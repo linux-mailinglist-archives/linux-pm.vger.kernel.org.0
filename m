@@ -2,96 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFDBD1F1459
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 10:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846B01F152B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729123AbgFHIRI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 8 Jun 2020 04:17:08 -0400
-Received: from coyote.holtmann.net ([212.227.132.17]:52107 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729085AbgFHIRI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 04:17:08 -0400
-Received: from marcel-macpro.fritz.box (p5b3d2638.dip0.t-ipconnect.de [91.61.38.56])
-        by mail.holtmann.org (Postfix) with ESMTPSA id A3843CEC82;
-        Mon,  8 Jun 2020 10:26:54 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: [PATCH v3] Bluetooth: Allow suspend even when preparation has
- failed
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <20200605135009.v3.1.I0ec31d716619532fc007eac081e827a204ba03de@changeid>
-Date:   Mon, 8 Jun 2020 10:17:05 +0200
-Cc:     Bluez mailing list <linux-bluetooth@vger.kernel.org>,
-        len.brown@intel.com,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        linux-pm@vger.kernel.org, rafael@kernel.org,
-        todd.e.brandt@linux.intel.com, rui.zhang@intel.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <24703FC2-32D1-434A-84FC-7111BEC45C2F@holtmann.org>
-References: <20200605135009.v3.1.I0ec31d716619532fc007eac081e827a204ba03de@changeid>
-To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+        id S1729160AbgFHJRd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 05:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726038AbgFHJR2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:17:28 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CEFC08C5C3
+        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 02:17:28 -0700 (PDT)
+Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jiDu8-0000uR-47; Mon, 08 Jun 2020 11:17:16 +0200
+Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jiDu4-0005wF-5q; Mon, 08 Jun 2020 11:17:12 +0200
+Date:   Mon, 8 Jun 2020 11:17:12 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Grant Likely <grant.likely@arm.com>,
+        Saravana Kannan <saravanak@google.com>, a.hajda@samsung.com,
+        artem.bityutskiy@linux.intel.com, balbi@kernel.org,
+        broonie@kernel.org, fntoth@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com,
+        nd <nd@arm.com>, kernel@pengutronix.de
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+Message-ID: <20200608091712.GA28093@pengutronix.de>
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com>
+ <20200325125120.GX1922688@smile.fi.intel.com>
+ <295d25de-f01e-26de-02d6-1ac0c149d828@arm.com>
+ <20200326163110.GD1922688@smile.fi.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200326163110.GD1922688@smile.fi.intel.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:55:36 up 107 days, 20:12, 209 users,  load average: 0.14, 0.27,
+ 0.26
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Abhishek,
+On 20-03-26 18:31, Andy Shevchenko wrote:
+> On Thu, Mar 26, 2020 at 03:01:22PM +0000, Grant Likely wrote:
+> > On 25/03/2020 12:51, Andy Shevchenko wrote:
+> > > On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
+> > > > On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > Consider the following scenario.
+> > > > > 
+> > > > > The main driver of USB OTG controller (dwc3-pci), which has the following
+> > > > > functional dependencies on certain platform:
+> > > > > - ULPI (tusb1210)
+> > > > > - extcon (tested with extcon-intel-mrfld)
+> > > > > 
+> > > > > Note, that first driver, tusb1210, is available at the moment of
+> > > > > dwc3-pci probing, while extcon-intel-mrfld is built as a module and
+> > > > > won't appear till user space does something about it.
+> > > > > 
+> > > > > This is depicted by kernel configuration excerpt:
+> > > > > 
+> > > > > 	CONFIG_PHY_TUSB1210=y
+> > > > > 	CONFIG_USB_DWC3=y
+> > > > > 	CONFIG_USB_DWC3_ULPI=y
+> > > > > 	CONFIG_USB_DWC3_DUAL_ROLE=y
+> > > > > 	CONFIG_USB_DWC3_PCI=y
+> > > > > 	CONFIG_EXTCON_INTEL_MRFLD=m
+> > > > > 
+> > > > > In the Buildroot environment the modules are probed by alphabetical ordering
+> > > > > of their modaliases. The latter comes to the case when USB OTG driver will be
+> > > > > probed first followed by extcon one.
+> > > > > 
+> > > > > So, if the platform anticipates extcon device to be appeared, in the above case
+> > > > > we will get deferred probe of USB OTG, because of ordering.
+> > > > > 
+> > > > > Since current implementation, done by the commit 58b116bce136 ("drivercore:
+> > > > > deferral race condition fix") counts the amount of triggered deferred probe,
+> > > > > we never advance the situation -- the change makes it to be an infinite loop.
+> > > > 
+> > > > Hi Andy,
+> > > > 
+> > > > I'm trying to understand this sequence of steps. Sorry if the questions
+> > > > are stupid -- I'm not very familiar with USB/PCI stuff.
+> > > 
+> > > Thank you for looking into this. My answer below.
+> > > 
+> > > As a first thing I would like to tell that there is another example of bad
+> > > behaviour of deferred probe with no relation to USB. The proposed change also
+> > > fixes that one (however, less possible to find in real life).
+> > > 
+> > > > > ---8<---8<---
+> > > > > 
+> > > > > [   22.187127] driver_deferred_probe_trigger <<< 1
+> > > > > 
+> > > > > ...here is the late initcall triggers deferred probe...
+> > > > > 
+> > > > > [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
+> > > > > 
+> > > > > ...dwc3.0.auto is the only device in the deferred list...
+> > > > 
+> > > > Ok, dwc3.0.auto is the only unprobed device at this point?
+> > > 
+> > > Correct.
+> > > 
+> > > > > [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
+> > > > > 
+> > > > > ...the counter before mutex is unlocked is kept the same...
+> > > > > 
+> > > > > [   22.205663] platform dwc3.0.auto: Retrying from deferred list
+> > > > > 
+> > > > > ...mutes has been unlocked, we try to re-probe the driver...
+> > > > > 
+> > > > > [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
+> > > > > [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
+> > > > > [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
+> > > > > [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
+> > > > > [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
+> > > > > [   22.263723] driver_deferred_probe_trigger <<< 2
+> > > > > 
+> > > > > ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
+> > > > > 
+> > > > > [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
+> > > > 
+> > > > So where did this dwc3.0.auto.ulpi come from?
+> > > 
+> > > > Looks like the device is created by dwc3_probe() through this call flow:
+> > > > dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
+> > > > dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
+> > > 
+> > > Correct.
+> > > 
+> > > > > [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
+> > > > 
+> > > > Can you please point me to which code patch actually caused the probe
+> > > > deferral?
+> > > 
+> > > Sure, it's in drd.c.
+> > > 
+> > > if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> > >    edev = extcon_get_extcon_dev(name);
+> > >    if (!edev)
+> > >      return ERR_PTR(-EPROBE_DEFER);
+> > >    return edev;
+> > > }
+> > > 
+> > > > > ...but extcon driver is still missing...
+> > > > > 
+> > > > > [   22.283174] platform dwc3.0.auto: Added to deferred list
+> > > > > [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
+> > > > 
+> > > > I'm not fully aware of all the USB implications, but if extcon is
+> > > > needed, why can't that check be done before we add and probe the ulpi
+> > > > device? That'll avoid this whole "fake" probing and avoid the counter
+> > > > increase. And avoid the need for this patch that's touching the code
+> > > > code that's already a bit delicate.
+> > > 
+> > > > Also, with my limited experience with all the possible drivers in the
+> > > > kernel, it's weird that the ulpi device is added and probed before we
+> > > > make sure the parent device (dwc3.0.auto) can actually probe
+> > > > successfully.
+> > > 
+> > > As I said above the deferred probe trigger has flaw on its own.
+> > > Even if we fix for USB case, there is (and probably will be) others.
+> > 
+> > Right here is the driver design bug. A driver's probe() hook should *not*
+> > return -EPROBE_DEFER after already creating child devices which may have
+> > already been probed.
+> 
+> Any documentation statement for this requirement?
+> 
+> By the way, I may imagine other mechanisms that probe the driver on other CPU
+> at the same time (let's consider parallel modprobes). The current code has a
+> flaw with that.
 
-> It is preferable to allow suspend even when Bluetooth has problems
-> preparing for sleep. When Bluetooth fails to finish preparing for
-> suspend, log the error and allow the suspend notifier to continue
-> instead.
-> 
-> To also make it clearer why suspend failed, change bt_dev_dbg to
-> bt_dev_err when handling the suspend timeout.
-> 
-> Fixes: dd522a7429b07e ("Bluetooth: Handle LE devices during suspend")
-> Reported-by: Len Brown <len.brown@intel.com>
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
-> To verify this is properly working, I added an additional change to
-> hci_suspend_wait_event to always return -16. This validates that suspend
-> continues even when an error has occurred during the suspend
-> preparation.
-> 
-> Example on Chromebook:
-> [   55.834524] PM: Syncing filesystems ... done.
-> [   55.841930] PM: Preparing system for sleep (s2idle)
-> [   55.940492] Bluetooth: hci_core.c:hci_suspend_notifier() hci0: Suspend notifier action (3) failed: -16
-> [   55.940497] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> [   55.941692] OOM killer disabled.
-> [   55.941693] Freezing remaining freezable tasks ... (elapsed 0.000 seconds) done.
-> [   55.942632] PM: Suspending system (s2idle)
-> 
-> I ran this through a suspend_stress_test in the following scenarios:
-> * Peer classic device connected: 50+ suspends
-> * No devices connected: 100 suspends
-> * With the above test case returning -EBUSY: 50 suspends
-> 
-> I also ran this through our automated testing for suspend and wake on
-> BT from suspend continues to work.
-> 
-> 
-> Changes in v3:
-> - Changed printf format for unsigned long
-> 
-> Changes in v2:
-> - Added fixes and reported-by tags
-> 
-> net/bluetooth/hci_core.c | 17 ++++++++++-------
-> 1 file changed, 10 insertions(+), 7 deletions(-)
+Hi,
 
-patch has been applied to bluetooth-next tree.
+sorry for picking this up again but I stumbled above the same issue
+within the driver imx/drm driver which is using the component framework.
+I end up in a infinity boot loop if I enabled the HDMI (which is the
+DesignWare bridge device) and the LVDS support and the LVDS bind return
+with EPROBE_DEFER. There are no words within the component framework docs
+which says that this is forbidden. Of course we can work-around the
+driver-core framework but IMHO this shouldn't be the way to go. I do not
+say that we should revert the commit introducing the regression but we
+should address this not only by extending the docs since the most
+drm-drivers are using the component framework and can end up in the same
+situation.
 
-Regards
+> > It can be solved by refactoring the driver probe routine. If a resource is
+> > required to be present, then check that it is available early; before
+> > registering child devices.
+> 
+> We fix one and leave others.
 
-Marcel
+E.g. the imx-drm and the sunxi driver...
 
+Regards,
+  Marco
+
+> > The proposed solution to modify driver core is fragile and susceptible to
+> > side effects from other probe paths. I don't think it is the right approach.
+> 
+> Have you tested it on your case? Does it fix the issue?
+> 
