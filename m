@@ -2,223 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 846B01F152B
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CD31F152D
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 11:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgFHJRd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 05:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50520 "EHLO
+        id S1729155AbgFHJRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 05:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726038AbgFHJR2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:17:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CEFC08C5C3
-        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 02:17:28 -0700 (PDT)
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jiDu8-0000uR-47; Mon, 08 Jun 2020 11:17:16 +0200
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jiDu4-0005wF-5q; Mon, 08 Jun 2020 11:17:12 +0200
-Date:   Mon, 8 Jun 2020 11:17:12 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Grant Likely <grant.likely@arm.com>,
-        Saravana Kannan <saravanak@google.com>, a.hajda@samsung.com,
-        artem.bityutskiy@linux.intel.com, balbi@kernel.org,
-        broonie@kernel.org, fntoth@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com,
-        nd <nd@arm.com>, kernel@pengutronix.de
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-Message-ID: <20200608091712.GA28093@pengutronix.de>
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
- <20200325032901.29551-1-saravanak@google.com>
- <20200325125120.GX1922688@smile.fi.intel.com>
- <295d25de-f01e-26de-02d6-1ac0c149d828@arm.com>
- <20200326163110.GD1922688@smile.fi.intel.com>
+        with ESMTP id S1729164AbgFHJRo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 05:17:44 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D7CC08C5C4
+        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 02:17:44 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id u26so13812795wmn.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jun 2020 02:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4Fm1rwtOISvK8gr+7LuMXZ/qPS5BDlq5HB6zyGZJxGw=;
+        b=WFLvXLljBM6V1NmppMID2bA5jT2HXO415vnRZxi3guuwvHkqqI1fio60qbVJenv9y1
+         SeVA1WczH4p6ZAdZQXh1Kqfl6k2eD44MmBJsiy/QQHs0A6Oet4X/ux6mzTZvhMhESIHd
+         mnXyfKz/WS3zE53m3JdhAiDzmwQrkJ9EMMSFSABw3h5/YlY6Bj/Q+cy0PCmrg1FOr0iu
+         5FXCkwzBx2wl86k2NvvfFCDG11F5jgjsI8YcmrOibVTw9lP+EOu0WZxM3ufQU83nZ2HR
+         eVRdH02+tYD4NTVAp1jMy2RniJaBZOI4NYzfYIsReSQWsrxnK68oAw9MB/H7C1aWGQnI
+         5wyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4Fm1rwtOISvK8gr+7LuMXZ/qPS5BDlq5HB6zyGZJxGw=;
+        b=dVrZ8VX6VNEhhnQve7Fyr4ATKUkjKWV2qlGNgyh9AZ5oyfAQLA6zZ4iN3JM69JI/nh
+         rGURV8BRs0iJHuvBWKdqfiMNKJB3x1aF9KbzQ3OigqHR/JfzrysC6J+MST3Gob5y/zMW
+         HsppPPAwXP0B2zWMFoFcVKXzx2PbvHOdRqiPgbm1zk6u5O3JcDBcqoK2Zlx752DifTTu
+         mTWd7m7ESGn/h1ZjfJiqAtD1SWWH27K2O2UgkBa189zGdJ8WteUuMny0+itr2gsakiol
+         BHUdCSI0Tour2ZNvXpZSPInwe+uLODyF4KdGKU/eYGguUdA7bJmDWfyYDs0dW7y43YSp
+         Jkig==
+X-Gm-Message-State: AOAM530kcQpG9TyjZiCl9Kew5Mk5tyIbLSlb+BMFoZIcPz6WlSJq9cv7
+        D3VZhe5BDAcWGKrdWHsXyYTyQw==
+X-Google-Smtp-Source: ABdhPJyCtnfLmNUkx7DrKCb4pwHApmhfPCWmAwzBNq7fE7AzanzmZTIYoP+MO6W7EOpfC/5BKbDo9A==
+X-Received: by 2002:a7b:cb91:: with SMTP id m17mr16300196wmi.126.1591607862942;
+        Mon, 08 Jun 2020 02:17:42 -0700 (PDT)
+Received: from bender.baylibre.local ([2a01:e35:2ec0:82b0:22:5867:d2c6:75f4])
+        by smtp.gmail.com with ESMTPSA id t7sm22732326wrq.41.2020.06.08.02.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jun 2020 02:17:42 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     khilman@baylibre.com, lee.jones@linaro.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/5] mfd: Add support for Khadas Microcontroller
+Date:   Mon,  8 Jun 2020 11:17:34 +0200
+Message-Id: <20200608091739.2368-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200326163110.GD1922688@smile.fi.intel.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:55:36 up 107 days, 20:12, 209 users,  load average: 0.14, 0.27,
- 0.26
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-03-26 18:31, Andy Shevchenko wrote:
-> On Thu, Mar 26, 2020 at 03:01:22PM +0000, Grant Likely wrote:
-> > On 25/03/2020 12:51, Andy Shevchenko wrote:
-> > > On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
-> > > > On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > Consider the following scenario.
-> > > > > 
-> > > > > The main driver of USB OTG controller (dwc3-pci), which has the following
-> > > > > functional dependencies on certain platform:
-> > > > > - ULPI (tusb1210)
-> > > > > - extcon (tested with extcon-intel-mrfld)
-> > > > > 
-> > > > > Note, that first driver, tusb1210, is available at the moment of
-> > > > > dwc3-pci probing, while extcon-intel-mrfld is built as a module and
-> > > > > won't appear till user space does something about it.
-> > > > > 
-> > > > > This is depicted by kernel configuration excerpt:
-> > > > > 
-> > > > > 	CONFIG_PHY_TUSB1210=y
-> > > > > 	CONFIG_USB_DWC3=y
-> > > > > 	CONFIG_USB_DWC3_ULPI=y
-> > > > > 	CONFIG_USB_DWC3_DUAL_ROLE=y
-> > > > > 	CONFIG_USB_DWC3_PCI=y
-> > > > > 	CONFIG_EXTCON_INTEL_MRFLD=m
-> > > > > 
-> > > > > In the Buildroot environment the modules are probed by alphabetical ordering
-> > > > > of their modaliases. The latter comes to the case when USB OTG driver will be
-> > > > > probed first followed by extcon one.
-> > > > > 
-> > > > > So, if the platform anticipates extcon device to be appeared, in the above case
-> > > > > we will get deferred probe of USB OTG, because of ordering.
-> > > > > 
-> > > > > Since current implementation, done by the commit 58b116bce136 ("drivercore:
-> > > > > deferral race condition fix") counts the amount of triggered deferred probe,
-> > > > > we never advance the situation -- the change makes it to be an infinite loop.
-> > > > 
-> > > > Hi Andy,
-> > > > 
-> > > > I'm trying to understand this sequence of steps. Sorry if the questions
-> > > > are stupid -- I'm not very familiar with USB/PCI stuff.
-> > > 
-> > > Thank you for looking into this. My answer below.
-> > > 
-> > > As a first thing I would like to tell that there is another example of bad
-> > > behaviour of deferred probe with no relation to USB. The proposed change also
-> > > fixes that one (however, less possible to find in real life).
-> > > 
-> > > > > ---8<---8<---
-> > > > > 
-> > > > > [   22.187127] driver_deferred_probe_trigger <<< 1
-> > > > > 
-> > > > > ...here is the late initcall triggers deferred probe...
-> > > > > 
-> > > > > [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
-> > > > > 
-> > > > > ...dwc3.0.auto is the only device in the deferred list...
-> > > > 
-> > > > Ok, dwc3.0.auto is the only unprobed device at this point?
-> > > 
-> > > Correct.
-> > > 
-> > > > > [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
-> > > > > 
-> > > > > ...the counter before mutex is unlocked is kept the same...
-> > > > > 
-> > > > > [   22.205663] platform dwc3.0.auto: Retrying from deferred list
-> > > > > 
-> > > > > ...mutes has been unlocked, we try to re-probe the driver...
-> > > > > 
-> > > > > [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
-> > > > > [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
-> > > > > [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
-> > > > > [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
-> > > > > [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
-> > > > > [   22.263723] driver_deferred_probe_trigger <<< 2
-> > > > > 
-> > > > > ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
-> > > > > 
-> > > > > [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
-> > > > 
-> > > > So where did this dwc3.0.auto.ulpi come from?
-> > > 
-> > > > Looks like the device is created by dwc3_probe() through this call flow:
-> > > > dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
-> > > > dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
-> > > 
-> > > Correct.
-> > > 
-> > > > > [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
-> > > > 
-> > > > Can you please point me to which code patch actually caused the probe
-> > > > deferral?
-> > > 
-> > > Sure, it's in drd.c.
-> > > 
-> > > if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-> > >    edev = extcon_get_extcon_dev(name);
-> > >    if (!edev)
-> > >      return ERR_PTR(-EPROBE_DEFER);
-> > >    return edev;
-> > > }
-> > > 
-> > > > > ...but extcon driver is still missing...
-> > > > > 
-> > > > > [   22.283174] platform dwc3.0.auto: Added to deferred list
-> > > > > [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
-> > > > 
-> > > > I'm not fully aware of all the USB implications, but if extcon is
-> > > > needed, why can't that check be done before we add and probe the ulpi
-> > > > device? That'll avoid this whole "fake" probing and avoid the counter
-> > > > increase. And avoid the need for this patch that's touching the code
-> > > > code that's already a bit delicate.
-> > > 
-> > > > Also, with my limited experience with all the possible drivers in the
-> > > > kernel, it's weird that the ulpi device is added and probed before we
-> > > > make sure the parent device (dwc3.0.auto) can actually probe
-> > > > successfully.
-> > > 
-> > > As I said above the deferred probe trigger has flaw on its own.
-> > > Even if we fix for USB case, there is (and probably will be) others.
-> > 
-> > Right here is the driver design bug. A driver's probe() hook should *not*
-> > return -EPROBE_DEFER after already creating child devices which may have
-> > already been probed.
-> 
-> Any documentation statement for this requirement?
-> 
-> By the way, I may imagine other mechanisms that probe the driver on other CPU
-> at the same time (let's consider parallel modprobes). The current code has a
-> flaw with that.
+The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
+connected via I2C.
 
-Hi,
+This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
+boards.
 
-sorry for picking this up again but I stumbled above the same issue
-within the driver imx/drm driver which is using the component framework.
-I end up in a infinity boot loop if I enabled the HDMI (which is the
-DesignWare bridge device) and the LVDS support and the LVDS bind return
-with EPROBE_DEFER. There are no words within the component framework docs
-which says that this is forbidden. Of course we can work-around the
-driver-core framework but IMHO this shouldn't be the way to go. I do not
-say that we should revert the commit introducing the regression but we
-should address this not only by extending the docs since the most
-drm-drivers are using the component framework and can end up in the same
-situation.
+It has multiple boot control features like password check, power-on
+options, power-off control and system FAN control on recent boards.
 
-> > It can be solved by refactoring the driver probe routine. If a resource is
-> > required to be present, then check that it is available early; before
-> > registering child devices.
-> 
-> We fix one and leave others.
+Thie serie adds :
+- the bindings
+- the MFD driver
+- the Thermal Cooling cell driver
+- updates MAINTAINERS
+- add support into the Khadas VIM3/VIM3L DT
 
-E.g. the imx-drm and the sunxi driver...
+Changes since v2 at [3]:
+- Removed NVMEM driver for separate submission
+- fixed MFD driver, header and Kconfig
+- fixed Thermal Kconfig
+- fixed MAINTAINERS files and path
 
-Regards,
-  Marco
+Changes since RFC v1 at [2]:
+- moved hwmon driver to thermal-only
+- moved the SM1 thermal nodes in a separate serie
+- added the bindings review tag from rob
 
-> > The proposed solution to modify driver core is fragile and susceptible to
-> > side effects from other probe paths. I don't think it is the right approach.
-> 
-> Have you tested it on your case? Does it fix the issue?
-> 
+[1] http://lore.kernel.org/r/20200512093916.19676-1-narmstrong@baylibre.com
+[2] http://lore.kernel.org/r/20200421080102.22796-1-narmstrong@baylibre.com
+[3] http://lore.kernel.org/r/20200512132613.31507-1-narmstrong@baylibre.com
+
+Neil Armstrong (5):
+  dt-bindings: mfd: add Khadas Microcontroller bindings
+  mfd: add support for the Khadas System control Microcontroller
+  thermal: add support for the MCU controlled FAN on Khadas boards
+  MAINTAINERS: add myself as maintainer for Khadas MCU drivers
+  arm64: dts: meson-khadas-vim3: add Khadas MCU nodes
+
+ .../devicetree/bindings/mfd/khadas,mcu.yaml   |  44 +++++
+ MAINTAINERS                                   |   9 +
+ .../boot/dts/amlogic/meson-khadas-vim3.dtsi   |  23 +++
+ drivers/mfd/Kconfig                           |  21 +++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/khadas-mcu.c                      | 142 ++++++++++++++
+ drivers/thermal/Kconfig                       |  11 ++
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/khadas_mcu_fan.c              | 174 ++++++++++++++++++
+ include/linux/mfd/khadas-mcu.h                |  91 +++++++++
+ 10 files changed, 517 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
+ create mode 100644 drivers/mfd/khadas-mcu.c
+ create mode 100644 drivers/thermal/khadas_mcu_fan.c
+ create mode 100644 include/linux/mfd/khadas-mcu.h
+
+-- 
+2.22.0
+
