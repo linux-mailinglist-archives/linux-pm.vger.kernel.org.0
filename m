@@ -2,141 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC13C1F12CE
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 08:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7BB1F1312
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 08:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728343AbgFHGXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 02:23:10 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:35870 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726929AbgFHGXH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 02:23:07 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200608062306euoutp01097cc799d12b77a7fe410a73e93de17d~WfWPxrwL_0227402274euoutp01t
-        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 06:23:06 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200608062306euoutp01097cc799d12b77a7fe410a73e93de17d~WfWPxrwL_0227402274euoutp01t
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591597386;
-        bh=Ed//Cd6z0QIrLCNML1qOtIZ7Khf+C73RK+aUB8WgLdc=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=l/n+9q1EAcWiTLoeOjHk+8I5uRWNa8bKeYta0aUSD0yHAlyW81lN89zFbib6mF7mE
-         z+W6GVEsMQz24PXwOCh94okBMBELwX8wLNeULXwm57yo1yHLMKVFkyGGjsF8xIMOvl
-         4gYRxDL2ORTD68QOUxeL5FJqtQwkhhlN5F+Tu/FI=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200608062306eucas1p1f86b3c42ac7a5e0c433bf0a5c9e50512~WfWPjONb92277922779eucas1p1q;
-        Mon,  8 Jun 2020 06:23:06 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id EF.1C.60679.A49DDDE5; Mon,  8
-        Jun 2020 07:23:06 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200608062305eucas1p275aa4db597e18b8fa8afd3e7cf372906~WfWPKhZVY2738627386eucas1p26;
-        Mon,  8 Jun 2020 06:23:05 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200608062305eusmtrp15e4b93a89aab197728ab25f9c65d0466~WfWPJ7b3e0747607476eusmtrp1H;
-        Mon,  8 Jun 2020 06:23:05 +0000 (GMT)
-X-AuditID: cbfec7f4-0cbff7000001ed07-e6-5eddd94a9027
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 64.92.08375.949DDDE5; Mon,  8
-        Jun 2020 07:23:05 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200608062305eusmtip10b36ebd707cbc4d2a66a1b369d4a8d31~WfWOuZhSY1716417164eusmtip11;
-        Mon,  8 Jun 2020 06:23:05 +0000 (GMT)
-Subject: Re: [PATCHv2 0/2] SBS battery PEC support
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Emil Velikov <emil.velikov@collabora.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <be2a9fd5-9646-5e13-209a-6072a00d1b08@samsung.com>
-Date:   Mon, 8 Jun 2020 08:23:05 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.9.0
+        id S1728334AbgFHGw2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 02:52:28 -0400
+Received: from mga11.intel.com ([192.55.52.93]:17633 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726929AbgFHGw1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 02:52:27 -0400
+IronPort-SDR: cp9X9B84NAjPh0/jJ2V5rrR8AkAdWPa3wTMXeSCL97NiC6dw+IAMSQi5+4sdC0m9R2LxMQF3H0
+ qpaRkDHn2OFg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2020 23:52:26 -0700
+IronPort-SDR: mTuTwaNs94YS1DXYh0D7RJaQ3aJ2l6U9lq8UJ0y4jWjDGsH6lBWYNmBD/nA6kW3Bn5pNrPCUYz
+ SzRyVmF9zuog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,487,1583222400"; 
+   d="scan'208";a="313797666"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by FMSMGA003.fm.intel.com with ESMTP; 07 Jun 2020 23:52:25 -0700
+Date:   Mon, 8 Jun 2020 14:53:24 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Michal Miroslaw <mirq-linux@rere.qmqm.pl>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2][RFC] PM-runtime: add tracepoints to cover all
+ usage_count changes
+Message-ID: <20200608065324.GA9018@chenyu-office.sh.intel.com>
+References: <cover.1591380524.git.yu.c.chen@intel.com>
+ <6ce5c2d21758363b7c9a31187eda1787bc4a6160.1591380524.git.yu.c.chen@intel.com>
+ <20200605193311.GB9553@qmqm.qmqm.pl>
+ <20200606071459.GA1298@chenyu-office.sh.intel.com>
+ <20200607045535.GD12913@qmqm.qmqm.pl>
 MIME-Version: 1.0
-In-Reply-To: <20200605230625.192427-1-sebastian.reichel@collabora.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNKsWRmVeSWpSXmKPExsWy7djP87peN+/GGTRN5bN42vWWzWLzuR5W
-        i8u75rBZfO49wmhx97WfxendJQ5sHjvuLmH02LSqk83j8ya5AOYoLpuU1JzMstQifbsEroxl
-        93ewFdzkrLiwfwtjA+ND9i5GTg4JAROJX+vWsnQxcnEICaxglLi0dB4zhPOFUeLZl8+sEM5n
-        RonJzw+xwbRcaGyGqlrOKPH10R4o5z2jROudbmaQKmEBI4kzW9aAtYsIdDBKHFy0nxEkwSwQ
-        JDFrwXQwm03AUKLrbRfYWF4BO4mFN+6xgNgsAioSf3feB6sRFYiV6Fu6AKpGUOLkzCdgNZwC
-        bhLn9u5lgpgpL7H97RxmCFtc4taT+UwgiyUEprNL9Ez6ywhxt4vEj6/XoH4Qlnh1fAs0CGQk
-        Tk/uYYFoaGaUeHhuLTuE08MocblpBlS3tcSdc7+AujmAVmhKrN+lD2JKCDhKLGlwgTD5JG68
-        FYS4gU9i0rbpzBBhXomONiGIGWoSs46vg9t68MIl5gmMSrOQfDYLyTezkHwzC2HtAkaWVYzi
-        qaXFuempxUZ5qeV6xYm5xaV56XrJ+bmbGIFJ5vS/4192MO76k3SIUYCDUYmHl0PsbpwQa2JZ
-        cWXuIUYJDmYlEV6ns6fjhHhTEiurUovy44tKc1KLDzFKc7AoifMaL3oZKySQnliSmp2aWpBa
-        BJNl4uCUamDsWRNn9Dq3smGr1p57/xVl+BQu//JY9jXrYKH9nCDbp+pGa1s/M4T3Z0yUO5Pp
-        ER575o9kXXzFc+VtyxoMIjpPGdntlI37WX9UybMx2n3y5JCo6ctvPz5gqMnOwvHM3nNiybRZ
-        /lp66yfs/ypktPi3UbH3+rDK/7d6OpQsAy+2Nqyco83NHKTEUpyRaKjFXFScCACtF9YqLgMA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsVy+t/xu7qeN+/GGWzdoW/xtOstm8Xmcz2s
-        Fpd3zWGz+Nx7hNHi7ms/i9O7SxzYPHbcXcLosWlVJ5vH501yAcxRejZF+aUlqQoZ+cUltkrR
-        hhZGeoaWFnpGJpZ6hsbmsVZGpkr6djYpqTmZZalF+nYJehnL7u9gK7jJWXFh/xbGBsaH7F2M
-        nBwSAiYSFxqbmUFsIYGljBKX30lCxGUkTk5rYIWwhSX+XOti62LkAqp5yyjx9+I5NpCEsICR
-        xJkta1hBEiICHYwSz188YwRJMAsESczc95kdomMmo8SEo9PB1rEJGEp0ve0C6+YVsJNYeOMe
-        C4jNIqAi8XfnfbBmUYFYiW/3tkDVCEqcnPkErIZTwE3i3N69TBALzCTmbX7IDGHLS2x/OwfK
-        Fpe49WQ+0wRGoVlI2mchaZmFpGUWkpYFjCyrGEVSS4tz03OLDfWKE3OLS/PS9ZLzczcxAqNq
-        27Gfm3cwXtoYfIhRgINRiYeXQ+xunBBrYllxZe4hRgkOZiURXqezp+OEeFMSK6tSi/Lji0pz
-        UosPMZoCPTeRWUo0OR8Y8Xkl8YamhuYWlobmxubGZhZK4rwdAgdjhATSE0tSs1NTC1KLYPqY
-        ODilGhgFD5hHJvDKXZ+o9dLgT+/l108celdU2aa9iCg4emXr+9ij4b8uXT17uWjezWcrtux9
-        G1ClOfv+1kmfVj34mfVOce2c+RoR0hJcXhfYVvzMDFyt71LI81v1A7fJnNM7H6za+iXtQ7z+
-        1OoTF1gmz2F+uL7cdkLRofP9uz8bLX622u+2+/7eLzpTeJVYijMSDbWYi4oTAZOFCAnAAgAA
-X-CMS-MailID: 20200608062305eucas1p275aa4db597e18b8fa8afd3e7cf372906
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200605230641eucas1p199386d808ad8ce83006092da23e48bb5
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200605230641eucas1p199386d808ad8ce83006092da23e48bb5
-References: <CGME20200605230641eucas1p199386d808ad8ce83006092da23e48bb5@eucas1p1.samsung.com>
-        <20200605230625.192427-1-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200607045535.GD12913@qmqm.qmqm.pl>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+On Sun, Jun 07, 2020 at 06:55:35AM +0200, Michal Miroslaw wrote:
+> On Sat, Jun 06, 2020 at 03:14:59PM +0800, Chen Yu wrote:
+> > Hi,
+> > On Fri, Jun 05, 2020 at 09:33:11PM +0200, Michal Miroslaw wrote:
+> > > On Sat, Jun 06, 2020 at 03:05:52AM +0800, Chen Yu wrote:
+> > > > Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
+> > > > has added some tracepoints to monitor the change of runtime usage, and
+> > > > there is something to improve:
+> > > > 1. There are some places that adjust the usage count have not
+> > > >    been traced yet. For example, pm_runtime_get_noresume() and
+> > > >    pm_runtime_put_noidle()
+> > > > 2. The change of the usage count will not be tracked if decreased
+> > > >    from 1 to 0.
+> > > [...]
+> > > > @@ -1448,16 +1453,17 @@ EXPORT_SYMBOL_GPL(pm_runtime_forbid);
+> > > >   */
+> > > >  void pm_runtime_allow(struct device *dev)
+> > > >  {
+> > > > +	bool is_zero;
+> > > > +
+> > > >  	spin_lock_irq(&dev->power.lock);
+> > > >  	if (dev->power.runtime_auto)
+> > > >  		goto out;
+> > > >  
+> > > >  	dev->power.runtime_auto = true;
+> > > > -	if (atomic_dec_and_test(&dev->power.usage_count))
+> > > > +	is_zero = atomic_dec_and_test(&dev->power.usage_count);
+> > > > +	trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
+> > > > +	if (is_zero)
+> > > >  		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
+> > > > -	else
+> > > > -		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
+> > > > -
+> > > [...]
+> > > 
+> > > IIRC, rpm_idle() has a tracepoint already.
+> > > 
+> > Yes, this is what I concerned previously. If someone
+> > want to track the change of usage_count, then he might
+> > have to enable both trace rpm_usage and rpm_idle so
+> > as to track the moment when the counter drops from 1 to
+> > 0. It might be more consistent if we only enable
+> > trace rpm_usage to track the whole process.
+> > > > @@ -1523,9 +1529,8 @@ static void update_autosuspend(struct device *dev, int old_delay, int old_use)
+> > > >  		/* If it used to be allowed then prevent it. */
+> > > >  		if (!old_use || old_delay >= 0) {
+> > > >  			atomic_inc(&dev->power.usage_count);
+> > > > -			rpm_resume(dev, 0);
+> > > > -		} else {
+> > > >  			trace_rpm_usage_rcuidle(dev, 0);
+> > > > +			rpm_resume(dev, 0);
+> > > >  		}
+> > > >  	}
+> > > [...]
+> > > 
+> > > This actually changes logic, so it doesn't match the patch description.
+> > > 
+> > This patch intends to adjust the logic to be consistent with
+> > the change of usage_counter, that is to say, only after the
+> > counter has been possibly modified, we record it. In current
+> > logic above, it tracks the usage count where the latter does
+> > not change.
+> 
+> I see now what you intended. I think it would be nice to put the idea
+> (that all usage changes be shown using rpm_usage even if included in
+> other trace points) into the commit message. Otherwise, looks ok.
+>
+Okay, will do in next version, thanks!
 
-On 06.06.2020 01:06, Sebastian Reichel wrote:
-> Second try to enable PEC for SBS battery. Mainline currently
-> has 3 different platforms using sbs-battery with an I2C driver
-> not implementing I2C_M_RECV_LEN:
->
->   * i2c-exynos5
->   * i2c-rk3x
->   * i2c-tegra
->
-> On those platforms PEC will be temporarly disabled for SBS
-> functions requesting strings. I considered moving the emulation
-> to I2C core, but it's specific to the SBS battery. The hack
-> only works because the strings are constant.
-
-Thanks for the update. Works fine on Samsung Exynos-based Chromebooks: 
-Snow, Peach-Pit and Peach-Pi.
-
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-
-> Changes since PATCHv1:
->   * dropped all applied changes
->   * rebased on top of power-supply's for-next branch
->   * keep existing string reading method as fallback
->
-> -- Sebastian
->
-> Sebastian Reichel (2):
->    power: supply: sbs-battery: use i2c_smbus_read_block_data()
->    power: supply: sbs-battery: add PEC support"
->
->   drivers/power/supply/sbs-battery.c | 89 +++++++++++++++++++++++++++++-
->   1 file changed, 87 insertions(+), 2 deletions(-)
->
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Chenyu
