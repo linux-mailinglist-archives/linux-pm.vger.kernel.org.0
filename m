@@ -2,168 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0381F1DD9
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 18:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67861F1E2B
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jun 2020 19:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387483AbgFHQxE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 12:53:04 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:24705 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387482AbgFHQxE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 12:53:04 -0400
+        id S1730737AbgFHRK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 13:10:28 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:62208 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730696AbgFHRK1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 13:10:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1591635184; x=1623171184;
+  t=1591636226; x=1623172226;
   h=date:from:to:cc:message-id:references:mime-version:
    in-reply-to:subject;
-  bh=rnDp5I6x3A3PSGWGNTcHDsvC0Hxz7VaObBC0sQPmk2o=;
-  b=hWkRf1jiNufrHRtHOPHM8Z4RjXzMYch3DR9iuKPDz94gSEizJcnboqpG
-   mljUyLK6S9IviIEF9t1R9zFQMCtW+u8bi3XbrZacppHProR/KO/jNJTE7
-   TcW8NW3WGSAAqs9a9by5U3zHTJ/wBH75/R61KYM91zK11WjuGE1mPAUUV
-   w=;
-IronPort-SDR: MSGLE2U6Ywvdm0/7LZ2EFFZLSYATNkPwGtPzXiLLT7V5bdnlx5eTqZ85cjdTzmiDTvSDMabs5n
- CF2KXs+xJ+3A==
+  bh=t5Ht9pQ/L15OhRjsj3oBdWbi3godPK4J8lNDSU8Sric=;
+  b=h7W5QzygyIq9kvN2MXSsz8d2kdwog+IbguIPcpOcwHFxk4ZfUhoy3VYU
+   v38Ybr+IdaQPH88f0HS1mGGClX6F04gM3GQNi6w95YpSflTOWLj2fefu1
+   BrX8Ww8aTcmVeGu1pg5Ca1tqXgKTILyD1UIVTd2PBcOLCx9/tsUcEp/MY
+   c=;
+IronPort-SDR: S8JB7UWD4QsekyIBB/T3lttKcrT1Ne/0DCTZfl8uIv+BINZ1G4WVygkiGFpts8j2A2qHCjsFIu
+ YrHU8J2n5sQQ==
 X-IronPort-AV: E=Sophos;i="5.73,487,1583193600"; 
-   d="scan'208";a="50682291"
-Subject: Re: [PATCH 03/12] x86/xen: Introduce new function to map
- HYPERVISOR_shared_info on Resume
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2a-22cc717f.us-west-2.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 08 Jun 2020 16:53:01 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2a-22cc717f.us-west-2.amazon.com (Postfix) with ESMTPS id B726EA221B;
-        Mon,  8 Jun 2020 16:52:58 +0000 (UTC)
-Received: from EX13D08UEB003.ant.amazon.com (10.43.60.11) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 8 Jun 2020 16:52:36 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB003.ant.amazon.com (10.43.60.11) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 8 Jun 2020 16:52:36 +0000
+   d="scan'208";a="49364832"
+Subject: Re: [PATCH 04/12] x86/xen: add system core suspend and resume callbacks
+Received: from sea32-co-svc-lb4-vlan2.sea.corp.amazon.com (HELO email-inbound-relay-1e-57e1d233.us-east-1.amazon.com) ([10.47.23.34])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 08 Jun 2020 17:10:17 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-57e1d233.us-east-1.amazon.com (Postfix) with ESMTPS id C791814168C;
+        Mon,  8 Jun 2020 17:10:08 +0000 (UTC)
+Received: from EX13D05UWC001.ant.amazon.com (10.43.162.82) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 8 Jun 2020 17:09:48 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D05UWC001.ant.amazon.com (10.43.162.82) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 8 Jun 2020 17:09:48 +0000
 Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Mon, 8 Jun 2020 16:52:36 +0000
+ (172.22.96.68) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Mon, 8 Jun 2020 17:09:47 +0000
 Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id C641640832; Mon,  8 Jun 2020 16:52:35 +0000 (UTC)
-Date:   Mon, 8 Jun 2020 16:52:35 +0000
+        id F15BC40832; Mon,  8 Jun 2020 17:09:47 +0000 (UTC)
+Date:   Mon, 8 Jun 2020 17:09:47 +0000
 From:   Anchal Agarwal <anchalag@amazon.com>
 To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
-        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <kamatam@amazon.com>, <sstabellini@kernel.org>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200608165235.GA1330@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Message-ID: <20200608170947.GA4392@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 References: <cover.1589926004.git.anchalag@amazon.com>
- <529f544a64bb93b920bf86b1d3f86d93b0a4219b.1589926004.git.anchalag@amazon.com>
- <72989b50-0c13-7a2b-19e2-de4a3646c83f@oracle.com>
- <20200604230307.GB25251@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <9644a5f1-e1f8-5fe1-3135-cc6b4baf893b@oracle.com>
+ <79cf02631dc00e62ebf90410bfbbdb52fe7024cb.1589926004.git.anchalag@amazon.com>
+ <4b577564-e4c3-0182-2b9e-5f79004f32a1@oracle.com>
+ <B966B3A2-4F08-42FA-AF59-B8AA0783C2BA@amazon.com>
+ <e2073aa4-2410-4630-fee6-4e4abc172876@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <9644a5f1-e1f8-5fe1-3135-cc6b4baf893b@oracle.com>
+In-Reply-To: <e2073aa4-2410-4630-fee6-4e4abc172876@oracle.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 05:39:54PM -0400, Boris Ostrovsky wrote:
+On Fri, Jun 05, 2020 at 05:24:37PM -0400, Boris Ostrovsky wrote:
 > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
 > 
 > 
-> On 6/4/20 7:03 PM, Anchal Agarwal wrote:
-> > On Sat, May 30, 2020 at 07:02:01PM -0400, Boris Ostrovsky wrote:
-> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> >>
-> >>
-> >>
-> >> On 5/19/20 7:25 PM, Anchal Agarwal wrote:
-> >>> Introduce a small function which re-uses shared page's PA allocated
-> >>> during guest initialization time in reserve_shared_info() and not
-> >>> allocate new page during resume flow.
-> >>> It also  does the mapping of shared_info_page by calling
-> >>> xen_hvm_init_shared_info() to use the function.
-> >>>
-> >>> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-> >>> ---
-> >>>  arch/x86/xen/enlighten_hvm.c | 7 +++++++
-> >>>  arch/x86/xen/xen-ops.h       | 1 +
-> >>>  2 files changed, 8 insertions(+)
-> >>>
-> >>> diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
-> >>> index e138f7de52d2..75b1ec7a0fcd 100644
-> >>> --- a/arch/x86/xen/enlighten_hvm.c
-> >>> +++ b/arch/x86/xen/enlighten_hvm.c
-> >>> @@ -27,6 +27,13 @@
-> >>>
-> >>>  static unsigned long shared_info_pfn;
-> >>>
-> >>> +void xen_hvm_map_shared_info(void)
-> >>> +{
-> >>> +     xen_hvm_init_shared_info();
-> >>> +     if (shared_info_pfn)
-> >>> +             HYPERVISOR_shared_info = __va(PFN_PHYS(shared_info_pfn));
-> >>> +}
-> >>> +
-> >>
-> >> AFAICT it is only called once so I don't see a need for new routine.
-> >>
-> >>
-> > HYPERVISOR_shared_info can only be mapped in this scope without refactoring
-> > much of the code.
+> On 6/3/20 6:40 PM, Agarwal, Anchal wrote:
+> >     CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >
+> >
+> >
+> >     On 5/19/20 7:26 PM, Anchal Agarwal wrote:
+> >     > From: Munehisa Kamata <kamatam@amazon.com>
+> >     >
+> >     > Add Xen PVHVM specific system core callbacks for PM suspend and
+> >     > hibernation support. The callbacks suspend and resume Xen
+> >     > primitives,like shared_info, pvclock and grant table. Note that
+> >     > Xen suspend can handle them in a different manner, but system
+> >     > core callbacks are called from the context.
+> >
+> >
+> >     I don't think I understand that last sentence.
+> >
+> > Looks like it may have cryptic meaning of stating that xen_suspend calls syscore_suspend from xen_suspend
+> > So, if these syscore ops gets called  during xen_suspend do not do anything. Check if the mode is in xen suspend
+> > and return from there. These syscore_ops are specifically for domU hibernation.
+> > I must admit, I may have overlooked lack of explanation of some implicit details in the original commit msg.
+> >
+> >     >  So if the callbacks
+> >     > are called from Xen suspend context, return immediately.
+> >     >
+> >
+> >
+> >     > +
+> >     > +static int xen_syscore_suspend(void)
+> >     > +{
+> >     > +     struct xen_remove_from_physmap xrfp;
+> >     > +     int ret;
+> >     > +
+> >     > +     /* Xen suspend does similar stuffs in its own logic */
+> >     > +     if (xen_suspend_mode_is_xen_suspend())
+> >     > +             return 0;
 > 
 > 
-> Refactoring what? All am suggesting is
->
-shared_info_pfn does not seem to be in scope here, it's scope is limited
-to enlighten_hvm.c. That's the reason I introduced a new function there.
-
-> --- a/arch/x86/xen/suspend.c
-> +++ b/arch/x86/xen/suspend.c
-> @@ -124,7 +124,9 @@ static void xen_syscore_resume(void)
->                 return;
+> With your explanation now making this clearer, is this check really
+> necessary? From what I see we are in XEN_SUSPEND mode when
+> lock_system_sleep() lock is taken, meaning that we can't initialize
+> hibernation.
 > 
->         /* No need to setup vcpu_info as it's already moved off */
-> -       xen_hvm_map_shared_info();
-> +       xen_hvm_init_shared_info();
-> +       if (shared_info_pfn)
-> +               HYPERVISOR_shared_info = __va(PFN_PHYS(shared_info_pfn));
+I see. Sounds plausible. I will fix both the code and commit message
+for better readability. Thanks for catching this.
 > 
->         pvclock_resume();
-> 
-> >> And is it possible for shared_info_pfn to be NULL in resume path (which
-> >> is where this is called)?
-> >>
-> >>
-> > I don't think it should be, still a sanity check but I don't think its needed there
-> > because hibernation will fail in any case if thats the case.
-> 
-> 
-> If shared_info_pfn is NULL you'd have problems long before hibernation
-> started. We set it in xen_hvm_guest_init() and never touch again.
-> 
-> 
-> In fact, I'd argue that it should be __ro_after_init.
-> 
-> 
-I agree, and I should have mentioned that I will remove that check and its not
-necessary as this gets mapped way early in the boot process.
-> > However, HYPERVISOR_shared_info does needs to be re-mapped on resume as its been
-> > marked to dummy address on suspend. Its also safe in case va changes.
-> > Does the answer your question?
+> >     > +
+> >     > +     xrfp.domid = DOMID_SELF;
+> >     > +     xrfp.gpfn = __pa(HYPERVISOR_shared_info) >> PAGE_SHIFT;
+> >     > +
+> >     > +     ret = HYPERVISOR_memory_op(XENMEM_remove_from_physmap, &xrfp);
+> >     > +     if (!ret)
+> >     > +             HYPERVISOR_shared_info = &xen_dummy_shared_info;
+> >     > +
+> >     > +     return ret;
+> >     > +}
+> >     > +
+> >     > +static void xen_syscore_resume(void)
+> >     > +{
+> >     > +     /* Xen suspend does similar stuffs in its own logic */
+> >     > +     if (xen_suspend_mode_is_xen_suspend())
+> >     > +             return;
+> >     > +
+> >     > +     /* No need to setup vcpu_info as it's already moved off */
+> >     > +     xen_hvm_map_shared_info();
+> >     > +
+> >     > +     pvclock_resume();
+> >     > +
+> >     > +     gnttab_resume();
+> >
+> >
+> >     Do you call gnttab_suspend() in pm suspend path?
+> > No, since it does nothing for HVM guests. The unmap_frames is only applicable for PV guests right?
 > 
 > 
-> I wasn't arguing whether HYPERVISOR_shared_info needs to be set, I was
-> only saying that shared_info_pfn doesn't need to be tested.
+> You should call it nevertheless. It will decide whether or not anything
+> needs to be done.
+Will fix it in V2.
 > 
-Got it. :)
 > 
 > -boris
 > 
