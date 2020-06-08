@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A15C01F2562
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 01:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDDD1F2588
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 01:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731924AbgFHX0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 19:26:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53048 "EHLO mail.kernel.org"
+        id S2387620AbgFHX12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 19:27:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731915AbgFHX0E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:26:04 -0400
+        id S1732124AbgFHX10 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 8 Jun 2020 19:27:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E9072068D;
-        Mon,  8 Jun 2020 23:26:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2324120775;
+        Mon,  8 Jun 2020 23:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658763;
-        bh=XPPEpC2yTAW6izKCvYgVtt0TlCBTsFss0avmq3pxYOY=;
+        s=default; t=1591658844;
+        bh=PcpT25rK7rYNhpCqz1U5PiI8V6SO18bbgHhxO/L2RUQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Nsma6UZ04GbR4wjARCTcEau6YRgz7PrKjU99/uO9xgPr5YRau5cRv4HXMX6bghE7d
-         ObOO0u+lYMCnF5MYh3qX6fdgbdlwLl/p4ylphdhZr+2arcrL3GcQ9vh6kSlB2qRxvd
-         3QNWb4vH1Pre/iOBjHNHxZ5N4fKyiIsBDwVbCpBE=
+        b=VMoZvbivSaz0cneP89rBBchI9zJX+XBZT/YS3CGpAClqY/G9Or865ZWUUmjVK4jJz
+         GvlkpbYBmK64NwU695O5V5WegFhCQydO6Ni38fTxVHp8SeEOS7sHExDv0xISAlc0zU
+         OIC6qtuo8eCS7nrM38EoCImFDxbgGY28H+ye/IEk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -34,12 +34,12 @@ Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
         linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 46/72] mips: cm: Fix an invalid error code of INTVN_*_ERR
-Date:   Mon,  8 Jun 2020 19:24:34 -0400
-Message-Id: <20200608232500.3369581-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 32/50] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Mon,  8 Jun 2020 19:26:22 -0400
+Message-Id: <20200608232640.3370262-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608232500.3369581-1-sashal@kernel.org>
-References: <20200608232500.3369581-1-sashal@kernel.org>
+In-Reply-To: <20200608232640.3370262-1-sashal@kernel.org>
+References: <20200608232640.3370262-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -78,7 +78,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 7f3f136572de..50d3d74001cb 100644
+index 60177a612cb1..df65516778a2 100644
 --- a/arch/mips/kernel/mips-cm.c
 +++ b/arch/mips/kernel/mips-cm.c
 @@ -123,9 +123,9 @@ static char *cm2_causes[32] = {
