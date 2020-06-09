@@ -2,315 +2,427 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA521F370A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 11:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF291F3841
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 12:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbgFIJ1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 05:27:21 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:59074 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726991AbgFIJ1S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 05:27:18 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200609092715euoutp018f6a44bbbc410a6eaa12d9139f9e9818~W1gT7MRda0734207342euoutp01U
-        for <linux-pm@vger.kernel.org>; Tue,  9 Jun 2020 09:27:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200609092715euoutp018f6a44bbbc410a6eaa12d9139f9e9818~W1gT7MRda0734207342euoutp01U
+        id S1728082AbgFIKmg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 06:42:36 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:40477 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727818AbgFIKmf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 06:42:35 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200609104232euoutp02e8f334a13f055da0b268d39d523d7917~W2iCvcCIg1777417774euoutp02V
+        for <linux-pm@vger.kernel.org>; Tue,  9 Jun 2020 10:42:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200609104232euoutp02e8f334a13f055da0b268d39d523d7917~W2iCvcCIg1777417774euoutp02V
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591694835;
-        bh=1oTJUZTGUemYBnJ4VGwd/IwzPiruFCXGH1Fd6M1vuV0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=ZeBgYUOIS8YpJTOJGWDInud97ioi+zRxfULhdXPLmwkbIs2pbqLsqUmm4BAhgRfA5
-         hkDGNFRcqnKwOqFOIBEIdO0Nc+kRQ5SOzgM538HoCC2jGtRlFnh6anbKjBTvXN2VJ9
-         QNwZKrp1Vl5frfc/8LxgmoqDdOEI2THvnCM7alGc=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200609092714eucas1p2e2a97cdee4cd9577232da18869a97fea~W1gTgac9D1043010430eucas1p2H;
-        Tue,  9 Jun 2020 09:27:14 +0000 (GMT)
+        s=mail20170921; t=1591699352;
+        bh=PLSkqIpsLNlo/H+N+2IqGi7nS8Ifz833svNS45yASaU=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=Q4cIlDSZwf670+KHd/rCHR4dCy5PsuLxj5Cq1ZOgX3D3Yfw5JrO8SP7Z+uK8fXSdW
+         TkkIYqxU5MpGm/AdYPL5qX/VFkK93QlZxPTcE64iAVdeeuPE821sCYyAHS/xeVUl5H
+         74msriKs9OS8G6GaU1HitPdA64ZjG8MjagW6iyoY=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200609104231eucas1p112b22b13492cea33847f349dce05a938~W2iCAM-H61594015940eucas1p1V;
+        Tue,  9 Jun 2020 10:42:31 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 4E.BE.60698.2F55FDE5; Tue,  9
-        Jun 2020 10:27:14 +0100 (BST)
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 40.19.61286.7976FDE5; Tue,  9
+        Jun 2020 11:42:31 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200609092713eucas1p2c124ed58ec8ec751bfc8b88df17b9129~W1gSzQ1T31246612466eucas1p2X;
-        Tue,  9 Jun 2020 09:27:13 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c~W2iBlGmiQ2622926229eucas1p2c;
+        Tue,  9 Jun 2020 10:42:30 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200609092713eusmtrp2560db55b0d11ae191ee9aa74992646d2~W1gSyS5f41432714327eusmtrp2I;
-        Tue,  9 Jun 2020 09:27:13 +0000 (GMT)
-X-AuditID: cbfec7f5-a29ff7000001ed1a-a8-5edf55f2c6f0
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 09.50.08375.1F55FDE5; Tue,  9
-        Jun 2020 10:27:13 +0100 (BST)
-Received: from [106.210.85.205] (unknown [106.210.85.205]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200609092712eusmtip1490f8194d82337445d546cf678528a3a~W1gRvtnXv2463424634eusmtip1r;
-        Tue,  9 Jun 2020 09:27:12 +0000 (GMT)
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Grant Likely <grant.likely@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        artem.bityutskiy@linux.intel.com, balbi@kernel.org,
-        broonie@kernel.org, fntoth@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com,
-        nd <nd@arm.com>, kernel@pengutronix.de
-From:   Andrzej Hajda <a.hajda@samsung.com>
-Message-ID: <b413d39f-71c4-d291-276d-1087baf07080@samsung.com>
-Date:   Tue, 9 Jun 2020 11:27:12 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.1
-MIME-Version: 1.0
-In-Reply-To: <20200609064511.7nek2rhk6ebfjaia@pengutronix.de>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjm23d2dhzOvqayt7KidSEFL1HRiUpNik5EN6J+FGqnPLjIG5va
-        5U9SYTo1S1zSvKaZNgRr5tSVRqu8YFZQkV1HJFqRmqldzLXcziT/Pc/zPs/3Pi98DFYOSucy
-        R5JSBW0Sn6Cm5ZSl/feT4O977TFhrVcC2bzTRRL268d+zLZn9slYw4c+mv1Vdp9mG/NfU+yZ
-        qnqabW7yY02GFop9Zi2h2dG8B4j9Zn2B2Uc1uZg1jvySsqVjBszqbQ46knCW2xYpV1dWh7gW
-        4zsZV2FO48ymbJor69rN3S2tk3H5jjCuo7dJwo2aF+yS75evjxMSjqQL2tDwg3KN0f5cklKw
-        /fjEPSuVgUoi9MiLAbIKikv1tB7JGSWpReAcn5CJZAxBtSFHKpJRBEMX2qXTkT8/73kGNQju
-        XH6FRTKM4GV3B3K5fAkPA4ND7oQfCQLHOac7gUkNht9n6rBrQJNAcDS8mtrOMAoSDvrJrS6Z
-        IktgZLiUcmF/Eg259i9uu4LMhq7LfW7di2yA5gGLxIUxWQhNgyVYxCo4PXbdvQuIgYHq4isy
-        sfYm+FFyHovYF7503PLoAeBsKZeI+BTYa89iMZyFoPFGiyewDt4+nnAXxVOl662horwRsupz
-        sEsG4gO9g7PFDj5QYCnyyArIylSK7kVg72n0PKiC6qfj9AWkNs64zDjjGuOMa4z/91YgyoRU
-        QpouMV7QrUwSjoXo+ERdWlJ8yOHkRDOa+oTdfzvGm1Hb5CEbIgxSeyt6Ve9jlFI+XXci0YaA
-        wWo/RVRPd4xSEcefOClok2O1aQmCzobmMZRapVhZ+TlaSeL5VOGoIKQI2umphPGam4E06QHX
-        yv0dgReDDzxsc74xmoMmh29+0rcy5beifDevWbYje/UiQ+fF/llzTLZ1RcUFKfP7911q+PB4
-        pHD5Hk372ugD394tTq50OLd01vJrt0DETr5Ik3G20FHoc3Ug8ujhbdyCONOPZ7O4Kh/l/cD8
-        l4uPew9E9fxJWPp31Bq75OHTGjWl0/ArgrBWx/8DJyBYn4ADAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpgleLIzCtJLcpLzFFi42I5/e/4Xd2PoffjDHbsMbfobZrOZPHm8TNm
-        i2NtT9gtpj58wmbxY95hNout/bdYLJoXr2ez2LFdxGLV1J0sFpd3zWGz+Nx7hNHiw66rzBZn
-        lvcwW8z6+IPVYu6XqcwWXYf+sjkIeGzbvY3VY828NYweO2fdZfdYsKnUY9OqTjaPeScDPfbP
-        XcPu0f/XwOP4je1MHp83yQVwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq
-        6dvZpKTmZJalFunbJehlzLp/halgkm/Fr4O7WBoY59h3MXJySAiYSPz+fpC1i5GLQ0hgKaPE
-        rZ+r2SES4hK7579lhrCFJf5c62KDKHrLKNG9dgkrSEJYIFHi+dt3YLaIgJbE3/b/YJOYBZYz
-        SzSfmsoI1cEs0fL/PVgVm4CmxN/NN4FGcXDwCthJdP3xBAmzCKhIfHw/lwXEFhWIlehe/APs
-        Cl4BQYmTM5+AxTkFbCV2PN/GBGIzC5hJzNv8kBnClpfY/nYOlC0u0fRlJesERqFZSNpnIWmZ
-        haRlFpKWBYwsqxhFUkuLc9Nziw31ihNzi0vz0vWS83M3MQJjf9uxn5t3MF7aGHyIUYCDUYmH
-        94b4vTgh1sSy4srcQ4wSHMxKIrxOZ0/HCfGmJFZWpRblxxeV5qQWH2I0BXpuIrOUaHI+MC3l
-        lcQbmhqaW1gamhubG5tZKInzdggcjBESSE8sSc1OTS1ILYLpY+LglGpg7Oz95XWbJVNzlZe0
-        i6LpXo/ZJYyvL+29ZJFy5jS3YLeiiU7uoyLzg7cq57aw1R5k9bAWc/uy+kba+SO/3kew9Rb7
-        Pn7/OeDbEoPo8ocfPx1/OYWpZCPbR7HQ6aoKR/zOni+2azypsL7qXLibt6WE185nsw6ycMod
-        lHURfXLeSiG7mXX24t/lSizFGYmGWsxFxYkANWZLlBMDAAA=
-X-CMS-MailID: 20200609092713eucas1p2c124ed58ec8ec751bfc8b88df17b9129
+        20200609104230eusmtrp2bdccadc2492619067695f3ce648d7306~W2iBkUG5T2886328863eusmtrp2i;
+        Tue,  9 Jun 2020 10:42:30 +0000 (GMT)
+X-AuditID: cbfec7f2-ef1ff7000001ef66-07-5edf67973457
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9F.A7.07950.6976FDE5; Tue,  9
+        Jun 2020 11:42:30 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200609104230eusmtip21b6d4ef4b0fd3602023d5155dcc52158~W2iAvfttR1352613526eusmtip2G;
+        Tue,  9 Jun 2020 10:42:30 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Saravana Kannan <saravanak@google.com>
+Subject: [PATCH v3] soc: samsung: Add simple voltage coupler for Exynos5800
+Date:   Tue,  9 Jun 2020 12:42:21 +0200
+Message-Id: <20200609104221.21243-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WSe0hTURzHO7t3d9fR4naVPD2oWFgkpFtFnKzsQcHtSUQPKDSX3la5Tdl1
+        lf1TaNRaraIITUzFSvNRtrV0mxW1RltMp2iuiTO1hMgaldMeltbc7fHf5/c93+/5/g4cEqNt
+        wmnkQU0Oq9UoVFJCjNc/+96yoEDZkyqzeqYiU2GdEF3p6yfQy6G3QlTz+Q1ALS13Raj3WqcA
+        fXmhF6B2ezGBQkYnQIUtjwTotrNbhD58axagrpJ2HDV52oTI4Bgl0JjPhCO98wuGTMPMKpqx
+        FXWLmDKzjjFXnyGYgO8BwVwYlTGWjtM4c95SDRiXv0HAhMwzt0btFi/PYFUHD7PaxOQ08QF/
+        9w1RtmXb0eF+E34C9KwxgCgSUothVdMwbgBikqZuAdiYPwL4YQhA73W9kB9CAFpGf+B/I15f
+        4E+kEkBb3gj2L+IONIJxF0HJoSFoIMY5hkqB7sGKyFUY9RyHxe5bEVM0tRH2tJZh44xTcdDr
+        bIiwhFoBu0otQr5uFqy5+zjSACm7CL63dhL8wVr4sNT5h6PhgMsi4nkG/GUrFfCBfAD7vLdF
+        /HAOwPa8QsC7lsGAdyScJsM7zYd19kReXg2rvndEZEhNgv7g5HEZC+Ol+gKMlyVQf4rm3XNh
+        kevOv9onrW0Yzwysdfki+9Phxxsqx4iLYGbR/64yAKpBLKvj1EqWk2vYIwmcQs3pNMqE9Cy1
+        GYQ/lGfMNWgFw237HIAigXSixB/7KpUWKg5zuWoHgCQmjZGsafak0pIMRe4xVpu1V6tTsZwD
+        TCdxaaxkUfm7FJpSKnLYTJbNZrV/TwVk1LQTQO4umIP9FG52Jc3ZXiJz9T7Nh8F7Pwn1yXMf
+        7+/I7DyevKTWvxA3R9W8jrm5qzxJaUyz5u5XzQvMq9Jf7RL1XgvN2nBhZ63mrPrrhHS7Z9Rf
+        Fvy0giuu25O3dMehtd3MbPrySkdqdvym5C1FA03ljFGxWzYl0VfBro9LiwkZ10VLce6AQh6P
+        aTnFbxQw/wdMAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuphkeLIzCtJLcpLzFFi42I5/e/4Pd1p6ffjDLp7rCw2zljPajH14RM2
+        i+tfnrNarP74mNHi/PkN7BYP5t5ksvh2pYPJ4vKuOWwWn3uPMFrMOL+PyWLtkbvsFm9+nGWy
+        uD3vMovFmdOXWC26Dv1ls/h3bSOLRceRb8wWG796OAh57Jx1l91jwaZSj02rOtk87lzbw+bR
+        /9fAY8vVdhaPvi2rGD2O39jO5PF5k1wAZ5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6h
+        sXmslZGpkr6dTUpqTmZZapG+XYJexo27S9gLtgRVfH2ykaWB8b5TFyMnh4SAicS5a3dYQGwh
+        gaWMEm1TkyDiMhInpzWwQtjCEn+udbFB1HxilGi/ywViswkYSnS9hYiLCMRLnP5/gr2LkYuD
+        WeAqi8T/hnawZmEBb4n7FxYwg9gsAqoS545sB7N5BWwlbs/fArVAXmL1hgPMExh5FjAyrGIU
+        SS0tzk3PLTbSK07MLS7NS9dLzs/dxAiMiW3Hfm7Zwdj1LvgQowAHoxIP7w3xe3FCrIllxZW5
+        hxglOJiVRHidzp6OE+JNSaysSi3Kjy8qzUktPsRoCrR8IrOUaHI+MF7zSuINTQ3NLSwNzY3N
+        jc0slMR5OwQOxggJpCeWpGanphakFsH0MXFwSjUwGv+PC21d6fo3XNxseoy+Ua5EKhdr1/k9
+        s5yLp03ovictJTJrtli2WGZb9hrBvKOXWzkZ7YKSGWX8vE6e8/zjlzhzUd8Mg+8s5ZfZjvUc
+        75728cXhayXfFtT3N1VJP7rHHGnNH2TdfeLiGmcZjierJ9T1hZfHeG7P+3XRPqKv/J7Y6lNT
+        zZ4qsRRnJBpqMRcVJwIAxiycuJ8CAAA=
+X-CMS-MailID: 20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200608091722eucas1p2fa8a4ac15c70e5a6e03c4babdf9f96b7
+X-RootMTR: 20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200608091722eucas1p2fa8a4ac15c70e5a6e03c4babdf9f96b7
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
-        <20200325032901.29551-1-saravanak@google.com>
-        <20200325125120.GX1922688@smile.fi.intel.com>
-        <295d25de-f01e-26de-02d6-1ac0c149d828@arm.com>
-        <20200326163110.GD1922688@smile.fi.intel.com>
-        <CGME20200608091722eucas1p2fa8a4ac15c70e5a6e03c4babdf9f96b7@eucas1p2.samsung.com>
-        <20200608091712.GA28093@pengutronix.de>
-        <437de51b-37e9-d8d1-19c7-137a9265bf45@samsung.com>
-        <20200609064511.7nek2rhk6ebfjaia@pengutronix.de>
+X-CMS-RootMailID: 20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c
+References: <CGME20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add a simple custom voltage regulator coupler for Exynos5800 SoCs, which
+require coupling between "vdd_arm" and "vdd_int" regulators. This coupler
+ensures that the voltage values don't go below the bootloader-selected
+operation point during the boot process until a the clients sets their
+constraints. It is achieved by assuming minimal voltage value equal to
+the current value if no constraints are set. This also ensures proper
+voltage balancing if any of the client driver is missing.
 
-On 09.06.2020 08:45, Marco Felsch wrote:
-> On 20-06-08 13:11, Andrzej Hajda wrote:
->> On 08.06.2020 11:17, Marco Felsch wrote:
->>> On 20-03-26 18:31, Andy Shevchenko wrote:
->>>> On Thu, Mar 26, 2020 at 03:01:22PM +0000, Grant Likely wrote:
->>>>> On 25/03/2020 12:51, Andy Shevchenko wrote:
->>>>>> On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
->>>>>>> On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
->>>>>>>> Consider the following scenario.
->>>>>>>>
->>>>>>>> The main driver of USB OTG controller (dwc3-pci), which has the following
->>>>>>>> functional dependencies on certain platform:
->>>>>>>> - ULPI (tusb1210)
->>>>>>>> - extcon (tested with extcon-intel-mrfld)
->>>>>>>>
->>>>>>>> Note, that first driver, tusb1210, is available at the moment of
->>>>>>>> dwc3-pci probing, while extcon-intel-mrfld is built as a module and
->>>>>>>> won't appear till user space does something about it.
->>>>>>>>
->>>>>>>> This is depicted by kernel configuration excerpt:
->>>>>>>>
->>>>>>>> 	CONFIG_PHY_TUSB1210=y
->>>>>>>> 	CONFIG_USB_DWC3=y
->>>>>>>> 	CONFIG_USB_DWC3_ULPI=y
->>>>>>>> 	CONFIG_USB_DWC3_DUAL_ROLE=y
->>>>>>>> 	CONFIG_USB_DWC3_PCI=y
->>>>>>>> 	CONFIG_EXTCON_INTEL_MRFLD=m
->>>>>>>>
->>>>>>>> In the Buildroot environment the modules are probed by alphabetical ordering
->>>>>>>> of their modaliases. The latter comes to the case when USB OTG driver will be
->>>>>>>> probed first followed by extcon one.
->>>>>>>>
->>>>>>>> So, if the platform anticipates extcon device to be appeared, in the above case
->>>>>>>> we will get deferred probe of USB OTG, because of ordering.
->>>>>>>>
->>>>>>>> Since current implementation, done by the commit 58b116bce136 ("drivercore:
->>>>>>>> deferral race condition fix") counts the amount of triggered deferred probe,
->>>>>>>> we never advance the situation -- the change makes it to be an infinite loop.
->>>>>>> Hi Andy,
->>>>>>>
->>>>>>> I'm trying to understand this sequence of steps. Sorry if the questions
->>>>>>> are stupid -- I'm not very familiar with USB/PCI stuff.
->>>>>> Thank you for looking into this. My answer below.
->>>>>>
->>>>>> As a first thing I would like to tell that there is another example of bad
->>>>>> behaviour of deferred probe with no relation to USB. The proposed change also
->>>>>> fixes that one (however, less possible to find in real life).
->>>>>>
->>>>>>>> ---8<---8<---
->>>>>>>>
->>>>>>>> [   22.187127] driver_deferred_probe_trigger <<< 1
->>>>>>>>
->>>>>>>> ...here is the late initcall triggers deferred probe...
->>>>>>>>
->>>>>>>> [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
->>>>>>>>
->>>>>>>> ...dwc3.0.auto is the only device in the deferred list...
->>>>>>> Ok, dwc3.0.auto is the only unprobed device at this point?
->>>>>> Correct.
->>>>>>
->>>>>>>> [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
->>>>>>>>
->>>>>>>> ...the counter before mutex is unlocked is kept the same...
->>>>>>>>
->>>>>>>> [   22.205663] platform dwc3.0.auto: Retrying from deferred list
->>>>>>>>
->>>>>>>> ...mutes has been unlocked, we try to re-probe the driver...
->>>>>>>>
->>>>>>>> [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
->>>>>>>> [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
->>>>>>>> [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
->>>>>>>> [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
->>>>>>>> [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
->>>>>>>> [   22.263723] driver_deferred_probe_trigger <<< 2
->>>>>>>>
->>>>>>>> ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
->>>>>>>>
->>>>>>>> [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
->>>>>>> So where did this dwc3.0.auto.ulpi come from?
->>>>>>> Looks like the device is created by dwc3_probe() through this call flow:
->>>>>>> dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
->>>>>>> dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
->>>>>> Correct.
->>>>>>
->>>>>>>> [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
->>>>>>> Can you please point me to which code patch actually caused the probe
->>>>>>> deferral?
->>>>>> Sure, it's in drd.c.
->>>>>>
->>>>>> if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
->>>>>>      edev = extcon_get_extcon_dev(name);
->>>>>>      if (!edev)
->>>>>>        return ERR_PTR(-EPROBE_DEFER);
->>>>>>      return edev;
->>>>>> }
->>>>>>
->>>>>>>> ...but extcon driver is still missing...
->>>>>>>>
->>>>>>>> [   22.283174] platform dwc3.0.auto: Added to deferred list
->>>>>>>> [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
->>>>>>> I'm not fully aware of all the USB implications, but if extcon is
->>>>>>> needed, why can't that check be done before we add and probe the ulpi
->>>>>>> device? That'll avoid this whole "fake" probing and avoid the counter
->>>>>>> increase. And avoid the need for this patch that's touching the code
->>>>>>> code that's already a bit delicate.
->>>>>>> Also, with my limited experience with all the possible drivers in the
->>>>>>> kernel, it's weird that the ulpi device is added and probed before we
->>>>>>> make sure the parent device (dwc3.0.auto) can actually probe
->>>>>>> successfully.
->>>>>> As I said above the deferred probe trigger has flaw on its own.
->>>>>> Even if we fix for USB case, there is (and probably will be) others.
->>>>> Right here is the driver design bug. A driver's probe() hook should *not*
->>>>> return -EPROBE_DEFER after already creating child devices which may have
->>>>> already been probed.
->>>> Any documentation statement for this requirement?
->>>>
->>>> By the way, I may imagine other mechanisms that probe the driver on other CPU
->>>> at the same time (let's consider parallel modprobes). The current code has a
->>>> flaw with that.
->>> Hi,
->>>
->>> sorry for picking this up again but I stumbled above the same issue
->>> within the driver imx/drm driver which is using the component framework.
->>> I end up in a infinity boot loop if I enabled the HDMI (which is the
->>> DesignWare bridge device) and the LVDS support and the LVDS bind return
->>> with EPROBE_DEFER. There are no words within the component framework docs
->>> which says that this is forbidden. Of course we can work-around the
->>> driver-core framework but IMHO this shouldn't be the way to go. I do not
->>> say that we should revert the commit introducing the regression but we
->>> should address this not only by extending the docs since the most
->>> drm-drivers are using the component framework and can end up in the same
->>> situation.
->> I am not sure why do you think this is similar issue.
-> Because I see trying to bind the device over and over..
->
->> Please describe the issue in more detail. Which drivers defers probe and
->> why, and why do you have infinite loop.
-> As said I'm currently on the imx-drm driver. The iMX6 devices are
-> using the synopsis HDMI IP core and so they are using this bridge device
-> driver (drivers/gpu/drm/bridge/synopsys/). The imx-drm driver can be
-> build module wise. As example I enabled the LDB and the HDMI support.
-> The HDMI driver is composed as platform driver with different
-> (sub-)drivers and devices. Those devices are populated by the HDMI core
-> driver _probe() function and triggers a driver_deferred_probe_trigger()
-> after the driver successfully probed. The LDB driver bind() returns
-> -EPROBE_DEFER because the panel we are looking for depends on a defered
-> regulator device. Now the defered probe code tries to probe the defered
-> devices again because the local-trigger count was changed by the HDMI
-> driver and we are in the never ending loop.
->
->> In general deferring probe from bind is not forbidden, but it should be
->> used carefully (as everything in kernel :) ). Fixing deferring probe
->> issues in many cases it is a matter of figuring out 'dependency loops'
->> and breaking them by splitting device initialization into more than one
->> phase.
-> We are on the way of splitting the imx-drm driver but there are many
-> other DRM drivers using the component framework. As far as I can see the
-> sunxi8 driver is component based and uses the same HDMI driver. I'm with
-> Andy that we should fix that on the common/core place.
+The balancing code comes from regulator core.c with the 
 
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+This patch is yet another attempt to fix the regulator coupling on
+Exynos5800/5422 SoCs. Here are links to the previous attempts and
+discussions:
 
-I have looked at the drivers and I see the main issue I see is that imx 
-drivers performs resource acquisition in bind phase. I think rule of 
-thumb should be "do not expose yourself, until you are ready", which in 
-this case means "do not call component_add, until resources are 
-acquired" - ie resource acquisition should be performed in probe. I use 
-this approach mainly to avoid multiple deferred re-probes, but it should 
-solve also this issue, so even if there will be solution to "deferred 
-probe issues" in core it would be good to fix imx drivers.
+https://lore.kernel.org/linux-samsung-soc/20191008101709.qVNy8eijBi0LynOteWFMnTg4GUwKG599n6OyYoX1Abs@z/
+https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
+https://lore.kernel.org/linux-pm/cover.1589528491.git.viresh.kumar@linaro.org/
+https://lore.kernel.org/linux-pm/20200528131130.17984-1-m.szyprowski@samsung.com/
+https://lore.kernel.org/linux-samsung-soc/57cf3a15-5d9b-7636-4c69-60742e8cfae6@samsung.com/
+https://lore.kernel.org/lkml/20200605063724.9030-1-m.szyprowski@samsung.com/
 
+The problem is with "vdd_int" regulator coupled with "vdd_arm" on Odroid
+XU3/XU4 boards family. "vdd_arm" is handled by CPUfreq. "vdd_int" is
+handled by devfreq. CPUfreq initialized quite early during boot and it
+starts changing OPPs and "vdd_arm" value. Sometimes CPU activity during
+boot goes down and some low-frequency OPPs are selected, what in turn
+causes lowering "vdd_arm". This happens before devfreq applies its
+requirements on "vdd_int". Regulator balancing code reduces "vdd_arm"
+voltage value, what in turn causes lowering "vdd_int" value to the lowest
+possible value. This is much below the operation point of the wcore bus,
+which still runs at the highest frequency.
 
-Regards
+The issue was hard to notice because in the most cases the board managed
+to boot properly, even when the regulator was set to lowest value allowed
+by the regulator constraints. However, it caused some random issues,
+which can be observed as "Unhandled prefetch abort" or low USB stability.
 
-Andrzej
+Handling this case in the generic code has been rejected, so the only way
+to ensure the desired behavior on Exynos5800-based SoCs is to make a
+custom regulator coupler driver. I've tried hard to extract some common
+code to simplify the exynos-regulator-coupler driver as much as possible,
+but the difference between it and the generic code is so deep that this
+approach failed, so indead I simply copied and modified the balancing
+code.
 
+Best regards
+Marek Szyprowski
+---
+ arch/arm/mach-exynos/Kconfig                  |   1 +
+ drivers/soc/samsung/Kconfig                   |   3 +
+ drivers/soc/samsung/Makefile                  |   1 +
+ .../soc/samsung/exynos-regulator-coupler.c    | 221 ++++++++++++++++++
+ 4 files changed, 226 insertions(+)
+ create mode 100644 drivers/soc/samsung/exynos-regulator-coupler.c
 
->
-> Regards,
->    Marco
->
->> Regards
->>
->> Andrzej
->>
->>
->>>>> It can be solved by refactoring the driver probe routine. If a resource is
->>>>> required to be present, then check that it is available early; before
->>>>> registering child devices.
->>>> We fix one and leave others.
->>> E.g. the imx-drm and the sunxi driver...
->>>
->>> Regards,
->>>     Marco
->>>
->>>>> The proposed solution to modify driver core is fragile and susceptible to
->>>>> side effects from other probe paths. I don't think it is the right approach.
->>>> Have you tested it on your case? Does it fix the issue?
->>>>
+diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
+index 76838255b5fa..f185cd3d4c62 100644
+--- a/arch/arm/mach-exynos/Kconfig
++++ b/arch/arm/mach-exynos/Kconfig
+@@ -118,6 +118,7 @@ config SOC_EXYNOS5800
+ 	bool "Samsung EXYNOS5800"
+ 	default y
+ 	depends on SOC_EXYNOS5420
++	select EXYNOS_REGULATOR_COUPLER
+ 
+ config EXYNOS_MCPM
+ 	bool
+diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+index 19c4d3f1437b..5d7819b52eed 100644
+--- a/drivers/soc/samsung/Kconfig
++++ b/drivers/soc/samsung/Kconfig
+@@ -43,4 +43,7 @@ config EXYNOS_PM_DOMAINS
+ 	bool "Exynos PM domains" if COMPILE_TEST
+ 	depends on PM_GENERIC_DOMAINS || COMPILE_TEST
+ 
++config EXYNOS_REGULATOR_COUPLER
++	bool "Exynos SoC Regulator Coupler" if COMPILE_TEST
++	depends on ARCH_EXYNOS || COMPILE_TEST
+ endif
+diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
+index 31db65cb7aa3..93285faec416 100644
+--- a/drivers/soc/samsung/Makefile
++++ b/drivers/soc/samsung/Makefile
+@@ -10,3 +10,4 @@ obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
+ 					exynos5250-pmu.o exynos5420-pmu.o
+ obj-$(CONFIG_EXYNOS_PMU_ARM64_DRIVERS)	+= exynos-pm.o exynos5433-pmu.o
+ obj-$(CONFIG_EXYNOS_PM_DOMAINS) += pm_domains.o
++obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) += exynos-regulator-coupler.o
+diff --git a/drivers/soc/samsung/exynos-regulator-coupler.c b/drivers/soc/samsung/exynos-regulator-coupler.c
+new file mode 100644
+index 000000000000..3cafc1738eb6
+--- /dev/null
++++ b/drivers/soc/samsung/exynos-regulator-coupler.c
+@@ -0,0 +1,221 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2020 Samsung Electronics Co., Ltd.
++ *	      http://www.samsung.com/
++ * Author: Marek Szyprowski <m.szyprowski@samsung.com>
++ *
++ * Simplified generic volatage coupler from regulator core.c
++ * The main difference is that it keeps current regulator voltage
++ * if consumers didn't apply their contraints yet.
++ */
++
++#include <linux/init.h>
++#include <linux/kernel.h>
++#include <linux/of.h>
++#include <linux/regulator/coupler.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++
++static int regulator_get_optimal_voltage(struct regulator_dev *rdev,
++					 int *current_uV,
++					 int *min_uV, int *max_uV,
++					 suspend_state_t state)
++{
++	struct coupling_desc *c_desc = &rdev->coupling_desc;
++	struct regulator_dev **c_rdevs = c_desc->coupled_rdevs;
++	struct regulation_constraints *constraints = rdev->constraints;
++	int desired_min_uV = 0, desired_max_uV = INT_MAX;
++	int max_current_uV = 0, min_current_uV = INT_MAX;
++	int highest_min_uV = 0, target_uV, possible_uV;
++	int i, ret, max_spread, n_coupled = c_desc->n_coupled;
++	bool done;
++
++	*current_uV = -1;
++
++	/* Find highest min desired voltage */
++	for (i = 0; i < n_coupled; i++) {
++		int tmp_min = 0;
++		int tmp_max = INT_MAX;
++
++		lockdep_assert_held_once(&c_rdevs[i]->mutex.base);
++
++		ret = regulator_check_consumers(c_rdevs[i],
++						&tmp_min,
++						&tmp_max, state);
++		if (ret < 0)
++			return ret;
++
++		if (tmp_min == 0) {
++			ret = regulator_get_voltage_rdev(c_rdevs[i]);
++			if (ret < 0)
++				return ret;
++			tmp_min = ret;
++		}
++
++		/* apply constraints */
++		ret = regulator_check_voltage(c_rdevs[i], &tmp_min, &tmp_max);
++		if (ret < 0)
++			return ret;
++
++		highest_min_uV = max(highest_min_uV, tmp_min);
++
++		if (i == 0) {
++			desired_min_uV = tmp_min;
++			desired_max_uV = tmp_max;
++		}
++	}
++
++	max_spread = constraints->max_spread[0];
++
++	/*
++	 * Let target_uV be equal to the desired one if possible.
++	 * If not, set it to minimum voltage, allowed by other coupled
++	 * regulators.
++	 */
++	target_uV = max(desired_min_uV, highest_min_uV - max_spread);
++
++	/*
++	 * Find min and max voltages, which currently aren't violating
++	 * max_spread.
++	 */
++	for (i = 1; i < n_coupled; i++) {
++		int tmp_act;
++
++		tmp_act = regulator_get_voltage_rdev(c_rdevs[i]);
++		if (tmp_act < 0)
++			return tmp_act;
++
++		min_current_uV = min(tmp_act, min_current_uV);
++		max_current_uV = max(tmp_act, max_current_uV);
++	}
++
++	/*
++	 * Correct target voltage, so as it currently isn't
++	 * violating max_spread
++	 */
++	possible_uV = max(target_uV, max_current_uV - max_spread);
++	possible_uV = min(possible_uV, min_current_uV + max_spread);
++
++	if (possible_uV > desired_max_uV)
++		return -EINVAL;
++
++	done = (possible_uV == target_uV);
++	desired_min_uV = possible_uV;
++
++	/* Set current_uV if wasn't done earlier in the code and if necessary */
++	if (*current_uV == -1) {
++		ret = regulator_get_voltage_rdev(rdev);
++		if (ret < 0)
++			return ret;
++		*current_uV = ret;
++	}
++
++	*min_uV = desired_min_uV;
++	*max_uV = desired_max_uV;
++
++	return done;
++}
++
++static int exynos_coupler_balance_voltage(struct regulator_coupler *coupler,
++					  struct regulator_dev *rdev,
++					  suspend_state_t state)
++{
++	struct regulator_dev **c_rdevs;
++	struct regulator_dev *best_rdev;
++	struct coupling_desc *c_desc = &rdev->coupling_desc;
++	int i, ret, n_coupled, best_min_uV, best_max_uV, best_c_rdev;
++	unsigned int delta, best_delta;
++	unsigned long c_rdev_done = 0;
++	bool best_c_rdev_done;
++
++	c_rdevs = c_desc->coupled_rdevs;
++	n_coupled = c_desc->n_coupled;
++
++	/*
++	 * Find the best possible voltage change on each loop. Leave the loop
++	 * if there isn't any possible change.
++	 */
++	do {
++		best_c_rdev_done = false;
++		best_delta = 0;
++		best_min_uV = 0;
++		best_max_uV = 0;
++		best_c_rdev = 0;
++		best_rdev = NULL;
++
++		/*
++		 * Find highest difference between optimal voltage
++		 * and current voltage.
++		 */
++		for (i = 0; i < n_coupled; i++) {
++			/*
++			 * optimal_uV is the best voltage that can be set for
++			 * i-th regulator at the moment without violating
++			 * max_spread constraint in order to balance
++			 * the coupled voltages.
++			 */
++			int optimal_uV = 0, optimal_max_uV = 0, current_uV = 0;
++
++			if (test_bit(i, &c_rdev_done))
++				continue;
++
++			ret = regulator_get_optimal_voltage(c_rdevs[i],
++							    &current_uV,
++							    &optimal_uV,
++							    &optimal_max_uV,
++							    state);
++			if (ret < 0)
++				goto out;
++
++			delta = abs(optimal_uV - current_uV);
++
++			if (delta && best_delta <= delta) {
++				best_c_rdev_done = ret;
++				best_delta = delta;
++				best_rdev = c_rdevs[i];
++				best_min_uV = optimal_uV;
++				best_max_uV = optimal_max_uV;
++				best_c_rdev = i;
++			}
++		}
++
++		/* Nothing to change, return successfully */
++		if (!best_rdev) {
++			ret = 0;
++			goto out;
++		}
++
++		ret = regulator_set_voltage_rdev(best_rdev, best_min_uV,
++						 best_max_uV, state);
++
++		if (ret < 0)
++			goto out;
++
++		if (best_c_rdev_done)
++			set_bit(best_c_rdev, &c_rdev_done);
++
++	} while (n_coupled > 1);
++
++out:
++	return ret;
++}
++
++static int exynos_coupler_attach(struct regulator_coupler *coupler,
++				 struct regulator_dev *rdev)
++{
++	return 0;
++}
++
++static struct regulator_coupler exynos_coupler = {
++	.attach_regulator = exynos_coupler_attach,
++	.balance_voltage  = exynos_coupler_balance_voltage,
++};
++
++static int __init exynos_coupler_init(void)
++{
++	if (!of_machine_is_compatible("samsung,exynos5800"))
++		return 0;
++
++	return regulator_coupler_register(&exynos_coupler);
++}
++arch_initcall(exynos_coupler_init);
+-- 
+2.17.1
+
