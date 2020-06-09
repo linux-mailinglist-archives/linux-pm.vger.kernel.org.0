@@ -2,411 +2,462 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B1E1F3D9B
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 16:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FAE1F3F8D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 17:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728751AbgFIOHt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 10:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728338AbgFIOHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 10:07:48 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E424C05BD1E;
-        Tue,  9 Jun 2020 07:07:47 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id x22so12588666lfd.4;
-        Tue, 09 Jun 2020 07:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=wxlUC47mBiAj2KazrQRk0ZOPTudYA0Zuw2dUBmXJP/M=;
-        b=d2hgC+ptjckByl9lFqMKN7zMtiofOgxz+Q/1e+mD94QxBUXrcRJuxxLpP0VBmiC1or
-         +uDYUvuvNrq5cT0Hoxhzfaw4YplDk3kGfhT9/OyogPZCrFWYkNAYMOZbdCGD2moHX0Nx
-         BBxHFeTIoMu73vIGvLoe73VRujwvLzuz7x5w9R0n4+1Gt+lm7mxM2IdU/D9BLEuV/2TP
-         MfdvKA6W4CPZjDRlS7DuViUEsjtaNWeEPHp/IwZ/jaJ6Vc71Ds/9fj5Kx7Rl2iOLj8h4
-         WhzjI9296qk1xxynyBWmq+RqxF/TSazN3PdO4q4KLq7guQVLvL/7TTiLfJux32wazpic
-         5mrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wxlUC47mBiAj2KazrQRk0ZOPTudYA0Zuw2dUBmXJP/M=;
-        b=McCZEih2Uf9MQ6I1KetVVddtXq6UIoVtMrpiU4vqWpmvsr03H1XJR3AxHfP5tMN7BS
-         yc+IJ4Mgn1XOuTUe92FxT/XWmqNQfiKSEOf2JjqjocwlG7Cz/gaoNOXoSlEXMab+LCL5
-         FnvqqD03kCzCPqQl9mGdF/hAbq6aRbLvHXXTRb1gFXStI+FguAecw1uxL48z6YDJEH+4
-         /WQ2oTOysvuxxWGM2gWPH2L/XSZFkbs3TfKjaDHH7TURmuTiQGLAv9a0QDISXA4o5QuG
-         Sc15EoRIARRy6zblhndJYlbC4770mrIPv50zYigoJnEzSvhcqYXmNneNeS9GPBwNZUFm
-         3KDA==
-X-Gm-Message-State: AOAM533xMIdMdk/+wDtBKdw7VTX60XPUpADkJXKagTIesnoE0Sz7sjyR
-        Hn8TUAY2FLaAts6zbaovPMw=
-X-Google-Smtp-Source: ABdhPJxY0/wPtyTxxKKV2kIBQt6lh/b2z8i0MpsPSuGj75pIEKAe7xDzg2Ey3heRmK9/oignDZvfIw==
-X-Received: by 2002:ac2:4567:: with SMTP id k7mr15515623lfm.122.1591711665891;
-        Tue, 09 Jun 2020 07:07:45 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id y17sm5078623lfa.77.2020.06.09.07.07.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jun 2020 07:07:43 -0700 (PDT)
-Subject: Re: [PATCH v3] soc: samsung: Add simple voltage coupler for
- Exynos5800
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Saravana Kannan <saravanak@google.com>
-References: <CGME20200609104230eucas1p2efc14b59c4ccdcb839b54a62fbd8a31c@eucas1p2.samsung.com>
- <20200609104221.21243-1-m.szyprowski@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <682662fa-d848-f51b-fad7-cb56af9f1a1c@gmail.com>
-Date:   Tue, 9 Jun 2020 17:07:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1730872AbgFIPiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 11:38:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728381AbgFIPh7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Jun 2020 11:37:59 -0400
+Received: from earth.universe (dyndsl-037-138-184-022.ewe-ip-backbone.de [37.138.184.22])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5550E20774;
+        Tue,  9 Jun 2020 15:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591717078;
+        bh=iR8N2iIawyWiTzawVileB4bmWBkoeEhPE46HgQN3S64=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tsAyG+oE38U0uVzXyEq8BppjPPPUXFAoltmH7fjFm6kbJhz01+6wiDk3nbL0vrMNp
+         C8amoyyYhSWXRkK2Hxbjg/mEneWMS9fk1aKKNQwvwzvXiG5UqW8LDJEuV6EuUU+sON
+         b5Yv7rPtX0P7haxrxxmgPkGJhwgSCAGcjLKvHwHY=
+Received: by earth.universe (Postfix, from userid 1000)
+        id B99533C08C6; Tue,  9 Jun 2020 17:37:56 +0200 (CEST)
+Date:   Tue, 9 Jun 2020 17:37:56 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 5.8
+Message-ID: <20200609153756.rdkntdy4i6zgcpbu@earth.universe>
 MIME-Version: 1.0
-In-Reply-To: <20200609104221.21243-1-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="c5hwyhkxeduuwcww"
+Content-Disposition: inline
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-09.06.2020 13:42, Marek Szyprowski пишет:
-> Add a simple custom voltage regulator coupler for Exynos5800 SoCs, which
-> require coupling between "vdd_arm" and "vdd_int" regulators. This coupler
-> ensures that the voltage values don't go below the bootloader-selected
-> operation point during the boot process until a the clients sets their
-> constraints. It is achieved by assuming minimal voltage value equal to
-> the current value if no constraints are set. This also ensures proper
-> voltage balancing if any of the client driver is missing.
-> 
-> The balancing code comes from regulator core.c with the 
-> 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
-> This patch is yet another attempt to fix the regulator coupling on
-> Exynos5800/5422 SoCs. Here are links to the previous attempts and
-> discussions:
-> 
-> https://lore.kernel.org/linux-samsung-soc/20191008101709.qVNy8eijBi0LynOteWFMnTg4GUwKG599n6OyYoX1Abs@z/
-> https://lore.kernel.org/lkml/20191017102758.8104-1-m.szyprowski@samsung.com/
-> https://lore.kernel.org/linux-pm/cover.1589528491.git.viresh.kumar@linaro.org/
-> https://lore.kernel.org/linux-pm/20200528131130.17984-1-m.szyprowski@samsung.com/
-> https://lore.kernel.org/linux-samsung-soc/57cf3a15-5d9b-7636-4c69-60742e8cfae6@samsung.com/
-> https://lore.kernel.org/lkml/20200605063724.9030-1-m.szyprowski@samsung.com/
-> 
-> The problem is with "vdd_int" regulator coupled with "vdd_arm" on Odroid
-> XU3/XU4 boards family. "vdd_arm" is handled by CPUfreq. "vdd_int" is
-> handled by devfreq. CPUfreq initialized quite early during boot and it
-> starts changing OPPs and "vdd_arm" value. Sometimes CPU activity during
-> boot goes down and some low-frequency OPPs are selected, what in turn
-> causes lowering "vdd_arm". This happens before devfreq applies its
-> requirements on "vdd_int". Regulator balancing code reduces "vdd_arm"
-> voltage value, what in turn causes lowering "vdd_int" value to the lowest
-> possible value. This is much below the operation point of the wcore bus,
-> which still runs at the highest frequency.
-> 
-> The issue was hard to notice because in the most cases the board managed
-> to boot properly, even when the regulator was set to lowest value allowed
-> by the regulator constraints. However, it caused some random issues,
-> which can be observed as "Unhandled prefetch abort" or low USB stability.
-> 
-> Handling this case in the generic code has been rejected, so the only way
-> to ensure the desired behavior on Exynos5800-based SoCs is to make a
-> custom regulator coupler driver. I've tried hard to extract some common
-> code to simplify the exynos-regulator-coupler driver as much as possible,
-> but the difference between it and the generic code is so deep that this
-> approach failed, so indead I simply copied and modified the balancing
-> code.
-> 
-> Best regards
-> Marek Szyprowski
-> ---
->  arch/arm/mach-exynos/Kconfig                  |   1 +
->  drivers/soc/samsung/Kconfig                   |   3 +
->  drivers/soc/samsung/Makefile                  |   1 +
->  .../soc/samsung/exynos-regulator-coupler.c    | 221 ++++++++++++++++++
->  4 files changed, 226 insertions(+)
->  create mode 100644 drivers/soc/samsung/exynos-regulator-coupler.c
-> 
-> diff --git a/arch/arm/mach-exynos/Kconfig b/arch/arm/mach-exynos/Kconfig
-> index 76838255b5fa..f185cd3d4c62 100644
-> --- a/arch/arm/mach-exynos/Kconfig
-> +++ b/arch/arm/mach-exynos/Kconfig
-> @@ -118,6 +118,7 @@ config SOC_EXYNOS5800
->  	bool "Samsung EXYNOS5800"
->  	default y
->  	depends on SOC_EXYNOS5420
-> +	select EXYNOS_REGULATOR_COUPLER
->  
->  config EXYNOS_MCPM
->  	bool
-> diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
-> index 19c4d3f1437b..5d7819b52eed 100644
-> --- a/drivers/soc/samsung/Kconfig
-> +++ b/drivers/soc/samsung/Kconfig
-> @@ -43,4 +43,7 @@ config EXYNOS_PM_DOMAINS
->  	bool "Exynos PM domains" if COMPILE_TEST
->  	depends on PM_GENERIC_DOMAINS || COMPILE_TEST
->  
-> +config EXYNOS_REGULATOR_COUPLER
-> +	bool "Exynos SoC Regulator Coupler" if COMPILE_TEST
-> +	depends on ARCH_EXYNOS || COMPILE_TEST
->  endif
-> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
-> index 31db65cb7aa3..93285faec416 100644
-> --- a/drivers/soc/samsung/Makefile
-> +++ b/drivers/soc/samsung/Makefile
-> @@ -10,3 +10,4 @@ obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
->  					exynos5250-pmu.o exynos5420-pmu.o
->  obj-$(CONFIG_EXYNOS_PMU_ARM64_DRIVERS)	+= exynos-pm.o exynos5433-pmu.o
->  obj-$(CONFIG_EXYNOS_PM_DOMAINS) += pm_domains.o
-> +obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) += exynos-regulator-coupler.o
-> diff --git a/drivers/soc/samsung/exynos-regulator-coupler.c b/drivers/soc/samsung/exynos-regulator-coupler.c
-> new file mode 100644
-> index 000000000000..3cafc1738eb6
-> --- /dev/null
-> +++ b/drivers/soc/samsung/exynos-regulator-coupler.c
-> @@ -0,0 +1,221 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2020 Samsung Electronics Co., Ltd.
-> + *	      http://www.samsung.com/
-> + * Author: Marek Szyprowski <m.szyprowski@samsung.com>
-> + *
-> + * Simplified generic volatage coupler from regulator core.c
 
-typo voltage -------------^
+--c5hwyhkxeduuwcww
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> + * The main difference is that it keeps current regulator voltage
-> + * if consumers didn't apply their contraints yet.
+Hi Linus,
 
-typo conStraints ------------------------^
+Here is the power-supply pull request. As mentioned in my
+pull request for 5.7, this time there are lots of changes.
+Quite a few changes to the core, lots of driver changes
+and one change to kobject core (with Ack from Greg). Please
+find the details in the signed tag (or below).
 
-> + */
-> +
-> +#include <linux/init.h>
-> +#include <linux/kernel.h>
-> +#include <linux/of.h>
-> +#include <linux/regulator/coupler.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/machine.h>
-> +
-> +static int regulator_get_optimal_voltage(struct regulator_dev *rdev,
-> +					 int *current_uV,
-> +					 int *min_uV, int *max_uV,
-> +					 suspend_state_t state)
-> +{
-> +	struct coupling_desc *c_desc = &rdev->coupling_desc;
-> +	struct regulator_dev **c_rdevs = c_desc->coupled_rdevs;
-> +	struct regulation_constraints *constraints = rdev->constraints;
-> +	int desired_min_uV = 0, desired_max_uV = INT_MAX;
-> +	int max_current_uV = 0, min_current_uV = INT_MAX;
-> +	int highest_min_uV = 0, target_uV, possible_uV;
-> +	int i, ret, max_spread, n_coupled = c_desc->n_coupled;
-> +	bool done;
-> +
-> +	*current_uV = -1;
-> +
-> +	/* Find highest min desired voltage */
-> +	for (i = 0; i < n_coupled; i++) {
-> +		int tmp_min = 0;
-> +		int tmp_max = INT_MAX;
-> +
-> +		lockdep_assert_held_once(&c_rdevs[i]->mutex.base);
-> +
-> +		ret = regulator_check_consumers(c_rdevs[i],
-> +						&tmp_min,
-> +						&tmp_max, state);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		if (tmp_min == 0) {
-> +			ret = regulator_get_voltage_rdev(c_rdevs[i]);
-> +			if (ret < 0)
-> +				return ret;
-> +			tmp_min = ret;
-> +		}
-> +
-> +		/* apply constraints */
-> +		ret = regulator_check_voltage(c_rdevs[i], &tmp_min, &tmp_max);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		highest_min_uV = max(highest_min_uV, tmp_min);
-> +
-> +		if (i == 0) {
-> +			desired_min_uV = tmp_min;
-> +			desired_max_uV = tmp_max;
-> +		}
-> +	}
-> +
-> +	max_spread = constraints->max_spread[0];
-> +
-> +	/*
-> +	 * Let target_uV be equal to the desired one if possible.
-> +	 * If not, set it to minimum voltage, allowed by other coupled
-> +	 * regulators.
-> +	 */
-> +	target_uV = max(desired_min_uV, highest_min_uV - max_spread);
-> +
-> +	/*
-> +	 * Find min and max voltages, which currently aren't violating
-> +	 * max_spread.
-> +	 */
-> +	for (i = 1; i < n_coupled; i++) {
-> +		int tmp_act;
-> +
-> +		tmp_act = regulator_get_voltage_rdev(c_rdevs[i]);
-> +		if (tmp_act < 0)
-> +			return tmp_act;
-> +
-> +		min_current_uV = min(tmp_act, min_current_uV);
-> +		max_current_uV = max(tmp_act, max_current_uV);
-> +	}
-> +
-> +	/*
-> +	 * Correct target voltage, so as it currently isn't
-> +	 * violating max_spread
-> +	 */
-> +	possible_uV = max(target_uV, max_current_uV - max_spread);
-> +	possible_uV = min(possible_uV, min_current_uV + max_spread);
-> +
-> +	if (possible_uV > desired_max_uV)
-> +		return -EINVAL;
-> +
-> +	done = (possible_uV == target_uV);
-> +	desired_min_uV = possible_uV;
-> +
-> +	/* Set current_uV if wasn't done earlier in the code and if necessary */
-> +	if (*current_uV == -1) {
-> +		ret = regulator_get_voltage_rdev(rdev);
-> +		if (ret < 0)
-> +			return ret;
-> +		*current_uV = ret;
-> +	}
-> +
-> +	*min_uV = desired_min_uV;
-> +	*max_uV = desired_max_uV;
-> +
-> +	return done;
-> +}
-> +
-> +static int exynos_coupler_balance_voltage(struct regulator_coupler *coupler,
-> +					  struct regulator_dev *rdev,
-> +					  suspend_state_t state)
-> +{
-> +	struct regulator_dev **c_rdevs;
-> +	struct regulator_dev *best_rdev;
-> +	struct coupling_desc *c_desc = &rdev->coupling_desc;
-> +	int i, ret, n_coupled, best_min_uV, best_max_uV, best_c_rdev;
-> +	unsigned int delta, best_delta;
-> +	unsigned long c_rdev_done = 0;
-> +	bool best_c_rdev_done;
-> +
-> +	c_rdevs = c_desc->coupled_rdevs;
-> +	n_coupled = c_desc->n_coupled;
-> +
-> +	/*
-> +	 * Find the best possible voltage change on each loop. Leave the loop
-> +	 * if there isn't any possible change.
-> +	 */
-> +	do {
-> +		best_c_rdev_done = false;
-> +		best_delta = 0;
-> +		best_min_uV = 0;
-> +		best_max_uV = 0;
-> +		best_c_rdev = 0;
-> +		best_rdev = NULL;
-> +
-> +		/*
-> +		 * Find highest difference between optimal voltage
-> +		 * and current voltage.
-> +		 */
-> +		for (i = 0; i < n_coupled; i++) {
-> +			/*
-> +			 * optimal_uV is the best voltage that can be set for
-> +			 * i-th regulator at the moment without violating
-> +			 * max_spread constraint in order to balance
-> +			 * the coupled voltages.
-> +			 */
-> +			int optimal_uV = 0, optimal_max_uV = 0, current_uV = 0;
-> +
-> +			if (test_bit(i, &c_rdev_done))
-> +				continue;
-> +
-> +			ret = regulator_get_optimal_voltage(c_rdevs[i],
-> +							    &current_uV,
-> +							    &optimal_uV,
-> +							    &optimal_max_uV,
-> +							    state);
-> +			if (ret < 0)
-> +				goto out;
-> +
-> +			delta = abs(optimal_uV - current_uV);
-> +
-> +			if (delta && best_delta <= delta) {
-> +				best_c_rdev_done = ret;
-> +				best_delta = delta;
-> +				best_rdev = c_rdevs[i];
-> +				best_min_uV = optimal_uV;
-> +				best_max_uV = optimal_max_uV;
-> +				best_c_rdev = i;
-> +			}
-> +		}
-> +
-> +		/* Nothing to change, return successfully */
-> +		if (!best_rdev) {
-> +			ret = 0;
-> +			goto out;
-> +		}
-> +
-> +		ret = regulator_set_voltage_rdev(best_rdev, best_min_uV,
-> +						 best_max_uV, state);
-> +
-> +		if (ret < 0)
-> +			goto out;
-> +
-> +		if (best_c_rdev_done)
-> +			set_bit(best_c_rdev, &c_rdev_done);
-> +
-> +	} while (n_coupled > 1);
-> +
-> +out:
-> +	return ret;
-> +}
-> +
-> +static int exynos_coupler_attach(struct regulator_coupler *coupler,
-> +				 struct regulator_dev *rdev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static struct regulator_coupler exynos_coupler = {
-> +	.attach_regulator = exynos_coupler_attach,
-> +	.balance_voltage  = exynos_coupler_balance_voltage,
-> +};
-> +
-> +static int __init exynos_coupler_init(void)
-> +{
-> +	if (!of_machine_is_compatible("samsung,exynos5800"))
-> +		return 0;
-> +
-> +	return regulator_coupler_register(&exynos_coupler);
-> +}
-> +arch_initcall(exynos_coupler_init);
-> 
+No merge conflicts have been reported from linux-next.
 
-The code looks good to me.
+-- Sebastian
 
-Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
+The following changes since commit 0e698dfa282211e414076f9dc7e83c1c288314fd:
+
+  Linux 5.7-rc4 (2020-05-03 14:56:04 -0700)
+
+are available in the Git repository at:
+
+  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
+pply.git tags/for-v5.8
+
+for you to fetch changes up to 152204dbdcee6df9406f87c81f9591aeaf1ba55b:
+
+  power: supply: cw2015: Attach OF ID table to the driver (2020-06-06 01:13=
+:56 +0200)
+
+----------------------------------------------------------------
+power supply and reset changes for the v5.8 series
+
+kobject:
+ * Increase number of allowed uevent variables
+
+power-supply core:
+ * Add power-supply type in uevent
+ * Cleanup property handling in core
+ * Make property and usb_type pointers const
+ * Convert core power-supply DT binding to YAML
+ * Cleanup HWMON code
+ * Add new health status "calibration required"
+ * Add new properties for manufacture date and
+   capacity error margin
+
+battery drivers:
+ * new cw2015 battery driver used by pine64 Pinebook Pro laptop
+ * axp22: blacklist on Meegopad T02
+ * sc27xx: support current/voltage reading
+ * max17042: support time-to-empty reading
+ * simple-battery: add more battery parameters
+ * bq27xxx: convert DT binding document to YAML
+ * sbs-battery: add TI BQ20Z65 support, fix technology property, convert
+		DT binding to YAML, add option to disable charger
+		broadcasts, add new properties: manufacture date,
+		capacity error margin, average current, charge current
+		and voltage and support calibration required health
+		status
+ * misc. fixes
+
+charger drivers:
+ * bq25890: cleanup, implement charge type, precharge current and input
+            current limiting properties
+ * bd70528: use new linear range helper library
+ * bd99954: new charger driver
+ * mp2629: new charger driver
+ * misc. fixes
+
+reboot drivers:
+ * oxnas-restart: introduce new driver
+ * syscon-reboot: convert DT binding to YAML, add parent syscon device supp=
+ort
+ * misc. fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      power: supply: cw2015: Attach OF ID table to the driver
+
+ChenTao (1):
+      power: supply: cw2015: Make some symbols static
+
+Christophe JAILLET (1):
+      power: supply: lp8788: Fix an error handling path in 'lp8788_charger_=
+probe()'
+
+Dan Carpenter (1):
+      power: bq25890: unlock on error paths in bq25890_resume()
+
+Dan Murphy (2):
+      dt-bindings: power: Convert power_supply text to yaml
+      dt-bindings: power: Convert bq27xxx dt to yaml
+
+Daniel Golle (1):
+      power: reset: introduce oxnas-restart
+
+David Heidelberg (1):
+      power: supply: smb347-charger: Add delay before getting IRQSTAT
+
+Dmitry Osipenko (1):
+      power: supply: smb347-charger: IRQSTAT_D is volatile
+
+Enric Balletbo i Serra (1):
+      power: supply: bq24257_charger: Replace depends on REGMAP_I2C with se=
+lect
+
+Geordan Neukum (1):
+      power: supply: max17042_battery: Add support for the TTE_NOW prop
+
+Hongbo Yao (1):
+      power: reset: ltc2952: remove unused variable
+
+Jason Yan (2):
+      power: supply: max14656: remove set but not used 'ret'
+      power: supply: ab8500_fg: remove comparison to bool
+
+Jean-Francois Dagenais (1):
+      power: supply: sbs-battery: add ability to disable charger broadcasts
+
+Jonathan Bakker (1):
+      power: supply: max17040: Correct voltage reading
+
+Kejia Hu (1):
+      power: reset: qcom-pon: reg write mask depends on pon generation
+
+Lubomir Rintel (1):
+      power: supply: olpc_battery: fix the power supply name
+
+Luca Ceresoli (1):
+      power: reset: gpio-poweroff: add missing '
+' in dev_err()
+
+Marek Szyprowski (1):
+      power: charger: max14577: Add proper dt-compatible strings
+
+Mathew King (4):
+      power: supply: core: Cleanup power supply sysfs attribute list
+      power: supply: core: Use designated initializer for property text arr=
+ays
+      power: supply: core: Add a macro that maps enum properties to text va=
+lues
+      power: supply: core: Add type property to uevent env
+
+Matti Vaittinen (11):
+      lib: add linear ranges helpers
+      lib/test_linear_ranges: add a test for the 'linear_ranges'
+      power: supply: bd70528: rename linear_range to avoid collision
+      regulator: use linear_ranges helper
+      power: supply: bd70528: use linear ranges
+      dt-bindings: battery: add new battery parameters
+      power: supply: add battery parameters
+      dt_bindings: ROHM BD99954 Charger
+      power: supply: Support ROHM bd99954 charger
+      power: supply: Fix Kconfig help text indentiation
+      power: supply: KConfig cleanup default n
+
+Micha=C5=82 Miros=C5=82aw (16):
+      power: supply: core: reduce power_supply_show_usb_type() parameters
+      power: supply: core: allow to constify property lists
+      power: supply: core: fix HWMON temperature labels
+      power: supply: core: hide unused HWMON labels
+      power: charger-manager: clarify num_properties starting value
+      power: supply: core: tabularize HWMON temperature labels
+      power: bq25890: simplify chip name property getter
+      power: bq25890: make property table const
+      power: bq25890: remove redundant I2C bus check
+      power: bq25890: protect view of the chip's state
+      power: bq25890: use proper CURRENT_NOW property for I_BAT
+      power: bq25890: fix ADC mode configuration
+      power: bq25890: update state on property read
+      power: bq25890: implement CHARGE_TYPE property
+      power: bq25890: implement PRECHARGE_CURRENT property
+      power: bq25890: implement INPUT_CURRENT_LIMIT property
+
+Qiushi Wu (1):
+      power: supply: core: fix memory leak in HWMON error path
+
+Rafael Gandolfi (1):
+      power: supply: axp288_fuel_gauge: Add the Meegopad T02 to the blackli=
+st.
+
+Samuel Zou (1):
+      power: supply: Make bd9995x_chip_reset static
+
+Saravanan Sekar (6):
+      dt-bindings: mfd: Add document bindings for mp2629
+      mfd: mp2629: Add support for mps battery charger
+      iio: adc: mp2629: Add support for mp2629 ADC driver
+      power: supply: Add support for mps mp2629 battery charger
+      power: supply: mp2629: Add impedance compensation config
+      MAINTAINERS: Add entry for mp2629 Battery Charger driver
+
+Sebastian Reichel (24):
+      power: supply: charger-manager: Prepare for const properties
+      power: supply: generic-adc-battery: Prepare for const properties
+      Merge tag 'tags/linear-ranges-lib' into psy-next
+      Merge tag 'tags/ib-mfd-iio-power-v5.8' into psy-next
+      kobject: increase allowed number of uevent variables
+      power: supply: core: add capacity error margin property
+      power: supply: core: add manufacture date properties
+      power: supply: core: add POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED
+      power: supply: sbs-battery: Add TI BQ20Z65 support
+      power: supply: sbs-battery: add POWER_SUPPLY_PROP_CAPACITY_ERROR_MARG=
+IN support
+      power: supply: sbs-battery: simplify read_read_string_data
+      power: supply: sbs-battery: add PEC support
+      power: supply: sbs-battery: add POWER_SUPPLY_PROP_CURRENT_AVG support
+      power: supply: sbs-battery: Improve POWER_SUPPLY_PROP_TECHNOLOGY supp=
+ort
+      power: supply: sbs-battery: add POWER_SUPPLY_PROP_CONSTANT_CHARGE_CUR=
+RENT/VOLTAGE_MAX support
+      power: supply: sbs-battery: add MANUFACTURE_DATE support
+      power: supply: sbs-battery: add POWER_SUPPLY_HEALTH_CALIBRATION_REQUI=
+RED support
+      power: supply: sbs-battery: fix idle battery status
+      power: supply: sbs-battery: switch from of_property_* to device_prope=
+rty_*
+      power: supply: sbs-battery: switch to i2c's probe_new
+      power: supply: sbs-battery: constify power-supply property array
+      dt-bindings: power: sbs-battery: Convert to yaml
+      Revert "power: supply: sbs-battery: add PEC support"
+      Revert "power: supply: sbs-battery: simplify read_read_string_data"
+
+Serge Semin (3):
+      dt-bindings: power: reset: Convert syscon-reboot-mode to DT schema
+      dt-bindings: power: reset: Unrequire regmap property in syscon-reboot=
+ node
+      power: reset: syscon-reboot: Add parental syscon support
+
+Tang Bin (2):
+      power: supply: 88pm860x_battery: remove redundant dev_err message
+      power: supply: axp288_charger: Omit superfluous error message
+
+Tobias Schramm (3):
+      dt-bindings: Document cellwise vendor-prefix
+      dt-bindings: power: supply: add cw2015_battery bindings
+      power: supply: add CellWise cw2015 fuel gauge driver
+
+Wolfram Sang (1):
+      power: supply: bq24190_charger: convert to use i2c_new_client_device()
+
+Yuanjiang Yu (4):
+      power: supply: sc27xx: Set 'no_thermal' flag for SC27xx fuel gauge
+      power: supply: sc27xx: Allow to change the battery full capacity
+      power: supply: sc27xx: Add CURRENT_NOW/VOLTAGE_NOW properties support
+      power: supply: sc27xx: Add boot voltage support
+
+ Documentation/ABI/testing/sysfs-class-power        |   45 +-
+ Documentation/ABI/testing/sysfs-class-power-mp2629 |    8 +
+ .../devicetree/bindings/mfd/mps,mp2629.yaml        |   62 ++
+ .../bindings/power/reset/syscon-reboot-mode.txt    |   35 -
+ .../bindings/power/reset/syscon-reboot-mode.yaml   |   55 +
+ .../bindings/power/reset/syscon-reboot.yaml        |   15 +-
+ .../devicetree/bindings/power/supply/battery.txt   |    6 +
+ .../devicetree/bindings/power/supply/bq27xxx.txt   |   56 -
+ .../devicetree/bindings/power/supply/bq27xxx.yaml  |   91 ++
+ .../bindings/power/supply/cw2015_battery.yaml      |   82 ++
+ .../bindings/power/supply/power-supply.yaml        |   40 +
+ .../bindings/power/supply/power_supply.txt         |   25 +-
+ .../bindings/power/supply/rohm,bd99954.yaml        |  155 +++
+ .../bindings/power/supply/sbs,sbs-battery.yaml     |   83 ++
+ .../bindings/power/supply/sbs_sbs-battery.txt      |   27 -
+ .../devicetree/bindings/vendor-prefixes.yaml       |    2 +
+ MAINTAINERS                                        |   12 +
+ arch/x86/platform/olpc/olpc-xo1-sci.c              |    4 +-
+ arch/x86/platform/olpc/olpc-xo15-sci.c             |    4 +-
+ drivers/iio/adc/Kconfig                            |   10 +
+ drivers/iio/adc/Makefile                           |    1 +
+ drivers/iio/adc/mp2629_adc.c                       |  208 ++++
+ drivers/mfd/Kconfig                                |    9 +
+ drivers/mfd/Makefile                               |    2 +
+ drivers/mfd/mp2629.c                               |   79 ++
+ drivers/platform/olpc/olpc-xo175-ec.c              |    4 +-
+ drivers/power/reset/Kconfig                        |    7 +
+ drivers/power/reset/Makefile                       |    1 +
+ drivers/power/reset/gpio-poweroff.c                |    2 +-
+ drivers/power/reset/ltc2952-poweroff.c             |    3 +-
+ drivers/power/reset/oxnas-restart.c                |  233 ++++
+ drivers/power/reset/qcom-pon.c                     |    3 +-
+ drivers/power/reset/syscon-reboot.c                |    7 +-
+ drivers/power/supply/88pm860x_battery.c            |    8 +-
+ drivers/power/supply/Kconfig                       |   59 +-
+ drivers/power/supply/Makefile                      |    3 +
+ drivers/power/supply/ab8500_fg.c                   |    2 +-
+ drivers/power/supply/axp288_charger.c              |    5 +-
+ drivers/power/supply/axp288_fuel_gauge.c           |    6 +
+ drivers/power/supply/bd70528-charger.c             |  140 +--
+ drivers/power/supply/bd99954-charger.c             | 1142 ++++++++++++++++=
+++++
+ drivers/power/supply/bd99954-charger.h             | 1075 ++++++++++++++++=
+++
+ drivers/power/supply/bq24190_charger.c             |    2 +-
+ drivers/power/supply/bq25890_charger.c             |  200 ++--
+ drivers/power/supply/charger-manager.c             |   40 +-
+ drivers/power/supply/cw2015_battery.c              |  750 +++++++++++++
+ drivers/power/supply/generic-adc-battery.c         |   22 +-
+ drivers/power/supply/lp8788-charger.c              |   18 +-
+ drivers/power/supply/max14577_charger.c            |   10 +
+ drivers/power/supply/max14656_charger_detector.c   |    5 +-
+ drivers/power/supply/max17040_battery.c            |    2 +-
+ drivers/power/supply/max17042_battery.c            |    8 +
+ drivers/power/supply/mp2629_charger.c              |  669 ++++++++++++
+ drivers/power/supply/olpc_battery.c                |    4 +-
+ drivers/power/supply/power_supply_core.c           |    8 +
+ drivers/power/supply/power_supply_hwmon.c          |   64 +-
+ drivers/power/supply/power_supply_sysfs.c          |  484 +++++----
+ drivers/power/supply/sbs-battery.c                 |  232 +++-
+ drivers/power/supply/sc27xx_fuel_gauge.c           |   77 +-
+ drivers/power/supply/smb347-charger.c              |    5 +
+ drivers/regulator/88pg86x.c                        |    4 +-
+ drivers/regulator/88pm800-regulator.c              |    4 +-
+ drivers/regulator/Kconfig                          |    1 +
+ drivers/regulator/act8865-regulator.c              |    4 +-
+ drivers/regulator/act8945a-regulator.c             |    2 +-
+ drivers/regulator/arizona-ldo1.c                   |    2 +-
+ drivers/regulator/arizona-micsupp.c                |    4 +-
+ drivers/regulator/as3711-regulator.c               |    6 +-
+ drivers/regulator/as3722-regulator.c               |    4 +-
+ drivers/regulator/axp20x-regulator.c               |   16 +-
+ drivers/regulator/bcm590xx-regulator.c             |    8 +-
+ drivers/regulator/bd70528-regulator.c              |    8 +-
+ drivers/regulator/bd71828-regulator.c              |   10 +-
+ drivers/regulator/bd718x7-regulator.c              |   26 +-
+ drivers/regulator/da903x.c                         |    2 +-
+ drivers/regulator/helpers.c                        |  130 +--
+ drivers/regulator/hi6421-regulator.c               |    4 +-
+ drivers/regulator/lochnagar-regulator.c            |    4 +-
+ drivers/regulator/lp873x-regulator.c               |    4 +-
+ drivers/regulator/lp87565-regulator.c              |    2 +-
+ drivers/regulator/lp8788-buck.c                    |    2 +-
+ drivers/regulator/max77650-regulator.c             |    2 +-
+ drivers/regulator/mcp16502.c                       |    4 +-
+ drivers/regulator/mp8859.c                         |    2 +-
+ drivers/regulator/mt6323-regulator.c               |    6 +-
+ drivers/regulator/mt6358-regulator.c               |    8 +-
+ drivers/regulator/mt6380-regulator.c               |    6 +-
+ drivers/regulator/mt6397-regulator.c               |    6 +-
+ drivers/regulator/palmas-regulator.c               |    4 +-
+ drivers/regulator/qcom-rpmh-regulator.c            |    2 +-
+ drivers/regulator/qcom_rpm-regulator.c             |   14 +-
+ drivers/regulator/qcom_smd-regulator.c             |   78 +-
+ drivers/regulator/rk808-regulator.c                |   10 +-
+ drivers/regulator/s2mps11.c                        |   14 +-
+ drivers/regulator/sky81452-regulator.c             |    2 +-
+ drivers/regulator/stpmic1_regulator.c              |   18 +-
+ drivers/regulator/tps65086-regulator.c             |   10 +-
+ drivers/regulator/tps65217-regulator.c             |    4 +-
+ drivers/regulator/tps65218-regulator.c             |    6 +-
+ drivers/regulator/tps65912-regulator.c             |    4 +-
+ drivers/regulator/twl-regulator.c                  |    4 +-
+ drivers/regulator/twl6030-regulator.c              |    2 +-
+ drivers/regulator/wm831x-dcdc.c                    |    2 +-
+ drivers/regulator/wm831x-ldo.c                     |    4 +-
+ drivers/regulator/wm8350-regulator.c               |    2 +-
+ drivers/regulator/wm8400-regulator.c               |    2 +-
+ include/linux/kobject.h                            |    2 +-
+ include/linux/linear_range.h                       |   48 +
+ include/linux/mfd/mp2629.h                         |   26 +
+ include/linux/power_supply.h                       |   13 +-
+ include/linux/regulator/driver.h                   |   27 +-
+ lib/Kconfig                                        |    3 +
+ lib/Kconfig.debug                                  |   12 +
+ lib/Makefile                                       |    2 +
+ lib/linear_ranges.c                                |  241 +++++
+ lib/test_linear_ranges.c                           |  228 ++++
+ 116 files changed, 6544 insertions(+), 937 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-mp2629
+ create mode 100644 Documentation/devicetree/bindings/mfd/mps,mp2629.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/syscon-re=
+boot-mode.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/syscon-re=
+boot-mode.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/bq27xxx.=
+txt
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq27xxx.=
+yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/cw2015_b=
+attery.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/power-su=
+pply.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/rohm,bd9=
+9954.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/sbs,sbs-=
+battery.yaml
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/sbs_sbs-=
+battery.txt
+ create mode 100644 drivers/iio/adc/mp2629_adc.c
+ create mode 100644 drivers/mfd/mp2629.c
+ create mode 100644 drivers/power/reset/oxnas-restart.c
+ create mode 100644 drivers/power/supply/bd99954-charger.c
+ create mode 100644 drivers/power/supply/bd99954-charger.h
+ create mode 100644 drivers/power/supply/cw2015_battery.c
+ create mode 100644 drivers/power/supply/mp2629_charger.c
+ create mode 100644 include/linux/linear_range.h
+ create mode 100644 include/linux/mfd/mp2629.h
+ create mode 100644 lib/linear_ranges.c
+ create mode 100644 lib/test_linear_ranges.c
+
+--c5hwyhkxeduuwcww
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7frM0ACgkQ2O7X88g7
++ppBbw//VCPXIkbsLm7YiAEAJtNza4VQIW6IH87qWqBm9wmJ41J88kiNNGhEExWc
+zXJ8Gd6rRbDNTlCxoYd/YHMzbhLCaUORxE8Se3U8USCd4YzUwzdPhs180XEMu1ro
+RDkCUR1dfnFcms3IP/gf8ESMts6WLMWnoYgkmBNXU5n4jn9AhGfOGP8ICOIx6YXe
+ad+Wnyiet244rXoE+K2tJiXP2b6XS6E4DiE/Aiww4r6ppx+eK04HRZRPqze+ZEVL
+VbC11HS28VtFFgQphgCAMk+YCjDbbWe2rqBAPepAVpSVSoaf/r9J9s0Evtktifv5
+5jT94ddL9gziX0z17+OyIOTC1WmCMeNeRFAgSX5OukHYapjcFMYYy3OStXx1PV/C
+vvPTVzlriC5nUxDK6yQMlY6SfVVfB5QVHA1M4g21668tUznYVH1XdArZhqzOSZx5
+cMh+wTh4knYiJlOuJpPXAn9VEQDrSuFbYIajW2aeZWJgmcdGirRFj0WVZPzGvAnr
+dl7AAOsnNlilGyGCLZs/ie2RM2jnJDFxkVxU+0N/vsCjzJgfO4qQIHcpXec/AF4s
+cE0QAiKFST/T4L1l+sBuBx6u754VWGse447cGZ8Ob1HpT15F+4FDuly2PdEOy2WH
+STlp2vxsiDh4IjdkKMQN5Ve2ssPgvv/v0eap/j16YxrAmPYZJGY=
+=RU9l
+-----END PGP SIGNATURE-----
+
+--c5hwyhkxeduuwcww--
