@@ -2,259 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8401F3442
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 08:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EE21F34C9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 09:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727966AbgFIGpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 02:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727955AbgFIGp3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 02:45:29 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7517C03E97C
-        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 23:45:28 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jiY0X-0003D2-OR; Tue, 09 Jun 2020 08:45:13 +0200
-Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1jiY0V-0004QC-57; Tue, 09 Jun 2020 08:45:11 +0200
-Date:   Tue, 9 Jun 2020 08:45:11 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     Andrzej Hajda <a.hajda@samsung.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Grant Likely <grant.likely@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        artem.bityutskiy@linux.intel.com, balbi@kernel.org,
-        broonie@kernel.org, fntoth@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com,
-        nd <nd@arm.com>, kernel@pengutronix.de
-Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
- can't be satisfied
-Message-ID: <20200609064511.7nek2rhk6ebfjaia@pengutronix.de>
-References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
- <20200325032901.29551-1-saravanak@google.com>
- <20200325125120.GX1922688@smile.fi.intel.com>
- <295d25de-f01e-26de-02d6-1ac0c149d828@arm.com>
- <20200326163110.GD1922688@smile.fi.intel.com>
- <CGME20200608091722eucas1p2fa8a4ac15c70e5a6e03c4babdf9f96b7@eucas1p2.samsung.com>
- <20200608091712.GA28093@pengutronix.de>
- <437de51b-37e9-d8d1-19c7-137a9265bf45@samsung.com>
+        id S1726083AbgFIHYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 03:24:36 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39636 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725993AbgFIHYg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 03:24:36 -0400
+Received: by mail-oi1-f193.google.com with SMTP id d67so17837165oig.6;
+        Tue, 09 Jun 2020 00:24:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=C/AluQFezpElpg6Pbtj8tyshUteaFf54Xt+QlROi5Vo=;
+        b=Mszvom1ju0FMYVwZ2N36JAwokoSCa6osvn6J7e+Iky+f35p45sQUzELeJV36j3FNkE
+         ZejuL6YfVj37+DRUCiT6Kl0DE/yzX6saJUrbXU7FiaGpS2eXHvr1fxTvi7bJpD+Xiws+
+         tm/e6GkHX3xxbrw+5j14/kaA1EWLK8Pst1iQQFIEB5KcJnvfXz44BHQRtXus4H3p4tvB
+         X5bnVv/zGp+Yf1u5iZ5Ygbjt4NBNLcIIJJLWmecwXx8A8W+4zcyEa4WTiaiijJ7L6JyS
+         gz6MyQFm7/BunltXGHOZR0NT1Kjzj3CET6qGUWnkZMfSTnVwE6OTOMKEnMgT/SSO0uoP
+         B/ng==
+X-Gm-Message-State: AOAM531d9fHSBySgCargLxUg3mj8le1RNRl1zlFgd55t9dBdY09NND8n
+        6Mft24vs4pP3eAiJNhpUiTP8TAJ2xa2xM1yDooU=
+X-Google-Smtp-Source: ABdhPJxbq2qvdCNRUW9ZD5tMa7PNpthSYSo1YvGbZqi+7qha2Fu+hyW6T99B8OhQkZ0Tis34KxACYZ9umkfFxrzOjME=
+X-Received: by 2002:a54:4006:: with SMTP id x6mr2235784oie.148.1591687475499;
+ Tue, 09 Jun 2020 00:24:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <437de51b-37e9-d8d1-19c7-137a9265bf45@samsung.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:00:16 up 206 days,  3:18, 203 users,  load average: 0.06, 0.11,
- 0.05
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+References: <1591614776-20333-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <CAMuHMdXT0qofW38-g79TSiy1nUBhrWNPfbViKRyWSFdme=oD0g@mail.gmail.com> <TY2PR01MB36923211263DA7F54A814AF4D8820@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY2PR01MB36923211263DA7F54A814AF4D8820@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 9 Jun 2020 09:24:23 +0200
+Message-ID: <CAMuHMdWSZNXk_bXvWzgt6aEtuOtox9sXyP36bG=Z_8KNiwkmHw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: rcar_gen3_thermal: Fix undefined temperature if negative
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Dien Pham <dien.pham.ry@renesas.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Van Do <van.do.xw@renesas.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-06-08 13:11, Andrzej Hajda wrote:
-> 
-> On 08.06.2020 11:17, Marco Felsch wrote:
-> > On 20-03-26 18:31, Andy Shevchenko wrote:
-> >> On Thu, Mar 26, 2020 at 03:01:22PM +0000, Grant Likely wrote:
-> >>> On 25/03/2020 12:51, Andy Shevchenko wrote:
-> >>>> On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
-> >>>>> On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >>>>>> Consider the following scenario.
-> >>>>>>
-> >>>>>> The main driver of USB OTG controller (dwc3-pci), which has the following
-> >>>>>> functional dependencies on certain platform:
-> >>>>>> - ULPI (tusb1210)
-> >>>>>> - extcon (tested with extcon-intel-mrfld)
-> >>>>>>
-> >>>>>> Note, that first driver, tusb1210, is available at the moment of
-> >>>>>> dwc3-pci probing, while extcon-intel-mrfld is built as a module and
-> >>>>>> won't appear till user space does something about it.
-> >>>>>>
-> >>>>>> This is depicted by kernel configuration excerpt:
-> >>>>>>
-> >>>>>> 	CONFIG_PHY_TUSB1210=y
-> >>>>>> 	CONFIG_USB_DWC3=y
-> >>>>>> 	CONFIG_USB_DWC3_ULPI=y
-> >>>>>> 	CONFIG_USB_DWC3_DUAL_ROLE=y
-> >>>>>> 	CONFIG_USB_DWC3_PCI=y
-> >>>>>> 	CONFIG_EXTCON_INTEL_MRFLD=m
-> >>>>>>
-> >>>>>> In the Buildroot environment the modules are probed by alphabetical ordering
-> >>>>>> of their modaliases. The latter comes to the case when USB OTG driver will be
-> >>>>>> probed first followed by extcon one.
-> >>>>>>
-> >>>>>> So, if the platform anticipates extcon device to be appeared, in the above case
-> >>>>>> we will get deferred probe of USB OTG, because of ordering.
-> >>>>>>
-> >>>>>> Since current implementation, done by the commit 58b116bce136 ("drivercore:
-> >>>>>> deferral race condition fix") counts the amount of triggered deferred probe,
-> >>>>>> we never advance the situation -- the change makes it to be an infinite loop.
-> >>>>> Hi Andy,
-> >>>>>
-> >>>>> I'm trying to understand this sequence of steps. Sorry if the questions
-> >>>>> are stupid -- I'm not very familiar with USB/PCI stuff.
-> >>>> Thank you for looking into this. My answer below.
-> >>>>
-> >>>> As a first thing I would like to tell that there is another example of bad
-> >>>> behaviour of deferred probe with no relation to USB. The proposed change also
-> >>>> fixes that one (however, less possible to find in real life).
-> >>>>
-> >>>>>> ---8<---8<---
-> >>>>>>
-> >>>>>> [   22.187127] driver_deferred_probe_trigger <<< 1
-> >>>>>>
-> >>>>>> ...here is the late initcall triggers deferred probe...
-> >>>>>>
-> >>>>>> [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
-> >>>>>>
-> >>>>>> ...dwc3.0.auto is the only device in the deferred list...
-> >>>>> Ok, dwc3.0.auto is the only unprobed device at this point?
-> >>>> Correct.
-> >>>>
-> >>>>>> [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
-> >>>>>>
-> >>>>>> ...the counter before mutex is unlocked is kept the same...
-> >>>>>>
-> >>>>>> [   22.205663] platform dwc3.0.auto: Retrying from deferred list
-> >>>>>>
-> >>>>>> ...mutes has been unlocked, we try to re-probe the driver...
-> >>>>>>
-> >>>>>> [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
-> >>>>>> [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
-> >>>>>> [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
-> >>>>>> [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
-> >>>>>> [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
-> >>>>>> [   22.263723] driver_deferred_probe_trigger <<< 2
-> >>>>>>
-> >>>>>> ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
-> >>>>>>
-> >>>>>> [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
-> >>>>> So where did this dwc3.0.auto.ulpi come from?
-> >>>>> Looks like the device is created by dwc3_probe() through this call flow:
-> >>>>> dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
-> >>>>> dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
-> >>>> Correct.
-> >>>>
-> >>>>>> [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
-> >>>>> Can you please point me to which code patch actually caused the probe
-> >>>>> deferral?
-> >>>> Sure, it's in drd.c.
-> >>>>
-> >>>> if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
-> >>>>     edev = extcon_get_extcon_dev(name);
-> >>>>     if (!edev)
-> >>>>       return ERR_PTR(-EPROBE_DEFER);
-> >>>>     return edev;
-> >>>> }
-> >>>>
-> >>>>>> ...but extcon driver is still missing...
-> >>>>>>
-> >>>>>> [   22.283174] platform dwc3.0.auto: Added to deferred list
-> >>>>>> [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
-> >>>>> I'm not fully aware of all the USB implications, but if extcon is
-> >>>>> needed, why can't that check be done before we add and probe the ulpi
-> >>>>> device? That'll avoid this whole "fake" probing and avoid the counter
-> >>>>> increase. And avoid the need for this patch that's touching the code
-> >>>>> code that's already a bit delicate.
-> >>>>> Also, with my limited experience with all the possible drivers in the
-> >>>>> kernel, it's weird that the ulpi device is added and probed before we
-> >>>>> make sure the parent device (dwc3.0.auto) can actually probe
-> >>>>> successfully.
-> >>>> As I said above the deferred probe trigger has flaw on its own.
-> >>>> Even if we fix for USB case, there is (and probably will be) others.
-> >>> Right here is the driver design bug. A driver's probe() hook should *not*
-> >>> return -EPROBE_DEFER after already creating child devices which may have
-> >>> already been probed.
-> >> Any documentation statement for this requirement?
-> >>
-> >> By the way, I may imagine other mechanisms that probe the driver on other CPU
-> >> at the same time (let's consider parallel modprobes). The current code has a
-> >> flaw with that.
-> > Hi,
+Hi Shimoda-san,
+
+On Tue, Jun 9, 2020 at 4:34 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> > From: Geert Uytterhoeven, Sent: Monday, June 8, 2020 8:38 PM
+> <snip>
+> > > --- a/drivers/thermal/rcar_gen3_thermal.c
+> > > +++ b/drivers/thermal/rcar_gen3_thermal.c
+> > > @@ -167,7 +167,7 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+> > >  {
+> > >         struct rcar_gen3_thermal_tsc *tsc = devdata;
+> > >         int mcelsius, val;
+> > > -       u32 reg;
+> > > +       long reg;
 > >
-> > sorry for picking this up again but I stumbled above the same issue
-> > within the driver imx/drm driver which is using the component framework.
-> > I end up in a infinity boot loop if I enabled the HDMI (which is the
-> > DesignWare bridge device) and the LVDS support and the LVDS bind return
-> > with EPROBE_DEFER. There are no words within the component framework docs
-> > which says that this is forbidden. Of course we can work-around the
-> > driver-core framework but IMHO this shouldn't be the way to go. I do not
-> > say that we should revert the commit introducing the regression but we
-> > should address this not only by extending the docs since the most
-> > drm-drivers are using the component framework and can end up in the same
-> > situation.
-> 
-> I am not sure why do you think this is similar issue.
-
-Because I see trying to bind the device over and over..
-
-> Please describe the issue in more detail. Which drivers defers probe and 
-> why, and why do you have infinite loop.
-
-As said I'm currently on the imx-drm driver. The iMX6 devices are
-using the synopsis HDMI IP core and so they are using this bridge device
-driver (drivers/gpu/drm/bridge/synopsys/). The imx-drm driver can be
-build module wise. As example I enabled the LDB and the HDMI support.
-The HDMI driver is composed as platform driver with different
-(sub-)drivers and devices. Those devices are populated by the HDMI core
-driver _probe() function and triggers a driver_deferred_probe_trigger()
-after the driver successfully probed. The LDB driver bind() returns 
--EPROBE_DEFER because the panel we are looking for depends on a defered
-regulator device. Now the defered probe code tries to probe the defered
-devices again because the local-trigger count was changed by the HDMI
-driver and we are in the never ending loop.
-
-> In general deferring probe from bind is not forbidden, but it should be 
-> used carefully (as everything in kernel :) ). Fixing deferring probe 
-> issues in many cases it is a matter of figuring out 'dependency loops' 
-> and breaking them by splitting device initialization into more than one 
-> phase.
-
-We are on the way of splitting the imx-drm driver but there are many
-other DRM drivers using the component framework. As far as I can see the
-sunxi8 driver is component based and uses the same HDMI driver. I'm with
-Andy that we should fix that on the common/core place.
-
-Regards,
-  Marco
-
-> Regards
-> 
-> Andrzej
-> 
-> 
+> > "long" is 64-bit, so "int" should be sufficient.
+>
+> Oops.
+>
+> > >         /* Read register and convert to mili Celsius */
+> > >         reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
 > >
-> >>> It can be solved by refactoring the driver probe routine. If a resource is
-> >>> required to be present, then check that it is available early; before
-> >>> registering child devices.
-> >> We fix one and leave others.
-> > E.g. the imx-drm and the sunxi driver...
+> > However, rcar_gen3_thermal_read() does return u32, so keeping u32 for
+> > reg looks more logical to me.
 > >
-> > Regards,
-> >    Marco
+> > Successive lines are:
 > >
-> >>> The proposed solution to modify driver core is fragile and susceptible to
-> >>> side effects from other probe paths. I don't think it is the right approach.
-> >> Have you tested it on your case? Does it fix the issue?
-> >>
-> 
+> >         if (reg <= thcode[tsc->id][1])
+> >                 val = FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b1,
+> >                                 tsc->coef.a1);
+> >         else
+> >                 val = FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b2,
+> >                                 tsc->coef.a2);
+> >
+> > Perhaps it's safer to add an cast to FIXPT_INT(), so it always returns
+> > int, and/or add casts to FIXPT_DIV(), so only signed values are passed
+> > to DIV_ROUND_CLOSEST?
+> > That would prevent the issue from reappearing later.
+>
+> There is not related to the issue but, thcode[] is also int.
+> So, if we use casts, we will see a lot of casts like below:
+
+Sorry for being unclear: I literally meant to add casts to the macros,
+not to the callers.  If the macros are safe against this issue, then the
+callers don't have to care anymore.
+But this might be overkill, as the issue is present in one place only.
+
+> I'm thinking the name "reg" is not good because it should be the same type as
+> rcar_gen3_thermal_read(). But, if we use other name like "int ctemp;", we can use
+> it like below. What do you think?
+> ---
+> static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+> {
+>         struct rcar_gen3_thermal_tsc *tsc = devdata;
+>         int mcelsius, val;
+>         int ctemp;
+>
+>         /* Read register and convert to mili Celsius */
+>         ctemp = int(rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK);
+
+No need for a cast to int here, as assignment to ctemp takes care
+of that.
+
+>
+>         if (ctemp <= thcode[tsc->id][1])
+>                 val = FIXPT_DIV(FIXPT_INT(ctemp) - tsc->coef.b1,
+>                                 tsc->coef.a1);
+>         else
+>                 val = FIXPT_DIV(FIXPT_INT(ctemp) - tsc->coef.b2,
+>                                 tsc->coef.a2);
+
+That would work too.
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
