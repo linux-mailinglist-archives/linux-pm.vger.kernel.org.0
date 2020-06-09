@@ -2,146 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7771F4703
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 21:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856F1F47A9
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 22:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731064AbgFITWv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 15:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726633AbgFITWu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 15:22:50 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265AEC03E97C
-        for <linux-pm@vger.kernel.org>; Tue,  9 Jun 2020 12:22:50 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y18so8421334plr.4
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jun 2020 12:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+UJnkDxVkadhbJZh7bYn2L5UqyxoXGSxqxY/M/szSR4=;
-        b=BrU/V7wm9SzSTlMa8d22kFnOE4mN00rol//Jjz+04Hn6J1erJsseYX8zVrPSDUiylf
-         GCiRfTPX3BJzekyQUwvZG0UkyfGeJKUXqpeqCIPoehqbw3R5pqXRqXmpwlyZwepS/TGr
-         YAH9JlZLOfppxeutohPijYHDPE5e6jQ6REAiA=
+        id S1732452AbgFIUCC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 16:02:02 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:46910 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725926AbgFIUCC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 16:02:02 -0400
+Received: by mail-il1-f196.google.com with SMTP id h3so21572427ilh.13;
+        Tue, 09 Jun 2020 13:02:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+UJnkDxVkadhbJZh7bYn2L5UqyxoXGSxqxY/M/szSR4=;
-        b=KOKl1hAlSVIArqKILWalWuH54GycY6gW5YAgMtRnlJkl33vXHj03MAIUKYB+dhqrh9
-         fme/zKuLK4KLTTRW2n+CKIdOQzUKBnAGt4i0XE9Igb1aUqs7nc+pWH8nJ6FMMmTSbvyu
-         K+Qt24CoE/28R7KRUOG6KCsFblF4fGOw80LAEL+Y8VektU2NR3DKF6KZZeBS90oNZGA9
-         STxYwTarN1j/hmh9AMtP7Fts8hJQZQ6i4ruj4QMpEpnR1xvkYl2lb4DwYJXga56vpO+A
-         J8XIvTf+ja6GB8X3gJ/Vms73pB8rzGc7UBs1wd5xH0koSIE7fM2IAdD2Qef7VqZzhxvE
-         7+PQ==
-X-Gm-Message-State: AOAM532wRREbsMwHoHHmi4+AxsJyitIRT4vqajhrG/nUk+WMK2GkmBGz
-        yYmQHmrCbRwAcRHjt6BXbT+qRA==
-X-Google-Smtp-Source: ABdhPJw5bzT4J550aXlAie2EH+LaVisk2G8Dq9u2jRv5dhmd33lWlXPfhVg3c11tavyjDtI3hU2d3Q==
-X-Received: by 2002:a17:902:a513:: with SMTP id s19mr4474055plq.140.1591730569654;
-        Tue, 09 Jun 2020 12:22:49 -0700 (PDT)
-Received: from twawrzynczak.bld.corp.google.com ([161.97.245.194])
-        by smtp.gmail.com with ESMTPSA id p12sm10883174pfq.69.2020.06.09.12.22.48
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ELH9Be8+gsKdPlrt+pdF1SGavvBGmA9LnuUEzWNi+6g=;
+        b=CHOc8+QJrn/5WqMMg8YRiB3zcAfYtVhxV5HXKC0YpvfngKn0tEyqL0KHsi2E7PD6+A
+         bkM1L+/U5l9x65d9M9CM6ISAQCykSjP4sYskYnu//mY11bmS14KX08WfFDHXXLyqRnYx
+         KpYlTauTcPq+coaXiel9C55rIvH03MrevWKITA4gRtyp24s23dgLDi9RmegieP3DDJ9e
+         1/RFvoFj0uFCdUd75Gnqbod7+IUUyvOspQlnhpVhk9MhNaGAznPDusZoN5+9F/rPGrjs
+         7QCVdO+uV6j4Uo/rUbXN1M0z42IYI0drh8RrUeexL9FGEekA+L9VjJAZZ7xOe7wfrvQY
+         7CIQ==
+X-Gm-Message-State: AOAM532acxCxnD3Gu6iZ9w8lRfm8+8OcT1uoxXmu+K8jQ/dSRjjiqZfH
+        0zuOOn+gyzONqlSQlo6SWA==
+X-Google-Smtp-Source: ABdhPJzzN9h/0yFH/jDM7Lc0O27CSSrGvQPkicYGBRLDyugbScvihBoQuG1yDC/Qmm+eVczJTsZiSQ==
+X-Received: by 2002:a92:854a:: with SMTP id f71mr28102764ilh.28.1591732921382;
+        Tue, 09 Jun 2020 13:02:01 -0700 (PDT)
+Received: from xps15 ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id g64sm7823853iof.5.2020.06.09.13.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 12:22:49 -0700 (PDT)
-From:   Tim Wawrzynczak <twawrzynczak@chromium.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        Tue, 09 Jun 2020 13:02:00 -0700 (PDT)
+Received: (nullmailer pid 1358678 invoked by uid 1000);
+        Tue, 09 Jun 2020 20:01:59 -0000
+Date:   Tue, 9 Jun 2020 14:01:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-pm@vger.kernel.org,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-tegra@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
         linux-kernel@vger.kernel.org,
-        Tim Wawrzynczak <twawrzynczak@chromium.org>
-Subject: [PATCH 2/2] power: supply: sbs_battery: Support Manufacture Date field
-Date:   Tue,  9 Jun 2020 13:22:37 -0600
-Message-Id: <20200609192237.32571-2-twawrzynczak@chromium.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200609192237.32571-1-twawrzynczak@chromium.org>
-References: <20200609192237.32571-1-twawrzynczak@chromium.org>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        dri-devel@lists.freedesktop.org,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v3 23/39] dt-bindings: memory: tegra20: Add memory client
+ IDs
+Message-ID: <20200609200159.GA1358512@bogus>
+References: <20200607185530.18113-1-digetx@gmail.com>
+ <20200607185530.18113-24-digetx@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200607185530.18113-24-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds support for the sbs-battery driver to export a battery's
-manufacture date as a field in sysfs. It is exported as a simple Y/M/D
-format for ease of consumption.
+On Sun, 07 Jun 2020 21:55:14 +0300, Dmitry Osipenko wrote:
+> Each memory client have a unique hardware ID, this patch adds these IDs.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  include/dt-bindings/memory/tegra20-mc.h | 53 +++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
 
-Signed-off-by: Tim Wawrzynczak <twawrzynczak@chromium.org>
-Change-Id: Ia952624f33700587f4d71ad09ad68c0940c7f508
----
- drivers/power/supply/sbs-battery.c | 31 +++++++++++++++++++++++++++++-
- 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index f8d74e9f79317..989625be80743 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -42,6 +42,7 @@ enum {
- 	REG_DESIGN_VOLTAGE_MAX,
- 	REG_MANUFACTURER,
- 	REG_MODEL_NAME,
-+	REG_MANUFACTURE_DATE,
- };
- 
- /* Battery Mode defines */
-@@ -112,6 +113,10 @@ static const struct chip_data {
- 		SBS_DATA(POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN, 0x19, 0, 65535),
- 	[REG_DESIGN_VOLTAGE_MAX] =
- 		SBS_DATA(POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN, 0x19, 0, 65535),
-+	/* Manufacture Date is encoded as a 16-bit register, but is exported
-+	 * from here as a string */
-+	[REG_MANUFACTURE_DATE] =
-+		SBS_DATA(POWER_SUPPLY_PROP_MANUFACTURE_DATE, 0x1B, 0, 65535),
- 	[REG_SERIAL_NUMBER] =
- 		SBS_DATA(POWER_SUPPLY_PROP_SERIAL_NUMBER, 0x1C, 0, 65535),
- 	/* Properties of type `const char *' */
-@@ -145,7 +150,8 @@ static enum power_supply_property sbs_properties[] = {
- 	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
- 	/* Properties of type `const char *' */
- 	POWER_SUPPLY_PROP_MANUFACTURER,
--	POWER_SUPPLY_PROP_MODEL_NAME
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_MANUFACTURE_DATE,
- };
- 
- /* Supports special manufacturer commands from TI BQ20Z75 IC. */
-@@ -170,6 +176,10 @@ static char model_name[I2C_SMBUS_BLOCK_MAX + 1];
- static char manufacturer[I2C_SMBUS_BLOCK_MAX + 1];
- static bool force_load;
- 
-+/* manufacture_date is returned as a 16-bit word in the smart battery itself.
-+ * It is decoded here and displayed as "%4d/%2d/%2d", Y/m/d format. */
-+static char manufacture_date[11];
-+
- static int sbs_read_word_data(struct i2c_client *client, u8 address)
- {
- 	struct sbs_info *chip = i2c_get_clientdata(client);
-@@ -682,6 +692,25 @@ static int sbs_get_property(struct power_supply *psy,
- 		ret = sbs_get_battery_property(client, ret, psp, val);
- 		break;
- 
-+	case POWER_SUPPLY_PROP_MANUFACTURE_DATE:
-+		ret = sbs_get_property_index(client, psp);
-+		if (ret < 0)
-+			break;
-+
-+		ret = sbs_get_battery_property(client, ret, psp, val);
-+
-+		/* Convert encoded data (from the SBS 1.1 spec) into a string:
-+		 * bits 9-15 are the year, encoded as years since 1980
-+		 * bits 5-8 are the month, encoded as 1-12
-+		 * bits 0-4 are the day of the month, encoded as 1-31 */
-+		snprintf(manufacture_date, sizeof(manufacture_date),
-+			 "%4d/%2d/%2d",
-+			 ((val->intval >> 9) & 0x7f) + 1980,
-+			 (val->intval >> 5) & 0xf,
-+			 val->intval & 0x1f);
-+		val->strval = manufacture_date;
-+		break;
-+
- 	case POWER_SUPPLY_PROP_MODEL_NAME:
- 		ret = sbs_get_property_index(client, psp);
- 		if (ret < 0)
--- 
-2.26.2
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
+
+If a tag was not added on purpose, please state why and what changed.
 
