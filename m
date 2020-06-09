@@ -2,83 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ED81F47B0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 22:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF70B1F4983
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jun 2020 00:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732500AbgFIUCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 16:02:30 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45692 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725926AbgFIUC2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 16:02:28 -0400
-Received: by mail-io1-f68.google.com with SMTP id y5so24174642iob.12;
-        Tue, 09 Jun 2020 13:02:27 -0700 (PDT)
+        id S1728364AbgFIWps (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 18:45:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728108AbgFIWps (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 18:45:48 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E0EC05BD1E;
+        Tue,  9 Jun 2020 15:45:47 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id w3so274909qkb.6;
+        Tue, 09 Jun 2020 15:45:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bnajTCsYo//0LX6v48OVudY2hoQxnR0lPhAu3BVle9c=;
+        b=J8DftvE3CnS7ZKX6nz4fGSSQWd5bh0hJqetE9b7SOKmSp94WHGu8gsy92YCXxo8FNo
+         WC5PK/UaJZRC9YoL7WKrBKqmyIRcPCDFpnQMB3LXIaNXVCLljAjAqp/CkdNF3Nl6cq9U
+         wtoYooGY7WxWT8C2PMvAR257F3NUY8goeaoSAehXAyDZlFUM17EwmfCtzBCZ05x8yG2x
+         +119SZGLWC2I5lns6fzL2xjykKv8VV2NXPL4LfDX3+W6zxn05HlqRBHZqNGl4Xw6DE48
+         CadmMPWu/eCeTs5LK9qhw0IqXdGsopGzJqomdGGsARyfQZad2X8MxLs3aTXiYxw/81oV
+         9xKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=k8Vtkuk+eVaXGU/8rfVJdWcttoiSK9i9poLLXc4pfnw=;
-        b=uUvqEBhR3EXCW+mC25JRkSeAgKuETy/N8Sae6xZgNXUOrjyI0FECNYsbroCECbajXq
-         dCHsQN+UiqSB2fbcx3A787iYg8yTfT7mWo8da9GBGETkj4YQJm65JGV9oAoxyQ5Oxgtq
-         bQcWDmPV3kupCm8l9dCikZ5who4CvhImNKn/oDmgopVnIm2/JKY6eZL6BNwuHsTMi1vo
-         pjdpJZ0uF9myXpxZfS3oTZmZnTsHgwaCYzr/cFcZ5LMuLTWOt509+dnRU+FMjmTcLlY7
-         GgB0RVqNav5c1Lzgt+r7nZCLxrXymqpid/+XI0rbx1iQWjQ+AEkft6zHrEx6v7vMOLQq
-         zOIg==
-X-Gm-Message-State: AOAM531oX/4IWQc2zMqx67sPN7oilvsD7g4J7eGMnmQ016ZbMiXdRqrZ
-        P0ilHD7QC6YZ1Kjx6OS7ZQ==
-X-Google-Smtp-Source: ABdhPJwwjhFBa9o+ou5vR9zbKMqsajdWUO/uk2RF8iJ7Mxb3+utXKh5+R6GmAI2gbaTUyNT6I1quhg==
-X-Received: by 2002:a05:6602:2e96:: with SMTP id m22mr28955927iow.165.1591732947458;
-        Tue, 09 Jun 2020 13:02:27 -0700 (PDT)
-Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id e184sm7664983iof.44.2020.06.09.13.02.26
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bnajTCsYo//0LX6v48OVudY2hoQxnR0lPhAu3BVle9c=;
+        b=IoRY+MLqjOJGokqiBPl08qQQx/maw3u6p01eXA1hlcRgVPos+eMcuSRhBolDVUcW+q
+         qYxivyFLyozVrNI6B9uV9yG2TH0bI3c7+BPfuMroonS7jRWSeJsbGFP341BYu7LtMd0+
+         ND9QErhUVYsDcQHR4X9KyPw4xruDO+dvtR81G2CsHnCfKQOVxR77kiyGQtFMkXVckHjz
+         ZAMzhDteXLo1kHapd9vbXZWaJNtuj93tI/YtvepyI6nC5HqQOoRSCDBDZuijNYV4PFG4
+         C3tG1JaDIkp/PTmNFSGjXcIx4I306l1jTu5myFQKrPmGMITQCP/HlvXOoGpIVbT9wg5H
+         DCJA==
+X-Gm-Message-State: AOAM530IcBNMv/AYPTxs/Nt3YyWAqQkLj1YDyFCruouG1KmmgdaTdPe1
+        Qu6EUB1Ztc3d98BZg6cKmQ==
+X-Google-Smtp-Source: ABdhPJy3OkPGQRSZZPsiFZzPVaGRJb/o3iSXN4EkyJCA80OAb7iK0e/0V0u0IDcCUZkx+xMzdQ9hzw==
+X-Received: by 2002:a37:a20c:: with SMTP id l12mr232487qke.34.1591742746924;
+        Tue, 09 Jun 2020 15:45:46 -0700 (PDT)
+Received: from localhost.localdomain ([142.119.96.191])
+        by smtp.googlemail.com with ESMTPSA id j5sm12698804qtc.72.2020.06.09.15.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 13:02:27 -0700 (PDT)
-Received: (nullmailer pid 1359505 invoked by uid 1000);
-        Tue, 09 Jun 2020 20:02:25 -0000
-Date:   Tue, 9 Jun 2020 14:02:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-kernel@vger.kernel.org, Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-pm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>, devicetree@vger.kernel.org,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Subject: Re: [PATCH v3 24/39] dt-bindings: memory: tegra30: Add memory client
- IDs
-Message-ID: <20200609200225.GA1359394@bogus>
-References: <20200607185530.18113-1-digetx@gmail.com>
- <20200607185530.18113-25-digetx@gmail.com>
+        Tue, 09 Jun 2020 15:45:46 -0700 (PDT)
+From:   Keyur Patel <iamkeyur96@gmail.com>
+Cc:     Keyur Patel <iamkeyur96@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: axp20x_usb_power: fix spelling mistake
+Date:   Tue,  9 Jun 2020 18:45:23 -0400
+Message-Id: <20200609224524.108092-1-iamkeyur96@gmail.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200607185530.18113-25-digetx@gmail.com>
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 07 Jun 2020 21:55:15 +0300, Dmitry Osipenko wrote:
-> Each memory client have a unique hardware ID, this patch adds these IDs.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  include/dt-bindings/memory/tegra30-mc.h | 67 +++++++++++++++++++++++++
->  1 file changed, 67 insertions(+)
-> 
+Fix typo: "tigger" --> "trigger"
 
+Signed-off-by: Keyur Patel <iamkeyur96@gmail.com>
+---
+ drivers/power/supply/axp20x_usb_power.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please add Acked-by/Reviewed-by tags when posting new versions. However,
-there's no need to repost patches *only* to add the tags. The upstream
-maintainer will do that for acks received on the version they apply.
-
-If a tag was not added on purpose, please state why and what changed.
+diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+index 4fde24b5f35a..d01dc0332edc 100644
+--- a/drivers/power/supply/axp20x_usb_power.c
++++ b/drivers/power/supply/axp20x_usb_power.c
+@@ -78,7 +78,7 @@ static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
+ 	/*
+ 	 * Polling is only necessary while VBUS is offline. While online, a
+ 	 * present->absent transition implies an online->offline transition
+-	 * and will triger the VBUS_REMOVAL IRQ.
++	 * and will trigger the VBUS_REMOVAL IRQ.
+ 	 */
+ 	if (power->axp20x_id >= AXP221_ID && !power->online)
+ 		return true;
+-- 
+2.26.2
 
