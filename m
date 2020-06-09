@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D731F3BFA
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 15:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B501F3BEE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 15:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730032AbgFINRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 09:17:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S1728601AbgFINRa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 09:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729217AbgFINOv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 09:14:51 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F3C03E97C;
-        Tue,  9 Jun 2020 06:14:51 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id u16so12451003lfl.8;
-        Tue, 09 Jun 2020 06:14:51 -0700 (PDT)
+        with ESMTP id S1729222AbgFINOx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 09:14:53 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA99C08C5C6;
+        Tue,  9 Jun 2020 06:14:52 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id z9so24953046ljh.13;
+        Tue, 09 Jun 2020 06:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=cD6QbvUalU2rLnxp32Ky1as2vyVdkG0FzQ7kZtLukL0=;
-        b=Q3BU6gEN8cA0NMpF2QMR7/ASta55aBJk7I1MDLK4koAixnvzP0ayWGZf3TbVJLF+65
-         vId8KuOWkM8U5/Iu7EFpk85VTkAI1Oehc5+09VHXeLIo+3cVsuJq4oGVwhxOfGNsuvbD
-         NY1D4HQAhEREDBvmx8hAhNZ0GxixaeV++zeo7LJMnNn7h/CFhkHfaAgF7SCKO1XsKJJY
-         0ZyzEXamv8Ak+eCx/bhJHanQn+avSJOXU6PU4tk+eh+cUe2i6S0A4Jt1tYo88dL8dYJC
-         s5eTYYMCyCjEBFckuvK4gbtaaU0Yeq9B1wPNhczvvoYJBXYoJl7pPyfH9SzzMzxPj2yF
-         LUag==
+        bh=LMNT0sLytr4m3uFIZANOy+2q8/EiZDnxOa5gRaq0ITs=;
+        b=lbMlxJS2Nz9rtjKFACkhNVig0C+NLEZNIUQjbCyAejsn/LTxC42QfroGOTv+8KLqAW
+         6y5xkKZb09oaRg2UZVbz7aLFAAdIrJ+kgt1Tlq9Dq7iId7/Z+BWwMm2kxyu/SCDUYlql
+         12ZVVrjXylQbQi5tuhR420Yw3BZrrE6CmUUR83gh8A0KjatkRl9Eo0KnlYRhSnq0OL2w
+         zGw4GlwjSIo2wOuNRhjRMk48Q5E/srRH9rWAlnd72rQwqJNLphk4vbbXMbOBkoVP4G2b
+         qWLWKcVCSFqFtQ7JqQSVJl50Sbqjzq7bnL5VmxGG7iA8V/hf8nZInlDgFPI8qJHjRRD6
+         SLUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=cD6QbvUalU2rLnxp32Ky1as2vyVdkG0FzQ7kZtLukL0=;
-        b=fhOqmMaU3lhgZeA0kzxjATepFWHp6msRMorZA/1N1nuF2UMWuX7ShUBEh80M6QahxI
-         7F1Fl9x0xHXaNQvuyK+2nOlxtmNy9co2PRw6h+ZrbKJzR3M+5PTkxlMgAByWiVdw+bGk
-         hA/1cnAq0yJnQHSIXqIyz/5WbDKOseVq+CaNo1KSCwH3N5Fzdze0ojkZC8TLe7+vGOLb
-         l6M9MH4I63lIOTCdeTSXZUlLZZlJp+UP1Q3lCIOnZB1X08yjFuDcTvQuIwwXjEnJ6GVf
-         WFYTPfrnd7Pk2rCT08l+vXRYWCNw7bHR+FitgwTJCsYwFswEkcFOb9/49DdkxtizF6U7
-         1xDg==
-X-Gm-Message-State: AOAM533rIxf86hceLB34YOypewxC6xZOkrydje/uiYaXE81YwPNB4vvt
-        MBvECA9ULcBiw0p/0YA6l9o=
-X-Google-Smtp-Source: ABdhPJy+RmOWQqGmO4euFmKISnOZyzVw/14wPtNZKhpxrmxeb6HuV6Wq/6xWdmnG+KQ6p+Izt7lD/w==
-X-Received: by 2002:a19:6a09:: with SMTP id u9mr15434868lfu.65.1591708489649;
-        Tue, 09 Jun 2020 06:14:49 -0700 (PDT)
+        bh=LMNT0sLytr4m3uFIZANOy+2q8/EiZDnxOa5gRaq0ITs=;
+        b=fjfYOY1tKlgS+vGFRpzWAzxhq0ZtluaAjgic4J9yWBDc9cuXWyzJ48xM8VHpTMku7J
+         7Mi04FNYRZfaV5am54nSMTYdJJs7JVzleQRzV+1J8Bs3RD13kE0geucqrKcFpH5pT0qO
+         NUgjn/YDEukJPH2dLLgK05sHa1BdBuUXMzCbeME24UH8uhyPFl0Pzd0qaT965Q7CClir
+         SzRUtH3WUNrQoz3PNpFiwVkXYgY8uPa9/K9UiO2ftYGTD1l5EcIElJmo/4t9x5P/n341
+         1R9HfJ71Mr5j9KKGHaFNQp7cr13ha4OtnDcjoWkaLCb7ZIg2C/aEWmailtkAJOZuyN73
+         LwVA==
+X-Gm-Message-State: AOAM531tOWlYlZW5D8y/gG0hpSSJJsvMeznFr1p4o/7K1nixBiJ880nP
+        OeIkZcYvbGWNCxUImK21Xag=
+X-Google-Smtp-Source: ABdhPJzANPUwZcPwRmo0EzLdzFN781gP6GVzps4LmakICCdU1/D+4djzR//O5R7z6v44gq/opoA+KA==
+X-Received: by 2002:a05:651c:384:: with SMTP id e4mr13499996ljp.410.1591708490782;
+        Tue, 09 Jun 2020 06:14:50 -0700 (PDT)
 Received: from localhost.localdomain (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.gmail.com with ESMTPSA id l22sm4323522lji.120.2020.06.09.06.14.48
+        by smtp.gmail.com with ESMTPSA id l22sm4323522lji.120.2020.06.09.06.14.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jun 2020 06:14:49 -0700 (PDT)
+        Tue, 09 Jun 2020 06:14:50 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -63,9 +63,9 @@ Cc:     =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v4 20/37] dt-bindings: memory: tegra30: mc: Document new interconnect property
-Date:   Tue,  9 Jun 2020 16:13:47 +0300
-Message-Id: <20200609131404.17523-21-digetx@gmail.com>
+Subject: [PATCH v4 21/37] dt-bindings: memory: tegra30: emc: Document new interconnect property
+Date:   Tue,  9 Jun 2020 16:13:48 +0300
+Message-Id: <20200609131404.17523-22-digetx@gmail.com>
 X-Mailer: git-send-email 2.26.0
 In-Reply-To: <20200609131404.17523-1-digetx@gmail.com>
 References: <20200609131404.17523-1-digetx@gmail.com>
@@ -76,46 +76,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Memory controller is interconnected with memory clients and with the
-external memory controller. Document new interconnect property which
-turns memory controller into interconnect provider.
+External memory controller is interconnected with memory controller and
+with external memory. Document new interconnect property which turns
+external memory controller into interconnect provider.
 
 Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../bindings/memory-controllers/nvidia,tegra30-mc.yaml       | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bindings/memory-controllers/nvidia,tegra30-emc.yaml     | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
-index 84fd57bcf0dc..5436e6d420bc 100644
---- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
-+++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-mc.yaml
-@@ -57,6 +57,9 @@ properties:
-   "#iommu-cells":
-     const: 1
+diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-emc.yaml
+index 112bae2fcbbd..c243986db420 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-emc.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra30-emc.yaml
+@@ -31,6 +31,9 @@ properties:
+   interrupts:
+     maxItems: 1
  
 +  "#interconnect-cells":
-+    const: 1
++    const: 0
 +
- patternProperties:
-   "^emc-timings-[0-9]+$":
-     type: object
-@@ -120,6 +123,7 @@ required:
-   - clock-names
-   - "#reset-cells"
-   - "#iommu-cells"
+   nvidia,memory-controller:
+     $ref: /schemas/types.yaml#/definitions/phandle
+     description:
+@@ -214,6 +217,7 @@ required:
+   - interrupts
+   - clocks
+   - nvidia,memory-controller
 +  - "#interconnect-cells"
  
  additionalProperties: false
  
-@@ -135,6 +139,7 @@ examples:
+@@ -227,6 +231,8 @@ examples:
  
-         #iommu-cells = <1>;
-         #reset-cells = <1>;
-+        #interconnect-cells = <1>;
+         nvidia,memory-controller = <&mc>;
  
++        #interconnect-cells = <0>;
++
          emc-timings-1 {
              nvidia,ram-code = <1>;
+ 
 -- 
 2.26.0
 
