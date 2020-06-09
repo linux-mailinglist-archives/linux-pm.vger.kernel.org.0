@@ -2,151 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCD71F324F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 04:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0A11F3254
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 04:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726966AbgFICeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 8 Jun 2020 22:34:25 -0400
-Received: from mail-eopbgr1300129.outbound.protection.outlook.com ([40.107.130.129]:6223
-        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726765AbgFICeZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 8 Jun 2020 22:34:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kLY4/zQwVK5s/xq4L+Ak7xcEUlZJxk4HreSKFQ8uf/A4O3BKQlVwBPbIFfOS3Gq/bpvAWVSL2pnAmO8lSBrh6lZql4EE7ahZMdYf75vHqt7qVa2mx+4+N7BuqJvu0IQqA8J7LRItZLedAynPX2tEHugU6reIlSprl3+4aczQ6aGrRqD3DFQuL2p1x0nAYGeIaDv0btvIELauQQ5adz8rdPtMDc8dCGh7tkTsD9oWG6zSloXewxd9z9SRpU+Oolo5jDCjedbU8UbS5vFfUVHYpncX66XzjmUSPE9Z8eTHBqWp4Rp4f0aC1d0acyT7fXxnUZjDVyV72q6Y5H3XJZVkqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KIBcqR58oyE6R63FMHWpKRfXW64ov7QqSNZEjkGcEhU=;
- b=VrLWsfH2wmTXfBWqS42pRgvum5BWmRMn5CeUciGk/L1PGtpnLBjxBrq07ruoUVnXwXyFv1gWL2zmC4+zMQpkEvsmPhcz3dwhAVwt67gG7h/HxjWolxeWrtOY5Q5Wv9mBzRES+QQFAiSZf+iKWxUdEiVhdb1AIOsQtyHUwGlNcZoEjgpxzLKSwheVmyJTvCKpe5u9nIqQBlcEnZIxyZbRR8QDLaKHvAdg8+z6ML3zzkJLRI3sBQdVxU8UWshGeg6+qvlbFteTRy58WYjdwpfePLb/V1MZ/TFC0Ej0acyYxHF+qrAHjh7zYNS9PsrJfHuET0SuF3Px+Sj48aq6AQupEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S1726985AbgFIChs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 8 Jun 2020 22:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726909AbgFIChp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 8 Jun 2020 22:37:45 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8CCC03E969
+        for <linux-pm@vger.kernel.org>; Mon,  8 Jun 2020 19:37:43 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id 69so15421363otv.2
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jun 2020 19:37:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KIBcqR58oyE6R63FMHWpKRfXW64ov7QqSNZEjkGcEhU=;
- b=ZtukJy1SBoKDiD4PMfP33i54TlORyLgfW1nbrt/ablhaAJuKP6caDmSEP90KtzJxIO8LC5yuIk3IagMDYevmpWrALInHCuh5LOuzIFzSvykyDDmlhOVVCP3ofXLXnne4C6I6lWf7mqlJAC5WamRpYSe3yBGrAHATxzMuRn6fqMg=
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
- by TY2PR01MB3386.jpnprd01.prod.outlook.com (2603:1096:404:d0::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3066.19; Tue, 9 Jun
- 2020 02:34:20 +0000
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::2da1:bdb7:9089:7f43]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::2da1:bdb7:9089:7f43%3]) with mapi id 15.20.3066.023; Tue, 9 Jun 2020
- 02:34:20 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dien Pham <dien.pham.ry@renesas.com>
-CC:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        =?utf-8?B?TmlrbGFzIFPDtmRlcmx1bmQ=?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Van Do <van.do.xw@renesas.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH] thermal: rcar_gen3_thermal: Fix undefined temperature if
- negative
-Thread-Topic: [PATCH] thermal: rcar_gen3_thermal: Fix undefined temperature if
- negative
-Thread-Index: AQHWPYXYPBDXHyG8gEWwtXrFuGWaDKjOl4qAgAD0HAA=
-Date:   Tue, 9 Jun 2020 02:34:20 +0000
-Message-ID: <TY2PR01MB36923211263DA7F54A814AF4D8820@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-References: <1591614776-20333-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <CAMuHMdXT0qofW38-g79TSiy1nUBhrWNPfbViKRyWSFdme=oD0g@mail.gmail.com>
-In-Reply-To: <CAMuHMdXT0qofW38-g79TSiy1nUBhrWNPfbViKRyWSFdme=oD0g@mail.gmail.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux-m68k.org; dkim=none (message not signed)
- header.d=none;linux-m68k.org; dmarc=none action=none header.from=renesas.com;
-x-originating-ip: [124.210.22.195]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b762723f-a389-4266-f63c-08d80c1d9d47
-x-ms-traffictypediagnostic: TY2PR01MB3386:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <TY2PR01MB33862482771F0B15F2D1916BD8820@TY2PR01MB3386.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 042957ACD7
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: APoFPScJBUH7S28JLKP21cBad4WYsAFxb8rspmunn2TtW+eu2HpMbAuvR0LFKTsB5Bwj5ySBNZ7BVgBuGzdRXgV9JthBpnzhtpjXxrnGMElXbA1iAqDCxqXjGoAnlKSOfBz9L41IlZ29LtIdwK17IkKml6tnN+4LUjXxUbeEahdnpfRMDRGhN0zJEyMgYhNe7K4lZbiS4vf6JuF8++tNNKbGgq6koy+ZiQMHPpSwE3kbjHLTMNJs7nCUssJCMMkOkdrNRixSuKfv32DK/qLdXuAZj8EtX52copJQH8vm4hyqJHGkHtuV7pBr9VKnagHdpQp8GBBFIlfLObjC3X6ICw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(86362001)(8676002)(2906002)(4326008)(33656002)(5660300002)(55236004)(8936002)(6506007)(52536014)(26005)(76116006)(66946007)(66446008)(66556008)(186003)(64756008)(66476007)(110136005)(55016002)(71200400001)(316002)(478600001)(83380400001)(54906003)(7696005)(6636002)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: P5Kjp2tTgcF/EMBA2n7upVcWBUyA3YF7E6xOzypo6rPmT3KkWs+OUxqeC6IIFiVLd1r/K5wPSkyIaRLv83Kz0/c8U8EyTTV5JsrewXHoQTfQiNDojqHa2x7M+AGI705knxwlfSNR8+NpYeEHWVKOtoQ+nn3cNikFQSEDcFyPuGPFSpNE051x/EsUW4ZtQh7//EoWOJB4egpc+k+ZP23TBgjJrqCF7alMVBSFMgasEAQAcVju5tlunfk5nuevXmtlvZoK1fQcTofyghhTMzlMGABqkuz21VSKnJZKp/yx2AZMfUTxN615XPiRymMU2Xv6Al9n5gH/WRSXXUL6Adr+xT8TVdm765vYKXkHkJ3GJ7Wp/fZuNou1MTUWySl6GZH9CPKFLpJD19UolkESZPaJTL1HXjMvh3gwp8DYu7M1E6TcHip0r/FKdZl++cPiTiZpd0nFeVNNJqHLJgyVEqGiDM54qXnnJKDxB5AtB7BimZL6MQSvu5l8Kd63neiJBJSj
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gIREOCncp+kCLejh9A1JytrjVRseDJ9dDmzpsV7xNws=;
+        b=I9F+MzX3keiz7H+vq67DtBb3j76mL76MQZ+r9HgbdfDur2wVNf7HxaK0JjLFewpHIl
+         JEhC5yhS5eeZK9YbS3L3jGKgKUclvO6bqli/E4ozAVwZVdJgis0MsPi2Hgadsfexdkyc
+         GQTSjl2rMRA+2wxu7vGskuJxaXnulBsJwF/CHu4/mdeUno+caXYvieZFZA1/QyVtcSTt
+         ba+bxnnpUhC9mBSo7ZJyb9pprv1xeGOatgMlVbhKrztR3z14T4p1ND3KzH1BDo0e0g2K
+         M1AheK59avMkAVhIcd1aAvO6N3Spb+jYpTbN1OYYTIMGLhhtvRmDgj209cPg9F7OO+9B
+         IZZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gIREOCncp+kCLejh9A1JytrjVRseDJ9dDmzpsV7xNws=;
+        b=fXcSG3rSu8cafJEN2jv5z6rPLq6fwfZIEO2tt7U5xC5rIYkZryqQv18MG3kYw7IVMy
+         hxA7/MPkAAHp2aplOy56+tQjbijmN6VrkcQIMpYzgMU566husXCmEb50YsAd6CbV+mNT
+         4nDFBlTANT2XzL17Eel9u24B1SRG8G79M2ITxA2RSmWVbP/tTsW/zzX55cLb9TX7wDFn
+         c2qbAiVD+8VI7hc778CUDcRQk2F0DLeI2QVPDmx3VR2u/Osh9CPSVUD0/Z0fiOKymyHL
+         gz099oH+9et1QgaEo3Tn/uNoE/QQJ0l3MjJJJWqzmkuN3XIpkX6vQFlo4KBrCRfhez0F
+         l8mw==
+X-Gm-Message-State: AOAM533ktMLrwtFSG4CTo2X8ZTmJTLFyPGfXscFHSYvRZ9LJS+rQqTqL
+        Ia2NhozS3FKjAaXBuBOwx4yEOO8eJQD0T3NwlrGLEQ==
+X-Google-Smtp-Source: ABdhPJyNcC5SuTdnFrtUT/J1vHIVd1tebb9cmCY1PZhbEnXealjVBrgi7u4Qxgwn4MSraDU9LrRx5Xm6eUPmfkqlABk=
+X-Received: by 2002:a9d:6048:: with SMTP id v8mr14796461otj.231.1591670262910;
+ Mon, 08 Jun 2020 19:37:42 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b762723f-a389-4266-f63c-08d80c1d9d47
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jun 2020 02:34:20.3430
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2aRWR4NnKTHrCw1QYfX0lTP8pdx8vtQTfI8NpoUCWg3VZwaGcAj3MxlGqtTLimAV4SeU2DZzmbi88ChKiLpwP+tCqPc4gVNtfsZ9i8NiytTJOOMAe0Ajo4PyghgeowbX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB3386
+References: <CGME20200605063729eucas1p288dd9d3acdb62cc86745cb6af5c31fc6@eucas1p2.samsung.com>
+ <20200605063724.9030-1-m.szyprowski@samsung.com> <20200605102018.GA5413@sirena.org.uk>
+ <2f0e021d-387a-4693-882d-aba66e20dd2b@samsung.com> <20200605155903.GI5413@sirena.org.uk>
+In-Reply-To: <20200605155903.GI5413@sirena.org.uk>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 8 Jun 2020 19:37:07 -0700
+Message-ID: <CAGETcx8asyFRz5LmU4LSMJuPWvcWdvi1GHAhQ85AWdd6jcmdiA@mail.gmail.com>
+Subject: Re: [PATCH] regulator: do not balance 'boot-on' coupled regulators
+ without constraints
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>, peron.clem@gmail.com,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Android Kernel Team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgR2VlcnQtc2FuLA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgY29tbWVudHMhDQoNCj4gRnJvbTog
-R2VlcnQgVXl0dGVyaG9ldmVuLCBTZW50OiBNb25kYXksIEp1bmUgOCwgMjAyMCA4OjM4IFBNDQo8
-c25pcD4NCj4gPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvcmNhcl9nZW4zX3RoZXJtYWwuYw0KPiA+
-ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC9yY2FyX2dlbjNfdGhlcm1hbC5jDQo+ID4gQEAgLTE2Nyw3
-ICsxNjcsNyBAQCBzdGF0aWMgaW50IHJjYXJfZ2VuM190aGVybWFsX2dldF90ZW1wKHZvaWQgKmRl
-dmRhdGEsIGludCAqdGVtcCkNCj4gPiAgew0KPiA+ICAgICAgICAgc3RydWN0IHJjYXJfZ2VuM190
-aGVybWFsX3RzYyAqdHNjID0gZGV2ZGF0YTsNCj4gPiAgICAgICAgIGludCBtY2Vsc2l1cywgdmFs
-Ow0KPiA+IC0gICAgICAgdTMyIHJlZzsNCj4gPiArICAgICAgIGxvbmcgcmVnOw0KPiANCj4gImxv
-bmciIGlzIDY0LWJpdCwgc28gImludCIgc2hvdWxkIGJlIHN1ZmZpY2llbnQuDQoNCk9vcHMuDQoN
-Cj4gPiAgICAgICAgIC8qIFJlYWQgcmVnaXN0ZXIgYW5kIGNvbnZlcnQgdG8gbWlsaSBDZWxzaXVz
-ICovDQo+ID4gICAgICAgICByZWcgPSByY2FyX2dlbjNfdGhlcm1hbF9yZWFkKHRzYywgUkVHX0dF
-TjNfVEVNUCkgJiBDVEVNUF9NQVNLOw0KPiANCj4gSG93ZXZlciwgcmNhcl9nZW4zX3RoZXJtYWxf
-cmVhZCgpIGRvZXMgcmV0dXJuIHUzMiwgc28ga2VlcGluZyB1MzIgZm9yDQo+IHJlZyBsb29rcyBt
-b3JlIGxvZ2ljYWwgdG8gbWUuDQo+IA0KPiBTdWNjZXNzaXZlIGxpbmVzIGFyZToNCj4gDQo+ICAg
-ICAgICAgaWYgKHJlZyA8PSB0aGNvZGVbdHNjLT5pZF1bMV0pDQo+ICAgICAgICAgICAgICAgICB2
-YWwgPSBGSVhQVF9ESVYoRklYUFRfSU5UKHJlZykgLSB0c2MtPmNvZWYuYjEsDQo+ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgdHNjLT5jb2VmLmExKTsNCj4gICAgICAgICBlbHNlDQo+
-ICAgICAgICAgICAgICAgICB2YWwgPSBGSVhQVF9ESVYoRklYUFRfSU5UKHJlZykgLSB0c2MtPmNv
-ZWYuYjIsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdHNjLT5jb2VmLmEyKTsN
-Cj4gDQo+IFBlcmhhcHMgaXQncyBzYWZlciB0byBhZGQgYW4gY2FzdCB0byBGSVhQVF9JTlQoKSwg
-c28gaXQgYWx3YXlzIHJldHVybnMNCj4gaW50LCBhbmQvb3IgYWRkIGNhc3RzIHRvIEZJWFBUX0RJ
-VigpLCBzbyBvbmx5IHNpZ25lZCB2YWx1ZXMgYXJlIHBhc3NlZA0KPiB0byBESVZfUk9VTkRfQ0xP
-U0VTVD8NCj4gVGhhdCB3b3VsZCBwcmV2ZW50IHRoZSBpc3N1ZSBmcm9tIHJlYXBwZWFyaW5nIGxh
-dGVyLg0KDQpUaGVyZSBpcyBub3QgcmVsYXRlZCB0byB0aGUgaXNzdWUgYnV0LCB0aGNvZGVbXSBp
-cyBhbHNvIGludC4NClNvLCBpZiB3ZSB1c2UgY2FzdHMsIHdlIHdpbGwgc2VlIGEgbG90IG9mIGNh
-c3RzIGxpa2UgYmVsb3c6DQotLS0NCnN0YXRpYyBpbnQgcmNhcl9nZW4zX3RoZXJtYWxfZ2V0X3Rl
-bXAodm9pZCAqZGV2ZGF0YSwgaW50ICp0ZW1wKQ0Kew0KCXN0cnVjdCByY2FyX2dlbjNfdGhlcm1h
-bF90c2MgKnRzYyA9IGRldmRhdGE7DQoJaW50IG1jZWxzaXVzLCB2YWw7DQoJdTMyIHJlZzsNCg0K
-CS8qIFJlYWQgcmVnaXN0ZXIgYW5kIGNvbnZlcnQgdG8gbWlsaSBDZWxzaXVzICovDQoJcmVnID0g
-cmNhcl9nZW4zX3RoZXJtYWxfcmVhZCh0c2MsIFJFR19HRU4zX1RFTVApICYgQ1RFTVBfTUFTSzsN
-Cg0KCWlmICgoaW50KXJlZyA8PSB0aGNvZGVbdHNjLT5pZF1bMV0pDQoJCXZhbCA9IChpbnQpRklY
-UFRfRElWKChpbnQpRklYUFRfSU5UKHJlZykgLSB0c2MtPmNvZWYuYjEsDQoJCQkJdHNjLT5jb2Vm
-LmExKTsNCgllbHNlDQoJCXZhbCA9IChpbnQpRklYUFRfRElWKChpbnQpRklYUFRfSU5UKHJlZykg
-LSB0c2MtPmNvZWYuYjIsDQoJCQkJdHNjLT5jb2VmLmEyKTsNCi0tLQ0KDQpJJ20gdGhpbmtpbmcg
-dGhlIG5hbWUgInJlZyIgaXMgbm90IGdvb2QgYmVjYXVzZSBpdCBzaG91bGQgYmUgdGhlIHNhbWUg
-dHlwZSBhcw0KcmNhcl9nZW4zX3RoZXJtYWxfcmVhZCgpLiBCdXQsIGlmIHdlIHVzZSBvdGhlciBu
-YW1lIGxpa2UgImludCBjdGVtcDsiLCB3ZSBjYW4gdXNlDQppdCBsaWtlIGJlbG93LiBXaGF0IGRv
-IHlvdSB0aGluaz8NCi0tLQ0Kc3RhdGljIGludCByY2FyX2dlbjNfdGhlcm1hbF9nZXRfdGVtcCh2
-b2lkICpkZXZkYXRhLCBpbnQgKnRlbXApDQp7DQoJc3RydWN0IHJjYXJfZ2VuM190aGVybWFsX3Rz
-YyAqdHNjID0gZGV2ZGF0YTsNCglpbnQgbWNlbHNpdXMsIHZhbDsNCglpbnQgY3RlbXA7DQoNCgkv
-KiBSZWFkIHJlZ2lzdGVyIGFuZCBjb252ZXJ0IHRvIG1pbGkgQ2Vsc2l1cyAqLw0KCWN0ZW1wID0g
-aW50KHJjYXJfZ2VuM190aGVybWFsX3JlYWQodHNjLCBSRUdfR0VOM19URU1QKSAmIENURU1QX01B
-U0spOw0KDQoJaWYgKGN0ZW1wIDw9IHRoY29kZVt0c2MtPmlkXVsxXSkNCgkJdmFsID0gRklYUFRf
-RElWKEZJWFBUX0lOVChjdGVtcCkgLSB0c2MtPmNvZWYuYjEsDQoJCQkJdHNjLT5jb2VmLmExKTsN
-CgllbHNlDQoJCXZhbCA9IEZJWFBUX0RJVihGSVhQVF9JTlQoY3RlbXApIC0gdHNjLT5jb2VmLmIy
-LA0KCQkJCXRzYy0+Y29lZi5hMik7DQotLS0NCg0KPiBCVFcsIHJjYXJfZ2VuM190aGVybWFsX21j
-ZWxzaXVzX3RvX3RlbXAoKSByZXR1cm5zIGEgdmFsdWUgdG8gc3RvcmUgaW4gYQ0KPiByZWdpc3Rl
-ciwgaGVuY2UgSSB0aGluayBpdCBzaG91bGQgcmV0dXJuIHUzMiBpbnN0ZWFkIG9mIGludC4NCg0K
-SSB0aGluayBzby4NCg0KQmVzdCByZWdhcmRzLA0KWW9zaGloaXJvIFNoaW1vZGENCg0KPiBHcntv
-ZXRqZSxlZXRpbmd9cywNCj4gDQo+ICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0K
-PiAtLQ0KPiBHZWVydCBVeXR0ZXJob2V2ZW4gLS0gVGhlcmUncyBsb3RzIG9mIExpbnV4IGJleW9u
-ZCBpYTMyIC0tIGdlZXJ0QGxpbnV4LW02OGsub3JnDQo+IA0KPiBJbiBwZXJzb25hbCBjb252ZXJz
-YXRpb25zIHdpdGggdGVjaG5pY2FsIHBlb3BsZSwgSSBjYWxsIG15c2VsZiBhIGhhY2tlci4gQnV0
-DQo+IHdoZW4gSSdtIHRhbGtpbmcgdG8gam91cm5hbGlzdHMgSSBqdXN0IHNheSAicHJvZ3JhbW1l
-ciIgb3Igc29tZXRoaW5nIGxpa2UgdGhhdC4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAtLSBMaW51cyBUb3J2YWxkcw0K
+On Fri, Jun 5, 2020 at 8:59 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Fri, Jun 05, 2020 at 03:37:32PM +0200, Marek Szyprowski wrote:
+> > On 05.06.2020 12:20, Mark Brown wrote:
+>
+> > > No, this is not what boot-on means at all.  It is there for cases where
+> > > we can't read the enable status from the hardware.  Trying to infer
+> > > *anything* about the runtime behaviour from it being present or absent
+> > > is very badly broken.
+>
+> > Okay, what about the 'always-on' property? I don't think that we need
+> > another property for annotating this behavior, as in my opinion this is
+>
+> No, that's just as disconnected from the need - we may as well do it
+> based on the regulator name being an odd number of characters.
+>
+> > just an implementation issue on the Linux kernel and regulator
+> > framework. Alternatively I can drop the property check, but then it
+> > won't be possible to have a regulator without a consumer, which follows
+> > the other one (although we still don't have a real use case for it).
+>
+> > If you don't like this idea at all, I will try to move this logic to the
+> > custom coupler again, although it would mean some code copying.
+>
+> I think that's better TBH.
+>
+> > > Saravana (CCed) was working on some patches which tried to deal with
+> > > some stuff around this for enables using the sync_state() callback.
+> > > Unfortunately there's quite a few problems with the current approach
+> > > (the biggest one from my point of view being that it's implemented so
+> > > that it requires every single consumer of every device on the PMIC to
+> > > come up but there's others at more of an implementation level).
+>
+> > I'm not sure if we really need such complex solution for this...
+>
+> So I think that the specific approach there is overly heavyweight and
+> restrictive but I do see the general use case here for something per
+> regulator providing we can avoid breaking anything that does actually
+> need to change the regulator state (eg, raising the voltage for
+> cpufreq).
+
+The changes I propose won't prevent anything from asking for more
+power/energy (will always allow turning on stuff, increasing voltage,
+increasing current, etc). It'll only prevent reducing power lower than
+what was provided when the bootloader left stuff on. This shouldn't
+break most boards -- because any other consumer could be setting
+similar limits and things don't break then. But even if that's a
+concern, we can still default to a timeout behavior and then give
+folks the choice of disabling the timeout if they know all their
+devices will probe.
+
+Btw, the patch series I sent fixes a lot of subtle use cases even with
+the timeout enabled. For example, in one hardware platform, a LDO is
+shared between camera, display, UFS and USB. The camera driver would
+probe first, enable the regulator, poll its HW and then disable the
+regulator. This causes the regulator to be disabled before display,
+UFS, and USB could probe and this caused hardware faults for those.
+
+> Previously to the past week I'd only really heard about it
+> causing problems in the context of displays left on by the bootloader
+> glitching during boot but this is a concrete
+
+Ah, finally! I have examples of pretty much the same issue in some
+downstream kernels -- the CPU and memory shares rails with other
+hardware blocks and things fail if this isn't taken care of. Glad that
+someone else found an example for me in the upstream kernel.
+
+> use case and we already
+> have the infrastructure to track dependencies at the device model level
+> if we use it well.
+
+I'll send out a v3 series in a couple of days to address Mark's
+earlier comments and also add the voltage support to address Marek's
+case. We can take it from there.
+
+-Saravana
