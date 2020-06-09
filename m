@@ -2,93 +2,283 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3C81F3A05
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 13:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B001F3A6C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jun 2020 14:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgFILpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 07:45:21 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:32408 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726395AbgFILpV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 07:45:21 -0400
-X-IronPort-AV: E=Sophos;i="5.73,491,1583161200"; 
-   d="scan'208";a="48999935"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 09 Jun 2020 20:45:19 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 66AD84224204;
-        Tue,  9 Jun 2020 20:45:19 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com
-Cc:     niklas.soderlund+renesas@ragnatech.se, van.do.xw@renesas.com,
-        dien.pham.ry@renesas.com, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2] thermal: rcar_gen3_thermal: Fix undefined temperature if negative
-Date:   Tue,  9 Jun 2020 20:45:10 +0900
-Message-Id: <1591703110-14869-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1726395AbgFIMKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 08:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45376 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729175AbgFIMKl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 08:10:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3994C05BD1E
+        for <linux-pm@vger.kernel.org>; Tue,  9 Jun 2020 05:10:40 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jid5L-0007jU-Uz; Tue, 09 Jun 2020 14:10:31 +0200
+Received: from mfe by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1jid5J-0000k0-NW; Tue, 09 Jun 2020 14:10:29 +0200
+Date:   Tue, 9 Jun 2020 14:10:29 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Andrzej Hajda <a.hajda@samsung.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Grant Likely <grant.likely@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        artem.bityutskiy@linux.intel.com, balbi@kernel.org,
+        broonie@kernel.org, fntoth@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        peter.ujfalusi@ti.com, rafael@kernel.org, kernel-team@android.com,
+        nd <nd@arm.com>, kernel@pengutronix.de
+Subject: Re: [PATCH v3] driver core: Break infinite loop when deferred probe
+ can't be satisfied
+Message-ID: <20200609121029.nfhgilpu5meoygoa@pengutronix.de>
+References: <20200324175719.62496-1-andriy.shevchenko@linux.intel.com>
+ <20200325032901.29551-1-saravanak@google.com>
+ <20200325125120.GX1922688@smile.fi.intel.com>
+ <295d25de-f01e-26de-02d6-1ac0c149d828@arm.com>
+ <20200326163110.GD1922688@smile.fi.intel.com>
+ <CGME20200608091722eucas1p2fa8a4ac15c70e5a6e03c4babdf9f96b7@eucas1p2.samsung.com>
+ <20200608091712.GA28093@pengutronix.de>
+ <437de51b-37e9-d8d1-19c7-137a9265bf45@samsung.com>
+ <20200609064511.7nek2rhk6ebfjaia@pengutronix.de>
+ <b413d39f-71c4-d291-276d-1087baf07080@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b413d39f-71c4-d291-276d-1087baf07080@samsung.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 11:47:26 up 207 days,  1:06, 199 users,  load average: 0.17, 0.07,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dien Pham <dien.pham.ry@renesas.com>
+On 20-06-09 11:27, Andrzej Hajda wrote:
+> 
+> On 09.06.2020 08:45, Marco Felsch wrote:
+> > On 20-06-08 13:11, Andrzej Hajda wrote:
+> >> On 08.06.2020 11:17, Marco Felsch wrote:
+> >>> On 20-03-26 18:31, Andy Shevchenko wrote:
+> >>>> On Thu, Mar 26, 2020 at 03:01:22PM +0000, Grant Likely wrote:
+> >>>>> On 25/03/2020 12:51, Andy Shevchenko wrote:
+> >>>>>> On Tue, Mar 24, 2020 at 08:29:01PM -0700, Saravana Kannan wrote:
+> >>>>>>> On Tue, Mar 24, 2020 at 5:38 AM Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >>>>>>>> Consider the following scenario.
+> >>>>>>>>
+> >>>>>>>> The main driver of USB OTG controller (dwc3-pci), which has the following
+> >>>>>>>> functional dependencies on certain platform:
+> >>>>>>>> - ULPI (tusb1210)
+> >>>>>>>> - extcon (tested with extcon-intel-mrfld)
+> >>>>>>>>
+> >>>>>>>> Note, that first driver, tusb1210, is available at the moment of
+> >>>>>>>> dwc3-pci probing, while extcon-intel-mrfld is built as a module and
+> >>>>>>>> won't appear till user space does something about it.
+> >>>>>>>>
+> >>>>>>>> This is depicted by kernel configuration excerpt:
+> >>>>>>>>
+> >>>>>>>> 	CONFIG_PHY_TUSB1210=y
+> >>>>>>>> 	CONFIG_USB_DWC3=y
+> >>>>>>>> 	CONFIG_USB_DWC3_ULPI=y
+> >>>>>>>> 	CONFIG_USB_DWC3_DUAL_ROLE=y
+> >>>>>>>> 	CONFIG_USB_DWC3_PCI=y
+> >>>>>>>> 	CONFIG_EXTCON_INTEL_MRFLD=m
+> >>>>>>>>
+> >>>>>>>> In the Buildroot environment the modules are probed by alphabetical ordering
+> >>>>>>>> of their modaliases. The latter comes to the case when USB OTG driver will be
+> >>>>>>>> probed first followed by extcon one.
+> >>>>>>>>
+> >>>>>>>> So, if the platform anticipates extcon device to be appeared, in the above case
+> >>>>>>>> we will get deferred probe of USB OTG, because of ordering.
+> >>>>>>>>
+> >>>>>>>> Since current implementation, done by the commit 58b116bce136 ("drivercore:
+> >>>>>>>> deferral race condition fix") counts the amount of triggered deferred probe,
+> >>>>>>>> we never advance the situation -- the change makes it to be an infinite loop.
+> >>>>>>> Hi Andy,
+> >>>>>>>
+> >>>>>>> I'm trying to understand this sequence of steps. Sorry if the questions
+> >>>>>>> are stupid -- I'm not very familiar with USB/PCI stuff.
+> >>>>>> Thank you for looking into this. My answer below.
+> >>>>>>
+> >>>>>> As a first thing I would like to tell that there is another example of bad
+> >>>>>> behaviour of deferred probe with no relation to USB. The proposed change also
+> >>>>>> fixes that one (however, less possible to find in real life).
+> >>>>>>
+> >>>>>>>> ---8<---8<---
+> >>>>>>>>
+> >>>>>>>> [   22.187127] driver_deferred_probe_trigger <<< 1
+> >>>>>>>>
+> >>>>>>>> ...here is the late initcall triggers deferred probe...
+> >>>>>>>>
+> >>>>>>>> [   22.191725] platform dwc3.0.auto: deferred_probe_work_func in deferred list
+> >>>>>>>>
+> >>>>>>>> ...dwc3.0.auto is the only device in the deferred list...
+> >>>>>>> Ok, dwc3.0.auto is the only unprobed device at this point?
+> >>>>>> Correct.
+> >>>>>>
+> >>>>>>>> [   22.198727] platform dwc3.0.auto: deferred_probe_work_func 1 <<< counter 1
+> >>>>>>>>
+> >>>>>>>> ...the counter before mutex is unlocked is kept the same...
+> >>>>>>>>
+> >>>>>>>> [   22.205663] platform dwc3.0.auto: Retrying from deferred list
+> >>>>>>>>
+> >>>>>>>> ...mutes has been unlocked, we try to re-probe the driver...
+> >>>>>>>>
+> >>>>>>>> [   22.211487] bus: 'platform': driver_probe_device: matched device dwc3.0.auto with driver dwc3
+> >>>>>>>> [   22.220060] bus: 'platform': really_probe: probing driver dwc3 with device dwc3.0.auto
+> >>>>>>>> [   22.238735] bus: 'ulpi': driver_probe_device: matched device dwc3.0.auto.ulpi with driver tusb1210
+> >>>>>>>> [   22.247743] bus: 'ulpi': really_probe: probing driver tusb1210 with device dwc3.0.auto.ulpi
+> >>>>>>>> [   22.256292] driver: 'tusb1210': driver_bound: bound to device 'dwc3.0.auto.ulpi'
+> >>>>>>>> [   22.263723] driver_deferred_probe_trigger <<< 2
+> >>>>>>>>
+> >>>>>>>> ...the dwc3.0.auto probes ULPI, we got successful bound and bumped counter...
+> >>>>>>>>
+> >>>>>>>> [   22.268304] bus: 'ulpi': really_probe: bound device dwc3.0.auto.ulpi to driver tusb1210
+> >>>>>>> So where did this dwc3.0.auto.ulpi come from?
+> >>>>>>> Looks like the device is created by dwc3_probe() through this call flow:
+> >>>>>>> dwc3_probe() -> dwc3_core_init() -> dwc3_core_ulpi_init() ->
+> >>>>>>> dwc3_ulpi_init() -> ulpi_register_interface() -> ulpi_register()
+> >>>>>> Correct.
+> >>>>>>
+> >>>>>>>> [   22.276697] platform dwc3.0.auto: Driver dwc3 requests probe deferral
+> >>>>>>> Can you please point me to which code patch actually caused the probe
+> >>>>>>> deferral?
+> >>>>>> Sure, it's in drd.c.
+> >>>>>>
+> >>>>>> if (device_property_read_string(dev, "linux,extcon-name", &name) == 0) {
+> >>>>>>      edev = extcon_get_extcon_dev(name);
+> >>>>>>      if (!edev)
+> >>>>>>        return ERR_PTR(-EPROBE_DEFER);
+> >>>>>>      return edev;
+> >>>>>> }
+> >>>>>>
+> >>>>>>>> ...but extcon driver is still missing...
+> >>>>>>>>
+> >>>>>>>> [   22.283174] platform dwc3.0.auto: Added to deferred list
+> >>>>>>>> [   22.288513] platform dwc3.0.auto: driver_deferred_probe_add_trigger local counter: 1 new counter 2
+> >>>>>>> I'm not fully aware of all the USB implications, but if extcon is
+> >>>>>>> needed, why can't that check be done before we add and probe the ulpi
+> >>>>>>> device? That'll avoid this whole "fake" probing and avoid the counter
+> >>>>>>> increase. And avoid the need for this patch that's touching the code
+> >>>>>>> code that's already a bit delicate.
+> >>>>>>> Also, with my limited experience with all the possible drivers in the
+> >>>>>>> kernel, it's weird that the ulpi device is added and probed before we
+> >>>>>>> make sure the parent device (dwc3.0.auto) can actually probe
+> >>>>>>> successfully.
+> >>>>>> As I said above the deferred probe trigger has flaw on its own.
+> >>>>>> Even if we fix for USB case, there is (and probably will be) others.
+> >>>>> Right here is the driver design bug. A driver's probe() hook should *not*
+> >>>>> return -EPROBE_DEFER after already creating child devices which may have
+> >>>>> already been probed.
+> >>>> Any documentation statement for this requirement?
+> >>>>
+> >>>> By the way, I may imagine other mechanisms that probe the driver on other CPU
+> >>>> at the same time (let's consider parallel modprobes). The current code has a
+> >>>> flaw with that.
+> >>> Hi,
+> >>>
+> >>> sorry for picking this up again but I stumbled above the same issue
+> >>> within the driver imx/drm driver which is using the component framework.
+> >>> I end up in a infinity boot loop if I enabled the HDMI (which is the
+> >>> DesignWare bridge device) and the LVDS support and the LVDS bind return
+> >>> with EPROBE_DEFER. There are no words within the component framework docs
+> >>> which says that this is forbidden. Of course we can work-around the
+> >>> driver-core framework but IMHO this shouldn't be the way to go. I do not
+> >>> say that we should revert the commit introducing the regression but we
+> >>> should address this not only by extending the docs since the most
+> >>> drm-drivers are using the component framework and can end up in the same
+> >>> situation.
+> >> I am not sure why do you think this is similar issue.
+> > Because I see trying to bind the device over and over..
+> >
+> >> Please describe the issue in more detail. Which drivers defers probe and
+> >> why, and why do you have infinite loop.
+> > As said I'm currently on the imx-drm driver. The iMX6 devices are
+> > using the synopsis HDMI IP core and so they are using this bridge device
+> > driver (drivers/gpu/drm/bridge/synopsys/). The imx-drm driver can be
+> > build module wise. As example I enabled the LDB and the HDMI support.
+> > The HDMI driver is composed as platform driver with different
+> > (sub-)drivers and devices. Those devices are populated by the HDMI core
+> > driver _probe() function and triggers a driver_deferred_probe_trigger()
+> > after the driver successfully probed. The LDB driver bind() returns
+> > -EPROBE_DEFER because the panel we are looking for depends on a defered
+> > regulator device. Now the defered probe code tries to probe the defered
+> > devices again because the local-trigger count was changed by the HDMI
+> > driver and we are in the never ending loop.
+> >
+> >> In general deferring probe from bind is not forbidden, but it should be
+> >> used carefully (as everything in kernel :) ). Fixing deferring probe
+> >> issues in many cases it is a matter of figuring out 'dependency loops'
+> >> and breaking them by splitting device initialization into more than one
+> >> phase.
+> > We are on the way of splitting the imx-drm driver but there are many
+> > other DRM drivers using the component framework. As far as I can see the
+> > sunxi8 driver is component based and uses the same HDMI driver. I'm with
+> > Andy that we should fix that on the common/core place.
+> 
+> 
+> I have looked at the drivers and I see the main issue I see is that imx 
+> drivers performs resource acquisition in bind phase.
 
-As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
-  "Result is undefined for negative divisors if the dividend variable
-   type is unsigned and for negative dividends if the divisor variable
-   type is unsigned."
+As I said we are working on this.
 
-In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
-checked sign of divisor before using. It makes undefined temperature
-value in case the value is negative.
+> I think rule of 
+> thumb should be "do not expose yourself, until you are ready", which in 
+> this case means "do not call component_add, until resources are 
+> acquired" - ie resource acquisition should be performed in probe.
 
-This patch fixes to satisfy DIV_ROUND_CLOSEST description
-and fix bug too. Note that the name "reg" is not good because it should
-be the same type as rcar_gen3_thermal_read(). So, rename it with "ctemp".
+Hm.. there are is no documentation which forbid this use-case. I thought
+that the component framework bind() equals the driver probe() function..
 
-Signed-off-by: Van Do <van.do.xw@renesas.com>
-Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
-[shimoda: minor fixes, add Fixes tag]
-Fixes: 564e73d283af ("thermal: rcar_gen3_thermal: Add R-Car Gen3 thermal driver")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- Changes from v1:
- - Use int instead of long.
- - Rename "reg" with "ctemp".
- https://patchwork.kernel.org/patch/11593051/
+> I use 
+> this approach mainly to avoid multiple deferred re-probes, but it should 
+> solve also this issue, so even if there will be solution to "deferred 
+> probe issues" in core it would be good to fix imx drivers.
 
- drivers/thermal/rcar_gen3_thermal.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Pls, see my above comments. It is not only the imx driver. Also we
+shouldn't expect that driver-developers will follow a rule which is
+not written somewhere.
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 58fe7c1..49ea330 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -167,16 +167,16 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
- {
- 	struct rcar_gen3_thermal_tsc *tsc = devdata;
- 	int mcelsius, val;
--	u32 reg;
-+	int ctemp;
- 
- 	/* Read register and convert to mili Celsius */
--	reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
-+	ctemp = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
- 
--	if (reg <= thcode[tsc->id][1])
--		val = FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b1,
-+	if (ctemp <= thcode[tsc->id][1])
-+		val = FIXPT_DIV(FIXPT_INT(ctemp) - tsc->coef.b1,
- 				tsc->coef.a1);
- 	else
--		val = FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b2,
-+		val = FIXPT_DIV(FIXPT_INT(ctemp) - tsc->coef.b2,
- 				tsc->coef.a2);
- 	mcelsius = FIXPT_TO_MCELSIUS(val);
- 
--- 
-2.7.4
+Regards,
+  Marco
 
+> Regards
+> 
+> Andrzej
+> 
+> 
+> >
+> > Regards,
+> >    Marco
+> >
+> >> Regards
+> >>
+> >> Andrzej
+> >>
+> >>
+> >>>>> It can be solved by refactoring the driver probe routine. If a resource is
+> >>>>> required to be present, then check that it is available early; before
+> >>>>> registering child devices.
+> >>>> We fix one and leave others.
+> >>> E.g. the imx-drm and the sunxi driver...
+> >>>
+> >>> Regards,
+> >>>     Marco
+> >>>
+> >>>>> The proposed solution to modify driver core is fragile and susceptible to
+> >>>>> side effects from other probe paths. I don't think it is the right approach.
+> >>>> Have you tested it on your case? Does it fix the issue?
+> >>>>
