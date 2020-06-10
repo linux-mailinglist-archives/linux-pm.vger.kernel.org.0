@@ -2,99 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1A081F4ED5
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jun 2020 09:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541111F4F9E
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jun 2020 09:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbgFJH0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 10 Jun 2020 03:26:36 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:1584 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726081AbgFJH0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jun 2020 03:26:36 -0400
-X-UUID: b72ab5fc772b40e68d62d1f9d3e165fa-20200610
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=oVjcbyJtHSMVDm6RhFxQD8NCsbEcu2YvovIvKyEf9WA=;
-        b=IUTBTpaBBmuA2LUlB2T48toWx3CdAIxf4jwMN/vX+EWykLSG+cW3QoD+NTz4iRPhdqNM6a6v2iqe40C8qev9NQ3RkkD0D7pWCTNMzoZM9DaFxdOHyylza95xCUc8rZyztB63F/bl4/TLPY8pahpKqjhvwQyWLQydopZGE1GTH6c=;
-X-UUID: b72ab5fc772b40e68d62d1f9d3e165fa-20200610
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1727039160; Wed, 10 Jun 2020 15:26:31 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 10 Jun 2020 15:26:22 +0800
-Received: from [172.21.77.4] (172.21.77.4) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 10 Jun 2020 15:26:24 +0800
-Message-ID: <1591773984.14659.14.camel@mtksdaap41>
-Subject: Re: [PATCH v9 1/4] dt-bindings: power: avs: add mtk svs dt-bindings
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Nicolas Boichat <drinkcat@google.com>,
-        Angus Lin <Angus.Lin@mediatek.com>, <linux-pm@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Xiaoqing Liu <Xiaoqing.Liu@mediatek.com>,
-        YT Lee <yt.lee@mediatek.com>, Fan Chen <fan.chen@mediatek.com>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        HenryC Chen <HenryC.Chen@mediatek.com>,
-        Charles Yang <Charles.Yang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nishanth Menon <nm@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Wed, 10 Jun 2020 15:26:24 +0800
-In-Reply-To: <20200609173636.GA1125574@bogus>
-References: <20200609104534.29314-1-roger.lu@mediatek.com>
-         <20200609104534.29314-2-roger.lu@mediatek.com>
-         <20200609173636.GA1125574@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726544AbgFJHwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 10 Jun 2020 03:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbgFJHwo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 10 Jun 2020 03:52:44 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8CDC03E96B;
+        Wed, 10 Jun 2020 00:52:43 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 2526C2A3FC4
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        kernel@collabora.com
+Subject: [FIXED PATCH v4 5/7] iio: adc: exynos: Use input_device_enabled()
+Date:   Wed, 10 Jun 2020 09:52:30 +0200
+Message-Id: <20200610075230.14172-1-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200610012801.GA11530@qmqm.qmqm.pl>
+References: <20200610012801.GA11530@qmqm.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RGVhciBSb2IsDQoNClRoYW5rcyBmb3IgdGhlIGZlZWRiYWNrLg0KDQpPbiBUdWUsIDIwMjAtMDYt
-MDkgYXQgMTE6MzYgLTA2MDAsIFJvYiBIZXJyaW5nIHdyb3RlOg0KPiBPbiBUdWUsIDA5IEp1biAy
-MDIwIDE4OjQ1OjMxICswODAwLCBSb2dlciBMdSB3cm90ZToNCj4gPiBEb2N1bWVudCB0aGUgYmlu
-ZGluZyBmb3IgZW5hYmxpbmcgbXRrIHN2cyBvbiBNZWRpYVRlayBTb0MuDQo+ID4gDQo+ID4gU2ln
-bmVkLW9mZi1ieTogUm9nZXIgTHUgPHJvZ2VyLmx1QG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4g
-PiAgLi4uL2JpbmRpbmdzL3Bvd2VyL2F2cy9tdGtfc3ZzLnlhbWwgICAgICAgICAgIHwgMTQxICsr
-KysrKysrKysrKysrKysrKw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMTQxIGluc2VydGlvbnMoKykN
-Cj4gPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy9wb3dlci9hdnMvbXRrX3N2cy55YW1sDQo+ID4gDQo+IA0KPiANCj4gTXkgYm90IGZvdW5kIGVy
-cm9ycyBydW5uaW5nICdtYWtlIGR0X2JpbmRpbmdfY2hlY2snIG9uIHlvdXIgcGF0Y2g6DQo+IA0K
-PiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvcG93ZXIvYXZzL210a19zdnMuZXhh
-bXBsZS5kdHM6MjI6MTg6IGZhdGFsIGVycm9yOiBkdC1iaW5kaW5ncy9wb3dlci9tdDgxODMtcG93
-ZXIuaDogTm8gc3VjaCBmaWxlIG9yIGRpcmVjdG9yeQ0KPiAgICAgICAgICAjaW5jbHVkZSA8ZHQt
-YmluZGluZ3MvcG93ZXIvbXQ4MTgzLXBvd2VyLmg+DQo+ICAgICAgICAgICAgICAgICAgIF5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4gY29tcGlsYXRpb24gdGVybWluYXRlZC4N
-Cj4gc2NyaXB0cy9NYWtlZmlsZS5saWI6MzEyOiByZWNpcGUgZm9yIHRhcmdldCAnRG9jdW1lbnRh
-dGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL3Bvd2VyL2F2cy9tdGtfc3ZzLmV4YW1wbGUuZHQueWFt
-bCcgZmFpbGVkDQo+IG1ha2VbMV06ICoqKiBbRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRp
-bmdzL3Bvd2VyL2F2cy9tdGtfc3ZzLmV4YW1wbGUuZHQueWFtbF0gRXJyb3IgMQ0KPiBtYWtlWzFd
-OiAqKiogV2FpdGluZyBmb3IgdW5maW5pc2hlZCBqb2JzLi4uLg0KPiBNYWtlZmlsZToxMzAwOiBy
-ZWNpcGUgZm9yIHRhcmdldCAnZHRfYmluZGluZ19jaGVjaycgZmFpbGVkDQo+IG1ha2U6ICoqKiBb
-ZHRfYmluZGluZ19jaGVja10gRXJyb3IgMg0KPiANCj4gU2VlIGh0dHBzOi8vcGF0Y2h3b3JrLm96
-bGFicy5vcmcvcGF0Y2gvMTMwNTgwMA0KPiANCj4gSWYgeW91IGFscmVhZHkgcmFuICdtYWtlIGR0
-X2JpbmRpbmdfY2hlY2snIGFuZCBkaWRuJ3Qgc2VlIHRoZSBhYm92ZQ0KPiBlcnJvcihzKSwgdGhl
-biBtYWtlIHN1cmUgZHQtc2NoZW1hIGlzIHVwIHRvIGRhdGU6DQo+IA0KPiBwaXAzIGluc3RhbGwg
-Z2l0K2h0dHBzOi8vZ2l0aHViLmNvbS9kZXZpY2V0cmVlLW9yZy9kdC1zY2hlbWEuZ2l0QG1hc3Rl
-ciAtLXVwZ3JhZGUNCj4gDQo+IFBsZWFzZSBjaGVjayBhbmQgcmUtc3VibWl0Lg0KDQpPb3BzLCBt
-dDgxODMtcG93ZXIuaCBpcyBhZGRlZCBpbiBiZWxvdyBwYXRjaCB3aGljaCBpcyBzdGlsbCB1bmRl
-ciByZXZpZXcNCmluIHBhdGNod29yay4gSW4gb3JkZXIgdG8gaGF2ZSBjb21wbGV0ZSBTVlMgZGVz
-Y3JpcHRpb24sIG10ODE4My1wb3dlci5oDQppcyBhZGRlZCBpbiBtdGtfc3ZzLnlhbWwuDQoNClRo
-ZXJlZm9yZSwgdGhpcyBpc3N1ZSB3aWxsIGJlIGZpeGVkIGFmdGVyIHBhdGNoIGluY2x1ZGluZyBt
-dDgxODMtcG93ZXIuaA0KaXMgbWVyZ2VkLg0KDQojZHQtYmluZGluZ3MvcG93ZXIvbXQ4MTgzLXBv
-d2VyLmgNCmh0dHBzOi8vcGF0Y2h3b3JrLmtlcm5lbC5vcmcvcGF0Y2gvMTE1NjI1MjEvDQoNCj4g
-DQo+IA0KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0K
-PiBMaW51eC1tZWRpYXRlayBtYWlsaW5nIGxpc3QNCj4gTGludXgtbWVkaWF0ZWtAbGlzdHMuaW5m
-cmFkZWFkLm9yZw0KPiBodHRwOi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2xpbnV4LW1lZGlhdGVrDQoNCg==
+A new helper is available, so use it. Inspecting 'users' member of
+input_dev requires taking device's mutex.
+
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+---
+ drivers/iio/adc/exynos_adc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/exynos_adc.c b/drivers/iio/adc/exynos_adc.c
+index 22131a677445..2761c3aea2c6 100644
+--- a/drivers/iio/adc/exynos_adc.c
++++ b/drivers/iio/adc/exynos_adc.c
+@@ -633,7 +633,9 @@ static irqreturn_t exynos_ts_isr(int irq, void *dev_id)
+ 	bool pressed;
+ 	int ret;
+ 
+-	while (info->input->users) {
++	mutex_lock(&info->input->mutex);
++	while (input_device_enabled(info->input)) {
++		mutex_unlock(&info->input->mutex);
+ 		ret = exynos_read_s3c64xx_ts(dev, &x, &y);
+ 		if (ret == -ETIMEDOUT)
+ 			break;
+@@ -651,7 +653,10 @@ static irqreturn_t exynos_ts_isr(int irq, void *dev_id)
+ 		input_sync(info->input);
+ 
+ 		usleep_range(1000, 1100);
++
++		mutex_lock(&info->input->mutex);
+ 	}
++	mutex_unlock(&info->input->mutex);
+ 
+ 	writel(0, ADC_V1_CLRINTPNDNUP(info->regs));
+ 
+-- 
+2.17.1
 
