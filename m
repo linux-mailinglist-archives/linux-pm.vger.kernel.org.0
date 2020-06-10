@@ -2,87 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9D51F4A66
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jun 2020 02:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E641F4ADA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jun 2020 03:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725988AbgFJAdV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 9 Jun 2020 20:33:21 -0400
-Received: from bin-mail-out-05.binero.net ([195.74.38.228]:43038 "EHLO
-        bin-mail-out-05.binero.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725948AbgFJAdV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 9 Jun 2020 20:33:21 -0400
-X-Halon-ID: f0f30e9c-aab1-11ea-86ee-0050569116f7
-Authorized-sender: niklas@soderlund.pp.se
-Received: from bismarck.berto.se (p4fca2eca.dip0.t-ipconnect.de [79.202.46.202])
-        by bin-vsp-out-03.atm.binero.net (Halon) with ESMTPA
-        id f0f30e9c-aab1-11ea-86ee-0050569116f7;
-        Wed, 10 Jun 2020 02:33:06 +0200 (CEST)
-From:   =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] thermal: rcar_gen3_thermal: Do not shadow thcode variable
-Date:   Wed, 10 Jun 2020 02:33:00 +0200
-Message-Id: <20200610003300.884258-1-niklas.soderlund+renesas@ragnatech.se>
-X-Mailer: git-send-email 2.27.0
+        id S1725954AbgFJB2O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 9 Jun 2020 21:28:14 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:40293 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725944AbgFJB2M (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 9 Jun 2020 21:28:12 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 49hTrh691xz8r;
+        Wed, 10 Jun 2020 03:28:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1591752489; bh=GKakFZj7r0PwB6e2LKfOoZiiZ9swBqGVdyd905VRjjc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JcyUlr+WvHTHmVp9QAURy3vHUtHVVvuUk1Xc6U+oronaswAv4sPlpbwXkVXPI8OAh
+         +ZCIKP6b32XkKvBIkcDKfm7t5TkDfmLGkNf74ukWIjaGqoW7qPfkxtWoih0Eomc4q/
+         w2zgsXY6Ruhf8XUqJzx4KoGN+dBRlxxN21IxsSv4ms6v4OXw8WDPGKcSmtcRlDrzu+
+         SXD6KNjcaDfhF9rBu5rWcpoycCx3SX/hJ8Ihse3BcYOPhIiNqNAicuPBIwHgj3I9AF
+         SpBhhg7k+AJoi+ZsRdKBumYPce06a6uaA4FP/36CK0TBm0UvejlWb02cPOjzHiUszs
+         CUzBf4na9/iZw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.2 at mail
+Date:   Wed, 10 Jun 2020 03:28:01 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        kernel@collabora.com
+Subject: Re: [PATCH v4 5/7] iio: adc: exynos: Use input_device_enabled()
+Message-ID: <20200610012801.GA11530@qmqm.qmqm.pl>
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com>
+ <20200608112211.12125-6-andrzej.p@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200608112211.12125-6-andrzej.p@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function rcar_gen3_thermal_calc_coefs() takes an argument called
-'thcode' which shadows the static global 'thcode' variable. This is not
-harmful but bad for readability and is harmful for planned changes to
-the driver. The THCODE values should be read from hardware fuses if they
-are available and only fallback to the global 'thcode' variable if they
-are not fused.
+On Mon, Jun 08, 2020 at 01:22:09PM +0200, Andrzej Pietrasiewicz wrote:
+> A new helper is available, so use it. Inspecting 'users' member of
+> input_dev requires taking device's mutex.
+[...]
+> --- a/drivers/iio/adc/exynos_adc.c
+> +++ b/drivers/iio/adc/exynos_adc.c
+> @@ -633,7 +633,9 @@ static irqreturn_t exynos_ts_isr(int irq, void *dev_id)
+>  	bool pressed;
+>  	int ret;
+>  
+> -	while (info->input->users) {
+> +	mutex_lock(&info->input->mutex);
+> +	while (input_device_enabled(info->input)) {
+> +		mutex_unlock(&info->input->mutex);
+>  		ret = exynos_read_s3c64xx_ts(dev, &x, &y);
+>  		if (ret == -ETIMEDOUT)
+>  			break;
+> @@ -651,6 +653,8 @@ static irqreturn_t exynos_ts_isr(int irq, void *dev_id)
+>  		input_sync(info->input);
+>  
+>  		usleep_range(1000, 1100);
+> +
+> +		mutex_lock(&info->input->mutex);
+>  	}
 
-Rename the global 'thcode' variable to 'thcodes' to avoid shadowing the
-symbol in functions that take it as an argument.
+Missed an mutex_unlock() here.
 
-Signed-off-by: Niklas SÃ¶derlund <niklas.soderlund+renesas@ragnatech.se>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/thermal/rcar_gen3_thermal.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+>  
+>  	writel(0, ADC_V1_CLRINTPNDNUP(info->regs));
 
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 58fe7c1ef00b1270..bb4f5b42beb943e3 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -63,7 +63,7 @@
- #define TSC_MAX_NUM	3
- 
- /* default THCODE values if FUSEs are missing */
--static const int thcode[TSC_MAX_NUM][3] = {
-+static const int thcodes[TSC_MAX_NUM][3] = {
- 	{ 3397, 2800, 2221 },
- 	{ 3393, 2795, 2216 },
- 	{ 3389, 2805, 2237 },
-@@ -172,7 +172,7 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
- 	/* Read register and convert to mili Celsius */
- 	reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
- 
--	if (reg <= thcode[tsc->id][1])
-+	if (reg <= thcodes[tsc->id][1])
- 		val = FIXPT_DIV(FIXPT_INT(reg) - tsc->coef.b1,
- 				tsc->coef.a1);
- 	else
-@@ -430,7 +430,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		priv->tscs[i] = tsc;
- 
- 		priv->thermal_init(tsc);
--		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcode[i],
-+		rcar_gen3_thermal_calc_coefs(tsc, ptat, thcodes[i],
- 					     *rcar_gen3_ths_tj_1);
- 
- 		zone = devm_thermal_zone_of_sensor_register(dev, i, tsc,
--- 
-2.27.0
-
+Best Regards,
+Micha³ Miros³aw
