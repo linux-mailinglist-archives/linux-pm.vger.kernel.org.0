@@ -2,63 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B4A1F6A62
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jun 2020 16:55:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893F91F6C0E
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jun 2020 18:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgFKOz4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 11 Jun 2020 10:55:56 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:44736 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbgFKOz4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jun 2020 10:55:56 -0400
-Received: by mail-lf1-f67.google.com with SMTP id w15so3660673lfe.11;
-        Thu, 11 Jun 2020 07:55:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tG64BUJ8TS5taZg0hL83hvWeRis47PfXL8DPqNHCXxs=;
-        b=OLGuwP2CF7bZFkOiORcLAQoD8LxaWs33FqlC6HwRj/wKwRGjYUmnhCBfe8XI8yVkST
-         /q71OzWG+SXD1QCtxXKa5Nwi67ahQ6w48mmdVDn/oVuxBEOdRWKkauxJaueXmlD3PRBN
-         0gy9v9UCbletZUgbesUH3/K+2ypDa2lY0aM1buqeP9PSsJ8u2UaUWz0Y4R6p23PQ/aJY
-         cL33T4phHwvHRPL2MBxKFDlOqPhdFlA237PsPpwh4gGMjXHZL5I5hCcYz8SOKBdF0V2K
-         RLZm3t4X/JIbRXUYAzHqCLWQCsvSnNmchZSMt9pKNlYrs+ODFBtYfwEf8o9VVTTIItrs
-         llJg==
-X-Gm-Message-State: AOAM533lMhXrHWdBKuiu9uxwMG3FAZtIXMoCFGvVdsjEDTDfWxKPQVmw
-        PPRYwuBoEtSYbi38c6FRuCVP7O1ZNnM=
-X-Google-Smtp-Source: ABdhPJwejNPn8b2gu/doPN0PjZLXAZa8cOcqJeH5Z9QKV8/y5Hqe8mos8aIMBwkmj98yAh2/93RD/w==
-X-Received: by 2002:ac2:4ac2:: with SMTP id m2mr2721923lfp.94.1591887354536;
-        Thu, 11 Jun 2020 07:55:54 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id y12sm769380ljh.79.2020.06.11.07.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Jun 2020 07:55:54 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id c12so3664876lfc.10;
-        Thu, 11 Jun 2020 07:55:54 -0700 (PDT)
-X-Received: by 2002:ac2:5cd1:: with SMTP id f17mr4264517lfq.4.1591887353884;
- Thu, 11 Jun 2020 07:55:53 -0700 (PDT)
+        id S1725873AbgFKQSG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 11 Jun 2020 12:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725796AbgFKQSG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 11 Jun 2020 12:18:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C57C08C5C1;
+        Thu, 11 Jun 2020 09:18:06 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f0bef0005d5b3018ae552bb.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:ef00:5d5:b301:8ae5:52bb])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 691831EC0301;
+        Thu, 11 Jun 2020 18:18:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1591892284;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RJ7GoAEedrAK4DvGOTYw+36v89yWRwjmeXLTFyITpDc=;
+        b=WEAA1RLryyys5lbBBt7AxdJlwbKkwhspyf6IM1ftPSqXfF0uBlIVnVAiu/Lf7bYVpg5e4Y
+        OSSj1pDbnCZ6xJFhp+oa9qxHNYy1domqNK3LLw+x1ByEFS8wfQF986hpLMwP2XtAvUApZ3
+        pg5E7+EOFrQDTa96aKwPOeosO1fKLu4=
+Date:   Thu, 11 Jun 2020 18:17:58 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Mario.Limonciello@dell.com
+Cc:     pmenzel@molgen.mpg.de, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+        ckellner@redhat.com, linux-pm@vger.kernel.org
+Subject: Re: Intel laptop: Starting with `maxcpus=1` and then bringing other
+ CPUs online freezes system
+Message-ID: <20200611161758.GG30352@zn.tnic>
+References: <125e904a-088e-f111-00a4-95c3b18d882f@molgen.mpg.de>
+ <a0de2be2c9344980bce7190d19204316@AUSX13MPC105.AMER.DELL.COM>
 MIME-Version: 1.0
-References: <20200609224524.108092-1-iamkeyur96@gmail.com> <20200609225035.108435-1-iamkeyur96@gmail.com>
-In-Reply-To: <20200609225035.108435-1-iamkeyur96@gmail.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Thu, 11 Jun 2020 22:55:44 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64mEhd8d-=+bt=Di=L4+kyt6VLyp2ZbOxGnDoiV09iJ+g@mail.gmail.com>
-Message-ID: <CAGb2v64mEhd8d-=+bt=Di=L4+kyt6VLyp2ZbOxGnDoiV09iJ+g@mail.gmail.com>
-Subject: Re: [PATCH v2] power: supply: axp20x_usb_power: fix spelling mistake
-To:     Keyur Patel <iamkeyur96@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a0de2be2c9344980bce7190d19204316@AUSX13MPC105.AMER.DELL.COM>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 10, 2020 at 6:50 AM Keyur Patel <iamkeyur96@gmail.com> wrote:
->
-> Fix typo: "triger" --> "trigger"
->
-> Signed-off-by: Keyur Patel <iamkeyur96@gmail.com>
+On Thu, Jun 11, 2020 at 01:13:27PM +0000, Mario.Limonciello@dell.com wrote:
+> From some other similar reports I've heard this could be related to the ucode
+> loading causing a freeze.  I would suggest trying to disable the Intel ucode
+> loader with the initramfs as a debugging tactic.
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+There's a cmdline param for that: "dis_ucode_ldr".
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
