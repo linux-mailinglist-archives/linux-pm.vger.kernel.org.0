@@ -2,114 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC451F7B11
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jun 2020 17:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CCA1F7CC2
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jun 2020 20:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgFLPp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 12 Jun 2020 11:45:58 -0400
-Received: from mga07.intel.com ([134.134.136.100]:10047 "EHLO mga07.intel.com"
+        id S1726263AbgFLSKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 12 Jun 2020 14:10:01 -0400
+Received: from mga17.intel.com ([192.55.52.151]:52458 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726112AbgFLPp6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 12 Jun 2020 11:45:58 -0400
-IronPort-SDR: 6NESIibgOnlhwWwplCLGumUQh+2R/zILy2HJ99Ouu7AUtWZw7h+P2GnlXifW2wpl7v0EDId3rH
- YLZz0L4N4yhA==
+        id S1726219AbgFLSKA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 12 Jun 2020 14:10:00 -0400
+IronPort-SDR: +UuUjlDaNx9zn/ne7Pkh6pkw+dp3DIDk4FZcpNZjMD9v1hDV+kOvW5ISpu/oEAgpjlp15+n7JV
+ AHDY2dM3/CMg==
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2020 08:45:57 -0700
-IronPort-SDR: vEpkrF0S0lkXZ+9C/LiR7LbQmJWHluZyADAKAuHQdlxvLZxNKfEHDS0Ua5ZGj+VLc8K4FR5v1i
- 4X04R3ix94nw==
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2020 11:10:00 -0700
+IronPort-SDR: nSKNjD0AvxXeQx2X31ulLTYloZsV9FYfxW7IdEu2UWO1KcPhBaLilMcJMr1wOblTLFJWFGObQq
+ LQoG5GhaSBjA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,503,1583222400"; 
-   d="scan'208";a="380731890"
+X-IronPort-AV: E=Sophos;i="5.73,504,1583222400"; 
+   d="scan'208";a="261063588"
 Received: from amritada-mobl.amr.corp.intel.com (HELO spandruv-mobl3.amr.corp.intel.com) ([10.254.106.203])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Jun 2020 08:45:55 -0700
-Message-ID: <89e856e6c76b460c1515b70677e44bc50033bc17.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Add additional OOB enabling bit
+  by fmsmga008.fm.intel.com with ESMTP; 12 Jun 2020 11:09:59 -0700
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Doug Smythies <dsmythies@telus.net>, lenb@kernel.org,
-        viresh.kumar@linaro.org, rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 12 Jun 2020 08:45:54 -0700
-In-Reply-To: <000301d640c3$4e6d61c0$eb482540$@net>
-References: <20200611174838.2822533-1-srinivas.pandruvada@linux.intel.com>
-         <000301d640c3$4e6d61c0$eb482540$@net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
+To:     rjw@rjwysocki.net, lenb@kernel.org, viresh.kumar@linaro.org,
+        dsmythies@telus.net
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2] cpufreq: intel_pstate: Add additional OOB enabling bit
+Date:   Fri, 12 Jun 2020 11:09:57 -0700
+Message-Id: <20200612180957.1018235-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-06-12 at 07:11 -0700, Doug Smythies wrote:
-> On 2020.06.11 10:49 Srinivas Pandruvada wrote:
-> 
-> > Add additional bit for OOB (Out of band) enabling of P-states. In
-> > this
-> > case intel_pstate shouldn't load. Currently, only "BIT(8) == 1" of
-> > the
-> > MSR MSR_MISC_PWR_MGMT is considered as OOB. Also add "BIT(18) == 1"
-> > as
-> > OOB condition.
-> 
-> Shouldn't those bits be defined in these files:
-> arch/x86/include/asm/msr-index.h
-> and
-> tools/arch/x86/include/asm/msr-index.h
-> 
-> ?
-The rule from arch-x86 maintainers requires use in more than one place
-to go there.
+Add additional bit for OOB (Out of band) enabling of P-states. In this
+case intel_pstate shouldn't load. Currently, only "BIT(8) == 1" of the
+MSR MSR_MISC_PWR_MGMT is considered as OOB. Also add "BIT(18) == 1" as
+OOB condition.
 
-> 
-> By the way, I couldn't find those bits defined in Intel docs that I
-> have.
-Usually, they end up in data sheets.
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v2
+   - As suggested by Doug add OOB in debug message
+   - Atleast added local definition of OOB mask
 
->  
-> > Signed-off-by: Srinivas Pandruvada <
-> > srinivas.pandruvada@linux.intel.com>
-> > ---
-> >  drivers/cpufreq/intel_pstate.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/intel_pstate.c
-> > b/drivers/cpufreq/intel_pstate.c
-> > index 8e23a698ce04..f21761443c90 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -2686,8 +2686,8 @@ static bool __init
-> > intel_pstate_platform_pwr_mgmt_exists(void)
-> >  	id = x86_match_cpu(intel_pstate_cpu_oob_ids);
-> >  	if (id) {
-> >  		rdmsrl(MSR_MISC_PWR_MGMT, misc_pwr);
-> > -		if (misc_pwr & (1 << 8)) {
-> > -			pr_debug("Bit 8 in the MISC_PWR_MGMT MSR
-> > set\n");
-> > +		if ((misc_pwr & BIT(8)) || (misc_pwr & BIT(18))) {
-> 
-> And then those bit definitions used above.
-I didn't understand the comment.
+ drivers/cpufreq/intel_pstate.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> 
-> > +			pr_debug("Bit 8 or 18 in the MISC_PWR_MGMT MSR
-> > set\n");
-> 
-> And then some insight also printed  with the debug message.
-> At least say "Out of Band".
-We can.
-
-Thanks,
-Srinivas
-
-> 
-> >  			return true;
-> >  		}
-> >  	}
-> > --
-> > 2.24.1
-> 
-> 
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 8e23a698ce04..4e9bfd2509b8 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2677,6 +2677,7 @@ static struct acpi_platform_list plat_info[] __initdata = {
+ 	{ } /* End */
+ };
+ 
++#define BITMASK_OOB	(BIT(8) | BIT(18))
+ static bool __init intel_pstate_platform_pwr_mgmt_exists(void)
+ {
+ 	const struct x86_cpu_id *id;
+@@ -2686,8 +2687,9 @@ static bool __init intel_pstate_platform_pwr_mgmt_exists(void)
+ 	id = x86_match_cpu(intel_pstate_cpu_oob_ids);
+ 	if (id) {
+ 		rdmsrl(MSR_MISC_PWR_MGMT, misc_pwr);
+-		if (misc_pwr & (1 << 8)) {
+-			pr_debug("Bit 8 in the MISC_PWR_MGMT MSR set\n");
++		if (misc_pwr & BITMASK_OOB) {
++			pr_debug("Bit 8 or 18 in the MISC_PWR_MGMT MSR set\n");
++			pr_debug("P states are controlled in Out of Band mode by the firmware/hardware\n");
+ 			return true;
+ 		}
+ 	}
+-- 
+2.24.1
 
