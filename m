@@ -2,178 +2,285 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1891F82E5
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jun 2020 12:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8151F82F6
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jun 2020 12:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726317AbgFMKYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Jun 2020 06:24:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726308AbgFMKYr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 13 Jun 2020 06:24:47 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4B2F1206D7;
-        Sat, 13 Jun 2020 10:24:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592043885;
-        bh=5hmz+kjWd9Z2AW7NAsVZZX4+pg4hDqrs7p2tTAKmflw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FW2Pu/7rGdPOLqx+80eTZA579t5DpabAHDWeukIjeiU27m09Vc3K1+jggK3bM6LNz
-         oxVihZrLrph4fi1tEwmyMSbbv12JzguetesxlL1xle7FSHsacIgatVJmpwcW7vJCFu
-         UVdK20CNxPuzIocaTMKxFanAzf4tAfimNhldvCKY=
-Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jk3L9-002cLP-No; Sat, 13 Jun 2020 11:24:43 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PM / devfreq: rk3399_dmc: Fix kernel oops when rockchip,pmu is absent
-Date:   Sat, 13 Jun 2020 11:24:35 +0100
-Message-Id: <20200613102435.1728299-1-maz@kernel.org>
-X-Mailer: git-send-email 2.26.2
+        id S1725812AbgFMK3O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jun 2020 06:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgFMK2c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 13 Jun 2020 06:28:32 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29AAC08C5C2
+        for <linux-pm@vger.kernel.org>; Sat, 13 Jun 2020 03:28:24 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id y20so10198641wmi.2
+        for <linux-pm@vger.kernel.org>; Sat, 13 Jun 2020 03:28:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=roEol/nTFYZ5xZzwvlQenXs1w+jmJbk2YKEI6lkb47o=;
+        b=MZdWRSCbX1vaGo91qYRn125MNnFrrtLIZQMFpnGoohpTZeHC6Bfpk1kl8xgPtBuNPX
+         +HIPtXDpfBHf7VkU3+/xu29zOu9z1WMkJeBrAwcAkAiXo8IR1SNP4AyIFcWArDu3TaEK
+         Rx0X8bNn+sXURsYubE6DwsHsbqKK8j+4xJ+UXwb0U3cDZ1H59K8Eo2YlBAFu/pi51ymp
+         VhKdN+de/Fvg69SGc4tzmST/3siM0KjF6jxuQeHAdL366NNIfmqA2OS1kAb+sT6JHfUa
+         jlUwhu3nnwvMGObckuVqCaUUyukKfITo07IrEYnnGqsOz1+mwSzYocV9fjnaztY5iChL
+         s7lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=roEol/nTFYZ5xZzwvlQenXs1w+jmJbk2YKEI6lkb47o=;
+        b=CAeO7iuJqOnsTh5QjW6q2JnT6kZyRah9UyDwfLybFpIUE9/pdK2okrd2DRjcR/lHQJ
+         kh23ouw82iNnROK3Jphs5Wk00ccDkC/+AnF2Yxjn0uLOUthFeXiK1snmLkrwlwaEmsky
+         qmY53cOF1aLIdEtmO0DQXlioIJFtKaLbJpIvpFD5mcsGpNdoqlEdFmlQFYVrEQFLRw2/
+         xsMyEb1p+HdWjpg/7o/VBDntkyQi8LPEmZKQGZm6LqHNWtMnRfWqYSAupXrJeJpkqSQ9
+         UQtR4eChsvSnBLLvwz51T5DGoLo+7ms6hFIIQGNRDkE71JTYqHuATZLFbUm5vadzrp8u
+         7+EA==
+X-Gm-Message-State: AOAM5325EnUiPsPDIbE3VYa56Nun2PT0FyDrHs03oJ2FCkCfZA/XmssX
+        qV4812Onw3iAzkE1In+qshcmwiZ1t90=
+X-Google-Smtp-Source: ABdhPJxwJO912Fmxx5Ct2lRsQ3Nf4OFuV3iJabf/P802dIrcTjsEN9jJvaR5M7L6OyEp9IZpyKra5Q==
+X-Received: by 2002:a1c:5fd4:: with SMTP id t203mr3142268wmb.184.1592044103219;
+        Sat, 13 Jun 2020 03:28:23 -0700 (PDT)
+Received: from tool.localnet ([213.177.199.127])
+        by smtp.googlemail.com with ESMTPSA id y14sm12519090wma.25.2020.06.13.03.28.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Jun 2020 03:28:22 -0700 (PDT)
+From:   Daniel =?ISO-8859-1?Q?Gonz=E1lez?= Cabanelas <dgcbueu@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     sre@kernel.org
+Subject: [PATCH v3 1/2 ] power: reset: add driver for LinkStation power off
+Date:   Sat, 13 Jun 2020 12:26:52 +0200
+Message-ID: <3315137.NY7H5Hu6o1@tool>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 62.31.163.78
-X-SA-Exim-Rcpt-To: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Booting a recent kernel on a rk3399-based system (nanopc-t4),
-equipped with a recent u-boot and ATF results in the following:
+Some Buffalo LinkStations perform the power off operation, at restart
+time, depending on the state of an output pin (LED2/INTn) at the ethernet
+PHY. This pin is also used to wake the machine when a WoL packet is=20
+received by the PHY.
 
-[    5.607431] Unable to handle kernel NULL pointer dereference at virtual =
-address 00000000000001e4
-[    5.608219] Mem abort info:
-[    5.608469]   ESR =3D 0x96000004
-[    5.608749]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
-[    5.609223]   SET =3D 0, FnV =3D 0
-[    5.609600]   EA =3D 0, S1PTW =3D 0
-[    5.609891] Data abort info:
-[    5.610149]   ISV =3D 0, ISS =3D 0x00000004
-[    5.610489]   CM =3D 0, WnR =3D 0
-[    5.610757] user pgtable: 4k pages, 48-bit VAs, pgdp=3D00000000e62fb000
-[    5.611326] [00000000000001e4] pgd=3D0000000000000000, p4d=3D00000000000=
-00000
-[    5.611931] Internal error: Oops: 96000004 [#1] SMP
-[    5.612363] Modules linked in: rockchip_thermal(E+) rk3399_dmc(E+) sound=
-core(E) dw_wdt(E) rockchip_dfi(E) nvmem_rockchip_efuse(E) pwm_rockchip(E) c=
-fg80211(E+) rockchip_saradc(E) industrialio(E) rfkill(E) cpufreq_dt(E) ip_t=
-ables(E) x_tables(E) autofs4(E) ext4(E) crc32c_generic(E) crc16(E) mbcache(=
-E) jbd2(E) realtek(E) nvme(E) nvme_core(E) t10_pi(E) xhci_plat_hcd(E) xhci_=
-hcd(E) rtc_rk808(E) rk808_regulator(E) clk_rk808(E) dwc3(E) udc_core(E) rol=
-es(E) ulpi(E) rk808(E) fan53555(E) rockchipdrm(E) analogix_dp(E) dw_hdmi(E)=
- cec(E) dw_mipi_dsi(E) fixed(E) dwc3_of_simple(E) phy_rockchip_emmc(E) gpio=
-_keys(E) drm_kms_helper(E) phy_rockchip_inno_usb2(E) ehci_platform(E) dwmac=
-_rk(E) stmmac_platform(E) phy_rockchip_pcie(E) ohci_platform(E) ohci_hcd(E)=
- rockchip_io_domain(E) stmmac(E) phy_rockchip_typec(E) ehci_hcd(E) sdhci_of=
-_arasan(E) mdio_xpcs(E) sdhci_pltfm(E) cqhci(E) drm(E) sdhci(E) phylink(E) =
-of_mdio(E) usbcore(E) i2c_rk3x(E) dw_mmc_rockchip(E) dw_mmc_pltfm(E) dw_mmc=
-(E) fixed_phy(E) libphy(E)
-[    5.612454]  pl330(E)
-[    5.620255] CPU: 1 PID: 270 Comm: systemd-udevd Tainted: G            E =
-    5.7.0-13692-g83ae758d8b22 #1157
-[    5.621110] Hardware name: rockchip evb_rk3399/evb_rk3399, BIOS 2020.07-=
-rc4-00023-g10d4cafe0f 06/10/2020
-[    5.621947] pstate: 40000005 (nZcv daif -PAN -UAO BTYPE=3D--)
-[    5.622446] pc : regmap_read+0x1c/0x80
-[    5.622787] lr : rk3399_dmcfreq_probe+0x6a4/0x8c0 [rk3399_dmc]
-[    5.623299] sp : ffff8000126cb8a0
-[    5.623594] x29: ffff8000126cb8a0 x28: ffff8000126cbdb0
-[    5.624063] x27: ffff0000f22dac40 x26: ffff0000f6779800
-[    5.624533] x25: ffff0000f6779810 x24: 00000000ffffffea
-[    5.625002] x23: 00000000ffffffea x22: ffff0000f65b74c8
-[    5.625471] x21: ffff0000f783ca08 x20: ffff0000f65b7480
-[    5.625941] x19: 0000000000000000 x18: 0000000000000001
-[    5.626410] x17: 0000000000000000 x16: 0000000000000000
-[    5.626878] x15: ffff0000f22db138 x14: ffffffffffffffff
-[    5.627347] x13: 0000000000000018 x12: ffff80001106a8c7
-[    5.627817] x11: 0000000000000003 x10: 0101010101010101
-[    5.627861] systemd[1]: Found device SPCC M.2 PCIE SSD 3.
-[    5.628286] x9 : ffff800008d7c89c x8 : 7f7f7f7f7f7f7f7f
-[    5.629238] x7 : fefefeff646c606d x6 : 1c0e0e0ee3e8e9f0
-[    5.629709] x5 : 706968630e0e0e1c x4 : 8080808000000000
-[    5.630178] x3 : 937b1b5b1b434b80 x2 : ffff8000126cb944
-[    5.630648] x1 : 0000000000000308 x0 : 0000000000000000
-[    5.631119] Call trace:
-[    5.631346]  regmap_read+0x1c/0x80
-[    5.631654]  rk3399_dmcfreq_probe+0x6a4/0x8c0 [rk3399_dmc]
-[    5.632142]  platform_drv_probe+0x5c/0xb0
-[    5.632500]  really_probe+0xe4/0x448
-[    5.632819]  driver_probe_device+0xfc/0x168
-[    5.633191]  device_driver_attach+0x7c/0x88
-[    5.633567]  __driver_attach+0xac/0x178
-[    5.633914]  bus_for_each_dev+0x78/0xc8
-[    5.634261]  driver_attach+0x2c/0x38
-[    5.634582]  bus_add_driver+0x14c/0x230
-[    5.634925]  driver_register+0x6c/0x128
-[    5.635269]  __platform_driver_register+0x50/0x60
-[    5.635692]  rk3399_dmcfreq_driver_init+0x2c/0x1000 [rk3399_dmc]
-[    5.636226]  do_one_initcall+0x50/0x230
-[    5.636569]  do_init_module+0x60/0x248
-[    5.636902]  load_module+0x21f8/0x28d8
-[    5.637237]  __do_sys_finit_module+0xb0/0x118
-[    5.637627]  __arm64_sys_finit_module+0x28/0x38
-[    5.638031]  el0_svc_common.constprop.0+0x7c/0x1f8
-[    5.638456]  do_el0_svc+0x2c/0x98
-[    5.638754]  el0_svc+0x18/0x48
-[    5.639029]  el0_sync_handler+0x8c/0x2d4
-[    5.639378]  el0_sync+0x158/0x180
-[    5.639680] Code: a9bd7bfd 910003fd a90153f3 aa0003f3 (b941e400)
-[    5.640221] ---[ end trace 63675fe5d0021970 ]---
+The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
+and other models. Without it, the board remains forever halted if a=20
+power off command is executed, unless the PSU is disconnected and
+connected again.
 
-This turns out to be due to the rk3399-dmc driver looking for
-an *undocumented* property (rockchip,pmu), and happily using
-a NULL pointer when the property isn't there.
+Add the driver to provide the power off function and also make the WoL
+feature to be available.
 
-The very existence of this driver in the kernel is highly doubtful
-(I'd expect firmware to deal with this directly), but in the meantime
-let's prevent it from oopsing the kernel at probe time if this
-property isn't present.
+Signed-off-by: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
+=2D--
+Changes in v3:
+  - Code for PHY autodectection added, "phy-handle,intn" deleted.
+Changes in v2:
+  - The driver is now compatible with the WoL function, the LED2 pin output
+    is now used as INTn. Added the required code to make INTn work properly.
+  - Code for PHY autodectection deleted, "phy-handle,intn" is now mandatory.
+  - Replace a dev_info with a dev_dbg.
+  - Use phy_device_free in the driver remove.
+  - Cosmetic changes.
 
-Signed-off-by: Marc Zyngier <maz@kernel.org>
----
- drivers/devfreq/rk3399_dmc.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ drivers/power/reset/Kconfig                |  11 ++
+ drivers/power/reset/Makefile               |   1 +
+ drivers/power/reset/linkstation-poweroff.c | 144 +++++++++++++++++++++
+ 3 files changed, 156 insertions(+)
+ create mode 100644 drivers/power/reset/linkstation-poweroff.c
 
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 24f04f78285b..bee233a2e0ce 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -371,13 +371,16 @@ static int rk3399_dmcfreq_probe(struct platform_devic=
-e *pdev)
- 	}
+diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+index f07b982c8d..431cd9f201 100644
+=2D-- a/drivers/power/reset/Kconfig
++++ b/drivers/power/reset/Kconfig
+@@ -99,6 +99,17 @@ config POWER_RESET_HISI
+ 	help
+ 	  Reboot support for Hisilicon boards.
 =20
- 	node =3D of_parse_phandle(np, "rockchip,pmu", 0);
--	if (node) {
--		data->regmap_pmu =3D syscon_node_to_regmap(node);
--		of_node_put(node);
--		if (IS_ERR(data->regmap_pmu)) {
--			ret =3D PTR_ERR(data->regmap_pmu);
--			goto err_edev;
--		}
-+	if (!node) {
-+		ret =3D -ENODEV;
-+		goto err_edev;
-+	}
++config POWER_RESET_LINKSTATION
++	tristate "Buffalo LinkStation power-off driver"
++	depends on ARCH_MVEBU || COMPILE_TEST
++	depends on OF_MDIO && PHYLIB
++	help
++	  This driver supports turning off some Buffalo LinkStations by
++	  setting an output pin at the ethernet PHY to the correct state.
++	  It also makes the device compatible with the WoL function.
 +
-+	data->regmap_pmu =3D syscon_node_to_regmap(node);
-+	of_node_put(node);
-+	if (IS_ERR(data->regmap_pmu)) {
-+		ret =3D PTR_ERR(data->regmap_pmu);
-+		goto err_edev;
- 	}
-=20
- 	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
---=20
-2.26.2
++	  Say Y here if you have Buffalo LinkStation LS421D/E.
++
+ config POWER_RESET_MSM
+ 	bool "Qualcomm MSM power-off driver"
+ 	depends on ARCH_QCOM
+diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+index 5710ca4695..c51eceba9e 100644
+=2D-- a/drivers/power/reset/Makefile
++++ b/drivers/power/reset/Makefile
+@@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini-pow=
+eroff.o
+ obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
+ obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
+ obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
++obj-${CONFIG_POWER_RESET_LINKSTATION} +=3D linkstation-poweroff.o
+ obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
+ obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
+ obj-$(CONFIG_POWER_RESET_OXNAS) +=3D oxnas-restart.o
+diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/res=
+et/linkstation-poweroff.c
+new file mode 100644
+index 0000000000..688af0a962
+=2D-- /dev/null
++++ b/drivers/power/reset/linkstation-poweroff.c
+@@ -0,0 +1,144 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * LinkStation power off restart driver
++ * Copyright (C) 2020 Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
++ */
++
++#include <linux/module.h>
++#include <linux/notifier.h>
++#include <linux/of.h>
++#include <linux/of_mdio.h>
++#include <linux/of_platform.h>
++#include <linux/reboot.h>
++#include <linux/phy.h>
++
++/* Defines from the eth phy Marvell driver */
++#define MII_MARVELL_COPPER_PAGE		0
++#define MII_MARVELL_LED_PAGE		3
++#define MII_MARVELL_WOL_PAGE		17
++#define MII_MARVELL_PHY_PAGE		22
++
++#define MII_PHY_LED_CTRL		16
++#define MII_88E1318S_PHY_LED_TCR	18
++#define MII_88E1318S_PHY_WOL_CTRL	16
++#define MII_M1011_IEVENT		19
++
++#define MII_88E1318S_PHY_LED_TCR_INTn_ENABLE		BIT(7)
++#define MII_88E1318S_PHY_LED_TCR_FORCE_INT		BIT(15)
++#define MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS	BIT(12)
++#define LED2_FORCE_ON					(0x8 << 8)
++#define LEDMASK						GENMASK(11,8)
++
++static struct phy_device *phydev;
++
++static void mvphy_reg_intn(u16 data)
++{
++	int rc =3D 0, saved_page;
++
++	saved_page =3D phy_select_page(phydev, MII_MARVELL_LED_PAGE);
++	if (saved_page < 0)
++		goto err;
++
++	/* Force manual LED2 control to let INTn work */
++	__phy_modify(phydev, MII_PHY_LED_CTRL, LEDMASK, LED2_FORCE_ON);
++
++	/* Set the LED[2]/INTn pin to the required state */
++	__phy_modify(phydev, MII_88E1318S_PHY_LED_TCR,
++		     MII_88E1318S_PHY_LED_TCR_FORCE_INT,
++		     MII_88E1318S_PHY_LED_TCR_INTn_ENABLE | data);
++
++	if (!data) {
++		/* Clear interrupts to ensure INTn won't be holded in high state */
++		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_COPPER_PAGE);
++		__phy_read(phydev, MII_M1011_IEVENT);
++
++		/* If WOL was enabled and a magic packet was received before powering
++		 * off, we won't be able to wake up by sending another magic packet.=20
++		 * Clear WOL status.
++		 */
++		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_WOL_PAGE);
++		__phy_set_bits(phydev, MII_88E1318S_PHY_WOL_CTRL,
++			       MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS);
++	}
++err:
++	rc =3D phy_restore_page(phydev, saved_page, rc);
++	if (rc < 0)
++		dev_err(&phydev->mdio.dev, "Write register failed, %d\n", rc);
++}
++
++static int linkstation_reboot_notifier(struct notifier_block *nb,
++				       unsigned long action, void *unused)
++{
++	if (action =3D=3D SYS_RESTART)
++		mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block linkstation_reboot_nb =3D {
++	.notifier_call =3D linkstation_reboot_notifier,
++};
++
++static void linkstation_poweroff(void)
++{
++	unregister_reboot_notifier(&linkstation_reboot_nb);
++	mvphy_reg_intn(0);
++
++	kernel_restart("Power off");
++}
++
++static int linkstation_poweroff_probe(struct platform_device *pdev)
++{
++	struct mii_bus *bus;
++	struct device_node *dn;
++
++	dn =3D of_find_node_by_name(NULL, "mdio");
++	if (!dn)
++		return -ENODEV;
++
++	bus =3D of_mdio_find_bus(dn);
++	of_node_put(dn);
++	if (!bus)
++		return -EPROBE_DEFER;
++
++	phydev =3D phy_find_first(bus);
++	if (!phydev)
++		return -EPROBE_DEFER;
++
++	register_reboot_notifier(&linkstation_reboot_nb);
++	pm_power_off =3D linkstation_poweroff;
++
++	dev_dbg(&pdev->dev, "PHY [%s]\n", phydev_name(phydev));
++
++	return 0;
++}
++
++static int linkstation_poweroff_remove(struct platform_device *pdev)
++{
++	pm_power_off =3D NULL;
++	unregister_reboot_notifier(&linkstation_reboot_nb);
++
++	return 0;
++}
++
++static const struct of_device_id ls_poweroff_of_match[] =3D {
++	{ .compatible =3D "linkstation,power-off", },
++	{ },
++};
++
++MODULE_DEVICE_TABLE(of, ls_poweroff_of_match);
++
++static struct platform_driver linkstation_poweroff_driver =3D {
++	.probe =3D linkstation_poweroff_probe,
++	.remove =3D linkstation_poweroff_remove,
++	.driver =3D {
++		.name =3D "linkstation_power_off",
++		.of_match_table =3D ls_poweroff_of_match,
++	},
++};
++
++module_platform_driver(linkstation_poweroff_driver);
++
++MODULE_AUTHOR("Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>");
++MODULE_DESCRIPTION("LinkStation power off driver");
++MODULE_LICENSE("GPL v2");
+=2D-=20
+2.27.0
+
+
+
 
