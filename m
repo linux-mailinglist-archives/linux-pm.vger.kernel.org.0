@@ -2,82 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA331F8616
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jun 2020 03:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8966D1F863E
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jun 2020 04:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgFNBK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 13 Jun 2020 21:10:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:53306 "EHLO foss.arm.com"
+        id S1726486AbgFNCoq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 13 Jun 2020 22:44:46 -0400
+Received: from mga18.intel.com ([134.134.136.126]:65316 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726803AbgFNBK2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 13 Jun 2020 21:10:28 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB1451042;
-        Sat, 13 Jun 2020 18:10:27 -0700 (PDT)
-Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C01193F73C;
-        Sat, 13 Jun 2020 18:10:25 -0700 (PDT)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [PATCH 3/3] arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE
-Date:   Sun, 14 Jun 2020 02:07:55 +0100
-Message-Id: <20200614010755.9129-4-valentin.schneider@arm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200614010755.9129-1-valentin.schneider@arm.com>
-References: <20200614010755.9129-1-valentin.schneider@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726460AbgFNCoq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 13 Jun 2020 22:44:46 -0400
+IronPort-SDR: lv02LAnizU9/WWWDWtCK+pzTHgNNo3ab9gUdZmN0eYGAVzKNyhRExdqe2BMi3hca93gfDO9zhx
+ /Ww7esSobNVg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2020 19:44:45 -0700
+IronPort-SDR: hhUf12M7EwiPy0i3rUUaVQrNPQhbBuiU4ngV/zw5TOmSY003nKvn9q0t1goDaggWHeOkm5AxCw
+ RD/d5RfgahYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,509,1583222400"; 
+   d="scan'208";a="475280183"
+Received: from hongmeij-mobl4.ccr.corp.intel.com ([10.255.30.60])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Jun 2020 19:44:43 -0700
+Message-ID: <779a84cab9e01cbb8cafaea59ead79b26a2573df.camel@intel.com>
+Subject: Re: [THERMAL] INT3403 and new 0x91 thermal events in dmesg
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Alex Hung <alex.hung@canonical.com>, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date:   Sun, 14 Jun 2020 10:44:42 +0800
+In-Reply-To: <ee531821-83f1-2c80-4e2c-b2a359af7583@canonical.com>
+References: <ee531821-83f1-2c80-4e2c-b2a359af7583@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This option now correctly depends on CPU_FREQ_THERMAL, so select it on the
-architectures that implement the required functions,
-arch_set_thermal_pressure() and arch_get_thermal_pressure().
+On Fri, 2020-06-12 at 15:02 -0600, Alex Hung wrote:
+> Hi,
+> 
+> A user reported int3403 was flooding his dmesg like following
+> 
+> [ 8.112761] int3403 thermal INT3403:00: Unsupported event [0x91]
+> [ 10.121722] int3403 thermal INT3403:00: Unsupported event [0x91]
+> [ 12.165233] int3403 thermal INT3403:00: Unsupported event [0x91]
+> 
+> Buglink: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1882823
+> 
+> In int3403_thermal.c the events are defined up to
+> INT3403_THERMAL_EVENT
+> (0x90), and thus int3403 complains 0x91 is not supported.
+> 
+> I did a quick search online and found this is not the only case:
+> https://www.spinics.net/lists/ibm-acpi-devel/msg04629.html (though
+> the
+> 0x91 was unrelated to this problem).
+> 
+> This is likely a new feature in int3403 but I wasn't able to find any
+> specifications or documents. Does anyone know what it is and how this
+> can be added to int3403_thermal.c ?
+> 
+I'm not sure if this is a new feature that we have to support or not,
+but before that, we can downgrade the error message just like what we
+did in 44c0c23725a1("drivers: thermal: processor_thermal: Downgrade
+error message").
 
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
----
- arch/arm/Kconfig   | 1 +
- arch/arm64/Kconfig | 1 +
- 2 files changed, 2 insertions(+)
+thanks,
+rui
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index c77c93c485a0..f80bc12dabed 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -46,6 +46,7 @@ config ARM
- 	select EDAC_ATOMIC_SCRUB
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_ARCH_TOPOLOGY if ARM_CPU_TOPOLOGY
-+	select SCHED_THERMAL_PRESSURE if GENERIC_ARCH_TOPOLOGY
- 	select GENERIC_ATOMIC64 if CPU_V7M || CPU_V6 || !CPU_32v6K || !AEABI
- 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
- 	select GENERIC_CPU_AUTOPROBE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 5d513f461957..8bfe9221309f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -93,6 +93,7 @@ config ARM64
- 	select FRAME_POINTER
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_ARCH_TOPOLOGY
-+	select SCHED_THERMAL_PRESSURE
- 	select GENERIC_CLOCKEVENTS
- 	select GENERIC_CLOCKEVENTS_BROADCAST
- 	select GENERIC_CPU_AUTOPROBE
--- 
-2.27.0
 
