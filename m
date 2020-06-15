@@ -2,195 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 789301F9711
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 14:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458F11F9996
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 16:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730054AbgFOMuq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 08:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729990AbgFOMu2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 08:50:28 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0948C05BD1E;
-        Mon, 15 Jun 2020 05:50:28 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ne5so6783058pjb.5;
-        Mon, 15 Jun 2020 05:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=CW8sVg3Ki8BPXWoXTIsvDk7MK1hG8/08VLgL06LyYi4=;
-        b=LVl5ljYLSgTAVwIntKBSWNOIq+59AJGhYsMRCv7FgizVBCV9zxPwAYBxWxQZ6xADRy
-         d9ARo/Ao8Gq4lHGuhuUQO634dCgBnH7O+BDc22OpAW3UiD+TtPiC6zskCXfep1rrEYFT
-         waJkS+LySZyNniytxVp83g7ILVl6wK8EoOEcSOxJ+VC7TDDNAAF71YT1XzolXC2RFUVu
-         LZQYzfPELSxdi3bYcBbnOTRwwBahB87UlvBevC6JI3MSIGOIXrzIrjIel1BAB4uE4fKg
-         e+U8RC8uU+ZDLPLRB4jmqk78v6AlRiDMRT48brZ8tM+aC9R3L+1pd4FpP8xtXJBESok/
-         OsMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=CW8sVg3Ki8BPXWoXTIsvDk7MK1hG8/08VLgL06LyYi4=;
-        b=A7UXD/5SSV9Jlo0WwDQ/ku+247uaK3f+v8yPNxQftpSm1Uo2IHtjrnJHCJtfGgPJZG
-         c8bJgjt7HJ+1XU6DYHhep2rjjU2blPoP6Ggidsmu7q4oEuzsZnOexEPhAnth37YGqdxY
-         a4Tpje4TYf4BDyRz0xFObPM/HPaZngztqJWqceyzkrOLND4wJ3TEfhmUaW/lsmSS4Lnr
-         zlV5tl/13VeazlsUFedRmd8RH7/wkrZ8QtA9FDvczXHYe9MZklBw7ktk+dftt70XPM+9
-         2ylReCf7dSdIElt23theiSWIv/JXp7Fxd48CkeKX5u4xmX/On43rMDC8OOvznaoL+33X
-         oB4A==
-X-Gm-Message-State: AOAM530dSnNdsafKotpUmOWsAHG3DqCJXWCxaSOL4V8t2daWtkCv4RYq
-        UJhB6bsEFkuN0G75kFJuC+U=
-X-Google-Smtp-Source: ABdhPJwc22e39iJAlXB5y6rgPIfIw/oKijE5P33N2iVQp4Hj73fH1PvftHb5a+uVHJ1TwJ241w7Udw==
-X-Received: by 2002:a17:902:8e82:: with SMTP id bg2mr22711436plb.198.1592225428192;
-        Mon, 15 Jun 2020 05:50:28 -0700 (PDT)
-Received: from syed ([106.198.128.180])
-        by smtp.gmail.com with ESMTPSA id a10sm12010155pgv.72.2020.06.15.05.50.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Jun 2020 05:50:27 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 18:20:05 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     linus.walleij@linaro.org, akpm@linux-foundation.org
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v8 0/4] Introduce the for_each_set_clump macro
-Message-ID: <cover.1592224128.git.syednwaris@gmail.com>
+        id S1730367AbgFOOF7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 10:05:59 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:37018 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729243AbgFOOF7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 10:05:59 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id CC4281C0BD2; Mon, 15 Jun 2020 16:05:57 +0200 (CEST)
+Date:   Mon, 15 Jun 2020 16:05:57 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, tony@atomide.com, sre@kernel.org,
+        nekit1000@gmail.com, mpartap@gmx.net, merlijn@wizzup.org,
+        martin_rysavy@centrum.cz, linux-pm@vger.kernel.org
+Subject: [RFC] Limiting charge current on Droid 4 (and N900)
+Message-ID: <20200615140557.GA22781@duo.ucw.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="17pEHd4RhPHOinZp"
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Linus,
 
-Since this patchset primarily affects GPIO drivers, would you like
-to pick it up through your GPIO tree?
+--17pEHd4RhPHOinZp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This patchset introduces a new generic version of for_each_set_clump. 
-The previous version of for_each_set_clump8 used a fixed size 8-bit
-clump, but the new generic version can work with clump of any size but
-less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
-in several GPIO drivers.
+Hi!
 
-The earlier 8-bit for_each_set_clump8 facilitated a
-for-loop syntax that iterates over a memory region entire groups of set
-bits at a time.
+Droid 4 has same problem as N900: it is often neccessary to manually
+tweak current draw from USB, for example when using thin charging cable.
 
-For example, suppose you would like to iterate over a 32-bit integer 8
-bits at a time, skipping over 8-bit groups with no set bit, where
-XXXXXXXX represents the current 8-bit group:
+N900 creates unique attribute by hand, but I believe
+POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT looks suitable. (Should N900 be
+converted?)
 
-    Example:        10111110 00000000 11111111 00110011
-    First loop:     10111110 00000000 11111111 XXXXXXXX
-    Second loop:    10111110 00000000 XXXXXXXX 00110011
-    Third loop:     XXXXXXXX 00000000 11111111 00110011
+Comments? Would the patch be acceptable after fixing whitespace?
 
-Each iteration of the loop returns the next 8-bit group that has at
-least one set bit.
+Best regards,
+									Pavel
 
-But with the new for_each_set_clump the clump size can be different from 8 bits.
-Moreover, the clump can be split at word boundary in situations where word 
-size is not multiple of clump size. Following are examples showing the working 
-of new macro for clump sizes of 24 bits and 6 bits.
+Signed-off-by: Pavel Machek <pavel@ucw.cz>
 
-Example 1:
-clump size: 24 bits, Number of clumps (or ports): 10
-bitmap stores the bit information from where successive clumps are retrieved.
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cp=
+cap-battery.c
+index b16848cfb58c..39a00716372f 100644
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -3,7 +3,7 @@
+  *
+  * Copyright (C) 2017 Tony Lindgren <tony@atomide.com>
+  *
+- * Some parts of the code based on earlie Motorola mapphone Linux kernel
++ * Some parts of the code based on earlier Motorola mapphone Linux kernel
+  * drivers:
+  *
+  * Copyright (C) 2009-2010 Motorola, Inc.
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cp=
+cap-charger.c
+index cf1e05b511d9..292d7a31c663 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -89,6 +89,8 @@
+  * CPCAP_REG_CRM charge currents. These seem to match MC13783UG.pdf
+  * values in "Table 8-3. Charge Path Regulator Current Limit
+  * Characteristics" for the nominal values.
++ *
++ * Except 70mA and 1.596A and unlimited, these are simply 88.7mA / step.
+  */
+ #define CPCAP_REG_CRM_ICHRG(val)	(((val) & 0xf) << 0)
+ #define CPCAP_REG_CRM_ICHRG_0A000	CPCAP_REG_CRM_ICHRG(0x0)
+@@ -147,6 +149,8 @@ struct cpcap_charger_ddata {
+ 	int status;
+ 	int state;
+ 	int voltage;
++	int limit_current;
++
+ 	int last_current;
+ 	int last_current_retries;
+ };
+@@ -175,6 +179,7 @@ static enum power_supply_property cpcap_charger_props[]=
+ =3D {
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE,
++	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ };
+@@ -238,6 +243,9 @@ static int cpcap_charger_get_property(struct power_supp=
+ly *psy,
+ 	case POWER_SUPPLY_PROP_STATUS:
+ 		val->intval =3D ddata->status;
+ 		break;
++  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		val->intval =3D ddata->limit_current;
++		break;
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+ 		val->intval =3D ddata->voltage;
+ 		break;
+@@ -308,6 +316,25 @@ cpcap_charger_get_bat_const_charge_voltage(struct cpca=
+p_charger_ddata *ddata)
+ 	return voltage;
+ }
+=20
++static int cpcap_charger_current_to_regval(int microamp)
++{
++	int miliamp =3D microamp/1000;
++	int res;
++	if (miliamp < 0)
++		return -EINVAL;
++	if (miliamp < 70)
++		return CPCAP_REG_CRM_ICHRG(0x0);
++	if (miliamp < 177)
++		return CPCAP_REG_CRM_ICHRG(0x1);
++	if (miliamp > 1596)
++		return CPCAP_REG_CRM_ICHRG(0xe);
++
++	res =3D microamp / 88666;
++	if (res > 0xd)
++		res =3D 0xd;
++	return CPCAP_REG_CRM_ICHRG(res);
++}
++
+ static int cpcap_charger_set_property(struct power_supply *psy,
+ 				      enum power_supply_property psp,
+ 				      const union power_supply_propval *val)
+@@ -316,6 +343,12 @@ static int cpcap_charger_set_property(struct power_sup=
+ply *psy,
+ 	int voltage, batvolt;
+=20
+ 	switch (psp) {
++  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
++		if (cpcap_charger_current_to_regval(val->intval) < 0)
++			return -EINVAL;
++		ddata->limit_current =3D val->intval;
++		schedule_delayed_work(&ddata->detect_work, 0);
++		break;
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+ 		voltage =3D cpcap_charger_match_voltage(val->intval);
+ 		batvolt =3D cpcap_charger_get_bat_const_charge_voltage(ddata);
+@@ -335,6 +368,7 @@ static int cpcap_charger_property_is_writeable(struct p=
+ower_supply *psy,
+ 					       enum power_supply_property psp)
+ {
+ 	switch (psp) {
++	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+ 		return 1;
+ 	default:
+@@ -657,23 +691,21 @@ static void cpcap_usb_detect(struct work_struct *work)
+=20
+ 	if (!ddata->feeding_vbus && cpcap_charger_vbus_valid(ddata) &&
+ 	    s.chrgcurr1) {
+-		int max_current;
+-		int vchrg;
++		int max_current =3D 532000;
++		int vchrg, ichrg;
+=20
+ 		if (cpcap_charger_battery_found(ddata))
+-			max_current =3D CPCAP_REG_CRM_ICHRG_1A596;
+-		else
+-			max_current =3D CPCAP_REG_CRM_ICHRG_0A532;
++			max_current =3D 1596000;
+=20
+ 		switch (ddata->state) {
+ 		case CPCAP_CHARGER_DETECTING:
+ 			ddata->last_current_retries =3D 0;
+ 			break;
+ 		case CPCAP_CHARGER_DISCONNECTED:
+-			if (ddata->last_current > CPCAP_REG_CRM_ICHRG_0A532) {
++			if (ddata->last_current > 532000) {
+ 				/* Attempt current 3 times before lowering */
+ 				if (ddata->last_current_retries++ >=3D 3) {
+-					ddata->last_current--;
++					ddata->last_current -=3D 100000;
+ 					ddata->last_current_retries =3D 0;
+ 					/* Wait a bit for voltage to ramp up */
+ 					usleep_range(40000, 50000);
+@@ -688,11 +720,16 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 			break;
+ 		}
+=20
++		if (max_current > ddata->limit_current)
++			max_current =3D ddata->limit_current;
++
+ 		ddata->last_current =3D max_current;
++
++		ichrg =3D cpcap_charger_current_to_regval(max_current);
+ 		vchrg =3D cpcap_charger_voltage_to_regval(ddata->voltage);
+ 		error =3D cpcap_charger_set_state(ddata,
+ 						CPCAP_REG_CRM_VCHRG(vchrg),
+-						max_current, 0);
++						ichrg, 0);
+ 		if (error)
+ 			goto out_err;
+ 		cpcap_charger_update_state(ddata, CPCAP_CHARGER_CHARGING);
+@@ -864,6 +901,7 @@ static int cpcap_charger_probe(struct platform_device *=
+pdev)
+=20
+ 	ddata->dev =3D &pdev->dev;
+ 	ddata->voltage =3D 4200000;
++	ddata->limit_current =3D 532000;
+=20
+ 	ddata->reg =3D dev_get_regmap(ddata->dev->parent, NULL);
+ 	if (!ddata->reg)
 
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x000000aa000000aa;
-        0xbbbbabcdeffedcba;  /* Least significant bits */
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-Different iterations of for_each_set_clump:-
-'offset' is the bit position and 'clump' is the 24 bit clump from the
-above bitmap.
-Iteration first:        offset: 0 clump: 0xfedcba
-Iteration second:       offset: 24 clump: 0xabcdef
-Iteration third:        offset: 48 clump: 0xaabbbb
-Iteration fourth:       offset: 96 clump: 0xaa
-Iteration fifth:        offset: 144 clump: 0xff
-Iteration sixth:        offset: 168 clump: 0xaaaaaa
-Iteration seventh:      offset: 216 clump: 0xff
-Loop breaks because in the end the remaining bits (0x00aa) size was less
-than clump size of 24 bits.
+--17pEHd4RhPHOinZp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In above example it can be seen that in iteration third, the 24 bit clump
-that was retrieved was split between bitmap[0] and bitmap[1]. This example 
-also shows that 24 bit zeroes if present in between, were skipped (preserving
-the previous for_each_set_macro8 behaviour). 
+-----BEGIN PGP SIGNATURE-----
 
-Example 2:
-clump size = 6 bits, Number of clumps (or ports) = 3.
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCXueARQAKCRAw5/Bqldv6
+8r/sAJ46iCoAwzi+b8D09i52j6yXo5rYVgCggxr+sue70dpus3LswQUr8Ki7lSM=
+=YnOL
+-----END PGP SIGNATURE-----
 
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x0f00000000000000;
-        0x0000000000000ac0;  /* Least significant bits */
-
-Different iterations of for_each_set_clump:
-'offset' is the bit position and 'clump' is the 6 bit clump from the
-above bitmap.
-Iteration first:        offset: 6 clump: 0x2b
-Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
-Here 6 * 3 is clump size * no. of clumps.
-
-Changes in v8:
- - [Patch 2/4]: Minor change: Use '__initdata' for correct section mismatch
-   in 'clump_test_data' array.
-
-Changes in v7:
- - [Patch 2/4]: Minor changes: Use macro 'DECLARE_BITMAP()' and split 'struct'
-   definition and test data.
-
-Changes in v6:
- - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
-   succinct.
-
-Changes in v5:
- - [Patch 4/4]: Minor change: Hardcode value for better code readability.
-
-Changes in v4:
- - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
- - [Patch 3/4]: Minor change: Inline value for better code readability.
- - [Patch 4/4]: Minor change: Inline value for better code readability.
-
-Changes in v3:
- - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
-   in function thunderx_gpio_set_multiple.
-
-CHanges in v2:
- - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
-   function parameters.
- - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
-
-Syed Nayyar Waris (4):
-  bitops: Introduce the for_each_set_clump macro
-  lib/test_bitmap.c: Add for_each_set_clump test cases
-  gpio: thunderx: Utilize for_each_set_clump macro
-  gpio: xilinx: Utilize for_each_set_clump macro
-
- drivers/gpio/gpio-thunderx.c      |  11 ++-
- drivers/gpio/gpio-xilinx.c        |  62 ++++++-------
- include/asm-generic/bitops/find.h |  19 ++++
- include/linux/bitmap.h            |  61 +++++++++++++
- include/linux/bitops.h            |  13 +++
- lib/find_bit.c                    |  14 +++
- lib/test_bitmap.c                 | 145 ++++++++++++++++++++++++++++++
- 7 files changed, 291 insertions(+), 34 deletions(-)
-
-
-base-commit: 444fc5cde64330661bf59944c43844e7d4c2ccd8
--- 
-2.26.2
-
+--17pEHd4RhPHOinZp--
