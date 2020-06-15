@@ -2,60 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD8F1FA3A3
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 00:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C031FA457
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 01:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725960AbgFOWkH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 18:40:07 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56560 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbgFOWkG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 18:40:06 -0400
-Received: from 2.general.alexhung.us.vpn ([10.172.65.255] helo=canonical.com)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <alex.hung@canonical.com>)
-        id 1jkxlo-0005Af-J9; Mon, 15 Jun 2020 22:40:01 +0000
-From:   Alex Hung <alex.hung@canonical.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com, rafael.j.wysocki@intel.com,
-        gayatri.kammela@intel.com, srinivas.pandruvada@intel.com,
-        gupt21@gmail.com, linux-pm@vger.kernel.org, alex.hung@canonical.com
-Cc:     stable@vger.kernel.org
-Subject: [PATCH] thermal: int3403_thermal: Downgrade error message
-Date:   Mon, 15 Jun 2020 16:39:57 -0600
-Message-Id: <20200615223957.183153-1-alex.hung@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S1726940AbgFOXgo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 15 Jun 2020 19:36:44 -0400
+Received: from mail.bnv.gob.ve ([201.249.200.115]:41466 "EHLO
+        correo.bnv.gob.ve" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726763AbgFOXga (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 19:36:30 -0400
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 0E0D33633A89;
+        Mon, 15 Jun 2020 17:55:11 -0400 (-04)
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jbGnXZHxfZYR; Mon, 15 Jun 2020 17:55:10 -0400 (-04)
+Received: from localhost (localhost.bnv.gob.ve [127.0.0.1])
+        by correo.bnv.gob.ve (Postfix) with ESMTP id 8CBFC3633AAD;
+        Mon, 15 Jun 2020 17:55:10 -0400 (-04)
+X-Virus-Scanned: amavisd-new at bnv.gob.ve
+Received: from correo.bnv.gob.ve ([127.0.0.1])
+        by localhost (correo.bnv.gob.ve [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id F1tPUh04j84j; Mon, 15 Jun 2020 17:55:10 -0400 (-04)
+Received: from [10.122.16.20] (unknown [105.12.7.63])
+        by correo.bnv.gob.ve (Postfix) with ESMTPSA id 01AAA3633A87;
+        Mon, 15 Jun 2020 17:55:00 -0400 (-04)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: donation of Euro 2,000,000.00.
+To:     Recipients <manuel@info.com>
+From:   "manuel franco" <manuel@info.com>
+Date:   Mon, 15 Jun 2020 23:54:51 +0200
+Reply-To: manuelfrancospende22@gmail.com
+Message-Id: <20200615215501.01AAA3633A87@correo.bnv.gob.ve>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Downgrade "Unsupported event" message from dev_err to dev_dbg to avoid
-flooding with this message one some platforms.
+You have a donation of Euro 2,000,000.00.
 
-Cc: stable@vger.kernel.org # v5.4+
-Suggested-by: Zhang Rui <rui.zhang@intel.com>
-Signed-off-by: Alex Hung <alex.hung@canonical.com>
----
- drivers/thermal/intel/int340x_thermal/int3403_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My name is Manuel Franco from the United States.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-index f86cbb1..ec1d58c 100644
---- a/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3403_thermal.c
-@@ -74,7 +74,7 @@ static void int3403_notify(acpi_handle handle,
- 						   THERMAL_TRIP_CHANGED);
- 		break;
- 	default:
--		dev_err(&priv->pdev->dev, "Unsupported event [0x%x]\n", event);
-+		dev_dbg(&priv->pdev->dev, "Unsupported event [0x%x]\n", event);
- 		break;
- 	}
- }
--- 
-2.7.4
-
+I won the America lottery worth $768 million and I am donating a portion of it to just 5 lucky people and a few Orphanage homes as a memorandum of goodwill to humanity.email: manuelfrancospende@gmail.com
