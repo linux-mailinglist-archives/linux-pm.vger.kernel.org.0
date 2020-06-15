@@ -2,91 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27781F8FE6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 09:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F551F9027
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 09:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbgFOHbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 03:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728369AbgFOHbn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 03:31:43 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB7FC05BD43
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 00:31:41 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id v14so2241231pgl.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 00:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LrJ4JAo2vjzpAGyvhcbFA7qISNQsytIItEN02iswbAY=;
-        b=xIDTWFM2aEF9G48Tte+2/OhzJEH4zIX8UuUvaXknN7D4I4cmnaZPllbbgOZ2Qk+1bY
-         xbc+h154cHHO0epDGK216n3MwNuTQp8fqNoImvPxYEWwYNbpZlJyWIj2LFILlM6wvgH+
-         PrrwqgyDhhXP7IQ8oGaTW5/tJ5HPe94oZv9gZMHEzR71J+0zMmRMINshTnnEMwgOVaAR
-         riY+A1J2/TsZ/dTasy+1g79Vmc0d1usNeEDBgt0+HWb+bXb9RnVRGlHffL4L/ugZBF2w
-         Dud6PN5w+IJx6AeU9QRAZD329d15LkFad4bKzdPv8fewOwdQekgvuC7XPd0gsL3i8Aa0
-         VR1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LrJ4JAo2vjzpAGyvhcbFA7qISNQsytIItEN02iswbAY=;
-        b=BgwL/YbaVxrLPi3cyG9vHJ5DwVWpXUPUBig5lhMTflv2NLDPqze4oL2asPc9SV+MT3
-         YJn/vSlfyNB8tXJ1a2Id87hNMMfGvyJhKxuw2ge2r5y7EtApAAXRysjyY2L3RrkIbrUC
-         furcBZhVcnxqN4F6eRfC+/lXDHL1m306cxIbdXAG6ZRDhO8ewy8cLeSzeKycCg1eNlWb
-         fFmU1tWlspkSLZd5SVnx5sqHCsxHv5UJJOEPOaKU10uKgrxSGhzOuzg70xw+FVKQht3+
-         5pZ1ir8lkbeS6LkHJgqA6ouOHa14tUDIadxyaJ+oSM2raOFFURxG0oXOcui8sGVmeRKP
-         7yLA==
-X-Gm-Message-State: AOAM533NZC1WS3735tdDKVpZMvxZyw7mCdHprGTMYTETJEtn0cE5gPxk
-        dZHdINV8b9aIKrPrRlZN5AeGJg==
-X-Google-Smtp-Source: ABdhPJzYVFN3gBHjfNgqZa/g6YU6WbN/APpY56EAa5j7L5CZKm7Xt1592LSNfKcNJdQv1J9FEzZwKg==
-X-Received: by 2002:a63:5f41:: with SMTP id t62mr20785803pgb.252.1592206301079;
-        Mon, 15 Jun 2020 00:31:41 -0700 (PDT)
-Received: from localhost ([122.172.62.209])
-        by smtp.gmail.com with ESMTPSA id p14sm11774352pjf.32.2020.06.15.00.31.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 Jun 2020 00:31:40 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 13:01:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        srv_heupstream@mediatek.com
-Subject: Re: [PATCH 00/12] Add cpufreq and cci devfreq for mt8183, and SVS
- support
-Message-ID: <20200615073138.2vk5f3kplsz6rgqc@vireshk-i7>
-References: <20200520034307.20435-1-andrew-sh.cheng@mediatek.com>
+        id S1728677AbgFOHly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 03:41:54 -0400
+Received: from mout.web.de ([212.227.15.4]:36859 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728496AbgFOHll (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jun 2020 03:41:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1592206866;
+        bh=bItkEfVhTtW3qhNuAqeugRekO6eOCtuOduTADC0Dxpo=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=Zr9HGQbqrU9fyeP4eO2ZtJrBxH8XaC0ynw0tq5V0+wzIpUJiXLRbt1y2LYOa8ei4b
+         iS9HAJ7mN4kR9zTAJ1ubULFO6wsLGMtofBN0a56KNo8CTdRMPaFjdB8jGj8SoPhcbO
+         qWwKneuMOCgFwl8ZifRNCyt/xJyU/L9IiFfxHQ1k=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([78.49.107.236]) by smtp.web.de (mrweb003
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0MSrll-1jIzl12fBd-00RtLL; Mon, 15
+ Jun 2020 09:41:06 +0200
+Subject: Re: [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on error
+To:     Wolfram Sang <wsa@kernel.org>, linux-pm@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Aisheng Dong <aisheng.dong@nxp.com>,
+        Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Andy Duan <fugang.duan@nxp.com>, linux-kernel@vger.kernel.org,
+        Qiushi Wu <wu000273@umn.edu>,
+        Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
+        Aditya Pakki <pakki001@umn.edu>
+References: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
+ <20200614091203.GC2878@kunai>
+ <AM6PR04MB4966A1FD80A29BA1E63247C0809C0@AM6PR04MB4966.eurprd04.prod.outlook.com>
+ <20200615070613.GA1497@kunai>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <44768ceb-ee7c-85f2-6091-ec6bcd06ab54@web.de>
+Date:   Mon, 15 Jun 2020 09:40:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520034307.20435-1-andrew-sh.cheng@mediatek.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200615070613.GA1497@kunai>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-GB
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:FuBQm1DRSSkCYJ2edMYXZR4IvGdroKwuuv04BLF5yUfFgHJ/mn+
+ yD3jvW29OaoGTyGy+53Tb9VbJash4lZqCw/HNyfKTmEhtIMhsEa2PSDwhiRlg5s8AI/2+nL
+ LHwX1OD/k456WCZgpwcSRhM1lEugbwyYhKb0PTP6t4axS2GwVFWXBU8U19jyMoK0fnOEQU5
+ kdeP64TlrD8QanCbAxDzg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:NXiTrW/1b1M=:SgG+2iWLn8ElTNhwZuZrBS
+ UY0H5Nti9xLwHfPHxBLBETlP4WJaBb2K1Qr3Pq4y0aWz7N+OSgtzmwEO2q2Pvj+YDSsyErOHB
+ qQmiS1V0hHuRKfbLnDqsf6BcM3j0zbxbqPBRh08xgrmYRfNenVGT5t3HsZt1r+0PaNgB1rErp
+ SaHjxuT8L/TBYbTbnDfa5LoBPRrW3jK/1SI1xPMtOnfP+jbXTbFZ052Ce48QunlB3ycJWVAI9
+ Tze+LsWZrTokMSEWjZzpkE+rrqyGZcUg9UBz66Nj26P9fHFUy/gPIGgWP2R1eAnrhqzkDgZyc
+ GZgeSepUsLYp5ZXoj1d2+BRda645LYU121Txcljw0aRMDlPMvkTfxIWBRzs+lu9zizVkYSvqb
+ 9+8dStG6yFFvxLeySVFeQ284wMc+PLvZ1BSoJ4IPAt5wlvmJV53LnGemc9lPlvmnK8u7BClXd
+ H69TX32QTlMz204B41n2JcrAqMaHr0H9MmRzhbSXOAriTGngBWJPKwsIN7fyrQ11WDChm4M4R
+ I4VAnLS5Yk5og4hKGKd8NhmgqgwHRWDEs1WNwuxRxhBvcWSl9xDhTTzmsc2c6XjMYDJ/AW981
+ +1oVOZZhr7uoGl8+XM/SrSc3jgJP9lafyz5dE+8aCXzOmQCiIh6qc3nGGFuaLpsMK587eO0qD
+ Pne/t1wE1i1Icj7BHC/dNLiPSrKMQjG2nkTyNktD6DXmDLFnt9NBC5/DvFwX10rgaJztL0sDD
+ Bo9fJQd2+1JhC0TsK7L8HexjTsAz7mHBxxUGxHRCjtEo20RlAcQD8kOEawedMjoYvGWqFHsFT
+ jabT3Ow1yqv9IigwZoALXEPgVAOGZex6zrl/7nG7AQMSxgJd/aSCwnZaEDAqziF1qrMVZsPuH
+ nfxc3yvja1BjPnYn+1yfOmMh8nZaAaQd3VBf+tkj9wA9aWSjnNb4iwUNBVnrB/DG/Neyjiqhv
+ /NnTnTZoLEPE+Fg3tDpHA0gPmgXlF0lT6bUCMo9J29V1OfqIAy3RiTeVZFnAKOPsqU+hi78DV
+ s64Pge9GWzxa88PE9EguTO0W9J9cevmUH+4i+E2zfY2QNfas2JmoXOD2wXOtLyQQJuOL/Tqzt
+ iviJsFj+UQD9e89/nNXE2Tzefg6AnxVvfIbfHW4EIheLFpds22Hjs8NOSlHnxJxLUfItQUxeh
+ /y9U7MrigPyp3RCNX8Yd8hLLy5dIoRC8AoGZS5E2gz0qlX07SmLIQ5tRO3CjJe7T+FSAld5rW
+ u8LEQM+KET53W+4m1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-05-20, 11:42, Andrew-sh.Cheng wrote:
-> 	- Resend depending patches of Sravana Kannan base on kernel-5.7
+> I started a seperate thread:
+>
+> https://lkml.org/lkml/2020/6/14/76
+>
+> Still, on-going discussion if the proper fix is to remove the error chec=
+k.
 
-Saravana's patches were never accepted and I suggested him this which
-he never tested I believe.
+I find that a bit of additional information can make such a link safer.
 
-https://lore.kernel.org/lkml/20191125112812.26jk5hsdwqfnofc2@vireshk-i7/
+RFC: a failing pm_runtime_get increases the refcnt?
+https://lore.kernel.org/lkml/20200614090751.GA2878@kunai/
 
-There is no point rebasing your stuff on a series which hasn't
-concluded or is accepted, at least logically.
+How will the clarification of corresponding software aspects evolve furthe=
+r?
 
--- 
-viresh
+Regards,
+Markus
