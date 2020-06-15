@@ -2,84 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B31951F9EDA
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 19:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C43B1F9EE8
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 19:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730976AbgFORug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 13:50:36 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:39175 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731065AbgFORug (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 13:50:36 -0400
-Received: by mail-il1-f195.google.com with SMTP id p5so16149186ile.6;
-        Mon, 15 Jun 2020 10:50:34 -0700 (PDT)
+        id S1731065AbgFOR6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 13:58:48 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36971 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728585AbgFOR6s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 13:58:48 -0400
+Received: by mail-io1-f68.google.com with SMTP id r2so402376ioo.4;
+        Mon, 15 Jun 2020 10:58:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=QqFXAIP35kaKyGPJGm7boR5Cw7I5I86IlWfC5gy7jdY=;
-        b=kiIpc7AIL8Dk1fC0dggM5w81CZwU2lyBNIv0tFHeEQ9QzoHqcXPW455jjrSgyjTIwr
-         b9c6fHRM1AFlHMI0/ziww7CDIvlcPL77po3V+/Cax7rp51kVdaEUOlNl134THIOL5zYO
-         8Cq2nYBvkW2IcWwtaVo8Ywl9HOgFnPe8huvJEiMSMrOcOTZAExhFIyzwzBNkFL6TFs/M
-         ZYAj8Pd3pjOjHYqYsJC6b4fJbM2WDyzda7zfJHmuJrEnrqkwLHdPtV4oQIhJ5po6QU4u
-         8fNbYWQtjY6xEg2SJdPxB7Gggh8clzN1XYk5rGWJ3plBcXwAHiTc1QVdEM7+L4bBmwSx
-         mOiQ==
-X-Gm-Message-State: AOAM531AeRH2ukfl9fkBECMnt+Z1sWiokhdZfPTKP5zEu/4I/0OA7EQK
-        UaVQqfG5YSlBgVAJfU7EZQ==
-X-Google-Smtp-Source: ABdhPJxCEkYl2U35hyzTpC6rWtsSN7STUGL7WtCf6JOtFuiSQmZkx9jnmtarBm3jhTOq8YQocc2Szw==
-X-Received: by 2002:a92:aa13:: with SMTP id j19mr27556195ili.193.1592243434058;
-        Mon, 15 Jun 2020 10:50:34 -0700 (PDT)
+        bh=/74HbfroHB61O/mrzbKJJjBB8AZlHWxP2oBPibXkxY8=;
+        b=mEgiCputIv51F50IjHmQC8XZwZ8fj4Q4luzIMPsv+iK089LhJSYdoghMjWXQg7KqZl
+         gEMoWfTz4B4gF46PkYZFNGllU06G60VstN65se6rcSusM1nekabIDKh3lcb4yJ2wHyOD
+         nnZhjCd8K0J6XVf5BexXdYdvgZGRssAxUnqqBZ2Kk6leOQf43KcPkKlJNfbSQS4/q0b8
+         b3tgECBbErdrc2vAu6Tc4kZsnFuOa5Rlxdcv7uatiZUUStYjeqV8YwkNgjmhUPDr6tHD
+         wJBlNEweoGSakYc54I6hda3g7BaqLJi6qPegNgDlXEvyhKy4Y96bDIEGLqJ1Ld+gD7en
+         HxSg==
+X-Gm-Message-State: AOAM533U0kTQYx5U3qIspnDcxM5Gh19nTC93Ayntkspnp61qTyty5w5U
+        0HsgJoBKXBxdaHCZjSmFsA==
+X-Google-Smtp-Source: ABdhPJzHHZp4+2D2CPnREtsOrP4HU0FKnjC7ZBKz9hcq/Ll5x38zJ+ihu5f8fyhIDgmwsspw8rJWgw==
+X-Received: by 2002:a6b:91d4:: with SMTP id t203mr28373543iod.149.1592243927188;
+        Mon, 15 Jun 2020 10:58:47 -0700 (PDT)
 Received: from xps15 ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id b65sm8511986ilg.82.2020.06.15.10.50.32
+        by smtp.gmail.com with ESMTPSA id p9sm8303940ile.87.2020.06.15.10.58.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 10:50:33 -0700 (PDT)
-Received: (nullmailer pid 2031787 invoked by uid 1000);
-        Mon, 15 Jun 2020 17:50:32 -0000
-Date:   Mon, 15 Jun 2020 11:50:32 -0600
+        Mon, 15 Jun 2020 10:58:46 -0700 (PDT)
+Received: (nullmailer pid 2044691 invoked by uid 1000);
+        Mon, 15 Jun 2020 17:58:44 -0000
+Date:   Mon, 15 Jun 2020 11:58:44 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        kernel@collabora.com, Emil Velikov <emil.velikov@collabora.com>,
-        linux-kernel@vger.kernel.org,
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Emil Velikov <emil.velikov@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
-        Sebastian Reichel <sre@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [PATCHv2 2/6] power: supply: gpio-charger: Make gpios optional
-Message-ID: <20200615175032.GA2031757@bogus>
+        Russell King <linux@armlinux.org.uk>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCHv2 3/6] power: supply: gpio-charger: add
+ charge-current-limit feature
+Message-ID: <20200615175844.GA2032047@bogus>
 References: <20200605224403.181015-1-sebastian.reichel@collabora.com>
- <20200605224403.181015-3-sebastian.reichel@collabora.com>
+ <20200605224403.181015-4-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200605224403.181015-3-sebastian.reichel@collabora.com>
+In-Reply-To: <20200605224403.181015-4-sebastian.reichel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 06 Jun 2020 00:43:59 +0200, Sebastian Reichel wrote:
-> While strongly recommended, not all devices have a gpio to
-> detect if the charger is connected. This moves the 'gpios'
-> from required to optional section.
-> 
-> This also modifies error handling for the GPIO a bit: We
-> no longer fallback to pdata, if a GPIO is specified using
-> GPIO descriptor tables. This is a bit cleaner and does
-> not have any real impact: There are only two mainline pdata
-> users (arm/mach-sa1100/collie.c, arm/mach-pxa/tosa.c) and
-> none of them specify the GPIO via gpiod descriptor tables.
-> Once both have been converted the driver's support for
-> specifying GPIOs numbers in pdata will be dropped.
+On Sat, Jun 06, 2020 at 12:44:00AM +0200, Sebastian Reichel wrote:
+> Add new charge-current-limit feature to gpio-charger.
 > 
 > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
->  .../bindings/power/supply/gpio-charger.yaml   |  7 +++-
->  drivers/power/supply/gpio-charger.c           | 38 ++++++++++++-------
->  2 files changed, 31 insertions(+), 14 deletions(-)
+>  .../bindings/power/supply/gpio-charger.yaml   |  31 ++++
+>  drivers/power/supply/gpio-charger.c           | 140 ++++++++++++++++++
+>  2 files changed, 171 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> index 30eabbb14ef3..e11cfdc68a51 100644
+> --- a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> @@ -39,6 +39,25 @@ properties:
+>      maxItems: 1
+>      description: GPIO indicating the charging status
+>  
+> +  charge-current-limit-gpios:
+> +    minItems: 1
+> +    maxItems: 32
+> +    description: GPIOs used for current limiting
+> +
+> +  charge-current-limit-mapping:
+> +    description: List of touples with current in uA and a GPIO bitmap (in
 
-Acked-by: Rob Herring <robh@kernel.org>
+s/touples/tuples/
+
+> +      this order). The touples must be provided in descending order of the
+
+and here.
+
+> +      current limit.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    items:
+> +      items:
+> +        - description:
+> +            Current limit in uA
+> +        - description:
+> +            Encoded GPIO setting. Bit 0 represents last GPIO from the
+> +            charge-current-limit-gpios property. Bit 1 second to last
+> +            GPIO and so on.
+
+Seems a bit odd that bit N doesn't represent index N of the gpios.
+
+> +
+>  required:
+>    - compatible
+>  
+> @@ -47,6 +66,12 @@ anyOf:
+>      - gpios
+>    - required:
+>      - charge-status-gpios
+> +  - required:
+> +    - charge-current-limit-gpios
+> +
+> +dependencies:
+> +  charge-current-limit-gpios: [ charge-current-limit-mapping ]
+> +  charge-current-limit-mapping: [ charge-current-limit-gpios ]
+>  
+>  additionalProperties: false
+>  
+> @@ -60,4 +85,10 @@ examples:
+>  
+>        gpios = <&gpd 28 GPIO_ACTIVE_LOW>;
+>        charge-status-gpios = <&gpc 27 GPIO_ACTIVE_LOW>;
+> +
+> +      charge-current-limit-gpios = <&gpioA 11 GPIO_ACTIVE_HIGH>,
+> +                                   <&gpioA 12 GPIO_ACTIVE_HIGH>;
+> +      charge-current-limit-mapping = <2500000 0x00>, // 2.5 A => both GPIOs low
+> +                                     <700000 0x01>, // 700 mA => GPIO A.12 high
+> +                                     <0 0x02>; // 0 mA => GPIO A.11 high
+>      };
