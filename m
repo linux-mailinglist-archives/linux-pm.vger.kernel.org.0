@@ -2,136 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AA2C1F9546
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 13:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5116D1F959E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 13:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729683AbgFOLZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 07:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729680AbgFOLZi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 07:25:38 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47647C05BD43
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 04:25:38 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id x14so1971793uao.7
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 04:25:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vrKmkhg+c1u0kB4U6Q0PfBV1XmTvqqdQ8hWTNkN5v2k=;
-        b=XIIEk3jhhCjnXxJTApUX1KsztsSHxmkhzNIzJiVbqEHf7zAn0F9ATFYCTcxehIn7Db
-         PSo6AK16Dk/Mq2bHaFCNXJPKhXFfIyKWlZ64UGJVCrZI5POsNEiNmiXtK4/nrUoQyxE7
-         QHFnkyTx7Mf1Cjrktsn7BMYv521Nzaa/sKvQWydv/s1Sx4G5vEEGEzjGrqvH0ubiDc45
-         oBYNVXzgJF6M5MhYQLfXHAaZnaB+ow+dxNe5MRjqhZkkny1Gytj8LuYB8sxhWldVtsrz
-         jrDMHgw3N8/IG4Ozcd3vnUA3fApwh05lTSBFjbz5aKHtOvycqlLUQb87pFCTW7Ocp/gA
-         +uhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vrKmkhg+c1u0kB4U6Q0PfBV1XmTvqqdQ8hWTNkN5v2k=;
-        b=DMtP34e+Pex2sqeTk95FNFFUT1vi1vU5x2hMaUqk0RAM/xHJloq/y0tDFGk4dtBA3b
-         oTeebmN6vMdVMHLjd3HYd7y7hAuQSOiR6UN1bPmIUJeRRp7COEmVNvineSBgdE5R2C4N
-         g0stAnEUfjwcpyFAQbZPNQOTNJhL2aaU/uCdLehYYjFiXtif3Nn77K8pYj37T2udIbNc
-         EWTxIySUv2aulHW/+euDgMM15tGRf+LUPZ+0xz46+OgK3c6noTd+s6H/wxne0JqgExvD
-         6tFDiffJcMsLtlyL9HWsbxkMUj10oKa2Ux7EBbNN71hXwK64hDhYMgglyWTwaPoLruX2
-         jwYw==
-X-Gm-Message-State: AOAM5320wieX2OhRQ292FbiZD/zYIXLd/quuEh5nzHrTB6pq79TU92Kb
-        etCTzttrsz3K2OLugy0Gh0GVO9YVY4857w9D17Q3SA==
-X-Google-Smtp-Source: ABdhPJzqNGqsG+5owbRVG/KlqJGvlwwJKZq02aq94CP4ikq3550XKb+IM6Rhtt+J/C/aq6FLjSiLs0/JETpwhEPnOTc=
-X-Received: by 2002:a9f:22e1:: with SMTP id 88mr18170672uan.19.1592220336997;
- Mon, 15 Jun 2020 04:25:36 -0700 (PDT)
+        id S1729686AbgFOLwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 07:52:15 -0400
+Received: from sonic311-30.consmr.mail.ir2.yahoo.com ([77.238.176.162]:41942
+        "EHLO sonic311-30.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729630AbgFOLwP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 07:52:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592221933; bh=+NKq2YP/4c3bLm2HmGhxa/KCZOXr0NIUKHs/ECuC0yk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Y1RMoN3QuOjJetFg8e2XZhVRs/dthXMFrTWBjwtxvPb3UDX3y14x1TIzKXvUCNEHXfoIL1mNLqIdAz9O/ANiDTjgfRpBI0l1HdxcxPRwWnBrX3qLOvlUmfDDdghEMx7VGG5AP/uLxqd3ltS3HK1p1kg4Y6bClUFdSfv2xQNGNEIeNlrbmOIcxJWFEvXbv1YuoQQBwChYChHzQiUXnBhC5RbEfvtAtxh7/qHIoYeNcKrJZHe3Npbei+Giei4qDsdxM/Hdqg5r1NT0MolazwfucRaXDas1TKtSX7fRa3ZtfX4s+zrFau8XxRfriDit/lUCNV1ZENRi1ZfGm+YwVOdPXQ==
+X-YMail-OSG: XOuJOXMVM1ncEgNaDnWgApxZCwN07uQ39klrsimz51ZOIzdmpNud_1ux.gytQ_j
+ hLg60McYwG.M.frTFdISibW9aBZ94eE01BDvh4HRluYY64bRbfC.z2mU2DrfgOMDyxnS0bY8NNXH
+ 00_UecU0eJwltraS_ZBakHQrOx_1Gt1aDjrq1kFp9p634RS8fqJXSLX4pmufpEXrpEtltego8xS4
+ tQCT3aKKvHsMKxAp4GawllgDMoMZqZ8HvzVobzeRw0NaVWBDym29ELhNUIDt731W7FBranOWcVlm
+ gSbxQiWE_L7p8Vw5BIC1n5Bd6CiF2a9nHl4vndBCDOkrztsIorifhUiXvdILuAgEgpXTy.A5Ptmx
+ VzfXmLiuyntX55d9K9N_8_DucexQIJYYkixAWgY5Y01lhaVpK_Ik2KHxofmbS8.YlDk9BUFpGkBF
+ Ps7jDbqhfJeZQszU6IUBPIU2FA3SLFcBP2sfSYtwP37CTQS9slhgx6LTucQYA1RjusAvRc44gLTF
+ bHtr77njDPDhv3j1UxNgiQ_LMMtDAivQuTW8FKKuF2rJrvCI.zxP8aTZt56A3hX4OM08JQXwsJkq
+ j8xtt32n5waSPVABl2kZD6P4WxnZEo8Bal3T8SDB9WnuZ2mkMoZmvsxRkf00n6OUZUq1QO50vfck
+ _2WFMTyGC9JgExKCfLxrrY4CV.z5l2cxAqX2goTiGXOqZAGf.Zr6VB4SJC2aMeYTyiZRmnnCCUrU
+ W51y4iezVAA4tN3AYyC7wIeCr.pc4Od9XWSwQNurEhseu41I3C5GRv1SCd4WCshXrBaQKwHHZLyD
+ OFRGkaDWZWs4TOQBJAV9d2jMr1ogilf6PWwNSuzQxteWe.fuTaZKGHFE8EKSufrLMrsePiqCpIxE
+ oRwXn.U5S6k4j_KdvgQlNDkluYi2_Ua7dDEYqg8anGBS40dB8RiK99Tju8O19jDes9bB029DA1xJ
+ hn.e.OgnH5hpTTDA4VhmLazryB_PCvW_AMZTGDaUAGLbsMqvuhqPppi8fTwCUd3itEyWDmx_1tP9
+ PT5gsLNundT_2KId.kPGrnFuqFv.aPwvsNqpFoAGwOHTB_2BDLY5UBqgD_JRAR0n0Pw3V2GYitRS
+ kHqA7o8NUjNuCFE1IFfJLlFN1viY_bSPUFHSRhvRv0hiiNj3QZCS44tRBKWDxoIfyShh8jx_BAio
+ ZO0fcj3mgqtcin8x.3m8ju8tXJcfdRPY5FX2zSE_bV0NM.vnIT_iE_jmf1vbPLZQkwqvXx7.0HjK
+ d1Ps6nUiFijIPVVqBVG2ng5YVBNTjXR_ED6nFvNsA0rwiSy7Y.1eyQq1FCecKMKpF7E6NqJ3TzTh
+ SUiM-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Mon, 15 Jun 2020 11:52:13 +0000
+Date:   Mon, 15 Jun 2020 11:52:08 +0000 (UTC)
+From:   "Mrs. Mina A. Brunel" <mrs.minaabrunel209@gmail.com>
+Reply-To: mrsminaaaliyahbrunel344@gmail.com
+Message-ID: <1042728165.1621442.1592221928161@mail.yahoo.com>
+Subject: My Dear in the lord
 MIME-Version: 1.0
-References: <20200429103644.5492-1-daniel.lezcano@linaro.org> <20200429103644.5492-4-daniel.lezcano@linaro.org>
-In-Reply-To: <20200429103644.5492-4-daniel.lezcano@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 15 Jun 2020 13:25:00 +0200
-Message-ID: <CAPDyKFrdzcf5e98EM0VvwxnR0zDFQ851PDLOZ9wpe-LO6n4Abw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] thermal: cpuidle: Register cpuidle cooling device
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>, lukasz.luba@arm.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "open list:CPU IDLE TIME MANAGEMENT FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:CPUIDLE DRIVER - ARM PSCI" 
-        <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <1042728165.1621442.1592221928161.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16119 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 29 Apr 2020 at 12:37, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> The cpuidle driver can be used as a cooling device by injecting idle
-> cycles. The DT binding for the idle state added an optional
->
-> When the property is set, register the cpuidle driver with the idle
-> state node pointer as a cooling device. The thermal framework will do
-> the association automatically with the thermal zone via the
-> cooling-device defined in the device tree cooling-maps section.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  - V4:
->    - Do not check the return value as the function does no longer return one
-> ---
->  drivers/cpuidle/cpuidle-arm.c  | 3 +++
->  drivers/cpuidle/cpuidle-psci.c | 3 +++
->  2 files changed, 6 insertions(+)
->
-> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
-> index 9e5156d39627..8c758920d699 100644
-> --- a/drivers/cpuidle/cpuidle-arm.c
-> +++ b/drivers/cpuidle/cpuidle-arm.c
-> @@ -8,6 +8,7 @@
->
->  #define pr_fmt(fmt) "CPUidle arm: " fmt
->
-> +#include <linux/cpu_cooling.h>
->  #include <linux/cpuidle.h>
->  #include <linux/cpumask.h>
->  #include <linux/cpu_pm.h>
-> @@ -124,6 +125,8 @@ static int __init arm_idle_init_cpu(int cpu)
->         if (ret)
->                 goto out_kfree_drv;
->
-> +       cpuidle_cooling_register(drv);
-> +
->         return 0;
->
->  out_kfree_drv:
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index bae9140a65a5..1f38e0dfc9b2 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -9,6 +9,7 @@
->  #define pr_fmt(fmt) "CPUidle PSCI: " fmt
->
->  #include <linux/cpuhotplug.h>
-> +#include <linux/cpu_cooling.h>
->  #include <linux/cpuidle.h>
->  #include <linux/cpumask.h>
->  #include <linux/cpu_pm.h>
-> @@ -313,6 +314,8 @@ static int __init psci_idle_init_cpu(int cpu)
->         if (ret)
->                 goto out_kfree_drv;
->
-> +       cpuidle_cooling_register(drv);
-> +
 
-Apologies for the late reply, but just noticed this change in v5.8-rc1.
 
-Don't you need a cpuidle_cooling_unregister function? For example,
-cpuidle-psci may fail and then calls cpuidle_unregister() to cleans up
-things.
+My Dear in the lord
 
-Is that okay?
 
-Kind regards
-Uffe
+My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
+na Faso, I am married to Mr. Brunel Patrice, a politician who owns a small =
+gold company in Burkina Faso; He died of Leprosy and Radesyge, in the year =
+February 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Mi=
+llion Euro) Eight million, Five hundred thousand Euros in a bank in Ouagado=
+ugou the capital city of Burkina Faso in West Africa. The money was from th=
+e sale of his company and death benefits payment and entitlements of my dec=
+eased husband by his company.
+
+I am sending you this message with heavy tears in my eyes and great sorrow =
+in my heart, and also praying that it will reach you in good health because=
+ I am not in good health, I sleep every night without knowing if I may be a=
+live to see the next day. I am suffering from long time cancer and presentl=
+y I am partially suffering from Leprosy, which has become difficult for me =
+to move around. I was married to my late husband for more than 6 years with=
+out having a child and my doctor confided that I have less chance to live, =
+having to know when the cup of death will come, I decided to contact you to=
+ claim the fund since I don't have any relation I grew up from an orphanage=
+ home.
+
+I have decided to donate this money for the support of helping Motherless b=
+abies/Less privileged/Widows and churches also to build the house of God be=
+cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
+cided to donate from what I have inherited from my late husband to you for =
+the good work of Almighty God; I will be going in for an operation surgery =
+soon.
+
+Now I want you to stand as my next of kin to claim the funds for charity pu=
+rposes. Because of this money remains unclaimed after my death, the bank ex=
+ecutives or the government will take the money as unclaimed fund and maybe =
+use it for selfishness and worthless ventures, I need a very honest person =
+who can claim this money and use it for Charity works, for orphanages, wido=
+ws and also build schools and churches for less privilege that will be name=
+d after my late husband and my name.
+
+I need your urgent answer to know if you will be able to execute this proje=
+ct, and I will give you more information on how the fund will be transferre=
+d to your bank account or online banking.
+
+Thanks
+Mrs. Mina A. Brunel
