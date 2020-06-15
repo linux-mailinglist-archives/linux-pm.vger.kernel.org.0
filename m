@@ -2,95 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5116D1F959E
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 13:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB611F965B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 14:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729686AbgFOLwP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 07:52:15 -0400
-Received: from sonic311-30.consmr.mail.ir2.yahoo.com ([77.238.176.162]:41942
-        "EHLO sonic311-30.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729630AbgFOLwP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 07:52:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592221933; bh=+NKq2YP/4c3bLm2HmGhxa/KCZOXr0NIUKHs/ECuC0yk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Y1RMoN3QuOjJetFg8e2XZhVRs/dthXMFrTWBjwtxvPb3UDX3y14x1TIzKXvUCNEHXfoIL1mNLqIdAz9O/ANiDTjgfRpBI0l1HdxcxPRwWnBrX3qLOvlUmfDDdghEMx7VGG5AP/uLxqd3ltS3HK1p1kg4Y6bClUFdSfv2xQNGNEIeNlrbmOIcxJWFEvXbv1YuoQQBwChYChHzQiUXnBhC5RbEfvtAtxh7/qHIoYeNcKrJZHe3Npbei+Giei4qDsdxM/Hdqg5r1NT0MolazwfucRaXDas1TKtSX7fRa3ZtfX4s+zrFau8XxRfriDit/lUCNV1ZENRi1ZfGm+YwVOdPXQ==
-X-YMail-OSG: XOuJOXMVM1ncEgNaDnWgApxZCwN07uQ39klrsimz51ZOIzdmpNud_1ux.gytQ_j
- hLg60McYwG.M.frTFdISibW9aBZ94eE01BDvh4HRluYY64bRbfC.z2mU2DrfgOMDyxnS0bY8NNXH
- 00_UecU0eJwltraS_ZBakHQrOx_1Gt1aDjrq1kFp9p634RS8fqJXSLX4pmufpEXrpEtltego8xS4
- tQCT3aKKvHsMKxAp4GawllgDMoMZqZ8HvzVobzeRw0NaVWBDym29ELhNUIDt731W7FBranOWcVlm
- gSbxQiWE_L7p8Vw5BIC1n5Bd6CiF2a9nHl4vndBCDOkrztsIorifhUiXvdILuAgEgpXTy.A5Ptmx
- VzfXmLiuyntX55d9K9N_8_DucexQIJYYkixAWgY5Y01lhaVpK_Ik2KHxofmbS8.YlDk9BUFpGkBF
- Ps7jDbqhfJeZQszU6IUBPIU2FA3SLFcBP2sfSYtwP37CTQS9slhgx6LTucQYA1RjusAvRc44gLTF
- bHtr77njDPDhv3j1UxNgiQ_LMMtDAivQuTW8FKKuF2rJrvCI.zxP8aTZt56A3hX4OM08JQXwsJkq
- j8xtt32n5waSPVABl2kZD6P4WxnZEo8Bal3T8SDB9WnuZ2mkMoZmvsxRkf00n6OUZUq1QO50vfck
- _2WFMTyGC9JgExKCfLxrrY4CV.z5l2cxAqX2goTiGXOqZAGf.Zr6VB4SJC2aMeYTyiZRmnnCCUrU
- W51y4iezVAA4tN3AYyC7wIeCr.pc4Od9XWSwQNurEhseu41I3C5GRv1SCd4WCshXrBaQKwHHZLyD
- OFRGkaDWZWs4TOQBJAV9d2jMr1ogilf6PWwNSuzQxteWe.fuTaZKGHFE8EKSufrLMrsePiqCpIxE
- oRwXn.U5S6k4j_KdvgQlNDkluYi2_Ua7dDEYqg8anGBS40dB8RiK99Tju8O19jDes9bB029DA1xJ
- hn.e.OgnH5hpTTDA4VhmLazryB_PCvW_AMZTGDaUAGLbsMqvuhqPppi8fTwCUd3itEyWDmx_1tP9
- PT5gsLNundT_2KId.kPGrnFuqFv.aPwvsNqpFoAGwOHTB_2BDLY5UBqgD_JRAR0n0Pw3V2GYitRS
- kHqA7o8NUjNuCFE1IFfJLlFN1viY_bSPUFHSRhvRv0hiiNj3QZCS44tRBKWDxoIfyShh8jx_BAio
- ZO0fcj3mgqtcin8x.3m8ju8tXJcfdRPY5FX2zSE_bV0NM.vnIT_iE_jmf1vbPLZQkwqvXx7.0HjK
- d1Ps6nUiFijIPVVqBVG2ng5YVBNTjXR_ED6nFvNsA0rwiSy7Y.1eyQq1FCecKMKpF7E6NqJ3TzTh
- SUiM-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Mon, 15 Jun 2020 11:52:13 +0000
-Date:   Mon, 15 Jun 2020 11:52:08 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <mrs.minaabrunel209@gmail.com>
-Reply-To: mrsminaaaliyahbrunel344@gmail.com
-Message-ID: <1042728165.1621442.1592221928161@mail.yahoo.com>
-Subject: My Dear in the lord
+        id S1729771AbgFOMPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 08:15:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729642AbgFOMPi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 08:15:38 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D457C061A0E;
+        Mon, 15 Jun 2020 05:15:38 -0700 (PDT)
+Received: from zn.tnic (p200300ec2f063c0085fbd8d4455f52fc.dip0.t-ipconnect.de [IPv6:2003:ec:2f06:3c00:85fb:d8d4:455f:52fc])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E7BB41EC0299;
+        Mon, 15 Jun 2020 14:15:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1592223336;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=IvLplpOzdVR3pvv87mkIgy3s3a9HTre37RLfwpBuQDk=;
+        b=plcRE/HT8GZ7mDZeXigYxsn/J0PdLHE1t9di7d6lkuXvUjT1Zof0zG7KP6SR3Uf+cE0Wjk
+        l3L4tt5jYOsrc+gkBhllMZbwzxaGLpqY/tkVRGFNbVQdfyJTtWZOL1+0huSI5i62Hg7vzW
+        CkJLUbF2zDsZnIDh3W8rolEcZRq2V8s=
+Date:   Mon, 15 Jun 2020 14:15:24 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Cc:     Liam Merwick <liam.merwick@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
+ wakeup
+Message-ID: <20200615121524.GH14668@zn.tnic>
+References: <20200605200728.10145-1-sean.j.christopherson@intel.com>
+ <b2ac2400-dbc1-f6bc-a397-17f1ae10bd83@oracle.com>
+ <20200608172921.GC8223@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <1042728165.1621442.1592221928161.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16119 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200608172921.GC8223@linux.intel.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jun 08, 2020 at 10:29:21AM -0700, Sean Christopherson wrote:
+> On Mon, Jun 08, 2020 at 11:12:35AM +0100, Liam Merwick wrote:
+> > On 05/06/2020 21:07, Sean Christopherson wrote:
+> > >Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
+> > >where firmware doesn't initialize or save/restore across S3.  This fixes
+> > >a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
+> > >taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
+> > >
+> > >Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
+> > >with the case where the MSR is locked, and because APs already redo
+> > >init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
+> > >used to reinitialize APs upon wakeup.  Do the call in the early wakeup
+> > >flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
+> > >a resume hook is not guaranteed to work, as KVM does VMXON in its own
+> > >resume hook, kvm_resume(), when KVM has active guests.
+> > >
+> > >Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+> > >Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> > >Cc: Paolo Bonzini <pbonzini@redhat.com>
+> > >Cc: kvm@vger.kernel.org
+> > 
+> > Should it have the following tag since it fixes a commit introduced in 5.6?
+> > Cc: stable@vger.kernel.org # v5.6
+> 
+> It definitely warrants a backport to v5.6.  I didn't include a Cc to stable
+> because I swear I had seen an email fly by that stated an explicit Cc is
+> unnecessary/unwanted for tip-tree patches, but per a recent statement from
+> Boris it looks like I'm simply confused[*].  I'll add the Cc in v2.
+> 
+> [*] https://lkml.kernel.org/r/20200417164752.GF7322@zn.tnic
 
+Yeah, I was simply parroting what Greg has told me. Maybe he should
+finally do that script. :-P
 
-My Dear in the lord
+Also, I believe Sasha's Skynet machine already does that...
 
+CCed both.
 
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politician who owns a small =
-gold company in Burkina Faso; He died of Leprosy and Radesyge, in the year =
-February 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Mi=
-llion Euro) Eight million, Five hundred thousand Euros in a bank in Ouagado=
-ugou the capital city of Burkina Faso in West Africa. The money was from th=
-e sale of his company and death benefits payment and entitlements of my dec=
-eased husband by his company.
+-- 
+Regards/Gruss,
+    Boris.
 
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
-
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
-
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
-
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
-
-Thanks
-Mrs. Mina A. Brunel
+https://people.kernel.org/tglx/notes-about-netiquette
