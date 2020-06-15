@@ -2,111 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 592E81F8DE9
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 08:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AAF1F8E85
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 08:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgFOGdo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 02:33:44 -0400
-Received: from mail-eopbgr60073.outbound.protection.outlook.com ([40.107.6.73]:60483
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728276AbgFOGdo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jun 2020 02:33:44 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HtZbfevxDS5Zs9arBmfSlRlIk3ZE3Nfmk64+zue172B0rzrHrOIywMniFz1VECHn3LUVpvef2nysJWY89FRzrpww4pYmBOgy7OzXk/2r9JmZtrejw/BM8fcWpPlW+i5bj754SsGbpuKxsU9hwV+j9UM6SmZnMvpHSR/n/2kcEko16Ex67Al5vHG4bh/xjyimu2nd9yZ6g5gkBuSMq7t4mhC/n+kmS+vc/UtGfqPLnEJ9tx64uijUA/3VVvIQSfSsxpRM399KaaQAuaRrijQ3IirfR+0kfjDgTB0eiq/pdvMY7bEC8ACVWrBRUSzKzNTB0bC8Ne32Bg1wcDnDSE/Mxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aXfroRNA573vzufwOFVP7OPR7NqOBERM2VqA4kkvUjQ=;
- b=TIwk2tcQmwXIbgGNLNRkUh0I8MuI0vx+Kv3Z9kA8LbaljP1N9F+BwADFesxdatwhH6nLGVOxh9+2lQL2rCVM9i8FnvbwYtjmvefkI61aZbwbMZrfT0MKSC/WGWWJaDJ+rqCLfjE8tmJI1BnV0DYbweyTJeERsfWk0N+RmFbeeaPTY0PptMOmRzemQ5ZykQEFHWPj8NMTnqO2qDVonwQ05qCqOVLBUZwgwZ3Y55mYNjJ90wUG2/qYjYUZQkPvIkwmdIWHrWZAvT1Q1OZ0b7HGV51KgLBDsMhPV+JLNT76qlcnfrRi87249XdWM5M3UAIUyMJnh4HeGzzj61BXtFpJ9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aXfroRNA573vzufwOFVP7OPR7NqOBERM2VqA4kkvUjQ=;
- b=M+NYOW+AX+MEJxxcMUqQy+yRIq7/Z9Yag4P8nGzyHzUsuBRDGgrxUgBJAHwaFCR6W4O/W4ZpcwO1EpSuMOb2K9329iE87VL4yC7Ncn+KhnCwQcy7U415+eEDQTRaSNqmU4YSVEHPM2FMrZCdUB4lQAKMse2ecniDykfMWK/6sYE=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB5816.eurprd04.prod.outlook.com (2603:10a6:20b:ac::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3088.19; Mon, 15 Jun
- 2020 06:33:40 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d%7]) with mapi id 15.20.3088.028; Mon, 15 Jun 2020
- 06:33:40 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Wolfram Sang <wsa@kernel.org>,
-        Dinghao Liu <dinghao.liu@zju.edu.cn>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Andy Duan <fugang.duan@nxp.com>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on error
-Thread-Topic: [PATCH] [v3] i2c: imx-lpi2c: Fix runtime PM imbalance on error
-Thread-Index: AQHWN9w+Q0hrdD3Y0kW70eX0BSxaHKjX6AOAgAFl52A=
-Date:   Mon, 15 Jun 2020 06:33:40 +0000
-Message-ID: <AM6PR04MB4966A1FD80A29BA1E63247C0809C0@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <20200601061640.27632-1-dinghao.liu@zju.edu.cn>
- <20200614091203.GC2878@kunai>
-In-Reply-To: <20200614091203.GC2878@kunai>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 1f7f00cf-9453-43cf-5bf7-08d810f60aef
-x-ms-traffictypediagnostic: AM6PR04MB5816:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB5816859867C9BE2F31C92489809C0@AM6PR04MB5816.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 04359FAD81
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ynGJi13+7+qoVaQ1BuPL5pU416dIPos5KKrPoy7VoCY6qsk0LE6GpvvrwSE95jLWDCIiVwmhA5p21uS7qANG8N4pgDuSj60h7k5WLTkcTHmBgkfw2AazRpmgz/Ms3Dif7kccwklqU7YnbcqxxMa9qRHwoVX0lUiTaE0+loyOpXmPBtPG0z4sfUEHlRugfoJk1ZFBjAjYRqcQcArrGc0LYdxVPC+KRWhDomsoG546jBNhAez/ATQeUBROvmuCfNqvrVnJ87ULM6RqNukLs2+zqPwe+5ZbE1tjNRUSs3fhEzwZuJzeyV2/6as8HjazLQXZP7h7NsKWr/UO7cesoAGbAQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(186003)(478600001)(7416002)(26005)(52536014)(7696005)(4326008)(2906002)(6506007)(5660300002)(55016002)(86362001)(54906003)(4744005)(9686003)(316002)(66946007)(33656002)(66556008)(66476007)(64756008)(66446008)(44832011)(8936002)(110136005)(8676002)(71200400001)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: xOQbWgDDdfHgdukctlkQpW+16OTaJVaLufKzI/JXzccbhMp/cNQLkLEIK4YOq7IO4+Q+/LaOgc1JnlmvuA8cQb9Ye+51LwJc3luVpJhhPgQrR6GsIFsag+1jOPabvj5zys76Bgu9IrE2xTRKsKxfhCZDEd+EwFMAKFFpI28aIWY8yvXJlm+hcQ2y1ZKkv3cdvGKG62JpvYQebN1asjUhNQ+eSvOSnfiSab/ZRn999XFppSO3LM8YMsZkvommjZSofIXC3/QApuMlWg4sVdtiT2SuxbihiKrb1buM8Sfh6W851HzxzNoKBscsg5A6amvkNiDD6/m2NeiGoqbuhuwzQcwKaHSqHc1duwk5PMTbu6OgaS5xGwaIJYMXoB0q0sm7dsFhW2SGTsHLznwijl4/CuGh9/oWTvFMZ2ydMr68XE9nk6qRgHwrjpxWG4SQUkJJ/jwptHDwWGUun6dBghmUclh5YV7+62eHaJnTsy1tiwg=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1728502AbgFOGud (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 02:50:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728163AbgFOGuc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jun 2020 02:50:32 -0400
+Received: from mail.kernel.org (ip5f5ad5c5.dynamic.kabel-deutschland.de [95.90.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D13642068E;
+        Mon, 15 Jun 2020 06:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592203832;
+        bh=Zjrj5OZPyOvO/jdeTX5ow9onQ7aySUfQ8A2G+IxyPwg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Z6qPHiEJvDFO3m03Z3MykURm1pxCjKqA7BRudV0z0cClR3Gj0Haead/QHgYsEuRsZ
+         9cKmmhifM2c5Fjgg9fvqLnGjr59D95Wb58DRWpOTLG+J9P/6wo+8EDOoj9WpHkjMUb
+         EB1eHrBt2YkupNXURpl6HKyoKz+JJ22wnuqLeTm8=
+Received: from mchehab by mail.kernel.org with local (Exim 4.93)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jkiwv-009o5W-RI; Mon, 15 Jun 2020 08:50:29 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH 02/22] docs: thermal: convert cpu-idle-cooling.rst to ReST
+Date:   Mon, 15 Jun 2020 08:50:07 +0200
+Message-Id: <7640755514809a7b5fe2756f3702613865877dcb.1592203650.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1592203650.git.mchehab+huawei@kernel.org>
+References: <cover.1592203650.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f7f00cf-9453-43cf-5bf7-08d810f60aef
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2020 06:33:40.3743
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qTbP9cAGOAw091QLY9zkFceLr40n2FaHrFQTrMImZmyHG60N9X5z0FNoZ7WXnyBYSbSCRgKKM4Oqu6qwUgsUgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB5816
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBXb2xmcmFtIFNhbmcgPHdzYUBrZXJuZWwub3JnPg0KPiBTZW50OiBTdW5kYXksIEp1
-bmUgMTQsIDIwMjAgNToxMiBQTQ0KPiANCj4gT24gTW9uLCBKdW4gMDEsIDIwMjAgYXQgMDI6MTY6
-NDBQTSArMDgwMCwgRGluZ2hhbyBMaXUgd3JvdGU6DQo+ID4gcG1fcnVudGltZV9nZXRfc3luYygp
-IGluY3JlbWVudHMgdGhlIHJ1bnRpbWUgUE0gdXNhZ2UgY291bnRlciBldmVuIHRoZQ0KPiA+IGNh
-bGwgcmV0dXJucyBhbiBlcnJvciBjb2RlLiBUaHVzIGEgY29ycmVzcG9uZGluZyBkZWNyZW1lbnQg
-aXMgbmVlZGVkDQo+ID4gb24gdGhlIGVycm9yIGhhbmRsaW5nIHBhdGggdG8ga2VlcCB0aGUgY291
-bnRlciBiYWxhbmNlZC4NCj4gDQo+IENhbiB5b3UgcG9pbnQgbWUgdG8gYSBkaXNjdXNzaW9uIHdo
-ZXJlIGl0IHdhcyBkZWNpZGVkIHRoYXQgdGhpcyBpcyBhIHByb3BlciBmaXg/DQo+IEknZCB0aGlu
-ayB3ZSByYXRoZXIgc2hvdWxkIGZpeCBwbV9ydW50aW1lX2dldF9zeW5jKCkgYnV0IG1heWJlIHRo
-ZXJlIGFyZQ0KPiB0ZWNobmljYWwgcmVhc29ucyBhZ2FpbnN0IGl0Lg0KDQpJIGhhZCB0aGUgc2Ft
-ZSBmZWVsaW5nLg0KQ29weSBwbSBndXlzIHRvIGNvbW1lbnRzLg0KDQpSZWdhcmRzDQpBaXNoZW5n
-DQo=
+Despite being named with .rst extension, this file doesn't
+match the ReST standard. It actually causes a crash at
+Sphinx:
+
+	Sphinx parallel build error:
+	docutils.utils.SystemMessage: /devel/v4l/docs/Documentation/driver-api/thermal/cpu-idle-cooling.rst:69: (SEVERE/4) Unexpected section title.
+
+Add needed markups for it to be properly parsed.
+
+While here, add it to the thermal index.rst.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../driver-api/thermal/cpu-idle-cooling.rst        | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/driver-api/thermal/cpu-idle-cooling.rst b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
+index b9f34ceb2a38..c2a7ca676853 100644
+--- a/Documentation/driver-api/thermal/cpu-idle-cooling.rst
++++ b/Documentation/driver-api/thermal/cpu-idle-cooling.rst
+@@ -1,3 +1,5 @@
++.. SPDX-License-Identifier: GPL-2.0
++
+ ================
+ CPU Idle Cooling
+ ================
+@@ -48,7 +50,7 @@ idle state target residency, we lead to dropping the static and the
+ dynamic leakage for this period (modulo the energy needed to enter
+ this state). So the sustainable power with idle cycles has a linear
+ relation with the OPP’s sustainable power and can be computed with a
+-coefficient similar to:
++coefficient similar to::
+ 
+ 	    Power(IdleCycle) = Coef x Power(OPP)
+ 
+@@ -139,7 +141,7 @@ Power considerations
+ --------------------
+ 
+ When we reach the thermal trip point, we have to sustain a specified
+-power for a specific temperature but at this time we consume:
++power for a specific temperature but at this time we consume::
+ 
+  Power = Capacitance x Voltage^2 x Frequency x Utilisation
+ 
+@@ -148,7 +150,7 @@ wrong in the system setup). The ‘Capacitance’ and ‘Utilisation’ are a
+ fixed value, ‘Voltage’ and the ‘Frequency’ are fixed artificially
+ because we don’t want to change the OPP. We can group the
+ ‘Capacitance’ and the ‘Utilisation’ into a single term which is the
+-‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have:
++‘Dynamic Power Coefficient (Cdyn)’ Simplifying the above, we have::
+ 
+  Pdyn = Cdyn x Voltage^2 x Frequency
+ 
+@@ -157,7 +159,7 @@ in order to target the sustainable power defined in the device
+ tree. So with the idle injection mechanism, we want an average power
+ (Ptarget) resulting in an amount of time running at full power on a
+ specific OPP and idle another amount of time. That could be put in a
+-equation:
++equation::
+ 
+  P(opp)target = ((Trunning x (P(opp)running) + (Tidle x P(opp)idle)) /
+ 			(Trunning + Tidle)
+@@ -168,7 +170,7 @@ equation:
+ 
+ At this point if we know the running period for the CPU, that gives us
+ the idle injection we need. Alternatively if we have the idle
+-injection duration, we can compute the running duration with:
++injection duration, we can compute the running duration with::
+ 
+  Trunning = Tidle / ((P(opp)running / P(opp)target) - 1)
+ 
+@@ -191,7 +193,7 @@ However, in this demonstration we ignore three aspects:
+    target residency, otherwise we end up consuming more energy and
+    potentially invert the mitigation effect
+ 
+-So the final equation is:
++So the final equation is::
+ 
+  Trunning = (Tidle - Twakeup ) x
+ 		(((P(opp)dyn + P(opp)static ) - P(opp)target) / P(opp)target )
+-- 
+2.26.2
+
