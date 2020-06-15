@@ -2,78 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 922331F9E90
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 19:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7561C1F9E9D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jun 2020 19:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731280AbgFORcv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 13:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731276AbgFORcv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 15 Jun 2020 13:32:51 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7D2C061A0E
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 10:32:50 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id 64so8102826pfv.11
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 10:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MXiTVmySLinwx/ohTb+qSbZFWKUCXVmO5le+pblRvB4=;
-        b=G0mA6JzChysz4vfhRHU6jq7QE/eHCQELey0LnpzfKSltZnUX4xJrQcsFvDqNuuzn/B
-         FQxQmO1cTFK2rwGfPExYUmB1UGc+D0FhPK1IWgrpsi9Tnelh53bMnIAGxe548hlLCDgz
-         K8Qxo955RfvfEP5VJzZbZ6z34BV7rZNu9ZAzI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MXiTVmySLinwx/ohTb+qSbZFWKUCXVmO5le+pblRvB4=;
-        b=Adpye+HvpLPafs6O/Qjk//HeXFlwysBYr4dYcJaD8sjjxjtjwLMWxAzj4l1gBOqGi0
-         iK12oin3kezsGRLByYfyt8SjJOrSqMk9jhmFuw5Kc5wqKGfCtDd2IU6J43q5jj+zNIZx
-         Uy3U/QGQCIyf76y91g0FHeZzr7cbRp/AuRY0gnteakBpbhOFTzHvgMKQB+ui8/qGIu7S
-         mysl48yjoHgq5mOcmL7dgi2uTEF1Vl5oxWJLtok7DvD6LZPqM7NBngc8YHQsaN+CAuhI
-         gaX+0akf05LG8Qi3zkdnB83SqCPMFwJtFfGRnholBNXFYE7J1xuytdysAdTRC29pgNmv
-         LN0w==
-X-Gm-Message-State: AOAM531JiUZY8AabfjI726qKBGzzBmjjqxR5I6XgnRf8/VgyeZksANeq
-        +u210YkrS6hWtafXQ9GEuTlY0Q==
-X-Google-Smtp-Source: ABdhPJwx4PYvnCYX2JxTXMHgP55Wrhu8eXLVeZVNpAxBLT0KLVHVOQYT0WO997vdvPGw+oFzo0eXRg==
-X-Received: by 2002:a62:194d:: with SMTP id 74mr25149159pfz.21.1592242370263;
-        Mon, 15 Jun 2020 10:32:50 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id f3sm115586pjw.57.2020.06.15.10.32.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jun 2020 10:32:49 -0700 (PDT)
-Date:   Mon, 15 Jun 2020 10:32:48 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org
-Subject: Re: [PATCH v6 5/5] cpufreq: qcom: Disable fast switch when scaling
- DDR/L3
-Message-ID: <20200615173248.GV4525@google.com>
-References: <20200605213332.609-1-sibis@codeaurora.org>
- <20200605213332.609-6-sibis@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200605213332.609-6-sibis@codeaurora.org>
+        id S1730961AbgFORfT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 13:35:19 -0400
+Received: from mga07.intel.com ([134.134.136.100]:60144 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729847AbgFORfS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jun 2020 13:35:18 -0400
+IronPort-SDR: YwrT5Lkv5HZDZsACtBnspln9ds2k3+nKIKngwPmAg5bR7NfA9dw6hD+YURDvD7KXcbNhvWd2zj
+ GMR7msC99AmQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 10:35:18 -0700
+IronPort-SDR: 51+mZbATzb7maRcHc1mjVbVrxDqDO6M2cv45SsM7b+oxHngCDcFSqacinDVTDXr7OPEcmXRB/a
+ d40MxvSKq9pQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,515,1583222400"; 
+   d="scan'208";a="298594064"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2020 10:35:16 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH][RFC] PM / s2idle: Clear _TIF_POLLING_NRFLAG before suspend to idle
+Date:   Tue, 16 Jun 2020 01:36:11 +0800
+Message-Id: <20200615173611.15349-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 06, 2020 at 03:03:32AM +0530, Sibi Sankar wrote:
-> Disable fast switch when the opp-tables required for scaling DDR/L3
-> are populated.
-> 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+Suspend to idle was found to not work on Goldmont CPU recently.
+And the issue was triggered due to:
 
-not sure a separate patch is needed for this, but anyway:
+1. On Goldmont the CPU in idle can only be woken up via IPIs,
+   not POLL mode:
+   Commit 08e237fa56a1 ("x86/cpu: Add workaround for MONITOR
+   instruction erratum on Goldmont based CPUs")
+2. When the CPU is entering suspend to idle process, the
+  _TIF_POLLING_NRFLAG is kept on.
+3. Commit b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+   makes use of _TIF_POLLING_NRFLAG to avoid sending IPIs to
+   idle CPUs.
+4. As a result, some IPIs related functions might not work
+   well during suspend to idle on Goldmont. For example, one
+   suspected victim:
+   tick_unfreeze() -> timekeeping_resume() -> hrtimers_resume()
+   -> clock_was_set() -> on_each_cpu() might wait forever,
+   because the IPIs will not be sent to the CPUs which are
+   sleeping with _TIF_POLLING_NRFLAG set, and Goldmont CPU
+   could not be woken up by only setting _TIF_NEED_RESCHED
+   on the monitor address.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+I don't find a way in Ubuntu to update the firmware of Goldmont
+and check if the issue was gone, a fix patch would do no harm.
+Clear the _TIF_POLLING_NRFLAG flag before entering suspend to idle,
+and let the driver's enter_s2idle() to decide whether to set
+_TIF_POLLING_NRFLAG or not. So that to avoid the scenario described
+above and keep the context consistent with before.
+
+Fixes: b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+Reported-by: kbuild test robot <lkp@intel.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+ drivers/cpuidle/cpuidle.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index c149d9e20dfd..d17dad362d34 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -13,6 +13,7 @@
+ #include <linux/mutex.h>
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
++#include <linux/sched/idle.h>
+ #include <linux/notifier.h>
+ #include <linux/pm_qos.h>
+ #include <linux/cpu.h>
+@@ -186,8 +187,10 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ 	 * be frozen safely.
+ 	 */
+ 	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
+-	if (index > 0)
++	if (index > 0) {
++		__current_clr_polling();
+ 		enter_s2idle_proper(drv, dev, index);
++	}
+ 
+ 	return index;
+ }
+-- 
+2.17.1
+
