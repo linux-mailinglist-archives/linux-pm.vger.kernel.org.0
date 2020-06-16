@@ -2,87 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAF41FAFA6
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 13:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7615D1FB192
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 15:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728649AbgFPL5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 07:57:48 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:40667 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728144AbgFPL5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 07:57:46 -0400
-Received: by mail-ej1-f65.google.com with SMTP id q19so21183066eja.7;
-        Tue, 16 Jun 2020 04:57:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+v8uCi/MM/jmen9lx+FKaOy5thFlmFvnrtAkhPsEN2s=;
-        b=Kea9gTBuTz9gAlpjaFxFE+HQ0A3C5OA1UCPmqpcnV+orUJP6slNUDP/sEAUvcl7vEi
-         GPKo1sxTSHny8UdwdUp289JVYe0q2kQIgZORdowU7ngnMVuTJiyNOanw5o53aRWogpum
-         FNdCw/rW6iTYPFTuuLHj37vqtBtLqJDWzJYDRSikz679YnfVgPRlNsCBUGJqg7Nh09rE
-         Zv1VwldY5vFkI9UULpznr3/0GMhcojFfQIlIhAA/qwyV+Txz5gI3OA/jwjuX/XW4NNFE
-         SjknAb961v1NWcBdnCgLqxwdvQwrvrvFgY8x5FnIDE+rBYcojNq3HImEIRbppJY9JZ3n
-         Dkng==
-X-Gm-Message-State: AOAM530RfBJx/HfU0PCe5Ovh6S76OcXAh7IPrjI17bIc4xjewU/cvTg/
-        9dhRTb2fbSxwPRPhwkQX/70=
-X-Google-Smtp-Source: ABdhPJxcQNdV/H7nPWwktJ3WW5sRNLcscw+1S7A9rSCDlEe2uCTezR9VSviWZ9JiV63E3GHfZiF0Jw==
-X-Received: by 2002:a17:906:fcb7:: with SMTP id qw23mr2247171ejb.229.1592308664586;
-        Tue, 16 Jun 2020 04:57:44 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.184])
-        by smtp.googlemail.com with ESMTPSA id h5sm10994714ejp.45.2020.06.16.04.57.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 16 Jun 2020 04:57:43 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 13:57:41 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Pali Roh??r <pali@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@proceq.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] power: supply: bq27xxx_battery: Notify about all
- battery changes
-Message-ID: <20200616115741.GA13274@kozik-lap>
-References: <20200525141200.17199-1-krzk@kernel.org>
- <fc59bcd5-1868-8c7a-9fc9-67ad70b477f4@ti.com>
- <20200616105224.GF1718@bug>
+        id S1728561AbgFPNFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 09:05:24 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:39922 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728751AbgFPNFV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 09:05:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592312719;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7nZX/JZoMn+I5qsocsgLqRgQUtpNpbf+EHIybmwJtOc=;
+        b=DrTWSdc51IgcrjaAMEbVTNIUuwKk9tbvc65esaiRUfyf6HC89eIAFP1HkgIwMQcloe71Zx
+        ZrZ3XJ+4bVa1pDQj6zbc3JfNAKPe4H+gjkeZq/QkWFjQYfqmOgahNwU+1FLrUPHDaDY0YO
+        F6zs7fjkWicjD+JvfM+fl05yhD3NjX8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-395-9xOyBG-QPzmPq6osX1JXvA-1; Tue, 16 Jun 2020 09:05:14 -0400
+X-MC-Unique: 9xOyBG-QPzmPq6osX1JXvA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 108C8107B7CB;
+        Tue, 16 Jun 2020 13:05:07 +0000 (UTC)
+Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3337D5D9E4;
+        Tue, 16 Jun 2020 13:05:01 +0000 (UTC)
+Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+References: <20200616015718.7812-1-longman@redhat.com>
+ <20200616015718.7812-2-longman@redhat.com>
+ <20200616033035.GB902@sol.localdomain>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <56c2304c-73cc-8f48-d8d0-5dd6c39f33f3@redhat.com>
+Date:   Tue, 16 Jun 2020 09:05:00 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200616105224.GF1718@bug>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200616033035.GB902@sol.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 12:52:24PM +0200, Pavel Machek wrote:
-> On Tue 2020-05-26 21:24:39, Andrew F. Davis wrote:
-> > On 5/25/20 10:11 AM, Krzysztof Kozlowski wrote:
-> > > All battery related data could be important for user-space.  For example
-> > > time-to-full could be shown to user on the screen or health could be
-> > > monitored for any issues.  Instead of comparing few selected old/new
-> > > values, just check if anything changed in the cache.
-> > > 
-> > 
-> > 
-> > At least some value will change every time we poll the battery, are we
-> > okay with having power_supply_changed() called every time?
-> 
-> I believe that's very bad idea. AFAICT that would wake up userspace every
-> 5 seconds, eating power in unexpected way, and without easy ability of opting
-> out. IOW a regression.
+On 6/15/20 11:30 PM, Eric Biggers wrote:
+> On Mon, Jun 15, 2020 at 09:57:16PM -0400, Waiman Long wrote:
+>> The kzfree() function is normally used to clear some sensitive
+>> information, like encryption keys, in the buffer before freeing it back
+>> to the pool. Memset() is currently used for the buffer clearing. However,
+>> it is entirely possible that the compiler may choose to optimize away the
+>> memory clearing especially if LTO is being used. To make sure that this
+>> optimization will not happen, memzero_explicit(), which is introduced
+>> in v3.18, is now used in kzfree() to do the clearing.
+>>
+>> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   mm/slab_common.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 9e72ba224175..37d48a56431d 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
+>>   	if (unlikely(ZERO_OR_NULL_PTR(mem)))
+>>   		return;
+>>   	ks = ksize(mem);
+>> -	memset(mem, 0, ks);
+>> +	memzero_explicit(mem, ks);
+>>   	kfree(mem);
+>>   }
+>>   EXPORT_SYMBOL(kzfree);
+> This is a good change, but the commit message isn't really accurate.  AFAIK, no
+> one has found any case where this memset() gets optimized out.  And even with
+> LTO, it would be virtually impossible due to all the synchronization and global
+> data structures that kfree() uses.  (Remember that this isn't the C standard
+> function "free()", so the compiler can't assign it any special meaning.)
+> Not to mention that LTO support isn't actually upstream yet.
+>
+> I still agree with the change, but it might be helpful if the commit message
+> were honest that this is really a hardening measure and about properly conveying
+> the intent.  As-is this sounds like a critical fix, which might confuse people.
 
-It won't be 5 seconds but poll_interval which is 360 seconds by default.
-It can be 5 seconds if user-space changes this time or if user-space
-keeps asking for get_property. In first case: user-space kind of decided
-about it... In second: user-space is already woken-up since it polls get
-properties.
+Yes, I agree that the commit log may look a bit scary. How about the 
+following:
 
-However I understand that this is quite intrusive change and maybe in
-such case user-space should just keep polling (if it wants all data to
-be provided every n-seconds).
+The kzfree() function is normally used to clear some sensitive
+information, like encryption keys, in the buffer before freeing it back
+to the pool. Memset() is currently used for buffer clearing. However
+unlikely, there is still a non-zero probability that the compiler may
+choose to optimize away the memory clearing especially if LTO is being
+used in the future. To make sure that this optimization will never
+happen, memzero_explicit(), which is introduced in v3.18, is now used
+in kzfree() to future-proof it.
 
-Best regards,
-Krzysztof
+Cheers,
+Longman
 
