@@ -2,124 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E321FAAD6
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 10:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51CF1FAB3B
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 10:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726630AbgFPIM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 04:12:56 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54740 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727103AbgFPIMx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 04:12:53 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200616081251euoutp0224925d38174b5a14dbcdc293d60799b7~Y_AWg93-w2285522855euoutp02D
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 08:12:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200616081251euoutp0224925d38174b5a14dbcdc293d60799b7~Y_AWg93-w2285522855euoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1592295171;
-        bh=t+LeSgDb8yZiggnUrlN5WU6K26V0DBW3GJJdVArjas0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+jCOQIWkDGe9XGLIqdRn3w3dPjQyrpSKh2T4lHysEkAI0fN6GtaoskT83MfGVXv+
-         gWeajrzI0vI/B/8AhaLm9bdPL6Tuu3vSGvUbT6I9J3dkep1w1JtfOQsjMdb8GBKzgQ
-         Jl1jzPiRNtruHSWgiMvwqzzutkHR0VngL6gAfYtY=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200616081250eucas1p2448a2a68035538b80b7a0ade6d623821~Y_AWLczxx2000720007eucas1p2F;
-        Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id B5.5E.60698.20F78EE5; Tue, 16
-        Jun 2020 09:12:50 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3~Y_AV5DEGu0048500485eucas1p2o;
-        Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200616081250eusmtrp11e628046414c848eeef3b46c4e5d342c~Y_AV4dJ0E1314613146eusmtrp1s;
-        Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-X-AuditID: cbfec7f5-a29ff7000001ed1a-f8-5ee87f02c16d
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id A2.4A.07950.20F78EE5; Tue, 16
-        Jun 2020 09:12:50 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200616081250eusmtip269bdae8437e63967952de0a9644e93bb~Y_AVXwV1D0491904919eusmtip2j;
-        Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH 4/4] ARM: multi_v7_defconfig: Enable big.LITTLE cpuidle
- driver
-Date:   Tue, 16 Jun 2020 10:12:30 +0200
-Message-Id: <20200616081230.31198-5-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200616081230.31198-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42LZduznOV2m+hdxBrN3WlhsnLGe1WLeZ1mL
-        8+c3sFtsenyN1eJz7xFGixnn9zFZvPn9gt1iYVMLu8XaI3fZHTg91sxbw+ixaVUnm8eda3vY
-        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujFdHH7EWnGatOLt3MnsD4xeWLkZODgkB
-        E4m1/5aB2UICKxglOibadDFyAdlfGCXufrvNDuF8ZpS4P2sJM0zHnm1LoRLLGSXWfPvPDNdy
-        dd9bsCo2AUOJrrddbCC2iEC6xL2/S8A6mAUmMEm8ae5n7WLk4BAWCJCYe6AGpIZFQFVizbIW
-        sHpeAVuJY7v+s0Nsk5dYveEA2ExOATuJZZufM4HMkRBoZpc4unEmI0SRi8TTmXOZIGxhiVfH
-        t0A1y0icntzDAtXAKPHw3Fp2CKeHUeJy0wyobmuJO+d+sYFcxCygKbF+lz5E2FHi7dtuJpCw
-        hACfxI23giBhZiBz0rbpzBBhXomONiGIajWJWcfXwa09eOESNLQ8JGZc/MwKCaCJQCd8fcQ2
-        gVF+FsKyBYyMqxjFU0uLc9NTi43zUsv1ihNzi0vz0vWS83M3MQITyOl/x7/uYNz3J+kQowAH
-        oxIPL0PA8zgh1sSy4srcQ4wSHMxKIrxOZ0/HCfGmJFZWpRblxxeV5qQWH2KU5mBREuc1XvQy
-        VkggPbEkNTs1tSC1CCbLxMEp1cDYuFwpojD2gdyP3fkpvemnNW45KemL31j3b86SKVsyzK90
-        sm3glHpxosxUO156z36v06q9Rz9UTyj/u/GXvQij0d47586edyldki/WK3Myedet9Lk8seVd
-        Ag7vLv7o3lq3+qiY1VrHhu7p654eNbr8/nXvl1sTEs8ZipQ7L2L0MxLM4go9Ha+jxFKckWio
-        xVxUnAgAxvgoMhwDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsVy+t/xe7pM9S/iDJZMULXYOGM9q8W8z7IW
-        589vYLfY9Pgaq8Xn3iOMFjPO72OyePP7BbvFwqYWdou1R+6yO3B6rJm3htFj06pONo871/aw
-        eWxeUu/Rt2UVo8fnTXIBbFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2
-        NimpOZllqUX6dgl6Ga+OPmItOM1acXbvZPYGxi8sXYycHBICJhJ7ti1l72Lk4hASWMoosenk
-        dkaIhIzEyWkNrBC2sMSfa11sEEWfGCWOflwLlmATMJToeguS4OQQEciUWHjuJtgkZoEpTBI7
-        3u0ESwgL+Emc3TyRHcRmEVCVWLOsBSzOK2ArcWzXf3aIDfISqzccYAaxOQXsJJZtfs4EYgsB
-        1Sw7e5F5AiPfAkaGVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIEBve3Yzy07GLveBR9iFOBg
-        VOLhjQh6HifEmlhWXJl7iFGCg1lJhNfp7Ok4Id6UxMqq1KL8+KLSnNTiQ4ymQEdNZJYSTc4H
-        RlteSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGzPMiHCVJYq82
-        eG0TEbk96/Pe7yGnref2NJt8Vu/XPX0qMOnj3h8V7Wymt0QXHP8hVRDa94fvx4e7Ue/LZ3t8
-        ktMz9Cou2tRWWFPvE90y6aibVpP0w2NXz2+4uUB+rsO0OA45F5aLSmqWr9YpWpxYcHhNeF5v
-        4QZ7vqe3G3U33p+64s96zxfrlViKMxINtZiLihMBc07dp34CAAA=
-X-CMS-MailID: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
-References: <20200616081230.31198-1-m.szyprowski@samsung.com>
-        <CGME20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3@eucas1p2.samsung.com>
+        id S1726881AbgFPIbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 04:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726112AbgFPIbP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 04:31:15 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450B8C03E96A
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 01:31:13 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id e1so19833760wrt.5
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 01:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=O9PrYTho49Bp6EVdK3E+npj+dEJ0SrzzaYmk25xGQCs=;
+        b=IVV0TzJSfu6Cb6fbIfYYBpYjGCuxgbVN6r850piGyx/5zINEAkRFXfc72poc2cK3SZ
+         VcEF0dEg5+XAe+ur1GnVppYchAQG97vZPiCl91UlA+lO45mdrqXZkQBH73ga3MUse6k8
+         PIJS0YoOXZtsj9PPGtsNUfzRCyLXcKDCZjKMgvvYQcE98rVzgsqVF/3jX6iwWqlzOXnZ
+         spDdTuXYgP3RMFGGFUaiblGaaV/T/RQ3mmLF9ELJoLXNag3y3Jlvcw26NSv+DvAClrkM
+         Od/Kvm4WsC4LM9LUOt0LLdyQgRNEF6e7Ejc1Koa1sidd62IiKTJKeu9cI6v6cmCgIS4t
+         pdUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=O9PrYTho49Bp6EVdK3E+npj+dEJ0SrzzaYmk25xGQCs=;
+        b=lPNoKXz+EH2brqTVgGRqFl2B60k6bccyzVIZkJ9W7U54o7uzNhf043/dDaTYNyVq6J
+         NsMn+Jv6Wrk4wYRIWeaf/54DZGQb0jQr5saEdGt8VPIzNyXR2L9+CAP5Bn+PC2rhhogI
+         /K9gWWLxEV8wZV1i9mjeCaVav8B1yfALh+7Xz3ErAgVdwWTqNj87AAzpJNlkX1oOnhTu
+         XdqFsCWW0kT6v0hzWVBpndNh+T2JUblvIPPMLX/Kfgl9uuiioj+hclJZdCQlRGorED7s
+         KOyg5VhLz8ZrarWDnPC1NkZkX5DHRXStMaXLv8futatNHV8yHw1SfEeMxH+giIH+kdRe
+         ztCw==
+X-Gm-Message-State: AOAM532mUI1sftsgUJpJ2kgmREOkbfuoFx0QgUrVDmJD+bwCE/iGLpeF
+        2g+60AlYTJ4gPNhINTbqbt+xDQ==
+X-Google-Smtp-Source: ABdhPJyGVDBmCjx821OXOVBJ+fFcT06h8c84Po1Zcr2LqYcehjC7g284lXeFVlBS/b/VGmEgEyVJRg==
+X-Received: by 2002:adf:9ccf:: with SMTP id h15mr1815949wre.275.1592296271800;
+        Tue, 16 Jun 2020 01:31:11 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id b8sm27846943wrm.35.2020.06.16.01.31.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 01:31:10 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 09:31:07 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, rafael@kernel.org, arnd@arndb.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org
+Subject: Re: [PATCH 2/2] cpufreq: Specify default governor on command line
+Message-ID: <20200616083107.GA122049@google.com>
+References: <20200615165554.228063-1-qperret@google.com>
+ <20200615165554.228063-3-qperret@google.com>
+ <20200616043143.obk5k3rv737j5dnd@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200616043143.obk5k3rv737j5dnd@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable big.LITTLE cpuidle driver, which can be used on Exynos-based
-Peach Pit/Pi Chromebooks.
+Hey Viresh,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- arch/arm/configs/multi_v7_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+On Tuesday 16 Jun 2020 at 10:01:43 (+0530), Viresh Kumar wrote:
+> On 15-06-20, 17:55, Quentin Perret wrote:
+> > +static void cpufreq_get_default_governor(void)
+> > +{
+> > +	default_governor = cpufreq_parse_governor(cpufreq_param_governor);
+> > +	if (!default_governor) {
+> > +		if (*cpufreq_param_governor)
+> > +			pr_warn("Failed to find %s\n", cpufreq_param_governor);
+> > +		default_governor = cpufreq_default_governor();
+> 
+> A module_get() never happened for this case and so maybe a
+> module_put() should never get called.
 
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index 95543914d3c7..6a922a8ef712 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -111,6 +111,7 @@ CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
- CONFIG_QORIQ_CPUFREQ=y
- CONFIG_CPU_IDLE=y
- CONFIG_ARM_CPUIDLE=y
-+CONFIG_ARM_BIG_LITTLE_CPUIDLE=y
- CONFIG_ARM_ZYNQ_CPUIDLE=y
- CONFIG_ARM_EXYNOS_CPUIDLE=y
- CONFIG_ARM_TEGRA_CPUIDLE=y
--- 
-2.17.1
+Correct, however cpufreq_default_governor() being a weak function, we're
+basically guaranteed the governor we get from there is builtin, so
+gov->owner is NULL. That is, module_put() is not actively useful, but it
+doesn't harm. So I figured that should be fine. That could definitely
+use a comment, though :)
 
+> > +	}
+> > +}
+> > +
+> > +static void cpufreq_put_default_governor(void)
+> > +{
+> > +	if (!default_governor)
+> > +		return;
+> > +	module_put(default_governor->owner);
+> > +	default_governor = NULL;
+> > +}
+> > +
+> >  static int cpufreq_init_governor(struct cpufreq_policy *policy)
+> >  {
+> >  	int ret;
+> > @@ -2701,6 +2721,8 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
+> >  
+> >  	if (driver_data->setpolicy)
+> >  		driver_data->flags |= CPUFREQ_CONST_LOOPS;
+> > +	else
+> > +		cpufreq_get_default_governor();
+> >  
+> >  	if (cpufreq_boost_supported()) {
+> >  		ret = create_boost_sysfs_file();
+> > @@ -2769,6 +2791,7 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver)
+> >  	subsys_interface_unregister(&cpufreq_interface);
+> >  	remove_boost_sysfs_file();
+> >  	cpuhp_remove_state_nocalls_cpuslocked(hp_online);
+> > +	cpufreq_put_default_governor();
+> >  
+> >  	write_lock_irqsave(&cpufreq_driver_lock, flags);
+> >  
+> > @@ -2792,4 +2815,5 @@ static int __init cpufreq_core_init(void)
+> >  	return 0;
+> >  }
+> 
+> And since this is a per boot thing, there is perhaps no need of doing
+> these at driver register/unregister, I would rather do it at:
+> cpufreq_core_init() time itself and so we will never need to run
+> cpufreq_put_default_governor() and so can be removed.
+
+Right, so the reason I avoided cpufreq_core_init() was because it is
+called at core_initcall() time, which means I can't really assume the
+governors have been loaded by that time. By waiting for the driver to
+probe before detecting the default gov, we get that nice ordering. But
+yes, it feels odd to have it here :/
+
+Thinking about it more, the natural fit for this would rather be the
+register/unregister path for governors directly. If that sounds good to
+you (?) I'll try to move it there in v2.
+
+> And another thing I am not able to understand (despite you commenting
+> about that in the commit log) is what happens if the default governor
+> chosen is built as a module ?
+
+So the answer is 'it depends'. If the driver is built as a module too,
+then you should load the governor module first, and then the driver
+module, and everything will work just fine.
+
+But in the case where the governor is loaded _after_ the driver (either
+because we got the module ordering wrong, or because the driver is
+builtin), then the policies will be initialized with the builtin
+default, and nothing special will happen when the governor module is
+loaded.
+
+That behaviour very much is open for discussion, though. A possible
+alternative would be to automatically switch all policies to the default
+governor upon loading. That would have the nice benefit or removing the
+ordering dependency, but that is more involved and I didn't have a
+use-case for it, so I went for the simpler option ('the-default
+governor-needs-to-be-registered-before-the-policies-are-created').
+
+Thoughts?
+
+Thanks,
+Quentin
