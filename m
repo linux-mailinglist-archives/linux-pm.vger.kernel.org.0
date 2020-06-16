@@ -2,97 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6F41FA749
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 06:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532611FA767
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 06:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgFPEAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 00:00:38 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:41498 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726846AbgFPEAh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 00:00:37 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3w8xb194145;
-        Tue, 16 Jun 2020 04:00:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=TkXWLHBUcq6GrqGb8B/sbaIZ/YHDymjYC75g5tesDI8=;
- b=s0bTOq51QseDHq3DCV1eok86CuoPzPpKYMVoC9U62ArE0saDMsnZyPLX69xmMmiHf234
- GhtCzXclPyAD2lvezqNJX8FgmH65sQ9KccDDY5XWfo8Aa7QHwrwmkBM3HdBxQgVizkwR
- TWYYw16ccvp5fkc32sMx4T+djKHsND99VSK/XK3ZASboQzuMEu3UqLhJCMYcF1rztbLF
- 8thcP+Q59Z1RQaqEhadQSZY1Ppzp8aM+nArYVhqLkdXswKRcQPS43Kk7a4rkdXR3hFtv
- lGelrDKD8kNKh9uCoaCrNMnAejMfsXhLT4QgfQMCt4BhcPh9j0Tooxa1V88YIFFXPo+U 2Q== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31p6e5vda1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Jun 2020 04:00:10 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3xOvH131174;
-        Tue, 16 Jun 2020 04:00:09 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 31p6dcadma-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 04:00:09 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05G406xx021363;
-        Tue, 16 Jun 2020 04:00:06 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 15 Jun 2020 21:00:06 -0700
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        netdev@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-mm@kvack.org,
-        linux-rdma@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-scsi@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-wireless@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-        ath10k@lists.infradead.org
-Subject: Re: [PATCH 00/17] spelling.txt: /decriptors/descriptors/
-Date:   Mon, 15 Jun 2020 23:59:55 -0400
-Message-Id: <159227986422.24883.1110692977647896521.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
-References: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160028
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006160027
+        id S1725308AbgFPED7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 00:03:59 -0400
+Received: from mga09.intel.com ([134.134.136.24]:62660 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgFPED7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Jun 2020 00:03:59 -0400
+IronPort-SDR: bTLDGJ7mB+OzzoCoOcAKZF2WHrr3MSXJpOlG2FjQqXkWUM6j2TRUvluDwm+Gl4ZwbwsPRAWcrE
+ eWjikO1GGOFw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 21:03:58 -0700
+IronPort-SDR: nRMI7s6Bxwgsiy0QG0/AMGXkMLtFc1525NwLHMT0EvN2ASXrIvNC+j9/K/XeZAiLaQ6xccKOKt
+ wsSuHV/QCWCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,517,1583222400"; 
+   d="scan'208";a="476265878"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2020 21:03:52 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rui Zhang <rui.zhang@intel.com>,
+        Chen Yu <yu.c.chen@intel.com>
+Subject: [PATCH][v2] PM / s2idle: Clear _TIF_POLLING_NRFLAG before suspend to idle
+Date:   Tue, 16 Jun 2020 12:04:42 +0800
+Message-Id: <20200616040442.21515-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 9 Jun 2020 13:45:53 +0100, Kieran Bingham wrote:
+Suspend to idle was found to not work on Goldmont CPU recently.
+And the issue was triggered due to:
 
-> I wouldn't normally go through spelling fixes, but I caught sight of
-> this typo twice, and then foolishly grepped the tree for it, and saw how
-> pervasive it was.
-> 
-> so here I am ... fixing a typo globally... but with an addition in
-> scripts/spelling.txt so it shouldn't re-appear ;-)
-> 
-> [...]
+1. On Goldmont the CPU in idle can only be woken up via IPIs,
+   not POLLING mode:
+   Commit 08e237fa56a1 ("x86/cpu: Add workaround for MONITOR
+   instruction erratum on Goldmont based CPUs")
+2. When the CPU is entering suspend to idle process, the
+   _TIF_POLLING_NRFLAG is kept on, due to cpuidle_enter_s2idle()
+   doesn't properly match call_cpuidle().
+3. Commit b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+   makes use of _TIF_POLLING_NRFLAG to avoid sending IPIs to
+   idle CPUs.
+4. As a result, some IPIs related functions might not work
+   well during suspend to idle on Goldmont. For example, one
+   suspected victim:
+   tick_unfreeze() -> timekeeping_resume() -> hrtimers_resume()
+   -> clock_was_set() -> on_each_cpu() might wait forever,
+   because the IPIs will not be sent to the CPUs which are
+   sleeping with _TIF_POLLING_NRFLAG set, and Goldmont CPU
+   could not be woken up by only setting _TIF_NEED_RESCHED
+   on the monitor address.
 
-Applied to 5.9/scsi-queue, thanks!
+I don't find a way in Ubuntu to update the firmware of Goldmont
+and check if the issue was gone, a fix patch would do no harm.
+Clear the _TIF_POLLING_NRFLAG flag before entering suspend to idle,
+and let the driver's enter_s2idle() to decide whether to set
+_TIF_POLLING_NRFLAG or not. So that to avoid the scenario described
+above and keep the context consistent with before. Also adjust
+the naming to be consistent with call_cpuidle().
 
-[06/17] scsi: Fix trivial spelling
-        https://git.kernel.org/mkp/scsi/c/0a19a725c0ed
+Fixes: b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reported-by: kbuild test robot <lkp@intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+v2: According to Peter's review, v1 is racy, if someone already
+    set TIF_NEED_RESCHED this patch just clear POLLING and go to sleep.
+    Check TIF_NEED_RESCHED before entering suspend to idle and
+    adjust the naming to be consistent with call_cpuidle().
+--
+ drivers/cpuidle/cpuidle.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+index c149d9e20dfd..b003767abebd 100644
+--- a/drivers/cpuidle/cpuidle.c
++++ b/drivers/cpuidle/cpuidle.c
+@@ -13,6 +13,7 @@
+ #include <linux/mutex.h>
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
++#include <linux/sched/idle.h>
+ #include <linux/notifier.h>
+ #include <linux/pm_qos.h>
+ #include <linux/cpu.h>
+@@ -133,8 +134,8 @@ int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
+ }
+ 
+ #ifdef CONFIG_SUSPEND
+-static void enter_s2idle_proper(struct cpuidle_driver *drv,
+-				struct cpuidle_device *dev, int index)
++static void s2idle_enter(struct cpuidle_driver *drv,
++			 struct cpuidle_device *dev, int index)
+ {
+ 	ktime_t time_start, time_end;
+ 
+@@ -168,6 +169,15 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+ 	dev->states_usage[index].s2idle_usage++;
+ }
+ 
++static int call_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
++		       int index)
++{
++	if (!current_clr_polling_and_test())
++		s2idle_enter(drv, dev, index);
++
++	return index;
++}
++
+ /**
+  * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
+  * @drv: cpuidle driver for the given CPU.
+@@ -187,7 +197,7 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ 	 */
+ 	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
+ 	if (index > 0)
+-		enter_s2idle_proper(drv, dev, index);
++		call_s2idle(drv, dev, index);
+ 
+ 	return index;
+ }
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.1
+
