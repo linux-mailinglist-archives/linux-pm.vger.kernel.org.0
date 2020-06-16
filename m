@@ -2,140 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 532611FA767
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 06:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1B7D1FA7BD
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 06:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725308AbgFPED7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 00:03:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:62660 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgFPED7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Jun 2020 00:03:59 -0400
-IronPort-SDR: bTLDGJ7mB+OzzoCoOcAKZF2WHrr3MSXJpOlG2FjQqXkWUM6j2TRUvluDwm+Gl4ZwbwsPRAWcrE
- eWjikO1GGOFw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 21:03:58 -0700
-IronPort-SDR: nRMI7s6Bxwgsiy0QG0/AMGXkMLtFc1525NwLHMT0EvN2ASXrIvNC+j9/K/XeZAiLaQ6xccKOKt
- wsSuHV/QCWCQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,517,1583222400"; 
-   d="scan'208";a="476265878"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Jun 2020 21:03:52 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rui Zhang <rui.zhang@intel.com>,
-        Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH][v2] PM / s2idle: Clear _TIF_POLLING_NRFLAG before suspend to idle
-Date:   Tue, 16 Jun 2020 12:04:42 +0800
-Message-Id: <20200616040442.21515-1-yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1725928AbgFPE2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 00:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbgFPE2g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 00:28:36 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F4FC05BD43
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 21:28:36 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id s10so8662901pgm.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 21:28:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YaFHme5I+vEiE9uZgkx1lHevUOVlBP99z4TPAG/B6Js=;
+        b=n9mKx0XLblljfU1/2otAMQ6pOQK99gXRz18ZgUZanhinH4owiDvYtypcf6Sqq8gdZG
+         Yb2CBv7G7K2Yb6rXbPVUvT3oyqsRA3u/c8QRqvJ/zi8KD0E0RBo4aBUCBPJVrq3dWApo
+         j0tAWc8e3IDgc89c+TIzduQ0sDiDTd9muFhIdDU7HsJCvRhJhGGGEz4h6378+1ZpL+Es
+         GxLDhhajfiVsOIZH15jDXXb767tbDzuQjAvSief8u3zUyPKP6XHCtCKkyf4iewHo9Odl
+         Q9KvqSKO8336D8/ZgFsKI6z6gXxnfqM7P3IC/gngXLggYeSojKqsQNto+keFGVdQGGCF
+         b5ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YaFHme5I+vEiE9uZgkx1lHevUOVlBP99z4TPAG/B6Js=;
+        b=kU5OEBAVzm6horWtfjeHSGF1Ju32TWdBrsmVQ81YglqSfzSPBP3Vwgzw1jtZnmu9sQ
+         /hZu/JkuIcV503vCMti0JZ1Y84Pr442JWJCrDAUhh8GJIknzf9UOzbqNt8vzAmNgE1Wv
+         shvkFv8LnQFg6mXDyiqCKUROuxKVpAHycr5Yyr+Wgbygyot4l3j0BYylOT+UUYnNtUwd
+         UDWSvfOgtSMz67RgY35EVDU2bSVs5TsD8pxT86bel7rdVVLJ2na1UUNP+stl/n4cdPor
+         5dU4+G13E3jnFLHH7im5IfAkKNRfUfpxAjvpcwgaQYB5skxE5H1/uXMNaMOI6dK8Kwqr
+         lyGA==
+X-Gm-Message-State: AOAM533f87/BQVoSy99OJFaaOtoKBklnVB0PWbO80z98kDN2CPFsVtDL
+        WNQzB2y/GmhJi1ZrH+0Ss0Rz1A==
+X-Google-Smtp-Source: ABdhPJxpnwaDV/9AKfcTr2LjEIIk4xAPjUH6jqsguih+3J5o67WPw9vRcApVwL9o95WNsa02ug5U5Q==
+X-Received: by 2002:a62:7bcd:: with SMTP id w196mr433531pfc.73.1592281715522;
+        Mon, 15 Jun 2020 21:28:35 -0700 (PDT)
+Received: from localhost ([122.172.119.132])
+        by smtp.gmail.com with ESMTPSA id q10sm16272276pfk.86.2020.06.15.21.28.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 15 Jun 2020 21:28:34 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 09:58:31 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Quentin Perret <qperret@google.com>
+Cc:     rjw@rjwysocki.net, rafael@kernel.org, arnd@arndb.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org
+Subject: Re: [PATCH 1/2] cpufreq: Register governors at core_initcall
+Message-ID: <20200616042831.3kazrpvvjhbahoaj@vireshk-i7>
+References: <20200615165554.228063-1-qperret@google.com>
+ <20200615165554.228063-2-qperret@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200615165554.228063-2-qperret@google.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Suspend to idle was found to not work on Goldmont CPU recently.
-And the issue was triggered due to:
+On 15-06-20, 17:55, Quentin Perret wrote:
+> Currently, most CPUFreq governors are registered at core_initcall time
+> when used as default, and module_init otherwise. In preparation for
+> letting users specify the default governor on the kernel command line,
+> change all of them to use core_initcall unconditionally, as is already
+> the case for schedutil and performance. This will enable us to assume
+> builtin governors have been registered before the builtin CPUFreq
+> drivers probe.
+> 
+> And since all governors now have similar init/exit patterns, introduce
+> two new macros cpufreq_governor_{init,exit}() to factorize the code.
+> 
+> Signed-off-by: Quentin Perret <qperret@google.com>
+> ---
+> Note: I couldn't boot-test the change to spudemand, by lack of hardware.
+> But I can confirm cell_defconfig compiles just fine.
+> ---
+>  .../platforms/cell/cpufreq_spudemand.c        | 26 ++-----------------
+>  drivers/cpufreq/cpufreq_conservative.c        | 22 ++++------------
+>  drivers/cpufreq/cpufreq_ondemand.c            | 24 +++++------------
+>  drivers/cpufreq/cpufreq_performance.c         | 14 ++--------
+>  drivers/cpufreq/cpufreq_powersave.c           | 18 +++----------
+>  drivers/cpufreq/cpufreq_userspace.c           | 18 +++----------
+>  include/linux/cpufreq.h                       | 14 ++++++++++
+>  kernel/sched/cpufreq_schedutil.c              |  6 +----
+>  8 files changed, 36 insertions(+), 106 deletions(-)
 
-1. On Goldmont the CPU in idle can only be woken up via IPIs,
-   not POLLING mode:
-   Commit 08e237fa56a1 ("x86/cpu: Add workaround for MONITOR
-   instruction erratum on Goldmont based CPUs")
-2. When the CPU is entering suspend to idle process, the
-   _TIF_POLLING_NRFLAG is kept on, due to cpuidle_enter_s2idle()
-   doesn't properly match call_cpuidle().
-3. Commit b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
-   makes use of _TIF_POLLING_NRFLAG to avoid sending IPIs to
-   idle CPUs.
-4. As a result, some IPIs related functions might not work
-   well during suspend to idle on Goldmont. For example, one
-   suspected victim:
-   tick_unfreeze() -> timekeeping_resume() -> hrtimers_resume()
-   -> clock_was_set() -> on_each_cpu() might wait forever,
-   because the IPIs will not be sent to the CPUs which are
-   sleeping with _TIF_POLLING_NRFLAG set, and Goldmont CPU
-   could not be woken up by only setting _TIF_NEED_RESCHED
-   on the monitor address.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I don't find a way in Ubuntu to update the firmware of Goldmont
-and check if the issue was gone, a fix patch would do no harm.
-Clear the _TIF_POLLING_NRFLAG flag before entering suspend to idle,
-and let the driver's enter_s2idle() to decide whether to set
-_TIF_POLLING_NRFLAG or not. So that to avoid the scenario described
-above and keep the context consistent with before. Also adjust
-the naming to be consistent with call_cpuidle().
-
-Fixes: b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reported-by: kbuild test robot <lkp@intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
-v2: According to Peter's review, v1 is racy, if someone already
-    set TIF_NEED_RESCHED this patch just clear POLLING and go to sleep.
-    Check TIF_NEED_RESCHED before entering suspend to idle and
-    adjust the naming to be consistent with call_cpuidle().
---
- drivers/cpuidle/cpuidle.c | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index c149d9e20dfd..b003767abebd 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -13,6 +13,7 @@
- #include <linux/mutex.h>
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
-+#include <linux/sched/idle.h>
- #include <linux/notifier.h>
- #include <linux/pm_qos.h>
- #include <linux/cpu.h>
-@@ -133,8 +134,8 @@ int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
- }
- 
- #ifdef CONFIG_SUSPEND
--static void enter_s2idle_proper(struct cpuidle_driver *drv,
--				struct cpuidle_device *dev, int index)
-+static void s2idle_enter(struct cpuidle_driver *drv,
-+			 struct cpuidle_device *dev, int index)
- {
- 	ktime_t time_start, time_end;
- 
-@@ -168,6 +169,15 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
- 	dev->states_usage[index].s2idle_usage++;
- }
- 
-+static int call_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-+		       int index)
-+{
-+	if (!current_clr_polling_and_test())
-+		s2idle_enter(drv, dev, index);
-+
-+	return index;
-+}
-+
- /**
-  * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
-  * @drv: cpuidle driver for the given CPU.
-@@ -187,7 +197,7 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
- 	 */
- 	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
- 	if (index > 0)
--		enter_s2idle_proper(drv, dev, index);
-+		call_s2idle(drv, dev, index);
- 
- 	return index;
- }
 -- 
-2.17.1
-
+viresh
