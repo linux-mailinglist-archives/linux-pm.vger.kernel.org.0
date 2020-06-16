@@ -2,115 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 787711FC1FE
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 01:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EAED1FC26C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 01:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgFPXBt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 19:01:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39104 "EHLO mx2.suse.de"
+        id S1726025AbgFPXmj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 19:42:39 -0400
+Received: from ns.mm-sol.com ([37.157.136.199]:41207 "EHLO extserv.mm-sol.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725849AbgFPXBs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 16 Jun 2020 19:01:48 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6CB7AADA8;
-        Tue, 16 Jun 2020 23:01:45 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 1AC8EDA7C3; Wed, 17 Jun 2020 01:01:30 +0200 (CEST)
-Date:   Wed, 17 Jun 2020 01:01:30 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Joe Perches <joe@perches.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200616230130.GJ27795@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Joe Perches <joe@perches.com>,
-        Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200616015718.7812-1-longman@redhat.com>
- <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+        id S1725849AbgFPXmj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 16 Jun 2020 19:42:39 -0400
+X-Greylist: delayed 388 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 19:42:38 EDT
+Received: from [192.168.1.3] (212-5-158-38.ip.btc-net.bg [212.5.158.38])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by extserv.mm-sol.com (Postfix) with ESMTPSA id 1F3F2CFFF;
+        Wed, 17 Jun 2020 02:36:08 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mm-sol.com; s=201706;
+        t=1592350568; bh=aLjBBuVOgl1FEIUDX+t32lCMDeKTv5OVH1NddWDHMpE=;
+        h=Subject:To:Cc:From:Date:From;
+        b=EfroWTqqlD6NHw6xyFCW6GE8yNG9v4tk9irwG84sR4pF6hq/+ltwGqL5xdpb0edjn
+         r5UQ/kKqRFK+U5OXH/gAW4439jtDbk+lvbvmmfw/emfwsyxyJ0vYjnxnQejw9mXyME
+         5VayAl3PcplbJxDYIst2n5x1bGwouyPJSLMWQm4azu5MolegAppuBLr1eN+BZfhu33
+         jmjyzV10E7U3EumlPt1c78s/+hKpUQjGqGZdTTGrfZDVjgecQgv627neoN8vWI+awy
+         4QZ8/0uQj+wehx2TajEMLiZnF9CDqPvWUHpE7VoXioOvs7j4xrbtMRjbxdVxQWg5vv
+         FGk9WG7SqdTfw==
+Subject: Re: [PATCH] PCI: qcom: Disable power management for uPD720201 USB3
+ controller
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     bjorn.andersson@linaro.org, vkoul@kernel.org, sanm@codeaurora.org,
+        mgautam@codeaurora.org, agross@kernel.org, bhelgaas@google.com,
+        robh@kernel.org, lorenzo.pieralisi@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+References: <20200616211711.GA1981914@bjorn-Precision-5520>
+From:   Stanimir Varbanov <svarbanov@mm-sol.com>
+Message-ID: <47b52403-360e-08b6-ad0d-0f4a2272a5f7@mm-sol.com>
+Date:   Wed, 17 Jun 2020 02:36:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+In-Reply-To: <20200616211711.GA1981914@bjorn-Precision-5520>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 11:53:50AM -0700, Joe Perches wrote:
-> On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
-> >  v4:
-> >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
-> >     so that it can be backported to stable.
-> >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
-> >     now as there can be a bit more discussion on what is best. It will be
-> >     introduced as a separate patch later on after this one is merged.
-> 
-> To this larger audience and last week without reply:
-> https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
-> 
-> Are there _any_ fastpath uses of kfree or vfree?
 
-I'd consider kfree performance critical for cases where it is called
-under locks. If possible the kfree is moved outside of the critical
-section, but we have rbtrees or lists that get deleted under locks and
-restructuring the code to do eg. splice and free it outside of the lock
-is not always possible.
+
+On 6/17/20 12:17 AM, Bjorn Helgaas wrote:
+> [+cc Rafael, linux-pm]
+> 
+> On Mon, Jun 15, 2020 at 09:24:13PM +0300, Georgi Djakov wrote:
+>> The uPD720201 USB3 host controller (connected to PCIe) on the Dragonboard
+>> 845c is often failing during suspend and resume. The following messages
+>> are seen over the console:
+>>
+>>   PM: suspend entry (s2idle)
+>>   Filesystems sync: 0.000 seconds
+>>   Freezing user space processes ... (elapsed 0.001 seconds) done.
+>>   OOM killer disabled.
+>>   Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+>>   printk: Suspending console(s) (use no_console_suspend to debug)
+>>   dwc3-qcom a8f8800.usb: HS-PHY not in L2
+>>   dwc3-qcom a6f8800.usb: HS-PHY not in L2
+>>   xhci_hcd 0000:01:00.0: can't change power state from D3hot to D0 (config
+>>   space inaccessible)
+>>   xhci_hcd 0000:01:00.0: can't change power state from D3hot to D0 (config
+>>   space inaccessible)
+>>   xhci_hcd 0000:01:00.0: Controller not ready at resume -19
+>>   xhci_hcd 0000:01:00.0: PCI post-resume error -19!
+>>   xhci_hcd 0000:01:00.0: HC died; cleaning up
+>>
+>> Then the USB devices are not functional anymore. Let's disable the PM of
+>> the controller for now, as this will at least keep USB devices working
+>> even after suspend and resume.
+> 
+> This seems like we're just covering up a deeper problem here.  I think
+> it would be better to fix the underlying problem.
+> 
+> The quirk you're adding is specific to the Renesas 0x0014 device.  Is
+> there some reason to think the problem is specific to that device, or
+> might other devices have the same problem?
+
+I also think that the USB controller might have some issue with .resume.
+It is obvious that qcom-pcie RC doesn't implement suspend/resume which
+means that its clocks are not disabled at the moment when USB is resuming.
+
+Georgi, can you try to bypass suspend/resume in the USB driver itself?
+
+> 
+> Maybe we're missing something in pcie-qcom.c?  Is there any
+> suspend/resume support required in that driver?  It doesn't look like
+> it has anything except that it calls pm_runtime_enable().
+
+Yes, definitely we did not implemented suspend/resume callbacks, but
+that means that the RC should be functional while the system is in suspend.
+
+> 
+>> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+>> ---
+>>  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>> index 138e1a2d21cc..c1f502682a19 100644
+>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> @@ -1439,6 +1439,13 @@ static void qcom_fixup_class(struct pci_dev *dev)
+>>  {
+>>  	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
+>>  }
+>> +
+>> +static void qcom_fixup_nopm(struct pci_dev *dev)
+>> +{
+>> +	dev->pm_cap = 0;
+>> +	dev_info(&dev->dev, "Disabling PCI power management\n");
+>> +}
+>> +
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0101, qcom_fixup_class);
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0104, qcom_fixup_class);
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0106, qcom_fixup_class);
+>> @@ -1446,6 +1453,7 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0107, qcom_fixup_class);
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
+>>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+>> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_RENESAS, 0x0014, qcom_fixup_nopm);
+> 
+> The convention is that DECLARE_PCI_FIXUP_*() comes immediately after
+> the quirk function itself, so the whole patch would be a single diff
+> hunk.  See drivers/pci/quirks.c for many examples.
+> 
+>>  static struct platform_driver qcom_pcie_driver = {
+>>  	.probe = qcom_pcie_probe,
+
+-- 
+regards,
+Stan
