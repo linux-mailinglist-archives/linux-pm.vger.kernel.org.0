@@ -2,121 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D67F1FA901
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 08:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E1D01FA915
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 08:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgFPGmR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 02:42:17 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:34150 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbgFPGmQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 02:42:16 -0400
-Received: by mail-ej1-f66.google.com with SMTP id l27so20291324ejc.1;
-        Mon, 15 Jun 2020 23:42:11 -0700 (PDT)
+        id S1726579AbgFPGuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 02:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgFPGuT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 02:50:19 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F4AC05BD43
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 23:50:18 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id t132so10845769vst.2
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jun 2020 23:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xsn4sYJ9N3GdQ4UwPuiI0oU7Rkc9ofrrOyqI9+Zu+vs=;
+        b=lPLhLQjLDtPxB2h7HpZbj5XDp+iQwwn0lgr3MKY1Z9ydSw1gEUqt6EXie/Da9Fy+fZ
+         /xrrUYwBQRsw4xD3YYMhg/4cphu+PjsHo5MylX8OfXhTVJcDSl4kD438Hx6gXe86T7eK
+         TRb4/gsT+fgFAc3qfQbuWKBL7smIAxo3KR04lCG/W16BK6T7WpSMDBloukBDLHIKTPuk
+         QhxuaGLVNqmSs4ly6hR9JYGqAslb654YIhpm+KBrSVidbEzx0eIBWWGg0Xsfm2JZ/wEg
+         JxG8L03KPeo43STHvjyzallQfgpXs9+mM4oPEULLd41HaAB0XeLfTDgTsYXsTsssWbDX
+         Qc+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8yT+7Ta/B3BUGUR35Fz/0p22bghMwTUAxgTnwepounI=;
-        b=CrqjoVKTD3f3KdvDGIeuUsz+tApuK+psSd/zZznBL+PvDQ9kr/y3NysJrLCUvijZ0W
-         D1lMJFJjDjxCjK+3vtuSUx88E4FI/icqqmCPzoYqFy6r+CX7+frVJXkQBTdJvOi0k2H8
-         BQWo08oG78S63Nmuvi83IANQL4LNBYWwNm3J2aXU7+GGmL071iftqMsCEIxqPKRgxnoO
-         l2aRKff/cldTmTKB1sX4cPbWqW005Wxuza/3URs7J0zQObIlg8c0OKxW9NsQzskaJNhs
-         WYN8j8RMnmY+IrXoBKVYXvhwDHpIj4QOYGkzsnxSvMv3OoF06DPJymcAuYl6IFpm70uf
-         LBaQ==
-X-Gm-Message-State: AOAM531HP4eO0zbWwLMfP5GDnN825+ONW2qq1LmJWzlrQRrQ9tLmHjV1
-        pUaK0iSgeht2xDq1+zJMRIs=
-X-Google-Smtp-Source: ABdhPJwG7kr4DUIGgc4iCDEeodlEq5kx0AY8+Z/EURP92P+0Zf4E0UWpXqDGfffbUz9uBG+pBru51g==
-X-Received: by 2002:a17:906:ce2f:: with SMTP id sd15mr1306745ejb.445.1592289731375;
-        Mon, 15 Jun 2020 23:42:11 -0700 (PDT)
-Received: from localhost (ip-37-188-174-201.eurotel.cz. [37.188.174.201])
-        by smtp.gmail.com with ESMTPSA id j10sm9734428edf.97.2020.06.15.23.42.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2020 23:42:10 -0700 (PDT)
-Date:   Tue, 16 Jun 2020 08:42:08 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
-Message-ID: <20200616064208.GA9499@dhcp22.suse.cz>
-References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-2-longman@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xsn4sYJ9N3GdQ4UwPuiI0oU7Rkc9ofrrOyqI9+Zu+vs=;
+        b=Cvymp0K5l0eLVCLA7fhPWSj0nG4SF2jc3COAME66nH9McDIYut5a9Kq4VsKYXVJ+Cg
+         /rsPMUcrnK5CphJnAwtBb0/+EEoxC5oBfGxKPBWRm5kNGLycrUP5NjsjyHGASYt8Fau3
+         rWIC+ubVWbonXvqlfbzdG26Gh+vrdE7DBDKa5hC+7AATk8geGj/1XIt5d8pXKM1Zf1Ud
+         9lgDTscPx0Qbksob56VBVtU4vlogZbNpRR/DQDlwKsXnabNl0nqsLHLVou6x4R9IhXUT
+         4H/KXkupcoeRC5+gw2POsSyyRmteAzTnI+CDcRofE2mOBYa2gY5EK3SUdYBsaLTVru2j
+         X7IA==
+X-Gm-Message-State: AOAM532XL5ieso4+A6HgxLFYfupDINsI/7p4fOzUbUKuHDEwOYWZTa/b
+        PsEJ1LLwgZxVssLLWNZJamAMc9S3Be+p9TZ55O5ukA==
+X-Google-Smtp-Source: ABdhPJwVprXIzriB+Mukv1+Y2AfHXFYc9TMGG9na1M4igDSqdnDhrHJ5SlkiQmSkoFjGXqzzQsH5L3vNpBwsO6oZXmM=
+X-Received: by 2002:a67:db88:: with SMTP id f8mr469381vsk.165.1592290217683;
+ Mon, 15 Jun 2020 23:50:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200616015718.7812-2-longman@redhat.com>
+References: <20200615152054.6819-1-ulf.hansson@linaro.org> <20200615152054.6819-6-ulf.hansson@linaro.org>
+ <CAGETcx9bbhW6NoHmjcx3h2y-b8eS_NLwGSyh_scX=CnTpujDNA@mail.gmail.com>
+In-Reply-To: <CAGETcx9bbhW6NoHmjcx3h2y-b8eS_NLwGSyh_scX=CnTpujDNA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 16 Jun 2020 08:49:41 +0200
+Message-ID: <CAPDyKFo+p3MyesDDXJBBgQEYFfw0wQ=4ujyD_ORcS=gVKw8DSQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] cpuidle: psci: Prevent domain idlestates until
+ consumers are ready
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon 15-06-20 21:57:16, Waiman Long wrote:
-> The kzfree() function is normally used to clear some sensitive
-> information, like encryption keys, in the buffer before freeing it back
-> to the pool. Memset() is currently used for the buffer clearing. However,
-> it is entirely possible that the compiler may choose to optimize away the
-> memory clearing especially if LTO is being used. To make sure that this
-> optimization will not happen, memzero_explicit(), which is introduced
-> in v3.18, is now used in kzfree() to do the clearing.
-> 
-> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Waiman Long <longman@redhat.com>
+On Mon, 15 Jun 2020 at 20:06, Saravana Kannan <saravanak@google.com> wrote:
+>
+> On Mon, Jun 15, 2020 at 8:21 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Depending on the SoC/platform, additional devices may be part of the PSCI
+> > PM domain topology. This is the case with 'qcom,rpmh-rsc' device, for
+> > example, even if this is not yet visible in the corresponding DTS-files.
+> >
+> > Without going into too much details, a device like the 'qcom,rpmh-rsc' may
+> > have HW constraints that needs to be obeyed to, before a domain idlestate
+> > can be picked.
+> >
+> > Therefore, let's implement the ->sync_state() callback to receive a
+> > notification when all consumers of the PSCI PM domain providers have been
+> > attached/probed to it. In this way, we can make sure all constraints from
+> > all relevant devices, are taken into account before allowing a domain
+> > idlestate to be picked.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index bf527d2bb4b6..b6e9649ab0da 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -27,6 +27,7 @@ struct psci_pd_provider {
+> >  };
+> >
+> >  static LIST_HEAD(psci_pd_providers);
+> > +static bool psci_pd_allow_domain_state;
+>
+> Is there ever only 1 device that's probed by this driver? If yes, this
+> is okay. Otherwise, you'll need to handle this on a per device basis.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
+There is only one device. Subnodes, may exist to describe a
+hierarchical description of the topology of the power-domains [1].
 
-Although I am not really sure this is a stable material. Is there any
-known instance where the memset was optimized out from kzfree?
+Kind regards
+Uffe
 
-> ---
->  mm/slab_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 9e72ba224175..37d48a56431d 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
->  	if (unlikely(ZERO_OR_NULL_PTR(mem)))
->  		return;
->  	ks = ksize(mem);
-> -	memset(mem, 0, ks);
-> +	memzero_explicit(mem, ks);
->  	kfree(mem);
->  }
->  EXPORT_SYMBOL(kzfree);
-> -- 
-> 2.18.1
-> 
-
--- 
-Michal Hocko
-SUSE Labs
+[1] Documentation/devicetree/bindings/arm/psci.yaml
