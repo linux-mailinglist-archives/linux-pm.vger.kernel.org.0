@@ -2,55 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 882731FAEA2
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 12:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2161FAEAC
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 12:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728619AbgFPKwf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 06:52:35 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:53586 "EHLO
+        id S1728382AbgFPKxi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 06:53:38 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:53670 "EHLO
         jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728168AbgFPKwf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 06:52:35 -0400
+        with ESMTP id S1726467AbgFPKxi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 06:53:38 -0400
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 7B9DD1C0BD2; Tue, 16 Jun 2020 12:52:33 +0200 (CEST)
-Date:   Tue, 16 Jun 2020 12:52:24 +0200
+        id 9C73E1C0BD2; Tue, 16 Jun 2020 12:53:36 +0200 (CEST)
+Date:   Tue, 16 Jun 2020 12:53:25 +0200
 From:   Pavel Machek <pavel@ucw.cz>
-To:     "Andrew F. Davis" <afd@ti.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Pali Roh??r <pali@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@proceq.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] power: supply: bq27xxx_battery: Notify about all
- battery changes
-Message-ID: <20200616105224.GF1718@bug>
-References: <20200525141200.17199-1-krzk@kernel.org>
- <fc59bcd5-1868-8c7a-9fc9-67ad70b477f4@ti.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        daniel.lezcano@linaro.org, bjorn.andersson@linaro.org,
+        agross@kernel.org, robh@kernel.org, amit.kucheria@verdurent.com,
+        mark.rutland@arm.com, rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/6] Introduce Power domain based warming device driver
+Message-ID: <20200616105325.GH1718@bug>
+References: <20200604015317.31389-1-thara.gopinath@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc59bcd5-1868-8c7a-9fc9-67ad70b477f4@ti.com>
+In-Reply-To: <20200604015317.31389-1-thara.gopinath@linaro.org>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 2020-05-26 21:24:39, Andrew F. Davis wrote:
-> On 5/25/20 10:11 AM, Krzysztof Kozlowski wrote:
-> > All battery related data could be important for user-space.  For example
-> > time-to-full could be shown to user on the screen or health could be
-> > monitored for any issues.  Instead of comparing few selected old/new
-> > values, just check if anything changed in the cache.
-> > 
-> 
-> 
-> At least some value will change every time we poll the battery, are we
-> okay with having power_supply_changed() called every time?
+Hi!
 
-I believe that's very bad idea. AFAICT that would wake up userspace every
-5 seconds, eating power in unexpected way, and without easy ability of opting
-out. IOW a regression.
+> Certain resources modeled as a generic power domain in linux kernel can be
+> used to warm up the SoC (mx power domain on sdm845) if the temperature
+> falls below certain threshold. These power domains can be considered as
+> thermal warming devices.  (opposite of thermal cooling devices).
+
+Would you explain when this is needed?
+
+I'd normally expect "too low" temperature to be a problem during power-on, but at
+that time Linux is not running so it can not provide the heating...
+
+Best regards,
 
 									Pavel
 -- 
