@@ -2,131 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BADD1FBF9C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 22:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C2E1FC08A
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 23:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731142AbgFPUBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 16 Jun 2020 16:01:43 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:55218 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731290AbgFPUBl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 16:01:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592337700;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IZuHuVBorvvnUwBUanoxn5EJfFFGTbG0F4JYxmnKd8I=;
-        b=gwuk/kzdb3Ik/Dhd6PCUCPRmNEObII+9CwrZ/qJl/8ZMzV9Julk2/PzPS1Kt5wSfmj85JW
-        GcpiGRFXoqunERmt75RXVaWyPWzbgwxA9xXkyR72DbZB1LRzKAyBx7Ars6UjCB0BBiDDAL
-        Uk6QmjDdivEAi3x3XULlpxOBCWEX8XA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-195-RsA5jiRVM622hegDVDAGvA-1; Tue, 16 Jun 2020 16:01:36 -0400
-X-MC-Unique: RsA5jiRVM622hegDVDAGvA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AD51C8035E9;
-        Tue, 16 Jun 2020 20:01:28 +0000 (UTC)
-Received: from llong.remote.csb (ovpn-114-156.rdu2.redhat.com [10.10.114.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4F41719D71;
-        Tue, 16 Jun 2020 20:01:20 +0000 (UTC)
-Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-To:     Joe Perches <joe@perches.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-References: <20200616015718.7812-1-longman@redhat.com>
- <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <7662bfe8-b279-f98c-3ae3-c3b889aea1f5@redhat.com>
-Date:   Tue, 16 Jun 2020 16:01:19 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726804AbgFPU6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 16 Jun 2020 16:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726428AbgFPU6M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 16:58:12 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA5EC061573;
+        Tue, 16 Jun 2020 13:58:11 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id a13so3341511ilh.3;
+        Tue, 16 Jun 2020 13:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FYZcH9YCAV2D9xJRlKDws3xYJbeunSuHP5OJ4xopk5U=;
+        b=sMF4Sz7iAfVFIns3sFM03xAVLeLz7qz67oG6nGIOlyZZ3O/RM8u2Pn9IjPPyKjEhkz
+         rUVI5YzGAv9LDyXBpmtn6ltuOy+cEhjBA5e+dz5AjMAGLGNFZ9JpZk9Dc+RbOo9yGVkk
+         YKpLnn0Tt7F0qK+LyZWtmDVYLtg6hqJ778mTjGl5/YueUBiU8X3OJSpI9T2LWsi/dm1R
+         128cAkSgho2OWRjjKjr4ZwtJzNkxCliHWC4Rfr/6gThIGFsIevcMtr2vc1y2FJb4F9AT
+         2IG3BhZaAI5FJox/mINW4hJenvrhvylvAz7q8DisookNHWadKuEZfYFp7A5M9zpAnbn8
+         lI2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FYZcH9YCAV2D9xJRlKDws3xYJbeunSuHP5OJ4xopk5U=;
+        b=FdRdnmBkutc1uQaabq5NnCwesyheqbAyJQpJYHQTbwRjBct4oESiwh2DcKbm/ltTWw
+         1lyWffeWdPpKpUR1xJRmXq1Pf7xGO2ENUz/MO6SVivPy8W7TOJczoSUci6nkTdMkC4MO
+         MAqpKfk7VOogfgBWxgJlwGARZf4zG2pJ0A6BO5cPv3f0sMidoIAiv6E0pjPZ5stVrWFo
+         uNGdWOW7lo4ff85/mBhs1ErlWadciymjHToqYzKrch9v/zoQBjrWGApr7b/VD7bET2qG
+         8DGU5hq/JlUhvliOIair9LWJmWQcaeR2QaBW7FS2XHqXJd0dBMM6dYsa8NktQxgkM5x6
+         SiOQ==
+X-Gm-Message-State: AOAM530Z4F/NEaPoG8p7OLFjdKT2Nm0FqBof+KDLAptRaDuKUAPo68Yd
+        qEYsm8He9sN4K1yojVpAHkTiew0sQNEvNiDk7UM=
+X-Google-Smtp-Source: ABdhPJw7r9fTtiY0V63BhtDgkS/1VuVZSmoZam4NKdSyg6P5i4KlsKliKnLpusFiTessmcmOsEUwrNO8miMsJEyN4oY=
+X-Received: by 2002:a92:de10:: with SMTP id x16mr5352212ilm.6.1592341091058;
+ Tue, 16 Jun 2020 13:58:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+References: <CGME20200616081248eucas1p168faa343ce333a28c8fd3cf9a6a58b3c@eucas1p1.samsung.com>
+ <20200616081230.31198-1-m.szyprowski@samsung.com>
+In-Reply-To: <20200616081230.31198-1-m.szyprowski@samsung.com>
+From:   Anand Moon <linux.amoon@gmail.com>
+Date:   Wed, 17 Jun 2020 02:28:01 +0530
+Message-ID: <CANAwSgStsYP5fBB7z7-Reo2BP4ZQPT6RN4s8QdLGVGhKCDA_Ng@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Restore big.LITTLE cpuidle driver for Exynos
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/16/20 2:53 PM, Joe Perches wrote:
-> On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
->>   v4:
->>    - Break out the memzero_explicit() change as suggested by Dan Carpenter
->>      so that it can be backported to stable.
->>    - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
->>      now as there can be a bit more discussion on what is best. It will be
->>      introduced as a separate patch later on after this one is merged.
-> To this larger audience and last week without reply:
-> https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
->
-> Are there _any_ fastpath uses of kfree or vfree?
->
-> Many patches have been posted recently to fix mispairings
-> of specific types of alloc and free functions.
->
-> To eliminate these mispairings at a runtime cost of four
-> comparisons, should the kfree/vfree/kvfree/kfree_const
-> functions be consolidated into a single kfree?
->
-> Something like the below:
->
->     void kfree(const void *addr)
->     {
->     	if (is_kernel_rodata((unsigned long)addr))
->     		return;
->
->     	if (is_vmalloc_addr(addr))
->     		_vfree(addr);
->     	else
->     		_kfree(addr);
->     }
->
->     #define kvfree		kfree
->     #define vfree		kfree
->     #define kfree_const	kfree
->
->
-How about adding CONFIG_DEBUG_VM code to check for invalid address 
-ranges in kfree() and vfree()? By doing this, we can catch unmatched 
-pairing in debug mode, but won't have the overhead when debug mode is off.
+Hi Marek,
 
-Thought?
+On Tue, 16 Jun 2020 at 13:44, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>
+> The ARM big.LITTLE cpuidle driver has been enabled and tested on Samsung
+> Exynos 5420/5800 based Peach Pit/Pi Chromebooks and in fact it worked
+> only on those boards.
+>
+> However, support for it was broken by the commit 833b5794e330 ("ARM:
+> EXYNOS: reset Little cores when cpu is up") and then never enabled in the
+> exynos_defconfig. This patchset provides the needed fix to the common
+> code and restores support for it. Thanks to Lukasz Luba who motivated me
+> to take a look into this issue.
+>
+Thanks for this updates.
 
-Cheers,
-Longman
+But I feel some DTS changes are missing for example
+d2e5c871ed8a drivers: cpuidle: initialize big.LITTLE driver through DT
 
+But I feel that this feature is not working as desired since
+still some missing code changes for cluster idle states are missing.
+like clock  PWR_CTR and PWR_CTRL2.
+
+-Anand
+
+> Best regards
+> Marek Szyprowski
+> Samsung R&D Institute Poland
+>
+>
+> Patch summary:
+>
+> Marek Szyprowski (4):
+>   ARM: exynos: Apply little core workaround only under secure firmware
+>   cpuidle: big.LITTLE: enable driver only on Peach-Pit/Pi Chromebooks
+>   ARM: exynos_defconfig: Enable big.LITTLE cpuidle driver
+>   ARM: multi_v7_defconfig: Enable big.LITTLE cpuidle driver
+>
+>  arch/arm/configs/exynos_defconfig    |  1 +
+>  arch/arm/configs/multi_v7_defconfig  |  1 +
+>  arch/arm/mach-exynos/mcpm-exynos.c   | 10 +++++++---
+>  drivers/cpuidle/cpuidle-big_little.c |  3 +--
+>  4 files changed, 10 insertions(+), 5 deletions(-)
+>
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
