@@ -2,112 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFF61FA6FE
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 05:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED76A1FA714
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 05:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726434AbgFPDaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 15 Jun 2020 23:30:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53234 "EHLO mail.kernel.org"
+        id S1725985AbgFPDfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 15 Jun 2020 23:35:11 -0400
+Received: from mga11.intel.com ([192.55.52.93]:52889 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbgFPDai (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 15 Jun 2020 23:30:38 -0400
-Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B3B8206D7;
-        Tue, 16 Jun 2020 03:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592278237;
-        bh=cbCBV+GA89Kxk07F75+TVwUbSIVVlsmXitOPPgujt0g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CI14aWxQPw24ENjaHXJfOipbxs59iBOy6w+TeEVniGvJYBqy6D1cwSzDbSE5kI4lU
-         lIYg5jNgJLjG7j91Xm1X3e+BxtmR8FfP4CJnhYPkHwCMU6wjZ6YBjNC+nYJMCpp2N5
-         Vlpy20o3OcJdDug0iUS5K1iWjVtuIX+008M01eB4=
-Date:   Mon, 15 Jun 2020 20:30:35 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Sterba <dsterba@suse.cz>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
-Message-ID: <20200616033035.GB902@sol.localdomain>
-References: <20200616015718.7812-1-longman@redhat.com>
- <20200616015718.7812-2-longman@redhat.com>
+        id S1725978AbgFPDfL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 15 Jun 2020 23:35:11 -0400
+IronPort-SDR: qrSRGl4HxCHfMbhbthB2zx4G1tFIlwgrEeupE16Kr8Cdj9w6E3gWBNesAFWYHE/+25dkrUzpl+
+ V/MvJoxZVfjQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2020 20:35:11 -0700
+IronPort-SDR: 4bJt/MCnL6bzAU78afso5FW3yO3Ka6xGQi7hHHorxubxslqyLyG0spDfIyZ39w6VKu2d+l8URQ
+ c9YieamPPi2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,517,1583222400"; 
+   d="scan'208";a="476275786"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Jun 2020 20:35:09 -0700
+Date:   Tue, 16 Jun 2020 11:36:18 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][RFC] PM / s2idle: Clear _TIF_POLLING_NRFLAG before
+ suspend to idle
+Message-ID: <20200616033618.GA20959@chenyu-office.sh.intel.com>
+References: <20200615173611.15349-1-yu.c.chen@intel.com>
+ <20200615184041.GG2531@hirez.programming.kicks-ass.net>
+ <20200615193154.GJ2554@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200616015718.7812-2-longman@redhat.com>
+In-Reply-To: <20200615193154.GJ2554@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 15, 2020 at 09:57:16PM -0400, Waiman Long wrote:
-> The kzfree() function is normally used to clear some sensitive
-> information, like encryption keys, in the buffer before freeing it back
-> to the pool. Memset() is currently used for the buffer clearing. However,
-> it is entirely possible that the compiler may choose to optimize away the
-> memory clearing especially if LTO is being used. To make sure that this
-> optimization will not happen, memzero_explicit(), which is introduced
-> in v3.18, is now used in kzfree() to do the clearing.
+On Mon, Jun 15, 2020 at 09:31:54PM +0200, Peter Zijlstra wrote:
+> On Mon, Jun 15, 2020 at 08:40:41PM +0200, Peter Zijlstra wrote:
 > 
-> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Waiman Long <longman@redhat.com>
+> > > @@ -186,8 +187,10 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+> > >  	 * be frozen safely.
+> > >  	 */
+> > >  	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
+> > > -	if (index > 0)
+> > > +	if (index > 0) {
+> > > +		__current_clr_polling();
+> > >  		enter_s2idle_proper(drv, dev, index);
+> > > +	}
+> > >  
+> > >  	return index;
+> > >  }
+> > 
+> > So how is that commit 08e237fa56a1 not suffient? That makes
+> > mwait_idle_with_hints() DTRT for this 'functionally challenged' piece of
+> > hardware.
+> > 
+> > AFAICT intel_enter_s2idle() uses mwait_idle_with_hints().
+> > 
+> > What am I missing?
+> 
+> What's missing is that cpuidle_enter_s2idle() doesn't properly match
+> call_cpuidle().
+>
+Right.
+> Something like so then. Your version is racy, if someone already set
+> TIF_NEED_RESCHED you just clear POLLING and go to sleep.
+> 
+Got it, I'll test the patch below.
+
+Thanks,
+Chenyu
 > ---
->  mm/slab_common.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 9e72ba224175..37d48a56431d 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
->  	if (unlikely(ZERO_OR_NULL_PTR(mem)))
->  		return;
->  	ks = ksize(mem);
-> -	memset(mem, 0, ks);
-> +	memzero_explicit(mem, ks);
->  	kfree(mem);
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index c149d9e20dfd..81bee8d03c6d 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -133,8 +133,8 @@ int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
 >  }
->  EXPORT_SYMBOL(kzfree);
-
-This is a good change, but the commit message isn't really accurate.  AFAIK, no
-one has found any case where this memset() gets optimized out.  And even with
-LTO, it would be virtually impossible due to all the synchronization and global
-data structures that kfree() uses.  (Remember that this isn't the C standard
-function "free()", so the compiler can't assign it any special meaning.)
-Not to mention that LTO support isn't actually upstream yet.
-
-I still agree with the change, but it might be helpful if the commit message
-were honest that this is really a hardening measure and about properly conveying
-the intent.  As-is this sounds like a critical fix, which might confuse people.
-
-- Eric
+>  
+>  #ifdef CONFIG_SUSPEND
+> -static void enter_s2idle_proper(struct cpuidle_driver *drv,
+> -				struct cpuidle_device *dev, int index)
+> +static void s2idle_enter(struct cpuidle_driver *drv,
+> +			 struct cpuidle_device *dev, int index)
+>  {
+>  	ktime_t time_start, time_end;
+>  
+> @@ -168,6 +168,15 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>  	dev->states_usage[index].s2idle_usage++;
+>  }
+>  
+> +static int call_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+> +		       int index)
+> +{
+> +	if (!current_clr_polling_and_test())
+> +		s2idle_enter(drv, dev, index);
+> +
+> +	return index;
+> +}
+> +
+>  /**
+>   * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
+>   * @drv: cpuidle driver for the given CPU.
+> @@ -187,7 +196,7 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+>  	 */
+>  	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
+>  	if (index > 0)
+> -		enter_s2idle_proper(drv, dev, index);
+> +		call_s2idle(drv, dev, index);
+>  
+>  	return index;
+>  }
