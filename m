@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D46F51FAAD5
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 10:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E321FAAD6
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jun 2020 10:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725979AbgFPIM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1726630AbgFPIM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 16 Jun 2020 04:12:56 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54733 "EHLO
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:54740 "EHLO
         mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727090AbgFPIMw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 04:12:52 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200616081250euoutp0279b821d8d4474d8e5bbc3f27170b6555~Y_AWLo3N42347523475euoutp02j
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200616081250euoutp0279b821d8d4474d8e5bbc3f27170b6555~Y_AWLo3N42347523475euoutp02j
+        with ESMTP id S1727103AbgFPIMx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 16 Jun 2020 04:12:53 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200616081251euoutp0224925d38174b5a14dbcdc293d60799b7~Y_AWg93-w2285522855euoutp02D
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 08:12:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200616081251euoutp0224925d38174b5a14dbcdc293d60799b7~Y_AWg93-w2285522855euoutp02D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
         s=mail20170921; t=1592295171;
-        bh=AWAMWTUTIZzqNOG8Dq390F6D/G8wFyFWzK2NpqNDPCI=;
+        bh=t+LeSgDb8yZiggnUrlN5WU6K26V0DBW3GJJdVArjas0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ht+bkG2qZ+OdHZWy9XAQH7cki5AfIkHJY7wUUVe05eA6b1kA5P4N5oohA/sdDlyA7
-         l7s0WSg6861ROmUE4ibkt9Q8iLJE37LPVECyR1xKW2s3e8yPISSUz6rZx+nLtzN+V6
-         1cGhqToESw0ytNrFLdxDrCrE29ulrvNsbMyy6pM0=
+        b=i+jCOQIWkDGe9XGLIqdRn3w3dPjQyrpSKh2T4lHysEkAI0fN6GtaoskT83MfGVXv+
+         gWeajrzI0vI/B/8AhaLm9bdPL6Tuu3vSGvUbT6I9J3dkep1w1JtfOQsjMdb8GBKzgQ
+         Jl1jzPiRNtruHSWgiMvwqzzutkHR0VngL6gAfYtY=
 Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200616081250eucas1p155fffc189a23ff88a3ef5203276ad644~Y_AV30mTb2187921879eucas1p1P;
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200616081250eucas1p2448a2a68035538b80b7a0ade6d623821~Y_AWLczxx2000720007eucas1p2F;
         Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
 Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 15.5E.60698.20F78EE5; Tue, 16
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id B5.5E.60698.20F78EE5; Tue, 16
         Jun 2020 09:12:50 +0100 (BST)
 Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
         eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200616081250eucas1p2de7110898dad050866d78cb5d5120422~Y_AVbP8hL0677406774eucas1p2P;
+        20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3~Y_AV5DEGu0048500485eucas1p2o;
         Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
 Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200616081250eusmtrp1da8be45a72185c83dd86ddb56d9f3d18~Y_AVan3io1259512595eusmtrp1g;
+        20200616081250eusmtrp11e628046414c848eeef3b46c4e5d342c~Y_AV4dJ0E1314613146eusmtrp1s;
         Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-f7-5ee87f02fbd9
+X-AuditID: cbfec7f5-a29ff7000001ed1a-f8-5ee87f02c16d
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id E1.4A.07950.20F78EE5; Tue, 16
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id A2.4A.07950.20F78EE5; Tue, 16
         Jun 2020 09:12:50 +0100 (BST)
 Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200616081249eusmtip288f3c5634c8d95b3191234c8ab2da204~Y_AU3w65N0387603876eusmtip24;
-        Tue, 16 Jun 2020 08:12:49 +0000 (GMT)
+        20200616081250eusmtip269bdae8437e63967952de0a9644e93bb~Y_AVXwV1D0491904919eusmtip2j;
+        Tue, 16 Jun 2020 08:12:50 +0000 (GMT)
 From:   Marek Szyprowski <m.szyprowski@samsung.com>
 To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
@@ -54,46 +54,47 @@ Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lukasz Luba <lukasz.luba@arm.com>,
         Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: [PATCH 3/4] ARM: exynos_defconfig: Enable big.LITTLE cpuidle driver
-Date:   Tue, 16 Jun 2020 10:12:29 +0200
-Message-Id: <20200616081230.31198-4-m.szyprowski@samsung.com>
+Subject: [PATCH 4/4] ARM: multi_v7_defconfig: Enable big.LITTLE cpuidle
+ driver
+Date:   Tue, 16 Jun 2020 10:12:30 +0200
+Message-Id: <20200616081230.31198-5-m.szyprowski@samsung.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200616081230.31198-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgleLIzCtJLcpLzFFi42LZduznOV2m+hdxBp0PlC02zljPajHvs6zF
-        +fMb2C02Pb7GavG59wijxYzz+5gs3vx+wW6xsKmF3WLtkbvsDpwea+atYfTYtKqTzePOtT1s
-        HpuX1Hv0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxobnN9kK1rNWrH/F2sB4g6WLkZNDQsBE
-        4lT7dFYQW0hgBaNE2yr/LkYuIPsLo8T5oyeYIJzPjBKrP+1ghemY8bmXHSKxnFHixcm7jHAt
-        VyasYwSpYhMwlOh628UGYosIpEvc+7sErINZYAKTxJvmfrBRwgI+Es9vXWYCsVkEVCXOfv8J
-        dBQHB6+ArcTDabUQ2+QlVm84wAxicwrYSSzb/BzsJAmB/2wSL6d/YoQocpFo27oH6jxhiVfH
-        t7BD2DISpyf3sEA0NDNKPDy3lh3C6WGUuNw0A6rbWuLOuV9sIJuZBTQl1u/Shwg7SqzrvMcK
-        EpYQ4JO48VYQJMwMZE7aNp0ZIswr0dEmBFGtJjHr+Dq4tQcvXGKGsD0klm3/AA2tiYwSR04v
-        ZprAKD8LYdkCRsZVjOKppcW56anFxnmp5XrFibnFpXnpesn5uZsYgenj9L/jX3cw7vuTdIhR
-        gINRiYeXIeB5nBBrYllxZe4hRgkOZiURXqezp+OEeFMSK6tSi/Lji0pzUosPMUpzsCiJ8xov
-        ehkrJJCeWJKanZpakFoEk2Xi4JRqYGT6qbX0zaUdTya+yo1/E2K56ON8xvUr9YQ2PSp4xxOd
-        aLF9z0rxb09e5a3d5f1yfeshN/a42afzmdjnr+lvmfZv8r/JvWu35ttF+b5UdJS4OuFf0JvK
-        Ul7OBwKLp2ieS8+POn/q/4Vpz1ie+L0x6Bcs1qg7I/tltV8i++esRtfjds39kodCrkxVYinO
-        SDTUYi4qTgQAZqCw9hsDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsVy+t/xe7pM9S/iDK4fZLHYOGM9q8W8z7IW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkleLIzCtJLcpLzFFi42LZduznOV2m+hdxBrN3WlhsnLGe1WLeZ1mL
+        8+c3sFtsenyN1eJz7xFGixnn9zFZvPn9gt1iYVMLu8XaI3fZHTg91sxbw+ixaVUnm8eda3vY
+        PDYvqffo27KK0ePzJrkAtigum5TUnMyy1CJ9uwSujFdHH7EWnGatOLt3MnsD4xeWLkZODgkB
+        E4m1/5aB2UICKxglOibadDFyAdlfGCXufrvNDuF8ZpS4P2sJM0zHnm1LoRLLGSXWfPvPDNdy
+        dd9bsCo2AUOJrrddbCC2iEC6xL2/S8A6mAUmMEm8ae5n7WLk4BAWCJCYe6AGpIZFQFVizbIW
+        sHpeAVuJY7v+s0Nsk5dYveEA2ExOATuJZZufM4HMkRBoZpc4unEmI0SRi8TTmXOZIGxhiVfH
+        t0A1y0icntzDAtXAKPHw3Fp2CKeHUeJy0wyobmuJO+d+sYFcxCygKbF+lz5E2FHi7dtuJpCw
+        hACfxI23giBhZiBz0rbpzBBhXomONiGIajWJWcfXwa09eOESNLQ8JGZc/MwKCaCJQCd8fcQ2
+        gVF+FsKyBYyMqxjFU0uLc9NTi43zUsv1ihNzi0vz0vWS83M3MQITyOl/x7/uYNz3J+kQowAH
+        oxIPL0PA8zgh1sSy4srcQ4wSHMxKIrxOZ0/HCfGmJFZWpRblxxeV5qQWH2KU5mBREuc1XvQy
+        VkggPbEkNTs1tSC1CCbLxMEp1cDYuFwpojD2gdyP3fkpvemnNW45KemL31j3b86SKVsyzK90
+        sm3glHpxosxUO156z36v06q9Rz9UTyj/u/GXvQij0d47586edyldki/WK3Myedet9Lk8seVd
+        Ag7vLv7o3lq3+qiY1VrHhu7p654eNbr8/nXvl1sTEs8ZipQ7L2L0MxLM4go9Ha+jxFKckWio
+        xVxUnAgAxvgoMhwDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrNLMWRmVeSWpSXmKPExsVy+t/xe7pM9S/iDJZMULXYOGM9q8W8z7IW
         589vYLfY9Pgaq8Xn3iOMFjPO72OyePP7BbvFwqYWdou1R+6yO3B6rJm3htFj06pONo871/aw
         eWxeUu/Rt2UVo8fnTXIBbFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2
-        NimpOZllqUX6dgl6GRue32QrWM9asf4VawPjDZYuRk4OCQETiRmfe9m7GLk4hASWMkqcebwF
-        KiEjcXJaAyuELSzx51oXG0TRJ0aJ9dvPgyXYBAwlut6CJDg5RAQyJRaeuwk2iVlgCpPEjnc7
-        wRLCAj4Sz29dZgKxWQRUJc5+/wm0gYODV8BW4uG0WogF8hKrNxxgBrE5Bewklm1+DlYuBFSy
-        7OxF5gmMfAsYGVYxiqSWFuem5xYb6RUn5haX5qXrJefnbmIEBvO2Yz+37GDsehd8iFGAg1GJ
-        hzci6HmcEGtiWXFl7iFGCQ5mJRFep7On44R4UxIrq1KL8uOLSnNSiw8xmgLdNJFZSjQ5Hxhp
-        eSXxhqaG5haWhubG5sZmFkrivB0CB2OEBNITS1KzU1MLUotg+pg4OKUaGAUMJRe6GcZEh9bl
-        Ha+5tnrCAps1Xl7772cvYN2ROMPS7WIYc7++1Hb92+ubFapTFPg6RWXVVTze7vn+bernBv+a
-        r2I7fvVc5158Ltz8zKEQVcP4u8zVypGHl/45fufH0//T52U0ce7r5Wxl9rUJTn9ZsfShQ5Sz
-        wII6MY5ophX3r0jzCdtOUmIpzkg01GIuKk4EABQx07p8AgAA
-X-CMS-MailID: 20200616081250eucas1p2de7110898dad050866d78cb5d5120422
+        NimpOZllqUX6dgl6Ga+OPmItOM1acXbvZPYGxi8sXYycHBICJhJ7ti1l72Lk4hASWMoosenk
+        dkaIhIzEyWkNrBC2sMSfa11sEEWfGCWOflwLlmATMJToeguS4OQQEciUWHjuJtgkZoEpTBI7
+        3u0ESwgL+Emc3TyRHcRmEVCVWLOsBSzOK2ArcWzXf3aIDfISqzccYAaxOQXsJJZtfs4EYgsB
+        1Sw7e5F5AiPfAkaGVYwiqaXFuem5xUZ6xYm5xaV56XrJ+bmbGIEBve3Yzy07GLveBR9iFOBg
+        VOLhjQh6HifEmlhWXJl7iFGCg1lJhNfp7Ok4Id6UxMqq1KL8+KLSnNTiQ4ymQEdNZJYSTc4H
+        RlteSbyhqaG5haWhubG5sZmFkjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGzPMiHCVJYq82
+        eG0TEbk96/Pe7yGnref2NJt8Vu/XPX0qMOnj3h8V7Wymt0QXHP8hVRDa94fvx4e7Ue/LZ3t8
+        ktMz9Cou2tRWWFPvE90y6aibVpP0w2NXz2+4uUB+rsO0OA45F5aLSmqWr9YpWpxYcHhNeF5v
+        4QZ7vqe3G3U33p+64s96zxfrlViKMxINtZiLihMBc07dp34CAAA=
+X-CMS-MailID: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200616081250eucas1p2de7110898dad050866d78cb5d5120422
+X-RootMTR: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20200616081250eucas1p2de7110898dad050866d78cb5d5120422
+X-CMS-RootMailID: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
 References: <20200616081230.31198-1-m.szyprowski@samsung.com>
-        <CGME20200616081250eucas1p2de7110898dad050866d78cb5d5120422@eucas1p2.samsung.com>
+        <CGME20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -104,21 +105,21 @@ Peach Pit/Pi Chromebooks.
 
 Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- arch/arm/configs/exynos_defconfig | 1 +
+ arch/arm/configs/multi_v7_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
-index 374fbff8eaa6..c928bc710c48 100644
---- a/arch/arm/configs/exynos_defconfig
-+++ b/arch/arm/configs/exynos_defconfig
-@@ -28,6 +28,7 @@ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=m
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_CPUFREQ_DT=y
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 95543914d3c7..6a922a8ef712 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -111,6 +111,7 @@ CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
+ CONFIG_QORIQ_CPUFREQ=y
  CONFIG_CPU_IDLE=y
+ CONFIG_ARM_CPUIDLE=y
 +CONFIG_ARM_BIG_LITTLE_CPUIDLE=y
+ CONFIG_ARM_ZYNQ_CPUIDLE=y
  CONFIG_ARM_EXYNOS_CPUIDLE=y
- CONFIG_VFP=y
- CONFIG_NEON=y
+ CONFIG_ARM_TEGRA_CPUIDLE=y
 -- 
 2.17.1
 
