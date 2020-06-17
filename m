@@ -2,100 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 805241FC853
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 10:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2211FC8D7
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 10:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbgFQIKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 04:10:35 -0400
-Received: from mail-eopbgr60054.outbound.protection.outlook.com ([40.107.6.54]:1795
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726573AbgFQIKe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 04:10:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CQqYiavcVihv22syNLTYUu7yUVo0ZldNq1yPvk/lo4Ry/kNI/R213EighC7c4CAvJQdasnaC2GaUWfKVIvTyoLQM1sqoneuRLjv4SwtMAMgMlHq/9vWC4RTkTuz8VpAL/QY1FXi7E4KMwbRKnIXqI6hwhXrboUDgdqbBNVWRBmpq4ZFFUZbk0H3rs/8OB4YrGappFMPOzIVmwWzyfQ0ORFN9uivpvrz0VxetNlon0Y1NqO9UYQCuaZUceuX+pFbRV2bZ7Uxt5MFLvy0Fc0dVtiBGwNOrjDScE9oV/ZgUGwnQhLMV6yck/iEzHExDwsmh/W3u19ZrEwGLpUntiP42yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AN7uTV5DN6GfOP0/OfubOL/m3XHomGUATyz+N/JEVXU=;
- b=PZB3YNJ+F08A9gw1tQXggTNI2ct2Qk0ObK1XL15sjFRixzW5Q0DKLV6GEro8KD2F2/BkBVLDGjyhZmFoYZ1+HCzBJvk1Gn9bLvLWc19JVy4twlIJX7+GpHBbqX0Q24pgzakhR//aQX5ZQXuLUP9UgjHBawcdQB9TlN2EY1y1Q672FU4QAKGeqggp474ftasDYDaT35YvDIXYvJLOoJoN5SRdNtcyeGTjEC3U4zzSJVg8Y3bkrFDYFWe+u0E2XWuClAjtsJqv3r+ira1cs1XgCNMLPkiCED/YGbyvcL9Tq1inmQFx7M68iWG0MqHgh3bdtSYD+2RbJg7VBym02PM6dQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AN7uTV5DN6GfOP0/OfubOL/m3XHomGUATyz+N/JEVXU=;
- b=Gu4OIJv4QUBTBo0BuKmGyhZ9KBEVBxU8RRuiifWbKaKQ+eUqxknFzIKTA1qnbB0NwJBPEmQcIKTUKH1NuEGPFGD3G2oavNjZ563MhW/NvCXScxMuMrZ4xPkffC4VDA/tmQ+F9GfU3g6ke2LFiZcuu0a5H0hjKzmANcYwGAhhfYo=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR04MB6662.eurprd04.prod.outlook.com (2603:10a6:20b:ff::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.21; Wed, 17 Jun
- 2020 08:10:31 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::3c6c:a0e9:9a4e:c51d%7]) with mapi id 15.20.3088.028; Wed, 17 Jun 2020
- 08:10:31 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Anson Huang <anson.huang@nxp.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
+        id S1726355AbgFQIfl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 04:35:41 -0400
+Received: from esa2.hc3370-68.iphmx.com ([216.71.145.153]:38612 "EHLO
+        esa2.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725967AbgFQIfl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 04:35:41 -0400
+Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: KfZvMvC1oYnZ7gi+KDWOviH4clxbHShSY7Yli+xfkrqN6LkJMaGowI1WLqHxqcACgMUrxfkUAD
+ Ay5pg5WGOeqKL0CCypgK4qhxMgOHjyTIf64e1aNhYRAm71VGxZrK78hisJYBoO7fnRxdMgfY7b
+ vDubhXWnqwLSYTQ7ryxlfakGFVKT1POd8dRmcMBv35hFYrPvNJEhPlc4qaSrLIUxHxgq6p86dI
+ Fvz6UQo69l4R4knwvEj6X3MlFh19OkyWqWkPIwHX3MDCwr+2pRlebLitMY4MMI8I/Szkk6yaRS
+ 9UE=
+X-SBRS: 2.7
+X-MesageID: 20261029
+X-Ironport-Server: esa2.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.73,522,1583211600"; 
+   d="scan'208";a="20261029"
+Date:   Wed, 17 Jun 2020 10:35:28 +0200
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH] thermal: imx8mm: Support module autoloading
-Thread-Topic: [PATCH] thermal: imx8mm: Support module autoloading
-Thread-Index: AQHWRH0soZuetWFEX0qtKLrE8EkPzajcdHIg
-Date:   Wed, 17 Jun 2020 08:10:31 +0000
-Message-ID: <AM6PR04MB4966A52D3920CE31669B266E809A0@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <1592380074-19222-1-git-send-email-Anson.Huang@nxp.com>
-In-Reply-To: <1592380074-19222-1-git-send-email-Anson.Huang@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: nxp.com; dkim=none (message not signed)
- header.d=none;nxp.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: a6fe631d-034b-401e-48a4-08d81295e779
-x-ms-traffictypediagnostic: AM6PR04MB6662:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR04MB6662F5489204673749A6AFC1809A0@AM6PR04MB6662.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:361;
-x-forefront-prvs: 04371797A5
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BnZqSZkOP7vATLMhPhRVApHJsfvGTQ1o0jO2o2RTyUAveqXIEDU1z/+68Zmle6Se8ZuxEQCkM+4l9AhW7y0FjeKSywjb4n+BxxraOC6AHg8prYaDETPb+d4iKomAeMQV7aMLCr17dpEkBeqRTcMUppUEuJHC0BRKVrz90E/29GE8xy3LwFqsck+GEfSwt4BUF8zZ7kgIOoAsXK4BNcM/f8sJPNLdYXM+6k57ySDY9mkbHvW0fJoIbkVWqzZtcEcfsvjs0JzVplSDO3/LMam5HoLgI0nPuowz/KeoGEcD29ejys3k+1pB0v2/Qv0/qI6ZTr0lGePeCCHC4HYyNnhk/rhvdQXNfKCN9b712Sh0C51dJQEmv4kO4T+4xiBcLSiAqO+mngE9SPZk1qKZY4C4Zw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(346002)(39860400002)(136003)(366004)(396003)(376002)(2906002)(478600001)(71200400001)(9686003)(55016002)(110136005)(8676002)(7696005)(6506007)(8936002)(26005)(316002)(186003)(4326008)(44832011)(33656002)(66556008)(64756008)(86362001)(66476007)(66446008)(66946007)(76116006)(7416002)(5660300002)(52536014)(558084003)(32563001)(921003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: ciYk7ntEc6c0JrrnJVwOKKhvSwfzNvjzc+X7RRE150kp7qh9EWTUR9OEssPF+SlDK065PtbTF8F8hJjlYtUmWeJRoqePauzMks5PHDkwA3E+ouOZYawHialOaW1MEL8kJXt2yrcZ+KRCSe35c0+UzRZZLKLxUHHn88k/7C4T7hokTaXX9xCDoYsP1q1orQpYiqr5hkp2Oi6aNHUvtAN/Q5OiqigXa09zR51+3T7S82x2INYKGVbeO7O4aLoXe7xIfmz43p/prnGxDgyXLOgWyq8APP8dSk9HBS1x1l0to/bDhow4gJ/4UWtenQv4l7ckg73QKRFemsOkCpvhPpQDqvCTiZz6s8x0v+CyduukMGtSxjEVvGguI2jXCj7pNWHYRYlLs3aboDlXGt720gNlvyG3VjMnIIwqqFdsFD8KdOgMGFH84ynF+wLp/1J5FwqDct88I2XMoYGAWrSONfJdrvPiVCR7o75lQ+DtAUJRH2zomZG8DQhWPm4YQ8hB4WtV
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
+ hibernation]
+Message-ID: <20200617083528.GW735@Air-de-Roger>
+References: <7FD7505E-79AA-43F6-8D5F-7A2567F333AB@amazon.com>
+ <20200604070548.GH1195@Air-de-Roger>
+ <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6fe631d-034b-401e-48a4-08d81295e779
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2020 08:10:31.4218
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h4+Es8LEyZRoiVMtlny7d5MVLZF1b1pnF0hf3JIcS/V7Biw1tsIyny8UBRW1t2jQh9IAkOHF/C3hvAWykFho7w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB6662
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBBbnNvbiBIdWFuZyA8QW5zb24uSHVhbmdAbnhwLmNvbT4NCj4gU2VudDogV2VkbmVz
-ZGF5LCBKdW5lIDE3LCAyMDIwIDM6NDggUE0NCj4gDQo+IEFkZCBhIG1pc3NpbmcgTU9EVUxFX0RF
-VklDRV9UQUJMRSBlbnRyeSB0byBzdXBwb3J0IG1vZHVsZSBhdXRvbG9hZGluZy4NCj4gDQo+IFNp
-Z25lZC1vZmYtYnk6IEFuc29uIEh1YW5nIDxBbnNvbi5IdWFuZ0BueHAuY29tPg0KDQpSZXZpZXdl
-ZC1ieTogRG9uZyBBaXNoZW5nIDxhaXNoZW5nLmRvbmdAbnhwLmNvbT4NCg0KUmVnYXJkcw0KQWlz
-aGVuZw0K
+On Tue, Jun 16, 2020 at 09:49:25PM +0000, Anchal Agarwal wrote:
+> On Thu, Jun 04, 2020 at 09:05:48AM +0200, Roger Pau Monné wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > On Wed, Jun 03, 2020 at 11:33:52PM +0000, Agarwal, Anchal wrote:
+> > >  CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > >     > +             xenbus_dev_error(dev, err, "Freezing timed out;"
+> > >     > +                              "the device may become inconsistent state");
+> > >
+> > >     Leaving the device in this state is quite bad, as it's in a closed
+> > >     state and with the queues frozen. You should make an attempt to
+> > >     restore things to a working state.
+> > >
+> > > You mean if backend closed after timeout? Is there a way to know that? I understand it's not good to
+> > > leave it in this state however, I am still trying to find if there is a good way to know if backend is still connected after timeout.
+> > > Hence the message " the device may become inconsistent state".  I didn't see a timeout not even once on my end so that's why
+> > > I may be looking for an alternate perspective here. may be need to thaw everything back intentionally is one thing I could think of.
+> > 
+> > You can manually force this state, and then check that it will behave
+> > correctly. I would expect that on a failure to disconnect from the
+> > backend you should switch the frontend to the 'Init' state in order to
+> > try to reconnect to the backend when possible.
+> > 
+> From what I understand forcing manually is, failing the freeze without
+> disconnect and try to revive the connection by unfreezing the
+> queues->reconnecting to backend [which never got diconnected]. May be even
+> tearing down things manually because I am not sure what state will frontend
+> see if backend fails to to disconnect at any point in time. I assumed connected.
+> Then again if its "CONNECTED" I may not need to tear down everything and start
+> from Initialising state because that may not work.
+> 
+> So I am not so sure about backend's state so much, lets say if  xen_blkif_disconnect fail,
+> I don't see it getting handled in the backend then what will be backend's state?
+> Will it still switch xenbus state to 'Closed'? If not what will frontend see, 
+> if it tries to read backend's state through xenbus_read_driver_state ?
+> 
+> So the flow be like:
+> Front end marks XenbusStateClosing
+> Backend marks its state as XenbusStateClosing
+>     Frontend marks XenbusStateClosed
+>     Backend disconnects calls xen_blkif_disconnect
+>        Backend fails to disconnect, the above function returns EBUSY
+>        What will be state of backend here?
+
+Backend should stay in state 'Closing' then, until it can finish
+tearing down.
+
+>        Frontend did not tear down the rings if backend does not switches the
+>        state to 'Closed' in case of failure.
+> 
+> If backend stays in CONNECTED state, then even if we mark it Initialised in frontend, backend
+
+Backend will stay in state 'Closing' I think.
+
+> won't be calling connect(). {From reading code in frontend_changed}
+> IMU, Initialising will fail since backend dev->state != XenbusStateClosed plus
+> we did not tear down anything so calling talk_to_blkback may not be needed
+> 
+> Does that sound correct?
+
+I think switching to the initial state in order to try to attempt a
+reconnection would be our best bet here.
+
+Thanks, Roger.
