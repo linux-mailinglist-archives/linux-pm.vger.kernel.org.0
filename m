@@ -2,78 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D17A1FCAC0
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 12:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062C11FCB05
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 12:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbgFQKXq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 06:23:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43286 "EHLO mail.kernel.org"
+        id S1725901AbgFQKks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 06:40:48 -0400
+Received: from foss.arm.com ([217.140.110.172]:55276 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725964AbgFQKXP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 06:23:15 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.126])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C418214D8;
-        Wed, 17 Jun 2020 10:23:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592389394;
-        bh=q4XtEUaNAPjAlHRDzfBXndousVziD4EzqeUrETXxBjM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0MCVuvHI4/1WTFEjLx/PerIQCGJWPkXUx8NmAPAuT+j6OWVH2KxRnjyvdt2jK8+s0
-         7ayqOmzHDqBByicUIi1G7WN6rwNZdX4ChqzQOGRlVZ9muaJ7ewvrGl8DKhbpe34EPM
-         MzliQlc5UYP6C7dFO4dXAxjMjubYHD0FWHaRvuYg=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Laurentiu Palcu <laurentiu.palcu@intel.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: power: supply: bq25890: Document required interrupt
-Date:   Wed, 17 Jun 2020 12:23:05 +0200
-Message-Id: <20200617102305.14241-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200617102305.14241-1-krzk@kernel.org>
-References: <20200617102305.14241-1-krzk@kernel.org>
+        id S1725860AbgFQKkr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jun 2020 06:40:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EC958C0A;
+        Wed, 17 Jun 2020 03:40:46 -0700 (PDT)
+Received: from [10.37.12.67] (unknown [10.37.12.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9D923F71F;
+        Wed, 17 Jun 2020 03:40:44 -0700 (PDT)
+Subject: Re: [PATCH 0/4] Restore big.LITTLE cpuidle driver for Exynos
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Anand Moon <linux.amoon@gmail.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+References: <CGME20200616081248eucas1p168faa343ce333a28c8fd3cf9a6a58b3c@eucas1p1.samsung.com>
+ <20200616081230.31198-1-m.szyprowski@samsung.com>
+ <CANAwSgStsYP5fBB7z7-Reo2BP4ZQPT6RN4s8QdLGVGhKCDA_Ng@mail.gmail.com>
+ <3e6b5dbb-a8a2-e3db-d740-53e13676455c@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6b2ac503-62e1-35a6-6dc7-232597367396@arm.com>
+Date:   Wed, 17 Jun 2020 11:40:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <3e6b5dbb-a8a2-e3db-d740-53e13676455c@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver requires interrupts (fails probe if it is not provided) so
-document this requirement in bindings.
 
-Fixes: 4aeae9cb0dad ("power_supply: Add support for TI BQ25890 charger chip")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- Documentation/devicetree/bindings/power/supply/bq25890.txt | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.txt b/Documentation/devicetree/bindings/power/supply/bq25890.txt
-index 51ecc756521f..3b4c69a7fa70 100644
---- a/Documentation/devicetree/bindings/power/supply/bq25890.txt
-+++ b/Documentation/devicetree/bindings/power/supply/bq25890.txt
-@@ -10,6 +10,7 @@ Required properties:
-     * "ti,bq25895"
-     * "ti,bq25896"
- - reg: integer, i2c address of the device.
-+- interrupts: interrupt line;
- - ti,battery-regulation-voltage: integer, maximum charging voltage (in uV);
- - ti,charge-current: integer, maximum charging current (in uA);
- - ti,termination-current: integer, charge will be terminated when current in
-@@ -39,6 +40,9 @@ bq25890 {
- 	compatible = "ti,bq25890";
- 	reg = <0x6a>;
- 
-+	interrupt-parent = <&gpio1>;
-+	interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
-+
- 	ti,battery-regulation-voltage = <4200000>;
- 	ti,charge-current = <1000000>;
- 	ti,termination-current = <50000>;
--- 
-2.17.1
+On 6/17/20 10:48 AM, Marek Szyprowski wrote:
+> Hi Anand,
+> 
+> On 16.06.2020 22:58, Anand Moon wrote:
+>> On Tue, 16 Jun 2020 at 13:44, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>>> The ARM big.LITTLE cpuidle driver has been enabled and tested on Samsung
+>>> Exynos 5420/5800 based Peach Pit/Pi Chromebooks and in fact it worked
+>>> only on those boards.
+>>>
+>>> However, support for it was broken by the commit 833b5794e330 ("ARM:
+>>> EXYNOS: reset Little cores when cpu is up") and then never enabled in the
+>>> exynos_defconfig. This patchset provides the needed fix to the common
+>>> code and restores support for it. Thanks to Lukasz Luba who motivated me
+>>> to take a look into this issue.
+>>>
+>> Thanks for this updates.
+>>
+>> But I feel some DTS changes are missing for example
+>> d2e5c871ed8a drivers: cpuidle: initialize big.LITTLE driver through DT
+> 
+> This is not strictly needed. The bl-cpuidle matches also to the A7/A15
+> CPU product ids and it is properly instantiated on the Peach Pit/Pi
+> Chromebooks. Those CPU DT properties were added as a future-proof
+> generic solution. I won't hurt to add them though.
 
+> 
+>> But I feel that this feature is not working as desired since
+>> still some missing code changes for cluster idle states are missing.
+>> like clock  PWR_CTR and PWR_CTRL2.
+> 
+> I cannot judge now. All I can test now is a that the boards enters those
+> idle states and system works stable. I cannot measure power consumption,
+> because currently I have only remote access to the boards.
+
+I agree with Marek. This can be done incrementally. The series fixes the
+code path which was working. After the investigation with a power
+meter, a proper set of new patches might come if needed.
+
+As a hint to measure this power consumption difference, because it
+might be tricky, I would suggest to heat up the SoC. The main
+difference between wfi and deeper idle which cut the power
+to some components (like caches) should be seen at higher voltage
+OPP and higher temperature. It's due to the fact that static power
+(leakage) is related to Vdd and temperature -
+higher voltage -> higher leakage
+higher temp -> higher leakage
+This difference (idle state 0 vs 1) should be amplified in the
+above scenario and easier to measure.
+
+I am going to review this series after finishing hotplug tests.
+
+Regards,
+Lukasz
