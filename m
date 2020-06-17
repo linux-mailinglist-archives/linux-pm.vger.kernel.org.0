@@ -2,126 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E76331FD210
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 18:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AF91FD278
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 18:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgFQQ1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 12:27:04 -0400
-Received: from foss.arm.com ([217.140.110.172]:60326 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727102AbgFQQ1D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 12:27:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69C2A1045;
-        Wed, 17 Jun 2020 09:27:02 -0700 (PDT)
-Received: from [10.37.12.67] (unknown [10.37.12.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BF103F71F;
-        Wed, 17 Jun 2020 09:27:00 -0700 (PDT)
-Subject: Re: [PATCH 1/4] ARM: exynos: Apply little core workaround only under
- secure firmware
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20200616081230.31198-1-m.szyprowski@samsung.com>
- <CGME20200616081249eucas1p151a8892ca0abfa3108955e1fc5054fc3@eucas1p1.samsung.com>
- <20200616081230.31198-2-m.szyprowski@samsung.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <1f59ab26-94e8-6ee8-48f9-568cf1a0edfa@arm.com>
-Date:   Wed, 17 Jun 2020 17:26:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726329AbgFQQnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 12:43:45 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:22079 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726597AbgFQQnm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 12:43:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592412221; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=D4RdphQ0R1rE6zlNQnweaxq4dFFlOZRlQvz+hdcu5Dk=;
+ b=CzCRphblvUwNw0Ss3mv81b4RuxkTHj9ldHOXBZqZYAEmdmr1zF3q2LpIi8g/gbXCrprGW8pU
+ vGFLp9JSZ36oekWR5S4d5WQwdt+6LbdeuXfuF8U1YDL4c7upDs4E2TglvaTjdSF3MjtktW8m
+ A2uleMvlPSIQcTxSqBIQc0na/Xc=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n12.prod.us-east-1.postgun.com with SMTP id
+ 5eea482abfb34e631c49cc0b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 17 Jun 2020 16:43:22
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B7188C433A0; Wed, 17 Jun 2020 16:43:21 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 11054C433CA;
+        Wed, 17 Jun 2020 16:43:21 +0000 (UTC)
 MIME-Version: 1.0
-In-Reply-To: <20200616081230.31198-2-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
+Date:   Wed, 17 Jun 2020 22:13:21 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
+        bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH v6 4/5] cpufreq: qcom: Update the bandwidth levels on
+ frequency change
+In-Reply-To: <20200616221157.GA4525@google.com>
+References: <20200605213332.609-1-sibis@codeaurora.org>
+ <20200605213332.609-5-sibis@codeaurora.org>
+ <20200615172553.GU4525@google.com>
+ <e21f85d64d72ec637c10dae93e8323bb@codeaurora.org>
+ <20200616221157.GA4525@google.com>
+Message-ID: <8a6ea89f41a3341e9d00ed9aa66355d6@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Marek,
-
-I've give it a try with hotplug torture tests and has only one a minor
-comment.
-
-On 6/16/20 9:12 AM, Marek Szyprowski wrote:
-> The additional soft-reset call during little core power up was needed
-> to properly boot all cores on the Exynos5422-based boards with secure
-> firmware (like Odroid XU3/XU4 family). This however broke big.LITTLE
-> CPUidle driver, which worked only on boards without secure firmware
-> (like Peach-Pit/Pi Chromebooks).
+On 2020-06-17 03:41, Matthias Kaehlcke wrote:
+> Hi Sibi,
 > 
-> Apply the workaround only when board is running under secure firmware.
+> after doing the review I noticed that Viresh replied on the cover 
+> letter
+> that he picked the series up for v5.9, so I'm not sure if it makes 
+> sense
+> to send a v7.
 > 
-> Fixes: 833b 5794 e330 ("ARM: EXYNOS: reset Little cores when cpu is up")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   arch/arm/mach-exynos/mcpm-exynos.c | 10 +++++++---
->   1 file changed, 7 insertions(+), 3 deletions(-)
+> On Wed, Jun 17, 2020 at 02:35:00AM +0530, Sibi Sankar wrote:
 > 
-> diff --git a/arch/arm/mach-exynos/mcpm-exynos.c b/arch/arm/mach-exynos/mcpm-exynos.c
-> index 9a681b421ae1..cd861c57d5ad 100644
-> --- a/arch/arm/mach-exynos/mcpm-exynos.c
-> +++ b/arch/arm/mach-exynos/mcpm-exynos.c
-> @@ -26,6 +26,7 @@
->   #define EXYNOS5420_USE_L2_COMMON_UP_STATE	BIT(30)
->   
->   static void __iomem *ns_sram_base_addr __ro_after_init;
-> +static bool secure_firmware __ro_after_init;
->   
->   /*
->    * The common v7_exit_coherency_flush API could not be used because of the
-> @@ -58,15 +59,16 @@ static void __iomem *ns_sram_base_addr __ro_after_init;
->   static int exynos_cpu_powerup(unsigned int cpu, unsigned int cluster)
->   {
->   	unsigned int cpunr = cpu + (cluster * EXYNOS5420_CPUS_PER_CLUSTER);
-> +	bool state;
->   
->   	pr_debug("%s: cpu %u cluster %u\n", __func__, cpu, cluster);
->   	if (cpu >= EXYNOS5420_CPUS_PER_CLUSTER ||
->   		cluster >= EXYNOS5420_NR_CLUSTERS)
->   		return -EINVAL;
->   
-> -	if (!exynos_cpu_power_state(cpunr)) {
-> -		exynos_cpu_power_up(cpunr);
-> -
-> +	state = exynos_cpu_power_state(cpunr);
-> +	exynos_cpu_power_up(cpunr);
-
-I can see that you have moved this call up, probably to avoid more
-'if-else' stuff. I just wanted to notify you that this function
-'exynos_cpu_powerup' is called twice when cpu is going up:
-1. by the already running cpu i.e. CPU0 and the 'state' is 0 for i.e.
-CPU2
-2. by the newly starting cpu i.e. CPU2 by running
-'secondary_start_kernel' and the state is 3.
-
-In this scenario the 'exynos_cpu_power_up' will be called twice.
-I have checked in hotplug that this is not causing any issues, but
-thought maybe it's worth share it with you. Maybe you can double check
-in TRM that this is not causing anything.
-
-> +	if (!state && secure_firmware) {
->   		/*
->   		 * This assumes the cluster number of the big cores(Cortex A15)
->   		 * is 0 and the Little cores(Cortex A7) is 1.
-> @@ -258,6 +260,8 @@ static int __init exynos_mcpm_init(void)
->   		return -ENOMEM;
->   	}
->   
-> +	secure_firmware = exynos_secure_firmware_available();
-> +
->   	/*
->   	 * To increase the stability of KFC reset we need to program
->   	 * the PMU SPARE3 register
+>> > > @@ -112,7 +178,7 @@ static int qcom_cpufreq_hw_read_lut(struct
+>> > > device *cpu_dev,
+>> > >
+>> > >  		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
+>> > >  			table[i].frequency = freq;
+>> > > -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
+>> > > +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
+>> >
+>> > This is the cross-validation mentioned above, right? Shouldn't it
+>> > include
+>> > a check of the return value?
+>> 
+>> Yes, this is the cross-validation step,
+>> we adjust the voltage if opp-tables are
+>> present/added successfully and enable
+>> them, else we would just do a add opp.
+>> We don't want to exit early on a single
+>> opp failure. We will error out a bit
+>> later if the opp-count ends up to be
+>> zero.
 > 
+> At least an error/warning message would seem convenient when 
+> adjusting/adding
+> an OPP fails, otherwise you would only notice by looking at the sysfs
+> attributes (if you'd even spot a single/few OPPs to be missing).
 
-Other than that, the patch set looks good to me.
+I did consider the case where adjust
+voltage fails and we do report the
+freq for which it fails for as well.
+If adding a OPP fails we will still
+it being listed in the sysfs cpufreq
+scaling_available_frequencies since
+it lists the freq_table in khz there
+instead.
 
-Regards,
-Lukasz
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
