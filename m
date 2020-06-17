@@ -2,121 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A1F1FC5B9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 07:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D976E1FC6DD
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 09:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726782AbgFQFjk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 01:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbgFQFjk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 01:39:40 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9854C061573
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 22:39:39 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id v6so358143uam.10
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jun 2020 22:39:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v9qIRx2tmhQ3c3ThbA5nkdagn3KrF5Ngnlh6eWWB5sQ=;
-        b=tV5VmVtHEExLDAgnm3QHdrBX6Z+X2xewEeIPR6nHkE1YvO2YLuZj5m7aMMzZc0N5qn
-         b+bHb3H1Pc+gT0kD2XioSKa20MP/FHGwtV/+Ku/ZtIp1b1oux3Iapejc2V8uF24wb84E
-         iGb7tbt9DpISBvbBvsKSNtrp9WUTQMdXNgm5SX6l5DWFH999VJdCu1JcxskvBo+k2OZQ
-         /Oz077l3N08uClrw1bPyI3kIatKaQbccwkvGEVq1gF7KwfD3tn5OMSSBypaFjkdpH7m4
-         0SVo1rcoH6DlH7ilS9OSS3zJzdheVKSrfuPcWqR5TLKQeSrLrMatTJo4OiBQ9ZDSl+L5
-         e/zg==
+        id S1726341AbgFQHMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 03:12:20 -0400
+Received: from mail-ej1-f65.google.com ([209.85.218.65]:34229 "EHLO
+        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbgFQHMT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 03:12:19 -0400
+Received: by mail-ej1-f65.google.com with SMTP id l27so1176601ejc.1;
+        Wed, 17 Jun 2020 00:12:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v9qIRx2tmhQ3c3ThbA5nkdagn3KrF5Ngnlh6eWWB5sQ=;
-        b=NnNrJBEaKiyCKzNYRy5R0MUx3C9e4lk1S7Vt1zNyqY/laX4HFUfA0vvqRLu2d0Tw+H
-         bXgbChPfaquX9h8oCdgiuxqB+797GS+A+HzVsD1ZjssjXgOyLEKx/Ga1Kq21W4H0IdjX
-         mmmD8Q9fk6s99qDuLbwKh8JpclvUj1vd3HZtlyD6/WOts4QYa9TOgwwMmvp78STnEy8t
-         wgaSsKgU50TcmN73SAZ8B5KU6mH4JPRfGrmCrwNXD6TiQ97SU7U6AiMMATFe5Vmbh6qC
-         ARdF4lrGOrMBEh1B8m2x0SRp6iKRMcgRxGuIUgLPWy58rTCugkB7n8Ym80Y4M1+diZjQ
-         /oDA==
-X-Gm-Message-State: AOAM531ppzOH8OI3Z/nJB6IlBKNdxrfTZvYeiCtLhVorDCqH/fA5nlFR
-        RbihuOZ9KadN/suy9f+g4N82fdVW8UJVT5qE1S29dw==
-X-Google-Smtp-Source: ABdhPJz89Ef33YgEHunwRCxdjaFBZmv3URUcXF7ranAVS8kN/9HInOJDHD51KTNr0Mh1t1tL3cEoGx09WYVLD327dfg=
-X-Received: by 2002:ab0:1eca:: with SMTP id p10mr4534103uak.94.1592372379134;
- Tue, 16 Jun 2020 22:39:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200608091739.2368-1-narmstrong@baylibre.com> <20200608091739.2368-6-narmstrong@baylibre.com>
-In-Reply-To: <20200608091739.2368-6-narmstrong@baylibre.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Wed, 17 Jun 2020 11:09:28 +0530
-Message-ID: <CAHLCerP+jEhZJs7yPmwPEm15FnrShJjNzOJ2UNcXVP5-WFbwVg@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] arm64: dts: meson-khadas-vim3: add Khadas MCU nodes
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E5EcWVbc+7tsS+GAmjqiwsU8zuC9ZQ4KDsXaJSfWulo=;
+        b=hpp62K4a8CwZm2UreL6e+o7U64jJN0cGZO64x4/KaxFcj3JVTRwtGgvvphlWOGIwmB
+         mKDjFk36BUKL84X0A9sBPYLln2swyjTrxBpOKfntaidgraTsEqWSInVYjR+f229KLn86
+         JQgPgDrHQKjlcGt4G5FRUs/LnXp6LNLqNd3mRfMJQtEv721UDpyA2floMIWMSRRU63gC
+         qmC2URd5guep9hGNbmRJS4tl3WdSME9dwc9fVWomUGjNxDBIdLQAdimTtHyDG+qL4Z/x
+         N3yZtL4KoRdctI+kyJccwtPMuNdYqp+mPDxIX3roHMzcx6zoabwiEq+N3FeX8asH5wbJ
+         BPbw==
+X-Gm-Message-State: AOAM532QhxsCV6VV0nmw55nyn7fUqk+2MaOyho+lUa6ubnTkcAd2T2f0
+        jAq+dwgSw/eEUQy0iHHJ2nc=
+X-Google-Smtp-Source: ABdhPJzxXEZ/32Vk1uutSgWgDm/2Kml+FRFv6q/oUOzaHXvM3d9a7wcEm5DrSyb0iZ8v3ZPtZ+pKKg==
+X-Received: by 2002:a17:906:2581:: with SMTP id m1mr6681797ejb.89.1592377934427;
+        Wed, 17 Jun 2020 00:12:14 -0700 (PDT)
+Received: from localhost (ip-37-188-158-19.eurotel.cz. [37.188.158.19])
+        by smtp.gmail.com with ESMTPSA id g22sm12516138ejo.1.2020.06.17.00.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jun 2020 00:12:13 -0700 (PDT)
+Date:   Wed, 17 Jun 2020 09:12:12 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     dsterba@suse.cz, Joe Perches <joe@perches.com>,
+        Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
         linux-amlogic@lists.infradead.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
+Message-ID: <20200617071212.GJ9499@dhcp22.suse.cz>
+References: <20200616015718.7812-1-longman@redhat.com>
+ <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+ <20200616230130.GJ27795@twin.jikos.cz>
+ <20200617003711.GD8681@bombadil.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200617003711.GD8681@bombadil.infradead.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 8, 2020 at 2:47 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
->
-> Add the Khadas MCU node with active FAN thermal nodes for all the
-> Khadas VIM3 variants.
->
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+On Tue 16-06-20 17:37:11, Matthew Wilcox wrote:
+> On Wed, Jun 17, 2020 at 01:01:30AM +0200, David Sterba wrote:
+> > On Tue, Jun 16, 2020 at 11:53:50AM -0700, Joe Perches wrote:
+> > > On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+> > > >  v4:
+> > > >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+> > > >     so that it can be backported to stable.
+> > > >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+> > > >     now as there can be a bit more discussion on what is best. It will be
+> > > >     introduced as a separate patch later on after this one is merged.
+> > > 
+> > > To this larger audience and last week without reply:
+> > > https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+> > > 
+> > > Are there _any_ fastpath uses of kfree or vfree?
+> > 
+> > I'd consider kfree performance critical for cases where it is called
+> > under locks. If possible the kfree is moved outside of the critical
+> > section, but we have rbtrees or lists that get deleted under locks and
+> > restructuring the code to do eg. splice and free it outside of the lock
+> > is not always possible.
+> 
+> Not just performance critical, but correctness critical.  Since kvfree()
+> may allocate from the vmalloc allocator, I really think that kvfree()
+> should assert that it's !in_atomic().  Otherwise we can get into trouble
+> if we end up calling vfree() and have to take the mutex.
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+FWIW __vfree already checks for atomic context and put the work into a
+deferred context. So this should be safe. It should be used as a last
+resort, though.
 
-
-> ---
->  .../boot/dts/amlogic/meson-khadas-vim3.dtsi   | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-> index 094ecf2222bb..3325e54ea690 100644
-> --- a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-> +++ b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
-> @@ -183,6 +183,23 @@
->         hdmi-phandle = <&hdmi_tx>;
->  };
->
-> +&cpu_thermal {
-> +       trips {
-> +               cpu_active: cpu-active {
-> +                       temperature = <80000>; /* millicelsius */
-> +                       hysteresis = <2000>; /* millicelsius */
-> +                       type = "active";
-> +               };
-> +       };
-> +
-> +       cooling-maps {
-> +               map {
-> +                       trip = <&cpu_active>;
-> +                       cooling-device = <&khadas_mcu THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> +               };
-> +       };
-> +};
-> +
->  &ext_mdio {
->         external_phy: ethernet-phy@0 {
->                 /* Realtek RTL8211F (0x001cc916) */
-> @@ -222,6 +239,12 @@
->         pinctrl-0 = <&i2c_ao_sck_pins>, <&i2c_ao_sda_pins>;
->         pinctrl-names = "default";
->
-> +       khadas_mcu: system-controller@18 {
-> +               compatible = "khadas,mcu";
-> +               reg = <0x18>;
-> +               #cooling-cells = <2>;
-> +       };
-> +
->         gpio_expander: gpio-controller@20 {
->                 compatible = "ti,tca6408";
->                 reg = <0x20>;
-> --
-> 2.22.0
->
+-- 
+Michal Hocko
+SUSE Labs
