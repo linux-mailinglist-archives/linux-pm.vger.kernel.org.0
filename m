@@ -2,120 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AF91FD278
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 18:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAA61FD2DD
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 18:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726329AbgFQQnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 12:43:45 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:22079 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726597AbgFQQnm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 12:43:42 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592412221; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=D4RdphQ0R1rE6zlNQnweaxq4dFFlOZRlQvz+hdcu5Dk=;
- b=CzCRphblvUwNw0Ss3mv81b4RuxkTHj9ldHOXBZqZYAEmdmr1zF3q2LpIi8g/gbXCrprGW8pU
- vGFLp9JSZ36oekWR5S4d5WQwdt+6LbdeuXfuF8U1YDL4c7upDs4E2TglvaTjdSF3MjtktW8m
- A2uleMvlPSIQcTxSqBIQc0na/Xc=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-east-1.postgun.com with SMTP id
- 5eea482abfb34e631c49cc0b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 17 Jun 2020 16:43:22
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B7188C433A0; Wed, 17 Jun 2020 16:43:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 11054C433CA;
-        Wed, 17 Jun 2020 16:43:21 +0000 (UTC)
+        id S1726848AbgFQQxF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 12:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726329AbgFQQxF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 12:53:05 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49DDC06174E;
+        Wed, 17 Jun 2020 09:53:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=3aHDULVOAZalwQVfI9n5bUMyn1CLTGa3J/NFAT87OxI=; b=EjXQIdObgegi5j91EFEDjl6J4B
+        4PFr18Fmi9N2VNb1fcBGNkiLBXvVZ1htcGrseMu9kTS9bo9T44MNOJqZ007Xrbp4NGvwIhogVMROC
+        4xtL4tRjznzBTriAV5EjM3uTlwrvgQlihLewoVQE8JFYD41d85i4wnyyAiSwg0Ckhm1pLMAj99YQD
+        QdSXFKeUT+35nzi0FYZdeC1mkdJzl2xxgC10iJIbNe3MwEtwTXMWmltCGmq0CuBk8ERWPzwHQblLB
+        iJ6ysmGyfsUwrKbj3L5z7An9AM1KW4q34m1/jm2fcnd3SznIGzuPTxs7Gb+F0uIni5G6Tk/eu9I/E
+        MpsG7yaQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jlbIe-0002Zw-LA; Wed, 17 Jun 2020 16:52:32 +0000
+Subject: Re: [PATCH v2] Input: document inhibiting
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        kernel@collabora.com
+References: <f9007f37-c526-5fa4-3188-a554d2434177@redhat.com>
+ <20200617101822.8558-1-andrzej.p@collabora.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <8ebf502e-855d-6a6b-9c7b-d96d5e519d82@infradead.org>
+Date:   Wed, 17 Jun 2020 09:52:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+In-Reply-To: <20200617101822.8558-1-andrzej.p@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Wed, 17 Jun 2020 22:13:21 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org,
-        linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH v6 4/5] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-In-Reply-To: <20200616221157.GA4525@google.com>
-References: <20200605213332.609-1-sibis@codeaurora.org>
- <20200605213332.609-5-sibis@codeaurora.org>
- <20200615172553.GU4525@google.com>
- <e21f85d64d72ec637c10dae93e8323bb@codeaurora.org>
- <20200616221157.GA4525@google.com>
-Message-ID: <8a6ea89f41a3341e9d00ed9aa66355d6@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-06-17 03:41, Matthias Kaehlcke wrote:
-> Hi Sibi,
+On 6/17/20 3:18 AM, Andrzej Pietrasiewicz wrote:
+> Document inhibiting input devices and its relation to being
+> a wakeup source.
 > 
-> after doing the review I noticed that Viresh replied on the cover 
-> letter
-> that he picked the series up for v5.9, so I'm not sure if it makes 
-> sense
-> to send a v7.
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> ---
+> v1..v2:
 > 
-> On Wed, Jun 17, 2020 at 02:35:00AM +0530, Sibi Sankar wrote:
+> - Addressed editorial comments from Randy
+> - Added a paragraph by Hans
 > 
->> > > @@ -112,7 +178,7 @@ static int qcom_cpufreq_hw_read_lut(struct
->> > > device *cpu_dev,
->> > >
->> > >  		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
->> > >  			table[i].frequency = freq;
->> > > -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
->> > > +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
->> >
->> > This is the cross-validation mentioned above, right? Shouldn't it
->> > include
->> > a check of the return value?
->> 
->> Yes, this is the cross-validation step,
->> we adjust the voltage if opp-tables are
->> present/added successfully and enable
->> them, else we would just do a add opp.
->> We don't want to exit early on a single
->> opp failure. We will error out a bit
->> later if the opp-count ends up to be
->> zero.
+>  Documentation/input/input-programming.rst | 40 +++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
 > 
-> At least an error/warning message would seem convenient when 
-> adjusting/adding
-> an OPP fails, otherwise you would only notice by looking at the sysfs
-> attributes (if you'd even spot a single/few OPPs to be missing).
+> diff --git a/Documentation/input/input-programming.rst b/Documentation/input/input-programming.rst
+> index 45a4c6e05e39..7432315cc829 100644
+> --- a/Documentation/input/input-programming.rst
+> +++ b/Documentation/input/input-programming.rst
+> @@ -164,6 +164,46 @@ disconnects. Calls to both callbacks are serialized.
+>  The open() callback should return a 0 in case of success or any nonzero value
+>  in case of failure. The close() callback (which is void) must always succeed.
+>  
+> +Inhibiting input devices
+> +~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Inhibiting a device means ignoring input events from it. As such it is about maintaining
+> +relationships with input handlers - either already existing relationships, or relationships
+> +to be established while the device is in inhibited state.
+> +
+> +If a device is inhibited, no input handler will receive events from it.
+> +
+> +The fact that nobody wants events from the device is exploited further, by calling device's
+> +close() (if there are users) and open() (if there are users) on inhibit and uninhibit
+> +operations, respectively. Indeed, the meaning of close() is to stop providing events
+> +to the input core and that of open() is to start providing events to the input core.
+> +
+> +Calling the device's close() method on inhibit (if there are users) allows the driver
+> +to save power. Either by directly powering down the device or by releasing the
+> +runtime-pm reference it got in open() when the driver is using runtime-pm.
+> +
+> +Inhibiting and uninhibiting are orthogonal to opening and closing the device by input
+> +handlers. Userspace might want to inhibit a device in anticipation before any handler is
+> +positively matched against it.
+> +
+> +Inhibiting and uninhibiting are orthogonal to device's being a wakeup source, too. Being a
+> +wakeup source plays a role when the system is sleeping, not when the system is operating.
+> +How drivers should program their interaction between inhibiting, sleeping and being a wakeup
+> +source is driver-specific.
+> +
+> +Taking the analogy with the network devices - bringing a network interface down doesn't mean
+> +that it should be impossible be wake the system up on LAN through this interface. So, there
+> +may be input drivers which should be considered wakeup sources even when inhibited. Actually,
+> +in many I2C input devices their interrupt is declared a wakeup interrupt and its handling
+> +happens in driver's core, which is not aware of input-specific inhibit (nor should it be).
+> +Composite devices containing several interfaces can be inhibited on a per-interface basis and
+> +e.g. inhibiting one interface shouldn't affect the device's capability of being a wakeup source.
+> +
+> +If a device is to be considered a wakeup source while inhibited, special care must be taken when
+> +programming its suspend(), as it might need to call device's open(). Depending on what close()
+> +means for the device in question, not opening() it before going to sleep might make it
+> +impossible to provide any wakeup events. The device is going to sleep anyway.
+> +
+>  Basic event types
+>  ~~~~~~~~~~~~~~~~~
+>  
+> 
 
-I did consider the case where adjust
-voltage fails and we do report the
-freq for which it fails for as well.
-If adding a OPP fails we will still
-it being listed in the sysfs cpufreq
-scaling_available_frequencies since
-it lists the freq_table in khz there
-instead.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
 
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+~Randy
