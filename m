@@ -2,169 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AE21FD054
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 17:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76331FD210
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 18:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgFQPI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 11:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgFQPI5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 11:08:57 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E3AC06174E
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jun 2020 08:08:56 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id p5so2701883wrw.9
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jun 2020 08:08:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+VNaCgKeSAnsN+2G9TGu/G00Sb3RTAWKbG0yrAPTqfc=;
-        b=PjRd+YJaVQBUHQNA2/1ldZGAZDRGPLRJx6vn4bQ/rNkgw9VAr96cilJKYUFZfEaDA+
-         HzU3AK3wJJQUDymlKwFpdQU8KjP99QeVmcn0bJsycQ7Wq5D+9EtJX0t2wxQ9iKJUqtbY
-         tx+yLFVYPNGBR+uRQxD/S1Rez637Q7fxDxX81mpy6WoiSnRsothG21jfzqCrGGP5bkqy
-         0GzHx/6bP6bsZjd8PkZSKBQpPddWd2Udbro03r3t9L7GMOohEYk3boX0FZsEtZ4ewoB8
-         zXP8f2QUPfY9jxga/X7alS3BShywjSYVxo2Sty0oyjTNRupb+B3rgvceGjh8LZWY2PMt
-         xrqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+VNaCgKeSAnsN+2G9TGu/G00Sb3RTAWKbG0yrAPTqfc=;
-        b=QE6vF+7Ykt1pS2IvNicZsPXdL5FiTjfsKpyVAq0CBKiurOyaKs1YbB5GeXeBK0heiz
-         zL2UpNJY0PTLbn6YclQ31q+enJvS/yHkqBf/kh9Gx+h9BJLqtTOLWoYgmDiBF19PJqC/
-         19dswPL6pCsb3OUKJZF0YQPRyMFbE3om41kwFE7qq7L6sn7/dG6GSkXal7U8qBcuoKuG
-         zKkl53EBdKq1OMf5/adQmoY67zXkafP6NIibuyFPMtLZ7VgbsXISUxQ75fkfOaoSBynS
-         AtgAkwieKkIfYYS5FVEAsx/BluJme3z4+5ioGeyrnfbtOVEiSaO+Di1ZSpRbl//hnaVj
-         DDLg==
-X-Gm-Message-State: AOAM531ZItLy0mD70g/1Vh1SmWQ9NfsKOARm+eviAlEqx4rEP451GGvW
-        qlZHdcm7koO++SrlpBd5l8zo6A==
-X-Google-Smtp-Source: ABdhPJxX7JM0uX3X/Kwlok22E/PAQtWSfiY6CgMnhY7NTYOH/rojgKo8V80hqDPFuNDj3usNnCAXbA==
-X-Received: by 2002:a5d:4a4d:: with SMTP id v13mr1522923wrs.142.1592406534608;
-        Wed, 17 Jun 2020 08:08:54 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id j18sm35640740wrn.59.2020.06.17.08.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 08:08:53 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 16:08:50 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 00/17] Modularizing Versatile Express
-Message-ID: <20200617150850.t23gwj3p2qnduq2a@holly.lan>
-References: <20200429205825.10604-1-robh@kernel.org>
+        id S1727822AbgFQQ1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 12:27:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:60326 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727102AbgFQQ1D (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jun 2020 12:27:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 69C2A1045;
+        Wed, 17 Jun 2020 09:27:02 -0700 (PDT)
+Received: from [10.37.12.67] (unknown [10.37.12.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8BF103F71F;
+        Wed, 17 Jun 2020 09:27:00 -0700 (PDT)
+Subject: Re: [PATCH 1/4] ARM: exynos: Apply little core workaround only under
+ secure firmware
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+References: <20200616081230.31198-1-m.szyprowski@samsung.com>
+ <CGME20200616081249eucas1p151a8892ca0abfa3108955e1fc5054fc3@eucas1p1.samsung.com>
+ <20200616081230.31198-2-m.szyprowski@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <1f59ab26-94e8-6ee8-48f9-568cf1a0edfa@arm.com>
+Date:   Wed, 17 Jun 2020 17:26:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200429205825.10604-1-robh@kernel.org>
+In-Reply-To: <20200616081230.31198-2-m.szyprowski@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Apr 29, 2020 at 03:58:09PM -0500, Rob Herring wrote:
-> This series enables building various Versatile Express platform drivers
-> as modules. The primary target is the Fast Model FVP which is supported
-> in Android. As Android is moving towards their GKI, or generic kernel,
-> the hardware support has to be in modules. Currently ARCH_VEXPRESS
-> enables several built-in only drivers. Some of these are needed, but
-> some are only needed for older 32-bit VExpress platforms and can just
-> be disabled. For FVP, the pl111 display driver is needed. The pl111
-> driver depends on vexpress-osc clocks which had a dependency chain of
-> vexpress-config --> vexpress-syscfg --> vexpress-sysreg. These
-> components relied on fixed initcall ordering and didn't support deferred
-> probe which would have complicated making them modules. All these levels
-> of abstraction are needlessly complicated, so this series simplifies
-> things a bit by merging the vexpress-config and vexpress-syscfg
-> functionality.
-> 
-> There's a couple of other pieces to this which I've sent out separately
-> as they don't have dependencies with this series. The cross subsystem
-> dependencies in this series are mainly the ordering of enabling drivers
-> as modules.
+Hi Marek,
 
-This series results in the vexpress-a15 console not coming up until very
-late in the boot process because the console arch_initcall() ends up
-being deferred because it's dependencies are no longer use
-core_initcall() to ensure they get in first.
+I've give it a try with hotplug torture tests and has only one a minor
+comment.
 
-Is there a problem registering vexpress-osc, vexpress-sysreg and
-vexpress-config as core_initcall's so the console behaves nicely
-when they are all compiled as built-ins?
-
-
-Daniel.
-
-
-
-
+On 6/16/20 9:12 AM, Marek Szyprowski wrote:
+> The additional soft-reset call during little core power up was needed
+> to properly boot all cores on the Exynos5422-based boards with secure
+> firmware (like Odroid XU3/XU4 family). This however broke big.LITTLE
+> CPUidle driver, which worked only on boards without secure firmware
+> (like Peach-Pit/Pi Chromebooks).
 > 
-> A complete git branch is here[1]. Tested on Fast Model FVP Rev C.
+> Apply the workaround only when board is running under secure firmware.
 > 
-> v2:
-> The major change is a boot fix for 32-bit VExpress platforms with patch 3.
-> I also dropped 'power/reset: vexpress: Support building as a module' as it
-> was incomplete and not needed for this series.
-> 
-> Rob
-> 
-> [1] git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git vexpress-modules-v4
-> 
-> Rob Herring (16):
->   ARM: vexpress: Move vexpress_flags_set() into arch code
->   arm64: vexpress: Don't select CONFIG_POWER_RESET_VEXPRESS
->   amba: Retry adding deferred devices at late_initcall
->   clk: versatile: Rework kconfig structure
->   clk: versatile: Only enable SP810 on 32-bit by default
->   clk: vexpress-osc: Use the devres clock API variants
->   clk: vexpress-osc: Support building as a module
->   mfd: vexpress-sysreg: Drop selecting CONFIG_CLKSRC_MMIO
->   mfd: vexpress-sysreg: Drop unused syscon child devices
->   mfd: vexpress-sysreg: Use devres API variants
->   mfd: vexpress-sysreg: Support building as a module
->   bus: vexpress-config: Merge vexpress-syscfg into vexpress-config
->   bus: vexpress-config: simplify config bus probing
->   vexpress: Move setting master site to vexpress-config bus
->   bus: vexpress-config: Support building as module
->   ARM: vexpress: Don't select VEXPRESS_CONFIG
-> 
->  arch/arm/mach-integrator/Kconfig         |   1 -
->  arch/arm/mach-realview/Kconfig           |   1 -
->  arch/arm/mach-versatile/Kconfig          |   1 -
->  arch/arm/mach-vexpress/Kconfig           |   4 -
->  arch/arm/mach-vexpress/core.h            |   1 +
->  arch/arm/mach-vexpress/dcscb.c           |   1 +
->  arch/arm/mach-vexpress/v2m.c             |  23 ++
->  arch/arm64/Kconfig.platforms             |   3 -
->  drivers/amba/bus.c                       |  14 +-
->  drivers/bus/Kconfig                      |   2 +-
->  drivers/bus/vexpress-config.c            | 354 ++++++++++++++++++-----
->  drivers/clk/Makefile                     |   2 +-
->  drivers/clk/versatile/Kconfig            |  24 +-
->  drivers/clk/versatile/clk-vexpress-osc.c |  20 +-
->  drivers/mfd/Kconfig                      |   5 +-
->  drivers/mfd/vexpress-sysreg.c            |  99 +------
->  drivers/misc/Kconfig                     |   9 -
->  drivers/misc/Makefile                    |   1 -
->  drivers/misc/vexpress-syscfg.c           | 280 ------------------
->  include/linux/vexpress.h                 |  30 --
->  20 files changed, 354 insertions(+), 521 deletions(-)
->  delete mode 100644 drivers/misc/vexpress-syscfg.c
-> 
-> 
-> base-commit: 8f3d9f354286745c751374f5f1fcafee6b3f3136
+> Fixes: 833b 5794 e330 ("ARM: EXYNOS: reset Little cores when cpu is up")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
-> 2.20.1
+>   arch/arm/mach-exynos/mcpm-exynos.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm/mach-exynos/mcpm-exynos.c b/arch/arm/mach-exynos/mcpm-exynos.c
+> index 9a681b421ae1..cd861c57d5ad 100644
+> --- a/arch/arm/mach-exynos/mcpm-exynos.c
+> +++ b/arch/arm/mach-exynos/mcpm-exynos.c
+> @@ -26,6 +26,7 @@
+>   #define EXYNOS5420_USE_L2_COMMON_UP_STATE	BIT(30)
+>   
+>   static void __iomem *ns_sram_base_addr __ro_after_init;
+> +static bool secure_firmware __ro_after_init;
+>   
+>   /*
+>    * The common v7_exit_coherency_flush API could not be used because of the
+> @@ -58,15 +59,16 @@ static void __iomem *ns_sram_base_addr __ro_after_init;
+>   static int exynos_cpu_powerup(unsigned int cpu, unsigned int cluster)
+>   {
+>   	unsigned int cpunr = cpu + (cluster * EXYNOS5420_CPUS_PER_CLUSTER);
+> +	bool state;
+>   
+>   	pr_debug("%s: cpu %u cluster %u\n", __func__, cpu, cluster);
+>   	if (cpu >= EXYNOS5420_CPUS_PER_CLUSTER ||
+>   		cluster >= EXYNOS5420_NR_CLUSTERS)
+>   		return -EINVAL;
+>   
+> -	if (!exynos_cpu_power_state(cpunr)) {
+> -		exynos_cpu_power_up(cpunr);
+> -
+> +	state = exynos_cpu_power_state(cpunr);
+> +	exynos_cpu_power_up(cpunr);
+
+I can see that you have moved this call up, probably to avoid more
+'if-else' stuff. I just wanted to notify you that this function
+'exynos_cpu_powerup' is called twice when cpu is going up:
+1. by the already running cpu i.e. CPU0 and the 'state' is 0 for i.e.
+CPU2
+2. by the newly starting cpu i.e. CPU2 by running
+'secondary_start_kernel' and the state is 3.
+
+In this scenario the 'exynos_cpu_power_up' will be called twice.
+I have checked in hotplug that this is not causing any issues, but
+thought maybe it's worth share it with you. Maybe you can double check
+in TRM that this is not causing anything.
+
+> +	if (!state && secure_firmware) {
+>   		/*
+>   		 * This assumes the cluster number of the big cores(Cortex A15)
+>   		 * is 0 and the Little cores(Cortex A7) is 1.
+> @@ -258,6 +260,8 @@ static int __init exynos_mcpm_init(void)
+>   		return -ENOMEM;
+>   	}
+>   
+> +	secure_firmware = exynos_secure_firmware_available();
+> +
+>   	/*
+>   	 * To increase the stability of KFC reset we need to program
+>   	 * the PMU SPARE3 register
+> 
+
+Other than that, the patch set looks good to me.
+
+Regards,
+Lukasz
