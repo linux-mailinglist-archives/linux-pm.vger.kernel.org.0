@@ -2,237 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4712D1FD7DE
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 23:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338CF1FD968
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 01:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726930AbgFQVsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 17:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgFQVsZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 17:48:25 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD56CC06174E;
-        Wed, 17 Jun 2020 14:48:24 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id i8so2250331lfo.4;
-        Wed, 17 Jun 2020 14:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5Jselfb+tn7C8hTjnU6+q8jejO6KT7yeJaOlgUUkDfU=;
-        b=mwx5FqjFDSptmsKzHcONWpBLtprM57vaBgakUrQH//+Wi7aKJIAIWuPst+Zp0Iuhk3
-         tfIlYgUDzeYSqxUUURx/O1dx7s2TvPzzgiE2BOy1dqoRKBK66qjg/mVCQkt0dJXpo3Si
-         RwrJthyDNFbxLFXPejydJ9Q28ONzS1aPctaHlo31bNgQcGI5sQaLTfIO8JIhNmKCh+FF
-         4VA6pZ7phh/s/FVUZT57NjB+vXPPivPPpJemdR3i11XE16SUYdZgLoY9MNPQQkp/oEoY
-         9lLMohB4e94cWM+epe2qOogrOff4WMh1tRlevLQyiF9w25fRBJ7F/DzNTrRHbF03Ocgw
-         OsCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5Jselfb+tn7C8hTjnU6+q8jejO6KT7yeJaOlgUUkDfU=;
-        b=OjxrtoJT9PBDdzDNUXDDDJ/N5pM1BBH3Uu7wGxaRVWvDA78lOyHYnhzoxUHc+0F+pA
-         hN6QdNAqv0f/nZpwtL1IegpC+fQU/I1bRBTsgNDVk7jEg/5a+MQCzRTqMwo3bygGxK5/
-         EG7eOY0dEYXOtg8ozvz1Efyk2U/EVZaTlbXb0uhFqEdx4oBPuxzVHyptNgAf1YHbqUbg
-         VvoHGl43ymRLPz9iqsgydw8y85pYVcyqFa49jNd0k69gaFrSuykYiBxrZFuKVHebuNxJ
-         RLTuHuvPzdI2dDdima4yGuaQ1ODz+6+zhrAql6ipUwdeZL/JotDdB19TdErO/26hKjmZ
-         ilFA==
-X-Gm-Message-State: AOAM530qA/6stQJ9I6XAyw1ySuaQP77R0IZctKYvLGJ2VVQkXVrk6ZoU
-        K5pxf+boxtjgm3Y3aYQX/VoyQPWC
-X-Google-Smtp-Source: ABdhPJwRVLd8CkSuYn2vqquecgWKtSaPyyIaPzfp8KTngx8hhBHL8y1WDBsfFbYEaKVYw5U+60MERw==
-X-Received: by 2002:a19:787:: with SMTP id 129mr500303lfh.147.1592430502790;
-        Wed, 17 Jun 2020 14:48:22 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id s9sm198055ljc.43.2020.06.17.14.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jun 2020 14:48:22 -0700 (PDT)
-Subject: Re: [PATCH v4 22/37] dt-bindings: host1x: Document new interconnect
- properties
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20200609131404.17523-1-digetx@gmail.com>
- <20200609131404.17523-23-digetx@gmail.com> <20200617213726.GA2837398@bogus>
- <5303317a-2cb6-d7a8-361a-30867fc6eab7@gmail.com>
-Message-ID: <8fc5c06f-ee0f-f907-6631-05b45b89c7da@gmail.com>
-Date:   Thu, 18 Jun 2020 00:48:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726952AbgFQXMS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 19:12:18 -0400
+Received: from smtprelay0191.hostedemail.com ([216.40.44.191]:41454 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726761AbgFQXMS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 19:12:18 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id C6BF8181D330D;
+        Wed, 17 Jun 2020 23:12:13 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:965:966:967:968:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2196:2198:2199:2200:2201:2393:2525:2561:2564:2682:2685:2693:2828:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3353:3622:3865:3866:3867:3868:3870:3871:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4385:4390:4395:5007:6248:6691:6742:6743:7875:7903:9025:9108:10004:10400:10848:11232:11658:11914:12043:12048:12050:12297:12438:12555:12740:12760:12895:13069:13095:13311:13357:13439:14096:14097:14180:14181:14659:14721:14777:14915:21080:21433:21451:21627:21788:21811:30054:30070:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:3,LUA_SUMMARY:none
+X-HE-Tag: anger66_3706ec726e0b
+X-Filterd-Recvd-Size: 3931
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf11.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 17 Jun 2020 23:12:07 +0000 (UTC)
+Message-ID: <38c5745d14cff75fe264a3bc61d19fd837baf7ad.camel@perches.com>
+Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to
+ kfree_sensitive()
+From:   Joe Perches <joe@perches.com>
+To:     Denis Efremov <efremov@ispras.ru>,
+        Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org
+Date:   Wed, 17 Jun 2020 16:12:06 -0700
+In-Reply-To: <17e4fede-bab0-d93c-6964-69decc889d7d@ispras.ru>
+References: <20200616015718.7812-1-longman@redhat.com>
+         <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
+         <17e4fede-bab0-d93c-6964-69decc889d7d@ispras.ru>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.2-0ubuntu1 
 MIME-Version: 1.0
-In-Reply-To: <5303317a-2cb6-d7a8-361a-30867fc6eab7@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-18.06.2020 00:44, Dmitry Osipenko пишет:
-> 18.06.2020 00:37, Rob Herring пишет:
->> On Tue, Jun 09, 2020 at 04:13:49PM +0300, Dmitry Osipenko wrote:
->>> Most of Host1x devices have at least one memory client. These clients
->>> are directly connected to the memory controller. The new interconnect
->>> properties represent the memory client's connection to the memory
->>> controller.
->>>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>  .../display/tegra/nvidia,tegra20-host1x.txt   | 68 +++++++++++++++++++
->>>  1 file changed, 68 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
->>> index 47319214b5f6..ab4fbee7bccf 100644
->>> --- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
->>> +++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt
->>> @@ -20,6 +20,10 @@ Required properties:
->>>  - reset-names: Must include the following entries:
->>>    - host1x
->>>  
->>> +Each host1x client module having to perform DMA through the Memory Controller
->>> +should have the interconnect endpoints set to the Memory Client and External
->>> +Memory respectively.
->>> +
->>>  The host1x top-level node defines a number of children, each representing one
->>>  of the following host1x client modules:
->>>  
->>> @@ -36,6 +40,12 @@ of the following host1x client modules:
->>>    - reset-names: Must include the following entries:
->>>      - mpe
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the MPE memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - vi: video input
->>>  
->>>    Required properties:
->>> @@ -65,6 +75,12 @@ of the following host1x client modules:
->>>        - power-domains: Must include sor powergate node as csicil is in
->>>          SOR partition.
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the VI memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - epp: encoder pre-processor
->>>  
->>>    Required properties:
->>> @@ -78,6 +94,12 @@ of the following host1x client modules:
->>>    - reset-names: Must include the following entries:
->>>      - epp
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the EPP memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - isp: image signal processor
->>>  
->>>    Required properties:
->>> @@ -91,6 +113,12 @@ of the following host1x client modules:
->>>    - reset-names: Must include the following entries:
->>>      - isp
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the ISP memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - gr2d: 2D graphics engine
->>>  
->>>    Required properties:
->>> @@ -104,6 +132,12 @@ of the following host1x client modules:
->>>    - reset-names: Must include the following entries:
->>>      - 2d
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the GR2D memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - gr3d: 3D graphics engine
->>>  
->>>    Required properties:
->>> @@ -122,6 +156,12 @@ of the following host1x client modules:
->>>      - 3d
->>>      - 3d2 (Only required on SoCs with two 3D clocks)
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the GR3D memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  - dc: display controller
->>>  
->>>    Required properties:
->>> @@ -149,6 +189,10 @@ of the following host1x client modules:
->>>    - nvidia,hpd-gpio: specifies a GPIO used for hotplug detection
->>>    - nvidia,edid: supplies a binary EDID blob
->>>    - nvidia,panel: phandle of a display panel
->>> +  - interconnects: Must contain entry for the DC memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>>  
->>>  - hdmi: High Definition Multimedia Interface
->>>  
->>> @@ -297,6 +341,12 @@ of the following host1x client modules:
->>>    - reset-names: Must include the following entries:
->>>      - vic
->>>  
->>> +  Optional properties:
->>> +  - interconnects: Must contain entry for the VIC memory clients.
->>> +  - interconnect-names: Must include name of the interconnect path for each
->>> +    interconnect entry. Consult TRM documentation for information about
->>> +    available memory clients, see MEMORY CONTROLLER section.
->>> +
->>>  Example:
->>>  
->>>  / {
->>> @@ -410,6 +460,15 @@ Example:
->>>  			resets = <&tegra_car 27>;
->>>  			reset-names = "dc";
->>>  
->>> +			interconnects = <&mc TEGRA20_MC_DISPLAY0A &emc>,
->>> +					<&mc TEGRA20_MC_DISPLAY0B &emc>,
->>> +					<&mc TEGRA20_MC_DISPLAY0C &emc>,
->>> +					<&mc TEGRA20_MC_DISPLAY1B &emc>;
->>
->> This looks odd or wrong. Each entry has 2 phandles? 
+On Thu, 2020-06-18 at 00:31 +0300, Denis Efremov wrote:
 > 
-> Each entry defines interconnect path, where MC is the start of the path
-> and EMC is the end. So yes, 2 phandles for each path.
+> On 6/16/20 9:53 PM, Joe Perches wrote:
+> > On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
+> > >  v4:
+> > >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
+> > >     so that it can be backported to stable.
+> > >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
+> > >     now as there can be a bit more discussion on what is best. It will be
+> > >     introduced as a separate patch later on after this one is merged.
+> > 
+> > To this larger audience and last week without reply:
+> > https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
+> > 
+> > Are there _any_ fastpath uses of kfree or vfree?
+> > 
+> > Many patches have been posted recently to fix mispairings
+> > of specific types of alloc and free functions.
 > 
-> Please see arm/boot/dts/qcom-msm8974.dtsi for another example [1].
+> I've prepared a coccinelle script to highlight these mispairings in a function
+> a couple of days ago: https://lkml.org/lkml/2020/6/5/953
+> I've listed all the fixes in the commit message. 
 > 
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/qcom-msm8974.dtsi?h=v5.8-rc1#n1448
+> Not so many mispairings actually, and most of them are harmless like:
+> kmalloc(E) -> kvfree(E)
 > 
+> However, coccinelle script can't detect cross-functions mispairings, i.e.
+> allocation in one function, free in another funtion.
 
-Actually, there are even better examples:
+Hey Denis, thanks for those patches.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sc7180.dtsi?h=v5.8-rc1#n1044
+If possible, it's probably better to not require these pairings
+and use a single standard kfree/free function.
+
+Given the existing ifs in kfree in slab/slob/slub, it seems
+likely that adding a few more wouldn't have much impact.
+
+
