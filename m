@@ -2,114 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D976E1FC6DD
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 09:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E8B1FC7BE
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jun 2020 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbgFQHMU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 03:12:20 -0400
-Received: from mail-ej1-f65.google.com ([209.85.218.65]:34229 "EHLO
-        mail-ej1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbgFQHMT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 03:12:19 -0400
-Received: by mail-ej1-f65.google.com with SMTP id l27so1176601ejc.1;
-        Wed, 17 Jun 2020 00:12:15 -0700 (PDT)
+        id S1726600AbgFQHom (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 03:44:42 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40553 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726625AbgFQHom (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 17 Jun 2020 03:44:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592379880;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LdQWvEMUJWYJ0ayIlG9RiKefcYkYap4fRHuTq5TItU8=;
+        b=E0n7SLeEUnJIeWiXfh5C7gE/EROJVhAdJvR6bcAak5whHcOTpmJIF0jLf0lkogWa1DzmY+
+        BNwyBFgkj4YamkhdVk6Dm6DeiRppQk4qA/0XSHYgr6t+iGw+6eOQ33RZeNySouE4w2Pi0v
+        yEhQkuTjMk+ZOuGf6CtQ42SdzRsbzuw=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-220-kiKQpL6OPyy3YdR7HQ8dGg-1; Wed, 17 Jun 2020 03:44:38 -0400
+X-MC-Unique: kiKQpL6OPyy3YdR7HQ8dGg-1
+Received: by mail-ej1-f69.google.com with SMTP id m22so652685ejn.4
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jun 2020 00:44:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=E5EcWVbc+7tsS+GAmjqiwsU8zuC9ZQ4KDsXaJSfWulo=;
-        b=hpp62K4a8CwZm2UreL6e+o7U64jJN0cGZO64x4/KaxFcj3JVTRwtGgvvphlWOGIwmB
-         mKDjFk36BUKL84X0A9sBPYLln2swyjTrxBpOKfntaidgraTsEqWSInVYjR+f229KLn86
-         JQgPgDrHQKjlcGt4G5FRUs/LnXp6LNLqNd3mRfMJQtEv721UDpyA2floMIWMSRRU63gC
-         qmC2URd5guep9hGNbmRJS4tl3WdSME9dwc9fVWomUGjNxDBIdLQAdimTtHyDG+qL4Z/x
-         N3yZtL4KoRdctI+kyJccwtPMuNdYqp+mPDxIX3roHMzcx6zoabwiEq+N3FeX8asH5wbJ
-         BPbw==
-X-Gm-Message-State: AOAM532QhxsCV6VV0nmw55nyn7fUqk+2MaOyho+lUa6ubnTkcAd2T2f0
-        jAq+dwgSw/eEUQy0iHHJ2nc=
-X-Google-Smtp-Source: ABdhPJzxXEZ/32Vk1uutSgWgDm/2Kml+FRFv6q/oUOzaHXvM3d9a7wcEm5DrSyb0iZ8v3ZPtZ+pKKg==
-X-Received: by 2002:a17:906:2581:: with SMTP id m1mr6681797ejb.89.1592377934427;
-        Wed, 17 Jun 2020 00:12:14 -0700 (PDT)
-Received: from localhost (ip-37-188-158-19.eurotel.cz. [37.188.158.19])
-        by smtp.gmail.com with ESMTPSA id g22sm12516138ejo.1.2020.06.17.00.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 00:12:13 -0700 (PDT)
-Date:   Wed, 17 Jun 2020 09:12:12 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     dsterba@suse.cz, Joe Perches <joe@perches.com>,
-        Waiman Long <longman@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] mm, treewide: Rename kzfree() to kfree_sensitive()
-Message-ID: <20200617071212.GJ9499@dhcp22.suse.cz>
-References: <20200616015718.7812-1-longman@redhat.com>
- <fe3b9a437be4aeab3bac68f04193cb6daaa5bee4.camel@perches.com>
- <20200616230130.GJ27795@twin.jikos.cz>
- <20200617003711.GD8681@bombadil.infradead.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=LdQWvEMUJWYJ0ayIlG9RiKefcYkYap4fRHuTq5TItU8=;
+        b=oxfp3zB0J9xnvjVylGObUd/qaEBUpMoqzLRZC9CVYJBXRmouzq7fNbu091IHtbemN2
+         +x5318/LrtRysPVB+s6vQYcycxAK9UXNhrYcGmcyFLxHQ9L/kA5Gm6NYgV3qerU+0m0C
+         vshmAvEgq36iaOs26tp6xjSHVQvIXGSDSiTg2Ts4RJVPkYrEIJhuIKMm3eJo7gQGFO3M
+         nRxI5EAkxEuuAqB9EY2nUDm4GLdu1jm5XwTLANXntWZfTCSlMglhCGf3loTft52HMoi8
+         b5CjnfWOk8wwAL6xzI2Pslc9Le9BjxHPgukORZpfY2mqEIlTeAENFgTNTtN5JTcEf7tC
+         QJ5g==
+X-Gm-Message-State: AOAM532TIPwqwB0sKJU8FtDkhIcsWaUMYDXyNKK358VLzbEjKs0C7kCW
+        rZcUS9t/GDW27Rmg+xJpCje3VCv9NZK1tYlzPRLXw6c7cKQO1n+eg+lUY0h0RJ1duaqykHIC1FR
+        mAryHtdzaNOMoxF38W4g=
+X-Received: by 2002:a17:906:e47:: with SMTP id q7mr6349234eji.279.1592379877129;
+        Wed, 17 Jun 2020 00:44:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJztAsLsgDaFxPRHVMxQyWpwuzemyHiIKlOYzD7aKaYp8CK5bsLlyAMtEHuAjaMc+cKU/OAdZw==
+X-Received: by 2002:a17:906:e47:: with SMTP id q7mr6349200eji.279.1592379876894;
+        Wed, 17 Jun 2020 00:44:36 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id i12sm12619661ejz.122.2020.06.17.00.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 Jun 2020 00:44:36 -0700 (PDT)
+Subject: Re: [PATCH] Input: document inhibiting
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>, Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        kernel@collabora.com
+References: <40988408-8f36-3a52-6439-34084de6b129@redhat.com>
+ <20200616172909.21625-1-andrzej.p@collabora.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <f9007f37-c526-5fa4-3188-a554d2434177@redhat.com>
+Date:   Wed, 17 Jun 2020 09:44:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617003711.GD8681@bombadil.infradead.org>
+In-Reply-To: <20200616172909.21625-1-andrzej.p@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 16-06-20 17:37:11, Matthew Wilcox wrote:
-> On Wed, Jun 17, 2020 at 01:01:30AM +0200, David Sterba wrote:
-> > On Tue, Jun 16, 2020 at 11:53:50AM -0700, Joe Perches wrote:
-> > > On Mon, 2020-06-15 at 21:57 -0400, Waiman Long wrote:
-> > > >  v4:
-> > > >   - Break out the memzero_explicit() change as suggested by Dan Carpenter
-> > > >     so that it can be backported to stable.
-> > > >   - Drop the "crypto: Remove unnecessary memzero_explicit()" patch for
-> > > >     now as there can be a bit more discussion on what is best. It will be
-> > > >     introduced as a separate patch later on after this one is merged.
-> > > 
-> > > To this larger audience and last week without reply:
-> > > https://lore.kernel.org/lkml/573b3fbd5927c643920e1364230c296b23e7584d.camel@perches.com/
-> > > 
-> > > Are there _any_ fastpath uses of kfree or vfree?
-> > 
-> > I'd consider kfree performance critical for cases where it is called
-> > under locks. If possible the kfree is moved outside of the critical
-> > section, but we have rbtrees or lists that get deleted under locks and
-> > restructuring the code to do eg. splice and free it outside of the lock
-> > is not always possible.
+Hi,
+
+On 6/16/20 7:29 PM, Andrzej Pietrasiewicz wrote:
+> Document inhibiting input devices and its relation to being
+> a wakeup source.
 > 
-> Not just performance critical, but correctness critical.  Since kvfree()
-> may allocate from the vmalloc allocator, I really think that kvfree()
-> should assert that it's !in_atomic().  Otherwise we can get into trouble
-> if we end up calling vfree() and have to take the mutex.
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> ---
+> 
+> @Hans, @Dmitry,
+> 
+> My fist attempt at documenting inhibiting. Kindly look at it to see if I haven't got anything
+> wrong.
+> 
+> Andrzej
+> 
+>   Documentation/input/input-programming.rst | 36 +++++++++++++++++++++++
+>   1 file changed, 36 insertions(+)
+> 
+> diff --git a/Documentation/input/input-programming.rst b/Documentation/input/input-programming.rst
+> index 45a4c6e05e39..0cd1ad4504fb 100644
+> --- a/Documentation/input/input-programming.rst
+> +++ b/Documentation/input/input-programming.rst
+> @@ -164,6 +164,42 @@ disconnects. Calls to both callbacks are serialized.
+>   The open() callback should return a 0 in case of success or any nonzero value
+>   in case of failure. The close() callback (which is void) must always succeed.
+>   
+> +Inhibiting input devices
+> +~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Inhibiting a device means ignoring input events from it. As such it is about maintaining
+> +relationships with input handlers - either an already existing relationships, or
+> +relationships to be established while the device is in inhibited state.
+> +
+> +If a device is inhibited, no input handler will receive events from it.
+> +
+> +The fact that nobody wants events from the device is exploited further, by calling device's
+> +close() (if there are users) and open() (if there are users) on inhibit and uninhibit
+> +operations, respectively. Indeed, the meaning of close() is to stop providing events
+> +to the input core and that of open() is to start providing events to the input core.
 
-FWIW __vfree already checks for atomic context and put the work into a
-deferred context. So this should be safe. It should be used as a last
-resort, though.
+Maybe add the following here? :
 
--- 
-Michal Hocko
-SUSE Labs
+Calling the device's close() method on inhibit (if there are users) allows the driver
+to save power. Either by directly powering down the device or by releasing the
+runtime-pm reference it got in open() when the driver is using runtime-pm.
+
+Otherwise this looks good to me. Thank you for doing this, we (including myself)
+really need to get better at doucmenting all sorts of kernel things. Often we have
+these long discussions about something on the mailinglist and then everyone is
+expected to just know what was decided from the on, which really doesn't work all
+that well.
+
+> +
+> +Inhibiting and uninhibiting is orthogonal to opening and closing the device by input
+> +handlers. Userspace might want to inhibit a device in anticipation before any handler is
+> +positively matched against it.
+> +
+> +Inhibiting and uninhibiting is orthogonal to device's being a wakeup source, too. Being a
+> +wakeup source plays a role when the system is sleeping, not when the system is operating.
+> +How drivers should program their interaction between inhibiting, sleeping and being a wakeup
+> +source is driver-specific.
+> +
+> +Taking the analogy with the network devices - bringing a network interface down doesn't mean
+> +that it should be impossible to be wake the system up on LAN through this interface. So, there
+> +may be input drivers which should be considered wakeup sources even when inhibited. Actually,
+> +in many i2c input devices their interrupt is declared a wakeup interrupt and its handling
+> +happens in driver's core, which is not aware of input-specific inhibit (nor should it be).
+> +Composite devices containing several interfaces can be inhibited on a per-interface basis and
+> +e.g. inhibiting one interface shouldn't affect the device's capability of being a wakeup source.
+> +
+> +If a device is to be considered a wakeup source while inhibited, special care must be taken when
+> +programming its suspend(), as it might need to call device's open(). Depending on what close()
+> +means for the device in question not opening() it before going to sleep might make it impossible
+> +to provide any wakeup events. The device is going to sleep anyway.
+> +
+>   Basic event types
+>   ~~~~~~~~~~~~~~~~~
+>   
+> 
+
+
+Regards,
+
+Hans
+
