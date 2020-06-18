@@ -2,106 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B10A71FEF11
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 11:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A42B1FEF74
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 12:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbgFRJyg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 05:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
+        id S1728455AbgFRKN7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 06:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728086AbgFRJyd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 05:54:33 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24D8C06174E
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 02:54:32 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id j4so2236458plk.3
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 02:54:32 -0700 (PDT)
+        with ESMTP id S1728320AbgFRKN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 06:13:57 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A638C06174E;
+        Thu, 18 Jun 2020 03:13:56 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id p5so5407825wrw.9;
+        Thu, 18 Jun 2020 03:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jxYaQFOuethLH+6qCp7SYy5ev2dqdee2Bmv5jtz/8kU=;
-        b=SwZyvRFdIOLAmwWOUo+F40IAyx5vcY7t7VtCMKmlXE5959lxtrfuSOav6SXn4HEn9b
-         qfL+cZUXFpZGvbPTC0VlkifpM0hcelUY7m2dbEIVCQDc0i5gwQLG8jRublPoOSB8U/A1
-         CKLeuwPhIXsjBVZHBPSvT9aVkkzWnvLpesnQzIHA/l82U+rOC2gO5V0int8I8RCnhuNo
-         eFYWYbjZF600Vd0sOYvGaO0vsM6+v/nsa46OEeu+OWY/jwRx2Rrz2AOy43tjQbMeADoK
-         vP+wEJo0eNBi9Zt0Hpo4x1Wd/Dg1bEnKYbB1LhKC/pAUd14DWmTBmrs7gvgmBx27wOQq
-         Nzkg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ofe7nJVAVWjLyJL8t4PpDn39yJzviAXAAMypfIFntOI=;
+        b=i/HO+PxqnWKAQSyq/Xh6rEdogjYLB+ReE6hg4iTtg3eCa7x3wzIKvlEqTQ9hdLfH9v
+         xUafRsV9lrYQms0zdNyXxpuSgJipptP2XkMvUrPDaw5nvtITN0kfz2ebwU2qdI7gnLv3
+         0T82dRVB40i35x+V0Uy/WtNdvYW7Mvryxyr0YjG6c0PmF2voxtlH2qVDTz2H6bsmR7/i
+         ubrjKECuSNy6KhyirtD+I8Fl0XOB2OVEJMHSCp/daA2VfeVx9btvf+CXrO9ugFLZoZpP
+         M1eHDAn46/56ucUewhRAKK9r0ZGtKauDAkXQyKNPEgEj+MT2OqPDwu2qyB1qi4rRDHjG
+         33Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jxYaQFOuethLH+6qCp7SYy5ev2dqdee2Bmv5jtz/8kU=;
-        b=Z2pWQaHoPiTNVRZF77+6XuUtlFYlaBQWM0Y3xj5YOSQWtzVopT084q6+t0VQRVnlgR
-         lHH6ZjAUa1o3MLtbDOCMdhf+nDIjJ5UqOQcK6r357mi1aD5xprm1G/hk/aMLTbDVwDMz
-         5MUi+EP8xHT7gYR76UiGqOSQt1s+vaEdHkXZ1hF/k2o2vR+ErIjZ9CkL8/dc9l8OrSVM
-         H1KucIoJmnaqhjAR2lWjVnJGbuIRIS8xleeb3HJesQPgQLkFLxxvCJ1dbMAwvbfCZyAd
-         9IKvWt0laUqN6ByZSYzWzNUCChCR4//kEV1RlEtaA8uq3sSei4RufGja2CBagSAO7T+w
-         88Fg==
-X-Gm-Message-State: AOAM532YrXM+MBjPOkL0mYnOvVzWJSKYdpToW4JMzGlGAKNb4gQKgNRS
-        N2s3d1rnfAGtGD4o38FWlc7sRg==
-X-Google-Smtp-Source: ABdhPJwri2PoCABkalcKuQR/pD7ASrRIrdyeZ9bnWjTeKTykWL3STjOgPPvyP9Bl4x+fqvXirq3UgQ==
-X-Received: by 2002:a17:902:ee12:: with SMTP id z18mr2983112plb.308.1592474072433;
-        Thu, 18 Jun 2020 02:54:32 -0700 (PDT)
-Received: from localhost ([122.172.119.132])
-        by smtp.gmail.com with ESMTPSA id z144sm2567092pfc.195.2020.06.18.02.54.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 18 Jun 2020 02:54:31 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 15:24:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
-Cc:     linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, lukasz.luba@arm.com
-Subject: Re: [PATCH 2/2] cpufreq: arm_scmi: Set fast_switch_possible
- conditionally
-Message-ID: <20200618095429.tj3ddquy5m2q367e@vireshk-i7>
-References: <20200617094332.8391-1-nicola.mazzucato@arm.com>
- <20200617094332.8391-2-nicola.mazzucato@arm.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ofe7nJVAVWjLyJL8t4PpDn39yJzviAXAAMypfIFntOI=;
+        b=rFxT26oydypQkzZoTaqkbBuHi5V/xdlh7W7jhNUoiDnvOzIqRXe2TJEEZfI9YyoGsc
+         V5ZrHN5DOtZrNkBPRE/MHoj59QsrdKVz1yJ+wrw//dovv2Wm/d020Z0NcPkrGQszY7iI
+         4tsm8D2mrbzZeRzf9MODX4QAgh3Evv7cKlkfiH+mTQiWeEJNmY9G81ee9NhtN9VxC3no
+         t4SQk3je3izfrkFVbiTH/cg2AdIOcMwt9iWadEmbngDJFkRqu+dsv0EtF/JvDZNkN0Z8
+         73fJYflejKuTa6kMucQOhCo9rww2HinYft7zgvsXbEWXHAebm6BLvBpM+CMZ3pbsKncN
+         FlAg==
+X-Gm-Message-State: AOAM5312BixJQtFCClwfIL7o1WNwIsd8AzNddacthf915gx6VwjaVRGr
+        WcY+A+Qdktja1FbelsKg0qMFLXK7Dqs=
+X-Google-Smtp-Source: ABdhPJwUJTp7kFoxbzS9NlyOX4LlbTCaL3vi3FLnL2azj38Ci4pZ9vsgReoYRfs98DH5tB2Oa6go0g==
+X-Received: by 2002:adf:9404:: with SMTP id 4mr3665859wrq.367.1592475235180;
+        Thu, 18 Jun 2020 03:13:55 -0700 (PDT)
+Received: from localhost ([213.191.183.145])
+        by smtp.gmail.com with ESMTPSA id e25sm3272396wrc.69.2020.06.18.03.13.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jun 2020 03:13:54 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: power: supply: Document max17040 extensions
+Date:   Thu, 18 Jun 2020 13:13:39 +0300
+Message-Id: <20200618101340.2671020-1-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617094332.8391-2-nicola.mazzucato@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-06-20, 10:43, Nicola Mazzucato wrote:
-> Currently the fast_switch_possible flag is set unconditionally
-> to true. Based on this, schedutil does not create a
-> thread for frequency switching and would always use the
-> fast switch path.
-> However, if the platform does not support frequency
-> fast switch, this may cause the governor to attempt an
-> operation that is not supported by the platform.
-> 
-> Fix this by correctly retrieve the fast_switch capability
-> from the driver which knows if the platform can support
-> this feature.
-> 
-> Suggested-by: Lukasz Luba <lukasz.luba@arm.com>
-> Signed-off-by: Nicola Mazzucato <nicola.mazzucato@arm.com>
-> ---
->  drivers/cpufreq/scmi-cpufreq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index 61623e2ff149..1cf688fcb56b 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -198,7 +198,8 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  
->  	policy->cpuinfo.transition_latency = latency;
->  
-> -	policy->fast_switch_possible = true;
-> +	policy->fast_switch_possible =
-> +		handle->perf_ops->fast_switch_possible(handle, cpu_dev);
->  
->  	em_register_perf_domain(policy->cpus, nr_opp, &em_cb);
+Maxim max17040 is a fuel gauge from a larger family utilising the Model
+Gauge technology. Document all different compatible strings that the
+max17040 driver recognizes.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Some devices in the wild report double the capacity. The
+maxim,double-soc (from State-Of-Charge) property fixes that.
 
+Complete device reset might lead to very inaccurate readings. Specify
+maxim,skip-reset to avoid that.
+
+To compensate for the battery chemistry and operating conditions the
+chips support a compensation value. Specify one or two byte compensation
+via the maxim,rcomp byte array.
+
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+---
+v1: https://lkml.org/lkml/2020/6/8/682
+
+Changes in v2:
+- add maxim,skip-reset
+- remove 2 byte rcomp from example, the specified compat string supports 1 byte
+  rcomp
+
+ .../power/supply/max17040_battery.txt         | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+index 4e0186b8380fa..3ee91c295027f 100644
+--- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
++++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+@@ -2,7 +2,9 @@ max17040_battery
+ ~~~~~~~~~~~~~~~~
+ 
+ Required properties :
+- - compatible : "maxim,max17040" or "maxim,max77836-battery"
++ - compatible : "maxim,max17040", "maxim,max17041", "maxim,max17043",
++ 		"maxim,max17044", "maxim,max17048", "maxim,max17049",
++		"maxim,max17058", "maxim,max17059" or "maxim,max77836-battery"
+  - reg: i2c slave address
+ 
+ Optional properties :
+@@ -11,6 +13,18 @@ Optional properties :
+ 				generated. Can be configured from 1 up to 32
+ 				(%). If skipped the power up default value of
+ 				4 (%) will be used.
++- maxim,double-soc : 		Certain devices return double the capacity.
++				Specify this boolean property to divide the
++				reported value in 2 and thus normalize it.
++				SOC == State of Charge == Capacity.
++- maxim,skip-reset :		Do not reset device on driver initialization.
++				Some devices report extremely inaccurately after
++				a hard reset.
++- maxim,rcomp :			A value to compensate readings for various
++				battery chemistries and operating temperatures.
++				max17040,41 have 2 byte rcomp, default to
++				0x97 0x00. All other devices have one byte
++				rcomp, default to 0x97.
+ - interrupts : 			Interrupt line see Documentation/devicetree/
+ 				bindings/interrupt-controller/interrupts.txt
+ - wakeup-source :		This device has wakeup capabilities. Use this
+@@ -31,3 +45,11 @@ Example:
+ 		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+ 		wakeup-source;
+ 	};
++
++	battery-fuel-gauge@36 {
++		compatible = "maxim,max17048";
++		reg = <0x36>;
++		maxim,rcomp = /bits/ 8 <0x97>;
++		maxim,alert-low-soc-level = <10>;
++		maxim,double-soc;
++	};
+
+base-commit: 1713116fa907cc7290020f0d8632ec646d2936f8
 -- 
-viresh
+2.27.0
+
