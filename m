@@ -2,183 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 112141FF61D
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 17:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98B71FF938
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 18:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731238AbgFRPDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 11:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60454 "EHLO
+        id S1728236AbgFRQ26 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 12:28:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726853AbgFRPDi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 11:03:38 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6CDC06174E
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 08:03:37 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id q19so7670753lji.2
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 08:03:37 -0700 (PDT)
+        with ESMTP id S1729077AbgFRQ2y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 12:28:54 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 221D4C0613ED
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 09:28:53 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id h5so6738463wrc.7
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 09:28:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n7OlS+GwL++zlMgerOt6xFjvAHKRx4D54ivq6twtNuM=;
-        b=ORkvlLBgA1esosGkQurOfdfuJxZ0oPmeMhen/wNR1FzPkfy6vGdg7sWvoHcpsdWMaX
-         jcmbDInP1C1eDa0Yz4ZkIM3/TD9XzZDdtY8ZEoew7sVTTsP4mFHchNH9dfuI2rPyu9ZY
-         LiEEs8x0+h5BOSmQb/6QcRjNwq7HUp6A2a/hSt8H88+oVDAaKyZ645nQ7w9Olfr4Uxt/
-         ojF7/AFTOM9HL9G4fSQBZINpWagLIlc/OzmlfUc8ikGPtdBqCmhGLPt8ym4cBQ9vn40s
-         yNQD1DElZFIVv8VkRTZPuG89oo3pOA8AzQ0ew6quWVgEPlyHCec9SW78vEbQfLqAkzOf
-         FlEg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5BtInqn0HK3LhGSOqpzcc+VvzjO2vK+SIfcb8Zyst/s=;
+        b=odevfLHS7udDSNGRylCeO2GK+VEz1OY9+pY2RckNxWlzBCRG2hlFpNf6+gr8PKu4Iv
+         tj1G1Vcxfz9LG+ygke6gIxql+cjGYpQ1mY6VdpdPlChpWDonM3PefuwcFBoJfWjZV/o+
+         CR6xRglkdlXJoE51Sz7C2YMHN+mc9IwFc7P9kBuZck3wBty1M5Su/3/dhyDCecbVI5aH
+         leQZVIOvdX1cwxW42QZRnwUFG7hLl7P7CljP2Km/bqlU2XWuvtEPLbskejDHm//uKQlz
+         2IYDidYF2v8ay1rj1c0D9+gwTeVaMxh7naQQ8/I3zIQApSSo49rOYomcAMVweMTcXx1j
+         U0VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n7OlS+GwL++zlMgerOt6xFjvAHKRx4D54ivq6twtNuM=;
-        b=L6XtQ7uB+XdVfK8TsAY2wxpvydlepI/yyzSIw9mNW9+y4WV4h3ETWGchK+wfj36Vo5
-         c5I91wRzAMzTxbVYVjJ2jR8SSQQNQL/t+FcEnnX3jE/rqpf5SkO+K9dGNoYecF4XxcTP
-         VJNpP3Q/QWGmMUVlO+k48yYa2VtttZ0YbwQaM+eFcbkS6cuOcHWMJJ5kafcTYwyh49SA
-         YWiFMCpxvE/1qL2B8CxqKjPQB+cOCg2YJG2m31pMPaQjX9WHUUw8Lnx/ZySaltltTmFM
-         plQuY7SuNPppUrAI0FgSor5u5TeUFzy7fvvgw5xq34QrqpY2QpR6cWUEGEaBK8BbS+3y
-         NEDw==
-X-Gm-Message-State: AOAM531ReiE3U8L7PI+mkXXtqbTXeKnmUBb6uTXZGNnqmPcqoUcenU2h
-        jZS6w9w3YqxqMqetsWtkOkEj01xpcCQnsI5d7vwPwA==
-X-Google-Smtp-Source: ABdhPJzxxMz2ip/Y2ppi+/Zj9M3CIDCys8ygeYZUmjcfeK8RW5W/JrTu/UQEH/73a4HCtAjAw7pksbTZY/UxwSH+914=
-X-Received: by 2002:a2e:541e:: with SMTP id i30mr2366630ljb.156.1592492616104;
- Thu, 18 Jun 2020 08:03:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5BtInqn0HK3LhGSOqpzcc+VvzjO2vK+SIfcb8Zyst/s=;
+        b=oqe4bnbB8Omt2tCzW5APvgO595x+TgyDz6GUHX2B7QcE0wul/7n38WiLGw+kv4cVH+
+         3DVMfFc/B2eSI/1u0ct/z7MeNao1si4TGn9IWO/1jtvIQ+HvONBPolUlfKnzbIOglaS2
+         1YBMOqZFHU663OhS8ZBdF2b9Hw4C3jkroicGBA6fZ/hI0Vj80Vhe9Hpx9D+3velGJqfU
+         UpQmeptnL9AzHI9cBo9IyAD88630LaRWW8XgDv1yQphHCdEZ+/nrdd9mo7k7eJGrJIpd
+         1Qf2VEDTo2EXGyYR3Y/VPSCvQAIF5Lx9pM4Efp2yPaQRrNa/Sbdm9UprAONoVas5ShYu
+         3t9w==
+X-Gm-Message-State: AOAM530XfgglyMO7138YsE9F+ioNMonJp0+EZgDmjmYTwK9rCEt32pIe
+        AITukaaoQ6nrxuALIinIKz+SUg==
+X-Google-Smtp-Source: ABdhPJz6qa2JKgQLkPKOqwNTFZMVh3JmnZ6aw7y5et5eRtOtT3vbCB5EdZXzl9SVv6nhMcSGytpKjQ==
+X-Received: by 2002:adf:ec42:: with SMTP id w2mr5505499wrn.269.1592497731532;
+        Thu, 18 Jun 2020 09:28:51 -0700 (PDT)
+Received: from dell ([95.149.164.118])
+        by smtp.gmail.com with ESMTPSA id z7sm3185948wmb.42.2020.06.18.09.28.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 09:28:50 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 17:28:49 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     khilman@baylibre.com, linux-amlogic@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: Re: [PATCH v4 1/2] thermal: add support for the MCU controlled FAN
+ on Khadas boards
+Message-ID: <20200618162849.GH954398@dell>
+References: <20200618133818.15857-1-narmstrong@baylibre.com>
+ <20200618133818.15857-2-narmstrong@baylibre.com>
 MIME-Version: 1.0
-References: <20200614010755.9129-1-valentin.schneider@arm.com> <20200614010755.9129-2-valentin.schneider@arm.com>
-In-Reply-To: <20200614010755.9129-2-valentin.schneider@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 18 Jun 2020 17:03:24 +0200
-Message-ID: <CAKfTPtCyi9acak95_2_2uL3Cf0OMAbZhDav2LbPY+ULPrD7z4w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/cpu-cooling, sched/core: Cleanup thermal
- pressure definition
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200618133818.15857-2-narmstrong@baylibre.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 14 Jun 2020 at 03:10, Valentin Schneider
-<valentin.schneider@arm.com> wrote:
->
-> The following commit:
->
->   14533a16c46d ("thermal/cpu-cooling, sched/core: Move the arch_set_thermal_pressure() API to generic scheduler code")
->
-> moved the definition of arch_set_thermal_pressure() to sched/core.c, but
-> kept its declaration in linux/arch_topology.h. When building e.g. an x86
-> kernel with CONFIG_SCHED_THERMAL_PRESSURE=y, cpufreq_cooling.c ends up
-> getting the declaration of arch_set_thermal_pressure() from
-> include/linux/arch_topology.h, which is somewhat awkward.
->
-> On top of this, the public setter, arch_set_thermal_pressure(), is defined
-> unconditionally in sched/core.c while the public getter,
-> arch_scale_thermal_pressure(), is hardcoded to return 0 unless it has been
-> redefined by the architecture. arch_*() functions are meant to be defined
-> by architectures, so revert the aforementioned commit and re-implement it
-> in a way that keeps arch_set_thermal_pressure() architecture-definable.
->
-> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+On Thu, 18 Jun 2020, Neil Armstrong wrote:
+
+> The new Khadas VIM2 and VIM3 boards controls the cooling fan via the
+> on-board microcontroller.
+> 
+> This implements the FAN control as thermal devices and as cell of the Khadas
+> MCU MFD driver.
+> 
+> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+
+Is this an Ack?
+
+If so, do you require a pull-request?
+
 > ---
->  drivers/base/arch_topology.c      | 11 +++++++++++
->  drivers/thermal/cpufreq_cooling.c |  5 +++++
->  include/linux/arch_topology.h     |  3 ---
->  kernel/sched/core.c               | 11 -----------
->  4 files changed, 16 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 4d0a0038b476..d14cab7dfa3c 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -54,6 +54,17 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
->         per_cpu(cpu_scale, cpu) = capacity;
->  }
->
-> +DEFINE_PER_CPU(unsigned long, thermal_pressure);
-> +
-> +void arch_set_thermal_pressure(const struct cpumask *cpus,
-> +                              unsigned long th_pressure)
-> +{
-> +       int cpu;
-> +
-> +       for_each_cpu(cpu, cpus)
-> +               WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-> +}
-> +
->  static ssize_t cpu_capacity_show(struct device *dev,
->                                  struct device_attribute *attr,
->                                  char *buf)
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index e297e135c031..a1efd379b683 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -417,6 +417,11 @@ static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
->         return 0;
->  }
->
-> +__weak void
-> +arch_set_thermal_pressure(const struct cpumask *cpus, unsigned long th_pressure)
-> +{
-> +}
+> Hi Lee,
+> 
+> Could you apply this patch via the MFD tree since it depends on
+> the linux/mfd/khadas-mcu.h header ?
+> 
+> This patch is unchanged from the v3 serie.
+> 
+> Thanks,
+> Neil
+> 
+>  drivers/thermal/Kconfig          |  11 ++
+>  drivers/thermal/Makefile         |   1 +
+>  drivers/thermal/khadas_mcu_fan.c | 174 +++++++++++++++++++++++++++++++
+>  3 files changed, 186 insertions(+)
+>  create mode 100644 drivers/thermal/khadas_mcu_fan.c
 
-Having this weak function declared in cpufreq_cooling is weird. This
-means that we will have to do so for each one that wants to use it.
-
-Can't you declare an empty function in a common header file ?
-
-> +
->  /**
->   * cpufreq_set_cur_state - callback function to set the current cooling state.
->   * @cdev: thermal cooling device pointer.
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 0566cb3314ef..81bd1c627195 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -39,9 +39,6 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
->         return per_cpu(thermal_pressure, cpu);
->  }
->
-> -void arch_set_thermal_pressure(struct cpumask *cpus,
-> -                              unsigned long th_pressure);
-> -
->  struct cpu_topology {
->         int thread_id;
->         int core_id;
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 43ba2d4a8eca..7861d21f3c2b 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3628,17 +3628,6 @@ unsigned long long task_sched_runtime(struct task_struct *p)
->         return ns;
->  }
->
-> -DEFINE_PER_CPU(unsigned long, thermal_pressure);
-> -
-> -void arch_set_thermal_pressure(struct cpumask *cpus,
-> -                              unsigned long th_pressure)
-> -{
-> -       int cpu;
-> -
-> -       for_each_cpu(cpu, cpus)
-> -               WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-> -}
-> -
->  /*
->   * This function gets called by the timer code, with HZ frequency.
->   * We call it with interrupts disabled.
-> --
-> 2.27.0
->
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
