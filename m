@@ -2,134 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E82D1FED70
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 10:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066391FED95
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 10:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728426AbgFRIUE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 04:20:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54562 "EHLO
+        id S1727098AbgFRI2j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 04:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728351AbgFRIUD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 04:20:03 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28B3C06174E
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 01:20:00 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id r7so5077060wro.1
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 01:20:00 -0700 (PDT)
+        with ESMTP id S1728196AbgFRI2h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 04:28:37 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CADBCC0613F0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 01:28:36 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l17so4309990wmj.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 01:28:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=4KcujSsS1jyjnsxMXRZfCGa39cS76YnVtoeGFVxCFgc=;
-        b=JP6cdM6fRlsxkBS/oB90AVgYIES7VE8ArtqzXGZ8RnERg8aj8ytd++B2GEjbx3XJdh
-         5fEtk7p/TKEXMSNfLVJ5haAGojW2NatyNxLjq36RasROlWCd+J0EsfKG/rZhX4F0cI+D
-         o1sXVokcbprB6k95jboAGE/WYgr86lK24y7US+dgADQbL9YjPqJZzXgSy+Uf9eNOivmX
-         GW8LmoFy1DiTHCgWKG1s3KlKKGKKLHRyHSJrvRMz4tLjVycxiexpvkzkFzfIwlod3Vm+
-         8hV2AuaYNUhl1dsJMCHSPChuCldzgGma/AiWvTUgKnmcEP3YIaaC1df5xJt5QtCAFZAU
-         rOxQ==
+        bh=pNtXBIvU5TL09qsEeDfkPWacil/hALuNwYF0M4VqVIA=;
+        b=s8BNjNGF1UTKkjVDS8nWIdgDRjlFSXgMAcIi75k+nM41dr3jATR3IzMMp0joVXktiF
+         WfFxvjaUbCtc4l4lwbnZBCYJNYXEdV0b08HTjKy8RwmC/H54jxGYXY44sO4moMFcFVzH
+         +avE69VbK06HsLaoeqHXueOof2z43MmEh4BME2CRgKsP0plFGt3WhU7DDq1vC7bu6jrU
+         N469wRpA5We3mztUXKE93mihM9/6Q68YyqfzYe2Qn6KqETb8SJbHHBOoqbq3kXDaXQgG
+         PuW6LF5HO9W4P2gufa6mQgD2fP4muGjfl/rJgP/2Ll7fhBinj6vWOZFHSHU8nMKzrg1+
+         ll1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=4KcujSsS1jyjnsxMXRZfCGa39cS76YnVtoeGFVxCFgc=;
-        b=WhlkhLEFJ6zoWFvdGXEPhF/6vyLwM7MbbnguDqS9BwYdZXXmedLzrgXSAZY/VJ9Syl
-         YKpmL1azEIzsKy73gsPfriE1A/pnJMMFzsDyzHIFNhluawJY7WuX/cZgLo5yGXlh0eIQ
-         h9FnNikffFtdmkU8gf18KFcQpz0N5Dq+iWw9hMiOoGOWriK8x3AteIwoOePX446vgJ0a
-         tBpkKPlgho1KGRkPHWhGPP/iy1iQ2fBa8UV2yP1ZMM7iPMhwdI1JJP4NoV/G5cAWgaXr
-         LSqaNN58hIXEG2Fvnt8y6fjWvLA/XtiXQZ6cRzoG2sp12iCML9CEIeMiOd3nY5088Ahi
-         6Ecw==
-X-Gm-Message-State: AOAM5300Zxpfqha5/1xSLE9J8HWuSq/YvwQXAvCSpavHWQGhLZX72jgA
-        JJ9bgWgrD3dfDm5jvswVbKQUdA==
-X-Google-Smtp-Source: ABdhPJzHjbMVQLF+FVct8ot/7YOMYRsMDLX1hN75mvGjfOq63MOC8UTFzu2niGdYKHrjduUo6iHLhw==
-X-Received: by 2002:adf:82d0:: with SMTP id 74mr3124134wrc.138.1592468399531;
-        Thu, 18 Jun 2020 01:19:59 -0700 (PDT)
+        bh=pNtXBIvU5TL09qsEeDfkPWacil/hALuNwYF0M4VqVIA=;
+        b=RkBH3TfHW5I30s/wJuvihv14vJKfkxinTExfZj04ewmzCZ4lyD40mh5gHSVceIXHsv
+         4JySMxjH6ahvVSEj2VifcKFrPWTfygQouMdYH6Bh1l4iULSotSCqeRGNyAXFx7r0nTyi
+         Y+sOnArJJY6W8Bcxsf8rmIeXWee/lhJCbnl18Z9dXOMO05lAQtCNiVHYhqLWhhby/DdH
+         9Ti8WMliF/kvIART46Pe6ee9leStoCla7gSvnCK82t3r4D4y3T9Hh+c8ljU0DCeySDYt
+         7JF4GpcEyqe9OSEwgxRxucHXmuvYbSWaB9LtZEIGWCGGpssVw11/EdukRDYdIEf8IORW
+         VC9w==
+X-Gm-Message-State: AOAM530I2/zp8dqCApN/ISeWrxEjHtDMzsSXRCcHV+j+ICekMaf3t+kn
+        3bXfe8Tj1worqz3kRoi5CtJN0g==
+X-Google-Smtp-Source: ABdhPJx0bssLzs0IUMEdhcrZYDyS44UMQ45eyj2LaifO2XUGoS2al0i8+FuiMCxAwozRQz4kCay5Gw==
+X-Received: by 2002:a1c:ddc1:: with SMTP id u184mr2658284wmg.115.1592468915449;
+        Thu, 18 Jun 2020 01:28:35 -0700 (PDT)
 Received: from dell ([95.149.164.118])
-        by smtp.gmail.com with ESMTPSA id l17sm749882wmh.14.2020.06.18.01.19.58
+        by smtp.gmail.com with ESMTPSA id j5sm2501138wrq.39.2020.06.18.01.28.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 01:19:58 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 09:19:57 +0100
+        Thu, 18 Jun 2020 01:28:34 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 09:28:32 +0100
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     khilman@baylibre.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/5] mfd: Add support for Khadas Microcontroller
-Message-ID: <20200618081957.GD2608702@dell>
-References: <20200608091739.2368-1-narmstrong@baylibre.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mfd: max77620: Convert to json-schema
+Message-ID: <20200618082832.GA954398@dell>
+References: <20200609162621.1769610-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200608091739.2368-1-narmstrong@baylibre.com>
+In-Reply-To: <20200609162621.1769610-1-thierry.reding@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 08 Jun 2020, Neil Armstrong wrote:
+On Tue, 09 Jun 2020, Thierry Reding wrote:
 
-> The new Khadas VIM2, VIM3 and Edge boards embeds an on-board microcontroller
-> connected via I2C.
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> This Microcontroller is present on the Khadas VIM1, VIM2, VIM3 and Edge
-> boards.
+> Convert the Maxim MAX77620 PMIC device tree bindings from free-form text
+> format to json-schema.
 > 
-> It has multiple boot control features like password check, power-on
-> options, power-off control and system FAN control on recent boards.
+> This also pulls in the GPIO, regulator, pinmux and thermal bindings for
+> the corresponding subdevices into the top-level binding so that it can
+> be described more consistently.
 > 
-> Thie serie adds :
-> - the bindings
-> - the MFD driver
-> - the Thermal Cooling cell driver
-> - updates MAINTAINERS
-> - add support into the Khadas VIM3/VIM3L DT
-> 
-> Changes since v2 at [3]:
-> - Removed NVMEM driver for separate submission
-> - fixed MFD driver, header and Kconfig
-> - fixed Thermal Kconfig
-> - fixed MAINTAINERS files and path
-> 
-> Changes since RFC v1 at [2]:
-> - moved hwmon driver to thermal-only
-> - moved the SM1 thermal nodes in a separate serie
-> - added the bindings review tag from rob
-> 
-> [1] http://lore.kernel.org/r/20200512093916.19676-1-narmstrong@baylibre.com
-> [2] http://lore.kernel.org/r/20200421080102.22796-1-narmstrong@baylibre.com
-> [3] http://lore.kernel.org/r/20200512132613.31507-1-narmstrong@baylibre.com
-> 
-> Neil Armstrong (5):
->   dt-bindings: mfd: add Khadas Microcontroller bindings
->   mfd: add support for the Khadas System control Microcontroller
->   thermal: add support for the MCU controlled FAN on Khadas boards
->   MAINTAINERS: add myself as maintainer for Khadas MCU drivers
->   arm64: dts: meson-khadas-vim3: add Khadas MCU nodes
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  .../bindings/gpio/gpio-max77620.txt           |  25 -
+>  .../devicetree/bindings/mfd/max77620.txt      | 162 -----
+>  .../devicetree/bindings/mfd/max77620.yaml     | 662 ++++++++++++++++++
+>  .../bindings/pinctrl/pinctrl-max77620.txt     | 127 ----
+>  .../bindings/regulator/regulator-max77620.txt | 222 ------
+>  .../bindings/thermal/max77620_thermal.txt     |  70 --
+>  6 files changed, 662 insertions(+), 606 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/max77620.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77620.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/regulator-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/max77620_thermal.txt
 
-I'm a bit concerned by the missing patches from my inbox.
+Wow, what a beast.  I can see why Rob is putting this one off!
 
-Looks like you omitted to send me patch 3 and 5.
-
-Hopefully the Thermal patch doesn't depend on the MFD one!
-
->  .../devicetree/bindings/mfd/khadas,mcu.yaml   |  44 +++++
->  MAINTAINERS                                   |   9 +
->  .../boot/dts/amlogic/meson-khadas-vim3.dtsi   |  23 +++
->  drivers/mfd/Kconfig                           |  21 +++
->  drivers/mfd/Makefile                          |   1 +
->  drivers/mfd/khadas-mcu.c                      | 142 ++++++++++++++
->  drivers/thermal/Kconfig                       |  11 ++
->  drivers/thermal/Makefile                      |   1 +
->  drivers/thermal/khadas_mcu_fan.c              | 174 ++++++++++++++++++
->  include/linux/mfd/khadas-mcu.h                |  91 +++++++++
->  10 files changed, 517 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/khadas,mcu.yaml
->  create mode 100644 drivers/mfd/khadas-mcu.c
->  create mode 100644 drivers/thermal/khadas_mcu_fan.c
->  create mode 100644 include/linux/mfd/khadas-mcu.h
-> 
+Changes look okay to me, but Rob and Linus should review.
 
 -- 
 Lee Jones [李琼斯]
