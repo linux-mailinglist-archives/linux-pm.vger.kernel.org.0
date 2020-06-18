@@ -2,121 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0526A1FF9DE
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E15201FFAB4
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 20:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732041AbgFRRFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 13:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732037AbgFRRFj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 13:05:39 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313BFC0613EF
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 10:05:39 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k2so2809911pjs.2
-        for <linux-pm@vger.kernel.org>; Thu, 18 Jun 2020 10:05:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AO2SIF4iY7sgxTuLuzUmwf7DkdmGysB0WQTalXPbMgs=;
-        b=PjKtZNzrbelzn7kEW6flnrKRJfMx65kRbQIqwTIoA+/W1n8FQeiJfwdpuOV6x2R3mS
-         XEO8LLqDs4LE7JAxtoXjAqdIN3Oc7zn+R5KYN4dgsUMhdoWSMTlwrchvmY8Z4t6chINu
-         zxbq6KbAwGuUFAyndsYbnFFB7B6PaUN8tqoLw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AO2SIF4iY7sgxTuLuzUmwf7DkdmGysB0WQTalXPbMgs=;
-        b=DBnspb49XDDuGVub4p9lxWwxVn/z1bJZlZM6aysnHNCD+BW1RTrb52/duv4TmCXafv
-         cBdI5lfVboJQWZEqZo8BcQWc3/uE/QHjufXSUOMJ8Ty1Eqi1FPq6Bgy0EdiBU3VyZ7My
-         1QrLqU4E8EJ3sbwnIJGpjNK7p8m2yiQWhSwtgS+d3Jonn+EhW6sw1seKeEfgbgVS9gbg
-         ga1g7ypBwv+REX5GNlD48NVEKtQgHurAFVbAzpN0NHe+myHak37gmhgB0ZOUO5vH9lmZ
-         Qi1BXePXiIt2akt+zwjDKRQcWgypDFnO8s2VaQjJQVZd9NRIqCJ0HRNeJEqT8UJsp0ea
-         3s7A==
-X-Gm-Message-State: AOAM532nUlwYVHvIvNhnk3vca2vagbYMMTsDsMxZNjX9XQZ5mr6F/bZY
-        pxU4/wLnWyIqz1ZU+rAmJs9FiQ==
-X-Google-Smtp-Source: ABdhPJxaMrMstwhBsh7FtkQsh979iTm724MDzimjrNFiSDhToMWkLyBwqBleJt9mhy08j3fm2nlAKw==
-X-Received: by 2002:a17:902:9687:: with SMTP id n7mr4557868plp.180.1592499938642;
-        Thu, 18 Jun 2020 10:05:38 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
-        by smtp.gmail.com with ESMTPSA id i63sm3094782pje.34.2020.06.18.10.05.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 10:05:37 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 10:05:36 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        georgi.djakov@linaro.org, saravanak@google.com, nm@ti.com,
-        bjorn.andersson@linaro.org, agross@kernel.org, rjw@rjwysocki.net,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dianders@chromium.org,
-        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
-        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org,
-        linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH v6 4/5] cpufreq: qcom: Update the bandwidth levels on
- frequency change
-Message-ID: <20200618170536.GF4525@google.com>
-References: <20200605213332.609-1-sibis@codeaurora.org>
- <20200605213332.609-5-sibis@codeaurora.org>
- <20200615172553.GU4525@google.com>
- <e21f85d64d72ec637c10dae93e8323bb@codeaurora.org>
- <20200616221157.GA4525@google.com>
- <8a6ea89f41a3341e9d00ed9aa66355d6@codeaurora.org>
+        id S1727787AbgFRSCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 14:02:47 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:11974 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727022AbgFRSCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 14:02:46 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592503365; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=0wfkwopuLx8hs9G0OXE+EBnMO69t9YFTTa2ykBZeSkI=; b=XyLcCeGQMUXlRNN3qfbplME0adih9h178NeQOVH3qrqQI/F2qB3oX/vDh511Tm/8Gsju8y/w
+ x6l/0nFbyOBCTlY5JAeZ7a1WiwhF6adZpG8XUn69UhAnbLwGh8cpqPU1mC45ZHTtJ0PyI/kt
+ gUvo2MkCc5ZPiGshkOeCXzUytDs=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
+ 5eebac11356bcc26abdbffe2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 18:01:53
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5DB23C4339C; Thu, 18 Jun 2020 18:01:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 59BFEC433C9;
+        Thu, 18 Jun 2020 18:01:51 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 59BFEC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
+Date:   Thu, 18 Jun 2020 12:01:50 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/5] cpuidle: psci: Fail cpuidle registration if set OSI
+ mode failed
+Message-ID: <20200618180150.GK12942@codeaurora.org>
+References: <20200615152054.6819-1-ulf.hansson@linaro.org>
+ <20200615152054.6819-2-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <8a6ea89f41a3341e9d00ed9aa66355d6@codeaurora.org>
+In-Reply-To: <20200615152054.6819-2-ulf.hansson@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 10:13:21PM +0530, Sibi Sankar wrote:
-> On 2020-06-17 03:41, Matthias Kaehlcke wrote:
-> > Hi Sibi,
-> > 
-> > after doing the review I noticed that Viresh replied on the cover letter
-> > that he picked the series up for v5.9, so I'm not sure if it makes sense
-> > to send a v7.
-> > 
-> > On Wed, Jun 17, 2020 at 02:35:00AM +0530, Sibi Sankar wrote:
-> > 
-> > > > > @@ -112,7 +178,7 @@ static int qcom_cpufreq_hw_read_lut(struct
-> > > > > device *cpu_dev,
-> > > > >
-> > > > >  		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
-> > > > >  			table[i].frequency = freq;
-> > > > > -			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
-> > > > > +			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
-> > > >
-> > > > This is the cross-validation mentioned above, right? Shouldn't it
-> > > > include
-> > > > a check of the return value?
-> > > 
-> > > Yes, this is the cross-validation step,
-> > > we adjust the voltage if opp-tables are
-> > > present/added successfully and enable
-> > > them, else we would just do a add opp.
-> > > We don't want to exit early on a single
-> > > opp failure. We will error out a bit
-> > > later if the opp-count ends up to be
-> > > zero.
-> > 
-> > At least an error/warning message would seem convenient when
-> > adjusting/adding
-> > an OPP fails, otherwise you would only notice by looking at the sysfs
-> > attributes (if you'd even spot a single/few OPPs to be missing).
-> 
-> I did consider the case where adjust
-> voltage fails and we do report the
-> freq for which it fails for as well.
-> If adding a OPP fails we will still
-> it being listed in the sysfs cpufreq
-> scaling_available_frequencies since
-> it lists the freq_table in khz there
-> instead.
+On Mon, Jun 15 2020 at 09:21 -0600, Ulf Hansson wrote:
+>Currently we allow the cpuidle driver registration to succeed, even if we
+>failed to enable the OSI mode when the hierarchical DT layout is used. This
+>means running in a degraded mode, by using the available idle states per
+>CPU, while also preventing the domain idle states.
+>
+>Moving forward, this behaviour looks quite questionable to maintain, as
+>complexity seems to grow around it, especially when trying to add support
+>for deferred probe, for example.
+>
+>Therefore, let's make the cpuidle driver registration to fail in this
+>situation, thus relying on the default architectural cpuidle backend for
+>WFI to be used.
+>
+>Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Ah, right, I missed that v6 added the error log to
-qcom_cpufreq_update_opp(), please ignore my comment :)
+May be PATCH 3/5 should come before this change, but for this patch itself,
+please consider -
+
+Reviewed-by: Lina Iyer <ilina@codeaurora.org>
+
+>---
+> drivers/cpuidle/cpuidle-psci-domain.c | 5 -----
+> 1 file changed, 5 deletions(-)
+>
+>diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+>index 423f03bbeb74..f07786aad673 100644
+>--- a/drivers/cpuidle/cpuidle-psci-domain.c
+>+++ b/drivers/cpuidle/cpuidle-psci-domain.c
+>@@ -26,7 +26,6 @@ struct psci_pd_provider {
+> };
+>
+> static LIST_HEAD(psci_pd_providers);
+>-static bool osi_mode_enabled __initdata;
+>
+> static int psci_pd_power_off(struct generic_pm_domain *pd)
+> {
+>@@ -272,7 +271,6 @@ static int __init psci_idle_init_domains(void)
+> 		goto remove_pd;
+> 	}
+>
+>-	osi_mode_enabled = true;
+> 	of_node_put(np);
+> 	pr_info("Initialized CPU PM domain topology\n");
+> 	return pd_count;
+>@@ -293,9 +291,6 @@ struct device __init *psci_dt_attach_cpu(int cpu)
+> {
+> 	struct device *dev;
+>
+>-	if (!osi_mode_enabled)
+>-		return NULL;
+>-
+> 	dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
+> 	if (IS_ERR_OR_NULL(dev))
+> 		return dev;
+>-- 
+>2.20.1
+>
