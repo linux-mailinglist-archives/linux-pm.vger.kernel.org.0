@@ -2,38 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF291FDDE3
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 03:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175921FE100
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 03:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732263AbgFRB3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 21:29:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38430 "EHLO mail.kernel.org"
+        id S1731907AbgFRBvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 21:51:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34730 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732256AbgFRB3N (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:29:13 -0400
+        id S1727071AbgFRB06 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:26:58 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C7FF222209;
-        Thu, 18 Jun 2020 01:29:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0FB7921D80;
+        Thu, 18 Jun 2020 01:26:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443752;
-        bh=D8zLb6A3eAFY+oTRbtdMRb/vYU6Su0bEE3Y/89xD7JQ=;
+        s=default; t=1592443617;
+        bh=1vNCKVBDL3uGljQY3US1t2T4+3QsHCABbxYqhgu8NQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iWg9kaAi/Bbik3Sw79/2uVOu+mRfQi3BPmpwOkbqBk59AeWHAv55jAe2t+HeJSaMX
-         Co4ESE9M2ujmjT9kMYWlMrBSRirZ51CoHbs2k3oBgf9lDUOsn8Vsrz0hyV4OBFumD0
-         bj4rq6SZlpwcGbujRVxlerevRd7Wv03C3FBZZWXg=
+        b=J+HJx6Krzg6BMoqJQ183PlOHciWdIjlGjH2rrwQEO6KnFOQj1Fp0sfOtT0JbT+fST
+         iI9Locv5CJpxNotN+miy83JMru98gTpU+3TzrG/Qg/hdT/rvE4wcr2Ygz3FUH/cOuZ
+         9MefWmvjYxb7hat5mCukd+jRTNix5V8vNKF5wKdw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 40/80] power: supply: lp8788: Fix an error handling path in 'lp8788_charger_probe()'
-Date:   Wed, 17 Jun 2020 21:27:39 -0400
-Message-Id: <20200618012819.609778-40-sashal@kernel.org>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 044/108] thermal/drivers/ti-soc-thermal: Avoid dereferencing ERR_PTR
+Date:   Wed, 17 Jun 2020 21:24:56 -0400
+Message-Id: <20200618012600.608744-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012819.609778-1-sashal@kernel.org>
-References: <20200618012819.609778-1-sashal@kernel.org>
+In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
+References: <20200618012600.608744-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,68 +45,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-[ Upstream commit 934ed3847a4ebc75b655659c4d2349ba4337941c ]
+[ Upstream commit 7440f518dad9d861d76c64956641eeddd3586f75 ]
 
-In the probe function, in case of error, resources allocated in
-'lp8788_setup_adc_channel()' must be released.
+On error the function ti_bandgap_get_sensor_data() returns the error
+code in ERR_PTR() but we only checked if the return value is NULL or
+not. And, so we can dereference an error code inside ERR_PTR.
+While at it, convert a check to IS_ERR_OR_NULL.
 
-This can be achieved easily by using the devm_ variant of
-'iio_channel_get()'.
-This has the extra benefit to simplify the remove function and to axe the
-'lp8788_release_adc_channel()' function which is now useless.
-
-Fixes: 98a276649358 ("power_supply: Add new lp8788 charger driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20200424161944.6044-1-sudipm.mukherjee@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/lp8788-charger.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply/lp8788-charger.c
-index cd614fe69d14..c3075ea011b6 100644
---- a/drivers/power/supply/lp8788-charger.c
-+++ b/drivers/power/supply/lp8788-charger.c
-@@ -603,27 +603,14 @@ static void lp8788_setup_adc_channel(struct device *dev,
- 		return;
+diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+index c211a8e4a210..fa98c398d70f 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
++++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+@@ -183,7 +183,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
  
- 	/* ADC channel for battery voltage */
--	chan = iio_channel_get(dev, pdata->adc_vbatt);
-+	chan = devm_iio_channel_get(dev, pdata->adc_vbatt);
- 	pchg->chan[LP8788_VBATT] = IS_ERR(chan) ? NULL : chan;
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
  
- 	/* ADC channel for battery temperature */
--	chan = iio_channel_get(dev, pdata->adc_batt_temp);
-+	chan = devm_iio_channel_get(dev, pdata->adc_batt_temp);
- 	pchg->chan[LP8788_BATT_TEMP] = IS_ERR(chan) ? NULL : chan;
- }
+-	if (!data || IS_ERR(data))
++	if (!IS_ERR_OR_NULL(data))
+ 		data = ti_thermal_build_data(bgp, id);
  
--static void lp8788_release_adc_channel(struct lp8788_charger *pchg)
--{
--	int i;
--
--	for (i = 0; i < LP8788_NUM_CHG_ADC; i++) {
--		if (!pchg->chan[i])
--			continue;
--
--		iio_channel_release(pchg->chan[i]);
--		pchg->chan[i] = NULL;
--	}
--}
--
- static ssize_t lp8788_show_charger_status(struct device *dev,
- 				struct device_attribute *attr, char *buf)
- {
-@@ -744,7 +731,6 @@ static int lp8788_charger_remove(struct platform_device *pdev)
- 	lp8788_irq_unregister(pdev, pchg);
- 	sysfs_remove_group(&pdev->dev.kobj, &lp8788_attr_group);
- 	lp8788_psy_unregister(pchg);
--	lp8788_release_adc_channel(pchg);
+ 	if (!data)
+@@ -210,7 +210,7 @@ int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id)
  
- 	return 0;
- }
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (data && data->ti_thermal) {
++	if (!IS_ERR_OR_NULL(data) && data->ti_thermal) {
+ 		if (data->our_zone)
+ 			thermal_zone_device_unregister(data->ti_thermal);
+ 	}
+@@ -276,7 +276,7 @@ int ti_thermal_unregister_cpu_cooling(struct ti_bandgap *bgp, int id)
+ 
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (data) {
++	if (!IS_ERR_OR_NULL(data)) {
+ 		cpufreq_cooling_unregister(data->cool_dev);
+ 		cpufreq_cpu_put(data->policy);
+ 	}
 -- 
 2.25.1
 
