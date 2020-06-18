@@ -2,31 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15201FFAB4
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 20:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCAA1FFAB2
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 20:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727787AbgFRSCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 14:02:47 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:11974 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727022AbgFRSCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 18 Jun 2020 14:02:46 -0400
+        id S1727779AbgFRSCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 14:02:36 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:43280 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727022AbgFRSCg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Jun 2020 14:02:36 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592503365; h=In-Reply-To: Content-Type: MIME-Version:
+ s=smtp; t=1592503355; h=In-Reply-To: Content-Type: MIME-Version:
  References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=0wfkwopuLx8hs9G0OXE+EBnMO69t9YFTTa2ykBZeSkI=; b=XyLcCeGQMUXlRNN3qfbplME0adih9h178NeQOVH3qrqQI/F2qB3oX/vDh511Tm/8Gsju8y/w
- x6l/0nFbyOBCTlY5JAeZ7a1WiwhF6adZpG8XUn69UhAnbLwGh8cpqPU1mC45ZHTtJ0PyI/kt
- gUvo2MkCc5ZPiGshkOeCXzUytDs=
-X-Mailgun-Sending-Ip: 104.130.122.29
+ bh=lCdbSGdi/eKz+yk7v3H4F1EFosxd309eL9sHFCGRvJc=; b=oLWTeA1BtlwlObJRGqsyOsh4CPy+6AwUiseIp/Pk5w41PwI7tprf6y4yL3gvbsl/EdfR8LnU
+ zzfCCd4S4Xisgtr1iNBIQcMOlx5JdoXPspjcHNAvaYWLQJbmpa314A77bBTvXSTOO94yHGXK
+ M8DI1mQYCiUSEjP5EqlLT4w2fCM=
+X-Mailgun-Sending-Ip: 69.72.43.7
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
- 5eebac11356bcc26abdbffe2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 18:01:53
+ smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
+ 5eebac275866879c76b6e43e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 18:02:15
  GMT
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5DB23C4339C; Thu, 18 Jun 2020 18:01:52 +0000 (UTC)
+        id 22C13C43391; Thu, 18 Jun 2020 18:02:15 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -36,12 +36,12 @@ Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 59BFEC433C9;
-        Thu, 18 Jun 2020 18:01:51 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 59BFEC433C9
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2ECA4C433C8;
+        Thu, 18 Jun 2020 18:02:14 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2ECA4C433C8
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Thu, 18 Jun 2020 12:01:50 -0600
+Date:   Thu, 18 Jun 2020 12:02:13 -0600
 From:   Lina Iyer <ilina@codeaurora.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
@@ -54,75 +54,83 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
         linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/5] cpuidle: psci: Fail cpuidle registration if set OSI
- mode failed
-Message-ID: <20200618180150.GK12942@codeaurora.org>
+Subject: Re: [PATCH 3/5] cpuidle: psci: Split into two separate build objects
+Message-ID: <20200618180213.GL12942@codeaurora.org>
 References: <20200615152054.6819-1-ulf.hansson@linaro.org>
- <20200615152054.6819-2-ulf.hansson@linaro.org>
+ <20200615152054.6819-4-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200615152054.6819-2-ulf.hansson@linaro.org>
+In-Reply-To: <20200615152054.6819-4-ulf.hansson@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon, Jun 15 2020 at 09:21 -0600, Ulf Hansson wrote:
->Currently we allow the cpuidle driver registration to succeed, even if we
->failed to enable the OSI mode when the hierarchical DT layout is used. This
->means running in a degraded mode, by using the available idle states per
->CPU, while also preventing the domain idle states.
->
->Moving forward, this behaviour looks quite questionable to maintain, as
->complexity seems to grow around it, especially when trying to add support
->for deferred probe, for example.
->
->Therefore, let's make the cpuidle driver registration to fail in this
->situation, thus relying on the default architectural cpuidle backend for
->WFI to be used.
+>The combined build object for the PSCI cpuidle driver and the PSCI PM
+>domain, is a bit messy. Therefore let's split it up by adding a new Kconfig
+>ARM_PSCI_CPUIDLE_DOMAIN and convert into two separate objects.
 >
 >Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-May be PATCH 3/5 should come before this change, but for this patch itself,
-please consider -
-
 Reviewed-by: Lina Iyer <ilina@codeaurora.org>
 
 >---
-> drivers/cpuidle/cpuidle-psci-domain.c | 5 -----
-> 1 file changed, 5 deletions(-)
+> drivers/cpuidle/Kconfig.arm    | 10 ++++++++++
+> drivers/cpuidle/Makefile       |  5 ++---
+> drivers/cpuidle/cpuidle-psci.h |  2 +-
+> 3 files changed, 13 insertions(+), 4 deletions(-)
 >
->diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
->index 423f03bbeb74..f07786aad673 100644
->--- a/drivers/cpuidle/cpuidle-psci-domain.c
->+++ b/drivers/cpuidle/cpuidle-psci-domain.c
->@@ -26,7 +26,6 @@ struct psci_pd_provider {
-> };
+>diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+>index 51a7e89085c0..0844fadc4be8 100644
+>--- a/drivers/cpuidle/Kconfig.arm
+>+++ b/drivers/cpuidle/Kconfig.arm
+>@@ -23,6 +23,16 @@ config ARM_PSCI_CPUIDLE
+> 	  It provides an idle driver that is capable of detecting and
+> 	  managing idle states through the PSCI firmware interface.
 >
-> static LIST_HEAD(psci_pd_providers);
->-static bool osi_mode_enabled __initdata;
+>+config ARM_PSCI_CPUIDLE_DOMAIN
+>+	bool "PSCI CPU idle Domain"
+>+	depends on ARM_PSCI_CPUIDLE
+>+	depends on PM_GENERIC_DOMAINS_OF
+>+	default y
+>+	help
+>+	  Select this to enable the PSCI based CPUidle driver to use PM domains,
+>+	  which is needed to support the hierarchical DT based layout of the
+>+	  idle states.
+>+
+> config ARM_BIG_LITTLE_CPUIDLE
+> 	bool "Support for ARM big.LITTLE processors"
+> 	depends on ARCH_VEXPRESS_TC2_PM || ARCH_EXYNOS || COMPILE_TEST
+>diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+>index f07800cbb43f..26bbc5e74123 100644
+>--- a/drivers/cpuidle/Makefile
+>+++ b/drivers/cpuidle/Makefile
+>@@ -21,9 +21,8 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
+> obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
+> obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
+> obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
+>-obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
+>-cpuidle_psci-y				:= cpuidle-psci.o
+>-cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
+>+obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
+>+obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
+> obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
+> obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
 >
-> static int psci_pd_power_off(struct generic_pm_domain *pd)
-> {
->@@ -272,7 +271,6 @@ static int __init psci_idle_init_domains(void)
-> 		goto remove_pd;
-> 	}
+>diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
+>index 0690d66df829..d8e925e84c27 100644
+>--- a/drivers/cpuidle/cpuidle-psci.h
+>+++ b/drivers/cpuidle/cpuidle-psci.h
+>@@ -9,7 +9,7 @@ struct device_node;
+> void psci_set_domain_state(u32 state);
+> int psci_dt_parse_state_node(struct device_node *np, u32 *state);
 >
->-	osi_mode_enabled = true;
-> 	of_node_put(np);
-> 	pr_info("Initialized CPU PM domain topology\n");
-> 	return pd_count;
->@@ -293,9 +291,6 @@ struct device __init *psci_dt_attach_cpu(int cpu)
-> {
-> 	struct device *dev;
->
->-	if (!osi_mode_enabled)
->-		return NULL;
->-
-> 	dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
-> 	if (IS_ERR_OR_NULL(dev))
-> 		return dev;
+>-#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
+>+#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
+> struct device *psci_dt_attach_cpu(int cpu);
+> void psci_dt_detach_cpu(struct device *dev);
+> #else
 >-- 
 >2.20.1
 >
