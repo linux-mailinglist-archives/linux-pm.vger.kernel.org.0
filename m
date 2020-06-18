@@ -2,135 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCAA1FFAB2
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 20:02:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F65C1FFE89
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 01:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgFRSCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 18 Jun 2020 14:02:36 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:43280 "EHLO m43-7.mailgun.net"
+        id S1728932AbgFRXUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 18 Jun 2020 19:20:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727022AbgFRSCg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 18 Jun 2020 14:02:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592503355; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=lCdbSGdi/eKz+yk7v3H4F1EFosxd309eL9sHFCGRvJc=; b=oLWTeA1BtlwlObJRGqsyOsh4CPy+6AwUiseIp/Pk5w41PwI7tprf6y4yL3gvbsl/EdfR8LnU
- zzfCCd4S4Xisgtr1iNBIQcMOlx5JdoXPspjcHNAvaYWLQJbmpa314A77bBTvXSTOO94yHGXK
- M8DI1mQYCiUSEjP5EqlLT4w2fCM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-west-2.postgun.com with SMTP id
- 5eebac275866879c76b6e43e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 18 Jun 2020 18:02:15
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 22C13C43391; Thu, 18 Jun 2020 18:02:15 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726835AbgFRXUO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 18 Jun 2020 19:20:14 -0400
+Received: from localhost (mobile-166-170-222-206.mycingular.net [166.170.222.206])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2ECA4C433C8;
-        Thu, 18 Jun 2020 18:02:14 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2ECA4C433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Thu, 18 Jun 2020 12:02:13 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        linux-pm@vger.kernel.org, "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/5] cpuidle: psci: Split into two separate build objects
-Message-ID: <20200618180213.GL12942@codeaurora.org>
-References: <20200615152054.6819-1-ulf.hansson@linaro.org>
- <20200615152054.6819-4-ulf.hansson@linaro.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id B58C7206E2;
+        Thu, 18 Jun 2020 23:20:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592522413;
+        bh=NS0PQoZ4D7dKborXS9BkdpVpGPMGRYqY0rGf2tcmk/Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=LmrzciU9LATqeSx7hJ1B2LhdeaSx9Pb5+dlU+KoEUueAeM4uyv2Khhm7K09cmW/Cc
+         V/ehu2uzvVPRvYKR0/cq+4K39GOFMRS83CkDcgPeWogHA0gfZWL/BDVwRfTLhjztpV
+         UCzlqpAx15dHNevwWUNhARkXBpSR+sAAOVdC9DgM=
+Date:   Thu, 18 Jun 2020 18:20:11 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     svarbanov@mm-sol.com, bjorn.andersson@linaro.org, vkoul@kernel.org,
+        sanm@codeaurora.org, mgautam@codeaurora.org, agross@kernel.org,
+        bhelgaas@google.com, robh@kernel.org, lorenzo.pieralisi@arm.com,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Disable power management for uPD720201 USB3
+ controller
+Message-ID: <20200618232011.GA2128408@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200615152054.6819-4-ulf.hansson@linaro.org>
+In-Reply-To: <20200616211711.GA1981914@bjorn-Precision-5520>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 15 2020 at 09:21 -0600, Ulf Hansson wrote:
->The combined build object for the PSCI cpuidle driver and the PSCI PM
->domain, is a bit messy. Therefore let's split it up by adding a new Kconfig
->ARM_PSCI_CPUIDLE_DOMAIN and convert into two separate objects.
->
->Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Reviewed-by: Lina Iyer <ilina@codeaurora.org>
+On Tue, Jun 16, 2020 at 04:17:11PM -0500, Bjorn Helgaas wrote:
+> On Mon, Jun 15, 2020 at 09:24:13PM +0300, Georgi Djakov wrote:
+> > The uPD720201 USB3 host controller (connected to PCIe) on the Dragonboard
+> > 845c is often failing during suspend and resume. The following messages
+> > are seen over the console:
+> > 
+> >   PM: suspend entry (s2idle)
+> >   Filesystems sync: 0.000 seconds
+> >   Freezing user space processes ... (elapsed 0.001 seconds) done.
+> >   OOM killer disabled.
+> >   Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> >   printk: Suspending console(s) (use no_console_suspend to debug)
+> >   dwc3-qcom a8f8800.usb: HS-PHY not in L2
+> >   dwc3-qcom a6f8800.usb: HS-PHY not in L2
+> >   xhci_hcd 0000:01:00.0: can't change power state from D3hot to D0 (config
+> >   space inaccessible)
+> >   xhci_hcd 0000:01:00.0: can't change power state from D3hot to D0 (config
+> >   space inaccessible)
+> >   xhci_hcd 0000:01:00.0: Controller not ready at resume -19
+> >   xhci_hcd 0000:01:00.0: PCI post-resume error -19!
+> >   xhci_hcd 0000:01:00.0: HC died; cleaning up
+> > 
+> > Then the USB devices are not functional anymore. Let's disable the PM of
+> > the controller for now, as this will at least keep USB devices working
+> > even after suspend and resume.
 
->---
-> drivers/cpuidle/Kconfig.arm    | 10 ++++++++++
-> drivers/cpuidle/Makefile       |  5 ++---
-> drivers/cpuidle/cpuidle-psci.h |  2 +-
-> 3 files changed, 13 insertions(+), 4 deletions(-)
->
->diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
->index 51a7e89085c0..0844fadc4be8 100644
->--- a/drivers/cpuidle/Kconfig.arm
->+++ b/drivers/cpuidle/Kconfig.arm
->@@ -23,6 +23,16 @@ config ARM_PSCI_CPUIDLE
-> 	  It provides an idle driver that is capable of detecting and
-> 	  managing idle states through the PSCI firmware interface.
->
->+config ARM_PSCI_CPUIDLE_DOMAIN
->+	bool "PSCI CPU idle Domain"
->+	depends on ARM_PSCI_CPUIDLE
->+	depends on PM_GENERIC_DOMAINS_OF
->+	default y
->+	help
->+	  Select this to enable the PSCI based CPUidle driver to use PM domains,
->+	  which is needed to support the hierarchical DT based layout of the
->+	  idle states.
->+
-> config ARM_BIG_LITTLE_CPUIDLE
-> 	bool "Support for ARM big.LITTLE processors"
-> 	depends on ARCH_VEXPRESS_TC2_PM || ARCH_EXYNOS || COMPILE_TEST
->diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
->index f07800cbb43f..26bbc5e74123 100644
->--- a/drivers/cpuidle/Makefile
->+++ b/drivers/cpuidle/Makefile
->@@ -21,9 +21,8 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
-> obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
-> obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
-> obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
->-obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
->-cpuidle_psci-y				:= cpuidle-psci.o
->-cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
->+obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
->+obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
-> obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
-> obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
->
->diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
->index 0690d66df829..d8e925e84c27 100644
->--- a/drivers/cpuidle/cpuidle-psci.h
->+++ b/drivers/cpuidle/cpuidle-psci.h
->@@ -9,7 +9,7 @@ struct device_node;
-> void psci_set_domain_state(u32 state);
-> int psci_dt_parse_state_node(struct device_node *np, u32 *state);
->
->-#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
->+#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
-> struct device *psci_dt_attach_cpu(int cpu);
-> void psci_dt_detach_cpu(struct device *dev);
-> #else
->-- 
->2.20.1
->
+Georgi, can you collect the complete dmesg log and "sudo lspci
+-vvxxxx" output somewhere?  A new report at bugzilla.kernel.org would
+be a good spot.
+
+Maybe we're missing a delay here.  The "config space inaccessible"
+message means we read 0xffff from PCI_PM_CTRL, which probably means
+the device is still in D3cold.  If it were in any other power state,
+PCI_PM_CTRL should be readable, and 0xffff is not a valid value.
+
+Could you also insert a dump_stack() right after we print that "config
+space inaccessible" message?  I don't know enough about power
+management to understand why we see that message twice.
+
+> This seems like we're just covering up a deeper problem here.  I think
+> it would be better to fix the underlying problem.
+> 
+> The quirk you're adding is specific to the Renesas 0x0014 device.  Is
+> there some reason to think the problem is specific to that device, or
+> might other devices have the same problem?
+> 
+> Maybe we're missing something in pcie-qcom.c?  Is there any
+> suspend/resume support required in that driver?  It doesn't look like
+> it has anything except that it calls pm_runtime_enable().
+> 
+> > Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 138e1a2d21cc..c1f502682a19 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1439,6 +1439,13 @@ static void qcom_fixup_class(struct pci_dev *dev)
+> >  {
+> >  	dev->class = PCI_CLASS_BRIDGE_PCI << 8;
+> >  }
+> > +
+> > +static void qcom_fixup_nopm(struct pci_dev *dev)
+> > +{
+> > +	dev->pm_cap = 0;
+> > +	dev_info(&dev->dev, "Disabling PCI power management\n");
+> > +}
+> > +
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0101, qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0104, qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0106, qcom_fixup_class);
+> > @@ -1446,6 +1453,7 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0107, qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x0302, qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1000, qcom_fixup_class);
+> >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_QCOM, 0x1001, qcom_fixup_class);
+> > +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_RENESAS, 0x0014, qcom_fixup_nopm);
+> 
+> The convention is that DECLARE_PCI_FIXUP_*() comes immediately after
+> the quirk function itself, so the whole patch would be a single diff
+> hunk.  See drivers/pci/quirks.c for many examples.
+> 
+> >  static struct platform_driver qcom_pcie_driver = {
+> >  	.probe = qcom_pcie_probe,
