@@ -2,39 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064621FE48C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 04:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939E61FE33B
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 04:07:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728803AbgFRCTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 22:19:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51150 "EHLO mail.kernel.org"
+        id S1730938AbgFRCHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 22:07:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55254 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730122AbgFRBTX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:19:23 -0400
+        id S1730722AbgFRBWU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9856B221F2;
-        Thu, 18 Jun 2020 01:19:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F67D20776;
+        Thu, 18 Jun 2020 01:22:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443163;
-        bh=th9LzinmB/iJByqx4yAfdoibilCaqLb71XRYANjmnxQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LPi3I82vcFAb1uJB/sqr1YcZzk/jhqhM4wX5k+gGw9AcBT7IKyQ/ZHUox4R6omdXL
-         kyJkCx7lvaR+bQk6jTjiKloXPOAp4PuFThsbaJGohCr9xczcvwneC3+idmKpRXaQqI
-         RJOypXdEF3kJIsettx0RrOrP2X731RYIIJaMzvSU=
+        s=default; t=1592443340;
+        bh=pfMglipJmW2Nk/4AvOsxQl4v5eafwLNehc1TxMDPaGc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qyX/v+ac8KpJ65td3K8RR4iowzQffrOErhcjeLFxOOO8tARssJI5Nf8+XBB52qLTC
+         QRIKw5VpJI8Cxt0Y68wRAyHqJsN5GFwqaY64Hlvd/6jMYgUxfF36PTmeHmcd7UtnpM
+         aSjhgtfuAON2URgUGMhersacODOuKc9DykXdC6hA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        David Heidelberg <david@ixit.cz>,
+Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 129/266] power: supply: smb347-charger: IRQSTAT_D is volatile
-Date:   Wed, 17 Jun 2020 21:14:14 -0400
-Message-Id: <20200618011631.604574-129-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 001/172] power: supply: bq24257_charger: Replace depends on REGMAP_I2C with select
+Date:   Wed, 17 Jun 2020 21:19:27 -0400
+Message-Id: <20200618012218.607130-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,36 +41,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 
-[ Upstream commit c32ea07a30630ace950e07ffe7a18bdcc25898e1 ]
+[ Upstream commit 87c3d579c8ed0eaea6b1567d529a8daa85a2bc6c ]
 
-Fix failure when USB cable is connected:
-smb347 2-006a: reading IRQSTAT_D failed
+regmap is a library function that gets selected by drivers that need
+it. No driver modules should depend on it. Depending on REGMAP_I2C makes
+this driver only build if another driver already selected REGMAP_I2C,
+as the symbol can't be selected through the menu kernel configuration.
 
-Fixes: 1502cfe19bac ("smb347-charger: Fix battery status reporting logic for charger faults")
-
-Tested-by: David Heidelberg <david@ixit.cz>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Fixes: 2219a935963e ("power_supply: Add TI BQ24257 charger driver")
+Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/smb347-charger.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/power/supply/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/smb347-charger.c b/drivers/power/supply/smb347-charger.c
-index c1d124b8be0c..d102921b3ab2 100644
---- a/drivers/power/supply/smb347-charger.c
-+++ b/drivers/power/supply/smb347-charger.c
-@@ -1138,6 +1138,7 @@ static bool smb347_volatile_reg(struct device *dev, unsigned int reg)
- 	switch (reg) {
- 	case IRQSTAT_A:
- 	case IRQSTAT_C:
-+	case IRQSTAT_D:
- 	case IRQSTAT_E:
- 	case IRQSTAT_F:
- 	case STAT_A:
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index ff6dab0bf0dd..76c699b5abda 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -555,7 +555,7 @@ config CHARGER_BQ24257
+ 	tristate "TI BQ24250/24251/24257 battery charger driver"
+ 	depends on I2C
+ 	depends on GPIOLIB || COMPILE_TEST
+-	depends on REGMAP_I2C
++	select REGMAP_I2C
+ 	help
+ 	  Say Y to enable support for the TI BQ24250, BQ24251, and BQ24257 battery
+ 	  chargers.
 -- 
 2.25.1
 
