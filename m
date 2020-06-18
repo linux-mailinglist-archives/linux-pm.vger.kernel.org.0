@@ -2,36 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 939E61FE33B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 04:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EF331FE289
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jun 2020 04:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730938AbgFRCHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 17 Jun 2020 22:07:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55254 "EHLO mail.kernel.org"
+        id S1729854AbgFRCCT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 17 Jun 2020 22:02:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730722AbgFRBWU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:22:20 -0400
+        id S1731073AbgFRBXv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:23:51 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F67D20776;
-        Thu, 18 Jun 2020 01:22:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4158020CC7;
+        Thu, 18 Jun 2020 01:23:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443340;
-        bh=pfMglipJmW2Nk/4AvOsxQl4v5eafwLNehc1TxMDPaGc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qyX/v+ac8KpJ65td3K8RR4iowzQffrOErhcjeLFxOOO8tARssJI5Nf8+XBB52qLTC
-         QRIKw5VpJI8Cxt0Y68wRAyHqJsN5GFwqaY64Hlvd/6jMYgUxfF36PTmeHmcd7UtnpM
-         aSjhgtfuAON2URgUGMhersacODOuKc9DykXdC6hA=
+        s=default; t=1592443431;
+        bh=zsf3BNbMkMFZFRzExFDVzfc4J9xwxSZPT9wxEK4Rizs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GWwGbPpiivuJ0S2zc1PTCMRVwmovI1/28HyHufR1rOvqSiAK7ho4AwH5dl+S+9Sqs
+         CSNmh2c2y1+dYU5LO/xLRO1HtpC/3OngMp8HwFmAbQiDApPFGGLvsjKxPXcJqy39u1
+         BvuCb+5uLqY7QneNWLo935iCsKS/u7ymo7Ftq9t4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 001/172] power: supply: bq24257_charger: Replace depends on REGMAP_I2C with select
-Date:   Wed, 17 Jun 2020 21:19:27 -0400
-Message-Id: <20200618012218.607130-1-sashal@kernel.org>
+Cc:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
+        linux-omap@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 070/172] thermal/drivers/ti-soc-thermal: Avoid dereferencing ERR_PTR
+Date:   Wed, 17 Jun 2020 21:20:36 -0400
+Message-Id: <20200618012218.607130-70-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -41,36 +45,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+From: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-[ Upstream commit 87c3d579c8ed0eaea6b1567d529a8daa85a2bc6c ]
+[ Upstream commit 7440f518dad9d861d76c64956641eeddd3586f75 ]
 
-regmap is a library function that gets selected by drivers that need
-it. No driver modules should depend on it. Depending on REGMAP_I2C makes
-this driver only build if another driver already selected REGMAP_I2C,
-as the symbol can't be selected through the menu kernel configuration.
+On error the function ti_bandgap_get_sensor_data() returns the error
+code in ERR_PTR() but we only checked if the return value is NULL or
+not. And, so we can dereference an error code inside ERR_PTR.
+While at it, convert a check to IS_ERR_OR_NULL.
 
-Fixes: 2219a935963e ("power_supply: Add TI BQ24257 charger driver")
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20200424161944.6044-1-sudipm.mukherjee@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index ff6dab0bf0dd..76c699b5abda 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -555,7 +555,7 @@ config CHARGER_BQ24257
- 	tristate "TI BQ24250/24251/24257 battery charger driver"
- 	depends on I2C
- 	depends on GPIOLIB || COMPILE_TEST
--	depends on REGMAP_I2C
-+	select REGMAP_I2C
- 	help
- 	  Say Y to enable support for the TI BQ24250, BQ24251, and BQ24257 battery
- 	  chargers.
+diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+index b4f981daeaf2..452e034aedc1 100644
+--- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
++++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+@@ -183,7 +183,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+ 
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (!data || IS_ERR(data))
++	if (!IS_ERR_OR_NULL(data))
+ 		data = ti_thermal_build_data(bgp, id);
+ 
+ 	if (!data)
+@@ -210,7 +210,7 @@ int ti_thermal_remove_sensor(struct ti_bandgap *bgp, int id)
+ 
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (data && data->ti_thermal) {
++	if (!IS_ERR_OR_NULL(data) && data->ti_thermal) {
+ 		if (data->our_zone)
+ 			thermal_zone_device_unregister(data->ti_thermal);
+ 	}
+@@ -276,7 +276,7 @@ int ti_thermal_unregister_cpu_cooling(struct ti_bandgap *bgp, int id)
+ 
+ 	data = ti_bandgap_get_sensor_data(bgp, id);
+ 
+-	if (data) {
++	if (!IS_ERR_OR_NULL(data)) {
+ 		cpufreq_cooling_unregister(data->cool_dev);
+ 		if (data->policy)
+ 			cpufreq_cpu_put(data->policy);
 -- 
 2.25.1
 
