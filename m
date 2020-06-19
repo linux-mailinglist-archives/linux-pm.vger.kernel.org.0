@@ -2,101 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 978B2201265
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 17:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A13BF2012EA
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405361AbgFSPwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 11:52:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54834 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390743AbgFSPXT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jun 2020 11:23:19 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D9C821548;
-        Fri, 19 Jun 2020 15:23:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592580198;
-        bh=8M0BVirU0WrdSQ2GntXLcUZw8QqQhLkv8Jmputer5H8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t5VXTrw9/mrY45p7vrxed5/7Gw737AweFHxTOEiYCaQKR3YengPZa/btCkP/Z+KWo
-         s5/jH6n0ui3AxFKHnSxNVMmgyMJ63hOVwDofuuAWo00I+yf6ZmycdV5Fd3hi18E00Q
-         1VP3euFRHsTnJwQRgrSqoVAFPT8UoJ15bWRxeRu4=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.7 160/376] mips: cm: Fix an invalid error code of INTVN_*_ERR
-Date:   Fri, 19 Jun 2020 16:31:18 +0200
-Message-Id: <20200619141717.895785728@linuxfoundation.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200619141710.350494719@linuxfoundation.org>
-References: <20200619141710.350494719@linuxfoundation.org>
-User-Agent: quilt/0.66
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S2392555AbgFSPTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 11:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404048AbgFSPPq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 11:15:46 -0400
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3755FC06174E
+        for <linux-pm@vger.kernel.org>; Fri, 19 Jun 2020 08:15:45 -0700 (PDT)
+Received: from ramsan ([IPv6:2a02:1810:ac12:ed20:38b1:3718:f116:dc69])
+        by albert.telenet-ops.be with bizsmtp
+        id t3Fj2200C1b8psi063FjHk; Fri, 19 Jun 2020 17:15:44 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jmIk3-0005jD-Dj; Fri, 19 Jun 2020 17:15:43 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1jmIk3-0003vm-Bv; Fri, 19 Jun 2020 17:15:43 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: thermal: rcar-thermal: Improve schema validation
+Date:   Fri, 19 Jun 2020 17:15:41 +0200
+Message-Id: <20200619151541.15069-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+  - Document missing "#thermal-sensor-cells",
+  - Factor out common required properties,
+  - "interrupts", "clocks", and "power-domains" are required on R-Mobile
+    APE6, too,
+  - Invert logic to simplify descriptions,
+  - Add "additionalProperties: false".
 
-[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
-
-Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
-errors") adds cm2_causes[] array with map of error type ID and
-pointers to the short description string. There is a mistake in
-the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
-correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
-claims they have {0x17,0x18} codes. This is obviously hex-dec
-copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
-
-Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Paul Burton <paulburton@kernel.org>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/mips/kernel/mips-cm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../bindings/thermal/rcar-thermal.yaml        | 53 ++++++++++++-------
+ 1 file changed, 34 insertions(+), 19 deletions(-)
 
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index cdb93ed91cde..361bfc91a0e6 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -119,9 +119,9 @@ static char *cm2_causes[32] = {
- 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
- 	"0x08", "0x09", "0x0a", "0x0b",
- 	"0x0c", "0x0d", "0x0e", "0x0f",
--	"0x10", "0x11", "0x12", "0x13",
--	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
--	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
-+	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
-+	"0x14", "0x15", "0x16", "0x17",
-+	"0x18", "0x19", "0x1a", "0x1b",
- 	"0x1c", "0x1d", "0x1e", "0x1f"
- };
+diff --git a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+index 0994693d240f9ff4..88787b98992fe7c9 100644
+--- a/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/rcar-thermal.yaml
+@@ -59,25 +59,40 @@ properties:
+   resets:
+     maxItems: 1
  
+-if:
+-  properties:
+-    compatible:
+-      contains:
+-        enum:
+-          - renesas,thermal-r8a73a4 # R-Mobile APE6
+-          - renesas,thermal-r8a7779 # R-Car H1
+-then:
+-  required:
+-    - compatible
+-    - reg
+-else:
+-  required:
+-    - compatible
+-    - reg
+-    - interrupts
+-    - clocks
+-    - power-domains
+-    - resets
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - renesas,thermal-r8a73a4 # R-Mobile APE6
++                - renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - resets
++        - '#thermal-sensor-cells'
++
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: renesas,thermal-r8a7779 # R-Car H1
++    then:
++      required:
++        - interrupts
++        - clocks
++        - power-domains
++
++additionalProperties: false
+ 
+ examples:
+   # Example (non interrupt support)
 -- 
-2.25.1
-
-
+2.17.1
 
