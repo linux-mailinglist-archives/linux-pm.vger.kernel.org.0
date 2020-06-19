@@ -2,203 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B0C2019D4
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 19:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BF82019EB
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 20:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387565AbgFSRzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 13:55:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44616 "EHLO mail.kernel.org"
+        id S1733166AbgFSSDv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 14:03:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731445AbgFSRzY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jun 2020 13:55:24 -0400
+        id S1727003AbgFSSDv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jun 2020 14:03:51 -0400
 Received: from earth.universe (dyndsl-037-138-190-043.ewe-ip-backbone.de [37.138.190.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3DB782053B;
-        Fri, 19 Jun 2020 17:55:23 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 239A320DD4;
+        Fri, 19 Jun 2020 18:03:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592589323;
-        bh=IyFmyA/Yk2YkDZNGlb+HjNAe4pqU3k0vVzuoupw5GDo=;
+        s=default; t=1592589830;
+        bh=XpQcmkHUs6scw56HIc1aqVY7nFfbPMX/4F+G2CVJtCo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o0plxateUPBswEeUrt8Rh8w0mJqodkcKNVTr2I8goEfkkqrZ5AIp2NhdtAKol+VcC
-         1fNEcbegvYafaWZFDlIXfEml1Ik2q9vrzCFV9qqeSgqe3g8xS293hzA0x9SMTZ5NTf
-         AkjmB8B7TVXHIyhSWASxniOtv/D4yTeHJmDclWB0=
+        b=UJxY/L4df9jEX6dfoD6VrzqtO7UC3LKJlfUzTgxIBvb81T2/h8Ri7YmNpA1XlYNw5
+         EDWJLMJ2jc/Rybwv4aPGmjNtVPkKbsq4GelMlA30sUaYQzx7TDTaDFXH/U7s8YyIiy
+         jI17E2K3uDm6vUD1GEN+Bde7Bd6hRJpIWKFA5MiY=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 9AAC93C08CD; Fri, 19 Jun 2020 19:55:21 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 19:55:21 +0200
+        id 81DB63C08CD; Fri, 19 Jun 2020 20:03:48 +0200 (CEST)
+Date:   Fri, 19 Jun 2020 20:03:48 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-Cc:     "Andrew F. Davis" <afd@ti.com>,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Anton Vorontsov <cbouatmailru@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [RFC] power: supply: bq27xxx_battery: Fix polling interval after
- re-bind
-Message-ID: <20200619175521.xrcd7ahvjtc4zoqi@earth.universe>
-References: <20200525113220.369-1-krzk@kernel.org>
- <65ccf383-85a3-3ccd-f38c-e92ddae8fe1e@ti.com>
- <20200527074254.vhyfntpolphj3eeq@pali>
+To:     Jonathan Bakker <xc-racer2@live.ca>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: max8998_charger: Correct ONLINE and add
+ STATUS props
+Message-ID: <20200619180348.hmjedqcp3uqlyj7i@earth.universe>
+References: <CY4PR04MB066382CE428A87AD131DB96CA3BA0@CY4PR04MB0663.namprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bptvdc4ovioh7sxm"
+        protocol="application/pgp-signature"; boundary="w735oymtygjx5gmu"
 Content-Disposition: inline
-In-Reply-To: <20200527074254.vhyfntpolphj3eeq@pali>
+In-Reply-To: <CY4PR04MB066382CE428A87AD131DB96CA3BA0@CY4PR04MB0663.namprd04.prod.outlook.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bptvdc4ovioh7sxm
-Content-Type: text/plain; charset=iso-8859-1
+--w735oymtygjx5gmu
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, May 27, 2020 at 09:42:54AM +0200, Pali Roh=E1r wrote:
-> On Tuesday 26 May 2020 21:16:28 Andrew F. Davis wrote:
-> > On 5/25/20 7:32 AM, Krzysztof Kozlowski wrote:
-> > > This reverts commit 8cfaaa811894a3ae2d7360a15a6cfccff3ebc7db.
-> > >=20
-> > > If device was unbound and bound, the polling interval would be set to=
- 0.
-> > > This is both unexpected and messes up with other bq27xxx devices (if
-> > > more than one battery device is used).
-> > >=20
-> > > This reset of polling interval was added in commit 8cfaaa811894
-> > > ("bq27x00_battery: Fix OOPS caused by unregistring bq27x00 driver")
-> > > stating that power_supply_unregister() calls get_property().  However=
- in
-> > > Linux kernel v3.1 and newer, such call trace does not exist.
-> > > Unregistering power supply does not call get_property() on unregister=
-ed
-> > > power supply.
-> > >=20
-> > > Fixes: 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistrin=
-g bq27x00 driver")
-> > > Cc: <stable@vger.kernel.org>
-> > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > >=20
-> > > ---
-> > >=20
-> > > I really could not identify the issue being fixed in offending commit
-> > > 8cfaaa811894 ("bq27x00_battery: Fix OOPS caused by unregistring bq27x=
-00
-> > > driver"), therefore maybe I missed here something important.
-> > >=20
-> > > Please share your thoughts on this.
-> >=20
-> > I'm having a hard time finding the OOPS also. Maybe there is a window
-> > where the poll function is running or about to run where
-> > cancel_delayed_work_sync() is called and cancels the work, only to have
-> > an interrupt or late get_property call in to the poll function and
-> > re-schedule it.
-> >=20
-> > What we really need is to do is look at how we are handling the polling
-> > function. It gets called from the workqueue, from a threaded interrupt
-> > context, and from a power supply framework callback, possibly all at the
-> > same time. Sometimes its protected by a lock, sometimes not. Updating
-> > the device's cached data should always be locked.
-> >=20
-> > What's more is the poll function is self-arming, so if we call
-> > cancel_delayed_work_sync() (remove it from the work queue then then wait
-> > for it to finish if running), are we sure it wont have just re-arm itse=
-lf?
-> >=20
-> > We should make the only way we call the poll function be through the
-> > work queue, (plus make sure all accesses to the cache are locked).
-> >=20
-> > Andrew
+On Sat, May 16, 2020 at 03:35:44PM -0700, Jonathan Bakker wrote:
+> The ONLINE prop should be when the charger is present (ie able to
+> charge), however, it was for when it was actually charging or not.
+> Instead, add the STATUS prop to show whether charging is actually
+> going on or not.
 >=20
-> I do not remember details too. It is long time ago.
+> The magic numbers have been ported from a downstream kernel for the
+> SGH-T959V.
 >=20
-> CCing Ivaylo Dimitrov as he may remember something...
+> Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+> ---
 
-Applying this revert introduces at least a race condition when
-userspace reads sysfs files while kernel removes the driver.
-
-So looking at the entrypoints for schedules:
-
-bq27xxx_battery_i2c_probe:
-  Not relevant, probe is done when the battery is being removed.
-
-poll_interval_param_set:
-  Can be avoided by unregistering from the list earlier. This
-  is the right thing to do considering the battery is added to
-  the list as last step in the probe routine, it should be removed
-  first during teardown.
-
-bq27xxx_external_power_changed:
-  This can happen at any time while the power-supply device is
-  registered, because of the code in get_property.
-
-bq27xxx_battery_poll:
-  This can happen at any time while the power-supply device is
-  registered.
-
-As far as I can see the only thing in the delayed work needing
-the power-supply device is power_supply_changed(). If we add a
-check, that di->bat is not NULL, we should be able to reorder
-teardown like this:
-
-1. remove from list
-2. unregister power-supply device and set to di->bat to NULL
-3. cancel delayed work
-4. destroy mutex
-
-Also I agree with Andrew, that the locking looks fishy. I think
-the lock needs to be moved, so that the call to
-bq27xx_battery_update(di) in bq27xxx_battery_poll is protected.
+Thanks, queued.
 
 -- Sebastian
 
-> > > ---
-> > >  drivers/power/supply/bq27xxx_battery.c | 8 --------
-> > >  1 file changed, 8 deletions(-)
-> > >=20
-> > > diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/s=
-upply/bq27xxx_battery.c
-> > > index 942c92127b6d..4c94ee72de95 100644
-> > > --- a/drivers/power/supply/bq27xxx_battery.c
-> > > +++ b/drivers/power/supply/bq27xxx_battery.c
-> > > @@ -1905,14 +1905,6 @@ EXPORT_SYMBOL_GPL(bq27xxx_battery_setup);
-> > > =20
-> > >  void bq27xxx_battery_teardown(struct bq27xxx_device_info *di)
-> > >  {
-> > > -	/*
-> > > -	 * power_supply_unregister call bq27xxx_battery_get_property which
-> > > -	 * call bq27xxx_battery_poll.
-> > > -	 * Make sure that bq27xxx_battery_poll will not call
-> > > -	 * schedule_delayed_work again after unregister (which cause OOPS).
-> > > -	 */
-> > > -	poll_interval =3D 0;
-> > > -
-> > >  	cancel_delayed_work_sync(&di->work);
-> > > =20
-> > >  	power_supply_unregister(di->bat);
-> > >=20
+>  drivers/power/supply/max8998_charger.c | 25 ++++++++++++++++++++++---
+>  1 file changed, 22 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/max8998_charger.c b/drivers/power/suppl=
+y/max8998_charger.c
+> index 9a926c7c0f22..c26023b19f26 100644
+> --- a/drivers/power/supply/max8998_charger.c
+> +++ b/drivers/power/supply/max8998_charger.c
+> @@ -23,6 +23,7 @@ struct max8998_battery_data {
+>  static enum power_supply_property max8998_battery_props[] =3D {
+>  	POWER_SUPPLY_PROP_PRESENT, /* the presence of battery */
+>  	POWER_SUPPLY_PROP_ONLINE, /* charger is active or not */
+> +	POWER_SUPPLY_PROP_STATUS, /* charger is charging/discharging/full */
+>  };
+> =20
+>  /* Note that the charger control is done by a current regulator "CHARGER=
+" */
+> @@ -49,10 +50,28 @@ static int max8998_battery_get_property(struct power_=
+supply *psy,
+>  		ret =3D max8998_read_reg(i2c, MAX8998_REG_STATUS2, &reg);
+>  		if (ret)
+>  			return ret;
+> -		if (reg & (1 << 3))
+> -			val->intval =3D 0;
+> -		else
+> +
+> +		if (reg & (1 << 5))
+>  			val->intval =3D 1;
+> +		else
+> +			val->intval =3D 0;
+> +
+> +		break;
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		ret =3D max8998_read_reg(i2c, MAX8998_REG_STATUS2, &reg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (!(reg & (1 << 5))) {
+> +			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> +		} else {
+> +			if (reg & (1 << 6))
+> +				val->intval =3D POWER_SUPPLY_STATUS_FULL;
+> +			else if (reg & (1 << 3))
+> +				val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
+> +			else
+> +				val->intval =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +		}
+>  		break;
+>  	default:
+>  		return -EINVAL;
+> --=20
+> 2.20.1
+>=20
 
---bptvdc4ovioh7sxm
+--w735oymtygjx5gmu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s+/0ACgkQ2O7X88g7
-+ppQzA//SWcqaQntFbKQv8z/4GHcuJ7qIX8cTG/v3v9yVDhtNkxg1404eAoDt9yh
-lWXfmm/1ANPfl6BaiFoaWqV5S7+ZbCYh8VXoAq3EFWBpiof7GpoQ5zJjKOR1f6Nj
-S2RcywA1tN9pofeWrkH7K+hy7NYcnpOuew5etZ2MqZ6cCvq79A6+iQP2Wu9hCKt8
-A4vEvIMi29Q9mmG3LOsImPjAWCWKyvrKI5WefnYMUcX8BHSuxiB5vk+jvbzHZarr
-ZsBMspMbcEUq2N8M80Idrltp0ugo3QsZNE9GKVQ0wJnIE3O1eI24w6RBKlJ0Nf+T
-D8vVdmFM8h/4CQeWPESxi1gNkRlAX3iYAEg9+nOhPR2DU6PeaQT0ZrVthlY1Z9qt
-XyYXVusja+pVkBCBrD43bIYgD5I0dUaY2ud0try+eGD5IlTr2SdKa5Hc0yEOFYCk
-yqBsKq1THlkhtfFP/PXz+9/dhLvd6QShca5WWB+kSWK/MX8dNhL+kcFhfcDjp5x0
-NpQ9fpYtZTTyxj0WuGbg9VVVysz7bYtvrXBOt1Ls4159UzBuRFQjfAJywaa78qd6
-GfzsG8s7mtbKgLpLNSk1qWWidMIUHTVipZffdDFpmAxsmX5MajHAaWpSqqMju8C0
-j//ACKzlaeUiWjHwLtD5xDJeasmC3Fjet3e09pc0x1geqLkUD1M=
-=aSj0
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s/gQACgkQ2O7X88g7
++poW0g/5ASrparSqnyb/SlMkJRqwhDyImrnEfTNaaJz+8Ro+DKq4h4kMZW3fdPO1
+qr77SfFw/ZO/7gWqT4Wk8QcvS+jNPfAxzOhBD1Ob+LW53duR/Febes4ysejyQeBp
+C+NiFoBqZ98b8h12fo6XEsk7t9bKUDa0nUS/88h+hGkBnTW2HIJIIdjPDI82pWLF
+plS+B5evPO5puIHccegHqSRjL4ltKUL+G/ImivS8cWBlISRXRQctVXLArjyuw9c2
+SBC+Fvrg+P6oHYGDdSj+7fNeDow2rR3uGA1aW++nlHVERw0jj8ON5ZRoh3tohYue
++s16kRDQHLf6gCOJSjEeQUbt/j8XtOqOMiUjbRvNZlQbJwjVOTRJRig676cPxfgB
+HQ6Gchl1m5x9+MnNp8INX4gp7Q5lNAeS5kBn4CaU/1AXttBJlq8zQAcy4a7HjQxm
+pXeUPaGhmcEcAW5+7bukWiKXPaLm3zDqJit1xBpY8+kU3DkTfh4V+YB3W6VtuOfc
+LDmp0ylVx2yCkw+ZsjjoLDmzn2NWiqZzFKIxLDjQ1erF62DChEzqoITeHBBWXUo+
+3CwPI+NBx8cTJbzimTgmK91fam5X8x8LM6lfWkN7lJirTuECKYaEA8GKLR6Jh1z5
+V4OdU3NSrEU3EEvL7LDtK+IBlDIxWiIxCz206y1a01G6WVv5y4M=
+=4zhX
 -----END PGP SIGNATURE-----
 
---bptvdc4ovioh7sxm--
+--w735oymtygjx5gmu--
