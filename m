@@ -2,310 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628E4201685
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AB320163F
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395064AbgFSQbx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 12:31:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46788 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388976AbgFSOwj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:52:39 -0400
-Received: from earth.universe (dyndsl-037-138-190-043.ewe-ip-backbone.de [37.138.190.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FE4121852;
-        Fri, 19 Jun 2020 14:52:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578359;
-        bh=i67KDE+PFmmQj9KC7OiGYsLdMFJ1r4ASlSwr3oP7eFY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IYfhRfTW+4+mLYVvCDtdHAvk12cXDP0O7Cu11bIdtTXa7qDhKy5N5q+kzLcJhPLet
-         7nEk8sIbHXdrkP10KrO2Jpbs7ovjkKtnuc/4+xohwX4XyAIilUxnttXXuM40tkOT02
-         tZqi4L+hAFL10H4Lwy+XUG3MOuF/StStzMMTTg9Q=
+        id S2389963AbgFSQ21 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 12:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394951AbgFSQ2Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 12:28:25 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E64C06174E;
+        Fri, 19 Jun 2020 09:28:25 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 542132A54CA
 Received: by earth.universe (Postfix, from userid 1000)
-        id ACD2D3C08CD; Fri, 19 Jun 2020 16:52:37 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 16:52:37 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Daniel =?utf-8?B?R29uesOhbGV6?= Cabanelas <dgcbueu@gmail.com>
-Cc:     linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 1/2 ] power: reset: add driver for LinkStation power
- off
-Message-ID: <20200619145237.7fz6sbwbhb2rhhu2@earth.universe>
-References: <3315137.NY7H5Hu6o1@tool>
+        id CAF173C08CD; Fri, 19 Jun 2020 18:28:20 +0200 (CEST)
+Date:   Fri, 19 Jun 2020 18:28:20 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Emil Velikov <emil.velikov@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Russell King <linux@armlinux.org.uk>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCHv2 3/6] power: supply: gpio-charger: add
+ charge-current-limit feature
+Message-ID: <20200619162820.hhv5rftp4xkhwtix@earth.universe>
+References: <20200605224403.181015-1-sebastian.reichel@collabora.com>
+ <20200605224403.181015-4-sebastian.reichel@collabora.com>
+ <20200615175844.GA2032047@bogus>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="j7hkta2eynmybcrd"
+        protocol="application/pgp-signature"; boundary="yyzsddwp6z7jengx"
 Content-Disposition: inline
-In-Reply-To: <3315137.NY7H5Hu6o1@tool>
+In-Reply-To: <20200615175844.GA2032047@bogus>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---j7hkta2eynmybcrd
-Content-Type: text/plain; charset=iso-8859-1
+--yyzsddwp6z7jengx
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jun 13, 2020 at 12:26:52PM +0200, Daniel Gonz=E1lez Cabanelas wrote:
-> Some Buffalo LinkStations perform the power off operation, at restart
-> time, depending on the state of an output pin (LED2/INTn) at the ethernet
-> PHY. This pin is also used to wake the machine when a WoL packet is=20
-> received by the PHY.
+On Mon, Jun 15, 2020 at 11:58:44AM -0600, Rob Herring wrote:
+> On Sat, Jun 06, 2020 at 12:44:00AM +0200, Sebastian Reichel wrote:
+> > Add new charge-current-limit feature to gpio-charger.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  .../bindings/power/supply/gpio-charger.yaml   |  31 ++++
+> >  drivers/power/supply/gpio-charger.c           | 140 ++++++++++++++++++
+> >  2 files changed, 171 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charge=
+r.yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> > index 30eabbb14ef3..e11cfdc68a51 100644
+> > --- a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> > +++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> > @@ -39,6 +39,25 @@ properties:
+> >      maxItems: 1
+> >      description: GPIO indicating the charging status
+> > =20
+> > +  charge-current-limit-gpios:
+> > +    minItems: 1
+> > +    maxItems: 32
+> > +    description: GPIOs used for current limiting
+> > +
+> > +  charge-current-limit-mapping:
+> > +    description: List of touples with current in uA and a GPIO bitmap =
+(in
 >=20
-> The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
-> and other models. Without it, the board remains forever halted if a=20
-> power off command is executed, unless the PSU is disconnected and
-> connected again.
+> s/touples/tuples/
 >=20
-> Add the driver to provide the power off function and also make the WoL
-> feature to be available.
+> > +      this order). The touples must be provided in descending order of=
+ the
 >=20
-> Signed-off-by: Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>
-> ---
-> Changes in v3:
->   - Code for PHY autodectection added, "phy-handle,intn" deleted.
-> Changes in v2:
->   - The driver is now compatible with the WoL function, the LED2 pin outp=
-ut
->     is now used as INTn. Added the required code to make INTn work proper=
-ly.
->   - Code for PHY autodectection deleted, "phy-handle,intn" is now mandato=
-ry.
->   - Replace a dev_info with a dev_dbg.
->   - Use phy_device_free in the driver remove.
->   - Cosmetic changes.
->=20
->  drivers/power/reset/Kconfig                |  11 ++
->  drivers/power/reset/Makefile               |   1 +
->  drivers/power/reset/linkstation-poweroff.c | 144 +++++++++++++++++++++
->  3 files changed, 156 insertions(+)
->  create mode 100644 drivers/power/reset/linkstation-poweroff.c
->=20
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index f07b982c8d..431cd9f201 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -99,6 +99,17 @@ config POWER_RESET_HISI
->  	help
->  	  Reboot support for Hisilicon boards.
-> =20
-> +config POWER_RESET_LINKSTATION
-> +	tristate "Buffalo LinkStation power-off driver"
-> +	depends on ARCH_MVEBU || COMPILE_TEST
-> +	depends on OF_MDIO && PHYLIB
-> +	help
-> +	  This driver supports turning off some Buffalo LinkStations by
-> +	  setting an output pin at the ethernet PHY to the correct state.
-> +	  It also makes the device compatible with the WoL function.
-> +
-> +	  Say Y here if you have Buffalo LinkStation LS421D/E.
-> +
->  config POWER_RESET_MSM
->  	bool "Qualcomm MSM power-off driver"
->  	depends on ARCH_QCOM
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index 5710ca4695..c51eceba9e 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini-p=
-oweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
->  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
->  obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
-> +obj-${CONFIG_POWER_RESET_LINKSTATION} +=3D linkstation-poweroff.o
->  obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
->  obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
->  obj-$(CONFIG_POWER_RESET_OXNAS) +=3D oxnas-restart.o
-> diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/r=
-eset/linkstation-poweroff.c
-> new file mode 100644
-> index 0000000000..688af0a962
-> --- /dev/null
-> +++ b/drivers/power/reset/linkstation-poweroff.c
-> @@ -0,0 +1,144 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * LinkStation power off restart driver
-> + * Copyright (C) 2020 Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of.h>
-> +#include <linux/of_mdio.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/reboot.h>
-> +#include <linux/phy.h>
-> +
-> +/* Defines from the eth phy Marvell driver */
-> +#define MII_MARVELL_COPPER_PAGE		0
-> +#define MII_MARVELL_LED_PAGE		3
-> +#define MII_MARVELL_WOL_PAGE		17
-> +#define MII_MARVELL_PHY_PAGE		22
-> +
-> +#define MII_PHY_LED_CTRL		16
-> +#define MII_88E1318S_PHY_LED_TCR	18
-> +#define MII_88E1318S_PHY_WOL_CTRL	16
-> +#define MII_M1011_IEVENT		19
-> +
-> +#define MII_88E1318S_PHY_LED_TCR_INTn_ENABLE		BIT(7)
-> +#define MII_88E1318S_PHY_LED_TCR_FORCE_INT		BIT(15)
-> +#define MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS	BIT(12)
-> +#define LED2_FORCE_ON					(0x8 << 8)
-> +#define LEDMASK						GENMASK(11,8)
-> +
-> +static struct phy_device *phydev;
-> +
-> +static void mvphy_reg_intn(u16 data)
-> +{
-> +	int rc =3D 0, saved_page;
-> +
-> +	saved_page =3D phy_select_page(phydev, MII_MARVELL_LED_PAGE);
-> +	if (saved_page < 0)
-> +		goto err;
-> +
-> +	/* Force manual LED2 control to let INTn work */
-> +	__phy_modify(phydev, MII_PHY_LED_CTRL, LEDMASK, LED2_FORCE_ON);
-> +
-> +	/* Set the LED[2]/INTn pin to the required state */
-> +	__phy_modify(phydev, MII_88E1318S_PHY_LED_TCR,
-> +		     MII_88E1318S_PHY_LED_TCR_FORCE_INT,
-> +		     MII_88E1318S_PHY_LED_TCR_INTn_ENABLE | data);
-> +
-> +	if (!data) {
-> +		/* Clear interrupts to ensure INTn won't be holded in high state */
-> +		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_COPPER_PAGE);
-> +		__phy_read(phydev, MII_M1011_IEVENT);
-> +
-> +		/* If WOL was enabled and a magic packet was received before powering
-> +		 * off, we won't be able to wake up by sending another magic packet.=
-=20
-> +		 * Clear WOL status.
-> +		 */
-> +		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_WOL_PAGE);
-> +		__phy_set_bits(phydev, MII_88E1318S_PHY_WOL_CTRL,
-> +			       MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS);
-> +	}
-> +err:
-> +	rc =3D phy_restore_page(phydev, saved_page, rc);
-> +	if (rc < 0)
-> +		dev_err(&phydev->mdio.dev, "Write register failed, %d\n", rc);
-> +}
-> +
-> +static int linkstation_reboot_notifier(struct notifier_block *nb,
-> +				       unsigned long action, void *unused)
-> +{
-> +	if (action =3D=3D SYS_RESTART)
-> +		mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static struct notifier_block linkstation_reboot_nb =3D {
-> +	.notifier_call =3D linkstation_reboot_notifier,
-> +};
-> +
-> +static void linkstation_poweroff(void)
-> +{
-> +	unregister_reboot_notifier(&linkstation_reboot_nb);
+> and here.
 
-I think this can be removed here and then you can use
-devm_register_reboot_notifier in probe and drop the
-unregister in remove function. Otherwise the driver
-LGTM.
+Ack.
+
+> > +      current limit.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > +    items:
+> > +      items:
+> > +        - description:
+> > +            Current limit in uA
+> > +        - description:
+> > +            Encoded GPIO setting. Bit 0 represents last GPIO from the
+> > +            charge-current-limit-gpios property. Bit 1 second to last
+> > +            GPIO and so on.
+>=20
+> Seems a bit odd that bit N doesn't represent index N of the gpios.
+
+I was looking at it from a graphical POV (i.e. "last" bit represents
+last element):
+
+list =3D <element3, element2, element1, element0>;
+bits =3D 0b1011; // element3, 1 and 0
+
+Basically when writing it the order is the same at the cost of list
+index being reverse of bit index. But I do not really mind the order.
+If people think its better the other way around I can swap it.
 
 -- Sebastian
 
-> +	mvphy_reg_intn(0);
-> +
-> +	kernel_restart("Power off");
-> +}
-> +
-> +static int linkstation_poweroff_probe(struct platform_device *pdev)
-> +{
-> +	struct mii_bus *bus;
-> +	struct device_node *dn;
-> +
-> +	dn =3D of_find_node_by_name(NULL, "mdio");
-> +	if (!dn)
-> +		return -ENODEV;
-> +
-> +	bus =3D of_mdio_find_bus(dn);
-> +	of_node_put(dn);
-> +	if (!bus)
-> +		return -EPROBE_DEFER;
-> +
-> +	phydev =3D phy_find_first(bus);
-> +	if (!phydev)
-> +		return -EPROBE_DEFER;
-> +
-> +	register_reboot_notifier(&linkstation_reboot_nb);
-> +	pm_power_off =3D linkstation_poweroff;
-> +
-> +	dev_dbg(&pdev->dev, "PHY [%s]\n", phydev_name(phydev));
-> +
-> +	return 0;
-> +}
-> +
-> +static int linkstation_poweroff_remove(struct platform_device *pdev)
-> +{
-> +	pm_power_off =3D NULL;
-> +	unregister_reboot_notifier(&linkstation_reboot_nb);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id ls_poweroff_of_match[] =3D {
-> +	{ .compatible =3D "linkstation,power-off", },
-> +	{ },
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, ls_poweroff_of_match);
-> +
-> +static struct platform_driver linkstation_poweroff_driver =3D {
-> +	.probe =3D linkstation_poweroff_probe,
-> +	.remove =3D linkstation_poweroff_remove,
-> +	.driver =3D {
-> +		.name =3D "linkstation_power_off",
-> +		.of_match_table =3D ls_poweroff_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(linkstation_poweroff_driver);
-> +
-> +MODULE_AUTHOR("Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>");
-> +MODULE_DESCRIPTION("LinkStation power off driver");
-> +MODULE_LICENSE("GPL v2");
-> --=20
-> 2.27.0
->=20
->=20
->=20
->=20
+> > +
+> >  required:
+> >    - compatible
+> > =20
+> > @@ -47,6 +66,12 @@ anyOf:
+> >      - gpios
+> >    - required:
+> >      - charge-status-gpios
+> > +  - required:
+> > +    - charge-current-limit-gpios
+> > +
+> > +dependencies:
+> > +  charge-current-limit-gpios: [ charge-current-limit-mapping ]
+> > +  charge-current-limit-mapping: [ charge-current-limit-gpios ]
+> > =20
+> >  additionalProperties: false
+> > =20
+> > @@ -60,4 +85,10 @@ examples:
+> > =20
+> >        gpios =3D <&gpd 28 GPIO_ACTIVE_LOW>;
+> >        charge-status-gpios =3D <&gpc 27 GPIO_ACTIVE_LOW>;
+> > +
+> > +      charge-current-limit-gpios =3D <&gpioA 11 GPIO_ACTIVE_HIGH>,
+> > +                                   <&gpioA 12 GPIO_ACTIVE_HIGH>;
+> > +      charge-current-limit-mapping =3D <2500000 0x00>, // 2.5 A =3D> b=
+oth GPIOs low
+> > +                                     <700000 0x01>, // 700 mA =3D> GPI=
+O A.12 high
+> > +                                     <0 0x02>; // 0 mA =3D> GPIO A.11 =
+high
+> >      };
 
---j7hkta2eynmybcrd
+--yyzsddwp6z7jengx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s0SMACgkQ2O7X88g7
-+poCdA/+ODHYt+t1EU3RdSi+HAlVJoVMq2pVwojj6eF5JTN907b9Cw9jcn4pVN4u
-Qv+hY8WZQyt78n0aRXmD0Ym3yUqt72WXsCyMPLi+AUxbbeg87KSW18BPgaRuLbvy
-vI0MG43ASOlJlwMZ84MH15H7Z4y5XlUEW4b+JmGL5+oRnT0XSaPdhBv/r5MtlH3c
-SRVQNloi6ZCMG7qZ9Fg2UvteHYbAS/idYGBtOlkCJzClf1mwseohjMHS74aJXQDi
-G0ypN8ycMM/dfk5IoRQ2qlfQN43sjzOGK6ZSQ3Ho1+xr7TGGqDJ0OX1DPcoiZk2t
-3nYBNFroyVciUPRujxY8iewsLU7jzTiGFfDJsGDVOBAJ/ok3e/KizU+aJIBcB5bO
-/j66kEsIi9if92DmC3ohFgPBhG2qmm1eftOaknucTNVb7IH/LsUEp6RXhMVHRTun
-nsC8D+0OkMOUQSCtNZbzsunQ2OX0OvGjPD2RtdafYrv7FKOj3Fv3ZcA85fDqVpLT
-HDY+zahoisOlJLG5unmFuU7WaBa6rg0mnIA1VxuEDmY6TC09oz1UidhzbuGdowmf
-PvGqFWQko59aaKTf9VXSdtE/E9ux28vZcXoXFaFdejtkVCNBYOxyQbslHBA8HrQx
-M7gypokWjXXRAJkLwqcOBMEslmPyVwVwcakSmk87nv7/jNJ+ahI=
-=eXkw
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s55sACgkQ2O7X88g7
++posXxAAimYGCMZqPCMGM572BWT84enhMCGLDZmbHF2T+nErP9bjg6Kl/7chCfr6
+YtyFPcX5kAhq4yCwymzAEWjsnmo4Vn01XcXCvXZkUy9TZYyxTpqLN5IQupFoe1h6
+QbP54+FosPdTsf2Yvm7QVyDxlbYMpuPPpU95jZRBtl4zsP5VGeZMwe0Ohf5x//aT
+qBL/nY/l06OVq/pKV1OjfvAu6P4G1OkKnNw+AJ+itTZWZi+0I5xfsWZJ6Q9qHCXq
+Gew48sWBTKQS4jLECNZuA7GcdYxNdjh8yl8t2jNCAw4WL7uSHL1wBBkzUmYjGB2h
+qF5Q8w48iI3Dl2VwEvUp52Ca/AGu98e5gJp0QBqYUUxojZ15m4jbYk4elu05vb+v
+kVdFvtpVWAhRChbiw7+PmOR+4WBC8d3CxpTgbGcFgort3mNPer8b1eS5YmA1eko9
+d5Lb4xsw72+PrdSOdVFOqLW0jduAhlJuZfpnaStzfBO+YZWPJrkkmr78GZ/oIRrg
+Tv78EKJ0ppyDv7wSev+4FbhsrneE16fJ6EoXrMwHzQt310wXam/bZu9ffzALPCsw
+eNZFiCNV+0AXyziGJ9OLJQCVchgt5KgwkwDv0eVhDPZ6qUl7aG7lmCcVuFZrvFnB
+v5BSRmZ3xE10iEmifEEhYlA4LYc/zFjdtWexbmc6Fj230KbY3zQ=
+=3lsp
 -----END PGP SIGNATURE-----
 
---j7hkta2eynmybcrd--
+--yyzsddwp6z7jengx--
