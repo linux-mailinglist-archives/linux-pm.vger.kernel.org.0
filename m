@@ -2,170 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AB320163F
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3DD201652
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389963AbgFSQ21 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 12:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394951AbgFSQ2Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 12:28:25 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E64C06174E;
-        Fri, 19 Jun 2020 09:28:25 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 542132A54CA
+        id S2389235AbgFSQ3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 12:29:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388632AbgFSQ3I (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jun 2020 12:29:08 -0400
+Received: from earth.universe (dyndsl-037-138-190-043.ewe-ip-backbone.de [37.138.190.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C12A21707;
+        Fri, 19 Jun 2020 16:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592584147;
+        bh=ZtQhASeQp5iIgLtY6Y187VZOIqUND/RMMdRa8MqBJZ0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e1Nmqq2Q1PSlS/XgDVPaBzBHdE8AauJhEW6lmqQA4eVEMFvbNqCURptugUHju4lI7
+         ndPEtNUUjdw8o5K6o8Ml7ccr4UBCc534yFeBVNcVsiWXaNki2YF/roULzwJvYayvv7
+         RTn81dP33oKFk2D+TSKHR87YPJSUW9BE6M8KrvZI=
 Received: by earth.universe (Postfix, from userid 1000)
-        id CAF173C08CD; Fri, 19 Jun 2020 18:28:20 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 18:28:20 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Emil Velikov <emil.velikov@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
+        id 9FE0C3C08CD; Fri, 19 Jun 2020 18:29:05 +0200 (CEST)
+Date:   Fri, 19 Jun 2020 18:29:05 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Emil Velikov <emil.velikov@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         Robert Jarzmik <robert.jarzmik@free.fr>,
         Russell King <linux@armlinux.org.uk>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCHv2 3/6] power: supply: gpio-charger: add
- charge-current-limit feature
-Message-ID: <20200619162820.hhv5rftp4xkhwtix@earth.universe>
+Subject: Re: [PATCHv2 1/6] dt-bindings: power: supply: gpio-charger: convert
+ to yaml
+Message-ID: <20200619162905.7yoxccylfz55daie@earth.universe>
 References: <20200605224403.181015-1-sebastian.reichel@collabora.com>
- <20200605224403.181015-4-sebastian.reichel@collabora.com>
- <20200615175844.GA2032047@bogus>
+ <20200605224403.181015-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="yyzsddwp6z7jengx"
+        protocol="application/pgp-signature"; boundary="lln7em7yay23qb4r"
 Content-Disposition: inline
-In-Reply-To: <20200615175844.GA2032047@bogus>
+In-Reply-To: <20200605224403.181015-2-sebastian.reichel@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---yyzsddwp6z7jengx
+--lln7em7yay23qb4r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Jun 15, 2020 at 11:58:44AM -0600, Rob Herring wrote:
-> On Sat, Jun 06, 2020 at 12:44:00AM +0200, Sebastian Reichel wrote:
-> > Add new charge-current-limit feature to gpio-charger.
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> > ---
-> >  .../bindings/power/supply/gpio-charger.yaml   |  31 ++++
-> >  drivers/power/supply/gpio-charger.c           | 140 ++++++++++++++++++
-> >  2 files changed, 171 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charge=
-r.yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
-> > index 30eabbb14ef3..e11cfdc68a51 100644
-> > --- a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
-> > +++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
-> > @@ -39,6 +39,25 @@ properties:
-> >      maxItems: 1
-> >      description: GPIO indicating the charging status
-> > =20
-> > +  charge-current-limit-gpios:
-> > +    minItems: 1
-> > +    maxItems: 32
-> > +    description: GPIOs used for current limiting
-> > +
-> > +  charge-current-limit-mapping:
-> > +    description: List of touples with current in uA and a GPIO bitmap =
-(in
+On Sat, Jun 06, 2020 at 12:43:58AM +0200, Sebastian Reichel wrote:
+> Convert the gpio-charger bindings from text format to
+> new YAML based representation.
 >=20
-> s/touples/tuples/
->=20
-> > +      this order). The touples must be provided in descending order of=
- the
->=20
-> and here.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
 
-Ack.
-
-> > +      current limit.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> > +    items:
-> > +      items:
-> > +        - description:
-> > +            Current limit in uA
-> > +        - description:
-> > +            Encoded GPIO setting. Bit 0 represents last GPIO from the
-> > +            charge-current-limit-gpios property. Bit 1 second to last
-> > +            GPIO and so on.
->=20
-> Seems a bit odd that bit N doesn't represent index N of the gpios.
-
-I was looking at it from a graphical POV (i.e. "last" bit represents
-last element):
-
-list =3D <element3, element2, element1, element0>;
-bits =3D 0b1011; // element3, 1 and 0
-
-Basically when writing it the order is the same at the cost of list
-index being reverse of bit index. But I do not really mind the order.
-If people think its better the other way around I can swap it.
+Thanks, queued.
 
 -- Sebastian
 
-> > +
-> >  required:
-> >    - compatible
-> > =20
-> > @@ -47,6 +66,12 @@ anyOf:
-> >      - gpios
-> >    - required:
-> >      - charge-status-gpios
-> > +  - required:
-> > +    - charge-current-limit-gpios
-> > +
-> > +dependencies:
-> > +  charge-current-limit-gpios: [ charge-current-limit-mapping ]
-> > +  charge-current-limit-mapping: [ charge-current-limit-gpios ]
-> > =20
-> >  additionalProperties: false
-> > =20
-> > @@ -60,4 +85,10 @@ examples:
-> > =20
-> >        gpios =3D <&gpd 28 GPIO_ACTIVE_LOW>;
-> >        charge-status-gpios =3D <&gpc 27 GPIO_ACTIVE_LOW>;
-> > +
-> > +      charge-current-limit-gpios =3D <&gpioA 11 GPIO_ACTIVE_HIGH>,
-> > +                                   <&gpioA 12 GPIO_ACTIVE_HIGH>;
-> > +      charge-current-limit-mapping =3D <2500000 0x00>, // 2.5 A =3D> b=
-oth GPIOs low
-> > +                                     <700000 0x01>, // 700 mA =3D> GPI=
-O A.12 high
-> > +                                     <0 0x02>; // 0 mA =3D> GPIO A.11 =
-high
-> >      };
+>  .../bindings/power/supply/gpio-charger.txt    | 31 ----------
+>  .../bindings/power/supply/gpio-charger.yaml   | 58 +++++++++++++++++++
+>  2 files changed, 58 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/supply/gpio-c=
+harger.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/gpio-c=
+harger.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charger.=
+txt b/Documentation/devicetree/bindings/power/supply/gpio-charger.txt
+> deleted file mode 100644
+> index 0fb33b2c62a6..000000000000
+> --- a/Documentation/devicetree/bindings/power/supply/gpio-charger.txt
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -gpio-charger
+> -
+> -Required properties :
+> - - compatible : "gpio-charger"
+> - - gpios : GPIO indicating the charger presence.
+> -   See GPIO binding in bindings/gpio/gpio.txt .
+> - - charger-type : power supply type, one of
+> -     unknown
+> -     battery
+> -     ups
+> -     mains
+> -     usb-sdp (USB standard downstream port)
+> -     usb-dcp (USB dedicated charging port)
+> -     usb-cdp (USB charging downstream port)
+> -     usb-aca (USB accessory charger adapter)
+> -
+> -Optional properties:
+> - - charge-status-gpios: GPIO indicating whether a battery is charging.
+> -
+> -Example:
+> -
+> -	usb_charger: charger {
+> -		compatible =3D "gpio-charger";
+> -		charger-type =3D "usb-sdp";
+> -		gpios =3D <&gpd 28 GPIO_ACTIVE_LOW>;
+> -		charge-status-gpios =3D <&gpc 27 GPIO_ACTIVE_LOW>;
+> -	};
+> -
+> -	battery {
+> -		power-supplies =3D <&usb_charger>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charger.=
+yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> new file mode 100644
+> index 000000000000..78b167c62ab1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/gpio-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: simple battery chargers only communicating through GPIOs
+> +
+> +maintainers:
+> +  - Sebastian Reichel <sre@kernel.org>
+> +
+> +description:
+> +  This binding is for all chargers, which are working more or less
+> +  autonomously, only providing some status GPIOs and possibly some
+> +  GPIOs for limited control over the charging process.
+> +
+> +properties:
+> +  compatible:
+> +    const: gpio-charger
+> +
+> +  charger-type:
+> +    enum:
+> +      - unknown
+> +      - battery
+> +      - ups
+> +      - mains
+> +      - usb-sdp                   # USB standard downstream port
+> +      - usb-dcp                   # USB dedicated charging port
+> +      - usb-cdp                   # USB charging downstream port
+> +      - usb-aca                   # USB accessory charger adapter
+> +    description:
+> +      Type of the charger, e.g. "mains" for a wall charger.
+> +
+> +  gpios:
+> +    maxItems: 1
+> +    description: GPIO indicating the charger presence
+> +
+> +  charge-status-gpios:
+> +    maxItems: 1
+> +    description: GPIO indicating the charging status
+> +
+> +required:
+> +  - compatible
+> +  - gpios
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    charger {
+> +      compatible =3D "gpio-charger";
+> +      charger-type =3D "usb-sdp";
+> +
+> +      gpios =3D <&gpd 28 GPIO_ACTIVE_LOW>;
+> +      charge-status-gpios =3D <&gpc 27 GPIO_ACTIVE_LOW>;
+> +    };
+> --=20
+> 2.26.2
+>=20
 
---yyzsddwp6z7jengx
+--lln7em7yay23qb4r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s55sACgkQ2O7X88g7
-+posXxAAimYGCMZqPCMGM572BWT84enhMCGLDZmbHF2T+nErP9bjg6Kl/7chCfr6
-YtyFPcX5kAhq4yCwymzAEWjsnmo4Vn01XcXCvXZkUy9TZYyxTpqLN5IQupFoe1h6
-QbP54+FosPdTsf2Yvm7QVyDxlbYMpuPPpU95jZRBtl4zsP5VGeZMwe0Ohf5x//aT
-qBL/nY/l06OVq/pKV1OjfvAu6P4G1OkKnNw+AJ+itTZWZi+0I5xfsWZJ6Q9qHCXq
-Gew48sWBTKQS4jLECNZuA7GcdYxNdjh8yl8t2jNCAw4WL7uSHL1wBBkzUmYjGB2h
-qF5Q8w48iI3Dl2VwEvUp52Ca/AGu98e5gJp0QBqYUUxojZ15m4jbYk4elu05vb+v
-kVdFvtpVWAhRChbiw7+PmOR+4WBC8d3CxpTgbGcFgort3mNPer8b1eS5YmA1eko9
-d5Lb4xsw72+PrdSOdVFOqLW0jduAhlJuZfpnaStzfBO+YZWPJrkkmr78GZ/oIRrg
-Tv78EKJ0ppyDv7wSev+4FbhsrneE16fJ6EoXrMwHzQt310wXam/bZu9ffzALPCsw
-eNZFiCNV+0AXyziGJ9OLJQCVchgt5KgwkwDv0eVhDPZ6qUl7aG7lmCcVuFZrvFnB
-v5BSRmZ3xE10iEmifEEhYlA4LYc/zFjdtWexbmc6Fj230KbY3zQ=
-=3lsp
+iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s59EACgkQ2O7X88g7
++poTgg/+Jy47Umtm1TDYfreX2IK/zJzPDWvLpmdpAtPJjctCCrMjTdPVMJUfSRSB
+v8y6bhzGd05Uwy4/xNA/s6mfiCkEpvAxy9j4hNW60+9mKG4WXRBVzWCaAHJ2d22r
+Yroxoq+7pitZ20P/6t5pTYIS5/UqE2695lH/XuuNzzV2E2LYe3LIHTC+xXQQiuL+
+MBVwp8sheham904HsnVPslT1nBY0Oy36BszGrXHAGA+RJVHgqrqWBAHalaOZk1qH
+Ab6Z3Zi3QP3kjp2jMaYiXkuuEgRm2UvnHzqSvYGg5XmnnRjEmKhFHJVz5aApXmqs
+QWFjVVm6iAoCnqnChBenWEBQl0QGq5p3+aCvVUTp++4VTXnMaP1ZdHyHS0T7SbIK
+pVXFPpXQ4q8mNhRF7yc8KS/pmOPPhoeoc7RPlEVrw/7qphhCPu3zpQ0UYg22Qk9P
+kuhvNHN2w1ekCHpY4FEMElT920IXy/O4nzBwnXJMRkhCOtrJEIMDXwNUq34y3cGd
+tQnqfu41F7SGZ+eaN/62BOmAt1tFUuBHItULPxKUTKl1Hyz+OwbmtTaPwQzcxjl9
+3hJdQT+xh09EmsdcZ6CzViB1DJHANr+KHF9DEgy5UsYQZR6aAvWBTKL2SgJNFJPz
+AM1V7tst08DvxLa1jRg8hSvVwELeOD4c1431wri5tNP6G9tsQXw=
+=gdx0
 -----END PGP SIGNATURE-----
 
---yyzsddwp6z7jengx--
+--lln7em7yay23qb4r--
