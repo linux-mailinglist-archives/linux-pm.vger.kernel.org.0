@@ -2,105 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D7C200D68
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 16:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30AA3200EAF
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 17:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390230AbgFSO5V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 10:57:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52672 "EHLO mail.kernel.org"
+        id S2391552AbgFSPKN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 11:10:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39982 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390224AbgFSO5U (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:57:20 -0400
-Received: from earth.universe (dyndsl-037-138-190-043.ewe-ip-backbone.de [37.138.190.43])
+        id S2403769AbgFSPKK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jun 2020 11:10:10 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0836C2158C;
-        Fri, 19 Jun 2020 14:57:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 68CF021852;
+        Fri, 19 Jun 2020 15:10:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578640;
-        bh=CT9r71MK/Ydp6dwbrEa6O5/PjRwxLbVniRQATszwRQw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PiOsvkir4Os/TLSff6ns8HfTYTo0f/91c/A/OMpAc86PfpoZeZCUwDxBP0bLnO8rS
-         DBzOKGLvrTsWDiaWSnNTOSY7PDGCuNbIwJCr9lEG4Ljvha6FEZrWZP6I6aeZ3LxNsW
-         0nlV8/2Jm+cCcDHQPUI7/wOUnenYIe/kVduz3Ipo=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 69E193C08CD; Fri, 19 Jun 2020 16:57:18 +0200 (CEST)
-Date:   Fri, 19 Jun 2020 16:57:18 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Wang Qing <wangqing@vivo.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers\power\supply: use kobj_to_dev
-Message-ID: <20200619145718.72ginjzx2inkzelv@earth.universe>
-References: <1591944954-14411-1-git-send-email-wangqing@vivo.com>
+        s=default; t=1592579409;
+        bh=FCCEw+4akgFAHzkOen0GsKaRoZY8JJzUhE5Y8DFpSiE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ra3LJMCNITKUoeBvEC+twnver8wJu5U+wFiieuTr3OOV/L1OcmUoBg6bH56OptH3N
+         OQhZJFCI1LnAj7wlCly4U4N0EAvBNspJNkAzqC2HFk01gxIND/dxQwGMHlM6upkjOx
+         /KowWJnrVFHt6I6u34rFL/XO/BkeVZbpSLWReLm0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 095/261] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Fri, 19 Jun 2020 16:31:46 +0200
+Message-Id: <20200619141654.429263462@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200619141649.878808811@linuxfoundation.org>
+References: <20200619141649.878808811@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pmji5uxywuwhyrf6"
-Content-Disposition: inline
-In-Reply-To: <1591944954-14411-1-git-send-email-wangqing@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
---pmji5uxywuwhyrf6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
 
-Hi,
+Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
+errors") adds cm2_causes[] array with map of error type ID and
+pointers to the short description string. There is a mistake in
+the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
+correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
+claims they have {0x17,0x18} codes. This is obviously hex-dec
+copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
 
-On Fri, Jun 12, 2020 at 02:55:54PM +0800, Wang Qing wrote:
-> Use kobj_to_dev() API instead of container_of().
->=20
-> Signed-off-by: Wang Qing <wangqing@vivo.com>
-> ---
+Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/kernel/mips-cm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Thanks, queued.
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index e5ea3db23d6b..a9eab83d9148 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -119,9 +119,9 @@ static char *cm2_causes[32] = {
+ 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
+ 	"0x08", "0x09", "0x0a", "0x0b",
+ 	"0x0c", "0x0d", "0x0e", "0x0f",
+-	"0x10", "0x11", "0x12", "0x13",
+-	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
+-	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
++	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
++	"0x14", "0x15", "0x16", "0x17",
++	"0x18", "0x19", "0x1a", "0x1b",
+ 	"0x1c", "0x1d", "0x1e", "0x1f"
+ };
+ 
+-- 
+2.25.1
 
--- Sebastian
 
->  drivers/power/supply/power_supply_sysfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->  mode change 100644 =3D> 100755 drivers/power/supply/power_supply_sysfs.c
->=20
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index bc79560..af0cad2
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -343,7 +343,7 @@ static umode_t power_supply_attr_is_visible(struct ko=
-bject *kobj,
->  					   struct attribute *attr,
->  					   int attrno)
->  {
-> -	struct device *dev =3D container_of(kobj, struct device, kobj);
-> +	struct device *dev =3D kobj_to_dev(kobj);
->  	struct power_supply *psy =3D dev_get_drvdata(dev);
->  	umode_t mode =3D S_IRUSR | S_IRGRP | S_IROTH;
->  	int i;
-> --=20
-> 2.7.4
->=20
 
---pmji5uxywuwhyrf6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl7s0k4ACgkQ2O7X88g7
-+pouAxAAol0mBNNBXhOkXgK+gNZN2w/ZvBouoVzRqOXniMeAjKhDYUVNCxjN2RRf
-+5qYt0cYGrSVR/FMmY40IGzGPKnO/0cAasVP5CVy8Rkf+Ji0Sy2P40LfFlJe/ZZO
-n/o1dD/m76uremaWPnFJ7St9v1HspoPBQxHC7QEvjvb5zNdvg/OuT9v1XmcwHn+F
-4ab4U9NnAAzDRZz+IzU+xBO6jRm3eVrjPv6f+YUGi4idKNqKZ03g/2u8MRGy5LUg
-fRaO3v/UCW+IQBbPOKbgta2ak9ZqeHTOlYCFivbgvQu/aYEuco4fA6o0cQynLZVV
-06mPloIA5xtPuvJlDBogWzkWjJ3lsXk7femaRnZ1Ra6+I13eMSPCS44diDiEjIUF
-obU9vJmcQmwtTHvHOdaiYjKUXq1pQyLJtEmKoLDvilR+XTw+L4EfnyjGdnMveQsM
-CsgxEFG5mBNh6Xra91D8tzT6lqJW4cL1Ae66DqNTmPUYRY4ex2A6OyLi/c5ivvED
-akGfVU3o2MHE9ZSKlE+b3TapTre1FoFw2M+ZpOIauv9WniVcVsKPmoLASYgL9Y9e
-NT05Zy1OVDZlUKI+6reMvsxzFu4UF9cTzB8vmGOrYfs2y51v70zKdNrBduP9obBt
-fWoCydVn9P3aK4LsUIVMd/DKHT06h5RXdkOQKZNMzavAn08Mkfg=
-=YjtU
------END PGP SIGNATURE-----
-
---pmji5uxywuwhyrf6--
