@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD482015D4
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 069FF201703
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 18:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390508AbgFSO7W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 10:59:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55416 "EHLO mail.kernel.org"
+        id S2388741AbgFSOtq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 10:49:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388538AbgFSO7U (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:59:20 -0400
+        id S2389226AbgFSOtp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jun 2020 10:49:45 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE5CF21973;
-        Fri, 19 Jun 2020 14:59:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 693A2217BA;
+        Fri, 19 Jun 2020 14:49:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592578759;
+        s=default; t=1592578184;
         bh=XPPEpC2yTAW6izKCvYgVtt0TlCBTsFss0avmq3pxYOY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PPh62KtxUOI9B+TyZbBKf4dEX3PFDjqeOc75S/EqR4co3zGdBTtD+mnYXR/j2FKyC
-         QFqLSAqgJ5SoGvIsM/rktrDuQy8LPN0vqcY0dYwhqGcwTXdcbTV3EYinpsfuzdMu9I
-         oWO7fMIwqNJmwRuXySuHJ5nGrPJkl/QUskZ2T7Wo=
+        b=mKk49kTsp2+mdz6SaGbWiv93cKsU4wtGXVpv9tcDnxrspi8XRl/+5Wh2HIZFnOKnA
+         u/xmQ4tOs0zTPbW4rB7CmC59S2J6fitw7d6/VJPXoEmuECCAg5N/gmy/J30i+Phzwj
+         go+HjftZUszSiUCSg7A8eRUkUeHmIkaSpSSSYQ0w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,12 +35,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 145/267] mips: cm: Fix an invalid error code of INTVN_*_ERR
-Date:   Fri, 19 Jun 2020 16:32:10 +0200
-Message-Id: <20200619141655.779549813@linuxfoundation.org>
+Subject: [PATCH 4.14 115/190] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Fri, 19 Jun 2020 16:32:40 +0200
+Message-Id: <20200619141639.379681920@linuxfoundation.org>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200619141648.840376470@linuxfoundation.org>
-References: <20200619141648.840376470@linuxfoundation.org>
+In-Reply-To: <20200619141633.446429600@linuxfoundation.org>
+References: <20200619141633.446429600@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
