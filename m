@@ -2,325 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6039120196A
+	by mail.lfdr.de (Postfix) with ESMTP id CC8C920196B
 	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 19:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731175AbgFSRZk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 13:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729255AbgFSRZh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 13:25:37 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A120C06174E
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jun 2020 10:25:37 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id b15so5298177ybg.12
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jun 2020 10:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bkEWjWXqjBZVsPVhPv/NOF2Z3u1EPViCIb4Xb0v/sUE=;
-        b=iQtVFDFlzepyz+Ub2etCID5sIaNR3ShRxXkqIeUeJeKTGcm6p8To+9Fa2jo0bu51OW
-         tf0+oZNd8VhtU8wBAwSDo3fqv0ImjACRbj2gAQe+F8brc+JBjPXup9lhMUft9ptMva5u
-         6H30I1HlAoQ8mnnXoDX/LNuL5W+aKj1kHaMgYsTNQP/MhyIM9m3mAKBJQNH8VaJk63dQ
-         CORaNtLFSD3RtEIvx1R/qP01V/TduxdpWZVKG9k2y5Lm4X661z6Lvm6Epl6PkXL6lvkP
-         eYsJ6nU5QzOZtAd97qbOFd5vZgX7EUOcraE0HKPedIZWeMBF72n1P8omohxhWf1D4lf/
-         bd8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bkEWjWXqjBZVsPVhPv/NOF2Z3u1EPViCIb4Xb0v/sUE=;
-        b=bkrpD6oQ7gdaDFSb4tGnDvQRgL0jm1QPD4dPDzKH1bVJHNGoIKz1lee6ThJxV/ZiSA
-         Bt36BhnHtSVC9m29wfGj+JDn6nYJ7BgADngMJ05s54Oa645L10zVnEutprlCjwSnKi+D
-         uBEWMw0vJaU96t76Sq/WPMJtnODJOBktuMKI8b3R+q+XK2Q8I5OILt0o7Algd0i6/FDU
-         5mvcNNGq7cdcU+hVnZFpeXpJo3/fnj9xpQvlzPYBWb8e5YMj1GU5t9SVcU38PH2sPbud
-         hzM8hwzOlMDTlRNKID902pOk3WVA5vfvdhq3szz//U7Lil7pMRs4pRD6FzHDFjQsKpjf
-         /LNQ==
-X-Gm-Message-State: AOAM531OYIMOCv4/RhQvYhnoUs+OGp+SF18ybNbMr2j3lvQTXjo1HFmU
-        c6D2noAXh5sFB6O+jr7Xfn5MFz/SKqqXbhwc1Sred/+V
-X-Google-Smtp-Source: ABdhPJzTeTEmIGA/l6PzvNYY0QE9AU6OVLAu4AxRutg/y0w0QOHH7rvq3C20j0QqdPbXaEl4z6JmYW+spmj6mxwZj/w=
-X-Received: by 2002:a25:3ac6:: with SMTP id h189mr7359178yba.281.1592587536446;
- Fri, 19 Jun 2020 10:25:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <3315137.NY7H5Hu6o1@tool> <20200619145237.7fz6sbwbhb2rhhu2@earth.universe>
-In-Reply-To: <20200619145237.7fz6sbwbhb2rhhu2@earth.universe>
-From:   =?UTF-8?Q?Daniel_Gonz=C3=A1lez_Cabanelas?= <dgcbueu@gmail.com>
-Date:   Fri, 19 Jun 2020 19:25:25 +0200
-Message-ID: <CABwr4_unk9ezqNmbyHN70Dkk2_RQidJ42SjPDry-0q_aW=V24g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2 ] power: reset: add driver for LinkStation power off
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1730893AbgFSR0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 13:26:11 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:7186 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729255AbgFSR0K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 13:26:10 -0400
+Received: from pps.filterd (m0170396.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JHOhmc004121;
+        Fri, 19 Jun 2020 13:26:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=Y47GOtysBn/U+lyIQcdu534W6B4NcD1Ao2pjkmc0fuA=;
+ b=LfxYUNiq613Vy1wMd0RPk6Ek0ZMT1N7vtxgwo/hu7cYPMfpIK1TItwPnhiXkrMFNlBvs
+ FdEYym64KsId7NzCVkc8Tc1PNwqL0sK4qLFoMUmla84eyWrTX5824gQsz9HJLwBbA0fs
+ /2jHzDQk0ESuzh6Lel7D4zK+5dhSMLeVYuriwt2A3AbUsjhn/g5Tf+ldqA9YpQLxg0vM
+ 5is+CRDGgnk7neI0R89XjSD04MhCmx8QljBc1qp6L3KFMqkUTzqHZknzkg7P83twVd8U
+ zUV4O//+VqUGd/TIsSA9F0sKqvWGFCDUY7wEuMgEmIDYgb30Rms4D8AdyOior3i5sVL0 tQ== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 31q66c3mmx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 Jun 2020 13:26:09 -0400
+Received: from pps.filterd (m0133268.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05JHLgYZ026082;
+        Fri, 19 Jun 2020 13:26:08 -0400
+Received: from ausxippc106.us.dell.com (AUSXIPPC106.us.dell.com [143.166.85.156])
+        by mx0a-00154901.pphosted.com with ESMTP id 31rh3evwts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Jun 2020 13:26:08 -0400
+X-LoopCount0: from 10.166.132.131
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="560532163"
+From:   <Mario.Limonciello@dell.com>
+To:     <sebastian.reichel@collabora.com>, <hdegoede@redhat.com>
+CC:     <pali@kernel.org>, <y.linux@paritcher.com>,
+        <linux-kernel@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <mjg59@srcf.ucam.org>
+Subject: RE: [PATCH 2/3] platform/x86: dell-wmi: add new keymap type 0x0012
+Thread-Topic: [PATCH 2/3] platform/x86: dell-wmi: add new keymap type 0x0012
+Thread-Index: AQHWPUx5kZ6BCWcrZkepA13uOwTuTKjO2RsQgACifgD//7DjgIABl+YAgAAPn4CAAAPSgIAPnq6A///ItkA=
+Date:   Fri, 19 Jun 2020 17:26:06 +0000
+Message-ID: <1bf60afb825a4a4abd5b4e6c278ac710@AUSX13MPC105.AMER.DELL.COM>
+References: <cover.1591584631.git.y.linux@paritcher.com>
+ <0dc191a3d16f0e114f6a8976433e248018e10c43.1591584631.git.y.linux@paritcher.com>
+ <83fe431cacbc4708962767668ac8f06f@AUSX13MPC105.AMER.DELL.COM>
+ <79bd59ee-dd37-bdc5-f6b4-00f2c33fdcff@paritcher.com>
+ <7f9f0410696141cfabb0237d33b7b529@AUSX13MPC105.AMER.DELL.COM>
+ <20200609154938.udo7mn7ka7z7pr6c@pali>
+ <20200609164533.qtup47io2aoc5hgl@earth.universe>
+ <136a06e3-0f00-d252-ebdd-a76c8a575db8@redhat.com>
+ <20200619153103.k4ewdaljqubcrvvc@earth.universe>
+In-Reply-To: <20200619153103.k4ewdaljqubcrvvc@earth.universe>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2020-06-19T17:26:03.0514757Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_ActionId=92cccc85-be94-41a6-a2ed-fffbb3b162be;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [143.166.24.40]
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-19_19:2020-06-19,2020-06-19 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 mlxlogscore=999 spamscore=0
+ cotscore=-2147483648 lowpriorityscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 malwarescore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006190129
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006190129
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+> >
+> > This is not so much about non-genuine as about the adapter having
+> > the wrong wattage. E.g. plugging a 65W adapter in a laptop which
+> > has a 45W CPU + a 35W discrete GPU will not allow the laptop to
+> > really charge while it is in use.
+>=20
+> Ok. So how much information is available over WMI? Exposing the
+> max. input power via the power-supply API makes sense in any case.
 
-El vie., 19 jun. 2020 a las 16:52, Sebastian Reichel
-(<sre@kernel.org>) escribi=C3=B3:
->
-> Hi,
->
-> On Sat, Jun 13, 2020 at 12:26:52PM +0200, Daniel Gonz=C3=A1lez Cabanelas =
-wrote:
-> > Some Buffalo LinkStations perform the power off operation, at restart
-> > time, depending on the state of an output pin (LED2/INTn) at the ethern=
-et
-> > PHY. This pin is also used to wake the machine when a WoL packet is
-> > received by the PHY.
-> >
-> > The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
-> > and other models. Without it, the board remains forever halted if a
-> > power off command is executed, unless the PSU is disconnected and
-> > connected again.
-> >
-> > Add the driver to provide the power off function and also make the WoL
-> > feature to be available.
-> >
-> > Signed-off-by: Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>
-> > ---
-> > Changes in v3:
-> >   - Code for PHY autodectection added, "phy-handle,intn" deleted.
-> > Changes in v2:
-> >   - The driver is now compatible with the WoL function, the LED2 pin ou=
-tput
-> >     is now used as INTn. Added the required code to make INTn work prop=
-erly.
-> >   - Code for PHY autodectection deleted, "phy-handle,intn" is now manda=
-tory.
-> >   - Replace a dev_info with a dev_dbg.
-> >   - Use phy_device_free in the driver remove.
-> >   - Cosmetic changes.
-> >
-> >  drivers/power/reset/Kconfig                |  11 ++
-> >  drivers/power/reset/Makefile               |   1 +
-> >  drivers/power/reset/linkstation-poweroff.c | 144 +++++++++++++++++++++
-> >  3 files changed, 156 insertions(+)
-> >  create mode 100644 drivers/power/reset/linkstation-poweroff.c
-> >
-> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> > index f07b982c8d..431cd9f201 100644
-> > --- a/drivers/power/reset/Kconfig
-> > +++ b/drivers/power/reset/Kconfig
-> > @@ -99,6 +99,17 @@ config POWER_RESET_HISI
-> >       help
-> >         Reboot support for Hisilicon boards.
-> >
-> > +config POWER_RESET_LINKSTATION
-> > +     tristate "Buffalo LinkStation power-off driver"
-> > +     depends on ARCH_MVEBU || COMPILE_TEST
-> > +     depends on OF_MDIO && PHYLIB
-> > +     help
-> > +       This driver supports turning off some Buffalo LinkStations by
-> > +       setting an output pin at the ethernet PHY to the correct state.
-> > +       It also makes the device compatible with the WoL function.
-> > +
-> > +       Say Y here if you have Buffalo LinkStation LS421D/E.
-> > +
-> >  config POWER_RESET_MSM
-> >       bool "Qualcomm MSM power-off driver"
-> >       depends on ARCH_QCOM
-> > diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefil=
-e
-> > index 5710ca4695..c51eceba9e 100644
-> > --- a/drivers/power/reset/Makefile
-> > +++ b/drivers/power/reset/Makefile
-> > @@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini=
--poweroff.o
-> >  obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
-> >  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
-> >  obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
-> > +obj-${CONFIG_POWER_RESET_LINKSTATION} +=3D linkstation-poweroff.o
-> >  obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
-> >  obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
-> >  obj-$(CONFIG_POWER_RESET_OXNAS) +=3D oxnas-restart.o
-> > diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power=
-/reset/linkstation-poweroff.c
-> > new file mode 100644
-> > index 0000000000..688af0a962
-> > --- /dev/null
-> > +++ b/drivers/power/reset/linkstation-poweroff.c
-> > @@ -0,0 +1,144 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * LinkStation power off restart driver
-> > + * Copyright (C) 2020 Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.co=
-m>
-> > + */
-> > +
-> > +#include <linux/module.h>
-> > +#include <linux/notifier.h>
-> > +#include <linux/of.h>
-> > +#include <linux/of_mdio.h>
-> > +#include <linux/of_platform.h>
-> > +#include <linux/reboot.h>
-> > +#include <linux/phy.h>
-> > +
-> > +/* Defines from the eth phy Marvell driver */
-> > +#define MII_MARVELL_COPPER_PAGE              0
-> > +#define MII_MARVELL_LED_PAGE         3
-> > +#define MII_MARVELL_WOL_PAGE         17
-> > +#define MII_MARVELL_PHY_PAGE         22
-> > +
-> > +#define MII_PHY_LED_CTRL             16
-> > +#define MII_88E1318S_PHY_LED_TCR     18
-> > +#define MII_88E1318S_PHY_WOL_CTRL    16
-> > +#define MII_M1011_IEVENT             19
-> > +
-> > +#define MII_88E1318S_PHY_LED_TCR_INTn_ENABLE         BIT(7)
-> > +#define MII_88E1318S_PHY_LED_TCR_FORCE_INT           BIT(15)
-> > +#define MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS   BIT(12)
-> > +#define LED2_FORCE_ON                                        (0x8 << 8=
-)
-> > +#define LEDMASK                                              GENMASK(1=
-1,8)
-> > +
-> > +static struct phy_device *phydev;
-> > +
-> > +static void mvphy_reg_intn(u16 data)
-> > +{
-> > +     int rc =3D 0, saved_page;
-> > +
-> > +     saved_page =3D phy_select_page(phydev, MII_MARVELL_LED_PAGE);
-> > +     if (saved_page < 0)
-> > +             goto err;
-> > +
-> > +     /* Force manual LED2 control to let INTn work */
-> > +     __phy_modify(phydev, MII_PHY_LED_CTRL, LEDMASK, LED2_FORCE_ON);
-> > +
-> > +     /* Set the LED[2]/INTn pin to the required state */
-> > +     __phy_modify(phydev, MII_88E1318S_PHY_LED_TCR,
-> > +                  MII_88E1318S_PHY_LED_TCR_FORCE_INT,
-> > +                  MII_88E1318S_PHY_LED_TCR_INTn_ENABLE | data);
-> > +
-> > +     if (!data) {
-> > +             /* Clear interrupts to ensure INTn won't be holded in hig=
-h state */
-> > +             __phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_COP=
-PER_PAGE);
-> > +             __phy_read(phydev, MII_M1011_IEVENT);
-> > +
-> > +             /* If WOL was enabled and a magic packet was received bef=
-ore powering
-> > +              * off, we won't be able to wake up by sending another ma=
-gic packet.
-> > +              * Clear WOL status.
-> > +              */
-> > +             __phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_WOL=
-_PAGE);
-> > +             __phy_set_bits(phydev, MII_88E1318S_PHY_WOL_CTRL,
-> > +                            MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS=
-);
-> > +     }
-> > +err:
-> > +     rc =3D phy_restore_page(phydev, saved_page, rc);
-> > +     if (rc < 0)
-> > +             dev_err(&phydev->mdio.dev, "Write register failed, %d\n",=
- rc);
-> > +}
-> > +
-> > +static int linkstation_reboot_notifier(struct notifier_block *nb,
-> > +                                    unsigned long action, void *unused=
-)
-> > +{
-> > +     if (action =3D=3D SYS_RESTART)
-> > +             mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
-> > +
-> > +     return NOTIFY_DONE;
-> > +}
-> > +
-> > +static struct notifier_block linkstation_reboot_nb =3D {
-> > +     .notifier_call =3D linkstation_reboot_notifier,
-> > +};
-> > +
-> > +static void linkstation_poweroff(void)
-> > +{
-> > +     unregister_reboot_notifier(&linkstation_reboot_nb);
->
-> I think this can be removed here and then you can use
-> devm_register_reboot_notifier in probe and drop the
-> unregister in remove function. Otherwise the driver
-> LGTM.
+WMI is event driven.  You plug in the adapter and the platform will
+evaluate its power needs and advertise it to the OS in the event.
 
-I've tested this change and it didn't work. Probably because without
-unregistering the notifier, when kernel_restart("Power off") is
-called, the notifier is still there, and we end performing a restart
-instead the power off operation.
+It's important to note this is not a fixed value.
+For example if you have a dock connected the power needs might be higher.
 
-Regards
-Daniel
+>=20
+> > One issue I see with doing this in the power_supply class is that
+> > the charger is represented by the standard ACPI AC adapter stuff,
+> > which does not have this info. This sort of extra info comes from
+> > WMI. Now we could have the WMI driver register a second power_supply
+> > device, but that means having 2 power_supply devices representing
+> > the 1 AC adapter which does not feel right.
+>=20
+> I agree. WMI and ACPI information need to be merged and exposed
+> as one device to userspace. It's not the first time we have this
+> kind of requirement, but so far it was about merging battery info
+> from two places. Unfortunately no code has been written so far to
+> support this.
+>=20
+> > I was myself actually thinking more along the lines of adding a
+> > new mechanism to the kernel where the kernel can send messages
+> > to userspace (either with some special tag inside dmesg, or through
+> > a new mechanism) indication that the message should be shown
+> > as a notification (dialog/bubble/whatever) inside the UI.
+> >
+> > This could be useful for this adapter case, but e.g. also for
+> > pluging a thunderbolt device into a non thunderbolt capable
+> > Type-C port, a superspeed USB device into a USB-2 only USB
+> > port and probably other cases.
+> >
+> > Rather then inventing separate userspace APIs for all these
+> > cases having a general notification mechanism might be
+> > quite useful for this (as long as the kernel does not
+> > over use it).
+>=20
+> I don't think this is a good idea. It brings all kind of
+> localization problems. Also the information is not machine
+> parsable. It looks more like a hack to get things working
+> quickly by avoiding using/designing proper APIs.
 
->
-> -- Sebastian
->
-> > +     mvphy_reg_intn(0);
-> > +
-> > +     kernel_restart("Power off");
-> > +}
-> > +
-> > +static int linkstation_poweroff_probe(struct platform_device *pdev)
-> > +{
-> > +     struct mii_bus *bus;
-> > +     struct device_node *dn;
-> > +
-> > +     dn =3D of_find_node_by_name(NULL, "mdio");
-> > +     if (!dn)
-> > +             return -ENODEV;
-> > +
-> > +     bus =3D of_mdio_find_bus(dn);
-> > +     of_node_put(dn);
-> > +     if (!bus)
-> > +             return -EPROBE_DEFER;
-> > +
-> > +     phydev =3D phy_find_first(bus);
-> > +     if (!phydev)
-> > +             return -EPROBE_DEFER;
-> > +
-> > +     register_reboot_notifier(&linkstation_reboot_nb);
-> > +     pm_power_off =3D linkstation_poweroff;
-> > +
-> > +     dev_dbg(&pdev->dev, "PHY [%s]\n", phydev_name(phydev));
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int linkstation_poweroff_remove(struct platform_device *pdev)
-> > +{
-> > +     pm_power_off =3D NULL;
-> > +     unregister_reboot_notifier(&linkstation_reboot_nb);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct of_device_id ls_poweroff_of_match[] =3D {
-> > +     { .compatible =3D "linkstation,power-off", },
-> > +     { },
-> > +};
-> > +
-> > +MODULE_DEVICE_TABLE(of, ls_poweroff_of_match);
-> > +
-> > +static struct platform_driver linkstation_poweroff_driver =3D {
-> > +     .probe =3D linkstation_poweroff_probe,
-> > +     .remove =3D linkstation_poweroff_remove,
-> > +     .driver =3D {
-> > +             .name =3D "linkstation_power_off",
-> > +             .of_match_table =3D ls_poweroff_of_match,
-> > +     },
-> > +};
-> > +
-> > +module_platform_driver(linkstation_poweroff_driver);
-> > +
-> > +MODULE_AUTHOR("Daniel Gonz=C3=A1lez Cabanelas <dgcbueu@gmail.com>");
-> > +MODULE_DESCRIPTION("LinkStation power off driver");
-> > +MODULE_LICENSE("GPL v2");
-> > --
-> > 2.27.0
-> >
-> >
-> >
-> >
+When you have the data to populate in sysfs at init time I
+would agree, but at least in this case it's not always
+static data that can be queried on demand.  You would have
+to wait until the first event comes around and populate
+some kernel structures for the sysfs attributes to read from
+at that time.
+
+As a similar suggestion to Hans', what about letting the kernel
+advertise a table of fixed printf style strings for translation?
+When the dynamic data comes in the event can just be an index to one
+of those strings and the data in the following bytes.  Userland
+could then map the strings accordingly.
+
+Running with this concept, it could even be an overhaul to your typical
+content in dmesg to allow errors and info messages to be translatable too.
