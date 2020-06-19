@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BAB2004C6
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 11:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2C8200BEC
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jun 2020 16:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgFSJQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 19 Jun 2020 05:16:05 -0400
-Received: from lucky1.263xmail.com ([211.157.147.131]:43726 "EHLO
-        lucky1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726878AbgFSJQE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 19 Jun 2020 05:16:04 -0400
-X-Greylist: delayed 411 seconds by postgrey-1.27 at vger.kernel.org; Fri, 19 Jun 2020 05:16:03 EDT
-Received: from localhost (unknown [192.168.167.32])
-        by lucky1.263xmail.com (Postfix) with ESMTP id 6D418AFDC6;
-        Fri, 19 Jun 2020 17:09:11 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-ABS-CHECKED: 0
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by smtp.263.net (postfix) whith ESMTP id P3326T139697392834304S1592557749877054_;
-        Fri, 19 Jun 2020 17:09:10 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <434d5cdc956ae93f131f66b7a903d7ad>
-X-RL-SENDER: finley.xiao@rock-chips.com
-X-SENDER: xf@rock-chips.com
-X-LOGIN-NAME: finley.xiao@rock-chips.com
-X-FST-TO: heiko@sntech.de
-X-SENDER-IP: 58.22.7.114
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-X-System-Flag: 0
-From:   Finley Xiao <finley.xiao@rock-chips.com>
-To:     heiko@sntech.de, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, javi.merino@kernel.org,
-        rui.zhang@intel.com, amit.kucheria@verdurent.com
-Cc:     linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, stable@vger.kernel.org,
-        huangtao@rock-chips.com, tony.xie@rock-chips.com,
-        cl@rock-chips.com, Finley Xiao <finley.xiao@rock-chips.com>
-Subject: [PATCH] thermal/drivers/cpufreq_cooling: Fix wrong frequency converted from power
-Date:   Fri, 19 Jun 2020 17:08:25 +0800
-Message-Id: <20200619090825.32747-1-finley.xiao@rock-chips.com>
-X-Mailer: git-send-email 2.11.0
+        id S2388042AbgFSOjf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 19 Jun 2020 10:39:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57022 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388035AbgFSOjc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 19 Jun 2020 10:39:32 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 24DDD20CC7;
+        Fri, 19 Jun 2020 14:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592577571;
+        bh=6kMPdUFE150+BlX703K5Ki/VlX6lvcj6VOQhqc0pvzY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vP4GRk+M1/tO6DODghujz7zAPt+7iEyoT2+O1hLBrd/PoZ0u3hK5Mw6NmX1tjXOo6
+         sEq5F8TMTHMuHu+VpwhPU4GDs+Y8iTPFH8ah1+mHXyQC96oxSt3u6lnQW23uqAJRg6
+         ZT/yatm3zXs8x5UnL3qnLeoRHEH+4dNku1jP6Yn8=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.4 063/101] mips: cm: Fix an invalid error code of INTVN_*_ERR
+Date:   Fri, 19 Jun 2020 16:32:52 +0200
+Message-Id: <20200619141617.359180596@linuxfoundation.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200619141614.001544111@linuxfoundation.org>
+References: <20200619141614.001544111@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function cpu_power_to_freq is used to find a frequency and set the
-cooling device to consume at most the power to be converted. For example,
-if the power to be converted is 80mW, and the em table is as follow.
-struct em_cap_state table[] = {
-	/* KHz     mW */
-	{ 1008000, 36, 0 },
-	{ 1200000, 49, 0 },
-	{ 1296000, 59, 0 },
-	{ 1416000, 72, 0 },
-	{ 1512000, 86, 0 },
-};
-The target frequency should be 1416000KHz, not 1512000KHz.
+From: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Fixes: 349d39dc5739 ("thermal: cpu_cooling: merge frequency and power tables")
-Cc: <stable@vger.kernel.org> # v4.13+
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+[ Upstream commit 8a0efb8b101665a843205eab3d67ab09cb2d9a8d ]
+
+Commit 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache
+errors") adds cm2_causes[] array with map of error type ID and
+pointers to the short description string. There is a mistake in
+the table, since according to MIPS32 manual CM2_ERROR_TYPE = {17,18}
+correspond to INTVN_WR_ERR and INTVN_RD_ERR, while the table
+claims they have {0x17,0x18} codes. This is obviously hex-dec
+copy-paste bug. Moreover codes {0x18 - 0x1a} indicate L2 ECC errors.
+
+Fixes: 3885c2b463f6 ("MIPS: CM: Add support for reporting CM cache errors")
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Paul Burton <paulburton@kernel.org>
+Cc: Ralf Baechle <ralf@linux-mips.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thermal/cpufreq_cooling.c | 6 +++---
+ arch/mips/kernel/mips-cm.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 9e124020519f..6c0e1b053126 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -123,12 +123,12 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- {
- 	int i;
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index 76f18c56141c..3458d23d230c 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -123,9 +123,9 @@ static char *cm2_causes[32] = {
+ 	"COH_RD_ERR", "MMIO_WR_ERR", "MMIO_RD_ERR", "0x07",
+ 	"0x08", "0x09", "0x0a", "0x0b",
+ 	"0x0c", "0x0d", "0x0e", "0x0f",
+-	"0x10", "0x11", "0x12", "0x13",
+-	"0x14", "0x15", "0x16", "INTVN_WR_ERR",
+-	"INTVN_RD_ERR", "0x19", "0x1a", "0x1b",
++	"0x10", "INTVN_WR_ERR", "INTVN_RD_ERR", "0x13",
++	"0x14", "0x15", "0x16", "0x17",
++	"0x18", "0x19", "0x1a", "0x1b",
+ 	"0x1c", "0x1d", "0x1e", "0x1f"
+ };
  
--	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
--		if (power > cpufreq_cdev->em->table[i].power)
-+	for (i = cpufreq_cdev->max_level; i >= 0; i--) {
-+		if (power >= cpufreq_cdev->em->table[i].power)
- 			break;
- 	}
- 
--	return cpufreq_cdev->em->table[i + 1].frequency;
-+	return cpufreq_cdev->em->table[i].frequency;
- }
- 
- /**
 -- 
-2.11.0
+2.25.1
 
 
 
