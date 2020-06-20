@@ -2,65 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39362202366
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Jun 2020 13:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35763202589
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Jun 2020 19:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728063AbgFTLoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 20 Jun 2020 07:44:30 -0400
-Received: from rdslmr.btconnect.com ([62.239.164.79]:50937 "EHLO
-        mail.btconnect.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728046AbgFTLo1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Jun 2020 07:44:27 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 07:44:14 EDT
-Received: from mail.btconnect.com (rd11780omr11.iuser.iroot.adidom.com [10.187.89.172])
-        by rd11780slr11.dci.bt.com (MOS 4.4.8-GA)
-        with ESMTP id ARU41794;
-        Sat, 20 Jun 2020 12:36:02 +0100
-Received: (from localhost [127.0.0.1])
-        by rd11780omr11.dci.bt.com (MOS 4.4.8-GA)
-        id OQZ44616;
-        Sat, 20 Jun 2020 12:36:02 +0100 (BST)
-Received: from 156.96.58.242 (EHLO User) ([156.96.58.242])
-        by rd11780omr11.dci.bt.com
-        with ESMTP id OQZ44291 (AUTH IAN.ACFGROUP);
-        Sat, 20 Jun 2020 12:35:59 +0100 (BST)
-Reply-To: <mariaforlife2@gmail.com>
-From:   "Mrs Maria Talley" <IAN.ACFGROUP@btconnect.com>
-Subject: May the Peace of the Lord be with you
-Date:   Sat, 20 Jun 2020 07:35:56 -0400
+        id S1727083AbgFTRLL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 20 Jun 2020 13:11:11 -0400
+Received: from mail.rc.ru ([151.236.222.147]:39506 "EHLO mail.rc.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725290AbgFTRLK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 20 Jun 2020 13:11:10 -0400
+X-Greylist: delayed 1549 seconds by postgrey-1.27 at vger.kernel.org; Sat, 20 Jun 2020 13:11:09 EDT
+Received: from mail.rc.ru ([2a01:7e00:e000:1bf::1]:57788)
+        by mail.rc.ru with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ink@jurassic.park.msu.ru>)
+        id 1jmgbs-0005A3-VC; Sat, 20 Jun 2020 17:44:52 +0100
+Date:   Sat, 20 Jun 2020 17:44:49 +0100
+From:   Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+To:     Gregory Clement <gregory.clement@bootlin.com>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: dt: fix oops on armada37xx
+Message-ID: <20200620164449.GA19776@mail.rc.ru>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <202006201135.OQZ44291@rd11780omr11.dci.bt.com>
-X-Mirapoint-IP-Reputation: reputation=Bad-1,
-        source=Queried,
-        refid=tid=0001.0A782F92.5EEDF402.0007,
-        actions=TAG
-X-Junkmail: UCE(50)
-X-Junkmail-Status: score=50/50, host=rd11780omr11.dci.bt.com
-X-Junkmail-Signature-Raw: score=bulk(0),
-        refid=str=0001.0A782F23.5EEDF289.001F,ss=3,sh,re=0.000,recu=0.000,reip=0.000,cl=3,cld=1,fgs=0,
-        ip=156.96.58.242,
-        so=2016-11-06 16:00:04,
-        dmn=2013-03-21 17:37:32,
-        mode=multiengine
-X-Junkmail-IWF: false
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-May the Peace of the Lord be with you!
+Commit 0c868627e617e43a295d8 (cpufreq: dt: Allow platform specific
+intermediate callbacks) added two function pointers to the
+struct cpufreq_dt_platform_data. However, armada37xx_cpufreq_driver_init()
+has this struct (pdata) located on the stack and uses only "suspend"
+and "resume" fields. So these newly added "get_intermediate" and
+"target_intermediate" pointers are uninitialized and contain arbitrary
+non-null values, causing all kinds of trouble.
 
-Please this is an urgent solicitation for assistance, I'm Mrs Maria Talley from United States of America, but I lived in London for many years. I am 54 years old. I was diagnosed of cancer for about 2 years ago. This letter comes from a devastated, sorrowful and emotional laden soul that needs compassion from a kind and conscience driven person. I need someone who has a sincere compassionate heart of international humanitarian charity. There is some properties left by my late husband, which I sold, because the doctor had diagnosed me that I am in my last days, that I can not live anymore longer, so I have to sale all those properties that was left by my late husband.
+For instance, here is an oops on espressobin after an attempt to change
+the cpefreq governor:
 
-I have deposited the sum of $9.5 Million in a Bank in United States of America, which I sold from my properties and deposited it in New York City Bank in America. I want you to help me use this funds to help the less privilege, the motherless baby homes and hospitals in your country before I die. I want you to take 40 percent of the total money for your personal use, while 60% of the money will go to charity. I will appreciate your utmost confidentiality and trust in this matter to accomplish my heart desire, as I don't want anything that will jeopardize my last wish. If you are a good and honest person write back to me for more.
+[   29.174554] Unable to handle kernel execute from non-executable memory at virtual address ffff00003f87bdc0
+...
+[   29.269373] pc : 0xffff00003f87bdc0
+[   29.272957] lr : __cpufreq_driver_target+0x138/0x580
+...
 
-Thanks and God bless you,
-Mrs Maria Talley
+Fixed by zeroing out pdata before use.
+
+Signed-off-by: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+---
+ drivers/cpufreq/armada-37xx-cpufreq.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
+index aa0f06dec959..df1c941260d1 100644
+--- a/drivers/cpufreq/armada-37xx-cpufreq.c
++++ b/drivers/cpufreq/armada-37xx-cpufreq.c
+@@ -456,6 +456,7 @@ static int __init armada37xx_cpufreq_driver_init(void)
+ 	/* Now that everything is setup, enable the DVFS at hardware level */
+ 	armada37xx_cpufreq_enable_dvfs(nb_pm_base);
+ 
++	memset(&pdata, 0, sizeof(pdata));
+ 	pdata.suspend = armada37xx_cpufreq_suspend;
+ 	pdata.resume = armada37xx_cpufreq_resume;
+ 
+-- 
+2.20.1
