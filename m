@@ -2,106 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 872EC202703
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jun 2020 00:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A47202774
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jun 2020 01:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgFTW22 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 20 Jun 2020 18:28:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:51632 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727930AbgFTW22 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 20 Jun 2020 18:28:28 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 608BCD6E;
-        Sat, 20 Jun 2020 15:28:27 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C1623F73C;
-        Sat, 20 Jun 2020 15:28:25 -0700 (PDT)
-References: <20200614010755.9129-1-valentin.schneider@arm.com> <20200614010755.9129-2-valentin.schneider@arm.com> <CAKfTPtCyi9acak95_2_2uL3Cf0OMAbZhDav2LbPY+ULPrD7z4w@mail.gmail.com> <20200620174912.GA18358@arm.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "open list\:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 1/3] thermal/cpu-cooling, sched/core: Cleanup thermal pressure definition
-In-reply-to: <20200620174912.GA18358@arm.com>
-Date:   Sat, 20 Jun 2020 23:28:19 +0100
-Message-ID: <jhjmu4xcqyk.mognet@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1728379AbgFTX5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 20 Jun 2020 19:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726932AbgFTX5r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 20 Jun 2020 19:57:47 -0400
+Received: from omr1.cc.vt.edu (omr1.cc.ipv6.vt.edu [IPv6:2607:b400:92:8300:0:c6:2117:b0e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1B4C061794
+        for <linux-pm@vger.kernel.org>; Sat, 20 Jun 2020 16:57:47 -0700 (PDT)
+Received: from mr1.cc.vt.edu (junk.cc.ipv6.vt.edu [IPv6:2607:b400:92:9:0:9d:8fcb:4116])
+        by omr1.cc.vt.edu (8.14.4/8.14.4) with ESMTP id 05KH3UHW014354
+        for <linux-pm@vger.kernel.org>; Sat, 20 Jun 2020 13:03:30 -0400
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+        by mr1.cc.vt.edu (8.14.7/8.14.7) with ESMTP id 05KH3PUW002611
+        for <linux-pm@vger.kernel.org>; Sat, 20 Jun 2020 13:03:30 -0400
+Received: by mail-qt1-f199.google.com with SMTP id l1so9668798qtv.13
+        for <linux-pm@vger.kernel.org>; Sat, 20 Jun 2020 10:03:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:mime-version
+         :content-transfer-encoding:date:message-id;
+        bh=cs5+3ih73jFMu6qpNbvhhGPhDRDuHq3E6WeyXknfW4k=;
+        b=OdGYUd6sRB3XuY83Zs82fT3aP6TyHMZQpQg1sWVTPKpIf34grA2bzCWnVxgCBCZQYB
+         G0ZQkUoFFRX1zfS44GweczLFI9q6AKabg5noLB0lb3oUKlOt7zaQ/7waSmu2G3aLm6Eg
+         VgpRN3Lqy2e+r4wsBZjAXCJ6A69EMejEwgw8Z6L030VLQ6GSyfAsIfSpRiXqAKg+Yuad
+         Jpboy9EJ+XviEpqpIR4mcaBRBZafahsynjf7Rn9A8mAc7RR1LdYBJRFnnw+K+KpW0Hw1
+         KbIMamAKzFoUJ4oECt1xqHMZEsDd8ruuL0dlQMw4kS65ZvBhFYaYelZTq7CAFFExF4lj
+         bxKg==
+X-Gm-Message-State: AOAM530hBqSlyF0khQ72RldmruYUqbHT1Qt9yHN1BQpIFWeGbVlhAX2O
+        4unXjkWlzfZYBxZlfeQzVytaS7ExV635Rl8edIgpd/hygvpfjyOZAg5qp2xHeFmLVk0Fo8BFEZ+
+        85hiGAnj7Pd24BjF3WqR6+bUoGB4QVw==
+X-Received: by 2002:ac8:6f2f:: with SMTP id i15mr8927049qtv.73.1592672604852;
+        Sat, 20 Jun 2020 10:03:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx87DNY6uLlTO0cNDTDy29rsTwxaWggNld5pClSRe8YEiuE4m8qPXq/4gO+YPN+IJzlOzmfIw==
+X-Received: by 2002:ac8:6f2f:: with SMTP id i15mr8927021qtv.73.1592672604410;
+        Sat, 20 Jun 2020 10:03:24 -0700 (PDT)
+Received: from turing-police ([2601:5c0:c001:c9e1::359])
+        by smtp.gmail.com with ESMTPSA id u27sm9708775qkm.121.2020.06.20.10.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 Jun 2020 10:03:23 -0700 (PDT)
+From:   "Valdis =?utf-8?Q?Kl=c4=93tnieks?=" <valdis.kletnieks@vt.edu>
+X-Google-Original-From: "Valdis =?utf-8?Q?Kl=c4=93tnieks?=" <Valdis.Kletnieks@vt.edu>
+X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
+To:     Sibi Sankar <sibis@codeaurora.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: opp: core: Add missing export to core.c
+Mime-Version: 1.0
+Content-Type: multipart/signed; boundary="==_Exmh_1592672602_62491P";
+         micalg=pgp-sha1; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 7bit
+Date:   Sat, 20 Jun 2020 13:03:22 -0400
+Message-ID: <566735.1592672602@turing-police>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+--==_Exmh_1592672602_62491P
+Content-Type: text/plain; charset=us-ascii
 
-On 20/06/20 18:49, Ionela Voinescu wrote:
-> Hi Vincent,
->
-> On Thursday 18 Jun 2020 at 17:03:24 (+0200), Vincent Guittot wrote:
->> On Sun, 14 Jun 2020 at 03:10, Valentin Schneider
->> <valentin.schneider@arm.com> wrote:
-> [..]
->> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
->> > index e297e135c031..a1efd379b683 100644
->> > --- a/drivers/thermal/cpufreq_cooling.c
->> > +++ b/drivers/thermal/cpufreq_cooling.c
->> > @@ -417,6 +417,11 @@ static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
->> >         return 0;
->> >  }
->> >
->> > +__weak void
->> > +arch_set_thermal_pressure(const struct cpumask *cpus, unsigned long th_pressure)
->> > +{
->> > +}
->>
->> Having this weak function declared in cpufreq_cooling is weird. This
->> means that we will have to do so for each one that wants to use it.
->>
->> Can't you declare an empty function in a common header file ?
->
-> Do we expect anyone other than cpufreq_cooling to call
-> arch_set_thermal_pressure()?
->
-> I'm not against any of the options, either having it here as a week
-> default definition (same as done for arch_set_freq_scale() in cpufreq.c)
-> or in a common header (as done for arch_scale_freq_capacity() in sched.h).
->
+After this commit, a 'make allmodconfig' fails due to a missing export.
+commit 5f2430fb40c74db85764c8a472ecd6849025dd3f
+Author: Sibi Sankar <sibis@codeaurora.org>
+Date:   Sat Jun 6 03:03:31 2020 +0530
 
-Same thoughts here; I was going for the arch_set_freq_scale() way.
+    cpufreq: qcom: Update the bandwidth levels on frequency change
 
-> But for me, Valentin's implementation seems more natural as setters are
-> usually only called from within the framework that does the control
-> (throttling for thermal or frequency setting for cpufreq) and we
-> probably want to think twice if we want to call them from other places.
->
+ERROR: modpost: "dev_pm_opp_adjust_voltage" [drivers/cpufreq/qcom-cpufreq-hw.ko] undefined!
 
-Well TBH I was tempted to go the other way and keep the definition in
-core.c, given a simple per-cpu value is fairly generic. More precisely, it
-seems somewhat awkward that architectures have to redefine those interfaces
-when, given what cpufreq_cooling is doing, they'll have to go for per-cpu
-storage in some way or another.
+Provide the export.
 
-I ultimately decided against it, seeing as it isn't too difficult to come
-up with other drivers of thermal pressure. There was that TDP-bound thing
-[1], where IIUC you could end up with throttling not because of thermal but
-because of power constraints. And then there's always FW that can cap stuff
-as a last resort, and some architectures will want to inform the scheduler
-of that when/if they'll be able to query FW for that.
+Fixes: 5f2430fb40c7 ("cpufreq: qcom: Update the bandwidth levels on frequency change")
+Signed-off-by: Valdis Kletnieks <valdis.kletnieks@vt.edu>
 
-[1]: 20200428032258.2518-1-currojerez@riseup.net
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 6937bf45f497..c9336aac74e9 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2302,6 +2302,7 @@ int dev_pm_opp_adjust_voltage(struct device *dev, unsigned long freq,
+ 	dev_pm_opp_put_opp_table(opp_table);
+ 	return r;
+ }
++EXPORT_SYMBOL_GPL(dev_pm_opp_adjust_voltage);
 
-> Thanks,
-> Ionela.
+ /**
+  * dev_pm_opp_enable() - Enable a specific OPP
+
+
+
+
+--==_Exmh_1592672602_62491P
+Content-Type: application/pgp-signature
+
+-----BEGIN PGP SIGNATURE-----
+Comment: Exmh version 2.9.0 11/07/2018
+
+iQIVAwUBXu5BWgdmEQWDXROgAQI4Iw//QnU27JvHhCwuSrw8cmYSTiRJ6QqGgJLQ
+4f7MpTHE7P8t1dxc6AI2ciIT2gt60f28Yc9nh6PmKiUk8zJ3jCvupor7lUGa5WaU
+PQY3PLvgFIvfeRD+BkrhDOleZB4vpWJ7b7Zv7kU66/IyaxebnSY+p9JxVrbdzboY
+nkuPh+sYARz+HGnpapOyVKrs5mIchFTPpl+yYjIoae1vq13IieIqJA5reEfIyLeF
+cmnt6pXuNdmU4MRkPK0GCaWmePq7N5utrSRTcY6NjbFE5rchLChJrWD1bH2KvOPi
+zGPVX8NvdkpVThORmqrO3CJbf9CmCSwOAsjLxFKXQzB/OwbbexgAaEGsv4qkF4ZE
+up0u2auRNidb7ZgHN3MWaMVQkLP52xB2EbkpyjAXsVmjknPnho+RJHGiq6q5jTnP
+d632L39BjUwh74qNNKtHS5PMBCgpFQoFP+SRRGR3xSZbodrjigVDYxWKRDR5Ue1B
+ilOu58VO7+jhm0WYukf8ukA3KpjRMMRpAJ7U/lRE1PmYdekgR2gFwFpOqiweeSpU
+oRu/QpQ6O0sARN9T4+SjtYAkhvM4cw6XFr9faZwygi6LbPkgg4krkrSXg3RFWu2j
+EQJgc8f1WyNQQOcSbrP+vLPo2N81kcW1nbj3NLP9YCu8KvkzzdLRHpk0MWD9iXds
+akVwlJC2Hck=
+=QLy8
+-----END PGP SIGNATURE-----
+
+--==_Exmh_1592672602_62491P--
