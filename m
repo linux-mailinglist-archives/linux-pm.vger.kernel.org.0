@@ -2,105 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3048203E4E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 19:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAA8203FFA
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 21:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730073AbgFVRs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 13:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730049AbgFVRs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 13:48:26 -0400
-X-Greylist: delayed 1106 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 Jun 2020 10:48:26 PDT
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6950BC061573;
-        Mon, 22 Jun 2020 10:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=D6RYs2e9cp/tiQdgjUAxoJL7fGpw4g7U5+v8QSSYE+o=; b=RXfsOigMRTty6ZaUB7G7FJXMVv
-        f25gQtP8ZWeaSDC+T5BEBziK6Qh4jMqv7/yXp5g4o8UmkRbxLdwJYNaNFJfIRMg7zjUXLSCZGN9EM
-        gG+8rXX5LSu9ON0+l2oEWIigdXmqsFyPlhm5QqDR7g3jwUmX5n8kUxQORnFwNBhQxMNprfcSJriAw
-        hVzpLG+h6Vy7bKHRWV5UEYvQSv7lwH5ehd3ZopU0YBF3V3Wn6/eLHBKvajKBA92GZYQS4D3Z8qTA4
-        xRMwmxXNh+EPPMfIrbNeYlK0ibTwUCc+YNrvYYHNL5UpMcrGEF018JN3NIihc7SYAdAcqaq8zMD2b
-        9XLyQ7Ew==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jnQGJ-00027e-Fr; Mon, 22 Jun 2020 17:29:39 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0050E303DA8;
-        Mon, 22 Jun 2020 19:29:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B6CE12B6335C0; Mon, 22 Jun 2020 19:29:36 +0200 (CEST)
-Date:   Mon, 22 Jun 2020 19:29:36 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Chen Yu <yu.c.chen@intel.com>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rui Zhang <rui.zhang@intel.com>
-Subject: Re: [PATCH][v2] PM / s2idle: Clear _TIF_POLLING_NRFLAG before
- suspend to idle
-Message-ID: <20200622172936.GA4781@hirez.programming.kicks-ass.net>
-References: <20200616040442.21515-1-yu.c.chen@intel.com>
- <CAJZ5v0gBVBAjdCOXsM-Fa-iAkuv2JMi2mVkG5w7ADcg9dWencA@mail.gmail.com>
+        id S1728318AbgFVTTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 15:19:06 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:44794 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728068AbgFVTTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 15:19:05 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05MJJ3q7030177;
+        Mon, 22 Jun 2020 14:19:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1592853544;
+        bh=4Uc57vnU9L76B5vi4WPRq81bboaPP34jgfbbQ+MxC3w=;
+        h=From:To:CC:Subject:Date;
+        b=jEazJJydbIUPSsGXDFDfIJRK3UoMRkk35oUQzNujT5acEcNsX6TNMArSA2lwMiTTO
+         zpoVhDSlBLq86GI7EcCT1izoFhaCfHGB5E66dO+gj7xbGZA0vVrRWQmszrz2I2I3bR
+         xSrLxuL1OpCLcmN6ellUgr2D/FLFyE74+E+uyaDo=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 05MJJ3kN042288
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 22 Jun 2020 14:19:03 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 22
+ Jun 2020 14:19:03 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 22 Jun 2020 14:19:03 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05MJJ3xi125356;
+        Mon, 22 Jun 2020 14:19:03 -0500
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+To:     <sre@kernel.org>, <pali@kernel.org>, <robh@kernel.org>
+CC:     <afd@ti.com>, <r-rivera-matos@ti.com>, <dmurphy@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <sspatil@android.com>
+Subject: [PATCH v13 0/4] Add JEITA properties and introduce the bq2515x charger
+Date:   Mon, 22 Jun 2020 14:18:33 -0500
+Message-ID: <20200622191837.9326-1-r-rivera-matos@ti.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gBVBAjdCOXsM-Fa-iAkuv2JMi2mVkG5w7ADcg9dWencA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 06:19:35PM +0200, Rafael J. Wysocki wrote:
-> > Fixes: b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
-> > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Len Brown <lenb@kernel.org>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> 
-> Peter, any more comments here?
+This patchset adds additional health properties to the power_supply header.
+These additional properties are taken from the JEITA specification. This
+patchset also introduces the bq2515x family of charging ICs.
 
-Only that the whole s2idle stuff could do with a cleanup :-)
+Dan Murphy (2):
+  power_supply: Add additional health properties to the header
+  dt-bindings: power: Convert battery.txt to battery.yaml
 
-> > +static int call_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> > +                      int index)
-> > +{
-> > +       if (!current_clr_polling_and_test())
-> > +               s2idle_enter(drv, dev, index);
-> > +
-> > +       return index;
-> 
-> Is the value returned here used at all?
-> 
-> > +}
-> > +
-> >  /**
-> >   * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
-> >   * @drv: cpuidle driver for the given CPU.
-> > @@ -187,7 +197,7 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-> >          */
-> >         index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> >         if (index > 0)
-> > -               enter_s2idle_proper(drv, dev, index);
-> > +               call_s2idle(drv, dev, index);
-> 
-> I'm wondering why this can't be
-> 
->     if (index > 0 && !current_clr_polling_and_test())
->             enter_s2idle_proper(drv, dev, index);
+Ricardo Rivera-Matos (2):
+  dt-bindings: power: Add the bindings for the bq2515x family of
+    chargers.
+  power: supply: bq25150 introduce the bq25150
 
-Works for me. Some Wysocki guy wrote much of it, best ask him :-)
+ Documentation/ABI/testing/sysfs-class-power   |    3 +-
+ .../bindings/power/supply/battery.txt         |   83 +-
+ .../bindings/power/supply/battery.yaml        |  139 ++
+ .../bindings/power/supply/bq2515x.yaml        |   93 ++
+ drivers/power/supply/Kconfig                  |   13 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bq2515x_charger.c        | 1158 +++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c     |    3 +
+ include/linux/power_supply.h                  |    3 +
+ 9 files changed, 1414 insertions(+), 82 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/battery.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+ create mode 100644 drivers/power/supply/bq2515x_charger.c
 
-The thing that confused me is that all this is way different from the
-normal idle path and didn't keep the invariants.
+-- 
+2.27.0
 
-Ideally; much of that gets folded back into the normal patch somehow.
