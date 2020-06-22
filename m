@@ -2,171 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E70203251
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51C4203243
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbgFVIqE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 04:46:04 -0400
-Received: from esa6.hc3370-68.iphmx.com ([216.71.155.175]:36212 "EHLO
-        esa6.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgFVIqE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 04:46:04 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Mon, 22 Jun 2020 04:46:03 EDT
-Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-IronPort-SDR: 4TpWVnbtiqhHqTm8UcF3OpAb2ZHi7hzxMchVDlx84oPPC2OsOAjK2SGuA51o1ODupl2ywABbKs
- sTGTZwEKCHOWRk3j67f09FvjcIBqouRt4xz0ohd5suQxkDHg1yk+MHmJxOxAluIGqpnqFIF2OH
- 04YAJ30lc/a5kSPPrGakF2TBnKOjBMH1fUOJ6TzqIMxiVO3Q14HqKHl9cdBd1jOqInig3Z6IN1
- SRgzwpiMw315v8aBPVr76xaemjJo64jKEZKyF3QQUDhxS0lx2+OvdOzT0m389dE4n5hBxoFbH/
- 0mM=
-X-SBRS: 2.7
-X-MesageID: 20942116
-X-Ironport-Server: esa6.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.75,266,1589256000"; 
-   d="scan'208";a="20942116"
-Date:   Mon, 22 Jun 2020 10:38:46 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Anchal Agarwal <anchalag@amazon.com>
-CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
- hibernation]
-Message-ID: <20200622083846.GF735@Air-de-Roger>
-References: <7FD7505E-79AA-43F6-8D5F-7A2567F333AB@amazon.com>
- <20200604070548.GH1195@Air-de-Roger>
- <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200617083528.GW735@Air-de-Roger>
- <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        id S1726858AbgFVIkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 04:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726613AbgFVIkZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 04:40:25 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9152CC061795
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:40:24 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id n24so18257656lji.10
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hFeVIaukde5cEJYosI/nKt2dPH3w8UvOLbWUnlXHsBU=;
+        b=iEGUuJhLh3+NwbCNxjkkRe9EVuTa6QWYy1pemvrk9YZZt2QLagctJEfbVbcJm3GNqL
+         XdU1vFbZpQJ9MY0yMrL+JM4jrBltzKfZAMow7TO4U8iz6WgaI8qShnkMrXigDZZFvxFD
+         RBeIyRDTs+ycv/eO6kZtT1jPgvH7GJzZTAARh2+PpD0kHr0BSQrlEMwIN/jE38mW6Pmo
+         YWEGWjwW5DsbhEW7jBaTCQuGWx+25ofFPoeJ2n7vJPcWvNpCNABDJHi4v2Mken1RB6r6
+         C9kML6zezbYAd/Hnqn1IPXNudHg0e+N4TYUl/2iU8PsJJWpYOTULbYAMymthaJOFfY7R
+         idaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hFeVIaukde5cEJYosI/nKt2dPH3w8UvOLbWUnlXHsBU=;
+        b=uI4KBXwjb5kNrZujo/Mp2agiW0OOIETwL5DyPXgMWenYo+kNtpK7QW4j+bUQqoWHtm
+         2AwW7azqbYEvelPsirmTt0dttSz6Ioc8tBV2/6IG1rRBag7euWfuPqPidc/MmrzA8ZKj
+         gEFu3ncAnNMxbqoO3jua3jQbxiV6QFO32SkyhausujLNBRs/eG79FHjDP+15+tWrlALy
+         z+1IxBB9LjdjHFVbomdvXQ0Uh1m800tDAmHDZplIS+smF377NealRqRmmDQ546GaUQMC
+         joZwevFN5cQO2UIue50m/Xj94/0IQwRXidKDKve3kAQJW4SZWv8dD9ch5S8JfaFr0ef8
+         xFlA==
+X-Gm-Message-State: AOAM531t2zRGDFqzc82HD3MlkmtmEhHCZClcevqetG1Xtp1it7G3k8He
+        fCuWMy5+VlK12dYgjgvPFqP+3tzyvldXlamfGzPV4w==
+X-Google-Smtp-Source: ABdhPJwBhI+o3WaB0VdNYziKJq6W2qVP2mYiDJ3QR8uHR3AWB7nuaFJazUewFMpxfNUCL74ZyOyKvTbpGiVkpD6bBkQ=
+X-Received: by 2002:a2e:9786:: with SMTP id y6mr7668442lji.398.1592815222900;
+ Mon, 22 Jun 2020 01:40:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
- AMSPEX02CL02.citrite.net (10.69.22.126)
+References: <cover.1591684754.git.amit.kucheria@linaro.org>
+ <bf5ca7777fbb6f5e2d374a9a72d1e17d485bd8ea.1591684754.git.amit.kucheria@linaro.org>
+ <20200621071841.GF128451@builder.lan>
+In-Reply-To: <20200621071841.GF128451@builder.lan>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 22 Jun 2020 14:10:11 +0530
+Message-ID: <CAP245DWL0zRuV1LXq-FqMPX3BUFqLWwMFZpGrtr+Tg7SccQctw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm8250: Add thermal zones and
+ throttling support
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 11:43:12PM +0000, Anchal Agarwal wrote:
-> On Wed, Jun 17, 2020 at 10:35:28AM +0200, Roger Pau Monné wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > 
-> > 
-> > 
-> > On Tue, Jun 16, 2020 at 09:49:25PM +0000, Anchal Agarwal wrote:
-> > > On Thu, Jun 04, 2020 at 09:05:48AM +0200, Roger Pau Monné wrote:
-> > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > > On Wed, Jun 03, 2020 at 11:33:52PM +0000, Agarwal, Anchal wrote:
-> > > > >  CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > > >     > +             xenbus_dev_error(dev, err, "Freezing timed out;"
-> > > > >     > +                              "the device may become inconsistent state");
-> > > > >
-> > > > >     Leaving the device in this state is quite bad, as it's in a closed
-> > > > >     state and with the queues frozen. You should make an attempt to
-> > > > >     restore things to a working state.
-> > > > >
-> > > > > You mean if backend closed after timeout? Is there a way to know that? I understand it's not good to
-> > > > > leave it in this state however, I am still trying to find if there is a good way to know if backend is still connected after timeout.
-> > > > > Hence the message " the device may become inconsistent state".  I didn't see a timeout not even once on my end so that's why
-> > > > > I may be looking for an alternate perspective here. may be need to thaw everything back intentionally is one thing I could think of.
-> > > >
-> > > > You can manually force this state, and then check that it will behave
-> > > > correctly. I would expect that on a failure to disconnect from the
-> > > > backend you should switch the frontend to the 'Init' state in order to
-> > > > try to reconnect to the backend when possible.
-> > > >
-> > > From what I understand forcing manually is, failing the freeze without
-> > > disconnect and try to revive the connection by unfreezing the
-> > > queues->reconnecting to backend [which never got diconnected]. May be even
-> > > tearing down things manually because I am not sure what state will frontend
-> > > see if backend fails to to disconnect at any point in time. I assumed connected.
-> > > Then again if its "CONNECTED" I may not need to tear down everything and start
-> > > from Initialising state because that may not work.
-> > >
-> > > So I am not so sure about backend's state so much, lets say if  xen_blkif_disconnect fail,
-> > > I don't see it getting handled in the backend then what will be backend's state?
-> > > Will it still switch xenbus state to 'Closed'? If not what will frontend see,
-> > > if it tries to read backend's state through xenbus_read_driver_state ?
-> > >
-> > > So the flow be like:
-> > > Front end marks XenbusStateClosing
-> > > Backend marks its state as XenbusStateClosing
-> > >     Frontend marks XenbusStateClosed
-> > >     Backend disconnects calls xen_blkif_disconnect
-> > >        Backend fails to disconnect, the above function returns EBUSY
-> > >        What will be state of backend here?
-> > 
-> > Backend should stay in state 'Closing' then, until it can finish
-> > tearing down.
-> > 
-> It disconnects the ring after switching to connected state too. 
-> > >        Frontend did not tear down the rings if backend does not switches the
-> > >        state to 'Closed' in case of failure.
-> > >
-> > > If backend stays in CONNECTED state, then even if we mark it Initialised in frontend, backend
-> > 
-> > Backend will stay in state 'Closing' I think.
-> > 
-> > > won't be calling connect(). {From reading code in frontend_changed}
-> > > IMU, Initialising will fail since backend dev->state != XenbusStateClosed plus
-> > > we did not tear down anything so calling talk_to_blkback may not be needed
-> > >
-> > > Does that sound correct?
-> > 
-> > I think switching to the initial state in order to try to attempt a
-> > reconnection would be our best bet here.
+On Sun, Jun 21, 2020 at 12:51 PM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
+>
+> On Mon 08 Jun 23:44 PDT 2020, Amit Kucheria wrote:
+>
+> > sm8250 has 24 thermal sensors split across two tsens controllers. Add
+> > the thermal zones to expose them and wireup the cpus to throttle on
+> > crossing passive temperature thresholds.
 > >
-> It does not seems to work correctly, I get hung tasks all over and all the
-> requests to filesystem gets stuck. Backend does shows the state as connected
-> after xenbus_dev_suspend fails but I think there may be something missing.
-> I don't seem to get IO interrupts thereafter i.e hitting the function blkif_interrupts.
-> I think just marking it initialised may not be the only thing.
-> Here is a short description of what I am trying to do:
-> So, on timeout:
->     Switch XenBusState to "Initialized"
->     unquiesce/unfreeze the queues and return
->     mark info->connected = BLKIF_STATE_CONNECTED
+> > Update the comment in the drivers to list the SoCs it supports.
+> >
+> > Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm8250.dtsi | 766 +++++++++++++++++++++++++++
+> >  drivers/thermal/qcom/tsens-v2.c      |   2 +-
+> >  2 files changed, 767 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > index deaa8415c7b72..5cd18cd8a675b 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> > @@ -8,6 +8,7 @@
+> >  #include <dt-bindings/clock/qcom,rpmh.h>
+> >  #include <dt-bindings/power/qcom-rpmpd.h>
+> >  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> >
+> >  / {
+> >       interrupt-parent = <&intc>;
+> > @@ -86,6 +87,7 @@ CPU0: cpu@0 {
+> >                       enable-method = "psci";
+> >                       next-level-cache = <&L2_0>;
+> >                       qcom,freq-domain = <&cpufreq_hw 0>;
+> > +                     #cooling-cells = <2>;
+>
+> This doesn't apply to linux-next.
+>
+> The problem seems to be that, as pointed out when I submitted that
+> patch, the previously anonymous "cpufreq hardware" is now replaced by
+> the "EPSS" hardware block.
 
-If xenbus state is Initialized isn't it wrong to set info->connected
-== CONNECTED?
+I'll take a look.
 
-You should tear down all the internal state (like a proper close)?
+> So we need a new driver (or update the existing one) to support this new
+> hardware block.
+>
+> Presumably though, without this there's not much cooling anyways - which
+> is sad, as your patch looks good.
+>
+> >                       L2_0: l2-cache {
+> >                             compatible = "cache";
+> >                             next-level-cache = <&L3_0>;
+> [..]
+> > diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+> > index b293ed32174b5..58cac8f2a358c 100644
+> > --- a/drivers/thermal/qcom/tsens-v2.c
+> > +++ b/drivers/thermal/qcom/tsens-v2.c
+> > @@ -26,7 +26,7 @@
+> >  #define TM_TRDY_OFF                  0x00e4
+> >  #define TM_WDOG_LOG_OFF              0x013c
+> >
+> > -/* v2.x: 8996, 8998, sdm845 */
+> > +/* v2.x: 8996, 8998, sc7180, sdm845, sm8150, sm8250 */
+>
+> Even though it's trivial, can you please send this through the tsens
+> tree instead, so we don't end up having unnecessary merge conflicts.
+>
 
->     return EBUSY
-> 
-> I even allowed blkfront_connect to switch state to "CONNECTED" rather me doing
-> it explicitly as mentioned above without re-allocating/re-registering the device
-> just to make sure bklfront_info object has all the right values.
-> Do you see anythign missing here?
-
-I'm afraid you will have to do a little bit of debugging here to
-figure out what's going on. You can add printk's to several places to
-see which path is taken, and why blkfront ends in such state.
-
-Thanks, Roger.
+Will do. Thanks for the review.
