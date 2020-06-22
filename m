@@ -2,109 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD622031E7
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A622031FD
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbgFVIRu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 04:17:50 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:44385 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726699AbgFVIRu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Jun 2020 04:17:50 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1592813869; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=glcto0l0iQlHpS80rrXSQWxQLrQAV2ARSJlihUlAAiA=; b=f5fFAa+GLIPvJXZ0d2BlqKWdBkYj4MpHU06AcYn64iUTyMFSOqEyGk6kSwDmpsJbT9Ln4TVE
- YI7FkygCfJxg89/Y6WqYYNgAnnnpbpfoDiDkkHcvHwoJxa89f+mg/AVoNSy04QfEP5vgJ6JG
- 42OBE1mCvmWAfsGadY00BLSxmtQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
- 5ef069200206ad41d1a25261 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 22 Jun 2020 08:17:36
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 28E2DC4344A; Mon, 22 Jun 2020 08:17:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BB9F8C4339C;
-        Mon, 22 Jun 2020 08:17:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BB9F8C4339C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     viresh.kumar@linaro.org, sboyd@kernel.org,
-        georgi.djakov@linaro.org, saravanak@google.com, mka@chromium.org
-Cc:     nm@ti.com, bjorn.andersson@linaro.org, agross@kernel.org,
-        rjw@rjwysocki.net, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dianders@chromium.org, vincent.guittot@linaro.org,
-        amit.kucheria@linaro.org, lukasz.luba@arm.com,
-        sudeep.holla@arm.com, smasetty@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH v6 5/5] cpufreq: qcom: Disable fast switch when scaling DDR/L3
-Date:   Mon, 22 Jun 2020 13:46:49 +0530
-Message-Id: <20200622081649.27280-6-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20200622081649.27280-1-sibis@codeaurora.org>
-References: <20200622081649.27280-1-sibis@codeaurora.org>
+        id S1726613AbgFVIW7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 04:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbgFVIW4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 04:22:56 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE589C061794
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:22:55 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id g2so9098194lfb.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h+ozlEIO/qxyAds7OwFWzzEoRVVdD8s4jy8p/vmQnnY=;
+        b=UcMLx/8mYxw2ta2G1/AB6B/unlXIkPifTtiot243yO126jlfY/UOTtF9MCEG5lyfMC
+         HmQRn9k87Yx2sKznyi3g+INXCkHZRLFyNwCVHk08E+ah9lynlEZFF8OXAH8fAw9biDMa
+         BaFpQKhYbNAkudPei3ewrrAa+HdCHeTrqHgFtVFbcbn3FapOccKSDthv/QZQYz6RtvRX
+         UWLAaLzXVZYIWirxe5Y/JtYqurly+ki1Ns9F1Qs0NxRr5yPSzLRqMQNwzgOXKcywg12K
+         OrIFAmz/DsdS91xHgTN/cgBFJ800I0InulmYvE6WqojOE/rGewhSAgjGuB72Aogatxt0
+         ZV6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h+ozlEIO/qxyAds7OwFWzzEoRVVdD8s4jy8p/vmQnnY=;
+        b=BAsiP103to3bPnEx+s+RBuP/RC2egU6agWKk+RRyStZz0med95P9TcEB5r6lwHvjn4
+         13kSQpZ/EOBQ3Trxf5KNaXg/itIEszars9/dPqFwF0Qh04UgO5vhTbtaIeDeLHndgYl7
+         n79b5v8dbdkvGkQd5stTlueZQmsmBzNZZ3zxGYM4QkurMbtalZFKmoU9uKkjSXhAfb+Y
+         ViuCTbpih7zcvotKBixCQsK8Eam5NyZK23WkgNLzhdONzPMe4xj4WcmJcwjf9piRMiBW
+         c9o1mcXNELOI8dDEVTyY73dXDzUfDCRiMwxSbTwYiUc7PdftcamzO/XM8sk2ptkpnRix
+         S10w==
+X-Gm-Message-State: AOAM532c7D4wdzbRlDnmzPsDhEmuVnKw1eYsV8JneVPb14KVKEzRmih/
+        /hRq4zxRyiVr7JvPwPqJFszkEjuJi1VObTSkjO1ojw==
+X-Google-Smtp-Source: ABdhPJxyq3Xqu94mRkWd8rRoN/XkS/DhYnK8sHEIOt5mcr9WKVN7v3S6QLEPKw8ZT4mciLtuhkJ+Ae9wqzcESAsUXjQ=
+X-Received: by 2002:a05:6512:6ca:: with SMTP id u10mr9407371lff.184.1592814174117;
+ Mon, 22 Jun 2020 01:22:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200614010755.9129-1-valentin.schneider@arm.com>
+ <20200614010755.9129-2-valentin.schneider@arm.com> <CAKfTPtCyi9acak95_2_2uL3Cf0OMAbZhDav2LbPY+ULPrD7z4w@mail.gmail.com>
+ <20200620174912.GA18358@arm.com>
+In-Reply-To: <20200620174912.GA18358@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 22 Jun 2020 10:22:42 +0200
+Message-ID: <CAKfTPtDcKnF5kgORXCbppcF==ejcPcCqoCo0_vtSMX9_hJCjMg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] thermal/cpu-cooling, sched/core: Cleanup thermal
+ pressure definition
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Valentin Schneider <valentin.schneider@arm.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Disable fast switch when the opp-tables required for scaling DDR/L3
-are populated.
+On Sat, 20 Jun 2020 at 19:49, Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+>
+> Hi Vincent,
+>
+> On Thursday 18 Jun 2020 at 17:03:24 (+0200), Vincent Guittot wrote:
+> > On Sun, 14 Jun 2020 at 03:10, Valentin Schneider
+> > <valentin.schneider@arm.com> wrote:
+> [..]
+> > > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> > > index e297e135c031..a1efd379b683 100644
+> > > --- a/drivers/thermal/cpufreq_cooling.c
+> > > +++ b/drivers/thermal/cpufreq_cooling.c
+> > > @@ -417,6 +417,11 @@ static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
+> > >         return 0;
+> > >  }
+> > >
+> > > +__weak void
+> > > +arch_set_thermal_pressure(const struct cpumask *cpus, unsigned long th_pressure)
+> > > +{
+> > > +}
+> >
+> > Having this weak function declared in cpufreq_cooling is weird. This
+> > means that we will have to do so for each one that wants to use it.
+> >
+> > Can't you declare an empty function in a common header file ?
+>
+> Do we expect anyone other than cpufreq_cooling to call
+> arch_set_thermal_pressure()?
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
+Yes, cpufreq cooling device is only 1 possible way to do thermal mitigation
 
-v7:
- * Picked up R-b from Matthias
-
-v6:
- * No change
-
-v5:
- * Drop dev_pm_opp_get_path_count [Saravana]
-
- drivers/cpufreq/qcom-cpufreq-hw.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index aaf98333d37da..fa68fa8ebd95e 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -159,6 +159,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 		dev_err(cpu_dev, "Invalid opp table in device tree\n");
- 		return ret;
- 	} else {
-+		policy->fast_switch_possible = true;
- 		icc_scaling_enabled = false;
- 	}
- 
-@@ -308,8 +309,6 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 
- 	dev_pm_opp_of_register_em(policy->cpus);
- 
--	policy->fast_switch_possible = true;
--
- 	return 0;
- error:
- 	devm_iounmap(dev, base);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+>
+> I'm not against any of the options, either having it here as a week
+> default definition (same as done for arch_set_freq_scale() in cpufreq.c)
+> or in a common header (as done for arch_scale_freq_capacity() in sched.h).
+>
+> But for me, Valentin's implementation seems more natural as setters are
+> usually only called from within the framework that does the control
+> (throttling for thermal or frequency setting for cpufreq) and we
+> probably want to think twice if we want to call them from other places.
+>
+> Thanks,
+> Ionela.
