@@ -2,81 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD9B203DA2
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF49B203DB0
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 19:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729777AbgFVRQ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 13:16:58 -0400
-Received: from mga07.intel.com ([134.134.136.100]:45056 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729309AbgFVRQ6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Jun 2020 13:16:58 -0400
-IronPort-SDR: 86mAV5nhuhI2qHoZ+TnVsJ2aL9OvBy/Zw6fI7cDO/SATsH7OBXLYpabw9NQ64fjmFcRmTXWGW4
- uQY9ubV4wKWw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="209013397"
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="209013397"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 10:16:58 -0700
-IronPort-SDR: +l1MFBOMI9UhPmyFiCJ4R+cL2z3IkOTUTF9pRTc+CphmYwvRwUqLABqom5f94wtlmyqtCnrZds
- b2fHQJn3BHUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="300909504"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jun 2020 10:16:55 -0700
-Date:   Tue, 23 Jun 2020 01:18:00 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, Len Brown <lenb@kernel.org>,
+        id S1729886AbgFVRTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 13:19:11 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:33561 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729309AbgFVRTK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 13:19:10 -0400
+Received: by mail-ej1-f66.google.com with SMTP id n24so18829510ejd.0;
+        Mon, 22 Jun 2020 10:19:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ln85lt/Tkp1vKFWqTv00g+4W/YsS086NIYrAVE4JpT0=;
+        b=hIiFE6qtZzcpkqtZynPzaG+YpFGyXDX4bz4jwnWl6Wm2jqIc6wAGfwAWs4VgDAdQDW
+         5W6zVTF4teJzH7/grIz43MQA/BTRH+MBbAppSQ5+qf6nbJa9A7DwO+TK/Q0/ejrncItx
+         x4KOV2cPhdvw5i5w5aQFNhddZzcICsoEaliBer9RPmhgoj4KhhEtF/3XFDk2vyXdiEGM
+         RayYsTtW10B450veEHMOmEiI+F6UEmRfpoav02Ouaab8LOIyRlSXG7/6CN/iQUsocN3m
+         FUMn48SU7PftBYvBC+Ywr+6oVvAjIb55ULg+6aZf/K02n2hFGbUFOdZsNQ2Y0ehqRaLx
+         qs+A==
+X-Gm-Message-State: AOAM532xxhb5x06oZQ7z+KVku9/WI5cPaL7uqDtFKKPLZvbRXfXtP0ft
+        i3oL+OCbS8pFaF+LfpNbbxw=
+X-Google-Smtp-Source: ABdhPJyKgq8iRpzKLQo5IV3+fqcBuikBkINfz718scwpI9EXxdN7s66bem51nkTf+pp3l+ytbFDS5A==
+X-Received: by 2002:a17:906:1c4b:: with SMTP id l11mr6340914ejg.307.1592846348168;
+        Mon, 22 Jun 2020 10:19:08 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.235])
+        by smtp.googlemail.com with ESMTPSA id y2sm12128925ejj.103.2020.06.22.10.19.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 22 Jun 2020 10:19:07 -0700 (PDT)
+Date:   Mon, 22 Jun 2020 19:19:04 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rui Zhang <rui.zhang@intel.com>
-Subject: Re: [PATCH][v2] PM / s2idle: Clear _TIF_POLLING_NRFLAG before
- suspend to idle
-Message-ID: <20200622171759.GA26527@chenyu-office.sh.intel.com>
-References: <20200616040442.21515-1-yu.c.chen@intel.com>
- <CAJZ5v0gBVBAjdCOXsM-Fa-iAkuv2JMi2mVkG5w7ADcg9dWencA@mail.gmail.com>
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 1/4] ARM: exynos: Apply little core workaround only under
+ secure firmware
+Message-ID: <20200622171904.GA4174@kozik-lap>
+References: <20200616081230.31198-1-m.szyprowski@samsung.com>
+ <CGME20200616081249eucas1p151a8892ca0abfa3108955e1fc5054fc3@eucas1p1.samsung.com>
+ <20200616081230.31198-2-m.szyprowski@samsung.com>
+ <1f59ab26-94e8-6ee8-48f9-568cf1a0edfa@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gBVBAjdCOXsM-Fa-iAkuv2JMi2mVkG5w7ADcg9dWencA@mail.gmail.com>
+In-Reply-To: <1f59ab26-94e8-6ee8-48f9-568cf1a0edfa@arm.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-On Mon, Jun 22, 2020 at 06:19:35PM +0200, Rafael J. Wysocki wrote:
-[cut]
-> > +{
-> > +       if (!current_clr_polling_and_test())
-> > +               s2idle_enter(drv, dev, index);
-> > +
-> > +       return index;
+On Wed, Jun 17, 2020 at 05:26:58PM +0100, Lukasz Luba wrote:
+> Hi Marek,
 > 
-> Is the value returned here used at all?
->
-It is not used for now IMO.
-> >          */
-> >         index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> >         if (index > 0)
-> > -               enter_s2idle_proper(drv, dev, index);
-> > +               call_s2idle(drv, dev, index);
+> I've give it a try with hotplug torture tests and has only one a minor
+> comment.
 > 
-> I'm wondering why this can't be
-> 
->     if (index > 0 && !current_clr_polling_and_test())
->             enter_s2idle_proper(drv, dev, index);
-> 
-Yes, it should be simpler, but I guess Peter was trying to
-make call_s2idle() consistent with call_cpuidle(),
-and also s2idle_enter() is analogous to cpuidle_enter().
+> On 6/16/20 9:12 AM, Marek Szyprowski wrote:
+> > The additional soft-reset call during little core power up was needed
+> > to properly boot all cores on the Exynos5422-based boards with secure
+> > firmware (like Odroid XU3/XU4 family). This however broke big.LITTLE
+> > CPUidle driver, which worked only on boards without secure firmware
+> > (like Peach-Pit/Pi Chromebooks).
+> > 
+> > Apply the workaround only when board is running under secure firmware.
+> > 
+> > Fixes: 833b 5794 e330 ("ARM: EXYNOS: reset Little cores when cpu is up")
 
-Thanks,
-Chenyu
+Fix the Fixes tag (in case of resend, otherwise I'll do it).
+
+> > Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > ---
+> >   arch/arm/mach-exynos/mcpm-exynos.c | 10 +++++++---
+> >   1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/arch/arm/mach-exynos/mcpm-exynos.c b/arch/arm/mach-exynos/mcpm-exynos.c
+> > index 9a681b421ae1..cd861c57d5ad 100644
+> > --- a/arch/arm/mach-exynos/mcpm-exynos.c
+> > +++ b/arch/arm/mach-exynos/mcpm-exynos.c
+> > @@ -26,6 +26,7 @@
+> >   #define EXYNOS5420_USE_L2_COMMON_UP_STATE	BIT(30)
+> >   static void __iomem *ns_sram_base_addr __ro_after_init;
+> > +static bool secure_firmware __ro_after_init;
+> >   /*
+> >    * The common v7_exit_coherency_flush API could not be used because of the
+> > @@ -58,15 +59,16 @@ static void __iomem *ns_sram_base_addr __ro_after_init;
+> >   static int exynos_cpu_powerup(unsigned int cpu, unsigned int cluster)
+> >   {
+> >   	unsigned int cpunr = cpu + (cluster * EXYNOS5420_CPUS_PER_CLUSTER);
+> > +	bool state;
+> >   	pr_debug("%s: cpu %u cluster %u\n", __func__, cpu, cluster);
+> >   	if (cpu >= EXYNOS5420_CPUS_PER_CLUSTER ||
+> >   		cluster >= EXYNOS5420_NR_CLUSTERS)
+> >   		return -EINVAL;
+> > -	if (!exynos_cpu_power_state(cpunr)) {
+> > -		exynos_cpu_power_up(cpunr);
+> > -
+> > +	state = exynos_cpu_power_state(cpunr);
+> > +	exynos_cpu_power_up(cpunr);
+> 
+> I can see that you have moved this call up, probably to avoid more
+> 'if-else' stuff. I just wanted to notify you that this function
+> 'exynos_cpu_powerup' is called twice when cpu is going up:
+> 1. by the already running cpu i.e. CPU0 and the 'state' is 0 for i.e.
+> CPU2
+> 2. by the newly starting cpu i.e. CPU2 by running
+> 'secondary_start_kernel' and the state is 3.
+> 
+> In this scenario the 'exynos_cpu_power_up' will be called twice.
+> I have checked in hotplug that this is not causing any issues, but
+> thought maybe it's worth share it with you. Maybe you can double check
+> in TRM that this is not causing anything.
+
+This brings the old code, before 833b5794e33. I wonder why? I understood
+that only soft-reset should be skipped.
+
+Best regards,
+Krzysztof
