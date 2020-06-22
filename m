@@ -2,111 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23345202E47
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 04:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D901202E8D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 04:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731015AbgFVCVl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 21 Jun 2020 22:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731010AbgFVCVk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jun 2020 22:21:40 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACE7C061795
-        for <linux-pm@vger.kernel.org>; Sun, 21 Jun 2020 19:21:40 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id p3so4800684pgh.3
-        for <linux-pm@vger.kernel.org>; Sun, 21 Jun 2020 19:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=za4ixpkZVJ89aZj99CdaA5henDCAhx0/4oZkooHfKSM=;
-        b=a5HO9j+w7TlTCzuhw+ErrqrGWVXKa5oUj7qYt5EOEM1bzS3OcwQ608ozcI6NloQw3D
-         bXlHU46+YfEZwUWe0v6V5thX/67joii/re2fHcch1I/WF+f3tUku/ajXoIEVUAz9ZVJS
-         djDjg3RcwiiXutYd+rBdbCPZoI4KUvriIYMhY0Wjx9bRjPzzVGn31NC89ATaNHWPnxY5
-         i7a6VUynyNHt+KdqK9zVC4kh6Di9rUuSBPO95x+3YAPL3hgw1akVj4sm9Ojzw12C46aQ
-         ego0CXDzdbS8h6O2MMrErvI7X/HGcIAFch1Ic9NiYquTB6xrFsWKTR+49YSUrXUyb2zW
-         aK2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=za4ixpkZVJ89aZj99CdaA5henDCAhx0/4oZkooHfKSM=;
-        b=JQt0Be4M+QrB67KD+lcJ9zWIt2TpdE57O2bsD5QHo8urVGxw6TYzmavc4Gk6+/lSNc
-         rnQQ3SzgKUDvCRdi7jD5GbvPxoq+Z/6M6Tai6xEAmEliQAhYXIy1VIsxcQUAIs8j3Kl7
-         n1+/1zzHUshdceZk7Bgxx00E+Qc7m0kw/qWr5N6rLlPvHw4I7oyLZcSyuFV4Z1Ii9ZuB
-         VOYRhPWB6ZVrXhxMgq6a4cm06GoyjyHfPTsFcgsBD+pe4r/DM3YlQTdknqBJ5MudHcP8
-         p5jbfB47x4UfuOLWbwvClmn4N7qOjBj7yluKCi8SLmPnCoCoikOoLrUohowPIyv83ft/
-         Oq6g==
-X-Gm-Message-State: AOAM531EX6Fn4HjlbOvbS9+Z/cLotu6WQAYWZ80vJ8br9iWQSDqapWrB
-        3VjZUd506X5qHPCLOK8bBJOzvQ==
-X-Google-Smtp-Source: ABdhPJyUdbzgsK5VX3z+os8AgBV7UxgmQb8OJV6f2Z+9OVyvMSOlUO0h83jSi0pXsZKM6SwyJWa5zw==
-X-Received: by 2002:a63:924b:: with SMTP id s11mr10807370pgn.74.1592792499893;
-        Sun, 21 Jun 2020 19:21:39 -0700 (PDT)
-Received: from localhost ([122.172.111.76])
-        by smtp.gmail.com with ESMTPSA id i5sm11906183pjd.23.2020.06.21.19.21.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 21 Jun 2020 19:21:39 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 07:51:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: dt: fix oops on armada37xx
-Message-ID: <20200622022137.f27ztstb5w3o43fe@vireshk-i7>
-References: <20200620164449.GA19776@mail.rc.ru>
+        id S1731085AbgFVC7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 21 Jun 2020 22:59:47 -0400
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:58722 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731062AbgFVC7q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 21 Jun 2020 22:59:46 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.088681|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.049363-0.000501963-0.950135;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03278;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=27;RT=27;SR=0;TI=SMTPD_---.HqMydez_1592794774;
+Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.HqMydez_1592794774)
+          by smtp.aliyun-inc.com(10.147.40.44);
+          Mon, 22 Jun 2020 10:59:39 +0800
+From:   Frank Lee <frank@allwinnertech.com>
+To:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        p.zabel@pengutronix.de, clabbe@baylibre.com, icenowy@aosc.io,
+        megous@megous.com, karlp@tweak.net.au, bage@linutronix.de
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        huangshuosheng@allwinnertech.com, liyong@allwinnertech.com,
+        frank <frank@allwinnertech.com>
+Subject: [PATCH v2 00/11] Allwinner A100 Initial support
+Date:   Mon, 22 Jun 2020 10:58:56 +0800
+Message-Id: <20200622025907.32574-1-frank@allwinnertech.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200620164449.GA19776@mail.rc.ru>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-06-20, 17:44, Ivan Kokshaysky wrote:
-> Commit 0c868627e617e43a295d8 (cpufreq: dt: Allow platform specific
-> intermediate callbacks) added two function pointers to the
-> struct cpufreq_dt_platform_data. However, armada37xx_cpufreq_driver_init()
-> has this struct (pdata) located on the stack and uses only "suspend"
-> and "resume" fields. So these newly added "get_intermediate" and
-> "target_intermediate" pointers are uninitialized and contain arbitrary
-> non-null values, causing all kinds of trouble.
-> 
-> For instance, here is an oops on espressobin after an attempt to change
-> the cpefreq governor:
-> 
-> [   29.174554] Unable to handle kernel execute from non-executable memory at virtual address ffff00003f87bdc0
-> ...
-> [   29.269373] pc : 0xffff00003f87bdc0
-> [   29.272957] lr : __cpufreq_driver_target+0x138/0x580
-> ...
-> 
-> Fixed by zeroing out pdata before use.
-> 
-> Signed-off-by: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> ---
->  drivers/cpufreq/armada-37xx-cpufreq.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/armada-37xx-cpufreq.c b/drivers/cpufreq/armada-37xx-cpufreq.c
-> index aa0f06dec959..df1c941260d1 100644
-> --- a/drivers/cpufreq/armada-37xx-cpufreq.c
-> +++ b/drivers/cpufreq/armada-37xx-cpufreq.c
-> @@ -456,6 +456,7 @@ static int __init armada37xx_cpufreq_driver_init(void)
->  	/* Now that everything is setup, enable the DVFS at hardware level */
->  	armada37xx_cpufreq_enable_dvfs(nb_pm_base);
->  
-> +	memset(&pdata, 0, sizeof(pdata));
->  	pdata.suspend = armada37xx_cpufreq_suspend;
->  	pdata.resume = armada37xx_cpufreq_resume;
+From: frank <frank@allwinnertech.com>
 
-Applied. Thanks.
+This patch set adds initial support for allwinner a100 soc,
+which is a 64-bit tablet chip.
+
+v2:
+-Some naming consistency
+-Repair email address
+-Fix mmc clock
+-Don't export system clock
+-Fix checkpatch warning
+-Drop unneeded pin function, convert to jtag_gpu and i2s_x
+
+Frank Lee (11):
+  dt-bindings: clk: sunxi-ccu: add compatible string for A100 CCU and
+    R-CCU
+  clk: sunxi-ng: add support for the Allwinner A100 CCU
+  dt-bindings: pinctrl: sunxi: Add A100 pinctrl bindings
+  pinctrl: sunxi: add support for the Allwinner A100 pin controller
+  dt-bindings: nvmem: SID: add binding for A100's SID controller
+  nvmem: sunxi-sid: add support for A100's SID controller
+  dt-bindings: thermal: sun8i: Add binding for A100's THS controller
+  thermal: sun8i: Add A100's THS controller support
+  arm64: allwinner: A100: add the basical Allwinner A100 DTSI file
+  dt-bindings: arm: sunxi: Add Allwinner A100 Perf1 Board bindings
+  arm64: allwinner: A100: add support for Allwinner Perf1 board
+
+ Documentation/devicetree/bindings/arm/sunxi.yaml   |    5 +
+ .../bindings/clock/allwinner,sun4i-a10-ccu.yaml    |    7 +-
+ .../bindings/nvmem/allwinner,sun4i-a10-sid.yaml    |    1 +
+ .../pinctrl/allwinner,sun4i-a10-pinctrl.yaml       |   72 +-
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |    6 +-
+ arch/arm64/boot/dts/allwinner/Makefile             |    1 +
+ .../dts/allwinner/sun50i-a100-allwinner-perf1.dts  |   27 +
+ arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi     |  337 ++++++
+ drivers/clk/sunxi-ng/Kconfig                       |   10 +
+ drivers/clk/sunxi-ng/Makefile                      |    2 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c           |  214 ++++
+ drivers/clk/sunxi-ng/ccu-sun50i-a100-r.h           |   21 +
+ drivers/clk/sunxi-ng/ccu-sun50i-a100.c             | 1261 ++++++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun50i-a100.h             |   56 +
+ drivers/nvmem/sunxi_sid.c                          |    6 +
+ drivers/pinctrl/sunxi/Kconfig                      |   10 +
+ drivers/pinctrl/sunxi/Makefile                     |    2 +
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c      |  105 ++
+ drivers/pinctrl/sunxi/pinctrl-sun50i-a100.c        |  708 +++++++++++
+ drivers/thermal/sun8i_thermal.c                    |   14 +
+ include/dt-bindings/clock/sun50i-a100-ccu.h        |  116 ++
+ include/dt-bindings/clock/sun50i-a100-r-ccu.h      |   23 +
+ include/dt-bindings/reset/sun50i-a100-ccu.h        |   68 ++
+ include/dt-bindings/reset/sun50i-a100-r-ccu.h      |   18 +
+ 24 files changed, 3059 insertions(+), 31 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-allwinner-perf1.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100.dtsi
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100-r.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100-r.h
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun50i-a100.h
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-a100-r.c
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun50i-a100.c
+ create mode 100644 include/dt-bindings/clock/sun50i-a100-ccu.h
+ create mode 100644 include/dt-bindings/clock/sun50i-a100-r-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun50i-a100-ccu.h
+ create mode 100644 include/dt-bindings/reset/sun50i-a100-r-ccu.h
 
 -- 
-viresh
+1.9.1
+
