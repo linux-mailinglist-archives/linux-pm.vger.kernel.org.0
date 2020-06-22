@@ -2,144 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D2F203232
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E70203251
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jun 2020 10:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbgFVIhj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 04:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbgFVIhi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 04:37:38 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21798C061794
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:37:37 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id i27so18258777ljb.12
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 01:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3eXBIJ/ong3y2DHs11bafvAglqmRKvwsWXz4ncOvgbk=;
-        b=MyVxAdfQuB3hNhVA6gFQPxOHMVZq4kOoEBR5d6+KvfCryN2lealybR0S635YEMAIb1
-         7CZFmBV4O9X4eZXOcbPkmEiodDZvxNhCOL7WBwd6J2Cj3/1b8ZHiWxf3RAU10cL4ibcx
-         GbHMLomNSEpu9ejd3MB182JsijA8KDOJSvVUdgJjLz2nAVxl/RIeI6YgcqGWOAnwYJJT
-         viXUnrmiCJWl8KHn52/cVCN1oD7n+D/UloNHOitJhWjYp/wwwu2k1gBiVKxW9DHxhhzZ
-         GIzmRw7Ry3GeuyRqGCH5rOdvc2R9lNBZeBPcVKaXbXeyiK68BDupWJy+Gt6110i0Vpos
-         q/Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3eXBIJ/ong3y2DHs11bafvAglqmRKvwsWXz4ncOvgbk=;
-        b=SADDEKYnYTGJwx5kSZIFhj+nvqY3p754rGr8UklHKHGillDnorgySPtdWkO5eu0Lpw
-         2vzJN0jicmol/YfmXXSlHzCqP1oTtSH4P3zYPLe7L+SBIJAFbMwsiL3fIw+o9rnPrX41
-         4OzFCZn9ON8QyzA/LjvDWvgGekMaAo01eOrQxiraV9dhp1EtnWqWum961gF1YgkPxFwq
-         UJlHAwy3zFsuv9G/a5Il7HxFiaE9sciTbv3j3JgPPA1w441vdsLaPWf6HpdjbmiD+TTl
-         h+tVScnkI0Q4A65lamlmRBD+hlswbW55w51fA0crF3uBiq7Gas9oTV3dY1DeMxpiGLCD
-         VPSg==
-X-Gm-Message-State: AOAM533T9e+DaYcYrNSaoC0V8gPrxgP01bvm/y/A7k/K+Pq8+NtWHpOc
-        dl14JUinrisGQM3ayuwQiQ0LyeaQ9YKCkRc2t1Ua2LRNrGM=
-X-Google-Smtp-Source: ABdhPJyq2873ShtFN9NjzvHiLg+t0lqwT8VYMxYMqaId//U8qDN7eqNChDblrwuN2XX52zIX4exu3kqPkTH2dU3Dtk0=
-X-Received: by 2002:a05:651c:512:: with SMTP id o18mr8528544ljp.226.1592815055424;
- Mon, 22 Jun 2020 01:37:35 -0700 (PDT)
+        id S1725928AbgFVIqE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 04:46:04 -0400
+Received: from esa6.hc3370-68.iphmx.com ([216.71.155.175]:36212 "EHLO
+        esa6.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbgFVIqE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 22 Jun 2020 04:46:04 -0400
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Mon, 22 Jun 2020 04:46:03 EDT
+Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: 4TpWVnbtiqhHqTm8UcF3OpAb2ZHi7hzxMchVDlx84oPPC2OsOAjK2SGuA51o1ODupl2ywABbKs
+ sTGTZwEKCHOWRk3j67f09FvjcIBqouRt4xz0ohd5suQxkDHg1yk+MHmJxOxAluIGqpnqFIF2OH
+ 04YAJ30lc/a5kSPPrGakF2TBnKOjBMH1fUOJ6TzqIMxiVO3Q14HqKHl9cdBd1jOqInig3Z6IN1
+ SRgzwpiMw315v8aBPVr76xaemjJo64jKEZKyF3QQUDhxS0lx2+OvdOzT0m389dE4n5hBxoFbH/
+ 0mM=
+X-SBRS: 2.7
+X-MesageID: 20942116
+X-Ironport-Server: esa6.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.75,266,1589256000"; 
+   d="scan'208";a="20942116"
+Date:   Mon, 22 Jun 2020 10:38:46 +0200
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
+ hibernation]
+Message-ID: <20200622083846.GF735@Air-de-Roger>
+References: <7FD7505E-79AA-43F6-8D5F-7A2567F333AB@amazon.com>
+ <20200604070548.GH1195@Air-de-Roger>
+ <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200617083528.GW735@Air-de-Roger>
+ <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-References: <20200614010755.9129-1-valentin.schneider@arm.com>
- <20200614010755.9129-2-valentin.schneider@arm.com> <CAKfTPtCyi9acak95_2_2uL3Cf0OMAbZhDav2LbPY+ULPrD7z4w@mail.gmail.com>
- <20200620174912.GA18358@arm.com> <jhjmu4xcqyk.mognet@arm.com>
-In-Reply-To: <jhjmu4xcqyk.mognet@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 22 Jun 2020 10:37:23 +0200
-Message-ID: <CAKfTPtDG26Y9s4c+MbdmbxJaiCv6s6WTqmzztcoFsm2SnRL=vQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] thermal/cpu-cooling, sched/core: Cleanup thermal
- pressure definition
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
+ AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 21 Jun 2020 at 00:28, Valentin Schneider
-<valentin.schneider@arm.com> wrote:
->
->
-> On 20/06/20 18:49, Ionela Voinescu wrote:
-> > Hi Vincent,
+On Fri, Jun 19, 2020 at 11:43:12PM +0000, Anchal Agarwal wrote:
+> On Wed, Jun 17, 2020 at 10:35:28AM +0200, Roger Pau Monné wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > 
+> > 
+> > 
+> > On Tue, Jun 16, 2020 at 09:49:25PM +0000, Anchal Agarwal wrote:
+> > > On Thu, Jun 04, 2020 at 09:05:48AM +0200, Roger Pau Monné wrote:
+> > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > > On Wed, Jun 03, 2020 at 11:33:52PM +0000, Agarwal, Anchal wrote:
+> > > > >  CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > > >     > +             xenbus_dev_error(dev, err, "Freezing timed out;"
+> > > > >     > +                              "the device may become inconsistent state");
+> > > > >
+> > > > >     Leaving the device in this state is quite bad, as it's in a closed
+> > > > >     state and with the queues frozen. You should make an attempt to
+> > > > >     restore things to a working state.
+> > > > >
+> > > > > You mean if backend closed after timeout? Is there a way to know that? I understand it's not good to
+> > > > > leave it in this state however, I am still trying to find if there is a good way to know if backend is still connected after timeout.
+> > > > > Hence the message " the device may become inconsistent state".  I didn't see a timeout not even once on my end so that's why
+> > > > > I may be looking for an alternate perspective here. may be need to thaw everything back intentionally is one thing I could think of.
+> > > >
+> > > > You can manually force this state, and then check that it will behave
+> > > > correctly. I would expect that on a failure to disconnect from the
+> > > > backend you should switch the frontend to the 'Init' state in order to
+> > > > try to reconnect to the backend when possible.
+> > > >
+> > > From what I understand forcing manually is, failing the freeze without
+> > > disconnect and try to revive the connection by unfreezing the
+> > > queues->reconnecting to backend [which never got diconnected]. May be even
+> > > tearing down things manually because I am not sure what state will frontend
+> > > see if backend fails to to disconnect at any point in time. I assumed connected.
+> > > Then again if its "CONNECTED" I may not need to tear down everything and start
+> > > from Initialising state because that may not work.
+> > >
+> > > So I am not so sure about backend's state so much, lets say if  xen_blkif_disconnect fail,
+> > > I don't see it getting handled in the backend then what will be backend's state?
+> > > Will it still switch xenbus state to 'Closed'? If not what will frontend see,
+> > > if it tries to read backend's state through xenbus_read_driver_state ?
+> > >
+> > > So the flow be like:
+> > > Front end marks XenbusStateClosing
+> > > Backend marks its state as XenbusStateClosing
+> > >     Frontend marks XenbusStateClosed
+> > >     Backend disconnects calls xen_blkif_disconnect
+> > >        Backend fails to disconnect, the above function returns EBUSY
+> > >        What will be state of backend here?
+> > 
+> > Backend should stay in state 'Closing' then, until it can finish
+> > tearing down.
+> > 
+> It disconnects the ring after switching to connected state too. 
+> > >        Frontend did not tear down the rings if backend does not switches the
+> > >        state to 'Closed' in case of failure.
+> > >
+> > > If backend stays in CONNECTED state, then even if we mark it Initialised in frontend, backend
+> > 
+> > Backend will stay in state 'Closing' I think.
+> > 
+> > > won't be calling connect(). {From reading code in frontend_changed}
+> > > IMU, Initialising will fail since backend dev->state != XenbusStateClosed plus
+> > > we did not tear down anything so calling talk_to_blkback may not be needed
+> > >
+> > > Does that sound correct?
+> > 
+> > I think switching to the initial state in order to try to attempt a
+> > reconnection would be our best bet here.
 > >
-> > On Thursday 18 Jun 2020 at 17:03:24 (+0200), Vincent Guittot wrote:
-> >> On Sun, 14 Jun 2020 at 03:10, Valentin Schneider
-> >> <valentin.schneider@arm.com> wrote:
-> > [..]
-> >> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> >> > index e297e135c031..a1efd379b683 100644
-> >> > --- a/drivers/thermal/cpufreq_cooling.c
-> >> > +++ b/drivers/thermal/cpufreq_cooling.c
-> >> > @@ -417,6 +417,11 @@ static int cpufreq_get_cur_state(struct thermal_cooling_device *cdev,
-> >> >         return 0;
-> >> >  }
-> >> >
-> >> > +__weak void
-> >> > +arch_set_thermal_pressure(const struct cpumask *cpus, unsigned long th_pressure)
-> >> > +{
-> >> > +}
-> >>
-> >> Having this weak function declared in cpufreq_cooling is weird. This
-> >> means that we will have to do so for each one that wants to use it.
-> >>
-> >> Can't you declare an empty function in a common header file ?
-> >
-> > Do we expect anyone other than cpufreq_cooling to call
-> > arch_set_thermal_pressure()?
-> >
-> > I'm not against any of the options, either having it here as a week
-> > default definition (same as done for arch_set_freq_scale() in cpufreq.c)
-> > or in a common header (as done for arch_scale_freq_capacity() in sched.h).
-> >
->
-> Same thoughts here; I was going for the arch_set_freq_scale() way.
->
-> > But for me, Valentin's implementation seems more natural as setters are
-> > usually only called from within the framework that does the control
-> > (throttling for thermal or frequency setting for cpufreq) and we
-> > probably want to think twice if we want to call them from other places.
-> >
->
-> Well TBH I was tempted to go the other way and keep the definition in
-> core.c, given a simple per-cpu value is fairly generic. More precisely, it
+> It does not seems to work correctly, I get hung tasks all over and all the
+> requests to filesystem gets stuck. Backend does shows the state as connected
+> after xenbus_dev_suspend fails but I think there may be something missing.
+> I don't seem to get IO interrupts thereafter i.e hitting the function blkif_interrupts.
+> I think just marking it initialised may not be the only thing.
+> Here is a short description of what I am trying to do:
+> So, on timeout:
+>     Switch XenBusState to "Initialized"
+>     unquiesce/unfreeze the queues and return
+>     mark info->connected = BLKIF_STATE_CONNECTED
 
-Having all definitions in the same place is my main concern here.
-If topology.c defines arch_set_thermal_pressure it should also provide
-the empty function when the feature is not available or possible
-instead of relying of each user of the interface to define a weak
-function just in case.
+If xenbus state is Initialized isn't it wrong to set info->connected
+== CONNECTED?
 
-> seems somewhat awkward that architectures have to redefine those interfaces
-> when, given what cpufreq_cooling is doing, they'll have to go for per-cpu
-> storage in some way or another.
->
-> I ultimately decided against it, seeing as it isn't too difficult to come
-> up with other drivers of thermal pressure. There was that TDP-bound thing
-> [1], where IIUC you could end up with throttling not because of thermal but
-> because of power constraints. And then there's always FW that can cap stuff
-> as a last resort, and some architectures will want to inform the scheduler
-> of that when/if they'll be able to query FW for that.
->
-> [1]: 20200428032258.2518-1-currojerez@riseup.net
->
-> > Thanks,
-> > Ionela.
+You should tear down all the internal state (like a proper close)?
+
+>     return EBUSY
+> 
+> I even allowed blkfront_connect to switch state to "CONNECTED" rather me doing
+> it explicitly as mentioned above without re-allocating/re-registering the device
+> just to make sure bklfront_info object has all the right values.
+> Do you see anythign missing here?
+
+I'm afraid you will have to do a little bit of debugging here to
+figure out what's going on. You can add printk's to several places to
+see which path is taken, and why blkfront ends in such state.
+
+Thanks, Roger.
