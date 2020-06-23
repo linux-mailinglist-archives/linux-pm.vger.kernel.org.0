@@ -2,210 +2,259 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8172204907
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 07:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46B1204923
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 07:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730081AbgFWFPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 01:15:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726252AbgFWFPS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 01:15:18 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B765C061573
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id f9so704287pfn.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3phtSZElnKhAKAsJ0GkPo5emlqkKBgqm+SMemI7XzZE=;
-        b=yTd34Wi8nuuX1GjOPwJKiPvV3apHnv1PBY5cE3Txgjq7ZhCA5x5CVfF/3zOXQLo+RA
-         UNoQkrET3GF3kqKwRgcoppDliQzeTcK5pE8JNYIku0KWis95i5MicFo/DyTaGlMENdEY
-         OFOz6j8HmYJpWGOqHNoD3yOZh32eNXcWVEGB/n87Lt2YBNoQ3uq5eoV3lQCNVvD/6zvb
-         a+tOvufVyKXv4E1Jb7Jum/3U8uqBsq1WG1sfdom6B0K1GUaIJcK3oShUwQo1MLjAcAZ5
-         3paxC0VY98zUkGERCN58qkatsvsXvocT/RKh02WsluOPObokqUMkHKtqRAP/q3VBhzu3
-         RO2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3phtSZElnKhAKAsJ0GkPo5emlqkKBgqm+SMemI7XzZE=;
-        b=mNgEvk+NYXn7tXAikF6cFZBBxWU/DIiqEXCM5OU+xQE34L7Q4iyOM+32yz2bYsnfsF
-         VVV/rWruMZUmYLMUe35wXjN4jvV4bG/x8gcLfeIECA/0xjBx0vFLysLVYFWsiBH4iCKs
-         Sii5M0BCRss6bhUyUPkwDC+2AoTO80i21mNeZre1SJLwyJDJXbjRZZvjp6ObtQ6W0hGT
-         7mwZyrS1hB0/+1sqWtdtj55LqFzOb2kaO6pY4eNzeCj7YRHt0ARFltI30qFjNk3l0Tmv
-         OdfNScZaFGU7pUCaao0h30t4UoF97WCwxINUlNW9FK2hCV2CIOI+JPauSmmnvGTf5eED
-         pBKg==
-X-Gm-Message-State: AOAM531+oVhu8Iji72Zg9p4Q/iWVHzmDnBDarq9aQhuV46pVq+CbKjZ4
-        OqmWsyVf1OEXk8/YRNA94M7Pqg==
-X-Google-Smtp-Source: ABdhPJxDJmmDQujdEzvEsZ71dYVPCTHV1QA8cJuQCCak03eaFvWu2zff1mtJNhHPc1SW3zuBJ0uUaw==
-X-Received: by 2002:aa7:9184:: with SMTP id x4mr23054383pfa.271.1592889317007;
-        Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
-Received: from localhost ([122.172.111.76])
-        by smtp.gmail.com with ESMTPSA id o1sm16562358pfu.70.2020.06.22.22.15.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jun 2020 22:15:16 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: cppc: Reorder code and remove apply_hisi_workaround variable
-Date:   Tue, 23 Jun 2020 10:45:11 +0530
-Message-Id: <b217dc843935e3f86584a73893d330fd99a4e472.1592889188.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        id S1730081AbgFWFTb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 01:19:31 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:17588 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728729AbgFWFTa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 01:19:30 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ef190b50000>; Mon, 22 Jun 2020 22:18:45 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 22 Jun 2020 22:19:30 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Mon, 22 Jun 2020 22:19:30 -0700
+Received: from [10.24.37.103] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 23 Jun
+ 2020 05:19:21 +0000
+Subject: Re: [TEGRA194_CPUFREQ Patch v3 3/4] cpufreq: Add Tegra194 cpufreq
+ driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
+        <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <1592775274-27513-1-git-send-email-sumitg@nvidia.com>
+ <1592775274-27513-4-git-send-email-sumitg@nvidia.com>
+ <20200622072052.uryxo4hri6gzrkku@vireshk-i7>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <ed6956a3-3f77-2943-6387-5affc25b59d2@nvidia.com>
+Date:   Tue, 23 Jun 2020 10:49:18 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200622072052.uryxo4hri6gzrkku@vireshk-i7>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1592889525; bh=sEQVKKrqd5FMPr3hfJ8vm8kY/vg10WEobCiUip4lwic=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=KpQV2mdYmRpvLg2foGEBLfVh+ae3LYgLH9O1y3SVjdRsSF42AVgJ6iJ4mc7UWIkb0
+         YguB/5fcQDhFQe/4tze3mZP6L3Bvt+c0fyYiBiorvTXLNHM6j4FIIBIevp8PSJO6Vt
+         7DaodlNWwW4INZDI22t/YOQw0MQ6n9hAEAxGGA2+xt4ChZT/4uqLPP+Q/BL9CwYluF
+         f0xAcIoEXswwEgRmCXe7lOTr0i39IazIY+sio2UdOvlgfdV5bnJwS86WSpx0oQxgnt
+         M58mY04ov63h0rZC/UX5OfBHD4QD/z8cRKkPQojeHG6/mAskT6hxFBQC3KO3YeKjtF
+         +7RiMHUaiijBg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the current approach we have an extra check in the
-cppc_cpufreq_get_rate() callback, which checks if hisilicon's get rate
-implementation should be used instead. While it works fine, the approach
-isn't very straight forward, over that we have an extra check in the
-routine.
+Hi Viresh,
 
-Rearrange code and update the cpufreq driver's get() callback pointer
-directly for the hisilicon case. This gets the extra variable is removed
-and the extra check isn't required anymore as well.
+Thank you for the review. please find my reply inline.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Xiongfeng Wang, will it be possible for you to give this a try as I
-can't really test it locally.
 
- drivers/cpufreq/cppc_cpufreq.c | 91 ++++++++++++++++------------------
- 1 file changed, 42 insertions(+), 49 deletions(-)
+>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+>> @@ -0,0 +1,403 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, NVIDIA CORPORATION. All rights reserved
+> 
+>                      2020
+> 
+>> + */
+>> +
+>> +#include <linux/cpu.h>
+>> +#include <linux/cpufreq.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/dma-mapping.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/of_platform.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/slab.h>
+>> +
+>> +#include <asm/smp_plat.h>
+>> +
+>> +#include <soc/tegra/bpmp.h>
+>> +#include <soc/tegra/bpmp-abi.h>
+>> +
+>> +#define KHZ                     1000
+>> +#define REF_CLK_MHZ             408 /* 408 MHz */
+>> +#define US_DELAY                500
+>> +#define US_DELAY_MIN            2
+>> +#define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
+>> +#define MAX_CNT                 ~0U
+>> +
+>> +/* cpufreq transisition latency */
+>> +#define TEGRA_CPUFREQ_TRANSITION_LATENCY (300 * 1000) /* unit in nanoseconds */
+>> +
+>> +#define LOOP_FOR_EACH_CPU_OF_CLUSTER(cl) for (cpu = (cl * 2); \
+>> +                                     cpu < ((cl + 1) * 2); cpu++)
+> 
+> Both latency and this loop are used only once in the code, maybe just open code
+> it. Also you should have passed cpu as a parameter to the macro, even if it
+> works fine without it, for better readability.
+> 
+Ok, i will open code the loop in next version. For latency value, i feel 
+named macro makes readability better. So, prefer keeping it.
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 257d726a4456..03a21daddbec 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -45,8 +45,6 @@ struct cppc_workaround_oem_info {
- 	u32 oem_revision;
- };
- 
--static bool apply_hisi_workaround;
--
- static struct cppc_workaround_oem_info wa_info[] = {
- 	{
- 		.oem_id		= "HISI  ",
-@@ -59,50 +57,6 @@ static struct cppc_workaround_oem_info wa_info[] = {
- 	}
- };
- 
--static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu,
--					unsigned int perf);
--
--/*
-- * HISI platform does not support delivered performance counter and
-- * reference performance counter. It can calculate the performance using the
-- * platform specific mechanism. We reuse the desired performance register to
-- * store the real performance calculated by the platform.
-- */
--static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpunum)
--{
--	struct cppc_cpudata *cpudata = all_cpu_data[cpunum];
--	u64 desired_perf;
--	int ret;
--
--	ret = cppc_get_desired_perf(cpunum, &desired_perf);
--	if (ret < 0)
--		return -EIO;
--
--	return cppc_cpufreq_perf_to_khz(cpudata, desired_perf);
--}
--
--static void cppc_check_hisi_workaround(void)
--{
--	struct acpi_table_header *tbl;
--	acpi_status status = AE_OK;
--	int i;
--
--	status = acpi_get_table(ACPI_SIG_PCCT, 0, &tbl);
--	if (ACPI_FAILURE(status) || !tbl)
--		return;
--
--	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
--		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
--		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
--		    wa_info[i].oem_revision == tbl->oem_revision) {
--			apply_hisi_workaround = true;
--			break;
--		}
--	}
--
--	acpi_put_table(tbl);
--}
--
- /* Callback function used to retrieve the max frequency from DMI */
- static void cppc_find_dmi_mhz(const struct dmi_header *dm, void *private)
- {
-@@ -402,9 +356,6 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
- 	struct cppc_cpudata *cpu = all_cpu_data[cpunum];
- 	int ret;
- 
--	if (apply_hisi_workaround)
--		return hisi_cppc_cpufreq_get_rate(cpunum);
--
- 	ret = cppc_get_perf_ctrs(cpunum, &fb_ctrs_t0);
- 	if (ret)
- 		return ret;
-@@ -455,6 +406,48 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
- 	.name = "cppc_cpufreq",
- };
- 
-+/*
-+ * HISI platform does not support delivered performance counter and
-+ * reference performance counter. It can calculate the performance using the
-+ * platform specific mechanism. We reuse the desired performance register to
-+ * store the real performance calculated by the platform.
-+ */
-+static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpunum)
-+{
-+	struct cppc_cpudata *cpudata = all_cpu_data[cpunum];
-+	u64 desired_perf;
-+	int ret;
-+
-+	ret = cppc_get_desired_perf(cpunum, &desired_perf);
-+	if (ret < 0)
-+		return -EIO;
-+
-+	return cppc_cpufreq_perf_to_khz(cpudata, desired_perf);
-+}
-+
-+static void cppc_check_hisi_workaround(void)
-+{
-+	struct acpi_table_header *tbl;
-+	acpi_status status = AE_OK;
-+	int i;
-+
-+	status = acpi_get_table(ACPI_SIG_PCCT, 0, &tbl);
-+	if (ACPI_FAILURE(status) || !tbl)
-+		return;
-+
-+	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
-+		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
-+		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
-+		    wa_info[i].oem_revision == tbl->oem_revision) {
-+			/* Overwrite the get() callback */
-+			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
-+			break;
-+		}
-+	}
-+
-+	acpi_put_table(tbl);
-+}
-+
- static int __init cppc_cpufreq_init(void)
- {
- 	int i, ret = 0;
--- 
-2.25.0.rc1.19.g042ed3e048af
+>> +
+>> +u16 map_freq_to_ndiv(struct mrq_cpu_ndiv_limits_response *nltbl, u32 freq)
+> 
+> Unused routine
+> 
+Sure, will remove it.
 
+>> +{
+>> +     return DIV_ROUND_UP(freq * nltbl->pdiv * nltbl->mdiv,
+>> +                         nltbl->ref_clk_hz / KHZ);
+>> +}
+> 
+>> +static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>> +{
+>> +     struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+>> +     int cl = get_cpu_cluster(policy->cpu);
+>> +     u32 cpu;
+>> +
+>> +     if (cl >= data->num_clusters)
+>> +             return -EINVAL;
+>> +
+>> +     policy->cur = tegra194_fast_get_speed(policy->cpu); /* boot freq */
+>> +
+>> +     /* set same policy for all cpus in a cluster */
+>> +     LOOP_FOR_EACH_CPU_OF_CLUSTER(cl)
+>> +             cpumask_set_cpu(cpu, policy->cpus);
+>> +
+>> +     policy->freq_table = data->tables[cl];
+>> +     policy->cpuinfo.transition_latency = TEGRA_CPUFREQ_TRANSITION_LATENCY;
+>> +
+>> +     return 0;
+>> +}
+> 
+>> +static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>> +                                    unsigned int index)
+>> +{
+>> +     struct cpufreq_frequency_table *tbl = policy->freq_table + index;
+>> +
+>> +     on_each_cpu_mask(policy->cpus, set_cpu_ndiv, tbl, true);
+> 
+> I am still a bit confused. While setting the frequency you are calling this
+> routine for each CPU of the policy (cluster). Does that mean that CPUs within a
+> cluster can actually run at different frequencies at any given point of time ?
+> 
+> If cpufreq terms, a cpufreq policy represents a group of CPUs that change
+> frequency together, i.e. they share the clk line. If all CPUs in your system can
+> do DVFS separately, then you must have policy per CPU, instead of cluster.
+> 
+T194 supports four CPU clusters, each with two cores. Each CPU cluster 
+is capable of running at a specific frequency sourced by respective 
+NAFLL to provide cluster specific clocks. Individual cores within a 
+cluster write freq in per core register. Cluster h/w forwards the 
+max(core0, core1) request to per cluster NAFLL.
+
+>> +static void tegra194_cpufreq_free_resources(void)
+>> +{
+>> +     flush_workqueue(read_counters_wq);
+> 
+> Why is this required exactly? I see that you add the work request and
+> immediately flush it, then why would you need to do this separately ?
+> 
+Ya, will remove flush_workqueue().
+
+>> +     destroy_workqueue(read_counters_wq);
+>> +}
+>> +
+>> +static struct cpufreq_frequency_table *
+>> +init_freq_table(struct platform_device *pdev, struct tegra_bpmp *bpmp,
+>> +             unsigned int cluster_id)
+>> +{
+>> +     struct cpufreq_frequency_table *freq_table;
+>> +     struct mrq_cpu_ndiv_limits_response resp;
+>> +     unsigned int num_freqs, ndiv, delta_ndiv;
+>> +     struct mrq_cpu_ndiv_limits_request req;
+>> +     struct tegra_bpmp_message msg;
+>> +     u16 freq_table_step_size;
+>> +     int err, index;
+>> +
+>> +     memset(&req, 0, sizeof(req));
+>> +     req.cluster_id = cluster_id;
+>> +
+>> +     memset(&msg, 0, sizeof(msg));
+>> +     msg.mrq = MRQ_CPU_NDIV_LIMITS;
+>> +     msg.tx.data = &req;
+>> +     msg.tx.size = sizeof(req);
+>> +     msg.rx.data = &resp;
+>> +     msg.rx.size = sizeof(resp);
+>> +
+>> +     err = tegra_bpmp_transfer(bpmp, &msg);
+> 
+> So the firmware can actually return different frequency tables for the clusters,
+> right ? Else you could have received the table only once and used it for all the
+> CPUs.
+> 
+Yes, frequency tables are returned per cluster by BPMP firmware. In T194 
+SOC, currently same table values are used for all clusters. This might 
+change in future.
+
+>> +     if (err)
+>> +             return ERR_PTR(err);
+>> +
+>> +     /*
+>> +      * Make sure frequency table step is a multiple of mdiv to match
+>> +      * vhint table granularity.
+>> +      */
+>> +     freq_table_step_size = resp.mdiv *
+>> +                     DIV_ROUND_UP(CPUFREQ_TBL_STEP_HZ, resp.ref_clk_hz);
+>> +
+>> +     dev_dbg(&pdev->dev, "cluster %d: frequency table step size: %d\n",
+>> +             cluster_id, freq_table_step_size);
+>> +
+>> +     delta_ndiv = resp.ndiv_max - resp.ndiv_min;
+>> +
+>> +     if (unlikely(delta_ndiv == 0))
+>> +             num_freqs = 1;
+>> +     else
+>> +             /* We store both ndiv_min and ndiv_max hence the +1 */
+>> +             num_freqs = delta_ndiv / freq_table_step_size + 1;
+>> +
+>> +     num_freqs += (delta_ndiv % freq_table_step_size) ? 1 : 0;
+>> +
+>> +     freq_table = devm_kcalloc(&pdev->dev, num_freqs + 1,
+>> +                               sizeof(*freq_table), GFP_KERNEL);
+>> +     if (!freq_table)
+>> +             return ERR_PTR(-ENOMEM);
+>> +
+>> +     for (index = 0, ndiv = resp.ndiv_min;
+>> +                     ndiv < resp.ndiv_max;
+>> +                     index++, ndiv += freq_table_step_size) {
+>> +             freq_table[index].driver_data = ndiv;
+>> +             freq_table[index].frequency = map_ndiv_to_freq(&resp, ndiv);
+>> +     }
+>> +
+>> +     freq_table[index].driver_data = resp.ndiv_max;
+>> +     freq_table[index++].frequency = map_ndiv_to_freq(&resp, resp.ndiv_max);
+>> +     freq_table[index].frequency = CPUFREQ_TABLE_END;
+>> +
+>> +     return freq_table;
+>> +}
+> 
+> --
+> viresh
+> 
