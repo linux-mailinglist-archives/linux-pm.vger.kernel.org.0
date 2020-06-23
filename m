@@ -2,91 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2071A2046E7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 03:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE272047F5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 05:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728875AbgFWB4P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 22 Jun 2020 21:56:15 -0400
-Received: from mga07.intel.com ([134.134.136.100]:25133 "EHLO mga07.intel.com"
+        id S1731147AbgFWDas (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 22 Jun 2020 23:30:48 -0400
+Received: from mga01.intel.com ([192.55.52.88]:37359 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730458AbgFWB4P (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 22 Jun 2020 21:56:15 -0400
-IronPort-SDR: mnkc2gtWSsxFihg+R3qdq6HCEDl8N/UZMcAlzPMH16Lh1MVKp9mCezzojnpxs1ZjfBgxn0DlDp
- ed5UFuSkVONA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="209123801"
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="209123801"
+        id S1731041AbgFWDar (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 22 Jun 2020 23:30:47 -0400
+IronPort-SDR: e97n6scrqdZTvJTgMfHz8Bt2afu+BgbfyFoUx4kgsJvzm3xg6+FTflNUwhM52wjswMIuu8Ol/N
+ zplhYS823BMw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="162028084"
+X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
+   d="scan'208";a="162028084"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 18:55:26 -0700
-IronPort-SDR: c7fQlezvt9UUct1YKe9X4P7jCCWicimvxVRgDSFVd67T7uaPCDncj+d4Pj/U1iCPzJcXiRB+Bo
- qePFxiETuZeg==
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 20:30:46 -0700
+IronPort-SDR: gUeYtFDqiFigNyzgQ7a/un72k0V6ut8TjWK+DuNbEceZjv/+9UgKOpXIRZ8WJcw7ZKTZlxDPZN
+ QlWzesx8hexw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,268,1589266800"; 
-   d="scan'208";a="452047841"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2020 18:55:24 -0700
-Date:   Tue, 23 Jun 2020 09:56:28 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rui Zhang <rui.zhang@intel.com>
-Subject: Re: [PATCH][v2] PM / s2idle: Clear _TIF_POLLING_NRFLAG before
- suspend to idle
-Message-ID: <20200623015628.GA28671@chenyu-office.sh.intel.com>
-References: <20200616040442.21515-1-yu.c.chen@intel.com>
- <CAJZ5v0gBVBAjdCOXsM-Fa-iAkuv2JMi2mVkG5w7ADcg9dWencA@mail.gmail.com>
- <20200622171759.GA26527@chenyu-office.sh.intel.com>
- <CAJZ5v0grJZyOX7fFx_nNjtOLT1NGyu1L10H3TY+e0HR3+T8JZA@mail.gmail.com>
+X-IronPort-AV: E=Sophos;i="5.75,269,1589266800"; 
+   d="scan'208";a="263178407"
+Received: from lkp-server01.sh.intel.com (HELO f484c95e4fd1) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jun 2020 20:30:44 -0700
+Received: from kbuild by f484c95e4fd1 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jnZdz-0000aY-SD; Tue, 23 Jun 2020 03:30:43 +0000
+Date:   Tue, 23 Jun 2020 11:30:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 0d62e7bd3feab497ce3b148fc279e393bf4ba775
+Message-ID: <5ef17739.gydh2Go6Jo2RR0f5%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0grJZyOX7fFx_nNjtOLT1NGyu1L10H3TY+e0HR3+T8JZA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 09:45:35PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Jun 22, 2020 at 7:16 PM Chen Yu <yu.c.chen@intel.com> wrote:
-> >
-> > Hi Rafael,
-> > On Mon, Jun 22, 2020 at 06:19:35PM +0200, Rafael J. Wysocki wrote:
-> > [cut]
-> > > > +{
-> > > > +       if (!current_clr_polling_and_test())
-> > > > +               s2idle_enter(drv, dev, index);
-> > > > +
-> > > > +       return index;
-> > >
-> > > Is the value returned here used at all?
-> > >
-> > It is not used for now IMO.
-> > > >          */
-> > > >         index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> > > >         if (index > 0)
-> > > > -               enter_s2idle_proper(drv, dev, index);
-> > > > +               call_s2idle(drv, dev, index);
-> > >
-> > > I'm wondering why this can't be
-> > >
-> > >     if (index > 0 && !current_clr_polling_and_test())
-> > >             enter_s2idle_proper(drv, dev, index);
-> > >
-> > Yes, it should be simpler, but I guess Peter was trying to
-> > make call_s2idle() consistent with call_cpuidle(),
-> > and also s2idle_enter() is analogous to cpuidle_enter().
-> 
-> So IMO it would be better to do the simplest fix first and then do the
-> cleanup on top of it.
->
-Okay, I'll do that.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 0d62e7bd3feab497ce3b148fc279e393bf4ba775  Merge branch 'acpi-sysfs-next' into bleeding-edge
 
-Thanks,
-Chenyu
+elapsed time: 726m
+
+configs tested: 107
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+mips                malta_kvm_guest_defconfig
+arm                         s3c6400_defconfig
+xtensa                           alldefconfig
+sh                  sh7785lcr_32bit_defconfig
+xtensa                    xip_kc705_defconfig
+arm                        keystone_defconfig
+arm                       versatile_defconfig
+m68k                            mac_defconfig
+sh                           sh2007_defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200622
+i386                 randconfig-a002-20200622
+i386                 randconfig-a003-20200622
+i386                 randconfig-a001-20200622
+i386                 randconfig-a005-20200622
+i386                 randconfig-a004-20200622
+x86_64               randconfig-a004-20200622
+x86_64               randconfig-a002-20200622
+x86_64               randconfig-a003-20200622
+x86_64               randconfig-a005-20200622
+x86_64               randconfig-a001-20200622
+x86_64               randconfig-a006-20200622
+i386                 randconfig-a013-20200622
+i386                 randconfig-a016-20200622
+i386                 randconfig-a012-20200622
+i386                 randconfig-a014-20200622
+i386                 randconfig-a015-20200622
+i386                 randconfig-a011-20200622
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
