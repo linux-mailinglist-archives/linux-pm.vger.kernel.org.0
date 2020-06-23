@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8AD205A4B
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 20:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5A6205A31
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 20:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733125AbgFWSJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 14:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        id S1733245AbgFWSIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 14:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733214AbgFWSIq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 14:08:46 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97359C061573;
-        Tue, 23 Jun 2020 11:08:45 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l17so3824532wmj.0;
-        Tue, 23 Jun 2020 11:08:45 -0700 (PDT)
+        with ESMTP id S1732549AbgFWSIs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 14:08:48 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB13FC061573;
+        Tue, 23 Jun 2020 11:08:47 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 22so2962461wmg.1;
+        Tue, 23 Jun 2020 11:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=J8OcL2igjAskSXad9xrzVVWdlH7GJvm1mWz0l8/dfzA=;
-        b=qlW0UT0INRLFF+18UA4WegQJDYUTYkGa2on8OgajVSza/LdEv0MWiQLmjbiZXiychi
-         MZ0XwkY/FFJkgJXCubN2Lcmn8lrhgmBmyErSPqFD7telVRgLXQFHBSRNwGi4oepLFl1F
-         oZH9WgVeI0xsT78HliB0EhzAp3l6NzZDOnIFl+iSQzBkjuZMpxyZn1YRb7o31c1W+yHJ
-         TO1FzUfCQyz5YSOQ5AQyvPpyyxbfP3qLwX96ZMOWezf88JTykzysuhRYxsiqtkK0bfOL
-         Z+SuRnEwSSD1bPcJ1UzE3Oxbt8/Z3fhj7NAe9Lq7Q4LLXlfgnWFGfQ3aazEiMpRcpurX
-         qq0A==
+        bh=3bxtTT24XCUFSEzo9TJrraJWvnIZVMAljX8QaOMq9yc=;
+        b=Jcx19HzyIeI9OHcm1n3h/bdnMyZhZPsIz9dXVeWTPlkqRHbGjaiwkPQSlbpVHaAq9U
+         CVbyaA965pR0hgK8AsZBvZs7O3cgqmQ+dYfSsH9s54t3Ym4lkh4qRYAHog0MV+dSgt6r
+         D+82qr8AsbQaltWWzUTmTm10mfD5BABAj6MmZuWpz5Np5a9LbBcBpMGK6j59s6aLPfLS
+         DZWrwPND6IqZs8XUFCfEkOVcZMRVVXUcy40J75VdLoMuZQm/vgjD9/zxex4Xf5fAlY/l
+         x00C6YN+E5dP4/G/hsDLdiZKmOM8Qs1DynorU3mSCCx5QXbifidrze8vgMtliSRRqUmp
+         2MpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=J8OcL2igjAskSXad9xrzVVWdlH7GJvm1mWz0l8/dfzA=;
-        b=hte+FF7NIXcplGxu1F3+0w6pdRq2AZCJ7yhdtnu1gt66++gZUo8MgND81pC3ZVqZnu
-         C1B1zfW8KijG57WbkfoVsbL6oFSwni7UXPqU4d/PHQHd+c9Gyu5/OLWC96Jb7MgDIvmt
-         drcSkZf0oMwT7yhxNejzo6p0W7HoJvooVGeV11en8XuKT0RpEJINmhIHe0m2gSPZ7V3D
-         hBfi+eGiCBXr9xnAp1pkUoSSJ50vj5Na+/ztYMOjA21Ormj+GCmEPyIbjt2Gkh0czwYo
-         tcF0uX+H/gv0jdj2d9xC0YsTQDQEHj1SZ+2p4rMAl/AMprufaT1d+DSTaxKYk+mPJEQT
-         2gdw==
-X-Gm-Message-State: AOAM532OMm2ar+fEE1x6urQcrxESdrvIk8xKJPu9URv69Sx2LvuZNkSb
-        71iLOUhXHGYUnMkS5wFwvR4=
-X-Google-Smtp-Source: ABdhPJwXRXk7kAY+Swq+1CCO+mVVjQWtgirNw0i03TSNku0/pz4e3x4VGJtYXemKG951DrgLzVPTrw==
-X-Received: by 2002:a1c:96ce:: with SMTP id y197mr26789007wmd.55.1592935724369;
-        Tue, 23 Jun 2020 11:08:44 -0700 (PDT)
+        bh=3bxtTT24XCUFSEzo9TJrraJWvnIZVMAljX8QaOMq9yc=;
+        b=uSgKMtCkSfd97hzegaoh5bKjNYKB6iDbwqrIc0cHkCP7oTO5Ddy8SMnYi2GTGx1EQ8
+         MqRHRw0zdSFwenH/EkQgwcVIXgcv6fz73rHp8AGrp4++mLVdfpPqoRzfRX/zZqWXMqzl
+         5AMgwMEMGAWXofF+oQ+zIdKeVBs7jFviTgvpIeE4o2jg22CWfUso5XDRpWbxkO30XrAs
+         cPdZURO7lFI16CqsA1HZD6fHdBg1fBoF8L+Fy2tkMlwtCDETU8i6oFC6se0ZycdKPq+S
+         W75hsDd3vJqG1+f/OvvKLuT9DsC9ndHqP6nKWuBNh1oKdrOAjsP0R+J7G9P4VMynCB7w
+         ZC+A==
+X-Gm-Message-State: AOAM5305ennSJ5VbdhUckHhxyQ+8k4TJXVfcOER3danhO0uBEy9cdfNr
+        Ibn2Vd+wdYfaE4Hlckjtpjs=
+X-Google-Smtp-Source: ABdhPJxdGyFnxemry6uyd0/iseA2W/X2LRPcYYo/8lFhH9JKSLyNtNM7oIsZIaiTOMX0cylU15YRhg==
+X-Received: by 2002:a1c:7717:: with SMTP id t23mr19448487wmi.75.1592935726407;
+        Tue, 23 Jun 2020 11:08:46 -0700 (PDT)
 Received: from localhost.localdomain (abag196.neoplus.adsl.tpnet.pl. [83.6.170.196])
-        by smtp.googlemail.com with ESMTPSA id c16sm4719529wml.45.2020.06.23.11.08.43
+        by smtp.googlemail.com with ESMTPSA id c16sm4719529wml.45.2020.06.23.11.08.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 11:08:44 -0700 (PDT)
+        Tue, 23 Jun 2020 11:08:46 -0700 (PDT)
 From:   Konrad Dybcio <konradybcio@gmail.com>
 To:     skrzynka@konradybcio.pl
 Cc:     Konrad Dybcio <konradybcio@gmail.com>,
@@ -59,9 +59,9 @@ Cc:     Konrad Dybcio <konradybcio@gmail.com>,
         Rajendra Nayak <rnayak@codeaurora.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 3/8] arm64: dts: qcom: sdm630: Add tsens node
-Date:   Tue, 23 Jun 2020 20:08:27 +0200
-Message-Id: <20200623180832.254163-4-konradybcio@gmail.com>
+Subject: [PATCH 4/8] arm64: dts: qcom: sdm630: nile: Enable BLSP1_UART2
+Date:   Tue, 23 Jun 2020 20:08:28 +0200
+Message-Id: <20200623180832.254163-5-konradybcio@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200623180832.254163-1-konradybcio@gmail.com>
 References: <20200623180832.254163-1-konradybcio@gmail.com>
@@ -72,48 +72,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enable tsens on this SoC using tsens-v2 driver.
+Enable the second UART interface used on this board.
+Also convert the DT to use phandles instead of addresses
+to make it coherent with other device trees.
 
 Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
 ---
- .../devicetree/bindings/thermal/qcom-tsens.yaml       |  1 +
- arch/arm64/boot/dts/qcom/sdm630.dtsi                  | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+ .../dts/qcom/sdm630-sony-xperia-nile.dtsi     | 50 ++++++++++---------
+ 1 file changed, 26 insertions(+), 24 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index d7be931b42d2..d89d5acd6e2a 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -39,6 +39,7 @@ properties:
-               - qcom,msm8996-tsens
-               - qcom,msm8998-tsens
-               - qcom,sc7180-tsens
-+              - qcom,sdm630-tsens
-               - qcom,sdm845-tsens
-           - const: qcom,tsens-v2
- 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index ea85f28032d2..92bf4ae6a590 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -566,6 +566,17 @@ anoc2_smmu: iommu@16c0000 {
- 				<GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
+index 9ba359c848d0..de06fa809488 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630-sony-xperia-nile.dtsi
+@@ -99,38 +99,40 @@ removed_region@85800000 {
+ 			no-map;
  		};
+ 	};
++};
  
-+		tsens: thermal-sensor@10ae000 {
-+			compatible = "qcom,sdm630-tsens", "qcom,tsens-v2";
-+			reg = <0x010ae000 0x1000>, /* TM */
-+				  <0x010ad000 0x1000>; /* SROT */
-+			#qcom,sensors = <12>;
-+			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>,
-+					 <GIC_SPI 430 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "uplow", "critical";
-+			#thermal-sensor-cells = <1>;
-+		};
+-	soc {
+-		sdhci@c0c4000 {
+-			status = "okay";
++&blsp_i2c1 {
++	status = "okay";
+ 
+-			mmc-ddr-1_8v;
+-			/* SoMC Nile platform's eMMC doesn't support HS200 mode */
+-			mmc-hs400-1_8v;
+-		};
++	/* Synaptics touchscreen */
++};
+ 
+-		i2c@c175000 {
+-			status = "okay";
++&blsp_i2c2 {
++	status = "okay";
+ 
+-			/* Synaptics touchscreen */
+-		};
++	/* SMB1351 charger */
++};
+ 
+-		i2c@c176000 {
+-			status = "okay";
++/* I2C3, 4, 5, 7 and 8 are disabled on this board. */
+ 
+-			/* SMB1351 charger */
+-		};
++&blsp_i2c6 {
++	status = "okay";
+ 
+-		serial@c1af000 {
+-			status = "okay";
+-		};
++	/* NXP NFC */
++};
+ 
+-		/* I2C3, 4, 5, 7 and 8 are disabled on this board. */
++&blsp1_uart2 {
++	status = "okay";
++};
+ 
+-		i2c@c1b6000 {
+-			status = "okay";
++&blsp2_uart1 {
++	status = "okay";
++};
+ 
+-			/* NXP NFC */
+-		};
+-	};
++&sdhc_1 {
++	status = "okay";
 +
- 		tcsr_mutex_regs: syscon@1f40000 {
- 			compatible = "syscon";
- 			reg = <0x01f40000 0x20000>;
++	mmc-ddr-1_8v;
++	/* SoMC Nile platform's eMMC doesn't support HS200 mode */
++	mmc-hs400-1_8v;
+ };
 -- 
 2.27.0
 
