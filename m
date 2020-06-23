@@ -2,213 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A2D204C1E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 10:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9C6204C35
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 10:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731545AbgFWITP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 04:19:15 -0400
-Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:4488 "EHLO
-        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731158AbgFWITP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 04:19:15 -0400
-Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-IronPort-SDR: ZRmsZgvndMLKlaHYgf+qJD/49thRx3s73TfBWrx+DqKTmUHpwKUQKNuTooiaUqS9PwlHrCRV6r
- MDsF3Ur+0CBVWuWqfZd82RxcsMJwhSMOAkU2xSEibiYfblGe2hF7fHZdC+cgc/hNdS/ZsGEUGI
- wl/aKVu9h+7Qh/QJ/o9WFe5kYjq+scFieaixz3fJa4aTAGAvwjV0Fzkwl7G+hg+SNUgQXQ4OCK
- K/ZSc6/OtOogVSoledpNc1794Fa9bGBUZDOc5hjyf5Yk9Z1U7yEm47l9laczbBDdQRs1Q6ztuH
- ZWI=
-X-SBRS: 2.7
-X-MesageID: 21489538
-X-Ironport-Server: esa4.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.75,270,1589256000"; 
-   d="scan'208";a="21489538"
-Date:   Tue, 23 Jun 2020 10:19:03 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Anchal Agarwal <anchalag@amazon.com>
-CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
- hibernation]
-Message-ID: <20200623081903.GP735@Air-de-Roger>
-References: <7FD7505E-79AA-43F6-8D5F-7A2567F333AB@amazon.com>
- <20200604070548.GH1195@Air-de-Roger>
- <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200617083528.GW735@Air-de-Roger>
- <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200622083846.GF735@Air-de-Roger>
- <20200623004314.GA28586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        id S1731769AbgFWIUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 04:20:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731768AbgFWIUt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 04:20:49 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB266C061573;
+        Tue, 23 Jun 2020 01:20:49 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 136so146851pfv.3;
+        Tue, 23 Jun 2020 01:20:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=koP8iiq5V0iYubfxxOW3PAl1D6rfdr+0Xi18OnqYrhU=;
+        b=I56XCJ0vDD0cDoEgQpgYHW/BHpQ9bnklsZp6n/8/HDSB6VXansgA7Ue7eqljfBL0CZ
+         ski930bwgB9uUU9KZkYjXuugjccej3VJhJ6JT2/99TK8luqVQziBr0H02+qUgy3cCKNH
+         oKqh8sII74JNzA26dcHsRPDiPKRURQ5IBPIXy2PnpovyZ3BdjaN8A4c2URcacX//eNzm
+         jOpob1lDVgexe9gg13v4dQYnGzyYDNIDDId7fWtM3NdyWyBb5XoLdvfyGE6GGOBzB/yR
+         jK2ogsObfNR6Lf8XFxZKL3vijslvVwGg4HB51iPotTDaQsOJIUCfrnes06hF9T7aZHs2
+         WtPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=koP8iiq5V0iYubfxxOW3PAl1D6rfdr+0Xi18OnqYrhU=;
+        b=S2VTjisIZuYn/pFGU5DdboOe9LQbHGvYjCYLEA6HIiqYvoUDQfpTRx5jU9SnGef+M0
+         adIBCGSPzaKurb0iCvh25cV5PqoDHtJ8otRHfZEI+gWXdYQ+XQNOZ6Pt7reyjj1UJ2cE
+         RCn1KO2O6XsB33ImGfrSJOKllnVMQkvgElXpbyTM7L8zUEWvCEe9WvrBenFkIPaCDVFh
+         AjUOTWH3ysQL6dfaD9Y579udO20+1UjqK2Rx/aRuTwgjTv521cD5DbOdg7qWlD8mrwNJ
+         Tz2BDkB9gmnYog9sEaI7QFu5sc/gdAk+/aDu8eAYphDzf9uYKPkM6LFfaUmwOKb8Xu4S
+         OMww==
+X-Gm-Message-State: AOAM531vDRzSWt0rJ4qLxPwEPfEa6X6pskdbOvbKdiexYfegVuWpQeDh
+        d8oq989dpr0qKD/69OeVO20=
+X-Google-Smtp-Source: ABdhPJzax7O7TAjWcWEeKwyx1toVsaScBfLO1ubCoWtK/zQtkjSbtphT0GTTUg+j2reNUM1XLXYGSw==
+X-Received: by 2002:a63:5b07:: with SMTP id p7mr15989398pgb.250.1592900449076;
+        Tue, 23 Jun 2020 01:20:49 -0700 (PDT)
+Received: from localhost.localdomain (61-231-250-16.dynamic-ip.hinet.net. [61.231.250.16])
+        by smtp.googlemail.com with ESMTPSA id g4sm4136602pgn.64.2020.06.23.01.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 01:20:48 -0700 (PDT)
+From:   Crag Wang <crag0715@gmail.com>
+X-Google-Original-From: Crag Wang <crag_wang@dell.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     mathewk@chromium.org, mario.limonciello@dell.com,
+        Crag Wang <crag_wang@dell.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] power_supply: wilco_ec: Add permanent long life charging mode
+Date:   Tue, 23 Jun 2020 16:20:16 +0800
+Message-Id: <20200623082016.23188-1-crag_wang@dell.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200623004314.GA28586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
- AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 12:43:14AM +0000, Anchal Agarwal wrote:
-> On Mon, Jun 22, 2020 at 10:38:46AM +0200, Roger Pau Monné wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > 
-> > 
-> > 
-> > On Fri, Jun 19, 2020 at 11:43:12PM +0000, Anchal Agarwal wrote:
-> > > On Wed, Jun 17, 2020 at 10:35:28AM +0200, Roger Pau Monné wrote:
-> > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > >
-> > > >
-> > > >
-> > > > On Tue, Jun 16, 2020 at 09:49:25PM +0000, Anchal Agarwal wrote:
-> > > > > On Thu, Jun 04, 2020 at 09:05:48AM +0200, Roger Pau Monné wrote:
-> > > > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > > > > On Wed, Jun 03, 2020 at 11:33:52PM +0000, Agarwal, Anchal wrote:
-> > > > > > >  CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > > > > >     > +             xenbus_dev_error(dev, err, "Freezing timed out;"
-> > > > > > >     > +                              "the device may become inconsistent state");
-> > > > > > >
-> > > > > > >     Leaving the device in this state is quite bad, as it's in a closed
-> > > > > > >     state and with the queues frozen. You should make an attempt to
-> > > > > > >     restore things to a working state.
-> > > > > > >
-> > > > > > > You mean if backend closed after timeout? Is there a way to know that? I understand it's not good to
-> > > > > > > leave it in this state however, I am still trying to find if there is a good way to know if backend is still connected after timeout.
-> > > > > > > Hence the message " the device may become inconsistent state".  I didn't see a timeout not even once on my end so that's why
-> > > > > > > I may be looking for an alternate perspective here. may be need to thaw everything back intentionally is one thing I could think of.
-> > > > > >
-> > > > > > You can manually force this state, and then check that it will behave
-> > > > > > correctly. I would expect that on a failure to disconnect from the
-> > > > > > backend you should switch the frontend to the 'Init' state in order to
-> > > > > > try to reconnect to the backend when possible.
-> > > > > >
-> > > > > From what I understand forcing manually is, failing the freeze without
-> > > > > disconnect and try to revive the connection by unfreezing the
-> > > > > queues->reconnecting to backend [which never got diconnected]. May be even
-> > > > > tearing down things manually because I am not sure what state will frontend
-> > > > > see if backend fails to to disconnect at any point in time. I assumed connected.
-> > > > > Then again if its "CONNECTED" I may not need to tear down everything and start
-> > > > > from Initialising state because that may not work.
-> > > > >
-> > > > > So I am not so sure about backend's state so much, lets say if  xen_blkif_disconnect fail,
-> > > > > I don't see it getting handled in the backend then what will be backend's state?
-> > > > > Will it still switch xenbus state to 'Closed'? If not what will frontend see,
-> > > > > if it tries to read backend's state through xenbus_read_driver_state ?
-> > > > >
-> > > > > So the flow be like:
-> > > > > Front end marks XenbusStateClosing
-> > > > > Backend marks its state as XenbusStateClosing
-> > > > >     Frontend marks XenbusStateClosed
-> > > > >     Backend disconnects calls xen_blkif_disconnect
-> > > > >        Backend fails to disconnect, the above function returns EBUSY
-> > > > >        What will be state of backend here?
-> > > >
-> > > > Backend should stay in state 'Closing' then, until it can finish
-> > > > tearing down.
-> > > >
-> > > It disconnects the ring after switching to connected state too.
-> > > > >        Frontend did not tear down the rings if backend does not switches the
-> > > > >        state to 'Closed' in case of failure.
-> > > > >
-> > > > > If backend stays in CONNECTED state, then even if we mark it Initialised in frontend, backend
-> > > >
-> > > > Backend will stay in state 'Closing' I think.
-> > > >
-> > > > > won't be calling connect(). {From reading code in frontend_changed}
-> > > > > IMU, Initialising will fail since backend dev->state != XenbusStateClosed plus
-> > > > > we did not tear down anything so calling talk_to_blkback may not be needed
-> > > > >
-> > > > > Does that sound correct?
-> > > >
-> > > > I think switching to the initial state in order to try to attempt a
-> > > > reconnection would be our best bet here.
-> > > >
-> > > It does not seems to work correctly, I get hung tasks all over and all the
-> > > requests to filesystem gets stuck. Backend does shows the state as connected
-> > > after xenbus_dev_suspend fails but I think there may be something missing.
-> > > I don't seem to get IO interrupts thereafter i.e hitting the function blkif_interrupts.
-> > > I think just marking it initialised may not be the only thing.
-> > > Here is a short description of what I am trying to do:
-> > > So, on timeout:
-> > >     Switch XenBusState to "Initialized"
-> > >     unquiesce/unfreeze the queues and return
-> > >     mark info->connected = BLKIF_STATE_CONNECTED
-> > 
-> > If xenbus state is Initialized isn't it wrong to set info->connected
-> > == CONNECTED?
-> >
-> Yes, you are right earlier I was marking it explicitly but that was not right,
-> the connect path for blkfront will do that.
-> > You should tear down all the internal state (like a proper close)?
-> > 
-> Isn't that similar to disconnecting in the first place that failed during
-> freeze? Do you mean re-try to close but this time re-connect after close
-> basically do everything you would at "restore"?
+This is a long life mode for extended warranty battery, switching
+to a differnt mode selection is unavailable. The power charging rate
+is customized so that battery at work last longer.
 
-Last time I checked blkfront supported reconnections (ie: disconnect
-from a backend and connect again). I was assuming we could apply the
-same here on timeout, and just follow the same path where the frontend
-waits indefinitely for the backend to close and then attempts to
-reconnect.
+Signed-off-by: Crag Wang <crag_wang@dell.com>
+---
+ Documentation/ABI/testing/sysfs-class-power-wilco | 3 +++
+ drivers/power/supply/power_supply_sysfs.c         | 1 +
+ drivers/power/supply/wilco-charger.c              | 5 +++++
+ include/linux/power_supply.h                      | 1 +
+ 4 files changed, 10 insertions(+)
 
-> Also, I experimented with that and it works intermittently. I want to take a
-> step back on this issue and ask few questions here:
-> 1. Is fixing this recovery a blocker for me sending in a V2 version?
+diff --git a/Documentation/ABI/testing/sysfs-class-power-wilco b/Documentation/ABI/testing/sysfs-class-power-wilco
+index da1d6ffe5e3c..1c91b17b6fd4 100644
+--- a/Documentation/ABI/testing/sysfs-class-power-wilco
++++ b/Documentation/ABI/testing/sysfs-class-power-wilco
+@@ -14,6 +14,9 @@ Description:
+ 			Charging begins when level drops below
+ 			charge_control_start_threshold, and ceases when
+ 			level is above charge_control_end_threshold.
++		Permanent Long Life: Last longer battery life, this mode
++			is programmed once in the factory. Switching to a
++			different mode is unavailable.
+ 
+ What:		/sys/class/power_supply/wilco-charger/charge_control_start_threshold
+ Date:		April 2019
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index bc79560229b5..af3884015ad8 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -87,6 +87,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
+ 	[POWER_SUPPLY_CHARGE_TYPE_STANDARD]	= "Standard",
+ 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	= "Adaptive",
+ 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	= "Custom",
++	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	= "Permanent Long Life",
+ };
+ 
+ static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
+diff --git a/drivers/power/supply/wilco-charger.c b/drivers/power/supply/wilco-charger.c
+index b3c6d7cdd731..713c3018652f 100644
+--- a/drivers/power/supply/wilco-charger.c
++++ b/drivers/power/supply/wilco-charger.c
+@@ -27,6 +27,7 @@ enum charge_mode {
+ 	CHARGE_MODE_AC = 3,	/* Mostly AC use, used for Trickle */
+ 	CHARGE_MODE_AUTO = 4,	/* Used for Adaptive */
+ 	CHARGE_MODE_CUSTOM = 5,	/* Used for Custom */
++	CHARGE_MODE_LONGLIFE = 6, /* Used for Permanent Long Life */
+ };
+ 
+ #define CHARGE_LOWER_LIMIT_MIN	50
+@@ -48,6 +49,8 @@ static int psp_val_to_charge_mode(int psp_val)
+ 		return CHARGE_MODE_AUTO;
+ 	case POWER_SUPPLY_CHARGE_TYPE_CUSTOM:
+ 		return CHARGE_MODE_CUSTOM;
++	case POWER_SUPPLY_CHARGE_TYPE_LONGLIFE:
++		return CHARGE_MODE_LONGLIFE;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -67,6 +70,8 @@ static int charge_mode_to_psp_val(enum charge_mode mode)
+ 		return POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE;
+ 	case CHARGE_MODE_CUSTOM:
+ 		return POWER_SUPPLY_CHARGE_TYPE_CUSTOM;
++	case CHARGE_MODE_LONGLIFE:
++		return POWER_SUPPLY_CHARGE_TYPE_LONGLIFE;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index ac1345a48ad0..528a3eaa2320 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -48,6 +48,7 @@ enum {
+ 	POWER_SUPPLY_CHARGE_TYPE_STANDARD,	/* normal speed */
+ 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
+ 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
++	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
+ };
+ 
+ enum {
+-- 
+2.20.1
 
-At the end of day it's your feature. I would certainly prefer for it
-to work as good as possible, this being a recovery in case of failure
-just make sure it does something sane (ie: crash/close the frontend)
-and add a TODO note.
-
-> 2. In our 2-3 years of supporting this feature at large scale we haven't seen this issue
-> where backend fails to disconnect. What we are trying to do here is create a
-> hypothetical situation where we leave backend in Closing state and try and see how it
-> recovers. The reason why I think it "may not" occur and the timeout of 5HZ is
-> sufficient is because we haven't come across even a single use-case where it
-> caused hibernation to fail.
-> The reason why I think "it may" occur is if we are running a really memory
-> intensive workload and ring is busy and is unable to complete all the requests
-> in the given timeout. This is very unlikely though.
-
-As said above I would generally prefer for code to handle possible
-failures the best way, and hence I think here it would be nice to
-fallback to the normal disconnect path and just wait for the backend
-to close.
-
-You likely have this very well tuned to your own environment and
-workloads, since this will now be upstream others might have more
-contended systems where it could start to fail.
-
-> 3) Also, I do not think this may be straight forward to fix and expect
-> hibernation to work flawlessly in subsequent invocations. I am open to 
-> all suggestions.
-
-Right, adding a TODO would seem appropriate then.
-
-Roger.
