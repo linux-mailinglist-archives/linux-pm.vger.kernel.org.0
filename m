@@ -2,106 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F655204F0F
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 12:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55EB8204F6D
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 12:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732172AbgFWKdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 06:33:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731158AbgFWKdN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jun 2020 06:33:13 -0400
-Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4DB672072E;
-        Tue, 23 Jun 2020 10:33:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592908393;
-        bh=7wQI3EJ/wW63CXeUks2SdMxBsWFVW+i++WGKoe+xuH4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RMXumB3LOF0ID+gYZE58sAb4Kc4tTiXH9Y1OJpHUMxdbS19+pgqTUIUksM6gJKmxy
-         PlLoLuAHf1fJX7hWO0vXRtz6XeIvyBGwRwdcIMYxmvIxDYFubSgMnWJpW7fbHpu8WK
-         WIXupN7g+pFe4ohplPtoAOARu6rH+eANY2Z1yED4=
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.92)
-        (envelope-from <maz@kernel.org>)
-        id 1jngEp-005efD-Or; Tue, 23 Jun 2020 11:33:11 +0100
+        id S1732204AbgFWKoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 06:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732135AbgFWKog (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 06:44:36 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67141C061755
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 03:44:36 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id k1so8965196pls.2
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 03:44:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dqfTmGA2mr5owmX+JGgs4wffhJI7qn1ybWwfAl5Tutk=;
+        b=qEhagxofi4lJjgjFsYM/B4xrt5iSXZggcDW/kcsd+R9YlLkUfQ6qUaM9vbBGQchmRq
+         UKJPIpGbwvei4iG3Q2PHL2yOADHfnNxAvy+q+ZEL1N/ym8vu7FGmA3Mif+7VIpVKqB/A
+         UkwROGWtz2qkjpSJ3R7vXdhB30+TsJdvlPvi0630ubrDAfwhayEUYp7t0nX1GTOCIoKa
+         50x1AYl9qqHgwJtoVqgmR+L/7VkoFMLfsuP16aEg2CRfwQTfflF+JBY6KzfSJozQZJJO
+         mcoOR7vA98wtpPeKHaKdgEHntcZ7RS5iQjei36/YlU3tvaenW8Y36whnb2nlaF2JUUlm
+         rT9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dqfTmGA2mr5owmX+JGgs4wffhJI7qn1ybWwfAl5Tutk=;
+        b=P4eLsTwck9huq/xDvMe5Xll5jFfE+WakRI+OJL7veBy1gUWWf7vS1CRsqn4jGTiUPC
+         2wWHjYkXeoWjyA+lPSXCbMWNWzDVnsrgbJp9E7GwlvM9oYJ04SGLyORPR16vNx2I8TuV
+         R3DGAxqhUCbQdjbQTOcgnwGBTkihOvoNmKg0/OQ2cSPoRNUt5KAkNCOKNkf6oyDaIpXQ
+         khsDfcRTtFF98lhirGNfU+WMpxKFbqU46LZRi1FUPnWxzeRJwAkj4xG4qiBfFMW034+l
+         Q2ns8stHvQlxqnnUfDNFvTey0tFQL30KFR7ol97ZDMrGyrgfumsPmQxCJwARpX7uZOTi
+         kVBw==
+X-Gm-Message-State: AOAM5312Q4Lb0j+CYVa9+eB5DSoCeOsZliL6v/jjrNGaqdpUKeo0k6+m
+        0uFAJvZLDqtYlioux805N0+9+g==
+X-Google-Smtp-Source: ABdhPJx9+rNoGm24t+RpfH7bcHHY3qoa0VPMsj1T3NW/lZd6uiuTe2Ua9qxjs0tXPhyzFqgCwOhM4A==
+X-Received: by 2002:a17:90b:1292:: with SMTP id fw18mr21924791pjb.183.1592909075801;
+        Tue, 23 Jun 2020 03:44:35 -0700 (PDT)
+Received: from localhost ([122.172.111.76])
+        by smtp.gmail.com with ESMTPSA id j19sm16484355pfn.109.2020.06.23.03.44.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jun 2020 03:44:35 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 16:14:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     sboyd@kernel.org, georgi.djakov@linaro.org, saravanak@google.com,
+        mka@chromium.org, nm@ti.com, bjorn.andersson@linaro.org,
+        agross@kernel.org, rjw@rjwysocki.net,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dianders@chromium.org,
+        vincent.guittot@linaro.org, amit.kucheria@linaro.org,
+        lukasz.luba@arm.com, sudeep.holla@arm.com, smasetty@codeaurora.org
+Subject: Re: [PATCH v6 0/5] DDR/L3 Scaling support on SDM845 and SC7180 SoCs
+Message-ID: <20200623104433.ok3vepuc55m7bxoi@vireshk-i7>
+References: <20200622081649.27280-1-sibis@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 23 Jun 2020 11:33:11 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM / devfreq: rk3399_dmc: Fix kernel oops when
- rockchip,pmu is absent
-In-Reply-To: <7555251.hpBSmtosxn@diego>
-References: <20200613102435.1728299-1-maz@kernel.org>
- <3900410.KmKVo4a8Xk@diego> <5d8101c2c9f6c4b965641dadbaf837e8@kernel.org>
- <7555251.hpBSmtosxn@diego>
-User-Agent: Roundcube Webmail/1.4.5
-Message-ID: <4d623262e58f38fb466f5f58c22321b2@kernel.org>
-X-Sender: maz@kernel.org
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: heiko@sntech.de, enric.balletbo@collabora.com, myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200622081649.27280-1-sibis@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-06-23 09:55, Heiko Stübner wrote:
-> Am Montag, 22. Juni 2020, 17:07:52 CEST schrieb Marc Zyngier:
-
-[...]
-
->> maz@fine-girl:~$ sudo dtc -I dtb /sys/firmware/fdt 2>/dev/null | grep 
->> -A
->> 5 dmc
->> 	dmc {
->> 		u-boot,dm-pre-reloc;
->> 		compatible = "rockchip,rk3399-dmc";
->> 		devfreq-events = <0xc8>;
->> 
->> [followed by a ton of timings...]
->> 
->> It is definitely coming from u-boot (I don't provide any DTB 
->> otherwise,
->> and you can find the corresponding node and timings in the u-boot 
->> tree).
+On 22-06-20, 13:46, Sibi Sankar wrote:
+> This patch series aims to extend cpu based scaling support to L3/DDR on
+> SDM845 and SC7180 SoCs.
 > 
-> which is probably the source of the problem :-) .
+> Patches [1-2] - Blacklist SDM845 and SC7180 in cpufreq-dt-platdev
+> Patches [3-5] - Update bw levels based on cpu frequency change
 > 
-> I'm pretty sure the "reviewed" binding in the kernel doesn't match the
-> dt-nodes used in uboot.
+> V7:
+>  * Fixup comments for correctness [Matthias]
+>  * Initialize icc_scaling_enabled to false [Matthias]
+>  * Make use of the increased per line character limit [Matthias]
 
-and the driver doesn't match the binding either. Frankly, this is badly
-messed up.
+Applied. Thanks.
 
-> While u-boot these days syncs the main devicetrees from Linux, the 
-> memory
-> setup stuff is pretty specific to uboot (and lives in separate dtsi 
-> files).
-> 
-> And I guess you're the only one feeding uboot's dtb to Linux directly, 
-> hence
-> nobody else did encounter this before ;-) .
-
-I'm not "feeding" it directly. I'm using the expected DT distribution
-mechanism, which is the boot firmware. Nobody should ever have to 
-provide
-their own DT to the kernel.
-
-Thanks,
-
-         M. (starting to like ACPI more and more every day)
 -- 
-Jazz is not dead. It just smells funny...
+viresh
