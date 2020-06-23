@@ -2,149 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F302054F2
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 16:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C925E205592
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 17:13:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732846AbgFWOiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 10:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732858AbgFWOh6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 10:37:58 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF69C061798
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 07:37:57 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id y20so3485006wmi.2
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 07:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ceG/rp64xRAj8gur9y870c/+SKauz/Pvvf3Ek5gAYHE=;
-        b=S/38hRP9jJeEO0648j5i0HwQUkmAn8MPLasoGaNt8LdCbQqEVydbz8k0QMIB7TcSxT
-         mB8W7q1gDfv+vrDORU79pdT175xGSNJNn9FeFSOeCambF0o+fNWV7YZc6bTiG/1Z6IfR
-         QyqfeR3sUuTOxKqqFW+5Mj6QQ1oGWLVdX8LKSRdVg1scMMyLuhkobEB7qpI1w1w/qH7z
-         jwaDjR41jrisZougD+3Uuakf/CAy6jS5bQHpWHTAieha1OiW3LJqSFRQr/vLShLUiHPk
-         yPP9bihWulsfYdzcIcoqxokyu81EfkMggDs54t64ujxNzfIYZShzXVRQcjXTRd7mV3TJ
-         lmtg==
+        id S1732862AbgFWPNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 11:13:24 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39169 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732781AbgFWPNX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 11:13:23 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 18so2275993otv.6;
+        Tue, 23 Jun 2020 08:13:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ceG/rp64xRAj8gur9y870c/+SKauz/Pvvf3Ek5gAYHE=;
-        b=hqj0SJf1wmSiaZ/7EdWQ8UPO9s9kXICnAqFcXsuEU9v4+gednFe9BHmfVfZbFmFkV6
-         76kIBqocaA6apqqIRqrO73UM7f3g3yOO5dvTExJICXI1kMQY46+8VFpOiV2/fZCnqGQh
-         jBRI4wPNuIcqNb2Fwv9ZbBtuyxosQZ49hFTYwZ7MY2mtpysJuA/j0urbQExE/1FNha5u
-         97gEdwmBGXNNAQmL5dCh0CLWt4bFuc1g/lpNCFARqAUi1WhhB277YuQeeRCPctiY6zba
-         8WeW1xKDoFpFeQD1OlUMFoz3CawXoXFjsQMpBh8KZQpNqagj25FAk5HcHxNRDxbJ+qnn
-         W3pw==
-X-Gm-Message-State: AOAM530Irb/zTqbC/ScgfLx9o/MshqaBTEhmdYtmdRcsD1nOVjriIdNN
-        PJbq6nUOpMPPGOA6jWvQDpA7ew==
-X-Google-Smtp-Source: ABdhPJzFhA2lwUjrw8Uh+XlYz4CBl1VsesMxrJl8KjSj+B5PacC6wuAYbyLBKbmaRzqOKAPJJSOTSQ==
-X-Received: by 2002:a1c:9943:: with SMTP id b64mr24802648wme.102.1592923075430;
-        Tue, 23 Jun 2020 07:37:55 -0700 (PDT)
-Received: from [192.168.0.41] (lns-bzn-59-82-252-131-168.adsl.proxad.net. [82.252.131.168])
-        by smtp.googlemail.com with ESMTPSA id h14sm6949375wrt.36.2020.06.23.07.37.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2020 07:37:54 -0700 (PDT)
-Subject: Re: [PATCH v4 00/11] Stop monitoring disabled devices
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <Message-ID: <4493c0e4-51aa-3907-810c-74949ff27ca4@samsung.com>
- <20200528192051.28034-1-andrzej.p@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <9cbffad6-69e4-0b33-4640-fde7c4f6a6e7@linaro.org>
-Date:   Tue, 23 Jun 2020 16:37:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ti2WHwyTcE0aMHiiYFzjueBDRVS+U4KlIbhFdN8VMXU=;
+        b=iGmgqjDqcPQ82a4Z7uTO6IuW8wo/9tpJ9xvYQ/eJm7eBGTxNBYDDRlU+APNWHhrJAa
+         2E55B7iDqQReeL6ab0bNvymycfVOIX6g4s3iZbBNigEIWd98z7u2mrjS7M7W2UBBxxQw
+         U0q99z86joOwQX+q3tKcsTRcUyd3yooP10Tfj2AN3M1Kmu28U8t3Fj2g421YOydzMswn
+         VXpUQtS2grAMcSKHuMKgMImok5/rHiAG2Z/do2JK8AIEvT0HQzCXqjFC41Q8+C03iHXa
+         aB+omhvPxcBNbzwDnWEKt7qwgAMGaFG78ygbaX9K0y6vIN9sqVYzDPafSMYumAJ9ZFjR
+         BrtQ==
+X-Gm-Message-State: AOAM531OAdM1A4UtOqSr1uIbq5jNqJmo3I+ru5VvPsJuf8n99jSJ/OkQ
+        VgCXb/GO7YTUrhoonTK9K0iMbka5ry9VkHqGTjHyuA==
+X-Google-Smtp-Source: ABdhPJxVeEE74i8IgwTMNzoIpveKPQnYy9Uo13cXX+uwcXAFRqBXo+ELImH9t7I4+XNHDbLIlUBdHsBdOKiF4/JVsdw=
+X-Received: by 2002:a05:6830:10ca:: with SMTP id z10mr18171827oto.167.1592925202721;
+ Tue, 23 Jun 2020 08:13:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200528192051.28034-1-andrzej.p@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <cover.1592892767.git.yu.c.chen@intel.com> <55caab9c03a0d6c3c0a1f45294d6c274b73c954b.1592892767.git.yu.c.chen@intel.com>
+In-Reply-To: <55caab9c03a0d6c3c0a1f45294d6c274b73c954b.1592892767.git.yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 23 Jun 2020 17:13:11 +0200
+Message-ID: <CAJZ5v0gJqPX55HvGb7dn8dV5jr3-MPNQHTRbsYCN47zp07VhsQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2][v3] PM / s2idle: Clear _TIF_POLLING_NRFLAG before
+ suspend to idle
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jun 23, 2020 at 8:30 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Suspend to idle was found to not work on Goldmont CPU recently.
+> And the issue was triggered due to:
+>
+> 1. On Goldmont the CPU in idle can only be woken up via IPIs,
+>    not POLLING mode:
+>    Commit 08e237fa56a1 ("x86/cpu: Add workaround for MONITOR
+>    instruction erratum on Goldmont based CPUs")
+> 2. When the CPU is entering suspend to idle process, the
+>    _TIF_POLLING_NRFLAG is kept on, due to cpuidle_enter_s2idle()
+>    doesn't properly match call_cpuidle().
+> 3. Commit b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+>    makes use of _TIF_POLLING_NRFLAG to avoid sending IPIs to
+>    idle CPUs.
+> 4. As a result, some IPIs related functions might not work
+>    well during suspend to idle on Goldmont. For example, one
+>    suspected victim:
+>    tick_unfreeze() -> timekeeping_resume() -> hrtimers_resume()
+>    -> clock_was_set() -> on_each_cpu() might wait forever,
+>    because the IPIs will not be sent to the CPUs which are
+>    sleeping with _TIF_POLLING_NRFLAG set, and Goldmont CPU
+>    could not be woken up by only setting _TIF_NEED_RESCHED
+>    on the monitor address.
+>
+> Clear the _TIF_POLLING_NRFLAG flag before entering suspend to idle,
+> and let the driver's enter_s2idle() to decide whether to set
+> _TIF_POLLING_NRFLAG or not. So that to avoid the scenario described
+> above and keep the context consistent with before.
+>
+> Fixes: b2a02fc43a1f ("smp: Optimize send_call_function_single_ipi()")
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Cc: Len Brown <lenb@kernel.org>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
 
-Hi Andrzej,
+Applied (based on the previous discussion) with some subject and
+changelog edits.
 
+Thanks!
 
-On 28/05/2020 21:20, Andrzej Pietrasiewicz wrote:
-> There is already a reviewed v3 (not to be confused with RFC v3), which can
-> be considered for merging:
-> 
-> https://lore.kernel.org/linux-pm/20200423165705.13585-2-andrzej.p@collabora.com/
-> 
-> Let me cite Bartlomiej Zolnierkiewicz:
-> 
-> "I couldn't find the problems with the patch itself (no new issues
-> being introduced, all changes seem to be improvements over the current
-> situation).
-> 
-> Also the patch is not small but it also not that big and it mostly
-> removes the code:
-> 
-> 17 files changed, 105 insertions(+), 244 deletions(-)"
-
-
-Thanks for this nice cleanup. Given the series was tested, reviewed and
-acked, I would like to merge it as soon as possible.
-
-Can you send the V5 with the EXPORT_SYMBOL_GPL fixed ? So the series can
-enter the integration loop.
-
-Thanks
-
- -- Daniel
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> ---
+> v2: According to Peter's review, v1 is racy, if someone already
+>     set TIF_NEED_RESCHED this patch just clear POLLING and go to sleep.
+>     Check TIF_NEED_RESCHED before entering suspend to idle and
+>     adjust the naming to be consistent with call_cpuidle().
+>
+> v3: According to Rafael, it would be better to do the simplest fix
+>    first and then do the cleanup on top of it.
+> ---
+>  drivers/cpuidle/cpuidle.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index c149d9e20dfd..e092789187c6 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/clock.h>
+> +#include <linux/sched/idle.h>
+>  #include <linux/notifier.h>
+>  #include <linux/pm_qos.h>
+>  #include <linux/cpu.h>
+> @@ -186,7 +187,7 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+>          * be frozen safely.
+>          */
+>         index = find_deepest_state(drv, dev, U64_MAX, 0, true);
+> -       if (index > 0)
+> +       if (index > 0 && !current_clr_polling_and_test())
+>                 enter_s2idle_proper(drv, dev, index);
+>
+>         return index;
+> --
+> 2.17.1
+>
