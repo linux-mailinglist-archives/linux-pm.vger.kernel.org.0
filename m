@@ -2,145 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7FF205B80
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 21:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466DA205BCA
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 21:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733278AbgFWTLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 15:11:35 -0400
-Received: from mail-ej1-f41.google.com ([209.85.218.41]:45691 "EHLO
-        mail-ej1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733248AbgFWTLf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 15:11:35 -0400
-Received: by mail-ej1-f41.google.com with SMTP id a1so8698389ejg.12;
-        Tue, 23 Jun 2020 12:11:33 -0700 (PDT)
+        id S1733236AbgFWTaJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 15:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733220AbgFWTaJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 15:30:09 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4A9C061573
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 12:30:08 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id p3so15928pgh.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 12:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=An2GCL0W0GyW68DzsGiws/r+1TEGtw/wzHzCr8ezdkE=;
+        b=g1FSJR+LYV7sCD9nvr+Xd2iQsHcoVy+mcdoi53fhQAfO7LZnbIIIaG6GGhr+qO+S5e
+         rnasksoLpbFeeQgP+g4eqscvacgZTE0UtkCYv4LhrLJJCVPPfEY68ssqxXTIMsz25oRP
+         m4ZPWNPTBzAlIpd3+LOTtA/ZdYnuZXsSTL6BKrObojQTcsV0ROGiKsJvS3vfZ/5cEAhZ
+         vpuwVVLd38BpiQbVIVbqTmPU1PfLDEHnI+p1DiIyDCrYY8BzKtkpr/pVm3uf7G2TttN+
+         NGqBPRgmAka5vi676gLsWvHX8oLP8MwY2GTU+anxqkFmID88cT8hSwtPWbMfNOuxn3sp
+         jPBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=S6qzk+OKExXb2YpLZeuh1PmKG+c4jm0lpjuoeWwXFzk=;
-        b=r9kTTD97qkKFw+q1SPYr0Wmmq3KWGMmYl1o9LsR0k5H/dgQxF1Fj/AYaVCjMl0Xfhx
-         952UvgI6M34fyLhH+gGlkFq+u/PMO6TWDqrp/3vpXe75uggWJLtNzU2smIEt1MrgPRsR
-         2LpwPNKlxLPZ1zQAgqJ/O031v3TGNxGQYDFywEUx1p4Axdgl8olSmu3knmuhr9dDI0o/
-         XfLw/tjQCoOrBNndsTlkMuVBK1NnExcM8UQxWElMLIF9UZH9+zIgsBYtzyWyiky7jBeU
-         neE0PZ46Pqg0pkxQ5aM6CtRFI09dM5dNS9Mk4QCIRoNhymZ54j1MOxuf6kULC3Wwf0RY
-         QKzQ==
-X-Gm-Message-State: AOAM533o31B/eNTpEmWZdnSOEhqe09EvV7r9zil3N8T3FHhrEPQ6FM96
-        290/5Q5+lgkg0SAxtxMMxm0=
-X-Google-Smtp-Source: ABdhPJzL8paryXZaLIV+aJhyo9RYBnt+N7daGvK76KL9xSHh8GkcyzPYHf1WG9BUOVfCwW6i7BNwCg==
-X-Received: by 2002:a17:906:4cd0:: with SMTP id q16mr13306634ejt.418.1592939492855;
-        Tue, 23 Jun 2020 12:11:32 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.235])
-        by smtp.googlemail.com with ESMTPSA id a2sm4479503ejg.76.2020.06.23.12.11.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 23 Jun 2020 12:11:31 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 21:11:29 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Willy Wolff <willy.mh.wolff.ml@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
-Message-ID: <20200623191129.GA4171@kozik-lap>
-References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
- <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=An2GCL0W0GyW68DzsGiws/r+1TEGtw/wzHzCr8ezdkE=;
+        b=rAG8sUcd5yCu1WQA0k1+KH1vQryw+H4zYMV3qRuOARCEVfyXa9qOI6tZ62Tyqt9rBt
+         AukwgRR3mD3k3SJ+Pu32+OE04DlcSa5/OM06iQXC62rvSkRnuct9WJqjFXOKzrC4TS/t
+         5ZEXRCi+64beKxIFlx31dSi1sI3Oc0RWo2l22t+u/rwV25L9ORiNkyo9XifF36tOKB5I
+         6uAQQyGiCcC/UTQcajYt/wkXkLj0kuvoKNvqN2/kFd8FUWR4M3wa4oRfrev3zv94zFM8
+         qmmC/RJ5KCMFyqA/rcKrDdXMHERnRXxQKuCumV+J/8i4c9+ji60lXOlXg/e6+pgP9YEe
+         /fTg==
+X-Gm-Message-State: AOAM532QAWbMAu3LHf+/D78rWpWAo4NtG/Q/nVsaNZk6l2FjoHWMH85R
+        oCL557mkj5iHjvJoRp5w0KcqRb7IApo=
+X-Google-Smtp-Source: ABdhPJzWxzRK5UbLTDiEfzzi1lJah/rkwCE6pACY3txg4/gpi/1jC6TL7NMRQ/+vHV6CejYJHDjIaw==
+X-Received: by 2002:aa7:8298:: with SMTP id s24mr3974740pfm.21.1592940607616;
+        Tue, 23 Jun 2020 12:30:07 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s30sm14643707pgn.34.2020.06.23.12.30.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 12:30:06 -0700 (PDT)
+Message-ID: <5ef2583e.1c69fb81.6acae.b7b9@mx.google.com>
+Date:   Tue, 23 Jun 2020 12:30:06 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.8-rc2-8-g43bad67922e1
+Subject: pm/testing baseline: 43 runs, 1 regressions (v5.8-rc2-8-g43bad67922e1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 09:02:38PM +0200, Krzysztof Kozlowski wrote:
-> On Tue, 23 Jun 2020 at 18:47, Willy Wolff <willy.mh.wolff.ml@gmail.com> wrote:
-> >
-> > Hi everybody,
-> >
-> > Is DVFS for memory bus really working on Odroid XU3/4 board?
-> > Using a simple microbenchmark that is doing only memory accesses, memory DVFS
-> > seems to not working properly:
-> >
-> > The microbenchmark is doing pointer chasing by following index in an array.
-> > Indices in the array are set to follow a random pattern (cutting prefetcher),
-> > and forcing RAM access.
-> >
-> > git clone https://github.com/wwilly/benchmark.git \
-> >   && cd benchmark \
-> >   && source env.sh \
-> >   && ./bench_build.sh \
-> >   && bash source/scripts/test_dvfs_mem.sh
-> >
-> > Python 3, cmake and sudo rights are required.
-> >
-> > Results:
-> > DVFS CPU with performance governor
-> > mem_gov = simple_ondemand at 165000000 Hz in idle, should be bumped when the
-> > benchmark is running.
-> > - on the LITTLE cluster it takes 4.74308 s to run (683.004 c per memory access),
-> > - on the big cluster it takes 4.76556 s to run (980.343 c per moemory access).
-> >
-> > While forcing DVFS memory bus to use performance governor,
-> > mem_gov = performance at 825000000 Hz in idle,
-> > - on the LITTLE cluster it takes 1.1451 s to run (164.894 c per memory access),
-> > - on the big cluster it takes 1.18448 s to run (243.664 c per memory access).
-> >
-> > The kernel used is the last 5.7.5 stable with default exynos_defconfig.
-> 
-> Thanks for the report. Few thoughts:
-> 1. What trans_stat are saying? Except DMC driver you can also check
-> all other devfreq devices (e.g. wcore) - maybe the devfreq events
-> (nocp) are not properly assigned?
-> 2. Try running the measurement for ~1 minutes or longer. The counters
-> might have some delay (which would require probably fixing but the
-> point is to narrow the problem).
-> 3. What do you understand by "mem_gov"? Which device is it?
+pm/testing baseline: 43 runs, 1 regressions (v5.8-rc2-8-g43bad67922e1)
 
-+Cc Lukasz who was working on this.
+Regressions Summary
+-------------------
 
-I just run memtester and more-or-less ondemand works (at least ramps
-up):
-
-Before:
-/sys/class/devfreq/10c20000.memory-controller$ cat trans_stat
-     From  :   To
-           : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
-* 165000000:         0         0         0         0         0         0         0         0   1795950
-  206000000:         1         0         0         0         0         0         0         0      4770
-  275000000:         0         1         0         0         0         0         0         0     15540
-  413000000:         0         0         1         0         0         0         0         0     20780
-  543000000:         0         0         0         1         0         0         0         1     10760
-  633000000:         0         0         0         0         2         0         0         0     10310
-  728000000:         0         0         0         0         0         0         0         0         0
-  825000000:         0         0         0         0         0         2         0         0     25920
-Total transition : 9
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
 
 
-$ sudo memtester 1G
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc2=
+-8-g43bad67922e1/plan/baseline/
 
-During memtester:
-/sys/class/devfreq/10c20000.memory-controller$ cat trans_stat
-     From  :   To
-           : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
-  165000000:         0         0         0         0         0         0         0         1   1801490
-  206000000:         1         0         0         0         0         0         0         0      4770
-  275000000:         0         1         0         0         0         0         0         0     15540
-  413000000:         0         0         1         0         0         0         0         0     20780
-  543000000:         0         0         0         1         0         0         0         2     11090
-  633000000:         0         0         0         0         3         0         0         0     17210
-  728000000:         0         0         0         0         0         0         0         0         0
-* 825000000:         0         0         0         0         0         3         0         0    169020
-Total transition : 13
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.8-rc2-8-g43bad67922e1
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      43bad67922e11898a43e62c64775f2a8675039b0 =
 
-However after killing memtester it stays at 633 MHz for very long time
-and does not slow down. This is indeed weird...
 
-Best regards,
-Krzysztof
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef24f50cd4ea9a17a97bf27
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc2-8-g43bad67=
+922e1/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech=
+-ac.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc2-8-g43bad67=
+922e1/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech=
+-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5ef24f50cd4ea9a=
+17a97bf2c
+      new failure (last pass: v5.8-rc2)
+      2 lines =20
