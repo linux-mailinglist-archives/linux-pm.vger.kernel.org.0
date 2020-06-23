@@ -2,125 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E19AD204DE4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 11:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F655204F0F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 12:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731921AbgFWJZm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 05:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731919AbgFWJZl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 05:25:41 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE7C061573
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 02:25:41 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id u26so1803702wmn.1
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 02:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=q25Robvc8p0VCT45Ku6+CqjX7ikyGj3nKC2Rkm2Sa7U=;
-        b=MbtT92jRqhblgP01XYQ289lWx/8/mAZpF2odAygIsMJx7tzVhKf77HPio8ytt2Nlrj
-         mz5Hd4SfeetgCbA7EMe00zMQnfEt1VnV895LdA33HSMDUUOhUIvqmY8Baws3UdibTvA6
-         Htnjr127Ypdcinq7hAOrpTvgfRiWXrgmo+DATS8V0nsXZRbjyjq0R3I2H/NzzFQ3Qp+g
-         tkJgvtIm44r4BqDzPXQwuKHCHw7uGgia3CYyzKlkG6g0jbtx3gIplFyjg/or6P3+F7ng
-         yY2DOK4V1zSG0QoAcANXRGjw3nZSAqiNLi/B+R2QuoBPixfWCoBJRUVb3fF0h0BhgInm
-         Sn+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q25Robvc8p0VCT45Ku6+CqjX7ikyGj3nKC2Rkm2Sa7U=;
-        b=uG56MVHijqy4HlQArBKM3jH3MX0NggmGz+Y+3CaymZJUq+aR3W5FTqrSUzBlTiwHIH
-         FSRUKIEsfiVvjmzC1CDQWAhguddcNfC5RVPDrvK+H6uDo3LwKzCwmHFpFt8E4WzTTb6H
-         UwdnajU4TM3tmWShRFnTCqLWH/T2VpwzLgH8MLItDG+h4q5Gu3xeCxmZEwCSjeFq0tDN
-         95rGjzHeq9DE6AsjUb10k/End+KTcp1kqr2b/Kuy+hQ8vGeHcFsl+bw5BCoWhAxcYdWF
-         F3h+aAF+etNrSluQAzmNHHC+TZOP2RKAn9Q4SmT12uHuFMtlx8rnQOdCc+IG3+B2AZzx
-         PEGg==
-X-Gm-Message-State: AOAM530GKIuesZYEtdnUGHjCLsxrixLzeseRLy4sUlrOOw70kpjRyXpL
-        42LFMtO1v+8JU1SBT58kD5mL0w==
-X-Google-Smtp-Source: ABdhPJyl/Wvp1EmPvPKbYZpgmTNv8myFw0amWQE5G3nU/EjHi1cPOLHWOuSUY3bGl4PIoPk41iA8jw==
-X-Received: by 2002:a1c:9896:: with SMTP id a144mr22578733wme.75.1592904340254;
-        Tue, 23 Jun 2020 02:25:40 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id u20sm2789618wmc.44.2020.06.23.02.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 02:25:39 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 10:25:36 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     rjw@rjwysocki.net, rafael@kernel.org, viresh.kumar@linaro.org,
-        arnd@arndb.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, kernel-team@android.com,
-        tkjos@google.com, adharmap@codeaurora.org, lkp@lists.01.org
-Subject: Re: [cpufreq] d83f959b5e:
- kmsg.cpufreq:cpufreq_online:Failed_to_initialize_policy_for_cpu:#(-#)
-Message-ID: <20200623092536.GA52234@google.com>
-References: <20200615165554.228063-3-qperret@google.com>
- <20200622005457.GI5535@shao2-debian>
+        id S1732172AbgFWKdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 06:33:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55794 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731158AbgFWKdN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 23 Jun 2020 06:33:13 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DB672072E;
+        Tue, 23 Jun 2020 10:33:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592908393;
+        bh=7wQI3EJ/wW63CXeUks2SdMxBsWFVW+i++WGKoe+xuH4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RMXumB3LOF0ID+gYZE58sAb4Kc4tTiXH9Y1OJpHUMxdbS19+pgqTUIUksM6gJKmxy
+         PlLoLuAHf1fJX7hWO0vXRtz6XeIvyBGwRwdcIMYxmvIxDYFubSgMnWJpW7fbHpu8WK
+         WIXupN7g+pFe4ohplPtoAOARu6rH+eANY2Z1yED4=
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jngEp-005efD-Or; Tue, 23 Jun 2020 11:33:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200622005457.GI5535@shao2-debian>
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Tue, 23 Jun 2020 11:33:11 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PM / devfreq: rk3399_dmc: Fix kernel oops when
+ rockchip,pmu is absent
+In-Reply-To: <7555251.hpBSmtosxn@diego>
+References: <20200613102435.1728299-1-maz@kernel.org>
+ <3900410.KmKVo4a8Xk@diego> <5d8101c2c9f6c4b965641dadbaf837e8@kernel.org>
+ <7555251.hpBSmtosxn@diego>
+User-Agent: Roundcube Webmail/1.4.5
+Message-ID: <4d623262e58f38fb466f5f58c22321b2@kernel.org>
+X-Sender: maz@kernel.org
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: heiko@sntech.de, enric.balletbo@collabora.com, myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 2020-06-23 09:55, Heiko Stübner wrote:
+> Am Montag, 22. Juni 2020, 17:07:52 CEST schrieb Marc Zyngier:
 
-Thanks for the report.
+[...]
 
-On Monday 22 Jun 2020 at 08:54:57 (+0800), kernel test robot wrote:
-> Greeting,
+>> maz@fine-girl:~$ sudo dtc -I dtb /sys/firmware/fdt 2>/dev/null | grep 
+>> -A
+>> 5 dmc
+>> 	dmc {
+>> 		u-boot,dm-pre-reloc;
+>> 		compatible = "rockchip,rk3399-dmc";
+>> 		devfreq-events = <0xc8>;
+>> 
+>> [followed by a ton of timings...]
+>> 
+>> It is definitely coming from u-boot (I don't provide any DTB 
+>> otherwise,
+>> and you can find the corresponding node and timings in the u-boot 
+>> tree).
 > 
-> FYI, we noticed the following commit (built with gcc-9):
+> which is probably the source of the problem :-) .
 > 
-> commit: d83f959b5e7a6378a4afbff23de2a2d064d95749 ("[PATCH 2/2] cpufreq: Specify default governor on command line")
-> url: https://github.com/0day-ci/linux/commits/Quentin-Perret/cpufreq-Specify-the-default-governor-on-command-line/20200616-005920
-> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
-> 
-> in testcase: kernel-selftests
-> with following parameters:
-> 
-> 	group: kselftests-x86
-> 	ucode: 0xdc
-> 
-> test-description: The kernel contains a set of "self tests" under the tools/testing/selftests/ directory. These are intended to be small unit tests to exercise individual code paths in the kernel.
-> test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
-> 
-> 
-> on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz with 16G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <rong.a.chen@intel.com>
-> 
-> 
-> 
-> [    8.715369] intel_pstate: Intel P-state driver initializing
-> [    8.721146] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 0 (-61)
-> [    8.728900] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 1 (-61)
-> [    8.736615] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 2 (-61)
-> [    8.744400] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 3 (-61)
-> [    8.752222] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 4 (-61)
-> [    8.760010] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 5 (-61)
-> [    8.768077] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 6 (-61)
-> [    8.775891] cpufreq: cpufreq_online: Failed to initialize policy for cpu: 7 (-61)
+> I'm pretty sure the "reviewed" binding in the kernel doesn't match the
+> dt-nodes used in uboot.
 
-That, I think, is because of the issue I reported here:
+and the driver doesn't match the binding either. Frankly, this is badly
+messed up.
 
-    https://lore.kernel.org/lkml/20200615174141.GA235811@google.com/
+> While u-boot these days syncs the main devicetrees from Linux, the 
+> memory
+> setup stuff is pretty specific to uboot (and lives in separate dtsi 
+> files).
+> 
+> And I guess you're the only one feeding uboot's dtb to Linux directly, 
+> hence
+> nobody else did encounter this before ;-) .
 
-The v2 (to be posted shortly) will address this.
+I'm not "feeding" it directly. I'm using the expected DT distribution
+mechanism, which is the boot firmware. Nobody should ever have to 
+provide
+their own DT to the kernel.
 
 Thanks,
-Quentin
+
+         M. (starting to like ACPI more and more every day)
+-- 
+Jazz is not dead. It just smells funny...
