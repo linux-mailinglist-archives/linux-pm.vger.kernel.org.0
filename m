@@ -2,124 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466DA205BCA
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 21:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0AC2068A4
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 01:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733236AbgFWTaJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 15:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S2387636AbgFWXs5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 19:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733220AbgFWTaJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 15:30:09 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4A9C061573
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 12:30:08 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id p3so15928pgh.3
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 12:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=An2GCL0W0GyW68DzsGiws/r+1TEGtw/wzHzCr8ezdkE=;
-        b=g1FSJR+LYV7sCD9nvr+Xd2iQsHcoVy+mcdoi53fhQAfO7LZnbIIIaG6GGhr+qO+S5e
-         rnasksoLpbFeeQgP+g4eqscvacgZTE0UtkCYv4LhrLJJCVPPfEY68ssqxXTIMsz25oRP
-         m4ZPWNPTBzAlIpd3+LOTtA/ZdYnuZXsSTL6BKrObojQTcsV0ROGiKsJvS3vfZ/5cEAhZ
-         vpuwVVLd38BpiQbVIVbqTmPU1PfLDEHnI+p1DiIyDCrYY8BzKtkpr/pVm3uf7G2TttN+
-         NGqBPRgmAka5vi676gLsWvHX8oLP8MwY2GTU+anxqkFmID88cT8hSwtPWbMfNOuxn3sp
-         jPBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=An2GCL0W0GyW68DzsGiws/r+1TEGtw/wzHzCr8ezdkE=;
-        b=rAG8sUcd5yCu1WQA0k1+KH1vQryw+H4zYMV3qRuOARCEVfyXa9qOI6tZ62Tyqt9rBt
-         AukwgRR3mD3k3SJ+Pu32+OE04DlcSa5/OM06iQXC62rvSkRnuct9WJqjFXOKzrC4TS/t
-         5ZEXRCi+64beKxIFlx31dSi1sI3Oc0RWo2l22t+u/rwV25L9ORiNkyo9XifF36tOKB5I
-         6uAQQyGiCcC/UTQcajYt/wkXkLj0kuvoKNvqN2/kFd8FUWR4M3wa4oRfrev3zv94zFM8
-         qmmC/RJ5KCMFyqA/rcKrDdXMHERnRXxQKuCumV+J/8i4c9+ji60lXOlXg/e6+pgP9YEe
-         /fTg==
-X-Gm-Message-State: AOAM532QAWbMAu3LHf+/D78rWpWAo4NtG/Q/nVsaNZk6l2FjoHWMH85R
-        oCL557mkj5iHjvJoRp5w0KcqRb7IApo=
-X-Google-Smtp-Source: ABdhPJzWxzRK5UbLTDiEfzzi1lJah/rkwCE6pACY3txg4/gpi/1jC6TL7NMRQ/+vHV6CejYJHDjIaw==
-X-Received: by 2002:aa7:8298:: with SMTP id s24mr3974740pfm.21.1592940607616;
-        Tue, 23 Jun 2020 12:30:07 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s30sm14643707pgn.34.2020.06.23.12.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 12:30:06 -0700 (PDT)
-Message-ID: <5ef2583e.1c69fb81.6acae.b7b9@mx.google.com>
-Date:   Tue, 23 Jun 2020 12:30:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S2387520AbgFWXs5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 19:48:57 -0400
+X-Greylist: delayed 385 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 23 Jun 2020 16:48:56 PDT
+Received: from mail.klausen.dk (mail.klausen.dk [IPv6:2001:470:1f0b:1730::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9142CC061573;
+        Tue, 23 Jun 2020 16:48:56 -0700 (PDT)
+Subject: Re: [PATCH v13 1/4] battery: Add the battery hooking API
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=klausen.dk; s=dkim;
+        t=1592955747;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4g5w63uD1aXz3cObU8Y1okQo2GDDE+cBxkna1MnTOqQ=;
+        b=nKLcQnci93IxtvDZQUO5UhWuybhxYljcwchzOEd9aJXluuHbT1F1cJNocCeYKSVaYtqoss
+        vJbvFhqJozN/8h4GvzdkfSbjLeb88p4PYTFEsy5NWxW4KaVILqzTspWUyeMpTG3k0u4gAk
+        r0e6xzzpT3cEq7GRmsb0UEirrrU8Rd0=
+To:     Ognjen Galic <smclt30p@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Lv Zheng <lv.zheng@intel.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devel@acpica.org, Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        ibm-acpi-devel@lists.sourceforge.net,
+        Linux PM <linux-pm@vger.kernel.org>,
+        =?UTF-8?Q?Christoph_B=c3=b6hmwalder?= <christoph@boehmwalder.at>,
+        Kevin Locke <kevin@kevinlocke.name>
+References: <20180207145813.icmv6rwemyejhxbk@thinkpad>
+From:   Kristian Klausen <kristian@klausen.dk>
+Message-ID: <2270b8c7-beec-5ab6-f8b7-5ec41751c699@klausen.dk>
+Date:   Wed, 24 Jun 2020 01:42:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.8-rc2-8-g43bad67922e1
-Subject: pm/testing baseline: 43 runs, 1 regressions (v5.8-rc2-8-g43bad67922e1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20180207145813.icmv6rwemyejhxbk@thinkpad>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 43 runs, 1 regressions (v5.8-rc2-8-g43bad67922e1)
+On 07.02.2018 15.58, Ognjen Galic wrote:
+> This is a patch that implements a generic hooking API for the
+> generic ACPI battery driver.
+>
+> With this new generic API, drivers can expose platform specific
+> behaviour via sysfs attributes in /sys/class/power_supply/BATn/
+> in a generic way.
+>
+> A perfect example of the need for this API are Lenovo ThinkPads.
+>
+> Lenovo ThinkPads have a ACPI extension that allows the setting of
+> start and stop charge thresholds in the EC and battery firmware
+> via ACPI. The thinkpad_acpi module can use this API to expose
+> sysfs attributes that it controls inside the ACPI battery driver
+> sysfs tree, under /sys/class/power_supply/BATN/.
+>
+> The file drivers/acpi/battery.h has been moved to
+> include/acpi/battery.h and the includes inside ac.c, sbs.c, and
+> battery.c have been adjusted to reflect that.
+>
+> When drivers hooks into the API, the API calls add_battery() for
+> each battery in the system that passes it a acpi_battery
+> struct. Then, the drivers can use device_create_file() to create
+> new sysfs attributes with that struct and identify the batteries
+> for per-battery attributes.
 
-Regressions Summary
--------------------
+Hi
 
-platform                     | arch  | lab          | compiler | defconfig =
-| results
------------------------------+-------+--------------+----------+-----------=
-+--------
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
-| 4/5    =
+I did that, when I implemented charge threshold support for ASUS 
+laptops[1][2].
 
+It works very well but I can't control the threshold with udev (also 
+reported by another user here[3]). So I did a bit of digging and the 
+doc[4] states: "If attributes are added after the device is registered, 
+then userspace won’t get notified and userspace will not know about the 
+new attributes.", which seems to be the way the current code works:
+power_supply_register_no_ws is called[5] and if it success all the hooks 
+are run.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc2=
--8-g43bad67922e1/plan/baseline/
+Looking at the code I'm not sure there is a easy way to fix it, do you 
+have any good ideas?
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-rc2-8-g43bad67922e1
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      43bad67922e11898a43e62c64775f2a8675039b0 =
+Best
+Kristian Klausen
 
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d507a54f5865d8dcbdd16c66a1a2da15640878ca
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7973353e92ee1e7ca3b2eb361a4b7cb66c92abee
+[3] 
+https://www.reddit.com/r/linuxhardware/comments/g8kpee/psa_kernel_54_added_the_ability_to_set_a_battery/fp8bwgu/
+[4] 
+https://www.kernel.org/doc/html/v5.8-rc2/driver-api/driver-model/device.html
+[5] 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/acpi/battery.c?id=8c3f6993c221cc1a2588046e3ff32d64580396b7#n854
 
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-| results
------------------------------+-------+--------------+----------+-----------=
-+--------
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
-| 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef24f50cd4ea9a17a97bf27
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc2-8-g43bad67=
-922e1/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech=
--ac.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc2-8-g43bad67=
-922e1/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech=
--ac.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5ef24f50cd4ea9a=
-17a97bf2c
-      new failure (last pass: v5.8-rc2)
-      2 lines =20
+>
+> Signed-off-by: Ognjen Galic <smclt30p@gmail.com>
