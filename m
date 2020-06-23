@@ -2,41 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 766BB2048FD
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 07:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8172204907
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 07:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728275AbgFWFMk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 01:12:40 -0400
-Received: from mga02.intel.com ([134.134.136.20]:8579 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728579AbgFWFMj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 23 Jun 2020 01:12:39 -0400
-IronPort-SDR: XmhRzz8+TSgV2F7siaLj04i0VxG1JKRU4ZMSsxEZVnOH5sSuFJ/IXQG4IVPCvf16yxv62JgKC4
- Z1Ijqlityzyg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9660"; a="132378788"
-X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
-   d="scan'208";a="132378788"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2020 22:12:38 -0700
-IronPort-SDR: /GR5SaCIvXV+LEaMY3PmkvvZujnIu1VD9y1RZcWXbSaWhvem7rDc3sIfZNFNyNsoOecxbZJUE1
- 6v/lvRS/MpxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,270,1589266800"; 
-   d="scan'208";a="311165676"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.255.228.38])
-  by fmsmga002.fm.intel.com with ESMTP; 22 Jun 2020 22:12:37 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH 2/2] cpufreq: intel_pstate: Allow raw energy performance preference value
-Date:   Mon, 22 Jun 2020 22:12:33 -0700
-Message-Id: <20200623051233.1419218-2-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200623051233.1419218-1-srinivas.pandruvada@linux.intel.com>
-References: <20200623051233.1419218-1-srinivas.pandruvada@linux.intel.com>
+        id S1730081AbgFWFPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 01:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726252AbgFWFPS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 01:15:18 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B765C061573
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id f9so704287pfn.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3phtSZElnKhAKAsJ0GkPo5emlqkKBgqm+SMemI7XzZE=;
+        b=yTd34Wi8nuuX1GjOPwJKiPvV3apHnv1PBY5cE3Txgjq7ZhCA5x5CVfF/3zOXQLo+RA
+         UNoQkrET3GF3kqKwRgcoppDliQzeTcK5pE8JNYIku0KWis95i5MicFo/DyTaGlMENdEY
+         OFOz6j8HmYJpWGOqHNoD3yOZh32eNXcWVEGB/n87Lt2YBNoQ3uq5eoV3lQCNVvD/6zvb
+         a+tOvufVyKXv4E1Jb7Jum/3U8uqBsq1WG1sfdom6B0K1GUaIJcK3oShUwQo1MLjAcAZ5
+         3paxC0VY98zUkGERCN58qkatsvsXvocT/RKh02WsluOPObokqUMkHKtqRAP/q3VBhzu3
+         RO2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3phtSZElnKhAKAsJ0GkPo5emlqkKBgqm+SMemI7XzZE=;
+        b=mNgEvk+NYXn7tXAikF6cFZBBxWU/DIiqEXCM5OU+xQE34L7Q4iyOM+32yz2bYsnfsF
+         VVV/rWruMZUmYLMUe35wXjN4jvV4bG/x8gcLfeIECA/0xjBx0vFLysLVYFWsiBH4iCKs
+         Sii5M0BCRss6bhUyUPkwDC+2AoTO80i21mNeZre1SJLwyJDJXbjRZZvjp6ObtQ6W0hGT
+         7mwZyrS1hB0/+1sqWtdtj55LqFzOb2kaO6pY4eNzeCj7YRHt0ARFltI30qFjNk3l0Tmv
+         OdfNScZaFGU7pUCaao0h30t4UoF97WCwxINUlNW9FK2hCV2CIOI+JPauSmmnvGTf5eED
+         pBKg==
+X-Gm-Message-State: AOAM531+oVhu8Iji72Zg9p4Q/iWVHzmDnBDarq9aQhuV46pVq+CbKjZ4
+        OqmWsyVf1OEXk8/YRNA94M7Pqg==
+X-Google-Smtp-Source: ABdhPJxDJmmDQujdEzvEsZ71dYVPCTHV1QA8cJuQCCak03eaFvWu2zff1mtJNhHPc1SW3zuBJ0uUaw==
+X-Received: by 2002:aa7:9184:: with SMTP id x4mr23054383pfa.271.1592889317007;
+        Mon, 22 Jun 2020 22:15:17 -0700 (PDT)
+Received: from localhost ([122.172.111.76])
+        by smtp.gmail.com with ESMTPSA id o1sm16562358pfu.70.2020.06.22.22.15.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jun 2020 22:15:16 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: cppc: Reorder code and remove apply_hisi_workaround variable
+Date:   Tue, 23 Jun 2020 10:45:11 +0530
+Message-Id: <b217dc843935e3f86584a73893d330fd99a4e472.1592889188.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -44,204 +65,147 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently using attribute "energy_performance_preference", user space can
-write one of the four per-defined preference string. These preference
-strings gets mapped to a hard-coded Energy-Performance Preference (EPP) or
-Energy-Performance Bias (EPB) knob.
+With the current approach we have an extra check in the
+cppc_cpufreq_get_rate() callback, which checks if hisilicon's get rate
+implementation should be used instead. While it works fine, the approach
+isn't very straight forward, over that we have an extra check in the
+routine.
 
-These four values supposed to cover broad spectrum of use cases, but they
-are not uniformly distributed in the range. There are number of cases,
-where this is not enough. For example:
+Rearrange code and update the cpufreq driver's get() callback pointer
+directly for the hisilicon case. This gets the extra variable is removed
+and the extra check isn't required anymore as well.
 
-Suppose user wants more performance when connected to AC. Instead of using
-default "balance performance", the "performance" setting can be used. This
-changes EPP value from 0x80 to 0x00. But setting EPP to 0, results in
-electrical and thermal issues on some platforms. This results in CPU to do
-aggressive throttling, which causes drop in performance. But some value
-between 0x80 and 0x00 results in better performance. But that value can't
-be fixed as the power curve is not linear. In some cases just changing EPP
-from 0x80 to 0x75 is enough to get significant performance gain.
-
-Similarly on battery EPP 0x80 can be very aggressive in power consumption.
-But picking up the next choice "balance power" results in too much loss
-of performance, which cause bad user experience in use case like "Google
-Hangout". It was observed that some value between these two EPP is
-optimal.
-
-This change allows fine grain EPP tuning for platform like Chromebooks.
-Here based on the product and use cases, different EPP values can be set.
-This change is similar to the change done for:
-/sys/devices/system/cpu/cpu*/power/energy_perf_bias
-where user has choice to write a predefined string or raw value.
-
-The change itself is trivial. When user preference doesn't match
-predefined string preferences and value is an unsigned integer and in
-range, use that value for EPP/EPB.
-
-Suggested-by: Len Brown <lenb@kernel.org>
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- Documentation/admin-guide/pm/intel_pstate.rst |  4 +-
- drivers/cpufreq/intel_pstate.c                | 63 ++++++++++++++++---
- 2 files changed, 56 insertions(+), 11 deletions(-)
+Xiongfeng Wang, will it be possible for you to give this a try as I
+can't really test it locally.
 
-diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
-index 939bfdc53f4f..1f4ef187f8a5 100644
---- a/Documentation/admin-guide/pm/intel_pstate.rst
-+++ b/Documentation/admin-guide/pm/intel_pstate.rst
-@@ -561,7 +561,9 @@ somewhere between the two extremes:
- Strings written to the ``energy_performance_preference`` attribute are
- internally translated to integer values written to the processor's
- Energy-Performance Preference (EPP) knob (if supported) or its
--Energy-Performance Bias (EPB) knob.
-+Energy-Performance Bias (EPB) knob. It is also possible to write a positive
-+integer value between 0 to 255 for EPP or 0 to 15 for EPB. Writing Invalid
-+value results in error.
- 
- [Note that tasks may by migrated from one CPU to another by the scheduler's
- load-balancing algorithm and if different energy vs performance hints are
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 1cf6d06f2314..251813b7060b 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -602,11 +602,12 @@ static const unsigned int epp_values[] = {
- 	HWP_EPP_POWERSAVE
+ drivers/cpufreq/cppc_cpufreq.c | 91 ++++++++++++++++------------------
+ 1 file changed, 42 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 257d726a4456..03a21daddbec 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -45,8 +45,6 @@ struct cppc_workaround_oem_info {
+ 	u32 oem_revision;
  };
  
--static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
-+static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data, int *raw_epp)
- {
- 	s16 epp;
- 	int index = -EINVAL;
- 
-+	*raw_epp = 0;
- 	epp = intel_pstate_get_epp(cpu_data, 0);
- 	if (epp < 0)
- 		return epp;
-@@ -614,12 +615,14 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
- 	if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
- 		if (epp == HWP_EPP_PERFORMANCE)
- 			return 1;
--		if (epp <= HWP_EPP_BALANCE_PERFORMANCE)
-+		if (epp == HWP_EPP_BALANCE_PERFORMANCE)
- 			return 2;
--		if (epp <= HWP_EPP_BALANCE_POWERSAVE)
-+		if (epp == HWP_EPP_BALANCE_POWERSAVE)
- 			return 3;
--		else
-+		if (epp == HWP_EPP_POWERSAVE)
- 			return 4;
-+		*raw_epp = epp;
-+		return 0;
- 	} else if (boot_cpu_has(X86_FEATURE_EPB)) {
- 		/*
- 		 * Range:
-@@ -631,6 +634,13 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
- 		 * value which can be set. Here only using top two bits
- 		 * effectively.
- 		 */
-+
-+		if (epp & 0x03) {
-+			/* Raw value was set in EPB */
-+			*raw_epp = epp;
-+			return 0;
-+		}
-+
- 		index = (epp >> 2) + 1;
+-static bool apply_hisi_workaround;
+-
+ static struct cppc_workaround_oem_info wa_info[] = {
+ 	{
+ 		.oem_id		= "HISI  ",
+@@ -59,50 +57,6 @@ static struct cppc_workaround_oem_info wa_info[] = {
  	}
+ };
  
-@@ -638,7 +648,8 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
- }
- 
- static int intel_pstate_set_energy_pref_index(struct cpudata *cpu_data,
--					      int pref_index)
-+					      int pref_index, bool use_raw,
-+					      u32 raw_epp)
- {
- 	int epp = -EINVAL;
- 	int ret;
-@@ -657,12 +668,31 @@ static int intel_pstate_set_energy_pref_index(struct cpudata *cpu_data,
- 
- 		value &= ~GENMASK_ULL(31, 24);
- 
-+		if (use_raw) {
-+			if (raw_epp > 255) {
-+				ret = -EINVAL;
-+				goto return_pref;
-+			}
-+			value |= (u64)raw_epp << 24;
-+			ret = wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
-+			goto return_pref;
-+		}
-+
- 		if (epp == -EINVAL)
- 			epp = epp_values[pref_index - 1];
- 
- 		value |= (u64)epp << 24;
- 		ret = wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
- 	} else {
-+		if (use_raw) {
-+			if (raw_epp > 0x0f) {
-+				ret = -EINVAL;
-+				goto return_pref;
-+			}
-+			ret = intel_pstate_set_epb(cpu_data->cpu, epp);
-+			goto return_pref;
-+		}
-+
- 		if (epp == -EINVAL)
- 			epp = (pref_index - 1) << 2;
- 		ret = intel_pstate_set_epb(cpu_data->cpu, epp);
-@@ -694,6 +724,8 @@ static ssize_t store_energy_performance_preference(
- {
- 	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
- 	char str_preference[21];
-+	bool raw = false;
-+	u32 epp;
- 	int ret;
- 
- 	ret = sscanf(buf, "%20s", str_preference);
-@@ -701,10 +733,18 @@ static ssize_t store_energy_performance_preference(
- 		return -EINVAL;
- 
- 	ret = match_string(energy_perf_strings, -1, str_preference);
+-static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu,
+-					unsigned int perf);
+-
+-/*
+- * HISI platform does not support delivered performance counter and
+- * reference performance counter. It can calculate the performance using the
+- * platform specific mechanism. We reuse the desired performance register to
+- * store the real performance calculated by the platform.
+- */
+-static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpunum)
+-{
+-	struct cppc_cpudata *cpudata = all_cpu_data[cpunum];
+-	u64 desired_perf;
+-	int ret;
+-
+-	ret = cppc_get_desired_perf(cpunum, &desired_perf);
 -	if (ret < 0)
-+	if (ret < 0) {
-+		ret = kstrtouint(buf, 10, &epp);
-+		if (ret)
-+			return ret;
+-		return -EIO;
+-
+-	return cppc_cpufreq_perf_to_khz(cpudata, desired_perf);
+-}
+-
+-static void cppc_check_hisi_workaround(void)
+-{
+-	struct acpi_table_header *tbl;
+-	acpi_status status = AE_OK;
+-	int i;
+-
+-	status = acpi_get_table(ACPI_SIG_PCCT, 0, &tbl);
+-	if (ACPI_FAILURE(status) || !tbl)
+-		return;
+-
+-	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
+-		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
+-		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
+-		    wa_info[i].oem_revision == tbl->oem_revision) {
+-			apply_hisi_workaround = true;
+-			break;
+-		}
+-	}
+-
+-	acpi_put_table(tbl);
+-}
+-
+ /* Callback function used to retrieve the max frequency from DMI */
+ static void cppc_find_dmi_mhz(const struct dmi_header *dm, void *private)
+ {
+@@ -402,9 +356,6 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpunum)
+ 	struct cppc_cpudata *cpu = all_cpu_data[cpunum];
+ 	int ret;
+ 
+-	if (apply_hisi_workaround)
+-		return hisi_cppc_cpufreq_get_rate(cpunum);
+-
+ 	ret = cppc_get_perf_ctrs(cpunum, &fb_ctrs_t0);
+ 	if (ret)
+ 		return ret;
+@@ -455,6 +406,48 @@ static struct cpufreq_driver cppc_cpufreq_driver = {
+ 	.name = "cppc_cpufreq",
+ };
+ 
++/*
++ * HISI platform does not support delivered performance counter and
++ * reference performance counter. It can calculate the performance using the
++ * platform specific mechanism. We reuse the desired performance register to
++ * store the real performance calculated by the platform.
++ */
++static unsigned int hisi_cppc_cpufreq_get_rate(unsigned int cpunum)
++{
++	struct cppc_cpudata *cpudata = all_cpu_data[cpunum];
++	u64 desired_perf;
++	int ret;
 +
-+		raw = true;
++	ret = cppc_get_desired_perf(cpunum, &desired_perf);
++	if (ret < 0)
++		return -EIO;
++
++	return cppc_cpufreq_perf_to_khz(cpudata, desired_perf);
++}
++
++static void cppc_check_hisi_workaround(void)
++{
++	struct acpi_table_header *tbl;
++	acpi_status status = AE_OK;
++	int i;
++
++	status = acpi_get_table(ACPI_SIG_PCCT, 0, &tbl);
++	if (ACPI_FAILURE(status) || !tbl)
++		return;
++
++	for (i = 0; i < ARRAY_SIZE(wa_info); i++) {
++		if (!memcmp(wa_info[i].oem_id, tbl->oem_id, ACPI_OEM_ID_SIZE) &&
++		    !memcmp(wa_info[i].oem_table_id, tbl->oem_table_id, ACPI_OEM_TABLE_ID_SIZE) &&
++		    wa_info[i].oem_revision == tbl->oem_revision) {
++			/* Overwrite the get() callback */
++			cppc_cpufreq_driver.get = hisi_cppc_cpufreq_get_rate;
++			break;
++		}
 +	}
 +
-+	ret = intel_pstate_set_energy_pref_index(cpu_data, ret, raw, epp);
-+	if (ret)
- 		return ret;
- 
--	intel_pstate_set_energy_pref_index(cpu_data, ret);
- 	return count;
- }
- 
-@@ -712,13 +752,16 @@ static ssize_t show_energy_performance_preference(
- 				struct cpufreq_policy *policy, char *buf)
++	acpi_put_table(tbl);
++}
++
+ static int __init cppc_cpufreq_init(void)
  {
- 	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
--	int preference;
-+	int preference, raw_epp;
- 
--	preference = intel_pstate_get_energy_pref_index(cpu_data);
-+	preference = intel_pstate_get_energy_pref_index(cpu_data, &raw_epp);
- 	if (preference < 0)
- 		return preference;
- 
--	return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
-+	if (raw_epp)
-+		return  sprintf(buf, "%d\n", raw_epp);
-+	else
-+		return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
- }
- 
- cpufreq_freq_attr_rw(energy_performance_preference);
+ 	int i, ret = 0;
 -- 
-2.25.4
+2.25.0.rc1.19.g042ed3e048af
 
