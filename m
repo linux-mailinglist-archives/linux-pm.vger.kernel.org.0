@@ -2,183 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5D5205A05
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 19:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC20205A18
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 20:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732913AbgFWR6C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 13:58:02 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:46216 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728916AbgFWR6C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 13:58:02 -0400
-Received: from 89-64-86-94.dynamic.chello.pl (89.64.86.94) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 8d4284b4e984008f; Tue, 23 Jun 2020 19:58:00 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 2/2][v3] PM / s2idle: Code cleanup to make s2idle consistent with normal idle path
-Date:   Tue, 23 Jun 2020 19:57:59 +0200
-Message-ID: <15473183.xuek0xzqYe@kreacher>
-In-Reply-To: <a00278cc5db9f4845006cff130fd91a58c0d92d1.1592892767.git.yu.c.chen@intel.com>
-References: <cover.1592892767.git.yu.c.chen@intel.com> <a00278cc5db9f4845006cff130fd91a58c0d92d1.1592892767.git.yu.c.chen@intel.com>
+        id S1733069AbgFWSEn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 14:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733061AbgFWSEn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 14:04:43 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34CFC061755
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 11:04:42 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id o11so13783022wrv.9
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 11:04:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KMyNyMJgXdnDE8dwyWtDRLMYZCApSGZoNnTanpCNMz4=;
+        b=DNY2SIEqqg213W0g0T1faTmSZ6dBln1UGUK/rijjLxojRCce8hOkLkT+7v4hj73zxJ
+         sb2tRMmbp/i2e+0YWsaATQ8zHIWcg2fKZ6Nkj98z5IqY4QNWEDB2mXz69DefkTZn8xx0
+         FeWJgsHgkrrDXtkKrEGdm43P3iVhP6zUmtFMxIZDY9weu3Y+eiW5W/nLqhNHdLUhhGoD
+         gnT8dPQAcBuRixz5P/BDF6r+WZwVkxThIhMJ0C6qrV5qKzK0IdyZA8eI3ePdYLTX85ag
+         0VMr8Sd92U4n19cJ329Sa1NO3O8kWQbPK1I2kMJWRv6SdeT1aDYNTxs0NrmQoa9c0SiY
+         dQUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KMyNyMJgXdnDE8dwyWtDRLMYZCApSGZoNnTanpCNMz4=;
+        b=VbJtkIGPsO230MtSprvYX+DDu0uHCozW51IvIbRLnIhkjqdgynsoWrzXiARZi/oL9B
+         h0uy62UJGXK4AHd+MqhunSVrUBiCoEJxsNE8KPoUOJXIiJ/TRJy2BgselAKI6zv9AKyr
+         mbEGWt83n/j9CC9zTPQAyAbhc4tIXGQVRxHlw4/PRTe5OgwErGpDV+JDUOZdo9SnYUo1
+         03ndf9O+SPnZ/dikJDg29NEwYojEE7Ga293KJ2yhu1bt6qlPnKf82Q9XqO79y5cB7lxm
+         AwHZIx5RjT6IePV7Mei30rXbTx4q7WtD/QhPdFG5BLkdp9PXKalSJLgBUPHBfvwHysnT
+         4D/g==
+X-Gm-Message-State: AOAM531F5qoMfg+vIB4dAqM5grYNzLSIh7eusMCLd4ToPITHyfXd0T/n
+        bg3LHPCDlbq6omAhUWwX5jIxbg==
+X-Google-Smtp-Source: ABdhPJzf8QrpXcRaMKR0n1A2i2w8BDw+Gir+VgL42qsH/jZ2RAO6SqlzOQkuQuN1npWj+Lpo2pMlsg==
+X-Received: by 2002:a5d:5310:: with SMTP id e16mr23887574wrv.289.1592935481174;
+        Tue, 23 Jun 2020 11:04:41 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id i17sm17528076wrc.34.2020.06.23.11.04.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 11:04:40 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 19:04:37 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     arnd@arndb.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, kernel-team@android.com,
+        tkjos@google.com, adharmap@codeaurora.org, viresh.kumar@linaro.org,
+        rafael@kernel.org, rjw@rjwysocki.net
+Subject: Re: [PATCH v2 0/2] cpufreq: Specify the default governor on command
+ line
+Message-ID: <20200623180437.GA248517@google.com>
+References: <20200623142138.209513-1-qperret@google.com>
+ <002201d64987$5dc93b90$195bb2b0$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <002201d64987$5dc93b90$195bb2b0$@net>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, June 23, 2020 8:31:52 AM CEST Chen Yu wrote:
-> Currently s2idle is a little different from the normal idle path. This
-> patch makes call_s2idle() consistent with call_cpuidle(), and also
-> s2idle_enter() is analogous to cpuidle_enter().
+Hi Doug,
+
+On Tuesday 23 Jun 2020 at 10:54:33 (-0700), Doug Smythies wrote:
+> Hi Quentin,
 > 
-> No functional change.
+> Because I am lazy and sometimes do not want to recompile
+> the distro source, I have a need/desire for this.
+
+Good to know I'm not the only one ;-)
+
+> Tested these two grub command lines:
 > 
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  drivers/cpuidle/cpuidle.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+> GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=300 intel_pstate=disable cpufreq.default_governor=schedutil cpuidle_sysfs_switch cpuidle.governor=teo"
 > 
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index e092789187c6..b2e764d1ac99 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -134,8 +134,8 @@ int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  }
->  
->  #ifdef CONFIG_SUSPEND
-> -static void enter_s2idle_proper(struct cpuidle_driver *drv,
-> -				struct cpuidle_device *dev, int index)
-> +static void s2idle_enter(struct cpuidle_driver *drv,
-> +			 struct cpuidle_device *dev, int index)
->  {
->  	ktime_t time_start, time_end;
->  
-> @@ -169,6 +169,15 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
->  	dev->states_usage[index].s2idle_usage++;
->  }
->  
-> +static int call_s2idle(struct cpuidle_driver *drv,
-> +		       struct cpuidle_device *dev, int index)
-> +{
-> +	if (!current_clr_polling_and_test())
-> +		s2idle_enter(drv, dev, index);
-> +
-
-Well, I'd rather move the definition of this function to idle.c, because it is
-better to call current_clr_polling_and_test() from there.
-
-> +	return index;
-> +}
-> +
->  /**
->   * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
->   * @drv: cpuidle driver for the given CPU.
-> @@ -187,8 +196,8 @@ int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
->  	 * be frozen safely.
->  	 */
->  	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> -	if (index > 0 && !current_clr_polling_and_test())
-> -		enter_s2idle_proper(drv, dev, index);
-> +	if (index > 0)
-> +		call_s2idle(drv, dev, index);
-
-This can be made look more like cpuidle_enter() too.
-
->  
->  	return index;
->  }
+> And
 > 
+> #GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=450 intel_pstate=passive cpufreq.default_governor=schedutil cpuidle_sysfs_switch cpuidle.governor=teo"
+> 
+> And all worked as expected. I use Ubuntu as my distro, and also had to disable a startup script that switches to "ondemand", or similar, after 1 minute.
 
-So overall I'd prefer to apply something like this (on top of the [1/2]):
+Good, thanks for giving it a try.
 
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] cpuidle: Rearrange s2idle-specific idle state entry code
+> As a side note (separate subject, but is one reason I tried it):
+> My i5-9600K based computer seems to hit a power limit during boot approximately 3 seconds after kernel selection on grub.
+> This had no effect on that issue (even when selecting powersave governor).
 
-Implement call_cpuidle_s2idle() in analogy with call_cpuidle()
-for the s2idle-specific idle state entry and invoke it from
-cpuidle_idle_call() to make the s2idle-specific idle entry code
-path look more similar to the "regular" idle entry one.
+Interesting ... Could you confirm that compiling with powersave as
+default doesn't fix the issue either?
 
-No intentional functional impact.
+Other question, when does the intel_pstate driver start on your device?
+Before or after that 3 seconds boot time?
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpuidle/cpuidle.c |    6 +++---
- kernel/sched/idle.c       |   15 +++++++++++----
- 2 files changed, 14 insertions(+), 7 deletions(-)
-
-Index: linux-pm/kernel/sched/idle.c
-===================================================================
---- linux-pm.orig/kernel/sched/idle.c
-+++ linux-pm/kernel/sched/idle.c
-@@ -96,6 +96,15 @@ void __cpuidle default_idle_call(void)
- 	}
- }
- 
-+static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
-+			       struct cpuidle_device *dev)
-+{
-+	if (current_clr_polling_and_test())
-+		return -EBUSY;
-+
-+	return cpuidle_enter_s2idle(drv, dev);
-+}
-+
- static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 		      int next_state)
- {
-@@ -171,11 +180,9 @@ static void cpuidle_idle_call(void)
- 		if (idle_should_enter_s2idle()) {
- 			rcu_idle_enter();
- 
--			entered_state = cpuidle_enter_s2idle(drv, dev);
--			if (entered_state > 0) {
--				local_irq_enable();
-+			entered_state = call_cpuidle_s2idle(drv, dev);
-+			if (entered_state > 0)
- 				goto exit_idle;
--			}
- 
- 			rcu_idle_exit();
- 
-Index: linux-pm/drivers/cpuidle/cpuidle.c
-===================================================================
---- linux-pm.orig/drivers/cpuidle/cpuidle.c
-+++ linux-pm/drivers/cpuidle/cpuidle.c
-@@ -13,7 +13,6 @@
- #include <linux/mutex.h>
- #include <linux/sched.h>
- #include <linux/sched/clock.h>
--#include <linux/sched/idle.h>
- #include <linux/notifier.h>
- #include <linux/pm_qos.h>
- #include <linux/cpu.h>
-@@ -187,9 +186,10 @@ int cpuidle_enter_s2idle(struct cpuidle_
- 	 * be frozen safely.
- 	 */
- 	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
--	if (index > 0 && !current_clr_polling_and_test())
-+	if (index > 0) {
- 		enter_s2idle_proper(drv, dev, index);
--
-+		local_irq_enable();
-+	}
- 	return index;
- }
- #endif /* CONFIG_SUSPEND */
-
-
-
+Thanks,
+Quentin
