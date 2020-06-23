@@ -2,100 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 777802057CA
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 18:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBBA205852
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jun 2020 19:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733048AbgFWQrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 23 Jun 2020 12:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S1733117AbgFWRNU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 23 Jun 2020 13:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733052AbgFWQrg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 12:47:36 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47383C061755;
-        Tue, 23 Jun 2020 09:47:36 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id g21so4001237wmg.0;
-        Tue, 23 Jun 2020 09:47:36 -0700 (PDT)
+        with ESMTP id S1733082AbgFWRNT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 23 Jun 2020 13:13:19 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B769DC061755
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 10:13:17 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id k4so19481666oik.2
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jun 2020 10:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=2a8A3SZ7tBOcfEqWak8yyvM0vR1xvbK/AAfn7XUHse8=;
-        b=XaG5IS7m1eA+gI4FIsCp1abY5EaS5J4F++5cxdUwUG2r6Oj46qpLOXkCiesfyQ+75z
-         5e1kVESZ1WPd+WbF1ptJigMflNi8z0SqXlT85/Jy2hBzcQKK56SkP6qFr77pZHnkTVHU
-         og9a64+MImwd6LMEHElbEuslUPh57AbB7GqvCWjqbdwrAXyD/tMgKzx2DTeu64K4cUjJ
-         Ab295T4L4df3dCYNjJNyGD2Bnz58dIMwlJemGRZLq668ic4/wmCEsew/Di9V5GbP0z7T
-         bR7srReGDI5xCZ0am81PqoKq18wXCcaE/d9u27k0n0AMwjBJhcxh88BWphAs7Yz5thUe
-         IbsA==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=i0uoYXqFKhL3vc8tp9C6K5GgpytnAnuC0fZClT3jh84RWiGoFjDxz39WaUpuVkv5Kt
+         SmAD30H1WPcvgrd6SExLkc0wvDrspPtVH+1PQMYezhVKK7bR7gTWCpGypXQPIWL4m5P/
+         UFpcHIAwKZqa5DVah79cTZgEa934aGrR1pZyyekUT2C2Q3FXfvUm+RudX5svn6pptMTT
+         YUdPBGfzBWetaC2UbBaKbhgDQiwJdAeAt9IEos/JG/Wjt1Ikco+AIihtHk/64mwRaTkM
+         tERL1Y9s4p6ROcotdBqAWRPz8pvuk7rPYGNRk0ct0p7vzFJC0SJE00MV5zGFRmcqW5F+
+         R6tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=2a8A3SZ7tBOcfEqWak8yyvM0vR1xvbK/AAfn7XUHse8=;
-        b=LvvCRSC9gllARgeK+p+oKgKnVhyD8YD1d3dGDidQp8/eSyh24GW9lMqHJ0ICcz9Tlr
-         TI/7VI6/GW9e8vJxukmjEiAMTpygDmofls2vD67ew5+1ZDBgjLyU+HlWaS3unrAcJ4rn
-         WvBFFFihgZ3VDbug0l9BBLhA/rE7WI8Pjb81RjP1D4TTJffZanOX6i8x71NuCpMfnk18
-         XS14vRqH4eDuqFGhgyIjRiaNf//+szsFCtnZ6xDchiEsDzUP5zFFiI8Epr+FlUSwZqDH
-         /mVA4UREh5GTACjdLDL/OLHlllLIflq8bZ2B7rvu6fNW7re9VBmYfRw4qlG3rPafwiNk
-         1dSA==
-X-Gm-Message-State: AOAM5300vQpqnPa9XAOgN5nGXCW57x+cm37upcPCbxvc/TXJL13Ex/tV
-        Z5TtMJENEV90PH+CX/3Z5YE=
-X-Google-Smtp-Source: ABdhPJxSuhZVggr1/EQ+Jrz7f0zu6OuFXAZICwjiL3Xfp9K7vXfwNBCxLQtiBy6U5aX7CEwNsEZHRQ==
-X-Received: by 2002:a1c:2485:: with SMTP id k127mr22257875wmk.138.1592930855034;
-        Tue, 23 Jun 2020 09:47:35 -0700 (PDT)
-Received: from macmini.local (181.4.199.77.rev.sfr.net. [77.199.4.181])
-        by smtp.gmail.com with ESMTPSA id d28sm25319430wrc.50.2020.06.23.09.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 09:47:34 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 18:47:33 +0200
-From:   Willy Wolff <willy.mh.wolff.ml@gmail.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: brocken devfreq simple_ondemand for Odroid XU3/4?
-Message-ID: <20200623164733.qbhua7b6cg2umafj@macmini.local>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=J0VpeRSOJK/TFNJp5yzWMw9fGCcpvggw0aTUG92BVzQ=;
+        b=OL53QqoPHBEyIcLMEA2CCdiVDcYjZYFPKGUa7QpmgIVcWvsQJ5WvmfLioOK/Kro5Jb
+         ZIkEI1K6m0ErKA1F7n6PtUm618+bHQpNXUHO2Sm6PepNjWDnIzH1NbkC4ZNB94rlVRiW
+         IfBOUexkay0bAg57jSnziZ+/K9fR+bQr9VbbSiSOUxze7XD7ahcDOUwz+PFcj2Xd6tMp
+         jALh8DXvpyEtoD97Vm7llRQLhFrN6ovpLnqoMZW81WvTr4bjOQJXi+LRdCMlW0MnCC0H
+         Q66Qctd8OacnZdC48oEst0X4IJd/dpt8x2Ui51kq8/DK0vQ61FhK+rA9BHTDnaJLmxfE
+         KW3w==
+X-Gm-Message-State: AOAM531I3f4BYFNOQ+1XznNzKJBZ2C+7Yx/93Pc87BsxP6req6zwMBox
+        rTy3mYx/2tRX4AFMoUeTep+fM7AXX5QJpRqO1tY=
+X-Google-Smtp-Source: ABdhPJwFGNvc68tznvvGeV1jsg/GTZ4Rd/39o97OHBEKjwSpMzIvEuOyGqbhcOFMrzUuf9xgPL++CJubuneMvIUBBhk=
+X-Received: by 2002:a05:6808:3d3:: with SMTP id o19mr17543391oie.63.1592932396880;
+ Tue, 23 Jun 2020 10:13:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Received: by 2002:a9d:1d03:0:0:0:0:0 with HTTP; Tue, 23 Jun 2020 10:13:15
+ -0700 (PDT)
+Reply-To: sctnld11170@tlen.pl
+From:   "Mr. Scott Donald" <jesseomar11@gmail.com>
+Date:   Tue, 23 Jun 2020 10:13:15 -0700
+Message-ID: <CAJs48TCdF4yNPxK7idLt-8=zPqaO9MudVK-snWMwrGxb6HXbZw@mail.gmail.com>
+Subject: Hello, Please
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi everybody,
+Dear Friend,
+I'm Mr. Scott Donald a Successful business Man. dealing with
+Exportation, I got your mail contact through search to let you know my
+Ugly Situation Am a dying Man here in Los Angeles California Hospital
+Bed in (USA), I Lost my Wife and my only Daughter for Covid-19 I'm
+dying with same symptoms. my Doctor open-up to me that I don't have
+enough time to live anymore, I have a project that I am about to hand
+over to you. I have already instructed the Barclays Bank of London to
+transfer my fund sum of =C2=A33,7M GBP to you as to enable you to give 50%
+to Charitable Home and take 50% I have given all I have here in
+America to Charitable home I ask my Doctor to help me keep you notice
+when I'm no more please, allow me to see you on my Doctor whats-app
+video call very urgent please, here is my Doctor Whats-app Number for
+urgent notice +13019692737
 
-Is DVFS for memory bus really working on Odroid XU3/4 board?
-Using a simple microbenchmark that is doing only memory accesses, memory DVFS
-seems to not working properly:
+Hope To Hear From You. I'm sending this email to you for the second
+time yet no response from you.
 
-The microbenchmark is doing pointer chasing by following index in an array.
-Indices in the array are set to follow a random pattern (cutting prefetcher),
-and forcing RAM access.
+My Regards.
 
-git clone https://github.com/wwilly/benchmark.git \
-  && cd benchmark \
-  && source env.sh \
-  && ./bench_build.sh \
-  && bash source/scripts/test_dvfs_mem.sh
-
-Python 3, cmake and sudo rights are required.
-
-Results:
-DVFS CPU with performance governor
-mem_gov = simple_ondemand at 165000000 Hz in idle, should be bumped when the
-benchmark is running.
-- on the LITTLE cluster it takes 4.74308 s to run (683.004 c per memory access),
-- on the big cluster it takes 4.76556 s to run (980.343 c per moemory access).
-
-While forcing DVFS memory bus to use performance governor,
-mem_gov = performance at 825000000 Hz in idle,
-- on the LITTLE cluster it takes 1.1451 s to run (164.894 c per memory access),
-- on the big cluster it takes 1.18448 s to run (243.664 c per memory access).
-
-The kernel used is the last 5.7.5 stable with default exynos_defconfig.
-
-Cheers,
-Willy
+Mr. Scott Donald
+CEO
