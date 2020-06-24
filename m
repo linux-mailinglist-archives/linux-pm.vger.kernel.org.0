@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A172207143
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 12:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115D8207145
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 12:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388421AbgFXKd0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 06:33:26 -0400
+        id S2390396AbgFXKdd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 06:33:33 -0400
 Received: from mail-eopbgr50074.outbound.protection.outlook.com ([40.107.5.74]:27279
         "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390430AbgFXKdY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 24 Jun 2020 06:33:24 -0400
+        id S2388197AbgFXKd2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Jun 2020 06:33:28 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e/NYUBKxBJRSFdGXUsWIucmX1jLk1lmYy8uI/xV1dgqRmqyABRZ4d19OOyEOd62PsmGsS00EV3Mp0Lu44OX5v+hbzXlWJQvaPskRzTICDPBkmXFYQ8sw6a8fq/8AqqSgdRDlQ5Xlp44sIB1wZOQ9aRuHotTjW8QLx0HWH/G07/Hcd+xcZ7HbHBSdwwHKw09gVoxY+a5Bnj9uW/EQt2oCz14wecWh/afPgtbeaFAjOFIGHZIAc3x7tAx7k4PlbpOmJyYGCjseD3DkOoCkTnLma+Exv5lcooEc4eMrJjF0KUW7zm4hbRYoLE3Xiwdpc8MKNeUDgIhVgYxSaVgGCX2y7A==
+ b=is2cU8I+DreOCrF479No1PbO1eS/zKMmEzvZJ6g2KU61h/FdJ+aoCqd7LPtOdFHa3k8MBDeX7IE/Y10Kgv2/iNRqHDOmMEs6iBCQHxmVVhIwNm3BtAObiuB0Z+Hk+WcMHs938TUhlB/vMVzAQa/w0xif1QdDuiZHFhW0H6oAZs3qCe8yqHLP12+aR3qB0Kn1SolAl+BStqrFm0qDyBFZgQjm5CmzJLpqwq0MvONbhMW461J+gRIWQQMOpWE/nq5UHVmTzqiUvoxH2MOloR1tJ47g5jvuZ0c1EdMj7GmtmF+SbuTuNblBZJu12bzAi0U02AFcyG2DoOBBQEuRHqKdNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s/gLNWHJBFdPe+yK6SdEdcGlZQH9DOx59u4muZL5sGg=;
- b=dX8+2MAyw7U7s8zRp4njQYhvL7zmkLRPs0VjZhPaS+8AUwwV9AHQ7Z/8DG9qD2DUlUYJu2xFxbkxPfv+06e4ARbGqq7daJtaHarZFCP1zWxhE54RpeiLJTzNwnprSryCXDe1igchsWMhf0GP9+kmRJyLXJhlmHlxNO2SBB1HbJhPKv+BVa18krD4NLPMCdjjqE7B/27vdJCYwEiEj3UAXwIH1+Iyr1ATW9eQldFvoVSxkCgUWaSxTJxUQQlx+HBFCotm//z/40Cv+Uj/z5fZWysCn7ZkQl6MhbsKrrxqEdv+mk60mtQsM24bx8pXCp3Df1ZXqcsX9A9dqw8EMxhqng==
+ bh=fNP6svsYgFgKnfef8+/h3dqOMyRzdkDZWcoLAm4/Qlc=;
+ b=jQZTfiQ6blV4TTLbRZwUPZnk898ghWLJroTHM2CRwkMIJaMBmaMJaEcE2a25j60LvTPjPsyEYeRrq7fJvlA1806SXSClWu6zjrMQ1MzlUd3SI17eNM0gesK4v0ugxQ+MheTR3G8pUuBve6LOmC5zfyI3E3Xq2ZbHggWbHvgEGvggXuR4huy4OYB9CvXLlYCHoPN6GFotDdTdE+IJXWsgbGu7JI1rHAnIBqsbVW416BqN3r7WgWYYoAJLaXUmGwjL5sgnAAuwqVzzlsnYmU/qwqW8BnEPfDBf6SDC+MrZaD+p1WHHjrdoEo5Wsv1kdmrZt72N3S/l0OHFhFtZJolc/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s/gLNWHJBFdPe+yK6SdEdcGlZQH9DOx59u4muZL5sGg=;
- b=gcJniOqq11ZYv5Qz9UtZtyrmmI8JPhukxcfp3CyhvAJbxHdyZd188pulw3elVcHfVpuJgyraXMTPDlubJFHGJVnMDbO3PmSLhiflUFPTc9T0wpytMoVeiN9KkCJT4tKZ4ibUNLRfkVIEr0CbWG23y8idj3qzhQM5TsdImgqsegg=
+ bh=fNP6svsYgFgKnfef8+/h3dqOMyRzdkDZWcoLAm4/Qlc=;
+ b=mx0FBMJOxzUAYiGrD++1x8bplcDV0kVxO4e9gdVoeEw9FXecqD0wYPQJlFyAWRW3Re2aJz5M6jLzM7Z3AuPZVqWuOsNRlKfqlBMofQkRe6wBuGLiG4gbeegI2ny/ocOMJoyHGKQwtUR3Sly6P/gjpGpPuFxX5n2u1HF/yd6vVpc=
 Authentication-Results: kernel.org; dkim=none (message not signed)
  header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
 Received: from VI1PR0401MB2287.eurprd04.prod.outlook.com
  (2603:10a6:800:2e::19) by VI1PR0401MB2445.eurprd04.prod.outlook.com
  (2603:10a6:800:55::12) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.20; Wed, 24 Jun
- 2020 10:33:17 +0000
+ 2020 10:33:18 +0000
 Received: from VI1PR0401MB2287.eurprd04.prod.outlook.com
  ([fe80::9d5c:685e:4b51:fa60]) by VI1PR0401MB2287.eurprd04.prod.outlook.com
  ([fe80::9d5c:685e:4b51:fa60%3]) with mapi id 15.20.3109.027; Wed, 24 Jun 2020
- 10:33:17 +0000
+ 10:33:18 +0000
 From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
 To:     khilman@kernel.org, ulf.hansson@linaro.org,
         linux-pm@vger.kernel.org, rjw@rjwysocki.net
 Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
         alsa-devel@alsa-project.org, linux-imx@nxp.com
-Subject: [PATCH v3 1/2] PM / domains: Introduce multi PM domains helpers
-Date:   Wed, 24 Jun 2020 13:32:46 +0300
-Message-Id: <20200624103247.7115-2-daniel.baluta@oss.nxp.com>
+Subject: [PATCH v3 2/2] ASoC: SOF: Use multi PM domains helpers
+Date:   Wed, 24 Jun 2020 13:32:47 +0300
+Message-Id: <20200624103247.7115-3-daniel.baluta@oss.nxp.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200624103247.7115-1-daniel.baluta@oss.nxp.com>
 References: <20200624103247.7115-1-daniel.baluta@oss.nxp.com>
@@ -55,33 +55,33 @@ X-ClientProxiedBy: AM0PR01CA0100.eurprd01.prod.exchangelabs.com
  (2603:10a6:800:2e::19)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from fsr-ub1864-103.ro-buh02.nxp.com (83.217.231.2) by AM0PR01CA0100.eurprd01.prod.exchangelabs.com (2603:10a6:208:10e::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Wed, 24 Jun 2020 10:33:16 +0000
+Received: from fsr-ub1864-103.ro-buh02.nxp.com (83.217.231.2) by AM0PR01CA0100.eurprd01.prod.exchangelabs.com (2603:10a6:208:10e::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Wed, 24 Jun 2020 10:33:17 +0000
 X-Mailer: git-send-email 2.17.1
 X-Originating-IP: [83.217.231.2]
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: cbd7c576-94c3-436f-b529-08d8182a01d8
+X-MS-Office365-Filtering-Correlation-Id: 20506606-785d-4286-1695-08d8182a028a
 X-MS-TrafficTypeDiagnostic: VI1PR0401MB2445:
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR0401MB244572BD8963332DC64788F9B8950@VI1PR0401MB2445.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Microsoft-Antispam-PRVS: <VI1PR0401MB24456BE047B8DA88944B07FDB8950@VI1PR0401MB2445.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:525;
 X-Forefront-PRVS: 0444EB1997
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KIURNGWJ+NaTOuMUQjp8oJ09bP1L5OYWRb3G3S2+y6ujOmgqN97npcnCuI6GRsboZKukhAZY2wrkFYaSCAfDa+9tqoDBwau+nH6ILq7U2osFzGrAgslNZOVMVefEyJ8QF3RYsCFLeO742Sx8aqFy3j+No9kvEt+Vg7j8jibN0wo1bc7GpLgy7L2NfcC0nnaEJDK9IdpAP5dNTVPyeTtCjHkojM+21wtgbdQFDoMggO26FVCaXCLQK/TZT07m0BkWpXvdapoCz9YuxKzbE7jZquRlmJqATKjvv+7e3DtFUqQURk4lLXe5U7Za7gtLeDsUmF9hJy4hv7vNygFh84wOEw==
+X-Microsoft-Antispam-Message-Info: 4kigOxSjKoglRV07XNIa0i/JFjy+KFnHpjYUcf3KRIJHF7EDBB1WNHvNhbq1HTabfEGXIkX3JfD41E2f3zXVgnl07LN3uMChCqy7Dx1wil2sge/wwqn3MGxf+YAL9Z1XwCJhwTE7dzqM7cJWQxUsxk1nwmxrfki5vCBmbRSX7cmMTFkUOuIwXqJeomGfewBzRHhGzKDPu/RgJ2ojvJzuO0fxTj4z4Qws26HDaUEKB8JvsN/BCLozdWIJvV/ljY/Lb0N4YKchMCpPvxbkduuxi+pQ4zyQEUofAi7a1IjqWOkbKyAh3e2q2e8pRd526DNhDZzyfsurXTfS1XWbnPzM2A==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2287.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(86362001)(8676002)(186003)(16526019)(1076003)(8936002)(6512007)(66946007)(2616005)(83380400001)(66556008)(5660300002)(66476007)(316002)(956004)(26005)(6486002)(44832011)(4326008)(6506007)(2906002)(52116002)(478600001)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: /thEo6/d96Gx9bStZpBOcWxhm2Tae3uEMKRX54IsuW8zgFKMFfDlKBu1zI9YBAX/nyrDua8ieeDr8JEcI90nzRyoxU6cKn50J18OMNNQvXpnA0Auri4KhC95aeuj17T9R8T1GYaQdqJ8UTHL0DUQ8/j8j7ia6qB/jH+9PLamv3fOl2JdMGJHK/KhqcDxD5X5y7uKj4Uc1l9IxRfLwbaIstsICYvdbG6ZCAgS3zHwRSNF/QOtjfaUV8rH8RnpDbh6d1dYLF3qi/jJbtV+1ihQqNgkBSSWuTQu1DERYRSpuO2waMsi5rlozaGVyUgfffjUmjAG0l6r/B2iG56py4nJwGbx/VFcg0YGqApUElYGMnzf66K4pdOWuewBUxKD7+WPbEMW7u5Hgo72VV3WecXbix5fIppc+rW3VcFNT+KGMO0n950MXDB7dqzjsLSBAclN6PuM2maYhncFa4fbROHa3/fMG5gs6mkXFIha04YbFpc=
+X-MS-Exchange-AntiSpam-MessageData: zd+QXYH5g90CW6nEnEXNVAlytKPXzMA22kCOja/COv6Du86+4J27B0ANRRbEZKTcG9Z4PC5e7VfY1+EDFQCwEMci8Ofgv8YfixJccxo16Gue4CT/eN88wRNyc+jXLisJbcFKsNgW1/EXwqfgl+oro7tyO9El4J+YTTXzM0CXBoNQg5TpiwA40DMowPUTVTDy18G31XEeqTRcw9lE/bZBNzZvuzGqB5Tw4o0pJgRTGusY/+YEDz597Zo1/Jji+Vl9sGEJaFHG/lOUBJ9MyklplaV8aitfgehiUAOkk37KP7g7gX8kRRFl0cTD8xFFwM0u0REQnA6/QKiB9l1SRqJiaJ/pwlttptQCY7d63a24XtpDmW2+2JPItNFmEwJKzMs4VWljXCfqYvLmaE5d8ygLsgjQAmHQuWDyCH1atWwn39xygDxw/BodZ0mYmNC/ljrUzw571oMKmi2WeadeataXePTkNAkvUXZhhL1Rcx8kHhw=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbd7c576-94c3-436f-b529-08d8182a01d8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20506606-785d-4286-1695-08d8182a028a
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2287.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2020 10:33:17.4406
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2020 10:33:18.5441
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m+yZ8tBeNp+Or2QguurcRoMMre+79IZwJH+mTjb7n1/y+5hwQWpJ42lZ88RN64QKbo0pJr6cNbx6Rgr57YxtmQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ijIwhoA5fYDcr0bN2jpvzEE5Mw++N+0jpoUFx0E7miwpHGjZTPGyITJ/rR2jC7s7RqWlUq8B0hWsZ3xud+FGdg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2445
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -90,181 +90,127 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Daniel Baluta <daniel.baluta@nxp.com>
 
-This patch introduces helpers support for multi PM domains.
-
-API consists of:
-
-1) dev_multi_pm_attach - powers up all PM domains associated with a given
-device. Because we can attach one PM domain per device, we create
-virtual devices (children of initial device) and associate PM domains
-one per virtual device.
-
-2) dev_multi_pm_detach - detaches all virtual devices from PM domains
-attached with.
+Use dev_multi_pm_attach / dev_multi_pm_detach instead of the hardcoded
+version.
 
 Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
 ---
- drivers/base/power/common.c | 93 +++++++++++++++++++++++++++++++++++++
- include/linux/pm_domain.h   | 19 ++++++++
- 2 files changed, 112 insertions(+)
+ sound/soc/sof/imx/imx8.c | 60 ++++++----------------------------------
+ 1 file changed, 9 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-index bbddb267c2e6..b0a4d0109810 100644
---- a/drivers/base/power/common.c
-+++ b/drivers/base/power/common.c
-@@ -228,3 +228,96 @@ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd)
- 	device_pm_check_callbacks(dev);
- }
- EXPORT_SYMBOL_GPL(dev_pm_domain_set);
-+
-+/**
-+ * dev_multi_pm_attach - power up device associated power domains
-+ * @dev: The device used to lookup the PM domains
-+ *
-+ * Parse device's OF node to find all PM domains specifiers. For each power
-+ * domain found, create a virtual device and associate it with the
-+ * current power domain.
-+ *
-+ * This function should typically be invoked by a driver during the
-+ * probe phase, in the case its device requires power management through
-+ * multiple PM domains.
-+ *
-+ * Returns a pointer to @dev_multi_pm_domain_data if successfully attached PM
-+ * domains, NULL when the device doesn't need a PM domain or when single
-+ * power-domains exists for it, else an ERR_PTR() in case of
-+ * failures.
-+ */
-+struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev)
-+{
-+	struct dev_multi_pm_domain_data *mpd, *retp;
-+	int num_domains;
-+	int i;
-+
-+	num_domains = of_count_phandle_with_args(dev->of_node, "power-domains",
-+						 "#power-domain-cells");
-+	if (num_domains < 2)
-+		return NULL;
-+
-+	mpd = devm_kzalloc(dev, sizeof(*mpd), GFP_KERNEL);
-+	if (!mpd)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mpd->dev = dev;
-+	mpd->num_domains = num_domains;
-+
-+	mpd->virt_devs = devm_kmalloc_array(dev, mpd->num_domains,
-+					    sizeof(*mpd->virt_devs),
-+					    GFP_KERNEL);
-+	if (!mpd->virt_devs)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mpd->links = devm_kmalloc_array(dev, mpd->num_domains,
-+					sizeof(*mpd->links), GFP_KERNEL);
-+	if (!mpd->links)
-+		return ERR_PTR(-ENOMEM);
-+
-+	for (i = 0; i < mpd->num_domains; i++) {
-+		mpd->virt_devs[i] = dev_pm_domain_attach_by_id(dev, i);
-+		if (IS_ERR(mpd->virt_devs[i])) {
-+			retp = (struct dev_multi_pm_domain_data *)
-+				mpd->virt_devs[i];
-+			goto exit_unroll_pm;
-+		}
-+		mpd->links[i] = device_link_add(dev, mpd->virt_devs[i],
-+						DL_FLAG_STATELESS |
-+						DL_FLAG_PM_RUNTIME |
-+						DL_FLAG_RPM_ACTIVE);
-+		if (!mpd->links[i]) {
-+			retp = ERR_PTR(-ENOMEM);
-+			dev_pm_domain_detach(mpd->virt_devs[i], false);
-+			goto exit_unroll_pm;
-+		}
-+	}
-+	return mpd;
-+
-+exit_unroll_pm:
-+	while (--i >= 0) {
-+		device_link_del(mpd->links[i]);
-+		dev_pm_domain_detach(mpd->virt_devs[i], false);
-+	}
-+
-+	return retp;
-+}
-+EXPORT_SYMBOL(dev_multi_pm_attach);
-+
-+/**
-+ * dev_multi_pm_detach - Detach a device from its PM domains.
-+ * Each multi power domain is attached to a virtual children device
-+ *
-+ * @mpd: multi power domains data, contains the association between
-+ * virtul device and PM domain
-+ */
-+void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd)
-+{
-+	int i;
-+
-+	for (i = 0; i < mpd->num_domains; i++) {
-+		device_link_del(mpd->links[i]);
-+		dev_pm_domain_detach(mpd->virt_devs[i], false);
-+	}
-+}
-+EXPORT_SYMBOL(dev_multi_pm_detach);
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 9ec78ee53652..af1107731044 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -183,6 +183,13 @@ struct generic_pm_domain_data {
- 	void *data;
+diff --git a/sound/soc/sof/imx/imx8.c b/sound/soc/sof/imx/imx8.c
+index 68b2edccd791..7229993c5af8 100644
+--- a/sound/soc/sof/imx/imx8.c
++++ b/sound/soc/sof/imx/imx8.c
+@@ -51,10 +51,7 @@ struct imx8_priv {
+ 	struct imx_sc_ipc *sc_ipc;
+ 
+ 	/* Power domain handling */
+-	int num_domains;
+-	struct device **pd_dev;
+-	struct device_link **link;
+-
++	struct dev_multi_pm_domain_data *mpd;
  };
  
-+struct dev_multi_pm_domain_data {
-+	struct device *dev; /* parent device */
-+	struct device **virt_devs; /* virtual children links */
-+	struct device_link **links; /*  links parent <-> virtual children */
-+	int num_domains;
-+};
-+
- #ifdef CONFIG_PM_GENERIC_DOMAINS
- static inline struct generic_pm_domain_data *to_gpd_data(struct pm_domain_data *pdd)
- {
-@@ -369,18 +376,27 @@ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np)
+ static void imx8_get_reply(struct snd_sof_dev *sdev)
+@@ -207,7 +204,6 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 	struct resource res;
+ 	u32 base, size;
+ 	int ret = 0;
+-	int i;
  
- #ifdef CONFIG_PM
- int dev_pm_domain_attach(struct device *dev, bool power_on);
-+struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev);
- struct device *dev_pm_domain_attach_by_id(struct device *dev,
- 					  unsigned int index);
- struct device *dev_pm_domain_attach_by_name(struct device *dev,
- 					    const char *name);
- void dev_pm_domain_detach(struct device *dev, bool power_off);
- int dev_pm_domain_start(struct device *dev);
-+void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd);
- void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd);
-+
- #else
- static inline int dev_pm_domain_attach(struct device *dev, bool power_on)
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+@@ -218,45 +214,15 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 	priv->sdev = sdev;
+ 
+ 	/* power up device associated power domains */
+-	priv->num_domains = of_count_phandle_with_args(np, "power-domains",
+-						       "#power-domain-cells");
+-	if (priv->num_domains < 0) {
+-		dev_err(sdev->dev, "no power-domains property in %pOF\n", np);
+-		return priv->num_domains;
+-	}
+-
+-	priv->pd_dev = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+-					  sizeof(*priv->pd_dev), GFP_KERNEL);
+-	if (!priv->pd_dev)
+-		return -ENOMEM;
+-
+-	priv->link = devm_kmalloc_array(&pdev->dev, priv->num_domains,
+-					sizeof(*priv->link), GFP_KERNEL);
+-	if (!priv->link)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < priv->num_domains; i++) {
+-		priv->pd_dev[i] = dev_pm_domain_attach_by_id(&pdev->dev, i);
+-		if (IS_ERR(priv->pd_dev[i])) {
+-			ret = PTR_ERR(priv->pd_dev[i]);
+-			goto exit_unroll_pm;
+-		}
+-		priv->link[i] = device_link_add(&pdev->dev, priv->pd_dev[i],
+-						DL_FLAG_STATELESS |
+-						DL_FLAG_PM_RUNTIME |
+-						DL_FLAG_RPM_ACTIVE);
+-		if (!priv->link[i]) {
+-			ret = -ENOMEM;
+-			dev_pm_domain_detach(priv->pd_dev[i], false);
+-			goto exit_unroll_pm;
+-		}
+-	}
++	priv->mpd = dev_multi_pm_attach(&pdev->dev);
++	if (IS_ERR(priv->mpd))
++		return PTR_ERR(priv->mpd);
+ 
+ 	ret = imx_scu_get_handle(&priv->sc_ipc);
+ 	if (ret) {
+ 		dev_err(sdev->dev, "Cannot obtain SCU handle (err = %d)\n",
+ 			ret);
+-		goto exit_unroll_pm;
++		goto exit_detach_pm;
+ 	}
+ 
+ 	priv->ipc_dev = platform_device_register_data(sdev->dev, "imx-dsp",
+@@ -264,7 +230,7 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 						      pdev, sizeof(*pdev));
+ 	if (IS_ERR(priv->ipc_dev)) {
+ 		ret = PTR_ERR(priv->ipc_dev);
+-		goto exit_unroll_pm;
++		goto exit_detach_pm;
+ 	}
+ 
+ 	priv->dsp_ipc = dev_get_drvdata(&priv->ipc_dev->dev);
+@@ -328,26 +294,18 @@ static int imx8_probe(struct snd_sof_dev *sdev)
+ 
+ exit_pdev_unregister:
+ 	platform_device_unregister(priv->ipc_dev);
+-exit_unroll_pm:
+-	while (--i >= 0) {
+-		device_link_del(priv->link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
+-
++exit_detach_pm:
++	dev_multi_pm_detach(priv->mpd);
+ 	return ret;
+ }
+ 
+ static int imx8_remove(struct snd_sof_dev *sdev)
  {
+ 	struct imx8_priv *priv = (struct imx8_priv *)sdev->private;
+-	int i;
+ 
+ 	platform_device_unregister(priv->ipc_dev);
+ 
+-	for (i = 0; i < priv->num_domains; i++) {
+-		device_link_del(priv->link[i]);
+-		dev_pm_domain_detach(priv->pd_dev[i], false);
+-	}
++	dev_multi_pm_detach(priv->mpd);
+ 
  	return 0;
  }
-+
-+static inline struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev)
-+{
-+	return NULL;
-+}
-+
- static inline struct device *dev_pm_domain_attach_by_id(struct device *dev,
- 							unsigned int index)
- {
-@@ -396,6 +412,9 @@ static inline int dev_pm_domain_start(struct device *dev)
- {
- 	return 0;
- }
-+
-+static inline void dev_multi_pm_detach(struct dev_multi_pm_domain_data *mpd) {}
-+
- static inline void dev_pm_domain_set(struct device *dev,
- 				     struct dev_pm_domain *pd) {}
- #endif
 -- 
 2.17.1
 
