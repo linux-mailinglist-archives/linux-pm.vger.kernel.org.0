@@ -2,97 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E20206C2C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 08:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F52206CF0
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 08:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388998AbgFXGIU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 02:08:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388164AbgFXGIU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 02:08:20 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93899C061573;
-        Tue, 23 Jun 2020 23:08:18 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o2so1299478wmh.2;
-        Tue, 23 Jun 2020 23:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J3AVCftaR9EPyVJSqZvDpFIlU9LAhorW3LOOtyD+8K4=;
-        b=mvpTvHX5ybEUwBm8lbbmhcm7Hb632yIgI6KI1i1azenZ+I3ggc9FqJDZwNHLXL3qos
-         5dwJL/iOANuTSGlR8vWIw1SrWmS85nbTWPF6V9W7HHTkJvLCYnMQ6HFJGNHx/8kVAIJH
-         brm41FjXgrhl8XZ4vJpFY24H11fOvruoV9kCE72crRSgVu6oVtI5xtQ9Jz2P7IeOlKSo
-         iR6a9tNwEgLkUvcL+sw7FxaLp1PtM+NM2o1XISKc4xtaoxIJ1w7uyyp5nR63MCmVVzRl
-         3dgJUkWoWZIXDH/FKWIj5Od6rqeYZpqmPrtv1JK+wjr0Jz3Oacmh/h8kvJW6jQdtNldu
-         2YEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J3AVCftaR9EPyVJSqZvDpFIlU9LAhorW3LOOtyD+8K4=;
-        b=LPFmVBX1lGidbhS7VzFexuQQIp/eABOCKLi5JNLuyzTG8wRZX3fc5++bvUEED4y5ra
-         BshHa5wx6bu5ueu+NwI1DJsNvEfKAu1E2oiCMjTqan5MvSbSAS7MPt7sS2jUvGq/+oGA
-         xSZ1tphQilSlMXdG7OzPXtsG8N81OWhA1HQp/a8MCat7fkKIXiL8xiDH5k49NSrV6oPz
-         RlmT/UTvF22cnWY5qqqhuKiJgfkmItdCy4WQn3bjA45TK+p+UB7W7iYxyWM1B9IUloug
-         FfUx4D6BEXDJrVTRNaT1nvUmSu2vcYzt1Mcr3Of1QoLHdKuX9x5F+VlUJAu8TCkYMoZC
-         wuQg==
-X-Gm-Message-State: AOAM5303Ty4UMCh38+wVO6vlbDiJxUo2YrTZTnHVOFrRiYY8h+p1aHqj
-        94YLqQa2ajK6UBjrPrAB+RI=
-X-Google-Smtp-Source: ABdhPJxiESCVTYPKA7k2CylgKyTPo+uTpECT+lsNYvSmat+X3RolB7tU7PK118c4exFljWMvSRQoCw==
-X-Received: by 2002:a7b:c18f:: with SMTP id y15mr20639263wmi.85.1592978897172;
-        Tue, 23 Jun 2020 23:08:17 -0700 (PDT)
-Received: from ?IPv6:2a04:241e:500:9200:593:409e:3935:5922? ([2a04:241e:500:9200:593:409e:3935:5922])
-        by smtp.gmail.com with ESMTPSA id k185sm3352122wmk.47.2020.06.23.23.08.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jun 2020 23:08:16 -0700 (PDT)
-Subject: Re: [PATCH v4 0/6] PM / devfreq: Add dynamic scaling for imx8m ddr
- controller
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        leonard.crestez@nxp.com
-Cc:     Anson.Huang@nxp.com, a.swigon@partner.samsung.com,
-        abailon@baylibre.com, abel.vesa@nxp.com, aisheng.dong@nxp.com,
-        angus@akkea.ca, cw00.choi@samsung.com, devicetree@vger.kernel.org,
-        fabio.estevam@nxp.com, georgi.djakov@linaro.org,
-        kernel@pengutronix.de, krzk@kernel.org, kyungmin.park@samsung.com,
-        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-imx@nxp.com, linux-pm@vger.kernel.org, mark.rutland@arm.com,
-        martink@posteo.de, mka@chromium.org, mturquette@baylibre.com,
-        myungjoo.ham@samsung.com, ping.bai@nxp.com, rjw@rjwysocki.net,
-        robh@kernel.org, saravanak@google.com, sboyd@kernel.org,
-        shawnguo@kernel.org, viresh.kumar@linaro.org
-References: <cover.1573252696.git.leonard.crestez@nxp.com>
- <20200622135858.15891-1-martin.kepplinger@puri.sm>
-From:   Leonard Crestez <cdleonard@gmail.com>
-Message-ID: <e8440abf-e51f-9846-f2af-a1a44a7fd89a@gmail.com>
-Date:   Wed, 24 Jun 2020 09:08:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S2389505AbgFXGqm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 02:46:42 -0400
+Received: from mga17.intel.com ([192.55.52.151]:65042 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389144AbgFXGqk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Jun 2020 02:46:40 -0400
+IronPort-SDR: owoanpTUDqTm7IXL+LzSlCZ5TXLlWGeXnR4RMQsNdkvK4lqcR6/HmfvS7/2B/ZKcqpVXGshBJm
+ E9CPvzbthv3A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9661"; a="124618223"
+X-IronPort-AV: E=Sophos;i="5.75,274,1589266800"; 
+   d="scan'208";a="124618223"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2020 23:46:39 -0700
+IronPort-SDR: SXiroAhjJAvtcQaz0xdzKMICtwzmwhKoerH6NVNurYioUoY9vfgS+hI+gMjtd1MuvBp+4uP2yy
+ ezfrMFcV1EMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,274,1589266800"; 
+   d="scan'208";a="264994160"
+Received: from lkp-server01.sh.intel.com (HELO 538b5e3c8319) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Jun 2020 23:46:37 -0700
+Received: from kbuild by 538b5e3c8319 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jnzB7-0000m4-5y; Wed, 24 Jun 2020 06:46:37 +0000
+Date:   Wed, 24 Jun 2020 14:46:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ ecc844444841b81afe167ea405503dfef069b22b
+Message-ID: <5ef2f6a9.CHZDoWjDdQEHebLr%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <20200622135858.15891-1-martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/22/20 4:58 PM, Martin Kepplinger wrote:
-> hi Leondard,
-> 
-> before using this patchset I'd like to ask: Do you have plans to create
-> an update and push this forward? It is useful.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: ecc844444841b81afe167ea405503dfef069b22b  Merge branch 'pm-sleep' into bleeding-edge
 
-Hello.
+elapsed time: 720m
 
-I am no longer with NXP and don't have access to imx hardware right now.
+configs tested: 104
+configs skipped: 3
 
-However the series that you replied to is very old and was accepted many 
-months ago. You shouldn't have to apply out-of-tree kernel patches.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
---
-Regards,
-Leonard
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                      tct_hammer_defconfig
+arc                         haps_hs_defconfig
+arm                          lpd270_defconfig
+mips                           ip27_defconfig
+m68k                         amcore_defconfig
+powerpc                    gamecube_defconfig
+i386                              allnoconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200623
+i386                 randconfig-a002-20200623
+i386                 randconfig-a003-20200623
+i386                 randconfig-a001-20200623
+i386                 randconfig-a005-20200623
+i386                 randconfig-a004-20200623
+x86_64               randconfig-a012-20200623
+x86_64               randconfig-a011-20200623
+x86_64               randconfig-a013-20200623
+x86_64               randconfig-a014-20200623
+x86_64               randconfig-a015-20200623
+x86_64               randconfig-a016-20200623
+i386                 randconfig-a013-20200623
+i386                 randconfig-a016-20200623
+i386                 randconfig-a012-20200623
+i386                 randconfig-a014-20200623
+i386                 randconfig-a015-20200623
+i386                 randconfig-a011-20200623
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
