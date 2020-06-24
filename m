@@ -2,123 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DDEF207414
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 15:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC98207452
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388521AbgFXNNq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 09:13:46 -0400
-Received: from mail-ej1-f68.google.com ([209.85.218.68]:46210 "EHLO
-        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388367AbgFXNNq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 09:13:46 -0400
-Received: by mail-ej1-f68.google.com with SMTP id p20so2363055ejd.13;
-        Wed, 24 Jun 2020 06:13:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BDyIAIkz+outt0wjRZXFGz7XkAFPA/tTfRPsaqbeBic=;
-        b=cBoDk95Xr+/3SorCdmi317L0xPhuybVi2Gj+kAITdbJ+fXCnXFphYYW4v9MR86+/wH
-         SQCxjmOaeBaoBe/DfLIxQ/BZVeidyamSI0Xn8q6p3o7zL8QgEXkds5McYsM+tT3ouXmc
-         jvWO+m/R9IO74b22UDGPY20rbe9hZGNTFxLpkL5WiThlVd89C7sc1ZxvZ76dko5PDQG1
-         j1MCLl3K89h2z1Pp4YgC3Z1RACiA3MruyYXMUkK38jX7XE1mEv/fmKyRNb3r0OeG8LnK
-         p9PDysVc0uPFZhHQbxuOxgR4NLk83gYvG0dzR8gkWqurdrW3/Eqitf7O7pFjdWuF55yo
-         OdRA==
-X-Gm-Message-State: AOAM533KXijfBwXKl8bFvFjFROlIpzLMapfADTzEXvsb9ZNnTkju7jr1
-        N996DRO2GV7ONttBSZmBEkY=
-X-Google-Smtp-Source: ABdhPJzzPyKDomrh74GPMsORKH0aJpm0N4ocflgfVK159jT1jxEJ+S6d46lyTXjIsXY0GWgw/Bnkjg==
-X-Received: by 2002:a17:906:ca56:: with SMTP id jx22mr11630669ejb.494.1593004424202;
-        Wed, 24 Jun 2020 06:13:44 -0700 (PDT)
-Received: from pi3 ([194.230.155.235])
-        by smtp.googlemail.com with ESMTPSA id ss4sm15386027ejb.63.2020.06.24.06.13.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 06:13:43 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 15:13:41 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Kamil Konieczny <k.konieczny@samsung.com>,
-        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
-Message-ID: <20200624131341.GA20905@pi3>
-References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
- <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
- <20200623191129.GA4171@kozik-lap>
- <CGME20200624103308eucas1p29c8572979809b129ff8ac729c6c728e2@eucas1p2.samsung.com>
- <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
- <828b0d63-4d01-48d6-5971-64855adebed2@samsung.com>
- <20200624120651.GA20813@pi3>
- <55772862-ff8f-1e1d-91ae-7b4d7c3be1b6@arm.com>
+        id S2389513AbgFXNTl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 09:19:41 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:60940 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389445AbgFXNTk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 09:19:40 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05ODIWE1064154;
+        Wed, 24 Jun 2020 13:19:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=/CHyyqyPX91FA7D+EZofQoOQ+oKgF27GewZ7ADCObvI=;
+ b=RIPooS+K44BtWf7/FbFv5ISdxykDc2HG28LCHlWqNMntLN2gMNY0ybH8crRudp+YhHj4
+ oIo7KmD1Q+j8rW5N8n4y9Y4GIwO3qqyeNu+ZmwMdGesQ22eCKcUyvwkzkCsz3XeuIk8y
+ 91rZTre8GL1oVeUaHqtR6/GSIgdCqCspXizzOtY6PGZqvlDtlH/NnjIw1+ap4Z3uQA4m
+ dqdFDFT+ntFgGqiP15JcmOg/BRez0ZlwNz9o2ns65cpzIQZWG149Ys2YWR0G82js3t8r
+ CRXgbc5ALccH99P2yHaAAQ7Tzw3K2L8wK7DrDagJtxsHFw5e7Qn0YH1MI1BPan3XDXEO AA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 31uustjtd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 24 Jun 2020 13:19:34 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05ODJJd5160990;
+        Wed, 24 Jun 2020 13:19:34 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 31uurqtbcx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 24 Jun 2020 13:19:34 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05ODJW7t005612;
+        Wed, 24 Jun 2020 13:19:32 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 24 Jun 2020 13:19:28 +0000
+Date:   Wed, 24 Jun 2020 16:19:21 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH] intel_idle: Fix uninitialized variable bug
+Message-ID: <20200624131921.GB9972@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55772862-ff8f-1e1d-91ae-7b4d7c3be1b6@arm.com>
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006240096
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9661 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
+ cotscore=-2147483648 adultscore=0 bulkscore=0 spamscore=0 phishscore=0
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006240096
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 02:03:03PM +0100, Lukasz Luba wrote:
-> 
-> 
-> On 6/24/20 1:06 PM, Krzysztof Kozlowski wrote:
-> > My case was clearly showing wrong behavior. System was idle but not
-> > sleeping - network working, SSH connection ongoing.  Therefore at least
-> > one CPU was not idle and could adjust the devfreq/DMC... but this did not
-> > happen. The system stayed for like a minute in 633 MHz OPP.
-> > 
-> > Not-waking up idle processors - ok... so why not using power efficient
-> > workqueue? It is exactly for this purpose - wake up from time to time on
-> > whatever CPU to do the necessary job.
-> 
-> IIRC I've done this experiment, still keeping in devfreq:
-> INIT_DEFERRABLE_WORK()
-> just applying patch [1]. It uses a system_wq which should
-> be the same as system_power_efficient_wq when
-> CONFIG_WQ_POWER_EFFICIENT_DEFAULT is not set (our case).
-> This wasn't solving the issue for the deferred work. That's
-> why the patch 2/2 following patch 1/2 [1] was needed.
-> 
-> The deferred work uses TIMER_DEFERRABLE in it's initialization
-> and this is the problem. When the deferred work was queued on a CPU,
-> next that CPU went idle, the work was not migrated to some other CPU.
-> The former cpu is also not woken up according to the documentation [2].
+The "tick" variable isn't initialized if "lapic_timer_always_reliable"
+is true.
 
-Yes, you need either workqueue.power_efficient kernel param or CONFIG
-option to actually enable it.  But at least it could then work on any
-CPU.
+Fixes: 40ab82e08d78 ("intel_idle: Simplify LAPIC timer reliability checks")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/idle/intel_idle.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Another solution is to use directly WQ_UNBOUND.
-
-> That's why Kamil's approach should be continue IMHO. It gives more
-> control over important devices like: bus, dmc, gpu, which utilization
-> does not strictly correspond to cpu utilization (which might be low or
-> even 0 and cpu put into idle).
-> 
-> I think Kamil was pointing out also some other issues not only dmc
-> (buses probably), but I realized too late to help him.
-
-This should not be a configurable option. Why someone would prefer to
-use one over another and decide about this during build or run time?
-Instead it should be just *right* all the time. Always.
-
-Argument that we want to save power so we will not wake up any CPU is
-ridiculous if because of this system stays in high-power mode.
-
-If system is idle and memory going to be idle, someone should be woken
-up to save more power and slow down memory controller.
-
-If system is idle but memory going to be busy, the currently busy CPU
-(which performs some memory-intensive job) could do the job and ramp up
-the devfreq performance.
-
-Best regards,
-Krzysztof
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index aae53e650638..6c9152f303a6 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -132,7 +132,7 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+ 	struct cpuidle_state *state = &drv->states[index];
+ 	unsigned long eax = flg2MWAIT(state->flags);
+ 	unsigned long ecx = 1; /* break on interrupt flag */
+-	bool tick;
++	bool tick = false;
+ 	int cpu = smp_processor_id();
+ 
+ 	/*
+-- 
+2.27.0
 
