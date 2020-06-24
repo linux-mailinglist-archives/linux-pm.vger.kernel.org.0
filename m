@@ -2,138 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C66AD2070C4
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 12:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6BB207141
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 12:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390119AbgFXKGq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 06:06:46 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:39803 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390133AbgFXKGp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 06:06:45 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200624100644euoutp01d960a0aca504ee561f97a97b764bf434~bcuEcQfPg0952509525euoutp01r
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jun 2020 10:06:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200624100644euoutp01d960a0aca504ee561f97a97b764bf434~bcuEcQfPg0952509525euoutp01r
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1592993204;
-        bh=ElIIgJiCGK3igywiFZvai5FDMBo5AkeSvYXQLNTvpI4=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=imdBl9PIQqH92B5TVh6YvBMoVNnnEvOxUCR24J65QIvyQd30HOvPVtlzPUSy9vm28
-         k0lr0EdFKMEWLKI/tN1du+4IfLNDQhw2zL19UwaS3zDvsrGuKrPXZSwpQi5ZHP8/75
-         P15uZb84FrV2IzI4CBc+MQzBnxhLqQXqeoX3qwHk=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200624100643eucas1p212a0e63f9f2be65f9c9dcaea403103a2~bcuD70-3P2465624656eucas1p20;
-        Wed, 24 Jun 2020 10:06:43 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id E4.FB.06456.3B523FE5; Wed, 24
-        Jun 2020 11:06:43 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200624100643eucas1p2afb2e6567bb6dda6ea237ad2bf3a7051~bcuDdxAh01629516295eucas1p26;
-        Wed, 24 Jun 2020 10:06:43 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200624100643eusmtrp101841f7e1e88bcbceb564666c728459f~bcuDc-TWZ1004110041eusmtrp1H;
-        Wed, 24 Jun 2020 10:06:43 +0000 (GMT)
-X-AuditID: cbfec7f2-7efff70000001938-f9-5ef325b31d03
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id CC.76.06314.3B523FE5; Wed, 24
-        Jun 2020 11:06:43 +0100 (BST)
-Received: from [106.120.51.71] (unknown [106.120.51.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200624100642eusmtip20d288534e9ef67ebaa19c8c663537068~bcuDAmEmP3156331563eusmtip2C;
-        Wed, 24 Jun 2020 10:06:42 +0000 (GMT)
-Subject: Re: [PATCH 4/4] ARM: multi_v7_defconfig: Enable big.LITTLE cpuidle
- driver
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Message-ID: <5262c50b-d9b8-8f32-874e-5ebc0672ed8c@samsung.com>
-Date:   Wed, 24 Jun 2020 12:06:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.8.0
+        id S2390424AbgFXKdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 06:33:22 -0400
+Received: from mail-eopbgr50074.outbound.protection.outlook.com ([40.107.5.74]:27279
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388421AbgFXKdV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 24 Jun 2020 06:33:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AItJK/QIImiQIEmEebSjvqvFNZrVLq6ygidos+QPZS2E7tVZl/kKIZaR4WX6m57/HvUzRwpbRK0PyH1wAJvhhH2+zrehH2JTtxVsegy8zBukGNQc6XaVNgBfFKHCsCCV2wp6G0MRgfvHioBH6DYZN1TBoIAXOH2PEK4hJHje4ji9HYZuy+nPo+NQwNy2rlwvWVrsC+/BxWOeFg+lLpNwcznzKG9IfDO6j6YVnyE+ewCtX/pUq0p25CHg9vHOzHoZbq6V1jB4RK/L+TL37ZPcwbn+71QRvuglJPSFIcNDwdIgp1eDKw++ZJVB+9J0j2oFJ7Z7blglYw4UgQiqv3bdnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KsZNQeeSGRqslaYBepsd0cplnO0TsApo56aASIlqJ8c=;
+ b=iszz8kxL0b0v7okgujbjmfHkAYjwGiFeR2Fv9pGwl/AOgSx+HHYzD3SW5IXYVP3ownNY0F67vUhvae4UlYvgG0sGM2NCBGNnJeRec80YzSyEjtKVWSZGFeR6jFSfA+Safnt5Rb11i7DWyRMRZA5OMwaH1mTCXmFXLbZGOzah4bt0+iboo+t1yYJEd5oQlRA5JSGPoGtk2hEhqbrkU81Wjh+aSbQz+XwVe+fcX3QQW7o0BHpBwlU4cD9Xa6ty3Be6unt9Wjxek8DfxLkvUSIC+nqdDxS+Y1eTA9BdPXPHiNdMKiV19JTEopAqC0a7zEmsGlKGkGLvnBugrsRAtPgCFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KsZNQeeSGRqslaYBepsd0cplnO0TsApo56aASIlqJ8c=;
+ b=Lrmi4cFW7/GQQ8DM06DEIxFTLHV0wcZSMKiNgOLOEdV5Pij3/TAtF0cve6xSX/ljcVOuThF3VwiMrEuDu1JQlqMwsATkRUIgqGxYBxXUQeMiscEouF3XlrxzfI78hs8fOeki58Sula2PwiAk8fwa+ZJzORGN0zCmrRTeCzIkelA=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=oss.nxp.com;
+Received: from VI1PR0401MB2287.eurprd04.prod.outlook.com
+ (2603:10a6:800:2e::19) by VI1PR0401MB2445.eurprd04.prod.outlook.com
+ (2603:10a6:800:55::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3131.20; Wed, 24 Jun
+ 2020 10:33:16 +0000
+Received: from VI1PR0401MB2287.eurprd04.prod.outlook.com
+ ([fe80::9d5c:685e:4b51:fa60]) by VI1PR0401MB2287.eurprd04.prod.outlook.com
+ ([fe80::9d5c:685e:4b51:fa60%3]) with mapi id 15.20.3109.027; Wed, 24 Jun 2020
+ 10:33:16 +0000
+From:   Daniel Baluta <daniel.baluta@oss.nxp.com>
+To:     khilman@kernel.org, ulf.hansson@linaro.org,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        alsa-devel@alsa-project.org, linux-imx@nxp.com
+Subject: [PATCH v3 0/2] Introduce multi PM domains helpers
+Date:   Wed, 24 Jun 2020 13:32:45 +0300
+Message-Id: <20200624103247.7115-1-daniel.baluta@oss.nxp.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain; charset=a
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR01CA0100.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:10e::41) To VI1PR0401MB2287.eurprd04.prod.outlook.com
+ (2603:10a6:800:2e::19)
 MIME-Version: 1.0
-In-Reply-To: <20200616081230.31198-5-m.szyprowski@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrEKsWRmVeSWpSXmKPExsWy7djP87qbVT/HGWx+qWsx77OsxfnzG9gt
-        Nj2+xmrxufcIo8WM8/uYLN78fsFusbCphd1i7ZG77A4cHmvmrWH02LSqk83jzrU9bB6bl9R7
-        9G1ZxejxeZNcAFsUl01Kak5mWWqRvl0CV8aTu19YCw6wV0zcNZWpgXEbWxcjJ4eEgInE6sVb
-        gGwuDiGBFYwS7zd/Z4ZwvjBK/DvezgLhfGaU6N6+jAmm5fui70wQieWMEt+fnWYFSQgJvGWU
-        2LuWA8QWFgiR+HajixHEFhHQl+huuwJmMwtMYJLY+TAVxGYTsJKY2L4KLM4rYCdxue0QM4jN
-        IqAqceHGc3YQW1QgQuLTg8OsEDWCEidnPmEBsTmB6t/fameDmCkucevJfCYIW15i+9s5zBCH
-        7mOXuHlKGMJ2kfh34S47hC0s8er4FihbRuL05B6wLyUE1jFK/O14wQzhbGeUWD75HzSUrCXu
-        nPsFZHMAbdCUWL9LHyLsKPH2bTcTSFhCgE/ixltBiBv4JCZtm84MEeaV6GgTgqhWk9iwbAMb
-        zNqunSuZJzAqzULy2Swk38xC8s0shL0LGFlWMYqnlhbnpqcWG+allusVJ+YWl+al6yXn525i
-        BKak0/+Of9rB+PVS0iFGAQ5GJR7eDQ8+xgmxJpYVV+YeYpTgYFYS4XU6ezpOiDclsbIqtSg/
-        vqg0J7X4EKM0B4uSOK/xopexQgLpiSWp2ampBalFMFkmDk6pBkb9OS8b93hcFlZ23Ht+K9tu
-        6dVfJJYlFB2turb96VK3JadKlasP2G1/wZcutqDdrndb8iaReXN8fSd1eS7VMZrRdMh1XcS6
-        XEbWVL2ssOrM9c9fLpx2bYayhnFNXXbz2jLRal156UVG206w39dkOfP7xObZ2yVmPbNdPIuN
-        o2/1Vf99qVYJl7SUWIozEg21mIuKEwGH9PalRQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCIsWRmVeSWpSXmKPExsVy+t/xe7qbVT/HGdyZxGcx77OsxfnzG9gt
-        Nj2+xmrxufcIo8WM8/uYLN78fsFusbCphd1i7ZG77A4cHmvmrWH02LSqk83jzrU9bB6bl9R7
-        9G1ZxejxeZNcAFuUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5m
-        WWqRvl2CXsaTu19YCw6wV0zcNZWpgXEbWxcjJ4eEgInE90XfmboYuTiEBJYySuw60waU4ABK
-        yEgcX18GUSMs8edaF1i9kMBrRomNF81AbGGBEIlvN7oYQWwRAX2J7rYrjCBzmAUmMUn8OHMH
-        quEoo8TB/1YgNpuAlcTE9lVgDbwCdhKX2w4xg9gsAqoSF248ZwexRQUiJA7vmAVVIyhxcuYT
-        FhCbE6j+/a12sJnMAuoSf+ZdYoawxSVuPZnPBGHLS2x/O4d5AqPQLCTts5C0zELSMgtJywJG
-        llWMIqmlxbnpucWGesWJucWleel6yfm5mxiBMbjt2M/NOxgvbQw+xCjAwajEw7vhwcc4IdbE
-        suLK3EOMEhzMSiK8TmdPxwnxpiRWVqUW5ccXleakFh9iNAV6biKzlGhyPjA95JXEG5oamltY
-        GpobmxubWSiJ83YIHIwREkhPLEnNTk0tSC2C6WPi4JRqYEwMdVA7Kv+U4ZjxFbMFUh+bam9z
-        TOm7tEakM96qxEp4ZYDZv+Db+9ccO7hN7nar9Z5LQr0Ggo8N9ezv6rBtl2jWyzolsiHCL+Di
-        6keuYkvNeW2cJWbmrFY9sHRZbSCXXMXBlJOslXt37mblf3P6j3tY3OqPteUi9YcL00/wT8ry
-        dHgecFc1VYmlOCPRUIu5qDgRANo6Y/jXAgAA
-X-CMS-MailID: 20200624100643eucas1p2afb2e6567bb6dda6ea237ad2bf3a7051
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3
-References: <20200616081230.31198-1-m.szyprowski@samsung.com>
-        <CGME20200616081250eucas1p2a98f8810962ddc692fa5588a74f911b3@eucas1p2.samsung.com>
-        <20200616081230.31198-5-m.szyprowski@samsung.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from fsr-ub1864-103.ro-buh02.nxp.com (83.217.231.2) by AM0PR01CA0100.eurprd01.prod.exchangelabs.com (2603:10a6:208:10e::41) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3109.22 via Frontend Transport; Wed, 24 Jun 2020 10:33:15 +0000
+X-Mailer: git-send-email 2.17.1
+X-Originating-IP: [83.217.231.2]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 10905119-2311-42eb-4723-08d8182a011b
+X-MS-TrafficTypeDiagnostic: VI1PR0401MB2445:
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <VI1PR0401MB2445B423B9D7ABF7AD19B66AB8950@VI1PR0401MB2445.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Forefront-PRVS: 0444EB1997
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6ZIHkiDLxCQA/Qxqe8UBeX38gE5FhHG55SQr0PUlPQYlhyeTH88f3oUXn/ZVkP6Bx/s8Ks1P8g7I3PXI0qjOAK/IWvG/w4xLZkE2jyzfQ3lunpCId9XuysXhcXfLTSaNgoK1vuGEMi6dBABCKXn7RputBru6jBDazgGQ5N4KRHMlOUfC6AEC6c2CD3AX4eDifgXFPwDDFayhri5ZQQPho8Jq1Xsj/xRh6ErOMiq81spgmM0ND8r2+JapXxsK1/evvenhxcUM9Pm+Osqu4VOkaHu5dDv3tquK0/p6CKP/aObde7KvBby+2f2RevhhVmyI
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0401MB2287.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(346002)(376002)(366004)(39860400002)(396003)(86362001)(8676002)(186003)(16526019)(1076003)(8936002)(6512007)(66946007)(2616005)(83380400001)(66556008)(5660300002)(66476007)(316002)(956004)(26005)(6486002)(44832011)(4326008)(6506007)(2906002)(52116002)(478600001)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: 5Okqs5mep7iRnApeBT98GH0CtWsmpu63SC4stu1AYlZd1L1PSh2UWekYFQe3quF5aPyBlZ+sUj6dt10j7hcZvk15av2Q7rNIaaVOeSIby9Oiaid0KKjm7siTWTzzM3kgpf/omzO4MYWOlgLaQdYMT8Y2Nuk+agDHSHczss4ZSlNeXBgCyZ1Pw4QUzpmJpLQs7FBnBjXhrD9sIb1j15paUoL26QLd1Ny2RuxsTaPEEZ5GnCZjSvgToE2JYshWsd76lK8wkxFzY07dVTAHu2wtKDBsjJKQwr/kXwMfzsoWMsx5gcOpcCyccJxZB6BlGegVLwc3ORtc4KBqdY9ziwpOd2ZDXaeqYYd4BIw09kP0d9KLXXmuo7kFYEs+GgLMc1ChQXBVbsd1cIDKSrG5rDekJlkR8mW0X8tf9Sr+ymCh9PXhmvUPGV/Pb0dRjYBWOq08SI/YIF8WIgfW78fxWuTHexeBqcE7lOMRThzdVkVhUjg=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10905119-2311-42eb-4723-08d8182a011b
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0401MB2287.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2020 10:33:16.2171
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RqBbVskbPPdkdD0X/2SwltmF4yrp/fVzWdReUCS22LSnPpTwqcqNT2ltYAw40dxeaqppFcK9ggR3Ss4WeADihg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0401MB2445
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Daniel Baluta <daniel.baluta@nxp.com>
 
-On 6/16/20 10:12 AM, Marek Szyprowski wrote:
-> Enable big.LITTLE cpuidle driver, which can be used on Exynos-based
-> Peach Pit/Pi Chromebooks.
-> 
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+i.MX8QXP/i.MX8QM has IPs that need multiple power domains to be up
+in order to work. In order to help drivers, we introduce multi PM
+domains helpers that are able to activate/deactivate multi PM domains.
 
-Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+First patch introduces the helpers and second patch demonstrates how
+a driver can use them instead of hardcoding the PM domains handling.
 
-Best regards,
---
-Bartlomiej Zolnierkiewicz
-Samsung R&D Institute Poland
-Samsung Electronics
+Changes since v2:
+»       - fix kernel test robot reported issues (missing static inline
+	for newly introduced functions in headers and arguments
+	swapped for devm_kzalloc).
 
-> ---
->  arch/arm/configs/multi_v7_defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> index 95543914d3c7..6a922a8ef712 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -111,6 +111,7 @@ CONFIG_ARM_RASPBERRYPI_CPUFREQ=y
->  CONFIG_QORIQ_CPUFREQ=y
->  CONFIG_CPU_IDLE=y
->  CONFIG_ARM_CPUIDLE=y
-> +CONFIG_ARM_BIG_LITTLE_CPUIDLE=y
->  CONFIG_ARM_ZYNQ_CPUIDLE=y
->  CONFIG_ARM_EXYNOS_CPUIDLE=y
->  CONFIG_ARM_TEGRA_CPUIDLE=y
-> 
+Changes since v1: (addressed Ranjani's comments)
+»       - enhanced description for dev_multi_pm_attach return value
+»       - renamed exit_unroll_pm label to exit_detach_pm
+
+Ideally would be to have patch 1/2 merged via power tree and then I
+will submit again patch 2/2 on sound tree.
+
+Daniel Baluta (2):
+  PM / domains: Introduce multi PM domains helpers
+  ASoC: SOF: Use multi PM domains helpers
+
+ drivers/base/power/common.c | 93 +++++++++++++++++++++++++++++++++++++
+ include/linux/pm_domain.h   | 19 ++++++++
+ sound/soc/sof/imx/imx8.c    | 60 ++++--------------------
+ 3 files changed, 121 insertions(+), 51 deletions(-)
+
+-- 
+2.17.1
+
