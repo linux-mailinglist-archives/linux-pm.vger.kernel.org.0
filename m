@@ -2,106 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E412075D5
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 16:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F1A20763E
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 17:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390423AbgFXOiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 10:38:54 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56268 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388652AbgFXOiy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 10:38:54 -0400
-Received: from 89-64-84-125.dynamic.chello.pl (89.64.84.125) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 45514ec22c03a9c3; Wed, 24 Jun 2020 16:38:52 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH] intel_idle: Eliminate redundant static variable
-Date:   Wed, 24 Jun 2020 16:38:51 +0200
-Message-ID: <1731670.qoJTzjjlrN@kreacher>
+        id S2391183AbgFXPAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 11:00:23 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41149 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389043AbgFXPAX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 11:00:23 -0400
+Received: by mail-ot1-f67.google.com with SMTP id k15so2167936otp.8;
+        Wed, 24 Jun 2020 08:00:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eykhWQcNNxAwrKLr1Dkv70utXgS770FMiPrM6b8KPjc=;
+        b=hkHeIouE0X74Rn2j8Igk/XY/4jOLE8DlfLi2yerUJcVKFK2NOOdBPJbwUwayFt9GQG
+         WS5VZ/1HkAVQNdCD4Qw61wOfGp6p+kXSgTgiww5uGvWDHsnEHfavrw6TnCFiUMRwADaM
+         Gd+nb664kj4N2CTEWKSFKzOnyCSUoM4CJG3iDxh/Lw+ARo+KhKTWSa8WSAFoE6O8KrIX
+         QqKdDMntr1VZNUZn6VVodgXBpCRtWjQhYS0+9AUQSTZC3SGGEvb1PV8vyNRtbJ0zOqwk
+         BQ8u0iVIWuDqnwsJPwDKJqWcWWf2h1JXRTSBmURpbESG15E4O2MZV9ck1Df4AXDW5atK
+         cjyQ==
+X-Gm-Message-State: AOAM5336mnoguDHEPE24ywgzFB52m96XoeX9G0UfGu4pFJP+u37TYJUY
+        FSdV+YfFLbHlIQYcFgyWWiYMoRFz/kyJSlvVZAw=
+X-Google-Smtp-Source: ABdhPJxTfu2nRQ0ID+eDw+0oWm7stVdBgfOBXZxtPamhCD54VzLFyKUSp9gBGIPEG0mIIAqQQkSpe0tvPBek2gXWEWg=
+X-Received: by 2002:a9d:7d15:: with SMTP id v21mr22236731otn.118.1593010820398;
+ Wed, 24 Jun 2020 08:00:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com> <20200608112211.12125-4-andrzej.p@collabora.com>
+In-Reply-To: <20200608112211.12125-4-andrzej.p@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 24 Jun 2020 17:00:09 +0200
+Message-ID: <CAJZ5v0j7e9TzDtEiDXmj3fLAQ7CvFHoe7Q3aYKKas3PEXrsUuw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] ACPI: button: Access input device's users under
+ appropriate mutex
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        linux-input@vger.kernel.org,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        Collabora Kernel ML <kernel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Jun 8, 2020 at 1:22 PM Andrzej Pietrasiewicz
+<andrzej.p@collabora.com> wrote:
+>
+> Inspecting input device's 'users' member should be done under device's
+> mutex, so add appropriate invocations.
+>
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-The value of the lapic_timer_always_reliable static variable in
-the intel_idle driver reflects the boot_cpu_has(X86_FEATURE_ARAT)
-value and so it also reflects the static_cpu_has(X86_FEATURE_ARAT)
-value.
+This looks like a fix that might be applied independently of the other
+patches in the series.
 
-Hence, the lapic_timer_always_reliable check in intel_idle() is
-redundant and apart from this lapic_timer_always_reliable is only
-used in two places in which boot_cpu_has(X86_FEATURE_ARAT) can be
-used directly.
+Do you want me to pick it up?
 
-Eliminate the lapic_timer_always_reliable variable in accordance
-with the above observations.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/idle/intel_idle.c |   11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
-
-Index: linux-pm/drivers/idle/intel_idle.c
-===================================================================
---- linux-pm.orig/drivers/idle/intel_idle.c
-+++ linux-pm/drivers/idle/intel_idle.c
-@@ -66,8 +66,6 @@ static struct cpuidle_device __percpu *i
- static unsigned long auto_demotion_disable_flags;
- static bool disable_promotion_to_c1e;
- 
--static bool lapic_timer_always_reliable;
--
- struct idle_cpu {
- 	struct cpuidle_state *state_table;
- 
-@@ -142,7 +140,7 @@ static __cpuidle int intel_idle(struct c
- 	if (state->flags & CPUIDLE_FLAG_TLB_FLUSHED)
- 		leave_mm(cpu);
- 
--	if (!static_cpu_has(X86_FEATURE_ARAT) && !lapic_timer_always_reliable) {
-+	if (!static_cpu_has(X86_FEATURE_ARAT)) {
- 		/*
- 		 * Switch over to one-shot tick broadcast if the target C-state
- 		 * is deeper than C1.
-@@ -1562,7 +1560,7 @@ static int intel_idle_cpu_online(unsigne
- {
- 	struct cpuidle_device *dev;
- 
--	if (!lapic_timer_always_reliable)
-+	if (!boot_cpu_has(X86_FEATURE_ARAT))
- 		tick_broadcast_enable();
- 
- 	/*
-@@ -1655,16 +1653,13 @@ static int __init intel_idle_init(void)
- 		goto init_driver_fail;
- 	}
- 
--	if (boot_cpu_has(X86_FEATURE_ARAT))	/* Always Reliable APIC Timer */
--		lapic_timer_always_reliable = true;
--
- 	retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "idle/intel:online",
- 				   intel_idle_cpu_online, NULL);
- 	if (retval < 0)
- 		goto hp_setup_fail;
- 
- 	pr_debug("Local APIC timer is reliable in %s\n",
--		 lapic_timer_always_reliable ? "all C-states" : "C1");
-+		 boot_cpu_has(X86_FEATURE_ARAT) ? "all C-states" : "C1");
- 
- 	return 0;
- 
-
-
-
+> ---
+>  drivers/acpi/button.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/button.c b/drivers/acpi/button.c
+> index 78cfc70cb320..ff7ab291f678 100644
+> --- a/drivers/acpi/button.c
+> +++ b/drivers/acpi/button.c
+> @@ -456,13 +456,16 @@ static int acpi_button_resume(struct device *dev)
+>  {
+>         struct acpi_device *device = to_acpi_device(dev);
+>         struct acpi_button *button = acpi_driver_data(device);
+> +       struct input_dev *input = button->input;
+>
+>         button->suspended = false;
+> -       if (button->type == ACPI_BUTTON_TYPE_LID && button->input->users) {
+> +       mutex_lock(&input->mutex);
+> +       if (button->type == ACPI_BUTTON_TYPE_LID && input->users) {
+>                 button->last_state = !!acpi_lid_evaluate_state(device);
+>                 button->last_time = ktime_get();
+>                 acpi_lid_initialize_state(device);
+>         }
+> +       mutex_unlock(&input->mutex);
+>         return 0;
+>  }
+>  #endif
+> --
+> 2.17.1
+>
