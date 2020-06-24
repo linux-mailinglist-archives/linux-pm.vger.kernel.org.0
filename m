@@ -2,163 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D16206EC3
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 10:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA079206EC8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jun 2020 10:16:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390331AbgFXIOp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 04:14:45 -0400
-Received: from mail-ej1-f52.google.com ([209.85.218.52]:38533 "EHLO
-        mail-ej1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390249AbgFXIOp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 04:14:45 -0400
-Received: by mail-ej1-f52.google.com with SMTP id w16so1559139ejj.5;
-        Wed, 24 Jun 2020 01:14:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ibh7qwsVmOM0eKJK6oTaNo8+HhtSr5AxAKMdLvNoMHg=;
-        b=Tx9eORMt9WfmS5rqNr50S4SZJw+JylxOQiJp64Vm2I7zAzVRXpFo6fEoHqZaqSxWJK
-         i7rnVSp6SAcXQW37ggGYt7ts8t0f+Fo0MgzyQCzJdZh03kQAr4X0/3XW0i7LhNiio0R4
-         6GOmng2ODDxncjpaYpu8ZHn9cXDcaD8hPY68F2+08nJeAInKKafte/FAa2wI0UvqnQJi
-         0aTU0l+nsweoc0igRz8EbV3FfsBXNUIcYkt6cp0cbE54SJZG0ufm6MWBus+DzfxgxCiy
-         suzQIg2/3N2QkIRq6ouQkFdssZrXx2IOzxA6H0Xhf7RaQISPdIT8Til+jAukAbuHjoX1
-         gzDQ==
-X-Gm-Message-State: AOAM532BNMExjDSwHKWNvmfaVG8LlLNp7/Jlgh0CAxfBUJ0zDfk7USMS
-        OewfcYZcl+FLbZzjGRE7Le0=
-X-Google-Smtp-Source: ABdhPJwTeuyZfApU34NyzWK0HGsXM4sXOeoUnfsKIw0gNosZtxMfWcYqWxrIgZNdijsZjlpl7dJwjQ==
-X-Received: by 2002:a17:907:11db:: with SMTP id va27mr11152068ejb.175.1592986481334;
-        Wed, 24 Jun 2020 01:14:41 -0700 (PDT)
-Received: from pi3 ([194.230.155.235])
-        by smtp.googlemail.com with ESMTPSA id f16sm3512754ejr.0.2020.06.24.01.14.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2020 01:14:40 -0700 (PDT)
-Date:   Wed, 24 Jun 2020 10:14:38 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Willy Wolff <willy.mh.wolff.ml@gmail.com>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
+        id S2388709AbgFXIQO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 Jun 2020 04:16:14 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:52790 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388048AbgFXIQO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 04:16:14 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200624081611euoutp01537180a859292b0c073d831d2b55e9ad~bbNi2URUA1103511035euoutp01S;
+        Wed, 24 Jun 2020 08:16:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200624081611euoutp01537180a859292b0c073d831d2b55e9ad~bbNi2URUA1103511035euoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1592986571;
+        bh=EHndB5QzgamLkOVrkzrSmd1+bAEHOFM//FEnnR45Bo4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Ttjv3W55vyImYB59xCPQGIkn8zbRLXBGasQGUJiz/6sVRQB/SP1QXjVJV0rckcjIA
+         DzXxc/v4LaHLIL3c/8BbMl1q6vOp/OqLyPvixrG6e7B85XhSnhZ0nQBi0A7oVwzy0v
+         fSncipZy8duCvq/9fJ6GPWB8OH792pT13dKUEuTA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200624081611eucas1p226b8963e5ae702345134f941d6b96727~bbNisDFHe0174401744eucas1p2H;
+        Wed, 24 Jun 2020 08:16:11 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 86.DD.05997.ACB03FE5; Wed, 24
+        Jun 2020 09:16:10 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200624081610eucas1p1fb83289f3916bf59400b2ea737c124d1~bbNiOoyMc2767127671eucas1p1U;
+        Wed, 24 Jun 2020 08:16:10 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200624081610eusmtrp1ab30ef185830ae9fc608a966fd014c18~bbNiNZNoB3260232602eusmtrp1X;
+        Wed, 24 Jun 2020 08:16:10 +0000 (GMT)
+X-AuditID: cbfec7f4-65dff7000000176d-3a-5ef30bcaa20a
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 67.73.06017.ACB03FE5; Wed, 24
+        Jun 2020 09:16:10 +0100 (BST)
+Received: from [106.120.51.71] (unknown [106.120.51.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200624081608eusmtip1aca323a1e91aaac71dd2e364feb4b059~bbNgn-YNL1894018940eusmtip1J;
+        Wed, 24 Jun 2020 08:16:08 +0000 (GMT)
+Subject: Re: [PATCH v4 01/11] acpi: thermal: Fix error handling in the
+ register function
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
-Message-ID: <20200624081438.GA20603@pi3>
-References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
- <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
- <20200623191129.GA4171@kozik-lap>
- <20200624080117.fzgowkpgyhs6tbzx@macmini.local>
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel@collabora.com
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Message-ID: <ecaae46b-5ba5-3c08-2451-34d0dba46143@samsung.com>
+Date:   Wed, 24 Jun 2020 10:16:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200624080117.fzgowkpgyhs6tbzx@macmini.local>
+In-Reply-To: <20200528192051.28034-2-andrzej.p@collabora.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02TbUxTZxTH89x7e9syyi5F7BO2xaVxMzMT3NzYiaLRwYf7bX5Uoow6bpBI
+        q2uhTGUbkvHWKeMlglZ0KMa+oBsWKBSQELrJsFLBZagbb1VAcJa3diIOytpeyPj2O/9z/s//
+        nA+PiJSWCKNEaaoMTq1SpMvpEMp6e8G55c5rnqStvvE4MP3mo2DeuUDAtSdDFJSdWybh5ikX
+        AZc8b0HVve8o0F3eCnnWQQG4/vgM8j3nKFh+/Le/6oiHR6daCaia0MJjo14I9c7TAjCftVFw
+        xXSZBpvLTYOh/QcElif9AtC9MpHgOfMLgsbJKQLmRvxBz40DQiiqL0Vgb6wmwF7QLoDb1euh
+        q6JYAJUzFxD09h6A2rYJEu467gtg1FVMw1KThYKJBhk4WjPgVl4fCfWWsyT0V3soMIy0CHe/
+        z166fpIda64SsL8XnyHY5sGriG0wPSJY41wMa9MPCtl642a2pm2SYC3mIpod6G+j2Smn069f
+        /ZadfT4qZMcr7QRbMuOm9+LEkLgULj1Ny6ljdiWHHK7puUEdmw37auGeF+WgilAdEosw8xEu
+        KHwg1KEQkZQxItxtOY/4wovwsO+ZgC88CHfmPiRWLc4cCxVgKWNAeMhE8ENuhG858oONCCYR
+        T04VBXkdsw0vWN3BDJLRSbD7absw0KCZ7bi0wIwCLGF24daCf+kAU8w72Do/HtQjmX14bsQu
+        4GfCcff50eCjYmYnrmj8PrgRycjwn6M/rvAG3OSuIgNhmHkhxqXTdppfOwFb/xmjeI7Az7oa
+        hDy/iR3lpyne8BPCS4UTK+4mhA3lvhX3DjzgfOVnkT/iPfxzSwwv78FN5psoIGMmDD90h/NL
+        hOEyayXJyxJcmC/lp9/Fddfq6NVYnc1EliC5fs1p+jXn6Neco/8/txpRZiTjMjXKVE7zoYrL
+        itYolJpMVWr0F0eVFuT/Jw5fl7cZtSwe6kSMCMlDJXUjs0lSgUKrOa7sRFhEytdJPu1xJEkl
+        KYrjJzj10c/VmemcphO9IaLkMsm2K5MHpUyqIoM7wnHHOPVqlxCJo3JQdF+WzHN/w+t7cvfP
+        fD12JDbP21OjiPjypUqzsTd7i/TF3evDF3Ofbu84WGUafvDJ9F9LsPOiNSFRHDpkOZB2qFeb
+        Ipo+ERepXVbGRyVIyy/seNnVXbup4U7H7vbYt5cM2b747CnvRl+ycn/Wx2G28Njkxb4yV23z
+        N+W/zp/0rY/cuyinNIcVH2wm1RrFf9z+H0sjBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxTVxiHd+69vS1il7OC4wRFXRNCNFuxXLAvBrtFY7zxD1lmtiyO4Tq4
+        AzJKTW9p5kwUpwh0yocG0K5BkG5C12Wu5aMMZrQssg0twrJmEFn46AhEacCaGLYObMEl/Pc7
+        v/M8581JXhmtaGETZUUlJsFYoitWshuYweWB8Td+iw3l7vrTsxnaf1lm4JlviYJvpv9i4NKV
+        FRp+ODNJQVMoCWxD5xiwtOyC8q5xCUz+kQ3nQ1cYWJl6FDnd3g+jZ3opsM2aYarNKgW374IE
+        HPU9DFxvb2GhZ3KehRu3ahC4pv0SsPzTTkPo4s8IOueCFDyZiAx63PZQClXuOgT9nc0U9Ffc
+        ksDd5ldhoKFaAo0LXyF48CAHvu2bpeHe4IgEApPVLPzX7WJgtiMBBntN8FP5MA1uVz0N/uYQ
+        AzcmfpS+9Trf5DzJ/+2xSfjfqy9SvGfcjviO9lGKb3uSyvdYx6W8u20n39o3R/EuRxXLP/T3
+        sXzQ54v09tP84uOAlJ9p7Kf42oV59m1yVJVlNJSahO2FBtG0V/mBGtJU6kxQpaVnqtSc5sM9
+        aRnKVG1WvlBcZBaMqdqPVIWt979jji++/NnS0FNUhho2WlCMjOB04itzMdGswF8jcu2LTyxI
+        Fum3kIHvzWtIHAn7LawFbYggjxCpnHJKoxdx+CiZC1atuvGYI0td89IoRONqOemdcUrXjHKK
+        eIa9VJRi8R5SV+FA0SzHWtJb8S8bzQxOJl3PZlb7Tfh90u+xvmBeIb9eDaxOiMF7SUPnl6vv
+        0DiFhJtG6LWcQMYC117020j3vI2uRQrrOt26TrGuU6zrlGbEOFC8UCrqC/RimkrU6cXSkgJV
+        nkHvQpH17Lq71OFBluARL8IypNwovzmxmKuQ6MziCb0XERmtjJfvuz+Yq5Dn6058LhgNx4yl
+        xYLoRRmRz9XRiZvyDJFlLzEdU2eoNZCp1nAabjcoE+SV+E6OAhfoTMKngnBcMP7vUbKYxDKU
+        GW8fGuFS/O9dbfHm67vvaVeGZnbgg7G3L52drV1IOmWoDC9ypw3DzsuOOa6e+9h/+KWE5Jxl
+        Ma/Qbd8W+67ulMf8jrmIzcGdgcrdjW9qRs014XJn9gF72JekNG6tiMtKDuKxovSasZs7FvSX
+        s++EDpW9ZoNAyuh0nauV0yoZsVCn3kkbRd1z33/Dy7QDAAA=
+X-CMS-MailID: 20200624081610eucas1p1fb83289f3916bf59400b2ea737c124d1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200528192122eucas1p29d209ad5a885b31deb04dcad13f98ad5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200528192122eucas1p29d209ad5a885b31deb04dcad13f98ad5
+References: <Message-ID: <4493c0e4-51aa-3907-810c-74949ff27ca4@samsung.com>
+        <20200528192051.28034-1-andrzej.p@collabora.com>
+        <CGME20200528192122eucas1p29d209ad5a885b31deb04dcad13f98ad5@eucas1p2.samsung.com>
+        <20200528192051.28034-2-andrzej.p@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 10:01:17AM +0200, Willy Wolff wrote:
-> Hi Krzysztof,
-> Thanks to look at it.
-> 
-> mem_gov is /sys/class/devfreq/10c20000.memory-controller/governor
-> 
-> Here some numbers after increasing the running time:
-> 
-> Running using simple_ondemand:
-> Before:
->      From  :   To                                                                                     
->            : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
-> * 165000000:         0         0         0         0         0         0         0         4   4528600
->   206000000:         5         0         0         0         0         0         0         0     57780
->   275000000:         0         5         0         0         0         0         0         0     50060
->   413000000:         0         0         5         0         0         0         0         0     46240
->   543000000:         0         0         0         5         0         0         0         0     48970
->   633000000:         0         0         0         0         5         0         0         0     47330
->   728000000:         0         0         0         0         0         0         0         0         0
->   825000000:         0         0         0         0         0         5         0         0    331300
-> Total transition : 34
-> 
-> 
-> After:
->      From  :   To
->            : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
-> * 165000000:         0         0         0         0         0         0         0         4   5098890
->   206000000:         5         0         0         0         0         0         0         0     57780
->   275000000:         0         5         0         0         0         0         0         0     50060
->   413000000:         0         0         5         0         0         0         0         0     46240
->   543000000:         0         0         0         5         0         0         0         0     48970
->   633000000:         0         0         0         0         5         0         0         0     47330
->   728000000:         0         0         0         0         0         0         0         0         0
->   825000000:         0         0         0         0         0         5         0         0    331300
-> Total transition : 34
-> 
-> With a running time of:
-> LITTLE => 283.699 s (680.877 c per mem access)
-> big => 284.47 s (975.327 c per mem access)
 
-I see there were no transitions during your memory test.
+On 5/28/20 9:20 PM, Andrzej Pietrasiewicz wrote:
+> The acpi_thermal_register_thermal_zone() is missing any error handling.
+> This needs to be fixed.
+> 
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-> 
-> And when I set to the performance governor:
-> Before:
->      From  :   To
->            : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
->   165000000:         0         0         0         0         0         0         0         5   5099040
->   206000000:         5         0         0         0         0         0         0         0     57780
->   275000000:         0         5         0         0         0         0         0         0     50060
->   413000000:         0         0         5         0         0         0         0         0     46240
->   543000000:         0         0         0         5         0         0         0         0     48970
->   633000000:         0         0         0         0         5         0         0         0     47330
->   728000000:         0         0         0         0         0         0         0         0         0
-> * 825000000:         0         0         0         0         0         5         0         0    331350
-> Total transition : 35
-> 
-> After:
->      From  :   To
->            : 165000000 206000000 275000000 413000000 543000000 633000000 728000000 825000000   time(ms)
->   165000000:         0         0         0         0         0         0         0         5   5099040
->   206000000:         5         0         0         0         0         0         0         0     57780
->   275000000:         0         5         0         0         0         0         0         0     50060
->   413000000:         0         0         5         0         0         0         0         0     46240
->   543000000:         0         0         0         5         0         0         0         0     48970
->   633000000:         0         0         0         0         5         0         0         0     47330
->   728000000:         0         0         0         0         0         0         0         0         0
-> * 825000000:         0         0         0         0         0         5         0         0    472980
-> Total transition : 35
-> 
-> With a running time of:
-> LITTLE: 68.8428 s (165.223 c per mem access)
-> big: 71.3268 s (244.549 c per mem access)
-> 
-> 
-> I see some transition, but not occuring during the benchmark.
-> I haven't dive into the code, but maybe it is the heuristic behind that is not
-> well defined? If you know how it's working that would be helpfull before I dive
-> in it.
-
-Sorry, don't know that much. It seems it counts time between overflow of
-DMC perf events and based on this bumps up the frequency.
-
-Maybe your test does not fit well in current formula? Maybe the formula
-has some drawbacks...
-
-> 
-> I run your test as well, and indeed, it seems to work for large bunch of memory,
-> and there is some delay before making a transition (seems to be around 10s).
-> When you kill memtester, it reduces the freq stepwisely every ~10s.
-> 
-> Note that the timing shown above account for the critical path, and the code is
-> looping on reading only, there is no write in the critical path.
-> Maybe memtester is doing writes and devfreq heuristic uses only write info?
->
-You mentioned that you want to cut the prefetcher to have direct access
-to RAM. But prefetcher also accesses the RAM. He does not get the
-contents from the air.  Although this is unrelated to the problem
-because your pattern should kick ondemand as well.
+Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
 Best regards,
-Krzysztof
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
+
+> ---
+>  drivers/acpi/thermal.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+> index 19067a5e5293..6de8066ca1e7 100644
+> --- a/drivers/acpi/thermal.c
+> +++ b/drivers/acpi/thermal.c
+> @@ -901,23 +901,35 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>  	result = sysfs_create_link(&tz->device->dev.kobj,
+>  				   &tz->thermal_zone->device.kobj, "thermal_zone");
+>  	if (result)
+> -		return result;
+> +		goto unregister_tzd;
+>  
+>  	result = sysfs_create_link(&tz->thermal_zone->device.kobj,
+>  				   &tz->device->dev.kobj, "device");
+>  	if (result)
+> -		return result;
+> +		goto remove_tz_link;
+>  
+>  	status =  acpi_bus_attach_private_data(tz->device->handle,
+>  					       tz->thermal_zone);
+> -	if (ACPI_FAILURE(status))
+> -		return -ENODEV;
+> +	if (ACPI_FAILURE(status)) {
+> +		result = -ENODEV;
+> +		goto remove_dev_link;
+> +	}
+>  
+>  	tz->tz_enabled = 1;
+>  
+>  	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+>  		 tz->thermal_zone->id);
+> +
+>  	return 0;
+> +
+> +remove_dev_link:
+> +	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
+> +remove_tz_link:
+> +	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
+> +unregister_tzd:
+> +	thermal_zone_device_unregister(tz->thermal_zone);
+> +
+> +	return result;
+>  }
+>  
+>  static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
+> 
+
