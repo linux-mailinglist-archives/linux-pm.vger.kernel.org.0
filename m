@@ -2,202 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DE420A1E7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 17:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128E920A1F7
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 17:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405786AbgFYP1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 11:27:45 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:35307 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405766AbgFYP1o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Jun 2020 11:27:44 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id oTmujDjcOVEJfoTmvjEWnX; Thu, 25 Jun 2020 09:27:42 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1593098862; bh=RVs4Ovnc/me+FGPNSUhJjaVhnerEivhzrjX5EcfsJe0=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=vxZs0Hs9Y7GBWHOfrw8VYgHkMNp48ti+qPJJZGQZ2ARKIc3GUP+a3zVMON4Gu+XQI
-         IBKFXdS0pJxJDDpY3LODIOdXaUMLfNtAmIG2pSyp1encgxPmZggM9aaW6dI2XgFXH6
-         0RdrPAhXtMs/9hQn58M8gzPk7Pgn6OrEx1W80sGJ86XUNJFMmYul147dLkDFB1PZfo
-         05SdAolSXfCM3ZZfkHqxk9qvk2OU/Aq+BqenMD432Qx7wuVigQgeXw4uLY9yt0EpXi
-         sQcglk+allPR6djD4Pioq16thBpgqZXHitCD9+yWSwhPM6wAIfcqn6SWf8/Rf6Ccjv
-         xt1XTBtoowrOA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=KIck82No c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8
- a=m-Cm7fCOe7P8hAMx0BIA:9 a=maVp5vB5daoMQ-QU:21 a=U_Z0NZ6cXKdVcP4U:21
- a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Len Brown'" <len.brown@intel.com>
-Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <000701d643f0$fa0f3140$ee2d93c0$@net>
-In-Reply-To: <000701d643f0$fa0f3140$ee2d93c0$@net>
-Subject: RE: x86_energy_perf_policy
-Date:   Thu, 25 Jun 2020 08:27:39 -0700
-Message-ID: <000101d64b05$2ac63200$80529600$@net>
+        id S2405781AbgFYPbV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 11:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405780AbgFYPbU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 11:31:20 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B3FC08C5C1
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 08:31:20 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d10so2942620pls.5
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 08:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=eVkVeWbolD0Pgsmsb9KVZmPc+7XOqA0Z9hQg+EjgGag=;
+        b=YzrNw66EwUXxMDYsL4NkFemiwhiSmm4vAek4sFS1iVgaycyzjZFyQm2BMeQrV+1nXu
+         wx8dIzLpWid4v1WIeX+DYbhJWJrc1Qqaw+wVes3yRzWzKWk3tXlgPlG/sWV/RB/kiGGO
+         Cvvr2yvnh8HcPLUgZPtis+NEEPp8MH2BCqbkV88WZ9OlQn58ZQxC0r43J7ZCfflpHJxL
+         OdBcuAkc/1JhJOAeEeJauy4RBZMKzcQTLnEHiSLcrnAJfEOO6Kz6Iq9cS6qkrhniUMES
+         1B7GDPntO/N71/twD+aMkG2EUMmqw50PVy9Ld7Jo/SY9H2TJM1/BJD3QbYmGFvt6j45P
+         Jjtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=eVkVeWbolD0Pgsmsb9KVZmPc+7XOqA0Z9hQg+EjgGag=;
+        b=gWQthD7gl/PoiAnNm1uDFuA0JsVgB3rIXsb6ZzVLJ4ZgEIup1a4ozY8+rUPyKFT9u0
+         DdbIZp0sVX0Ex9sZtd7cDASQoZfbZ55+al6LLad65/5TgNpNKgUVMu7DXwomOv08eF+N
+         8u76v4xAQMb9jZLKJEKw95wtOcbMwNrlR4KJre8/ZYLGJK2a7TlFhhf8ht8ogGmVfEUL
+         fvAXtem992RqOI6nDE85px3jihIokq3SDVshi+HWFBSYBq2tknbZQuTMtqJ9/cQm5PIl
+         SRotWTkbK6RUPgyuRA8fhLEgte9qh9w9DwigoSfdNmdKpDojvW1SBxl+UlmO/sI1wL91
+         75bw==
+X-Gm-Message-State: AOAM532QANrt6Tcx06d9c0Ir/QmGf1yw/Cyp+zvCbGYAAYISckO/n6oz
+        GDW1vgpxbgPglSAf+w2/kV5QKg==
+X-Google-Smtp-Source: ABdhPJyD4Zdbbf5C7So2a+7x2v9+CcNMi7BNvK76UGasYQiZerr97r7VNahuoeDwp1XYXwSdDeIKkg==
+X-Received: by 2002:a17:902:6945:: with SMTP id k5mr6125309plt.336.1593099079987;
+        Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s194sm20362759pgs.24.2020.06.25.08.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
+Message-ID: <5ef4c347.1c69fb81.8d1e0.c830@mx.google.com>
+Date:   Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZD8PfSy8WNOn4USb644svYuN0mPAHEIpTg
-X-CMAE-Envelope: MS4wfPEt0Ghxhu2u6K+2htjzQWe/xp+uWtbItmLhsjWzNyqBRbNoPrvka31qeeV54VHSyfqUk9HIGMPN2vEUO6Zky+UyZ9SqsrwaWzJF2NITPXrYME9XiCIy
- 5QQVp9z4bFV5gIBSv/ONx3MXJ+x0v/1TqtJMQ8ZOjVinIg4rv3GjmGKdC8EYeLVUcIQtdD0NAE2kI3R5N/sA3WE96zg0kM0bqT3F7q5sMBGOxwE0Sk0Gwg6i
- 5vkufCstLh5/sksfrr7NJA==
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.8-rc2-24-gdcc4e8ba3539
+Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
+ 20 warnings (v5.8-rc2-24-gdcc4e8ba3539)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Len,
+pm/testing build: 6 builds: 0 failed, 6 passed, 20 warnings (v5.8-rc2-24-gd=
+cc4e8ba3539)
 
-When I look at the dates for patches,
-I do not think that
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+8-rc2-24-gdcc4e8ba3539/
 
-tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+Tree: pm
+Branch: testing
+Git Describe: v5.8-rc2-24-gdcc4e8ba3539
+Git Commit: dcc4e8ba353955cbf43d70c71f1bd543839e2094
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
 
-even knows about intel_cpufreq (intel_pstate in passive mode).
-Anyway this tool is now banned from my computers.
+Warnings Detected:
 
-I'll re-phrase my previous e-mail, in a much more blunt way:
+arc:
 
-tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+arm64:
+    defconfig (gcc-8): 8 warnings
 
-should be fixed or removed.
+arm:
+    multi_v7_defconfig (gcc-8): 12 warnings
 
-... Doug
+i386:
 
-> -----Original Message-----
-> From: linux-pm-owner@vger.kernel.org [mailto:linux-pm-owner@vger.kernel.org] On Behalf Of Doug
-> Smythies
-> Sent: June 16, 2020 8:15 AM
-> To: 'Len Brown'
-> Cc: 'Srinivas Pandruvada'; 'Linux PM'
-> Subject: x86_energy_perf_policy
-> 
-> Hi Len,
-> 
-> I have been using x86_energy_perf_policy to manage EPB while I do some tests.
-> I noticed it says this:
-> 
-> "HWP can be enabled using '--hwp-enable'"
-> 
-> So, I thought great, I can now in one boot do:
-> 
-> intel_pstate, no-HWP, performance/powersave.
-> intel_cpufreq, no-HWP, all governors
-> 
-> run: x86_energy_perf_policy --hwp-enable
-> 
-> then repeat the above, but only passive, if trying some of Rafael's RFC stuff,
-> which is NOT part of this e-mail.
-> 
-> However, enabling HWP via this method leaves my system in an unusable state.
-> 
-> Please confirm or deny if I am supposed to be able to enable HWP via
-> x86_energy_perf_policy?
-> 
-> No need to read on:
-> 
-> Examples (kernel 5.8=rc1):
-> 
-> Note: I wrote my own MSR decoder. I know I could use turbostat, and do
-> have it running virtually 100% of the time. However, writing my own
-> decoder forced me to learn more.
-> 
-> Fresh boot (no=hwp forced):
-> 
-> root@s18:/home/doug# /home/doug/c/msr-decoder
-> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
-> B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
-> 9.) 0x199: IA32_PERF_CTL        : CPU 0-5 :   9 :   8 :   8 :   8 :  19 :  26 :
-> C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-5 :   6 :   6 :   6 :   6 :   6 :   6 :
-> 1.) 0x19C: IA32_THERM_STATUS: 88480000
-> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
-> reset
-> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88470000
-> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : RHO disable : EEO disable
-> 
-> Now,
-> 
-> # x86_energy_perf_policy --hwp-enable
-> 
-> root@s18:/home/doug# /home/doug/c/msr-decoder
-> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
-> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-> 1.) 0x19C: IA32_THERM_STATUS: 88480000
-> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
-> reset
-> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460000
-> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : RHO disable : EEO disable
-> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 :
-> lowest 1
-> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
->     raw: 8000FF01 : 8000FF01 : 8000FF01 : 8000FF01 : 8000FF01 : 8000FF01 :
->     min:        1 :        1 :        1 :        1 :        1 :        1 :
->     max:      255 :      255 :      255 :      255 :      255 :      255 :
->     des:        0 :        0 :        0 :        0 :        0 :        0 :
->     epp:      128 :      128 :      128 :      128 :      128 :      128 :
->     act:        0 :        0 :        0 :        0 :        0 :        0 :
-> 7.) 0x777: IA32_HWP_STATUS: 0 : high 0 : guaranteed 0 : efficient 0 : lowest 0
-> 
-> Notice that EPP is 128, and I can not achieve full CPU speed for a workflow that should.
-> Ok. So maybe I just need to toggle between performance and powersave and back. No difference.
-> I tried many variations. There are many situations where the misbehaves.
-> 
-> If I boot with HWP enabled, I can observe EPP (and min and max) behave as expected
-> and as a function of the governor. The system seems to behave.
-> 
-> intel_pstate / powersave:
-> 
-> root@s18:/home/doug# /home/doug/c/msr-decoder
-> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
-> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-> 1.) 0x19C: IA32_THERM_STATUS: 88480800 PWL
-> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
-> reset
-> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88470800 PWL
-> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 4000000 PL1L
-> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : RHO disable : EEO disable
-> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 :
-> lowest 1
-> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
->     raw: 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 :
->     min:        8 :        8 :        8 :        8 :        8 :        8 :
->     max:       46 :       46 :       46 :       46 :       46 :       46 :
->     des:        0 :        0 :        0 :        0 :        0 :        0 :
->     epp:      128 :      128 :      128 :      128 :      128 :      128 :
->     act:        0 :        0 :        0 :        0 :        0 :        0 :
-> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
-> 
-> intel_pstate / performance:
-> 
-> root@s18:/home/doug# /home/doug/c/msr-decoder
-> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
-> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-> 1.) 0x19C: IA32_THERM_STATUS: 88470800 PWL
-> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
-> reset
-> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460800 PWL
-> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 4000000 PL1L
-> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : RHO disable : EEO disable
-> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 :
-> lowest 1
-> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
->     raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
->     min:       46 :       46 :       46 :       46 :       46 :       46 :
->     max:       46 :       46 :       46 :       46 :       46 :       46 :
->     des:        0 :        0 :        0 :        0 :        0 :        0 :
->     epp:        0 :        0 :        0 :        0 :        0 :        0 :
->     act:        0 :        0 :        0 :        0 :        0 :        0 :
-> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
-> 
-> ... Doug
+riscv:
+
+x86_64:
 
 
+Warnings summary:
+
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus =
+unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 12 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
