@@ -2,229 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABC5209B84
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 10:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E85209B91
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 10:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390746AbgFYIu4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 04:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S2390556AbgFYI6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 04:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390453AbgFYIuz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 04:50:55 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB0AC0613ED
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:50:55 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id d6so2909287pjs.3
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:50:55 -0700 (PDT)
+        with ESMTP id S2390330AbgFYI6B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 04:58:01 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78D5C061573
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:58:00 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id b25so2014868ljp.6
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:58:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JEMoZdpFmrFhFcFBcdt9FFDGd+0A8OhsnWsQtV3mDFY=;
-        b=zwcL9Y65FiPLi2vjuyj40QyTUjgv3aeO4hIU2vSpY+ujIZWGaNlfkCfdnIbFsNxo0H
-         s2bxZH7BVoYdiRgMEO/Vg6ESWbMhb3nv/KAEMF1vtI/9xGSuo+SXo03llv+PmHWmUC8n
-         2Fuh04JomaNSCobeuTTpqT4sCG7KY1xn0mKHLmWhjxI/XPEc/dehP6bUzCl0o7UY9Xxk
-         gP27jOnkzXmkF6VH+uuxfwPM1NkKvSVA28LRw3MgNoRtiU2Pfr7WPki43eagX+zgnSVT
-         PqOmYzAJqDo2V2tahpUFRzZbvkj5DnYF48KOvH3PCv7nYdSDRdi4B74G+fWo74pp9cMm
-         mZQw==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=fQj8GSzsb1+pdtgnS8aKkWuOlGiJbZZkRjMYogMxMTI=;
+        b=1EWytFWvMUGPjkoyq01zk1IliKJQ84AmrrPW33B1e7rNo9Ut8nGhjDBjgaU9Qgkfff
+         KrU1gDUGypDzp2buWc0un/jKmONipjFfHGZD1TnfljvD02mLT9vun0t7fLA4Vz7PZhps
+         ok5lX6EWdv4mxfGY9VwTciEkkifSvCHENNXcaIgrA+IxSkUpiHKQwfWpBH+Hy2sLzkGX
+         uh2kpE1K3RgGkP7ACtHMJjJlaLuH3LLkpGZl8agU/yxLTymwULCUYZQGvs861TAFMbKP
+         QhWuWD/ozt9lTu9FQaQRiuzzh55vk5JZaD7OouF9QZyS05g6xC+89M4IoYNDhB0mg5FZ
+         XJAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JEMoZdpFmrFhFcFBcdt9FFDGd+0A8OhsnWsQtV3mDFY=;
-        b=oSFeU/5oI+Hvs23OgPYO4WXxBQsM2r4wQuXE/d6EfC8nkwgFtF/L4Lqj615JO1caqV
-         xtw5WttJf2tMleqftxsvErcp7DbdY7w3E02IlZJ/YLwSeW0f8dt+dbqKcIrPdXt9CVt+
-         bG4dmJI/A2ZEdEm/k28oq98hoHXjLNb4NBicHscxps6hf+e+HCY8/sqwe/iXBv+qtM0a
-         zuZI9t+6cVrIX39a7Sz3FZH+l6H/nT/zxFAQ7B1aO1J6Ehxtf/IQ8S3FNS6cKbyuRMk4
-         Sq+kI4F/eg3vNPeR8iOtfXK0Aq5a4AtJhBdXxrs2vxo6GniJf0hlkezDh6H59TFs1bmI
-         dhzg==
-X-Gm-Message-State: AOAM531wYLD0LWhXaHo0dS1JWlR2lIR8+j/T9Pe7IDbV5LoHjgHGpWMw
-        6+ywkX1N5+MiFMgIvr8fToMJ7w==
-X-Google-Smtp-Source: ABdhPJzHllegdQIG8KbY6WzYzQnZ64LxOSyUGGS4GTbuRzkA6CihktIRU3UyCCXiZkNESNztdGrrfg==
-X-Received: by 2002:a17:90a:74cb:: with SMTP id p11mr2162481pjl.89.1593075055236;
-        Thu, 25 Jun 2020 01:50:55 -0700 (PDT)
-Received: from localhost ([122.172.111.76])
-        by smtp.gmail.com with ESMTPSA id s9sm19347192pgo.22.2020.06.25.01.50.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 01:50:54 -0700 (PDT)
-Date:   Thu, 25 Jun 2020 14:20:52 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Todd Kjos <tkjos@google.com>, adharmap@codeaurora.org
-Subject: Re: [PATCH v2 2/2] cpufreq: Specify default governor on command line
-Message-ID: <20200625085052.4ah4wbog3guj74v4@vireshk-i7>
-References: <20200623142138.209513-1-qperret@google.com>
- <20200623142138.209513-3-qperret@google.com>
- <20200624055023.xofefhohf7wifme5@vireshk-i7>
- <CAJZ5v0ja_rM7i=psW1HRyzEpW=8QwP2u9p+ihN3FS8_53bbxTQ@mail.gmail.com>
- <20200624153259.GA2844@google.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=fQj8GSzsb1+pdtgnS8aKkWuOlGiJbZZkRjMYogMxMTI=;
+        b=ElqbzEnkPUDggeGs0q3ApuLumqTYqjhtu+QrerfGwzSvEBPfns4RIb/FKL9cKnxleJ
+         dbPUpP7YHmMp89YbRRQonaSKNsqU4ZGWQFIUG2vpKIcv3nD4EQIxxRKpGlL6dYW0ANuG
+         KQ+D6k7wi7NczAxSNOf2wB3zYU3A5RhTdP5TJt3yQfliqnP9+NmLY606puLUGEqukEq4
+         4UW9jGpfr6+dXvK1I1w2HTT8Mhy43ORBou3yzH6egV/C+Is8FKIVbDbhAhy8bOGzzYJz
+         oJ72slaOElttXU1bo0+jg48qX6sAD3x3y/MvQeJ7PnWqwmL0IDuPU4R62JzAFgwUwUz0
+         Lg0Q==
+X-Gm-Message-State: AOAM530RTxQI7haItkzBGvJqrC+Gy6v9BEApdyQBExHeegisBb7NGsZ3
+        GEx+225aMFcw4BVb5LB6HuQ/sg==
+X-Google-Smtp-Source: ABdhPJyO5HRSKP5oqtkzIm8TtNZ0ZVzBzQuBPqObhKqjTV1lNH34HDQicYxSmxAYD7MnkvyMmcSsZg==
+X-Received: by 2002:a05:651c:338:: with SMTP id b24mr15335953ljp.87.1593075479157;
+        Thu, 25 Jun 2020 01:57:59 -0700 (PDT)
+Received: from ?IPv6:2a00:1fa0:44da:b8e6:887f:f9f8:ffc4:9fb8? ([2a00:1fa0:44da:b8e6:887f:f9f8:ffc4:9fb8])
+        by smtp.gmail.com with ESMTPSA id w1sm4690973ljo.80.2020.06.25.01.57.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jun 2020 01:57:58 -0700 (PDT)
+Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: Fix undefined temperature
+ if negative
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com
+Cc:     niklas.soderlund+renesas@ragnatech.se, van.do.xw@renesas.com,
+        dien.pham.ry@renesas.com, linux-pm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+References: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Message-ID: <db9e3bd3-d3f0-61d2-7ffe-3306003f57d8@cogentembedded.com>
+Date:   Thu, 25 Jun 2020 11:57:56 +0300
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200624153259.GA2844@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-06-20, 16:32, Quentin Perret wrote:
-> Right, but I must admit that, looking at this more, I'm getting a bit
-> confused with the overall locking for governors :/
+Hello!
+
+On 25.06.2020 5:56, Yoshihiro Shimoda wrote:
+
+> From: Dien Pham <dien.pham.ry@renesas.com>
 > 
-> When in cpufreq_init_policy() we find a governor using
-> find_governor(policy->last_governor), what guarantees this governor is
-> not concurrently unregistered? That is, what guarantees this governor
-> doesn't go away between that find_governor() call, and the subsequent
-> call to try_module_get() in cpufreq_set_policy() down the line?
+> As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
+>    "Result is undefined for negative divisors if the dividend variable
+>     type is unsigned and for negative dividends if the divisor variable
+>     type is unsigned."
 > 
-> Can we somewhat assume that whatever governor is referred to by
-> policy->last_governor will have a non-null refcount? Or are the
-> cpufreq_online() and cpufreq_unregister_governor() path mutually
-> exclusive? Or is there something else?
+> In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
+> checked sign of divisor before using. It makes undefined temperature
+> value in case the value is negative.
+> 
+> This patch fixes to satisfy DIV_ROUND_CLOSEST description
+> and fix bug too. Note that the variable name "reg" is not good
+> because it should be the same type as rcar_gen3_thermal_read().
+> However, there is better to rename it in a further patch as
 
-This should be sufficient to fix pending issues I believe. Based over your
-patches.
+    It's better.
 
--- 
-viresh
+> cleanup.
+> 
+> Signed-off-by: Van Do <van.do.xw@renesas.com>
+> Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
+> [shimoda: minor fixes, add Fixes tag]
+> Fixes: 564e73d283af ("thermal: rcar_gen3_thermal: Add R-Car Gen3 thermal driver")
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> Reviewed-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
+> Tested-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
+[...]
 
--------------------------8<-------------------------
-From: Viresh Kumar <viresh.kumar@linaro.org>
-Date: Thu, 25 Jun 2020 13:15:23 +0530
-Subject: [PATCH] cpufreq: Fix locking issues with governors
-
-The locking around governors handling isn't adequate currently. The list
-of governors should never be traversed without locking in place. Also we
-must make sure the governor isn't removed while it is still referenced
-by code.
-
-Reported-by: Quentin Perret <qperret@google.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 59 ++++++++++++++++++++++++---------------
- 1 file changed, 36 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 4b1a5c0173cf..dad6b85f4c89 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -624,6 +624,24 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
- 	return NULL;
- }
- 
-+static struct cpufreq_governor *get_governor(const char *str_governor)
-+{
-+	struct cpufreq_governor *t;
-+
-+	mutex_lock(&cpufreq_governor_mutex);
-+	t = find_governor(str_governor);
-+	if (!t)
-+		goto unlock;
-+
-+	if (!try_module_get(t->owner))
-+		t = NULL;
-+
-+unlock:
-+	mutex_unlock(&cpufreq_governor_mutex);
-+
-+	return t;
-+}
-+
- static unsigned int cpufreq_parse_policy(char *str_governor)
- {
- 	if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN))
-@@ -643,28 +661,14 @@ static struct cpufreq_governor *cpufreq_parse_governor(char *str_governor)
- {
- 	struct cpufreq_governor *t;
- 
--	mutex_lock(&cpufreq_governor_mutex);
--
--	t = find_governor(str_governor);
--	if (!t) {
--		int ret;
--
--		mutex_unlock(&cpufreq_governor_mutex);
--
--		ret = request_module("cpufreq_%s", str_governor);
--		if (ret)
--			return NULL;
--
--		mutex_lock(&cpufreq_governor_mutex);
-+	t = get_governor(str_governor);
-+	if (t)
-+		return t;
- 
--		t = find_governor(str_governor);
--	}
--	if (t && !try_module_get(t->owner))
--		t = NULL;
--
--	mutex_unlock(&cpufreq_governor_mutex);
-+	if (request_module("cpufreq_%s", str_governor))
-+		return NULL;
- 
--	return t;
-+	return get_governor(str_governor);
- }
- 
- /**
-@@ -818,12 +822,14 @@ static ssize_t show_scaling_available_governors(struct cpufreq_policy *policy,
- 		goto out;
- 	}
- 
-+	mutex_lock(&cpufreq_governor_mutex);
- 	for_each_governor(t) {
- 		if (i >= (ssize_t) ((PAGE_SIZE / sizeof(char))
- 		    - (CPUFREQ_NAME_LEN + 2)))
--			goto out;
-+			break;
- 		i += scnprintf(&buf[i], CPUFREQ_NAME_PLEN, "%s ", t->name);
- 	}
-+	mutex_unlock(&cpufreq_governor_mutex);
- out:
- 	i += sprintf(&buf[i], "\n");
- 	return i;
-@@ -1060,11 +1066,14 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- {
- 	struct cpufreq_governor *gov = NULL;
- 	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
-+	bool put_governor = false;
-+	int ret;
- 
- 	if (has_target()) {
- 		/* Update policy governor to the one used before hotplug. */
--		gov = find_governor(policy->last_governor);
-+		gov = get_governor(policy->last_governor);
- 		if (gov) {
-+			put_governor = true;
- 			pr_debug("Restoring governor %s for cpu %d\n",
- 				 policy->governor->name, policy->cpu);
- 		} else if (default_governor) {
-@@ -1091,7 +1100,11 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- 			return -ENODATA;
- 	}
- 
--	return cpufreq_set_policy(policy, gov, pol);
-+	ret = cpufreq_set_policy(policy, gov, pol);
-+	if (put_governor)
-+		module_put(gov->owner);
-+
-+	return ret;
- }
- 
- static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cpu)
+MBR, Sergei
