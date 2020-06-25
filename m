@@ -2,106 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EBA209DC1
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 13:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AA3209E0E
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 14:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404328AbgFYLx1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 07:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728063AbgFYLxZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 07:53:25 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC69C0613ED
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 04:53:23 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id l2so4135426wmf.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 04:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=L4pFCzHJgLhT16AIpG64Yl9/rDj1/+gYvG4jvCw9F50=;
-        b=n3FRfqC1licA7sUvOVNsmYWGO4K/7vUEPRhyqo4fBRqJTuRXkEEQHh7uwPCnN+FcSf
-         ENydElYHJy9PUQYU9sfu1loBq5H0SIftbO5Sht4ahrm0xfMnJWRT8ci/38Brp/clygPK
-         L+kiUfWAo1teGmyfYs8LGk4Be7IorgzrIWkIJkU3+o97MGk2rpkBjG0TTaRxtyGh3tTs
-         EeCP+GkZCM3t1EJHFzQFkTYrnf8HsuUcHNDQc4lZ7iWF+4scXEzFr1ns/1MxaOcUwWTj
-         JPmiymJ2xlffeNK125ctWiPcqf8r9RQ46JpCxIewZ2tZTAghyq1qmdPz+xuCXqYbiZRg
-         gZRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=L4pFCzHJgLhT16AIpG64Yl9/rDj1/+gYvG4jvCw9F50=;
-        b=P1lQVwCBt31eB+/5CE4KbBiBUSdgu94Rby0Ij+0QRcAHv4w5/MZR3uPtzVKT62/LNl
-         KDp/H3r3PsEURnf8ZBWsL7QeXbNDumTFBjCAG8IcKt68XhA66ZDbCSLIM+zT8/U29ISM
-         XGrqfdMWaRY7uSxvxNA/JaRZGAqjBIvUi9njY0JvEYCu8J+cx7hbKb73G/EAZUw19eD2
-         zKngWub82ygU/dbFHXLaGLUTjo1HDUZ21bynAmRXw/cfqIe0+MYnZ2xuOqSvloG19jC+
-         WzXtAg2T0UYc2ppOlU1BBRXnmx1XZ6CZVgWsstys75cWWiHXr8BgNY5iwgU0Va//LQhO
-         8Qow==
-X-Gm-Message-State: AOAM533lxNvD5PvCee/z5uZXzWzrVYim/Em2fMsv4fkWnh5WzidpWmx7
-        PSaW/OwkLhL6ACGaq6j0mIzObQ==
-X-Google-Smtp-Source: ABdhPJzB3iG4QLOlxIPODy0q2tWS2+hoPSsNM/MppS52ewBi9bFqIsOWO5K4QEbJ3JGH6DNum7H2Og==
-X-Received: by 2002:a1c:2d54:: with SMTP id t81mr3196690wmt.154.1593086002391;
-        Thu, 25 Jun 2020 04:53:22 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id 104sm32104033wrl.25.2020.06.25.04.53.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 04:53:21 -0700 (PDT)
-Date:   Thu, 25 Jun 2020 12:53:18 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Todd Kjos <tkjos@google.com>, adharmap@codeaurora.org
-Subject: Re: [PATCH v2 2/2] cpufreq: Specify default governor on command line
-Message-ID: <20200625115318.GA219598@google.com>
-References: <20200623142138.209513-1-qperret@google.com>
- <20200623142138.209513-3-qperret@google.com>
- <20200625113602.z2xrwebd2gngbww3@vireshk-i7>
- <CAJZ5v0g=+2OFKVk2ZnmK-33knUwqcaOOQ+q9ZWnmeoBD9KOX9g@mail.gmail.com>
+        id S2404445AbgFYMCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 08:02:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:38688 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404311AbgFYMCq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jun 2020 08:02:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45E371FB;
+        Thu, 25 Jun 2020 05:02:45 -0700 (PDT)
+Received: from [10.37.12.83] (unknown [10.37.12.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CC8E3F73C;
+        Thu, 25 Jun 2020 05:02:42 -0700 (PDT)
+Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
+To:     Kamil Konieczny <k.konieczny@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
+ <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
+ <20200623191129.GA4171@kozik-lap>
+ <CGME20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3@eucas1p1.samsung.com>
+ <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
+ <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
+ <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
+ <4c3b01af-2337-1eba-4675-6488105144c8@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6f8b1119-62b1-942d-cfde-6f1e9a28c40c@arm.com>
+Date:   Thu, 25 Jun 2020 13:02:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g=+2OFKVk2ZnmK-33knUwqcaOOQ+q9ZWnmeoBD9KOX9g@mail.gmail.com>
+In-Reply-To: <4c3b01af-2337-1eba-4675-6488105144c8@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday 25 Jun 2020 at 13:44:34 (+0200), Rafael J. Wysocki wrote:
-> On Thu, Jun 25, 2020 at 1:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > This change is not right IMO. This part handles the set-policy case,
-> > where there are no governors. Right now this code, for some reasons
-> > unknown to me, forcefully uses the default governor set to indicate
-> > the policy, which is not a great idea in my opinion TBH. This doesn't
-> > and shouldn't care about governor modules and should only be looking
-> > at strings instead of governor pointer.
-> 
-> Sounds right.
-> 
-> > Rafael, I even think we should remove this code completely and just
-> > rely on what the driver has sent to us. Using the selected governor
-> > for set policy drivers is very confusing and also we shouldn't be
-> > forced to compiling any governor for the set-policy case.
-> 
-> Well, AFAICS the idea was to use the default governor as a kind of
-> default policy proxy, but I agree that strings should be sufficient
-> for that.
 
-I agree with all the above. I'd much rather not rely on the default
-governor name to populate the default policy, too, so +1 from me.
 
-Thanks,
-Quentin
+On 6/25/20 12:30 PM, Kamil Konieczny wrote:
+> Hi Lukasz,
+> 
+> On 25.06.2020 12:02, Lukasz Luba wrote:
+>> Hi Sylwester,
+>>
+>> On 6/24/20 4:11 PM, Sylwester Nawrocki wrote:
+>>> Hi All,
+>>>
+>>> On 24.06.2020 12:32, Lukasz Luba wrote:
+>>>> I had issues with devfreq governor which wasn't called by devfreq
+>>>> workqueue. The old DELAYED vs DEFERRED work discussions and my patches
+>>>> for it [1]. If the CPU which scheduled the next work went idle, the
+>>>> devfreq workqueue will not be kicked and devfreq governor won't check
+>>>> DMC status and will not decide to decrease the frequency based on low
+>>>> busy_time.
+>>>> The same applies for going up with the frequency. They both are
+>>>> done by the governor but the workqueue must be scheduled periodically.
+>>>
+>>> As I have been working on resolving the video mixer IOMMU fault issue
+>>> described here: https://patchwork.kernel.org/patch/10861757
+>>> I did some investigation of the devfreq operation, mostly on Odroid U3.
+>>>
+>>> My conclusions are similar to what Lukasz says above. I would like to add
+>>> that broken scheduling of the performance counters read and the devfreq
+>>> updates seems to have one more serious implication. In each call, which
+>>> normally should happen periodically with fixed interval we stop the counters,
+>>> read counter values and start the counters again. But if period between
+>>> calls becomes long enough to let any of the counters overflow, we will
+>>> get wrong performance measurement results. My observations are that
+>>> the workqueue job can be suspended for several seconds and conditions for
+>>> the counter overflow occur sooner or later, depending among others
+>>> on the CPUs load.
+>>> Wrong bus load measurement can lead to setting too low interconnect bus
+>>> clock frequency and then bad things happen in peripheral devices.
+>>>
+>>> I agree the workqueue issue needs to be fixed. I have some WIP code to use
+>>> the performance counters overflow interrupts instead of SW polling and with
+>>> that the interconnect bus clock control seems to work much better.
+>>>
+>>
+>> Thank you for sharing your use case and investigation results. I think
+>> we are reaching a decent number of developers to maybe address this
+>> issue: 'workqueue issue needs to be fixed'.
+>> I have been facing this devfreq workqueue issue ~5 times in different
+>> platforms.
+>>
+>> Regarding the 'performance counters overflow interrupts' there is one
+>> thing worth to keep in mind: variable utilization and frequency.
+>> For example, in order to make a conclusion in algorithm deciding that
+>> the device should increase or decrease the frequency, we fix the period
+>> of observation, i.e. to 500ms. That can cause the long delay if the
+>> utilization of the device suddenly drops. For example we set an
+>> overflow threshold to value i.e. 1000 and we know that at 1000MHz
+>> and full utilization (100%) the counter will reach that threshold
+>> after 500ms (which we want, because we don't want too many interrupts
+>> per sec). What if suddenly utilization drops to 2% (i.e. from 5GB/s
+>> to 250MB/s (what if it drops to 25MB/s?!)), the counter will reach the
+>> threshold after 50*500ms = 25s. It is impossible just for the counters
+>> to predict next utilization and adjust the threshold. [...]
+> 
+> irq triggers for underflow and overflow, so driver can adjust freq
+> 
+
+Probably possible on some platforms, depends on how many PMU registers
+are available, what information can be can assign to them and type of
+interrupt. A lot of hassle and still - platform and device specific.
+Also, drivers should not adjust the freq, governors (different types
+of them with different settings that they can handle) should do it.
+
+What the framework can do is to take this responsibility and provide
+generic way to monitor the devices (or stop if they are suspended).
+That should work nicely with the governors, which try to predict the
+next best frequency. From my experience the more fluctuating intervals
+the governors are called, the more odd decisions they make.
+That's why I think having a predictable interval i.e. 100ms is something
+desirable. Tuning the governors is easier in this case, statistics
+are easier to trace and interpret, solution is not to platform specific,
+etc.
+
+Kamil do you have plans to refresh and push your next version of the
+workqueue solution?
+
+Regards,
+Lukasz
+
