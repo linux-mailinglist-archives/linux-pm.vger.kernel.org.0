@@ -2,93 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4A91209BB1
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 11:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764D0209C6B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 12:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389916AbgFYJFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 05:05:07 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:39284 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389473AbgFYJFH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 05:05:07 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05P92DCN042815;
-        Thu, 25 Jun 2020 09:05:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=6p1/RFHaVHhyTKsdD/zUstV9/O0VSIYItjrUNz/5ZuQ=;
- b=gdjDuDb8HlQHOTbgcFWIg4JP3G6b5wP2LokCkNkbCFnC7vyzgVxlEqx4VRAPPswUIety
- Wg8pKIl/gFVoFJMKt5GpDNgvI4EXZmi0QVhLp5+105xvLBxLvKLQxulXnsqKMWUm7jer
- W6dv7I4p1b/zQKhxAP2wp2dH4rQP6Hd4ReYXrPflQtKLvGNPPqk9tYIF1KZQ0tQ93A1W
- UbZC8Aq7N36wvOdKg6B5gbx/8wBoxQvWNGea6MUTDTfaPA3/2sgfW2vmiTaz45VlVmpt
- jMGEHmxbzwM70P8uWtw5yNnrwhTAzEIQLNTY5ruDJbRyDgxK9x4PubdWG5lnhGm/o+dy bw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 31uustycw5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 25 Jun 2020 09:05:01 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05P94FGj168673;
-        Thu, 25 Jun 2020 09:05:00 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 31uur8nnx5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 25 Jun 2020 09:05:00 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05P94vI2031214;
-        Thu, 25 Jun 2020 09:04:59 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 25 Jun 2020 09:04:57 +0000
-Date:   Thu, 25 Jun 2020 12:04:49 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH] intel_idle: Fix uninitialized variable bug
-Message-ID: <20200625090449.GA2549@kadam>
-References: <20200624131921.GB9972@mwanda>
- <CAJZ5v0hG2FL0VSeE+ind9MSMc_c7nA4KjKxFPdMhVOPrMdYJKQ@mail.gmail.com>
+        id S2390074AbgFYKCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 06:02:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:55512 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390025AbgFYKCO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jun 2020 06:02:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0CB41F1;
+        Thu, 25 Jun 2020 03:02:12 -0700 (PDT)
+Received: from [10.37.12.83] (unknown [10.37.12.83])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E0EA3F73C;
+        Thu, 25 Jun 2020 03:02:10 -0700 (PDT)
+Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
+ <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
+ <20200623191129.GA4171@kozik-lap>
+ <CGME20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3@eucas1p1.samsung.com>
+ <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
+ <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
+Date:   Thu, 25 Jun 2020 11:02:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hG2FL0VSeE+ind9MSMc_c7nA4KjKxFPdMhVOPrMdYJKQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9662 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006250056
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9662 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- cotscore=-2147483648 malwarescore=0 mlxscore=0 clxscore=1015
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- spamscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006250056
+In-Reply-To: <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 24, 2020 at 03:41:05PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jun 24, 2020 at 3:19 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > The "tick" variable isn't initialized if "lapic_timer_always_reliable"
-> > is true.
-> 
-> If lapic_timer_always_reliable is true, then
-> static_cpu_has(X86_FEATURE_ARAT) must also be true AFAICS.
-> 
-> So the lapic_timer_always_reliable check in there looks redundant.
+Hi Sylwester,
 
-Can the lapic_timer_always_reliable variable just be removed entirely
-and replaced with an static_cpu_has(X86_FEATURE_ARAT) check?
+On 6/24/20 4:11 PM, Sylwester Nawrocki wrote:
+> Hi All,
+> 
+> On 24.06.2020 12:32, Lukasz Luba wrote:
+>> I had issues with devfreq governor which wasn't called by devfreq
+>> workqueue. The old DELAYED vs DEFERRED work discussions and my patches
+>> for it [1]. If the CPU which scheduled the next work went idle, the
+>> devfreq workqueue will not be kicked and devfreq governor won't check
+>> DMC status and will not decide to decrease the frequency based on low
+>> busy_time.
+>> The same applies for going up with the frequency. They both are
+>> done by the governor but the workqueue must be scheduled periodically.
+> 
+> As I have been working on resolving the video mixer IOMMU fault issue
+> described here: https://patchwork.kernel.org/patch/10861757
+> I did some investigation of the devfreq operation, mostly on Odroid U3.
+> 
+> My conclusions are similar to what Lukasz says above. I would like to add
+> that broken scheduling of the performance counters read and the devfreq
+> updates seems to have one more serious implication. In each call, which
+> normally should happen periodically with fixed interval we stop the counters,
+> read counter values and start the counters again. But if period between
+> calls becomes long enough to let any of the counters overflow, we will
+> get wrong performance measurement results. My observations are that
+> the workqueue job can be suspended for several seconds and conditions for
+> the counter overflow occur sooner or later, depending among others
+> on the CPUs load.
+> Wrong bus load measurement can lead to setting too low interconnect bus
+> clock frequency and then bad things happen in peripheral devices.
+> 
+> I agree the workqueue issue needs to be fixed. I have some WIP code to use
+> the performance counters overflow interrupts instead of SW polling and with
+> that the interconnect bus clock control seems to work much better.
+> 
 
-regards,
-dan carpenter
+Thank you for sharing your use case and investigation results. I think
+we are reaching a decent number of developers to maybe address this
+issue: 'workqueue issue needs to be fixed'.
+I have been facing this devfreq workqueue issue ~5 times in different
+platforms.
+
+Regarding the 'performance counters overflow interrupts' there is one
+thing worth to keep in mind: variable utilization and frequency.
+For example, in order to make a conclusion in algorithm deciding that
+the device should increase or decrease the frequency, we fix the period
+of observation, i.e. to 500ms. That can cause the long delay if the
+utilization of the device suddenly drops. For example we set an
+overflow threshold to value i.e. 1000 and we know that at 1000MHz
+and full utilization (100%) the counter will reach that threshold
+after 500ms (which we want, because we don't want too many interrupts
+per sec). What if suddenly utilization drops to 2% (i.e. from 5GB/s
+to 250MB/s (what if it drops to 25MB/s?!)), the counter will reach the
+threshold after 50*500ms = 25s. It is impossible just for the counters
+to predict next utilization and adjust the threshold.
+To address that, we still need to have another mechanism (like watchdog)
+which will be triggered just to check if the threshold needs adjustment.
+This mechanism can be a local timer in the driver or a framework
+timer running kind of 'for loop' on all this type of devices (like
+the scheduled workqueue). In both cases in the system there will be
+interrupts, timers (even at workqueues) and scheduling.
+The approach to force developers to implement their local watchdog
+timers (or workqueues) in drivers is IMHO wrong and that's why we have
+frameworks.
+
+Regards,
+Lukasz
 
