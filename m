@@ -2,213 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1CB209E35
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 14:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BD5209E6C
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 14:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404598AbgFYMMf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 08:12:35 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:58138 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404596AbgFYMMe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 08:12:34 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200625121232euoutp0156bb45d681de220c6ce4554ef3b1ca80~byFMNP6Lg2215222152euoutp01K
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 12:12:32 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200625121232euoutp0156bb45d681de220c6ce4554ef3b1ca80~byFMNP6Lg2215222152euoutp01K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593087152;
-        bh=r2YT8qcUQvVggMMJZuYcGzmqkKrEtSaC/jUBzXklzHg=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=gZ9lm5GJX8zSYn6hxUqOx/nDBRXXrhKft0P5LrBDJOxgoyNLXqQ5TmGaGtIVK0ltJ
-         FzoVajLwqkDd5k6XCsuCuH0Pd6ib1f/5XxGWZ1EkDlesdpnhPiGFNoB9Ca2zWH02JU
-         8zc/unirqQEa/DMOYhbNdFw9SjhGLhnZXBd5RDVA=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200625121231eucas1p25a695661397003624facaafce7eaba5c~byFL2OKhJ1012410124eucas1p2y;
-        Thu, 25 Jun 2020 12:12:31 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 75.98.05997.FA494FE5; Thu, 25
-        Jun 2020 13:12:31 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200625121231eucas1p15f9882e3d46aabd71835dbdba4c3e651~byFLbvHvC2321623216eucas1p1-;
-        Thu, 25 Jun 2020 12:12:31 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200625121231eusmtrp236613c8ea77d6351fe1c2131faa508da~byFLa6jhA2442224422eusmtrp2U;
-        Thu, 25 Jun 2020 12:12:31 +0000 (GMT)
-X-AuditID: cbfec7f4-677ff7000000176d-e9-5ef494afc5bc
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 87.C4.06314.FA494FE5; Thu, 25
-        Jun 2020 13:12:31 +0100 (BST)
-Received: from [106.120.51.18] (unknown [106.120.51.18]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200625121230eusmtip2466d09df0997094c011652c8f475c6ad~byFKzbT-P0139301393eusmtip2-;
-        Thu, 25 Jun 2020 12:12:30 +0000 (GMT)
-Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-From:   Kamil Konieczny <k.konieczny@samsung.com>
-Message-ID: <ee2e4acb-3986-3227-da1f-177d2756d194@samsung.com>
-Date:   Thu, 25 Jun 2020 14:12:30 +0200
+        id S2404610AbgFYM16 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 08:27:58 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:43781 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2404630AbgFYM15 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 08:27:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1593088075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=U/icW62T4HUCwgSKZakwjRQ1z0NoKU4sAPE7i/iVWfo=;
+        b=B+t6nj1qL9xhMCJXWWghpeSVqbQ1+xgQtwTY7DtfnsoFM+31v7BZkOUI99W7G7mOMmodr1
+        V9ibn6VJIG0FRIJS3EPq/LeOquDBBRYbmOjb+rSnKSzL9boFNUiHkT9rv3qaGBC2Sj9WIp
+        rA0lwt2tW2TeARzJK8QI5aFVq2BkOME=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-438-C5LbrgYXMsybLOKDlz4mdg-1; Thu, 25 Jun 2020 08:27:52 -0400
+X-MC-Unique: C5LbrgYXMsybLOKDlz4mdg-1
+Received: by mail-wr1-f71.google.com with SMTP id 59so40240wrp.4
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 05:27:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=U/icW62T4HUCwgSKZakwjRQ1z0NoKU4sAPE7i/iVWfo=;
+        b=Fes5+uyfLKVHAKTJ3lJZpEVtmEQbkJK9PM8R/V6bPGmfvoGgCpoe5dHzmBYWolmPYg
+         pduVqM4MDsyyXut/imUeL919qmezlD4FLmuK5B4IX3OkvrT7SVsRMevclC0hduf+IHHn
+         ckMKzeZ+5v/qolNgCsCXwbx8C+A5rD3LlIzZdKgnrOvgMMhBu7MAq7rMTLaDMY6YBNbk
+         LcLWuus+bi2aIreKUsnTQEatQhADOVYDdbHjtXN9NsCVzqE40l009KDv2QEimIZibj4u
+         JUaF9/iw2NF9lZKXVKvKCWUGQ+2l7pdyG0jNdGkLuVU4+vFX/sm7BLww7EYcmLHfxrbD
+         r3GQ==
+X-Gm-Message-State: AOAM533wqz6XSfNKyLuyQWWn3JfWxKACEDhR1HZBXh/JXD3vBHY5pVJH
+        9nug+bTOvEq7QfpDK0mrKQD43j7AmTn266M8tAjdG9+p324gMUGzloY33d6hMoZLaNIffDlH8Rb
+        TFSbdHrFRHy3mh3XsZRM=
+X-Received: by 2002:adf:b6a4:: with SMTP id j36mr9096777wre.260.1593088070568;
+        Thu, 25 Jun 2020 05:27:50 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwxllhAQRLAR9I9dtDG8whn5hCHq7QeFhyH3PL95QcplZ/bHbi4Ic9wL0R+tysHRbldN2Fn3Q==
+X-Received: by 2002:adf:b6a4:: with SMTP id j36mr9096750wre.260.1593088070290;
+        Thu, 25 Jun 2020 05:27:50 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:91d0:a5f0:9f34:4d80? ([2001:b07:6468:f312:91d0:a5f0:9f34:4d80])
+        by smtp.gmail.com with ESMTPSA id t5sm11697507wmj.37.2020.06.25.05.27.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Jun 2020 05:27:49 -0700 (PDT)
+Subject: Re: [PATCH v2] x86/cpu: Reinitialize IA32_FEAT_CTL MSR on BSP during
+ wakeup
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, "H. Peter Anvin" <hpa@zytor.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Brad Campbell <lists2009@fnarfbargle.com>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        kvm-devel <kvm@vger.kernel.org>
+References: <20200608174134.11157-1-sean.j.christopherson@intel.com>
+ <CAJZ5v0inhpW1vbYJYPqWgkekK7hKhgO_fE5JmemT+p2qh7RFaw@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <2a3976ac-242b-260a-ce7b-2080d8e9d0f8@redhat.com>
+Date:   Thu, 25 Jun 2020 14:27:46 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.0
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <6f8b1119-62b1-942d-cfde-6f1e9a28c40c@arm.com>
+In-Reply-To: <CAJZ5v0inhpW1vbYJYPqWgkekK7hKhgO_fE5JmemT+p2qh7RFaw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrDKsWRmVeSWpSXmKPExsWy7djPc7rrp3yJMzi8z8hi44z1rBbXvzxn
-        teh//JrZ4vz5DewWZ5vesFtsenyN1eLyrjlsFp97jzBazDi/j8liYVMLu8XtxhVsFofftLNa
-        fDvxiNGB12PNvDWMHjtn3WX32LSqk81j85J6j74tqxg9Pm+SC2CL4rJJSc3JLEst0rdL4Mr4
-        d2w6S8EDlYrOTVuYGhifyHYxcnJICJhIrDu/m62LkYtDSGAFo8S/1u+sEM4XRolPp14wQzif
-        GSWW7O9igWmZvOYaVGI5o0TT5UWsIAkhgbeMEtP7fUFsYQE7ifnXdoHFRQRCJNbNnQfWwCzw
-        k1ni/aYTzCAJNgF9iYNnT4JN5QVq+DvjJiOIzSKgKvFnVgcTiC0qECFxvHsyO0SNoMTJmU+A
-        6jk4OAWsJd6tFQUJMwuIS9x6Mp8JwpaX2P52DjPEoS/ZJc4fVYWwXSTunrrLBGELS7w6voUd
-        wpaR+L8TpJcLyG5mlDjdMJUdwulhlNj7ZQsbRJW1xOePB9hAFjMLaEqs36UPEXaUeHvsDTNI
-        WEKAT+LGW0GIG/gkJm2bDhXmlehoE4KoVpV4fqoH6gRpia7/61gnMCrNQvLYLCTfzELyzSyE
-        vQsYWVYxiqeWFuempxYb5aWW6xUn5haX5qXrJefnbmIEprHT/45/2cG460/SIUYBDkYlHt4D
-        E7/ECbEmlhVX5h5ilOBgVhLhdTp7Ok6INyWxsiq1KD++qDQntfgQozQHi5I4r/Gil7FCAumJ
-        JanZqakFqUUwWSYOTqkGxqYghUV2vaHBRe9X1D9XmbKYdbGpVlfbtcfTFhmk/THmPLx+/dQj
-        tfz/opsSo7dtm+nNy/fM7qLZS3fb7r9OEqeNyje6TTjdcLVIwW9tkt6tVyu558XJypXOUmSJ
-        TRa8EmL4c2f5DKNsVd86dpezfnf+Hl6TyV7+oe3uJlWTEwsrDnEqqjP0K7EUZyQaajEXFScC
-        AN29E6pfAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrPIsWRmVeSWpSXmKPExsVy+t/xe7rrp3yJM2jrELXYOGM9q8X1L89Z
-        Lfofv2a2OH9+A7vF2aY37BabHl9jtbi8aw6bxefeI4wWM87vY7JY2NTCbnG7cQWbxeE37awW
-        3048YnTg9Vgzbw2jx85Zd9k9Nq3qZPPYvKTeo2/LKkaPz5vkAtii9GyK8ktLUhUy8otLbJWi
-        DS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DL+HZvOUvBApaJz0xamBsYnsl2M
-        nBwSAiYSk9dcY+5i5OIQEljKKDHx4CcmiIS0ROPp1VC2sMSfa11sILaQwGtGie830kFsYQE7
-        ifnXdrGC2CICIRKXu88wggxiFvjNLNH77CPU1O/MEl+u7wXrZhPQlzh49iQLiM0L1P13xk1G
-        EJtFQFXiz6wOsG2iAhESLff/sEPUCEqcnPkEqJ6Dg1PAWuLdWlGQMLOAusSfeZeYIWxxiVtP
-        5jNB2PIS29/OYZ7AKDQLSfcsJC2zkLTMQtKygJFlFaNIamlxbnpusaFecWJucWleul5yfu4m
-        RmDkbjv2c/MOxksbgw8xCnAwKvHwHpj4JU6INbGsuDL3EKMEB7OSCK/T2dNxQrwpiZVVqUX5
-        8UWlOanFhxhNgX6byCwlmpwPTCp5JfGGpobmFpaG5sbmxmYWSuK8HQIHY4QE0hNLUrNTUwtS
-        i2D6mDg4pRoYPU9dknrJ+bF42r6Ev7s4JzCaq1/4/qZ+nlFI31+/3f7a/rPZ9OJXxIYpvDb+
-        Vn1i32rby/5zZLs4OHO3y6mJnmPYclR+goyU8vTp7JzRm37ve/qUvXVzwpetqWrdThUhT0y7
-        56w+2b5BLLtslmrii38xM7XK+y23rd19LmXl9TUJp19WaT3lVmIpzkg01GIuKk4EAKzmvUDy
-        AgAA
-X-CMS-MailID: 20200625121231eucas1p15f9882e3d46aabd71835dbdba4c3e651
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3
-References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
-        <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
-        <20200623191129.GA4171@kozik-lap>
-        <CGME20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3@eucas1p1.samsung.com>
-        <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
-        <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
-        <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
-        <4c3b01af-2337-1eba-4675-6488105144c8@samsung.com>
-        <6f8b1119-62b1-942d-cfde-6f1e9a28c40c@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25.06.2020 14:02, Lukasz Luba wrote:
-> 
-> 
-> On 6/25/20 12:30 PM, Kamil Konieczny wrote:
->> Hi Lukasz,
+On 25/06/20 14:06, Rafael J. Wysocki wrote:
+> On Mon, Jun 8, 2020 at 7:49 PM Sean Christopherson
+> <sean.j.christopherson@intel.com> wrote:
 >>
->> On 25.06.2020 12:02, Lukasz Luba wrote:
->>> Hi Sylwester,
->>>
->>> On 6/24/20 4:11 PM, Sylwester Nawrocki wrote:
->>>> Hi All,
->>>>
->>>> On 24.06.2020 12:32, Lukasz Luba wrote:
->>>>> I had issues with devfreq governor which wasn't called by devfreq
->>>>> workqueue. The old DELAYED vs DEFERRED work discussions and my patches
->>>>> for it [1]. If the CPU which scheduled the next work went idle, the
->>>>> devfreq workqueue will not be kicked and devfreq governor won't check
->>>>> DMC status and will not decide to decrease the frequency based on low
->>>>> busy_time.
->>>>> The same applies for going up with the frequency. They both are
->>>>> done by the governor but the workqueue must be scheduled periodically.
->>>>
->>>> As I have been working on resolving the video mixer IOMMU fault issue
->>>> described here: https://patchwork.kernel.org/patch/10861757
->>>> I did some investigation of the devfreq operation, mostly on Odroid U3.
->>>>
->>>> My conclusions are similar to what Lukasz says above. I would like to add
->>>> that broken scheduling of the performance counters read and the devfreq
->>>> updates seems to have one more serious implication. In each call, which
->>>> normally should happen periodically with fixed interval we stop the counters,
->>>> read counter values and start the counters again. But if period between
->>>> calls becomes long enough to let any of the counters overflow, we will
->>>> get wrong performance measurement results. My observations are that
->>>> the workqueue job can be suspended for several seconds and conditions for
->>>> the counter overflow occur sooner or later, depending among others
->>>> on the CPUs load.
->>>> Wrong bus load measurement can lead to setting too low interconnect bus
->>>> clock frequency and then bad things happen in peripheral devices.
->>>>
->>>> I agree the workqueue issue needs to be fixed. I have some WIP code to use
->>>> the performance counters overflow interrupts instead of SW polling and with
->>>> that the interconnect bus clock control seems to work much better.
->>>>
->>>
->>> Thank you for sharing your use case and investigation results. I think
->>> we are reaching a decent number of developers to maybe address this
->>> issue: 'workqueue issue needs to be fixed'.
->>> I have been facing this devfreq workqueue issue ~5 times in different
->>> platforms.
->>>
->>> Regarding the 'performance counters overflow interrupts' there is one
->>> thing worth to keep in mind: variable utilization and frequency.
->>> For example, in order to make a conclusion in algorithm deciding that
->>> the device should increase or decrease the frequency, we fix the period
->>> of observation, i.e. to 500ms. That can cause the long delay if the
->>> utilization of the device suddenly drops. For example we set an
->>> overflow threshold to value i.e. 1000 and we know that at 1000MHz
->>> and full utilization (100%) the counter will reach that threshold
->>> after 500ms (which we want, because we don't want too many interrupts
->>> per sec). What if suddenly utilization drops to 2% (i.e. from 5GB/s
->>> to 250MB/s (what if it drops to 25MB/s?!)), the counter will reach the
->>> threshold after 50*500ms = 25s. It is impossible just for the counters
->>> to predict next utilization and adjust the threshold. [...]
+>> Reinitialize IA32_FEAT_CTL on the BSP during wakeup to handle the case
+>> where firmware doesn't initialize or save/restore across S3.  This fixes
+>> a bug where IA32_FEAT_CTL is left uninitialized and results in VMXON
+>> taking a #GP due to VMX not being fully enabled, i.e. breaks KVM.
 >>
->> irq triggers for underflow and overflow, so driver can adjust freq
+>> Use init_ia32_feat_ctl() to "restore" IA32_FEAT_CTL as it already deals
+>> with the case where the MSR is locked, and because APs already redo
+>> init_ia32_feat_ctl() during suspend by virtue of the SMP boot flow being
+>> used to reinitialize APs upon wakeup.  Do the call in the early wakeup
+>> flow to avoid dependencies in the syscore_ops chain, e.g. simply adding
+>> a resume hook is not guaranteed to work, as KVM does VMXON in its own
+>> resume hook, kvm_resume(), when KVM has active guests.
 >>
+>> Reported-by: Brad Campbell <lists2009@fnarfbargle.com>
+>> Tested-by: Brad Campbell <lists2009@fnarfbargle.com>
+>> Reviewed-by: Liam Merwick <liam.merwick@oracle.com>
+>> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: kvm@vger.kernel.org
+>> Cc: stable@vger.kernel.org # v5.6
+>> Fixes: 21bd3467a58e ("KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR")
+>> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> Probably possible on some platforms, depends on how many PMU registers
-> are available, what information can be can assign to them and type of
-> interrupt. A lot of hassle and still - platform and device specific.
-> Also, drivers should not adjust the freq, governors (different types
-> of them with different settings that they can handle) should do it.
-> 
-> What the framework can do is to take this responsibility and provide
-> generic way to monitor the devices (or stop if they are suspended).
-> That should work nicely with the governors, which try to predict the
-> next best frequency. From my experience the more fluctuating intervals
-> the governors are called, the more odd decisions they make.
-> That's why I think having a predictable interval i.e. 100ms is something
-> desirable. Tuning the governors is easier in this case, statistics
-> are easier to trace and interpret, solution is not to platform specific,
-> etc.
-> 
-> Kamil do you have plans to refresh and push your next version of the
-> workqueue solution?
+> Given the regression fix nature of this patch, is it being taken care
+> of by anyone (tip in particular) already?
 
-I do not, as Bartek takes over my work,
-+CC Bartek
+I was waiting for tip to pick it up, but I can as well with an Acked-by
+(KVM is broken by the patch but there's nothing KVM specific in it).
 
--- 
-Best regards,
-Kamil Konieczny
-Samsung R&D Institute Poland
+Paolo
+
+>> ---
+>>
+>> v2:
+>>   - Collect Reviewed/Tested tags. [Brad, Liam, Maxim].
+>>   - Include asm/cpu.h to fix Zhaoxin and Centaur builds. [Brad, LKP]
+>>   - Add Cc to stable. [Liam]
+>>
+>>  arch/x86/include/asm/cpu.h    | 5 +++++
+>>  arch/x86/kernel/cpu/centaur.c | 1 +
+>>  arch/x86/kernel/cpu/cpu.h     | 4 ----
+>>  arch/x86/kernel/cpu/zhaoxin.c | 1 +
+>>  arch/x86/power/cpu.c          | 6 ++++++
+>>  5 files changed, 13 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+>> index dd17c2da1af5..da78ccbd493b 100644
+>> --- a/arch/x86/include/asm/cpu.h
+>> +++ b/arch/x86/include/asm/cpu.h
+>> @@ -58,4 +58,9 @@ static inline bool handle_guest_split_lock(unsigned long ip)
+>>         return false;
+>>  }
+>>  #endif
+>> +#ifdef CONFIG_IA32_FEAT_CTL
+>> +void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+>> +#else
+>> +static inline void init_ia32_feat_ctl(struct cpuinfo_x86 *c) {}
+>> +#endif
+>>  #endif /* _ASM_X86_CPU_H */
+>> diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
+>> index 426792565d86..c5cf336e5077 100644
+>> --- a/arch/x86/kernel/cpu/centaur.c
+>> +++ b/arch/x86/kernel/cpu/centaur.c
+>> @@ -3,6 +3,7 @@
+>>  #include <linux/sched.h>
+>>  #include <linux/sched/clock.h>
+>>
+>> +#include <asm/cpu.h>
+>>  #include <asm/cpufeature.h>
+>>  #include <asm/e820/api.h>
+>>  #include <asm/mtrr.h>
+>> diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+>> index 37fdefd14f28..38ab6e115eac 100644
+>> --- a/arch/x86/kernel/cpu/cpu.h
+>> +++ b/arch/x86/kernel/cpu/cpu.h
+>> @@ -80,8 +80,4 @@ extern void x86_spec_ctrl_setup_ap(void);
+>>
+>>  extern u64 x86_read_arch_cap_msr(void);
+>>
+>> -#ifdef CONFIG_IA32_FEAT_CTL
+>> -void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
+>> -#endif
+>> -
+>>  #endif /* ARCH_X86_CPU_H */
+>> diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+>> index df1358ba622b..05fa4ef63490 100644
+>> --- a/arch/x86/kernel/cpu/zhaoxin.c
+>> +++ b/arch/x86/kernel/cpu/zhaoxin.c
+>> @@ -2,6 +2,7 @@
+>>  #include <linux/sched.h>
+>>  #include <linux/sched/clock.h>
+>>
+>> +#include <asm/cpu.h>
+>>  #include <asm/cpufeature.h>
+>>
+>>  #include "cpu.h"
+>> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
+>> index aaff9ed7ff45..b0d3c5ca6d80 100644
+>> --- a/arch/x86/power/cpu.c
+>> +++ b/arch/x86/power/cpu.c
+>> @@ -193,6 +193,8 @@ static void fix_processor_context(void)
+>>   */
+>>  static void notrace __restore_processor_state(struct saved_context *ctxt)
+>>  {
+>> +       struct cpuinfo_x86 *c;
+>> +
+>>         if (ctxt->misc_enable_saved)
+>>                 wrmsrl(MSR_IA32_MISC_ENABLE, ctxt->misc_enable);
+>>         /*
+>> @@ -263,6 +265,10 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
+>>         mtrr_bp_restore();
+>>         perf_restore_debug_store();
+>>         msr_restore_context(ctxt);
+>> +
+>> +       c = &cpu_data(smp_processor_id());
+>> +       if (cpu_has(c, X86_FEATURE_MSR_IA32_FEAT_CTL))
+>> +               init_ia32_feat_ctl(c);
+>>  }
+>>
+>>  /* Needed by apm.c */
+>> --
+>> 2.26.0
+>>
+> 
 
