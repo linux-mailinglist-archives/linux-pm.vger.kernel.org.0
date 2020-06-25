@@ -2,110 +2,248 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 499EE20A33C
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 18:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B3020A514
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 20:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406422AbgFYQm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 12:42:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403912AbgFYQm4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 12:42:56 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA971C08C5C1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:42:55 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id h22so94336lji.9
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:42:55 -0700 (PDT)
+        id S2403952AbgFYSh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 14:37:29 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:16778 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728406AbgFYSh2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 14:37:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zClFgpz3ZMsyGeYZHhNVEHPebUS6ZTida1tC/1yV4wQ=;
-        b=XnU7x3eOw/bSXbFDAG1leuCXtQ6csxKA+CSU5cYRceR41Mzu3Z/ZhE3lCLKlBDURcJ
-         NPqgX8GTfDUS3sPfoc0jVhrFaUCAsuY2sroqnqqMz6BU3F2HHnijYOoL/qv47JkxRov7
-         P+W1Wq5bGFFhZP+n4lQxfVLgIDUpKtEr7ZwtJxEL/5orJIqhv536mi1S8dQSCSZY742k
-         33sZG2kY5jKA16DOr3AlP7TzFVFthfyo0Teiqx3pozw45lOLwKH8QbOJujhj/OFsDGte
-         6xBla455Fpt0gAZflbHtqieLXZ0P/64hUGCKZvomaOLQT+ExQ66Ls3kJbH1BSJKkcIvF
-         QxNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=zClFgpz3ZMsyGeYZHhNVEHPebUS6ZTida1tC/1yV4wQ=;
-        b=R0HeCMmJelVuVDqVjt/yNeAZEe/j24ANroGCzLv/gDPqTiYQjphC+41E0IWbYmpXNj
-         v+rYuI8fFJAMuaV3bvqeCiK/bIhU5Y5puRtUuDJFoxxkc+tc48GbGh4/z0OzEbMdZKjl
-         N2bemcP2/Q8pnuY3C8flJY0c5SNyoI80wBaQUif85rTyNN4HLoHauO7HAwrfXAoWjLKJ
-         Ihcu88usxyLBQYF6L8dkkqOo6u43ED6nnpTPdBwMyAiQj1sq4xMF7OFeIFo13re8XsyG
-         5UpEhsSJQxysYjMGz9YV00L/O1BtD6CX+2LpTedFm/skf9iKfz47mmNvN74ZOwRuRlDM
-         2Fkg==
-X-Gm-Message-State: AOAM531xKjMsWIyvQ3ZwnMZDJEgrGLGZ+a7B3UArghFCjMBCz/DB7PsY
-        zEcL8e9N5uJb/5sMhH9BN06Ewg==
-X-Google-Smtp-Source: ABdhPJzDdobcvIkvsC4t6+0mpz7c88hWpFSnrXKSvIHdOg1LwgQ2M+PnVjApc9f2/lRfyOfCsQpEkA==
-X-Received: by 2002:a2e:7011:: with SMTP id l17mr18238543ljc.424.1593103374304;
-        Thu, 25 Jun 2020 09:42:54 -0700 (PDT)
-Received: from wasted.cogentembedded.com ([2a00:1fa0:6ae:209b:f7ba:a780:4a06:8d86])
-        by smtp.gmail.com with ESMTPSA id 2sm5696247lfr.48.2020.06.25.09.42.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 09:42:53 -0700 (PDT)
-Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: Fix undefined temperature
- if negative
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>
-Cc:     "niklas.soderlund+renesas@ragnatech.se" 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Van Do <van.do.xw@renesas.com>,
-        Dien Pham <dien.pham.ry@renesas.com>,
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1593110246; x=1624646246;
+  h=date:from:to:cc:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:subject;
+  bh=qlB2s4Wgnet0CN8ARSsKtfvhK92eox5FVS24rLtb+rU=;
+  b=mv8WKD75KZXT2Wv6dMBRRMLqOZY6gIdejE/1xsodfAjR7J66l6IisIGZ
+   M9QYvjnLzLOi6uEWdopkyWVItVKiWoy0j1jYI85aaoreErVowFwB85Fzj
+   eE5LD6IuLHA02E6zjN3VH8OwvZGwGzESY5WChBz0KbuznJsA3d/xnoOQN
+   o=;
+IronPort-SDR: SCR/aF+rX11ye4y2opWfGY1ClwptB+a+zTCNmAF+d6fCjJf+qsOh77GBJkosreSA4gZmk3KUZB
+ UVvuNlnLGzMQ==
+X-IronPort-AV: E=Sophos;i="5.75,280,1589241600"; 
+   d="scan'208";a="39889028"
+Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and hibernation]
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 25 Jun 2020 18:37:25 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1a-7d76a15f.us-east-1.amazon.com (Postfix) with ESMTPS id E128AA275E;
+        Thu, 25 Jun 2020 18:37:16 +0000 (UTC)
+Received: from EX13D05UWB001.ant.amazon.com (10.43.161.181) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 25 Jun 2020 18:36:59 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D05UWB001.ant.amazon.com (10.43.161.181) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 25 Jun 2020 18:36:59 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 25 Jun 2020 18:36:59 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 66FC940359; Thu, 25 Jun 2020 18:36:59 +0000 (UTC)
+Date:   Thu, 25 Jun 2020 18:36:59 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Roger Pau =?iso-8859-1?Q?Monn=E9?= <roger.pau@citrix.com>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-References: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <db9e3bd3-d3f0-61d2-7ffe-3306003f57d8@cogentembedded.com>
- <TY2PR01MB3692CC45140FF53CACD097BBD8920@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Organization: Cogent Embedded
-Message-ID: <cb207009-7af6-72cf-1551-b38445a557c8@cogentembedded.com>
-Date:   Thu, 25 Jun 2020 19:42:51 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.1
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Message-ID: <20200625183659.GA26586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <7FD7505E-79AA-43F6-8D5F-7A2567F333AB@amazon.com>
+ <20200604070548.GH1195@Air-de-Roger>
+ <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200617083528.GW735@Air-de-Roger>
+ <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200622083846.GF735@Air-de-Roger>
+ <20200623004314.GA28586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200623081903.GP735@Air-de-Roger>
 MIME-Version: 1.0
-In-Reply-To: <TY2PR01MB3692CC45140FF53CACD097BBD8920@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-MW
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200623081903.GP735@Air-de-Roger>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/25/2020 02:34 PM, Yoshihiro Shimoda wrote:
-
->>> From: Dien Pham <dien.pham.ry@renesas.com>
->>>
->>> As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
->>>    "Result is undefined for negative divisors if the dividend variable
->>>     type is unsigned and for negative dividends if the divisor variable
->>>     type is unsigned."
->>>
->>> In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
->>> checked sign of divisor before using. It makes undefined temperature
->>> value in case the value is negative.
->>>
->>> This patch fixes to satisfy DIV_ROUND_CLOSEST description
->>> and fix bug too. Note that the variable name "reg" is not good
->>> because it should be the same type as rcar_gen3_thermal_read().
->>> However, there is better to rename it in a further patch as
->>
->>     It's better.
+On Tue, Jun 23, 2020 at 10:19:03AM +0200, Roger Pau Monné wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
-> Thank you for your review! I'll fix it.
+> 
+> 
+> On Tue, Jun 23, 2020 at 12:43:14AM +0000, Anchal Agarwal wrote:
+> > On Mon, Jun 22, 2020 at 10:38:46AM +0200, Roger Pau Monné wrote:
+> > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > >
+> > >
+> > >
+> > > On Fri, Jun 19, 2020 at 11:43:12PM +0000, Anchal Agarwal wrote:
+> > > > On Wed, Jun 17, 2020 at 10:35:28AM +0200, Roger Pau Monné wrote:
+> > > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > > >
+> > > > >
+> > > > >
+> > > > > On Tue, Jun 16, 2020 at 09:49:25PM +0000, Anchal Agarwal wrote:
+> > > > > > On Thu, Jun 04, 2020 at 09:05:48AM +0200, Roger Pau Monné wrote:
+> > > > > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > > > > > On Wed, Jun 03, 2020 at 11:33:52PM +0000, Agarwal, Anchal wrote:
+> > > > > > > >  CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > > > > > >     > +             xenbus_dev_error(dev, err, "Freezing timed out;"
+> > > > > > > >     > +                              "the device may become inconsistent state");
+> > > > > > > >
+> > > > > > > >     Leaving the device in this state is quite bad, as it's in a closed
+> > > > > > > >     state and with the queues frozen. You should make an attempt to
+> > > > > > > >     restore things to a working state.
+> > > > > > > >
+> > > > > > > > You mean if backend closed after timeout? Is there a way to know that? I understand it's not good to
+> > > > > > > > leave it in this state however, I am still trying to find if there is a good way to know if backend is still connected after timeout.
+> > > > > > > > Hence the message " the device may become inconsistent state".  I didn't see a timeout not even once on my end so that's why
+> > > > > > > > I may be looking for an alternate perspective here. may be need to thaw everything back intentionally is one thing I could think of.
+> > > > > > >
+> > > > > > > You can manually force this state, and then check that it will behave
+> > > > > > > correctly. I would expect that on a failure to disconnect from the
+> > > > > > > backend you should switch the frontend to the 'Init' state in order to
+> > > > > > > try to reconnect to the backend when possible.
+> > > > > > >
+> > > > > > From what I understand forcing manually is, failing the freeze without
+> > > > > > disconnect and try to revive the connection by unfreezing the
+> > > > > > queues->reconnecting to backend [which never got diconnected]. May be even
+> > > > > > tearing down things manually because I am not sure what state will frontend
+> > > > > > see if backend fails to to disconnect at any point in time. I assumed connected.
+> > > > > > Then again if its "CONNECTED" I may not need to tear down everything and start
+> > > > > > from Initialising state because that may not work.
+> > > > > >
+> > > > > > So I am not so sure about backend's state so much, lets say if  xen_blkif_disconnect fail,
+> > > > > > I don't see it getting handled in the backend then what will be backend's state?
+> > > > > > Will it still switch xenbus state to 'Closed'? If not what will frontend see,
+> > > > > > if it tries to read backend's state through xenbus_read_driver_state ?
+> > > > > >
+> > > > > > So the flow be like:
+> > > > > > Front end marks XenbusStateClosing
+> > > > > > Backend marks its state as XenbusStateClosing
+> > > > > >     Frontend marks XenbusStateClosed
+> > > > > >     Backend disconnects calls xen_blkif_disconnect
+> > > > > >        Backend fails to disconnect, the above function returns EBUSY
+> > > > > >        What will be state of backend here?
+> > > > >
+> > > > > Backend should stay in state 'Closing' then, until it can finish
+> > > > > tearing down.
+> > > > >
+> > > > It disconnects the ring after switching to connected state too.
+> > > > > >        Frontend did not tear down the rings if backend does not switches the
+> > > > > >        state to 'Closed' in case of failure.
+> > > > > >
+> > > > > > If backend stays in CONNECTED state, then even if we mark it Initialised in frontend, backend
+> > > > >
+> > > > > Backend will stay in state 'Closing' I think.
+> > > > >
+> > > > > > won't be calling connect(). {From reading code in frontend_changed}
+> > > > > > IMU, Initialising will fail since backend dev->state != XenbusStateClosed plus
+> > > > > > we did not tear down anything so calling talk_to_blkback may not be needed
+> > > > > >
+> > > > > > Does that sound correct?
+> > > > >
+> > > > > I think switching to the initial state in order to try to attempt a
+> > > > > reconnection would be our best bet here.
+> > > > >
+> > > > It does not seems to work correctly, I get hung tasks all over and all the
+> > > > requests to filesystem gets stuck. Backend does shows the state as connected
+> > > > after xenbus_dev_suspend fails but I think there may be something missing.
+> > > > I don't seem to get IO interrupts thereafter i.e hitting the function blkif_interrupts.
+> > > > I think just marking it initialised may not be the only thing.
+> > > > Here is a short description of what I am trying to do:
+> > > > So, on timeout:
+> > > >     Switch XenBusState to "Initialized"
+> > > >     unquiesce/unfreeze the queues and return
+> > > >     mark info->connected = BLKIF_STATE_CONNECTED
+> > >
+> > > If xenbus state is Initialized isn't it wrong to set info->connected
+> > > == CONNECTED?
+> > >
+> > Yes, you are right earlier I was marking it explicitly but that was not right,
+> > the connect path for blkfront will do that.
+> > > You should tear down all the internal state (like a proper close)?
+> > >
+> > Isn't that similar to disconnecting in the first place that failed during
+> > freeze? Do you mean re-try to close but this time re-connect after close
+> > basically do everything you would at "restore"?
+> 
+> Last time I checked blkfront supported reconnections (ie: disconnect
+> from a backend and connect again). I was assuming we could apply the
+> same here on timeout, and just follow the same path where the frontend
+> waits indefinitely for the backend to close and then attempts to
+> reconnect.
+> 
+> > Also, I experimented with that and it works intermittently. I want to take a
+> > step back on this issue and ask few questions here:
+> > 1. Is fixing this recovery a blocker for me sending in a V2 version?
+> 
+> At the end of day it's your feature. I would certainly prefer for it
+> to work as good as possible, this being a recovery in case of failure
+> just make sure it does something sane (ie: crash/close the frontend)
+> and add a TODO note.
+> 
+> > 2. In our 2-3 years of supporting this feature at large scale we haven't seen this issue
+> > where backend fails to disconnect. What we are trying to do here is create a
+> > hypothetical situation where we leave backend in Closing state and try and see how it
+> > recovers. The reason why I think it "may not" occur and the timeout of 5HZ is
+> > sufficient is because we haven't come across even a single use-case where it
+> > caused hibernation to fail.
+> > The reason why I think "it may" occur is if we are running a really memory
+> > intensive workload and ring is busy and is unable to complete all the requests
+> > in the given timeout. This is very unlikely though.
+> 
+> As said above I would generally prefer for code to handle possible
+> failures the best way, and hence I think here it would be nice to
+> fallback to the normal disconnect path and just wait for the backend
+> to close.
+>
+Do you mind throwing some light in here, what that path may be, if its
+straight forward to fix I would like to debug it a bit more. May be I am
+missing some of the context here.
 
-   Note that "there" isn't needed there, I wasn't explicit enough, it seems... 
+I was of the view we may just want to mark frontend closed which should do 
+the job of freeing resources and then following the same flow as
+blkfront_restore. That does not seems to work correctly 100% of the time.
 
-> Best regards,
-> Yoshihiro Shimoda
+> You likely have this very well tuned to your own environment and
+> workloads, since this will now be upstream others might have more
+> contended systems where it could start to fail.
+> 
+I agree, however, this is also from the testing I did with 100 of runs 
+outside of EC2 running few tests of my own. 
+> > 3) Also, I do not think this may be straight forward to fix and expect
+> > hibernation to work flawlessly in subsequent invocations. I am open to
+> > all suggestions.
+> 
+> Right, adding a TODO would seem appropriate then.
+>
+Just to double check, I will send in a V2 with this marked as TO-DO?
+> Roger.
 
-MBR, Sergei
+Thanks,
+Anchal
