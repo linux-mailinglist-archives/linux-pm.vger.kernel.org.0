@@ -2,84 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5847D20A8B7
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 01:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32F720A8CE
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 01:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406523AbgFYXS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 19:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44264 "EHLO
+        id S2390917AbgFYX0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 19:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407747AbgFYXSz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 19:18:55 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFA7C08C5DD
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:18:54 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id s18so4542826vsi.6
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:18:54 -0700 (PDT)
+        with ESMTP id S2390589AbgFYX0f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 19:26:35 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF23EC08C5DC
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b16so3758796pfi.13
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UZUejZ4FxIPzgalcSBOTl7RrSB8oG1JXXKFu2TzIVTY=;
-        b=gEFD/h6/YccJ6NUPfYT/xgz0X+isX8Cd6CGn2UCUGx7jpM3t81GIEKLZxSIh9n3gSf
-         LyFFAVqzLW2EOg2vox4IxQFv/KkghELE3h+1pMYcAk3L5vCjE1vuqYv6ModKBhiykPJm
-         E+uZ3A7Yo3f2524NLn2qvAOct1Q0SfZjBL3KQ=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wcg6bLKAHJ0/BxsC+brekPNOiBl21FKQYq+hY1Ge/R8=;
+        b=BC5QnNm/L9fi0/7m8QzEN2dxwRm+UEWAUD0wfyKtJN3dH3RSF2OfNu+WtclANsPrj0
+         tccUpSmsJU6AXH4UrZsO6uoZhCt2UkUkc+F3mD5CpUKXZYyuWLUNOGBNl2XGZYTF3WZr
+         ijY/VFyXQ74HchwLZNMFyPvcLQOxOcA/UoQ0M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UZUejZ4FxIPzgalcSBOTl7RrSB8oG1JXXKFu2TzIVTY=;
-        b=j9g2RyIBEasX1whbN1VtaNRuiizki7VYvrwCuWkcz9xs11CxieRRR7frIO47wB8kcd
-         iTwIikLqDgP4IMKqLUaMKJNl6gYApHZrZZnLDxtV7EDyCZavN1TV4RWDFctpU52EGJqi
-         pEW/b/wWvyDX2HjUXgDGXTBHDpsW4mYS3yoUrAGgdHK8MGwSfRifMT7s5eD3goxJDDuJ
-         0oRCTMwnUpbEh+5wkeIGhoTr3R92h1A8rGKH1+C3nIdayNWnjj3jsljUEggFNSYGpvrG
-         focrRv8hGIcSNjfPpjiYAGtilNVrJHTOAsnkwkpfY8EsGWcoy5o5KP0C0GQ+EPDgia7K
-         amrQ==
-X-Gm-Message-State: AOAM531BxJThsF+4bxluLFiDMgc2tfGuSa5flvo+s7ilJTmQI3iQ3/xC
-        das3p/VeiDc6GgJgIL74NbsBpLq9KeRYBC0ytxrTag==
-X-Google-Smtp-Source: ABdhPJzhi8dHdwc7k/3b1+iOeFD6RskzYY/+B8+g9RbXB08kX6vZ9AZiixX+D9Pnv0ODrkx1cdSZ8uCd7wY1U33lSFI=
-X-Received: by 2002:a05:6102:1167:: with SMTP id k7mr517235vsg.71.1593127133874;
- Thu, 25 Jun 2020 16:18:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624111128.v2.1.Ibae403db54245c458d14297f1892c77c5055da41@changeid>
- <1593080522.28236.17.camel@suse.com>
-In-Reply-To: <1593080522.28236.17.camel@suse.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wcg6bLKAHJ0/BxsC+brekPNOiBl21FKQYq+hY1Ge/R8=;
+        b=nZhmA67ReJ65npPecuEX5zqi76zBXi9AGQZ8kMS2XluvTvlFpidoAVa4RmUWZqDP+o
+         5p8BaA0IXRUCiWE//D+sriMNC/ogEvr3nsVnNzMImQsGiatkBVJ/Gpwnor9xniD+fg+u
+         YNzWgZAX8+G4fHHTkXsQzjyODBR6Dbf40qIN6qt2Ge/bWC81QzH9iXZAy8n7maEgai9i
+         q73J0/ua7sYozUa/Yb2VFsGnEVBrBlWlWd6+Zqu7LVaP8NyVDBa2uOM04dkR/jsra6OC
+         TWXvFvI8yDMdbTwtwhWDhJM0dz2zOxsBXp7OJMRXwR719lOI8fAsEi1WTevMv+mdr5wc
+         ZT3g==
+X-Gm-Message-State: AOAM533ARNS/LDBW5RgVqfGupNI8O/KumxccvdKv+w04NPdndLeVRBp9
+        UJd1qkcHMxjTUzH+khkxrjUBmQ==
+X-Google-Smtp-Source: ABdhPJxbIKdpaqZK2+wHlfbZwwz6bF78GirDWwQUzayQq/pWbTr2e2gviyY7c0WS4IBaYh/15HOjxg==
+X-Received: by 2002:a63:182:: with SMTP id 124mr232820pgb.288.1593127594156;
+        Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
+Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:e09a:8d06:a338:aafb])
+        by smtp.gmail.com with ESMTPSA id f207sm8901936pfa.107.2020.06.25.16.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2020 16:26:33 -0700 (PDT)
 From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Thu, 25 Jun 2020 16:18:42 -0700
-Message-ID: <CANFp7mUmk=HqPyJ5TS5uQPyaEtOWdz=D+7XBS8MyikuF9y9EJQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: btusb: Reset port on cmd timeout
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Rocky Liao <rjliao@codeaurora.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Bluez mailing list <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        linux-usb@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+To:     marcel@holtmann.org, Oliver Neukum <oneukum@suse.com>,
+        linux-bluetooth@vger.kernel.org
+Cc:     chromeos-bluetooth-upstreaming@chromium.org,
+        linux-pm@vger.kernel.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
         Johan Hedberg <johan.hedberg@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Bluetooth: btusb: Comment on unbalanced pm reference
+Date:   Thu, 25 Jun 2020 16:26:27 -0700
+Message-Id: <20200625162544.1.Iea2fbf7a284191c0f09c2ffbe8c14b872d0f68b2@changeid>
+X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for the heads up Oliver -- I will send a patch with a comment on this.
+Add a comment clarifying that a PM reference in btusb_qca_cmd_timeout is
+not unbalanced because it results in a device reset.
 
-On Thu, Jun 25, 2020 at 3:22 AM Oliver Neukum <oneukum@suse.com> wrote:
->
-> Am Mittwoch, den 24.06.2020, 11:11 -0700 schrieb Abhishek Pandit-
-> Subedi:
-> > QCA_ROME sometimes gets into a state where it is unresponsive to
-> > commands. Since it doesn't have support for a reset gpio, reset the usb
-> > port when this occurs instead.
->
-> Hi,
->
-> on first glance this looks like an unbalanced PM reference. It is not
-> because the operation is suicidal, but this deserves a comment, unless
-> you want to get a note telling you that you caused an imbalance every
-> few weeks.
->
->         Regards
->                 Oliver
->
+Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+---
+
+ drivers/bluetooth/btusb.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index f8a71fdabb3d1b..0e143c0cecf2a1 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -581,6 +581,7 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
+ 		return;
+ 
+ 	bt_dev_err(hdev, "Multiple cmd timeouts seen. Resetting usb device.");
++	/* This is not an unbalanced PM reference since the device will reset */
+ 	err = usb_autopm_get_interface(data->intf);
+ 	if (!err)
+ 		usb_queue_reset_device(data->intf);
+-- 
+2.27.0.111.gc72c7da667-goog
+
