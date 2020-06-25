@@ -2,251 +2,292 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 128E920A1F7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 17:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D9120A29B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 18:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405781AbgFYPbV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 11:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405780AbgFYPbU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 11:31:20 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B3FC08C5C1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 08:31:20 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d10so2942620pls.5
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 08:31:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eVkVeWbolD0Pgsmsb9KVZmPc+7XOqA0Z9hQg+EjgGag=;
-        b=YzrNw66EwUXxMDYsL4NkFemiwhiSmm4vAek4sFS1iVgaycyzjZFyQm2BMeQrV+1nXu
-         wx8dIzLpWid4v1WIeX+DYbhJWJrc1Qqaw+wVes3yRzWzKWk3tXlgPlG/sWV/RB/kiGGO
-         Cvvr2yvnh8HcPLUgZPtis+NEEPp8MH2BCqbkV88WZ9OlQn58ZQxC0r43J7ZCfflpHJxL
-         OdBcuAkc/1JhJOAeEeJauy4RBZMKzcQTLnEHiSLcrnAJfEOO6Kz6Iq9cS6qkrhniUMES
-         1B7GDPntO/N71/twD+aMkG2EUMmqw50PVy9Ld7Jo/SY9H2TJM1/BJD3QbYmGFvt6j45P
-         Jjtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eVkVeWbolD0Pgsmsb9KVZmPc+7XOqA0Z9hQg+EjgGag=;
-        b=gWQthD7gl/PoiAnNm1uDFuA0JsVgB3rIXsb6ZzVLJ4ZgEIup1a4ozY8+rUPyKFT9u0
-         DdbIZp0sVX0Ex9sZtd7cDASQoZfbZ55+al6LLad65/5TgNpNKgUVMu7DXwomOv08eF+N
-         8u76v4xAQMb9jZLKJEKw95wtOcbMwNrlR4KJre8/ZYLGJK2a7TlFhhf8ht8ogGmVfEUL
-         fvAXtem992RqOI6nDE85px3jihIokq3SDVshi+HWFBSYBq2tknbZQuTMtqJ9/cQm5PIl
-         SRotWTkbK6RUPgyuRA8fhLEgte9qh9w9DwigoSfdNmdKpDojvW1SBxl+UlmO/sI1wL91
-         75bw==
-X-Gm-Message-State: AOAM532QANrt6Tcx06d9c0Ir/QmGf1yw/Cyp+zvCbGYAAYISckO/n6oz
-        GDW1vgpxbgPglSAf+w2/kV5QKg==
-X-Google-Smtp-Source: ABdhPJyD4Zdbbf5C7So2a+7x2v9+CcNMi7BNvK76UGasYQiZerr97r7VNahuoeDwp1XYXwSdDeIKkg==
-X-Received: by 2002:a17:902:6945:: with SMTP id k5mr6125309plt.336.1593099079987;
-        Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s194sm20362759pgs.24.2020.06.25.08.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
-Message-ID: <5ef4c347.1c69fb81.8d1e0.c830@mx.google.com>
-Date:   Thu, 25 Jun 2020 08:31:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2403935AbgFYQHN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 12:07:13 -0400
+Received: from mga18.intel.com ([134.134.136.126]:61022 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403863AbgFYQHN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jun 2020 12:07:13 -0400
+IronPort-SDR: 3y01CxYocPZSZONBa1ofuDmzYcniEbmlllue9k6WDSv6VbmwWWqg/oe26xeuud6HvSKqAmZn1K
+ PFcX0af/p87Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="132387047"
+X-IronPort-AV: E=Sophos;i="5.75,279,1589266800"; 
+   d="scan'208";a="132387047"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 09:07:12 -0700
+IronPort-SDR: xpz6+p70VGZkhi2xMA93stFrzA/pGpHCzxxb2Rflw6zVVT0ZHMZ6DDdZHgFMRCAQbJj2/KQdRf
+ UiIrcjrANsNw==
+X-IronPort-AV: E=Sophos;i="5.75,279,1589266800"; 
+   d="scan'208";a="279854953"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 09:07:12 -0700
+Message-ID: <f23b11bbf8bf01194404aefd53bdf67fef3bcba8.camel@linux.intel.com>
+Subject: Re: [PATCH 1/2] cpufreq: intel_pstate: Allow enable/disable energy
+ efficiency
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org
+Date:   Thu, 25 Jun 2020 09:06:39 -0700
+In-Reply-To: <000001d64b01$45aceea0$d106cbe0$@net>
+References: <20200623051233.1419218-1-srinivas.pandruvada@linux.intel.com>
+         <001e01d64976$616de950$2449bbf0$@net> <000001d64b01$45aceea0$d106cbe0$@net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.8-rc2-24-gdcc4e8ba3539
-Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
- 20 warnings (v5.8-rc2-24-gdcc4e8ba3539)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 6 builds: 0 failed, 6 passed, 20 warnings (v5.8-rc2-24-gd=
-cc4e8ba3539)
+Hi Doug,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-8-rc2-24-gdcc4e8ba3539/
+On Thu, 2020-06-25 at 07:59 -0700, Doug Smythies wrote:
+> Hi Srinivas,
+> 
+> I saw your V3.
+> I do not understand your reluctance to use
+> 
+> arch/x86/include/asm/msr-index.h
 
-Tree: pm
-Branch: testing
-Git Describe: v5.8-rc2-24-gdcc4e8ba3539
-Git Commit: dcc4e8ba353955cbf43d70c71f1bd543839e2094
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 6 unique architectures
+I don't have reluctance. That was the guidance from x86 core
+maintainers years back. But may have changed. So checking again.
 
-Warnings Detected:
+"
+Unless the BIT is used in more than one places, it should stay local by
+not adding to msr_indes.h.
+"
 
-arc:
+It can be moved to msr_index.h once turbostat start using this.
+Len can comment on it when that will happen.
 
-arm64:
-    defconfig (gcc-8): 8 warnings
+> 
+> 
+[..]
 
-arm:
-    multi_v7_defconfig (gcc-8): 12 warnings
+> > > So, add an additional attribute "energy_efficiency_enable" under
+> > > /sys/devices/system/cpu/intel_pstate/ for these CPU models. This
+> > > allows
+> > > to read and write bit 19 ("Disable Energy Efficiency
+> > > Optimization") in
+> > > the MSR IA32_POWER_CTL.
+> > > 
+> > > This attribute is present in both HWP and non-HWP mode as this
+> > > has an
+> > > effect in both modes. Refer to Intel Software Developer's manual
+> > > for
+> > > details. The scope of this bit is package wide.
+> > 
+> > I do and always have. However these manuals are 1000's of pages,
+> > are updated often, and it can be difficult to find the correct page
+> > for the correct processor. So it is great that, in general, the
+> > same
+> > mnemonics are used in the code as the manuals.
+There is no mnemonic for bits like EE in SDM. The MSR name matches SDM.
 
-i386:
 
-riscv:
+> > 
+> > > Suggested-by: Len Brown <lenb@kernel.org>
+> > > Signed-off-by: Srinivas Pandruvada <
+> > > srinivas.pandruvada@linux.intel.com>
+> > > ---
+> > >  Documentation/admin-guide/pm/intel_pstate.rst |  7 +++
+> > >  drivers/cpufreq/intel_pstate.c                | 49
+> > > ++++++++++++++++++-
+> > >  2 files changed, 54 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/Documentation/admin-guide/pm/intel_pstate.rst
+> > > b/Documentation/admin-
+> > > guide/pm/intel_pstate.rst
+> > > index 39d80bc29ccd..939bfdc53f4f 100644
+> > > --- a/Documentation/admin-guide/pm/intel_pstate.rst
+> > > +++ b/Documentation/admin-guide/pm/intel_pstate.rst
+> > > @@ -431,6 +431,13 @@ argument is passed to the kernel in the
+> > > command line.
+> > >  	supported in the current configuration, writes to this
+> > > attribute will
+> > >  	fail with an appropriate error.
+> > > 
+> > > +``energy_efficiency_enable``
+> > > +	This attribute is only present on platforms, which has CPUs
+> > > matching
+> > > +	Kaby Lake desktop CPU model. By default "energy_efficiency" is
+> > > disabled
+> > 
+> > So, why not mention Coffee Lake also, as you did above?
+> 
+> And I still think you need to add "Coffee Lake" here also.
+We can add.
 
-x86_64:
+Thanks,
+Srinivas
 
+> 
+> > > +	on these CPU models in HWP mode by this driver. Enabling energy
+> > > +	efficiency may limit maximum operating frequency in both HWP
+> > > and non
+> > > +	HWP mode.
+> > > +
+> > >  Interpretation of Policy Attributes
+> > >  -----------------------------------
+> > > 
+> > > diff --git a/drivers/cpufreq/intel_pstate.c
+> > > b/drivers/cpufreq/intel_pstate.c
+> > > index 8e23a698ce04..1cf6d06f2314 100644
+> > > --- a/drivers/cpufreq/intel_pstate.c
+> > > +++ b/drivers/cpufreq/intel_pstate.c
+> > > @@ -1218,6 +1218,44 @@ static ssize_t
+> > > store_hwp_dynamic_boost(struct kobject *a,
+> > >  	return count;
+> > >  }
+> > > 
+> > > +#define MSR_IA32_POWER_CTL_BIT_EE	19
+> > 
+> > (same comment as the other day, for another patch) In my opinion
+> > and for
+> > consistency, this bit should be defined in
+> > 
+> > arch/x86/include/asm/msr-index.h
+> > 
+> > like so (I defined the other bits also):
+> > 
+> > diff --git a/arch/x86/include/asm/msr-index.h
+> > b/arch/x86/include/asm/msr-index.h
+> > index e8370e64a155..1a6084067f18 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -255,6 +255,12 @@
+> > 
+> >  #define MSR_IA32_POWER_CTL             0x000001fc
+> > 
+> > +/* POWER_CTL bits (some are model specific): */
+> > +
+> > +#define POWER_CTL_C1E                  1
+> > +#define POWER_CTL_EEO                  19
+> > +#define POWER_CTL_RHO                  20
+> > +
+> >  #define MSR_IA32_MC0_CTL               0x00000400
+> >  #define MSR_IA32_MC0_STATUS            0x00000401
+> >  #define MSR_IA32_MC0_ADDR              0x00000402
+> > 
+> > There is another almost identical file at:
+> > 
+> > tools/arch/x86/include/asm/msr-index.h
+> > 
+> > and I am not sure which one is the master, but
+> > the former contains stuff that the later does not.
+> > 
+> > I have defined the bits names in a consistent way
+> > as observed elsewhere in the file. i.e. drop the
+> > "MSR_IA32_" prefix and add the bit.
+> > 
+> > Now, tying this back to my earlier comment about the
+> > manuals:
+> > The file "tools/arch/x86/include/asm/msr-index.h"
+> > is an excellent gateway reference for those
+> > 1000's of pages of software reference manuals.
+> > 
+> > As a user that uses them all the time, but typically
+> > only digs deep into those manuals once every year or
+> > two, I find tremendous value added via the msr-index.h
+> > file.
+> > 
+> > > +
+> > > +static ssize_t show_energy_efficiency_enable(struct kobject
+> > > *kobj,
+> > > +					     struct kobj_attribute
+> > > *attr,
+> > > +					     char *buf)
+> > > +{
+> > > +	u64 power_ctl;
+> > > +	int enable;
+> > > +
+> > > +	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
+> > > +	enable = (power_ctl & BIT(MSR_IA32_POWER_CTL_BIT_EE)) >>
+> > > MSR_IA32_POWER_CTL_BIT_EE;
+> > > +	return sprintf(buf, "%d\n", !enable);
+> > > +}
+> > > +
+> > > +static ssize_t store_energy_efficiency_enable(struct kobject *a,
+> > > +					      struct kobj_attribute *b,
+> > > +					      const char *buf, size_t
+> > > count)
+> > > +{
+> > > +	u64 power_ctl;
+> > > +	u32 input;
+> > > +	int ret;
+> > > +
+> > > +	ret = kstrtouint(buf, 10, &input);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	mutex_lock(&intel_pstate_driver_lock);
+> > > +	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
+> > > +	if (input)
+> > > +		power_ctl &= ~BIT(MSR_IA32_POWER_CTL_BIT_EE);
+> > > +	else
+> > > +		power_ctl |= BIT(MSR_IA32_POWER_CTL_BIT_EE);
+> > > +	wrmsrl(MSR_IA32_POWER_CTL, power_ctl);
+> > > +	mutex_unlock(&intel_pstate_driver_lock);
+> > > +
+> > > +	return count;
+> > > +}
+> > > +
+> > >  show_one(max_perf_pct, max_perf_pct);
+> > >  show_one(min_perf_pct, min_perf_pct);
+> > > 
+> > > @@ -1228,6 +1266,7 @@ define_one_global_rw(min_perf_pct);
+> > >  define_one_global_ro(turbo_pct);
+> > >  define_one_global_ro(num_pstates);
+> > >  define_one_global_rw(hwp_dynamic_boost);
+> > > +define_one_global_rw(energy_efficiency_enable);
+> > > 
+> > >  static struct attribute *intel_pstate_attributes[] = {
+> > >  	&status.attr,
+> > > @@ -1241,6 +1280,8 @@ static const struct attribute_group
+> > > intel_pstate_attr_group = {
+> > >  	.attrs = intel_pstate_attributes,
+> > >  };
+> > > 
+> > > +static const struct x86_cpu_id
+> > > intel_pstate_cpu_ee_disable_ids[];
+> > > +
+> > >  static void __init intel_pstate_sysfs_expose_params(void)
+> > >  {
+> > >  	struct kobject *intel_pstate_kobject;
+> > > @@ -1273,6 +1314,12 @@ static void __init
+> > > intel_pstate_sysfs_expose_params(void)
+> > >  				       &hwp_dynamic_boost.attr);
+> > >  		WARN_ON(rc);
+> > >  	}
+> > > +
+> > > +	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids)) {
+> > > +		rc = sysfs_create_file(intel_pstate_kobject,
+> > > +				       &energy_efficiency_enable.attr);
+> > > +		WARN_ON(rc);
+> > > +	}
+> > >  }
+> > >  /************************** sysfs end ************************/
+> > > 
+> > > @@ -1288,8 +1335,6 @@ static void intel_pstate_hwp_enable(struct
+> > > cpudata *cpudata)
+> > >  		cpudata->epp_default = intel_pstate_get_epp(cpudata,
+> > > 0);
+> > >  }
+> > > 
+> > > -#define MSR_IA32_POWER_CTL_BIT_EE	19
+> > > -
+> > >  /* Disable energy efficiency optimization */
+> > >  static void intel_pstate_disable_ee(int cpu)
+> > >  {
+> > > --
+> > > 2.25.4
+> 
+> 
 
-Warnings summary:
-
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #size-cells (1) differs from / (2)
-    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
-rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
- its #address-cells (1) differs from / (2)
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
- (1) differs from / (2)
-    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
-s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
-lls (1) differs from / (2)
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: War=
-ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C add=
-ress must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4:=
- Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus=
- unit address format error, expected "40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: War=
-ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C add=
-ress must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4:=
- Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus=
- unit address format error, expected "40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: War=
-ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C add=
-ress must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4:=
- Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus=
- unit address format error, expected "40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: War=
-ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C addr=
-ess must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4:=
- Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus =
-unit address format error, expected "40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C addr=
-ess must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: =
-Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus =
-unit address format error, expected "40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C addr=
-ess must be less than 10-bits, got "0x40000010"
-    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: =
-Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus =
-unit address format error, expected "40000010"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
-
-Warnings:
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#address-cells (1) differs from / (2)
-    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
- (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
-#size-cells (1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
-1) differs from / (2)
-    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
-mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
-differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 12 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
-ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
-address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
-i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
-ust be less than 10-bits, got "0x40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
-ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
-address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
-i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
-ust be less than 10-bits, got "0x40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus unit =
-address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: Warning =
-(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C address m=
-ust be less than 10-bits, got "0x40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus unit=
- address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: Warning =
-(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C address =
-must be less than 10-bits, got "0x40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus unit=
- address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: Warning =
-(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C address =
-must be less than 10-bits, got "0x40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4: Warn=
-ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus unit=
- address format error, expected "40000010"
-    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: Warning =
-(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C address =
-must be less than 10-bits, got "0x40000010"
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
