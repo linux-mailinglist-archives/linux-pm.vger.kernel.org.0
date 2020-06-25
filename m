@@ -2,189 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712DC209D20
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 12:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDD3209D26
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 12:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404105AbgFYKyg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 06:54:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403952AbgFYKyg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 06:54:36 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC9C0613ED
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 03:54:35 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id o13so160558pgf.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 03:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yx0lD7fGCawYLo67/HEDDyL+lrRFtxEIUe5sUIZ62J4=;
-        b=KFzDILrifAGB9mux0K0myeWdvE++5mwEPTLiZlUHtmvaSd5Zbbi+N3aDQqCfvRoADy
-         vgu0THEKzIO32WFExI06AHflnZAeytfQquxOij2If7MxulGyiquIDz2kpgr2AJd62yFE
-         3EZvh4hdkirQqJk9q1MFSAbrG6rxcjUIzDerLiZOKUwQDsgK6eKLTA39sis77KVz1WCW
-         3ABVAvDmDdqCrr64wSHg8vwrkmjxjunuQRddTA1lZ/o5ZNmBfPvqa38Wq3dg9cKfx6xR
-         j+chsV3sY3Dt/QO9DgGVZcTCU2SFcl7FcON/wIZIgrJ/iJxcQWBQzn0Kaqflv4RwZ8n6
-         L3eg==
+        id S2404076AbgFYKzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 06:55:42 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46412 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404042AbgFYKzm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 06:55:42 -0400
+Received: by mail-oi1-f195.google.com with SMTP id l63so4532914oih.13;
+        Thu, 25 Jun 2020 03:55:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yx0lD7fGCawYLo67/HEDDyL+lrRFtxEIUe5sUIZ62J4=;
-        b=bXfNppJQRQ8t/2ChXUlUnk335umZxvh4EBT6QwhbpsLTMLKpQ59tPHUz4pBwg/Ff4R
-         abMUsULOikffhkn4SoxCgff1q2M31UwL0jQDDjz5vwIM5HHCb5E6uAK1ZwGBWZZ2pOo9
-         q2syGEsMYN09N4gNtoej/steOyoo8MCdVaybz0QR8x3aZA8VtNNg8PggKJH//Ka3esmb
-         gD6ZGYNd4HqDNHLgGyy5p+wNWQofTI4IsZ8vRF8AL9c/rzHOuf1k+r51+RJ8thMRh6GT
-         qkrbnfYnrJ4oY/6q4T2UwoFycTCRC4XMDLRGzfVArHF2zrlmwOvSrybqSHERLLD9RQWg
-         3WbQ==
-X-Gm-Message-State: AOAM530K/nCSWwZjSDHFI+u+SDgW4RoirlWFeVcoAkRHEA4Pfj9dDbx7
-        PsMQ7Z8FUCFkE4vWRou0+iYHOA==
-X-Google-Smtp-Source: ABdhPJy0/PWHlw5xC2GRTtLNg6G2ne3hVL381s0Dp6vTcQq3l/hAhoPTcjAsPJSL5gnb3vM45ejGAA==
-X-Received: by 2002:aa7:82d5:: with SMTP id f21mr7333895pfn.244.1593082475155;
-        Thu, 25 Jun 2020 03:54:35 -0700 (PDT)
-Received: from localhost ([122.172.111.76])
-        by smtp.gmail.com with ESMTPSA id u4sm23045364pfl.102.2020.06.25.03.54.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 03:54:34 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Quentin Perret <qperret@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: Fix locking issues with governors
-Date:   Thu, 25 Jun 2020 16:24:16 +0530
-Message-Id: <49c7d64460cdb39b006991e5251260eb0eea9f2a.1593082448.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TrUXVh5K34ExkyosZm6J1FzTLucnrfzr2MGexVTzx7A=;
+        b=EDEalBM1t/9VXmckPzbNjY25D6IoMcyNWBb+hrEoH8jC/Q+oJl8lSm80mjg2uQEnsh
+         mJ0iQjPQfGG+unfCTOArQ+VmLCvtKMXRSwP4fJco608qCO5CPZd1VaCwGmK9BOw63mmP
+         NrtqP3qMjG+0wwsRXJpJE+pKRF9dObo0D8Gej1TYA/P31WadIrw8w7E8QVOvCX+Bk27q
+         8gyI1sPv2Bo5ToZUbNOkxRkgk8tC2jKRjjb6zrH/V3RftrlxwGMt+glqGLRufzEryXNF
+         QF5SqyR6mUhfF8hsVSWXpvCnw6X61kUcMaVmwx01R68uF8LvwK5En2j1fNDcr9DMZC03
+         m6oA==
+X-Gm-Message-State: AOAM531di9ZZWLCC6i8yU52Hj9OgbdYK0jECXSnsfdZzZQ6a9wboRJ6c
+        2OUybgKXOH15f68+aCJOTa3Q+K5CaMcguS2Hn7c=
+X-Google-Smtp-Source: ABdhPJxEHcU+htFP7B4i5hFRJBFdP4Ml1jBQ9xnktdScLVwnwA+huwt1DnfbyHYvIexy3b5Mqz0mUcFvn4VuBdP0DQA=
+X-Received: by 2002:a54:4585:: with SMTP id z5mr1709742oib.110.1593082540828;
+ Thu, 25 Jun 2020 03:55:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com> <20200608112211.12125-4-andrzej.p@collabora.com>
+ <CAJZ5v0j7e9TzDtEiDXmj3fLAQ7CvFHoe7Q3aYKKas3PEXrsUuw@mail.gmail.com> <20200625052318.GE248110@dtor-ws>
+In-Reply-To: <20200625052318.GE248110@dtor-ws>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 Jun 2020 12:55:29 +0200
+Message-ID: <CAJZ5v0hgQt-amMn8xiF_0kyVZ-9pQxgm5H-VcFpinVQGKnYhwQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/7] ACPI: button: Access input device's users under
+ appropriate mutex
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        linux-input@vger.kernel.org,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        Collabora Kernel ML <kernel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The locking around governors handling isn't adequate currently. The list
-of governors should never be traversed without locking in place. Also we
-must make sure the governor isn't removed while it is still referenced
-by code.
+On Thu, Jun 25, 2020 at 7:23 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> On Wed, Jun 24, 2020 at 05:00:09PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Jun 8, 2020 at 1:22 PM Andrzej Pietrasiewicz
+> > <andrzej.p@collabora.com> wrote:
+> > >
+> > > Inspecting input device's 'users' member should be done under device's
+> > > mutex, so add appropriate invocations.
+> > >
+> > > Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> >
+> > This looks like a fix that might be applied independently of the other
+> > patches in the series.
+> >
+> > Do you want me to pick it up?
+>
+> If you pick it we'll have to have a dance with this series. Can I apply
+> instead?
 
-Reported-by: Quentin Perret <qperret@google.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 59 ++++++++++++++++++++++++---------------
- 1 file changed, 36 insertions(+), 23 deletions(-)
+Yes, please.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 4b1a5c0173cf..dad6b85f4c89 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -624,6 +624,24 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
- 	return NULL;
- }
- 
-+static struct cpufreq_governor *get_governor(const char *str_governor)
-+{
-+	struct cpufreq_governor *t;
-+
-+	mutex_lock(&cpufreq_governor_mutex);
-+	t = find_governor(str_governor);
-+	if (!t)
-+		goto unlock;
-+
-+	if (!try_module_get(t->owner))
-+		t = NULL;
-+
-+unlock:
-+	mutex_unlock(&cpufreq_governor_mutex);
-+
-+	return t;
-+}
-+
- static unsigned int cpufreq_parse_policy(char *str_governor)
- {
- 	if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN))
-@@ -643,28 +661,14 @@ static struct cpufreq_governor *cpufreq_parse_governor(char *str_governor)
- {
- 	struct cpufreq_governor *t;
- 
--	mutex_lock(&cpufreq_governor_mutex);
--
--	t = find_governor(str_governor);
--	if (!t) {
--		int ret;
--
--		mutex_unlock(&cpufreq_governor_mutex);
--
--		ret = request_module("cpufreq_%s", str_governor);
--		if (ret)
--			return NULL;
--
--		mutex_lock(&cpufreq_governor_mutex);
-+	t = get_governor(str_governor);
-+	if (t)
-+		return t;
- 
--		t = find_governor(str_governor);
--	}
--	if (t && !try_module_get(t->owner))
--		t = NULL;
--
--	mutex_unlock(&cpufreq_governor_mutex);
-+	if (request_module("cpufreq_%s", str_governor))
-+		return NULL;
- 
--	return t;
-+	return get_governor(str_governor);
- }
- 
- /**
-@@ -818,12 +822,14 @@ static ssize_t show_scaling_available_governors(struct cpufreq_policy *policy,
- 		goto out;
- 	}
- 
-+	mutex_lock(&cpufreq_governor_mutex);
- 	for_each_governor(t) {
- 		if (i >= (ssize_t) ((PAGE_SIZE / sizeof(char))
- 		    - (CPUFREQ_NAME_LEN + 2)))
--			goto out;
-+			break;
- 		i += scnprintf(&buf[i], CPUFREQ_NAME_PLEN, "%s ", t->name);
- 	}
-+	mutex_unlock(&cpufreq_governor_mutex);
- out:
- 	i += sprintf(&buf[i], "\n");
- 	return i;
-@@ -1060,11 +1066,14 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- {
- 	struct cpufreq_governor *gov = NULL;
- 	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
-+	bool put_governor = false;
-+	int ret;
- 
- 	if (has_target()) {
- 		/* Update policy governor to the one used before hotplug. */
--		gov = find_governor(policy->last_governor);
-+		gov = get_governor(policy->last_governor);
- 		if (gov) {
-+			put_governor = true;
- 			pr_debug("Restoring governor %s for cpu %d\n",
- 				 policy->governor->name, policy->cpu);
- 		} else if (default_governor) {
-@@ -1091,7 +1100,11 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- 			return -ENODATA;
- 	}
- 
--	return cpufreq_set_policy(policy, gov, pol);
-+	ret = cpufreq_set_policy(policy, gov, pol);
-+	if (put_governor)
-+		module_put(gov->owner);
-+
-+	return ret;
- }
- 
- static int cpufreq_add_policy_cpu(struct cpufreq_policy *policy, unsigned int cpu)
--- 
-2.25.0.rc1.19.g042ed3e048af
+Also feel free to add
 
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+to it.
+
+> I do not think this change has any practical effect as nobody
+> attaches/detached input handlers or opening/closing input devices when
+> system goes through device resume phase.
+
+Indeed.
+
+Thanks!
