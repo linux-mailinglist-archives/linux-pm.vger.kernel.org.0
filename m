@@ -2,89 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29242098AC
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 04:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6875209956
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 07:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389489AbgFYC4T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 Jun 2020 22:56:19 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:45600 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388930AbgFYC4T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 Jun 2020 22:56:19 -0400
-X-IronPort-AV: E=Sophos;i="5.75,277,1589209200"; 
-   d="scan'208";a="50534979"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 25 Jun 2020 11:56:17 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 24BE04006DF5;
-        Thu, 25 Jun 2020 11:56:17 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com
-Cc:     niklas.soderlund+renesas@ragnatech.se, van.do.xw@renesas.com,
-        dien.pham.ry@renesas.com, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v3] thermal: rcar_gen3_thermal: Fix undefined temperature if negative
-Date:   Thu, 25 Jun 2020 11:56:08 +0900
-Message-Id: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1728725AbgFYFOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 01:14:34 -0400
+Received: from mga11.intel.com ([192.55.52.93]:60997 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726571AbgFYFOe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jun 2020 01:14:34 -0400
+IronPort-SDR: 2HemDhHIziST6J5M3L/+sqJSIp+Mb8hna5oxCQRGMKX6CATTkfdz7opc+hYk+63tLEK4i6rkqc
+ YOGQFOPCoaOA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="142990619"
+X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
+   d="scan'208";a="142990619"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2020 22:14:33 -0700
+IronPort-SDR: 4o09eHyp3wmNSZzI3NtwxSxBiCe3Vk3cL/R1SjaNUZ8Pl78eaIUbVeYzqmdgGAk2U/wDNMfqBR
+ GFRdzGrgC8fQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
+   d="scan'208";a="479518432"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by fmsmga005.fm.intel.com with ESMTP; 24 Jun 2020 22:14:31 -0700
+Date:   Thu, 25 Jun 2020 13:15:34 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 2/2][v3] PM / s2idle: Code cleanup to make s2idle
+ consistent with normal idle path
+Message-ID: <20200625051534.GA22907@chenyu-office.sh.intel.com>
+References: <cover.1592892767.git.yu.c.chen@intel.com>
+ <a00278cc5db9f4845006cff130fd91a58c0d92d1.1592892767.git.yu.c.chen@intel.com>
+ <15473183.xuek0xzqYe@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15473183.xuek0xzqYe@kreacher>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dien Pham <dien.pham.ry@renesas.com>
+Hi Rafael,
+On Tue, Jun 23, 2020 at 07:57:59PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Subject: [PATCH] cpuidle: Rearrange s2idle-specific idle state entry code
+> 
+> Implement call_cpuidle_s2idle() in analogy with call_cpuidle()
+> for the s2idle-specific idle state entry and invoke it from
+> cpuidle_idle_call() to make the s2idle-specific idle entry code
+> path look more similar to the "regular" idle entry one.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/cpuidle.c |    6 +++---
+>  kernel/sched/idle.c       |   15 +++++++++++----
+>  2 files changed, 14 insertions(+), 7 deletions(-)
+> 
+> Index: linux-pm/kernel/sched/idle.c
+> ===================================================================
+> --- linux-pm.orig/kernel/sched/idle.c
+> +++ linux-pm/kernel/sched/idle.c
+> @@ -96,6 +96,15 @@ void __cpuidle default_idle_call(void)
+>  	}
+>  }
+>  
+> +static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
+> +			       struct cpuidle_device *dev)
+> +{
+> +	if (current_clr_polling_and_test())
+> +		return -EBUSY;
+> +
+> +	return cpuidle_enter_s2idle(drv, dev);
+> +}
+> +
+>  static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>  		      int next_state)
+>  {
+> @@ -171,11 +180,9 @@ static void cpuidle_idle_call(void)
+>  		if (idle_should_enter_s2idle()) {
+>  			rcu_idle_enter();
+>  
+> -			entered_state = cpuidle_enter_s2idle(drv, dev);
+> -			if (entered_state > 0) {
+> -				local_irq_enable();
+> +			entered_state = call_cpuidle_s2idle(drv, dev);
+I guess this changes the context a little bit that(comparing to [1/2 patch],
+after this modification, when we found that TIF_NEED_RESCHED is set we can have
+a second chance in the following call_cpuidle to do a second s2idle try. However
+in [1/2 patch], it might exit the s2idle phase directly once when we see
+TIF_NEED_RESCHED is set(because entered_state is postive we treat it as a successful
+s2idle). In summary I think the change (patch [2/2]) is more robust.
+Acked-by: Chen Yu <yu.c.chen@intel.com>
 
-As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
-  "Result is undefined for negative divisors if the dividend variable
-   type is unsigned and for negative dividends if the divisor variable
-   type is unsigned."
-
-In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
-checked sign of divisor before using. It makes undefined temperature
-value in case the value is negative.
-
-This patch fixes to satisfy DIV_ROUND_CLOSEST description
-and fix bug too. Note that the variable name "reg" is not good
-because it should be the same type as rcar_gen3_thermal_read().
-However, there is better to rename it in a further patch as
-cleanup.
-
-Signed-off-by: Van Do <van.do.xw@renesas.com>
-Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
-[shimoda: minor fixes, add Fixes tag]
-Fixes: 564e73d283af ("thermal: rcar_gen3_thermal: Add R-Car Gen3 thermal driver")
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Reviewed-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
-Tested-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
----
- Changes from v2:
- - Add Niklas-san's Reviewed-by and Tested-by.
- - Keep the variable name "reg" and revise the commit description for it.
- https://patchwork.kernel.org/patch/11595327/
-
- Changes from v1:
- - Use int instead of long.
- - Rename "reg" with "ctemp".
- https://patchwork.kernel.org/patch/11593051/
-
- drivers/thermal/rcar_gen3_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 58fe7c1..c48c5e9 100644
---- a/drivers/thermal/rcar_gen3_thermal.c
-+++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -167,7 +167,7 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
- {
- 	struct rcar_gen3_thermal_tsc *tsc = devdata;
- 	int mcelsius, val;
--	u32 reg;
-+	int reg;
- 
- 	/* Read register and convert to mili Celsius */
- 	reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
--- 
-2.7.4
-
+Thanks,
+Chenyu
