@@ -2,133 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 847CE209D9B
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 13:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A571209DA2
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 13:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404366AbgFYLgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 07:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404293AbgFYLgH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 07:36:07 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 581A6C061573
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 04:36:06 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id d10so2683324pls.5
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 04:36:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zQMqcazx04oPZQDkNalK3c+oZ7+4RMlmpEj0gizKox0=;
-        b=L248HdTsPVnj/dY7XKrltNkz4VYCOnOgsSQfRfZu/tPmRa0oZMbcjKF+5ejsPs/2Y1
-         NL5I8SsxCo24n66/lBXA+bygwjzf5iJTi/DZlzUczZbpR7wRK1iWGCbwRKOcb9cvc/f/
-         gJslRoo/GTy/cuYo1p55x5m4tK+urvm5yXU10mM1U1oaUKX14HbI3DdE3d16qXqww8Pp
-         K0YpNhy99bRpIj+9f5r7EgDls76+B/xn9bxjFPIbXXRc833qLbghfPmrba7L95Y3CKx8
-         Yjqh3hPP1F5kprbOpUPbOWSQTvlef3cYCeVh7vnXxZQYLEZRa1if4spadTWe2wiNiiiK
-         w8YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zQMqcazx04oPZQDkNalK3c+oZ7+4RMlmpEj0gizKox0=;
-        b=aKhBJoQczhaMLJtamtQ4kEqjo4I9cyL7zolstiODm6YY5f/hVLtuZSl/cNkjfucJdQ
-         0FLIKztSlFBdSZhoD+5ZaI+SXYVJdy9lTsF9thCEqyT2j+mKPixMdM0sg+7bFo2QbqFI
-         XaC3waVYWePJgRnEUIdHCDQsul6SH2lg7gWH0MaZ8vft6/5/Ch3M9CDLkUXzBs85SwNh
-         l5fr+OPYYHApmLgW8YBtmEUnw6FQuhSekp1StgUrop2hfjDQ+hjuxCVVTMRuCuXOBa2I
-         DtPY/iXOMheeYG9uuAGPehL+KtK5yc1o/Q+6KP9n1154JU+6El7MUDkdj9A6fHywL2vy
-         U0Nw==
-X-Gm-Message-State: AOAM531ICWxbAES42ghUEHRiQhccMmhYN2NlagO8MgxLvr1FtIAjhtkC
-        GpzySIts1kS3mC7TY7+a6Yvj0w==
-X-Google-Smtp-Source: ABdhPJwuUmK8E9MFP4gCexgTFH6CLEAZn2UkSkrEV9QFJ0/Po7aUxoQVoHBtPpVEHTgbwLK9Ms70Qg==
-X-Received: by 2002:a17:902:7787:: with SMTP id o7mr9561302pll.327.1593084965635;
-        Thu, 25 Jun 2020 04:36:05 -0700 (PDT)
-Received: from localhost ([122.172.111.76])
-        by smtp.gmail.com with ESMTPSA id r4sm19096550pgp.60.2020.06.25.04.36.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 04:36:04 -0700 (PDT)
-Date:   Thu, 25 Jun 2020 17:06:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Quentin Perret <qperret@google.com>
-Cc:     rjw@rjwysocki.net, rafael@kernel.org, arnd@arndb.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org
-Subject: Re: [PATCH v2 2/2] cpufreq: Specify default governor on command line
-Message-ID: <20200625113602.z2xrwebd2gngbww3@vireshk-i7>
-References: <20200623142138.209513-1-qperret@google.com>
- <20200623142138.209513-3-qperret@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623142138.209513-3-qperret@google.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S2404300AbgFYLil (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 07:38:41 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:16162 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2404313AbgFYLik (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 07:38:40 -0400
+X-IronPort-AV: E=Sophos;i="5.75,279,1589209200"; 
+   d="scan'208";a="50366953"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 25 Jun 2020 20:38:38 +0900
+Received: from localhost.localdomain (unknown [10.166.252.89])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id B190F421C958;
+        Thu, 25 Jun 2020 20:38:38 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com
+Cc:     niklas.soderlund+renesas@ragnatech.se, van.do.xw@renesas.com,
+        dien.pham.ry@renesas.com, linux-pm@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v4] thermal: rcar_gen3_thermal: Fix undefined temperature if negative
+Date:   Thu, 25 Jun 2020 20:38:19 +0900
+Message-Id: <1593085099-2057-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After your last email (reply to my patch), I noticed a change which
-isn't required. :)
+From: Dien Pham <dien.pham.ry@renesas.com>
 
-On 23-06-20, 15:21, Quentin Perret wrote:
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 0128de3603df..4b1a5c0173cf 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -50,6 +50,9 @@ static LIST_HEAD(cpufreq_governor_list);
->  #define for_each_governor(__governor)				\
->  	list_for_each_entry(__governor, &cpufreq_governor_list, governor_list)
->  
-> +static char cpufreq_param_governor[CPUFREQ_NAME_LEN];
-> +static struct cpufreq_governor *default_governor;
-> +
->  /**
->   * The "cpufreq driver" - the arch- or hardware-dependent low
->   * level driver of CPUFreq support, and its spinlock. This lock
-> @@ -1055,7 +1058,6 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
->  
->  static int cpufreq_init_policy(struct cpufreq_policy *policy)
->  {
-> -	struct cpufreq_governor *def_gov = cpufreq_default_governor();
->  	struct cpufreq_governor *gov = NULL;
->  	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
->  
-> @@ -1065,8 +1067,8 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
->  		if (gov) {
->  			pr_debug("Restoring governor %s for cpu %d\n",
->  				 policy->governor->name, policy->cpu);
-> -		} else if (def_gov) {
-> -			gov = def_gov;
-> +		} else if (default_governor) {
-> +			gov = default_governor;
->  		} else {
->  			return -ENODATA;
->  		}
+As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
+  "Result is undefined for negative divisors if the dividend variable
+   type is unsigned and for negative dividends if the divisor variable
+   type is unsigned."
 
+In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
+checked sign of divisor before using. It makes undefined temperature
+value in case the value is negative.
 
-> @@ -1074,8 +1076,8 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
->  		/* Use the default policy if there is no last_policy. */
->  		if (policy->last_policy) {
->  			pol = policy->last_policy;
-> -		} else if (def_gov) {
-> -			pol = cpufreq_parse_policy(def_gov->name);
-> +		} else if (default_governor) {
-> +			pol = cpufreq_parse_policy(default_governor->name);
+This patch fixes to satisfy DIV_ROUND_CLOSEST description
+and fix bug too. Note that the variable name "reg" is not good
+because it should be the same type as rcar_gen3_thermal_read().
+However, it's better to rename the "reg" in a further patch as
+cleanup.
 
-This change is not right IMO. This part handles the set-policy case,
-where there are no governors. Right now this code, for some reasons
-unknown to me, forcefully uses the default governor set to indicate
-the policy, which is not a great idea in my opinion TBH. This doesn't
-and shouldn't care about governor modules and should only be looking
-at strings instead of governor pointer.
+Signed-off-by: Van Do <van.do.xw@renesas.com>
+Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
+[shimoda: minor fixes, add Fixes tag]
+Fixes: 564e73d283af ("thermal: rcar_gen3_thermal: Add R-Car Gen3 thermal driver")
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Reviewed-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
+Tested-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+---
+ Changes from v3:
+ - Add Amit's Reviewed-by.
+ - Fix typos in the commit description.
+ https://patchwork.kernel.org/patch/11624619/
 
-Rafael, I even think we should remove this code completely and just
-rely on what the driver has sent to us. Using the selected governor
-for set policy drivers is very confusing and also we shouldn't be
-forced to compiling any governor for the set-policy case.
+ Changes from v2:
+ - Add Niklas-san's Reviewed-by and Tested-by.
+ - Keep the variable name "reg" and revise the commit description for it.
+ https://patchwork.kernel.org/patch/11595327/
 
+ Changes from v1:
+ - Use int instead of long.
+ - Rename "reg" with "ctemp".
+ https://patchwork.kernel.org/patch/11593051/
+
+ drivers/thermal/rcar_gen3_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index 58fe7c1..c48c5e9 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -167,7 +167,7 @@ static int rcar_gen3_thermal_get_temp(void *devdata, int *temp)
+ {
+ 	struct rcar_gen3_thermal_tsc *tsc = devdata;
+ 	int mcelsius, val;
+-	u32 reg;
++	int reg;
+ 
+ 	/* Read register and convert to mili Celsius */
+ 	reg = rcar_gen3_thermal_read(tsc, REG_GEN3_TEMP) & CTEMP_MASK;
 -- 
-viresh
+2.7.4
+
