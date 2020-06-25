@@ -2,108 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6875209956
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 07:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D3209966
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 07:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728725AbgFYFOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 01:14:34 -0400
-Received: from mga11.intel.com ([192.55.52.93]:60997 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726571AbgFYFOe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 25 Jun 2020 01:14:34 -0400
-IronPort-SDR: 2HemDhHIziST6J5M3L/+sqJSIp+Mb8hna5oxCQRGMKX6CATTkfdz7opc+hYk+63tLEK4i6rkqc
- YOGQFOPCoaOA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9662"; a="142990619"
-X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
-   d="scan'208";a="142990619"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2020 22:14:33 -0700
-IronPort-SDR: 4o09eHyp3wmNSZzI3NtwxSxBiCe3Vk3cL/R1SjaNUZ8Pl78eaIUbVeYzqmdgGAk2U/wDNMfqBR
- GFRdzGrgC8fQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,278,1589266800"; 
-   d="scan'208";a="479518432"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by fmsmga005.fm.intel.com with ESMTP; 24 Jun 2020 22:14:31 -0700
-Date:   Thu, 25 Jun 2020 13:15:34 +0800
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 2/2][v3] PM / s2idle: Code cleanup to make s2idle
- consistent with normal idle path
-Message-ID: <20200625051534.GA22907@chenyu-office.sh.intel.com>
-References: <cover.1592892767.git.yu.c.chen@intel.com>
- <a00278cc5db9f4845006cff130fd91a58c0d92d1.1592892767.git.yu.c.chen@intel.com>
- <15473183.xuek0xzqYe@kreacher>
+        id S2389792AbgFYFXX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 01:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389559AbgFYFXW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 01:23:22 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95487C061573;
+        Wed, 24 Jun 2020 22:23:22 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id u128so2763715pgu.13;
+        Wed, 24 Jun 2020 22:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G7EYtpN+7APVu3hftiJBUcaii12rvBtQLcLyvFMd3fw=;
+        b=jJIIJMoxL6YsQVrG7We7n48E+SeW7jk0D25Di+/5IowuwUSecYdFowrs3zU3Ar+clB
+         D7O/AgEWBWfMEOmUWDep0xWKKl8zbs3ABy/eLh8Y/rqrV47ShC/omyeBMohoN+RrEVGv
+         zMvNYy9Si2WXLoSyXeQBtE7pOxnk/4Z7HeqYSbK1usdxxvj/KfrRfwmgezF21rhBaQxL
+         3dJ6sXHFV3I5r1Oc+FaC8rLXBwY9Jos35avaKEVvJB2z+WsyWE2Q+utTq9C5fOgPuUom
+         YtjrsnSlphGxBQ7IyrYgDi/KklkyWAiY6PraldKhi3/UqKrYGyFCbNJyeSWtvQ/inbve
+         nzFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=G7EYtpN+7APVu3hftiJBUcaii12rvBtQLcLyvFMd3fw=;
+        b=K28tgkfoCC8MvqtkB+9VehH8oOJV/d4JTmfExcYPuzjIExcbmCSILzj0p8JXOqhaWV
+         cVwSEOubffJF345A5/ihg4RsJK989UOrfqR7DnBFZ3wVUJvuAFRjJo5qNg/Trr5KqF76
+         da2l1ywh0A8G3jrSgKL1I2KUOAkkY7gLF+4Rrxj8O9KUryB64oAxFD4ty4OGA5lTvhDt
+         L+XITm9mYrvAfxtru8AYfSJ/X39KdrIo+XLIwPpjZnWNjzvcrUHd+1rZjiEAP/ay63uE
+         IpTYmQlXwk+WenhJgxxb8uocXdKZjz0zkiZgFTXJ3kRBe+ETuyRjnEFrZDNRzFep8j5j
+         Wu2w==
+X-Gm-Message-State: AOAM531M4mn/6sThDL6JdPyB1HLr54hoXZxTES0J5rufbajX/NPLjsk1
+        HEu0TvAG64wmkDhpsMhQxn4=
+X-Google-Smtp-Source: ABdhPJw9IVvFgD9u6cKkJI+eEsVm8cCM5YDQSmq1Y1wrIMZkohaI0YZ2wNwSQKKZGzZRenNdJo7hRA==
+X-Received: by 2002:a65:46c9:: with SMTP id n9mr23942588pgr.89.1593062601705;
+        Wed, 24 Jun 2020 22:23:21 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
+        by smtp.gmail.com with ESMTPSA id i12sm21668804pfk.180.2020.06.24.22.23.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 22:23:20 -0700 (PDT)
+Date:   Wed, 24 Jun 2020 22:23:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-iio@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        linux-input@vger.kernel.org,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        Collabora Kernel ML <kernel@collabora.com>
+Subject: Re: [PATCH v4 3/7] ACPI: button: Access input device's users under
+ appropriate mutex
+Message-ID: <20200625052318.GE248110@dtor-ws>
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com>
+ <20200608112211.12125-4-andrzej.p@collabora.com>
+ <CAJZ5v0j7e9TzDtEiDXmj3fLAQ7CvFHoe7Q3aYKKas3PEXrsUuw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <15473183.xuek0xzqYe@kreacher>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAJZ5v0j7e9TzDtEiDXmj3fLAQ7CvFHoe7Q3aYKKas3PEXrsUuw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-On Tue, Jun 23, 2020 at 07:57:59PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] cpuidle: Rearrange s2idle-specific idle state entry code
+On Wed, Jun 24, 2020 at 05:00:09PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Jun 8, 2020 at 1:22 PM Andrzej Pietrasiewicz
+> <andrzej.p@collabora.com> wrote:
+> >
+> > Inspecting input device's 'users' member should be done under device's
+> > mutex, so add appropriate invocations.
+> >
+> > Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 > 
-> Implement call_cpuidle_s2idle() in analogy with call_cpuidle()
-> for the s2idle-specific idle state entry and invoke it from
-> cpuidle_idle_call() to make the s2idle-specific idle entry code
-> path look more similar to the "regular" idle entry one.
+> This looks like a fix that might be applied independently of the other
+> patches in the series.
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/cpuidle.c |    6 +++---
->  kernel/sched/idle.c       |   15 +++++++++++----
->  2 files changed, 14 insertions(+), 7 deletions(-)
-> 
-> Index: linux-pm/kernel/sched/idle.c
-> ===================================================================
-> --- linux-pm.orig/kernel/sched/idle.c
-> +++ linux-pm/kernel/sched/idle.c
-> @@ -96,6 +96,15 @@ void __cpuidle default_idle_call(void)
->  	}
->  }
->  
-> +static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
-> +			       struct cpuidle_device *dev)
-> +{
-> +	if (current_clr_polling_and_test())
-> +		return -EBUSY;
-> +
-> +	return cpuidle_enter_s2idle(drv, dev);
-> +}
-> +
->  static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->  		      int next_state)
->  {
-> @@ -171,11 +180,9 @@ static void cpuidle_idle_call(void)
->  		if (idle_should_enter_s2idle()) {
->  			rcu_idle_enter();
->  
-> -			entered_state = cpuidle_enter_s2idle(drv, dev);
-> -			if (entered_state > 0) {
-> -				local_irq_enable();
-> +			entered_state = call_cpuidle_s2idle(drv, dev);
-I guess this changes the context a little bit that(comparing to [1/2 patch],
-after this modification, when we found that TIF_NEED_RESCHED is set we can have
-a second chance in the following call_cpuidle to do a second s2idle try. However
-in [1/2 patch], it might exit the s2idle phase directly once when we see
-TIF_NEED_RESCHED is set(because entered_state is postive we treat it as a successful
-s2idle). In summary I think the change (patch [2/2]) is more robust.
-Acked-by: Chen Yu <yu.c.chen@intel.com>
+> Do you want me to pick it up?
 
-Thanks,
-Chenyu
+If you pick it we'll have to have a dance with this series. Can I apply
+instead?
+
+I do not think this change has any practical effect as nobody
+attaches/detached input handlers or opening/closing input devices when
+system goes through device resume phase.
+
+> 
+> > ---
+> >  drivers/acpi/button.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/acpi/button.c b/drivers/acpi/button.c
+> > index 78cfc70cb320..ff7ab291f678 100644
+> > --- a/drivers/acpi/button.c
+> > +++ b/drivers/acpi/button.c
+> > @@ -456,13 +456,16 @@ static int acpi_button_resume(struct device *dev)
+> >  {
+> >         struct acpi_device *device = to_acpi_device(dev);
+> >         struct acpi_button *button = acpi_driver_data(device);
+> > +       struct input_dev *input = button->input;
+> >
+> >         button->suspended = false;
+> > -       if (button->type == ACPI_BUTTON_TYPE_LID && button->input->users) {
+> > +       mutex_lock(&input->mutex);
+> > +       if (button->type == ACPI_BUTTON_TYPE_LID && input->users) {
+> >                 button->last_state = !!acpi_lid_evaluate_state(device);
+> >                 button->last_time = ktime_get();
+> >                 acpi_lid_initialize_state(device);
+> >         }
+> > +       mutex_unlock(&input->mutex);
+> >         return 0;
+> >  }
+> >  #endif
+> > --
+> > 2.17.1
+> >
+
+Thanks.
+
+-- 
+Dmitry
