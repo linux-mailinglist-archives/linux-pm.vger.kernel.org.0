@@ -2,118 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A9520A2BA
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 18:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499EE20A33C
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 18:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406064AbgFYQPP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 12:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S2406422AbgFYQm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 12:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406057AbgFYQPN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 12:15:13 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1ECC08C5C1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:15:13 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id q90so2739204pjh.3
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:15:13 -0700 (PDT)
+        with ESMTP id S2403912AbgFYQm4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 12:42:56 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA971C08C5C1
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:42:55 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id h22so94336lji.9
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 09:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=LiR+vvBj/1zG53Aljjyp+mWfuQeKPL4gCZSBIMws0J8=;
-        b=jMnJrRJf/2MMXx8vq3QHNLgJDXpORh9Cbqi1vvxRZY4RmEktiws4bUmCMv8gHNAQic
-         Up/PeaxGpztX/mg2MCcqH2bmDt/QaCwymZhhwMRXrA1FALCvZw9cDjQdX600NfQ1rbZX
-         D70mTkRP+SYL2qKfNaSCQ4lX7r17La40Vgo4gC+let9jsiLHApLhIq24WM5MYP6uN6Wc
-         pUKiTTkZLF1NlMbJ9nKLAFckgGSanPktFRQgFJcNsx+hoJVdh3NkH1tO7LS8Yx2AQhiK
-         sGVDQTyr7XRPGhklcwvK6QCXLJSZ7QeyxYujluxFeBxNFY2umapVSY96BEcDdXZEd7Mf
-         OxEw==
+        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=zClFgpz3ZMsyGeYZHhNVEHPebUS6ZTida1tC/1yV4wQ=;
+        b=XnU7x3eOw/bSXbFDAG1leuCXtQ6csxKA+CSU5cYRceR41Mzu3Z/ZhE3lCLKlBDURcJ
+         NPqgX8GTfDUS3sPfoc0jVhrFaUCAsuY2sroqnqqMz6BU3F2HHnijYOoL/qv47JkxRov7
+         P+W1Wq5bGFFhZP+n4lQxfVLgIDUpKtEr7ZwtJxEL/5orJIqhv536mi1S8dQSCSZY742k
+         33sZG2kY5jKA16DOr3AlP7TzFVFthfyo0Teiqx3pozw45lOLwKH8QbOJujhj/OFsDGte
+         6xBla455Fpt0gAZflbHtqieLXZ0P/64hUGCKZvomaOLQT+ExQ66Ls3kJbH1BSJKkcIvF
+         QxNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=LiR+vvBj/1zG53Aljjyp+mWfuQeKPL4gCZSBIMws0J8=;
-        b=V/JjjLg0vkkmZJ0JVSKlcV7nouspxQelJSu9C304HxhOG3CJHy4LBbeEq05YY3tmpH
-         bup7XPMITN4jWcKuwszw0MTkKRhAJg1iGJGLtBL/XjwDU84V8ioKoEjo8d1kAcgoyCzB
-         GLx+og09xDRjLslPLRmBvRxpjd+Pz+sE4BMKlDP2Oi0uiFupwkWvn1MVy3hIjNg57lLp
-         YHG2yUptwahwoEV23Qtko2gDRdXQdq1t0B8UrMdsRVHzpeiEMrOsu8LJKwz6EJ1eNR7x
-         34F5Rk8Wnb/Stbl0LmOjfm3cF8DQRxCYil3LG1t210aVExaJPDmS7p4ygahKunbVXn4u
-         Pelg==
-X-Gm-Message-State: AOAM531HE+RVyGo7Wwj8efJ0LNeuaWBHcsBdeXYtYwoeACBBZLAGOv3I
-        SGW8MaJgzh0DtCS6/tEilu584Q==
-X-Google-Smtp-Source: ABdhPJxLo3cgvmx8uIiOPVtNRhmD3w7jlg+qeALu2byDvfHbN84bZy5cMGScAeUERTeIH+ygJF15Nw==
-X-Received: by 2002:a17:90a:2ec6:: with SMTP id h6mr4192447pjs.82.1593101712791;
-        Thu, 25 Jun 2020 09:15:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j23sm2374141pfn.3.2020.06.25.09.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 09:15:12 -0700 (PDT)
-Message-ID: <5ef4cd90.1c69fb81.43355.5179@mx.google.com>
-Date:   Thu, 25 Jun 2020 09:15:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=zClFgpz3ZMsyGeYZHhNVEHPebUS6ZTida1tC/1yV4wQ=;
+        b=R0HeCMmJelVuVDqVjt/yNeAZEe/j24ANroGCzLv/gDPqTiYQjphC+41E0IWbYmpXNj
+         v+rYuI8fFJAMuaV3bvqeCiK/bIhU5Y5puRtUuDJFoxxkc+tc48GbGh4/z0OzEbMdZKjl
+         N2bemcP2/Q8pnuY3C8flJY0c5SNyoI80wBaQUif85rTyNN4HLoHauO7HAwrfXAoWjLKJ
+         Ihcu88usxyLBQYF6L8dkkqOo6u43ED6nnpTPdBwMyAiQj1sq4xMF7OFeIFo13re8XsyG
+         5UpEhsSJQxysYjMGz9YV00L/O1BtD6CX+2LpTedFm/skf9iKfz47mmNvN74ZOwRuRlDM
+         2Fkg==
+X-Gm-Message-State: AOAM531xKjMsWIyvQ3ZwnMZDJEgrGLGZ+a7B3UArghFCjMBCz/DB7PsY
+        zEcL8e9N5uJb/5sMhH9BN06Ewg==
+X-Google-Smtp-Source: ABdhPJzDdobcvIkvsC4t6+0mpz7c88hWpFSnrXKSvIHdOg1LwgQ2M+PnVjApc9f2/lRfyOfCsQpEkA==
+X-Received: by 2002:a2e:7011:: with SMTP id l17mr18238543ljc.424.1593103374304;
+        Thu, 25 Jun 2020 09:42:54 -0700 (PDT)
+Received: from wasted.cogentembedded.com ([2a00:1fa0:6ae:209b:f7ba:a780:4a06:8d86])
+        by smtp.gmail.com with ESMTPSA id 2sm5696247lfr.48.2020.06.25.09.42.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jun 2020 09:42:53 -0700 (PDT)
+Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: Fix undefined temperature
+ if negative
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amit.kucheria@verdurent.com" <amit.kucheria@verdurent.com>
+Cc:     "niklas.soderlund+renesas@ragnatech.se" 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Van Do <van.do.xw@renesas.com>,
+        Dien Pham <dien.pham.ry@renesas.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+References: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <db9e3bd3-d3f0-61d2-7ffe-3306003f57d8@cogentembedded.com>
+ <TY2PR01MB3692CC45140FF53CACD097BBD8920@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Organization: Cogent Embedded
+Message-ID: <cb207009-7af6-72cf-1551-b38445a557c8@cogentembedded.com>
+Date:   Thu, 25 Jun 2020 19:42:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.8-rc2-24-gdcc4e8ba3539
-Subject: pm/testing baseline: 44 runs,
- 1 regressions (v5.8-rc2-24-gdcc4e8ba3539)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <TY2PR01MB3692CC45140FF53CACD097BBD8920@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-MW
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 44 runs, 1 regressions (v5.8-rc2-24-gdcc4e8ba3539)
+On 06/25/2020 02:34 PM, Yoshihiro Shimoda wrote:
 
-Regressions Summary
--------------------
+>>> From: Dien Pham <dien.pham.ry@renesas.com>
+>>>
+>>> As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
+>>>    "Result is undefined for negative divisors if the dividend variable
+>>>     type is unsigned and for negative dividends if the divisor variable
+>>>     type is unsigned."
+>>>
+>>> In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
+>>> checked sign of divisor before using. It makes undefined temperature
+>>> value in case the value is negative.
+>>>
+>>> This patch fixes to satisfy DIV_ROUND_CLOSEST description
+>>> and fix bug too. Note that the variable name "reg" is not good
+>>> because it should be the same type as rcar_gen3_thermal_read().
+>>> However, there is better to rename it in a further patch as
+>>
+>>     It's better.
+> 
+> Thank you for your review! I'll fix it.
 
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+   Note that "there" isn't needed there, I wasn't explicit enough, it seems... 
 
+> Best regards,
+> Yoshihiro Shimoda
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc2=
--24-gdcc4e8ba3539/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-rc2-24-gdcc4e8ba3539
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      dcc4e8ba353955cbf43d70c71f1bd543839e2094 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef4c395d7ae53114997bf13
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc2-24-gdcc4e8=
-ba3539/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc2-24-gdcc4e8=
-ba3539/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef4c395d7ae5311=
-4997bf16
-      failing since 1 day (last pass: v5.8-rc2-8-g43bad67922e1, first fail:=
- v5.8-rc2-12-g3f291d339bdc)
-      1 lines =20
+MBR, Sergei
