@@ -2,107 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E85209B91
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 10:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A91209BB1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 11:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390556AbgFYI6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 04:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52020 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390330AbgFYI6B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 04:58:01 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78D5C061573
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:58:00 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id b25so2014868ljp.6
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 01:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cogentembedded-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fQj8GSzsb1+pdtgnS8aKkWuOlGiJbZZkRjMYogMxMTI=;
-        b=1EWytFWvMUGPjkoyq01zk1IliKJQ84AmrrPW33B1e7rNo9Ut8nGhjDBjgaU9Qgkfff
-         KrU1gDUGypDzp2buWc0un/jKmONipjFfHGZD1TnfljvD02mLT9vun0t7fLA4Vz7PZhps
-         ok5lX6EWdv4mxfGY9VwTciEkkifSvCHENNXcaIgrA+IxSkUpiHKQwfWpBH+Hy2sLzkGX
-         uh2kpE1K3RgGkP7ACtHMJjJlaLuH3LLkpGZl8agU/yxLTymwULCUYZQGvs861TAFMbKP
-         QhWuWD/ozt9lTu9FQaQRiuzzh55vk5JZaD7OouF9QZyS05g6xC+89M4IoYNDhB0mg5FZ
-         XJAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fQj8GSzsb1+pdtgnS8aKkWuOlGiJbZZkRjMYogMxMTI=;
-        b=ElqbzEnkPUDggeGs0q3ApuLumqTYqjhtu+QrerfGwzSvEBPfns4RIb/FKL9cKnxleJ
-         dbPUpP7YHmMp89YbRRQonaSKNsqU4ZGWQFIUG2vpKIcv3nD4EQIxxRKpGlL6dYW0ANuG
-         KQ+D6k7wi7NczAxSNOf2wB3zYU3A5RhTdP5TJt3yQfliqnP9+NmLY606puLUGEqukEq4
-         4UW9jGpfr6+dXvK1I1w2HTT8Mhy43ORBou3yzH6egV/C+Is8FKIVbDbhAhy8bOGzzYJz
-         oJ72slaOElttXU1bo0+jg48qX6sAD3x3y/MvQeJ7PnWqwmL0IDuPU4R62JzAFgwUwUz0
-         Lg0Q==
-X-Gm-Message-State: AOAM530RTxQI7haItkzBGvJqrC+Gy6v9BEApdyQBExHeegisBb7NGsZ3
-        GEx+225aMFcw4BVb5LB6HuQ/sg==
-X-Google-Smtp-Source: ABdhPJyO5HRSKP5oqtkzIm8TtNZ0ZVzBzQuBPqObhKqjTV1lNH34HDQicYxSmxAYD7MnkvyMmcSsZg==
-X-Received: by 2002:a05:651c:338:: with SMTP id b24mr15335953ljp.87.1593075479157;
-        Thu, 25 Jun 2020 01:57:59 -0700 (PDT)
-Received: from ?IPv6:2a00:1fa0:44da:b8e6:887f:f9f8:ffc4:9fb8? ([2a00:1fa0:44da:b8e6:887f:f9f8:ffc4:9fb8])
-        by smtp.gmail.com with ESMTPSA id w1sm4690973ljo.80.2020.06.25.01.57.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jun 2020 01:57:58 -0700 (PDT)
-Subject: Re: [PATCH v3] thermal: rcar_gen3_thermal: Fix undefined temperature
- if negative
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        amit.kucheria@verdurent.com
-Cc:     niklas.soderlund+renesas@ragnatech.se, van.do.xw@renesas.com,
-        dien.pham.ry@renesas.com, linux-pm@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-References: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-From:   Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Message-ID: <db9e3bd3-d3f0-61d2-7ffe-3306003f57d8@cogentembedded.com>
-Date:   Thu, 25 Jun 2020 11:57:56 +0300
-User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S2389916AbgFYJFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 05:05:07 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:39284 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389473AbgFYJFH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 05:05:07 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05P92DCN042815;
+        Thu, 25 Jun 2020 09:05:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=6p1/RFHaVHhyTKsdD/zUstV9/O0VSIYItjrUNz/5ZuQ=;
+ b=gdjDuDb8HlQHOTbgcFWIg4JP3G6b5wP2LokCkNkbCFnC7vyzgVxlEqx4VRAPPswUIety
+ Wg8pKIl/gFVoFJMKt5GpDNgvI4EXZmi0QVhLp5+105xvLBxLvKLQxulXnsqKMWUm7jer
+ W6dv7I4p1b/zQKhxAP2wp2dH4rQP6Hd4ReYXrPflQtKLvGNPPqk9tYIF1KZQ0tQ93A1W
+ UbZC8Aq7N36wvOdKg6B5gbx/8wBoxQvWNGea6MUTDTfaPA3/2sgfW2vmiTaz45VlVmpt
+ jMGEHmxbzwM70P8uWtw5yNnrwhTAzEIQLNTY5ruDJbRyDgxK9x4PubdWG5lnhGm/o+dy bw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 31uustycw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 25 Jun 2020 09:05:01 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05P94FGj168673;
+        Thu, 25 Jun 2020 09:05:00 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 31uur8nnx5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 25 Jun 2020 09:05:00 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05P94vI2031214;
+        Thu, 25 Jun 2020 09:04:59 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 25 Jun 2020 09:04:57 +0000
+Date:   Thu, 25 Jun 2020 12:04:49 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] intel_idle: Fix uninitialized variable bug
+Message-ID: <20200625090449.GA2549@kadam>
+References: <20200624131921.GB9972@mwanda>
+ <CAJZ5v0hG2FL0VSeE+ind9MSMc_c7nA4KjKxFPdMhVOPrMdYJKQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <1593053768-31016-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hG2FL0VSeE+ind9MSMc_c7nA4KjKxFPdMhVOPrMdYJKQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9662 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006250056
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9662 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
+ cotscore=-2147483648 malwarescore=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006250056
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello!
-
-On 25.06.2020 5:56, Yoshihiro Shimoda wrote:
-
-> From: Dien Pham <dien.pham.ry@renesas.com>
+On Wed, Jun 24, 2020 at 03:41:05PM +0200, Rafael J. Wysocki wrote:
+> On Wed, Jun 24, 2020 at 3:19 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+> >
+> > The "tick" variable isn't initialized if "lapic_timer_always_reliable"
+> > is true.
 > 
-> As description for DIV_ROUND_CLOSEST in file include/linux/kernel.h.
->    "Result is undefined for negative divisors if the dividend variable
->     type is unsigned and for negative dividends if the divisor variable
->     type is unsigned."
+> If lapic_timer_always_reliable is true, then
+> static_cpu_has(X86_FEATURE_ARAT) must also be true AFAICS.
 > 
-> In current code, the FIXPT_DIV uses DIV_ROUND_CLOSEST but has not
-> checked sign of divisor before using. It makes undefined temperature
-> value in case the value is negative.
-> 
-> This patch fixes to satisfy DIV_ROUND_CLOSEST description
-> and fix bug too. Note that the variable name "reg" is not good
-> because it should be the same type as rcar_gen3_thermal_read().
-> However, there is better to rename it in a further patch as
+> So the lapic_timer_always_reliable check in there looks redundant.
 
-    It's better.
+Can the lapic_timer_always_reliable variable just be removed entirely
+and replaced with an static_cpu_has(X86_FEATURE_ARAT) check?
 
-> cleanup.
-> 
-> Signed-off-by: Van Do <van.do.xw@renesas.com>
-> Signed-off-by: Dien Pham <dien.pham.ry@renesas.com>
-> [shimoda: minor fixes, add Fixes tag]
-> Fixes: 564e73d283af ("thermal: rcar_gen3_thermal: Add R-Car Gen3 thermal driver")
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> Reviewed-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
-> Tested-by: Niklas Soderlund <niklas.soderlund+renesas@ragnatech.se>
-[...]
+regards,
+dan carpenter
 
-MBR, Sergei
