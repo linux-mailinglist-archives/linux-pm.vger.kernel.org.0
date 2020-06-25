@@ -2,159 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8620620A702
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jun 2020 22:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76A820A867
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 00:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405151AbgFYUsD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 16:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405026AbgFYUsC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 16:48:02 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57E7DC08C5C1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 13:48:02 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id z17so5280953edr.9
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 13:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Tn33QMHZ+qNx5YT7oVBhQ/nQOONeR57qMeYBaxKkSXo=;
-        b=Ggd+eURO6bXZrXb/VrO6+GxK6IB0ymlMRAjfKYtjDGfvFU0I0yzRD6yvgotEk3BWPf
-         PGehawuwWuxJffh9+td9mlCHcAVUQNWj2ejefuznqGo8V+4g+wTK+ufuWOvYOvF38Sup
-         7nzPAtDMJb+KbyRYO0JXywstw/xOGIiXzZDlSixrgKtxcDWVHwPcShzNUeSjCkYWiKUd
-         2c9/E+zttHjji2yyoaRZ+fuMLDcTKrFh6AV3QLqK17VFBDK/HfnKPU/diOPh45NxYWre
-         62t3JyO6a9VOns7Ewz3MXGMCdE9+p4yl8BRtNzVIF3LHlDZSGqc89OP4BfMlGiedk6HO
-         k2fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Tn33QMHZ+qNx5YT7oVBhQ/nQOONeR57qMeYBaxKkSXo=;
-        b=fVpnsbqCVQH7WiOn0o/drJpW0ZTJebNnWWQtGWUYFow8LziF/K0dO2aubEU7lgFeJ2
-         bzEOS8c1GgQkIxubl2IkV+7DTnX9yoLINcHV2e8EPhIS/5QPQSeKkLxWrRxbLOj9RtUr
-         yn5Qt8F+yY3+ywIIEyiXSlL+V2RWHifLzy2q5F3pbpAlE7grHK3xQVknS8g6LuTyRrDs
-         z5Cj5PRmp8JYJ80wyh5YUroeCrYfP83rWjQfgkPgINaHI+PCcdXnx/XyNwcCBMNyQGbw
-         mlVkQ7sjQy6KlkOxa3Km+LXi9CiXpUF1nbR8qdqRGs754PsocCss0NW1RzjMq+jVYOet
-         5uMw==
-X-Gm-Message-State: AOAM530pdbfTth29OFnX/JlC/VzZ2+u9axXPOMOAjkzdf59GzhRREgfH
-        i/3tXFgb36WDaaVPXRNNo8NhzS2Wr2vntXV9bYz/CA==
-X-Google-Smtp-Source: ABdhPJxMYbJ9UZDD3lxVN3tEGwHQsEYytGrM3sJo+TNPXLGdrEYJ2a4RfAquxSOd7PoDH9I6lJXON22hhfJyFvcjD50=
-X-Received: by 2002:a50:e606:: with SMTP id y6mr28081edm.303.1593118080706;
- Thu, 25 Jun 2020 13:48:00 -0700 (PDT)
+        id S2406090AbgFYWuB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 18:50:01 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29562 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405903AbgFYWuB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 25 Jun 2020 18:50:01 -0400
+IronPort-SDR: /7Kw5i2Ia3ukJ9Napp97tQhGzrYG1OS1tDW5UE5/Xpq/S7FsZhqzsVmfdyKEtK//dbEJygULjy
+ 7dlWW41xv/DQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9663"; a="145163597"
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="145163597"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2020 15:50:00 -0700
+IronPort-SDR: PGR+aiRMrJiEpVfeTkD/7FOwZYABvO/nzjR/4etEPEGm4t+mbQEfMpW3+nbCAK9y28zmMlrnfS
+ gsBZ7MqJhg+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,280,1589266800"; 
+   d="scan'208";a="479638543"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.255.228.165])
+  by fmsmga006.fm.intel.com with ESMTP; 25 Jun 2020 15:49:59 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org,
+        dsmythies@telus.net, bp@alien8.de, tglx@linutronix.de,
+        mingo@redhat.com, hpa@zytor.com, peterz@infradead.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [UPDATE][PATCH v3 1/2] cpufreq: intel_pstate: Allow enable/disable energy efficiency
+Date:   Thu, 25 Jun 2020 15:49:31 -0700
+Message-Id: <20200625224931.1468150-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <20200625064614.101183-1-wvw@google.com> <20200625102305.gu3xo4ovcqyd35vd@vireshk-i7>
-In-Reply-To: <20200625102305.gu3xo4ovcqyd35vd@vireshk-i7>
-From:   Wei Wang <wvw@google.com>
-Date:   Thu, 25 Jun 2020 13:47:49 -0700
-Message-ID: <CAGXk5yrA=oXZs9KAaELsO7+ex7xCggEwdWSC_KXrUWQnvKEpWQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: force frequency update when limits change
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Wei Wang <wei.vince.wang@gmail.com>, dsmythies@telus.net,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 3:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 24-06-20, 23:46, Wei Wang wrote:
-> > To avoid reducing the frequency of a CPU prematurely, we skip reducing
-> > the frequency if the CPU had been busy recently.
-> >
-> > This should not be done when the limits of the policy are changed, for
-> > example due to thermal throttling. We should always get the frequency
-> > within the new limits as soon as possible.
-> >
-> > There was a fix in
-> > commit 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when
-> > limits change") upstream which introduced another flag. However, the
-> > fix didn't address the case when next_freq is the same as previously
-> > voted, which is then checked in sugov_update_next_freq. As a result, the
-> > frequency would be stuck at low until the high demanding workload quits.
-> >
-> > test trace:
-> >   kworker/u19:0-1872  ( 1872) [002] ....   347.878871: cpu_frequency_limits: min=600000 max=2348000 cpu_id=6
-> >          dhry64-11525 (11525) [007] d.h2   347.880012: sugov_should_update_freq: thermal limit on policy6
-> >          dhry64-11525 (11525) [007] d.h2   347.880012: sugov_deferred_update: policy6 skipped update
-> >          dhry64-11525 (11525) [007] d.h2   347.884040: sugov_deferred_update: policy6 skipped update
->
-> I am not sure these are helpful in the logs as the code which
-> generated them isn't there in the kernel.
->
-Yes, those traceprintk were added to those particular functions to help debug.
+By default intel_pstate driver disables energy efficiency by setting
+MSR_IA32_POWER_CTL bit 19 for Kaby Lake desktop CPU model in HWP mode.
+This CPU model is also shared by Coffee Lake desktop CPUs. This allows
+these systems to reach maximum possible frequency. But this adds power
+penalty, which some customers don't want. They want some way to enable/
+disable dynamically.
 
+So, add an additional attribute "energy_efficiency_enable" under
+/sys/devices/system/cpu/intel_pstate/ for these CPU models. This allows
+to read and write bit 19 ("Disable Energy Efficiency Optimization") in
+the MSR IA32_POWER_CTL.
 
-> > ...
-> >
-> > This patch fixes this by skipping the check and forcing an update in
-> > this case. The second flag was kept as the limits_change flag could be
-> > updated in thermal kworker from another CPU.
->
-> I am sorry but I am not fully sure of what the problem is. Can you
-> describe that by giving an example with some random frequency, and
-> tell the expected and actual behavior ?
->
-The problem is sugov thought next_freq already updated (but actually
-skipped by the rate limit thing) and all following updates will be
-skipped.
-Actually this is specifically for Android common kernel 4.19's issue
-which has sugov_up_down_rate_limit in sugov_update_next_freq, let's
-continue discussion there.
+This attribute is present in both HWP and non-HWP mode as this has an
+effect in both modes. Refer to Intel Software Developer's manual for
+details. The scope of this bit is package wide. Also these systems
+support only one package. So read/write MSR on the current CPU is
+enough.
 
-Thanks!
--Wei
-> > Fixes: ecd288429126 ("cpufreq: schedutil: Don't set next_freq to UINT_MAX")
-> > Signed-off-by: Wei Wang <wvw@google.com>
-> > ---
-> >  kernel/sched/cpufreq_schedutil.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > index 7fbaee24c824..dc2cd768022e 100644
-> > --- a/kernel/sched/cpufreq_schedutil.c
-> > +++ b/kernel/sched/cpufreq_schedutil.c
-> > @@ -102,11 +102,12 @@ static bool sugov_should_update_freq(struct sugov_policy *sg_policy, u64 time)
-> >  static bool sugov_update_next_freq(struct sugov_policy *sg_policy, u64 time,
-> >                                  unsigned int next_freq)
-> >  {
-> > -     if (sg_policy->next_freq == next_freq)
-> > +     if (!sg_policy->need_freq_update && sg_policy->next_freq == next_freq)
->
-> AFAIU, if the next freq is same as currently programmed one, there is
-> no need to force update it.
->
-> >               return false;
-> >
-> >       sg_policy->next_freq = next_freq;
-> >       sg_policy->last_freq_update_time = time;
-> > +     sg_policy->need_freq_update = false;
-> >
-> >       return true;
-> >  }
-> > @@ -178,7 +179,6 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >       if (freq == sg_policy->cached_raw_freq && !sg_policy->need_freq_update)
-> >               return sg_policy->next_freq;
-> >
-> > -     sg_policy->need_freq_update = false;
-> >       sg_policy->cached_raw_freq = freq;
-> >       return cpufreq_driver_resolve_freq(policy, freq);
-> >  }
-> > --
-> > 2.27.0.212.ge8ba1cc988-goog
->
-> --
-> viresh
+Suggested-by: Len Brown <lenb@kernel.org>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v3 update
+Moved the MSR bit definition to msr-index.h from intel_pstate.c as Doug
+wanted. Offline checking with Borislav, for MSR defintion it is
+fine to move to  msr-index.h even for single user of the definition. But
+here the MSR definition is already in msr-index.h, but adding the MSR bit
+definition also.
+
+ Documentation/admin-guide/pm/intel_pstate.rst |  9 ++++
+ arch/x86/include/asm/msr-index.h              |  1 +
+ drivers/cpufreq/intel_pstate.c                | 47 ++++++++++++++++++-
+ 3 files changed, 55 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
+index 39d80bc29ccd..1ca2684a94d7 100644
+--- a/Documentation/admin-guide/pm/intel_pstate.rst
++++ b/Documentation/admin-guide/pm/intel_pstate.rst
+@@ -431,6 +431,15 @@ argument is passed to the kernel in the command line.
+ 	supported in the current configuration, writes to this attribute will
+ 	fail with an appropriate error.
+ 
++``energy_efficiency_enable``
++	This attribute is only present on platforms, which has CPUs matching
++	Kaby Lake or Coffee Lake desktop CPU model. By default
++	"energy_efficiency" is disabled on these CPU models in HWP mode by this
++	driver. Enabling energy efficiency may limit maximum operating
++	frequency in both HWP and non HWP mode. In non HWP mode, this attribute
++	has an effect in turbo range only. But in HWP mode, this attribute also
++	has an effect in non turbo range.
++
+ Interpretation of Policy Attributes
+ -----------------------------------
+ 
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index e8370e64a155..fec86ad14f8d 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -254,6 +254,7 @@
+ #define MSR_PEBS_FRONTEND		0x000003f7
+ 
+ #define MSR_IA32_POWER_CTL		0x000001fc
++#define MSR_IA32_POWER_CTL_BIT_EE	19
+ 
+ #define MSR_IA32_MC0_CTL		0x00000400
+ #define MSR_IA32_MC0_STATUS		0x00000401
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 8e23a698ce04..daa1d9c12098 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -1218,6 +1218,42 @@ static ssize_t store_hwp_dynamic_boost(struct kobject *a,
+ 	return count;
+ }
+ 
++static ssize_t show_energy_efficiency_enable(struct kobject *kobj,
++					     struct kobj_attribute *attr,
++					     char *buf)
++{
++	u64 power_ctl;
++	int enable;
++
++	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
++	enable = (power_ctl & BIT(MSR_IA32_POWER_CTL_BIT_EE)) >> MSR_IA32_POWER_CTL_BIT_EE;
++	return sprintf(buf, "%d\n", !enable);
++}
++
++static ssize_t store_energy_efficiency_enable(struct kobject *a,
++					      struct kobj_attribute *b,
++					      const char *buf, size_t count)
++{
++	u64 power_ctl;
++	u32 input;
++	int ret;
++
++	ret = kstrtouint(buf, 10, &input);
++	if (ret)
++		return ret;
++
++	mutex_lock(&intel_pstate_driver_lock);
++	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
++	if (input)
++		power_ctl &= ~BIT(MSR_IA32_POWER_CTL_BIT_EE);
++	else
++		power_ctl |= BIT(MSR_IA32_POWER_CTL_BIT_EE);
++	wrmsrl(MSR_IA32_POWER_CTL, power_ctl);
++	mutex_unlock(&intel_pstate_driver_lock);
++
++	return count;
++}
++
+ show_one(max_perf_pct, max_perf_pct);
+ show_one(min_perf_pct, min_perf_pct);
+ 
+@@ -1228,6 +1264,7 @@ define_one_global_rw(min_perf_pct);
+ define_one_global_ro(turbo_pct);
+ define_one_global_ro(num_pstates);
+ define_one_global_rw(hwp_dynamic_boost);
++define_one_global_rw(energy_efficiency_enable);
+ 
+ static struct attribute *intel_pstate_attributes[] = {
+ 	&status.attr,
+@@ -1241,6 +1278,8 @@ static const struct attribute_group intel_pstate_attr_group = {
+ 	.attrs = intel_pstate_attributes,
+ };
+ 
++static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[];
++
+ static void __init intel_pstate_sysfs_expose_params(void)
+ {
+ 	struct kobject *intel_pstate_kobject;
+@@ -1273,6 +1312,12 @@ static void __init intel_pstate_sysfs_expose_params(void)
+ 				       &hwp_dynamic_boost.attr);
+ 		WARN_ON(rc);
+ 	}
++
++	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids)) {
++		rc = sysfs_create_file(intel_pstate_kobject,
++				       &energy_efficiency_enable.attr);
++		WARN_ON(rc);
++	}
+ }
+ /************************** sysfs end ************************/
+ 
+@@ -1288,8 +1333,6 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+ 		cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
+ }
+ 
+-#define MSR_IA32_POWER_CTL_BIT_EE	19
+-
+ /* Disable energy efficiency optimization */
+ static void intel_pstate_disable_ee(int cpu)
+ {
+-- 
+2.25.4
+
