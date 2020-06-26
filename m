@@ -2,224 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 817C720AAF4
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 05:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E234C20AB1D
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 06:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728481AbgFZDwD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 23:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
+        id S1726525AbgFZEPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jun 2020 00:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728477AbgFZDwA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 23:52:00 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917DC08C5DB
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:52:00 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id a127so4055884pfa.12
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:52:00 -0700 (PDT)
+        with ESMTP id S1726013AbgFZEPW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jun 2020 00:15:22 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3301C08C5C1
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 21:15:21 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id i14so8024297ejr.9
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 21:15:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1kNSCiHNHSb6jIhG+JaGhvWbvnCv4GNFP8GZBjcVO0Y=;
-        b=REu2vVnNvFUO7RMznNy7FQBFECB9nt/3gLuM5qsneFWLgFzaMJa3uw3MHsopvaIhRw
-         PbNnmBTaimtKOz0klQp0RnQodX5uRKSH9pOq1Ccz3zTI4vV7+v0MISmgwCZGCkc21vZN
-         U52lXDHn+Y5h2h8hpp74pkX3e4Xn6Fqw0fyKD/EE6CQz38h8MhZnzIGlb5VfyqxU5MAA
-         gb8Q4OnL2jpwG2KyrfR2BHXksxqb2G1KFHUhKDdsVFtA7dnMzYVwnpziKtHmLattaA6x
-         P1FnWmQNQaAou+Uwc+cmpdSWtLmP9SJ2gRcQjE0KhbOZDgERvj50ZKjAmRaLZn3zKK1O
-         rHDA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5dyXISEFPO4zN8NJzbUQLcaTnJQH628lZUaCtOB5NIs=;
+        b=Xl8bCjfJJjilv9lKWhwjcP/+CuLRgyomgZeuj1L9+0F71WtVlIZsKDDYLnnfAIarMr
+         q3sw2+60tHQzQSf6tqxEsyV/Pd/bOkOw1SRi2uXmDjiYwz4o4Nf7CqCbjd/WD+r2KRSH
+         u0O6wDAKMG/bDNOxopybeMC7eSoFxhfAFLV9Vv7KadH/iYG9jVWjEd/CX/9CIGGMbMqq
+         y52eXj8jaAZ18IH4ffNzHyelT3PwwJwKqLRWMtuw2OJ2c9SE6CoFAUDJDkL13xz8C2wD
+         I5RKKBwaeedhmeg43keuqZQDlnA6T+aoLzjWeVwlTQ9tcPw7qRfltesEVVvB6LhoBYz6
+         TA0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1kNSCiHNHSb6jIhG+JaGhvWbvnCv4GNFP8GZBjcVO0Y=;
-        b=YzU0cnW52ZHMiG1gJYW0HIPanx9q2E0iOxnlNtXoVPUMaJQSAPtcdLFPRheLny0ARy
-         Zg9xNuLeyMEauQNJ9Gxb2d9D/0EZl+iGymkDYjGC4Otjego+QttVyq0NLyQVGsrUOhCx
-         CE90xdRUCkg8gERoY6JZGiyMt4BpKcDWhPEDTsfSNFU9Y9lU+tX34MlJbr65mVnZLfHM
-         k9OD5L71we2rO79UE//y2T+P9G0jnXTUtwXqyUxyDTCkov8Lw3e4N0gB0OGCm++80EyD
-         qHILbskvZTDA8Xj3QZ9krhpZ1Vi9tEaoLXj8spVTuNfYWbb6K4TG5foG4K2J7oi8GLDk
-         eE8w==
-X-Gm-Message-State: AOAM533+cBId5tXGbht7VABEdTev2c+x9Y209F9WVFGO7m5p33KE2XLH
-        bUTWPmY2j9/VRI+FOtVXimLTfw==
-X-Google-Smtp-Source: ABdhPJxPjqWrG39q9awzXKeB5MXv4YUXUaJP0+B/iWs3190cB3S0L3qYXloC/o4T6J/Sv50uR1AkYA==
-X-Received: by 2002:aa7:9abc:: with SMTP id x28mr885223pfi.39.1593143519452;
-        Thu, 25 Jun 2020 20:51:59 -0700 (PDT)
-Received: from localhost ([122.172.127.76])
-        by smtp.gmail.com with ESMTPSA id k2sm21272108pgm.11.2020.06.25.20.51.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 20:51:58 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org,
-        Quentin Perret <qperret@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 3/3] cpufreq: Specify default governor on command line
-Date:   Fri, 26 Jun 2020 09:21:44 +0530
-Message-Id: <7eb38608b2b32c0c72dfb160c51206ec42e74e35.1593143118.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1593143118.git.viresh.kumar@linaro.org>
-References: <cover.1593143118.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5dyXISEFPO4zN8NJzbUQLcaTnJQH628lZUaCtOB5NIs=;
+        b=K9a+2DR3QpYwsUZED7bDAcdgGzxGOyq72nFnpI3/0wN2FNvZCEld6YYPs3JRPL9vdC
+         QncqaOj/KRLXdHmsngPxgwDwE6i4gn3l+3q+Bk1T38jreHAmd4KVwIejfMoXn9N+CYYs
+         uhTP6nDTGMxDb1ffZngBUM5pK11J9rPD45Qyr8iUs36OkHCedxDO+eWaX33c+O+O28G4
+         jVefQGDOWuVz5kHL/WfG+V5NPhw1W8FeF11yVscCWSIkkuymv5IUiKpqU701tERhXUKY
+         1cfthBEvFv9HToxKJmZI3Ss8hL2T7mxrQlLEXPDKlSSYmND4dG5afP+ZhkwUghtM87A9
+         jumg==
+X-Gm-Message-State: AOAM532YRy43zH2WHkyVAUQHWh9sbtP24ZhZVRtnuRO48GA5NeVAHM5y
+        lUkEVuK7wBS1biKfe7yebYZXU3P3LO+0O1t1GyGYvA==
+X-Google-Smtp-Source: ABdhPJw0Us/srclnotYnN/IE0ZDFwhVMn6cHekEEslbon23FeASyGg8wDxOW25Da/DrocSRcVJ/O1k6YKAzCIz5PbXM=
+X-Received: by 2002:a17:906:d204:: with SMTP id w4mr898177ejz.117.1593144920242;
+ Thu, 25 Jun 2020 21:15:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200625064614.101183-1-wvw@google.com> <20200625102305.gu3xo4ovcqyd35vd@vireshk-i7>
+ <CAGXk5yrA=oXZs9KAaELsO7+ex7xCggEwdWSC_KXrUWQnvKEpWQ@mail.gmail.com>
+ <20200626021428.tnecyy3wt42slvik@vireshk-i7> <20200626023219.wvhzomwzlw24bzrv@vireshk-i7>
+In-Reply-To: <20200626023219.wvhzomwzlw24bzrv@vireshk-i7>
+From:   Wei Wang <wvw@google.com>
+Date:   Thu, 25 Jun 2020 21:15:09 -0700
+Message-ID: <CAGXk5yqsj+YTv3=Dj-NZY=sBb=g9DUfVmxcO-CeE3jjipA9Osw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: force frequency update when limits change
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>, dsmythies@telus.net,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Quentin Perret <qperret@google.com>
+On Thu, Jun 25, 2020 at 7:32 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 26-06-20, 07:44, Viresh Kumar wrote:
+> > On 25-06-20, 13:47, Wei Wang wrote:
+> > > On Thu, Jun 25, 2020 at 3:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > > I am sorry but I am not fully sure of what the problem is. Can you
+> > > > describe that by giving an example with some random frequency, and
+> > > > tell the expected and actual behavior ?
+> > > >
+> > > The problem is sugov thought next_freq already updated (but actually
+> > > skipped by the rate limit thing) and all following updates will be
+> > > skipped.
+>
+> The rate-limiting thing is specific to android and not present in
+> mainline. Even in android I see next_freq getting updated only after
+> rate-limiting is verified.
+>
+> I think you maybe trying to fix an android only problem in mainline,
+> which may not be required at all. And I am not sure if Android has a
+> problem as well :)
+>
+Yes, that is Android specific, I added you to the Gerrit already.
 
-Currently, the only way to specify the default CPUfreq governor is via
-Kconfig options, which suits users who can build the kernel themselves
-perfectly.
+Thanks!
+-Wei
 
-However, for those who use a distro-like kernel (such as Android, with
-the Generic Kernel Image project), the only way to use a different
-default is to boot to userspace, and to then switch using the sysfs
-interface. Being able to specify the default governor on the command
-line, like is the case for cpuidle, would enable those users to specify
-their governor of choice earlier on, and to simplify slighlty the
-userspace boot procedure.
-
-To support this use-case, add a kernel command line parameter enabling
-to specify a default governor for CPUfreq, which takes precedence over
-the builtin default.
-
-This implementation has one notable limitation: the default governor
-must be registered before the driver. This is solved for builtin
-governors and drivers using appropriate *_initcall() functions. And in
-the modular case, this must be reflected as a constraint on the module
-loading order.
-
-Signed-off-by: Quentin Perret <qperret@google.com>
-[ Viresh: Converted 'default_governor' to a string and parsing it only
-	  at initcall level, and several updates to
-	  cpufreq_init_policy(). ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- .../admin-guide/kernel-parameters.txt         |  5 +++
- Documentation/admin-guide/pm/cpufreq.rst      |  6 ++--
- drivers/cpufreq/cpufreq.c                     | 36 ++++++++++++++-----
- 3 files changed, 35 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fb95fad81c79..8deb5a89328a 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -703,6 +703,11 @@
- 	cpufreq.off=1	[CPU_FREQ]
- 			disable the cpufreq sub-system
- 
-+	cpufreq.default_governor=
-+			[CPU_FREQ] Name of the default cpufreq governor or
-+			policy to use. This governor must be registered in the
-+			kernel before the cpufreq driver probes.
-+
- 	cpu_init_udelay=N
- 			[X86] Delay for N microsec between assert and de-assert
- 			of APIC INIT to start processors.  This delay occurs
-diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-index 0c74a7784964..368e612145d2 100644
---- a/Documentation/admin-guide/pm/cpufreq.rst
-+++ b/Documentation/admin-guide/pm/cpufreq.rst
-@@ -147,9 +147,9 @@ CPUs in it.
- 
- The next major initialization step for a new policy object is to attach a
- scaling governor to it (to begin with, that is the default scaling governor
--determined by the kernel configuration, but it may be changed later
--via ``sysfs``).  First, a pointer to the new policy object is passed to the
--governor's ``->init()`` callback which is expected to initialize all of the
-+determined by the kernel command line or configuration, but it may be changed
-+later via ``sysfs``).  First, a pointer to the new policy object is passed to
-+the governor's ``->init()`` callback which is expected to initialize all of the
- data structures necessary to handle the given policy and, possibly, to add
- a governor ``sysfs`` interface to it.  Next, the governor is started by
- invoking its ``->start()`` callback.
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index e798a1193bdf..93c6399c1a42 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -50,6 +50,9 @@ static LIST_HEAD(cpufreq_governor_list);
- #define for_each_governor(__governor)				\
- 	list_for_each_entry(__governor, &cpufreq_governor_list, governor_list)
- 
-+static char cpufreq_param_governor[CPUFREQ_NAME_LEN];
-+static char default_governor[CPUFREQ_NAME_LEN];
-+
- /**
-  * The "cpufreq driver" - the arch- or hardware-dependent low
-  * level driver of CPUFreq support, and its spinlock. This lock
-@@ -1061,7 +1064,6 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
- 
- static int cpufreq_init_policy(struct cpufreq_policy *policy)
- {
--	struct cpufreq_governor *def_gov = cpufreq_default_governor();
- 	struct cpufreq_governor *gov = NULL;
- 	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
- 	bool put_governor = false;
-@@ -1071,22 +1073,29 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- 		/* Update policy governor to the one used before hotplug. */
- 		gov = get_governor(policy->last_governor);
- 		if (gov) {
--			put_governor = true;
- 			pr_debug("Restoring governor %s for cpu %d\n",
--				 policy->governor->name, policy->cpu);
--		} else if (def_gov) {
--			gov = def_gov;
-+				 gov->name, policy->cpu);
- 		} else {
--			return -ENODATA;
-+			gov = get_governor(default_governor);
-+		}
-+
-+		if (gov) {
-+			put_governor = true;
-+		} else {
-+			gov = cpufreq_default_governor();
-+			if (!gov)
-+				return -ENODATA;
- 		}
-+
- 	} else {
-+
- 		/* Use the default policy if there is no last_policy. */
- 		if (policy->last_policy) {
- 			pol = policy->last_policy;
--		} else if (def_gov) {
--			pol = cpufreq_parse_policy(def_gov->name);
-+		} else {
-+			pol = cpufreq_parse_policy(default_governor);
- 			/*
--			 * In case the default governor is neiter "performance"
-+			 * In case the default governor is neither "performance"
- 			 * nor "powersave", fall back to the initial policy
- 			 * value set by the driver.
- 			 */
-@@ -2796,13 +2805,22 @@ EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
- 
- static int __init cpufreq_core_init(void)
- {
-+	struct cpufreq_governor *gov = cpufreq_default_governor();
-+	char *name = gov->name;
-+
- 	if (cpufreq_disabled())
- 		return -ENODEV;
- 
- 	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
- 	BUG_ON(!cpufreq_global_kobject);
- 
-+	if (strlen(cpufreq_param_governor))
-+		name = cpufreq_param_governor;
-+
-+	strncpy(default_governor, name, CPUFREQ_NAME_LEN);
-+
- 	return 0;
- }
- module_param(off, int, 0444);
-+module_param_string(default_governor, cpufreq_param_governor, CPUFREQ_NAME_LEN, 0444);
- core_initcall(cpufreq_core_init);
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+> > I am sorry, can you please give a detailed example with existing
+> > frequency and limits, then the limits changed to new values, then what
+> > exactly happens ?
+> >
+> > > Actually this is specifically for Android common kernel 4.19's issue
+> > > which has sugov_up_down_rate_limit in sugov_update_next_freq, let's
+> > > continue discussion there.
+> >
+> > If it is a mainline problem, we will surely get it fixed here. Just
+> > that I am not able to understand the problem yet. Sorry about that.
+>
+> --
+> viresh
