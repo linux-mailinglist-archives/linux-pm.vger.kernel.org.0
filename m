@@ -2,29 +2,29 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDB920B85C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 20:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F4C20B857
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 20:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbgFZSeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jun 2020 14:34:23 -0400
-Received: from mga11.intel.com ([192.55.52.93]:1976 "EHLO mga11.intel.com"
+        id S1725890AbgFZSeS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jun 2020 14:34:18 -0400
+Received: from mga11.intel.com ([192.55.52.93]:1959 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725880AbgFZSeW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 26 Jun 2020 14:34:22 -0400
-IronPort-SDR: Qq2hsTGa3X1hR7VZfMJo82GW0d0UrbmuGWlJ9MeBpugCwdsD71UX20BRRqSHpKwbyzJAa+YQnB
- A0lRv44ia29g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9664"; a="143666459"
+        id S1725788AbgFZSeS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 26 Jun 2020 14:34:18 -0400
+IronPort-SDR: Uo9jasPwiiMnYvsj+8fHseU6nfmHfUh78psoSF8rObOBHsYwADshFqyUmcAVjpu2oCID+5NZcc
+ c1WR9JYxRCbQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9664"; a="143666466"
 X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
-   d="scan'208";a="143666459"
+   d="scan'208";a="143666466"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 11:34:13 -0700
-IronPort-SDR: nSgnm8qsr/ilwuBci+mcSpjh6tiqhyHppE3o/mEVqRmrYzldQ3AGmL0mro01qyo56D1EXd8fWH
- UG9/+SuZwrWg==
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2020 11:34:14 -0700
+IronPort-SDR: tGuuSBxUMtOmuCFSDBcR0fjSwCotULXQG0+w+oehyPjpjnk+N87jjOa6krzI9C5x2DQ8UwNWqu
+ O0CoJpHZFNuQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,284,1589266800"; 
-   d="scan'208";a="453447588"
+   d="scan'208";a="453447596"
 Received: from spandruv-mobl.amr.corp.intel.com ([10.254.109.205])
   by orsmga005.jf.intel.com with ESMTP; 26 Jun 2020 11:34:13 -0700
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
@@ -34,9 +34,9 @@ To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, lenb@kernel.org,
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         x86@kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v4 1/2] cpufreq: intel_pstate: Allow enable/disable energy efficiency
-Date:   Fri, 26 Jun 2020 11:34:00 -0700
-Message-Id: <20200626183401.1495090-2-srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v4 2/2] cpufreq: intel_pstate: Allow raw energy performance preference value
+Date:   Fri, 26 Jun 2020 11:34:01 -0700
+Message-Id: <20200626183401.1495090-3-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200626183401.1495090-1-srinivas.pandruvada@linux.intel.com>
 References: <20200626183401.1495090-1-srinivas.pandruvada@linux.intel.com>
@@ -47,250 +47,182 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-By default intel_pstate driver disables energy efficiency by setting
-MSR_IA32_POWER_CTL bit 19 for Kaby Lake desktop CPU model in HWP mode.
-This CPU model is also shared by Coffee Lake desktop CPUs. This allows
-these systems to reach maximum possible frequency. But this adds power
-penalty, which some customers don't want. They want some way to enable/
-disable dynamically.
+Currently using attribute "energy_performance_preference", user space can
+write one of the four per-defined preference string. These preference
+strings gets mapped to a hard-coded Energy-Performance Preference (EPP) or
+Energy-Performance Bias (EPB) knob.
 
-So, add an additional attribute "energy_efficiency" under
-/sys/devices/system/cpu/intel_pstate/ for these CPU models. This allows
-to read and write bit 19 ("Disable Energy Efficiency Optimization") in
-the MSR IA32_POWER_CTL.
+These four values are supposed to cover broad spectrum of use cases, but
+are not uniformly distributed in the range. There are number of cases,
+where this is not enough. For example:
 
-This attribute is present in both HWP and non-HWP mode as this has an
-effect in both modes. Refer to Intel Software Developer's manual for
-details.
+Suppose user wants more performance when connected to AC. Instead of using
+default "balance performance", the "performance" setting can be used. This
+changes EPP value from 0x80 to 0x00. But setting EPP to 0, results in
+electrical and thermal issues on some platforms. This results in
+aggressive throttling, which causes a drop in performance. But some value
+between 0x80 and 0x00 results in better performance. But that value can't
+be fixed as the power curve is not linear. In some cases just changing EPP
+from 0x80 to 0x75 is enough to get significant performance gain.
 
-The scope of this bit is package wide. Also these systems are single
-package systems. So read/write MSR on the current CPU is enough.
+Similarly on battery the default "balance_performance" mode can be
+aggressive in power consumption. But picking up the next choice
+"balance power" results in too much loss of performance, which results in
+bad user experience in use cases like "Google Hangout". It was observed
+that some value between these two EPP is optimal.
 
-The energy efficiency (EE) bit setting needs to be preserved during
-suspend/resume and CPU offline/online operation. To do this:
-- Restoring the EE setting from the cpufreq resume() callback, if there
-is change from the system default.
-- By default, don't disable EE from cpufreq init() callback for matching
-CPU models. Since the scope is package wide and is a single package
-system, move the disable EE calls from init() callback to
-intel_pstate_init() function, which is called only once.
+This change allows fine grain EPP tuning for platform like Chromebook or
+for users who wants to fine tune power and performance.
+Here based on the product and use cases, different EPP values can be set.
+This change is similar to the change done for:
+/sys/devices/system/cpu/cpu*/power/energy_perf_bias
+where user has choice to write a predefined string or raw value.
+
+The change itself is trivial. When user preference doesn't match
+predefined string preferences and value is an unsigned integer and in
+range, use that value for EPP. When the EPP feature is not present
+writing raw value is not supported.
 
 Suggested-by: Len Brown <lenb@kernel.org>
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- Documentation/admin-guide/pm/intel_pstate.rst | 11 +++
- arch/x86/include/asm/msr-index.h              |  6 +-
- drivers/cpufreq/intel_pstate.c                | 97 ++++++++++++++-----
- 3 files changed, 88 insertions(+), 26 deletions(-)
+ Documentation/admin-guide/pm/intel_pstate.rst |  6 ++-
+ drivers/cpufreq/intel_pstate.c                | 50 +++++++++++++++----
+ 2 files changed, 45 insertions(+), 11 deletions(-)
 
 diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-guide/pm/intel_pstate.rst
-index 39d80bc29ccd..25e1097fc332 100644
+index 25e1097fc332..40d481cca368 100644
 --- a/Documentation/admin-guide/pm/intel_pstate.rst
 +++ b/Documentation/admin-guide/pm/intel_pstate.rst
-@@ -431,6 +431,17 @@ argument is passed to the kernel in the command line.
- 	supported in the current configuration, writes to this attribute will
- 	fail with an appropriate error.
+@@ -565,7 +565,11 @@ somewhere between the two extremes:
+ Strings written to the ``energy_performance_preference`` attribute are
+ internally translated to integer values written to the processor's
+ Energy-Performance Preference (EPP) knob (if supported) or its
+-Energy-Performance Bias (EPB) knob.
++Energy-Performance Bias (EPB) knob. It is also possible to write a positive
++integer value between 0 to 255, if the EPP feature is present. If the EPP
++feature is not present, writing integer value to this attribute is not
++supported. In this case, user can use
++ "/sys/devices/system/cpu/cpu*/power/energy_perf_bias" interface.
  
-+``energy_efficiency``
-+	This attribute is only present on platforms, which have CPUs matching
-+	Kaby Lake or Coffee Lake desktop CPU model. By default
-+	energy efficiency optimizations are disabled on these CPU models in HWP
-+	mode by this driver. Enabling energy efficiency may limit maximum
-+	operating frequency in both HWP and non HWP mode. In non HWP mode,
-+	optimizations are done only in the turbo frequency range. In HWP mode,
-+	optimizations are done in the entire frequency range. Setting this
-+	attribute to "1" enables energy efficiency optimizations and setting
-+	to "0" disables energy efficiency optimizations.
-+
- Interpretation of Policy Attributes
- -----------------------------------
- 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index e8370e64a155..21b409195b46 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -149,6 +149,10 @@
- 
- #define MSR_LBR_SELECT			0x000001c8
- #define MSR_LBR_TOS			0x000001c9
-+
-+#define MSR_IA32_POWER_CTL		0x000001fc
-+#define MSR_IA32_POWER_CTL_BIT_EE	19
-+
- #define MSR_LBR_NHM_FROM		0x00000680
- #define MSR_LBR_NHM_TO			0x000006c0
- #define MSR_LBR_CORE_FROM		0x00000040
-@@ -253,8 +257,6 @@
- 
- #define MSR_PEBS_FRONTEND		0x000003f7
- 
--#define MSR_IA32_POWER_CTL		0x000001fc
--
- #define MSR_IA32_MC0_CTL		0x00000400
- #define MSR_IA32_MC0_STATUS		0x00000401
- #define MSR_IA32_MC0_ADDR		0x00000402
+ [Note that tasks may by migrated from one CPU to another by the scheduler's
+ load-balancing algorithm and if different energy vs performance hints are
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 8e23a698ce04..7dfd9da385d1 100644
+index 7dfd9da385d1..27737b53dfc6 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -866,10 +866,39 @@ static int intel_pstate_hwp_save_state(struct cpufreq_policy *policy)
- 	return 0;
+@@ -602,11 +602,12 @@ static const unsigned int epp_values[] = {
+ 	HWP_EPP_POWERSAVE
+ };
+ 
+-static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
++static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data, int *raw_epp)
+ {
+ 	s16 epp;
+ 	int index = -EINVAL;
+ 
++	*raw_epp = 0;
+ 	epp = intel_pstate_get_epp(cpu_data, 0);
+ 	if (epp < 0)
+ 		return epp;
+@@ -614,12 +615,14 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
+ 	if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
+ 		if (epp == HWP_EPP_PERFORMANCE)
+ 			return 1;
+-		if (epp <= HWP_EPP_BALANCE_PERFORMANCE)
++		if (epp == HWP_EPP_BALANCE_PERFORMANCE)
+ 			return 2;
+-		if (epp <= HWP_EPP_BALANCE_POWERSAVE)
++		if (epp == HWP_EPP_BALANCE_POWERSAVE)
+ 			return 3;
+-		else
++		if (epp == HWP_EPP_POWERSAVE)
+ 			return 4;
++		*raw_epp = epp;
++		return 0;
+ 	} else if (boot_cpu_has(X86_FEATURE_EPB)) {
+ 		/*
+ 		 * Range:
+@@ -638,7 +641,8 @@ static int intel_pstate_get_energy_pref_index(struct cpudata *cpu_data)
  }
  
-+#define POWER_CTL_EE_ENABLE	1
-+#define POWER_CTL_EE_DISABLE	2
-+
-+static int power_ctl_ee_state;
-+
-+static void set_power_ctl_ee_state(bool input)
-+{
-+	u64 power_ctl;
-+
-+	mutex_lock(&intel_pstate_driver_lock);
-+	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
-+	if (input) {
-+		power_ctl &= ~BIT(MSR_IA32_POWER_CTL_BIT_EE);
-+		power_ctl_ee_state = POWER_CTL_EE_ENABLE;
-+	} else {
-+		power_ctl |= BIT(MSR_IA32_POWER_CTL_BIT_EE);
-+		power_ctl_ee_state = POWER_CTL_EE_DISABLE;
-+	}
-+	wrmsrl(MSR_IA32_POWER_CTL, power_ctl);
-+	mutex_unlock(&intel_pstate_driver_lock);
-+}
-+
- static void intel_pstate_hwp_enable(struct cpudata *cpudata);
- 
- static int intel_pstate_resume(struct cpufreq_policy *policy)
+ static int intel_pstate_set_energy_pref_index(struct cpudata *cpu_data,
+-					      int pref_index)
++					      int pref_index, bool use_raw,
++					      u32 raw_epp)
  {
-+
-+	/* Only restore if the system default is changed */
-+	if (power_ctl_ee_state == POWER_CTL_EE_ENABLE)
-+		set_power_ctl_ee_state(true);
-+	else if (power_ctl_ee_state == POWER_CTL_EE_DISABLE)
-+		set_power_ctl_ee_state(false);
-+
- 	if (!hwp_active)
- 		return 0;
+ 	int epp = -EINVAL;
+ 	int ret;
+@@ -657,6 +661,16 @@ static int intel_pstate_set_energy_pref_index(struct cpudata *cpu_data,
  
-@@ -1218,6 +1247,32 @@ static ssize_t store_hwp_dynamic_boost(struct kobject *a,
+ 		value &= ~GENMASK_ULL(31, 24);
+ 
++		if (use_raw) {
++			if (raw_epp > 255) {
++				ret = -EINVAL;
++				goto return_pref;
++			}
++			value |= (u64)raw_epp << 24;
++			ret = wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
++			goto return_pref;
++		}
++
+ 		if (epp == -EINVAL)
+ 			epp = epp_values[pref_index - 1];
+ 
+@@ -694,6 +708,8 @@ static ssize_t store_energy_performance_preference(
+ {
+ 	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
+ 	char str_preference[21];
++	bool raw = false;
++	u32 epp;
+ 	int ret;
+ 
+ 	ret = sscanf(buf, "%20s", str_preference);
+@@ -701,10 +717,21 @@ static ssize_t store_energy_performance_preference(
+ 		return -EINVAL;
+ 
+ 	ret = match_string(energy_perf_strings, -1, str_preference);
+-	if (ret < 0)
++	if (ret < 0) {
++		if (!boot_cpu_has(X86_FEATURE_HWP_EPP))
++			return ret;
++
++		ret = kstrtouint(buf, 10, &epp);
++		if (ret)
++			return ret;
++
++		raw = true;
++	}
++
++	ret = intel_pstate_set_energy_pref_index(cpu_data, ret, raw, epp);
++	if (ret)
+ 		return ret;
+ 
+-	intel_pstate_set_energy_pref_index(cpu_data, ret);
  	return count;
  }
  
-+static ssize_t show_energy_efficiency(struct kobject *kobj, struct kobj_attribute *attr,
-+				      char *buf)
-+{
-+	u64 power_ctl;
-+	int enable;
-+
-+	rdmsrl(MSR_IA32_POWER_CTL, power_ctl);
-+	enable = !!(power_ctl & BIT(MSR_IA32_POWER_CTL_BIT_EE));
-+	return sprintf(buf, "%d\n", !enable);
-+}
-+
-+static ssize_t store_energy_efficiency(struct kobject *a, struct kobj_attribute *b,
-+				       const char *buf, size_t count)
-+{
-+	bool input;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &input);
-+	if (ret)
-+		return ret;
-+
-+	set_power_ctl_ee_state(input);
-+
-+	return count;
-+}
-+
- show_one(max_perf_pct, max_perf_pct);
- show_one(min_perf_pct, min_perf_pct);
- 
-@@ -1228,6 +1283,7 @@ define_one_global_rw(min_perf_pct);
- define_one_global_ro(turbo_pct);
- define_one_global_ro(num_pstates);
- define_one_global_rw(hwp_dynamic_boost);
-+define_one_global_rw(energy_efficiency);
- 
- static struct attribute *intel_pstate_attributes[] = {
- 	&status.attr,
-@@ -1241,6 +1297,8 @@ static const struct attribute_group intel_pstate_attr_group = {
- 	.attrs = intel_pstate_attributes,
- };
- 
-+static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[];
-+
- static void __init intel_pstate_sysfs_expose_params(void)
+@@ -712,13 +739,16 @@ static ssize_t show_energy_performance_preference(
+ 				struct cpufreq_policy *policy, char *buf)
  {
- 	struct kobject *intel_pstate_kobject;
-@@ -1273,6 +1331,11 @@ static void __init intel_pstate_sysfs_expose_params(void)
- 				       &hwp_dynamic_boost.attr);
- 		WARN_ON(rc);
- 	}
-+
-+	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids)) {
-+		rc = sysfs_create_file(intel_pstate_kobject, &energy_efficiency.attr);
-+		WARN_ON(rc);
-+	}
+ 	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
+-	int preference;
++	int preference, raw_epp;
+ 
+-	preference = intel_pstate_get_energy_pref_index(cpu_data);
++	preference = intel_pstate_get_energy_pref_index(cpu_data, &raw_epp);
+ 	if (preference < 0)
+ 		return preference;
+ 
+-	return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
++	if (raw_epp)
++		return  sprintf(buf, "%d\n", raw_epp);
++	else
++		return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
  }
- /************************** sysfs end ************************/
  
-@@ -1288,25 +1351,6 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
- 		cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
- }
- 
--#define MSR_IA32_POWER_CTL_BIT_EE	19
--
--/* Disable energy efficiency optimization */
--static void intel_pstate_disable_ee(int cpu)
--{
--	u64 power_ctl;
--	int ret;
--
--	ret = rdmsrl_on_cpu(cpu, MSR_IA32_POWER_CTL, &power_ctl);
--	if (ret)
--		return;
--
--	if (!(power_ctl & BIT(MSR_IA32_POWER_CTL_BIT_EE))) {
--		pr_info("Disabling energy efficiency optimization\n");
--		power_ctl |= BIT(MSR_IA32_POWER_CTL_BIT_EE);
--		wrmsrl_on_cpu(cpu, MSR_IA32_POWER_CTL, power_ctl);
--	}
--}
--
- static int atom_get_min_pstate(void)
- {
- 	u64 value;
-@@ -1982,10 +2026,6 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
- 	if (hwp_active) {
- 		const struct x86_cpu_id *id;
- 
--		id = x86_match_cpu(intel_pstate_cpu_ee_disable_ids);
--		if (id)
--			intel_pstate_disable_ee(cpunum);
--
- 		intel_pstate_hwp_enable(cpu);
- 
- 		id = x86_match_cpu(intel_pstate_hwp_boost_ids);
-@@ -2803,8 +2843,17 @@ static int __init intel_pstate_init(void)
- 	if (rc)
- 		return rc;
- 
--	if (hwp_active)
-+	if (hwp_active) {
-+		const struct x86_cpu_id *id;
-+
-+		id = x86_match_cpu(intel_pstate_cpu_ee_disable_ids);
-+		if (id) {
-+			set_power_ctl_ee_state(false);
-+			pr_info("Disabling energy efficiency optimization\n");
-+		}
-+
- 		pr_info("HWP enabled\n");
-+	}
- 
- 	return 0;
- }
+ cpufreq_freq_attr_rw(energy_performance_preference);
 -- 
 2.25.4
 
