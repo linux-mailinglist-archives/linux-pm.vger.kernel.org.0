@@ -2,228 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 431E420B74D
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 19:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1775C20B78D
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 19:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728112AbgFZRic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 Jun 2020 13:38:32 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52806 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728049AbgFZRi0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jun 2020 13:38:26 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id A4AF22A5E4A
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
+        id S1726337AbgFZRud (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 Jun 2020 13:50:33 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:49191 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725833AbgFZRud (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 Jun 2020 13:50:33 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200626175031euoutp01bafce4a53d0cdd793aaa29c11df79960~cKVkwLJCn1504415044euoutp01Q
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jun 2020 17:50:31 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200626175031euoutp01bafce4a53d0cdd793aaa29c11df79960~cKVkwLJCn1504415044euoutp01Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593193831;
+        bh=xSiB+0bcJ6gqaHQQW/JlglYx4ltOHCmHixD8o+J+bJ4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=iegxD2XbOSUIk9KYF3h0+50BUjoFJJnNv1u0uTPkv9+qvTYRlNS0H6al+dIJtw6hV
+         Y3XsskLnRo7WswEy1A9As4n9j7kp5gpXZzTtTRpGGj5Z7qlvAUTA1PPGTp3HNShHeD
+         LNU+DqBOUBvOJKvmCjNmm5qFM4GBHHSTW/2REsR8=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200626175030eucas1p20d63917468dd11dad46e3915ba694847~cKVkBDO9X0495504955eucas1p2e;
+        Fri, 26 Jun 2020 17:50:30 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 63.03.06456.66536FE5; Fri, 26
+        Jun 2020 18:50:30 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200626175029eucas1p131a223f6371e01f88c9bc245e10d2699~cKVjmFJlh2464324643eucas1p1-;
+        Fri, 26 Jun 2020 17:50:29 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200626175029eusmtrp201557a4ce0eeccc9b477761d8452c616~cKVjlbZe_1801118011eusmtrp2q;
+        Fri, 26 Jun 2020 17:50:29 +0000 (GMT)
+X-AuditID: cbfec7f2-809ff70000001938-11-5ef635662503
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 82.CA.06017.56536FE5; Fri, 26
+        Jun 2020 18:50:29 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200626175028eusmtip1faefa4680763a54bc73309bdb88ce92e~cKVicMkDa2150821508eusmtip1e;
+        Fri, 26 Jun 2020 17:50:28 +0000 (GMT)
+Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v5 11/11] thermal: Rename set_mode() to change_mode()
-Date:   Fri, 26 Jun 2020 19:37:55 +0200
-Message-Id: <20200626173755.26379-12-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200626173755.26379-1-andrzej.p@collabora.com>
-References: <9cbffad6-69e4-0b33-4640-fde7c4f6a6e7@linaro.org>
- <20200626173755.26379-1-andrzej.p@collabora.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <708feba7-6b11-4943-1073-a1b5e54b6283@samsung.com>
+Date:   Fri, 26 Jun 2020 19:50:28 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRmVeSWpSXmKPExsWy7djP87pppt/iDE5uF7K4/uU5q0X/49fM
+        FufPb2C3ONv0ht1i0+NrrBaXd81hs/jce4TRYsb5fUwWC5ta2C1uN65gs/h24hGjA7fHmnlr
+        GD12zrrL7rFpVSebx+Yl9R59W1YxenzeJBfAFsVlk5Kak1mWWqRvl8CV0XfxN1vBdomK3T95
+        GxhfCHcxcnJICJhI3HjwhL2LkYtDSGAFo8TrJX9YIZwvjBKnb21ig3A+M0osWtbFCtMy/9k3
+        ZojEckaJF60ToVo+Mkoc2nGKHaRKWMBOYv61XWAdIgKqEtcu3GUBKWIWOMgssffLGWaQBJuA
+        oUTv0T5GEJsXqOHOnglgzSxADQfeHQdrFhWIlehbuoANokZQ4uTMJywgNqeAtcTLq2fA4swC
+        4hK3nsxngrDlJba/nQN2noTALXaJO5eusEHc7SIx78cGqB+EJV4d38IOYctI/N8J0gzS0Mwo
+        0bP7NjuEM4FR4v7xBYwQVdYSd879AprEAbRCU2L9Ln2IsKPE22NvmEHCEgJ8EjfeCkIcwScx
+        adt0qDCvREebEES1isTvVdOZIGwpie4n/1kmMCrNQvLaLCTvzELyziyEvQsYWVYxiqeWFuem
+        pxYb5qWW6xUn5haX5qXrJefnbmIEpq3T/45/2sH49VLSIUYBDkYlHt4XD77GCbEmlhVX5h5i
+        lOBgVhLhdTp7Ok6INyWxsiq1KD++qDQntfgQozQHi5I4r/Gil7FCAumJJanZqakFqUUwWSYO
+        TqkGxt27q7RuLWCvnZfCNONM4IRJk/xmHZ09VZFTUHTqgicPSviWLpBXPfc0+JMHW9yul53u
+        y5c1V4k4Rbp7PCkxtqlct6/U1jIrVmZ+kslCvrmrBWzN1rQcebe184K75OnpuvUWBgXxpXvs
+        e0SMq7tvS0sIdB277Deb6YHgPi9be68Z5vHnXSWSlViKMxINtZiLihMBVqHxulcDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKIsWRmVeSWpSXmKPExsVy+t/xu7qppt/iDO6cMLe4/uU5q0X/49fM
+        FufPb2C3ONv0ht1i0+NrrBaXd81hs/jce4TRYsb5fUwWC5ta2C1uN65gs/h24hGjA7fHmnlr
+        GD12zrrL7rFpVSebx+Yl9R59W1YxenzeJBfAFqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2Ri
+        qWdobB5rZWSqpG9nk5Kak1mWWqRvl6CX0XfxN1vBdomK3T95GxhfCHcxcnJICJhIzH/2jbmL
+        kYtDSGApo0T7811sXYwcQAkpifktShA1whJ/rnWxQdS8Z5SYdPcfE0hCWMBOYv61XawgtoiA
+        qsS1C3dZQIqYBQ4zSxw7dZgVomMis8SD1ntsIFVsAoYSvUf7GEFsXqDuO3smsIPYLEDdB94d
+        B5skKhAr8e3eFjaIGkGJkzOfsIDYnALWEi+vngGLMwuoS/yZd4kZwhaXuPVkPhOELS+x/e0c
+        5gmMQrOQtM9C0jILScssJC0LGFlWMYqklhbnpucWG+kVJ+YWl+al6yXn525iBEbptmM/t+xg
+        7HoXfIhRgINRiYf3xYOvcUKsiWXFlbmHGCU4mJVEeJ3Ono4T4k1JrKxKLcqPLyrNSS0+xGgK
+        9NxEZinR5HxgAskriTc0NTS3sDQ0NzY3NrNQEuftEDgYIySQnliSmp2aWpBaBNPHxMEp1cC4
+        j/2K/XZdlhI//SMmPx/suHboVq7gzJJTkoqLfTxf3jzNaH4ryjkpgDn2pfA8Rs41O7dKJGxS
+        8Haw13etVdfvPSzkqK28Te5w8f5PumqTnmoGJBW3hJlcXv87WXmL6b8kt7U3PzkKNPV1VZf6
+        VWfMUnJcP2njr98aYv1/VK0uZevdzvKqvqDEUpyRaKjFXFScCAASuzkY6AIAAA==
+X-CMS-MailID: 20200626175029eucas1p131a223f6371e01f88c9bc245e10d2699
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3
+References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
+        <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
+        <20200623191129.GA4171@kozik-lap>
+        <CGME20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3@eucas1p1.samsung.com>
+        <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
+        <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
+        <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-set_mode() is only called when tzd's mode is about to change. Actual
-setting is performed in thermal_core, in thermal_zone_device_set_mode().
-The meaning of set_mode() callback is actually to notify the driver about
-the mode being changed and giving the driver a chance to oppose such
-change.
+Hi Lukasz,
 
-To better reflect the purpose of the method rename it to change_mode()
+On 25.06.2020 12:02, Lukasz Luba wrote:
+> Regarding the 'performance counters overflow interrupts' there is one
+> thing worth to keep in mind: variable utilization and frequency.
+> For example, in order to make a conclusion in algorithm deciding that
+> the device should increase or decrease the frequency, we fix the period
+> of observation, i.e. to 500ms. That can cause the long delay if the
+> utilization of the device suddenly drops. For example we set an
+> overflow threshold to value i.e. 1000 and we know that at 1000MHz
+> and full utilization (100%) the counter will reach that threshold
+> after 500ms (which we want, because we don't want too many interrupts
+> per sec). What if suddenly utilization drops to 2% (i.e. from 5GB/s
+> to 250MB/s (what if it drops to 25MB/s?!)), the counter will reach the
+> threshold after 50*500ms = 25s. It is impossible just for the counters
+> to predict next utilization and adjust the threshold.
 
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-[for acerhdf]
-Acked-by: Peter Kaestle <peter@piie.net>
-Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
----
- drivers/platform/x86/acerhdf.c                          | 6 +++---
- drivers/thermal/imx_thermal.c                           | 8 ++++----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
- drivers/thermal/intel/intel_quark_dts_thermal.c         | 6 +++---
- drivers/thermal/thermal_core.c                          | 4 ++--
- include/linux/thermal.h                                 | 2 +-
- 6 files changed, 16 insertions(+), 16 deletions(-)
+Agreed, that's in case when we use just the performance counter (PMCNT)
+overflow interrupts. In my experiments I used the (total) cycle counter
+(CCNT) overflow interrupts. As that counter is clocked with fixed rate
+between devfreq updates it can be used as a timer by pre-loading it with 
+initial value depending on current bus frequency. But we could as well 
+use some reliable system timer mechanism to generate periodic events. 
+I was hoping to use the cycle counter to generate low frequency monitor 
+events and the actual performance counters overflow interrupts to detect 
+any sudden changes of utilization. However, it seems it cannot be done 
+with as simple performance counters HW architecture as on Exynos4412.
+It looks like on Exynos5422 we have all what is needed, there is more 
+flexibility in selecting the counter source signal, e.g. each counter
+can be a clock cycle counter or can count various bus events related to 
+actual utilization. Moreover, we could configure the counter gating period 
+and alarm interrupts are available for when the counter value drops below 
+configured MIN threshold or exceeds configured MAX value.
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 76323855c80c..f816a8a13039 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -413,8 +413,8 @@ static inline void acerhdf_enable_kernelmode(void)
-  *          the temperature and the fan.
-  * disabled: the BIOS takes control of the fan.
-  */
--static int acerhdf_set_mode(struct thermal_zone_device *thermal,
--			    enum thermal_device_mode mode)
-+static int acerhdf_change_mode(struct thermal_zone_device *thermal,
-+			       enum thermal_device_mode mode)
- {
- 	if (mode == THERMAL_DEVICE_DISABLED && kernelmode)
- 		acerhdf_revert_to_bios_mode();
-@@ -473,7 +473,7 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
- 	.bind = acerhdf_bind,
- 	.unbind = acerhdf_unbind,
- 	.get_temp = acerhdf_get_ec_temp,
--	.set_mode = acerhdf_set_mode,
-+	.change_mode = acerhdf_change_mode,
- 	.get_trip_type = acerhdf_get_trip_type,
- 	.get_trip_hyst = acerhdf_get_trip_hyst,
- 	.get_trip_temp = acerhdf_get_trip_temp,
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index a02398118d88..9700ae39feb7 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -330,8 +330,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	return 0;
- }
- 
--static int imx_set_mode(struct thermal_zone_device *tz,
--			enum thermal_device_mode mode)
-+static int imx_change_mode(struct thermal_zone_device *tz,
-+			   enum thermal_device_mode mode)
- {
- 	struct imx_thermal_data *data = tz->devdata;
- 	struct regmap *map = data->tempmon;
-@@ -447,7 +447,7 @@ static struct thermal_zone_device_ops imx_tz_ops = {
- 	.bind = imx_bind,
- 	.unbind = imx_unbind,
- 	.get_temp = imx_get_temp,
--	.set_mode = imx_set_mode,
-+	.change_mode = imx_change_mode,
- 	.get_trip_type = imx_get_trip_type,
- 	.get_trip_temp = imx_get_trip_temp,
- 	.get_crit_temp = imx_get_crit_temp,
-@@ -860,7 +860,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
- 	 * Need to disable thermal sensor, otherwise, when thermal core
- 	 * try to get temperature before thermal sensor resume, a wrong
- 	 * temperature will be read as the thermal sensor is powered
--	 * down. This is done in set_mode() operation called from
-+	 * down. This is done in change_mode() operation called from
- 	 * thermal_zone_device_disable()
- 	 */
- 	ret = thermal_zone_device_disable(data->tz);
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index ce49d3b100d5..d3732f624913 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -377,8 +377,8 @@ static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
- 	return 0;
- }
- 
--static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
--				enum thermal_device_mode mode)
-+static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
-+				       enum thermal_device_mode mode)
- {
- 	struct int3400_thermal_priv *priv = thermal->devdata;
- 	int result = 0;
-@@ -399,7 +399,7 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
- 
- static struct thermal_zone_device_ops int3400_thermal_ops = {
- 	.get_temp = int3400_thermal_get_temp,
--	.set_mode = int3400_thermal_set_mode,
-+	.change_mode = int3400_thermal_change_mode,
- };
- 
- static struct thermal_zone_params int3400_thermal_params = {
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index e29c3e330b17..3eafc6b0e6c3 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -298,8 +298,8 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 	return 0;
- }
- 
--static int sys_set_mode(struct thermal_zone_device *tzd,
--				enum thermal_device_mode mode)
-+static int sys_change_mode(struct thermal_zone_device *tzd,
-+			   enum thermal_device_mode mode)
- {
- 	int ret;
- 
-@@ -319,7 +319,7 @@ static struct thermal_zone_device_ops tzone_ops = {
- 	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- 	.get_crit_temp = sys_get_crit_temp,
--	.set_mode = sys_set_mode,
-+	.change_mode = sys_change_mode,
- };
- 
- static void free_soc_dts(struct soc_sensor_entry *aux_entry)
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 3988ad088387..35540a4c2716 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -482,8 +482,8 @@ int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
- 		return ret;
- 	}
- 
--	if (tz->ops->set_mode)
--		ret = tz->ops->set_mode(tz, mode);
-+	if (tz->ops->change_mode)
-+		ret = tz->ops->change_mode(tz, mode);
- 
- 	if (!ret)
- 		tz->mode = mode;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index df013c39ba9b..b9efaa780d88 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -76,7 +76,7 @@ struct thermal_zone_device_ops {
- 		       struct thermal_cooling_device *);
- 	int (*get_temp) (struct thermal_zone_device *, int *);
- 	int (*set_trips) (struct thermal_zone_device *, int, int);
--	int (*set_mode) (struct thermal_zone_device *,
-+	int (*change_mode) (struct thermal_zone_device *,
- 		enum thermal_device_mode);
- 	int (*get_trip_type) (struct thermal_zone_device *, int,
- 		enum thermal_trip_type *);
--- 
-2.17.1
+So it should be possible to configure the HW to generate the utilization 
+monitoring events without excessive continuous CPU intervention.
+But I'm rather not going to work on the Exynos5422 SoC support at the moment.
 
+> To address that, we still need to have another mechanism (like watchdog)
+> which will be triggered just to check if the threshold needs adjustment.
+> This mechanism can be a local timer in the driver or a framework
+> timer running kind of 'for loop' on all this type of devices (like
+> the scheduled workqueue). In both cases in the system there will be
+> interrupts, timers (even at workqueues) and scheduling.
+> The approach to force developers to implement their local watchdog
+> timers (or workqueues) in drivers is IMHO wrong and that's why we have
+> frameworks.
+
+Yes, it should be also possible in the framework to use the counter alarm
+events where the hardware is advanced enough, in order to avoid excessive 
+SW polling.
+
+--
+Regards,
+Sylwester
