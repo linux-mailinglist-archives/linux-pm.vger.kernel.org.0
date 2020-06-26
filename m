@@ -2,88 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32F720A8CE
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 01:26:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF2220AA66
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 04:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390917AbgFYX0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 19:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S1728009AbgFZCOd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 22:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390589AbgFYX0f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 19:26:35 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF23EC08C5DC
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id b16so3758796pfi.13
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
+        with ESMTP id S1728000AbgFZCOd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 22:14:33 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D232C08C5DB
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 19:14:33 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id o13so1314054pgf.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 19:14:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wcg6bLKAHJ0/BxsC+brekPNOiBl21FKQYq+hY1Ge/R8=;
-        b=BC5QnNm/L9fi0/7m8QzEN2dxwRm+UEWAUD0wfyKtJN3dH3RSF2OfNu+WtclANsPrj0
-         tccUpSmsJU6AXH4UrZsO6uoZhCt2UkUkc+F3mD5CpUKXZYyuWLUNOGBNl2XGZYTF3WZr
-         ijY/VFyXQ74HchwLZNMFyPvcLQOxOcA/UoQ0M=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=s5o3IoNBS8kqHmXPb9rBGsy54P5rUFZhSKcIAVavfbM=;
+        b=QRe4Ib+5fV9eQl0eypxjn3pVPZm6syKXHcdOl8PCejImzGkEDHWSoD61LueRICkUih
+         0i2t0NH1KV7ykK7VClhkzSIlIE6TbIS5TZ8tyZUAUwtef3ueK8ksFvd1fxWtj0kUZyBh
+         ayj8CnjPrfvlZWakWazIz7NkLt1x4CPff8sY8ln/IrmhQ1GQI3mveeaozPVZDYzlTxDS
+         UpIS/3dDTz/MOs+XRGGWXR8uMVkbWpuSjMhjazUUu5MMpTniB9qEFeojbqfJeN7OZ21r
+         u9URNO8ogVv39fuGzlHw/GoXnYng0eWkAlhN9RtnKu/PUS0HjEjcnWkgPQ4q07AChrur
+         jqPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wcg6bLKAHJ0/BxsC+brekPNOiBl21FKQYq+hY1Ge/R8=;
-        b=nZhmA67ReJ65npPecuEX5zqi76zBXi9AGQZ8kMS2XluvTvlFpidoAVa4RmUWZqDP+o
-         5p8BaA0IXRUCiWE//D+sriMNC/ogEvr3nsVnNzMImQsGiatkBVJ/Gpwnor9xniD+fg+u
-         YNzWgZAX8+G4fHHTkXsQzjyODBR6Dbf40qIN6qt2Ge/bWC81QzH9iXZAy8n7maEgai9i
-         q73J0/ua7sYozUa/Yb2VFsGnEVBrBlWlWd6+Zqu7LVaP8NyVDBa2uOM04dkR/jsra6OC
-         TWXvFvI8yDMdbTwtwhWDhJM0dz2zOxsBXp7OJMRXwR719lOI8fAsEi1WTevMv+mdr5wc
-         ZT3g==
-X-Gm-Message-State: AOAM533ARNS/LDBW5RgVqfGupNI8O/KumxccvdKv+w04NPdndLeVRBp9
-        UJd1qkcHMxjTUzH+khkxrjUBmQ==
-X-Google-Smtp-Source: ABdhPJxbIKdpaqZK2+wHlfbZwwz6bF78GirDWwQUzayQq/pWbTr2e2gviyY7c0WS4IBaYh/15HOjxg==
-X-Received: by 2002:a63:182:: with SMTP id 124mr232820pgb.288.1593127594156;
-        Thu, 25 Jun 2020 16:26:34 -0700 (PDT)
-Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:e09a:8d06:a338:aafb])
-        by smtp.gmail.com with ESMTPSA id f207sm8901936pfa.107.2020.06.25.16.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2020 16:26:33 -0700 (PDT)
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To:     marcel@holtmann.org, Oliver Neukum <oneukum@suse.com>,
-        linux-bluetooth@vger.kernel.org
-Cc:     chromeos-bluetooth-upstreaming@chromium.org,
-        linux-pm@vger.kernel.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] Bluetooth: btusb: Comment on unbalanced pm reference
-Date:   Thu, 25 Jun 2020 16:26:27 -0700
-Message-Id: <20200625162544.1.Iea2fbf7a284191c0f09c2ffbe8c14b872d0f68b2@changeid>
-X-Mailer: git-send-email 2.27.0.111.gc72c7da667-goog
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=s5o3IoNBS8kqHmXPb9rBGsy54P5rUFZhSKcIAVavfbM=;
+        b=Bzm6Wsfg8lwxnzdffb3WXB8SD7s3qtrQebMJB+JY0gBN+bBRPI6lEejpwlWqN4URv6
+         9Lmq1SUE/9ml1W8WbqlSyB85jj2DF8W6VFVySSbkWQSNAlrU0AYVxrWlCiZRLMfi+UFU
+         8hvnmJHInsiYI5NQQ56hESXfTh6FQaIHcjgGkr9Z3pVNzv6yI3BDEErhgEQkzb6Omqdv
+         LQ3L1WZIW1u7Au+JOIFFyX5kC3axthgQK6hDiB+Kkkwl0n59hizgzywPU0+zQgU6M7GV
+         t4b9M/ltrUAWDagePKarAREhAzl4xKQsKe6cSH0MXhyiodLaqFYtA+QxJKoWiQCJ+YYr
+         Kz6A==
+X-Gm-Message-State: AOAM532VxVGIUZvMDUnWxPCWUbkr1aXqwi1HwEkpr4WMJh+sY3+26YUq
+        8J+5PWbco7GMLzLabO/p4MMb6Q==
+X-Google-Smtp-Source: ABdhPJyeNz/9eBEvd7EjBKVWAdQz1ZzZv4JUKci8xV+/Ua9jyb7dc/YXL6S1k1wsVh++vfbWsUgRFQ==
+X-Received: by 2002:a63:c50a:: with SMTP id f10mr722738pgd.167.1593137672741;
+        Thu, 25 Jun 2020 19:14:32 -0700 (PDT)
+Received: from localhost ([122.172.127.76])
+        by smtp.gmail.com with ESMTPSA id g21sm23788354pfh.134.2020.06.25.19.14.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 25 Jun 2020 19:14:32 -0700 (PDT)
+Date:   Fri, 26 Jun 2020 07:44:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Wei Wang <wvw@google.com>
+Cc:     Wei Wang <wei.vince.wang@gmail.com>, dsmythies@telus.net,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: schedutil: force frequency update when limits
+ change
+Message-ID: <20200626021428.tnecyy3wt42slvik@vireshk-i7>
+References: <20200625064614.101183-1-wvw@google.com>
+ <20200625102305.gu3xo4ovcqyd35vd@vireshk-i7>
+ <CAGXk5yrA=oXZs9KAaELsO7+ex7xCggEwdWSC_KXrUWQnvKEpWQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGXk5yrA=oXZs9KAaELsO7+ex7xCggEwdWSC_KXrUWQnvKEpWQ@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a comment clarifying that a PM reference in btusb_qca_cmd_timeout is
-not unbalanced because it results in a device reset.
+On 25-06-20, 13:47, Wei Wang wrote:
+> On Thu, Jun 25, 2020 at 3:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > I am sorry but I am not fully sure of what the problem is. Can you
+> > describe that by giving an example with some random frequency, and
+> > tell the expected and actual behavior ?
+> >
+> The problem is sugov thought next_freq already updated (but actually
+> skipped by the rate limit thing) and all following updates will be
+> skipped.
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
+I am sorry, can you please give a detailed example with existing
+frequency and limits, then the limits changed to new values, then what
+exactly happens ?
 
- drivers/bluetooth/btusb.c | 1 +
- 1 file changed, 1 insertion(+)
+> Actually this is specifically for Android common kernel 4.19's issue
+> which has sugov_up_down_rate_limit in sugov_update_next_freq, let's
+> continue discussion there.
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index f8a71fdabb3d1b..0e143c0cecf2a1 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -581,6 +581,7 @@ static void btusb_qca_cmd_timeout(struct hci_dev *hdev)
- 		return;
- 
- 	bt_dev_err(hdev, "Multiple cmd timeouts seen. Resetting usb device.");
-+	/* This is not an unbalanced PM reference since the device will reset */
- 	err = usb_autopm_get_interface(data->intf);
- 	if (!err)
- 		usb_queue_reset_device(data->intf);
+If it is a mainline problem, we will surely get it fixed here. Just
+that I am not able to understand the problem yet. Sorry about that.
+
 -- 
-2.27.0.111.gc72c7da667-goog
-
+viresh
