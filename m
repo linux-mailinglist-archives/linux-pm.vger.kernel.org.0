@@ -2,68 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F8E20AAF6
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 05:52:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817C720AAF4
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jun 2020 05:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbgFZDv6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 Jun 2020 23:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58088 "EHLO
+        id S1728481AbgFZDwD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 Jun 2020 23:52:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726104AbgFZDv5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 23:51:57 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14F7C08C5C1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:51:56 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id e9so4365221pgo.9
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:51:56 -0700 (PDT)
+        with ESMTP id S1728477AbgFZDwA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 Jun 2020 23:52:00 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0917DC08C5DB
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:52:00 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id a127so4055884pfa.12
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jun 2020 20:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bDEuNi6VcWGVZVG3Ao7I2ar+mftbkIzW0ZQYBhMw7zM=;
-        b=wcvPUDCYNg0VoRCPuSICiKnZcq2vobgSOlnfY8Z3efK+1eAEzvDJSGHyQpRUWfyvxC
-         XzwvY7fSDagVhRnGyduvbpsXjslT9EPFXb0dS2FSJeFHFgzkj6JRunX7PXgQQ7/jpS7T
-         uc6ABXV22lRh8uMuIx8ib0HN0MnTXN7S9P+/Qh+cI1owcBtVhpbVp5UqvsvLHDbD3Vrj
-         uw7IFMf5CdC7qXEj+vope0cFkOC3U8gEbqZpzzZojl4+Z48HSjSVn9ryZGuoS1Fs8oeO
-         RBeuQgqdvhpjHYVi9V+WAXYEYlHm4IOXHnsXDX2ovJzacZ1Oc5IZQn2m+qKgeOkG/ZmA
-         15vQ==
+        bh=1kNSCiHNHSb6jIhG+JaGhvWbvnCv4GNFP8GZBjcVO0Y=;
+        b=REu2vVnNvFUO7RMznNy7FQBFECB9nt/3gLuM5qsneFWLgFzaMJa3uw3MHsopvaIhRw
+         PbNnmBTaimtKOz0klQp0RnQodX5uRKSH9pOq1Ccz3zTI4vV7+v0MISmgwCZGCkc21vZN
+         U52lXDHn+Y5h2h8hpp74pkX3e4Xn6Fqw0fyKD/EE6CQz38h8MhZnzIGlb5VfyqxU5MAA
+         gb8Q4OnL2jpwG2KyrfR2BHXksxqb2G1KFHUhKDdsVFtA7dnMzYVwnpziKtHmLattaA6x
+         P1FnWmQNQaAou+Uwc+cmpdSWtLmP9SJ2gRcQjE0KhbOZDgERvj50ZKjAmRaLZn3zKK1O
+         rHDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bDEuNi6VcWGVZVG3Ao7I2ar+mftbkIzW0ZQYBhMw7zM=;
-        b=g/XzGiaVsvFiW/l2ORmktlAcsPEPPhYHpi94cJoNwAwyP5wPXMCiaA6C8BdkFqypTm
-         o/M50LxuMAdeWQp121fSgcIRbEXTvGMIDUElOYVvVU4VMxuaSOS6vHbRBE80zjFO0SNZ
-         4/5PxovSPa2I1a3mh6CK3zob5GAPBn7NnsbbXtC1Y480eVsTu5PgsJd5luD82uulePVJ
-         z5i2Zasx2seqIz8DeHIzEBpYZ6dHL7IzbVboXkO/1k3nUM0DID/I031SYtuYhIfrwtNg
-         ocBpmBNpR69/BbUjQiOjl+d4okgdW8lOweupJU8cQgESCXITq+Msq5cJbWqzebQ/tZdh
-         eJmw==
-X-Gm-Message-State: AOAM533z8TF3AgxDe8Q89cY3HFJraXDwr2gmjoGID6ovYfzrRxm0QUP/
-        WbCT0FdkNk9RlFewzzg8lxtoQDn2ue8=
-X-Google-Smtp-Source: ABdhPJyBSNZeRfEB61G0+HghLvkgTEmfZ8d/AT4P7cecCx+9cvBEU4r+vShOWis1m8oKqQMSGSyQBA==
-X-Received: by 2002:a63:495c:: with SMTP id y28mr1020538pgk.30.1593143516459;
-        Thu, 25 Jun 2020 20:51:56 -0700 (PDT)
+        bh=1kNSCiHNHSb6jIhG+JaGhvWbvnCv4GNFP8GZBjcVO0Y=;
+        b=YzU0cnW52ZHMiG1gJYW0HIPanx9q2E0iOxnlNtXoVPUMaJQSAPtcdLFPRheLny0ARy
+         Zg9xNuLeyMEauQNJ9Gxb2d9D/0EZl+iGymkDYjGC4Otjego+QttVyq0NLyQVGsrUOhCx
+         CE90xdRUCkg8gERoY6JZGiyMt4BpKcDWhPEDTsfSNFU9Y9lU+tX34MlJbr65mVnZLfHM
+         k9OD5L71we2rO79UE//y2T+P9G0jnXTUtwXqyUxyDTCkov8Lw3e4N0gB0OGCm++80EyD
+         qHILbskvZTDA8Xj3QZ9krhpZ1Vi9tEaoLXj8spVTuNfYWbb6K4TG5foG4K2J7oi8GLDk
+         eE8w==
+X-Gm-Message-State: AOAM533+cBId5tXGbht7VABEdTev2c+x9Y209F9WVFGO7m5p33KE2XLH
+        bUTWPmY2j9/VRI+FOtVXimLTfw==
+X-Google-Smtp-Source: ABdhPJxPjqWrG39q9awzXKeB5MXv4YUXUaJP0+B/iWs3190cB3S0L3qYXloC/o4T6J/Sv50uR1AkYA==
+X-Received: by 2002:aa7:9abc:: with SMTP id x28mr885223pfi.39.1593143519452;
+        Thu, 25 Jun 2020 20:51:59 -0700 (PDT)
 Received: from localhost ([122.172.127.76])
-        by smtp.gmail.com with ESMTPSA id iq19sm9467176pjb.48.2020.06.25.20.51.55
+        by smtp.gmail.com with ESMTPSA id k2sm21272108pgm.11.2020.06.25.20.51.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 25 Jun 2020 20:51:55 -0700 (PDT)
+        Thu, 25 Jun 2020 20:51:58 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>, Arnd Bergmann <arnd@arndb.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>
-Cc:     linux-pm@vger.kernel.org, kernel-team@android.com,
-        tkjos@google.com, adharmap@codeaurora.org,
-        Quentin Perret <qperret@google.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3 2/3] cpufreq: Register governors at core_initcall
-Date:   Fri, 26 Jun 2020 09:21:43 +0530
-Message-Id: <088d0d017f1fe57edef0f50b2cfaeb785b6908df.1593143118.git.viresh.kumar@linaro.org>
+        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org,
+        Quentin Perret <qperret@google.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 3/3] cpufreq: Specify default governor on command line
+Date:   Fri, 26 Jun 2020 09:21:44 +0530
+Message-Id: <7eb38608b2b32c0c72dfb160c51206ec42e74e35.1593143118.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 In-Reply-To: <cover.1593143118.git.viresh.kumar@linaro.org>
 References: <cover.1593143118.git.viresh.kumar@linaro.org>
@@ -76,301 +71,155 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Quentin Perret <qperret@google.com>
 
-Currently, most CPUFreq governors are registered at core_initcall time
-when used as default, and module_init otherwise. In preparation for
-letting users specify the default governor on the kernel command line,
-change all of them to use core_initcall unconditionally, as is already
-the case for schedutil and performance. This will enable us to assume
-builtin governors have been registered before the builtin CPUFreq
-drivers probe.
+Currently, the only way to specify the default CPUfreq governor is via
+Kconfig options, which suits users who can build the kernel themselves
+perfectly.
 
-And since all governors now have similar init/exit patterns, introduce
-two new macros cpufreq_governor_{init,exit}() to factorize the code.
+However, for those who use a distro-like kernel (such as Android, with
+the Generic Kernel Image project), the only way to use a different
+default is to boot to userspace, and to then switch using the sysfs
+interface. Being able to specify the default governor on the command
+line, like is the case for cpuidle, would enable those users to specify
+their governor of choice earlier on, and to simplify slighlty the
+userspace boot procedure.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+To support this use-case, add a kernel command line parameter enabling
+to specify a default governor for CPUfreq, which takes precedence over
+the builtin default.
+
+This implementation has one notable limitation: the default governor
+must be registered before the driver. This is solved for builtin
+governors and drivers using appropriate *_initcall() functions. And in
+the modular case, this must be reflected as a constraint on the module
+loading order.
+
 Signed-off-by: Quentin Perret <qperret@google.com>
+[ Viresh: Converted 'default_governor' to a string and parsing it only
+	  at initcall level, and several updates to
+	  cpufreq_init_policy(). ]
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- .../platforms/cell/cpufreq_spudemand.c        | 26 ++-----------------
- drivers/cpufreq/cpufreq_conservative.c        | 22 ++++------------
- drivers/cpufreq/cpufreq_ondemand.c            | 24 +++++------------
- drivers/cpufreq/cpufreq_performance.c         | 14 ++--------
- drivers/cpufreq/cpufreq_powersave.c           | 18 +++----------
- drivers/cpufreq/cpufreq_userspace.c           | 18 +++----------
- include/linux/cpufreq.h                       | 14 ++++++++++
- kernel/sched/cpufreq_schedutil.c              |  6 +----
- 8 files changed, 36 insertions(+), 106 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  5 +++
+ Documentation/admin-guide/pm/cpufreq.rst      |  6 ++--
+ drivers/cpufreq/cpufreq.c                     | 36 ++++++++++++++-----
+ 3 files changed, 35 insertions(+), 12 deletions(-)
 
-diff --git a/arch/powerpc/platforms/cell/cpufreq_spudemand.c b/arch/powerpc/platforms/cell/cpufreq_spudemand.c
-index 55b31eadb3c8..ca7849e113d7 100644
---- a/arch/powerpc/platforms/cell/cpufreq_spudemand.c
-+++ b/arch/powerpc/platforms/cell/cpufreq_spudemand.c
-@@ -126,30 +126,8 @@ static struct cpufreq_governor spu_governor = {
- 	.stop = spu_gov_stop,
- 	.owner = THIS_MODULE,
- };
--
--/*
-- * module init and destoy
-- */
--
--static int __init spu_gov_init(void)
--{
--	int ret;
--
--	ret = cpufreq_register_governor(&spu_governor);
--	if (ret)
--		printk(KERN_ERR "registration of governor failed\n");
--	return ret;
--}
--
--static void __exit spu_gov_exit(void)
--{
--	cpufreq_unregister_governor(&spu_governor);
--}
--
--
--module_init(spu_gov_init);
--module_exit(spu_gov_exit);
-+cpufreq_governor_init(spu_governor);
-+cpufreq_governor_exit(spu_governor);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index fb95fad81c79..8deb5a89328a 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -703,6 +703,11 @@
+ 	cpufreq.off=1	[CPU_FREQ]
+ 			disable the cpufreq sub-system
  
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Christian Krafft <krafft@de.ibm.com>");
--
-diff --git a/drivers/cpufreq/cpufreq_conservative.c b/drivers/cpufreq/cpufreq_conservative.c
-index 737ff3b9c2c0..aa39ff31ec9f 100644
---- a/drivers/cpufreq/cpufreq_conservative.c
-+++ b/drivers/cpufreq/cpufreq_conservative.c
-@@ -322,17 +322,7 @@ static struct dbs_governor cs_governor = {
- 	.start = cs_start,
- };
- 
--#define CPU_FREQ_GOV_CONSERVATIVE	(&cs_governor.gov)
--
--static int __init cpufreq_gov_dbs_init(void)
--{
--	return cpufreq_register_governor(CPU_FREQ_GOV_CONSERVATIVE);
--}
--
--static void __exit cpufreq_gov_dbs_exit(void)
--{
--	cpufreq_unregister_governor(CPU_FREQ_GOV_CONSERVATIVE);
--}
-+#define CPU_FREQ_GOV_CONSERVATIVE	(cs_governor.gov)
- 
- MODULE_AUTHOR("Alexander Clouter <alex@digriz.org.uk>");
- MODULE_DESCRIPTION("'cpufreq_conservative' - A dynamic cpufreq governor for "
-@@ -343,11 +333,9 @@ MODULE_LICENSE("GPL");
- #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE
- struct cpufreq_governor *cpufreq_default_governor(void)
- {
--	return CPU_FREQ_GOV_CONSERVATIVE;
-+	return &CPU_FREQ_GOV_CONSERVATIVE;
- }
--
--core_initcall(cpufreq_gov_dbs_init);
--#else
--module_init(cpufreq_gov_dbs_init);
- #endif
--module_exit(cpufreq_gov_dbs_exit);
++	cpufreq.default_governor=
++			[CPU_FREQ] Name of the default cpufreq governor or
++			policy to use. This governor must be registered in the
++			kernel before the cpufreq driver probes.
 +
-+cpufreq_governor_init(CPU_FREQ_GOV_CONSERVATIVE);
-+cpufreq_governor_exit(CPU_FREQ_GOV_CONSERVATIVE);
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index 82a4d37ddecb..ac361a8b1d3b 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -408,7 +408,7 @@ static struct dbs_governor od_dbs_gov = {
- 	.start = od_start,
- };
+ 	cpu_init_udelay=N
+ 			[X86] Delay for N microsec between assert and de-assert
+ 			of APIC INIT to start processors.  This delay occurs
+diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+index 0c74a7784964..368e612145d2 100644
+--- a/Documentation/admin-guide/pm/cpufreq.rst
++++ b/Documentation/admin-guide/pm/cpufreq.rst
+@@ -147,9 +147,9 @@ CPUs in it.
  
--#define CPU_FREQ_GOV_ONDEMAND	(&od_dbs_gov.gov)
-+#define CPU_FREQ_GOV_ONDEMAND	(od_dbs_gov.gov)
+ The next major initialization step for a new policy object is to attach a
+ scaling governor to it (to begin with, that is the default scaling governor
+-determined by the kernel configuration, but it may be changed later
+-via ``sysfs``).  First, a pointer to the new policy object is passed to the
+-governor's ``->init()`` callback which is expected to initialize all of the
++determined by the kernel command line or configuration, but it may be changed
++later via ``sysfs``).  First, a pointer to the new policy object is passed to
++the governor's ``->init()`` callback which is expected to initialize all of the
+ data structures necessary to handle the given policy and, possibly, to add
+ a governor ``sysfs`` interface to it.  Next, the governor is started by
+ invoking its ``->start()`` callback.
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index e798a1193bdf..93c6399c1a42 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -50,6 +50,9 @@ static LIST_HEAD(cpufreq_governor_list);
+ #define for_each_governor(__governor)				\
+ 	list_for_each_entry(__governor, &cpufreq_governor_list, governor_list)
  
- static void od_set_powersave_bias(unsigned int powersave_bias)
- {
-@@ -429,7 +429,7 @@ static void od_set_powersave_bias(unsigned int powersave_bias)
- 			continue;
- 
- 		policy = cpufreq_cpu_get_raw(cpu);
--		if (!policy || policy->governor != CPU_FREQ_GOV_ONDEMAND)
-+		if (!policy || policy->governor != &CPU_FREQ_GOV_ONDEMAND)
- 			continue;
- 
- 		policy_dbs = policy->governor_data;
-@@ -461,16 +461,6 @@ void od_unregister_powersave_bias_handler(void)
- }
- EXPORT_SYMBOL_GPL(od_unregister_powersave_bias_handler);
- 
--static int __init cpufreq_gov_dbs_init(void)
--{
--	return cpufreq_register_governor(CPU_FREQ_GOV_ONDEMAND);
--}
--
--static void __exit cpufreq_gov_dbs_exit(void)
--{
--	cpufreq_unregister_governor(CPU_FREQ_GOV_ONDEMAND);
--}
--
- MODULE_AUTHOR("Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>");
- MODULE_AUTHOR("Alexey Starikovskiy <alexey.y.starikovskiy@intel.com>");
- MODULE_DESCRIPTION("'cpufreq_ondemand' - A dynamic cpufreq governor for "
-@@ -480,11 +470,9 @@ MODULE_LICENSE("GPL");
- #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND
- struct cpufreq_governor *cpufreq_default_governor(void)
- {
--	return CPU_FREQ_GOV_ONDEMAND;
-+	return &CPU_FREQ_GOV_ONDEMAND;
- }
--
--core_initcall(cpufreq_gov_dbs_init);
--#else
--module_init(cpufreq_gov_dbs_init);
- #endif
--module_exit(cpufreq_gov_dbs_exit);
++static char cpufreq_param_governor[CPUFREQ_NAME_LEN];
++static char default_governor[CPUFREQ_NAME_LEN];
 +
-+cpufreq_governor_init(CPU_FREQ_GOV_ONDEMAND);
-+cpufreq_governor_exit(CPU_FREQ_GOV_ONDEMAND);
-diff --git a/drivers/cpufreq/cpufreq_performance.c b/drivers/cpufreq/cpufreq_performance.c
-index def9afe0f5b8..71c1d9aba772 100644
---- a/drivers/cpufreq/cpufreq_performance.c
-+++ b/drivers/cpufreq/cpufreq_performance.c
-@@ -23,16 +23,6 @@ static struct cpufreq_governor cpufreq_gov_performance = {
- 	.limits		= cpufreq_gov_performance_limits,
- };
+ /**
+  * The "cpufreq driver" - the arch- or hardware-dependent low
+  * level driver of CPUFreq support, and its spinlock. This lock
+@@ -1061,7 +1064,6 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
  
--static int __init cpufreq_gov_performance_init(void)
--{
--	return cpufreq_register_governor(&cpufreq_gov_performance);
--}
--
--static void __exit cpufreq_gov_performance_exit(void)
--{
--	cpufreq_unregister_governor(&cpufreq_gov_performance);
--}
--
- #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE
- struct cpufreq_governor *cpufreq_default_governor(void)
+ static int cpufreq_init_policy(struct cpufreq_policy *policy)
  {
-@@ -50,5 +40,5 @@ MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
- MODULE_DESCRIPTION("CPUfreq policy governor 'performance'");
- MODULE_LICENSE("GPL");
+-	struct cpufreq_governor *def_gov = cpufreq_default_governor();
+ 	struct cpufreq_governor *gov = NULL;
+ 	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
+ 	bool put_governor = false;
+@@ -1071,22 +1073,29 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
+ 		/* Update policy governor to the one used before hotplug. */
+ 		gov = get_governor(policy->last_governor);
+ 		if (gov) {
+-			put_governor = true;
+ 			pr_debug("Restoring governor %s for cpu %d\n",
+-				 policy->governor->name, policy->cpu);
+-		} else if (def_gov) {
+-			gov = def_gov;
++				 gov->name, policy->cpu);
+ 		} else {
+-			return -ENODATA;
++			gov = get_governor(default_governor);
++		}
++
++		if (gov) {
++			put_governor = true;
++		} else {
++			gov = cpufreq_default_governor();
++			if (!gov)
++				return -ENODATA;
+ 		}
++
+ 	} else {
++
+ 		/* Use the default policy if there is no last_policy. */
+ 		if (policy->last_policy) {
+ 			pol = policy->last_policy;
+-		} else if (def_gov) {
+-			pol = cpufreq_parse_policy(def_gov->name);
++		} else {
++			pol = cpufreq_parse_policy(default_governor);
+ 			/*
+-			 * In case the default governor is neiter "performance"
++			 * In case the default governor is neither "performance"
+ 			 * nor "powersave", fall back to the initial policy
+ 			 * value set by the driver.
+ 			 */
+@@ -2796,13 +2805,22 @@ EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
  
--core_initcall(cpufreq_gov_performance_init);
--module_exit(cpufreq_gov_performance_exit);
-+cpufreq_governor_init(cpufreq_gov_performance);
-+cpufreq_governor_exit(cpufreq_gov_performance);
-diff --git a/drivers/cpufreq/cpufreq_powersave.c b/drivers/cpufreq/cpufreq_powersave.c
-index 1ae66019eb83..7749522355b5 100644
---- a/drivers/cpufreq/cpufreq_powersave.c
-+++ b/drivers/cpufreq/cpufreq_powersave.c
-@@ -23,16 +23,6 @@ static struct cpufreq_governor cpufreq_gov_powersave = {
- 	.owner		= THIS_MODULE,
- };
- 
--static int __init cpufreq_gov_powersave_init(void)
--{
--	return cpufreq_register_governor(&cpufreq_gov_powersave);
--}
--
--static void __exit cpufreq_gov_powersave_exit(void)
--{
--	cpufreq_unregister_governor(&cpufreq_gov_powersave);
--}
--
- MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>");
- MODULE_DESCRIPTION("CPUfreq policy governor 'powersave'");
- MODULE_LICENSE("GPL");
-@@ -42,9 +32,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
+ static int __init cpufreq_core_init(void)
  {
- 	return &cpufreq_gov_powersave;
++	struct cpufreq_governor *gov = cpufreq_default_governor();
++	char *name = gov->name;
++
+ 	if (cpufreq_disabled())
+ 		return -ENODEV;
+ 
+ 	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
+ 	BUG_ON(!cpufreq_global_kobject);
+ 
++	if (strlen(cpufreq_param_governor))
++		name = cpufreq_param_governor;
++
++	strncpy(default_governor, name, CPUFREQ_NAME_LEN);
++
+ 	return 0;
  }
--
--core_initcall(cpufreq_gov_powersave_init);
--#else
--module_init(cpufreq_gov_powersave_init);
- #endif
--module_exit(cpufreq_gov_powersave_exit);
-+
-+cpufreq_governor_init(cpufreq_gov_powersave);
-+cpufreq_governor_exit(cpufreq_gov_powersave);
-diff --git a/drivers/cpufreq/cpufreq_userspace.c b/drivers/cpufreq/cpufreq_userspace.c
-index b43e7cd502c5..50a4d7846580 100644
---- a/drivers/cpufreq/cpufreq_userspace.c
-+++ b/drivers/cpufreq/cpufreq_userspace.c
-@@ -126,16 +126,6 @@ static struct cpufreq_governor cpufreq_gov_userspace = {
- 	.owner		= THIS_MODULE,
- };
- 
--static int __init cpufreq_gov_userspace_init(void)
--{
--	return cpufreq_register_governor(&cpufreq_gov_userspace);
--}
--
--static void __exit cpufreq_gov_userspace_exit(void)
--{
--	cpufreq_unregister_governor(&cpufreq_gov_userspace);
--}
--
- MODULE_AUTHOR("Dominik Brodowski <linux@brodo.de>, "
- 		"Russell King <rmk@arm.linux.org.uk>");
- MODULE_DESCRIPTION("CPUfreq policy governor 'userspace'");
-@@ -146,9 +136,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
- {
- 	return &cpufreq_gov_userspace;
- }
--
--core_initcall(cpufreq_gov_userspace_init);
--#else
--module_init(cpufreq_gov_userspace_init);
- #endif
--module_exit(cpufreq_gov_userspace_exit);
-+
-+cpufreq_governor_init(cpufreq_gov_userspace);
-+cpufreq_governor_exit(cpufreq_gov_userspace);
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 3494f6763597..e62b022cb07e 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -577,6 +577,20 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy);
- int cpufreq_register_governor(struct cpufreq_governor *governor);
- void cpufreq_unregister_governor(struct cpufreq_governor *governor);
- 
-+#define cpufreq_governor_init(__governor)			\
-+static int __init __governor##_init(void)			\
-+{								\
-+	return cpufreq_register_governor(&__governor);	\
-+}								\
-+core_initcall(__governor##_init)
-+
-+#define cpufreq_governor_exit(__governor)			\
-+static void __exit __governor##_exit(void)			\
-+{								\
-+	return cpufreq_unregister_governor(&__governor);	\
-+}								\
-+module_exit(__governor##_exit)
-+
- struct cpufreq_governor *cpufreq_default_governor(void);
- struct cpufreq_governor *cpufreq_fallback_governor(void);
- 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 7fbaee24c824..402a09af9f43 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -909,11 +909,7 @@ struct cpufreq_governor *cpufreq_default_governor(void)
- }
- #endif
- 
--static int __init sugov_register(void)
--{
--	return cpufreq_register_governor(&schedutil_gov);
--}
--core_initcall(sugov_register);
-+cpufreq_governor_init(schedutil_gov);
- 
- #ifdef CONFIG_ENERGY_MODEL
- extern bool sched_energy_update;
+ module_param(off, int, 0444);
++module_param_string(default_governor, cpufreq_param_governor, CPUFREQ_NAME_LEN, 0444);
+ core_initcall(cpufreq_core_init);
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
