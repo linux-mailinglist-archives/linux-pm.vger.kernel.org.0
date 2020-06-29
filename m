@@ -2,114 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCEA20D53C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E793820D507
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731854AbgF2TPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S1731581AbgF2TN6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731742AbgF2TOW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:14:22 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F298CC08EACA
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id e18so7821279pgn.7
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
+        with ESMTP id S1731546AbgF2TNx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:53 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B2CC0086EA
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 02:44:58 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id h5so15835318wrc.7
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 02:44:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4irVPvy6SLfIHJxFGOTl27eLkGNjnPf7i0OL+P/LA5k=;
-        b=gvy6L2gNxq9EwuQLge3KvNqHHwK00gDANooUZvO4v6O5WkSzyTrdIQh/0aKfX2EltN
-         BC+F/sMOwIeTzytYh6C+biD3Z0k6ukqbdDxfzaddghnTjVpA5NWIn66UJGhUQht65PyZ
-         UeQC58uEadA2EDA5nxAwZTOmY1XiiRXMAqh4qZqk5F0ktgOQ4Giv/rDvhNJX+IvYgcRF
-         uyUIijuxIyKFEY98uEPgkKkWVz1lx7Yn194BvXvE9VqaqfoT3h524c71kZLvLyv0Y3xD
-         Y9evO5z8oHOrC+f8Jlfh91dni7AyjZR5XVxyL1Ss6Xooxx2IhT7B1txyR0AIA+/7u5mi
-         FGzQ==
+         :content-disposition:in-reply-to;
+        bh=ige0bLI228QBtpujPXwJLumrVk0AINfrstrNdcA8YTE=;
+        b=VgKSnKwUGko3Ufn+PVIGXdWOFYC3GeRMX1JUUPmyLweEIpus3fNNVqIF8myZY7hlPE
+         mr8DasZ/JN8K9fhWSlAQYeKQ/YmQ8PYVPaXy/H07HwRtbS2dhvX5wXjvO4nc/yDELJwe
+         2TbfTcbgSB8q4MeYSkW0iafbaWGyYraCjuEn6v+4xx7kVYviV1W41/a8FGa6sOqE1S1y
+         hH+nJ4gOdQXKp2UOwJD4PSyfxRiI7mNwIJEmAaFSwv5lky0FrvZF/mpAT/cbLZA49uD8
+         SvtlG08UiwKF3810F0flrzRismFPAR2pXcJ41rA8pIxJwuidFTD83kZ9UeuHX5H/QFm2
+         haew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4irVPvy6SLfIHJxFGOTl27eLkGNjnPf7i0OL+P/LA5k=;
-        b=s3R3JiDc+KyWd/aLhxl/kCyzF2pDPYescUqdlTtNxztA7qn0YrkWLvJyLE9RNJCKuo
-         tZqTVc3z6o64cyPHYHw9lYGZF5sSAFMMDBhuN6tOdsHD1NEgyuWBi2x0OCbppa20KaO7
-         Wm65WnagzXAnNVhqvMg6whufcrhSWBxRm64kkACceJ2B9kwTJidDu8e04+UM2TzJR35a
-         WzaHhlAekAphWEmqg3T7Pamh/U2k15OSNeiU6IYOz+oi1SuluZ4fdsbA7vGdzhb7STMR
-         T7tvX54M1zaJR2mqg2f3SKM4d0gloD26SCx8/p6hcIppm7zLlYCM/j2plxy0csp8ZBLu
-         RAGg==
-X-Gm-Message-State: AOAM530dpEobGQ5bRkYmGamkAbmVv84jtYm8D9V1Gc4QbKWI8tLP7+CR
-        GqBegadoTDz9XcY/NpN9phfzOQ==
-X-Google-Smtp-Source: ABdhPJyWU8GRq0w0MyNAiW2bszj3RcxuYIa7V3PZhOEGRHvN2Ts53LH/NqZxHeCX7T8Kw8KhW0DfLg==
-X-Received: by 2002:a63:182:: with SMTP id 124mr8482105pgb.288.1593411402221;
-        Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
-Received: from localhost ([122.172.127.76])
-        by smtp.gmail.com with ESMTPSA id m20sm34111505pfk.52.2020.06.28.23.16.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Jun 2020 23:16:41 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 11:46:39 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, jonathanh@nvidia.com, talho@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ PATCH v4 3/4] cpufreq: Add Tegra194 cpufreq
- driver
-Message-ID: <20200629061639.7cwxfi64drkof6yu@vireshk-i7>
-References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
- <1593186236-12760-4-git-send-email-sumitg@nvidia.com>
+         :mime-version:content-disposition:in-reply-to;
+        bh=ige0bLI228QBtpujPXwJLumrVk0AINfrstrNdcA8YTE=;
+        b=QsW2ULrjkQz/6R/wN0A/A7ThN6cgNvnP5MQP34vnVTNX5ttACK0L3zPCUn+hbnn8Ax
+         SbGS/LssyV4M4b8ceDYGVzONHF7Kwp7SmXXgoPS8ox+KMI/LjCwHmy0GV1Rt4+6dKUap
+         h4Zr+xH7rlnlWBtbOGZUdg6YqqBlB1B3jj4caNWEe3C2wfZ4mJFY5nGS4+mIbiESVWs/
+         wqLghaeZp7/XD1l18s9GU+2TUX2t5IrGQ3UuqaEBvm9lobeg/74/oEFxAY6IGTyKDoSv
+         /uP3IFFbP2H5Ih6k+e/p8Qy+c5AaxkklO+yGhFAwMofLeFliIIHJR0TBzY9xKJXHeXyI
+         dXMQ==
+X-Gm-Message-State: AOAM532Q+AF384IwPrHfGPbJTq6dPteFV9At0544h2/tPdzIKeKRtx15
+        mp7Rae2ZhpdQnySK+jsNm620Aw==
+X-Google-Smtp-Source: ABdhPJwHWrygg6BiK5fEk9EEnZAfF+5PYEBh9CUJkPtjUQ71I4bDVU2Q2M33ksNBJ9Sr+c3MY7lBAw==
+X-Received: by 2002:adf:f38f:: with SMTP id m15mr14681272wro.173.1593423896894;
+        Mon, 29 Jun 2020 02:44:56 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
+        by smtp.gmail.com with ESMTPSA id 138sm29810979wma.23.2020.06.29.02.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 02:44:55 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 10:44:52 +0100
+From:   Quentin Perret <qperret@google.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4 3/3] cpufreq: Specify default governor on command line
+Message-ID: <20200629094452.GB1228312@google.com>
+References: <cover.1593418662.git.viresh.kumar@linaro.org>
+ <96b6e6ca02b664194ff3e57e1ec768fbc597bf38.1593418662.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1593186236-12760-4-git-send-email-sumitg@nvidia.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <96b6e6ca02b664194ff3e57e1ec768fbc597bf38.1593418662.git.viresh.kumar@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-06-20, 21:13, Sumit Gupta wrote:
-> +static int tegra194_cpufreq_probe(struct platform_device *pdev)
-> +{
-> +	struct tegra194_cpufreq_data *data;
-> +	struct tegra_bpmp *bpmp;
-> +	int err, i;
+On Monday 29 Jun 2020 at 13:55:00 (+0530), Viresh Kumar wrote:
+>  static int __init cpufreq_core_init(void)
+>  {
+> +	struct cpufreq_governor *gov = cpufreq_default_governor();
 > +
-> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->num_clusters = MAX_CLUSTERS;
-> +	data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
-> +				    sizeof(*data->tables), GFP_KERNEL);
-> +	if (!data->tables)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	bpmp = tegra_bpmp_get(&pdev->dev);
-> +	if (IS_ERR(bpmp))
-> +		return PTR_ERR(bpmp);
-> +
-> +	read_counters_wq = alloc_workqueue("read_counters_wq", __WQ_LEGACY, 1);
-> +	if (!read_counters_wq) {
-> +		dev_err(&pdev->dev, "fail to create_workqueue\n");
-> +		err = -EINVAL;
-> +		goto put_bpmp;
+>  	if (cpufreq_disabled())
+>  		return -ENODEV;
+>  
+>  	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
+>  	BUG_ON(!cpufreq_global_kobject);
+>  
+> +	if (!strlen(default_governor))
 
-This will call destroy_workqueue() eventually and it will crash your
-kernel.
+Should we test '!strlen(default_governor) && gov' here actually?
+We check the return value of cpufreq_default_governor() in
+cpufreq_init_policy(), so I'm guessing we should do the same here to be
+on the safe side.
 
-Apart from this, this stuff looks okay. Don't resend the patch just
-yet (and if required, send only this patch using --in-reply-to flag
-for git send email). Lets wait for an Ack from Rob for the first two
-patches.
-
-> +	}
+> +		strncpy(default_governor, gov->name, CPUFREQ_NAME_LEN);
 > +
+>  	return 0;
+>  }
+>  module_param(off, int, 0444);
+> +module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
+>  core_initcall(cpufreq_core_init);
+> -- 
+> 2.25.0.rc1.19.g042ed3e048af
 
--- 
-viresh
+
+Other than that, the whole series looks good to me.
+
+Thanks,
+Quentin
