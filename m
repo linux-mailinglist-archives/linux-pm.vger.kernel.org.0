@@ -2,157 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDAB20D615
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFEDA20D74B
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731041AbgF2TRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:17:34 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:46260 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728039AbgF2TRc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:17:32 -0400
-Received: from 89-64-84-69.dynamic.chello.pl (89.64.84.69) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 60876454d392fc4c; Mon, 29 Jun 2020 17:17:29 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Neal Liu <neal.liu@mediatek.com>
-Cc:     Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, wsd_upstream@mediatek.com
-Subject: Re: [PATCH] cpuidle: change enter_s2idle() prototype
-Date:   Mon, 29 Jun 2020 17:17:28 +0200
-Message-ID: <9963896.lEaLCsxmBZ@kreacher>
-In-Reply-To: <1593421540-7397-2-git-send-email-neal.liu@mediatek.com>
-References: <1593421540-7397-1-git-send-email-neal.liu@mediatek.com> <1593421540-7397-2-git-send-email-neal.liu@mediatek.com>
+        id S1729373AbgF2T2g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732749AbgF2T1n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:27:43 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38962C0307AA
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 08:52:10 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id l63so8464951pge.12
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 08:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=O7sIHXeq9javydgPa4kkSbbJduAe1ZtNE3KpkpyN1M0=;
+        b=VYMLb/s9Us5ceNtmBLYQSBLKuoXcWKMN/lu2yfULUISWVJJTp86tOTMfJ3DoNjJfLT
+         s6AoWxOJIqBs9AxUj0O9RdD8eVM3oyAEkoVRT0xdY8d+ItmXwCv5Lq6pkrsPOYq/nvgJ
+         JF9LSEIIG5HTA37tnlSFKA90gXabDAm6mePAEfWWctxeF6+yUhDlwRK1XNSMTv5Z3KAD
+         bBrAcLrv9z5m3E2dRh3JN+haNQrPckQy9ke8DuRR/9PoafYfGvEDQoij4UbGIW5CVfFt
+         uZRYG1aD/hl0VT+lYj3PZ/Qy0ErcTJJYTfzvAt4NrRev4I7Rg3yw8ROXptZ86O50Vb7g
+         JTGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=O7sIHXeq9javydgPa4kkSbbJduAe1ZtNE3KpkpyN1M0=;
+        b=GcHqRO7Ehor9qy2Oouiyv8Hi4AAZk2apJMUQpVAsa6+KgwDpjKDE6CdkLrRvEEQXh1
+         y2EkU/bio4cbQ/nIeLPw4MlIjZgJIo8XqGCQWoLdzTaNycWTA4XXO7t2kl42nUc8vIuI
+         cCQ52ey8P7/+PLyIUKSoMvr+mixia8oO+u6WAO8x8WBJ/aX0RRz65c5b7svv9DZjVScS
+         bfuBO0EKqNO0c9u7Z3X8Ve6zpp+DavYgo7k6qwH9kKsyWNJVfPM2eks1sICfCALS0eTd
+         9hWcdCZLbEjTU4dKW5ShSarpObly+6sz0j2nL3H+PR+eNmzA2H6Nlk8y5SaZ5DlaOHro
+         Y40g==
+X-Gm-Message-State: AOAM530dCy0Hi3lN4dxiGn5cCDA3jtTpHluvt4O/kMpY8d2xEPrBGxs4
+        VuK4nCmz5mr7mgM8nKSdi/ED7ZYvLmI=
+X-Google-Smtp-Source: ABdhPJzCqVt5iaGjpTADjIp6sM/qiPJ3AYeVdocTRdq87dWRkQVWmSHDhhiylIc1384vQ+MtkTiG/Q==
+X-Received: by 2002:a65:4c0b:: with SMTP id u11mr9054792pgq.383.1593445928778;
+        Mon, 29 Jun 2020 08:52:08 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a3sm191462pgd.73.2020.06.29.08.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 08:52:07 -0700 (PDT)
+Message-ID: <5efa0e27.1c69fb81.3ce31.0870@mx.google.com>
+Date:   Mon, 29 Jun 2020 08:52:07 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc3-20-g4ebdb176f4ab
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 6 builds: 0 failed, 6 passed,
+ 8 warnings (v5.8-rc3-20-g4ebdb176f4ab)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday, June 29, 2020 11:05:40 AM CEST Neal Liu wrote:
-> Control Flow Integrity(CFI) is a security mechanism that disallows
-> changes to the original control flow graph of a compiled binary,
-> making it significantly harder to perform such attacks.
-> 
-> init_state_node() assigns same function pointer to idle_state->enter
-> and idle_state->enter_s2idle. This definitely causes CFI failure
-> when calling either enter() or enter_s2idle().
-> 
-> Align enter_s2idle() with enter() function prototype to fix CFI
-> failure.
+pm/testing build: 6 builds: 0 failed, 6 passed, 8 warnings (v5.8-rc3-20-g4e=
+bdb176f4ab)
 
-That needs to be documented somewhere close to the definition of the
-callbacks in question.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+8-rc3-20-g4ebdb176f4ab/
 
-Otherwise it is completely unclear why this is a good idea.
+Tree: pm
+Branch: testing
+Git Describe: v5.8-rc3-20-g4ebdb176f4ab
+Git Commit: 4ebdb176f4ab253a2f7eb2b924dd3dba9fa3bc1d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 6 unique architectures
 
-> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
-> ---
->  drivers/acpi/processor_idle.c   |    6 ++++--
->  drivers/cpuidle/cpuidle-tegra.c |    8 +++++---
->  drivers/idle/intel_idle.c       |    6 ++++--
->  include/linux/cpuidle.h         |    6 +++---
->  4 files changed, 16 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 75534c5..6ffb6c9 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -655,8 +655,8 @@ static int acpi_idle_enter(struct cpuidle_device *dev,
->  	return index;
->  }
->  
-> -static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
-> -				   struct cpuidle_driver *drv, int index)
-> +static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
-> +				  struct cpuidle_driver *drv, int index)
->  {
->  	struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
->  
-> @@ -674,6 +674,8 @@ static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
->  		}
->  	}
->  	acpi_idle_do_entry(cx);
-> +
-> +	return 0;
->  }
->  
->  static int acpi_processor_setup_cpuidle_cx(struct acpi_processor *pr,
-> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-> index 1500458..a12fb14 100644
-> --- a/drivers/cpuidle/cpuidle-tegra.c
-> +++ b/drivers/cpuidle/cpuidle-tegra.c
-> @@ -253,11 +253,13 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
->  	return err ? -1 : index;
->  }
->  
-> -static void tegra114_enter_s2idle(struct cpuidle_device *dev,
-> -				  struct cpuidle_driver *drv,
-> -				  int index)
-> +static int tegra114_enter_s2idle(struct cpuidle_device *dev,
-> +				 struct cpuidle_driver *drv,
-> +				 int index)
->  {
->  	tegra_cpuidle_enter(dev, drv, index);
-> +
-> +	return 0;
->  }
->  
->  /*
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index f449584..b178da3 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -175,13 +175,15 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
->   * Invoked as a suspend-to-idle callback routine with frozen user space, frozen
->   * scheduler tick and suspended scheduler clock on the target CPU.
->   */
-> -static __cpuidle void intel_idle_s2idle(struct cpuidle_device *dev,
-> -					struct cpuidle_driver *drv, int index)
-> +static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
-> +				       struct cpuidle_driver *drv, int index)
->  {
->  	unsigned long eax = flg2MWAIT(drv->states[index].flags);
->  	unsigned long ecx = 1; /* break on interrupt flag */
->  
->  	mwait_idle_with_hints(eax, ecx);
-> +
-> +	return 0;
->  }
->  
->  /*
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index ec2ef63..bee10c0 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -66,9 +66,9 @@ struct cpuidle_state {
->  	 * suspended, so it must not re-enable interrupts at any point (even
->  	 * temporarily) or attempt to change states of clock event devices.
->  	 */
-> -	void (*enter_s2idle) (struct cpuidle_device *dev,
-> -			      struct cpuidle_driver *drv,
-> -			      int index);
-> +	int (*enter_s2idle)(struct cpuidle_device *dev,
-> +			    struct cpuidle_driver *drv,
-> +			    int index);
->  };
->  
->  /* Idle State Flags */
-> -- 
-> 1.7.9.5
-> 
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
 
 
+Warnings summary:
 
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
