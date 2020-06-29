@@ -2,102 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E793820D507
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B9020D4F0
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731581AbgF2TN6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43388 "EHLO
+        id S1731213AbgF2TM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731546AbgF2TNx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:53 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B2CC0086EA
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 02:44:58 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id h5so15835318wrc.7
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 02:44:58 -0700 (PDT)
+        with ESMTP id S1731179AbgF2TM4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:12:56 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9703BC00861A
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 03:31:36 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id g75so14851702wme.5
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 03:31:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ige0bLI228QBtpujPXwJLumrVk0AINfrstrNdcA8YTE=;
-        b=VgKSnKwUGko3Ufn+PVIGXdWOFYC3GeRMX1JUUPmyLweEIpus3fNNVqIF8myZY7hlPE
-         mr8DasZ/JN8K9fhWSlAQYeKQ/YmQ8PYVPaXy/H07HwRtbS2dhvX5wXjvO4nc/yDELJwe
-         2TbfTcbgSB8q4MeYSkW0iafbaWGyYraCjuEn6v+4xx7kVYviV1W41/a8FGa6sOqE1S1y
-         hH+nJ4gOdQXKp2UOwJD4PSyfxRiI7mNwIJEmAaFSwv5lky0FrvZF/mpAT/cbLZA49uD8
-         SvtlG08UiwKF3810F0flrzRismFPAR2pXcJ41rA8pIxJwuidFTD83kZ9UeuHX5H/QFm2
-         haew==
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=Opmj4uUxeQ3xM8gi/GCKlnFKXWu2kvQ3Y3KwfIa2RwM=;
+        b=sItA/+/HhStbK5wIjrUza13deCS4ZJu4rsRpymnZyD6rZNKz8QjS/Mo4z0gD9K3xm5
+         /h9MQMMDP7bSNZcl/JU+/9TzJZnMfBYLv7nXH1e4N+kqk4+ZqZ+TpmZrl2EaX6crXyEf
+         7JQ8EmBe9LL1n/ESxycsfrrAlP3ZEbg1X0nTEGSff4zL9jaoYXTQAoSTXoDhU0YEm5Gt
+         GreChXhKfZw0zxUwCibBPw71jxVt4U2DYki76sOIvRFlzjZ5Oje/OJxby2T/X6jkwGXd
+         UVj55psbxsIV/QN0ipSfOV287YLdu0TuamjT0r3vr3QB5cyEKC/ffVePZvTTz+Sh0Kt6
+         hdXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ige0bLI228QBtpujPXwJLumrVk0AINfrstrNdcA8YTE=;
-        b=QsW2ULrjkQz/6R/wN0A/A7ThN6cgNvnP5MQP34vnVTNX5ttACK0L3zPCUn+hbnn8Ax
-         SbGS/LssyV4M4b8ceDYGVzONHF7Kwp7SmXXgoPS8ox+KMI/LjCwHmy0GV1Rt4+6dKUap
-         h4Zr+xH7rlnlWBtbOGZUdg6YqqBlB1B3jj4caNWEe3C2wfZ4mJFY5nGS4+mIbiESVWs/
-         wqLghaeZp7/XD1l18s9GU+2TUX2t5IrGQ3UuqaEBvm9lobeg/74/oEFxAY6IGTyKDoSv
-         /uP3IFFbP2H5Ih6k+e/p8Qy+c5AaxkklO+yGhFAwMofLeFliIIHJR0TBzY9xKJXHeXyI
-         dXMQ==
-X-Gm-Message-State: AOAM532Q+AF384IwPrHfGPbJTq6dPteFV9At0544h2/tPdzIKeKRtx15
-        mp7Rae2ZhpdQnySK+jsNm620Aw==
-X-Google-Smtp-Source: ABdhPJwHWrygg6BiK5fEk9EEnZAfF+5PYEBh9CUJkPtjUQ71I4bDVU2Q2M33ksNBJ9Sr+c3MY7lBAw==
-X-Received: by 2002:adf:f38f:: with SMTP id m15mr14681272wro.173.1593423896894;
-        Mon, 29 Jun 2020 02:44:56 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:d6cc:2030:37c1:9964])
-        by smtp.gmail.com with ESMTPSA id 138sm29810979wma.23.2020.06.29.02.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 02:44:55 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 10:44:52 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 3/3] cpufreq: Specify default governor on command line
-Message-ID: <20200629094452.GB1228312@google.com>
-References: <cover.1593418662.git.viresh.kumar@linaro.org>
- <96b6e6ca02b664194ff3e57e1ec768fbc597bf38.1593418662.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=Opmj4uUxeQ3xM8gi/GCKlnFKXWu2kvQ3Y3KwfIa2RwM=;
+        b=YPnhfiekQWX7ypxONcOJMDmmuxbMyw2+JGXY8BcDqwOCov+tfGOH85R/BCVw/9Xaw/
+         FoPz1Kwrhlw6yNAhy4BOHUHsg+a8W8QBOCIHNkWsYFOdcHUrJAJ0kAR7Guu8TcYGxP4V
+         s79y/TdFCBVqaXCYdPop1kKTVO8yasm58SHT29m6+vRTyliipBPkBn42VeIK9QjFJumR
+         /p6E3lKFj96MVuEB0sMM1LbfnEwxO0St2qLv81xCP4NuUvlqxxR1tbA+uxH5Dw53JI9T
+         PD2m3x8XoK0dtLrXV/GNvJMWVCffUcAOoSdPFeRKFHUPPebk7QEJo/EtO12JpJ3058Dz
+         E0VA==
+X-Gm-Message-State: AOAM533kLnpRhVY5tO1NKRVCZJJ/AGMhFXnRlBgpzXQGTo45Ed5N/ZPU
+        49TpLisvzbI8ZNzkLR8ZPNw6sQ==
+X-Google-Smtp-Source: ABdhPJylw7ckn2lELoN/+/TUqPmKJiz0YUqslHSGb9pFmWdwp7Zkk3VjmDYZj3oo2b+gI8Y0OIBe2w==
+X-Received: by 2002:a1c:790c:: with SMTP id l12mr15728140wme.50.1593426695092;
+        Mon, 29 Jun 2020 03:31:35 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:a5b5:45c4:c00e:7063? ([2a01:e34:ed2f:f020:a5b5:45c4:c00e:7063])
+        by smtp.googlemail.com with ESMTPSA id m9sm6602024wml.45.2020.06.29.03.31.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Jun 2020 03:31:34 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Anson Huang <anson.huang@nxp.com>, dien.pham.ry@renesas.com,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        "michael.kao" <Michael.Kao@mediatek.com>, yangtiezhu@loongson.cn,
+        Zhang Rui <rui.zhang@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal fixes for v5.8-rc4
+Message-ID: <55cb7814-8305-23bd-873c-5a82104b1248@linaro.org>
+Date:   Mon, 29 Jun 2020 12:31:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <96b6e6ca02b664194ff3e57e1ec768fbc597bf38.1593418662.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 29 Jun 2020 at 13:55:00 (+0530), Viresh Kumar wrote:
->  static int __init cpufreq_core_init(void)
->  {
-> +	struct cpufreq_governor *gov = cpufreq_default_governor();
-> +
->  	if (cpufreq_disabled())
->  		return -ENODEV;
->  
->  	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
->  	BUG_ON(!cpufreq_global_kobject);
->  
-> +	if (!strlen(default_governor))
+The following changes since commit 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68:
 
-Should we test '!strlen(default_governor) && gov' here actually?
-We check the return value of cpufreq_default_governor() in
-cpufreq_init_policy(), so I'm guessing we should do the same here to be
-on the safe side.
+  Linux 5.8-rc3 (2020-06-28 15:00:24 -0700)
 
-> +		strncpy(default_governor, gov->name, CPUFREQ_NAME_LEN);
-> +
->  	return 0;
->  }
->  module_param(off, int, 0444);
-> +module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
->  core_initcall(cpufreq_core_init);
-> -- 
-> 2.25.0.rc1.19.g042ed3e048af
+are available in the Git repository at:
 
 
-Other than that, the whole series looks good to me.
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.8-rc4
 
-Thanks,
-Quentin
+for you to fetch changes up to 5f8f06425a0dcdad7bedbb77e67f5c65ab4dacfc:
+
+  thermal/drivers/rcar_gen3: Fix undefined temperature if negative
+(2020-06-29 12:15:34 +0200)
+
+----------------------------------------------------------------
+- Fix undefined temperature if negative on the rcar_gen3 (Dien Pham)
+
+- Fix wrong frequency converted from power for the cpufreq cooling
+  device (Finley Xiao)
+
+- Fix compilation warnings by making functions static in the tsens
+  driver (Amit Kucheria)
+
+- Fix return value of sprd_thm_probe for the Spreadtrum driver
+  (Tiezhu Yang)
+
+- Fix bank number settings on the Mediatek mt8183 (Michael Kao)
+
+- Fix missing of_node_put() at probe time i.MX (Anson Huang)
+
+----------------------------------------------------------------
+Amit Kucheria (1):
+      thermal/drivers/tsens: Fix compilation warnings by making
+functions static
+
+Anson Huang (1):
+      thermal/drivers: imx: Fix missing of_node_put() at probe time
+
+Dien Pham (1):
+      thermal/drivers/rcar_gen3: Fix undefined temperature if negative
+
+Finley Xiao (1):
+      thermal/drivers/cpufreq_cooling: Fix wrong frequency converted
+from power
+
+Michael Kao (1):
+      thermal/drivers/mediatek: Fix bank number settings on mt8183
+
+Tiezhu Yang (1):
+      thermal/drivers/sprd: Fix return value of sprd_thm_probe()
+
+ drivers/thermal/cpufreq_cooling.c   |  6 +++---
+ drivers/thermal/imx_thermal.c       |  7 ++++---
+ drivers/thermal/mtk_thermal.c       |  5 ++++-
+ drivers/thermal/qcom/tsens.c        | 10 +++++-----
+ drivers/thermal/rcar_gen3_thermal.c |  2 +-
+ drivers/thermal/sprd_thermal.c      |  4 ++--
+ 6 files changed, 19 insertions(+), 15 deletions(-)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
