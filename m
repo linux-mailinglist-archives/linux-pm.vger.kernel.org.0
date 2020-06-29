@@ -2,134 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCC420DD8C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D9C20E05C
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731304AbgF2TNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S1732705AbgF2Uph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731273AbgF2TNI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:08 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB4C08EC05
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:48:28 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id s1so16761102ljo.0
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:48:27 -0700 (PDT)
+        with ESMTP id S1731572AbgF2TN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:57 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADFFC08ED8C
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:05:02 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id o2so8680697vsr.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TMiOaRXPbBCmvsQhZQZwPQhO0CEmmeEuzVBe8QB9/bw=;
-        b=eZN+AKNqDPqkzjHlgJVXVozWvev4EslhTtOwR9F7cRMyVurHeID6ZtGHxLXI6DwfO4
-         7ZepBNV+kKuvghwEAJLJYqR2JJe+nZLD+XcBOA/kFM30hKbyI2tNhPJBgcQhCM7GckoA
-         6u9oZfZq3Eshn5GTmWpaFRpOKGYX1NjO9lxfthdgptQctcBQoUChdMjiOTV4/kekfBMi
-         b/fzY/qxRfFyBeuMo25vEm+OckxCoSE16THKHctHFWQ+0jCFSVdWqbMBJsMEWjQcECYa
-         wfb+dQ/FNlF+ZSWwP3R2CB4SST9aMucAY+EyH8zmPEQPe2DG5hShPKC5a8pNF8tOdcKy
-         z8wQ==
+        bh=O4CL5jT1tY8QD8FjAFdyHeuWe+dWBhI6iRrYPmWg+K0=;
+        b=ufgK5aOt+VEkKCf7cfv7S4ZtNXtnnmklYABTUv1VaPxOyVYlRF0W+WWMz74ZV08AGE
+         1s1vKmMq4KVk+MBoFIT07TOKURsUNbRQdevHqaQ1aWm8cwm+U1Imt2LTLVn76ZfauBCL
+         Jn8YnNOHw3ZvLP+IWIJlri1ht33n4/CzEON0vrJSMjbdw8TJtfW8X1tddfpQMfXgkCZi
+         BtT26G9ckLhBaXLHozdLJ9i2lXgOWfKOEveukc+nllrmwg/ZQ4vjc16Owk1GMoom+Uhd
+         EtZSUhps1bb5xV0fHsgJxXJI4qzTSeRxyn0KdrZYD00xOxK3NemGIoaULhoM5HjdHhpi
+         jOmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TMiOaRXPbBCmvsQhZQZwPQhO0CEmmeEuzVBe8QB9/bw=;
-        b=jluNK8WwNbwLN2cpP4oIrv6CU8ytF5P/3ruwMrVK3yHxw4O6kzxDX699Cn50XrgmxN
-         olAET7gTpTcZ6uOPvNNR4hDDsEpP9lkPHeL14vhVT4Nxfg+ASsaZGJnNOU4aNyhXzkeT
-         vx1Ne0H8TP2bLcfpbloWPHr+KSH16sEkvgJ8bJsFJqnJmc0TtgnPBr574nB+Da6rIY8o
-         x++TbPSiyOIW6J/dCowvIzbBCvzocZBbXIc+09N9n6PsjnOO6pTGYbOLQbzPjNKlpnrn
-         idSyjQKIl5PSpcDuWLSwvUHahSWFkn7wXwI9pyrLostw2cs12hTv0SntGudUiD+a0fvh
-         3P7g==
-X-Gm-Message-State: AOAM53157gmHPanfgVqUcn0FoHfgh7kWiDWkkP/tMVW/96WOb7FJjdBJ
-        z21D3M7AE+hCVrDwNvBYrrVmQwpIfETfbDZlvIJoiA==
-X-Google-Smtp-Source: ABdhPJz8Xi/8RhtlNzOxfZcCcsQ6wXqbmRLtT2FZvNHfcrfRdS7lFVKrxm6GjHGDNhqpKJg6rwrDW4am/48Bpmy6opo=
-X-Received: by 2002:a2e:9d10:: with SMTP id t16mr7294802lji.46.1593413306316;
- Sun, 28 Jun 2020 23:48:26 -0700 (PDT)
+        bh=O4CL5jT1tY8QD8FjAFdyHeuWe+dWBhI6iRrYPmWg+K0=;
+        b=aPMZTpvK3wWsubQ6XBbZhkc1ee8vJWq04XM5Izq6Wl+kqTvKu8Ayv0pCwvsUAKD8PB
+         smDshcJTcBaV0/CpCrxMd22IfH+VlPZrXN5OADWTI1V8rVZT79NNg/7m1jLWxgtnoNdQ
+         NA6/9ltG/AtpzzXvx+IW1sXJosls4iZCwKK9vhtQCAFMRWeD/tx/dlm7lqwvZJSv9HuP
+         vBOoyDUk46+k2lMPsSN6zEgzbC6Nm/DyEB3pNm0T/NoTleKKXnoU/Rk3jb2nxqMlttT0
+         CKFvxFgOEHOtsco6b2wE1Chop/+RkJZpmZrkvoak5hY31PqES9XfPsQWFX4sOeTLp/b9
+         Vrkg==
+X-Gm-Message-State: AOAM532yMRNWBMT4Tp0rIYwn83HJ9a1mAx4MrTb+VDW2btjJcZD+GQFy
+        gShnVti7ijlGOvfqgZYgmdZ23g4lXFbZS56Ep0IFyw==
+X-Google-Smtp-Source: ABdhPJwExycQo0Z3q8vxfUV0tozODXEDNYpnqbSU0LS4IbWtPA6zbYd6g3HijjZDuNICJGxZ+gh7EBDX0w/h/Xyyvro=
+X-Received: by 2002:a05:6102:203:: with SMTP id z3mr2837721vsp.182.1593414301322;
+ Mon, 29 Jun 2020 00:05:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <202006281417.GPpEXCGD%lkp@intel.com> <20200628060359.GA29916@8567a11ddfea>
-In-Reply-To: <20200628060359.GA29916@8567a11ddfea>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 29 Jun 2020 12:18:15 +0530
-Message-ID: <CAP245DVK6+if=73AtveXJO=y-J75cWZkCRzFy1G+RJ0QXokCzg@mail.gmail.com>
-Subject: Re: [RFC PATCH linus] drivers: thermal: tsens: tsens_critical_irq_thread()
- can be static
-To:     kernel test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+References: <9cbffad6-69e4-0b33-4640-fde7c4f6a6e7@linaro.org>
+ <20200626173755.26379-1-andrzej.p@collabora.com> <20200626173755.26379-7-andrzej.p@collabora.com>
+In-Reply-To: <20200626173755.26379-7-andrzej.p@collabora.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Mon, 29 Jun 2020 12:34:50 +0530
+Message-ID: <CAHLCerO2XOOX9akEwaTu_cjSqRycFpNmoVxkSe36L8B4ALWidA@mail.gmail.com>
+Subject: Re: [PATCH v5 06/11] thermal: Add mode helpers
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-A patch to fix this was already submitted on 27th May.
-
-I believe Daniel plans to send it as fixes for -rc4.
-
-Regards,
-Amit
-
-On Sun, Jun 28, 2020 at 11:34 AM kernel test robot <lkp@intel.com> wrote:
+On Fri, Jun 26, 2020 at 11:08 PM Andrzej Pietrasiewicz
+<andrzej.p@collabora.com> wrote:
 >
+> Prepare for making the drivers not access tzd's private members.
 >
-> Fixes: a7ff82976122 ("drivers: thermal: tsens: Merge tsens-common.c into tsens.c")
-> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> [EXPORT_SYMBOL -> EXPORT_SYMBOL_GPL]
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 > ---
->  tsens.c |   10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+>  drivers/thermal/thermal_core.c | 53 ++++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        | 13 +++++++++
+>  2 files changed, 66 insertions(+)
 >
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 8d3e94d2a9ed4..39c4462e38f62 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -382,7 +382,7 @@ static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
->   *
->   * Return: IRQ_HANDLED
->   */
-> -irqreturn_t tsens_critical_irq_thread(int irq, void *data)
-> +static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
->  {
->         struct tsens_priv *priv = data;
->         struct tsens_irq_data d;
-> @@ -452,7 +452,7 @@ irqreturn_t tsens_critical_irq_thread(int irq, void *data)
->   *
->   * Return: IRQ_HANDLED
->   */
-> -irqreturn_t tsens_irq_thread(int irq, void *data)
-> +static irqreturn_t tsens_irq_thread(int irq, void *data)
->  {
->         struct tsens_priv *priv = data;
->         struct tsens_irq_data d;
-> @@ -520,7 +520,7 @@ irqreturn_t tsens_irq_thread(int irq, void *data)
->         return IRQ_HANDLED;
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 14d3b1b94c4f..3181295075b9 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -459,6 +459,59 @@ static void thermal_zone_device_reset(struct thermal_zone_device *tz)
+>         thermal_zone_device_init(tz);
 >  }
 >
-> -int tsens_set_trips(void *_sensor, int low, int high)
-> +static int tsens_set_trips(void *_sensor, int low, int high)
+> +int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+> +                                enum thermal_device_mode mode)
+
+Should this be static?
+
+> +{
+> +       int ret = 0;
+> +
+> +       mutex_lock(&tz->lock);
+> +
+> +       /* do nothing if mode isn't changing */
+> +       if (mode == tz->mode) {
+> +               mutex_unlock(&tz->lock);
+> +
+> +               return ret;
+> +       }
+> +
+> +       if (tz->ops->set_mode)
+> +               ret = tz->ops->set_mode(tz, mode);
+> +
+> +       if (!ret)
+> +               tz->mode = mode;
+> +
+> +       mutex_unlock(&tz->lock);
+> +
+> +       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> +
+> +       return ret;
+> +}
+> +
+> +int thermal_zone_device_enable(struct thermal_zone_device *tz)
+> +{
+> +       return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_ENABLED);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_zone_device_enable);
+> +
+> +int thermal_zone_device_disable(struct thermal_zone_device *tz)
+> +{
+> +       return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_DISABLED);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_zone_device_disable);
+> +
+> +int thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
+> +{
+> +       enum thermal_device_mode mode;
+> +
+> +       mutex_lock(&tz->lock);
+> +
+> +       mode = tz->mode;
+> +
+> +       mutex_unlock(&tz->lock);
+> +
+> +       return mode == THERMAL_DEVICE_ENABLED;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_zone_device_is_enabled);
+> +
+>  void thermal_zone_device_update(struct thermal_zone_device *tz,
+>                                 enum thermal_notify_event event)
 >  {
->         struct tsens_sensor *s = _sensor;
->         struct tsens_priv *priv = s->priv;
-> @@ -557,7 +557,7 @@ int tsens_set_trips(void *_sensor, int low, int high)
->         return 0;
->  }
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index a808f6fa2777..df013c39ba9b 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -416,6 +416,9 @@ int thermal_zone_get_offset(struct thermal_zone_device *tz);
 >
-> -int tsens_enable_irq(struct tsens_priv *priv)
-> +static int tsens_enable_irq(struct tsens_priv *priv)
->  {
->         int ret;
->         int val = tsens_version(priv) > VER_1_X ? 7 : 1;
-> @@ -570,7 +570,7 @@ int tsens_enable_irq(struct tsens_priv *priv)
->         return ret;
->  }
+>  void thermal_cdev_update(struct thermal_cooling_device *);
+>  void thermal_notify_framework(struct thermal_zone_device *, int);
+> +int thermal_zone_device_enable(struct thermal_zone_device *tz);
+> +int thermal_zone_device_disable(struct thermal_zone_device *tz);
+> +int thermal_zone_device_is_enabled(struct thermal_zone_device *tz);
+>  #else
+>  static inline struct thermal_zone_device *thermal_zone_device_register(
+>         const char *type, int trips, int mask, void *devdata,
+> @@ -463,6 +466,16 @@ static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
+>  static inline void thermal_notify_framework(struct thermal_zone_device *tz,
+>         int trip)
+>  { }
+> +
+> +static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
+> +{ return -ENODEV; }
+> +
+> +static inline int thermal_zone_device_disable(struct thermal_zone_device *tz)
+> +{ return -ENODEV; }
+> +
+> +static inline int
+> +thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
+> +{ return -ENODEV; }
+>  #endif /* CONFIG_THERMAL */
 >
-> -void tsens_disable_irq(struct tsens_priv *priv)
-> +static void tsens_disable_irq(struct tsens_priv *priv)
->  {
->         regmap_field_write(priv->rf[INT_EN], 0);
->  }
+>  #endif /* __THERMAL_H__ */
+> --
+> 2.17.1
+>
