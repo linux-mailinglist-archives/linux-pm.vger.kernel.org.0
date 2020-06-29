@@ -2,93 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D8620D71D
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F03E20DAFC
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729535AbgF2T1J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:27:09 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:27190 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732299AbgF2T1G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:27:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1593458825;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ULeTr0SB55lWnRLDf1wo07nelEQfKeugCaPGmgEHj60=;
-        b=iF0bpywfWzf8RTRacdQLshD4hN/fw13VX8Vqbn8g0UaeFjaBLOSSbYi1MQQ237M7xfGIBs
-        S9J07UlNrOdJiWrAT7aics8y/7MDD+gelEWWAagwn8Yv8Nk3GFqAg2gFy4rmnYhAho9wBi
-        7Wxi+xbwi7QJwRctru4M6in1T4n3OZY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-18-5TlJu8U2Nl6yNclv8OYdGQ-1; Mon, 29 Jun 2020 15:27:00 -0400
-X-MC-Unique: 5TlJu8U2Nl6yNclv8OYdGQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6FFDBA0C01;
-        Mon, 29 Jun 2020 19:26:59 +0000 (UTC)
-Received: from prarit.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EC68C19C71;
-        Mon, 29 Jun 2020 19:26:58 +0000 (UTC)
-From:   Prarit Bhargava <prarit@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Prarit Bhargava <prarit@redhat.com>, Len Brown <lenb@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] turbostat: Use sched_getcpu() instead of hardcoded cpu 0
-Date:   Mon, 29 Jun 2020 15:26:57 -0400
-Message-Id: <20200629192657.34045-1-prarit@redhat.com>
+        id S1732708AbgF2UCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:02:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387655AbgF2UC1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 16:02:27 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C4EC03E979
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 13:02:26 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id w17so8751432otl.4
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 13:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w8kvw01QtTGGnsYhL3inZ/4k+CD9olJ2CUCa3W61+0s=;
+        b=h1L1Z7dCrx47MCg268EgH0SJuOWCGNJVYK3LrZsWGdpQSI8cXVvV77KMlhMRwkXl+5
+         5h1ZObJbPaMgUG071GI4uGPvN/JpsOIq1j302pkxd768GBERzyTzZYqMyV0ncuu27CI3
+         uSwpLhh/RwPv04MiUhVNRC07ZflqVrx0sZYNU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w8kvw01QtTGGnsYhL3inZ/4k+CD9olJ2CUCa3W61+0s=;
+        b=UXs6MKuw+ub6WT5Hvqu1udPuE0DabdfroS6Mb+aOKy1pYiAA3VK42TyUnZkihnhfKu
+         +ZFxqjcrjXmzz0D7Kd2Yq2SWyVst70Du8zETaq5EhEy6PYZ3ZWTLzHcD4ZXzr0pTfkeM
+         lRTubpARzPHD1Liv1m5h6tZlLQIQkqfisD06LgGm2+LQQJCbxlLm+gwezumywnsegTB/
+         S4yk7jfMG4/1dIP1CwnI62j9Ew7PiFhMZd3skOM8WHN7zu+te2E7t2y+LRrcd+kDnySQ
+         Q/b22ROCE08nNOHNhAIfVAHPIsZqpGAkFUHp2DXBjsiWPVn7ij335ZiK4exzu/tZZ61V
+         0ssA==
+X-Gm-Message-State: AOAM5335PUWFY0mIFjsr6QDFgnG6yAJC7FuieFQHIMxKyHgbYtpQMOJk
+        k265J2GqW6dlq+Fo5c45jvlXmQ==
+X-Google-Smtp-Source: ABdhPJy2ZGQSMxPZ9QL1oqxm59wX+vcuGd8XulqX+fkUvR7Vkg2vUHQVJYME6VOTN++A2JPcd7OKJg==
+X-Received: by 2002:a9d:4810:: with SMTP id c16mr2708947otf.197.1593460946248;
+        Mon, 29 Jun 2020 13:02:26 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id p73sm213895oop.36.2020.06.29.13.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 13:02:25 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     trenn@suse.com, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpupower: Fix comparing pointer to 0 coccicheck warns
+Date:   Mon, 29 Jun 2020 14:02:22 -0600
+Message-Id: <20200629200223.27322-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Disabling cpu 0 results in an error
+Fix cocciccheck wanrns found by:
+make coccicheck MODE=report M=tools/power/cpupower/
 
-turbostat: /sys/devices/system/cpu/cpu0/topology/thread_siblings: open failed: No such file or directory
+tools/power/cpupower/utils/helpers/bitmask.c:29:12-13: WARNING comparing pointer to 0, suggest !E
+tools/power/cpupower/utils/helpers/bitmask.c:29:12-13: WARNING comparing pointer to 0
+tools/power/cpupower/utils/helpers/bitmask.c:43:12-13: WARNING comparing pointer to 0
 
-Use sched_getcpu() instead of a hardcoded cpu 0 to get the max cpu number.
-
-Signed-off-by: Prarit Bhargava <prarit@redhat.com>
-Cc: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/power/x86/turbostat/turbostat.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+ tools/power/cpupower/utils/helpers/bitmask.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 33b370865d16..2d3a3012f2f8 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2769,12 +2769,19 @@ void re_initialize(void)
- void set_max_cpu_num(void)
- {
- 	FILE *filep;
-+	int base_cpu;
- 	unsigned long dummy;
-+	char pathname[64];
+diff --git a/tools/power/cpupower/utils/helpers/bitmask.c b/tools/power/cpupower/utils/helpers/bitmask.c
+index 6c7932f5bd66..649d87cb8b0f 100644
+--- a/tools/power/cpupower/utils/helpers/bitmask.c
++++ b/tools/power/cpupower/utils/helpers/bitmask.c
+@@ -26,11 +26,11 @@ struct bitmask *bitmask_alloc(unsigned int n)
+ 	struct bitmask *bmp;
  
-+	base_cpu = sched_getcpu();
-+	if (base_cpu < 0)
-+		err(1, "cannot find calling cpu ID");
-+	sprintf(pathname,
-+		"/sys/devices/system/cpu/cpu%d/topology/thread_siblings",
-+		base_cpu);
-+
-+	filep = fopen_or_die(pathname, "r");
- 	topo.max_cpu_num = 0;
--	filep = fopen_or_die(
--			"/sys/devices/system/cpu/cpu0/topology/thread_siblings",
--			"r");
- 	while (fscanf(filep, "%lx,", &dummy) == 1)
- 		topo.max_cpu_num += BITMASK_SIZE;
- 	fclose(filep);
+ 	bmp = malloc(sizeof(*bmp));
+-	if (bmp == 0)
++	if (!bmp)
+ 		return 0;
+ 	bmp->size = n;
+ 	bmp->maskp = calloc(longsperbits(n), sizeof(unsigned long));
+-	if (bmp->maskp == 0) {
++	if (!bmp->maskp) {
+ 		free(bmp);
+ 		return 0;
+ 	}
+@@ -40,7 +40,7 @@ struct bitmask *bitmask_alloc(unsigned int n)
+ /* Free `struct bitmask` */
+ void bitmask_free(struct bitmask *bmp)
+ {
+-	if (bmp == 0)
++	if (!bmp)
+ 		return;
+ 	free(bmp->maskp);
+ 	bmp->maskp = (unsigned long *)0xdeadcdef;  /* double free tripwire */
 -- 
-2.21.3
+2.25.1
 
