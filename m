@@ -2,111 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3070D20D345
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBCEA20D53C
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgF2S5d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 14:57:33 -0400
-Received: from mga05.intel.com ([192.55.52.43]:57272 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728942AbgF2S52 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:57:28 -0400
-IronPort-SDR: YicFCowbxuoQM4Gw4wwtqvmk5B9wNcA7wZ7hVFiNtpGavry5L/SEb7f68WuXkhszTB7jLyh4fa
- co4UDkPQjvfA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="230725847"
-X-IronPort-AV: E=Sophos;i="5.75,294,1589266800"; 
-   d="scan'208";a="230725847"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2020 22:34:57 -0700
-IronPort-SDR: nKb8wG9RWla5JJT3JADlZfStBphHCrokT3cd2SE9MXtJwU7d+r9MrbeDaputaYyzY1SWR1ZVp9
- tRt4gIOfc39A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,294,1589266800"; 
-   d="scan'208";a="480662173"
-Received: from jielin1-mobl.ccr.corp.intel.com (HELO rzhang1-mobile.ccr.corp.intel.com) ([10.249.173.170])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2020 22:34:54 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net
-Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH] powercap/intel_rapl: add support for Sapphire Rapids
-Date:   Mon, 29 Jun 2020 13:34:50 +0800
-Message-Id: <20200629053450.12392-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S1731854AbgF2TPx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731742AbgF2TOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:14:22 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F298CC08EACA
+        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id e18so7821279pgn.7
+        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4irVPvy6SLfIHJxFGOTl27eLkGNjnPf7i0OL+P/LA5k=;
+        b=gvy6L2gNxq9EwuQLge3KvNqHHwK00gDANooUZvO4v6O5WkSzyTrdIQh/0aKfX2EltN
+         BC+F/sMOwIeTzytYh6C+biD3Z0k6ukqbdDxfzaddghnTjVpA5NWIn66UJGhUQht65PyZ
+         UeQC58uEadA2EDA5nxAwZTOmY1XiiRXMAqh4qZqk5F0ktgOQ4Giv/rDvhNJX+IvYgcRF
+         uyUIijuxIyKFEY98uEPgkKkWVz1lx7Yn194BvXvE9VqaqfoT3h524c71kZLvLyv0Y3xD
+         Y9evO5z8oHOrC+f8Jlfh91dni7AyjZR5XVxyL1Ss6Xooxx2IhT7B1txyR0AIA+/7u5mi
+         FGzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4irVPvy6SLfIHJxFGOTl27eLkGNjnPf7i0OL+P/LA5k=;
+        b=s3R3JiDc+KyWd/aLhxl/kCyzF2pDPYescUqdlTtNxztA7qn0YrkWLvJyLE9RNJCKuo
+         tZqTVc3z6o64cyPHYHw9lYGZF5sSAFMMDBhuN6tOdsHD1NEgyuWBi2x0OCbppa20KaO7
+         Wm65WnagzXAnNVhqvMg6whufcrhSWBxRm64kkACceJ2B9kwTJidDu8e04+UM2TzJR35a
+         WzaHhlAekAphWEmqg3T7Pamh/U2k15OSNeiU6IYOz+oi1SuluZ4fdsbA7vGdzhb7STMR
+         T7tvX54M1zaJR2mqg2f3SKM4d0gloD26SCx8/p6hcIppm7zLlYCM/j2plxy0csp8ZBLu
+         RAGg==
+X-Gm-Message-State: AOAM530dpEobGQ5bRkYmGamkAbmVv84jtYm8D9V1Gc4QbKWI8tLP7+CR
+        GqBegadoTDz9XcY/NpN9phfzOQ==
+X-Google-Smtp-Source: ABdhPJyWU8GRq0w0MyNAiW2bszj3RcxuYIa7V3PZhOEGRHvN2Ts53LH/NqZxHeCX7T8Kw8KhW0DfLg==
+X-Received: by 2002:a63:182:: with SMTP id 124mr8482105pgb.288.1593411402221;
+        Sun, 28 Jun 2020 23:16:42 -0700 (PDT)
+Received: from localhost ([122.172.127.76])
+        by smtp.gmail.com with ESMTPSA id m20sm34111505pfk.52.2020.06.28.23.16.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 28 Jun 2020 23:16:41 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 11:46:39 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
+        thierry.reding@gmail.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, jonathanh@nvidia.com, talho@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        bbasu@nvidia.com, mperttunen@nvidia.com
+Subject: Re: [TEGRA194_CPUFREQ PATCH v4 3/4] cpufreq: Add Tegra194 cpufreq
+ driver
+Message-ID: <20200629061639.7cwxfi64drkof6yu@vireshk-i7>
+References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
+ <1593186236-12760-4-git-send-email-sumitg@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1593186236-12760-4-git-send-email-sumitg@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RAPL on SPR behaves similar to HSW server, except that SPR uses a fixed
-energy unit (1 Joule) for the PSYS RAPL domain.
+On 26-06-20, 21:13, Sumit Gupta wrote:
+> +static int tegra194_cpufreq_probe(struct platform_device *pdev)
+> +{
+> +	struct tegra194_cpufreq_data *data;
+> +	struct tegra_bpmp *bpmp;
+> +	int err, i;
+> +
+> +	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
+> +	if (!data)
+> +		return -ENOMEM;
+> +
+> +	data->num_clusters = MAX_CLUSTERS;
+> +	data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
+> +				    sizeof(*data->tables), GFP_KERNEL);
+> +	if (!data->tables)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, data);
+> +
+> +	bpmp = tegra_bpmp_get(&pdev->dev);
+> +	if (IS_ERR(bpmp))
+> +		return PTR_ERR(bpmp);
+> +
+> +	read_counters_wq = alloc_workqueue("read_counters_wq", __WQ_LEGACY, 1);
+> +	if (!read_counters_wq) {
+> +		dev_err(&pdev->dev, "fail to create_workqueue\n");
+> +		err = -EINVAL;
+> +		goto put_bpmp;
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/powercap/intel_rapl_common.c | 23 ++++++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+This will call destroy_workqueue() eventually and it will crash your
+kernel.
 
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 61a63a16b5e7..b739ce4f390d 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -93,6 +93,7 @@ struct rapl_defaults {
- 	u64 (*compute_time_window)(struct rapl_package *rp, u64 val,
- 				    bool to_raw);
- 	unsigned int dram_domain_energy_unit;
-+	unsigned int psys_domain_energy_unit;
- };
- static struct rapl_defaults *rapl_defaults;
- 
-@@ -533,12 +534,23 @@ static void rapl_init_domains(struct rapl_package *rp)
- 		for (j = 0; j < RAPL_DOMAIN_REG_MAX; j++)
- 			rd->regs[j] = rp->priv->regs[i][j];
- 
--		if (i == RAPL_DOMAIN_DRAM) {
-+		switch (i) {
-+		case RAPL_DOMAIN_DRAM:
- 			rd->domain_energy_unit =
- 			    rapl_defaults->dram_domain_energy_unit;
- 			if (rd->domain_energy_unit)
- 				pr_info("DRAM domain energy unit %dpj\n",
- 					rd->domain_energy_unit);
-+			break;
-+		case RAPL_DOMAIN_PLATFORM:
-+			rd->domain_energy_unit =
-+			    rapl_defaults->psys_domain_energy_unit;
-+			if (rd->domain_energy_unit)
-+				pr_info("Platform domain energy unit %dpj\n",
-+					rd->domain_energy_unit);
-+			break;
-+		default:
-+			break;
- 		}
- 		rd++;
- 	}
-@@ -919,6 +931,14 @@ static const struct rapl_defaults rapl_defaults_hsw_server = {
- 	.dram_domain_energy_unit = 15300,
- };
- 
-+static const struct rapl_defaults rapl_defaults_spr_server = {
-+	.check_unit = rapl_check_unit_core,
-+	.set_floor_freq = set_floor_freq_default,
-+	.compute_time_window = rapl_compute_time_window_core,
-+	.dram_domain_energy_unit = 15300,
-+	.psys_domain_energy_unit = 1000000000,
-+};
-+
- static const struct rapl_defaults rapl_defaults_byt = {
- 	.floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_BYT,
- 	.check_unit = rapl_check_unit_atom,
-@@ -978,6 +998,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
- 	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,		&rapl_defaults_core),
- 	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,		&rapl_defaults_core),
- 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		&rapl_defaults_core),
-+	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
- 
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,	&rapl_defaults_byt),
- 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,	&rapl_defaults_cht),
+Apart from this, this stuff looks okay. Don't resend the patch just
+yet (and if required, send only this patch using --in-reply-to flag
+for git send email). Lets wait for an Ack from Rob for the first two
+patches.
+
+> +	}
+> +
+
 -- 
-2.17.1
-
+viresh
