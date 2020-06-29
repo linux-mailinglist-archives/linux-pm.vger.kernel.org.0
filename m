@@ -2,71 +2,259 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CF420D718
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807C120D64F
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 22:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730244AbgF2T0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:26:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:40108 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732409AbgF2TYz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jun 2020 15:24:55 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 24A5B13D5;
-        Mon, 29 Jun 2020 04:05:38 -0700 (PDT)
-Received: from [10.37.12.67] (unknown [10.37.12.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A02103F73C;
-        Mon, 29 Jun 2020 04:05:34 -0700 (PDT)
-Subject: Re: [PATCH v2 1/4] ARM: exynos: MCPM: Restore big.LITTLE cpuidle
- support
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
+        id S1732035AbgF2TS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731759AbgF2TOU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:14:20 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BE6C0085D5;
+        Mon, 29 Jun 2020 04:16:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 9391127D8DE
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <20200629091343.GA16015@kozik-lap>
- <CGME20200629100230eucas1p1bf07ca4c84ba6be1fbdd80c45d077518@eucas1p1.samsung.com>
- <20200629100218.6267-1-m.szyprowski@samsung.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <1be67c26-57c2-c32d-4e32-e8389094bb59@arm.com>
-Date:   Mon, 29 Jun 2020 12:05:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20200629100218.6267-1-m.szyprowski@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v6 02/11] thermal: Store thermal mode in a dedicated enum
+Date:   Mon, 29 Jun 2020 13:16:06 +0200
+Message-Id: <20200629111615.18131-3-andrzej.p@collabora.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200629111615.18131-1-andrzej.p@collabora.com>
+References: <CAHLCerO2XOOX9akEwaTu_cjSqRycFpNmoVxkSe36L8B4ALWidA@mail.gmail.com>
+ <20200629111615.18131-1-andrzej.p@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Prepare for storing mode in struct thermal_zone_device.
 
+Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+[for acerhdf]
+Acked-by: Peter Kaestle <peter@piie.net>
+Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+---
+ drivers/acpi/thermal.c                        | 27 +++++++++----------
+ drivers/platform/x86/acerhdf.c                |  8 ++++--
+ .../intel/int340x_thermal/int3400_thermal.c   | 18 +++++--------
+ 3 files changed, 25 insertions(+), 28 deletions(-)
 
-On 6/29/20 11:02 AM, Marek Szyprowski wrote:
-> Call exynos_cpu_power_up(cpunr) unconditionally. This is needed by the
-> big.LITTLE cpuidle driver and has no side-effects on other code paths.
-> 
-> The additional soft-reset call during little core power up has been added
-> to properly boot all cores on the Exynos5422-based boards with secure
-> firmware (like Odroid XU3/XU4 family). This however broke big.LITTLE
-> CPUidle driver, which worked only on boards without secure firmware (like
-> Peach-Pit/Pi Chromebooks). Apply the workaround only when board is
-> running under secure firmware.
-> 
-> Fixes: 833b5794e330 ("ARM: EXYNOS: reset Little cores when cpu is up")
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
-> v2:
-> - adjusted patch subject to better describe the change
-> - added a comment about exynos_cpu_power_up(cpunr) call
-> ---
+diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+index 6de8066ca1e7..fb46070c66d8 100644
+--- a/drivers/acpi/thermal.c
++++ b/drivers/acpi/thermal.c
+@@ -172,7 +172,7 @@ struct acpi_thermal {
+ 	struct acpi_thermal_trips trips;
+ 	struct acpi_handle_list devices;
+ 	struct thermal_zone_device *thermal_zone;
+-	int tz_enabled;
++	enum thermal_device_mode mode;
+ 	int kelvin_offset;	/* in millidegrees */
+ 	struct work_struct thermal_check_work;
+ };
+@@ -500,7 +500,7 @@ static void acpi_thermal_check(void *data)
+ {
+ 	struct acpi_thermal *tz = data;
+ 
+-	if (!tz->tz_enabled)
++	if (tz->mode != THERMAL_DEVICE_ENABLED)
+ 		return;
+ 
+ 	thermal_zone_device_update(tz->thermal_zone,
+@@ -534,8 +534,7 @@ static int thermal_get_mode(struct thermal_zone_device *thermal,
+ 	if (!tz)
+ 		return -EINVAL;
+ 
+-	*mode = tz->tz_enabled ? THERMAL_DEVICE_ENABLED :
+-		THERMAL_DEVICE_DISABLED;
++	*mode = tz->mode;
+ 
+ 	return 0;
+ }
+@@ -544,27 +543,25 @@ static int thermal_set_mode(struct thermal_zone_device *thermal,
+ 				enum thermal_device_mode mode)
+ {
+ 	struct acpi_thermal *tz = thermal->devdata;
+-	int enable;
+ 
+ 	if (!tz)
+ 		return -EINVAL;
+ 
++	if (mode != THERMAL_DEVICE_DISABLED &&
++	    mode != THERMAL_DEVICE_ENABLED)
++		return -EINVAL;
+ 	/*
+ 	 * enable/disable thermal management from ACPI thermal driver
+ 	 */
+-	if (mode == THERMAL_DEVICE_ENABLED)
+-		enable = 1;
+-	else if (mode == THERMAL_DEVICE_DISABLED) {
+-		enable = 0;
++	if (mode == THERMAL_DEVICE_DISABLED)
+ 		pr_warn("thermal zone will be disabled\n");
+-	} else
+-		return -EINVAL;
+ 
+-	if (enable != tz->tz_enabled) {
+-		tz->tz_enabled = enable;
++	if (mode != tz->mode) {
++		tz->mode = mode;
+ 		ACPI_DEBUG_PRINT((ACPI_DB_INFO,
+ 			"%s kernel ACPI thermal control\n",
+-			tz->tz_enabled ? "Enable" : "Disable"));
++			tz->mode == THERMAL_DEVICE_ENABLED ?
++			"Enable" : "Disable"));
+ 		acpi_thermal_check(tz);
+ 	}
+ 	return 0;
+@@ -915,7 +912,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+ 		goto remove_dev_link;
+ 	}
+ 
+-	tz->tz_enabled = 1;
++	tz->mode = THERMAL_DEVICE_ENABLED;
+ 
+ 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+ 		 tz->thermal_zone->id);
+diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+index 4df7609b4aa9..9d1030b1a4f4 100644
+--- a/drivers/platform/x86/acerhdf.c
++++ b/drivers/platform/x86/acerhdf.c
+@@ -68,6 +68,7 @@ static int kernelmode = 1;
+ #else
+ static int kernelmode;
+ #endif
++static enum thermal_device_mode thermal_mode;
+ 
+ static unsigned int interval = 10;
+ static unsigned int fanon = 60000;
+@@ -397,6 +398,7 @@ static inline void acerhdf_revert_to_bios_mode(void)
+ {
+ 	acerhdf_change_fanstate(ACERHDF_FAN_AUTO);
+ 	kernelmode = 0;
++	thermal_mode = THERMAL_DEVICE_DISABLED;
+ 	if (thz_dev)
+ 		thz_dev->polling_delay = 0;
+ 	pr_notice("kernel mode fan control OFF\n");
+@@ -404,6 +406,7 @@ static inline void acerhdf_revert_to_bios_mode(void)
+ static inline void acerhdf_enable_kernelmode(void)
+ {
+ 	kernelmode = 1;
++	thermal_mode = THERMAL_DEVICE_ENABLED;
+ 
+ 	thz_dev->polling_delay = interval*1000;
+ 	thermal_zone_device_update(thz_dev, THERMAL_EVENT_UNSPECIFIED);
+@@ -416,8 +419,7 @@ static int acerhdf_get_mode(struct thermal_zone_device *thermal,
+ 	if (verbose)
+ 		pr_notice("kernel mode fan control %d\n", kernelmode);
+ 
+-	*mode = (kernelmode) ? THERMAL_DEVICE_ENABLED
+-			     : THERMAL_DEVICE_DISABLED;
++	*mode = thermal_mode;
+ 
+ 	return 0;
+ }
+@@ -739,6 +741,8 @@ static int __init acerhdf_register_thermal(void)
+ 	if (IS_ERR(cl_dev))
+ 		return -EINVAL;
+ 
++	thermal_mode = kernelmode ?
++		THERMAL_DEVICE_ENABLED : THERMAL_DEVICE_DISABLED;
+ 	thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
+ 					      &acerhdf_dev_ops,
+ 					      &acerhdf_zone_params, 0,
+diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+index 0b3a62655843..e84faaadff87 100644
+--- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
++++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+@@ -48,7 +48,7 @@ struct int3400_thermal_priv {
+ 	struct acpi_device *adev;
+ 	struct platform_device *pdev;
+ 	struct thermal_zone_device *thermal;
+-	int mode;
++	enum thermal_device_mode mode;
+ 	int art_count;
+ 	struct art *arts;
+ 	int trt_count;
+@@ -395,24 +395,20 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
+ 				enum thermal_device_mode mode)
+ {
+ 	struct int3400_thermal_priv *priv = thermal->devdata;
+-	bool enable;
+ 	int result = 0;
+ 
+ 	if (!priv)
+ 		return -EINVAL;
+ 
+-	if (mode == THERMAL_DEVICE_ENABLED)
+-		enable = true;
+-	else if (mode == THERMAL_DEVICE_DISABLED)
+-		enable = false;
+-	else
++	if (mode != THERMAL_DEVICE_ENABLED &&
++	    mode != THERMAL_DEVICE_DISABLED)
+ 		return -EINVAL;
+ 
+-	if (enable != priv->mode) {
+-		priv->mode = enable;
++	if (mode != priv->mode) {
++		priv->mode = mode;
+ 		result = int3400_thermal_run_osc(priv->adev->handle,
+-						 priv->current_uuid_index,
+-						 enable);
++						priv->current_uuid_index,
++						mode == THERMAL_DEVICE_ENABLED);
+ 	}
+ 
+ 	evaluate_odvp(priv);
+-- 
+2.17.1
 
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-
-Regards,
-Lukasz
