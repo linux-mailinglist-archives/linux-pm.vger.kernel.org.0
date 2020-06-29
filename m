@@ -2,98 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F3320E86B
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E958120E8BF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 01:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391913AbgF2WGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 18:06:41 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:40152 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404852AbgF2WGj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 18:06:39 -0400
-Received: by mail-io1-f65.google.com with SMTP id q8so18891303iow.7;
-        Mon, 29 Jun 2020 15:06:38 -0700 (PDT)
+        id S1726974AbgF2W0k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 18:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726956AbgF2W0j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 18:26:39 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09794C061755;
+        Mon, 29 Jun 2020 15:26:39 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id g2so10146078lfb.0;
+        Mon, 29 Jun 2020 15:26:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cP4sHdE6sVU4pAKA0exheCdKvDd6a6G7XmSgVWtBEvc=;
+        b=PzOv3n9Gm5zmFnKCTSTUyKIYFXig6ahMHvW0EniFX7RW08ZtlI4/bI3fd+Kx4hZH9O
+         OOjsRDkX+vZbVDPHYpcF26s6FzHOi5P/6Kdv3fufLA10Agt9o1sCW83RK/OFwNDzDgnV
+         o6+ZrDhxUvzIDzqTPnMtqE6lgZ7qd19KvkwPLhUd5sSjKaES7I2JppBLPZkM143gnmGI
+         B/nVeJPSM+af412HiidnzsyLr8UQtyiQyFEmSp864fyM9JLDJ8K/3P+iEJxuchJxDgtr
+         M2rz/Ft0OLlGr29VWq0wyDOWqFcq9SvKrSJaf0H4lDwgyoy6RBxkiSBv2vQIop4osUx5
+         ypaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d7i/LtCWxvjcrkXKayf7wJy9l1xOiA2SNi/swky4zLs=;
-        b=qLdJXcPscwc3PFY50yegWdAsLBHC54GiL4gYXMR3cLhKfeE3Qc4tzIKGsyz/QutbkW
-         dNFNivu56Q9rxEcbHgc6nt7Ux9uxtTPEgSbkkK2VaLArJUTSPLPfOhjQvFqNXhEGsONp
-         HfF1/16rL3djkFNZIkWNL//zR0Ve5ogJUcR5mW/cp6UOajRLAQcpAODLTWpdHJptoBVL
-         LBBWcvW8YyxiMfdAlWVxig9cWw7vxrNdjS2LpMOP969UKZLN3VTaduq5qoJzzelrnD5V
-         yDIK+ZWMemU8w/3LmJL4WJI8dfK8Vpq3c0IiHyaGamLZzf32CN0tUBCFDJyGszPasPcE
-         8HXw==
-X-Gm-Message-State: AOAM5310p9e0Oi5sOfZduAQx7NXmtg+f0oMJCFh4x9/0jSfeaaR0+oWg
-        i+CdgQSAe1IZS3VvIj+Fgw==
-X-Google-Smtp-Source: ABdhPJzu7iHEmXhdSieXnQBr0DvEvJgrCjdJBUPurQFawvCOFA7nufQByGRhQUQtaAcZ36ucGFZwCw==
-X-Received: by 2002:a6b:5b14:: with SMTP id v20mr19143451ioh.182.1593468398381;
-        Mon, 29 Jun 2020 15:06:38 -0700 (PDT)
-Received: from xps15 ([64.188.179.255])
-        by smtp.gmail.com with ESMTPSA id t11sm627471ils.3.2020.06.29.15.06.37
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=cP4sHdE6sVU4pAKA0exheCdKvDd6a6G7XmSgVWtBEvc=;
+        b=eIPEvJExXMDSyGMf4yA8Fer2uiYyb8orWymY+1axEx/BJpyjt0+xAB5cmWD1hEq/P4
+         SU4KsiW2vOCoCWBDREbm8G5RaCsokMVaBMtHiryU/iMr4CLyzKeyoj6UhWktWzk+leTX
+         wRqiO3uxLe4ZeVPSiTAqxH9BfW828eO71yzat53vZGFxcxgHNHiLIyPj94NwIBvdwpEi
+         v84NHfPmkvPMgCabBYQPpK4LzBYyaBGNxJ0oHdMJEhXKbPG4MJyywlK/VZkMaH8IY5+a
+         v7IPqPEqTvTYeDeOiXpQ0z1HWUyiQj6SVRNxpcBr/UAU6AsS9DyfZ4KyBHmT/GCrT0ek
+         12sg==
+X-Gm-Message-State: AOAM531Ay2FX52Z9gh5zJey94kuyo8Ulr3HdY3UbE25zv7439EUYMYda
+        CJ5LvB9hO7Yb1ChhY2Pg/DY=
+X-Google-Smtp-Source: ABdhPJyHSgWGq7dLLjGmmpq05cDht4MErm/JFYc9yuMAz773WGNp6QbxwwEY/aAyrCXd0P0fcp/lOw==
+X-Received: by 2002:a05:6512:110e:: with SMTP id l14mr9720085lfg.25.1593469596449;
+        Mon, 29 Jun 2020 15:26:36 -0700 (PDT)
+Received: from localhost.localdomain (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
+        by smtp.gmail.com with ESMTPSA id 25sm222649ljh.139.2020.06.29.15.26.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 15:06:37 -0700 (PDT)
-Received: (nullmailer pid 3025233 invoked by uid 1000);
-        Mon, 29 Jun 2020 22:06:36 -0000
-Date:   Mon, 29 Jun 2020 16:06:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        catalin.marinas@arm.com, mperttunen@nvidia.com,
-        jonathanh@nvidia.com, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org, will@kernel.org,
-        talho@nvidia.com, linux-arm-kernel@lists.infradead.org,
-        thierry.reding@gmail.com, bbasu@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ PATCH v4 1/4] dt-bindings: arm: Add t194
- ccplex compatible and bpmp property
-Message-ID: <20200629220636.GA3022986@bogus>
-References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
- <1593186236-12760-2-git-send-email-sumitg@nvidia.com>
+        Mon, 29 Jun 2020 15:26:35 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v1] cpuidle: tegra: Correctly handle result of arm_cpuidle_simple_enter()
+Date:   Tue, 30 Jun 2020 01:26:25 +0300
+Message-Id: <20200629222625.674-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1593186236-12760-2-git-send-email-sumitg@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 26 Jun 2020 21:13:53 +0530, Sumit Gupta wrote:
-> To do frequency scaling on all CPUs within T194 CPU Complex, we need
-> to query BPMP for data on valid operating points. Document a compatible
-> string under 'cpus' node to represent the CPU Complex for binding drivers
-> like cpufreq which don't have their node or CPU Complex node to bind to.
-> Also, document a property to point to the BPMP device that can be queried
-> for all CPUs.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  Documentation/devicetree/bindings/arm/cpus.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
+The arm_cpuidle_simple_enter() returns the entered idle-index and not a
+error code. It happened that TEGRA_C1=index=err=0, and hence this typo
+was difficult to notice in the code since everything happened to work
+properly. This patch fixes the minor typo, it doesn't fix any problem.
 
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/cpuidle/cpuidle-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: Additional properties are not allowed ('descrption' was unexpected)
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: 'descrption' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: {'$ref': '/schemas/types.yaml#/definitions/phandle', 'descrption': 'Specifies the bpmp node that needs to be queried to get\noperating point data for all CPUs.\n\nOptional for NVIDIA Tegra194 Carmel CPUs\n'} is not valid under any of the given schemas (Possible causes of the failure):
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: 'description' is a required property
-
-Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/arm/cpus.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/arm/cpus.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-Makefile:1347: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
-
-
-See https://patchwork.ozlabs.org/patch/1317775
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+index 150045849d78..9e9a9cccd755 100644
+--- a/drivers/cpuidle/cpuidle-tegra.c
++++ b/drivers/cpuidle/cpuidle-tegra.c
+@@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+ 			       int index)
+ {
+ 	unsigned int cpu = cpu_logical_map(dev->cpu);
+-	int err;
++	int err = 0;
+ 
+ 	index = tegra_cpuidle_adjust_state_index(index, cpu);
+ 	if (dev->states_usage[index].disable)
+ 		return -1;
+ 
+ 	if (index == TEGRA_C1)
+-		err = arm_cpuidle_simple_enter(dev, drv, index);
++		index = arm_cpuidle_simple_enter(dev, drv, index);
+ 	else
+ 		err = tegra_cpuidle_state_enter(dev, index, cpu);
+ 
+-- 
+2.26.0
 
