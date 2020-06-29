@@ -2,263 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCCB20E629
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7E620E438
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404044AbgF2Voy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 17:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727803AbgF2Shp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 14:37:45 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943DEC00F83D
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 05:49:02 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id g14so5256892ual.11
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 05:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/czzbe3TtUcJIflJ99q2lIskXBgVNXfpcq83W982SW4=;
-        b=WeSAP/a5lZp6nQMEdDIM8axmsEfnvdtP2chd3VGBSckQwa2U21YukiLtyPPobyXRuz
-         qYvGnoJy2SUKgfnYrOr3jRhoupwpMs3QX+xGwrqTeAtGDEL8iTdjC6PN+tFU5iplVnnH
-         3ucRfvHL7WjJ+gtGhev0U+/hV5HrD3ymzqRKeQrv4+5ImAO6zhR9vLGZVRJQqMfrVxZw
-         uToRn6fmJ1MVQd0H0L4UGrVpsm529MFKG1jOf/g8cOtAWlx/5fXAYzhwDiBp5fWyHkNG
-         fKlGAU5e05jHLGweiiNV7g/5A5MRWrfBh7NP6PF2Tq8mI41CfWsoaTZ3omYxPZGLOXHS
-         jCbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/czzbe3TtUcJIflJ99q2lIskXBgVNXfpcq83W982SW4=;
-        b=DDtanETpktr6IC5sW7uZIfarsquDy+dscVocteclhQf3LgCvam1rG4uNJ1zFfIUCk0
-         3PhvpvZ2RW1toscv6vzkNyBazF1I1rTPN0aUnhMjj7RE3iwXjG6S17irc2Y+omPGLt0e
-         m7+68SteLxA8enD0yStPNnkqLnLnHekxLpY/s4ORCuWcpl3edyLI2eNlnKpQYnTN8M7C
-         41GNXmIojf4oHcKiajZX9h3XUbY2yznIXeLkQ9aCXWv2AtqHnO8VsQhfH2ZWiQV2GIPd
-         O5LUPhF0egUfmDMcKhGajiIaiu5JLXMM7GKvq1sd3rke6Wbg3EHJsKOYrB4FdAqkVNGJ
-         28GQ==
-X-Gm-Message-State: AOAM531SE2p2iNunqgJMD7ebERq8vGfCoVQWJm5Au4mquz6r3+N3ZcWG
-        Gdsk9Y1umHa56CLt7TckCqe42Fl7sB3n+xlkYFPFjg==
-X-Google-Smtp-Source: ABdhPJykO05gG5Bb+nA0Vnr/X3v2J1XSrulYz3voXHdt/RxIAbgJ9ID8IoL5WSwYX4Qy51z7VQCupXXNmThb4Z9Upd0=
-X-Received: by 2002:ab0:232:: with SMTP id 47mr10473617uas.48.1593434941649;
- Mon, 29 Jun 2020 05:49:01 -0700 (PDT)
+        id S2387824AbgF2VWp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 17:22:45 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:58681 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729596AbgF2Sv1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 14:51:27 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 805C058035E;
+        Mon, 29 Jun 2020 11:07:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 29 Jun 2020 11:07:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=WE1PSDJ6UR5jIFS55riBxt9LPeJ
+        Xh4U7NigTPnNX65A=; b=l8oEpc8ou0b31MaSG3xJyMa7ni1mk3WLjAf0+QKHhjs
+        AVpZBfZIOMlIwpRfzUZ14GCy22hl/ny7wF6EPd/RmE10onf4Ip8tNfeqRwOPe/KF
+        gPA9Mojv1xbR1GKjCgVa8zHPvuXzX/L9FcWYOtdSddgGtn8h1eG9jBxj75YJbHTK
+        AANJop2cVs8dOOdN/3CdbzUDXLfYiXtQNsQYaSDjYw02qjx1HRJeF5WHzMmAyjXS
+        3KhOuwB1qhHBpETNlNr2Wcj3pOWH0N/xGG6lycaJauSm7B8zbUUSEZMMBd+GhU53
+        6JgTxPN4HoKR9TklVbYstBJUuXqO1J9mbgHbuVlFbiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=WE1PSD
+        J6UR5jIFS55riBxt9LPeJXh4U7NigTPnNX65A=; b=jvAnAfyGaqUn/08ZHsSqLO
+        uW19B9zLVT4SoApSBBkRM437Kkyd5+RLGxYcTd9L/oNbS6MJbqab7VsM98DbsCWO
+        4d+n8RBYK/BF0fHr9iBnrIaiiVmQvnFV3zkFgHUJ5uXQbG6usHTFF8bzNilFUc7u
+        VHSM1KJiVUTLlVmNRTKoIFa+4KuOnlVlYMVDSkofqAXPutOIj/pnE21k7/gu3pBQ
+        daqivTY5w3AmuBudK+2x1qoXFuOwCBazHChG9faFssJKqFPAI7ckWQyHm9tFFwxU
+        pbbe+PLQsGexmH8opjSu/KNzsplx1vR5KknkeXSlJ597pWOeC+sjwaFee54Bzuew
+        ==
+X-ME-Sender: <xms:wwP6XqWvknOfJkcPQBXZIqW8UorMwaNBI5C1ODdyBwTlMY09xUHPxw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudelledguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:wwP6XmkjVUmeiEdlJgUfigxWgJQVaqJmvthVxhwDQFDiMykoEnTrdA>
+    <xmx:wwP6XubBPGGFyYHtXHWC-1pZWDOV_FPhqmC25ASqd2-PXgI2_RfGwg>
+    <xmx:wwP6XhWf_nU3-9dDRfPGYtrX-iylRBw_6x4z_SVVOUOMQWduDd8qGA>
+    <xmx:xgP6XmWAWQwhFI3MhZjhHXi92Prz-GT5C9njmChD_WUolvvNS1KtFw>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0E01A3280060;
+        Mon, 29 Jun 2020 11:07:47 -0400 (EDT)
+Date:   Mon, 29 Jun 2020 17:07:45 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     robh+dt@kernel.org, wens@csie.org, mturquette@baylibre.com,
+        sboyd@kernel.org, srinivas.kandagatla@linaro.org,
+        linus.walleij@linaro.org, anarsoul@gmail.com,
+        tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        p.zabel@pengutronix.de, clabbe@baylibre.com, icenowy@aosc.io,
+        megous@megous.com, karlp@tweak.net.au, bage@linutronix.de,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        huangshuosheng@allwinnertech.com, liyong@allwinnertech.com
+Subject: Re: [PATCH v2 06/11] nvmem: sunxi-sid: add support for A100's SID
+ controller
+Message-ID: <20200629150745.ettjdggv55gfxs5s@gilmour.lan>
+References: <20200622025907.32574-1-frank@allwinnertech.com>
+ <20200622025907.32574-7-frank@allwinnertech.com>
 MIME-Version: 1.0
-References: <20200629122925.21729-1-andrzej.p@collabora.com> <20200629122925.21729-12-andrzej.p@collabora.com>
-In-Reply-To: <20200629122925.21729-12-andrzej.p@collabora.com>
-From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Mon, 29 Jun 2020 18:18:50 +0530
-Message-ID: <CAHLCerONdxx=x_ykO=JjpM5AB08ZX3ukhKVWgPARcS5V7q80Gw@mail.gmail.com>
-Subject: Re: [PATCH v7 11/11] thermal: Rename set_mode() to change_mode()
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        lakml <linux-arm-kernel@lists.infradead.org>,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qt3qjbwfvcqzuc6s"
+Content-Disposition: inline
+In-Reply-To: <20200622025907.32574-7-frank@allwinnertech.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 6:00 PM Andrzej Pietrasiewicz
-<andrzej.p@collabora.com> wrote:
->
-> set_mode() is only called when tzd's mode is about to change. Actual
-> setting is performed in thermal_core, in thermal_zone_device_set_mode().
-> The meaning of set_mode() callback is actually to notify the driver about
-> the mode being changed and giving the driver a chance to oppose such
-> change.
->
-> To better reflect the purpose of the method rename it to change_mode()
->
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> [for acerhdf]
-> Acked-by: Peter Kaestle <peter@piie.net>
-> Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
 
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+--qt3qjbwfvcqzuc6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jun 22, 2020 at 10:59:02AM +0800, Frank Lee wrote:
+> Add support for A100's SID controller.
+>=20
+> Signed-off-by: Frank Lee <frank@allwinnertech.com>
 > ---
->  drivers/platform/x86/acerhdf.c                          | 6 +++---
->  drivers/thermal/imx_thermal.c                           | 8 ++++----
->  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
->  drivers/thermal/intel/intel_quark_dts_thermal.c         | 6 +++---
->  drivers/thermal/thermal_core.c                          | 4 ++--
->  include/linux/thermal.h                                 | 2 +-
->  6 files changed, 16 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-> index 76323855c80c..f816a8a13039 100644
-> --- a/drivers/platform/x86/acerhdf.c
-> +++ b/drivers/platform/x86/acerhdf.c
-> @@ -413,8 +413,8 @@ static inline void acerhdf_enable_kernelmode(void)
->   *          the temperature and the fan.
->   * disabled: the BIOS takes control of the fan.
->   */
-> -static int acerhdf_set_mode(struct thermal_zone_device *thermal,
-> -                           enum thermal_device_mode mode)
-> +static int acerhdf_change_mode(struct thermal_zone_device *thermal,
-> +                              enum thermal_device_mode mode)
->  {
->         if (mode == THERMAL_DEVICE_DISABLED && kernelmode)
->                 acerhdf_revert_to_bios_mode();
-> @@ -473,7 +473,7 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
->         .bind = acerhdf_bind,
->         .unbind = acerhdf_unbind,
->         .get_temp = acerhdf_get_ec_temp,
-> -       .set_mode = acerhdf_set_mode,
-> +       .change_mode = acerhdf_change_mode,
->         .get_trip_type = acerhdf_get_trip_type,
->         .get_trip_hyst = acerhdf_get_trip_hyst,
->         .get_trip_temp = acerhdf_get_trip_temp,
-> diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-> index a02398118d88..9700ae39feb7 100644
-> --- a/drivers/thermal/imx_thermal.c
-> +++ b/drivers/thermal/imx_thermal.c
-> @@ -330,8 +330,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
->         return 0;
->  }
->
-> -static int imx_set_mode(struct thermal_zone_device *tz,
-> -                       enum thermal_device_mode mode)
-> +static int imx_change_mode(struct thermal_zone_device *tz,
-> +                          enum thermal_device_mode mode)
->  {
->         struct imx_thermal_data *data = tz->devdata;
->         struct regmap *map = data->tempmon;
-> @@ -447,7 +447,7 @@ static struct thermal_zone_device_ops imx_tz_ops = {
->         .bind = imx_bind,
->         .unbind = imx_unbind,
->         .get_temp = imx_get_temp,
-> -       .set_mode = imx_set_mode,
-> +       .change_mode = imx_change_mode,
->         .get_trip_type = imx_get_trip_type,
->         .get_trip_temp = imx_get_trip_temp,
->         .get_crit_temp = imx_get_crit_temp,
-> @@ -860,7 +860,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
->          * Need to disable thermal sensor, otherwise, when thermal core
->          * try to get temperature before thermal sensor resume, a wrong
->          * temperature will be read as the thermal sensor is powered
-> -        * down. This is done in set_mode() operation called from
-> +        * down. This is done in change_mode() operation called from
->          * thermal_zone_device_disable()
->          */
->         ret = thermal_zone_device_disable(data->tz);
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index ce49d3b100d5..d3732f624913 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -377,8 +377,8 @@ static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
->         return 0;
->  }
->
-> -static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
-> -                               enum thermal_device_mode mode)
-> +static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
-> +                                      enum thermal_device_mode mode)
->  {
->         struct int3400_thermal_priv *priv = thermal->devdata;
->         int result = 0;
-> @@ -399,7 +399,7 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
->
->  static struct thermal_zone_device_ops int3400_thermal_ops = {
->         .get_temp = int3400_thermal_get_temp,
-> -       .set_mode = int3400_thermal_set_mode,
-> +       .change_mode = int3400_thermal_change_mode,
+>  drivers/nvmem/sunxi_sid.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
+> index e26ef1b..8ac074b 100644
+> --- a/drivers/nvmem/sunxi_sid.c
+> +++ b/drivers/nvmem/sunxi_sid.c
+> @@ -189,6 +189,11 @@ static int sunxi_sid_probe(struct platform_device *p=
+dev)
+>  	.need_register_readout =3D true,
 >  };
->
->  static struct thermal_zone_params int3400_thermal_params = {
-> diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> index e29c3e330b17..3eafc6b0e6c3 100644
-> --- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-> +++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-> @@ -298,8 +298,8 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->         return 0;
->  }
->
-> -static int sys_set_mode(struct thermal_zone_device *tzd,
-> -                               enum thermal_device_mode mode)
-> +static int sys_change_mode(struct thermal_zone_device *tzd,
-> +                          enum thermal_device_mode mode)
->  {
->         int ret;
->
-> @@ -319,7 +319,7 @@ static struct thermal_zone_device_ops tzone_ops = {
->         .get_trip_type = sys_get_trip_type,
->         .set_trip_temp = sys_set_trip_temp,
->         .get_crit_temp = sys_get_crit_temp,
-> -       .set_mode = sys_set_mode,
-> +       .change_mode = sys_change_mode,
->  };
->
->  static void free_soc_dts(struct soc_sensor_entry *aux_entry)
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index e613f5c07bad..a61e91513584 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -482,8 +482,8 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->                 return ret;
->         }
->
-> -       if (tz->ops->set_mode)
-> -               ret = tz->ops->set_mode(tz, mode);
-> +       if (tz->ops->change_mode)
-> +               ret = tz->ops->change_mode(tz, mode);
->
->         if (!ret)
->                 tz->mode = mode;
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index df013c39ba9b..b9efaa780d88 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -76,7 +76,7 @@ struct thermal_zone_device_ops {
->                        struct thermal_cooling_device *);
->         int (*get_temp) (struct thermal_zone_device *, int *);
->         int (*set_trips) (struct thermal_zone_device *, int, int);
-> -       int (*set_mode) (struct thermal_zone_device *,
-> +       int (*change_mode) (struct thermal_zone_device *,
->                 enum thermal_device_mode);
->         int (*get_trip_type) (struct thermal_zone_device *, int,
->                 enum thermal_trip_type *);
-> --
-> 2.17.1
->
+> =20
+> +static const struct sunxi_sid_cfg sun50i_a100_cfg =3D {
+> +	.value_offset =3D 0x200,
+> +	.size =3D 0x100,
+> +};
+> +
+
+It looks like it's the same tha nthe H3 / A64 then?
+
+If so, you can just reuse their compatible as fallback
+
+Maxime
+
+--qt3qjbwfvcqzuc6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXvoDwQAKCRDj7w1vZxhR
+xR1+AQDUmJ2eKxkSAKY8N3oAYv2RkDrEZNTRivNZeW/rTDtt1gD/fIJbT8KdkTtN
+Oq4B49fJoiJYQc72b1d+sdbscb9XAw4=
+=7lp0
+-----END PGP SIGNATURE-----
+
+--qt3qjbwfvcqzuc6s--
