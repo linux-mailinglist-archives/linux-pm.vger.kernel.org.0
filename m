@@ -2,225 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E25420E228
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B1320DF99
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732750AbgF2VCy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 17:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
+        id S1731757AbgF2UiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729597AbgF2TMt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:12:49 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E6BAC02A55E;
-        Mon, 29 Jun 2020 06:14:02 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id n5so15462556otj.1;
-        Mon, 29 Jun 2020 06:14:02 -0700 (PDT)
+        with ESMTP id S1731730AbgF2TOU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:14:20 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61FDC02A560
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 06:14:26 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id y7so3702760vkf.9
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 06:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wUm1DqpGN5XmVYcQ9vlrW6bAWNxPJKNUBexoC8nS/Ds=;
+        b=BT0/zl5XRxbuPrO7SatKs69j+FXHyw9zFUp0W6pCAVRFbuVWsW/4rz69J5XNFI7+XT
+         rT8v/ZqOiYGqHBnb+pYZoAokisxWDuNC2q47a0XSkycGVxnMjNveTa7pj8XQ9gb/6CFt
+         NTe7mK7rogiD669XOv416uCvsxR/XoJw7xJMyxmLhjwaLJKceTx+XS8Riw5PoJY4j/Y9
+         BKTk0peACR14oHYIDFCn+Yk1mNwJgp4TuUGHzHSWj3bCyeliHFLJagaf1yzY6U9oROQC
+         7dFa8Ozo9FTPibEn9J4pxoTfmbvJLelFDOrmIqC0ijrtPtMq+MHprK13S8XtQrd6KKvX
+         Sgnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zl39/ogoiavirjWw0RJ4az07WY9iTjH0DwkSRzvIbpU=;
-        b=iV6/ld8RsP71JH/0pKRvmpzmiaJflW2tQuIVNHHnkwpqvY9q6FU3pG1SWZEkl+p0aF
-         4OI5HWLZI2Y2vblza8zaLEBiqhPcvaBxyZ85Q2iFBbcwYqHNRAhbapxvZaOmDeXCRwXn
-         S9roPv1fXBxPyFecE6RVj233o95BlbMkXQcg8IoMd+4/kfItU/9ERDAbbgtxFNK3TuUN
-         yXHzeUR0wue86LivwQY+BxN/ZxTez20+QJ7S/I8fx/CzFUa7em4iCp5aYwjh0KlGJ38H
-         Q0TI03xIuq2a57BGxTpd0oBvu9pNyqSuuhadapBY/PRfnELZi+FCBNSzBoMCsEtD3f3x
-         T4CA==
-X-Gm-Message-State: AOAM530dC1OYjxz7VdkeqSUb/XhYMUAisb0zZcNRNAjwnGlfFkgi3Ppw
-        mXMx1dUHz+7PoQNnGk1d3euJePoBE8G12WXeOM0=
-X-Google-Smtp-Source: ABdhPJzWedaVn91U287hY9yoH0WOIt/kqv2XIxbgQlaCJIJISmhHMf7cLkfEj9WuAXDiyquy7mPVbhFyGacWFrvsxBg=
-X-Received: by 2002:a9d:7d15:: with SMTP id v21mr12871453otn.118.1593436441986;
- Mon, 29 Jun 2020 06:14:01 -0700 (PDT)
+        bh=wUm1DqpGN5XmVYcQ9vlrW6bAWNxPJKNUBexoC8nS/Ds=;
+        b=UFhJyK8onKn9Vqlmb0StV93biFTxySBb4F73HEyhNj21f5ft3ljoIE2JDL8tOXLJq9
+         irqgm6+CIT6OvkKJ21q4X11wO+kY0TpbMkHUMv6C6uF3fVnSQ36pA05gZWSS99+iAfYt
+         PT4qVDUIMfKcYJ+eFZzqKtRYjljuM/FBwS6ClDO6KrDn3etvj7bmhHjtIp91h7ok629d
+         ZKpv34ofXxcoub2ftCL7S60y2UBpBojfWm1AyRcYPygrym+SzcZv6PmbCrZPUCQNETo0
+         t7xEfMbI+NB4N4MQzXDOug8rzo9fwvVEv70UsOpWBK4v6rjfyMYlYOL5iO23U2JivUMN
+         Er8Q==
+X-Gm-Message-State: AOAM530vB5nv/q1cLFOZnXPQ5CQb3xDBckzrA/qLu6KIHOPy84XDI4sZ
+        seUprFzVdR8i3V4xzNCy1d9J9QT+xb6R1UjRVBgPiw==
+X-Google-Smtp-Source: ABdhPJwqjv8P1N2hkVCTPq8KPMs3rDIm5sBcQeK3WBhBYHmZo8sJWnzLMHUoFYfgRwa/6N4osQmIDHV/F2ze2jLTbgM=
+X-Received: by 2002:a1f:d783:: with SMTP id o125mr10139104vkg.46.1593436464488;
+ Mon, 29 Jun 2020 06:14:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1593143118.git.viresh.kumar@linaro.org> <f366ed3dd3dd111e42173b366fe4dd5a0e4647fd.1593143118.git.viresh.kumar@linaro.org>
- <20200626082433.GA284605@google.com> <20200629021309.eleyysuh5f5g52qw@vireshk-i7>
-In-Reply-To: <20200629021309.eleyysuh5f5g52qw@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 29 Jun 2020 15:13:46 +0200
-Message-ID: <CAJZ5v0j6vRpcJxJnSg_Ph02g_4H2LomPM6Ed9t4gaD7YeNE_pg@mail.gmail.com>
-Subject: Re: [PATCH V3 1/3] cpufreq: Fix locking issues with governors
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
+References: <1590371941-25430-1-git-send-email-yangtiezhu@loongson.cn> <CADBw62pW3StqqAm-35zSsWkTo6040zDyEG1K2+tFzE9HxuaUFw@mail.gmail.com>
+In-Reply-To: <CADBw62pW3StqqAm-35zSsWkTo6040zDyEG1K2+tFzE9HxuaUFw@mail.gmail.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 29 Jun 2020 18:44:13 +0530
+Message-ID: <CAHLCerNwEefUG+bbWw6pd-jpBau8p2qs0Sd9f1yzx2iisCv01w@mail.gmail.com>
+Subject: Re: [PATCH] thermal: sprd: Fix return value of sprd_thm_probe()
+To:     Baolin Wang <baolin.wang7@gmail.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Todd Kjos <tkjos@google.com>, adharmap@codeaurora.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 4:13 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, May 29, 2020 at 7:55 PM Baolin Wang <baolin.wang7@gmail.com> wrote:
 >
-> On 26-06-20, 09:24, Quentin Perret wrote:
-> > On Friday 26 Jun 2020 at 09:21:42 (+0530), Viresh Kumar wrote:
-> > > The locking around governors handling isn't adequate currently. The list
-> > > of governors should never be traversed without locking in place. Also we
-> > > must make sure the governor isn't removed while it is still referenced
-> > > by code.
-> > >
-> > > Reported-by: Quentin Perret <qperret@google.com>
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > ---
-> > >  drivers/cpufreq/cpufreq.c | 59 ++++++++++++++++++++++++---------------
-> > >  1 file changed, 36 insertions(+), 23 deletions(-)
-> > >
-> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > index 0128de3603df..e798a1193bdf 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -621,6 +621,24 @@ static struct cpufreq_governor *find_governor(const char *str_governor)
-> > >     return NULL;
-> > >  }
-> > >
-> > > +static struct cpufreq_governor *get_governor(const char *str_governor)
-> > > +{
-> > > +   struct cpufreq_governor *t;
-> > > +
-> > > +   mutex_lock(&cpufreq_governor_mutex);
-> > > +   t = find_governor(str_governor);
-> > > +   if (!t)
-> > > +           goto unlock;
-> > > +
-> > > +   if (!try_module_get(t->owner))
-> > > +           t = NULL;
-> > > +
-> > > +unlock:
-> > > +   mutex_unlock(&cpufreq_governor_mutex);
-> > > +
-> > > +   return t;
-> > > +}
-> > > +
-> > >  static unsigned int cpufreq_parse_policy(char *str_governor)
-> > >  {
-> > >     if (!strncasecmp(str_governor, "performance", CPUFREQ_NAME_LEN))
-> > > @@ -640,28 +658,14 @@ static struct cpufreq_governor *cpufreq_parse_governor(char *str_governor)
-> > >  {
-> > >     struct cpufreq_governor *t;
-> > >
-> > > -   mutex_lock(&cpufreq_governor_mutex);
-> > > -
-> > > -   t = find_governor(str_governor);
-> > > -   if (!t) {
-> > > -           int ret;
-> > > -
-> > > -           mutex_unlock(&cpufreq_governor_mutex);
-> > > -
-> > > -           ret = request_module("cpufreq_%s", str_governor);
-> > > -           if (ret)
-> > > -                   return NULL;
-> > > -
-> > > -           mutex_lock(&cpufreq_governor_mutex);
-> > > +   t = get_governor(str_governor);
-> > > +   if (t)
-> > > +           return t;
-> > >
-> > > -           t = find_governor(str_governor);
-> > > -   }
-> > > -   if (t && !try_module_get(t->owner))
-> > > -           t = NULL;
-> > > -
-> > > -   mutex_unlock(&cpufreq_governor_mutex);
-> > > +   if (request_module("cpufreq_%s", str_governor))
-> > > +           return NULL;
-> > >
-> > > -   return t;
-> > > +   return get_governor(str_governor);
-> > >  }
-> > >
-> > >  /**
-> > > @@ -815,12 +819,14 @@ static ssize_t show_scaling_available_governors(struct cpufreq_policy *policy,
-> > >             goto out;
-> > >     }
-> > >
-> > > +   mutex_lock(&cpufreq_governor_mutex);
-> > >     for_each_governor(t) {
-> > >             if (i >= (ssize_t) ((PAGE_SIZE / sizeof(char))
-> > >                 - (CPUFREQ_NAME_LEN + 2)))
-> > > -                   goto out;
-> > > +                   break;
-> > >             i += scnprintf(&buf[i], CPUFREQ_NAME_PLEN, "%s ", t->name);
-> > >     }
-> > > +   mutex_unlock(&cpufreq_governor_mutex);
-> > >  out:
-> > >     i += sprintf(&buf[i], "\n");
-> > >     return i;
-> > > @@ -1058,11 +1064,14 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
-> > >     struct cpufreq_governor *def_gov = cpufreq_default_governor();
-> > >     struct cpufreq_governor *gov = NULL;
-> > >     unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
-> > > +   bool put_governor = false;
-> > > +   int ret;
-> > >
-> > >     if (has_target()) {
-> > >             /* Update policy governor to the one used before hotplug. */
-> > > -           gov = find_governor(policy->last_governor);
-> > > +           gov = get_governor(policy->last_governor);
-> > >             if (gov) {
-> > > +                   put_governor = true;
-> > >                     pr_debug("Restoring governor %s for cpu %d\n",
-> > >                              policy->governor->name, policy->cpu);
-> > >             } else if (def_gov) {
-> > > @@ -1089,7 +1098,11 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
-> > >                     return -ENODATA;
-> > >     }
-> > >
-> > > -   return cpufreq_set_policy(policy, gov, pol);
-> > > +   ret = cpufreq_set_policy(policy, gov, pol);
-> > > +   if (put_governor)
-> > > +           module_put(gov->owner);
-> >
-> > Nit: I think you could safely do
-> >
-> >       if (gov)
-> >               module_put(gov->owner);
-> >
-> > and get rid of 'put_governor', given that try_module_get() and
-> > module_put() are nops if owner is NULL (which is guaranteed for
-> > the result of cpufreq_default_governor() as it is builtin).
+> Hi,
 >
-> I described why I chose to keep it that way in the other email, but I
-> am all for dropping the variable. And so what about this ?
+> On Mon, May 25, 2020 at 10:00 AM Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+> >
+> > When call function devm_platform_ioremap_resource(), we should use IS_ERR()
+> > to check the return value and return PTR_ERR() if failed.
+> >
+> > Fixes: 554fdbaf19b1 ("thermal: sprd: Add Spreadtrum thermal driver support")
+> > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>
+> Good catch. Thanks.
+> Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
 
-Works for me.
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e798a1193bdf..d9e9ae7051bb 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1064,18 +1064,17 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
->         struct cpufreq_governor *def_gov = cpufreq_default_governor();
->         struct cpufreq_governor *gov = NULL;
->         unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
-> -       bool put_governor = false;
->         int ret;
+> > ---
+> >  drivers/thermal/sprd_thermal.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+> > index a340374..4cde70d 100644
+> > --- a/drivers/thermal/sprd_thermal.c
+> > +++ b/drivers/thermal/sprd_thermal.c
+> > @@ -348,8 +348,8 @@ static int sprd_thm_probe(struct platform_device *pdev)
+> >
+> >         thm->var_data = pdata;
+> >         thm->base = devm_platform_ioremap_resource(pdev, 0);
+> > -       if (!thm->base)
+> > -               return -ENOMEM;
+> > +       if (IS_ERR(thm->base))
+> > +               return PTR_ERR(thm->base);
+> >
+> >         thm->nr_sensors = of_get_child_count(np);
+> >         if (thm->nr_sensors == 0 || thm->nr_sensors > SPRD_THM_MAX_SENSOR) {
+> > --
+> > 2.1.0
+> >
 >
->         if (has_target()) {
->                 /* Update policy governor to the one used before hotplug. */
->                 gov = get_governor(policy->last_governor);
->                 if (gov) {
-> -                       put_governor = true;
->                         pr_debug("Restoring governor %s for cpu %d\n",
->                                  policy->governor->name, policy->cpu);
->                 } else if (def_gov) {
->                         gov = def_gov;
-> +                       module_get(gov->owner);
->                 } else {
->                         return -ENODATA;
->                 }
-> @@ -1099,7 +1098,7 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
->         }
->
->         ret = cpufreq_set_policy(policy, gov, pol);
-> -       if (put_governor)
-> +       if (gov)
->                 module_put(gov->owner);
->
->         return ret;
 >
 > --
-> viresh
+> Baolin Wang
