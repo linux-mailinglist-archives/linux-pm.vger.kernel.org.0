@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D9C20E05C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C16820E0E0
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732705AbgF2Uph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 16:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S1727838AbgF2Uug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731572AbgF2TN5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:57 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADFFC08ED8C
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:05:02 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id o2so8680697vsr.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:05:02 -0700 (PDT)
+        with ESMTP id S1731453AbgF2TNf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:35 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328BBC094246
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:19:57 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id c7so3521775uap.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 00:19:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=verdurent-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=O4CL5jT1tY8QD8FjAFdyHeuWe+dWBhI6iRrYPmWg+K0=;
-        b=ufgK5aOt+VEkKCf7cfv7S4ZtNXtnnmklYABTUv1VaPxOyVYlRF0W+WWMz74ZV08AGE
-         1s1vKmMq4KVk+MBoFIT07TOKURsUNbRQdevHqaQ1aWm8cwm+U1Imt2LTLVn76ZfauBCL
-         Jn8YnNOHw3ZvLP+IWIJlri1ht33n4/CzEON0vrJSMjbdw8TJtfW8X1tddfpQMfXgkCZi
-         BtT26G9ckLhBaXLHozdLJ9i2lXgOWfKOEveukc+nllrmwg/ZQ4vjc16Owk1GMoom+Uhd
-         EtZSUhps1bb5xV0fHsgJxXJI4qzTSeRxyn0KdrZYD00xOxK3NemGIoaULhoM5HjdHhpi
-         jOmA==
+        bh=XpYnh8gMYavfYLlo546wBFKAR4SvsyOyU3BwpCQr48Y=;
+        b=13O1W6B1WoYn8RPzdruP1UsaIJjpCs+IyOvzq9Hz0Cb2k6EwAvj3Zp/jB0S6Kft7Nl
+         o4TQYqPUgOaEo/uWqotQ66eV2QrtibbA4DUDHE4leNZi23M9bAJKxke54zBwxNB72yYi
+         1O6c/zqJ69Y0NMv25Jca9Nu60iNQgRing2YBd00Vu1VRiFE+o5C8fEjhIvHwTKKwq+kA
+         fpWvKQy++uWsEtjukRFnzGgeMUDntbJSBHd+6Hkxej1CLrJHk44FNNfa207qLIA+LrNj
+         FTqRgy04tivPRI1OV065nQpiXGXPJtXkPiSp1G1mTd7pzIbU9k8IrQ90x16surkpuXdC
+         r/iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=O4CL5jT1tY8QD8FjAFdyHeuWe+dWBhI6iRrYPmWg+K0=;
-        b=aPMZTpvK3wWsubQ6XBbZhkc1ee8vJWq04XM5Izq6Wl+kqTvKu8Ayv0pCwvsUAKD8PB
-         smDshcJTcBaV0/CpCrxMd22IfH+VlPZrXN5OADWTI1V8rVZT79NNg/7m1jLWxgtnoNdQ
-         NA6/9ltG/AtpzzXvx+IW1sXJosls4iZCwKK9vhtQCAFMRWeD/tx/dlm7lqwvZJSv9HuP
-         vBOoyDUk46+k2lMPsSN6zEgzbC6Nm/DyEB3pNm0T/NoTleKKXnoU/Rk3jb2nxqMlttT0
-         CKFvxFgOEHOtsco6b2wE1Chop/+RkJZpmZrkvoak5hY31PqES9XfPsQWFX4sOeTLp/b9
-         Vrkg==
-X-Gm-Message-State: AOAM532yMRNWBMT4Tp0rIYwn83HJ9a1mAx4MrTb+VDW2btjJcZD+GQFy
-        gShnVti7ijlGOvfqgZYgmdZ23g4lXFbZS56Ep0IFyw==
-X-Google-Smtp-Source: ABdhPJwExycQo0Z3q8vxfUV0tozODXEDNYpnqbSU0LS4IbWtPA6zbYd6g3HijjZDuNICJGxZ+gh7EBDX0w/h/Xyyvro=
-X-Received: by 2002:a05:6102:203:: with SMTP id z3mr2837721vsp.182.1593414301322;
- Mon, 29 Jun 2020 00:05:01 -0700 (PDT)
+        bh=XpYnh8gMYavfYLlo546wBFKAR4SvsyOyU3BwpCQr48Y=;
+        b=dOXE/FWrYONkE49mdd7HAnLHRedrmeRkY5LhM1o1p/q15N6lW2yl/IDM3g+sNNM8Q0
+         gP7GMOJG/wGlFH6Or39ldYKw4dn2gqR9mhFIXDoK1bo64ZaWQAvmMy0ufpEfLiOG8HRM
+         3nymZGuuXJhCFt8hYQUA3UnbA4MJ/GF8PgRM52V1PtG2aNV3xoLU8aLS2+bSfe5QaeeX
+         Suube9Nv4SpMk+Iygh09uwyT1sShPtEQrs32doLayH90RF2YdffJ5zl05G0JBpSoWZdj
+         Ic5VBnKZNZwoIBu5GQhHOnPbtyA0R6t1Nw2VpQhsLzDOGaRK1/TSfsbeq4Fwf3UVr8Ij
+         XD7A==
+X-Gm-Message-State: AOAM532LdtyBTVJsOqAPG8hpf4WyrPWVkLLO1E2cn8VRbh5AQpE49yy+
+        5Zt3uQho4ZBk3FOC17HuFCu3aNMUOYGeJx/pcycmzg==
+X-Google-Smtp-Source: ABdhPJxuIMc3AKl58RR5BB2o4v6o+LuGqoOO72B8HIckh2GgWrvSrRyjWB3ObkuGZltyeo/65xaFDUvMh18+fu68Jl8=
+X-Received: by 2002:a9f:3113:: with SMTP id m19mr553540uab.77.1593415196293;
+ Mon, 29 Jun 2020 00:19:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <9cbffad6-69e4-0b33-4640-fde7c4f6a6e7@linaro.org>
- <20200626173755.26379-1-andrzej.p@collabora.com> <20200626173755.26379-7-andrzej.p@collabora.com>
-In-Reply-To: <20200626173755.26379-7-andrzej.p@collabora.com>
+ <20200626173755.26379-1-andrzej.p@collabora.com> <20200626173755.26379-3-andrzej.p@collabora.com>
+In-Reply-To: <20200626173755.26379-3-andrzej.p@collabora.com>
 From:   Amit Kucheria <amit.kucheria@verdurent.com>
-Date:   Mon, 29 Jun 2020 12:34:50 +0530
-Message-ID: <CAHLCerO2XOOX9akEwaTu_cjSqRycFpNmoVxkSe36L8B4ALWidA@mail.gmail.com>
-Subject: Re: [PATCH v5 06/11] thermal: Add mode helpers
+Date:   Mon, 29 Jun 2020 12:49:45 +0530
+Message-ID: <CAHLCerMF3AusmmUUiE21mAV293fBU5vCxJ0K-dPcVNZBSHtMBg@mail.gmail.com>
+Subject: Re: [PATCH v5 02/11] thermal: Store thermal mode in a dedicated enum
 To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 Cc:     Linux PM list <linux-pm@vger.kernel.org>,
         linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
@@ -103,115 +103,191 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Fri, Jun 26, 2020 at 11:08 PM Andrzej Pietrasiewicz
 <andrzej.p@collabora.com> wrote:
 >
-> Prepare for making the drivers not access tzd's private members.
+> Prepare for storing mode in struct thermal_zone_device.
 >
 > Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> [for acerhdf]
+> Acked-by: Peter Kaestle <peter@piie.net>
 > Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> [EXPORT_SYMBOL -> EXPORT_SYMBOL_GPL]
-> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+
+
 > ---
->  drivers/thermal/thermal_core.c | 53 ++++++++++++++++++++++++++++++++++
->  include/linux/thermal.h        | 13 +++++++++
->  2 files changed, 66 insertions(+)
+>  drivers/acpi/thermal.c                        | 27 +++++++++----------
+>  drivers/platform/x86/acerhdf.c                |  8 ++++--
+>  .../intel/int340x_thermal/int3400_thermal.c   | 18 +++++--------
+>  3 files changed, 25 insertions(+), 28 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 14d3b1b94c4f..3181295075b9 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -459,6 +459,59 @@ static void thermal_zone_device_reset(struct thermal_zone_device *tz)
->         thermal_zone_device_init(tz);
->  }
->
-> +int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
-> +                                enum thermal_device_mode mode)
-
-Should this be static?
-
-> +{
-> +       int ret = 0;
-> +
-> +       mutex_lock(&tz->lock);
-> +
-> +       /* do nothing if mode isn't changing */
-> +       if (mode == tz->mode) {
-> +               mutex_unlock(&tz->lock);
-> +
-> +               return ret;
-> +       }
-> +
-> +       if (tz->ops->set_mode)
-> +               ret = tz->ops->set_mode(tz, mode);
-> +
-> +       if (!ret)
-> +               tz->mode = mode;
-> +
-> +       mutex_unlock(&tz->lock);
-> +
-> +       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-> +
-> +       return ret;
-> +}
-> +
-> +int thermal_zone_device_enable(struct thermal_zone_device *tz)
-> +{
-> +       return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_ENABLED);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_enable);
-> +
-> +int thermal_zone_device_disable(struct thermal_zone_device *tz)
-> +{
-> +       return thermal_zone_device_set_mode(tz, THERMAL_DEVICE_DISABLED);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_disable);
-> +
-> +int thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
-> +{
+> diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
+> index 6de8066ca1e7..fb46070c66d8 100644
+> --- a/drivers/acpi/thermal.c
+> +++ b/drivers/acpi/thermal.c
+> @@ -172,7 +172,7 @@ struct acpi_thermal {
+>         struct acpi_thermal_trips trips;
+>         struct acpi_handle_list devices;
+>         struct thermal_zone_device *thermal_zone;
+> -       int tz_enabled;
 > +       enum thermal_device_mode mode;
-> +
-> +       mutex_lock(&tz->lock);
-> +
-> +       mode = tz->mode;
-> +
-> +       mutex_unlock(&tz->lock);
-> +
-> +       return mode == THERMAL_DEVICE_ENABLED;
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_is_enabled);
-> +
->  void thermal_zone_device_update(struct thermal_zone_device *tz,
->                                 enum thermal_notify_event event)
+>         int kelvin_offset;      /* in millidegrees */
+>         struct work_struct thermal_check_work;
+>  };
+> @@ -500,7 +500,7 @@ static void acpi_thermal_check(void *data)
 >  {
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index a808f6fa2777..df013c39ba9b 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -416,6 +416,9 @@ int thermal_zone_get_offset(struct thermal_zone_device *tz);
+>         struct acpi_thermal *tz = data;
 >
->  void thermal_cdev_update(struct thermal_cooling_device *);
->  void thermal_notify_framework(struct thermal_zone_device *, int);
-> +int thermal_zone_device_enable(struct thermal_zone_device *tz);
-> +int thermal_zone_device_disable(struct thermal_zone_device *tz);
-> +int thermal_zone_device_is_enabled(struct thermal_zone_device *tz);
+> -       if (!tz->tz_enabled)
+> +       if (tz->mode != THERMAL_DEVICE_ENABLED)
+>                 return;
+>
+>         thermal_zone_device_update(tz->thermal_zone,
+> @@ -534,8 +534,7 @@ static int thermal_get_mode(struct thermal_zone_device *thermal,
+>         if (!tz)
+>                 return -EINVAL;
+>
+> -       *mode = tz->tz_enabled ? THERMAL_DEVICE_ENABLED :
+> -               THERMAL_DEVICE_DISABLED;
+> +       *mode = tz->mode;
+>
+>         return 0;
+>  }
+> @@ -544,27 +543,25 @@ static int thermal_set_mode(struct thermal_zone_device *thermal,
+>                                 enum thermal_device_mode mode)
+>  {
+>         struct acpi_thermal *tz = thermal->devdata;
+> -       int enable;
+>
+>         if (!tz)
+>                 return -EINVAL;
+>
+> +       if (mode != THERMAL_DEVICE_DISABLED &&
+> +           mode != THERMAL_DEVICE_ENABLED)
+> +               return -EINVAL;
+>         /*
+>          * enable/disable thermal management from ACPI thermal driver
+>          */
+> -       if (mode == THERMAL_DEVICE_ENABLED)
+> -               enable = 1;
+> -       else if (mode == THERMAL_DEVICE_DISABLED) {
+> -               enable = 0;
+> +       if (mode == THERMAL_DEVICE_DISABLED)
+>                 pr_warn("thermal zone will be disabled\n");
+> -       } else
+> -               return -EINVAL;
+>
+> -       if (enable != tz->tz_enabled) {
+> -               tz->tz_enabled = enable;
+> +       if (mode != tz->mode) {
+> +               tz->mode = mode;
+>                 ACPI_DEBUG_PRINT((ACPI_DB_INFO,
+>                         "%s kernel ACPI thermal control\n",
+> -                       tz->tz_enabled ? "Enable" : "Disable"));
+> +                       tz->mode == THERMAL_DEVICE_ENABLED ?
+> +                       "Enable" : "Disable"));
+>                 acpi_thermal_check(tz);
+>         }
+>         return 0;
+> @@ -915,7 +912,7 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
+>                 goto remove_dev_link;
+>         }
+>
+> -       tz->tz_enabled = 1;
+> +       tz->mode = THERMAL_DEVICE_ENABLED;
+>
+>         dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
+>                  tz->thermal_zone->id);
+> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
+> index 4df7609b4aa9..9d1030b1a4f4 100644
+> --- a/drivers/platform/x86/acerhdf.c
+> +++ b/drivers/platform/x86/acerhdf.c
+> @@ -68,6 +68,7 @@ static int kernelmode = 1;
 >  #else
->  static inline struct thermal_zone_device *thermal_zone_device_register(
->         const char *type, int trips, int mask, void *devdata,
-> @@ -463,6 +466,16 @@ static inline void thermal_cdev_update(struct thermal_cooling_device *cdev)
->  static inline void thermal_notify_framework(struct thermal_zone_device *tz,
->         int trip)
->  { }
-> +
-> +static inline int thermal_zone_device_enable(struct thermal_zone_device *tz)
-> +{ return -ENODEV; }
-> +
-> +static inline int thermal_zone_device_disable(struct thermal_zone_device *tz)
-> +{ return -ENODEV; }
-> +
-> +static inline int
-> +thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
-> +{ return -ENODEV; }
->  #endif /* CONFIG_THERMAL */
+>  static int kernelmode;
+>  #endif
+> +static enum thermal_device_mode thermal_mode;
 >
->  #endif /* __THERMAL_H__ */
+>  static unsigned int interval = 10;
+>  static unsigned int fanon = 60000;
+> @@ -397,6 +398,7 @@ static inline void acerhdf_revert_to_bios_mode(void)
+>  {
+>         acerhdf_change_fanstate(ACERHDF_FAN_AUTO);
+>         kernelmode = 0;
+> +       thermal_mode = THERMAL_DEVICE_DISABLED;
+>         if (thz_dev)
+>                 thz_dev->polling_delay = 0;
+>         pr_notice("kernel mode fan control OFF\n");
+> @@ -404,6 +406,7 @@ static inline void acerhdf_revert_to_bios_mode(void)
+>  static inline void acerhdf_enable_kernelmode(void)
+>  {
+>         kernelmode = 1;
+> +       thermal_mode = THERMAL_DEVICE_ENABLED;
+>
+>         thz_dev->polling_delay = interval*1000;
+>         thermal_zone_device_update(thz_dev, THERMAL_EVENT_UNSPECIFIED);
+> @@ -416,8 +419,7 @@ static int acerhdf_get_mode(struct thermal_zone_device *thermal,
+>         if (verbose)
+>                 pr_notice("kernel mode fan control %d\n", kernelmode);
+>
+> -       *mode = (kernelmode) ? THERMAL_DEVICE_ENABLED
+> -                            : THERMAL_DEVICE_DISABLED;
+> +       *mode = thermal_mode;
+>
+>         return 0;
+>  }
+> @@ -739,6 +741,8 @@ static int __init acerhdf_register_thermal(void)
+>         if (IS_ERR(cl_dev))
+>                 return -EINVAL;
+>
+> +       thermal_mode = kernelmode ?
+> +               THERMAL_DEVICE_ENABLED : THERMAL_DEVICE_DISABLED;
+>         thz_dev = thermal_zone_device_register("acerhdf", 2, 0, NULL,
+>                                               &acerhdf_dev_ops,
+>                                               &acerhdf_zone_params, 0,
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 0b3a62655843..e84faaadff87 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -48,7 +48,7 @@ struct int3400_thermal_priv {
+>         struct acpi_device *adev;
+>         struct platform_device *pdev;
+>         struct thermal_zone_device *thermal;
+> -       int mode;
+> +       enum thermal_device_mode mode;
+>         int art_count;
+>         struct art *arts;
+>         int trt_count;
+> @@ -395,24 +395,20 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
+>                                 enum thermal_device_mode mode)
+>  {
+>         struct int3400_thermal_priv *priv = thermal->devdata;
+> -       bool enable;
+>         int result = 0;
+>
+>         if (!priv)
+>                 return -EINVAL;
+>
+> -       if (mode == THERMAL_DEVICE_ENABLED)
+> -               enable = true;
+> -       else if (mode == THERMAL_DEVICE_DISABLED)
+> -               enable = false;
+> -       else
+> +       if (mode != THERMAL_DEVICE_ENABLED &&
+> +           mode != THERMAL_DEVICE_DISABLED)
+>                 return -EINVAL;
+>
+> -       if (enable != priv->mode) {
+> -               priv->mode = enable;
+> +       if (mode != priv->mode) {
+> +               priv->mode = mode;
+>                 result = int3400_thermal_run_osc(priv->adev->handle,
+> -                                                priv->current_uuid_index,
+> -                                                enable);
+> +                                               priv->current_uuid_index,
+> +                                               mode == THERMAL_DEVICE_ENABLED);
+>         }
+>
+>         evaluate_odvp(priv);
 > --
 > 2.17.1
 >
