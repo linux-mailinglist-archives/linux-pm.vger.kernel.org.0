@@ -2,231 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7425920E06D
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A458C20E0C3
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389605AbgF2UqH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 16:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
+        id S1727049AbgF2Utd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731548AbgF2TNx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:53 -0400
+        with ESMTP id S1731487AbgF2TNk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:40 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D81FC0085B1;
-        Mon, 29 Jun 2020 04:16:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA57C0076FC;
+        Mon, 29 Jun 2020 04:26:43 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id B841D2A0F61
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v6 11/11] thermal: Rename set_mode() to change_mode()
-Date:   Mon, 29 Jun 2020 13:16:15 +0200
-Message-Id: <20200629111615.18131-12-andrzej.p@collabora.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200629111615.18131-1-andrzej.p@collabora.com>
-References: <CAHLCerO2XOOX9akEwaTu_cjSqRycFpNmoVxkSe36L8B4ALWidA@mail.gmail.com>
- <20200629111615.18131-1-andrzej.p@collabora.com>
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id 6C20C2A2236
+Subject: Re: [PATCH v2] PM / devfreq: rk3399_dmc: Fix kernel oops when
+ rockchip,pmu is absent
+To:     Chanwoo Choi <cw00.choi@samsung.com>, Marc Zyngier <maz@kernel.org>
+Cc:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <CGME20200622152844epcas1p2309f34247eb9653acdfd3818b7e6a569@epcas1p2.samsung.com>
+ <20200622152824.1054946-1-maz@kernel.org>
+ <784808d7-8943-44ab-f15a-34821e6d4d5f@samsung.com>
+ <87tuyue142.wl-maz@kernel.org>
+ <c1a5b730-0554-bb90-9d8d-b50390482e96@samsung.com>
+ <3de68490-d788-e416-dd5f-d4d6e7eca61a@collabora.com>
+ <154fe5b6-6a05-c2b7-3014-2f7b9c2049f9@samsung.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <267623b3-9fc5-886e-3554-b86fa1e57ccb@collabora.com>
+Date:   Mon, 29 Jun 2020 13:26:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <154fe5b6-6a05-c2b7-3014-2f7b9c2049f9@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-set_mode() is only called when tzd's mode is about to change. Actual
-setting is performed in thermal_core, in thermal_zone_device_set_mode().
-The meaning of set_mode() callback is actually to notify the driver about
-the mode being changed and giving the driver a chance to oppose such
-change.
+Hi Chanwoo,
 
-To better reflect the purpose of the method rename it to change_mode()
+On 29/6/20 13:29, Chanwoo Choi wrote:
+> Hi Enric and Mark,
+> 
+> On 6/29/20 8:05 PM, Enric Balletbo i Serra wrote:
+>> Hi Chanwoo and Marc,
+>>
+>> On 29/6/20 13:09, Chanwoo Choi wrote:
+>>> Hi Enric,
+>>>
+>>> Could you check this issue? Your patch[1] causes this issue.
+>>> As Marc mentioned, although rk3399-dmc.c handled 'rockchip,pmu'
+>>> as the mandatory property, your patch[1] didn't add the 'rockchip,pmu'
+>>> property to the documentation. 
+>>>
+>>
+>> I think the problem is that the DT binding patch, for some reason, was missed
+>> and didn't land. The patch seems to have all the required reviews and acks.
+>>
+>>   https://patchwork.kernel.org/patch/10901593/
+>>
+>> Sorry because I didn't notice this issue when 9173c5ceb035 landed. And thanks
+>> for fixing the issue.
+> 
+> If the 'rockchip,pmu' propery is mandatory, instead of Mark's patch,
+> we better to require the merge of patch[1] to DT maintainer.
+> 
+> [1] https://patchwork.kernel.org/patch/10901593/
+> 
 
-Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-[for acerhdf]
-Acked-by: Peter Kaestle <peter@piie.net>
-Reviewed-by: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
----
- drivers/platform/x86/acerhdf.c                          | 6 +++---
- drivers/thermal/imx_thermal.c                           | 8 ++++----
- drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 6 +++---
- drivers/thermal/intel/intel_quark_dts_thermal.c         | 6 +++---
- drivers/thermal/thermal_core.c                          | 4 ++--
- include/linux/thermal.h                                 | 2 +-
- 6 files changed, 16 insertions(+), 16 deletions(-)
+Give me some time to double check, because I think that at this point, is needed
+on some devices with old firmware but not now. It's been a while since I worked
+on this, but I suspect that being optional is the right way.
 
-diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-index 76323855c80c..f816a8a13039 100644
---- a/drivers/platform/x86/acerhdf.c
-+++ b/drivers/platform/x86/acerhdf.c
-@@ -413,8 +413,8 @@ static inline void acerhdf_enable_kernelmode(void)
-  *          the temperature and the fan.
-  * disabled: the BIOS takes control of the fan.
-  */
--static int acerhdf_set_mode(struct thermal_zone_device *thermal,
--			    enum thermal_device_mode mode)
-+static int acerhdf_change_mode(struct thermal_zone_device *thermal,
-+			       enum thermal_device_mode mode)
- {
- 	if (mode == THERMAL_DEVICE_DISABLED && kernelmode)
- 		acerhdf_revert_to_bios_mode();
-@@ -473,7 +473,7 @@ static struct thermal_zone_device_ops acerhdf_dev_ops = {
- 	.bind = acerhdf_bind,
- 	.unbind = acerhdf_unbind,
- 	.get_temp = acerhdf_get_ec_temp,
--	.set_mode = acerhdf_set_mode,
-+	.change_mode = acerhdf_change_mode,
- 	.get_trip_type = acerhdf_get_trip_type,
- 	.get_trip_hyst = acerhdf_get_trip_hyst,
- 	.get_trip_temp = acerhdf_get_trip_temp,
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index a02398118d88..9700ae39feb7 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -330,8 +330,8 @@ static int imx_get_temp(struct thermal_zone_device *tz, int *temp)
- 	return 0;
- }
- 
--static int imx_set_mode(struct thermal_zone_device *tz,
--			enum thermal_device_mode mode)
-+static int imx_change_mode(struct thermal_zone_device *tz,
-+			   enum thermal_device_mode mode)
- {
- 	struct imx_thermal_data *data = tz->devdata;
- 	struct regmap *map = data->tempmon;
-@@ -447,7 +447,7 @@ static struct thermal_zone_device_ops imx_tz_ops = {
- 	.bind = imx_bind,
- 	.unbind = imx_unbind,
- 	.get_temp = imx_get_temp,
--	.set_mode = imx_set_mode,
-+	.change_mode = imx_change_mode,
- 	.get_trip_type = imx_get_trip_type,
- 	.get_trip_temp = imx_get_trip_temp,
- 	.get_crit_temp = imx_get_crit_temp,
-@@ -860,7 +860,7 @@ static int __maybe_unused imx_thermal_suspend(struct device *dev)
- 	 * Need to disable thermal sensor, otherwise, when thermal core
- 	 * try to get temperature before thermal sensor resume, a wrong
- 	 * temperature will be read as the thermal sensor is powered
--	 * down. This is done in set_mode() operation called from
-+	 * down. This is done in change_mode() operation called from
- 	 * thermal_zone_device_disable()
- 	 */
- 	ret = thermal_zone_device_disable(data->tz);
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index ce49d3b100d5..d3732f624913 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -377,8 +377,8 @@ static int int3400_thermal_get_temp(struct thermal_zone_device *thermal,
- 	return 0;
- }
- 
--static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
--				enum thermal_device_mode mode)
-+static int int3400_thermal_change_mode(struct thermal_zone_device *thermal,
-+				       enum thermal_device_mode mode)
- {
- 	struct int3400_thermal_priv *priv = thermal->devdata;
- 	int result = 0;
-@@ -399,7 +399,7 @@ static int int3400_thermal_set_mode(struct thermal_zone_device *thermal,
- 
- static struct thermal_zone_device_ops int3400_thermal_ops = {
- 	.get_temp = int3400_thermal_get_temp,
--	.set_mode = int3400_thermal_set_mode,
-+	.change_mode = int3400_thermal_change_mode,
- };
- 
- static struct thermal_zone_params int3400_thermal_params = {
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index e29c3e330b17..3eafc6b0e6c3 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -298,8 +298,8 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 	return 0;
- }
- 
--static int sys_set_mode(struct thermal_zone_device *tzd,
--				enum thermal_device_mode mode)
-+static int sys_change_mode(struct thermal_zone_device *tzd,
-+			   enum thermal_device_mode mode)
- {
- 	int ret;
- 
-@@ -319,7 +319,7 @@ static struct thermal_zone_device_ops tzone_ops = {
- 	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- 	.get_crit_temp = sys_get_crit_temp,
--	.set_mode = sys_set_mode,
-+	.change_mode = sys_change_mode,
- };
- 
- static void free_soc_dts(struct soc_sensor_entry *aux_entry)
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index e613f5c07bad..a61e91513584 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -482,8 +482,8 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
- 		return ret;
- 	}
- 
--	if (tz->ops->set_mode)
--		ret = tz->ops->set_mode(tz, mode);
-+	if (tz->ops->change_mode)
-+		ret = tz->ops->change_mode(tz, mode);
- 
- 	if (!ret)
- 		tz->mode = mode;
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index df013c39ba9b..b9efaa780d88 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -76,7 +76,7 @@ struct thermal_zone_device_ops {
- 		       struct thermal_cooling_device *);
- 	int (*get_temp) (struct thermal_zone_device *, int *);
- 	int (*set_trips) (struct thermal_zone_device *, int, int);
--	int (*set_mode) (struct thermal_zone_device *,
-+	int (*change_mode) (struct thermal_zone_device *,
- 		enum thermal_device_mode);
- 	int (*get_trip_type) (struct thermal_zone_device *, int,
- 		enum thermal_trip_type *);
--- 
-2.17.1
+Maybe Heiko, who IIRC worked on TF-A has a more clear thought on this?
 
+Thanks,
+ Enric
+
+>>
+>> Best regards,
+>>  Enric
+>>
+>>> [1] 9173c5ceb035 ("PM / devfreq: rk3399_dmc: Pass ODT
+>>> and auto power down parameters to TF-A.")
+>>>
+>>>
+>>> On 6/29/20 5:18 PM, Marc Zyngier wrote:
+>>>> Hi Chanwoo,
+>>>>
+>>>> On Mon, 29 Jun 2020 03:43:37 +0100,
+>>>> Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>>>>>
+>>>>> Hi Marc,
+>>>>>
+>>>>> On 6/23/20 12:28 AM, Marc Zyngier wrote:
+>>>>
+>>>> [...]
+>>>>
+>>>>> It looks good to me. But, I think that it is not necessary
+>>>>> fully kernel panic log about NULL pointer. It is enoughspsp
+>>>>> just mentioning the NULL pointer issue without full kernel panic log.
+>>>>
+>>>> I personally find the backtrace useful as it allows people with the
+>>>> same issue to trawl the kernel log and find whether it has already be
+>>>> fixed upstream. But it's only me, and I'm not attached to it.
+>>>>
+>>>>> So, how about editing the patch description as following or others simply?
+>>>>> and we need to add 'stable@vger.kernel.org' to Cc list for applying it
+>>>>> to stable branch.
+>>>>
+>>>> Looks good to me.
+>>>>
+>>>>>
+>>>>>
+>>>>>   PM / devfreq: rk3399_dmc: Fix kernel oops when rockchip,pmu is absent
+>>>>>
+>>>>>     Booting a recent kernel on a rk3399-based system (nanopc-t4),
+>>>>>     equipped with a recent u-boot and ATF results in the kernel panic
+>>>>>     about NULL pointer issue.
+>>>>
+>>>> nit: "results in a kernel panic on dereferencing a NULL pointer".
+>>>>
+>>>>>
+>>>>>     This turns out to be due to the rk3399-dmc driver looking for
+>>>>>     an *undocumented* property (rockchip,pmu), and happily using
+>>>>>     a NULL pointer when the property isn't there.
+>>>>>
+>>>>>     Instead, make most of what was brought in with 9173c5ceb035
+>>>>>     ("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters
+>>>>>     to TF-A.") conditioned on finding this property in the device-tree,
+>>>>>     preventing the driver from exploding.
+>>>>>
+>>>>>     Fixes: 9173c5ceb035 ("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters to TF-A.")
+>>>>>     Signed-off-by: Marc Zyngier <maz@kernel.org>
+>>>>>     Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>>>
+>>>>
+>>>> Note that the biggest issue is still there: the driver is using an
+>>>> undocumented property, and this patch is just papering over it.
+>>>> Since I expect this property to be useful for something, it would be
+>>>> good for whoever knows what it does to document it.
+>>>
+>>> Hi Marc,
+>>>
+>>> You are right. We have to do two step:
+>>> 1. Add missing explanation of 'rockchip,pmu' property to dt-binding document
+>>> 2. If possible, add 'rockchip,pmu' property node to rk3399_dmc dt node.
+>>>
+>>> When I tried to find usage example of 'rockchip,pmu' property,
+>>> I found them as following: The 'rockchip,pmu' property[2] indicates
+>>> 'PMU (Power Management Unit)'. 
+>>>
+>>> $ grep -rn "rockchip,pmu" arch/arm64/boot/dts/
+>>> arch/arm64/boot/dts/rockchip/px30.dtsi:1211:		rockchip,pmu = <&pmugrf>;
+>>> arch/arm64/boot/dts/rockchip/rk3399.dtsi:1909:		rockchip,pmu = <&pmugrf>;
+>>> arch/arm64/boot/dts/rockchip/rk3368.dtsi:807:		rockchip,pmu = <&pmugrf>;
+>>>
+>>> [2] the description of 'rockchip,pmu' property
+>>> - https://protect2.fireeye.com/url?k=e55f0ba3-b8384f85-e55e80ec-0cc47a31384a-d9c5f6b28aba9be6&q=1&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.7.2%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fpinctrl%2Frockchip%2Cpinctrl.txt%23L40
+>>>
+>>>
+>>> If don't receive the any reply, I'll add as following:
+>>>
+>>> cwchoi00@chan-linux-pc:~/kernel/git.kernel/linux.chanwoo$ d
+>>> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>> index 0ec68141f85a..161e60ea874b 100644
+>>> --- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>> +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>> @@ -18,6 +18,8 @@ Optional properties:
+>>>                          format depends on the interrupt controller.
+>>>                          It should be a DCF interrupt. When DDR DVFS finishes
+>>>                          a DCF interrupt is triggered.
+>>> +- rockchip,pmu:                 Phandle to the syscon managing the "pmu general
+>>> +                        register files".
+>>>  
+>>>  Following properties relate to DDR timing:
+>>>  
+>>>
+>>>
+>>
+>>
+> 
+> 
