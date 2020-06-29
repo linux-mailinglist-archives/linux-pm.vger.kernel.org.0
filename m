@@ -2,218 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20BF920E047
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEB120E01C
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730497AbgF2Uok (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 16:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
+        id S1731660AbgF2Umu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 16:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731600AbgF2TN7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:59 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E134C0147FE
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 01:25:18 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id f6so3688884pjq.5
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 01:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=i9Nqhif6ApfXooGjeibxstbXojwGjO9SaXuxe+uQjDQ=;
-        b=jD0KhJNTqUUeR6j8mvpYmsiEJ6YBf4Q+GOdLtNpRkaBosp2KwiuK9yUwZ8EHRsFuai
-         KYlaB4Q7zIBzB2CxHTakt+snj6JFm0zvArqsimL3CTVwFzg9kFc/0uJX+4EJSMKl78Bc
-         YCiIqNCe1diXqPg7c6Mx/WhrlkN/DkzOY8IABTkcpPU92AXSVbkPxz+vgwWZCUWrwHAy
-         HHm4m+xOl4bLGpYOv4MdVIYM7y+wGaHXjZXNn0ntnKRUnenNT2W/SkCtEoTHirw+Bicz
-         6AptWVdJlrnSBh25JHVXnbv+eT7UEvVvS4o5HLKaQ0MHyTc5UnqrtFjtTGM2izAw55it
-         Xx3w==
+        with ESMTP id S1731644AbgF2TOD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:14:03 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C92C008775;
+        Mon, 29 Jun 2020 02:13:48 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id w6so15824552ejq.6;
+        Mon, 29 Jun 2020 02:13:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=i9Nqhif6ApfXooGjeibxstbXojwGjO9SaXuxe+uQjDQ=;
-        b=QckinMMvincwOSEzXSyrdZ+2N8QyfxowDyiHMIkQ7+yM2t4oo2f8zEgWtlBgeGdBOh
-         sfaJ1BPQYkp7EQ8V2TZq4xKGKdwqCX4BjaYakPMdR+3zIWqqCuD8SptJ2CR1SlDz6gVL
-         T2A6W6xcL0d16qhnqeVS0eQ8GBE3ClluJ13OaH1ZevIhYRrkgPQ81L2Lp0syT0US74+e
-         Z03iB0F9pznNtEnO/DG3ksa3BtBw43IcqvdIyW+qv9brcp2ezsxzE3EJuiQD6SGQTTUb
-         SDr80k5BtVL6rJF9FvFzc3UT7d/8u7X0GHtP7AJJ4FPzH01qXpNXxR9LEzQLNgNeRTmS
-         cBdg==
-X-Gm-Message-State: AOAM530oGl6paM14bz+14qjafxDp2Pen5obzsVr+2PR3MExOygzRmDz8
-        QBtqL3qFVM7Gro2/yzMf3Buq+A==
-X-Google-Smtp-Source: ABdhPJySmY+y/vwIX7ZPHKRcm025SbC8nwl+OHt6zHB9pB5+zOoWeprGva6CTquPpjzuELrjdUDBrw==
-X-Received: by 2002:a17:90b:1492:: with SMTP id js18mr8390978pjb.42.1593419118010;
-        Mon, 29 Jun 2020 01:25:18 -0700 (PDT)
-Received: from localhost ([122.172.127.76])
-        by smtp.gmail.com with ESMTPSA id 8sm19048210pja.0.2020.06.29.01.25.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jun 2020 01:25:17 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com, tkjos@google.com, adharmap@codeaurora.org,
-        Quentin Perret <qperret@google.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V4 3/3] cpufreq: Specify default governor on command line
-Date:   Mon, 29 Jun 2020 13:55:00 +0530
-Message-Id: <96b6e6ca02b664194ff3e57e1ec768fbc597bf38.1593418662.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1593418662.git.viresh.kumar@linaro.org>
-References: <cover.1593418662.git.viresh.kumar@linaro.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=3y8JQhJxn3CQlaKZteqal2/97kZCmMBM7dtDyKGGv64=;
+        b=tXvn0UHMgVbxGSsnrbFejJhoGstArJKYgxJ4LsZKe3InYTYQuEMZ9MfAT/5sRv+hEm
+         HhxZY5Z7VK3/GF+b3p842g4dAC3oK/gzQ803sy+Lthtr2SdXgUbfTmP+y78CuKQe4mAi
+         t+KwfxCMS+PfQEZJfVU4oGLRjOQJaDEYCqHlJU624iQxrlcyVPOYsB59c3O649GlWCxW
+         2kMj6Ys/NjIzBbrMuy2mTA/T7yoiZlibx17cEqOhRWQCFabX45lQEtkMgoNkLMvNw5DF
+         mh9f/2ArtHAWQ6nLto6KaRSfxSz2mI0ed3UaH/Bg/nmQLtjrO/y4z6WI6wpKgIl5+pTo
+         NSlg==
+X-Gm-Message-State: AOAM532wE7IXCRE1nmDKaP1tk3VsgjhdEaNV3Gmv3UhhhK94V8TnQ0JL
+        E39KPeWhvGtCjOj6kAgeuZhDqP75
+X-Google-Smtp-Source: ABdhPJyUgK9GSbdCJz/BUuE5Y9gd62uMCDp7R4PGI83oXcm73c/vzRhudmdjK8/T6BUfn6qrxsCr9g==
+X-Received: by 2002:a17:906:3e84:: with SMTP id a4mr12493437ejj.372.1593422027202;
+        Mon, 29 Jun 2020 02:13:47 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.195])
+        by smtp.googlemail.com with ESMTPSA id f17sm28318273edj.32.2020.06.29.02.13.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Jun 2020 02:13:46 -0700 (PDT)
+Date:   Mon, 29 Jun 2020 11:13:43 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH 1/4] ARM: exynos: Apply little core workaround only under
+ secure firmware
+Message-ID: <20200629091343.GA16015@kozik-lap>
+References: <20200616081230.31198-1-m.szyprowski@samsung.com>
+ <CGME20200616081249eucas1p151a8892ca0abfa3108955e1fc5054fc3@eucas1p1.samsung.com>
+ <20200616081230.31198-2-m.szyprowski@samsung.com>
+ <1f59ab26-94e8-6ee8-48f9-568cf1a0edfa@arm.com>
+ <20200622171904.GA4174@kozik-lap>
+ <96d7f0f2-63c0-8c8d-5a79-ba27295b389a@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <96d7f0f2-63c0-8c8d-5a79-ba27295b389a@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Quentin Perret <qperret@google.com>
+On Mon, Jun 29, 2020 at 10:54:27AM +0200, Marek Szyprowski wrote:
+> Hi Krzysztof,
+> 
+> On 22.06.2020 19:19, Krzysztof Kozlowski wrote:
+> > On Wed, Jun 17, 2020 at 05:26:58PM +0100, Lukasz Luba wrote:
+> >> I've give it a try with hotplug torture tests and has only one a minor
+> >> comment.
+> >>
+> >> On 6/16/20 9:12 AM, Marek Szyprowski wrote:
+> >>> The additional soft-reset call during little core power up was needed
+> >>> to properly boot all cores on the Exynos5422-based boards with secure
+> >>> firmware (like Odroid XU3/XU4 family). This however broke big.LITTLE
+> >>> CPUidle driver, which worked only on boards without secure firmware
+> >>> (like Peach-Pit/Pi Chromebooks).
+> >>>
+> >>> Apply the workaround only when board is running under secure firmware.
+> >>>
+> >>> Fixes: 833b 5794 e330 ("ARM: EXYNOS: reset Little cores when cpu is up")
+> > Fix the Fixes tag (in case of resend, otherwise I'll do it).
+> >
+> >>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> >>> ---
+> >>>    arch/arm/mach-exynos/mcpm-exynos.c | 10 +++++++---
+> >>>    1 file changed, 7 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/arch/arm/mach-exynos/mcpm-exynos.c b/arch/arm/mach-exynos/mcpm-exynos.c
+> >>> index 9a681b421ae1..cd861c57d5ad 100644
+> >>> --- a/arch/arm/mach-exynos/mcpm-exynos.c
+> >>> +++ b/arch/arm/mach-exynos/mcpm-exynos.c
+> >>> @@ -26,6 +26,7 @@
+> >>>    #define EXYNOS5420_USE_L2_COMMON_UP_STATE	BIT(30)
+> >>>    static void __iomem *ns_sram_base_addr __ro_after_init;
+> >>> +static bool secure_firmware __ro_after_init;
+> >>>    /*
+> >>>     * The common v7_exit_coherency_flush API could not be used because of the
+> >>> @@ -58,15 +59,16 @@ static void __iomem *ns_sram_base_addr __ro_after_init;
+> >>>    static int exynos_cpu_powerup(unsigned int cpu, unsigned int cluster)
+> >>>    {
+> >>>    	unsigned int cpunr = cpu + (cluster * EXYNOS5420_CPUS_PER_CLUSTER);
+> >>> +	bool state;
+> >>>    	pr_debug("%s: cpu %u cluster %u\n", __func__, cpu, cluster);
+> >>>    	if (cpu >= EXYNOS5420_CPUS_PER_CLUSTER ||
+> >>>    		cluster >= EXYNOS5420_NR_CLUSTERS)
+> >>>    		return -EINVAL;
+> >>> -	if (!exynos_cpu_power_state(cpunr)) {
+> >>> -		exynos_cpu_power_up(cpunr);
+> >>> -
+> >>> +	state = exynos_cpu_power_state(cpunr);
+> >>> +	exynos_cpu_power_up(cpunr);
+> >> I can see that you have moved this call up, probably to avoid more
+> >> 'if-else' stuff. I just wanted to notify you that this function
+> >> 'exynos_cpu_powerup' is called twice when cpu is going up:
+> >> 1. by the already running cpu i.e. CPU0 and the 'state' is 0 for i.e.
+> >> CPU2
+> >> 2. by the newly starting cpu i.e. CPU2 by running
+> >> 'secondary_start_kernel' and the state is 3.
+> >>
+> >> In this scenario the 'exynos_cpu_power_up' will be called twice.
+> >> I have checked in hotplug that this is not causing any issues, but
+> >> thought maybe it's worth share it with you. Maybe you can double check
+> >> in TRM that this is not causing anything.
+> > This brings the old code, before 833b5794e33. I wonder why? I understood
+> > that only soft-reset should be skipped.
+> 
+> Because otherwise the Peach boards hangs during the cpuidle. I didn't 
+> analyze the code that much to judge if it is really necessary in all 
+> cases, I only restored what worked initially. I can add a comment about 
+> that to the commit log if needed.
 
-Currently, the only way to specify the default CPUfreq governor is via
-Kconfig options, which suits users who can build the kernel themselves
-perfectly.
+Yes, please mention this in commit msg.
 
-However, for those who use a distro-like kernel (such as Android, with
-the Generic Kernel Image project), the only way to use a different
-default is to boot to userspace, and to then switch using the sysfs
-interface. Being able to specify the default governor on the command
-line, like is the case for cpuidle, would enable those users to specify
-their governor of choice earlier on, and to simplify slighlty the
-userspace boot procedure.
-
-To support this use-case, add a kernel command line parameter enabling
-to specify a default governor for CPUfreq, which takes precedence over
-the builtin default.
-
-This implementation has one notable limitation: the default governor
-must be registered before the driver. This is solved for builtin
-governors and drivers using appropriate *_initcall() functions. And in
-the modular case, this must be reflected as a constraint on the module
-loading order.
-
-Signed-off-by: Quentin Perret <qperret@google.com>
-[ Viresh: Converted 'default_governor' to a string and parsing it only
-	  at initcall level, and several updates to
-	  cpufreq_init_policy(). ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- .../admin-guide/kernel-parameters.txt         |  5 +++
- Documentation/admin-guide/pm/cpufreq.rst      |  6 ++--
- drivers/cpufreq/cpufreq.c                     | 31 +++++++++++++------
- 3 files changed, 30 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index fb95fad81c79..8deb5a89328a 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -703,6 +703,11 @@
- 	cpufreq.off=1	[CPU_FREQ]
- 			disable the cpufreq sub-system
- 
-+	cpufreq.default_governor=
-+			[CPU_FREQ] Name of the default cpufreq governor or
-+			policy to use. This governor must be registered in the
-+			kernel before the cpufreq driver probes.
-+
- 	cpu_init_udelay=N
- 			[X86] Delay for N microsec between assert and de-assert
- 			of APIC INIT to start processors.  This delay occurs
-diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-index 0c74a7784964..368e612145d2 100644
---- a/Documentation/admin-guide/pm/cpufreq.rst
-+++ b/Documentation/admin-guide/pm/cpufreq.rst
-@@ -147,9 +147,9 @@ CPUs in it.
- 
- The next major initialization step for a new policy object is to attach a
- scaling governor to it (to begin with, that is the default scaling governor
--determined by the kernel configuration, but it may be changed later
--via ``sysfs``).  First, a pointer to the new policy object is passed to the
--governor's ``->init()`` callback which is expected to initialize all of the
-+determined by the kernel command line or configuration, but it may be changed
-+later via ``sysfs``).  First, a pointer to the new policy object is passed to
-+the governor's ``->init()`` callback which is expected to initialize all of the
- data structures necessary to handle the given policy and, possibly, to add
- a governor ``sysfs`` interface to it.  Next, the governor is started by
- invoking its ``->start()`` callback.
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index e9e8200a0211..ad94b1d47ddb 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -50,6 +50,8 @@ static LIST_HEAD(cpufreq_governor_list);
- #define for_each_governor(__governor)				\
- 	list_for_each_entry(__governor, &cpufreq_governor_list, governor_list)
- 
-+static char default_governor[CPUFREQ_NAME_LEN];
-+
- /**
-  * The "cpufreq driver" - the arch- or hardware-dependent low
-  * level driver of CPUFreq support, and its spinlock. This lock
-@@ -1061,7 +1063,6 @@ __weak struct cpufreq_governor *cpufreq_default_governor(void)
- 
- static int cpufreq_init_policy(struct cpufreq_policy *policy)
- {
--	struct cpufreq_governor *def_gov = cpufreq_default_governor();
- 	struct cpufreq_governor *gov = NULL;
- 	unsigned int pol = CPUFREQ_POLICY_UNKNOWN;
- 	int ret;
-@@ -1071,21 +1072,27 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
- 		gov = get_governor(policy->last_governor);
- 		if (gov) {
- 			pr_debug("Restoring governor %s for cpu %d\n",
--				 policy->governor->name, policy->cpu);
--		} else if (def_gov) {
--			gov = def_gov;
--			__module_get(gov->owner);
-+				 gov->name, policy->cpu);
- 		} else {
--			return -ENODATA;
-+			gov = get_governor(default_governor);
-+		}
-+
-+		if (!gov) {
-+			gov = cpufreq_default_governor();
-+			if (!gov)
-+				return -ENODATA;
-+			__module_get(gov->owner);
- 		}
-+
- 	} else {
-+
- 		/* Use the default policy if there is no last_policy. */
- 		if (policy->last_policy) {
- 			pol = policy->last_policy;
--		} else if (def_gov) {
--			pol = cpufreq_parse_policy(def_gov->name);
-+		} else {
-+			pol = cpufreq_parse_policy(default_governor);
- 			/*
--			 * In case the default governor is neiter "performance"
-+			 * In case the default governor is neither "performance"
- 			 * nor "powersave", fall back to the initial policy
- 			 * value set by the driver.
- 			 */
-@@ -2795,13 +2802,19 @@ EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
- 
- static int __init cpufreq_core_init(void)
- {
-+	struct cpufreq_governor *gov = cpufreq_default_governor();
-+
- 	if (cpufreq_disabled())
- 		return -ENODEV;
- 
- 	cpufreq_global_kobject = kobject_create_and_add("cpufreq", &cpu_subsys.dev_root->kobj);
- 	BUG_ON(!cpufreq_global_kobject);
- 
-+	if (!strlen(default_governor))
-+		strncpy(default_governor, gov->name, CPUFREQ_NAME_LEN);
-+
- 	return 0;
- }
- module_param(off, int, 0444);
-+module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
- core_initcall(cpufreq_core_init);
--- 
-2.25.0.rc1.19.g042ed3e048af
+Best regards,
+Krzysztof
 
