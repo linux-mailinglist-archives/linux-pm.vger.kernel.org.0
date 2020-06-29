@@ -2,90 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D97120E6A6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F3320E86B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 00:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404143AbgF2VtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 17:49:20 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:51886 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404340AbgF2VtF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 17:49:05 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id D9FFE1C0C22; Mon, 29 Jun 2020 23:49:00 +0200 (CEST)
-Date:   Mon, 29 Jun 2020 23:49:00 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Merlijn Wajer <merlijn@wizzup.org>
-Cc:     kernel list <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-omap@vger.kernel.org, tony@atomide.com, sre@kernel.org,
-        nekit1000@gmail.com, mpartap@gmx.net, martin_rysavy@centrum.cz,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC] Limiting charge current on Droid 4 (and N900)
-Message-ID: <20200629214900.GB26513@amd>
-References: <20200615140557.GA22781@duo.ucw.cz>
- <23f924be-a0ee-8efa-d92c-da83700261da@wizzup.org>
+        id S2391913AbgF2WGl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 18:06:41 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:40152 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404852AbgF2WGj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 18:06:39 -0400
+Received: by mail-io1-f65.google.com with SMTP id q8so18891303iow.7;
+        Mon, 29 Jun 2020 15:06:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d7i/LtCWxvjcrkXKayf7wJy9l1xOiA2SNi/swky4zLs=;
+        b=qLdJXcPscwc3PFY50yegWdAsLBHC54GiL4gYXMR3cLhKfeE3Qc4tzIKGsyz/QutbkW
+         dNFNivu56Q9rxEcbHgc6nt7Ux9uxtTPEgSbkkK2VaLArJUTSPLPfOhjQvFqNXhEGsONp
+         HfF1/16rL3djkFNZIkWNL//zR0Ve5ogJUcR5mW/cp6UOajRLAQcpAODLTWpdHJptoBVL
+         LBBWcvW8YyxiMfdAlWVxig9cWw7vxrNdjS2LpMOP969UKZLN3VTaduq5qoJzzelrnD5V
+         yDIK+ZWMemU8w/3LmJL4WJI8dfK8Vpq3c0IiHyaGamLZzf32CN0tUBCFDJyGszPasPcE
+         8HXw==
+X-Gm-Message-State: AOAM5310p9e0Oi5sOfZduAQx7NXmtg+f0oMJCFh4x9/0jSfeaaR0+oWg
+        i+CdgQSAe1IZS3VvIj+Fgw==
+X-Google-Smtp-Source: ABdhPJzu7iHEmXhdSieXnQBr0DvEvJgrCjdJBUPurQFawvCOFA7nufQByGRhQUQtaAcZ36ucGFZwCw==
+X-Received: by 2002:a6b:5b14:: with SMTP id v20mr19143451ioh.182.1593468398381;
+        Mon, 29 Jun 2020 15:06:38 -0700 (PDT)
+Received: from xps15 ([64.188.179.255])
+        by smtp.gmail.com with ESMTPSA id t11sm627471ils.3.2020.06.29.15.06.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 15:06:37 -0700 (PDT)
+Received: (nullmailer pid 3025233 invoked by uid 1000);
+        Mon, 29 Jun 2020 22:06:36 -0000
+Date:   Mon, 29 Jun 2020 16:06:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        catalin.marinas@arm.com, mperttunen@nvidia.com,
+        jonathanh@nvidia.com, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org, will@kernel.org,
+        talho@nvidia.com, linux-arm-kernel@lists.infradead.org,
+        thierry.reding@gmail.com, bbasu@nvidia.com
+Subject: Re: [TEGRA194_CPUFREQ PATCH v4 1/4] dt-bindings: arm: Add t194
+ ccplex compatible and bpmp property
+Message-ID: <20200629220636.GA3022986@bogus>
+References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
+ <1593186236-12760-2-git-send-email-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="ZfOjI3PrQbgiZnxM"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <23f924be-a0ee-8efa-d92c-da83700261da@wizzup.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <1593186236-12760-2-git-send-email-sumitg@nvidia.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, 26 Jun 2020 21:13:53 +0530, Sumit Gupta wrote:
+> To do frequency scaling on all CPUs within T194 CPU Complex, we need
+> to query BPMP for data on valid operating points. Document a compatible
+> string under 'cpus' node to represent the CPU Complex for binding drivers
+> like cpufreq which don't have their node or CPU Complex node to bind to.
+> Also, document a property to point to the BPMP device that can be queried
+> for all CPUs.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/arm/cpus.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
---ZfOjI3PrQbgiZnxM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
+My bot found errors running 'make dt_binding_check' on your patch:
 
-> > Droid 4 has same problem as N900: it is often neccessary to manually
-> > tweak current draw from USB, for example when using thin charging cable.
-> >=20
-> > N900 creates unique attribute by hand, but I believe
-> > POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT looks suitable. (Should N900 be
-> > converted?)
-> >=20
-> > Comments? Would the patch be acceptable after fixing whitespace?
->=20
-> I'm not very knowledgeable on batteries - but the patch looks good to me.
->=20
-> Could you perhaps explain what exactly this fixes? I've seen some
-> interesting behaviour when plugging a Droid 4 into a PC (or wall
-> charger, really): the led blinks for a few seconds until it
-> stabilises.
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: Additional properties are not allowed ('descrption' was unexpected)
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: 'descrption' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'type', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: {'$ref': '/schemas/types.yaml#/definitions/phandle', 'descrption': 'Specifies the bpmp node that needs to be queried to get\noperating point data for all CPUs.\n\nOptional for NVIDIA Tegra194 Carmel CPUs\n'} is not valid under any of the given schemas (Possible causes of the failure):
+	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/arm/cpus.yaml: properties:nvidia,bpmp: 'description' is a required property
 
-With this patch, we'll limit charging to 0.5A by default, unless
-overrident by user. So you should not see green LED blinking, unless
-you manually select bigger current than charger can handle.
+Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/arm/cpus.example.dts' failed
+make[1]: *** [Documentation/devicetree/bindings/arm/cpus.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+Makefile:1347: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
 
-> And then there's the issue where, once the battery is full, it will
-> switch between charging and discharging every few seconds/minutes.
 
-This will definitely not help with this one.
+See https://patchwork.ozlabs.org/patch/1317775
 
-Best regards,
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
 
---ZfOjI3PrQbgiZnxM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Please check and re-submit.
 
-iEYEARECAAYFAl76YcwACgkQMOfwapXb+vLX6wCeJphl0Oi4AFWn9kxgBhOq9X31
-wtwAoL3nHC9lc2nGxO6RSI3cXE/ZOYdJ
-=KZon
------END PGP SIGNATURE-----
-
---ZfOjI3PrQbgiZnxM--
