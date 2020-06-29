@@ -2,117 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6554920D46F
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D5920D555
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730428AbgF2TIX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 15:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S1731942AbgF2TQS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730513AbgF2TCm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:02:42 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2FBC030F22
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 09:36:02 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id d6so8252656pjs.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 09:36:02 -0700 (PDT)
+        with ESMTP id S1731936AbgF2TQL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:16:11 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C64C08C5E2
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id b184so1895942pfa.6
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 12:16:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Myoo6ZszmB6Qkv8sLYHFDV565+xqDs7Rlyww/lkwQBA=;
-        b=NIJX+MlmdfRd5dB7nB3OHbZhgQpco07ZwsCvKQ/tGnOuwEqG2JZ6LmCWCV+p97NJ+1
-         toCcqed2xOu+l04ODK8vcdjs2xhX4ig17LH0vh5ECqC1VNEKT1jSDT6PJvCNzLJ2Sr++
-         PmLSzY4IItUo5+0Mi6DsKQioikZSiQ6o71czweVQq1jPKYdMNNXTIC854u8+aTpYwB/p
-         k9BiIvQOn4tmhuokW8wniWhDiheWd7dJ4M4iDh0bJkyWUg3y6e9vgxrI/rxyNoVteeMd
-         IQQu3r5YcJc/1d0BP4MrQxS/P2ivLSKoYwqCja3BdxWi4SBKVEQyXO3UDZsd6BMlPlbf
-         XG0Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=E57soH+fAZU9oM/uuDn4bCNx2wALmvA7rwFsDeo/VdmyR4hSt+vRDMPW0qpAcJ9V/h
+         UbYJ9fIR9BUAZrS+1TfrEzBoFSxbLFUBB/IIzj7rfy4Y1SyxPmM/cs9fEremwVWV5m5u
+         b9v38myIgTBJNjasjLIOUO/K2CJS7vPJsURIlWBEC7RA0ax+vZbkexDjvFbqaAUgNm/w
+         yj4NkgHNxXLdKOO4AZsIv5vnXx8YMl4s3e1fTXh2Hp6rhwVI9k4nzVvvlc/OSvXrfpbl
+         +6DOlsrKa8IKCRxKxdcbetpm2uz+ZUKJBnziwlMhGJ11qW6bGQPIDGjYXF06+gry04Zz
+         3NGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Myoo6ZszmB6Qkv8sLYHFDV565+xqDs7Rlyww/lkwQBA=;
-        b=gEQ2vW4fAmmGOFLBdTsnD9TwLmzepnwj7ulLUvKAnwMyygYHGNe3oeaqEjfbu7rWWE
-         yi460Y7LYTo0qSKhe2Cttugcaw9U7irblNsOVKmgRdrlEixLzJzqrsS+Yfz7lAIg1YyB
-         0R+2FIMwwgbi0BOXStHiE9Z3wdedNAqkV7QGIo2OO/T2RTimYXK+9DmY8r8GsPiq7wAa
-         T2ZEL2DJyJpVkxNRUa5+hp69+m9UN2GAXE4Lmd2vUQSFI47B/g7/TFoHWWdDzoBpkcdC
-         3n7IbKEEMQRIKh3zPJBhDPuyX0C1KsfhsBqiFVa1aY/BXfAnjhscloyE/7xhMEzMYfmE
-         BjaA==
-X-Gm-Message-State: AOAM530OdFSr8J94YMfxYz4f79lXpk4tEFxJ0k7kAYTSFwf+wZt8MVbB
-        tpbG6BtDHXx26mDM5v+8TbW68lWy8OI=
-X-Google-Smtp-Source: ABdhPJwt6HsLfBYhQ/zpXyHXnIxmX3sIs9AufEGI5xCKE2saOC3vefynplOUPL4+cb9MDyi1svAXVg==
-X-Received: by 2002:a17:90a:898a:: with SMTP id v10mr17453145pjn.95.1593448561930;
-        Mon, 29 Jun 2020 09:36:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w3sm99777pjt.19.2020.06.29.09.36.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 09:36:01 -0700 (PDT)
-Message-ID: <5efa1871.1c69fb81.cc4c2.04b0@mx.google.com>
-Date:   Mon, 29 Jun 2020 09:36:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=XdfoRVGuOCD2JOxmLnJxyvoO2f5zjf1xh4i//8cGLHs=;
+        b=LytTJ8rceK032013f/qAbEx9FIxn1prVTagNM9KZkojydCZr1vrjvXR/mk4StIgAXp
+         KKZbQ5yS6dH6fjGXys91tJDNJWwn8I1lB6sIJ/zacpZRuOCj/xiHaZ953FI1NYYyZtSF
+         4Zt0p0Xt5Sk9S7L6ZEGNJ+bOYOlBCprtb2C4MTTMeQw4qAg6pr4KhUnXo8DX6bFTYcrF
+         avuQdvRNWfB6XBvHH1OQTdJYnKwEf/T0w6jRq4lqJA3CfNMpw4Ojx7/w/nE4XSw10aP6
+         dZzCenEg/CrBdo2IJmUJAxwArdaWPQKUAwtqdCo4vu3D8RAXI7PO7CMonKXVIT+68Ta+
+         z9qQ==
+X-Gm-Message-State: AOAM530VHhKQt3nH9iyhDNZS0FJKKWr7KOqG9vLy7B6kpVWlxgN9Y7CU
+        P+rqQDCknzkGvVB1AabX05QLg1p4Yv+oiyxmwtEQxAVvpvU=
+X-Google-Smtp-Source: ABdhPJyNR5zXZ8o09DSJzsSA3OSccnAxM/c9AxKQjYYOZlXvOMCiHs1YW/1gQi1Sa70TQ2VOPtabshfviWRkV7+ICnM=
+X-Received: by 2002:a6b:db17:: with SMTP id t23mr18236117ioc.4.1593458159284;
+ Mon, 29 Jun 2020 12:15:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc3-20-g4ebdb176f4ab
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 34 runs,
- 1 regressions (v5.8-rc3-20-g4ebdb176f4ab)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Received: by 2002:a05:6602:1588:0:0:0:0 with HTTP; Mon, 29 Jun 2020 12:15:58
+ -0700 (PDT)
+Reply-To: mrs.victoria.alexander2@gmail.com
+From:   "mrs.victoria alexander" <markalexandermilley321@gmail.com>
+Date:   Mon, 29 Jun 2020 12:15:58 -0700
+Message-ID: <CAP7XNCwEGQ+-Q==u4yk4yvJdk1X+gsfSU6pUV_hROjmF=p-DHw@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 34 runs, 1 regressions (v5.8-rc3-20-g4ebdb176f4ab)
-
-Regressions Summary
--------------------
-
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+Dear friend,
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc3=
--20-g4ebdb176f4ab/plan/baseline/
+I have a business container transaction what that some of( $13million dollars)
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-rc3-20-g4ebdb176f4ab
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      4ebdb176f4ab253a2f7eb2b924dd3dba9fa3bc1d =
+ I would like to discuss with you. If you are interested, please
+contact my email
 
+address (mrs.victoria.alexander2@gmail.com)
 
+My WhatsApp number but only message (+19293737780)
 
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab          | compiler | defconfig | results
-----------------+-------+--------------+----------+-----------+--------
-bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efa0d9f3f32f9016e85bb20
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc3-20-g4ebdb1=
-76f4ab/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc3-20-g4ebdb1=
-76f4ab/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efa0d9f3f32f901=
-6e85bb23
-      new failure (last pass: v5.8-rc2-27-g3168a010c528)
-      2 lines =20
+Please do not reply if you are not ready
+Thanks
