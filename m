@@ -2,98 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E51FE20E061
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCC420DD8C
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 23:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730060AbgF2Upy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 16:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S1731304AbgF2TNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731567AbgF2TN5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:57 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70532C08EACB
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:17:45 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k71so4103910pje.0
-        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:17:45 -0700 (PDT)
+        with ESMTP id S1731273AbgF2TNI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:13:08 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB4C08EC05
+        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:48:28 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id s1so16761102ljo.0
+        for <linux-pm@vger.kernel.org>; Sun, 28 Jun 2020 23:48:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/iWF9Aktns6tjUCoIAHOc+DKzNhTAu9vb8oX3epUC60=;
-        b=blY5505ygN1qt1Y8DSpy0SiYhbAhUtlzOYCJQL61xLBe5ORTR3pWGY2BSrDFUf/frY
-         D2KvctYi0X9Ru4JBVk6rpW0KJGoE6oLqz2VhAUynepoFHbJ2tVw3/pYv2ujjSLBKo+cZ
-         xJsCdaCDR1eK+PCnlmrpDahrh6/Q/7Ls9G6cjc2mnEoLxWf8SRWVkadedQsCIsOXQcog
-         QbspxLbknbwM3pgGBz+VC2c9ai4fqnMqPyOi2JVK+m+Y8+R7SofQf6PYyPWFqo4q/6Lg
-         9DW1LM6RJ/DvVtF9/5oFhneRt9RQoGxAXSwjuwZVCv7KOp0aPb2jd6ycudIjnuVJqhNz
-         l6AA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TMiOaRXPbBCmvsQhZQZwPQhO0CEmmeEuzVBe8QB9/bw=;
+        b=eZN+AKNqDPqkzjHlgJVXVozWvev4EslhTtOwR9F7cRMyVurHeID6ZtGHxLXI6DwfO4
+         7ZepBNV+kKuvghwEAJLJYqR2JJe+nZLD+XcBOA/kFM30hKbyI2tNhPJBgcQhCM7GckoA
+         6u9oZfZq3Eshn5GTmWpaFRpOKGYX1NjO9lxfthdgptQctcBQoUChdMjiOTV4/kekfBMi
+         b/fzY/qxRfFyBeuMo25vEm+OckxCoSE16THKHctHFWQ+0jCFSVdWqbMBJsMEWjQcECYa
+         wfb+dQ/FNlF+ZSWwP3R2CB4SST9aMucAY+EyH8zmPEQPe2DG5hShPKC5a8pNF8tOdcKy
+         z8wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/iWF9Aktns6tjUCoIAHOc+DKzNhTAu9vb8oX3epUC60=;
-        b=T0HFFlgY6Oueo57agY0AkgrgHUaz7K4AMhfW0FP4Is7qecKcKjIlf39Wh3KDWv55Os
-         kUnEsjpeieDDPdf/ONVC3zZAJnREt5OUnat03zloqBLJwFKNsYHtfR/llkppdchfkLtQ
-         8pzkdFfXfKUXA2KZx17YqJ++XhJCLRYWnoG+ztOtqDP7Ve+8jRYFqj/Ob5S7yVNiFmE9
-         vjvO2gqC8f01pfTg7X9pV/k6XElKFROY+WuU2eUspKP7HucHf05sGbi0R1YLDEyYV2Ig
-         htQAKaCdwbs7r2BTewhKIdVUJDM+OQWKe/xfSzyYgBly/LAZ4TUANd9wFspMv3kLRWpq
-         oLzw==
-X-Gm-Message-State: AOAM530A6jrY84ipDhQE40xg0ISRrgY1YBENUOVQdjOxkycOi+ejG1wJ
-        zfW/bP335J2yrG5XRoA25KX1IA==
-X-Google-Smtp-Source: ABdhPJwTKfFVHzwQAGzguT3A58qTDtSwnwdELyYHjDiWd5nJqHRq6K6pp1+oar1iZXy/qT8C+R3bhQ==
-X-Received: by 2002:a17:902:201:: with SMTP id 1mr12567598plc.195.1593411464987;
-        Sun, 28 Jun 2020 23:17:44 -0700 (PDT)
-Received: from localhost ([122.172.127.76])
-        by smtp.gmail.com with ESMTPSA id t184sm3828984pfd.49.2020.06.28.23.17.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Jun 2020 23:17:44 -0700 (PDT)
-Date:   Mon, 29 Jun 2020 11:47:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, will@kernel.org,
-        thierry.reding@gmail.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, jonathanh@nvidia.com, talho@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ PATCH v4 4/4] arm64: defconfig: Enable
- CONFIG_ARM_TEGRA194_CPUFREQ
-Message-ID: <20200629061742.26pd4rzswlb5wegx@vireshk-i7>
-References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
- <1593186236-12760-5-git-send-email-sumitg@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TMiOaRXPbBCmvsQhZQZwPQhO0CEmmeEuzVBe8QB9/bw=;
+        b=jluNK8WwNbwLN2cpP4oIrv6CU8ytF5P/3ruwMrVK3yHxw4O6kzxDX699Cn50XrgmxN
+         olAET7gTpTcZ6uOPvNNR4hDDsEpP9lkPHeL14vhVT4Nxfg+ASsaZGJnNOU4aNyhXzkeT
+         vx1Ne0H8TP2bLcfpbloWPHr+KSH16sEkvgJ8bJsFJqnJmc0TtgnPBr574nB+Da6rIY8o
+         x++TbPSiyOIW6J/dCowvIzbBCvzocZBbXIc+09N9n6PsjnOO6pTGYbOLQbzPjNKlpnrn
+         idSyjQKIl5PSpcDuWLSwvUHahSWFkn7wXwI9pyrLostw2cs12hTv0SntGudUiD+a0fvh
+         3P7g==
+X-Gm-Message-State: AOAM53157gmHPanfgVqUcn0FoHfgh7kWiDWkkP/tMVW/96WOb7FJjdBJ
+        z21D3M7AE+hCVrDwNvBYrrVmQwpIfETfbDZlvIJoiA==
+X-Google-Smtp-Source: ABdhPJz8Xi/8RhtlNzOxfZcCcsQ6wXqbmRLtT2FZvNHfcrfRdS7lFVKrxm6GjHGDNhqpKJg6rwrDW4am/48Bpmy6opo=
+X-Received: by 2002:a2e:9d10:: with SMTP id t16mr7294802lji.46.1593413306316;
+ Sun, 28 Jun 2020 23:48:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1593186236-12760-5-git-send-email-sumitg@nvidia.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <202006281417.GPpEXCGD%lkp@intel.com> <20200628060359.GA29916@8567a11ddfea>
+In-Reply-To: <20200628060359.GA29916@8567a11ddfea>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 29 Jun 2020 12:18:15 +0530
+Message-ID: <CAP245DVK6+if=73AtveXJO=y-J75cWZkCRzFy1G+RJ0QXokCzg@mail.gmail.com>
+Subject: Re: [RFC PATCH linus] drivers: thermal: tsens: tsens_critical_irq_thread()
+ can be static
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26-06-20, 21:13, Sumit Gupta wrote:
-> Enable Tegra194 CPU frequency scaling support by default.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Hi,
+
+A patch to fix this was already submitted on 27th May.
+
+I believe Daniel plans to send it as fixes for -rc4.
+
+Regards,
+Amit
+
+On Sun, Jun 28, 2020 at 11:34 AM kernel test robot <lkp@intel.com> wrote:
+>
+>
+> Fixes: a7ff82976122 ("drivers: thermal: tsens: Merge tsens-common.c into tsens.c")
+> Signed-off-by: kernel test robot <lkp@intel.com>
 > ---
->  arch/arm64/configs/defconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index f9d378d..385bd35 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -91,6 +91,7 @@ CONFIG_ARM_QCOM_CPUFREQ_NVMEM=y
->  CONFIG_ARM_QCOM_CPUFREQ_HW=y
->  CONFIG_ARM_RASPBERRYPI_CPUFREQ=m
->  CONFIG_ARM_TEGRA186_CPUFREQ=y
-> +CONFIG_ARM_TEGRA194_CPUFREQ=y
->  CONFIG_QORIQ_CPUFREQ=y
->  CONFIG_ARM_SCPI_PROTOCOL=y
->  CONFIG_RASPBERRYPI_FIRMWARE=y
-
-Instead of this, maybe you can rather add a default y thing in the
-Kconfig itself as this is a single platform driver.
-
--- 
-viresh
+>  tsens.c |   10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 8d3e94d2a9ed4..39c4462e38f62 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -382,7 +382,7 @@ static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
+>   *
+>   * Return: IRQ_HANDLED
+>   */
+> -irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+> +static irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+>  {
+>         struct tsens_priv *priv = data;
+>         struct tsens_irq_data d;
+> @@ -452,7 +452,7 @@ irqreturn_t tsens_critical_irq_thread(int irq, void *data)
+>   *
+>   * Return: IRQ_HANDLED
+>   */
+> -irqreturn_t tsens_irq_thread(int irq, void *data)
+> +static irqreturn_t tsens_irq_thread(int irq, void *data)
+>  {
+>         struct tsens_priv *priv = data;
+>         struct tsens_irq_data d;
+> @@ -520,7 +520,7 @@ irqreturn_t tsens_irq_thread(int irq, void *data)
+>         return IRQ_HANDLED;
+>  }
+>
+> -int tsens_set_trips(void *_sensor, int low, int high)
+> +static int tsens_set_trips(void *_sensor, int low, int high)
+>  {
+>         struct tsens_sensor *s = _sensor;
+>         struct tsens_priv *priv = s->priv;
+> @@ -557,7 +557,7 @@ int tsens_set_trips(void *_sensor, int low, int high)
+>         return 0;
+>  }
+>
+> -int tsens_enable_irq(struct tsens_priv *priv)
+> +static int tsens_enable_irq(struct tsens_priv *priv)
+>  {
+>         int ret;
+>         int val = tsens_version(priv) > VER_1_X ? 7 : 1;
+> @@ -570,7 +570,7 @@ int tsens_enable_irq(struct tsens_priv *priv)
+>         return ret;
+>  }
+>
+> -void tsens_disable_irq(struct tsens_priv *priv)
+> +static void tsens_disable_irq(struct tsens_priv *priv)
+>  {
+>         regmap_field_write(priv->rf[INT_EN], 0);
+>  }
