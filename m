@@ -2,184 +2,282 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B892520D387
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAA520D477
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jun 2020 21:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730127AbgF2S75 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 14:59:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:37356 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728088AbgF2S74 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:59:56 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2328143B;
-        Mon, 29 Jun 2020 04:52:15 -0700 (PDT)
-Received: from [10.37.12.67] (unknown [10.37.12.67])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 854593F73C;
-        Mon, 29 Jun 2020 04:52:12 -0700 (PDT)
-Subject: Re: brocken devfreq simple_ondemand for Odroid XU3/4?
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Cc:     Kamil Konieczny <k.konieczny@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        id S1727006AbgF2TIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 Jun 2020 15:08:36 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:14372 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730761AbgF2TIe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 15:08:34 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200629120111epoutp03c3010a8c4e24c4697867267f9bd40ec4~dAgbDms8l1762117621epoutp03x
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 12:01:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200629120111epoutp03c3010a8c4e24c4697867267f9bd40ec4~dAgbDms8l1762117621epoutp03x
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1593432071;
+        bh=Nkwx+fzu3X0xc6Y/GQe/dfl93aOi9to2z0NjebNWLAk=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=S4KcnfRxe8kvj+5KLtOW02fH0HRyd7Rlm2Wcnc/PrRxLqT7+8v//oYwOwqZFtimGv
+         k+dut8KvSVROgRD7sVdAPQQrctLvRuZfg2jGcaZO3MAcLKPkgOVcV9Vmua5ixJ88fP
+         LyLkPE6R17zgeKuRRhMdW3BNPEHYs1RT2hRQgmug=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20200629120110epcas1p40f28ff568b492deb15a1eb663584ef3c~dAgae_U0E3257632576epcas1p4_;
+        Mon, 29 Jun 2020 12:01:10 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.40.157]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 49wR0N3krPzMqYlp; Mon, 29 Jun
+        2020 12:01:08 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A3.07.28578.408D9FE5; Mon, 29 Jun 2020 21:01:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200629120107epcas1p3d599c93a005a36d3caba86785d27da27~dAgXxD_z71595315953epcas1p3u;
+        Mon, 29 Jun 2020 12:01:07 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200629120107epsmtrp1088d1483b95573ad0fbe7ba43562b3d2~dAgXwTlHr1642016420epsmtrp1B;
+        Mon, 29 Jun 2020 12:01:07 +0000 (GMT)
+X-AuditID: b6c32a39-8c9ff70000006fa2-bd-5ef9d804583f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        03.C9.08303.308D9FE5; Mon, 29 Jun 2020 21:01:07 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200629120107epsmtip246ec2fee9326708f827b30a009d3db48~dAgXcx1352885228852epsmtip2e;
+        Mon, 29 Jun 2020 12:01:07 +0000 (GMT)
+Subject: Re: [PATCH v2] PM / devfreq: rk3399_dmc: Fix kernel oops when
+ rockchip,pmu is absent
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20200623164733.qbhua7b6cg2umafj@macmini.local>
- <CAJKOXPeLuq81NC2xZh3y32EB-_APbDAchZD4OW_eCgQKKO+p8w@mail.gmail.com>
- <20200623191129.GA4171@kozik-lap>
- <CGME20200624103308eucas1p188a5fe3cee1916d9430c9971c2dab3a3@eucas1p1.samsung.com>
- <85f5a8c0-7d48-f2cd-3385-c56d662f2c88@arm.com>
- <ef5184ed-00ff-4226-5ece-b0fc8eb16fb6@samsung.com>
- <4a72fcab-e8da-8323-1fbe-98a6a4b3e0f1@arm.com>
- <4c3b01af-2337-1eba-4675-6488105144c8@samsung.com>
- <6f8b1119-62b1-942d-cfde-6f1e9a28c40c@arm.com>
- <ee2e4acb-3986-3227-da1f-177d2756d194@samsung.com>
- <ad4e1a73-6de3-68ee-e3b3-b30bc315bd31@samsung.com>
- <691bc55c-5b04-b519-4575-6dce5ea9914c@samsung.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <be215777-54fd-ed84-0709-1d276bc3fe90@arm.com>
-Date:   Mon, 29 Jun 2020 12:52:10 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        kernel-team@android.com,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <566d2f93-b5ff-b583-3965-83d4b9188c36@samsung.com>
+Date:   Mon, 29 Jun 2020 21:12:18 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <691bc55c-5b04-b519-4575-6dce5ea9914c@samsung.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <267623b3-9fc5-886e-3554-b86fa1e57ccb@collabora.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCJsWRmVeSWpSXmKPExsWy7bCmri7LjZ9xBvv/S1msuX2I0eL/o9es
+        Fju2i1icbXrDbnF51xw2i8+9Rxgtds45yWpxu3EFm8WCjY8YHTg9tu3exuqx4+4SRo9NqzrZ
+        PPq2rGL02H5tHrPH501yAWxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5
+        ibmptkouPgG6bpk5QEcpKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgosC/SKE3OL
+        S/PS9ZLzc60MDQyMTIEKE7Iztn+5ylawTL9iXusv9gbGX6pdjJwcEgImEvNXb2TuYuTiEBLY
+        wSgx68E5dgjnE6NEy7mzTBDOZ0aJaz+fAzkcYC0Nf6Hiuxgler6vZAIZJSTwnlFi4vciEFtY
+        IF7iRssdVhBbRCBKov/jN7AGZoFJTBKTln0AS7AJaEnsf3GDDcTmF1CUuPrjMSOIzStgJ3H9
+        0hawoSwCqhIr3s0Es0UFwiRObmuBqhGUODnzCQvIQZwCjhJ/PgaDhJkFxCVuPZnPBGHLS2x/
+        OwfsNQmBHRwSJzoOsEI84CIx/SsvxPvCEq+Ob2GHsKUkXva3QdnVEitPHmGD6O1glNiy/wIr
+        RMJYYv/SyeCAYBbQlFi/Sx8irCix8/dcRoi9fBLvvvZAreKV6GgTgihRlrj84C4ThC0psbi9
+        k20Co9IsJM/MQvLBLCQfzEJYtoCRZRWjWGpBcW56arFhgSlyXG9iBCdXLcsdjNPfftA7xMjE
+        wXiIUYKDWUmE97P1tzgh3pTEyqrUovz4otKc1OJDjKbA4J3ILCWanA9M73kl8YamRsbGxhYm
+        hmamhoZK4rxO1hfihATSE0tSs1NTC1KLYPqYODilGpjW+N7MFS38GxJxlO94uQYbVzzHzoUb
+        hQ5/0/2/nWnDlV+2Ng/+fplz86DSdhnR+JpZDzbsWXD+g7Jn7Iwl5cn9h5SDEpLTNncZ+58N
+        +7h1+29xud3beurudb3475Dy5Le+zKzm/8w+3cdkZv3fzPCB2/3wM+7HihbPts/8Ez1dWuzy
+        scz+VXfuMhVqzzzad5TxJtNrhZZTv5trc3dZr/Tu+dbr8ujWuUbGz5P3mfKL6Z1Jm1O883GZ
+        g8zNoIPhFbovbKfczll24tyf3g0ace8Dvv5gPBmRrbN48cWmm7xxD99JzYjg+9L/++wPjnzj
+        zXL/9+Qt+z75z9k7gq8XOvS5zO6+Vb5e1iFIP6lI89eiq0osxRmJhlrMRcWJADb1Pfc3BAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSvC7zjZ9xBqv6FS3W3D7EaPH/0WtW
+        ix3bRSzONr1ht7i8aw6bxefeI4wWO+ecZLW43biCzWLBxkeMDpwe23ZvY/XYcXcJo8emVZ1s
+        Hn1bVjF6bL82j9nj8ya5ALYoLpuU1JzMstQifbsEroztX66yFSzTr5jX+ou9gfGXahcjB4eE
+        gIlEw1+mLkYuDiGBHYwSpx8uY+ti5ASKS0pMu3iUGaJGWOLw4WKImreMEo8/PWAFqREWiJe4
+        0XIHzBYRiJI41HOHHaSIWWAKk8T9P7vZIDq2M0usebyZBaSKTUBLYv+LG2Ab+AUUJa7+eMwI
+        YvMK2Elcv7SFCcRmEVCVWPFuJpgtKhAmsXPJYyaIGkGJkzOfsIBcxCngKPHnYzBImFlAXeLP
+        vEvMELa4xK0n85kgbHmJ7W/nME9gFJ6FpHsWkpZZSFpmIWlZwMiyilEytaA4Nz232LDAKC+1
+        XK84Mbe4NC9dLzk/dxMjONK0tHYw7ln1Qe8QIxMH4yFGCQ5mJRHez9bf4oR4UxIrq1KL8uOL
+        SnNSiw8xSnOwKInzfp21ME5IID2xJDU7NbUgtQgmy8TBKdXAdE5H0CJ27ZNpnMWBl+9MjXWa
+        ut5twakjV36Knj3G7XPw4KR5/+ct2SV26lFS5fTZ7q9394n2lstqbHh+Ze3nf0Hzqh/+DFe2
+        fRSp6n376ny1pRnyNf6cBp+bls06XvOK54LU9LqWq+dtVBv23vylcEP7/C53V5mb0T63cjy2
+        3HMImyRYN+msRv6TAyvXcYq6NOje8WEPP7DF9p3ZdVmpNP51aQ2LL97ZnarbuCsz4nr34jdN
+        C7eY3Jiw9d0Cfrf1BobqRRYNMuz/3239LLa2/f+WSRG9FYbhR7g2tYSfDApPeCd0vsLoo3vE
+        +wtGc7M1U/o/aN5t3jGroHN24aya0jMP8pynaJ2Sl7HoY0k9HKPEUpyRaKjFXFScCADYtlxw
+        IwMAAA==
+X-CMS-MailID: 20200629120107epcas1p3d599c93a005a36d3caba86785d27da27
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200622152844epcas1p2309f34247eb9653acdfd3818b7e6a569
+References: <CGME20200622152844epcas1p2309f34247eb9653acdfd3818b7e6a569@epcas1p2.samsung.com>
+        <20200622152824.1054946-1-maz@kernel.org>
+        <784808d7-8943-44ab-f15a-34821e6d4d5f@samsung.com>
+        <87tuyue142.wl-maz@kernel.org>
+        <c1a5b730-0554-bb90-9d8d-b50390482e96@samsung.com>
+        <3de68490-d788-e416-dd5f-d4d6e7eca61a@collabora.com>
+        <154fe5b6-6a05-c2b7-3014-2f7b9c2049f9@samsung.com>
+        <267623b3-9fc5-886e-3554-b86fa1e57ccb@collabora.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Chanwoo,
+Hi Enric,
 
-On 6/29/20 2:43 AM, Chanwoo Choi wrote:
-> Hi,
+On 6/29/20 8:26 PM, Enric Balletbo i Serra wrote:
+> Hi Chanwoo,
 > 
-> Sorry for late reply because of my perfornal issue. I count not check the email.
-
-I hope you are good now.
-
-> 
-> On 6/26/20 8:22 PM, Bartlomiej Zolnierkiewicz wrote:
+> On 29/6/20 13:29, Chanwoo Choi wrote:
+>> Hi Enric and Mark,
 >>
->> On 6/25/20 2:12 PM, Kamil Konieczny wrote:
->>> On 25.06.2020 14:02, Lukasz Luba wrote:
->>>>
->>>>
->>>> On 6/25/20 12:30 PM, Kamil Konieczny wrote:
->>>>> Hi Lukasz,
->>>>>
->>>>> On 25.06.2020 12:02, Lukasz Luba wrote:
->>>>>> Hi Sylwester,
->>>>>>
->>>>>> On 6/24/20 4:11 PM, Sylwester Nawrocki wrote:
->>>>>>> Hi All,
->>>>>>>
->>>>>>> On 24.06.2020 12:32, Lukasz Luba wrote:
->>>>>>>> I had issues with devfreq governor which wasn't called by devfreq
->>>>>>>> workqueue. The old DELAYED vs DEFERRED work discussions and my patches
->>>>>>>> for it [1]. If the CPU which scheduled the next work went idle, the
->>>>>>>> devfreq workqueue will not be kicked and devfreq governor won't check
->>>>>>>> DMC status and will not decide to decrease the frequency based on low
->>>>>>>> busy_time.
->>>>>>>> The same applies for going up with the frequency. They both are
->>>>>>>> done by the governor but the workqueue must be scheduled periodically.
->>>>>>>
->>>>>>> As I have been working on resolving the video mixer IOMMU fault issue
->>>>>>> described here: https://patchwork.kernel.org/patch/10861757
->>>>>>> I did some investigation of the devfreq operation, mostly on Odroid U3.
->>>>>>>
->>>>>>> My conclusions are similar to what Lukasz says above. I would like to add
->>>>>>> that broken scheduling of the performance counters read and the devfreq
->>>>>>> updates seems to have one more serious implication. In each call, which
->>>>>>> normally should happen periodically with fixed interval we stop the counters,
->>>>>>> read counter values and start the counters again. But if period between
->>>>>>> calls becomes long enough to let any of the counters overflow, we will
->>>>>>> get wrong performance measurement results. My observations are that
->>>>>>> the workqueue job can be suspended for several seconds and conditions for
->>>>>>> the counter overflow occur sooner or later, depending among others
->>>>>>> on the CPUs load.
->>>>>>> Wrong bus load measurement can lead to setting too low interconnect bus
->>>>>>> clock frequency and then bad things happen in peripheral devices.
->>>>>>>
->>>>>>> I agree the workqueue issue needs to be fixed. I have some WIP code to use
->>>>>>> the performance counters overflow interrupts instead of SW polling and with
->>>>>>> that the interconnect bus clock control seems to work much better.
->>>>>>>
->>>>>>
->>>>>> Thank you for sharing your use case and investigation results. I think
->>>>>> we are reaching a decent number of developers to maybe address this
->>>>>> issue: 'workqueue issue needs to be fixed'.
->>>>>> I have been facing this devfreq workqueue issue ~5 times in different
->>>>>> platforms.
->>>>>>
->>>>>> Regarding the 'performance counters overflow interrupts' there is one
->>>>>> thing worth to keep in mind: variable utilization and frequency.
->>>>>> For example, in order to make a conclusion in algorithm deciding that
->>>>>> the device should increase or decrease the frequency, we fix the period
->>>>>> of observation, i.e. to 500ms. That can cause the long delay if the
->>>>>> utilization of the device suddenly drops. For example we set an
->>>>>> overflow threshold to value i.e. 1000 and we know that at 1000MHz
->>>>>> and full utilization (100%) the counter will reach that threshold
->>>>>> after 500ms (which we want, because we don't want too many interrupts
->>>>>> per sec). What if suddenly utilization drops to 2% (i.e. from 5GB/s
->>>>>> to 250MB/s (what if it drops to 25MB/s?!)), the counter will reach the
->>>>>> threshold after 50*500ms = 25s. It is impossible just for the counters
->>>>>> to predict next utilization and adjust the threshold. [...]
->>>>>
->>>>> irq triggers for underflow and overflow, so driver can adjust freq
->>>>>
->>>>
->>>> Probably possible on some platforms, depends on how many PMU registers
->>>> are available, what information can be can assign to them and type of
->>>> interrupt. A lot of hassle and still - platform and device specific.
->>>> Also, drivers should not adjust the freq, governors (different types
->>>> of them with different settings that they can handle) should do it.
->>>>
->>>> What the framework can do is to take this responsibility and provide
->>>> generic way to monitor the devices (or stop if they are suspended).
->>>> That should work nicely with the governors, which try to predict the
->>>> next best frequency. From my experience the more fluctuating intervals
->>>> the governors are called, the more odd decisions they make.
->>>> That's why I think having a predictable interval i.e. 100ms is something
->>>> desirable. Tuning the governors is easier in this case, statistics
->>>> are easier to trace and interpret, solution is not to platform specific,
->>>> etc.
->>>>
->>>> Kamil do you have plans to refresh and push your next version of the
->>>> workqueue solution?
+>> On 6/29/20 8:05 PM, Enric Balletbo i Serra wrote:
+>>> Hi Chanwoo and Marc,
 >>>
->>> I do not, as Bartek takes over my work,
->>> +CC Bartek
+>>> On 29/6/20 13:09, Chanwoo Choi wrote:
+>>>> Hi Enric,
+>>>>
+>>>> Could you check this issue? Your patch[1] causes this issue.
+>>>> As Marc mentioned, although rk3399-dmc.c handled 'rockchip,pmu'
+>>>> as the mandatory property, your patch[1] didn't add the 'rockchip,pmu'
+>>>> property to the documentation. 
+>>>>
+>>>
+>>> I think the problem is that the DT binding patch, for some reason, was missed
+>>> and didn't land. The patch seems to have all the required reviews and acks.
+>>>
+>>>   https://patchwork.kernel.org/patch/10901593/
+>>>
+>>> Sorry because I didn't notice this issue when 9173c5ceb035 landed. And thanks
+>>> for fixing the issue.
 >>
->> Hi Lukasz,
+>> If the 'rockchip,pmu' propery is mandatory, instead of Mark's patch,
+>> we better to require the merge of patch[1] to DT maintainer.
 >>
->> As you remember in January Chanwoo has proposed another idea (to allow
->> selecting workqueue type by devfreq device driver):
+>> [1] https://patchwork.kernel.org/patch/10901593/
 >>
->> "I'm developing the RFC patch and then I'll send it as soon as possible."
->> (https://lore.kernel.org/linux-pm/6107fa2b-81ad-060d-89a2-d8941ac4d17e@samsung.com/)
->>
->> "After posting my suggestion, we can discuss it"
->> (https://lore.kernel.org/linux-pm/f5c5cd64-b72c-2802-f6ea-ab3d28483260@samsung.com/)
->>
->> so we have been waiting on the patch to be posted..
 > 
-> Sorry for this. I'll send it within few days.
+> Give me some time to double check, because I think that at this point, is needed
+> on some devices with old firmware but not now. It's been a while since I worked
+> on this, but I suspect that being optional is the right way.
+
+OK. Thanks for your reply.
+
+> 
+> Maybe Heiko, who IIRC worked on TF-A has a more clear thought on this?
+> 
+> Thanks,
+>  Enric
+> 
+>>>
+>>> Best regards,
+>>>  Enric
+>>>
+>>>> [1] 9173c5ceb035 ("PM / devfreq: rk3399_dmc: Pass ODT
+>>>> and auto power down parameters to TF-A.")
+>>>>
+>>>>
+>>>> On 6/29/20 5:18 PM, Marc Zyngier wrote:
+>>>>> Hi Chanwoo,
+>>>>>
+>>>>> On Mon, 29 Jun 2020 03:43:37 +0100,
+>>>>> Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>>>>>>
+>>>>>> Hi Marc,
+>>>>>>
+>>>>>> On 6/23/20 12:28 AM, Marc Zyngier wrote:
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>> It looks good to me. But, I think that it is not necessary
+>>>>>> fully kernel panic log about NULL pointer. It is enoughspsp
+>>>>>> just mentioning the NULL pointer issue without full kernel panic log.
+>>>>>
+>>>>> I personally find the backtrace useful as it allows people with the
+>>>>> same issue to trawl the kernel log and find whether it has already be
+>>>>> fixed upstream. But it's only me, and I'm not attached to it.
+>>>>>
+>>>>>> So, how about editing the patch description as following or others simply?
+>>>>>> and we need to add 'stable@vger.kernel.org' to Cc list for applying it
+>>>>>> to stable branch.
+>>>>>
+>>>>> Looks good to me.
+>>>>>
+>>>>>>
+>>>>>>
+>>>>>>   PM / devfreq: rk3399_dmc: Fix kernel oops when rockchip,pmu is absent
+>>>>>>
+>>>>>>     Booting a recent kernel on a rk3399-based system (nanopc-t4),
+>>>>>>     equipped with a recent u-boot and ATF results in the kernel panic
+>>>>>>     about NULL pointer issue.
+>>>>>
+>>>>> nit: "results in a kernel panic on dereferencing a NULL pointer".
+>>>>>
+>>>>>>
+>>>>>>     This turns out to be due to the rk3399-dmc driver looking for
+>>>>>>     an *undocumented* property (rockchip,pmu), and happily using
+>>>>>>     a NULL pointer when the property isn't there.
+>>>>>>
+>>>>>>     Instead, make most of what was brought in with 9173c5ceb035
+>>>>>>     ("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters
+>>>>>>     to TF-A.") conditioned on finding this property in the device-tree,
+>>>>>>     preventing the driver from exploding.
+>>>>>>
+>>>>>>     Fixes: 9173c5ceb035 ("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters to TF-A.")
+>>>>>>     Signed-off-by: Marc Zyngier <maz@kernel.org>
+>>>>>>     Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>>>>
+>>>>>
+>>>>> Note that the biggest issue is still there: the driver is using an
+>>>>> undocumented property, and this patch is just papering over it.
+>>>>> Since I expect this property to be useful for something, it would be
+>>>>> good for whoever knows what it does to document it.
+>>>>
+>>>> Hi Marc,
+>>>>
+>>>> You are right. We have to do two step:
+>>>> 1. Add missing explanation of 'rockchip,pmu' property to dt-binding document
+>>>> 2. If possible, add 'rockchip,pmu' property node to rk3399_dmc dt node.
+>>>>
+>>>> When I tried to find usage example of 'rockchip,pmu' property,
+>>>> I found them as following: The 'rockchip,pmu' property[2] indicates
+>>>> 'PMU (Power Management Unit)'. 
+>>>>
+>>>> $ grep -rn "rockchip,pmu" arch/arm64/boot/dts/
+>>>> arch/arm64/boot/dts/rockchip/px30.dtsi:1211:		rockchip,pmu = <&pmugrf>;
+>>>> arch/arm64/boot/dts/rockchip/rk3399.dtsi:1909:		rockchip,pmu = <&pmugrf>;
+>>>> arch/arm64/boot/dts/rockchip/rk3368.dtsi:807:		rockchip,pmu = <&pmugrf>;
+>>>>
+>>>> [2] the description of 'rockchip,pmu' property
+>>>> - https://protect2.fireeye.com/url?k=e55f0ba3-b8384f85-e55e80ec-0cc47a31384a-d9c5f6b28aba9be6&q=1&u=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Fv5.7.2%2Fsource%2FDocumentation%2Fdevicetree%2Fbindings%2Fpinctrl%2Frockchip%2Cpinctrl.txt%23L40
+>>>>
+>>>>
+>>>> If don't receive the any reply, I'll add as following:
+>>>>
+>>>> cwchoi00@chan-linux-pc:~/kernel/git.kernel/linux.chanwoo$ d
+>>>> diff --git a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>>> index 0ec68141f85a..161e60ea874b 100644
+>>>> --- a/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>>> +++ b/Documentation/devicetree/bindings/devfreq/rk3399_dmc.txt
+>>>> @@ -18,6 +18,8 @@ Optional properties:
+>>>>                          format depends on the interrupt controller.
+>>>>                          It should be a DCF interrupt. When DDR DVFS finishes
+>>>>                          a DCF interrupt is triggered.
+>>>> +- rockchip,pmu:                 Phandle to the syscon managing the "pmu general
+>>>> +                        register files".
+>>>>  
+>>>>  Following properties relate to DDR timing:
+>>>>  
+>>>>
+>>>>
+>>>
+>>>
+>>
+>>
+> 
+> 
 
 
-Feel free to add me on CC, I can review&test the patches if you like.
-
-Stay safe and healthy.
-
-Regards,
-Lukasz
-
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
