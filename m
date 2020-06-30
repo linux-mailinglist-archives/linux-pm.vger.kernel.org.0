@@ -2,103 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F094420FD9D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 22:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F80F20FF8D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 23:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729409AbgF3U05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 16:26:57 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:62100 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728824AbgF3U05 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jun 2020 16:26:57 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1593548816; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=dqxuWzf6XuS04cq7vFT3rZkwpSupq9TrDFJEIb72eMo=; b=daOedZId6g80b/Ot6N1kAAOBtluJgXajzOIFMyfDYGahVXQgfp4fi5I3l5AjdP+ps2g8EIsZ
- 0Ua9OA0WesSQ0fdaiiQ7hTUq0laW27D/kC7O1qXY48kY/ZNuhhSW39JJBxZMDDePmFmdKNCc
- aCKzYpJsCsdp5w87p1wXwv4tNM8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n10.prod.us-west-2.postgun.com with SMTP id
- 5efb9ffffe1db4db8947a3c3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 30 Jun 2020 20:26:39
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B764AC433CA; Tue, 30 Jun 2020 20:26:39 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0C706C433C8;
-        Tue, 30 Jun 2020 20:26:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0C706C433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
-Date:   Tue, 30 Jun 2020 14:26:38 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle: governor: export cpuidle_register_governor
-Message-ID: <20200630202638.GA16096@codeaurora.org>
-References: <20200630191308.23611-1-ilina@codeaurora.org>
+        id S1726417AbgF3Vy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 17:54:59 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:49430 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726363AbgF3Vy6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 17:54:58 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 05ULstDJ045398;
+        Tue, 30 Jun 2020 16:54:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1593554095;
+        bh=uEJgcb4tcrP5fgkrX6EiOUahHBi41yHxOfg797i9G7Y=;
+        h=From:To:CC:Subject:Date;
+        b=luJLCjuo3qyLzaTYTDGeMj8qnvTA/p8dChi5GC/qx6xjHk793ZR6fw1aq8vl/LbtH
+         6/53pvEVo5jHDk/gxP44InzITsFkaeuQDMNhxPZf3frWqrsh5JNwzAjY8EBbJyDVvO
+         mea5vS7KyGYvkJPGp/uMFM67s7x/iGWYZkK2+Lm4=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05ULstac018843;
+        Tue, 30 Jun 2020 16:54:55 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 30
+ Jun 2020 16:54:55 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 30 Jun 2020 16:54:55 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 05ULstKj046698;
+        Tue, 30 Jun 2020 16:54:55 -0500
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+To:     <sre@kernel.org>, <pali@kernel.org>, <robh@kernel.org>
+CC:     <afd@ti.com>, <r-rivera-matos@ti.com>, <dmurphy@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <sspatil@android.com>
+Subject: [PATCH v14 0/4] Add JEITA properties and introduce the bq2515x charger
+Date:   Tue, 30 Jun 2020 16:54:22 -0500
+Message-ID: <20200630215426.26450-1-r-rivera-matos@ti.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200630191308.23611-1-ilina@codeaurora.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Please ignore this patch. Will re-send.
+Hello,
 
-Thanks,
-Lina
+This patchset adds additional health properties to the power_supply header.
+These additional properties are taken from the JEITA specification. This
+patchset also introduces the bq2515x family of charging ICs.
 
-On Tue, Jun 30 2020 at 13:13 -0600, Lina Iyer wrote:
->Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
->capability of registering cpuidle governors. With this change, let's
->bring the capability back to allow cpuidle governors to be registered
->from a module.
->
->Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->---
-> drivers/cpuidle/governor.c | 1 +
-> include/linux/cpuidle.h    | 1 +
-> 2 files changed, 2 insertions(+)
->
->diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
->index 29acaf48e575..480ec58cffa9 100644
->--- a/drivers/cpuidle/governor.c
->+++ b/drivers/cpuidle/governor.c
->@@ -102,6 +102,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
->
-> 	return ret;
-> }
->+EXPORT_SYMBOL_GPL(cpuidle_register_governor);
->
-> /**
->  * cpuidle_governor_latency_req - Compute a latency constraint for CPU
->diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
->index ec2ef63771f0..cc02ce7eab6c 100644
->--- a/include/linux/cpuidle.h
->+++ b/include/linux/cpuidle.h
->@@ -264,6 +264,7 @@ struct cpuidle_governor {
-> 					bool *stop_tick);
-> 	void (*reflect)		(struct cpuidle_device *dev, int index);
-> };
->+EXPORT_SYMBOL_GPL(cpuidle_governor);
->
-> #ifdef CONFIG_CPU_IDLE
-> extern int cpuidle_register_governor(struct cpuidle_governor *gov);
->-- 
->The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->a Linux Foundation Collaborative Project
->
+Dan Murphy (2):
+  power_supply: Add additional health properties to the header
+  dt-bindings: power: Convert battery.txt to battery.yaml
+
+Ricardo Rivera-Matos (2):
+  dt-bindings: power: Add the bindings for the bq2515x family of
+    chargers.
+  power: supply: bq25150 introduce the bq25150
+
+ Documentation/ABI/testing/sysfs-class-power   |    3 +-
+ .../bindings/power/supply/battery.txt         |   86 +-
+ .../bindings/power/supply/battery.yaml        |  157 +++
+ .../bindings/power/supply/bq2515x.yaml        |   93 ++
+ drivers/power/supply/Kconfig                  |   13 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/bq2515x_charger.c        | 1158 +++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c     |    3 +
+ include/linux/power_supply.h                  |    3 +
+ 9 files changed, 1431 insertions(+), 86 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/battery.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.yaml
+ create mode 100644 drivers/power/supply/bq2515x_charger.c
+
+-- 
+2.27.0
+
