@@ -2,152 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFFD20FC49
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A79820FC76
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 21:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727964AbgF3SzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 14:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbgF3SzB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:55:01 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45519C061755;
-        Tue, 30 Jun 2020 11:55:01 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id b25so20249926ljp.6;
-        Tue, 30 Jun 2020 11:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BzgMhXLEUdnpV+eyiXp8gY+NYcPXZt80LsSxCrt130w=;
-        b=Fo4rsg9H56IFS5D6ha3r5T6pqcQWPWslqUXu7kmBvkklL7wJeH3/nl7CKgFL21ghuy
-         9rNrp2/e1H5T168hRirL0tgYM3ttdLYx+qDNm0pMuPCgpxtgJyRj0iCInQw2GFWe6GVa
-         9lySD/DX9Hdo8MBJmertxwdGWyzPmcQ1Ly5MBtIzTVcAaSp9O2gk+EkXIVDhlw/vLQ5b
-         gSQ+MPWtPJ0C3qEezUAKJgaKc7gK3fEA3ulM3AolgdBF9huNYRvsWRYGxUuUazR10rd/
-         m5AzdWfnDSFig3GRjXEC/OF9UD8xoZwq7mF2wOYJmowN6cr6whdMq5UeV5/pG2ZrtZGd
-         sqTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BzgMhXLEUdnpV+eyiXp8gY+NYcPXZt80LsSxCrt130w=;
-        b=hp6QRcTFNoT551qDamadfv31MOYcBsb7VQDoNMhTfe1a+t68zubocctS0XpvmFoV/8
-         jOkGKE08DkNEd8xyZmzNA1pb85bPk5xI9g4vi+kQEIVFQdQTjMbwKcLnZzn7c53sum9I
-         7EQNdVvcs2e1Eh34PnjB45Rs8rOiBuLklasuZGNdgNec3mJm+Y32Ew+d3uRnINsfBY/I
-         Z3yS+3Odt+AiD86DEDQZmw2Kk4mXxKsSJkBqHbOwIoL6LOprmnxoSjFQJMEC7Qs7MbjZ
-         WjrZPdAmBtgrUEilQ1PLrVl3hIB/ZBbQevnXUcGgOPqS5kezbbJ+Mp4q7IuJI7jGQ0g9
-         GZ6g==
-X-Gm-Message-State: AOAM531vPNwal/SeQ6YO452CA4X1SLq8umKqCHLFGpgA1kxpeNg1ufbi
-        jCScoEUH1xBCNpqzAPKM/6Ru4mnjR6c=
-X-Google-Smtp-Source: ABdhPJyhPR2tcOOOHwWqsufCXF381rfcl46YGZknX8X4/gNKMNA8HDyZUfQJJet9owInRvF70mAoJg==
-X-Received: by 2002:a05:651c:119a:: with SMTP id w26mr10725430ljo.126.1593543299276;
-        Tue, 30 Jun 2020 11:54:59 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id z1sm990910ljn.88.2020.06.30.11.54.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2020 11:54:58 -0700 (PDT)
-Subject: Re: [PATCH v1] cpuidle: tegra: Correctly handle result of
- arm_cpuidle_simple_enter()
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20200629222625.674-1-digetx@gmail.com>
- <d9efb0f5-d6ab-f3db-540e-c6ae1b42e45e@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <4bae133b-1b51-281c-1759-ca0d259b18ca@gmail.com>
-Date:   Tue, 30 Jun 2020 21:54:57 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726300AbgF3TKN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 15:10:13 -0400
+Received: from cmta17.telus.net ([209.171.16.90]:45200 "EHLO cmta17.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726209AbgF3TKN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jun 2020 15:10:13 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id qLdvjoKt16Ny5qLdxjkUP4; Tue, 30 Jun 2020 13:10:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1593544211; bh=KEwBVGcV4xIVBuVAFLqU6HNRaWvNIcSCXbr/d8Y0/EE=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=YVUpHmKrRk/EFiCn9IOi6KRhcwEnfWaiv8X8sYFL+J3staJJGIa1TS5xbeTYfTMIW
+         xRNyypiRCamGvWnCLDrC5y2rdvU7Q2w7dLKegYGTTtKBIkbdPh8y1zW2lb86NR5bMp
+         ANessuRStilg57GpgSa8woDb3btyn3v2vP0GijRueey4CWhhilro8PSE7COn0JNwjV
+         6MO1vcdjOGPkhDc3BlU3W0uuAnpjoDtgtsiPi//klcuIO54ubne13x8Wvi/JKJtpgs
+         jpdUmMT03tcZxjPM8gI+t9y8EtqoCNAi1VygX9Uo0t+yz2DCVzeKmyJV+6ywHXr6Pq
+         IRHbFK4oBVruQ==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=RqG70xuK c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=pH80pAQaE416k-EMKpcA:9
+ a=3nlCnYMItDXQoRTY:21 a=qbljny__F9ZO-OzY:21 a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
+Cc:     "'Len Brown'" <len.brown@intel.com>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
+        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+References: <2931539.RsFqoHxarq@kreacher>        <000001d6376a$03bbaae0$0b3300a0$@net> <b624a148cdb91340dd8d8831c7b033017cab737e.camel@linux.intel.com> <000201d63776$2d56f330$8804d990$@net> 
+In-Reply-To: 
+Subject: cpufreq: intel_pstate: HWP mode issue
+Date:   Tue, 30 Jun 2020 12:10:07 -0700
+Message-ID: <003401d64f12$135d8530$3a188f90$@net>
 MIME-Version: 1.0
-In-Reply-To: <d9efb0f5-d6ab-f3db-540e-c6ae1b42e45e@nvidia.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdY3bCT0dMErDJdzQFCwkA2hers8QwAA/SAwBa0nvwAAOyyfkA==
+X-CMAE-Envelope: MS4wfPVQmNCAOXLxDxyjK8myhsrMjODkN5Q9cjzaFV05ck5w9SJ22BJFFhP0WOiu5zTYSDVjUy5U7LgGDko4J7y7Nz6n2IeP4uD3hFmscA8t5SdhA9zXFohV
+ HUvm5ShDGc7segbcfFyPPEnYKlO6WIBejz/kUSTBPX9VzrzxUNlQxX8UocRnk/KTFZExcwCHgJ7sTn3SXWSeA18eoOW1WWTtaoWBfxsy7L62SxeWzlQSoF+a
+ RFpTXG7YVK6yys0PnmIcFsqHDewJpPmx3i40EY6mTghlxntCYPsb693/YDlDNlUUesMPgRNrZDx0tyhixc6rD1bFBD2T4LAwh1FuzWwtXIVEG2MgSDkxZn+/
+ HkiLbQqOjn7FSltmXjEli4biYJgJgw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-30.06.2020 12:02, Jon Hunter пишет:
+This is re-send without the attachments, because
+I suspect the original was deleted entirely for the list
+because of them.
+Sorry if you got this twice.
+
+On 2020.06.30 11:41 Doug Smythies wrote:
 > 
-> On 29/06/2020 23:26, Dmitry Osipenko wrote:
->> The arm_cpuidle_simple_enter() returns the entered idle-index and not a
->> error code. It happened that TEGRA_C1=index=err=0, and hence this typo
->> was difficult to notice in the code since everything happened to work
->> properly. This patch fixes the minor typo, it doesn't fix any problem.
+> Hi Srinivas,
 > 
-> I guess that is dependent on if CPUIDLE is enabled ...
+> O.K. let's try this again, starting a new thread, with address list similar to a few weeks ago.
+> I believe I have untangled my multiple issues, such that this e-mail should be only about
+> the single issue of HWP capable processors incorrectly deciding to lower the CPU frequency
+> under some conditions. Also, my previous assertion as to the issue was indeed incorrect.
 > 
-> #ifdef CONFIG_CPU_IDLE
-> extern int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
->                 struct cpuidle_driver *drv, int index);
-> #else
-> static inline int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
->                  struct cpuidle_driver *drv, int index) { return -ENODEV; }
-> #endif
+> I now:
+> . never use x86_energy_perf_policy.
+> . For HWP disabled: never change from active to passive or via versa, but rather do it via boot.
+> . after boot always check and reset the various power limit log bits that are set.
+> . never compile the kernel (well, until after any tests), which will set those bits again.
+> . never run prime95 high heat torture test, which will set those bits again.
+> . Note that the tests done for this e-mail never ever set those bits again.
+> . Invented an entirely new way to manifest, demonstrate, and exploit the issue (also mentioned June
+> 6th).
+> . All tests were repeated on another HWP capable computer, so a i5-9600K and a i5-6200U.
 > 
-> Looks like it could return an error.
-
-Hello Jon!
-
-The cpuidle's enter() callback returns an index of the entered state on
-success, on negative value on failure.
-
-The negative number *could be* a proper error code, but in the same time
-it also doesn't matter what's the exact negative value is for the
-cpuidle's core code. Please see more below!
-
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/cpuidle/cpuidle-tegra.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
->> index 150045849d78..9e9a9cccd755 100644
->> --- a/drivers/cpuidle/cpuidle-tegra.c
->> +++ b/drivers/cpuidle/cpuidle-tegra.c
->> @@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
->>  			       int index)
->>  {
->>  	unsigned int cpu = cpu_logical_map(dev->cpu);
->> -	int err;
->> +	int err = 0;
->>  
->>  	index = tegra_cpuidle_adjust_state_index(index, cpu);
->>  	if (dev->states_usage[index].disable)
->>  		return -1;
->>  
->>  	if (index == TEGRA_C1)
->> -		err = arm_cpuidle_simple_enter(dev, drv, index);
->> +		index = arm_cpuidle_simple_enter(dev, drv, index);
->>  	else
->>  		err = tegra_cpuidle_state_enter(dev, index, cpu);
->>  
->>
+> New method (old was periodic workflow):
 > 
-> However, I do think that there is something not right in the error handling
-> here. Would also be nice to get rid of these -1.
+> Long busy, short gap, busy but taking loop time samples so as to estimate CPU frequency.
+> I am calling it an inverse impulse response test.
+> 
+> Assertion:
+> 
+> If the short sleep is somehow simultaneous with some sort of 5.0 millisecond (200 Hertz)
+> periodic event (either in HWP itself, or via the driver, I am unable to determine which,
+> but think it is inside the black box that is HWP), then there is a possibility that the
+> CPU frequency will drop significantly and will take an excessive amount of time to recover.
+> Frequency step ups are exactly on 5.0 millisecond boundaries +/- the short gap time.
+> 
+> . The probability is somewhat inconsistent and a function of whatever else the computer is doing.
+> . The time to recover is a function of EPP, and if EPP is low enough my test never fails.
+> . These tests were all done with default settings.
+> . The "5.0" mSec is only for those default settings, it actually depends on EPP.
+>   . Crude step boundaries, mSec: EPP=32, 2; EPP=64, 4; EPP=128, 5.00; EPP=196, 9
+> . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate. (HWP - powersave)
+> . High level: i5-6200U: 4134 tests, 128 failures, 3.1% fail rate. (HWP - powersave)
+> . Low level (capture waveforms): i5-9600K: 1842 captured failure waveforms. See graph.
+> . Low level (capture waveforms): i5-6200U: 458 captured failure waveforms. See graph.
+> . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests. 0 failures.
+> . Verify acpi-cpufreq/ondemand works fine: i5-6200U: 8575 tests. 0 failures.
+> 
+> The short gap was 842 uSeconds for all these tests, and for no particular reason.
+> 
+> While I have not re-done the bounds investigation, I have no reason to doubt
+> my previous work, re-stated below:
+> 
+> > Gap definition:
+> > lower limit not known, but < 747 uSeconds.
+> > Upper limit is between 952 and 955 uSeconds (there will be some overhead uncertainties).
+> > Must be preceded by busy time spanning a couple of HWP sampling boundaries
+> > or jiffy boundaries or something (I don't actually know how HWP does stuff).
+> 
+> Rather than point to graphs, which nobody seems to look at, they are attached,
+> and so might get striped for some of you.
+> 
+> ... Doug
+> 
+> Addendum: Some of the MSRs you have requested in the past:
+> 
+> i5-9600K (HWP - powersave after test):
+> 
+> root@s18:/home/doug# /home/doug/c/msr-decoder
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
+> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> 1.) 0x19C: IA32_THERM_STATUS: 88480000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
+> reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 :
+> lowest 1
+> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+>     raw: 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 :
+>     min:        8 :        8 :        8 :        8 :        8 :        8 :
+>     max:       46 :       46 :       46 :       46 :       46 :       46 :
+>     des:        0 :        0 :        0 :        0 :        0 :        0 :
+>     epp:      128 :      128 :      128 :      128 :      128 :      128 :
+>     act:        0 :        0 :        0 :        0 :        0 :        0 :
+> 7.) 0x777: IA32_HWP_STATUS: 0 : high 0 : guaranteed 0 : efficient 0 : lowest 0
+> 
+> i5-9600K (no HWP - acpi-cpufreq/ondemand after test):
+> 
+> root@s18:/home/doug/c# /home/doug/c/msr-decoder
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
+> B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
+> 9.) 0x199: IA32_PERF_CTL        : CPU 0-5 :   8 :   8 :   8 :   8 :   8 :   8 :
+> C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-5 :   6 :   6 :   6 :   6 :   6 :   6 :
+> 1.) 0x19C: IA32_THERM_STATUS: 88480000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
+> reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+> 
+> i5-6200U (HWP - powersave after test):
+> 
+> 8.) 0x198: IA32_PERF_STATUS : CPU 0-3 : 19 : 19 : 19 : 19 :
+> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> 1.) 0x19C: IA32_THERM_STATUS: 88430000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 4018C0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
+> reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88420000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 24005D : C1E disable : EEO enable : RHO enable
+> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 105171C : high 28 : guaranteed 23 : efficient 5 :
+> lowest 1
+> 6.) 0x774: IA32_HWP_REQUEST: CPU 0-3 :
+>     raw: 80001B04 : 80001B04 : 80001B04 : 80001B04 :
+>     min:        4 :        4 :        4 :        4 :
+>     max:       27 :       27 :       27 :       27 :
+>     des:        0 :        0 :        0 :        0 :
+>     epp:      128 :      128 :      128 :      128 :
+>     act:        0 :        0 :        0 :        0 :
+> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
+> 
+> i5-6200U (no HWP - acpi-cpufreq/ondemand after test):
+> 
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-3 :  23 :  23 :  23 :  23 :
+> B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
+> 9.) 0x199: IA32_PERF_CTL        : CPU 0-3 :  11 :   5 :   5 :   5 :
+> C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-3 :   6 :   6 :   6 :   6 :
+> 1.) 0x19C: IA32_THERM_STATUS: 88440000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 4018C0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18
+> reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88430000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 24005D : C1E disable : EEO enable : RHO enable
 
-IIRC, the -1 was borrowed from some other cpuidle driver, for example
-cpuidle-psci[1] and coupled.c[2] are returning -1 on a failure.
 
-[1]
-https://elixir.bootlin.com/linux/v5.8-rc3/source/drivers/cpuidle/cpuidle-psci.c#L63
-[2]
-https://elixir.bootlin.com/linux/v5.8-rc3/source/drivers/cpuidle/coupled.c#L473
-
-Looking at the the cpuidle's call chain, all of the code checks only
-whether the returned value of the enter() is negative or not and in the
-end that value is ignored [3][4].
-
-[3]
-https://elixir.bootlin.com/linux/v5.8-rc3/source/kernel/sched/idle.c#L216
-[4]
-https://elixir.bootlin.com/linux/v5.8-rc3/source/drivers/cpuidle/cpuidle.c#L360
-
-Indeed, it would be better to return something more meaningful, but what
-should we return for a disabled state if not -1?
