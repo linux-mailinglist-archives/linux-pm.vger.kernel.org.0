@@ -2,132 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8429C20F089
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 10:30:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB4020F119
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 11:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731515AbgF3IaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 04:30:21 -0400
-Received: from esa6.hc3370-68.iphmx.com ([216.71.155.175]:19703 "EHLO
-        esa6.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727059AbgF3IaU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 04:30:20 -0400
-Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-IronPort-SDR: vJWCbZ24qNBCnRa1jeMfzFihapPAEXWOb/MH/cTYYQUyip68MUIwSFss/OBbvXPJYIxsyk1cMP
- fykjYjWPPolzXUfAKEKbi8v5e6uTYPGHa6se6prvblrrjZ315fDhXE1Ldp+PwYlfxKFSuTxQzJ
- fPz8b/Ptrkeq2wV7Rn+c0mEizLc08zRTfpE0PDc/3s/85ulln/xVa/ZpKNcjFMEisNHCGoh3Sk
- yQnP6MGeMNavHGNxNXThtwWpJyX4Yohpdvq55ZlG0FcG1zCwqQ5tX3XMLY0i4aQJXKK1yVMij0
- oLM=
-X-SBRS: 2.7
-X-MesageID: 21593289
-X-Ironport-Server: esa6.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.75,296,1589256000"; 
-   d="scan'208";a="21593289"
-Date:   Tue, 30 Jun 2020 10:30:06 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Anchal Agarwal <anchalag@amazon.com>
-CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
- hibernation]
-Message-ID: <20200630083006.GJ735@Air-de-Roger>
-References: <20200604070548.GH1195@Air-de-Roger>
- <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200617083528.GW735@Air-de-Roger>
- <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200622083846.GF735@Air-de-Roger>
- <20200623004314.GA28586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200623081903.GP735@Air-de-Roger>
- <20200625183659.GA26586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200626091239.GA735@Air-de-Roger>
- <20200629192035.GA13195@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        id S1731764AbgF3JCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 05:02:47 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9472 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731591AbgF3JCr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 05:02:47 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5efaff530001>; Tue, 30 Jun 2020 02:01:07 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 30 Jun 2020 02:02:46 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 30 Jun 2020 02:02:46 -0700
+Received: from [10.26.75.203] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 30 Jun
+ 2020 09:02:44 +0000
+Subject: Re: [PATCH v1] cpuidle: tegra: Correctly handle result of
+ arm_cpuidle_simple_enter()
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+References: <20200629222625.674-1-digetx@gmail.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <d9efb0f5-d6ab-f3db-540e-c6ae1b42e45e@nvidia.com>
+Date:   Tue, 30 Jun 2020 10:02:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200629222625.674-1-digetx@gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200629192035.GA13195@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
- AMSPEX02CL02.citrite.net (10.69.22.126)
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1593507667; bh=Z9j7LGBXe6yVK+/hW2mjYUjn/x07AQ3M1fpHZ8wfI+M=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=qOg+KEG4BpwTRHwoVdurwFcvBMP5jN84EghU4QOwyUtnB4zg+H8HvRnJGmwEbwlq7
+         an9a0PrUTii3NLuCrR3NMxLvy/Ccnh7OP+vWh++c+7kRczCQyNoCQ3Pyk45E5u93A6
+         S9pMkaic0wvxLdRRG0KIShCan/NUQS5Ii4CeDNh8e0ljTImO4FyebR/iMn6SvYlo6Y
+         5D+OqmppAtGIsJYHsn+9W+Y1514jM5BULFG1X5IaMAVFA+jumdn1exiCBUZaZu99we
+         wRmvmGlG1nXR0d+U7NLTKJ+scQTt3Yqq//WrC50F7PhNpk5RBlmIJjS/01omsSpIpO
+         rtDtWWqlRgEKQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 07:20:35PM +0000, Anchal Agarwal wrote:
-> On Fri, Jun 26, 2020 at 11:12:39AM +0200, Roger Pau Monné wrote:
-> > So the frontend should do:
-> > 
-> > - Switch to Closed state (and cleanup everything required).
-> > - Wait for backend to switch to Closed state (must be done
-> >   asynchronously, handled in blkback_changed).
-> > - Switch frontend to XenbusStateInitialising, that will in turn force
-> >   the backend to switch to XenbusStateInitWait.
-> > - After that it should just follow the normal connection procedure.
-> > 
-> > I think the part that's missing is the frontend doing the state change
-> > to XenbusStateInitialising when the backend switches to the Closed
-> > state.
-> > 
-> > > I was of the view we may just want to mark frontend closed which should do
-> > > the job of freeing resources and then following the same flow as
-> > > blkfront_restore. That does not seems to work correctly 100% of the time.
-> > 
-> > I think the missing part is that you must wait for the backend to
-> > switch to the Closed state, or else the switch to
-> > XenbusStateInitialising won't be picked up correctly by the backend
-> > (because it's still doing it's cleanup).
-> > 
-> > Using blkfront_restore might be an option, but you need to assert the
-> > backend is in the initial state before using that path.
-> >
-> Yes, I agree and I make sure that XenbusStateInitialising only triggers
-> on frontend once backend is disconnected. msleep in a loop not that graceful but
-> works.
-> Frontend only switches to XenbusStateInitialising once it sees backend
-> as Closed. The issue here is and may require more debugging is:
-> 1. Hibernate instance->Closing failed, artificially created situation by not
-> marking frontend Closed in the first place during freezing.
-> 2. System comes back up fine restored to 'backend connected'.
 
-I'm not sure I'm following what is happening here, what should happen
-IMO is that the backend will eventually reach the Closed state? Ie:
-the frontend has initiated the disconnection from the backend by
-setting the Closing state, and the backend will have to eventually
-reach the Closed state.
+On 29/06/2020 23:26, Dmitry Osipenko wrote:
+> The arm_cpuidle_simple_enter() returns the entered idle-index and not a
+> error code. It happened that TEGRA_C1=index=err=0, and hence this typo
+> was difficult to notice in the code since everything happened to work
+> properly. This patch fixes the minor typo, it doesn't fix any problem.
 
-At that point the frontend can initiate a reconnection by switching to
-the Initialising state.
+I guess that is dependent on if CPUIDLE is enabled ...
 
-> 3. Re-run (1) again without reboot
-> 4. (4) fails to recover basically freezing does not fail at all which is weird
->    because it should timeout as it passes through same path. It hits a BUG in
->    talk_to_blkback() and instance crashes.
+#ifdef CONFIG_CPU_IDLE
+extern int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
+                struct cpuidle_driver *drv, int index);
+#else
+static inline int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
+                 struct cpuidle_driver *drv, int index) { return -ENODEV; }
+#endif
 
-It's hard to tell exactly. I guess you would have to figure what makes
-the frontend not get stuck at the same place as the first attempt.
+Looks like it could return an error.
+ 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/cpuidle/cpuidle-tegra.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+> index 150045849d78..9e9a9cccd755 100644
+> --- a/drivers/cpuidle/cpuidle-tegra.c
+> +++ b/drivers/cpuidle/cpuidle-tegra.c
+> @@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+>  			       int index)
+>  {
+>  	unsigned int cpu = cpu_logical_map(dev->cpu);
+> -	int err;
+> +	int err = 0;
+>  
+>  	index = tegra_cpuidle_adjust_state_index(index, cpu);
+>  	if (dev->states_usage[index].disable)
+>  		return -1;
+>  
+>  	if (index == TEGRA_C1)
+> -		err = arm_cpuidle_simple_enter(dev, drv, index);
+> +		index = arm_cpuidle_simple_enter(dev, drv, index);
+>  	else
+>  		err = tegra_cpuidle_state_enter(dev, index, cpu);
+>  
+> 
 
-Roger.
+However, I do think that there is something not right in the error handling
+here. Would also be nice to get rid of these -1.
+
+Jon
+
+-- 
+nvpublic
