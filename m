@@ -2,173 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 079CE20FBC9
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D7C20FBD8
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390836AbgF3Sdv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 14:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390831AbgF3Sdu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:33:50 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CCAC03E97B
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 11:33:49 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id j4so18699561wrp.10
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 11:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fJpxH5/djWt9U3VYoQjuqMYzJN+p95+ihodoPPW+SNQ=;
-        b=QtRvGqVxjzxpiFVybIea7lqehIQLky2ZFc2aG1M6771qlNANmaszRuCoEuuKojC4wO
-         e3gUMOhd6TiyI5C3zuqPkGO0Q61l1AUfwUIyFir+LMpB+pXEgIoiTyIse+E+W0JIoF1S
-         Ulyhd/nP9MSIRL7CQFpcHG+cwScKqaWXcQ/tUEnD/6C37OGTdUaiJf+DPwkPtWe/8/+H
-         pW6dOiQPIe+l5evZRZ/JGlvO4MKwSS91ACC5sj6UoHMgGtVpVLEnFRxyvyjuZIe8ACvV
-         zt1UeqXVyKh3Xxm3WcxDd6DXGrfYHQSZ3gPsXzrDcM2C9jWuSc6Z39R9xenraJNNEyLy
-         YGMQ==
+        id S1731743AbgF3SgF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 14:36:05 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:47015 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725963AbgF3SgE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:36:04 -0400
+Received: by mail-ot1-f65.google.com with SMTP id n24so16993727otr.13;
+        Tue, 30 Jun 2020 11:36:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fJpxH5/djWt9U3VYoQjuqMYzJN+p95+ihodoPPW+SNQ=;
-        b=bqpT9dE7KuLr3+IEjQ10AxxjSQ2cap5BCUTdt+N57nIiZYiFBcObWGZmUSQyZweXmf
-         vv4nVxteruX+GLK6EOOQU3CbRwvmBa/FxvptFXDA/RVYhq3Nq2+S4c1OZ/ZX4F+GYi1E
-         Csg6VoM/Yvw/ZnXiK0I4hRawlVgKvcMwU8KTu2icE7XlDCObGlQyImPn8ItJ/poELWTW
-         jQd11YyNHJBgksIbN+qbjvsMTdusosEbG1Ae8eOZWD8VfuQqPcvkTSD5w3TDDxK5JNbY
-         3yeItscZd4ODnGEEcFUPA2CGgNt5eiYF3gXbN8LB5+4coay7yUDReKKmH98WhrDcoCfp
-         rauA==
-X-Gm-Message-State: AOAM530WHXWN6B+ne5BlwC6KSqoEZ7MkeRbhfOaKDzOL0u4f+/4GgSgO
-        N2HSWSPhtoMrD5lrik4BxWN2gA==
-X-Google-Smtp-Source: ABdhPJxLhcXrkHLv2/YCvgyaaG9WujOJsdKLAP5iiMsukPW0YrKfbKY169ibr3i+yNbysUtJLv4bdw==
-X-Received: by 2002:a5d:6ac1:: with SMTP id u1mr22357628wrw.123.1593542028223;
-        Tue, 30 Jun 2020 11:33:48 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07? ([2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07])
-        by smtp.googlemail.com with ESMTPSA id b10sm4104203wmj.30.2020.06.30.11.33.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2020 11:33:47 -0700 (PDT)
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
- <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
- <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
-Date:   Tue, 30 Jun 2020 20:33:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r0w1rUKQgK5a4NrOFjBzuKsJ73al8FDWBmP26SO07LY=;
+        b=XyYNd9xsRp/zz4XAzRxOUMojhaKTMMJsGrMD3oRl0lP9vKidIjpwoDc4yLcayLDl3g
+         jS23+sCd/R0KUXhq5MEuG58Wa0KqEKkiC4JzfWKohSLD0Gv91VTMByKsB9j0QHrABIDX
+         qPGWv45CgO9/x8cX7wRdohTpwauB3YelCVRpuDM1gS+sRcUwyu83xIRlSPAbONpEBHsQ
+         skW5zBEQWA2Ufj0u6JBVJ7u4JkIR5L92Xk/MDnyBKb2mN7IvVQIIwr1py8zbrSnllasx
+         Fqs48w2aaOgYQpdYBRM7qmOMlWpNI6VozqgyXhT4xNB61tMW23CphhtMboI/LsskvqKJ
+         AI1A==
+X-Gm-Message-State: AOAM5302iSOLn53CmBMBArQqaQaJsbdGSR3xHivyujLR6mNuR86VXE8q
+        VDK8ahwsrf1Htmng3rw6fdPdJtBgS7NR8F0hTK8=
+X-Google-Smtp-Source: ABdhPJyfKNR2mAW+ZquuTmcfS4CS0jrfj9YUROqYC4rkoPStrpEF1YJI6C4RI2L3RKrKl8F9E2AWh4t/Pazokt5J/Fg=
+X-Received: by 2002:a9d:7d15:: with SMTP id v21mr18541238otn.118.1593542163940;
+ Tue, 30 Jun 2020 11:36:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20200626183401.1495090-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20200626183401.1495090-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 30 Jun 2020 20:35:52 +0200
+Message-ID: <CAJZ5v0giN1Jmgdh5q_eiJ60O31c-Ez2EY9WLnmn7Z8f9tQvUWw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] cpufreq: intel_pstate: Support raw epp and energy_efficiency
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <lenb@kernel.org>,
+        Doug Smythies <dsmythies@telus.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/06/2020 18:56, Andrzej Pietrasiewicz wrote:
-> Hi,
-> 
-> W dniu 30.06.2020 o 17:53, Daniel Lezcano pisze:
->> On 30/06/2020 17:29, Andrzej Pietrasiewicz wrote:
->>> Hi Daniel,
->>>
->>> W dniu 30.06.2020 o 16:53, Daniel Lezcano pisze:
->>>> On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
->>>>> Hi Daniel,
->>>>>
->>>>> I am reading the logs and can't find anything specific to thermal.
->>>>>
->>>>> What I can see is
->>>>>
->>>>> "random: crng init done"
->>>>>
->>>>> with large times (~200s) and then e.g.
->>>>>
->>>>> 'auto-login-action timed out after 283 seconds'
->>>>>
->>>>> I'm looking at e.g.
->>>>> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
->>>>>
->>>>>
->>>>>
->>>
->>> f5e50bf4d3ef is PATCH 11/11. Does the problem happen at PATCH 1-10/11?
->>> PATCH 11/11 renames a method and the code compiles, so it seems
->>> unlikely that this is causing problems. One should never say never,
->>> though ;)
->>
->> The sha1 is just the HEAD for the kernel reference. The regression
->> happens with your series, somewhere.
->>
->>> The reported failure is not due to some test failing but rather due
->>> to timeout logging into the test system. Could it be that there is
->>> some other problem?
->>
->> I did reproduce:
->>
->> v5.8-rc3 + series => imx6 hang at boot time
->> v5.8-rc3 => imx6 boots correctly
->>
-> 
-> I kindly ask for a bisect.
+On Fri, Jun 26, 2020 at 8:34 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> v4
+> Changes suggested by Borislav
+> - msr-index file is sorted for the MSR_IA32_POWER_CTL
+> - Remove "_enable" from the new attribute
+> - Changes related to documentation
+> Changes suggested by Peter
+> - Use of kstrtobool
+> Suspend/resume restore
+>
+> v3
+> Some edits for the description as suggested by Doug
+>
+> v2
+> Remove raw value support for EPB
+>
+> Srinivas Pandruvada (2):
+>   cpufreq: intel_pstate: Allow enable/disable energy efficiency
+>   cpufreq: intel_pstate: Allow raw energy performance preference value
+>
+>  Documentation/admin-guide/pm/intel_pstate.rst |  17 +-
+>  arch/x86/include/asm/msr-index.h              |   6 +-
+>  drivers/cpufreq/intel_pstate.c                | 147 ++++++++++++++----
+>  3 files changed, 133 insertions(+), 37 deletions(-)
+>
+> --
 
-I will give a try but it is a very long process as the board is running
-on kernelci.
-
-I was not able to reproduce it on imx7 despite it is the same sensor :/
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Both applied as 5.9 material, thanks!
