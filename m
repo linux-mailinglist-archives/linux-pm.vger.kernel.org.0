@@ -2,114 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB4020F119
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 11:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B576620F224
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 12:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731764AbgF3JCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 05:02:47 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9472 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731591AbgF3JCr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 05:02:47 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5efaff530001>; Tue, 30 Jun 2020 02:01:07 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 30 Jun 2020 02:02:46 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 30 Jun 2020 02:02:46 -0700
-Received: from [10.26.75.203] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 30 Jun
- 2020 09:02:44 +0000
-Subject: Re: [PATCH v1] cpuidle: tegra: Correctly handle result of
- arm_cpuidle_simple_enter()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-References: <20200629222625.674-1-digetx@gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <d9efb0f5-d6ab-f3db-540e-c6ae1b42e45e@nvidia.com>
-Date:   Tue, 30 Jun 2020 10:02:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1732160AbgF3KFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 06:05:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44640 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732078AbgF3KFw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jun 2020 06:05:52 -0400
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 02BA62073E;
+        Tue, 30 Jun 2020 10:05:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593511552;
+        bh=WGsfVoaT6gosQlq2ySDAquPdQTa/aXDxRdmxD1Nsln8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=um9iXcbbiq0/h4rBLL3CVKNNpdpKp8XNwiBmhB/N1BOewXCoTQv7OhhXdXZq6f9ui
+         Ijow/waRSxqxqtWZvi2jPWc9y+xoFjYJ/OGRAqwMc0EOJkcvDXR1W1S/yQT7zbDCba
+         +uBUUkYa6Ti/Pk+a4NA0Euc+oJuMGK+VCk/70QcA=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1jqD9C-007hs2-EG; Tue, 30 Jun 2020 11:05:50 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        stable@vger.kernel.org
+Subject: [PATCH v3] PM / devfreq: rk3399_dmc: Fix kernel oops when rockchip,pmu is absent
+Date:   Tue, 30 Jun 2020 11:05:46 +0100
+Message-Id: <20200630100546.862468-1-maz@kernel.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <20200629222625.674-1-digetx@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1593507667; bh=Z9j7LGBXe6yVK+/hW2mjYUjn/x07AQ3M1fpHZ8wfI+M=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=qOg+KEG4BpwTRHwoVdurwFcvBMP5jN84EghU4QOwyUtnB4zg+H8HvRnJGmwEbwlq7
-         an9a0PrUTii3NLuCrR3NMxLvy/Ccnh7OP+vWh++c+7kRczCQyNoCQ3Pyk45E5u93A6
-         S9pMkaic0wvxLdRRG0KIShCan/NUQS5Ii4CeDNh8e0ljTImO4FyebR/iMn6SvYlo6Y
-         5D+OqmppAtGIsJYHsn+9W+Y1514jM5BULFG1X5IaMAVFA+jumdn1exiCBUZaZu99we
-         wRmvmGlG1nXR0d+U7NLTKJ+scQTt3Yqq//WrC50F7PhNpk5RBlmIJjS/01omsSpIpO
-         rtDtWWqlRgEKQ==
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: cw00.choi@samsung.com, enric.balletbo@collabora.com, myungjoo.ham@samsung.com, kyungmin.park@samsung.com, heiko@sntech.de, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@android.com, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Booting a recent kernel on a rk3399-based system (nanopc-t4),
+equipped with a recent u-boot and ATF results in an Oops due
+to a NULL pointer dereference.
 
-On 29/06/2020 23:26, Dmitry Osipenko wrote:
-> The arm_cpuidle_simple_enter() returns the entered idle-index and not a
-> error code. It happened that TEGRA_C1=index=err=0, and hence this typo
-> was difficult to notice in the code since everything happened to work
-> properly. This patch fixes the minor typo, it doesn't fix any problem.
+This turns out to be due to the rk3399-dmc driver looking for
+an *undocumented* property (rockchip,pmu), and happily using
+a NULL pointer when the property isn't there.
 
-I guess that is dependent on if CPUIDLE is enabled ...
+Instead, make most of what was brought in with 9173c5ceb035
+("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters
+to TF-A.") conditioned on finding this property in the device-tree,
+preventing the driver from exploding.
 
-#ifdef CONFIG_CPU_IDLE
-extern int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
-                struct cpuidle_driver *drv, int index);
-#else
-static inline int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
-                 struct cpuidle_driver *drv, int index) { return -ENODEV; }
-#endif
+Cc: stable@vger.kernel.org
+Fixes: 9173c5ceb035 ("PM / devfreq: rk3399_dmc: Pass ODT and auto power down parameters to TF-A.")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+* From v2:
+  - Trimmed down commit message
+  - Cc stable
 
-Looks like it could return an error.
+ drivers/devfreq/rk3399_dmc.c | 42 ++++++++++++++++++++----------------
+ 1 file changed, 23 insertions(+), 19 deletions(-)
+
+diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
+index 24f04f78285b..027769e39f9b 100644
+--- a/drivers/devfreq/rk3399_dmc.c
++++ b/drivers/devfreq/rk3399_dmc.c
+@@ -95,18 +95,20 @@ static int rk3399_dmcfreq_target(struct device *dev, unsigned long *freq,
  
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/cpuidle/cpuidle-tegra.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-> index 150045849d78..9e9a9cccd755 100644
-> --- a/drivers/cpuidle/cpuidle-tegra.c
-> +++ b/drivers/cpuidle/cpuidle-tegra.c
-> @@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
->  			       int index)
->  {
->  	unsigned int cpu = cpu_logical_map(dev->cpu);
-> -	int err;
-> +	int err = 0;
->  
->  	index = tegra_cpuidle_adjust_state_index(index, cpu);
->  	if (dev->states_usage[index].disable)
->  		return -1;
->  
->  	if (index == TEGRA_C1)
-> -		err = arm_cpuidle_simple_enter(dev, drv, index);
-> +		index = arm_cpuidle_simple_enter(dev, drv, index);
->  	else
->  		err = tegra_cpuidle_state_enter(dev, index, cpu);
->  
-> 
-
-However, I do think that there is something not right in the error handling
-here. Would also be nice to get rid of these -1.
-
-Jon
-
+ 	mutex_lock(&dmcfreq->lock);
+ 
+-	if (target_rate >= dmcfreq->odt_dis_freq)
+-		odt_enable = true;
+-
+-	/*
+-	 * This makes a SMC call to the TF-A to set the DDR PD (power-down)
+-	 * timings and to enable or disable the ODT (on-die termination)
+-	 * resistors.
+-	 */
+-	arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, dmcfreq->odt_pd_arg0,
+-		      dmcfreq->odt_pd_arg1,
+-		      ROCKCHIP_SIP_CONFIG_DRAM_SET_ODT_PD,
+-		      odt_enable, 0, 0, 0, &res);
++	if (dmcfreq->regmap_pmu) {
++		if (target_rate >= dmcfreq->odt_dis_freq)
++			odt_enable = true;
++
++		/*
++		 * This makes a SMC call to the TF-A to set the DDR PD
++		 * (power-down) timings and to enable or disable the
++		 * ODT (on-die termination) resistors.
++		 */
++		arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, dmcfreq->odt_pd_arg0,
++			      dmcfreq->odt_pd_arg1,
++			      ROCKCHIP_SIP_CONFIG_DRAM_SET_ODT_PD,
++			      odt_enable, 0, 0, 0, &res);
++	}
+ 
+ 	/*
+ 	 * If frequency scaling from low to high, adjust voltage first.
+@@ -371,13 +373,14 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+-	if (node) {
+-		data->regmap_pmu = syscon_node_to_regmap(node);
+-		of_node_put(node);
+-		if (IS_ERR(data->regmap_pmu)) {
+-			ret = PTR_ERR(data->regmap_pmu);
+-			goto err_edev;
+-		}
++	if (!node)
++		goto no_pmu;
++
++	data->regmap_pmu = syscon_node_to_regmap(node);
++	of_node_put(node);
++	if (IS_ERR(data->regmap_pmu)) {
++		ret = PTR_ERR(data->regmap_pmu);
++		goto err_edev;
+ 	}
+ 
+ 	regmap_read(data->regmap_pmu, RK3399_PMUGRF_OS_REG2, &val);
+@@ -399,6 +402,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
+ 		goto err_edev;
+ 	};
+ 
++no_pmu:
+ 	arm_smccc_smc(ROCKCHIP_SIP_DRAM_FREQ, 0, 0,
+ 		      ROCKCHIP_SIP_CONFIG_DRAM_INIT,
+ 		      0, 0, 0, 0, &res);
 -- 
-nvpublic
+2.27.0
+
