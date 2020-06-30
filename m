@@ -2,23 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B78D220F5FB
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 15:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 717F120F79F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 16:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387729AbgF3Nn2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 09:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S2389114AbgF3Oxf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 10:53:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387429AbgF3Nn1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 09:43:27 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63520C061755;
-        Tue, 30 Jun 2020 06:43:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id EDD2D2A4A92
+        with ESMTP id S2387485AbgF3Oxe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 10:53:34 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3636C03E97A
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 07:53:33 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id q5so20499358wru.6
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 07:53:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Pd7u04aHacMlHQWEyySnd7sTkXliNVOpzVO8z+Rcu5w=;
+        b=NkFaCQ+V4OEnig591m8AkSZBQ1b/h4v4zSXQCbGQjK8FGeP7BHqOTEEGCastiiIUob
+         M0UVfI/NN4nkXDl8JWTMRjTXXxE7YY82izMG/nYeTbmQmokH3Y5w8MgUsyVL4e1VgYUT
+         N1cPSd+vrHvWo2gcY3lMTw+tftpI6X+sjeq0ogRJa32PGCXGWVSLibvqHvWLGnfsqlAZ
+         gVUWjjOIssl9YbMlBotqTT3aaqp+HzsPKnNLoe8ITTH2Rl9UfczmQAl3YiAfYlwvgbJs
+         Ns773D3M2fHMZu8r4tCMXhWe/imwGkam1Xq5u+xV3f2CTem3P28CCCllcf8ELrD2BE++
+         pOkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Pd7u04aHacMlHQWEyySnd7sTkXliNVOpzVO8z+Rcu5w=;
+        b=Y7PreKFEL5ht3U3sunZk54mFjThYx4yQobio8TvCZsSD93aGaneuYtJNlZ3Pkqvcy/
+         +wgNfjVUQ77E3xn1njD6OuOdqUFbwvQhpNtAmUTsrRXia0FBKTpXsATjlDQ+LExtdZ2N
+         5xmEb3LUZO8GacPk28YtIROmdKLqFyQvWWbb1dijRvvxZh30nmmUja8wSY7MoRvrQrF8
+         OfCh7Jm7d3EIWuuJFAiK4t87TzfH8jkQ0BwRQ9yiiscrsL4lj0MTNoQ5Z4Sz0oLdMGpy
+         HePyCi3s1DOvyw6ZXSPYyeUQZvkkHRwMRYSmsMNoxDVBMLetdoIPP71Ia9jj37B4EWjs
+         WaYw==
+X-Gm-Message-State: AOAM533Ag93mUpbjVwvAmWVKE5++FIZiLXrmWvAepqSlqrYjZF1F9iyz
+        gsFvZ0GhLPpOOFH4ccOAQ25syw==
+X-Google-Smtp-Source: ABdhPJwhGwFNFixe1BGFQoohJyS2prHI3aMDtNCIwm9jyQOp0qSvzuwh8OQOhlRmoHrNF73pfYRftA==
+X-Received: by 2002:a5d:51ce:: with SMTP id n14mr22295714wrv.155.1593528812400;
+        Tue, 30 Jun 2020 07:53:32 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07? ([2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07])
+        by smtp.googlemail.com with ESMTPSA id g14sm3784671wrm.93.2020.06.30.07.53.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jun 2020 07:53:31 -0700 (PDT)
 Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
         linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
         netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
         platform-driver-x86@vger.kernel.org,
@@ -62,14 +93,15 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         kernel@collabora.com
 References: <20200629122925.21729-1-andrzej.p@collabora.com>
  <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
-Date:   Tue, 30 Jun 2020 15:43:20 +0200
+ <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
+Date:   Tue, 30 Jun 2020 16:53:29 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -77,96 +109,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
-
-I am reading the logs and can't find anything specific to thermal.
-
-What I can see is
-
-"random: crng init done"
-
-with large times (~200s) and then e.g.
-
-'auto-login-action timed out after 283 seconds'
-
-I'm looking at e.g. 
-https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
-
-Is there anywhere else I can look at?
-
-Andrzej
-
-W dniu 30.06.2020 o 14:57, Daniel Lezcano pisze:
+On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
+> Hi Daniel,
 > 
-> Hi Andrzej,
+> I am reading the logs and can't find anything specific to thermal.
 > 
-> I've tested your series with kernelci and there are 3 regressions for
-> the imx6.
+> What I can see is
 > 
-> https://kernelci.org/test/job/thermal/branch/testing/kernel/v5.8-rc3-11-gf5e50bf4d3ef/plan/baseline/
+> "random: crng init done"
+> 
+> with large times (~200s) and then e.g.
+> 
+> 'auto-login-action timed out after 283 seconds'
+> 
+> I'm looking at e.g.
+> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
 > 
 > 
-> On 29/06/2020 14:29, Andrzej Pietrasiewicz wrote:
->> A respin of v6 with these changes:
->>
->> v6..v7:
->> - removed duplicate S-o-b line from patch 6/11
->>
->> v5..v6:
->> - staticized thermal_zone_device_set_mode() (kbuild test robot)
->>
->> v4..v5:
->>
->> - EXPORT_SYMBOL -> EXPORT_SYMBOL_GPL (Daniel)
->> - dropped unnecessary thermal_zone_device_enable() in int3400_thermal.c
->> and in thermal_of.c (Bartlomiej)
->>
->> Andrzej Pietrasiewicz (11):
->>    acpi: thermal: Fix error handling in the register function
->>    thermal: Store thermal mode in a dedicated enum
->>    thermal: Add current mode to thermal zone device
->>    thermal: Store device mode in struct thermal_zone_device
->>    thermal: remove get_mode() operation of drivers
->>    thermal: Add mode helpers
->>    thermal: Use mode helpers in drivers
->>    thermal: Explicitly enable non-changing thermal zone devices
->>    thermal: core: Stop polling DISABLED thermal devices
->>    thermal: Simplify or eliminate unnecessary set_mode() methods
->>    thermal: Rename set_mode() to change_mode()
->>
->>   drivers/acpi/thermal.c                        | 75 +++++----------
->>   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  8 ++
->>   .../ethernet/mellanox/mlxsw/core_thermal.c    | 91 ++++---------------
->>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  9 +-
->>   drivers/platform/x86/acerhdf.c                | 33 +++----
->>   drivers/platform/x86/intel_mid_thermal.c      |  6 ++
->>   drivers/power/supply/power_supply_core.c      |  9 +-
->>   drivers/thermal/armada_thermal.c              |  6 ++
->>   drivers/thermal/da9062-thermal.c              | 16 +---
->>   drivers/thermal/dove_thermal.c                |  6 ++
->>   drivers/thermal/hisi_thermal.c                |  6 +-
->>   drivers/thermal/imx_thermal.c                 | 57 ++++--------
->>   .../intel/int340x_thermal/int3400_thermal.c   | 38 ++------
->>   .../int340x_thermal/int340x_thermal_zone.c    |  5 +
->>   drivers/thermal/intel/intel_pch_thermal.c     |  5 +
->>   .../thermal/intel/intel_quark_dts_thermal.c   | 34 ++-----
->>   drivers/thermal/intel/intel_soc_dts_iosf.c    |  3 +
->>   drivers/thermal/intel/x86_pkg_temp_thermal.c  |  6 ++
->>   drivers/thermal/kirkwood_thermal.c            |  7 ++
->>   drivers/thermal/rcar_thermal.c                |  9 +-
->>   drivers/thermal/rockchip_thermal.c            |  6 +-
->>   drivers/thermal/spear_thermal.c               |  7 ++
->>   drivers/thermal/sprd_thermal.c                |  6 +-
->>   drivers/thermal/st/st_thermal.c               |  5 +
->>   drivers/thermal/thermal_core.c                | 76 ++++++++++++++--
->>   drivers/thermal/thermal_of.c                  | 41 +--------
->>   drivers/thermal/thermal_sysfs.c               | 37 +-------
->>   include/linux/thermal.h                       | 19 +++-
->>   28 files changed, 275 insertions(+), 351 deletions(-)
->>
->>
->> base-commit: 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68
->>
-> 
-> 
+> Is there anywhere else I can look at?
 
+No unfortunately :/
+
+I have a Meerkat96 which uses the same sensor as the imx6q.
+
+I'll give a try to see if I can reproduce and let you know.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
