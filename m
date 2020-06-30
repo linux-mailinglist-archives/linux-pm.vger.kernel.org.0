@@ -2,83 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91E5E20FBEC
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B4D20FBF3
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbgF3Skc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 14:40:32 -0400
-Received: from cmta20.telus.net ([209.171.16.93]:46048 "EHLO cmta20.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726161AbgF3Skc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jun 2020 14:40:32 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id qLBAjf7NpmPBRqLBBjqXbR; Tue, 30 Jun 2020 12:40:30 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1593542430; bh=5lsW47LwcbLEtRnjtW+QOJmsT1zddKUIUZH9u4fGksw=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=JFx5kCLqN4LamJppGxGwSOJsn9jznwF87fwxh6722QXMSiD2/1+2vTC85iCounDJb
-         A/Z1VDokZ03f16c18KzTQxFYcSgkuv074Ma8DrxSwwVwoLzIXPhWjGBUDcMmV1TusO
-         2g1lQsIoGpa5OvVx2cr9IHRSxC+2H2o6w3faGo1GXOX9WlX/hmePbyAqkLNJj5p8iu
-         ubPQyGnTpuSlA/ybpuVdEyQ77F0Edsjh5ah37tDwyM3akuBuFXdg7FxVO7hdLiga4W
-         BjeKpRvtnUhPJH6ntLUqUHz/BEylmPF7ncqJqtw4/iLK9fCTpG9Dz07tF/UhhLcwUn
-         OkLGi/j2H5uCg==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=ZvmT1OzG c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=OM2GBPE6UocqHCZ_6TsA:9
- a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
-Cc:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
-        <lenb@kernel.org>, <bp@alien8.de>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <hpa@zytor.com>, <peterz@infradead.org>
-References: <20200626183401.1495090-1-srinivas.pandruvada@linux.intel.com> <20200626183401.1495090-3-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20200626183401.1495090-3-srinivas.pandruvada@linux.intel.com>
-Subject: RE: [PATCH v4 2/2] cpufreq: intel_pstate: Allow raw energy performance preference value
-Date:   Tue, 30 Jun 2020 11:40:24 -0700
-Message-ID: <002301d64f0d$ee4bea10$cae3be30$@net>
+        id S1726015AbgF3SpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 14:45:01 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:43715 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbgF3SpB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:45:01 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 95so8599136otw.10
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 11:45:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d587Tri7YqxIGDjNRL0ZDsNMGBm9HnMbdfINVOzflP8=;
+        b=N5VEi4vn/phe1hYgQLEvqYZcYSe4VSPkjGVXfyEambvxcX0wB0XWBBY3PZeTODyX92
+         FKkKO7Kvij2Kw4iyqW9L2Vcts145XP2NPa/shjC0oc+hcHgauT4MmQF8U20dE7vg0b4Q
+         /zlyO/iPEB1MI5gKpBfNxcL8MrPIeV8hI5SF1f7Is5Ijhf1V/OhnODiYCFO9Mgg8MEUO
+         HQ+UDMUxSBvccX+UC25quqimT4H49cOg0JR02Vy0kJ9mHO7+MVUq/w5XZO3pNT53boka
+         /B5I95NikW/NWSuX/VbKxvXFRgiPl/DaHpiS5JNvDqbeq8SptIGeBawtXltLa399ylLi
+         4xWA==
+X-Gm-Message-State: AOAM533ISBKfVnQR/zFQtsCtB5X4kJVtrqBj1Duk8M723t4VxQYiL9n0
+        dQcZsajJcBIKRp58H0pRxf0TUQRjuIJCfN8zXBk=
+X-Google-Smtp-Source: ABdhPJzUKEhJ36zegLUocaizwyJLErqDY24v8xjZIcAE7DGPcVuQXdXLU966lYSrpkXMIzwIuRyR6jthFg72AIKN5A4=
+X-Received: by 2002:a9d:1c82:: with SMTP id l2mr1736399ota.167.1593542700054;
+ Tue, 30 Jun 2020 11:45:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZL6GfN1BQpAfQRQwWuKbhHibbLRAA8mfVA
-X-CMAE-Envelope: MS4wfO7oaIfxSFx3svGsM9XZ/bOt6LbDnNC2uVTFiGTFwNKr2B82MLeELAmZZnTJX9D9cQCCyy14mIw/vSa16A5QxZSJUQ5UYE6UBTogEYH0rzdE9/6yAVIE
- 2ydKkpE+D+89ZJRgt3xkzdaV49R4nSSX8Po2vgWhqAmunKRhEstLsHdakLxbjFUwSl+stHrUB77scr66zINi+bBKFdl52IRDkP0t5daD8bJ4XdXOwSB/hOTo
- KPCPX2Ed4tyrVMDckiKrnIOfip7pPWw+s/Xhx2BKKJmBabElLJcBgYGcvd7lTMYodgtxaSiWz47J1icIBbuzRFFU6HKZjpKSwUO/4RBWy/LoYmJpdolVg7Mg
- 2v2yIELSTDG/9hfPLu0SgK/WjLRjhNBBprEmOD95TerlpGMmRyUqmkCpxGdy+RTKPexLmorgC0ovlGRny4eMtN4WBraxNvRzrK4mHuOgHYXQkyrX+DPUAGtI
- EDDmKt2C82CvTn5KO961z5k4rNaeDIiuwophog==
+References: <20200629053450.12392-1-rui.zhang@intel.com>
+In-Reply-To: <20200629053450.12392-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 30 Jun 2020 20:44:49 +0200
+Message-ID: <CAJZ5v0hNe2xoEF1nu3Y1hij67vOOne_v-eCJTf_ZSgFT3mVrKA@mail.gmail.com>
+Subject: Re: [PATCH] powercap/intel_rapl: add support for Sapphire Rapids
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+On Mon, Jun 29, 2020 at 8:57 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> RAPL on SPR behaves similar to HSW server, except that SPR uses a fixed
+> energy unit (1 Joule) for the PSYS RAPL domain.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/powercap/intel_rapl_common.c | 23 ++++++++++++++++++++++-
+>  1 file changed, 22 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 61a63a16b5e7..b739ce4f390d 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -93,6 +93,7 @@ struct rapl_defaults {
+>         u64 (*compute_time_window)(struct rapl_package *rp, u64 val,
+>                                     bool to_raw);
+>         unsigned int dram_domain_energy_unit;
+> +       unsigned int psys_domain_energy_unit;
+>  };
+>  static struct rapl_defaults *rapl_defaults;
+>
+> @@ -533,12 +534,23 @@ static void rapl_init_domains(struct rapl_package *rp)
+>                 for (j = 0; j < RAPL_DOMAIN_REG_MAX; j++)
+>                         rd->regs[j] = rp->priv->regs[i][j];
+>
+> -               if (i == RAPL_DOMAIN_DRAM) {
+> +               switch (i) {
+> +               case RAPL_DOMAIN_DRAM:
+>                         rd->domain_energy_unit =
+>                             rapl_defaults->dram_domain_energy_unit;
+>                         if (rd->domain_energy_unit)
+>                                 pr_info("DRAM domain energy unit %dpj\n",
+>                                         rd->domain_energy_unit);
+> +                       break;
+> +               case RAPL_DOMAIN_PLATFORM:
+> +                       rd->domain_energy_unit =
+> +                           rapl_defaults->psys_domain_energy_unit;
+> +                       if (rd->domain_energy_unit)
+> +                               pr_info("Platform domain energy unit %dpj\n",
+> +                                       rd->domain_energy_unit);
+> +                       break;
+> +               default:
+> +                       break;
+>                 }
+>                 rd++;
+>         }
+> @@ -919,6 +931,14 @@ static const struct rapl_defaults rapl_defaults_hsw_server = {
+>         .dram_domain_energy_unit = 15300,
+>  };
+>
+> +static const struct rapl_defaults rapl_defaults_spr_server = {
+> +       .check_unit = rapl_check_unit_core,
+> +       .set_floor_freq = set_floor_freq_default,
+> +       .compute_time_window = rapl_compute_time_window_core,
+> +       .dram_domain_energy_unit = 15300,
+> +       .psys_domain_energy_unit = 1000000000,
+> +};
+> +
+>  static const struct rapl_defaults rapl_defaults_byt = {
+>         .floor_freq_reg_addr = IOSF_CPU_POWER_BUDGET_CTL_BYT,
+>         .check_unit = rapl_check_unit_atom,
+> @@ -978,6 +998,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+>         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,         &rapl_defaults_core),
+>         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,           &rapl_defaults_core),
+>         X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,         &rapl_defaults_core),
+> +       X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defaults_spr_server),
+>
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     &rapl_defaults_byt),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,        &rapl_defaults_cht),
+> --
 
-Thanks for all your work on this.
-I have fallen behind, and not sure when I can catch up.
-However...
-
-On 2020.06.26 11:34 Srinivas Pandruvada wrote:
-
-> Similarly on battery the default "balance_performance" mode can be
-> aggressive in power consumption. But picking up the next choice
-> "balance power" results in too much loss of performance, which results in
-> bad user experience in use cases like "Google Hangout". It was observed
-> that some value between these two EPP is optimal.
-
-There is a possibility that one of the issues I have been ranting
-about could be a contributing factor to things like this.
-(I don't know if it actually is.)
-One way to compensate is to lower EPP.
-
-I am going to send a new e-mail in a minute about it.
-Please consider the possibility that some of these
-EPP adjustments might just be programming around the issue.
-
-... Doug
-
-
+Applied as 5.9 material, thanks!
