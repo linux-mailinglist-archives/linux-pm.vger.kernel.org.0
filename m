@@ -2,167 +2,420 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A5C20EA5E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 02:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB1220ED28
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 07:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728810AbgF3Aid (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 Jun 2020 20:38:33 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:37051 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728767AbgF3Aic (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 Jun 2020 20:38:32 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200630003828epoutp0459abf89d9dc2777fe40f5c159d9879f9~dK1oPut7A1265112651epoutp04j
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 00:38:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200630003828epoutp0459abf89d9dc2777fe40f5c159d9879f9~dK1oPut7A1265112651epoutp04j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593477509;
-        bh=BGcI4sW/4NWDbR0YPdZykhJ0fZePdhSRq9FDAb2iitQ=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=td/Hu1dmGdY0GT6wvgH/Q21pn/nHMVwe8IUqhU4KB38CwV7NnveUOn9IZgGrlKIfi
-         Gx9Luek335p9A3d9uwGI0gpMoPrJJX7WM0Hg7DPR+7y25+jtgSALiJT2nwyo9OosMt
-         A+8brtuMNchkhvPgfdlmfPpxEk8C5/mjI2T+zfS4=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20200630003828epcas1p3a174ce5c7703fcb6c3913a649407e34a~dK1nxpEr51041410414epcas1p34;
-        Tue, 30 Jun 2020 00:38:28 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.156]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 49wlp96xgLzMqYkb; Tue, 30 Jun
-        2020 00:38:25 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        FE.8E.19033.E798AFE5; Tue, 30 Jun 2020 09:38:22 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200630003822epcas1p2f017c7ac051424736ae3c97da6d1d607~dK1iHWKL30561605616epcas1p2O;
-        Tue, 30 Jun 2020 00:38:22 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200630003822epsmtrp2a378995b5ea63ed2d58979d866767458~dK1iGg3X60711807118epsmtrp2S;
-        Tue, 30 Jun 2020 00:38:22 +0000 (GMT)
-X-AuditID: b6c32a36-159ff70000004a59-3b-5efa897eb942
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A1.81.08382.E798AFE5; Tue, 30 Jun 2020 09:38:22 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200630003822epsmtip20d59274b66518e07b04c7e82f4a0c199~dK1h1BKl22242522425epsmtip2e;
-        Tue, 30 Jun 2020 00:38:22 +0000 (GMT)
-Subject: Re: [PATCH v2] PM / devfreq: rk3399_dmc: Fix kernel oops when
- rockchip,pmu is absent
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel-team@android.com, stable@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <20fe48e9-62bc-69e4-6cea-2499f6fd2b60@samsung.com>
-Date:   Tue, 30 Jun 2020 09:49:32 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726019AbgF3FIM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 01:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728326AbgF3FIL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 01:08:11 -0400
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBA1C03E979
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 22:08:11 -0700 (PDT)
+Received: by mail-vk1-xa43.google.com with SMTP id h1so4172022vkn.12
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 22:08:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=verdurent-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HiecufVTiEjOfo/YHcow5WgExinvPEroQaoEf3MmndY=;
+        b=Lr2pHMkEu39c/kfeHzuatr6eZAI4j9ZdxptYHISRg5Eh2WH9+3IF2NKMMTm4H/9yVC
+         t8RL72pfvAAL3kYe+FHjfpo3ARELLKqLaUrqn3SqgebiTgvHLvaeOZcIK4Civp57p1i3
+         wgEZg8CN2UVsvNi/6sYKNX4oawpo4MB7YVy+q7u8haFR25zGpWj1xvg59Ufkbr+Z8k5E
+         YFhvQjJxBNUlRqRaeY8CLd4zVGTEpy2ptu3FBFCIQVT1UXWvB8WenDOvwRAc4nwI0SRr
+         bIoBmhkLQTiBGcBPaz8QFRCCU7qLfMvKdxQWV1QWWDSZ3B6pKeLU5EnihwMffppil0pr
+         f1KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HiecufVTiEjOfo/YHcow5WgExinvPEroQaoEf3MmndY=;
+        b=CubcHzAa0GVCnVhuFXziZJgvkUtpZAqMkvz/X8p/A4V5Epr9CiorqdKJduL1904M6N
+         LhOFzbasimnYAkBn+89RA+anc0bACIh28UDcJKorLCGwe35uhrH3bsdyDDkuI+irpdbs
+         zSh1UBnLwGM70qpp44TY9OwNam/9k0yrVdCdn0lKSdKOLTBhCUJZeMpjHWzTDy4ETstg
+         0c4tVXNu47BEqbt7+qT65zSehPVwdeBFC37+VAWjYDexucMD8onx7jLHnKD2/HCqEmvK
+         3yoFkylnRW5IoKtcwUhJtqhWl3PfZLm3PhUTzSa+DJex9XmIawWx/qqr0Fg3p9EA29Ki
+         DjeQ==
+X-Gm-Message-State: AOAM5315Uy0V1zV968XfzzqJjRFEZ2LZ/QTXkWqi/Bes0gOHt2DZr0oC
+        FW+Vm/AP7+V+JTaeIWBq7cecZTq2usXt87n2c11Mog==
+X-Google-Smtp-Source: ABdhPJxO+cstx9z+jGKxT0HzDYpm5WXp00sfrhanyuT0fPwKT3gZlJRtmAWrNKAj+ujbX7PSNvT1giMzEkoD6jC2TxU=
+X-Received: by 2002:a1f:1f04:: with SMTP id f4mr12481194vkf.73.1593493690261;
+ Mon, 29 Jun 2020 22:08:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <636bcc73fa658747626e36d71bfcc4f9@kernel.org>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOJsWRmVeSWpSXmKPExsWy7bCmrm5d5684g0NbLSzW3D7EaPH/0WtW
-        ix3bRSzONr1ht7i8aw6bxefeI4wWO+ecZLW43biCzWLBxkeMDpwe23ZvY/XYcXcJo8emVZ1s
-        Hn1bVjF6bL82j9nj8ya5ALaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8
-        xNxUWyUXnwBdt8wcoKOUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQWWBXrFibnF
-        pXnpesn5uVaGBgZGpkCFCdkZzxZOYixo46nYs7ODqYHxAmcXIyeHhICJxJnZx9i7GLk4hAR2
-        MEr8ufmZFcL5xCixefo1qMw3Romp2+6zwLTsmfAAqmovo8SuVXcYIZz3jBK/N19hB6kSFoiX
-        uNFyhxXEFhFQlPh04SRYEbPABiaJaafmsoEk2AS0JPa/uAFm8wMVXf3xmBHE5hWwk9hx4SQT
-        iM0ioCoxd+ojsKGiAmESJ7e1QNUISpyc+QTsJE4BK4kjq3+D1TMLiEvcejIfypaXaN46mxni
-        7C0cErvXy0HYLhKPNt1jgrCFJV4d38IOYUtJfH63lw3CrpZYefIIG8jREgIdjBJb9l9ghUgY
-        S+xfOhmomQNogabE+l36EGFFiZ2/5zJC7OWTePe1hxWkREKAV6KjTQiiRFni8oO7UGslJRa3
-        d7JNYFSaheSbWUg+mIXkg1kIyxYwsqxiFEstKM5NTy02LDBCju5NjOAUq2W2g3HS2w96hxiZ
-        OBgPMUpwMCuJ8J42+BUnxJuSWFmVWpQfX1Sak1p8iNEUGL4TmaVEk/OBST6vJN7Q1MjY2NjC
-        xNDM1NBQSZxXTeZCnJBAemJJanZqakFqEUwfEwenVAPT/Nud/CtezZu4o7N9Wzur1jHhd693
-        e5//e/aWXglb/sWdlo23VkvPlGk8xnNn1bepIdHT5JIavl6s1koKlX0UmZO7QsorNGPifec+
-        psefG6oWS1SYNR7rCb8855RtkZpEU+LR/83JAg2JZXPvhKocTDe04zWqNWstTEg6Kupwern6
-        70cTezW2/mqWlsg8ExF77dSc13/3uexhf/l7596QrT8P3XmoXjC7/N+kuzbTPsY89L36Urt3
-        7sUCzU9erw/c72NY9umdtkh1opTWrWPBfVb/zZ8obKvZPyPxT8zqS6y3s94/1KooXXq7LTk5
-        adV257OKFqv0DyZs+Hbe3ENcm6N0TRXT817uE6/iGIIOKLEUZyQaajEXFScCAM7UCyc6BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIIsWRmVeSWpSXmKPExsWy7bCSvG5d5684g4ZvfBZrbh9itPj/6DWr
-        xY7tIhZnm96wW1zeNYfN4nPvEUaLnXNOslrcblzBZrFg4yNGB06Pbbu3sXrsuLuE0WPTqk42
-        j74tqxg9tl+bx+zxeZNcAFsUl01Kak5mWWqRvl0CV8azhZMYC9p4Kvbs7GBqYLzA2cXIySEh
-        YCKxZ8ID1i5GLg4hgd2MEpNvPGKESEhKTLt4lLmLkQPIFpY4fLgYouYto8TdtffBaoQF4iVu
-        tNxhBbFFBBQlPl04yQhSxCywgUli+Z7FYEVCAhuYJe7/MASx2QS0JPa/uMEGYvMDNVz98Ris
-        hlfATmLHhZNMIDaLgKrE3KmP2EFsUYEwiZ1LHjNB1AhKnJz5hAXE5hSwkjiy+jdYnFlAXeLP
-        vEvMELa4xK0n86Hi8hLNW2czT2AUnoWkfRaSlllIWmYhaVnAyLKKUTK1oDg3PbfYsMAwL7Vc
-        rzgxt7g0L10vOT93EyM41rQ0dzBuX/VB7xAjEwfjIUYJDmYlEd7TBr/ihHhTEiurUovy44tK
-        c1KLDzFKc7AoifPeKFwYJySQnliSmp2aWpBaBJNl4uCUamA6Vlh3WfSGwzWOiH0rGopq8xxj
-        1be263Tlx+7rOheTO2PXvH0cQro5q62+8QlYacZJn/tlsmBvo/z/38e6TTRkT6e3yvKfPlHz
-        Ojdf3m6q8D2nzEXvI/VvRPpsizjssVnn1xSdvScvvDq8cpZ0mfIN8+8OVzUOfiuxT1253s1/
-        6pp/llZx/tf3qdRo8n6aeGlmpYslk2KXnPrf+pLc316Gok1lp15u+CpmtubxC49nl6pzbx1Q
-        +WkhPn/9zGnyplmTOhT+r9DYYuP65qDg48NKb/Zv+zc97WmZYYizpsXZ2nxec0Wz9exqSRuS
-        SiselG6wtHKfauXLWizeIOQxN3GvwZm9Inz71qa4rwwr+qzEUpyRaKjFXFScCAAIFWEYJAMA
-        AA==
-X-CMS-MailID: 20200630003822epcas1p2f017c7ac051424736ae3c97da6d1d607
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200622152844epcas1p2309f34247eb9653acdfd3818b7e6a569
-References: <CGME20200622152844epcas1p2309f34247eb9653acdfd3818b7e6a569@epcas1p2.samsung.com>
-        <20200622152824.1054946-1-maz@kernel.org>
-        <784808d7-8943-44ab-f15a-34821e6d4d5f@samsung.com>
-        <87tuyue142.wl-maz@kernel.org>
-        <c1a5b730-0554-bb90-9d8d-b50390482e96@samsung.com>
-        <3de68490-d788-e416-dd5f-d4d6e7eca61a@collabora.com>
-        <154fe5b6-6a05-c2b7-3014-2f7b9c2049f9@samsung.com>
-        <636bcc73fa658747626e36d71bfcc4f9@kernel.org>
+References: <20200629122925.21729-1-andrzej.p@collabora.com> <20200629122925.21729-9-andrzej.p@collabora.com>
+In-Reply-To: <20200629122925.21729-9-andrzej.p@collabora.com>
+From:   Amit Kucheria <amit.kucheria@verdurent.com>
+Date:   Tue, 30 Jun 2020 10:37:59 +0530
+Message-ID: <CAHLCerPdEX8QxmahJPSnPp6sSh3G07Ur-+82+5QuozO26W58RQ@mail.gmail.com>
+Subject: Re: [PATCH v7 08/11] thermal: Explicitly enable non-changing thermal
+ zone devices
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        lakml <linux-arm-kernel@lists.infradead.org>,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Marc,
-Hi Marc,
+On Mon, Jun 29, 2020 at 5:59 PM Andrzej Pietrasiewicz
+<andrzej.p@collabora.com> wrote:
+>
+> Some thermal zone devices never change their state, so they should be
+> always enabled.
+>
+> Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
 
-On 6/29/20 10:22 PM, Marc Zyngier wrote:
-> On 2020-06-29 12:29, Chanwoo Choi wrote:
->> Hi Enric and Mark,
->>
->> On 6/29/20 8:05 PM, Enric Balletbo i Serra wrote:
->>> Hi Chanwoo and Marc,
->>>
->>> On 29/6/20 13:09, Chanwoo Choi wrote:
->>>> Hi Enric,
->>>>
->>>> Could you check this issue? Your patch[1] causes this issue.
->>>> As Marc mentioned, although rk3399-dmc.c handled 'rockchip,pmu'
->>>> as the mandatory property, your patch[1] didn't add the 'rockchip,pmu'
->>>> property to the documentation.
->>>>
->>>
->>> I think the problem is that the DT binding patch, for some reason, was missed
->>> and didn't land. The patch seems to have all the required reviews and acks.
->>>
->>>   https://patchwork.kernel.org/patch/10901593/
->>>
->>> Sorry because I didn't notice this issue when 9173c5ceb035 landed. And thanks
->>> for fixing the issue.
->>
->> If the 'rockchip,pmu' propery is mandatory, instead of Mark's patch,
->> we better to require the merge of patch[1] to DT maintainer.
-> 
-> It is way too late. Firmware exists (mainline u-boot, for one) that
-> do not expose the new property, and you can't demand that people
-> upgrade. This is an ABI bug, and we now have to live with it.
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-As you commented, it is proper that rk3399-dmc.c treats 'rockchip,pmu'
-property as optional. Could you send v3 with edited patch descritpion
-and adding stable mailing list to Cc?
-
-> 
-> So, yes to fixing the DT, and no to *only* fixing the DT.
-
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+> ---
+>  drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c       | 8 ++++++++
+>  drivers/net/wireless/intel/iwlwifi/mvm/tt.c              | 9 ++++++++-
+>  drivers/platform/x86/intel_mid_thermal.c                 | 6 ++++++
+>  drivers/power/supply/power_supply_core.c                 | 9 +++++++--
+>  drivers/thermal/armada_thermal.c                         | 6 ++++++
+>  drivers/thermal/dove_thermal.c                           | 6 ++++++
+>  .../thermal/intel/int340x_thermal/int340x_thermal_zone.c | 5 +++++
+>  drivers/thermal/intel/intel_pch_thermal.c                | 5 +++++
+>  drivers/thermal/intel/intel_soc_dts_iosf.c               | 3 +++
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c             | 6 ++++++
+>  drivers/thermal/kirkwood_thermal.c                       | 7 +++++++
+>  drivers/thermal/rcar_thermal.c                           | 9 ++++++++-
+>  drivers/thermal/spear_thermal.c                          | 7 +++++++
+>  drivers/thermal/st/st_thermal.c                          | 5 +++++
+>  14 files changed, 87 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
+> index 3de8a5e83b6c..e3510e9b21f3 100644
+> --- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
+> +++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
+> @@ -92,6 +92,14 @@ int cxgb4_thermal_init(struct adapter *adap)
+>                 ch_thermal->tzdev = NULL;
+>                 return ret;
+>         }
+> +
+> +       ret = thermal_zone_device_enable(ch_thermal->tzdev);
+> +       if (ret) {
+> +               dev_err(adap->pdev_dev, "Failed to enable thermal zone\n");
+> +               thermal_zone_device_unregister(adap->ch_thermal.tzdev);
+> +               return ret;
+> +       }
+> +
+>         return 0;
+>  }
+>
+> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+> index 418e59b7c671..0c95663bf9ed 100644
+> --- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+> @@ -733,7 +733,7 @@ static  struct thermal_zone_device_ops tzone_ops = {
+>
+>  static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+>  {
+> -       int i;
+> +       int i, ret;
+>         char name[16];
+>         static atomic_t counter = ATOMIC_INIT(0);
+>
+> @@ -759,6 +759,13 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+>                 return;
+>         }
+>
+> +       ret = thermal_zone_device_enable(mvm->tz_device.tzone);
+> +       if (ret) {
+> +               IWL_DEBUG_TEMP(mvm, "Failed to enable thermal zone\n");
+> +               thermal_zone_device_unregister(mvm->tz_device.tzone);
+> +               return;
+> +       }
+> +
+>         /* 0 is a valid temperature,
+>          * so initialize the array with S16_MIN which invalid temperature
+>          */
+> diff --git a/drivers/platform/x86/intel_mid_thermal.c b/drivers/platform/x86/intel_mid_thermal.c
+> index f402e2e74a38..f12f4e7bd971 100644
+> --- a/drivers/platform/x86/intel_mid_thermal.c
+> +++ b/drivers/platform/x86/intel_mid_thermal.c
+> @@ -493,6 +493,12 @@ static int mid_thermal_probe(struct platform_device *pdev)
+>                         ret = PTR_ERR(pinfo->tzd[i]);
+>                         goto err;
+>                 }
+> +               ret = thermal_zone_device_enable(pinfo->tzd[i]);
+> +               if (ret) {
+> +                       kfree(td_info);
+> +                       thermal_zone_device_unregister(pinfo->tzd[i]);
+> +                       goto err;
+> +               }
+>         }
+>
+>         pinfo->pdev = pdev;
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index 02b37fe6061c..90e56736d479 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -939,7 +939,7 @@ static struct thermal_zone_device_ops psy_tzd_ops = {
+>
+>  static int psy_register_thermal(struct power_supply *psy)
+>  {
+> -       int i;
+> +       int i, ret;
+>
+>         if (psy->desc->no_thermal)
+>                 return 0;
+> @@ -949,7 +949,12 @@ static int psy_register_thermal(struct power_supply *psy)
+>                 if (psy->desc->properties[i] == POWER_SUPPLY_PROP_TEMP) {
+>                         psy->tzd = thermal_zone_device_register(psy->desc->name,
+>                                         0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
+> -                       return PTR_ERR_OR_ZERO(psy->tzd);
+> +                       if (IS_ERR(psy->tzd))
+> +                               return PTR_ERR(psy->tzd);
+> +                       ret = thermal_zone_device_enable(psy->tzd);
+> +                       if (ret)
+> +                               thermal_zone_device_unregister(psy->tzd);
+> +                       return ret;
+>                 }
+>         }
+>         return 0;
+> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+> index 7c447cd149e7..c2ebfb5be4b3 100644
+> --- a/drivers/thermal/armada_thermal.c
+> +++ b/drivers/thermal/armada_thermal.c
+> @@ -874,6 +874,12 @@ static int armada_thermal_probe(struct platform_device *pdev)
+>                         return PTR_ERR(tz);
+>                 }
+>
+> +               ret = thermal_zone_device_enable(tz);
+> +               if (ret) {
+> +                       thermal_zone_device_unregister(tz);
+> +                       return ret;
+> +               }
+> +
+>                 drvdata->type = LEGACY;
+>                 drvdata->data.tz = tz;
+>                 platform_set_drvdata(pdev, drvdata);
+> diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
+> index 75901ced4a62..73182eb94bc0 100644
+> --- a/drivers/thermal/dove_thermal.c
+> +++ b/drivers/thermal/dove_thermal.c
+> @@ -153,6 +153,12 @@ static int dove_thermal_probe(struct platform_device *pdev)
+>                 return PTR_ERR(thermal);
+>         }
+>
+> +       ret = thermal_zone_device_enable(thermal);
+> +       if (ret) {
+> +               thermal_zone_device_unregister(thermal);
+> +               return ret;
+> +       }
+> +
+>         platform_set_drvdata(pdev, thermal);
+>
+>         return 0;
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> index 432213272f1e..6e479deff76b 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -259,9 +259,14 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+>                 ret = PTR_ERR(int34x_thermal_zone->zone);
+>                 goto err_thermal_zone;
+>         }
+> +       ret = thermal_zone_device_enable(int34x_thermal_zone->zone);
+> +       if (ret)
+> +               goto err_enable;
+>
+>         return int34x_thermal_zone;
+>
+> +err_enable:
+> +       thermal_zone_device_unregister(int34x_thermal_zone->zone);
+>  err_thermal_zone:
+>         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+>         kfree(int34x_thermal_zone->aux_trips);
+> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+> index 56401fd4708d..65702094f3d3 100644
+> --- a/drivers/thermal/intel/intel_pch_thermal.c
+> +++ b/drivers/thermal/intel/intel_pch_thermal.c
+> @@ -352,9 +352,14 @@ static int intel_pch_thermal_probe(struct pci_dev *pdev,
+>                 err = PTR_ERR(ptd->tzd);
+>                 goto error_cleanup;
+>         }
+> +       err = thermal_zone_device_enable(ptd->tzd);
+> +       if (err)
+> +               goto err_unregister;
+>
+>         return 0;
+>
+> +err_unregister:
+> +       thermal_zone_device_unregister(ptd->tzd);
+>  error_cleanup:
+>         iounmap(ptd->hw_base);
+>  error_release:
+> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> index f75271b669c6..4f1a2f7c016c 100644
+> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
+> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> @@ -329,6 +329,9 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+>                 ret = PTR_ERR(dts->tzone);
+>                 goto err_ret;
+>         }
+> +       ret = thermal_zone_device_enable(dts->tzone);
+> +       if (ret)
+> +               goto err_enable;
+>
+>         ret = soc_dts_enable(id);
+>         if (ret)
+> diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> index a006b9fd1d72..b81c33202f41 100644
+> --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+> @@ -363,6 +363,12 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
+>                 kfree(zonedev);
+>                 return err;
+>         }
+> +       err = thermal_zone_device_enable(zonedev->tzone);
+> +       if (err) {
+> +               thermal_zone_device_unregister(zonedev->tzone);
+> +               kfree(zonedev);
+> +               return err;
+> +       }
+>         /* Store MSR value for package thermal interrupt, to restore at exit */
+>         rdmsr(MSR_IA32_PACKAGE_THERM_INTERRUPT, zonedev->msr_pkg_therm_low,
+>               zonedev->msr_pkg_therm_high);
+> diff --git a/drivers/thermal/kirkwood_thermal.c b/drivers/thermal/kirkwood_thermal.c
+> index 189b675cf14d..7fb6e476c82a 100644
+> --- a/drivers/thermal/kirkwood_thermal.c
+> +++ b/drivers/thermal/kirkwood_thermal.c
+> @@ -65,6 +65,7 @@ static int kirkwood_thermal_probe(struct platform_device *pdev)
+>         struct thermal_zone_device *thermal = NULL;
+>         struct kirkwood_thermal_priv *priv;
+>         struct resource *res;
+> +       int ret;
+>
+>         priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+>         if (!priv)
+> @@ -82,6 +83,12 @@ static int kirkwood_thermal_probe(struct platform_device *pdev)
+>                         "Failed to register thermal zone device\n");
+>                 return PTR_ERR(thermal);
+>         }
+> +       ret = thermal_zone_device_enable(thermal);
+> +       if (ret) {
+> +               thermal_zone_device_unregister(thermal);
+> +               dev_err(&pdev->dev, "Failed to enable thermal zone device\n");
+> +               return ret;
+> +       }
+>
+>         platform_set_drvdata(pdev, thermal);
+>
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index 46aeb28b4e90..787710bb88fe 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -550,12 +550,19 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>                         priv->zone = devm_thermal_zone_of_sensor_register(
+>                                                 dev, i, priv,
+>                                                 &rcar_thermal_zone_of_ops);
+> -               else
+> +               else {
+>                         priv->zone = thermal_zone_device_register(
+>                                                 "rcar_thermal",
+>                                                 1, 0, priv,
+>                                                 &rcar_thermal_zone_ops, NULL, 0,
+>                                                 idle);
+> +
+> +                       ret = thermal_zone_device_enable(priv->zone);
+> +                       if (ret) {
+> +                               thermal_zone_device_unregister(priv->zone);
+> +                               priv->zone = ERR_PTR(ret);
+> +                       }
+> +               }
+>                 if (IS_ERR(priv->zone)) {
+>                         dev_err(dev, "can't register thermal zone\n");
+>                         ret = PTR_ERR(priv->zone);
+> diff --git a/drivers/thermal/spear_thermal.c b/drivers/thermal/spear_thermal.c
+> index f68f581fd669..ee33ed692e4f 100644
+> --- a/drivers/thermal/spear_thermal.c
+> +++ b/drivers/thermal/spear_thermal.c
+> @@ -131,6 +131,11 @@ static int spear_thermal_probe(struct platform_device *pdev)
+>                 ret = PTR_ERR(spear_thermal);
+>                 goto disable_clk;
+>         }
+> +       ret = thermal_zone_device_enable(spear_thermal);
+> +       if (ret) {
+> +               dev_err(&pdev->dev, "Cannot enable thermal zone\n");
+> +               goto unregister_tzd;
+> +       }
+>
+>         platform_set_drvdata(pdev, spear_thermal);
+>
+> @@ -139,6 +144,8 @@ static int spear_thermal_probe(struct platform_device *pdev)
+>
+>         return 0;
+>
+> +unregister_tzd:
+> +       thermal_zone_device_unregister(spear_thermal);
+>  disable_clk:
+>         clk_disable(stdev->clk);
+>
+> diff --git a/drivers/thermal/st/st_thermal.c b/drivers/thermal/st/st_thermal.c
+> index b928ca6a289b..1276b95604fe 100644
+> --- a/drivers/thermal/st/st_thermal.c
+> +++ b/drivers/thermal/st/st_thermal.c
+> @@ -246,11 +246,16 @@ int st_thermal_register(struct platform_device *pdev,
+>                 ret = PTR_ERR(sensor->thermal_dev);
+>                 goto sensor_off;
+>         }
+> +       ret = thermal_zone_device_enable(sensor->thermal_dev);
+> +       if (ret)
+> +               goto tzd_unregister;
+>
+>         platform_set_drvdata(pdev, sensor);
+>
+>         return 0;
+>
+> +tzd_unregister:
+> +       thermal_zone_device_unregister(sensor->thermal_dev);
+>  sensor_off:
+>         st_thermal_sensor_off(sensor);
+>
+> --
+> 2.17.1
+>
