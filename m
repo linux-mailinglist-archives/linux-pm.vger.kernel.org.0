@@ -2,158 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9576420F8E5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 17:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FDA20F981
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 18:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730478AbgF3PxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 11:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
+        id S2388541AbgF3Qb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 12:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389783AbgF3PxT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 11:53:19 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B4EC03E97E
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 08:53:18 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id g75so19285607wme.5
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 08:53:18 -0700 (PDT)
+        with ESMTP id S1732008AbgF3Qb4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 12:31:56 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71D0C061755
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 09:31:56 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id h4so2586566plt.9
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 09:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZlhxamwqaiEMIpmJScsP8WaHtcSePSX2SSE4z4msAfU=;
-        b=pZMbiCji8j2GB9THF+qXVSgiyMCUWOFHbpWrTaTQ5T5hngskdKThzcqyS/urr5eKVO
-         equszs6sppekKylDyaCAdUDTCjVL0NqhJlKigviPxF3AkeCBXankW5oAu5fSYw3sJL0j
-         pN95T60h1NnV60aqhcJ4+JOxAl5l7GXafksuzsMsCyJRmbrM5outQ43liZtosxzBoari
-         8aQ+OZ567cvqIdHFwLXayD0BST12Yq8qqnxN5sT9F87L+PZg3Gg+jzIY6Vgikazpm40Y
-         MsD/kbGeVX1bCXKJWA61xX/b+MlinG5QKJ97kYzr2MaCyy/nlKOVVhxNA8tCCM+yOB4j
-         Osyw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=lulc8sCBZxSsIDSGEDtjINzC+/cThYmKQydGNOLrXZk=;
+        b=aKUgpSD/He1pCv7TvCNXwV9z+Q3uGOGLxilUpyitNbMesfDm95S24P973smJiUd0lo
+         YQtvwzaWvCkwIjO6scgIJ74QMzJeyFxaqde9lRcRdhyY+/ISOpVE02jJ/dqKn5r6W6br
+         4G8AJicwQ88EEvLk1uY1F0/7E6HlxzJ1T0t4Of/v4rS982I4mMvIeSSmcORRkLRGUszd
+         nTgJY0zLaVwompnDKBYfCXolengsNSyItqi0+bZEfTHuAUqsQ3CXx1zHPogm3p68NQ+l
+         pyp9GtA86QZ2YiaDXvty6LohelyfJTfku8txJc6ED7Bi9qrcF11YHaLb85bp+PFKS5j1
+         kUDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ZlhxamwqaiEMIpmJScsP8WaHtcSePSX2SSE4z4msAfU=;
-        b=TBz+sO7L8Re7yt0FrTplxzwxWhZRsFwGKRG5+ss0G+YXlHRigeEeLEvp0NQS4DtNJx
-         zuABdu7RCJGG5mxjUSJ8L36U0ph+JM4tU7TlV/wFhyPvFn4ZBrQZOsnFOjFO9BTe/SW1
-         sUEB8YVXFH0+Q0KR5QJZru5jFqDS0h7N6Vi9pC2HwMiHA3/4VWFJSWiVtj8Y1xJ2PSih
-         jbpP0VXif7HcEuVit21eycGUfurFhxRIVbiq0PcIh5Deal8acfVSedVUD7P4lXuuPXYA
-         Ee8WFSC2wHdiZhCDZ/w1c2UzCQeZTNhY1KTq0pgmRyCPVTOljPjnGWSo9CtHD4UGogMj
-         R5Ww==
-X-Gm-Message-State: AOAM533NdR8d/8dH6UMY3KwHEPXvEh1svwZVaWbi53IUPZWuBbHYdaiE
-        8z+o5Obb2772Ic4pfhWAGZZqqQ==
-X-Google-Smtp-Source: ABdhPJxl2gp79Z5Dv6ITz5QGs5s+4SmumsdhYFya47TQ/xK22cY2dC2eBhxp9kUukoWVgtVejXnuBg==
-X-Received: by 2002:a7b:c14a:: with SMTP id z10mr21389052wmi.19.1593532397120;
-        Tue, 30 Jun 2020 08:53:17 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07? ([2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07])
-        by smtp.googlemail.com with ESMTPSA id a2sm4010629wrn.68.2020.06.30.08.53.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jun 2020 08:53:16 -0700 (PDT)
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
-Date:   Tue, 30 Jun 2020 17:53:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=lulc8sCBZxSsIDSGEDtjINzC+/cThYmKQydGNOLrXZk=;
+        b=Ccpff5uvQgKAsivl2qGjUo+8OQTj6kV8sEqcb1e03JEh9YRMjx7Ckid2Wa0z3yCBTn
+         AMNStttt1pOonWSRsFSxrk2/4S/9QGXUKjOwLlZn7Vm07i913jtxW1pd7LdHtXKkHYCi
+         NTzgqMLBuUS+EuaoSLh7DIfiyoIzN1osIb4ZmXPGngdylwuQuc7KeIas9hNWCT51W0F5
+         DuP0aA03i6EkSSjxS074x7rg4EaP0AiNmYG5gCRxBqWQtl2cG4xPGJDXnZWAJUQ9wzki
+         pm9esPkIL3Dbm6SpBdcUXVzYclllrmF5kcr+i+YIvIKLQYMOOqZFVitCmEH3ilC6Nv+d
+         beWQ==
+X-Gm-Message-State: AOAM532llEQqFaerknLMOI0q1w/3AYMzozBkJz19d1g+Q+8LMArRuYTu
+        cVJ6p3Xy6I1Tg6zjUnGkCiGohA==
+X-Google-Smtp-Source: ABdhPJwTlyv2TA/q9N6YOe9W7ECy+4TC0eVFcKpSHM0OTvDRAYxowppQyUFCmnMW3HlFl7hzK7jaOg==
+X-Received: by 2002:a17:90a:1d06:: with SMTP id c6mr7037791pjd.194.1593534716224;
+        Tue, 30 Jun 2020 09:31:56 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m14sm3183697pgn.83.2020.06.30.09.31.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jun 2020 09:31:55 -0700 (PDT)
+Message-ID: <5efb68fb.1c69fb81.621a6.8761@mx.google.com>
+Date:   Tue, 30 Jun 2020 09:31:55 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc3-22-g0169dcbef89a
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 77 runs,
+ 1 regressions (v5.8-rc3-22-g0169dcbef89a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/06/2020 17:29, Andrzej Pietrasiewicz wrote:
-> Hi Daniel,
-> 
-> W dniu 30.06.2020 o 16:53, Daniel Lezcano pisze:
->> On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
->>> Hi Daniel,
->>>
->>> I am reading the logs and can't find anything specific to thermal.
->>>
->>> What I can see is
->>>
->>> "random: crng init done"
->>>
->>> with large times (~200s) and then e.g.
->>>
->>> 'auto-login-action timed out after 283 seconds'
->>>
->>> I'm looking at e.g.
->>> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
->>>
->>>
-> 
-> f5e50bf4d3ef is PATCH 11/11. Does the problem happen at PATCH 1-10/11?
-> PATCH 11/11 renames a method and the code compiles, so it seems
-> unlikely that this is causing problems. One should never say never,
-> though ;)
+pm/testing baseline: 77 runs, 1 regressions (v5.8-rc3-22-g0169dcbef89a)
 
-The sha1 is just the HEAD for the kernel reference. The regression
-happens with your series, somewhere.
+Regressions Summary
+-------------------
 
-> The reported failure is not due to some test failing but rather due
-> to timeout logging into the test system. Could it be that there is
-> some other problem?
-
-I did reproduce:
-
-v5.8-rc3 + series => imx6 hang at boot time
-v5.8-rc3 => imx6 boots correctly
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc3=
+-22-g0169dcbef89a/plan/baseline/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.8-rc3-22-g0169dcbef89a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      0169dcbef89af55d4b2bb8ac0762683622e532e9 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5efb5d021e13014c6685bb30
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc3-22-g0169dc=
+bef89a/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc3-22-g0169dc=
+bef89a/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efb5d021e13014c=
+6685bb35
+      failing since 0 day (last pass: v5.8-rc2-27-g3168a010c528, first fail=
+: v5.8-rc3-20-g4ebdb176f4ab)
+      2 lines =20
