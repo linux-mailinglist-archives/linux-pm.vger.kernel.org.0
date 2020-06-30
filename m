@@ -2,114 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9476F20EE38
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 08:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8429C20F089
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 10:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729901AbgF3GWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 02:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729975AbgF3GWl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 02:22:41 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF11EC061755
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 23:22:41 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id t6so9471576pgq.1
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jun 2020 23:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yxI0dB1QFgZNIVokC1hI+G+Iqlv6A0nmADwj9+78Tks=;
-        b=CdZajyIJHDjOv65E77khrmmw03A7NqdRALdHclmEq43x0A5YERCb9uk8uLW+tX46JL
-         zSfex5IBG8VNGN9gNc70Fxurl907/DAYftlHGmLH9BFvsGGy8nIXnFHWNmHXHSpaSCz/
-         qDqUQZaZcpY5ijqfUZnFDGCWEx6Lgt2HkKvc8oc/Ao9Z0RLEFiXPgur13RH4msc0NuBO
-         7hSiDCK2LgMP9EW7nWsi0kh1ymWFCECLq47QkmJ+3IeZnRZoEHNQl8Zxe/GFOuFd5Q0D
-         YXp8LhRkXDNS1eig3k5dfutAxsToJhnqtQW+V4e/4F7uLVYKOPTTAG6CHrxxWGv12DlY
-         WthQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yxI0dB1QFgZNIVokC1hI+G+Iqlv6A0nmADwj9+78Tks=;
-        b=JAQ30Bq95jdq1JtniVw2heEifaKYqrJoRpG2W8zrs61ttbA+6dbZSUnt8K8Y8+HDVX
-         nsuGehZ1Zf1pNSLmTPJHOZTCY1p/Fs6bTLMNJNAL+l24oa8AftTIsDHIrx5UClOQSiDj
-         aTr+2tA5wwZdL26hqYKc1NEYDH/3Mw5bBKFSha5aQxDByuXirM6xZEYbGDvwpZ8dXNvr
-         W/PmA8Nni/0LjKynQrqWKQPNLUQZiS0mupmr2Q9w9M0jU0MjvOpnli9+4O9zd3/X+8jH
-         OY1rM3kZd/rBa3gRRe/RIrNT9NcTSa0JVu+11AW+CZ5f7yA38A43/kmlZRJmPU4zusgQ
-         HESA==
-X-Gm-Message-State: AOAM530/kvZd7ny9CzRC9DR4GrLPqSfWckecT42JoSgvvKogMGtjvwTs
-        YgwYgzXjRTvnCGnjbPx2kuK/4w==
-X-Google-Smtp-Source: ABdhPJwkpX+UqkRhUMU2StSSepg0T7aIZhYVKhSZq4GziMwUla8dN0NFMDLDBH2U3p99v/31HC6nbw==
-X-Received: by 2002:aa7:8f08:: with SMTP id x8mr2228098pfr.41.1593498161157;
-        Mon, 29 Jun 2020 23:22:41 -0700 (PDT)
-Received: from localhost ([103.208.69.16])
-        by smtp.gmail.com with ESMTPSA id n37sm1486372pgl.82.2020.06.29.23.22.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jun 2020 23:22:39 -0700 (PDT)
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-To:     linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH] MAINTAINERS: update Amit Kucheria's email to a single email address
-Date:   Tue, 30 Jun 2020 11:52:32 +0530
-Message-Id: <8cbb7004a6a9b846a8d827f514f33f1a265dd5d4.1593498024.git.amit.kucheria@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        id S1731515AbgF3IaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 04:30:21 -0400
+Received: from esa6.hc3370-68.iphmx.com ([216.71.155.175]:19703 "EHLO
+        esa6.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727059AbgF3IaU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 04:30:20 -0400
+Authentication-Results: esa6.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: vJWCbZ24qNBCnRa1jeMfzFihapPAEXWOb/MH/cTYYQUyip68MUIwSFss/OBbvXPJYIxsyk1cMP
+ fykjYjWPPolzXUfAKEKbi8v5e6uTYPGHa6se6prvblrrjZ315fDhXE1Ldp+PwYlfxKFSuTxQzJ
+ fPz8b/Ptrkeq2wV7Rn+c0mEizLc08zRTfpE0PDc/3s/85ulln/xVa/ZpKNcjFMEisNHCGoh3Sk
+ yQnP6MGeMNavHGNxNXThtwWpJyX4Yohpdvq55ZlG0FcG1zCwqQ5tX3XMLY0i4aQJXKK1yVMij0
+ oLM=
+X-SBRS: 2.7
+X-MesageID: 21593289
+X-Ironport-Server: esa6.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.75,296,1589256000"; 
+   d="scan'208";a="21593289"
+Date:   Tue, 30 Jun 2020 10:30:06 +0200
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "jgross@suse.com" <jgross@suse.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "sstabellini@kernel.org" <sstabellini@kernel.org>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Woodhouse, David" <dwmw@amazon.co.uk>,
+        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
+Subject: Re: [PATCH 06/12] xen-blkfront: add callbacks for PM suspend and
+ hibernation]
+Message-ID: <20200630083006.GJ735@Air-de-Roger>
+References: <20200604070548.GH1195@Air-de-Roger>
+ <20200616214925.GA21684@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200617083528.GW735@Air-de-Roger>
+ <20200619234312.GA24846@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200622083846.GF735@Air-de-Roger>
+ <20200623004314.GA28586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200623081903.GP735@Air-de-Roger>
+ <20200625183659.GA26586@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200626091239.GA735@Air-de-Roger>
+ <20200629192035.GA13195@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200629192035.GA13195@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Emails currently go to different mailboxes. Switch to the kernel.org
-address so I can forward them to a single mailbox.
+On Mon, Jun 29, 2020 at 07:20:35PM +0000, Anchal Agarwal wrote:
+> On Fri, Jun 26, 2020 at 11:12:39AM +0200, Roger Pau Monné wrote:
+> > So the frontend should do:
+> > 
+> > - Switch to Closed state (and cleanup everything required).
+> > - Wait for backend to switch to Closed state (must be done
+> >   asynchronously, handled in blkback_changed).
+> > - Switch frontend to XenbusStateInitialising, that will in turn force
+> >   the backend to switch to XenbusStateInitWait.
+> > - After that it should just follow the normal connection procedure.
+> > 
+> > I think the part that's missing is the frontend doing the state change
+> > to XenbusStateInitialising when the backend switches to the Closed
+> > state.
+> > 
+> > > I was of the view we may just want to mark frontend closed which should do
+> > > the job of freeing resources and then following the same flow as
+> > > blkfront_restore. That does not seems to work correctly 100% of the time.
+> > 
+> > I think the missing part is that you must wait for the backend to
+> > switch to the Closed state, or else the switch to
+> > XenbusStateInitialising won't be picked up correctly by the backend
+> > (because it's still doing it's cleanup).
+> > 
+> > Using blkfront_restore might be an option, but you need to assert the
+> > backend is in the initial state before using that path.
+> >
+> Yes, I agree and I make sure that XenbusStateInitialising only triggers
+> on frontend once backend is disconnected. msleep in a loop not that graceful but
+> works.
+> Frontend only switches to XenbusStateInitialising once it sees backend
+> as Closed. The issue here is and may require more debugging is:
+> 1. Hibernate instance->Closing failed, artificially created situation by not
+> marking frontend Closed in the first place during freezing.
+> 2. System comes back up fine restored to 'backend connected'.
 
-Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
----
- Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 +-
- MAINTAINERS                                               | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I'm not sure I'm following what is happening here, what should happen
+IMO is that the backend will eventually reach the Closed state? Ie:
+the frontend has initiated the disconnection from the backend by
+setting the Closing state, and the backend will have to eventually
+reach the Closed state.
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-index d7be931b42d22..0985e65a9d871 100644
---- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-@@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: QCOM SoC Temperature Sensor (TSENS)
- 
- maintainers:
--  - Amit Kucheria <amit.kucheria@linaro.org>
-+  - Amit Kucheria <amitk@kernel.org>
- 
- description: |
-   QCOM SoCs have TSENS IP to allow temperature measurement. There are currently
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 496fd4eafb68c..f80cb6185662f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14230,7 +14230,7 @@ F:	drivers/net/ethernet/qualcomm/rmnet/
- F:	include/linux/if_rmnet.h
- 
- QUALCOMM TSENS THERMAL DRIVER
--M:	Amit Kucheria <amit.kucheria@linaro.org>
-+M:	Amit Kucheria <amitk@kernel.org>
- L:	linux-pm@vger.kernel.org
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
-@@ -16930,7 +16930,7 @@ F:	drivers/media/radio/radio-raremono.c
- THERMAL
- M:	Zhang Rui <rui.zhang@intel.com>
- M:	Daniel Lezcano <daniel.lezcano@linaro.org>
--R:	Amit Kucheria <amit.kucheria@verdurent.com>
-+R:	Amit Kucheria <amitk@kernel.org>
- L:	linux-pm@vger.kernel.org
- S:	Supported
- Q:	https://patchwork.kernel.org/project/linux-pm/list/
--- 
-2.25.1
+At that point the frontend can initiate a reconnection by switching to
+the Initialising state.
 
+> 3. Re-run (1) again without reboot
+> 4. (4) fails to recover basically freezing does not fail at all which is weird
+>    because it should timeout as it passes through same path. It hits a BUG in
+>    talk_to_blkback() and instance crashes.
+
+It's hard to tell exactly. I guess you would have to figure what makes
+the frontend not get stuck at the same place as the first attempt.
+
+Roger.
