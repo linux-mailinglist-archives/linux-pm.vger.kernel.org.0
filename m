@@ -2,67 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A61EF20F4C2
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 14:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067B120F53A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 14:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387683AbgF3Mfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 08:35:43 -0400
-Received: from smtp3.sd73.bc.ca ([142.24.50.246]:46822 "EHLO smtp3.sd73.bc.ca"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732042AbgF3Mfn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 30 Jun 2020 08:35:43 -0400
-Received: from smtp.sd73.bc.ca (smtp.sd73.bc.ca [10.10.10.14])
-        by smtp3.sd73.bc.ca (Postfix) with ESMTP id 6C4DF666C3;
-        Tue, 30 Jun 2020 01:27:09 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra.sd73.bc.ca [10.10.10.7])
-        by smtp.sd73.bc.ca (Postfix) with ESMTP id 89600E042C;
-        Tue, 30 Jun 2020 01:27:13 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTPS id 7CB505C0D4682D;
-        Tue, 30 Jun 2020 01:19:08 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 312245C0D46818;
-        Tue, 30 Jun 2020 01:19:08 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca ([127.0.0.1])
-        by localhost (zimbra2.sd73.bc.ca [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id W99JmCgQCcKe; Tue, 30 Jun 2020 01:19:08 -0700 (PDT)
-Received: from zimbra2.sd73.bc.ca (zimbra3.sd73.bc.ca [10.10.10.7])
-        by zimbra2.sd73.bc.ca (Postfix) with ESMTP id 95A505C0D4882B;
-        Tue, 30 Jun 2020 01:19:06 -0700 (PDT)
-Date:   Tue, 30 Jun 2020 01:19:06 -0700 (PDT)
-From:   charles jackson <lisa.petel@sd73.bc.ca>
-Reply-To: charles jackson <charlesjacksonjr001@gmail.com>
-Message-ID: <8830555.67041408.1593505146456.JavaMail.zimbra@zimbra.sd73.bc.ca>
-Subject: =?UTF-8?Q?=5BPossible_Spam=5D_Covid?= =?UTF-8?Q?_19_Wohlt=C3=A4tigkeitsfon?= =?UTF-8?Q?ds?=
+        id S2388093AbgF3M6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 08:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388065AbgF3M57 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 08:57:59 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89673C08C5DB
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 05:57:57 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id q5so20013545wru.6
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jun 2020 05:57:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WwiCRMR/atAzHQdqmr8uQelMa6OcJuGWGuwIRfhRdfs=;
+        b=PjtHdZDyhsfzOMknUBCzAw98LBJLOT+lMKu8FyLjhCUmY5zqFEKQjOpc0es34kiYw7
+         TEnUSoSJ3f61hHZTPcBVtChXqTKUT14Z1ygKNwosPCBzB0Pm7msxtjo5fYPA+1w7D3U4
+         JYy/2C4+NLEFNGgD3gyxAeXQqJVZpzuBvxQOI3xU1q0cTX7uddeB860HGcA+R9a2NxlU
+         qOTSAPhfdHAEOvdlwOeQX21T5qSrN6jUZabswuo4hqHGPCBCpAOpGIbYLHfj2nkekTdR
+         6EPB/JQvmiyH9Shvv0lfPtAWdeC/xfUmMiaNaQy2sSG+IcFqZJPB8yJf2CCLCRJbaFfP
+         TXnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WwiCRMR/atAzHQdqmr8uQelMa6OcJuGWGuwIRfhRdfs=;
+        b=Zs+vpykPS2G2VJfaDqHWG6U5P1jqpImIUDIg+Lnw6N3CmXoNxy2b0qJoa3jgdLGCkp
+         15eaOGKl/yOdTgWUoTgytUHl3MZL+tukhiJ8tKDR2rB34++j9ZX2BHeCgDfbjX6nxRRu
+         vjqNHFAEVcYp8VzW/M/k3Gb6hC+KLIaM+uAdm7aXYfGREtMiAzBsFlpT0/FOXZ/QmeUx
+         ap6tyQGLnvqMJcqBk3xxmzsfNp1GKvpyjQoxyY32sBISVSX6gk/nIWHZFuN+l7JHgvJC
+         CxTQ7mtTUZuK29ozkRbeXGvFFxFu6mKQOu62JOKKW6j+YSBOvLEEaM1sqkk4GNiLy/PV
+         cPGw==
+X-Gm-Message-State: AOAM533rJdlqcuvGUzdFas0KuAfRMU9fwpIbQxifjwl0RelxpZegZVsh
+        ZHD/APV77C5snrBl43fE3s6ZFQ==
+X-Google-Smtp-Source: ABdhPJwAuU8HZu7bzQUdUK7N+9kAxLdtAij91dHnV4cLlG9pUpOpa87mO5UpON9ihs0/vm3ANHX4DA==
+X-Received: by 2002:adf:ec42:: with SMTP id w2mr21971589wrn.269.1593521875852;
+        Tue, 30 Jun 2020 05:57:55 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07? ([2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07])
+        by smtp.googlemail.com with ESMTPSA id 133sm3823861wme.5.2020.06.30.05.57.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Jun 2020 05:57:55 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+References: <20200629122925.21729-1-andrzej.p@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
+Date:   Tue, 30 Jun 2020 14:57:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <20200629122925.21729-1-andrzej.p@collabora.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.10.10.90]
-X-Mailer: Zimbra 8.6.0_GA_1242 (zclient/8.6.0_GA_1242)
-Thread-Topic: Covid 19 =?utf-8?Q?Wohlt=C3=A4tigkeitsfonds?=
-Thread-Index: IUWc7zqudtx5R79uoj8bRbYJ6nWXsw==
-To:     unlisted-recipients:; (no To-header on input)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+Hi Andrzej,
+
+I've tested your series with kernelci and there are 3 regressions for
+the imx6.
+
+https://kernelci.org/test/job/thermal/branch/testing/kernel/v5.8-rc3-11-gf5e50bf4d3ef/plan/baseline/
+
+
+On 29/06/2020 14:29, Andrzej Pietrasiewicz wrote:
+> A respin of v6 with these changes:
+> 
+> v6..v7:
+> - removed duplicate S-o-b line from patch 6/11
+> 
+> v5..v6:
+> - staticized thermal_zone_device_set_mode() (kbuild test robot)
+> 
+> v4..v5:
+> 
+> - EXPORT_SYMBOL -> EXPORT_SYMBOL_GPL (Daniel)
+> - dropped unnecessary thermal_zone_device_enable() in int3400_thermal.c
+> and in thermal_of.c (Bartlomiej)
+> 
+> Andrzej Pietrasiewicz (11):
+>   acpi: thermal: Fix error handling in the register function
+>   thermal: Store thermal mode in a dedicated enum
+>   thermal: Add current mode to thermal zone device
+>   thermal: Store device mode in struct thermal_zone_device
+>   thermal: remove get_mode() operation of drivers
+>   thermal: Add mode helpers
+>   thermal: Use mode helpers in drivers
+>   thermal: Explicitly enable non-changing thermal zone devices
+>   thermal: core: Stop polling DISABLED thermal devices
+>   thermal: Simplify or eliminate unnecessary set_mode() methods
+>   thermal: Rename set_mode() to change_mode()
+> 
+>  drivers/acpi/thermal.c                        | 75 +++++----------
+>  .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  8 ++
+>  .../ethernet/mellanox/mlxsw/core_thermal.c    | 91 ++++---------------
+>  drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  9 +-
+>  drivers/platform/x86/acerhdf.c                | 33 +++----
+>  drivers/platform/x86/intel_mid_thermal.c      |  6 ++
+>  drivers/power/supply/power_supply_core.c      |  9 +-
+>  drivers/thermal/armada_thermal.c              |  6 ++
+>  drivers/thermal/da9062-thermal.c              | 16 +---
+>  drivers/thermal/dove_thermal.c                |  6 ++
+>  drivers/thermal/hisi_thermal.c                |  6 +-
+>  drivers/thermal/imx_thermal.c                 | 57 ++++--------
+>  .../intel/int340x_thermal/int3400_thermal.c   | 38 ++------
+>  .../int340x_thermal/int340x_thermal_zone.c    |  5 +
+>  drivers/thermal/intel/intel_pch_thermal.c     |  5 +
+>  .../thermal/intel/intel_quark_dts_thermal.c   | 34 ++-----
+>  drivers/thermal/intel/intel_soc_dts_iosf.c    |  3 +
+>  drivers/thermal/intel/x86_pkg_temp_thermal.c  |  6 ++
+>  drivers/thermal/kirkwood_thermal.c            |  7 ++
+>  drivers/thermal/rcar_thermal.c                |  9 +-
+>  drivers/thermal/rockchip_thermal.c            |  6 +-
+>  drivers/thermal/spear_thermal.c               |  7 ++
+>  drivers/thermal/sprd_thermal.c                |  6 +-
+>  drivers/thermal/st/st_thermal.c               |  5 +
+>  drivers/thermal/thermal_core.c                | 76 ++++++++++++++--
+>  drivers/thermal/thermal_of.c                  | 41 +--------
+>  drivers/thermal/thermal_sysfs.c               | 37 +-------
+>  include/linux/thermal.h                       | 19 +++-
+>  28 files changed, 275 insertions(+), 351 deletions(-)
+> 
+> 
+> base-commit: 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68
+> 
+
 
 -- 
-Hallo
- 
- Ich bin Charles W. Jackson aus North Carolina, Vereinigte Staaten von Amerika, und ich bin der Gewinner des Mega-Millionen-Jackpots von 344 Millionen US-Dollar. Ich spende die Summe von 2.000.000 Millionen Euro als Teil der Hilfsgelder f&uuml;r das Corona-Virus.
- 
- Dies ist Ihr Spendencode: [CJ530342019]
- 
- www.youtube.com/watch?v=BSr8myiLPMQ
- 
- Bitte antworten Sie auf diese E-Mail mit dem SPENDERCODE:
- 
- charlesjacksonjr001@gmail.com
- 
- Ich hoffe, dass Sie und Ihre Familie dies durchkommen
- 
- 
- Herr Charles Jackson
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
