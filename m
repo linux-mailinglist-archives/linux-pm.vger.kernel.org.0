@@ -2,131 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B785320FBE5
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C046120FBE8
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 20:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgF3Siy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 14:38:54 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42919 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbgF3Six (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:38:53 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 76so4810781otu.9;
-        Tue, 30 Jun 2020 11:38:52 -0700 (PDT)
+        id S1727848AbgF3Sju (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 14:39:50 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46762 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgF3Sjt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 14:39:49 -0400
+Received: by mail-oi1-f196.google.com with SMTP id l63so17277694oih.13;
+        Tue, 30 Jun 2020 11:39:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=U4CE/0puyHhDFR+hvTXHPqKihS4zRWzdZIBdwpMjjPI=;
-        b=OxbORm8dMOWa4dr6NIJr8n/khyXOT8tZbcVt4tBZjIJg3uoo7XuzmaRdRGzsseTjyY
-         VvQZizZjWqW5XTR9fn0s9mlVfYRIDBrQybz6OkzJ8xTavAymm+7x6rJahUA79YltJjqd
-         5M3F4W/5s2AC78HS/PjCJWvlrybfClJpdqOUjhkg+oXOJu8xvvQ/gpwH0TgR4xLBHw1n
-         asCR1VizOWlpawo9A8JwqosuYFU5EqOFTFpm7TEe8LZFrw00BCuUkt56opkF+i8jJnNs
-         VCoVE9FPWjwt19XK28GY08ITsQMZRFgn+z6VOc8oFBo9A6PiycVT9DGZ8D6y8VHZvj2Q
-         hIzw==
-X-Gm-Message-State: AOAM530DDhAGDJTI0KRG6F4ry9AzH6RFx7FNsPpbKZLz9tVFiUzlXnwE
-        QZzAZcLMH4QmsFuWMTHXtCqgfofz1KHOH/cua8g=
-X-Google-Smtp-Source: ABdhPJySOGPpCYIMPEpa4NqaFUumrZMT0Y1q+t1uhnyYXYD7Q0zC+lTmDJBQPsveJWJkDKW5dW8oyRZX6fbr/yadk7A=
-X-Received: by 2002:a9d:1c82:: with SMTP id l2mr1714092ota.167.1593542332362;
- Tue, 30 Jun 2020 11:38:52 -0700 (PDT)
+        bh=2UvTp9bo5BGLWrozn0b9r4ZbImtVYoW1saxIXIYZe7E=;
+        b=m5vf2yeYEmQQvR029pydYxr60KwwteAiiBTu7z8QteMDi7jEROwhZFDWLRAdA1Pb5d
+         GLJ4BlaAZuqY/7GI4smlssegPEZ59wwM6xdwFZLQ/jhTDI4DoS9QR7mSRTQVcZya6h2g
+         gH2JUlC1CHVS1I8b82spWVfENDwp4w9oiuy+FadNjOCmZ0pOkT1yT9BGrdluUD9/OISu
+         PdrUcSzVPrEjThR62MleVZBXdObzG/DwTHMjAObjuI7qY4vGXol0pA9oiCh9UAplUkzT
+         oM+UPJJAeyoNmE7/kXq7IhEO4QYJpkfOSvIUctpGZl1Dw0mepmHD6CWsfJb2JIPUQF0t
+         nudg==
+X-Gm-Message-State: AOAM530kuoV3W7g9cca0HXTQ/dQNcBfiRv0GvEPsoQchm09KXaT/n/By
+        Gyu/+B3ouPkrorTxzVCs6U5D88Vbg8M4jtPUPzGr7A==
+X-Google-Smtp-Source: ABdhPJyYS3812JK8xEOO9o4rXVkyyuGMBIaKjlQNHAgmdOlmnyzM0VrI30qA+axFY9QWiIfNrG9PDJGcbSOku9k9bC4=
+X-Received: by 2002:aca:4a89:: with SMTP id x131mr18016228oia.103.1593542389170;
+ Tue, 30 Jun 2020 11:39:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1593418662.git.viresh.kumar@linaro.org>
-In-Reply-To: <cover.1593418662.git.viresh.kumar@linaro.org>
+References: <2f00a5847708547a57920e24a2ec5e76b265cde9.1593425047.git.viresh.kumar@linaro.org>
+In-Reply-To: <2f00a5847708547a57920e24a2ec5e76b265cde9.1593425047.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Jun 2020 20:38:41 +0200
-Message-ID: <CAJZ5v0jmYDmSRX4UkXGH7HrnrRX-9ZGF6G-Z2LQuVyTWMp8eww@mail.gmail.com>
-Subject: Re: [PATCH V4 0/3] cpufreq: Allow default governor on cmdline and fix
- locking issues
+Date:   Tue, 30 Jun 2020 20:39:38 +0200
+Message-ID: <CAJZ5v0hffQ1JBWM_iP25Bta0+tu9cxvi4UmX2RsyqqVNjoPXGA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Remove the weakly defined cpufreq_default_governor()
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ben Segall <bsegall@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Todd Kjos <tkjos@google.com>, adharmap@codeaurora.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Quentin Perret <qperret@google.com>
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Quentin Perret <qperret@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 29, 2020 at 10:58 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Mon, Jun 29, 2020 at 10:48 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Hi,
+> The default cpufreq governor is chosen with the help of a "choice"
+> option in the Kconfig which will always end up selecting one of the
+> governors and so the weakly defined definition of
+> cpufreq_default_governor() will never get called.
 >
-> I have picked Quentin's series over my patch, modified both and tested.
+> Moreover, this makes us skip the checking of the return value of that
+> routine as it will always be non NULL.
 >
-> V3->V4:
-> - Do __module_get() for cpufreq_default_governor() case as well and get
->   rid of an extra variable.
-> - Use a single character array, default_governor, instead of two of them.
+> If the Kconfig option changes in future, then we will start getting a
+> link error instead (and it won't go unnoticed as in the case of the weak
+> definition).
 >
-> V2->V3:
-> - default_governor is a string now and we don't set it on governor
->   registration or unregistration anymore.
-> - Fixed locking issues in cpufreq_init_policy().
+> Suggested-by: Quentin Perret <qperret@google.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+> Based over the following series:
+> - [PATCH V4 0/3] cpufreq: Allow default governor on cmdline and fix
+>   locking issues
 >
-> --
-> Viresh
+>  drivers/cpufreq/cpufreq.c | 7 -------
+>  1 file changed, 7 deletions(-)
 >
-> Original cover letter fro Quentin:
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index ad94b1d47ddb..036f4cc42ede 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1056,11 +1056,6 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+>         return 0;
+>  }
 >
-> This series enables users of prebuilt kernels (e.g. distro kernels) to
-> specify their CPUfreq governor of choice using the kernel command line,
-> instead of having to wait for the system to fully boot to userspace to
-> switch using the sysfs interface. This is helpful for 2 reasons:
->   1. users get to choose the governor that runs during the actual boot;
->   2. it simplifies the userspace boot procedure a bit (one less thing to
->      worry about).
+> -__weak struct cpufreq_governor *cpufreq_default_governor(void)
+> -{
+> -       return NULL;
+> -}
+> -
+>  static int cpufreq_init_policy(struct cpufreq_policy *policy)
+>  {
+>         struct cpufreq_governor *gov = NULL;
+> @@ -1079,8 +1074,6 @@ static int cpufreq_init_policy(struct cpufreq_policy *policy)
 >
-> To enable this, the first patch moves all governor init calls to
-> core_initcall, to make sure they are registered by the time the drivers
-> probe. This should be relatively low impact as registering a governor
-> is a simple procedure (it gets added to a llist), and all governors
-> already load at core_initcall anyway when they're set as the default
-> in Kconfig. This also allows to clean-up the governors' init/exit code,
-> and reduces boilerplate.
->
-> The second patch introduces the new command line parameter, inspired by
-> its cpuidle counterpart. More details can be found in the respective
-> patch headers.
->
-> Changes in v2:
->  - added Viresh's ack to patch 01
->  - moved the assignment of 'default_governor' in patch 02 to the governor
->    registration path instead of the driver registration (Viresh)
->
-> Quentin Perret (2):
->   cpufreq: Register governors at core_initcall
->   cpufreq: Specify default governor on command line
->
-> Viresh Kumar (1):
->   cpufreq: Fix locking issues with governors
->
->  .../admin-guide/kernel-parameters.txt         |  5 ++
->  Documentation/admin-guide/pm/cpufreq.rst      |  6 +-
->  .../platforms/cell/cpufreq_spudemand.c        | 26 +-----
->  drivers/cpufreq/cpufreq.c                     | 87 ++++++++++++-------
->  drivers/cpufreq/cpufreq_conservative.c        | 22 ++---
->  drivers/cpufreq/cpufreq_ondemand.c            | 24 ++---
->  drivers/cpufreq/cpufreq_performance.c         | 14 +--
->  drivers/cpufreq/cpufreq_powersave.c           | 18 +---
->  drivers/cpufreq/cpufreq_userspace.c           | 18 +---
->  include/linux/cpufreq.h                       | 14 +++
->  kernel/sched/cpufreq_schedutil.c              |  6 +-
->  11 files changed, 100 insertions(+), 140 deletions(-)
+>                 if (!gov) {
+>                         gov = cpufreq_default_governor();
+> -                       if (!gov)
+> -                               return -ENODATA;
+>                         __module_get(gov->owner);
+>                 }
 >
 > --
 
-All three patches applied as 5.9 material, thanks!
+Applied as 5.9 material, thanks!
