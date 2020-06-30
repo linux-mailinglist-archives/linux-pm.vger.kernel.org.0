@@ -2,107 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B86E820F84A
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 17:29:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD4720F877
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jun 2020 17:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389360AbgF3P3m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 Jun 2020 11:29:42 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34984 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbgF3P3l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 Jun 2020 11:29:41 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id AD7A52A1DD7
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
-Date:   Tue, 30 Jun 2020 17:29:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S2389453AbgF3Pf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 Jun 2020 11:35:29 -0400
+Received: from mga01.intel.com ([192.55.52.88]:56113 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389472AbgF3Pf3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 30 Jun 2020 11:35:29 -0400
+IronPort-SDR: 9MUvMHsr+nQVQOOATKbmBJyddW8PFJ2VP7+1K9Vt7djZX8tOf0O3mLo+11OUGy9X+1Bqucd7hI
+ bGUN2E8ZVtgA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="164275162"
+X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
+   d="scan'208";a="164275162"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 08:35:28 -0700
+IronPort-SDR: G7tKrINYbzcvfvWHznr2coYdrUvsO33iueotv+iah3XwelwKpr0gtEss5dWDi5JDf83IkdA4I/
+ VADAlDox4ueg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
+   d="scan'208";a="481231881"
+Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jun 2020 08:35:26 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rafael.j.wysocki@intel.com, srinivas.pandruvada@linux.intel.com,
+        andriy.shevchenko@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     rui.zhang@intel.com, sumeet.r.pawnikar@intel.com
+Subject: [PATCH] ACPI: fan: fix: Update Tiger Lake ACPI device ID
+Date:   Tue, 30 Jun 2020 21:11:49 +0530
+Message-Id: <1593531709-21749-1-git-send-email-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Tiger Lake's new unique ACPI device ID for Fan is not valid
+because of missing 'C' in the ID. Fix this Fan ID by updating it.
 
-W dniu 30.06.2020 o 16:53, Daniel Lezcano pisze:
-> On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
->> Hi Daniel,
->>
->> I am reading the logs and can't find anything specific to thermal.
->>
->> What I can see is
->>
->> "random: crng init done"
->>
->> with large times (~200s) and then e.g.
->>
->> 'auto-login-action timed out after 283 seconds'
->>
->> I'm looking at e.g.
->> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
->>
+Fixes: c248dfe7e0ca ("ACPI: fan: Add Tiger Lake ACPI device ID")
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+---
+ drivers/acpi/fan.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-f5e50bf4d3ef is PATCH 11/11. Does the problem happen at PATCH 1-10/11?
-PATCH 11/11 renames a method and the code compiles, so it seems
-unlikely that this is causing problems. One should never say never,
-though ;)
+diff --git a/drivers/acpi/fan.c b/drivers/acpi/fan.c
+index 873e039ad4b7..62873388b24f 100644
+--- a/drivers/acpi/fan.c
++++ b/drivers/acpi/fan.c
+@@ -25,8 +25,8 @@
+ 
+ static const struct acpi_device_id fan_device_ids[] = {
+ 	{"PNP0C0B", 0},
+-	{"INT1044", 0},
+ 	{"INT3404", 0},
++	{"INTC1044", 0},
+ 	{"", 0},
+ };
+ MODULE_DEVICE_TABLE(acpi, fan_device_ids);
+-- 
+1.7.9.5
 
-The reported failure is not due to some test failing but rather due
-to timeout logging into the test system. Could it be that there is
-some other problem?
-
-Andrzej
