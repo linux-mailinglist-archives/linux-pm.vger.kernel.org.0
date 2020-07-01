@@ -2,132 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 584A0210D21
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 16:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE958210DAB
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 16:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbgGAOHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 10:07:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:43934 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731342AbgGAOHi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Jul 2020 10:07:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30C0F30E;
-        Wed,  1 Jul 2020 07:07:37 -0700 (PDT)
-Received: from localhost (unknown [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C614C3F73C;
-        Wed,  1 Jul 2020 07:07:36 -0700 (PDT)
-Date:   Wed, 1 Jul 2020 15:07:35 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
-        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>
-Subject: Re: [PATCH 4/8] cpufreq,vexpress-spc: fix Frequency Invariance (FI)
- for bL switching
-Message-ID: <20200701140735.GB32736@arm.com>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-5-ionela.voinescu@arm.com>
- <20200701095414.2wjcnyhndgcedk2q@vireshk-i7>
+        id S1731493AbgGAOZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 10:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731223AbgGAOZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 10:25:54 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A45C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 07:25:54 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id o2so23479934wmh.2
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 07:25:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bzxWUOb25TYvscIF9N4MMene00x35xMy0V9YTIPCvEw=;
+        b=Les4jxi+eQeD1WT6Qp6mIFEtHFoL2Xnxk7pXe2myRsbelv7n1VGJ2KaPP5bueTaj+p
+         Ws0ZeIj3EKbuDp54QOSPqNSrx1Vs5Rr5aWn7OVocTi4YjblOE5DyZS1ftrIfz9pYa/jr
+         szUO3UsdDch3lGHQeL88e06vcoFSR2oq3tuxrUF0lLAHIa/retTlgJkr/Y3S+oYlUHoW
+         VrkbrOKxnOT9vxZYzK6UVniGsbbZpTig8cJdpUcTP/yWj7Yn803bPMnqrL80zMkwwjIX
+         Aux9sAXy7wImthnbVxLQU9n0Uj1rXSL1I4qY6sxjbaOn+7DM2PE51ZkTpb39UeHL8/OK
+         ci3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bzxWUOb25TYvscIF9N4MMene00x35xMy0V9YTIPCvEw=;
+        b=WA9IlK8ca/65Al0wMyZJGKEp9Znv41V0GvzQsX/gQ0WF0Q/ZDQfJ19jfgdzP8iocVz
+         vN+vBoICJzKWQtK6sKE+EcLlMehQhs8ZTHl5WoZ/kPCSnP8HFl13A7xfrI/6c3fMsig9
+         p4aUbrkSHNogPVv9lM4oYI0ToiE5+Qhin7C3pP8p6DA/Xbn6wDEC7oUf2wkcKoDDyJlk
+         mZkf09jqZJ1bOex/89V0EVcWTA45Ev70hWmLn5mcl1wB3DwVW4lMv/n6PnHpJ3e4lZBV
+         ajo5iZS4rnJhQy7wI9wt1E7kjJ35kZQaL4E8NSOQEPgWMsOBoilPTa7wWNBmKa4/JfL4
+         2Xjw==
+X-Gm-Message-State: AOAM533GgPM4HVcjKMfNyxdoGI/FMCWZIdjcOSCENccz/6gAQcmQHidC
+        83RAWQASzxbQEQM+ADK14YGegQ==
+X-Google-Smtp-Source: ABdhPJxNJbgGXlTsOmTodMV5Dfnt24WopKgYqjBK+3slHN4EbVmyAyteCotRWf0oQTewKCuWuIkiDg==
+X-Received: by 2002:a1c:e90a:: with SMTP id q10mr28362215wmc.140.1593613553010;
+        Wed, 01 Jul 2020 07:25:53 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07? ([2a01:e34:ed2f:f020:54f4:a99f:ab88:bc07])
+        by smtp.googlemail.com with ESMTPSA id c2sm7658210wrv.47.2020.07.01.07.25.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2020 07:25:52 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+References: <20200629122925.21729-1-andrzej.p@collabora.com>
+ <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
+ <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+ <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
+ <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
+ <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
+ <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
+ <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
+ <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <5dba166b-ecef-c9ee-a13a-0e9bbf74ce4c@linaro.org>
+Date:   Wed, 1 Jul 2020 16:25:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701095414.2wjcnyhndgcedk2q@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 01 Jul 2020 at 16:16:19 (+0530), Viresh Kumar wrote:
-> On 01-07-20, 10:07, Ionela Voinescu wrote:
-> > In the majority of cases, the index argument to cpufreq's target_index()
-> > is meant to identify the frequency that is requested from the hardware,
-> > according to the frequency table: policy->freq_table[index].frequency.
-> > 
-> > After successfully requesting it from the hardware, this value, together
-> > with the maximum hardware frequency (policy->cpuinfo.max_freq) are used
-> > as arguments to arch_set_freq_scale(), in order to set the task scheduler
-> > frequency scale factor. This is a normalized indication of a CPU's
-> > current performance.
-> > 
-> > But for the vexpress-spc-cpufreq driver, when big.LITTLE switching [1]
-> > is enabled, there are three issues with using the above information for
-> > setting the FI scale factor:
-> > 
-> >  - cur_freq: policy->freq_table[index].frequency is not the frequency
-> >    requested from the hardware. ve_spc_cpufreq_set_rate() will convert
-> >    from this virtual frequency to an actual frequency, which is then
-> >    requested from the hardware. For the A7 cluster, the virtual frequency
-> >    is half the actual frequency. The use of the virtual policy->freq_table
-> >    frequency results in an incorrect FI scale factor.
-> > 
-> >  - max_freq: policy->cpuinfo.max_freq does not correctly identify the
-> >    maximum frequency of the physical cluster. This value identifies the
-> >    maximum frequency achievable by the big-LITTLE pair, that is the
-> >    maximum frequency of the big CPU. But when the LITTLE CPU in the group
-> >    is used, the hardware maximum frquency passed to arch_set_freq_scale()
-> >    is incorrect.
-> > 
-> >  - missing a scale factor update: when switching clusters, the driver
-> >    recalculates the frequency of the old clock domain based on the
-> >    requests of the remaining CPUs in the domain and asks for a clock
-> >    change. But this does not result in an update in the scale factor.
-> > 
-> > Therefore, introduce a local function bLs_set_sched_freq_scale() that
-> > helps call arch_set_freq_scale() with correct information for the
-> > is_bL_switching_enabled() case, while maintaining the old, more
-> > efficient, call site of arch_set_freq_scale() for when cluster
-> > switching is disabled.
-> > 
-> > Also, because of these requirements in computing the scale factor, this
-> > driver is the only one that maintains custom support for FI, which is
-> > marked by the presence of the CPUFREQ_CUSTOM_SET_FREQ_SCALE flag.
-> > 
-> > [1] https://lwn.net/Articles/481055/
-> > 
-> > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> > Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Cc: Liviu Dudau <liviu.dudau@arm.com>
-> > ---
-> >  drivers/cpufreq/vexpress-spc-cpufreq.c | 23 ++++++++++++++++++++++-
-> >  1 file changed, 22 insertions(+), 1 deletion(-)
-> 
-> Is there anyone who cares for this driver and EAS ? I will just skip doing the
-> FIE thing here and mark it skipped.
+On 01/07/2020 12:23, Andrzej Pietrasiewicz wrote:
+> Hi,
 > 
 
-That is a good question. The vexpress driver is still used for TC2, but
-I don't know of any users of this bL switcher functionality that's part
-of the driver. I think there were a few people wondering recently if
-it's still used [1].
+[ ... ]
 
-If we disconsider the bL switcher functionality, then the vexpress
-driver itself gets in line with the other drivers supported by this
-series. Therefore there would not be a flag set needed here. Also, to
-maintain current functionality, we would not need to introduce a flag
-at all.
+>>>>
+>>>> I did reproduce:
+>>>>
+>>>> v5.8-rc3 + series => imx6 hang at boot time
+>>>> v5.8-rc3 => imx6 boots correctly
+>>>>
+> 
+> What did you reproduce? Timeout logging in to the test system or a
+> "real" failure of a test?
 
-But, the frequency invariance fix is also useful for schedutil to
-better select a frequency based on invariant utilization. So if we
-independently decide having a flag like the one introduced at 1/8 is
-useful, I would recommend to consider this patch, as it does fix some
-current functionality in the kernel (whether we can determine if it's
-used much or not).
+Timeout logging. Boot hangs.
 
-Therefore, IMO, if it's not used any more it should be removed, but if
-it's kept it should be fixed.
+>>> I kindly ask for a bisect.
+>>
+>> I will give a try but it is a very long process as the board is running
+>> on kernelci.
+>>
+>> I was not able to reproduce it on imx7 despite it is the same sensor :/
+>>
+>>
+> 
+> Could it be that the thermal sensors somehow contribute to entropy and
+> after
+> the series is applied on some machines it takes more time to gather enough
+> entropy?
 
-[1] https://lore.kernel.org/linux-arm-kernel/20200624195811.435857-8-maz@kernel.org/
+I assume you are talking about the entropy for random?
+
+It would be really surprising if it is the case. The message appears
+asynchronously, I believe the boot flow is stuck in a mutex.
 
 
-Thanks,
-Ionela.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-> -- 
-> viresh
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
