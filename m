@@ -2,220 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 293B0211257
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 20:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E45242113A9
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 21:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732691AbgGASGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 14:06:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:35098 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730227AbgGASGe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Jul 2020 14:06:34 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AC6F1FB;
-        Wed,  1 Jul 2020 11:06:33 -0700 (PDT)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE11C3F73C;
-        Wed,  1 Jul 2020 11:06:32 -0700 (PDT)
-Date:   Wed, 1 Jul 2020 19:06:31 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
- freq invariance
-Message-ID: <20200701180631.GA12482@arm.com>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-2-ionela.voinescu@arm.com>
- <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
- <20200701133330.GA32736@arm.com>
- <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
+        id S1726021AbgGATgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 15:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbgGATgn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 15:36:43 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6779DC08C5C1
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 12:36:43 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id f2so10295247plr.8
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 12:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=LTMxCrcUyZgwZ2WBFmGmP2QBHtoyDf5L38rtUGYDF6s=;
+        b=UJ59DzGSh5sXYtLC6DzfJlWDoJqNH9BgWXrssNPygcqco0wVE+51b/MiG8Nd0Opo8+
+         rHI1FV6KqGnbvbswv1SU7xWwv0++zoYplEGIw/AukJH95pbTJMTU5tTs0jq9u8Y1RfYt
+         3Xg60KoAHq2Q5R9OO8duQP4COvbU1SzDVe52vkCw5MIFyzUKGcErXnISkdSgUA/fdbCK
+         U1fgG2uKwJRra1Im7+MGc5faSa9EUizcXV/D5gDqOhEHTWlXLhCgs/KfTdx/YCs6bpSW
+         3ivagWsf2hqflqpbjDJIEXo2ACVRlb5APCCo7X6/ssHQlL1G5Q7uSAkaiA7w6ts23ChI
+         nwlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=LTMxCrcUyZgwZ2WBFmGmP2QBHtoyDf5L38rtUGYDF6s=;
+        b=rtYM/fmMrbftQwt8p0xbNjStNd3C/UWN+a9udcrn9N9Rbf9QSAfagRq8nzuo7W7h0h
+         +u9s5OEWBcQ9L3Q6AKjyf2deKRy2JlXFgXJ2f10MNhAyjZlrFlvUkHpIWZ+j4m4flo8j
+         5F0BHpHV792IfW+nJlkSgKW0hfepXQcEqLieAHifkhGWTOsBMP3MGMBVrcqn9ZqOHXZ4
+         AcXipBZMdsoX5CmPSqlXwyTGtqRIvXA48wVTB8FQgF87WssA+vq61C0uJRspszahLN04
+         Oan8DoG6fYco4JvMDay7FszpKmC2BXNdqsuzPFD/5kuRsq83oKCcZQZYSDhPL+S87vOj
+         E8FA==
+X-Gm-Message-State: AOAM533dzVxlRaMX9igB/+pHC/S6+vq/2XVNgNCkPLUcXjUU5Z8tA3KE
+        vjhA/UOckP2WIh28rncK5l/gTg==
+X-Google-Smtp-Source: ABdhPJxy/TUPOILtHFNCrCYGChq8aWILq7TOGRpDZwuc83CMS+8/q9JPLi2e6Pev+/tmUrTfhj/fAg==
+X-Received: by 2002:a17:90a:c087:: with SMTP id o7mr26424788pjs.37.1593632202869;
+        Wed, 01 Jul 2020 12:36:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id cl17sm5774342pjb.50.2020.07.01.12.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2020 12:36:42 -0700 (PDT)
+Message-ID: <5efce5ca.1c69fb81.5380d.f216@mx.google.com>
+Date:   Wed, 01 Jul 2020 12:36:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc3-33-gdb1041095755
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 20 warnings (v5.8-rc3-33-gdb1041095755)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+pm/testing build: 7 builds: 0 failed, 7 passed, 20 warnings (v5.8-rc3-33-gd=
+b1041095755)
 
-Thank you for the review!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+8-rc3-33-gdb1041095755/
 
-On Wednesday 01 Jul 2020 at 18:05:33 (+0200), Rafael J. Wysocki wrote:
-> On Wed, Jul 1, 2020 at 3:33 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
-> >
-> > Hi,
-> >
-> > Thank you for taking a look over these so quickly.
-> >
-> > On Wednesday 01 Jul 2020 at 16:16:17 (+0530), Viresh Kumar wrote:
-> > > On 01-07-20, 10:07, Ionela Voinescu wrote:
-> > > > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> > > > index 3494f6763597..42668588f9f8 100644
-> > > > --- a/include/linux/cpufreq.h
-> > > > +++ b/include/linux/cpufreq.h
-> > > > @@ -293,7 +293,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
-> > > >
-> > > >  struct cpufreq_driver {
-> > > >     char            name[CPUFREQ_NAME_LEN];
-> > > > -   u8              flags;
-> > > > +   u16             flags;
-> > >
-> > > Lets make it u32.
-> > >
-> > > >     void            *driver_data;
-> > > >
-> > > >     /* needed by all drivers */
-> > > > @@ -417,6 +417,14 @@ struct cpufreq_driver {
-> > > >   */
-> > > >  #define CPUFREQ_IS_COOLING_DEV                     BIT(7)
-> > > >
-> > > > +/*
-> > > > + * Set by drivers which implement the necessary calls to the scheduler's
-> > > > + * frequency invariance engine. The use of this flag will result in the
-> > > > + * default arch_set_freq_scale calls being skipped in favour of custom
-> > > > + * driver calls.
-> > > > + */
-> > > > +#define CPUFREQ_CUSTOM_SET_FREQ_SCALE              BIT(8)
-> > >
-> > > I will rather suggest CPUFREQ_SKIP_SET_FREQ_SCALE as the name and
-> > > functionality. We need to give drivers a choice if they do not want
-> > > the core to do it on their behalf, because they are doing it on their
-> > > own or they don't want to do it.
-> 
-> Well, this would go backwards to me, as we seem to be designing an
-> opt-out flag for something that's not even implemented already.
-> 
-> I would go for an opt-in instead.  That would be much cleaner and less
-> prone to regressions IMO.
-> 
-> >
-> > In this case we would not be able to tell if cpufreq (driver or core)
-> > can provide the frequency scale factor, so we would not be able to tell
-> > if the system is really frequency invariant; CPUFREQ_SKIP_SET_FREQ_SCALE
-> > would be set if either:
-> >  - the driver calls arch_set_freq_scale() on its own
-> >  - the driver does not want arch_set_freq_scale() to be called.
-> >
-> > So at the core level we would not be able to distinguish between the
-> > two, and return whether cpufreq-based invariance is supported.
-> >
-> > I don't really see a reason why a driver would not want to set the
-> > frequency scale factor, if it has the proper mechanisms to do so
-> > (therefore excluding the exceptions mentioned in 2/8). I think the
-> > cpufreq core or drivers should produce the information (set the scale
-> > factor) and it should be up to the users to decide whether to use it or
-> > not. But being invariant should always be the default.
-> 
-> So instead of what is being introduced by this patch, there should be
-> an opt-in mechanism for drivers to tell the core to do the freq-scale
-> factor setting on behalf of the driver.
-> 
+Tree: pm
+Branch: testing
+Git Describe: v5.8-rc3-33-gdb1041095755
+Git Commit: db104109575551b9d477167284d674fd31047baf
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 12 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
 
 
-This could work better as it covers the following scenarios:
- - All the drivers in patch 3/8 would just use the flag to inform the
-   the core that it can call arch_set_freq_scale() on their behalf.
- - It being omitted truly conveys the message that cpufreq information
-   should not be used for frequency invariance, no matter the
-   implementation of arch_set_freq_scale() (more details below)
+Warnings summary:
 
-The only case that it does not cover is is the scenario in patch 4/8:
-one in which the driver is atypical and it needs its own calls to
-arch_set_freq_scale(), while it still wants to be able to report support
-for frequency invariance through cpufreq_sets_freq_scale() and later
-arch_scale_freq_invariant(). But the jury is still out on whether that
-part of the vexpress-spc driver should be given that much consideration.
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    3    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    1    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus=
+ unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: War=
+ning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4:=
+ Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus =
+unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    1    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
 
-My choice of flag was considering this case and potentially other future
-ones like it, but this alternative also sounds good to me.
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
-> Then, the driver would be responsible to only opt-in for that if it
-> knows it for a fact that the sched tick doesn't set the freq-scale
-> factor.
-> 
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
-I think that would create a tight coupling between the driver and the
-architecture, when arch_set_freq_scale() is already meant to have the
-same purpose, but it also provides some flexibility. Let me expand on
-this below.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
-> > Therefore, there are a few reasons I went for
-> > CPUFREQ_CUSTOM_SET_FREQ_SCALE instead:
-> >  - It tells us if the driver has custom mechanisms to set the scale
-> >    factor to filter the setting in cpufreq core and to inform the
-> >    core on whether the system is frequency invariant.
-> >  - It does have a user in the vexpress-spc driver.
-> >  - Currently there aren't drivers that could but choose not to set
-> >    the frequency scale factor, and it my opinion this should not be
-> >    the case.
-> 
-> Well, that depends on what you mean by "could".
-> 
-> For example, it doesn't really make sense to set the freq-scale factor
-> in either the ACPI cpufreq driver or intel_pstate, because the
-> frequency (or P-state to be precise) requested by them may not be the
-> one the CPU ends up running at and even so it may change at any time
-> for various reasons (eg. in the turbo range).  However, the ACPI
-> cpufreq driver as well as intel_pstate in the passive mode both set
-> policy->cur, so that might be used for setting the freq-scale factor
-> in principle, but that freq-scale factor may not be very useful in
-> practice.
-> 
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
 
-Yes, this completely makes sense, and if there are more accurate methods
-of obtaining information about the current performance level, by using
-counters for example, they should definitely be used.
+Warnings:
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
 
-But in my opinion it should not be up to the driver to choose between
-the methods. The driver and core would only have some information on the
-current performance level (more or less accurate) and
-arch_set_freq_scale() is called to *potentially* use it to set the scale
-factor. So the use of policy->cur would be entirely dependent on the
-implementation of arch_set_freq_scale().
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
 
-There could be a few scenarios here:
- - arch_set_freq_scale() is left to its weak default that does nothing
-   (which would be the case for when the ACPI cpufreq driver or
-   intel_psate are used)
- - arch_set_freq_scale() is implemented in such a way that takes into
-   account the presence of a counter-based method of setting the scale
-   factor and makes that take precedence (currently done for the users
-   of the arch_topology driver). This also provides support for platforms
-   that have partial support for counters, where the use of cpufreq
-   information is still useful for the CPUs that don't support counters.
-   For those cases, some information, although not entirely accurate,
-   is still better than no information at all.
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
-So I believe cpufreq should just provide the information, if it can,
-and let the user decide whether to use it, or what source of information
-takes precedence. Therefore, arch_set_freq_scale() would decide to
-whether to filter it out.
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 12 warnings, 0 se=
+ction mismatches
 
-In any case, your suggestion regarding the choice of flag would make
-bypassing the use of cpufreq information in setting the scale factor
-explicit, no matter the definition of arch_set_freq_scale(). But it
-would also require writers of cpufreq driver code to remember to
-consider the setting of that flag.
+Warnings:
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bus unit=
+ address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: Warning =
+(i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C address =
+must be less than 10-bits, got "0x40000010"
 
-I'll consider this more while gauging interest in 4/8.
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
 
-Many thanks,
-Ionela.
-
-> Thanks!
+---
+For more info write to <info@kernelci.org>
