@@ -2,89 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7432E210AE6
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 14:17:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0553E210C52
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 15:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730515AbgGAMQp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 08:16:45 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36252 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730503AbgGAMQn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 08:16:43 -0400
-Received: by mail-oi1-f196.google.com with SMTP id h17so20417454oie.3;
-        Wed, 01 Jul 2020 05:16:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w+LLXM4KPjeviTd5XtfNEKoIrALguf5kvnK4UkyGpcs=;
-        b=qwD3m6CJQdUEnwzgo1iD0jW//YNcR7k8o/CfzRTZ6lPO3zpV67/CT+Cx9GY5NFDXms
-         FARslZFp16GpssSowEAxl5JRYrRATkEEo+MxkZojhwxNCi0TThG0qG0hvBM7lsncP8dA
-         NNQ9IDck+OakDxIIPjdqgCkvySNTROW109sUmwgYhqQV/WaQTwwjvG1RT3vvdEO1O1hd
-         hgqCn2iZ3JpW+viE/zDYQYIZJmEYqLGZeq4pw2aziFnf0yHZDQGy3u9QzdvyIG2P1LaW
-         gZ1A3eLNl+2117kuOCfuzwaI5Dmg4WCVnDjC98ofGKtxP7iYI6s6cwLTvQte3aSkW0+U
-         LW+A==
-X-Gm-Message-State: AOAM533lORPswViq2V2BYWTKe6GbNN+Ve0ujMy6I4zT0IlJSLN1uvxBg
-        pPLPedrbEdyT/UubSn4I5uQX0Q8pX5DtC9wASnk=
-X-Google-Smtp-Source: ABdhPJxfK1QzCckGAcRzG9ecCejOkFhWuBlSjsQ1HLhnJBkm7BrR3F15SSxW88Iu0/deoTngBDpAiGj4ujZO75q5pBE=
-X-Received: by 2002:aca:4a89:: with SMTP id x131mr20755870oia.103.1593605802721;
- Wed, 01 Jul 2020 05:16:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200701042007.13333-1-xhao@linux.alibaba.com> <20200701045227.epojzjwuky5kkdzj@vireshk-i7>
-In-Reply-To: <20200701045227.epojzjwuky5kkdzj@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Jul 2020 14:16:31 +0200
-Message-ID: <CAJZ5v0iRW25n9CqvJ=ODbVh2osocx+wJVz62GqaWV9m4sdL12g@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: CPPC: simply the code access 'highest_perf'
- value in cppc_perf_caps struct
+        id S1731134AbgGANdh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 09:33:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:41304 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730408AbgGANdd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Jul 2020 09:33:33 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67C6430E;
+        Wed,  1 Jul 2020 06:33:32 -0700 (PDT)
+Received: from localhost (unknown [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 088733F73C;
+        Wed,  1 Jul 2020 06:33:31 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 14:33:30 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Xin Hao <xhao@linux.alibaba.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
+        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
+        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
+ freq invariance
+Message-ID: <20200701133330.GA32736@arm.com>
+References: <20200701090751.7543-1-ionela.voinescu@arm.com>
+ <20200701090751.7543-2-ionela.voinescu@arm.com>
+ <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 1, 2020 at 6:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 01-07-20, 12:20, Xin Hao wrote:
-> >  The 'caps' variable has been defined, so there is no need to get
-> >  'highest_perf' value through 'cpu->caps.highest_perf', you can use
-> >  'caps->highest_perf' instead.
-> >
-> > Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> > ---
-> >  drivers/cpufreq/cppc_cpufreq.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > index 257d726a4456..051d0e56c67a 100644
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -161,7 +161,7 @@ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu,
-> >               if (!max_khz)
-> >                       max_khz = cppc_get_dmi_max_khz();
-> >               mul = max_khz;
-> > -             div = cpu->perf_caps.highest_perf;
-> > +             div = caps->highest_perf;
-> >       }
-> >       return (u64)perf * mul / div;
-> >  }
-> > @@ -184,7 +184,7 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu,
-> >       } else {
-> >               if (!max_khz)
-> >                       max_khz = cppc_get_dmi_max_khz();
-> > -             mul = cpu->perf_caps.highest_perf;
-> > +             mul = caps->highest_perf;
-> >               div = max_khz;
-> >       }
->
-> Applied. Thanks.
+Hi,
 
-I applied the previous cppc_cpufreq patch, hopefully it will not clash
-with this one.
+Thank you for taking a look over these so quickly.
 
-Are you going to take care of this driver going forward?
+On Wednesday 01 Jul 2020 at 16:16:17 (+0530), Viresh Kumar wrote:
+> On 01-07-20, 10:07, Ionela Voinescu wrote:
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 3494f6763597..42668588f9f8 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -293,7 +293,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
+> >  
+> >  struct cpufreq_driver {
+> >  	char		name[CPUFREQ_NAME_LEN];
+> > -	u8		flags;
+> > +	u16		flags;
+> 
+> Lets make it u32.
+> 
+> >  	void		*driver_data;
+> >  
+> >  	/* needed by all drivers */
+> > @@ -417,6 +417,14 @@ struct cpufreq_driver {
+> >   */
+> >  #define CPUFREQ_IS_COOLING_DEV			BIT(7)
+> >  
+> > +/*
+> > + * Set by drivers which implement the necessary calls to the scheduler's
+> > + * frequency invariance engine. The use of this flag will result in the
+> > + * default arch_set_freq_scale calls being skipped in favour of custom
+> > + * driver calls.
+> > + */
+> > +#define CPUFREQ_CUSTOM_SET_FREQ_SCALE		BIT(8)
+> 
+> I will rather suggest CPUFREQ_SKIP_SET_FREQ_SCALE as the name and
+> functionality. We need to give drivers a choice if they do not want
+> the core to do it on their behalf, because they are doing it on their
+> own or they don't want to do it.
+> 
+
+In this case we would not be able to tell if cpufreq (driver or core)
+can provide the frequency scale factor, so we would not be able to tell
+if the system is really frequency invariant; CPUFREQ_SKIP_SET_FREQ_SCALE
+would be set if either:
+ - the driver calls arch_set_freq_scale() on its own
+ - the driver does not want arch_set_freq_scale() to be called.
+
+So at the core level we would not be able to distinguish between the
+two, and return whether cpufreq-based invariance is supported.
+
+I don't really see a reason why a driver would not want to set the
+frequency scale factor, if it has the proper mechanisms to do so
+(therefore excluding the exceptions mentioned in 2/8). I think the
+cpufreq core or drivers should produce the information (set the scale
+factor) and it should be up to the users to decide whether to use it or
+not. But being invariant should always be the default.
+
+Therefore, there are a few reasons I went for
+CPUFREQ_CUSTOM_SET_FREQ_SCALE instead:
+ - It tells us if the driver has custom mechanisms to set the scale
+   factor to filter the setting in cpufreq core and to inform the
+   core on whether the system is frequency invariant.
+ - It does have a user in the vexpress-spc driver.
+ - Currently there aren't drivers that could but choose not to set
+   the frequency scale factor, and it my opinion this should not be
+   the case.
+
+Thanks,
+Ionela.
+
+> -- 
+> viresh
