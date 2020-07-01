@@ -2,334 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F592111AD
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 19:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293B0211257
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 20:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728385AbgGARM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 13:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732463AbgGARM1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 13:12:27 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCC8C08C5C1
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 10:12:26 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z13so24893912wrw.5
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 10:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TRT2eGY8Zk/CLkX+7ZsdwVBPTCAQcwVx/IkeDBQOzgI=;
-        b=bCDrYnK3vveQkkUILpaZmRCO2PcFzRg5W/A5ohrU+isHgm/4xHLrkjtULuqa3cHMoA
-         3UJ3E4PmLHA4KaQ8UK2UqTpbngLq3Rq6p98V1i8JCWi3m7Eh4rrHPy4uRST4Nw/wq5to
-         98ex9A4ChixgpRJsv9WSW2EGCJ3FOBLabYq3fFM5bgPy19TCzF1eqxHeOGWhc/hMQM8l
-         4UDx6ChIsT3gav16Olva68FypMJOmDEpwIZKdvq3h8GTXg5lUKrmpD3cU1B2bWsrXOG5
-         fkONXPsZlAQkImm4fjfnn6nEOhwj7ZR+7D8SwaHE8WGQHSmEDI0kyur0DPa6gltnPoDy
-         /Z0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TRT2eGY8Zk/CLkX+7ZsdwVBPTCAQcwVx/IkeDBQOzgI=;
-        b=JBbvxVRP6agpNP4aqnsbfY1DT+4BAjseH+f2VpzL6Z9VP6L9C7GpZ2OFpXCxuqajH0
-         z/COY2CtT2caQ8zNTAPknh+NFcsq4F4CpUhhdt3jW2Pgj/kseNGj4f/xKLhUs15Jm+IU
-         RL6w59mMkYqjXLFPN/19Hwc4F2vvTccByZtDzUoAO84mZ0q7bWCl6hlv+qI3ACE2utBo
-         Mv2jDQ8GBK/5xEnxEPxLlFAFtt90kor57FkiGYcc8GMV4jX1TQIUmrvY+N26pky5rnrK
-         WhRR9BDzP3RMHV76pVI1B29GRaK7LycBWaJ1dHzrrWWYpnrc1nFrBATtPSArlzjg/G6F
-         vKZQ==
-X-Gm-Message-State: AOAM530cBpjx9UWyD22U8HdlP2+O3RC3IRWn23/E5Gb/xmt4fKlSmi5M
-        ZYcbcK0kTO0XGhNoZYAUPRIbqA==
-X-Google-Smtp-Source: ABdhPJynTjslcgmNNSt9bgIBELifCxpvlOLFaN8KibbjzFceYJ3fNw15fpl7lIVDMN2d+A5E2jeIfA==
-X-Received: by 2002:a5d:4986:: with SMTP id r6mr26610285wrq.424.1593623544836;
-        Wed, 01 Jul 2020 10:12:24 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id w17sm8768090wra.42.2020.07.01.10.12.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2020 10:12:24 -0700 (PDT)
-Subject: Re: [PATCH v4 28/37] memory: tegra: Register as interconnect provider
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20200609131404.17523-1-digetx@gmail.com>
- <20200609131404.17523-29-digetx@gmail.com>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Message-ID: <aec831a6-a7ad-6bcc-4e15-c44582f7568e@linaro.org>
-Date:   Wed, 1 Jul 2020 20:12:22 +0300
+        id S1732691AbgGASGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 14:06:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:35098 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730227AbgGASGe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Jul 2020 14:06:34 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AC6F1FB;
+        Wed,  1 Jul 2020 11:06:33 -0700 (PDT)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE11C3F73C;
+        Wed,  1 Jul 2020 11:06:32 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 19:06:31 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
+ freq invariance
+Message-ID: <20200701180631.GA12482@arm.com>
+References: <20200701090751.7543-1-ionela.voinescu@arm.com>
+ <20200701090751.7543-2-ionela.voinescu@arm.com>
+ <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+ <20200701133330.GA32736@arm.com>
+ <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200609131404.17523-29-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+Hi Rafael,
 
-Thank you for updating the patches!
+Thank you for the review!
 
-On 6/9/20 16:13, Dmitry Osipenko wrote:
-> Now memory controller is a memory interconnection provider. This allows us
-> to use interconnect API in order to change memory configuration.
+On Wednesday 01 Jul 2020 at 18:05:33 (+0200), Rafael J. Wysocki wrote:
+> On Wed, Jul 1, 2020 at 3:33 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> >
+> > Hi,
+> >
+> > Thank you for taking a look over these so quickly.
+> >
+> > On Wednesday 01 Jul 2020 at 16:16:17 (+0530), Viresh Kumar wrote:
+> > > On 01-07-20, 10:07, Ionela Voinescu wrote:
+> > > > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > > > index 3494f6763597..42668588f9f8 100644
+> > > > --- a/include/linux/cpufreq.h
+> > > > +++ b/include/linux/cpufreq.h
+> > > > @@ -293,7 +293,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
+> > > >
+> > > >  struct cpufreq_driver {
+> > > >     char            name[CPUFREQ_NAME_LEN];
+> > > > -   u8              flags;
+> > > > +   u16             flags;
+> > >
+> > > Lets make it u32.
+> > >
+> > > >     void            *driver_data;
+> > > >
+> > > >     /* needed by all drivers */
+> > > > @@ -417,6 +417,14 @@ struct cpufreq_driver {
+> > > >   */
+> > > >  #define CPUFREQ_IS_COOLING_DEV                     BIT(7)
+> > > >
+> > > > +/*
+> > > > + * Set by drivers which implement the necessary calls to the scheduler's
+> > > > + * frequency invariance engine. The use of this flag will result in the
+> > > > + * default arch_set_freq_scale calls being skipped in favour of custom
+> > > > + * driver calls.
+> > > > + */
+> > > > +#define CPUFREQ_CUSTOM_SET_FREQ_SCALE              BIT(8)
+> > >
+> > > I will rather suggest CPUFREQ_SKIP_SET_FREQ_SCALE as the name and
+> > > functionality. We need to give drivers a choice if they do not want
+> > > the core to do it on their behalf, because they are doing it on their
+> > > own or they don't want to do it.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/memory/tegra/Kconfig |   1 +
->  drivers/memory/tegra/mc.c    | 114 +++++++++++++++++++++++++++++++++++
->  drivers/memory/tegra/mc.h    |   8 +++
->  include/soc/tegra/mc.h       |   3 +
->  4 files changed, 126 insertions(+)
+> Well, this would go backwards to me, as we seem to be designing an
+> opt-out flag for something that's not even implemented already.
 > 
-> diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
-> index 5bf75b316a2f..7055fdef2c32 100644
-> --- a/drivers/memory/tegra/Kconfig
-> +++ b/drivers/memory/tegra/Kconfig
-> @@ -3,6 +3,7 @@ config TEGRA_MC
->  	bool "NVIDIA Tegra Memory Controller support"
->  	default y
->  	depends on ARCH_TEGRA
-> +	select INTERCONNECT
->  	help
->  	  This driver supports the Memory Controller (MC) hardware found on
->  	  NVIDIA Tegra SoCs.
-> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-> index 772aa021b5f6..7ef7ac9e103e 100644
-> --- a/drivers/memory/tegra/mc.c
-> +++ b/drivers/memory/tegra/mc.c
-> @@ -594,6 +594,118 @@ static __maybe_unused irqreturn_t tegra20_mc_irq(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
->  
-> +static int tegra_mc_icc_set(struct icc_node *src, struct icc_node *dst)
-> +{
-> +	return 0;
-> +}
-> +
-> +static int tegra_mc_icc_aggregate(struct icc_node *node,
-> +				  u32 tag, u32 avg_bw, u32 peak_bw,
-> +				  u32 *agg_avg, u32 *agg_peak)
-> +{
-> +	*agg_avg = min((u64)avg_bw + (*agg_avg), (u64)U32_MAX);
-> +	*agg_peak = max(*agg_peak, peak_bw);
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Memory Controller (MC) has few Memory Clients that are issuing memory
-> + * bandwidth allocation requests to the MC interconnect provider. The MC
-> + * provider aggregates the requests and then sends the aggregated request
-> + * up to the External Memory Controller (EMC) interconnect provider which
-> + * re-configures hardware interface to External Memory (EMEM) in accordance
-> + * to the required bandwidth. Each MC interconnect node represents an
-> + * individual Memory Client.
-> + *
-> + * Memory interconnect topology:
-> + *
-> + *               +----+
-> + * +--------+    |    |
-> + * | TEXSRD +--->+    |
-> + * +--------+    |    |
-> + *               |    |    +-----+    +------+
-> + *    ...        | MC +--->+ EMC +--->+ EMEM |
-> + *               |    |    +-----+    +------+
-> + * +--------+    |    |
-> + * | DISP.. +--->+    |
-> + * +--------+    |    |
-> + *               +----+
-> + */
-> +static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
-> +{
-> +	struct icc_onecell_data *data;
-> +	struct icc_node *node;
-> +	unsigned int num_nodes;
-> +	unsigned int i;
-> +	int err;
-> +
-> +	/* older device-trees don't have interconnect properties */
-> +	if (!of_find_property(mc->dev->of_node, "#interconnect-cells", NULL))
-> +		return 0;
-> +
-> +	num_nodes = mc->soc->num_clients;
-> +
-> +	data = devm_kzalloc(mc->dev, struct_size(data, nodes, num_nodes),
-> +			    GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	mc->provider.dev = mc->dev;
-> +	mc->provider.set = tegra_mc_icc_set;
+> I would go for an opt-in instead.  That would be much cleaner and less
+> prone to regressions IMO.
+> 
+> >
+> > In this case we would not be able to tell if cpufreq (driver or core)
+> > can provide the frequency scale factor, so we would not be able to tell
+> > if the system is really frequency invariant; CPUFREQ_SKIP_SET_FREQ_SCALE
+> > would be set if either:
+> >  - the driver calls arch_set_freq_scale() on its own
+> >  - the driver does not want arch_set_freq_scale() to be called.
+> >
+> > So at the core level we would not be able to distinguish between the
+> > two, and return whether cpufreq-based invariance is supported.
+> >
+> > I don't really see a reason why a driver would not want to set the
+> > frequency scale factor, if it has the proper mechanisms to do so
+> > (therefore excluding the exceptions mentioned in 2/8). I think the
+> > cpufreq core or drivers should produce the information (set the scale
+> > factor) and it should be up to the users to decide whether to use it or
+> > not. But being invariant should always be the default.
+> 
+> So instead of what is being introduced by this patch, there should be
+> an opt-in mechanism for drivers to tell the core to do the freq-scale
+> factor setting on behalf of the driver.
+> 
 
-Hmm, maybe the core should not require a set() implementation and we can
-just make it optional instead. Then the dummy function would not be needed.
 
-> +	mc->provider.data = data;
-> +	mc->provider.xlate = of_icc_xlate_onecell;
-> +	mc->provider.aggregate = tegra_mc_icc_aggregate;
-> +
-> +	err = icc_provider_add(&mc->provider);
-> +	if (err)
-> +		goto err_msg;
+This could work better as it covers the following scenarios:
+ - All the drivers in patch 3/8 would just use the flag to inform the
+   the core that it can call arch_set_freq_scale() on their behalf.
+ - It being omitted truly conveys the message that cpufreq information
+   should not be used for frequency invariance, no matter the
+   implementation of arch_set_freq_scale() (more details below)
 
-Nit: I am planning to re-organize some of the existing drivers to call
-icc_provider_add() after the topology is populated. Could you please move
-this after the nodes are created and linked.
+The only case that it does not cover is is the scenario in patch 4/8:
+one in which the driver is atypical and it needs its own calls to
+arch_set_freq_scale(), while it still wants to be able to report support
+for frequency invariance through cpufreq_sets_freq_scale() and later
+arch_scale_freq_invariant(). But the jury is still out on whether that
+part of the vexpress-spc driver should be given that much consideration.
 
-> +
-> +	/* create Memory Controller node */
-> +	node = icc_node_create(TEGRA_ICC_MC);
-> +	err = PTR_ERR_OR_ZERO(node);
-> +	if (err)
-> +		goto del_provider;
-> +
-> +	node->name = "Memory Controller";
-> +	icc_node_add(node, &mc->provider);
-> +
-> +	/* link Memory Controller to External Memory Controller */
-> +	err = icc_link_create(node, TEGRA_ICC_EMC);
-> +	if (err)
-> +		goto remove_nodes;
-> +
-> +	for (i = 0; i < num_nodes; i++) {
-> +		/* create MC client node */
-> +		node = icc_node_create(mc->soc->clients[i].id);
-> +		err = PTR_ERR_OR_ZERO(node);
-> +		if (err)
-> +			goto remove_nodes;
-> +
-> +		node->name = mc->soc->clients[i].name;
-> +		icc_node_add(node, &mc->provider);
-> +
-> +		/* link Memory Client to Memory Controller */
-> +		err = icc_link_create(node, TEGRA_ICC_MC);
-> +		if (err)
-> +			goto remove_nodes;
-> +
-> +		data->nodes[i] = node;
-> +	}
-> +	data->num_nodes = num_nodes;
-> +
-> +	return 0;
-> +
-> +remove_nodes:
-> +	icc_nodes_remove(&mc->provider);
-> +del_provider:
-> +	icc_provider_del(&mc->provider);
-> +err_msg:
-> +	dev_err(mc->dev, "failed to initialize ICC: %d\n", err);
-> +
-> +	return err;
-> +}
-> +
->  static int tegra_mc_probe(struct platform_device *pdev)
->  {
->  	struct resource *res;
-> @@ -702,6 +814,8 @@ static int tegra_mc_probe(struct platform_device *pdev)
->  		}
->  	}
->  
-> +	tegra_mc_interconnect_setup(mc);
-> +
->  	return 0;
->  }
->  
-> diff --git a/drivers/memory/tegra/mc.h b/drivers/memory/tegra/mc.h
-> index afa3ba45c9e6..abeb6a2cc36a 100644
-> --- a/drivers/memory/tegra/mc.h
-> +++ b/drivers/memory/tegra/mc.h
-> @@ -115,4 +115,12 @@ extern const struct tegra_mc_soc tegra132_mc_soc;
->  extern const struct tegra_mc_soc tegra210_mc_soc;
->  #endif
->  
-> +/*
-> + * These IDs are for internal use of Tegra's ICC, the values are chosen
-> + * such that they don't conflict with the device-tree ICC node IDs.
-> + */
-> +#define TEGRA_ICC_EMC		1000
-> +#define TEGRA_ICC_EMEM		2000
-> +#define TEGRA_ICC_MC		3000
-> +
->  #endif /* MEMORY_TEGRA_MC_H */
-> diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
-> index 1238e35653d1..71de023f9f47 100644
-> --- a/include/soc/tegra/mc.h
-> +++ b/include/soc/tegra/mc.h
-> @@ -7,6 +7,7 @@
->  #define __SOC_TEGRA_MC_H__
->  
->  #include <linux/err.h>
-> +#include <linux/interconnect-provider.h>
->  #include <linux/reset-controller.h>
->  #include <linux/types.h>
->  
-> @@ -178,6 +179,8 @@ struct tegra_mc {
->  
->  	struct reset_controller_dev reset;
->  
-> +	struct icc_provider provider;
-> +
->  	spinlock_t lock;
->  };
+My choice of flag was considering this case and potentially other future
+ones like it, but this alternative also sounds good to me.
 
-The rest looks good to me!
 
-Thanks,
-Georgi
+> Then, the driver would be responsible to only opt-in for that if it
+> knows it for a fact that the sched tick doesn't set the freq-scale
+> factor.
+> 
+
+I think that would create a tight coupling between the driver and the
+architecture, when arch_set_freq_scale() is already meant to have the
+same purpose, but it also provides some flexibility. Let me expand on
+this below.
+
+> > Therefore, there are a few reasons I went for
+> > CPUFREQ_CUSTOM_SET_FREQ_SCALE instead:
+> >  - It tells us if the driver has custom mechanisms to set the scale
+> >    factor to filter the setting in cpufreq core and to inform the
+> >    core on whether the system is frequency invariant.
+> >  - It does have a user in the vexpress-spc driver.
+> >  - Currently there aren't drivers that could but choose not to set
+> >    the frequency scale factor, and it my opinion this should not be
+> >    the case.
+> 
+> Well, that depends on what you mean by "could".
+> 
+> For example, it doesn't really make sense to set the freq-scale factor
+> in either the ACPI cpufreq driver or intel_pstate, because the
+> frequency (or P-state to be precise) requested by them may not be the
+> one the CPU ends up running at and even so it may change at any time
+> for various reasons (eg. in the turbo range).  However, the ACPI
+> cpufreq driver as well as intel_pstate in the passive mode both set
+> policy->cur, so that might be used for setting the freq-scale factor
+> in principle, but that freq-scale factor may not be very useful in
+> practice.
+> 
+
+Yes, this completely makes sense, and if there are more accurate methods
+of obtaining information about the current performance level, by using
+counters for example, they should definitely be used.
+
+But in my opinion it should not be up to the driver to choose between
+the methods. The driver and core would only have some information on the
+current performance level (more or less accurate) and
+arch_set_freq_scale() is called to *potentially* use it to set the scale
+factor. So the use of policy->cur would be entirely dependent on the
+implementation of arch_set_freq_scale().
+
+There could be a few scenarios here:
+ - arch_set_freq_scale() is left to its weak default that does nothing
+   (which would be the case for when the ACPI cpufreq driver or
+   intel_psate are used)
+ - arch_set_freq_scale() is implemented in such a way that takes into
+   account the presence of a counter-based method of setting the scale
+   factor and makes that take precedence (currently done for the users
+   of the arch_topology driver). This also provides support for platforms
+   that have partial support for counters, where the use of cpufreq
+   information is still useful for the CPUs that don't support counters.
+   For those cases, some information, although not entirely accurate,
+   is still better than no information at all.
+
+So I believe cpufreq should just provide the information, if it can,
+and let the user decide whether to use it, or what source of information
+takes precedence. Therefore, arch_set_freq_scale() would decide to
+whether to filter it out.
+
+In any case, your suggestion regarding the choice of flag would make
+bypassing the use of cpufreq information in setting the scale factor
+explicit, no matter the definition of arch_set_freq_scale(). But it
+would also require writers of cpufreq driver code to remember to
+consider the setting of that flag.
+
+I'll consider this more while gauging interest in 4/8.
+
+Many thanks,
+Ionela.
+
+> Thanks!
