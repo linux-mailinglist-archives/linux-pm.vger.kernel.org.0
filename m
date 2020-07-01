@@ -2,161 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B18A21099E
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 12:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E825A210AC5
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 14:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730097AbgGAKq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 06:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
+        id S1730273AbgGAMKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 08:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730086AbgGAKqZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 06:46:25 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7565C061755
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 03:46:24 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id x11so9754015plo.7
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 03:46:24 -0700 (PDT)
+        with ESMTP id S1730237AbgGAMKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 08:10:42 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFA8C03E979
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 05:10:41 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id e4so26628745ljn.4
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 05:10:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=c180/7FwpKvGEyHWGqPQnUSjW+5tKdGdhB+WYAhbUtw=;
-        b=yAcy24wDSVycHCzzXqdHmHO383EIfzESnJ5+e9LLU3voHw5/kFs0ctGT/VIwI7ayvG
-         tV93akfWqwN7WxIay8trsTgXmPB+DH2XsxW50DMZ0eb1M1HCrpb0DwpIvOqumbuPrMkM
-         CV4dGl3lc2UjH5cmSSoEJp63ZvleACcUSg+kROiS4uBe72vXBmTNOeJgF4lvlt79CQKH
-         Yr+1PkElWMcMaz6AfW//aZE/4Tmy0X/EQW0QxMBX7P95piPN4yEhIxnX/rog964qex4v
-         FqshgQRASz0dyR/kL1C9PcAsWjw7vhb5pK+m737nX+QRnL4mXJpBaxPUv4LGZ3jKCnUC
-         VFkw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=W0W7BV8cUI7CuBuiHY2QDrSNw3SUVEmFQilJePOeK9o=;
+        b=iSLl6gC1LJlLK+whB5oyTs+OtzYClkNiWCwVhfxSa4nWWZE9cgvKbMs0t/oSHF7iif
+         zPmUIlXcMvtxLFJp7z6fFiMvN4YJ6rUqMYVlZIaaWTQoxWOm+QMIcyZygSGx8XPiwDiR
+         gY7xx5sSSox29urVygQAwHuiedYy8Nm/IOZPe3gvE6DoqVNuSSSCWKaIaDX0E1UeGtlv
+         cXHA7O36mWAvOHACXNpQMLAryoNFB+NCZ8eFL0SuWjoGzAh8PH+d+TdXqa7F2DjxpOFN
+         DhYOuea6pLyM5G9hE2ygiZH2kw6bz1SRw7/DtQZriZ+mAUU5ileGd3gp8xq6cQ+mfVVu
+         krIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=c180/7FwpKvGEyHWGqPQnUSjW+5tKdGdhB+WYAhbUtw=;
-        b=Q8Q74mbbTeir6udXfEJIgTqravIf2hT2l3xJBGtfz53hphRNHbwOjxA78CCjdwah3u
-         yMy1I/mexk/AunwzJ92a52523a232243WAw4waZ9PzfHew+5/mx45qOTcTp02v6ylEe6
-         wEUgImR0/++ueHNzOn61VItoto0OMp6hBvv9RafWSEIeiTOlgel3qyiUxoWL3StN5MV+
-         42x2TFo3KisLf717lVbdPkUDGg6rY6Sv0Z6E0+X3ojETdgnxkkA+V7jl2m1Pw8rWSxVe
-         cp5Xgld0yOPxdZzdoGZiAyrRlUHXW4yIzp2QJ7BGAIbMbH7hfu+qrOpxxq9wg3y6t5sC
-         edFA==
-X-Gm-Message-State: AOAM532kw63320fO7XQ2drku/YD93jXgGWM86J9epPgcpTBJOU4QrCMJ
-        F75GmflzUBr4czAqJku4b3CtmQ==
-X-Google-Smtp-Source: ABdhPJxb/cvAYrJDaZ7c/DxEM5reEp4PZNjRsWCCJf8rgvWFDpZGsfjETYJx1oHhez60juA7xprI8g==
-X-Received: by 2002:a17:902:26f:: with SMTP id 102mr21110617plc.226.1593600384493;
-        Wed, 01 Jul 2020 03:46:24 -0700 (PDT)
-Received: from localhost ([122.172.81.75])
-        by smtp.gmail.com with ESMTPSA id h6sm5425478pfo.123.2020.07.01.03.46.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jul 2020 03:46:22 -0700 (PDT)
-Date:   Wed, 1 Jul 2020 16:16:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
-        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/8] cpufreq: report whether cpufreq supports Frequency
- Invariance (FI)
-Message-ID: <20200701104620.lxhxty7gymjlagp6@vireshk-i7>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-6-ionela.voinescu@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=W0W7BV8cUI7CuBuiHY2QDrSNw3SUVEmFQilJePOeK9o=;
+        b=d0j4K1J+FRIcaj8glDZtTNcMbCayQhNU9Dosk3AjlemZU8TRXeX9YKMslKYwICPyIv
+         iPTbNjNWL/Ci6muT7l1hRoOIFEnM59h7WoINzmPgn3AWAOlvpkY5mZ48O6si2Tm1dNhf
+         PJvHzWEGOTiWHk0dsatDLPDHttuvseHg9Oq23TMFyy9P5m7l8esxMS/9dASNLYQ8UFhh
+         10nZWAIl/Ka3mcs4f0lmXqUEPQ0fzDsMHPRhDogBALT7W6qLNb+/Zcx5+ZTZcoi2+Qzw
+         LNDE/mRMLuwy0V4mjVhzOCPE3SBxVo5VEGP+hCNfdxY0jEt1Kws0deh9oNJIO13NTYGE
+         5qXQ==
+X-Gm-Message-State: AOAM532fqsM4QcY3xz5QIOXOynOp9Ro2Vi5Z+N0JswJ60l5vgokhJlvB
+        nj5kGiAf2JqKCuw/MKhdCJ4AUNA0KCRkc+9JI4TORg==
+X-Google-Smtp-Source: ABdhPJwlyEUVszhEWkGK9ickVjMXKxSq5+Z9Y8911VTJDuTZvkJDrAcgHU7MCWtxM5ciiTIBdB+HA0Lphjo+oygwqUU=
+X-Received: by 2002:a2e:8855:: with SMTP id z21mr8588845ljj.325.1593605440227;
+ Wed, 01 Jul 2020 05:10:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701090751.7543-6-ionela.voinescu@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200625144509.17918-1-daniel.lezcano@linaro.org>
+ <20200625144509.17918-3-daniel.lezcano@linaro.org> <CAP245DUMjTQr2vKirZ+FxEYWC=VQ_k+OegxQgXcKDU8ThWuCsQ@mail.gmail.com>
+ <0fe6837f-9b44-4578-23f2-3e4932d01122@linaro.org> <CAP245DUG-OsSD-_CucMMQ26HpzjJhn0emfq_go923NsDq6RqOg@mail.gmail.com>
+ <c664d247-7f9b-603f-c318-48e534aedfc9@linaro.org>
+In-Reply-To: <c664d247-7f9b-603f-c318-48e534aedfc9@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Wed, 1 Jul 2020 17:40:28 +0530
+Message-ID: <CAP245DV8jT5vj7v6vybw3Eec7wGMXRwFm=Xum5i_n4sMCHHAfg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] thermal: core: Remove old uapi generic netlink
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ram Chandrasekar <rkumbako@codeaurora.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-20, 10:07, Ionela Voinescu wrote:
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 83b58483a39b..60b5272c5d80 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -59,6 +59,9 @@ static struct cpufreq_driver *cpufreq_driver;
->  static DEFINE_PER_CPU(struct cpufreq_policy *, cpufreq_cpu_data);
->  static DEFINE_RWLOCK(cpufreq_driver_lock);
->  
-> +/* Mark support for the scheduler's frequency invariance engine */
-> +static DEFINE_STATIC_KEY_FALSE(cpufreq_set_freq_scale);
-> +
->  /* Flag to suspend/resume CPUFreq governors */
->  static bool cpufreq_suspended;
->  
-> @@ -67,6 +70,26 @@ static inline bool has_target(void)
->  	return cpufreq_driver->target_index || cpufreq_driver->target;
->  }
->  
-> +static inline
-> +void enable_cpufreq_freq_invariance(struct cpufreq_driver *driver)
-> +{
-> +	if ((driver->flags & CPUFREQ_CUSTOM_SET_FREQ_SCALE) ||
-> +	    ((driver->target_index || driver->fast_switch)
-> +	     && !(driver->target || driver->setpolicy))) {
+On Wed, Jul 1, 2020 at 3:15 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+> On 01/07/2020 11:33, Amit Kucheria wrote:
+> > On Wed, Jul 1, 2020 at 2:56 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 30/06/2020 13:47, Amit Kucheria wrote:
+> >>> On Thu, Jun 25, 2020 at 8:15 PM Daniel Lezcano
+> >>> <daniel.lezcano@linaro.org> wrote:
+> >>>>
 
-This will get simplified with the way I suggested it I believe.
+> >>>>  /* Adding event notification support elements */
+> >>>>  #define THERMAL_GENL_FAMILY_NAME                "thermal_event"
+> >>>> -#define THERMAL_GENL_VERSION                    0x01
+> >>>> +#define THERMAL_GENL_VERSION                    0x02
+> >>>
+> >>> This hunk should be removed since you set version back to 1 in the
+> >>> next patch and we don't actually intend to bump the version yet.
+> >>
+> >> Well, I've been very strict here for git-bisecting.
+> >>
+> >> I move to V2 because of the removal, but when adding the new genetlink
+> >> code, the family name changed, so we returned back to the V1 as it is a
+> >> new genetlink thermal brand.
+> >
+> > I don't understand the move to v2 for an empty skeleton UAPI. For the
+> > purposes of bisection, couldn't you just remove all the v1 UAPI (w/o
+> > bumping to v2) and then add a new UAPI in the next patch?
+> >
+> >> The name is change because it is no longer event based but also sampling
+> >> and commands.
+> >
+> > In this case, just to avoid any confusion, the new UAPI could be v2
+> > making the transition clear in case of bisection.
+> >
+> > I'm afraid the v1->v2->v1 is a bit more confusing.
+>
+> Let me elaborate a bit:
+>
+> Why there is this patch ?
+> - By removing this code first, the next patch will just contain
+> additions, I thought it would be clearer
+>
+> Why increase the version here ?
+> - Code must continue to compile and as the 'thermal_event' family is now
+> different from V1, the version is changed
+>
+> Why the version goes to V1 in the next patch ?
+> - The family name is changed as it is not doing event only, so it is a
+> new netlink thermal protocol and we begin at V1
+>
+> So the main reason of this patch is to be very strict in the iteration
+> changes. May be it is too much, in this case I can merge this patch with
+> 4/5, the old netlink protocol removal will be lost in the addition of
+> the new protocol. I'm fine with that if you think it is simpler.
 
-> +
-> +		static_branch_enable_cpuslocked(&cpufreq_set_freq_scale);
-> +		pr_debug("%s: Driver %s can provide frequency invariance.",
-> +			 __func__, driver->name);
-> +	} else
-> +		pr_err("%s: Driver %s cannot provide frequency invariance.",
-> +		__func__, driver->name);
-> +}
-> +
-> +bool cpufreq_sets_freq_scale(void)
-> +{
-> +	return static_branch_likely(&cpufreq_set_freq_scale);
-> +}
-> +
->  /* internal prototypes */
->  static unsigned int __cpufreq_get(struct cpufreq_policy *policy);
->  static int cpufreq_init_governor(struct cpufreq_policy *policy);
-> @@ -2713,6 +2736,8 @@ int cpufreq_register_driver(struct cpufreq_driver *driver_data)
->  	cpufreq_driver = driver_data;
->  	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
->  
-> +	enable_cpufreq_freq_invariance(cpufreq_driver);
-> +
->  	if (driver_data->setpolicy)
->  		driver_data->flags |= CPUFREQ_CONST_LOOPS;
->  
-> @@ -2782,6 +2807,7 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver)
->  	cpus_read_lock();
->  	subsys_interface_unregister(&cpufreq_interface);
->  	remove_boost_sysfs_file();
-> +	static_branch_disable_cpuslocked(&cpufreq_set_freq_scale);
->  	cpuhp_remove_state_nocalls_cpuslocked(hp_online);
->  
->  	write_lock_irqsave(&cpufreq_driver_lock, flags);
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 42668588f9f8..8b6369d657bd 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -217,6 +217,7 @@ void refresh_frequency_limits(struct cpufreq_policy *policy);
->  void cpufreq_update_policy(unsigned int cpu);
->  void cpufreq_update_limits(unsigned int cpu);
->  bool have_governor_per_policy(void);
-> +bool cpufreq_sets_freq_scale(void);
->  struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
->  void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
->  void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
-> @@ -237,6 +238,10 @@ static inline unsigned int cpufreq_get_hw_max_freq(unsigned int cpu)
->  {
->  	return 0;
->  }
-> +static inline bool cpufreq_sets_freq_scale(void)
-> +{
-> +	return false;
-> +}
->  static inline void disable_cpufreq(void) { }
->  #endif
->  
-> -- 
-> 2.17.1
+Considering that there are no users of v1 currently, it feels a bit
+over engineered, IMHO.
 
--- 
-viresh
+Also, the new UAPI doesn't need to begin at v1. Just having it start
+at v2 will avoid this confusion, no?
