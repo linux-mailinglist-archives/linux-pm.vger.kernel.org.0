@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A369A21079D
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 11:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AA92107A0
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 11:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729165AbgGAJJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 05:09:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:47742 "EHLO foss.arm.com"
+        id S1728969AbgGAJJc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 05:09:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:47772 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726255AbgGAJJ0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 1 Jul 2020 05:09:26 -0400
+        id S1726255AbgGAJJb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Jul 2020 05:09:31 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A83E1045;
-        Wed,  1 Jul 2020 02:09:25 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EDD0B106F;
+        Wed,  1 Jul 2020 02:09:30 -0700 (PDT)
 Received: from e108754-lin.cambridge.arm.com (unknown [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 85CE13F68F;
-        Wed,  1 Jul 2020 02:09:23 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3489D3F68F;
+        Wed,  1 Jul 2020 02:09:29 -0700 (PDT)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
         catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
@@ -24,9 +24,9 @@ To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
 Cc:     mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
         ionela.voinescu@arm.com, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/8] cpufreq: allow drivers to flag custom support for freq invariance
-Date:   Wed,  1 Jul 2020 10:07:44 +0100
-Message-Id: <20200701090751.7543-2-ionela.voinescu@arm.com>
+Subject: [PATCH 2/8] cpufreq: move invariance setter calls in cpufreq core
+Date:   Wed,  1 Jul 2020 10:07:45 +0100
+Message-Id: <20200701090751.7543-3-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200701090751.7543-1-ionela.voinescu@arm.com>
 References: <20200701090751.7543-1-ionela.voinescu@arm.com>
@@ -35,146 +35,135 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The scheduler's Frequency Invariance Engine (FIE) is providing a
-frequency scale correction factor that helps achieve more accurate
-load-tracking by conveying information about the currently selected
-frequency relative to the maximum supported frequency of a CPU.
+From: Valentin Schneider <valentin.schneider@arm.com>
 
-In some cases this is achieved by passing information from cpufreq
-drivers about the frequency selection done by cpufreq.
+To properly scale its per-entity load-tracking signals, the task scheduler
+needs to be given a frequency scale factor, i.e. some image of the current
+frequency the CPU is running at. Currently, this scale can be computed
+either by using counters (APERF/MPERF on x86, AMU on arm64), or by
+piggy-backing on the frequency selection done by cpufreq.
 
-Given that most drivers follow a similar process of selecting and
-setting of frequency, there is a strong case for moving the setting
-of the frequency scale factor from the cpufreq drivers frequency
-switch callbacks (target_index() and fast_switch()), to the cpufreq
-core functions that call them.
+For the latter, drivers have to explicitly set the scale factor
+themselves, despite it being purely boiler-plate code: the required
+information depends entirely on the kind of frequency switch callback
+implemented by the driver, i.e. either of: target_index(), target(),
+fast_switch() and setpolicy().
 
-In preparation for this, acknowledge that there are still drivers
-who's frequency setting process is custom and therefore these drivers
-will want to provide and flag custom support for the setting of the
-scheduler's frequency invariance (FI) scale factor as well. Prepare
-for this by introducing a new flag: CPUFREQ_CUSTOM_SET_FREQ_SCALE.
+The fitness of those callbacks with regard to driving the Frequency
+Invariance Engine (FIE) is studied below:
 
-Examples of users of this flag are:
- - drivers that do not implement the callbacks that lend themselves
-   to triggering the setting of the FI scale factor,
- - drivers that implement the appropriate callbacks but which have
-   an atypical implementation.
+target_index()
+==============
+Documentation states that the chosen frequency "must be determined by
+freq_table[index].frequency". It isn't clear if it *has* to be that
+frequency, or if it can use that frequency value to do some computation
+that ultimately leads to a different frequency selection. All drivers
+go for the former, while the vexpress-spc-cpufreq has an atypical
+implementation.
 
-Currently, given that all drivers call arch_set_freq_scale() directly,
-flag all users with CPUFREQ_CUSTOM_SET_FREQ_SCALE. These driver changes
-are also useful to maintain bisection between the FI switch from the
-drivers to the core.
+Thefore, the hook works on the asusmption the core can use
+freq_table[index].frequency.
 
+target()
+=======
+This has been flagged as deprecated since:
+
+  commit 9c0ebcf78fde ("cpufreq: Implement light weight ->target_index() routine")
+
+It also doesn't have that many users:
+
+  cpufreq-nforce2.c:371:2:	.target = nforce2_target,
+  cppc_cpufreq.c:416:2:		.target = cppc_cpufreq_set_target,
+  pcc-cpufreq.c:573:2:		.target = pcc_cpufreq_target,
+
+Should we care about drivers using this hook, we may be able to exploit
+cpufreq_freq_transition_{being, end}(). Otherwise, if FIE support is
+desired in their current state, arch_set_freq_scale() could still be
+called directly by the driver, while CPUFREQ_CUSTOM_SET_FREQ_SCALE
+could be used to mark support for it.
+
+fast_switch()
+=============
+This callback *has* to return the frequency that was selected.
+
+setpolicy()
+===========
+This callback does not have any designated way of informing what was the
+end choice. But there are only two drivers using setpolicy(), and none
+of them have current FIE support:
+
+  drivers/cpufreq/longrun.c:281:	.setpolicy	= longrun_set_policy,
+  drivers/cpufreq/intel_pstate.c:2215:	.setpolicy	= intel_pstate_set_policy,
+
+The intel_pstate is known to use counter-driven frequency invariance.
+
+If FIE support is desired in their current state, arch_set_freq_scale()
+could still be called directly by the driver, while
+CPUFREQ_CUSTOM_SET_FREQ_SCALE could be used to mark support for it.
+
+Conclusion
+==========
+
+Given that the significant majority of current FIE enabled drivers use
+callbacks that lend themselves to triggering the setting of the FIE scale
+factor in a generic way, move the invariance setter calls to cpufreq core,
+while filtering drivers that flag custom support using
+CPUFREQ_CUSTOM_SET_FREQ_SCALE.
+
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
 Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
 Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
 Cc: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/cpufreq-dt.c           |  3 ++-
- drivers/cpufreq/qcom-cpufreq-hw.c      |  3 ++-
- drivers/cpufreq/scmi-cpufreq.c         |  3 ++-
- drivers/cpufreq/scpi-cpufreq.c         |  3 ++-
- drivers/cpufreq/vexpress-spc-cpufreq.c |  3 ++-
- include/linux/cpufreq.h                | 10 +++++++++-
- 6 files changed, 19 insertions(+), 6 deletions(-)
+ drivers/cpufreq/cpufreq.c | 20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-index 944d7b45afe9..8e0571a49d1e 100644
---- a/drivers/cpufreq/cpufreq-dt.c
-+++ b/drivers/cpufreq/cpufreq-dt.c
-@@ -331,7 +331,8 @@ static int cpufreq_exit(struct cpufreq_policy *policy)
- 
- static struct cpufreq_driver dt_cpufreq_driver = {
- 	.flags = CPUFREQ_STICKY | CPUFREQ_NEED_INITIAL_FREQ_CHECK |
--		 CPUFREQ_IS_COOLING_DEV,
-+		 CPUFREQ_IS_COOLING_DEV |
-+		 CPUFREQ_CUSTOM_SET_FREQ_SCALE,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.target_index = set_target,
- 	.get = cpufreq_generic_get,
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 573630c23aca..e13780beb373 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -337,7 +337,8 @@ static struct freq_attr *qcom_cpufreq_hw_attr[] = {
- static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.flags		= CPUFREQ_STICKY | CPUFREQ_NEED_INITIAL_FREQ_CHECK |
- 			  CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
--			  CPUFREQ_IS_COOLING_DEV,
-+			  CPUFREQ_IS_COOLING_DEV |
-+			  CPUFREQ_CUSTOM_SET_FREQ_SCALE,
- 	.verify		= cpufreq_generic_frequency_table_verify,
- 	.target_index	= qcom_cpufreq_hw_target_index,
- 	.get		= qcom_cpufreq_hw_get,
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index fb42e3390377..16ab4ecc75e4 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -223,7 +223,8 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
- 	.name	= "scmi",
- 	.flags	= CPUFREQ_STICKY | CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
- 		  CPUFREQ_NEED_INITIAL_FREQ_CHECK |
--		  CPUFREQ_IS_COOLING_DEV,
-+		  CPUFREQ_IS_COOLING_DEV |
-+		  CPUFREQ_CUSTOM_SET_FREQ_SCALE,
- 	.verify	= cpufreq_generic_frequency_table_verify,
- 	.attr	= cpufreq_generic_attr,
- 	.target_index	= scmi_cpufreq_set_target,
-diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-index b0f5388b8854..6b5f56dc3ca3 100644
---- a/drivers/cpufreq/scpi-cpufreq.c
-+++ b/drivers/cpufreq/scpi-cpufreq.c
-@@ -197,7 +197,8 @@ static struct cpufreq_driver scpi_cpufreq_driver = {
- 	.name	= "scpi-cpufreq",
- 	.flags	= CPUFREQ_STICKY | CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
- 		  CPUFREQ_NEED_INITIAL_FREQ_CHECK |
--		  CPUFREQ_IS_COOLING_DEV,
-+		  CPUFREQ_IS_COOLING_DEV |
-+		  CPUFREQ_CUSTOM_SET_FREQ_SCALE,
- 	.verify	= cpufreq_generic_frequency_table_verify,
- 	.attr	= cpufreq_generic_attr,
- 	.get	= scpi_cpufreq_get_rate,
-diff --git a/drivers/cpufreq/vexpress-spc-cpufreq.c b/drivers/cpufreq/vexpress-spc-cpufreq.c
-index 4e8b1dee7c9a..e0a1a3367ec5 100644
---- a/drivers/cpufreq/vexpress-spc-cpufreq.c
-+++ b/drivers/cpufreq/vexpress-spc-cpufreq.c
-@@ -496,7 +496,8 @@ static struct cpufreq_driver ve_spc_cpufreq_driver = {
- 	.name			= "vexpress-spc",
- 	.flags			= CPUFREQ_STICKY |
- 					CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
--					CPUFREQ_NEED_INITIAL_FREQ_CHECK,
-+					CPUFREQ_NEED_INITIAL_FREQ_CHECK |
-+					CPUFREQ_CUSTOM_SET_FREQ_SCALE,
- 	.verify			= cpufreq_generic_frequency_table_verify,
- 	.target_index		= ve_spc_cpufreq_set_target,
- 	.get			= ve_spc_cpufreq_get_rate,
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 3494f6763597..42668588f9f8 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -293,7 +293,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
- 
- struct cpufreq_driver {
- 	char		name[CPUFREQ_NAME_LEN];
--	u8		flags;
-+	u16		flags;
- 	void		*driver_data;
- 
- 	/* needed by all drivers */
-@@ -417,6 +417,14 @@ struct cpufreq_driver {
-  */
- #define CPUFREQ_IS_COOLING_DEV			BIT(7)
- 
-+/*
-+ * Set by drivers which implement the necessary calls to the scheduler's
-+ * frequency invariance engine. The use of this flag will result in the
-+ * default arch_set_freq_scale calls being skipped in favour of custom
-+ * driver calls.
-+ */
-+#define CPUFREQ_CUSTOM_SET_FREQ_SCALE		BIT(8)
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 0128de3603df..83b58483a39b 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -2046,9 +2046,16 @@ EXPORT_SYMBOL(cpufreq_unregister_notifier);
+ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+ 					unsigned int target_freq)
+ {
++	unsigned int freq;
 +
- int cpufreq_register_driver(struct cpufreq_driver *driver_data);
- int cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
+ 	target_freq = clamp_val(target_freq, policy->min, policy->max);
++	freq = cpufreq_driver->fast_switch(policy, target_freq);
++
++	if (freq && !(cpufreq_driver->flags & CPUFREQ_CUSTOM_SET_FREQ_SCALE))
++		arch_set_freq_scale(policy->related_cpus, freq,
++				    policy->cpuinfo.max_freq);
+ 
+-	return cpufreq_driver->fast_switch(policy, target_freq);
++	return freq;
+ }
+ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+ 
+@@ -2140,7 +2147,7 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
+ 			    unsigned int relation)
+ {
+ 	unsigned int old_target_freq = target_freq;
+-	int index;
++	int index, retval;
+ 
+ 	if (cpufreq_disabled())
+ 		return -ENODEV;
+@@ -2171,7 +2178,14 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
+ 
+ 	index = cpufreq_frequency_table_target(policy, target_freq, relation);
+ 
+-	return __target_index(policy, index);
++	retval = __target_index(policy, index);
++
++	if (!retval && !(cpufreq_driver->flags & CPUFREQ_CUSTOM_SET_FREQ_SCALE))
++		arch_set_freq_scale(policy->related_cpus,
++				    policy->freq_table[index].frequency,
++				    policy->cpuinfo.max_freq);
++
++	return retval;
+ }
+ EXPORT_SYMBOL_GPL(__cpufreq_driver_target);
  
 -- 
 2.17.1
