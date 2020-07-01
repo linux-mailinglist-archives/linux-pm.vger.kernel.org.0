@@ -2,70 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE5A211644
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 00:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851832116B1
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 01:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgGAWtI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 18:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S1726464AbgGAXgo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 19:36:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgGAWtH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 18:49:07 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ABE4C08C5C1;
-        Wed,  1 Jul 2020 15:49:07 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id d17so14470122ljl.3;
-        Wed, 01 Jul 2020 15:49:07 -0700 (PDT)
+        with ESMTP id S1726413AbgGAXgo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 19:36:44 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA1FC08C5C1;
+        Wed,  1 Jul 2020 16:36:44 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id m26so14724846lfo.13;
+        Wed, 01 Jul 2020 16:36:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fPsKBXYO3Tet43XDuQQQGHQH4tCc1yYACrZBORXJJ68=;
-        b=P0OE/MumCxoQHzp+GCtkevXNIAcpHJsUmxKsWnF8E1eywTmWNV6oX3GnvLK1aG7FwD
-         jGy4vCh5PmmvcMxM109Hek7o0qwA+M1CTyrrHC+libila3qa5u6UOMqtTQeNkfxk963F
-         TcrgsN3pEF8+YDxjzWCWe2PoWqrBSDOepgwFJerG/hqx0QVvU2fz2aHw8J9p2wErRJ7T
-         7C3EFanMwtolcDSkfpwohVvbyEXBZdmwrPAKzBH298ZQ33znZZlE230Uldn+WMxF5HV8
-         YrrYCwfKhKIMWp/trkrVuD7UW/beL6st6Hc2/csDzyOYBoZU+qQx6/8rWHOaTTQFTpBg
-         bhYw==
+        bh=TARMjYdHjjq3zj3UdYugq16yVCkI0yHEqNSthzPBnjA=;
+        b=Clb1fkeGHtH5meU1AUmTh/DrSXEJKzyyUHougWi7iLO/PnCVM/KT/Qfl5gObcxYIOf
+         poxGIyQtI77yF3t5Uu5k+sO3j+gtvSxhoNu++hYXaMAfbz87fNyEJUIgOl2Qor6XF8ZO
+         AOIYeudjgV+vLLwJA37SnQWJZ9bzmWP9L5JJASIJdhDVJWvLbQ76dz1UNHc9Cn6Ob7aJ
+         jjDYitbCsYIZH3BdqPaZY3cuPmTXRlb2p+eIQL1roJcLJzW9+A/ufuhvPMEjtcoM26Yx
+         LGkrRo+rktmXODPrvEPVbmy+A/4PTcxNhGXIJZj8rT/G9//GdE6zHSxE6yqdECukvJrN
+         ZE8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=fPsKBXYO3Tet43XDuQQQGHQH4tCc1yYACrZBORXJJ68=;
-        b=IdTxkEmlXYayfsJddMpeGtRUdgHjmTYaM1brC5Nfa14CS22CAJ8CHOhZ5omQKBM2HQ
-         MyQuhexS3z93wxpl1rkPgtEXLuxOQao6/9yQosDxOd0eVLDR8kKmqMztp6zJSjh70zWi
-         O4+a3H2/sQa6EiOYBYe6tIuZZ4FrLd7KU2VFPQZituaRTl97O/OeFevtxzvPhNgphhyp
-         IHnXpvIEKX9AYyQCSlOYUu+LZKGyweuWUuWOdKD8Nl5yNkzIVsGumLRrGrgEUWwcBlNk
-         jwRk/PBpfPBmB1GRdZGn6A0k81LP/EjSY52BesWUx7/M0Hr/C60fIf7hK1ePwQQ71z9Y
-         fSAQ==
-X-Gm-Message-State: AOAM533Ha/4ebjkBiKNYTCt2rYRcPewxjGFNsjzPqHtb7wsMvu8Zau/f
-        yTwGVJIBooz4LRseev/Z6bCmUV1gUoc=
-X-Google-Smtp-Source: ABdhPJxxRc70R0rtUr+V01v5C1hWj1YNSddKIovHKWqwJ4E7h9yElLNZVKCZhYW11WqsARdGDa6y+w==
-X-Received: by 2002:a2e:81c8:: with SMTP id s8mr14561656ljg.281.1593643745475;
-        Wed, 01 Jul 2020 15:49:05 -0700 (PDT)
+        bh=TARMjYdHjjq3zj3UdYugq16yVCkI0yHEqNSthzPBnjA=;
+        b=fTzhxPi7LjEyIJJ75babB9jLbnNMJHxZa7Ts9y2No4K1dtHvwDA418UFbqUjC7Wdrt
+         JTnuS+MGQYYkZDCvqfYpwUCuBnQfnyTrbL7DZEs63rJklBhePh7kSA5GgY0oSy4G7nki
+         s9px/yxTKJbcPZuSTp+cEdnLQ5aS9kZigTvJRodN2aJtHbfcL9NAClFD+T1GCwSCVhnc
+         0nv5VblQKO4QNbJ63HeL8FATjw8fa1nWYqPxjzL6hTAqJKcshMotRnG29Wsgbe29qADF
+         dgpg/dQj2KG2gxQW0FSRt6o55rhZftVM9KCLFSwNVk8WaNVJ2V0YU8OmNOY5sKjhC7oN
+         AC8A==
+X-Gm-Message-State: AOAM5331pR8HSRiXQDtxXAXB35l92VPx7NOY5ha0/lmn+FfJLTIdOx3q
+        AyDhWbkZlaOA75Lm5H1/2lNYzTAMY3Y=
+X-Google-Smtp-Source: ABdhPJzpjVfIcRoIVtpwV3y58+IISkU9q95ir4JljE24TYlCKzQbPSQXrlZCICbOftVA0366nD51Fw==
+X-Received: by 2002:a19:4805:: with SMTP id v5mr16722713lfa.75.1593646602112;
+        Wed, 01 Jul 2020 16:36:42 -0700 (PDT)
 Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id l1sm2286341ljc.65.2020.07.01.15.49.03
+        by smtp.googlemail.com with ESMTPSA id u19sm2551087lju.63.2020.07.01.16.36.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2020 15:49:04 -0700 (PDT)
-Subject: Re: [PATCH v1] cpuidle: tegra: Correctly handle result of
- arm_cpuidle_simple_enter()
-To:     Jon Hunter <jonathanh@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20200629222625.674-1-digetx@gmail.com>
- <d9efb0f5-d6ab-f3db-540e-c6ae1b42e45e@nvidia.com>
- <4bae133b-1b51-281c-1759-ca0d259b18ca@gmail.com>
- <a55f74fd-1105-1576-8f73-d6d3062541ef@nvidia.com>
+        Wed, 01 Jul 2020 16:36:41 -0700 (PDT)
+Subject: Re: [PATCH v4 28/37] memory: tegra: Register as interconnect provider
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200609131404.17523-1-digetx@gmail.com>
+ <20200609131404.17523-29-digetx@gmail.com>
+ <aec831a6-a7ad-6bcc-4e15-c44582f7568e@linaro.org>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <de1d5c68-0714-3b50-9d39-9351950308e7@gmail.com>
-Date:   Thu, 2 Jul 2020 01:49:02 +0300
+Message-ID: <82d27a47-f189-6609-a584-c9ca1b35a76c@gmail.com>
+Date:   Thu, 2 Jul 2020 02:36:40 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <a55f74fd-1105-1576-8f73-d6d3062541ef@nvidia.com>
+In-Reply-To: <aec831a6-a7ad-6bcc-4e15-c44582f7568e@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -74,81 +82,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.07.2020 16:56, Jon Hunter пишет:
+01.07.2020 20:12, Georgi Djakov пишет:
+> Hi Dmitry,
 > 
-> On 30/06/2020 19:54, Dmitry Osipenko wrote:
->> 30.06.2020 12:02, Jon Hunter пишет:
->>>
->>> On 29/06/2020 23:26, Dmitry Osipenko wrote:
->>>> The arm_cpuidle_simple_enter() returns the entered idle-index and not a
->>>> error code. It happened that TEGRA_C1=index=err=0, and hence this typo
->>>> was difficult to notice in the code since everything happened to work
->>>> properly. This patch fixes the minor typo, it doesn't fix any problem.
->>>
->>> I guess that is dependent on if CPUIDLE is enabled ...
->>>
->>> #ifdef CONFIG_CPU_IDLE
->>> extern int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
->>>                 struct cpuidle_driver *drv, int index);
->>> #else
->>> static inline int arm_cpuidle_simple_enter(struct cpuidle_device *dev,
->>>                  struct cpuidle_driver *drv, int index) { return -ENODEV; }
->>> #endif
->>>
->>> Looks like it could return an error.
+> Thank you for updating the patches!
+
+Hello, Georgi!
+
+Thank you for the review!
+
+> On 6/9/20 16:13, Dmitry Osipenko wrote:
+>> Now memory controller is a memory interconnection provider. This allows us
+>> to use interconnect API in order to change memory configuration.
 >>
->> Hello Jon!
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/memory/tegra/Kconfig |   1 +
+>>  drivers/memory/tegra/mc.c    | 114 +++++++++++++++++++++++++++++++++++
+>>  drivers/memory/tegra/mc.h    |   8 +++
+>>  include/soc/tegra/mc.h       |   3 +
+>>  4 files changed, 126 insertions(+)
 >>
->> The cpuidle's enter() callback returns an index of the entered state on
->> success, on negative value on failure.
+>> diff --git a/drivers/memory/tegra/Kconfig b/drivers/memory/tegra/Kconfig
+>> index 5bf75b316a2f..7055fdef2c32 100644
+>> --- a/drivers/memory/tegra/Kconfig
+>> +++ b/drivers/memory/tegra/Kconfig
+>> @@ -3,6 +3,7 @@ config TEGRA_MC
+>>  	bool "NVIDIA Tegra Memory Controller support"
+>>  	default y
+>>  	depends on ARCH_TEGRA
+>> +	select INTERCONNECT
+>>  	help
+>>  	  This driver supports the Memory Controller (MC) hardware found on
+>>  	  NVIDIA Tegra SoCs.
+>> diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
+>> index 772aa021b5f6..7ef7ac9e103e 100644
+>> --- a/drivers/memory/tegra/mc.c
+>> +++ b/drivers/memory/tegra/mc.c
+>> @@ -594,6 +594,118 @@ static __maybe_unused irqreturn_t tegra20_mc_irq(int irq, void *data)
+>>  	return IRQ_HANDLED;
+>>  }
+>>  
+>> +static int tegra_mc_icc_set(struct icc_node *src, struct icc_node *dst)
+>> +{
+>> +	return 0;
+>> +}
+>> +
+>> +static int tegra_mc_icc_aggregate(struct icc_node *node,
+>> +				  u32 tag, u32 avg_bw, u32 peak_bw,
+>> +				  u32 *agg_avg, u32 *agg_peak)
+>> +{
+>> +	*agg_avg = min((u64)avg_bw + (*agg_avg), (u64)U32_MAX);
+>> +	*agg_peak = max(*agg_peak, peak_bw);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +/*
+>> + * Memory Controller (MC) has few Memory Clients that are issuing memory
+>> + * bandwidth allocation requests to the MC interconnect provider. The MC
+>> + * provider aggregates the requests and then sends the aggregated request
+>> + * up to the External Memory Controller (EMC) interconnect provider which
+>> + * re-configures hardware interface to External Memory (EMEM) in accordance
+>> + * to the required bandwidth. Each MC interconnect node represents an
+>> + * individual Memory Client.
+>> + *
+>> + * Memory interconnect topology:
+>> + *
+>> + *               +----+
+>> + * +--------+    |    |
+>> + * | TEXSRD +--->+    |
+>> + * +--------+    |    |
+>> + *               |    |    +-----+    +------+
+>> + *    ...        | MC +--->+ EMC +--->+ EMEM |
+>> + *               |    |    +-----+    +------+
+>> + * +--------+    |    |
+>> + * | DISP.. +--->+    |
+>> + * +--------+    |    |
+>> + *               +----+
+>> + */
+>> +static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
+>> +{
+>> +	struct icc_onecell_data *data;
+>> +	struct icc_node *node;
+>> +	unsigned int num_nodes;
+>> +	unsigned int i;
+>> +	int err;
+>> +
+>> +	/* older device-trees don't have interconnect properties */
+>> +	if (!of_find_property(mc->dev->of_node, "#interconnect-cells", NULL))
+>> +		return 0;
+>> +
+>> +	num_nodes = mc->soc->num_clients;
+>> +
+>> +	data = devm_kzalloc(mc->dev, struct_size(data, nodes, num_nodes),
+>> +			    GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	mc->provider.dev = mc->dev;
+>> +	mc->provider.set = tegra_mc_icc_set;
 > 
-> Yes, however, when I read the first sentence of the changelog it seemed
-> to suggested it would never return and error code. Perhaps you meant in
-> the context of the Tegra CPUIdle driver because CPU_IDLE is always enabled?
+> Hmm, maybe the core should not require a set() implementation and we can
+> just make it optional instead. Then the dummy function would not be needed.
 
-Yes, the commit message could be improved in regards to the error
-condition clarification. I'll update it in v2, thank you for the suggestion!
+Eventually this dummy function might become populated with a memory
+latency allowness programming. I could add a comment into that function
+in the next version, saying that it's to-be-done for now.
 
->> The negative number *could be* a proper error code, but in the same time
->> it also doesn't matter what's the exact negative value is for the
->> cpuidle's core code. Please see more below!
->>
->>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>>> ---
->>>>  drivers/cpuidle/cpuidle-tegra.c | 4 ++--
->>>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
->>>> index 150045849d78..9e9a9cccd755 100644
->>>> --- a/drivers/cpuidle/cpuidle-tegra.c
->>>> +++ b/drivers/cpuidle/cpuidle-tegra.c
->>>> @@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
->>>>  			       int index)
->>>>  {
->>>>  	unsigned int cpu = cpu_logical_map(dev->cpu);
->>>> -	int err;
->>>> +	int err = 0;
->>>>  
->>>>  	index = tegra_cpuidle_adjust_state_index(index, cpu);
->>>>  	if (dev->states_usage[index].disable)
->>>>  		return -1;
->>>>  
->>>>  	if (index == TEGRA_C1)
->>>> -		err = arm_cpuidle_simple_enter(dev, drv, index);
->>>> +		index = arm_cpuidle_simple_enter(dev, drv, index);
->>>>  	else
->>>>  		err = tegra_cpuidle_state_enter(dev, index, cpu);
->>>>  
->>>>
->>>
->>> However, I do think that there is something not right in the error handling
->>> here. Would also be nice to get rid of these -1.
->>
->> IIRC, the -1 was borrowed from some other cpuidle driver, for example
->> cpuidle-psci[1] and coupled.c[2] are returning -1 on a failure.
+>> +	mc->provider.data = data;
+>> +	mc->provider.xlate = of_icc_xlate_onecell;
+>> +	mc->provider.aggregate = tegra_mc_icc_aggregate;
+>> +
+>> +	err = icc_provider_add(&mc->provider);
+>> +	if (err)
+>> +		goto err_msg;
 > 
-> Indeed. Maybe we just let sleeping dogs lie in this case.
+> Nit: I am planning to re-organize some of the existing drivers to call
+> icc_provider_add() after the topology is populated. Could you please move
+> this after the nodes are created and linked.
 
-+1
+Are you planning to remove the provider's list-head initialization from
+the icc_provider_add() [1] and move it to the individual provider
+drivers, correct?
 
-We could always return to this later on, once there will be a real need.
+[1]
+https://elixir.bootlin.com/linux/v5.8-rc3/source/drivers/interconnect/core.c#L977
+
+If yes, then it should be easy to move the icc_provider_add() in the
+case of this driver. Otherwise, please give some more clarification.
+
+Please notice that the same "node" variable is used for both creation
+and linking of the nodes to the provider here, making code nice and
+clean. And thus, the provider's list-head should be initialized before
+the linking.
+
+...
+> The rest looks good to me!
+
+Thanks!
