@@ -2,150 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B4C21092A
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 12:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C28721099A
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jul 2020 12:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729879AbgGAKXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 06:23:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S1729926AbgGAKqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 06:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729781AbgGAKXi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 06:23:38 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248D4C03E979;
-        Wed,  1 Jul 2020 03:23:38 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 339872A530D
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
- <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
- <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
- <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
-Date:   Wed, 1 Jul 2020 12:23:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        with ESMTP id S1729849AbgGAKqV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 06:46:21 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940F4C061755
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 03:46:21 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id bf7so438364plb.2
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 03:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ZAwIqiRySDiFfmgD/1oQKpgA8/Glycu71hEVY2X/5aI=;
+        b=Y2MZvUMxug59kJ6DDiLOpxa9zz6EJSdJWxnPjurraa6ShY+zwguiLuVARBo2GsYARE
+         sCBkYAjnk8pxDw6oB8oYB32xL2alGAVqRPY9f4ka1qooiZvIZ1rQFc2RCSl9hXErdZ8O
+         l2R+I1SFM5l9TUuGSKCN/nXFxiXTCkqe7NcMZ8WZ18FSTMVVQiDxRLRWt3TjHIRIHxZa
+         lw3/CrMZTs/Xla60Ez35dHPn+j7pFdAAX9vfqeviEf+R2//EnfHkS/+0uek5aH0NP7M0
+         /GZvpAXruFM3RGb9Gw2a9FvZjV35rJRNtOSbVmVTrP5TuYIhV201UAKxQOKMieYx4mlB
+         1+ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ZAwIqiRySDiFfmgD/1oQKpgA8/Glycu71hEVY2X/5aI=;
+        b=FyUtKNc+kp6UA0mAcGzSB+c8YUcawD0ri0/eY/AWvb3dx0rNdF6e+sr0IrsXrwoE8g
+         yzY/eZBxTfd/0RMG4cjm3lN1vV3L3khcvZ9I+fmwQ1o4JyZfuKCvDt9bpINbYfgdw0rI
+         uI5kdvbRkZvrBip60FtBzXsscsRXbfNHTWaAgHo1Gzt7VLTCVoFt7Y69n47KzCuN54ni
+         INZ60cm00jHIUqRjJGOmMuLYpSPiLiy1R3l+aeibRzzdB4Ys6TS0qLAbcA2zNOtIkyOl
+         rJyteSQUfpngG5GBexXVnoa/NG8/Slrk0RXH5YLH9NHi2ovfOcJVib3a8IVQravXmQCr
+         GgBw==
+X-Gm-Message-State: AOAM5337e3yPZvO7USWtNEBUoQMRrwrMipZN71EmpgQdW1dtpv5FhB2T
+        z2DdXfinJdBXmzvfOg/psrhqZyJhY7o=
+X-Google-Smtp-Source: ABdhPJxPFfNLz+aE4EPYb5tQdrUGE5weML5br9ZUPuFYPAJytDY8xi4+x275Aqh4ljhNNfYUKKeflg==
+X-Received: by 2002:a17:902:8d89:: with SMTP id v9mr21290407plo.191.1593600381045;
+        Wed, 01 Jul 2020 03:46:21 -0700 (PDT)
+Received: from localhost ([122.172.81.75])
+        by smtp.gmail.com with ESMTPSA id d16sm5413722pfo.156.2020.07.01.03.46.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Jul 2020 03:46:19 -0700 (PDT)
+Date:   Wed, 1 Jul 2020 16:16:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
+        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
+        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
+ freq invariance
+Message-ID: <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+References: <20200701090751.7543-1-ionela.voinescu@arm.com>
+ <20200701090751.7543-2-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200701090751.7543-2-ionela.voinescu@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 01-07-20, 10:07, Ionela Voinescu wrote:
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 3494f6763597..42668588f9f8 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -293,7 +293,7 @@ __ATTR(_name, 0644, show_##_name, store_##_name)
+>  
+>  struct cpufreq_driver {
+>  	char		name[CPUFREQ_NAME_LEN];
+> -	u8		flags;
+> +	u16		flags;
 
-W dniu 30.06.2020 o 20:33, Daniel Lezcano pisze:
-> On 30/06/2020 18:56, Andrzej Pietrasiewicz wrote:
->> Hi,
->>
->> W dniu 30.06.2020 o 17:53, Daniel Lezcano pisze:
->>> On 30/06/2020 17:29, Andrzej Pietrasiewicz wrote:
->>>> Hi Daniel,
->>>>
->>>> W dniu 30.06.2020 o 16:53, Daniel Lezcano pisze:
->>>>> On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
->>>>>> Hi Daniel,
->>>>>>
->>>>>> I am reading the logs and can't find anything specific to thermal.
->>>>>>
->>>>>> What I can see is
->>>>>>
->>>>>> "random: crng init done"
->>>>>>
->>>>>> with large times (~200s) and then e.g.
->>>>>>
->>>>>> 'auto-login-action timed out after 283 seconds'
->>>>>>
->>>>>> I'm looking at e.g.
->>>>>> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
->>>>>>
->>>>>>
->>>>>>
->>>>
->>>> f5e50bf4d3ef is PATCH 11/11. Does the problem happen at PATCH 1-10/11?
->>>> PATCH 11/11 renames a method and the code compiles, so it seems
->>>> unlikely that this is causing problems. One should never say never,
->>>> though ;)
->>>
->>> The sha1 is just the HEAD for the kernel reference. The regression
->>> happens with your series, somewhere.
->>>
->>>> The reported failure is not due to some test failing but rather due
->>>> to timeout logging into the test system. Could it be that there is
->>>> some other problem?
->>>
->>> I did reproduce:
->>>
->>> v5.8-rc3 + series => imx6 hang at boot time
->>> v5.8-rc3 => imx6 boots correctly
->>>
+Lets make it u32.
 
-What did you reproduce? Timeout logging in to the test system or a "real" 
-failure of a test?
+>  	void		*driver_data;
+>  
+>  	/* needed by all drivers */
+> @@ -417,6 +417,14 @@ struct cpufreq_driver {
+>   */
+>  #define CPUFREQ_IS_COOLING_DEV			BIT(7)
+>  
+> +/*
+> + * Set by drivers which implement the necessary calls to the scheduler's
+> + * frequency invariance engine. The use of this flag will result in the
+> + * default arch_set_freq_scale calls being skipped in favour of custom
+> + * driver calls.
+> + */
+> +#define CPUFREQ_CUSTOM_SET_FREQ_SCALE		BIT(8)
 
->>
->> I kindly ask for a bisect.
-> 
-> I will give a try but it is a very long process as the board is running
-> on kernelci.
-> 
-> I was not able to reproduce it on imx7 despite it is the same sensor :/
-> 
-> 
+I will rather suggest CPUFREQ_SKIP_SET_FREQ_SCALE as the name and
+functionality. We need to give drivers a choice if they do not want
+the core to do it on their behalf, because they are doing it on their
+own or they don't want to do it.
 
-Could it be that the thermal sensors somehow contribute to entropy and after
-the series is applied on some machines it takes more time to gather enough
-entropy?
-
-Andrzej
+-- 
+viresh
