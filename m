@@ -2,92 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38BA8211A84
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 05:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E1F211ABC
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 05:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgGBDF4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 23:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726262AbgGBDFz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 23:05:55 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5028CC08C5DB
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 20:05:55 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id f2so10703484plr.8
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 20:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=LSIXeJkTyhS8zDoxVph+aH1Bdmz06pqtIU5eHol2+kg=;
-        b=IHna+nXuiFtXsW8Y44jarGOecmrNRjmRg+BPWhVHX8oo0+pm750A347UxP8cdyRZtz
-         1rpywCjS09JJX3W5xYBHW4fN6qh+vM7hi/H2OD6gpAR1d3u9DiA5Pm47zTSAAtfjjdt+
-         DZn8k+LOezD7Jt0KucWr934HnBmU0a1UWPHWGTBh8BAcZHGguAvIeqc/nh3qnVhehZlm
-         GWaWs1LN+68mh6kQISH/hddLDYkvv5FgdSG3ICOb2papaV+z/hAE8QEkPQaFCdRM7+Kx
-         9c25ktltyB+cMJEEt0dgNCB6qWPzOBd9cjrq/NU7P6fCRV5baY33f4wuYawgduP7EGxd
-         XeZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LSIXeJkTyhS8zDoxVph+aH1Bdmz06pqtIU5eHol2+kg=;
-        b=bOsKWNtGAMwS3UEjd4rFZokRD83Qprw1wrwGiG3zRGyJFUS/OY6azjMAJdBUQWBAcw
-         qKwdm2frBFmSMFLfMbmraLd38FdSGjyup5IF1ZcUacvvR4pkcYdK1I/ouE0I664meCSc
-         +Fra/rhwb+o5AJrnPCVU+NquZnCYBL37sDzzEYkXfu/ccwcak3CmalEE+rHh6WiqTgbR
-         q8/rZkUAmLSaW3phXUBJdTRxU3y3u4pdAJxHrcKkL/6KtuWbAOHhhJSJre9g+s724ShD
-         dLBU8/DvZp++onq+7Pc0EEWQYiOxhpIqbmU5S8EyN9AVTxaqlSWGxTCh2DFN6N3h+EI3
-         BGDg==
-X-Gm-Message-State: AOAM532pS5WEWBGaM0iup0BHBlKxsuk/Zvg+7GXT68D6jxLVR2QCysn1
-        tSdVzxpgEtmR1jCGYShavdAqqA==
-X-Google-Smtp-Source: ABdhPJxvwixRnu5/bd9/OEJGu9MtVDUrqOpsYEcjxi3jhAkd3T2UijJV0Xq35KWKIh1AqiCM6n9Qlw==
-X-Received: by 2002:a17:902:a987:: with SMTP id bh7mr12452608plb.197.1593659154871;
-        Wed, 01 Jul 2020 20:05:54 -0700 (PDT)
-Received: from localhost ([223.235.247.110])
-        by smtp.gmail.com with ESMTPSA id n9sm2804781pjo.53.2020.07.01.20.05.53
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jul 2020 20:05:54 -0700 (PDT)
-Date:   Thu, 2 Jul 2020 08:35:51 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
-        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>
-Subject: Re: [PATCH 4/8] cpufreq,vexpress-spc: fix Frequency Invariance (FI)
- for bL switching
-Message-ID: <20200702030551.p4cevaahgfvpum4o@vireshk-i7>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-5-ionela.voinescu@arm.com>
- <20200701095414.2wjcnyhndgcedk2q@vireshk-i7>
- <20200701140735.GB32736@arm.com>
+        id S1726710AbgGBDxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 23:53:39 -0400
+Received: from mga12.intel.com ([192.55.52.136]:26354 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726173AbgGBDxi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 1 Jul 2020 23:53:38 -0400
+IronPort-SDR: TiZbNwiRGUGq6vCivE2XVzpXT5FpxVO/yaZ8rCUhZmmX96mTxkYS57ml+pEMj43WD9xDEI8axO
+ 2eYWfkgpM6Sg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="126403409"
+X-IronPort-AV: E=Sophos;i="5.75,302,1589266800"; 
+   d="scan'208";a="126403409"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2020 20:53:37 -0700
+IronPort-SDR: GX73XtJNzEACs8ZUJOsMTC86aE184MMIzV8g1KtxWQPkJxqQfz6qKg69ekDWwoREcWjCFfe8Ex
+ W4IvBgeAey9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,302,1589266800"; 
+   d="scan'208";a="277989359"
+Received: from lkp-server01.sh.intel.com (HELO 28879958b202) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 01 Jul 2020 20:53:34 -0700
+Received: from kbuild by 28879958b202 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1jqqI1-0003T0-Jb; Thu, 02 Jul 2020 03:53:33 +0000
+Date:   Thu, 02 Jul 2020 11:52:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ db104109575551b9d477167284d674fd31047baf
+Message-ID: <5efd59ea.PRARoJz0adbcB+sv%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200701140735.GB32736@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-20, 15:07, Ionela Voinescu wrote:
-> On Wednesday 01 Jul 2020 at 16:16:19 (+0530), Viresh Kumar wrote:
-> > Is there anyone who cares for this driver and EAS ? I will just skip doing the
-> > FIE thing here and mark it skipped.
-> 
-> That is a good question. The vexpress driver is still used for TC2, but
-> I don't know of any users of this bL switcher functionality that's part
-> of the driver. I think there were a few people wondering recently if
-> it's still used [1].
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: db104109575551b9d477167284d674fd31047baf  Merge branches 'pm-cpufreq' and 'powercap' into linux-next
 
-Even if it is used by some, there is no need, I believe, to enable
-freq-invariance for it, which wasn't enabled until now.
+elapsed time: 721m
 
-And considering that we are going to enable the flag only for the
-interested parties now, as from the discussion on 1/8, this shouldn't
-be required.
+configs tested: 102
+configs skipped: 2
 
--- 
-viresh
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                               allnoconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm64                            allmodconfig
+arm64                             allnoconfig
+arm                          pxa3xx_defconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      ppc6xx_defconfig
+mips                          ath25_defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                              debian-10.3
+i386                              allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                              allnoconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                              allnoconfig
+m68k                           sun3_defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nios2                            allyesconfig
+openrisc                            defconfig
+c6x                              allyesconfig
+c6x                               allnoconfig
+openrisc                         allyesconfig
+nds32                               defconfig
+nds32                             allnoconfig
+csky                             allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+h8300                            allmodconfig
+xtensa                              defconfig
+arc                                 defconfig
+arc                              allyesconfig
+sh                               allmodconfig
+sh                                allnoconfig
+microblaze                        allnoconfig
+mips                             allyesconfig
+mips                              allnoconfig
+mips                             allmodconfig
+parisc                            allnoconfig
+parisc                              defconfig
+parisc                           allyesconfig
+parisc                           allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          rhel-kconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200701
+i386                 randconfig-a001-20200701
+i386                 randconfig-a006-20200701
+i386                 randconfig-a005-20200701
+i386                 randconfig-a004-20200701
+i386                 randconfig-a003-20200701
+x86_64               randconfig-a012-20200701
+x86_64               randconfig-a016-20200701
+x86_64               randconfig-a014-20200701
+x86_64               randconfig-a011-20200701
+x86_64               randconfig-a015-20200701
+x86_64               randconfig-a013-20200701
+i386                 randconfig-a011-20200701
+i386                 randconfig-a015-20200701
+i386                 randconfig-a014-20200701
+i386                 randconfig-a016-20200701
+i386                 randconfig-a012-20200701
+i386                 randconfig-a013-20200701
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+s390                             allyesconfig
+s390                              allnoconfig
+s390                             allmodconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+sparc64                             defconfig
+sparc64                           allnoconfig
+sparc64                          allyesconfig
+sparc64                          allmodconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                               rhel-7.6
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                                   rhel
+x86_64                         rhel-7.2-clear
+x86_64                                    lkp
+x86_64                              fedora-25
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
