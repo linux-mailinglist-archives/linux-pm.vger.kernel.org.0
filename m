@@ -2,82 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E858212674
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 16:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C312212732
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 16:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729480AbgGBOjM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 10:39:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728179AbgGBOjM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 2 Jul 2020 10:39:12 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 925D92065F;
-        Thu,  2 Jul 2020 14:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1593700752;
-        bh=qh+QrqZ1UHNEbqazeXUIg0KX2EhsudHzr0KVBgTRLgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fiOI/5Dq62/t9KUduPh4pr90Red/TPP5UuvgNx5PBbB+g6KkgPO0vxLPKsY0ANkPG
-         oAHXqxz5mBCSNYASAC30/UAUAjBTJuvh48x9tC3vBpXk8fXOxsIERDRpKE7UeUENky
-         9Oar+nlPmNTI3zrVjIrYgvBYvWykTwGGl23Nho5Y=
-Date:   Thu, 2 Jul 2020 15:39:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     nicolas.ferre@microchip.com
-Cc:     linux-arm-kernel@lists.infradead.org, sre@kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-spi@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>
-Subject: Re: [PATCH] MAINTAINERS: Change Maintainer for some at91 drivers
-Message-ID: <20200702143909.GH4483@sirena.org.uk>
-References: <20200702134224.3750-1-nicolas.ferre@microchip.com>
+        id S1728105AbgGBO6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 10:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729551AbgGBO6d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 10:58:33 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08319C08C5E0
+        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 07:58:32 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id l17so27188091wmj.0
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 07:58:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=x8u1Qd58Jra03vuD/Ujnb8vgjM3oVoZL6nudEwpIjQU=;
+        b=MuVybhw3sv5NBKOe6y2sDqWGb6wf25zluQ+REINq2DD7Z+G0/vL+1PjKXCx7BKu36I
+         rkOhMxsrdH5ggNXyGtUArqqK6FFDtfoucPppNg9Ac+hzT2ib7NgaqP0jqhE6wN/Uu+8z
+         v+G0SlqZQN+IlE68CkVhUzr6RbLF8Keh04beeKuAifk1Z731BvyUs42Io9/Px37GRxeX
+         yncDnRQqK5X92hTB50me7klYSTEYamFN0yXSRdJF0BHVUgiLPDfmTBzIkJZE4CJvAKyL
+         RaMTiVIc2TEWIqPmtRek99oHZherYcLqVesA9MCxFhhjk91a5Rg2NrQso0apj3CruhoK
+         A3Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=x8u1Qd58Jra03vuD/Ujnb8vgjM3oVoZL6nudEwpIjQU=;
+        b=U8QYNjS7GhTRQHr2AxBJBYuOb2oSvEpx96V40DqNTA6VE4C6CMLRUOCoFtC4IxgmL/
+         BQmCMXculQQlVh7DlEKI+ktJ1D7mZgK2L8vLH+gqAdeC9YSorAhmqonRw1wcgfmuqp62
+         ma6XGv42KiJlf7Mg1aAK20RMxsK1twY/RV7QgjSg1e1et6KReCwE9r7lj3Nq4/9waGsG
+         oozjdHWWzzTQTyUZGa5sQj3K38UKkKqF/zAKKiCbVPsCmEZLihoUZo0Kowm1on1fHQ3d
+         /1q/0pZSZMclyUH8G4l3CFM0iaQ8d1NVNw+zQZ9vMG7RfQIz4Tw2LEw1G0Adp5Tj44wE
+         1Ohg==
+X-Gm-Message-State: AOAM5320EyVZj5Szakn9TdYHTbnDRDg8vvmHRAKzvinrL8FgKogirM0I
+        nlv/uzyrQ6ojNQ3tLm4JLq2yRQ==
+X-Google-Smtp-Source: ABdhPJwDLcM1T+80bGDziotECthUV0hMUrJkGQgjNgyDlPfrA+vwPUEsl/LS3IvbqZBTaU5G7yjFLg==
+X-Received: by 2002:a7b:cd07:: with SMTP id f7mr30660667wmj.115.1593701911400;
+        Thu, 02 Jul 2020 07:58:31 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0? ([2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0])
+        by smtp.googlemail.com with ESMTPSA id v24sm13394737wrd.92.2020.07.02.07.58.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jul 2020 07:58:30 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+References: <20200629122925.21729-1-andrzej.p@collabora.com>
+ <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
+ <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+ <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
+ <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
+ <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
+ <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
+ <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
+ <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+ <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
+ <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <134e1e38-02d0-32ed-bd59-cf283a161b35@linaro.org>
+Date:   Thu, 2 Jul 2020 16:58:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BXr400anF0jyguTS"
-Content-Disposition: inline
-In-Reply-To: <20200702134224.3750-1-nicolas.ferre@microchip.com>
-X-Cookie: I'm rated PG-34!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 02/07/2020 15:53, Andrzej Pietrasiewicz wrote:
+> Hi Daniel,
+> 
+> <snip>
+> 
+>>>>>>
+>>>>>> I did reproduce:
+>>>>>>
+>>>>>> v5.8-rc3 + series => imx6 hang at boot time
+>>>>>> v5.8-rc3 => imx6 boots correctly
+>>
+>> So finally I succeeded to reproduce it on my imx7 locally. The sensor
+>> was failing to initialize for another reason related to the legacy
+>> cooling device, this is why it is not appearing on the imx7.
+>>
+>> I can now git-bisect :)
+>>
+> 
+> That would be very kind of you, thank you!
 
---BXr400anF0jyguTS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Author: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Date:   Mon Jun 29 14:29:21 2020 +0200
 
-On Thu, Jul 02, 2020 at 03:42:24PM +0200, nicolas.ferre@microchip.com wrote:
+    thermal: Use mode helpers in drivers
 
-> I kept these entries together as it may generate conflicts if handled
-> separately. I suggest that Mark take the chunk as maintainer of SPI and
-> Audio sub-systems.
-> Anyway, don't hesitate to tell me if I should handle this change
-> differently or at another time during the development cycle.
+    Use thermal_zone_device_{en|dis}able() and
+thermal_zone_device_is_enabled().
 
-That works for me (though I'd be a bit surprised if it generated
-conflicts), Sebastian?
 
---BXr400anF0jyguTS
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl798Y0ACgkQJNaLcl1U
-h9DNkgf8CXzfu1HBWQjLABvOUjJTv8R3dJZAz4XSEss7PxmXnFF0VwTpt7Xh3gLS
-sp4hUskO70QgqH+f7CtFOPQ2i12u55qu6hHVyB6bEyYrl8xXRgg+oxt9iIrGmf3Q
-gC9OJmWEJy4+ZaRL8x/QnDbQTbAv7B/yexPqll4qG5/RlbHj7nqrL4z8NSuuMmm/
-atsaFx3fmY5kEfyjEBECMQ6fYXEbf+T0ySVWT4Y3eMEdMpAGOM3c7KvGNQpi07gw
-lkRVCa9lO0PkmC94nzW60H2ocdgZdn+pXt4fYcPFl9ijCFJjXG1ijg7mE1YasQ0F
-cRTKaVC87piSsTwYo/L2C6O1MlkKxw==
-=7g5B
------END PGP SIGNATURE-----
-
---BXr400anF0jyguTS--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
