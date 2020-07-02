@@ -2,114 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF831212514
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 15:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFAF212526
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 15:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729263AbgGBNqr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 09:46:47 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:40176 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729047AbgGBNqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 09:46:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1593697607; x=1625233607;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=npTNr8twP/tyLNtM3PSd3ahFvXvXe/yaEybXuDL7ItU=;
-  b=H7qg5TDCWJd4LCgSbz64hN631JCpsmHFHRqAJlPnJ3OwKCbGOd/hSAUZ
-   e4klBvWqg9gKpohMvZQcOM/1H2QEWwmFfNmpufBV3OToCg72Fs0xq+nic
-   Aptep0L35ZQQd/GCM9fhkElAxTqiwQXVcSJG1BNLDohNJAW05hsLjpBTq
-   Wu/exJfMKVM66SdFr1/EOa0G0EoeaW1vslAqBuZ+WEjnWQPyLLYeryGmD
-   1KZzZ9asrv9g+89F8uOja4f/6PwJ0o4T9U3/D78vCLRD7Vcy+AX2R5DCc
-   0HE5/j2+UoHt8mkp8MUE/ljBcpylj5x+4FnWF/6FweR1yQz/ySXx5tTZL
-   A==;
-IronPort-SDR: OGNPd1Jr05acijLqDonYJw21klvbQUik4rG4Uo+B+UvaJ9paa1izCinxXA64RieVLRcf+RS61G
- qvsDcMBeQEulK8aHy8XRx+OZBOG7sfVu1t7xY/4GlVow410jmtbpI2x3JuVCXtOg33Xp6Jtb2a
- b7sUrKxb7lOeiMn1O+CGzBox9gy3wUnpzCDw4RyuFxERXIIsexEDn8aY67SeQ1KU7wNp/TFing
- J0MdUYaVsL6t3NQfwhXWit//au+7oWsmuVvGpzVKw4MxMybd3kd9WXFZLawDvqR/Jq3ThVDDcU
- ihM=
-X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
-   d="scan'208";a="82397838"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Jul 2020 06:46:46 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 2 Jul 2020 06:46:46 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Thu, 2 Jul 2020 06:46:21 -0700
-From:   <nicolas.ferre@microchip.com>
-To:     <linux-arm-kernel@lists.infradead.org>, <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        "Codrin Ciubotariu" <codrin.ciubotariu@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>
-Subject: [PATCH] MAINTAINERS: Change Maintainer for some at91 drivers
-Date:   Thu, 2 Jul 2020 15:42:24 +0200
-Message-ID: <20200702134224.3750-1-nicolas.ferre@microchip.com>
-X-Mailer: git-send-email 2.27.0
+        id S1729313AbgGBNrp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 09:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729254AbgGBNro (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 09:47:44 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FCFC08C5DC
+        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 06:47:44 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id k6so28503595wrn.3
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 06:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZwC2KofFJKO2Kz1ZnDpUC9vH2nMKW6u7oZXxLzQv40I=;
+        b=dmiLcwDhJk1NQcYlu03OuKMtUIE/NeC2LLeLbrwxiWP/CQWVh678undWuJpSMFfWKt
+         pqJQFbXDS3SmeqvEKXm69oZpdNbYtPr6K3bey6rLz4r9xng9TFETrFIQ4hIDCxrfauBv
+         GRYt0qlTOeZ49+GYrf+gmLrcYXd/cnfabq6G/6qUAp59taYwc4gBHa3cG+n+S7WK2WBM
+         bGRllAgbervVwDtmS+KJwhmnJnQLcCPvhcoveFej6391OZEALA4RpW2ZaSp+wxwu9qX6
+         lLqF4S+Po6BfziWbngftEcLQyKYRo1r1AtxgL+iQTjhEXqpcEujdUBJ/nnzFqdttjO26
+         +8Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZwC2KofFJKO2Kz1ZnDpUC9vH2nMKW6u7oZXxLzQv40I=;
+        b=ZNP+lAImRKkmKDSWZx8Xs30QJhAug2PMRmPkYZXBErZEFJCSRhBR+N08cU0lSoomez
+         gS4qFsoQbFN+PteO/HQK0U0SXhVaDzck4nLO4b89qaVFbSU+ai7qJHtO9qai6C56rkuG
+         pp/N7csZi/UYOyPYDUf+GslxMFnOF1vd6sZ5oSel1QVHJaovMNz+lh/PVAA28TSOAp4t
+         aJhpZqhhncYbx0lyt9iAq4uB/zMDQG286dweRtpZInZHQ0ccUaiXe4zzbeMA6MVaW6GN
+         uP5BsK8yyD8ZY8XHVoamZnCjemdjmZhUHe9VTZXpnqQRMCjzdbZZXOfjO/Nw+NmBqDCf
+         jTxw==
+X-Gm-Message-State: AOAM531Vc+nT26GjxFlg1fc5gzIgEeHt0XGjVtC8H0ovB5jcmI1HLbMW
+        AvKl+aG8e8RseI0QJTMz1wu+Ug==
+X-Google-Smtp-Source: ABdhPJxkjl0IEjS3JqN7KaPO6L0oyFA19XXhKeCpfVTk+YyOUUQhs0LWqu5F2t0O0dXW3DG2OnPg/w==
+X-Received: by 2002:adf:c44d:: with SMTP id a13mr32528906wrg.205.1593697663121;
+        Thu, 02 Jul 2020 06:47:43 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0? ([2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0])
+        by smtp.googlemail.com with ESMTPSA id g16sm11988699wrh.91.2020.07.02.06.47.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jul 2020 06:47:42 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+References: <20200629122925.21729-1-andrzej.p@collabora.com>
+ <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
+ <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+ <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
+ <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
+ <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
+ <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
+ <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
+ <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
+Date:   Thu, 2 Jul 2020 15:47:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
+On 01/07/2020 12:23, Andrzej Pietrasiewicz wrote:
+> Hi,
+> 
+> W dniu 30.06.2020 o 20:33, Daniel Lezcano pisze:
+>> On 30/06/2020 18:56, Andrzej Pietrasiewicz wrote:
+>>> Hi,
+>>>
+>>> W dniu 30.06.2020 o 17:53, Daniel Lezcano pisze:
+>>>> On 30/06/2020 17:29, Andrzej Pietrasiewicz wrote:
+>>>>> Hi Daniel,
+>>>>>
+>>>>> W dniu 30.06.2020 o 16:53, Daniel Lezcano pisze:
+>>>>>> On 30/06/2020 15:43, Andrzej Pietrasiewicz wrote:
+>>>>>>> Hi Daniel,
+>>>>>>>
+>>>>>>> I am reading the logs and can't find anything specific to thermal.
+>>>>>>>
+>>>>>>> What I can see is
+>>>>>>>
+>>>>>>> "random: crng init done"
+>>>>>>>
+>>>>>>> with large times (~200s) and then e.g.
+>>>>>>>
+>>>>>>> 'auto-login-action timed out after 283 seconds'
+>>>>>>>
+>>>>>>> I'm looking at e.g.
+>>>>>>> https://storage.kernelci.org/thermal/testing/v5.8-rc3-11-gf5e50bf4d3ef/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-imx6q-sabrelite.html
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>
+>>>>> f5e50bf4d3ef is PATCH 11/11. Does the problem happen at PATCH 1-10/11?
+>>>>> PATCH 11/11 renames a method and the code compiles, so it seems
+>>>>> unlikely that this is causing problems. One should never say never,
+>>>>> though ;)
+>>>>
+>>>> The sha1 is just the HEAD for the kernel reference. The regression
+>>>> happens with your series, somewhere.
+>>>>
+>>>>> The reported failure is not due to some test failing but rather due
+>>>>> to timeout logging into the test system. Could it be that there is
+>>>>> some other problem?
+>>>>
+>>>> I did reproduce:
+>>>>
+>>>> v5.8-rc3 + series => imx6 hang at boot time
+>>>> v5.8-rc3 => imx6 boots correctly
 
-I hand over the maintenance of these drivers to my colleagues. Claudiu,
-Codrin and Tudor already have experience with these controllers and
-sub-systems.
+So finally I succeeded to reproduce it on my imx7 locally. The sensor
+was failing to initialize for another reason related to the legacy
+cooling device, this is why it is not appearing on the imx7.
 
-Signed-off-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
-Mark, Sebastian,
+I can now git-bisect :)
 
-I kept these entries together as it may generate conflicts if handled
-separately. I suggest that Mark take the chunk as maintainer of SPI and
-Audio sub-systems.
-Anyway, don't hesitate to tell me if I should handle this change
-differently or at another time during the development cycle.
 
-Best regards,
-  Nicolas
 
- MAINTAINERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 496fd4eafb68..1c1527a34d99 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11333,17 +11333,17 @@ F:	drivers/iio/adc/at91-sama5d2_adc.c
- F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
- 
- MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
--M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-+M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- S:	Supported
- F:	drivers/power/reset/at91-sama5d2_shdwc.c
- 
- MICROCHIP SPI DRIVER
--M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-+M:	Tudor Ambarus <tudor.ambarus@microchip.com>
- S:	Supported
- F:	drivers/spi/spi-atmel.*
- 
- MICROCHIP SSC DRIVER
--M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-+M:	Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
- F:	drivers/misc/atmel-ssc.c
 -- 
-2.27.0
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
