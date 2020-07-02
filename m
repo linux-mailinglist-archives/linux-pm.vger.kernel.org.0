@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C07211788
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 03:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB42921179F
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 03:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbgGBBBX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 21:01:23 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:21265 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727994AbgGBBBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 21:01:22 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200702010120epoutp042782fa2df937b6c296430394c645aeaf~dycJxGL7q1852818528epoutp04R
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 01:01:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200702010120epoutp042782fa2df937b6c296430394c645aeaf~dycJxGL7q1852818528epoutp04R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593651680;
-        bh=RsDj3CoPR1c7on0/7kkXlT3fnQEAu+pB1kuzaD759NE=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=sPZuY5Gr2LXvyOGauwcUcac938YcV204WwXoVlVKbdP+2Cjc9dapQoPaY9lhpa4vM
-         qODIMLAB1uJePTlfKieSXnlYnbYeLs4ES6PckLquMgucZCecx8Fy386keiicWYtyu5
-         WxdSeqFvhPZUzYCUycQ5vyT1eBIEqUSti2zEMTD8=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200702010119epcas1p4473b8c2187f17e0a003511635d125d6a~dycJCKZMZ2585225852epcas1p4_;
-        Thu,  2 Jul 2020 01:01:19 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 49y0Cc3WppzMqYkZ; Thu,  2 Jul
-        2020 01:01:16 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4B.BF.18978.CD13DFE5; Thu,  2 Jul 2020 10:01:16 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200702010116epcas1p1e610a393c91c8ceff1bb7ed3c0ce0a42~dycGBJOBJ3155831558epcas1p17;
-        Thu,  2 Jul 2020 01:01:16 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200702010116epsmtrp1944739d7de34b50d28a2b175ea2d2f01~dycGAMQT40320003200epsmtrp1O;
-        Thu,  2 Jul 2020 01:01:16 +0000 (GMT)
-X-AuditID: b6c32a35-603ff70000004a22-33-5efd31dc51a9
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.F3.08382.BD13DFE5; Thu,  2 Jul 2020 10:01:15 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200702010115epsmtip21e1e4d6e06ba114440f6dab9770a9626~dycFrcvq-0995009950epsmtip2j;
-        Thu,  2 Jul 2020 01:01:15 +0000 (GMT)
-Subject: Re: [PATCH v4 15/37] PM / devfreq: tegra30: Add error messages to
- tegra_devfreq_target()
-To:     Dmitry Osipenko <digetx@gmail.com>,
+        id S1727809AbgGBBU7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 21:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727805AbgGBBU7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 21:20:59 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB03C08C5C1;
+        Wed,  1 Jul 2020 18:20:58 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id t25so24927495lji.12;
+        Wed, 01 Jul 2020 18:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=dYCeMOPmLDd6YkOtzFpnQl9uCIfo9ocTM9gPN7zgGLs=;
+        b=d9j4CswU2NFZCBq45rswJjWthlpogrZnyxU2Y3/qFx3SzQ/Yg010yg+KHPckVLMK7E
+         sPM8Vl3sG/AcQaGYeiyAu0/y2NWDRFpN1cCGWZfSvqzvHm5OiyAxAO1Dt97pMU2E0dmk
+         iS7KuYi16IoF64egljBq4I2PpWLZDdd95183IIuQ7d7bgik4N+IndnkWEQhQKukAgMZA
+         s+JpJag5nHTBtAfKONT0BOIODyFke/y2jPMJiBL+CegXb4WhTK5iNesdPuPjBHoOitij
+         010J4brz2P8aTqBd6+yMM3QatHxh0kZo1oOmAU8jRZ0M8hgVNeF73mXnCW8JE/+4P82m
+         R9qQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=dYCeMOPmLDd6YkOtzFpnQl9uCIfo9ocTM9gPN7zgGLs=;
+        b=YC6fEuv8hQgsxL5mbKztMb2innT7OnhnNF4HqcD5xTW+u9yly7Cmlf+uSa3mzyybgK
+         m8pu3VQn1Cxdl/Q5mbR97v226SLQHsfYT8KXDQGnj0HjrJ1wfj44AonMdt3eIxxckHJq
+         C68JCzlAgSeflTxVijmfeH3+/tbiw8Lm3LFXmaD1a6XLeI4jalGzCwh9/KPErjwyFHJT
+         LJCv2769IMQJ3FAKzte2VyXp9eJn6EqjzYB77EamhkNrgSmbssBHY9nvWWC2dr+mqScF
+         szRdu1EqSen8Qo3oNxqlvCl+2TDu/dt04QICs04jCVWKrb/8Q6N8EZ2VtRHJncVTLtaq
+         FJLQ==
+X-Gm-Message-State: AOAM532Kzwo/s220/HRqHhhwt1ddR/YYfgy02sHtWfRqJJxT2CCaE3eK
+        BQAoVn7QRYCFqgVxJDpj+5ZRtJomzjw=
+X-Google-Smtp-Source: ABdhPJxfVjfn28q5t97TdXNmIK+RNFjKEXIoVX+Bw+Pu1pBF7C+yZ6DON9DioM1xmYHgdH2FopVzAw==
+X-Received: by 2002:a2e:9818:: with SMTP id a24mr13554159ljj.280.1593652857102;
+        Wed, 01 Jul 2020 18:20:57 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
+        by smtp.googlemail.com with ESMTPSA id d18sm2380862lja.116.2020.07.01.18.20.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Jul 2020 18:20:56 -0700 (PDT)
+Subject: Re: [PATCH v4 11/37] PM / devfreq: tegra30: Silence deferred probe
+ error
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         Georgi Djakov <georgi.djakov@linaro.org>,
@@ -65,106 +65,73 @@ Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
         linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <1d11b08f-eed5-ece1-462d-b18151e65777@samsung.com>
-Date:   Thu, 2 Jul 2020 10:12:31 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
-MIME-Version: 1.0
-In-Reply-To: <20200609131404.17523-16-digetx@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrAJsWRmVeSWpSXmKPExsWy7bCmru4dw79xBl2bpCzuz2tltHj36Smr
-        xfwj51gtVn98zGhx5et7NovpezexWbTMWsRicbbpDbvF5V1z2Cw+9x5htOj8MovN4uIpV4vb
-        jSvYLCatncpo0br3CLvFv2sbWSx+7prH4iDo8f5GK7vHzll32T0unfvD7LFpVSebx51re9g8
-        7ncfZ/LobX7H5tG3ZRWjx+dNcgGcUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW
-        5koKeYm5qbZKLj4Bum6ZOUC/KCmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKLAv0
-        ihNzi0vz0vWS83OtDA0MjEyBChOyM9Y8+MVecJiz4tH102wNjJfYuxg5OSQETCR6dkxi62Lk
-        4hAS2MEo8W/yTFYI5xOjxKlZD5kgnG+MEjN3f2SBadk0/TkjRGIvo0Tb651QLe8ZJZa9+MYI
-        UiUskCzx5NgbsHYRgSPMEqs7j4O1MAtcZpQ42/aFDaSKTUBLYv+LG2A2v4CixNUfj8G6eQXs
-        JCZ9fQV2IouAikTXxeVMILaoQJjEyW0tUDWCEidnPgG7iVPAXOLo9T6wemYBcYlbT+YzQdjy
-        EtvfzmEGWSwh0M4pcXDJJ2aIJ1wkpp2/CA0DYYlXx7dA2VISL/vboOxqiZUnj7BBNHcwSmzZ
-        f4EVImEssX/pZKANHEAbNCXW79KHCCtK7Pw9lxFiMZ/Eu689rCAlEgK8Eh1tQhAlyhKXH9xl
-        grAlJRa3d7JNYFSaheSdWUhemIXkhVkIyxYwsqxiFEstKM5NTy02LDBEjvBNjOCkrmW6g3Hi
-        2w96hxiZOBgPMUpwMCuJ8J42+BUnxJuSWFmVWpQfX1Sak1p8iNEUGMATmaVEk/OBeSWvJN7Q
-        1MjY2NjCxNDM1NBQSZxXXOZCnJBAemJJanZqakFqEUwfEwenVAOTT9sJtSOy7u1nDhS0JEqc
-        KLmut+HYzU/l8pGiZo//TnZ4JXv/fmvMsz+JSyr/CNxakd+5Yp9Gao5jYZDvPPMS0VnxFVG9
-        sTzXTt5amW7WWMabNeP+UfU98f/ThBynblQIskrIWHr1aPaK7b+vST58ctzYnmVpVVeEQ/D9
-        S3oS7ikq9d9VP7oH/P6wo8tIkfn/7ibVv5KPGk8euMUkxpL2suPBVznDXYuiH8/3O2Q0U0ok
-        gK/d10POwdTF8DZTodHDw5bWCwPPStvICYs0u0b0LYw9qcETNFti2S4dX75JDz4r9XYbcgse
-        qDE1nKy7NFO4Jlmk5F+dtNIWO7YlZrv82X+fUZ+SX+4gVrPjhhJLcUaioRZzUXEiAIxS6HNz
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFIsWRmVeSWpSXmKPExsWy7bCSvO5tw79xBnPabSzuz2tltHj36Smr
-        xfwj51gtVn98zGhx5et7NovpezexWbTMWsRicbbpDbvF5V1z2Cw+9x5htOj8MovN4uIpV4vb
-        jSvYLCatncpo0br3CLvFv2sbWSx+7prH4iDo8f5GK7vHzll32T0unfvD7LFpVSebx51re9g8
-        7ncfZ/LobX7H5tG3ZRWjx+dNcgGcUVw2Kak5mWWpRfp2CVwZax78Yi84zFnx6PpptgbGS+xd
-        jJwcEgImEpumP2fsYuTiEBLYzSjx8VwjC0RCUmLaxaPMXYwcQLawxOHDxRA1bxkl5h/ayQpS
-        IyyQLPHk2BsmkISIwDFmiU2nT4M5zAKXGSV2dH5lg2jZxihxZ/c1NpAWNgEtif0vboDZ/AKK
-        Eld/PGYEsXkF7CQmfX0FdhOLgIpE18XlTCC2qECYxM4lj5kgagQlTs58AnYep4C5xNHrfWD1
-        zALqEn/mXWKGsMUlbj2ZzwRhy0tsfzuHeQKj8Cwk7bOQtMxC0jILScsCRpZVjJKpBcW56bnF
-        hgWGeanlesWJucWleel6yfm5mxjB0a2luYNx+6oPeocYmTgYDzFKcDArifCeNvgVJ8SbklhZ
-        lVqUH19UmpNafIhRmoNFSZz3RuHCOCGB9MSS1OzU1ILUIpgsEwenVAOT/HPnzltqCx4ElKSX
-        PWKf/5ifye+k8MX+Uw+sZbfFWUlJqv8RvHL9sXZXt4ZBgML9Z3a/ix5F384ts320NEMk+Kr6
-        5Lt7Pp7vVp97XTtxbbPmNxXj1Ts/81x0S/CfoDn9QNtu56Z/V68cnpu5c6qY7vvNPzN+eE/Y
-        1D+lWpMjJ+ZC1EOz1vd/Zy2IPdhvs0t44myJlUnsHXXHTUtvdc+ZccrFynWW7HP3hj35iybJ
-        ci67JaP6+kf3t+aV0RY/tRxdeavuptS/bZ1iwNr+bJPZJCWFJPfuX5kTrK1W60z1Tb1dz7ml
-        7F9VOtfH4slTX2hkxDk0F+QoLznk0RrLavl2hbgwp/vahLp5sh/75p1TYinOSDTUYi4qTgQA
-        9enaEV0DAAA=
-X-CMS-MailID: 20200702010116epcas1p1e610a393c91c8ceff1bb7ed3c0ce0a42
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200609131710epcas1p218e720c23ae62ecf4a6f6727854d93f0
 References: <20200609131404.17523-1-digetx@gmail.com>
-        <CGME20200609131710epcas1p218e720c23ae62ecf4a6f6727854d93f0@epcas1p2.samsung.com>
-        <20200609131404.17523-16-digetx@gmail.com>
+ <CGME20200609131843epcas1p3a5b06308559ff03ef1b27521f412b656@epcas1p3.samsung.com>
+ <20200609131404.17523-12-digetx@gmail.com>
+ <136b430d-2097-7b2b-d7dd-b438deee8f5d@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <fda8aa80-04f1-af00-7a0d-f9b589cdb37e@gmail.com>
+Date:   Thu, 2 Jul 2020 04:20:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <136b430d-2097-7b2b-d7dd-b438deee8f5d@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/9/20 10:13 PM, Dmitry Osipenko wrote:
-> It's useful to now when something goes wrong instead of failing silently,
-> so let's add error messages to tegra_devfreq_target() to prevent situation
-> where it fails silently.
+02.07.2020 03:59, Chanwoo Choi пишет:
+> Hi,
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/tegra30-devfreq.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> On 6/9/20 10:13 PM, Dmitry Osipenko wrote:
+>> Tegra EMC driver was turned into a regular kernel driver, it also could
+>> be compiled as a loadable kernel module now. Hence EMC clock isn't
+>> guaranteed to be available and clk_get("emc") may return -EPROBE_DEFER and
+>> there is no good reason to spam KMSG with a error about missing EMC clock
+>> in this case, so let's silence the deferred probe error.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/devfreq/tegra30-devfreq.c | 9 ++++++---
+>>  1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>> index e94a27804c20..423dd35c95b3 100644
+>> --- a/drivers/devfreq/tegra30-devfreq.c
+>> +++ b/drivers/devfreq/tegra30-devfreq.c
+>> @@ -801,9 +801,12 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>  	}
+>>  
+>>  	tegra->emc_clock = devm_clk_get(&pdev->dev, "emc");
+>> -	if (IS_ERR(tegra->emc_clock)) {
+>> -		dev_err(&pdev->dev, "Failed to get emc clock\n");
+>> -		return PTR_ERR(tegra->emc_clock);
+>> +	err = PTR_ERR_OR_ZERO(tegra->emc_clock);
+>> +	if (err) {
+>> +		if (err != -EPROBE_DEFER)
+>> +			dev_err(&pdev->dev, "Failed to get emc clock: %d\n",
+>> +				err);
+>> +		return err;
+>>  	}
+>>  
+>>  	err = platform_get_irq(pdev, 0);
+>>
 > 
-> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-> index 13f93c6038ab..a03fb16c5c4c 100644
-> --- a/drivers/devfreq/tegra30-devfreq.c
-> +++ b/drivers/devfreq/tegra30-devfreq.c
-> @@ -641,12 +641,16 @@ static int tegra_devfreq_target(struct device *dev, unsigned long *freq,
->  	dev_pm_opp_put(opp);
->  
->  	err = clk_set_min_rate(tegra->emc_clock, rate * KHZ);
-> -	if (err)
-> +	if (err) {
-> +		dev_err(dev, "Failed to set min rate: %d\n", err);
->  		return err;
-> +	}
->  
->  	err = clk_set_rate(tegra->emc_clock, 0);
-> -	if (err)
-> +	if (err) {
-> +		dev_err(dev, "Failed to set rate: %d\n", err);
->  		goto restore_min_rate;
-> +	}
->  
->  	return 0;
->  
+> As I commented on patch10, I recommend that you add the Tegra EMC driver
+> commit information into patch description and Looks good to me.
 > 
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+Hello, Chanwoo!
 
--- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+This patch11 and patch10 are depending on the patches 4/5 (the Tegra EMC
+driver patches) of *this* series, hence there is no commit information.
+I'm expecting that this whole series will go via tegra tree once all the
+patches will be reviewed and collect all the necessary acks from you,
+ICC and CLK subsystem maintainers.
+
+Please feel free to give yours ack to the patches 10/11 if they are good
+to you :)
