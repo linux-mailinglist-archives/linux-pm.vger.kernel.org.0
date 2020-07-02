@@ -2,154 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C312212732
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 16:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26212212761
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 17:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgGBO6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 10:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729551AbgGBO6d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 10:58:33 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08319C08C5E0
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 07:58:32 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id l17so27188091wmj.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 07:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=x8u1Qd58Jra03vuD/Ujnb8vgjM3oVoZL6nudEwpIjQU=;
-        b=MuVybhw3sv5NBKOe6y2sDqWGb6wf25zluQ+REINq2DD7Z+G0/vL+1PjKXCx7BKu36I
-         rkOhMxsrdH5ggNXyGtUArqqK6FFDtfoucPppNg9Ac+hzT2ib7NgaqP0jqhE6wN/Uu+8z
-         v+G0SlqZQN+IlE68CkVhUzr6RbLF8Keh04beeKuAifk1Z731BvyUs42Io9/Px37GRxeX
-         yncDnRQqK5X92hTB50me7klYSTEYamFN0yXSRdJF0BHVUgiLPDfmTBzIkJZE4CJvAKyL
-         RaMTiVIc2TEWIqPmtRek99oHZherYcLqVesA9MCxFhhjk91a5Rg2NrQso0apj3CruhoK
-         A3Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=x8u1Qd58Jra03vuD/Ujnb8vgjM3oVoZL6nudEwpIjQU=;
-        b=U8QYNjS7GhTRQHr2AxBJBYuOb2oSvEpx96V40DqNTA6VE4C6CMLRUOCoFtC4IxgmL/
-         BQmCMXculQQlVh7DlEKI+ktJ1D7mZgK2L8vLH+gqAdeC9YSorAhmqonRw1wcgfmuqp62
-         ma6XGv42KiJlf7Mg1aAK20RMxsK1twY/RV7QgjSg1e1et6KReCwE9r7lj3Nq4/9waGsG
-         oozjdHWWzzTQTyUZGa5sQj3K38UKkKqF/zAKKiCbVPsCmEZLihoUZo0Kowm1on1fHQ3d
-         /1q/0pZSZMclyUH8G4l3CFM0iaQ8d1NVNw+zQZ9vMG7RfQIz4Tw2LEw1G0Adp5Tj44wE
-         1Ohg==
-X-Gm-Message-State: AOAM5320EyVZj5Szakn9TdYHTbnDRDg8vvmHRAKzvinrL8FgKogirM0I
-        nlv/uzyrQ6ojNQ3tLm4JLq2yRQ==
-X-Google-Smtp-Source: ABdhPJwDLcM1T+80bGDziotECthUV0hMUrJkGQgjNgyDlPfrA+vwPUEsl/LS3IvbqZBTaU5G7yjFLg==
-X-Received: by 2002:a7b:cd07:: with SMTP id f7mr30660667wmj.115.1593701911400;
-        Thu, 02 Jul 2020 07:58:31 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0? ([2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0])
-        by smtp.googlemail.com with ESMTPSA id v24sm13394737wrd.92.2020.07.02.07.58.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2020 07:58:30 -0700 (PDT)
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
- <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
- <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
- <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
- <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
- <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
- <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <134e1e38-02d0-32ed-bd59-cf283a161b35@linaro.org>
-Date:   Thu, 2 Jul 2020 16:58:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1730048AbgGBPJP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 11:09:15 -0400
+Received: from mga06.intel.com ([134.134.136.31]:6021 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730011AbgGBPJN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Jul 2020 11:09:13 -0400
+IronPort-SDR: m2S4Y/NweF2eyc55qSkh0o3bGLw9q5AK8aS/aJGiafZ6tiGlfhgXitQA92iwBqlk+7L//BwG5a
+ jwp68M+zOSPA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9670"; a="208447303"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="208447303"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 08:09:12 -0700
+IronPort-SDR: cxAEvCQFFv4QLnW0TdbWFFJnSl1VP9l7dJfjBTCq/uP8ia1AS2J1YdnEQKIAVpmQG7CnsJdaTU
+ bTbU1IzIEKeg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="313048924"
+Received: from ysandomi-mobl2.ger.corp.intel.com (HELO [10.254.152.79]) ([10.254.152.79])
+  by orsmga008.jf.intel.com with ESMTP; 02 Jul 2020 08:09:08 -0700
+Subject: Re: [Intel-wired-lan] [e1000e] e86e383f28: suspend-stress.fail
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Len Brown <len.brown@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, lkp@lists.01.org,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        kernel test robot <rong.a.chen@intel.com>,
+        "Lifshits, Vitaly" <vitaly.lifshits@intel.com>,
+        mickey.elya@intel.com, "Avivi, Amir" <amir.avivi@intel.com>,
+        "Neftin, Sasha" <sasha.neftin@intel.com>
+References: <20200521052753.GB12456@shao2-debian>
+ <5A1631F8-259E-4897-BE52-0F5DB406E44F@canonical.com>
+ <489156ef4d028d210ec03b7b02413e000fec2eaf.camel@intel.com>
+ <01DBC003-008F-470C-A228-029F34631305@canonical.com>
+ <6d83291fc68d52ecf48a952ac49a98e798b7b8b7.camel@intel.com>
+From:   "Neftin, Sasha" <sasha.neftin@intel.com>
+Message-ID: <a3b1bca5-9270-df74-0c18-b7bcf37062a1@intel.com>
+Date:   Thu, 2 Jul 2020 18:09:07 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <6d83291fc68d52ecf48a952ac49a98e798b7b8b7.camel@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/07/2020 15:53, Andrzej Pietrasiewicz wrote:
-> Hi Daniel,
-> 
-> <snip>
-> 
->>>>>>
->>>>>> I did reproduce:
->>>>>>
->>>>>> v5.8-rc3 + series => imx6 hang at boot time
->>>>>> v5.8-rc3 => imx6 boots correctly
+On 7/2/2020 17:10, Zhang Rui wrote:
+> On Thu, 2020-07-02 at 21:12 +0800, Kai-Heng Feng wrote:
+>>> On Jul 2, 2020, at 20:20, Zhang Rui <rui.zhang@intel.com> wrote:
+>>>
+>>> Hi, all,
+>>>
+>>> This patch has been shipped in 5.8-rc1 with its upstream commit id
+>>> 0c80cdbf3320. And we observed big drop of suspend quality.
+>>>
+>>> Previously, we have run into this "e1000e Hardware Error" issue,
+>>> occasionally. But now, on a NUC I have, system suspend-to-mem fails
+>>> within 10 suspend  cycles in most cases, but won't work again until
+>>> a reboot.
+>>> https://bugzilla.kernel.org/show_bug.cgi?id=205015
+>>>
+>>> IMO, this is a regression, and we need to find a way to fix it.
 >>
->> So finally I succeeded to reproduce it on my imx7 locally. The sensor
->> was failing to initialize for another reason related to the legacy
->> cooling device, this is why it is not appearing on the imx7.
->>
->> I can now git-bisect :)
+>> Should be fixed by
+>> https://lore.kernel.org/lkml/20200618065453.12140-1-aaron.ma@canonical.com/
 >>
 > 
-> That would be very kind of you, thank you!
+> Great, I will give it a try and update later.
+Rui,
+Does ME/CSME AMT run on your machine?
+Thanks,
+sasha
+> 
+> thanks,
+> rui
+> 
+>> Kai-Heng
+>>
+>>>
+>>> thanks,
+>>> rui
+>>>
+>>>
+>>> On Sat, 2020-05-23 at 20:20 +0800, Kai-Heng Feng wrote:
+>>>> [+Cc intel-wired-lan]
+>>>>
+>>>>> On May 21, 2020, at 13:27, kernel test robot <
+>>>>> rong.a.chen@intel.com
+>>>>>> wrote:
+>>>>>
+>>>>> Greeting,
+>>>>>
+>>>>> FYI, we noticed the following commit (built with gcc-7):
+>>>>>
+>>>>> commit: e86e383f2854234129c66e90f84ac2c74b2b1828 ("e1000e: Warn
+>>>>> if
+>>>>> disabling ULP failed")
+>>>>>
+>>>
+>>>
+> https://git.kernel.org/cgit/linux/kernel/git/jkirsher/next-queue.git
+>>>>> dev-queue
+>>>>
+>>>> kern  :warn  : [  240.884667] e1000e 0000:00:19.0 eth0: Failed to
+>>>> disable ULP
+>>>> kern  :info  : [  241.896122] asix 2-3:1.0 eth1: link up,
+>>>> 100Mbps,
+>>>> full-duplex, lpa 0xC1E1
+>>>> kern  :err   : [  242.269348] e1000e 0000:00:19.0 eth0: Hardware
+>>>> Error
+>>>> kern  :info  : [  242.772702] e1000e 0000:00:19.0:
+>>>> pci_pm_resume+0x0/0x80 returned 0 after 2985422 usecs
+>>>>
+>>>> So the patch does catch issues previously ignored.
+>>>>
+>>>> I wonder what's the next move, maybe increase the ULP timeout
+>>>> again?
+>>>>
+>>>> Kai-Heng
+>>>>
+>>>>> in testcase: suspend-stress
+>>>>> with following parameters:
+>>>>>
+>>>>> 	mode: mem
+>>>>> 	iterations: 10
+>>>>>
+>>>>>
+>>>>>
+>>>>> on test machine: 4 threads Broadwell with 8G memory
+>>>>>
+>>>>> caused below changes (please refer to attached dmesg/kmsg for
+>>>>> entire log/backtrace):
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>> If you fix the issue, kindly add following tag
+>>>>> Reported-by: kernel test robot <rong.a.chen@intel.com>
+>>>>>
+>>>>> SUSPEND RESUME TEST STARTED
+>>>>> Suspend to mem 1/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-1/10
+>>>>> -O /dev/null
+>>>>> Done
+>>>>> Sleep for 10 seconds
+>>>>> Suspend to mem 2/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-2/10
+>>>>> -O /dev/null
+>>>>> Done
+>>>>> Sleep for 10 seconds
+>>>>> Suspend to mem 3/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-3/10
+>>>>> -O /dev/null
+>>>>> Done
+>>>>> Sleep for 10 seconds
+>>>>> Suspend to mem 4/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-4/10
+>>>>> -O /dev/null
+>>>>> Done
+>>>>> Sleep for 10 seconds
+>>>>> Suspend to mem 5/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-5/10
+>>>>> -O /dev/null
+>>>>> Done
+>>>>> Sleep for 10 seconds
+>>>>> Suspend to mem 6/10:
+>>>>> /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-
+>>>>> 8
+>>>>>
+> http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-6/10
+>>>>> -O /dev/null
+>>>>> Failed
+>>>>>
+>>>>>
+>>>>>
+>>>>> To reproduce:
+>>>>>
+>>>>>        git clone https://github.com/intel/lkp-tests.git
+>>>>>        cd lkp-tests
+>>>>>        bin/lkp install job.yaml  # job file is attached in this
+>>>>> email
+>>>>>        bin/lkp run     job.yaml
+>>>>>
+>>>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Rong Chen
+>>>>>
+>>>>> <config-5.7.0-rc4-01618-ge86e383f28542><job-
+>>>>> script.txt><kmsg.xz><suspend-stress.txt><job.yaml>
+>>>>
+>>>>
+>>
+>>
+> 
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+> 
 
-Author: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Date:   Mon Jun 29 14:29:21 2020 +0200
-
-    thermal: Use mode helpers in drivers
-
-    Use thermal_zone_device_{en|dis}able() and
-thermal_zone_device_is_enabled().
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
