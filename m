@@ -2,97 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 038DA212287
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 13:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E36212339
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 14:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728805AbgGBLqU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 07:46:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728009AbgGBLqU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 07:46:20 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677C2C08C5DC
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 04:46:20 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id l6so9252195pjq.1
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 04:46:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Y66BdGLXe7ElT19YUw05TZ+XtmB7S3su8JlgwqLpqn4=;
-        b=eJ7T25fEPgZk9QNXnChTO+a5BkV6i/A6p7o+VidSoCqAklisjQtAD4HFTkojx2NsHs
-         zH/yhGxuzpbyJGcybXmCB6c07VoM05DdC9mHPSGi4pNm9vl0ncRktw3uRz9TxcToUtsJ
-         rleBxoLp40KRUt0qmAT6+uKVkjX2V5cJx4Maxle/92nZhajSJaBWaFgjw0qnjFd1f1tY
-         QC0uTfknbnIcruC6M1Z+GSVa7fYFkl7y+sbBC6KGIbDCQASt8yE93zURNFOmo6xgzqK+
-         loRrMu95ccMw4zU3CYgsrVXy01UIiOrOkr+xt1ObNcvg7kJL2/vaNAoiuap5VOUPb2dA
-         n8dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Y66BdGLXe7ElT19YUw05TZ+XtmB7S3su8JlgwqLpqn4=;
-        b=pcXMfvL1SFt2s9r6WKwfohvZ5e6mvsT1e/5h2aQhyBbuBmdyABiWkuwRKR2V3YtN7c
-         a+05LUf7UeRF+B9oMG7EnvP9HPDALtvjfdnsQ7LttzBNVFPJ0pWDmjutlJTYE2ABJ5iR
-         79XkV7JNEVELpitiJOatpFzsCvEB4P94mhRNsLD+cRhGr0IU2nSTtzxEaHj8ybvFUDGt
-         sPVBnBNxbTxVlLOV1abpH4I0AbJ+F4DHPXtoeKQbqxchi8XZfj87pjRLKTeFeF8kab3+
-         TxkzVvMjgBfjeqeQb8Or8ylv7yC4souPKZTIWkR6/pe0Rol24gP/5Zay49pqeZMVUuEJ
-         vsYA==
-X-Gm-Message-State: AOAM530axUfcwsV3guhpLg+zEdonel4xxdOHDghe422VBypBnhlxpv3n
-        Sh9ZXkpMIkPLX0HKScZktTRz+Q==
-X-Google-Smtp-Source: ABdhPJxGOFQpu5yGoJXE8yveWRzYwJ4ls6rFlsnyYT4JuklF+wC0ozy8mFOMNpmJav9d5Mbmcq/Hlg==
-X-Received: by 2002:a17:90a:8c01:: with SMTP id a1mr4912838pjo.97.1593690378893;
-        Thu, 02 Jul 2020 04:46:18 -0700 (PDT)
-Received: from localhost ([122.172.40.201])
-        by smtp.gmail.com with ESMTPSA id c207sm8856436pfb.159.2020.07.02.04.46.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Jul 2020 04:46:18 -0700 (PDT)
-Date:   Thu, 2 Jul 2020 17:16:16 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, catalin.marinas@arm.com, sudeep.holla@arm.com,
-        will@kernel.org, linux@armlinux.org.uk, valentin.schneider@arm.com,
-        mingo@redhat.com, peterz@infradead.org, dietmar.eggemann@arm.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Liviu Dudau <liviu.dudau@arm.com>
-Subject: Re: [PATCH 4/8] cpufreq,vexpress-spc: fix Frequency Invariance (FI)
- for bL switching
-Message-ID: <20200702114616.kgzxj4ffzgdn2g24@vireshk-i7>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-5-ionela.voinescu@arm.com>
- <20200701095414.2wjcnyhndgcedk2q@vireshk-i7>
- <20200701140735.GB32736@arm.com>
- <20200702030551.p4cevaahgfvpum4o@vireshk-i7>
- <20200702114123.GA28120@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200702114123.GA28120@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1728808AbgGBMUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 08:20:54 -0400
+Received: from mga11.intel.com ([192.55.52.93]:36203 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728778AbgGBMUx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 2 Jul 2020 08:20:53 -0400
+IronPort-SDR: tPsGzfZ4A/FD84XrPy+VpcslnPczcEKnr9SK4COXeiDzQ2ryliPHefObH1cSiX6N2TDffvz1XR
+ QNwTqS4pMKYw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9669"; a="145024851"
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="145024851"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jul 2020 05:20:53 -0700
+IronPort-SDR: QqlcAa0+M5a82/P12ACfd3/haqaeygUnwDtYMq1ZVOpmUhKgPFSiEgT0GLBqJSJyiZ0i7SkBGz
+ Afh/P62hTlgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,304,1589266800"; 
+   d="scan'208";a="481983201"
+Received: from gxu8-mobl.amr.corp.intel.com ([10.249.168.57])
+  by fmsmga005.fm.intel.com with ESMTP; 02 Jul 2020 05:20:51 -0700
+Message-ID: <489156ef4d028d210ec03b7b02413e000fec2eaf.camel@intel.com>
+Subject: Re: [e1000e] e86e383f28: suspend-stress.fail
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>
+Cc:     kernel test robot <rong.a.chen@intel.com>, lkp@lists.01.org,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Thu, 02 Jul 2020 20:20:50 +0800
+In-Reply-To: <5A1631F8-259E-4897-BE52-0F5DB406E44F@canonical.com>
+References: <20200521052753.GB12456@shao2-debian>
+         <5A1631F8-259E-4897-BE52-0F5DB406E44F@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-07-20, 12:41, Ionela Voinescu wrote:
-> It was enabled until now, but it was partially broken. If you look over
-> the driver you'll see arch_set_freq_scale() being called for both
-> is_bL_switching_enabled() and for when it's not [1].
+Hi, all,
 
-I missed that completely, it was indeed added here:
+This patch has been shipped in 5.8-rc1 with its upstream commit id
+0c80cdbf3320. And we observed big drop of suspend quality.
 
-commit 518accf20629 ("cpufreq: arm_big_little: invoke frequency-invariance setter function")
+Previously, we have run into this "e1000e Hardware Error" issue,
+occasionally. But now, on a NUC I have, system suspend-to-mem fails within 10 suspend  cycles in most cases, but won't work again until a reboot.
+https://bugzilla.kernel.org/show_bug.cgi?id=205015
 
-and so this patch or a version of it is required here.
+IMO, this is a regression, and we need to find a way to fix it.
 
-> If we just don't want frequency invariance for
-> is_bL_switching_enabled(), I can just guard the setting of the flag
-> suggested by Rafael at 1/8 by !CONFIG_BL_SWITCHER.
+thanks,
+rui
+
+
+On Sat, 2020-05-23 at 20:20 +0800, Kai-Heng Feng wrote:
+> [+Cc intel-wired-lan]
 > 
-> I'll proceed to do that and remove the fix at 4/8.
+> > On May 21, 2020, at 13:27, kernel test robot <rong.a.chen@intel.com
+> > > wrote:
+> > 
+> > Greeting,
+> > 
+> > FYI, we noticed the following commit (built with gcc-7):
+> > 
+> > commit: e86e383f2854234129c66e90f84ac2c74b2b1828 ("e1000e: Warn if
+> > disabling ULP failed")
+> > 
+https://git.kernel.org/cgit/linux/kernel/git/jkirsher/next-queue.git
+> >  dev-queue
+> 
+> kern  :warn  : [  240.884667] e1000e 0000:00:19.0 eth0: Failed to
+> disable ULP
+> kern  :info  : [  241.896122] asix 2-3:1.0 eth1: link up, 100Mbps,
+> full-duplex, lpa 0xC1E1
+> kern  :err   : [  242.269348] e1000e 0000:00:19.0 eth0: Hardware
+> Error
+> kern  :info  : [  242.772702] e1000e 0000:00:19.0:
+> pci_pm_resume+0x0/0x80 returned 0 after 2985422 usecs
+> 
+> So the patch does catch issues previously ignored.
+> 
+> I wonder what's the next move, maybe increase the ULP timeout again?
+> 
+> Kai-Heng
+> 
+> > in testcase: suspend-stress
+> > with following parameters:
+> > 
+> > 	mode: mem
+> > 	iterations: 10
+> > 
+> > 
+> > 
+> > on test machine: 4 threads Broadwell with 8G memory
+> > 
+> > caused below changes (please refer to attached dmesg/kmsg for
+> > entire log/backtrace):
+> > 
+> > 
+> > 
+> > 
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kernel test robot <rong.a.chen@intel.com>
+> > 
+> > SUSPEND RESUME TEST STARTED
+> > Suspend to mem 1/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-1/10
+> >  -O /dev/null
+> > Done
+> > Sleep for 10 seconds
+> > Suspend to mem 2/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-2/10
+> >  -O /dev/null
+> > Done
+> > Sleep for 10 seconds
+> > Suspend to mem 3/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-3/10
+> >  -O /dev/null
+> > Done
+> > Sleep for 10 seconds
+> > Suspend to mem 4/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-4/10
+> >  -O /dev/null
+> > Done
+> > Sleep for 10 seconds
+> > Suspend to mem 5/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-5/10
+> >  -O /dev/null
+> > Done
+> > Sleep for 10 seconds
+> > Suspend to mem 6/10:
+> > /usr/bin/wget -q --timeout=1800 --tries=1 --local-encoding=UTF-8 
+> > http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-6/10
+> >  -O /dev/null
+> > Failed
+> > 
+> > 
+> > 
+> > To reproduce:
+> > 
+> >        git clone https://github.com/intel/lkp-tests.git
+> >        cd lkp-tests
+> >        bin/lkp install job.yaml  # job file is attached in this
+> > email
+> >        bin/lkp run     job.yaml
+> > 
+> > 
+> > 
+> > Thanks,
+> > Rong Chen
+> > 
+> > <config-5.7.0-rc4-01618-ge86e383f28542><job-
+> > script.txt><kmsg.xz><suspend-stress.txt><job.yaml>
+> 
+> 
 
-I think it would be better to do that and avoid any complicate code
-unnecessarily here.
-
--- 
-viresh
