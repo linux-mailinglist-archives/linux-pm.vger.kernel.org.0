@@ -2,166 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEB1212B98
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 19:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A0DD212C1A
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 20:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgGBRwZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 13:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgGBRwY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 13:52:24 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5149CC08C5DE
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 10:52:24 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 22so28079023wmg.1
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 10:52:24 -0700 (PDT)
+        id S1727993AbgGBSWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 14:22:02 -0400
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:3113 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbgGBSV7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 14:21:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=oglYmDMJJsMPIXYV1ITcnNL4FWv5Lg95ZCqCfgcjHUs=;
-        b=eCKvFL3ymp9ODmh1kib4C/AcPrCHfUe4eQkI84tWMNstC588Mcs/UzyYV+30IgEPIB
-         lfn4BGs06fAPfloAK0p40cJ3BQEuYzsfHY7d9o5Wr4ZrXyQrqXhtnG6F3jFX42w8e/2m
-         weKvXoukAneezHhMB60mGihkb8pcI/kk8sZmWoEft2bkOnM2yQyw4RX50kJPE3J+9MnN
-         fQinPrGJq2HYROL7Dl9fLIK+uTW325NDPRzeAtAAM2vhot8J8DATGO6hnDZGucHe9Jjs
-         qXs+mG8rCVEuhGXBHfDtewoYJIa2KlLkJMQg70p6vJf/FdlJAKW6C6ggeDUiANRQMAFK
-         P1Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=oglYmDMJJsMPIXYV1ITcnNL4FWv5Lg95ZCqCfgcjHUs=;
-        b=cDjjyd1kod7bGddqobAOj8kmB2WByBIO5G32yhu8G+KsigAqGiU+HeSHMxFgR5gIB4
-         Nek/EeFUIccnCFBm/J+4h9So//+EzMFV4k0i7ihyLwi0NqT5sd+eNrkUUZKT7s86yFOg
-         fHMdbLCp4oQo2Z3plGpollEJ/vkhs9oGG5yz4EKKp5gYUKMZyZQu0GWLzB2Kk/e+bqig
-         f/N3ipQxZAR5UYYmLkYRRwub2QSSm9M5prHWD81khFIpeLXfKgOgPdNaVE2GaQcsG+jR
-         1sCL4uiqBQOIC4taoerVjAiwCLdHVA5uTl8nJ/VDOV3b1psXkhIjBGNTwHzOO5Tzd67L
-         KMNA==
-X-Gm-Message-State: AOAM533FLJW0k6Lhwsbw4tAwfZCQtD/kUrm/X5VVW4tFqgXHW3vU0dSV
-        o9Cyp2jTM1N2zzUfwB0j/goNvA==
-X-Google-Smtp-Source: ABdhPJwGnT2w1T0cKggQNb65VkNrkBamKBA/sNFXDWMPWvMyn5BHS1CuhDAFIDm0ZukJhYYRAkgr9A==
-X-Received: by 2002:a7b:c041:: with SMTP id u1mr34629911wmc.56.1593712342780;
-        Thu, 02 Jul 2020 10:52:22 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0? ([2a01:e34:ed2f:f020:c88a:7b2b:a4a1:46d0])
-        by smtp.googlemail.com with ESMTPSA id h2sm11232487wrw.62.2020.07.02.10.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jul 2020 10:52:22 -0700 (PDT)
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
- <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
- <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
- <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
- <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
- <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
- <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
- <8aeb4f51-1813-63c1-165b-06640af5968f@linaro.org>
- <685ef627-e377-bbf1-da11-7f7556ca2dd7@collabora.com>
- <d41bf28f-ee91-6946-2334-f11ec81f96fe@linaro.org>
-Message-ID: <b773a49d-c26e-9e20-2a5e-647eb771d617@linaro.org>
-Date:   Thu, 2 Jul 2020 19:52:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1593714118; x=1625250118;
+  h=date:from:to:subject:message-id:mime-version;
+  bh=cs2EUulVYmJiGWKGk3tjkuDldhZPB72HbPIIjHU97dk=;
+  b=Im/bqyFMVIZ9ZEysI5y0Exifv8AoyVt0F4JvyFQ6wg6oYkamRQOYZl2r
+   KHg786tY44AsAQso/39AmMSrWgJIzcbau7KHMpmTXX8T6FjunccNyfeFG
+   Rzp111s4wYKSnb23u/8rZZfVov9Hqi8ynOMey40eR9EyAHHltz77uzJNQ
+   w=;
+IronPort-SDR: QkQyYmP3nGLpAiOJsMdMVFBarx/mgZsiYn5B7jwFEKwaWLU7F40e7pi00Eb1XlqW0VHybjgWcA
+ d/KKpJe7YxXg==
+X-IronPort-AV: E=Sophos;i="5.75,305,1589241600"; 
+   d="scan'208";a="56964454"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 02 Jul 2020 18:21:50 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
+        by email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com (Postfix) with ESMTPS id BDE57C05B9;
+        Thu,  2 Jul 2020 18:21:43 +0000 (UTC)
+Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 2 Jul 2020 18:21:25 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
+ EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 2 Jul 2020 18:21:25 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 2 Jul 2020 18:21:25 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 896F240844; Thu,  2 Jul 2020 18:21:24 +0000 (UTC)
+Date:   Thu, 2 Jul 2020 18:21:24 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
+        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
+        <anchalag@amazon.com>, <xen-devel@lists.xenproject.org>,
+        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@kernel.crashing.org>
+Subject: [PATCH v2 00/11] Fix PM hibernation in Xen guests
+Message-ID: <cover.1593665947.git.anchalag@amazon.com>
 MIME-Version: 1.0
-In-Reply-To: <d41bf28f-ee91-6946-2334-f11ec81f96fe@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/07/2020 19:49, Daniel Lezcano wrote:
+Hello,
+This series fixes PM hibernation for hvm guests running on xen hypervisor.
+The running guest could now be hibernated and resumed successfully at a
+later time. The fixes for PM hibernation are added to block and
+network device drivers i.e xen-blkfront and xen-netfront. Any other driver
+that needs to add S4 support if not already, can follow same method of
+introducing freeze/thaw/restore callbacks.
+The patches had been tested against upstream kernel and xen4.11. Large
+scale testing is also done on Xen based Amazon EC2 instances. All this testing
+involved running memory exhausting workload in the background.
 
-[ ... ]
+Doing guest hibernation does not involve any support from hypervisor and
+this way guest has complete control over its state. Infrastructure
+restrictions for saving up guest state can be overcome by guest initiated
+hibernation.
 
->> Thanks!
->>
->> That confirms your suspicions.
->>
->> So the reason is that ->get_temp() is called while the mutex is held and
->> thermal_zone_device_is_enabled() wants to take the same mutex.
-> 
-> Yes, that's correct.
-> 
->> Is adding a comment to thermal_zone_device_is_enabled() to never call
->> it while the mutex is held and adding another version of it which does
->> not take the mutex ok?
-> 
-> The thermal_zone_device_is_enabled() is only used in two places, acpi
-> and this imx driver, and given:
-> 
-> 1. as soon as the mutex is released, there is no guarantee the thermal
-> zone won't be changed right after, the lock is pointless, thus the
-> information also.
-> 
-> 2. from a design point of view, I don't see why a driver should know if
-> a thermal zone is disabled or not
-> 
-> It would make sense to end with this function and do not give the
-> different drivers an opportunity to access this information.
-> 
-> Why not add change_mode for the acpi in order to enable or disable the
-> events and for imx_thermal use irq_enabled flag instead of the thermal
-> zone mode? Moreover it is very unclear why this function is needed in
-> imx_get_temp(), and I suspect we should be able to get rid of it.
+These patches were send out as RFC before and all the feedback had been
+incorporated in the patches. The last v1 could be found here:
 
-If you agree with that you can send a patch on top of your series so I
-can test it fixes the imx platform.
+[v1]: https://lkml.org/lkml/2020/5/19/1312
+All comments and feedback from v1 had been incorporated in v2 series.
+Any comments/suggestions are welcome
 
+Known issues:
+1.KASLR causes intermittent hibernation failures. VM fails to resumes and
+has to be restarted. I will investigate this issue separately and shouldn't
+be a blocker for this patch series.
+2. During hibernation, I observed sometimes that freezing of tasks fails due
+to busy XFS workqueuei[xfs-cil/xfs-sync]. This is also intermittent may be 1
+out of 200 runs and hibernation is aborted in this case. Re-trying hibernation
+may work. Also, this is a known issue with hibernation and some
+filesystems like XFS has been discussed by the community for years with not an
+effectve resolution at this point.
+
+Testing How to:
+---------------
+1. Setup xen hypervisor on a physical machine[ I used Ubuntu 16.04 +upstream
+xen-4.11]
+2. Bring up a HVM guest w/t kernel compiled with hibernation patches
+[I used ubuntu18.04 netboot bionic images and also Amazon Linux on-prem images].
+3. Create a swap file size=RAM size
+4. Update grub parameters and reboot
+5. Trigger pm-hibernation from within the VM
+
+Example:
+Set up a file-backed swap space. Swap file size>=Total memory on the system
+sudo dd if=/dev/zero of=/swap bs=$(( 1024 * 1024 )) count=4096 # 4096MiB
+sudo chmod 600 /swap
+sudo mkswap /swap
+sudo swapon /swap
+
+Update resume device/resume offset in grub if using swap file:
+resume=/dev/xvda1 resume_offset=200704 no_console_suspend=1
+
+Execute:
+--------
+sudo pm-hibernate
+OR
+echo disk > /sys/power/state && echo reboot > /sys/power/disk
+
+Compute resume offset code:
+"
+#!/usr/bin/env python
+import sys
+import array
+import fcntl
+
+#swap file
+f = open(sys.argv[1], 'r')
+buf = array.array('L', [0])
+
+#FIBMAP
+ret = fcntl.ioctl(f.fileno(), 0x01, buf)
+print buf[0]
+"
+
+
+Aleksei Besogonov (1):
+  PM / hibernate: update the resume offset on SNAPSHOT_SET_SWAP_AREA
+
+Anchal Agarwal (4):
+  x86/xen: Introduce new function to map HYPERVISOR_shared_info on
+    Resume
+  x86/xen: save and restore steal clock during PM hibernation
+  xen: Introduce wrapper for save/restore sched clock offset
+  xen: Update sched clock offset to avoid system instability in
+    hibernation
+
+Munehisa Kamata (5):
+  xen/manage: keep track of the on-going suspend mode
+  xenbus: add freeze/thaw/restore callbacks support
+  x86/xen: add system core suspend and resume callbacks
+  xen-blkfront: add callbacks for PM suspend and hibernation
+  xen-netfront: add callbacks for PM suspend and hibernation
+
+Thomas Gleixner (1):
+  genirq: Shutdown irq chips in suspend/resume during hibernation
+
+ arch/x86/xen/enlighten_hvm.c      |   7 ++
+ arch/x86/xen/suspend.c            |  53 +++++++++++++
+ arch/x86/xen/time.c               |  15 +++-
+ arch/x86/xen/xen-ops.h            |   3 +
+ drivers/block/xen-blkfront.c      | 122 +++++++++++++++++++++++++++++-
+ drivers/net/xen-netfront.c        |  98 +++++++++++++++++++++++-
+ drivers/xen/events/events_base.c  |   1 +
+ drivers/xen/manage.c              |  60 +++++++++++++++
+ drivers/xen/xenbus/xenbus_probe.c |  96 +++++++++++++++++++----
+ include/linux/irq.h               |   2 +
+ include/xen/xen-ops.h             |   3 +
+ include/xen/xenbus.h              |   3 +
+ kernel/irq/chip.c                 |   2 +-
+ kernel/irq/internals.h            |   1 +
+ kernel/irq/pm.c                   |  31 +++++---
+ kernel/power/user.c               |   6 +-
+ 16 files changed, 470 insertions(+), 33 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.20.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
