@@ -2,102 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD842116BC
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 01:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7848211711
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 02:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726764AbgGAXlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 19:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
+        id S1727850AbgGBAOF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 20:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726438AbgGAXlH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 19:41:07 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DF3C08C5C1;
-        Wed,  1 Jul 2020 16:41:07 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id s16so9296602lfp.12;
-        Wed, 01 Jul 2020 16:41:07 -0700 (PDT)
+        with ESMTP id S1726486AbgGBAOE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 20:14:04 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60272C08C5C1;
+        Wed,  1 Jul 2020 17:14:04 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id y13so14780867lfe.9;
+        Wed, 01 Jul 2020 17:14:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=RRbpFTrpv2CAyc73C39i4Eh5fUq8y8ua8EeETi+isng=;
-        b=rIOsGHd2+UGL+iszD1JJDQkzBEEDzUF0t4Ww/jguiyg3EmeFGYUlODeIQcGLWkMBU6
-         F4c6vdB9WBAxG8nc5C4n2l8rhBxP47vpZ7xH5yBRJlLx1ed0vD5uB+h7jUGmprpZ2Vi6
-         eN20HFNMgQfmODS7LwYGJd5KtpGUElA2mAtmWVQACQWUK9B2e7QuYRcr6/RgyuSRvDFh
-         L2E/BDeJBHN/0Mt18JmoeStrgbMHA+5aaYWbGSOoHE53KYOOlhavE9GqfyT3SjHgIiOj
-         Jhk/q6w18OQxpkxz6LDXO6P7kox7XYZc8KAsr9iZgqUi7+lcR3uWnbt6HzOpJaIZRKBl
-         muPg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kwC5VoRk/JW1ACEw8wj5QHRKmXQhWpl/5jY/IQUHYZI=;
+        b=DZ6yKn7ZCd1bwWIDWqUrnKYfMobOFcvEmmW9+q90u9NzwqYvKEWP/nQT8tpG5/0HtN
+         CDqCSk4KdPrR0KCaEqIKw3K8aEC5OgjlI9pKw+V4JDEzF/Jvof2qAwByZwklLZ27c5vA
+         42rpsl1OfrjFeoHaETeutJz5fkIc6cImUkVjr8WXONpiYuZOcZEQrcD9p3bxCeLI6j0u
+         2mDln3azpxjBIi4KYNmZD0X1n5zJRJ6C7U402Jn+g6MSCzAO+ktOSLeGNoreXpQdl/A7
+         HP5lotlqjpG2O21hYrsTBKXdi0etb6N44FyKOUQjqhEzW/1Msef/VHRr29DBqfI4PVH+
+         6wJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=RRbpFTrpv2CAyc73C39i4Eh5fUq8y8ua8EeETi+isng=;
-        b=qrS4rK2+gpZuNqvp/pB8zfGOsJw9pPyDpQHB9xSOz/hjEUjfxz8d+81ALBw0SmzvE3
-         bTuvD54FCMLLuHyEJN5oAYoVhab0toJAPPjstjExfj9sQiTW8JYGCqI2ZtQCjpqDJRSM
-         +Si1vV5wMdGLcum3C9ODcz/QRNbOi7I5W3qL8TWYDOfvgSjlQ1jIzGoVHeFqYJj+K/b3
-         zSYuWa5MKULTewavTHRLipqgWRO3bQCnyOH7OAtNzs/KuYoexYJacUYDXGO2wv76UuEU
-         bOKBrb1DVwTm3GWW+NDHY8Au4loj2rScHDVyf1/6HhkgkPPayXq/Z6vJULhMu4t95qiB
-         QD6w==
-X-Gm-Message-State: AOAM533UCAuGqNMTWmV0WVb1R+oxD3X9Ij5wy6Esl4AyHSDTrjihoXVn
-        zQkcEgeMs1Wav/FBT8fEhF9gGxjIDJc=
-X-Google-Smtp-Source: ABdhPJz6pai9jEk4qOJM3yHcyoJZJ3X5EJNiH6TMgrwAtCtMNVi1xc0abdH95NFEfjbBLreScuwj3A==
-X-Received: by 2002:a19:23cc:: with SMTP id j195mr16661019lfj.210.1593646865567;
-        Wed, 01 Jul 2020 16:41:05 -0700 (PDT)
-Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id l5sm2864306lfp.9.2020.07.01.16.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Jul 2020 16:41:04 -0700 (PDT)
-Subject: Re: [PATCH v4 27/37] interconnect: Relax requirement in
- of_icc_get_from_provider()
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>,
-        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20200609131404.17523-1-digetx@gmail.com>
- <20200609131404.17523-28-digetx@gmail.com>
- <3b410ea3-26d3-6f7a-213c-40dbabbde8d1@linaro.org>
+        bh=kwC5VoRk/JW1ACEw8wj5QHRKmXQhWpl/5jY/IQUHYZI=;
+        b=h9Hvv0moyqs1qiZCwp4vtZ2Fx9wuZGdP3uNlYw5yN1HRSkNKS6ZQVXs4uB0iiQmP5+
+         Apuj7uFHemkJo7ojKMlL3llOAUpQDg2BU30cNwFBspY2aEG/19bnkqFsCs0pJmzLfwba
+         u9Rsemdm17TFR/s+DjolgrCn07jXYkNbRrbfo3yWDl80DfJw6l77wMTIiZ3UHR1cxQiU
+         X7mGdLVhaax8llsbKr+rVjJB2q3c8td7n0GJA0k9TMdvFm2mqUItZ96J8ioL1ktZ24cQ
+         eALmSldras+ahN6TpUSO6v1W7UaDYNyuI6l8FbbjZH9p4jNJd87LA0rhVAy9uommRnp7
+         TR8g==
+X-Gm-Message-State: AOAM531Ruo8EY6JFBnQr3hpXIsO/CZA1MlixyppmwqKBP72M65/Cf6zm
+        xSJU34vB5RNfSZdgvckz8SM=
+X-Google-Smtp-Source: ABdhPJzLCJL/RhpcJjPMyewDvWkytr2F2yYNIDdjXhHliV+t4O2mgzPqCSlkb2uI8/ku8ybXa0RGbQ==
+X-Received: by 2002:a19:a8c:: with SMTP id 134mr16897823lfk.128.1593648842804;
+        Wed, 01 Jul 2020 17:14:02 -0700 (PDT)
+Received: from localhost.localdomain (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
+        by smtp.gmail.com with ESMTPSA id x22sm2339948lji.133.2020.07.01.17.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2020 17:14:01 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <95f476ce-081d-a222-2b98-96e6f8217c30@gmail.com>
-Date:   Thu, 2 Jul 2020 02:41:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v2] cpuidle: tegra: Correctly handle result of arm_cpuidle_simple_enter()
+Date:   Thu,  2 Jul 2020 03:13:54 +0300
+Message-Id: <20200702001354.27056-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.26.0
 MIME-Version: 1.0
-In-Reply-To: <3b410ea3-26d3-6f7a-213c-40dbabbde8d1@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-01.07.2020 20:10, Georgi Djakov пишет:
-> Hi Dmitry,
-> 
-> On 6/9/20 16:13, Dmitry Osipenko wrote:
->> From: Artur Świgoń <a.swigon@samsung.com>
->>
->> This patch relaxes the condition in of_icc_get_from_provider() so that it
->> is no longer required to set #interconnect-cells = <1> in the DT. In case
->> of the devfreq driver for exynos-bus, #interconnect-cells is always zero.
->>
->> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
->> [digetx@gmail.com: added cells_num checking for of_icc_xlate_onecell()]
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> 
-> I have already applied the original patch by Artur, so please make the cells_num
-> check a separate patch.
+The enter() callback of CPUIDLE drivers returns index of the entered idle
+state on success or a negative value on failure. The negative value could
+any negative value, i.e. it doesn't necessarily needs to be a error code.
+That's because CPUIDLE core only cares about the fact of failure and not
+about the reason of the enter() failure.
 
-Okay, I'll update this patch! Thank you!
+Like every other enter() callback, the arm_cpuidle_simple_enter() returns
+the entered idle-index on success. Unlike some of other drivers, it never
+fails. It happened that TEGRA_C1=index=err=0 in the code of cpuidle-tegra
+driver, and thus, there is no problem for the cpuidle-tegra driver created
+by the typo in the code which assumes that the arm_cpuidle_simple_enter()
+returns a error code.
+
+The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_IDLE
+is disabled in a kernel's config, but all CPUIDLE drivers are disabled if
+CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't ever
+see the error code from arm_cpuidle_simple_enter() today.
+
+Of course the code may get some changes in the future and then the typo
+may transform into a real bug, so let's correct the typo in the code by
+making tegra_cpuidle_enter() to directly return the index returned by the
+arm_cpuidle_simple_enter().
+
+This patch fixes a minor typo in the code, it doesn't fix any bugs.
+
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+
+Changelog:
+
+v2: Improved commit message by clarifying what values are returned by
+    arm_cpuidle_simple_enter() and when. Thanks to Jon Hunter for the
+    suggestion!
+
+ drivers/cpuidle/cpuidle-tegra.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+index 150045849d78..9e9a9cccd755 100644
+--- a/drivers/cpuidle/cpuidle-tegra.c
++++ b/drivers/cpuidle/cpuidle-tegra.c
+@@ -236,14 +236,14 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+ 			       int index)
+ {
+ 	unsigned int cpu = cpu_logical_map(dev->cpu);
+-	int err;
++	int err = 0;
+ 
+ 	index = tegra_cpuidle_adjust_state_index(index, cpu);
+ 	if (dev->states_usage[index].disable)
+ 		return -1;
+ 
+ 	if (index == TEGRA_C1)
+-		err = arm_cpuidle_simple_enter(dev, drv, index);
++		index = arm_cpuidle_simple_enter(dev, drv, index);
+ 	else
+ 		err = tegra_cpuidle_state_enter(dev, index, cpu);
+ 
+-- 
+2.26.0
+
