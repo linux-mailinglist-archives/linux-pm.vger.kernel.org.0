@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0DD212C1A
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 20:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48251212C17
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 20:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbgGBSWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 14:22:02 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:3113 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbgGBSV7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 14:21:59 -0400
+        id S1728096AbgGBSVy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 14:21:54 -0400
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:16023 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbgGBSVx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 14:21:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1593714118; x=1625250118;
-  h=date:from:to:subject:message-id:mime-version;
-  bh=cs2EUulVYmJiGWKGk3tjkuDldhZPB72HbPIIjHU97dk=;
-  b=Im/bqyFMVIZ9ZEysI5y0Exifv8AoyVt0F4JvyFQ6wg6oYkamRQOYZl2r
-   KHg786tY44AsAQso/39AmMSrWgJIzcbau7KHMpmTXX8T6FjunccNyfeFG
-   Rzp111s4wYKSnb23u/8rZZfVov9Hqi8ynOMey40eR9EyAHHltz77uzJNQ
-   w=;
-IronPort-SDR: QkQyYmP3nGLpAiOJsMdMVFBarx/mgZsiYn5B7jwFEKwaWLU7F40e7pi00Eb1XlqW0VHybjgWcA
- d/KKpJe7YxXg==
+  t=1593714113; x=1625250113;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=uoroRGLFE2Atyc2JGE05NLscaVRKKsCZnOJvewnD1q4=;
+  b=cfr5zgdq7Ft7MAHGkskXajztclg+fGj0slKdLNLluKkmOzUYYOX4IKrl
+   bw1lfhRIMBG25w5OTvBTvS251rg6SB4FWCEtW+LMqYDN0X/LRX8VQBbIN
+   9427OFi+ocY2nfg0RE0Au/6mkvxWbLXX5/mU41YNN32zRF6jgU642GuiK
+   A=;
+IronPort-SDR: 2zEetQQdV5iJipJrTQmkyojCF1liNQ2rvC5FD4pMA/MiHYFXS2EHBC9fKUXHHRnbe8spyb4jXz
+ T4wH3OzVpZxQ==
 X-IronPort-AV: E=Sophos;i="5.75,305,1589241600"; 
-   d="scan'208";a="56964454"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 02 Jul 2020 18:21:50 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-74cf8b49.us-east-1.amazon.com (Postfix) with ESMTPS id BDE57C05B9;
-        Thu,  2 Jul 2020 18:21:43 +0000 (UTC)
-Received: from EX13D08UEB002.ant.amazon.com (10.43.60.107) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 2 Jul 2020 18:21:25 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D08UEB002.ant.amazon.com (10.43.60.107) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 2 Jul 2020 18:21:25 +0000
+   d="scan'208";a="55693041"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2a-119b4f96.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 02 Jul 2020 18:21:50 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2a-119b4f96.us-west-2.amazon.com (Postfix) with ESMTPS id BA4BA1A102E;
+        Thu,  2 Jul 2020 18:21:48 +0000 (UTC)
+Received: from EX13D10UWA003.ant.amazon.com (10.43.160.248) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 2 Jul 2020 18:21:43 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D10UWA003.ant.amazon.com (10.43.160.248) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 2 Jul 2020 18:21:36 +0000
 Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Thu, 2 Jul 2020 18:21:25 +0000
+ (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 2 Jul 2020 18:21:36 +0000
 Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 896F240844; Thu,  2 Jul 2020 18:21:24 +0000 (UTC)
-Date:   Thu, 2 Jul 2020 18:21:24 +0000
+        id 8A9B940844; Thu,  2 Jul 2020 18:21:36 +0000 (UTC)
+Date:   Thu, 2 Jul 2020 18:21:36 +0000
 From:   Anchal Agarwal <anchalag@amazon.com>
 To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
@@ -54,133 +55,161 @@ To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
         <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
         <benh@kernel.crashing.org>
-Subject: [PATCH v2 00/11] Fix PM hibernation in Xen guests
-Message-ID: <cover.1593665947.git.anchalag@amazon.com>
+Subject: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
+Message-ID: <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1593665947.git.anchalag@amazon.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
+In-Reply-To: <cover.1593665947.git.anchalag@amazon.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
-This series fixes PM hibernation for hvm guests running on xen hypervisor.
-The running guest could now be hibernated and resumed successfully at a
-later time. The fixes for PM hibernation are added to block and
-network device drivers i.e xen-blkfront and xen-netfront. Any other driver
-that needs to add S4 support if not already, can follow same method of
-introducing freeze/thaw/restore callbacks.
-The patches had been tested against upstream kernel and xen4.11. Large
-scale testing is also done on Xen based Amazon EC2 instances. All this testing
-involved running memory exhausting workload in the background.
+From: Munehisa Kamata <kamatam@amazon.com>
 
-Doing guest hibernation does not involve any support from hypervisor and
-this way guest has complete control over its state. Infrastructure
-restrictions for saving up guest state can be overcome by guest initiated
-hibernation.
+Guest hibernation is different from xen suspend/resume/live migration.
+Xen save/restore does not use pm_ops as is needed by guest hibernation.
+Hibernation in guest follows ACPI path and is guest inititated , the
+hibernation image is saved within guest as compared to later modes
+which are xen toolstack assisted and image creation/storage is in
+control of hypervisor/host machine.
+To differentiate between Xen suspend and PM hibernation, keep track
+of the on-going suspend mode by mainly using a new PM notifier.
+Introduce simple functions which help to know the on-going suspend mode
+so that other Xen-related code can behave differently according to the
+current suspend mode.
+Since Xen suspend doesn't have corresponding PM event, its main logic
+is modfied to acquire pm_mutex and set the current mode.
 
-These patches were send out as RFC before and all the feedback had been
-incorporated in the patches. The last v1 could be found here:
+Though, acquirng pm_mutex is still right thing to do, we may
+see deadlock if PM hibernation is interrupted by Xen suspend.
+PM hibernation depends on xenwatch thread to process xenbus state
+transactions, but the thread will sleep to wait pm_mutex which is
+already held by PM hibernation context in the scenario. Xen shutdown
+code may need some changes to avoid the issue.
 
-[v1]: https://lkml.org/lkml/2020/5/19/1312
-All comments and feedback from v1 had been incorporated in v2 series.
-Any comments/suggestions are welcome
+[Anchal Agarwal: Changelog]:
+ RFC v1->v2: Code refactoring
+ v1->v2:     Remove unused functions for PM SUSPEND/PM hibernation
 
-Known issues:
-1.KASLR causes intermittent hibernation failures. VM fails to resumes and
-has to be restarted. I will investigate this issue separately and shouldn't
-be a blocker for this patch series.
-2. During hibernation, I observed sometimes that freezing of tasks fails due
-to busy XFS workqueuei[xfs-cil/xfs-sync]. This is also intermittent may be 1
-out of 200 runs and hibernation is aborted in this case. Re-trying hibernation
-may work. Also, this is a known issue with hibernation and some
-filesystems like XFS has been discussed by the community for years with not an
-effectve resolution at this point.
+Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+---
+ drivers/xen/manage.c  | 60 +++++++++++++++++++++++++++++++++++++++++++
+ include/xen/xen-ops.h |  1 +
+ 2 files changed, 61 insertions(+)
 
-Testing How to:
----------------
-1. Setup xen hypervisor on a physical machine[ I used Ubuntu 16.04 +upstream
-xen-4.11]
-2. Bring up a HVM guest w/t kernel compiled with hibernation patches
-[I used ubuntu18.04 netboot bionic images and also Amazon Linux on-prem images].
-3. Create a swap file size=RAM size
-4. Update grub parameters and reboot
-5. Trigger pm-hibernation from within the VM
-
-Example:
-Set up a file-backed swap space. Swap file size>=Total memory on the system
-sudo dd if=/dev/zero of=/swap bs=$(( 1024 * 1024 )) count=4096 # 4096MiB
-sudo chmod 600 /swap
-sudo mkswap /swap
-sudo swapon /swap
-
-Update resume device/resume offset in grub if using swap file:
-resume=/dev/xvda1 resume_offset=200704 no_console_suspend=1
-
-Execute:
---------
-sudo pm-hibernate
-OR
-echo disk > /sys/power/state && echo reboot > /sys/power/disk
-
-Compute resume offset code:
-"
-#!/usr/bin/env python
-import sys
-import array
-import fcntl
-
-#swap file
-f = open(sys.argv[1], 'r')
-buf = array.array('L', [0])
-
-#FIBMAP
-ret = fcntl.ioctl(f.fileno(), 0x01, buf)
-print buf[0]
-"
-
-
-Aleksei Besogonov (1):
-  PM / hibernate: update the resume offset on SNAPSHOT_SET_SWAP_AREA
-
-Anchal Agarwal (4):
-  x86/xen: Introduce new function to map HYPERVISOR_shared_info on
-    Resume
-  x86/xen: save and restore steal clock during PM hibernation
-  xen: Introduce wrapper for save/restore sched clock offset
-  xen: Update sched clock offset to avoid system instability in
-    hibernation
-
-Munehisa Kamata (5):
-  xen/manage: keep track of the on-going suspend mode
-  xenbus: add freeze/thaw/restore callbacks support
-  x86/xen: add system core suspend and resume callbacks
-  xen-blkfront: add callbacks for PM suspend and hibernation
-  xen-netfront: add callbacks for PM suspend and hibernation
-
-Thomas Gleixner (1):
-  genirq: Shutdown irq chips in suspend/resume during hibernation
-
- arch/x86/xen/enlighten_hvm.c      |   7 ++
- arch/x86/xen/suspend.c            |  53 +++++++++++++
- arch/x86/xen/time.c               |  15 +++-
- arch/x86/xen/xen-ops.h            |   3 +
- drivers/block/xen-blkfront.c      | 122 +++++++++++++++++++++++++++++-
- drivers/net/xen-netfront.c        |  98 +++++++++++++++++++++++-
- drivers/xen/events/events_base.c  |   1 +
- drivers/xen/manage.c              |  60 +++++++++++++++
- drivers/xen/xenbus/xenbus_probe.c |  96 +++++++++++++++++++----
- include/linux/irq.h               |   2 +
- include/xen/xen-ops.h             |   3 +
- include/xen/xenbus.h              |   3 +
- kernel/irq/chip.c                 |   2 +-
- kernel/irq/internals.h            |   1 +
- kernel/irq/pm.c                   |  31 +++++---
- kernel/power/user.c               |   6 +-
- 16 files changed, 470 insertions(+), 33 deletions(-)
-
+diff --git a/drivers/xen/manage.c b/drivers/xen/manage.c
+index cd046684e0d1..69833fd6cfd1 100644
+--- a/drivers/xen/manage.c
++++ b/drivers/xen/manage.c
+@@ -14,6 +14,7 @@
+ #include <linux/freezer.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/export.h>
++#include <linux/suspend.h>
+ 
+ #include <xen/xen.h>
+ #include <xen/xenbus.h>
+@@ -40,6 +41,20 @@ enum shutdown_state {
+ /* Ignore multiple shutdown requests. */
+ static enum shutdown_state shutting_down = SHUTDOWN_INVALID;
+ 
++enum suspend_modes {
++	NO_SUSPEND = 0,
++	XEN_SUSPEND,
++	PM_HIBERNATION,
++};
++
++/* Protected by pm_mutex */
++static enum suspend_modes suspend_mode = NO_SUSPEND;
++
++bool xen_is_xen_suspend(void)
++{
++	return suspend_mode == XEN_SUSPEND;
++}
++
+ struct suspend_info {
+ 	int cancelled;
+ };
+@@ -99,6 +114,10 @@ static void do_suspend(void)
+ 	int err;
+ 	struct suspend_info si;
+ 
++	lock_system_sleep();
++
++	suspend_mode = XEN_SUSPEND;
++
+ 	shutting_down = SHUTDOWN_SUSPEND;
+ 
+ 	err = freeze_processes();
+@@ -162,6 +181,10 @@ static void do_suspend(void)
+ 	thaw_processes();
+ out:
+ 	shutting_down = SHUTDOWN_INVALID;
++
++	suspend_mode = NO_SUSPEND;
++
++	unlock_system_sleep();
+ }
+ #endif	/* CONFIG_HIBERNATE_CALLBACKS */
+ 
+@@ -387,3 +410,40 @@ int xen_setup_shutdown_event(void)
+ EXPORT_SYMBOL_GPL(xen_setup_shutdown_event);
+ 
+ subsys_initcall(xen_setup_shutdown_event);
++
++static int xen_pm_notifier(struct notifier_block *notifier,
++			unsigned long pm_event, void *unused)
++{
++	switch (pm_event) {
++	case PM_SUSPEND_PREPARE:
++	case PM_HIBERNATION_PREPARE:
++	case PM_RESTORE_PREPARE:
++		suspend_mode = PM_HIBERNATION;
++		break;
++	case PM_POST_SUSPEND:
++	case PM_POST_RESTORE:
++	case PM_POST_HIBERNATION:
++		/* Set back to the default */
++		suspend_mode = NO_SUSPEND;
++		break;
++	default:
++		pr_warn("Receive unknown PM event 0x%lx\n", pm_event);
++		return -EINVAL;
++	}
++
++	return 0;
++};
++
++static struct notifier_block xen_pm_notifier_block = {
++	.notifier_call = xen_pm_notifier
++};
++
++static int xen_setup_pm_notifier(void)
++{
++	if (!xen_hvm_domain())
++		return -ENODEV;
++
++	return register_pm_notifier(&xen_pm_notifier_block);
++}
++
++subsys_initcall(xen_setup_pm_notifier);
+diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+index 39a5580f8feb..2521d6a306cd 100644
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -40,6 +40,7 @@ u64 xen_steal_clock(int cpu);
+ 
+ int xen_setup_shutdown_event(void);
+ 
++bool xen_is_xen_suspend(void);
+ extern unsigned long *xen_contiguous_bitmap;
+ 
+ #if defined(CONFIG_XEN_PV) || defined(CONFIG_ARM) || defined(CONFIG_ARM64)
 -- 
 2.20.1
 
