@@ -2,105 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5265D211A40
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 04:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A51DE211A5B
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 04:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbgGBCoV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 22:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
+        id S1726187AbgGBC6W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 22:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725805AbgGBCoV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 22:44:21 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7931C08C5C1
-        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 19:44:20 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s14so10682936plq.6
-        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 19:44:20 -0700 (PDT)
+        with ESMTP id S1726097AbgGBC6V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 22:58:21 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C99C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 19:58:21 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id z3so2584121pfn.12
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 19:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=isbOQd2LXqwGe2XN0v2Rojr+1zs/7ikiY6hJeRf2GTI=;
-        b=G+p15q+UuPQNWHWqucs1rYYMutVsji8peFDbApoyy1FGnP1H6aEfT1xCUCwIQpco32
-         3oSrVqU5wQZIYJ0dhrXAbV3UB+jigBuUhKq1r986X+Ca2h0TtTGowGkCp2qBty7AzL2s
-         SyP7d4DdbDJzxPmeVnXWNOZVrU8dphNb3KjC9pQDTsey7ANzmV9rQZ+zpBARkA/iGrfE
-         Xr1KoWZr8+YZ0d9KHTYglvu7UV8y6xP5gDpmS+FTiIq5LiEZLH3E9rH9Pi6r+QjyOqB+
-         tgYg3Caxwujlck4Zhvh0GpyErSicwsTELHrH4uyYLkyQMiK0ks+hUph51yX1m9In05eK
-         kW8A==
+        bh=T8E2WLP76UAor8xyXwaGyeONvKVqPzozF3LQH+sB25g=;
+        b=XtIkoZARBOOxbFgd0psranRYed5UO5Ohw7Nqe6Bo4BHy8xLmycgS8rT3VKuJglyBl1
+         OqfUjPceX+p4nMczyVNpTmtES0rWxBM2kOhz8k2BEKSy4Y2yslLmtx2rQwTmgvc8iCBz
+         jVaadwMvRIbdAkCwvC2tU7XFvNT9I6B3Pts4Kdaw2HFcxFk66kcrTqLLbi/ez4Fte+Ud
+         XJ82xmXu/Xu5yZlintdAeQv81OekuVCa4IiJ8npmgDiMF7RJgyPpEk/ICclIlgx3O3ZS
+         UvKbIhfVjR5GFdW5TEEJoY7xqSVHqcuHa3nBiM/xX4ih5+Obfvz7hA1sLaQaKbIEUKOj
+         LGCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=isbOQd2LXqwGe2XN0v2Rojr+1zs/7ikiY6hJeRf2GTI=;
-        b=N5rDx7jk9zqfbkjp76QeldvZ79tYMXE+OR3Osms05Ku/95tQCv1u5xlcFt/yne/Ip4
-         3LBgIgVj3pQkJY3quP3wpwduO4OhH3EGKZF1n9FzWBytZDLae0LzwBnY/THAljlDuIai
-         pZSFTz5i7sJEcGx4QqixFoHDTOVk5Z8m/laomwUD7Uckt4g+LgP14jIXEYJkUsZUDhA2
-         cesPcFVg8k/2V73ITTXk6LD7WH7NLOkYjAbrQdCRYHxwfNIF4i6DQ7+1aJENqH9zAahE
-         RM7cl8EfIBPdljB+YI+XNDK+vcTPiuZxNGDkxaTO7PXCMXjeZ2jTKPwJ/MDgIISHzGX9
-         tXtw==
-X-Gm-Message-State: AOAM531k7MgIVy4KlPKVbafhwWaoSYghA4zBWTBeaB2FzhRkofyuUZIn
-        Nvp8bLX9JLp1Zn8XrqDlCaOxTQ==
-X-Google-Smtp-Source: ABdhPJyJU07M66YziF91QRH1/LMXAx/FTAxftvnXR+Z1169X1189zk4H4aPpwxzhbmmIqGfdCr4cxQ==
-X-Received: by 2002:a17:90a:2048:: with SMTP id n66mr8924797pjc.71.1593657860287;
-        Wed, 01 Jul 2020 19:44:20 -0700 (PDT)
+        bh=T8E2WLP76UAor8xyXwaGyeONvKVqPzozF3LQH+sB25g=;
+        b=U7JpKaLOyIea+2gHvDEF7sTVvKuAKN0cOMjF96Okm3s+oy+LT63ERYbGeH4qer0TCP
+         c42xBEWOn96uS5BRwXC8COshK9LGCRhUcbnRu/oMJPJeaxpPwM9QH8QynhC4Zuep1Myb
+         3SbnBtNKciv9dXc6TIzCKlt5M7I6tjHhww4NWNaq1bYI4shMK8CQmDL8zXqdl0Zp+UGE
+         5VeDY+Wyn1uAKj4aAWHr1Flv2SpfiQjJi0X1ie7RIiWA5U+app4qZzjkp8UFFScWnx4b
+         NWJzikeFg+r64dX51hy3qNR6fau3MS6OzkHnpKUcsWc4BlV+tiOaHIbnKPsQUBLBUk3m
+         kA9Q==
+X-Gm-Message-State: AOAM533+5EKbnVBDRGC32JtvhFpTc4Q5JoGcUdeJbk+dJetzOY2atd9G
+        qDpzQz9KrmqCguKiRhQPCI7EDw==
+X-Google-Smtp-Source: ABdhPJyKZTp5tmDq4Zq7ijoSaWuh2H5kvp93fGeQNGNbfqzUu+TQxqaDaNYLDI0kO4mP4uhmzIQvlQ==
+X-Received: by 2002:a63:79c2:: with SMTP id u185mr21742987pgc.84.1593658700948;
+        Wed, 01 Jul 2020 19:58:20 -0700 (PDT)
 Received: from localhost ([223.235.247.110])
-        by smtp.gmail.com with ESMTPSA id 2sm7199723pfa.110.2020.07.01.19.44.19
+        by smtp.gmail.com with ESMTPSA id f131sm7271323pgc.14.2020.07.01.19.58.19
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Jul 2020 19:44:19 -0700 (PDT)
-Date:   Thu, 2 Jul 2020 08:14:17 +0530
+        Wed, 01 Jul 2020 19:58:20 -0700 (PDT)
+Date:   Thu, 2 Jul 2020 08:28:18 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: mvebu: ARMADA_AP_CPU_CLK needs to select
- ARMADA_AP_CP_HELPER
-Message-ID: <20200702024417.ot2llwnwkfjohjcs@vireshk-i7>
-References: <20200701201128.2448427-1-natechancellor@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
+ freq invariance
+Message-ID: <20200702025818.s4oh7rzz3tr6zwqr@vireshk-i7>
+References: <20200701090751.7543-1-ionela.voinescu@arm.com>
+ <20200701090751.7543-2-ionela.voinescu@arm.com>
+ <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+ <20200701133330.GA32736@arm.com>
+ <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200701201128.2448427-1-natechancellor@gmail.com>
+In-Reply-To: <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-07-20, 13:11, Nathan Chancellor wrote:
-> When building arm32 allmodconfig:
+On 01-07-20, 18:05, Rafael J. Wysocki wrote:
+> On Wed, Jul 1, 2020 at 3:33 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> > On Wednesday 01 Jul 2020 at 16:16:17 (+0530), Viresh Kumar wrote:
+> > > I will rather suggest CPUFREQ_SKIP_SET_FREQ_SCALE as the name and
+> > > functionality. We need to give drivers a choice if they do not want
+> > > the core to do it on their behalf, because they are doing it on their
+> > > own or they don't want to do it.
 > 
-> ld.lld: error: undefined symbol: ap_cp_unique_name
-> >>> referenced by ap-cpu-clk.c
-> >>>               clk/mvebu/ap-cpu-clk.o:(ap_cpu_clock_probe) in archive drivers/built-in.a
+> Well, this would go backwards to me, as we seem to be designing an
+> opt-out flag for something that's not even implemented already.
 > 
-> ap_cp_unique_name is only compiled into the kernel image when
-> CONFIG_ARMADA_AP_CP_HELPER is selected (as it is not user selectable).
-> However, CONFIG_ARMADA_AP_CPU_CLK does not select it.
-> 
-> This has been a problem since the driver was added to the kernel but it
-> was not built before commit c318ea261749 ("cpufreq: ap806: fix cpufreq
-> driver needs ap cpu clk") so it was never noticed.
-> 
-> Fixes: f756e362d938 ("clk: mvebu: add CPU clock driver for Armada 7K/8K")
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> ---
-> 
-> I do not know who should actually take this patch since the problematic
-> patch is on Viresh's cpufreq/arm/linux-next
+> I would go for an opt-in instead.  That would be much cleaner and less
+> prone to regressions IMO.
 
-That patch just enabled the config option and I have picked it up for
-5.9.
+That's fine, I just wanted an option for drivers to opt-out of this
+thing. I felt okay with the opt-out flag as this should be enabled for
+most of the drivers and so enabling by default looked okay as well.
 
-> but the problem originated
-> from a patch in the clk tree in 5.4. I assume all that would be needed
-> is a clk maintainer's ack? Please let me know if I did something wrong.
+> > In this case we would not be able to tell if cpufreq (driver or core)
+> > can provide the frequency scale factor, so we would not be able to tell
+> > if the system is really frequency invariant; CPUFREQ_SKIP_SET_FREQ_SCALE
 
-This patch should go through clk tree and get pushed for 5.8 if
-possible (which makes sense as well).
+That is easy to fix. Let the drivers call
+enable_cpufreq_freq_invariance() and set the flag.
+
+> > would be set if either:
+> >  - the driver calls arch_set_freq_scale() on its own
+> >  - the driver does not want arch_set_freq_scale() to be called.
+> >
+> > So at the core level we would not be able to distinguish between the
+> > two, and return whether cpufreq-based invariance is supported.
+> >
+> > I don't really see a reason why a driver would not want to set the
+> > frequency scale factor
+
+A simple case where the driver doesn't have any idea what the real
+freq of the CPU is and it doesn't have counters to guess it as well.
+
+There can be other reasons which we aren't able to imagine at this
+point of time.
 
 -- 
 viresh
