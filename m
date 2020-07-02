@@ -2,164 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B08AA2119EA
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 03:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55155211A36
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jul 2020 04:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbgGBB71 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 1 Jul 2020 21:59:27 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:57261 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726792AbgGBB71 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 21:59:27 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200702015922epoutp04a2645d4803ac794b68411b2064008a09~dzO1MGC2L0403204032epoutp04W
-        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 01:59:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200702015922epoutp04a2645d4803ac794b68411b2064008a09~dzO1MGC2L0403204032epoutp04W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593655162;
-        bh=lOHAZFZPS9+a73hijdym/L6Q0O9mYbyCPmsKNSs7qgg=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=LUegyff6IMYLE8WbGfPQDbJXWXv7YZEafhLnuGgONcvDDrv+pOL3vskjY6o4LRmUK
-         9ifxlsc/copNmdkj56iCQKffbd1WAcE7heUOyLGQ5khFjwOIQ+xRunFhAgoQ3a0Svq
-         bcLA7W0Q+VjqqtAurhOyvIXJeEZLyir3Ij7wzzbI=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200702015921epcas1p2c5bb12503dd757cf487768767648b8e3~dzOzykN_i0470704707epcas1p2O;
-        Thu,  2 Jul 2020 01:59:21 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 49y1Vb0fsMzMqYkw; Thu,  2 Jul
-        2020 01:59:19 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        35.4E.28578.27F3DFE5; Thu,  2 Jul 2020 10:59:14 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200702015913epcas1p3b00b299a3d73041a2d160e8b27288335~dzOsxxd1t2702827028epcas1p3w;
-        Thu,  2 Jul 2020 01:59:13 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200702015913epsmtrp1c32923219f33a07f6da520a92f68fa0d~dzOsw0LvC3265932659epsmtrp1k;
-        Thu,  2 Jul 2020 01:59:13 +0000 (GMT)
-X-AuditID: b6c32a39-e6f5da8000006fa2-bc-5efd3f724813
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        09.7C.08382.17F3DFE5; Thu,  2 Jul 2020 10:59:13 +0900 (KST)
-Received: from [10.113.221.102] (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200702015913epsmtip16246678cb1645396ad107b39799832fa~dzOsh0BLI0949609496epsmtip13;
-        Thu,  2 Jul 2020 01:59:13 +0000 (GMT)
-Subject: Re: [PATCH v4 17/37] PM / devfreq: tegra20: Relax Kconfig
- dependency
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-Organization: Samsung Electronics
-Message-ID: <876019c4-2dfa-b966-a6e7-573b5189d374@samsung.com>
-Date:   Thu, 2 Jul 2020 11:10:29 +0900
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
-        Thunderbird/59.0
+        id S1726534AbgGBChv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 1 Jul 2020 22:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgGBChu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 1 Jul 2020 22:37:50 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9FD1C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed,  1 Jul 2020 19:37:50 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id gc9so5280325pjb.2
+        for <linux-pm@vger.kernel.org>; Wed, 01 Jul 2020 19:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=E6qbMlZ2Efi0OnOWp1DIBcuwZU3AyV6M/I4efZUFWaQ=;
+        b=rd1riGz5u1jk9KczDNJXRDIkj0NTKkAhfsqIiYDHCcSsb8ey6U0F1lFO9QGss6CNbt
+         Ip86QpCH2sEZK9SlOx8nKnf+n7jnVHXxm4NDfae5aC7viKXQaHcBWLTHnT6GbUzbeB7Q
+         Mt8RBMyjd5iZNseSUs4Hz9hF/NbUBjYL8aSdfWs72ZYYvmAzNw6GXFglngdNHIGl6Jz2
+         SMxgCUVkKjoKBbxwdlXXC2OdpN0OV92nz91NjSWmYWmnCZa4dxe/J3mmJBCHoiqT3lhm
+         Pvp1PNtK7P8ThpAdcqJDe7TNdWDTx6ealZ829ZRwwmdUPNhjWCw6ivyfs/J10c3DFw7X
+         MkaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E6qbMlZ2Efi0OnOWp1DIBcuwZU3AyV6M/I4efZUFWaQ=;
+        b=unxbhB3uXa4vOV8O+hUmAWSxxYHIZV9m+M1aSgXMXUQ4SuH1E2NHAH6HN0l0rACGBF
+         oGYmG6HB77fUAB2PAbdm2DR5I9um8La5ojY2plEAX/Aas0YkgH3RFvHm3l7s8DNSFKjK
+         h7t/Zb8D95ZSbwABo2GQLLNnnSaA2KJnuGtaRzskmU2adMSgLR94sje2njcCYg6PeokU
+         gaoqx0r8jVCtwFw4p+WFoptIXERmnYibQ8MxG4DIzySqoMaOsUZm0fHAuG5xW1Mon6y6
+         gzAv5CDtT1vSCLt6LgjQbd3mjW0S6eiH4oATWgjokIfm+unVVQ2oprqGA0msIdeJBcNt
+         g86w==
+X-Gm-Message-State: AOAM533KH8M9wJop0eOWO1eUcNrGzRTaisSrnFwZgqd+y+ik2LKdQo4q
+        jPB6bAAEa+qe8qHDCwcSAblEig==
+X-Google-Smtp-Source: ABdhPJzWA2sCClagfIdhuHoEOvXzH6EhJArvtlPVjv9hibIidWhx1A4wpf9A1PD40eqx9Md3bEahxQ==
+X-Received: by 2002:a17:90a:6a03:: with SMTP id t3mr30648268pjj.174.1593657470066;
+        Wed, 01 Jul 2020 19:37:50 -0700 (PDT)
+Received: from localhost ([223.235.247.110])
+        by smtp.gmail.com with ESMTPSA id io3sm235298pjb.22.2020.07.01.19.37.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 01 Jul 2020 19:37:48 -0700 (PDT)
+Date:   Thu, 2 Jul 2020 08:07:47 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Xin Hao <xhao@linux.alibaba.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] cpufreq: CPPC: simply the code access 'highest_perf'
+ value in cppc_perf_caps struct
+Message-ID: <20200702023746.li2uf4zl7bwzg62x@vireshk-i7>
+References: <20200701042007.13333-1-xhao@linux.alibaba.com>
+ <20200701045227.epojzjwuky5kkdzj@vireshk-i7>
+ <CAJZ5v0iRW25n9CqvJ=ODbVh2osocx+wJVz62GqaWV9m4sdL12g@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200609131404.17523-18-digetx@gmail.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLJsWRmVeSWpSXmKPExsWy7bCmnm6R/d84g+51xhb357UyWrz79JTV
-        Yv6Rc6wWqz8+ZrS48vU9m8X0vZvYLFpmLWKxONv0ht3i8q45bBafe48wWnR+mcVmcfGUq8Xt
-        xhVsFpPWTmW0aN17hN3i37WNLBY/d81jcRD0eH+jld1j56y77B6Xzv1h9ti0qpPN4861PWwe
-        97uPM3n0Nr9j8+jbsorR4/MmuQDOqGybjNTElNQihdS85PyUzLx0WyXv4HjneFMzA0NdQ0sL
-        cyWFvMTcVFslF58AXbfMHKBflBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2SqkFKTkFlgV6
-        xYm5xaV56XrJ+blWhgYGRqZAhQnZGbuXTWAsWMdV8el/H0sD4w6OLkYODgkBE4kj2027GLk4
-        hAR2MEr87ZvCCuF8YpT4cvoKE4TzjVFi56+bQBlOsI4bu9+zQyT2Mkr8nnaEEcJ5zyjx9eJV
-        RpAqYQF/iQ8fT4C1iwgcYZZY3XkcrIpZ4DKjxNm2L2wgVWwCWhL7X9wAs/kFFCWu/ngM1s0r
-        YCdx9Ps5FpALWQRUJH58rgQJiwqESZzc1gJVIihxcuYTsBJOAXOJ76dVQMLMAuISt57MZ4Kw
-        5SW2v53DDLJWQqCZU2LflZXMEC+4SOza0s4IYQtLvDq+hR3ClpJ42d8GZVdLrDx5hA2iuYNR
-        Ysv+C1D/G0vsXzqZCWQxs4CmxPpd+hBhRYmdv+cyQizmk3j3tYcVEsC8Eh1tQhAlyhKXH9xl
-        grAlJRa3d7JNYFSaheSbWUhemIXkhVkIyxYwsqxiFEstKM5NTy02LDBFju1NjOB0rmW5g3H6
-        2w96hxiZOBgPMUpwMCuJ8J42+BUnxJuSWFmVWpQfX1Sak1p8iNEUGLwTmaVEk/OBGSWvJN7Q
-        1MjY2NjCxNDM1NBQSZzXyfpCnJBAemJJanZqakFqEUwfEwenVANTFaPhA4HPoX2vDv1Wefb3
-        7PJ9H0XXhb9g3zvvjl6ibcLXG8f9e7eX7uZ6ElD3nPmAgo6rilzXkv3853KexUw0z+P7LePx
-        UuuU5sXuyZ+7DHddKDx461kFM9+6oI2CG+78r5lissLS5NWjI/fKZ6jcu1F82eHi2hcvJr52
-        em24yifP6onA2+dOC0U+/tttL5VtrRJ68qAx56TLb1TSZ6ycXDnvxcymgz81fLT//zh8WvnW
-        xpo10vN2qJ0/WSwS+eBLsNzpE2t5yk0+RKzb7PX4/HTNqTJpy033VeXJmH1ZsTyoKcJph/JL
-        /vo7PPcUZNm6OJmFO6N3rNTfFrxEvu+3/MxsuWIdtmsaBQqfHrEtjlJiKc5INNRiLipOBADJ
-        3JN2cAQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ra0hTYRzGfc85np0txo5z5eul1ZaQrZoKke+HsiiikyF2By2skYdpbbo2
-        tSyoLP0wu0liqxXOmWnMVJyXOe0CXsoaGcuKeUNj2gXKlStSKa05Ar/93ud5frwf/hQu7CHC
-        qIzMbFabqVBJSR7R0ikVrz2x6U9qTG1DJBopKwRoYnI8EJm6egNRzXc3QG9+ekhkeGQlUYGx
-        gkAvL3zhoL62OyTyXukCSP/DSCLni21oMP8+ia7XlgJU+KiLg2bfNRBouq2M2BzEeFyFHMZu
-        HOYwr3t/44zVoieZoXcPSWbk0jOMuXJxgmSuNlkA47WKd3FTeBvSWFVGLquNjj/CS2+vKgaa
-        Ot6pybmrxHnQShUBLgXpddDV7uEUAR4lpNsBLDEXB/qLUHjD2Y0XAeofB8POTp1/8xVA93Ar
-        5tsE04nw/Wcz6StE9FMcWh0OzPfA6T4AW/U/Sb/SAuCQcwL4FJKWwSefXKSPBbQEvp1yz+d8
-        Oh52/+olfN8RdCSc8ub54sX0AWivdGP+SRB8fmtsfsKl4+AvR6QvxumV8HfZa9zPIXBgzIT5
-        eRm0fb2DF4Ng4wLbuEAxLlCMC5RyQFhAKKvRqZVqXawmNpM9Kdcp1LqcTKX8aJbaCuaPLVvV
-        CmyWb/IOgFGgA0AKl4r4jpiZVCE/TZF3mtVmHdbmqFhdBwinCGkI33XCnCqklYps9jjLaljt
-        /xajuGHnsbyCyNtJH7c0SmT3Lg9F719Sl5AdkJRrNqzp2cNWyTv7aiKer073hI8eapTYCjZ4
-        JBrJbUZk608cVQ0mr+43nN2ZKAp34s66seVxR2TfKY1dcJDnnZzePicr2bep1IzlVpW2RSQv
-        AjtsMUMlPfbuS7tHlKbyLSmLalI+VCrN13num03ILTYmxCsyVIJ8A0mIlYJx9ZlhyzVxwMYm
-        pmLWYNe6qrYKwrk7o6IV67NMoWLw6il4MDlomT0mCtq7FBWaHAGfhTn1owEh/Hj5sRXeM3Np
-        2c1xYY/N5+5GFzfne+emUoMTHJdnyCh9jb6lOkI2ztVjWQN19dWD3VJCl66IleFaneIvbgKk
-        5FsDAAA=
-X-CMS-MailID: 20200702015913epcas1p3b00b299a3d73041a2d160e8b27288335
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200609131659epcas1p25e50d1a206229fefa3425740a476c989
-References: <20200609131404.17523-1-digetx@gmail.com>
-        <CGME20200609131659epcas1p25e50d1a206229fefa3425740a476c989@epcas1p2.samsung.com>
-        <20200609131404.17523-18-digetx@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iRW25n9CqvJ=ODbVh2osocx+wJVz62GqaWV9m4sdL12g@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/9/20 10:13 PM, Dmitry Osipenko wrote:
-> The Tegra EMC driver now could be compiled as a loadable kernel module.
-> Currently devfreq driver depends on the EMC/MC drivers in Kconfig, and
-> thus, devfreq is forced to be a kernel module if EMC is compiled as a
-> module. This build dependency could be relaxed since devfreq driver
-> checks MC/EMC presence on probe, allowing kernel configuration where
-> devfreq is a built-in driver and EMC driver is a loadable module.
-> This change puts Tegra20 devfreq Kconfig entry on a par with the Tegra30
-> devfreq entry.
+On 01-07-20, 14:16, Rafael J. Wysocki wrote:
+> On Wed, Jul 1, 2020 at 6:52 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 01-07-20, 12:20, Xin Hao wrote:
+> > >  The 'caps' variable has been defined, so there is no need to get
+> > >  'highest_perf' value through 'cpu->caps.highest_perf', you can use
+> > >  'caps->highest_perf' instead.
+> > >
+> > > Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
+> > > ---
+> > >  drivers/cpufreq/cppc_cpufreq.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > > index 257d726a4456..051d0e56c67a 100644
+> > > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > > @@ -161,7 +161,7 @@ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu,
+> > >               if (!max_khz)
+> > >                       max_khz = cppc_get_dmi_max_khz();
+> > >               mul = max_khz;
+> > > -             div = cpu->perf_caps.highest_perf;
+> > > +             div = caps->highest_perf;
+> > >       }
+> > >       return (u64)perf * mul / div;
+> > >  }
+> > > @@ -184,7 +184,7 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu,
+> > >       } else {
+> > >               if (!max_khz)
+> > >                       max_khz = cppc_get_dmi_max_khz();
+> > > -             mul = cpu->perf_caps.highest_perf;
+> > > +             mul = caps->highest_perf;
+> > >               div = max_khz;
+> > >       }
+> >
+> > Applied. Thanks.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/devfreq/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I applied the previous cppc_cpufreq patch, hopefully it will not clash
+> with this one.
 > 
-> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
-> index 37dc40d1fcfb..0ee36ae2fa79 100644
-> --- a/drivers/devfreq/Kconfig
-> +++ b/drivers/devfreq/Kconfig
-> @@ -123,7 +123,7 @@ config ARM_TEGRA_DEVFREQ
->  
->  config ARM_TEGRA20_DEVFREQ
->  	tristate "NVIDIA Tegra20 DEVFREQ Driver"
-> -	depends on (TEGRA_MC && TEGRA20_EMC) || COMPILE_TEST
-> +	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
->  	depends on COMMON_CLK
->  	select DEVFREQ_GOV_SIMPLE_ONDEMAND
->  	help
-> 
+> Are you going to take care of this driver going forward?
 
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+I started picking up the patches for this driver as it was mostly ARM
+stuff and FWIW, I picked the previous one as well and because it was
+sent by me, I never replied with the "Applied" message :)
+
+Will it be possible for you to drop that one? Or should I drop that
+now ? There shouldn't be any conflicts for now though.
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+viresh
