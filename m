@@ -2,72 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FBD621364A
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 10:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9664421369E
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 10:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725949AbgGCIVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jul 2020 04:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S1726039AbgGCIlU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jul 2020 04:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725915AbgGCIVI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 04:21:08 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EBDC08C5C1;
-        Fri,  3 Jul 2020 01:21:07 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id o4so18004657lfi.7;
-        Fri, 03 Jul 2020 01:21:07 -0700 (PDT)
+        with ESMTP id S1725648AbgGCIlT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 04:41:19 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DCBC08C5C1;
+        Fri,  3 Jul 2020 01:41:19 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id z24so11121290ljn.8;
+        Fri, 03 Jul 2020 01:41:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R3DXWe/7kffwAkZY5CuO0mg5y/MW32bQD7iUuOlWvjA=;
-        b=T7sDBYf2EJVFVlZiG90k4/S+CPDEHBEarBT1uTJkaCGF3HVtF8eOi9CDQ+aHvlqnXQ
-         nm7RzyBvtVL8kBGopKyQfcImX8Srzn4+ay+GPESM+pGPewRmwhZGW7Esvu9t0Sgkwpsx
-         M146OX2cUdY43VYg30eK0+t7ggnx2vSKX/Whu0iArmHpPw0cs//ikzhcDHfOilaSQxFo
-         AelddUCc+K7bnV20ZyBuEleNfdrd0uMKIFovW1IZmLx0TUKtwEQdeNwmJyPrTcoOWY0g
-         orCeliygk/p6edAJVkTfy/39zO4RN0VBcSBCpJtzuq8gZ12vbPF8yYK4EYZQhB8RFW08
-         cIAA==
+        bh=94u4fadNGtidN2vaiyXlzWw+DxqIFzoI6bECvXw6Onc=;
+        b=Rwjky4+fTcHJpBjZGyOurGK+bbTLYpMa1+miIEapCV2QYmnTJlRx+lbXF4XppXR4KP
+         ehdKLNZRYaj5hPmxptVbfninuCrD1nDGglstkBWCsDZ/x+45XJt9jQNLoE5wg6sKcs5e
+         r1u8drtFNmPJmN0ikR6asgq0lU1Z9PerEoyOcj+h8q8y/WmGU44iB7e3F+6PPriu4CKc
+         wdgzD2y9QqrJstXhFQlETSGtPbCze3O4SeJ2IiqWpqH+m07PurDkSqPKu9cCD5vwayPL
+         X49MryiptFeK3PzPBTXX+1ZPyS0w5pY25GOjNkZ2Fqq2wBEJ58ZB+8pN0ksGfMzSSkWS
+         k0hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=R3DXWe/7kffwAkZY5CuO0mg5y/MW32bQD7iUuOlWvjA=;
-        b=GVLGt8j2HzIQrIKtTj3bSESbXcx2js6JYGuhqDEMeIsDgHGumNfmN23FxiRWqQustW
-         xPHx6dIPU4vrDh262YmR5XmYbHmuAZ+fP9HQ9Z3T0Rv0m0ehtQpnjtDw/sY19uoUHQWj
-         EPu1F+HBYhXR7oUwHGpJbxsWFjQgRYKYV3LNXM39nVqNOrYCk3j817JFu5R4v2mzrjv2
-         9xjG7nIpuP+lIVagYwJSUzw8dYGdkbRzBCRkOGQE586pp3HYhoOJHQ1SNW14U5m7zQy7
-         Qn0aIOwLGAvLFSuxA6n68+Ns598knKARKxq0ePZ25q37IyV9HCA7yxfBc4sZ8Isi0TYm
-         CVhQ==
-X-Gm-Message-State: AOAM533E2LTpR+0ml0DTSDelQXdtTabUaptSxsJLcuVWqLPPzxlpJmv4
-        GjxZOgnlGTX9KXbWSZ3dWko+hpRZ4Z0=
-X-Google-Smtp-Source: ABdhPJwPnozSkJ2XzdKc+tafvTvERFYy06y/KVN/pGEFisb8WeHehrR2cSDS/OOZ4LlJ6y23zfNkPg==
-X-Received: by 2002:a05:6512:203b:: with SMTP id s27mr4115815lfs.158.1593764465014;
-        Fri, 03 Jul 2020 01:21:05 -0700 (PDT)
+        bh=94u4fadNGtidN2vaiyXlzWw+DxqIFzoI6bECvXw6Onc=;
+        b=DLObjcbgoMX5lHY02GuZ4lZDEGdGPt8cBWamCWbAq7tmxcyNOU/IJZGpiK/NAU5Jys
+         mbHOFjWWgBFyvnCjCRdFOiuuwmHouEDNfYiFONzPFohCseKCv1YpqB/gg6m4Z9SsQd3S
+         nrmjVFAAv6G6QQSqu0qO18dRpBrOcVolkB03aqLi/QZYcfIXs7K5C1dX7hyfuhos12MW
+         rvIBKNicE0oi9bIovLwLeEyvEzMjXCO/FCJtHHs3uiOdL85HfLgQpzlR1RWO2RqtndhM
+         fpIYizB3Z1TI9JGeK5ZBNX+pvYkm397VPeLzmf3xzrNQGQw7iPfjMX0nfLAJdtyUkp55
+         Qyiw==
+X-Gm-Message-State: AOAM531RR1tADhClRzTC0P6EUL9n+iI/wMxQ8+tr4n+0KhUFGjcbSUJ0
+        6NwHtPfQpNaGcWtdDVW/DoNdmdlGQj4=
+X-Google-Smtp-Source: ABdhPJzHywnF/v01Hll4ows4GlWRPjjUQx4ETYaAZkhy1uLq32oivsjtx3GFvxO1wnG+bHMUCD+SfQ==
+X-Received: by 2002:a05:651c:50d:: with SMTP id o13mr20078873ljp.181.1593765677281;
+        Fri, 03 Jul 2020 01:41:17 -0700 (PDT)
 Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
-        by smtp.googlemail.com with ESMTPSA id 203sm4396573lfh.19.2020.07.03.01.21.03
+        by smtp.googlemail.com with ESMTPSA id y13sm3871513ljd.20.2020.07.03.01.41.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jul 2020 01:21:04 -0700 (PDT)
-Subject: Re: [PATCH v2] PM / devfreq: tegra: Add Dmitry as a maintainer
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        Fri, 03 Jul 2020 01:41:16 -0700 (PDT)
+Subject: Re: [PATCH v4 28/37] memory: tegra: Register as interconnect provider
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <CGME20200402222006epcas1p4027cd509b32ba2d2bdf90e9e84cf4bec@epcas1p4.samsung.com>
- <20200402221723.6064-1-digetx@gmail.com>
- <921abb5e-8c12-db8b-b345-fbe49080dc1c@samsung.com>
- <a08f16bc-df90-2199-91c8-f2acfe0f94ad@samsung.com>
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>,
+        =?UTF-8?B?QXJ0dXIgxZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200609131404.17523-1-digetx@gmail.com>
+ <20200609131404.17523-29-digetx@gmail.com>
+ <aec831a6-a7ad-6bcc-4e15-c44582f7568e@linaro.org>
+ <82d27a47-f189-6609-a584-c9ca1b35a76c@gmail.com>
+ <05cb459d-fc10-1537-eaea-df06f7566b6a@linaro.org>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <33a4df9d-7642-2f64-e073-ef6091f1ca33@gmail.com>
-Date:   Fri, 3 Jul 2020 11:21:03 +0300
+Message-ID: <31565962-a25c-324f-8319-b3e3ea66b4f1@gmail.com>
+Date:   Fri, 3 Jul 2020 11:41:14 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <a08f16bc-df90-2199-91c8-f2acfe0f94ad@samsung.com>
+In-Reply-To: <05cb459d-fc10-1537-eaea-df06f7566b6a@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,62 +84,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-03.07.2020 03:44, Chanwoo Choi пишет:
-> Dear all,
+02.07.2020 15:36, Georgi Djakov пишет:
+...
+>>>> +	mc->provider.data = data;
+>>>> +	mc->provider.xlate = of_icc_xlate_onecell;
+>>>> +	mc->provider.aggregate = tegra_mc_icc_aggregate;
+>>>> +
+>>>> +	err = icc_provider_add(&mc->provider);
+>>>> +	if (err)
+>>>> +		goto err_msg;
+>>>
+>>> Nit: I am planning to re-organize some of the existing drivers to call
+>>> icc_provider_add() after the topology is populated. Could you please move
+>>> this after the nodes are created and linked.
+>>
+>> Are you planning to remove the provider's list-head initialization from
+>> the icc_provider_add() [1] and move it to the individual provider
+>> drivers, correct?
 > 
-> On 5/8/20 1:04 PM, Chanwoo Choi wrote:
->> Hi Rafael,
->>
->> Could you please apply it to linux-pm directly?
->>
->> I think that it is better to be applied directly
->> for preventing the possible merge conflict of MAINTAINERS file.
->>
->> Best Regards,
->> Chanwoo Choi
->>
->> On 4/3/20 7:17 AM, Dmitry Osipenko wrote:
->>> I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
->>> want to help keep them working and evolving in the future.
->>>
->>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
->>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->>> ---
->>>
->>> Changelog:
->>>
->>> v2: - Addressed review comments made by Chanwoo Choi to v1 by correcting
->>>       git's address, making this patch standalone and adding Rafael Wysocki
->>>       to the list of email recipients.
->>>
->>>  MAINTAINERS | 9 +++++++++
->>>  1 file changed, 9 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index 245a96316636..0a694e20ea19 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -10922,6 +10922,15 @@ F:	include/linux/memblock.h
->>>  F:	mm/memblock.c
->>>  F:	Documentation/core-api/boot-time-mm.rst
->>>  
->>> +MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
->>> +M:	Dmitry Osipenko <digetx@gmail.com>
->>> +L:	linux-pm@vger.kernel.org
->>> +L:	linux-tegra@vger.kernel.org
->>> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
->>> +S:	Maintained
->>> +F:	drivers/devfreq/tegra20-devfreq.c
->>> +F:	drivers/devfreq/tegra30-devfreq.c
->>> +
->>>  MEMORY MANAGEMENT
->>>  M:	Andrew Morton <akpm@linux-foundation.org>
->>>  L:	linux-mm@kvack.org
->>>
->>
->>
-> 
-> I applied it to devfreq-next branch. Thanks.
+> Yes, that would be the first step, but i need to post some patches first,
+> so let's keep it as-is for now. Sorry for the confusion.
 
-Hello, Chanwoo! Thank you very much! :)
-
+No problems, I'll keep an eye on the ICC core changes!
+Please feel free to the CC me on the patches, I may give them a whirl.
