@@ -2,156 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE8B213071
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 02:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB42213078
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 02:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726028AbgGCA11 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 2 Jul 2020 20:27:27 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:15674 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbgGCA10 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 20:27:26 -0400
+        id S1726017AbgGCAdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 2 Jul 2020 20:33:14 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:11315 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725937AbgGCAdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 2 Jul 2020 20:33:14 -0400
 Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200703002723epoutp01ad9eb18b0416fcc2e6707cf833672736~eFnzH_Pdl0983009830epoutp01b
-        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 00:27:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200703002723epoutp01ad9eb18b0416fcc2e6707cf833672736~eFnzH_Pdl0983009830epoutp01b
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200703003310epoutp025ff9ae403e6c8576c05a1cc29702f05a~eFs2bKEfX0954309543epoutp02Z
+        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 00:33:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200703003310epoutp025ff9ae403e6c8576c05a1cc29702f05a~eFs2bKEfX0954309543epoutp02Z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593736043;
-        bh=78YFWLUy8a6bG0IHznbUMinVUfMhZKY0hWn/f2bKTPQ=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=n/eJ46kdngbho6R0418x+3ptVzEAavlFvhuaUY2BHsla8mP5Q/RzSI/oaxSYIVt/b
-         hH/qGO48oEYjQUgkxphVrIvxE9iKB1uGwcl4n3y+g9sil1ljeA9a7ijUjRy3F/cd3b
-         L0LrT/VG/QmEcacGcXiT5+6ODkzBFLB7MuK4p7GY=
+        s=mail20170921; t=1593736390;
+        bh=WgDPUYOS70hgOg400YBVb5DhaHc/yBFjmgoXoUJmDMw=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=r8p9duiMBKndbOsMEPllv2s58Cu+2nfi05VcJX8bELHBNIh5xaGhiy1AFIktpxo1E
+         3eBYRGrqYol8TvVJAz+qQF2yTW90FrceeeOS3vatEOm1QibV718Kp2gIxmXlVV+kUK
+         /33+DTFnb3PsoVaLo/9ElqMYE4atDOSTWf5aVrRc=
 Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200703002722epcas1p47dc4697da12a5d1999b0f1135600081e~eFnysJkqp0272102721epcas1p4F;
-        Fri,  3 Jul 2020 00:27:22 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 49ybPz7487zMqYkk; Fri,  3 Jul
-        2020 00:27:19 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B3.18.28578.76B7EFE5; Fri,  3 Jul 2020 09:27:19 +0900 (KST)
+        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+        20200703003309epcas1p3caf2fd985ec2c237f1e0bcbf83990f01~eFs18fMzl2651926519epcas1p33;
+        Fri,  3 Jul 2020 00:33:09 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 49ybXg5G4szMqYkv; Fri,  3 Jul
+        2020 00:33:07 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4A.4E.18978.3CC7EFE5; Fri,  3 Jul 2020 09:33:07 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200703002719epcas1p2d9c4f9d0f4bbfdb31f21be4ab6fa4408~eFnvewYGC3267232672epcas1p2v;
-        Fri,  3 Jul 2020 00:27:19 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        20200703003307epcas1p20b58f82e8e7e0beb335410cd4b877884~eFsziTrw82396023960epcas1p2Z;
+        Fri,  3 Jul 2020 00:33:07 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200703002719epsmtrp2015c4aa95c939ae170c46502b7a9dce8~eFnveA_Ur0126401264epsmtrp27;
-        Fri,  3 Jul 2020 00:27:19 +0000 (GMT)
-X-AuditID: b6c32a39-e6f5da8000006fa2-96-5efe7b67c9d6
+        20200703003307epsmtrp233b13333867cbb0d370434cc05862122~eFszhjaJP0418304183epsmtrp2X;
+        Fri,  3 Jul 2020 00:33:07 +0000 (GMT)
+X-AuditID: b6c32a35-b8298a8000004a22-25-5efe7cc36538
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6C.8E.08303.76B7EFE5; Fri,  3 Jul 2020 09:27:19 +0900 (KST)
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        EA.CB.08382.3CC7EFE5; Fri,  3 Jul 2020 09:33:07 +0900 (KST)
 Received: from [10.113.221.102] (unknown [10.113.221.102]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200703002719epsmtip2bca91588d12f05b243b2729bc6967a00~eFnvQf75I2430624306epsmtip2H;
-        Fri,  3 Jul 2020 00:27:19 +0000 (GMT)
-Subject: Re: [PATCH 12/17] drivers: devfreq: Fix trivial spelling
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
+        20200703003307epsmtip285aa2853c809377373831f3619fdd8db~eFszSmAja2432224322epsmtip2Q;
+        Fri,  3 Jul 2020 00:33:07 +0000 (GMT)
+Subject: Re: [PATCH v2] PM / devfreq: tegra: Add Dmitry as a maintainer
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
         MyungJoo Ham <myungjoo.ham@samsung.com>,
         Kyungmin Park <kyungmin.park@samsung.com>,
-        Jiri Kosina <trivial@kernel.org>,
-        "open list:DEVICE FREQUENCY EVENT (DEVFREQ-EVENT)" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-From:   Chanwoo Choi <cw00.choi@samsung.com>
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Organization: Samsung Electronics
-Message-ID: <bc52868b-e468-70b3-74ec-782bca8ada25@samsung.com>
-Date:   Fri, 3 Jul 2020 09:38:34 +0900
+Message-ID: <a08f16bc-df90-2199-91c8-f2acfe0f94ad@samsung.com>
+Date:   Fri, 3 Jul 2020 09:44:22 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
         Thunderbird/59.0
 MIME-Version: 1.0
-In-Reply-To: <20200609124610.3445662-13-kieran.bingham+renesas@ideasonboard.com>
+In-Reply-To: <921abb5e-8c12-db8b-b345-fbe49080dc1c@samsung.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBJsWRmVeSWpSXmKPExsWy7bCmnm569b84g19/LS0+XetmtNh2+jer
-        xdmmN+wWl3fNYbP43HuE0WLry3dMFrcbV7BZvN9/mcmBw2N2x0xWj02rOtk8+rasYvT4vEku
-        gCUq2yYjNTEltUghNS85PyUzL91WyTs43jne1MzAUNfQ0sJcSSEvMTfVVsnFJ0DXLTMH6Awl
-        hbLEnFKgUEBicbGSvp1NUX5pSapCRn5xia1SakFKToFlgV5xYm5xaV66XnJ+rpWhgYGRKVBh
-        QnbGvpP/mAtm8lasfDWTtYHxEVcXIyeHhICJxKbdzcxdjFwcQgI7GCXWt59khHA+MUrc2POe
-        DcL5zCjxt+kLO0zLzLcXoRK7GCXu9W1mgnDeM0p0tb1mBakSFnCU+LdsOiOILSJQILH96XKw
-        ucwCc5gkVq1dD1bEJqAlsf/FDTYQm19AUeLqj8dgDbwCdhIHD39gBrFZBFQkLj87DlYjKhAm
-        cXJbC1SNoMTJmU9Yuhg5ODgFAiRav4CNZBYQl7j1ZD4ThC0vsf3tHLDnJARmckhcXb8OrF5C
-        wEXi0Al7iG+EJV4d3wL1mZTE53d72SDsaomVJ4+wQfR2MEps2X+BFSJhLLF/6WQmkDnMApoS
-        63fpQ4QVJXb+nssIsZdP4t3XHlaIVbwSHW1CECXKEpcf3GWCsCUlFrd3sk1gVJqF5JlZSD6Y
-        heSDWQjLFjCyrGIUSy0ozk1PLTYsMEWO7U2M4CSqZbmDcfrbD3qHGJk4GA8xSnAwK4nwJqj+
-        ixPiTUmsrEotyo8vKs1JLT7EaAoM3onMUqLJ+cA0nlcSb2hqZGxsbGFiaGZqaKgkzutkfSFO
-        SCA9sSQ1OzW1ILUIpo+Jg1OqgUl1pngHy5s1wpv5ptuFb7jBk5icvKBHYXJU6owqQV8RaaOE
-        m/8fvYg+pLi643+r6IxFrRfS/63NfKRy9/++1uQ5J7cf3nWoLeCrRFaS2/73+15MtU///Ner
-        zmTPzcrCtOT47Faraz9eaYazcvhOezhnvtWZf1L5SrNYZkzcyMrZ/VqoMZ7LetZsk8lP3qga
-        P+U4eSJddmVEUFBo2aKSGWKRe7+znft34yWLR53V53vnnv+X1px7aHpi5jstS4H/IvvMuo8f
-        vyU6c/7XogO/15aZfGAMXbmEsfDSox+89Z/5DYT+VlSf1p70TvCi26bwCbd+r/dqrJf4vOx5
-        XGJ7xvKJFU73ctc3+DybmTTtWFe0EktxRqKhFnNRcSIAV+qFvisEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkkeLIzCtJLcpLzFFi42LZdlhJXje9+l+cwa0bQhafrnUzWmw7/ZvV
-        4mzTG3aLy7vmsFl87j3CaLH15Tsmi9uNK9gs3u+/zOTA4TG7Yyarx6ZVnWwefVtWMXp83iQX
-        wBLFZZOSmpNZllqkb5fAlbHv5D/mgpm8FStfzWRtYHzE1cXIySEhYCIx8+1FNhBbSGAHo8Ty
-        F14QcUmJaRePMncxcgDZwhKHDxd3MXIBlbxllOje8YsFpEZYwFHi37LpjCC2iECBxNQtV5lB
-        bGaBOUwSd++XQTS8YJS4PvsmWAObgJbE/hc3wJbxCyhKXP3xGKyZV8BO4uDhD2DNLAIqEpef
-        HQerERUIk9i55DETRI2gxMmZT1hADuIUCJBo/cIKsUtd4s+8S1B7xSVuPZnPBGHLS2x/O4d5
-        AqPwLCTds5C0zELSMgtJywJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV56XrJ+bmbGMGxpKW1
-        g3HPqg96hxiZOBgPMUpwMCuJ8Cao/osT4k1JrKxKLcqPLyrNSS0+xCjNwaIkzvt11sI4IYH0
-        xJLU7NTUgtQimCwTB6dUA9OCLtbTuibpiskbXu7ass9mgnvVbPnqB3pR29ZqeCpY6Ou6yH4W
-        YZt50/Z4xA/ZW2f7b6j9nFlz/zH78pT4xlftzIeiTn79u03t1R7HA70SvSzLr7wtXp217Ia2
-        0ZkDyS+tN0j+LNiT1ul2pmGRn/HjqfdVI6qcXp5/V3kvdn3jDIbOlwIdX3Z+ylp/kWl79q3J
-        EkFv5r58xNsUVqn4x0xm/nmxXsGpL8pYDq7fFSEdO2deZT6P69rahamFzYf9DjMvPG7P9Uvy
-        0ce13Ycub9w4/xRTiuv2XY1RW2sSZ0asPJr3puN2wcG1lyazTb+kc+xZPlfYeXaV2jVe/+89
-        jUvU5TyeeoHvyyRPu89Oaa8/K7EUZyQaajEXFScCAK1qN1wUAwAA
-X-CMS-MailID: 20200703002719epcas1p2d9c4f9d0f4bbfdb31f21be4ab6fa4408
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEJsWRmVeSWpSXmKPExsWy7bCmvu7hmn9xBu/ua1is/viY0aJl1iIW
+        i7NNb9gtLu+aw2bxufcIo0Xnl1lsFrcbV7BZnDl9idXi5655LA6cHjtn3WX36G1+x+ax5Wo7
+        i0ffllWMHp83yQWwRmXbZKQmpqQWKaTmJeenZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoq
+        ufgE6Lpl5gAdpKRQlphTChQKSCwuVtK3synKLy1JVcjILy6xVUotSMkpsCzQK07MLS7NS9dL
+        zs+1MjQwMDIFKkzIzli2+QFrwQ7eip/3XzM1ML7j6mLk5JAQMJHoP/6SGcQWEtjBKLHjfGgX
+        IxeQ/YlRYu6N2+wQzjdGiU+3PrHCdKzdto0JIrGXUeLK37+MEM57RomGn1uAWjg4hAXcJfrn
+        24I0sAloSex/cYMNpEZE4A+jxIXbl8AmMQtEShzeuZoJxOYXUJS4+uMxI4jNK2AnMbN3AjuI
+        zSKgIvF68l6wuKhAmMTJbS1QNYISJ2c+YQGxOQXsJc6t/sAEMVNc4taT+VC2vMT2t3OYQRZL
+        CKzkkHj9tJ0J4gUXiTef/zFD2MISr45vYYewpSQ+v9vLBmFXS6w8eYQNormDUWLL/gtQ/xtL
+        7F86mQnkS2YBTYn1u/QhwooSO3/PZYRYzCfx7msPK0iJhACvREebEESJssTlB3ehTpCUWNze
+        yTaBUWkWkndmIXlhFpIXZiEsW8DIsopRLLWgODc9tdiwwBA5tjcxghOrlukOxolvP+gdYmTi
+        YDzEKMHBrCTCm6D6L06INyWxsiq1KD++qDQntfgQoykwgCcyS4km5wNTe15JvKGpkbGxsYWJ
+        oZmpoaGSOK+4zIU4IYH0xJLU7NTUgtQimD4mDk6pBqbz135auy2ZVHHP8Wtw7+Ha9/91Z61r
+        2tI2t2DH5veb98zZ+zR22z9ZxdyEJaVrpBgsXlpP+zyz8sC5z5z7/p9mL8nPbnyzj/Xy29wv
+        +npXD0kE2LrFOxXvFFZcuqrviHaI/Sop/fr9Jz2e7Y+P/sA3ZaGOoCBHf/YScfmzsvuS+N9v
+        6lKvjY1TfpW93n6DXeUUnWlZt4yrXD4c39i1VEF6epRSpmzu84sG20+FNzmkOWsuSI23Ttu5
+        r8V4wWKb2yyhPxWk9j9+sD3b5o74hxnF03d+1y1vcj034+6dRPcnG+efyzBQvvdG3ivaWXu/
+        0FX7W6JHTgovYrkc7Xwp5l3OOY3mcLfKE6s8fr9N27hJiaU4I9FQi7moOBEABYj04TUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeLIzCtJLcpLzFFi42LZdlhJXvdwzb84g33reC1Wf3zMaNEyaxGL
+        xdmmN+wWl3fNYbP43HuE0aLzyyw2i9uNK9gszpy+xGrxc9c8FgdOj52z7rJ79Da/Y/PYcrWd
+        xaNvyypGj8+b5AJYo7hsUlJzMstSi/TtErgylm1+wFqwg7fi5/3XTA2M77i6GDk5JARMJNZu
+        28bUxcjFISSwm1Fi5u8LLBAJSYlpF48ydzFyANnCEocPF0PUvGWUeHnmPCtIXFjAXaJ/vi1I
+        OZuAlsT+FzfYQGpEBBqYJFoXLWMCSTALREr0zN3CBtG8l1Hi/byFzCAJfgFFias/HjOC2LwC
+        dhIzeyewg9gsAioSryfvBYuLCoRJ7FzymAmiRlDi5MwnYMdxCthLnFv9AWqBusSfeZeYIWxx
+        iVtP5kPF5SW2v53DPIFReBaS9llIWmYhaZmFpGUBI8sqRsnUguLc9NxiwwLDvNRyveLE3OLS
+        vHS95PzcTYzgGNPS3MG4fdUHvUOMTByMhxglOJiVRHgTVP/FCfGmJFZWpRblxxeV5qQWH2KU
+        5mBREue9UbgwTkggPbEkNTs1tSC1CCbLxMEp1cBUrbgk5NH3by+fb5g5pT5wkpb0Xu0J11pO
+        Clq9/D3p5MbTWf4d1kWX1RjX39dV5vXgiN9slsWewC8T8b/+r/Anq8cx0iFe3Jsm87sUNS5u
+        YzwQra78wN006MyP0Bds+YumfUuXYt4++2iFqHaBqM6zJY/ain9s79kaFWb6YLv3okrWnM1l
+        3IefnLG5HM/+zodBfm58jJn/a/12sz45F52j4WbCLAEBxm9O6lcuF7dsEPknPu2n8vKtqSf/
+        9r3qZE1/eTqgRfAL2wv/m8dCFJVd6lL5Zk//cX7ftoUJi81vnpDpXCX3y69mhXLDnZbEjc8C
+        bGKqvl2fFlP+8sWjsnCB2OmicxQT3qfcDVv8+YkSS3FGoqEWc1FxIgDb/Ma6IAMAAA==
+X-CMS-MailID: 20200703003307epcas1p20b58f82e8e7e0beb335410cd4b877884
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: SVC_REQ_APPROVE
 CMS-TYPE: 101P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200609124733epcas1p41612c63bd66692c16651622f4402efc4
-References: <20200609124610.3445662-1-kieran.bingham+renesas@ideasonboard.com>
-        <CGME20200609124733epcas1p41612c63bd66692c16651622f4402efc4@epcas1p4.samsung.com>
-        <20200609124610.3445662-13-kieran.bingham+renesas@ideasonboard.com>
+X-CMS-RootMailID: 20200402222006epcas1p4027cd509b32ba2d2bdf90e9e84cf4bec
+References: <CGME20200402222006epcas1p4027cd509b32ba2d2bdf90e9e84cf4bec@epcas1p4.samsung.com>
+        <20200402221723.6064-1-digetx@gmail.com>
+        <921abb5e-8c12-db8b-b345-fbe49080dc1c@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/9/20 9:46 PM, Kieran Bingham wrote:
-> The word 'descriptor' is misspelled throughout the tree.
+Dear all,
+
+On 5/8/20 1:04 PM, Chanwoo Choi wrote:
+> Hi Rafael,
 > 
-> Fix it up accordingly:
->     decriptors -> descriptors
+> Could you please apply it to linux-pm directly?
 > 
-> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> ---
->  drivers/devfreq/devfreq-event.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> I think that it is better to be applied directly
+> for preventing the possible merge conflict of MAINTAINERS file.
 > 
-> diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-> index 8c31b0f2e28f..56efbeb7851e 100644
-> --- a/drivers/devfreq/devfreq-event.c
-> +++ b/drivers/devfreq/devfreq-event.c
-> @@ -293,7 +293,7 @@ static void devfreq_event_release_edev(struct device *dev)
->  /**
->   * devfreq_event_add_edev() - Add new devfreq-event device.
->   * @dev		: the device owning the devfreq-event device being created
-> - * @desc	: the devfreq-event device's decriptor which include essential
-> + * @desc	: the devfreq-event device's descriptor which include essential
->   *		  data for devfreq-event device.
->   *
->   * Note that this function add new devfreq-event device to devfreq-event class
-> @@ -385,7 +385,7 @@ static void devm_devfreq_event_release(struct device *dev, void *res)
->  /**
->   * devm_devfreq_event_add_edev() - Resource-managed devfreq_event_add_edev()
->   * @dev		: the device owning the devfreq-event device being created
-> - * @desc	: the devfreq-event device's decriptor which include essential
-> + * @desc	: the devfreq-event device's descriptor which include essential
->   *		  data for devfreq-event device.
->   *
->   * Note that this function manages automatically the memory of devfreq-event
+> Best Regards,
+> Chanwoo Choi
+> 
+> On 4/3/20 7:17 AM, Dmitry Osipenko wrote:
+>> I was contributing to the NVIDIA Tegra20+ devfreq drivers recently and
+>> want to help keep them working and evolving in the future.
+>>
+>> Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>
+>> Changelog:
+>>
+>> v2: - Addressed review comments made by Chanwoo Choi to v1 by correcting
+>>       git's address, making this patch standalone and adding Rafael Wysocki
+>>       to the list of email recipients.
+>>
+>>  MAINTAINERS | 9 +++++++++
+>>  1 file changed, 9 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 245a96316636..0a694e20ea19 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -10922,6 +10922,15 @@ F:	include/linux/memblock.h
+>>  F:	mm/memblock.c
+>>  F:	Documentation/core-api/boot-time-mm.rst
+>>  
+>> +MEMORY FREQUENCY SCALING DRIVERS FOR NVIDIA TEGRA
+>> +M:	Dmitry Osipenko <digetx@gmail.com>
+>> +L:	linux-pm@vger.kernel.org
+>> +L:	linux-tegra@vger.kernel.org
+>> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git
+>> +S:	Maintained
+>> +F:	drivers/devfreq/tegra20-devfreq.c
+>> +F:	drivers/devfreq/tegra30-devfreq.c
+>> +
+>>  MEMORY MANAGEMENT
+>>  M:	Andrew Morton <akpm@linux-foundation.org>
+>>  L:	linux-mm@kvack.org
+>>
+> 
 > 
 
-Applied it. Thanks.
+I applied it to devfreq-next branch. Thanks.
+
 
 -- 
 Best Regards,
