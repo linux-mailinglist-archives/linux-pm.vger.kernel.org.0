@@ -2,173 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D82F2139B1
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 14:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5D72139E1
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 14:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgGCMFL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jul 2020 08:05:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGCMFH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 08:05:07 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C78FC08C5C1
-        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 05:05:07 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id j18so31790318wmi.3
-        for <linux-pm@vger.kernel.org>; Fri, 03 Jul 2020 05:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=b/2h7xwQ3PLCO21KCpNHtwNw5XKKdaueZj6bzj1qaFI=;
-        b=FwFjz9kczp/fmEq/3CY2LzY2MoAX4g3txWk2jZPo1VMcZhFboGhbIg3T8rhW0rPtbh
-         qKWbZioeDBQZ9CKsivZWPupCioAGqQYcUfu4IlduD6az4TVr0iBMZzhBOKPL9J7uMbWA
-         mquofFZR7KwyKNOmBpOWqsQ2cDTqZBtJ4MhCqXeld9v0yHNq686i8GUu6NvzX52yGtCB
-         wdhzw6IXYtGUX0Q+WUJVgugYssLiqaRgCYqUWIi7yrmmC5szxCxNsSn3Qy+dVlKZF2Z/
-         21oufd7NY1SMIhg2z1KYznt2bu66fmWXV174+G1DLqnoRRv5lvwFG0EieYGNbAm9E8hr
-         EE6g==
+        id S1726178AbgGCMSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jul 2020 08:18:03 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37490 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbgGCMSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 08:18:02 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 12so19844391oir.4;
+        Fri, 03 Jul 2020 05:18:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=b/2h7xwQ3PLCO21KCpNHtwNw5XKKdaueZj6bzj1qaFI=;
-        b=Fh/QYu6UYC+Q5W/w9k7IGdARwTY5dxC2rf3XuFCDO8is9bou3iLXRL4HE3Hm8MoEQM
-         aULtmAufTqIAcXHMNehYbPP+Dc9/nTWiBF7cr6WQEXVnKPoq1VCnYpaLc42sjVKYkfMx
-         4AjA9bcJMEnv1lkKBZvODinYqLCPzXW+HS5nZ1GAVIqHPvBUcOG1UUCLg+jwlKZg4vLW
-         Du1vmjxEnbhQNXYdT9lpmbgJQQnedCxcS+sEIsdj/nqFZCf+tfk7g64IDADMpTLJ7y3l
-         cELkNp/MqCFgcgstBHaEEMocmPx70eDOq3cQ5d3HmJCjIAoIa23BRz0jP7OPnAhdDUZb
-         ukzQ==
-X-Gm-Message-State: AOAM532jVfYtUvwzHK/V6Bu4B1nNACo8cbU37Jgor/uelC5B5UKbDrjt
-        6nvlBrjJSUM7qgxS7+sO9MN/ig==
-X-Google-Smtp-Source: ABdhPJwumsxgGpUFT/dRsPTyUr8OuykwTKjzsUJJ7FiUIydVdbcw33LRfbaUoxiLbcb0XM3MhDfEJQ==
-X-Received: by 2002:a1c:9e84:: with SMTP id h126mr25473497wme.61.1593777905183;
-        Fri, 03 Jul 2020 05:05:05 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:7019:4e9b:2970:f860? ([2a01:e34:ed2f:f020:7019:4e9b:2970:f860])
-        by smtp.googlemail.com with ESMTPSA id k20sm13379403wmi.27.2020.07.03.05.05.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jul 2020 05:05:04 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Fixes for stop monitoring disabled devices series
-To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200703104354.19657-1-andrzej.p@collabora.com>
- <fc1bb7f5-2096-a604-8c30-81d34bf5b737@linaro.org>
- <91db4c89-0615-4a69-9695-ed5d3c42e1b7@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <79ae59af-d3b9-852c-d5f3-5b80d9c6ea8c@linaro.org>
-Date:   Fri, 3 Jul 2020 14:05:00 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Oi7KCmisZZOxbTNZth57zE50NPkwGb8qPSfZLePIfnw=;
+        b=Y+NvKN5ccU2sn/d+k/0WXGvEzvWhySF5BtgGmEJjc159Nr9LmZo82gW5E/SG8hAGxM
+         AyfPFeckLIdRvUsWYLZB0FBfCKH/QixoiYK3vQCiGDMq3uEZaVZYpaSyr6x44+w8YsWo
+         IfeHaQR0cqoeKciSB15jtcJOaMunN/Q/fXi50hEJZUpZ15IbBieUM2mvxnSWujLI+019
+         z54Zf8uqU2OtbUJ5aF1bCGbo132DPeRp+jvSXTDjoopWwqxZxtgkd7qDCC7mhs1QUZyH
+         vkScK8HMhcmvWrS5mtUFNU9C6Y97+lPaL9dszEhJmbwKmvSb2sPgVLHKQETQC7DTqYW/
+         yb8Q==
+X-Gm-Message-State: AOAM532pTkiUtkWmW7D6b3lpFn2QwrHrziRKGefYBLt3/6XZB9cEFFdw
+        vBRsgD5jKGfdgdUlPvAfvOuI1MrlUXzyM5i73pg=
+X-Google-Smtp-Source: ABdhPJxm1iEh0OWPmzqlUOmdOGmVD+UuYAFKeFz4ataM8y7DQH47+7k+7QSzTHoKyaeMab0wApcKrHwBwSbc13PGcPk=
+X-Received: by 2002:aca:e188:: with SMTP id y130mr9572140oig.110.1593778681863;
+ Fri, 03 Jul 2020 05:18:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <91db4c89-0615-4a69-9695-ed5d3c42e1b7@collabora.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com> <20200703113026.GT18446@dhcp22.suse.cz>
+In-Reply-To: <20200703113026.GT18446@dhcp22.suse.cz>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 3 Jul 2020 14:17:50 +0200
+Message-ID: <CAJZ5v0g+ip-EuUsoK646W-jVSSUhbnvHKsWmFH0+F1w0oYSmGw@mail.gmail.com>
+Subject: Re: [RFC]: mm,power: introduce MADV_WIPEONSUSPEND
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     "Catangiu, Adrian Costin" <acatan@amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "bonzini@gnu.org" <bonzini@gnu.org>,
+        "Graf (AWS), Alexander" <graf@amazon.de>,
+        "MacCarthaigh, Colm" <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Sandu, Andrei" <sandreim@amazon.com>,
+        "Brooker, Marc" <mbrooker@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        "Manwaring, Derek" <derekmn@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/07/2020 13:57, Andrzej Pietrasiewicz wrote:
-> Hi,
-> 
-> W dniu 03.07.2020 o 13:06, Daniel Lezcano pisze:
->> On 03/07/2020 12:43, Andrzej Pietrasiewicz wrote:
->>> This short series contains fixes for "Stop monitoring disabled devices"
->>> series https://www.spinics.net/lists/arm-kernel/msg817861.html
->>>
->>> Invocation of thermal_zone_device_is_enabled() in acpi/thermal is now
->>> redundant, because thermal_zone_device_update() now is capable of
->>> handling disabled devices.
->>>
->>> In imx's ->get_temp() the lock must not be taken, otherwise a deadlock
->>> happens. The decision whether explicitly running a measurement cycle
->>> is needed is taken based on driver's local irq_enabled variable.
->>>
->>> Finally, thermal_zone_device_is_enabled() is made available to the
->>> core only, as there are no driver users of it.
->>>
->>> Andrzej Pietrasiewicz (3):
->>>    acpi: thermal: Don't call thermal_zone_device_is_enabled()
->>>    thermal: imx: Use driver's local data to decide whether to run a
->>>      measurement
->>>    thermal: Make thermal_zone_device_is_enabled() available to core only
->>>
->>>   drivers/acpi/thermal.c         | 3 ---
->>>   drivers/thermal/imx_thermal.c  | 7 ++++---
->>>   drivers/thermal/thermal_core.c | 1 -
->>>   drivers/thermal/thermal_core.h | 2 ++
->>>   include/linux/thermal.h        | 5 -----
->>>   5 files changed, 6 insertions(+), 12 deletions(-)
->>
->> Is this series easily merge-able with the other series?
->>
-> 
-> So-so.
-> 
-> Some simple conflicts needed to be resolved.
-> 
-> I have created a branch for you to look at and decide
-> how far off it is from the original and whether the
-> original Acked-by/Reviewed-by can be retained.
-> 
-> Note that I might have lost some portions of code
-> during conflict resolution. It seems to me I haven't
-> but you know.
-> 
-> The branch:
-> 
-> https://gitlab.collabora.com/andrzej.p/kernel-tests/-/tree/thermal-dont-poll-disabled-for-daniel
+On Fri, Jul 3, 2020 at 1:30 PM Michal Hocko <mhocko@kernel.org> wrote:
+>
+> On Fri 03-07-20 10:34:09, Catangiu, Adrian Costin wrote:
+> > This patch adds logic to the kernel power code to zero out contents of
+> > all MADV_WIPEONSUSPEND VMAs present in the system during its transition
+> > to any suspend state equal or greater/deeper than Suspend-to-memory,
+> > known as S3.
+>
+> How does the application learn that its memory got wiped? S2disk is an
+> async operation and it can happen at any time during the task execution.
+> So how does the application work to prevent from corrupted state - e.g.
+> when suspended between two memory loads?
 
-Ok, I propose to keep the these three patches on top of V7.
+This doesn't affect hibernation AFAICS, but system suspend
+(suspend-to-RAM or suspend-to-idle, or standby) is async too.
 
-Rui are you fine with that ?
+I guess this calls for an interface to notify user space (that opted
+in to receive such notifications) on system-wide suspend start and
+finish.
 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks!
