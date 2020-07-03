@@ -2,59 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 671672141D5
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Jul 2020 00:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5192141DB
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jul 2020 00:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgGCWxd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jul 2020 18:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S1726379AbgGCW4c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jul 2020 18:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgGCWxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 18:53:33 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17406C061794
-        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 15:53:33 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f5so22816805ljj.10
-        for <linux-pm@vger.kernel.org>; Fri, 03 Jul 2020 15:53:32 -0700 (PDT)
+        with ESMTP id S1726188AbgGCW4b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 18:56:31 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A47FC061794
+        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 15:56:31 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id t74so19377800lff.2
+        for <linux-pm@vger.kernel.org>; Fri, 03 Jul 2020 15:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xCR5VvhKlbkEFM6sZwEPdCYNVIQ/fI7Y+3OKvD7Y5CE=;
-        b=M7+yQAj4FyVF9DU+YNPXjKkVGTGKftdJcKKszBlVnX5aS/jz3jwzpl3oRMTykHtghk
-         CMx1MmsupZzmxYmq0YdqHf4JFlGmU+ghnqWOKgIEdrvyFQ8Qa99a2FdkXrdi2Se/MLsL
-         nlVcruJkxMDHASJOxyYFVac4TY50weNssjd+pcNnCBmcp3Oz3AkyGCqXTM+LdkZ0pRFo
-         SJAmicXgGy4doAWU9fLljh5vtUNMBTr+DM4EVbJvY2Mmd+0/V3H4Ly/4mbVGWiUWaTQs
-         5AIO+GujEt3x4dZHcu5ilq/o638RybF8ne644ndhtl4BYMHpGmDujSfX0aKEpdomjKD8
-         kEdQ==
+        bh=HbgA4RzqidtZFEVtt5akl8++MP32OZjgKqPdlkBDgXs=;
+        b=UeZlVA56DqwTv9Lh1HYTByyGxaiUrgbCpUb5wwS/W3ttQUa/nvZj+SlwPS35p4CYSP
+         Dowgopsc43EYqpsAdDrA2Xpid3lkfppKMVYaEQf/e8bD3MGnuO2VKhSicJ5UMowB4JIv
+         1EGmWrpPbBWxHHAF74B0p12xAwXZ89dk7RJo6xAoFLJ0ejv4EI2nlhY1B50UjO1cPtJ7
+         nKtGAslCAzgcf2mxWINZ5sK/mtNkc7OeZe8Lkwg/U5dpuvCWk8FDTjU70/wcDwVNA6o0
+         gSdzbay7w2WFaxVj7xbHwB0IyEehWpmOReepW9FeS88uEUObxDYUB7E8A0YxAmd/b9tG
+         M72Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xCR5VvhKlbkEFM6sZwEPdCYNVIQ/fI7Y+3OKvD7Y5CE=;
-        b=HaHKHjhtV0JRW0foiJynWtwwtSFLq+sorip2ZIs3iaBFsxvj1dP9gTyagddLBu5SYS
-         E09MyAaec9yKBUmc2ghLob72yGSFrJR/bjXdT9eP5LIW6MY3Dx+dVuv1lRQHrAUEJW7+
-         5GQfNaGK2V0PDp0B2RZr2BfTVcbcXLGn+O6zgOFqp4Xqd48q9M7I+4zkPvWCmadSYVv6
-         GyHnlGJ2qqKJG5tT+jvNzbNL4ibvK2g1ZLmrf+gLyPBtuZdOuAkVsIGZf89KKRvACzI1
-         cI4mxx/suyMRjp0vj3SrmWbKrMbXwQ1mS6QGRfqcvuKdfHAUhOqpNPoLja0f5jeICPRi
-         QeQQ==
-X-Gm-Message-State: AOAM531932N+NZ3N3UAjBNq3CtxXe3vm+neVIelPF0jpaZvek+ceIYgk
-        pfbBZh7KtQ8IkcwD768tojL7MKsvs6k4ZIera1guuA==
-X-Google-Smtp-Source: ABdhPJy0/d7YQxkDTsZvXO7ow32yFdRcjugFg1twpCSkcbrbcdxZ/z4wQIr7NksLBKL4GwroBCtrf1lXG19AlZ5fv5c=
-X-Received: by 2002:a2e:9dcc:: with SMTP id x12mr4527117ljj.415.1593816811282;
- Fri, 03 Jul 2020 15:53:31 -0700 (PDT)
+        bh=HbgA4RzqidtZFEVtt5akl8++MP32OZjgKqPdlkBDgXs=;
+        b=CT88ARxiU6dXG6/7DBd11YUx7nsBwfIFRYb4PM4AP2ungKkjjuqAgPue95wD9zKb6y
+         sFAkTITu4yT7Ua20kD6DsXjCByOSV5QeKuy6NAYDBbONNGKrO6A/d6PhLfoCmam0RyyQ
+         J6nHz40hmCcB8a2ualxUg2eidkjTaKeWo7+34vMFlcv3Ek2Xx/HnVr+w2o5//ILepIdf
+         MPgCMMJP/buE8EyA7CxdHe7AtwkiqKESKOkPwLb9dGA3793rMp6QX5AFbP0U6HfkYljM
+         AVTQ6VJjrdQ1oKtv2okCXbozAVvmMuNFbDwnRHe9sS70W2LGbMc70CCjaesfIHpTB2GT
+         zzaw==
+X-Gm-Message-State: AOAM533vtcsI95iathl1c7bp68Rv4cXxIpPCYsMusx9HAd/tnzOR5mOY
+        G4ZMuvUlUtLkz/zBEsR0ZbGKWK9A4REw/Bs8rMRsLDtQ
+X-Google-Smtp-Source: ABdhPJwMLT+gN9QjK+IvxYNcKqOXF1CgkwQpOJdeVbidIY1M/NzUS4Gb23Gqi9y7RTbtdUpFyLm5YuABMHLAclQ1HnM=
+X-Received: by 2002:a05:6512:752:: with SMTP id c18mr888011lfs.141.1593816989653;
+ Fri, 03 Jul 2020 15:56:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com>
- <20200703113026.GT18446@dhcp22.suse.cz> <CAG48ez2O2z4L=n57Omwy6s1sWQkdTkPKiikhbfdVhiyd_TGRRw@mail.gmail.com>
- <20200703223453.GA25072@amd>
-In-Reply-To: <20200703223453.GA25072@amd>
+References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com> <20200703224411.GC25072@amd>
+In-Reply-To: <20200703224411.GC25072@amd>
 From:   Jann Horn <jannh@google.com>
-Date:   Sat, 4 Jul 2020 00:53:04 +0200
-Message-ID: <CAG48ez0JkDb84FD8xgpNmERhWcjqbZuXfWbxzmnkM_CH_mXAnQ@mail.gmail.com>
+Date:   Sat, 4 Jul 2020 00:56:03 +0200
+Message-ID: <CAG48ez0oWQd42a-H-Dzw1Wq7HgB5PpFRGCZeYxP8ohxaoZHmvQ@mail.gmail.com>
 Subject: Re: [RFC]: mm,power: introduce MADV_WIPEONSUSPEND
 To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Michal Hocko <mhocko@kernel.org>,
-        "Catangiu, Adrian Costin" <acatan@amazon.com>,
+Cc:     "Catangiu, Adrian Costin" <acatan@amazon.com>,
         "linux-mm@kvack.org" <linux-mm@kvack.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "virtualization@lists.linux-foundation.org" 
@@ -63,6 +60,7 @@ Cc:     Michal Hocko <mhocko@kernel.org>,
         "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
         "len.brown@intel.com" <len.brown@intel.com>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
         "fweimer@redhat.com" <fweimer@redhat.com>,
         "keescook@chromium.org" <keescook@chromium.org>,
         "luto@amacapital.net" <luto@amacapital.net>,
@@ -82,28 +80,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 4, 2020 at 12:34 AM Pavel Machek <pavel@ucw.cz> wrote:
-> On Fri 2020-07-03 15:29:22, Jann Horn wrote:
-> > On Fri, Jul 3, 2020 at 1:30 PM Michal Hocko <mhocko@kernel.org> wrote:
-> > > On Fri 03-07-20 10:34:09, Catangiu, Adrian Costin wrote:
-> > > > This patch adds logic to the kernel power code to zero out contents of
-> > > > all MADV_WIPEONSUSPEND VMAs present in the system during its transition
-> > > > to any suspend state equal or greater/deeper than Suspend-to-memory,
-> > > > known as S3.
-> > >
-> > > How does the application learn that its memory got wiped? S2disk is an
-> > > async operation and it can happen at any time during the task execution.
-> > > So how does the application work to prevent from corrupted state - e.g.
-> > > when suspended between two memory loads?
-> >
-> > You can do it seqlock-style, kind of - you reserve the first byte of
-> > the page or so as a "is this page initialized" marker, and after every
-> > read from the page, you do a compiler barrier and check whether that
-> > byte has been
+On Sat, Jul 4, 2020 at 12:44 AM Pavel Machek <pavel@ucw.cz> wrote:
+> > Cryptographic libraries carry pseudo random number generators to
+> > quickly provide randomness when needed. If such a random pool gets
+> > cloned, secrets may get revealed, as the same random number may get
+> > used multiple times. For fork, this was fixed using the WIPEONFORK
+> > madvise flag [1].
 >
-> That would also need smp cpu barriers, and guarantee that first byte
-> is always ... cleared first, and matching barriers in kernel space,
-> too, no?
+> > Unfortunately, the same problem surfaces when a virtual machine gets
+> > cloned. The existing flag does not help there. This patch introduces a
+> > new flag to automatically clear memory contents on VM suspend/resume,
+> > which will allow random number generators to reseed when virtual
+> > machines get cloned.
+>
+> Umm. If this is real problem, should kernel provide such rng in the
+> vsdo page using vsyscalls? Kernel can have special interface to its
+> vsyscalls, but we may not want to offer this functionality to rest of
+> userland...
 
-Not if it happens in the guts of the suspend stuff, when userspace is
-frozen, I think?
+And then the kernel would just need to maintain a sequence
+number in the vDSO data page that gets bumped on suspend, right?
