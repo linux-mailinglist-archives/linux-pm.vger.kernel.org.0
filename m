@@ -2,135 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA2F2133F0
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 08:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDDD21344C
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 08:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgGCGPP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jul 2020 02:15:15 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:46150 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgGCGPO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 02:15:14 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200703061512epoutp011c86f45e6c16b18d12a580f6b0e2bd05~eKXewYxej2413124131epoutp01S
-        for <linux-pm@vger.kernel.org>; Fri,  3 Jul 2020 06:15:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200703061512epoutp011c86f45e6c16b18d12a580f6b0e2bd05~eKXewYxej2413124131epoutp01S
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1593756912;
-        bh=XJm1fvNg9hfO3m0YYoOYKOBAaLBb4q2pn0V9WebzjhY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ojBGQECtum48ZmiHKzs6r+FXAKGHcJNkpGpzA3770s2ccinAe/FE8umVBy0sPDoJR
-         a/m0SKBhaE09vwITVVb7dGv7lRt42UMnUKZSSsAuow8ZFAhYW0i53+Gleu+ng3cORy
-         zdXTD/dsQa2mye1TA+L4ONxCWtBCukyCF/FtW1uk=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200703061511epcas1p48cedd9b23ad7b2716b9dda6471c5a8e0~eKXePvMT-0635706357epcas1p4X;
-        Fri,  3 Jul 2020 06:15:11 +0000 (GMT)
-Received: from epsmges1p2.samsung.com (unknown [182.195.40.154]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 49yl7K4b5czMqYkq; Fri,  3 Jul
-        2020 06:15:09 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        A5.78.19033.DECCEFE5; Fri,  3 Jul 2020 15:15:09 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200703061509epcas1p3e338b614c44f5d8b566dae92f11cc8cb~eKXcA4eB91020410204epcas1p3o;
-        Fri,  3 Jul 2020 06:15:09 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200703061509epsmtrp27b712376909a68c1a4df3959e41f8efc~eKXb-N3Yk2442524425epsmtrp2V;
-        Fri,  3 Jul 2020 06:15:09 +0000 (GMT)
-X-AuditID: b6c32a36-16fff70000004a59-4a-5efeccedb9e3
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        03.2E.08382.DECCEFE5; Fri,  3 Jul 2020 15:15:09 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.113.221.102]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200703061508epsmtip1ef6c2bd15f987b32a2859214dbf8aad0~eKXbvzxJf1305313053epsmtip1j;
-        Fri,  3 Jul 2020 06:15:08 +0000 (GMT)
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     lukasz.luba@arm.com, k.konieczny@samsung.com, krzk@kernel.org,
-        kgene@kernel.org
-Cc:     s.nawrocki@samsung.com, willy.mh.wolff.ml@gmail.com,
-        b.zolnierkie@samsung.com, cw00.choi@samsung.com,
-        chanwoo@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH 2/2] memory: samsung: exynos5422-dmc: Use delayed timer
- as default
-Date:   Fri,  3 Jul 2020 15:26:22 +0900
-Message-Id: <20200703062622.11773-3-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200703062622.11773-1-cw00.choi@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupkk+LIzCtJLcpLzFFi42LZdljTQPftmX9xBp8OKFtsnLGe1WLijSss
-        Fte/PGe1WPBpBqtF/+PXzBbnz29gtzjb9IbdYtPja6wWl3fNYbP43HuE0WLG+X1MFgubWtgt
-        bjeuYLM4/Kad1eLbiUeMDvwea+atYfTYOesuu8emVZ1sHpuX1Hv0bVnF6PF5k1wAW1S2TUZq
-        YkpqkUJqXnJ+SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QyUoKZYk5pUCh
-        gMTiYiV9O5ui/NKSVIWM/OISW6XUgpScAssCveLE3OLSvHS95PxcK0MDAyNToMKE7Ix/Bw+w
-        FfSzV9w7epK9gbGHrYuRg0NCwERixs6CLkYuDiGBHYwSh1ZNZINwPjFK7Hy9gQnC+cYocbHr
-        KlCGE6zj4JQGZojEXkaJzu5FUM4XRolj194yg1SxCWhJ7H9xA6xDRCBUYva9qWBFzAK7mCS+
-        TJsJViQsECFxb815VpBDWARUJY69DAIJ8wpYSSx7t4gJYpu8xOoNB8DKOQWsJe703AO7T0Kg
-        l0Oi98s0ZogiF4lpN/ayQNjCEq+Ob2GHsKUkPr/bC3V2tcTKk0egmjsYJbbsv8AKkTCW2L90
-        MhPIEcwCmhLrd+lDhBUldv6eywhiMwvwSbz72sMKCTBeiY42IYgSZYnLD+5C3Skpsbi9E2qV
-        h8SKs4+hQdfHKLHk3BamCYxysxA2LGBkXMUollpQnJueWmxYYIQcZZsYwWlSy2wH46S3H/QO
-        MTJxMB5ilOBgVhLhTVD9FyfEm5JYWZValB9fVJqTWnyI0RQYeBOZpUST84GJOq8k3tDUyNjY
-        2MLE0MzU0FBJnFdN5kKckEB6YklqdmpqQWoRTB8TB6dUA9OE+VX7Tp3onXnHlMezXNbkCn8o
-        5035kycZ+JXPKMk+PrfVfdF9t8TFafZ7K7xEcjn6QjeejzAsSZL1W/K54Vzjk5Nr9U+IcM3t
-        ufuyhvmYUpl/+bEfLwqmyrVdtvXeP/n5XSHPR5c8Xh0Q3KW2NbH98awOnzrlvHt7CoSSVm9r
-        euR/84Cr7DS2ky6f3tkq5m9f+JWzpF7Q1Dx/TenCw6/0eozUtxWdn7eb+2HHhh1Ld0Zkhf5s
-        jLj37ZrQhomZ98QOT21ymOC+bxJ30BfhbqXX4Vu7+/nn254qmxV+XaN+1xZhe5FLXxS8RXZx
-        RF+4u6lrwhWHW/p501o9DVZ9b3W6Vzl/wdOMo5OTZnKoybspsRRnJBpqMRcVJwIAbNmxzxwE
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrELMWRmVeSWpSXmKPExsWy7bCSnO7bM//iDNqvc1psnLGe1WLijSss
-        Fte/PGe1WPBpBqtF/+PXzBbnz29gtzjb9IbdYtPja6wWl3fNYbP43HuE0WLG+X1MFgubWtgt
-        bjeuYLM4/Kad1eLbiUeMDvwea+atYfTYOesuu8emVZ1sHpuX1Hv0bVnF6PF5k1wAWxSXTUpq
-        TmZZapG+XQJXxr+DB9gK+tkr7h09yd7A2MPWxcjJISFgInFwSgNzFyMXh5DAbkaJM63zWCAS
-        khLTLh4FSnAA2cIShw8XQ9R8YpRY1vKREaSGTUBLYv+LG2CDRAQiJc43HGUDKWIWOMYksfxt
-        O9ggYYEwiU8nNrGCDGIRUJU49jIIJMwrYCWx7N0iJohd8hKrNxxgBrE5Bawl7vTcA5spBFTz
-        pvM64wRGvgWMDKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3MYKDWUtzB+P2VR/0DjEy
-        cTAeYpTgYFYS4U1Q/RcnxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdG4cI4IYH0xJLU7NTUgtQi
-        mCwTB6dUA5MMN2/jfXMVs+WHono74559P7XrfuGR0B0+vKuY/By79s82F16dNcPu0YMdC3Pu
-        W8+y/juDs4DNb2M8d5HCvMW7m57lfkqKOVos+/HQgXuz79pcLl3FUGO//8EDtqVfWzadnr7H
-        c552dZzCfQuP53a7jD9tzrFuDFtelaZod2t78tQ5nNttVk8NeDHJYZZUTzdzfVtWaF75hGnn
-        eRXP7Oc+qMR7zLGAf73YXdkJ4XU8B3iOCL8ScMjreB0v2b7+2j02gdLYa9nrS1i2Vy5kyY9c
-        acKZbJzH9HTlhYaZNhFKeq9/fBZ3Kc3ad09x3Q6uLR84ls2N4mjwTTvwaorH/l+X1mz2flVd
-        pDfvXviv8JNKLMUZiYZazEXFiQByK+lw1QIAAA==
-X-CMS-MailID: 20200703061509epcas1p3e338b614c44f5d8b566dae92f11cc8cb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200703061509epcas1p3e338b614c44f5d8b566dae92f11cc8cb
-References: <20200703062622.11773-1-cw00.choi@samsung.com>
-        <CGME20200703061509epcas1p3e338b614c44f5d8b566dae92f11cc8cb@epcas1p3.samsung.com>
+        id S1725891AbgGCGiz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jul 2020 02:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725960AbgGCGiy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 02:38:54 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E951CC08C5E0
+        for <linux-pm@vger.kernel.org>; Thu,  2 Jul 2020 23:38:53 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id w3so20184929wmi.4
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jul 2020 23:38:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=eorUmfUDMZcNbxM4Fi+PFLp5IkxH/y0wJ21yqWKUjto=;
+        b=TW3k/K6sgcyOzEJs1rw4KfmOe6mN35kwzPQC2F/IgbreSFQA8LXxI7YB4jg768YPf/
+         qlg1GD44Sj2mlQxBQfGEjhGX+c1yfO9Z2Mc+s3nSyOkzpJAHcbxMv5x83AFf4RMl33Gm
+         yETeAQpLmJArPgsTWZB5qQKZ8Av/jgJcSZrGjUH26ysjAUnp1x07PQ8p12XuVcqaQK5X
+         GMh0+9HUQqJoYLlyJFUBhedpmjHLeeAZnlpCjwpSz8Hl1wDM4IBIpPuTU1aSgw+6hhf5
+         PQOMSuzQnnW914bYoIpCxkKUDZ3G876lD7uO8p49b0PgquhyTREZXOsoMzsDs/Eo5jcO
+         p6mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eorUmfUDMZcNbxM4Fi+PFLp5IkxH/y0wJ21yqWKUjto=;
+        b=Ud+AmEk7c+KsVO4ees9cdUWmwgMfEtz21nRvgaxyRWfAThwqZF6ZZUlmq40IJrazrM
+         449IAixb+9vh38XCvM9INK/s+aD34rsrHUdh3rAw2yQkD/4D5Euk/3ceMvZAmO1+8anC
+         bV5UXzTdVOu/71R2Eh93vII1oerZhKwLxaSJkx0GfPmiBcE6V4HH78CCRcgLNXSCQqnj
+         IHXm5kB1sm5air2dPUnlj+XCus5hHSlUqHcBM09Oms7Y0MimPkHA0hTUWTCpBHZpAqnY
+         dDUHeLTYQS2nB5UKnJQasIreJwuIEE8gwbQyTCr+/ubbg8PC6v1T9nwkXO1doOUvCmqv
+         g/8Q==
+X-Gm-Message-State: AOAM5335vLDpgTKVLd2SIIVxHNXCk7M1T6yEoIRJ/F5aLrNQgI8qrW6i
+        E0sNkJXS1O8wGkf137hDK8vAgg==
+X-Google-Smtp-Source: ABdhPJwx/dU/vear+SglZ3FxU9XUXFqcn8iwzYeLZYSHOLOaUd4iFi5d4+vvIppL6IdFuFPEJc4a0g==
+X-Received: by 2002:a1c:7311:: with SMTP id d17mr24326224wmb.60.1593758332203;
+        Thu, 02 Jul 2020 23:38:52 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:7019:4e9b:2970:f860? ([2a01:e34:ed2f:f020:7019:4e9b:2970:f860])
+        by smtp.googlemail.com with ESMTPSA id 65sm13709437wre.6.2020.07.02.23.38.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Jul 2020 23:38:51 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org,
+        linux-rockchip@lists.infradead.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Intel Linux Wireless <linuxwifi@intel.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Peter Kaestle <peter@piie.net>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Allison Randal <allison@lohutok.net>,
+        Enrico Weigelt <info@metux.net>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        kernel@collabora.com
+References: <20200629122925.21729-1-andrzej.p@collabora.com>
+ <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
+ <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
+ <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
+ <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
+ <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
+ <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
+ <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
+ <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
+ <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
+ <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
+ <8aeb4f51-1813-63c1-165b-06640af5968f@linaro.org>
+ <685ef627-e377-bbf1-da11-7f7556ca2dd7@collabora.com>
+ <d41bf28f-ee91-6946-2334-f11ec81f96fe@linaro.org>
+ <44c622dd7de8c7bf143c4435c0edd1b98d09a3d6.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <58265668-fc6d-729a-c126-0c73c2ea853b@linaro.org>
+Date:   Fri, 3 Jul 2020 08:38:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <44c622dd7de8c7bf143c4435c0edd1b98d09a3d6.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use delayed timer as default instead of deferrable timer
-in order to monitor the DMC status regardless of CPU idle.
+On 03/07/2020 03:49, Zhang Rui wrote:
+> On Thu, 2020-07-02 at 19:49 +0200, Daniel Lezcano wrote:
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/memory/samsung/exynos5422-dmc.c | 1 +
- 1 file changed, 1 insertion(+)
+[ ... ]
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 25196d6268e2..93e9c2429c0d 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -945,6 +945,7 @@ static int exynos5_dmc_get_cur_freq(struct device *dev, unsigned long *freq)
-  * It provides to the devfreq framework needed functions and polling period.
-  */
- static struct devfreq_dev_profile exynos5_dmc_df_profile = {
-+	.timer = DEVFREQ_TIMER_DELAYED,
- 	.target = exynos5_dmc_target,
- 	.get_dev_status = exynos5_dmc_get_status,
- 	.get_cur_freq = exynos5_dmc_get_cur_freq,
+>>> So the reason is that ->get_temp() is called while the mutex is
+>>> held and
+>>> thermal_zone_device_is_enabled() wants to take the same mutex.
+>>
+>> Yes, that's correct.
+>>
+>>> Is adding a comment to thermal_zone_device_is_enabled() to never
+>>> call
+>>> it while the mutex is held and adding another version of it which
+>>> does
+>>> not take the mutex ok?
+>>
+>> The thermal_zone_device_is_enabled() is only used in two places, acpi
+>> and this imx driver, and given:
+>>
+>> 1. as soon as the mutex is released, there is no guarantee the
+>> thermal
+>> zone won't be changed right after, the lock is pointless, thus the
+>> information also.
+>>
+>> 2. from a design point of view, I don't see why a driver should know
+>> if
+>> a thermal zone is disabled or not
+>>
+>> It would make sense to end with this function and do not give the
+>> different drivers an opportunity to access this information.
+> 
+> I agree.
+>>
+>> Why not add change_mode for the acpi in order to enable or disable
+>> the
+>> events
+> 
+> thermal_zone_device_is_enabled() is invoked in acpi thermal driver
+> because we only want to do thermal_zone_device_update() when the acpi
+> thermal zone is enabled.
+> 
+> As thermal_zone_device_update() can handle a disabled thermal zone now,
+> we can just remove the check.
+
+Ah yes, good point!
+
+
+
 -- 
-2.17.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
