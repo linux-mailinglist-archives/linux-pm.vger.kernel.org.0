@@ -2,88 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9405B2138E2
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 12:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE062138E3
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jul 2020 12:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbgGCKpu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 3 Jul 2020 06:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36980 "EHLO
+        id S1726022AbgGCKqg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 3 Jul 2020 06:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725984AbgGCKpu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 06:45:50 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD40AC08C5C1;
-        Fri,  3 Jul 2020 03:45:49 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 648AC2A617B
-Subject: Re: [PATCH v7 00/11] Stop monitoring disabled devices
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-References: <20200629122925.21729-1-andrzej.p@collabora.com>
- <aab40d90-3f72-657c-5e14-e53a34c4b420@linaro.org>
- <3d03d1a2-ac06-b69b-93cb-e0203be62c10@collabora.com>
- <47111821-d691-e71d-d740-e4325e290fa4@linaro.org>
- <be9b7ee3-cad0-e462-126d-08de9b226285@collabora.com>
- <4353a939-3f5e-8369-5bc0-ad8162b5ffc7@linaro.org>
- <a531d80f-afd1-2dec-6c77-ed984e97595c@collabora.com>
- <db1ff4e1-cbf8-89b3-5d64-b91a1fd88a41@linaro.org>
- <73942aea-ae79-753c-fe90-d4a99423d548@collabora.com>
- <374dddd9-b600-3a30-d6c3-8cfcefc944d9@linaro.org>
- <5a28deb7-f307-8b03-faad-ab05cb8095d1@collabora.com>
- <8aeb4f51-1813-63c1-165b-06640af5968f@linaro.org>
- <685ef627-e377-bbf1-da11-7f7556ca2dd7@collabora.com>
- <d41bf28f-ee91-6946-2334-f11ec81f96fe@linaro.org>
- <44c622dd7de8c7bf143c4435c0edd1b98d09a3d6.camel@intel.com>
- <58265668-fc6d-729a-c126-0c73c2ea853b@linaro.org>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <625911aa-a55f-dcbf-66b3-719117c6aa32@collabora.com>
-Date:   Fri, 3 Jul 2020 12:45:44 +0200
+        with ESMTP id S1725915AbgGCKqf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 3 Jul 2020 06:46:35 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686BEC08C5C1;
+        Fri,  3 Jul 2020 03:46:35 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id b25so32809696ljp.6;
+        Fri, 03 Jul 2020 03:46:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZoL+j4Y+Z4WvYVFNGyL695fk3xg4Z6QZO/cWXb2X98s=;
+        b=Hv4+tKt2vemcSn1fWh46/PWtOJvinoHGrUakKW5/d0dZep1DX0iFI+84HcYvtSife2
+         0H0ut/5ViUhbrsQiH3Mb4HUjVbbUh0/ZhciON0hFmOEhR9GjFKLJZshW22HOfmGoFxfW
+         MiTLrWisu/BdnFf3Ld75vyR0wT4atm194bIui1ltI1dskBs2hYA6t5ESAj+R+4Cf5uki
+         KTJW6F8pr2gNb3KMSV5H/LBc7BqsbkAXk6vBJ2is1uviAvIK+HX/loWAIdKfp26t/hXs
+         8zc5g0tYA5Eyd8k59m/2ybZCU6Vk0Kpm/n3qxpLycOhl6ncG2nU5NNyG9/W+vxDX0aa8
+         b+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZoL+j4Y+Z4WvYVFNGyL695fk3xg4Z6QZO/cWXb2X98s=;
+        b=o0F2F4yWPxYJuSIrAMXh105zGsuwNuA4bblzl7TF97E/OIO+PHukLeh8p3c4KRt2lx
+         Vf7FQOVmGMySNIxbzsE1yzfTHOfj67FwZh/ArhAtl43jGhgqmzzVlqmk0SiKGQER17kh
+         grPY4S00JfllO2BgaMg5UGrToutdklo0lEjVFV3qaM65up3dC43pKz7QNMEM2JsI5PrJ
+         NNXb0NVee1v50j/GMJLvm/34FDbYlO1bfdvZx0SmFzY05q/UC/J0Rd2Rtz6QL4Jce+j2
+         VKCHaF4NMR8hS4rhp7imlXX5sPVzZHxh1ricV+LW+gqxUs36C/2pjGbAQnuNnOKle/3F
+         ABLw==
+X-Gm-Message-State: AOAM530NyCQLHXMTfo7iiNlskn+WIlzvsTddCEBNT8wm3ez6VpLwTjDh
+        DNH6q/MEPTzGUg1HCk7e2sc=
+X-Google-Smtp-Source: ABdhPJxdtDhJ2zfGPUqdkG2FiChIxtnxwVhEYypRyXNFa+PrUnLKzsCkYfuFycSt3kRoLc47KYo86g==
+X-Received: by 2002:a2e:9d0b:: with SMTP id t11mr18612477lji.122.1593773193951;
+        Fri, 03 Jul 2020 03:46:33 -0700 (PDT)
+Received: from [192.168.2.145] (79-139-237-54.dynamic.spd-mgts.ru. [79.139.237.54])
+        by smtp.googlemail.com with ESMTPSA id l12sm3812618ljj.43.2020.07.03.03.46.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jul 2020 03:46:31 -0700 (PDT)
+Subject: Re: [PATCH 2/2] PM / devfreq: Add governor flags to clarify the
+ features
+To:     Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     leonard.crestez@nxp.com, lukasz.luba@arm.com,
+        enric.balletbo@collabora.com, hl@rock-chips.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, abel.vesa@nxp.com,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com
+References: <20200703100810.12304-1-cw00.choi@samsung.com>
+ <CGME20200703095657epcas1p187b7f90a4a33da7791a83a78760f3a91@epcas1p1.samsung.com>
+ <20200703100810.12304-3-cw00.choi@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <6027cf29-ea6f-0a27-3e39-a80c24b80bb8@gmail.com>
+Date:   Fri, 3 Jul 2020 13:46:30 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <58265668-fc6d-729a-c126-0c73c2ea853b@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200703100810.12304-3-cw00.choi@samsung.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -91,61 +75,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+03.07.2020 13:08, Chanwoo Choi пишет:
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index e94a27804c20..620ecd250d7c 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -765,10 +765,12 @@ static int tegra_governor_event_handler(struct devfreq *devfreq,
+>  
+>  static struct devfreq_governor tegra_devfreq_governor = {
+>  	.name = "tegra_actmon",
+> +	.flag = DEVFREQ_GOV_FLAG_ATTR_COMMON
+> +		| DEVFREQ_GOV_FLAG_ATTR_POLLING_INTERVAL,
 
-W dniu 03.07.2020 o 08:38, Daniel Lezcano pisze:
-> On 03/07/2020 03:49, Zhang Rui wrote:
->> On Thu, 2020-07-02 at 19:49 +0200, Daniel Lezcano wrote:
-> 
-> [ ... ]
-> 
->>>> So the reason is that ->get_temp() is called while the mutex is
->>>> held and
->>>> thermal_zone_device_is_enabled() wants to take the same mutex.
->>>
->>> Yes, that's correct.
->>>
->>>> Is adding a comment to thermal_zone_device_is_enabled() to never
->>>> call
->>>> it while the mutex is held and adding another version of it which
->>>> does
->>>> not take the mutex ok?
->>>
->>> The thermal_zone_device_is_enabled() is only used in two places, acpi
->>> and this imx driver, and given:
->>>
->>> 1. as soon as the mutex is released, there is no guarantee the
->>> thermal
->>> zone won't be changed right after, the lock is pointless, thus the
->>> information also.
->>>
->>> 2. from a design point of view, I don't see why a driver should know
->>> if
->>> a thermal zone is disabled or not
->>>
->>> It would make sense to end with this function and do not give the
->>> different drivers an opportunity to access this information.
->>
->> I agree.
->>>
->>> Why not add change_mode for the acpi in order to enable or disable
->>> the
->>> events
->>
->> thermal_zone_device_is_enabled() is invoked in acpi thermal driver
->> because we only want to do thermal_zone_device_update() when the acpi
->> thermal zone is enabled.
->>
->> As thermal_zone_device_update() can handle a disabled thermal zone now,
->> we can just remove the check.
-> 
-> Ah yes, good point!
-> 
-> 
-> 
+Hello, Chanwoo!
 
-I sent a short series with fixes. Daniel, can you kindly test it?
+There is a typo here, it should be ".attr = ".
 
-Regards,
+> +	.flag = DEVFREQ_GOV_FLAG_FLAG_IMMUTABLE,
+> +		| DEVFREQ_GOV_FLAG_FLAG_IRQ_DRIVEN,
 
-Andrzej
+There is a typo here too FLAG_FLAG ^
+
+>  	.get_target_freq = tegra_governor_get_target,
+>  	.event_handler = tegra_governor_event_handler,
+> -	.immutable = true,
+> -	.interrupt_driven = true,
+>  };
+>  
+
