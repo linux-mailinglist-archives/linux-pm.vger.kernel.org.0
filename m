@@ -2,162 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 899BC214A7E
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jul 2020 08:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96EE214B91
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jul 2020 11:37:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgGEGEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 5 Jul 2020 02:04:34 -0400
-Received: from mga03.intel.com ([134.134.136.65]:53525 "EHLO mga03.intel.com"
+        id S1726491AbgGEJhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 5 Jul 2020 05:37:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36216 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725873AbgGEGEe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 5 Jul 2020 02:04:34 -0400
-IronPort-SDR: pHnVBsnIxSx5WKl1RlaRCjXrBR5HrZUnQ9z4I8Ty1cV8AXChURgWwbzJjdlA4BNDJYgri+i7nc
- +huKGr37dUTw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9672"; a="147301297"
-X-IronPort-AV: E=Sophos;i="5.75,314,1589266800"; 
-   d="scan'208";a="147301297"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2020 23:04:33 -0700
-IronPort-SDR: RTZKJhnrLEZugPly4VtR2NDpLYKGxq/qbqDz6diM18IhrJLYpFDA0aIulzr5x/OJiPJ0R6pdFP
- RzzxPLYsn14A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,314,1589266800"; 
-   d="scan'208";a="282715546"
-Received: from yangblan-mobl2.ccr.corp.intel.com ([10.255.29.148])
-  by orsmga006.jf.intel.com with ESMTP; 04 Jul 2020 23:04:22 -0700
-Message-ID: <9627f15fb2145525b40d6c1aed6752e13df876e9.camel@intel.com>
-Subject: Re: [PATCH 0/3] Fixes for stop monitoring disabled devices series
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Vishal Kulkarni <vishal@chelsio.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>,
-        Intel Linux Wireless <linuxwifi@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Peter Kaestle <peter@piie.net>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>, Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Allison Randal <allison@lohutok.net>,
-        Enrico Weigelt <info@metux.net>,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        kernel@collabora.com
-Date:   Sun, 05 Jul 2020 14:04:21 +0800
-In-Reply-To: <79ae59af-d3b9-852c-d5f3-5b80d9c6ea8c@linaro.org>
-References: <20200703104354.19657-1-andrzej.p@collabora.com>
-         <fc1bb7f5-2096-a604-8c30-81d34bf5b737@linaro.org>
-         <91db4c89-0615-4a69-9695-ed5d3c42e1b7@collabora.com>
-         <79ae59af-d3b9-852c-d5f3-5b80d9c6ea8c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726467AbgGEJhH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 5 Jul 2020 05:37:07 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DF9F2073E;
+        Sun,  5 Jul 2020 09:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593941826;
+        bh=wExsVNlA8OBH3gMvy3MLlC4oFVBlISbS1WZHNOU2l2E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ay2INal2pcNefvfAGMKg5ZpHsn1mCBTxd5zyrNSPig3oAPahfmPvLZulZTpPlaPxb
+         Se01tIA9ntYiDejjJP7PAn2WBGWJGZSfieXwWNuQqhfS6XBBnEU2X3O2dyOqAqQaHJ
+         ZldDjZ/kVbzv0Fg+lDmjQlm+knSwmmL272Yz+Hlg=
+Date:   Sun, 5 Jul 2020 11:37:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gustav Wiklander <gustavwi@axis.com>
+Cc:     Gustav Wiklander <Gustav.Wiklander@axis.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "khilman@kernel.org" <khilman@kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, kernel <kernel@axis.com>
+Subject: Re: [PATCH] PM / Domains: Add module ref count for each consumer
+Message-ID: <20200705093708.GA559523@kroah.com>
+References: <20200610143943.12548-1-gustav.wiklander@axis.com>
+ <20200610145229.GA2101163@kroah.com>
+ <a6f1fbad-b753-db30-bf95-c314e9eea508@axis.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a6f1fbad-b753-db30-bf95-c314e9eea508@axis.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-07-03 at 14:05 +0200, Daniel Lezcano wrote:
-> On 03/07/2020 13:57, Andrzej Pietrasiewicz wrote:
-> > Hi,
-> > 
-> > W dniu 03.07.2020 o 13:06, Daniel Lezcano pisze:
-> > > On 03/07/2020 12:43, Andrzej Pietrasiewicz wrote:
-> > > > This short series contains fixes for "Stop monitoring disabled
-> > > > devices"
-> > > > series https://www.spinics.net/lists/arm-kernel/msg817861.html
-> > > > 
-> > > > Invocation of thermal_zone_device_is_enabled() in acpi/thermal
-> > > > is now
-> > > > redundant, because thermal_zone_device_update() now is capable
-> > > > of
-> > > > handling disabled devices.
-> > > > 
-> > > > In imx's ->get_temp() the lock must not be taken, otherwise a
-> > > > deadlock
-> > > > happens. The decision whether explicitly running a measurement
-> > > > cycle
-> > > > is needed is taken based on driver's local irq_enabled
-> > > > variable.
-> > > > 
-> > > > Finally, thermal_zone_device_is_enabled() is made available to
-> > > > the
-> > > > core only, as there are no driver users of it.
-> > > > 
-> > > > Andrzej Pietrasiewicz (3):
-> > > >    acpi: thermal: Don't call thermal_zone_device_is_enabled()
-> > > >    thermal: imx: Use driver's local data to decide whether to
-> > > > run a
-> > > >      measurement
-> > > >    thermal: Make thermal_zone_device_is_enabled() available to
-> > > > core only
-> > > > 
-> > > >   drivers/acpi/thermal.c         | 3 ---
-> > > >   drivers/thermal/imx_thermal.c  | 7 ++++---
-> > > >   drivers/thermal/thermal_core.c | 1 -
-> > > >   drivers/thermal/thermal_core.h | 2 ++
-> > > >   include/linux/thermal.h        | 5 -----
-> > > >   5 files changed, 6 insertions(+), 12 deletions(-)
+On Wed, Jun 10, 2020 at 07:24:02PM +0200, Gustav Wiklander wrote:
+> On 6/10/20 4:52 PM, Greg KH wrote:
+> > On Wed, Jun 10, 2020 at 04:39:43PM +0200, Gustav Wiklander wrote:
+> > > From: Gustav Wiklander <gustavwi@axis.com>
 > > > 
-> > > Is this series easily merge-able with the other series?
-> > > 
+> > > Currently a pm_domain can be unloaded without regard for consumers.
+> > > This patch adds a module dependecy for every registered consumer.
+> > > Now a power domain driver can only be unloaded if no consumers are
+> > > registered.
 > > 
-> > So-so.
-> > 
-> > Some simple conflicts needed to be resolved.
-> > 
-> > I have created a branch for you to look at and decide
-> > how far off it is from the original and whether the
-> > original Acked-by/Reviewed-by can be retained.
-> > 
-> > Note that I might have lost some portions of code
-> > during conflict resolution. It seems to me I haven't
-> > but you know.
-> > 
-> > The branch:
+> > What is the problem with doing this?  Shouldn't when a power domain is
+> > unregistered, the consumers are properly torn down?  Some subsystems
+> > allow you to unload a module at any point in time, and properly clean
+> > things up.  What is the problem today that you are trying to solve with
+> > this (remember, removing modules only happens by developers, no
+> > real-world system ever automatically onloads a module.)
 > > 
 > > 
-https://gitlab.collabora.com/andrzej.p/kernel-tests/-/tree/thermal-dont-poll-disabled-for-daniel
+> Hi Greg and Rafael,
 > 
-> Ok, I propose to keep the these three patches on top of V7.
+> Thanks for the quick reply.
 > 
-> Rui are you fine with that ?
+> PM domains shall call pm_genpd_remove at removal. As described in the
+> definition pm_genpd_remove will fail if any device is still associated to
+> it. *However*, at module removal the kernel ignores device removal failure
+> and still unloads the powerdomain module.
 
-Yes, that works for me.
+So shouldn't the driver that controls that device be fixed up to
+properly remove the association first?
+
+Is there any in-kernel code that has this problem today?  Adding module
+reference logic for an operation that has to be initiated by a developer
+only, seems like it's not really needed.
 
 thanks,
-rui
-> 
-> 
-> 
 
+greg k-h
