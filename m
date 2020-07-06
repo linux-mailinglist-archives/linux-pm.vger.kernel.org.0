@@ -2,68 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C93C21535F
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 09:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524AB21550C
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 11:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728711AbgGFHj7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jul 2020 03:39:59 -0400
-Received: from smtp.asem.it ([151.1.184.197]:58244 "EHLO smtp.asem.it"
+        id S1728330AbgGFJ5X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jul 2020 05:57:23 -0400
+Received: from mail5.windriver.com ([192.103.53.11]:58812 "EHLO mail5.wrs.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728652AbgGFHj7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 6 Jul 2020 03:39:59 -0400
-Received: from webmail.asem.it
-        by asem.it (smtp.asem.it)
-        (SecurityGateway 6.5.2)
-        with ESMTP id SG000361436.MSG 
-        for <linux-pm@vger.kernel.org>; Mon, 06 Jul 2020 09:39:57 +0200S
-Received: from ASAS044.asem.intra (172.16.16.44) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 6 Jul
- 2020 09:39:54 +0200
-Received: from flavio-x.asem.intra (172.16.17.208) by ASAS044.asem.intra
- (172.16.16.44) with Microsoft SMTP Server id 15.1.1979.3 via Frontend
- Transport; Mon, 6 Jul 2020 09:39:54 +0200
-From:   Flavio Suligoi <f.suligoi@asem.it>
-To:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Flavio Suligoi <f.suligoi@asem.it>
-Subject: [PATCH v1 1/1] power: supply: axp20x_usb_power: fix spelling mistake
-Date:   Mon, 6 Jul 2020 09:39:53 +0200
-Message-ID: <20200706073953.20337-1-f.suligoi@asem.it>
+        id S1727973AbgGFJ5W (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Jul 2020 05:57:22 -0400
+Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
+        by mail5.wrs.com (8.15.2/8.15.2) with ESMTPS id 0669tDiw002399
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
+        Mon, 6 Jul 2020 02:55:34 -0700
+Received: from pek-lpg-core2.corp.ad.wrs.com (128.224.153.41) by
+ ALA-HCA.corp.ad.wrs.com (147.11.189.40) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 6 Jul 2020 02:55:12 -0700
+From:   <zhe.he@windriver.com>
+To:     <trond.myklebust@hammerspace.com>, <anna.schumaker@netapp.com>,
+        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <linux-nfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <zhe.he@windriver.com>
+Subject: [PATCH] freezer: Add unsafe versions of freezable_schedule_timeout_interruptible for NFS
+Date:   Mon, 6 Jul 2020 17:52:24 +0800
+Message-ID: <20200706095224.2285480-1-zhe.he@windriver.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-SGHeloLookup-Result: pass smtp.helo=webmail.asem.it (ip=172.16.16.44)
-X-SGSPF-Result: none (smtp.asem.it)
-X-SGOP-RefID: str=0001.0A090202.5F02D54B.002D,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0 (_st=1 _vt=0 _iwf=0)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix typo: "triger" --> "trigger"
+From: He Zhe <zhe.he@windriver.com>
 
-Signed-off-by: Flavio Suligoi <f.suligoi@asem.it>
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+commit 0688e64bc600 ("NFS: Allow signal interruption of NFS4ERR_DELAYed operations")
+introduces nfs4_delay_interruptible which also needs an _unsafe version to
+avoid the following call trace for the same reason explained in
+commit 416ad3c9c006 ("freezer: add unsafe versions of freezable helpers for NFS")
+
+CPU: 4 PID: 3968 Comm: rm Tainted: G W 5.8.0-rc4 #1
+Hardware name: Marvell OcteonTX CN96XX board (DT)
+Call trace:
+dump_backtrace+0x0/0x1dc
+show_stack+0x20/0x30
+dump_stack+0xdc/0x150
+debug_check_no_locks_held+0x98/0xa0
+nfs4_delay_interruptible+0xd8/0x120
+nfs4_handle_exception+0x130/0x170
+nfs4_proc_rmdir+0x8c/0x220
+nfs_rmdir+0xa4/0x360
+vfs_rmdir.part.0+0x6c/0x1b0
+do_rmdir+0x18c/0x210
+__arm64_sys_unlinkat+0x64/0x7c
+el0_svc_common.constprop.0+0x7c/0x110
+do_el0_svc+0x24/0xa0
+el0_sync_handler+0x13c/0x1b8
+el0_sync+0x158/0x180
+
+Signed-off-by: He Zhe <zhe.he@windriver.com>
 ---
-v1: add Acked-by: Chen-Yu Tsai <wens@csie.org>
+ fs/nfs/nfs4proc.c       |  2 +-
+ include/linux/freezer.h | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
- drivers/power/supply/axp20x_usb_power.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index 4fde24b5f35a..d01dc0332edc 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -78,7 +78,7 @@ static bool axp20x_usb_vbus_needs_polling(struct axp20x_usb_power *power)
- 	/*
- 	 * Polling is only necessary while VBUS is offline. While online, a
- 	 * present->absent transition implies an online->offline transition
--	 * and will triger the VBUS_REMOVAL IRQ.
-+	 * and will trigger the VBUS_REMOVAL IRQ.
- 	 */
- 	if (power->axp20x_id >= AXP221_ID && !power->online)
- 		return true;
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index e32717fd1169..15ecfa474e37 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -414,7 +414,7 @@ static int nfs4_delay_interruptible(long *timeout)
+ {
+ 	might_sleep();
+ 
+-	freezable_schedule_timeout_interruptible(nfs4_update_delay(timeout));
++	freezable_schedule_timeout_interruptible_unsafe(nfs4_update_delay(timeout));
+ 	if (!signal_pending(current))
+ 		return 0;
+ 	return __fatal_signal_pending(current) ? -EINTR :-ERESTARTSYS;
+diff --git a/include/linux/freezer.h b/include/linux/freezer.h
+index 21f5aa0b217f..27828145ca09 100644
+--- a/include/linux/freezer.h
++++ b/include/linux/freezer.h
+@@ -207,6 +207,17 @@ static inline long freezable_schedule_timeout_interruptible(long timeout)
+ 	return __retval;
+ }
+ 
++/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
++static inline long freezable_schedule_timeout_interruptible_unsafe(long timeout)
++{
++	long __retval;
++
++	freezer_do_not_count();
++	__retval = schedule_timeout_interruptible(timeout);
++	freezer_count_unsafe();
++	return __retval;
++}
++
+ /* Like schedule_timeout_killable(), but should not block the freezer. */
+ static inline long freezable_schedule_timeout_killable(long timeout)
+ {
+@@ -285,6 +296,9 @@ static inline void set_freezable(void) {}
+ #define freezable_schedule_timeout_interruptible(timeout)		\
+ 	schedule_timeout_interruptible(timeout)
+ 
++#define freezable_schedule_timeout_interruptible_unsafe(timeout)	\
++	schedule_timeout_interruptible(timeout)
++
+ #define freezable_schedule_timeout_killable(timeout)			\
+ 	schedule_timeout_killable(timeout)
+ 
 -- 
 2.17.1
 
