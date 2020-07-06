@@ -2,110 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC51215EF4
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 20:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC3A21602E
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 22:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729569AbgGFSp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jul 2020 14:45:28 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:52122 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729599AbgGFSp2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jul 2020 14:45:28 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 066IjQru127801;
-        Mon, 6 Jul 2020 13:45:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1594061126;
-        bh=PcCdHop+GwSCzLkx0JmARyDO1A24Eate1XRLBtTMA40=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=M6qDT0k4TEgef3OaQkqIPgZk8BwC+8sw6byBrzGey0J/gK3+jLg+vmu8tr48+Za1J
-         h5DtyjJFk1Og1jMpX+LRW7d/8Fc64GYEt6a5/VIxOW8EslwlTXby7lccCDyBunmx0+
-         zMoxFaelMm9FgyrsqF900mUzaptanDFC3srgeTYo=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 066IjQoG102161
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Jul 2020 13:45:26 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 6 Jul
- 2020 13:45:26 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 6 Jul 2020 13:45:26 -0500
-Received: from [10.250.43.45] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 066IjOjF081156;
-        Mon, 6 Jul 2020 13:45:24 -0500
-Subject: Re: [EXTERNAL] Re: [PATCH v15 2/4] dt-bindings: power: Convert
- battery.txt to battery.yaml
-To:     Rob Herring <robh@kernel.org>
-CC:     <pali@kernel.org>, <linux-pm@vger.kernel.org>,
-        <sspatil@android.com>, <linux-kernel@vger.kernel.org>,
-        <afd@ti.com>, <dmurphy@ti.com>, <sre@kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20200701211044.18590-1-r-rivera-matos@ti.com>
- <20200701211044.18590-3-r-rivera-matos@ti.com>
- <20200702205320.GA1672139@bogus>
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <54914eed-4a65-745b-b61b-9515737023e3@ti.com>
-Date:   Mon, 6 Jul 2020 13:45:24 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726933AbgGFUT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jul 2020 16:19:58 -0400
+Received: from mga09.intel.com ([134.134.136.24]:35159 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726540AbgGFUT5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Jul 2020 16:19:57 -0400
+IronPort-SDR: nbhH2bSgIDfFYKOctCl/mh7cUL/rIIO54qMOjta0YUpdtmbM1OoCAMr0gQySQWZJYxyK4cS1Gm
+ 0/dD8N+jlYHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="149011865"
+X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
+   d="scan'208";a="149011865"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2020 13:19:57 -0700
+IronPort-SDR: 3BSlNuO2KXikjBngo+wNaqVNmV3zQUTDkjml4aOc/RpldiXpP1T8cEi6HYwkxOytSN/E8JRvFA
+ R0GfNdOpaQkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,321,1589266800"; 
+   d="scan'208";a="483254110"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.147])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Jul 2020 13:19:56 -0700
+Date:   Mon, 6 Jul 2020 13:19:56 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, x86@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] x86, sched: Bail out of frequency invariance if
+ turbo frequency is unknown
+Message-ID: <20200706201956.GA1390666@iweiny-DESK2.sc.intel.com>
+References: <20200531182453.15254-1-ggherdovich@suse.cz>
+ <20200531182453.15254-3-ggherdovich@suse.cz>
+ <20200601233418.GA15416@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200702205320.GA1672139@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200601233418.GA15416@ranerica-svr.sc.intel.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rob
+On Mon, Jun 01, 2020 at 04:34:18PM -0700, Ricardo Neri wrote:
+> On Sun, May 31, 2020 at 08:24:52PM +0200, Giovanni Gherdovich wrote:
+> > There may be CPUs that support turbo boost but don't declare any turbo
+> > ratio, i.e. their MSR_TURBO_RATIO_LIMIT is all zeroes. In that condition
+> > scale-invariant calculations can't be performed.
+> > 
+> > Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
+> > Suggested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> 
+> FWIW,
+> 
+> Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-On 7/2/20 3:53 PM, Rob Herring wrote:
-> On Wed, 01 Jul 2020 16:10:42 -0500, Ricardo Rivera-Matos wrote:
->> From: Dan Murphy <dmurphy@ti.com>
->>
->> Convert the battery.txt file to yaml and fix up the examples.
->>
->> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->> ---
->>   .../bindings/power/supply/battery.txt         |  86 +---------
->>   .../bindings/power/supply/battery.yaml        | 157 ++++++++++++++++++
->>   2 files changed, 158 insertions(+), 85 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/battery.yaml
->>
->
-> My bot found errors running 'make dt_binding_check' on your patch:
->
-> Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml'
-> Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/power/supply/battery.example.dts' failed
-> make[1]: *** [Documentation/devicetree/bindings/power/supply/battery.example.dts] Error 255
-> make[1]: *** Waiting for unfinished jobs....
-> Makefile:1347: recipe for target 'dt_binding_check' failed
-> make: *** [dt_binding_check] Error 2
-I think your bot is looking for the types.yaml in the wrong place. 
-'/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml' 
-should be 
-'/usr/local/lib/python3.6/dist-packages/dtschema/schemas/types.yaml'. I 
-renamed might 'schemas' directory to 'schema' and my battery.yaml passed 
-the dt_binding_check.
->
->
-> See https://patchwork.ozlabs.org/patch/1320813
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure dt-schema is up to date:
->
-> pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-Confirmed on latest dt-schema
->
-> Please check and re-submit.
+Is this going to make it as a fix to 5.8?
 
-     Thanks,
+Tested-by: Ira Weiny <ira.weiny@intel.com>
 
-         Ricardo
-
->
