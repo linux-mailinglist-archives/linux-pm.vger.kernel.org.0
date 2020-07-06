@@ -2,120 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B82B6215C51
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 18:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B0B215E5F
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 20:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729629AbgGFQyX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jul 2020 12:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729623AbgGFQyX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jul 2020 12:54:23 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18694C08C5DF
-        for <linux-pm@vger.kernel.org>; Mon,  6 Jul 2020 09:54:23 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l2so41374324wmf.0
-        for <linux-pm@vger.kernel.org>; Mon, 06 Jul 2020 09:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Xne7vGpOLGVeZi1RzsYuJY7kP006PU447//pazbnL/8=;
-        b=UEvqepdTWsEazyNyqDFLHWyFasioIb58H3Ax5VAXf9sR/mpp/WR3L1ghP3K3Mx78ez
-         EHqQvwgr5FA12jUBNWe/8k3ZdP3I+cnx3fUoS0aJOTk0TmsULpbBi9fuaAjZ5tIfhcFz
-         /43uuB0C+XpM1umBZrUir5clRWeTFo30UE7yn3EDEcba+DAUu42Il6fbk8vMKwEeMaPr
-         YDDGYTj3TqsEBYWh58ghEVN/GeWzobDjcJHT1gJC7phxiTp9Y0y5fX11H5Ynz/SRXl1E
-         SgZuMyqOS9HbyCQgcGMTDx2WxH9sPaX4F55h+67iKU9SejsMgherhSQGL/vt8+mytJIl
-         vGUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Xne7vGpOLGVeZi1RzsYuJY7kP006PU447//pazbnL/8=;
-        b=Pj0Dsd287ekAO1MFWVStmrn9R/BgsdafqMBgpr/xGnUYyb3/95jHFr9SPCsUcI/Ot2
-         BAF1DFNQg5k+EvqlFIahx36A/h8kupkezOyQ2+h8/jYZn65cp/STCMo1MxAabXK9l8ND
-         SxTbCo8YN9utC5C7QriT8XcOijdRNPJ9XWlUsg8BlKKQ2jDtfHYQ1y08H4HMQmWOtj7Q
-         hprxsvlcD0Hn7v9T0eW2Qvmkr4oAHpHtRd6G8MQbXYjQsOD3ui3swFdZ4U3o/uuIv02D
-         elpf40x+MHLnUU+cbKRA7/pBD+hJMpd5MWKzqqBYg9Geax+PvFOY6CfKnWWeuPJ+dkcJ
-         UXCg==
-X-Gm-Message-State: AOAM5338YBLnSWQ93OHmVOv96t5kcgdDIN4aE/10R1sapIpfnZ+Zsvvy
-        Grs106I6ukmOXe052ahhsaxZ3A==
-X-Google-Smtp-Source: ABdhPJxExmQmKbAkk+w/FTJsLGuqOHLlDJckmvf+a6xqgrNkO3sW24epd0O9t/fk4BURnw+rdGk1mQ==
-X-Received: by 2002:a1c:804c:: with SMTP id b73mr106243wmd.59.1594054461512;
-        Mon, 06 Jul 2020 09:54:21 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f9e8:8c05:eb6f:1865? ([2a01:e34:ed2f:f020:f9e8:8c05:eb6f:1865])
-        by smtp.googlemail.com with ESMTPSA id 51sm20025871wrc.44.2020.07.06.09.54.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Jul 2020 09:54:20 -0700 (PDT)
-Subject: Re: linux-next: Tree for Jul 6 (thermal/thermal_netlink.c)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-References: <20200706174001.2d316826@canb.auug.org.au>
- <b0348556-065d-f8fa-fc1d-0f084147deb5@infradead.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <af95ed8a-577b-d029-ac27-9fbd142e9ffa@linaro.org>
-Date:   Mon, 6 Jul 2020 18:54:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729767AbgGFSdr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jul 2020 14:33:47 -0400
+Received: from muru.com ([72.249.23.125]:60924 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729550AbgGFSdq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 6 Jul 2020 14:33:46 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 6C99F80FE;
+        Mon,  6 Jul 2020 18:34:38 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>
+Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH] thermal: ti-soc-thermal: Fix bogus thermal shutdowns for omap4430
+Date:   Mon,  6 Jul 2020 11:33:38 -0700
+Message-Id: <20200706183338.25622-1-tony@atomide.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <b0348556-065d-f8fa-fc1d-0f084147deb5@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+We can sometimes get bogus thermal shutdowns on omap4430 at least with
+droid4 running idle with a battery charger connected:
 
-Hi,
+thermal thermal_zone0: critical temperature reached (143 C), shutting down
 
-thanks for reporting that, I'll fix it.
+Dumping out the register values shows we can occasionally get a 0x7f value
+that is outside the TRM listed values in the ADC conversion table. And then
+we get a normal value when reading again after that. Reading the register
+multiple times does not seem help avoiding the bogus values as they stay
+until the next sample is ready.
 
-On 06/07/2020 18:53, Randy Dunlap wrote:
-> On 7/6/20 12:40 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20200703:
->>
-> 
-> on i386 or x86_64:
-> 
-> when CONFIG_NET is not set/enabled:
-> 
-> thermal_netlink.c:(.text+0x34): undefined reference to `nla_put'
-> thermal_netlink.c:(.text+0x76): undefined reference to `nla_put'
-> thermal_netlink.c:(.text+0x87f): undefined reference to `init_net'
-> ld: thermal_netlink.c:(.text+0x89d): undefined reference to `netlink_broadcast'
-> thermal_netlink.c:(.text+0xa19): undefined reference to `__alloc_skb'
-> ld: thermal_netlink.c:(.text+0xa59): undefined reference to `genlmsg_put'
-> ld: thermal_netlink.c:(.text+0xad9): undefined reference to `init_net'
-> ld: thermal_netlink.c:(.text+0xade): undefined reference to `netlink_unicast'
-> ld: thermal_netlink.c:(.text+0xb02): undefined reference to `kfree_skb'
-> thermal_netlink.c:(.text+0xb7d): undefined reference to `genlmsg_put'
-> thermal_netlink.c:(.text+0xc29): undefined reference to `__alloc_skb'
-> ld: thermal_netlink.c:(.text+0xc66): undefined reference to `genlmsg_put'
-> ld: thermal_netlink.c:(.text+0xce1): undefined reference to `kfree_skb'
-> thermal_netlink.c:(.text+0xd0e): undefined reference to `__alloc_skb'
-> ld: thermal_netlink.c:(.text+0xd47): undefined reference to `genlmsg_put'
-> ld: thermal_netlink.c:(.text+0xde4): undefined reference to `kfree_skb'
-> thermal_netlink.c:(.text+0x1d): undefined reference to `nla_put'
-> thermal_netlink.c:(.text+0x494): undefined reference to `skb_trim'
-> thermal_netlink.c:(.init.text+0xd): undefined reference to `genl_register_family'
-> 
-> 
-> 
+Looking at the TRM chapter "18.4.10.2.3 ADC Codes Versus Temperature", we
+should have values from 13 to 107 listed with a total of 95 values. But
+looking at the omap4430_adc_to_temp array, the values are off, and the
+end values are missing. And it seems that the 4430 ADC table is similar
+to omap3630 rather than omap4460.
 
+Let's fix the issue by using values based on the omap3630 table and just
+ignoring invalid values. Compared to the 4430 TRM, the omap3630 table has
+the missing values added while the TRM table only shows every second
+value.
 
+Note that sometimes the ADC register values within the valid table can
+also be way off for about 1 out of 10 values. But it seems that those
+just show about 25 C too low values rather than too high values. So those
+do not cause a bogus thermal shutdown.
+
+Fixes: 1a31270e54d7 ("staging: omap-thermal: add OMAP4 data structures")
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ .../ti-soc-thermal/omap4-thermal-data.c       | 23 ++++++++++---------
+ .../thermal/ti-soc-thermal/omap4xxx-bandgap.h | 10 +++++---
+ 2 files changed, 19 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+--- a/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
++++ b/drivers/thermal/ti-soc-thermal/omap4-thermal-data.c
+@@ -37,20 +37,21 @@ static struct temp_sensor_data omap4430_mpu_temp_sensor_data = {
+ 
+ /*
+  * Temperature values in milli degree celsius
+- * ADC code values from 530 to 923
++ * ADC code values from 13 to 107, see TRM
++ * "18.4.10.2.3 ADC Codes Versus Temperature".
+  */
+ static const int
+ omap4430_adc_to_temp[OMAP4430_ADC_END_VALUE - OMAP4430_ADC_START_VALUE + 1] = {
+-	-38000, -35000, -34000, -32000, -30000, -28000, -26000, -24000, -22000,
+-	-20000, -18000, -17000, -15000, -13000, -12000, -10000, -8000, -6000,
+-	-5000, -3000, -1000, 0, 2000, 3000, 5000, 6000, 8000, 10000, 12000,
+-	13000, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 28000, 30000,
+-	32000, 33000, 35000, 37000, 38000, 40000, 42000, 43000, 45000, 47000,
+-	48000, 50000, 52000, 53000, 55000, 57000, 58000, 60000, 62000, 64000,
+-	66000, 68000, 70000, 71000, 73000, 75000, 77000, 78000, 80000, 82000,
+-	83000, 85000, 87000, 88000, 90000, 92000, 93000, 95000, 97000, 98000,
+-	100000, 102000, 103000, 105000, 107000, 109000, 111000, 113000, 115000,
+-	117000, 118000, 120000, 122000, 123000,
++	-40000, -38000, -35000, -34000, -32000, -30000, -28000, -26000, -24000,
++	-22000,	-20000, -18500, -17000, -15000, -13500, -12000, -10000, -8000,
++	-6500, -5000, -3500, -1500, 0, 2000, 3500, 5000, 6500, 8500, 10000,
++	12000, 13500, 15000, 17000, 19000, 21000, 23000, 25000, 27000, 28500,
++	30000, 32000, 33500, 35000, 37000, 38500, 40000, 42000, 43500, 45000,
++	47000, 48500, 50000, 52000, 53500, 55000, 57000, 58500, 60000, 62000,
++	64000, 66000, 68000, 70000, 71500, 73500, 75000, 77000, 78500, 80000,
++	82000, 83500, 85000, 87000, 88500, 90000, 92000, 93500, 95000, 97000,
++	98500, 100000, 102000, 103500, 105000, 107000, 109000, 111000, 113000,
++	115000, 117000, 118500, 120000, 122000, 123500, 125000,
+ };
+ 
+ /* OMAP4430 data */
+diff --git a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+--- a/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
++++ b/drivers/thermal/ti-soc-thermal/omap4xxx-bandgap.h
+@@ -53,9 +53,13 @@
+  * and thresholds for OMAP4430.
+  */
+ 
+-/* ADC conversion table limits */
+-#define OMAP4430_ADC_START_VALUE			0
+-#define OMAP4430_ADC_END_VALUE				127
++/*
++ * ADC conversion table limits. Ignore values outside the TRM listed
++ * range to avoid bogus thermal shutdowns. See omap4430 TRM chapter
++ * "18.4.10.2.3 ADC Codes Versus Temperature".
++ */
++#define OMAP4430_ADC_START_VALUE			13
++#define OMAP4430_ADC_END_VALUE				107
+ /* bandgap clock limits (no control on 4430) */
+ #define OMAP4430_MAX_FREQ				32768
+ #define OMAP4430_MIN_FREQ				32768
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.27.0
