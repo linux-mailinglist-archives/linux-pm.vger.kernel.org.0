@@ -2,65 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B241215A2E
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 17:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F52215C21
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 18:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729320AbgGFPBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jul 2020 11:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60988 "EHLO
+        id S1729585AbgGFQoy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jul 2020 12:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729121AbgGFPBh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jul 2020 11:01:37 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71C9C061755
-        for <linux-pm@vger.kernel.org>; Mon,  6 Jul 2020 08:01:37 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id 66so5227736vka.13
-        for <linux-pm@vger.kernel.org>; Mon, 06 Jul 2020 08:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=EdOZpjO1qH5bzdEOxt752lVnx/jy0TkzNAY06cNqxNA=;
-        b=BMYOP6PSNsjoXkxfk9PCrSdhH5ftBaoUMIsdjMrOilQ1PFYbP58L6RJXJlSvlhyLhC
-         TAjJm9bHVN6k3m50nd5zfkCzIVotSnF8HK8GJHVPe7c2pHSOFEpvO7hU6hulcMw7SbMh
-         UA3N29bsSatixF1TzP5YU5BoQ5GSABgqvZSR7M2ftCkTELuwB/uiG8fMtispI33tQnL5
-         uXCotFgNLS/TV1O5trEPOeUL8Q4DVtlFxkOaoOLV2XU8ADmIKoda1d91KAwCbiCXafrk
-         GtPwZiI4H9RuglVE0gozvyLjuvY9UqLCmORjTGo62v8nN28KbBWB4uSHL4A/N79XxOfB
-         2sVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=EdOZpjO1qH5bzdEOxt752lVnx/jy0TkzNAY06cNqxNA=;
-        b=QNXlcYB6/oNu+cioIwkeMpuocVZGCKu7wgdLQHbdlZRo1TFhci6dt2DVok976DDVet
-         f07Fgu1o+bYVGxvLllNFVvcBu+k9lw8VUIWUyG7sba9bH7Lf7RTFnNtKZIZqJmiSZtTo
-         SfIn/W/r0vk1rg71vOFKXeiyOvKpco57l8AsXKm2w3GOUX9vct21UICBZ24ZGCwK/cOB
-         gRheHheXinfQWKadi2iAo9lxWDhrOZ9APw77ytLdTsK0mmlOr0y/AxHkgJH0468E18MT
-         6TSq1yhglAsLN92ztIb8Zy7uHyxDAzZcF5y8776Q5DfbrK1igdbQsgEysbZv4VvZXo69
-         w5sw==
-X-Gm-Message-State: AOAM533LjiUcdCMXqIthpwwtEIyXY5GJIfeMXuGLnq4oXEbWlRV3j6s8
-        rotf03cj7EKeDwWmU/bq1vgVmxgYRaNUUr+adSg=
-X-Google-Smtp-Source: ABdhPJxrBJqlH4sg1YN1KWqBG0Lbe4H7IaLIbQhjRYi8NhOJdGTk9KlAHuYIHbWuUiBvRETeFYyNtGawOapzdjipC+w=
-X-Received: by 2002:a1f:930f:: with SMTP id v15mr33657713vkd.63.1594047693013;
- Mon, 06 Jul 2020 08:01:33 -0700 (PDT)
+        with ESMTP id S1729551AbgGFQoy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jul 2020 12:44:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F372C061755;
+        Mon,  6 Jul 2020 09:44:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=nNfTuHPUfs6PO3Ww3M+wQvUkhv+TTYKzJicouLRKRMw=; b=a1+V8UoOtgEsLkN9UOIZ4Bnv/p
+        lcMSuwC7t0ZzoTOvnhy9U7pPwxjLtzHa717t+nema+w3WTRdOPugdMbTfOBXZ9/fjWT4uZ2vEgmq4
+        xc1Ym0sB9SP55Xm21azWnVN85JBtWGuxrWE6o2H+NLcXlG4Lk7ZTIZZwwRqGO+9P/nqZAGteC6rb+
+        hCJ1s+jYU4mqxTzSnjLWhNi2aA9oIhxmbK8AkzX+J/bISH2bA1SFSpr0g2XsOe2AXVw9gMuvcZh2y
+        K7QmLLekR8tgjXXhwoujOIJ9Z6t9rQW86NvD4Sep8WClf24vQvNEgpaujBFaAhb5Phs42U5gdbUU6
+        Po4ivOGQ==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jsUEb-0002lO-Uu; Mon, 06 Jul 2020 16:44:50 +0000
+To:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH -next] cpufreq: add stub for get_cpu_idle_time() to fix
+ scsi/lpfc driver build
+Message-ID: <3a20bf20-247d-1242-dcd0-aef1bbc6e308@infradead.org>
+Date:   Mon, 6 Jul 2020 09:44:46 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Received: by 2002:a67:7c0e:0:0:0:0:0 with HTTP; Mon, 6 Jul 2020 08:01:32 -0700 (PDT)
-Reply-To: jrichardonlaura@gmail.com
-From:   laura Richardson <amedetonoukoffi2018@gmail.com>
-Date:   Mon, 6 Jul 2020 15:01:32 +0000
-Message-ID: <CAEaHrkXAfF+NJcg_m-3THDTQTHss5KGQb62mPb2Jduq0fE1rFw@mail.gmail.com>
-Subject: Vuelve a mi
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hola querido amigo,
+From: Randy Dunlap <rdunlap@infradead.org>
 
-Soy Laura J. Richardson de los Estados Unidos. Por favor, me gustar=C3=ADa
-comunicarme con usted. estar=C3=A9 esperando tu respuesta.
+To fix a build error in drivers/scsi/lpfc/lpfc_sli.c when
+CONFIG_CPU_FREQ is not set/enabled, add a stub function for
+get_cpu_idle_time() in <linux/cpufreq.h>.
 
-Laura!
+../drivers/scsi/lpfc/lpfc_sli.c: In function ‘lpfc_init_idle_stat_hb’:
+../drivers/scsi/lpfc/lpfc_sli.c:7330:26: error: implicit declaration of function ‘get_cpu_idle_time’; did you mean ‘set_cpu_active’? [-Werror=implicit-function-declaration]
+   idle_stat->prev_idle = get_cpu_idle_time(i, &wall, 1);
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-pm@vger.kernel.org
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+Cc: linux-scsi@vger.kernel.org
+---
+ include/linux/cpufreq.h |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+--- linux-next-20200706.orig/include/linux/cpufreq.h
++++ linux-next-20200706/include/linux/cpufreq.h
+@@ -237,6 +237,10 @@ static inline unsigned int cpufreq_get_h
+ {
+ 	return 0;
+ }
++static inline u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy)
++{
++	return 0;
++}
+ static inline void disable_cpufreq(void) { }
+ #endif
+ 
+
