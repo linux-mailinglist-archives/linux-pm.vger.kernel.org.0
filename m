@@ -2,122 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC12215716
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 14:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5B321572C
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jul 2020 14:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728938AbgGFMO7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 6 Jul 2020 08:14:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:34636 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727896AbgGFMO6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 6 Jul 2020 08:14:58 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB0EF1FB;
-        Mon,  6 Jul 2020 05:14:57 -0700 (PDT)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3E973F68F;
-        Mon,  6 Jul 2020 05:14:48 -0700 (PDT)
-Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
- freq invariance
-To:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-2-ionela.voinescu@arm.com>
- <20200701094417.ffuvduz6pqknjcks@vireshk-i7> <20200701133330.GA32736@arm.com>
- <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
- <20200702025818.s4oh7rzz3tr6zwqr@vireshk-i7> <20200702114425.GB28120@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <389dd87f-fed0-e4ea-81f3-5491fd2a54d1@arm.com>
-Date:   Mon, 6 Jul 2020 14:14:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729021AbgGFM1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 6 Jul 2020 08:27:05 -0400
+Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:31155 "EHLO
+        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729005AbgGFM1F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 6 Jul 2020 08:27:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1594038425; x=1625574425;
+  h=to:cc:references:from:message-id:date:mime-version:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=08px2a189zc2nXN1oq9ShmmahZqanekxRx3N9/XMQds=;
+  b=tIvNb9Sam47AOVSOr7Ezm/I6LPv7wMzbYcTUwJJwytpdzCHcAr2uyuMR
+   yIgP6ADSqxJyZm6zR1FlWahm0MjO+prOMX+lLdxr1b5kUXJKHLKns5SZu
+   SVC5Kp45GJpr3mtnRFfOatPejj8r+HCmfVxB09l1yQQOiSTXELKCmiA5M
+   0=;
+IronPort-SDR: DEkt349oSIozOOwwVrwUyKH5nOEdnyljv3NPedaBA41POCc7zKEjMQe7JZDMaeZy7pi8t3Sqnw
+ 7AQh536xQKWQ==
+X-IronPort-AV: E=Sophos;i="5.75,318,1589241600"; 
+   d="scan'208";a="41666398"
+Subject: Re: [RFC]: mm,power: introduce MADV_WIPEONSUSPEND
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1d-9ec21598.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 06 Jul 2020 12:27:04 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-9ec21598.us-east-1.amazon.com (Postfix) with ESMTPS id 16768A247F;
+        Mon,  6 Jul 2020 12:26:57 +0000 (UTC)
+Received: from EX13D20UWC001.ant.amazon.com (10.43.162.244) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 6 Jul 2020 12:26:57 +0000
+Received: from 38f9d3867b82.ant.amazon.com (10.43.161.146) by
+ EX13D20UWC001.ant.amazon.com (10.43.162.244) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Mon, 6 Jul 2020 12:26:51 +0000
+To:     Pavel Machek <pavel@ucw.cz>, Jann Horn <jannh@google.com>
+CC:     "Catangiu, Adrian Costin" <acatan@amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "bonzini@gnu.org" <bonzini@gnu.org>,
+        "MacCarthaigh, Colm" <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Sandu, Andrei" <sandreim@amazon.com>,
+        "Brooker, Marc" <mbrooker@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        "Manwaring, Derek" <derekmn@amazon.com>
+References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com>
+ <20200703224411.GC25072@amd>
+ <CAG48ez0oWQd42a-H-Dzw1Wq7HgB5PpFRGCZeYxP8ohxaoZHmvQ@mail.gmail.com>
+ <20200704114820.GA16083@amd>
+From:   Alexander Graf <graf@amazon.com>
+Message-ID: <57ab4fb3-3f82-d34f-ad74-2214b45a4dd9@amazon.com>
+Date:   Mon, 6 Jul 2020 14:26:44 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200702114425.GB28120@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200704114820.GA16083@amd>
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.43.161.146]
+X-ClientProxiedBy: EX13D44UWC001.ant.amazon.com (10.43.162.26) To
+ EX13D20UWC001.ant.amazon.com (10.43.162.244)
+Content-Type: text/plain; charset="windows-1252"; format="flowed"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/07/2020 13:44, Ionela Voinescu wrote:
-> Hi,
-> 
-> On Thursday 02 Jul 2020 at 08:28:18 (+0530), Viresh Kumar wrote:
->> On 01-07-20, 18:05, Rafael J. Wysocki wrote:
->>> On Wed, Jul 1, 2020 at 3:33 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->>>> On Wednesday 01 Jul 2020 at 16:16:17 (+0530), Viresh Kumar wrote:
 
-[...]
 
->> There can be other reasons which we aren't able to imagine at this
->> point of time.
+On 04.07.20 13:48, Pavel Machek wrote:
+> Hi!
+> =
+
+>>>> Cryptographic libraries carry pseudo random number generators to
+>>>> quickly provide randomness when needed. If such a random pool gets
+>>>> cloned, secrets may get revealed, as the same random number may get
+>>>> used multiple times. For fork, this was fixed using the WIPEONFORK
+>>>> madvise flag [1].
+>>>
+>>>> Unfortunately, the same problem surfaces when a virtual machine gets
+>>>> cloned. The existing flag does not help there. This patch introduces a
+>>>> new flag to automatically clear memory contents on VM suspend/resume,
+>>>> which will allow random number generators to reseed when virtual
+>>>> machines get cloned.
+>>>
+>>> Umm. If this is real problem, should kernel provide such rng in the
+>>> vsdo page using vsyscalls? Kernel can have special interface to its
+>>> vsyscalls, but we may not want to offer this functionality to rest of
+>>> userland...
 >>
-> 
-> But I understand both the points you and Rafael raised so it's obvious
-> that a 'opt in' flag would be the better option.
+>> And then the kernel would just need to maintain a sequence
+>> number in the vDSO data page that gets bumped on suspen
+> =
 
-Why can't we just move the arch_set_freq_scale() call from cpufreq
-driver to cpufreq core w/o introducing a FIE related driver flag?
+> Yes, something like that would work. Plus, we'd be free to change the
+> mechanism in future.
 
-Current scenario for Frequency Invariance Engine (FIE) on arm/arm64.
+So if we keep treading along that train of thought, a simple vsyscall =
 
-+------------------------------+       +------------------------------+
-|                              |       |                              |
-| cpufreq core:                |       | arch: (arm, arm64)           |
+that returns an epoch (incremented by every [VM] resume) would be good =
 
-|                              |       |                              |
-| weak arch_set_freq_scale() {}|       |                              |
-|                              |       |                              |
-+------------------------------+       |                              |
-                                       |                              |
-+------------------------------+       |                              |
-|                              |       |                              |
-| cpufreq driver:              |       |                              |
-|                            +-----------> arch_set_freq_scale()      |
-|                              |       |   {                          |
-+------------------------------+       |      if (use counters)       |
-                                       |        return;               |
-+------------------------------+       |      ...                     |
-|                              |       |   }                          |
-| task scheduler:              |       |                              |
-|                            +-----------> arch_scale_freq_tick()*    |
-|                              |       |   {                          |
+enough, as user space could in its own logic determine whether it's =
 
-|                              |       |      if (!use counters)      |
-|                              |       |        return;               |
-|                              |       |      ...                     |
-|                              |       |   }                          |
-+------------------------------+       +------------------------------+
+still living inside the same epoch.
 
-* defined as topology_scale_freq_tick() in arm64
+The beauty of the clearing is that the checks on it are almost free and =
 
-Only Arm/Arm64 defines arch_set_freq_scale() to get the 'legacy' CPUfreq
-based FIE. This would still be the case when we move
-arch_set_freq_scale() from individual cpufreq drivers to cpufreq core.
+that we can avoid to store secrets on disk in the first place.
 
-Arm64 is the only arch which has to runtime-choose between two different
-FIEs. This is currently done by bailing out early in one of the FIE
-functions based on 'use counters'.
+The latter I think is impossible to model with the epoch, but that might =
 
-X86 (and others) will continue to not define arch_set_freq_scale().
+be ok.
 
-The issue with CONFIG_BL_SWITCHER (vexpress-spc-cpufreq.c) could be
-solved arm/arm64 internally (arch_topology.c) by putting
-arch_set_freq_scale() under a !CONFIG_BL_SWITCHER guard.
-I doubt that there are any arm bL systems out there running it. At least
-I'm not aware of any complaints due to missing FIE support in bl
-switcher setups so far.
+Performance wise, I don't think we can make the vsyscall as cheap as a =
+
+memory compare. Keep in mind that we need to check for the epoch in a =
+
+pretty hot path. How bad would it really be? I'm not sure. It might be =
+
+good enough.
+
+My main concern however is around fragmentation of mechanisms. We =
+
+already have the WIPEONFORK semantic in place in user space =
+
+applications. Do we really want to introduce yet another check for =
+
+what's almost the same semantic? With WIPEONSUSPEND, the hot path check =
+
+between fork and suspend are identical. With an epoch, we have to check =
+
+for zeros and the epoch in addition.
+
+Unless we create a vsyscall that returns both the PID as well as the =
+
+epoch and thus handles fork *and* suspend. I need to think about this a =
+
+bit more :).
+
+
+Alex
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
