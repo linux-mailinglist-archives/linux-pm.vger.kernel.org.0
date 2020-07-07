@@ -2,65 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512392172F2
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AAD2172FA
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728133AbgGGPtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 11:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S1728164AbgGGPvD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 11:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728485AbgGGPtO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:49:14 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB14C08C5E3
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 08:49:14 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id f7so42686246wrw.1
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 08:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=R/msZMHFZFhx7FtV1U4x6F/0CAVdjvMvgRT/NC78y40=;
-        b=MobMyrjR9AJycEk2mi5Sq3uQIiCVRztqdkLHqoXq0Xx+JZ8KAISUiDRjhN6Yn5A+22
-         ou+UdEg2G1508GrcMLY5tP0WR6yXgF/Lq1rO2kitGdj7AYtMvcA1bNIXOLyMqhBFvtqB
-         v0JWLpMJC9RF9i82bU6AnAS/QMK3zeBkaPqY7ZU9E64zNYFaCnQaeKapXxSZIZpre3dp
-         /gyo2768jJfR+LmEezi+LOQng8QSzxQrX2Qap40V9sfiOCe4fR80Ml/kxi8aF8NNT88Z
-         FdZdZKy++pzBg8IcMLZQnXm09IApuylDTWhDXD7+BCPQFDxa9uWVJdhTlXbcc0GHiQGQ
-         xIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=R/msZMHFZFhx7FtV1U4x6F/0CAVdjvMvgRT/NC78y40=;
-        b=qjRq28XxbtxPDP8+0MuxRlluHoE7PvMH1fubQMAm0OPYIeWYxuEzKcgiGqK9YubaKO
-         wUX0mVTAEjKfdqwrTzgc2qAukFLvPgVeW75p8VYtI1jKNLt1cGGH6HrX2wY+5O/Rpf91
-         pLmN8TgCE1FntRwRqCh3N1myOcmoih7i6XuvUY3/YoOp4jAOQNMJiCGYwuQD42hl3DO0
-         qFIb0M8FQ6kooWWK2zmtw1dtuE8DLjVWMCBC34XK7Wq0a1y9F1aFsfoHGh7oZqhpVXh7
-         IvtU0jpLd9QrsvLeuH38pNrVDn5IokTzerDhT/42K0+5YwuWdjQipr80mbJF4bSM6bAp
-         YIWw==
-X-Gm-Message-State: AOAM531MpdlFWbzYY24pXPopfNmZjNiEcFD0M2LPG6TKVokLbVqjxPvE
-        BGRIqRVUiyr0YVDNCm47hsNi4bpjHDg=
-X-Google-Smtp-Source: ABdhPJzB2lzxg02HvDyZykAOfBzZtzV6VPnCvusD+uRECHuBlKqXlNPf6GpDDuc2YVRPuhXxaJQK6g==
-X-Received: by 2002:a5d:4992:: with SMTP id r18mr51805915wrq.323.1594136952944;
-        Tue, 07 Jul 2020 08:49:12 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:b4ff:29eb:619e:318? ([2a01:e34:ed2f:f020:b4ff:29eb:619e:318])
-        by smtp.googlemail.com with ESMTPSA id i67sm1721005wma.12.2020.07.07.08.49.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jul 2020 08:49:12 -0700 (PDT)
+        with ESMTP id S1728135AbgGGPvC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:51:02 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B001C061755;
+        Tue,  7 Jul 2020 08:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=sKnrwpscRwRPBpUhlbtspTfx0oBw6mAir2Zy9BEVNbY=; b=axtmKjqfm+LW4fWv7U2f6Lrn13
+        2zgE82uA8OYJSX7OjWObeNsFa8krOfsiU170JEztNCnVohby5uiusNK/s6KIRKYTyCHCF4Fsk77xT
+        Wmo7YLmw5npBFWBMDvLAqFOP5b/M4M6bkQ8MEqe7UR2k1lSl5QLlwD2shEPa2P0R9+g55L4K3FOfz
+        J6nXUv/oybK8ijjdQOvvQI2PCEN4MMhuqxX64UQEv/kxHjKGnmANA7ZI+IjW6zy/mIka4/LPci3S3
+        o3EI1GRux/KJIMgfJq5gIXPHvyAd84hCxF9+rMjp/Opplr5hZFuLybZIgBsw1nMDTq6Vynfjd/nFR
+        aG+n3B3g==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jsps4-0006Dy-Jz; Tue, 07 Jul 2020 15:51:01 +0000
 Subject: Re: [PATCH] thermal: netlink: Fix compilation error when CONFIG_NET=n
-To:     Randy Dunlap <rdunlap@infradead.org>, rui.zhang@intel.com
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
 Cc:     amit.kucheria@verdurent.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <20200707090159.1018-1-daniel.lezcano@linaro.org>
  <66b4c589-48e0-8975-b3b1-79168e3ea5e4@infradead.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
-Date:   Tue, 7 Jul 2020 17:49:11 +0200
+ <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6568ae82-32a3-7a9a-9bf0-15dd7805a1fd@infradead.org>
+Date:   Tue, 7 Jul 2020 08:50:56 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <66b4c589-48e0-8975-b3b1-79168e3ea5e4@infradead.org>
+In-Reply-To: <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -69,48 +49,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/07/2020 17:47, Randy Dunlap wrote:
-> On 7/7/20 2:01 AM, Daniel Lezcano wrote:
->> When the network is not configured, the netlink are disabled on all
->> the system. The thermal framework assumed the netlink are always
->> opt-in.
+On 7/7/20 8:49 AM, Daniel Lezcano wrote:
+> On 07/07/2020 17:47, Randy Dunlap wrote:
+>> On 7/7/20 2:01 AM, Daniel Lezcano wrote:
+>>> When the network is not configured, the netlink are disabled on all
+>>> the system. The thermal framework assumed the netlink are always
+>>> opt-in.
+>>>
+>>> Fix this by adding a Kconfig option for the netlink notification,
+>>> defaulting to yes and depending on CONFIG_NET.
+>>>
+>>> As the change implies multiple stubs and in order to not pollute the
+>>> internal thermal header, the thermal_nelink.h has been added and
+>>> included in the thermal_core.h, so this one regain some kind of
+>>> clarity.
+>>>
+>>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> ---
+>>>  drivers/thermal/Kconfig           | 10 ++++
+>>>  drivers/thermal/Makefile          |  5 +-
+>>>  drivers/thermal/thermal_core.h    | 20 +------
+>>>  drivers/thermal/thermal_netlink.h | 98 +++++++++++++++++++++++++++++++
+>>>  4 files changed, 114 insertions(+), 19 deletions(-)
+>>>  create mode 100644 drivers/thermal/thermal_netlink.h
+>>>
 >>
->> Fix this by adding a Kconfig option for the netlink notification,
->> defaulting to yes and depending on CONFIG_NET.
 >>
->> As the change implies multiple stubs and in order to not pollute the
->> internal thermal header, the thermal_nelink.h has been added and
->> included in the thermal_core.h, so this one regain some kind of
->> clarity.
+>> Hm, now I get this:
 >>
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>  drivers/thermal/Kconfig           | 10 ++++
->>  drivers/thermal/Makefile          |  5 +-
->>  drivers/thermal/thermal_core.h    | 20 +------
->>  drivers/thermal/thermal_netlink.h | 98 +++++++++++++++++++++++++++++++
->>  4 files changed, 114 insertions(+), 19 deletions(-)
->>  create mode 100644 drivers/thermal/thermal_netlink.h
+>> ../drivers/thermal/thermal_helpers.c: In function ‘thermal_cdev_set_cur_state’:
+>> ../drivers/thermal/thermal_helpers.c:182:2: error: implicit declaration of function ‘thermal_notify_cdev_update’; did you mean ‘thermal_notify_cdev_delete’? [-Werror=implicit-function-declaration]
+>>   thermal_notify_cdev_update(cdev->id, target);
 >>
+>>
+>> or should that call be to thermal_notify_cdev_state_update()?
 > 
-> 
-> Hm, now I get this:
-> 
-> ../drivers/thermal/thermal_helpers.c: In function ‘thermal_cdev_set_cur_state’:
-> ../drivers/thermal/thermal_helpers.c:182:2: error: implicit declaration of function ‘thermal_notify_cdev_update’; did you mean ‘thermal_notify_cdev_delete’? [-Werror=implicit-function-declaration]
->   thermal_notify_cdev_update(cdev->id, target);
-> 
-> 
-> or should that call be to thermal_notify_cdev_state_update()?
+> Ah right, the patch applies on top of the v4 which is not yet in
+> linux-next, I'm waiting for the kernelci loop result.
 
-Ah right, the patch applies on top of the v4 which is not yet in
-linux-next, I'm waiting for the kernelci loop result.
+OK, that explains why I had a little trouble applying the patch.
 
-
+thanks.
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+~Randy
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
