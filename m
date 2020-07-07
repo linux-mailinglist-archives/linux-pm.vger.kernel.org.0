@@ -2,107 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B91142175E8
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 20:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332AF21766E
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 20:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgGGSHl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 14:07:41 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:33564 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728036AbgGGSHl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 14:07:41 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 067I7dsp122688;
-        Tue, 7 Jul 2020 13:07:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1594145259;
-        bh=tcG+3QfvQYtuz+moQPRntRSYLDtYJOO1r/4BMO3+5bI=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Zv4ipbsfseRXYHLCKiWPZV5bHcwAJV63dS7QRwA8FLcswu9yTLyci8r5q+NNGzxvp
-         SbD2SzbGUjAwDtbxGfHP6ui2CppuNgxlG4BHspx5HmTAC1CeCwKx+gWqRBGpI/XM30
-         98AWdn7xdQfH8chUr/J7m/Xg0VhUb/FUwWGAgqrg=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 067I7d6J032245
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Jul 2020 13:07:39 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 7 Jul
- 2020 13:07:39 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 7 Jul 2020 13:07:39 -0500
-Received: from [10.250.43.45] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 067I7cGA011289;
-        Tue, 7 Jul 2020 13:07:38 -0500
-Subject: Re: [EXTERNAL] Re: [PATCH v15 2/4] dt-bindings: power: Convert
- battery.txt to battery.yaml
-To:     Rob Herring <robh@kernel.org>
-CC:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Sandeep Patil <sspatil@android.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>, Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20200701211044.18590-1-r-rivera-matos@ti.com>
- <20200701211044.18590-3-r-rivera-matos@ti.com>
- <20200702205320.GA1672139@bogus>
- <54914eed-4a65-745b-b61b-9515737023e3@ti.com>
- <CAL_JsqKXC1TFFCq6HBqdbHNeWbA=SnCqHkTx+FQXiPYDLb6sNw@mail.gmail.com>
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <50e85766-08d2-f91e-a6a9-c4b4f8858dc4@ti.com>
-Date:   Tue, 7 Jul 2020 13:07:38 -0500
+        id S1728260AbgGGSSj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 14:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728029AbgGGSSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 14:18:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49DAC061755;
+        Tue,  7 Jul 2020 11:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=nbd66pLuGjkYKOc6hwK0BBSTm2RkMZp20FPfhd1njx0=; b=gCM1d9uQPgnpbWhR89j1G6N89L
+        nyQwBb/fwtc6SqBRN44jREedbdYNDvXXlyiUyrzuJ9nSaAftI8qCMjYux+z0flLj4NTyFaynD49EB
+        bmiDeaL7ZHxZfhPCMA5Gr7O15ojxPsmRL7ZWOuMW+49yvCzvJe3Vq9vVZYjYacVVoevwSunz9FfwL
+        IRJw/JSUFIyOZQCtw3z8jNyiInwy/hpiPgpC0BpVTKPZ47kHrTyPOhcQtVp8CUbtF/t0a9ySRR9y9
+        CskOXgmkAv6Y5xKJ3cewZDFmWE3Lp1gZbkPEe8q2tKJzmqlMntxXmxGnqDS8DiAdHGkZg1ceJpD57
+        S8xbHesg==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jssAs-0005GW-Qm; Tue, 07 Jul 2020 18:18:35 +0000
+Subject: Re: [PATCH -next] cpufreq: add stub for get_cpu_idle_time() to fix
+ scsi/lpfc driver build
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+References: <3a20bf20-247d-1242-dcd0-aef1bbc6e308@infradead.org>
+ <20200707030943.xkocccy6qy2c3hrx@vireshk-i7>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <b35ed758-a964-2f76-d2d3-99c260458878@infradead.org>
+Date:   Tue, 7 Jul 2020 11:18:30 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKXC1TFFCq6HBqdbHNeWbA=SnCqHkTx+FQXiPYDLb6sNw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200707030943.xkocccy6qy2c3hrx@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 7/7/20 9:40 AM, Rob Herring wrote:
-> On Mon, Jul 6, 2020 at 12:45 PM Ricardo Rivera-Matos
-> <r-rivera-matos@ti.com> wrote:
->> Rob
+On 7/6/20 8:09 PM, Viresh Kumar wrote:
+> On 06-07-20, 09:44, Randy Dunlap wrote:
+>> From: Randy Dunlap <rdunlap@infradead.org>
 >>
->> On 7/2/20 3:53 PM, Rob Herring wrote:
->>> On Wed, 01 Jul 2020 16:10:42 -0500, Ricardo Rivera-Matos wrote:
->>>> From: Dan Murphy <dmurphy@ti.com>
->>>>
->>>> Convert the battery.txt file to yaml and fix up the examples.
->>>>
->>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->>>> ---
->>>>    .../bindings/power/supply/battery.txt         |  86 +---------
->>>>    .../bindings/power/supply/battery.yaml        | 157 ++++++++++++++++++
->>>>    2 files changed, 158 insertions(+), 85 deletions(-)
->>>>    create mode 100644 Documentation/devicetree/bindings/power/supply/battery.yaml
->>>>
->>> My bot found errors running 'make dt_binding_check' on your patch:
->>>
->>> Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml'
->>> Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/power/supply/battery.example.dts' failed
->>> make[1]: *** [Documentation/devicetree/bindings/power/supply/battery.example.dts] Error 255
->>> make[1]: *** Waiting for unfinished jobs....
->>> Makefile:1347: recipe for target 'dt_binding_check' failed
->>> make: *** [dt_binding_check] Error 2
->> I think your bot is looking for the types.yaml in the wrong place.
-> Really? Yet it works fine on thousands of other patches?
->
->> '/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml'
->> should be
->> '/usr/local/lib/python3.6/dist-packages/dtschema/schemas/types.yaml'. I
->> renamed might 'schemas' directory to 'schema' and my battery.yaml passed
->> the dt_binding_check.
-> Maybe fix the 'schema/' path in your schema file which is wrong.
-Oh I see. My apologies, Rob.
->
-> Rob
+>> To fix a build error in drivers/scsi/lpfc/lpfc_sli.c when
+>> CONFIG_CPU_FREQ is not set/enabled, add a stub function for
+>> get_cpu_idle_time() in <linux/cpufreq.h>.
+>>
+>> ../drivers/scsi/lpfc/lpfc_sli.c: In function ‘lpfc_init_idle_stat_hb’:
+>> ../drivers/scsi/lpfc/lpfc_sli.c:7330:26: error: implicit declaration of function ‘get_cpu_idle_time’; did you mean ‘set_cpu_active’? [-Werror=implicit-function-declaration]
+> 
+> And why is lpfc_sli.c using a cpufreq (supposedly internal, i.e. for
+> cpufreq related parts) routine ? I think if you really need this, then
+> it should be moved to a better common place and let everyone use it.
+
+Viresh:
+
+James Smart replied in another email thread with lpfc explanation for using
+get_cpu_idle_time().  Please see
+https://lore.kernel.org/linux-scsi/7ae1c7e3-ce8d-836b-1ae7-d4d00bd8f95c@broadcom.com/T/#md083717b1ff3a428c3b419dcc6d11cd03fee44c7
+
+for this text:
+""The driver is using cpu utilization in order to choose between softirq or work queues in handling an interrupt. Less-utilized, softirq is used. higher utilized, work queue is used.  The utilization is checked periodically via a heartbeat. ""
+
+
+> I also see that drivers/macintosh/rack-meter.c has its own
+> implementation for this.
+> 
+>>    idle_stat->prev_idle = get_cpu_idle_time(i, &wall, 1);
+>>
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+>> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+>> Cc: linux-pm@vger.kernel.org
+>> Cc: James Smart <james.smart@broadcom.com>
+>> Cc: Dick Kennedy <dick.kennedy@broadcom.com>
+>> Cc: linux-scsi@vger.kernel.org
+>> ---
+>>  include/linux/cpufreq.h |    4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> --- linux-next-20200706.orig/include/linux/cpufreq.h
+>> +++ linux-next-20200706/include/linux/cpufreq.h
+>> @@ -237,6 +237,10 @@ static inline unsigned int cpufreq_get_h
+>>  {
+>>  	return 0;
+>>  }
+>> +static inline u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy)
+>> +{
+>> +	return 0;
+>> +}
+>>  static inline void disable_cpufreq(void) { }
+>>  #endif
+>>  
+> 
+
+
+-- 
+~Randy
+
