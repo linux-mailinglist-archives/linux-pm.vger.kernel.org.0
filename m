@@ -2,177 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B854C2174FB
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 19:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21FD921751B
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 19:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgGGRS1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 13:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50596 "EHLO
+        id S1728094AbgGGR3A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 13:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727791AbgGGRS1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 13:18:27 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55967C08C5DC
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 10:18:27 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id j186so968163vsd.10
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 10:18:27 -0700 (PDT)
+        with ESMTP id S1728029AbgGGR27 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 13:28:59 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C634C08C5DC
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 10:28:59 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id s14so17011525plq.6
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 10:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=74Xd65ujs50AwKytINLgt7qtTa7IevS/aqZRV1i9Rd8=;
-        b=UWYVic96pOSZRZsRmw2D0xW579eTy1JPNBw9lI+/tOGAhV3ymR2VcORJIdFnYMXlx/
-         Pyh7l5oLPF9TOnZJYezcZKg0Et63e+3Ah4oPnZkC/aFt8IXpEP/Dw63qRvAoiZeMGyTl
-         BkYS5dtdJ+VAfBgPrKdTozMDQ4weGwZxX/96E=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GDk3o4K7Qdy44WeUL6xRZLs/1lKN7Q2+qDuM1ziAKUE=;
+        b=AD6CoW2UICDWk/1zx/l6PEom5Vnjn8v6sAqR+Vebu1tpz3GUosmm3pgGhiWnNTMqEn
+         m+gTH9ORFg6cG+8B+7LfOi7FXvVjWYao93wjk1OI12A4kbeZrQ1mKBOLdFjwX0/wEq0W
+         NkqU+R92VjKbfG/v2osMCZiL9GgHrO1xI5Upo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=74Xd65ujs50AwKytINLgt7qtTa7IevS/aqZRV1i9Rd8=;
-        b=BcSKeBGBL6SS+/7IKJk7yhbV38NnxL4NjsgY4hjB3NimWwBVy5ffyPaaWdKmIvIgNI
-         Jxzw8o56yEzjwlS4HnnvyFcVdNhTUBgQXmVj36wl5KJPcMClf1QMy4JYM1QntI2lI4KA
-         XaTdCsA0G+UPrgYzc4GxKlHHZhuJILsLCgbJqg/OAWFQ8hdoy2cCA3Cctsn0b84SPim8
-         0hHhXZVLj79yOtd1Te6hlWu4mE4N68aQD2PREO1/4vgAGOHazctY6Qm+jBvpYHWYackH
-         d1vJYGa1yYqABJxrcqghzLygq70LOgoFtgKcEeXRmrdFOHSDr2z5E7HsL3dBqtqdXHT/
-         DIzA==
-X-Gm-Message-State: AOAM532Pch1Ncy1lPJQrLsCwkdkeBYNyN4CAgtCkNwh1qZhiXqCsgz4p
-        NLLY9D7jQPRq2CtmASf347hoj5kzvSpEPEdl1MvSKg==
-X-Google-Smtp-Source: ABdhPJwk+V71z2wv/WQnTefFWymSCRO53UNKZiBT8TehImzf1AUUKNg93mkz/cBBz2gO3h2NY5EkhH6PKev8387kkUo=
-X-Received: by 2002:a67:6e05:: with SMTP id j5mr32408546vsc.196.1594142306552;
- Tue, 07 Jul 2020 10:18:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707162417.3514284-1-abhishekpandit@chromium.org>
- <20200707092406.v4.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
- <CAJZ5v0iyvge_Hqgm46_vfjh45YFdnsJ7ksvY7DqD6gx+f+1dvg@mail.gmail.com>
- <CANFp7mUas8Qnzqeivri25S7SWbKe6T+6riN419dR6xZXXOcaKA@mail.gmail.com> <CAJZ5v0iVXbxHzV0Y_y5idkoS4DdF+cXQ6kmA0bWWHWZ-TVv8wg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iVXbxHzV0Y_y5idkoS4DdF+cXQ6kmA0bWWHWZ-TVv8wg@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GDk3o4K7Qdy44WeUL6xRZLs/1lKN7Q2+qDuM1ziAKUE=;
+        b=MJSTa1mDoNU77Mj5On3s8II7fce78uH8ZB6GOFV8JAyWGOWlNE2d8jJiD6G0FIErg2
+         gyBqCOVke23QJWfjho6YCD6WqDKrf4fpUWGBXPmbK/oofhdClqaPFCQ9sEmjTzItKvfo
+         4ZonhkRf7fZJck8mDxAdXH/vB43ChYQtWBlJ95R6/wCigM8OTLn/7twmLxIOxkqDzZUd
+         nOjDOxrJ57e6V7SUuMLRh8w57S8AFWhCaP6ZI6h3fG/D4qvDpBOhVrDKijPRzqLp5v9B
+         q3sG1XL5a7TG91oZZKzW7iqqsAnV2+7+DsF4P76bG53Ia8KFWdIyHHk9jDEcItfKRSds
+         mDeg==
+X-Gm-Message-State: AOAM5306Dgpx2Xb5Jh054RBPl511yGr4VOY4/TRPOMX925gfiJ3B7BuX
+        VFXZ0D/CINE3vM++h987ZTij4Q==
+X-Google-Smtp-Source: ABdhPJzf226Gragbu1zI/saxunXJOqH4GwQ3BKzo0ajhKJmOD3ROv3HiPeqfCvACm0AL0aY/4IdfFQ==
+X-Received: by 2002:a17:902:8d89:: with SMTP id v9mr45486975plo.191.1594142938963;
+        Tue, 07 Jul 2020 10:28:58 -0700 (PDT)
+Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:7220:84ff:fe09:2b94])
+        by smtp.gmail.com with ESMTPSA id e15sm1414285pgt.17.2020.07.07.10.28.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jul 2020 10:28:58 -0700 (PDT)
 From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Tue, 7 Jul 2020 10:18:15 -0700
-Message-ID: <CANFp7mXEB4ckWKRDDqUdmBBrbk00CW_pOX+1zmo_AgywtHZ+Nw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org
+Cc:     linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org, swboyd@chromium.org,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: [PATCH v5 0/1] power: Emit change uevent when updating sysfs
+Date:   Tue,  7 Jul 2020 10:28:43 -0700
+Message-Id: <20200707172845.4177903-1-abhishekpandit@chromium.org>
+X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sounds good to me. Patch v5 incoming after compile-test.
+
+Hi linux-pm,
+
+ChromeOS has a udev rule to chown the `power/wakeup` attribute so that
+the power manager can modify it during runtime.
+
+(https://source.chromium.org/chromiumos/chromiumos/codesearch/+/master:src/platform2/power_manager/udev/99-powerd-permissions.rules)
+
+In our automated tests, we found that the `power/wakeup` attributes
+weren't being chown-ed for some boards. On investigating, I found that
+when the drivers probe and call device_set_wakeup_capable, no uevent was
+being emitted for the newly added power/wakeup attribute. This was
+manifesting at boot on some boards (Marvell SDIO bluetooth and Broadcom
+Serial bluetooth drivers) or during usb disconnects during resume
+(Realtek btusb driver with reset resume quirk).
+
+It seems reasonable to me that changes to the attributes of a device
+should cause a changed uevent so I have added that here.
+
+Here's an example of the kernel events after toggling the authorized
+bit of /sys/bus/usb/devices/1-3/
+
+$ echo 0 > /sys/bus/usb/devices/1-3/authorized
+KERNEL[27.357994] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0/rfkill1 (rfkill)
+KERNEL[27.358049] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0 (bluetooth)
+KERNEL[27.358458] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0 (usb)
+KERNEL[27.358486] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.1 (usb)
+KERNEL[27.358529] change   /devices/pci0000:00/0000:00:15.0/usb1/1-3 (usb)
+
+$ echo 1 > /sys/bus/usb/devices/1-3/authorized
+KERNEL[36.415749] change   /devices/pci0000:00/0000:00:15.0/usb1/1-3 (usb)
+KERNEL[36.415798] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0 (usb)
+KERNEL[36.417414] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0 (bluetooth)
+KERNEL[36.417447] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0/rfkill2 (rfkill)
+KERNEL[36.417481] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.1 (usb)
+
+Series-version 4 update:
+Tested again on device and verified it's working as expected:
+KERNEL[52.678174] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0/rfkill2 (rfkill)
+KERNEL[52.678211] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0 (bluetooth)
+KERNEL[52.678251] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0 (usb)
+KERNEL[52.679721] remove   /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.1 (usb)
+KERNEL[52.679772] change   /devices/pci0000:00/0000:00:15.0/usb1/1-3 (usb)
+KERNEL[56.022259] change   /devices/pci0000:00/0000:00:15.0/usb1/1-3 (usb)
+KERNEL[56.022306] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0 (usb)
+KERNEL[56.022488] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0 (bluetooth)
+KERNEL[56.022531] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.0/bluetooth/hci0/rfkill3 (rfkill)
+KERNEL[56.023392] add      /devices/pci0000:00/0000:00:15.0/usb1/1-3/1-3:1.1 (usb)
 
 Thanks
 Abhishek
 
-On Tue, Jul 7, 2020 at 10:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Tue, Jul 7, 2020 at 6:48 PM Abhishek Pandit-Subedi
-> <abhishekpandit@chromium.org> wrote:
-> >
-> > Hi Rafael,
-> >
-> > (resent in plain text)
-> >
-> > On Tue, Jul 7, 2020 at 9:28 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Tue, Jul 7, 2020 at 6:24 PM Abhishek Pandit-Subedi
-> > > <abhishekpandit@chromium.org> wrote:
-> > > >
-> > > > Udev rules that depend on the power/wakeup attribute don't get triggered
-> > > > correctly if device_set_wakeup_capable is called after the device is
-> > > > created. This can happen for several reasons (driver sets wakeup after
-> > > > device is created, wakeup is changed on parent device, etc) and it seems
-> > > > reasonable to emit a changed event when adding or removing attributes on
-> > > > the device.
-> > > >
-> > > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > > > ---
-> > > >
-> > > > Changes in v4:
-> > > > - Fix warning where returning from void and tested on device
-> > > >
-> > > > Changes in v3:
-> > > > - Simplified error handling
-> > > >
-> > > > Changes in v2:
-> > > > - Add newline at end of bt_dev_err
-> > > >
-> > > >  drivers/base/power/sysfs.c | 9 ++++++++-
-> > > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> > > > index 24d25cf8ab1487..aeb58d40aac8de 100644
-> > > > --- a/drivers/base/power/sysfs.c
-> > > > +++ b/drivers/base/power/sysfs.c
-> > > > @@ -1,6 +1,7 @@
-> > > >  // SPDX-License-Identifier: GPL-2.0
-> > > >  /* sysfs entries for device PM */
-> > > >  #include <linux/device.h>
-> > > > +#include <linux/kobject.h>
-> > > >  #include <linux/string.h>
-> > > >  #include <linux/export.h>
-> > > >  #include <linux/pm_qos.h>
-> > > > @@ -739,12 +740,18 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
-> > > >
-> > > >  int wakeup_sysfs_add(struct device *dev)
-> > > >  {
-> > > > -       return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> > > > +       int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> > > > +
-> > > > +       if (ret)
-> > > > +               return ret;
-> > > > +
-> > > > +       return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
-> > >
-> > > So let me repeat the previous comment:
-> > >
-> > > If you return an error here, it may confuse the caller to think that
-> > > the operation has failed completely, whereas the merging of the
-> > > attribute group has been successful already.
-> > >
-> > > I don't think that an error can be returned at this point.
-> > >
-> >
-> > The caller looks at the return code and just logs that an error
-> > occurred (no other action). It's also unlikely for kobject_uevent to
-> > fail (I saw mostly -ENOMEM and an -ENOENT when the kobj wasn't in the
-> > correct set).
-> >
-> > Call site:
-> >     int ret = wakeup_sysfs_add(dev);
-> >
-> >     if (ret)
-> >         dev_info(dev, "Wakeup sysfs attributes not added\n");
->
-> Yes, which is confusing, because the wakeup attributes may in fact
-> have been added.  Which is my point.
->
-> >
-> > So I'm ok with either keeping this as-is (caller isn't getting
-> > confused, just logging) or swallowing the return of kobject_uevent.
->
-> I would just ignore the return value of kobject_uevent() along the
-> lines of wakeup_sysfs_remove() below.
->
-> Thanks!
->
-> > > >  }
-> > > >
-> > > >  void wakeup_sysfs_remove(struct device *dev)
-> > > >  {
-> > > >         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-> > > > +       kobject_uevent(&dev->kobj, KOBJ_CHANGE);
-> > > >  }
-> > > >
-> > > >  int pm_qos_sysfs_add_resume_latency(struct device *dev)
-> > > > --
-> > > > 2.27.0.212.ge8ba1cc988-goog
-> > > >
+Changes in v5:
+- Ignore return from kobject_uevent when adding to sysfs
+
+Changes in v4:
+- Fix warning where returning from void and tested on device
+
+Changes in v3:
+- Simplified error handling
+
+Changes in v2:
+- Add newline at end of bt_dev_err
+
+Abhishek Pandit-Subedi (1):
+  power: Emit changed uevent on wakeup_sysfs_add/remove
+
+ drivers/base/power/sysfs.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+-- 
+2.27.0.212.ge8ba1cc988-goog
+
