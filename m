@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 614A8216D44
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31EB216D46
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727951AbgGGM6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 08:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
+        id S1727962AbgGGM6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 08:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgGGM6U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 08:58:20 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5522C061755
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 05:58:20 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id c11so24630794lfh.8
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 05:58:20 -0700 (PDT)
+        with ESMTP id S1727936AbgGGM6X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 08:58:23 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3169C061755
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 05:58:22 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id j11so1021158ljo.7
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 05:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5QPCeXu6BWoF2sfrIOTCH52uavZZh/rGlBAHnTqsaz4=;
-        b=Ys5Fb/WaS8vr4UorsC8qhs5CHXu/8HPGctmAymK7MD+Ml8caOqMDbDVxnlp8Mpc8ov
-         u01apMYHmzuWiFAPnQlk4vT34z/mTv7e5XPkVrid6ozPF8pKyVP9gGsId9SNe0ktexTq
-         w1H3gXqc9FWjwu0INVZpswlmTWb0mcDIv20mli68wMrF6NIFHcz/6g/b5Aj5ZYBpYeJR
-         tMlPZvMff3+UWJi8PQi4P48iwCz/iCZIHKNQ7EepFWka7zh5slKAViQUs6glEY4T+n2M
-         u2wOTAjx/RCN8Su7L5in76xf4MjkAHjoYSxNXCVyk8rWPk9fSpZ+09SZXBHLscvmdatx
-         IWCw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=JmH1BfPiU4RoSWuHQPEJ8Sx4+RN7bhXBUvJ2uLAr9qM=;
+        b=Ad7XXos1cMmY+GKjq/D9UtSBmDNPOeVXkEk3XQ8wQl0QlkUWtCwInOmjZmoDIncBHb
+         XK6+h7K+uqUHqZXaTO/qeFFYBZ/TGnH2PC2189v/S6CCjKuMkMGXkOhaIB+GjZsRkXGP
+         sZlwnSie+aPey2AKnh2JAKCuFh3oGUOu0n2/RvUWQQHtCbS+yFnqUaLPv6igWPkwW4Oj
+         6MnRpJOehFo5cmYc6/vsfoQuy25/s4gsoreVtAlkV5pLjTpOhJxullGUTeW+KgwGcki6
+         vEDYWNZL4eOuJ4W7a8oOxNgk29NhvZA+uOHbJI5AmMwuTcfOIe8DqXORy5X+/1bnSSOl
+         e8yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5QPCeXu6BWoF2sfrIOTCH52uavZZh/rGlBAHnTqsaz4=;
-        b=CzYWIhNtq2ELRd7O2IK6rMari7h3dJSIOi1iSlqlMImiRsgFyqNjGhy7f9dInFUdoo
-         c9jZuuxnCQ/bfieVhxFNA0SKqlN/D4GoY67WU1LBEZuFw8ttbRsu7xE8VJLsfsj7HTLk
-         UctATm1SP633A/QkuqQs/UsZdPbhfM49/+JFeHWC07Ek++la7F6tEFel/vSqv+jq+9cY
-         WZ6fVTfKgw5avDmthdfMPTcBrLExvcHE0qXrrbE+aqWNLFlf1Jlvb22ggWEpwSqUCh0s
-         KlXSGnS1RB/kgVCKDRLXEBbGPjBQsukcIFL9+dPa3NyZS9ThQqoTmQZt/R5049/Syr38
-         r30w==
-X-Gm-Message-State: AOAM532ZBQ9VTx/X3+MpVOkBYN41/DIdp5stZkjvu7+q3hwAhs0jpI20
-        PD6VctOtMUnYtp3gIJu6X+mL1g==
-X-Google-Smtp-Source: ABdhPJwvZp/vEWWuRsY3Dn6udiBMekr0CNBH1Hn4mVH3JFB2UJhhamlayZQ6suVRhfRPbR6zWbqJ8Q==
-X-Received: by 2002:ac2:5296:: with SMTP id q22mr32640404lfm.106.1594126698144;
-        Tue, 07 Jul 2020 05:58:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=JmH1BfPiU4RoSWuHQPEJ8Sx4+RN7bhXBUvJ2uLAr9qM=;
+        b=VUhVCeQ3TPkw9W/sW6//cNcnw4YGDYKYoK/6LKklTz3uV9HauYJvkhSrf0RF8t2VUH
+         OGHckOhLHb/7TQVh29SP5BT1fVW2tyPqPhAZlljtXzk9kIwsupa59wkV/i+qCPoyVj8D
+         8Th2Qb+4bMF95KTbDCb7PHCYzoa7p7sG8RCXfSQNeVoRFZF1jbxMf4qoCU/bvtrs7DlL
+         W3IjZsBiI9xyI65W7lnmAuzk7ydgC2UcUsdspqZ9JOCq3NapWoFgRW0DguRoDaFVIhWu
+         egderHaKqtxo7ybZqPmPPnG7vmvW87ozTCKbKIJ0b13KTlHI3gzDL15Glmvt6HnaXkKU
+         /vMQ==
+X-Gm-Message-State: AOAM5304n2wYE4d4yN0pSJAxYJceU1NHn8t5ypGA2RK+fnVNuJNZQAzx
+        9DF6ITWvldaKI4DIOR0UJLrvZA==
+X-Google-Smtp-Source: ABdhPJzUlqKwp5fDTuJIhcklcQOJEemZfGYMUbMkILw8e1U/ymMGmHmpI3jEkHFPEWctxqwO/X56vg==
+X-Received: by 2002:a05:651c:21a:: with SMTP id y26mr14747466ljn.106.1594126701205;
+        Tue, 07 Jul 2020 05:58:21 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-181-7.NA.cust.bahnhof.se. [98.128.181.7])
-        by smtp.gmail.com with ESMTPSA id 11sm9554395lfz.78.2020.07.07.05.58.15
+        by smtp.gmail.com with ESMTPSA id 11sm9554395lfz.78.2020.07.07.05.58.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 05:58:16 -0700 (PDT)
+        Tue, 07 Jul 2020 05:58:20 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -62,10 +62,12 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Saravana Kannan <saravanak@google.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 0/5] cpuidle: psci: Various improvements for PSCI PM domains
-Date:   Tue,  7 Jul 2020 14:57:59 +0200
-Message-Id: <20200707125804.13030-1-ulf.hansson@linaro.org>
+Subject: [PATCH v2 1/5] cpuidle: psci: Split into two separate build objects
+Date:   Tue,  7 Jul 2020 14:58:00 +0200
+Message-Id: <20200707125804.13030-2-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200707125804.13030-1-ulf.hansson@linaro.org>
+References: <20200707125804.13030-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -73,41 +75,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Changes in v2:
-	- Put patch 3 as patch 1 and rebased accordingly. No other changes have
-	been made.
-	- Added reviewed-by and acked-by tags.
+The combined build object for the PSCI cpuidle driver and the PSCI PM
+domain, is a bit messy. Therefore let's split it up by adding a new Kconfig
+ARM_PSCI_CPUIDLE_DOMAIN and convert into two separate objects.
 
-The main change in this series is done in patch 5/5, which implements support
-to prevent domain idlestates until all PSCI PM domain consumers are ready for
-it. To reach that point the corresponding code for cpuidle-psci and
-cpuidle-psci-domain, needed to be converted into platform drivers, which is
-done by the earlier changes in the series.
+Reviewed-by: Lina Iyer <ilina@codeaurora.org>
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/cpuidle/Kconfig.arm    | 10 ++++++++++
+ drivers/cpuidle/Makefile       |  5 ++---
+ drivers/cpuidle/cpuidle-psci.h |  2 +-
+ 3 files changed, 13 insertions(+), 4 deletions(-)
 
-Additionally, some improvements have been made to the error path, which becomes
-easier when the code gets converted to platform drivers.
-
-Deployment for a Qcom SoC, which actually takes full benefit of these changes
-are also in the pipe, but deferring then a bit until $subject series have been
-discussed.
-
-Kind regards
-Ulf Hansson
-
-Ulf Hansson (5):
-  cpuidle: psci: Split into two separate build objects
-  cpuidle: psci: Fail cpuidle registration if set OSI mode failed
-  cpuidle: psci: Fix error path via converting to a platform driver
-  cpuidle: psci: Convert PM domain to platform driver
-  cpuidle: psci: Prevent domain idlestates until consumers are ready
-
- drivers/cpuidle/Kconfig.arm           |  10 ++
- drivers/cpuidle/Makefile              |   5 +-
- drivers/cpuidle/cpuidle-psci-domain.c |  74 +++++++++-----
- drivers/cpuidle/cpuidle-psci.c        | 141 +++++++++++++++-----------
- drivers/cpuidle/cpuidle-psci.h        |  11 +-
- 5 files changed, 150 insertions(+), 91 deletions(-)
-
+diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+index 51a7e89085c0..0844fadc4be8 100644
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -23,6 +23,16 @@ config ARM_PSCI_CPUIDLE
+ 	  It provides an idle driver that is capable of detecting and
+ 	  managing idle states through the PSCI firmware interface.
+ 
++config ARM_PSCI_CPUIDLE_DOMAIN
++	bool "PSCI CPU idle Domain"
++	depends on ARM_PSCI_CPUIDLE
++	depends on PM_GENERIC_DOMAINS_OF
++	default y
++	help
++	  Select this to enable the PSCI based CPUidle driver to use PM domains,
++	  which is needed to support the hierarchical DT based layout of the
++	  idle states.
++
+ config ARM_BIG_LITTLE_CPUIDLE
+ 	bool "Support for ARM big.LITTLE processors"
+ 	depends on ARCH_VEXPRESS_TC2_PM || ARCH_EXYNOS || COMPILE_TEST
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index f07800cbb43f..26bbc5e74123 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -21,9 +21,8 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
+ obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
+ obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
+ obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
+-obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
+-cpuidle_psci-y				:= cpuidle-psci.o
+-cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
++obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
++obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
+ obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
+ obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
+ 
+diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
+index 7299a04dd467..ac8170684d4f 100644
+--- a/drivers/cpuidle/cpuidle-psci.h
++++ b/drivers/cpuidle/cpuidle-psci.h
+@@ -8,7 +8,7 @@ struct device_node;
+ void psci_set_domain_state(u32 state);
+ int __init psci_dt_parse_state_node(struct device_node *np, u32 *state);
+ 
+-#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
++#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
+ struct device __init *psci_dt_attach_cpu(int cpu);
+ #else
+ static inline struct device __init *psci_dt_attach_cpu(int cpu) { return NULL; }
 -- 
 2.20.1
 
