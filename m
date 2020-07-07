@@ -2,122 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B19D2173EF
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 18:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801FE21742D
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 18:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgGGQ2S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 12:28:18 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:46180 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726911AbgGGQ2S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 12:28:18 -0400
-Received: by mail-oi1-f193.google.com with SMTP id l63so33924109oih.13;
-        Tue, 07 Jul 2020 09:28:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qqA8J6CgHJ1oaRzYuw9U/pBjnnBjCWF7/6JXnD6SNeI=;
-        b=fAiVt3yqIgVL/Vd9TRAgthE4dRaHiCqRkxSnfarLUPMS4LYutAu8xdEPhJoA4bi1pw
-         ne+rdWwu/aQAaFAuqIVf6IhdMBWAy8XRlMOowocJ1sYWMhD0srRbqDv89rlbaN1lLCoD
-         XbGJ892l6I7pVFjPd1ngGQgTn/dGqaWpqXVZl4vhf8M47bXZdysOt/0C1mTkYbGxT7B8
-         xvqn1X1xssyxWuJTpJQZS5pwKr2e84+Cn2qinjANbazLFS6iUiph9U9GwLYdaVN2yn2N
-         7Wped44lTUlbjZ2Xt3V9lkaaWTm1VM0uLXkOpIazHk53EK/Hl3oD+xBUAgLekBUK3cER
-         X/wQ==
-X-Gm-Message-State: AOAM530Y4wubsuDnbmiZXxo9vUubteHb0wgrD+VSwvzdp37gXBro5BHr
-        GTZpZ4wFHZJn053oxSPBGllrVQJ75OdKc2vfBoo=
-X-Google-Smtp-Source: ABdhPJwWEu1nW2hVdT2oditOw+IT/F4slchce0IYqSxCLUtcrqN8q00tngKV7H/5HMxNHixTJq1zO157Gf900Ep315g=
-X-Received: by 2002:aca:f58a:: with SMTP id t132mr3798335oih.68.1594139296771;
- Tue, 07 Jul 2020 09:28:16 -0700 (PDT)
+        id S1727936AbgGGQiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 12:38:01 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:38352 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726911AbgGGQiB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 12:38:01 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 70C791C0C0A; Tue,  7 Jul 2020 18:37:58 +0200 (CEST)
+Date:   Tue, 7 Jul 2020 18:37:58 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Jann Horn <jannh@google.com>,
+        "Catangiu, Adrian Costin" <acatan@amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "bonzini@gnu.org" <bonzini@gnu.org>,
+        "Graf (AWS), Alexander" <graf@amazon.de>,
+        "MacCarthaigh, Colm" <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Sandu, Andrei" <sandreim@amazon.com>,
+        "Brooker, Marc" <mbrooker@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        "Manwaring, Derek" <derekmn@amazon.com>
+Subject: Re: [RFC]: mm,power: introduce MADV_WIPEONSUSPEND
+Message-ID: <20200707163758.GA1947@amd>
+References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com>
+ <20200703113026.GT18446@dhcp22.suse.cz>
+ <CAG48ez2O2z4L=n57Omwy6s1sWQkdTkPKiikhbfdVhiyd_TGRRw@mail.gmail.com>
+ <20200707073823.GA3820@dhcp22.suse.cz>
+ <20200707080726.GA32357@amd>
+ <20200707085847.GA5913@dhcp22.suse.cz>
 MIME-Version: 1.0
-References: <20200707162417.3514284-1-abhishekpandit@chromium.org> <20200707092406.v4.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
-In-Reply-To: <20200707092406.v4.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Jul 2020 18:28:05 +0200
-Message-ID: <CAJZ5v0iyvge_Hqgm46_vfjh45YFdnsJ7ksvY7DqD6gx+f+1dvg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
-To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="cWoXeonUoKmBZSoM"
+Content-Disposition: inline
+In-Reply-To: <20200707085847.GA5913@dhcp22.suse.cz>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 7, 2020 at 6:24 PM Abhishek Pandit-Subedi
-<abhishekpandit@chromium.org> wrote:
->
-> Udev rules that depend on the power/wakeup attribute don't get triggered
-> correctly if device_set_wakeup_capable is called after the device is
-> created. This can happen for several reasons (driver sets wakeup after
-> device is created, wakeup is changed on parent device, etc) and it seems
-> reasonable to emit a changed event when adding or removing attributes on
-> the device.
->
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
->
-> Changes in v4:
-> - Fix warning where returning from void and tested on device
->
-> Changes in v3:
-> - Simplified error handling
->
-> Changes in v2:
-> - Add newline at end of bt_dev_err
->
->  drivers/base/power/sysfs.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index 24d25cf8ab1487..aeb58d40aac8de 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /* sysfs entries for device PM */
->  #include <linux/device.h>
-> +#include <linux/kobject.h>
->  #include <linux/string.h>
->  #include <linux/export.h>
->  #include <linux/pm_qos.h>
-> @@ -739,12 +740,18 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
->
->  int wakeup_sysfs_add(struct device *dev)
->  {
-> -       return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> +       int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-> +
-> +       if (ret)
-> +               return ret;
-> +
-> +       return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
 
-So let me repeat the previous comment:
+--cWoXeonUoKmBZSoM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If you return an error here, it may confuse the caller to think that
-the operation has failed completely, whereas the merging of the
-attribute group has been successful already.
+Hi!
 
-I don't think that an error can be returned at this point.
+> > > > You can do it seqlock-style, kind of - you reserve the first byte of
+> > > > the page or so as a "is this page initialized" marker, and after ev=
+ery
+> > > > read from the page, you do a compiler barrier and check whether that
+> > > > byte has been cleared.
+> > >=20
+> > > This is certainly possible yet wery awkwar interface to use IMHO.
+> > > MADV_EXTERNALY_VOLATILE would express the actual semantic much better.
+> > > I might not still understand the expected usecase but if the target
+> > > application has to be changed anyway then why not simply use a
+> > > transparent and proper signaling mechanism like poll on a fd. That
+> >=20
+> > The goal is to have cryprographically-safe get_random_number() with 0
+> > syscalls.
+> >=20
+> > You'd need to do:
+> >=20
+> >    if (!poll(did_i_migrate)) {
+> >          use_prng_seed();
+> > 	 if (poll(did_i_migrate)) {
+> > 	       /* oops_they_migrated_me_in_middle_of_computation,
+> >  	          lets_redo_it() */
+> >  		  goto retry:
+> > 	 }
+> >    }
+> >=20
+> > Which means two syscalls..
+>=20
+> Is this a real problem though? Do we have any actual numbers? E.g. how
+> often does the migration happen so that 2 syscalls would be visible in
+> actual workloads?
 
->  }
->
->  void wakeup_sysfs_remove(struct device *dev)
->  {
->         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-> +       kobject_uevent(&dev->kobj, KOBJ_CHANGE);
->  }
->
->  int pm_qos_sysfs_add_resume_latency(struct device *dev)
-> --
-> 2.27.0.212.ge8ba1cc988-goog
->
+Please go through the thread and try to understand it.
+
+You'd need syscalls per get_randomness(), not per migration.
+
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--cWoXeonUoKmBZSoM
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl8EpOUACgkQMOfwapXb+vIrGQCfa8t3eRPUQJN4sgdBPhRqIXIN
+Md0AoL/VSUKG0fqXzutn3A1vlMnmAH5A
+=B3/F
+-----END PGP SIGNATURE-----
+
+--cWoXeonUoKmBZSoM--
