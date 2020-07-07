@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31EB216D46
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274A2216D47
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727962AbgGGM6X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 08:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S1727936AbgGGM6Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 08:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727936AbgGGM6X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 08:58:23 -0400
+        with ESMTP id S1727886AbgGGM6Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 08:58:24 -0400
 Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3169C061755
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 05:58:22 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id j11so1021158ljo.7
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 05:58:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A171DC061755
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 05:58:24 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id q7so36508181ljm.1
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 05:58:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=JmH1BfPiU4RoSWuHQPEJ8Sx4+RN7bhXBUvJ2uLAr9qM=;
-        b=Ad7XXos1cMmY+GKjq/D9UtSBmDNPOeVXkEk3XQ8wQl0QlkUWtCwInOmjZmoDIncBHb
-         XK6+h7K+uqUHqZXaTO/qeFFYBZ/TGnH2PC2189v/S6CCjKuMkMGXkOhaIB+GjZsRkXGP
-         sZlwnSie+aPey2AKnh2JAKCuFh3oGUOu0n2/RvUWQQHtCbS+yFnqUaLPv6igWPkwW4Oj
-         6MnRpJOehFo5cmYc6/vsfoQuy25/s4gsoreVtAlkV5pLjTpOhJxullGUTeW+KgwGcki6
-         vEDYWNZL4eOuJ4W7a8oOxNgk29NhvZA+uOHbJI5AmMwuTcfOIe8DqXORy5X+/1bnSSOl
-         e8yA==
+        bh=Tyb4FTg+dS/M/U030tOYrYBkxinzi9TyZY+2pXYSj8s=;
+        b=WcTZPDyrGuD+JpLr2CvFSOW4wI/84AB9XBsPM+jNP55/QXFFMDJ2Kcuad7JKSuEgl4
+         CMsJcDQJheQ23rJe96pFp9zvexdXKEVqmJE+BhjbytMKWA3ME0ZHKt6RLTMMacnHJqX2
+         eHz9Jr/J9Itm7q4oL7NVLhg9l448S2Q49iTD4WdSJCSYCeU5QUE0K3iXcaJ0Y2WYHFGZ
+         XQj2KfRpp0yZshd2s60tgduYEi8cCEBXVk/68tYWIKGTQCdf3nT3UUM+49atzgZzQd/F
+         NEWIC0yJKMlERT7u2126WmBfK+sVr1OqaCYc11UQHPCZl/pL+tJtV+RipTMslbw9Rv7W
+         GhPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=JmH1BfPiU4RoSWuHQPEJ8Sx4+RN7bhXBUvJ2uLAr9qM=;
-        b=VUhVCeQ3TPkw9W/sW6//cNcnw4YGDYKYoK/6LKklTz3uV9HauYJvkhSrf0RF8t2VUH
-         OGHckOhLHb/7TQVh29SP5BT1fVW2tyPqPhAZlljtXzk9kIwsupa59wkV/i+qCPoyVj8D
-         8Th2Qb+4bMF95KTbDCb7PHCYzoa7p7sG8RCXfSQNeVoRFZF1jbxMf4qoCU/bvtrs7DlL
-         W3IjZsBiI9xyI65W7lnmAuzk7ydgC2UcUsdspqZ9JOCq3NapWoFgRW0DguRoDaFVIhWu
-         egderHaKqtxo7ybZqPmPPnG7vmvW87ozTCKbKIJ0b13KTlHI3gzDL15Glmvt6HnaXkKU
-         /vMQ==
-X-Gm-Message-State: AOAM5304n2wYE4d4yN0pSJAxYJceU1NHn8t5ypGA2RK+fnVNuJNZQAzx
-        9DF6ITWvldaKI4DIOR0UJLrvZA==
-X-Google-Smtp-Source: ABdhPJzUlqKwp5fDTuJIhcklcQOJEemZfGYMUbMkILw8e1U/ymMGmHmpI3jEkHFPEWctxqwO/X56vg==
-X-Received: by 2002:a05:651c:21a:: with SMTP id y26mr14747466ljn.106.1594126701205;
-        Tue, 07 Jul 2020 05:58:21 -0700 (PDT)
+        bh=Tyb4FTg+dS/M/U030tOYrYBkxinzi9TyZY+2pXYSj8s=;
+        b=CfwieFFehAtfd2dSHJu9laQ8o2x9+Y9Xh5Pvn7vj3FkVQevfO7x6Tkz2gc2BFDU/gZ
+         HWoGMrn9faW4idRYXFALYgDJ4KHWTSAN68wNw5vxR5lxcn2haqBOgjFbvRjcFCOB5xOL
+         nC+DpbnQ3NQDmVWHstwTgdcUEqseR97IGt4fAGKihbWurvCYPuEUwXnAZLe5R4uGFFqF
+         PuyL82i2kbAtC+uigLQGkTb/Qkza7nIE1Ohnz+317Yqmr/ERQkbZ3hMZPSUV6c6CaMBT
+         w8UKfJiWb9lQzQELvHH3gQv8hJnC84LPUrV7raj2GJCKbYYeRmXtDAaaxWH2d7+JbmIA
+         C6ZA==
+X-Gm-Message-State: AOAM533DFgLvaUe40mqPm6rndK6BLXbtXVZgvb6RxP2A35dw3ti87qZE
+        OGkVT/x7BmsR3NDZr5fZkLCaGw==
+X-Google-Smtp-Source: ABdhPJylq0jjpwH2fsuo8vkN+Gf9ZYpUxI0iRGTwMhIxlrERcqaj5/+hQ1rGx4VxvHtG/4ViNKkMrA==
+X-Received: by 2002:a2e:9a8d:: with SMTP id p13mr6597746lji.36.1594126703088;
+        Tue, 07 Jul 2020 05:58:23 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-181-7.NA.cust.bahnhof.se. [98.128.181.7])
-        by smtp.gmail.com with ESMTPSA id 11sm9554395lfz.78.2020.07.07.05.58.19
+        by smtp.gmail.com with ESMTPSA id 11sm9554395lfz.78.2020.07.07.05.58.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 05:58:20 -0700 (PDT)
+        Tue, 07 Jul 2020 05:58:21 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -62,9 +62,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Saravana Kannan <saravanak@google.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/5] cpuidle: psci: Split into two separate build objects
-Date:   Tue,  7 Jul 2020 14:58:00 +0200
-Message-Id: <20200707125804.13030-2-ulf.hansson@linaro.org>
+Subject: [PATCH v2 2/5] cpuidle: psci: Fail cpuidle registration if set OSI mode failed
+Date:   Tue,  7 Jul 2020 14:58:01 +0200
+Message-Id: <20200707125804.13030-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200707125804.13030-1-ulf.hansson@linaro.org>
 References: <20200707125804.13030-1-ulf.hansson@linaro.org>
@@ -75,69 +75,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The combined build object for the PSCI cpuidle driver and the PSCI PM
-domain, is a bit messy. Therefore let's split it up by adding a new Kconfig
-ARM_PSCI_CPUIDLE_DOMAIN and convert into two separate objects.
+Currently we allow the cpuidle driver registration to succeed, even if we
+failed to enable the OSI mode when the hierarchical DT layout is used. This
+means running in a degraded mode, by using the available idle states per
+CPU, while also preventing the domain idle states.
+
+Moving forward, this behaviour looks quite questionable to maintain, as
+complexity seems to grow around it, especially when trying to add support
+for deferred probe, for example.
+
+Therefore, let's make the cpuidle driver registration to fail in this
+situation, thus relying on the default architectural cpuidle backend for
+WFI to be used.
 
 Reviewed-by: Lina Iyer <ilina@codeaurora.org>
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/cpuidle/Kconfig.arm    | 10 ++++++++++
- drivers/cpuidle/Makefile       |  5 ++---
- drivers/cpuidle/cpuidle-psci.h |  2 +-
- 3 files changed, 13 insertions(+), 4 deletions(-)
+ drivers/cpuidle/cpuidle-psci-domain.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index 51a7e89085c0..0844fadc4be8 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -23,6 +23,16 @@ config ARM_PSCI_CPUIDLE
- 	  It provides an idle driver that is capable of detecting and
- 	  managing idle states through the PSCI firmware interface.
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index 423f03bbeb74..f07786aad673 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -26,7 +26,6 @@ struct psci_pd_provider {
+ };
  
-+config ARM_PSCI_CPUIDLE_DOMAIN
-+	bool "PSCI CPU idle Domain"
-+	depends on ARM_PSCI_CPUIDLE
-+	depends on PM_GENERIC_DOMAINS_OF
-+	default y
-+	help
-+	  Select this to enable the PSCI based CPUidle driver to use PM domains,
-+	  which is needed to support the hierarchical DT based layout of the
-+	  idle states.
-+
- config ARM_BIG_LITTLE_CPUIDLE
- 	bool "Support for ARM big.LITTLE processors"
- 	depends on ARCH_VEXPRESS_TC2_PM || ARCH_EXYNOS || COMPILE_TEST
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index f07800cbb43f..26bbc5e74123 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -21,9 +21,8 @@ obj-$(CONFIG_ARM_U8500_CPUIDLE)         += cpuidle-ux500.o
- obj-$(CONFIG_ARM_AT91_CPUIDLE)          += cpuidle-at91.o
- obj-$(CONFIG_ARM_EXYNOS_CPUIDLE)        += cpuidle-exynos.o
- obj-$(CONFIG_ARM_CPUIDLE)		+= cpuidle-arm.o
--obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle_psci.o
--cpuidle_psci-y				:= cpuidle-psci.o
--cpuidle_psci-$(CONFIG_PM_GENERIC_DOMAINS_OF) += cpuidle-psci-domain.o
-+obj-$(CONFIG_ARM_PSCI_CPUIDLE)		+= cpuidle-psci.o
-+obj-$(CONFIG_ARM_PSCI_CPUIDLE_DOMAIN)	+= cpuidle-psci-domain.o
- obj-$(CONFIG_ARM_TEGRA_CPUIDLE)		+= cpuidle-tegra.o
- obj-$(CONFIG_ARM_QCOM_SPM_CPUIDLE)	+= cpuidle-qcom-spm.o
+ static LIST_HEAD(psci_pd_providers);
+-static bool osi_mode_enabled __initdata;
  
-diff --git a/drivers/cpuidle/cpuidle-psci.h b/drivers/cpuidle/cpuidle-psci.h
-index 7299a04dd467..ac8170684d4f 100644
---- a/drivers/cpuidle/cpuidle-psci.h
-+++ b/drivers/cpuidle/cpuidle-psci.h
-@@ -8,7 +8,7 @@ struct device_node;
- void psci_set_domain_state(u32 state);
- int __init psci_dt_parse_state_node(struct device_node *np, u32 *state);
+ static int psci_pd_power_off(struct generic_pm_domain *pd)
+ {
+@@ -272,7 +271,6 @@ static int __init psci_idle_init_domains(void)
+ 		goto remove_pd;
+ 	}
  
--#ifdef CONFIG_PM_GENERIC_DOMAINS_OF
-+#ifdef CONFIG_ARM_PSCI_CPUIDLE_DOMAIN
- struct device __init *psci_dt_attach_cpu(int cpu);
- #else
- static inline struct device __init *psci_dt_attach_cpu(int cpu) { return NULL; }
+-	osi_mode_enabled = true;
+ 	of_node_put(np);
+ 	pr_info("Initialized CPU PM domain topology\n");
+ 	return pd_count;
+@@ -293,9 +291,6 @@ struct device __init *psci_dt_attach_cpu(int cpu)
+ {
+ 	struct device *dev;
+ 
+-	if (!osi_mode_enabled)
+-		return NULL;
+-
+ 	dev = dev_pm_domain_attach_by_name(get_cpu_device(cpu), "psci");
+ 	if (IS_ERR_OR_NULL(dev))
+ 		return dev;
 -- 
 2.20.1
 
