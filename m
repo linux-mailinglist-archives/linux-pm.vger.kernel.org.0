@@ -2,155 +2,395 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC08216A62
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 12:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE24216AE4
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 12:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727094AbgGGKeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 06:34:22 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:59548 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725874AbgGGKeW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 06:34:22 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id B0C812A0718
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Collabora Kernel ML <kernel@collabora.com>, matthias.bgg@gmail.com,
-        drinkcat@chromium.org, hsinyi@chromium.org,
-        Michael Kao <michael.kao@mediatek.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH] Revert "thermal: mediatek: fix register index error"
-Date:   Tue,  7 Jul 2020 12:34:12 +0200
-Message-Id: <20200707103412.1010823-1-enric.balletbo@collabora.com>
-X-Mailer: git-send-email 2.27.0
+        id S1727097AbgGGK6o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 06:58:44 -0400
+Received: from foss.arm.com ([217.140.110.172]:39968 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726911AbgGGK6o (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Jul 2020 06:58:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B1E781FB;
+        Tue,  7 Jul 2020 03:58:42 -0700 (PDT)
+Received: from [10.37.12.65] (unknown [10.37.12.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C56DC3F71E;
+        Tue,  7 Jul 2020 03:58:38 -0700 (PDT)
+Subject: Re: [PATCH v6 3/6] thermal: Add generic power domain warming device
+ driver.
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, ulf.hansson@linaro.org,
+        bjorn.andersson@linaro.org, agross@kernel.org, robh@kernel.org,
+        amit.kucheria@verdurent.com, mark.rutland@arm.com,
+        rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200604015317.31389-1-thara.gopinath@linaro.org>
+ <20200604015317.31389-4-thara.gopinath@linaro.org>
+ <733d118d-45a3-b981-4820-5d841e921a8d@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <79a35aea-51c1-ed76-5107-35d2191b028f@arm.com>
+Date:   Tue, 7 Jul 2020 11:58:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <733d118d-45a3-b981-4820-5d841e921a8d@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6
+Hi Daniel and Thara
 
-The above patch is supposed to fix a register index error on mt2701. It
-is not clear if the problem solved is a hang or just an invalid value
-returned, my guess is the second. The patch introduces, though, a new
-hang on MT8173 device making them unusable. So, seems reasonable, revert
-the patch because introduces a worst issue.
+On 7/3/20 11:02 AM, Daniel Lezcano wrote:
+> 
+> Hi Thara,
+> 
+> sorry for the delay.
+> 
+> Added Lukasz.
 
-The reason I send a revert instead of trying to fix the issue for MT8173
-is because the information needed to fix the issue is in the datasheet
-and is not public. So I am not really able to fix it.
+Thank you for adding me.
+I will go through the patches to understand them and build
+the context. I can see some interesting idea described below.
 
-Fixes the following bug when CONFIG_MTK_THERMAL is set on MT8173
-devices.
+Regards,
+Lukasz
 
-[    2.222488] Unable to handle kernel paging request at virtual address ffff8000125f5001
-[    2.230421] Mem abort info:
-[    2.233207]   ESR = 0x96000021
-[    2.236261]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    2.241571]   SET = 0, FnV = 0
-[    2.244623]   EA = 0, S1PTW = 0
-[    2.247762] Data abort info:
-[    2.250640]   ISV = 0, ISS = 0x00000021
-[    2.254473]   CM = 0, WnR = 0
-[    2.257544] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041850000
-[    2.264251] [ffff8000125f5001] pgd=000000013ffff003, pud=000000013fffe003, pmd=000000013fff9003, pte=006800001100b707
-[    2.274867] Internal error: Oops: 96000021 [#1] PREEMPT SMP
-[    2.280432] Modules linked in:
-[    2.283483] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.7.0-rc6+ #162
-[    2.289914] Hardware name: Google Elm (DT)
-[    2.294003] pstate: 20000005 (nzCv daif -PAN -UAO)
-[    2.298792] pc : mtk_read_temp+0xb8/0x1c8
-[    2.302793] lr : mtk_read_temp+0x7c/0x1c8
-[    2.306794] sp : ffff80001003b930
-[    2.310100] x29: ffff80001003b930 x28: 0000000000000000
-[    2.315404] x27: 0000000000000002 x26: ffff0000f9550b10
-[    2.320709] x25: ffff0000f9550a80 x24: 0000000000000090
-[    2.326014] x23: ffff80001003ba24 x22: 00000000610344c0
-[    2.331318] x21: 0000000000002710 x20: 00000000000001f4
-[    2.336622] x19: 0000000000030d40 x18: ffff800011742ec0
-[    2.341926] x17: 0000000000000001 x16: 0000000000000001
-[    2.347230] x15: ffffffffffffffff x14: ffffff0000000000
-[    2.352535] x13: ffffffffffffffff x12: 0000000000000028
-[    2.357839] x11: 0000000000000003 x10: ffff800011295ec8
-[    2.363143] x9 : 000000000000291b x8 : 0000000000000002
-[    2.368447] x7 : 00000000000000a8 x6 : 0000000000000004
-[    2.373751] x5 : 0000000000000000 x4 : ffff800011295cb0
-[    2.379055] x3 : 0000000000000002 x2 : ffff8000125f5001
-[    2.384359] x1 : 0000000000000001 x0 : ffff0000f9550a80
-[    2.389665] Call trace:
-[    2.392105]  mtk_read_temp+0xb8/0x1c8
-[    2.395760]  of_thermal_get_temp+0x2c/0x40
-[    2.399849]  thermal_zone_get_temp+0x78/0x160
-[    2.404198]  thermal_zone_device_update.part.0+0x3c/0x1f8
-[    2.409589]  thermal_zone_device_update+0x34/0x48
-[    2.414286]  of_thermal_set_mode+0x58/0x88
-[    2.418375]  thermal_zone_of_sensor_register+0x1a8/0x1d8
-[    2.423679]  devm_thermal_zone_of_sensor_register+0x64/0xb0
-[    2.429242]  mtk_thermal_probe+0x690/0x7d0
-[    2.433333]  platform_drv_probe+0x5c/0xb0
-[    2.437335]  really_probe+0xe4/0x448
-[    2.440901]  driver_probe_device+0xe8/0x140
-[    2.445077]  device_driver_attach+0x7c/0x88
-[    2.449252]  __driver_attach+0xac/0x178
-[    2.453082]  bus_for_each_dev+0x78/0xc8
-[    2.456909]  driver_attach+0x2c/0x38
-[    2.460476]  bus_add_driver+0x14c/0x230
-[    2.464304]  driver_register+0x6c/0x128
-[    2.468131]  __platform_driver_register+0x50/0x60
-[    2.472831]  mtk_thermal_driver_init+0x24/0x30
-[    2.477268]  do_one_initcall+0x50/0x298
-[    2.481098]  kernel_init_freeable+0x1ec/0x264
-[    2.485450]  kernel_init+0x1c/0x110
-[    2.488931]  ret_from_fork+0x10/0x1c
-[    2.492502] Code: f9401081 f9400402 b8a67821 8b010042 (b9400042)
-[    2.498599] ---[ end trace e43e3105ed27dc99 ]---
-[    2.503367] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-[    2.511020] SMP: stopping secondary CPUs
-[    2.514941] Kernel Offset: disabled
-[    2.518421] CPU features: 0x090002,25006005
-[    2.522595] Memory Limit: none
-[    2.525644] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]--
-
-Cc: Michael Kao <michael.kao@mediatek.com>
-Fixes: eb9aecd90d1a ("thermal: mediatek: fix register index error")
-Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
----
-
- drivers/thermal/mtk_thermal.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 6b7ef1993d7e..42c9cd0e5f77 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -594,8 +594,7 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 	u32 raw;
- 
- 	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
--		raw = readl(mt->thermal_base +
--			    conf->msr[conf->bank_data[bank->id].sensors[i]]);
-+		raw = readl(mt->thermal_base + conf->msr[i]);
- 
- 		temp = raw_to_mcelsius(mt,
- 				       conf->bank_data[bank->id].sensors[i],
-@@ -736,8 +735,7 @@ static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
- 
- 	for (i = 0; i < conf->bank_data[num].num_sensors; i++)
- 		writel(conf->sensor_mux_values[conf->bank_data[num].sensors[i]],
--		       mt->thermal_base +
--		       conf->adcpnp[conf->bank_data[num].sensors[i]]);
-+		       mt->thermal_base + conf->adcpnp[i]);
- 
- 	writel((1 << conf->bank_data[num].num_sensors) - 1,
- 	       controller_base + TEMP_MONCTL0);
--- 
-2.27.0
-
+> 
+> On 04/06/2020 03:53, Thara Gopinath wrote:
+>> Resources modeled as power domains in linux kernel can  be used to warm the
+>> SoC(eg. mx power domain on sdm845).  To support this feature, introduce a
+>> generic power domain warming device driver that can be plugged into the
+>> thermal framework (The thermal framework itself requires further
+>> modifiction to support a warming device in place of a cooling device.
+>> Those extensions are not introduced in this patch series).
+> 
+> The patch itself looks fine but I'm not very convinced about using a
+> specific driver as a warming device.
+> 
+> It is all about changing the performance state of a device and the power
+> domain is a way to access the associated callback.
+> 
+> It could be used as a cooling device as well.
+> 
+> The cpufreq cooling device could be used as a warming device and the way
+> we access the performance state is the freq qos.
+> 
+> We end up with different ways to do the same thing : change the
+> performance state.
+> 
+> On the other side, the energy model is being moved to the struct device,
+> so we will have gpu and cpu using it to retrieve a performance state
+> given a power value.
+> 
+> My opinion is instead of multiplying the ways to do the same think, we
+> should find a way to unify all the passive cooling devices into a single
+> generic performance state based mitigation device.
+> 
+> It does not imply to make all the passive cooling device changes but
+> provide a generic one first.
+> 
+> The ideal would be to register a struct device as a performance state
+> capable device and use the energy model stored in it.
+> 
+> In the meantime, the energy model should embed a couple of callbacks
+> get_power / set_power to set the performance state.
+> 
+> That implies a bit of more work, but IMHO it is worth to do.
+> 
+> Does it make sense ?
+> 
+> 
+>> ---
+>>
+>> v3->v4:
+>> 	- Removed late_init hook pd_warming_device_ops.
+>> 	- Use of_genpd_add_device instead of pm_genpd_add_device to attach
+>> 	  device to the generic power domain.
+>> 	- Use thermal_of_cooling_device_parent_register to register the
+>> 	  cooling device so that the device with genpd attached can be
+>> 	  made parent of the cooling device.
+>> 	- With above changes, remove reference to generic_pm_domain in
+>> 	  pd_warming_device.
+>>
+>> v4->v5:
+>> 	- All the below changes are as per Ulf's review comments.
+>> 	- Renamed pwr_domain_warming.c and pwr_domain_warming.h to
+>> 	  pd_warming.c and pd_warming.h.
+>> 	- Renamed pwr_domain_warming_register API to
+>> 	  of_pd_warming_register.
+>> 	- Dropped in-param pd_name to of_pd_warming_register.
+>> 	- Introduced ID allocator to uniquely identify each power domain
+>> 	  warming device.
+>> 	- Introduced pd_warming_release to handle device kfree for
+>> 	  pd_warming_device.
+>> 	- Introduced pm_genpd_remove_device in the error exit path
+>> 	  of of_pd_warming_register.
+>> v5->v6:
+>> 	- Fixed issues with ->release() and kfree(dev) as pointed
+>> 	  out by Ulf.
+>>
+>>   drivers/thermal/Kconfig      |  10 +++
+>>   drivers/thermal/Makefile     |   4 +
+>>   drivers/thermal/pd_warming.c | 169 +++++++++++++++++++++++++++++++++++
+>>   include/linux/pd_warming.h   |  29 ++++++
+>>   4 files changed, 212 insertions(+)
+>>   create mode 100644 drivers/thermal/pd_warming.c
+>>   create mode 100644 include/linux/pd_warming.h
+>>
+>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+>> index e53314ea9e25..3a0bcf3e8bd9 100644
+>> --- a/drivers/thermal/Kconfig
+>> +++ b/drivers/thermal/Kconfig
+>> @@ -206,6 +206,16 @@ config DEVFREQ_THERMAL
+>>   
+>>   	  If you want this support, you should say Y here.
+>>   
+>> +config PWR_DOMAIN_WARMING_THERMAL
+>> +	bool "Power Domain based warming device"
+>> +	depends on PM_GENERIC_DOMAINS_OF
+>> +	help
+>> +	  This implements the generic power domain based warming
+>> +	  mechanism through increasing the performance state of
+>> +	  a power domain.
+>> +
+>> +	  If you want this support, you should say Y here.
+>> +
+>>   config THERMAL_EMULATION
+>>   	bool "Thermal emulation mode support"
+>>   	help
+>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+>> index 86c506410cc0..14fa696a08bd 100644
+>> --- a/drivers/thermal/Makefile
+>> +++ b/drivers/thermal/Makefile
+>> @@ -28,7 +28,11 @@ thermal_sys-$(CONFIG_CLOCK_THERMAL)	+= clock_cooling.o
+>>   # devfreq cooling
+>>   thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+>>   
+>> +#pwr domain warming
+>> +thermal_sys-$(CONFIG_PWR_DOMAIN_WARMING_THERMAL)	+= pd_warming.o
+>> +
+>>   obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o
+>> +
+>>   # platform thermal drivers
+>>   obj-y				+= broadcom/
+>>   obj-$(CONFIG_THERMAL_MMIO)		+= thermal_mmio.o
+>> diff --git a/drivers/thermal/pd_warming.c b/drivers/thermal/pd_warming.c
+>> new file mode 100644
+>> index 000000000000..1ea93481c79b
+>> --- /dev/null
+>> +++ b/drivers/thermal/pd_warming.c
+>> @@ -0,0 +1,169 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, Linaro Ltd
+>> + */
+>> +#include <linux/err.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/init.h>
+>> +#include <linux/of_device.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/module.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/pd_warming.h>
+>> +
+>> +struct pd_warming_device {
+>> +	struct thermal_cooling_device *cdev;
+>> +	struct device dev;
+>> +	int id;
+>> +	int max_state;
+>> +	int cur_state;
+>> +	bool runtime_resumed;
+>> +};
+>> +
+>> +static DEFINE_IDA(pd_ida);
+>> +
+>> +static int pd_wdev_get_max_state(struct thermal_cooling_device *cdev,
+>> +				 unsigned long *state)
+>> +{
+>> +	struct pd_warming_device *pd_wdev = cdev->devdata;
+>> +
+>> +	*state = pd_wdev->max_state;
+>> +	return 0;
+>> +}
+>> +
+>> +static int pd_wdev_get_cur_state(struct thermal_cooling_device *cdev,
+>> +				 unsigned long *state)
+>> +{
+>> +	struct pd_warming_device *pd_wdev = cdev->devdata;
+>> +
+>> +	*state = dev_pm_genpd_get_performance_state(&pd_wdev->dev);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int pd_wdev_set_cur_state(struct thermal_cooling_device *cdev,
+>> +				 unsigned long state)
+>> +{
+>> +	struct pd_warming_device *pd_wdev = cdev->devdata;
+>> +	struct device *dev = &pd_wdev->dev;
+>> +	int ret;
+>> +
+>> +	ret = dev_pm_genpd_set_performance_state(dev, state);
+>> +
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (state && !pd_wdev->runtime_resumed) {
+>> +		ret = pm_runtime_get_sync(dev);
+>> +		pd_wdev->runtime_resumed = true;
+>> +	} else if (!state && pd_wdev->runtime_resumed) {
+>> +		ret = pm_runtime_put(dev);
+>> +		pd_wdev->runtime_resumed = false;
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static struct thermal_cooling_device_ops pd_warming_device_ops = {
+>> +	.get_max_state	= pd_wdev_get_max_state,
+>> +	.get_cur_state	= pd_wdev_get_cur_state,
+>> +	.set_cur_state	= pd_wdev_set_cur_state,
+>> +};
+>> +
+>> +static void pd_warming_release(struct device *dev)
+>> +{
+>> +	struct pd_warming_device *pd_wdev;
+>> +
+>> +	pd_wdev = container_of(dev, struct pd_warming_device, dev);
+>> +	kfree(pd_wdev);
+>> +}
+>> +
+>> +struct thermal_cooling_device *
+>> +of_pd_warming_register(struct device *parent, int pd_id)
+>> +{
+>> +	struct pd_warming_device *pd_wdev;
+>> +	struct of_phandle_args pd_args;
+>> +	char cdev_name[THERMAL_NAME_LENGTH];
+>> +	int ret;
+>> +
+>> +	pd_wdev = kzalloc(sizeof(*pd_wdev), GFP_KERNEL);
+>> +	if (!pd_wdev)
+>> +		return ERR_PTR(-ENOMEM);
+>> +
+>> +	dev_set_name(&pd_wdev->dev, "%s_%d_warming_dev",
+>> +		     dev_name(parent), pd_id);
+>> +	pd_wdev->dev.parent = parent;
+>> +	pd_wdev->dev.release = pd_warming_release;
+>> +
+>> +	ret = device_register(&pd_wdev->dev);
+>> +	if (ret) {
+>> +		put_device(&pd_wdev->dev);
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret = ida_simple_get(&pd_ida, 0, 0, GFP_KERNEL);
+>> +	if (ret < 0)
+>> +		goto unregister_device;
+>> +
+>> +	pd_wdev->id = ret;
+>> +
+>> +	pd_args.np = parent->of_node;
+>> +	pd_args.args[0] = pd_id;
+>> +	pd_args.args_count = 1;
+>> +
+>> +	ret = of_genpd_add_device(&pd_args, &pd_wdev->dev);
+>> +
+>> +	if (ret)
+>> +		goto remove_ida;
+>> +
+>> +	ret = dev_pm_genpd_performance_state_count(&pd_wdev->dev);
+>> +	if (ret < 0)
+>> +		goto out_genpd;
+>> +
+>> +	pd_wdev->max_state = ret - 1;
+>> +	pm_runtime_enable(&pd_wdev->dev);
+>> +	pd_wdev->runtime_resumed = false;
+>> +
+>> +	snprintf(cdev_name, sizeof(cdev_name), "thermal-pd-%d", pd_wdev->id);
+>> +	pd_wdev->cdev = thermal_of_cooling_device_register
+>> +					(NULL, cdev_name, pd_wdev,
+>> +					 &pd_warming_device_ops);
+>> +	if (IS_ERR(pd_wdev->cdev)) {
+>> +		pr_err("unable to register %s cooling device\n", cdev_name);
+>> +		ret = PTR_ERR(pd_wdev->cdev);
+>> +		goto out_runtime_disable;
+>> +	}
+>> +
+>> +	return pd_wdev->cdev;
+>> +
+>> +out_runtime_disable:
+>> +	pm_runtime_disable(&pd_wdev->dev);
+>> +out_genpd:
+>> +	pm_genpd_remove_device(&pd_wdev->dev);
+>> +remove_ida:
+>> +	ida_simple_remove(&pd_ida, pd_wdev->id);
+>> +unregister_device:
+>> +	device_unregister(&pd_wdev->dev);
+>> +out:
+>> +	return ERR_PTR(ret);
+>> +}
+>> +EXPORT_SYMBOL_GPL(of_pd_warming_register);
+>> +
+>> +void pd_warming_unregister(struct thermal_cooling_device *cdev)
+>> +{
+>> +	struct pd_warming_device *pd_wdev = cdev->devdata;
+>> +	struct device *dev = &pd_wdev->dev;
+>> +
+>> +	if (pd_wdev->runtime_resumed) {
+>> +		dev_pm_genpd_set_performance_state(dev, 0);
+>> +		pm_runtime_put(dev);
+>> +		pd_wdev->runtime_resumed = false;
+>> +	}
+>> +	pm_runtime_disable(dev);
+>> +	pm_genpd_remove_device(dev);
+>> +	ida_simple_remove(&pd_ida, pd_wdev->id);
+>> +	thermal_cooling_device_unregister(cdev);
+>> +	device_unregister(dev);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pd_warming_unregister);
+>> diff --git a/include/linux/pd_warming.h b/include/linux/pd_warming.h
+>> new file mode 100644
+>> index 000000000000..550a5683b56d
+>> --- /dev/null
+>> +++ b/include/linux/pd_warming.h
+>> @@ -0,0 +1,29 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (c) 2019, Linaro Ltd.
+>> + */
+>> +#ifndef __PWR_DOMAIN_WARMING_H__
+>> +#define __PWR_DOMAIN_WARMING_H__
+>> +
+>> +#include <linux/pm_domain.h>
+>> +#include <linux/thermal.h>
+>> +
+>> +#ifdef CONFIG_PWR_DOMAIN_WARMING_THERMAL
+>> +struct thermal_cooling_device *
+>> +of_pd_warming_register(struct device *parent, int pd_id);
+>> +
+>> +void pd_warming_unregister(struct thermal_cooling_device *cdev);
+>> +
+>> +#else
+>> +static inline struct thermal_cooling_device *
+>> +of_pd_warming_register(struct device *parent, int pd_id)
+>> +{
+>> +	return ERR_PTR(-ENOSYS);
+>> +}
+>> +
+>> +static inline void
+>> +pd_warming_unregister(struct thermal_cooling_device *cdev)
+>> +{
+>> +}
+>> +#endif /* CONFIG_PWR_DOMAIN_WARMING_THERMAL */
+>> +#endif /* __PWR_DOMAIN_WARMING_H__ */
+>>
+> 
+> 
