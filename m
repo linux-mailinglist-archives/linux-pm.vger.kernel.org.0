@@ -2,127 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C0B21751E
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 19:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91142175E8
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 20:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728425AbgGGR3C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 13:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728417AbgGGR3B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 13:29:01 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80694C08C5DC
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 10:29:00 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id g67so19421860pgc.8
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 10:29:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=gFm0zZsEee0jyOpcffZkH1BBWPUeyZACVROnx5BmvFo=;
-        b=aQ/vxe3ywvqhq7YhSCKxmIKhYaHRQV/lAb0Ay3c3hWSBBVyWq+D/OHnRFO8RNeQtRg
-         2k//7Epb+Gf4F5KD/StYT7UInpD5GLuyr8RaAU5jBdE3mfl2F0hNn3gYounrtwMBPGFs
-         /rpq/eVGdY4Pz88MPR5amU68PTfCRQRDua2/o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gFm0zZsEee0jyOpcffZkH1BBWPUeyZACVROnx5BmvFo=;
-        b=ho3DMscZdLo8VRn1VVLZz9eyAdOXkR9MxeiOoakVy8nwnq8eD+PvK50ue4z2gw/C3F
-         KTquGODS8KQ1qC+aAkIUqqas3tQAdRqyuLHz5WOTQ8nN5Eo9hca+0I9GUeUPXKdSGpnj
-         nn2j0Fy809AYIhLUDjUwTqQUwGVR7LWO9tvQaM5lkmRTRCIa/6a1dmiSCcY1pJGQg05n
-         PAV0oFnY3FnOTJ50enuevGp8Hkuss9Twae7uB2sM2VEbQn8i03RT9q5FXiQrPVSPEPHq
-         b1qNh2Z5J+F2ZfMbdTyZNxxKkhshmZhqWww+e62wSZMr0/9aWt6tQ4yXpW29Uq0V+ZHU
-         PzJA==
-X-Gm-Message-State: AOAM531NN0sC3I0ddSamUiVD6E1y4/EmV+OzBFtBOa4kScGo1qcgZnfX
-        vcg1/kQF/Jp76hmM+UhC9/oYHA==
-X-Google-Smtp-Source: ABdhPJzs7CUdSj1Gwg62L4bJ94/aaSFpSOiduFOUy+QsKRQ9yrQ+xhNyo9VbVBvbbbAX6udNlEsTZA==
-X-Received: by 2002:a62:fb06:: with SMTP id x6mr50324326pfm.28.1594142940088;
-        Tue, 07 Jul 2020 10:29:00 -0700 (PDT)
-Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:7220:84ff:fe09:2b94])
-        by smtp.gmail.com with ESMTPSA id e15sm1414285pgt.17.2020.07.07.10.28.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 10:28:59 -0700 (PDT)
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org
-Cc:     linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org, swboyd@chromium.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v5 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
-Date:   Tue,  7 Jul 2020 10:28:44 -0700
-Message-Id: <20200707102823.v5.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-In-Reply-To: <20200707172845.4177903-1-abhishekpandit@chromium.org>
-References: <20200707172845.4177903-1-abhishekpandit@chromium.org>
+        id S1728149AbgGGSHl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 14:07:41 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:33564 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728036AbgGGSHl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 14:07:41 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 067I7dsp122688;
+        Tue, 7 Jul 2020 13:07:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1594145259;
+        bh=tcG+3QfvQYtuz+moQPRntRSYLDtYJOO1r/4BMO3+5bI=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Zv4ipbsfseRXYHLCKiWPZV5bHcwAJV63dS7QRwA8FLcswu9yTLyci8r5q+NNGzxvp
+         SbD2SzbGUjAwDtbxGfHP6ui2CppuNgxlG4BHspx5HmTAC1CeCwKx+gWqRBGpI/XM30
+         98AWdn7xdQfH8chUr/J7m/Xg0VhUb/FUwWGAgqrg=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 067I7d6J032245
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Jul 2020 13:07:39 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 7 Jul
+ 2020 13:07:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Tue, 7 Jul 2020 13:07:39 -0500
+Received: from [10.250.43.45] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 067I7cGA011289;
+        Tue, 7 Jul 2020 13:07:38 -0500
+Subject: Re: [EXTERNAL] Re: [PATCH v15 2/4] dt-bindings: power: Convert
+ battery.txt to battery.yaml
+To:     Rob Herring <robh@kernel.org>
+CC:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Sandeep Patil <sspatil@android.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>, Dan Murphy <dmurphy@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20200701211044.18590-1-r-rivera-matos@ti.com>
+ <20200701211044.18590-3-r-rivera-matos@ti.com>
+ <20200702205320.GA1672139@bogus>
+ <54914eed-4a65-745b-b61b-9515737023e3@ti.com>
+ <CAL_JsqKXC1TFFCq6HBqdbHNeWbA=SnCqHkTx+FQXiPYDLb6sNw@mail.gmail.com>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <50e85766-08d2-f91e-a6a9-c4b4f8858dc4@ti.com>
+Date:   Tue, 7 Jul 2020 13:07:38 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqKXC1TFFCq6HBqdbHNeWbA=SnCqHkTx+FQXiPYDLb6sNw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Udev rules that depend on the power/wakeup attribute don't get triggered
-correctly if device_set_wakeup_capable is called after the device is
-created. This can happen for several reasons (driver sets wakeup after
-device is created, wakeup is changed on parent device, etc) and it seems
-reasonable to emit a changed event when adding or removing attributes on
-the device.
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
-
-Changes in v5:
-- Ignore return from kobject_uevent when adding to sysfs
-
-Changes in v4:
-- Fix warning where returning from void and tested on device
-
-Changes in v3:
-- Simplified error handling
-
-Changes in v2:
-- Add newline at end of bt_dev_err
-
- drivers/base/power/sysfs.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index 24d25cf8ab1487..c7b24812523c9e 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* sysfs entries for device PM */
- #include <linux/device.h>
-+#include <linux/kobject.h>
- #include <linux/string.h>
- #include <linux/export.h>
- #include <linux/pm_qos.h>
-@@ -739,12 +740,18 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
- 
- int wakeup_sysfs_add(struct device *dev)
- {
--	return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-+	int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-+
-+	if (!ret)
-+		kobject_uevent(&dev->kobj, KOBJ_CHANGE);
-+
-+	return ret;
- }
- 
- void wakeup_sysfs_remove(struct device *dev)
- {
- 	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-+	kobject_uevent(&dev->kobj, KOBJ_CHANGE);
- }
- 
- int pm_qos_sysfs_add_resume_latency(struct device *dev)
--- 
-2.27.0.212.ge8ba1cc988-goog
-
+On 7/7/20 9:40 AM, Rob Herring wrote:
+> On Mon, Jul 6, 2020 at 12:45 PM Ricardo Rivera-Matos
+> <r-rivera-matos@ti.com> wrote:
+>> Rob
+>>
+>> On 7/2/20 3:53 PM, Rob Herring wrote:
+>>> On Wed, 01 Jul 2020 16:10:42 -0500, Ricardo Rivera-Matos wrote:
+>>>> From: Dan Murphy <dmurphy@ti.com>
+>>>>
+>>>> Convert the battery.txt file to yaml and fix up the examples.
+>>>>
+>>>> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+>>>> ---
+>>>>    .../bindings/power/supply/battery.txt         |  86 +---------
+>>>>    .../bindings/power/supply/battery.yaml        | 157 ++++++++++++++++++
+>>>>    2 files changed, 158 insertions(+), 85 deletions(-)
+>>>>    create mode 100644 Documentation/devicetree/bindings/power/supply/battery.yaml
+>>>>
+>>> My bot found errors running 'make dt_binding_check' on your patch:
+>>>
+>>> Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml'
+>>> Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/power/supply/battery.example.dts' failed
+>>> make[1]: *** [Documentation/devicetree/bindings/power/supply/battery.example.dts] Error 255
+>>> make[1]: *** Waiting for unfinished jobs....
+>>> Makefile:1347: recipe for target 'dt_binding_check' failed
+>>> make: *** [dt_binding_check] Error 2
+>> I think your bot is looking for the types.yaml in the wrong place.
+> Really? Yet it works fine on thousands of other patches?
+>
+>> '/usr/local/lib/python3.6/dist-packages/dtschema/schema/types.yaml'
+>> should be
+>> '/usr/local/lib/python3.6/dist-packages/dtschema/schemas/types.yaml'. I
+>> renamed might 'schemas' directory to 'schema' and my battery.yaml passed
+>> the dt_binding_check.
+> Maybe fix the 'schema/' path in your schema file which is wrong.
+Oh I see. My apologies, Rob.
+>
+> Rob
