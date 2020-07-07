@@ -2,247 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228F2216D23
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FEE216D2A
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 14:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbgGGMua (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 08:50:30 -0400
-Received: from mga18.intel.com ([134.134.136.126]:6844 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726839AbgGGMu3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 7 Jul 2020 08:50:29 -0400
-IronPort-SDR: Xu0kt1jFbv1YQclH0OF6HQVZFtf/IsvmECBoQA7/eJQI67m+qNG0WwxPJ/OXhnAzXjNfj9/gBK
- A/0znkEiowgg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9674"; a="135050302"
-X-IronPort-AV: E=Sophos;i="5.75,323,1589266800"; 
-   d="scan'208";a="135050302"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2020 05:50:29 -0700
-IronPort-SDR: PmtYd744IxekUpknJ+GTZDry4mZVfEPI0pGZgBrAsRC4yfc0lUm4OhIRXyMbXBjnFg3/2zsv35
- 3e8uGNQRIiUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,323,1589266800"; 
-   d="scan'208";a="268191071"
-Received: from zhexindu-mobl.ccr.corp.intel.com ([10.255.31.6])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Jul 2020 05:50:26 -0700
-Message-ID: <f96e3a1176ef62c9a0cbcbf7bd4dab105e973335.camel@intel.com>
-Subject: Re: [e1000e] e86e383f28: suspend-stress.fail
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>,
-        kernel test robot <rong.a.chen@intel.com>, lkp@lists.01.org,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Date:   Tue, 07 Jul 2020 20:50:25 +0800
-In-Reply-To: <6d83291fc68d52ecf48a952ac49a98e798b7b8b7.camel@intel.com>
-References: <20200521052753.GB12456@shao2-debian>
-         <5A1631F8-259E-4897-BE52-0F5DB406E44F@canonical.com>
-         <489156ef4d028d210ec03b7b02413e000fec2eaf.camel@intel.com>
-         <01DBC003-008F-470C-A228-029F34631305@canonical.com>
-         <6d83291fc68d52ecf48a952ac49a98e798b7b8b7.camel@intel.com>
+        id S1726900AbgGGMwd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 08:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbgGGMwd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 08:52:33 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CB1C061755
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 05:52:33 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id n137so9369382vkf.7
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 05:52:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mccdrVF4oLoKQclUhOrW5fngvBVj8VNRdTVBq4tIgxs=;
+        b=R4+21DYaf6eemSb4/CbgyAImm10EW3yr7zLGvUXjG9DKbJUdhnYL/jep1ZCsipgBxy
+         8SSQ/QbHIhpqhrvtBFejMdr9vu4Pq+42Pen/GXdLrY2Nn6JXgjpKFdBd3W+s//vpdvpF
+         b90PNFLgQxRz++xxdEFHaCeXXB8CJNEUyUyg7XffYj7iWohjMCWiD6R7RW9Xw9Nbunf8
+         SlRhDExUKtpDAicf80MeDhuFDExuKUT+xkI36isUp3TLlj2l26O2+z+/5cx9IVgfDUah
+         6nFJdA7O9/k3z1Dcvm4h2eB7PwtPs2HbOWXcX+iMc0CyAU3yEYjwIaAxNnXHdy4F3Pvd
+         yEQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mccdrVF4oLoKQclUhOrW5fngvBVj8VNRdTVBq4tIgxs=;
+        b=ukIliIbwVhOTRvcD4rKtFcOhOxAOpnkeGX+pVJVdSZEzOE500cJctiSlgm0/5eavP9
+         Rdne2gVMqX+VFt7HJdE5vQuPnkn8dhbM3z1TG2UOnqTHnexiFDc3yuyYhPk2tZz67BxR
+         iTnbXWJtVeYUSndYf7vAWaKVdNkJhJawB8KoRyNc2etzdqiMwrhhglDzghCHKEmr6mMx
+         7Au+N/hK16aYl6PJvmgOX0as6leLBxJknFlvSdxnmyHa9lkJp+8AccFkd7j+mG7N/k8g
+         jHUy+Y4RxzxWm4IIoYMc/YjbGnZ62vgKidVF86iYB+JQIkZkBLN8LOO0nckhoe99ZNKO
+         5ftA==
+X-Gm-Message-State: AOAM530BFKsXeM6XQ1jra+BnWLKRvur/b2EkbENJmGz/61YlLiG0qex3
+        iPQpqcqVtM8uBLmgrZPT8/qijUTE1fNk9wdIK4sf2g==
+X-Google-Smtp-Source: ABdhPJwaiO5NorUxLputA/SnsfA54HypHtrgadfvFccPTnCbyKbC5nsTx3KvCD3qsGWSaat9B+gJQx5r8t0hExtsRjw=
+X-Received: by 2002:a1f:3f0f:: with SMTP id m15mr38376278vka.53.1594126352552;
+ Tue, 07 Jul 2020 05:52:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200615152054.6819-1-ulf.hansson@linaro.org> <f924de32-f780-e921-fe45-cf26e70e1c66@arm.com>
+ <CAPDyKFrQfjL2kBOOJj49Pf1An5ubng9_nE5=urPZM5yATR2HBg@mail.gmail.com> <cf424e19-de17-8fa8-f2a3-9e8f996fa7ad@arm.com>
+In-Reply-To: <cf424e19-de17-8fa8-f2a3-9e8f996fa7ad@arm.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 7 Jul 2020 14:51:55 +0200
+Message-ID: <CAPDyKFpc+LKZ8Khjau9iLD0YJTHvqav2HD4+aDhMaPpSEXPawA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] cpuidle: psci: Various improvements for PSCI PM domains
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2020-07-02 at 22:10 +0800, Zhang Rui wrote:
-> On Thu, 2020-07-02 at 21:12 +0800, Kai-Heng Feng wrote:
-> > > On Jul 2, 2020, at 20:20, Zhang Rui <rui.zhang@intel.com> wrote:
-> > > 
-> > > Hi, all,
-> > > 
-> > > This patch has been shipped in 5.8-rc1 with its upstream commit
-> > > id
-> > > 0c80cdbf3320. And we observed big drop of suspend quality.
-> > > 
-> > > Previously, we have run into this "e1000e Hardware Error" issue,
-> > > occasionally. But now, on a NUC I have, system suspend-to-mem
-> > > fails
-> > > within 10 suspend  cycles in most cases, but won't work again
-> > > until
-> > > a reboot.
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=205015
-> > > 
-> > > IMO, this is a regression, and we need to find a way to fix it.
-> > 
-> > Should be fixed by 
-> > 
-https://lore.kernel.org/lkml/20200618065453.12140-1-aaron.ma@canonical.com/
-> > 
-> 
-> Great, I will give it a try and update later.
+On Tue, 7 Jul 2020 at 14:37, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 7/7/20 12:53 PM, Ulf Hansson wrote:
+> > Hi Lukaz,
+> >
+> > On Tue, 30 Jun 2020 at 12:23, Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> Hi Ulf,
+> >>
+> >> On 6/15/20 4:20 PM, Ulf Hansson wrote:
+> >>> The main change in this series is done in patch 5/5, which implements support
+> >>> to prevent domain idlestates until all PSCI PM domain consumers are ready for
+> >>> it. To reach that point the corresponding code for cpuidle-psci and
+> >>> cpuidle-psci-domain, needed to be converted into platform drivers, which is
+> >>> done by the earlier changes in the series.
+> >>>
+> >>> Additionally, some improvements have been made to the error path, which becomes
+> >>> easier when the code gets converted to platform drivers.
+> >>>
+> >>> Deployment for a Qcom SoC, which actually takes full benefit of these changes
+> >>> are also in the pipe, but deferring then a bit until $subject series have been
+> >>> discussed.
+> >>>
+> >>> Kind regards
+> >>> Ulf Hansson
+> >>>
+> >>> Ulf Hansson (5):
+> >>>     cpuidle: psci: Fail cpuidle registration if set OSI mode failed
+> >>>     cpuidle: psci: Fix error path via converting to a platform driver
+> >>>     cpuidle: psci: Split into two separate build objects
+> >>>     cpuidle: psci: Convert PM domain to platform driver
+> >>>     cpuidle: psci: Prevent domain idlestates until consumers are ready
+> >>>
+> >>>    drivers/cpuidle/Kconfig.arm           |  10 ++
+> >>>    drivers/cpuidle/Makefile              |   5 +-
+> >>>    drivers/cpuidle/cpuidle-psci-domain.c |  74 +++++++++-----
+> >>>    drivers/cpuidle/cpuidle-psci.c        | 141 +++++++++++++++-----------
+> >>>    drivers/cpuidle/cpuidle-psci.h        |  11 +-
+> >>>    5 files changed, 150 insertions(+), 91 deletions(-)
+> >>>
+> >>
+> >> Since I am interested in some CPU idle statistics (residency, etc),
+> >> I would like to help you and Sudeep in reviewing the patch set.
+> >
+> > Thanks, much appreciated!
+> >
+> >>
+> >> Could you clarify some bit below?
+> >> 1. There is Qcom SoC which has dependencies between PSCI PM domain
+> >> consumers and this CPU idle - thus we cannot register and use CPU
+> >> idle driver till related drivers fully setup.
+> >
+> > I think you got it right, but let me clarify.
+> >
+> > On Qcom SoC, PSCI PM domain consumers aren't solely CPU devices, but
+> > also the 'qcom,rpmh-rsc' device is a consumer, for example.
+> >
+> > That doesn't mean the CPU idle driver can't be probed/initialized, but
+> > rather that the PSCI PM domain must not be powered off. The power off
+> > needs to wait until all the consumers of the PSCI PM domain have been
+> > registered/probed.
+> >
+> > See more details in the commit message of patch5.
+> >
+> >> 2. The proposed solution is to use platform driver and plat. device
+> >> for this CPU idle driver, to have access to deferred probe mechanism and
+> >> wait for the consumer drivers fully probed state.
+> >
+> > Correct, but let me fill in some more.
+> >
+> > I would like to use the ->sync_state() callback of the PSCI PM domain
+> > driver, as a way to understand that all consumers have been probed.
+> >
+> >> 3. Do you have maybe some estimations how long it takes for these
+> >> consumers to be fully probed?
+> >
+> > I am not sure I understand the reason for the question.
+>
+> I was wondering if this is because of HW issue of long setup, thus
+> we need to wait a bit longer with drivers deferred probing.
+> But this is not the case as I can see now.
+>
+>
+> >
+> > Anyway, at this point, I am looking at the qcom,rpmh-rsc device, which
+> > is being probed by the drivers/soc/qcom/rpmh-rsc.c driver. Moving
+> > forward, in principle it can be any device/driver that is a consumer
+> > of the PSCI PM domain. I am not even excluding that drivers can be
+> > modules. It should work for all cases.
+>
+> The late_initcall won't help, this is a really tough requirement:
+> being a module...
+>
+>
+> >
+> >> 4. Changing just this CPU idle driver registration point (to
+> >> late_initcall()) phase in time is not a solution.
+> >
+> > Correct, it doesn't work.
+> >
+> > Playing with initcalls doesn't guarantee anything when it comes to
+> > making sure all consumers are ready.
+>
+> I agree, especially when modules are involved.
+>
+> >
+> > Hope this clarifies things a bit for you, but just tell me if there is
+> > anything more I can do to further explain things.
+>
+> Yes, thank you. I can see now why you need this explicit ->sync_state()
+> callback.
+> I don't see better solution to what you have proposed here.
+> I will go through the patches once again to check and add some
+> reviewed-by.
+>
 
-The test box was busy on other usage, and I didn't have a chance to try
-the patched kernel. Will update tomorrow.
+Thanks a lot for your time! I am just about to post a v2, to re-order
+the series so patch 3 comes first, according to suggestions from Lina.
 
-thanks,
-rui
-> 
-> thanks,
-> rui
-> 
-> > Kai-Heng
-> > 
-> > > 
-> > > thanks,
-> > > rui
-> > > 
-> > > 
-> > > On Sat, 2020-05-23 at 20:20 +0800, Kai-Heng Feng wrote:
-> > > > [+Cc intel-wired-lan]
-> > > > 
-> > > > > On May 21, 2020, at 13:27, kernel test robot <
-> > > > > rong.a.chen@intel.com
-> > > > > > wrote:
-> > > > > 
-> > > > > Greeting,
-> > > > > 
-> > > > > FYI, we noticed the following commit (built with gcc-7):
-> > > > > 
-> > > > > commit: e86e383f2854234129c66e90f84ac2c74b2b1828 ("e1000e:
-> > > > > Warn
-> > > > > if
-> > > > > disabling ULP failed")
-> > > > > 
-> > > 
-> > > 
-> 
-> https://git.kernel.org/cgit/linux/kernel/git/jkirsher/next-queue.git
-> > > > > dev-queue
-> > > > 
-> > > > kern  :warn  : [  240.884667] e1000e 0000:00:19.0 eth0: Failed
-> > > > to
-> > > > disable ULP
-> > > > kern  :info  : [  241.896122] asix 2-3:1.0 eth1: link up,
-> > > > 100Mbps,
-> > > > full-duplex, lpa 0xC1E1
-> > > > kern  :err   : [  242.269348] e1000e 0000:00:19.0 eth0:
-> > > > Hardware
-> > > > Error
-> > > > kern  :info  : [  242.772702] e1000e 0000:00:19.0:
-> > > > pci_pm_resume+0x0/0x80 returned 0 after 2985422 usecs
-> > > > 
-> > > > So the patch does catch issues previously ignored.
-> > > > 
-> > > > I wonder what's the next move, maybe increase the ULP timeout
-> > > > again?
-> > > > 
-> > > > Kai-Heng
-> > > > 
-> > > > > in testcase: suspend-stress
-> > > > > with following parameters:
-> > > > > 
-> > > > > 	mode: mem
-> > > > > 	iterations: 10
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > on test machine: 4 threads Broadwell with 8G memory
-> > > > > 
-> > > > > caused below changes (please refer to attached dmesg/kmsg for
-> > > > > entire log/backtrace):
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > If you fix the issue, kindly add following tag
-> > > > > Reported-by: kernel test robot <rong.a.chen@intel.com>
-> > > > > 
-> > > > > SUSPEND RESUME TEST STARTED
-> > > > > Suspend to mem 1/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-1/10
-> > > > > -O /dev/null
-> > > > > Done
-> > > > > Sleep for 10 seconds
-> > > > > Suspend to mem 2/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-2/10
-> > > > > -O /dev/null
-> > > > > Done
-> > > > > Sleep for 10 seconds
-> > > > > Suspend to mem 3/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-3/10
-> > > > > -O /dev/null
-> > > > > Done
-> > > > > Sleep for 10 seconds
-> > > > > Suspend to mem 4/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-4/10
-> > > > > -O /dev/null
-> > > > > Done
-> > > > > Sleep for 10 seconds
-> > > > > Suspend to mem 5/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-5/10
-> > > > > -O /dev/null
-> > > > > Done
-> > > > > Sleep for 10 seconds
-> > > > > Suspend to mem 6/10:
-> > > > > /usr/bin/wget -q --timeout=1800 --tries=1 --local-
-> > > > > encoding=UTF-
-> > > > > 8 
-> > > > > 
-> 
-> 
-http://inn:80/~lkp/cgi-bin/lkp-jobfile-append-var?job_file=/lkp/jobs/scheduled/lkp-bdw-nuc1/suspend-stress-10-mem-debian-x86_64-20180403.cgz-e86e383f2854234129c66e90f84ac2c74b2b1828-20200517-66267-13fgkna-8.yaml&job_state=suspending-6/10
-> > > > > -O /dev/null
-> > > > > Failed
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > To reproduce:
-> > > > > 
-> > > > >       git clone https://github.com/intel/lkp-tests.git
-> > > > >       cd lkp-tests
-> > > > >       bin/lkp install job.yaml  # job file is attached in
-> > > > > this
-> > > > > email
-> > > > >       bin/lkp run     job.yaml
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > Thanks,
-> > > > > Rong Chen
-> > > > > 
-> > > > > <config-5.7.0-rc4-01618-ge86e383f28542><job-
-> > > > > script.txt><kmsg.xz><suspend-stress.txt><job.yaml>
-> > > > 
-> > > > 
-> > 
-> > 
+Please move over to review that version instead, in a few minutes.
 
+Kind regards
+Uffe
