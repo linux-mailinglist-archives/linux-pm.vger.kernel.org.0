@@ -2,176 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3FD216B25
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 13:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F522216B7D
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 13:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgGGLMN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 07:12:13 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:64910 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728169AbgGGLMJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 07:12:09 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 067B2qUv056292;
-        Tue, 7 Jul 2020 07:12:06 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3249rce3dd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 07:12:06 -0400
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 067B4ZAe062109;
-        Tue, 7 Jul 2020 07:12:05 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3249rce3ct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 07:12:05 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 067B0iic018990;
-        Tue, 7 Jul 2020 11:12:04 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03wdc.us.ibm.com with ESMTP id 322hd8f8ae-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Jul 2020 11:12:04 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 067BC3Va42140088
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Jul 2020 11:12:03 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A0A9AC05F;
-        Tue,  7 Jul 2020 11:12:03 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3806BAC060;
-        Tue,  7 Jul 2020 11:12:03 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.85.70.202])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Jul 2020 11:12:03 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id A34E02E48CE; Tue,  7 Jul 2020 16:41:54 +0530 (IST)
-From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Neuling <mikey@neuling.org>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
-Cc:     linuxppc-dev@ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-Subject: [PATCH 5/5] cpuidle-pseries: Block Extended CEDE(1) which adds no additional value.
-Date:   Tue,  7 Jul 2020 16:41:39 +0530
-Message-Id: <1594120299-31389-6-git-send-email-ego@linux.vnet.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com>
-References: <1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-07_07:2020-07-07,2020-07-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 lowpriorityscore=0
- cotscore=-2147483648 clxscore=1015 phishscore=0 suspectscore=0
- adultscore=0 mlxlogscore=845 mlxscore=0 malwarescore=0 classifier=spam
- adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2007070085
+        id S1728029AbgGGL25 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 07:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727834AbgGGL25 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 07:28:57 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04505C08C5E0
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 04:28:56 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id e8so15188472ljb.0
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 04:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l2GgGCQ4x2LNmv5qReFPVJw3khTbvSjXsD6wjYhQb7Y=;
+        b=zWnIc6qofdCS9+DTAqiP2mYvfUMkKgNtY66044wIi1kMyF/YMWbTeAbp88neTmKAjg
+         l4NVDAG1dEwiaZezcxnW8k9KINZmV3DJhoBAYyDImmbwzinIrmh6319oyq9VSJrczDFj
+         mPkPKQ+JVKQJ33Pteub5ITH+KNCisvIOs2eDRq6lSy77ixWfNBm3/AbIu8/LYHSFisNL
+         G4SQZdmMtzLpXK3Qo0STr2ZXBrJwTBjBoXIRtxft8IFNK/uVuvwcO82ILEZdRuaaiem9
+         jwKqcIxMoUt6Nehc4S6/Wx9bgRY/ZxA1UbCtjfTs8v5QmYf6Ip9JPYGynYjONYsadalI
+         Dzug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l2GgGCQ4x2LNmv5qReFPVJw3khTbvSjXsD6wjYhQb7Y=;
+        b=QT7pwrCnDtwV1MyVEnC4B5jgi71r+wkgRxBD4NxzVwA8rsa0oiXGk1uqs/KqzSf8PM
+         ZAJ7ctrjmH0uHVPVSKJQeI04OOSKysy05Xi54W+WXexzky64M8dwdWkvytxczaDZlmza
+         pGQseufwPtAyQJTo/+0Qqz5A1RV5rok3PZRFmz7YYDObbxwe9SbAiCksjseisrTIauDE
+         TcMQQTOVqFz+tfAeLgVsDAS5m7ZWmBpdKuEr0UIB2Aex6pCIwNx68KGqmKmdoI2Wo9p2
+         YYGEGQ3MqTsRAT0QHfiGgONVOFNeuNnGn881hV6bzCZRcqVkqzKP9Td+TgUHk+GcE1xv
+         R96w==
+X-Gm-Message-State: AOAM530rxVJ1e6YLLv4novYtRIIuW1h/eZKKI0KkCfl1EtlXwiitZvHh
+        cie2OdCIWg7/UVxhuphAJ4V91tQNVgJ4Qs1J1ojIZw==
+X-Google-Smtp-Source: ABdhPJzwnbeGJl04zq1MZBixqaru16oyOK4a5p7qERMrlxVnC8ulTiRIAiMfY3IMS44ahKysxRy+Eg/cXIDkrrO8/XM=
+X-Received: by 2002:a2e:7a1a:: with SMTP id v26mr13972698ljc.104.1594121335310;
+ Tue, 07 Jul 2020 04:28:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200609162621.1769610-1-thierry.reding@gmail.com>
+In-Reply-To: <20200609162621.1769610-1-thierry.reding@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 7 Jul 2020 13:28:44 +0200
+Message-ID: <CACRpkdY=rVH03i+JsLuiDKa_BSU57ZNdBNHGv6avuC-AkPZkMQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mfd: max77620: Convert to json-schema
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-tegra@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Hi Thierry,
 
-The Extended CEDE state with latency-hint = 1 is only different from
-normal CEDE (with latency-hint = 0) in that a CPU in Extended CEDE(1)
-does not wakeup on timer events. Both CEDE and Extended CEDE(1) map to
-the same hardware idle state. Since we already get SMT folding from
-the normal CEDE, the Extended CEDE(1) doesn't provide any additional
-value. This patch blocks Extended CEDE(1).
+thanks for doing this!
 
-Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
----
- drivers/cpuidle/cpuidle-pseries.c | 57 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 54 insertions(+), 3 deletions(-)
+On Tue, Jun 9, 2020 at 6:26 PM Thierry Reding <thierry.reding@gmail.com> wrote:
 
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index 6f893cd..be0b8b2 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -350,6 +350,43 @@ static int pseries_cpuidle_driver_init(void)
- 	return 0;
- }
- 
-+#define XCEDE1_HINT	1
-+#define ERR_NO_VALUE_ADD	(-1)
-+#define ERR_NO_EE_WAKEUP	(-2)
-+
-+/*
-+ * Returns 0 if the Extende CEDE state with @hint is not blocked in
-+ * cpuidle framework.
-+ *
-+ * Returns ERR_NO_EE_WAKEUP if the Extended CEDE state is blocked due
-+ * to not being responsive to external interrupts.
-+ *
-+ * Returns ERR_NO_VALUE_ADD if the Extended CEDE state does not provide
-+ * added value addition over the normal CEDE.
-+ */
-+static int cpuidle_xcede_blocked(u8 hint, u64 latency_us, u8 responsive_to_irqs)
-+{
-+
-+	/*
-+	 * We will only allow extended CEDE states that are responsive
-+	 * to irqs do not require an H_PROD to be woken up.
-+	 */
-+	if (!responsive_to_irqs)
-+		return ERR_NO_EE_WAKEUP;
-+
-+	/*
-+	 * We already obtain SMT folding benefits from CEDE (which is
-+	 * CEDE with hint 0). Furthermore, CEDE is also responsive to
-+	 * timer-events, while XCEDE1 requires an external
-+	 * interrupt/H_PROD to be woken up. Hence, block XCEDE1 since
-+	 * it adds no further value.
-+	 */
-+	if (hint == XCEDE1_HINT)
-+		return ERR_NO_VALUE_ADD;
-+
-+	return 0;
-+}
-+
- static int add_pseries_idle_states(void)
- {
- 	int nr_states = 2; /* By default we have snooze, CEDE */
-@@ -365,15 +402,29 @@ static int add_pseries_idle_states(void)
- 		char name[CPUIDLE_NAME_LEN];
- 		unsigned int latency_hint = xcede_records[i].latency_hint;
- 		u64 residency_us;
-+		int rc;
-+
-+		if (latency_us < min_latency_us)
-+			min_latency_us = latency_us;
-+
-+		rc = cpuidle_xcede_blocked(latency_hint, latency_us,
-+					   xcede_records[i].responsive_to_irqs);
- 
--		if (!xcede_records[i].responsive_to_irqs) {
-+		if (rc) {
-+			switch (rc) {
-+			case ERR_NO_VALUE_ADD:
-+				pr_info("cpuidle : Skipping XCEDE%d. No additional value-add\n",
-+					latency_hint);
-+				break;
-+			case ERR_NO_EE_WAKEUP:
- 			pr_info("cpuidle : Skipping XCEDE%d. Not responsive to IRQs\n",
- 				latency_hint);
-+			break;
-+			}
-+
- 			continue;
- 		}
- 
--		if (latency_us < min_latency_us)
--			min_latency_us = latency_us;
- 		snprintf(name, CPUIDLE_NAME_LEN, "XCEDE%d", latency_hint);
- 
- 		/*
--- 
-1.9.4
+>  delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/max77620.txt
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max77620.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/pinctrl/pinctrl-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/regulator/regulator-max77620.txt
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/max77620_thermal.txt
 
+So everything goes in under the MFD node now I suppose (why not).
+
+> diff --git a/Documentation/devicetree/bindings/mfd/max77620.yaml b/Documentation/devicetree/bindings/mfd/max77620.yaml
+(...)
+> +patternProperties:
+> +  "^gpio(@[0-9]+)?$":
+> +    type: object
+> +    properties:
+> +      gpio-hog:
+> +        $ref: "/schemas/types.yaml#/definitions/flag"
+> +
+> +      output-high:
+> +        $ref: "/schemas/types.yaml#/definitions/flag"
+> +
+> +      gpios:
+> +        $ref: "/schemas/types.yaml#/definitions/uint32-matrix"
+
+This looks strange. ^gpio(@[0-9]+)?$ seems like the node for
+the gpio-controller per se, and that should have a subnode for
+the hog, but this makes it look like that hog is directly in the
+gpio controller node.
+
+The current gpio.txt lists this example:
+
+        qe_pio_a: gpio-controller@1400 {
+                compatible = "fsl,qe-pario-bank-a", "fsl,qe-pario-bank";
+                reg = <0x1400 0x18>;
+                gpio-controller;
+                #gpio-cells = <2>;
+
+                line_b {
+                        gpio-hog;
+                        gpios = <6 0>;
+                        output-low;
+                        line-name = "foo-bar-gpio";
+                };
+        };
+
+I know I should make a generic gpio.yaml include you can just
+use for all of this but you know ... time. (Volunteers welcome!)
+
+> +  "^pinmux(@[0-9]+)?$":
+> +    type: object
+> +    patternProperties:
+> +      "^gpio[0-7_]+$":
+> +        type: object
+> +        properties:
+> +          pins:
+> +            items:
+> +              pattern: "^gpio[0-7]$"
+> +            minItems: 1
+> +            maxItems: 8
+> +
+> +          function:
+> +            $ref: "/schemas/types.yaml#/definitions/string"
+> +            enum:
+> +              - gpio
+> +              - lpm-control-in
+> +              - fps-out
+> +              - 32k-out1
+> +              - sd0-dvs-in
+> +              - sd1-dvs-in
+> +              - reference-out
+> +
+> +          drive-push-pull:
+> +            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            enum: [ 0, 1 ]
+> +
+> +          drive-open-drain:
+> +            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            enum: [ 0, 1 ]
+> +
+> +          bias-pull-up:
+> +            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            enum: [ 0, 1 ]
+> +
+> +          bias-pull-down:
+> +            $ref: "/schemas/types.yaml#/definitions/uint32"
+> +            enum: [ 0, 1 ]
+
+This seems to reinvent large parts of Rob's already provided:
+Documentation/devicetree/bindings/pinctrl/pinmux-node.yaml
+Documentation/devicetree/bindings/pinctrl/pincfg-node.yaml
+
+So just $ref-include these instead. See other bindings for examples.
+Since this is placed in mfd you might need some ../pinctrl... path.
+
+Yours,
+Linus Walleij
