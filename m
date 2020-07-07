@@ -2,95 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77AAD2172FA
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A3A217313
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728164AbgGGPvD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 11:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728135AbgGGPvC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:51:02 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B001C061755;
-        Tue,  7 Jul 2020 08:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=sKnrwpscRwRPBpUhlbtspTfx0oBw6mAir2Zy9BEVNbY=; b=axtmKjqfm+LW4fWv7U2f6Lrn13
-        2zgE82uA8OYJSX7OjWObeNsFa8krOfsiU170JEztNCnVohby5uiusNK/s6KIRKYTyCHCF4Fsk77xT
-        Wmo7YLmw5npBFWBMDvLAqFOP5b/M4M6bkQ8MEqe7UR2k1lSl5QLlwD2shEPa2P0R9+g55L4K3FOfz
-        J6nXUv/oybK8ijjdQOvvQI2PCEN4MMhuqxX64UQEv/kxHjKGnmANA7ZI+IjW6zy/mIka4/LPci3S3
-        o3EI1GRux/KJIMgfJq5gIXPHvyAd84hCxF9+rMjp/Opplr5hZFuLybZIgBsw1nMDTq6Vynfjd/nFR
-        aG+n3B3g==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jsps4-0006Dy-Jz; Tue, 07 Jul 2020 15:51:01 +0000
-Subject: Re: [PATCH] thermal: netlink: Fix compilation error when CONFIG_NET=n
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com
-Cc:     amit.kucheria@verdurent.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20200707090159.1018-1-daniel.lezcano@linaro.org>
- <66b4c589-48e0-8975-b3b1-79168e3ea5e4@infradead.org>
- <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6568ae82-32a3-7a9a-9bf0-15dd7805a1fd@infradead.org>
-Date:   Tue, 7 Jul 2020 08:50:56 -0700
+        id S1728479AbgGGPyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 11:54:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53134 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728029AbgGGPyR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:54:17 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 067FWtcB066589;
+        Tue, 7 Jul 2020 11:53:54 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 324s7163h6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 11:53:54 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 067FeF8Y016662;
+        Tue, 7 Jul 2020 15:53:52 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 322hd7uk99-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Jul 2020 15:53:52 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 067Fro4R65732814
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Jul 2020 15:53:50 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E73364C050;
+        Tue,  7 Jul 2020 15:53:49 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A8CF24C04A;
+        Tue,  7 Jul 2020 15:53:47 +0000 (GMT)
+Received: from [9.85.70.197] (unknown [9.85.70.197])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Jul 2020 15:53:47 +0000 (GMT)
+Subject: Re: [PATCH 2/2] selftest/cpuidle: Add support for cpuidle latency
+ measurement
+To:     Shuah Khan <skhan@linuxfoundation.org>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20200707152917.10652-1-psampat@linux.ibm.com>
+ <20200707152917.10652-3-psampat@linux.ibm.com>
+ <bf016b30-18e6-69fd-afc5-5319ebd6a890@linuxfoundation.org>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <77f3c7a1-bfb0-d6ff-67e1-1854e390016e@linux.ibm.com>
+Date:   Tue, 7 Jul 2020 21:23:46 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <bf016b30-18e6-69fd-afc5-5319ebd6a890@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-07_08:2020-07-07,2020-07-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ malwarescore=0 mlxlogscore=999 suspectscore=0 priorityscore=1501
+ cotscore=-2147483648 impostorscore=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2007070113
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/7/20 8:49 AM, Daniel Lezcano wrote:
-> On 07/07/2020 17:47, Randy Dunlap wrote:
->> On 7/7/20 2:01 AM, Daniel Lezcano wrote:
->>> When the network is not configured, the netlink are disabled on all
->>> the system. The thermal framework assumed the netlink are always
->>> opt-in.
->>>
->>> Fix this by adding a Kconfig option for the netlink notification,
->>> defaulting to yes and depending on CONFIG_NET.
->>>
->>> As the change implies multiple stubs and in order to not pollute the
->>> internal thermal header, the thermal_nelink.h has been added and
->>> included in the thermal_core.h, so this one regain some kind of
->>> clarity.
->>>
->>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>> ---
->>>  drivers/thermal/Kconfig           | 10 ++++
->>>  drivers/thermal/Makefile          |  5 +-
->>>  drivers/thermal/thermal_core.h    | 20 +------
->>>  drivers/thermal/thermal_netlink.h | 98 +++++++++++++++++++++++++++++++
->>>  4 files changed, 114 insertions(+), 19 deletions(-)
->>>  create mode 100644 drivers/thermal/thermal_netlink.h
->>>
->>
->>
->> Hm, now I get this:
->>
->> ../drivers/thermal/thermal_helpers.c: In function ‘thermal_cdev_set_cur_state’:
->> ../drivers/thermal/thermal_helpers.c:182:2: error: implicit declaration of function ‘thermal_notify_cdev_update’; did you mean ‘thermal_notify_cdev_delete’? [-Werror=implicit-function-declaration]
->>   thermal_notify_cdev_update(cdev->id, target);
->>
->>
->> or should that call be to thermal_notify_cdev_state_update()?
-> 
-> Ah right, the patch applies on top of the v4 which is not yet in
-> linux-next, I'm waiting for the kernelci loop result.
+[..snip..]
+>> +
+>> +ins_mod()
+>> +{
+>> +    if [ ! -f "$MODULE" ]; then
+>> +        printf "$MODULE module does not exist. Exitting\n"
+>> +        exit 2
+>
+> Please use ksft_skip code to indicate the test is being skipped.
+>
+Sure thing I'll use ksft_skip exit code instead.
+>> +    fi
+>> +    printf "Inserting $MODULE module\n\n"
+>> +    insmod $MODULE
+>> +    if [ $? != 0 ]; then
+>> +        printf "Insmod $MODULE failed\n"
+>> +        exit 2
+>
+> This is fine since you expect to be able to load the module.
+>
+Thanks for the review.
+Pratik
 
-OK, that explains why I had a little trouble applying the patch.
-
-thanks.
--- 
-~Randy
+[..snip..]
+>>
+>
+> thanks,
+> -- Shuah
 
