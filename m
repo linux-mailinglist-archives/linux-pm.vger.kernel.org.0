@@ -2,122 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2813F2172F7
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512392172F2
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 17:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728907AbgGGPtQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 11:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S1728133AbgGGPtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 11:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728502AbgGGPtP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:49:15 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39333C08C5E2
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 08:49:15 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gc15so1053765pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 08:49:15 -0700 (PDT)
+        with ESMTP id S1728485AbgGGPtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 11:49:14 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB14C08C5E3
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 08:49:14 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id f7so42686246wrw.1
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 08:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=QIa6nXktLNxV0OJGlYLuHe4XdRrUEelYZWVni//KxsU=;
-        b=ZENk32FXh9uVqWbCNy26QjHPUtixN1Mj5Z4BllFM9EXpZrcM4xdZqepp2x8GHb8w4T
-         xo+RKmHHP+GwBykMt+Ngp2u909P+u+/8U/5gapxacqAu1AL5+7MgPlSJ+wWGl7sbiXea
-         yH4t7ZL3ssoXqvdaICXTKyOhKS5BbWelsOIbo=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=R/msZMHFZFhx7FtV1U4x6F/0CAVdjvMvgRT/NC78y40=;
+        b=MobMyrjR9AJycEk2mi5Sq3uQIiCVRztqdkLHqoXq0Xx+JZ8KAISUiDRjhN6Yn5A+22
+         ou+UdEg2G1508GrcMLY5tP0WR6yXgF/Lq1rO2kitGdj7AYtMvcA1bNIXOLyMqhBFvtqB
+         v0JWLpMJC9RF9i82bU6AnAS/QMK3zeBkaPqY7ZU9E64zNYFaCnQaeKapXxSZIZpre3dp
+         /gyo2768jJfR+LmEezi+LOQng8QSzxQrX2Qap40V9sfiOCe4fR80Ml/kxi8aF8NNT88Z
+         FdZdZKy++pzBg8IcMLZQnXm09IApuylDTWhDXD7+BCPQFDxa9uWVJdhTlXbcc0GHiQGQ
+         xIcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QIa6nXktLNxV0OJGlYLuHe4XdRrUEelYZWVni//KxsU=;
-        b=gJV8YKLcz+mAdPMZydW4nTQcZ7BSMIb/+mFNsYk1vxkQo9ALyy+2rLzlDhgIevjIaM
-         qtEjrSbDmV2MieoNSULmsCLgFNo0kcCOvtRYJ8/OgpxYN6HA9GWaakon8h7ZAzX65I5q
-         bmFNN+h7VUyuwtbSx3j7RLwTRFT6dhBziE7uhvWwrGak2Axul6DEqAmbHJ5a/hJVvI6Z
-         XFht3144wppTJsQxGWyyo5tohuLVgBxj25J8P2nz3jwP3eJHN9VKNgAeEVsA1+BErOI2
-         MgL5xDznct8MOhI4wNXogwa/X022BcrCQEfBlyXrT7L9dJRZqMmmyhumNSGxo5pGFau8
-         2nPg==
-X-Gm-Message-State: AOAM533dc+8AH1yaBTWtizsNtrZHyVBsfgFLXquXFEiZ8dum9dm59soc
-        YbVEgfrVyiUlzLZVeYY0roYO0g==
-X-Google-Smtp-Source: ABdhPJz9iHG+DFuUyYcBIjr3vVuYxa0ZU2rFQLx+SaJILKp2THWi5NfPgogurVf9a1QeoPIhrUJUuA==
-X-Received: by 2002:a17:90a:67c7:: with SMTP id g7mr4910530pjm.165.1594136954819;
-        Tue, 07 Jul 2020 08:49:14 -0700 (PDT)
-Received: from apsdesk.mtv.corp.google.com ([2620:15c:202:1:7220:84ff:fe09:2b94])
-        by smtp.gmail.com with ESMTPSA id t5sm1360194pgl.38.2020.07.07.08.49.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 08:49:14 -0700 (PDT)
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=R/msZMHFZFhx7FtV1U4x6F/0CAVdjvMvgRT/NC78y40=;
+        b=qjRq28XxbtxPDP8+0MuxRlluHoE7PvMH1fubQMAm0OPYIeWYxuEzKcgiGqK9YubaKO
+         wUX0mVTAEjKfdqwrTzgc2qAukFLvPgVeW75p8VYtI1jKNLt1cGGH6HrX2wY+5O/Rpf91
+         pLmN8TgCE1FntRwRqCh3N1myOcmoih7i6XuvUY3/YoOp4jAOQNMJiCGYwuQD42hl3DO0
+         qFIb0M8FQ6kooWWK2zmtw1dtuE8DLjVWMCBC34XK7Wq0a1y9F1aFsfoHGh7oZqhpVXh7
+         IvtU0jpLd9QrsvLeuH38pNrVDn5IokTzerDhT/42K0+5YwuWdjQipr80mbJF4bSM6bAp
+         YIWw==
+X-Gm-Message-State: AOAM531MpdlFWbzYY24pXPopfNmZjNiEcFD0M2LPG6TKVokLbVqjxPvE
+        BGRIqRVUiyr0YVDNCm47hsNi4bpjHDg=
+X-Google-Smtp-Source: ABdhPJzB2lzxg02HvDyZykAOfBzZtzV6VPnCvusD+uRECHuBlKqXlNPf6GpDDuc2YVRPuhXxaJQK6g==
+X-Received: by 2002:a5d:4992:: with SMTP id r18mr51805915wrq.323.1594136952944;
+        Tue, 07 Jul 2020 08:49:12 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:b4ff:29eb:619e:318? ([2a01:e34:ed2f:f020:b4ff:29eb:619e:318])
+        by smtp.googlemail.com with ESMTPSA id i67sm1721005wma.12.2020.07.07.08.49.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jul 2020 08:49:12 -0700 (PDT)
+Subject: Re: [PATCH] thermal: netlink: Fix compilation error when CONFIG_NET=n
+To:     Randy Dunlap <rdunlap@infradead.org>, rui.zhang@intel.com
+Cc:     amit.kucheria@verdurent.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     linux-bluetooth@vger.kernel.org,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        rafael.j.wysocki@intel.com, swboyd@chromium.org,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v3 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
-Date:   Tue,  7 Jul 2020 08:49:05 -0700
-Message-Id: <20200707084857.v3.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
-X-Mailer: git-send-email 2.27.0.212.ge8ba1cc988-goog
-In-Reply-To: <20200707154905.2763616-1-abhishekpandit@chromium.org>
-References: <20200707154905.2763616-1-abhishekpandit@chromium.org>
+References: <20200707090159.1018-1-daniel.lezcano@linaro.org>
+ <66b4c589-48e0-8975-b3b1-79168e3ea5e4@infradead.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <04a6904d-9220-9045-6816-12cf84781f4d@linaro.org>
+Date:   Tue, 7 Jul 2020 17:49:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <66b4c589-48e0-8975-b3b1-79168e3ea5e4@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Udev rules that depend on the power/wakeup attribute don't get triggered
-correctly if device_set_wakeup_capable is called after the device is
-created. This can happen for several reasons (driver sets wakeup after
-device is created, wakeup is changed on parent device, etc) and it seems
-reasonable to emit a changed event when adding or removing attributes on
-the device.
+On 07/07/2020 17:47, Randy Dunlap wrote:
+> On 7/7/20 2:01 AM, Daniel Lezcano wrote:
+>> When the network is not configured, the netlink are disabled on all
+>> the system. The thermal framework assumed the netlink are always
+>> opt-in.
+>>
+>> Fix this by adding a Kconfig option for the netlink notification,
+>> defaulting to yes and depending on CONFIG_NET.
+>>
+>> As the change implies multiple stubs and in order to not pollute the
+>> internal thermal header, the thermal_nelink.h has been added and
+>> included in the thermal_core.h, so this one regain some kind of
+>> clarity.
+>>
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
+>>  drivers/thermal/Kconfig           | 10 ++++
+>>  drivers/thermal/Makefile          |  5 +-
+>>  drivers/thermal/thermal_core.h    | 20 +------
+>>  drivers/thermal/thermal_netlink.h | 98 +++++++++++++++++++++++++++++++
+>>  4 files changed, 114 insertions(+), 19 deletions(-)
+>>  create mode 100644 drivers/thermal/thermal_netlink.h
+>>
+> 
+> 
+> Hm, now I get this:
+> 
+> ../drivers/thermal/thermal_helpers.c: In function ‘thermal_cdev_set_cur_state’:
+> ../drivers/thermal/thermal_helpers.c:182:2: error: implicit declaration of function ‘thermal_notify_cdev_update’; did you mean ‘thermal_notify_cdev_delete’? [-Werror=implicit-function-declaration]
+>   thermal_notify_cdev_update(cdev->id, target);
+> 
+> 
+> or should that call be to thermal_notify_cdev_state_update()?
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
+Ah right, the patch applies on top of the v4 which is not yet in
+linux-next, I'm waiting for the kernelci loop result.
 
-Changes in v3:
-- Simplified error handling
 
-Changes in v2:
-- Add newline at end of bt_dev_err
-
- drivers/base/power/sysfs.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index 24d25cf8ab1487..04c82373c8f240 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /* sysfs entries for device PM */
- #include <linux/device.h>
-+#include <linux/kobject.h>
- #include <linux/string.h>
- #include <linux/export.h>
- #include <linux/pm_qos.h>
-@@ -739,12 +740,18 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
- 
- int wakeup_sysfs_add(struct device *dev)
- {
--	return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-+	int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
-+
-+	if (ret)
-+		return ret;
-+
-+	return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
- }
- 
- void wakeup_sysfs_remove(struct device *dev)
- {
- 	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
-+	return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
- }
- 
- int pm_qos_sysfs_add_resume_latency(struct device *dev)
 -- 
-2.27.0.212.ge8ba1cc988-goog
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
