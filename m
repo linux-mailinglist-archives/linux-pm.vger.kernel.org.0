@@ -2,210 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E82D216E19
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 15:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174ED216EB4
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 16:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727886AbgGGNyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 09:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727064AbgGGNyi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 09:54:38 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B175CC061755
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 06:54:38 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id t187so1172637vke.5
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 06:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S3jdzOO32cHlgwmkrkbUpdIm/1MzyDL/EIRbxMTEa5A=;
-        b=Z7xophkPQOkh4ARlxVwFuQJQTBEkSwbOlfOmHHyVle/OWVRWv195/0w2f2t+18snII
-         n3FQ2codAubRjrUSwmyf3H/bvuc0OsNnp3dke2n7VO6YXh/6U9sff01yJTCcBXB97N4O
-         6B26hIolpF+/goAhq8UKgXegM8/9vMeegLeLdtHGeuWYpcRucq5jfbOcGwqaVg8ngSrA
-         1JAP0gkX+J8Um4gTC2fymZhoWIPl9qMkepe+SA81ejzI+RbrXNzlK46JX9YIvPugCwKS
-         f8ceM9b+8mKnMjWN+emWh7vUYj6LvvjD7sNWmzfTZebUC506AFLaUOgH5ESXowrLhRpq
-         RYcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S3jdzOO32cHlgwmkrkbUpdIm/1MzyDL/EIRbxMTEa5A=;
-        b=QaQ2uhl/NkbkhJ1Et5W5jN4bWubYciiUh1eJiLufcxQozFsnpG+BtHTVjezD+NFZyd
-         /QTqu9bMD8c71dKNOzBwLDgUzQNWcuWUOjOUuDOYWnuoctKMz1ydEtt3C2IWeuzAr2FM
-         wUIPZKS+in61C0WMHVHqGfRq1tuWJFhrXo9rlfASyRXRZ7ZXodQNt/szl4h4Snpf32bi
-         5dbgTL/u7SoRQLWtmfkzU2ksaNrbzn7+PxUnCmMcz1UWGsfPtJa7FgLOglQ+3dyLMalw
-         BchObHdRjBGpJRFwa3yRGfoP8D7mPC8+qfkDw367CpvPHFv7b2y9PGbJAzRqlqmpfLnD
-         zlSA==
-X-Gm-Message-State: AOAM532XK94GPuFOJIdski0IbI6zuraGT1eW6PeKib3XvR7ph39hZ9vn
-        ViS0J8i5r0/fcY4Sn4pKGllRnhfmVFEvZE7hvC4JPQ==
-X-Google-Smtp-Source: ABdhPJw9SoRYf79I1P+jKjjZvaJuTnoqHslNrUEV0toooQ5NEaW+6rlt/daKxhkuVtAbPlSqKvED9krSaR3HLLT6Tbw=
-X-Received: by 2002:a1f:1889:: with SMTP id 131mr29817788vky.59.1594130077760;
- Tue, 07 Jul 2020 06:54:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200624103247.7115-1-daniel.baluta@oss.nxp.com> <20200624103247.7115-2-daniel.baluta@oss.nxp.com>
-In-Reply-To: <20200624103247.7115-2-daniel.baluta@oss.nxp.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 7 Jul 2020 15:54:01 +0200
-Message-ID: <CAPDyKFr8BTkM2W_qbXK1KxtuoZC=uO14_uY9zCWvzfyU0h1a6Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] PM / domains: Introduce multi PM domains helpers
-To:     Daniel Baluta <daniel.baluta@oss.nxp.com>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        id S1726946AbgGGO3C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 10:29:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58658 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726805AbgGGO3C (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 7 Jul 2020 10:29:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D7AAA2073E;
+        Tue,  7 Jul 2020 14:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594132141;
+        bh=SeXjnrv0KQvcd5JrSwJuK4Z3XaoksQu7R84+qAENwuw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P4FBXdVCCTFVLNly8/ClwjMiwbxZo2+1v2fWs/GeevPXQR9aB6PotkQGnK9uDtI8n
+         Pj4Nw9OWHPnEpZtqW43oBirhBGSOHdjg+NHVJHuuJMvdG0gsH5QAiw7MASezJfgq7Q
+         J0CRRFVkt+M1awRqGwq2cUUTDo6vkfeMFo/+qWAo=
+Date:   Tue, 7 Jul 2020 16:28:59 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc:     linux-pm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        rafael.j.wysocki@intel.com, swboyd@chromium.org,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        alsa-devel@alsa-project.org, dl-linux-imx <linux-imx@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH v2 1/1] power: Emit changed uevent on
+ wakeup_sysfs_add/remove
+Message-ID: <20200707142859.GB55434@kroah.com>
+References: <20200706210717.1210639-1-abhishekpandit@chromium.org>
+ <20200706140715.v2.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200706140715.v2.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 24 Jun 2020 at 12:33, Daniel Baluta <daniel.baluta@oss.nxp.com> wrote:
->
-> From: Daniel Baluta <daniel.baluta@nxp.com>
->
-> This patch introduces helpers support for multi PM domains.
->
-> API consists of:
->
-> 1) dev_multi_pm_attach - powers up all PM domains associated with a given
-> device. Because we can attach one PM domain per device, we create
-> virtual devices (children of initial device) and associate PM domains
-> one per virtual device.
->
-> 2) dev_multi_pm_detach - detaches all virtual devices from PM domains
-> attached with.
-
-Nit pick:
-I suggest to rename the helpers into
-dev_pm_domain_attach|detach_multi(), to be more consistent with
-existing function names. It's a bit long I admit that, but I prefer
-the consistency.
-
->
-> Signed-off-by: Daniel Baluta <daniel.baluta@nxp.com>
+On Mon, Jul 06, 2020 at 02:07:17PM -0700, Abhishek Pandit-Subedi wrote:
+> Udev rules that depend on the power/wakeup attribute don't get triggered
+> correctly if device_set_wakeup_capable is called after the device is
+> created. This can happen for several reasons (driver sets wakeup after
+> device is created, wakeup is changed on parent device, etc) and it seems
+> reasonable to emit a changed event when adding or removing attributes on
+> the device.
+> 
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 > ---
->  drivers/base/power/common.c | 93 +++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h   | 19 ++++++++
->  2 files changed, 112 insertions(+)
->
-> diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> index bbddb267c2e6..b0a4d0109810 100644
-> --- a/drivers/base/power/common.c
-> +++ b/drivers/base/power/common.c
-> @@ -228,3 +228,96 @@ void dev_pm_domain_set(struct device *dev, struct dev_pm_domain *pd)
->         device_pm_check_callbacks(dev);
+> 
+> Changes in v2:
+> - Add newline at end of bt_dev_err
+> 
+>  drivers/base/power/sysfs.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> index 24d25cf8ab1487..d57e8e7f175ebf 100644
+> --- a/drivers/base/power/sysfs.c
+> +++ b/drivers/base/power/sysfs.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* sysfs entries for device PM */
+>  #include <linux/device.h>
+> +#include <linux/kobject.h>
+>  #include <linux/string.h>
+>  #include <linux/export.h>
+>  #include <linux/pm_qos.h>
+> @@ -739,12 +740,30 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+>  
+>  int wakeup_sysfs_add(struct device *dev)
+>  {
+> -	return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> +	int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> +
+> +	if (!ret) {
+> +		int tmp = kobject_uevent(&dev->kobj, KOBJ_CHANGE);
+> +
+> +		if (tmp)
+> +			dev_err(dev,
+> +				"Error in uevent for wakeup_sysfs_add: %d\n",
+> +				tmp);
+> +	}
+> +
+> +	return ret;
 >  }
->  EXPORT_SYMBOL_GPL(dev_pm_domain_set);
-> +
-> +/**
-> + * dev_multi_pm_attach - power up device associated power domains
-> + * @dev: The device used to lookup the PM domains
-> + *
-> + * Parse device's OF node to find all PM domains specifiers. For each power
-> + * domain found, create a virtual device and associate it with the
-> + * current power domain.
-> + *
-> + * This function should typically be invoked by a driver during the
-> + * probe phase, in the case its device requires power management through
-> + * multiple PM domains.
-> + *
-> + * Returns a pointer to @dev_multi_pm_domain_data if successfully attached PM
-> + * domains, NULL when the device doesn't need a PM domain or when single
-> + * power-domains exists for it, else an ERR_PTR() in case of
-> + * failures.
-> + */
-> +struct dev_multi_pm_domain_data *dev_multi_pm_attach(struct device *dev)
-> +{
-> +       struct dev_multi_pm_domain_data *mpd, *retp;
-> +       int num_domains;
-> +       int i;
-> +
-> +       num_domains = of_count_phandle_with_args(dev->of_node, "power-domains",
-> +                                                "#power-domain-cells");
-> +       if (num_domains < 2)
-> +               return NULL;
 
-dev_pm_domain_attach_* is typically wrapper functions, allowing
-different types of PM domains to be supported. For example,
-dev_pm_domain_attach() calls acpi_dev_pm_attach() and
-genpd_dev_pm_attach(). While dev_pm_domain_attach_by_id() only calls
-genpd_dev_pm_attach_by_id(), as there's no corresponding interface for
-the acpi PM domain.
+Shouldn't the above function look like this instead to be simpler:
 
-The above said, I don't think another layer should be needed here, but
-there is something missing that makes this consistent with the
-behaviour of the above mentioned functions.
+int wakeup_sysfs_add(struct device *dev)
+{
+	int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
 
-How about adding a genpd OF helper ("of_genpd_num_domains(struct
-device_node *)"), that deals with the above parsing and returns the
-number of domains for the device? In this way, if
-of_genpd_num_domains() returns an error code or zero, it's easier to
-continue to try with other PM domain providers (if/when that is
-supported).
+	if (ret)
+		return ret;
+
+	return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
+}
+
+
+>  
+>  void wakeup_sysfs_remove(struct device *dev)
+>  {
+> +	int tmp;
+
+Use 'ret' like the above function had, to be consistent.
 
 > +
-> +       mpd = devm_kzalloc(dev, sizeof(*mpd), GFP_KERNEL);
-> +       if (!mpd)
-> +               return ERR_PTR(-ENOMEM);
+>  	sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
 > +
-> +       mpd->dev = dev;
-> +       mpd->num_domains = num_domains;
-> +
-> +       mpd->virt_devs = devm_kmalloc_array(dev, mpd->num_domains,
-> +                                           sizeof(*mpd->virt_devs),
-> +                                           GFP_KERNEL);
-> +       if (!mpd->virt_devs)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       mpd->links = devm_kmalloc_array(dev, mpd->num_domains,
-> +                                       sizeof(*mpd->links), GFP_KERNEL);
-> +       if (!mpd->links)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       for (i = 0; i < mpd->num_domains; i++) {
-> +               mpd->virt_devs[i] = dev_pm_domain_attach_by_id(dev, i);
-> +               if (IS_ERR(mpd->virt_devs[i])) {
-> +                       retp = (struct dev_multi_pm_domain_data *)
-> +                               mpd->virt_devs[i];
-> +                       goto exit_unroll_pm;
-> +               }
-> +               mpd->links[i] = device_link_add(dev, mpd->virt_devs[i],
-> +                                               DL_FLAG_STATELESS |
-> +                                               DL_FLAG_PM_RUNTIME |
-> +                                               DL_FLAG_RPM_ACTIVE);
+> +	tmp = kobject_uevent(&dev->kobj, KOBJ_CHANGE);
+> +	if (tmp)
+> +		dev_err(dev, "Error in uevent for wakeup_sysfs_remove: %d\n",
 
-As a suggestion to be a little bit more flexible, perhaps these bits
-should be given as an in-parameter instead. Potentially we could then
-also treat the in-parameter being zero, as that no device link should
-be added.
+nit, use __func__ to describe a function name, if you really want it.
+Why do you need to send a message for this error, will that really ever
+happen?
 
-Although, it's kind of hard to know as the users of this interface
-aren't really widely known yet.
+thanks,
 
-> +               if (!mpd->links[i]) {
-> +                       retp = ERR_PTR(-ENOMEM);
-> +                       dev_pm_domain_detach(mpd->virt_devs[i], false);
-> +                       goto exit_unroll_pm;
-> +               }
-> +       }
-> +       return mpd;
-> +
-> +exit_unroll_pm:
-> +       while (--i >= 0) {
-> +               device_link_del(mpd->links[i]);
-> +               dev_pm_domain_detach(mpd->virt_devs[i], false);
-> +       }
-> +
-> +       return retp;
-> +}
-> +EXPORT_SYMBOL(dev_multi_pm_attach);
-> +
-
-[...]
-
-Kind regards
-Uffe
+greg k-h
