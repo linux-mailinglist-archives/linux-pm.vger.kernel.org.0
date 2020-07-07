@@ -2,263 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D56A2168BC
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 11:02:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B16E2168D8
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 11:14:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727853AbgGGJCH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 05:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbgGGJCG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 05:02:06 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF6BC08C5DB
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 02:02:06 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id a6so44323201wrm.4
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 02:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=kRUj27P8zkGmRIKsXZ+nQk6qp/gprxkKDYwZvWToTEw=;
-        b=pH2EQs+98Q+b/hALQfjLX+d/kUVqXcCMJojjSCHyCDhhWUqwLbxL1Dmc/I4kLt4+rc
-         gzTPDZuuPVC+Tqj7E9x/p47pPP0Pg995WHDCujTB5jfF3eULQol88fmyftUQmvSIHHBK
-         bcN8qq/70I4t2S6PyMoS4L/X5UAvHtMFMsl5n1uR6EIFwgIYLX/1/91rk1AMip5Etk7X
-         8ywDSgwegbQCwBx9o5kK4oNOR4kSpGhUEW55z8Glp+upLI8C31bdWU2gnU7ObrY0NSKc
-         iGo1MHOBCoxhAd3vRwdB9nM/JMn2VnDliLKGtsrsOxUb+pgOmVA2Q05bmcECkvJkc88h
-         hIOA==
+        id S1725941AbgGGJO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 05:14:56 -0400
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:43226 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgGGJO4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 05:14:56 -0400
+Received: by mail-wr1-f51.google.com with SMTP id j4so41937966wrp.10;
+        Tue, 07 Jul 2020 02:14:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=kRUj27P8zkGmRIKsXZ+nQk6qp/gprxkKDYwZvWToTEw=;
-        b=OSgCD2jEqboYFY7RqWOnsZ5L1zZrG1BDtFAgGkesiXbekxvrtsg7xwnZtAVSZPZfiI
-         +Tk8D2PKt4V581LYBifNZZWGhqf+F20pxIfHZRz3Ap5OprMkPBe6uXpd6OEIr9aVToqZ
-         nk1xVr7EiPpm8I7vH+KW5jKvxaMVI7Ao2heLLETemFh0VTEFv2Zz1k/3vBYpctClwIz9
-         St+51EY2orwHZ5N9mfdZeaY0fnuaHvbvE+1Pr2CD1/aMR+A/SVqv/YTYgOFcFLe61voz
-         /3+J4CSjA+G8wJIFG/XADC7TXpsXkZFCG2bLFpq46Gp/TW38fjs761uEqx9J7SyngV6T
-         bs5Q==
-X-Gm-Message-State: AOAM531a4xFMigcK582ID+38OtKD3/HoP5cEB9L1pvzHrtz4KSmlVPk5
-        YdyBT4F6Ago727OyfnHWcJXyzg==
-X-Google-Smtp-Source: ABdhPJw0LLwgq5sF+UNMHDhajm6tbuK6sIv9ZaOSuqr0BBO+kT16aXZYIymLrhUsFYfKPCbgX3Y/Lw==
-X-Received: by 2002:adf:f707:: with SMTP id r7mr52056237wrp.70.1594112524900;
-        Tue, 07 Jul 2020 02:02:04 -0700 (PDT)
-Received: from localhost.localdomain (lns-bzn-59-82-252-131-168.adsl.proxad.net. [82.252.131.168])
-        by smtp.gmail.com with ESMTPSA id d201sm142998wmd.34.2020.07.07.02.02.03
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d1fV6kPM36TD326Nzxg7Z+ipDhi5SrBR72LA2cwak+8=;
+        b=EHif8dqWLZUl9y9rwWvC7kHopzbjBT1vUeAUXKuDnnOFAp22PqmTL87dm94iO+HImu
+         HrIsM++GEHdg8oaj7yay+wpqMZ+ShKUpIsIzP0cxS1sVjgaSNFhPiwM2/vmFUg9Kw9r4
+         xCYWCWca94Ur64AFkIZKD4gFLmsB4qwsWuXYzcHl2yzU8FruJWyokR3uiIoHdabjsW6S
+         GSIR5S9OVN6xqmUPPsemoKLDAUsMIyePMe+wCKdd36iFcXS1aVZYLlaVxIlfbDox+7JM
+         9cgTqEhMH28Kd+1e1TuncHTZ8caX8HwYXLEIWKjefAtWtAzbOZHNLY8puRukC6BL1PRL
+         n79g==
+X-Gm-Message-State: AOAM532zLATfWE5I8M1X8JBHvHrBD5mbnOtQC6BkvQrT5MR1ZwA4fZ3J
+        KRXvw4c1mNG0mCbdZZYEing=
+X-Google-Smtp-Source: ABdhPJzFu/LXDAQqw0UoyFr80RTenCH282ojT9C7p2oH1LQMP7cch/sujIzsdADrs5lAs/XWoztr4g==
+X-Received: by 2002:a5d:4d0b:: with SMTP id z11mr23258665wrt.24.1594113294131;
+        Tue, 07 Jul 2020 02:14:54 -0700 (PDT)
+Received: from localhost (ip-37-188-179-51.eurotel.cz. [37.188.179.51])
+        by smtp.gmail.com with ESMTPSA id w13sm111649wrr.67.2020.07.07.02.14.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 02:02:04 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     amit.kucheria@verdurent.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rdunlap@infradead.org
-Subject: [PATCH] thermal: netlink: Fix compilation error when CONFIG_NET=n
-Date:   Tue,  7 Jul 2020 11:01:57 +0200
-Message-Id: <20200707090159.1018-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        Tue, 07 Jul 2020 02:14:53 -0700 (PDT)
+Date:   Tue, 7 Jul 2020 11:14:51 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Alexander Graf <graf@amazon.com>
+Cc:     Jann Horn <jannh@google.com>, Pavel Machek <pavel@ucw.cz>,
+        "Catangiu, Adrian Costin" <acatan@amazon.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "len.brown@intel.com" <len.brown@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "wad@chromium.org" <wad@chromium.org>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "bonzini@gnu.org" <bonzini@gnu.org>,
+        "MacCarthaigh, Colm" <colmmacc@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        "Sandu, Andrei" <sandreim@amazon.com>,
+        "Brooker, Marc" <mbrooker@amazon.com>,
+        "Weiss, Radu" <raduweis@amazon.com>,
+        "Manwaring, Derek" <derekmn@amazon.com>
+Subject: Re: [RFC]: mm,power: introduce MADV_WIPEONSUSPEND
+Message-ID: <20200707091451.GB5913@dhcp22.suse.cz>
+References: <B7793B7A-3660-4769-9B9A-FFCF250728BB@amazon.com>
+ <20200703224411.GC25072@amd>
+ <CAG48ez0oWQd42a-H-Dzw1Wq7HgB5PpFRGCZeYxP8ohxaoZHmvQ@mail.gmail.com>
+ <20200704114820.GA16083@amd>
+ <57ab4fb3-3f82-d34f-ad74-2214b45a4dd9@amazon.com>
+ <CAG48ez1tAAD+x6n07uCisXpqVpDUPX7xBWiKFkS3u2azHqd41A@mail.gmail.com>
+ <20200707074425.GC3820@dhcp22.suse.cz>
+ <efa55313-ce8a-bac9-15df-167f93c672b3@amazon.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efa55313-ce8a-bac9-15df-167f93c672b3@amazon.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the network is not configured, the netlink are disabled on all
-the system. The thermal framework assumed the netlink are always
-opt-in.
+On Tue 07-07-20 10:01:23, Alexander Graf wrote:
+> On 07.07.20 09:44, Michal Hocko wrote:
+> > On Mon 06-07-20 14:52:07, Jann Horn wrote:
+> > > On Mon, Jul 6, 2020 at 2:27 PM Alexander Graf <graf@amazon.com> wrote:
+> > > > Unless we create a vsyscall that returns both the PID as well as the
+> > > > epoch and thus handles fork *and* suspend. I need to think about this a
+> > > > bit more :).
+> > > 
+> > > You can't reliably detect forking by checking the PID if it is
+> > > possible for multiple forks to be chained before the reuse check runs:
+> > > 
+> > >   - pid 1000 remembers its PID
+> > >   - pid 1000 forks, creating child pid 1001
+> > >   - pid 1000 exits and is waited on by init
+> > >   - the pid allocator wraps around
+> > >   - pid 1001 forks, creating child pid 1000
+> > >   - child with pid 1000 tries to check for forking, determines that its
+> > > PID is 1000, and concludes that it is still the original process
+> > 
+> > I must be really missing something here because I really fail to see why
+> > there has to be something new even invented. Sure, checking for pid is
+> > certainly a suboptimal solution because pids are terrible tokens to work
+> > with. We do have a concept of file descriptors which a much better and
+> > supports signaling. There is a clear source of the signal IIUC
+> > (migration) and there are consumers to act upon that (e.g. crypto
+> > backends). So what does really prevent to use a standard signal delivery
+> > over fd for this usecase?
+> 
+> I wasn't part of the discussions on why things like WIPEONFORK were invented
+> instead of just using signalling mechanisms, but the main reason I can think
+> of are libraries.
 
-Fix this by adding a Kconfig option for the netlink notification,
-defaulting to yes and depending on CONFIG_NET.
+Well, I would argue that WIPEONFORK is conceptually different. It is
+one time initialization mechanism with a very clear life time semantic.
+So any programming model is really as easy as, the initial state is
+always 0 for a new task without any surprises later on because you own
+the memory (essentially an extension to initialized .data section on
+exec to any new task).
 
-As the change implies multiple stubs and in order to not pollute the
-internal thermal header, the thermal_nelink.h has been added and
-included in the thermal_core.h, so this one regain some kind of
-clarity.
+Compare that to a completely async nature of this interface. Any read
+would essentially have to be properly synchronized with the external
+event otherwise the state could have been corrupted. Such a consistency
+model is really cumbersome to work with.
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/Kconfig           | 10 ++++
- drivers/thermal/Makefile          |  5 +-
- drivers/thermal/thermal_core.h    | 20 +------
- drivers/thermal/thermal_netlink.h | 98 +++++++++++++++++++++++++++++++
- 4 files changed, 114 insertions(+), 19 deletions(-)
- create mode 100644 drivers/thermal/thermal_netlink.h
+> As a library, you are under no control of the main loop usually, which means
+> you just don't have a way to poll for an fd. As a library author, I would
+> usually try to avoid very hard to create such a dependency, because it makes
+> it really hard to glue pieces together.
+> 
+> The same applies to signals btw, which would also be a possible way to
+> propagate such events.
 
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 3eb2348e5242..07983bef8d6a 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -17,6 +17,16 @@ menuconfig THERMAL
- 
- if THERMAL
- 
-+config THERMAL_NETLINK
-+	bool "Thermal netlink management"
-+	depends on NET
-+	default y
-+	help
-+	  The thermal framework has a netlink interface to do thermal
-+	  zones discovery, temperature readings and events such as
-+	  trip point crossed, cooling device update or governor
-+	  change. It is recommended to enable the feature.
-+
- config THERMAL_STATISTICS
- 	bool "Thermal state transition statistics"
- 	help
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 1bbf0805fb04..589f6fb0d381 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -5,7 +5,10 @@
- 
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
- thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
--					thermal_helpers.o thermal_netlink.o
-+					thermal_helpers.o
-+
-+# netlink interface to manage the thermal framework
-+thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
- 
- # interface to/from other layers providing sensors
- thermal_sys-$(CONFIG_THERMAL_HWMON)		+= thermal_hwmon.o
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index b44969d50ec0..99d065e6ed08 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -12,6 +12,8 @@
- #include <linux/device.h>
- #include <linux/thermal.h>
- 
-+#include "thermal_netlink.h"
-+
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-@@ -52,24 +54,6 @@ int for_each_thermal_governor(int (*cb)(struct thermal_governor *, void *),
- 
- struct thermal_zone_device *thermal_zone_get_by_id(int id);
- 
--/* Netlink notification function */
--int thermal_notify_tz_create(int tz_id, const char *name);
--int thermal_notify_tz_delete(int tz_id);
--int thermal_notify_tz_enable(int tz_id);
--int thermal_notify_tz_disable(int tz_id);
--int thermal_notify_tz_trip_down(int tz_id, int id);
--int thermal_notify_tz_trip_up(int tz_id, int id);
--int thermal_notify_tz_trip_delete(int tz_id, int id);
--int thermal_notify_tz_trip_add(int tz_id, int id, int type,
--			       int temp, int hyst);
--int thermal_notify_tz_trip_change(int tz_id, int id, int type,
--				  int temp, int hyst);
--int thermal_notify_cdev_state_update(int cdev_id, int state);
--int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
--int thermal_notify_cdev_delete(int cdev_id);
--int thermal_notify_tz_gov_change(int tz_id, const char *name);
--int thermal_genl_sampling_temp(int id, int temp);
--
- struct thermal_attr {
- 	struct device_attribute attr;
- 	char name[THERMAL_NAME_LENGTH];
-diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-new file mode 100644
-index 000000000000..0ec28d105da5
---- /dev/null
-+++ b/drivers/thermal/thermal_netlink.h
-@@ -0,0 +1,98 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ *  Copyright (C) Linaro Ltd 2020
-+ *  Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ */
-+
-+/* Netlink notification function */
-+#ifdef CONFIG_THERMAL_NETLINK
-+int thermal_notify_tz_create(int tz_id, const char *name);
-+int thermal_notify_tz_delete(int tz_id);
-+int thermal_notify_tz_enable(int tz_id);
-+int thermal_notify_tz_disable(int tz_id);
-+int thermal_notify_tz_trip_down(int tz_id, int id);
-+int thermal_notify_tz_trip_up(int tz_id, int id);
-+int thermal_notify_tz_trip_delete(int tz_id, int id);
-+int thermal_notify_tz_trip_add(int tz_id, int id, int type,
-+			       int temp, int hyst);
-+int thermal_notify_tz_trip_change(int tz_id, int id, int type,
-+				  int temp, int hyst);
-+int thermal_notify_cdev_state_update(int cdev_id, int state);
-+int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
-+int thermal_notify_cdev_delete(int cdev_id);
-+int thermal_notify_tz_gov_change(int tz_id, const char *name);
-+int thermal_genl_sampling_temp(int id, int temp);
-+#else
-+static inline int thermal_notify_tz_create(int tz_id, const char *name)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_delete(int tz_id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_enable(int tz_id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_disable(int tz_id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_trip_down(int tz_id, int id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_trip_up(int tz_id, int id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_trip_delete(int tz_id, int id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_trip_add(int tz_id, int id, int type,
-+					     int temp, int hyst)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_trip_change(int tz_id, int id, int type,
-+						int temp, int hyst)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_cdev_state_update(int cdev_id, int state)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_cdev_add(int cdev_id, const char *name,
-+					  int max_state)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_cdev_delete(int cdev_id)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_notify_tz_gov_change(int tz_id, const char *name)
-+{
-+	return 0;
-+}
-+
-+static inline int thermal_genl_sampling_temp(int id, int temp)
-+{
-+	return 0;
-+}
-+#endif /* CONFIG_THERMAL_NETLINK */
+Just to clarify I didn't really mean posix signals here. Those would be
+quite clumsy indeed. But I can imagine that a library registers to a
+system wide means to get a notification. There are many examples for
+that, including a lot of usage inside libraries. All different *bus
+interfaces.
+
 -- 
-2.17.1
-
+Michal Hocko
+SUSE Labs
