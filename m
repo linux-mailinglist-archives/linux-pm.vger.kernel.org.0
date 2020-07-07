@@ -2,208 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF84F21744D
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 18:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B214217464
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jul 2020 18:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728292AbgGGQnf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 7 Jul 2020 12:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
+        id S1728183AbgGGQsG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 7 Jul 2020 12:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728260AbgGGQnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 12:43:33 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCEBC08C5DC
-        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 09:43:31 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id o1so10394687plk.1
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 09:43:31 -0700 (PDT)
+        with ESMTP id S1728073AbgGGQsE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 7 Jul 2020 12:48:04 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75B7C08C5E1
+        for <linux-pm@vger.kernel.org>; Tue,  7 Jul 2020 09:48:04 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id p25so15088454vsg.4
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jul 2020 09:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0CvFCRMGyH8ng1oyUVoBZbdUNhkgtcfr8Mw5rYPl6rU=;
-        b=Ip4JCRO9Uih6Knc+6wGL010irBJegJQlega20oXZD3gAVz3Gd96yQRvs7kaA3fNjV/
-         z/ZAGWVhhJjrmk34h9KVXeuOIaYj72kuKRWPEmYv0R0iY8LFuVS0z7DbSvF+HjQ08l8A
-         oUg6MlEKkSCh78v9cDkJ55Qm4t2hysgVyhapX2iKObx3m4a9jLTUV4GbWVHNpjEBVQ7g
-         AoodoW9ix66XSZBcf3u0ldo/kMtkd+FX2uNLw0LKtcOLgt3rvi3VrFUbKkw7DCoVNXDV
-         LQ8I03Yti0ZM6SiXfhQ91ml5lPQYcGroauyF+5ECCGLjPgQWmZo3E521xeqU+AadU+jf
-         ckLw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1eWoCnOASAKMtuQZyGLOuX3o7NTlzqUAEG+oBEPWKJ8=;
+        b=El0vxZtqg6JPxeKZyM66PqiJ4jyD0i9lHL6yotyIIDUC+AViY0YG4D/79jNwjMUabw
+         9Pr+v/FoxAAvwkEMHuljUs0iNcnGbyDN1kDvHa6dchgrr3JbLcEOq/qc5RS43jbf9URR
+         JVyJb24B6MSCghW0Q5LihVIf3+BHxKMaYaFA8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0CvFCRMGyH8ng1oyUVoBZbdUNhkgtcfr8Mw5rYPl6rU=;
-        b=pD82UheM+yiJq5FicJZ0I+5A6+206eOt78SVxQL4LHKteAOzuKintDCU8kKZUgee+v
-         GmsuJujL2vp9v8BE3lG38puCvhKLEfiHe/xmpi9Ja+tfQZ0D9tAAFcRI2uVAIqFc0n7M
-         Vz2TjDV1oxlnm1JXdYCYCT7D/0beM2HZLFnNiO3nIbc6DSYQcpJ4pkidSbUPqLBmX+sY
-         VhBkP7q4//cmKxtOIl8xWWmEi79u49B4nG1wBY2pkfOSTFAJTY1gTISVqvz/AlbRx31+
-         bK0Z/SCt39LIBUcnfT3VV0p1GCDJ063c8cTCBuQDbWOIhHtt2Egw0+J0CWIGu+OSKwAR
-         e1QA==
-X-Gm-Message-State: AOAM533edyS2oQdOfSJYGxdeYXtndEOxzckX9DOm3T+6abrbA3bS9JIy
-        EMSMSATQTECH+luNUeIftVGPFw==
-X-Google-Smtp-Source: ABdhPJwwBLoiCnrjwRhFJQYWj+jTUZqOBr3HuHyo0/STACqPViLc8hndgtf6CrLI/HtLg7tjT5bZ0A==
-X-Received: by 2002:a17:90a:1089:: with SMTP id c9mr5346227pja.180.1594140210827;
-        Tue, 07 Jul 2020 09:43:30 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id n12sm1392859pgr.88.2020.07.07.09.43.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 09:43:29 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 09:43:25 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Neal Liu <neal.liu@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        lkml <linux-kernel@vger.kernel.org>, wsd_upstream@mediatek.com
-Subject: Re: [PATCH v2] cpuidle: change enter_s2idle() prototype
-Message-ID: <20200707164325.GA2525978@google.com>
-References: <1594005196-16327-1-git-send-email-neal.liu@mediatek.com>
- <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1eWoCnOASAKMtuQZyGLOuX3o7NTlzqUAEG+oBEPWKJ8=;
+        b=o7hRskhLn+bIGNboQ+2U1wL4gznz2+lBq0vlwkEW7lHLDCWjMMLR96/S2mHq30/9Kc
+         HtiSNXixAEL0+1TdAdOnftuu+orHW49UD9N8TVaryClsNxsqLEtNYXLtTxuK/ee8/9u2
+         tsb2sbhalk1hUZo6bPlmYJShPXhLoRWCLHHWi5oWuCtbxDnVtjhWX2+HULRah/W9QQRl
+         C5WQHmg9V3YZk00BJOqTycEWG9U2Jr0pLQKRkqVFtr9wFbEsBKQYj5IT7gCFeolM2NXB
+         sK9oqLhN/eHtRGB9+cuTITfXJ9k7cmyxkRBJsnrra4T3KCoMUz5J6pszZsZOaQ/ghWwM
+         EJvg==
+X-Gm-Message-State: AOAM530pycAcw+O1LtOQA7PLsndQ2elj2QuS9CWpbC+qGWl3f1UTcVFP
+        MQLeSh4MFaPO6XyrqFkRvlQdnb8DWLXdxiD6ryQ4mA==
+X-Google-Smtp-Source: ABdhPJysq8+6FxhpZrg1dgwHaUrHRyK3KI93qSdqzWL6HNijbQcEkUjFbxYm09sE8WLnXhQ1UoylWLanSIj9IJCT5bo=
+X-Received: by 2002:a67:c90c:: with SMTP id w12mr30280616vsk.86.1594140483655;
+ Tue, 07 Jul 2020 09:48:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
+References: <20200707162417.3514284-1-abhishekpandit@chromium.org>
+ <20200707092406.v4.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid> <CAJZ5v0iyvge_Hqgm46_vfjh45YFdnsJ7ksvY7DqD6gx+f+1dvg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iyvge_Hqgm46_vfjh45YFdnsJ7ksvY7DqD6gx+f+1dvg@mail.gmail.com>
+From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date:   Tue, 7 Jul 2020 09:47:52 -0700
+Message-ID: <CANFp7mUas8Qnzqeivri25S7SWbKe6T+6riN419dR6xZXXOcaKA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 06, 2020 at 11:13:16AM +0800, Neal Liu wrote:
-> Control Flow Integrity(CFI) is a security mechanism that disallows
-> changes to the original control flow graph of a compiled binary,
-> making it significantly harder to perform such attacks.
-> 
-> init_state_node() assign same function callback to different
-> function pointer declarations.
-> 
-> static int init_state_node(struct cpuidle_state *idle_state,
->                            const struct of_device_id *matches,
->                            struct device_node *state_node) { ...
->         idle_state->enter = match_id->data; ...
->         idle_state->enter_s2idle = match_id->data; }
-> 
-> Function declarations:
-> 
-> struct cpuidle_state { ...
->         int (*enter) (struct cpuidle_device *dev,
->                       struct cpuidle_driver *drv,
->                       int index);
-> 
->         void (*enter_s2idle) (struct cpuidle_device *dev,
->                               struct cpuidle_driver *drv,
->                               int index); };
-> 
-> In this case, either enter() or enter_s2idle() would cause CFI check
-> failed since they use same callee.
-> 
-> Align function prototype of enter() since it needs return value for
-> some use cases. The return value of enter_s2idle() is no
-> need currently.
-> 
-> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
-> ---
->  drivers/acpi/processor_idle.c   |    6 ++++--
->  drivers/cpuidle/cpuidle-tegra.c |    8 +++++---
->  drivers/idle/intel_idle.c       |    6 ++++--
->  include/linux/cpuidle.h         |    6 +++---
->  4 files changed, 16 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 75534c5..6ffb6c9 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -655,8 +655,8 @@ static int acpi_idle_enter(struct cpuidle_device *dev,
->  	return index;
->  }
->  
-> -static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
-> -				   struct cpuidle_driver *drv, int index)
-> +static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
-> +				  struct cpuidle_driver *drv, int index)
->  {
->  	struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
->  
-> @@ -674,6 +674,8 @@ static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
->  		}
->  	}
->  	acpi_idle_do_entry(cx);
-> +
-> +	return 0;
->  }
->  
->  static int acpi_processor_setup_cpuidle_cx(struct acpi_processor *pr,
-> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
-> index 1500458..a12fb14 100644
-> --- a/drivers/cpuidle/cpuidle-tegra.c
-> +++ b/drivers/cpuidle/cpuidle-tegra.c
-> @@ -253,11 +253,13 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
->  	return err ? -1 : index;
->  }
->  
-> -static void tegra114_enter_s2idle(struct cpuidle_device *dev,
-> -				  struct cpuidle_driver *drv,
-> -				  int index)
-> +static int tegra114_enter_s2idle(struct cpuidle_device *dev,
-> +				 struct cpuidle_driver *drv,
-> +				 int index)
->  {
->  	tegra_cpuidle_enter(dev, drv, index);
-> +
-> +	return 0;
->  }
->  
->  /*
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index f449584..b178da3 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -175,13 +175,15 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
->   * Invoked as a suspend-to-idle callback routine with frozen user space, frozen
->   * scheduler tick and suspended scheduler clock on the target CPU.
->   */
-> -static __cpuidle void intel_idle_s2idle(struct cpuidle_device *dev,
-> -					struct cpuidle_driver *drv, int index)
-> +static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
-> +				       struct cpuidle_driver *drv, int index)
->  {
->  	unsigned long eax = flg2MWAIT(drv->states[index].flags);
->  	unsigned long ecx = 1; /* break on interrupt flag */
->  
->  	mwait_idle_with_hints(eax, ecx);
-> +
-> +	return 0;
->  }
->  
->  /*
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index ec2ef63..bee10c0 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -66,9 +66,9 @@ struct cpuidle_state {
->  	 * suspended, so it must not re-enable interrupts at any point (even
->  	 * temporarily) or attempt to change states of clock event devices.
->  	 */
-> -	void (*enter_s2idle) (struct cpuidle_device *dev,
-> -			      struct cpuidle_driver *drv,
-> -			      int index);
-> +	int (*enter_s2idle)(struct cpuidle_device *dev,
-> +			    struct cpuidle_driver *drv,
-> +			    int index);
->  };
->  
->  /* Idle State Flags */
-> -- 
-> 1.7.9.5
+Hi Rafael,
 
-This looks good to me, thank you for sending the patch! Please feel free
-to add:
+(resent in plain text)
 
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
+On Tue, Jul 7, 2020 at 9:28 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Jul 7, 2020 at 6:24 PM Abhishek Pandit-Subedi
+> <abhishekpandit@chromium.org> wrote:
+> >
+> > Udev rules that depend on the power/wakeup attribute don't get triggered
+> > correctly if device_set_wakeup_capable is called after the device is
+> > created. This can happen for several reasons (driver sets wakeup after
+> > device is created, wakeup is changed on parent device, etc) and it seems
+> > reasonable to emit a changed event when adding or removing attributes on
+> > the device.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> >
+> > Changes in v4:
+> > - Fix warning where returning from void and tested on device
+> >
+> > Changes in v3:
+> > - Simplified error handling
+> >
+> > Changes in v2:
+> > - Add newline at end of bt_dev_err
+> >
+> >  drivers/base/power/sysfs.c | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+> > index 24d25cf8ab1487..aeb58d40aac8de 100644
+> > --- a/drivers/base/power/sysfs.c
+> > +++ b/drivers/base/power/sysfs.c
+> > @@ -1,6 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  /* sysfs entries for device PM */
+> >  #include <linux/device.h>
+> > +#include <linux/kobject.h>
+> >  #include <linux/string.h>
+> >  #include <linux/export.h>
+> >  #include <linux/pm_qos.h>
+> > @@ -739,12 +740,18 @@ int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid)
+> >
+> >  int wakeup_sysfs_add(struct device *dev)
+> >  {
+> > -       return sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> > +       int ret = sysfs_merge_group(&dev->kobj, &pm_wakeup_attr_group);
+> > +
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       return kobject_uevent(&dev->kobj, KOBJ_CHANGE);
+>
+> So let me repeat the previous comment:
+>
+> If you return an error here, it may confuse the caller to think that
+> the operation has failed completely, whereas the merging of the
+> attribute group has been successful already.
+>
+> I don't think that an error can be returned at this point.
+>
 
-Sami
+The caller looks at the return code and just logs that an error
+occurred (no other action). It's also unlikely for kobject_uevent to
+fail (I saw mostly -ENOMEM and an -ENOENT when the kobj wasn't in the
+correct set).
+
+Call site:
+    int ret = wakeup_sysfs_add(dev);
+
+    if (ret)
+        dev_info(dev, "Wakeup sysfs attributes not added\n");
+
+So I'm ok with either keeping this as-is (caller isn't getting
+confused, just logging) or swallowing the return of kobject_uevent.
+
+> >  }
+> >
+> >  void wakeup_sysfs_remove(struct device *dev)
+> >  {
+> >         sysfs_unmerge_group(&dev->kobj, &pm_wakeup_attr_group);
+> > +       kobject_uevent(&dev->kobj, KOBJ_CHANGE);
+> >  }
+> >
+> >  int pm_qos_sysfs_add_resume_latency(struct device *dev)
+> > --
+> > 2.27.0.212.ge8ba1cc988-goog
+> >
