@@ -2,91 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC95218BF8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 17:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D74F8218D24
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 18:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730330AbgGHPni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jul 2020 11:43:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48696 "EHLO mail.kernel.org"
+        id S1730538AbgGHQj4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jul 2020 12:39:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54094 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730317AbgGHPlp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 8 Jul 2020 11:41:45 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        id S1730157AbgGHQj4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Jul 2020 12:39:56 -0400
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 21A7A207D0;
-        Wed,  8 Jul 2020 15:41:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C2F520720;
+        Wed,  8 Jul 2020 16:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594222904;
-        bh=dS8/G+hfAJds4aB+AZ58jEHtC4unT+hW+QxSxGfpACM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KgB8+wGzPOilTekboLA/+rDPufT0G5C2/PhJ7YCPZDxem3D86NevHfczXH/Zgu3ow
-         dxIcIa1CIAHJaGUlpfjyigBbz/Sog77dJoLmMkKBQwVBNtOo9PVX3yprDU5YI7JD1v
-         AG/qIZ4b9k/evjw0Z6NgRIbxDH73aVnrarm70Hl4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anson Huang <Anson.Huang@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.4 07/16] thermal/drivers: imx: Fix missing of_node_put() at probe time
-Date:   Wed,  8 Jul 2020 11:41:26 -0400
-Message-Id: <20200708154135.3199907-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200708154135.3199907-1-sashal@kernel.org>
-References: <20200708154135.3199907-1-sashal@kernel.org>
+        s=default; t=1594226395;
+        bh=si9R9YOpPstoou9WxWBNgmosG+kQzBPQSimX+2todNU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kYuGFbgc5ScwOake38b/0c4Q3UUTq874vrMs+mkeC4d90VGDkdlANcs3gLiwRgShT
+         D4D7nu4T/2t6tPGAPlRttnXFJAt+oXZ8PMY7RRFhZVc6X77Kdbc4D9fWXQ9AiZ02eC
+         EtTHvufxN+zYb7miMNJr1Wfe9TlPnIMOsElEP9Gc=
+Received: by mail-oo1-f43.google.com with SMTP id z127so5419205ooa.3;
+        Wed, 08 Jul 2020 09:39:55 -0700 (PDT)
+X-Gm-Message-State: AOAM533GKwxWcMWpxpv7ZqwLcAMS6a59aXoKxWbSa12eMZmH25OAVJHR
+        FV1zjle9FCWi6c/rcLYTBcAGOvPh9wRdYEbx4g==
+X-Google-Smtp-Source: ABdhPJw98eGut4x1Dphx+po6Q/2rXcEkLotblIzQIjhYrS1ENyVSDVV9J3vSnlOvtvnWZa3lln2BohhrcL8U1WbVAUE=
+X-Received: by 2002:a4a:7459:: with SMTP id t25mr39686838ooe.25.1594226394837;
+ Wed, 08 Jul 2020 09:39:54 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20200429205825.10604-1-robh@kernel.org> <20200617150850.t23gwj3p2qnduq2a@holly.lan>
+In-Reply-To: <20200617150850.t23gwj3p2qnduq2a@holly.lan>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 8 Jul 2020 10:39:43 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+uTW_-cNOQFWPcYEVRvqf3DEqiaGTfV5uWag0zvAzjgA@mail.gmail.com>
+Message-ID: <CAL_Jsq+uTW_-cNOQFWPcYEVRvqf3DEqiaGTfV5uWag0zvAzjgA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] Modularizing Versatile Express
+To:     Daniel Thompson <daniel.thompson@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Anson Huang <Anson.Huang@nxp.com>
+On Wed, Jun 17, 2020 at 9:08 AM Daniel Thompson
+<daniel.thompson@linaro.org> wrote:
+>
+> On Wed, Apr 29, 2020 at 03:58:09PM -0500, Rob Herring wrote:
+> > This series enables building various Versatile Express platform drivers
+> > as modules. The primary target is the Fast Model FVP which is supported
+> > in Android. As Android is moving towards their GKI, or generic kernel,
+> > the hardware support has to be in modules. Currently ARCH_VEXPRESS
+> > enables several built-in only drivers. Some of these are needed, but
+> > some are only needed for older 32-bit VExpress platforms and can just
+> > be disabled. For FVP, the pl111 display driver is needed. The pl111
+> > driver depends on vexpress-osc clocks which had a dependency chain of
+> > vexpress-config --> vexpress-syscfg --> vexpress-sysreg. These
+> > components relied on fixed initcall ordering and didn't support deferred
+> > probe which would have complicated making them modules. All these levels
+> > of abstraction are needlessly complicated, so this series simplifies
+> > things a bit by merging the vexpress-config and vexpress-syscfg
+> > functionality.
+> >
+> > There's a couple of other pieces to this which I've sent out separately
+> > as they don't have dependencies with this series. The cross subsystem
+> > dependencies in this series are mainly the ordering of enabling drivers
+> > as modules.
+>
+> This series results in the vexpress-a15 console not coming up until very
+> late in the boot process because the console arch_initcall() ends up
+> being deferred because it's dependencies are no longer use
+> core_initcall() to ensure they get in first.
 
-[ Upstream commit b45fd13be340e4ed0a2a9673ba299eb2a71ba829 ]
+Which was a hack...
 
-After finishing using cpu node got from of_get_cpu_node(), of_node_put()
-needs to be called.
+> Is there a problem registering vexpress-osc, vexpress-sysreg and
+> vexpress-config as core_initcall's so the console behaves nicely
+> when they are all compiled as built-ins?
 
-Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/1585232945-23368-1-git-send-email-Anson.Huang@nxp.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/imx_thermal.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+I think the correct way to solve this is with devlinks which reduces
+the deferred probes. Can you see if that's better? That's still off by
+default and needs a kernel command line option. That may just get the
+console up at an earlier initcall level, but not before other h/w
+drivers. I think having some way to prioritize probe order without
+initcall hacks would be good. Then you could prioritize a console or
+splash screen or ???.
 
-diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
-index bb6754a5342c1..85511c1160b7f 100644
---- a/drivers/thermal/imx_thermal.c
-+++ b/drivers/thermal/imx_thermal.c
-@@ -656,7 +656,7 @@ MODULE_DEVICE_TABLE(of, of_imx_thermal_match);
- static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
- {
- 	struct device_node *np;
--	int ret;
-+	int ret = 0;
- 
- 	data->policy = cpufreq_cpu_get(0);
- 	if (!data->policy) {
-@@ -671,11 +671,12 @@ static int imx_thermal_register_legacy_cooling(struct imx_thermal_data *data)
- 		if (IS_ERR(data->cdev)) {
- 			ret = PTR_ERR(data->cdev);
- 			cpufreq_cpu_put(data->policy);
--			return ret;
- 		}
- 	}
- 
--	return 0;
-+	of_node_put(np);
-+
-+	return ret;
- }
- 
- static void imx_thermal_unregister_legacy_cooling(struct imx_thermal_data *data)
--- 
-2.25.1
+Also, if you really need an early console, then use earlycon.
 
+Rob
