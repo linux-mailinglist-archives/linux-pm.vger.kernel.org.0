@@ -2,93 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A47092187A9
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 14:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8CD2188DE
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 15:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728640AbgGHMez (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jul 2020 08:34:55 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:10909 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728965AbgGHMeu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 08:34:50 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f05bcff0000>; Wed, 08 Jul 2020 05:33:03 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 08 Jul 2020 05:34:49 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 08 Jul 2020 05:34:49 -0700
-Received: from [10.26.73.185] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 8 Jul
- 2020 12:34:48 +0000
-From:   Jon Hunter <jonathanh@nvidia.com>
-Subject: Re: [PATCH v2] cpuidle: tegra: Correctly handle result of
- arm_cpuidle_simple_enter()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-References: <20200702001354.27056-1-digetx@gmail.com>
-Message-ID: <4ffff3d8-2d41-3fb2-ed16-c9662d18d261@nvidia.com>
-Date:   Wed, 8 Jul 2020 13:34:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729451AbgGHNV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jul 2020 09:21:28 -0400
+Received: from vps.xff.cz ([195.181.215.36]:51474 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729147AbgGHNV2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Jul 2020 09:21:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1594214485; bh=U0WR2nFkpJx01kvx97N0svEG1PoUvQLse/Iz6UEIF6o=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=Yc33ukwUgxe3p/96KYESmRhcx5gU501uy7YW/oh+rAfvjilZRBXvapbETWR/8CTfu
+         qWlEM2h9+rYSdSCB9HuS5hck5XGd/fbmPrC6/YWALp6YS7uS3NSJPUqkmKi/Qz29vH
+         MyM/a3yOixCKCaHURD2NS2gr5gGI2NmflX2frvXE=
+Date:   Wed, 8 Jul 2020 15:21:24 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     linux-sunxi@googlegroups.com,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] thermal: sun8i: Be loud when probe fails
+Message-ID: <20200708132124.3b3iaavms43o622g@core.my.home>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Frank Lee <tiny.windzz@gmail.com>, linux-sunxi@googlegroups.com,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200708105527.868987-1-megous@megous.com>
+ <CAEExFWvR4QnAQsXBnxk3V776P+YVJzs4PU-HWJ7dfo4B6cdtkg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200702001354.27056-1-digetx@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1594211583; bh=+WiKehweVjFm/N1WTgoSGN3YwF0LWqAX6QQ458Y2Z4o=;
-        h=X-PGP-Universal:From:Subject:To:CC:References:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=NBOjwAFfGvCc0zWdBhGhm4frMUR2zarSDCnAcyTi9urKVTpk44xeBVG2iYLIAlRjG
-         m+d/qO6NEhsCW4YKqFAcpOBtmbPrR8AoVuox/bZkzMjQINDPYzNP94qBZEZvl6amxJ
-         wLWREHv4545+RiGMcZlHiiQTzlW16A2hOwGQS5zAlpu8biC3TZMGeaSM2+N/aXe/Vu
-         YwyKEUZOLwtJJct91E/p7HmJnbtPsDre5xECjpvNustGgKspSWs3auELLN+ML0SXr6
-         MaTK/AwupS4eOqGxWcUvcMomWYy23HBQKcyDfHG5SWn7zUmtT5lZ0QqZOvGBofpZZW
-         VNB/IjWof2IFg==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEExFWvR4QnAQsXBnxk3V776P+YVJzs4PU-HWJ7dfo4B6cdtkg@mail.gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 02/07/2020 01:13, Dmitry Osipenko wrote:
-> The enter() callback of CPUIDLE drivers returns index of the entered idle
-> state on success or a negative value on failure. The negative value could
-> any negative value, i.e. it doesn't necessarily needs to be a error code.
-> That's because CPUIDLE core only cares about the fact of failure and not
-> about the reason of the enter() failure.
+On Wed, Jul 08, 2020 at 07:55:40PM +0800, Frank Lee wrote:
+> HI Ondrej,
+> On Wed, Jul 8, 2020 at 6:55 PM Ondrej Jirman <megous@megous.com> wrote:
+> >
+> > I noticed several mobile Linux distributions failing to enable the
+> > thermal regulation correctly, because the kernel is silent
+> > when thermal driver fails to probe. Add enough error reporting
+> > to debug issues and warn users in case thermal sensor is failing
+> > to probe.
+> >
+> > Failing to notify users means, that SoC can easily overheat under
+> > load.
+> >
+> > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> > ---
+> >  drivers/thermal/sun8i_thermal.c | 55 ++++++++++++++++++++++++++-------
+> >  1 file changed, 43 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> > index 74d73be16496..9065e79ae743 100644
+> > --- a/drivers/thermal/sun8i_thermal.c
+> > +++ b/drivers/thermal/sun8i_thermal.c
+> > @@ -287,8 +287,12 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> >
+> >         calcell = devm_nvmem_cell_get(dev, "calibration");
+> >         if (IS_ERR(calcell)) {
+> > +               dev_err(dev, "Failed to get calibration nvmem cell (%ld)\n",
+> > +                       PTR_ERR(calcell));
+> > +
+> >                 if (PTR_ERR(calcell) == -EPROBE_DEFER)
+> >                         return -EPROBE_DEFER;
+> > +
+> >                 /*
+> >                  * Even if the external calibration data stored in sid is
+> >                  * not accessible, the THS hardware can still work, although
+> > @@ -308,6 +312,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> >         caldata = nvmem_cell_read(calcell, &callen);
+> >         if (IS_ERR(caldata)) {
+> >                 ret = PTR_ERR(caldata);
+> > +               dev_err(dev, "Failed to read calibration data (%d)\n",
+> > +                       ret);
+> >                 goto out;
+> >         }
+> >
+> > @@ -330,23 +336,35 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+> >                 return PTR_ERR(base);
+> >
+> >         tmdev->regmap = devm_regmap_init_mmio(dev, base, &config);
+> > -       if (IS_ERR(tmdev->regmap))
+> > +       if (IS_ERR(tmdev->regmap)) {
+> > +               dev_err(dev, "Failed to init regmap (%ld)\n",
+> > +                       PTR_ERR(tmdev->regmap));
+> >                 return PTR_ERR(tmdev->regmap);
+> > +       }
+> >
+> >         if (tmdev->chip->has_bus_clk_reset) {
+> >                 tmdev->reset = devm_reset_control_get(dev, NULL);
+> > -               if (IS_ERR(tmdev->reset))
+> > +               if (IS_ERR(tmdev->reset)) {
+> > +                       dev_err(dev, "Failed to get reset (%ld)\n",
+> > +                               PTR_ERR(tmdev->reset));
+> >                         return PTR_ERR(tmdev->reset);
+> > +               }
+> >
+> >                 tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
+> > -               if (IS_ERR(tmdev->bus_clk))
+> > +               if (IS_ERR(tmdev->bus_clk)) {
+> > +                       dev_err(dev, "Failed to get bus clock (%ld)\n",
+> > +                               PTR_ERR(tmdev->bus_clk));
+> >                         return PTR_ERR(tmdev->bus_clk);
+> > +               }
+> >         }
+> >
+> >         if (tmdev->chip->has_mod_clk) {
+> >                 tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
+> > -               if (IS_ERR(tmdev->mod_clk))
+> > +               if (IS_ERR(tmdev->mod_clk)) {
+> > +                       dev_err(dev, "Failed to get mod clock (%ld)\n",
+> > +                               PTR_ERR(tmdev->mod_clk));
+> >                         return PTR_ERR(tmdev->mod_clk);
+> > +               }
+> >         }
+> >
+> >         ret = reset_control_deassert(tmdev->reset);
+> > @@ -471,8 +489,12 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+> >                                                              i,
+> >                                                              &tmdev->sensor[i],
+> >                                                              &ths_ops);
+> > -               if (IS_ERR(tmdev->sensor[i].tzd))
+> > +               if (IS_ERR(tmdev->sensor[i].tzd)) {
+> > +                       dev_err(tmdev->dev,
+> > +                               "Failed to register sensor %d (%ld)\n",
+> > +                               i, PTR_ERR(tmdev->sensor[i].tzd));
+> >                         return PTR_ERR(tmdev->sensor[i].tzd);
+> > +               }
+> >
+> >                 if (devm_thermal_add_hwmon_sysfs(tmdev->sensor[i].tzd))
+> >                         dev_warn(tmdev->dev,
+> > @@ -501,19 +523,21 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+> >
+> >         ret = sun8i_ths_resource_init(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         irq = platform_get_irq(pdev, 0);
+> > -       if (irq < 0)
+> > -               return irq;
+> > +       if (irq < 0) {
+> > +               ret = irq;
+> > +               goto err_out;
+> > +       }
+> >
+> >         ret = tmdev->chip->init(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         ret = sun8i_ths_register(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         /*
+> >          * Avoid entering the interrupt handler, the thermal device is not
+> > @@ -523,10 +547,17 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+> >         ret = devm_request_threaded_irq(dev, irq, NULL,
+> >                                         sun8i_irq_thread,
+> >                                         IRQF_ONESHOT, "ths", tmdev);
+> > -       if (ret)
+> > -               return ret;
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to request irq (%d)\n", ret);
+> > +               goto err_out;
+> > +       }
+> >
+> > +       dev_info(dev, "Thermal sensor ready!\n");
+> >         return 0;
+> > +
+> > +err_out:
+> > +       dev_err(dev, "Failed to probe thermal sensor (%d)\n", ret);
 > 
-> Like every other enter() callback, the arm_cpuidle_simple_enter() returns
-> the entered idle-index on success. Unlike some of other drivers, it never
-> fails. It happened that TEGRA_C1=index=err=0 in the code of cpuidle-tegra
-> driver, and thus, there is no problem for the cpuidle-tegra driver created
-> by the typo in the code which assumes that the arm_cpuidle_simple_enter()
-> returns a error code.
+> When the driver fails, there will be this print. Isn't it superfluous
+> for you to add these？
 > 
-> The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_IDLE
-> is disabled in a kernel's config, but all CPUIDLE drivers are disabled if
-> CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't ever
-> see the error code from arm_cpuidle_simple_enter() today.
+> sun8i-thermal: probe of 5070400.thermal-sensor failed with error
+
+There's no such failure message in the case I investigated, which is
+EPROBE_DEFER failure waiting for nvmem driver that never loads,
+because it's not configured by the user to build.
+
+regards,
+	o.
+
 > 
-> Of course the code may get some changes in the future and then the typo
-> may transform into a real bug, so let's correct the typo in the code by
-> making tegra_cpuidle_enter() to directly return the index returned by the
-> arm_cpuidle_simple_enter().
-
-Are you suggesting that arm_cpuidle_simple_enter() could be updated to
-actually return an error? Sorry it is not clear to me what you are implying.
-
-Cheers
-Jon
-
--- 
-nvpublic
+> Yangtao
