@@ -2,88 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A76218196
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 09:45:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8592181D8
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 09:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgGHHpw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jul 2020 03:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43660 "EHLO
+        id S1727963AbgGHHx6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jul 2020 03:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726936AbgGHHpv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 03:45:51 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3203FC08C5DC;
-        Wed,  8 Jul 2020 00:45:51 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id q15so1857423wmj.2;
-        Wed, 08 Jul 2020 00:45:51 -0700 (PDT)
+        with ESMTP id S1727953AbgGHHx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 03:53:58 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4DC08E6DC
+        for <linux-pm@vger.kernel.org>; Wed,  8 Jul 2020 00:53:58 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id u185so17575945pfu.1
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jul 2020 00:53:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yvlYiPks6mhJ8cxYaoK6/i2US4+IgEbdzDKr7+cJ8uU=;
-        b=c8zH5rhPF+phZfOSXO2gDlN1DVl+v/Cx3tp71GVcxczbkc9prklYE502HeCl0glvy6
-         Z09D+iEq9UGcfSb1a+Mf5hdFW2kSYRq5dFk3pMDdgASp3i31c8uUpF2gg1s3hlAvH+JR
-         UeHsGHrHrBE9C3c8ngoZ2Sc51llOQhaNDHXJkEM/60yS52jr1OJuqKH4ujGoY5Fnxl7u
-         zJE1L7f98lSbSh0wJSbFRdGexe0fXqxTc3uScLviud8SaxkjPBP6jfRrR0P3n6lfLIYo
-         bMXKLmGeXt/PYevPZZYiYsE61OdxNMFgYvN0X9WtE1addVd/85HbCIuEl7p82T+E/g0e
-         4vBw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y55nygfLWId4LN/DVfidqEEz07PpT+kE/Of591U6tQ4=;
+        b=Xg5+rbjB4NptqIoHOkzJD8CBC9CdjUtEiqL6VhBe9weMoDUPG2r3x3/raQHvb+DQfw
+         z7VO288nlBCiFbODbJrcXUvNxl2qAwJp4QuldqLdXN6AMj9eMqdOkVyiYG/91TWuIuvC
+         j2L0f69XENjZEe26MlLnqG0lemBcCDxqqFoXWxYq6Vcy5lINlm18YvOPVR8Di4PnIh3w
+         DJQrNXwsbvEfzAHgFVkBFtkpJ6X2qFDCiaI7z4xK1T6JmywW7ZFzl2rjwFOH6RRVBDhl
+         pvQSyELHn9KwzfgDJx0yo6LGJuLYdqg+du4ZiHgZ7nXmznz2YYghQY1oVwn3oMgzzGss
+         IkoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yvlYiPks6mhJ8cxYaoK6/i2US4+IgEbdzDKr7+cJ8uU=;
-        b=kNqbzBNMrbd148eY2ayj8oOvhv6iUoanWYk8hsFBSdPqWDJjiey7QiKfrCyJRFfL29
-         X4sFRNyisGz6LyNmKQ9VwJ732ESuZk81roe3SYT5pyLBKlXcSKZKVsQUMAiqoLis3fiH
-         xDmC699gVZozV2GU/u840fe4YV/hS1wSBAH/ocmraS3aB2lSvueR8opqGUjN5nfV0sip
-         FLmN7Larqtw9UHDJrndIOTcoksXNYDYzQvspgJZ/e7I7nZscRkkEsaIs450ffimy4emm
-         U35iBSvCu72lkQiyPvIyKzKNlyftp2OQxQdveZB8bab85C095GUuMDJX3gjs5XUn2/bZ
-         lJSg==
-X-Gm-Message-State: AOAM530fm/F5Md6ZfH1CybysJWkXIdfXDjjAke66EFw1AmbZ3DT8Q7xh
-        CREu5KS4doGftS0CQgYNQBs=
-X-Google-Smtp-Source: ABdhPJyfCRKV9aKG3yjwH2QZVnVF+A1H/3zVPGdu0ei4zSGkOGEIMvWFCSdjaZrYu71+eOEVdiEAug==
-X-Received: by 2002:a05:600c:2249:: with SMTP id a9mr7625316wmm.163.1594194349997;
-        Wed, 08 Jul 2020 00:45:49 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:2e56:dcff:fed2:c6d6])
-        by smtp.googlemail.com with ESMTPSA id 65sm5495212wre.6.2020.07.08.00.45.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2020 00:45:49 -0700 (PDT)
-Date:   Wed, 8 Jul 2020 09:45:47 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, megous@megous.com, stefan@olimex.com,
-        bage@linutronix.de, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, liyong@allwinnertech.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        huangshuosheng@allwinnertech.com, linux-i2c@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 00/16] Allwinner A100 Initial support
-Message-ID: <20200708074547.GA19609@Red>
-References: <20200708071942.22595-1-frank@allwinnertech.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Y55nygfLWId4LN/DVfidqEEz07PpT+kE/Of591U6tQ4=;
+        b=V+hKbBqmNIwfC1ImlSPzJG424pxyKCvwBK9wT2729gj74P6JLNZvIXg1D2EJAcqIbT
+         BSv2qFcP8tXxd9FyXsm7pq8XXoIpnYKksPhjYgjOVh1YutgVBNopgAkgTCyrzNidRovZ
+         q5UqXcW+duazK8j9d/cRsEgSHVFel5NZg1pGVcghwAUvRof6Rtau6wqWSl8phwvtOKI6
+         yN95ouCQzjR66TZG5Y4bYX17KcLtTkH7wlUkeiwukzxPqFvxmhTtMUSA4evlTLo/skDR
+         NrFGBXFzoGJkguhba4cxwDyhx6LuJrhkk8kDPCnilualP7YQmxIu1NwpNuTv9Hr3VyBo
+         uMIA==
+X-Gm-Message-State: AOAM532E7FTdCUF0sCvPgShk7qpYfHpwEZZ24e5nCOq0AvE9Hs1/ViBB
+        xt0Q2QGAAW9V0uvyGtsPwR57gA==
+X-Google-Smtp-Source: ABdhPJwC7Vm1dEppffoA5E0fBMvPfXspEZc6nlyiGFReMPLoTylbUyWvT/PUDl6HviV+8iyvh8H8Gg==
+X-Received: by 2002:a62:178e:: with SMTP id 136mr51909249pfx.180.1594194837422;
+        Wed, 08 Jul 2020 00:53:57 -0700 (PDT)
+Received: from localhost ([122.172.40.201])
+        by smtp.gmail.com with ESMTPSA id m68sm4672626pje.24.2020.07.08.00.53.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 Jul 2020 00:53:56 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     stable@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Finley Xiao <finley.xiao@rock-chips.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [For-STABLE] thermal/drivers/cpufreq_cooling: Fix wrong frequency converted from power
+Date:   Wed,  8 Jul 2020 13:23:43 +0530
+Message-Id: <bc3978d0b7472c140e4d87f61138168a2a7b995c.1594194577.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708071942.22595-1-frank@allwinnertech.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 03:19:26PM +0800, Frank Lee wrote:
-> This patch set adds initial support for allwinner a100 soc,
-> which is a 64-bit tablet chip.
-> 
+From: Finley Xiao <finley.xiao@rock-chips.com>
 
-Hello
+commit 371a3bc79c11b707d7a1b7a2c938dc3cc042fffb upstream.
 
-Does a product already exists with it ? I couldnt found any.
-Does a datasheet is availlable ?
+The function cpu_power_to_freq is used to find a frequency and set the
+cooling device to consume at most the power to be converted. For example,
+if the power to be converted is 80mW, and the em table is as follow.
+struct em_cap_state table[] = {
+	/* KHz     mW */
+	{ 1008000, 36, 0 },
+	{ 1200000, 49, 0 },
+	{ 1296000, 59, 0 },
+	{ 1416000, 72, 0 },
+	{ 1512000, 86, 0 },
+};
+The target frequency should be 1416000KHz, not 1512000KHz.
 
-Regards
+Fixes: 349d39dc5739 ("thermal: cpu_cooling: merge frequency and power tables")
+Cc: <stable@vger.kernel.org> # v4.13+
+Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20200619090825.32747-1-finley.xiao@rock-chips.com
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Hi Greg,
+
+I am resending this as I got your emails of this failing on 4.14, 4.19
+and 5.4. This should be applied to all three of them.
+
+@Finley: I hope I have done it correctly, please do check it as this
+required me to rewrite the code to adapt to previous kernels.
+
+ drivers/thermal/cpu_cooling.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
+index 908a8014cf76..1f4387a5ceae 100644
+--- a/drivers/thermal/cpu_cooling.c
++++ b/drivers/thermal/cpu_cooling.c
+@@ -280,11 +280,11 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+ 	int i;
+ 	struct freq_table *freq_table = cpufreq_cdev->freq_table;
+ 
+-	for (i = 1; i <= cpufreq_cdev->max_level; i++)
+-		if (power > freq_table[i].power)
++	for (i = 0; i < cpufreq_cdev->max_level; i++)
++		if (power >= freq_table[i].power)
+ 			break;
+ 
+-	return freq_table[i - 1].frequency;
++	return freq_table[i].frequency;
+ }
+ 
+ /**
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
