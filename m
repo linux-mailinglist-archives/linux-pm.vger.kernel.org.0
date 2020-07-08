@@ -2,130 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8592181D8
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 09:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A891218280
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 10:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbgGHHx6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jul 2020 03:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44916 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727953AbgGHHx6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 03:53:58 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4DC08E6DC
-        for <linux-pm@vger.kernel.org>; Wed,  8 Jul 2020 00:53:58 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id u185so17575945pfu.1
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jul 2020 00:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y55nygfLWId4LN/DVfidqEEz07PpT+kE/Of591U6tQ4=;
-        b=Xg5+rbjB4NptqIoHOkzJD8CBC9CdjUtEiqL6VhBe9weMoDUPG2r3x3/raQHvb+DQfw
-         z7VO288nlBCiFbODbJrcXUvNxl2qAwJp4QuldqLdXN6AMj9eMqdOkVyiYG/91TWuIuvC
-         j2L0f69XENjZEe26MlLnqG0lemBcCDxqqFoXWxYq6Vcy5lINlm18YvOPVR8Di4PnIh3w
-         DJQrNXwsbvEfzAHgFVkBFtkpJ6X2qFDCiaI7z4xK1T6JmywW7ZFzl2rjwFOH6RRVBDhl
-         pvQSyELHn9KwzfgDJx0yo6LGJuLYdqg+du4ZiHgZ7nXmznz2YYghQY1oVwn3oMgzzGss
-         IkoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Y55nygfLWId4LN/DVfidqEEz07PpT+kE/Of591U6tQ4=;
-        b=V+hKbBqmNIwfC1ImlSPzJG424pxyKCvwBK9wT2729gj74P6JLNZvIXg1D2EJAcqIbT
-         BSv2qFcP8tXxd9FyXsm7pq8XXoIpnYKksPhjYgjOVh1YutgVBNopgAkgTCyrzNidRovZ
-         q5UqXcW+duazK8j9d/cRsEgSHVFel5NZg1pGVcghwAUvRof6Rtau6wqWSl8phwvtOKI6
-         yN95ouCQzjR66TZG5Y4bYX17KcLtTkH7wlUkeiwukzxPqFvxmhTtMUSA4evlTLo/skDR
-         NrFGBXFzoGJkguhba4cxwDyhx6LuJrhkk8kDPCnilualP7YQmxIu1NwpNuTv9Hr3VyBo
-         uMIA==
-X-Gm-Message-State: AOAM532E7FTdCUF0sCvPgShk7qpYfHpwEZZ24e5nCOq0AvE9Hs1/ViBB
-        xt0Q2QGAAW9V0uvyGtsPwR57gA==
-X-Google-Smtp-Source: ABdhPJwC7Vm1dEppffoA5E0fBMvPfXspEZc6nlyiGFReMPLoTylbUyWvT/PUDl6HviV+8iyvh8H8Gg==
-X-Received: by 2002:a62:178e:: with SMTP id 136mr51909249pfx.180.1594194837422;
-        Wed, 08 Jul 2020 00:53:57 -0700 (PDT)
-Received: from localhost ([122.172.40.201])
-        by smtp.gmail.com with ESMTPSA id m68sm4672626pje.24.2020.07.08.00.53.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 Jul 2020 00:53:56 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     stable@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [For-STABLE] thermal/drivers/cpufreq_cooling: Fix wrong frequency converted from power
-Date:   Wed,  8 Jul 2020 13:23:43 +0530
-Message-Id: <bc3978d0b7472c140e4d87f61138168a2a7b995c.1594194577.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        id S1726778AbgGHI3W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jul 2020 04:29:22 -0400
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21310 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbgGHI3V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 04:29:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1594196951; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=jD96cNVk4WverTyy8Fiywg+kdEL/iExZzz/45XYdWKHMcQqWMXjKX7SAVK47EUbHVysVrIgquEj32BdSoqIzyYQPOA6v7jHpKTHd8G1lGNWy1mfVxjrvo/XGD9xg/Js47E3Kv+Tb+8NPHjAVrytRgMMwBbbo5apq+b1GRcTUZE8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1594196951; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=7V0Y1mdQh92BH4uQ2n3obKmr9UwLXUfHi+CMhdVqZ7I=; 
+        b=eRhcCNShYcOKjlME9P9tC4Ai3qene2NJJPHEmHdgDZNbSQan6oMU+w4ybDajaJpQYIJx93BG+LX4hFHjIp8VPB+mK58tbLyVPCNBZzJnDg2B3ouoXgqWfezTRRAmQJbQbI9/w/ZhsoZ/bfpls7p2P2P/PINvPB7SIR8UIZmVP+I=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=qubes-os.org;
+        spf=pass  smtp.mailfrom=frederic.pierret@qubes-os.org;
+        dmarc=pass header.from=<frederic.pierret@qubes-os.org> header.from=<frederic.pierret@qubes-os.org>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1594196951;
+        s=s; d=qubes-os.org; i=frederic.pierret@qubes-os.org;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type;
+        bh=7V0Y1mdQh92BH4uQ2n3obKmr9UwLXUfHi+CMhdVqZ7I=;
+        b=dpMIFY/nDn9b7bmIhrA9OBVt4TVjnNylOrM4wh4fHIATv0mAQQFHjysXoZFfihei
+        9JyUuX9FEIEs+D/HDGsKLc0uxfQCYp666gB/BPdWTaQ8yJw1oj15GMKyLAT/NFkwsx2
+        fSvvDnnUHE/cku2t8Uwb2x6pnEeIfenrXoebt1e4=
+Received: from [10.137.0.45] (92.188.110.153 [92.188.110.153]) by mx.zohomail.com
+        with SMTPS id 15941969340521007.984087864391; Wed, 8 Jul 2020 01:28:54 -0700 (PDT)
+Subject: Re: dummy-psu
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
+        <marmarek@invisiblethingslab.com>
+References: <a8223cce-636f-578b-7304-eb0e4868e018@qubes-os.org>
+ <ccb6ed3d-db27-1648-d4bd-94efc8508e41@qubes-os.org>
+ <20200619165920.q6oj4w43rqxhoqlp@earth.universe>
+From:   =?UTF-8?B?RnLDqWTDqXJpYyBQaWVycmV0?= 
+        <frederic.pierret@qubes-os.org>
+Message-ID: <a23092db-2e3b-e4c3-03b9-a6d5c4d98b21@qubes-os.org>
+Date:   Wed, 8 Jul 2020 10:28:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200619165920.q6oj4w43rqxhoqlp@earth.universe>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="XBQDRtHYLdz3ogl28y10kqi1lQHMCAq1E"
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Finley Xiao <finley.xiao@rock-chips.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--XBQDRtHYLdz3ogl28y10kqi1lQHMCAq1E
+Content-Type: multipart/mixed; boundary="LciCClYidhrukSYD1JcNwbRWwuwpKyvvw"
 
-commit 371a3bc79c11b707d7a1b7a2c938dc3cc042fffb upstream.
+--LciCClYidhrukSYD1JcNwbRWwuwpKyvvw
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-The function cpu_power_to_freq is used to find a frequency and set the
-cooling device to consume at most the power to be converted. For example,
-if the power to be converted is 80mW, and the em table is as follow.
-struct em_cap_state table[] = {
-	/* KHz     mW */
-	{ 1008000, 36, 0 },
-	{ 1200000, 49, 0 },
-	{ 1296000, 59, 0 },
-	{ 1416000, 72, 0 },
-	{ 1512000, 86, 0 },
-};
-The target frequency should be 1416000KHz, not 1512000KHz.
+Hi Sebastian,
 
-Fixes: 349d39dc5739 ("thermal: cpu_cooling: merge frequency and power tables")
-Cc: <stable@vger.kernel.org> # v4.13+
-Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20200619090825.32747-1-finley.xiao@rock-chips.com
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Hi Greg,
+First of all, thank you for your answer. I'm currently working on a secon=
+d version according to your suggestion. Here I'm using ioctl + misc devic=
+e in order to register any type of PSU device. I'm only having an issue o=
+n how to get the maximum allowed power_supply_property https://git.kernel=
+=2Eorg/pub/scm/linux/kernel/git/stable/linux.git/tree/include/linux/power=
+_supply.h?h=3Dv5.7.7#n164. I'm seeing in git log that this enum has new e=
+ntries in the middle of it's declaration so getting the upper limit of al=
+lowed properties seems tricky.
 
-I am resending this as I got your emails of this failing on 4.14, 4.19
-and 5.4. This should be applied to all three of them.
+For example in my current implementation, I'm allowing with ioctl to add =
+any number of properties the user want to add before registering. A check=
+ is done if the supplied value is in range of zero and currently the uppe=
+r limit, POWER_SUPPLY_PROP_SERIAL_NUMBER. Do you have any suggestion on h=
+ow should I get this upper limit without hardcoding some specific value? =
+This current issue is because I don't want to trust user input...
 
-@Finley: I hope I have done it correctly, please do check it as this
-required me to rewrite the code to adapt to previous kernels.
+I'm not C or kernel fluent so I apologize if my question looks stupid.
 
- drivers/thermal/cpu_cooling.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Best regards,
+Fr=E9d=E9ric
 
-diff --git a/drivers/thermal/cpu_cooling.c b/drivers/thermal/cpu_cooling.c
-index 908a8014cf76..1f4387a5ceae 100644
---- a/drivers/thermal/cpu_cooling.c
-+++ b/drivers/thermal/cpu_cooling.c
-@@ -280,11 +280,11 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- 	int i;
- 	struct freq_table *freq_table = cpufreq_cdev->freq_table;
- 
--	for (i = 1; i <= cpufreq_cdev->max_level; i++)
--		if (power > freq_table[i].power)
-+	for (i = 0; i < cpufreq_cdev->max_level; i++)
-+		if (power >= freq_table[i].power)
- 			break;
- 
--	return freq_table[i - 1].frequency;
-+	return freq_table[i].frequency;
- }
- 
- /**
--- 
-2.25.0.rc1.19.g042ed3e048af
+On 2020-06-19 18:59, Sebastian Reichel wrote:
+> Hi Fr=E9d=E9ric,
+>=20
+> On Mon, Jun 15, 2020 at 06:44:11PM +0200, Fr=E9d=E9ric Pierret wrote:
+>> On 2020-06-05 16:02, Fr=E9d=E9ric Pierret wrote:
+>>> Dear all,
+>>>
+>>> I'm working on a kernel module currently called "dummy-psu"
+>>> (https://github.com/fepitre/dummy-psu) which creates a power
+>>> supply AC and a battery like in
+>>> 'drivers/power/supply/test_power.c'. After loaded, this driver
+>>> allows to modify integer values of the virtual psu created
+>>> through its sysfs attribute directly. String values are
+>>> currently set through module parameters. Such module allows for
+>>> example to test ACPI tools or desktop plugins.
+>>>
+>>> In the context of the Qubes OS project, it allows to setup into
+>>> a VM, PSU components with real information coming from the host
+>>> system battery or ac with some refresh time.
+>>>
+>>> I'm writing to you to know if you would be interested to have
+>>> such module integrating side to test_power.c.
+>>>
+>>> Another name could be "virtual-psu". Any kind of improvements
+>>> are very welcomed. Thank you.
+>>>
+>>> Best regards,
+>>> Fr=E9d=E9ric Pierret
+>>
+>> Dear all,
+>> Just a little ping to know if anyone has been interested in this
+>> project.
+>>
+>> Best regards,
+>> Fr=E9d=E9ric Pierret
+>=20
+> I think it would be worthwile to have something like this for
+> the power-supply framework. This is useful for your VM case,
+> testing the power-supply API in a better way than test_power.c
+> and for peripheral devices with userspace drivers.
+>=20
+> But I don't think it's a good idea to use the sysfs files as
+> input. There should be support to register multiple virtual
+> devices (e.g. battery and AC in your case, or multiple BT
+> peripherals). Also the sysfs interface does not allow you to
+> change multiple values atomically. I think the proper way is
+> to do it the same way as uinput and register a miscdevice.
+>=20
+> -- Sebastian
+>=20
 
+
+--LciCClYidhrukSYD1JcNwbRWwuwpKyvvw--
+
+--XBQDRtHYLdz3ogl28y10kqi1lQHMCAq1E
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEn6ZLkvlecGvyjiymSEAQtc3FduIFAl8Fg70ACgkQSEAQtc3F
+duKYcA//ROWr4FDw3sDN+z94Cx2i6TVI2KDfYwuR3PUDLxNo2ze4tzRKRevt435I
+6KoPDHwfQjqYxIRPMbsPov0tzyO5DSwVYxaFSBD1NX4ICop8Tnc983lngRqbXMA7
+D4BMvmInmRW/ekXhGd3CY/uye9EME45gRO2M0ZpZG4w2PEJgCfGJmGip7yRVaKYy
+9H+iSygSP6pJO2FbKVZxidHe/IoqSJvwAfFtWOls/5sCwfWBTesoOFM9+N8UB5/E
+xHMxVkz4sJraOrCtU3VUS/K4H0ygZU21eG1DTSNWdwuILiXvMuRNqb+HNMSbDhjO
+M0WcrPYy3PPvA4BWo20iRHUOZhpJKnsfCdJd3FEZ45Ej6mOECSBD9XNJdCwz3lYI
+UkPqu9f5QkWZWyIxyaXdzAmU0DwujGYnhQ5wfFKBxlU/aBdhOTuNAvHTU/kRAt1N
+3c+nN4PkHSfWklegxbBLooitwGLt2+wXWNt+c5V0mtT/a0yGHDFswwyIdiwlKTIt
+OMS35SZnT8JgZ2RY+VSkrHpaT3H0UUToUmUYSyuIgEym7Y2yFDacVMw4BsqCCdaq
+wQl2DAte47cTXrpuNJBfhgc8ZmP8aFWe4Y386dmd0YYxaZeP/dZXbdOTj8HJSaDs
+Qsx26k8Z82MuVzg0isBGuuCth/YBLnjE4qr3UFQlhVSFHfRfKj4=
+=T4S3
+-----END PGP SIGNATURE-----
+
+--XBQDRtHYLdz3ogl28y10kqi1lQHMCAq1E--
