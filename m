@@ -2,102 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBDF2188FE
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 15:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C2E21891D
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jul 2020 15:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729416AbgGHN3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 8 Jul 2020 09:29:52 -0400
-Received: from wnew3-smtp.messagingengine.com ([64.147.123.17]:59809 "EHLO
-        wnew3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728148AbgGHN3w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 8 Jul 2020 09:29:52 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 75059B4A;
-        Wed,  8 Jul 2020 09:29:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 08 Jul 2020 09:29:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=J
-        gqM+l7NWg3T7iC7VFNhEk0S3/jtNUOXIDLh0bXRuPI=; b=kewKNCCYBt56UwdbX
-        zn044rAYxmzBJCeLQQNYNx/m9SG5nut+WSWsNX5vxS8FTmHXC3SeY4ER3oj9d9h9
-        xe2O07Y5Wu7UDKJpEATK8NOUkxjXDjx7TpIwtlhnDVhgoZ4qUB+I9gnrtGECiYK5
-        bqWFvgVUYXW+G/+O+fbnE7BsUFDmfBXRZCm61cQh+fUmjXueVLS/J/73h7OueIDw
-        wsid/eB3Q8o11vx6tcvAsiOHr1rV/CTlIXYzUM+ChdtyvsX1wqN1pRITjPDKRZkR
-        uU+615lNx1XSRjxaLPjfra8VuSB7Fhe0DRi+6ecallrGWm2LIy2uCZvDVje360tB
-        s/YPQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=JgqM+l7NWg3T7iC7VFNhEk0S3/jtNUOXIDLh0bXRu
-        PI=; b=fOf9EPcxN5J7ynthXkbJPdNJO/1BGgVihQjEkUiqzXckLxoaUEj5sDbVT
-        /BNC1wdMsuj4lB4X/rBAbhWAg10DN5y6xyHpRAxYboL6LhZJj38KG0+CyVobLVKT
-        nH6XnWQjQ4x/C04NHL/HF8PEr7XN9zzEnMMr2z5hmh85Up/EswW1V6iG0C9bKmF3
-        KyplaGdTlBbwFLsAKXgII4t2Ryll2RsNQ4p/tgvNAreohqZeQmukmsSt4zsAcTPV
-        d+ciO/VxoMb9oVWbAlzoBAAMuf3GCSrgnGvuwz4YVRjm8lAq7gS2vY0gD8cDqPkA
-        5asGg7vcEt4Xy7un0vr/l2ueER5uw==
-X-ME-Sender: <xms:TcoFX-dzCiiMKARQniK_Gw03jjY1aIF51uZ4yRzPGoz52M6e6G1eyg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrudejgdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepgfejtedtjefggfffvdetuedthedtheegheeuteekfeeghfdtteejkeeludeg
-    vddunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:TcoFX4P_fuOmUd6qlOAcZlEDBZV08JYlRqf6-1xo0FrfdgoKwgnBRw>
-    <xmx:TcoFX_jUxhRXpkQIlw5JpcTEMC9iqk462LdouhftMmQJ8wYY1Mq5EA>
-    <xmx:TcoFX7_pgiWplmI427ydtAcQKaGQ4G1J3WpzSHsO_3th5f22jDaEOw>
-    <xmx:TsoFX39wA5uCrKhSFtWpjEP_v7gfnYoxNTyHw1MYManT7Pp9lKu42U9i9Ag>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F3E61328006A;
-        Wed,  8 Jul 2020 09:29:48 -0400 (EDT)
-Date:   Wed, 8 Jul 2020 15:29:47 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Ondrej Jirman <megous@megous.com>
+        id S1729640AbgGHNdH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 8 Jul 2020 09:33:07 -0400
+Received: from vps.xff.cz ([195.181.215.36]:51824 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729147AbgGHNdH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 8 Jul 2020 09:33:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1594215185; bh=idGKF3JzxhsuONqMIcvOgw3WlXUUbr9YQZ9VScLBUYg=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=Rp56wWkG9R4RLksIW7bT1P61QkUVxcyv2wX+/7vHCpxeoUMSrE1Bi6DgyZSXgqc8+
+         y/DikjqGDtr6N9UFBztaPkoS+vvTdOUXWMHEQ4t/na3QL9r1uv9Fim0TQ0sifgFNcO
+         iqkuaF/HsWznZrrsKSlbyTFB8bEPCgx8GX356vho=
+Date:   Wed, 8 Jul 2020 15:33:05 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Frank Lee <tiny.windzz@gmail.com>
 Cc:     linux-sunxi@googlegroups.com,
         Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
         "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
         "moderated list:ARM/Allwinner sunXi SoC support" 
         <linux-arm-kernel@lists.infradead.org>,
         open list <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] thermal: sun8i: Be loud when probe fails
-Message-ID: <20200708132947.6rsgsqychmtzvuhr@gilmour.lan>
+Message-ID: <20200708133305.hpvxybbsy3xdxtmp@core.my.home>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Frank Lee <tiny.windzz@gmail.com>, linux-sunxi@googlegroups.com,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
 References: <20200708105527.868987-1-megous@megous.com>
+ <CAEExFWvR4QnAQsXBnxk3V776P+YVJzs4PU-HWJ7dfo4B6cdtkg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200708105527.868987-1-megous@megous.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEExFWvR4QnAQsXBnxk3V776P+YVJzs4PU-HWJ7dfo4B6cdtkg@mail.gmail.com>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 12:55:27PM +0200, Ondrej Jirman wrote:
-> @@ -523,10 +547,17 @@ static int sun8i_ths_probe(struct platform_device *=
-pdev)
->  	ret =3D devm_request_threaded_irq(dev, irq, NULL,
->  					sun8i_irq_thread,
->  					IRQF_ONESHOT, "ths", tmdev);
-> -	if (ret)
-> -		return ret;
-> +	if (ret) {
-> +		dev_err(dev, "Failed to request irq (%d)\n", ret);
-> +		goto err_out;
-> +	}
-> =20
-> +	dev_info(dev, "Thermal sensor ready!\n");
->  	return 0;
+On Wed, Jul 08, 2020 at 07:55:40PM +0800, Frank Lee wrote:
+> HI Ondrej,
+> On Wed, Jul 8, 2020 at 6:55 PM Ondrej Jirman <megous@megous.com> wrote:
+> >
+> > I noticed several mobile Linux distributions failing to enable the
+> > thermal regulation correctly, because the kernel is silent
+> > when thermal driver fails to probe. Add enough error reporting
+> > to debug issues and warn users in case thermal sensor is failing
+> > to probe.
+> >
+> > Failing to notify users means, that SoC can easily overheat under
+> > load.
+> >
+> > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> > ---
+> >  drivers/thermal/sun8i_thermal.c | 55 ++++++++++++++++++++++++++-------
+> >  1 file changed, 43 insertions(+), 12 deletions(-)
+> >
+> > diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> > index 74d73be16496..9065e79ae743 100644
+> > --- a/drivers/thermal/sun8i_thermal.c
+> > +++ b/drivers/thermal/sun8i_thermal.c
+> > @@ -287,8 +287,12 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> >
+> >         calcell = devm_nvmem_cell_get(dev, "calibration");
+> >         if (IS_ERR(calcell)) {
+> > +               dev_err(dev, "Failed to get calibration nvmem cell (%ld)\n",
+> > +                       PTR_ERR(calcell));
+> > +
+> >                 if (PTR_ERR(calcell) == -EPROBE_DEFER)
+> >                         return -EPROBE_DEFER;
+> > +
+> >                 /*
+> >                  * Even if the external calibration data stored in sid is
+> >                  * not accessible, the THS hardware can still work, although
+> > @@ -308,6 +312,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> >         caldata = nvmem_cell_read(calcell, &callen);
+> >         if (IS_ERR(caldata)) {
+> >                 ret = PTR_ERR(caldata);
+> > +               dev_err(dev, "Failed to read calibration data (%d)\n",
+> > +                       ret);
+> >                 goto out;
+> >         }
+> >
+> > @@ -330,23 +336,35 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+> >                 return PTR_ERR(base);
+> >
+> >         tmdev->regmap = devm_regmap_init_mmio(dev, base, &config);
+> > -       if (IS_ERR(tmdev->regmap))
+> > +       if (IS_ERR(tmdev->regmap)) {
+> > +               dev_err(dev, "Failed to init regmap (%ld)\n",
+> > +                       PTR_ERR(tmdev->regmap));
+> >                 return PTR_ERR(tmdev->regmap);
+> > +       }
+> >
+> >         if (tmdev->chip->has_bus_clk_reset) {
+> >                 tmdev->reset = devm_reset_control_get(dev, NULL);
+> > -               if (IS_ERR(tmdev->reset))
+> > +               if (IS_ERR(tmdev->reset)) {
+> > +                       dev_err(dev, "Failed to get reset (%ld)\n",
+> > +                               PTR_ERR(tmdev->reset));
+> >                         return PTR_ERR(tmdev->reset);
+> > +               }
+> >
+> >                 tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
+> > -               if (IS_ERR(tmdev->bus_clk))
+> > +               if (IS_ERR(tmdev->bus_clk)) {
+> > +                       dev_err(dev, "Failed to get bus clock (%ld)\n",
+> > +                               PTR_ERR(tmdev->bus_clk));
+> >                         return PTR_ERR(tmdev->bus_clk);
+> > +               }
+> >         }
+> >
+> >         if (tmdev->chip->has_mod_clk) {
+> >                 tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
+> > -               if (IS_ERR(tmdev->mod_clk))
+> > +               if (IS_ERR(tmdev->mod_clk)) {
+> > +                       dev_err(dev, "Failed to get mod clock (%ld)\n",
+> > +                               PTR_ERR(tmdev->mod_clk));
+> >                         return PTR_ERR(tmdev->mod_clk);
+> > +               }
+> >         }
+> >
+> >         ret = reset_control_deassert(tmdev->reset);
+> > @@ -471,8 +489,12 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+> >                                                              i,
+> >                                                              &tmdev->sensor[i],
+> >                                                              &ths_ops);
+> > -               if (IS_ERR(tmdev->sensor[i].tzd))
+> > +               if (IS_ERR(tmdev->sensor[i].tzd)) {
+> > +                       dev_err(tmdev->dev,
+> > +                               "Failed to register sensor %d (%ld)\n",
+> > +                               i, PTR_ERR(tmdev->sensor[i].tzd));
+> >                         return PTR_ERR(tmdev->sensor[i].tzd);
+> > +               }
+> >
+> >                 if (devm_thermal_add_hwmon_sysfs(tmdev->sensor[i].tzd))
+> >                         dev_warn(tmdev->dev,
+> > @@ -501,19 +523,21 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+> >
+> >         ret = sun8i_ths_resource_init(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         irq = platform_get_irq(pdev, 0);
+> > -       if (irq < 0)
+> > -               return irq;
+> > +       if (irq < 0) {
+> > +               ret = irq;
+> > +               goto err_out;
+> > +       }
+> >
+> >         ret = tmdev->chip->init(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         ret = sun8i_ths_register(tmdev);
+> >         if (ret)
+> > -               return ret;
+> > +               goto err_out;
+> >
+> >         /*
+> >          * Avoid entering the interrupt handler, the thermal device is not
+> > @@ -523,10 +547,17 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+> >         ret = devm_request_threaded_irq(dev, irq, NULL,
+> >                                         sun8i_irq_thread,
+> >                                         IRQF_ONESHOT, "ths", tmdev);
+> > -       if (ret)
+> > -               return ret;
+> > +       if (ret) {
+> > +               dev_err(dev, "Failed to request irq (%d)\n", ret);
+> > +               goto err_out;
+> > +       }
+> >
+> > +       dev_info(dev, "Thermal sensor ready!\n");
+> >         return 0;
+> > +
+> > +err_out:
+> > +       dev_err(dev, "Failed to probe thermal sensor (%d)\n", ret);
+> 
+> When the driver fails, there will be this print. Isn't it superfluous
+> for you to add these？
+> 
+> sun8i-thermal: probe of 5070400.thermal-sensor failed with error
 
-I missed that in my first mail, but I'm not sure we want to print
-anything on success. This doesn't bring any value and that will only
-make it harder to find errors in other drivers.
+Thinking more about it. You're right. This is probably only shown for
+non-EPROBE_DEFER errors. So this printk is superfluous, since EPROBE_DEFER
+from nvmem/sid is already shown elsewhere in this patch.
 
-Maxime
+thanks,
+	o.
+
+> 
+> Yangtao
