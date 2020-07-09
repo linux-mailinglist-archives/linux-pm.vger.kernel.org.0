@@ -2,234 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9BE21A97A
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 23:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003C521A97C
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 23:04:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726220AbgGIVBT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 17:01:19 -0400
-Received: from cmta17.telus.net ([209.171.16.90]:40954 "EHLO cmta17.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726193AbgGIVBS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Jul 2020 17:01:18 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id tdfMjniArYgvrtdfNjUXWn; Thu, 09 Jul 2020 15:01:15 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1594328475; bh=DO1Bu4NVVoKXFJHl4WRTu15YNf8zO2Urudde2JxqiC8=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=C4zOU/O3yx44XMRv35z8PHjCaLmnD5r7pb88Sto4Ohe6KkEz+xdWC0tEfu59EuTZ4
-         +diYDwHvSuLSOZCytzGQxWM0mF9jSqYtcoks+x+nmXiwEEAQ2cEYrNlMknVAp//RGw
-         O0ovoppc+NTt5gxX33LQvy8TD/HqBdSFsfpc6pr8bZpZjZd6sKyqIwi5YfG5x2ta/u
-         mMG9in4vpqPNdtc2fj4w6l4KXR0G2t7AeI6wQs5ZGCGi4ojlHK6MLN0fXIADAB3wIs
-         /HZE1e7nXJswRBAiFfn8/a6zj7L1BrACM5Ilawc27Gvbw+F8rKm2qAtz93n8eK5CjA
-         gx/hcxJyquWJg==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=MIQeZ/Rl c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
- a=zMdRSeC2V0WUCyk-5DIA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <2016232.ihCVsphvri@kreacher> <2988949.NgUrjYMkJj@kreacher>
-In-Reply-To: <2988949.NgUrjYMkJj@kreacher>
-Subject: RE: [PATCH 2/2] cpufreq: intel_pstate: Use passive mode by default without HWP
-Date:   Thu, 9 Jul 2020 14:01:11 -0700
-Message-ID: <000801d65634$14f0ecb0$3ed2c610$@net>
+        id S1726222AbgGIVEw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 17:04:52 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:40453 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbgGIVEw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 17:04:52 -0400
+Received: by mail-io1-f67.google.com with SMTP id q8so3830856iow.7;
+        Thu, 09 Jul 2020 14:04:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=ep2BUalGoUDMYiRgPfHR0K5E7uXRpZtzmzl5wMZRFHs=;
+        b=AA7h/I7bauQk7abixJNncQ1aG7YAueNZEsj/fiA9sBsdq8245RqKrRTJXTgoMUIpt/
+         4Q0TW0wHHs2hzkI0D3HXUx4wFAu4sx4o3u0reOT40nu4PXaORKVn93G4ZbnXmHkdWwFI
+         96JGzwoXWFMIOgcWw9OuYKNvZCXs9SfW0lwIFruNsQvymFgAHmxyK1Gd+qUQvURqrkZ+
+         M93nafNiQ2jRwcG+6WXqtSCEubJsrFGz6VkxmwsdbsoqzaqqwO1/qjPIn5Aa3dRumZ82
+         g+ec7sAabgIemW01IlMMyncuBLa8tmtHzUqFPU0Y56G9pOF10VAtTjdsVNo44Q1zvWBy
+         1jFw==
+X-Gm-Message-State: AOAM530528xuNMhoaWv0viItMQMdr+5m0B0qkWYTD3O+DpAVGb+bI66Q
+        SS3j0oTEqEvXfdqtvNqiiw==
+X-Google-Smtp-Source: ABdhPJzzckh793p74m62K2t6bgxJyhqTwep2hglKcjMTiXCsSoxr/OlqW/k8gyAtxdeWk6fveOx07A==
+X-Received: by 2002:a02:cd06:: with SMTP id g6mr43286633jaq.37.1594328690447;
+        Thu, 09 Jul 2020 14:04:50 -0700 (PDT)
+Received: from xps15 ([64.188.179.254])
+        by smtp.gmail.com with ESMTPSA id g8sm2399655ilq.49.2020.07.09.14.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Jul 2020 14:04:49 -0700 (PDT)
+Received: (nullmailer pid 883283 invoked by uid 1000);
+        Thu, 09 Jul 2020 21:04:48 -0000
+Date:   Thu, 9 Jul 2020 15:04:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
+Cc:     georgi.djakov@linaro.org, cw00.choi@samsung.com, krzk@kernel.org,
+        devicetree@vger.kernel.org, a.swigon@samsung.com,
+        myungjoo.ham@samsung.com, inki.dae@samsung.com,
+        sw0312.kim@samsung.com, b.zolnierkie@samsung.com,
+        m.szyprowski@samsung.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC v6 1/6] dt-bindings: exynos-bus: Add documentation
+ for interconnect properties
+Message-ID: <20200709210448.GA876103@bogus>
+References: <20200702163724.2218-1-s.nawrocki@samsung.com>
+ <CGME20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3@eucas1p2.samsung.com>
+ <20200702163724.2218-2-s.nawrocki@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdYFAJargBggJ0TwR7qfhutpuszfMhRKzmYA
-X-CMAE-Envelope: MS4wfFH9BkYFuVxjO56y8+N3Ib/kkgigvoFuwtSboGqrttZaQE488zlSPJzRQlPGcCGGuMCEUEQKYGj6fkyXedT/ukZxD254yCs1DavUvyWAy2689+fu9Lgj
- m3xHlM7CKmH1BAylD5dLGXco8HrI9ri/eQd1b1zPmAjeIOqOUAJU7hO+iORuwlvSjdcPLFCtRjklPfgXSlzm94m+FdJatqbEcKqXD3WsKrBpI/DjJoDGZY+M
- bD8FK+YAn8mU4dat+RRr0zNVN6hgJco1iyMN5G2SZT1n24wpJe1+0kMDowY0EzTPPHUAbCrb5DCzsr+QM889C5yOuQMMYcQKgtPPv1MKgaLmY6EIYDHwuL6C
- ubMbIIqg5MmPsCX05i0anDYokXSPiA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200702163724.2218-2-s.nawrocki@samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-As you may or may not recall, I am attempting to untangle
-and separate multiple compounding issues around the
-intel_pstate driver and HWP (or not).
-
-Until everything is figured out, I am using the following rules:
-
-. never use x86_energy_perf_policy.
-. For HWP disabled: never change from active to passive or via versa, but rather do it via boot.
-. after boot always check and reset the various power limit log bits that are set.
-. never compile the kernel (well, until after any tests), which will set those bits again.
-. never run prime95 high heat torture test, which will set those bits again.
-. try to never do anything else that will set those bits again.
-
-On 2020.03.28 05:58 Rafael J. Wysocki wrote:
+On Thu, Jul 02, 2020 at 06:37:19PM +0200, Sylwester Nawrocki wrote:
+> Add documentation for new optional properties in the exynos bus nodes:
+> samsung,interconnect-parent, #interconnect-cells, bus-width.
+> These properties allow to specify the SoC interconnect structure which
+> then allows the interconnect consumer devices to request specific
+> bandwidth requirements.
 > 
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> After recent changes allowing scale-invariant utilization to be
-> used on x86, the schedutil governor on top of intel_pstate in the
-> passive mode should be on par with (or better than) the active mode
-> "powersave" algorithm of intel_pstate on systems in which
-> hardware-managed P-states (HWP) are not used, so it should not be
-> necessary to use the internal scaling algorithm in those cases.
-> 
-> Accordingly, modify intel_pstate to start in the passive mode by
-> default if the processor at hand does not support HWP of if the driver
-> is requested to avoid using HWP through the kernel command line.
-> 
-> Among other things, that will allow utilization clamps and the
-> support for RT/DL tasks in the schedutil governor to be utilized on
-> systems in which intel_pstate is used.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
 > ---
->  Documentation/admin-guide/pm/intel_pstate.rst | 32 ++++++++++++++++-----------
->  drivers/cpufreq/intel_pstate.c                |  3 ++-
->  2 files changed, 21 insertions(+), 14 deletions(-)
+> Changes for v6:
+>  - added dts example of bus hierarchy definition and the interconnect
+>    consumer,
+>  - added new bus-width property.
 > 
-> diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-
-> guide/pm/intel_pstate.rst
-> index ad392f3aee06..39d80bc29ccd 100644
-> --- a/Documentation/admin-guide/pm/intel_pstate.rst
-> +++ b/Documentation/admin-guide/pm/intel_pstate.rst
-> @@ -62,9 +62,10 @@ on the capabilities of the processor.
->  Active Mode
->  -----------
+> Changes for v5:
+>  - exynos,interconnect-parent-node renamed to samsung,interconnect-parent
+> ---
+>  .../devicetree/bindings/devfreq/exynos-bus.txt     | 68 +++++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 2 deletions(-)
 > 
-> -This is the default operation mode of ``intel_pstate``.  If it works in this
-> -mode, the ``scaling_driver`` policy attribute in ``sysfs`` for all ``CPUFreq``
-> -policies contains the string "intel_pstate".
-> +This is the default operation mode of ``intel_pstate`` for processors with
-> +hardware-managed P-states (HWP) support.  If it works in this mode, the
-> +``scaling_driver`` policy attribute in ``sysfs`` for all ``CPUFreq`` policies
-> +contains the string "intel_pstate".
+> diff --git a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> index e71f752..4035e3e 100644
+> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+> @@ -51,6 +51,13 @@ Optional properties only for parent bus device:
+>  - exynos,saturation-ratio: the percentage value which is used to calibrate
+>  			the performance count against total cycle count.
+>  
+> +Optional properties for interconnect functionality (QoS frequency constraints):
+> +- samsung,interconnect-parent: phandle to the parent interconnect node; for
+> +  passive devices should point to same node as the exynos,parent-bus property.
+
+Adding vendor specific properties for a common binding defeats the 
+point.
+
+> +- #interconnect-cells: should be 0.
+> +- bus-width: the interconnect bus width in bits, default value is 8 when this
+> +  property is missing.
+
+Your bus is 8-bits or 4-bits as the example?
+
+> +
+>  Detailed correlation between sub-blocks and power line according to Exynos SoC:
+>  - In case of Exynos3250, there are two power line as following:
+>  	VDD_MIF |--- DMC
+> @@ -135,7 +142,7 @@ Detailed correlation between sub-blocks and power line according to Exynos SoC:
+>  		|--- PERIC (Fixed clock rate)
+>  		|--- FSYS  (Fixed clock rate)
+>  
+> -Example1:
+> +Example 1:
+>  	Show the AXI buses of Exynos3250 SoC. Exynos3250 divides the buses to
+>  	power line (regulator). The MIF (Memory Interface) AXI bus is used to
+>  	transfer data between DRAM and CPU and uses the VDD_MIF regulator.
+> @@ -184,7 +191,7 @@ Example1:
+>  	|L5   |200000 |200000  |400000 |300000 |       ||1000000 |
+>  	----------------------------------------------------------
+>  
+> -Example2 :
+> +Example 2:
+>  	The bus of DMC (Dynamic Memory Controller) block in exynos3250.dtsi
+>  	is listed below:
+>  
+> @@ -419,3 +426,60 @@ Example2 :
+>  		devfreq = <&bus_leftbus>;
+>  		status = "okay";
+>  	};
+> +
+> +Example 3:
+> +	An interconnect path "bus_display -- bus_leftbus -- bus_dmc" on
+> +	Exynos4412 SoC with video mixer as an interconnect consumer device.
+> +
+> +	soc {
+> +		bus_dmc: bus_dmc {
+> +			compatible = "samsung,exynos-bus";
+> +			clocks = <&clock CLK_DIV_DMC>;
+> +			clock-names = "bus";
+> +			operating-points-v2 = <&bus_dmc_opp_table>;
+> +			bus-width = <4>;
+> +			#interconnect-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		bus_leftbus: bus_leftbus {
+> +			compatible = "samsung,exynos-bus";
+> +			clocks = <&clock CLK_DIV_GDL>;
+> +			clock-names = "bus";
+> +			operating-points-v2 = <&bus_leftbus_opp_table>;
+> +			samsung,interconnect-parent = <&bus_dmc>;
+> +			#interconnect-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		bus_display: bus_display {
+> +			compatible = "samsung,exynos-bus";
+> +			clocks = <&clock CLK_ACLK160>;
+> +			clock-names = "bus";
+> +			operating-points-v2 = <&bus_display_opp_table>;
+> +			samsung,interconnect-parent = <&bus_leftbus>;
+> +			#interconnect-cells = <0>;
+> +			status = "disabled";
+> +		};
+> +
+> +		bus_dmc_opp_table: opp_table1 {
+> +			compatible = "operating-points-v2";
+> +			/* ... */
+> +		}
+> +
+> +		bus_leftbus_opp_table: opp_table3 {
+> +			compatible = "operating-points-v2";
+> +			/* ... */
+> +		};
+> +
+> +		bus_display_opp_table: opp_table4 {
+> +			compatible = "operating-points-v2";
+> +			/* .. */
+> +		};
+> +
+> +		&mixer {
+> +			compatible = "samsung,exynos4212-mixer";
+> +			interconnects = <&bus_display &bus_dmc>;
+> +			/* ... */
+> +		};
+> +	};
+> -- 
+> 2.7.4
 > 
->  In this mode the driver bypasses the scaling governors layer of ``CPUFreq`` and
->  provides its own scaling algorithms for P-state selection.  Those algorithms
-> @@ -138,12 +139,13 @@ internal P-state selection logic to be less performance-focused.
->  Active Mode Without HWP
->  ~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> -This is the default operation mode for processors that do not support the HWP
-> -feature.  It also is used by default with the ``intel_pstate=no_hwp`` argument
-> -in the kernel command line.  However, in this mode ``intel_pstate`` may refuse
-> -to work with the given processor if it does not recognize it.  [Note that
-> -``intel_pstate`` will never refuse to work with any processor with the HWP
-> -feature enabled.]
-> +This operation mode is optional for processors that do not support the HWP
-> +feature or when the ``intel_pstate=no_hwp`` argument is passed to the kernel in
-> +the command line.  The active mode is used in those cases if the
-> +``intel_pstate=active`` argument is passed to the kernel in the command line.
-
-???
-I can not see anywhere in the code where the kernel command line argument
-"intel_pstate=active" is dealt with.
-
-> +In this mode ``intel_pstate`` may refuse to work with processors that are not
-> +recognized by it.  [Note that ``intel_pstate`` will never refuse to work with
-> +any processor with the HWP feature enabled.]
-> 
->  In this mode ``intel_pstate`` registers utilization update callbacks with the
->  CPU scheduler in order to run a P-state selection algorithm, either
-> @@ -188,10 +190,14 @@ is not set.
->  Passive Mode
->  ------------
-> 
-> -This mode is used if the ``intel_pstate=passive`` argument is passed to the
-> -kernel in the command line (it implies the ``intel_pstate=no_hwp`` setting too).
-> -Like in the active mode without HWP support, in this mode ``intel_pstate`` may
-> -refuse to work with the given processor if it does not recognize it.
-> +This is the default operation mode of ``intel_pstate`` for processors without
-> +hardware-managed P-states (HWP) support.  It is always used if the
-> +``intel_pstate=passive`` argument is passed to the kernel in the command line
-> +regardless of whether or not the given processor supports HWP.  [Note that the
-> +``intel_pstate=no_hwp`` setting implies ``intel_pstate=passive`` if it is used
-> +without ``intel_pstate=active``.]
-
-??? as above. I can not see where intel_pstate=active is dealt with in 
-the code.
-
-> Like in the active mode without HWP support,
-> +in this mode ``intel_pstate`` may refuse to work with processors that are not
-> +recognized by it.
-> 
->  If the driver works in this mode, the ``scaling_driver`` policy attribute in
->  ``sysfs`` for all ``CPUFreq`` policies contains the string "intel_cpufreq".
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index d2297839374d..b24a5c5ec4f9 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2769,6 +2769,8 @@ static int __init intel_pstate_init(void)
->  		pr_info("Invalid MSRs\n");
->  		return -ENODEV;
->  	}
-> +	/* Without HWP start in the passive mode. */
-> +	default_driver = &intel_cpufreq;
-> 
->  hwp_cpu_matched:
->  	/*
-> @@ -2814,7 +2816,6 @@ static int __init intel_pstate_setup(char *str)
->  	if (!strcmp(str, "disable")) {
->  		no_load = 1;
->  	} else if (!strcmp(str, "passive")) {
-> -		pr_info("Passive mode enabled\n");
->  		default_driver = &intel_cpufreq;
->  		no_hwp = 1;
->  	}
-> --
-> 2.16.4
-
-Example 1: i5-9600k (hwp capable) (kernel 5.8-rc4):
-
-Grub:
-GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=450 intel_pstate=active intel_pstate=no_hwp cpuidle_sysfs_switch
-cpuidle.governor=teo"
-
-/proc/cmdline:
-BOOT_IMAGE=/boot/vmlinuz-5.8.0-rc4-stock root=UUID=0ac356c1-caa9-4c2e-8229-4408bd998dbd ro ipv6.disable=1 consoleblank=450
-intel_pstate=active intel_pstate=no_hwp cpuidle_sysfs_switch cpuidle.governor=teo
-
-Result:
-
-doug@s18:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_driver
-/sys/devices/system/cpu/cpu0/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu1/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu2/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu3/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu4/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu5/cpufreq/scaling_driver:intel_cpufreq
-
-Example 2: i7-2600k (does not have hwp) (kernel 5.8-rc1)
-
-Grub:
-GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=300 intel_pstate=active cpuidle_sysfs_switch cpuidle.governor=teo"
-
-/proc/cmdline:
-BOOT_IMAGE=/boot/vmlinuz-5.8.0-rc1-stock root=UUID=bcbc624b-892b-46ca-9e9e-102daf644170 ro ipv6.disable=1 consoleblank=300
-intel_pstate=active cpuidle_sysfs_switch cpuidle.governor=teo
-
-Result:
-
-doug@s15:~$ grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_driver
-/sys/devices/system/cpu/cpu0/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu1/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu2/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu3/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu4/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu5/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu6/cpufreq/scaling_driver:intel_cpufreq
-/sys/devices/system/cpu/cpu7/cpufreq/scaling_driver:intel_cpufreq
-
-... Doug
-
-
