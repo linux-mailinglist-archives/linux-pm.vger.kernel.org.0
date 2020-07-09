@@ -2,123 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F01B5219BA8
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 11:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B18219BB1
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 11:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726291AbgGIJGe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 05:06:34 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3945 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbgGIJGe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 05:06:34 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f06ddae0000>; Thu, 09 Jul 2020 02:04:46 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 09 Jul 2020 02:06:34 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 09 Jul 2020 02:06:34 -0700
-Received: from [10.26.72.135] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 9 Jul
- 2020 09:06:32 +0000
-Subject: Re: [PATCH v2] cpuidle: tegra: Correctly handle result of
- arm_cpuidle_simple_enter()
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        id S1726340AbgGIJJR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 05:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgGIJJQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 05:09:16 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184DDC08C5CE
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 02:09:16 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id k5so827488pjg.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 02:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=dfRkitREAl1cCOBzHtF2sXnD7um5XaadlgUl3USHzOw=;
+        b=vRZqKThIDXkF1WZVYjCd+lAU6Yw2xjVCcYtJIao696XqXbwd91uA7uJ5g1mR35cCFB
+         rZr5VYDRmnjk9boh6Jl5KyqMTPrY2H0G8FIPX9kZMMCJPuMs+cBqkQKxNe1W3lYR78eH
+         FaDvwzxnmHT5f6eztfFL7bkqinHccld+C1fydY+Qf2Rf7XdsUzJs1yIBEsg04ZFanFWe
+         CFTvMh7apsM6QnpAVOUY5cjzNo85yhDwcicI+HX+8QaqeD9tHp0W2Rw4UnVEHSDGHPIR
+         LEpTCKYLqF5yE0phZTENtyuOY4JTQ61JAFBPpDquOfQkBPwEsUM6VfBzbZKzL88cLkdf
+         uAlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dfRkitREAl1cCOBzHtF2sXnD7um5XaadlgUl3USHzOw=;
+        b=R196KCQBhQ+dY8W7hrwm71K8P1vIYhq60HmXjstAiVwBz1oH2YmNQqUY5l6xpUmHzY
+         hTEbwFT+OHfblK9KCwu1xmlB1xuOSBiiWkGWTUhtLUTMSJ84O8ZdrDPM/f+mkC2ky1F+
+         li1SB8JmryOr/mimjiY6HHFVW+YgMK7zxhNXpsiSG7NRUbuIanhV8Q/TtI7O81ouBPQc
+         hqiIGbpE0MMxFYJihI2vLYXQxUPS59fzmg71SHI+NUyZmtv4c1kbBexxQXKxikEJegOr
+         BQ8AArobbojTPGDVMrEpSagnnwJH1RUiTYeYkBjjiZa83SzWQQwu5tf+K7HTyBFuX3XV
+         kIzg==
+X-Gm-Message-State: AOAM53316kRlOH8fXnj46QPByBlndrccWhuf1BZKCsM28c07U1Btn5j3
+        qjJ62AsaI/yQR1tUvjIBX44W/g==
+X-Google-Smtp-Source: ABdhPJxrn0x/9eaXzBdCUMoLFcH5nlz8yRsfA6f4zpfmqLIKKts2GJNGLlHeTT9csCf0DTwa8Bx4bA==
+X-Received: by 2002:a17:90a:b00e:: with SMTP id x14mr14377506pjq.57.1594285755440;
+        Thu, 09 Jul 2020 02:09:15 -0700 (PDT)
+Received: from localhost ([122.172.40.201])
+        by smtp.gmail.com with ESMTPSA id u19sm2364195pfk.98.2020.07.09.02.09.14
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Jul 2020 02:09:14 -0700 (PDT)
+Date:   Thu, 9 Jul 2020 14:39:12 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-References: <20200702001354.27056-1-digetx@gmail.com>
- <4ffff3d8-2d41-3fb2-ed16-c9662d18d261@nvidia.com>
- <3bc2064e-e94d-984c-edab-50b4dc2fd2dd@gmail.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <be99caca-b50a-0e12-29dc-2da0d924af43@nvidia.com>
-Date:   Thu, 9 Jul 2020 10:06:30 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
+ freq invariance
+Message-ID: <20200709090912.vapouiruidgypxzc@vireshk-i7>
+References: <20200701090751.7543-1-ionela.voinescu@arm.com>
+ <20200701090751.7543-2-ionela.voinescu@arm.com>
+ <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
+ <20200701133330.GA32736@arm.com>
+ <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
+ <20200702025818.s4oh7rzz3tr6zwqr@vireshk-i7>
+ <20200702114425.GB28120@arm.com>
+ <389dd87f-fed0-e4ea-81f3-5491fd2a54d1@arm.com>
+ <20200709085354.GA5623@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <3bc2064e-e94d-984c-edab-50b4dc2fd2dd@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1594285486; bh=8qisClleseagOjMZhpG3BPg84Jvhtb/1QRMvMnOEW9Y=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=g+QhVkb1ExcABcfE19R/xeH0NhOQ6DMWOpfRBM21qw6Ucdf6c3VXucHRkZ0L5ACiZ
-         NCyQoPvV1n9rNXge2P3gyUivBb8Vg+GM0Gs/obNKWniXH+nzo9wYhTNLaLlY09k1ey
-         T1vuYDInT/b6gHhJ3F5vOin6HtSDHop/g7MNQFZwtSvzJpLC40tvXbleF8R0UleP3+
-         tsyBPFWwdTOwBh9jqKXZKnRFkdbhQpkhbizc4QVMWKddI5HkhiIphQia1emraQ4n3D
-         HOB3y6XkyM/3qGjPRPjPSZaTXYTKBIeOMf4m0hXIZMOaGBhY+JszxWORNCWRmxDJaQ
-         kzFWGSDBxMeJg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200709085354.GA5623@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 09-07-20, 09:53, Ionela Voinescu wrote:
+> On Monday 06 Jul 2020 at 14:14:47 (+0200), Dietmar Eggemann wrote:
+> > Why can't we just move the arch_set_freq_scale() call from cpufreq
+> > driver to cpufreq core w/o introducing a FIE related driver flag?
+> > 
+> > Current scenario for Frequency Invariance Engine (FIE) on arm/arm64.
+> > 
+> > +------------------------------+       +------------------------------+
+> > |                              |       |                              |
+> > | cpufreq core:                |       | arch: (arm, arm64)           |
+> > 
+> > |                              |       |                              |
+> > | weak arch_set_freq_scale() {}|       |                              |
+> > |                              |       |                              |
+> > +------------------------------+       |                              |
+> >                                        |                              |
+> > +------------------------------+       |                              |
+> > |                              |       |                              |
+> > | cpufreq driver:              |       |                              |
+> > |                            +-----------> arch_set_freq_scale()      |
+> > |                              |       |   {                          |
+> > +------------------------------+       |      if (use counters)       |
+> >                                        |        return;               |
+> > +------------------------------+       |      ...                     |
+> > |                              |       |   }                          |
+> > | task scheduler:              |       |                              |
+> > |                            +-----------> arch_scale_freq_tick()*    |
+> > |                              |       |   {                          |
+> > 
+> > |                              |       |      if (!use counters)      |
+> > |                              |       |        return;               |
+> > |                              |       |      ...                     |
+> > |                              |       |   }                          |
+> > +------------------------------+       +------------------------------+
+> > 
+> > * defined as topology_scale_freq_tick() in arm64
+> > 
+> > Only Arm/Arm64 defines arch_set_freq_scale() to get the 'legacy' CPUfreq
+> > based FIE. This would still be the case when we move
+> > arch_set_freq_scale() from individual cpufreq drivers to cpufreq core.
+> > 
+> > Arm64 is the only arch which has to runtime-choose between two different
+> > FIEs. This is currently done by bailing out early in one of the FIE
+> > functions based on 'use counters'.
+> > 
+> > X86 (and others) will continue to not define arch_set_freq_scale().
+> > 
+> > The issue with CONFIG_BL_SWITCHER (vexpress-spc-cpufreq.c) could be
+> > solved arm/arm64 internally (arch_topology.c) by putting
+> > arch_set_freq_scale() under a !CONFIG_BL_SWITCHER guard.
+> > I doubt that there are any arm bL systems out there running it. At least
+> > I'm not aware of any complaints due to missing FIE support in bl
+> > switcher setups so far.
 
-On 08/07/2020 15:32, Dmitry Osipenko wrote:
-> 08.07.2020 15:34, Jon Hunter =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
->>
->> On 02/07/2020 01:13, Dmitry Osipenko wrote:
->>> The enter() callback of CPUIDLE drivers returns index of the entered id=
-le
->>> state on success or a negative value on failure. The negative value cou=
-ld
->>> any negative value, i.e. it doesn't necessarily needs to be a error cod=
-e.
->>> That's because CPUIDLE core only cares about the fact of failure and no=
-t
->>> about the reason of the enter() failure.
->>>
->>> Like every other enter() callback, the arm_cpuidle_simple_enter() retur=
-ns
->>> the entered idle-index on success. Unlike some of other drivers, it nev=
-er
->>> fails. It happened that TEGRA_C1=3Dindex=3Derr=3D0 in the code of cpuid=
-le-tegra
->>> driver, and thus, there is no problem for the cpuidle-tegra driver crea=
-ted
->>> by the typo in the code which assumes that the arm_cpuidle_simple_enter=
-()
->>> returns a error code.
->>>
->>> The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_I=
-DLE
->>> is disabled in a kernel's config, but all CPUIDLE drivers are disabled =
-if
->>> CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't e=
-ver
->>> see the error code from arm_cpuidle_simple_enter() today.
->>>
->>> Of course the code may get some changes in the future and then the typo
->>> may transform into a real bug, so let's correct the typo in the code by
->>> making tegra_cpuidle_enter() to directly return the index returned by t=
-he
->>> arm_cpuidle_simple_enter().
->>
->> Are you suggesting that arm_cpuidle_simple_enter() could be updated to
->> actually return an error? Sorry it is not clear to me what you are imply=
-ing.
->=20
-> Hello, Jon!
->=20
-> Yes, I'm saying that *potentially* arm_cpuidle_simple_enter() could be
-> updated to actually return error.
+I agree to that.
 
+> Thank you Dietmar, for your review.
+> 
+> I was trying to suggest the same in my other replies.
 
-OK, then I am confused, because after your change, we would now ignore
-any error that could be returned in the future. Yes the current code
-does not set the variable 'index' correctly, but before we set the value
-of 'index' shouldn't we check that the value being returned is not a
-negative error code first?
+I am sorry, I must have overlooked that part in your replies,
+otherwise I may agreed to it :)
 
-Jon
+> Rafael, Viresh, would you mind confirming whether you still consider
+> having an 'opt in' flag is preferable here?
 
---=20
-nvpublic
+Well, we wanted an opt-in flag instead of an opt-out one. And no flag
+is certainly better.
+
+-- 
+viresh
