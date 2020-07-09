@@ -2,149 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E15219F1E
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 13:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171A3219FDC
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 14:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726433AbgGILdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 07:33:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbgGILdW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 07:33:22 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5452BC061A0B
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 04:33:22 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id g75so1414062wme.5
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 04:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ZIb74klp0h6UWr6/TS/11mmFGV/72HoMTQo4qJf3ORo=;
-        b=fuWDO70EKTbi49qR9wTXqgGu0SPbyIT24LkwnflguPA9AnZZP8ZS+I3J+I3gAt9DPd
-         p47yE80SfJY2aZHrT7TqCbIUHHrjgvcZf93KM7tKJYSnS39Y/gXqsz4Tf6FOSf6EEuCG
-         pH0eHFJRc8HiEZg4O6qPPbZV1iFNrYHHEa6BzGztKF4y+h3cE9mBbmAl5MBr+AyiHpBM
-         GdSF4/yXJNmhUBkJrtsXd6j03YQb540XNfhUSGgT9koPaTfQWdqwERI3DxOwrqa5y6Ec
-         B7dLDboAHNGk6e/R02K5D93b/OZCy69NhDzihGqfTuCh/PXaW1ZAa3XrAQICB9qQ6Zyf
-         cYkw==
+        id S1727888AbgGIMS0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 08:18:26 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:43278 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726327AbgGIMS0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 08:18:26 -0400
+Received: by mail-oi1-f194.google.com with SMTP id x83so1671643oif.10;
+        Thu, 09 Jul 2020 05:18:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ZIb74klp0h6UWr6/TS/11mmFGV/72HoMTQo4qJf3ORo=;
-        b=VR6zlljFXEAkh+0mZTErAOwrKe0gH3uXgPU8RgwxmYVF8nFycWvjetNYaGOTIDAEnA
-         d4DwmE2vbsVRcQ/lY3+++pydHh5FAzlMB97Jyf3G66DmasGspY/+kXbhiL0V7SEBc9M9
-         8/d6E8AqORlkvbGdbhdey4Oox7IwBEp/ePWTEW8QE5nc5M6xeH2izPDoVE1PBOBTzLCv
-         XKkRxILQl6Vu0P9nxKB3o/0yStw2PHExjFipOJlIxEQY1DTTIb/AJLpybeOWkOE6bHLC
-         91cj09NFDRPBLKW0y4Fl4s4Qt+Jyg9zXxONRGvxm42IClpLPhL9+PHHMpVe0PAYQXD1W
-         XHZA==
-X-Gm-Message-State: AOAM533hGQdzSYOfKpe+gYspwYYXvnyHT7QCbY48c9f8dK/H5vPNpiku
-        RD472AZbZd5XfZA9h6EPPj7w4Q==
-X-Google-Smtp-Source: ABdhPJxoHQM+D4+hSCTnqJVzGv7ThVF6Lyz/19dZbPBvXwJCLjDYojSfxytI6Qb/R+mCvL+LAMy62w==
-X-Received: by 2002:a05:600c:2182:: with SMTP id e2mr13495604wme.186.1594294400952;
-        Thu, 09 Jul 2020 04:33:20 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id w12sm5453165wrm.79.2020.07.09.04.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 04:33:20 -0700 (PDT)
-Date:   Thu, 9 Jul 2020 12:33:18 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Kevin Brodsky <Kevin.Brodsky@arm.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 00/17] Modularizing Versatile Express
-Message-ID: <20200709113318.w5jcj3kjy4xc3v7p@holly.lan>
-References: <20200429205825.10604-1-robh@kernel.org>
- <20200617150850.t23gwj3p2qnduq2a@holly.lan>
- <CAL_Jsq+uTW_-cNOQFWPcYEVRvqf3DEqiaGTfV5uWag0zvAzjgA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BHVNxL+/4Dut3OSZTR+rYs7XqFLN3i0nnfmN8u7+xOA=;
+        b=HsPvqGX/GQ4OR4PD8qcCtxVGfclDRun1lAmESdkuU5btq7AutoGcvN2+yohnLpnadd
+         tO60+9ABX4LJe7VCGmwf3pMI0Wt1N8tamr/dvrWsGebqc3FP3mb9sonTbgnWOl2SQJlL
+         XrMcCPoWHbBo1ReQEkC5cDiVhkDhg/amdZE7fFBqo6gU3bkQKQ/Af52flG6sJY2c8EI7
+         d8f/IOU/hs3D5OqeNUDtC5WOWMs620lKXhe0IQgsWQZWUMi/uGVUYieMxucFV7xyzYcs
+         EzH+gn1USAQ2/QGft1FL1b4AIs4vs8pz6/nhGibMmQkjTqmyS7KOxkq3mjRBGnsYvNiJ
+         HYeQ==
+X-Gm-Message-State: AOAM532wTK2f2HpwOkCilCgt7dQ/Nsva5wPIK2qVvOttSL6JD3fYtrE9
+        5NR/R1T7hZM+PT3ikdyQUQB0WiT8/B8serd8Okc=
+X-Google-Smtp-Source: ABdhPJxtj1vjB44EgNVrKbINxMf3MLBQQVOimbtqX57PoimFmHD9A3C9Fv4wq87LSAfsDKch7XlhTuenX5e7j0W2xjI=
+X-Received: by 2002:aca:4a89:: with SMTP id x131mr11420648oia.103.1594297104569;
+ Thu, 09 Jul 2020 05:18:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_Jsq+uTW_-cNOQFWPcYEVRvqf3DEqiaGTfV5uWag0zvAzjgA@mail.gmail.com>
+References: <1594005196-16327-1-git-send-email-neal.liu@mediatek.com> <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
+In-Reply-To: <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 9 Jul 2020 14:18:13 +0200
+Message-ID: <CAJZ5v0ihB5AJwSRpjaOnXAmciregzxARL5xfudu1h+=_LXaE_w@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: change enter_s2idle() prototype
+To:     Neal Liu <neal.liu@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, wsd_upstream@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 08, 2020 at 10:39:43AM -0600, Rob Herring wrote:
-> On Wed, Jun 17, 2020 at 9:08 AM Daniel Thompson
-> <daniel.thompson@linaro.org> wrote:
-> >
-> > On Wed, Apr 29, 2020 at 03:58:09PM -0500, Rob Herring wrote:
-> > > This series enables building various Versatile Express platform drivers
-> > > as modules. The primary target is the Fast Model FVP which is supported
-> > > in Android. As Android is moving towards their GKI, or generic kernel,
-> > > the hardware support has to be in modules. Currently ARCH_VEXPRESS
-> > > enables several built-in only drivers. Some of these are needed, but
-> > > some are only needed for older 32-bit VExpress platforms and can just
-> > > be disabled. For FVP, the pl111 display driver is needed. The pl111
-> > > driver depends on vexpress-osc clocks which had a dependency chain of
-> > > vexpress-config --> vexpress-syscfg --> vexpress-sysreg. These
-> > > components relied on fixed initcall ordering and didn't support deferred
-> > > probe which would have complicated making them modules. All these levels
-> > > of abstraction are needlessly complicated, so this series simplifies
-> > > things a bit by merging the vexpress-config and vexpress-syscfg
-> > > functionality.
-> > >
-> > > There's a couple of other pieces to this which I've sent out separately
-> > > as they don't have dependencies with this series. The cross subsystem
-> > > dependencies in this series are mainly the ordering of enabling drivers
-> > > as modules.
-> >
-> > This series results in the vexpress-a15 console not coming up until very
-> > late in the boot process because the console arch_initcall() ends up
-> > being deferred because it's dependencies are no longer use
-> > core_initcall() to ensure they get in first.
-> 
-> Which was a hack...
-> 
-> > Is there a problem registering vexpress-osc, vexpress-sysreg and
-> > vexpress-config as core_initcall's so the console behaves nicely
-> > when they are all compiled as built-ins?
-> 
-> I think the correct way to solve this is with devlinks which reduces
-> the deferred probes. Can you see if that's better? That's still off by
-> default and needs a kernel command line option. That may just get the
+On Mon, Jul 6, 2020 at 5:13 AM Neal Liu <neal.liu@mediatek.com> wrote:
+>
+> Control Flow Integrity(CFI) is a security mechanism that disallows
+> changes to the original control flow graph of a compiled binary,
+> making it significantly harder to perform such attacks.
+>
+> init_state_node() assign same function callback to different
+> function pointer declarations.
+>
+> static int init_state_node(struct cpuidle_state *idle_state,
+>                            const struct of_device_id *matches,
+>                            struct device_node *state_node) { ...
+>         idle_state->enter = match_id->data; ...
+>         idle_state->enter_s2idle = match_id->data; }
+>
+> Function declarations:
+>
+> struct cpuidle_state { ...
+>         int (*enter) (struct cpuidle_device *dev,
+>                       struct cpuidle_driver *drv,
+>                       int index);
+>
+>         void (*enter_s2idle) (struct cpuidle_device *dev,
+>                               struct cpuidle_driver *drv,
+>                               int index); };
+>
+> In this case, either enter() or enter_s2idle() would cause CFI check
+> failed since they use same callee.
 
-"fw_devlink=on", right?
+Can you please explain this in a bit more detail?
 
-I didn't see any difference on time to console activation with this
-enabled.
+As it stands, I don't understand the problem statement enough to apply
+the patch.
 
+> Align function prototype of enter() since it needs return value for
+> some use cases. The return value of enter_s2idle() is no
+> need currently.
 
-> console up at an earlier initcall level, but not before other h/w
-> drivers. I think having some way to prioritize probe order without
-> initcall hacks would be good. Then you could prioritize a console or
-> splash screen or ???.
+So last time I requested you to document why ->enter_s2idle needs to
+return an int in the code, which has not been done.  Please do that.
 
-I don't disagree on "the right thing to do" although I am a little
-surprised to see the old hack removed a replacement is ready. IIUC
-the modularization for GKI doesn't require them to be changed.
-
-
-> Also, if you really need an early console, then use earlycon.
-
-To be honest I have relaxed a few expectations in my test harness and
-have already moved on ;-).
-
-Right now the console will not come up until after we have decompressed
-the ramdisk even when we have configure the kernel to have a rich set of
-console drivers built in. That does feel pretty uncomfortable as a user,
-especially if you have a large initrd but the test suite doesn't mind!
-
-
-Daniel.
+> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
+> ---
+>  drivers/acpi/processor_idle.c   |    6 ++++--
+>  drivers/cpuidle/cpuidle-tegra.c |    8 +++++---
+>  drivers/idle/intel_idle.c       |    6 ++++--
+>  include/linux/cpuidle.h         |    6 +++---
+>  4 files changed, 16 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index 75534c5..6ffb6c9 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -655,8 +655,8 @@ static int acpi_idle_enter(struct cpuidle_device *dev,
+>         return index;
+>  }
+>
+> -static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+> -                                  struct cpuidle_driver *drv, int index)
+> +static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+> +                                 struct cpuidle_driver *drv, int index)
+>  {
+>         struct acpi_processor_cx *cx = per_cpu(acpi_cstate[index], dev->cpu);
+>
+> @@ -674,6 +674,8 @@ static void acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+>                 }
+>         }
+>         acpi_idle_do_entry(cx);
+> +
+> +       return 0;
+>  }
+>
+>  static int acpi_processor_setup_cpuidle_cx(struct acpi_processor *pr,
+> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+> index 1500458..a12fb14 100644
+> --- a/drivers/cpuidle/cpuidle-tegra.c
+> +++ b/drivers/cpuidle/cpuidle-tegra.c
+> @@ -253,11 +253,13 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+>         return err ? -1 : index;
+>  }
+>
+> -static void tegra114_enter_s2idle(struct cpuidle_device *dev,
+> -                                 struct cpuidle_driver *drv,
+> -                                 int index)
+> +static int tegra114_enter_s2idle(struct cpuidle_device *dev,
+> +                                struct cpuidle_driver *drv,
+> +                                int index)
+>  {
+>         tegra_cpuidle_enter(dev, drv, index);
+> +
+> +       return 0;
+>  }
+>
+>  /*
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index f449584..b178da3 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -175,13 +175,15 @@ static __cpuidle int intel_idle(struct cpuidle_device *dev,
+>   * Invoked as a suspend-to-idle callback routine with frozen user space, frozen
+>   * scheduler tick and suspended scheduler clock on the target CPU.
+>   */
+> -static __cpuidle void intel_idle_s2idle(struct cpuidle_device *dev,
+> -                                       struct cpuidle_driver *drv, int index)
+> +static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+> +                                      struct cpuidle_driver *drv, int index)
+>  {
+>         unsigned long eax = flg2MWAIT(drv->states[index].flags);
+>         unsigned long ecx = 1; /* break on interrupt flag */
+>
+>         mwait_idle_with_hints(eax, ecx);
+> +
+> +       return 0;
+>  }
+>
+>  /*
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index ec2ef63..bee10c0 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -66,9 +66,9 @@ struct cpuidle_state {
+>          * suspended, so it must not re-enable interrupts at any point (even
+>          * temporarily) or attempt to change states of clock event devices.
+>          */
+> -       void (*enter_s2idle) (struct cpuidle_device *dev,
+> -                             struct cpuidle_driver *drv,
+> -                             int index);
+> +       int (*enter_s2idle)(struct cpuidle_device *dev,
+> +                           struct cpuidle_driver *drv,
+> +                           int index);
+>  };
+>
+>  /* Idle State Flags */
+> --
+> 1.7.9.5
