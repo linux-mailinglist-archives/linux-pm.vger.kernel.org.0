@@ -2,99 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 502BD21A543
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 18:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FA8621A55D
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 19:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbgGIQyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 12:54:51 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:37725 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbgGIQyu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 12:54:50 -0400
-Received: by mail-io1-f68.google.com with SMTP id v6so3065896iob.4;
-        Thu, 09 Jul 2020 09:54:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LGz/Zlxj80AaON4ZExXC6wPffqBZf12wYIQFvRvtTFU=;
-        b=mjhxfGcDLXIH8n2jNgt6RvjU2fPWiJOC3gZMPuiDMa22/KsJ7O5RxItOEfwjW5ojnz
-         a/loPK+quPsnxKPynDknLb9Cn9EUxlIryCr3NF+Sj+lcuQHQlyXFI6pEpFpp1/lsqT2p
-         D6WiAXaXBxC5I8hjrxjJKrtQxAjYV7JfNIo4jeaQEqCRXS49Vp8uuZ9idpJPNUHGb9dR
-         Jx3u1Fk/727u4zbNiuF+Jz1/1oqMsCLOkCC9BG74u68scjEESQtC2WMHcVdz6AqaT+K5
-         1/DR9sQvCKXkLq+8CAqhzz83UA2Jy2jWavEQ8F3+c6be4RHJzeLY6mwsq5/1UJwQu0jH
-         SX2A==
-X-Gm-Message-State: AOAM530yrTBGMg5b9VbXL+uQ4tAL4H3oCwFJZuOTHpp6UpyX0kBdQVLY
-        aZnxFCis3glcTa0M9LcEuw==
-X-Google-Smtp-Source: ABdhPJwVHnWKGBfcmnHMtMLi5T9+D6bkCcY8zGSjmNL+jbQ/Q/bEuXfltsJTV1Viqjq6/RURN8zfZg==
-X-Received: by 2002:a05:6638:252:: with SMTP id w18mr60811098jaq.42.1594313689499;
-        Thu, 09 Jul 2020 09:54:49 -0700 (PDT)
-Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id l17sm1999262ilm.70.2020.07.09.09.54.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jul 2020 09:54:48 -0700 (PDT)
-Received: (nullmailer pid 510212 invoked by uid 1000);
-        Thu, 09 Jul 2020 16:54:37 -0000
-Date:   Thu, 9 Jul 2020 10:54:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     linux-gpio@vger.kernel.org, amit.kucheria@verdurent.com,
-        linux-arm-kernel@lists.infradead.org, gregory.clement@bootlin.com,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        huangshuosheng@allwinnertech.com, devicetree@vger.kernel.org,
-        daniel.lezcano@linaro.org, wens@csie.org, lee.jones@linaro.org,
-        clabbe@baylibre.com, p.zabel@pengutronix.de, icenowy@aosc.io,
-        tiny.windzz@gmail.com, linux-kernel@vger.kernel.org,
-        jason@lakedaemon.net, liyong@allwinnertech.com,
-        linux-i2c@vger.kernel.org, bage@linutronix.de, stefan@olimex.com,
-        linus.walleij@linaro.org, rui.zhang@intel.com, tglx@linutronix.de,
-        megous@megous.com, linux-pm@vger.kernel.org, mripard@kernel.org,
-        anarsoul@gmail.com, mturquette@baylibre.com,
-        srinivas.kandagatla@linaro.org, maz@kernel.org, sboyd@kernel.org
-Subject: Re: [PATCH v3 06/16] dt-bindings: nvmem: SID: add binding for A100's
- SID controller
-Message-ID: <20200709165437.GA509792@bogus>
-References: <20200708071942.22595-1-frank@allwinnertech.com>
- <20200708071942.22595-7-frank@allwinnertech.com>
+        id S1726958AbgGIRAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 13:00:52 -0400
+Received: from mga05.intel.com ([192.55.52.43]:47626 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726722AbgGIRAv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 9 Jul 2020 13:00:51 -0400
+IronPort-SDR: pr92ZLzmvhfdbO0gLPdzqeZmKfxerIjCoPMVTyGzZsJhMmPV48bk6D8x0ndGOSiLQh+9xS2AqJ
+ wXwCogQS5bdA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="232915650"
+X-IronPort-AV: E=Sophos;i="5.75,332,1589266800"; 
+   d="scan'208";a="232915650"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 10:00:46 -0700
+IronPort-SDR: ReqF61yT9GNlrJ2FoKQId9/N0nD7svQY92hCP2NuekQC6dLMzXqDS8Zi+SwBTQPG+D9Hk3HL9p
+ qoxFDAc9sRGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,332,1589266800"; 
+   d="scan'208";a="457976840"
+Received: from rpantang-mobl.amr.corp.intel.com ([10.212.22.171])
+  by orsmga005.jf.intel.com with ESMTP; 09 Jul 2020 10:00:44 -0700
+Message-ID: <e4e13cdad78f8593b5c307b5130e416bdc1dccbf.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal/int340x_thermal: Prevent page fault on
+ .set_mode() op
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Bartosz Szczepanek <bsz@semihalf.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Radoslaw Biernacki <rad@semihalf.com>,
+        Alex Levin <levinale@google.com>
+Date:   Thu, 09 Jul 2020 10:00:43 -0700
+In-Reply-To: <20200708134613.131555-1-bsz@semihalf.com>
+References: <20200708134613.131555-1-bsz@semihalf.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200708071942.22595-7-frank@allwinnertech.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 08 Jul 2020 15:19:32 +0800, Frank Lee wrote:
-> Add a binding for A100's SID controller.
+On Wed, 2020-07-08 at 15:46 +0200, Bartosz Szczepanek wrote:
+> Starting from commit "thermal/int340x_thermal: Don't require IDSP to
+> exist", priv->current_uuid_index is initialized to -1. This value may
+> be passed to int3400_thermal_run_osc() from int3400_thermal_set_mode,
+> contributing to page fault when accessing int3400_thermal_uuids array
+> at index -1.
 > 
-> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+> This commit adds a check on uuid value to int3400_thermal_run_osc.
+> 
+> Signed-off-by: Bartosz Szczepanek <bsz@semihalf.com>
+Reviewed-by: Pandruvada, Srinivas <srinivas.pandruvada@linux.intel.com>
+
 > ---
->  Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml: properties:compatible:enum:5: {'items': [{'const': 'allwinner,sun50i-a100-sid'}, {'const': 'allwinner,sun50i-a64-sid'}]} is not of type 'string'
-Documentation/devicetree/bindings/Makefile:20: recipe for target 'Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.example.dts' failed
-make[1]: *** [Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml: ignoring, error in schema: properties: compatible: enum: 5
-warning: no schema found in file: ./Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml: ignoring, error in schema: properties: compatible: enum: 5
-warning: no schema found in file: ./Documentation/devicetree/bindings/nvmem/allwinner,sun4i-a10-sid.yaml
-Makefile:1347: recipe for target 'dt_binding_check' failed
-make: *** [dt_binding_check] Error 2
-
-
-See https://patchwork.ozlabs.org/patch/1325053
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 0b3a62655843..12448ccd27f1 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -216,11 +216,16 @@ static int int3400_thermal_run_osc(acpi_handle
+> handle,
+>  	acpi_status status;
+>  	int result = 0;
+>  	struct acpi_osc_context context = {
+> -		.uuid_str = int3400_thermal_uuids[uuid],
+> +		.uuid_str = NULL,
+>  		.rev = 1,
+>  		.cap.length = 8,
+>  	};
+>  
+> +	if (uuid < 0 || uuid >= INT3400_THERMAL_MAXIMUM_UUID)
+> +		return -EINVAL;
+> +
+> +	context.uuid_str = int3400_thermal_uuids[uuid];
+> +
+>  	buf[OSC_QUERY_DWORD] = 0;
+>  	buf[OSC_SUPPORT_DWORD] = enable;
+>  
 
