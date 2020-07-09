@@ -2,99 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3864521A066
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 15:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7AB21A3D4
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 17:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726617AbgGINAJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 09:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S1727975AbgGIPfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 11:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbgGINAJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 09:00:09 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F3DC08C5DC
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 06:00:08 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id k6so2266099wrn.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 06:00:08 -0700 (PDT)
+        with ESMTP id S1727092AbgGIPf3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 11:35:29 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC764C08C5DD
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 08:35:29 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id g67so1126405pgc.8
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 08:35:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lVrj7tYkfLoGqvj3owMMt4Bxl+SxGlyf+OCDf2yZMSo=;
-        b=L7ek4xBYwpneFtHsjTj0MYwILJTEK3Nj780DPHIK1FuNFhDJDr+CSoGzo4P0o3dpIh
-         9YZibjSOxKTeqGh0ST4+UBsRXc61uFSV0tFsLQxShbTr49697Rfpc5EXVQ9wYTfkR48C
-         tfgc16paYu2j+UsVSX61+39AEqw3hYhysVXcaLzD4T8upQ75XniWPUt3EhC9m1d85dGA
-         8oIkdfGEunG83rGo9fZFF2hGfZTNSMXvaD2bF3FtmdJtaCPrsdtTZQ3lgLai9MBP2IcH
-         38RCF3NwtCh1zCngT7dWBDYjNM42XXhSqOjUt0YRYTJHvY0NNiQQaZ6EcpCAcqTgKd0d
-         iYDw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0q/rCvNt3k405F9K/TajOpXPAtgojFFtnqWJkLPEMF4=;
+        b=OWbz3/CqrDpo/Wcvq2r+CzFCtoWft8EU3UQBsM0iXshdZeW30DCs/+vWW/pDAXePHh
+         2oLzG8kSev55DDnOpuoGAbRzEEmpYfdKukcFXVxGuDNbCFFMWbv25beCD/NtvTEk6R1c
+         g7W7jqGUm4nzWI01J6Ul1JxZcEbMXqtZSar7Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=lVrj7tYkfLoGqvj3owMMt4Bxl+SxGlyf+OCDf2yZMSo=;
-        b=oIvVUpoX3FwSmJB0cjTZex+rHzfI/XTMut3YMrTBenperDPhb6abwTmdd2C2bkn+NG
-         UwFKX63rAeMWnMGuPbp6ozseXWePhmk25qxbyHEaxXh/1ENoZ1jwQAwvyIfe0vr6ur84
-         nU6uunVqbPlT5aHMQLHFI7JzKdl29LWpm2i/SufJbSoCz6nap5JgautllXrdwhvSfaCj
-         Hq1I0VDmLOk52AwcJpCzZQlxtpWpDHzVJ2std7yrPsEbxDeD4dGsLPx8dWCj94bgQnE6
-         8nccIo13nb+tOvNINJ5cJ17oaH8ijKeFxIkz+eZpH0dXBE1U4XcBejRp81dDDNVWjwf9
-         urRA==
-X-Gm-Message-State: AOAM533L6xd0wppwodIhdOskXeNTPxKWqtOzu5CXByjUWQrv5+LT86hh
-        tQZv8ssoQ8yv3IJ9o+jaIgtdBABj09o=
-X-Google-Smtp-Source: ABdhPJwkuHIpsYSzMeKdthPBV+xKywxAKxEC7b9ioVSPi5Ib6zLkYE+NtrbGLmwRzENCvP0j4tqMAQ==
-X-Received: by 2002:adf:e901:: with SMTP id f1mr63389805wrm.80.1594299607024;
-        Thu, 09 Jul 2020 06:00:07 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id u15sm5660717wrm.64.2020.07.09.06.00.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Jul 2020 06:00:06 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, georgi.djakov@linaro.org,
-        jun.nie@linaro.org, mdtipton@codeaurora.org,
-        okukatla@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: msm8916: Fix buswidth of pcnoc_s nodes
-Date:   Thu,  9 Jul 2020 16:00:04 +0300
-Message-Id: <20200709130004.12462-1-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.26.2
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0q/rCvNt3k405F9K/TajOpXPAtgojFFtnqWJkLPEMF4=;
+        b=To1Hqdk7WJeRNooh6HMTshbhL/w/VlSYr+5fsJTABSakzygKTsIa0AQKQ3zO1Y1eYl
+         ztilgJh1KWDWBtAc2djv/4rqvtsiKLoWgVNUiyznlabU0VLXyENHEyEWJ9miBnXrONbz
+         DCaD9Q4BiVCLssaUlxJwgzYl9SqHAP6P17XiefJu5CvWdMBw5YbwZc8tVTfXW7n2cX2E
+         NH1EcJLf+hNA+kGJpAVCPafQib35HJ5DZoP+fSdoGxYMvYBHKOWHb4dcJR5XkQZ1OCnM
+         4PDVdEO7nMJxNWU7zTPKYJOKrViflZVjCAlPbBFb906caHjMEgl7AHZSu+MzsdN/Z7qA
+         jpOw==
+X-Gm-Message-State: AOAM532o8/j1YdmrA40P0tnZkhGwmAG63RgmE+YTfREAPV1j92Vmh0Nr
+        3F6V6LEhZ/vz0qbCHCKw5e9qRA==
+X-Google-Smtp-Source: ABdhPJxezNzU/FHc9DH0NCqtmmgu7yFn9tCxihSQrSv2FyCRlXKSWOfUQMA/NNJhOf+7Z3KfioxOBA==
+X-Received: by 2002:a62:a217:: with SMTP id m23mr27037150pff.291.1594308929281;
+        Thu, 09 Jul 2020 08:35:29 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id b8sm3221741pjm.31.2020.07.09.08.35.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jul 2020 08:35:28 -0700 (PDT)
+Date:   Thu, 9 Jul 2020 08:35:27 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Mike Tipton <mdtipton@codeaurora.org>
+Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, agross@kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add generic qcom bindings
+Message-ID: <20200709153527.GJ3191083@google.com>
+References: <20200623040515.23317-1-mdtipton@codeaurora.org>
+ <20200623040515.23317-2-mdtipton@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200623040515.23317-2-mdtipton@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The buswidth of the pcnoc_s_* nodes is actually not 8, but
-4 bytes. Let's fix it.
+On Mon, Jun 22, 2020 at 09:05:14PM -0700, Mike Tipton wrote:
+> Add generic qcom interconnect bindings that are common across platforms. In
+> particular, these include QCOM_ICC_TAG_* macros that clients can use when
+> calling icc_set_tag().
+> 
+> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
+> ---
+>  include/dt-bindings/interconnect/qcom,icc.h | 26 +++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,icc.h
+> 
+> diff --git a/include/dt-bindings/interconnect/qcom,icc.h b/include/dt-bindings/interconnect/qcom,icc.h
+> new file mode 100644
+> index 000000000000..cd34f36daaaa
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,icc.h
+> @@ -0,0 +1,26 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_ICC_H
+> +#define __DT_BINDINGS_INTERCONNECT_QCOM_ICC_H
+> +
+> +/*
+> + * The AMC bucket denotes constraints that are applied to hardware when
+> + * icc_set_bw() completes, whereas the WAKE and SLEEP constraints are applied
+> + * when the execution environment transitions between active and low power mode.
+> + */
+> +#define QCOM_ICC_BUCKET_AMC		0
+> +#define QCOM_ICC_BUCKET_WAKE		1
+> +#define QCOM_ICC_BUCKET_SLEEP		2
+> +#define QCOM_ICC_NUM_BUCKETS		3
+> +
+> +#define QCOM_ICC_TAG_AMC		(1 << QCOM_ICC_BUCKET_AMC)
+> +#define QCOM_ICC_TAG_WAKE		(1 << QCOM_ICC_BUCKET_WAKE)
+> +#define QCOM_ICC_TAG_SLEEP		(1 << QCOM_ICC_BUCKET_SLEEP)
+> +#define QCOM_ICC_TAG_ACTIVE_ONLY	(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE)
+> +#define QCOM_ICC_TAG_ALWAYS		(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
+> +					 QCOM_ICC_TAG_SLEEP)
+> +
+> +#endif
 
-Reported-by: Jun Nie <jun.nie@linaro.org>
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- drivers/interconnect/qcom/msm8916.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
-index e94f3c5228b7..42c6c5581662 100644
---- a/drivers/interconnect/qcom/msm8916.c
-+++ b/drivers/interconnect/qcom/msm8916.c
-@@ -197,13 +197,13 @@ DEFINE_QNODE(pcnoc_int_0, MSM8916_PNOC_INT_0, 8, -1, -1, MSM8916_PNOC_SNOC_MAS,
- DEFINE_QNODE(pcnoc_int_1, MSM8916_PNOC_INT_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
- DEFINE_QNODE(pcnoc_m_0, MSM8916_PNOC_MAS_0, 8, -1, -1, MSM8916_PNOC_INT_0);
- DEFINE_QNODE(pcnoc_m_1, MSM8916_PNOC_MAS_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
--DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 8, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
--DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 8, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
--DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 8, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
--DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 8, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
--DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 8, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
--DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 8, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
--DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 8, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
-+DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 4, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
-+DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 4, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
-+DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 4, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
-+DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 4, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
-+DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 4, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
-+DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 4, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
-+DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 4, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
- DEFINE_QNODE(pcnoc_snoc_mas, MSM8916_PNOC_SNOC_MAS, 8, 29, -1, MSM8916_PNOC_SNOC_SLV);
- DEFINE_QNODE(pcnoc_snoc_slv, MSM8916_PNOC_SNOC_SLV, 8, -1, 45, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC, MSM8916_SNOC_INT_1);
- DEFINE_QNODE(qdss_int, MSM8916_SNOC_QDSS_INT, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC);
+Would it make sense to squash the two patches of this series into a
+single patch? This would make it more evident that this was moved
+from drivers/interconnect/qcom/icc-rpmh.h and avoid duplicate
+definitions if only this patch was applied.
