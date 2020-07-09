@@ -2,157 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B18219BB1
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 11:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58230219C61
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jul 2020 11:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726340AbgGIJJR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 05:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53466 "EHLO
+        id S1726298AbgGIJgb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 05:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgGIJJQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 05:09:16 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 184DDC08C5CE
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 02:09:16 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id k5so827488pjg.3
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 02:09:16 -0700 (PDT)
+        with ESMTP id S1726261AbgGIJgb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 05:36:31 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF33C08C5CE
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 02:36:30 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id b15so1277091edy.7
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 02:36:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dfRkitREAl1cCOBzHtF2sXnD7um5XaadlgUl3USHzOw=;
-        b=vRZqKThIDXkF1WZVYjCd+lAU6Yw2xjVCcYtJIao696XqXbwd91uA7uJ5g1mR35cCFB
-         rZr5VYDRmnjk9boh6Jl5KyqMTPrY2H0G8FIPX9kZMMCJPuMs+cBqkQKxNe1W3lYR78eH
-         FaDvwzxnmHT5f6eztfFL7bkqinHccld+C1fydY+Qf2Rf7XdsUzJs1yIBEsg04ZFanFWe
-         CFTvMh7apsM6QnpAVOUY5cjzNo85yhDwcicI+HX+8QaqeD9tHp0W2Rw4UnVEHSDGHPIR
-         LEpTCKYLqF5yE0phZTENtyuOY4JTQ61JAFBPpDquOfQkBPwEsUM6VfBzbZKzL88cLkdf
-         uAlA==
+        d=semihalf-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eygZbTdlFFJ71jCLfCgJ+FFK+a7qNbIVolSlOz1F8GM=;
+        b=WiAQr+CWI7AR7BcmGBUGWjPFNscJqLLdx51nc0bGW2Zjlly/I7bVYJKiNQ5FIK42gQ
+         ztKZ39/kOKalWkN6N32n9+XcKyY2/UZpc0fDuRm0PCCb/Qq39LkHNF83Q1ad+4KSpgiV
+         LTgltQyaJIT9ryfmqIqBqoTOuXUkDuBlRZqCb4KIGN39bAlxO6AKe1pry724NX4dMW6E
+         Thw3IS52wTv26/tNSpIZ2OhuwOSW2kWMybtNxYwUWn+l1g1ADjvnStvay3TcV2Q2XIJY
+         genZjiQMJwXx7fw8+JQ5Xk/LKkC57jVNSW8/UQ/LfFzmgNF9SBYB6Z7JaKK9wrAlePEW
+         xRXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dfRkitREAl1cCOBzHtF2sXnD7um5XaadlgUl3USHzOw=;
-        b=R196KCQBhQ+dY8W7hrwm71K8P1vIYhq60HmXjstAiVwBz1oH2YmNQqUY5l6xpUmHzY
-         hTEbwFT+OHfblK9KCwu1xmlB1xuOSBiiWkGWTUhtLUTMSJ84O8ZdrDPM/f+mkC2ky1F+
-         li1SB8JmryOr/mimjiY6HHFVW+YgMK7zxhNXpsiSG7NRUbuIanhV8Q/TtI7O81ouBPQc
-         hqiIGbpE0MMxFYJihI2vLYXQxUPS59fzmg71SHI+NUyZmtv4c1kbBexxQXKxikEJegOr
-         BQ8AArobbojTPGDVMrEpSagnnwJH1RUiTYeYkBjjiZa83SzWQQwu5tf+K7HTyBFuX3XV
-         kIzg==
-X-Gm-Message-State: AOAM53316kRlOH8fXnj46QPByBlndrccWhuf1BZKCsM28c07U1Btn5j3
-        qjJ62AsaI/yQR1tUvjIBX44W/g==
-X-Google-Smtp-Source: ABdhPJxrn0x/9eaXzBdCUMoLFcH5nlz8yRsfA6f4zpfmqLIKKts2GJNGLlHeTT9csCf0DTwa8Bx4bA==
-X-Received: by 2002:a17:90a:b00e:: with SMTP id x14mr14377506pjq.57.1594285755440;
-        Thu, 09 Jul 2020 02:09:15 -0700 (PDT)
-Received: from localhost ([122.172.40.201])
-        by smtp.gmail.com with ESMTPSA id u19sm2364195pfk.98.2020.07.09.02.09.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Jul 2020 02:09:14 -0700 (PDT)
-Date:   Thu, 9 Jul 2020 14:39:12 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] cpufreq: allow drivers to flag custom support for
- freq invariance
-Message-ID: <20200709090912.vapouiruidgypxzc@vireshk-i7>
-References: <20200701090751.7543-1-ionela.voinescu@arm.com>
- <20200701090751.7543-2-ionela.voinescu@arm.com>
- <20200701094417.ffuvduz6pqknjcks@vireshk-i7>
- <20200701133330.GA32736@arm.com>
- <CAJZ5v0gT+xWwxcx3OZjXBnDLr9i4VOt2Vp3ScWBxbu+NiopkbA@mail.gmail.com>
- <20200702025818.s4oh7rzz3tr6zwqr@vireshk-i7>
- <20200702114425.GB28120@arm.com>
- <389dd87f-fed0-e4ea-81f3-5491fd2a54d1@arm.com>
- <20200709085354.GA5623@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eygZbTdlFFJ71jCLfCgJ+FFK+a7qNbIVolSlOz1F8GM=;
+        b=fTv6AsIUOJq7wvla1tvBUvxalXUZWEhquNoD78LFEStpMQUE2b4u4nqVStcCr3MOSq
+         L6LOMH0navOUbE3BQmsfV6mkSFH6/eG1VQMpUDEz9y8c9Cs81+p8JUnd6arFGs6kcA8Z
+         D9S4n++2DOrobfDMzx+GJ9QeISfm0WY6hN1WtM6M8ndASldKSE3ZUIYaYpVe+tZBZElQ
+         metz5VUQgap0KBsJqV6nR7EBjR0CQry6I0/HgJD9x81VIVN4ORGqdVN1JuA6st8uK91O
+         3KHlm7XxrA1Ceb7nqSjUk2b6GI8vZ6zcURMKOR2hkYAwyou/m54kxcERodVWrdJvs0D0
+         KcGQ==
+X-Gm-Message-State: AOAM532Nx4Gt3jt+1hE8c4hxaVxHtkaWSBNRlF6F8rTSiqxL4xSqbuJs
+        4youG5OVJl9QLAsMWCgj2zTpQ6yl9GlgjFOAEKwqEg==
+X-Google-Smtp-Source: ABdhPJyBTmJWVm+jeRh/T397jZe1feymToc3uhaSUxFBG3KtVFCrNLA1lCw6fQ/UuGQVOizKlaB8ldlMBCqSg811i6s=
+X-Received: by 2002:a05:6402:14c1:: with SMTP id f1mr73921180edx.342.1594287389229;
+ Thu, 09 Jul 2020 02:36:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200709085354.GA5623@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200708134613.131555-1-bsz@semihalf.com>
+In-Reply-To: <20200708134613.131555-1-bsz@semihalf.com>
+From:   Bartosz Szczepanek <bsz@semihalf.com>
+Date:   Thu, 9 Jul 2020 11:36:18 +0200
+Message-ID: <CABLO=+kwtYKdEHNsYS13+=LgFZ3L7Snym-aBthxe=vOsjiPTbg@mail.gmail.com>
+Subject: Re: [PATCH] thermal/int340x_thermal: Prevent page fault on
+ .set_mode() op
+To:     Matthew Garrett <mjg59@google.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Pandruvada Srinivas <srinivas.pandruvada@linux.intel.com>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Radoslaw Biernacki <rad@semihalf.com>,
+        Alex Levin <levinale@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-07-20, 09:53, Ionela Voinescu wrote:
-> On Monday 06 Jul 2020 at 14:14:47 (+0200), Dietmar Eggemann wrote:
-> > Why can't we just move the arch_set_freq_scale() call from cpufreq
-> > driver to cpufreq core w/o introducing a FIE related driver flag?
-> > 
-> > Current scenario for Frequency Invariance Engine (FIE) on arm/arm64.
-> > 
-> > +------------------------------+       +------------------------------+
-> > |                              |       |                              |
-> > | cpufreq core:                |       | arch: (arm, arm64)           |
-> > 
-> > |                              |       |                              |
-> > | weak arch_set_freq_scale() {}|       |                              |
-> > |                              |       |                              |
-> > +------------------------------+       |                              |
-> >                                        |                              |
-> > +------------------------------+       |                              |
-> > |                              |       |                              |
-> > | cpufreq driver:              |       |                              |
-> > |                            +-----------> arch_set_freq_scale()      |
-> > |                              |       |   {                          |
-> > +------------------------------+       |      if (use counters)       |
-> >                                        |        return;               |
-> > +------------------------------+       |      ...                     |
-> > |                              |       |   }                          |
-> > | task scheduler:              |       |                              |
-> > |                            +-----------> arch_scale_freq_tick()*    |
-> > |                              |       |   {                          |
-> > 
-> > |                              |       |      if (!use counters)      |
-> > |                              |       |        return;               |
-> > |                              |       |      ...                     |
-> > |                              |       |   }                          |
-> > +------------------------------+       +------------------------------+
-> > 
-> > * defined as topology_scale_freq_tick() in arm64
-> > 
-> > Only Arm/Arm64 defines arch_set_freq_scale() to get the 'legacy' CPUfreq
-> > based FIE. This would still be the case when we move
-> > arch_set_freq_scale() from individual cpufreq drivers to cpufreq core.
-> > 
-> > Arm64 is the only arch which has to runtime-choose between two different
-> > FIEs. This is currently done by bailing out early in one of the FIE
-> > functions based on 'use counters'.
-> > 
-> > X86 (and others) will continue to not define arch_set_freq_scale().
-> > 
-> > The issue with CONFIG_BL_SWITCHER (vexpress-spc-cpufreq.c) could be
-> > solved arm/arm64 internally (arch_topology.c) by putting
-> > arch_set_freq_scale() under a !CONFIG_BL_SWITCHER guard.
-> > I doubt that there are any arm bL systems out there running it. At least
-> > I'm not aware of any complaints due to missing FIE support in bl
-> > switcher setups so far.
+Hi Rui, Matthew,
 
-I agree to that.
+I think this regression should be corrected still in the 5.8 release
+cycle. It may cause kernel panic if .set_mode() is called before
+current_uuid_store(), and from what I see both operations can be
+triggered from sysfs. What I'm not 100% sure about is if we should
+apply the above fix, or rather revert the driver to its default
+behaviour of using uuid=0 if it wasn't set from userspace (this is how
+it was before Matthew's commit). What do you think?
 
-> Thank you Dietmar, for your review.
-> 
-> I was trying to suggest the same in my other replies.
+Best regards,
+Bartosz
 
-I am sorry, I must have overlooked that part in your replies,
-otherwise I may agreed to it :)
 
-> Rafael, Viresh, would you mind confirming whether you still consider
-> having an 'opt in' flag is preferable here?
-
-Well, we wanted an opt-in flag instead of an opt-out one. And no flag
-is certainly better.
-
--- 
-viresh
+On Wed, Jul 8, 2020 at 3:46 PM Bartosz Szczepanek <bsz@semihalf.com> wrote:
+>
+> Starting from commit "thermal/int340x_thermal: Don't require IDSP to
+> exist", priv->current_uuid_index is initialized to -1. This value may
+> be passed to int3400_thermal_run_osc() from int3400_thermal_set_mode,
+> contributing to page fault when accessing int3400_thermal_uuids array
+> at index -1.
+>
+> This commit adds a check on uuid value to int3400_thermal_run_osc.
+>
+> Signed-off-by: Bartosz Szczepanek <bsz@semihalf.com>
+> ---
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 0b3a62655843..12448ccd27f1 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -216,11 +216,16 @@ static int int3400_thermal_run_osc(acpi_handle handle,
+>         acpi_status status;
+>         int result = 0;
+>         struct acpi_osc_context context = {
+> -               .uuid_str = int3400_thermal_uuids[uuid],
+> +               .uuid_str = NULL,
+>                 .rev = 1,
+>                 .cap.length = 8,
+>         };
+>
+> +       if (uuid < 0 || uuid >= INT3400_THERMAL_MAXIMUM_UUID)
+> +               return -EINVAL;
+> +
+> +       context.uuid_str = int3400_thermal_uuids[uuid];
+> +
+>         buf[OSC_QUERY_DWORD] = 0;
+>         buf[OSC_SUPPORT_DWORD] = enable;
+>
+> --
+> 2.17.1
+>
