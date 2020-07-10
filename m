@@ -2,155 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E500F21B534
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 14:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0F421B554
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 14:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgGJMhf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 08:37:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726664AbgGJMhd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Jul 2020 08:37:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6AE3120772;
-        Fri, 10 Jul 2020 12:37:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594384653;
-        bh=3mgL0Xsw7l3dWlF8A5C8xZNqhhZYlFQyQbk+6H5ZBhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eOhMiqOOY82yZH2/LKZZ+cRuW/4wwKZ2xggMy+wdNV1S9rchyVzy16KGF9z1CawmX
-         Ouw34qWppih6X44wdil/Ra+Ea47QrW3DcP8Bu9G0BsvChXWZzAQ/t8pgqOCqX+8JkZ
-         b6GrDRm5O4Rnhhw+w0v4l1RnkSM8ZVxRWCs14nw8=
-Date:   Fri, 10 Jul 2020 14:37:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Gustav Wiklander <gustav.wiklander@axis.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        kernel@axis.com, Gustav Wiklander <gustavwi@axis.com>
-Subject: Re: [PATCHv2] PM / Domains: Add module ref count for each consumer
-Message-ID: <20200710123737.GA1546682@kroah.com>
-References: <20200610193156.20363-1-gustav.wiklander@axis.com>
- <CAPDyKFr_-ayyxAuzj92TwQmbcAVDrR6GSEQfD4HhWuUnseB0GA@mail.gmail.com>
- <20200710103734.GC1203263@kroah.com>
- <CAPDyKFqUZwOMRv5537k2N8xiwjKgk3Fi8MB364+wVUaT-rHuEw@mail.gmail.com>
+        id S1726896AbgGJMpI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 08:45:08 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:41146 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726820AbgGJMpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 08:45:08 -0400
+Received: by mail-ed1-f67.google.com with SMTP id e22so4543385edq.8;
+        Fri, 10 Jul 2020 05:45:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ABCar9XaLCL6nQFaJkwQvjmy7wFbtvMLNqM9yovrz04=;
+        b=oJv2kPqAhDjy/9Bqdy5ZYO6cynzW5Hf2+DLrhBkvMhgYhkPn4xbBidRn+gBmWJYkTi
+         NkJ8kKFxkZMeSKdhzgrA2D1WOYTXfikL1EqejcGVBvWyd/Hxa0eJB5Yxfh1JzZnoFARu
+         n4ZmIxDqu0oNMA2LUNCYd8iMDml2OcAyBx3HXI3wUufDaq00BC+MjEutBhZbRExEKqNz
+         4tf0W4lCeTx4o44zJ/uVu+Y1NcTmOEg7pvN7n3YUHmZMkgREWDgs5yKQsU5SHNZjtku8
+         FcAifWSGh1ckZQFur5VHJwmKmxE4ahKYaX99Ve1sKO2ZaG41BaHmeCcTsGv7aV/iRO0i
+         girQ==
+X-Gm-Message-State: AOAM533YrlgZkyJDPmfaZ5GSvpVoGpa0CJ7Fsz1dU3bm1y9gyt3iQBV/
+        FcVPlCIAa1Tpz5hQfqT+900=
+X-Google-Smtp-Source: ABdhPJwaB+c1mORjF8jaO+c/+QMJ0GE5nK3K8F4mfLhSS6Mvk1IPL6raXjJal+9PnCv8TJGdi0CJSA==
+X-Received: by 2002:a05:6402:1c10:: with SMTP id ck16mr60633676edb.72.1594385106109;
+        Fri, 10 Jul 2020 05:45:06 -0700 (PDT)
+Received: from pi3 ([194.230.155.195])
+        by smtp.googlemail.com with ESMTPSA id d12sm4379131edx.80.2020.07.10.05.45.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jul 2020 05:45:05 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 14:45:03 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, willy.mh.wolff.ml@gmail.com,
+        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, s.nawrocki@samsung.com, kgene@kernel.org
+Subject: Re: [PATCH 1/2] memory: samsung: exynos5422-dmc: Adjust polling
+ interval and uptreshold
+Message-ID: <20200710124503.GB22897@pi3>
+References: <20200708153420.29484-1-lukasz.luba@arm.com>
+ <CGME20200708153448epcas1p438fae2327ac69fcc1a78d9c73cfda501@epcas1p4.samsung.com>
+ <20200708153420.29484-2-lukasz.luba@arm.com>
+ <fa3f651a-3c2b-188b-e2dc-4fd05ce4a1b7@samsung.com>
+ <a676fc18-6f1f-8502-e8d5-5ad1ccf0eec6@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqUZwOMRv5537k2N8xiwjKgk3Fi8MB364+wVUaT-rHuEw@mail.gmail.com>
+In-Reply-To: <a676fc18-6f1f-8502-e8d5-5ad1ccf0eec6@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 02:01:15PM +0200, Ulf Hansson wrote:
-> On Fri, 10 Jul 2020 at 12:37, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Jul 10, 2020 at 12:18:57PM +0200, Ulf Hansson wrote:
-> > > On Wed, 10 Jun 2020 at 21:32, Gustav Wiklander
-> > > <gustav.wiklander@axis.com> wrote:
-> > > >
-> > > > From: Gustav Wiklander <gustavwi@axis.com>
-> > > >
-> > > > Currently a pm_domain can be unloaded without regard for consumers.
-> > > > This patch adds a module dependecy for every registered consumer.
-> > > > Now a power domain driver can only be unloaded if no consumers are
-> > > > registered.
-> > >
-> > > According to the comments from Rafael, yes, this needs some further
-> > > clarifications.
-> > >
-> > > Moreover, we also need to deal with module reference counters when
-> > > adding/removing subdomains. Also pointed out by Rafael.
-> > >
-> > > >
-> > > > Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
-> > > > ---
-> > > > Automated setting genpd->owner when calling pm_genpd_init.
-> > > > Similar to how usb_register_driver does it.
-> > > >
-> > > >  drivers/base/power/domain.c | 22 +++++++++++++++++-----
-> > > >  include/linux/pm_domain.h   | 10 ++++++++--
-> > > >  2 files changed, 25 insertions(+), 7 deletions(-)
-> > > >
-> > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > > > index 0a01df608849..70c8b59bfed9 100644
-> > > > --- a/drivers/base/power/domain.c
-> > > > +++ b/drivers/base/power/domain.c
-> > > > @@ -1499,11 +1499,18 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
-> > > >         if (IS_ERR(gpd_data))
-> > > >                 return PTR_ERR(gpd_data);
-> > > >
-> > > > +       if (!try_module_get(genpd->owner)) {
-> > > > +               ret = -ENODEV;
-> > > > +               goto out;
-> > > > +       }
-> > > > +
-> > > >         gpd_data->cpu = genpd_get_cpu(genpd, base_dev);
-> > > >
-> > > >         ret = genpd->attach_dev ? genpd->attach_dev(genpd, dev) : 0;
-> > > > -       if (ret)
-> > > > +       if (ret) {
-> > > > +               module_put(genpd->owner);
-> > > >                 goto out;
-> > > > +       }
-> > > >
-> > > >         genpd_lock(genpd);
-> > > >
-> > > > @@ -1579,6 +1586,8 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
-> > > >
-> > > >         genpd_free_dev_data(dev, gpd_data);
-> > > >
-> > > > +       module_put(genpd->owner);
-> > > > +
-> > > >         return 0;
-> > > >
-> > > >   out:
-> > > > @@ -1755,15 +1764,17 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
-> > > >  }
-> > > >
-> > > >  /**
-> > > > - * pm_genpd_init - Initialize a generic I/O PM domain object.
-> > > > + * __pm_genpd_init - Initialize a generic I/O PM domain object.
-> > > >   * @genpd: PM domain object to initialize.
-> > > >   * @gov: PM domain governor to associate with the domain (may be NULL).
-> > > >   * @is_off: Initial value of the domain's power_is_off field.
-> > > > + * @owner: module owner of this power domain object.
-> > > >   *
-> > > >   * Returns 0 on successful initialization, else a negative error code.
-> > > >   */
-> > > > -int pm_genpd_init(struct generic_pm_domain *genpd,
-> > > > -                 struct dev_power_governor *gov, bool is_off)
-> > > > +int __pm_genpd_init(struct generic_pm_domain *genpd,
-> > > > +                 struct dev_power_governor *gov, bool is_off,
-> > > > +                 struct module *owner)
-> > >
-> > > Please drop this new interface altogether. Instead we can just let the
-> > > caller of pm_genpd_init() to assign genpd->owner, rather than passing
-> > > it as a parameter.
-> >
-> > No, I asked for this type of interface because it does not require any
-> > developer to "remember" to set this value or not, and it does not
-> > require you to go and fix the whole kernel.  This is the correct way to
-> > do this, see the many other driver subsystems that do this today for
-> > that reason.
+On Fri, Jul 10, 2020 at 09:34:45AM +0100, Lukasz Luba wrote:
+> Hi Chanwoo,
 > 
-> Well, in many cases I would agree with you, but not for genpd.
+> On 7/9/20 5:08 AM, Chanwoo Choi wrote:
+> > Hi Lukasz,
+> > 
+> > On 7/9/20 12:34 AM, Lukasz Luba wrote:
+> > > In order to react faster and make better decisions under some workloads,
+> > > benchmarking the memory subsystem behavior, adjust the polling interval
+> > > and upthreshold value used by the simple_ondemand governor.
+> > > 
+> > > Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+> > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > ---
+> > >   drivers/memory/samsung/exynos5422-dmc.c | 4 ++--
+> > >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+> > > index 93e9c2429c0d..e03ee35f0ab5 100644
+> > > --- a/drivers/memory/samsung/exynos5422-dmc.c
+> > > +++ b/drivers/memory/samsung/exynos5422-dmc.c
+> > > @@ -1466,10 +1466,10 @@ static int exynos5_dmc_probe(struct platform_device *pdev)
+> > >   		 * Setup default thresholds for the devfreq governor.
+> > >   		 * The values are chosen based on experiments.
+> > >   		 */
+> > > -		dmc->gov_data.upthreshold = 30;
+> > > +		dmc->gov_data.upthreshold = 10;
+> > >   		dmc->gov_data.downdifferential = 5;
+> > > -		exynos5_dmc_df_profile.polling_ms = 500;
+> > > +		exynos5_dmc_df_profile.polling_ms = 100;
+> > >   	}
+> > > 
+> > 
+> > Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+> > 
 > 
-> We have and are still, continuously finding new configurations that
-> are needed for a genpd. And we don't want a new in-parameter to be
-> added each time that happens.
+> Thank you for the review. Do you think this patch could go through
+> your tree together with your patches?
+> 
+> I don't know Krzysztof's opinion about the patch 2/2, but
+> I would expect, assuming the patch itself is correct, he would
+> like to take it into his next/dt branch.
 
-THIS_MODULE is "special", other config options you need should go in a
-structure as you say.  This way we get the compiler to fix the option to
-always be the correct one, no need for a developer to remember it,
-totally different from all other driver/subsystem options.
+In the cover letter you mentioned that this is a follow up for the
+Chanwoo's patchset. But are these patches really depending on it? Can
+they be picked up independently?
 
-thanks,
+The DTS patch must go through arm soc, so I will take it. If it really
+depends on driver changes, then it has to wait for next release.
 
-greg k-h
+Best regards,
+Krzysztof
+
