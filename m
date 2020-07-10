@@ -2,92 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DF521B67F
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 15:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC59C21B6AE
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 15:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbgGJNeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 09:34:01 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:38369 "EHLO cmta16.telus.net"
+        id S1726832AbgGJNlg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 09:41:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:47256 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726840AbgGJNeB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Jul 2020 09:34:01 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id ttA5jRQFl5b7lttA6jbKJf; Fri, 10 Jul 2020 07:33:59 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1594388039; bh=3k6WC3lq7Nya483IlFpmai+sfNvwOM16loKCBwrE1o4=;
-        h=From:To:Cc:Subject:Date;
-        b=IWS3Bbn1o+O+J6IKVqQVP/NFcuVZUNIBDM7lSg0KwxbX6xBqF2m1RbK/QUfeZgRwL
-         KXxt7WkctF8k4NgdLfdo591OxW1Yp+VwZ1HS0bEghkW3Hu+aoCag3RBIrE+DO+WxG9
-         9mAq32v2HiNptjlpqP2K4eqJ8gQEEEI1n89rd6UEmSZ/vZ2AOwWkLAkbtT3F79PjdH
-         uJ5iL8bQ0nWEqGGngenqdnUvIW0I3ww7NQdlgysh+/jynnsITqOGQk9040ibhqnt9V
-         B1YCq+eBdEk2RVHPHB+oHY5upQCVbkb/Kyd45pKnFgrFnnJXzn8fUdGgIXnwz9KOJd
-         9qw9GNRvGwv1w==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=ndZCF_r969jSBklO3fMA:9
- a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>
-Cc:     "'Linux PM'" <linux-pm@vger.kernel.org>
-Subject: cpufreq: intel_pstate: EPB with performance governor
-Date:   Fri, 10 Jul 2020 06:33:57 -0700
-Message-ID: <000701d656be$c48083e0$4d818ba0$@net>
+        id S1726774AbgGJNlg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Jul 2020 09:41:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F14C1FB;
+        Fri, 10 Jul 2020 06:41:35 -0700 (PDT)
+Received: from [10.37.12.58] (unknown [10.37.12.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6843F3F8C6;
+        Fri, 10 Jul 2020 06:41:31 -0700 (PDT)
+Subject: Re: [PATCH 1/2] memory: samsung: exynos5422-dmc: Adjust polling
+ interval and uptreshold
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, willy.mh.wolff.ml@gmail.com,
+        k.konieczny@samsung.com, b.zolnierkie@samsung.com,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, s.nawrocki@samsung.com, kgene@kernel.org
+References: <20200708153420.29484-1-lukasz.luba@arm.com>
+ <CGME20200708153448epcas1p438fae2327ac69fcc1a78d9c73cfda501@epcas1p4.samsung.com>
+ <20200708153420.29484-2-lukasz.luba@arm.com>
+ <fa3f651a-3c2b-188b-e2dc-4fd05ce4a1b7@samsung.com>
+ <a676fc18-6f1f-8502-e8d5-5ad1ccf0eec6@arm.com>
+ <c016e256-65a6-8075-d88d-c3fad4815b4d@samsung.com>
+ <20200710131921.GA23039@pi3>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <4bfa227e-3a6b-dfe2-140b-b402dea52231@arm.com>
+Date:   Fri, 10 Jul 2020 14:41:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZWvsLAIXyppszvS8W5WAMzng3ZNw==
-X-CMAE-Envelope: MS4wfIs4Av5iRFn/nPv4oBElZedK/j7yg04WZgZ3VuX0nexacLdeyRm66j00v7bNLt9Se3zfkMpNAs4e+GZO+UWmjJ3UopNS3WiuV12sXw6daGVfJ03uKJ/L
- g+nFP5zzALls5iDO9S21nkcv4yhVyEgrmC/5SFSQE91u+zp0J8eLz+wsNpxJgWSXvX3/tozOw0+d8S4oq6zNYXn41d9yoQqSuyEOyk9RQU+gR9f2EHNPs8v+
- Tad8Y0kQF5pTly1lWW8Q7g==
+In-Reply-To: <20200710131921.GA23039@pi3>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas and/or Rafael,
-
-Can you please confirm or deny that an older
-commit:
-
-commit 8442885fca09b2d26375b9fe507759879a6f661e
-cpufreq: intel_pstate: Set EPP/EPB to 0 in performance mode
-
-has been superseded by:
-
-arch/x86/kernel/cpu/intel_epb.c
-
-and that now there is no way to have some default EPB (say 6) for
-governors other than performance, while still getting an EPB of 0
-for the performance governor.
-
-... Doug
-
-Additional notes:
-Both my test computers have EPB as 0 upon startup,
-But I also tried this:
-
-diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-index f4dd73396f28..b536e381cd56 100644
---- a/arch/x86/kernel/cpu/intel_epb.c
-+++ b/arch/x86/kernel/cpu/intel_epb.c
-@@ -74,7 +74,8 @@ static int intel_epb_save(void)
-
- static void intel_epb_restore(void)
- {
--       u64 val = this_cpu_read(saved_epb);
-+//     u64 val = this_cpu_read(saved_epb);
-+       u64 val = 6;
-        u64 epb;
-
-        rdmsrl(MSR_IA32_ENERGY_PERF_BIAS, epb);
-
-which did get rid of this message:
-kernel: [    0.102158] ENERGY_PERF_BIAS: Set to 'normal', was 'performance'
 
 
+On 7/10/20 2:19 PM, Krzysztof Kozlowski wrote:
+> On Fri, Jul 10, 2020 at 03:13:18PM +0200, Marek Szyprowski wrote:
+>> Hi Lukasz,
+>>
+>> On 10.07.2020 10:34, Lukasz Luba wrote:
+>>> Hi Chanwoo,
+>>>
+>>> On 7/9/20 5:08 AM, Chanwoo Choi wrote:
+>>>> Hi Lukasz,
+>>>>
+>>>> On 7/9/20 12:34 AM, Lukasz Luba wrote:
+>>>>> In order to react faster and make better decisions under some
+>>>>> workloads,
+>>>>> benchmarking the memory subsystem behavior, adjust the polling interval
+>>>>> and upthreshold value used by the simple_ondemand governor.
+>>>>>
+>>>>> Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>>> ---
+>>>>>    drivers/memory/samsung/exynos5422-dmc.c | 4 ++--
+>>>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/memory/samsung/exynos5422-dmc.c
+>>>>> b/drivers/memory/samsung/exynos5422-dmc.c
+>>>>> index 93e9c2429c0d..e03ee35f0ab5 100644
+>>>>> --- a/drivers/memory/samsung/exynos5422-dmc.c
+>>>>> +++ b/drivers/memory/samsung/exynos5422-dmc.c
+>>>>> @@ -1466,10 +1466,10 @@ static int exynos5_dmc_probe(struct
+>>>>> platform_device *pdev)
+>>>>>             * Setup default thresholds for the devfreq governor.
+>>>>>             * The values are chosen based on experiments.
+>>>>>             */
+>>>>> -        dmc->gov_data.upthreshold = 30;
+>>>>> +        dmc->gov_data.upthreshold = 10;
+>>>>>            dmc->gov_data.downdifferential = 5;
+>>>>>    -        exynos5_dmc_df_profile.polling_ms = 500;
+>>>>> +        exynos5_dmc_df_profile.polling_ms = 100;
+>>>>>        }
+>>>>>
+>>>>
+>>>> Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
+>>>>
+>>>
+>>> Thank you for the review. Do you think this patch could go through
+>>> your tree together with your patches?
+>>>
+>>> I don't know Krzysztof's opinion about the patch 2/2, but
+>>> I would expect, assuming the patch itself is correct, he would
+>>> like to take it into his next/dt branch.
+>>
+>> Is there really a need to remove the interrupts property? imho they are
+>> correct hw description, it just a matter of the driver to use or not to
+>> use them.
+
+Marek, I agree with you, they are correct hw description. Unfortunately,
+I don't have TRM to experiment and maybe fix the interrupt mode code.
+
+> 
+> That's actually very good point. I would also prefer to leave them.
+> However I understood that driver chooses mode depending on the property.
+
+Correct
+
+> 
+> In such case, maybe as you said, let's switch to polling mode
+> unconditionally?
+
+I can make happen that the polling mode will be unconditionally
+set as default.
+
+Do you think that the interrupt mode code can still stay in the
+driver, because maybe in future could be fixed?
+
+
+> 
+> Best regards,
+> Krzysztof
+> 
