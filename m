@@ -2,105 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFC421AD90
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 05:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 326B821ADC7
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 06:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727031AbgGJDcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 23:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726757AbgGJDcE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 23:32:04 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C6DC08C5DC
-        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 20:32:04 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id w2so1889438pgg.10
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 20:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6M9I0N+ITvQl9xLS8Krk1EyTKkYlOBKb0aLEeu36Cv8=;
-        b=W/lnnY3WTAA7T9J1NuelxckKknOIoZXKKbX/36nao31ESoCDBAuZ+OW+30GViwVfd8
-         5z+0iEl48c4xcxnb5XJilpOu3XLYs6AWNo8D2ckZNgIU8Xkz/LZICnbM7OmeLdBYAfwE
-         Mu12ew52Bep212m3xFB2cYiLBQpdr8qxuTeoUXi6m9TtnpD/srLkIUnaDdpzgliIupTF
-         6B8WF6wprssPLXrKtgQ4aOTDu+7J6QxZmmpULDLsikCwBGME4BC/HG1W53UVTVCR+kJp
-         b1dERd7Jqf/Gvg/fy6IYHXaVY+ooxDd+15OinfaHrBmqNe1s6P0x74b/Cw3b8nc/naiW
-         4oWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6M9I0N+ITvQl9xLS8Krk1EyTKkYlOBKb0aLEeu36Cv8=;
-        b=orKhxE9Nzd2Coa/5f7mnTh23FU/d13P3Af5iPcnwirRrw9XVdQH/Oy83PiK9tbilV9
-         FuTmQXYtKKcdfmwRSzzTWiaKDRCoax1BEQ4YzjHgsuhxHuHW40Wa780got+6tecvS+lg
-         uOQMKJV/7Q8oRRE5ZDn9nWNCSd8GknVe3peTpdKw4lrfOB9ZFob7AtRFYK3NkYA1bWuv
-         M9BkD/l8q0Z7aTQ1k/heWcgKnImF66yemTu57PnbA1efjfi+8h4PWOUPFsJfxcox4R7k
-         13GgCt+jGeRpWbjQZkxDagwZ09xsqKXrmTwdkXeovgd1lAO+wnDOl7N7ZADY8VkX0Xkv
-         F5XQ==
-X-Gm-Message-State: AOAM530yTLTUnq5AEjOsaJWz6k1sxHzI05Si+mZVRMCnDeiRE5WkA3rp
-        MMF4VCsf0/DduTe/KYDz8mGt6A==
-X-Google-Smtp-Source: ABdhPJxWp7W3tDSKZHDWvomOrjvvu5VENBEUeF62wqgfTC+Phjp6QzIdRtIQ5UxiD+hL8FDDrsZcZg==
-X-Received: by 2002:a62:195:: with SMTP id 143mr52866988pfb.226.1594351923564;
-        Thu, 09 Jul 2020 20:32:03 -0700 (PDT)
-Received: from localhost ([122.172.34.142])
-        by smtp.gmail.com with ESMTPSA id b82sm4212684pfb.215.2020.07.09.20.32.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 Jul 2020 20:32:02 -0700 (PDT)
-Date:   Fri, 10 Jul 2020 09:02:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rjw@rjwysocki.net, lenb@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix static checker warning for
- epp variable
-Message-ID: <20200710033201.batyrrr7lgqchw4j@vireshk-i7>
-References: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        id S1725851AbgGJELG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 00:11:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:48310 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725777AbgGJELF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Jul 2020 00:11:05 -0400
+IronPort-SDR: zthha9ddH52MsCsaeheEjUVTGXHBiHwoBCYKHae8iiNM4x+lLZaAAqWg0hwj6ZOED+Rfoz1CLq
+ WE8g66mFQ3SQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9677"; a="135611521"
+X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
+   d="scan'208";a="135611521"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2020 21:11:05 -0700
+IronPort-SDR: O8JSIaYP8xEdErt152VGO90GCWM6m1o5mEKemJL0bHREATm5oBf16JEQe97HEdZ2/CohI0VM5z
+ qXbRCTstSjIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,334,1589266800"; 
+   d="scan'208";a="389362043"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Jul 2020 21:11:02 -0700
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Len Brown <lenb@kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chen Yu <yu.c.chen@intel.com>, Len Brown <len.brown@intel.com>
+Subject: [PATCH][v2] intel_idle: Customize IceLake server support
+Date:   Fri, 10 Jul 2020 12:12:01 +0800
+Message-Id: <20200710041201.22390-1-yu.c.chen@intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-07-20, 13:05, Srinivas Pandruvada wrote:
-> Fix warning for:
-> drivers/cpufreq/intel_pstate.c:731 store_energy_performance_preference()
-> error: uninitialized symbol 'epp'.
-> 
-> This warning is for a case, when energy_performance_preference attribute
-> matches pre defined strings. In this case the value of raw epp will not
-> be used to set EPP bits in MSR_HWP_REQUEST. So initializing with any
-> value is fine.
-> 
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> This patch is on top of bleed-edge branch at
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm
-> 
->  drivers/cpufreq/intel_pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 44c7b4677675..94cd07678ee3 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -709,7 +709,7 @@ static ssize_t store_energy_performance_preference(
->  	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
->  	char str_preference[21];
->  	bool raw = false;
-> -	u32 epp;
-> +	u32 epp = 0;
->  	int ret;
->  
->  	ret = sscanf(buf, "%20s", str_preference);
+On ICX platform, the CPU frequency will slowly ramp up
+when woken up from C-states deeper than/equals to C1E.
+Although this feature does save energy in many cases
+this might also cause unexpected result. For example,
+workload might get unstable performance due to the uncertainty
+of CPU frequency. Besides, the CPU frequency might not be locked
+to specific level when the CPU utilization is low.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Thus this patch disables C1E auto-promotion and expose
+C1E as a separate idle state, so that the C1E and C6 can
+be disabled via sysfs when necessary.
 
+Besides C1 and C1E, the exit latency of C6 was measured
+by a dedicated tool. However the exit latency(41us) exposed
+by _CST is much smaller than the one we measured(128us). This
+is probably due to the _CST uses the exit latency when woken
+up from PC0+C6, rather than PC6+C6 when C6 was measured. Choose
+the latter as we need the longest latency in theory.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Acked-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+---
+v2: Minor commit message refinement for better understanding.
+--
+ drivers/idle/intel_idle.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index f4495841bf68..1eab606d858b 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -752,6 +752,35 @@ static struct cpuidle_state skx_cstates[] __initdata = {
+ 		.enter = NULL }
+ };
+ 
++static struct cpuidle_state icx_cstates[] __initdata = {
++	{
++		.name = "C1",
++		.desc = "MWAIT 0x00",
++		.flags = MWAIT2flg(0x00),
++		.exit_latency = 1,
++		.target_residency = 1,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.name = "C1E",
++		.desc = "MWAIT 0x01",
++		.flags = MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
++		.exit_latency = 4,
++		.target_residency = 4,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.name = "C6",
++		.desc = "MWAIT 0x20",
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.exit_latency = 128,
++		.target_residency = 384,
++		.enter = &intel_idle,
++		.enter_s2idle = intel_idle_s2idle, },
++	{
++		.enter = NULL }
++};
++
+ static struct cpuidle_state atom_cstates[] __initdata = {
+ 	{
+ 		.name = "C1E",
+@@ -1056,6 +1085,12 @@ static const struct idle_cpu idle_cpu_skx __initconst = {
+ 	.use_acpi = true,
+ };
+ 
++static const struct idle_cpu idle_cpu_icx __initconst = {
++	.state_table = icx_cstates,
++	.disable_promotion_to_c1e = true,
++	.use_acpi = true,
++};
++
+ static const struct idle_cpu idle_cpu_avn __initconst = {
+ 	.state_table = avn_cstates,
+ 	.disable_promotion_to_c1e = true,
+@@ -1110,6 +1145,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,		&idle_cpu_skl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		&idle_cpu_skl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,	&idle_cpu_bxt),
 -- 
-viresh
+2.17.1
+
