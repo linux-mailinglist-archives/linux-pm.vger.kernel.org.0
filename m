@@ -2,179 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A49121AD47
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 05:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FFC421AD90
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 05:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgGJDJC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 23:09:02 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:10871 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726495AbgGJDJB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 23:09:01 -0400
-X-UUID: 9e0d82b26dea417ba92dc81e6cb20e8c-20200710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ZFtOqU4dl/32ounTIhT+b9wwRW4JvgTVX7I6mCXa/UU=;
-        b=PXSZk+SYrkUrJROytn5Mvnmqzf+fNO/RgaGhQfLg7AFJB4hNS2vTXKIswG8yN/a8BwMIlJK3bzEjNh59kZeLY9Ok9M6ibjIPspeIne7nriVZscx8JmBDmUUU5AVIvWcdFR8n4Mn+jP5Xnbb/HpdkM4zKHhEBKvnma5hl0cQmE/w=;
-X-UUID: 9e0d82b26dea417ba92dc81e6cb20e8c-20200710
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <neal.liu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 916390051; Fri, 10 Jul 2020 11:08:57 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Jul 2020 11:08:54 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jul 2020 11:08:55 +0800
-Message-ID: <1594350535.4670.13.camel@mtkswgap22>
-Subject: Re: [PATCH v2] cpuidle: change enter_s2idle() prototype
-From:   Neal Liu <neal.liu@mediatek.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Neal Liu <neal.liu@mediatek.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
-Date:   Fri, 10 Jul 2020 11:08:55 +0800
-In-Reply-To: <CAJZ5v0ihB5AJwSRpjaOnXAmciregzxARL5xfudu1h+=_LXaE_w@mail.gmail.com>
-References: <1594005196-16327-1-git-send-email-neal.liu@mediatek.com>
-         <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
-         <CAJZ5v0ihB5AJwSRpjaOnXAmciregzxARL5xfudu1h+=_LXaE_w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1727031AbgGJDcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 23:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726757AbgGJDcE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 23:32:04 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C6DC08C5DC
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 20:32:04 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id w2so1889438pgg.10
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 20:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6M9I0N+ITvQl9xLS8Krk1EyTKkYlOBKb0aLEeu36Cv8=;
+        b=W/lnnY3WTAA7T9J1NuelxckKknOIoZXKKbX/36nao31ESoCDBAuZ+OW+30GViwVfd8
+         5z+0iEl48c4xcxnb5XJilpOu3XLYs6AWNo8D2ckZNgIU8Xkz/LZICnbM7OmeLdBYAfwE
+         Mu12ew52Bep212m3xFB2cYiLBQpdr8qxuTeoUXi6m9TtnpD/srLkIUnaDdpzgliIupTF
+         6B8WF6wprssPLXrKtgQ4aOTDu+7J6QxZmmpULDLsikCwBGME4BC/HG1W53UVTVCR+kJp
+         b1dERd7Jqf/Gvg/fy6IYHXaVY+ooxDd+15OinfaHrBmqNe1s6P0x74b/Cw3b8nc/naiW
+         4oWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6M9I0N+ITvQl9xLS8Krk1EyTKkYlOBKb0aLEeu36Cv8=;
+        b=orKhxE9Nzd2Coa/5f7mnTh23FU/d13P3Af5iPcnwirRrw9XVdQH/Oy83PiK9tbilV9
+         FuTmQXYtKKcdfmwRSzzTWiaKDRCoax1BEQ4YzjHgsuhxHuHW40Wa780got+6tecvS+lg
+         uOQMKJV/7Q8oRRE5ZDn9nWNCSd8GknVe3peTpdKw4lrfOB9ZFob7AtRFYK3NkYA1bWuv
+         M9BkD/l8q0Z7aTQ1k/heWcgKnImF66yemTu57PnbA1efjfi+8h4PWOUPFsJfxcox4R7k
+         13GgCt+jGeRpWbjQZkxDagwZ09xsqKXrmTwdkXeovgd1lAO+wnDOl7N7ZADY8VkX0Xkv
+         F5XQ==
+X-Gm-Message-State: AOAM530yTLTUnq5AEjOsaJWz6k1sxHzI05Si+mZVRMCnDeiRE5WkA3rp
+        MMF4VCsf0/DduTe/KYDz8mGt6A==
+X-Google-Smtp-Source: ABdhPJxWp7W3tDSKZHDWvomOrjvvu5VENBEUeF62wqgfTC+Phjp6QzIdRtIQ5UxiD+hL8FDDrsZcZg==
+X-Received: by 2002:a62:195:: with SMTP id 143mr52866988pfb.226.1594351923564;
+        Thu, 09 Jul 2020 20:32:03 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id b82sm4212684pfb.215.2020.07.09.20.32.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Jul 2020 20:32:02 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 09:02:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rjw@rjwysocki.net, lenb@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: intel_pstate: Fix static checker warning for
+ epp variable
+Message-ID: <20200710033201.batyrrr7lgqchw4j@vireshk-i7>
+References: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 967F8FBDB13B401C9F61D19FEDCEA86A89133194AAE8170C5FFDE56D1C0B79A12000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA3LTA5IGF0IDE0OjE4ICswMjAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToNCj4gT24gTW9uLCBKdWwgNiwgMjAyMCBhdCA1OjEzIEFNIE5lYWwgTGl1IDxuZWFsLmxpdUBt
-ZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+DQo+ID4gQ29udHJvbCBGbG93IEludGVncml0eShDRkkp
-IGlzIGEgc2VjdXJpdHkgbWVjaGFuaXNtIHRoYXQgZGlzYWxsb3dzDQo+ID4gY2hhbmdlcyB0byB0
-aGUgb3JpZ2luYWwgY29udHJvbCBmbG93IGdyYXBoIG9mIGEgY29tcGlsZWQgYmluYXJ5LA0KPiA+
-IG1ha2luZyBpdCBzaWduaWZpY2FudGx5IGhhcmRlciB0byBwZXJmb3JtIHN1Y2ggYXR0YWNrcy4N
-Cj4gPg0KPiA+IGluaXRfc3RhdGVfbm9kZSgpIGFzc2lnbiBzYW1lIGZ1bmN0aW9uIGNhbGxiYWNr
-IHRvIGRpZmZlcmVudA0KPiA+IGZ1bmN0aW9uIHBvaW50ZXIgZGVjbGFyYXRpb25zLg0KPiA+DQo+
-ID4gc3RhdGljIGludCBpbml0X3N0YXRlX25vZGUoc3RydWN0IGNwdWlkbGVfc3RhdGUgKmlkbGVf
-c3RhdGUsDQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IG9mX2Rl
-dmljZV9pZCAqbWF0Y2hlcywNCj4gPiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3Qg
-ZGV2aWNlX25vZGUgKnN0YXRlX25vZGUpIHsgLi4uDQo+ID4gICAgICAgICBpZGxlX3N0YXRlLT5l
-bnRlciA9IG1hdGNoX2lkLT5kYXRhOyAuLi4NCj4gPiAgICAgICAgIGlkbGVfc3RhdGUtPmVudGVy
-X3MyaWRsZSA9IG1hdGNoX2lkLT5kYXRhOyB9DQo+ID4NCj4gPiBGdW5jdGlvbiBkZWNsYXJhdGlv
-bnM6DQo+ID4NCj4gPiBzdHJ1Y3QgY3B1aWRsZV9zdGF0ZSB7IC4uLg0KPiA+ICAgICAgICAgaW50
-ICgqZW50ZXIpIChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiAgICAgICAgICAgICAg
-ICAgICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsDQo+ID4gICAgICAgICAgICAgICAg
-ICAgICAgIGludCBpbmRleCk7DQo+ID4NCj4gPiAgICAgICAgIHZvaWQgKCplbnRlcl9zMmlkbGUp
-IChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwNCj4gPiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBpbnQgaW5kZXgpOyB9Ow0KPiA+DQo+ID4gSW4gdGhpcyBjYXNlLCBlaXRo
-ZXIgZW50ZXIoKSBvciBlbnRlcl9zMmlkbGUoKSB3b3VsZCBjYXVzZSBDRkkgY2hlY2sNCj4gPiBm
-YWlsZWQgc2luY2UgdGhleSB1c2Ugc2FtZSBjYWxsZWUuDQo+IA0KPiBDYW4geW91IHBsZWFzZSBl
-eHBsYWluIHRoaXMgaW4gYSBiaXQgbW9yZSBkZXRhaWw/DQo+IA0KPiBBcyBpdCBzdGFuZHMsIEkg
-ZG9uJ3QgdW5kZXJzdGFuZCB0aGUgcHJvYmxlbSBzdGF0ZW1lbnQgZW5vdWdoIHRvIGFwcGx5DQo+
-IHRoZSBwYXRjaC4NCj4gDQoNCk9rYXksIExldCdzIG1lIHRyeSB0byBleHBsYWluIG1vcmUgZGV0
-YWlscy4NCkNvbnRyb2wgRmxvdyBJbnRlZ3JpdHkoQ0ZJKSBpcyBhIHNlY3VyaXR5IG1lY2hhbmlz
-bSB0aGF0IGRpc2FsbG93cw0KY2hhbmdlcyB0byB0aGUgb3JpZ2luYWwgY29udHJvbCBmbG93IGdy
-YXBoIG9mIGEgY29tcGlsZWQgYmluYXJ5LCBtYWtpbmcNCml0IHNpZ25pZmljYW50bHkgaGFyZGVy
-IHRvIHBlcmZvcm0gc3VjaCBhdHRhY2tzLg0KDQpUaGVyZSBhcmUgbXVsdGlwbGUgY29udHJvbCBm
-bG93IGluc3RydWN0aW9ucyB0aGF0IGNvdWxkIGJlIG1hbmlwdWxhdGVkDQpieSB0aGUgYXR0YWNr
-ZXIgYW5kIHN1YnZlcnQgY29udHJvbCBmbG93LiBUaGUgdGFyZ2V0IGluc3RydWN0aW9ucyB0aGF0
-DQp1c2UgZGF0YSB0byBkZXRlcm1pbmUgdGhlIGFjdHVhbCBkZXN0aW5hdGlvbi4NCi0gaW5kaXJl
-Y3QganVtcA0KLSBpbmRpcmVjdCBjYWxsDQotIHJldHVybg0KDQpJbiB0aGlzIGNhc2UsIGZ1bmN0
-aW9uIHByb3RvdHlwZSBiZXR3ZWVuIGNhbGxlciBhbmQgY2FsbGVlIGFyZSBtaXNtYXRjaC4NCkNh
-bGxlcjogKHR5cGUgQSlmdW5jQQ0KQ2FsbGVlOiAodHlwZSBBKWZ1bmNCDQpDYWxsZWU6ICh0eXBl
-IEMpZnVuY0MNCg0KZnVuY0EgY2FsbHMgZnVuY0IgLT4gbm8gcHJvYmxlbQ0KZnVuY0EgY2FsbHMg
-ZnVuY0MgLT4gQ0ZJIGNoZWNrIGZhaWxlZA0KDQpUaGF0J3Mgd2h5IHdlIHRyeSB0byBhbGlnbiBm
-dW5jdGlvbiBwcm90b3R5cGUuDQpQbGVhc2UgZmVlbCBmcmVlIHRvIGZlZWRiYWNrIGlmIHlvdSBo
-YXZlIGFueSBxdWVzdGlvbnMuDQoNCj4gPiBBbGlnbiBmdW5jdGlvbiBwcm90b3R5cGUgb2YgZW50
-ZXIoKSBzaW5jZSBpdCBuZWVkcyByZXR1cm4gdmFsdWUgZm9yDQo+ID4gc29tZSB1c2UgY2FzZXMu
-IFRoZSByZXR1cm4gdmFsdWUgb2YgZW50ZXJfczJpZGxlKCkgaXMgbm8NCj4gPiBuZWVkIGN1cnJl
-bnRseS4NCj4gDQo+IFNvIGxhc3QgdGltZSBJIHJlcXVlc3RlZCB5b3UgdG8gZG9jdW1lbnQgd2h5
-IC0+ZW50ZXJfczJpZGxlIG5lZWRzIHRvDQo+IHJldHVybiBhbiBpbnQgaW4gdGhlIGNvZGUsIHdo
-aWNoIGhhcyBub3QgYmVlbiBkb25lLiAgUGxlYXNlIGRvIHRoYXQuDQo+IA0KPiA+IFNpZ25lZC1v
-ZmYtYnk6IE5lYWwgTGl1IDxuZWFsLmxpdUBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIGRy
-aXZlcnMvYWNwaS9wcm9jZXNzb3JfaWRsZS5jICAgfCAgICA2ICsrKystLQ0KPiA+ICBkcml2ZXJz
-L2NwdWlkbGUvY3B1aWRsZS10ZWdyYS5jIHwgICAgOCArKysrKy0tLQ0KPiA+ICBkcml2ZXJzL2lk
-bGUvaW50ZWxfaWRsZS5jICAgICAgIHwgICAgNiArKysrLS0NCj4gPiAgaW5jbHVkZS9saW51eC9j
-cHVpZGxlLmggICAgICAgICB8ICAgIDYgKysrLS0tDQo+ID4gIDQgZmlsZXMgY2hhbmdlZCwgMTYg
-aW5zZXJ0aW9ucygrKSwgMTAgZGVsZXRpb25zKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJp
-dmVycy9hY3BpL3Byb2Nlc3Nvcl9pZGxlLmMgYi9kcml2ZXJzL2FjcGkvcHJvY2Vzc29yX2lkbGUu
-Yw0KPiA+IGluZGV4IDc1NTM0YzUuLjZmZmI2YzkgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9h
-Y3BpL3Byb2Nlc3Nvcl9pZGxlLmMNCj4gPiArKysgYi9kcml2ZXJzL2FjcGkvcHJvY2Vzc29yX2lk
-bGUuYw0KPiA+IEBAIC02NTUsOCArNjU1LDggQEAgc3RhdGljIGludCBhY3BpX2lkbGVfZW50ZXIo
-c3RydWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsDQo+ID4gICAgICAgICByZXR1cm4gaW5kZXg7DQo+
-ID4gIH0NCj4gPg0KPiA+IC1zdGF0aWMgdm9pZCBhY3BpX2lkbGVfZW50ZXJfczJpZGxlKHN0cnVj
-dCBjcHVpZGxlX2RldmljZSAqZGV2LA0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsIGludCBpbmRleCkNCj4gPiArc3RhdGlj
-IGludCBhY3BpX2lkbGVfZW50ZXJfczJpZGxlKHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgY3B1aWRsZV9kcml2
-ZXIgKmRydiwgaW50IGluZGV4KQ0KPiA+ICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgYWNwaV9wcm9j
-ZXNzb3JfY3ggKmN4ID0gcGVyX2NwdShhY3BpX2NzdGF0ZVtpbmRleF0sIGRldi0+Y3B1KTsNCj4g
-Pg0KPiA+IEBAIC02NzQsNiArNjc0LDggQEAgc3RhdGljIHZvaWQgYWNwaV9pZGxlX2VudGVyX3My
-aWRsZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiAgICAgICAgICAgICAgICAgfQ0K
-PiA+ICAgICAgICAgfQ0KPiA+ICAgICAgICAgYWNwaV9pZGxlX2RvX2VudHJ5KGN4KTsNCj4gPiAr
-DQo+ID4gKyAgICAgICByZXR1cm4gMDsNCj4gPiAgfQ0KPiA+DQo+ID4gIHN0YXRpYyBpbnQgYWNw
-aV9wcm9jZXNzb3Jfc2V0dXBfY3B1aWRsZV9jeChzdHJ1Y3QgYWNwaV9wcm9jZXNzb3IgKnByLA0K
-PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvY3B1aWRsZS10ZWdyYS5jIGIvZHJpdmVy
-cy9jcHVpZGxlL2NwdWlkbGUtdGVncmEuYw0KPiA+IGluZGV4IDE1MDA0NTguLmExMmZiMTQgMTAw
-NjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9jcHVpZGxlL2NwdWlkbGUtdGVncmEuYw0KPiA+ICsrKyBi
-L2RyaXZlcnMvY3B1aWRsZS9jcHVpZGxlLXRlZ3JhLmMNCj4gPiBAQCAtMjUzLDExICsyNTMsMTMg
-QEAgc3RhdGljIGludCB0ZWdyYV9jcHVpZGxlX2VudGVyKHN0cnVjdCBjcHVpZGxlX2RldmljZSAq
-ZGV2LA0KPiA+ICAgICAgICAgcmV0dXJuIGVyciA/IC0xIDogaW5kZXg7DQo+ID4gIH0NCj4gPg0K
-PiA+IC1zdGF0aWMgdm9pZCB0ZWdyYTExNF9lbnRlcl9zMmlkbGUoc3RydWN0IGNwdWlkbGVfZGV2
-aWNlICpkZXYsDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBj
-cHVpZGxlX2RyaXZlciAqZHJ2LA0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBpbnQgaW5kZXgpDQo+ID4gK3N0YXRpYyBpbnQgdGVncmExMTRfZW50ZXJfczJpZGxlKHN0cnVj
-dCBjcHVpZGxlX2RldmljZSAqZGV2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIGludCBpbmRleCkNCj4gPiAgew0KPiA+ICAgICAgICAgdGVncmFfY3B1aWRs
-ZV9lbnRlcihkZXYsIGRydiwgaW5kZXgpOw0KPiA+ICsNCj4gPiArICAgICAgIHJldHVybiAwOw0K
-PiA+ICB9DQo+ID4NCj4gPiAgLyoNCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pZGxlL2ludGVs
-X2lkbGUuYyBiL2RyaXZlcnMvaWRsZS9pbnRlbF9pZGxlLmMNCj4gPiBpbmRleCBmNDQ5NTg0Li5i
-MTc4ZGEzIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvaWRsZS9pbnRlbF9pZGxlLmMNCj4gPiAr
-KysgYi9kcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jDQo+ID4gQEAgLTE3NSwxMyArMTc1LDE1IEBA
-IHN0YXRpYyBfX2NwdWlkbGUgaW50IGludGVsX2lkbGUoc3RydWN0IGNwdWlkbGVfZGV2aWNlICpk
-ZXYsDQo+ID4gICAqIEludm9rZWQgYXMgYSBzdXNwZW5kLXRvLWlkbGUgY2FsbGJhY2sgcm91dGlu
-ZSB3aXRoIGZyb3plbiB1c2VyIHNwYWNlLCBmcm96ZW4NCj4gPiAgICogc2NoZWR1bGVyIHRpY2sg
-YW5kIHN1c3BlbmRlZCBzY2hlZHVsZXIgY2xvY2sgb24gdGhlIHRhcmdldCBDUFUuDQo+ID4gICAq
-Lw0KPiA+IC1zdGF0aWMgX19jcHVpZGxlIHZvaWQgaW50ZWxfaWRsZV9zMmlkbGUoc3RydWN0IGNw
-dWlkbGVfZGV2aWNlICpkZXYsDQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LCBpbnQgaW5kZXgpDQo+ID4gK3N0YXRp
-YyBfX2NwdWlkbGUgaW50IGludGVsX2lkbGVfczJpZGxlKHN0cnVjdCBjcHVpZGxlX2RldmljZSAq
-ZGV2LA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBj
-cHVpZGxlX2RyaXZlciAqZHJ2LCBpbnQgaW5kZXgpDQo+ID4gIHsNCj4gPiAgICAgICAgIHVuc2ln
-bmVkIGxvbmcgZWF4ID0gZmxnMk1XQUlUKGRydi0+c3RhdGVzW2luZGV4XS5mbGFncyk7DQo+ID4g
-ICAgICAgICB1bnNpZ25lZCBsb25nIGVjeCA9IDE7IC8qIGJyZWFrIG9uIGludGVycnVwdCBmbGFn
-ICovDQo+ID4NCj4gPiAgICAgICAgIG13YWl0X2lkbGVfd2l0aF9oaW50cyhlYXgsIGVjeCk7DQo+
-ID4gKw0KPiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gIH0NCj4gPg0KPiA+ICAvKg0KPiA+IGRp
-ZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2NwdWlkbGUuaCBiL2luY2x1ZGUvbGludXgvY3B1aWRs
-ZS5oDQo+ID4gaW5kZXggZWMyZWY2My4uYmVlMTBjMCAxMDA2NDQNCj4gPiAtLS0gYS9pbmNsdWRl
-L2xpbnV4L2NwdWlkbGUuaA0KPiA+ICsrKyBiL2luY2x1ZGUvbGludXgvY3B1aWRsZS5oDQo+ID4g
-QEAgLTY2LDkgKzY2LDkgQEAgc3RydWN0IGNwdWlkbGVfc3RhdGUgew0KPiA+ICAgICAgICAgICog
-c3VzcGVuZGVkLCBzbyBpdCBtdXN0IG5vdCByZS1lbmFibGUgaW50ZXJydXB0cyBhdCBhbnkgcG9p
-bnQgKGV2ZW4NCj4gPiAgICAgICAgICAqIHRlbXBvcmFyaWx5KSBvciBhdHRlbXB0IHRvIGNoYW5n
-ZSBzdGF0ZXMgb2YgY2xvY2sgZXZlbnQgZGV2aWNlcy4NCj4gPiAgICAgICAgICAqLw0KPiA+IC0g
-ICAgICAgdm9pZCAoKmVudGVyX3MyaWRsZSkgKHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0K
-PiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAq
-ZHJ2LA0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIGludCBpbmRleCk7DQo+ID4g
-KyAgICAgICBpbnQgKCplbnRlcl9zMmlkbGUpKHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRy
-diwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50IGluZGV4KTsNCj4gPiAgfTsN
-Cj4gPg0KPiA+ICAvKiBJZGxlIFN0YXRlIEZsYWdzICovDQo+ID4gLS0NCj4gPiAxLjcuOS41DQoN
-Cg==
+On 09-07-20, 13:05, Srinivas Pandruvada wrote:
+> Fix warning for:
+> drivers/cpufreq/intel_pstate.c:731 store_energy_performance_preference()
+> error: uninitialized symbol 'epp'.
+> 
+> This warning is for a case, when energy_performance_preference attribute
+> matches pre defined strings. In this case the value of raw epp will not
+> be used to set EPP bits in MSR_HWP_REQUEST. So initializing with any
+> value is fine.
+> 
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> This patch is on top of bleed-edge branch at
+> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm
+> 
+>  drivers/cpufreq/intel_pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 44c7b4677675..94cd07678ee3 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -709,7 +709,7 @@ static ssize_t store_energy_performance_preference(
+>  	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
+>  	char str_preference[21];
+>  	bool raw = false;
+> -	u32 epp;
+> +	u32 epp = 0;
+>  	int ret;
+>  
+>  	ret = sscanf(buf, "%20s", str_preference);
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
+-- 
+viresh
