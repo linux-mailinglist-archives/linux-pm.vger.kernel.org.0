@@ -2,162 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A6821B2D5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 11:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E9321B2D8
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 11:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726912AbgGJJ7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 05:59:02 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:13507 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726560AbgGJJ7C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 05:59:02 -0400
-X-UUID: f1cad1e5b63c4fc6827e6f8e0bffe364-20200710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=9cnTTLygirc/3dYNOomZLWUoDSDdQ7ZAA5TnMPkOnZM=;
-        b=gEY9K+hCAXGQaCa28zv5VwALGJyzldWi6q89MV3D89RxjWrr+loWjupY6hTcHtjAEmm7Z/5eLyLVVAu9IHf6mWjQSQzN8SdW2XMYRT0asak7G4mgc3f008Jmts4TwPdwNJB+FDSQMboQT8CgxY2GePbzGcOW7GOt4exy2vnxugc=;
-X-UUID: f1cad1e5b63c4fc6827e6f8e0bffe364-20200710
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <henry.yen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 946304925; Fri, 10 Jul 2020 17:58:59 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Jul 2020 17:58:57 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jul 2020 17:58:57 +0800
-Message-ID: <1594375137.4941.5.camel@mtksdccf07>
-Subject: Re: [PATCH v2 1/2] thermal: mediatek: prepare to add support for
- other platforms
-From:   mtk17045 <henry.yen@mediatek.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        ". Zhang Rui" <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Steven Liu" <steven.liu@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Henry Yen <henry.yen@mediatek.com>
-Date:   Fri, 10 Jul 2020 17:58:57 +0800
-In-Reply-To: <1588238074-19338-2-git-send-email-henry.yen@mediatek.com>
-References: <1588238074-19338-1-git-send-email-henry.yen@mediatek.com>
-         <1588238074-19338-2-git-send-email-henry.yen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726560AbgGJJ7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 05:59:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34882 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726664AbgGJJ7z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Jul 2020 05:59:55 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DFFC420767;
+        Fri, 10 Jul 2020 09:59:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594375194;
+        bh=c2o9Ui1ExEnEWh2k/NGuOvS6UjKlqtY1Sr48fn0/nSQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LH0FwLaCFNJCJFuRGPFJSJJjL67w3zcgve3YAJpaFdpUzXXILpBk7qDcE5r38ypU1
+         Nv5C5EvinHbNDEQRNLH0bl/kRhbfGAtYgfmv18Sbdos62R/IwLnnUJiKpL6O//Hm/r
+         rvHd+XTnX+kBtTJ9f7eZDBsGmTu4I85fygX1RxMY=
+Date:   Fri, 10 Jul 2020 11:59:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Qiwu Huang <yanziily@gmail.com>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiangfei1@xiaomi.com,
+        Qiwu Huang <huangqiwu@xiaomi.com>
+Subject: Re: [PATCH 1/5] power: supply: core: add quick charge type property
+Message-ID: <20200710095959.GA1197607@kroah.com>
+References: <20200710084841.1933254-1-yanziily@gmail.com>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200710084841.1933254-1-yanziily@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA0LTMwIGF0IDE3OjE0ICswODAwLCBIZW5yeSBZZW4gd3JvdGU6DQo+IEl0
-IGlzIGtub3duIHRoYXQgTWVkaWF0ZWsgb3ducyB0d28gdGhlcm1hbCBzeXN0ZW1zLCB3aGljaCBv
-bmx5IGRpZmZlcg0KPiBpbiB0aGUgd2F5IG9mIHJlYWRpbmcgY2FsaWJyYXRpb24gZGF0YSBhbmQg
-Y29udmVydGluZyB0ZW1wZXJhdHVyZS4NCj4gTVQ4MTczLCBNVDgxODMsIE1UMjcwMSBhbmQgTVQy
-NzEyIGJlbG9uZ3MgdG8gdmVyc2lvbiAxIHRoZXJtYWwNCj4gc3lzdGVtLCBhbmQgTVQ3NjIyIGJl
-bG9uZ3MgdG8gdmVyc2lvbiAyLg0KPiANCj4gSW4gb3JkZXIgdG8gaGFuZGxlIGJvdGggc3lzdGVt
-cywgdGhlIHN1ZmZpeCBfVjEgaXMgYXBwZW5kZWQgdG8gdGhlDQo+IGN1cnJlbnQgY29kZSwgYW5k
-IHRoZW4gdGhlIHNlY29uZCBwYXRjaCB3aWxsIGFkZCBfVjIgZnVuY3Rpb25zIHdpdGgNCj4gdGhl
-IHNhbWUgcHVycG9zZSBidXQgZGlmZmVyZW50IGltcGxlbWVudGF0aW9uLg0KPiANCj4gU2lnbmVk
-LW9mZi1ieTogSGVucnkgWWVuIDxoZW5yeS55ZW5AbWVkaWF0ZWsuY29tPg0KPiAtLS0NCj4gIGRy
-aXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jIHwgMTE0ICsrKysrKysrKysrKysrKysrKy0tLS0t
-LS0tLS0tLS0tLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCA2MiBpbnNlcnRpb25zKCspLCA1MiBkZWxl
-dGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwu
-YyBiL2RyaXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jDQo+IGluZGV4IDc2ZTMwNjAzZDRkNS4u
-MTAxMDdkOWQ1NmE4IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwu
-Yw0KPiArKysgYi9kcml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwuYw0KPiBAQCAtMTIwLDE4ICsx
-MjAsMTggQEANCj4gICAqIE1UMjcwMSBoYXMgMyBzZW5zb3JzIGFuZCBuZWVkcyAzIFZUUyBjYWxp
-YnJhdGlvbiBkYXRhLg0KPiAgICogTVQyNzEyIGhhcyA0IHNlbnNvcnMgYW5kIG5lZWRzIDQgVlRT
-IGNhbGlicmF0aW9uIGRhdGEuDQo+ICAgKi8NCj4gLSNkZWZpbmUgQ0FMSUJfQlVGMF9WQUxJRAkJ
-QklUKDApDQo+IC0jZGVmaW5lIENBTElCX0JVRjFfQURDX0dFKHgpCQkoKCh4KSA+PiAyMikgJiAw
-eDNmZikNCj4gLSNkZWZpbmUgQ0FMSUJfQlVGMF9WVFNfVFMxKHgpCQkoKCh4KSA+PiAxNykgJiAw
-eDFmZikNCj4gLSNkZWZpbmUgQ0FMSUJfQlVGMF9WVFNfVFMyKHgpCQkoKCh4KSA+PiA4KSAmIDB4
-MWZmKQ0KPiAtI2RlZmluZSBDQUxJQl9CVUYxX1ZUU19UUzMoeCkJCSgoKHgpID4+IDApICYgMHgx
-ZmYpDQo+IC0jZGVmaW5lIENBTElCX0JVRjJfVlRTX1RTNCh4KQkJKCgoeCkgPj4gMjMpICYgMHgx
-ZmYpDQo+IC0jZGVmaW5lIENBTElCX0JVRjJfVlRTX1RTNSh4KQkJKCgoeCkgPj4gNSkgJiAweDFm
-ZikNCj4gLSNkZWZpbmUgQ0FMSUJfQlVGMl9WVFNfVFNBQkIoeCkJCSgoKHgpID4+IDE0KSAmIDB4
-MWZmKQ0KPiAtI2RlZmluZSBDQUxJQl9CVUYwX0RFR0NfQ0FMSSh4KQkJKCgoeCkgPj4gMSkgJiAw
-eDNmKQ0KPiAtI2RlZmluZSBDQUxJQl9CVUYwX09fU0xPUEUoeCkJCSgoKHgpID4+IDI2KSAmIDB4
-M2YpDQo+IC0jZGVmaW5lIENBTElCX0JVRjBfT19TTE9QRV9TSUdOKHgpCSgoKHgpID4+IDcpICYg
-MHgxKQ0KPiAtI2RlZmluZSBDQUxJQl9CVUYxX0lEKHgpCQkoKCh4KSA+PiA5KSAmIDB4MSkNCj4g
-KyNkZWZpbmUgQ0FMSUJfQlVGMF9WQUxJRF9WMQkJQklUKDApDQo+ICsjZGVmaW5lIENBTElCX0JV
-RjFfQURDX0dFX1YxKHgpCQkoKCh4KSA+PiAyMikgJiAweDNmZikNCj4gKyNkZWZpbmUgQ0FMSUJf
-QlVGMF9WVFNfVFMxX1YxKHgpCSgoKHgpID4+IDE3KSAmIDB4MWZmKQ0KPiArI2RlZmluZSBDQUxJ
-Ql9CVUYwX1ZUU19UUzJfVjEoeCkJKCgoeCkgPj4gOCkgJiAweDFmZikNCj4gKyNkZWZpbmUgQ0FM
-SUJfQlVGMV9WVFNfVFMzX1YxKHgpCSgoKHgpID4+IDApICYgMHgxZmYpDQo+ICsjZGVmaW5lIENB
-TElCX0JVRjJfVlRTX1RTNF9WMSh4KQkoKCh4KSA+PiAyMykgJiAweDFmZikNCj4gKyNkZWZpbmUg
-Q0FMSUJfQlVGMl9WVFNfVFM1X1YxKHgpCSgoKHgpID4+IDUpICYgMHgxZmYpDQo+ICsjZGVmaW5l
-IENBTElCX0JVRjJfVlRTX1RTQUJCX1YxKHgpCSgoKHgpID4+IDE0KSAmIDB4MWZmKQ0KPiArI2Rl
-ZmluZSBDQUxJQl9CVUYwX0RFR0NfQ0FMSV9WMSh4KQkoKCh4KSA+PiAxKSAmIDB4M2YpDQo+ICsj
-ZGVmaW5lIENBTElCX0JVRjBfT19TTE9QRV9WMSh4KQkoKCh4KSA+PiAyNikgJiAweDNmKQ0KPiAr
-I2RlZmluZSBDQUxJQl9CVUYwX09fU0xPUEVfU0lHTl9WMSh4KQkoKCh4KSA+PiA3KSAmIDB4MSkN
-Cj4gKyNkZWZpbmUgQ0FMSUJfQlVGMV9JRF9WMSh4KQkJKCgoeCkgPj4gOSkgJiAweDEpDQo+ICAN
-Cj4gIGVudW0gew0KPiAgCVZUUzEsDQo+IEBAIC01MjUsNyArNTI1LDcgQEAgc3RhdGljIGNvbnN0
-IHN0cnVjdCBtdGtfdGhlcm1hbF9kYXRhIG10ODE4M190aGVybWFsX2RhdGEgPSB7DQo+ICAgKiBU
-aGlzIGNvbnZlcnRzIHRoZSByYXcgQURDIHZhbHVlIHRvIG1jZWxzaXVzIHVzaW5nIHRoZSBTb0Mg
-c3BlY2lmaWMNCj4gICAqIGNhbGlicmF0aW9uIGNvbnN0YW50cw0KPiAgICovDQo+IC1zdGF0aWMg
-aW50IHJhd190b19tY2Vsc2l1cyhzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10LCBpbnQgc2Vuc25vLCBz
-MzIgcmF3KQ0KPiArc3RhdGljIGludCByYXdfdG9fbWNlbHNpdXNfdjEoc3RydWN0IG10a190aGVy
-bWFsICptdCwgaW50IHNlbnNubywgczMyIHJhdykNCj4gIHsNCj4gIAlzMzIgdG1wOw0KPiAgDQo+
-IEBAIC01OTQsOSArNTk0LDkgQEAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9iYW5rX3RlbXBlcmF0
-dXJlKHN0cnVjdCBtdGtfdGhlcm1hbF9iYW5rICpiYW5rKQ0KPiAgCQlyYXcgPSByZWFkbChtdC0+
-dGhlcm1hbF9iYXNlICsNCj4gIAkJCSAgICBjb25mLT5tc3JbY29uZi0+YmFua19kYXRhW2Jhbmst
-PmlkXS5zZW5zb3JzW2ldXSk7DQo+ICANCj4gLQkJdGVtcCA9IHJhd190b19tY2Vsc2l1cyhtdCwN
-Cj4gLQkJCQkgICAgICAgY29uZi0+YmFua19kYXRhW2JhbmstPmlkXS5zZW5zb3JzW2ldLA0KPiAt
-CQkJCSAgICAgICByYXcpOw0KPiArCQl0ZW1wID0gcmF3X3RvX21jZWxzaXVzX3YxKG10LA0KPiAr
-CQkJCQkgIGNvbmYtPmJhbmtfZGF0YVtiYW5rLT5pZF0uc2Vuc29yc1tpXSwNCj4gKwkJCQkJICBy
-YXcpOw0KPiAgDQo+ICAJCS8qDQo+ICAJCSAqIFRoZSBmaXJzdCByZWFkIG9mIGEgc2Vuc29yIG9m
-dGVuIGNvbnRhaW5zIHZlcnkgaGlnaCBib2d1cw0KPiBAQCAtNzU4LDYgKzc1OCw1MSBAQCBzdGF0
-aWMgdTY0IG9mX2dldF9waHlzX2Jhc2Uoc3RydWN0IGRldmljZV9ub2RlICpucCkNCj4gIAlyZXR1
-cm4gb2ZfdHJhbnNsYXRlX2FkZHJlc3MobnAsIHJlZ2FkZHJfcCk7DQo+ICB9DQo+ICANCj4gK3N0
-YXRpYyBpbnQgbXRrX3RoZXJtYWxfZXh0cmFjdF9lZnVzZV92MShzdHJ1Y3QgbXRrX3RoZXJtYWwg
-Km10LCB1MzIgKmJ1ZikNCj4gK3sNCj4gKwlpbnQgaTsNCj4gKw0KPiArCWlmICghKGJ1ZlswXSAm
-IENBTElCX0JVRjBfVkFMSURfVjEpKQ0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKw0KPiArCW10
-LT5hZGNfZ2UgPSBDQUxJQl9CVUYxX0FEQ19HRV9WMShidWZbMV0pOw0KPiArDQo+ICsJZm9yIChp
-ID0gMDsgaSA8IG10LT5jb25mLT5udW1fc2Vuc29yczsgaSsrKSB7DQo+ICsJCXN3aXRjaCAobXQt
-PmNvbmYtPnZ0c19pbmRleFtpXSkgew0KPiArCQljYXNlIFZUUzE6DQo+ICsJCQltdC0+dnRzW1ZU
-UzFdID0gQ0FMSUJfQlVGMF9WVFNfVFMxX1YxKGJ1ZlswXSk7DQo+ICsJCQlicmVhazsNCj4gKwkJ
-Y2FzZSBWVFMyOg0KPiArCQkJbXQtPnZ0c1tWVFMyXSA9IENBTElCX0JVRjBfVlRTX1RTMl9WMShi
-dWZbMF0pOw0KPiArCQkJYnJlYWs7DQo+ICsJCWNhc2UgVlRTMzoNCj4gKwkJCW10LT52dHNbVlRT
-M10gPSBDQUxJQl9CVUYxX1ZUU19UUzNfVjEoYnVmWzFdKTsNCj4gKwkJCWJyZWFrOw0KPiArCQlj
-YXNlIFZUUzQ6DQo+ICsJCQltdC0+dnRzW1ZUUzRdID0gQ0FMSUJfQlVGMl9WVFNfVFM0X1YxKGJ1
-ZlsyXSk7DQo+ICsJCQlicmVhazsNCj4gKwkJY2FzZSBWVFM1Og0KPiArCQkJbXQtPnZ0c1tWVFM1
-XSA9IENBTElCX0JVRjJfVlRTX1RTNV9WMShidWZbMl0pOw0KPiArCQkJYnJlYWs7DQo+ICsJCWNh
-c2UgVlRTQUJCOg0KPiArCQkJbXQtPnZ0c1tWVFNBQkJdID0NCj4gKwkJCQlDQUxJQl9CVUYyX1ZU
-U19UU0FCQl9WMShidWZbMl0pOw0KPiArCQkJYnJlYWs7DQo+ICsJCWRlZmF1bHQ6DQo+ICsJCQli
-cmVhazsNCj4gKwkJfQ0KPiArCX0NCj4gKw0KPiArCW10LT5kZWdjX2NhbGkgPSBDQUxJQl9CVUYw
-X0RFR0NfQ0FMSV9WMShidWZbMF0pOw0KPiArCWlmIChDQUxJQl9CVUYxX0lEX1YxKGJ1ZlsxXSkg
-Jg0KPiArCSAgICBDQUxJQl9CVUYwX09fU0xPUEVfU0lHTl9WMShidWZbMF0pKQ0KPiArCQltdC0+
-b19zbG9wZSA9IC1DQUxJQl9CVUYwX09fU0xPUEVfVjEoYnVmWzBdKTsNCj4gKwllbHNlDQo+ICsJ
-CW10LT5vX3Nsb3BlID0gQ0FMSUJfQlVGMF9PX1NMT1BFX1YxKGJ1ZlswXSk7DQo+ICsNCj4gKwly
-ZXR1cm4gMDsNCj4gK30NCj4gKw0KPiAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9nZXRfY2FsaWJy
-YXRpb25fZGF0YShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAJCQkJCSAgICBzdHJ1Y3QgbXRrX3Ro
-ZXJtYWwgKm10KQ0KPiAgew0KPiBAQCAtNzkzLDQzICs4MzgsOCBAQCBzdGF0aWMgaW50IG10a190
-aGVybWFsX2dldF9jYWxpYnJhdGlvbl9kYXRhKHN0cnVjdCBkZXZpY2UgKmRldiwNCj4gIAkJZ290
-byBvdXQ7DQo+ICAJfQ0KPiAgDQo+IC0JaWYgKGJ1ZlswXSAmIENBTElCX0JVRjBfVkFMSUQpIHsN
-Cj4gLQkJbXQtPmFkY19nZSA9IENBTElCX0JVRjFfQURDX0dFKGJ1ZlsxXSk7DQo+IC0NCj4gLQkJ
-Zm9yIChpID0gMDsgaSA8IG10LT5jb25mLT5udW1fc2Vuc29yczsgaSsrKSB7DQo+IC0JCQlzd2l0
-Y2ggKG10LT5jb25mLT52dHNfaW5kZXhbaV0pIHsNCj4gLQkJCWNhc2UgVlRTMToNCj4gLQkJCQlt
-dC0+dnRzW1ZUUzFdID0gQ0FMSUJfQlVGMF9WVFNfVFMxKGJ1ZlswXSk7DQo+IC0JCQkJYnJlYWs7
-DQo+IC0JCQljYXNlIFZUUzI6DQo+IC0JCQkJbXQtPnZ0c1tWVFMyXSA9IENBTElCX0JVRjBfVlRT
-X1RTMihidWZbMF0pOw0KPiAtCQkJCWJyZWFrOw0KPiAtCQkJY2FzZSBWVFMzOg0KPiAtCQkJCW10
-LT52dHNbVlRTM10gPSBDQUxJQl9CVUYxX1ZUU19UUzMoYnVmWzFdKTsNCj4gLQkJCQlicmVhazsN
-Cj4gLQkJCWNhc2UgVlRTNDoNCj4gLQkJCQltdC0+dnRzW1ZUUzRdID0gQ0FMSUJfQlVGMl9WVFNf
-VFM0KGJ1ZlsyXSk7DQo+IC0JCQkJYnJlYWs7DQo+IC0JCQljYXNlIFZUUzU6DQo+IC0JCQkJbXQt
-PnZ0c1tWVFM1XSA9IENBTElCX0JVRjJfVlRTX1RTNShidWZbMl0pOw0KPiAtCQkJCWJyZWFrOw0K
-PiAtCQkJY2FzZSBWVFNBQkI6DQo+IC0JCQkJbXQtPnZ0c1tWVFNBQkJdID0gQ0FMSUJfQlVGMl9W
-VFNfVFNBQkIoYnVmWzJdKTsNCj4gLQkJCQlicmVhazsNCj4gLQkJCWRlZmF1bHQ6DQo+IC0JCQkJ
-YnJlYWs7DQo+IC0JCQl9DQo+IC0JCX0NCj4gLQ0KPiAtCQltdC0+ZGVnY19jYWxpID0gQ0FMSUJf
-QlVGMF9ERUdDX0NBTEkoYnVmWzBdKTsNCj4gLQkJaWYgKENBTElCX0JVRjFfSUQoYnVmWzFdKSAm
-DQo+IC0JCSAgICBDQUxJQl9CVUYwX09fU0xPUEVfU0lHTihidWZbMF0pKQ0KPiAtCQkJbXQtPm9f
-c2xvcGUgPSAtQ0FMSUJfQlVGMF9PX1NMT1BFKGJ1ZlswXSk7DQo+IC0JCWVsc2UNCj4gLQkJCW10
-LT5vX3Nsb3BlID0gQ0FMSUJfQlVGMF9PX1NMT1BFKGJ1ZlswXSk7DQo+IC0JfSBlbHNlIHsNCj4g
-KwlpZiAobXRrX3RoZXJtYWxfZXh0cmFjdF9lZnVzZV92MShtdCwgYnVmKSkNCj4gIAkJZGV2X2lu
-Zm8oZGV2LCAiRGV2aWNlIG5vdCBjYWxpYnJhdGVkLCB1c2luZyBkZWZhdWx0IGNhbGlicmF0aW9u
-IHZhbHVlc1xuIik7DQo+IC0JfQ0KPiAgDQo+ICBvdXQ6DQo+ICAJa2ZyZWUoYnVmKTsNCkp1c3Qg
-Z2VudGx5IHBpbmcuICAgIA0KTWFueSB0aGFua3MuDQoNCg==
+On Fri, Jul 10, 2020 at 04:48:37PM +0800, Qiwu Huang wrote:
+> From: Qiwu Huang <huangqiwu@xiaomi.com>
+> 
+> Reports the kind of quick charge type based on
+> different adapter power. UI will show different
+> animation effect for different quick charge type.
+> 
+> Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+> ---
+>  Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
+>  drivers/power/supply/power_supply_sysfs.c   |  1 +
+>  include/linux/power_supply.h                |  1 +
+>  3 files changed, 12 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> index 216d61a22f1e..0d9d6b46e239 100644
+> --- a/Documentation/ABI/testing/sysfs-class-power
+> +++ b/Documentation/ABI/testing/sysfs-class-power
+> @@ -708,3 +708,13 @@ Description:
+>  
+>  		Access: Read
+>  		Valid values: 1-31
+> +
+> +What:		/sys/class/power_supply/<supply_name>/quick_charge_type
+> +Date:		Jul 2020
+> +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
+> +		Description:
+> +		Reports the kind of quick charge type based on different adapter power.
+> +
+> +		Access: Read-Only
+> +		Valid values: "QUICK_CHARGE_NORMAL", "QUICK_CHARGE_FAST", "QUICK_CHARGE_FLASH",
+> +		"QUICK_CHARGE_TURBE", "QUICK_CHARGE_SUPER".
 
+"QUICK_CHARGE_TURBO"?
+
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> index bc79560229b5..f95574c41898 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -206,6 +206,7 @@ static struct power_supply_attr power_supply_attrs[] = {
+>  	POWER_SUPPLY_ATTR(MODEL_NAME),
+>  	POWER_SUPPLY_ATTR(MANUFACTURER),
+>  	POWER_SUPPLY_ATTR(SERIAL_NUMBER),
+> +	POWER_SUPPLY_ATTR(quick_charge_type),
+
+Shouldn't this be all uppercase:
+	QUICK_CHARGE_TYPE
+?
+
+And shouldn't there be a string with the expected values somewhere?
+
+thanks,
+
+greg k-h
