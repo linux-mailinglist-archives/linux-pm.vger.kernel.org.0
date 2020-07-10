@@ -2,105 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C78BD21B530
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 14:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E500F21B534
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 14:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727828AbgGJMh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 08:37:26 -0400
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:55405 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726664AbgGJMhZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 08:37:25 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 420E9BA0;
-        Fri, 10 Jul 2020 08:37:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 10 Jul 2020 08:37:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:subject:message-id:references:mime-version
-        :content-type:content-transfer-encoding:in-reply-to; s=fm3; bh=d
-        gJ3aoc5NiXYKfv58xR0xZCsr1W6r/7ugdtfPSWBvns=; b=b8A3eBvXkGhpO3lzR
-        E7vusMZO/bWx2sr5lbEDQlvB7LDwVl2pMdAaevv0E6Ar/Xih61VxsTZnrWr7Aopd
-        S2JcAX+pU1IfYUr0Ro7p4CnIS3kovnn2vMUhqsssIflFuUog5cUy7zlKSW4tmuHO
-        ZTkF8udIHqJcsFmxk0kUWGSmaGVaEQmjUiEVvEjwdHvGS0OP9X9NakAN/qnw/4fc
-        aePE2w/U4vi9b/cMJqJpc5bekWzOvIsq9ggOc4Nu+X/N5vkun8WmdjOhwxtaX1cP
-        kFoxETysvQN7RWeYc84CJ0Cqm2dPFeAQj9drqtiHXA0ELV9RFglTq8XHpiXqkHhw
-        2RctA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; bh=dgJ3aoc5NiXYKfv58xR0xZCsr1W6r/7ugdtfPSWBv
-        ns=; b=HQr9HBfRjC1cXeIA07LYz0c8ZamnWXn2wJ9N3Nj/pajxSKNL/CI60HxKA
-        8UBhyHNugxVf7roSxTMmmijjNLUd6CyymkFix+iqkm0I26iEZomS6C3h5LWs/jB4
-        08EzYiXkZ5udacOmMwRASP0BzrdpczgnuWOGjUqZHq/lgGvzfMaJKwp0bI638aJz
-        c0dIoZa8eZO0sBltDxRbU7WSlU+TNEJ2p6RDg2XaAhkRv7IBsg0JyRqeCuItvR+c
-        sKM8n8XxsleTUW33QGedESvk0EgAXha5EdU1zUa26O5J2cmeUbTFjOPNrHX76BHp
-        QKkf81q/kdmT/dCEp4Ihxc6GxGB9A==
-X-ME-Sender: <xms:AGEIX_VF2YIwxQaPlLqg_g5PHHnYRxNeQRosxYlfcLyEksUZj8-2Bw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedrvddugdehkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggugfgjsehtqhertddttdejnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepgfejjeekjedttdethedtfeelteefffduvdevvdfhtdeiudetleejgeelfeef
-    uedvnecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:AGEIX3kDLyfuDnJt50RhzCZPlSqB-rJAjUgyjDOis3SzVSKCHCF87w>
-    <xmx:AGEIX7aIDwXxD3jn55JAYhPPObaFEh-JIStZ6a4YUpJi7Os11x_Mmw>
-    <xmx:AGEIX6UlHD0EEf_cfp9_nX1DnacYVENmET5iVTpGLWVs_MqF1LVxYA>
-    <xmx:AWEIX9wL-1fAtDVWrg48pkcLVkqVqeWUIkk6jPlS_yXa5LvudaavZFsTLGo>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A08D2328005D;
-        Fri, 10 Jul 2020 08:37:19 -0400 (EDT)
-Date:   Fri, 10 Jul 2020 14:37:18 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
-        Frank Lee <frank@allwinnertech.com>, robh+dt@kernel.org,
-        wens@csie.org, mturquette@baylibre.com, sboyd@kernel.org,
-        gregory.clement@bootlin.com, tglx@linutronix.de,
-        jason@lakedaemon.net, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, linus.walleij@linaro.org,
-        anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        lee.jones@linaro.org, p.zabel@pengutronix.de, clabbe@baylibre.com,
-        icenowy@aosc.io, stefan@olimex.com, bage@linutronix.de,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        liyong@allwinnertech.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        linux-i2c@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 04/16] dt-bindings: pinctrl: sunxi: make gpio banks
- supplies required
-Message-ID: <20200710123718.mrvtk6rzkfuno5kn@gilmour.lan>
-References: <20200708071942.22595-1-frank@allwinnertech.com>
- <20200708071942.22595-5-frank@allwinnertech.com>
- <20200709171713.tutnlchji4e6i5pv@core.my.home>
+        id S1727861AbgGJMhf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 08:37:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36304 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726664AbgGJMhd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 10 Jul 2020 08:37:33 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AE3120772;
+        Fri, 10 Jul 2020 12:37:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594384653;
+        bh=3mgL0Xsw7l3dWlF8A5C8xZNqhhZYlFQyQbk+6H5ZBhA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eOhMiqOOY82yZH2/LKZZ+cRuW/4wwKZ2xggMy+wdNV1S9rchyVzy16KGF9z1CawmX
+         Ouw34qWppih6X44wdil/Ra+Ea47QrW3DcP8Bu9G0BsvChXWZzAQ/t8pgqOCqX+8JkZ
+         b6GrDRm5O4Rnhhw+w0v4l1RnkSM8ZVxRWCs14nw8=
+Date:   Fri, 10 Jul 2020 14:37:37 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Gustav Wiklander <gustav.wiklander@axis.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        kernel@axis.com, Gustav Wiklander <gustavwi@axis.com>
+Subject: Re: [PATCHv2] PM / Domains: Add module ref count for each consumer
+Message-ID: <20200710123737.GA1546682@kroah.com>
+References: <20200610193156.20363-1-gustav.wiklander@axis.com>
+ <CAPDyKFr_-ayyxAuzj92TwQmbcAVDrR6GSEQfD4HhWuUnseB0GA@mail.gmail.com>
+ <20200710103734.GC1203263@kroah.com>
+ <CAPDyKFqUZwOMRv5537k2N8xiwjKgk3Fi8MB364+wVUaT-rHuEw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200709171713.tutnlchji4e6i5pv@core.my.home>
+In-Reply-To: <CAPDyKFqUZwOMRv5537k2N8xiwjKgk3Fi8MB364+wVUaT-rHuEw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri, Jul 10, 2020 at 02:01:15PM +0200, Ulf Hansson wrote:
+> On Fri, 10 Jul 2020 at 12:37, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Jul 10, 2020 at 12:18:57PM +0200, Ulf Hansson wrote:
+> > > On Wed, 10 Jun 2020 at 21:32, Gustav Wiklander
+> > > <gustav.wiklander@axis.com> wrote:
+> > > >
+> > > > From: Gustav Wiklander <gustavwi@axis.com>
+> > > >
+> > > > Currently a pm_domain can be unloaded without regard for consumers.
+> > > > This patch adds a module dependecy for every registered consumer.
+> > > > Now a power domain driver can only be unloaded if no consumers are
+> > > > registered.
+> > >
+> > > According to the comments from Rafael, yes, this needs some further
+> > > clarifications.
+> > >
+> > > Moreover, we also need to deal with module reference counters when
+> > > adding/removing subdomains. Also pointed out by Rafael.
+> > >
+> > > >
+> > > > Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
+> > > > ---
+> > > > Automated setting genpd->owner when calling pm_genpd_init.
+> > > > Similar to how usb_register_driver does it.
+> > > >
+> > > >  drivers/base/power/domain.c | 22 +++++++++++++++++-----
+> > > >  include/linux/pm_domain.h   | 10 ++++++++--
+> > > >  2 files changed, 25 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > > > index 0a01df608849..70c8b59bfed9 100644
+> > > > --- a/drivers/base/power/domain.c
+> > > > +++ b/drivers/base/power/domain.c
+> > > > @@ -1499,11 +1499,18 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+> > > >         if (IS_ERR(gpd_data))
+> > > >                 return PTR_ERR(gpd_data);
+> > > >
+> > > > +       if (!try_module_get(genpd->owner)) {
+> > > > +               ret = -ENODEV;
+> > > > +               goto out;
+> > > > +       }
+> > > > +
+> > > >         gpd_data->cpu = genpd_get_cpu(genpd, base_dev);
+> > > >
+> > > >         ret = genpd->attach_dev ? genpd->attach_dev(genpd, dev) : 0;
+> > > > -       if (ret)
+> > > > +       if (ret) {
+> > > > +               module_put(genpd->owner);
+> > > >                 goto out;
+> > > > +       }
+> > > >
+> > > >         genpd_lock(genpd);
+> > > >
+> > > > @@ -1579,6 +1586,8 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
+> > > >
+> > > >         genpd_free_dev_data(dev, gpd_data);
+> > > >
+> > > > +       module_put(genpd->owner);
+> > > > +
+> > > >         return 0;
+> > > >
+> > > >   out:
+> > > > @@ -1755,15 +1764,17 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
+> > > >  }
+> > > >
+> > > >  /**
+> > > > - * pm_genpd_init - Initialize a generic I/O PM domain object.
+> > > > + * __pm_genpd_init - Initialize a generic I/O PM domain object.
+> > > >   * @genpd: PM domain object to initialize.
+> > > >   * @gov: PM domain governor to associate with the domain (may be NULL).
+> > > >   * @is_off: Initial value of the domain's power_is_off field.
+> > > > + * @owner: module owner of this power domain object.
+> > > >   *
+> > > >   * Returns 0 on successful initialization, else a negative error code.
+> > > >   */
+> > > > -int pm_genpd_init(struct generic_pm_domain *genpd,
+> > > > -                 struct dev_power_governor *gov, bool is_off)
+> > > > +int __pm_genpd_init(struct generic_pm_domain *genpd,
+> > > > +                 struct dev_power_governor *gov, bool is_off,
+> > > > +                 struct module *owner)
+> > >
+> > > Please drop this new interface altogether. Instead we can just let the
+> > > caller of pm_genpd_init() to assign genpd->owner, rather than passing
+> > > it as a parameter.
+> >
+> > No, I asked for this type of interface because it does not require any
+> > developer to "remember" to set this value or not, and it does not
+> > require you to go and fix the whole kernel.  This is the correct way to
+> > do this, see the many other driver subsystems that do this today for
+> > that reason.
+> 
+> Well, in many cases I would agree with you, but not for genpd.
+> 
+> We have and are still, continuously finding new configurations that
+> are needed for a genpd. And we don't want a new in-parameter to be
+> added each time that happens.
 
-On Thu, Jul 09, 2020 at 07:17:13PM +0200, Ond=C5=99ej Jirman wrote:
-> Hello,
->=20
-> On Wed, Jul 08, 2020 at 03:19:30PM +0800, Frank Lee wrote:
-> > Since we don't really have to care about the existing DT for boards,
-> > it would be great to make the gpio banks supplies required.
->=20
-> What if the borad doesn't use one of the banks? How would
-> I describe such a board if defining supplies for all banks
-> is required?
+THIS_MODULE is "special", other config options you need should go in a
+structure as you say.  This way we get the compiler to fix the option to
+always be the correct one, no need for a developer to remember it,
+totally different from all other driver/subsystem options.
 
-If that case ever comes up, we can always drop the requirement, it's going =
-to be backward
-compatible.
+thanks,
 
-Maxime
+greg k-h
