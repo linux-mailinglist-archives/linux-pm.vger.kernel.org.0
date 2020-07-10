@@ -2,102 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F63521ACF3
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 04:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEB621AD32
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 05:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgGJCPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 9 Jul 2020 22:15:00 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:35836 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726796AbgGJCPA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 9 Jul 2020 22:15:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1594347299; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=pZBbWOAImaAXj4ymXtVBbnn0fW0JrVwullPsUepvzus=; b=pyE3wRL/aIHm166hJBcHlc3oWFeACtWEFdjrjxhlwhahcRhuasR0Vzbx/VVkIHa2RJxtE4iF
- r2ko2JbNywpC38YS4qwdo8BgtuyD6Q9i/rM4Frg3Ny6EEIE3oxx5Dt/x0WHV51PHjBMk79PU
- 5FZY/AcmhhMB9ndNhaA82ROnMSQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f07cf1919b27ae9cecb4118 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 10 Jul 2020 02:14:49
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C34F5C433C8; Fri, 10 Jul 2020 02:14:48 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.2 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.0
-Received: from [192.168.1.117] (ip70-179-20-127.sd.sd.cox.net [70.179.20.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mdtipton)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BC953C433C6;
-        Fri, 10 Jul 2020 02:14:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BC953C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mdtipton@codeaurora.org
-Subject: Re: [PATCH] interconnect: msm8916: Fix buswidth of pcnoc_s nodes
-To:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org
-Cc:     bjorn.andersson@linaro.org, jun.nie@linaro.org,
-        okukatla@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200709130004.12462-1-georgi.djakov@linaro.org>
-From:   Mike Tipton <mdtipton@codeaurora.org>
-Message-ID: <320b3577-d7cd-886d-7a39-eafa286a8286@codeaurora.org>
-Date:   Thu, 9 Jul 2020 19:14:46 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726560AbgGJDAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 9 Jul 2020 23:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbgGJDAg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 9 Jul 2020 23:00:36 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F599C08C5CE
+        for <linux-pm@vger.kernel.org>; Thu,  9 Jul 2020 20:00:36 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id k5so1974760pjg.3
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jul 2020 20:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=x2Q65EzY9A+4WJ3/3xgyKC2pLQLOauk7fOikDEnLLU4=;
+        b=GETUc2u39p7zUsL72Oq0XwZQlEW4m73isgdfB6vVv1Ss0Y1ukG1UVuZuCfEU2GjUjf
+         iDhzCNv+q8CYc3fum11i2xf1arEQIpeaxepR5LKM9HT2hqaeNWhYGHxXnm+wh/fODrhx
+         d9MpgNGBhu+C78hGnOu/oOn4aJ5j8YQywSglNskU5la3PTJg2E7DVpQcQ938EgjOIxGx
+         7z++Zzk3H/qgdsNdOJGgja44weWdUbethNcvkBhQnxDV9zKEwHq05O2Ovy0YPno0sJPH
+         ATYqPf+4jPueD+Z4NNE1FXoR4CCkfL5XWXkYj/FdWKIrC50uzI3a4z2+4wGDaBVZfdyI
+         Ttpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=x2Q65EzY9A+4WJ3/3xgyKC2pLQLOauk7fOikDEnLLU4=;
+        b=o7ebr3iecoDM51Vv1LJyFKoysnI43QvPit+l9L991s3P2nz03ALuqUaxrPC3Pwkqcn
+         wMCXk/QDGCzCQghyxz9TaY7M49x1NXWigsr9YKTDfd6SBrnOe2kSsZ9kbuSDl7k0McDb
+         JLWQdTaF1LBBxYSLWeEQ5l/ikdPMMb2HmsrZ6URr8vHdhIYMxaTdLDqZLxhFHVwGSrND
+         zQUcPMRNZQQph1Z2VGDX1QbaBfnDIZ+swplQkVdY4j58gb9sfwtuYEplGelR28eb1gbh
+         b9kGPIG1IoqOMyWGnTgNSTqVrjb9AJVjcT4uwfzxRwCFcnpAcxrEFjE2PtKO00SlaxCC
+         phtQ==
+X-Gm-Message-State: AOAM530OFphxMpcXtETS8H843dHHw9cWBtCdOas0a3PtY7LlDabZOA8j
+        Yo/QMTOJMELR4stxo5wUCrtBiw==
+X-Google-Smtp-Source: ABdhPJzJbs8HynvxExYfLaLpk6jM+CJiUTM1pLP8kT49ZfV7ziWx8HZYwK+knJKvvfM5wbheEJB6SA==
+X-Received: by 2002:a17:902:aa0c:: with SMTP id be12mr58339011plb.45.1594350035374;
+        Thu, 09 Jul 2020 20:00:35 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id y17sm4141720pfe.30.2020.07.09.20.00.33
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 Jul 2020 20:00:34 -0700 (PDT)
+Date:   Fri, 10 Jul 2020 08:30:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Puhov <peter.puhov@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RFC 0/3] cpufreq: cppc: Add support for frequency invariance
+Message-ID: <20200710030032.3yq3lqqybhy5m744@vireshk-i7>
+References: <cover.1594289009.git.viresh.kumar@linaro.org>
+ <20200709124349.GA15342@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200709130004.12462-1-georgi.djakov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200709124349.GA15342@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/9/2020 6:00 AM, Georgi Djakov wrote:
-> The buswidth of the pcnoc_s_* nodes is actually not 8, but
-> 4 bytes. Let's fix it.
-> 
-> Reported-by: Jun Nie <jun.nie@linaro.org>
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
->   drivers/interconnect/qcom/msm8916.c | 14 +++++++-------
->   1 file changed, 7 insertions(+), 7 deletions(-)
+Thanks for the quick reply Ionela.
 
-Reviewed-by: Mike Tipton <mdtipton@codeaurora.org>
+On 09-07-20, 13:43, Ionela Voinescu wrote:
+> I'll put all my comments here for now, as they refer more to the design
+> of the solution.
+> 
+> I hope it won't be too repetitive compared to what we previously discussed
+> offline.
 
+> I understand you want to get additional points of view.
+
+Not necessarily, I knew you would be one of the major reviewers here
+:)
+
+I posted so you don't need to review in private anymore and then the
+code is somewhat updated since the previous time.
+
+> On Thursday 09 Jul 2020 at 15:43:32 (+0530), Viresh Kumar wrote:
+> I believe the code is unnecessarily invasive for the functionality it
+> tries to introduce and it does break existing functionality.
 > 
-> diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
-> index e94f3c5228b7..42c6c5581662 100644
-> --- a/drivers/interconnect/qcom/msm8916.c
-> +++ b/drivers/interconnect/qcom/msm8916.c
-> @@ -197,13 +197,13 @@ DEFINE_QNODE(pcnoc_int_0, MSM8916_PNOC_INT_0, 8, -1, -1, MSM8916_PNOC_SNOC_MAS,
->   DEFINE_QNODE(pcnoc_int_1, MSM8916_PNOC_INT_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
->   DEFINE_QNODE(pcnoc_m_0, MSM8916_PNOC_MAS_0, 8, -1, -1, MSM8916_PNOC_INT_0);
->   DEFINE_QNODE(pcnoc_m_1, MSM8916_PNOC_MAS_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
-> -DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 8, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
-> -DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 8, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
-> -DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 8, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
-> -DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 8, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
-> -DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 8, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
-> -DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 8, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
-> -DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 8, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
-> +DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 4, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
-> +DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 4, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
-> +DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 4, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
-> +DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 4, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
-> +DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 4, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
-> +DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 4, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
-> +DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 4, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
->   DEFINE_QNODE(pcnoc_snoc_mas, MSM8916_PNOC_SNOC_MAS, 8, 29, -1, MSM8916_PNOC_SNOC_SLV);
->   DEFINE_QNODE(pcnoc_snoc_slv, MSM8916_PNOC_SNOC_SLV, 8, -1, 45, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC, MSM8916_SNOC_INT_1);
->   DEFINE_QNODE(qdss_int, MSM8916_SNOC_QDSS_INT, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC);
 > 
+>  - (1) From code readability and design point of view, this switching
+>        between an architectural method and a driver method complicates
+>        an already complicated situation. We already have code that
+>        chooses between a cpufreq-based method and a counter based method
+>        for frequency invariance. This would basically introduce a choice
+>        between a cpufreq-based method through arch_set_freq_scale(), an
+>        architectural counter-based method through arch_set_freq_tick(),
+>        and another cpufreq-based method that piggy-backs on the
+>        architectural arch_set_freq_tick().
+
+I agree.
+
+>        As discussed offline, before I even try to begin accepting the
+>        possibility of this complicated mix, I would like to know why
+>        methods of obtaining the same thing by using the cpufreq
+>        arch_set_freq_scale()
+
+The problem is same as that was in case of x86, we don't know the real
+frequency the CPU may be running at and we need something that fires
+up periodically in a guaranteed way to capture the freq-scale.
+
+Though I am thinking now if we can trust the target_index() helper and
+keep updating the freq-scale based on the delta between last call to
+it and the latest call. I am not sure if it will be sufficient.
+
+>        or even the more invasive wrapping of the
+>        counter read functions is not working.
+
+I am not sure I understood this one.
+
+>  - (2) For 1/3, the presence of AMU counters does not guarantee their
+>        usability for frequency invariance. I know you wanted to avoid
+>        the complications of AMUs being marked as supporting invariance
+>        after the cpufreq driver init function, but this breaks the
+>        scenario in which the maximum frequency is invalid.
+
+Is that really a scenario ? i.e. Invalid maximum frequency ? Why would
+that ever happen ?
+
+And I am not sure if this breaks anything which already exists,
+because all we are doing in this case now is not registering cppc for
+FI, which should be fine.
+
+>  - (3) For 2/3, currently we support platforms that have partial support
+>        for AMUs, while this would not be supported here. The suggestions
+>        at (1) would give us this for free.
+
+As both were counter based mechanisms, I thought it would be better
+and more consistent if only one of them is picked. Though partial
+support of AMUs would still work without the CPPC driver.
+
+-- 
+viresh
