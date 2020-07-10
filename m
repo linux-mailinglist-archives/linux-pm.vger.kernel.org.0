@@ -2,108 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A83721BAF6
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 18:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7E921BB36
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 18:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728022AbgGJQbX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 12:31:23 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:43357 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726920AbgGJQbW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 12:31:22 -0400
-Received: by mail-io1-f66.google.com with SMTP id k23so6631962iom.10;
-        Fri, 10 Jul 2020 09:31:22 -0700 (PDT)
+        id S1727085AbgGJQll (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 12:41:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726977AbgGJQll (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 12:41:41 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0F2C08C5DC
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jul 2020 09:41:41 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id mn17so2851203pjb.4
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jul 2020 09:41:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=yv3QBCAvG6YZU7bGRxRyZKQa73z0mQNhdf8Wtgm0GNQ=;
+        b=Wp/NcYU0dbUHW5C0f5j0U/BlTUrZHf7GTVEUeStgfJmsy/CTrVLHPdo9tZ9a4hpCjH
+         BDf7UEzNWJQrYCAS7EOG3Hh3T/+mKCHue+LDFO/yGJ6BCBgS/Rz26L9pfRt/vjHp0mgN
+         6XS5q9BqwG4C1n8k8xsLmIjGkB+Hke4t4x/tKnHaoNlL9g/WB3DeS6gVUrKtqE8Ecy3+
+         HzWCCA//8SyeQvAItCMAVih2NoPy7fNMGjcwfPuCfkreUv3mBFHKbHG4Xarb3oBRShDR
+         cQpeGcev2dn1T+p0oqOQ7FMlCw3Nwwt6gRJ8TuZnws2oZJBtOFBcj9qxRJDjpHw9p3M5
+         luzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ri5Ju8/pmRRLLJvGOFF2lCmuUcpkIXlf+EO6oa9lkeg=;
-        b=nqA8jhOyMWl6zDz1D/rGpo03eDm1D3IS/FdHuyF1LPT26sjCt792sMeuNcIO7mOvL2
-         OUme2VhRUu2LUw5xB/KIpJTaSDWxKohp/V32eTKEb9MBnBcn2tUyyyzpizmNYhZZYG1O
-         22L1C11jZKSJ85zgzMqp2/8NhieoBucz8bLIdfjrHWadipzweQie9XiPB72eHY71kb9h
-         r2t68aE26ZIrP4KdYJtrj5XtPOr9X3iRn3BMf1LV1mbvH+oaBZv984BV0sQcaOGi5Sca
-         70x0K8HnQNPXXdctyZ7Q26RH2MUaxHPybRG0ckrYP1guNH9A7kpKgXuQrF1fdnmfAvE7
-         ykTA==
-X-Gm-Message-State: AOAM532UptoJOIU/48bAvz08dzheXFh6VdzoZlzsLAZkisG5KOc1Bb5i
-        yX66bbthYC/CoHiJp8auAZ6HPfnLCJ9E
-X-Google-Smtp-Source: ABdhPJzvLnRx24MgOhUZQEp05+U4gq81sv1JxrEdwFInJenxWlUIT/AyApoNCnP+LtIFrZS4Zidw3A==
-X-Received: by 2002:a6b:9042:: with SMTP id s63mr49394517iod.195.1594398681647;
-        Fri, 10 Jul 2020 09:31:21 -0700 (PDT)
-Received: from xps15 ([64.188.179.254])
-        by smtp.gmail.com with ESMTPSA id a5sm3706284ilt.71.2020.07.10.09.31.20
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=yv3QBCAvG6YZU7bGRxRyZKQa73z0mQNhdf8Wtgm0GNQ=;
+        b=b2fFl+05nEm+ZlcAWQ4v5fN62PenCkYM7R1tR2AQJK5eWlBqmllTg+2fkUnvqX++D+
+         mXVQLk5V9upMp6D6Beq+5fVtZ1iNy5eVERQATrQB7jNNXXJavzlfb51PqHyeYk+FURjw
+         1EENA0P1336veE7NUuagmIy6ztr1RpcpoY0jJ5Xf2Ozzril/Sk6WQOWkCBGMvTp35FVa
+         Obkg9hrYaqej4K5xAM2kBdF5Ovg//ACWhlEI2pr3TnHVUWLAnqLIrg5WIxZlG8tiObgH
+         S2P9E/G60jlxiJQEvEdCGNnGYvp+n1bCPswXjLAbRIqjtu65swFMuS3gqoVo2KaWhwdw
+         1voA==
+X-Gm-Message-State: AOAM531P6g4qImCJjZAufwxT0gNgt/ejVtSeIzlrPyRNSRcCHRuN10Pr
+        tkdvx5iDl3XSb8UnDC3Zl9jUOQ==
+X-Google-Smtp-Source: ABdhPJwPV4et91gVoizdjv5AIKJiRZMhudwxxGDeDIiTxV/LirlZJ67s8UEUkjmiCal45kQB28e3RA==
+X-Received: by 2002:a17:902:b095:: with SMTP id p21mr56941393plr.4.1594399300441;
+        Fri, 10 Jul 2020 09:41:40 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id hg13sm5961210pjb.21.2020.07.10.09.41.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jul 2020 09:31:20 -0700 (PDT)
-Received: (nullmailer pid 2759342 invoked by uid 1000);
-        Fri, 10 Jul 2020 16:31:19 -0000
-Date:   Fri, 10 Jul 2020 10:31:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Mike Tipton <mdtipton@codeaurora.org>
-Cc:     georgi.djakov@linaro.org, bjorn.andersson@linaro.org,
-        agross@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: interconnect: Add property to set
- BCM TCS wait behavior
-Message-ID: <20200710163119.GA2753833@bogus>
-References: <20200710015652.19206-1-mdtipton@codeaurora.org>
- <20200710015652.19206-3-mdtipton@codeaurora.org>
+        Fri, 10 Jul 2020 09:41:39 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Leonard Crestez <leonard.crestez@nxp.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] genpd: Fix up terminology with parent/child
+In-Reply-To: <CAPDyKFrAe4zRRAidY86L2UVyQUDeDc7HdjpJAn-r7ctYeHL0Zg@mail.gmail.com>
+References: <202007081629.0840B4CB78@keescook> <CAJZ5v0iZMveZv_nfu2upLQkp5-8sNdzRf8ATQV1UadvzcN+ZGA@mail.gmail.com> <CAPDyKFrAe4zRRAidY86L2UVyQUDeDc7HdjpJAn-r7ctYeHL0Zg@mail.gmail.com>
+Date:   Fri, 10 Jul 2020 09:41:39 -0700
+Message-ID: <7h8sfr1fwc.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200710015652.19206-3-mdtipton@codeaurora.org>
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 09, 2020 at 06:56:48PM -0700, Mike Tipton wrote:
-> Add "qcom,tcs-wait" property to set which TCS should wait for completion
-> when triggering.
-> 
-> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
-> ---
->  .../bindings/interconnect/qcom,bcm-voter.yaml       | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
-> index 5971fc1df08d..f0c3d6b01831 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
-> @@ -21,6 +21,16 @@ properties:
->      enum:
->        - qcom,bcm-voter
->  
-> +  qcom,tcs-wait:
-> +    description: |
-> +      Optional mask of which TCSs (Triggered Command Sets) wait for completion
-> +      upon triggering. In most cases, it's necessary to wait in both the AMC
-> +      and WAKE sets to ensure resources are available before use. If a specific
-> +      RSC and its use cases can ensure sufficient delay by other means, then
-> +      this can be overridden to reduce latencies.
+Ulf Hansson <ulf.hansson@linaro.org> writes:
 
-I have no idea what any of this means to provide any meaningful comment.
+> On Thu, 9 Jul 2020 at 14:25, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Thu, Jul 9, 2020 at 1:32 AM Kees Cook <keescook@chromium.org> wrote:
+>> >
+>> > The genpd infrastructure uses the terms master/slave, but such uses have
+>> > no external exposures (not even in Documentation/driver-api/pm/*) and are
+>> > not mandated by nor associated with any external specifications. Change
+>> > the language used through-out to parent/child.
+>> >
+>> > There was one possible exception in the debugfs node
+>> > "pm_genpd/pm_genpd_summary" but its path has no hits outside of the
+>> > kernel itself when performing a code search[1], and it seems even this
+>> > single usage has been non-functional since it was introduced due to a
+>> > typo in the Python ("apend" instead of correct "append"). Fix the typo
+>> > while we're at it.
+>> >
+>> > [1] https://codesearch.debian.net/
+>> >
+>> > Signed-off-by: Kees Cook <keescook@chromium.org>
+>>
+>> Applied as 5.9 material with a minor subject edit, thanks!
+>
+> If not too late, feel free to add my ack to the patch.
 
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    default: QCOM_ICC_TAG_ACTIVE_ONLY
+And mine too.
 
-Can't use defines here.
-
-> +
->  required:
->    - compatible
->  
-> @@ -39,7 +49,10 @@ examples:
->    # as defined in Documentation/devicetree/bindings/soc/qcom/rpmh-rsc.txt
->    - |
->  
-> +    #include <dt-bindings/interconnect/qcom,icc.h>
-> +
->      disp_bcm_voter: bcm_voter {
->          compatible = "qcom,bcm-voter";
-> +        qcom,tcs-wait = <QCOM_ICC_TAG_AMC>;
->      };
->  ...
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+Acked-by: Kevin Hilman <khilman@baylibre.com>
