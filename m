@@ -2,226 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB2321B2E9
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 12:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B917221B31C
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 12:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbgGJKC4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 06:02:56 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:59938 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726560AbgGJKCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 06:02:55 -0400
-X-UUID: 8855551bfe5b4550af3356d03893a238-20200710
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=+4c74NVArRBIIoYLPPEccmW7RniPRSe9tGbNorQsXlU=;
-        b=LTAYuB5KOSOu+IZXPtnEA4pOHlPwTJtUtHlnOyI2tYHHQiT/UjtXpz47/PwLfkRvy8tjviH97jXltHPFhUVfRt/s1CO8R5xnsfgA/K5+aW34N119M2ZGMjjivRXmpfCSriKTcg5JTcg+gr1KM7FnMB/qIOzWJNFEJDW5zdjdPbE=;
-X-UUID: 8855551bfe5b4550af3356d03893a238-20200710
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <henry.yen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1421551354; Fri, 10 Jul 2020 18:02:46 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 10 Jul 2020 18:02:44 +0800
-Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 10 Jul 2020 18:02:44 +0800
-Message-ID: <1594375364.4941.7.camel@mtksdccf07>
-Subject: Re: [PATCH v2 2/2] thermal: mediatek: add tsensor support for V2
- thermal system
-From:   mtk17045 <henry.yen@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        ". Zhang Rui" <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Steven Liu" <steven.liu@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Henry Yen <henry.yen@mediatek.com>
-Date:   Fri, 10 Jul 2020 18:02:44 +0800
-In-Reply-To: <1588238074-19338-3-git-send-email-henry.yen@mediatek.com>
-References: <1588238074-19338-1-git-send-email-henry.yen@mediatek.com>
-         <1588238074-19338-3-git-send-email-henry.yen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726912AbgGJKTf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 10 Jul 2020 06:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgGJKTf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 06:19:35 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E268C08C5CE
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jul 2020 03:19:35 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id b77so2692193vsd.8
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jul 2020 03:19:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kvljGXPC+E2fMTT3gzMOa+yWbquvAF9kobhlqHImqdw=;
+        b=aKJgvhdEPt+wMtzb+0pCNFJdYY2qVqS2ARHTp52WGvLkf8ZDetqqKC6a7rcUF2HOCE
+         iyaa33adVfAbrwdGZ7e7wckKuR06lH+wO+cbE6Wj+ojIkTj9iJv3tzqUjsMSdLyc9QxM
+         XHhoTJdKZUXrG58gDve5kpTBH3WGdVpqvj96cw2+3sTZfnm4Q/pgGEckMjrC502ShDby
+         BPAbulqTe2LLtl5uK5L5oNl9+6o4UufdIGG5+dtk/eiwfZZX9fqALTlQuNaAsKy45SOL
+         JM72RHHof86O+CL69fYE+K6F6ZtR6RyH4bSDNFSGr34/PnxUyLF2pMGqSOP5XTr4VVWF
+         VW1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kvljGXPC+E2fMTT3gzMOa+yWbquvAF9kobhlqHImqdw=;
+        b=L4SooXmkXRUCxXXu4kta1ZHIgHw/FCq9V/l255J0Aq8tp+d1FNrZiNhtJmcx5/HUwj
+         RyvB6ieykFYkn6nQs0eKx/v60gWkm3cOQp1CMKMftX3FNFwVCGH+asRepSZ+w2U/u1ny
+         ZOi0HWw/X009oYNDTcJV/WLjftj5YSwMgqZhM+4v6uejuydUyVH/IZSWLKycF4pHoiOM
+         c0lBrhrvi9JomfqRdnQQ02Es1se6B6Jay6X7EKGcULmTd3Q1UQ6nlE8Xg+DzieJYoqB/
+         7A5iXO+HJyymG8iqCx3PDWVImAkJF7nPb7+Mr4GPFJQnc1nQNUpeQU3X7N7vg5dtRsCt
+         bY4g==
+X-Gm-Message-State: AOAM531OyAHIqxKrWPirEU8cWPOiUpVWLYEcgJ+bk85MuRLevyQ+mNRE
+        UgvQEC5yf/XCyJXKQMss9iXL+kidGuTqLu7znieaHA==
+X-Google-Smtp-Source: ABdhPJy1o6oaKIQIjHCKfEyuWcfvchr3i2fgnXRdUmttLk7eq72yO8cFBv/eA340Zo0Vm999IqdS634MvUGxSs8eB0Y=
+X-Received: by 2002:a67:f888:: with SMTP id h8mr30740789vso.165.1594376374286;
+ Fri, 10 Jul 2020 03:19:34 -0700 (PDT)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20200610193156.20363-1-gustav.wiklander@axis.com>
+In-Reply-To: <20200610193156.20363-1-gustav.wiklander@axis.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 10 Jul 2020 12:18:57 +0200
+Message-ID: <CAPDyKFr_-ayyxAuzj92TwQmbcAVDrR6GSEQfD4HhWuUnseB0GA@mail.gmail.com>
+Subject: Re: [PATCHv2] PM / Domains: Add module ref count for each consumer
+To:     Gustav Wiklander <gustav.wiklander@axis.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel@axis.com, Gustav Wiklander <gustavwi@axis.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA0LTMwIGF0IDE3OjE0ICswODAwLCBIZW5yeSBZZW4gd3JvdGU6DQo+IFRo
-aXMgcGF0Y2ggYWRkcyBmdWxsIHN1cHBvcnQgZm9yIHZlciAyIHRoZXJtYWwgc3lzdGVtIChlLmcu
-LCBNVDc2MjIgU29DKS4NCj4gVGhlIG5ldyBjaGFuZ2VzIGluY2x1ZGUgcmVhZGluZyBjYWxpYnJh
-dGlvbiBkYXRhLCBjb252ZXJ0aW5nIHRlbXBlcmF0dXJlDQo+IGFuZCBoYXJkd2FyZSBpbml0aWFs
-aXphdGlvbiB3aGljaCBhcmUgc3BlY2lmaWMgZm9yIHZlcnNpb24gMiBzeXN0ZW0uDQo+IEVhY2gg
-cGxhdGZvcm0gZGVjaWRlcyB3aGljaCBmdW5jdGlvbiB0byBjYWxsIGFjY29yZGluZyB0byBpdHMg
-dmVyc2lvbi4NCj4gDQo+IEZpeGVzOiAzOTY2YmUzYzA4YzMgKCJ0aGVybWFsOiBtZWRpYXRlazog
-YWRkIHN1cHBvcnQgZm9yIE1UNzYyMiBTb0MiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBIZW5yeSBZZW4g
-PGhlbnJ5LnllbkBtZWRpYXRlay5jb20+DQo+IC0tLQ0KPiAgZHJpdmVycy90aGVybWFsL210a190
-aGVybWFsLmMgfCAxMzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLQ0KPiAgMSBm
-aWxlIGNoYW5nZWQsIDEyNSBpbnNlcnRpb25zKCspLCA3IGRlbGV0aW9ucygtKQ0KPiANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jIGIvZHJpdmVycy90aGVybWFs
-L210a190aGVybWFsLmMNCj4gaW5kZXggMTAxMDdkOWQ1NmE4Li44ODYyMGY3ZTk4OTAgMTAwNjQ0
-DQo+IC0tLSBhL2RyaXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jDQo+ICsrKyBiL2RyaXZlcnMv
-dGhlcm1hbC9tdGtfdGhlcm1hbC5jDQo+IEBAIC0zOCw2ICszOCw3IEBADQo+ICAjZGVmaW5lIFRF
-TVBfTU9OSURFVDAJCTB4MDE0DQo+ICAjZGVmaW5lIFRFTVBfTU9OSURFVDEJCTB4MDE4DQo+ICAj
-ZGVmaW5lIFRFTVBfTVNSQ1RMMAkJMHgwMzgNCj4gKyNkZWZpbmUgVEVNUF9NU1JDVEwxCQkweDAz
-Yw0KPiAgI2RlZmluZSBURU1QX0FIQlBPTEwJCTB4MDQwDQo+ICAjZGVmaW5lIFRFTVBfQUhCVE8J
-CTB4MDQ0DQo+ICAjZGVmaW5lIFRFTVBfQURDUE5QMAkJMHgwNDgNCj4gQEAgLTEzMyw2ICsxMzQs
-MjAgQEANCj4gICNkZWZpbmUgQ0FMSUJfQlVGMF9PX1NMT1BFX1NJR05fVjEoeCkJKCgoeCkgPj4g
-NykgJiAweDEpDQo+ICAjZGVmaW5lIENBTElCX0JVRjFfSURfVjEoeCkJCSgoKHgpID4+IDkpICYg
-MHgxKQ0KPiAgDQo+ICsvKg0KPiArICogTGF5b3V0IG9mIHRoZSBmdXNlcyBwcm92aWRpbmcgdGhl
-IGNhbGlicmF0aW9uIGRhdGENCj4gKyAqIFRoZXNlIG1hY3JvcyBjb3VsZCBiZSB1c2VkIGZvciBN
-VDc2MjIuDQo+ICsgKi8NCj4gKyNkZWZpbmUgQ0FMSUJfQlVGMF9BRENfT0VfVjIoeCkJCSgoKHgp
-ID4+IDIyKSAmIDB4M2ZmKQ0KPiArI2RlZmluZSBDQUxJQl9CVUYwX0FEQ19HRV9WMih4KQkJKCgo
-eCkgPj4gMTIpICYgMHgzZmYpDQo+ICsjZGVmaW5lIENBTElCX0JVRjBfREVHQ19DQUxJX1YyKHgp
-CSgoKHgpID4+IDYpICYgMHgzZikNCj4gKyNkZWZpbmUgQ0FMSUJfQlVGMF9PX1NMT1BFX1YyKHgp
-CSgoKHgpID4+IDApICYgMHgzZikNCj4gKyNkZWZpbmUgQ0FMSUJfQlVGMV9WVFNfVFMxX1YyKHgp
-CSgoKHgpID4+IDIzKSAmIDB4MWZmKQ0KPiArI2RlZmluZSBDQUxJQl9CVUYxX1ZUU19UUzJfVjIo
-eCkJKCgoeCkgPj4gMTQpICYgMHgxZmYpDQo+ICsjZGVmaW5lIENBTElCX0JVRjFfVlRTX1RTQUJC
-X1YyKHgpCSgoKHgpID4+IDUpICYgMHgxZmYpDQo+ICsjZGVmaW5lIENBTElCX0JVRjFfVkFMSURf
-VjIoeCkJCSgoKHgpID4+IDQpICYgMHgxKQ0KPiArI2RlZmluZSBDQUxJQl9CVUYxX09fU0xPUEVf
-U0lHTl9WMih4KQkoKCh4KSA+PiAzKSAmIDB4MSkNCj4gKw0KPiAgZW51bSB7DQo+ICAJVlRTMSwN
-Cj4gIAlWVFMyLA0KPiBAQCAtMTQzLDYgKzE1OCwxMSBAQCBlbnVtIHsNCj4gIAlNQVhfTlVNX1ZU
-UywNCj4gIH07DQo+ICANCj4gK2VudW0gbXRrX3RoZXJtYWxfdmVyc2lvbiB7DQo+ICsJTVRLX1RI
-RVJNQUxfVjEgPSAxLA0KPiArCU1US19USEVSTUFMX1YyLA0KPiArfTsNCj4gKw0KPiAgLyogTVQy
-NzAxIHRoZXJtYWwgc2Vuc29ycyAqLw0KPiAgI2RlZmluZSBNVDI3MDFfVFMxCTANCj4gICNkZWZp
-bmUgTVQyNzAxX1RTMgkxDQo+IEBAIC0yNDUsNiArMjY1LDcgQEAgc3RydWN0IG10a190aGVybWFs
-X2RhdGEgew0KPiAgCWNvbnN0IGludCAqY29udHJvbGxlcl9vZmZzZXQ7DQo+ICAJYm9vbCBuZWVk
-X3N3aXRjaF9iYW5rOw0KPiAgCXN0cnVjdCB0aGVybWFsX2JhbmtfY2ZnIGJhbmtfZGF0YVtNQVhf
-TlVNX1pPTkVTXTsNCj4gKwllbnVtIG10a190aGVybWFsX3ZlcnNpb24gdmVyc2lvbjsNCj4gIH07
-DQo+ICANCj4gIHN0cnVjdCBtdGtfdGhlcm1hbCB7DQo+IEBAIC0yNTgsOCArMjc5LDEwIEBAIHN0
-cnVjdCBtdGtfdGhlcm1hbCB7DQo+ICANCj4gIAkvKiBDYWxpYnJhdGlvbiB2YWx1ZXMgKi8NCj4g
-IAlzMzIgYWRjX2dlOw0KPiArCXMzMiBhZGNfb2U7DQo+ICAJczMyIGRlZ2NfY2FsaTsNCj4gIAlz
-MzIgb19zbG9wZTsNCj4gKwlzMzIgb19zbG9wZV9zaWduOw0KPiAgCXMzMiB2dHNbTUFYX05VTV9W
-VFNdOw0KPiAgDQo+ICAJY29uc3Qgc3RydWN0IG10a190aGVybWFsX2RhdGEgKmNvbmY7DQo+IEBA
-IC0zOTgsNiArNDIxLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfdGhlcm1hbF9kYXRhIG10
-ODE3M190aGVybWFsX2RhdGEgPSB7DQo+ICAJLm1zciA9IG10ODE3M19tc3IsDQo+ICAJLmFkY3Bu
-cCA9IG10ODE3M19hZGNwbnAsDQo+ICAJLnNlbnNvcl9tdXhfdmFsdWVzID0gbXQ4MTczX211eF92
-YWx1ZXMsDQo+ICsJLnZlcnNpb24gPSBNVEtfVEhFUk1BTF9WMSwNCj4gIH07DQo+ICANCj4gIC8q
-DQo+IEBAIC00MjgsNiArNDUyLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfdGhlcm1hbF9k
-YXRhIG10MjcwMV90aGVybWFsX2RhdGEgPSB7DQo+ICAJLm1zciA9IG10MjcwMV9tc3IsDQo+ICAJ
-LmFkY3BucCA9IG10MjcwMV9hZGNwbnAsDQo+ICAJLnNlbnNvcl9tdXhfdmFsdWVzID0gbXQyNzAx
-X211eF92YWx1ZXMsDQo+ICsJLnZlcnNpb24gPSBNVEtfVEhFUk1BTF9WMSwNCj4gIH07DQo+ICAN
-Cj4gIC8qDQo+IEBAIC00NTgsNiArNDgzLDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBtdGtfdGhl
-cm1hbF9kYXRhIG10MjcxMl90aGVybWFsX2RhdGEgPSB7DQo+ICAJLm1zciA9IG10MjcxMl9tc3Is
-DQo+ICAJLmFkY3BucCA9IG10MjcxMl9hZGNwbnAsDQo+ICAJLnNlbnNvcl9tdXhfdmFsdWVzID0g
-bXQyNzEyX211eF92YWx1ZXMsDQo+ICsJLnZlcnNpb24gPSBNVEtfVEhFUk1BTF9WMSwNCj4gIH07
-DQo+ICANCj4gIC8qDQo+IEBAIC00ODIsNiArNTA4LDcgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBt
-dGtfdGhlcm1hbF9kYXRhIG10NzYyMl90aGVybWFsX2RhdGEgPSB7DQo+ICAJLm1zciA9IG10NzYy
-Ml9tc3IsDQo+ICAJLmFkY3BucCA9IG10NzYyMl9hZGNwbnAsDQo+ICAJLnNlbnNvcl9tdXhfdmFs
-dWVzID0gbXQ3NjIyX211eF92YWx1ZXMsDQo+ICsJLnZlcnNpb24gPSBNVEtfVEhFUk1BTF9WMiwN
-Cj4gIH07DQo+ICANCj4gIC8qDQo+IEBAIC01MTQsNiArNTQxLDcgQEAgc3RhdGljIGNvbnN0IHN0
-cnVjdCBtdGtfdGhlcm1hbF9kYXRhIG10ODE4M190aGVybWFsX2RhdGEgPSB7DQo+ICAJLm1zciA9
-IG10ODE4M19tc3IsDQo+ICAJLmFkY3BucCA9IG10ODE4M19hZGNwbnAsDQo+ICAJLnNlbnNvcl9t
-dXhfdmFsdWVzID0gbXQ4MTgzX211eF92YWx1ZXMsDQo+ICsJLnZlcnNpb24gPSBNVEtfVEhFUk1B
-TF9WMSwNCj4gIH07DQo+ICANCj4gIC8qKg0KPiBAQCAtNTQwLDYgKzU2OCwzNiBAQCBzdGF0aWMg
-aW50IHJhd190b19tY2Vsc2l1c192MShzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10LCBpbnQgc2Vuc25v
-LCBzMzIgcmF3KQ0KPiAgCXJldHVybiBtdC0+ZGVnY19jYWxpICogNTAwIC0gdG1wOw0KPiAgfQ0K
-PiAgDQo+ICtzdGF0aWMgaW50IHJhd190b19tY2Vsc2l1c192MihzdHJ1Y3QgbXRrX3RoZXJtYWwg
-Km10LCBpbnQgc2Vuc25vLCBzMzIgcmF3KQ0KPiArew0KPiArCXMzMiBmb3JtYXRfMSA9IDA7DQo+
-ICsJczMyIGZvcm1hdF8yID0gMDsNCj4gKwlzMzIgZ19vZSA9IDE7DQo+ICsJczMyIGdfZ2FpbiA9
-IDE7DQo+ICsJczMyIGdfeF9yb29tdCA9IDA7DQo+ICsJczMyIHRtcCA9IDA7DQo+ICsNCj4gKwlp
-ZiAocmF3ID09IDApDQo+ICsJCXJldHVybiAwOw0KPiArDQo+ICsJcmF3ICY9IDB4ZmZmOw0KPiAr
-CWdfZ2FpbiA9IDEwMDAwICsgKCgobXQtPmFkY19nZSAtIDUxMikgKiAxMDAwMCkgPj4gMTIpOw0K
-PiArCWdfb2UgPSBtdC0+YWRjX29lIC0gNTEyOw0KPiArCWZvcm1hdF8xID0gbXQtPnZ0c1tWVFMy
-XSArIDMxMDUgLSBnX29lOw0KPiArCWZvcm1hdF8yID0gKG10LT5kZWdjX2NhbGkgKiAxMCkgPj4g
-MTsNCj4gKwlnX3hfcm9vbXQgPSAoKChmb3JtYXRfMSAqIDEwMDAwKSA+PiAxMikgKiAxMDAwMCkg
-LyBnX2dhaW47DQo+ICsNCj4gKwl0bXAgPSAoKCgoKHJhdyAtIGdfb2UpICogMTAwMDApID4+IDEy
-KSAqIDEwMDAwKSAvIGdfZ2FpbikgLSBnX3hfcm9vbXQ7DQo+ICsJdG1wID0gdG1wICogMTAgKiAx
-MDAgLyAxMTsNCj4gKw0KPiArCWlmIChtdC0+b19zbG9wZV9zaWduID09IDApDQo+ICsJCXRtcCA9
-IHRtcCAvICgxNjUgLSBtdC0+b19zbG9wZSk7DQo+ICsJZWxzZQ0KPiArCQl0bXAgPSB0bXAgLyAo
-MTY1ICsgbXQtPm9fc2xvcGUpOw0KPiArDQo+ICsJcmV0dXJuIChmb3JtYXRfMiAtIHRtcCkgKiAx
-MDA7DQo+ICt9DQo+ICsNCj4gIC8qKg0KPiAgICogbXRrX3RoZXJtYWxfZ2V0X2JhbmsgLSBnZXQg
-YmFuaw0KPiAgICogQGJhbms6CVRoZSBiYW5rDQo+IEBAIC01OTQsOSArNjUyLDEzIEBAIHN0YXRp
-YyBpbnQgbXRrX3RoZXJtYWxfYmFua190ZW1wZXJhdHVyZShzdHJ1Y3QgbXRrX3RoZXJtYWxfYmFu
-ayAqYmFuaykNCj4gIAkJcmF3ID0gcmVhZGwobXQtPnRoZXJtYWxfYmFzZSArDQo+ICAJCQkgICAg
-Y29uZi0+bXNyW2NvbmYtPmJhbmtfZGF0YVtiYW5rLT5pZF0uc2Vuc29yc1tpXV0pOw0KPiAgDQo+
-IC0JCXRlbXAgPSByYXdfdG9fbWNlbHNpdXNfdjEobXQsDQo+IC0JCQkJCSAgY29uZi0+YmFua19k
-YXRhW2JhbmstPmlkXS5zZW5zb3JzW2ldLA0KPiAtCQkJCQkgIHJhdyk7DQo+ICsJCWlmIChtdC0+
-Y29uZi0+dmVyc2lvbiA9PSBNVEtfVEhFUk1BTF9WMSkgew0KPiArCQkJdGVtcCA9IHJhd190b19t
-Y2Vsc2l1c192MSgNCj4gKwkJCQltdCwgY29uZi0+YmFua19kYXRhW2JhbmstPmlkXS5zZW5zb3Jz
-W2ldLCByYXcpOw0KPiArCQl9IGVsc2Ugew0KPiArCQkJdGVtcCA9IHJhd190b19tY2Vsc2l1c192
-MigNCj4gKwkJCQltdCwgY29uZi0+YmFua19kYXRhW2JhbmstPmlkXS5zZW5zb3JzW2ldLCByYXcp
-Ow0KPiArCQl9DQo+ICANCj4gIAkJLyoNCj4gIAkJICogVGhlIGZpcnN0IHJlYWQgb2YgYSBzZW5z
-b3Igb2Z0ZW4gY29udGFpbnMgdmVyeSBoaWdoIGJvZ3VzDQo+IEBAIC02OTgsOSArNzYwLDExIEBA
-IHN0YXRpYyB2b2lkIG10a190aGVybWFsX2luaXRfYmFuayhzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10
-LCBpbnQgbnVtLA0KPiAgCXdyaXRlbChhdXhhZGNfcGh5c19iYXNlICsgQVVYQURDX0NPTjFfQ0xS
-X1YsDQo+ICAJICAgICAgIGNvbnRyb2xsZXJfYmFzZSArIFRFTVBfQURDTVVYQUREUik7DQo+ICAN
-Cj4gLQkvKiBBSEIgYWRkcmVzcyBmb3IgcG5wIHNlbnNvciBtdXggc2VsZWN0aW9uICovDQo+IC0J
-d3JpdGVsKGFwbWl4ZWRfcGh5c19iYXNlICsgQVBNSVhFRF9TWVNfVFNfQ09OMSwNCj4gLQkgICAg
-ICAgY29udHJvbGxlcl9iYXNlICsgVEVNUF9QTlBNVVhBRERSKTsNCj4gKwlpZiAobXQtPmNvbmYt
-PnZlcnNpb24gPT0gTVRLX1RIRVJNQUxfVjEpIHsNCj4gKwkJLyogQUhCIGFkZHJlc3MgZm9yIHBu
-cCBzZW5zb3IgbXV4IHNlbGVjdGlvbiAqLw0KPiArCQl3cml0ZWwoYXBtaXhlZF9waHlzX2Jhc2Ug
-KyBBUE1JWEVEX1NZU19UU19DT04xLA0KPiArCQkgICAgICAgY29udHJvbGxlcl9iYXNlICsgVEVN
-UF9QTlBNVVhBRERSKTsNCj4gKwl9DQo+ICANCj4gIAkvKiBBSEIgdmFsdWUgZm9yIGF1eGFkYyBl
-bmFibGUgKi8NCj4gIAl3cml0ZWwoQklUKGNvbmYtPmF1eGFkY19jaGFubmVsKSwgY29udHJvbGxl
-cl9iYXNlICsgVEVNUF9BRENFTik7DQo+IEBAIC04MDMsNiArODY3LDIzIEBAIHN0YXRpYyBpbnQg
-bXRrX3RoZXJtYWxfZXh0cmFjdF9lZnVzZV92MShzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10LCB1MzIg
-KmJ1ZikNCj4gIAlyZXR1cm4gMDsNCj4gIH0NCj4gIA0KPiArc3RhdGljIGludCBtdGtfdGhlcm1h
-bF9leHRyYWN0X2VmdXNlX3YyKHN0cnVjdCBtdGtfdGhlcm1hbCAqbXQsIHUzMiAqYnVmKQ0KPiAr
-ew0KPiArCWlmICghQ0FMSUJfQlVGMV9WQUxJRF9WMihidWZbMV0pKQ0KPiArCQlyZXR1cm4gLUVJ
-TlZBTDsNCj4gKw0KPiArCW10LT5hZGNfb2UgPSBDQUxJQl9CVUYwX0FEQ19PRV9WMihidWZbMF0p
-Ow0KPiArCW10LT5hZGNfZ2UgPSBDQUxJQl9CVUYwX0FEQ19HRV9WMihidWZbMF0pOw0KPiArCW10
-LT5kZWdjX2NhbGkgPSBDQUxJQl9CVUYwX0RFR0NfQ0FMSV9WMihidWZbMF0pOw0KPiArCW10LT5v
-X3Nsb3BlID0gQ0FMSUJfQlVGMF9PX1NMT1BFX1YyKGJ1ZlswXSk7DQo+ICsJbXQtPnZ0c1tWVFMx
-XSA9IENBTElCX0JVRjFfVlRTX1RTMV9WMihidWZbMV0pOw0KPiArCW10LT52dHNbVlRTMl0gPSBD
-QUxJQl9CVUYxX1ZUU19UUzJfVjIoYnVmWzFdKTsNCj4gKwltdC0+dnRzW1ZUU0FCQl0gPSBDQUxJ
-Ql9CVUYxX1ZUU19UU0FCQl9WMihidWZbMV0pOw0KPiArCW10LT5vX3Nsb3BlX3NpZ24gPSBDQUxJ
-Ql9CVUYxX09fU0xPUEVfU0lHTl9WMihidWZbMV0pOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9
-DQo+ICsNCj4gIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfZ2V0X2NhbGlicmF0aW9uX2RhdGEoc3Ry
-dWN0IGRldmljZSAqZGV2LA0KPiAgCQkJCQkgICAgc3RydWN0IG10a190aGVybWFsICptdCkNCj4g
-IHsNCj4gQEAgLTgzOCw4ICs5MTksMTUgQEAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9nZXRfY2Fs
-aWJyYXRpb25fZGF0YShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+ICAJCWdvdG8gb3V0Ow0KPiAgCX0N
-Cj4gIA0KPiAtCWlmIChtdGtfdGhlcm1hbF9leHRyYWN0X2VmdXNlX3YxKG10LCBidWYpKQ0KPiAr
-CWlmIChtdC0+Y29uZi0+dmVyc2lvbiA9PSBNVEtfVEhFUk1BTF9WMSkNCj4gKwkJcmV0ID0gbXRr
-X3RoZXJtYWxfZXh0cmFjdF9lZnVzZV92MShtdCwgYnVmKTsNCj4gKwllbHNlDQo+ICsJCXJldCA9
-IG10a190aGVybWFsX2V4dHJhY3RfZWZ1c2VfdjIobXQsIGJ1Zik7DQo+ICsNCj4gKwlpZiAocmV0
-KSB7DQo+ICAJCWRldl9pbmZvKGRldiwgIkRldmljZSBub3QgY2FsaWJyYXRlZCwgdXNpbmcgZGVm
-YXVsdCBjYWxpYnJhdGlvbiB2YWx1ZXNcbiIpOw0KPiArCQlyZXQgPSAwOw0KPiArCX0NCj4gIA0K
-PiAgb3V0Og0KPiAgCWtmcmVlKGJ1Zik7DQo+IEBAIC04NzIsNiArOTYwLDI4IEBAIHN0YXRpYyBj
-b25zdCBzdHJ1Y3Qgb2ZfZGV2aWNlX2lkIG10a190aGVybWFsX29mX21hdGNoW10gPSB7DQo+ICB9
-Ow0KPiAgTU9EVUxFX0RFVklDRV9UQUJMRShvZiwgbXRrX3RoZXJtYWxfb2ZfbWF0Y2gpOw0KPiAg
-DQo+ICtzdGF0aWMgdm9pZCBtdGtfdGhlcm1hbF90dXJuX29uX2J1ZmZlcih2b2lkIF9faW9tZW0g
-KmFwbWl4ZWRfYmFzZSkNCj4gK3sNCj4gKwlpbnQgdG1wOw0KPiArDQo+ICsJdG1wID0gcmVhZGwo
-YXBtaXhlZF9iYXNlICsgQVBNSVhFRF9TWVNfVFNfQ09OMSk7DQo+ICsJdG1wICY9IH4oMHgzNyk7
-DQo+ICsJdG1wIHw9IDB4MTsNCj4gKwl3cml0ZWwodG1wLCBhcG1peGVkX2Jhc2UgKyBBUE1JWEVE
-X1NZU19UU19DT04xKTsNCj4gKwl1ZGVsYXkoMjAwKTsNCj4gK30NCj4gKw0KPiArc3RhdGljIHZv
-aWQgbXRrX3RoZXJtYWxfcmVsZWFzZV9wZXJpb2RpY190cyhzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10
-LA0KPiArCQkJCQkgICAgdm9pZCBfX2lvbWVtICphdXhhZGNfYmFzZSkNCj4gK3sNCj4gKwlpbnQg
-dG1wOw0KPiArDQo+ICsJd3JpdGVsKDB4ODAwLCBhdXhhZGNfYmFzZSArIEFVWEFEQ19DT04xX1NF
-VF9WKTsNCj4gKwl3cml0ZWwoMHgxLCBtdC0+dGhlcm1hbF9iYXNlICsgVEVNUF9NT05DVEwwKTsN
-Cj4gKwl0bXAgPSByZWFkbChtdC0+dGhlcm1hbF9iYXNlICsgVEVNUF9NU1JDVEwxKTsNCj4gKwl3
-cml0ZWwoKHRtcCAmICh+MHgxMGUpKSwgbXQtPnRoZXJtYWxfYmFzZSArIFRFTVBfTVNSQ1RMMSk7
-DQo+ICt9DQo+ICsNCj4gIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldikNCj4gIHsNCj4gIAlpbnQgcmV0LCBpLCBjdHJsX2lkOw0KPiBAQCAt
-ODgwLDYgKzk5MCw3IEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRm
-b3JtX2RldmljZSAqcGRldikNCj4gIAlzdHJ1Y3QgcmVzb3VyY2UgKnJlczsNCj4gIAl1NjQgYXV4
-YWRjX3BoeXNfYmFzZSwgYXBtaXhlZF9waHlzX2Jhc2U7DQo+ICAJc3RydWN0IHRoZXJtYWxfem9u
-ZV9kZXZpY2UgKnR6ZGV2Ow0KPiArCXZvaWQgX19pb21lbSAqYXBtaXhlZF9iYXNlLCAqYXV4YWRj
-X2Jhc2U7DQo+ICANCj4gIAltdCA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKm10
-KSwgR0ZQX0tFUk5FTCk7DQo+ICAJaWYgKCFtdCkNCj4gQEAgLTkxNCw2ICsxMDI1LDcgQEAgc3Rh
-dGljIGludCBtdGtfdGhlcm1hbF9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-PiAgCQlyZXR1cm4gLUVOT0RFVjsNCj4gIAl9DQo+ICANCj4gKwlhdXhhZGNfYmFzZSA9IG9mX2lv
-bWFwKGF1eGFkYywgMCk7DQo+ICAJYXV4YWRjX3BoeXNfYmFzZSA9IG9mX2dldF9waHlzX2Jhc2Uo
-YXV4YWRjKTsNCj4gIA0KPiAgCW9mX25vZGVfcHV0KGF1eGFkYyk7DQo+IEBAIC05MjksNiArMTA0
-MSw3IEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
-ZSAqcGRldikNCj4gIAkJcmV0dXJuIC1FTk9ERVY7DQo+ICAJfQ0KPiAgDQo+ICsJYXBtaXhlZF9i
-YXNlID0gb2ZfaW9tYXAoYXBtaXhlZHN5cywgMCk7DQo+ICAJYXBtaXhlZF9waHlzX2Jhc2UgPSBv
-Zl9nZXRfcGh5c19iYXNlKGFwbWl4ZWRzeXMpOw0KPiAgDQo+ICAJb2Zfbm9kZV9wdXQoYXBtaXhl
-ZHN5cyk7DQo+IEBAIC05NTQsNiArMTA2NywxMSBAQCBzdGF0aWMgaW50IG10a190aGVybWFsX3By
-b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAJCWdvdG8gZXJyX2Rpc2FibGVf
-Y2xrX2F1eGFkYzsNCj4gIAl9DQo+ICANCj4gKwlpZiAobXQtPmNvbmYtPnZlcnNpb24gPT0gTVRL
-X1RIRVJNQUxfVjIpIHsNCj4gKwkJbXRrX3RoZXJtYWxfdHVybl9vbl9idWZmZXIoYXBtaXhlZF9i
-YXNlKTsNCj4gKwkJbXRrX3RoZXJtYWxfcmVsZWFzZV9wZXJpb2RpY190cyhtdCwgYXV4YWRjX2Jh
-c2UpOw0KPiArCX0NCj4gKw0KPiAgCWZvciAoY3RybF9pZCA9IDA7IGN0cmxfaWQgPCBtdC0+Y29u
-Zi0+bnVtX2NvbnRyb2xsZXIgOyBjdHJsX2lkKyspDQo+ICAJCWZvciAoaSA9IDA7IGkgPCBtdC0+
-Y29uZi0+bnVtX2JhbmtzOyBpKyspDQo+ICAJCQltdGtfdGhlcm1hbF9pbml0X2JhbmsobXQsIGks
-IGFwbWl4ZWRfcGh5c19iYXNlLA0KSnVzdCBnZW50bHkgcGluZy4gICAgDQpNYW55IHRoYW5rcy4N
-Cg==
+On Wed, 10 Jun 2020 at 21:32, Gustav Wiklander
+<gustav.wiklander@axis.com> wrote:
+>
+> From: Gustav Wiklander <gustavwi@axis.com>
+>
+> Currently a pm_domain can be unloaded without regard for consumers.
+> This patch adds a module dependecy for every registered consumer.
+> Now a power domain driver can only be unloaded if no consumers are
+> registered.
 
+According to the comments from Rafael, yes, this needs some further
+clarifications.
+
+Moreover, we also need to deal with module reference counters when
+adding/removing subdomains. Also pointed out by Rafael.
+
+>
+> Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
+> ---
+> Automated setting genpd->owner when calling pm_genpd_init.
+> Similar to how usb_register_driver does it.
+>
+>  drivers/base/power/domain.c | 22 +++++++++++++++++-----
+>  include/linux/pm_domain.h   | 10 ++++++++--
+>  2 files changed, 25 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 0a01df608849..70c8b59bfed9 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1499,11 +1499,18 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+>         if (IS_ERR(gpd_data))
+>                 return PTR_ERR(gpd_data);
+>
+> +       if (!try_module_get(genpd->owner)) {
+> +               ret = -ENODEV;
+> +               goto out;
+> +       }
+> +
+>         gpd_data->cpu = genpd_get_cpu(genpd, base_dev);
+>
+>         ret = genpd->attach_dev ? genpd->attach_dev(genpd, dev) : 0;
+> -       if (ret)
+> +       if (ret) {
+> +               module_put(genpd->owner);
+>                 goto out;
+> +       }
+>
+>         genpd_lock(genpd);
+>
+> @@ -1579,6 +1586,8 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
+>
+>         genpd_free_dev_data(dev, gpd_data);
+>
+> +       module_put(genpd->owner);
+> +
+>         return 0;
+>
+>   out:
+> @@ -1755,15 +1764,17 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
+>  }
+>
+>  /**
+> - * pm_genpd_init - Initialize a generic I/O PM domain object.
+> + * __pm_genpd_init - Initialize a generic I/O PM domain object.
+>   * @genpd: PM domain object to initialize.
+>   * @gov: PM domain governor to associate with the domain (may be NULL).
+>   * @is_off: Initial value of the domain's power_is_off field.
+> + * @owner: module owner of this power domain object.
+>   *
+>   * Returns 0 on successful initialization, else a negative error code.
+>   */
+> -int pm_genpd_init(struct generic_pm_domain *genpd,
+> -                 struct dev_power_governor *gov, bool is_off)
+> +int __pm_genpd_init(struct generic_pm_domain *genpd,
+> +                 struct dev_power_governor *gov, bool is_off,
+> +                 struct module *owner)
+
+Please drop this new interface altogether. Instead we can just let the
+caller of pm_genpd_init() to assign genpd->owner, rather than passing
+it as a parameter.
+
+>  {
+>         int ret;
+>
+> @@ -1777,6 +1788,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>         genpd->gov = gov;
+>         INIT_WORK(&genpd->power_off_work, genpd_power_off_work_fn);
+>         atomic_set(&genpd->sd_count, 0);
+> +       genpd->owner = owner;
+>         genpd->status = is_off ? GPD_STATE_POWER_OFF : GPD_STATE_ACTIVE;
+>         genpd->device_count = 0;
+>         genpd->max_off_time_ns = -1;
+> @@ -1831,7 +1843,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
+>
+>         return 0;
+>  }
+> -EXPORT_SYMBOL_GPL(pm_genpd_init);
+> +EXPORT_SYMBOL_GPL(__pm_genpd_init);
+>
+>  static int genpd_remove(struct generic_pm_domain *genpd)
+>  {
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 9ec78ee53652..21a3183e00bc 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -9,6 +9,7 @@
+>  #define _LINUX_PM_DOMAIN_H
+>
+>  #include <linux/device.h>
+> +#include <linux/module.h>
+>  #include <linux/mutex.h>
+>  #include <linux/pm.h>
+>  #include <linux/err.h>
+> @@ -93,6 +94,7 @@ struct opp_table;
+>
+>  struct generic_pm_domain {
+>         struct device dev;
+> +       struct module *owner;           /* Module owner of the PM domain */
+>         struct dev_pm_domain domain;    /* PM domain operations */
+>         struct list_head gpd_list_node; /* Node in the global PM domains list */
+>         struct list_head master_links;  /* Links with PM domain as a master */
+> @@ -200,8 +202,12 @@ int pm_genpd_add_subdomain(struct generic_pm_domain *genpd,
+>                            struct generic_pm_domain *subdomain);
+>  int pm_genpd_remove_subdomain(struct generic_pm_domain *genpd,
+>                               struct generic_pm_domain *subdomain);
+> -int pm_genpd_init(struct generic_pm_domain *genpd,
+> -                 struct dev_power_governor *gov, bool is_off);
+> +int __pm_genpd_init(struct generic_pm_domain *genpd,
+> +                   struct dev_power_governor *gov, bool is_off,
+> +                   struct module *module);
+> +#define pm_genpd_init(genpd, gov, is_off) \
+> +       __pm_genpd_init(genpd, gov, is_off, THIS_MODULE)
+> +
+>  int pm_genpd_remove(struct generic_pm_domain *genpd);
+>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int state);
+>
+> --
+> 2.11.0
+>
+
+Kind regards
+Uffe
