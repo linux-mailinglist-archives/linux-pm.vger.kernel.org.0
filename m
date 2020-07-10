@@ -2,138 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3886421B344
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 12:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9311B21C361
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jul 2020 11:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbgGJKh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 06:37:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44264 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727925AbgGJKhx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 10 Jul 2020 06:37:53 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6BF2720767;
-        Fri, 10 Jul 2020 10:37:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594377450;
-        bh=NyVHUKUKqlIxF5m3vLQzfv7RokHp5Hd2UtR/oSs8sTk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s5Qhv0XXv2QfyMLqukJD8k2q10i0TlKV7RExhxCN0j7hSTcVcK1UdQQBhI4Ghj95x
-         llMcaZWiZHJNuS3P7qfE7pj2V+Li01tA9z+1Enz6we64oJxdBEpHsvYdoiqv0UuBwm
-         uDBEZOpwOy9W3jX2eDiKdJZKD1iXZIBDB4Yd1dsE=
-Date:   Fri, 10 Jul 2020 12:37:34 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Gustav Wiklander <gustav.wiklander@axis.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        kernel@axis.com, Gustav Wiklander <gustavwi@axis.com>
-Subject: Re: [PATCHv2] PM / Domains: Add module ref count for each consumer
-Message-ID: <20200710103734.GC1203263@kroah.com>
-References: <20200610193156.20363-1-gustav.wiklander@axis.com>
- <CAPDyKFr_-ayyxAuzj92TwQmbcAVDrR6GSEQfD4HhWuUnseB0GA@mail.gmail.com>
+        id S1727888AbgGKJmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Jul 2020 05:42:22 -0400
+Received: from outboundhk.mxmail.xiaomi.com ([207.226.244.123]:11898 "EHLO
+        xiaomi.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726262AbgGKJmW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 11 Jul 2020 05:42:22 -0400
+Received: from CNBOX05.mioffice.cn (10.237.8.125) by HKBOX1.mioffice.cn
+ (10.56.8.141) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 10 Jul
+ 2020 19:03:21 +0800
+Received: from CNBOX07.mioffice.cn (10.237.8.127) by cnbox05.mioffice.cn
+ (10.237.8.125) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 10 Jul
+ 2020 19:03:21 +0800
+Received: from CNBOX07.mioffice.cn ([10.237.8.127]) by CNBOX07.mioffice.cn
+ ([10.237.8.127]) with mapi id 15.00.1497.006; Fri, 10 Jul 2020 19:03:21 +0800
+From:   =?gb2312?B?RmVpMSBKaWFuZyC9r7fJ?= <jiangfei1@xiaomi.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Qiwu Huang <yanziily@gmail.com>
+CC:     "sre@kernel.org" <sre@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        =?gb2312?B?u8bG5M7k?= <huangqiwu@xiaomi.com>
+Subject: =?gb2312?B?tPC4tDogW0V4dGVybmFsIE1haWxdUmU6IFtQQVRDSCAzLzVdIHBvd2VyOiBz?=
+ =?gb2312?B?dXBwbHk6IGNvcmU6IGFkZCB3aXJlbGVzcyBzaWduYWwgc3RyZW5ndGggcHJv?=
+ =?gb2312?Q?perty?=
+Thread-Topic: [External Mail]Re: [PATCH 3/5] power: supply: core: add wireless
+ signal strength property
+Thread-Index: AQHWVqEGcOKSTFylU0y9/k4lIRbmAKkApV9A
+Date:   Fri, 10 Jul 2020 11:03:21 +0000
+Message-ID: <42c16fa4740244a3975bfa84b04d6574@CNBOX07.mioffice.cn>
+References: <20200710084841.1933254-1-yanziily@gmail.com>
+ <20200710084841.1933254-3-yanziily@gmail.com>
+ <20200710100106.GC1197607@kroah.com>
+In-Reply-To: <20200710100106.GC1197607@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.237.8.11]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFr_-ayyxAuzj92TwQmbcAVDrR6GSEQfD4HhWuUnseB0GA@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 12:18:57PM +0200, Ulf Hansson wrote:
-> On Wed, 10 Jun 2020 at 21:32, Gustav Wiklander
-> <gustav.wiklander@axis.com> wrote:
-> >
-> > From: Gustav Wiklander <gustavwi@axis.com>
-> >
-> > Currently a pm_domain can be unloaded without regard for consumers.
-> > This patch adds a module dependecy for every registered consumer.
-> > Now a power domain driver can only be unloaded if no consumers are
-> > registered.
-> 
-> According to the comments from Rafael, yes, this needs some further
-> clarifications.
-> 
-> Moreover, we also need to deal with module reference counters when
-> adding/removing subdomains. Also pointed out by Rafael.
-> 
-> >
-> > Signed-off-by: Gustav Wiklander <gustavwi@axis.com>
-> > ---
-> > Automated setting genpd->owner when calling pm_genpd_init.
-> > Similar to how usb_register_driver does it.
-> >
-> >  drivers/base/power/domain.c | 22 +++++++++++++++++-----
-> >  include/linux/pm_domain.h   | 10 ++++++++--
-> >  2 files changed, 25 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 0a01df608849..70c8b59bfed9 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -1499,11 +1499,18 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
-> >         if (IS_ERR(gpd_data))
-> >                 return PTR_ERR(gpd_data);
-> >
-> > +       if (!try_module_get(genpd->owner)) {
-> > +               ret = -ENODEV;
-> > +               goto out;
-> > +       }
-> > +
-> >         gpd_data->cpu = genpd_get_cpu(genpd, base_dev);
-> >
-> >         ret = genpd->attach_dev ? genpd->attach_dev(genpd, dev) : 0;
-> > -       if (ret)
-> > +       if (ret) {
-> > +               module_put(genpd->owner);
-> >                 goto out;
-> > +       }
-> >
-> >         genpd_lock(genpd);
-> >
-> > @@ -1579,6 +1586,8 @@ static int genpd_remove_device(struct generic_pm_domain *genpd,
-> >
-> >         genpd_free_dev_data(dev, gpd_data);
-> >
-> > +       module_put(genpd->owner);
-> > +
-> >         return 0;
-> >
-> >   out:
-> > @@ -1755,15 +1764,17 @@ static void genpd_lock_init(struct generic_pm_domain *genpd)
-> >  }
-> >
-> >  /**
-> > - * pm_genpd_init - Initialize a generic I/O PM domain object.
-> > + * __pm_genpd_init - Initialize a generic I/O PM domain object.
-> >   * @genpd: PM domain object to initialize.
-> >   * @gov: PM domain governor to associate with the domain (may be NULL).
-> >   * @is_off: Initial value of the domain's power_is_off field.
-> > + * @owner: module owner of this power domain object.
-> >   *
-> >   * Returns 0 on successful initialization, else a negative error code.
-> >   */
-> > -int pm_genpd_init(struct generic_pm_domain *genpd,
-> > -                 struct dev_power_governor *gov, bool is_off)
-> > +int __pm_genpd_init(struct generic_pm_domain *genpd,
-> > +                 struct dev_power_governor *gov, bool is_off,
-> > +                 struct module *owner)
-> 
-> Please drop this new interface altogether. Instead we can just let the
-> caller of pm_genpd_init() to assign genpd->owner, rather than passing
-> it as a parameter.
-
-No, I asked for this type of interface because it does not require any
-developer to "remember" to set this value or not, and it does not
-require you to go and fix the whole kernel.  This is the correct way to
-do this, see the many other driver subsystems that do this today for
-that reason.
-
-thanks,
-
-greg k-h
+SGkgR3JlZywNCg0KL3N5cy9jbGFzcy9wb3dlcl9zdXBwbHkvPHN1cHBseV9uYW1lPi9zaWduYWxf
+c3RyZW5ndGgNCldoYXQgdW5pdHMgYXJlIHRoaXMgaW4/ICBUaGUgInZhbHVlIiBtZWFucyB3aGF0
+Pw0KDQotLT4gVW5pdCBpcyBLSFosIHRoZSByZXR1cm4gdmFsdWUgaXMgYWxzbyBpbnRlZ2VyLCB0
+aGUgInZhbHVlIiBtZWFucyB0aGUgd29ya2luZyBmcmVxdWVuY3kgb2YgcmVjZWl2ZXIgY2hpcCBv
+ZiB3aXJlbGVzcyBjaGFyZ2luZy4NCg0KQiZSDQpGZWkgSmlhbmcNCg0KLS0tLS3Tyrz+1K28/i0t
+LS0tDQq3orz+yMs6IEdyZWcgS0ggPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0Kt6LLzcqx
+vOQ6IDIwMjDE6jfUwjEwyNUgMTg6MDENCsrVvP7IyzogUWl3dSBIdWFuZyA8eWFuemlpbHlAZ21h
+aWwuY29tPg0Ks63LzTogc3JlQGtlcm5lbC5vcmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsg
+bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgRmVpMSBKaWFuZyC9r7fJIDxqaWFuZ2ZlaTFA
+eGlhb21pLmNvbT47ILvGxuTO5CA8aHVhbmdxaXd1QHhpYW9taS5jb20+DQrW98ziOiBbRXh0ZXJu
+YWwgTWFpbF1SZTogW1BBVENIIDMvNV0gcG93ZXI6IHN1cHBseTogY29yZTogYWRkIHdpcmVsZXNz
+IHNpZ25hbCBzdHJlbmd0aCBwcm9wZXJ0eQ0KDQpPbiBGcmksIEp1bCAxMCwgMjAyMCBhdCAwNDo0
+ODozOVBNICswODAwLCBRaXd1IEh1YW5nIHdyb3RlOg0KPiBGcm9tOiBRaXd1IEh1YW5nIDxodWFu
+Z3Fpd3VAeGlhb21pLmNvbT4NCj4NCj4gcmVwb3J0cyB3aXJlbGVzcyBzaWduYWwgc3RyZW5ndGgu
+DQo+IFRoZSB2YWx1ZSBzaG93IGRlZ3JlZSBvZiBjb3VwbGluZyBiZXR3ZWVuIHR4IGFuZCByeC4N
+Cj4NCj4gU2lnbmVkLW9mZi1ieTogUWl3dSBIdWFuZyA8aHVhbmdxaXd1QHhpYW9taS5jb20+DQo+
+IC0tLQ0KPiAgRG9jdW1lbnRhdGlvbi9BQkkvdGVzdGluZy9zeXNmcy1jbGFzcy1wb3dlciB8IDkg
+KysrKysrKystDQo+ICBkcml2ZXJzL3Bvd2VyL3N1cHBseS9wb3dlcl9zdXBwbHlfc3lzZnMuYyAg
+IHwgMSArDQo+ICBpbmNsdWRlL2xpbnV4L3Bvd2VyX3N1cHBseS5oICAgICAgICAgICAgICAgIHwg
+MSArDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkN
+Cj4NCj4gZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vQUJJL3Rlc3Rpbmcvc3lzZnMtY2xhc3Mt
+cG93ZXIgYi9Eb2N1bWVudGF0aW9uL0FCSS90ZXN0aW5nL3N5c2ZzLWNsYXNzLXBvd2VyDQo+IGlu
+ZGV4IDIwOTljZjE5NGE4OS4uMWY0MmFhMGMwNzFlIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0
+aW9uL0FCSS90ZXN0aW5nL3N5c2ZzLWNsYXNzLXBvd2VyDQo+ICsrKyBiL0RvY3VtZW50YXRpb24v
+QUJJL3Rlc3Rpbmcvc3lzZnMtY2xhc3MtcG93ZXINCj4gQEAgLTczMCw0ICs3MzAsMTEgQEAgRGVz
+Y3JpcHRpb246DQo+DQo+ICBBY2Nlc3M6IFJlYWQtT25seQ0KPiAgVmFsaWQgdmFsdWVzOiAiQURB
+UFRFUl9OT05FIiwgIkFEQVBURVJfU0RQIiwgIkFEQVBURVJfRENQIiwgIkFEQVBURVJfQ0RQIiwN
+Cj4gLSJBREFQVEVSX1FDMiIsICJBREFQVEVSX1FDMyIsICJBREFQVEVSX1BEIiBvciBvdGhlciBw
+cml2YXRlIGFkYXB0ZXIuDQo+IFwgTm8gbmV3bGluZSBhdCBlbmQgb2YgZmlsZQ0KPiArIkFEQVBU
+RVJfUUMyIiwgIkFEQVBURVJfUUMzIiwgIkFEQVBURVJfUEQiIG9yIG90aGVyIHByaXZhdGUgYWRh
+cHRlci4NCj4gKw0KPiArV2hhdDovc3lzL2NsYXNzL3Bvd2VyX3N1cHBseS88c3VwcGx5X25hbWU+
+L3NpZ25hbF9zdHJlbmd0aA0KPiArRGF0ZTpKdWwgMjAyMA0KPiArQ29udGFjdDpGZWkgSmlhbmcg
+PGppYW5nZmVpMUB4aWFvbWkuY29tPg0KPiArRGVzY3JpcHRpb246DQo+ICtSZXBvcnRzIHdpcmVs
+ZXNzIHNpZ25hbCBzdHJlbmd0aC4NCj4gK1RoZSB2YWx1ZSBzaG93IGRlZ3JlZSBvZiBjb3VwbGlu
+Zy4NCg0KV2hhdCB1bml0cyBhcmUgdGhpcyBpbj8gIFRoZSAidmFsdWUiIG1lYW5zIHdoYXQ/DQoN
+CnRoYW5rcywNCg0KZ3JlZyBrLWgNCiMvKioqKioqsb7Tyrz+vLDG5Li9vP66rNPQ0KHD17mry761
+xLGjw9zQxc+io6y99s/e09q3osvNuPjJz8PmtdjWt9bQwdCz9rXEuPbIy7vyyLrX6aGjvfvWucjO
+us7G5Mv7yMvS1MjOus7Qzsq9yrnTw6OosPzAqLWrsrvP3tPayKuyv7vysr+31rXY0LnCtqGiuLTW
+xqGiu/LJoreio6mxvtPKvP7W0LXE0MXPoqGjyOe5+8T6tO3K1cHLsb7Tyrz+o6zH68T6waK8tLXn
+u7C78tPKvP7NqNaqt6K8/sjLsqLJvrP9sb7Tyrz+o6EgVGhpcyBlLW1haWwgYW5kIGl0cyBhdHRh
+Y2htZW50cyBjb250YWluIGNvbmZpZGVudGlhbCBpbmZvcm1hdGlvbiBmcm9tIFhJQU9NSSwgd2hp
+Y2ggaXMgaW50ZW5kZWQgb25seSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgd2hvc2UgYWRkcmVz
+cyBpcyBsaXN0ZWQgYWJvdmUuIEFueSB1c2Ugb2YgdGhlIGluZm9ybWF0aW9uIGNvbnRhaW5lZCBo
+ZXJlaW4gaW4gYW55IHdheSAoaW5jbHVkaW5nLCBidXQgbm90IGxpbWl0ZWQgdG8sIHRvdGFsIG9y
+IHBhcnRpYWwgZGlzY2xvc3VyZSwgcmVwcm9kdWN0aW9uLCBvciBkaXNzZW1pbmF0aW9uKSBieSBw
+ZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVk
+LiBJZiB5b3UgcmVjZWl2ZSB0aGlzIGUtbWFpbCBpbiBlcnJvciwgcGxlYXNlIG5vdGlmeSB0aGUg
+c2VuZGVyIGJ5IHBob25lIG9yIGVtYWlsIGltbWVkaWF0ZWx5IGFuZCBkZWxldGUgaXQhKioqKioq
+LyMNCg==
