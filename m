@@ -2,179 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5492221BE4B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jul 2020 22:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E14B521C596
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jul 2020 19:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728067AbgGJUH2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 10 Jul 2020 16:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgGJUH2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 10 Jul 2020 16:07:28 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF18FC08C5DC;
-        Fri, 10 Jul 2020 13:07:27 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id b15so5551060edy.7;
-        Fri, 10 Jul 2020 13:07:27 -0700 (PDT)
+        id S1728510AbgGKRtq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 11 Jul 2020 13:49:46 -0400
+Received: from mailrelay2-3.pub.mailoutpod1-cph3.one.com ([46.30.212.11]:38832
+        "EHLO mailrelay2-3.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728507AbgGKRtp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 11 Jul 2020 13:49:45 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=+CqFjCkiMTTrEMmgLJvQC/nHsLPJva/2WbdazGmDbtU=;
-        b=KQpUS3RWR6SFYKtDRZ273kbQ9uITMIz9ZdfmBHBz9A0icwaPWk7rAb/sBMBRQFgRBa
-         KcX/Rviiz5ftE4zqNG64RB+X8IxFhaTJzdp41VlN3SPm+mT6PbadOSA9pdZ0igaG5g48
-         cAldkuDtYAbivpN7t4CSOOgCM/WjRkSUQR3kuxSu6gx0AApsrwaiETEOmG9sjDJmzZPi
-         9LwdXaSg11Uh4hcimoIIkTqUCDucnO5ZOeSvzdZNdHvW8+edqZr8vsT68Br1OyAiLjNP
-         99TXNTRJ5KlyUUekDdX7milIlXg6GeQmvx12oEUwDDpbX8EMAJt4lTPsEc4peOEjA4+N
-         L1sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=+CqFjCkiMTTrEMmgLJvQC/nHsLPJva/2WbdazGmDbtU=;
-        b=qnbRfxvBdNrNzKpfggnx299ZU+6lUpXpIDsRRPzQF1YZzj65eDpaRbBXCCbXyDhCa8
-         UKuaQO600w+tOcSLv7ZF+3l3LaGZzv6f+QkgwmBHKMWd3NcGG/Jnhts5+hNvxvqO7KWo
-         nBLPCesIDBMHVqXepsY2MeBvsy3hRoQEKxeQwrC2z8ZwQX6adIP1FTo1TPO6RnadfNlo
-         ElzfDDJkugmRx0m8QYxZv2bzGVCnjm9aTsgmYQr06APm0lM1nM49D5SxtUEnzw0ZHKSF
-         sXEfNGiokQwONY7H0+JWqRpoJGM0Lr+AQ7F+mXcfizjiWk6Ny1YwP9tL2dpANBWTtPqF
-         LxyQ==
-X-Gm-Message-State: AOAM530WvtKV+LsBxk1GoZJUQ4G201YHQ1A1QHiz2mvV3e3g9sw2/J6j
-        P6HW8o8l954/gGLbkQxpKKc=
-X-Google-Smtp-Source: ABdhPJyF2/CZ5X3guxfM+/Uff+qM6LTB72hZnQuiA9xDD+N5C423hmEZj2QKJBP3epqGirgLzA2cqg==
-X-Received: by 2002:a50:d55b:: with SMTP id f27mr41864893edj.312.1594411646388;
-        Fri, 10 Jul 2020 13:07:26 -0700 (PDT)
-Received: from AnsuelXPS (host-87-16-250-164.retail.telecomitalia.it. [87.16.250.164])
-        by smtp.gmail.com with ESMTPSA id i2sm5303716edk.30.2020.07.10.13.07.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 Jul 2020 13:07:25 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Rob Herring'" <robh@kernel.org>
-Cc:     "'Amit Kucheria'" <amit.kucheria@linaro.org>,
-        "'Andy Gross'" <agross@kernel.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
-        "'Zhang Rui'" <rui.zhang@intel.com>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200709215136.28044-1-ansuelsmth@gmail.com> <20200709215136.28044-4-ansuelsmth@gmail.com> <20200710162657.GB2743639@bogus>
-In-Reply-To: <20200710162657.GB2743639@bogus>
-Subject: R: [PATCH 3/6] dt-bindings: thermal: tsens: document ipq8064 bindings
-Date:   Fri, 10 Jul 2020 22:07:21 +0200
-Message-ID: <0ef601d656f5$b9f8e0c0$2deaa240$@gmail.com>
+        d=lechevalier.se; s=20191106;
+        h=content-transfer-encoding:content-type:mime-version:subject:message-id:to:
+         from:date:from;
+        bh=XPY/Ygi3XaerueYBkHDnVuko1AdEHPalOWhfV5txzKM=;
+        b=M4u3MiycYmJuDpZEBNmSiEy3SdbjDX92qL7C6Q+sWi3kJC0pIV5Mnn6O9ss0p61C7SI4WaTPAlQBP
+         xvLoPx/+VInh6qf4qD7m10Ym5q+2b39BUjBYqWU4pzd3Z510AkLaJilDooeJSwWtT7a2nGDimRj7Z3
+         1h4GPp+SnsmBpM95USibfDm6vfpPQq9tr7MoRcq0YLBh6EPBN7O84T0viCRkUc/BXoEWQWiCfNepg6
+         S+aCn89oGHEsZUxXAMVubukSqnzaJrdQd33JWKZUhxAbADuK8gisCM24bLHa7iu+Mdr4WS6KJIdmFD
+         kLleSEaO6DYcGrRy7zG36nbmFYTTl5w==
+X-HalOne-Cookie: a880fdb267b37ff9f51ca5279a5cf7ed0bab0692
+X-HalOne-ID: e665811c-c39e-11ea-8888-d0431ea8a290
+Received: from [192.168.0.126] (h-131-138.a357.priv.bahnhof.se [81.170.131.138])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id e665811c-c39e-11ea-8888-d0431ea8a290;
+        Sat, 11 Jul 2020 17:49:43 +0000 (UTC)
+Date:   Sat, 11 Jul 2020 19:49:44 +0200 (GMT+02:00)
+From:   A L <mail@lechevalier.se>
+To:     linux-pm@vger.kernel.org
+Message-ID: <6dfd665.397441d8.1733eff4aa2@lechevalier.se>
+Subject: Schedutil scaling governor is missing time_in_state
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="iso-8859-1"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQKhcWl5bhTF+RXP3lhSldlnX/gq7QKeRUoHAWvA1uGnSreZEA==
-Content-Language: it
+X-Mailer: R2Mail2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
+I am testing the 'schedutil' scaling govenor.
 
-> -----Messaggio originale-----
-> Da: Rob Herring <robh@kernel.org>
-> Inviato: venerd=EC 10 luglio 2020 18:27
-> A: Ansuel Smith <ansuelsmth@gmail.com>
-> Cc: Amit Kucheria <amit.kucheria@linaro.org>; Andy Gross
-> <agross@kernel.org>; Bjorn Andersson <bjorn.andersson@linaro.org>;
-> Zhang Rui <rui.zhang@intel.com>; Daniel Lezcano
-> <daniel.lezcano@linaro.org>; linux-pm@vger.kernel.org; linux-arm-
-> msm@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Oggetto: Re: [PATCH 3/6] dt-bindings: thermal: tsens: document ipq8064
-> bindings
->=20
-> On Thu, Jul 09, 2020 at 11:51:33PM +0200, Ansuel Smith wrote:
-> > Document the use of regmap phandle for ipq8064 SoCs
-> >
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/thermal/qcom-tsens.yaml          | 51 =
-++++++++++++++++---
-> >  1 file changed, 44 insertions(+), 7 deletions(-)
-> >
-> > diff --git =
-a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> > index d7be931b42d2..5ceb5d720e16 100644
-> > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> > @@ -24,6 +24,7 @@ properties:
-> >            - enum:
-> >                - qcom,msm8916-tsens
-> >                - qcom,msm8974-tsens
-> > +              - qcom,ipq8064-tsens
-> >            - const: qcom,tsens-v0_1
-> >
-> >        - description: v1 of TSENS
-> > @@ -47,6 +48,11 @@ properties:
-> >        - description: TM registers
-> >        - description: SROT registers
-> >
-> > +  regmap:
-> > +    description:
-> > +      Phandle to the gcc. On ipq8064 SoCs gcc and tsense share the =
-same
-> regs.
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
->=20
-> Can't you make this a child of the gcc and drop this property?
->=20
+So far it seems to give good results in terms of reduced thermals and energ=
+y consumption.
 
-Make the thermal a child of the gcc would be a little confusing. Anyway
-making this
-a child of gcc cause the not probing of the thermal driver as it's =
-ignored
-any child of
-gcc. I pushed v2 with the fixed problem.
+One difference compared to 'ondemand' that I noticed is that /sys/devices/s=
+ystem/cpu/cpu*/cpufreq/stats/time_in_state is never updated. It is always e=
+mpty. This creates a problem for my munin graphs that log the average CPU f=
+requency for each core.
 
-> > +
-> >    interrupts:
-> >      minItems: 1
-> >      items:
-> > @@ -111,17 +117,48 @@ allOf:
-> >          interrupt-names:
-> >            minItems: 2
-> >
-> > -required:
-> > -  - compatible
-> > -  - reg
-> > -  - "#qcom,sensors"
-> > -  - interrupts
-> > -  - interrupt-names
-> > -  - "#thermal-sensor-cells"
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            enum:
-> > +              - qcom,ipq8064-tsens
-> > +    then:
-> > +      required:
-> > +        - compatible
-> > +        - regmap
-> > +        - "#qcom,sensors"
-> > +        - interrupts
-> > +        - interrupt-names
-> > +        - "#thermal-sensor-cells"
-> > +
-> > +    else:
-> > +      required:
-> > +        - compatible
-> > +        - reg
-> > +        - "#qcom,sensors"
-> > +        - interrupts
-> > +        - interrupt-names
-> > +        - "#thermal-sensor-cells"
->=20
-> Keep all the common required properties and just put reg/regmap in the
-> if/then if this ends up staying.
->=20
-> Rob
+Example with 'ondemand'
+cpu0/cpufreq/stats/time_in_state:3500000 3869872
+cpu0/cpufreq/stats/time_in_state:2300000 581995
+cpu0/cpufreq/stats/time_in_state:1600000 6895937
+cpu0/cpufreq/stats/total_trans:1746213
+cpu0/cpufreq/stats/trans_table:=C2=A0=C2=A0 From=C2=A0 :=C2=A0=C2=A0=C2=A0 =
+To
+cpu0/cpufreq/stats/trans_table:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 :=C2=A0=C2=A0 3500000=C2=A0=C2=A0 2300000=C2=A0=C2=A0 1600000
+cpu0/cpufreq/stats/trans_table:=C2=A0 3500000:=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 0=C2=A0=C2=A0=C2=A0=C2=A0 49335=C2=A0=C2=A0=C2=A0=C2=
+=A0 62476
+cpu0/cpufreq/stats/trans_table:=C2=A0 2300000:=C2=A0=C2=A0=C2=A0=C2=A0 5821=
+9=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0=C2=A0=C2=A0=C2=A0 75685=
+4
+cpu0/cpufreq/stats/trans_table:=C2=A0 1600000:=C2=A0=C2=A0=C2=A0=C2=A0 5359=
+1=C2=A0=C2=A0=C2=A0 765738=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+0
+
+Example with 'schedutil'
+cpu3/cpufreq/stats/time_in_state:<empty>
+cpu3/cpufreq/stats/total_trans:1751092
+cpu3/cpufreq/stats/trans_table:<empty>
+
+Is this a known problem or perhaps a design choice?
+
+This is on kernel 5.7.8 on and AMD Athlon 3000G CPU using 'acpi_cpufreq' sc=
+aling_driver.
+
+Anders
 
