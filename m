@@ -2,109 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FFD21CB19
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jul 2020 21:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5801321CC23
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 01:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729212AbgGLTYG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Jul 2020 15:24:06 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:53356 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729213AbgGLTYC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 12 Jul 2020 15:24:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594581841;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=b3KrXXJU4xTFoLZxrkdOWqXLXUZ09xiehHzSqm0Pkjg=;
-        b=YkTew4p7joE7FRYbi461BYun6QyZXlwl75wFMQ9+dA4pPLMDKVsIl0yM7eqxDOgWoeYszR
-        rMcNfg4ZkPvwo8j1JOKdObEHFyCbkbqpAnEFmqoqj1TrHUr0rSyMtI1d0Z2bfweW5bwcHJ
-        xET0zNi9DZDNzwxhSQVMt87GynB8ijM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-101-eT98CRoeOtyq_SgTYr6Hmw-1; Sun, 12 Jul 2020 15:23:59 -0400
-X-MC-Unique: eT98CRoeOtyq_SgTYr6Hmw-1
-Received: by mail-qt1-f197.google.com with SMTP id s25so8673887qth.9
-        for <linux-pm@vger.kernel.org>; Sun, 12 Jul 2020 12:23:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=b3KrXXJU4xTFoLZxrkdOWqXLXUZ09xiehHzSqm0Pkjg=;
-        b=EQ3WzFNmAIlB8i0UaCXiEo4o9zFHKIWz4Q3FV9UpEjIfTBUoouYnJ4lOqEPRUb9W14
-         fNeLdK3SBGDdctPUxhD74Jzgd0QRHiM6idzF3KLJdDbF10CJSf55LV2eT+dcxMzSbFgc
-         LcGzMnbyiDOArCI6ndwmRk3q1hQHAP9t+hsPpZgy9D4mfdxMrd+mDgVXtfYPdufnJ9Oh
-         f3rAmClF1D7Aag0D8dMqOxdLNJwheM0n1d3Hm9GBAcapFjT2PzltWlXvc95REesPhK41
-         F/aZYC9Aad6fcWoR7MgqxPMQMX4xEdwX+cUIQAGcRnt4ZysJtaIpGDHNSRw5jti3JDgy
-         ZTHQ==
-X-Gm-Message-State: AOAM530szw1AyI6wSbvk5vj53cOE7l3mhUPXL1xSE7WGxPb58vTT5PNP
-        vz6KI5N9Csxg2AbRRTfhu/MJrV4oVEtUdbLYLmK1NrpQn/MoNuoheWaDlzenv30VzDqvgsBjR/j
-        /M1xZ1ZcUe96sdzcWH6I=
-X-Received: by 2002:aed:2f81:: with SMTP id m1mr81595687qtd.266.1594581838903;
-        Sun, 12 Jul 2020 12:23:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyFr53b37diI/w/IdeVAqL09teKKMSooWPoLaA53zo+3jg48N0X3U39i0Ti1XPPzdbbAPOSWw==
-X-Received: by 2002:aed:2f81:: with SMTP id m1mr81595671qtd.266.1594581838617;
-        Sun, 12 Jul 2020 12:23:58 -0700 (PDT)
-Received: from trix.remote.csb (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id p7sm15836151qki.61.2020.07.12.12.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2020 12:23:57 -0700 (PDT)
-From:   trix@redhat.com
-To:     sre@kernel.org, anton.vorontsov@linaro.org, jtzhou@marvell.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] power: supply: check if calc_soc succeeded in pm860x_init_battery
-Date:   Sun, 12 Jul 2020 12:23:51 -0700
-Message-Id: <20200712192351.15428-1-trix@redhat.com>
-X-Mailer: git-send-email 2.18.1
+        id S1727998AbgGLX3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Jul 2020 19:29:45 -0400
+Received: from vps.xff.cz ([195.181.215.36]:60550 "EHLO vps.xff.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727785AbgGLX3p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 12 Jul 2020 19:29:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=megous.com; s=mail;
+        t=1594596583; bh=mGpvPO69Sq3uBZZ4LMIGshZ9SukFLv4L6UJ+xxlTBSs=;
+        h=Date:From:To:Cc:Subject:References:X-My-GPG-KeyId:From;
+        b=a8UcIIWVw0DeoiZqCVzEexyC+8qr0JumbaFjRMx1OAOluKaCH3YxXBxasO+UaKMU8
+         ty8DKLtX58uRK4+W5Zm3Gupkk/v/MT+stUCSjl2ykbPH0bw8U1MUhTufgu/Lz4Y1ER
+         5tZPLXAvIOIWqbEbF4N6Q7wcAtxSsgV0NMYKAJfo=
+Date:   Mon, 13 Jul 2020 01:29:42 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     linux-sunxi@googlegroups.com,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] thermal: sun8i: Be loud when probe fails
+Message-ID: <20200712232942.eecoekr25i3wu2iq@core.my.home>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Maxime Ripard <maxime@cerno.tech>, linux-sunxi@googlegroups.com,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20200708105527.868987-1-megous@megous.com>
+ <20200708122542.73o3lbhgvbdw5c4z@gilmour.lan>
+ <20200708132924.r6f5id2evprhybec@core.my.home>
+ <20200708133654.fp7k4whl2qmn5ygy@gilmour.lan>
+ <20200708134441.4lfuh7nwtqnkkg2a@core.my.home>
+ <20200708135748.l4zncodhhggurp6s@gilmour.lan>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200708135748.l4zncodhhggurp6s@gilmour.lan>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hi Maxime,
 
-clang static analysis flags this error
+On Wed, Jul 08, 2020 at 03:57:48PM +0200, Maxime Ripard wrote:
+> On Wed, Jul 08, 2020 at 03:44:41PM +0200, Ondřej Jirman wrote:
+> > >
 
-88pm860x_battery.c:522:19: warning: Assigned value is
-  garbage or undefined [core.uninitialized.Assign]
-                info->start_soc = soc;
-                                ^ ~~~
-soc is set by calling calc_soc.
-But calc_soc can return without setting soc.
+[...]
 
-So check the return status and bail similarly to other
-checks in pm860x_init_battery and initialize soc to
-silence the warning.
+> > > Yeah, but on the other hand, we regularly have people that come up and
+> > > ask if a "legitimate" EPROBE_DEFER error message (as in: the driver
+> > > wasn't there on the first attempt but was there on the second) is a
+> > > cause of concern or not.
+> > 
+> > That's why I also added a success message, to distinguish this case. 
+> 
+> That doesn't really help though. We have plenty of drivers that have
+> some sort of success message and people will still ask about that error
+> message earlier.
+> 
+> > > > And people run several distros for 3-4 months without anyone noticing any
+> > > > issues and that thermal regulation doesn't work. So it seems that lack of a
+> > > > success message is not enough.
+> > > 
+> > > I understand what the issue is, but do you really expect phone users to
+> > > monitor the kernel logs every time they boot their phone to see if the
+> > > thermal throttling is enabled?
+> > 
+> > Not phone users, but people making their own kernels/distributions. Those people
+> > monitor dmesg, and out of 4 distros or more nobody noticed there was an issue
+> > (despite the complaints of overheating by their users).
+> > 
+> > So I thought some warning may be in order, so that distro people more easily
+> > notice they have misconfigured the kernel or sometging.
+> 
+> I mean, then there's nothing we can do to properly address that then.
+> 
+> The configuration system is a gun, we can point at the target, but
+> anyone is definitely free to shot themself in the foot.
+> 
+> You would have exactly the same result if you left the thermal driver
+> disabled, or if you didn't have cpufreq support.
 
-Fixes: a830d28b48bf ("power_supply: Enable battery-charger for 88pm860x")
+Right. Though I hope there's some middle ground. I mean all of those dev_err
+in error paths of many drivers are there mostly to help debugging stuff.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/power/supply/88pm860x_battery.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+And even though I was part of this driver's development, it took me quite
+some time to figure out it was the missing sunxi-sid driver causing the issue,
+with complete silence from the driver.
 
-diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
-index 1308f3a185f3..590da88a17a2 100644
---- a/drivers/power/supply/88pm860x_battery.c
-+++ b/drivers/power/supply/88pm860x_battery.c
-@@ -433,7 +433,7 @@ static void pm860x_init_battery(struct pm860x_battery_info *info)
- 	int ret;
- 	int data;
- 	int bat_remove;
--	int soc;
-+	int soc = 0;
- 
- 	/* measure enable on GPADC1 */
- 	data = MEAS1_GP1;
-@@ -496,7 +496,9 @@ static void pm860x_init_battery(struct pm860x_battery_info *info)
- 	}
- 	mutex_unlock(&info->lock);
- 
--	calc_soc(info, OCV_MODE_ACTIVE, &soc);
-+	ret = calc_soc(info, OCV_MODE_ACTIVE, &soc);
-+	if (ret < 0)
-+		goto out;
- 
- 	data = pm860x_reg_read(info->i2c, PM8607_POWER_UP_LOG);
- 	bat_remove = data & BAT_WU_LOG;
--- 
-2.18.1
+Maybe this can/will be solved at another level entirely, like having a device
+core report devices probes that failed with EPROBE_DEFER some time after
+the boot finished and modules had a chance to load, instead of immediately
+for each probe retry.
 
+regards,
+	o.
+
+> Maxime
