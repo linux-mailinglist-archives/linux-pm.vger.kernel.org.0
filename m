@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9446F21CA82
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jul 2020 18:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05CF21CA84
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jul 2020 18:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbgGLQ7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 12 Jul 2020 12:59:32 -0400
-Received: from foss.arm.com ([217.140.110.172]:47884 "EHLO foss.arm.com"
+        id S1729209AbgGLQ7f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 12 Jul 2020 12:59:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:47902 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728859AbgGLQ7c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 12 Jul 2020 12:59:32 -0400
+        id S1728859AbgGLQ7e (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 12 Jul 2020 12:59:34 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9299D30E;
-        Sun, 12 Jul 2020 09:59:31 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A92E331B;
+        Sun, 12 Jul 2020 09:59:33 -0700 (PDT)
 Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B043E3F7D8;
-        Sun, 12 Jul 2020 09:59:29 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C7B683F7D8;
+        Sun, 12 Jul 2020 09:59:31 -0700 (PDT)
 From:   Valentin Schneider <valentin.schneider@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org
@@ -31,10 +31,12 @@ Cc:     Russell King <linux@armlinux.org.uk>,
         Juri Lelli <juri.lelli@redhat.com>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [PATCH v2 0/3] sched, arch_topology: Thermal pressure configuration cleanup
-Date:   Sun, 12 Jul 2020 17:59:14 +0100
-Message-Id: <20200712165917.9168-1-valentin.schneider@arm.com>
+Subject: [PATCH v2 1/3] arch_topology, sched/core: Cleanup thermal pressure definition
+Date:   Sun, 12 Jul 2020 17:59:15 +0100
+Message-Id: <20200712165917.9168-2-valentin.schneider@arm.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200712165917.9168-1-valentin.schneider@arm.com>
+References: <20200712165917.9168-1-valentin.schneider@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -42,48 +44,146 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi folks,
+The following commit:
 
-This stems from this thread [1] on the list. TL;DR: the thermal pressure config
-has no helpful documentation, and figuring out if the right dependencies are in
-place is not easy for a regular user. 
+  14533a16c46d ("thermal/cpu-cooling, sched/core: Move the arch_set_thermal_pressure() API to generic scheduler code")
 
-The current landscape also paints an odd picture: arch_set_thermal_pressure() is
-hardcoded in sched/core.c, and is *not* architecture-definable, while
-arch_get_thermal_pressure() is. Patch 1 is tackling this, the rest is Kconfig
-stuff.
+moved the definition of arch_set_thermal_pressure() to sched/core.c, but
+kept its declaration in linux/arch_topology.h. When building e.g. an x86
+kernel with CONFIG_SCHED_THERMAL_PRESSURE=y, cpufreq_cooling.c ends up
+getting the declaration of arch_set_thermal_pressure() from
+include/linux/arch_topology.h, which is somewhat awkward.
 
-Cheers,
-Valentin
+On top of this, sched/core.c unconditionally defines
+o The thermal_pressure percpu variable
+o arch_set_thermal_pressure()
 
-[1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
+while arch_scale_thermal_pressure() does nothing unless redefined by the
+architecture.
 
-Revisions
-=========
+arch_*() functions are meant to be defined by architectures, so revert the
+aforementioned commit and re-implement it in a way that keeps
+arch_set_thermal_pressure() architecture-definable, and doesn't define the
+thermal pressure percpu variable for kernels that don't need
+it (CONFIG_SCHED_THERMAL_PRESSURE=n).
 
-v1 -> v2
---------
-
-o Remove cpufreq_cooling.c weak function; use #define stub in sched/topology.h
-  (Vincent)
-o Hinge arm SCHED_THERMAL_PRESSURE selection on ARM_CPU_TOPOLOGY
-
-Valentin Schneider (3):
-  arch_topology, sched/core: Cleanup thermal pressure definition
-  sched: Cleanup SCHED_THERMAL_PRESSURE kconfig entry
-  arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE
-
- arch/arm/Kconfig                  |  1 +
+Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+---
  arch/arm/include/asm/topology.h   |  3 ++-
- arch/arm64/Kconfig                |  1 +
  arch/arm64/include/asm/topology.h |  3 ++-
  drivers/base/arch_topology.c      | 11 +++++++++++
  include/linux/arch_topology.h     |  4 ++--
  include/linux/sched/topology.h    |  7 +++++++
- init/Kconfig                      | 15 ++++++++++++++-
  kernel/sched/core.c               | 11 -----------
- 9 files changed, 40 insertions(+), 16 deletions(-)
+ 6 files changed, 24 insertions(+), 15 deletions(-)
 
---
+diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+index 435aba289fc5..e0593cf095d0 100644
+--- a/arch/arm/include/asm/topology.h
++++ b/arch/arm/include/asm/topology.h
+@@ -16,8 +16,9 @@
+ /* Enable topology flag updates */
+ #define arch_update_cpu_topology topology_update_cpu_topology
+ 
+-/* Replace task scheduler's default thermal pressure retrieve API */
++/* Replace task scheduler's default thermal pressure API */
+ #define arch_scale_thermal_pressure topology_get_thermal_pressure
++#define arch_set_thermal_pressure   topology_set_thermal_pressure
+ 
+ #else
+ 
+diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+index 0cc835ddfcd1..e042f6527981 100644
+--- a/arch/arm64/include/asm/topology.h
++++ b/arch/arm64/include/asm/topology.h
+@@ -34,8 +34,9 @@ void topology_scale_freq_tick(void);
+ /* Enable topology flag updates */
+ #define arch_update_cpu_topology topology_update_cpu_topology
+ 
+-/* Replace task scheduler's default thermal pressure retrieve API */
++/* Replace task scheduler's default thermal pressure API */
+ #define arch_scale_thermal_pressure topology_get_thermal_pressure
++#define arch_set_thermal_pressure   topology_set_thermal_pressure
+ 
+ #include <asm-generic/topology.h>
+ 
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 4d0a0038b476..d14cab7dfa3c 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -54,6 +54,17 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
+ 	per_cpu(cpu_scale, cpu) = capacity;
+ }
+ 
++DEFINE_PER_CPU(unsigned long, thermal_pressure);
++
++void arch_set_thermal_pressure(const struct cpumask *cpus,
++			       unsigned long th_pressure)
++{
++	int cpu;
++
++	for_each_cpu(cpu, cpus)
++		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
++}
++
+ static ssize_t cpu_capacity_show(struct device *dev,
+ 				 struct device_attribute *attr,
+ 				 char *buf)
+diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+index 0566cb3314ef..69b1dabe39dc 100644
+--- a/include/linux/arch_topology.h
++++ b/include/linux/arch_topology.h
+@@ -39,8 +39,8 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
+ 	return per_cpu(thermal_pressure, cpu);
+ }
+ 
+-void arch_set_thermal_pressure(struct cpumask *cpus,
+-			       unsigned long th_pressure);
++void topology_set_thermal_pressure(const struct cpumask *cpus,
++				   unsigned long th_pressure);
+ 
+ struct cpu_topology {
+ 	int thread_id;
+diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+index fb11091129b3..764222d637b7 100644
+--- a/include/linux/sched/topology.h
++++ b/include/linux/sched/topology.h
+@@ -232,6 +232,13 @@ unsigned long arch_scale_thermal_pressure(int cpu)
+ }
+ #endif
+ 
++#ifndef arch_set_thermal_pressure
++static __always_inline
++void arch_set_thermal_pressure(const struct cpumask *cpus,
++			       unsigned long th_pressure)
++{ }
++#endif
++
+ static inline int task_node(const struct task_struct *p)
+ {
+ 	return cpu_to_node(task_cpu(p));
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ff0519551188..90b44f3840e4 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -3731,17 +3731,6 @@ unsigned long long task_sched_runtime(struct task_struct *p)
+ 	return ns;
+ }
+ 
+-DEFINE_PER_CPU(unsigned long, thermal_pressure);
+-
+-void arch_set_thermal_pressure(struct cpumask *cpus,
+-			       unsigned long th_pressure)
+-{
+-	int cpu;
+-
+-	for_each_cpu(cpu, cpus)
+-		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+-}
+-
+ /*
+  * This function gets called by the timer code, with HZ frequency.
+  * We call it with interrupts disabled.
+-- 
 2.27.0
 
