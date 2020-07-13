@@ -2,65 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFCC21D884
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 16:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4149321D897
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 16:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729871AbgGMOaS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 10:30:18 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:12190 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729659AbgGMOaS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 10:30:18 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f0c6fed0000>; Mon, 13 Jul 2020 07:30:05 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 13 Jul 2020 07:30:17 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 13 Jul 2020 07:30:17 -0700
-Received: from [10.24.37.103] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 13 Jul
- 2020 14:30:09 +0000
-Subject: Re: [TEGRA194_CPUFREQ PATCH v4 3/4] cpufreq: Add Tegra194 cpufreq
- driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rjw@rjwysocki.net>, <catalin.marinas@arm.com>, <will@kernel.org>,
-        <thierry.reding@gmail.com>, <robh+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
-        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
-        <mperttunen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
-        <mirq-linux@rere.qmqm.pl>
-References: <1593186236-12760-1-git-send-email-sumitg@nvidia.com>
- <1593186236-12760-4-git-send-email-sumitg@nvidia.com>
- <20200629061639.7cwxfi64drkof6yu@vireshk-i7>
-From:   Sumit Gupta <sumitg@nvidia.com>
-Message-ID: <0d04d2c8-8f87-ecc7-9bd6-633d84b60e8b@nvidia.com>
-Date:   Mon, 13 Jul 2020 19:59:28 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730039AbgGMOcv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 10:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729918AbgGMOcq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 10:32:46 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060FEC061755
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 07:32:46 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id j10so10026457qtq.11
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 07:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JV7XujCjT0WQ4wkjALKmlW731iVG+iPdV0Rii6HipsE=;
+        b=pa6pNCMCjQQsJcn6JRnuQVsJuBE0YMkf8XHeoTrN40w24whIS3UehEHKsvoDinmJTt
+         DBQ3YUhvghGYV60Xpb5xSXl2lDujV2jF6VxwOr/aDF76DRVCvd/1dCr8LbhoyVzYBV3L
+         NAFlykQunvALJ8h2nY2Kd+5ozXlNYyFr2YhUax8lCIosdi8C5gdumEjELCyqJFXo6xTQ
+         ciCmX5gM3wA8fGEja7vJdp+0XTSMxXi4wzsZPZmxax9hbegn+OdYOhrpF7BF9qG8WKCE
+         Wj/eNmqlpb8hks0b+FK0gz8HdgFmhkEOnW4f1OjEqVAwuBj04gj3DQTwT/EswUOGex76
+         jTHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JV7XujCjT0WQ4wkjALKmlW731iVG+iPdV0Rii6HipsE=;
+        b=rBCk+raXvSlHdIdfxxmLiTMnPOOI5cJffzd6uvLYIQ1J6gOyoEiHOwazh8tero1t6c
+         wR115mcjUO52kURZwMdIq2/gPzLStWSw6mDzezuU+aqBEdZMQ95vjDHvo7zIkSLlbUiv
+         0IiZ6Ejv1O/wahxEvX4PS1p69zqYDkLlVHT6cV7L5PW1z9it/CRR5TWcs9WBteznBIju
+         I7rc+xwnQuCGYibNLGS/2G9WSw6gFnovcrj9nXsHNAUC53sgYhjp5XgwmIDiIk/C8gVo
+         vZXLzLj79SvsD9/W+1FSGekMCuyQgbqV1IlMjfuCah/ELdgawZixpeKxrwQGP7FHq79R
+         p8SA==
+X-Gm-Message-State: AOAM532s8Ln+F1MWSqBHUxi+SoxsXFh2BHdrOqIeO7wzOL+21zMcI15A
+        2QKL7LnFOWew9R/sodxMsXEHiA==
+X-Google-Smtp-Source: ABdhPJwCpXBnQ3gVjbL3KO0uYLMvWJ4HBXi/rSe0OTG4oUjXgHWdxblMk7Zj6jjIKa89WBuHHrMrMQ==
+X-Received: by 2002:ac8:c4e:: with SMTP id l14mr70226000qti.106.1594650765164;
+        Mon, 13 Jul 2020 07:32:45 -0700 (PDT)
+Received: from [192.168.1.92] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
+        by smtp.gmail.com with ESMTPSA id w18sm18516302qtn.3.2020.07.13.07.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2020 07:32:43 -0700 (PDT)
+Subject: Re: [PATCH v2 1/3] arch_topology, sched/core: Cleanup thermal
+ pressure definition
+To:     Valentin Schneider <valentin.schneider@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20200712165917.9168-1-valentin.schneider@arm.com>
+ <20200712165917.9168-2-valentin.schneider@arm.com>
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+Message-ID: <88488b17-fd01-76e6-ae53-027c1016340b@linaro.org>
+Date:   Mon, 13 Jul 2020 10:32:42 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200629061639.7cwxfi64drkof6yu@vireshk-i7>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <20200712165917.9168-2-valentin.schneider@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1594650605; bh=cczukomO7UcCHwxyADg2/yNUOTAA7Ksj6A5ikRcdVSA=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ZseOkDY3VI8BBpYTwAQpZqe6ktLrz0X4KF9iKWlMzXm81N5tZVCx7P9cwtXlKw/V/
-         cdls1zrdFWpmKpSv/v0ICmHIx5ZjCiVT2ViSPXqCvbuxRBZZYZJOJqL/XQ9lIBDYBt
-         Jlj+THatHHPaGH1xG8du4Xi13uygwwJWLIMAFtFyk6znhBTGcu4+TzmSDFDx/yHnPG
-         QSlAlx2JA0WOKpgdJY9RSv5UF8Ftc9mHWFobovQ05rfoLMRVQsEOGUFpekhZSh3WBi
-         /cUvhBKOlKDxYhxF3BxI0qnLLZ1TCDz0QoSyRAPEBcvwXFwWL0XnR4/4QK/iUFkXoj
-         7GOq0EISwKABw==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -68,52 +82,152 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
+On 7/12/20 12:59 PM, Valentin Schneider wrote:
+> The following commit:
 > 
-> On 26-06-20, 21:13, Sumit Gupta wrote:
->> +static int tegra194_cpufreq_probe(struct platform_device *pdev)
->> +{
->> +     struct tegra194_cpufreq_data *data;
->> +     struct tegra_bpmp *bpmp;
->> +     int err, i;
->> +
->> +     data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
->> +     if (!data)
->> +             return -ENOMEM;
->> +
->> +     data->num_clusters = MAX_CLUSTERS;
->> +     data->tables = devm_kcalloc(&pdev->dev, data->num_clusters,
->> +                                 sizeof(*data->tables), GFP_KERNEL);
->> +     if (!data->tables)
->> +             return -ENOMEM;
->> +
->> +     platform_set_drvdata(pdev, data);
->> +
->> +     bpmp = tegra_bpmp_get(&pdev->dev);
->> +     if (IS_ERR(bpmp))
->> +             return PTR_ERR(bpmp);
->> +
->> +     read_counters_wq = alloc_workqueue("read_counters_wq", __WQ_LEGACY, 1);
->> +     if (!read_counters_wq) {
->> +             dev_err(&pdev->dev, "fail to create_workqueue\n");
->> +             err = -EINVAL;
->> +             goto put_bpmp;
+>    14533a16c46d ("thermal/cpu-cooling, sched/core: Move the arch_set_thermal_pressure() API to generic scheduler code")
 > 
-> This will call destroy_workqueue() eventually and it will crash your
-> kernel.
+> moved the definition of arch_set_thermal_pressure() to sched/core.c, but
+> kept its declaration in linux/arch_topology.h. When building e.g. an x86
+> kernel with CONFIG_SCHED_THERMAL_PRESSURE=y, cpufreq_cooling.c ends up
+> getting the declaration of arch_set_thermal_pressure() from
+> include/linux/arch_topology.h, which is somewhat awkward.
 > 
-> Apart from this, this stuff looks okay. Don't resend the patch just
-> yet (and if required, send only this patch using --in-reply-to flag
-> for git send email). Lets wait for an Ack from Rob for the first two
-> patches.
+> On top of this, sched/core.c unconditionally defines
+> o The thermal_pressure percpu variable
+> o arch_set_thermal_pressure()
 > 
-Sorry for the delayed response as i was on PTO.
-Thank you for the feedback.
+> while arch_scale_thermal_pressure() does nothing unless redefined by the
+> architecture.
+> 
+> arch_*() functions are meant to be defined by architectures, so revert the
+> aforementioned commit and re-implement it in a way that keeps
+> arch_set_thermal_pressure() architecture-definable, and doesn't define the
+> thermal pressure percpu variable for kernels that don't need
+> it (CONFIG_SCHED_THERMAL_PRESSURE=n).
+> 
+> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> ---
 
-Have posted a v5 based on v4 patch set.
+Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
 
->> +     }
->> +
+>   arch/arm/include/asm/topology.h   |  3 ++-
+>   arch/arm64/include/asm/topology.h |  3 ++-
+>   drivers/base/arch_topology.c      | 11 +++++++++++
+>   include/linux/arch_topology.h     |  4 ++--
+>   include/linux/sched/topology.h    |  7 +++++++
+>   kernel/sched/core.c               | 11 -----------
+>   6 files changed, 24 insertions(+), 15 deletions(-)
 > 
-> --
-> viresh
+> diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+> index 435aba289fc5..e0593cf095d0 100644
+> --- a/arch/arm/include/asm/topology.h
+> +++ b/arch/arm/include/asm/topology.h
+> @@ -16,8 +16,9 @@
+>   /* Enable topology flag updates */
+>   #define arch_update_cpu_topology topology_update_cpu_topology
+>   
+> -/* Replace task scheduler's default thermal pressure retrieve API */
+> +/* Replace task scheduler's default thermal pressure API */
+>   #define arch_scale_thermal_pressure topology_get_thermal_pressure
+> +#define arch_set_thermal_pressure   topology_set_thermal_pressure
+>   
+>   #else
+>   
+> diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+> index 0cc835ddfcd1..e042f6527981 100644
+> --- a/arch/arm64/include/asm/topology.h
+> +++ b/arch/arm64/include/asm/topology.h
+> @@ -34,8 +34,9 @@ void topology_scale_freq_tick(void);
+>   /* Enable topology flag updates */
+>   #define arch_update_cpu_topology topology_update_cpu_topology
+>   
+> -/* Replace task scheduler's default thermal pressure retrieve API */
+> +/* Replace task scheduler's default thermal pressure API */
+>   #define arch_scale_thermal_pressure topology_get_thermal_pressure
+> +#define arch_set_thermal_pressure   topology_set_thermal_pressure
+>   
+>   #include <asm-generic/topology.h>
+>   
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index 4d0a0038b476..d14cab7dfa3c 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -54,6 +54,17 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
+>   	per_cpu(cpu_scale, cpu) = capacity;
+>   }
+>   
+> +DEFINE_PER_CPU(unsigned long, thermal_pressure);
+> +
+> +void arch_set_thermal_pressure(const struct cpumask *cpus,
+> +			       unsigned long th_pressure)
+> +{
+> +	int cpu;
+> +
+> +	for_each_cpu(cpu, cpus)
+> +		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+> +}
+> +
+>   static ssize_t cpu_capacity_show(struct device *dev,
+>   				 struct device_attribute *attr,
+>   				 char *buf)
+> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
+> index 0566cb3314ef..69b1dabe39dc 100644
+> --- a/include/linux/arch_topology.h
+> +++ b/include/linux/arch_topology.h
+> @@ -39,8 +39,8 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
+>   	return per_cpu(thermal_pressure, cpu);
+>   }
+>   
+> -void arch_set_thermal_pressure(struct cpumask *cpus,
+> -			       unsigned long th_pressure);
+> +void topology_set_thermal_pressure(const struct cpumask *cpus,
+> +				   unsigned long th_pressure);
+>   
+>   struct cpu_topology {
+>   	int thread_id;
+> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
+> index fb11091129b3..764222d637b7 100644
+> --- a/include/linux/sched/topology.h
+> +++ b/include/linux/sched/topology.h
+> @@ -232,6 +232,13 @@ unsigned long arch_scale_thermal_pressure(int cpu)
+>   }
+>   #endif
+>   
+> +#ifndef arch_set_thermal_pressure
+> +static __always_inline
+> +void arch_set_thermal_pressure(const struct cpumask *cpus,
+> +			       unsigned long th_pressure)
+> +{ }
+> +#endif
+> +
+>   static inline int task_node(const struct task_struct *p)
+>   {
+>   	return cpu_to_node(task_cpu(p));
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index ff0519551188..90b44f3840e4 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -3731,17 +3731,6 @@ unsigned long long task_sched_runtime(struct task_struct *p)
+>   	return ns;
+>   }
+>   
+> -DEFINE_PER_CPU(unsigned long, thermal_pressure);
+> -
+> -void arch_set_thermal_pressure(struct cpumask *cpus,
+> -			       unsigned long th_pressure)
+> -{
+> -	int cpu;
+> -
+> -	for_each_cpu(cpu, cpus)
+> -		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+> -}
+> -
+>   /*
+>    * This function gets called by the timer code, with HZ frequency.
+>    * We call it with interrupts disabled.
 > 
+
+-- 
+Warm Regards
+Thara
