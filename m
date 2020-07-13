@@ -2,88 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA70421D794
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 15:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED82021D7A7
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 15:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbgGMNwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 09:52:50 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40751 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729457AbgGMNwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 09:52:50 -0400
-Received: by mail-oi1-f193.google.com with SMTP id t198so11008040oie.7;
-        Mon, 13 Jul 2020 06:52:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UTOSP8CmAN/brRf5qrtudeU7fQ1Ik4iA8qlKt3ENOLg=;
-        b=niv9km/zC2bREr/OgF9N2/SzTB9OtQBd6PlwGk14Ury0cTMvdzGTqCCHO59g4yhOru
-         N68lvEgd4Gokj3l3UYOeU3XCimlew/nUyFrEClHbE44Q2dCNKDci9ehKm37nFEmG9XhZ
-         Z+01YsOkgqTbO5fguZz6UUeoLnew/bAAt4VEfKdsvcRHQsUQ14bRZsnqjAo6ZdDzM4QL
-         9BnKlH9rSw9KAsPGTlouHp8L7chK2htF2lltQvGsqjsKdkIsMYeA7Z4Y77K0idsdeev4
-         2Yc0vpcXV4su+cVb5U2RT1nIEtPFOdidLDtiAEDH8OyJWFjWAxiJw/t++Y8wCuSv/TVJ
-         dlIg==
-X-Gm-Message-State: AOAM531Se6s6S8JzNlGfVtHQbxRu+xCJ0H43K6ra9lTA63UQhf/qshWv
-        GQlqUhT5QMXEOMdpUUIS338h3pz3V4sNkRk0HCKLhA==
-X-Google-Smtp-Source: ABdhPJyACb7vJrkMQ2E5g2Yr8GkMR4QvYEEnISjH0AXD3dBEMv/lAPecNlmIOn5fcWeDKVb0wlFQIjkCfUkQJK0Ik44=
-X-Received: by 2002:aca:4a89:: with SMTP id x131mr14518559oia.103.1594648369100;
- Mon, 13 Jul 2020 06:52:49 -0700 (PDT)
+        id S1729492AbgGMN6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 09:58:41 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:64980 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729457AbgGMN6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 09:58:41 -0400
+Received: from 89-64-85-181.dynamic.chello.pl (89.64.85.181) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 68383a73e20a7f42; Mon, 13 Jul 2020 15:58:39 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Doug Smythies <dsmythies@telus.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Fix active mode setting from command line
+Date:   Mon, 13 Jul 2020 15:58:38 +0200
+Message-ID: <2265724.DSYBgs0BIW@kreacher>
 MIME-Version: 1.0
-References: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20200709200522.3566181-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Jul 2020 15:52:38 +0200
-Message-ID: <CAJZ5v0j-HC0azxizK0eJcDOt3_HmRid2DqZRk86ne0mE-5nZ4A@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix static checker warning for epp variable
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel-janitors@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 9, 2020 at 10:05 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Fix warning for:
-> drivers/cpufreq/intel_pstate.c:731 store_energy_performance_preference()
-> error: uninitialized symbol 'epp'.
->
-> This warning is for a case, when energy_performance_preference attribute
-> matches pre defined strings. In this case the value of raw epp will not
-> be used to set EPP bits in MSR_HWP_REQUEST. So initializing with any
-> value is fine.
->
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> This patch is on top of bleed-edge branch at
-> https://kernel.googlesource.com/pub/scm/linux/kernel/git/rafael/linux-pm
->
->  drivers/cpufreq/intel_pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 44c7b4677675..94cd07678ee3 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -709,7 +709,7 @@ static ssize_t store_energy_performance_preference(
->         struct cpudata *cpu_data = all_cpu_data[policy->cpu];
->         char str_preference[21];
->         bool raw = false;
-> -       u32 epp;
-> +       u32 epp = 0;
->         int ret;
->
->         ret = sscanf(buf, "%20s", str_preference);
-> --
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied, thanks!
+If intel_pstate starts in the passive mode by default (that happens
+when the processor in the system doesn't support HWP), passing
+intel_pstate=active in the kernel command line doesn't work, so
+fix that.
+
+Fixes: 33aa46f252c7 ("cpufreq: intel_pstate: Use passive mode by default without HWP")
+Reported-by: Doug Smythies <dsmythies@telus.net>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -2534,7 +2534,7 @@ static struct cpufreq_driver intel_cpufr
+ 	.name		= "intel_cpufreq",
+ };
+ 
+-static struct cpufreq_driver *default_driver = &intel_pstate;
++static struct cpufreq_driver *default_driver;
+ 
+ static void intel_pstate_driver_cleanup(void)
+ {
+@@ -2828,6 +2828,7 @@ static int __init intel_pstate_init(void
+ 			hwp_active++;
+ 			hwp_mode_bdw = id->driver_data;
+ 			intel_pstate.attr = hwp_cpufreq_attrs;
++			default_driver = &intel_pstate;
+ 			goto hwp_cpu_matched;
+ 		}
+ 	} else {
+@@ -2845,7 +2846,8 @@ static int __init intel_pstate_init(void
+ 		return -ENODEV;
+ 	}
+ 	/* Without HWP start in the passive mode. */
+-	default_driver = &intel_cpufreq;
++	if (!default_driver)
++		default_driver = &intel_cpufreq;
+ 
+ hwp_cpu_matched:
+ 	/*
+@@ -2899,6 +2901,8 @@ static int __init intel_pstate_setup(cha
+ 
+ 	if (!strcmp(str, "disable")) {
+ 		no_load = 1;
++	} else if (!strcmp(str, "active")) {
++		default_driver = &intel_pstate;
+ 	} else if (!strcmp(str, "passive")) {
+ 		default_driver = &intel_cpufreq;
+ 		no_hwp = 1;
+
+
+
