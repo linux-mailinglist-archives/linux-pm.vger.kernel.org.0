@@ -2,116 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED00E21D53B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 13:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D71621D57A
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 14:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729581AbgGMLrF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 07:47:05 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:49748 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727890AbgGMLrF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 07:47:05 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBl26h034830;
-        Mon, 13 Jul 2020 11:47:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=qKMvHCnAc5/FY10lx5s4SrenxH6VYwvPQdnxodFAVfE=;
- b=biqyHv71JVZIdHytAfCw0QtfgmholO/bi9k3ziStjRF5zSyyxCuvJBY8mhDbx0t6xLQA
- +e8OUnTYwG3B/CDeGt61VMT8lVkJYTZKSRKdCq9O/6eni6RrjdlZdlmrDTQRwCgghsoW
- RAhIeaKn92pneydeyM5qeY4yRSTnAveAC6W8F1P1PTRs7JNEuVCPanxFa18/bE9cdy66
- UYbQdFW1LvZDy1/amzq3gdmQB3Mf8gKOu8S5BUDIxcy/3hT3QFi3wlK8ysv5ikYBEx3b
- Mkywdkltv6SNR8XD0f2peBX+9WjsGfcLz3zcm9TJ/2MyTznIplL+77q7OPh5eV6fYfc4 9w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 32762n6cwt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Jul 2020 11:47:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06DBhkct106660;
-        Mon, 13 Jul 2020 11:45:02 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 327q0m7k9u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jul 2020 11:45:01 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06DBj0lO003174;
-        Mon, 13 Jul 2020 11:45:00 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 13 Jul 2020 04:45:00 -0700
-Date:   Mon, 13 Jul 2020 14:44:54 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     amit.kucheria@linaro.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [bug report] drivers: thermal: tsens: Merge tsens-8974 into
- tsens-v0_1
-Message-ID: <20200713114454.GR2571@kadam>
-References: <20190514090635.GA21833@mwanda>
+        id S1729457AbgGMMDV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 08:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728714AbgGMMDU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 08:03:20 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC4C061755
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 05:03:20 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id o4so8836088lfi.7
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 05:03:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5KMHDUl0dP2/yxULAu5/b1d01e8D1X8yaqLPXL7OeY=;
+        b=H3ojp220B2LkylmsATbkDKYAr9c9hzVaK8lhZCLxcDV3QcBMkL80V2xjQUHeAQu4ky
+         PWfn+Md+nsxFTihVKzDV8rTq5f4ormyVJW+rU7RAeuJyAv4Hnn43qqztrTig1KEl7h7I
+         pnpNN1yXLQsl+bXWAageYi1x2LeAIYT5Lo7aoYzJCC998Y/kA4Rgo1rLKWhI2XC/fAX8
+         tbLdXDwe90hvOvzyPZnqkCra7xZR3M5Os1BimwS6Zh1XxeESLNXjAD3Zb8ftjXmr7l6c
+         XOob7orM0tvlEoox2rDKGz20MBGTwumQ20xbUuqy5oMduu/LjxfdJUMNQouwAETRxG6V
+         nI5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5KMHDUl0dP2/yxULAu5/b1d01e8D1X8yaqLPXL7OeY=;
+        b=j205sJdBQsswyM2w4OQZ6r6/uhUQ/vwmobtEsKf+4bGP3RewoyndPmXcijvUUqUb2l
+         u7tHOoLLblXk9yMi5iqlsXTMv2P035I/nUtgzFm1QrfRoNGRwrfF8cdlFfahj0Zum0c9
+         XdE78XemTaHpYXbtAQE/YlBMIvxHllB3QkOUEyxKTFY5bVUefTHwX/RnclDNBig6Cxj7
+         2hF0fqPb0i+ktdJPXk4YzRIxBpeTYzZQywnqyvpYX5whY18I2J3SQeVheddTuEW9jpmw
+         UqNs/t89b57j/R+GLWEDig5GMqUM0mTbLXknT3b+Tje31qPoaOIpJn7pNhuYlPkyIOpK
+         amTg==
+X-Gm-Message-State: AOAM532+TQ4nKyELVnYFbrCaT8bLjhTM2oMytihXLETJeMd26JBluYSf
+        ExmFfQDvhGtCZ08eM74SGc1l+P0+8V6g2PKC78ZI+A==
+X-Google-Smtp-Source: ABdhPJxeeTVOBjzNfFPpHLHGDWpCLW18lUobuuQt7/W9ElRbsNZuZOxfCtntGelZjeemcLqJCveTFhKFSh5BaKmul5M=
+X-Received: by 2002:a19:7d84:: with SMTP id y126mr53124241lfc.149.1594641798626;
+ Mon, 13 Jul 2020 05:03:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190514090635.GA21833@mwanda>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9680 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- mlxlogscore=944 bulkscore=0 adultscore=0 phishscore=0 suspectscore=1
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007130088
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9680 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- clxscore=1011 priorityscore=1501 mlxlogscore=934 lowpriorityscore=0
- bulkscore=0 suspectscore=1 phishscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007130088
+References: <20200712165917.9168-1-valentin.schneider@arm.com>
+In-Reply-To: <20200712165917.9168-1-valentin.schneider@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 13 Jul 2020 14:03:06 +0200
+Message-ID: <CAKfTPtCWEb=Dh12GSyYSG6nsqSciyDmcev62ntexXuFDtO_+ng@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] sched, arch_topology: Thermal pressure
+ configuration cleanup
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Did we ever look into this?
+On Sun, 12 Jul 2020 at 18:59, Valentin Schneider
+<valentin.schneider@arm.com> wrote:
+>
+> Hi folks,
+>
+> This stems from this thread [1] on the list. TL;DR: the thermal pressure config
+> has no helpful documentation, and figuring out if the right dependencies are in
+> place is not easy for a regular user.
+>
+> The current landscape also paints an odd picture: arch_set_thermal_pressure() is
+> hardcoded in sched/core.c, and is *not* architecture-definable, while
+> arch_get_thermal_pressure() is. Patch 1 is tackling this, the rest is Kconfig
+> stuff.
+>
+> Cheers,
+> Valentin
+>
+> [1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
+>
+> Revisions
+> =========
+>
+> v1 -> v2
+> --------
+>
+> o Remove cpufreq_cooling.c weak function; use #define stub in sched/topology.h
+>   (Vincent)
 
-regards,
-dan carpenter
+Looks good to me.
 
-On Tue, May 14, 2019 at 12:06:35PM +0300, Dan Carpenter wrote:
-> Hello Amit Kucheria,
-> 
-> The patch c80cbb79e851: "drivers: thermal: tsens: Merge tsens-8974
-> into tsens-v0_1" from Mar 20, 2019, leads to the following static
-> checker warning:
-> 
-> 	drivers/thermal/qcom/tsens-v0_1.c:237 calibrate_8974()
-> 	warn: mask and shift to zero
-> 
-> drivers/thermal/qcom/tsens-v0_1.c
->    226                  case ONE_PT_CALIB:
->    227                  case ONE_PT_CALIB2:
->    228                          base1 = bkp[0] & BASE1_MASK;
->    229                          p1[0] = (bkp[0] & S0_P1_MASK) >> S0_P1_SHIFT;
->    230                          p1[1] = (bkp[0] & S1_P1_MASK) >> S1_P1_SHIFT;
->    231                          p1[2] = (bkp[0] & S2_P1_MASK) >> S2_P1_SHIFT;
->    232                          p1[3] = (bkp[0] & S3_P1_MASK) >> S3_P1_SHIFT;
->    233                          p1[4] = (bkp[1] & S4_P1_MASK);
->    234                          p1[5] = (bkp[1] & S5_P1_MASK) >> S5_P1_SHIFT;
->    235                          p1[6] = (bkp[1] & S6_P1_MASK) >> S6_P1_SHIFT;
->    236                          p1[7] = (bkp[1] & S7_P1_MASK) >> S7_P1_SHIFT;
->    237                          p1[8] = (bkp[2] & S8_P1_MASK_BKP) >> S8_P1_SHIFT;
->                                                   ^^^^^^^^^^^^^^     ^^^^^^^^^^^
-> #define S8_P1_MASK_BKP          0x3f
-> #define S8_P1_SHIFT 24
-> 
-> Other places define S8_P1_SHIFT as 4, so that's maybe something to
-> consider.
-> 
->    238                          p1[9] = (bkp[2] & S9_P1_MASK_BKP) >> S9_P1_BKP_SHIFT;
->    239                          p1[10] = (bkp[2] & S10_P1_MASK_BKP) >> S10_P1_BKP_SHIFT;
->    240                          break;
->    241                  }
->    242          } else {
->    243                  mode = (calib[1] & CAL_SEL_0_1) >> CAL_SEL_SHIFT;
->    244                  mode |= (calib[3] & CAL_SEL_2) >> CAL_SEL_SHIFT_2;
-> 
-> regards,
-> dan carpenter
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+
+> o Hinge arm SCHED_THERMAL_PRESSURE selection on ARM_CPU_TOPOLOGY
+>
+> Valentin Schneider (3):
+>   arch_topology, sched/core: Cleanup thermal pressure definition
+>   sched: Cleanup SCHED_THERMAL_PRESSURE kconfig entry
+>   arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE
+>
+>  arch/arm/Kconfig                  |  1 +
+>  arch/arm/include/asm/topology.h   |  3 ++-
+>  arch/arm64/Kconfig                |  1 +
+>  arch/arm64/include/asm/topology.h |  3 ++-
+>  drivers/base/arch_topology.c      | 11 +++++++++++
+>  include/linux/arch_topology.h     |  4 ++--
+>  include/linux/sched/topology.h    |  7 +++++++
+>  init/Kconfig                      | 15 ++++++++++++++-
+>  kernel/sched/core.c               | 11 -----------
+>  9 files changed, 40 insertions(+), 16 deletions(-)
+>
+> --
+> 2.27.0
+>
