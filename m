@@ -2,123 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D462B21E1DE
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 23:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B754321E33C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 00:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgGMVHm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 17:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726291AbgGMVHm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 17:07:42 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E82C061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 14:07:42 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k4so6050377pld.12
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 14:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=UWY93BEKGHJ4H/zfl37mRhIQkicIv/KkFkNAUD1jEvs=;
-        b=L7cUBrNMlwQSPlyuiHhd9AHXjYpsO/7ZjKFAOjt0Qt0nLp3watVf/fhpuoqLfWp7TQ
-         AgIib57qd4ni/crR+xp2iG097jVlOH79zdklb4BCqGSMCJWWu6npqqfmSeAvoot47ASr
-         IwpTWtJNneYKJMoam6L1kpdNqltcFm3qBEwU2/q8E1qBwkoBoCs994g/3Ilh59Rnr7+I
-         MSl/1LWmJvCYuUI59WR4W8cu8xEupctuRMIRNBQ+H1Hsntey2Nrfp4byRlOVRAVIVV+D
-         dtH84Rqx32kNokVKX2jh1hnoHl2c+lEy1ZhvOSlowZz4eCbICsbSnGKLJFrUFkWaIAFc
-         IwYg==
+        id S1726609AbgGMWy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 18:54:58 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:39590 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726347AbgGMWy5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 18:54:57 -0400
+Received: by mail-il1-f195.google.com with SMTP id k6so12673972ili.6;
+        Mon, 13 Jul 2020 15:54:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=UWY93BEKGHJ4H/zfl37mRhIQkicIv/KkFkNAUD1jEvs=;
-        b=gSquAGsNOeJ1vUvKUfPragLpaBnG5J/dNUYsjcC7ubyjGgpe6OZUO8Vvl5c3i1KFHB
-         1nsjA3XjKUQM+UtXCd8HMgfuLH7PZxsO7YQ4lnlfh2n8bLMOmesrS/GjJjoqLVWTh/CJ
-         PKjSFtVI0E+TMvCbhQO6sXLMruBbLJo3V1Huvc3uKq/glVLbn6vchlGPX0ltXLFu9I4H
-         eRG2rfRnNl2sXBasb/6fWTogPXj/zw81ij0Sto3aLOAHmusQR2HLcGq+v1+Vm88d4qdW
-         t4G8/ja0z6LmjdNPawlM8vvIusoKdO2KxnE7LJRA/gHxMBUKPHSsdTvYuUrbbjGGlc/1
-         uB/Q==
-X-Gm-Message-State: AOAM532YlQeo7pkrVvSmu+l49g1XU6xafcPyhrKBWqXJJ52GkGhleTkq
-        8C9opoPkYHId6lvrSZiDOiaSaQ==
-X-Google-Smtp-Source: ABdhPJw7zqak0bPwHnMpkk7iyWk67eQSW4Ev8yABfJzQF4vkE+NBVuNhm4NjrOQNG7dHJIKe3gmyEg==
-X-Received: by 2002:a17:90a:71c3:: with SMTP id m3mr1299044pjs.225.1594674461598;
-        Mon, 13 Jul 2020 14:07:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u2sm14960257pfl.21.2020.07.13.14.07.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Lx27nXKsEHDAQ3zBwCOzlK62p9t1j+kSDxv2fkLBnl0=;
+        b=omMEP7ix62sxfXYmZON9ompwOwJNPJ54PXm7iQ/l02jxQVcl/DBzLjFg3ULfadJeqn
+         RAvoVohi4oCVIWPfRG0BJxLmm7GTWUE+bKyJ+CqvDtk+G6XnNyiksO2NbTXJMtiPDYKy
+         ncivOCPxMNbhCfoBjRsjmbUDmbOEag6BAQpvnP71ti0FudDRVkHVIwln2swv/Q5YMF1G
+         1hlpd7WEWZW5E1lwjeasJg/c7UsQHxTaXQF+tFunHVCN/K9SxY7pcLVQnoWLS6drc1xH
+         YMnO7fYFMLYkuGCtExs3plDnqPZs6iYmOWyTivnccKl68dtqxAVhipvdL2uJZg9SuXjE
+         05gw==
+X-Gm-Message-State: AOAM533rw92vFKakVDVO0Oxj4DKBtI3vlLUVbN5CsnbWzhvT0yGpz9wm
+        Ejj0GN5xuT6lwEdQsti3YQ==
+X-Google-Smtp-Source: ABdhPJxKGIcBl7P0g7fSqwC5X3R2fzaMf2mpBeKTxIr+o8fUnEkwxEhRcUXiVhulNMpWIs3AEYRpIg==
+X-Received: by 2002:a92:58d6:: with SMTP id z83mr2086323ilf.186.1594680896394;
+        Mon, 13 Jul 2020 15:54:56 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id t5sm8807373iov.53.2020.07.13.15.54.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 14:07:40 -0700 (PDT)
-Message-ID: <5f0ccd1c.1c69fb81.23342.4c2b@mx.google.com>
-Date:   Mon, 13 Jul 2020 14:07:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Jul 2020 15:54:55 -0700 (PDT)
+Received: (nullmailer pid 874330 invoked by uid 1000);
+        Mon, 13 Jul 2020 22:54:53 -0000
+Date:   Mon, 13 Jul 2020 16:54:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     mturquette@baylibre.com, linus.walleij@linaro.org,
+        clabbe@baylibre.com, liyong@allwinnertech.com,
+        srinivas.kandagatla@linaro.org, icenowy@aosc.io,
+        p.zabel@pengutronix.de, linux-i2c@vger.kernel.org,
+        gregory.clement@bootlin.com, sboyd@kernel.org,
+        amit.kucheria@verdurent.com, bage@linutronix.de,
+        tglx@linutronix.de, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, anarsoul@gmail.com, megous@megous.com,
+        tiny.windzz@gmail.com, lee.jones@linaro.org, rui.zhang@intel.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        wens@csie.org, robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        maz@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org, mripard@kernel.org, stefan@olimex.com,
+        huangshuosheng@allwinnertech.com, jason@lakedaemon.net
+Subject: Re: [PATCH v3 01/16] dt-bindings: clk: sunxi-ccu: add compatible
+ string for A100 CCU and R-CCU
+Message-ID: <20200713225453.GA874275@bogus>
+References: <20200708071942.22595-1-frank@allwinnertech.com>
+ <20200708071942.22595-2-frank@allwinnertech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc5-39-gf2eae871177c
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing sleep: 8 runs, 1 regressions (v5.8-rc5-39-gf2eae871177c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200708071942.22595-2-frank@allwinnertech.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 8 runs, 1 regressions (v5.8-rc5-39-gf2eae871177c)
+On Wed, 08 Jul 2020 15:19:27 +0800, Frank Lee wrote:
+> This patch adds binding to a100's ccu clock and r-ccu clock.
+> 
+> Signed-off-by: Frank Lee <frank@allwinnertech.com>
+> ---
+>  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml         | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
 
-Regressions Summary
--------------------
-
-platform          | arch | lab           | compiler | defconfig          | =
-results
-------------------+------+---------------+----------+--------------------+-=
--------
-rk3288-veyron-jaq | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | =
-20/21  =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc5=
--39-gf2eae871177c/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-rc5-39-gf2eae871177c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f2eae871177c5c62003e6a961382f098afeabfe6 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform          | arch | lab           | compiler | defconfig          | =
-results
-------------------+------+---------------+----------+--------------------+-=
--------
-rk3288-veyron-jaq | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | =
-20/21  =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f0cbf76acb93470a785bb18
-
-  Results:     20 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-veyron-jaq.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-veyron-jaq.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0710.0/armhf/rootfs.cpio.gz =
-
-
-  * sleep.rtcwake-mem-7: https://kernelci.org/test/case/id/5f0cbf76acb93470=
-a785bb20
-      new failure (last pass: v5.8-rc3-22-g0169dcbef89a) =20
+Reviewed-by: Rob Herring <robh@kernel.org>
