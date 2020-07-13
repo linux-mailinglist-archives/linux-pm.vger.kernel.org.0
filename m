@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4AB21E1A9
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 22:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D462B21E1DE
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 23:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgGMUwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 16:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S1726338AbgGMVHm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 17:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbgGMUwm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 16:52:42 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36D7C061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 13:52:42 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id 72so6058601ple.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 13:52:42 -0700 (PDT)
+        with ESMTP id S1726291AbgGMVHm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 17:07:42 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E82C061755
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 14:07:42 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id k4so6050377pld.12
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 14:07:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=pXoRhBz4jWVYkhvgMUxI1XAwPzvoBiJLg3Q8j+n1sS0=;
-        b=F4XDZ18lQMLwRffSsx2faYwrFKcobZjCRJTPNuv/+PtY+mCUIEF5lorcG82GqWYPmM
-         DoMnTysDsGQpxYxNqy7hyRWH1DDDAnNGuXxQ1OLBps4rkxrKo7OCn9vdRrE2El15D2SI
-         R9CksogeGgDGaC8cwCjPv3no2l4lgL5U4oY3fEb1BulQPxvWFNDZLOPqXKHXkdHysqCA
-         Rv+lmVnzZ06QcKFxHxCK1VIU3NZCZW456O5IbJ6gYGsbZT+tT1IXnoFiCOJ3S2qftq0B
-         8r4dIyqNmM7hVcVA5lBJVjksy7ldcZB7cG5E8tgb6jsiw4Z09G+WWdvTJP8DDSrh6Yjg
-         MYqw==
+        bh=UWY93BEKGHJ4H/zfl37mRhIQkicIv/KkFkNAUD1jEvs=;
+        b=L7cUBrNMlwQSPlyuiHhd9AHXjYpsO/7ZjKFAOjt0Qt0nLp3watVf/fhpuoqLfWp7TQ
+         AgIib57qd4ni/crR+xp2iG097jVlOH79zdklb4BCqGSMCJWWu6npqqfmSeAvoot47ASr
+         IwpTWtJNneYKJMoam6L1kpdNqltcFm3qBEwU2/q8E1qBwkoBoCs994g/3Ilh59Rnr7+I
+         MSl/1LWmJvCYuUI59WR4W8cu8xEupctuRMIRNBQ+H1Hsntey2Nrfp4byRlOVRAVIVV+D
+         dtH84Rqx32kNokVKX2jh1hnoHl2c+lEy1ZhvOSlowZz4eCbICsbSnGKLJFrUFkWaIAFc
+         IwYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=pXoRhBz4jWVYkhvgMUxI1XAwPzvoBiJLg3Q8j+n1sS0=;
-        b=R4U/KDC7uYRw1f8eXQoo5cCIW8jrSFe4hv6ZeahgCOcPEu/PuvSKjCon79QWDYOjFO
-         HQOivyZOis02Nr3S6uxutZuorxt3Kd9eVb2X0lSBMbl5ws8NVSe4UXpqHCAXmn6E62YQ
-         Y+Jthwj0Qu4Wr7dceRH15NmPrL/2ZXWTng0N0vqomhRKd0qna0QBz601086VcssWDnDc
-         fZPFTFYU0hyIKpVJ4b2GwyYnV72VRUFbng3CILOC94iHsU6awkDVNEwmZqf3m5+f+wZx
-         gZiefuJsmpnGl+o2uD1KKIQySV2uILIVZaJIsNd5d/RjfRcqn1bbtBr/H21tklqz0bCl
-         jAFg==
-X-Gm-Message-State: AOAM530Y7A95xmW62Nz+n8abj5hIAFrVcp7PrvH1NwtM0hTaDyGPrRSr
-        lw/D9KCQHnBsZGlLrOZkNMyNIw==
-X-Google-Smtp-Source: ABdhPJzg7wqzAC943Qs48FEga1WncV85XkQLlccAfjMzMrNeVyhcJ27aEzcm2q1x1c5Wq/tyR1i0QQ==
-X-Received: by 2002:a17:90a:43c3:: with SMTP id r61mr1307447pjg.216.1594673561968;
-        Mon, 13 Jul 2020 13:52:41 -0700 (PDT)
+        bh=UWY93BEKGHJ4H/zfl37mRhIQkicIv/KkFkNAUD1jEvs=;
+        b=gSquAGsNOeJ1vUvKUfPragLpaBnG5J/dNUYsjcC7ubyjGgpe6OZUO8Vvl5c3i1KFHB
+         1nsjA3XjKUQM+UtXCd8HMgfuLH7PZxsO7YQ4lnlfh2n8bLMOmesrS/GjJjoqLVWTh/CJ
+         PKjSFtVI0E+TMvCbhQO6sXLMruBbLJo3V1Huvc3uKq/glVLbn6vchlGPX0ltXLFu9I4H
+         eRG2rfRnNl2sXBasb/6fWTogPXj/zw81ij0Sto3aLOAHmusQR2HLcGq+v1+Vm88d4qdW
+         t4G8/ja0z6LmjdNPawlM8vvIusoKdO2KxnE7LJRA/gHxMBUKPHSsdTvYuUrbbjGGlc/1
+         uB/Q==
+X-Gm-Message-State: AOAM532YlQeo7pkrVvSmu+l49g1XU6xafcPyhrKBWqXJJ52GkGhleTkq
+        8C9opoPkYHId6lvrSZiDOiaSaQ==
+X-Google-Smtp-Source: ABdhPJw7zqak0bPwHnMpkk7iyWk67eQSW4Ev8yABfJzQF4vkE+NBVuNhm4NjrOQNG7dHJIKe3gmyEg==
+X-Received: by 2002:a17:90a:71c3:: with SMTP id m3mr1299044pjs.225.1594674461598;
+        Mon, 13 Jul 2020 14:07:41 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id p127sm15534899pfb.17.2020.07.13.13.52.40
+        by smtp.gmail.com with ESMTPSA id u2sm14960257pfl.21.2020.07.13.14.07.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 13:52:41 -0700 (PDT)
-Message-ID: <5f0cc999.1c69fb81.743ee.54d6@mx.google.com>
-Date:   Mon, 13 Jul 2020 13:52:41 -0700 (PDT)
+        Mon, 13 Jul 2020 14:07:40 -0700 (PDT)
+Message-ID: <5f0ccd1c.1c69fb81.23342.4c2b@mx.google.com>
+Date:   Mon, 13 Jul 2020 14:07:40 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
@@ -56,8 +56,7 @@ X-Kernelci-Kernel: v5.8-rc5-39-gf2eae871177c
 X-Kernelci-Report-Type: test
 X-Kernelci-Tree: pm
 X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 91 runs,
- 2 regressions (v5.8-rc5-39-gf2eae871177c)
+Subject: pm/testing sleep: 8 runs, 1 regressions (v5.8-rc5-39-gf2eae871177c)
 To:     rafael@kernel.org, linux-pm@vger.kernel.org,
         kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From:   "kernelci.org bot" <bot@kernelci.org>
@@ -66,26 +65,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 91 runs, 2 regressions (v5.8-rc5-39-gf2eae871177c)
+pm/testing sleep: 8 runs, 1 regressions (v5.8-rc5-39-gf2eae871177c)
 
 Regressions Summary
 -------------------
 
-platform        | arch   | lab          | compiler | defconfig        | res=
-ults
-----------------+--------+--------------+----------+------------------+----=
-----
-bcm2837-rpi-3-b | arm64  | lab-baylibre | gcc-8    | defconfig        | 4/5=
-    =
-
-qemu_x86_64     | x86_64 | lab-baylibre | gcc-8    | x86_64_defconfig | 0/1=
-    =
+platform          | arch | lab           | compiler | defconfig          | =
+results
+------------------+------+---------------+----------+--------------------+-=
+-------
+rk3288-veyron-jaq | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | =
+20/21  =
 
 
   Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc5=
--39-gf2eae871177c/plan/baseline/
+-39-gf2eae871177c/plan/sleep/
 
-  Test:     baseline
+  Test:     sleep
   Tree:     pm
   Branch:   testing
   Describe: v5.8-rc5-39-gf2eae871177c
@@ -100,55 +96,29 @@ Test Regressions
 
 
 
-platform        | arch   | lab          | compiler | defconfig        | res=
-ults
-----------------+--------+--------------+----------+------------------+----=
-----
-bcm2837-rpi-3-b | arm64  | lab-baylibre | gcc-8    | defconfig        | 4/5=
-    =
+platform          | arch | lab           | compiler | defconfig          | =
+results
+------------------+------+---------------+----------+--------------------+-=
+-------
+rk3288-veyron-jaq | arm  | lab-collabora | gcc-8    | multi_v7_defconfig | =
+20/21  =
 
 
-  Details:     https://kernelci.org/test/plan/id/5f0cbf65997c02f93285bb1f
+  Details:     https://kernelci.org/test/plan/id/5f0cbf76acb93470a785bb18
 
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Results:     20 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
   Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+71177c/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-veyron-jaq.t=
+xt
   HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
+71177c/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-rk3288-veyron-jaq.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
+0710.0/armhf/rootfs.cpio.gz =
 
 
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0cbf65997c02f9=
-3285bb22
-      new failure (last pass: v5.8-rc3-35-g941eabdd7fe5)
-      1 lines =
-
-
-
-platform        | arch   | lab          | compiler | defconfig        | res=
-ults
-----------------+--------+--------------+----------+------------------+----=
-----
-qemu_x86_64     | x86_64 | lab-baylibre | gcc-8    | x86_64_defconfig | 0/1=
-    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f0cbb285874844ed785bb18
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: x86_64_defconfig
-  Compiler:    gcc-8 (gcc (Debian 8.3.0-6) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/x86_64/x86_64_defconfig/gcc-8/lab-baylibre/baseline-qemu_x86_64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc5-39-gf2eae8=
-71177c/x86_64/x86_64_defconfig/gcc-8/lab-baylibre/baseline-qemu_x86_64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/x86/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f0cbb285874844ed785b=
-b19
-      new failure (last pass: v5.8-rc3-35-g941eabdd7fe5) =20
+  * sleep.rtcwake-mem-7: https://kernelci.org/test/case/id/5f0cbf76acb93470=
+a785bb20
+      new failure (last pass: v5.8-rc3-22-g0169dcbef89a) =20
