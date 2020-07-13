@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCDB21CDFC
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 06:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E4E921CDFE
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 06:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728682AbgGMEGE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 00:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
+        id S1728865AbgGMEGI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 00:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgGMEGE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 00:06:04 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBC2C061794;
-        Sun, 12 Jul 2020 21:06:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id b9so4942048plx.6;
-        Sun, 12 Jul 2020 21:06:04 -0700 (PDT)
+        with ESMTP id S1725767AbgGMEGI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 00:06:08 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44888C061794;
+        Sun, 12 Jul 2020 21:06:08 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id x72so5437110pfc.6;
+        Sun, 12 Jul 2020 21:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=fPWSGdnxG/rBlzp5xQBwhrQ5NjyIF2qaf+KiNjPG/m0=;
-        b=pIU1kfZUkSE/zCej70KlwIk0WwehP1/WFUeWBB4WFH4vIIULLDYp2o0Oeov2tfB0uZ
-         B665MN244wDPTnb8q/CdhcItntjYs9jtz7MJfUxjVPDdjSr93NbJRskv1b/O2KZ30TTj
-         5Y7WExgskLHFPtchxu8OC5rS2okpXDb0Ca8EQtDwGZrO+fzvC9rKvsf34lCeTLCjPOSx
-         oWguLJZaJvh38CIgDLPHsRnM3KWiv0Ujh5+qC8XwjBfdz0aV4Uu+GjYeLMU0+CKWfR/H
-         yMrXcJJCszDh6pvTRvlAQ3t1of8jFEQnzKBE/Od7n4EFsfYCAjBmniU9JBFH/ph8Ca2O
-         x+MQ==
+        bh=c2UQvYzlnc2/AAGwljZkMYuOimUwvrvoBN1cwDaK3Ag=;
+        b=ZTFXwINjQqPXvn5NNIU5P08lljR+ImntkHPrZiTvkiypv+xCzczQruYIRoRAFrm8Ag
+         GcNXWz8ruYFuN51+dA7fHffMoWWlvEA9WsRfSB7jIXxPAK+eufTs3k7Uj386D4iaQ11y
+         dz/L5xdd3rOvDx4xVuyVNN/FvcX4tjCAcXOdKGvi61+e643SKMIzzyyE/0vrRHOCtbFL
+         PWOB+M+qUdZRcF9CcUjxhaC07CMfQaSuVZZSMKwdQP3eXuaDXI6Nn2J14Rg77F2SI99S
+         72I6/J11ryrtHmjBTKvRXfsBg1ixL/C64cgyUDk30EpbTqMy4men33tOr23RlhEv8hDr
+         JiwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=fPWSGdnxG/rBlzp5xQBwhrQ5NjyIF2qaf+KiNjPG/m0=;
-        b=BpZKzm6cmlc+SsGFB107pDfmnkz8EplCv9+oOQWDIEpDGpc8ipsJQfmFEFivBWh/I3
-         nKQ/mY/HAJeewVhx55v3Y613xRQzDlQZiIghHG5s/PdVLHZyOd/xQ7e2QpDiWKVxBPU4
-         PIU7XZ94rMWKNxDC/6hKyN/3gweQ0XV/ZoRI0IgqJWa7t7dAsgl1tEsh0EcrQU6eDYSo
-         BmWEkdCdKo1MelM5rBzb08t33gvU8MJmt3fi91P1hPWzlGIPd3w4Z1mfPQ04QayHFQvL
-         8MIgRmVa9fvtB2F3L/Y0BG2og9XkYJkw0BtyBF5VXV8riWXlS0BTAArGZxtnS5W37fik
-         iu1A==
-X-Gm-Message-State: AOAM530zQPls9J3kqLYQ19uTZnWAvcVLSexkg4BFNwaN+zIX6+/DEXXa
-        cK8veZg5rExHegLs9VhRqVM=
-X-Google-Smtp-Source: ABdhPJyfwg7muf7ApFRi4HQSEe1pzf/DdVxbl4AfLt7dnfrZdVLGHBxp+8jdFpR/KfOoo/5elXEqNg==
-X-Received: by 2002:a17:90b:3755:: with SMTP id ne21mr17753598pjb.218.1594613164122;
-        Sun, 12 Jul 2020 21:06:04 -0700 (PDT)
+        bh=c2UQvYzlnc2/AAGwljZkMYuOimUwvrvoBN1cwDaK3Ag=;
+        b=jrtn8rNGRmS2Lct1y7Lwyi+0jXVX/yVrxPBcbzIRq1BEfV8WUcX+r8vUfKaotw5OuY
+         k0yDAh5feHE4gnaczn/8wT0HisapDwaT8su3vttq2JSRS4KdZ4U5lHnRV9EVTifpSn9V
+         szmpBxdJf3XFmgYOQxQ9IrwMs+6l0wGpeg8PaZ2SOEdtZV2rBijN0PPTqrk9jEsVnZLm
+         yevq0ZslZ/RB143sLgeK1txekmODluIQ3He0lwRVsAWZhAC4YkH5X/yCf2PtzbVcxUDa
+         nUayWMCyEYa5M15LqvI4RITIUbko+yOMiUHeHun9wJqiMBwZ6aRjzNTppjx2ismeKWxA
+         m0jw==
+X-Gm-Message-State: AOAM530DKxaMR3uDUCQ8aQz0A9lXq8W103KuUCiSnAzjygYfqjHpc51t
+        slS0+YbGfChSdClNAfxxAnQ=
+X-Google-Smtp-Source: ABdhPJw+NzUjAbHdzxl3R6oRzgz/t5P87LWjwapN+GRyKy//ULbbSy4yD77be+ZtWSbZfHXwV7BtDQ==
+X-Received: by 2002:aa7:8648:: with SMTP id a8mr72872009pfo.222.1594613167716;
+        Sun, 12 Jul 2020 21:06:07 -0700 (PDT)
 Received: from xiaomi.mioffice.cn ([209.9.72.214])
-        by smtp.gmail.com with ESMTPSA id j13sm12561570pjz.8.2020.07.12.21.06.02
+        by smtp.gmail.com with ESMTPSA id j13sm12561570pjz.8.2020.07.12.21.06.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2020 21:06:03 -0700 (PDT)
+        Sun, 12 Jul 2020 21:06:07 -0700 (PDT)
 From:   Qiwu Huang <yanziily@gmail.com>
 To:     sre@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v2 4/5] power: supply: core: property to control reverse charge
-Date:   Mon, 13 Jul 2020 12:03:39 +0800
-Message-Id: <64abb8036fdf8b694d296a4170cb5ac51248af35.1594612572.git.huangqiwu@xiaomi.com>
+Subject: [PATCH v2 5/5] power: supply: core: supply battery soc with decimal form
+Date:   Mon, 13 Jul 2020 12:03:40 +0800
+Message-Id: <d7b0e268892b6143e537cf823d3a74214f6e6b1c.1594612572.git.huangqiwu@xiaomi.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1594612572.git.huangqiwu@xiaomi.com>
 References: <cover.1594612572.git.huangqiwu@xiaomi.com>
@@ -67,57 +67,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-Interface to control wireless reverse charge.
-Supply reverse charge function when enabled.
+Broadcast battery soc with decimal form.
+soc_decimal is the decimal part of battery soc.
+soc_decimal_rate is update frequency of decimal
+part of battery soc.
+We want to report such as 0.01 to 99.99% to
+user space to improve user experience
+when do very quick charging.
 
 Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
 ---
- Documentation/ABI/testing/sysfs-class-power | 12 ++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  1 +
- include/linux/power_supply.h                |  1 +
- 3 files changed, 14 insertions(+)
+ Documentation/ABI/testing/sysfs-class-power | 20 ++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c   |  2 ++
+ include/linux/power_supply.h                |  2 ++
+ 3 files changed, 24 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index f10780be2732..f4234ba1684a 100644
+index f4234ba1684a..bcc8ccad8163 100644
 --- a/Documentation/ABI/testing/sysfs-class-power
 +++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -740,3 +740,15 @@ Description:
+@@ -349,6 +349,26 @@ Description:
+ 		Access: Read
+ 		Valid values: Represented in microvolts
  
- 		Access: Read-Only
- 		Valid values: Reported as integer
-+
-+What:		/sys/class/power_supply/<supply_name>/reverse_chg_mode
++What:		/sys/class/power_supply/<supply_name>/soc_decimal,
 +Date:		Jul 2020
-+Contact:	Fei Jiang <jiangfei1@xiaomi.com>
++Contact:	jiangfei1@xiaomi.com
 +Description:
-+		The property supply interface to control wireless
-+		reverse charge mode.
++		Broadcast battery soc with decimal form.
++		soc_decimal is the start decimal part of battery soc.
 +
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
++		Access: Read
++		Valid values: 0 - 100
 +
++What:		/sys/class/power_supply/<supply_name>/soc_decimal_rate,
++Date:		Jul 2020
++Contact:	jiangfei1@xiaomi.com
++Description:
++		Broadcast battery soc with decimal form.
++		soc_decimal_rate is the decimal part of battery soc update freqency.
++
++		Access: Read
++		Valid values: 0 - 100
++
+ ===== USB Properties =====
+ 
+ What: 		/sys/class/power_supply/<supply_name>/current_avg
 diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index e420a453095e..81916b6b6ccf 100644
+index 81916b6b6ccf..a837addb4f21 100644
 --- a/drivers/power/supply/power_supply_sysfs.c
 +++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -209,6 +209,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
+@@ -210,6 +210,8 @@ static struct power_supply_attr power_supply_attrs[] = {
  	POWER_SUPPLY_ATTR(TX_ADAPTER),
  	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
-+	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
+ 	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
++	POWER_SUPPLY_ATTR(SOC_DECIMAL),
++	POWER_SUPPLY_ATTR(SOC_DECIMAL_RATE),
  };
  
  static struct attribute *
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 397fb8e96b03..319bf6456867 100644
+index 319bf6456867..d1aa5497938e 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -170,6 +170,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
+@@ -171,6 +171,8 @@ enum power_supply_property {
  	POWER_SUPPLY_PROP_TX_ADAPTER,
  	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
-+	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
+ 	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
++	POWER_SUPPLY_PROP_SOC_DECIMAL,
++	POWER_SUPPLY_PROP_SOC_DECIMAL_RATE,
  };
  
  enum power_supply_type {
