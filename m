@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E4E921CDFE
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 06:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C8B21D025
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 08:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728865AbgGMEGI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 00:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S1728895AbgGMG7g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 02:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgGMEGI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 00:06:08 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44888C061794;
-        Sun, 12 Jul 2020 21:06:08 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id x72so5437110pfc.6;
-        Sun, 12 Jul 2020 21:06:08 -0700 (PDT)
+        with ESMTP id S1728177AbgGMG7f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 02:59:35 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FF0C08C5DB
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jul 2020 23:59:35 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z15so14362491wrl.8
+        for <linux-pm@vger.kernel.org>; Sun, 12 Jul 2020 23:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c2UQvYzlnc2/AAGwljZkMYuOimUwvrvoBN1cwDaK3Ag=;
-        b=ZTFXwINjQqPXvn5NNIU5P08lljR+ImntkHPrZiTvkiypv+xCzczQruYIRoRAFrm8Ag
-         GcNXWz8ruYFuN51+dA7fHffMoWWlvEA9WsRfSB7jIXxPAK+eufTs3k7Uj386D4iaQ11y
-         dz/L5xdd3rOvDx4xVuyVNN/FvcX4tjCAcXOdKGvi61+e643SKMIzzyyE/0vrRHOCtbFL
-         PWOB+M+qUdZRcF9CcUjxhaC07CMfQaSuVZZSMKwdQP3eXuaDXI6Nn2J14Rg77F2SI99S
-         72I6/J11ryrtHmjBTKvRXfsBg1ixL/C64cgyUDk30EpbTqMy4men33tOr23RlhEv8hDr
-         JiwA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kinXBvz5+I1FgSK2RxVnBM/4h4YycBTf3sfQytiCbSA=;
+        b=LOn2ya0S5OB7Y5uvhFHYl/XEYXEVgKVvfjwGLeRxcYVK8kubTPZZMct7qQYidJpeJo
+         5RUTN+UHsk4k/Qyma5I22GYlfRjlugEU7XomNMheUP3bbRuVS3/7SVVRaLlvSvu9kIv0
+         zNERj4P/Ai70ommBpNcyUDpRDqCTUpmukH7M8y7dkrOPktVxKlk2m9rIEQYdjNL4DXJf
+         3dHT+wE8SFOp+bWdrs5z8K/msRqurH1sHrU/3qxb9ytCFJsAv3jeVQCpy/h6kbMLwWvc
+         JUuFw3rEpW2tqWqGZlQUKhB2PfFXs+/fxA6PhzCBkW1019Sgorg6Uw2dk03Ajt6NceSh
+         +oMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c2UQvYzlnc2/AAGwljZkMYuOimUwvrvoBN1cwDaK3Ag=;
-        b=jrtn8rNGRmS2Lct1y7Lwyi+0jXVX/yVrxPBcbzIRq1BEfV8WUcX+r8vUfKaotw5OuY
-         k0yDAh5feHE4gnaczn/8wT0HisapDwaT8su3vttq2JSRS4KdZ4U5lHnRV9EVTifpSn9V
-         szmpBxdJf3XFmgYOQxQ9IrwMs+6l0wGpeg8PaZ2SOEdtZV2rBijN0PPTqrk9jEsVnZLm
-         yevq0ZslZ/RB143sLgeK1txekmODluIQ3He0lwRVsAWZhAC4YkH5X/yCf2PtzbVcxUDa
-         nUayWMCyEYa5M15LqvI4RITIUbko+yOMiUHeHun9wJqiMBwZ6aRjzNTppjx2ismeKWxA
-         m0jw==
-X-Gm-Message-State: AOAM530DKxaMR3uDUCQ8aQz0A9lXq8W103KuUCiSnAzjygYfqjHpc51t
-        slS0+YbGfChSdClNAfxxAnQ=
-X-Google-Smtp-Source: ABdhPJw+NzUjAbHdzxl3R6oRzgz/t5P87LWjwapN+GRyKy//ULbbSy4yD77be+ZtWSbZfHXwV7BtDQ==
-X-Received: by 2002:aa7:8648:: with SMTP id a8mr72872009pfo.222.1594613167716;
-        Sun, 12 Jul 2020 21:06:07 -0700 (PDT)
-Received: from xiaomi.mioffice.cn ([209.9.72.214])
-        by smtp.gmail.com with ESMTPSA id j13sm12561570pjz.8.2020.07.12.21.06.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kinXBvz5+I1FgSK2RxVnBM/4h4YycBTf3sfQytiCbSA=;
+        b=gJOdgrJwMllU0s5jaShWbjyS+wuP0TSwpZizU1yBkdwA11nfVAAEevT40wFWO4YLVj
+         5YMuxGmKt/xOaEoZZVmpNQpFktMQKhvTJ2cI+SPoE6oiovd4DyTSJ9oN3r42Se3gZfk0
+         F/lc8hvU50cgyr5Ravmwu3hsuxW+/QAATqszs3TW8TtIFu+jpDAOiEYOD3oqPIbbxmZ1
+         D3t7I4D574PbSJr8c+oCIjI3fcBlJY1K6xUfqhuaihYJt9+1WZICaMsnfuMJ7EexQh62
+         QQ3QdkDPnIUC/BgLV4HuOlZQV+jFxnRnOaxsUMxYSW/f8iUOJI8XqGeimJda5zoIJiF8
+         u4cg==
+X-Gm-Message-State: AOAM530KzYCRQ8yxvcBAU7KL8K1jnsxAB4r9BVFbb2sfKCwza8wSN0IG
+        DuQmBQlyi5yTt1JIKOeT0mRFSA==
+X-Google-Smtp-Source: ABdhPJyVPeQ7ShrahAXpJcoWO4VTZySPJoqio9Q2uZh9sFtU3rbW6xzIeLZOkXeBF0Flfj7vAttPig==
+X-Received: by 2002:a5d:404e:: with SMTP id w14mr76901144wrp.268.1594623573901;
+        Sun, 12 Jul 2020 23:59:33 -0700 (PDT)
+Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id 92sm24394143wrr.96.2020.07.12.23.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jul 2020 21:06:07 -0700 (PDT)
-From:   Qiwu Huang <yanziily@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
-        Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v2 5/5] power: supply: core: supply battery soc with decimal form
-Date:   Mon, 13 Jul 2020 12:03:40 +0800
-Message-Id: <d7b0e268892b6143e537cf823d3a74214f6e6b1c.1594612572.git.huangqiwu@xiaomi.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1594612572.git.huangqiwu@xiaomi.com>
-References: <cover.1594612572.git.huangqiwu@xiaomi.com>
+        Sun, 12 Jul 2020 23:59:33 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     khilman@baylibre.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, lee.jones@linaro.org,
+        linux-amlogic@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com,
+        Amit Kucheria <amit.kucheria@linaro.org>
+Subject: [PATCH] arm64: dts: meson-khadas-vim3: add Khadas MCU nodes
+Date:   Mon, 13 Jul 2020 08:59:31 +0200
+Message-Id: <20200713065931.19845-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -65,80 +66,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Qiwu Huang <huangqiwu@xiaomi.com>
+Add the Khadas MCU node with active FAN thermal nodes for all the
+Khadas VIM3 variants.
 
-Broadcast battery soc with decimal form.
-soc_decimal is the decimal part of battery soc.
-soc_decimal_rate is update frequency of decimal
-part of battery soc.
-We want to report such as 0.01 to 99.99% to
-user space to improve user experience
-when do very quick charging.
-
-Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 ---
- Documentation/ABI/testing/sysfs-class-power | 20 ++++++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  2 ++
- include/linux/power_supply.h                |  2 ++
- 3 files changed, 24 insertions(+)
+Hi Kevin,
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index f4234ba1684a..bcc8ccad8163 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -349,6 +349,26 @@ Description:
- 		Access: Read
- 		Valid values: Represented in microvolts
- 
-+What:		/sys/class/power_supply/<supply_name>/soc_decimal,
-+Date:		Jul 2020
-+Contact:	jiangfei1@xiaomi.com
-+Description:
-+		Broadcast battery soc with decimal form.
-+		soc_decimal is the start decimal part of battery soc.
-+
-+		Access: Read
-+		Valid values: 0 - 100
-+
-+What:		/sys/class/power_supply/<supply_name>/soc_decimal_rate,
-+Date:		Jul 2020
-+Contact:	jiangfei1@xiaomi.com
-+Description:
-+		Broadcast battery soc with decimal form.
-+		soc_decimal_rate is the decimal part of battery soc update freqency.
-+
-+		Access: Read
-+		Valid values: 0 - 100
-+
- ===== USB Properties =====
- 
- What: 		/sys/class/power_supply/<supply_name>/current_avg
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 81916b6b6ccf..a837addb4f21 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -210,6 +210,8 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(TX_ADAPTER),
- 	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
- 	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
-+	POWER_SUPPLY_ATTR(SOC_DECIMAL),
-+	POWER_SUPPLY_ATTR(SOC_DECIMAL_RATE),
+The bindings has been reviewed and merged by Lee,
+could you apply this one via the amlogic tree ?
+
+Thanks,
+Neil
+
+ .../boot/dts/amlogic/meson-khadas-vim3.dtsi   | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+index 1ef1e3672b96..27408c10a811 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-khadas-vim3.dtsi
+@@ -183,6 +183,23 @@
+ 	hdmi-phandle = <&hdmi_tx>;
  };
  
- static struct attribute *
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 319bf6456867..d1aa5497938e 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -171,6 +171,8 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_TX_ADAPTER,
- 	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
- 	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
-+	POWER_SUPPLY_PROP_SOC_DECIMAL,
-+	POWER_SUPPLY_PROP_SOC_DECIMAL_RATE,
- };
++&cpu_thermal {
++	trips {
++		cpu_active: cpu-active {
++			temperature = <80000>; /* millicelsius */
++			hysteresis = <2000>; /* millicelsius */
++			type = "active";
++		};
++	};
++
++	cooling-maps {
++		map {
++			trip = <&cpu_active>;
++			cooling-device = <&khadas_mcu THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
++		};
++	};
++};
++
+ &ext_mdio {
+ 	external_phy: ethernet-phy@0 {
+ 		/* Realtek RTL8211F (0x001cc916) */
+@@ -222,6 +239,12 @@
+ 	pinctrl-0 = <&i2c_ao_sck_pins>, <&i2c_ao_sda_pins>;
+ 	pinctrl-names = "default";
  
- enum power_supply_type {
++	khadas_mcu: system-controller@18 {
++		compatible = "khadas,mcu";
++		reg = <0x18>;
++		#cooling-cells = <2>;
++	};
++
+ 	gpio_expander: gpio-controller@20 {
+ 		compatible = "ti,tca6408";
+ 		reg = <0x20>;
 -- 
-2.27.0
+2.22.0
 
