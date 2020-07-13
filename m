@@ -2,122 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB99021DE23
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 19:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077E321DE94
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 19:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729855AbgGMRDn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 13:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729751AbgGMRDn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 13:03:43 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21D2C061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 10:03:42 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id f7so17367591wrw.1
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 10:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=CPSWw64mXOwsZCsijrwvsAEz1b4GFJuj5M6D0TIa2Y4=;
-        b=sqYyZCjlzGtKUdjQ8mhJhTfzzemy2MkNKIWqAUalFwRGpbEYxDschPntoZzktQOiAu
-         K+h53t1qzpSeSlG7jIs+5itZw7L3aoHSXonlpbOcTIk4FcPQgaLjOU+sz74Dr8PCz+So
-         gpMoAdFgVaZUl4nWgwg5rrx+GaRcaIsUVl+KHwGU1xC4+e0FvK4AoW5bfyO6KnJ/MlTg
-         nWomACfGj8IQL7NQCAS8To/F62fE9GAqBkiw32JXvgfE9zvZ5Vp1ZOzPzWLrKZVCWrfq
-         OoFVAiW6pdBdKGXZJK6UQBrqlM7d0egxtWC+Au3kS/B2IUd7UQ0FhsnW7x6JGGHiEwGC
-         hGgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CPSWw64mXOwsZCsijrwvsAEz1b4GFJuj5M6D0TIa2Y4=;
-        b=KLwWazJcOtewE+6HvpVaseGHnZBjLzt4gQRewOQahtxwh5f0SiI4HXYkZS3ts9zUc4
-         wyQwXTjJOvy2PQxRdz4S7TZH5kwVJHA9E2m82OEcx2RjD61gfsLwqG8cWL54bPGHQu7P
-         J5Ufw0psUUPU9yxzutLKXnsaekhwiPiv2/YKh7EZsXtdAkzzZYsQ+XVcbu9aG+RM+o62
-         8b7+/mTU4hZimNMO7taszCdzAQ083BywVKadvNbwExJk9Ydh1Ba2YC4QgArslCrogsfJ
-         lVbm+6V+hThxM3k7b19pFxhtt4S/vLo4tUa7h//KfHTvRagTgRFSzMfWGtS/ghinBBOz
-         Urvg==
-X-Gm-Message-State: AOAM531EOt4dEVc2PWZk2Ltkn1cgxxron0gUN1Z09S/Mh/BhRE5Mg2Aq
-        LQhYaO+QENVd187FzOqhRtNoDg==
-X-Google-Smtp-Source: ABdhPJxwQBfsNMkNI4xGLvZYHPzk1Tka3WLrm/vB852YmxjUd1eWVokbCzi7pGH2UsnflDHI2l+6iw==
-X-Received: by 2002:adf:cf0c:: with SMTP id o12mr307750wrj.265.1594659821364;
-        Mon, 13 Jul 2020 10:03:41 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:501b:b12d:3463:93f8? ([2a01:e34:ed2f:f020:501b:b12d:3463:93f8])
-        by smtp.googlemail.com with ESMTPSA id a22sm304308wmj.9.2020.07.13.10.03.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 10:03:40 -0700 (PDT)
-Subject: Re: [RFC PATCH 1/4] dt-bindings:thermal:Add cold trip point type
-To:     Thara Gopinath <thara.gopinath@linaro.org>, rui.zhang@intel.com,
-        robh+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200710135154.181454-1-thara.gopinath@linaro.org>
- <20200710135154.181454-2-thara.gopinath@linaro.org>
- <08503e0c-c8db-6d03-9692-5339dadf6c4f@linaro.org>
- <2b845792-41f0-7fb1-122e-a77aa70c9a3c@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b1ee5a73-863b-c6d2-5d09-1ac231f40fe2@linaro.org>
-Date:   Mon, 13 Jul 2020 19:03:39 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1730474AbgGMRWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 13:22:52 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:16556 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730527AbgGMRWu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 13:22:50 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1594660970; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=3/XX7PjmIFYVvOgHnEITFTHUI6Eqb++G7wohiRsN8sQ=; b=dpfQXwbdvEua5KTERxJTxcxpuTDiWOmfRxHaAkJQ4vpTJbhd+p7oB+mzdYJJbm2ZGpDZnWTU
+ ByBtVsOA17/4CUQW0yI7bxBT+KLi19UjthQRtQ8WDVwlITm3zqWnhlTuPqlub8fSME323Ma/
+ YzDzihnMX8tlNrvAEvocW6gF9fU=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n15.prod.us-west-2.postgun.com with SMTP id
+ 5f0c98692991e765cdb15bfc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 13 Jul 2020 17:22:49
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 93083C433AF; Mon, 13 Jul 2020 17:22:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from jcrouse1-lnx.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jcrouse)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9AE05C433CB;
+        Mon, 13 Jul 2020 17:22:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9AE05C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jcrouse@codeaurora.org
+Date:   Mon, 13 Jul 2020 11:22:41 -0600
+From:   Jordan Crouse <jcrouse@codeaurora.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        kbuild test robot <lkp@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <freedreno@lists.freedesktop.org>,
+        "open list:INTERCONNECT API" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC PATCH] interconnect: qcom: add functions to query addr/cmds
+ for a path
+Message-ID: <20200713172241.GB3815@jcrouse1-lnx.qualcomm.com>
+Mail-Followup-To: Georgi Djakov <georgi.djakov@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        kbuild test robot <lkp@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" <dri-devel@lists.freedesktop.org>,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" <freedreno@lists.freedesktop.org>,
+        "open list:INTERCONNECT API" <linux-pm@vger.kernel.org>
+References: <20200701042528.12321-1-jonathan@marek.ca>
+ <3063d037-a781-6327-ef88-37b626c552e1@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <2b845792-41f0-7fb1-122e-a77aa70c9a3c@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3063d037-a781-6327-ef88-37b626c552e1@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/07/2020 19:01, Thara Gopinath wrote:
+On Mon, Jul 13, 2020 at 06:24:26PM +0300, Georgi Djakov wrote:
+> On 7/1/20 07:25, Jonathan Marek wrote:
+> > The a6xx GMU can vote for ddr and cnoc bandwidth, but it needs to be able
+> > to query the interconnect driver for bcm addresses and commands.
 > 
-> 
-> On 7/13/20 11:05 AM, Daniel Lezcano wrote:
->> On 10/07/2020 15:51, Thara Gopinath wrote:
->>> Extend thermal trip point type property to include "cold" trip type
->>> indicating point in the temperature domain below which a warming action
->>> must be intiated.
->>>
->>> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->>> ---
->>>   Documentation/devicetree/bindings/thermal/thermal.txt | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt
->>> b/Documentation/devicetree/bindings/thermal/thermal.txt
->>> index f78bec19ca35..1689d9ba1471 100644
->>> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
->>> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
->>> @@ -87,6 +87,7 @@ Required properties:
->>>       "active":    A trip point to enable active cooling
->>>       "passive":    A trip point to enable passive cooling
->>>       "hot":        A trip point to notify emergency
->>> +    "cold":        A trip point to enable warming
->>>       "critical":    Hardware not reliable.
->>>     Type: string
->>
->>
->> thermal.txt should have been removed. Perhaps, a patch is missing. The
->> thermal.txt has been converted into 3 yaml schema.
->>
->> The change should be in thermal-zones.yaml.
-> 
-> Hi Daniel..
-> 
-> Thanks for the review. My bad.. I will fix this in the next version.
-> I can send a patch removing thermal.txt as well
+> It's not very clear to me how the GMU firmware would be dealing with this? Does
+> anyone have an idea whether the GMU makes any bandwidth decisions? Or is it just
+> a static configuration and it just enables/disables a TCS?
 
-Yes, sure.
+The GMU can perform a direct vote to the hardware. For now it is a static
+configuration with pre-determined bandwidths generated from the OPP table.
 
-Thanks
+> I think that we can query the address from the cmd-db, but we have to know the
+> bcm names and the path. All the BCM/TCS information looks to be very low-level
+> and implementation specific, so exposing it through an API is not very good,
+> but hard-coding all this information is not good either.
 
+Exactly my concern. The BCM information in particular is going to end up being
+extremely target specific.
+
+Jordan
+
+> Thanks,
+> Georgi
+> 
+> > 
+> > I'm not sure what is the best way to go about implementing this, this is
+> > what I came up with.
+> > 
+> > I included a quick example of how this can be used by the a6xx driver to
+> > fill out the GMU bw_table (two ddr bandwidth levels in this example, note
+> > this would be using the frequency table in dts and not hardcoded values).
+> > 
+> > Signed-off-by: Jonathan Marek <jonathan@marek.ca>
+> > ---
+> >  drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 20 ++++-------
+> >  drivers/interconnect/qcom/icc-rpmh.c  | 50 +++++++++++++++++++++++++++
+> >  include/soc/qcom/icc.h                | 11 ++++++
+> >  3 files changed, 68 insertions(+), 13 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
