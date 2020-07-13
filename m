@@ -2,232 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4149321D897
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 16:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3B321D964
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 17:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730039AbgGMOcv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 10:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S1729649AbgGMPDI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 11:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729918AbgGMOcq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 10:32:46 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060FEC061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 07:32:46 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id j10so10026457qtq.11
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 07:32:45 -0700 (PDT)
+        with ESMTP id S1729027AbgGMPDH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 11:03:07 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21AEC061755
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 08:03:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id o2so13493577wmh.2
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 08:03:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JV7XujCjT0WQ4wkjALKmlW731iVG+iPdV0Rii6HipsE=;
-        b=pa6pNCMCjQQsJcn6JRnuQVsJuBE0YMkf8XHeoTrN40w24whIS3UehEHKsvoDinmJTt
-         DBQ3YUhvghGYV60Xpb5xSXl2lDujV2jF6VxwOr/aDF76DRVCvd/1dCr8LbhoyVzYBV3L
-         NAFlykQunvALJ8h2nY2Kd+5ozXlNYyFr2YhUax8lCIosdi8C5gdumEjELCyqJFXo6xTQ
-         ciCmX5gM3wA8fGEja7vJdp+0XTSMxXi4wzsZPZmxax9hbegn+OdYOhrpF7BF9qG8WKCE
-         Wj/eNmqlpb8hks0b+FK0gz8HdgFmhkEOnW4f1OjEqVAwuBj04gj3DQTwT/EswUOGex76
-         jTHw==
+        bh=hj7ei/4/U37aYVFzIdiyRob1Gsg4Hui2K44614n1iwI=;
+        b=i2jn9oc2zspqjTVmpnmwS8848CCRuvu5xsFu2vw3OlfkIRw7Fr77HxcgYjRAE3Mcyt
+         XR7yS0fAqYT11ZspWkctOR1T6sUV0edIcASIZGPkgG5KiUkwqfj4mxdtR24+h1qNsXxN
+         mSKEpGM4GcfiIjZwQvj1SesY0iKuwzcXeoZhrGx0oOfDhVnYzgdcyPwn93Esm1bxPHPR
+         +Rjuax6h6eB+6Z/9CbF4kMjHffa8MbtXlMJrTqUNHOwHy15TFfWSSaHhqTzuRgLYLDSF
+         oUm93NAXxBB6D2mhQntN0BOXU96MYVIZlw0MrXH2jTFNgO34gR1B/1beSyJUIS6ml78h
+         iN5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=JV7XujCjT0WQ4wkjALKmlW731iVG+iPdV0Rii6HipsE=;
-        b=rBCk+raXvSlHdIdfxxmLiTMnPOOI5cJffzd6uvLYIQ1J6gOyoEiHOwazh8tero1t6c
-         wR115mcjUO52kURZwMdIq2/gPzLStWSw6mDzezuU+aqBEdZMQ95vjDHvo7zIkSLlbUiv
-         0IiZ6Ejv1O/wahxEvX4PS1p69zqYDkLlVHT6cV7L5PW1z9it/CRR5TWcs9WBteznBIju
-         I7rc+xwnQuCGYibNLGS/2G9WSw6gFnovcrj9nXsHNAUC53sgYhjp5XgwmIDiIk/C8gVo
-         vZXLzLj79SvsD9/W+1FSGekMCuyQgbqV1IlMjfuCah/ELdgawZixpeKxrwQGP7FHq79R
-         p8SA==
-X-Gm-Message-State: AOAM532s8Ln+F1MWSqBHUxi+SoxsXFh2BHdrOqIeO7wzOL+21zMcI15A
-        2QKL7LnFOWew9R/sodxMsXEHiA==
-X-Google-Smtp-Source: ABdhPJwCpXBnQ3gVjbL3KO0uYLMvWJ4HBXi/rSe0OTG4oUjXgHWdxblMk7Zj6jjIKa89WBuHHrMrMQ==
-X-Received: by 2002:ac8:c4e:: with SMTP id l14mr70226000qti.106.1594650765164;
-        Mon, 13 Jul 2020 07:32:45 -0700 (PDT)
-Received: from [192.168.1.92] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id w18sm18516302qtn.3.2020.07.13.07.32.43
+        bh=hj7ei/4/U37aYVFzIdiyRob1Gsg4Hui2K44614n1iwI=;
+        b=EgYbtQWes3CB6Ynw3VtVIcCpGW8CPQKos5XC2ctkm/6j99M2h6LcGwMA93EUrPUgJn
+         iOvCr6bzyFILAl2wbrrMvl34GL3p4HjprqCyjdHzjhoaapQTqsvQEi8mSzpcGBqJFDQs
+         ji3DATtgHA0K7eNBTSRnCnc1+7A3R2JXNKc0ESk0H7hUwHv0r++dyzdUFSR9ntpupy9Z
+         1HfsHInJzmrkKRNZz2oBIaifFiFqKhDRgUPUwQ9ory4Lfnm4aUEozcDqWMeBtJnWOZ35
+         lw8X3AW2HlJnVQa+LmYa96RvAr7OfW+tXnHtXARy/3eGR8sHqzTebSd2LwR3A/6owP3S
+         uhlg==
+X-Gm-Message-State: AOAM533neZGHIj5mfwF72G/+odvCEhR0zFifSdyWoNRwteax6pZaDaG2
+        3FTIXa2CEDDpOEW8IWtCATsK+g==
+X-Google-Smtp-Source: ABdhPJw65cTT/euYaJOY4JshtT6+GDtwu+71TCGdRUmekWqgIVNWBBETTu76zAOQEbJHhJLgbIME6w==
+X-Received: by 2002:a1c:e285:: with SMTP id z127mr353808wmg.162.1594652586275;
+        Mon, 13 Jul 2020 08:03:06 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:501b:b12d:3463:93f8? ([2a01:e34:ed2f:f020:501b:b12d:3463:93f8])
+        by smtp.googlemail.com with ESMTPSA id v6sm24316475wrr.85.2020.07.13.08.03.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jul 2020 07:32:43 -0700 (PDT)
-Subject: Re: [PATCH v2 1/3] arch_topology, sched/core: Cleanup thermal
- pressure definition
-To:     Valentin Schneider <valentin.schneider@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20200712165917.9168-1-valentin.schneider@arm.com>
- <20200712165917.9168-2-valentin.schneider@arm.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <88488b17-fd01-76e6-ae53-027c1016340b@linaro.org>
-Date:   Mon, 13 Jul 2020 10:32:42 -0400
+        Mon, 13 Jul 2020 08:03:05 -0700 (PDT)
+Subject: Re: [RFC PATCH 0/4] thermal: Introduce support for monitoring falling
+ temperature
+To:     Thara Gopinath <thara.gopinath@linaro.org>, rui.zhang@intel.com,
+        robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200710135154.181454-1-thara.gopinath@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <7437ee89-e76d-0c82-9860-5c6076ad8a30@linaro.org>
+Date:   Mon, 13 Jul 2020 17:03:04 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200712165917.9168-2-valentin.schneider@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200710135154.181454-1-thara.gopinath@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 10/07/2020 15:51, Thara Gopinath wrote:
+> Thermal framework today supports monitoring for rising temperatures and
+> subsequently initiating cooling action in case of a thermal trip point
+> being crossed. There are scenarios where a SoC need some warming action to
+> be activated if the temperature falls below a cetain permissible limit.
+> Since warming action can be considered mirror opposite of cooling action,
+> most of the thermal framework can be re-used to achieve this.
+> 
+> This patch series is yet another attempt to add support for monitoring
+> falling temperature in thermal framework. Unlike the first attempt[1]
+> (where a new property was added to thermal trip point binding to indicate
+> direction of temperature monitoring), this series introduces a new trip
+> point type (THERMAL_TRIP_COLD) to indicate a trip point at which falling
+> temperature monitoring must be triggered. This patch series uses Daniel
+> Lezcano's recently added thermal genetlink interface[2] to notify userspace
+> of falling temperature and rising temperature at the cold trip point. This
+> will enable a user space engine to trigger the relevant mitigation for
+> falling temperature. At present, no support is added to any of the thermal
+> governors to monitor and mitigate falling temperature at the cold trip
+> point;rather all governors return doing nothing if triggered for a cold
+> trip point. As future extension, monitoring of falling temperature can be
+> added to the relevant thermal governor. 
+
+I agree we need a cold trip point in order to introduce the functioning
+temperature range in the thermal framework.
+
+Rui, what is your opinion ?
 
 
-On 7/12/20 12:59 PM, Valentin Schneider wrote:
-> The following commit:
-> 
->    14533a16c46d ("thermal/cpu-cooling, sched/core: Move the arch_set_thermal_pressure() API to generic scheduler code")
-> 
-> moved the definition of arch_set_thermal_pressure() to sched/core.c, but
-> kept its declaration in linux/arch_topology.h. When building e.g. an x86
-> kernel with CONFIG_SCHED_THERMAL_PRESSURE=y, cpufreq_cooling.c ends up
-> getting the declaration of arch_set_thermal_pressure() from
-> include/linux/arch_topology.h, which is somewhat awkward.
-> 
-> On top of this, sched/core.c unconditionally defines
-> o The thermal_pressure percpu variable
-> o arch_set_thermal_pressure()
-> 
-> while arch_scale_thermal_pressure() does nothing unless redefined by the
-> architecture.
-> 
-> arch_*() functions are meant to be defined by architectures, so revert the
-> aforementioned commit and re-implement it in a way that keeps
-> arch_set_thermal_pressure() architecture-definable, and doesn't define the
-> thermal pressure percpu variable for kernels that don't need
-> it (CONFIG_SCHED_THERMAL_PRESSURE=n).
-> 
-> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-> ---
-
-Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-
->   arch/arm/include/asm/topology.h   |  3 ++-
->   arch/arm64/include/asm/topology.h |  3 ++-
->   drivers/base/arch_topology.c      | 11 +++++++++++
->   include/linux/arch_topology.h     |  4 ++--
->   include/linux/sched/topology.h    |  7 +++++++
->   kernel/sched/core.c               | 11 -----------
->   6 files changed, 24 insertions(+), 15 deletions(-)
-> 
-> diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-> index 435aba289fc5..e0593cf095d0 100644
-> --- a/arch/arm/include/asm/topology.h
-> +++ b/arch/arm/include/asm/topology.h
-> @@ -16,8 +16,9 @@
->   /* Enable topology flag updates */
->   #define arch_update_cpu_topology topology_update_cpu_topology
->   
-> -/* Replace task scheduler's default thermal pressure retrieve API */
-> +/* Replace task scheduler's default thermal pressure API */
->   #define arch_scale_thermal_pressure topology_get_thermal_pressure
-> +#define arch_set_thermal_pressure   topology_set_thermal_pressure
->   
->   #else
->   
-> diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-> index 0cc835ddfcd1..e042f6527981 100644
-> --- a/arch/arm64/include/asm/topology.h
-> +++ b/arch/arm64/include/asm/topology.h
-> @@ -34,8 +34,9 @@ void topology_scale_freq_tick(void);
->   /* Enable topology flag updates */
->   #define arch_update_cpu_topology topology_update_cpu_topology
->   
-> -/* Replace task scheduler's default thermal pressure retrieve API */
-> +/* Replace task scheduler's default thermal pressure API */
->   #define arch_scale_thermal_pressure topology_get_thermal_pressure
-> +#define arch_set_thermal_pressure   topology_set_thermal_pressure
->   
->   #include <asm-generic/topology.h>
->   
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index 4d0a0038b476..d14cab7dfa3c 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -54,6 +54,17 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
->   	per_cpu(cpu_scale, cpu) = capacity;
->   }
->   
-> +DEFINE_PER_CPU(unsigned long, thermal_pressure);
-> +
-> +void arch_set_thermal_pressure(const struct cpumask *cpus,
-> +			       unsigned long th_pressure)
-> +{
-> +	int cpu;
-> +
-> +	for_each_cpu(cpu, cpus)
-> +		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-> +}
-> +
->   static ssize_t cpu_capacity_show(struct device *dev,
->   				 struct device_attribute *attr,
->   				 char *buf)
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index 0566cb3314ef..69b1dabe39dc 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -39,8 +39,8 @@ static inline unsigned long topology_get_thermal_pressure(int cpu)
->   	return per_cpu(thermal_pressure, cpu);
->   }
->   
-> -void arch_set_thermal_pressure(struct cpumask *cpus,
-> -			       unsigned long th_pressure);
-> +void topology_set_thermal_pressure(const struct cpumask *cpus,
-> +				   unsigned long th_pressure);
->   
->   struct cpu_topology {
->   	int thread_id;
-> diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-> index fb11091129b3..764222d637b7 100644
-> --- a/include/linux/sched/topology.h
-> +++ b/include/linux/sched/topology.h
-> @@ -232,6 +232,13 @@ unsigned long arch_scale_thermal_pressure(int cpu)
->   }
->   #endif
->   
-> +#ifndef arch_set_thermal_pressure
-> +static __always_inline
-> +void arch_set_thermal_pressure(const struct cpumask *cpus,
-> +			       unsigned long th_pressure)
-> +{ }
-> +#endif
-> +
->   static inline int task_node(const struct task_struct *p)
->   {
->   	return cpu_to_node(task_cpu(p));
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index ff0519551188..90b44f3840e4 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -3731,17 +3731,6 @@ unsigned long long task_sched_runtime(struct task_struct *p)
->   	return ns;
->   }
->   
-> -DEFINE_PER_CPU(unsigned long, thermal_pressure);
-> -
-> -void arch_set_thermal_pressure(struct cpumask *cpus,
-> -			       unsigned long th_pressure)
-> -{
-> -	int cpu;
-> -
-> -	for_each_cpu(cpu, cpus)
-> -		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-> -}
-> -
->   /*
->    * This function gets called by the timer code, with HZ frequency.
->    * We call it with interrupts disabled.
-> 
 
 -- 
-Warm Regards
-Thara
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
