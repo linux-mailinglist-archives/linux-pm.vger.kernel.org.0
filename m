@@ -2,125 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D71621D57A
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 14:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529D221D5A3
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 14:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729457AbgGMMDV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 08:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728714AbgGMMDU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 08:03:20 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAC4C061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 05:03:20 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id o4so8836088lfi.7
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 05:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5KMHDUl0dP2/yxULAu5/b1d01e8D1X8yaqLPXL7OeY=;
-        b=H3ojp220B2LkylmsATbkDKYAr9c9hzVaK8lhZCLxcDV3QcBMkL80V2xjQUHeAQu4ky
-         PWfn+Md+nsxFTihVKzDV8rTq5f4ormyVJW+rU7RAeuJyAv4Hnn43qqztrTig1KEl7h7I
-         pnpNN1yXLQsl+bXWAageYi1x2LeAIYT5Lo7aoYzJCC998Y/kA4Rgo1rLKWhI2XC/fAX8
-         tbLdXDwe90hvOvzyPZnqkCra7xZR3M5Os1BimwS6Zh1XxeESLNXjAD3Zb8ftjXmr7l6c
-         XOob7orM0tvlEoox2rDKGz20MBGTwumQ20xbUuqy5oMduu/LjxfdJUMNQouwAETRxG6V
-         nI5w==
+        id S1729621AbgGMMQo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 08:16:44 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44402 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726586AbgGMMQo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 08:16:44 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 5so9296289oty.11;
+        Mon, 13 Jul 2020 05:16:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=y5KMHDUl0dP2/yxULAu5/b1d01e8D1X8yaqLPXL7OeY=;
-        b=j205sJdBQsswyM2w4OQZ6r6/uhUQ/vwmobtEsKf+4bGP3RewoyndPmXcijvUUqUb2l
-         u7tHOoLLblXk9yMi5iqlsXTMv2P035I/nUtgzFm1QrfRoNGRwrfF8cdlFfahj0Zum0c9
-         XdE78XemTaHpYXbtAQE/YlBMIvxHllB3QkOUEyxKTFY5bVUefTHwX/RnclDNBig6Cxj7
-         2hF0fqPb0i+ktdJPXk4YzRIxBpeTYzZQywnqyvpYX5whY18I2J3SQeVheddTuEW9jpmw
-         UqNs/t89b57j/R+GLWEDig5GMqUM0mTbLXknT3b+Tje31qPoaOIpJn7pNhuYlPkyIOpK
-         amTg==
-X-Gm-Message-State: AOAM532+TQ4nKyELVnYFbrCaT8bLjhTM2oMytihXLETJeMd26JBluYSf
-        ExmFfQDvhGtCZ08eM74SGc1l+P0+8V6g2PKC78ZI+A==
-X-Google-Smtp-Source: ABdhPJxeeTVOBjzNfFPpHLHGDWpCLW18lUobuuQt7/W9ElRbsNZuZOxfCtntGelZjeemcLqJCveTFhKFSh5BaKmul5M=
-X-Received: by 2002:a19:7d84:: with SMTP id y126mr53124241lfc.149.1594641798626;
- Mon, 13 Jul 2020 05:03:18 -0700 (PDT)
+        bh=pO75K6jp9I0TgVd5uiJ2Fq8Rt2TkoAscNvbsoxxq4gc=;
+        b=dPWa6aQZgW7DGcWueb0oDzNGa1E+TbEIvYUXVbCEdclJbzvViyU+bANV1337iivQSx
+         8lLqLCt7h9X/BPhvZey6kO4jL17Ky1I9XRD1LGUYxTJ7U6gVQRcdlRWBWxFrEetBVoHO
+         bpkCze66VeDJ9CmNmsWqM91+BIpArS84TDeHPMieh5Dq650r4l8HPxHjyplI2LGs/9FS
+         7c7U9GLYHihG8JX+YXU8VPNSYUgQQcCBF1Y7OgGdZJzcEov9OX32r2VrUosRHQy4yxCH
+         dc2EI6RGNy5ZNqwLLSNJSsJd4hWKvEdquVDANHVvjIFX2Aa8XdlSekHufEXZ37S1MOJI
+         HaFw==
+X-Gm-Message-State: AOAM532PD7cmMoPfOrUrF5L1ydYM0cNGKeb4Zldk+vHUQwPbiZEQf57L
+        GTLWYc0H6BuLQODq4yB/bVns/kgs6N4kQnSrWok=
+X-Google-Smtp-Source: ABdhPJww6iKdpqCo7i0DLnnBg8yn+ASnskqRd8nMWT8j5w3LUd+Vv/EmoEO2GQob/q2uJhtuznO0DPhZzhOpQWxyyg0=
+X-Received: by 2002:a9d:590a:: with SMTP id t10mr33047434oth.262.1594642603476;
+ Mon, 13 Jul 2020 05:16:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200712165917.9168-1-valentin.schneider@arm.com>
-In-Reply-To: <20200712165917.9168-1-valentin.schneider@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 13 Jul 2020 14:03:06 +0200
-Message-ID: <CAKfTPtCWEb=Dh12GSyYSG6nsqSciyDmcev62ntexXuFDtO_+ng@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] sched, arch_topology: Thermal pressure
- configuration cleanup
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+References: <2016232.ihCVsphvri@kreacher> <2988949.NgUrjYMkJj@kreacher> <000801d65634$14f0ecb0$3ed2c610$@net>
+In-Reply-To: <000801d65634$14f0ecb0$3ed2c610$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Jul 2020 14:16:32 +0200
+Message-ID: <CAJZ5v0gmzUAXavNY=hFnG+983sQWWuAJhCeJBumD3mmt79cepg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Use passive mode by default
+ without HWP
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 12 Jul 2020 at 18:59, Valentin Schneider
-<valentin.schneider@arm.com> wrote:
+On Thu, Jul 9, 2020 at 11:01 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
-> Hi folks,
+> Hi Rafael,
 >
-> This stems from this thread [1] on the list. TL;DR: the thermal pressure config
-> has no helpful documentation, and figuring out if the right dependencies are in
-> place is not easy for a regular user.
+> As you may or may not recall, I am attempting to untangle
+> and separate multiple compounding issues around the
+> intel_pstate driver and HWP (or not).
 >
-> The current landscape also paints an odd picture: arch_set_thermal_pressure() is
-> hardcoded in sched/core.c, and is *not* architecture-definable, while
-> arch_get_thermal_pressure() is. Patch 1 is tackling this, the rest is Kconfig
-> stuff.
+> Until everything is figured out, I am using the following rules:
 >
-> Cheers,
-> Valentin
+> . never use x86_energy_perf_policy.
+> . For HWP disabled: never change from active to passive or via versa, but rather do it via boot.
+> . after boot always check and reset the various power limit log bits that are set.
+> . never compile the kernel (well, until after any tests), which will set those bits again.
+> . never run prime95 high heat torture test, which will set those bits again.
+> . try to never do anything else that will set those bits again.
 >
-> [1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
+> On 2020.03.28 05:58 Rafael J. Wysocki wrote:
+> >
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >
+> > After recent changes allowing scale-invariant utilization to be
+> > used on x86, the schedutil governor on top of intel_pstate in the
+> > passive mode should be on par with (or better than) the active mode
+> > "powersave" algorithm of intel_pstate on systems in which
+> > hardware-managed P-states (HWP) are not used, so it should not be
+> > necessary to use the internal scaling algorithm in those cases.
+> >
+> > Accordingly, modify intel_pstate to start in the passive mode by
+> > default if the processor at hand does not support HWP of if the driver
+> > is requested to avoid using HWP through the kernel command line.
+> >
+> > Among other things, that will allow utilization clamps and the
+> > support for RT/DL tasks in the schedutil governor to be utilized on
+> > systems in which intel_pstate is used.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  Documentation/admin-guide/pm/intel_pstate.rst | 32 ++++++++++++++++-----------
+> >  drivers/cpufreq/intel_pstate.c                |  3 ++-
+> >  2 files changed, 21 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/Documentation/admin-guide/pm/intel_pstate.rst b/Documentation/admin-
+> > guide/pm/intel_pstate.rst
+> > index ad392f3aee06..39d80bc29ccd 100644
+> > --- a/Documentation/admin-guide/pm/intel_pstate.rst
+> > +++ b/Documentation/admin-guide/pm/intel_pstate.rst
+> > @@ -62,9 +62,10 @@ on the capabilities of the processor.
+> >  Active Mode
+> >  -----------
+> >
+> > -This is the default operation mode of ``intel_pstate``.  If it works in this
+> > -mode, the ``scaling_driver`` policy attribute in ``sysfs`` for all ``CPUFreq``
+> > -policies contains the string "intel_pstate".
+> > +This is the default operation mode of ``intel_pstate`` for processors with
+> > +hardware-managed P-states (HWP) support.  If it works in this mode, the
+> > +``scaling_driver`` policy attribute in ``sysfs`` for all ``CPUFreq`` policies
+> > +contains the string "intel_pstate".
+> >
+> >  In this mode the driver bypasses the scaling governors layer of ``CPUFreq`` and
+> >  provides its own scaling algorithms for P-state selection.  Those algorithms
+> > @@ -138,12 +139,13 @@ internal P-state selection logic to be less performance-focused.
+> >  Active Mode Without HWP
+> >  ~~~~~~~~~~~~~~~~~~~~~~~
+> >
+> > -This is the default operation mode for processors that do not support the HWP
+> > -feature.  It also is used by default with the ``intel_pstate=no_hwp`` argument
+> > -in the kernel command line.  However, in this mode ``intel_pstate`` may refuse
+> > -to work with the given processor if it does not recognize it.  [Note that
+> > -``intel_pstate`` will never refuse to work with any processor with the HWP
+> > -feature enabled.]
+> > +This operation mode is optional for processors that do not support the HWP
+> > +feature or when the ``intel_pstate=no_hwp`` argument is passed to the kernel in
+> > +the command line.  The active mode is used in those cases if the
+> > +``intel_pstate=active`` argument is passed to the kernel in the command line.
 >
-> Revisions
-> =========
->
-> v1 -> v2
-> --------
->
-> o Remove cpufreq_cooling.c weak function; use #define stub in sched/topology.h
->   (Vincent)
+> ???
+> I can not see anywhere in the code where the kernel command line argument
+> "intel_pstate=active" is dealt with.
 
-Looks good to me.
+My bad, sorry about this.
 
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+I'll send a patch to fix this issue shortly.
 
-> o Hinge arm SCHED_THERMAL_PRESSURE selection on ARM_CPU_TOPOLOGY
->
-> Valentin Schneider (3):
->   arch_topology, sched/core: Cleanup thermal pressure definition
->   sched: Cleanup SCHED_THERMAL_PRESSURE kconfig entry
->   arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE
->
->  arch/arm/Kconfig                  |  1 +
->  arch/arm/include/asm/topology.h   |  3 ++-
->  arch/arm64/Kconfig                |  1 +
->  arch/arm64/include/asm/topology.h |  3 ++-
->  drivers/base/arch_topology.c      | 11 +++++++++++
->  include/linux/arch_topology.h     |  4 ++--
->  include/linux/sched/topology.h    |  7 +++++++
->  init/Kconfig                      | 15 ++++++++++++++-
->  kernel/sched/core.c               | 11 -----------
->  9 files changed, 40 insertions(+), 16 deletions(-)
->
-> --
-> 2.27.0
->
+Thanks!
