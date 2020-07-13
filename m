@@ -2,85 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6138A21D1F5
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 10:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5BB21D20C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jul 2020 10:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728382AbgGMImD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 04:42:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37894 "EHLO mail.kernel.org"
+        id S1727829AbgGMIoY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 04:44:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39454 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727834AbgGMImD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 13 Jul 2020 04:42:03 -0400
+        id S1725830AbgGMIoX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 13 Jul 2020 04:44:23 -0400
 Received: from localhost (unknown [84.241.194.92])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 430ED2065D;
-        Mon, 13 Jul 2020 08:42:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F9A82065D;
+        Mon, 13 Jul 2020 08:44:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594629723;
-        bh=LB10Hpmj34rIYqpojE3tjMY5Wd0jXgunZo/7a/Bdx4s=;
+        s=default; t=1594629863;
+        bh=KUdb4nh41mZvjlnlcASUhBfHECGZowa9Yivz08Vx3c0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sBsrH+ChkJC1OsMwtxYqPtV4cdidDnE9+YMOyB83YvCXN0N3eNk/yqMpqeim6xS16
-         Ji8yD26y/SmIgXaUrPhlPKUJkgOtrU2wjOA9rEuxoI9846VYCw+js05Vm3RGUlSGFB
-         N/ANtkAKuMF7PmEtPMpizPaFGfQfGAxx0HtjHNPM=
-Date:   Mon, 13 Jul 2020 10:42:00 +0200
+        b=VIlENMKrtnWBKZlCO6EVwM2WrgbGAkj8finWzrL4GnFY8kjCPVIKika9QBfPMkyPk
+         wZatrsBZv9oRcEz1zY2xiRtUnbM+/7Lx0VPDIQY5jOVbfhuU0Vv6WuGzYpuVxQ0ESM
+         RxDvujEwgIY+t7D2H5dbk8Egv3Fkb1GQ/djKpTvE=
+Date:   Mon, 13 Jul 2020 10:44:20 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Qiwu Huang <yanziily@gmail.com>
 Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: Re: [PATCH v2 2/5] power: supply: core: add wireless charger adapter
- type property
-Message-ID: <20200713084200.GD215949@kroah.com>
+Subject: Re: [PATCH v2 5/5] power: supply: core: supply battery soc with
+ decimal form
+Message-ID: <20200713084420.GE215949@kroah.com>
 References: <cover.1594612572.git.huangqiwu@xiaomi.com>
- <b20548fc825241c69878bfb05464b0e4f378f4ce.1594612572.git.huangqiwu@xiaomi.com>
+ <d7b0e268892b6143e537cf823d3a74214f6e6b1c.1594612572.git.huangqiwu@xiaomi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b20548fc825241c69878bfb05464b0e4f378f4ce.1594612572.git.huangqiwu@xiaomi.com>
+In-Reply-To: <d7b0e268892b6143e537cf823d3a74214f6e6b1c.1594612572.git.huangqiwu@xiaomi.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 12:03:37PM +0800, Qiwu Huang wrote:
+On Mon, Jul 13, 2020 at 12:03:40PM +0800, Qiwu Huang wrote:
 > From: Qiwu Huang <huangqiwu@xiaomi.com>
 > 
-> Reports what type of wireless adapter connection is
-> currently active forthe supply.
-> for example it can show if ADAPTER_PD capable source is attached.
+> Broadcast battery soc with decimal form.
+> soc_decimal is the decimal part of battery soc.
+> soc_decimal_rate is update frequency of decimal
+> part of battery soc.
+> We want to report such as 0.01 to 99.99% to
+> user space to improve user experience
+> when do very quick charging.
 > 
 > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
 > ---
->  Documentation/ABI/testing/sysfs-class-power | 11 +++++++++++
->  drivers/power/supply/power_supply_sysfs.c   |  1 +
->  include/linux/power_supply.h                |  1 +
->  3 files changed, 13 insertions(+)
+>  Documentation/ABI/testing/sysfs-class-power | 20 ++++++++++++++++++++
+>  drivers/power/supply/power_supply_sysfs.c   |  2 ++
+>  include/linux/power_supply.h                |  2 ++
+>  3 files changed, 24 insertions(+)
 > 
 > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> index d3169d47e359..cd07d3f4e8b1 100644
+> index f4234ba1684a..bcc8ccad8163 100644
 > --- a/Documentation/ABI/testing/sysfs-class-power
 > +++ b/Documentation/ABI/testing/sysfs-class-power
-> @@ -718,3 +718,14 @@ Contact:	Fei Jiang <jiangfei1@xiaomi.com>
->  		Access: Read-Only
->  		Valid values: Reported as integer
+> @@ -349,6 +349,26 @@ Description:
+>  		Access: Read
+>  		Valid values: Represented in microvolts
 >  
-> +===== Wireless Charger Properties =====
-> +What:		/sys/class/power_supply/<supply_name>/tx_adapter
+> +What:		/sys/class/power_supply/<supply_name>/soc_decimal,
 > +Date:		Jul 2020
-> +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
+> +Contact:	jiangfei1@xiaomi.com
 > +Description:
-> +		Reports what type of wireless adapter connection is currently active for
-> +		the supply, for example it can show if ADAPTER_PD capable source
-> +		is attached.
+> +		Broadcast battery soc with decimal form.
+> +		soc_decimal is the start decimal part of battery soc.
+> +
+> +		Access: Read
+> +		Valid values: 0 - 100
 
-Same question as before, what are the allowed types here?
+How can "100" be a valid decimal form here if this is a percent?
+
 
 > +
-> +		Access: Read-Only
-> +		Valid values: Reported as integer
+> +What:		/sys/class/power_supply/<supply_name>/soc_decimal_rate,
+> +Date:		Jul 2020
+> +Contact:	jiangfei1@xiaomi.com
+> +Description:
+> +		Broadcast battery soc with decimal form.
+> +		soc_decimal_rate is the decimal part of battery soc update freqency.
+> +
+> +		Access: Read
+> +		Valid values: 0 - 100
 
-What integer maps to what values?
+I think you need to document this a lot better as I still don't really
+understand what this is for or how to use it or report it.
+
+And what does "soc" mean here?
 
 thanks,
 
