@@ -2,105 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC65F21EE86
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 12:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA0421EF9D
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 13:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgGNK7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 06:59:47 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:47952 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727043AbgGNK7r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 06:59:47 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06EAw4hA041130;
-        Tue, 14 Jul 2020 10:59:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=FVZzYXiUXmNYZ2rp7CjKtJQ3hhXEWdRzRUoSe6Wbctg=;
- b=EFM7kEbYM0sjw6aLLBovqJFmAwYcL7/G6ByJwO7JFdfQy5WZmg7kfsnrsijFmq7zqq2k
- q0sRDC4fekv7O8j9eBzhbSSJS6FvYJJd+j/HwawZADvVoVFY/8RONF+7QboHdmcJmqqR
- bi8Xto/rHfZDCjOHhDg8u/4uzsTVyWxrIu8G2xsPuW0K0doUHH33KmEu0dlu+zXz51GZ
- mFinJhbNHCbHWBgGltuZpGAuv2R0vxKkyUsVg/nA4/s1Sc1uMdPuUqqTr6UmeA5Ec7bU
- Q+LvLFNGmnAfgr+H3FkyrrlerJBGNPmBtXvNPIrazHoSlsPfwp5CLYM5E+WCedKcS9iT Dg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 3274ur4qg3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Jul 2020 10:59:37 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06EAxbLM088296;
-        Tue, 14 Jul 2020 10:59:37 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 327q6s29p1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jul 2020 10:59:37 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06EAxPic017937;
-        Tue, 14 Jul 2020 10:59:25 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 Jul 2020 03:59:25 -0700
-Date:   Tue, 14 Jul 2020 13:59:18 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH -next] PM / devfreq: Fix missing unlock on error in
- devfreq_add_device()
-Message-ID: <20200714105918.GB2571@kadam>
-References: <20200714063025.118829-1-weiyongjun1@huawei.com>
- <20200714093758.GW2549@kadam>
+        id S1727046AbgGNLoA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 07:44:00 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17282 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726352AbgGNLoA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 07:44:00 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0d9a720000>; Tue, 14 Jul 2020 04:43:47 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 14 Jul 2020 04:43:59 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 14 Jul 2020 04:43:59 -0700
+Received: from [10.24.37.103] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jul
+ 2020 11:43:51 +0000
+Subject: Re: [TEGRA194_CPUFREQ PATCH v5 1/4] dt-bindings: arm: Add t194 ccplex
+ compatible and bpmp property
+To:     Rob Herring <robh@kernel.org>
+CC:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <mirq-linux@rere.qmqm.pl>,
+        <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <1594649209-29394-1-git-send-email-sumitg@nvidia.com>
+ <1594649209-29394-2-git-send-email-sumitg@nvidia.com>
+ <20200713164214.GA341271@bogus>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <70a0a8ee-b79a-2a05-5150-2ee0faaf2730@nvidia.com>
+Date:   Tue, 14 Jul 2020 17:13:47 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714093758.GW2549@kadam>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=2
- phishscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007140084
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
- suspectscore=2 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- mlxscore=0 priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007140084
+In-Reply-To: <20200713164214.GA341271@bogus>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594727027; bh=UrDpE1YD14GDWCNhmIrtodld5JLaTd22aLzUVIM8f98=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=mMHZutoFQHCAIoy3C50Yj8sRZfz8bUZeBCDekvCUEPPE8fsSz4fwzSQExX22vT/cZ
+         CflAgHY7F7DJQ0Ib4eEEBXTwMFoxODxAFuZ7sqHypnZdLsr1h4XhH0RpEetY5HUKUq
+         dpdSChmaeb86JPmxsDAXX5wUYvBjjNXhm6RcDVwsF0ZUP0UzXoU78qq0SEFs+zR/Ak
+         KPnQHXDPepa0yEXM9VUFQMFH/fIJIQfTam+Zy1qhexBLYqL8k6s2t6w8P2vQ65lKZJ
+         m67IHksK0pXbcM+jcJ+j556VUZyo8+yLif9IcjmoS32tdNUvZbpy57tu1db+VDf5g0
+         mRMvlTySolpVA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 12:37:58PM +0300, Dan Carpenter wrote:
-> On Tue, Jul 14, 2020 at 06:30:25AM +0000, Wei Yongjun wrote:
-> > Add the missing unlock before return from function devfreq_add_device()
-> > in the error handling case.
-> > 
-> > Fixes: d7c46505a7ad ("PM / devfreq: Add support delayed timer for polling mode")
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> > ---
-> >  drivers/devfreq/devfreq.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> > index 5320c3b37f35..2b54a59bb281 100644
-> > --- a/drivers/devfreq/devfreq.c
-> > +++ b/drivers/devfreq/devfreq.c
-> > @@ -788,6 +788,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
-> >  
-> >  	if (devfreq->profile->timer < 0
-> >  		|| devfreq->profile->timer >= DEVFREQ_TIMER_NUM) {
-> > +		mutex_unlock(&devfreq->lock);
-> >  		goto err_out;
+
+
+> On Mon, Jul 13, 2020 at 07:36:46PM +0530, Sumit Gupta wrote:
+>> To do frequency scaling on all CPUs within T194 CPU Complex, we need
+>> to query BPMP for data on valid operating points. Document a compatible
+>> string under 'cpus' node to represent the CPU Complex for binding drivers
+>> like cpufreq which don't have their node or CPU Complex node to bind to.
+>> Also, document a property to point to the BPMP device that can be queried
+>> for all CPUs.
 > 
-> This should be "goto err_dev;" and the unlock is not required because
-> we free "devfreq".
+> The cpus.yaml binding documents what's in 'cpu' nodes, not 'cpus'
+> node. AIUI, the latter is what you want. You should do your own schema
+> file here.
+> 
+Do you mean to change existing file name from 'cpus.yaml' to 'cpu.yaml' 
+and create new 'cpus.yaml' file?
+I think it's better to incorporate the change in existing 'cpus.yaml' 
+file to keep both cpu@X and cpus node details together. Please suggest.
 
-Also the error code needs to be set on this error path.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   Documentation/devicetree/bindings/arm/cpus.yaml | 11 +++++++++++
+>>   1 file changed, 11 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+>> index a018147..9b328e3 100644
+>> --- a/Documentation/devicetree/bindings/arm/cpus.yaml
+>> +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+>> @@ -162,6 +162,7 @@ properties:
+>>         - nvidia,tegra132-denver
+>>         - nvidia,tegra186-denver
+>>         - nvidia,tegra194-carmel
+>> +      - nvidia,tegra194-ccplex
+> 
+> Tegra194 has 2 different CPUs?
+> 
+No, T194 SOC has homogeneous architecture with four clusters where each 
+cluster has two symmetric cores. 'nvidia,tegra194-carmel' compatible 
+string represents each cpu. 'nvidia,tegra194-ccplex' string represents 
+the CPU Complex to bind cpufreq driver. The change was done as per 
+discussion [1]
 
-regards,
-dan carpenter
+>>         - qcom,krait
+>>         - qcom,kryo
+>>         - qcom,kryo260
+>> @@ -255,6 +256,15 @@ properties:
+>>
+>>         where voltage is in V, frequency is in MHz.
+>>
+>> +  nvidia,bpmp:
+>> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+>> +    description: |
+>> +      Specifies the bpmp node that needs to be queried to get
+>> +      operating point data for all CPUs.
+>> +
+>> +      Optional for systems that have a "compatible"
+>> +      property value of "nvidia,tegra194-ccplex".
+>> +
+>>     power-domains:
+>>       $ref: '/schemas/types.yaml#/definitions/phandle-array'
+>>       description:
+>> @@ -340,6 +350,7 @@ required:
+>>
+>>   dependencies:
+>>     rockchip,pmu: [enable-method]
+>> +  nvidia,bpmp: [compatible]
+>>
+>>   examples:
+>>     - |
+>> --
+>> 2.7.4
+>>
 
+[1] https://marc.info/?l=linux-arm-kernel&m=158999171528418&w=2
