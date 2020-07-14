@@ -2,119 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD38122000A
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 23:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107F021FF9A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 23:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbgGNV2b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 17:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727822AbgGNV2b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 17:28:31 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5BEC061755
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 14:28:30 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id o2so964842wmh.2
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 14:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=6fRLYpXTjUG7Lueiak9yUWNoWwRQrJnBa6oSKFtWg8E=;
-        b=GBtqBw0Em7d28Clr2HE7epER9Kd1HFANvHKbk7pStrPbKPJv6RQchJwkr9FVFWlUX+
-         win/zFORjiQ5ujugNAdmZMP0H15vXjLjrBGrW/w6KcapflDra/KoIMiKaI3Jjx02G2vB
-         /LiCugvUwh2//YQphHlWhh89cR3jaY6BZ7uln3kaFG27Htcg8BVUS4x82mYTG9kVA8Cn
-         Kzd2L5c8NDoK5rrxTeKYlz9xG0tuD2xvjdqZrBXOpsQQzxCYa1qz2AoTjZzKpRvCd2n1
-         B376DmakjeuKX9RPB414AV3RnDBp5hVV0Cy9+QeAw+deO+ZpylBpW3EdeStV6TiSztZJ
-         QlDA==
+        id S1728033AbgGNVIT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 17:08:19 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:39237 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726750AbgGNVIT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 17:08:19 -0400
+Received: by mail-il1-f193.google.com with SMTP id k6so57500ili.6;
+        Tue, 14 Jul 2020 14:08:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=6fRLYpXTjUG7Lueiak9yUWNoWwRQrJnBa6oSKFtWg8E=;
-        b=LSIfMurDju3NZV6h+MXfjX8VAcPYuYCU/Jx7zsk0PUL614fcnrlqayGLA2aawHaCWu
-         86O7t8orXSQrxgj8CZrQF8LwEQzC8MQr4TCM7cgjQRSoLRw+ZVVHfbRNDZ5v7lqB7blx
-         1xoMsItW4Iu5ow0w7SPaQDPCeT9lvFzm+4gpARKd3PY+kaKysv11FjOy0dt2uHfwStpl
-         fgBaYBb+omisGE0tBWQfZbEhITDR6oIgt+ftcF2v2LvCUPLsLmvyYS22zMwAbS2vbR4v
-         ieGKvmB8F0PsCEyE/vGxPhTPamBrPW5AVsVMdrz/X2tZhElqagWqVW7MBSATLda6jQuG
-         qtxw==
-X-Gm-Message-State: AOAM5313M5FwWETtEo7IRo7iQ5Rrm09J3aJRPmHoSYLbfZSbZ/+Zn4sv
-        vvOK1GE8LlDklz2sJPDVDoYvn0GZ6ax/qg==
-X-Google-Smtp-Source: ABdhPJzUpRcDwEsXYmLPaS6DkjCLEof0ShwsP8rsPx4113jnMsq2sgj3x5w2ZeBVI/fQ+uxbtv+gHA==
-X-Received: by 2002:a1c:4d11:: with SMTP id o17mr5506692wmh.134.1594760588532;
-        Tue, 14 Jul 2020 14:03:08 -0700 (PDT)
-Received: from dell ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id a84sm6040573wmh.47.2020.07.14.14.03.07
+        bh=47xVzqClcakdpwxsWPSzbhTXJk9iY+clY3tNe/dil2Q=;
+        b=LL4uvTkqgTWkNsTvc97n7Q+onw5+8y23ts5Q/NKy2mSW9RUd/z8uMRIHEJ5pTGE7J6
+         QVYm9rhGZLRbo3+uSzCQPzEfqzF7W1+qMjOoJij1fatqv2ysrrAz97Y2NEpspElaF80U
+         dfcvDeeRbG9BCojenUaO8WcBd4/HIaR9jXzo9o7envLQR4xRb/vR31IQXiFXW7v6Ox9M
+         1BepSVNXBZuxwyqGECfsH++Zcu5KHa92WCeAw8orStL4UDjA30q5dTXsUrddBz+q7Xie
+         g3bIMFNVSkndc1FF28vl/A32ZAIwsBYUtExOJLNMrI52yTVJt7vUKi1kWAaX3qRiVz/i
+         cI+A==
+X-Gm-Message-State: AOAM530447q/v6ZkOIyKdIxIpwWzALD0PCY1d0oSbB06PG0cNJI+Zp7K
+        BCVaxSewU1FLrwcCvwGVHg==
+X-Google-Smtp-Source: ABdhPJxk4CD0RmuAu+456Gzol2Zv7+diPbeNAwAx+o8KXZ40zRoA6BoDZbLLN1AGaDjYYmva06UBPg==
+X-Received: by 2002:a92:cbd1:: with SMTP id s17mr6598323ilq.43.1594760897955;
+        Tue, 14 Jul 2020 14:08:17 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id n7sm84082iob.44.2020.07.14.14.08.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 14:03:08 -0700 (PDT)
-Date:   Tue, 14 Jul 2020 22:03:06 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Dirk Brandewie <dirk.j.brandewie@intel.com>
-Subject: Re: [PATCH 12/13] cpufreq: intel_pstate: Supply struct attribute
- description for get_aperf_mperf_shift()
-Message-ID: <20200714210306.GI1398296@dell>
-References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200714145049.2496163-13-lee.jones@linaro.org>
- <CAJZ5v0jkDWD6Ea2_oEDtFfPDWh5ByphUqEa=3jE2ZbnW0DVEcQ@mail.gmail.com>
+        Tue, 14 Jul 2020 14:08:17 -0700 (PDT)
+Received: (nullmailer pid 2919365 invoked by uid 1000);
+        Tue, 14 Jul 2020 21:08:16 -0000
+Date:   Tue, 14 Jul 2020 15:08:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Iskren Chernev <iskren.chernev@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>
+Subject: Re: [PATCH v3 2/6] dt-bindings: power: supply: Extend max17040
+ compatibility
+Message-ID: <20200714210816.GA2918005@bogus>
+References: <20200624155633.3557401-1-iskren.chernev@gmail.com>
+ <20200624155633.3557401-3-iskren.chernev@gmail.com>
+ <20200713190310.GA546410@bogus>
+ <c4dc5045-48ee-a27b-98a8-22fdb37d6ba9@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jkDWD6Ea2_oEDtFfPDWh5ByphUqEa=3jE2ZbnW0DVEcQ@mail.gmail.com>
+In-Reply-To: <c4dc5045-48ee-a27b-98a8-22fdb37d6ba9@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 14 Jul 2020, Rafael J. Wysocki wrote:
-
-> On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
-> >
-> > Fixes the following W=1 kernel build warning(s):
-> >
-> >  drivers/cpufreq/intel_pstate.c:293: warning: Function parameter or member 'get_aperf_mperf_shift' not described in 'pstate_funcs'
-> >
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Len Brown <lenb@kernel.org>
-> > Cc: Dirk Brandewie <dirk.j.brandewie@intel.com>
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/cpufreq/intel_pstate.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> > index 44c7b4677675d..f92fc69c87269 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -275,6 +275,8 @@ static struct cpudata **all_cpu_data;
-> >   * @get_min:           Callback to get minimum P state
-> >   * @get_turbo:         Callback to get turbo P state
-> >   * @get_scaling:       Callback to get frequency scaling factor
-> > + * @get_aperf_mperf_shift: Callback to get the number of clock cycles after
-> > + *                     aperf, merf is incremented
+On Tue, Jul 14, 2020 at 11:49:44AM +0300, Iskren Chernev wrote:
 > 
-> This added description is inaccurate.  It should be something like
-> "Callback to get the APERF vs MPERF frequency difference".
+> On 7/13/20 10:03 PM, Rob Herring wrote:
+> > On Wed, Jun 24, 2020 at 06:56:29PM +0300, Iskren Chernev wrote:
+> >> Maxim max17040 is a fuel gauge from a larger family utilising the Model
+> >> Gauge technology. Document all different compatible strings that the
+> >> max17040 driver recognizes.
+> >>
+> >> Some devices in the wild report double the capacity. The
+> >> maxim,double-soc (from State-Of-Charge) property fixes that.
+> >>
+> >> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> >> ---
+> >>† .../bindings/power/supply/max17040_battery.txt††† | 15 ++++++++++++++-
+> >>† 1 file changed, 14 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> >> index 4e0186b8380fa..554bce82a08e6 100644
+> >> --- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> >> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+> >> @@ -2,7 +2,9 @@ max17040_battery
+> >>† ~~~~~~~~~~~~~~~~
+> >>
+> >>† Required properties :
+> >> - - compatible : "maxim,max17040" or "maxim,max77836-battery"
+> >> + - compatible : "maxim,max17040", "maxim,max17041", "maxim,max17043",
+> >> + †† ††† †"maxim,max17044", "maxim,max17048", "maxim,max17049",
+> >> +†† ††† †"maxim,max17058", "maxim,max17059" or "maxim,max77836-battery"
+> >>†† - reg: i2c slave address
+> >>
+> >>† Optional properties :
+> >> @@ -11,6 +13,10 @@ Optional properties :
+> >> ††† ††† ††† ††† †generated. Can be configured from 1 up to 32
+> >> ††† ††† ††† ††† †(%). If skipped the power up default value of
+> >> ††† ††† ††† ††† †4 (%) will be used.
+> >> +- maxim,double-soc : †† ††† †Certain devices return double the capacity.
+> >> +†† ††† ††† ††† †Specify this boolean property to divide the
+> >> +†† ††† ††† ††† †reported value in 2 and thus normalize it.
+> >> +†† ††† ††† ††† †SOC == State of Charge == Capacity.
+> >
+> > This can't be implied by the compatible string?
+> >
+> 
+> >From what I can tell - no. Here are multiple examples of downstream code:
 
-Does that mean the description of @aperf_mperf_shift above is also
-incorrect?
+Okay,
 
-> >   * @get_val:           Callback to convert P state to actual MSR write value
-> >   * @get_vid:           Callback to get VID data for Atom platforms
-> >   *
-> > --
-
--- 
-Lee Jones [ÊùéÁêºÊñØ]
-Senior Technical Lead - Developer Services
-Linaro.org ‚îÇ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Reviewed-by: Rob Herring <robh@kernel.org>
