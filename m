@@ -2,200 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2A622002B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 23:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E11E2200FD
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 01:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgGNVjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 17:39:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S1726450AbgGNXUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 19:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726918AbgGNVjb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 17:39:31 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5E7C061755
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 14:39:31 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id p7so8230624qvl.4
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 14:39:31 -0700 (PDT)
+        with ESMTP id S1726187AbgGNXUb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 19:20:31 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A73FC061794
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 16:20:31 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id f2so456955wrp.7
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 16:20:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ivtV/tA+b1A/Jafm7GfFZzd+iRi0WOOxKuOfikxY7+k=;
-        b=WjEYpxVM3mq/vbkRqdXSLdC7YbDXYAN/KzVub+tuD6Pj/BjXgN6ubrURsurRWz5Zju
-         XVL/1DkXIqEXvbjBtcHthBS/cpgE68ii8m0B8NWdlp+0ZsEERD+qlrbrswcvQL9nhoIo
-         pCyLIufdlyvYT5fREkPjqmbjxcHYRExuBahHXDsu+u5fsocUIz2jZtMM7zgDTCDJwsfA
-         /1fopVeOCIW7EaL0irp4bqfk5vXgkSZWjqjB2wZB/J7Xl0goI+lxCGzOO6THyQk5vTAL
-         aZDdX27Ci77hxUKb2q5WbtCT6O3L+8RDEwzsI97kA0s9VZqAsrwcs845rOZpQMrZDIzv
-         tYXA==
+        bh=/KMagfkLbbir5XD2E7V8iMKOu/nE7qe0ZSxVTJVsu5Y=;
+        b=I78DT92rk2oGUJNey+cMiJ+dT1q2neBqqRdkKk5hQk+kaMkXt5Z1hTIWtXtbl4f7TQ
+         +64sPRnnKCWYuoKMDmbwoLXqYPWi7TGwNfnvKe3IHbtwhAKKJh+iwZT2L810KyMya/0z
+         Yx6hgnbaUUDMqeBJM3KSFjEcHLQvA2q8adZbLlPJO7Cxljyddd53TCFO2C7eDHSEyd/K
+         ++teAkTGOI2b1PKFHB22OwLkFNjzWerwFPA1tZZa+4xErRTS0g5912aXv0xpH2bdtVcr
+         nicBCEGRDD7LNFyYq4YuSv4JMYTiDvG+4ll3/KQkUG02RSHHDW1eqhmanwJXqLyAz1QS
+         ZKGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ivtV/tA+b1A/Jafm7GfFZzd+iRi0WOOxKuOfikxY7+k=;
-        b=V3i92sehjJbuKJf1eskTLPsfH0CRyb54u6s4SidHxfZmEsSGsav7p3jpZ3CZ+eFqKC
-         JGZhOK4jo9hKWGKvc/xsPr9n/BhggS6L64g5Lrn+s8ylAxtirwmPGE+E6qT+evX/nrjF
-         Jwu5W5EV6Ej3t2002LMHXVdTeiI5udVGYiIVl58sEQ0iIW23rzZ+mrGpDT+w6kGNNmEV
-         HlE2ygdlPOoE7c3LEvWo9w4OavgY4J96s0sFoIC1mzXpodch8/jSrZo/+zMo+padb5Sb
-         ZhqDH4CqZm6X6X0xf61eqvjWlzzU0P4YqAUPwGLEXwIDCRaJQxsAaV5Tut2QjOyX8cbl
-         l+YQ==
-X-Gm-Message-State: AOAM5303XND2bXu0MQhPM9QP9A/QjMuLuXpggfuxnId8NFRqsjFa56Wl
-        Mz8T4zmZ83SVXAT9acc1KLUyOg==
-X-Google-Smtp-Source: ABdhPJwe07rWmBLjDl+TNx93m7uxFpH0gw52e9HYRNc/1T0+JhOUVFNF4wo6TGY89wzmBv3Wnssccw==
-X-Received: by 2002:ad4:42a7:: with SMTP id e7mr6694798qvr.212.1594762770573;
-        Tue, 14 Jul 2020 14:39:30 -0700 (PDT)
-Received: from [192.168.1.92] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id r185sm740qkb.39.2020.07.14.14.39.29
+        bh=/KMagfkLbbir5XD2E7V8iMKOu/nE7qe0ZSxVTJVsu5Y=;
+        b=m4xiEEBpVNLPX/w4qlZ53pdFY+JFTCErnn/39ehqCB+BhymBaZE7cbbz/SJctKb6n/
+         J4k43iho0p88WJjBCPfBA9td5R+q4fQ2xIBv8+Cez/93Z++EsCsVb78v5WjyMbmdWCjz
+         TkNHvzWLEFuqLICZ6cxusBTjhrG4thx9+ZgJl3DT+XIJ4mrAJBnr+BB5mzuOh57Pqz2V
+         JDdYemTuvx31NHMh6XwDwXgxb5/7s1N2WwTRXDza9qPGbxZfUlJ7BUY8t6cLsu1X8cCc
+         15NWmN5JC7p59ZJQ7mh0MfBLZo1ZEInfqKeI8XN2O4VsvJ33XgCjRFsPtzERZz6yq8vH
+         bWuw==
+X-Gm-Message-State: AOAM531tW2ak5nSTps6h9VZatL5MtNVE2ewhQBD35FuKXaeFaf0ziyjP
+        KhWcZ0iejmm34UyjH+QkG6txsw==
+X-Google-Smtp-Source: ABdhPJxg5ZRUMNL70rPOM9WunXXtcwFJTQMTcUcvKt8QOZqVA17b3C0Soo2dTi99b+nuQY2xrpeCTQ==
+X-Received: by 2002:adf:f4d1:: with SMTP id h17mr8189076wrp.227.1594768829794;
+        Tue, 14 Jul 2020 16:20:29 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9? ([2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9])
+        by smtp.googlemail.com with ESMTPSA id w128sm587809wmb.19.2020.07.14.16.20.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2020 14:39:30 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/4] thermal: Introduce support for monitoring falling
- temperature
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200710135154.181454-1-thara.gopinath@linaro.org>
- <7437ee89-e76d-0c82-9860-5c6076ad8a30@linaro.org>
- <b25d54d35cec777f0dcc5b2bcacce27321d9bd45.camel@intel.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <5861acec-c49a-47cc-d7c6-ccef11dc1d58@linaro.org>
-Date:   Tue, 14 Jul 2020 17:39:29 -0400
+        Tue, 14 Jul 2020 16:20:29 -0700 (PDT)
+Subject: Re: [PATCH v4 4/4] thermal: core: Add notifications call in the
+ framework
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>, rui.zhang@intel.com
+Cc:     srinivas.pandruvada@linux.intel.com, rkumbako@codeaurora.org,
+        amit.kucheria@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Arnd Bergmann <arnd.bergmann@linaro.org>
+References: <20200706105538.2159-1-daniel.lezcano@linaro.org>
+ <20200706105538.2159-4-daniel.lezcano@linaro.org>
+ <CGME20200706131708eucas1p1487955a7632584c17df724399f48825a@eucas1p1.samsung.com>
+ <c7ed6c63-cbb5-07dc-c292-2c473af8c4fb@samsung.com>
+ <23c5830d-0a7c-9e87-e859-821d2dccb200@linaro.org>
+ <8a34e9c4-6457-cfd2-3d05-05f80a630a0d@samsung.com>
+ <41466d5a-24fb-b861-93ae-3ed190af7174@samsung.com>
+ <75683b75-6e1b-6e4e-2354-477c487a5f5f@linaro.org>
+Message-ID: <4cfb15f6-2801-3386-c7cf-6296a54571a1@linaro.org>
+Date:   Wed, 15 Jul 2020 01:20:28 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <b25d54d35cec777f0dcc5b2bcacce27321d9bd45.camel@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <75683b75-6e1b-6e4e-2354-477c487a5f5f@linaro.org>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/14/20 9:49 AM, Zhang Rui wrote:
-> On Mon, 2020-07-13 at 17:03 +0200, Daniel Lezcano wrote:
->> On 10/07/2020 15:51, Thara Gopinath wrote:
->>> Thermal framework today supports monitoring for rising temperatures
->>> and
->>> subsequently initiating cooling action in case of a thermal trip
->>> point
->>> being crossed. There are scenarios where a SoC need some warming
->>> action to
->>> be activated if the temperature falls below a cetain permissible
->>> limit.
->>> Since warming action can be considered mirror opposite of cooling
->>> action,
->>> most of the thermal framework can be re-used to achieve this.
+On 13/07/2020 22:32, Daniel Lezcano wrote:
+> On 13/07/2020 11:31, Marek Szyprowski wrote:
+>> Hi
+>>
+>> On 07.07.2020 11:15, Marek Szyprowski wrote:
+>>> On 06.07.2020 15:46, Daniel Lezcano wrote:
+>>>> On 06/07/2020 15:17, Marek Szyprowski wrote:
+>>>>> On 06.07.2020 12:55, Daniel Lezcano wrote:
+>>>>>> The generic netlink protocol is implemented but the different
+>>>>>> notification functions are not yet connected to the core code.
+>>>>>>
+>>>>>> These changes add the notification calls in the different
+>>>>>> corresponding places.
+>>>>>>
+>>>>>> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+>>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>>> This patch landed in today's linux-next 20200706 as commit 5df786e46560
+>>>>> ("thermal: core: Add notifications call in the framework"). Sadly it
+>>>>> breaks booting various Samsung Exynos based boards. Here is an example
+>>>>> log from Odroid U3 board:
+>>>>>
+>>>>> Unable to handle kernel NULL pointer dereference at virtual address 
+>>>>> 00000010
+>>>>> pgd = (ptrval)
+>>>>> [00000010] *pgd=00000000
+>>>>> Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+>>>>> Modules linked in:
+>>>>> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-00015-g5df786e46560
+>>>>> #1146
+>>>>> Hardware name: Samsung Exynos (Flattened Device Tree)
+>>>>> PC is at kmem_cache_alloc+0x13c/0x418
+>>>>> LR is at kmem_cache_alloc+0x48/0x418
+>>>>> pc : [<c02b5cac>]    lr : [<c02b5bb8>]    psr: 20000053
+>>>>> ...
+>>>>> Flags: nzCv  IRQs on  FIQs off  Mode SVC_32  ISA ARM  Segment none
+>>>>> Control: 10c5387d  Table: 4000404a  DAC: 00000051
+>>>>> Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+>>>>> Stack: (0xee8f1cf8 to 0xee8f2000)
+>>>>> ...
+>>>>> [<c02b5cac>] (kmem_cache_alloc) from [<c08cd170>] 
+>>>>> (__alloc_skb+0x5c/0x170)
+>>>>> [<c08cd170>] (__alloc_skb) from [<c07ec19c>]
+>>>>> (thermal_genl_send_event+0x24/0x174)
+>>>>> [<c07ec19c>] (thermal_genl_send_event) from [<c07ec648>]
+>>>>> (thermal_notify_tz_create+0x58/0x74)
+>>>>> [<c07ec648>] (thermal_notify_tz_create) from [<c07e9058>]
+>>>>> (thermal_zone_device_register+0x358/0x650)
+>>>>> [<c07e9058>] (thermal_zone_device_register) from [<c1028d34>]
+>>>>> (of_parse_thermal_zones+0x304/0x7a4)
+>>>>> [<c1028d34>] (of_parse_thermal_zones) from [<c1028964>]
+>>>>> (thermal_init+0xdc/0x154)
+>>>>> [<c1028964>] (thermal_init) from [<c0102378>] 
+>>>>> (do_one_initcall+0x8c/0x424)
+>>>>> [<c0102378>] (do_one_initcall) from [<c1001158>]
+>>>>> (kernel_init_freeable+0x190/0x204)
+>>>>> [<c1001158>] (kernel_init_freeable) from [<c0ab85f4>]
+>>>>> (kernel_init+0x8/0x118)
+>>>>> [<c0ab85f4>] (kernel_init) from [<c0100114>] (ret_from_fork+0x14/0x20)
+>>>>>
+>>>>> Reverting it on top of linux-next fixes the boot issue. I will
+>>>>> investigate it further soon.
+>>>> Thanks for reporting this.
+>>>>
+>>>> Can you send the addr2line result and code it points to ?
 >>>
->>> This patch series is yet another attempt to add support for
->>> monitoring
->>> falling temperature in thermal framework. Unlike the first
->>> attempt[1]
->>> (where a new property was added to thermal trip point binding to
->>> indicate
->>> direction of temperature monitoring), this series introduces a new
->>> trip
->>> point type (THERMAL_TRIP_COLD) to indicate a trip point at which
->>> falling
->>> temperature monitoring must be triggered. This patch series uses
->>> Daniel
->>> Lezcano's recently added thermal genetlink interface[2] to notify
->>> userspace
->>> of falling temperature and rising temperature at the cold trip
->>> point. This
->>> will enable a user space engine to trigger the relevant mitigation
->>> for
->>> falling temperature. At present, no support is added to any of the
->>> thermal
->>> governors to monitor and mitigate falling temperature at the cold
->>> trip
->>> point;rather all governors return doing nothing if triggered for a
->>> cold
->>> trip point. As future extension, monitoring of falling temperature
->>> can be
->>> added to the relevant thermal governor.
+>>> addr2line of c02b5cac (kmem_cache_alloc+0x13c/0x418) points to 
+>>> mm/slub.c +2839, but I'm not sure if we can trust it. imho it looks 
+>>> like some trashed memory somewhere, but I don't have time right now to 
+>>> analyze it further now...
 >>
->> I agree we need a cold trip point in order to introduce the
->> functioning
->> temperature range in the thermal framework.
+>> Just one more thing I've noticed. The crash happens only if the kernel 
+>> is compiled with old GCC (tested with arm-linux-gnueabi-gcc (Linaro GCC 
+>> 4.9-2017.01) 4.9.4). If I compile kernel with newed GCC (like 
+>> arm-linux-gnueabi-gcc (Linaro GCC 6.4-2017.11) 6.4.1 20171012), it works 
+>> fine...
 >>
->> Rui, what is your opinion ?
+>> This happens also with Linux next-20200710, which again got this commit.
 > 
-> I agree with the concept of "cold" trip point.
-> In this patch set, the cold trip point is defined with only netlink
-> event support. But there are still quite a lot of things unclear,
-> especially what we should do in thermal framework?
-Hi Rui,
-
-Thanks for the comments.
-
-You are right that cold trip points are dealt with only by netlink 
-events in this patch series. Eventually IMHO, governors should handle 
-them with a logic opposite to what is being currently done for non-cold 
-trip points.
-
-> 
-> For example, to support this, we can
-> either
-> introduce both "cold" trip points and "warming devices", and introduce
-> new logic in thermal framework and governors to handle them,
-> Or
-> introduce "cold" trip point and "warming" device, but only
-> semantically, and treat them just like normal trip points and cooling
-> devices. And strictly define cooling state 0 as the state that
-> generates most heat, and define max cooling state as the state that
-> generates least heat. Then, say, we have a trip point at -10C, the
-> "warming" device is set to cooling state 0 when the temperature is
-> lower than -10C, and in most cases, this thermal zone is always in a
-> "overheating" state (temperature higher than -10C), and the "warming"
-> device for this thermal zone is "throttled" to generate as least heat
-> as possible. And this is pretty much what the current code has always
-> been doing, right?
+> So I finally succeed to reproduce on an ARM64 with a recent compiler,
+> earlycon, and the option CONFIG_INIT_ON_ALLOC_DEFAULT_ON.
 
 
-IMHO, thermal framework should move to a direction where the term 
-"mitigation" is used rather than cooling or warming. In this case 
-"cooling dev" and "warming dev" should will become 
-"temp-mitigating-dev". So going by this, I think what you mention as 
-option 1 is more suitable where new logic is introduced into the 
-framework and governors to handle the trip points marked as "cold".
+Finally, narrowed down the issue.
 
-Also in the current set of requirements, we have a few power domain 
-rails and other resources that are used exclusively in the thermal 
-framework for warming alone as in they are not used ever for cooling 
-down a zone. But then one of the requirements we have discussed is for 
-cpufreq and gpu scaling to be behave as warming devices where the 
-minimum operating point/ voltage of the relevant cpu/gpu is restricted.
-So in this case, Daniel had this suggestion of introducing negative 
-states for presently what is defined as cooling devices. So cooling dev 
-/ temp-mitigation-dev states can range from say -3 to 5 with 0 as the 
-good state where no mitigation is happening. This is an interesting idea 
-though I have not proto-typed it yet.
+ - genetlink initialization is done at subsys initcall.
+ - thermal netlink init is done at core initcall
+ - netlink is done at core initcall
 
-> 
-> I can not say which one is better for now as I don't have the
-> background of this requirement. It's nice that Thara sent this RFC
-> series for discussion, but from upstream point of view, I'd prefer to
-> see a full stack solution, before taking any code.
+By changing the order:
 
-We had done a session at ELC on this requirement. Here is the link to 
-the presentation. Hopefully it gives you some back ground on this.
+ - netlink and genetlink at core initcall
+ - thermal init at postcore initcall
 
-https://elinux.org/images/f/f7/ELC-2020-Thara-Ram-Linux-Kernel-Thermal-Warming.pdf
+That fixes the problem. The genetlink initcall order is from 2005 and
+IMO it makes sense to come right after the netlink initialization.
 
-I have sent across some patches for introducing a generic power domain 
-warming device which is under review by Daniel.
+It is acceptable to have the thermal init at the postcore initcall. It
+is very recently we moved from fs_initcall to core_initcall.
 
-So how do you want to proceed on this? Can you elaborate a bit more on 
-what you mean by a full stack solution.
-
-> 
-> thanks,
-> Rui
-> 
+Thanks to Arnd who give me a direction to look at.
 
 -- 
-Warm Regards
-Thara
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
