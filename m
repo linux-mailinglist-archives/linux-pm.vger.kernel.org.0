@@ -2,166 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D8D21EE04
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 12:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC65F21EE86
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 12:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbgGNKcH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 06:32:07 -0400
-Received: from mga06.intel.com ([134.134.136.31]:35558 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726856AbgGNKcG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jul 2020 06:32:06 -0400
-IronPort-SDR: fdZ6kstBvP0Mvb2ExYNNnJuphRQ0wYz/UZW/qgRXY4fQBO6CfUa7uowj5tlS788jlC5X9BSHRR
- FVNq/kL5y1+Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="210394949"
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="210394949"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 03:32:02 -0700
-IronPort-SDR: 8RpQUGaulyO9URQox/z9cCwzm15353tIvNLYNScGaLLpbfYZHTAohzjuv5vcNnBlYV5gd484lZ
- eGOy8Kwdli1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="316342785"
-Received: from lkp-server02.sh.intel.com (HELO 393d9bdf0d5c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 14 Jul 2020 03:32:01 -0700
-Received: from kbuild by 393d9bdf0d5c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1jvIEC-00004K-NK; Tue, 14 Jul 2020 10:32:00 +0000
-Date:   Tue, 14 Jul 2020 18:31:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 13e16aa03377c16d68021fe5a6bae28c0f100551
-Message-ID: <5f0d897d.9Fja5vLgrTaFOs/6%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726041AbgGNK7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 06:59:47 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:47952 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727043AbgGNK7r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 06:59:47 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06EAw4hA041130;
+        Tue, 14 Jul 2020 10:59:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=FVZzYXiUXmNYZ2rp7CjKtJQ3hhXEWdRzRUoSe6Wbctg=;
+ b=EFM7kEbYM0sjw6aLLBovqJFmAwYcL7/G6ByJwO7JFdfQy5WZmg7kfsnrsijFmq7zqq2k
+ q0sRDC4fekv7O8j9eBzhbSSJS6FvYJJd+j/HwawZADvVoVFY/8RONF+7QboHdmcJmqqR
+ bi8Xto/rHfZDCjOHhDg8u/4uzsTVyWxrIu8G2xsPuW0K0doUHH33KmEu0dlu+zXz51GZ
+ mFinJhbNHCbHWBgGltuZpGAuv2R0vxKkyUsVg/nA4/s1Sc1uMdPuUqqTr6UmeA5Ec7bU
+ Q+LvLFNGmnAfgr+H3FkyrrlerJBGNPmBtXvNPIrazHoSlsPfwp5CLYM5E+WCedKcS9iT Dg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 3274ur4qg3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Jul 2020 10:59:37 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06EAxbLM088296;
+        Tue, 14 Jul 2020 10:59:37 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 327q6s29p1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jul 2020 10:59:37 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06EAxPic017937;
+        Tue, 14 Jul 2020 10:59:25 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 14 Jul 2020 03:59:25 -0700
+Date:   Tue, 14 Jul 2020 13:59:18 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH -next] PM / devfreq: Fix missing unlock on error in
+ devfreq_add_device()
+Message-ID: <20200714105918.GB2571@kadam>
+References: <20200714063025.118829-1-weiyongjun1@huawei.com>
+ <20200714093758.GW2549@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200714093758.GW2549@kadam>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=2
+ phishscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007140084
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9681 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ suspectscore=2 phishscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ mlxscore=0 priorityscore=1501 adultscore=0 bulkscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007140084
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 13e16aa03377c16d68021fe5a6bae28c0f100551  Merge branch 'pm-cpufreq-fixes' into bleeding-edge
+On Tue, Jul 14, 2020 at 12:37:58PM +0300, Dan Carpenter wrote:
+> On Tue, Jul 14, 2020 at 06:30:25AM +0000, Wei Yongjun wrote:
+> > Add the missing unlock before return from function devfreq_add_device()
+> > in the error handling case.
+> > 
+> > Fixes: d7c46505a7ad ("PM / devfreq: Add support delayed timer for polling mode")
+> > Reported-by: Hulk Robot <hulkci@huawei.com>
+> > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> > ---
+> >  drivers/devfreq/devfreq.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> > index 5320c3b37f35..2b54a59bb281 100644
+> > --- a/drivers/devfreq/devfreq.c
+> > +++ b/drivers/devfreq/devfreq.c
+> > @@ -788,6 +788,7 @@ struct devfreq *devfreq_add_device(struct device *dev,
+> >  
+> >  	if (devfreq->profile->timer < 0
+> >  		|| devfreq->profile->timer >= DEVFREQ_TIMER_NUM) {
+> > +		mutex_unlock(&devfreq->lock);
+> >  		goto err_out;
+> 
+> This should be "goto err_dev;" and the unlock is not required because
+> we free "devfreq".
 
-elapsed time: 1079m
+Also the error code needs to be set on this error path.
 
-configs tested: 103
-configs skipped: 5
+regards,
+dan carpenter
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm64                            allyesconfig
-arm64                               defconfig
-arm64                            allmodconfig
-arm64                             allnoconfig
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                               allnoconfig
-m68k                       m5249evb_defconfig
-m68k                         amcore_defconfig
-h8300                               defconfig
-arm                    vt8500_v6_v7_defconfig
-powerpc                     mpc5200_defconfig
-arm                           sama5_defconfig
-mips                              allnoconfig
-sh                        apsh4ad0a_defconfig
-arm                     am200epdkit_defconfig
-xtensa                       common_defconfig
-i386                              allnoconfig
-parisc                           allmodconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                              allnoconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                              allnoconfig
-m68k                           sun3_defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nios2                            allyesconfig
-openrisc                            defconfig
-c6x                              allyesconfig
-c6x                               allnoconfig
-openrisc                         allyesconfig
-nds32                               defconfig
-nds32                             allnoconfig
-csky                             allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-h8300                            allmodconfig
-xtensa                              defconfig
-arc                                 defconfig
-arc                              allyesconfig
-sh                               allmodconfig
-sh                                allnoconfig
-microblaze                        allnoconfig
-mips                             allyesconfig
-mips                             allmodconfig
-parisc                            allnoconfig
-parisc                              defconfig
-parisc                           allyesconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          rhel-kconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20200713
-i386                 randconfig-a005-20200713
-i386                 randconfig-a006-20200713
-i386                 randconfig-a002-20200713
-i386                 randconfig-a003-20200713
-i386                 randconfig-a004-20200713
-i386                 randconfig-a016-20200713
-i386                 randconfig-a015-20200713
-i386                 randconfig-a011-20200713
-i386                 randconfig-a012-20200713
-i386                 randconfig-a013-20200713
-i386                 randconfig-a014-20200713
-x86_64               randconfig-a005-20200713
-x86_64               randconfig-a002-20200713
-x86_64               randconfig-a006-20200713
-x86_64               randconfig-a001-20200713
-x86_64               randconfig-a003-20200713
-x86_64               randconfig-a004-20200713
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-s390                             allyesconfig
-s390                              allnoconfig
-s390                             allmodconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-sparc64                             defconfig
-sparc64                           allnoconfig
-sparc64                          allyesconfig
-sparc64                          allmodconfig
-x86_64                                   rhel
-x86_64                         rhel-7.2-clear
-x86_64                                    lkp
-x86_64                              fedora-25
-x86_64                               rhel-7.6
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
