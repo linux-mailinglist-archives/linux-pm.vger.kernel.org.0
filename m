@@ -2,67 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB4521F3A4
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 16:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D754821F402
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 16:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725803AbgGNOO3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 10:14:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7310 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726974AbgGNOO3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jul 2020 10:14:29 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 881A14886A9F576467E5;
-        Tue, 14 Jul 2020 22:14:28 +0800 (CST)
-Received: from kernelci-master.huawei.com (10.175.101.6) by
- DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
- 14.3.487.0; Tue, 14 Jul 2020 22:14:21 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Hulk Robot <hulkci@huawei.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>
-Subject: [PATCH -next] cpuidle/pseries: Make symbol 'pseries_idle_driver' static
-Date:   Tue, 14 Jul 2020 22:24:24 +0800
-Message-ID: <20200714142424.66648-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726062AbgGNO0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 10:26:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725890AbgGNO0e (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jul 2020 10:26:34 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A2C822516;
+        Tue, 14 Jul 2020 14:26:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594736793;
+        bh=S3wLIXMLvW4hWE0k9kaLD27dt6WY9VJU7X1n3XEPPEI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GZKQS7l+v7huDhLmjre/t0kJSh4fLGZXnxIGOz8xnJYJsjKtyUc3hg5uM5w4/uSTP
+         eyUoZi4km+sze9KRrIiGzk3/vjRqI9Ua4hd4CkgZLG2dq/ro+daGh4CPuw3k+NpK/O
+         P8JmTQXzjye8F4gLH+1Dg+XqZUrpxVWAD+3q5kqo=
+Received: by mail-ot1-f49.google.com with SMTP id 18so13148114otv.6;
+        Tue, 14 Jul 2020 07:26:33 -0700 (PDT)
+X-Gm-Message-State: AOAM531LpGbzxpDkZ3ZfpPwjK2EGXeFKmxQ2ATumZA/cyKRyAyvjiSL3
+        okCXaYxYZ1pmNeEL3oprheCk/8QhDxfhktJG0g==
+X-Google-Smtp-Source: ABdhPJyuvjA8JGPnMGdzGxe+pkPemV2r5WuflfIGWMOBeMYBaIts3muiUvAU/L9AW1tNJurH/prAJoPR1eJXtPrSD+o=
+X-Received: by 2002:a9d:2646:: with SMTP id a64mr4051084otb.107.1594736792668;
+ Tue, 14 Jul 2020 07:26:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.175.101.6]
-X-CFilter-Loop: Reflected
+References: <20200709215136.28044-1-ansuelsmth@gmail.com> <20200709215136.28044-4-ansuelsmth@gmail.com>
+ <20200710162657.GB2743639@bogus> <0ef601d656f5$b9f8e0c0$2deaa240$@gmail.com>
+In-Reply-To: <0ef601d656f5$b9f8e0c0$2deaa240$@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 14 Jul 2020 08:26:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ8C_YJFiTSKCGqJoySKFJThZXQuQg9eLQE33yL_6v3pA@mail.gmail.com>
+Message-ID: <CAL_JsqJ8C_YJFiTSKCGqJoySKFJThZXQuQg9eLQE33yL_6v3pA@mail.gmail.com>
+Subject: Re: [PATCH 3/6] dt-bindings: thermal: tsens: document ipq8064 bindings
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sparse tool complains as follows:
+On Fri, Jul 10, 2020 at 2:07 PM <ansuelsmth@gmail.com> wrote:
+>
+>
+>
+> > -----Messaggio originale-----
+> > Da: Rob Herring <robh@kernel.org>
+> > Inviato: venerd=C3=AC 10 luglio 2020 18:27
+> > A: Ansuel Smith <ansuelsmth@gmail.com>
+> > Cc: Amit Kucheria <amit.kucheria@linaro.org>; Andy Gross
+> > <agross@kernel.org>; Bjorn Andersson <bjorn.andersson@linaro.org>;
+> > Zhang Rui <rui.zhang@intel.com>; Daniel Lezcano
+> > <daniel.lezcano@linaro.org>; linux-pm@vger.kernel.org; linux-arm-
+> > msm@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > kernel@vger.kernel.org
+> > Oggetto: Re: [PATCH 3/6] dt-bindings: thermal: tsens: document ipq8064
+> > bindings
+> >
+> > On Thu, Jul 09, 2020 at 11:51:33PM +0200, Ansuel Smith wrote:
+> > > Document the use of regmap phandle for ipq8064 SoCs
+> > >
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >  .../bindings/thermal/qcom-tsens.yaml          | 51 ++++++++++++++++-=
+--
+> > >  1 file changed, 44 insertions(+), 7 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yam=
+l
+> > b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > > index d7be931b42d2..5ceb5d720e16 100644
+> > > --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > > +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> > > @@ -24,6 +24,7 @@ properties:
+> > >            - enum:
+> > >                - qcom,msm8916-tsens
+> > >                - qcom,msm8974-tsens
+> > > +              - qcom,ipq8064-tsens
+> > >            - const: qcom,tsens-v0_1
+> > >
+> > >        - description: v1 of TSENS
+> > > @@ -47,6 +48,11 @@ properties:
+> > >        - description: TM registers
+> > >        - description: SROT registers
+> > >
+> > > +  regmap:
+> > > +    description:
+> > > +      Phandle to the gcc. On ipq8064 SoCs gcc and tsense share the s=
+ame
+> > regs.
+> > > +    $ref: /schemas/types.yaml#/definitions/phandle
+> >
+> > Can't you make this a child of the gcc and drop this property?
+> >
+>
+> Make the thermal a child of the gcc would be a little confusing. Anyway
+> making this
+> a child of gcc cause the not probing of the thermal driver as it's ignore=
+d
+> any child of
+> gcc. I pushed v2 with the fixed problem.
 
-drivers/cpuidle/cpuidle-pseries.c:25:23: warning:
- symbol 'pseries_idle_driver' was not declared. Should it be static?
- 
-'pseries_idle_driver' is not used outside of this file, so marks
-it static.
+Structure the DT as the h/w is structured, not what's convenient for the OS=
+.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
----
- drivers/cpuidle/cpuidle-pseries.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Either the GCC driver has to call of_platform_populate on the child
+nodes or you can perhaps use 'simple-mfd'.
 
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index 6513ef2af66a..3e058ad2bb51 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -22,7 +22,7 @@
- #include <asm/idle.h>
- #include <asm/plpar_wrappers.h>
- 
--struct cpuidle_driver pseries_idle_driver = {
-+static struct cpuidle_driver pseries_idle_driver = {
- 	.name             = "pseries_idle",
- 	.owner            = THIS_MODULE,
- };
-
+Rob
