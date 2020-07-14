@@ -2,97 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0352B21E3D7
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 01:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90B2E21E684
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 05:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726775AbgGMXqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 13 Jul 2020 19:46:09 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:45453 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726765AbgGMXqH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 19:46:07 -0400
-Received: by mail-io1-f67.google.com with SMTP id e64so15422853iof.12;
-        Mon, 13 Jul 2020 16:46:07 -0700 (PDT)
+        id S1726568AbgGNDsF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 13 Jul 2020 23:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbgGNDsF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 13 Jul 2020 23:48:05 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B329C061755
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 20:48:05 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id o1so6458418plk.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 20:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=EsBq089GZDoIsvZsbiScToJsxprKvs/96JCOecXXXpQ=;
+        b=uJcRAIpO/eks3FbmlqRMbW3QTtdRhagCtBBH/OPRFzO+cItithAHhWdexOdJ0Qd4PJ
+         /2Cb47Eiz6ndS7Pq12thMyP16KBwyvGmNOR0aXL4HkMoYjwI5Gdvxclz02dpsz5+be3e
+         RDYvNtm5JmHU3p6Jq2ji4NCzRuWwhF9g2Wjr43rZoQNFT73EI8NKtaRRODCtcMXRaQ4U
+         W0WiiM7dXislDwe3VkYVgNYylgwa/KBKaQJqZAjlH23E5tQhzRNLXsvV+gyxSNclygYD
+         OqX55Quq6wpD0uq2nuLV01i4AyXuFwkU0wrOfSBIQ3IkeeojSYD8GlbGaLtpFT5Tfb8/
+         3+4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T6nZ0cOZJ7RCB/ypig9TkUxlGlTFi3/Lq9vMup5t3BA=;
-        b=pFhD2aYYIkU4iaBaOATeWmjCgdY7eknkoonQy/MXwe38VIic2iqELxqHj1BxeIFDy/
-         NTNMz1X/D4bLmxfMNuEY0tpvluUSDP8DdPSQyljAdeiaZDSglSDNKW9FkxImMvJoAOus
-         c+fiVw118ZihcURX3es/IFJWbE9ygT5NCdTCsZuf1PkDUkP6F1dgGXQzkAiH9qX8On+3
-         1/N0yKTC4j4RGNPeWN7dIJi1wT+VxP9tDgYz2EvcN0QOIPfi2pDOV4+r9WZq/pTplWpk
-         WCpS9xzxCMfeKCX2WOLszd4+pqscjZHwZ6ysEwHgqFQ1OkXNLbvP/nMRlwbLMhWd5Aen
-         xZ7g==
-X-Gm-Message-State: AOAM531uupBHjxL8FRv0yKDL3Zc6hhjf47ALIMqE6T2EaTVqcHTtjb2h
-        jAE90BGFLD96kGKXWJb7pQ==
-X-Google-Smtp-Source: ABdhPJxh2RFsFJKfNQScdvILUrL+KW2m+tSrDtRyy1/vJm0JpYuo8Qyed6+ngOPyOJBA3WccAVXQzA==
-X-Received: by 2002:a02:c903:: with SMTP id t3mr2902964jao.30.1594683966700;
-        Mon, 13 Jul 2020 16:46:06 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id p9sm9379929ilc.78.2020.07.13.16.46.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 16:46:06 -0700 (PDT)
-Received: (nullmailer pid 943326 invoked by uid 1000);
-        Mon, 13 Jul 2020 23:46:04 -0000
-Date:   Mon, 13 Jul 2020 17:46:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Vinay Simha BN <simhavcs@gmail.com>
-Subject: Re: [PATCH v2 2/9] dt-bindings: battery: Add temperature properties
-Message-ID: <20200713234604.GA935472@bogus>
-References: <20200607144113.10202-1-digetx@gmail.com>
- <20200607144113.10202-3-digetx@gmail.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=EsBq089GZDoIsvZsbiScToJsxprKvs/96JCOecXXXpQ=;
+        b=M6tKKf/yZXbreWRPS/bT2oSGQO4HXUZrWQ6Kt3iA8r5y1VUscmbXuK1ovlsM6pjZbo
+         GnTSR/lPkGMCgGlfVMlO1RZttKQMwSJ6BuiNoDs2Fp16oJ5THOTfUu+ommqfCTX4R3OY
+         LFn4u4gO8S1WHcUNwI573coFE/majv6uJWb1Y/zcjjTleuGpVYq422WJslV84E4STjvy
+         53xAVUmE4Vcqg/DQBSyABj8hZFEk9DUempK59f/O/0sBA7xxiRsGp8+OOs27gQ1HA1w1
+         +USWoouqLSwcmJCwW4DzjbwUdiBkW11w2FVk0lbvLvCo/ePX3XoWs/51eGT5xA198Rkw
+         x9sQ==
+X-Gm-Message-State: AOAM530lQfbxCMtLQELEyiyxlImDxNyS2dD7IKTx3QMShdkHBMNAMSQv
+        wR8EJ15tOhI+7SfLbH0QSQLiBnO6evc=
+X-Google-Smtp-Source: ABdhPJzRBT5ZmUusJ1D4/9YXERxeJndlFfagLYukjSBjqjbkA64+3k6R2Ucrsr5Y2e6mTn3WY83raA==
+X-Received: by 2002:a17:90b:120a:: with SMTP id gl10mr2436607pjb.44.1594698484589;
+        Mon, 13 Jul 2020 20:48:04 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id i184sm15489021pfc.73.2020.07.13.20.48.03
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 13 Jul 2020 20:48:03 -0700 (PDT)
+Date:   Tue, 14 Jul 2020 09:18:02 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: ti-opp-supply: Replace HTTP links with HTTPS ones
+Message-ID: <20200714034802.jq2y5km4qentpehe@vireshk-i7>
+References: <20200713180516.36746-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200607144113.10202-3-digetx@gmail.com>
+In-Reply-To: <20200713180516.36746-1-grandmaster@al2klimov.de>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jun 07, 2020 at 05:41:06PM +0300, Dmitry Osipenko wrote:
-> Document generic battery temperature properties.
+On 13-07-20, 20:05, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+> 
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 > ---
->  .../devicetree/bindings/power/supply/battery.txt       | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+>  (Actually letting a shell for loop submit all this stuff for me.)
+> 
+>  If there are any URLs to be removed completely or at least not just HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
+> 
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+> 
+>  If you apply the patch, please let me know.
+> 
+>  Sorry again to all maintainers who complained about subject lines.
+>  Now I realized that you want an actually perfect prefixes,
+>  not just subsystem ones.
+>  I tried my best...
+>  And yes, *I could* (at least half-)automate it.
+>  Impossible is nothing! :)
+> 
+> 
+>  drivers/opp/ti-opp-supply.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/opp/ti-opp-supply.c b/drivers/opp/ti-opp-supply.c
+> index e3357e91decb..bd4771f388ab 100644
+> --- a/drivers/opp/ti-opp-supply.c
+> +++ b/drivers/opp/ti-opp-supply.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+> - * Copyright (C) 2016-2017 Texas Instruments Incorporated - http://www.ti.com/
+> + * Copyright (C) 2016-2017 Texas Instruments Incorporated - https://www.ti.com/
+>   *	Nishanth Menon <nm@ti.com>
+>   *	Dave Gerlach <d-gerlach@ti.com>
+>   *
 
-This is close to being converted to schema:
+Applied. Thanks.
 
-https://lore.kernel.org/linux-pm/20200707212914.31540-1-r-rivera-matos@ti.com/
- 
-> diff --git a/Documentation/devicetree/bindings/power/supply/battery.txt b/Documentation/devicetree/bindings/power/supply/battery.txt
-> index 5e29595edd74..e0c35eff9d3f 100644
-> --- a/Documentation/devicetree/bindings/power/supply/battery.txt
-> +++ b/Documentation/devicetree/bindings/power/supply/battery.txt
-> @@ -45,6 +45,16 @@ Optional Properties:
->     and corresponding battery internal resistance percent, which is used to look
->     up the resistance percent according to current temperature to get a accurate
->     batterty internal resistance in different temperatures.
-> + - temperature-ambient-min-alert-celsius: Alert when ambient temperature of a
-> +   battery is lower than threshold value.
-> + - temperature-ambient-max-alert-celsius: Alert when ambient temperature of a
-> +   battery is higher than threshold value.
-> + - temperature-min-alert-celsius: Alert when battery temperature is lower
-> +   than threshold value.
-> + - temperature-max-alert-celsius: Alert when battery temperature is higher
-> +   than threshold value.
-> + - temperature-min-celsius: minimum temperature at which battery can operate
-> + - temperature-max-celsius: maximum temperature at which battery can operate
-
-Perhaps 'temperature' is redundant since we have units.
-
-Perhaps do <min max> properties given specifying only min or max is 
-probably not valid?
-
-Rob
+-- 
+viresh
