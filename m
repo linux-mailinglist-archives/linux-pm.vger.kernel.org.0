@@ -2,110 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4920421F71F
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93821F771
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 18:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgGNQU5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 12:20:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:46150 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbgGNQU5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jul 2020 12:20:57 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D781730E;
-        Tue, 14 Jul 2020 09:20:56 -0700 (PDT)
-Received: from [10.57.32.45] (unknown [10.57.32.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B9C53F7BB;
-        Tue, 14 Jul 2020 09:20:55 -0700 (PDT)
-Subject: Re: [PATCH 08/13] cpufreq: acpi-cpufreq: Take 'dummy' principle one
- stage further
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Denis Sadykov <denis.m.sadykov@intel.com>,
-        Andy Grover <andrew.grover@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dominik Brodowski <linux@brodo.de>
-References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200714145049.2496163-9-lee.jones@linaro.org>
- <CAJZ5v0igiz-VmmDC2qsZ3AhqjGhM54LHMLeLdZ7Dr=h5Dm9Rrg@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <8b2f7674-9e33-e09c-cf99-84c59edb9779@arm.com>
-Date:   Tue, 14 Jul 2020 17:20:54 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728704AbgGNQfd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 12:35:33 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:44529 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728509AbgGNQfc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 12:35:32 -0400
+Received: by mail-oo1-f68.google.com with SMTP id o36so3442716ooi.11;
+        Tue, 14 Jul 2020 09:35:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xq4tKGNRH3KriixnxCn9uJFwafu8U4KY8hX/LfJhHus=;
+        b=YiDs65eV485lrt+lW5nub63ID42gtwNLyWQEU1PL09Oyw8qNqgjQB1f26GTBdYNH63
+         KI1ciMuKYb6BVEih/5QOZC3kiuJENxc5yU7c4axemexASwJanxwD28pXLV+Hq+6sK/ij
+         4Ye17M4vUHrKmrvvtWpdWt/Y5+rUewW0qZovF/QBBwXbNYor6FsJus0XAdXrLK0ahrs3
+         cPwPR2uNByIFC6UnJuLRtfswP9fkT5ddhuN/WHBMp58I1Wjhdr052t52GljFmGJe3X/u
+         G+pvQnTM+8NuSZBLCUOz2FqaUJw2UV/v6Pg1SxIeJa2tj7PBMjRKHw3ASXCBsO55enHx
+         jeqw==
+X-Gm-Message-State: AOAM5304/4XHSClLe3ptCo/WL5szvn/MqOrQ8O8g9Htuv7AmyvzRkwXk
+        nar/+YIkFtqVQrMs2Bdlfe30UBdFRoYK6hWOrYDdYw==
+X-Google-Smtp-Source: ABdhPJx9jwksQchlp8EzWcp4jDpRaQL5RgS6YS+xhSCdQj4OcOM3zMN5IV/4G0I2X0imPOE8KPCwOaKZyOkoPAp3Hf8=
+X-Received: by 2002:a4a:3e48:: with SMTP id t69mr5360935oot.38.1594744531359;
+ Tue, 14 Jul 2020 09:35:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0igiz-VmmDC2qsZ3AhqjGhM54LHMLeLdZ7Dr=h5Dm9Rrg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+References: <20200714145049.2496163-1-lee.jones@linaro.org> <20200714145049.2496163-13-lee.jones@linaro.org>
+In-Reply-To: <20200714145049.2496163-13-lee.jones@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jul 2020 18:35:19 +0200
+Message-ID: <CAJZ5v0jkDWD6Ea2_oEDtFfPDWh5ByphUqEa=3jE2ZbnW0DVEcQ@mail.gmail.com>
+Subject: Re: [PATCH 12/13] cpufreq: intel_pstate: Supply struct attribute
+ description for get_aperf_mperf_shift()
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Dirk Brandewie <dirk.j.brandewie@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-07-14 17:03, Rafael J. Wysocki wrote:
-> On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
->>
->> If we fail to use a variable, even a 'dummy' one, then the compiler
->> complains that it is set but not used.  We know this is fine, so we
->> set it to its own value here.
-> 
-> Which is kind of ugly in my personal view.  I hope that the compiler
-> will actually optimize the extra code away ...
-> 
->> Fixes the following W=1 kernel build warning(s):
-> 
-> Well, "Makes the following ... warning(s) go away:" rather ...
+On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
+>
+> Fixes the following W=1 kernel build warning(s):
+>
+>  drivers/cpufreq/intel_pstate.c:293: warning: Function parameter or member 'get_aperf_mperf_shift' not described in 'pstate_funcs'
+>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: Dirk Brandewie <dirk.j.brandewie@intel.com>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 44c7b4677675d..f92fc69c87269 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -275,6 +275,8 @@ static struct cpudata **all_cpu_data;
+>   * @get_min:           Callback to get minimum P state
+>   * @get_turbo:         Callback to get turbo P state
+>   * @get_scaling:       Callback to get frequency scaling factor
+> + * @get_aperf_mperf_shift: Callback to get the number of clock cycles after
+> + *                     aperf, merf is incremented
 
-Isn't that what we have __maybe_unused and __always_unused for?
+This added description is inaccurate.  It should be something like
+"Callback to get the APERF vs MPERF frequency difference".
 
-Robin.
-
->>   drivers/cpufreq/acpi-cpufreq.c: In function ‘cpu_freq_read_intel’:
->>   drivers/cpufreq/acpi-cpufreq.c:247:11: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
->>   drivers/cpufreq/acpi-cpufreq.c: In function ‘cpu_freq_read_amd’:
->>   drivers/cpufreq/acpi-cpufreq.c:265:11: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
->>
->> Cc: Andy Grover <andrew.grover@intel.com>
->> Cc: Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
->> Cc: Dominik Brodowski <linux@brodo.de>
->> Cc: Denis Sadykov <denis.m.sadykov@intel.com>
->> Signed-off-by: Lee Jones <lee.jones@linaro.org>
->> ---
->>   drivers/cpufreq/acpi-cpufreq.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
->> index 429e5a36c08a9..d38a693b48e03 100644
->> --- a/drivers/cpufreq/acpi-cpufreq.c
->> +++ b/drivers/cpufreq/acpi-cpufreq.c
->> @@ -247,6 +247,7 @@ static u32 cpu_freq_read_intel(struct acpi_pct_register *not_used)
->>          u32 val, dummy;
->>
->>          rdmsr(MSR_IA32_PERF_CTL, val, dummy);
->> +       dummy &= dummy; /* Silence set but not used warning */
->>          return val;
->>   }
->>
->> @@ -264,6 +265,7 @@ static u32 cpu_freq_read_amd(struct acpi_pct_register *not_used)
->>          u32 val, dummy;
->>
->>          rdmsr(MSR_AMD_PERF_CTL, val, dummy);
->> +       dummy &= dummy; /* Silence set but not used warning */
->>          return val;
->>   }
->>
->> --
->> 2.25.1
->>
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
-> 
+>   * @get_val:           Callback to convert P state to actual MSR write value
+>   * @get_vid:           Callback to get VID data for Atom platforms
+>   *
+> --
