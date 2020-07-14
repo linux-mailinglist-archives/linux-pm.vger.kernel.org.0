@@ -2,70 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 877D521F90D
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 20:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DE921F9B0
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 20:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729133AbgGNSR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 14:17:28 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:62378 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729260AbgGNSR1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 14:17:27 -0400
-Received: from 89-64-83-139.dynamic.chello.pl (89.64.83.139) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 5dfe8d161d0ab4fd; Tue, 14 Jul 2020 20:17:24 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported
-Date:   Tue, 14 Jul 2020 20:17:24 +0200
-Message-ID: <1776084.Fkt4dJnx8e@kreacher>
+        id S1729170AbgGNSoI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 14:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37988 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbgGNSoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 14:44:08 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED297C061755;
+        Tue, 14 Jul 2020 11:44:07 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: wlozano)
+        with ESMTPSA id 2DC4D2A090D
+From:   Walter Lozano <walter.lozano@collabora.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kernel@collabora.com, Walter Lozano <walter.lozano@collabora.com>
+Subject: [PATCH] cpufreq: imx: Select NVMEM_IMX_OCOTP
+Date:   Tue, 14 Jul 2020 15:43:56 -0300
+Message-Id: <20200714184356.32749-1-walter.lozano@collabora.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+When probing cpufreq for iMX6 the values in the efuse needs to be
+read which requires NVMEM_IMX_OCOTP. If this option is not enabled,
+the probe will be deferred forever and cpufreq won't be available.
 
-Although there are processors supporting hardware-managed P-states
-(HWP) without the energy-performance preference (EPP) feature, they
-are not expected to be run with HWP enabled (the BIOS should disable
-HWP on those systems).  Missing EPP support generally indicates an
-incomplete HWP implementation and so it is better to avoid using
-HWP on those systems in production.
+This patch forces the selection of the required configuration option.
 
-However, intel_pstate currently enables HWP on such systems, which
-is questionable, so prevent it from doing that by making it check
-EPP support before enabling HWP and avoid enabling it if EPP is not
-supported by the processor at hand.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Walter Lozano <walter.lozano@collabora.com>
 ---
- drivers/cpufreq/intel_pstate.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/cpufreq/Kconfig.arm | 1 +
+ 1 file changed, 1 insertion(+)
 
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -2899,7 +2899,12 @@ static int __init intel_pstate_init(void
- 	id = x86_match_cpu(hwp_support_ids);
- 	if (id) {
- 		copy_cpu_funcs(&core_funcs);
--		if (!no_hwp) {
-+		/*
-+		 * Avoid enabling HWP for processors without EPP support,
-+		 * because that means incomplete HWP implementation which is a
-+		 * corner case and supporting it is generally problematic.
-+		 */
-+		if (!no_hwp && boot_cpu_has(X86_FEATURE_HWP_EPP)) {
- 			hwp_active++;
- 			hwp_mode_bdw = id->driver_data;
- 			intel_pstate.attr = hwp_cpufreq_attrs;
-
-
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index c6cbfc8baf72..ce0227c429cf 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -93,6 +93,7 @@ config ARM_IMX6Q_CPUFREQ
+ 	tristate "Freescale i.MX6 cpufreq support"
+ 	depends on ARCH_MXC
+ 	depends on REGULATOR_ANATOP
++	select NVMEM_IMX_OCOTP
+ 	select PM_OPP
+ 	help
+ 	  This adds cpufreq driver support for Freescale i.MX6 series SoCs.
+-- 
+2.20.1
 
