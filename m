@@ -2,332 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAF521EB33
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 10:22:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBC521EBC5
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 10:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725793AbgGNIWJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 04:22:09 -0400
-Received: from mga18.intel.com ([134.134.136.126]:56868 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgGNIWH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jul 2020 04:22:07 -0400
-IronPort-SDR: baDPaL1cK5aUm4w38T6uxN7YCHXQ1qE8tZWW8Kjkd/htne3+suTJZVN2S0Cuey7HKzR7pPJLnW
- 1m67xsqpmzmg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9681"; a="136302618"
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="136302618"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 01:22:06 -0700
-IronPort-SDR: YZVPtJVybkz+dKclf3n1BQgGCXl9k0739OKpCmwofix8PLmUZzIi7k6YOoZLfVmiDpFqEqMG+d
- vy8io6B6nGqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,350,1589266800"; 
-   d="scan'208";a="485287634"
-Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Jul 2020 01:22:03 -0700
-From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-To:     rjw@rjwysocki.net, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     andriy.shevchenko@intel.com, srinivas.pandruvada@linux.intel.com,
-        sumeet.r.pawnikar@intel.com
-Subject: [PATCH v2] powercap: Add Power Limit4 support
-Date:   Tue, 14 Jul 2020 13:58:26 +0530
-Message-Id: <1594715306-10411-1-git-send-email-sumeet.r.pawnikar@intel.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S1726769AbgGNItt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 04:49:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57830 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbgGNIts (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 04:49:48 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20EC061755;
+        Tue, 14 Jul 2020 01:49:48 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id o11so20350880wrv.9;
+        Tue, 14 Jul 2020 01:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=+N9LNhgV2ZUiGn2thD2dhrb9kbQNFZhCqoXnUosFcmY=;
+        b=aO4ClOBHbWGRSfcjppygSuPeglb+wtXpvaRN6nL/qPZ2VfphqCrfFV/Na9Fpgt/Mb0
+         fApKRa6Y6SLOdtO2Dwk76f2GFk5tO6jSjXDc1zGbZMNwpVnc/Aa0ailAmTjAUt23qJnS
+         dT9beAwipVQ+uKsVNitijXXmy6E3BwBeLxyd0kTRj0+G/vxMcorUB5y25JLuK09I1/KT
+         vZfe5wrQsTh5TB91pcY0aqXf0nMIOpoN7BPBJLm4d81TsXwaQpp0gzo87/zRlidLwKue
+         /wFprDG82Ga0gQ2JJcCCnCbz+yYMPcLf4gWbLGfCnmIYEMfdqCVG/2OSSNGd6tngK744
+         9yJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=+N9LNhgV2ZUiGn2thD2dhrb9kbQNFZhCqoXnUosFcmY=;
+        b=TJi+z+iG+5wKuqchjsjXvkdK4Gk+CEs8OiiTwbLc+DnXhq22PD7byQz3JytWxjMJ8S
+         1kE6VHsbgEMOi50K/vg+fxHnzeV2dlKjdQvGjUCHAl2tGbUEEvHzWi5pRJ+LDrPZVHHP
+         3uBxrkjY/rLiiQl4KkyNPUGyh0E9lCZ5Rx3g6cp+vQ+MUGIJ8VcEN3e1Mtbm/SoRtoHn
+         uc9cuMyALziZHrjURe+H2DUgu3y/b4N6mjp+zJn68nK0khFcww+fQ+jyeAxtVH0NZ2AY
+         MyRESpFRCHCJt/2eDYJeTlFQgrkADM8YzyoSu9RqapC6w+Ky1lX915CltKhB50TAAT6i
+         G8DA==
+X-Gm-Message-State: AOAM5335gAm4TBwhmroWcJj1clXJUNPo0SAsMgZEHINz4umnkC8IkrKn
+        YQrL03WEYV8RxlD+E89Y9w/8xXJ1
+X-Google-Smtp-Source: ABdhPJx0RDN83W/SP0fzVcl6zerbR0vOCq7puAhfsvL8nJgU2JHMiamQsuJj7lZt/urL82jW80FpSw==
+X-Received: by 2002:a5d:6b08:: with SMTP id v8mr4041881wrw.2.1594716586982;
+        Tue, 14 Jul 2020 01:49:46 -0700 (PDT)
+Received: from [192.168.1.109] ([212.104.123.97])
+        by smtp.gmail.com with ESMTPSA id f12sm26670542wrw.53.2020.07.14.01.49.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jul 2020 01:49:46 -0700 (PDT)
+Subject: Re: [PATCH v3 2/6] dt-bindings: power: supply: Extend max17040
+ compatibility
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>
+References: <20200624155633.3557401-1-iskren.chernev@gmail.com>
+ <20200624155633.3557401-3-iskren.chernev@gmail.com>
+ <20200713190310.GA546410@bogus>
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+Message-ID: <c4dc5045-48ee-a27b-98a8-22fdb37d6ba9@gmail.com>
+Date:   Tue, 14 Jul 2020 11:49:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200713190310.GA546410@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Modern Intel Mobile platforms support power limit4 (PL4), which is
-the SoC package level maximum power limit (in Watts). It can be used
-to preemptively limits potential SoC power to prevent power spikes
-from tripping the power adapter and battery over-current protection.
-This patch enables this feature by exposing package level peak power
-capping control to userspace via RAPL sysfs interface. With this,
-application like DTPF can modify PL4 power limit, the similar way
-of other package power limit (PL1).
-As this feature is not tested on previous generations, here it is
-enabled only for the platform that has been verified to work,
-for safety concerns.
 
-Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
-Changes in v2:
- - Addressed review comments from Rafael.
- - Made the commit message more clearer.
- - Updated powercap documentation.
----
- Documentation/power/powercap/powercap.rst |   14 +++++---
- drivers/powercap/intel_rapl_common.c      |   54 +++++++++++++++++++++++++++--
- drivers/powercap/intel_rapl_msr.c         |   15 ++++++++
- include/linux/intel_rapl.h                |    5 ++-
- 4 files changed, 80 insertions(+), 8 deletions(-)
+On 7/13/20 10:03 PM, Rob Herring wrote:
+> On Wed, Jun 24, 2020 at 06:56:29PM +0300, Iskren Chernev wrote:
+>> Maxim max17040 is a fuel gauge from a larger family utilising the Model
+>> Gauge technology. Document all different compatible strings that the
+>> max17040 driver recognizes.
+>>
+>> Some devices in the wild report double the capacity. The
+>> maxim,double-soc (from State-Of-Charge) property fixes that.
+>>
+>> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+>> ---
+>>  .../bindings/power/supply/max17040_battery.txt    | 15 ++++++++++++++-
+>>  1 file changed, 14 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+>> index 4e0186b8380fa..554bce82a08e6 100644
+>> --- a/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+>> +++ b/Documentation/devicetree/bindings/power/supply/max17040_battery.txt
+>> @@ -2,7 +2,9 @@ max17040_battery
+>>  ~~~~~~~~~~~~~~~~
+>>
+>>  Required properties :
+>> - - compatible : "maxim,max17040" or "maxim,max77836-battery"
+>> + - compatible : "maxim,max17040", "maxim,max17041", "maxim,max17043",
+>> +         "maxim,max17044", "maxim,max17048", "maxim,max17049",
+>> +        "maxim,max17058", "maxim,max17059" or "maxim,max77836-battery"
+>>   - reg: i2c slave address
+>>
+>>  Optional properties :
+>> @@ -11,6 +13,10 @@ Optional properties :
+>>                  generated. Can be configured from 1 up to 32
+>>                  (%). If skipped the power up default value of
+>>                  4 (%) will be used.
+>> +- maxim,double-soc :         Certain devices return double the capacity.
+>> +                Specify this boolean property to divide the
+>> +                reported value in 2 and thus normalize it.
+>> +                SOC == State of Charge == Capacity.
+>
+> This can't be implied by the compatible string?
+>
 
-diff --git a/Documentation/power/powercap/powercap.rst b/Documentation/power/powercap/powercap.rst
-index 7ae3b44c7624..b3af059b6d5d 100644
---- a/Documentation/power/powercap/powercap.rst
-+++ b/Documentation/power/powercap/powercap.rst
-@@ -167,11 +167,12 @@ For example::
- package-0
- ---------
- 
--The Intel RAPL technology allows two constraints, short term and long term,
--with two different time windows to be applied to each power zone.  Thus for
--each zone there are 2 attributes representing the constraint names, 2 power
--limits and 2 attributes representing the sizes of the time windows. Such that,
--constraint_j_* attributes correspond to the jth constraint (j = 0,1).
-+Depending on different power zones, the Intel RAPL technology allows
-+one or multiple constraints like short term, long term and peak power,
-+with different time windows to be applied to each power zone.
-+All the zones contain attributes representing the constraint names,
-+power limits and the sizes of the time windows. Such that,
-+constraint_j_* attributes correspond to the jth constraint (j = 0,1,2).
- 
- For example::
- 
-@@ -181,6 +182,9 @@ For example::
- 	constraint_1_name
- 	constraint_1_power_limit_uw
- 	constraint_1_time_window_us
-+	constraint_2_name
-+	constraint_2_power_limit_uw
-+	constraint_2_time_window_us
- 
- Power Zone Attributes
- =====================
-diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 61a63a16b5e7..a8bcc58d61f0 100644
---- a/drivers/powercap/intel_rapl_common.c
-+++ b/drivers/powercap/intel_rapl_common.c
-@@ -39,6 +39,8 @@
- #define POWER_HIGH_LOCK         BIT_ULL(63)
- #define POWER_LOW_LOCK          BIT(31)
- 
-+#define POWER_LIMIT4_MASK		0x1FFF
-+
- #define TIME_WINDOW1_MASK       (0x7FULL<<17)
- #define TIME_WINDOW2_MASK       (0x7FULL<<49)
- 
-@@ -82,6 +84,7 @@ enum unit_type {
- 
- static const char pl1_name[] = "long_term";
- static const char pl2_name[] = "short_term";
-+static const char pl4_name[] = "peak_power";
- 
- #define power_zone_to_rapl_domain(_zone) \
- 	container_of(_zone, struct rapl_domain, power_zone)
-@@ -337,6 +340,9 @@ static int set_power_limit(struct powercap_zone *power_zone, int cid,
- 	case PL2_ENABLE:
- 		rapl_write_data_raw(rd, POWER_LIMIT2, power_limit);
- 		break;
-+	case PL4_ENABLE:
-+		rapl_write_data_raw(rd, POWER_LIMIT4, power_limit);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -371,6 +377,9 @@ static int get_current_power_limit(struct powercap_zone *power_zone, int cid,
- 	case PL2_ENABLE:
- 		prim = POWER_LIMIT2;
- 		break;
-+	case PL4_ENABLE:
-+		prim = POWER_LIMIT4;
-+		break;
- 	default:
- 		put_online_cpus();
- 		return -EINVAL;
-@@ -440,6 +449,13 @@ static int get_time_window(struct powercap_zone *power_zone, int cid,
- 	case PL2_ENABLE:
- 		ret = rapl_read_data_raw(rd, TIME_WINDOW2, true, &val);
- 		break;
-+	case PL4_ENABLE:
-+		/*
-+		 * Time window parameter is not applicable for PL4 entry
-+		 * so assigining '0' as default value.
-+		 */
-+		val = 0;
-+		break;
- 	default:
- 		put_online_cpus();
- 		return -EINVAL;
-@@ -483,6 +499,9 @@ static int get_max_power(struct powercap_zone *power_zone, int id, u64 *data)
- 	case PL2_ENABLE:
- 		prim = MAX_POWER;
- 		break;
-+	case PL4_ENABLE:
-+		prim = MAX_POWER;
-+		break;
- 	default:
- 		put_online_cpus();
- 		return -EINVAL;
-@@ -492,6 +511,10 @@ static int get_max_power(struct powercap_zone *power_zone, int id, u64 *data)
- 	else
- 		*data = val;
- 
-+	/* As a generalization rule, PL4 would be around two times PL2. */
-+	if (rd->rpl[id].prim_id == PL4_ENABLE)
-+		*data = *data * 2;
-+
- 	put_online_cpus();
- 
- 	return ret;
-@@ -524,12 +547,22 @@ static void rapl_init_domains(struct rapl_package *rp)
- 		rd->id = i;
- 		rd->rpl[0].prim_id = PL1_ENABLE;
- 		rd->rpl[0].name = pl1_name;
--		/* some domain may support two power limits */
--		if (rp->priv->limits[i] == 2) {
-+
-+		/*
-+		 * The PL2 power domain is applicable for limits two
-+		 * and limits three
-+		 */
-+		if (rp->priv->limits[i] >= 2) {
- 			rd->rpl[1].prim_id = PL2_ENABLE;
- 			rd->rpl[1].name = pl2_name;
- 		}
- 
-+		/* Enable PL4 domain if the total power limits are three */
-+		if (rp->priv->limits[i] == 3) {
-+			rd->rpl[2].prim_id = PL4_ENABLE;
-+			rd->rpl[2].name = pl4_name;
-+		}
-+
- 		for (j = 0; j < RAPL_DOMAIN_REG_MAX; j++)
- 			rd->regs[j] = rp->priv->regs[i][j];
- 
-@@ -587,6 +620,8 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
- 			    RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(POWER_LIMIT2, POWER_LIMIT2_MASK, 32,
- 			    RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
-+	PRIMITIVE_INFO_INIT(POWER_LIMIT4, POWER_LIMIT4_MASK, 0,
-+				RAPL_DOMAIN_REG_PL4, POWER_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(FW_LOCK, POWER_LOW_LOCK, 31,
- 			    RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(PL1_ENABLE, POWER_LIMIT1_ENABLE, 15,
-@@ -597,6 +632,8 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
- 			    RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(PL2_CLAMP, POWER_LIMIT2_CLAMP, 48,
- 			    RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
-+	PRIMITIVE_INFO_INIT(PL4_ENABLE, POWER_LIMIT4_MASK, 0,
-+				RAPL_DOMAIN_REG_PL4, ARBITRARY_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(TIME_WINDOW1, TIME_WINDOW1_MASK, 17,
- 			    RAPL_DOMAIN_REG_LIMIT, TIME_UNIT, 0),
- 	PRIMITIVE_INFO_INIT(TIME_WINDOW2, TIME_WINDOW2_MASK, 49,
-@@ -1252,6 +1289,7 @@ void rapl_remove_package(struct rapl_package *rp)
- 		if (find_nr_power_limit(rd) > 1) {
- 			rapl_write_data_raw(rd, PL2_ENABLE, 0);
- 			rapl_write_data_raw(rd, PL2_CLAMP, 0);
-+			rapl_write_data_raw(rd, PL4_ENABLE, 0);
- 		}
- 		if (rd->id == RAPL_DOMAIN_PACKAGE) {
- 			rd_package = rd;
-@@ -1360,6 +1398,13 @@ static void power_limit_state_save(void)
- 				if (ret)
- 					rd->rpl[i].last_power_limit = 0;
- 				break;
-+			case PL4_ENABLE:
-+				ret = rapl_read_data_raw(rd,
-+						 POWER_LIMIT4, true,
-+						 &rd->rpl[i].last_power_limit);
-+				if (ret)
-+					rd->rpl[i].last_power_limit = 0;
-+				break;
- 			}
- 		}
- 	}
-@@ -1390,6 +1435,11 @@ static void power_limit_state_restore(void)
- 					rapl_write_data_raw(rd, POWER_LIMIT2,
- 					    rd->rpl[i].last_power_limit);
- 				break;
-+			case PL4_ENABLE:
-+				if (rd->rpl[i].last_power_limit)
-+					rapl_write_data_raw(rd, POWER_LIMIT4,
-+					    rd->rpl[i].last_power_limit);
-+				break;
- 			}
- 		}
- 	}
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index d5487965bdfe..83c76454623e 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -28,6 +28,7 @@
- 
- /* Local defines */
- #define MSR_PLATFORM_POWER_LIMIT	0x0000065C
-+#define MSR_VR_CURRENT_CONFIG		0x00000601
- 
- /* private data for RAPL MSR Interface */
- static struct rapl_if_priv rapl_msr_priv = {
-@@ -123,13 +124,27 @@ static int rapl_msr_write_raw(int cpu, struct reg_action *ra)
- 	return ra->err;
- }
- 
-+/* List of verified CPUs. */
-+static const struct x86_cpu_id pl4_support_ids[] = {
-+	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
-+	{}
-+};
-+
- static int rapl_msr_probe(struct platform_device *pdev)
- {
- 	int ret;
-+	const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
- 
- 	rapl_msr_priv.read_raw = rapl_msr_read_raw;
- 	rapl_msr_priv.write_raw = rapl_msr_write_raw;
- 
-+	if (id) {
-+		rapl_msr_priv.limits[RAPL_DOMAIN_PACKAGE] = 3;
-+		rapl_msr_priv.regs[RAPL_DOMAIN_PACKAGE][RAPL_DOMAIN_REG_PL4] =
-+			MSR_VR_CURRENT_CONFIG;
-+		pr_info("PL4 support detected.\n");
-+	}
-+
- 	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
- 	if (IS_ERR(rapl_msr_priv.control_type)) {
- 		pr_debug("failed to register powercap control_type.\n");
-diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-index efb3ce892c20..3582176a1eca 100644
---- a/include/linux/intel_rapl.h
-+++ b/include/linux/intel_rapl.h
-@@ -29,6 +29,7 @@ enum rapl_domain_reg_id {
- 	RAPL_DOMAIN_REG_PERF,
- 	RAPL_DOMAIN_REG_POLICY,
- 	RAPL_DOMAIN_REG_INFO,
-+	RAPL_DOMAIN_REG_PL4,
- 	RAPL_DOMAIN_REG_MAX,
- };
- 
-@@ -38,12 +39,14 @@ enum rapl_primitives {
- 	ENERGY_COUNTER,
- 	POWER_LIMIT1,
- 	POWER_LIMIT2,
-+	POWER_LIMIT4,
- 	FW_LOCK,
- 
- 	PL1_ENABLE,		/* power limit 1, aka long term */
- 	PL1_CLAMP,		/* allow frequency to go below OS request */
- 	PL2_ENABLE,		/* power limit 2, aka short term, instantaneous */
- 	PL2_CLAMP,
-+	PL4_ENABLE,		/* power limit 4, aka max peak power */
- 
- 	TIME_WINDOW1,		/* long term */
- 	TIME_WINDOW2,		/* short term */
-@@ -65,7 +68,7 @@ struct rapl_domain_data {
- 	unsigned long timestamp;
- };
- 
--#define NR_POWER_LIMITS (2)
-+#define NR_POWER_LIMITS (3)
- struct rapl_power_limit {
- 	struct powercap_zone_constraint *constraint;
- 	int prim_id;		/* primitive ID used to enable */
--- 
-1.7.9.5
+From what I can tell - no. Here are multiple examples of downstream code:
+
+For max17043:
+- single soc [1]
+- double soc [2]
+- both (toggle with macro) [3]
+
+For max17048:
+- single soc [4]
+- double soc [5]
+- both (toggle with dts) [6], docs [7]
+
+For max17058:
+- both (toggle with macro) [8], this device is single
+- both (toggle with dts) [9], this device is double [10]
+
+[1] https://github.com/LineageOS/lge-kernel-sniper/blob/9907b1312e9b4c5c4f73ac9bf2e772b12e1c9145/drivers/power/max17043_fuelgauge.c#L383
+[2] https://github.com/LineageOS/android_kernel_lge_v500/blob/b4fe00e1f8f09c173a6c28a42ca69ff9529cc13b/drivers/power/max17043_fuelgauge.c#L307
+[3] https://github.com/LineageOS/lge-kernel-p880/blob/c5795644a60338f88c7aa29208efadde835ea769/drivers/power/max17043_fuelgauge.c#L406
+[4] https://github.com/LineageOS/lge-kernel-star/blob/d963160ebd8e64263ed740d5f1e1a0324085a826/drivers/power/max17048_battery.c#L168
+[5] https://github.com/LineageOS/android_kernel_samsung_p4/blob/b190cf1bf4ca0e597a51c820a323f2aa3b2c8585/drivers/power/max17048_battery.c#L192
+[6] https://github.com/LineageOS/android_kernel_htc_flounder/blob/03e0b4f36fc60c226adacdb48306df9ec65de33b/drivers/power/max17048_battery.c#L248
+[7] https://github.com/LineageOS/android_kernel_htc_flounder/blob/03e0b4f36fc60c226adacdb48306df9ec65de33b/Documentation/devicetree/bindings/power_supply/max17048_battery.txt#L23
+[8] https://github.com/LineageOS/android_kernel_asus_moorefield/blob/c3eae894ce8092c2a9a51f9a4924c8df714d6b3c/drivers/power/ASUS_BATTERY/max17058_battery.c#L551
+[9] https://github.com/LineageOS/android_kernel_motorola_msm8916/blob/415000d938de1aa46206043e06f033edf33557ce/drivers/power/max17058_battery.c#L225
+[10] https://github.com/LineageOS/android_kernel_motorola_msm8916/blob/415000d938de1aa46206043e06f033edf33557ce/arch/arm/boot/dts/qcom/msm8916-harpia-p0a.dts#L59
+
+>>  - interrupts :             Interrupt line see Documentation/devicetree/
+>>                  bindings/interrupt-controller/interrupts.txt
+>>  - wakeup-source :        This device has wakeup capabilities. Use this
+>> @@ -31,3 +37,10 @@ Example:
+>>          interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+>>          wakeup-source;
+>>      };
+>> +
+>> +    battery-fuel-gauge@36 {
+>> +        compatible = "maxim,max17048";
+>> +        reg = <0x36>;
+>> +        maxim,alert-low-soc-level = <10>;
+>> +        maxim,double-soc;
+>> +    };
+>> --
+>> 2.27.0
+>>
 
