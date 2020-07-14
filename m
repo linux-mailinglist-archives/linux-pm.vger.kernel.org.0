@@ -2,108 +2,605 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A6D21F7F7
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 19:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7250D21F81C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 19:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728845AbgGNRQE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 13:16:04 -0400
-Received: from mail-mw2nam10on2070.outbound.protection.outlook.com ([40.107.94.70]:6050
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726169AbgGNRQD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 14 Jul 2020 13:16:03 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ktujMN4mSm01mBiiOojCOaZzBFK+yvpkh7CPSonVQjZo7xsOiKjis9BnRu/QXkD14+3sKVBdiR3tUMRxTjpw1r5imqubTlZtGqP4H2F2MQUXbHPI9TBUz/nAHVO23CtQhTcWZQ3sibxb09XSLG7LBVOsb+hNL62t4vozY00B3xL3W189EJqZ/1aY0SGEMdbrBiW2ijA2z9Lu21/Gtd3s5yc4CSj7cpPBNsepqtKV98OBKy+qiyuRRpdKR/NvR2M11NSRBFFaGU7ZzJgC/NU5TjqFLgMlz1hFRZFC63a+QqTpnbsX8/8YV8Jo9qskotQ25bS8TrSZ5b626G9+gJygbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FbBY92KwgpYEniy5lcR1Z7maCt3W2cjGiK+EvQhyxrY=;
- b=IUXd+R10LFirJfUlVY0vRxPWrmsxqp7VH8qAh6s/tE5EqcvTDht1QU8PBAXcjy2pTgN9zzHZsr7lP2LsdpIA4wpAPc5oabYYByLyHs29VeQEjP9iwwobLShrV5mg97yRTL+lZMQOtgcW1nlsyMSvA2jPMJe03xwEVe7tPRAmzCf+t3Vke2S6M9fvvE1n4hViNRvWSUivWYGam9ouCDaYJfH6tvwsQuh0AiNiRfOI1UQryaBTnCEQpbYMebNh4RzFkxfgvCYnVGdXZHTVk1uJAlRSlv/50+cAmF0QGvgUbziPHqHx2k1oSd6GLHxcYbrbNukKYGyUIB6/Ir4o7kMWog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FbBY92KwgpYEniy5lcR1Z7maCt3W2cjGiK+EvQhyxrY=;
- b=FRdzIM7AxcpFYiLsk5p4ExTI/EOMAMDQwaPgLV9UHrGSgv/v3mvCYZWw88owg0NJxAfqYdrPp7pQxVe2pGLBU+8xP3rFCxM2ZJNpT5NZfJkQpXqHLGbfO4n4mQsoCjGUTw+5vs8dwg9JAmV/SW9eAVz9mRvG//meELhn3+7ZhzU=
-Authentication-Results: amd.com; dkim=none (message not signed)
- header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB2946.namprd12.prod.outlook.com (2603:10b6:408:9d::13)
- by BN8PR12MB3636.namprd12.prod.outlook.com (2603:10b6:408:4a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.23; Tue, 14 Jul
- 2020 17:15:58 +0000
-Received: from BN8PR12MB2946.namprd12.prod.outlook.com
- ([fe80::8dfe:a00d:ac29:b1a4]) by BN8PR12MB2946.namprd12.prod.outlook.com
- ([fe80::8dfe:a00d:ac29:b1a4%5]) with mapi id 15.20.3174.025; Tue, 14 Jul 2020
- 17:15:57 +0000
-Subject: Re: [PATCH 13/13] cpufreq: amd_freq_sensitivity: Remove unused ID
- structs
-To:     Lee Jones <lee.jones@linaro.org>, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Jacob Shin <jacob.shin@amd.com>
-References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200714145049.2496163-14-lee.jones@linaro.org>
-From:   Kim Phillips <kim.phillips@amd.com>
-Message-ID: <6101e041-41e9-22bc-488d-38124c139bc7@amd.com>
-Date:   Tue, 14 Jul 2020 12:15:55 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-In-Reply-To: <20200714145049.2496163-14-lee.jones@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BN8PR07CA0019.namprd07.prod.outlook.com
- (2603:10b6:408:ac::32) To BN8PR12MB2946.namprd12.prod.outlook.com
- (2603:10b6:408:9d::13)
+        id S1728836AbgGNRXH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 13:23:07 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:43014 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbgGNRXG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 13:23:06 -0400
+Received: by mail-io1-f67.google.com with SMTP id k23so18085316iom.10;
+        Tue, 14 Jul 2020 10:23:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=a+Jl/zD2Kd4gMYtf/Wpk6PVLO9f2VWE4h2cSc58BGeM=;
+        b=ax2EXax7q8Y/HYPuOczNLhSrTZfjoSKXbY8uwAkdiywf6KstC6stOgvOFugS/82q0Z
+         fKsPDG/f0JG6R57cQ/CYoZPN7vffOwULTTUN+8ZSh30Hx/cddojcwEsmrpNs4XPrm1Kq
+         7sUx5lq2fVoZPb1QMMbt8kuNewDuOnEPqSvKqQarwlL3od9EssdhhWldxaUox1lDfXSX
+         dNkR6/T2n5yZ0sQdRkrLZxoP0ddsAXkBrvewDFCV0vf391kXdK2td8NNlr8zSiA3Cp+C
+         0/bZP4QXqKIjt+rS8TLftjglqFdR7bu/EYXh8zb5789tJdQZkjevLJ169aC9dZtON7Zy
+         AXeg==
+X-Gm-Message-State: AOAM530i8HlEPfW9L4O6CTiUE+Hzjp1duy2axYppK0VO2k0POg7Irm81
+        IgWgmpDlAXelVK+mM1K32Q==
+X-Google-Smtp-Source: ABdhPJzeFK+zSdeFlJs+zJIwYJ2Y28Ic1p/2Pg5cd6kDpy3hOI4vNjuhyszcgAI1tjSCWUERnvuBYA==
+X-Received: by 2002:a5d:9503:: with SMTP id d3mr6027758iom.154.1594747383402;
+        Tue, 14 Jul 2020 10:23:03 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id g8sm10154384ilq.49.2020.07.14.10.23.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 10:23:02 -0700 (PDT)
+Received: (nullmailer pid 2563893 invoked by uid 1000);
+        Tue, 14 Jul 2020 17:23:01 -0000
+Date:   Tue, 14 Jul 2020 11:23:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan Marek <jonathan@marek.ca>
+Cc:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>
+Subject: Re: [PATCH v2 1/7] dt-bindings: interconnect: single yaml file for
+ RPMh interconnect drivers
+Message-ID: <20200714172301.GA2562995@bogus>
+References: <20200713154121.22094-1-jonathan@marek.ca>
+ <20200713154121.22094-2-jonathan@marek.ca>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.252.5.212] (165.204.84.11) by BN8PR07CA0019.namprd07.prod.outlook.com (2603:10b6:408:ac::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22 via Frontend Transport; Tue, 14 Jul 2020 17:15:56 +0000
-X-Originating-IP: [165.204.84.11]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 10994425-cd75-4a17-3817-08d8281992c8
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3636:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3636C19A991CC327065BBEB487610@BN8PR12MB3636.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qNdrBaNFaN0E/Nln/rmAoghTf3R4NmezlZSoe783yHDRswTF4vz+c1tgl8UYWwRn6Xkb77Rdx9ss72Zcj3QzhJx6IAr2UJqX/48uOTXiVUBEMo5zQGdwjvyRle84pxqujE9sj3Y5g5TEQLVknqdke3L4B/AHt/GlSsxDbhNak1XdOn+T/ZXp2bXV8TukhYDUI798UQ0g1WH6VQWKifvo8J1senuAf9N8cnE+uFwXrFFJZX0LsUhcGcuujevYDIBQf4/DybRo0iQrEd7MUZcEk1xie/ipuZ6FsWAkceF4gG6wDImFptLpwOtJpYB+vaGXGb0SH7Z59KOrEvcB1xqQLelJ8RDqFbuBK3WuMHQDhDu/O3wZxeNtRJf6xg7QMuh0
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2946.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(366004)(396003)(346002)(136003)(376002)(66556008)(66946007)(66476007)(16576012)(86362001)(52116002)(316002)(83380400001)(2616005)(4744005)(8676002)(36756003)(956004)(5660300002)(31686004)(6486002)(8936002)(26005)(31696002)(16526019)(2906002)(44832011)(53546011)(4326008)(186003)(478600001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: i/6xYyC9DjJVJc6mGlRPD7bWoeZiQpWwcux+/s1GVTJrf7/g8/wgtiip8x7jzKfhS6G+lg59m5J3Y/XPJsCymHVtIUaRUNjgL0NmB1avUsgKq0vwaA1QdmrkgRVf+CLTN4lVacUi1yGwFRemJcJ8FavgQWaboflG4nSp5A6GyhC65rZF4G/8TBROaMI+myNgawNE6M9yqpQf391QHoylxbU9mJ7NJbbrZx158eRwMCspb1KpNSvgIgGhPqAeAoxiZVHdjt3LdeVrC5ZjuE1YgNAWOKpAwlCiEgIn/8ZZq122T0Jx8P6Eqq2gdYmBd7UGcbg3m6uyUu0hHyDxpccuVJiLo0P/jD4YHSr+icPRzGB94ON0Q/0nqFRc8xDPwzqUA77sFgQQt1uPl7KeYkb01G+oTxqpdul8eDPLUbW2oq2UynNJyQLnI1FHd34/U8nx3XCNinS6nhsodZwaBkTDUOzcdF1PY4cCL20VPZHPHGk=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10994425-cd75-4a17-3817-08d8281992c8
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2946.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2020 17:15:57.7322
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dn5XjOMGTkR/c4t+Aa+sKY4c6SGodqAzyb8X+/5kbYCRRxvOMPUrSvS+O/hK2pKAhEgzoI9r1ma0JW1q3DeLBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3636
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200713154121.22094-2-jonathan@marek.ca>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/14/20 9:50 AM, Lee Jones wrote:
-> Can't see them being used anywhere and the compiler doesn't complain
-> that they're missing, so ...
+On Mon, 13 Jul 2020 11:41:10 -0400, Jonathan Marek wrote:
+> These two bindings are almost identical, so combine them into one. This
+> will make it easier to add the sm8150 and sm8250 interconnect bindings.
 > 
-> Fixes the following W=1 kernel build warning(s):
-> 
->  drivers/cpufreq/amd_freq_sensitivity.c:147:32: warning: ‘amd_freq_sensitivity_ids’ defined but not used [-Wunused-const-variable=]
->  147 | static const struct x86_cpu_id amd_freq_sensitivity_ids[] = {
->  | ^~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Cc: Jacob Shin <jacob.shin@amd.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Signed-off-by: Jonathan Marek <jonathan@marek.ca>
 > ---
+>  .../{qcom,sc7180.yaml => qcom,rpmh.yaml}      | 33 ++++++++-
+>  .../bindings/interconnect/qcom,sdm845.yaml    | 74 -------------------
+>  2 files changed, 30 insertions(+), 77 deletions(-)
+>  rename Documentation/devicetree/bindings/interconnect/{qcom,sc7180.yaml => qcom,rpmh.yaml} (67%)
+>  delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm845.yaml
+> 
 
-Same comment as for patch 9/13: these are used automatic module loading.
 
-Kim
+My bot found errors running 'make dt_binding_check' on your patch:
+
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:14:0: warning: "MASTER_SDCC_2" redefined
+ #define MASTER_SDCC_2   3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:14:0: note: this is the location of the previous definition
+ #define MASTER_SDCC_2   2
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:17:0: warning: "SLAVE_A1NOC_SNOC" redefined
+ #define SLAVE_A1NOC_SNOC   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:19:0: note: this is the location of the previous definition
+ #define SLAVE_A1NOC_SNOC  7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:18:0: warning: "SLAVE_SERVICE_A1NOC" redefined
+ #define SLAVE_SERVICE_A1NOC   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:20:0: note: this is the location of the previous definition
+ #define SLAVE_SERVICE_A1NOC  8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:24:0: warning: "MASTER_CRYPTO" redefined
+ #define MASTER_CRYPTO   4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:26:0: note: this is the location of the previous definition
+ #define MASTER_CRYPTO   3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:25:0: warning: "MASTER_IPA" redefined
+ #define MASTER_IPA   5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:27:0: note: this is the location of the previous definition
+ #define MASTER_IPA   4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:27:0: warning: "SLAVE_A2NOC_SNOC" redefined
+ #define SLAVE_A2NOC_SNOC   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:32:0: note: this is the location of the previous definition
+ #define SLAVE_A2NOC_SNOC  9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:28:0: warning: "SLAVE_SERVICE_A2NOC" redefined
+ #define SLAVE_SERVICE_A2NOC   8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:34:0: note: this is the location of the previous definition
+ #define SLAVE_SERVICE_A2NOC  11
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:30:0: warning: "MASTER_CAMNOC_HF0_UNCOMP" redefined
+ #define MASTER_CAMNOC_HF0_UNCOMP   0
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:123:0: note: this is the location of the previous definition
+ #define MASTER_CAMNOC_HF0_UNCOMP 13
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:31:0: warning: "MASTER_CAMNOC_HF1_UNCOMP" redefined
+ #define MASTER_CAMNOC_HF1_UNCOMP   1
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:124:0: note: this is the location of the previous definition
+ #define MASTER_CAMNOC_HF1_UNCOMP 14
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:32:0: warning: "MASTER_CAMNOC_SF_UNCOMP" redefined
+ #define MASTER_CAMNOC_SF_UNCOMP   2
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:125:0: note: this is the location of the previous definition
+ #define MASTER_CAMNOC_SF_UNCOMP  15
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:33:0: warning: "SLAVE_CAMNOC_UNCOMP" redefined
+ #define SLAVE_CAMNOC_UNCOMP   3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:126:0: note: this is the location of the previous definition
+ #define SLAVE_CAMNOC_UNCOMP  16
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:39:0: warning: "MASTER_SNOC_CNOC" redefined
+ #define MASTER_SNOC_CNOC   0
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:38:0: note: this is the location of the previous definition
+ #define MASTER_SNOC_CNOC  2
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:40:0: warning: "MASTER_QDSS_DAP" redefined
+ #define MASTER_QDSS_DAP   1
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:39:0: note: this is the location of the previous definition
+ #define MASTER_QDSS_DAP   3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:41:0: warning: "SLAVE_A1NOC_CFG" redefined
+ #define SLAVE_A1NOC_CFG   2
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:40:0: note: this is the location of the previous definition
+ #define SLAVE_A1NOC_CFG   4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:42:0: warning: "SLAVE_A2NOC_CFG" redefined
+ #define SLAVE_A2NOC_CFG   3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:41:0: note: this is the location of the previous definition
+ #define SLAVE_A2NOC_CFG   5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:48:0: warning: "SLAVE_CAMERA_CFG" redefined
+ #define SLAVE_CAMERA_CFG    9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:44:0: note: this is the location of the previous definition
+ #define SLAVE_CAMERA_CFG  8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:51:0: warning: "SLAVE_CLK_CTL" redefined
+ #define SLAVE_CLK_CTL   12
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:45:0: note: this is the location of the previous definition
+ #define SLAVE_CLK_CTL   9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:52:0: warning: "SLAVE_RBCPR_CX_CFG" redefined
+ #define SLAVE_RBCPR_CX_CFG   13
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:47:0: note: this is the location of the previous definition
+ #define SLAVE_RBCPR_CX_CFG  11
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:54:0: warning: "SLAVE_CRYPTO_0_CFG" redefined
+ #define SLAVE_CRYPTO_0_CFG   15
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:48:0: note: this is the location of the previous definition
+ #define SLAVE_CRYPTO_0_CFG  12
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:55:0: warning: "SLAVE_DCC_CFG" redefined
+ #define SLAVE_DCC_CFG   16
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:49:0: note: this is the location of the previous definition
+ #define SLAVE_DCC_CFG   13
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:56:0: warning: "SLAVE_CNOC_DDRSS" redefined
+ #define SLAVE_CNOC_DDRSS   17
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:50:0: note: this is the location of the previous definition
+ #define SLAVE_CNOC_DDRSS  14
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:57:0: warning: "SLAVE_DISPLAY_CFG" redefined
+ #define SLAVE_DISPLAY_CFG   18
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:51:0: note: this is the location of the previous definition
+ #define SLAVE_DISPLAY_CFG  15
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:61:0: warning: "SLAVE_GLM" redefined
+ #define SLAVE_GLM     22
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:52:0: note: this is the location of the previous definition
+ #define SLAVE_GLM   16
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:62:0: warning: "SLAVE_GFX3D_CFG" redefined
+ #define SLAVE_GFX3D_CFG   23
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:53:0: note: this is the location of the previous definition
+ #define SLAVE_GFX3D_CFG   17
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:63:0: warning: "SLAVE_IMEM_CFG" redefined
+ #define SLAVE_IMEM_CFG   24
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:54:0: note: this is the location of the previous definition
+ #define SLAVE_IMEM_CFG   18
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:64:0: warning: "SLAVE_IPA_CFG" redefined
+ #define SLAVE_IPA_CFG   25
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:55:0: note: this is the location of the previous definition
+ #define SLAVE_IPA_CFG   19
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:65:0: warning: "SLAVE_CNOC_MNOC_CFG" redefined
+ #define SLAVE_CNOC_MNOC_CFG   26
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:56:0: note: this is the location of the previous definition
+ #define SLAVE_CNOC_MNOC_CFG  20
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:70:0: warning: "SLAVE_PDM" redefined
+ #define SLAVE_PDM   31
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:59:0: note: this is the location of the previous definition
+ #define SLAVE_PDM   23
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:71:0: warning: "SLAVE_PIMEM_CFG" redefined
+ #define SLAVE_PIMEM_CFG   32
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:61:0: note: this is the location of the previous definition
+ #define SLAVE_PIMEM_CFG   25
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:72:0: warning: "SLAVE_PRNG" redefined
+ #define SLAVE_PRNG   33
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:62:0: note: this is the location of the previous definition
+ #define SLAVE_PRNG   26
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:73:0: warning: "SLAVE_QDSS_CFG" redefined
+ #define SLAVE_QDSS_CFG   34
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:63:0: note: this is the location of the previous definition
+ #define SLAVE_QDSS_CFG   27
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:79:0: warning: "SLAVE_SDCC_2" redefined
+ #define SLAVE_SDCC_2   40
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:66:0: note: this is the location of the previous definition
+ #define SLAVE_SDCC_2   30
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:81:0: warning: "SLAVE_SNOC_CFG" redefined
+ #define SLAVE_SNOC_CFG   42
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:68:0: note: this is the location of the previous definition
+ #define SLAVE_SNOC_CFG   32
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:82:0: warning: "SLAVE_TCSR" redefined
+ #define SLAVE_TCSR   43
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:71:0: note: this is the location of the previous definition
+ #define SLAVE_TCSR   35
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:84:0: warning: "SLAVE_TLMM_NORTH" redefined
+ #define SLAVE_TLMM_NORTH   45
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:72:0: note: this is the location of the previous definition
+ #define SLAVE_TLMM_NORTH  36
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:85:0: warning: "SLAVE_TLMM_SOUTH" redefined
+ #define SLAVE_TLMM_SOUTH   46
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:73:0: note: this is the location of the previous definition
+ #define SLAVE_TLMM_SOUTH  37
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:86:0: warning: "SLAVE_UFS_MEM_CFG" redefined
+ #define SLAVE_UFS_MEM_CFG   47
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:76:0: note: this is the location of the previous definition
+ #define SLAVE_UFS_MEM_CFG  40
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:88:0: warning: "SLAVE_VENUS_CFG" redefined
+ #define SLAVE_VENUS_CFG   49
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:79:0: note: this is the location of the previous definition
+ #define SLAVE_VENUS_CFG   43
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:90:0: warning: "SLAVE_VSENSE_CTRL_CFG" redefined
+ #define SLAVE_VSENSE_CTRL_CFG   51
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:80:0: note: this is the location of the previous definition
+ #define SLAVE_VSENSE_CTRL_CFG  44
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:91:0: warning: "SLAVE_SERVICE_CNOC" redefined
+ #define SLAVE_SERVICE_CNOC   52
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:82:0: note: this is the location of the previous definition
+ #define SLAVE_SERVICE_CNOC  46
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:95:0: warning: "SLAVE_LLCC_CFG" redefined
+ #define SLAVE_LLCC_CFG   2
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:85:0: note: this is the location of the previous definition
+ #define SLAVE_LLCC_CFG   1
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:101:0: warning: "MASTER_MNOC_HF_MEM_NOC" redefined
+ #define MASTER_MNOC_HF_MEM_NOC   4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:97:0: note: this is the location of the previous definition
+ #define MASTER_MNOC_HF_MEM_NOC  3
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:102:0: warning: "MASTER_MNOC_SF_MEM_NOC" redefined
+ #define MASTER_MNOC_SF_MEM_NOC   5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:98:0: note: this is the location of the previous definition
+ #define MASTER_MNOC_SF_MEM_NOC  4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:103:0: warning: "MASTER_SNOC_GC_MEM_NOC" redefined
+ #define MASTER_SNOC_GC_MEM_NOC   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:99:0: note: this is the location of the previous definition
+ #define MASTER_SNOC_GC_MEM_NOC  5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:104:0: warning: "MASTER_SNOC_SF_MEM_NOC" redefined
+ #define MASTER_SNOC_SF_MEM_NOC   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:100:0: note: this is the location of the previous definition
+ #define MASTER_SNOC_SF_MEM_NOC  6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:105:0: warning: "MASTER_GFX3D" redefined
+ #define MASTER_GFX3D   8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:101:0: note: this is the location of the previous definition
+ #define MASTER_GFX3D   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:106:0: warning: "SLAVE_MSS_PROC_MS_MPU_CFG" redefined
+ #define SLAVE_MSS_PROC_MS_MPU_CFG   9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:102:0: note: this is the location of the previous definition
+ #define SLAVE_MSS_PROC_MS_MPU_CFG 8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:108:0: warning: "SLAVE_LLCC" redefined
+ #define SLAVE_LLCC   11
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:104:0: note: this is the location of the previous definition
+ #define SLAVE_LLCC   10
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:114:0: warning: "MASTER_LLCC" redefined
+ #define MASTER_LLCC   0
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:107:0: note: this is the location of the previous definition
+ #define MASTER_LLCC   13
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:115:0: warning: "SLAVE_EBI1" redefined
+ #define SLAVE_EBI1   1
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:108:0: note: this is the location of the previous definition
+ #define SLAVE_EBI1   14
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:122:0: warning: "MASTER_ROTATOR" redefined
+ #define MASTER_ROTATOR   5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:116:0: note: this is the location of the previous definition
+ #define MASTER_ROTATOR   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:123:0: warning: "MASTER_VIDEO_P0" redefined
+ #define MASTER_VIDEO_P0   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:117:0: note: this is the location of the previous definition
+ #define MASTER_VIDEO_P0   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:124:0: warning: "MASTER_VIDEO_PROC" redefined
+ #define MASTER_VIDEO_PROC   7
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:119:0: note: this is the location of the previous definition
+ #define MASTER_VIDEO_PROC  9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:125:0: warning: "SLAVE_MNOC_HF_MEM_NOC" redefined
+ #define SLAVE_MNOC_HF_MEM_NOC   8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:121:0: note: this is the location of the previous definition
+ #define SLAVE_MNOC_HF_MEM_NOC  11
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:126:0: warning: "SLAVE_MNOC_SF_MEM_NOC" redefined
+ #define SLAVE_MNOC_SF_MEM_NOC   9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:120:0: note: this is the location of the previous definition
+ #define SLAVE_MNOC_SF_MEM_NOC  10
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:127:0: warning: "SLAVE_SERVICE_MNOC" redefined
+ #define SLAVE_SERVICE_MNOC   10
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:122:0: note: this is the location of the previous definition
+ #define SLAVE_SERVICE_MNOC  12
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:150:0: warning: "MASTER_PIMEM" redefined
+ #define MASTER_PIMEM   4
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:134:0: note: this is the location of the previous definition
+ #define MASTER_PIMEM   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:151:0: warning: "SLAVE_APPSS" redefined
+ #define SLAVE_APPSS   5
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:136:0: note: this is the location of the previous definition
+ #define SLAVE_APPSS   8
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:152:0: warning: "SLAVE_SNOC_CNOC" redefined
+ #define SLAVE_SNOC_CNOC   6
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:137:0: note: this is the location of the previous definition
+ #define SLAVE_SNOC_CNOC   9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:155:0: warning: "SLAVE_IMEM" redefined
+ #define SLAVE_IMEM   9
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:140:0: note: this is the location of the previous definition
+ #define SLAVE_IMEM   12
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:156:0: warning: "SLAVE_PIMEM" redefined
+ #define SLAVE_PIMEM   10
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:143:0: note: this is the location of the previous definition
+ #define SLAVE_PIMEM   15
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:157:0: warning: "SLAVE_SERVICE_SNOC" redefined
+ #define SLAVE_SERVICE_SNOC   11
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:144:0: note: this is the location of the previous definition
+ #define SLAVE_SERVICE_SNOC  16
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:158:0: warning: "SLAVE_QDSS_STM" redefined
+ #define SLAVE_QDSS_STM   12
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:145:0: note: this is the location of the previous definition
+ #define SLAVE_QDSS_STM   17
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:53:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sc7180.h:159:0: warning: "SLAVE_TCU" redefined
+ #define SLAVE_TCU   13
+ 
+In file included from Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:19:0:
+./scripts/dtc/include-prefixes/dt-bindings/interconnect/qcom,sdm845.h:146:0: note: this is the location of the previous definition
+ #define SLAVE_TCU   18
+ 
+Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dts:69.40-74.11: ERROR (duplicate_label): /example-1/interconnect@1740000: Duplicate label 'mmss_noc' on /example-1/interconnect@1740000 and /example-0/interconnect@1740000
+ERROR: Input tree has errors, aborting (use -f to force output)
+scripts/Makefile.lib:315: recipe for target 'Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dt.yaml' failed
+make[1]: *** [Documentation/devicetree/bindings/interconnect/qcom,rpmh.example.dt.yaml] Error 2
+make[1]: *** Waiting for unfinished jobs....
+Makefile:1347: recipe for target 'dt_binding_check' failed
+make: *** [dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1328116
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
