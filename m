@@ -2,105 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 298EF21F694
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 17:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948DA21F692
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 17:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727949AbgGNP6O convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 14 Jul 2020 11:58:14 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:36593 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgGNP6N (ORCPT
+        id S1726534AbgGNP6N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 11:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbgGNP6N (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 11:58:13 -0400
-Received: by mail-oi1-f193.google.com with SMTP id h17so14328489oie.3;
-        Tue, 14 Jul 2020 08:58:12 -0700 (PDT)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2942CC061755
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 08:58:13 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d1so1949571plr.8
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 08:58:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=kxexHih2bwVN8fZsmsF/MqEelBet2IqedPkfawQ8XiI=;
+        b=0+DEzBKhIzaOFKXUEBJhhcYOIkb2tGy+HoDO1yctB9zebIJSnfW3TuuZ0kT6F9MueU
+         ONKSt1RvtzLmGhJSC8GNbG61HmASJ1V2A/mGZ53xqHuJblyFLkPdlBdU0x99DLlb3VuG
+         ukCuRd8oFc8bIzlQcMU9VA5vUOztKqfDWtcglPfalKq7gCUCAx4kO+CzLdSpU/hrUcOn
+         SrIinpHYv5gxcElZ+Lre/Kl68j0x+WHeLxlvhDLlQzW6nUdLgNw83JN3SN3d9Di/ECCd
+         609TV5c/W/AQYYExuzESxSq+8YgL8cyOFV/hUIgXLWbrHTj6p+XnybIy9H14YbGC/ilA
+         v8Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qvEysgJYfCAug8jVBcrbyiiBEEw40SucgK7wjiV/k08=;
-        b=Z0Rtv5btpLrfFcNqmpAVRXlrC828HElFNUiJpt70GgQhhG2Ncpt7yWAH6/0vHNvm2j
-         I3G6nuOAs2lbXNVtQtsmt4p2gpPgu7pTCAbQuL9SzlXlfLs2Uf272T6oRcX9FeXYctPF
-         /lSvPXMy2cruNlVi/B1yCt4v6dToYOdmv0g6IPcVQkSIXE8AqrPk0IlQftWCj8Ro29Gk
-         YDwnWQgAz6MxUncyR6sSrGQN4cHv/fTBeL3clEo7ky33pVGRXiL5Mrm8J7RQRy2xSrwC
-         bKkW1i4FbffOmp4jJ6+nGN6NlreRp9d71L/Si0j4oPlmBfJgVkDY/x1XKRFZ11TlrpGd
-         b6UA==
-X-Gm-Message-State: AOAM530EFUlfdAjzLpYhmBvoJAM1M/Os9PRfcLGWzpUlb6miDla4qtty
-        TeFfWCcBd0mjfKiJP1quwEans4L9wJeXFME6g2E=
-X-Google-Smtp-Source: ABdhPJx3F5Gi+qjW3wd97TexweWn1i7SVIu1JsmkDLtvkyWQmXrxdacZYE66yGenmJOtuuP/TNv58mMUgzRQ1viiQ4w=
-X-Received: by 2002:aca:4a89:: with SMTP id x131mr4403423oia.103.1594742292442;
- Tue, 14 Jul 2020 08:58:12 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=kxexHih2bwVN8fZsmsF/MqEelBet2IqedPkfawQ8XiI=;
+        b=HxjG0E9kYaa7uK+uLF2/7urfV31Yi/oyo6WqPszrodPF2cG4F/bOMbBnSHt08hCaAK
+         OHMaOKpWzlwx1OlevCeZkS+x/A3bTAXTbyMZcOVxMNrq753c44b+HouWVC97Fk4lu01b
+         wLWNFBNleOmIC5lKvcYKtkyy+tR/KRedHB1Bh2xaKdzoMPSpn+r8FpSpOB3NzLIiwCOg
+         x5ZJE4VO17ss28QGLK2NCIafhQzT8o08NUyyVMaiJzvReoZU7ahEwq92zBQuENCfTlgk
+         wwKe7rumSWfyKUHCF94Ku1G/WdkmgVF5YjZibREt6De5gkr5/VQwR68D3cFBcOm001UU
+         2oxg==
+X-Gm-Message-State: AOAM5329mi+WgB/KJyQaoFXPQfCxMcdMQWf2AvjDQ8hvTnWXPzWMkX0F
+        hrk5UeB9Pf/IlsSpvF00CrY0efONmhM=
+X-Google-Smtp-Source: ABdhPJyFg9GDtuAfrv7bTXrq5MF1BwD1+QdznWzEaecfaR98WQY02gh4ZBp7a0IedF8nYK9k3VZF+g==
+X-Received: by 2002:a17:90a:cc:: with SMTP id v12mr4957099pjd.96.1594742292727;
+        Tue, 14 Jul 2020 08:58:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m19sm1765727pgd.13.2020.07.14.08.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 08:58:11 -0700 (PDT)
+Message-ID: <5f0dd613.1c69fb81.24398.3554@mx.google.com>
+Date:   Tue, 14 Jul 2020 08:58:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200714145049.2496163-1-lee.jones@linaro.org> <20200714145049.2496163-10-lee.jones@linaro.org>
-In-Reply-To: <20200714145049.2496163-10-lee.jones@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Jul 2020 17:58:01 +0200
-Message-ID: <CAJZ5v0iB0K6H28DSDQj9T7k_kV10THxV6-HwN9qfmkLsYNHfiA@mail.gmail.com>
-Subject: Re: [PATCH 09/13] cpufreq: acpi-cpufreq: Remove unused ID structs
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Andy Grover <andrew.grover@intel.com>,
-        Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
-        Dominik Brodowski <linux@brodo.de>,
-        Denis Sadykov <denis.m.sadykov@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc5-44-g71865a3b9f0a
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 68 runs,
+ 1 regressions (v5.8-rc5-44-g71865a3b9f0a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> Can't see them being used anywhere and the compiler doesn't complain
-> that they're missing, so ...
+pm/testing baseline: 68 runs, 1 regressions (v5.8-rc5-44-g71865a3b9f0a)
 
-Aren't they needed for automatic module loading in certain configurations?
+Regressions Summary
+-------------------
 
-> Fixes the following W=1 kernel build warning(s):
->
->  drivers/cpufreq/acpi-cpufreq.c:1004:36: warning: ‘processor_device_ids’ defined but not used [-Wunused-const-variable=]
->  997 | static const struct x86_cpu_id acpi_cpufreq_ids[] = {
->  | ^~~~~~~~~~~~~~~~
->  drivers/cpufreq/acpi-cpufreq.c:997:32: warning: ‘acpi_cpufreq_ids’ defined but not used [-Wunused-const-variable=]
->  619 | static const struct acpi_device_id processor_device_ids[] = {
->  | ^~~~~~~~~~~~~~~~~~~~
->
-> Cc: Andy Grover <andrew.grover@intel.com>
-> Cc: Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
-> Cc: Dominik Brodowski <linux@brodo.de>
-> Cc: Denis Sadykov <denis.m.sadykov@intel.com>
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 14 --------------
->  1 file changed, 14 deletions(-)
->
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index d38a693b48e03..fc68f13352695 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -995,18 +995,4 @@ MODULE_PARM_DESC(acpi_pstate_strict,
->  late_initcall(acpi_cpufreq_init);
->  module_exit(acpi_cpufreq_exit);
->
-> -static const struct x86_cpu_id acpi_cpufreq_ids[] = {
-> -       X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
-> -       X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
-> -       {}
-> -};
-> -MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
-> -
-> -static const struct acpi_device_id processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> -};
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> -
->  MODULE_ALIAS("acpi");
-> --
-> 2.25.1
->
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc5=
+-44-g71865a3b9f0a/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.8-rc5-44-g71865a3b9f0a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      71865a3b9f0af787f9e80943606014cb59965cc4 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+| results
+-----------------------------+-------+--------------+----------+-----------=
++--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+| 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f0dcb6972cdf677de85bb18
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc5-44-g71865a=
+3b9f0a/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretec=
+h-ac.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc5-44-g71865a=
+3b9f0a/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretec=
+h-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f0dcb6972cdf67=
+7de85bb1d
+      new failure (last pass: v5.8-rc5-39-gf2eae871177c)
+      2 lines =20
