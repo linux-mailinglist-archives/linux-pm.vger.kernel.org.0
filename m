@@ -2,159 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3443821F785
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A6D21F7F7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 19:16:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728838AbgGNQly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 12:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728688AbgGNQlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 12:41:53 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EF3C08C5C1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 09:41:53 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id c7so5896589uap.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 09:41:53 -0700 (PDT)
+        id S1728845AbgGNRQE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 13:16:04 -0400
+Received: from mail-mw2nam10on2070.outbound.protection.outlook.com ([40.107.94.70]:6050
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726169AbgGNRQD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jul 2020 13:16:03 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ktujMN4mSm01mBiiOojCOaZzBFK+yvpkh7CPSonVQjZo7xsOiKjis9BnRu/QXkD14+3sKVBdiR3tUMRxTjpw1r5imqubTlZtGqP4H2F2MQUXbHPI9TBUz/nAHVO23CtQhTcWZQ3sibxb09XSLG7LBVOsb+hNL62t4vozY00B3xL3W189EJqZ/1aY0SGEMdbrBiW2ijA2z9Lu21/Gtd3s5yc4CSj7cpPBNsepqtKV98OBKy+qiyuRRpdKR/NvR2M11NSRBFFaGU7ZzJgC/NU5TjqFLgMlz1hFRZFC63a+QqTpnbsX8/8YV8Jo9qskotQ25bS8TrSZ5b626G9+gJygbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FbBY92KwgpYEniy5lcR1Z7maCt3W2cjGiK+EvQhyxrY=;
+ b=IUXd+R10LFirJfUlVY0vRxPWrmsxqp7VH8qAh6s/tE5EqcvTDht1QU8PBAXcjy2pTgN9zzHZsr7lP2LsdpIA4wpAPc5oabYYByLyHs29VeQEjP9iwwobLShrV5mg97yRTL+lZMQOtgcW1nlsyMSvA2jPMJe03xwEVe7tPRAmzCf+t3Vke2S6M9fvvE1n4hViNRvWSUivWYGam9ouCDaYJfH6tvwsQuh0AiNiRfOI1UQryaBTnCEQpbYMebNh4RzFkxfgvCYnVGdXZHTVk1uJAlRSlv/50+cAmF0QGvgUbziPHqHx2k1oSd6GLHxcYbrbNukKYGyUIB6/Ir4o7kMWog==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ab7n3z5mmwJTrVdm4I/Qk+EgWW2BK5sF3S4Gs9LC2pU=;
-        b=VHZOUHrVRhNSrg3KXXZP+GAKYukKuZJqUkm5rQjUQ1ljdD3rJiZmHJ9JBEZxI/gQ78
-         LdVSaAcjIaGH2WHm3B6K1fnEsO+RpwuJIMwNVJZg0DwnljFT9vzkoAWDwNWe+zXSrjao
-         IpMj2M0CS/PRNwwFHxaGEGojTVKjZxRItENog=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ab7n3z5mmwJTrVdm4I/Qk+EgWW2BK5sF3S4Gs9LC2pU=;
-        b=f9fwdh4+V9cn28DIEOosxSHWYqRjqcZIAlxFCULD58qOc+ReKN/0NuL7P5+SYK46NT
-         CFsMSHrzu3vhC8xYjhUVBqsCZaoTJSwCAh25fKoEwR0WwGOcytzDagBR/g7x3GplkKvB
-         vOgm5nMdVwsDe8lnkIVrYSAEq18JGhQ0GTHotdz4lVkUHg8G1q+nmV3YRh+rILoYD3Xu
-         g9mSjfoY/TrElGtA93zHeJBmOxkAFja2MlnFPBDzD+TXCA1yZZ7NP9YhJPsE97Shc8FT
-         qMqsQ7whk3s/sN7FGdZEdmRs3hoWbNcUw0TG3rnMMnEeOCjAfb8cb+7NHzo/1iWfjLsF
-         UZew==
-X-Gm-Message-State: AOAM531wboQ9wOSbSx7J5GAPzvT+AFkIWqmw3eSaeN9vZ1+sdCgYrryn
-        UGsrpz/eJ1vC34EB4sTdl9tUHFMMoZJWr0o6vGM/OA==
-X-Google-Smtp-Source: ABdhPJyXVJ/fLtTJ5u5u/TYEyFxPBC2v7sTjbhSHP3mdXvobPVLvPRM7juHvP/wKZQeY+BIpC4A3UhZVueVzzEMcOHI=
-X-Received: by 2002:ab0:6f0a:: with SMTP id r10mr4847028uah.100.1594744912382;
- Tue, 14 Jul 2020 09:41:52 -0700 (PDT)
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FbBY92KwgpYEniy5lcR1Z7maCt3W2cjGiK+EvQhyxrY=;
+ b=FRdzIM7AxcpFYiLsk5p4ExTI/EOMAMDQwaPgLV9UHrGSgv/v3mvCYZWw88owg0NJxAfqYdrPp7pQxVe2pGLBU+8xP3rFCxM2ZJNpT5NZfJkQpXqHLGbfO4n4mQsoCjGUTw+5vs8dwg9JAmV/SW9eAVz9mRvG//meELhn3+7ZhzU=
+Authentication-Results: amd.com; dkim=none (message not signed)
+ header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB2946.namprd12.prod.outlook.com (2603:10b6:408:9d::13)
+ by BN8PR12MB3636.namprd12.prod.outlook.com (2603:10b6:408:4a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.23; Tue, 14 Jul
+ 2020 17:15:58 +0000
+Received: from BN8PR12MB2946.namprd12.prod.outlook.com
+ ([fe80::8dfe:a00d:ac29:b1a4]) by BN8PR12MB2946.namprd12.prod.outlook.com
+ ([fe80::8dfe:a00d:ac29:b1a4%5]) with mapi id 15.20.3174.025; Tue, 14 Jul 2020
+ 17:15:57 +0000
+Subject: Re: [PATCH 13/13] cpufreq: amd_freq_sensitivity: Remove unused ID
+ structs
+To:     Lee Jones <lee.jones@linaro.org>, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Jacob Shin <jacob.shin@amd.com>
+References: <20200714145049.2496163-1-lee.jones@linaro.org>
+ <20200714145049.2496163-14-lee.jones@linaro.org>
+From:   Kim Phillips <kim.phillips@amd.com>
+Message-ID: <6101e041-41e9-22bc-488d-38124c139bc7@amd.com>
+Date:   Tue, 14 Jul 2020 12:15:55 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+In-Reply-To: <20200714145049.2496163-14-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BN8PR07CA0019.namprd07.prod.outlook.com
+ (2603:10b6:408:ac::32) To BN8PR12MB2946.namprd12.prod.outlook.com
+ (2603:10b6:408:9d::13)
 MIME-Version: 1.0
-References: <20200706140715.v2.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid>
- <20200714052941.GB3874@shao2-debian>
-In-Reply-To: <20200714052941.GB3874@shao2-debian>
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Tue, 14 Jul 2020 09:41:41 -0700
-Message-ID: <CANFp7mURm5QKe8afuCHjFt89bgJtOyUkj_MJKdfzVto0i7EpZw@mail.gmail.com>
-Subject: Re: [power] 47b918cf9a: kmsg.power_supply_ADP1:Error_in_uevent_for_wakeup_sysfs_add
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Bluez mailing list <linux-bluetooth@vger.kernel.org>,
-        ChromeOS Bluetooth Upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, lkp@lists.01.org,
-        yu.c.chen@intel.com, "Zhang, Rui" <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [10.252.5.212] (165.204.84.11) by BN8PR07CA0019.namprd07.prod.outlook.com (2603:10b6:408:ac::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3174.22 via Frontend Transport; Tue, 14 Jul 2020 17:15:56 +0000
+X-Originating-IP: [165.204.84.11]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 10994425-cd75-4a17-3817-08d8281992c8
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3636:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BN8PR12MB3636C19A991CC327065BBEB487610@BN8PR12MB3636.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3173;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qNdrBaNFaN0E/Nln/rmAoghTf3R4NmezlZSoe783yHDRswTF4vz+c1tgl8UYWwRn6Xkb77Rdx9ss72Zcj3QzhJx6IAr2UJqX/48uOTXiVUBEMo5zQGdwjvyRle84pxqujE9sj3Y5g5TEQLVknqdke3L4B/AHt/GlSsxDbhNak1XdOn+T/ZXp2bXV8TukhYDUI798UQ0g1WH6VQWKifvo8J1senuAf9N8cnE+uFwXrFFJZX0LsUhcGcuujevYDIBQf4/DybRo0iQrEd7MUZcEk1xie/ipuZ6FsWAkceF4gG6wDImFptLpwOtJpYB+vaGXGb0SH7Z59KOrEvcB1xqQLelJ8RDqFbuBK3WuMHQDhDu/O3wZxeNtRJf6xg7QMuh0
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2946.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(39860400002)(366004)(396003)(346002)(136003)(376002)(66556008)(66946007)(66476007)(16576012)(86362001)(52116002)(316002)(83380400001)(2616005)(4744005)(8676002)(36756003)(956004)(5660300002)(31686004)(6486002)(8936002)(26005)(31696002)(16526019)(2906002)(44832011)(53546011)(4326008)(186003)(478600001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: i/6xYyC9DjJVJc6mGlRPD7bWoeZiQpWwcux+/s1GVTJrf7/g8/wgtiip8x7jzKfhS6G+lg59m5J3Y/XPJsCymHVtIUaRUNjgL0NmB1avUsgKq0vwaA1QdmrkgRVf+CLTN4lVacUi1yGwFRemJcJ8FavgQWaboflG4nSp5A6GyhC65rZF4G/8TBROaMI+myNgawNE6M9yqpQf391QHoylxbU9mJ7NJbbrZx158eRwMCspb1KpNSvgIgGhPqAeAoxiZVHdjt3LdeVrC5ZjuE1YgNAWOKpAwlCiEgIn/8ZZq122T0Jx8P6Eqq2gdYmBd7UGcbg3m6uyUu0hHyDxpccuVJiLo0P/jD4YHSr+icPRzGB94ON0Q/0nqFRc8xDPwzqUA77sFgQQt1uPl7KeYkb01G+oTxqpdul8eDPLUbW2oq2UynNJyQLnI1FHd34/U8nx3XCNinS6nhsodZwaBkTDUOzcdF1PY4cCL20VPZHPHGk=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 10994425-cd75-4a17-3817-08d8281992c8
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2946.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2020 17:15:57.7322
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dn5XjOMGTkR/c4t+Aa+sKY4c6SGodqAzyb8X+/5kbYCRRxvOMPUrSvS+O/hK2pKAhEgzoI9r1ma0JW1q3DeLBQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3636
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This version of the patch was not merged and the message above doesn't
-exist in the merged patch:
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=bleeding-edge&id=9a3e9e6ff6d7f6b8ce7903893962d50adcbe82d2
+On 7/14/20 9:50 AM, Lee Jones wrote:
+> Can't see them being used anywhere and the compiler doesn't complain
+> that they're missing, so ...
+> 
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/cpufreq/amd_freq_sensitivity.c:147:32: warning: ‘amd_freq_sensitivity_ids’ defined but not used [-Wunused-const-variable=]
+>  147 | static const struct x86_cpu_id amd_freq_sensitivity_ids[] = {
+>  | ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Cc: Jacob Shin <jacob.shin@amd.com>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
 
-The err log was emitted during boot as well and is innocuous since the
-power_supply initializes fully in the next line:
-kern  :err   : [    5.918034] power_supply ADP1: Error in uevent for
-wakeup_sysfs_add: -11
-kern  :info  : [    5.918300] ACPI: AC Adapter [ADP1] (on-line)
+Same comment as for patch 9/13: these are used automatic module loading.
 
-Abhishek
-
-On Mon, Jul 13, 2020 at 10:30 PM kernel test robot
-<rong.a.chen@intel.com> wrote:
->
-> Greeting,
->
-> FYI, we noticed the following commit (built with gcc-9):
->
-> commit: 47b918cf9a1d2b6e36706fd2be2b91e65f490146 ("[PATCH v2 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove")
-> url: https://github.com/0day-ci/linux/commits/Abhishek-Pandit-Subedi/power-Emit-changed-uevent-on-wakeup_sysfs_add-remove/20200707-050912
-> base: https://git.kernel.org/cgit/linux/kernel/git/rafael/linux-pm.git linux-next
->
-> in testcase: suspend-stress
-> with following parameters:
->
->         mode: freeze
->         iterations: 10
->
->
->
-> on test machine: 4 threads Ivy Bridge with 4G memory
->
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->
->
->
->
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <rong.a.chen@intel.com>
->
->
->
-> kern  :debug : [    5.917685] calling  acpi_ac_init+0x0/0xa3 @ 1
-> kern  :err   : [    5.918034] power_supply ADP1: Error in uevent for wakeup_sysfs_add: -11
-> kern  :info  : [    5.918300] ACPI: AC Adapter [ADP1] (on-line)
-> kern  :debug : [    5.918500] initcall acpi_ac_init+0x0/0xa3 returned 0 after 609 usecs
-> kern  :debug : [    5.918725] calling  acpi_button_driver_init+0x0/0x53 @ 1
-> kern  :info  : [    5.919006] input: Power Button as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0C:00/input/input0
-> kern  :info  : [    5.919367] ACPI: Power Button [PWRB]
-> kern  :info  : [    5.919580] input: Lid Switch as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0C0D:00/input/input1
-> kern  :info  : [    5.919927] ACPI: Lid Switch [LID]
-> kern  :info  : [    5.920131] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input2
-> kern  :info  : [    5.920455] ACPI: Power Button [PWRF]
-> kern  :debug : [    5.920644] initcall acpi_button_driver_init+0x0/0x53 returned 0 after 1669 usecs
-> kern  :debug : [    5.920944] calling  acpi_fan_driver_init+0x0/0x13 @ 1
-> kern  :debug : [    5.921155] initcall acpi_fan_driver_init+0x0/0x13 returned 0 after 11 usecs
-> kern  :debug : [    5.921388] calling  acpi_processor_driver_init+0x0/0xb7 @ 1
-> kern  :debug : [    5.921905] initcall acpi_processor_driver_init+0x0/0xb7 returned 0 after 299 usecs
-> kern  :debug : [    5.922203] calling  acpi_thermal_init+0x0/0x82 @ 1
-> kern  :info  : [    5.922755] thermal LNXTHERM:00: registered as thermal_zone0
-> kern  :info  : [    5.922977] ACPI: Thermal Zone [TZ01] (16 C)
-> kern  :debug : [    5.923177] initcall acpi_thermal_init+0x0/0x82 returned 0 after 759 usecs
-> kern  :debug : [    5.923409] calling  acpi_battery_init+0x0/0x39 @ 1
-> kern  :debug : [    5.923606] initcall acpi_battery_init+0x0/0x39 returned 0 after 4 usecs
-> kern  :debug : [    5.923841] calling  acpi_hed_driver_init+0x0/0x11 @ 1
-> kern  :debug : [    5.924075] initcall acpi_hed_driver_init+0x0/0x11 returned 0 after 32 usecs
-> kern  :info  : [    5.924178] battery: ACPI: Battery Slot [BAT1] (battery present)
-> kern  :debug : [    5.924309] calling  bgrt_init+0x0/0xbe @ 1
-> kern  :debug : [    5.924312] initcall bgrt_init+0x0/0xbe returned -19 after 0 usecs
-> kern  :debug : [    5.924928] calling  erst_init+0x0/0x309 @ 1
-> kern  :debug : [    5.925110] initcall erst_init+0x0/0x309 returned 0 after 0 usecs
-> kern  :debug : [    5.925325] calling  ghes_init+0x0/0xe5 @ 1
-> kern  :debug : [    5.925504] initcall ghes_init+0x0/0xe5 returned -19 after 0 usecs
-> kern  :debug : [    5.925721] calling  erst_dbg_init+0x0/0x2c @ 1
-> kern  :info  : [    5.925912] ERST DBG: ERST support is disabled.
->
->
->
-> To reproduce:
->
->         git clone https://github.com/intel/lkp-tests.git
->         cd lkp-tests
->         bin/lkp install job.yaml  # job file is attached in this email
->         bin/lkp run     job.yaml
->
->
->
-> Thanks,
-> Rong Chen
->
+Kim
