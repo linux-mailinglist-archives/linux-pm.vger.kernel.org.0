@@ -2,238 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5A921E850
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 08:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E7721E88C
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 08:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727055AbgGNGhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 02:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727104AbgGNGhH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 02:37:07 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F86C061755
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 23:37:07 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ls15so1109117pjb.1
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jul 2020 23:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vW6KQNy5+oCCRnnC1Q8VPuviXyfCEPdbUReZkc1RE18=;
-        b=sLBXfe3ttAMfTz75e+ERY2AsS9FIU/c552V9ylpEOSE595ixwhhjeZhxlfNesV9IpO
-         zd1NGnpeih9vKO0Ey8fZYmRTyORhlacRU/MgWpoRfzpGqYElumOD7eSFPh59pYLuGEK3
-         gZfMOMDdFRSyiieGMIN3sCqenjPsCuZZlpENJSzJxTEJ705jrtNUjYGrjdL1dUxsoJCA
-         0tprF+BFztmbNPUljlXaGezagsiaXi+fFroI3A2f29TfxwEBXXZ5C7DnyOj2avvbU1qY
-         ALmw1/oaZbDi0TwM+vg/OfRM5A9Lfck0pVdeneS1Z7q4cdRwt5K+A2Uxz2fnaJ8OWLKX
-         lVUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vW6KQNy5+oCCRnnC1Q8VPuviXyfCEPdbUReZkc1RE18=;
-        b=nguptquUtxm4v85ABrSFvRW54NJ5N/F65NdeulrF67Fx7pwoeruMIKhuIevgHgB1WT
-         UZ1pt5yc9NwslR4VMsf2DNZQ+V2A+pBx0gJwcgEF8MVOvHdO534I+IQIsDCIwRolkO/I
-         dmNm9SjwRV+9p34R12akDT9U/V4zBwQzuG/qdbWZ86zJAoLhNlhjmDL1zE0wHYL9/eA9
-         DY/Q9uHnsVYOKSplYiil+2RhQsvGkRRWtSgNFmwhfUvbaD2MsPTDGfa2O9cwHhjqAz+J
-         Jd6oEjE+oB9x8xOdQ+9K+fRhVOyadHbFlLMIbl0PYb7IzMi6Sh5l3a/KYicRPZRmUCaq
-         fEiQ==
-X-Gm-Message-State: AOAM531IRiLE8NUJoElUpGQ1lcwp1sTwa3sFAImj3DUXNvHL59sPE4mC
-        Gp9G+Hkb9+pMxwdN6itKEXHRcA==
-X-Google-Smtp-Source: ABdhPJzHeXdnI5gFF/5mblIM3hDic3jPtUw/UvPtLtB98l/KOSBrvn3KNrfDcm7rgkIe8jSo2pMjXQ==
-X-Received: by 2002:a17:902:e901:: with SMTP id k1mr2847764pld.130.1594708626463;
-        Mon, 13 Jul 2020 23:37:06 -0700 (PDT)
-Received: from localhost ([122.172.34.142])
-        by smtp.gmail.com with ESMTPSA id hg13sm1331299pjb.21.2020.07.13.23.37.05
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Jul 2020 23:37:05 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-Cc:     linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Subject: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-Date:   Tue, 14 Jul 2020 12:06:53 +0530
-Message-Id: <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1594707424.git.viresh.kumar@linaro.org>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726698AbgGNGs1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 02:48:27 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:51104 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726629AbgGNGs1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 02:48:27 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200714064825euoutp015e825ca0585f07c5483db024bef37723~hi6oKNLlK1736817368euoutp01A
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 06:48:25 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200714064825euoutp015e825ca0585f07c5483db024bef37723~hi6oKNLlK1736817368euoutp01A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1594709305;
+        bh=ktQQIQEMhkR4F9kpdyKQJsHX/Rt+fNec/hA6GOQDIDo=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=KnFLWT9eNSHFdbpy9cpUFYwAWafrfbss2bYHW6WMcqUHuR8oA/4wD3RgLLVaKDsrj
+         oeNKula/6yFuaUGYR/f8OWsWjwwnT716ZLxhwdp5p/aHt5nR73xWJ+g4e7ZRtOoJPe
+         b0fkw3OZXOAgeu7WFSEBCJfpujLazgGJjxNI9SpA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200714064824eucas1p26ebecc4a1e3f27faa81ae62b7a853164~hi6npld3e1846918469eucas1p2A;
+        Tue, 14 Jul 2020 06:48:24 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 55.AA.06318.8355D0F5; Tue, 14
+        Jul 2020 07:48:24 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104~hi6nRJW4M3028930289eucas1p2F;
+        Tue, 14 Jul 2020 06:48:24 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200714064824eusmtrp1acc85bb4bcfb81bf88cd5c6a6bf0ac99~hi6nQflzQ2736027360eusmtrp1q;
+        Tue, 14 Jul 2020 06:48:24 +0000 (GMT)
+X-AuditID: cbfec7f5-38bff700000018ae-a8-5f0d55381fe0
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1E.F6.06017.8355D0F5; Tue, 14
+        Jul 2020 07:48:24 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200714064824eusmtip1439d6154bd89a5cef462cde69ec5befc~hi6m2prql0479804798eusmtip19;
+        Tue, 14 Jul 2020 06:48:24 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Marian Mihailescu <mihailescu2m@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [PATCH] ARM: dts: exynos: Disable frequency scaling for FSYS bus
+Date:   Tue, 14 Jul 2020 08:47:59 +0200
+Message-Id: <20200714064759.31772-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrMIsWRmVeSWpSXmKPExsWy7djPc7oWobzxBqtemVlsnLGe1eL6l+es
+        FufPb2C3uLxrDpvF594jjBYzzu9jslh75C67xfppP1ktvp14xOjA6bFz1l12j02rOtk8+ras
+        YvT4vEkugCWKyyYlNSezLLVI3y6BK2Nq5yu2gm98Ffsu3WFpYNzB08XIwSEhYCKxo8m8i5GL
+        Q0hgBaPElXVz2LoYOYGcL4wSayanQCQ+M0rcWdfEAtPQ/jEMIr6cUWLTtIdMEA5Qwy6gq0C6
+        2QQMJbredoFNEhGIl3jUf5cFpIhZoJ9J4vGZrYwgCWEBT4nGVbNYQGwWAVWJXe+7mEBsXgFb
+        iea9X8BqJATkJVZvOMAM0iwhcJ9NYsXPqywQCRegbYeYIGxhiVfHt7BD2DISpyf3sEA0NDNK
+        PDy3lh3C6WGUuNw0A2qstcSdc7/YQB5iFtCUWL9LHyLsKHGns5cV4k8+iRtvBUHCzEDmpG3T
+        mSHCvBIdbUIQ1WoSs46vg1t78MIlZgjbQ+Jt02N2SDDGStyd8oJtAqPcLIRdCxgZVzGKp5YW
+        56anFhvnpZbrFSfmFpfmpesl5+duYgQmhdP/jn/dwbjvT9IhRgEORiUeXgl/nngh1sSy4src
+        Q4wSHMxKIrxOZ0/HCfGmJFZWpRblxxeV5qQWH2KU5mBREuc1XvQyVkggPbEkNTs1tSC1CCbL
+        xMEp1cC47vST0EXt02SnBc1MPp1gr77pfEXFPc7JRddiTL3zJjo4fmo7e5jJUv3N43n3rCPF
+        2xyPW77p8/2WPLfVLy541Y2HYX1LijZz1ZQIpP29VyrvN9Pw/brwvkMRcUn3H6oeD5lg8OnN
+        5Qfhb049znm249TjpetOXO5PnLOuLLFq9erbyndL2u6uV2Ipzkg01GIuKk4EAErnwcwGAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFLMWRmVeSWpSXmKPExsVy+t/xu7oWobzxBlMXyFtsnLGe1eL6l+es
+        FufPb2C3uLxrDpvF594jjBYzzu9jslh75C67xfppP1ktvp14xOjA6bFz1l12j02rOtk8+ras
+        YvT4vEkugCVKz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP0Ng81srIVEnfziYlNSezLLVI
+        3y5BL2Nq5yu2gm98Ffsu3WFpYNzB08XIwSEhYCLR/jGsi5GLQ0hgKaPEnX9tbF2MnEBxGYmT
+        0xpYIWxhiT/Xutggij4xSsz+fZAdJMEmYCjR9bYLrEFEIFFi9sfZYEXMApOZJM4cPgLWLSzg
+        KdG4ahYLiM0ioCqx630XE4jNK2Ar0bz3CyPEBnmJ1RsOME9g5FnAyLCKUSS1tDg3PbfYSK84
+        Mbe4NC9dLzk/dxMjMBy3Hfu5ZQdj17vgQ4wCHIxKPLwS/jzxQqyJZcWVuYcYJTiYlUR4nc6e
+        jhPiTUmsrEotyo8vKs1JLT7EaAq0fCKzlGhyPjBW8kriDU0NzS0sDc2NzY3NLJTEeTsEDsYI
+        CaQnlqRmp6YWpBbB9DFxcEo1ME6XPSgaOs3ZIndhgoDxjYlz52496L+JbTFr0M85Ezb+Z9B+
+        4DDp9qRH3qXsq9cruH60vhX2x/iQaPefVpZVJS9vK/y7bPnhruMu6XQ+8V2dttNqDFVvpmiE
+        OfI1fS2UTzmi1ZypsFF/1w3bL7eThdp+Zc8vsPhV37QqiWlS1C2uR82uJkm6E5VYijMSDbWY
+        i4oTAV32XFRdAgAA
+X-CMS-MailID: 20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104
+References: <CGME20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Several parts of the kernel are already using the effective CPU
-utilization to get the current load on the CPU, do the same here instead
-of depending on the idle time of the CPU, which isn't that accurate
-comparatively.
+Commit 1019fe2c7280 ("ARM: dts: exynos: Adjust bus related OPPs to the
+values correct for Exynos5422 Odroids") changed the parameters of the
+OPPs for the FSYS bus. Besides the frequency adjustments, it also removed
+the 'shared-opp' property from the OPP table used for FSYS_APB and FSYS
+busses.
 
-Note that, this (and CPU frequency scaling in general) doesn't work that
-well with idle injection as that is done from rt threads and is counted
-as load while it tries to do quite the opposite. That should be solved
-separately though.
+This revealed that in fact the FSYS bus frequency scaling never worked.
+When one OPP table is marked as 'opp-shared', only the first bus which
+selects the OPP sets the rate of its clock. Then OPP core assumes that
+the other busses have been changed to that OPP and no change to their
+clock rates are needed. Thus when FSYS_APB bus, which was registered
+first, set the rate for its clock, the OPP core did not change the FSYS
+bus clock later.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+The mentioned commit removed that behavior, what introduced a regression
+on some OdroidXU3 boards. Frequency scaling of the FSYS bus causes
+instability of the USB host operation, what can be observed as network
+hangs. To restore old behavior, simply disable frequency scaling for the
+FSYS bus.
+
+Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+Fixes: 1019fe2c7280 ("ARM: dts: exynos: Adjust bus related OPPs to the values correct for Exynos5422 Odroids")
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 ---
- drivers/thermal/cpufreq_cooling.c | 65 +++++++------------------------
- 1 file changed, 15 insertions(+), 50 deletions(-)
+ arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 6c0e1b053126..74340b2b0da7 100644
---- a/drivers/thermal/cpufreq_cooling.c
-+++ b/drivers/thermal/cpufreq_cooling.c
-@@ -23,6 +23,7 @@
- #include <linux/thermal.h>
- 
- #include <trace/events/thermal.h>
-+#include "../../kernel/sched/sched.h"
- 
- /*
-  * Cooling state <-> CPUFreq frequency
-@@ -38,16 +39,6 @@
-  *	...
-  */
- 
--/**
-- * struct time_in_idle - Idle time stats
-- * @time: previous reading of the absolute time that this cpu was idle
-- * @timestamp: wall time of the last invocation of get_cpu_idle_time_us()
-- */
--struct time_in_idle {
--	u64 time;
--	u64 timestamp;
--};
--
- /**
-  * struct cpufreq_cooling_device - data for cooling device with cpufreq
-  * @id: unique integer value corresponding to each cpufreq_cooling_device
-@@ -62,7 +53,6 @@ struct time_in_idle {
-  *	registered cooling device.
-  * @policy: cpufreq policy.
-  * @node: list_head to link all cpufreq_cooling_device together.
-- * @idle_time: idle time stats
-  * @qos_req: PM QoS contraint to apply
-  *
-  * This structure is required for keeping information of each registered
-@@ -76,7 +66,6 @@ struct cpufreq_cooling_device {
- 	struct em_perf_domain *em;
- 	struct cpufreq_policy *policy;
- 	struct list_head node;
--	struct time_in_idle *idle_time;
- 	struct freq_qos_request qos_req;
+diff --git a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+index ab27ff8bc3dc..afe090578e8f 100644
+--- a/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
++++ b/arch/arm/boot/dts/exynos5422-odroid-core.dtsi
+@@ -411,12 +411,6 @@
+ 	status = "okay";
  };
  
-@@ -132,34 +121,21 @@ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
- }
- 
- /**
-- * get_load() - get load for a cpu since last updated
-+ * get_load() - get current load for a cpu
-  * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
-  * @cpu:	cpu number
-- * @cpu_idx:	index of the cpu in time_in_idle*
-+ * @cpu_idx:	index of the cpu
-  *
-- * Return: The average load of cpu @cpu in percentage since this
-- * function was last called.
-+ * Return: The current load of cpu @cpu in percentage.
-  */
- static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
- 		    int cpu_idx)
- {
--	u32 load;
--	u64 now, now_idle, delta_time, delta_idle;
--	struct time_in_idle *idle_time = &cpufreq_cdev->idle_time[cpu_idx];
+-&bus_fsys {
+-	operating-points-v2 = <&bus_fsys2_opp_table>;
+-	devfreq = <&bus_wcore>;
+-	status = "okay";
+-};
 -
--	now_idle = get_cpu_idle_time(cpu, &now, 0);
--	delta_idle = now_idle - idle_time->time;
--	delta_time = now - idle_time->timestamp;
-+	unsigned long util = cpu_util_cfs(cpu_rq(cpu));
-+	unsigned long max = arch_scale_cpu_capacity(cpu);
- 
--	if (delta_time <= delta_idle)
--		load = 0;
--	else
--		load = div64_u64(100 * (delta_time - delta_idle), delta_time);
--
--	idle_time->time = now_idle;
--	idle_time->timestamp = now;
--
--	return load;
-+	util = effective_cpu_util(cpu, util, max, ENERGY_UTIL, NULL);
-+	return (util * 100) / max;
- }
- 
- /**
-@@ -192,13 +168,12 @@ static u32 get_dynamic_power(struct cpufreq_cooling_device *cpufreq_cdev,
-  * Instead, we calculate the current power on the assumption that the
-  * immediate future will look like the immediate past.
-  *
-- * We use the current frequency and the average load since this
-- * function was last called.  In reality, there could have been
-- * multiple opps since this function was last called and that affects
-- * the load calculation.  While it's not perfectly accurate, this
-- * simplification is good enough and works.  REVISIT this, as more
-- * complex code may be needed if experiments show that it's not
-- * accurate enough.
-+ * We use the current frequency and the current load.  In reality,
-+ * there could have been multiple opps since this function was last
-+ * called and that affects the load calculation.  While it's not
-+ * perfectly accurate, this simplification is good enough and works.
-+ * REVISIT this, as more complex code may be needed if experiments show
-+ * that it's not accurate enough.
-  *
-  * Return: 0 on success, -E* if getting the static power failed.
-  */
-@@ -523,13 +498,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 
- 	cpufreq_cdev->policy = policy;
- 	num_cpus = cpumask_weight(policy->related_cpus);
--	cpufreq_cdev->idle_time = kcalloc(num_cpus,
--					 sizeof(*cpufreq_cdev->idle_time),
--					 GFP_KERNEL);
--	if (!cpufreq_cdev->idle_time) {
--		cdev = ERR_PTR(-ENOMEM);
--		goto free_cdev;
--	}
- 
- 	/* max_level is an index, not a counter */
- 	cpufreq_cdev->max_level = i - 1;
-@@ -537,7 +505,7 @@ __cpufreq_cooling_register(struct device_node *np,
- 	ret = ida_simple_get(&cpufreq_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
- 		cdev = ERR_PTR(ret);
--		goto free_idle_time;
-+		goto free_cdev;
- 	}
- 	cpufreq_cdev->id = ret;
- 
-@@ -586,8 +554,6 @@ __cpufreq_cooling_register(struct device_node *np,
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
- remove_ida:
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--free_idle_time:
--	kfree(cpufreq_cdev->idle_time);
- free_cdev:
- 	kfree(cpufreq_cdev);
- 	return cdev;
-@@ -680,7 +646,6 @@ void cpufreq_cooling_unregister(struct thermal_cooling_device *cdev)
- 	thermal_cooling_device_unregister(cdev);
- 	freq_qos_remove_request(&cpufreq_cdev->qos_req);
- 	ida_simple_remove(&cpufreq_ida, cpufreq_cdev->id);
--	kfree(cpufreq_cdev->idle_time);
- 	kfree(cpufreq_cdev);
- }
- EXPORT_SYMBOL_GPL(cpufreq_cooling_unregister);
+ &bus_fsys2 {
+ 	operating-points-v2 = <&bus_fsys2_opp_table>;
+ 	devfreq = <&bus_wcore>;
 -- 
-2.25.0.rc1.19.g042ed3e048af
+2.17.1
 
