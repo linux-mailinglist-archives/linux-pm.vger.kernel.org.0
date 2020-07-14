@@ -2,48 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 280E121F861
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 19:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F91221F86E
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jul 2020 19:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgGNRmz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 14 Jul 2020 13:42:55 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:43791 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbgGNRmy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 13:42:54 -0400
-Received: by mail-oo1-f67.google.com with SMTP id t12so3488180ooc.10;
-        Tue, 14 Jul 2020 10:42:54 -0700 (PDT)
+        id S1726169AbgGNRoB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 14 Jul 2020 13:44:01 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:37795 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbgGNRoB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 13:44:01 -0400
+Received: by mail-ot1-f68.google.com with SMTP id w17so13677380otl.4;
+        Tue, 14 Jul 2020 10:44:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S0/1ZaSgSVdg/MxTYjJ9dtzl+Xg6TV7Nwz4t/Mg+vsA=;
-        b=bxG5u3JaixTFLisBdjbjmgG4Jst8r6wVfvLIGPHWzMlVo37Epp2Q4apYEcxdyWhO8Z
-         TaXXs8AThce5w/pZCHmpK5f7+PVxyoWsx0g4iaer6Sf6WKFj/Zt0Rl1zPL511V1/0wJ6
-         TjQz3WlqO22fERTQw96XP7ixxfZ39Y/8jSaMv7LIVY6CAoS0LFv9EIJlzl/tV5zzhg4D
-         es0R4+fpTaL/eZvlyQCuw2MZ01ICIcKVYvJ3iZbT5r+GQQB3T3qJKn5Aw3ZJWw/IWvUZ
-         pNansNA2kP6zgGsN3rVPctRK4fedW3VwcsW31+mJpP9mn8uY5ZP4VTpW69+bx3wL4LHB
-         o2Dw==
-X-Gm-Message-State: AOAM530/XpfJzhQ7svUeSjwdNyx/T48v0Jwv1NJjIduNMjmp5sWkuaDU
-        6JJLeo12H7rsmJU/+8wcMAC8ODvfdc34SJhdGQk=
-X-Google-Smtp-Source: ABdhPJymOPVRLUsrOujMOFvvybCIJI6YZCquLF+UTRGeAaJBEmNdfb5ZLFnZQsOI5ZGbtgzfbZEvH0Pjtz9Um19XLJw=
-X-Received: by 2002:a4a:9552:: with SMTP id n18mr5563407ooi.1.1594748574051;
- Tue, 14 Jul 2020 10:42:54 -0700 (PDT)
+        bh=mCgUl/KQDaKe/GhwnSeh5pmlX/T9coOehcI2bZOS1Jk=;
+        b=uOrjmiE7wKSscSIAz0B1PlVuyP292iewqUn/98o00Nw502tLFFnpykONG6yRwY50O7
+         EgSiNus9o84/U5We/DwdpgI+I8MUCQq8gRHHlmTSl0kRD+inxAi8/sC4HpVQTU10W2mb
+         T2R7+tyaaXLgtWIwYH8Lq4tt0KrMe2SGXlcXxILZKnj8hIhc2hqQuhY/xf376RgQB/KR
+         2LiwC+zuceAVS+iOM6NqCVTZPJrCrXSo2dKqwIcuBAI3bMV5rlgWZmxp2smCJpKCfm1p
+         K81L95qJZfyJ7ld9W0ieyhpQefLMHo7FomCDJq0QiSq84OjauQmubiY1ub/9pZrTNiSl
+         0Asw==
+X-Gm-Message-State: AOAM532qtHPDAqjVPhZnQbSH7XbeQ73ffui6b0KY+sCh8c0bddkOyXw9
+        sxIfvJBtRxWKWlMnHAJ8/tQdw+WqfkbQB8KvZAE=
+X-Google-Smtp-Source: ABdhPJxVUqvpDTkyR25LySONRyXttnQKmWkzj+1B6BBCOjjV6Zu5+Jw6fDpJzP4RA3e63VtM/WPK0rpvrBWxEO0usQM=
+X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr4975216ots.118.1594748640032;
+ Tue, 14 Jul 2020 10:44:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200714145049.2496163-1-lee.jones@linaro.org> <20200714145049.2496163-12-lee.jones@linaro.org>
-In-Reply-To: <20200714145049.2496163-12-lee.jones@linaro.org>
+References: <20200714145049.2496163-1-lee.jones@linaro.org> <20200714145049.2496163-11-lee.jones@linaro.org>
+In-Reply-To: <20200714145049.2496163-11-lee.jones@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Jul 2020 19:42:42 +0200
-Message-ID: <CAJZ5v0h-RjAFChHB9OazbkwSmBR1E-sFCBO_b5=mC+Jr-j_VmA@mail.gmail.com>
-Subject: Re: [PATCH 11/13] cpufreq: pcc-cpufreq: Remove unused ID structs
+Date:   Tue, 14 Jul 2020 19:43:48 +0200
+Message-ID: <CAJZ5v0jXjtZ0=ZnOZm2LNR32TwWSrq4C4bwhNh5tOOChfpWZxw@mail.gmail.com>
+Subject: Re: [PATCH 10/13] cpufreq: powernow-k8: Make use of known set but not
+ used variables
 To:     Lee Jones <lee.jones@linaro.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Matthew Garrett <mjg@redhat.com>,
-        Nagananda Chumbalkar <nagananda.chumbalkar@hp.com>
+        Andreas Herrmann <herrmann.der.user@googlemail.com>,
+        Dominik Brodowski <linux@brodo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Paul Devriendt <paul.devriendt@amd.com>,
+        Mark Langsdorf <mark.langsdorf@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 Sender: linux-pm-owner@vger.kernel.org
@@ -53,42 +57,56 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
 >
-> Can't see them being used anywhere and the compiler doesn't complain
-> that they're missing, so ...
-
-Autoloading of the module too.
-
+> If we fail to use a variable, even a 'dummy' one, then the compiler
+> complains that it is set but not used.  We know this is fine, so we
+> set it to its own value here.
+>
 > Fixes the following W=1 kernel build warning(s):
 >
->  drivers/cpufreq/pcc-cpufreq.c:619:36: warning: ‘processor_device_ids’ defined but not used [-Wunused-const-variable=]
->  619 | static const struct acpi_device_id processor_device_ids[] = {
->  | ^~~~~~~~~~~~~~~~~~~~
+>  drivers/cpufreq/powernow-k8.c: In function ‘pending_bit_stuck’:
+>  drivers/cpufreq/powernow-k8.c:89:10: warning: variable ‘hi’ set but not used [-Wunused-but-set-variable]
+>  89 | u32 lo, hi;
+>  | ^~
+>  drivers/cpufreq/powernow-k8.c: In function ‘core_voltage_pre_transition’:
+>  drivers/cpufreq/powernow-k8.c:285:14: warning: variable ‘lo’ set but not used [-Wunused-but-set-variable]
+>  285 | u32 maxvid, lo, rvomult = 1;
+>  | ^~
 >
-> Cc: Matthew Garrett <mjg@redhat.com>
-> Cc: Nagananda Chumbalkar <nagananda.chumbalkar@hp.com>
+> Cc: Andreas Herrmann <herrmann.der.user@googlemail.com>
+> Cc: Dominik Brodowski <linux@brodo.de>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Paul Devriendt <paul.devriendt@amd.com>
+> Cc: Mark Langsdorf <mark.langsdorf@amd.com>
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/cpufreq/pcc-cpufreq.c | 7 -------
->  1 file changed, 7 deletions(-)
+>  drivers/cpufreq/powernow-k8.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
-> index 5789fe7a94bd3..99cf8b78c032a 100644
-> --- a/drivers/cpufreq/pcc-cpufreq.c
-> +++ b/drivers/cpufreq/pcc-cpufreq.c
-> @@ -616,13 +616,6 @@ static void __exit pcc_cpufreq_exit(void)
->         free_percpu(pcc_cpu_info);
+> diff --git a/drivers/cpufreq/powernow-k8.c b/drivers/cpufreq/powernow-k8.c
+> index 3984959eed1d5..b76df81044c4f 100644
+> --- a/drivers/cpufreq/powernow-k8.c
+> +++ b/drivers/cpufreq/powernow-k8.c
+> @@ -89,6 +89,7 @@ static int pending_bit_stuck(void)
+>         u32 lo, hi;
+>
+>         rdmsr(MSR_FIDVID_STATUS, lo, hi);
+> +       hi &= hi; /* Silence set but not used warning */
+
+Hmm.
+
+What about using __always_unused for this?
+
+>         return lo & MSR_S_LO_CHANGE_PENDING ? 1 : 0;
 >  }
 >
-> -static const struct acpi_device_id processor_device_ids[] = {
-> -       {ACPI_PROCESSOR_OBJECT_HID, },
-> -       {ACPI_PROCESSOR_DEVICE_HID, },
-> -       {},
-> -};
-> -MODULE_DEVICE_TABLE(acpi, processor_device_ids);
-> -
->  MODULE_AUTHOR("Matthew Garrett, Naga Chumbalkar");
->  MODULE_VERSION(PCC_VERSION);
->  MODULE_DESCRIPTION("Processor Clocking Control interface driver");
+> @@ -292,6 +293,7 @@ static int core_voltage_pre_transition(struct powernow_k8_data *data,
+>                 rvomult = 2;
+>         rvosteps *= rvomult;
+>         rdmsr(MSR_FIDVID_STATUS, lo, maxvid);
+> +       lo &= lo; /* Silence set but not used warning */
+>         maxvid = 0x1f & (maxvid >> 16);
+>         pr_debug("ph1 maxvid=0x%x\n", maxvid);
+>         if (reqvid < maxvid) /* lower numbers are higher voltages */
 > --
 > 2.25.1
 >
