@@ -2,69 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70567221647
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 22:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1A6221662
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 22:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbgGOUcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 16:32:08 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33233 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbgGOUcH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 16:32:07 -0400
-Received: by mail-io1-f68.google.com with SMTP id d18so3709557ion.0;
-        Wed, 15 Jul 2020 13:32:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xgpaPe39mEo1k9W7lGAlknVj+R0r4vQdiUF0SkOMUw8=;
-        b=bqOYjFOM0b+cvBl+/JZNVYQR0qOD5OcVVL/B+gidid2UXi7I8utqqRE6kMK8PZizEP
-         Tpo9YzG6zWSUVthYipMAyefWDXPqiuBiZSj9/mkyUaeKlnnO1D+XPi11YNj6QBLYnwU/
-         YkgdTRkIDyxlmKxzzOxyCDdqNdlAkaj3C6QtdTwOyxprhKY1f8uPz7CzG7UjGIw7mT/H
-         HFjHHSNxCGF4MRFI3x/+bV1bi54NTFvDVDNI9ybkE1AbHTsK21pBll2nlMpIsjU6glXz
-         NN1tdOsZUrUoeee2m7NYDbYjqE3orlNPgVy6w7N+WBWsgzNuGLVzx+ABZbdWolLJHf7c
-         Pp9w==
-X-Gm-Message-State: AOAM531oLRKNXQMUzVdPqVBGkOM9jPZgF+aAyWSjoidOUf1mcM+1/R43
-        TNbzst7fOUX2E0B6PYdxR1U2pRUlqw==
-X-Google-Smtp-Source: ABdhPJznWQ9ULp+AZKrH/U6yUY+gFlaVC14n5TBcxj+4CLE+vxs6itLKSVREKbLdn7XNPC7/zvYV/g==
-X-Received: by 2002:a05:6602:148f:: with SMTP id a15mr1165503iow.26.1594845126473;
-        Wed, 15 Jul 2020 13:32:06 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v13sm1641502iox.12.2020.07.15.13.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 13:32:05 -0700 (PDT)
-Received: (nullmailer pid 769501 invoked by uid 1000);
-        Wed, 15 Jul 2020 20:32:04 -0000
-Date:   Wed, 15 Jul 2020 14:32:04 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: update Amit Kucheria's email to a single
- email address
-Message-ID: <20200715203204.GA769304@bogus>
-References: <8cbb7004a6a9b846a8d827f514f33f1a265dd5d4.1593498024.git.amit.kucheria@linaro.org>
+        id S1726786AbgGOUji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 16:39:38 -0400
+Received: from cmta20.telus.net ([209.171.16.93]:53941 "EHLO cmta20.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726675AbgGOUjh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 16:39:37 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id voBejhx9xljNxvoBgjp2il; Wed, 15 Jul 2020 14:39:35 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1594845575; bh=9fRULD8XlrgndUg5eFygGTTDWcJ/HwRXNiPujg/A/Qc=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=1fvtETkLR13imU+Vlzy1L7GOkj7CLH2z21fXJ9DDEaoqv6sxI7WRhSXOJw5fTuyT8
+         WoRFqST6TtfEllXl68MlT8KKs1qY9O9E27x87xXsanipAZ1QpcslVOcZCgybhqCL7i
+         05hY8TaopCbN43WaPsjj99Xdx/U5/0UI32Gfnkdy0lSXEfYpKOJ5yYH5dUh8HJlLry
+         WWLIFLA4M75+0zZyk9cQim6qdEAnrcvBbrvB2ycHQQYl0QItLwO/0HmF8B66Swu+sW
+         vitp5pvvbLC0KpmQ5EqaxfSup+4u/jqIFrYIMq/E+nCG0aupBu6Fb6vFUf9xoKNTRF
+         G+dhlq58AesXA==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=Z8aS40ZA c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
+ a=gu6fZOg2AAAA:8 a=oGXUH_wexJK_5aFMPiMA:9 a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10
+ a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
+        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>
+References: <3955470.QvD6XneCf3@kreacher>
+In-Reply-To: <3955470.QvD6XneCf3@kreacher>
+Subject: RE: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+Date:   Wed, 15 Jul 2020 13:39:29 -0700
+Message-ID: <000f01d65ae8$0c607990$25216cb0$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8cbb7004a6a9b846a8d827f514f33f1a265dd5d4.1593498024.git.amit.kucheria@linaro.org>
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdZaCuFLSnPOiWVOTIG1A3EnWVHa7QApTu8Q
+X-CMAE-Envelope: MS4wfEv3zAJX+Q5FKLqV55u0UjRRufhzfTzlTepfJsLiSoJWGqbw8G/MQ22qOAH6ryMIj4EApSXZNOoxIM3vu/LpAhtmjiuJ3Nlg9oPXDkVvj8H+g//WH7lV
+ vLLp4hl4TIMSuRJLG7JXKiI3RMVZ3sY5v+cPWtimZGTorfLZ6CqGTfb4kMwIOa0p+n9V+9/8qpmrKJ/OtxZF7G5lYOc5PIRbFJt5rRTOo9Ek0kFPXfOmQ3+R
+ MfBQA1vgqC82NbdXeX0JCWvKWMweqd05DuWNpYC64+0gbd2vIXYzrSlzvICQ3xxKAWO5XElfi7rvVZ6YflwlAyXVDyD/e+Gg7PuMQ/MqADph4qNUN6yD/A6C
+ 5WYvxSp+zL2ekinuJuOQXZCWUwf4fWQDp3oKGaeAB0y3b1lFOS2XHffWPor5PIPAnDTZRx8SoY0LV4HEjzpEZ09kWd/gSQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 30 Jun 2020 11:52:32 +0530, Amit Kucheria wrote:
-> Emails currently go to different mailboxes. Switch to the kernel.org
-> address so I can forward them to a single mailbox.
+On 2020.07.14 11:16 Rafael J. Wysocki wrote:
 > 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 +-
->  MAINTAINERS                                               | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+...
+> Since the passive mode hasn't worked with HWP at all, and it is not going to
+> the default for HWP systems anyway, I don't see any drawbacks related to making
+> this change, so I would consider this as 5.9 material unless there are any
+> serious objections.
 
-Applied, thanks!
+Good point.
+Some of the tests I do involve labour intensive post processing of data.
+I want to automate some of that work, and it will take time.
+We might be into the 5.9-rc series before I have detailed feedback.
+
+However, so far:
+
+Inverse impulse response test [1]:
+
+High level test, i5-9600K, HWP-passive (this patch), ondemand:
+3101 tests. 0 failures. (GOOD)
+
+From [1], re-stated:
+> . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate. (HWP-active - powersave)
+> . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests. 0 failures.
+
+My version of that cool Alexander named pipe test [2] serialized workflow:
+
+HWP-passive (this patch), performance: PASS.
+
+From [2], re-stated, and also re-tested.
+HWP-disabled passive - performance: FAIL.
+Although, I believe the issue to be EPB management, [3].
+
+And yes, I did see the reply to [3] that came earlier,
+And have now re-done the test, with the referenced patch added.
+It still is FAIL. I reply to the [3] thread, eventually.
+
+[1] https://marc.info/?l=linux-pm&m=159354421400342&w=2
+[2] https://marc.info/?l=linux-pm&m=159155067328641&w=2
+[3] https://marc.info/?l=linux-pm&m=159438804230744&w=2
+
+Kernel:
+
+b08284a541ad (HEAD -> k58rc5-doug) cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported
+063fd7ccabfe cpufreq: intel_pstate: Implement passive mode with HWP enabled
+730ccf5054e9 cpufreq: intel_pstate: Allow raw energy performance preference value
+bee36df01c68 cpufreq: intel_pstate: Allow enable/disable energy efficiency
+199629d8200e cpufreq: intel_pstate: Fix active mode setting from command line
+11ba468877bb (tag: v5.8-rc5, origin/master, origin/HEAD, master) Linux 5.8-rc5
+
+Rules for this work:
+
+. never use x86_energy_perf_policy.
+. For HWP disabled: never change from active to passive or via versa, but rather do it via boot.
+. after boot always check and reset the various power limit log bits that are set.
+. never compile the kernel (well, until after any tests), which will set those bits again.
+. never run prime95 high heat torture test, which will set those bits again.
+. try to never do anything else that will set those bits again.
+
+To be clear, I do allow changing governors within the context of the above rules.
+
+... Doug
+
+
