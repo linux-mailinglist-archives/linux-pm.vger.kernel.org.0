@@ -2,188 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D112204EB
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 08:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900AF220501
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 08:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgGOG0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 02:26:49 -0400
-Received: from mga12.intel.com ([192.55.52.136]:37382 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725823AbgGOG0t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 02:26:49 -0400
-IronPort-SDR: NeMlR0ECTuY5F83ySKZsgQ1xOS3ZsurH2vQ2NlHPI3OHK0/Xai/Jm2Rdgh3VJHWcVwvPfxQPcr
- HR6OZYEGA1kg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="128653576"
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="128653576"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2020 23:26:48 -0700
-IronPort-SDR: M9uLcZxTsXLulIi+jrO0+1t0W8JaYYGNdr+4FtwqsF7PmNWJID38zjJlmTt061ePX3N5L1n21D
- xdskanoS3TIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="281986346"
-Received: from chenyu-office.sh.intel.com ([10.239.158.173])
-  by orsmga003.jf.intel.com with ESMTP; 14 Jul 2020 23:26:46 -0700
-From:   Chen Yu <yu.c.chen@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Michal Miroslaw" <mirq-linux@rere.qmqm.pl>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chen Yu <yu.c.chen@intel.com>
-Subject: [PATCH 2/2][RESEND v3] PM-runtime: change the tracepoints to cover all usage_count
-Date:   Wed, 15 Jul 2020 14:28:03 +0800
-Message-Id: <395187057e486df9a4328bc6d7d4ee912967fdb3.1594790493.git.yu.c.chen@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1594790493.git.yu.c.chen@intel.com>
-References: <cover.1594790493.git.yu.c.chen@intel.com>
+        id S1727990AbgGOGcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 02:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725922AbgGOGcS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 02:32:18 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C349C061794
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:32:18 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id q15so4146539wmj.2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=pkHUcVa4GYgE65LjnGsodAOm4gwGb9et7Xg2bzrwdzE=;
+        b=jGogWDgbgbl2Aen5UYcLTTHJfC/9rpVJZsfavJSZ7TkB5UwdLUMDooQoT6g+wKKZw9
+         pZHxPvxYwfTgAFzLCmz+mWXsHQuf4K+jmnjlmHf08qnBBgAEJifed9e/K9+61lg/9W6F
+         qUDNBAit2SLTA4D++TMePb0pZdD5qlETRBG6ZREFNiC6cj5qKW3ix/j6eMxcthF7Em8m
+         ZmILsRfMBsfk7btqm+m4BKYdWFj0kKbuGYJyGJeoRVd8hv+etMhaR2O9xRbxHdQVpMOG
+         Sh1xCQiazfBihP6e29yQc2uONwoPl7CTIMkQE0fKSQFjE/mdkvASHRFmZ+VsRuk4Lxhe
+         okZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=pkHUcVa4GYgE65LjnGsodAOm4gwGb9et7Xg2bzrwdzE=;
+        b=plBWHrCZf3PCR6nWmyEkj3EzeY95RYmu0gyQWbS/wnBBHp1hFYPU/09hYPCvhixyBB
+         0m85clTlQeu/hOupYpzC0Y2Wk9i+lzFCHs4b83PFfPdPTV28Bcv5tfbL1j2q/KopYq0Q
+         IMFdf1oRIzNXFZ7j/HbGa4KGN/szevzKaoXYQIkT9hpD91pZmqYoTNdEDyKgO3KQ//YH
+         dmMNigSqt6g3uYu/403s7hAUvJujKLeFlpyxW4j0d1rHa821gRNxaJbBlesHraEVwfMc
+         lTEJIqiqZCIOUt/eMLeI39H3gF3uF92ZCyET8shqdaliV8qcKKIFbvlyoyMTDTJWlNcH
+         6/Rw==
+X-Gm-Message-State: AOAM533dNicfr68yc3/AIom28Su3Pdyf2CCXeYRItWnHlKwI9UigyLFC
+        LMU1HGGwpBJ/cpqa5o7zcqS1CGHl1tc=
+X-Google-Smtp-Source: ABdhPJxMK1q+aFYu8Ne/pvxzKFhE4bmkNgHpgH+yuuJVXawMMk1x0V0KEwkym2ub6wbPjV351i6yeg==
+X-Received: by 2002:a1c:f60d:: with SMTP id w13mr7440522wmc.51.1594794737161;
+        Tue, 14 Jul 2020 23:32:17 -0700 (PDT)
+Received: from dell ([2.31.163.61])
+        by smtp.gmail.com with ESMTPSA id t2sm1827418wma.43.2020.07.14.23.32.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 23:32:16 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 07:32:14 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 00/13] Rid W=1 warnings in CPUFreq
+Message-ID: <20200715063214.GO1398296@dell>
+References: <20200714145049.2496163-1-lee.jones@linaro.org>
+ <20200715033627.k6ardlhm3z3w65xw@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200715033627.k6ardlhm3z3w65xw@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
-has added some tracepoints to monitor the change of runtime usage, and
-there is something to improve:
-1. There are some places that adjust the usage count not
-   been traced yet. For example, pm_runtime_get_noresume() and
-   pm_runtime_put_noidle()
-2. The change of the usage count will not be tracked if decreased
-   from 1 to 0.
+On Wed, 15 Jul 2020, Viresh Kumar wrote:
 
-This patch intends to adjust the logic to be consistent with the
-change of usage_counter, that is to say, only after the counter has
-been possibly modified, we record it. Besides, all usage changes will
-be shown using rpm_usage even if included by other trace points.
-And these changes has helped track down the e1000e runtime issue.
+> On 14-07-20, 15:50, Lee Jones wrote:
+> > This set is part of a larger effort attempting to clean-up W=1
+> > kernel builds, which are currently overwhelmingly riddled with
+> > niggly little warnings.
+> > 
+> > After these patches are applied, the build system no longer
+> > complains about any W=0 nor W=1 level warnings in drivers/cpufreq.
+> 
+> And you need to rebase this stuff of pm/linux-next, as there are some
+> changes in cpufreq.c there.
 
-Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Signed-off-by: Chen Yu <yu.c.chen@intel.com>
----
- drivers/base/power/runtime.c | 38 +++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
+It's based on the latest -next.  Is pm/linux-next in -next?
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 85a248e196ca..5789d2624513 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1004,10 +1004,11 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
- 	int retval;
- 
- 	if (rpmflags & RPM_GET_PUT) {
--		if (!atomic_dec_and_test(&dev->power.usage_count)) {
--			trace_rpm_usage_rcuidle(dev, rpmflags);
-+		bool non_zero = !atomic_dec_and_test(&dev->power.usage_count);
-+
-+		trace_rpm_usage_rcuidle(dev, rpmflags);
-+		if (non_zero)
- 			return 0;
--		}
- 	}
- 
- 	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
-@@ -1038,10 +1039,12 @@ int __pm_runtime_suspend(struct device *dev, int rpmflags)
- 	int retval;
- 
- 	if (rpmflags & RPM_GET_PUT) {
--		if (!atomic_dec_and_test(&dev->power.usage_count)) {
--			trace_rpm_usage_rcuidle(dev, rpmflags);
-+		bool non_zero = !atomic_dec_and_test(&dev->power.usage_count);
-+
-+		trace_rpm_usage_rcuidle(dev, rpmflags);
-+		if (non_zero)
- 			return 0;
--		}
-+
- 	}
- 
- 	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe);
-@@ -1073,8 +1076,10 @@ int __pm_runtime_resume(struct device *dev, int rpmflags)
- 	might_sleep_if(!(rpmflags & RPM_ASYNC) && !dev->power.irq_safe &&
- 			dev->power.runtime_status != RPM_ACTIVE);
- 
--	if (rpmflags & RPM_GET_PUT)
-+	if (rpmflags & RPM_GET_PUT) {
- 		atomic_inc(&dev->power.usage_count);
-+		trace_rpm_usage_rcuidle(dev, rpmflags);
-+	}
- 
- 	spin_lock_irqsave(&dev->power.lock, flags);
- 	retval = rpm_resume(dev, rpmflags);
-@@ -1433,6 +1438,7 @@ void pm_runtime_forbid(struct device *dev)
- 
- 	dev->power.runtime_auto = false;
- 	atomic_inc(&dev->power.usage_count);
-+	trace_rpm_usage_rcuidle(dev, 0);
- 	rpm_resume(dev, 0);
- 
-  out:
-@@ -1448,16 +1454,17 @@ EXPORT_SYMBOL_GPL(pm_runtime_forbid);
-  */
- void pm_runtime_allow(struct device *dev)
- {
-+	bool is_zero;
-+
- 	spin_lock_irq(&dev->power.lock);
- 	if (dev->power.runtime_auto)
- 		goto out;
- 
- 	dev->power.runtime_auto = true;
--	if (atomic_dec_and_test(&dev->power.usage_count))
-+	is_zero = atomic_dec_and_test(&dev->power.usage_count);
-+	trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
-+	if (is_zero)
- 		rpm_idle(dev, RPM_AUTO | RPM_ASYNC);
--	else
--		trace_rpm_usage_rcuidle(dev, RPM_AUTO | RPM_ASYNC);
--
-  out:
- 	spin_unlock_irq(&dev->power.lock);
- }
-@@ -1523,9 +1530,8 @@ static void update_autosuspend(struct device *dev, int old_delay, int old_use)
- 		/* If it used to be allowed then prevent it. */
- 		if (!old_use || old_delay >= 0) {
- 			atomic_inc(&dev->power.usage_count);
--			rpm_resume(dev, 0);
--		} else {
- 			trace_rpm_usage_rcuidle(dev, 0);
-+			rpm_resume(dev, 0);
- 		}
- 	}
- 
-@@ -1533,8 +1539,10 @@ static void update_autosuspend(struct device *dev, int old_delay, int old_use)
- 	else {
- 
- 		/* If it used to be prevented then allow it. */
--		if (old_use && old_delay < 0)
-+		if (old_use && old_delay < 0) {
- 			atomic_dec(&dev->power.usage_count);
-+			trace_rpm_usage_rcuidle(dev, 0);
-+		}
- 
- 		/* Maybe we can autosuspend now. */
- 		rpm_idle(dev, RPM_AUTO);
-@@ -1741,12 +1749,14 @@ void pm_runtime_drop_link(struct device *dev)
- void pm_runtime_get_noresume(struct device *dev)
- {
- 	atomic_inc(&dev->power.usage_count);
-+	trace_rpm_usage_rcuidle(dev, 0);
- }
- EXPORT_SYMBOL_GPL(pm_runtime_get_noresume);
- 
- void pm_runtime_put_noidle(struct device *dev)
- {
- 	atomic_add_unless(&dev->power.usage_count, -1, 0);
-+	trace_rpm_usage_rcuidle(dev, 0);
- }
- EXPORT_SYMBOL_GPL(pm_runtime_put_noidle);
- 
 -- 
-2.17.1
-
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
