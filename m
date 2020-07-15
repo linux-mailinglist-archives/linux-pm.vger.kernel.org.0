@@ -2,125 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E77FC22099F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 12:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F19C2209E9
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 12:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731051AbgGOKNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 06:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731049AbgGOKNm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 06:13:42 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3D7C08C5C1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 03:13:42 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j4so1860033wrp.10
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 03:13:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Hn1Hbjff+9Afv2Xeip4oNSq9d24avIQDuzU6faxXekA=;
-        b=qlR93dSPHSbqYU0Gl7DzP6gPZu10L3MypqxPjXRCd3zNlT8TlEC6m6Emrl5IBiFU1J
-         DvS9LgkqWmXclVuVF7eg4Y3VJ/BFPwhIter84emkwYWrXg6eJKmAdTWpVOL02taH6M/s
-         ws/vvSueQ8jw/viS+72dcaQPaxdYvi1GENdrZOfWMvPnL/0MCDx4q/mMSqFOp8QQHArp
-         aZ2U5T4imohTHyYFz2Mc4/+JJEMmkH+o4DpX2yqPmu/O4oVsIWtL7T48dk1uGKNwpRgE
-         CE5pZsKIyFkaJok/rludtGQVXlsS062uymdMtf9BELZ5hXh15NssRLqmPXbWGpr0sbBk
-         L1ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Hn1Hbjff+9Afv2Xeip4oNSq9d24avIQDuzU6faxXekA=;
-        b=MgTab4Q9SJSKIR4bGUHRNgLsHRxmOAouvfFkQauVQvIBYxcgWCbILIpRVtyHvfRLv+
-         Z1Qgs1uCqUJ0zeKDfTQVWrMkRn5veAgPeOLfF2+f3uHcj3XLLsA8oE2w8MD9hq1sk8yk
-         tHXx4PTQpaEOpoIIkaHL05mB0HRvM6yR0Mk4yBrz83K9iyLv8yuf6EzrPw8Mzp9Q11b7
-         Bv+ZbNi90uP1Z+m3yRShdCAmz1Kb1ZoJcTJC+8zlzJE5vQuOHlWbI/Rd4tl0YrY7ClaR
-         5S3/dOjCBwx8+hBAEYwcDJVfIgo2NLIwMuxKQSu16qHZ/tbzL8CxWxtucVgpICtVcPFF
-         wzlg==
-X-Gm-Message-State: AOAM531tG/mMfWk2H2K273nbsUfrRXITZCwGQtMYAh3j1kzjZFJWB4d1
-        pHycUkHQhGxQRd+NEvbthtr6HQ==
-X-Google-Smtp-Source: ABdhPJz1sof9nbSox7QA78MbtsQxOffGJyaBrE6z+a2qbZEL+1W2WAWsKdYybzfKFDfNwDKsEZNt6w==
-X-Received: by 2002:a5d:60c7:: with SMTP id x7mr9987696wrt.138.1594808020835;
-        Wed, 15 Jul 2020 03:13:40 -0700 (PDT)
-Received: from dell ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id 68sm2712443wmz.40.2020.07.15.03.13.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 03:13:40 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 11:13:38 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 06/13] cpufreq: powernv-cpufreq: Functions only used
- in call-backs should be static
-Message-ID: <20200715101338.GA3165313@dell>
-References: <20200715082634.3024816-1-lee.jones@linaro.org>
- <20200715082634.3024816-7-lee.jones@linaro.org>
- <20200715094504.val6rb7wibysh7dn@vireshk-i7>
+        id S1728656AbgGOKW7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 06:22:59 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:15423 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728205AbgGOKW7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 06:22:59 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f0ed8c80000>; Wed, 15 Jul 2020 03:22:00 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 15 Jul 2020 03:22:58 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 15 Jul 2020 03:22:58 -0700
+Received: from [10.24.37.103] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jul
+ 2020 10:22:51 +0000
+Subject: Re: [TEGRA194_CPUFREQ PATCH v6 1/4] dt-bindings: arm: Add NVIDIA
+ Tegra194 CPU Complex binding
+To:     Rob Herring <robh@kernel.org>
+CC:     <rjw@rjwysocki.net>, <viresh.kumar@linaro.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <thierry.reding@gmail.com>, <mirq-linux@rere.qmqm.pl>,
+        <devicetree@vger.kernel.org>, <jonathanh@nvidia.com>,
+        <talho@nvidia.com>, <linux-pm@vger.kernel.org>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bbasu@nvidia.com>,
+        <mperttunen@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <CAL_JsqL1CuumdT1CZiofEZw9j+3gsir8JwSrZVfcxFxEB=bavQ@mail.gmail.com>
+ <1594742870-19957-1-git-send-email-sumitg@nvidia.com>
+ <20200714204742.GA2875540@bogus>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <a5b83dc3-63b9-9140-a7fe-52841d079141@nvidia.com>
+Date:   Wed, 15 Jul 2020 15:52:48 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200715094504.val6rb7wibysh7dn@vireshk-i7>
+In-Reply-To: <20200714204742.GA2875540@bogus>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1594808520; bh=yKUyW+CknpzoQCQidsJMAoY5rvG/iaJnlvE4IRnqLV4=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Z2qKm0LSpfvnHREtzkU2lOvqF8Gz4OH+wAHdBZihmJADIHhV6KcfoWt7S96f5nhPN
+         eZ4Cp/J1KjKebsBr8xrKsPzK12Y3/w1zFPNmQ1PPey6Lsf391z11bPFmrBh8PFon8L
+         wnZeQzqIDeoMz+74p0q+1N76leIfRT96ccQsV9QFnAsYfMNnuZRERPkBsz5h76bcvG
+         S+etb2C9E5EoW9f4gLtjBEIXgHJoF+FS+/4rKKD+3fVyHJUs0XgQ9tb+uvO3gjs1bA
+         6zNH7WE3KEe31w2VmMO+O2AeP5ljH/77dR6RxIkyJdx4ej6p9H89W5pUv4uFlwetfN
+         Ts06A0XyMTDpQ==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 15 Jul 2020, Viresh Kumar wrote:
+Thank you for the review.
 
-> On 15-07-20, 09:26, Lee Jones wrote:
-> > Fixes the following W=1 kernel build warning(s):
-> > 
-> >  drivers/cpufreq/powernv-cpufreq.c:669:6: warning: no previous prototype for ‘gpstate_timer_handler’ [-Wmissing-prototypes]
-> >  drivers/cpufreq/powernv-cpufreq.c:902:6: warning: no previous prototype for ‘powernv_cpufreq_work_fn’ [-Wmissing-prototypes]
-> > 
-> > Cc: Michael Ellerman <mpe@ellerman.id.au>
-> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> > Cc: Paul Mackerras <paulus@samba.org>
-> > Cc: linuxppc-dev@lists.ozlabs.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  drivers/cpufreq/powernv-cpufreq.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> > index 8646eb197cd96..068cc53abe320 100644
-> > --- a/drivers/cpufreq/powernv-cpufreq.c
-> > +++ b/drivers/cpufreq/powernv-cpufreq.c
-> > @@ -666,7 +666,7 @@ static inline void  queue_gpstate_timer(struct global_pstate_info *gpstates)
-> >   * according quadratic equation. Queues a new timer if it is still not equal
-> >   * to local pstate
-> >   */
-> > -void gpstate_timer_handler(struct timer_list *t)
-> > +static void gpstate_timer_handler(struct timer_list *t)
-> >  {
-> >  	struct global_pstate_info *gpstates = from_timer(gpstates, t, timer);
-> >  	struct cpufreq_policy *policy = gpstates->policy;
-> > @@ -899,7 +899,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
-> >  	.notifier_call = powernv_cpufreq_reboot_notifier,
-> >  };
-> >  
-> > -void powernv_cpufreq_work_fn(struct work_struct *work)
-> > +static void powernv_cpufreq_work_fn(struct work_struct *work)
-> >  {
-> >  	struct chip *chip = container_of(work, struct chip, throttle);
-> >  	struct cpufreq_policy *policy;
+>> Add device-tree binding documentation to represent Tegra194
+>> CPU Complex with compatible string under 'cpus' node. This
+>> can be used by drivers like cpufreq which don't have their
+>> node or CPU Complex node to bind to. Also, documenting
+>> 'nvidia,bpmp' property which points to BPMP device.
+>>
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   .../bindings/arm/nvidia,tegra194-ccplex.yaml       | 106 +++++++++++++++++++++
+>>   1 file changed, 106 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+>> new file mode 100644
+>> index 0000000..06dbdaa
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+>> @@ -0,0 +1,106 @@
+>> +# SPDX-License-Identifier: GPL-2.0
 > 
-> Don't you want to drop this patch now ? As you already reviewed the
-> other one on the list ?
+> Dual license please.
+> 
+Ok.
 
-Yes, please drop/ignore.
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/arm/nvidia,tegra194-ccplex.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: NVIDIA Tegra194 CPU Complex device tree bindings
+>> +
+>> +maintainers:
+>> +  - Thierry Reding <thierry.reding@gmail.com>
+>> +  - Jonathan Hunter <jonathanh@nvidia.com>
+>> +  - Sumit Gupta <sumitg@nvidia.com>
+>> +
+>> +description: |+
+>> +  Tegra194 SOC has homogeneous architecture where each cluster has two
+>> +  symmetric cores. Compatible string in "cpus" node represents the CPU
+>> +  Complex having all clusters.
+>> +
+>> +properties:
+> 
+> $nodename:
+>    const: cpus
+> 
+Ok.
 
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+>> +  compatible:
+>> +    enum:
+>> +      - nvidia,tegra194-ccplex
+>> +
+>> +  nvidia,bpmp:
+>> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+>> +    description: |
+>> +      Specifies the bpmp node that needs to be queried to get
+>> +      operating point data for all CPUs.
+>> +
+>> +      Optional for systems that have a "compatible"
+>> +      property value of "nvidia,tegra194-ccplex".
+> 
+> The schema says this already.
+> 
+Removed this text from here.
+
+>> +
+>> +  "#address-cells":
+>> +    const: 1
+> 
+> This is wrong. The binding says it's 2 cells on aarch64 cpus though we
+> don't enforce that.
+>Removed.
+
+>> +
+>> +  "#size-cells":
+>> +    const: 0
+>> +
+>> +dependencies:
+>> +  nvidia,bpmp: [compatible]
+> 
+> This is kind of redundant as 'compatible' is required in order to apply
+> the schema.
+>
+Removed this as well.
+
+>> +
+>> +examples:
+>> +  - |
+>> +    cpus {
+>> +      compatible = "nvidia,tegra194-ccplex";
+>> +      nvidia,bpmp = <&bpmp>;
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      cpu0_0: cpu@0 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x0>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu0_1: cpu@1 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x001>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu1_0: cpu@100 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x100>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu1_1: cpu@101 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x101>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu2_0: cpu@200 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x200>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu2_1: cpu@201 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x201>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu3_0: cpu@300 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x300>;
+>> +        enable-method = "psci";
+>> +      };
+>> +
+>> +      cpu3_1: cpu@301 {
+>> +        compatible = "nvidia,tegra194-carmel";
+>> +        device_type = "cpu";
+>> +        reg = <0x301>;
+>> +        enable-method = "psci";
+>> +       };
+> 
+> Not really that useful describing all these cpus.
+> 
+Ok. Kept first four cpu nodes only.
+
+>> +    };
+>> +...
+>> --
+>> 2.7.4
+>>
