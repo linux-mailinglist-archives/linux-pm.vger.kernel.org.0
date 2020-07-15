@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF604220714
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA97220713
 	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgGOI0v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:26:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S1725932AbgGOI1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729900AbgGOI0u (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:50 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39F1C061755
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:49 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id q5so1470735wru.6
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:49 -0700 (PDT)
+        with ESMTP id S1729908AbgGOI0v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:51 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D2AC061755
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:50 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id z15so1459993wrl.8
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WdiKEUGtJNb3K8rH57Xa0bqqHuMKs85IufCe6WoIQH0=;
-        b=h/tM5SidCdeT9YEPZb0RPN7LNM4OQEfUG0Gla4WTqsbW13CThG9SPV0We8E9oe7eKW
-         y2PuLeXzK9008gi1pAyFmaKBkBvo+0EWGPrnbrzZAy1uJxsvdLwLtevQ30Cwl7ocp8t9
-         x8sysDZkNQexAapYEh0MZvEOg0v2i0PIGOBb9hBxkdWOboI8mKwgyM8vTXy4oFwM0/Xp
-         F+/uIo/HSfVGWcSiN6+Eg2osFMI5gKrKcnHvDvcmzpYy6any0IIvQHjqhi/efTC0CJ5D
-         5O3Hc4EOm63rxsyL662vBvMpg3462huBOxdVH3By5OtQKJU4yzWjm2MOQfBtv1HMPH5y
-         bXgQ==
+        bh=8zTw93zoLeDrW9YVUykvWKpkCsGvq1SvpdvOV91LIDI=;
+        b=PoZeCokh14NVCVrG+W6OCssjbdxlYt+BY2RPI8eovLbhPzaLoVu6hY0++nOStWvk7G
+         AC5m93nmVlLOGmyl+yyOzhE20jZByNmfhTjC3f1OsE+xOaSFhOEZD1adMHSUY86nUcdq
+         003S8WLfCC4kJUQP3B7nLpwZLoeL5quxpYHznQprltVCVB12xkwl1x6YvqBSR6n+AvvB
+         J+eTnxP7lytE9JrfPxVYJ8Bsd1LHlvRP6P3N0Qlk+cD+UXDt4V9NfWmwaf8F2Bq4MSZ2
+         NpHfQwClEX7SFhVB8TSaoxSOf1g6l4dy6IsfsJoDadjfzaKDqNqTFIWTX6+6I08pYoo4
+         qDMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WdiKEUGtJNb3K8rH57Xa0bqqHuMKs85IufCe6WoIQH0=;
-        b=Kjd5QsB/DmAuwJgmRoPDx3dWSZwFkS0UKFZn7/lWXle/RQclGhJHpaYSfrQ2jI/d0q
-         VfthKbuEguKQkSlh+Ho1EoC6ZdPzrOvFRv8gTc4JaaaYd+Po72WflgaJdF7n5S2fR2CC
-         E9SESxHxxtSh8F2/3tXH0O4iSHfnxV0THOdyaAC13zQQkvjOT02sW8vxTGxoV1tXYpmC
-         SREQU83wLE2tlpCUIUK2oZZePN1WfXCvk1nbvNKO5lzRej2SwVPYO4iVPYDUKpe2yMsB
-         u19Z+/de8NvxTVjU11CNHUj8CunSEDpKrNqW2AnwIQST3iVAdmK980Lky703jjugYXNt
-         h75A==
-X-Gm-Message-State: AOAM533g+ravgrJnx62fEAds3JOBPDK4PdYZt+KLOnoRfEwGi+gryEK0
-        /eLrtMQ+FOiZnwF6fnuvANrmwA==
-X-Google-Smtp-Source: ABdhPJxh4iIC96B7vP7yT2NRdJCiN3e86bbKXTI7FBlC/f5JJATdbpmIk6pi0D1BpMCqtslGlYLI6A==
-X-Received: by 2002:a5d:540d:: with SMTP id g13mr9474170wrv.380.1594801608318;
-        Wed, 15 Jul 2020 01:26:48 -0700 (PDT)
+        bh=8zTw93zoLeDrW9YVUykvWKpkCsGvq1SvpdvOV91LIDI=;
+        b=KlYMKijiUgd75Vp55960FkD/PAPDm/pMgFbkOpWiXWgCMxLiQnzxVaKDbSyJ6WJS4P
+         5MaHzcewN8VplC0qfic3tHE/zOaXDmmIPpxTMN6QJCLq6a/QRoldzLv0nGxrKS9pzVda
+         0okaI3hwOg85YaO9ChDUO5vKNOZMvoXoaUzUDWzkGBrGbmY/GLGGBV3GVy20IBJj5UBF
+         vqG+W0Ge9WnwyWy61PtnSxsMwQ27z02ErFuS7EBQsiWDDQA9E7m62Aij7kxfJvu5R9RH
+         DJF0U5SpDiJ7zM6iSOGw4efxy9uPD+Xs8kefdWiKtarCX6lBXb8QMiVsZkxLEeapKm/o
+         BJUQ==
+X-Gm-Message-State: AOAM53123odX8lFpmL0QT/7KYyHiSb1PcMX5iIrVO8XrhXE8Ie89lRy9
+        hoV7gXOL4eBWSKiP2jy9EpZqyw==
+X-Google-Smtp-Source: ABdhPJw4NEwvaYTKWQAiVObRyn0jstQiDGELTMaVFiiY+4cxedHvwQNYAgmxqV/UHsTrTKosES/Miw==
+X-Received: by 2002:adf:9062:: with SMTP id h89mr9316099wrh.285.1594801609515;
+        Wed, 15 Jul 2020 01:26:49 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.46
+        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 01:26:47 -0700 (PDT)
+        Wed, 15 Jul 2020 01:26:48 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
         Dominik Brodowski <linux@brodo.de>,
         Denis Sadykov <denis.m.sadykov@intel.com>
-Subject: [PATCH v2 08/13] cpufreq: acpi-cpufreq: Mark 'dummy' variable as __always_unused
-Date:   Wed, 15 Jul 2020 09:26:29 +0100
-Message-Id: <20200715082634.3024816-9-lee.jones@linaro.org>
+Subject: [PATCH v2 09/13] cpufreq: acpi-cpufreq: Mark sometimes used ID structs as __maybe_unused
+Date:   Wed, 15 Jul 2020 09:26:30 +0100
+Message-Id: <20200715082634.3024816-10-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200715082634.3024816-1-lee.jones@linaro.org>
 References: <20200715082634.3024816-1-lee.jones@linaro.org>
@@ -69,16 +69,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If we fail to use a variable, even a 'dummy' one, then the compiler
-complains that it is set but not used.  We know this is fine, so we
-set it as __always_unused to let the compiler know.
+Not used when MODULE is not defined.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/cpufreq/acpi-cpufreq.c: In function ‘cpu_freq_read_intel’:
- drivers/cpufreq/acpi-cpufreq.c:247:11: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
- drivers/cpufreq/acpi-cpufreq.c: In function ‘cpu_freq_read_amd’:
- drivers/cpufreq/acpi-cpufreq.c:265:11: warning: variable ‘dummy’ set but not used [-Wunused-but-set-variable]
+ drivers/cpufreq/acpi-cpufreq.c:1004:36: warning: ‘processor_device_ids’ defined but not used [-Wunused-const-variable=]
+ 997 | static const struct x86_cpu_id acpi_cpufreq_ids[] = {
+ | ^~~~~~~~~~~~~~~~
+ drivers/cpufreq/acpi-cpufreq.c:997:32: warning: ‘acpi_cpufreq_ids’ defined but not used [-Wunused-const-variable=]
+ 619 | static const struct acpi_device_id processor_device_ids[] = {
+ | ^~~~~~~~~~~~~~~~~~~~
 
 Cc: Andy Grover <andrew.grover@intel.com>
 Cc: Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
@@ -90,27 +90,26 @@ Signed-off-by: Lee Jones <lee.jones@linaro.org>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 429e5a36c08a9..6b3d8355c8dea 100644
+index 6b3d8355c8dea..65bdedcc7f142 100644
 --- a/drivers/cpufreq/acpi-cpufreq.c
 +++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -244,7 +244,7 @@ static unsigned extract_freq(struct cpufreq_policy *policy, u32 val)
+@@ -993,14 +993,14 @@ MODULE_PARM_DESC(acpi_pstate_strict,
+ late_initcall(acpi_cpufreq_init);
+ module_exit(acpi_cpufreq_exit);
  
- static u32 cpu_freq_read_intel(struct acpi_pct_register *not_used)
- {
--	u32 val, dummy;
-+	u32 val, dummy __always_unused;
+-static const struct x86_cpu_id acpi_cpufreq_ids[] = {
++static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
+ 	X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
+ 	X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
  
- 	rdmsr(MSR_IA32_PERF_CTL, val, dummy);
- 	return val;
-@@ -261,7 +261,7 @@ static void cpu_freq_write_intel(struct acpi_pct_register *not_used, u32 val)
- 
- static u32 cpu_freq_read_amd(struct acpi_pct_register *not_used)
- {
--	u32 val, dummy;
-+	u32 val, dummy __always_unused;
- 
- 	rdmsr(MSR_AMD_PERF_CTL, val, dummy);
- 	return val;
+-static const struct acpi_device_id processor_device_ids[] = {
++static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
+ 	{ACPI_PROCESSOR_OBJECT_HID, },
+ 	{ACPI_PROCESSOR_DEVICE_HID, },
+ 	{},
 -- 
 2.25.1
 
