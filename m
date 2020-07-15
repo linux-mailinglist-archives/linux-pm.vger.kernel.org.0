@@ -2,198 +2,356 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE962216E4
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 23:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 750FD221715
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 23:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgGOVTF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 17:19:05 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:43050 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbgGOVTE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 17:19:04 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FL8QHE006742;
-        Wed, 15 Jul 2020 21:18:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=zDExtjrwlYBSKB/0QpKhHxZClcZ7lvE9kA+uBbq6Hnc=;
- b=HLwVRZq7VXZQTeFp9Hr52hQ++nIsXdzuR0+KkjceuzLc38AYSzxt89+nmcY4Zxb76rea
- 23RIVuKtIsZ+Bu9EOI3VVle5a57J6+fbrFZ4YT7xFo1KjZWthR+NJtUCJRlhZSVBc0XZ
- Q+Ah/Fzws952Boh5nkRCT0oa66P43PenkoUES3MtsrLuTMZ/oFhxqdVZvC/V1r/ZLOlJ
- jl8jC0swD8b2BmZRe7ugv5aGocHfrYBGLZbcIG6E/e8RoRCr0+DebRDRwO5WzEHyjTsa
- 6pQ+Dgh2Rd8GHAdyX/1MBSHUgmFND4ZzDYub89a4AAveZiPA+0xS0MwzgMJ7UdWl7t4t 0A== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 327s65m4me-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Jul 2020 21:18:27 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06FL7eTR101530;
-        Wed, 15 Jul 2020 21:18:26 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 327q0s1562-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jul 2020 21:18:26 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 06FLILCr010868;
-        Wed, 15 Jul 2020 21:18:21 GMT
-Received: from [10.39.217.130] (/10.39.217.130)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 15 Jul 2020 14:18:20 -0700
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
- mode
-To:     Anchal Agarwal <anchalag@amazon.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
-        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
-        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
-        sblbir@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org
-References: <cover.1593665947.git.anchalag@amazon.com>
- <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
- <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
- 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
- Jg6OxFYd01z+a+oL
-Message-ID: <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
-Date:   Wed, 15 Jul 2020 17:18:08 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726670AbgGOVft (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 17:35:49 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:42214 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726356AbgGOVfs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 17:35:48 -0400
+Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4B6W040Lk5zFcrC;
+        Wed, 15 Jul 2020 14:35:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1594848948; bh=+EvFjlk56B0RX4XgfDJ2niadmImcxD+3rd4UPIiPMHk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mpQL2av8YjEbp2d3ROfnjcU1vWvq2vjii/36RS2MgVla+0zIGhX/kf8cicpRwlYB/
+         mcu48AcdDyafZos40vjnrxqOIRgkk0hppnWGRANvosH1TUsIFzoLNBH1HDJxvm9agJ
+         0gY+/fUO/NixcYszfpoxvAqxcRmUBmV/95qtH+/0=
+X-Riseup-User-ID: 2AEF79B635DFDAFAEDCB840878B69694017DA9C5038573DD79D8B4D507259CCD
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by capuchin.riseup.net (Postfix) with ESMTPSA id 4B6W032Tywz8sjr;
+        Wed, 15 Jul 2020 14:35:47 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+In-Reply-To: <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
+References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net> <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
+Date:   Wed, 15 Jul 2020 14:35:39 -0700
+Message-ID: <87imeoihqs.fsf@riseup.net>
 MIME-Version: 1.0
-In-Reply-To: <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007150160
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9683 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- phishscore=0 mlxscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
- clxscore=1015 bulkscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007150160
+Content-Type: multipart/signed; boundary="==-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/15/20 4:49 PM, Anchal Agarwal wrote:
-> On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
->> CAUTION: This email originated from outside of the organization. Do no=
-t click links or open attachments unless you can confirm the sender and k=
-now the content is safe.
+--==-=-=
+Content-Type: multipart/mixed; boundary="=-=-="
+
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+"Rafael J. Wysocki" <rafael@kernel.org> writes:
+
+> On Wed, Jul 15, 2020 at 2:09 AM Francisco Jerez <currojerez@riseup.net> wrote:
 >>
+>> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
 >>
+>> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> >
+>> > Allow intel_pstate to work in the passive mode with HWP enabled and
+>> > make it set the HWP minimum performance limit (HWP floor) to the
+>> > P-state value given by the target frequency supplied by the cpufreq
+>> > governor, so as to prevent the HWP algorithm and the CPU scheduler
+>> > from working against each other, at least when the schedutil governor
+>> > is in use, and update the intel_pstate documentation accordingly.
+>> >
+>> > Among other things, this allows utilization clamps to be taken
+>> > into account, at least to a certain extent, when intel_pstate is
+>> > in use and makes it more likely that sufficient capacity for
+>> > deadline tasks will be provided.
+>> >
+>> > After this change, the resulting behavior of an HWP system with
+>> > intel_pstate in the passive mode should be close to the behavior
+>> > of the analogous non-HWP system with intel_pstate in the passive
+>> > mode, except that in the frequency range below the base frequency
+>> > (ie. the frequency retured by the base_frequency cpufreq attribute
+>> > in sysfs on HWP systems) the HWP algorithm is allowed to go above
+>> > the floor P-state set by intel_pstate with or without hardware
+>> > coordination of P-states among CPUs in the same package.
+>> >
+>> > Also note that the setting of the HWP floor may not be taken into
+>> > account by the processor in the following cases:
+>> >
+>> >  * For the HWP floor in the range of P-states above the base
+>> >    frequency, referred to as the turbo range, the processor has a
+>> >    license to choose any P-state from that range, either below or
+>> >    above the HWP floor, just like a non-HWP processor in the case
+>> >    when the target P-state falls into the turbo range.
+>> >
+>> >  * If P-states of the CPUs in the same package are coordinated
+>> >    at the hardware level, the processor may choose a P-state
+>> >    above the HWP floor, just like a non-HWP processor in the
+>> >    analogous case.
+>> >
+>> > With this change applied, intel_pstate in the passive mode
+>> > assumes complete control over the HWP request MSR and concurrent
+>> > changes of that MSR (eg. via the direct MSR access interface) are
+>> > overridden by it.
+>> >
+>> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>> > ---
+>> >
+>> > This basically unifies the passive mode behavior of intel_pstate for systems
+>> > with and without HWP enabled.  The only case in which there is a difference
+>> > between the two (after this patch) is below the turbo range, where the HWP
+>> > algorithm can go above the floor regardless of whether or not P-state are
+>> > coordinated package-wide (this means the systems with per-core P-states
+>> > mostly is where the difference can be somewhat visible).
+>> >
+>> > Since the passive mode hasn't worked with HWP at all, and it is not going to
+>> > the default for HWP systems anyway, I don't see any drawbacks related to making
+>> > this change, so I would consider this as 5.9 material unless there are any
+>> > serious objections.
+>> >
+>> > Thanks!
+>> >
+>> > ---
+>> >  Documentation/admin-guide/pm/intel_pstate.rst |   89 +++++++---------
+>> >  drivers/cpufreq/intel_pstate.c                |  141 ++++++++++++++++++++------
+>> >  2 files changed, 152 insertions(+), 78 deletions(-)
+>> >
+>> > Index: linux-pm/drivers/cpufreq/intel_pstate.c
+>> > ===================================================================
+>> > --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+>> > +++ linux-pm/drivers/cpufreq/intel_pstate.c
+>> > @@ -36,6 +36,7 @@
+>> >  #define INTEL_PSTATE_SAMPLING_INTERVAL       (10 * NSEC_PER_MSEC)
+>> >
+>> >  #define INTEL_CPUFREQ_TRANSITION_LATENCY     20000
+>> > +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP   5000
+>> >  #define INTEL_CPUFREQ_TRANSITION_DELAY               500
+>> >
+>> >  #ifdef CONFIG_ACPI
+>> > @@ -222,6 +223,7 @@ struct global_params {
+>> >   *                   preference/bias
+>> >   * @epp_saved:               Saved EPP/EPB during system suspend or CPU offline
+>> >   *                   operation
+>> > + * @epp_cached               Cached HWP energy-performance preference value
+>> >   * @hwp_req_cached:  Cached value of the last HWP Request MSR
+>> >   * @hwp_cap_cached:  Cached value of the last HWP Capabilities MSR
+>> >   * @last_io_update:  Last time when IO wake flag was set
+>> > @@ -259,6 +261,7 @@ struct cpudata {
+>> >       s16 epp_policy;
+>> >       s16 epp_default;
+>> >       s16 epp_saved;
+>> > +     s16 epp_cached;
+>> >       u64 hwp_req_cached;
+>> >       u64 hwp_cap_cached;
+>> >       u64 last_io_update;
+>> > @@ -676,6 +679,8 @@ static int intel_pstate_set_energy_pref_
+>> >
+>> >               value |= (u64)epp << 24;
+>> >               ret = wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
+>> > +
+>> > +             WRITE_ONCE(cpu_data->epp_cached, epp);
 >>
->> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
->>> +
->>> +bool xen_is_xen_suspend(void)
+>> Why introduce a new EPP cache variable if there is already
+>> hwp_req_cached?  If intel_pstate_set_energy_pref_index() is failing to
+>> update hwp_req_cached maybe we should fix that instead.  That will save
+>> you a little bit of work in intel_cpufreq_adjust_hwp().
+>
+> Yes, it would, but then we'd need to explicitly synchronize
+> intel_pstate_set_energy_pref_index() with the scheduler context which
+> I'd rather avoid.
+>
+
+How does using a differently named variable save you from doing that?
+
+And won't the EPP setting programmed by intel_pstate_set_energy_pref_index()
+be lost if intel_pstate_hwp_boost_up() or some other user of
+hwp_req_cached is executed afterwards with the current approach?  Seems
+like a bug to me.
+
+>> >       } else {
+>> >               if (epp == -EINVAL)
+>> >                       epp = (pref_index - 1) << 2;
+>> > @@ -2047,6 +2052,7 @@ static int intel_pstate_init_cpu(unsigne
+>> >               cpu->epp_default = -EINVAL;
+>> >               cpu->epp_powersave = -EINVAL;
+>> >               cpu->epp_saved = -EINVAL;
+>> > +             WRITE_ONCE(cpu->epp_cached, -EINVAL);
+>> >       }
+>> >
+>> >       cpu = all_cpu_data[cpunum];
+>> > @@ -2245,7 +2251,10 @@ static int intel_pstate_verify_policy(st
+>> >
+>> >  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+>> >  {
+>> > -     intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>> > +     if (hwp_active)
+>> > +             intel_pstate_hwp_force_min_perf(policy->cpu);
+>> > +     else
+>> > +             intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>> >  }
+>> >
+>> >  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+>> > @@ -2253,12 +2262,10 @@ static void intel_pstate_stop_cpu(struct
+>> >       pr_debug("CPU %d exiting\n", policy->cpu);
+>> >
+>> >       intel_pstate_clear_update_util_hook(policy->cpu);
+>> > -     if (hwp_active) {
+>> > +     if (hwp_active)
+>> >               intel_pstate_hwp_save_state(policy);
+>> > -             intel_pstate_hwp_force_min_perf(policy->cpu);
+>> > -     } else {
+>> > -             intel_cpufreq_stop_cpu(policy);
+>> > -     }
+>> > +
+>> > +     intel_cpufreq_stop_cpu(policy);
+>> >  }
+>> >
+>> >  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+>> > @@ -2388,13 +2395,82 @@ static void intel_cpufreq_trace(struct c
+>> >               fp_toint(cpu->iowait_boost * 100));
+>> >  }
+>> >
+>> > +static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pstate,
+>> > +                                  bool fast_switch)
+>> > +{
+>> > +     u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
+>> > +     s16 epp;
+>> > +
+>> > +     value &= ~HWP_MIN_PERF(~0L);
+>> > +     value |= HWP_MIN_PERF(target_pstate);
+>> > +
+>> > +     /*
+>> > +      * The entire MSR needs to be updated in order to update the HWP min
+>> > +      * field in it, so opportunistically update the max too if needed.
+>> > +      */
+>> > +     value &= ~HWP_MAX_PERF(~0L);
+>> > +     value |= HWP_MAX_PERF(cpu->max_perf_ratio);
+>> > +
+>> > +     /*
+>> > +      * In case the EPP has been adjusted via sysfs, write the last cached
+>> > +      * value of it to the MSR as well.
+>> > +      */
+>> > +     epp = READ_ONCE(cpu->epp_cached);
+>> > +     if (epp >= 0) {
+>> > +             value &= ~GENMASK_ULL(31, 24);
+>> > +             value |= (u64)epp << 24;
+>> > +     }
+>> > +
+>> > +     if (value == prev)
+>> > +             return;
+>> > +
+>> > +     WRITE_ONCE(cpu->hwp_req_cached, value);
+>> > +     if (fast_switch)
+>> > +             wrmsrl(MSR_HWP_REQUEST, value);
+>> > +     else
+>> > +             wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+>> > +}
 >>
->> Weren't you going to call this pv suspend? (And also --- is this suspe=
-nd
->> or hibernation? Your commit messages and cover letter talk about fixin=
-g
->> hibernation).
+>> I've asked this question already but you may have missed it: Given that
+>> you are of the opinion that [1] should be implemented in schedutil
+>> instead with intel_pstate in HWP passive mode, what's your plan for
+>> exposing the HWP_MAX_PERF knob to the governor in addition to
+>> HWP_MIN_PERF, since the interface implemented here only allows the
+>> governor to provide a single frequency?
 >>
->>
-> This is for hibernation is for pvhvm/hvm/pv-on-hvm guests as you may ca=
-ll it.
-> The method is just there to check if "xen suspend" is in progress.
-> I do not see "xen_suspend" differentiating between pv or hvm
-> domain until later in the code hence, I abstracted it to xen_is_xen_sus=
-pend.
+>> [1] https://lwn.net/ml/linux-pm/20200428032258.2518-1-currojerez@riseup.net/
+>
+> This is not just about the schedutil governor, but about cpufreq
+> governors in general (someone may still want to use the performance
+> governor on top of intel_pstate, for example).
+>
+> And while governors can only provide one frequency, the policy limits
+> in the cpufreq framework are based on QoS lists now and so it is
+> possible to add a max limit request, say from a driver, to the max QoS
+> list, and update it as needed, causing the max policy limit to be
+> adjusted.
+>
+> That said I'm not exactly sure how useful the max limit generally is
+> in practice on HWP systems, given that setting it above the base
+> frequency causes it to be ignored, effectively, and the turbo range
+> may be wider than the range of P-states below the base frequency.
+>
 
+I don't think that's accurate.  I've looked at hundreds of traces while
+my series [1] was in control of HWP_REQ_MAX and I've never seen an
+excursion above the maximum HWP_REQ_MAX control specified by it within a
+given P-state domain, even while that maximum specified was well into
+the turbo range.  So, yeah, I agree that HWP_REQ_MAX is nothing like a
+hard limit, particularly when multiple threads are running on the same
+clock domain, but the processor will still make its best effort to limit
+the clock frequency to the maximum of the requested maximums, even if it
+happens to be within the turbo range.  That doesn't make it useless.
+The exact same thing can be said about controlling HWP_REQ_MIN as you're
+doing now in this revision of your patch, BTW.
 
-I meant "pv suspend" in the sense that this is paravirtual suspend, not
-suspend for paravirtual guests. Just like pv drivers are for both pv and
-hvm guests.
+If you don't believe me here is the turbostat sample with maximum
+Bzy_MHz I get on the computer I'm sitting on right now while compiling a
+kernel on CPU0 if I set HWP_REQ_MAX to 0x1c (within the turbo range):
 
+| Core    CPU     Avg_MHz Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
+| -       -       757     27.03   2800    0x0000000000000000      7.13    4.90
+| 0       0       2794    99.77   2800    0x0000000080001c04      7.13    4.90
+| 0       2       83      2.98    2800    0x0000000080001c04
+| 1       1       73      2.60    2800    0x0000000080001c04
+| 1       3       78      2.79    2800    0x0000000080001c04
 
-And then --- should it be pv suspend or pv hibernation?
+With the default HWP_REQUEST:
 
+| Core    CPU     Avg_MHz Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
+| -       -       814     27.00   3015    0x0000000000000000      8.49    6.18
+| 0       0       2968    98.24   3021    0x0000000080001f04      8.49    6.18
+| 0       2       84      2.81    2982    0x0000000080001f04
+| 1       1       99      3.34    2961    0x0000000080001f04
+| 1       3       105     3.60    2921    0x0000000080001f04
 
+> Generally, I'm not quite convinced that limiting the max frequency is
+> really the right choice for controlling the processor's power draw on
+> the systems in question.  There are other ways to do that, which in
+> theory should be more effective.  I mentioned RAPL somewhere in this
+> context and there's the GUC firmware too.
 
->>> +{
->>> +     return suspend_mode =3D=3D XEN_SUSPEND;
->>> +}
->>> +
->>
->> +static int xen_setup_pm_notifier(void)
->> +{
->> +     if (!xen_hvm_domain())
->> +             return -ENODEV;
->>
->> I forgot --- what did we decide about non-x86 (i.e. ARM)?
-> It would be great to support that however, its  out of
-> scope for this patch set.
-> I=E2=80=99ll be happy to discuss it separately.
+I feel like we've had that conversation before and it's somewhat
+off-topic so I'll keep it short: Yes, in theory RAPL is more effective
+than HWP_REQ_MAX as a mechanism to limit the absolute power consumption
+of the processor package, but that's not the purpose of [1], its purpose
+is setting a lower limit to the energy efficiency of the processor when
+the maximum usable CPU frequency is known (due to the existence of an IO
+device bottleneck) -- And if the maximum usable CPU frequency is the
+information we have at hand, controlling the maximum CPU frequency
+directly is optimal, rather than trying to find the RAPL constraint that
+achieves the same average frequency by trial an error.  Also, in theory,
+even if you had an oracle to tell you what the appropriate RAPL
+constraint is, the result would necessarily be more energy-inefficient
+than controlling the maximum CPU frequency directly, since you're giving
+the processor additional freedom to run at frequencies above the one you
+want to average, which is guaranteed to be more energy-inefficient than
+running at that fixed frequency, assuming we are in the region of
+convexity of the processor's power curve.
 
+Anyway, if you still have some disagreement on the theoretical details
+you're more than welcome to bring up the matter on the other thread [1],
+or accept the invitation for a presentation I sent you months ago... ;)
 
-I wasn't implying that this *should* work on ARM but rather whether this
-will break ARM somehow (because xen_hvm_domain() is true there).
+--=-=-=--
 
+--==-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
->>
->> And PVH dom0.
-> That's another good use case to make it work with however, I still
-> think that should be tested/worked upon separately as the feature itsel=
-f
-> (PVH Dom0) is very new.
-
-
-Same question here --- will this break PVH dom0?
-
-
--boris
-
-
+iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXw92qwAKCRCDmTidfVK/
+WzqZAP4jdcVNyimkSLM6kPoFCiSgicQ1fpbaC1YpAx7btkH1jAEAhfrpAa7Wp4eH
+8a7DibEoG72ORD9ijNW9YAm93npzG84=
+=kYrW
+-----END PGP SIGNATURE-----
+--==-=-=--
