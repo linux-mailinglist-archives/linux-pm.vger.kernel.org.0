@@ -2,187 +2,648 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E11E2200FD
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 01:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB46220142
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 02:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgGNXUc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 19:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgGNXUb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 19:20:31 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A73FC061794
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 16:20:31 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id f2so456955wrp.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 16:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/KMagfkLbbir5XD2E7V8iMKOu/nE7qe0ZSxVTJVsu5Y=;
-        b=I78DT92rk2oGUJNey+cMiJ+dT1q2neBqqRdkKk5hQk+kaMkXt5Z1hTIWtXtbl4f7TQ
-         +64sPRnnKCWYuoKMDmbwoLXqYPWi7TGwNfnvKe3IHbtwhAKKJh+iwZT2L810KyMya/0z
-         Yx6hgnbaUUDMqeBJM3KSFjEcHLQvA2q8adZbLlPJO7Cxljyddd53TCFO2C7eDHSEyd/K
-         ++teAkTGOI2b1PKFHB22OwLkFNjzWerwFPA1tZZa+4xErRTS0g5912aXv0xpH2bdtVcr
-         nicBCEGRDD7LNFyYq4YuSv4JMYTiDvG+4ll3/KQkUG02RSHHDW1eqhmanwJXqLyAz1QS
-         ZKGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/KMagfkLbbir5XD2E7V8iMKOu/nE7qe0ZSxVTJVsu5Y=;
-        b=m4xiEEBpVNLPX/w4qlZ53pdFY+JFTCErnn/39ehqCB+BhymBaZE7cbbz/SJctKb6n/
-         J4k43iho0p88WJjBCPfBA9td5R+q4fQ2xIBv8+Cez/93Z++EsCsVb78v5WjyMbmdWCjz
-         TkNHvzWLEFuqLICZ6cxusBTjhrG4thx9+ZgJl3DT+XIJ4mrAJBnr+BB5mzuOh57Pqz2V
-         JDdYemTuvx31NHMh6XwDwXgxb5/7s1N2WwTRXDza9qPGbxZfUlJ7BUY8t6cLsu1X8cCc
-         15NWmN5JC7p59ZJQ7mh0MfBLZo1ZEInfqKeI8XN2O4VsvJ33XgCjRFsPtzERZz6yq8vH
-         bWuw==
-X-Gm-Message-State: AOAM531tW2ak5nSTps6h9VZatL5MtNVE2ewhQBD35FuKXaeFaf0ziyjP
-        KhWcZ0iejmm34UyjH+QkG6txsw==
-X-Google-Smtp-Source: ABdhPJxg5ZRUMNL70rPOM9WunXXtcwFJTQMTcUcvKt8QOZqVA17b3C0Soo2dTi99b+nuQY2xrpeCTQ==
-X-Received: by 2002:adf:f4d1:: with SMTP id h17mr8189076wrp.227.1594768829794;
-        Tue, 14 Jul 2020 16:20:29 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9? ([2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9])
-        by smtp.googlemail.com with ESMTPSA id w128sm587809wmb.19.2020.07.14.16.20.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2020 16:20:29 -0700 (PDT)
-Subject: Re: [PATCH v4 4/4] thermal: core: Add notifications call in the
- framework
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>, rui.zhang@intel.com
-Cc:     srinivas.pandruvada@linux.intel.com, rkumbako@codeaurora.org,
-        amit.kucheria@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Arnd Bergmann <arnd.bergmann@linaro.org>
-References: <20200706105538.2159-1-daniel.lezcano@linaro.org>
- <20200706105538.2159-4-daniel.lezcano@linaro.org>
- <CGME20200706131708eucas1p1487955a7632584c17df724399f48825a@eucas1p1.samsung.com>
- <c7ed6c63-cbb5-07dc-c292-2c473af8c4fb@samsung.com>
- <23c5830d-0a7c-9e87-e859-821d2dccb200@linaro.org>
- <8a34e9c4-6457-cfd2-3d05-05f80a630a0d@samsung.com>
- <41466d5a-24fb-b861-93ae-3ed190af7174@samsung.com>
- <75683b75-6e1b-6e4e-2354-477c487a5f5f@linaro.org>
-Message-ID: <4cfb15f6-2801-3386-c7cf-6296a54571a1@linaro.org>
-Date:   Wed, 15 Jul 2020 01:20:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726998AbgGOAJl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 20:09:41 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:56290 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726450AbgGOAJl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 14 Jul 2020 20:09:41 -0400
+Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4B5yS41CzNzFccC;
+        Tue, 14 Jul 2020 17:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1594771780; bh=Ad5qlOqnmimrNbAC4ZME4HG7yQpdX8yK593nHQsZmmQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=o5Xfxk2cMSN3DCGJZcyfTaLyyKtgbe+HsWgbW9XYTDf2idWXYFyIONCHoIQ4F1Cy9
+         eMB5K/N7N/EkeFjotkH6SA3w1TTOX8yy+Zn3bhRnn9ibbprTlLxX+sp1tivRlhybIn
+         Sx/efcnXT9UfW+54hDNaaBUCmAQxo6WKqM4IUEvI=
+X-Riseup-User-ID: E6178C2038C11DF7FD051B4B29915B39E4249CB275ACF2B1623D68C4225D3A25
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by capuchin.riseup.net (Postfix) with ESMTPSA id 4B5yS341n4z8tqN;
+        Tue, 14 Jul 2020 17:09:39 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+In-Reply-To: <3955470.QvD6XneCf3@kreacher>
+References: <3955470.QvD6XneCf3@kreacher>
+Date:   Tue, 14 Jul 2020 17:09:33 -0700
+Message-ID: <87r1tdiqpu.fsf@riseup.net>
 MIME-Version: 1.0
-In-Reply-To: <75683b75-6e1b-6e4e-2354-477c487a5f5f@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="==-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/07/2020 22:32, Daniel Lezcano wrote:
-> On 13/07/2020 11:31, Marek Szyprowski wrote:
->> Hi
->>
->> On 07.07.2020 11:15, Marek Szyprowski wrote:
->>> On 06.07.2020 15:46, Daniel Lezcano wrote:
->>>> On 06/07/2020 15:17, Marek Szyprowski wrote:
->>>>> On 06.07.2020 12:55, Daniel Lezcano wrote:
->>>>>> The generic netlink protocol is implemented but the different
->>>>>> notification functions are not yet connected to the core code.
->>>>>>
->>>>>> These changes add the notification calls in the different
->>>>>> corresponding places.
->>>>>>
->>>>>> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
->>>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->>>>> This patch landed in today's linux-next 20200706 as commit 5df786e46560
->>>>> ("thermal: core: Add notifications call in the framework"). Sadly it
->>>>> breaks booting various Samsung Exynos based boards. Here is an example
->>>>> log from Odroid U3 board:
->>>>>
->>>>> Unable to handle kernel NULL pointer dereference at virtual address 
->>>>> 00000010
->>>>> pgd = (ptrval)
->>>>> [00000010] *pgd=00000000
->>>>> Internal error: Oops: 5 [#1] PREEMPT SMP ARM
->>>>> Modules linked in:
->>>>> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.8.0-rc3-00015-g5df786e46560
->>>>> #1146
->>>>> Hardware name: Samsung Exynos (Flattened Device Tree)
->>>>> PC is at kmem_cache_alloc+0x13c/0x418
->>>>> LR is at kmem_cache_alloc+0x48/0x418
->>>>> pc : [<c02b5cac>]    lr : [<c02b5bb8>]    psr: 20000053
->>>>> ...
->>>>> Flags: nzCv  IRQs on  FIQs off  Mode SVC_32  ISA ARM  Segment none
->>>>> Control: 10c5387d  Table: 4000404a  DAC: 00000051
->>>>> Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
->>>>> Stack: (0xee8f1cf8 to 0xee8f2000)
->>>>> ...
->>>>> [<c02b5cac>] (kmem_cache_alloc) from [<c08cd170>] 
->>>>> (__alloc_skb+0x5c/0x170)
->>>>> [<c08cd170>] (__alloc_skb) from [<c07ec19c>]
->>>>> (thermal_genl_send_event+0x24/0x174)
->>>>> [<c07ec19c>] (thermal_genl_send_event) from [<c07ec648>]
->>>>> (thermal_notify_tz_create+0x58/0x74)
->>>>> [<c07ec648>] (thermal_notify_tz_create) from [<c07e9058>]
->>>>> (thermal_zone_device_register+0x358/0x650)
->>>>> [<c07e9058>] (thermal_zone_device_register) from [<c1028d34>]
->>>>> (of_parse_thermal_zones+0x304/0x7a4)
->>>>> [<c1028d34>] (of_parse_thermal_zones) from [<c1028964>]
->>>>> (thermal_init+0xdc/0x154)
->>>>> [<c1028964>] (thermal_init) from [<c0102378>] 
->>>>> (do_one_initcall+0x8c/0x424)
->>>>> [<c0102378>] (do_one_initcall) from [<c1001158>]
->>>>> (kernel_init_freeable+0x190/0x204)
->>>>> [<c1001158>] (kernel_init_freeable) from [<c0ab85f4>]
->>>>> (kernel_init+0x8/0x118)
->>>>> [<c0ab85f4>] (kernel_init) from [<c0100114>] (ret_from_fork+0x14/0x20)
->>>>>
->>>>> Reverting it on top of linux-next fixes the boot issue. I will
->>>>> investigate it further soon.
->>>> Thanks for reporting this.
->>>>
->>>> Can you send the addr2line result and code it points to ?
->>>
->>> addr2line of c02b5cac (kmem_cache_alloc+0x13c/0x418) points to 
->>> mm/slub.c +2839, but I'm not sure if we can trust it. imho it looks 
->>> like some trashed memory somewhere, but I don't have time right now to 
->>> analyze it further now...
->>
->> Just one more thing I've noticed. The crash happens only if the kernel 
->> is compiled with old GCC (tested with arm-linux-gnueabi-gcc (Linaro GCC 
->> 4.9-2017.01) 4.9.4). If I compile kernel with newed GCC (like 
->> arm-linux-gnueabi-gcc (Linaro GCC 6.4-2017.11) 6.4.1 20171012), it works 
->> fine...
->>
->> This happens also with Linux next-20200710, which again got this commit.
-> 
-> So I finally succeed to reproduce on an ARM64 with a recent compiler,
-> earlycon, and the option CONFIG_INIT_ON_ALLOC_DEFAULT_ON.
+--==-=-=
+Content-Type: multipart/mixed; boundary="=-=-="
 
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Finally, narrowed down the issue.
+"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
 
- - genetlink initialization is done at subsys initcall.
- - thermal netlink init is done at core initcall
- - netlink is done at core initcall
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Allow intel_pstate to work in the passive mode with HWP enabled and
+> make it set the HWP minimum performance limit (HWP floor) to the
+> P-state value given by the target frequency supplied by the cpufreq
+> governor, so as to prevent the HWP algorithm and the CPU scheduler
+> from working against each other, at least when the schedutil governor
+> is in use, and update the intel_pstate documentation accordingly.
+>
+> Among other things, this allows utilization clamps to be taken
+> into account, at least to a certain extent, when intel_pstate is
+> in use and makes it more likely that sufficient capacity for
+> deadline tasks will be provided.
+>
+> After this change, the resulting behavior of an HWP system with
+> intel_pstate in the passive mode should be close to the behavior
+> of the analogous non-HWP system with intel_pstate in the passive
+> mode, except that in the frequency range below the base frequency
+> (ie. the frequency retured by the base_frequency cpufreq attribute
+> in sysfs on HWP systems) the HWP algorithm is allowed to go above
+> the floor P-state set by intel_pstate with or without hardware
+> coordination of P-states among CPUs in the same package.
+>
+> Also note that the setting of the HWP floor may not be taken into
+> account by the processor in the following cases:
+>
+>  * For the HWP floor in the range of P-states above the base
+>    frequency, referred to as the turbo range, the processor has a
+>    license to choose any P-state from that range, either below or
+>    above the HWP floor, just like a non-HWP processor in the case
+>    when the target P-state falls into the turbo range.
+>
+>  * If P-states of the CPUs in the same package are coordinated
+>    at the hardware level, the processor may choose a P-state
+>    above the HWP floor, just like a non-HWP processor in the
+>    analogous case.
+>
+> With this change applied, intel_pstate in the passive mode
+> assumes complete control over the HWP request MSR and concurrent
+> changes of that MSR (eg. via the direct MSR access interface) are
+> overridden by it.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> This basically unifies the passive mode behavior of intel_pstate for syst=
+ems
+> with and without HWP enabled.  The only case in which there is a differen=
+ce
+> between the two (after this patch) is below the turbo range, where the HWP
+> algorithm can go above the floor regardless of whether or not P-state are
+> coordinated package-wide (this means the systems with per-core P-states
+> mostly is where the difference can be somewhat visible).
+>
+> Since the passive mode hasn't worked with HWP at all, and it is not going=
+ to
+> the default for HWP systems anyway, I don't see any drawbacks related to =
+making
+> this change, so I would consider this as 5.9 material unless there are any
+> serious objections.
+>
+> Thanks!
+>
+> ---
+>  Documentation/admin-guide/pm/intel_pstate.rst |   89 +++++++---------
+>  drivers/cpufreq/intel_pstate.c                |  141 +++++++++++++++++++=
++------
+>  2 files changed, 152 insertions(+), 78 deletions(-)
+>
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -36,6 +36,7 @@
+>  #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
+>=20=20
+>  #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
+> +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP	5000
+>  #define INTEL_CPUFREQ_TRANSITION_DELAY		500
+>=20=20
+>  #ifdef CONFIG_ACPI
+> @@ -222,6 +223,7 @@ struct global_params {
+>   *			preference/bias
+>   * @epp_saved:		Saved EPP/EPB during system suspend or CPU offline
+>   *			operation
+> + * @epp_cached		Cached HWP energy-performance preference value
+>   * @hwp_req_cached:	Cached value of the last HWP Request MSR
+>   * @hwp_cap_cached:	Cached value of the last HWP Capabilities MSR
+>   * @last_io_update:	Last time when IO wake flag was set
+> @@ -259,6 +261,7 @@ struct cpudata {
+>  	s16 epp_policy;
+>  	s16 epp_default;
+>  	s16 epp_saved;
+> +	s16 epp_cached;
+>  	u64 hwp_req_cached;
+>  	u64 hwp_cap_cached;
+>  	u64 last_io_update;
+> @@ -676,6 +679,8 @@ static int intel_pstate_set_energy_pref_
+>=20=20
+>  		value |=3D (u64)epp << 24;
+>  		ret =3D wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
+> +
+> +		WRITE_ONCE(cpu_data->epp_cached, epp);
 
-By changing the order:
+Why introduce a new EPP cache variable if there is already
+hwp_req_cached?  If intel_pstate_set_energy_pref_index() is failing to
+update hwp_req_cached maybe we should fix that instead.  That will save
+you a little bit of work in intel_cpufreq_adjust_hwp().
 
- - netlink and genetlink at core initcall
- - thermal init at postcore initcall
+>  	} else {
+>  		if (epp =3D=3D -EINVAL)
+>  			epp =3D (pref_index - 1) << 2;
+> @@ -2047,6 +2052,7 @@ static int intel_pstate_init_cpu(unsigne
+>  		cpu->epp_default =3D -EINVAL;
+>  		cpu->epp_powersave =3D -EINVAL;
+>  		cpu->epp_saved =3D -EINVAL;
+> +		WRITE_ONCE(cpu->epp_cached, -EINVAL);
+>  	}
+>=20=20
+>  	cpu =3D all_cpu_data[cpunum];
+> @@ -2245,7 +2251,10 @@ static int intel_pstate_verify_policy(st
+>=20=20
+>  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+>  {
+> -	intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> +	if (hwp_active)
+> +		intel_pstate_hwp_force_min_perf(policy->cpu);
+> +	else
+> +		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>  }
+>=20=20
+>  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> @@ -2253,12 +2262,10 @@ static void intel_pstate_stop_cpu(struct
+>  	pr_debug("CPU %d exiting\n", policy->cpu);
+>=20=20
+>  	intel_pstate_clear_update_util_hook(policy->cpu);
+> -	if (hwp_active) {
+> +	if (hwp_active)
+>  		intel_pstate_hwp_save_state(policy);
+> -		intel_pstate_hwp_force_min_perf(policy->cpu);
+> -	} else {
+> -		intel_cpufreq_stop_cpu(policy);
+> -	}
+> +
+> +	intel_cpufreq_stop_cpu(policy);
+>  }
+>=20=20
+>  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> @@ -2388,13 +2395,82 @@ static void intel_cpufreq_trace(struct c
+>  		fp_toint(cpu->iowait_boost * 100));
+>  }
+>=20=20
+> +static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32 target_pst=
+ate,
+> +				     bool fast_switch)
+> +{
+> +	u64 prev =3D READ_ONCE(cpu->hwp_req_cached), value =3D prev;
+> +	s16 epp;
+> +
+> +	value &=3D ~HWP_MIN_PERF(~0L);
+> +	value |=3D HWP_MIN_PERF(target_pstate);
+> +
+> +	/*
+> +	 * The entire MSR needs to be updated in order to update the HWP min
+> +	 * field in it, so opportunistically update the max too if needed.
+> +	 */
+> +	value &=3D ~HWP_MAX_PERF(~0L);
+> +	value |=3D HWP_MAX_PERF(cpu->max_perf_ratio);
+> +
+> +	/*
+> +	 * In case the EPP has been adjusted via sysfs, write the last cached
+> +	 * value of it to the MSR as well.
+> +	 */
+> +	epp =3D READ_ONCE(cpu->epp_cached);
+> +	if (epp >=3D 0) {
+> +		value &=3D ~GENMASK_ULL(31, 24);
+> +		value |=3D (u64)epp << 24;
+> +	}
+> +
+> +	if (value =3D=3D prev)
+> +		return;
+> +
+> +	WRITE_ONCE(cpu->hwp_req_cached, value);
+> +	if (fast_switch)
+> +		wrmsrl(MSR_HWP_REQUEST, value);
+> +	else
+> +		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+> +}
 
-That fixes the problem. The genetlink initcall order is from 2005 and
-IMO it makes sense to come right after the netlink initialization.
+I've asked this question already but you may have missed it: Given that
+you are of the opinion that [1] should be implemented in schedutil
+instead with intel_pstate in HWP passive mode, what's your plan for
+exposing the HWP_MAX_PERF knob to the governor in addition to
+HWP_MIN_PERF, since the interface implemented here only allows the
+governor to provide a single frequency?
 
-It is acceptable to have the thermal init at the postcore initcall. It
-is very recently we moved from fs_initcall to core_initcall.
+[1] https://lwn.net/ml/linux-pm/20200428032258.2518-1-currojerez@riseup.net/
 
-Thanks to Arnd who give me a direction to look at.
+> +
+> +static void intel_cpufreq_adjust_perf_ctl(struct cpudata *cpu,
+> +					  u32 target_pstate, bool fast_switch)
+> +{
+> +	if (fast_switch)
+> +		wrmsrl(MSR_IA32_PERF_CTL,
+> +		       pstate_funcs.get_val(cpu, target_pstate));
+> +	else
+> +		wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
+> +			      pstate_funcs.get_val(cpu, target_pstate));
+> +}
+> +
+> +static int intel_cpufreq_update_pstate(struct cpudata *cpu, int target_p=
+state,
+> +				       bool fast_switch)
+> +{
+> +	int old_pstate =3D cpu->pstate.current_pstate;
+> +
+> +	target_pstate =3D intel_pstate_prepare_request(cpu, target_pstate);
+> +	if (target_pstate !=3D old_pstate) {
+> +		cpu->pstate.current_pstate =3D target_pstate;
+> +		if (hwp_active)
+> +			intel_cpufreq_adjust_hwp(cpu, target_pstate,
+> +						 fast_switch);
+> +		else
+> +			intel_cpufreq_adjust_perf_ctl(cpu, target_pstate,
+> +						      fast_switch);
+> +	}
+> +
+> +	intel_cpufreq_trace(cpu, fast_switch ? INTEL_PSTATE_TRACE_FAST_SWITCH :
+> +			    INTEL_PSTATE_TRACE_TARGET, old_pstate);
+> +
+> +	return target_pstate;
+> +}
+> +
+>  static int intel_cpufreq_target(struct cpufreq_policy *policy,
+>  				unsigned int target_freq,
+>  				unsigned int relation)
+>  {
+>  	struct cpudata *cpu =3D all_cpu_data[policy->cpu];
+>  	struct cpufreq_freqs freqs;
+> -	int target_pstate, old_pstate;
+> +	int target_pstate;
+>=20=20
+>  	update_turbo_state();
+>=20=20
+> @@ -2402,6 +2478,7 @@ static int intel_cpufreq_target(struct c
+>  	freqs.new =3D target_freq;
+>=20=20
+>  	cpufreq_freq_transition_begin(policy, &freqs);
+> +
+>  	switch (relation) {
+>  	case CPUFREQ_RELATION_L:
+>  		target_pstate =3D DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
+> @@ -2413,15 +2490,11 @@ static int intel_cpufreq_target(struct c
+>  		target_pstate =3D DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
+>  		break;
+>  	}
+> -	target_pstate =3D intel_pstate_prepare_request(cpu, target_pstate);
+> -	old_pstate =3D cpu->pstate.current_pstate;
+> -	if (target_pstate !=3D cpu->pstate.current_pstate) {
+> -		cpu->pstate.current_pstate =3D target_pstate;
+> -		wrmsrl_on_cpu(policy->cpu, MSR_IA32_PERF_CTL,
+> -			      pstate_funcs.get_val(cpu, target_pstate));
+> -	}
+> +
+> +	target_pstate =3D intel_cpufreq_update_pstate(cpu, target_pstate, false=
+);
+> +
+>  	freqs.new =3D target_pstate * cpu->pstate.scaling;
+> -	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET, old_pstate);
+> +
+>  	cpufreq_freq_transition_end(policy, &freqs, false);
+>=20=20
+>  	return 0;
+> @@ -2431,15 +2504,14 @@ static unsigned int intel_cpufreq_fast_s
+>  					      unsigned int target_freq)
+>  {
+>  	struct cpudata *cpu =3D all_cpu_data[policy->cpu];
+> -	int target_pstate, old_pstate;
+> +	int target_pstate;
+>=20=20
+>  	update_turbo_state();
+>=20=20
+>  	target_pstate =3D DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+> -	target_pstate =3D intel_pstate_prepare_request(cpu, target_pstate);
+> -	old_pstate =3D cpu->pstate.current_pstate;
+> -	intel_pstate_update_pstate(cpu, target_pstate);
+> -	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH, old_pstate);
+> +
+> +	target_pstate =3D intel_cpufreq_update_pstate(cpu, target_pstate, true);
+> +
+>  	return target_pstate * cpu->pstate.scaling;
+>  }
+>=20=20
+> @@ -2459,7 +2531,6 @@ static int intel_cpufreq_cpu_init(struct
+>  		return ret;
+>=20=20
+>  	policy->cpuinfo.transition_latency =3D INTEL_CPUFREQ_TRANSITION_LATENCY;
+> -	policy->transition_delay_us =3D INTEL_CPUFREQ_TRANSITION_DELAY;
+>  	/* This reflects the intel_pstate_get_cpu_pstates() setting. */
+>  	policy->cur =3D policy->cpuinfo.min_freq;
+>=20=20
+> @@ -2471,10 +2542,17 @@ static int intel_cpufreq_cpu_init(struct
+>=20=20
+>  	cpu =3D all_cpu_data[policy->cpu];
+>=20=20
+> -	if (hwp_active)
+> +	if (hwp_active) {
+> +		u64 value;
+> +
+>  		intel_pstate_get_hwp_max(policy->cpu, &turbo_max, &max_state);
+> -	else
+> +		policy->transition_delay_us =3D INTEL_CPUFREQ_TRANSITION_DELAY_HWP;
+> +		rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value);
+> +		WRITE_ONCE(cpu->hwp_req_cached, value);
+> +	} else {
+>  		turbo_max =3D cpu->pstate.turbo_pstate;
+> +		policy->transition_delay_us =3D INTEL_CPUFREQ_TRANSITION_DELAY;
+> +	}
+>=20=20
+>  	min_freq =3D DIV_ROUND_UP(turbo_max * global.min_perf_pct, 100);
+>  	min_freq *=3D cpu->pstate.scaling;
+> @@ -2575,9 +2653,6 @@ static int intel_pstate_register_driver(
+>=20=20
+>  static int intel_pstate_unregister_driver(void)
+>  {
+> -	if (hwp_active)
+> -		return -EBUSY;
+> -
+>  	cpufreq_unregister_driver(intel_pstate_driver);
+>  	intel_pstate_driver_cleanup();
+>=20=20
+> @@ -2828,7 +2903,10 @@ static int __init intel_pstate_init(void
+>  			hwp_active++;
+>  			hwp_mode_bdw =3D id->driver_data;
+>  			intel_pstate.attr =3D hwp_cpufreq_attrs;
+> -			default_driver =3D &intel_pstate;
+> +			intel_cpufreq.attr =3D hwp_cpufreq_attrs;
+> +			if (!default_driver)
+> +				default_driver =3D &intel_pstate;
+> +
+>  			goto hwp_cpu_matched;
+>  		}
+>  	} else {
+> @@ -2899,14 +2977,13 @@ static int __init intel_pstate_setup(cha
+>  	if (!str)
+>  		return -EINVAL;
+>=20=20
+> -	if (!strcmp(str, "disable")) {
+> +	if (!strcmp(str, "disable"))
+>  		no_load =3D 1;
+> -	} else if (!strcmp(str, "active")) {
+> +	else if (!strcmp(str, "active"))
+>  		default_driver =3D &intel_pstate;
+> -	} else if (!strcmp(str, "passive")) {
+> +	else if (!strcmp(str, "passive"))
+>  		default_driver =3D &intel_cpufreq;
+> -		no_hwp =3D 1;
+> -	}
+> +
+>  	if (!strcmp(str, "no_hwp")) {
+>  		pr_info("HWP disabled\n");
+>  		no_hwp =3D 1;
+> Index: linux-pm/Documentation/admin-guide/pm/intel_pstate.rst
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-pm.orig/Documentation/admin-guide/pm/intel_pstate.rst
+> +++ linux-pm/Documentation/admin-guide/pm/intel_pstate.rst
+> @@ -54,10 +54,13 @@ registered (see `below <status_attr_>`_)
+>  Operation Modes
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20=20
+> -``intel_pstate`` can operate in three different modes: in the active mod=
+e with
+> -or without hardware-managed P-states support and in the passive mode.  W=
+hich of
+> -them will be in effect depends on what kernel command line options are u=
+sed and
+> -on the capabilities of the processor.
+> +``intel_pstate`` can operate in two different modes, active or passive. =
+ In the
+> +active mode, it uses its own internal preformance scaling governor algor=
+ithm or
+> +allows the hardware to do preformance scaling by itself, while in the pa=
+ssive
+> +mode it responds to requests made by a generic ``CPUFreq`` governor impl=
+ementing
+> +a certain performance scaling algorithm.  Which of them will be in effect
+> +depends on what kernel command line options are used and on the capabili=
+ties of
+> +the processor.
+>=20=20
+>  Active Mode
+>  -----------
+> @@ -194,10 +197,11 @@ This is the default operation mode of ``
+>  hardware-managed P-states (HWP) support.  It is always used if the
+>  ``intel_pstate=3Dpassive`` argument is passed to the kernel in the comma=
+nd line
+>  regardless of whether or not the given processor supports HWP.  [Note th=
+at the
+> -``intel_pstate=3Dno_hwp`` setting implies ``intel_pstate=3Dpassive`` if =
+it is used
+> -without ``intel_pstate=3Dactive``.]  Like in the active mode without HWP=
+ support,
+> -in this mode ``intel_pstate`` may refuse to work with processors that ar=
+e not
+> -recognized by it.
+> +``intel_pstate=3Dno_hwp`` setting causes the driver to start in the pass=
+ive mode
+> +if it is not combined with ``intel_pstate=3Dactive``.]  Like in the acti=
+ve mode
+> +without HWP support, in this mode ``intel_pstate`` may refuse to work wi=
+th
+> +processors that are not recognized by it if HWP is prevented from being =
+enabled
+> +through the kernel command line.
+>=20=20
+>  If the driver works in this mode, the ``scaling_driver`` policy attribut=
+e in
+>  ``sysfs`` for all ``CPUFreq`` policies contains the string "intel_cpufre=
+q".
+> @@ -318,10 +322,9 @@ manuals need to be consulted to get to i
+>=20=20
+>  For this reason, there is a list of supported processors in ``intel_psta=
+te`` and
+>  the driver initialization will fail if the detected processor is not in =
+that
+> -list, unless it supports the `HWP feature <Active Mode_>`_.  [The interf=
+ace to
+> -obtain all of the information listed above is the same for all of the pr=
+ocessors
+> -supporting the HWP feature, which is why they all are supported by
+> -``intel_pstate``.]
+> +list, unless it supports the HWP feature.  [The interface to obtain all =
+of the
+> +information listed above is the same for all of the processors supportin=
+g the
+> +HWP feature, which is why ``intel_pstate`` works with all of them.]
+>=20=20
+>=20=20
+>  User Space Interface in ``sysfs``
+> @@ -425,22 +428,16 @@ argument is passed to the kernel in the
+>  	as well as the per-policy ones) are then reset to their default
+>  	values, possibly depending on the target operation mode.]
+>=20=20
+> -	That only is supported in some configurations, though (for example, if
+> -	the `HWP feature is enabled in the processor <Active Mode With HWP_>`_,
+> -	the operation mode of the driver cannot be changed), and if it is not
+> -	supported in the current configuration, writes to this attribute will
+> -	fail with an appropriate error.
+> -
+>  ``energy_efficiency``
+> -	This attribute is only present on platforms, which have CPUs matching
+> -	Kaby Lake or Coffee Lake desktop CPU model. By default
+> -	energy efficiency optimizations are disabled on these CPU models in HWP
+> -	mode by this driver. Enabling energy efficiency may limit maximum
+> -	operating frequency in both HWP and non HWP mode. In non HWP mode,
+> -	optimizations are done only in the turbo frequency range. In HWP mode,
+> -	optimizations are done in the entire frequency range. Setting this
+> -	attribute to "1" enables energy efficiency optimizations and setting
+> -	to "0" disables energy efficiency optimizations.
+> +	This attribute is only present on platforms with CPUs matching the Kaby
+> +	Lake or Coffee Lake desktop CPU model. By default, energy-efficiency
+> +	optimizations are disabled on these CPU models if HWP is enabled.
+> +	Enabling energy-efficiency optimizations may limit maximum operating
+> +	frequency with or without the HWP feature.  With HWP enabled, the
+> +	optimizations are done only in the turbo frequency range.  Without it,
+> +	they are done in the entire available frequency range.  Setting this
+> +	attribute to "1" enables the energy-efficiency optimizations and setting
+> +	to "0" disables them.
+>=20=20
+>  Interpretation of Policy Attributes
+>  -----------------------------------
+> @@ -484,8 +481,8 @@ Next, the following policy attributes ha
+>  	policy for the time interval between the last two invocations of the
+>  	driver's utilization update callback by the CPU scheduler for that CPU.
+>=20=20
+> -One more policy attribute is present if the `HWP feature is enabled in t=
+he
+> -processor <Active Mode With HWP_>`_:
+> +One more policy attribute is present if the HWP feature is enabled in the
+> +processor:
+>=20=20
+>  ``base_frequency``
+>  	Shows the base frequency of the CPU. Any frequency above this will be
+> @@ -526,11 +523,11 @@ on the following rules, regardless of th
+>=20=20
+>   3. The global and per-policy limits can be set independently.
+>=20=20
+> -If the `HWP feature is enabled in the processor <Active Mode With HWP_>`=
+_, the
+> -resulting effective values are written into its registers whenever the l=
+imits
+> -change in order to request its internal P-state selection logic to alway=
+s set
+> -P-states within these limits.  Otherwise, the limits are taken into acco=
+unt by
+> -scaling governors (in the `passive mode <Passive Mode_>`_) and by the dr=
+iver
+> +In the `active mode with the HWP feature enabled <Active Mode With HWP_>=
+`_, the
+> +resulting effective values are written into hardware registers whenever =
+the
+> +limits change in order to request its internal P-state selection logic t=
+o always
+> +set P-states within these limits.  Otherwise, the limits are taken into =
+account
+> +by scaling governors (in the `passive mode <Passive Mode_>`_) and by the=
+ driver
+>  every time before setting a new P-state for a CPU.
+>=20=20
+>  Additionally, if the ``intel_pstate=3Dper_cpu_perf_limits`` command line=
+ argument
+> @@ -541,12 +538,11 @@ at all and the only way to set the limit
+>  Energy vs Performance Hints
+>  ---------------------------
+>=20=20
+> -If ``intel_pstate`` works in the `active mode with the HWP feature enabl=
+ed
+> -<Active Mode With HWP_>`_ in the processor, additional attributes are pr=
+esent
+> -in every ``CPUFreq`` policy directory in ``sysfs``.  They are intended t=
+o allow
+> -user space to help ``intel_pstate`` to adjust the processor's internal P=
+-state
+> -selection logic by focusing it on performance or on energy-efficiency, or
+> -somewhere between the two extremes:
+> +If the hardware-managed P-states (HWP) is enabled in the processor, addi=
+tional
+> +attributes, intended to allow user space to help ``intel_pstate`` to adj=
+ust the
+> +processor's internal P-state selection logic by focusing it on performan=
+ce or on
+> +energy-efficiency, or somewhere between the two extremes, are present in=
+ every
+> +``CPUFreq`` policy directory in ``sysfs``.  They are :
+>=20=20
+>  ``energy_performance_preference``
+>  	Current value of the energy vs performance hint for the given policy
+> @@ -650,12 +646,14 @@ of them have to be prepended with the ``
+>  	Do not register ``intel_pstate`` as the scaling driver even if the
+>  	processor is supported by it.
+>=20=20
+> +``active``
+> +	Register ``intel_pstate`` in the `active mode <Active Mode_>`_ to start
+> +	with.
+> +
+>  ``passive``
+>  	Register ``intel_pstate`` in the `passive mode <Passive Mode_>`_ to
+>  	start with.
+>=20=20
+> -	This option implies the ``no_hwp`` one described below.
+> -
+>  ``force``
+>  	Register ``intel_pstate`` as the scaling driver instead of
+>  	``acpi-cpufreq`` even if the latter is preferred on the given system.
+> @@ -670,13 +668,12 @@ of them have to be prepended with the ``
+>  	driver is used instead of ``acpi-cpufreq``.
+>=20=20
+>  ``no_hwp``
+> -	Do not enable the `hardware-managed P-states (HWP) feature
+> -	<Active Mode With HWP_>`_ even if it is supported by the processor.
+> +	Do not enable the hardware-managed P-states (HWP) feature even if it is
+> +	supported by the processor.
+>=20=20
+>  ``hwp_only``
+>  	Register ``intel_pstate`` as the scaling driver only if the
+> -	`hardware-managed P-states (HWP) feature <Active Mode With HWP_>`_ is
+> -	supported by the processor.
+> +	hardware-managed P-states (HWP) feature is supported by the processor.
+>=20=20
+>  ``support_acpi_ppc``
+>  	Take ACPI ``_PPC`` performance limits into account.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+--=-=-=--
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--==-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXw5JPQAKCRCDmTidfVK/
+W5O0AP9vpRhu6K8Fvgews8Gw41q4yV/gB1EikL0GqFp5slLVjAD9FCeDgKF4VkWk
+XkYof5PtwCfffJqUxpBj8v/RztmjWRM=
+=xlGb
+-----END PGP SIGNATURE-----
+--==-=-=--
