@@ -2,89 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D93D2205C5
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 09:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3922205DA
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 09:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726212AbgGOHGU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 03:06:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55556 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725852AbgGOHGU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 03:06:20 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35EF12065E;
-        Wed, 15 Jul 2020 07:06:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594796779;
-        bh=5SKEybmNPZ9vGQObkBpkzVnRI16H5OZzmLLIoHERkUo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=II8/IwKrHJw8tg2OyVy2S1RfQO2+9lm2GjOzWPo6tHg1P9ubopcnwN9v1WkYRxmQN
-         WCRgyaZnmWCIW/B+MJBO4mBPy21jPdtd+QYGBqBeoOBbeFCT79dMy6WGGma03dUPDu
-         vOjfdsHD0XaoCRsakt/uGWkyaiIcOl82UtfAUap4=
-Date:   Wed, 15 Jul 2020 09:06:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2][RESEND v3] PM-runtime: change the tracepoints to
- cover all usage_count
-Message-ID: <20200715070614.GA2297388@kroah.com>
-References: <cover.1594790493.git.yu.c.chen@intel.com>
- <395187057e486df9a4328bc6d7d4ee912967fdb3.1594790493.git.yu.c.chen@intel.com>
+        id S1729045AbgGOHIj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 03:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728820AbgGOHIj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 03:08:39 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD49C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 00:08:39 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id k5so2534139pjg.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 00:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xq3Gp8UkhZF8kQ4zb+jyVIPFdehHjSPGd5hT6HgXh/w=;
+        b=Xzy8PIF4K2ItoKXFk/foUR6I5BXk/eNa2ZxaWNFczBa7c8F6UGeqaJcQmF3pThQlvV
+         7zA+6l249GsUfcUnlu2PFXF60hFBrFMUHVTHcpb9XrfItqXkg9tGQIAxe4q0zMsWmSPt
+         1S+61Pr03KU1zDjmhy0/9GZezWZBTGjU1IrMIhczVD0gB8yHiLsZjPNNiY3FVnmI8LCF
+         xpFRUDYOkdKnxe082gdWCthy4LmggAU51aopDp/ijQFJYWORWOBucaPJwxryIoICk0zg
+         cy2bxnyVxgniG1TkcHYPV27ShnqwYAitfBDXz7zpmWcS9tnDSkYmNyF2lqwj944l+q4k
+         cCdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xq3Gp8UkhZF8kQ4zb+jyVIPFdehHjSPGd5hT6HgXh/w=;
+        b=MVE3C90wZJiBQ0QbKF7SZqoVRNqJVy9Xhp0KaLVcSLvlL1hrbd5qAIxp5LxEA3u0OJ
+         pNoDm+UakKIszVRfuV/tnzUXdVShrP0s87vBqzkGb81ilGXR7q5APgYisO19hEbECRUw
+         nQz9cf7XW3+Vli2qkXiSLRXplOf3dGGveIbjuS4N1Qonuj9fIAjiCXd1jvV7ONdJnvXK
+         MxiAVIpmx+aPp8mFVd1FXWfkoRY0ppto9DFjajoeGCu4Nq212ZTn7whbOcP2Jtq2flwK
+         Se2Lv+f5wmI3XYA9CV0P0vAahsgXOIlN6wXXVDwdDhVY5/6N/SHEuiIYS0B+21sNzWSN
+         JaQw==
+X-Gm-Message-State: AOAM531lG7dRtZfWozJ/VbsBPKsiY49SE5LPOwIYeURtiI9JU3Wj04V6
+        ZBiU+yvw2rzzgySGIDB6wvvpaQ==
+X-Google-Smtp-Source: ABdhPJy8CU1+Q+J3Wmu7L7IHUN6Y8XnrZPCTrx2DlZ8ooaZyYSZMSLvuFcl3XIALyLJK39oEnP3dlQ==
+X-Received: by 2002:a17:90a:e57:: with SMTP id p23mr8515503pja.164.1594796918658;
+        Wed, 15 Jul 2020 00:08:38 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id c27sm1109468pfj.163.2020.07.15.00.08.37
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jul 2020 00:08:37 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 12:38:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Alexander Clouter <alex@digriz.org.uk>
+Subject: Re: [PATCH 03/13] cpufreq: cpufreq_governor: Demote
+ store_sampling_rate() header to standard comment block
+Message-ID: <20200715070836.l24lzkb6pgvqj26i@vireshk-i7>
+References: <20200714145049.2496163-1-lee.jones@linaro.org>
+ <20200714145049.2496163-4-lee.jones@linaro.org>
+ <20200715025249.ukoqup4piqiz5lim@vireshk-i7>
+ <20200715064539.GS1398296@dell>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <395187057e486df9a4328bc6d7d4ee912967fdb3.1594790493.git.yu.c.chen@intel.com>
+In-Reply-To: <20200715064539.GS1398296@dell>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 02:28:03PM +0800, Chen Yu wrote:
-> Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
-> has added some tracepoints to monitor the change of runtime usage, and
-> there is something to improve:
-> 1. There are some places that adjust the usage count not
->    been traced yet. For example, pm_runtime_get_noresume() and
->    pm_runtime_put_noidle()
-> 2. The change of the usage count will not be tracked if decreased
->    from 1 to 0.
+On 15-07-20, 07:45, Lee Jones wrote:
+> On Wed, 15 Jul 2020, Viresh Kumar wrote:
+> > On 14-07-20, 15:50, Lee Jones wrote:
+> > > diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+> > > index f99ae45efaea7..63f7c219062b9 100644
+> > > --- a/drivers/cpufreq/cpufreq_governor.c
+> > > +++ b/drivers/cpufreq/cpufreq_governor.c
+> > > @@ -26,7 +26,7 @@ static DEFINE_PER_CPU(struct cpu_dbs_info, cpu_dbs);
+> > >  static DEFINE_MUTEX(gov_dbs_data_mutex);
+> > >  
+> > >  /* Common sysfs tunables */
+> > > -/**
+> > > +/*
+> > 
+> > This is an important routine with good documentation details already
+> > there, though internal to governors and so I would rather keep it.
 > 
-> This patch intends to adjust the logic to be consistent with the
-> change of usage_counter, that is to say, only after the counter has
-> been possibly modified, we record it. Besides, all usage changes will
-> be shown using rpm_usage even if included by other trace points.
-> And these changes has helped track down the e1000e runtime issue.
+> It maybe documented, but it isn't kerneldoc, for 2 reasons; a) it
+> doesn't meet the standards required qualify as kerneldoc i.e. it's
+> missing descriptions for each of the function parameters, which is why
+> the kerneldoc checker is complaining about it
+
+Right, so this is a mistake and not intentional probably.
+
+> and b) it is not
+> referenced by any *.rst file:
 > 
-> Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  drivers/base/power/runtime.c | 38 +++++++++++++++++++++++-------------
->  1 file changed, 24 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 85a248e196ca..5789d2624513 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1004,10 +1004,11 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
->  	int retval;
->  
->  	if (rpmflags & RPM_GET_PUT) {
-> -		if (!atomic_dec_and_test(&dev->power.usage_count)) {
-> -			trace_rpm_usage_rcuidle(dev, rpmflags);
-> +		bool non_zero = !atomic_dec_and_test(&dev->power.usage_count);
-> +
-> +		trace_rpm_usage_rcuidle(dev, rpmflags);
+>  git grep kernel-doc::.*cpufreq_governor.c
+>  /* no results */
 
-Why not just call trace everywhere before you do the atomic operations?
-Why does the trace need to be called after the operation everywhere?
+I believed (and it may be wrong) that there are two categories of
+routines/structures which can be put in kernel documentation, the
+exported ones and the internal ones which are important and are very
+useful in understanding the algorithms/logic in the drivers.
 
-thanks,
+I did try to go and look into Documentation/doc-guide/ but couldn't
+find any details on this.
 
-greg k-h
+You said that it needs to be referenced from some *.rst file, but why
+is that necessary ? What if people don't add any documentation in
+Documentation/ for their framework or driver but still want stuff to
+appear in kernel-doc as they can keep the documentation in comments
+more up to date.
+
+-- 
+viresh
