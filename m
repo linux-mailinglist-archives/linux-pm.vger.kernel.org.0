@@ -2,97 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18824220710
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F36F22071F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729652AbgGOI1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:27:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729932AbgGOI04 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:56 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8681C08C5C1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:55 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id a6so2966648wmm.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=I9K0sP4k999M7LgtJ1hbosTLECoGAC+DHglKiGxOGJ0=;
-        b=jbH8taSV1R0R0HA1uoMe9Xx/Wt4K2Uyeqr/sfT7vIKbeXYYPFVmYIBVvgtpcsafHLG
-         rL9xG7X3IBgk+gEIVfF/ZgovOEM6oCc06NYJf2yafwTpZpRohRlMIt7UKkYneqnjDzf9
-         Q+G9e1TXvwRMMxzsX5PbQPcCfgxEO+7JzBHU7TuqIR+Rd5ooXv1DcoqDaTO8u3qEU4Ys
-         IY/PoPKS4GTCsT4uNiHV6kSR5eUvMArOVE7EOoW9TPEGls+Bzpml1UbhrKSY7dfON8y5
-         3AE3hMZc830fDz2wNUfDbX2jhKzGlaBP4pX0lFpHa1xt/hCKDU3eDUMdRcJ5eTpmt5al
-         +Uiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=I9K0sP4k999M7LgtJ1hbosTLECoGAC+DHglKiGxOGJ0=;
-        b=BkIVRGuQdgKRzGgThw9Fpg+XLTbPmw+bqerXCcxCUWe0ht48TYObqa4jWGe26+BXx2
-         iGnspEkvo8ugQGZhUiOpjdshTKkmyKoHul4DrcXkci9XNE5ab8OHNLnY/I5BSw603U0k
-         vlmVJeK9oxpftWUcfyqBbp23OybdL0Zr8pnErbuDeqjFNt380kBUqQ3vVHUC7am6PGxz
-         Ii6suvm2HKQ6em7h7495S0NEoqy69iRbUGEF9csUSQZzeAnztEOqs1bvQZ61yOQazmMn
-         +eSQzI0S3VBd49dzppb/8hu9YbuxRzNPn2dwDPbZqROsAX3xy6ud/pFpOiIKT/Ah7H3P
-         Vx6A==
-X-Gm-Message-State: AOAM533dxkAidiCSoKwbyTD+SAoBr2qbTIcfm5/wx/YICh8o6ulneYXJ
-        lElWzgGi4GpszNuVqSDGkhMOFg==
-X-Google-Smtp-Source: ABdhPJx8hFJwy5mvfeQUMNX/b5bn1VGj7HPDqWqfA7V5iQIi2oISZQihLgJdW/LeiPD/u4P1E/WmVw==
-X-Received: by 2002:a1c:2485:: with SMTP id k127mr7281164wmk.138.1594801614566;
-        Wed, 15 Jul 2020 01:26:54 -0700 (PDT)
-Received: from localhost.localdomain ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 01:26:53 -0700 (PDT)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Jacob Shin <jacob.shin@amd.com>
-Subject: [PATCH v2 13/13] cpufreq: amd_freq_sensitivity: Mark sometimes used ID structs as __maybe_unused
-Date:   Wed, 15 Jul 2020 09:26:34 +0100
-Message-Id: <20200715082634.3024816-14-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200715082634.3024816-1-lee.jones@linaro.org>
-References: <20200715082634.3024816-1-lee.jones@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+        id S1726984AbgGOI1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:27:44 -0400
+Received: from mga07.intel.com ([134.134.136.100]:41250 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726396AbgGOI1n (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 04:27:43 -0400
+IronPort-SDR: ESfhtG135gxq2CEs2vGLLJRd7PVjIWaMsyWKJ5c8ucru3O93/oEhG4XD1DkTaZpWB7dBZoSYZh
+ 3MhsQr8M5VHg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="213876760"
+X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
+   d="scan'208";a="213876760"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 01:27:37 -0700
+IronPort-SDR: R2YkGjF0/a7Jh7EPsjLE55eWyoNz3iAYV26+kZVW+YaC8o8eWQDXB2vr9kw9bdtnyGyVvMFErL
+ iPHarFRLMHLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
+   d="scan'208";a="299812940"
+Received: from yren3-mobl.ccr.corp.intel.com ([10.249.174.224])
+  by orsmga002.jf.intel.com with ESMTP; 15 Jul 2020 01:27:35 -0700
+Message-ID: <e078f9ebd3e8e440d5c04d2abac31201f5d3443d.camel@intel.com>
+Subject: Re: [RFC PATCH 0/4] thermal: Introduce support for monitoring
+ falling temperature
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Thara Gopinath <thara.gopinath@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 15 Jul 2020 16:27:34 +0800
+In-Reply-To: <5861acec-c49a-47cc-d7c6-ccef11dc1d58@linaro.org>
+References: <20200710135154.181454-1-thara.gopinath@linaro.org>
+         <7437ee89-e76d-0c82-9860-5c6076ad8a30@linaro.org>
+         <b25d54d35cec777f0dcc5b2bcacce27321d9bd45.camel@intel.com>
+         <5861acec-c49a-47cc-d7c6-ccef11dc1d58@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-ot used when MODULE is not defined.
+Hi, Thara,
 
-Fixes the following W=1 kernel build warning(s):
+On Tue, 2020-07-14 at 17:39 -0400, Thara Gopinath wrote:
+> 
+> > 
+> > For example, to support this, we can
+> > either
+> > introduce both "cold" trip points and "warming devices", and
+> > introduce
+> > new logic in thermal framework and governors to handle them,
+> > Or
+> > introduce "cold" trip point and "warming" device, but only
+> > semantically, and treat them just like normal trip points and
+> > cooling
+> > devices. And strictly define cooling state 0 as the state that
+> > generates most heat, and define max cooling state as the state that
+> > generates least heat. Then, say, we have a trip point at -10C, the
+> > "warming" device is set to cooling state 0 when the temperature is
+> > lower than -10C, and in most cases, this thermal zone is always in
+> > a
+> > "overheating" state (temperature higher than -10C), and the
+> > "warming"
+> > device for this thermal zone is "throttled" to generate as least
+> > heat
+> > as possible. And this is pretty much what the current code has
+> > always
+> > been doing, right?
+> 
+> 
+> IMHO, thermal framework should move to a direction where the term 
+> "mitigation" is used rather than cooling or warming. In this case 
+> "cooling dev" and "warming dev" should will become 
+> "temp-mitigating-dev". So going by this, I think what you mention as 
+> option 1 is more suitable where new logic is introduced into the 
+> framework and governors to handle the trip points marked as "cold".
+> 
+> Also in the current set of requirements, we have a few power domain 
+> rails and other resources that are used exclusively in the thermal 
+> framework for warming alone as in they are not used ever for cooling 
+> down a zone. But then one of the requirements we have discussed is
+> for cpufreq and gpu scaling to be behave as warming devices where
+> the minimum operating point/ voltage of the relevant cpu/gpu is
+> restricted.
+> So in this case, Daniel had this suggestion of introducing negative 
+> states for presently what is defined as cooling devices. So cooling
+> dev 
+> / temp-mitigation-dev states can range from say -3 to 5 with 0 as
+> the 
+> good state where no mitigation is happening. This is an interesting
+> idea 
+> though I have not proto-typed it yet.
 
- drivers/cpufreq/amd_freq_sensitivity.c:147:32: warning: ‘amd_freq_sensitivity_ids’ defined but not used [-Wunused-const-variable=]
- 147 | static const struct x86_cpu_id amd_freq_sensitivity_ids[] = {
- | ^~~~~~~~~~~~~~~~~~~~~~~~
+Agreed. If some devices support both "cooling" and "warning", we should
+have only one "temp-mitigating-dev" instead.
+> 
+> > 
+> > I can not say which one is better for now as I don't have the
+> > background of this requirement. It's nice that Thara sent this RFC
+> > series for discussion, but from upstream point of view, I'd prefer
+> > to
+> > see a full stack solution, before taking any code.
+> 
+> We had done a session at ELC on this requirement. Here is the link
+> to 
+> the presentation. Hopefully it gives you some back ground on this.
 
-Cc: Jacob Shin <jacob.shin@amd.com>
-Signed-off-by: Lee Jones <lee.jones@linaro.org>
----
- drivers/cpufreq/amd_freq_sensitivity.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+yes, it helps. :)
+> 
+> 
+https://elinux.org/images/f/f7/ELC-2020-Thara-Ram-Linux-Kernel-Thermal-Warming.pdf
+> 
+> I have sent across some patches for introducing a generic power
+> domain 
+> warming device which is under review by Daniel.
+> 
+> So how do you want to proceed on this? Can you elaborate a bit more
+> on 
+> what you mean by a full stack solution.
 
-diff --git a/drivers/cpufreq/amd_freq_sensitivity.c b/drivers/cpufreq/amd_freq_sensitivity.c
-index f7c4206d4c90b..d0b10baf039ab 100644
---- a/drivers/cpufreq/amd_freq_sensitivity.c
-+++ b/drivers/cpufreq/amd_freq_sensitivity.c
-@@ -144,7 +144,7 @@ static void __exit amd_freq_sensitivity_exit(void)
- }
- module_exit(amd_freq_sensitivity_exit);
- 
--static const struct x86_cpu_id amd_freq_sensitivity_ids[] = {
-+static const struct x86_cpu_id __maybe_unused amd_freq_sensitivity_ids[] = {
- 	X86_MATCH_FEATURE(X86_FEATURE_PROC_FEEDBACK, NULL),
- 	{}
- };
--- 
-2.25.1
+I mean, the patches, and the idea look good to me, just with some minor
+comments. But applying this patch series, alone, does not bring us
+anything because we don't have a thermal zone driver that supports cold
+trip point, right?
+I'd like to see this patch series together with the support in
+thermal_core/governors and real users like updated/new thermal
+zone/cdev drivers that supports the cold trip point and warming
+actions.
+Or else I've the concern that this piece of code may be changed back
+and forth when prototyping the rest of the support.
+
+thanks,
+rui
 
