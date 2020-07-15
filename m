@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0785F221108
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 17:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B3B22110C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 17:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725831AbgGOPbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 11:31:19 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36604 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbgGOPbT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 11:31:19 -0400
-Received: by mail-oi1-f194.google.com with SMTP id h17so2524029oie.3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 08:31:18 -0700 (PDT)
+        id S1725897AbgGOPbz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 11:31:55 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42136 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbgGOPby (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 11:31:54 -0400
+Received: by mail-ot1-f67.google.com with SMTP id g37so1759843otb.9
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 08:31:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=BBW6K8+TvI8uJGpxP7UFZC6IWDomv3WMlukBT2EREJ8=;
-        b=VlqaFVKSJbR6CSoDUrS51ibv0VsZVYTnN6b8Mf1wZU6CjcXZm8+mHDnMJYayGyRwQZ
-         mz/SPVkL3mSHJLFVAZVNNEs3F+mqevlK407PSVOe8sUVcDKAluJZRfCmKvT1Gl7jMvCy
-         5K8RMY6RdWvMhCr1ouHnLzjuMmQ2drcCANcWMlp0y1d6k626DqS1o8qlKn62spLaqQ2s
-         5xqMPTeif+6ngXmphE+TSTNRaOA8pTyZlaSYiZ/6FBv3j1WVRtdL2ZPFkBKG1ixyir8g
-         we0hvJsLUwsGo/Z12IsWHKkH2EWxNbiFXAKOY5klD8s6SL2OwVisQ/GMdEg8/rThun+B
-         oDYg==
-X-Gm-Message-State: AOAM531AGcT+MiSttFsL4r187EKwdecqXheAZddE0Ifv/ZuUgazXUyYK
-        R27nFkgOTzvJaVu4vvI3PIIJunn98M06fQJBL/0=
-X-Google-Smtp-Source: ABdhPJyPcMAbwjPmcWXoE1l3sJ3/XyN5pkKKHAxynAZQ8Iv3h7e9wh++pvMgo+IR4QFp5JObqq90pO3v8JlDpOpXUmQ=
-X-Received: by 2002:a54:4e87:: with SMTP id c7mr251044oiy.110.1594827078031;
- Wed, 15 Jul 2020 08:31:18 -0700 (PDT)
+        bh=CfCu9gcxeRoD+7qVqyIBHyNUHyLlmoT+teLp+nb2dZ0=;
+        b=NZl2qhC8LNKcmQmByLBggdhf75E2gX2gtCEGJdIHLOs9EsBfsFqF2dlaxVm+txP4jG
+         TjSZsVu5rmmrD0E/uPZbqyqDahK1xeBkR1973ngnBomdEweJe4h8fqW2dOWYk5i2VbR5
+         neXNCA8P5KIcnoUcwBMvujisdpS3ROV+NZ6/u/qyCTyjFQmEzc/dxl+9IMsNqwZRqQnr
+         ELpHIpnkR7mOuheivDUHkee8CG2dPxjzGLhF36rGkCM+0UFvdOTeDTIOAJfnSDqQGj6B
+         sLiUgwYpNueZ/8nIOt/1oLVyM4keICTbKSZPhBJSyMtjzfZZq+ftN7zm5OxQx+ntd9sf
+         QYJg==
+X-Gm-Message-State: AOAM530Jfx+0wyakIA3sWj0vtlAl/W5pfloRNQ/8jtWZ2eC9fjzJrTJj
+        ru2GFWEVJtdBnp/VxzFbL1pBH7IOLJWuKUqdrnQ=
+X-Google-Smtp-Source: ABdhPJxqCa9PIsfAHEJXsS21RCQfg4fCS9+30rYQzsKC5k3XqY+8qM8Ud9Ij5B5Du4CoOnGQcTDfoDk7AHff+v9KjO8=
+X-Received: by 2002:a9d:590a:: with SMTP id t10mr188460oth.262.1594827113876;
+ Wed, 15 Jul 2020 08:31:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200714142355.29819-1-weiyongjun1@huawei.com>
-In-Reply-To: <20200714142355.29819-1-weiyongjun1@huawei.com>
+References: <20200714142424.66648-1-weiyongjun1@huawei.com>
+In-Reply-To: <20200714142424.66648-1-weiyongjun1@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Jul 2020 17:31:06 +0200
-Message-ID: <CAJZ5v0j17uaQ6zUufyn8LeKS88kS5GQLOMFF0QkNR4dP5-7+ZQ@mail.gmail.com>
-Subject: Re: [PATCH -next] cpufreq: powernv: Make some symbols static
+Date:   Wed, 15 Jul 2020 17:31:42 +0200
+Message-ID: <CAJZ5v0g-vEdOdHMXDBKX2+akELXCYYbRQSb+5RhG7chrP6-vXg@mail.gmail.com>
+Subject: Re: [PATCH -next] cpuidle/pseries: Make symbol 'pseries_idle_driver' static
 To:     Wei Yongjun <weiyongjun1@huawei.com>
 Cc:     Hulk Robot <hulkci@huawei.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Linux PM <linux-pm@vger.kernel.org>,
         linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
@@ -53,64 +53,30 @@ On Tue, Jul 14, 2020 at 4:14 PM Wei Yongjun <weiyongjun1@huawei.com> wrote:
 >
 > The sparse tool complains as follows:
 >
-> drivers/cpufreq/powernv-cpufreq.c:88:1: warning:
->  symbol 'pstate_revmap' was not declared. Should it be static?
-> drivers/cpufreq/powernv-cpufreq.c:383:18: warning:
->  symbol 'cpufreq_freq_attr_cpuinfo_nominal_freq' was not declared. Should it be static?
-> drivers/cpufreq/powernv-cpufreq.c:669:6: warning:
->  symbol 'gpstate_timer_handler' was not declared. Should it be static?
-> drivers/cpufreq/powernv-cpufreq.c:902:6: warning:
->  symbol 'powernv_cpufreq_work_fn' was not declared. Should it be static?
+> drivers/cpuidle/cpuidle-pseries.c:25:23: warning:
+>  symbol 'pseries_idle_driver' was not declared. Should it be static?
 >
-> Those symbols are not used outside of this file, so mark
-> them static.
+> 'pseries_idle_driver' is not used outside of this file, so marks
+> it static.
 >
 > Reported-by: Hulk Robot <hulkci@huawei.com>
 > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 > ---
->  drivers/cpufreq/powernv-cpufreq.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/cpuidle/cpuidle-pseries.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index 8646eb197cd9..cf118263ec65 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -85,7 +85,7 @@ struct global_pstate_info {
+> diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+> index 6513ef2af66a..3e058ad2bb51 100644
+> --- a/drivers/cpuidle/cpuidle-pseries.c
+> +++ b/drivers/cpuidle/cpuidle-pseries.c
+> @@ -22,7 +22,7 @@
+>  #include <asm/idle.h>
+>  #include <asm/plpar_wrappers.h>
 >
->  static struct cpufreq_frequency_table powernv_freqs[POWERNV_MAX_PSTATES+1];
->
-> -DEFINE_HASHTABLE(pstate_revmap, POWERNV_MAX_PSTATES_ORDER);
-> +static DEFINE_HASHTABLE(pstate_revmap, POWERNV_MAX_PSTATES_ORDER);
->  /**
->   * struct pstate_idx_revmap_data: Entry in the hashmap pstate_revmap
->   *                               indexed by a function of pstate id.
-> @@ -380,7 +380,7 @@ static ssize_t cpuinfo_nominal_freq_show(struct cpufreq_policy *policy,
->                 powernv_freqs[powernv_pstate_info.nominal].frequency);
->  }
->
-> -struct freq_attr cpufreq_freq_attr_cpuinfo_nominal_freq =
-> +static struct freq_attr cpufreq_freq_attr_cpuinfo_nominal_freq =
->         __ATTR_RO(cpuinfo_nominal_freq);
->
->  #define SCALING_BOOST_FREQS_ATTR_INDEX         2
-> @@ -666,7 +666,7 @@ static inline void  queue_gpstate_timer(struct global_pstate_info *gpstates)
->   * according quadratic equation. Queues a new timer if it is still not equal
->   * to local pstate
->   */
-> -void gpstate_timer_handler(struct timer_list *t)
-> +static void gpstate_timer_handler(struct timer_list *t)
->  {
->         struct global_pstate_info *gpstates = from_timer(gpstates, t, timer);
->         struct cpufreq_policy *policy = gpstates->policy;
-> @@ -899,7 +899,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
->         .notifier_call = powernv_cpufreq_reboot_notifier,
+> -struct cpuidle_driver pseries_idle_driver = {
+> +static struct cpuidle_driver pseries_idle_driver = {
+>         .name             = "pseries_idle",
+>         .owner            = THIS_MODULE,
 >  };
->
-> -void powernv_cpufreq_work_fn(struct work_struct *work)
-> +static void powernv_cpufreq_work_fn(struct work_struct *work)
->  {
->         struct chip *chip = container_of(work, struct chip, throttle);
->         struct cpufreq_policy *policy;
->
 
 Applied as 5.9 material, thanks!
