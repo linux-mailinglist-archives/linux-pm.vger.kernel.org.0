@@ -2,103 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B13BF220718
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E98220706
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729878AbgGOI0p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S1729890AbgGOI0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729876AbgGOI0o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:44 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E3BC08C5C1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:44 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id j18so4487161wmi.3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:44 -0700 (PDT)
+        with ESMTP id S1729880AbgGOI0q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:46 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888AFC08C5C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:45 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id q15so4502529wmj.2
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CMXxo9aOlmaJXA2Fa0TTzO8LQVMEninajvd8D9uCCWE=;
-        b=RIYma6QYVJVX6sqCjeZBICMdCBquDgYeFce4Jjorpqiq7zVo3szfhUm4pDcZJS/EP2
-         MgHKxk8sbYqPhINXT+ihq7Z+FPUL88ygpZTR9S9keXtmRiQkBEAZU9wOg7IepglGZ5V3
-         7Uatq6z9XXTfwuVtrVswMQnZS2m6VM6sc+tdRkNX+ZWjljHPeHVXCfTCLd47ZSHaf3wP
-         ITNYuyx5yxK4Z8HU14+yXtYr7qEePdUPEPa7trGn7u2t6HuscGs4dP6QwfwbGpQIOblg
-         V8VevTZOBiVo6MxkEFM/i/sakGOYb4E9xmukn6RPywOIHyTwKTuAomGD/vQRObzaHIuF
-         HWtg==
+        bh=MCk19GsQjhT9V6ZH5VfzAX6PQXTZggJu/iEJMuF5hMQ=;
+        b=V2Eh8BkZ8dcCa53IaQSf1cFlilO/zt8ksPMcm3ZyMf7Kh+zTEEuh90evBOvEi61Q2K
+         54BEgKiKD5KhfqA0S1X2/Xd7JybfTairskcEafqLYETq1pXo/nwW50FaHThpGQJCKMDn
+         N3w4k2sMMWuls8XD56YVqhTbHLtGtFTQdrBDWb/tFACe+fXHnJj4BsEkhGl8V6oDKxYs
+         xzRwW8j16fa41Zbo1mO6xdgn8cV+YCawvLHsJt/E0QV8Vg3yLLpnjDCgblt7FADeb/9C
+         es0UE0y/wxLnmsVmvRJLRckXYkWxyYcO5DGgT7rfz45lcFYKT+dOAz1YXilbEV5zMmX7
+         /WFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CMXxo9aOlmaJXA2Fa0TTzO8LQVMEninajvd8D9uCCWE=;
-        b=kpTZTklQq9MpM38ju1PrM1G6S4hLvbSJdxBvn4/f09yCRXUYAWk3OiBSCC7eoowIu7
-         7TLDU7DRQJ8wxQIWFydqGbu9DaUOq/+HLzpZLpnXtG2k95LFHE465YTd3ZCnpXzE8ZrC
-         awPDe+pGoDcIcabUTZYyM20LW/rBT+83zGKSpMeB/ZfqjltMZadr2qOE0D0hQ+BGxPok
-         0GWZYmDUxqXqXCFNyoNCSxxVHXLCpTIpmise3n03ohj4IJUMsKhACO3KmG70np47Hj+g
-         jCOlBsP3aUJZpKWM0RK+suI6H/FFlJa9FCTSfQbZzxg8Zlsdylen+isXlLVQ2oHLRIV7
-         BSLQ==
-X-Gm-Message-State: AOAM533/7OLg7i7Jf/HTtyMkDDsZCqP9ZSwnIlhhPEt+qqukpI1M5BHP
-        F7cb3QvOzNYKvSlWCsD/xGDeWA==
-X-Google-Smtp-Source: ABdhPJyCnyWAqwU40ixVBQHiLrpni7isN58Y6lCuAZSqR0npV55Xqhe8wF3lYeKfhxhebjg5JL4nHA==
-X-Received: by 2002:a1c:28a:: with SMTP id 132mr7405874wmc.109.1594801603021;
-        Wed, 15 Jul 2020 01:26:43 -0700 (PDT)
+        bh=MCk19GsQjhT9V6ZH5VfzAX6PQXTZggJu/iEJMuF5hMQ=;
+        b=frf13vyo4yYt+37YvVOXUtXdeZXFcDHxkNUYbjQTuepAvzOuG6FJTtnN4Z/rkRLWtJ
+         i01CwGINVO3Ini5QfAQNJU7XFyXHCoDycktWP8oLMwM3PRBaWPQBLA6h+zY5xaNWc3rd
+         u/ByuGyJpgAVIYvzQS5muc1MaEuExyw3PrOHlVze8xmqvQPReRwsvzVfNMs2l/BtKzLh
+         9wnjRU2izYLzWxAKpDlZbMnF6cKr3wRyz+iGUYL+EfC4Jf9e1sVUWd/lfCO6EbUcuJIK
+         F4gXMctBICGMAkXFVDLUSaQf97QSkCXfA1SGLRsS3qkt93mocABf0bStNbT7ICTJgR+1
+         h8zg==
+X-Gm-Message-State: AOAM530NHVFhUmO7Ptn/0RcOajYsO/oUgJHdyO0uY9Y5LJ3xOgIKD5AU
+        6mcjhCw3J2FStcQOPkSNklcQysja2eQ=
+X-Google-Smtp-Source: ABdhPJwMbYK/KKybcySvzNfcd30nLvna3tfOpKszLpsbnWbTflEcZDNIxJlMqKGZU3TgUfFpWQURiw==
+X-Received: by 2002:a1c:6354:: with SMTP id x81mr7228802wmb.98.1594801604289;
+        Wed, 15 Jul 2020 01:26:44 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.41
+        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 01:26:42 -0700 (PDT)
+        Wed, 15 Jul 2020 01:26:43 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Pal Singh <ajitpal.singh@st.com>
-Subject: [PATCH v2 04/13] cpufreq: sti-cpufreq: Fix some formatting and misspelling issues
-Date:   Wed, 15 Jul 2020 09:26:25 +0100
-Message-Id: <20200715082634.3024816-5-lee.jones@linaro.org>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, Olof Johansson <olof@lixom.net>
+Subject: [PATCH v2 05/13] cpufreq: pasemi: Include header file for {check,restore}_astate prototypes
+Date:   Wed, 15 Jul 2020 09:26:26 +0100
+Message-Id: <20200715082634.3024816-6-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200715082634.3024816-1-lee.jones@linaro.org>
 References: <20200715082634.3024816-1-lee.jones@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Kerneldoc format for attribute descriptions should be '@.*: '.
+If function callers and providers do not share the same prototypes the
+compiler complains of missing prototypes.  Fix this by including the
+correct platforms header file.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/cpufreq/sti-cpufreq.c:49: warning: cannot understand function prototype: 'struct sti_cpufreq_ddata '
+ drivers/cpufreq/pasemi-cpufreq.c:109:5: warning: no previous prototype for ‘check_astate’ [-Wmissing-prototypes]
+ 109 | int check_astate(void)
+ | ^~~~~~~~~~~~
+ drivers/cpufreq/pasemi-cpufreq.c:114:6: warning: no previous prototype for ‘restore_astate’ [-Wmissing-prototypes]
+ 114 | void restore_astate(int cpu)
+ | ^~~~~~~~~~~~~~
 
-Cc: Patrice Chotard <patrice.chotard@st.com>
-Cc: Pal Singh <ajitpal.singh@st.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Cc: Paul Mackerras <paulus@samba.org>
+Cc: linuxppc-dev@lists.ozlabs.org
+Suggested-by: Olof Johansson <olof@lixom.net>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/cpufreq/sti-cpufreq.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/cpufreq/pasemi-cpufreq.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
-index 8f16bbb164b84..a5ad96d29adca 100644
---- a/drivers/cpufreq/sti-cpufreq.c
-+++ b/drivers/cpufreq/sti-cpufreq.c
-@@ -40,11 +40,11 @@ enum {
- };
+diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cpufreq.c
+index c66f566a854cb..815645170c4de 100644
+--- a/drivers/cpufreq/pasemi-cpufreq.c
++++ b/drivers/cpufreq/pasemi-cpufreq.c
+@@ -22,6 +22,8 @@
+ #include <asm/time.h>
+ #include <asm/smp.h>
  
- /**
-- * ST CPUFreq Driver Data
-+ * struct sti_cpufreq_ddata - ST CPUFreq Driver Data
-  *
-- * @cpu_node		CPU's OF node
-- * @syscfg_eng		Engineering Syscon register map
-- * @regmap		Syscon register map
-+ * @cpu:		CPU's OF node
-+ * @syscfg_eng:		Engineering Syscon register map
-+ * @syscfg:		Syscon register map
-  */
- static struct sti_cpufreq_ddata {
- 	struct device *cpu;
++#include <platforms/pasemi/pasemi.h>
++
+ #define SDCASR_REG		0x0100
+ #define SDCASR_REG_STRIDE	0x1000
+ #define SDCPWR_CFGA0_REG	0x0100
 -- 
 2.25.1
 
