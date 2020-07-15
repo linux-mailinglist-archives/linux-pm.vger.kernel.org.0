@@ -2,144 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F36F22071F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B065B22075B
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgGOI1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:27:44 -0400
-Received: from mga07.intel.com ([134.134.136.100]:41250 "EHLO mga07.intel.com"
+        id S1728903AbgGOId1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:33:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726396AbgGOI1n (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 04:27:43 -0400
-IronPort-SDR: ESfhtG135gxq2CEs2vGLLJRd7PVjIWaMsyWKJ5c8ucru3O93/oEhG4XD1DkTaZpWB7dBZoSYZh
- 3MhsQr8M5VHg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="213876760"
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="213876760"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 01:27:37 -0700
-IronPort-SDR: R2YkGjF0/a7Jh7EPsjLE55eWyoNz3iAYV26+kZVW+YaC8o8eWQDXB2vr9kw9bdtnyGyVvMFErL
- iPHarFRLMHLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="299812940"
-Received: from yren3-mobl.ccr.corp.intel.com ([10.249.174.224])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jul 2020 01:27:35 -0700
-Message-ID: <e078f9ebd3e8e440d5c04d2abac31201f5d3443d.camel@intel.com>
-Subject: Re: [RFC PATCH 0/4] thermal: Introduce support for monitoring
- falling temperature
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Thara Gopinath <thara.gopinath@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, robh+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1726034AbgGOId1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 04:33:27 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0AB1C20672;
+        Wed, 15 Jul 2020 08:33:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594802006;
+        bh=iOVN0Aj56V7pWppvWBvshuC3/3Wx6PjHbGrnZyydSO0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PTE7YLDehLY6msegiqFCDsJCkrKstPFQEli4wDa+DYQ0plMqvlHJ00vUMOzOrJCY/
+         05CVC2ZuBA3YF5UVB395FVbgyOFuFxd2c+C3Gb9/pHpjTpCyPYcjbchaOybNvNF9Nr
+         0hAr7IDZ08YHAOgkmGdtM567MY6dwVdj2gl/4Ae4=
+Date:   Wed, 15 Jul 2020 10:33:22 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Wed, 15 Jul 2020 16:27:34 +0800
-In-Reply-To: <5861acec-c49a-47cc-d7c6-ccef11dc1d58@linaro.org>
-References: <20200710135154.181454-1-thara.gopinath@linaro.org>
-         <7437ee89-e76d-0c82-9860-5c6076ad8a30@linaro.org>
-         <b25d54d35cec777f0dcc5b2bcacce27321d9bd45.camel@intel.com>
-         <5861acec-c49a-47cc-d7c6-ccef11dc1d58@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 2/2][RESEND v3] PM-runtime: change the tracepoints to
+ cover all usage_count
+Message-ID: <20200715083322.GB2716443@kroah.com>
+References: <cover.1594790493.git.yu.c.chen@intel.com>
+ <395187057e486df9a4328bc6d7d4ee912967fdb3.1594790493.git.yu.c.chen@intel.com>
+ <20200715070614.GA2297388@kroah.com>
+ <20200715081838.GA22379@chenyu-office.sh.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200715081838.GA22379@chenyu-office.sh.intel.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Thara,
-
-On Tue, 2020-07-14 at 17:39 -0400, Thara Gopinath wrote:
-> 
+On Wed, Jul 15, 2020 at 04:18:38PM +0800, Chen Yu wrote:
+> Hi Greg,
+> thanks very much for taking a look,
+> On Wed, Jul 15, 2020 at 09:06:14AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jul 15, 2020 at 02:28:03PM +0800, Chen Yu wrote:
+> > > Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
+> > > has added some tracepoints to monitor the change of runtime usage, and
+> > > there is something to improve:
+> > > 1. There are some places that adjust the usage count not
+> > >    been traced yet. For example, pm_runtime_get_noresume() and
+> > >    pm_runtime_put_noidle()
+> > > 2. The change of the usage count will not be tracked if decreased
+> > >    from 1 to 0.
+> > > 
+> > > This patch intends to adjust the logic to be consistent with the
+> > > change of usage_counter, that is to say, only after the counter has
+> > > been possibly modified, we record it. Besides, all usage changes will
+> > > be shown using rpm_usage even if included by other trace points.
+> > > And these changes has helped track down the e1000e runtime issue.
+> > > 
+> > > Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > ---
+> > >  drivers/base/power/runtime.c | 38 +++++++++++++++++++++++-------------
+> > >  1 file changed, 24 insertions(+), 14 deletions(-)
+> > > 
+> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > index 85a248e196ca..5789d2624513 100644
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -1004,10 +1004,11 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
+> > >  	int retval;
+> > >  
+> > >  	if (rpmflags & RPM_GET_PUT) {
+> > > -		if (!atomic_dec_and_test(&dev->power.usage_count)) {
+> > > -			trace_rpm_usage_rcuidle(dev, rpmflags);
+> > > +		bool non_zero = !atomic_dec_and_test(&dev->power.usage_count);
+> > > +
+> > > +		trace_rpm_usage_rcuidle(dev, rpmflags);
 > > 
-> > For example, to support this, we can
-> > either
-> > introduce both "cold" trip points and "warming devices", and
-> > introduce
-> > new logic in thermal framework and governors to handle them,
-> > Or
-> > introduce "cold" trip point and "warming" device, but only
-> > semantically, and treat them just like normal trip points and
-> > cooling
-> > devices. And strictly define cooling state 0 as the state that
-> > generates most heat, and define max cooling state as the state that
-> > generates least heat. Then, say, we have a trip point at -10C, the
-> > "warming" device is set to cooling state 0 when the temperature is
-> > lower than -10C, and in most cases, this thermal zone is always in
-> > a
-> > "overheating" state (temperature higher than -10C), and the
-> > "warming"
-> > device for this thermal zone is "throttled" to generate as least
-> > heat
-> > as possible. And this is pretty much what the current code has
-> > always
-> > been doing, right?
-> 
-> 
-> IMHO, thermal framework should move to a direction where the term 
-> "mitigation" is used rather than cooling or warming. In this case 
-> "cooling dev" and "warming dev" should will become 
-> "temp-mitigating-dev". So going by this, I think what you mention as 
-> option 1 is more suitable where new logic is introduced into the 
-> framework and governors to handle the trip points marked as "cold".
-> 
-> Also in the current set of requirements, we have a few power domain 
-> rails and other resources that are used exclusively in the thermal 
-> framework for warming alone as in they are not used ever for cooling 
-> down a zone. But then one of the requirements we have discussed is
-> for cpufreq and gpu scaling to be behave as warming devices where
-> the minimum operating point/ voltage of the relevant cpu/gpu is
-> restricted.
-> So in this case, Daniel had this suggestion of introducing negative 
-> states for presently what is defined as cooling devices. So cooling
-> dev 
-> / temp-mitigation-dev states can range from say -3 to 5 with 0 as
-> the 
-> good state where no mitigation is happening. This is an interesting
-> idea 
-> though I have not proto-typed it yet.
-
-Agreed. If some devices support both "cooling" and "warning", we should
-have only one "temp-mitigating-dev" instead.
-> 
+> > Why not just call trace everywhere before you do the atomic operations?
+> > Why does the trace need to be called after the operation everywhere?
 > > 
-> > I can not say which one is better for now as I don't have the
-> > background of this requirement. It's nice that Thara sent this RFC
-> > series for discussion, but from upstream point of view, I'd prefer
-> > to
-> > see a full stack solution, before taking any code.
-> 
-> We had done a session at ELC on this requirement. Here is the link
-> to 
-> the presentation. Hopefully it gives you some back ground on this.
+> If I understand correctly, besides Michal's comments, if we put the trace
+> before the atomic operation, we might be unable to judge whether the counter
+> is going to increase or decrease from rpmflags: it is RPM_GET_PUT which combine
+> the get() and put() together, then it is a little inconvenient for tracking IMO.
 
-yes, it helps. :)
-> 
-> 
-https://elinux.org/images/f/f7/ELC-2020-Thara-Ram-Linux-Kernel-Thermal-Warming.pdf
-> 
-> I have sent across some patches for introducing a generic power
-> domain 
-> warming device which is under review by Daniel.
-> 
-> So how do you want to proceed on this? Can you elaborate a bit more
-> on 
-> what you mean by a full stack solution.
+A trace can never know the exact value of an atomic value as it could
+change right before or after the trace function is called, right?
 
-I mean, the patches, and the idea look good to me, just with some minor
-comments. But applying this patch series, alone, does not bring us
-anything because we don't have a thermal zone driver that supports cold
-trip point, right?
-I'd like to see this patch series together with the support in
-thermal_core/governors and real users like updated/new thermal
-zone/cdev drivers that supports the cold trip point and warming
-actions.
-Or else I've the concern that this piece of code may be changed back
-and forth when prototyping the rest of the support.
+So why are you caring about that?  Care about the functionality that is
+happening, not a reference count that you do not control at all.
 
 thanks,
-rui
 
+greg k-h
