@@ -2,89 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E80C3220537
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 08:38:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 734EA22053D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 08:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728894AbgGOGiE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 02:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S1728145AbgGOGje (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 02:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728892AbgGOGiD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 02:38:03 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0C7C061794
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:38:03 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id o13so2599330pgf.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:38:03 -0700 (PDT)
+        with ESMTP id S1726971AbgGOGjd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 02:39:33 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44FCCC061755
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:39:32 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id x8so1969129plm.10
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 23:39:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=2A3+9mh7yY4DJ4BNChsPgiBj6NoPHiNP3Ku5vhAEZsI=;
-        b=fHTiNevZHDxEboHxqvUWoy3orjXk5gSBI46aF/9Y4GQlLCOTFoppVfPG7rZK4m/ZK8
-         PgaXGu+LY7MGwnGI3qt3tyRT24g7k9jBerVoRojW0jzwCL4bIbRPRH/w/9ePABonlfCX
-         ZxfLOO/7BXPNev3nPT42007h0O8o7oBuJDJpGD7udd+a4nGteEPuCfTacEemz6Pl74ym
-         Es472qxqt0y/qXxDM2IvUh/oCHlzBnYoTR8nmSZvB/9q76kbmpglBVPqz4pQRf6ddVC6
-         1MaNsVeD4zz25LfnmnAmJ8r+yNaKNwPhR01Xf2qhG5PKP5FTSKnHWttmJBg1mMNkKDH7
-         mRlA==
+        bh=K1kqfp/kSgMwqPN12bKZZ//tfp2BxSTq1mD1swS+LDI=;
+        b=WTpGJqyvZjouFkCmi9zC/0IzuJwZoNFGlTzKYuYnoDp3GznjB6msDkhLTTTBu81Esi
+         VaiNpYKxJmEPniJqqf09uJdBkXcLEIlWpbN9YChqtejiEx5VVXwlAWq9RvVYA9F10bOq
+         Z4rxBdm44p8Cq8K/f5i74jWh1LV9csMsmEbFW+oFQ7/MxGBvm9QESsA11YtoP9tSC7bH
+         x1n3ZtXcPmgWKB1GOyjfJWyZgff0uRvK/uNOG0z5TdlWF1Pg47pEK57j4UjItuoeS2h8
+         JuwpEwZ9zcTL4k5YVHLs72Ty+YvrUQtNDOpdd243y3StSD5cGBZqDxK0RP+egFp0dBq6
+         OIuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2A3+9mh7yY4DJ4BNChsPgiBj6NoPHiNP3Ku5vhAEZsI=;
-        b=blKHC9jUQ89JswKJANMak2sDwkWX/+bcOlCN7knPCYAx0jl1nIKhjEHcCeLYO9VWGr
-         QeUJdVI6iLrMmjb6p1gqCVtjuve0IT5tG2uYiGEq8EBcK/qPElOw9ZcZVaAqC2kmXz2T
-         fIjB6TeqSyaCaF2YGQYZ268onBW/pegj4Mv722VLbDHXvnOHvtSYbceVyIrYdhT8Fyp6
-         jZHe63X394jlkdXhQ5PGjsM79SW04Pai95jrFoinfTrnMvCJ3g/T71VgpnGFMJjkyt1D
-         TWLNYtzTrHTZJwtzg9kMAGuLYgysAKGiEtcfpP+t8sBpQgBkG+8j8JxPprQsJ19t1se0
-         O8jg==
-X-Gm-Message-State: AOAM532CINra0ErVlcOK3k/UNIelGf02PnAk43FC+366afiVuNyOiSyB
-        MFTZ2xMJx70Wlh016lDI3DzRWg==
-X-Google-Smtp-Source: ABdhPJwiES3Dzi7xr3uSng0QWol6Q63ReF9HR9TiEoQfZiYF2zVKPRtW4D1KZgZKAe+SQhn3apRuSg==
-X-Received: by 2002:a65:5b05:: with SMTP id y5mr6690468pgq.90.1594795082971;
-        Tue, 14 Jul 2020 23:38:02 -0700 (PDT)
+        bh=K1kqfp/kSgMwqPN12bKZZ//tfp2BxSTq1mD1swS+LDI=;
+        b=uE6Gz837Y+teQpzt1Po3Xy5v0EBNYw+yc4aLsKlhFdMUqwWSHMhYPqtVOryXXKrdoF
+         3tcv1c5SD1Me6eDE/4/+OxG01d3ppUt43lYr1HFvVpDMB3hHzc+7sFsh6W17e3m4IzfE
+         Yre2ONDqed6yK6RP+QkbaAXmO7wm8XfBcz0fVLjwJ08WSvhBlyz6kbqrBxFs4XTaTOOK
+         lDfREPveQ7LKAgPKZ/QhLtt394NstQhRyzeUDF2pXMNGhu7IMoCc8XYExEQt6HZE9N+W
+         I9KhwhiY4mqHUP1QgjZxmEPc44A9z2I7w6azG2Kulr4iKlhcxNqMMJRcgD3jonVm8yVT
+         RItA==
+X-Gm-Message-State: AOAM531o/lvQs5t/uB2ZS0r5hWyyLIlGifBSQHeIQLaA99vNFIrF9fnv
+        TogKwT1HIfYPmxo7f7C5BoDAdw==
+X-Google-Smtp-Source: ABdhPJxLbshzrCuRoNXOv/ZJi7ksi9A0wHLDGdlFvXgLu4FgBdgA0IgbBWVDw+UxdqJZWSCcNXm/wQ==
+X-Received: by 2002:a17:90a:368c:: with SMTP id t12mr8639149pjb.90.1594795171879;
+        Tue, 14 Jul 2020 23:39:31 -0700 (PDT)
 Received: from localhost ([122.172.34.142])
-        by smtp.gmail.com with ESMTPSA id gv16sm934295pjb.5.2020.07.14.23.38.01
+        by smtp.gmail.com with ESMTPSA id d190sm1013466pfd.199.2020.07.14.23.39.30
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 Jul 2020 23:38:02 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 12:08:00 +0530
+        Tue, 14 Jul 2020 23:39:31 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 12:09:29 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 00/13] Rid W=1 warnings in CPUFreq
-Message-ID: <20200715063800.4vfxie2wrmaqdnra@vireshk-i7>
+Cc:     Olof Johansson <olof@lixom.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 05/13] cpufreq/arch: powerpc: pasemi: Move prototypes to
+ shared header
+Message-ID: <20200715063929.42p5ljlcuwie7pmz@vireshk-i7>
 References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200715033627.k6ardlhm3z3w65xw@vireshk-i7>
- <20200715063214.GO1398296@dell>
+ <20200714145049.2496163-6-lee.jones@linaro.org>
+ <20200715030706.prxya7fyylscoy25@vireshk-i7>
+ <CAOesGMi1dfqPbFJ8YoUoJ75NdU1=XiNoYx+6+JLu44a4LuuYGA@mail.gmail.com>
+ <20200715063607.GQ1398296@dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200715063214.GO1398296@dell>
+In-Reply-To: <20200715063607.GQ1398296@dell>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-07-20, 07:32, Lee Jones wrote:
-> On Wed, 15 Jul 2020, Viresh Kumar wrote:
-> 
-> > On 14-07-20, 15:50, Lee Jones wrote:
-> > > This set is part of a larger effort attempting to clean-up W=1
-> > > kernel builds, which are currently overwhelmingly riddled with
-> > > niggly little warnings.
-> > > 
-> > > After these patches are applied, the build system no longer
-> > > complains about any W=0 nor W=1 level warnings in drivers/cpufreq.
-> > 
-> > And you need to rebase this stuff of pm/linux-next, as there are some
-> > changes in cpufreq.c there.
-> 
-> It's based on the latest -next.  Is pm/linux-next in -next?
+On 15-07-20, 07:36, Lee Jones wrote:
+> I searched for "include.*platforms/" in drivers/, and was scared off
+> this method since no one else does this.
 
-Yes it is. Actually my bad, I based it on my next which didn't had
-pm/linux-next :)
+Yeah its not right for generic drivers, but this is very much platform
+specific so it is fine here.
 
 -- 
 viresh
