@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FA97220713
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA64322070D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgGOI1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S1729925AbgGOI05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729908AbgGOI0v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:51 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D2AC061755
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:50 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z15so1459993wrl.8
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:50 -0700 (PDT)
+        with ESMTP id S1729921AbgGOI0x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:26:53 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23C2C061755
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:52 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id s10so1419489wrw.12
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:26:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8zTw93zoLeDrW9YVUykvWKpkCsGvq1SvpdvOV91LIDI=;
-        b=PoZeCokh14NVCVrG+W6OCssjbdxlYt+BY2RPI8eovLbhPzaLoVu6hY0++nOStWvk7G
-         AC5m93nmVlLOGmyl+yyOzhE20jZByNmfhTjC3f1OsE+xOaSFhOEZD1adMHSUY86nUcdq
-         003S8WLfCC4kJUQP3B7nLpwZLoeL5quxpYHznQprltVCVB12xkwl1x6YvqBSR6n+AvvB
-         J+eTnxP7lytE9JrfPxVYJ8Bsd1LHlvRP6P3N0Qlk+cD+UXDt4V9NfWmwaf8F2Bq4MSZ2
-         NpHfQwClEX7SFhVB8TSaoxSOf1g6l4dy6IsfsJoDadjfzaKDqNqTFIWTX6+6I08pYoo4
-         qDMA==
+        bh=yBqTF9msKxXESKXR6D7ZZTPRiLswk1Xy6QhvSew6gR0=;
+        b=oRHNplZ7GSg6wW9XCQnXu7Ag3RRbpbsqZQOc7oxhhgEyiH+dzYvNYDSO1XjRvkWcJl
+         7uBZeyJQHXz5gFKwdA4IaSPpjV0DX6KUjXmZbpt8DBZ3nZ44yItO9dQ//zBdrT/9cvTm
+         Z72l+F9wCR8PderUySuiWy3jJEaa+wHxOy/cCPEY1a5C1RNJjZLnes/9fkbm4M1QHuS+
+         PgfHkNEUwTaIxHSK6Iv6NBKuuHfF1GDdnFJjO0G83E91e34xz0i1ZA2+w8hIbKEF8GHy
+         LlIZ+WuoYrKed+fVVbT2gpUEMdYo71pO5SW08hEGUWqSPfskXX6Mi9dOWpWUo89QJinQ
+         FZZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8zTw93zoLeDrW9YVUykvWKpkCsGvq1SvpdvOV91LIDI=;
-        b=KlYMKijiUgd75Vp55960FkD/PAPDm/pMgFbkOpWiXWgCMxLiQnzxVaKDbSyJ6WJS4P
-         5MaHzcewN8VplC0qfic3tHE/zOaXDmmIPpxTMN6QJCLq6a/QRoldzLv0nGxrKS9pzVda
-         0okaI3hwOg85YaO9ChDUO5vKNOZMvoXoaUzUDWzkGBrGbmY/GLGGBV3GVy20IBJj5UBF
-         vqG+W0Ge9WnwyWy61PtnSxsMwQ27z02ErFuS7EBQsiWDDQA9E7m62Aij7kxfJvu5R9RH
-         DJF0U5SpDiJ7zM6iSOGw4efxy9uPD+Xs8kefdWiKtarCX6lBXb8QMiVsZkxLEeapKm/o
-         BJUQ==
-X-Gm-Message-State: AOAM53123odX8lFpmL0QT/7KYyHiSb1PcMX5iIrVO8XrhXE8Ie89lRy9
-        hoV7gXOL4eBWSKiP2jy9EpZqyw==
-X-Google-Smtp-Source: ABdhPJw4NEwvaYTKWQAiVObRyn0jstQiDGELTMaVFiiY+4cxedHvwQNYAgmxqV/UHsTrTKosES/Miw==
-X-Received: by 2002:adf:9062:: with SMTP id h89mr9316099wrh.285.1594801609515;
-        Wed, 15 Jul 2020 01:26:49 -0700 (PDT)
+        bh=yBqTF9msKxXESKXR6D7ZZTPRiLswk1Xy6QhvSew6gR0=;
+        b=j+tSGeAG+jpIjoW4WzIMpbo1qabNGo0sT36drz95IdsoKAwZygpGgb+kGZBsHPdZ//
+         1Xa7gKLYu8pH81jDtNs9Yli0OVOA+J57tDl6E3TFCzOmY+0IGX696LCJa6SzxhFUUSOH
+         tM7cheUbnqbaGx+36M5FTurCWi42d+avhX0M4h7Tciktd62cob0DU4rbDuyQFPBoD9vm
+         b/PiLtLOwpv1mFTefesoV3/UsYSnE2oXZr8ir8ElzHtN+MukKXTn4U0jf8gLZq49IKCt
+         hSn8RNmSJBKePNQjUPkokTj47Kb4e1rRvi/gksBftLIKgA7mVTcCf7DhpF5rMRAdJyyv
+         rgSw==
+X-Gm-Message-State: AOAM532xMcsfAQJNWdNHcbH5VYQATcynsu5ruBQUzhItGRsT36EHyPeB
+        w/qp4/3PfPb67jUA98/ReWbevA==
+X-Google-Smtp-Source: ABdhPJy5SCVD1rT1DRxu8zgDWo02ZeuPue7Qv83+P6OX3TiNf3xq9p2hLtBri2FdrgS6Qle9GcUXPA==
+X-Received: by 2002:a5d:6ac1:: with SMTP id u1mr9898491wrw.123.1594801611303;
+        Wed, 15 Jul 2020 01:26:51 -0700 (PDT)
 Received: from localhost.localdomain ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.48
+        by smtp.gmail.com with ESMTPSA id h13sm2400361wml.42.2020.07.15.01.26.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 01:26:48 -0700 (PDT)
+        Wed, 15 Jul 2020 01:26:50 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Andy Grover <andrew.grover@intel.com>,
-        Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
+        Andreas Herrmann <herrmann.der.user@googlemail.com>,
         Dominik Brodowski <linux@brodo.de>,
-        Denis Sadykov <denis.m.sadykov@intel.com>
-Subject: [PATCH v2 09/13] cpufreq: acpi-cpufreq: Mark sometimes used ID structs as __maybe_unused
-Date:   Wed, 15 Jul 2020 09:26:30 +0100
-Message-Id: <20200715082634.3024816-10-lee.jones@linaro.org>
+        Pavel Machek <pavel@ucw.cz>,
+        Paul Devriendt <paul.devriendt@amd.com>,
+        Mark Langsdorf <mark.langsdorf@amd.com>
+Subject: [PATCH v2 10/13] cpufreq: powernow-k8: Mark 'hi' and 'lo' dummy variables as __always_unused
+Date:   Wed, 15 Jul 2020 09:26:31 +0100
+Message-Id: <20200715082634.3024816-11-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200715082634.3024816-1-lee.jones@linaro.org>
 References: <20200715082634.3024816-1-lee.jones@linaro.org>
@@ -69,47 +70,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Not used when MODULE is not defined.
+if we fail to use a variable, even a dummy ones, then the compiler
+complains that it is set but not used.  We know this is fine, so we
+set them as __always_unused here to let the compiler know.
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/cpufreq/acpi-cpufreq.c:1004:36: warning: ‘processor_device_ids’ defined but not used [-Wunused-const-variable=]
- 997 | static const struct x86_cpu_id acpi_cpufreq_ids[] = {
- | ^~~~~~~~~~~~~~~~
- drivers/cpufreq/acpi-cpufreq.c:997:32: warning: ‘acpi_cpufreq_ids’ defined but not used [-Wunused-const-variable=]
- 619 | static const struct acpi_device_id processor_device_ids[] = {
- | ^~~~~~~~~~~~~~~~~~~~
+ drivers/cpufreq/powernow-k8.c: In function ‘pending_bit_stuck’:
+ drivers/cpufreq/powernow-k8.c:89:10: warning: variable ‘hi’ set but not used [-Wunused-but-set-variable]
+ 89 | u32 lo, hi;
+ | ^~
+ drivers/cpufreq/powernow-k8.c: In function ‘core_voltage_pre_transition’:
+ drivers/cpufreq/powernow-k8.c:285:14: warning: variable ‘lo’ set but not used [-Wunused-but-set-variable]
+ 285 | u32 maxvid, lo, rvomult = 1;
+ | ^~
 
-Cc: Andy Grover <andrew.grover@intel.com>
-Cc: Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>
+Cc: Andreas Herrmann <herrmann.der.user@googlemail.com>
 Cc: Dominik Brodowski <linux@brodo.de>
-Cc: Denis Sadykov <denis.m.sadykov@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Paul Devriendt <paul.devriendt@amd.com>
+Cc: Mark Langsdorf <mark.langsdorf@amd.com>
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/cpufreq/acpi-cpufreq.c | 4 ++--
+ drivers/cpufreq/powernow-k8.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 6b3d8355c8dea..65bdedcc7f142 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -993,14 +993,14 @@ MODULE_PARM_DESC(acpi_pstate_strict,
- late_initcall(acpi_cpufreq_init);
- module_exit(acpi_cpufreq_exit);
+diff --git a/drivers/cpufreq/powernow-k8.c b/drivers/cpufreq/powernow-k8.c
+index 3984959eed1d5..0acc9e241cd7d 100644
+--- a/drivers/cpufreq/powernow-k8.c
++++ b/drivers/cpufreq/powernow-k8.c
+@@ -86,7 +86,7 @@ static u32 convert_fid_to_vco_fid(u32 fid)
+  */
+ static int pending_bit_stuck(void)
+ {
+-	u32 lo, hi;
++	u32 lo, hi __always_unused;
  
--static const struct x86_cpu_id acpi_cpufreq_ids[] = {
-+static const struct x86_cpu_id __maybe_unused acpi_cpufreq_ids[] = {
- 	X86_MATCH_FEATURE(X86_FEATURE_ACPI, NULL),
- 	X86_MATCH_FEATURE(X86_FEATURE_HW_PSTATE, NULL),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, acpi_cpufreq_ids);
+ 	rdmsr(MSR_FIDVID_STATUS, lo, hi);
+ 	return lo & MSR_S_LO_CHANGE_PENDING ? 1 : 0;
+@@ -282,7 +282,7 @@ static int core_voltage_pre_transition(struct powernow_k8_data *data,
+ {
+ 	u32 rvosteps = data->rvo;
+ 	u32 savefid = data->currfid;
+-	u32 maxvid, lo, rvomult = 1;
++	u32 maxvid, lo __always_unused, rvomult = 1;
  
--static const struct acpi_device_id processor_device_ids[] = {
-+static const struct acpi_device_id __maybe_unused processor_device_ids[] = {
- 	{ACPI_PROCESSOR_OBJECT_HID, },
- 	{ACPI_PROCESSOR_DEVICE_HID, },
- 	{},
+ 	pr_debug("ph1 (cpu%d): start, currfid 0x%x, currvid 0x%x, reqvid 0x%x, rvo 0x%x\n",
+ 		smp_processor_id(),
 -- 
 2.25.1
 
