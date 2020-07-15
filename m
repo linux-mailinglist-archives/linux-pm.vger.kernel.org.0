@@ -2,119 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7DB22094C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 11:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77FC22099F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 12:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730931AbgGOJyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 05:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37280 "EHLO
+        id S1731051AbgGOKNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 06:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730930AbgGOJyg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 05:54:36 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E4BC061755
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:54:36 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id o184so776377vsc.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:54:36 -0700 (PDT)
+        with ESMTP id S1731049AbgGOKNm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 06:13:42 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3D7C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 03:13:42 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j4so1860033wrp.10
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 03:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qH5uOPqjPkfFSArUrcmshSjzlap7LBh3zSvQcZr8Wvw=;
-        b=WUugtmlv36izLRSOLMeCONyWCqpCrEkYZ6es23+yNSdy4qpHxN9Nf7PzfEqGT5gJaS
-         7XG1hnjthdv/9SK7Ogmts5GQ983k7UMIzxgk/nib+TRIzUCsDlSX0GMoW6itZ6wlftUB
-         SKb6GEAu/cyBUVqBN9AQct8IsVo2rzXQ0sHqquCQ6YMUv/w6RrotPHgsuMmXhogPsm/U
-         bUdlyHY3K1f8ETrAj0g6wnAtfWeRI3VPRm1XKGNZRq5jjDPDizCtW/2W7aSPvX1hHHcW
-         yTSQlTmusxTTMv2faYtOIGkELZxWAU9TSgkHRQmupcRGNRaQYw5bfQr2cdpOmQRTj5ao
-         mMmQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Hn1Hbjff+9Afv2Xeip4oNSq9d24avIQDuzU6faxXekA=;
+        b=qlR93dSPHSbqYU0Gl7DzP6gPZu10L3MypqxPjXRCd3zNlT8TlEC6m6Emrl5IBiFU1J
+         DvS9LgkqWmXclVuVF7eg4Y3VJ/BFPwhIter84emkwYWrXg6eJKmAdTWpVOL02taH6M/s
+         ws/vvSueQ8jw/viS+72dcaQPaxdYvi1GENdrZOfWMvPnL/0MCDx4q/mMSqFOp8QQHArp
+         aZ2U5T4imohTHyYFz2Mc4/+JJEMmkH+o4DpX2yqPmu/O4oVsIWtL7T48dk1uGKNwpRgE
+         CE5pZsKIyFkaJok/rludtGQVXlsS062uymdMtf9BELZ5hXh15NssRLqmPXbWGpr0sbBk
+         L1ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qH5uOPqjPkfFSArUrcmshSjzlap7LBh3zSvQcZr8Wvw=;
-        b=NQS+yKVqlTOLWt3zeNPIQkpFpERPK7vjBIwp8P+osq04qpTPO+HhtjRBX3cgK65r28
-         dCZ60h4sSfY4ryZDVZMsjuOzTTPURXWkSo3pVO7eB+L5Vo78jLZTK9drnTW5kFaUYqEt
-         G5+b1Cu7eyU/gUmEe3zEmBwOrnAm7+8dZpeYgU7ucChp+1aBHFCaTNQi1DVZ1O1VMf4f
-         9fvdUAAyHWKOdo4mbH9oNYXoJsHyUopa2YJJHn6MkHkg6fGdCmVqUUJZ7JnNKXyxE3yv
-         iDncx+LqlE/rdddeTPdas1Fxz1YGsskAJXBe58Af4zmyBdg1BHMOLxPqH3dmxuc5rD5H
-         M7Gw==
-X-Gm-Message-State: AOAM5309Mxs3GVyEYDpz+VvvoSYejBWxxZj4Du70B05j4VLvYKe15bwa
-        8LrfhIQYcblVPlwDUBSPc6InUg4Wk48jgYBpwD5L7FI7Nsk=
-X-Google-Smtp-Source: ABdhPJxgzC25YsBbI063o8ZxHEZ02H36KAxq+rU+gA2sbvRtYA6Vs8KcSuatQCEq17DDQi7rkEPNnRjVNhJDyrfEz48=
-X-Received: by 2002:a67:f888:: with SMTP id h8mr6055678vso.165.1594806875806;
- Wed, 15 Jul 2020 02:54:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Hn1Hbjff+9Afv2Xeip4oNSq9d24avIQDuzU6faxXekA=;
+        b=MgTab4Q9SJSKIR4bGUHRNgLsHRxmOAouvfFkQauVQvIBYxcgWCbILIpRVtyHvfRLv+
+         Z1Qgs1uCqUJ0zeKDfTQVWrMkRn5veAgPeOLfF2+f3uHcj3XLLsA8oE2w8MD9hq1sk8yk
+         tHXx4PTQpaEOpoIIkaHL05mB0HRvM6yR0Mk4yBrz83K9iyLv8yuf6EzrPw8Mzp9Q11b7
+         Bv+ZbNi90uP1Z+m3yRShdCAmz1Kb1ZoJcTJC+8zlzJE5vQuOHlWbI/Rd4tl0YrY7ClaR
+         5S3/dOjCBwx8+hBAEYwcDJVfIgo2NLIwMuxKQSu16qHZ/tbzL8CxWxtucVgpICtVcPFF
+         wzlg==
+X-Gm-Message-State: AOAM531tG/mMfWk2H2K273nbsUfrRXITZCwGQtMYAh3j1kzjZFJWB4d1
+        pHycUkHQhGxQRd+NEvbthtr6HQ==
+X-Google-Smtp-Source: ABdhPJz1sof9nbSox7QA78MbtsQxOffGJyaBrE6z+a2qbZEL+1W2WAWsKdYybzfKFDfNwDKsEZNt6w==
+X-Received: by 2002:a5d:60c7:: with SMTP id x7mr9987696wrt.138.1594808020835;
+        Wed, 15 Jul 2020 03:13:40 -0700 (PDT)
+Received: from dell ([2.31.163.61])
+        by smtp.gmail.com with ESMTPSA id 68sm2712443wmz.40.2020.07.15.03.13.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 03:13:40 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 11:13:38 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 06/13] cpufreq: powernv-cpufreq: Functions only used
+ in call-backs should be static
+Message-ID: <20200715101338.GA3165313@dell>
+References: <20200715082634.3024816-1-lee.jones@linaro.org>
+ <20200715082634.3024816-7-lee.jones@linaro.org>
+ <20200715094504.val6rb7wibysh7dn@vireshk-i7>
 MIME-Version: 1.0
-References: <20200707125804.13030-1-ulf.hansson@linaro.org>
-In-Reply-To: <20200707125804.13030-1-ulf.hansson@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 15 Jul 2020 11:53:59 +0200
-Message-ID: <CAPDyKFp6+kSHsgvjQQwyQtot2KqdhikbCJW0JUSQJZyfa9cRyw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] cpuidle: psci: Various improvements for PSCI PM domains
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200715094504.val6rb7wibysh7dn@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 7 Jul 2020 at 14:58, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> Changes in v2:
->         - Put patch 3 as patch 1 and rebased accordingly. No other changes have
->         been made.
->         - Added reviewed-by and acked-by tags.
+On Wed, 15 Jul 2020, Viresh Kumar wrote:
 
-Rafael, I think this is ready to be picked up. In particular, the code
-that Sudeep/Lorenzo cares most about has been reviewed by
-Sudeep/Lukaz.
+> On 15-07-20, 09:26, Lee Jones wrote:
+> > Fixes the following W=1 kernel build warning(s):
+> > 
+> >  drivers/cpufreq/powernv-cpufreq.c:669:6: warning: no previous prototype for ‘gpstate_timer_handler’ [-Wmissing-prototypes]
+> >  drivers/cpufreq/powernv-cpufreq.c:902:6: warning: no previous prototype for ‘powernv_cpufreq_work_fn’ [-Wmissing-prototypes]
+> > 
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> > Cc: Paul Mackerras <paulus@samba.org>
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> >  drivers/cpufreq/powernv-cpufreq.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+> > index 8646eb197cd96..068cc53abe320 100644
+> > --- a/drivers/cpufreq/powernv-cpufreq.c
+> > +++ b/drivers/cpufreq/powernv-cpufreq.c
+> > @@ -666,7 +666,7 @@ static inline void  queue_gpstate_timer(struct global_pstate_info *gpstates)
+> >   * according quadratic equation. Queues a new timer if it is still not equal
+> >   * to local pstate
+> >   */
+> > -void gpstate_timer_handler(struct timer_list *t)
+> > +static void gpstate_timer_handler(struct timer_list *t)
+> >  {
+> >  	struct global_pstate_info *gpstates = from_timer(gpstates, t, timer);
+> >  	struct cpufreq_policy *policy = gpstates->policy;
+> > @@ -899,7 +899,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
+> >  	.notifier_call = powernv_cpufreq_reboot_notifier,
+> >  };
+> >  
+> > -void powernv_cpufreq_work_fn(struct work_struct *work)
+> > +static void powernv_cpufreq_work_fn(struct work_struct *work)
+> >  {
+> >  	struct chip *chip = container_of(work, struct chip, throttle);
+> >  	struct cpufreq_policy *policy;
+> 
+> Don't you want to drop this patch now ? As you already reviewed the
+> other one on the list ?
 
-Kind regards
-Uffe
+Yes, please drop/ignore.
 
-
->
-> The main change in this series is done in patch 5/5, which implements support
-> to prevent domain idlestates until all PSCI PM domain consumers are ready for
-> it. To reach that point the corresponding code for cpuidle-psci and
-> cpuidle-psci-domain, needed to be converted into platform drivers, which is
-> done by the earlier changes in the series.
->
-> Additionally, some improvements have been made to the error path, which becomes
-> easier when the code gets converted to platform drivers.
->
-> Deployment for a Qcom SoC, which actually takes full benefit of these changes
-> are also in the pipe, but deferring then a bit until $subject series have been
-> discussed.
->
-> Kind regards
-> Ulf Hansson
->
-> Ulf Hansson (5):
->   cpuidle: psci: Split into two separate build objects
->   cpuidle: psci: Fail cpuidle registration if set OSI mode failed
->   cpuidle: psci: Fix error path via converting to a platform driver
->   cpuidle: psci: Convert PM domain to platform driver
->   cpuidle: psci: Prevent domain idlestates until consumers are ready
->
->  drivers/cpuidle/Kconfig.arm           |  10 ++
->  drivers/cpuidle/Makefile              |   5 +-
->  drivers/cpuidle/cpuidle-psci-domain.c |  74 +++++++++-----
->  drivers/cpuidle/cpuidle-psci.c        | 141 +++++++++++++++-----------
->  drivers/cpuidle/cpuidle-psci.h        |  11 +-
->  5 files changed, 150 insertions(+), 91 deletions(-)
->
-> --
-> 2.20.1
->
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
