@@ -2,64 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E89220CBA
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 14:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35372220CC7
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 14:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730822AbgGOMLh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 15 Jul 2020 08:11:37 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42544 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728801AbgGOMLg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 08:11:36 -0400
-Received: by mail-ot1-f68.google.com with SMTP id g37so1250187otb.9;
-        Wed, 15 Jul 2020 05:11:36 -0700 (PDT)
+        id S1727951AbgGOMRC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 08:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726648AbgGOMRB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 08:17:01 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1982AC061755
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 05:17:01 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id f7so2471611wrw.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 05:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=P9+1m3wZiqcpo0cnrnururZIQWEQrhFekUGBts30/fQ=;
+        b=EKHMfQBUPRLnnQQy6i3XNrTIKLvKdaglpd3anIxBP5KtA7V0HujMdXnvEX3vUZo7+H
+         t5fnqFjVnqkUKRH/hlyrsXh79yMI5l92TtpicLz4H/eS9mTJqfDmvttnyNDi2IvvIo3m
+         X5VL7L7f9fqXfDap7ketUgOdL0B4HCZLZjQe/bxYv1YNbr0wJzntZpfsbyOeSVqzdf34
+         dvmF/viWDyhmQRt9ktn/P9OOl50Cm9AWl1vTRjww8R1nZ+1q4NdkQ6Z6AQNGfGnIR+Gc
+         Hpc+pE7t77YFeWLuHTYM+VBefRVRkEvb2oBUFG6+aHJ97Btx2gu1PdW+KJ1pTNWdB5d1
+         6Y+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=3cag8LrwMjM3xe6EZSlrz4EBUBRpTmPKD/ABz0zsn30=;
-        b=jEJzl2u/jvooFwgPzbcGNhIyAKUL/N2Uxdfo3SoIEnEI0D1Eml/Lm/8fSkBiGPFWWZ
-         YktRJGKZ1Se099A+RQmwzuquJfJWr2Ahnor2Lvqs84gePsruUtA7XfX3V8LoKuodHIzz
-         GiEMCzFLwEaI6UDww6jtA5tQlZgmfXMkP4e76HPakFXZUmgyVuDVBycGFRC2TIvzEVXG
-         9Or/xTN63OCbReUII5LU6xVPHcodco1bybCAmwquseQ7+oMDPLKr6uBsBggwGxRABZLq
-         GPM5zIIgLYrmSO2FBxfaS47h8rU0ZDk93JjXZ5GdAKdDi3rJIEFH8V+C77hbXr8xdR8A
-         B7pQ==
-X-Gm-Message-State: AOAM530boF05xDlLhMRvjKfQCc2T03vQuJaMi/bt3UgACQ4Up1oG/gPz
-        91hyVbbYLEj+D6CdnXP5y79W2CfG3rBgfcm/Crk=
-X-Google-Smtp-Source: ABdhPJwHW42/HPcNLnkN0GUVwuSkpH45wKSqeoBtesXsaKKCMSGwCyfwn0t0YZsdDwmvmoGpSB8/H5RWdVb+nY27lUg=
-X-Received: by 2002:a9d:590a:: with SMTP id t10mr8619498oth.262.1594815095838;
- Wed, 15 Jul 2020 05:11:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200714145049.2496163-10-lee.jones@linaro.org> <CAJZ5v0iB0K6H28DSDQj9T7k_kV10THxV6-HwN9qfmkLsYNHfiA@mail.gmail.com>
- <20200714210340.GJ1398296@dell> <20200715032442.gh2cliiddhv35fdj@vireshk-i7>
- <20200715032718.2zlo2eurhkpoayya@vireshk-i7> <CAJZ5v0jHJDLt6QFWG9FOpqmWMXAUuSEPHdHbVgFWcwR6FQD57Q@mail.gmail.com>
- <20200715113433.GB3165313@dell> <CAJZ5v0gFwYj7KKKj806s5SdWO1Wu5exiwObKKAdQWQEKg+2CJA@mail.gmail.com>
- <20200715115029.GC3165313@dell> <20200715120742.GD3165313@dell>
-In-Reply-To: <20200715120742.GD3165313@dell>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Jul 2020 14:11:24 +0200
-Message-ID: <CAJZ5v0jVvzCuxOa=xDXWw4Js0J5PfKb6aM4W-g=bAPz43JNqQg@mail.gmail.com>
-Subject: Re: [PATCH 09/13] cpufreq: acpi-cpufreq: Remove unused ID structs
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=P9+1m3wZiqcpo0cnrnururZIQWEQrhFekUGBts30/fQ=;
+        b=GiP51/hcmt5w/ubhRtnBFieXRgEAjKNaHi8hXLVP9nNQzwLmIlrnd/fiDxsvzCpPf6
+         NgkYhg6nYNvc4+/poQsf0PEiikBlqkVoylXsX7x+afVLvaKCAFxlXqwa2i0wCRIyAs27
+         Il5xcKFRxkMKzY1j0ScwspzUR7ndm3DL8d/araz4DNJl5eCqFByQXlqBMOOLV76P+Sa8
+         aX6gjoUmuJWUR7rnVXWQNtJ1OTyHA59H8J+A2lbkq2SsGYL2zjl70H2BEYsg3+GOAelj
+         iFKR748/kKZmHjrcSMZ6ly6QS7elUz+rcxx0r+p9Hk5uCRhuYOpKUc9BTFPuaoj+jDaa
+         RMSg==
+X-Gm-Message-State: AOAM533Gca7NMVIacyB1mfV4fhA0o8BF9MuFZ3Drf7rlbtFdwSEWoKMI
+        NM+t4knQjfzkDY0q8/jlk+k9jQ==
+X-Google-Smtp-Source: ABdhPJw1RlHdFlCQxqYGIvI7SbhsAtRef67AkGJAHgn0iJW7X2IQ3QQMgUd4z/mr68WLHf9teEyKyA==
+X-Received: by 2002:a5d:4a84:: with SMTP id o4mr11321706wrq.104.1594815419802;
+        Wed, 15 Jul 2020 05:16:59 -0700 (PDT)
+Received: from dell ([2.31.163.61])
+        by smtp.gmail.com with ESMTPSA id p29sm3239215wmi.43.2020.07.15.05.16.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 05:16:59 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 13:16:57 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Dominik Brodowski <linux@brodo.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+        Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
+        Dominik Brodowski <linux@brodo.de>,
+        Denis Sadykov <denis.m.sadykov@intel.com>
+Subject: Re: [PATCH 09/13] cpufreq: acpi-cpufreq: Remove unused ID structs
+Message-ID: <20200715121657.GE3165313@dell>
+References: <20200714145049.2496163-10-lee.jones@linaro.org>
+ <CAJZ5v0iB0K6H28DSDQj9T7k_kV10THxV6-HwN9qfmkLsYNHfiA@mail.gmail.com>
+ <20200714210340.GJ1398296@dell>
+ <20200715032442.gh2cliiddhv35fdj@vireshk-i7>
+ <20200715032718.2zlo2eurhkpoayya@vireshk-i7>
+ <CAJZ5v0jHJDLt6QFWG9FOpqmWMXAUuSEPHdHbVgFWcwR6FQD57Q@mail.gmail.com>
+ <20200715113433.GB3165313@dell>
+ <CAJZ5v0gFwYj7KKKj806s5SdWO1Wu5exiwObKKAdQWQEKg+2CJA@mail.gmail.com>
+ <20200715115029.GC3165313@dell>
+ <CAJZ5v0hJf2BwDvmtD6UEyyxm-CGcA=SLmAt+F8Sr0ceDZji0jw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hJf2BwDvmtD6UEyyxm-CGcA=SLmAt+F8Sr0ceDZji0jw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 2:07 PM Lee Jones <lee.jones@linaro.org> wrote:
->
-> On Wed, 15 Jul 2020, Lee Jones wrote:
->
+On Wed, 15 Jul 2020, Rafael J. Wysocki wrote:
+
+> On Wed, Jul 15, 2020 at 1:50 PM Lee Jones <lee.jones@linaro.org> wrote:
+> >
 > > On Wed, 15 Jul 2020, Rafael J. Wysocki wrote:
 > >
 > > > On Wed, Jul 15, 2020 at 1:34 PM Lee Jones <lee.jones@linaro.org> wrote:
@@ -107,29 +132,31 @@ On Wed, Jul 15, 2020 at 2:07 PM Lee Jones <lee.jones@linaro.org> wrote:
 > > be smart enough to see when its actually in use.  After all, it is the
 > > compiler that places the information into the device table.
 > >
-> > If that is not the case, then the MODULE_DEVICE_TABLE() magic is
-> > broken and will need fixing.  Removing boiler-plate is good, but not
-> > at the expense of obfuscation.
->
-> Okay, I'm satisfied.  This test build is without __maybe_unused:
->
-> # All configs built as modules (MODULE) - the compiler knows to use the tables
->
->  $ ccache make -f Makefile -j24 KBUILD_OUTPUT=../builds/build-x86 allmodconfig
->  $ ccache make -f Makefile -j24 KBUILD_OUTPUT=../builds/build-x86  W=1  drivers/cpufreq/
->  [...]
->    CC [M]  drivers/cpufreq/pcc-cpufreq.o
->
-> # All configs built-in (!MODULE) - the compiler sees that they are unused
->
->  $ ccache make -f Makefile -j24 KBUILD_OUTPUT=../builds/build-x86 allyesconfig
->  $ ccache make -f Makefile -j24 KBUILD_OUTPUT=../builds/build-x86  W=1  drivers/cpufreq/
->    CC      drivers/cpufreq/pcc-cpufreq.o
->   drivers/cpufreq/pcc-cpufreq.c:619:36: warning: ‘processor_device_ids’ defined but not used [-Wunused-const-variable=]
->   619 | static const struct acpi_device_id processor_device_ids[] = {
->       |                                    ^~~~~~~~~~~~~~~~~~~~
->
+> If that is not the case, then the MODULE_DEVICE_TABLE() magic is
+> > broken and will need fixing.
+> 
+> I'm not sure why that would be the case?
 
-OK
+Nor me.  In fact, take a look at my latest email.  I think I just
+proved out that it's not broken.  The warning is valid and
+MODULE_DEVICE_TABLE() appears to work just as it should.
 
-I thought that this would be the case. :-)
+> > Removing boiler-plate is good, but not at the expense of obfuscation.
+> 
+> I'm not following you here to be honest.
+
+Never mind.  It's no longer important.
+
+> BTW, I'm wondering if removing the "static" modifier from the
+> definitions of the structures in question makes the warnings you want
+> to get rid of go away.
+
+I'm sure that it would.  But that just alludes to the fact that the
+tables may be in use elsewhere, which in the case of !MODULE is
+untrue.  That's probably more of a hack than using __maybe_unused.
+
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog
