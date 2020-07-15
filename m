@@ -2,110 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8132207B7
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8548E220885
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 11:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729574AbgGOIq5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:46:57 -0400
-Received: from mga11.intel.com ([192.55.52.93]:61786 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729377AbgGOIq4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 04:46:56 -0400
-IronPort-SDR: AVBd4w/lewG8wnDfAgIeB6mv+zgzyBqn7bjk41JbB9qb2ClgbQ0Vnh8G3dNZXONfW7HAGLrRwh
- QmrTP2vASdHA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9682"; a="147113218"
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="147113218"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 01:46:56 -0700
-IronPort-SDR: DXexAs8H1P9V9yOFnm7lrcgiUiXuzWp57mJFBrWKsRwwIaSGj+DcHhlB7ITlgE7qWM2rj3LQsj
- K6bIgPBigxIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,354,1589266800"; 
-   d="scan'208";a="299819931"
-Received: from yren3-mobl.ccr.corp.intel.com ([10.249.174.224])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jul 2020 01:46:54 -0700
-Message-ID: <746420e6b213985518d8b314018e32dc3438e9af.camel@intel.com>
-Subject: Re: [RFC PATCH 3/4] thermal:core:Add genetlink notifications for
- monitoring falling temperature
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Thara Gopinath <thara.gopinath@linaro.org>,
-        daniel.lezcano@linaro.org, robh+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        id S1729623AbgGOJTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 05:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729549AbgGOJTM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 05:19:12 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836E0C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:19:12 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id f139so4829791wmf.5
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=6S4rQcbbTZAnnQ2mAS4yWMNRrJk1s3+AGlDrxLO8KXg=;
+        b=ZTSEyblPv2P83EojiNZREKOaW+HEbHXuQwZA+qzHoDEeevYBXsbb/m7Cv2JKaRUPSC
+         OMB2+0GdNF/GhRmuYrohmDcZPNviTo39lIFcOjNItuFg9iC6sSjI/0gxJSYjOA64Hnp/
+         V0VP57wQFxu+O9su7OIDG57xbfzaTmscPLBmK+zp8eVmLJ/IGvHVlj1ENw7MdYwUmKz0
+         3+zmUDmRqQlHD1KpGX7yMHc/YHXnDZUAQjUG1Nh03TgiZAinVyQqrl+RG0RoAOfdwKSo
+         /XLiw9utxk91lHgTqrPuKUYEs1l4gC+Xw7ZQRa8Mb3Gaf72hktg0TmZLVm29pQWo+44b
+         Yemg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6S4rQcbbTZAnnQ2mAS4yWMNRrJk1s3+AGlDrxLO8KXg=;
+        b=B9HoJ//mMtatvuwm+Lud6UApGJw64BImOlyMBX6SV2vVackBQ8bMHAo04Qf7tJlVeA
+         ZbWyIpe6SOJTUuOdFRdkiuV/gjTeLoBfLsgvVRR4B0dzOGRNDYl/0fns6d6UWb4UKIy7
+         XNbhp7MG7droBl2GxVRmqx4kpbZZ3gYX7UoPnFG/xTVUyeRUPZL7kD8cfNAE3gBxEb18
+         32e9JbZwY8dg8CCUwljCVq/mU+q3uM/1/2Sxy3fAj0cTeP4kPEJxlwoc4xZSozp5638P
+         N2dHm1F6eqMp7vabYB4AI7XaHoT+ua3JSnnrf/zAOJEg5LLS/J+RUrJbaf0KVHbmNCfb
+         Qkgw==
+X-Gm-Message-State: AOAM531DEfuiFhDUZ5SgZsq0jkg4nKOyMiGTuwBjj4batQLN05KTJQsh
+        sCJjJJ1XrJvv1/tRiTI3ULEnoLgY6QI=
+X-Google-Smtp-Source: ABdhPJz01iAz6XrxpaOaf1z0Na2lpWh6FhP27ILMosYGk50ZrcsrE3mRryySLa/rmuI3t6DXkfpSwA==
+X-Received: by 2002:a05:600c:2295:: with SMTP id 21mr7477060wmf.87.1594804750107;
+        Wed, 15 Jul 2020 02:19:10 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9? ([2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9])
+        by smtp.googlemail.com with ESMTPSA id q3sm2371916wmq.22.2020.07.15.02.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jul 2020 02:19:09 -0700 (PDT)
+Subject: Re: [PATCH] Revert "thermal: mediatek: fix register index error"
+To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
         linux-kernel@vger.kernel.org
-Date:   Wed, 15 Jul 2020 16:46:53 +0800
-In-Reply-To: <20200710135154.181454-4-thara.gopinath@linaro.org>
-References: <20200710135154.181454-1-thara.gopinath@linaro.org>
-         <20200710135154.181454-4-thara.gopinath@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Cc:     Collabora Kernel ML <kernel@collabora.com>, matthias.bgg@gmail.com,
+        drinkcat@chromium.org, hsinyi@chromium.org,
+        Michael Kao <michael.kao@mediatek.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20200707103412.1010823-1-enric.balletbo@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <7aa6c0a5-3fc4-fd27-ece8-d062078c6faa@linaro.org>
+Date:   Wed, 15 Jul 2020 11:19:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <20200707103412.1010823-1-enric.balletbo@collabora.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-07-10 at 09:51 -0400, Thara Gopinath wrote:
-> Add notification calls for trip type THERMAL_TRIP_COLD when
-> temperature
-> crosses the trip point in either direction.
+On 07/07/2020 12:34, Enric Balletbo i Serra wrote:
+> This reverts commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6
 > 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  drivers/thermal/thermal_core.c | 21 +++++++++++++++------
->  1 file changed, 15 insertions(+), 6 deletions(-)
+> The above patch is supposed to fix a register index error on mt2701. It
+> is not clear if the problem solved is a hang or just an invalid value
+> returned, my guess is the second. The patch introduces, though, a new
+> hang on MT8173 device making them unusable. So, seems reasonable, revert
+> the patch because introduces a worst issue.
 > 
-> diff --git a/drivers/thermal/thermal_core.c
-> b/drivers/thermal/thermal_core.c
-> index 750a89f0c20a..e2302ca1cd3b 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -429,12 +429,21 @@ static void handle_thermal_trip(struct
-> thermal_zone_device *tz, int trip)
->  		tz->ops->get_trip_hyst(tz, trip, &hyst);
->  
->  	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
-> -		if (tz->last_temperature < trip_temp &&
-> -		    tz->temperature >= trip_temp)
-> -			thermal_notify_tz_trip_up(tz->id, trip);
-> -		if (tz->last_temperature >= trip_temp &&
-> -		    tz->temperature < (trip_temp - hyst))
-> -			thermal_notify_tz_trip_down(tz->id, trip);
-> +		if (type == THERMAL_TRIP_COLD) {
-> +			if (tz->last_temperature > trip_temp &&
-> +			    tz->temperature <= trip_temp)
-> +				thermal_notify_tz_trip_down(tz->id,
-> trip);
+> The reason I send a revert instead of trying to fix the issue for MT8173
+> is because the information needed to fix the issue is in the datasheet
+> and is not public. So I am not really able to fix it.
+> 
+> Fixes the following bug when CONFIG_MTK_THERMAL is set on MT8173
+> devices.
 
-trip_type should also be part of the event because trip_down/trip_up
-for hot trip and cold trip have different meanings.
-Or can we use some more generic names like trip_on/trip_off? trip_on
-means the trip point is violated or actions need to be taken for the
-specific trip points, for both hot and cold trips. I know
-trip_on/trip_off doesn't represent what I mean clearly, but surely you
-can find a better name.
+Applied for v5.8-rc6
 
-thanks,
-rui
 
-> +			if (tz->last_temperature <= trip_temp &&
-> +			    tz->temperature > (trip_temp + hyst))
-> +				thermal_notify_tz_trip_up(tz->id,
-> trip);
-> +		} else {
-> +			if (tz->last_temperature < trip_temp &&
-> +			    tz->temperature >= trip_temp)
-> +				thermal_notify_tz_trip_up(tz->id,
-> trip);
-> +			if (tz->last_temperature >= trip_temp &&
-> +			    tz->temperature < (trip_temp - hyst))
-> +				thermal_notify_tz_trip_down(tz->id,
-> trip);
-> +		}
->  	}
->  
->  	if (type == THERMAL_TRIP_CRITICAL || type == THERMAL_TRIP_HOT)
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
