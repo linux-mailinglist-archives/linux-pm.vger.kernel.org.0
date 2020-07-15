@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF4B22015C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 02:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D704822015E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 02:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726670AbgGOAhy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 20:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S1728125AbgGOAiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 20:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbgGOAhy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 20:37:54 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD30C061755;
-        Tue, 14 Jul 2020 17:37:54 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id b92so681024pjc.4;
-        Tue, 14 Jul 2020 17:37:54 -0700 (PDT)
+        with ESMTP id S1726603AbgGOAiA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 20:38:00 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF6DC061755;
+        Tue, 14 Jul 2020 17:37:59 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id a24so415407pfc.10;
+        Tue, 14 Jul 2020 17:37:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bj0ge/lKsPf1Fx7ggAUb/llP8JF010xTcoaHEoLGxyE=;
-        b=HXC6T639/3yvNY+J8IEpxFn71weDtE36v4OCphKwx/KlgcbFsBSgd8IKzH5J2WWvGX
-         kjEgg8rMhDUhQUM8IFnDRv4msmzssSFo3fJqORtjBdLol418DMqqf7g0mzmz1MRyJAhc
-         uTbPoCxprlVzlf7CAGMOBlxDXvl9/1OWESPSm9PR0aNx9tfJrmncUTwVxhXJSRpuB/ru
-         p+kqtilyYU1A9qjDzb2VlBIhAO0Y4yttguQ7zf0pi9HvVa2mXVeq196TOf58Bjsrt/65
-         cRR8M+TxYRfaHqEuALia7S2KmxpzR+Zob0CKkUO6ISPCfeKUxXRUdvxC62z/iRcDeY5U
-         5vlw==
+        bh=v31UIEz3Dwtg5YacEjDmu57JbCXcygtQk9X1DgLN9BA=;
+        b=MJSxcvEtp3Y7p+hcrYq1rjGXkaZBgyQWEYJsNvHJANRqI7O6Z5BGS+FbwUdXzCgY+d
+         Wyz0O7PPgSIaV/Bv8N5Fg1bJ+frtJknNAnZlp9phkKvyLCaVdqqGMIq4po1eGkEDqStX
+         Jc4qCE3IHBGNsfeIA2359MNtSDS30hCC/QDVO0Lu6DsB+HCdjGE3QVRc/ZEQd/KXu1zm
+         yy6t7VOdf9ufa9+PUJAqtXN5TW6e2RTtkrUJu60W+uZFK29QGOj0TvszRLHTYnAfCfJ3
+         XykCKHlOLurgGGm7vv/WuvCBOgW+bdmnlv1wTAQzRnvFukX/4cO0MsA+Q2LGjnbOTIFm
+         Y1Qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bj0ge/lKsPf1Fx7ggAUb/llP8JF010xTcoaHEoLGxyE=;
-        b=sI41F0vJci3BKmwmKCZESOM1J1P0+HOoElcVT4f7tzeKmuok8LLxjW0As6utEh6GGp
-         sNQqFiHfJkkdH4vghKmGBHfDaVYhz0QbCWF4QLE9yNgZABkmgGEtVHIQzouFLPCTkVrN
-         QV00rbv2GYl71ToNzQSXHHeGvkfHnDTVo8Dcd65iC70MSOb1DQix/nwpzkGeha6g2aOG
-         KkVbKnF5cv/R+Yy2T4FLpcUrVqnmUyA7pnOb2SOLRHNhpvFdzeg0H04QtNOrGklKoHyh
-         y91Suvz9h0BnIwdFBvZlT+l6OJUeegRmFni9VtTgCsRRrTlvCcarFtKP+s2NW5ekH0be
-         VLRA==
-X-Gm-Message-State: AOAM533gW18+1OuLRhjkmqrmy5YKhQDCUxxWI0rHb4MNfWQZDolSqbGj
-        ZB+8NlGeJssZUTN1z5y9BS3K8E2fXAi46+9o
-X-Google-Smtp-Source: ABdhPJzunN28p7eooB/Av8/c0P3gZVNA85rZAuqjnzs2AahIW+OGNlN1MYwn1lBWlzUDImU5X6EZuw==
-X-Received: by 2002:a17:902:7008:: with SMTP id y8mr5909116plk.85.1594773474100;
-        Tue, 14 Jul 2020 17:37:54 -0700 (PDT)
+        bh=v31UIEz3Dwtg5YacEjDmu57JbCXcygtQk9X1DgLN9BA=;
+        b=JCFhKl91JIGOgvffmQ3zeP/RdKaRaTWqopgRV5qu7ozNWWnCmCPAK5hqEN1beUFpv2
+         wGji0vX8vevMJvL5Rt4qTYgJ/NQUSMQn7F/LaLUUSmzFzmwhp1nldiKCND60YNGIttE4
+         XolnGZnwHiG5eDdhyEA+7xLVeRn3ph4dk/r3HvMwYxHToyPzulBgx5nAmAwgSRGOUNvn
+         l4IhXEd4MKGAxh2z/Y7Ky0V63Y4S+CF751/5iFfXp3Wx9macBJ8hLo3Co5FF5iog28dj
+         arUZU43R3x3yTpq7XPx2oQCLIWu1ngzXqBf1+vTvgN/e5Z+XCmbVfn69kDhjtSdgGH1J
+         rVrw==
+X-Gm-Message-State: AOAM531NSB+ZTlXfwPSCQY1VY7oIb0UQAvpyNdOq00QgJbPzBLpDb2Wx
+        43OazUVes828KipnnO0odUhoBmOjtc/fWqXD
+X-Google-Smtp-Source: ABdhPJzIqRBAELFTUnIIaf/a+MWpl2QQpsiWVJK2IZJVmAxnHSGDSUYcefZpujxHQydNXBLoQTc4IQ==
+X-Received: by 2002:a65:64d8:: with SMTP id t24mr5742788pgv.286.1594773479515;
+        Tue, 14 Jul 2020 17:37:59 -0700 (PDT)
 Received: from xiaomi.mioffice.cn ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id t126sm266156pfd.214.2020.07.14.17.37.51
+        by smtp.gmail.com with ESMTPSA id t126sm266156pfd.214.2020.07.14.17.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 17:37:53 -0700 (PDT)
+        Tue, 14 Jul 2020 17:37:59 -0700 (PDT)
 From:   Qiwu Huang <yanziily@gmail.com>
 To:     sre@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v3 2/5] power: supply: core: add wireless charger adapter type property
-Date:   Wed, 15 Jul 2020 08:35:20 +0800
-Message-Id: <abd53a779a44c13a1d16e1fded3cb248e5fbfeba.1594726859.git.huangqiwu@xiaomi.com>
+Subject: [PATCH v3 3/5] power: supply: core: add wireless signal strength property
+Date:   Wed, 15 Jul 2020 08:35:21 +0800
+Message-Id: <460b4176d1ef7001cecdf84682c9d39ac676b8bd.1594726859.git.huangqiwu@xiaomi.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1594726859.git.huangqiwu@xiaomi.com>
 References: <cover.1594726859.git.huangqiwu@xiaomi.com>
@@ -67,102 +67,58 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-Reports what type of wireless adapter connection is
-currently active forthe supply.
-for example it can show if ADAPTER_PD capable source is attached.
+reports wireless signal strength.
+The value show degree of coupling between tx and rx.
 
 Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
 ---
- Documentation/ABI/testing/sysfs-class-power | 28 +++++++++++++++++++++
+ Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
  drivers/power/supply/power_supply_sysfs.c   |  1 +
- include/linux/power_supply.h                | 19 ++++++++++++++
- 3 files changed, 48 insertions(+)
+ include/linux/power_supply.h                |  1 +
+ 3 files changed, 12 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index dd3773dcf16a..03ab449fae8a 100644
+index 03ab449fae8a..75ec7de2fe78 100644
 --- a/Documentation/ABI/testing/sysfs-class-power
 +++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -729,3 +729,31 @@ Contact:	Fei Jiang <jiangfei1@xiaomi.com>
- 			3: QUICK_CHARGE_TURBE,
- 			4: QUICK_CHARGE_SUPER.
+@@ -757,3 +757,13 @@ Description:
+ 			13: ADAPTER_VOICE_BOX,
+ 			14: ADAPTER_PRIVATE_PD_50W.
  
-+===== Wireless Charger Properties =====
-+What:		/sys/class/power_supply/<supply_name>/tx_adapter
++What:		/sys/class/power_supply/<supply_name>/signal_strength
 +Date:		Jul 2020
 +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
 +Description:
-+		Reports the type of wireless adapter connection is currently active for
-+		the supply, for example it can show if ADAPTER_PD capable source
-+		is attached. Expect common wireless adapter type, also increase by
-+		some vendor private adapter type(ex. ADAPTER_PD_40W).
++		In PING phase, RX transmits a signal strength packet as the first
++		communication packet to instruct the base to keep power signal on.
++		The value reports wireless signal strength and show degree of coupling.
 +
 +		Access: Read-Only
-+		Valid values:
-+			0: ADAPTER_NONE,
-+			1: ADAPTER_SDP,
-+			2: ADAPTER_DCP,
-+			3: ADAPTER_CDP,
-+			4: ADAPTER_OCP,
-+			5: ADAPTER_QC2,
-+			6: ADAPTER_QC3,
-+			7: ADAPTER_PD,
-+			8: ADAPTER_AUTH_FAILED,
-+			9: ADAPTER_PRIVATE_QC3,
-+			10: ADAPTER_PRIVATE_PD,
-+			11: ADAPTER_CAR_POWER,
-+			12: ADAPTER_PRIVATE_PD_40W,
-+			13: ADAPTER_VOICE_BOX,
-+			14: ADAPTER_PRIVATE_PD_50W.
-+
++		Valid values: 0 - 100
 diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 9554d7907373..f2458e21d02b 100644
+index f2458e21d02b..e420a453095e 100644
 --- a/drivers/power/supply/power_supply_sysfs.c
 +++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -207,6 +207,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(MANUFACTURER),
+@@ -208,6 +208,7 @@ static struct power_supply_attr power_supply_attrs[] = {
  	POWER_SUPPLY_ATTR(SERIAL_NUMBER),
  	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
-+	POWER_SUPPLY_ATTR(TX_ADAPTER),
+ 	POWER_SUPPLY_ATTR(TX_ADAPTER),
++	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
  };
  
  static struct attribute *
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index f35c661a2544..0bbdec1630a4 100644
+index 0bbdec1630a4..346c6c9c0737 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -168,6 +168,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_MANUFACTURER,
+@@ -169,6 +169,7 @@ enum power_supply_property {
  	POWER_SUPPLY_PROP_SERIAL_NUMBER,
  	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_TX_ADAPTER,
+ 	POWER_SUPPLY_PROP_TX_ADAPTER,
++	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
  };
  
  enum power_supply_type {
-@@ -207,6 +208,24 @@ enum power_supply_quick_charge_type {
- 	QUICK_CHARGE_MAX,
- };
- 
-+enum power_supply_tx_adapter_type {
-+	ADAPTER_NONE = 0,			/* Nothing Attached */
-+	ADAPTER_SDP,				/* Standard Downstream Port */
-+	ADAPTER_CDP,				/* Charging Downstream Port */
-+	ADAPTER_DCP,				/* Dedicated Charging Port */
-+	ADAPTER_OCP,				/* Other Charging Port */
-+	ADAPTER_QC2,				/* Qualcomm Charge 2.0 */
-+	ADAPTER_QC3,				/* Qualcomm Charge 3.0 */
-+	ADAPTER_PD,				/* Power Delivery Port */
-+	ADAPTER_AUTH_FAILED,			/* Authenticated Failed Adapter */
-+	ADAPTER_PRIVATE_QC3,			/* Qualcomm Charge 3.0 with Private Protocol */
-+	ADAPTER_PRIVATE_PD,			/* PD Adapter with Private Protocol */
-+	ADAPTER_CAR_POWER,			/* Wireless Car Charger */
-+	ADAPTER_PRIVATE_PD_40W,			/* 40W PD Adapter with Private Protocol */
-+	ADAPTER_VOICE_BOX,			/* Voice Box which Support Wireless Charger */
-+	ADAPTER_PRIVATE_PD_50W,			/* 50W PD Adapter with Private Protocol */
-+};
-+
- enum power_supply_notifier_events {
- 	PSY_EVENT_PROP_CHANGED,
- };
 -- 
 2.27.0
 
