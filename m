@@ -2,171 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941782202E9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 05:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F4B2202EB
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 05:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727030AbgGOD1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 23:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
+        id S1728485AbgGOD1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 23:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbgGOD1E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 23:27:04 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6D20C061794
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 20:27:02 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id l17so732008iok.7
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 20:27:02 -0700 (PDT)
+        with ESMTP id S1726734AbgGOD1V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 23:27:21 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F16C061755
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 20:27:21 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id e8so1758527pgc.5
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 20:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/6qvp5WHZj/oa9tsQs7daglYAIrSHRjqnbn4LJYVqYM=;
-        b=ZEbB4gSyyVHw+IqRwjZPPSBGmJ1kW6qrI3GlqPzdjDUvIsbGFKVZ+/nKoDRVsb50DA
-         xwru94gf4SU4rS8VnQlP4S8oo+/KGKnprsAgKDgnODbTRc1yV0SBjDlAL6hamUrpX7dg
-         nEx9aWnWfqbkS4I82KGBsr1NbL5lrFwJwGnhQ+E1yC0BlfiSgYTF1a7DenrZ8qr2mPuh
-         R4BQKmo4xnSbLNVEXs4GdOGxxkS6o2Xs7mjqBXcPRR2LMkuZUcCB9lzKL+kNAFm+L/1l
-         cFRBkY5q26k0Lf4O5yj8NY0qaU/9G/8KOfklwi2xPEUDGOsg7HalAHkigm9R86E4PF1F
-         GAkw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=Xfe44VUg6t3uEKEZr5KZlokmJcH7EcHODPZ1Ek7+ev0=;
+        b=rqDUfhu/YFg8AfXgIqvzj4jUJm55xGZGfZTn0nJ/RhPxv87G+CfMpoXZtlSiPIxZiO
+         7cOCDnt6ewvLo+BACOIbspH5nBMsv76s2FbCrGB6hwOYO3GReB84ZsqW0xFDRkpsXo3T
+         93CmWiGNZRYwmlAAj3JyxA8y15aWS/k1nzmkMhk3PJ1cajgQ/xCaODvAnXkeR/IDIU7M
+         MiU0BYLPd7sHVZUSeQ6Q6Tt6e7tWYTJmypD9HLQTGwp+L4qyc0c25BhPJjnbC9ychl8s
+         47a82C0Lor/R7eqYHGIXFUDtfC73dthfGXAVmD/GLNssgfp/UY342VD+Ck4FIpfdeD96
+         scRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/6qvp5WHZj/oa9tsQs7daglYAIrSHRjqnbn4LJYVqYM=;
-        b=A7X2fBEDMedUPtnmZrhTzKKDOKOr0SOIvBo/On2yWI/E3TKJVECCtVI4K7W9MYdhPP
-         POUPCHnLe62L5jMUEPP3n4WTOf6SgTO7cFXlfzpqoiy6FsQ9yzXGp3itZMR5QJddOZKe
-         ybuaNkIQwuWL9LTUdjHCZFvePqB1upUVzpXMPthnyc3iv+ZKbDrSJV+9sYxMOCl8wcpa
-         s8/rPxnVLUqQrEmMgsRlV3szws7ezu9yN6h33gM1nHSxkNI3Z2vmxytAmIYU4DBweOtr
-         j0eg6pQvLVh1FCphZ6/m2EoZyo4rtkMiYQ/4U7QfOIb8bxlJqDOgieS0Gd0kTTAsyQWA
-         8Ytw==
-X-Gm-Message-State: AOAM53056nmp1NHOYa6S2jqzDcHCy7mAuzuPMkjxpnmi49wrk7XtlPug
-        y6/aTezl6F4+eSZvN70A0Y3WMrU7fPxb3sUoq4NAAQ==
-X-Google-Smtp-Source: ABdhPJzxESu7ZTsM8aFjcJhDG3lJKuIu8Kw/lLhq4wzNp1GQnFoGez4u1gAOdT+YRS9L0Tnnx500tXibztageq3WwBw=
-X-Received: by 2002:a6b:c80a:: with SMTP id y10mr8120079iof.67.1594783621833;
- Tue, 14 Jul 2020 20:27:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200714145049.2496163-1-lee.jones@linaro.org> <20200714145049.2496163-6-lee.jones@linaro.org>
-In-Reply-To: <20200714145049.2496163-6-lee.jones@linaro.org>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Tue, 14 Jul 2020 20:26:50 -0700
-Message-ID: <CAOesGMjCZMyWLe+tpNFstC88odeSCKS8bM6Oj9cpaj6j7U94rQ@mail.gmail.com>
-Subject: Re: [PATCH 05/13] cpufreq/arch: powerpc: pasemi: Move prototypes to
- shared header
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Xfe44VUg6t3uEKEZr5KZlokmJcH7EcHODPZ1Ek7+ev0=;
+        b=FJph+18z8nel1pZ8wRpxJLRcdl6J3MpGsIKVmYluGyKOmLncj9r0hcVTrqi84KLZSK
+         y+Bo249XblFB+c4YpKECHGyvH7socww3DdKFl6VcQwcz1W8nT3RX1+jWuvOkNSZKZIG5
+         tlxxQraO+T8l6XjOGm4r6+1J4kPcs4zH3Vd4S6fwhe9zIt52gOH1DFrZohVHqqjlvLd7
+         q6DvZVkuYyPBgi8JW4AOt/t5+HO6jVejOs8rede/YDapk1Rp+R4lzSztGmb1zTJgKkqU
+         mhddRbdv97a+Hql/N4nu3vDiNtvMsJ+AVQdbEy06jwL+wrO0sTYyd5K0bOrIvY45DzM6
+         0Iyw==
+X-Gm-Message-State: AOAM531wjJiQTNs8co5QxFz4QYsYZ4yP1iCEeo0YIbzKY1eAtBgq3TuW
+        4yOIU9dYFZ1MRuaXEYT68BzkoQ==
+X-Google-Smtp-Source: ABdhPJxvLtPG6/Yk6jZYYT6/cu/KekSQOrjbd/Em8rcltuDksibR5oAhSOVlLJAds+5Rs63iGLD3vw==
+X-Received: by 2002:a65:6883:: with SMTP id e3mr6203354pgt.5.1594783640870;
+        Tue, 14 Jul 2020 20:27:20 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id z2sm503142pff.36.2020.07.14.20.27.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Jul 2020 20:27:20 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 08:57:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        viresh kumar <viresh.kumar@linaro.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Grover <andrew.grover@intel.com>,
+        Paul Diefenbaugh <paul.s.diefenbaugh@intel.com>,
+        Dominik Brodowski <linux@brodo.de>,
+        Denis Sadykov <denis.m.sadykov@intel.com>
+Subject: Re: [PATCH 09/13] cpufreq: acpi-cpufreq: Remove unused ID structs
+Message-ID: <20200715032718.2zlo2eurhkpoayya@vireshk-i7>
+References: <20200714145049.2496163-1-lee.jones@linaro.org>
+ <20200714145049.2496163-10-lee.jones@linaro.org>
+ <CAJZ5v0iB0K6H28DSDQj9T7k_kV10THxV6-HwN9qfmkLsYNHfiA@mail.gmail.com>
+ <20200714210340.GJ1398296@dell>
+ <20200715032442.gh2cliiddhv35fdj@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200715032442.gh2cliiddhv35fdj@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 7:50 AM Lee Jones <lee.jones@linaro.org> wrote:
->
-> If function callers and providers do not share the same prototypes the
-> compiler complains of missing prototypes.  Fix this by moving the
-> already existing prototypes out to a mutually convenient location.
->
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/cpufreq/pasemi-cpufreq.c:109:5: warning: no previous prototype f=
-or =E2=80=98check_astate=E2=80=99 [-Wmissing-prototypes]
->  109 | int check_astate(void)
->  | ^~~~~~~~~~~~
->  drivers/cpufreq/pasemi-cpufreq.c:114:6: warning: no previous prototype f=
-or =E2=80=98restore_astate=E2=80=99 [-Wmissing-prototypes]
->  114 | void restore_astate(int cpu)
->  | ^~~~~~~~~~~~~~
->
-> Cc: Olof Johansson <olof@lixom.net>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-> Cc: Paul Mackerras <paulus@samba.org>
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> ---
->  arch/powerpc/platforms/pasemi/pasemi.h    | 15 ------------
->  arch/powerpc/platforms/pasemi/powersave.S |  2 ++
->  drivers/cpufreq/pasemi-cpufreq.c          |  1 +
->  include/linux/platform_data/pasemi.h      | 28 +++++++++++++++++++++++
->  4 files changed, 31 insertions(+), 15 deletions(-)
->  create mode 100644 include/linux/platform_data/pasemi.h
->
-> diff --git a/arch/powerpc/platforms/pasemi/pasemi.h b/arch/powerpc/platfo=
-rms/pasemi/pasemi.h
-> index 70b56048ed1be..528d81ef748ad 100644
-> --- a/arch/powerpc/platforms/pasemi/pasemi.h
-> +++ b/arch/powerpc/platforms/pasemi/pasemi.h
-> @@ -15,21 +15,6 @@ extern void __init pasemi_map_registers(void);
->  extern void idle_spin(void);
->  extern void idle_doze(void);
->
-> -/* Restore astate to last set */
-> -#ifdef CONFIG_PPC_PASEMI_CPUFREQ
-> -extern int check_astate(void);
-> -extern void restore_astate(int cpu);
-> -#else
-> -static inline int check_astate(void)
-> -{
-> -       /* Always return >0 so we never power save */
-> -       return 1;
-> -}
-> -static inline void restore_astate(int cpu)
-> -{
-> -}
-> -#endif
-> -
->  extern struct pci_controller_ops pasemi_pci_controller_ops;
->
->  #endif /* _PASEMI_PASEMI_H */
-> diff --git a/arch/powerpc/platforms/pasemi/powersave.S b/arch/powerpc/pla=
-tforms/pasemi/powersave.S
-> index d0215d5329ca7..7747b48963286 100644
-> --- a/arch/powerpc/platforms/pasemi/powersave.S
-> +++ b/arch/powerpc/platforms/pasemi/powersave.S
-> @@ -5,6 +5,8 @@
->   * Maintained by: Olof Johansson <olof@lixom.net>
->   */
->
-> +#include <linux/platform_data/pasemi.h>
-> +
->  #include <asm/processor.h>
->  #include <asm/page.h>
->  #include <asm/ppc_asm.h>
-> diff --git a/drivers/cpufreq/pasemi-cpufreq.c b/drivers/cpufreq/pasemi-cp=
-ufreq.c
-> index c66f566a854cb..c6bb3ecc90ef3 100644
-> --- a/drivers/cpufreq/pasemi-cpufreq.c
-> +++ b/drivers/cpufreq/pasemi-cpufreq.c
-> @@ -15,6 +15,7 @@
->  #include <linux/timer.h>
->  #include <linux/module.h>
->  #include <linux/of_address.h>
-> +#include <linux/platform_data/pasemi.h>
->
->  #include <asm/hw_irq.h>
->  #include <asm/io.h>
-> diff --git a/include/linux/platform_data/pasemi.h b/include/linux/platfor=
-m_data/pasemi.h
-> new file mode 100644
-> index 0000000000000..3fed0687fcc9a
-> --- /dev/null
-> +++ b/include/linux/platform_data/pasemi.h
-> @@ -0,0 +1,28 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2020 Linaro Ltd.
-> + *
-> + * Author: Lee Jones <lee.jones@linaro.org>
-> + */
+On 15-07-20, 08:54, Viresh Kumar wrote:
+> On 14-07-20, 22:03, Lee Jones wrote:
+> > On Tue, 14 Jul 2020, Rafael J. Wysocki wrote:
+> > 
+> > > On Tue, Jul 14, 2020 at 4:51 PM Lee Jones <lee.jones@linaro.org> wrote:
+> > > >
+> > > > Can't see them being used anywhere and the compiler doesn't complain
+> > > > that they're missing, so ...
+> > > 
+> > > Aren't they needed for automatic module loading in certain configurations?
+> > 
+> > Any idea how that works, or where the code is for that?
+> 
+> The MODULE_DEVICE_TABLE() thingy creates a map of vendor-id,
+> product-id that the kernel keeps after boot (and so there is no static
+> reference of it for the compiler), later when a device is hotplugged
+> into the kernel it refers to the map to find the related driver for it
+> and loads it if it isn't already loaded.
+> 
+> This has some of it, search for MODULE_DEVICE_TABLE() in it.
+> Documentation/driver-api/usb/hotplug.rst
 
-Absolutely not. It's neither your copyright, nor your authorship.
+And you just need to add __maybe_unused to them to suppress the
+warning.
 
-
--Olof
+-- 
+viresh
