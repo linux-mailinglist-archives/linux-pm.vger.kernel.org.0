@@ -2,54 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5334220D4C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 14:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E7C220E0C
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 15:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730795AbgGOMr2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 08:47:28 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:41348 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728861AbgGOMr2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 08:47:28 -0400
-Received: by mail-oi1-f196.google.com with SMTP id y22so2073059oie.8;
-        Wed, 15 Jul 2020 05:47:27 -0700 (PDT)
+        id S1731758AbgGONYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 09:24:09 -0400
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:35394 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730868AbgGONYI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 09:24:08 -0400
+Received: by mail-oo1-f65.google.com with SMTP id w1so457900ooj.2;
+        Wed, 15 Jul 2020 06:24:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4wdDNfmxaJDMgzx6KGb0R32bfQn7xefP7F9Z+jm7O8M=;
-        b=ErJPE7Y3tXa/QwfTZ8E+hqgzHhBnqeik0/u9v8c2k/hJSZsMGii49ClvmN/ypA/kBC
-         LZf1jkIHDdBCftCqO6/DPZ7c0RbRUznkZ1EHz/yx+qeGKpK3E+UWrgy0Qen3ihsF4vpB
-         of2Gx9AJ2R1fiNZX0x6zp4m3T3I7QPJ+2TcQ4dFS6Coc2CroJnOedC/ueCHmhAdDpnEF
-         KzrRdDg3a/JCSe38u1z8L0DvcZNt7ctxu5ibhuucAxtl8SlANBBGV9cR5YEhCTo0DOi/
-         lfYysjgs7Pc6VMhDgMaGq4sH2rBkI3o58VhwzqHYzrD1xsugWObKTuZlI5bUWC9eUMib
-         U+AA==
-X-Gm-Message-State: AOAM532VzyGKuCZdE6uD8Bkh1N682rX85s9rUDdBSwEsNoc+YJ/uetJH
-        r5NOhq0Xo1AguSMcoP/SCTCn4LZyEu97jx6O7P4=
-X-Google-Smtp-Source: ABdhPJxewLcMbqQtHFzIXxogNRmQ7yp2yEiyvW8cX3rQxeBkDtYIVHg606iB1KWw9RAdZfYsCuseer30sxq1Sm9KkVg=
-X-Received: by 2002:aca:f58a:: with SMTP id t132mr7362035oih.68.1594817247377;
- Wed, 15 Jul 2020 05:47:27 -0700 (PDT)
+        bh=ybTRMRwTXg8GftT6GqtnDN/MiNSxSxn6EjDTyKGp5Qk=;
+        b=j9DyxIOxG7B7a8H7FBQ/VbVPWsPA3d+bE/nAUMv3sjVGijrnOrpul8BoA0Xl6WdZJw
+         Cfn/58PQytWwq6oC3TZpE2EYj8xBQ4mrzM3UIvJC+iU86Mhjs96Q5pk960HzFVZgLhT5
+         I3Ff5iC49c6BOKcBEDyWx5pygZPCAlTHPmD40NMhxRdVEboLtytoym/uxWJvicrsNUV9
+         j9NL/wgO14tZxnj5iArdsIVkA/DOiMUVMSH4FjjBe9kAfF1hyZcEDjgpnxXJmAH+zP7+
+         TbkubSsrY2WR9tQp19XVrqIEuyvhGN3JwwKuglk6nLISKgaW0H9D8MEzbH0CQtHAsN68
+         iJqw==
+X-Gm-Message-State: AOAM532pzmwJMyRlIh00HneA/eg5Pc9pb3yp2vJaXd2RkSnQkRlXrBad
+        m5ZpoYS86p5J3WwCSJyf5/Ptdo+vJP6HpVB5Bd0=
+X-Google-Smtp-Source: ABdhPJxMCfbP+2jw0s4zpYMWrMAbGRmywLWYB0Np/Uh44G/h6/hOUJM7OZKrC4qaIHoEibMSyvOp3EYnmEaG8iTzlPA=
+X-Received: by 2002:a4a:2459:: with SMTP id v25mr9382879oov.75.1594819447535;
+ Wed, 15 Jul 2020 06:24:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1594707424.git.viresh.kumar@linaro.org> <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <CAJZ5v0i=yNH9pGkty2QdeQLcqJcuY=pLx_XcY4VXs8bSqXL=dg@mail.gmail.com> <20200715073225.vnf6dibfca3oc2h4@vireshk-i7>
-In-Reply-To: <20200715073225.vnf6dibfca3oc2h4@vireshk-i7>
+References: <20200715082634.3024816-1-lee.jones@linaro.org>
+In-Reply-To: <20200715082634.3024816-1-lee.jones@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Jul 2020 14:47:16 +0200
-Message-ID: <CAJZ5v0j1iaOuASa9K0x3QsWW2mhqoMQyhiVU5eXbNgEN=aU_rw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
+Date:   Wed, 15 Jul 2020 15:23:56 +0200
+Message-ID: <CAJZ5v0jra1Q=L9H-9jJTFERbwSt5t4iF=vmtv9_01roa6bPB3A@mail.gmail.com>
+Subject: Re: [PATCH v2 00/13] Rid W=1 warnings in CPUFreq
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -57,65 +48,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 9:32 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Jul 15, 2020 at 10:27 AM Lee Jones <lee.jones@linaro.org> wrote:
 >
-> On 14-07-20, 15:05, Rafael J. Wysocki wrote:
-> > On Tue, Jul 14, 2020 at 8:37 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >  static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
-> > >                     int cpu_idx)
-> > >  {
-> > > -       u32 load;
-> > > -       u64 now, now_idle, delta_time, delta_idle;
-> > > -       struct time_in_idle *idle_time = &cpufreq_cdev->idle_time[cpu_idx];
-> > > -
-> > > -       now_idle = get_cpu_idle_time(cpu, &now, 0);
-> > > -       delta_idle = now_idle - idle_time->time;
-> > > -       delta_time = now - idle_time->timestamp;
-> > > +       unsigned long util = cpu_util_cfs(cpu_rq(cpu));
-> > > +       unsigned long max = arch_scale_cpu_capacity(cpu);
-> > >
-> > > -       if (delta_time <= delta_idle)
-> > > -               load = 0;
-> > > -       else
-> > > -               load = div64_u64(100 * (delta_time - delta_idle), delta_time);
-> > > -
-> > > -       idle_time->time = now_idle;
-> > > -       idle_time->timestamp = now;
-> > > -
-> > > -       return load;
-> > > +       util = effective_cpu_util(cpu, util, max, ENERGY_UTIL, NULL);
-> >
-> > Hmm.
-> >
-> > It doesn't look like cpufreq_cdev and cpu_idx are needed any more in
-> > this function, so maybe drop them from the arg list?
+> This set is part of a larger effort attempting to clean-up W=1
+> kernel builds, which are currently overwhelmingly riddled with
+> niggly little warnings.
 >
-> Right.
+> After these patches are applied, the build system no longer
+> complains about any W=0 nor W=1 level warnings in drivers/cpufreq.
 >
-> > And then there
-> > won't be anything specific to CPU cooling in this function, so maybe
-> > move it to sched and export it from there properly?
+> Hurrah!
 >
-> There isn't a lot happening in this routine right now TBH and am not
-> sure if it is really worth it to have a separate routine for this
-> (unless we can get rid of something for all the callers, like avoiding
-> a call to arch_scale_cpu_capacity() and then naming it
-> effective_cpu_load().
+> Changelog
+>
+> v1 => v2:
+>  - Collect *-bys
+>  - Use __maybe_unused instead of removing device IDs
+>  - Use __always_unused instead of using unused variables
+>  - Include architecture header instead of creating new include file
+>
+> Lee Jones (13):
+>   cpufreq: freq_table: Demote obvious misuse of kerneldoc to standard
+>     comment blocks
+>   cpufreq: cpufreq: Demote lots of function headers unworthy of
+>     kerneldoc status
+>   cpufreq: cpufreq_governor: Demote store_sampling_rate() header to
+>     standard comment block
+>   cpufreq: sti-cpufreq: Fix some formatting and misspelling issues
+>   cpufreq: pasemi: Include header file for {check,restore}_astate
+>     prototypes
+>   cpufreq: powernv-cpufreq: Functions only used in call-backs should be
+>     static
+>   cpufreq: powernv-cpufreq: Fix a bunch of kerneldoc related issues
+>   cpufreq: acpi-cpufreq: Mark 'dummy' variable as __always_unused
+>   cpufreq: acpi-cpufreq: Mark sometimes used ID structs as
+>     __maybe_unused
+>   cpufreq: powernow-k8: Mark 'hi' and 'lo' dummy variables as
+>     __always_unused
+>   cpufreq: pcc-cpufreq: Mark sometimes used ID structs as __maybe_unused
+>   cpufreq: intel_pstate: Supply struct attribute description for
+>     get_aperf_mperf_shift()
+>   cpufreq: amd_freq_sensitivity: Mark sometimes used ID structs as
+>     __maybe_unused
+>
+>  drivers/cpufreq/acpi-cpufreq.c         |  8 +++----
+>  drivers/cpufreq/amd_freq_sensitivity.c |  2 +-
+>  drivers/cpufreq/cpufreq.c              | 32 ++++++++++++++------------
+>  drivers/cpufreq/cpufreq_governor.c     |  2 +-
+>  drivers/cpufreq/freq_table.c           |  6 ++---
+>  drivers/cpufreq/intel_pstate.c         |  2 ++
+>  drivers/cpufreq/pasemi-cpufreq.c       |  2 ++
+>  drivers/cpufreq/pcc-cpufreq.c          |  2 +-
+>  drivers/cpufreq/powernow-k8.c          |  4 ++--
+>  drivers/cpufreq/powernv-cpufreq.c      | 15 ++++++------
+>  drivers/cpufreq/sti-cpufreq.c          |  8 +++----
+>  11 files changed, 45 insertions(+), 38 deletions(-)
+>
+> --
 
-Maybe yes.  Or sched_cpu_load() to stand for "the effective CPU load
-as seen by the scheduler".
-
-But I'm not sure if percent is the best unit to return from it.  Maybe
-make it return something like (util << SCHED_CAPACITY_SHFT) /
-arch_scale_cpu_capacity(cpu).
-
-> > Also it looks like max could be passed to it along with the CPU number
-> > instead of being always taken as arch_scale_cpu_capacity(cpu).
->
-> I am not sure what you are suggesting here. What will be the value of
-> max if not arch_scale_cpu_capacity() ?
-
-I was thinking about a value supplied by the caller, eg.
-sched_cpu_load(cpu, max), but if all callers would pass
-arch_scale_cpu_capacity(cpu) as max anyway, then it's better to simply
-call it from there.
+All patches except for the [04/13] (applied by Viresh) and [06/13]
+(requested to be ignored) applied as 5.9 material with the ACKs from
+Viresh, thanks!
