@@ -2,106 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FC0221584
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 21:50:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70567221647
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 22:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgGOTuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 15:50:06 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:25772 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727118AbgGOTuE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 15:50:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1594842604; x=1626378604;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=99ygPzuHwg4Q3YW9N+NvtkYNtktLaI4YT2h/lpn7jBQ=;
-  b=UFnWsfiuKcYxKApwDqwbO4JuWJM9eKqMvcjYfa7ae83L+E3IOktXwAD5
-   1wHHvVKUrgAus7aPNrkORvrLyZLqsnyIeTugQzQrucQe/iiX/JBzJmcBU
-   KA+7Qe+7VED+J/xRZLe/xhq02bb//HcCqu8K5r42HbhhM5tMMZznPTi66
-   w=;
-IronPort-SDR: KVs3TTCGlt4jbzRtfh8Z1F2oZ0rdfRw93Xpe0nJRsHl/jLIcyO7oUiuuap5BxGwGfPqm/SHJu5
- uUVJci5HS3mg==
-X-IronPort-AV: E=Sophos;i="5.75,356,1589241600"; 
-   d="scan'208";a="42072089"
-Subject: Re: [PATCH v2 00/11] Fix PM hibernation in Xen guests
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 15 Jul 2020 19:50:03 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com (Postfix) with ESMTPS id 3C48DA216B;
-        Wed, 15 Jul 2020 19:49:55 +0000 (UTC)
-Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 15 Jul 2020 19:49:34 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 15 Jul 2020 19:49:33 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Wed, 15 Jul 2020 19:49:33 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 60CEF4E7C7; Wed, 15 Jul 2020 19:49:33 +0000 (UTC)
-Date:   Wed, 15 Jul 2020 19:49:33 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        "sstabellini@kernel.org" <sstabellini@kernel.org>,
-        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
-        "roger.pau@citrix.com" <roger.pau@citrix.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "len.brown@intel.com" <len.brown@intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Woodhouse, David" <dwmw@amazon.co.uk>,
-        "benh@kernel.crashing.org" <benh@kernel.crashing.org>
-Message-ID: <20200715194933.GA17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <cover.1593665947.git.anchalag@amazon.com>
- <324020A7-996F-4CF8-A2F4-46957CEA5F0C@amazon.com>
- <c6688a0c-7fec-97d2-3dcc-e160e97206e6@oracle.com>
+        id S1726960AbgGOUcI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 16:32:08 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:33233 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbgGOUcH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 16:32:07 -0400
+Received: by mail-io1-f68.google.com with SMTP id d18so3709557ion.0;
+        Wed, 15 Jul 2020 13:32:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xgpaPe39mEo1k9W7lGAlknVj+R0r4vQdiUF0SkOMUw8=;
+        b=bqOYjFOM0b+cvBl+/JZNVYQR0qOD5OcVVL/B+gidid2UXi7I8utqqRE6kMK8PZizEP
+         Tpo9YzG6zWSUVthYipMAyefWDXPqiuBiZSj9/mkyUaeKlnnO1D+XPi11YNj6QBLYnwU/
+         YkgdTRkIDyxlmKxzzOxyCDdqNdlAkaj3C6QtdTwOyxprhKY1f8uPz7CzG7UjGIw7mT/H
+         HFjHHSNxCGF4MRFI3x/+bV1bi54NTFvDVDNI9ybkE1AbHTsK21pBll2nlMpIsjU6glXz
+         NN1tdOsZUrUoeee2m7NYDbYjqE3orlNPgVy6w7N+WBWsgzNuGLVzx+ABZbdWolLJHf7c
+         Pp9w==
+X-Gm-Message-State: AOAM531oLRKNXQMUzVdPqVBGkOM9jPZgF+aAyWSjoidOUf1mcM+1/R43
+        TNbzst7fOUX2E0B6PYdxR1U2pRUlqw==
+X-Google-Smtp-Source: ABdhPJznWQ9ULp+AZKrH/U6yUY+gFlaVC14n5TBcxj+4CLE+vxs6itLKSVREKbLdn7XNPC7/zvYV/g==
+X-Received: by 2002:a05:6602:148f:: with SMTP id a15mr1165503iow.26.1594845126473;
+        Wed, 15 Jul 2020 13:32:06 -0700 (PDT)
+Received: from xps15 ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id v13sm1641502iox.12.2020.07.15.13.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 13:32:05 -0700 (PDT)
+Received: (nullmailer pid 769501 invoked by uid 1000);
+        Wed, 15 Jul 2020 20:32:04 -0000
+Date:   Wed, 15 Jul 2020 14:32:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: update Amit Kucheria's email to a single
+ email address
+Message-ID: <20200715203204.GA769304@bogus>
+References: <8cbb7004a6a9b846a8d827f514f33f1a265dd5d4.1593498024.git.amit.kucheria@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c6688a0c-7fec-97d2-3dcc-e160e97206e6@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <8cbb7004a6a9b846a8d827f514f33f1a265dd5d4.1593498024.git.amit.kucheria@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 03:43:33PM -0400, Boris Ostrovsky wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+On Tue, 30 Jun 2020 11:52:32 +0530, Amit Kucheria wrote:
+> Emails currently go to different mailboxes. Switch to the kernel.org
+> address so I can forward them to a single mailbox.
 > 
+> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 2 +-
+>  MAINTAINERS                                               | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> 
-> On 7/10/20 2:17 PM, Agarwal, Anchal wrote:
-> > Gentle ping on this series.
-> 
-> 
-> Have you tested save/restore?
->
-No, not with the last few series. But a good point, I will test that and get
-back to you. Do you see anything specific in the series that suggests otherwise?
 
-Thanks,
-Anchal
-> 
-> -bois
-> 
-> 
-> 
+Applied, thanks!
