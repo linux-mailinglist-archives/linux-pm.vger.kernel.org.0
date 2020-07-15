@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 796A12217EE
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 00:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 983E12217F5
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 00:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgGOWpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 18:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43346 "EHLO
+        id S1727771AbgGOWph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 18:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726660AbgGOWpd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 18:45:33 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48720C061755;
-        Wed, 15 Jul 2020 15:45:33 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id f18so4740047wrs.0;
-        Wed, 15 Jul 2020 15:45:33 -0700 (PDT)
+        with ESMTP id S1726660AbgGOWpg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 18:45:36 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDC8C061755;
+        Wed, 15 Jul 2020 15:45:35 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a6so4707833wrm.4;
+        Wed, 15 Jul 2020 15:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=la4qm6vspXOJfm9KXsdHliICfFa0lZg8lLjiPV4UsfU=;
-        b=OCHL4KJEJK9ziZzNh1qGADUHvDHQbBolLbT1SaZsUTAFKSLTzQMOPoaSrwV0wQDgzY
-         h7Vt+5UTHqfm9faomfb6XfLSxjXkr1IFLN862ngzq3/0/jXFqT5ndSaNwvaPFNipgOOs
-         axYreCkhm1/1Rc25buR2LmUOa4cdOJrUxcHccryKq4MtYVR74xNHQhNXAVAwzJvYNhlZ
-         R6WY7jNSH55bLUdRS9atC8D5/x6TJGwf5+6keE7MZjacghrCuNUkrsz8BOO4QH4c/PYC
-         Gl5+BoC9N5IhIl+uWAxrNd09Ev74MWYNJNQE/3z+j4fMI5Gbt4POvMIpaj6UpHPsfxeu
-         qNow==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=yQxWpRgQb3Xq+P5ehR8ew7q9vK97Ab3OJ4StJNb/DKE=;
+        b=Cc3Q0MhlbMUqI2mmJ4bjZ179I+46uu9zKgkpNPgpJOm3L/hq/V0QhAJdofKy6Z2OVT
+         eL+NI6Nl9UeopwhGW+y7+LPnEJjBE2wi4hri9+3ivsQ+LoBV7yxSWNFCogPIlVcWAfCi
+         pArSktSFfGpBXCXIIQzVOMUrh41iHsFQin8wP1ep2mhNzAB9h9oJDDVssuyUVe5aSAMA
+         bSkP9E8pPkJ1d4A38mwCK6THKgNXYBj9hbw+OHYiKQZvTFOc63rXufRT9DGc4OBTfXUh
+         TwQ+cLWaKUYkXRbIHGiBeaND5vfo4jGERYu5MUGeOspSoWVi1kH0vyV7a/EBhykNVUu0
+         U8Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=la4qm6vspXOJfm9KXsdHliICfFa0lZg8lLjiPV4UsfU=;
-        b=kuv7uffZqQiWgAd1GK9CoNTUSsIR3aRa0C7KcVFIslqBEUoCgmU0uYALhABRvyCUtX
-         qyQLVtEQj83QkycY5Hc4V60n2NYnyPBGNcZBDlyzwxVf6x5Dshq4E2k36JUDRw49Hvj9
-         sOwHLQ8p3xgLzHFwi62qy8cNQevtPv3NcZOuMKrNT79ByMN9zc1gLYqmT0Om+QZbm8Kt
-         rt8YsF5qbmuTar5X0YU1ca8AjczDOt/XIlv+20A9yYT2vYs69I1moWUKTB/2XiIELCzl
-         Gwmtar4c++ErGNCEDwmFuO0aRWPKt3j2GGKuPq2SaxM1pTV8q0qQdhKXcT+fuhTlxwCe
-         gDEQ==
-X-Gm-Message-State: AOAM533Ph2wxcPOHIzPcWX2FvErxy9rmXVaBJ7XhV29GQfWo/fs70XEG
-        am9oKtunXzJ5Gb84eUQaTqA=
-X-Google-Smtp-Source: ABdhPJxWAWBMJDcpCZDM3vJwoFjC/Aa00uTi9xyZVOCAE++3I4d/cu3sCiWcekzqs4P5EZFsIgVsHg==
-X-Received: by 2002:adf:fd46:: with SMTP id h6mr1951616wrs.105.1594853131852;
-        Wed, 15 Jul 2020 15:45:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=yQxWpRgQb3Xq+P5ehR8ew7q9vK97Ab3OJ4StJNb/DKE=;
+        b=saRxwr8MjYBbUN66wYevt4LptoYoqN5Mh2c76qu7HtaVPKbpZh3deevooSf4MSS2B2
+         jVVSLqlRBlgVC4LHlNiCInZffrFu3IACBkrGHgA3J5nHOHGtCFLBGcZMHqR3eE8nlt7G
+         pOBv2zaMkspygT8S2Vj9bH3hoxxv6Ca77NY/AnTu48jo2QAxXtn1YMw+mM/jjtUuuFgg
+         nFZAB9a29ES3ldz6ItrzzM6ynLrQvHsLqrteayJpctCa9KN7E1nUvrJUkdaRlWnicgP0
+         fV9PscJcPfKkvll+zMohddmGRI74RZe0ofNGXt9hxUkrvoY2d+cedjjoWThhlpZSS4gK
+         ewfA==
+X-Gm-Message-State: AOAM5337E+u6valFzzKtrwxWLbff7Xt3tSUbqllzRdC2KZ32Jpj1t/16
+        HnIEL5SeiyWdN2Bh4YSZ/zU=
+X-Google-Smtp-Source: ABdhPJynPlfZ8E65vRGR15Zc/F3arwLCSga7YwW6ZqouIkPDIQavfVH4Qflw3E24rqBWyWnXdKz/EQ==
+X-Received: by 2002:adf:ed47:: with SMTP id u7mr1939480wro.201.1594853134203;
+        Wed, 15 Jul 2020 15:45:34 -0700 (PDT)
 Received: from Ansuel-XPS.localdomain (host-87-7-31-173.retail.telecomitalia.it. [87.7.31.173])
-        by smtp.googlemail.com with ESMTPSA id b186sm5759898wme.1.2020.07.15.15.45.29
+        by smtp.googlemail.com with ESMTPSA id b186sm5759898wme.1.2020.07.15.15.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 15:45:30 -0700 (PDT)
+        Wed, 15 Jul 2020 15:45:33 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -59,10 +59,12 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v3 0/7] Add support for ipq8064 tsens
-Date:   Thu, 16 Jul 2020 00:44:55 +0200
-Message-Id: <20200715224503.30462-1-ansuelsmth@gmail.com>
+Subject: [PATCH v3 1/7] ipq806x: gcc: add support for child probe
+Date:   Thu, 16 Jul 2020 00:44:56 +0200
+Message-Id: <20200715224503.30462-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200715224503.30462-1-ansuelsmth@gmail.com>
+References: <20200715224503.30462-1-ansuelsmth@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -70,32 +72,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Ipq8064 SoCs tsens driver is based on 8960 tsens driver. This patchset 
-expand the 8960 unused driver with interrupt support and set_trip point.
-Ipq8064 needs to be registered as a gcc child as the tsens regs on
-this platform are shared with the controller.
+Add support for child probing needed for tsens driver that share the
+seme regs of gcc for this platform.
 
-v3:
-* Change driver to register as child instead of use phandle
-v2:
-* Fix dt-bindings problems
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+---
+ drivers/clk/qcom/gcc-ipq806x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ansuel Smith (7):
-  ipq806x: gcc: add support for child probe
-  drivers: thermal: tsens: try load regmap from parent for 8960
-  drivers: thermal: tsens: add ipq8064 support
-  dt-bindings: thermal: tsens: document ipq8064 bindings
-  drivers: thermal: tsens: add interrupt support for 9860 driver
-  drivers: thermal: tsens: add support for custom set_trip function
-  drivers: thermal: tsens: add set_trip support for 8960
-
- .../bindings/thermal/qcom-tsens.yaml          |  50 ++-
- drivers/clk/qcom/gcc-ipq806x.c                |   2 +-
- drivers/thermal/qcom/tsens-8960.c             | 286 +++++++++++++++++-
- drivers/thermal/qcom/tsens.c                  |   7 +
- drivers/thermal/qcom/tsens.h                  |   3 +
- 5 files changed, 325 insertions(+), 23 deletions(-)
-
+diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
+index a8456e09c44d..d6b7adb4be38 100644
+--- a/drivers/clk/qcom/gcc-ipq806x.c
++++ b/drivers/clk/qcom/gcc-ipq806x.c
+@@ -3089,7 +3089,7 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
+ 	regmap_write(regmap, 0x3cf8, 8);
+ 	regmap_write(regmap, 0x3d18, 8);
+ 
+-	return 0;
++	return of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
+ }
+ 
+ static struct platform_driver gcc_ipq806x_driver = {
 -- 
 2.27.0
 
