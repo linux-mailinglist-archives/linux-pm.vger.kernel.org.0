@@ -2,116 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E07882212E9
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 18:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 796FD221360
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 19:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgGOQrK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 12:47:10 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33496 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725861AbgGOQrJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 12:47:09 -0400
-Received: by mail-ot1-f67.google.com with SMTP id h13so1991651otr.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 09:47:08 -0700 (PDT)
+        id S1725993AbgGORMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 13:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725838AbgGORMS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 13:12:18 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69EFC061755
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 10:12:18 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id mn17so3381030pjb.4
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 10:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=fLZvnp+VlCFl1Z6yoxmKXgilfM403CskUy8duZ3791s=;
+        b=tSV0jg+u5y502Ii87glkUUbEVsf6hqHaFZzLfrVFT4kouNsspIrO0h6iwJTh+RXB0u
+         ZLoKeojRMhtUG4S2q2j3eMdTrtc1AZxZxgM4D/W7UZvAb8GiH7BuwGPMfYwU+JgUmAui
+         n++mNP9NHwovleTKgoOpJshzVAb5irL9fkX7qvdqBEZP2Fyp4gaSD3VPJp9GCXxM3Fq3
+         hlvLgLQjP/VjKlK/wsMWIQ/Tm9Ye9PGkABWbneyCaXzIkUfKW/K1BLLwio94mSX0sKHj
+         gM5pKxgCf1OjjoMgI1LPyUsCEsVgrv5vGCU/dOjFxdAl+WSbVUQO2d3WLzl4dYQl+H6F
+         UVCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X6IepPjY/ERRGkZ1QCaaoSCW0i1aZPjuUdsosr9ObGY=;
-        b=AtD0Bi0nTUsEHrDuuTDlALhS8waD9mFLT6O/Nt7zNkHbID8qQq8uAzZeP+OytYr1l+
-         1tlQauJWIQzR+ReTcVxNxGKH0cGVWl1/n8FJmd38zf9/GVxXFDLvxje301J716YhFaCT
-         4/YZhsQe8coVkZgBHuEz/CkpkAvGtTwcAIwzWpDsENayrVyU2I8MvP9xB94DkFk370Mm
-         o8xR3eLcUdRwF2kwK3a1LSFLjlUOX0ZJV/KPxmLnX0FMq9ZlWmCbtWOJFjxqMtKLqVFt
-         4gahHE/0Nhb4NN9XlIdBaTT853tN9UNK2I76v1uaOoSnSQuWyDhBZDqY2jV/aPRbvn7G
-         8CoQ==
-X-Gm-Message-State: AOAM531acGD2GCc6K5oX9vMsrI6MENoDcioA2EtNBfqstGetJirNHS6k
-        WRFzsstdLxlJuVx+pFqylVmUzBCv/JFFlTXZBVo=
-X-Google-Smtp-Source: ABdhPJzkjvIpaVvjlDaAgoZLZsbPVXqvBLMV98KeLut1T4WKwC7Bz1pAP3m283SYC61mKHfC9o5MOod9XR1XEifvHuk=
-X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr497703ots.118.1594831628210;
- Wed, 15 Jul 2020 09:47:08 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=fLZvnp+VlCFl1Z6yoxmKXgilfM403CskUy8duZ3791s=;
+        b=ggRGbl7waadYwJ3zACoqT3yvXcQ6ebtfqjFsN+Db8/xYaia25HOTqMxTTjlf8sF1FU
+         Bl8Nx3GJ1YntxKrVbxtkevSxiQ0vNNlEHVaA7yDbOV+UKiF8abBK8D1HFyr/Hdid4mx/
+         Vxr39aKkbdm3tweDJgVJbfH6qv417vsYZfEnOCtOeMwwlCDDYeG975HIuMR8mq/6Ty4o
+         L3y5MLu3G7F07tZWUKMdHviSKMRKHRWFVSHox2btBYiiLC5OiIHkfaxfPVM1ntXZfOLD
+         HFftneQgZQ6vPw0ui1bPnx/p0ZrBscV+B8oBZFPFrCc9uKPO8pYFwRKyxXBS939NeP+H
+         5pTw==
+X-Gm-Message-State: AOAM530vajklvCxQ24B5Xjlbcbyy2QUboS35k0lAV4gwYCxdhLOl+XIT
+        HIfvy97JNwTS53tOuQv9Afodfg==
+X-Google-Smtp-Source: ABdhPJx9jgLb2GI6fvOx4pzvpsBeYhdACT0el4RIjzMmdqygHQF+WRThCl2pAZGjUe+/dO2iPIdABA==
+X-Received: by 2002:a17:90a:f695:: with SMTP id cl21mr685963pjb.86.1594833138105;
+        Wed, 15 Jul 2020 10:12:18 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id b205sm2453010pfb.204.2020.07.15.10.12.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2020 10:12:17 -0700 (PDT)
+Message-ID: <5f0f38f1.1c69fb81.fd895.66bc@mx.google.com>
+Date:   Wed, 15 Jul 2020 10:12:17 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <000701d656be$c48083e0$4d818ba0$@net>
-In-Reply-To: <000701d656be$c48083e0$4d818ba0$@net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 15 Jul 2020 18:46:56 +0200
-Message-ID: <CAJZ5v0hKeHBNC2Bzdizm=42jtOqq8VOswCNNNk5HA9x_Y2T_Ng@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: EPB with performance governor
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc5-46-g8d0151344351
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 65 runs,
+ 1 regressions (v5.8-rc5-46-g8d0151344351)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 3:34 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Srinivas and/or Rafael,
->
-> Can you please confirm or deny that an older
-> commit:
->
-> commit 8442885fca09b2d26375b9fe507759879a6f661e
-> cpufreq: intel_pstate: Set EPP/EPB to 0 in performance mode
->
-> has been superseded by:
->
-> arch/x86/kernel/cpu/intel_epb.c
+pm/testing baseline: 65 runs, 1 regressions (v5.8-rc5-46-g8d0151344351)
 
-No, it hasn't.
+Regressions Summary
+-------------------
 
-However, intel_pstate only touches the EPB if EPP is not supported,
-which should become a non-issue after this patch posted by me
-yesterday: https://patchwork.kernel.org/patch/11663315/
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
 
-If EPP is supported, intel_pstate will use it and it will never look
-at the EPB even.
 
-> and that now there is no way to have some default EPB (say 6) for
-> governors other than performance, while still getting an EPB of 0
-> for the performance governor.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc5=
+-46-g8d0151344351/plan/baseline/
 
-If EPP is supported, what happens to the EPB is completely orthogonal
-to cpufreq etc.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.8-rc5-46-g8d0151344351
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      8d01513443514b97657e43e2c02ca3aff58ae0a3 =
 
-So it is possible to have the EPB different from 0, but it should be
-the same for all governors unless changed via energy_perf_bias.
 
-If EPP is not supported, though, then without the patch mentioned
-above, intel_pstate may fiddle with the EPB.
 
-> Additional notes:
-> Both my test computers have EPB as 0 upon startup,
+Test Regressions
+---------------- =
 
-That is before intel_epb_init() runs, because it will change the EPB
-to "normal" (6).
 
-> But I also tried this:
->
-> diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-> index f4dd73396f28..b536e381cd56 100644
-> --- a/arch/x86/kernel/cpu/intel_epb.c
-> +++ b/arch/x86/kernel/cpu/intel_epb.c
-> @@ -74,7 +74,8 @@ static int intel_epb_save(void)
->
->  static void intel_epb_restore(void)
->  {
-> -       u64 val = this_cpu_read(saved_epb);
-> +//     u64 val = this_cpu_read(saved_epb);
-> +       u64 val = 6;
->         u64 epb;
->
->         rdmsrl(MSR_IA32_ENERGY_PERF_BIAS, epb);
->
-> which did get rid of this message:
-> kernel: [    0.102158] ENERGY_PERF_BIAS: Set to 'normal', was 'performance'
 
-Which is exactly what happens when this message is printed.
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
 
-Instead of commenting out the line of code above, which is not a
-correct thing to do in general, you can simply set the EPB to 0 via
-energy_perf_bias for all CPUs and it should stick.
 
-Thanks!
+  Details:     https://kernelci.org/test/plan/id/5f0f2f183b6b175b1f85bb28
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc5-46-g8d0151=
+344351/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc5-46-g8d0151=
+344351/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0f2f183b6b175b=
+1f85bb2b
+      new failure (last pass: v5.8-rc5-44-g71865a3b9f0a)
+      2 lines =20
