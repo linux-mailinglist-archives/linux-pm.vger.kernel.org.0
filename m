@@ -2,101 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8548E220885
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 11:19:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083FA220910
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 11:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729623AbgGOJTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 05:19:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
+        id S1730783AbgGOJpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 05:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729549AbgGOJTM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 05:19:12 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836E0C08C5C1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:19:12 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id f139so4829791wmf.5
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:19:12 -0700 (PDT)
+        with ESMTP id S1729592AbgGOJpJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 05:45:09 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7B1C08C5C1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:45:07 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id x9so2177067plr.2
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 02:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6S4rQcbbTZAnnQ2mAS4yWMNRrJk1s3+AGlDrxLO8KXg=;
-        b=ZTSEyblPv2P83EojiNZREKOaW+HEbHXuQwZA+qzHoDEeevYBXsbb/m7Cv2JKaRUPSC
-         OMB2+0GdNF/GhRmuYrohmDcZPNviTo39lIFcOjNItuFg9iC6sSjI/0gxJSYjOA64Hnp/
-         V0VP57wQFxu+O9su7OIDG57xbfzaTmscPLBmK+zp8eVmLJ/IGvHVlj1ENw7MdYwUmKz0
-         3+zmUDmRqQlHD1KpGX7yMHc/YHXnDZUAQjUG1Nh03TgiZAinVyQqrl+RG0RoAOfdwKSo
-         /XLiw9utxk91lHgTqrPuKUYEs1l4gC+Xw7ZQRa8Mb3Gaf72hktg0TmZLVm29pQWo+44b
-         Yemg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=4BTTr5oucsR8JbbShHUL2XbMTStwAjQe5P0BncDXj58=;
+        b=ZiDAjjBZM/18U5oGdS+177O7tJJlRYSHzUSAe7RuMTwrs0ACtN+bj5Vbw0m+RP4NPH
+         FTONJ3j3zDRFBi+lWSl0lFFi7SsWDRcd3haI5usSaW9MdEiP5pSEiaaw6TRA4ipn7D+E
+         0PY7Zn85htsoso7JuhFupFcqKQb8r//K9EGlDqKbcPdEA0afofS2/DMj6UdomWTvtScp
+         kYjZIsAPHODHik5Xo0NOQXlzKz0x9Roae3Yw6eUgGmnnn8P1/OlOZ7C7HDIkHseLKkUI
+         0l2LtzDn74BqqRTB4jYPHTGn2lZk9HZ4dXGm8iF00EjXaN74jT/lxWmYZoqyD9Ncao+T
+         cK7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6S4rQcbbTZAnnQ2mAS4yWMNRrJk1s3+AGlDrxLO8KXg=;
-        b=B9HoJ//mMtatvuwm+Lud6UApGJw64BImOlyMBX6SV2vVackBQ8bMHAo04Qf7tJlVeA
-         ZbWyIpe6SOJTUuOdFRdkiuV/gjTeLoBfLsgvVRR4B0dzOGRNDYl/0fns6d6UWb4UKIy7
-         XNbhp7MG7droBl2GxVRmqx4kpbZZ3gYX7UoPnFG/xTVUyeRUPZL7kD8cfNAE3gBxEb18
-         32e9JbZwY8dg8CCUwljCVq/mU+q3uM/1/2Sxy3fAj0cTeP4kPEJxlwoc4xZSozp5638P
-         N2dHm1F6eqMp7vabYB4AI7XaHoT+ua3JSnnrf/zAOJEg5LLS/J+RUrJbaf0KVHbmNCfb
-         Qkgw==
-X-Gm-Message-State: AOAM531DEfuiFhDUZ5SgZsq0jkg4nKOyMiGTuwBjj4batQLN05KTJQsh
-        sCJjJJ1XrJvv1/tRiTI3ULEnoLgY6QI=
-X-Google-Smtp-Source: ABdhPJz01iAz6XrxpaOaf1z0Na2lpWh6FhP27ILMosYGk50ZrcsrE3mRryySLa/rmuI3t6DXkfpSwA==
-X-Received: by 2002:a05:600c:2295:: with SMTP id 21mr7477060wmf.87.1594804750107;
-        Wed, 15 Jul 2020 02:19:10 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9? ([2a01:e34:ed2f:f020:814b:c0b2:8c76:b6a9])
-        by smtp.googlemail.com with ESMTPSA id q3sm2371916wmq.22.2020.07.15.02.19.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2020 02:19:09 -0700 (PDT)
-Subject: Re: [PATCH] Revert "thermal: mediatek: fix register index error"
-To:     Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Collabora Kernel ML <kernel@collabora.com>, matthias.bgg@gmail.com,
-        drinkcat@chromium.org, hsinyi@chromium.org,
-        Michael Kao <michael.kao@mediatek.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20200707103412.1010823-1-enric.balletbo@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <7aa6c0a5-3fc4-fd27-ece8-d062078c6faa@linaro.org>
-Date:   Wed, 15 Jul 2020 11:19:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=4BTTr5oucsR8JbbShHUL2XbMTStwAjQe5P0BncDXj58=;
+        b=rkCbtC7BEJSVYsugYPK6cvHQGhJXkOqlxMM3J3FI2PohTkeepPOp+soz/o/XSnW6pS
+         JvNOnQOVUPWMIwRKYdUM7p+r5/k1KlPr5W83KivvHSkrWNDfzp/Rutx3iYwFhr9qL88Q
+         Lq/cFk52c3qJB7ODzjkR6Lna0/nOgBCF8JeNSyL5XxH1xDyBTOuoHTU5+7AnPPfHwZku
+         o5TjUP1Wwck59IJwQEC2WTDWRjUfGzGGZ5hBZVZlA2+1I657Iu4S34AmKQTFgc1Z8KIh
+         JeCxk8BEkviZA8a8y65EZ6PmzMg7DFkjsoUDiMtF3nCPGryYpENmg4k3XvZpfiakapFD
+         Hx2Q==
+X-Gm-Message-State: AOAM531hQmRa/ZMU8wGJJiH9rhZCUdFQnoy8siZfkiTqCtblPYA7FntK
+        UwE5Lahrn/9GawblMcmHv20KGw==
+X-Google-Smtp-Source: ABdhPJyrLXJkqRK/7BhC4BFVruLsng1ogMN6DlNeSjBGIhJnVoVhQXAvhZxEgnc3/B4w8m9S8AXf5Q==
+X-Received: by 2002:a17:902:d916:: with SMTP id c22mr7404932plz.69.1594806307293;
+        Wed, 15 Jul 2020 02:45:07 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id z13sm1605674pfq.220.2020.07.15.02.45.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jul 2020 02:45:06 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 15:15:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 06/13] cpufreq: powernv-cpufreq: Functions only used
+ in call-backs should be static
+Message-ID: <20200715094504.val6rb7wibysh7dn@vireshk-i7>
+References: <20200715082634.3024816-1-lee.jones@linaro.org>
+ <20200715082634.3024816-7-lee.jones@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20200707103412.1010823-1-enric.balletbo@collabora.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200715082634.3024816-7-lee.jones@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/07/2020 12:34, Enric Balletbo i Serra wrote:
-> This reverts commit eb9aecd90d1a39601e91cd08b90d5fee51d321a6
+On 15-07-20, 09:26, Lee Jones wrote:
+> Fixes the following W=1 kernel build warning(s):
 > 
-> The above patch is supposed to fix a register index error on mt2701. It
-> is not clear if the problem solved is a hang or just an invalid value
-> returned, my guess is the second. The patch introduces, though, a new
-> hang on MT8173 device making them unusable. So, seems reasonable, revert
-> the patch because introduces a worst issue.
+>  drivers/cpufreq/powernv-cpufreq.c:669:6: warning: no previous prototype for ‘gpstate_timer_handler’ [-Wmissing-prototypes]
+>  drivers/cpufreq/powernv-cpufreq.c:902:6: warning: no previous prototype for ‘powernv_cpufreq_work_fn’ [-Wmissing-prototypes]
 > 
-> The reason I send a revert instead of trying to fix the issue for MT8173
-> is because the information needed to fix the issue is in the datasheet
-> and is not public. So I am not really able to fix it.
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Cc: Paul Mackerras <paulus@samba.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/powernv-cpufreq.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Fixes the following bug when CONFIG_MTK_THERMAL is set on MT8173
-> devices.
+> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+> index 8646eb197cd96..068cc53abe320 100644
+> --- a/drivers/cpufreq/powernv-cpufreq.c
+> +++ b/drivers/cpufreq/powernv-cpufreq.c
+> @@ -666,7 +666,7 @@ static inline void  queue_gpstate_timer(struct global_pstate_info *gpstates)
+>   * according quadratic equation. Queues a new timer if it is still not equal
+>   * to local pstate
+>   */
+> -void gpstate_timer_handler(struct timer_list *t)
+> +static void gpstate_timer_handler(struct timer_list *t)
+>  {
+>  	struct global_pstate_info *gpstates = from_timer(gpstates, t, timer);
+>  	struct cpufreq_policy *policy = gpstates->policy;
+> @@ -899,7 +899,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
+>  	.notifier_call = powernv_cpufreq_reboot_notifier,
+>  };
+>  
+> -void powernv_cpufreq_work_fn(struct work_struct *work)
+> +static void powernv_cpufreq_work_fn(struct work_struct *work)
+>  {
+>  	struct chip *chip = container_of(work, struct chip, throttle);
+>  	struct cpufreq_policy *policy;
 
-Applied for v5.8-rc6
-
+Don't you want to drop this patch now ? As you already reviewed the
+other one on the list ?
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+viresh
