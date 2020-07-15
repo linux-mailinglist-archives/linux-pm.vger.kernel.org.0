@@ -2,148 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8FAC220162
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 02:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 071F7220277
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 04:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728177AbgGOAiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 14 Jul 2020 20:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
+        id S1727891AbgGOCoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 14 Jul 2020 22:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbgGOAiJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 20:38:09 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7D6C061755;
-        Tue, 14 Jul 2020 17:38:09 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id cm21so702119pjb.3;
-        Tue, 14 Jul 2020 17:38:09 -0700 (PDT)
+        with ESMTP id S1726768AbgGOCoh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 14 Jul 2020 22:44:37 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACC2C061755
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 19:44:37 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id i14so1034801pfu.13
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jul 2020 19:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p0+YEDfe3wI8x1UJdIu95ngNQLf6GGIEXN3WhvwT1qs=;
-        b=bdgvJSkr/yFownjUmAmOUmMS/dnvrJl7S3A0zeVF/9fk4B+CCbHG41BQ8uKKp5xTUo
-         5tY9Vip/GZ/8f2WUhStd+tNV3prueDX2F9P9rLlxwLXpSrkSZrLzxkllwST/xb7XhSUN
-         0Rouwc7By91KswhFHJ2E+gM4GShl3TMamzcCZ1OFO0ISRbewZGhoKCXNbbWdcIJLteG8
-         PDCgqQ8W/xV1AMa/tbjFBfrKsH9SFWq1nFWh0GObETNA8WAIvgj/lzimufOolSA1nzZz
-         LteXsPsH7D43WYEyTQi/ROOwkZX+UDEY4B0m5JqncEvl04jTfasvq/lf8yJdkfhpLZ/u
-         jO4w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=utvICfuCuFlpiRHbwei80u9bDXZsdPiuf5g3t7ZMbnw=;
+        b=q9VDXdFxBzmlMiYI3UsBHH3betTklXyYxBHHqFrQ6SgA8JyMP1H+mDPADCjVosU175
+         bnhS5f4vcP3eqm6d90YE2DOYNk0da4OTbHSOc+gFy4W9F7r+LBTM6z0IqOMjWGyRfVVy
+         SjE+QoJg/fdyEh2XmKlmYcF0jaXvxJ10BM43abBoK6Rhcvza+1A07hHChN9CXp0pkkpa
+         HaavUTGRheQoo3BNJNnv1ttuyYK2vlXsGMCiplQODLfs62C4FpoL3nqYWIfpZ3OWZ522
+         9sCA4UKf09ZTnVhaVqsAYXQbgPw0KCqnzARdx1kHy2B4ONjo/Jk+SKmXW9Vfr4xZMHvn
+         x1+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p0+YEDfe3wI8x1UJdIu95ngNQLf6GGIEXN3WhvwT1qs=;
-        b=f3wm7Z+vYCuXNq7/3azmL/kC7lrS2KJB8UO0f9TI/MYui5il/dZnzLy3gGX/NQY1yx
-         08ihJyKp+Tg6IpiooEU5NYV5UcPoPq3XHcGi1Vb9wUatmGqhoBdbLcBi1RQ9+hVtbfEV
-         OoxiNxJc/Re9dsmj4fLpKuL47q8RMUDXDILZxD5w+GdFttwx5rQTmlYECiXf8NYgE7Nz
-         LHkHvF3/MTPV7BsCO3mlSMeie9p/hG0knHt5otKPZRiMhoCYT68TjEC1hkV+/A2eSWOS
-         h2peolG/3UxngtphCHZuzJHdKgdJt/rJlkDOJTjk+JQUD5uSm7nNvFE3US4lpEAgeVNx
-         QAUg==
-X-Gm-Message-State: AOAM533l9jTDzkw/lHhLZnm8E1VR4oxRjI7clb+jf73WHnN1y/Cr2UfE
-        ChgbX/5ErPVuGtUblesnD1i48tK12B+HwW2R
-X-Google-Smtp-Source: ABdhPJzUPOGPru3NVFp3iyz46NiO6AIG+9uLfHIBvCSsklAQbvc1+uJqbRkN3cL+vihDK6CrvucJxA==
-X-Received: by 2002:a17:90a:9ea:: with SMTP id 97mr7362596pjo.8.1594773488945;
-        Tue, 14 Jul 2020 17:38:08 -0700 (PDT)
-Received: from xiaomi.mioffice.cn ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id t126sm266156pfd.214.2020.07.14.17.38.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 17:38:08 -0700 (PDT)
-From:   Qiwu Huang <yanziily@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
-        Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v3 5/5] power: supply: core: supply battery soc with decimal form
-Date:   Wed, 15 Jul 2020 08:35:23 +0800
-Message-Id: <7f59501fb0566895ea8d6656010c52f2a6a18ef8.1594726859.git.huangqiwu@xiaomi.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <cover.1594726859.git.huangqiwu@xiaomi.com>
-References: <cover.1594726859.git.huangqiwu@xiaomi.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=utvICfuCuFlpiRHbwei80u9bDXZsdPiuf5g3t7ZMbnw=;
+        b=DkwkmIgxYXX8qrRYlZh6NVZM2XH2/YOrAmGRGT+GOZMnufEbhKziFe+iQWEzfsENK3
+         RRJCU5HqYeyx1LKUQ3WQwe/jNjjRNIo+7932OEMQqSd2x1QXOL75Izq7BfUVhNErXPXA
+         pDEgdtForH48dNkMVnQAUq1suIG16TUaqR2O9b4iM87BG1MF+1A4K6m7snFxQwVohbQQ
+         kqIcG57nth5mCmW5v0VjAMxUjQ2IJcYIu6xDhbkSrtt65JnBH7ptp1ZXw7Em9hKLD4xs
+         ETFyXcjdnPqg3cuRjEIr6yqIFfGW4A/xD79MbBSsV4mvn3mGOQIHc8gwSIDW98IRKlY/
+         3Qrg==
+X-Gm-Message-State: AOAM533k6+MWyQGyxkSsQf9SyB4wyDJgn/8Yoyyno4JENkuLTBPSzBFR
+        Fw/hDKD1KTQWo2TmTRbAiEYGJQ==
+X-Google-Smtp-Source: ABdhPJyRJ0HV5M9ZKqN55OluXspx9XGOP93G5a6RQoMdeI3te8Tt8fRFF+88f39xp71NRuYXVUzQTA==
+X-Received: by 2002:aa7:9424:: with SMTP id y4mr644985pfo.287.1594781076764;
+        Tue, 14 Jul 2020 19:44:36 -0700 (PDT)
+Received: from localhost ([122.172.34.142])
+        by smtp.gmail.com with ESMTPSA id s194sm408224pgs.24.2020.07.14.19.44.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Jul 2020 19:44:36 -0700 (PDT)
+Date:   Wed, 15 Jul 2020 08:14:34 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dominik Brodowski <linux@brodo.de>
+Subject: Re: [PATCH 01/13] cpufreq: freq_table: Demote obvious misuse of
+ kerneldoc to standard comment blocks
+Message-ID: <20200715024434.ttnkq7mfwylgkiec@vireshk-i7>
+References: <20200714145049.2496163-1-lee.jones@linaro.org>
+ <20200714145049.2496163-2-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714145049.2496163-2-lee.jones@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Qiwu Huang <huangqiwu@xiaomi.com>
+On 14-07-20, 15:50, Lee Jones wrote:
+> No attempt has been made to document any of the demoted functions here.
+> 
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/cpufreq/freq_table.c:229: warning: Function parameter or member 'policy' not described in 'show_available_freqs'
+>  drivers/cpufreq/freq_table.c:229: warning: Function parameter or member 'buf' not described in 'show_available_freqs'
+>  drivers/cpufreq/freq_table.c:229: warning: Function parameter or member 'show_boost' not described in 'show_available_freqs'
+>  drivers/cpufreq/freq_table.c:269: warning: Function parameter or member 'policy' not described in 'scaling_available_frequencies_show'
+>  drivers/cpufreq/freq_table.c:269: warning: Function parameter or member 'buf' not described in 'scaling_available_frequencies_show'
+>  drivers/cpufreq/freq_table.c:281: warning: Function parameter or member 'policy' not described in 'scaling_boost_frequencies_show'
+>  drivers/cpufreq/freq_table.c:281: warning: Function parameter or member 'buf' not described in 'scaling_boost_frequencies_show'
+> 
+> Cc: Dominik Brodowski <linux@brodo.de>
+> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/cpufreq/freq_table.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+> index e117b0059123e..f839dc9852c08 100644
+> --- a/drivers/cpufreq/freq_table.c
+> +++ b/drivers/cpufreq/freq_table.c
+> @@ -221,7 +221,7 @@ int cpufreq_frequency_table_get_index(struct cpufreq_policy *policy,
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_frequency_table_get_index);
+>  
+> -/**
+> +/*
+>   * show_available_freqs - show available frequencies for the specified CPU
+>   */
+>  static ssize_t show_available_freqs(struct cpufreq_policy *policy, char *buf,
+> @@ -260,7 +260,7 @@ static ssize_t show_available_freqs(struct cpufreq_policy *policy, char *buf,
+>  struct freq_attr cpufreq_freq_attr_##_name##_freqs =     \
+>  __ATTR_RO(_name##_frequencies)
+>  
+> -/**
+> +/*
+>   * show_scaling_available_frequencies - show available normal frequencies for
+>   * the specified CPU
+>   */
+> @@ -272,7 +272,7 @@ static ssize_t scaling_available_frequencies_show(struct cpufreq_policy *policy,
+>  cpufreq_attr_available_freq(scaling_available);
+>  EXPORT_SYMBOL_GPL(cpufreq_freq_attr_scaling_available_freqs);
+>  
+> -/**
+> +/*
+>   * show_available_boost_freqs - show available boost frequencies for
+>   * the specified CPU
+>   */
 
-Broadcast battery soc with decimal form.
-soc_decimal is the decimal part of battery soc.
-soc_decimal_rate is update frequency of decimal
-part of battery soc.
-We want to report such as 0.01 to 99.99% to
-user space to improve user experience
-when do very quick charging.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
----
- Documentation/ABI/testing/sysfs-class-power | 25 +++++++++++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  2 ++
- include/linux/power_supply.h                |  2 ++
- 3 files changed, 29 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 54647d6995d3..5e0bba3e1930 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -349,6 +349,31 @@ Description:
- 		Access: Read
- 		Valid values: Represented in microvolts
- 
-+What:		/sys/class/power_supply/<supply_name>/soc_decimal,
-+Date:		Jul 2020
-+Contact:	jiangfei1@xiaomi.com
-+Description:
-+		Broadcast battery soc with decimal form.Battery soc(0 - 100 percent)
-+		is fine grain representation of battery capacity.
-+		soc_decimal is the start decimal part of battery soc.
-+		For example, soc_decimal value is 30 for 80.30%.
-+
-+		Access: Read
-+		Valid values: 0 - 99
-+
-+What:		/sys/class/power_supply/<supply_name>/soc_decimal_rate,
-+Date:		Jul 2020
-+Contact:	jiangfei1@xiaomi.com
-+Description:
-+		Broadcast battery soc with decimal form.Battery soc(0 - 100 percent)
-+		is fine grain representation of battery capacity.
-+		soc_decimal_rate is update rate for decimal part of battery soc.
-+		The value is depend on charging power. Soc decimal change faster
-+		with larger charging power.
-+
-+		Access: Read
-+		Valid values: 1 - 100
-+
- ===== USB Properties =====
- 
- What: 		/sys/class/power_supply/<supply_name>/current_avg
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 81916b6b6ccf..a837addb4f21 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -210,6 +210,8 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(TX_ADAPTER),
- 	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
- 	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
-+	POWER_SUPPLY_ATTR(SOC_DECIMAL),
-+	POWER_SUPPLY_ATTR(SOC_DECIMAL_RATE),
- };
- 
- static struct attribute *
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index a87ae1fff8d1..71e7c8010bde 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -171,6 +171,8 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_TX_ADAPTER,
- 	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
- 	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
-+	POWER_SUPPLY_PROP_SOC_DECIMAL,
-+	POWER_SUPPLY_PROP_SOC_DECIMAL_RATE,
- };
- 
- enum power_supply_type {
 -- 
-2.27.0
-
+viresh
