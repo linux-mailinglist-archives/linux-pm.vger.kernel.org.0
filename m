@@ -2,141 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C922206D4
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:15:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADDE2206E3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 10:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729648AbgGOIPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 04:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726201AbgGOIPW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 04:15:22 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001CAC061755
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:15:21 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id f18so1491834wrs.0
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 01:15:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=V6iOQn1Lci+q2i98jVN1XTnGz+Hdxpv3vM8VpJ0S+A4=;
-        b=Eo5oREcFHhZXozrzcYRD2JWcOY62qWjJx/ikx+izFFRRQlFSm3LkxjcNRo7W4jftdw
-         OT46EtdbcYELcxrrX4573eqhkuXexsQEidpGP0IqFGfV3QGzWWhlOv7B7xVTUXKYFEph
-         ZbNl+aLguuorGcF2N2/Fk21KaYytnYjmzgOiKS6CkMtevjcWf/pdZq7CaHWvEcVFONFu
-         GtSkZLE4zPAhj12kQBrIdXliiBDEWSoUCbUQuSgjdWJ/XjyCI2YoC0YMYUfLIPw7mZLv
-         aR03zAHQgulnkuoYZCxoYXS/RqhyIRx8G6pkumIRMZeb9Ar5cf89hcp+Lv7zKTELW9Wz
-         9Oow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=V6iOQn1Lci+q2i98jVN1XTnGz+Hdxpv3vM8VpJ0S+A4=;
-        b=agYHwuJ4I6Q8gk0IFMeu8kX6El8QfpljKK4HZs+5tnAKYpPBItwYTNIiZmRU4EU8VZ
-         NjvN8YQvAGidmhrwtKLwL+nQi7+U7X+kMYiNDS39GBNXkns9op2ggm8yc3tS6ex8gYYy
-         1p3/Y6aUncitYUidebeSRzofFKs/W0J89S5lS5fSwudOEI+z2Z5X2sg1++AYI4fbeUGb
-         gGyuWvfwnZfPjK8Yo21jfxz64Et+b7eFSX+Z0KULJMHT9TgCMm1J8AWZLUx34bgd2W4v
-         BDD/OI4H8oAN3rez5jv509LPA+LqJW3gjwmDtat5w+lg4IeR8ysCD4P/Sb0CkzeEV73N
-         aCCw==
-X-Gm-Message-State: AOAM531qPBPIJLg1BaLt6BK5dgU4fNdWjrElQv/xUe6wDVmuAHb8HsJ+
-        RVj6vsR7EqR6UuvTMhaQ9BemEDQXic8=
-X-Google-Smtp-Source: ABdhPJwd+NKXVIjT54d4zwOzR0bqm0ITLJ5fYWXqUhjjUznee1tbkVt+fBHedhAAyIzddgA6Opsg+Q==
-X-Received: by 2002:a5d:5441:: with SMTP id w1mr9526333wrv.381.1594800920670;
-        Wed, 15 Jul 2020 01:15:20 -0700 (PDT)
-Received: from dell ([2.31.163.61])
-        by smtp.gmail.com with ESMTPSA id t2sm2186116wma.43.2020.07.15.01.15.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 01:15:20 -0700 (PDT)
-Date:   Wed, 15 Jul 2020 09:15:18 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rjw@rjwysocki.net, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Venkatesh Pallipadi <venkatesh.pallipadi@intel.com>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Alexander Clouter <alex@digriz.org.uk>
-Subject: Re: [PATCH 03/13] cpufreq: cpufreq_governor: Demote
- store_sampling_rate() header to standard comment block
-Message-ID: <20200715081518.GA1398296@dell>
-References: <20200714145049.2496163-1-lee.jones@linaro.org>
- <20200714145049.2496163-4-lee.jones@linaro.org>
- <20200715025249.ukoqup4piqiz5lim@vireshk-i7>
- <20200715064539.GS1398296@dell>
- <20200715070836.l24lzkb6pgvqj26i@vireshk-i7>
- <20200715073150.GX1398296@dell>
- <20200715080236.n3gecwhidorn4rqq@vireshk-i7>
+        id S1729686AbgGOIRw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 04:17:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34480 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729609AbgGOIRw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 04:17:52 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6AA6C2067D;
+        Wed, 15 Jul 2020 08:17:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594801072;
+        bh=SvP8iyns00kbpVs5yBcwZXOYmwphb3eMqVXOlGWTykA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HhHhjzla7+qt5CngL6tg5OM8+pscX43/hxhpf0kHJwQsQVuNpjZXwGmgSDYsq3RXV
+         6dC1i4zALOwOJ56/cRJoVeZYfrOnPlYBKn4tJURD3URn3WDl4n2UBrZfMzXMP9LxeC
+         T+xIJs1imS7+nrpQajRxS2+QjIWt3dX/+1R0/IKI=
+Date:   Wed, 15 Jul 2020 10:17:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Michal Miroslaw <mirq-linux@rere.qmqm.pl>
+Cc:     Chen Yu <yu.c.chen@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2][RESEND v3] PM-runtime: change the tracepoints to
+ cover all usage_count
+Message-ID: <20200715081746.GA2616388@kroah.com>
+References: <cover.1594790493.git.yu.c.chen@intel.com>
+ <395187057e486df9a4328bc6d7d4ee912967fdb3.1594790493.git.yu.c.chen@intel.com>
+ <20200715070614.GA2297388@kroah.com>
+ <20200715072728.GA18147@qmqm.qmqm.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200715080236.n3gecwhidorn4rqq@vireshk-i7>
+In-Reply-To: <20200715072728.GA18147@qmqm.qmqm.pl>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 15 Jul 2020, Viresh Kumar wrote:
-
-> On 15-07-20, 08:31, Lee Jones wrote:
-> > I'm not sure what you mean.  Kerneldoc headers are designed to be
-> > extracted and converted into mediums which are easy to read/browse.
-> > For example, see the online documentation for 'debug_object_init':
+On Wed, Jul 15, 2020 at 09:27:28AM +0200, Michal Miroslaw wrote:
+> On Wed, Jul 15, 2020 at 09:06:14AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jul 15, 2020 at 02:28:03PM +0800, Chen Yu wrote:
+> > > Commit d229290689ae ("PM-runtime: add tracepoints for usage_count changes")
+> > > has added some tracepoints to monitor the change of runtime usage, and
+> > > there is something to improve:
+> > > 1. There are some places that adjust the usage count not
+> > >    been traced yet. For example, pm_runtime_get_noresume() and
+> > >    pm_runtime_put_noidle()
+> > > 2. The change of the usage count will not be tracked if decreased
+> > >    from 1 to 0.
+> > > 
+> > > This patch intends to adjust the logic to be consistent with the
+> > > change of usage_counter, that is to say, only after the counter has
+> > > been possibly modified, we record it. Besides, all usage changes will
+> > > be shown using rpm_usage even if included by other trace points.
+> > > And these changes has helped track down the e1000e runtime issue.
+> > > 
+> > > Reviewed-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> > > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> > > ---
+> > >  drivers/base/power/runtime.c | 38 +++++++++++++++++++++++-------------
+> > >  1 file changed, 24 insertions(+), 14 deletions(-)
+> > > 
+> > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > index 85a248e196ca..5789d2624513 100644
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -1004,10 +1004,11 @@ int __pm_runtime_idle(struct device *dev, int rpmflags)
+> > >  	int retval;
+> > >  
+> > >  	if (rpmflags & RPM_GET_PUT) {
+> > > -		if (!atomic_dec_and_test(&dev->power.usage_count)) {
+> > > -			trace_rpm_usage_rcuidle(dev, rpmflags);
+> > > +		bool non_zero = !atomic_dec_and_test(&dev->power.usage_count);
+> > > +
+> > > +		trace_rpm_usage_rcuidle(dev, rpmflags);
 > > 
-> >  https://www.kernel.org/doc/html/latest/core-api/debug-objects.html?highlight=debug_object_init#c.debug_object_init
-> > 
-> > They are generally meant to be referenced/consumed.  There is even a
-> > script provided inside the kernel to find offending instances where
-> > kerneldoc headers are provided, but not *yet* referenced:
-> > 
-> >  `scripts/find-unused-docs.sh`
-> > 
-> > HINT: There are many.
-> > 
-> > There *could* be and argument to use kerneldoc *just* so you can use
-> > the kerneldoc checker `scripts/kernel-doc` (which is invoked by W=1
-> > builds), in order to ensure the parameter descriptions are kept in
-> > check.
-> > 
-> > However, in this case, there are no descriptions provided.  So, in
-> > reference to my previous question, what are your reasons for wanting
-> > to keep kerneldoc here?
+> > Why not just call trace everywhere before you do the atomic operations?
+> > Why does the trace need to be called after the operation everywhere?
 > 
-> I think the code did the right thing by keeping them as kernel doc
-> type comments. What we missed then is getting them used in the *.rst
-> documentation.
-> 
-> A simple way of doing that could be just adding this to the cpu-freq
-> rst file, like:
-> 
-> -------------------------8<-------------------------
-> Here are the bits from the in-source documentation:
-> 
-> .. kernel-doc:: include/linux/cpufreq.h
-> .. kernel-doc:: drivers/cpufreq/cpufreq.c
-> .. kernel-doc:: drivers/cpufreq/freq_table.c
-> .. kernel-doc:: drivers/cpufreq/cpufreq_governor.c
-> -------------------------8<-------------------------
-> 
-> This will make the script stop complaining about these.
+> I would argue that this is easier mentally: We trace what state the
+> device is in from now on (a "current state" for the time being) instead
+> of tracing what it was before (an information that has just expired).
 
-This will stop `scripts/find-unused-docs.sh` from mentioning these
-files as an offender, but `scripts/kernel-doc` and by extension W=1
-builds (which is the point of this patch-set) will still complain.
+Is that really the case here and you look at that atomic value somehow
+in the trace and need it?
 
-Before you add the lines above, you need to provide descriptions for
-each of the function parameters or else they will not reach the
-required standards expected of kerneldoc.
+thanks,
 
-My suggestion would be to take this (and the other) patch and
-subsequently provide your own set i) providing the required parameter
-descriptions ii) re-promoting the comment blocks to kerneldoc and iii)
-adding the aforementioned lines to the *.rst file(s).
-
-> But the layout of things wont' be very nice right now.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+greg k-h
