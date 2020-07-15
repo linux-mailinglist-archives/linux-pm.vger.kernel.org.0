@@ -2,124 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1A6221662
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 22:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7E6221691
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jul 2020 22:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726786AbgGOUji (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 16:39:38 -0400
-Received: from cmta20.telus.net ([209.171.16.93]:53941 "EHLO cmta20.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726675AbgGOUjh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 16:39:37 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id voBejhx9xljNxvoBgjp2il; Wed, 15 Jul 2020 14:39:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1594845575; bh=9fRULD8XlrgndUg5eFygGTTDWcJ/HwRXNiPujg/A/Qc=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=1fvtETkLR13imU+Vlzy1L7GOkj7CLH2z21fXJ9DDEaoqv6sxI7WRhSXOJw5fTuyT8
-         WoRFqST6TtfEllXl68MlT8KKs1qY9O9E27x87xXsanipAZ1QpcslVOcZCgybhqCL7i
-         05hY8TaopCbN43WaPsjj99Xdx/U5/0UI32Gfnkdy0lSXEfYpKOJ5yYH5dUh8HJlLry
-         WWLIFLA4M75+0zZyk9cQim6qdEAnrcvBbrvB2ycHQQYl0QItLwO/0HmF8B66Swu+sW
-         vitp5pvvbLC0KpmQ5EqaxfSup+4u/jqIFrYIMq/E+nCG0aupBu6Fb6vFUf9xoKNTRF
-         G+dhlq58AesXA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Z8aS40ZA c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
- a=gu6fZOg2AAAA:8 a=oGXUH_wexJK_5aFMPiMA:9 a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10
- a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <3955470.QvD6XneCf3@kreacher>
-In-Reply-To: <3955470.QvD6XneCf3@kreacher>
-Subject: RE: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Wed, 15 Jul 2020 13:39:29 -0700
-Message-ID: <000f01d65ae8$0c607990$25216cb0$@net>
+        id S1726356AbgGOUuA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 16:50:00 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:24689 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbgGOUuA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 16:50:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1594846198; x=1626382198;
+  h=date:from:to:cc:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:subject;
+  bh=Z0Bj5n1UQ2ZkITPj7VMLUCR260N7o5zgaQh0zJTjo9w=;
+  b=rHcL5k2EM9ZnAeTwmLHvVfBzhBqtXI1Rl1pkYVHndn+SimCjMfAyYbvm
+   LkIed8BdWvtvlWzoVFr0fnFWPLWUh51en8D7+XKd6fvXgNSA4xfxVi77k
+   wcMvUuFYp8S4c/5hPcoN7ccBPq0+YxzqUPJGGK7/Td2cKpyti0+KJf3qJ
+   s=;
+IronPort-SDR: egCxTTQAJwMI43/0aX/z8oXu3NQj1TiM9Enuy46fU6CQHIN1t4Iofu4RMoWeW9abbFwiF0d9Lw
+ DMcfZ+o0VE1A==
+X-IronPort-AV: E=Sophos;i="5.75,356,1589241600"; 
+   d="scan'208";a="42136950"
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-119b4f96.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 15 Jul 2020 20:49:55 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2a-119b4f96.us-west-2.amazon.com (Postfix) with ESMTPS id 75ECA1A289B;
+        Wed, 15 Jul 2020 20:49:53 +0000 (UTC)
+Received: from EX13D01UWB004.ant.amazon.com (10.43.161.157) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 15 Jul 2020 20:49:44 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13d01UWB004.ant.amazon.com (10.43.161.157) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 15 Jul 2020 20:49:44 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Wed, 15 Jul 2020 20:49:43 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id A13584E7C6; Wed, 15 Jul 2020 20:49:43 +0000 (UTC)
+Date:   Wed, 15 Jul 2020 20:49:43 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>,
+        <anchalag@amazon.com>
+Message-ID: <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1593665947.git.anchalag@amazon.com>
+ <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZaCuFLSnPOiWVOTIG1A3EnWVHa7QApTu8Q
-X-CMAE-Envelope: MS4wfEv3zAJX+Q5FKLqV55u0UjRRufhzfTzlTepfJsLiSoJWGqbw8G/MQ22qOAH6ryMIj4EApSXZNOoxIM3vu/LpAhtmjiuJ3Nlg9oPXDkVvj8H+g//WH7lV
- vLLp4hl4TIMSuRJLG7JXKiI3RMVZ3sY5v+cPWtimZGTorfLZ6CqGTfb4kMwIOa0p+n9V+9/8qpmrKJ/OtxZF7G5lYOc5PIRbFJt5rRTOo9Ek0kFPXfOmQ3+R
- MfBQA1vgqC82NbdXeX0JCWvKWMweqd05DuWNpYC64+0gbd2vIXYzrSlzvICQ3xxKAWO5XElfi7rvVZ6YflwlAyXVDyD/e+Gg7PuMQ/MqADph4qNUN6yD/A6C
- 5WYvxSp+zL2ekinuJuOQXZCWUwf4fWQDp3oKGaeAB0y3b1lFOS2XHffWPor5PIPAnDTZRx8SoY0LV4HEjzpEZ09kWd/gSQ==
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020.07.14 11:16 Rafael J. Wysocki wrote:
+On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-...
-> Since the passive mode hasn't worked with HWP at all, and it is not going to
-> the default for HWP systems anyway, I don't see any drawbacks related to making
-> this change, so I would consider this as 5.9 material unless there are any
-> serious objections.
-
-Good point.
-Some of the tests I do involve labour intensive post processing of data.
-I want to automate some of that work, and it will take time.
-We might be into the 5.9-rc series before I have detailed feedback.
-
-However, so far:
-
-Inverse impulse response test [1]:
-
-High level test, i5-9600K, HWP-passive (this patch), ondemand:
-3101 tests. 0 failures. (GOOD)
-
-From [1], re-stated:
-> . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate. (HWP-active - powersave)
-> . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests. 0 failures.
-
-My version of that cool Alexander named pipe test [2] serialized workflow:
-
-HWP-passive (this patch), performance: PASS.
-
-From [2], re-stated, and also re-tested.
-HWP-disabled passive - performance: FAIL.
-Although, I believe the issue to be EPB management, [3].
-
-And yes, I did see the reply to [3] that came earlier,
-And have now re-done the test, with the referenced patch added.
-It still is FAIL. I reply to the [3] thread, eventually.
-
-[1] https://marc.info/?l=linux-pm&m=159354421400342&w=2
-[2] https://marc.info/?l=linux-pm&m=159155067328641&w=2
-[3] https://marc.info/?l=linux-pm&m=159438804230744&w=2
-
-Kernel:
-
-b08284a541ad (HEAD -> k58rc5-doug) cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported
-063fd7ccabfe cpufreq: intel_pstate: Implement passive mode with HWP enabled
-730ccf5054e9 cpufreq: intel_pstate: Allow raw energy performance preference value
-bee36df01c68 cpufreq: intel_pstate: Allow enable/disable energy efficiency
-199629d8200e cpufreq: intel_pstate: Fix active mode setting from command line
-11ba468877bb (tag: v5.8-rc5, origin/master, origin/HEAD, master) Linux 5.8-rc5
-
-Rules for this work:
-
-. never use x86_energy_perf_policy.
-. For HWP disabled: never change from active to passive or via versa, but rather do it via boot.
-. after boot always check and reset the various power limit log bits that are set.
-. never compile the kernel (well, until after any tests), which will set those bits again.
-. never run prime95 high heat torture test, which will set those bits again.
-. try to never do anything else that will set those bits again.
-
-To be clear, I do allow changing governors within the context of the above rules.
-
-... Doug
-
-
+> 
+> 
+> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
+> > From: Munehisa Kamata <kamatam@amazon.com>
+> >
+> > Guest hibernation is different from xen suspend/resume/live migration.
+> > Xen save/restore does not use pm_ops as is needed by guest hibernation.
+> > Hibernation in guest follows ACPI path and is guest inititated , the
+> > hibernation image is saved within guest as compared to later modes
+> > which are xen toolstack assisted and image creation/storage is in
+> > control of hypervisor/host machine.
+> > To differentiate between Xen suspend and PM hibernation, keep track
+> > of the on-going suspend mode by mainly using a new PM notifier.
+> > Introduce simple functions which help to know the on-going suspend mode
+> > so that other Xen-related code can behave differently according to the
+> > current suspend mode.
+> > Since Xen suspend doesn't have corresponding PM event, its main logic
+> > is modfied to acquire pm_mutex and set the current mode.
+> >
+> > Though, acquirng pm_mutex is still right thing to do, we may
+> > see deadlock if PM hibernation is interrupted by Xen suspend.
+> > PM hibernation depends on xenwatch thread to process xenbus state
+> > transactions, but the thread will sleep to wait pm_mutex which is
+> > already held by PM hibernation context in the scenario. Xen shutdown
+> > code may need some changes to avoid the issue.
+> >
+> > [Anchal Agarwal: Changelog]:
+> >  RFC v1->v2: Code refactoring
+> >  v1->v2:     Remove unused functions for PM SUSPEND/PM hibernation
+> >
+> > Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+> > Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+> > ---
+> >  drivers/xen/manage.c  | 60 +++++++++++++++++++++++++++++++++++++++++++
+> >  include/xen/xen-ops.h |  1 +
+> >  2 files changed, 61 insertions(+)
+> >
+> > diff --git a/drivers/xen/manage.c b/drivers/xen/manage.c
+> > index cd046684e0d1..69833fd6cfd1 100644
+> > --- a/drivers/xen/manage.c
+> > +++ b/drivers/xen/manage.c
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/freezer.h>
+> >  #include <linux/syscore_ops.h>
+> >  #include <linux/export.h>
+> > +#include <linux/suspend.h>
+> >
+> >  #include <xen/xen.h>
+> >  #include <xen/xenbus.h>
+> > @@ -40,6 +41,20 @@ enum shutdown_state {
+> >  /* Ignore multiple shutdown requests. */
+> >  static enum shutdown_state shutting_down = SHUTDOWN_INVALID;
+> >
+> > +enum suspend_modes {
+> > +     NO_SUSPEND = 0,
+> > +     XEN_SUSPEND,
+> > +     PM_HIBERNATION,
+> > +};
+> > +
+> > +/* Protected by pm_mutex */
+> > +static enum suspend_modes suspend_mode = NO_SUSPEND;
+> > +
+> > +bool xen_is_xen_suspend(void)
+> 
+> 
+> Weren't you going to call this pv suspend? (And also --- is this suspend
+> or hibernation? Your commit messages and cover letter talk about fixing
+> hibernation).
+> 
+> 
+This is for hibernation is for pvhvm/hvm/pv-on-hvm guests as you may call it.
+The method is just there to check if "xen suspend" is in progress.
+I do not see "xen_suspend" differentiating between pv or hvm
+domain until later in the code hence, I abstracted it to xen_is_xen_suspend.
+> > +{
+> > +     return suspend_mode == XEN_SUSPEND;
+> > +}
+> > +
+> 
+> 
+> 
+> > +
+> > +static int xen_pm_notifier(struct notifier_block *notifier,
+> > +                     unsigned long pm_event, void *unused)
+> > +{
+> > +     switch (pm_event) {
+> > +     case PM_SUSPEND_PREPARE:
+> > +     case PM_HIBERNATION_PREPARE:
+> > +     case PM_RESTORE_PREPARE:
+> > +             suspend_mode = PM_HIBERNATION;
+> 
+> 
+> Do you ever use this mode? It seems to me all you care about is whether
+> or not we are doing XEN_SUSPEND. And so perhaps suspend_mode could
+> become a boolean. And then maybe even drop it altogether because it you
+> should be able to key off (shutting_down == SHUTDOWN_SUSPEND).
+> 
+> 
+The mode was left there in case its needed for restore prepare cases. But you
+are right the only thing I currently care about whether shutting_down ==
+SHUTDOWN_SUSPEND. Infact, the notifier may not be needed in first place.
+xen_is_xen_suspend could work right off the bat using 'shutting_down' variable
+itself. *I think so* I will test it on my end and send an updated patch.
+> > +             break;
+> > +     case PM_POST_SUSPEND:
+> > +     case PM_POST_RESTORE:
+> > +     case PM_POST_HIBERNATION:
+> > +             /* Set back to the default */
+> > +             suspend_mode = NO_SUSPEND;
+> > +             break;
+> > +     default:
+> > +             pr_warn("Receive unknown PM event 0x%lx\n", pm_event);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> > +     return 0;
+> > +};
+> 
+> 
+> 
+> > +static int xen_setup_pm_notifier(void)
+> > +{
+> > +     if (!xen_hvm_domain())
+> > +             return -ENODEV;
+> 
+> 
+> I forgot --- what did we decide about non-x86 (i.e. ARM)?
+It would be great to support that however, its  out of
+scope for this patch set.
+I’ll be happy to discuss it separately.
+> 
+> 
+> And PVH dom0.
+That's another good use case to make it work with however, I still
+think that should be tested/worked upon separately as the feature itself
+(PVH Dom0) is very new.
+> 
+> 
+Thanks,
+Anchal
+> -boris
+> 
+> 
+> 
