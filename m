@@ -2,125 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C262225B0
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 16:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF95D2225B6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 16:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728642AbgGPOdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 10:33:50 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:38109 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726963AbgGPOdt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 10:33:49 -0400
-Received: by mail-ot1-f66.google.com with SMTP id t18so4352360otq.5;
-        Thu, 16 Jul 2020 07:33:48 -0700 (PDT)
+        id S1728918AbgGPOeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 10:34:20 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:37240 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgGPOeU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 10:34:20 -0400
+Received: by mail-oi1-f194.google.com with SMTP id 12so5248940oir.4;
+        Thu, 16 Jul 2020 07:34:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FmiaqtUzH0VdOjrke+C8yL3r2k6iKKJuwoCUU+1s/YM=;
-        b=SHIe9Dd6mgPOaSINMbSdShOD62DSNOIwFizaP1GeWhG38LW5q9FdxjfM7mNuridxvi
-         HhcMcF21M/cDgc4/+4PVoPUQGjSRgwcQ9+FSKUq/pcZ8bNOn8c79R2TTox27NAtKbM6N
-         3Mo0MLyRl0Mbx1v/bvXsEArx5ivWzujQZL1LdboQvXLH7dNJ0PEiNO6D29nV9QvwS9Nu
-         WzFyMCZcLR4aZ3c1hpf+LNr3QFEFpXhnp5srnZh6hxJxJcfTsGscyP8taeab/MM+6rzN
-         Hb1//32CAzE+Yg/hp0RxN6F1W7sOPMoyQjQRa4lE4U8nB9MOR4ATlepZZR+qEpvSXKKy
-         M/Bw==
-X-Gm-Message-State: AOAM5318n0h1G7CcJJ1IG/7b9H9RsMIgm+dqmTZ+TDxzuHsunnJU5RqB
-        bNchN9SU0EkOt54wcLNKGStz2w6CcZCccWKszlU=
-X-Google-Smtp-Source: ABdhPJzDoG5KJMpnyJXdOop97cHDWsuuF2FHfUwLGI7w8f7tBi7EwMgj3Cmu/EikpfyS7sA/w7x1c6v2smOAQcunlfg=
-X-Received: by 2002:a9d:590a:: with SMTP id t10mr4735960oth.262.1594910028178;
- Thu, 16 Jul 2020 07:33:48 -0700 (PDT)
+        bh=pQBul9LIU8MvE2AF0ZBFrjqE0P+aZuhV6KfYrZ/uskU=;
+        b=RKm1nRGB73CviQmXUFNEoE42Aytg4WCDzTxuBBtTvoOuiduFidq/0D/VFEvQmgjXi6
+         UXzSAkT5XOjdFmZ96w9A4IMhpxTqtRWi2aft/odZbg3wKAqeKEuabpcaR1hD+FN8xqQ1
+         J6UHqHNlG4aMBwiqPqWXXuNDuGUXFLsF9RE97zxcKvyL1Sx85WSLFJKypnBSGG4sE+NL
+         bcz99wYl6yR+L6AqomFHbv5pJ+r4W0GWvnkedG3st5CwbPq3JznUrkmgP+jKHrIZWLEz
+         tIHW0074KaWvroYBIACySWlHXp36FSI32alkoJxWHlcwFrhGXcgo3aW5BK7o+gRs9FsQ
+         JNfg==
+X-Gm-Message-State: AOAM531fxpw2Acw5V+0rT8OBbwFTHgev3JWAqLgY0Q/sXtSQnbU9yE7D
+        Yx9zkkwBel15J3MNKx18zMXWrbWEn4AVldvIU0g=
+X-Google-Smtp-Source: ABdhPJxkmCvMwt3wH5UA1ImcIc1PzKMQfE7n2mGBjb6iqjzqmjPkGLZPwqGo6D/CrQeRwTxtTINrlpBkgd0p2l6Rwug=
+X-Received: by 2002:a05:6808:64a:: with SMTP id z10mr4077163oih.54.1594910058311;
+ Thu, 16 Jul 2020 07:34:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net>
- <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
- <87imeoihqs.fsf@riseup.net> <44797cd1312843e5998070aec236b1cd80c48d14.camel@linux.intel.com>
-In-Reply-To: <44797cd1312843e5998070aec236b1cd80c48d14.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 16 Jul 2020 16:33:34 +0200
-Message-ID: <CAJZ5v0hm-evY87JkG=Aru2Z_gFwcjB7XD+pJgM4iMSQJkrmtrw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-19-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594811350-14066-19-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 16 Jul 2020 16:34:06 +0200
+Message-ID: <CAMuHMdXN17TsuMEKh=a7vQeCXMJiq0EANOQqQo_Ykn_4r5NaZA@mail.gmail.com>
+Subject: Re: [PATCH 18/20] dt-bindings: can: rcar_can: Document r8a774e1 support
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 16, 2020 at 3:14 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Wed, 2020-07-15 at 14:35 -0700, Francisco Jerez wrote:
-> > "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> >
-> > > On Wed, Jul 15, 2020 at 2:09 AM Francisco Jerez <
-> > > currojerez@riseup.net> wrote:
-> > > > "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> > > >
-> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > >
->
-> [...]
->
-> > > > > I don't think that's accurate.  I've looked at hundreds of
-> > > > > traces
-> > while
-> > my series [1] was in control of HWP_REQ_MAX and I've never seen an
-> > excursion above the maximum HWP_REQ_MAX control specified by it
-> > within a
-> > given P-state domain, even while that maximum specified was well into
-> > the turbo range.  So, yeah, I agree that HWP_REQ_MAX is nothing like
-> > a
-> > hard limit, particularly when multiple threads are running on the
-> > same
-> > clock domain, but the processor will still make its best effort to
-> > limit
-> > the clock frequency to the maximum of the requested maximums, even if
-> > it
-> > happens to be within the turbo range.  That doesn't make it useless.
-> > The exact same thing can be said about controlling HWP_REQ_MIN as
-> > you're
-> > doing now in this revision of your patch, BTW.
-> >
-> > If you don't believe me here is the turbostat sample with maximum
-> > Bzy_MHz I get on the computer I'm sitting on right now while
-> > compiling a
-> > kernel on CPU0 if I set HWP_REQ_MAX to 0x1c (within the turbo range):
-> >
-> > > Core    CPU     Avg_MHz
-> > > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
-> > > -       -       757     27.03   2800    0x0000000000000000      7.1
-> > > 3    4.90
-> > > 0       0       2794    99.77   2800    0x0000000080001c04      7.1
-> > > 3    4.90
-> > > 0       2       83      2.98    2800    0x0000000080001c04
-> > > 1       1       73      2.60    2800    0x0000000080001c04
-> > > 1       3       78      2.79    2800    0x0000000080001c04
-> >
-> > With the default HWP_REQUEST:
-> >
-> > > Core    CPU     Avg_MHz
-> > > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
-> > > -       -       814     27.00   3015    0x0000000000000000      8.4
-> > > 9    6.18
-> > > 0       0       2968    98.24   3021    0x0000000080001f04      8.4
-> > > 9    6.18
-> > > 0       2       84      2.81    2982    0x0000000080001f04
-> > > 1       1       99      3.34    2961    0x0000000080001f04
-> > > 1       3       105     3.60    2921    0x0000000080001f04
->
-> Correct. In HWP mode this is possible to lower limit in turbo region
-> conditionally. In legacy mode you can't with turbo activation ratio.
->
-> But what we don't want set max and min perf and use like desired to run
-> at a P-state overriding HWP or limit the range where HWP can't do any
-> meaningful selection.
+Hi Prabhakar,
 
-That's a good point too IMO.
+On Wed, Jul 15, 2020 at 1:11 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document SoC specific bindings for RZ/G2H (R8A774E1) SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
+
+Thanks for your patch!
+
+> --- a/Documentation/devicetree/bindings/net/can/rcar_can.txt
+> +++ b/Documentation/devicetree/bindings/net/can/rcar_can.txt
+> @@ -9,6 +9,7 @@ Required properties:
+>               "renesas,can-r8a774a1" if CAN controller is a part of R8A774A1 SoC.
+>               "renesas,can-r8a774b1" if CAN controller is a part of R8A774B1 SoC.
+>               "renesas,can-r8a774c0" if CAN controller is a part of R8A774C0 SoC.
+> +             "renesas,can-r8a774e1" if CAN controller is a part of R8A774E1 SoC.
+>               "renesas,can-r8a7778" if CAN controller is a part of R8A7778 SoC.
+>               "renesas,can-r8a7779" if CAN controller is a part of R8A7779 SoC.
+>               "renesas,can-r8a7790" if CAN controller is a part of R8A7790 SoC.
+
+Please also add R8A774E1 to the list of SoCs that can use CANFD through "clkp2".
+
+With that fixed:
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
