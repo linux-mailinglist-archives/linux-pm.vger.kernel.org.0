@@ -2,231 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A399F2228B8
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 19:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09892229C6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 19:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728237AbgGPRK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 13:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44436 "EHLO
+        id S1728182AbgGPRYh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 13:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgGPRKZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 13:10:25 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48D0C061755
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jul 2020 10:10:25 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id w17so4790399otl.4
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jul 2020 10:10:25 -0700 (PDT)
+        with ESMTP id S1725867AbgGPRYh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 13:24:37 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5453C061755;
+        Thu, 16 Jul 2020 10:24:36 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id x9so8831234ljc.5;
+        Thu, 16 Jul 2020 10:24:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
+        d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=74VCADifLAjW5QPg1wIiKFbTZE5Zk+0UxL1G9qiWDfU=;
-        b=ATLY3ADcfNMXjwxTz5e/3qQ/hjPPxzPinh3EbuXsvn07xGcW/3W5O22FyyqYP+GEfn
-         ZGHbXAseThuZQfmOpBANR07eo0wZrprTqC/UAFg4zXcWMDoy4xMX6brLRi9wSMc0JNoy
-         zbmXnRJFwCuMBF9gUZb+e7STiNbM/6whKcu8E=
+        bh=hjVlWdeLydlGM9Tsn7DxLyu36+NhHY2Z/yvVPpckruQ=;
+        b=FiKx9Fwj7zyC3kMQCecAVNhoRN34gTx+1k82pLWEC5BcPLZvzz3vFofaxHQuZn0Jqd
+         3dn2K47xydzifkXtMsae/32FQS82VcY9AZcz/5ixGN7CgIMQBufG3AnlFiFlhiM+/VjX
+         CfxvV3ZMuLPmxD9lWyy9FsnSnKjrFMlxD3amNehDYulF1hLHTvnNX3oOOw4mHyJLJWJn
+         tbBEo8CKRKqdwBknVZgMZ6GXVMZnv5p9ALwSh390MypgUST8afd8hRM4KV3juasyfaCG
+         67zmPwybGzA4Kv2ggn0ZUFf4wTK1NQ9L4cJ0QnPx6PeJa5hF9hiAbyXyhv5MLXzd6pVF
+         wg+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=74VCADifLAjW5QPg1wIiKFbTZE5Zk+0UxL1G9qiWDfU=;
-        b=fFZ45h/AGVdNriNwK2LX27tOZhx9d293Vl0R9x8DRD7sxMWQQVkBLZyEKgxszVtf1W
-         Nis0IVhppqzXS1NuNbm6ebWZEb8ugb5SuLYBpD1GgY0R4vA34Y9ZEjVeciTqNBHv42hW
-         LHENIAq/Y3JTU3N8nAEvIttM5IcygRdMqCRSvbCSZj6SLKm0lySERYOmdF1kFGnmU/ao
-         OYzlsWqgxTX7HNNhZ2FiW+KU4lFCGiw4Dm5VJqlZS5/PwTuM32yJDpA8PTTCvj4oXfws
-         5M4NontAgtBdg10sUNm8vJjZ7jm3ReqgDuerRGyf5O/3og0cBi0YL/UOnHg/MoQvezyO
-         sCqQ==
-X-Gm-Message-State: AOAM533x+x4DaOiibqAtCUAtJj07PB9ZzXpLrJ0Zlze5PEmP1OJpN/pr
-        IJshMThHogryh94hseRvSDaERw==
-X-Google-Smtp-Source: ABdhPJzuDxQBmf0/WSARbFEvj0I0lNmxbC39konR22yd2dlhEBWFopRh0Q6fzhuY1pxfLBYQGaW8dQ==
-X-Received: by 2002:a9d:6b92:: with SMTP id b18mr5184027otq.367.1594919424977;
-        Thu, 16 Jul 2020 10:10:24 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t10sm1268907otd.78.2020.07.16.10.10.24
+        bh=hjVlWdeLydlGM9Tsn7DxLyu36+NhHY2Z/yvVPpckruQ=;
+        b=cr7uZRD/QpSiYpCl4hLfikb7sQocj/BAWDBmGX9IcDIgJS7GCKTPXstKxJPsyqrgbN
+         ZGDdeitEHmEQ67xn56ZjocwEablCE4YvnBwoMSV9pkCa1F9dTEsY0fK9Cnbu2cWInGGs
+         b+77zOyqUDbHEEPQBExFEMyVng98rSWGpjPXQBJKU2cqr7t+grPb45EnHRnWFbmKscH1
+         gsAuEll+JfkFuifmAd2PT2hA6Ldwf4eEZovID5h8sL0VdUgBOpp73X1yY2FSqT7c0O5V
+         zDmSfj4PxtjMimiosIJWYvDJfKew0w4q4gzUbnniLtT7UoFGyJfukZjGEY9i7Q/lGwIC
+         w0yw==
+X-Gm-Message-State: AOAM531Umyp+2juVwew2xI6yiVAJRXT9PXywZ/z6IEZxNvz3C/Wn8fAv
+        07cMSSkhy0RU1f5rng5krl8=
+X-Google-Smtp-Source: ABdhPJxWX0RDd8+gr3FZ2UQP1i3XK53rFDnArCj6U8QciBVaSnm+3qrqPz/ZL4wTBZqMD/vPldibxg==
+X-Received: by 2002:a2e:8085:: with SMTP id i5mr2631573ljg.97.1594920275133;
+        Thu, 16 Jul 2020 10:24:35 -0700 (PDT)
+Received: from [192.168.2.145] (ppp91-76-4-184.pppoe.mtu-net.ru. [91.76.4.184])
+        by smtp.googlemail.com with ESMTPSA id y18sm1160541ljn.62.2020.07.16.10.24.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2020 10:10:24 -0700 (PDT)
-Subject: Re: [PATCH] cpupower: Provide offline CPU information for cpuidle-set
- and cpufreq-set options
-To:     latha@linux.vnet.ibm.com, trenn@suse.com, shuah@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20200713075647.70036-1-latha@linux.vnet.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <839adf7f-8875-47c5-0126-038e69e638ac@linuxfoundation.org>
-Date:   Thu, 16 Jul 2020 11:10:23 -0600
+        Thu, 16 Jul 2020 10:24:34 -0700 (PDT)
+Subject: Re: [PATCH v2 1/9] dt-bindings: power: supply: Add device-tree
+ binding for Summit SMB3xx
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Heidelberg <david@ixit.cz>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Jonghwa Lee <jonghwa3.lee@samsung.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Vinay Simha BN <simhavcs@gmail.com>
+References: <20200607144113.10202-1-digetx@gmail.com>
+ <20200607144113.10202-2-digetx@gmail.com> <20200713233959.GA928559@bogus>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <8427d000-f803-6f17-3f87-fae17aceb24a@gmail.com>
+Date:   Thu, 16 Jul 2020 20:24:33 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200713075647.70036-1-latha@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200713233959.GA928559@bogus>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/13/20 1:56 AM, latha@linux.vnet.ibm.com wrote:
-> From: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+14.07.2020 02:39, Rob Herring пишет:
+> On Sun, Jun 07, 2020 at 05:41:05PM +0300, Dmitry Osipenko wrote:
+>> From: David Heidelberg <david@ixit.cz>
+>>
+>> Summit SMB3xx series is a Programmable Switching Li+ Battery Charger.
+>> This patch adds device-tree binding for Summit SMB345, SMB347 and SMB358
+>> chargers.
+>>
+>> Signed-off-by: David Heidelberg <david@ixit.cz>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  .../power/supply/summit,smb347-charger.yaml   | 165 ++++++++++++++++++
+>>  .../dt-bindings/power/summit,smb347-charger.h |  19 ++
+>>  2 files changed, 184 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
+>>  create mode 100644 include/dt-bindings/power/summit,smb347-charger.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
+>> new file mode 100644
+>> index 000000000000..eea0a6398c95
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
+>> @@ -0,0 +1,165 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/power/supply/summit,smb347-charger.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: Battery charger driver for SMB345, SMB347 and SMB358
+>> +
+>> +maintainers:
+>> +  - David Heidelberg <david@ixit.cz>
+>> +  - Dmitry Osipenko <digetx@gmail.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - summit,smb345
+>> +      - summit,smb347
+>> +      - summit,smb358
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  monitored-battery:
+>> +    description: phandle to the battery node
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +
+>> +  summit,enable-usb-charging:
+>> +    type: boolean
+>> +    description: Enable charging through USB.
+>> +
+>> +  summit,enable-otg-charging:
+>> +    type: boolean
+>> +    description: Provide power for USB OTG
+>> +
+>> +  summit,enable-mains-charging:
+>> +    type: boolean
+>> +    description: Enable charging through mains
+>> +
+>> +  summit,enable-charge-control:
+>> +    description: Enable charging control
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
+>> +      - enum:
+>> +          - 0 # SMB3XX_CHG_ENABLE_SW SW (I2C interface)
+>> +          - 1 # SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW Pin control (Active Low)
+>> +          - 2 # SMB3XX_CHG_ENABLE_PIN_ACTIVE_HIGH Pin control (Active High)
+>> +
+>> +  summit,fast-voltage-threshold-microvolt:
+>> +    description: Voltage threshold to transit to fast charge mode (in uV)
+>> +    allOf:
+>> +      - $ref: /schemas/types.yaml#/definitions/uint32
 > 
-> When a user tries to modify cpuidle or cpufreq properties on offline
-> CPUs, the tool returns success (exit status 0) but also does not provide
-> any warning message regarding offline cpus that may have been specified
-> but left unchanged. In case of all or a few CPUs being offline, it can be
-> difficult to keep track of which CPUs didn't get the new frequency or idle
-> state set. Silent failures are difficult to keep track of when there are a
-> huge number of CPUs on which the action is performed.
-> 
-> This patch adds an additional message if the user attempts to modify
-> offline cpus.
-> 
+> Anything with a standard unit suffix already has a type, so drop.
 
-The idea is good. A few comments below on implementing it with
-duplicated code in cmd_freq_set() and cmd_idle_set().
-
-Please eliminate code duplication as much as possible. Handling
-offline_cpus alloc/free similar to cpus_chosen will reduce some
-duplication.
-
-> Reported-by: Pavithra R. Prakash <pavrampu@in.ibm.com>
-> Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
-> ---
->   tools/power/cpupower/utils/cpufreq-set.c | 24 ++++++++++++++++++++++--
->   tools/power/cpupower/utils/cpuidle-set.c | 21 ++++++++++++++++++++-
->   2 files changed, 42 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
-> index 6ed82fba5aaa..87031120582a 100644
-> --- a/tools/power/cpupower/utils/cpufreq-set.c
-> +++ b/tools/power/cpupower/utils/cpufreq-set.c
-> @@ -195,10 +195,14 @@ int cmd_freq_set(int argc, char **argv)
->   	extern int optind, opterr, optopt;
->   	int ret = 0, cont = 1;
->   	int double_parm = 0, related = 0, policychange = 0;
-> +	int str_len = 0;
->   	unsigned long freq = 0;
->   	char gov[20];
-> +	char *offline_cpus_str = NULL;
->   	unsigned int cpu;
->   
-> +	struct bitmask *offline_cpus = NULL;
-> +
->   	struct cpufreq_policy new_pol = {
->   		.min = 0,
->   		.max = 0,
-> @@ -311,14 +315,21 @@ int cmd_freq_set(int argc, char **argv)
->   		}
->   	}
->   
-> +	offline_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
-> +	str_len = sysconf(_SC_NPROCESSORS_CONF) * 5;
-> +	offline_cpus_str = malloc(sizeof(char) * str_len);
->   
-
-Allocate once when cpus_chosen is allocated.
-
->   	/* loop over CPUs */
->   	for (cpu = bitmask_first(cpus_chosen);
->   	     cpu <= bitmask_last(cpus_chosen); cpu++) {
->   
-> -		if (!bitmask_isbitset(cpus_chosen, cpu) ||
-> -		    cpupower_is_cpu_online(cpu) != 1)
-> +		if (!bitmask_isbitset(cpus_chosen, cpu))
-> +			continue;
-> +
-> +		if (cpupower_is_cpu_online(cpu) != 1) {
-> +			bitmask_setbit(offline_cpus, cpu);
->   			continue;
-> +		}
->   
->   		printf(_("Setting cpu: %d\n"), cpu);
->   		ret = do_one_cpu(cpu, &new_pol, freq, policychange);
-> @@ -328,5 +339,14 @@ int cmd_freq_set(int argc, char **argv)
->   		}
->   	}
->   
-> +	if (!bitmask_isallclear(offline_cpus)) {
-> +		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
-> +		printf(_("Following CPUs are offline:\n%s\n"),
-> +			 offline_cpus_str);
-> +		printf(_("cpupower set operation was not performed on them\n"));
-> +	}
-
-Make the printing common for cmd_idle_set() and cmd_freq_set().
-Make this generic to be able to print online and offline cpus.
-
-> +	free(offline_cpus_str);
-> +	bitmask_free(offline_cpus);
-
-Free these from main()
-
-> +
->   	return 0;
->   }
-> diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-> index 569f268f4c7f..adf6543fd3d6 100644
-> --- a/tools/power/cpupower/utils/cpuidle-set.c
-> +++ b/tools/power/cpupower/utils/cpuidle-set.c
-> @@ -27,9 +27,12 @@ int cmd_idle_set(int argc, char **argv)
->   	extern char *optarg;
->   	extern int optind, opterr, optopt;
->   	int ret = 0, cont = 1, param = 0, disabled;
-> +	int str_len = 0;
->   	unsigned long long latency = 0, state_latency;
->   	unsigned int cpu = 0, idlestate = 0, idlestates = 0;
->   	char *endptr;
-> +	char *offline_cpus_str = NULL;
-> +	struct bitmask *offline_cpus = NULL;
->   
->   	do {
->   		ret = getopt_long(argc, argv, "d:e:ED:", info_opts, NULL);
-> @@ -99,14 +102,20 @@ int cmd_idle_set(int argc, char **argv)
->   	if (bitmask_isallclear(cpus_chosen))
->   		bitmask_setall(cpus_chosen);
->   
-> +	offline_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
-> +	str_len = sysconf(_SC_NPROCESSORS_CONF) * 5;
-> +	offline_cpus_str = (void *)malloc(sizeof(char) * str_len);
-> +
-
-Same comment as before.
-
->   	for (cpu = bitmask_first(cpus_chosen);
->   	     cpu <= bitmask_last(cpus_chosen); cpu++) {
->   
->   		if (!bitmask_isbitset(cpus_chosen, cpu))
->   			continue;
->   
-> -		if (cpupower_is_cpu_online(cpu) != 1)
-> +		if (cpupower_is_cpu_online(cpu) != 1) {
-> +			bitmask_setbit(offline_cpus, cpu);
->   			continue;
-> +		}
->   
->   		idlestates = cpuidle_state_count(cpu);
->   		if (idlestates <= 0)
-> @@ -181,5 +190,15 @@ int cmd_idle_set(int argc, char **argv)
->   			break;
->   		}
->   	}
-> +
-> +	if (!bitmask_isallclear(offline_cpus)) {
-> +		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
-> +		printf(_("Following CPUs are offline:\n%s\n"),
-> +			 offline_cpus_str);
-> +		printf(_("CPU idle operation was not performed on them\n"));
-> +	}
-
-Same comment as before.
-
-> +	free(offline_cpus_str);
-> +	bitmask_free(offline_cpus);
-> +
-
-Same comment as before.
->   	return EXIT_SUCCESS;
->   }
-> 
-
-thanks,
--- Shuah
+I'll correct it in the next revision, thanks!
