@@ -2,100 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33BD522255B
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 16:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6471F222557
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 16:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728960AbgGPOYq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 10:24:46 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46266 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728054AbgGPOYn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 10:24:43 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l63so5186168oih.13;
+        id S1728579AbgGPOYn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 10:24:43 -0400
+Received: from foss.arm.com ([217.140.110.172]:56610 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728521AbgGPOYn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jul 2020 10:24:43 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73178D6E;
         Thu, 16 Jul 2020 07:24:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nnjKMypguJ4/5J3zi+nKWFTG5kpjunUyDYMlZ/jwgmI=;
-        b=fljkMAfPrYpQHm6VSG9c4mw47QxwvwLX2xcyThbqNeOX0Ub890r4mKq2raSy+Kjumi
-         e0Po3Gz2uX5SmyqxQW/kbWsJe0LqKwty9vaTTM11BcgfEuRbPa0zrrJQajz2bOx8DJYE
-         sk4ZkXDuySgxHZ+4Epfturpaq0V4TDSr0RwKEgJc1hIY6kkgADcUl2Ve62C2XnZwPI6l
-         zx3hgZ1W4qPut0+6muJG3AfHCzujDD4T645a3zmslqib4BQ+y5qFrOyZ31IppDOzloGa
-         i7d3y4W/PK+KgRNhYbo9X/AMK52ztH2DArl0MCYzIL3AiIIxeCF7+p5aiLF1NPXx4E0k
-         8dXQ==
-X-Gm-Message-State: AOAM531CnzAXl+i/5IvbH6pGr5FJz0BHKzCVGeSI9CLIuAZ1JWn2aec6
-        5IWqNAGLiYIe2an6uI+ysih/OhzilYaBUW3c9oc=
-X-Google-Smtp-Source: ABdhPJyuNSqQvBAEiTGasOgiHD3JNckbgGTJFnCjccv3IdfLUIQhxKYJFQ1pLgsPHo273k3ak0/gYQzGEMNEPFjDFtA=
-X-Received: by 2002:aca:5c41:: with SMTP id q62mr3871180oib.148.1594909482264;
- Thu, 16 Jul 2020 07:24:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <1594811350-14066-8-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Jul 2020 16:24:27 +0200
-Message-ID: <CAMuHMdXJFkWn--wvuxG_o4THHiq5jtnLjNc_4LUWUSMF2mSdEQ@mail.gmail.com>
-Subject: Re: [PATCH 07/20] dt-bindings: timer: renesas,tmu: Document r8a774e1 bindings
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
+Received: from [10.37.12.25] (unknown [10.37.12.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A66283F66E;
+        Thu, 16 Jul 2020 07:24:39 -0700 (PDT)
+Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Javi Merino <javi.merino@kernel.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
+        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+References: <cover.1594707424.git.viresh.kumar@linaro.org>
+ <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
+ <20200716115605.GR10769@hirez.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <681fb3e8-d645-2558-38de-b39b372499de@arm.com>
+Date:   Thu, 16 Jul 2020 15:24:37 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200716115605.GR10769@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 1:10 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> From: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
->
-> Document RZ/G2H (R8A774E1) SoC in the Renesas TMU bindings.
->
-> Signed-off-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renesas.com>
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi Peter,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thank you for summarizing this. I've put my comments below.
 
-> ---
->  Documentation/devicetree/bindings/timer/renesas,tmu.txt | 1 +
+On 7/16/20 12:56 PM, Peter Zijlstra wrote:
+> On Tue, Jul 14, 2020 at 12:06:53PM +0530, Viresh Kumar wrote:
+>>   /**
+>> + * get_load() - get current load for a cpu
+>>    * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
+>>    * @cpu:	cpu number
+>> + * @cpu_idx:	index of the cpu
+>>    *
+>> + * Return: The current load of cpu @cpu in percentage.
+>>    */
+>>   static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
+>>   		    int cpu_idx)
+>>   {
+>> +	unsigned long util = cpu_util_cfs(cpu_rq(cpu));
+>> +	unsigned long max = arch_scale_cpu_capacity(cpu);
+>>   
+>> +	util = effective_cpu_util(cpu, util, max, ENERGY_UTIL, NULL);
+>> +	return (util * 100) / max;
+>>   }
+> 
+> So there's a number of things... let me recap a bunch of things that
+> got mentioned on IRC earlier this week and then continue from there..
+> 
+> So IPA* (or any other thermal governor) needs energy estimates for the
+> various managed devices, cpufreq_cooling, being the driver for the CPU
+> device, needs to provide that and in return receives feedback on how
+> much energy it is allowed to consume, cpufreq_cooling then dynamically
+> enables/disables OPP states.
 
-Daniel: looks like "[PATCH v3] dt-bindings: timer: renesas: tmu: Convert
-to json-schema"[1] hasn't made it into linux-next yet?
+Currently, only IPA uses the power estimation, other governors don't
+use these API functions in cpufreq_cooling.
 
-[1] https://lore.kernel.org/r/20200518081506.23423-1-geert+renesas@glider.be
+> 
+> There are actually two methods the thermal governor will use:
+> get_real_power() and get_requested_power().
+> 
+> The first isn't used anywhere in mainline, but could be implemented on
+> hardware that has energy counters (like say x86 RAPL).
 
-Gr{oetje,eeting}s,
+The first is only present as callback for registered devfreq cooling,
+which is registered by devfreq driver. If that driver provides the
+get_real_power(), it will be called from get_requested_power().
+Thus, it's likely that IPA would get real power value from HW.
 
-                        Geert
+I was planning to add it also to cpufreq_cooling callbacks years
+ago...
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> The second attempts to guesstimate power, and is the subject of this
+> patch.
+> 
+> Currently cpufreq_cooling appears to estimate the CPU energy usage by
+> calculating the percentage of idle time using the per-cpu cpustat stuff,
+> which is pretty horrific.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Even worse, it then *samples* the *current* CPU frequency at that
+particular point in time and assumes that when the CPU wasn't idle
+during that period - it had *this* frequency...
+
+> 
+> This patch then attempts to improve upon that by using the scheduler's
+> cpu_util(ENERGY_UTIL) estimate, which is also used to select OPP state
+> and improves upon avg idle. This should be a big improvement as higher
+
+IMHO this patch set doesn't address the real problem: 'sampling
+freq problem' described above. There was no issue with getting idle
+period. The avg freq was the problem, in that period when the
+CPUs were running. The model implemented in alg was also a problem.
+
+The whole period (e.g. CPU freqs which were used or idle state)
+
+^(CPU freq)
+|
+|                            sampling the current freq
+|                _______        |
+|               |      |        |
+|________       |      |        |
+|       |       |      |        |
+|       | idle  |      |________v________...
+|_ _____|_______|__________________________> (time)
+   start of period               end
+   |<------- (typically 100ms)-->|
+
+
+
+> frequency consumes more energy, but should we not also consider that:
+> 
+> 	E = C V^2 f
+> 
+> The EAS energy model has tables for the OPPs that contain this, but in
+> this case we seem to be assuming a linear enery/frequency curve, which
+> is just not the case.
+
+I am not sure if I got your point. To understand your point better
+I think some drawing would be required. I will skip this patch
+and old mainline code and focus on your proposed solution
+(because this patch set does not address 'sampling freq problem').
+
+> 
+> I suppose we could do something like **:
+> 
+> 	100 * util^3 / max^3
+> 
+> which assumes V~f.
+
+In EM we keep power values in the array and these values grow
+exponentially. Each OPP has it corresponding
+
+P_x = C (V_x)^2 f_x    , where x is the OPP id thus corresponding V,f
+
+so we have discrete power values, growing like:
+
+^(power)
+|
+|
+|                          *
+|
+|
+|                       *
+|                       |
+|                   *   |
+|                       | <----- power estimation function
+|            *          |        should not use linear 'util/max_util'
+|   *                   |        relation here *
+|_______________________|_____________> (freq)
+    opp0     opp1  opp2 opp3 opp4
+
+What is the problem
+First:
+We need to pick the right Power from the array. I would suggest
+to pick the max allowed frequency for that whole period, because
+we don't know if the CPUs were using it (it's likely).
+Second:
+Then we have the utilization, which can be considered as:
+'idle period & running period with various freq inside', lets
+call it avg performance in that whole period.
+Third:
+Try to estimate the power used in that whole period having
+the avg performance and max performance.
+
+What you are suggesting is to travel that [*] line in
+non-linear fashion, but in (util^3)/(max_util^3). Which means
+it goes down faster when the utilization drops.
+I think it is too aggressive, e.g.
+500^3 / 1024^3 = 0.116  <--- very little, ~12%
+200^3 / 300^3  = 0.296
+
+Peter could you confirm if I understood you correct?
+This is quite important bit for me.
+
+> 
+> Another point is that cpu_util() vs turbo is a bit iffy, and to that,
+> things like x86-APERF/MPERF and ARM-AMU got mentioned. Those might also
+> have the benefit of giving you values that match your own sampling
+> interval (100ms), where the sched stuff is PELT (64,32.. based).
+> 
+> So what I've been thinking is that cpufreq drivers ought to be able to
+> supply this method, and only when they lack, can the cpufreq-governor
+> (schedutil) install a fallback. And then cpufreq-cooling can use
+> whatever is provided (through the cpufreq interfaces).
+> 
+> That way, we:
+> 
+>   1) don't have to export anything
+>   2) get arch drivers to provide something 'better'
+> 
+> 
+> Does that sounds like something sensible?
+> 
+
+Yes, make sense. Please also keep in mind that this
+utilization somehow must be mapped into power in a proper way.
+I am currently working on addressing all of these problems
+(including this correlation).
+
+Thank you for your time spending on it and your suggestions.
+
+Regards,
+Lukasz
+
+> 
+> 
+> 
+> [*] I always want a beer when I see that name :-)
+> 
+> [**] I despise code that uses percentages, computers suck at
+> /100 and there is no reason not to use any other random fraction, so why
+> pick a bad one.
+> 
