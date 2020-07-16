@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A00F92219F0
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 04:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A145E221A02
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 04:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbgGPC2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 22:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S1728119AbgGPC2y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 22:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727883AbgGPC22 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 22:28:28 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE9EC061755;
-        Wed, 15 Jul 2020 19:28:28 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id a6so5249936wrm.4;
-        Wed, 15 Jul 2020 19:28:27 -0700 (PDT)
+        with ESMTP id S1726479AbgGPC2b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 22:28:31 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6E9C061755;
+        Wed, 15 Jul 2020 19:28:30 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id 22so8096058wmg.1;
+        Wed, 15 Jul 2020 19:28:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NMGpsGsTomyvbhuxUBbF2KBZ5U7/Gj4W0Zm7Cz/Tuck=;
-        b=l8cR4NU56aOZ3mHbYkRDNMhvVeRyLGj1gne9YoLCdF45QWddvdGfSTQoVMt4jSHnan
-         sD1BLjXjlUbcUyWf9KYEzw7XkXdBpsv/zXhJ4UZo+23E8TX9y7iWGrxxPviqy76fCR20
-         an/vgp6jlxa1LmK+X6s6ZfZxdkqae5svzQAb33Po1C8G8E98cUFjxVomblId6v8P+LtI
-         ppkeAMnCIc6DNCYcG3RLxrqglDo/pD1AxP4IgXlwr7CNu8Z92t0C52OnRYLi/PLpbgV/
-         tGMlzNoEoIyBrghcBIAZYgrUFK8AOzG05tFHDd4bh/rfq83JNqZI1JwpQbRSJBG65sO7
-         DQDA==
+        bh=jsnFEaPOATe0rU74z4wmdx5Snp9SyB/gn+FbmEyk+5U=;
+        b=BJCEiCgjoizQk0MuwZnjC++IpUrRbuW2pdRAaA62MIRcfaclEvyOXR/tD9ejUx8GMS
+         mF90akZODSnNpjz6Uv4bahWA3cNTRYJUF2aXKAsCNiWNRsllo/6WH5fXcXS2s0t4XrHX
+         lzcNf/9rpffayJ8OKYukNpZHVJO/m1A8HBwouPwdkhMZlHWunkMej7lXrK1gJc8o+H5d
+         URbglFqcIogn5Oj3ZKJdVO5cTaZMaQk5jGAP1KB+VVWMaCatsUOq+tyaQ99Bg78Jju41
+         wMxTLmnysHeG8DpPr9a0EHs1ezob1S+rOScTOxEALW9jw4oZfjilpq28K6UoEwCafva6
+         JGHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NMGpsGsTomyvbhuxUBbF2KBZ5U7/Gj4W0Zm7Cz/Tuck=;
-        b=OckZ1HD/sZke8VDowamon4DymowUkxPa5TSZguOYNffk/OiGoA0RLeED17kQN0KZXM
-         qG28hqax8BSLURGhoDc5MVEZsVRMfGmhanrCrlowtsc0MHdoni/hEgWRZJvBslYDKdr7
-         q3Za3RUtG7+ZibHznouhhPqFWSgPMbx0LSAxgiJo8ZNmZuh67ZUPa6SHYbriUJIxJprF
-         Cv1ysY+l23cOCzSIS7wxvUGz0shbOquzn4K8KoITjzeU7ZrAKb+Oq7eS6nZDYSktYyoo
-         nHHuEsApfTP0fYouAfv8MaO6RWJgLJfZxLMXTL+YHr3LXrMhVh87y9ZbNK4IdvZ/o6gt
-         MHYg==
-X-Gm-Message-State: AOAM531w4MR8OblfKA2biQSrU9KJa/qwK53cQNwuKSznq5dkquVEVPRf
-        CFblrJvfo6KqITVtj7UyuZU=
-X-Google-Smtp-Source: ABdhPJxJAsBtiMpZ3+Al418gUaONCeToX/sTi4riGXieRkPadBAWYCNCqBF6C+rfo4Gp8wicLCmFNg==
-X-Received: by 2002:adf:e9c4:: with SMTP id l4mr2644495wrn.9.1594866506692;
-        Wed, 15 Jul 2020 19:28:26 -0700 (PDT)
+        bh=jsnFEaPOATe0rU74z4wmdx5Snp9SyB/gn+FbmEyk+5U=;
+        b=NPAHDXY218eCwiUwzLshGJ4bp0tvHWjhcEvTCnFHTfuIRYNH8zHgi791DgJK3Hdjcz
+         QNsKPu5czYgTXyNGsyJoEild7alFUzrQujAMmcxdbVDhuB0VKmwvSeH0Dbb+9U6PzcSc
+         sqL3Uvm4041NRd3PyNOXSyLOXQonazQkWCXceYqD92+OgAWcsBehtkFSIdOvHLp9tHoB
+         S4G2auskHd+HodUciACZcGrGnMQkdhe2taZhKPqW5JD91uShjHL9pgvxmLGtsb0XYxN1
+         mVzAs+Uj53U/Sega/4Xe2B/Lh0GeImZGmFUYYHyC+/S8o7oU3hKCjtt8bA2fNZRFfETd
+         Q/vw==
+X-Gm-Message-State: AOAM530tTvTNceZdCm3jwrvgEeakYMLel1J2T20JU8JA0ySjpp0GZ71F
+        GSBvWuDms3TQxwLYVcK1EHw=
+X-Google-Smtp-Source: ABdhPJzCJ+vAQ/QeXIWzlb11w/o7pwBiMD7vR0FI/Iqs4NB5SM67+6BkbQd4gbRfAjNy7ipBfFR+ig==
+X-Received: by 2002:a05:600c:2050:: with SMTP id p16mr2179009wmg.44.1594866508949;
+        Wed, 15 Jul 2020 19:28:28 -0700 (PDT)
 Received: from Ansuel-XPS.localdomain (host-87-7-31-173.retail.telecomitalia.it. [87.7.31.173])
-        by smtp.googlemail.com with ESMTPSA id u1sm7477611wrb.78.2020.07.15.19.28.25
+        by smtp.googlemail.com with ESMTPSA id u1sm7477611wrb.78.2020.07.15.19.28.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jul 2020 19:28:26 -0700 (PDT)
+        Wed, 15 Jul 2020 19:28:28 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: [PATCH v4 2/7] drivers: thermal: tsens: try load regmap from parent for 8960
-Date:   Thu, 16 Jul 2020 04:28:11 +0200
-Message-Id: <20200716022817.30439-3-ansuelsmth@gmail.com>
+Subject: [PATCH v4 3/7] drivers: thermal: tsens: add ipq8064 support
+Date:   Thu, 16 Jul 2020 04:28:12 +0200
+Message-Id: <20200716022817.30439-4-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200716022817.30439-1-ansuelsmth@gmail.com>
 References: <20200716022817.30439-1-ansuelsmth@gmail.com>
@@ -72,46 +72,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Devices based on 8060 tsens driver (ipq8064) use the reg of the gcc
-driver. Try to load the regmap of the parent as they share the same
-regs.
+Ipq8064 SoCs based use the same 8960 driver.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/thermal/qcom/tsens-8960.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/thermal/qcom/tsens.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
-index 2a28a5af209e..45788eb3c666 100644
---- a/drivers/thermal/qcom/tsens-8960.c
-+++ b/drivers/thermal/qcom/tsens-8960.c
-@@ -7,6 +7,7 @@
- #include <linux/delay.h>
- #include <linux/bitops.h>
- #include <linux/regmap.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/thermal.h>
- #include "tsens.h"
- 
-@@ -168,8 +169,17 @@ static int init_8960(struct tsens_priv *priv)
- 	u32 reg_cntl;
- 
- 	priv->tm_map = dev_get_regmap(priv->dev, NULL);
--	if (!priv->tm_map)
-+	if (!priv->tm_map) {
-+		struct device *parent = priv->dev->parent;
-+
-+		if (parent)
-+			priv->tm_map = syscon_node_to_regmap(parent->of_node);
-+	}
-+
-+	if (!priv->tm_map || IS_ERR(priv->tm_map)) {
-+		dev_err(priv->dev, "failed to get tsens regmap\n");
- 		return -ENODEV;
-+	}
- 
- 	/*
- 	 * The status registers for each sensor are discontiguous
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index 39c4462e38f6..23f63dfbf13d 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -906,6 +906,9 @@ static const struct of_device_id tsens_table[] = {
+ 	}, {
+ 		.compatible = "qcom,msm8996-tsens",
+ 		.data = &data_8996,
++	}, {
++		.compatible = "qcom,ipq8064-tsens",
++		.data = &data_8960,
+ 	}, {
+ 		.compatible = "qcom,tsens-v1",
+ 		.data = &data_tsens_v1,
 -- 
 2.27.0
 
