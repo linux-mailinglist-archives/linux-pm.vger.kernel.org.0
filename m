@@ -2,79 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC23221E68
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 10:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2E1221F11
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 10:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgGPIbU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 04:31:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727883AbgGPIbT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 16 Jul 2020 04:31:19 -0400
-Received: from pali.im (pali.im [31.31.79.79])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1ED4E20771;
-        Thu, 16 Jul 2020 08:31:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1594888279;
-        bh=GzFI9I6+K4axw7cYstVenNEukmi1BijumC9HWik5Nfs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nssIDpoby9zjwgo2NHCCkUxkO0RftC4dVhWeH1CB87j44KdTcJSh/p1tMb92MZSvs
-         Hvi6fiAAMeD15leFU8RYmO9qWsLyvl6cVGjCzXKGGkxag3Ov4braMP9TiCoz25Cr/f
-         +syHFqNoXkdJ9xT+L3sPUtsYFfDX1T4LVQK7hR+0=
-Received: by pali.im (Postfix)
-        id C8D14E7A; Thu, 16 Jul 2020 10:31:16 +0200 (CEST)
-Date:   Thu, 16 Jul 2020 10:31:16 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
+        id S1726239AbgGPIy5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 04:54:57 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:7760 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726013AbgGPIy4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 16 Jul 2020 04:54:56 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id ACAD59071DE4AB4BA700;
+        Thu, 16 Jul 2020 16:54:54 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS414-HUB.china.huawei.com (10.3.19.214) with Microsoft SMTP Server id
+ 14.3.487.0; Thu, 16 Jul 2020 16:54:53 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH] power: fix duplicated words in bq2415x_charger.h
-Message-ID: <20200716083116.oqio4clyotjqy5vw@pali>
-References: <74a380ee-d0a7-a58b-5740-6f1049d05d76@infradead.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] power: Convert to DEFINE_SHOW_ATTRIBUTE
+Date:   Thu, 16 Jul 2020 16:58:49 +0800
+Message-ID: <20200716085849.11571-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <74a380ee-d0a7-a58b-5740-6f1049d05d76@infradead.org>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday 15 July 2020 18:30:01 Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Drop the doubled word "for".
-> Change "It it" to "If it".
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Pali Rohár <pali@kernel.org>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-pm@vger.kernel.org
+From: Yongqiang Liu <liuyongqiang13@huawei.com>
 
-Thanks!
+Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
 
-Acked-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+---
+ drivers/power/supply/da9030_battery.c | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-> ---
->  include/linux/power/bq2415x_charger.h |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- linux-next-20200714.orig/include/linux/power/bq2415x_charger.h
-> +++ linux-next-20200714/include/linux/power/bq2415x_charger.h
-> @@ -14,8 +14,8 @@
->   * value is -1 then default chip value (specified in datasheet) will be
->   * used.
->   *
-> - * Value resistor_sense is needed for for configuring charge and
-> - * termination current. It it is less or equal to zero, configuring charge
-> + * Value resistor_sense is needed for configuring charge and
-> + * termination current. If it is less or equal to zero, configuring charge
->   * and termination current will not be possible.
->   *
->   * For automode support is needed to provide name of power supply device
-> 
+diff --git a/drivers/power/supply/da9030_battery.c b/drivers/power/supply/da9030_battery.c
+index 292ecf875..0deba48d2 100644
+--- a/drivers/power/supply/da9030_battery.c
++++ b/drivers/power/supply/da9030_battery.c
+@@ -172,17 +172,7 @@ static int bat_debug_show(struct seq_file *s, void *data)
+ 	return 0;
+ }
+ 
+-static int debug_open(struct inode *inode, struct file *file)
+-{
+-	return single_open(file, bat_debug_show, inode->i_private);
+-}
+-
+-static const struct file_operations bat_debug_fops = {
+-	.open		= debug_open,
+-	.read_iter		= seq_read_iter,
+-	.llseek		= seq_lseek,
+-	.release	= single_release,
+-};
++DEFINE_SHOW_ATTRIBUTE(bat_debug);
+ 
+ static struct dentry *da9030_bat_create_debugfs(struct da9030_charger *charger)
+ {
+-- 
+2.17.1
+
