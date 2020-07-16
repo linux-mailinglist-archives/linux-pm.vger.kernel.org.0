@@ -2,146 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D3E2221F4
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 13:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDE1222212
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 14:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728632AbgGPL4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 07:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728225AbgGPL4T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 07:56:19 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE92C061755;
-        Thu, 16 Jul 2020 04:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=9J/2b3b7YX/w3J/Y99T7XKn5p5MncV/hBcAxZFSpP/o=; b=md/+XRNjQfIIl04ga7+CuiYGkD
-        23HE25+cL7oCCu6eiZqV11gN85lh57Bkl4/WYxZwIgXB8CZvL1CW1FkvES3ed5bEGaP9TXuxYf6vJ
-        DVU5QYkHxxERZLAvUooucsUg3WwPRcwHjKrfaHvkynBJUGJx4iNl3AXt/miZSxgpEGJZOIQkkhmVi
-        mG4eLrjSTMqhBbCZadjsGFvWlh4KqSQyph6U+CR4WeE0QlKEO7G1XKRkqtN/gUo8xt0bRX+MPuaWO
-        GKq925mMwcrX6jiBbzU/hDLiN3KDpijvwTtrM9tbFAznWJtSb3sbu3iRGAuYir0aJ6WwhbndTLE2X
-        qNyjyVjQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jw2Ug-0006Cm-Rk; Thu, 16 Jul 2020 11:56:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 474A0305DD1;
-        Thu, 16 Jul 2020 13:56:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 27ACE20D27ABC; Thu, 16 Jul 2020 13:56:05 +0200 (CEST)
-Date:   Thu, 16 Jul 2020 13:56:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-Message-ID: <20200716115605.GR10769@hirez.programming.kicks-ass.net>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
+        id S1727844AbgGPMAZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 08:00:25 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:38943 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbgGPMAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 08:00:25 -0400
+Received: by mail-oo1-f68.google.com with SMTP id c4so1115185oou.6
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jul 2020 05:00:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pxcK9AG4MsjEnVWUbvo4102pCNg4f3SNGrtezPCAgvo=;
+        b=Y+I6gEr2mIrPMtS1qYz3s28HZKrVbTvUU2n3pRamrLoj6025XZqEQV4yi4lueVQoF+
+         Vo4tkmfUFzo7ijHtvmuxMmfdiegmiB9J6tCf4BMxAzM2WmdDduhfEb59QaopBD1aicmi
+         tmzRfg01Ozi3ZR7tuvlZB0/OaD5fTFQp7QokYr/JMyqb7njbP3t8lyKfY+lLyn5Ipe3d
+         utCq/Qz8ckRSnRDGXvcYFpez+XXzjO8TUHjBivUkIGgFu2IINDm1oDOHcP9kiCksOdaX
+         5U1kWy7Nf3APMHWfpRihtouM5m6VCQ7iEru5+rXqfrnjhOxwzTjUVDFgdawlBtz+x5Qa
+         pXiA==
+X-Gm-Message-State: AOAM533sUX7DbWEpWmSzRzb5blLwpVbMpsC1nDM6tan0oSPKUew4aNUJ
+        mE/zDDpejVk41I0WAmXkQZpCHhV8OThqjQ512O0=
+X-Google-Smtp-Source: ABdhPJyZFIWOCU1ylUoMi+GXaqiLLWvkhVwn/fDV8ts+woTdI2lZgfGQ/1pdVwiSqtfVon+tnkfIJGzg3yCz8s+ctTE=
+X-Received: by 2002:a4a:2459:: with SMTP id v25mr3782670oov.75.1594900824317;
+ Thu, 16 Jul 2020 05:00:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
+References: <000701d656be$c48083e0$4d818ba0$@net> <CAJZ5v0hKeHBNC2Bzdizm=42jtOqq8VOswCNNNk5HA9x_Y2T_Ng@mail.gmail.com>
+ <001d01d65af9$6dd46180$497d2480$@net>
+In-Reply-To: <001d01d65af9$6dd46180$497d2480$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Jul 2020 14:00:10 +0200
+Message-ID: <CAJZ5v0gvqhfHDDzVHNP4ODMfujaWA8Y8OuLF_i4JoM_1jVh=2w@mail.gmail.com>
+Subject: Re: cpufreq: intel_pstate: EPB with performance governor
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 12:06:53PM +0530, Viresh Kumar wrote:
->  /**
-> + * get_load() - get current load for a cpu
->   * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
->   * @cpu:	cpu number
-> + * @cpu_idx:	index of the cpu
->   *
-> + * Return: The current load of cpu @cpu in percentage.
->   */
->  static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
->  		    int cpu_idx)
->  {
-> +	unsigned long util = cpu_util_cfs(cpu_rq(cpu));
-> +	unsigned long max = arch_scale_cpu_capacity(cpu);
->  
-> +	util = effective_cpu_util(cpu, util, max, ENERGY_UTIL, NULL);
-> +	return (util * 100) / max;
->  }
+Hi Doug,
 
-So there's a number of things... let me recap a bunch of things that
-got mentioned on IRC earlier this week and then continue from there..
+On Thu, Jul 16, 2020 at 12:44 AM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> Hi Rafael,
+>
+> Thank you for your reply.
+>
+> On 2020.07.15 09:47 Rafael J. Wysocki wrote:
+> > On Fri, Jul 10, 2020 at 3:34 PM Doug Smythies <dsmythies@telus.net> wrote:
+> > >
+> > > Hi Srinivas and/or Rafael,
+> > >
+> > > Can you please confirm or deny that an older
+> > > commit:
+> > >
+> > > commit 8442885fca09b2d26375b9fe507759879a6f661e
+> > > cpufreq: intel_pstate: Set EPP/EPB to 0 in performance mode
+> > >
+> > > has been superseded by:
+> > >
+> > > arch/x86/kernel/cpu/intel_epb.c
+> >
+> > No, it hasn't.
+> >
+> > However, intel_pstate only touches the EPB if EPP is not supported,
+> > which should become a non-issue after this patch posted by me
+> > yesterday: https://patchwork.kernel.org/patch/11663315/
+> >
+> > If EPP is supported, intel_pstate will use it and it will never look
+> > at the EPB even.
+> >
+> > > and that now there is no way to have some default EPB (say 6) for
+> > > governors other than performance, while still getting an EPB of 0
+> > > for the performance governor.
+> >
+> > If EPP is supported, what happens to the EPB is completely orthogonal
+> > to cpufreq etc.
+>
+> Yes, I know.
+> I am talking about when HWP is disabled.
 
-So IPA* (or any other thermal governor) needs energy estimates for the
-various managed devices, cpufreq_cooling, being the driver for the CPU
-device, needs to provide that and in return receives feedback on how
-much energy it is allowed to consume, cpufreq_cooling then dynamically
-enables/disables OPP states.
+I see.
 
-There are actually two methods the thermal governor will use:
-get_real_power() and get_requested_power().
+> And I do not understand your reference to that patch from yesterday,
+> as it seems unrelated to me.
 
-The first isn't used anywhere in mainline, but could be implemented on
-hardware that has energy counters (like say x86 RAPL).
+If you are referring to when HWP is disabled, then it is not related indeed.
 
-The second attempts to guesstimate power, and is the subject of this
-patch.
+> > So it is possible to have the EPB different from 0, but it should be
+> > the same for all governors unless changed via energy_perf_bias.
+>
+> And I am saying that contradicts the earlier referenced patch.
+> We want EPB set to 0 for performance mode,
 
-Currently cpufreq_cooling appears to estimate the CPU energy usage by
-calculating the percentage of idle time using the per-cpu cpustat stuff,
-which is pretty horrific.
+The "performance" governor in cpufreq (or the active-mode
+"performance" scaling algorithm in intel_pstate) covers the CPU
+performance scaling only, while the EPB potentially affects the other
+system components too.  Thus driving the EPB from the CPU performance
+scaling subsystem is not the right approach IMO.
 
-This patch then attempts to improve upon that by using the scheduler's
-cpu_util(ENERGY_UTIL) estimate, which is also used to select OPP state
-and improves upon avg idle. This should be a big improvement as higher
-frequency consumes more energy, but should we not also consider that:
+> otherwise I challenge the name "performance" governor.
 
-	E = C V^2 f
+In that case "performance" means the maximum CPU capacity at the given
+EPB level.
 
-The EAS energy model has tables for the OPPs that contain this, but in
-this case we seem to be assuming a linear enery/frequency curve, which
-is just not the case.
+> Yes, EPB can be whatever for the other governors.
 
-I suppose we could do something like **:
+CPU performance scaling governors and the EPB should not be directly
+related to each other.  The EPB is system-wide, which generally means
+more than just CPUs (the uncore and memory may be affected by it in
+principle, for example).
 
-	100 * util^3 / max^3
+> >
+> > If EPP is not supported, though, then without the patch mentioned
+> > above, intel_pstate may fiddle with the EPB.
+> >
+> > > Additional notes:
+> > > Both my test computers have EPB as 0 upon startup,
+> >
+> > That is before intel_epb_init() runs, because it will change the EPB
+> > to "normal" (6).
+>
+> Yes, I know.
+>
+> >
+> > > But I also tried this:
+> > >
+> > > diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
+> > > index f4dd73396f28..b536e381cd56 100644
+> > > --- a/arch/x86/kernel/cpu/intel_epb.c
+> > > +++ b/arch/x86/kernel/cpu/intel_epb.c
+> > > @@ -74,7 +74,8 @@ static int intel_epb_save(void)
+> > >
+> > >  static void intel_epb_restore(void)
+> > >  {
+> > > -       u64 val = this_cpu_read(saved_epb);
+> > > +//     u64 val = this_cpu_read(saved_epb);
+> > > +       u64 val = 6;
+> > >         u64 epb;
+> > >
+> > >         rdmsrl(MSR_IA32_ENERGY_PERF_BIAS, epb);
+> > >
+> > > which did get rid of this message:
+> > > kernel: [    0.102158] ENERGY_PERF_BIAS: Set to 'normal', was 'performance'
+> >
+> > Which is exactly what happens when this message is printed.
+> >
+> > Instead of commenting out the line of code above, which is not a
+> > correct thing to do in general,
+>
+> Yes, of course. That was just a test, and the only way I could think of
+> to prove that the system started with it as 0.
+>
+> > you can simply set the EPB to 0 via
+> > energy_perf_bias for all CPUs and it should stick.
+>
+> And I am saying I should not have to do that, or even know about it,
+> when I want to use the performance governor.
 
-which assumes V~f.
+Again, cpufreq governors are on top of the EPB.
 
-Another point is that cpu_util() vs turbo is a bit iffy, and to that,
-things like x86-APERF/MPERF and ARM-AMU got mentioned. Those might also
-have the benefit of giving you values that match your own sampling
-interval (100ms), where the sched stuff is PELT (64,32.. based).
+> But yes, I expect the driver to remember the default, or otherwise set,
+> value of EPB for all the other governors.
 
-So what I've been thinking is that cpufreq drivers ought to be able to
-supply this method, and only when they lack, can the cpufreq-governor
-(schedutil) install a fallback. And then cpufreq-cooling can use
-whatever is provided (through the cpufreq interfaces).
+We clearly don't agree here.
 
-That way, we:
+Also in the passive mode of intel_pstate, when the regular cpufreq
+"performance" governor is in use, it's all about setting the frequency
+to the max alone through min = max without touching any other knobs
+which need to be adjusted separately.  That's how it's been always
+working and changing it now may confuse the users who have learned to
+rely on this behavior.
 
- 1) don't have to export anything
- 2) get arch drivers to provide something 'better'
-
-
-Does that sounds like something sensible?
-
-
-
-
-[*] I always want a beer when I see that name :-)
-
-[**] I despise code that uses percentages, computers suck at
-/100 and there is no reason not to use any other random fraction, so why
-pick a bad one.
-
+Thanks!
