@@ -2,165 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE35221957
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 03:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC8022197E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 03:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgGPBOn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 21:14:43 -0400
-Received: from mga01.intel.com ([192.55.52.88]:4087 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726479AbgGPBOn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 15 Jul 2020 21:14:43 -0400
-IronPort-SDR: 4rRE5yDWAgCmi1xDYvC4uezYbA+q2uRkctnD33u7RQG49A+TU2uIm+c8lagdwH3LOP8AmpCyee
- kGA70ZFUq2zg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="167431159"
-X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="167431159"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 18:14:37 -0700
-IronPort-SDR: /apEjM2sbtI+InvtVljomDOuqO+E/HTR6Z8Yvtnwa8mdz35nmskknQIDLsclCyHnAIyKrGQMZ2
- +Soee8unFA/g==
-X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
-   d="scan'208";a="286311658"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.255.229.194])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 18:14:37 -0700
-Message-ID: <44797cd1312843e5998070aec236b1cd80c48d14.camel@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP
- enabled
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Francisco Jerez <currojerez@riseup.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 15 Jul 2020 18:14:35 -0700
-In-Reply-To: <87imeoihqs.fsf@riseup.net>
-References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net>
-         <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
-         <87imeoihqs.fsf@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1728112AbgGPBaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 21:30:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727105AbgGPBaH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 21:30:07 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E7EC061755;
+        Wed, 15 Jul 2020 18:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Date:Message-ID:Cc:To:Subject:From:Sender:Reply-To:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=9NuwhqVj/zsoi98TNdlLdHx/B5plb0BCl27m5hSL7VA=; b=fsxo3kFl/nwOdchW2Be3CHpyQx
+        EqPJAhl0r5NK9PJN2jIiXh3j4svZXxKIfmlLiVLlN8TObAsQCujTIHMr93EELHUj5ehHplvkr2YhP
+        SBnJWY+z+lCVc6OKEheNQ1dEnTmGPrEP7xy2c4CeOC0Y8Vpw1oODtd+mlOA74bzQqAGClV2lS5X56
+        mhVL+7VZQrlRdN5mtCSSlUrNIHekcEeaUN3+de8H08wF35JGwNO6EWBG98TGVV2Z0Zi1bD+qlKfjH
+        emVkR5IoMYsezsEM5NmOctej0NihCTBxjFyGF+emUcdid8/PWmTnppQdHlLgdG5InKpadX863V8Zi
+        ciDbMZiw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jvsiq-0000Uh-JB; Thu, 16 Jul 2020 01:30:04 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+Subject: [PATCH] power: fix duplicated words in bq2415x_charger.h
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Message-ID: <74a380ee-d0a7-a58b-5740-6f1049d05d76@infradead.org>
+Date:   Wed, 15 Jul 2020 18:30:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2020-07-15 at 14:35 -0700, Francisco Jerez wrote:
-> "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> 
-> > On Wed, Jul 15, 2020 at 2:09 AM Francisco Jerez <
-> > currojerez@riseup.net> wrote:
-> > > "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> > > 
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > 
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[...]
+Drop the doubled word "for".
+Change "It it" to "If it".
 
-> > > > I don't think that's accurate.  I've looked at hundreds of
-> > > > traces
-> while
-> my series [1] was in control of HWP_REQ_MAX and I've never seen an
-> excursion above the maximum HWP_REQ_MAX control specified by it
-> within a
-> given P-state domain, even while that maximum specified was well into
-> the turbo range.  So, yeah, I agree that HWP_REQ_MAX is nothing like
-> a
-> hard limit, particularly when multiple threads are running on the
-> same
-> clock domain, but the processor will still make its best effort to
-> limit
-> the clock frequency to the maximum of the requested maximums, even if
-> it
-> happens to be within the turbo range.  That doesn't make it useless.
-> The exact same thing can be said about controlling HWP_REQ_MIN as
-> you're
-> doing now in this revision of your patch, BTW.
-> 
-> If you don't believe me here is the turbostat sample with maximum
-> Bzy_MHz I get on the computer I'm sitting on right now while
-> compiling a
-> kernel on CPU0 if I set HWP_REQ_MAX to 0x1c (within the turbo range):
-> 
-> > Core    CPU     Avg_MHz
-> > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
-> > -       -       757     27.03   2800    0x0000000000000000      7.1
-> > 3    4.90
-> > 0       0       2794    99.77   2800    0x0000000080001c04      7.1
-> > 3    4.90
-> > 0       2       83      2.98    2800    0x0000000080001c04
-> > 1       1       73      2.60    2800    0x0000000080001c04
-> > 1       3       78      2.79    2800    0x0000000080001c04
-> 
-> With the default HWP_REQUEST:
-> 
-> > Core    CPU     Avg_MHz
-> > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
-> > -       -       814     27.00   3015    0x0000000000000000      8.4
-> > 9    6.18
-> > 0       0       2968    98.24   3021    0x0000000080001f04      8.4
-> > 9    6.18
-> > 0       2       84      2.81    2982    0x0000000080001f04
-> > 1       1       99      3.34    2961    0x0000000080001f04
-> > 1       3       105     3.60    2921    0x0000000080001f04
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Pali Rohár <pali@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org
+---
+ include/linux/power/bq2415x_charger.h |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Correct. In HWP mode this is possible to lower limit in turbo region
-conditionally. In legacy mode you can't with turbo activation ratio.
-
-But what we don't want set max and min perf and use like desired to run
-at a P-state overriding HWP or limit the range where HWP can't do any
-meaningful selection.
-
-> > Generally, I'm not quite convinced that limiting the max frequency
-> > is
-> > really the right choice for controlling the processor's power draw
-> > on
-> > the systems in question.  There are other ways to do that, which in
-> > theory should be more effective.  I mentioned RAPL somewhere in
-> > this
-> > context and there's the GUC firmware too.
-> 
-> I feel like we've had that conversation before and it's somewhat
-> off-topic so I'll keep it short: Yes, in theory RAPL is more
-> effective
-> than HWP_REQ_MAX as a mechanism to limit the absolute power
-> consumption
-> of the processor package, but that's not the purpose of [1], its
-> purpose
-> is setting a lower limit to the energy efficiency of the processor
-> when
-> the maximum usable CPU frequency is known (due to the existence of an
-> IO
-> device bottleneck) -- And if the maximum usable CPU frequency is the
-> information we have at hand, controlling the maximum CPU frequency
-> directly is optimal, rather than trying to find the RAPL constraint
-> that
-> achieves the same average frequency by trial an error.  Also, in
-> theory,
-> even if you had an oracle to tell you what the appropriate RAPL
-> constraint is, the result would necessarily be more energy-
-> inefficient
-> than controlling the maximum CPU frequency directly, since you're
-> giving
-> the processor additional freedom to run at frequencies above the one
-> you
-> want to average, which is guaranteed to be more energy-inefficient
-> than
-> running at that fixed frequency, assuming we are in the region of
-> convexity of the processor's power curve.
-> 
-> Anyway, if you still have some disagreement on the theoretical
-> details
-> you're more than welcome to bring up the matter on the other thread
-> [1],
-> or accept the invitation for a presentation I sent you months ago...
-> ;)
+--- linux-next-20200714.orig/include/linux/power/bq2415x_charger.h
++++ linux-next-20200714/include/linux/power/bq2415x_charger.h
+@@ -14,8 +14,8 @@
+  * value is -1 then default chip value (specified in datasheet) will be
+  * used.
+  *
+- * Value resistor_sense is needed for for configuring charge and
+- * termination current. It it is less or equal to zero, configuring charge
++ * Value resistor_sense is needed for configuring charge and
++ * termination current. If it is less or equal to zero, configuring charge
+  * and termination current will not be possible.
+  *
+  * For automode support is needed to provide name of power supply device
 
