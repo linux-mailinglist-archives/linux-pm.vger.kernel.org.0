@@ -2,116 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 624E02229CA
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 19:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EC22229EE
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 19:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgGPRYm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 16 Jul 2020 13:24:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgGPRYm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 13:24:42 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45EBC061755;
-        Thu, 16 Jul 2020 10:24:41 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id b25so8829090ljp.6;
-        Thu, 16 Jul 2020 10:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TfS7LyRCXVJhAiKAI60mtJsvFYqMMExakCfeA+dafDM=;
-        b=eM8ekbItJW22+el3tFcXdtmsEzXxaWo+v6DoYGR+lHLcxpMrIw6BSmqbLFZuvBQCnP
-         ihgIeMTx/RwwePD4TZPTuLJNnVniE6M2JA6JRs/Z5LSiyLgsXgK5r1fMatkB7XlxtiMo
-         3z+nQWADtsOAq0xfUHYY01jMmos2tG4alSasWCmc8GgvtDVvANIO2YSojigeralZrqtb
-         Q1mocK8zXSulFDuw07bNDAHVtmzcBS5Uh0UNN85JGqqIIpNgNmOE6hQKo7DyvZJgM/kt
-         ENCUDy7STEgc/m8gghs+h2tiDOA4dRIQ1TjyZ9oAJwNTMp5kLMlreM8ptAYX4PROIWy6
-         paLg==
+        id S1729031AbgGPR3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 16 Jul 2020 13:29:37 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44916 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726986AbgGPR3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 16 Jul 2020 13:29:36 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 5so4799659oty.11;
+        Thu, 16 Jul 2020 10:29:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TfS7LyRCXVJhAiKAI60mtJsvFYqMMExakCfeA+dafDM=;
-        b=Nnt0e1QcJRzeevhyt86k1JJsXSxALfypUn4SlbzJoxskir6YBfL9iaA4CIZDRdY//e
-         xdfC32mEZfWfoR2sMMGsa1oe6N7eeH4uRphY12uGmrZ5ImRWQHhX9Hm1zopOUV9/Yc94
-         gjrXzQ+AhbnUSzLQkeZMMYhf0Ga1yZHU7PrPG1Y2YcYcYvwLE7KJOZFp2CmBLeytHx23
-         yoBFD8BcqNdgkYbfU8Q48d8SL31dgu/xXiYnQa1iJSiwQieVdVE8VCmCSxZ8u/6lhX2p
-         WvhZKFId8UPkTK7AB3C0Kuav6ijfXXno0EONikaqbDg3Q/6B9ULRGa8dJF0tbFRxYzZF
-         ruXA==
-X-Gm-Message-State: AOAM531fAGpqMKiXUrdslEWz0Ck+pT3DWHOOz5s7k1xzNyvBrzOS87V7
-        rQbSJF1jyEmVXTHTIYPuadE=
-X-Google-Smtp-Source: ABdhPJyBMa6/+CjZyZQ5I2muOOpdMwm+gbfhNF3ZsDHyDvdDeGLecmbLcuuKS3MxkhnDxlIVqNNcxw==
-X-Received: by 2002:a2e:8157:: with SMTP id t23mr2533932ljg.417.1594920280350;
-        Thu, 16 Jul 2020 10:24:40 -0700 (PDT)
-Received: from [192.168.2.145] (ppp91-76-4-184.pppoe.mtu-net.ru. [91.76.4.184])
-        by smtp.googlemail.com with ESMTPSA id u26sm1556349lfq.72.2020.07.16.10.24.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Jul 2020 10:24:39 -0700 (PDT)
-Subject: Re: [PATCH v2 2/9] dt-bindings: battery: Add temperature properties
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Vinay Simha BN <simhavcs@gmail.com>
-References: <20200607144113.10202-1-digetx@gmail.com>
- <20200607144113.10202-3-digetx@gmail.com> <20200713234604.GA935472@bogus>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1b84d818-11d3-05b9-fc45-29a0cb490edd@gmail.com>
-Date:   Thu, 16 Jul 2020 20:24:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=hLRAAQw1hek9rcC0v4IQJbEXFqIYwef7riqylhpqMJ8=;
+        b=shSPQIQ7V3HIrVMpDkOpCgrSkqoGSbj3UJVoze7Gnf6xPlUURVokKhs/cLxOhuKCvL
+         6CGOHrTTfQ97JyHGK0d7ydgwCVi2lASPKkX6ApU7HD59HQNDW9EPjwN+WxMl+tQdGTPX
+         qFMDnyb4L19sElmw7GG+GQfPcqdcw1S2j155B9behBbFkAtQfJ7LoyYYlPr66vPac25e
+         SY4lXSn2ARosjvlaruiWOUz6WBhQPp1DrslD5Dbt0xeV6lvDMK9TgDr3phFJuzA9OJ08
+         YKeIQM+Lgnd2ler3y0VFUv0rjEn56iZficzMgvPLI+Ysn3LjS8cv34Xu8nwdrx2tjPiC
+         XFHw==
+X-Gm-Message-State: AOAM532r+8IXUcOThNYTcvMYCR3ubOhORiV8aNALSYDcxQo8sbMKuEc5
+        FWysIkOLtuvFnJA8QZleYAQKlQKl2IBXlFS1rN4DSFuH
+X-Google-Smtp-Source: ABdhPJzOuAyn47IyH1V7aliQDZH8xprkbSFsARvbPH6K9CqdtEbyhqFvgPUADgSgMenaYoFyQ+TWa5vd0l7p6vA6/ts=
+X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr5299455ots.118.1594920575691;
+ Thu, 16 Jul 2020 10:29:35 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200713234604.GA935472@bogus>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 16 Jul 2020 19:29:23 +0200
+Message-ID: <CAJZ5v0iikebC7mujzog-Vge8=OhrZwQU0ii2FMZO215NfBpvhA@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.8-rc6
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-14.07.2020 02:46, Rob Herring пишет:
-> On Sun, Jun 07, 2020 at 05:41:06PM +0300, Dmitry Osipenko wrote:
->> Document generic battery temperature properties.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  .../devicetree/bindings/power/supply/battery.txt       | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
-> 
-> This is close to being converted to schema:
-> 
-> https://lore.kernel.org/linux-pm/20200707212914.31540-1-r-rivera-matos@ti.com/
+Hi Linus,
 
-Thanks! I'll keep an eye on this patch.
+Please pull from the tag
 
->> diff --git a/Documentation/devicetree/bindings/power/supply/battery.txt b/Documentation/devicetree/bindings/power/supply/battery.txt
->> index 5e29595edd74..e0c35eff9d3f 100644
->> --- a/Documentation/devicetree/bindings/power/supply/battery.txt
->> +++ b/Documentation/devicetree/bindings/power/supply/battery.txt
->> @@ -45,6 +45,16 @@ Optional Properties:
->>     and corresponding battery internal resistance percent, which is used to look
->>     up the resistance percent according to current temperature to get a accurate
->>     batterty internal resistance in different temperatures.
->> + - temperature-ambient-min-alert-celsius: Alert when ambient temperature of a
->> +   battery is lower than threshold value.
->> + - temperature-ambient-max-alert-celsius: Alert when ambient temperature of a
->> +   battery is higher than threshold value.
->> + - temperature-min-alert-celsius: Alert when battery temperature is lower
->> +   than threshold value.
->> + - temperature-max-alert-celsius: Alert when battery temperature is higher
->> +   than threshold value.
->> + - temperature-min-celsius: minimum temperature at which battery can operate
->> + - temperature-max-celsius: maximum temperature at which battery can operate
-> 
-> Perhaps 'temperature' is redundant since we have units.
-> 
-> Perhaps do <min max> properties given specifying only min or max is 
-> probably not valid?
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.8-rc6
 
-Thank you for the suggestions, I'll consider them for the v3!
+with top-most commit 1740f21af58b89a072f33ae0912d5acf95314f22
+
+ Merge branch 'pm-cpufreq'
+
+on top of commit 11ba468877bb23f28956a35e896356252d63c983
+
+ Linux 5.8-rc5
+
+to receive power management fixes for 5.8-rc6.
+
+These add missing handling of a command line switch to the
+intel_pstate driver (Rafael Wysocki) and fix the freeing of the
+operating performance point (OPP) entries for the legacy (v1) OPP
+table type (Walter Lozano).
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (1):
+      cpufreq: intel_pstate: Fix active mode setting from command line
+
+Walter Lozano (1):
+      opp: Increase parsed_static_opps in _of_add_opp_table_v1()
+
+---------------
+
+ drivers/cpufreq/intel_pstate.c | 8 ++++++--
+ drivers/opp/of.c               | 4 ++++
+ 2 files changed, 10 insertions(+), 2 deletions(-)
