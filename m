@@ -2,123 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C71622184F
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 01:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE35221957
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jul 2020 03:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727068AbgGOXPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 15 Jul 2020 19:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47876 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbgGOXPC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 15 Jul 2020 19:15:02 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598C2C08C5CE
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 16:15:02 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id l6so3683494qkc.6
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jul 2020 16:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Xd3yKqfzGmIuyChmnHGbxGkkq4tAYE3GR+3CE+pvQXg=;
-        b=Ts3s5J/0Jn86cWG4tF6CjMnwblbzfZlvMliTt+poHpAG7orVq3o3nSe6n6Q1EYPvYa
-         5QSUhh8VkISuEaFNLQ0Nq89faKdYqhaCqvSyPDIKMhJFeMis5CXzx3OzzvMWT5OYXkEG
-         Wx4NhgyxGnvXNO151lP+C0lffDejUl1x+1SXEXqWE+cQjQDKFy5ffljzNj6ryf1HznNK
-         jlebn5peyRii0ZNLjeLReRyhUhDGqBX/hlxs9n0twT5nWn2AKG4yhGKX670b5nh5Y73S
-         NPGhHXQpPmIAxzDFnHK8GzrJvS/dsx1QYdmOgOTEP2xaaIud7o7YYvdDZ9gC431R3Hu8
-         vEkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Xd3yKqfzGmIuyChmnHGbxGkkq4tAYE3GR+3CE+pvQXg=;
-        b=lIoG+BmlKGNquHPcpJU/eC5Id3R7k0HXxy7n4OoskF6g7YFMjwuGJ+Pd0SYQgS1N5f
-         Dv5h4+xjF4dVJ4qcUeACM1TbDoJ72dSH1wvcfXsdTWymxShzU55EekyDN/3DZSCZSznn
-         gqZ/ji4YA9ftZ167lx3pM6kofDIGZyqutqHqsq2dFXrw6aGZ/dZx5Ui/I71N+Yv9Jx9e
-         Dz0n24yiGUtDhDa8ciqvO1pOHCO0MAZQNDJclDBBHmgp9BON7NV/1JCG0JssjAT0YW3Z
-         wjStGqEmVXPe4YUMCaWI9mj6mgeWh6GWrDhngEKCF92JVjEnGaTEYerMfxoaRWRDLi9k
-         CpwA==
-X-Gm-Message-State: AOAM531QUGKXHCFVAK1BBV8sz1vO9hXRknpMP1zMqPtNPuoVf6gtes0A
-        di3Vy3n2wx103/1ObAMlC3ni/A==
-X-Google-Smtp-Source: ABdhPJzszqQUB8jmldBHMhwuFEBC+z8WHjXAb/q6EGDZuz6YCf/xKyIqVeXUt0vagEfU/5DMKL7TpQ==
-X-Received: by 2002:a05:620a:2002:: with SMTP id c2mr1314654qka.35.1594854901466;
-        Wed, 15 Jul 2020 16:15:01 -0700 (PDT)
-Received: from [192.168.1.92] (pool-71-255-246-27.washdc.fios.verizon.net. [71.255.246.27])
-        by smtp.gmail.com with ESMTPSA id o187sm4343607qke.76.2020.07.15.16.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jul 2020 16:15:00 -0700 (PDT)
-Subject: Re: [RFC PATCH 3/4] thermal:core:Add genetlink notifications for
- monitoring falling temperature
-To:     Zhang Rui <rui.zhang@intel.com>, daniel.lezcano@linaro.org,
-        robh+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200710135154.181454-1-thara.gopinath@linaro.org>
- <20200710135154.181454-4-thara.gopinath@linaro.org>
- <746420e6b213985518d8b314018e32dc3438e9af.camel@intel.com>
-From:   Thara Gopinath <thara.gopinath@linaro.org>
-Message-ID: <021bec8e-2cf7-99fb-d224-e16796b95567@linaro.org>
-Date:   Wed, 15 Jul 2020 19:15:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726776AbgGPBOn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 15 Jul 2020 21:14:43 -0400
+Received: from mga01.intel.com ([192.55.52.88]:4087 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726479AbgGPBOn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 15 Jul 2020 21:14:43 -0400
+IronPort-SDR: 4rRE5yDWAgCmi1xDYvC4uezYbA+q2uRkctnD33u7RQG49A+TU2uIm+c8lagdwH3LOP8AmpCyee
+ kGA70ZFUq2zg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9683"; a="167431159"
+X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
+   d="scan'208";a="167431159"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 18:14:37 -0700
+IronPort-SDR: /apEjM2sbtI+InvtVljomDOuqO+E/HTR6Z8Yvtnwa8mdz35nmskknQIDLsclCyHnAIyKrGQMZ2
+ +Soee8unFA/g==
+X-IronPort-AV: E=Sophos;i="5.75,357,1589266800"; 
+   d="scan'208";a="286311658"
+Received: from spandruv-mobl.amr.corp.intel.com ([10.255.229.194])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2020 18:14:37 -0700
+Message-ID: <44797cd1312843e5998070aec236b1cd80c48d14.camel@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP
+ enabled
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Francisco Jerez <currojerez@riseup.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Wed, 15 Jul 2020 18:14:35 -0700
+In-Reply-To: <87imeoihqs.fsf@riseup.net>
+References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net>
+         <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
+         <87imeoihqs.fsf@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-In-Reply-To: <746420e6b213985518d8b314018e32dc3438e9af.camel@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 7/15/20 4:46 AM, Zhang Rui wrote:
-> On Fri, 2020-07-10 at 09:51 -0400, Thara Gopinath wrote:
->> Add notification calls for trip type THERMAL_TRIP_COLD when
->> temperature
->> crosses the trip point in either direction.
->>
->> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
->> ---
->>   drivers/thermal/thermal_core.c | 21 +++++++++++++++------
->>   1 file changed, 15 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_core.c
->> b/drivers/thermal/thermal_core.c
->> index 750a89f0c20a..e2302ca1cd3b 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -429,12 +429,21 @@ static void handle_thermal_trip(struct
->> thermal_zone_device *tz, int trip)
->>   		tz->ops->get_trip_hyst(tz, trip, &hyst);
->>   
->>   	if (tz->last_temperature != THERMAL_TEMP_INVALID) {
->> -		if (tz->last_temperature < trip_temp &&
->> -		    tz->temperature >= trip_temp)
->> -			thermal_notify_tz_trip_up(tz->id, trip);
->> -		if (tz->last_temperature >= trip_temp &&
->> -		    tz->temperature < (trip_temp - hyst))
->> -			thermal_notify_tz_trip_down(tz->id, trip);
->> +		if (type == THERMAL_TRIP_COLD) {
->> +			if (tz->last_temperature > trip_temp &&
->> +			    tz->temperature <= trip_temp)
->> +				thermal_notify_tz_trip_down(tz->id,
->> trip);
+On Wed, 2020-07-15 at 14:35 -0700, Francisco Jerez wrote:
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
 > 
-> trip_type should also be part of the event because trip_down/trip_up
-> for hot trip and cold trip have different meanings.
-> Or can we use some more generic names like trip_on/trip_off? trip_on
-> means the trip point is violated or actions need to be taken for the
-> specific trip points, for both hot and cold trips. I know
-> trip_on/trip_off doesn't represent what I mean clearly, but surely you
-> can find a better name.
+> > On Wed, Jul 15, 2020 at 2:09 AM Francisco Jerez <
+> > currojerez@riseup.net> wrote:
+> > > "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+> > > 
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > 
 
-Makes sense.. I will fix this in the next version. I don't have a good 
-name at the moment but will think of something!
+[...]
 
+> > > > I don't think that's accurate.  I've looked at hundreds of
+> > > > traces
+> while
+> my series [1] was in control of HWP_REQ_MAX and I've never seen an
+> excursion above the maximum HWP_REQ_MAX control specified by it
+> within a
+> given P-state domain, even while that maximum specified was well into
+> the turbo range.  So, yeah, I agree that HWP_REQ_MAX is nothing like
+> a
+> hard limit, particularly when multiple threads are running on the
+> same
+> clock domain, but the processor will still make its best effort to
+> limit
+> the clock frequency to the maximum of the requested maximums, even if
+> it
+> happens to be within the turbo range.  That doesn't make it useless.
+> The exact same thing can be said about controlling HWP_REQ_MIN as
+> you're
+> doing now in this revision of your patch, BTW.
+> 
+> If you don't believe me here is the turbostat sample with maximum
+> Bzy_MHz I get on the computer I'm sitting on right now while
+> compiling a
+> kernel on CPU0 if I set HWP_REQ_MAX to 0x1c (within the turbo range):
+> 
+> > Core    CPU     Avg_MHz
+> > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
+> > -       -       757     27.03   2800    0x0000000000000000      7.1
+> > 3    4.90
+> > 0       0       2794    99.77   2800    0x0000000080001c04      7.1
+> > 3    4.90
+> > 0       2       83      2.98    2800    0x0000000080001c04
+> > 1       1       73      2.60    2800    0x0000000080001c04
+> > 1       3       78      2.79    2800    0x0000000080001c04
+> 
+> With the default HWP_REQUEST:
+> 
+> > Core    CPU     Avg_MHz
+> > Busy%   Bzy_MHz            HWP_REQ      PkgWatt CorWatt
+> > -       -       814     27.00   3015    0x0000000000000000      8.4
+> > 9    6.18
+> > 0       0       2968    98.24   3021    0x0000000080001f04      8.4
+> > 9    6.18
+> > 0       2       84      2.81    2982    0x0000000080001f04
+> > 1       1       99      3.34    2961    0x0000000080001f04
+> > 1       3       105     3.60    2921    0x0000000080001f04
 
--- 
-Warm Regards
-Thara
+Correct. In HWP mode this is possible to lower limit in turbo region
+conditionally. In legacy mode you can't with turbo activation ratio.
+
+But what we don't want set max and min perf and use like desired to run
+at a P-state overriding HWP or limit the range where HWP can't do any
+meaningful selection.
+
+> > Generally, I'm not quite convinced that limiting the max frequency
+> > is
+> > really the right choice for controlling the processor's power draw
+> > on
+> > the systems in question.  There are other ways to do that, which in
+> > theory should be more effective.  I mentioned RAPL somewhere in
+> > this
+> > context and there's the GUC firmware too.
+> 
+> I feel like we've had that conversation before and it's somewhat
+> off-topic so I'll keep it short: Yes, in theory RAPL is more
+> effective
+> than HWP_REQ_MAX as a mechanism to limit the absolute power
+> consumption
+> of the processor package, but that's not the purpose of [1], its
+> purpose
+> is setting a lower limit to the energy efficiency of the processor
+> when
+> the maximum usable CPU frequency is known (due to the existence of an
+> IO
+> device bottleneck) -- And if the maximum usable CPU frequency is the
+> information we have at hand, controlling the maximum CPU frequency
+> directly is optimal, rather than trying to find the RAPL constraint
+> that
+> achieves the same average frequency by trial an error.  Also, in
+> theory,
+> even if you had an oracle to tell you what the appropriate RAPL
+> constraint is, the result would necessarily be more energy-
+> inefficient
+> than controlling the maximum CPU frequency directly, since you're
+> giving
+> the processor additional freedom to run at frequencies above the one
+> you
+> want to average, which is guaranteed to be more energy-inefficient
+> than
+> running at that fixed frequency, assuming we are in the region of
+> convexity of the processor's power curve.
+> 
+> Anyway, if you still have some disagreement on the theoretical
+> details
+> you're more than welcome to bring up the matter on the other thread
+> [1],
+> or accept the invitation for a presentation I sent you months ago...
+> ;)
+
