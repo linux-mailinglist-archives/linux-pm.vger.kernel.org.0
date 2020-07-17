@@ -2,117 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A97223654
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 09:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1520B223811
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 11:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbgGQH4X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jul 2020 03:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbgGQH4V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jul 2020 03:56:21 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61864C061755
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 00:56:21 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id f18so15852845wml.3
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 00:56:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=o5nIopuM74BtlFzAImb/PK0gyySVM6KhH9dqp/om8uc=;
-        b=NViLlxEklhp1mf7knnPOTkE3tfi428+VHQSNEDbHSufq2Kp0CtIaRQ6KLH/dp/bthm
-         5KB6kGNDHPBndZPUjVblnnJCuGZf5aRnunRSI+4jjCviFmVd6OCmsbIxO8Wz1lZ4gMV7
-         mo8OG0Z+4l6xUg1vCqprcFAf6fROOuI+9MeoYuRD66Zof1qzxtVhyLLPtpXozMRZImi0
-         6aaE1etFK/dZtL8XBO/+qgJzFimkfgrPuVuxMGKHD65yVqrQKijg49ibw7kavHy5IL9O
-         JgrA2mSWlNt4z3w2tSzq6FlYyJf+N6qAGTmHUAZa6sNoUVkmaml6SBt0+qk4VI6uX7KD
-         kt+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=o5nIopuM74BtlFzAImb/PK0gyySVM6KhH9dqp/om8uc=;
-        b=p6rgTxq7okVB9/xhxQro3Dl++zIny+O8iERZEd3ocXGHXmD9HpBhz+k80cBZFt0Wc8
-         zYTMAXWmMjHSjT9ZLC3yGd4qYeJCu0RbA+XroIiIcDdDbCMxqJiKZVRLnCoip+P+8Glz
-         x8/e2+H4pr2dFDpa5PtSRBjWy6WB36hwfpcc2CAgPrCVSxELaeAcqhfRqfxR6JTDJA07
-         YyTUs3NsPQR1NzrPiW5xDHu5kZSlV93srxvLHaaKPsdYurdkZSX+rZPuwwCKDMa6OIwI
-         Ip9FfoFyLQIGkfzMM+TPmeVUbRT69tu2Bk3GiCSK3Kl5sVx5LPceB2S3MBKlvpYRq5cz
-         O7Uw==
-X-Gm-Message-State: AOAM533XdIApcAiGih97uA02yiMhCvP40ze+6m5ihdgsOg6Z8iR1572H
-        qN/VWOZauUDNFA6t2HPKcbi/NA==
-X-Google-Smtp-Source: ABdhPJyQffzOr3evg0fAENlwAmDQoBs8yLbdDfhUB2Pv/w4X9/+ZCM+homnG3Ny/Q26Zm37J79d9mw==
-X-Received: by 2002:a1c:9e84:: with SMTP id h126mr7660444wme.61.1594972579968;
-        Fri, 17 Jul 2020 00:56:19 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9880:a643:3e69:6393? ([2a01:e34:ed2f:f020:9880:a643:3e69:6393])
-        by smtp.googlemail.com with ESMTPSA id q7sm12848370wrs.27.2020.07.17.00.56.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Jul 2020 00:56:19 -0700 (PDT)
-Subject: Re: [PATCH v4 08/16] thermal: sun8i: add TEMP_CALIB_MASK for
- calibration data in sun50i_h6_ths_calibrate
-To:     Frank Lee <tiny.windzz@gmail.com>
-Cc:     Frank Lee <frank@allwinnertech.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?6buE54OB55Sf?= <huangshuosheng@allwinnertech.com>,
-        liyong@allwinnertech.com
-References: <cover.1594708863.git.frank@allwinnertech.com>
- <b8761e036b25f20873534e5f8d10b37b5d2ce72c.1594708864.git.frank@allwinnertech.com>
- <4771acd6-ecd3-b8e1-8605-75d78720b1d3@linaro.org>
- <CAEExFWv9_1kec_b+t+nnvT3cziXzmVa8GzJT3pQAZiCf4KA0ig@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <836e1b23-1c75-57fe-6e45-f7141272071c@linaro.org>
-Date:   Fri, 17 Jul 2020 09:56:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726686AbgGQJSo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jul 2020 05:18:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53636 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726627AbgGQJSn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jul 2020 05:18:43 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06H934i2174163;
+        Fri, 17 Jul 2020 05:18:09 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32b61kcwcf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 05:18:09 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06H93DjZ174849;
+        Fri, 17 Jul 2020 05:18:08 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 32b61kcwbk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 05:18:08 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06H99wmV024480;
+        Fri, 17 Jul 2020 09:18:06 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 329nmyjr55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Jul 2020 09:18:06 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06H9I4n855705760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jul 2020 09:18:04 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4B5BB52054;
+        Fri, 17 Jul 2020 09:18:04 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.85.80.176])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id E91DF5204E;
+        Fri, 17 Jul 2020 09:18:01 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/2] Selftest for cpuidle latency measurement
+Date:   Fri, 17 Jul 2020 14:47:59 +0530
+Message-Id: <20200717091801.29289-1-psampat@linux.ibm.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-In-Reply-To: <CAEExFWv9_1kec_b+t+nnvT3cziXzmVa8GzJT3pQAZiCf4KA0ig@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-17_04:2020-07-17,2020-07-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ spamscore=0 clxscore=1015 suspectscore=0 phishscore=0 priorityscore=1501
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007170066
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/07/2020 09:35, Frank Lee wrote:
-> On Fri, Jul 17, 2020 at 12:26 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 14/07/2020 09:13, Frank Lee wrote:
->>> From: Yangtao Li <frank@allwinnertech.com>
->>>
->>> For sun50i_h6_ths_calibrate(), the data read from nvmem needs a round of
->>> calculation. On the other hand, the newer SOC may store other data in
->>> the space other than 12bit sensor data. Add mask operation to read data
->>> to avoid conversion error.
->>>
->>> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
->>> Reviewed-by: Yangtao Li <tiny.windzz@gmail.com>
->>
->> Can you clarify these SoB ?
-> 
-> Previously I used 'Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>',
-> maybe this should be removed directly?
-> 
->>
->> Frank Lee==Yangtao Li==frank@allwinnertech.com==tiny.windzz@gmail.com ?
->>
-> 
-> Yeah.
+v1: https://lkml.org/lkml/2020/7/7/1036
+Changelog v1 --> v2
+1. Based on Shuah Khan's comment, changed exit code to ksft_skip to
+   indicate the test is being skipped
+2. Change the busy workload for baseline measurement from
+   "yes > /dev/null" to "cat /dev/random to /dev/null", based on
+   observed CPU utilization for "yes" consuming ~60% CPU while the
+   latter consumes 100% of CPUs, giving more accurate baseline numbers
+---
 
-You are not supposed to add reviewed-by yourself. Please remove it.
+The patch series introduces a mechanism to measure wakeup latency for
+IPI and timer based interrupts
+The motivation behind this series is to find significant deviations
+behind advertised latency and resisdency values
 
+To achieve this, we introduce a kernel module and expose its control
+knobs through the debugfs interface that the selftests can engage with.
+
+The kernel module provides the following interfaces within
+/sys/kernel/debug/latency_test/ for,
+1. IPI test:
+  ipi_cpu_dest   # Destination CPU for the IPI
+  ipi_cpu_src    # Origin of the IPI
+  ipi_latency_ns # Measured latency time in ns
+2. Timeout test:
+  timeout_cpu_src     # CPU on which the timer to be queued
+  timeout_expected_ns # Timer duration
+  timeout_diff_ns     # Difference of actual duration vs expected timer
+To include the module, check option and include as module
+kernel hacking -> Cpuidle latency selftests
+
+The selftest inserts the module, disables all the idle states and
+enables them one by one testing the following:
+1. Keeping source CPU constant, iterates through all the CPUS measuring
+   IPI latency for baseline (CPU is busy with
+   "cat /dev/random > /dev/null" workload) and the when the CPU is
+   allowed to be at rest
+2. Iterating through all the CPUs, sending expected timer durations to
+   be equivalent to the residency of the the deepest idle state
+   enabled and extracting the difference in time between the time of
+   wakeup and the expected timer duration
+
+Usage
+-----
+Can be used in conjuction to the rest of the selftests.
+Default Output location in: tools/testing/cpuidle/cpuidle.log
+
+To run this test specifically:
+$ make -C tools/testing/selftests TARGETS="cpuidle" run_tests
+
+There are a few optinal arguments too that the script can take
+	[-h <help>]
+	[-m <location of the module>]
+	[-o <location of the output>]
+
+Sample output snippet
+---------------------
+--IPI Latency Test---
+--Baseline IPI Latency measurement: CPU Busy--
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+...
+0            8         1996
+0            9         2125
+0           10         1264
+0           11         1788
+0           12         2045
+Baseline Average IPI latency(ns): 1843
+---Enabling state: 5---
+SRC_CPU   DEST_CPU IPI_Latency(ns)
+0            8       621719
+0            9       624752
+0           10       622218
+0           11       623968
+0           12       621303
+Expected IPI latency(ns): 100000
+Observed Average IPI latency(ns): 622792
+
+--Timeout Latency Test--
+--Baseline Timeout Latency measurement: CPU Busy--
+Wakeup_src Baseline_delay(ns) 
+...
+8            2249
+9            2226
+10           2211
+11           2183
+12           2263
+Baseline Average timeout diff(ns): 2226
+---Enabling state: 5---
+8           10749                   
+9           10911                   
+10          10912                   
+11          12100                   
+12          73276                   
+Expected timeout(ns): 10000200
+Observed Average timeout diff(ns): 23589
+
+Pratik Rajesh Sampat (2):
+  cpuidle: Trace IPI based and timer based wakeup latency from idle
+    states
+  selftest/cpuidle: Add support for cpuidle latency measurement
+
+ drivers/cpuidle/Makefile                   |   1 +
+ drivers/cpuidle/test-cpuidle_latency.c     | 150 ++++++++++++
+ lib/Kconfig.debug                          |  10 +
+ tools/testing/selftests/Makefile           |   1 +
+ tools/testing/selftests/cpuidle/Makefile   |   6 +
+ tools/testing/selftests/cpuidle/cpuidle.sh | 257 +++++++++++++++++++++
+ tools/testing/selftests/cpuidle/settings   |   1 +
+ 7 files changed, 426 insertions(+)
+ create mode 100644 drivers/cpuidle/test-cpuidle_latency.c
+ create mode 100644 tools/testing/selftests/cpuidle/Makefile
+ create mode 100755 tools/testing/selftests/cpuidle/cpuidle.sh
+ create mode 100644 tools/testing/selftests/cpuidle/settings
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.4
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
