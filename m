@@ -2,117 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46476223989
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 12:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBB1223AD2
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 13:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726056AbgGQKnU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jul 2020 06:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgGQKnU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jul 2020 06:43:20 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFA9C061755
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 03:43:19 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id f139so16357698wmf.5
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 03:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=o/b+EmKne5gnDXstxW2uX3pxAh0IsbYMQdhSzdZxQ90=;
-        b=ZrSA1VaWOJmimVTByiramfsqR+MhBH7LqpR7K5Hr/k/n8QyMRK7r6tC9igUDitBqvC
-         JRzp7+NludnBgMWUF2N6afx/XAYbeuLU1jr6H/m65A5MgmvOdudw5+7gwTzmwwNMD2TG
-         JwdmlhTIi/qpnB0pyVNcS+tU3AV6yQOaEAfJrlJu/staUrt+P8gWpwjGo16OEV7+oGha
-         YbrGgRwob0UhXAtzH29ybIk34ZJ7F+OFKskSh+0Ob2vtkuuFEF9GadOmIKUa7NZ3A5o7
-         Hcjhl6YnO3UUiDmp79cuspio9eSMAtZkUfDzgDbK0QYrVggj2ix7M2OoS+4KkE1Lg1zH
-         EEkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=o/b+EmKne5gnDXstxW2uX3pxAh0IsbYMQdhSzdZxQ90=;
-        b=o+cQF0dhTo3DTbC0zH6x0LHuUl8OX7T7QqIjUYQOoc7GaeX7wzlQw1leybPKqcwrh1
-         bJ+dq1vsCkTCKLSi2f3RbhH4IttYPaJUnzqmS11pVwe+ujzK/UBHwtbaCrPVt4zEsL3f
-         sUUPUIuAECMy6kjN0NEBJYNwXC81o2h1VjxUNonafHSV0zgDl2k0ANPnRMU6Efp0tIPx
-         M26HKJLCilJZIHH3+JOnWJK15gpZmUxWAxNSxKTq4+2RaMYpJ/lztO2UywCgmTW7IkGX
-         S2nIH9b+W9GcYUbf2/6vTrKivdkIs88PE6SpkvqIpta2jVd0snkegM48gNF/oW3LLBdf
-         pM2w==
-X-Gm-Message-State: AOAM532zUiGN4r3njLVXORj3Jp9Q2whsl0IzURtvByHuKjZEzE3Zuz+q
-        IdNdNQ6PHIn7TauLbjf0sCSqzw==
-X-Google-Smtp-Source: ABdhPJwdH3QTnBvXg3Z7gVZPAsOOybtbAb4sFkTkT/XqR+Td7VJeZEMZmlbMI1juTQ5o+1GVcwSmpQ==
-X-Received: by 2002:a1c:ed05:: with SMTP id l5mr8711628wmh.68.1594982598532;
-        Fri, 17 Jul 2020 03:43:18 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id a4sm15005117wrg.80.2020.07.17.03.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jul 2020 03:43:17 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 11:43:14 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel@vger.kernel.org, Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-Message-ID: <20200717104314.GB2385870@google.com>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200717101438.GA2366103@google.com>
- <20200717103305.GA2385870@google.com>
+        id S1726079AbgGQLxN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jul 2020 07:53:13 -0400
+Received: from foss.arm.com ([217.140.110.172]:34456 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726040AbgGQLxM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Jul 2020 07:53:12 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E4BFC30E;
+        Fri, 17 Jul 2020 04:53:11 -0700 (PDT)
+Received: from [10.37.12.35] (unknown [10.37.12.35])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B78F53F66E;
+        Fri, 17 Jul 2020 04:53:08 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] memory: samsung: exynos5422-dmc: Add module param
+ to control IRQ mode
+From:   Lukasz Luba <lukasz.luba@arm.com>
+To:     Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, willy.mh.wolff.ml@gmail.com,
+        k.konieczny@samsung.com, cw00.choi@samsung.com, krzk@kernel.org,
+        chanwoo@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, s.nawrocki@samsung.com, kgene@kernel.org
+References: <20200710191122.11029-1-lukasz.luba@arm.com>
+ <CGME20200710191148eucas1p2552537bb911bde44c783d98808efa07f@eucas1p2.samsung.com>
+ <20200710191122.11029-3-lukasz.luba@arm.com>
+ <1a389137-cab5-124a-e198-8be3bc2ca841@samsung.com>
+ <3154b8d2-1fa8-c69d-8a9d-05832e12fdd1@arm.com>
+Message-ID: <baadfe1a-89b6-9fd5-9ea8-e39b458af1aa@arm.com>
+Date:   Fri, 17 Jul 2020 12:53:06 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200717103305.GA2385870@google.com>
+In-Reply-To: <3154b8d2-1fa8-c69d-8a9d-05832e12fdd1@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 17 Jul 2020 at 11:33:05 (+0100), Quentin Perret wrote:
-> On Friday 17 Jul 2020 at 11:14:38 (+0100), Quentin Perret wrote:
-> > On Tuesday 14 Jul 2020 at 12:06:53 (+0530), Viresh Kumar wrote:
-> > >  /**
-> > > - * get_load() - get load for a cpu since last updated
-> > > + * get_load() - get current load for a cpu
-> > >   * @cpufreq_cdev:	&struct cpufreq_cooling_device for this cpu
-> > >   * @cpu:	cpu number
-> > > - * @cpu_idx:	index of the cpu in time_in_idle*
-> > > + * @cpu_idx:	index of the cpu
-> > >   *
-> > > - * Return: The average load of cpu @cpu in percentage since this
-> > > - * function was last called.
-> > > + * Return: The current load of cpu @cpu in percentage.
-> > >   */
-> > >  static u32 get_load(struct cpufreq_cooling_device *cpufreq_cdev, int cpu,
-> > >  		    int cpu_idx)
-> > >  {
-> > > -	u32 load;
-> > > -	u64 now, now_idle, delta_time, delta_idle;
-> > > -	struct time_in_idle *idle_time = &cpufreq_cdev->idle_time[cpu_idx];
-> > > -
-> > > -	now_idle = get_cpu_idle_time(cpu, &now, 0);
-> > > -	delta_idle = now_idle - idle_time->time;
-> > > -	delta_time = now - idle_time->timestamp;
-> > > +	unsigned long util = cpu_util_cfs(cpu_rq(cpu));
-> > > +	unsigned long max = arch_scale_cpu_capacity(cpu);
-> > 
-> > Should we subtract the thermal PELT signal from max?
+
+
+On 7/14/20 10:01 AM, Lukasz Luba wrote:
+> Hi Bartek,
 > 
-> Actually, that or add it the ENERGY_UTIL case in effective_cpu_util() as
-> this appears to be missing for EAS too ...
+> On 7/14/20 8:42 AM, Bartlomiej Zolnierkiewicz wrote:
+>>
+>> Hi,
+>>
+>> On 7/10/20 9:11 PM, Lukasz Luba wrote:
+>>> The driver can operate in two modes relaying on devfreq monitoring
+>>> mechanism which periodically checks the device status or it can use
+>>> interrupts when they are provided by loaded Device Tree. The newly
+>>> introduced module parameter can be used to choose between devfreq
+>>> monitoring and internal interrupts without modifying the Device Tree.
+>>> It also sets devfreq monitoring as default when the parameter is not set
+>>> (also the case for default when the driver is not built as a module).
+>>
+>> Could you please explain why should we leave the IRQ mode
+>> support in the dmc driver?
+> 
+> I am still experimenting with the IRQ mode in DMC, but have limited time
+> for it and no TRM.
+> The IRQ mode in memory controller or bus controller has one major
+> advantage: is more interactive. In polling we have fixed period, i.e.
+> 100ms - that's a lot when we have a sudden, latency sensitive workload.
+> There might be no check of the device load for i.e. 99ms, but the tasks
+> with such workload started running. That's a long period of a few frames
+> which are likely to be junked. Should we adjust polling interval to i.e.
+> 10ms, I don't think so. There is no easy way to address all of the
+> scenarios.
+> 
+>>
+>> What are the advantages over the polling mode?
+> 
+> As described above: more reactive to sudden workload, which might be
+> latency sensitive and cause junk frames.
+> Drawback: not best in benchmarks which are randomly jumping
+> over the data set, causing low traffic on memory.
+> It could be mitigated as Sylwester described with not only one type
+> of interrupt, but another, which could 'observe' also other information
+> type in the counters and fire.
+> 
+>>
+>> In what scenarios it should be used?
+> 
+> System like Android with GUI, when there is this sudden workload
+> quite often.
+> 
+> I think the interconnect could help here and would adjust the DMC
+> freq upfront. Although I don't know if interconnect on Exynos5422 is in
+> your scope in near future. Of course the interconnect will not cover
+> all scenarios either.
+> 
+> 
+>>
+>> [ If this is only for documentation purposes then it should be
+>>    removed as it would stay in (easily accessible) git history
+>>    anyway.. ]
+> 
+> The current interrupt mode is definitely not perfect and switching
+> to devfreq monitoring mode has more sense. On the other hand, it
+> still has potential, until there is no interconnect for this SoC.
+> I will continue experimenting with irq mode, so I would like to
+> still have the code in the driver.
+> 
+> Regards,
+> Lukasz
+> 
+>>
+>> Best regards,
+>> -- 
+>> Bartlomiej Zolnierkiewicz
+>> Samsung R&D Institute Poland
+>> Samsung Electronics
+>>
 
-Scratch that. I do think there is something missing in the EAS path, but
-not sure that would fix it. I'll have a think and stop spamming
-everybody in the meantime ...
+Bartek, do you have some objections to the patches or you think
+they can be taken via devfreq-next?
 
-The first question is still valid, though :)
-
-Sorry for the noise,
-Quentin
+Cheers,
+Lukasz
