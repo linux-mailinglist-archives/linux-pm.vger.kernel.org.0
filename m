@@ -2,98 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D3B22419A
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 19:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF61224338
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 20:36:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbgGQRQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jul 2020 13:16:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47860 "EHLO mail.kernel.org"
+        id S1728146AbgGQSgN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jul 2020 14:36:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726463AbgGQRQU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Jul 2020 13:16:20 -0400
-Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728022AbgGQSgN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Jul 2020 14:36:13 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94967206BE;
-        Fri, 17 Jul 2020 17:16:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 38FFD21702;
+        Fri, 17 Jul 2020 18:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595006179;
-        bh=BMFDpLiXiIkNg05MYBPfN+bjURAfepPCUIPuHQlUSiY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MAqrX9/PcmveaIgPJnYWRFY21xgtKg5EMWwxh3g7nMazwXEBJonijbZPHU1R1AQSa
-         sag/nVtSM5RSL7FnVUtetWrUo05JniCdQjp8Hf6CEV9x3VnWZizsBv5sP2Ay/dRjQC
-         vJr/42dT/FSeYxESIvBNs8Ae8GKXBGnAmzp/RL9Y=
-Date:   Fri, 17 Jul 2020 13:16:18 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH 4.14 105/136] usb/ehci-platform: Set PM runtime as active
- on resume
-Message-ID: <20200717171618.GQ2722994@sasha-vm>
-References: <20200623195303.601828702@linuxfoundation.org>
- <20200623195308.955410923@linuxfoundation.org>
- <20200709070023.GA18414@lxhi-065.adit-jv.com>
- <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
+        s=default; t=1595010972;
+        bh=6IhYIKmVZDeZrypbI87Kz8pgaQhaQha5rJV8Ik5J7bk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=s6sCGYdNX1R9qYXHHidspLXuFmtNrCsbL2kIbUlxAtc26Ua7C0ChuGqSMrMxcE/Q+
+         6R3kR+qo1eQ0iYYDZl4fMNgTUOl7lQplKoP3nbgBhX//diF+tyyahGvPnveim25CdD
+         lam63/GQ/3vp0/VXdRFp6dtfix15TcFPGvmcIEkQ=
+Received: by mail-ot1-f54.google.com with SMTP id 5so7518586oty.11;
+        Fri, 17 Jul 2020 11:36:12 -0700 (PDT)
+X-Gm-Message-State: AOAM532ccMUB4I4bDaCcANMdFqCID3aqLE4EdwqVDSHuIUfU19qaeaMx
+        wOI+Ng6jQ9/cneSIIK6OwO6loVCxdhtgSQPM6g==
+X-Google-Smtp-Source: ABdhPJwvWVISrMjnm+UoMBRoocoox6vjA7uZZ0i4pJ9VBySQKqf+ek0xvhn+opfsWguYonw/q0Q7Q/bIE/Tx5LV1iO8=
+X-Received: by 2002:a05:6830:3104:: with SMTP id b4mr10161318ots.192.1595010971464;
+ Fri, 17 Jul 2020 11:36:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
+References: <20200707102338.989660-1-yamada.masahiro@socionext.com>
+ <20200716230451.GA3041278@bogus> <CAK7LNAQN04i14VwrWspTJ7+Y87rgsopv88Dyv_8+4Hk8Kx0Fdw@mail.gmail.com>
+In-Reply-To: <CAK7LNAQN04i14VwrWspTJ7+Y87rgsopv88Dyv_8+4Hk8Kx0Fdw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 17 Jul 2020 12:36:00 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKahftcjgtMP9H4NE2df1LxaV+31M8KrmBWCVy05P0hHA@mail.gmail.com>
+Message-ID: <CAL_JsqKahftcjgtMP9H4NE2df1LxaV+31M8KrmBWCVy05P0hHA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: uniphier-thermal: add minItems to socionext,tmod-calibration
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 05:17:23PM +0100, Qais Yousef wrote:
->Hi Eugeniu
+On Thu, Jul 16, 2020 at 10:54 PM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
->On 07/09/20 09:00, Eugeniu Rosca wrote:
->> Hello everyone,
->>
->> Cc: linux-renesas-soc
->> Cc: linux-pm
+> On Fri, Jul 17, 2020 at 8:09 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, Jul 07, 2020 at 07:23:38PM +0900, Masahiro Yamada wrote:
+> > > As the description says, this property contains a pair of calibration
+> > > values. The number of items must be exactly 2.
+> > >
+> > > Add minItems to check a too short property.
+> > >
+> > > While I was here, I also added this property to the example because
+> > > this is the case in the real DT file,
+> > > arch/arm64/boot/dts/socionext/uniphier-ld20.dtsi
+> > >
+> > > Also, fix the interrupt type (edge -> level) to align with the
+> > > real DT.
+> > >
+> > > Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > > ---
+> > >
+> > >  .../bindings/thermal/socionext,uniphier-thermal.yaml          | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+> > > index 553c9dcdaeeb..57ffd0c4c474 100644
+> > > --- a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+> > > +++ b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+> > > @@ -29,6 +29,7 @@ properties:
+> > >
+> > >    socionext,tmod-calibration:
+> > >      $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +    minItems: 2
+> >
+> > The intent was if minItems is not defined, then the default is the same
+> > as maxItems. This is not the default for json-schema, so the tooling is
+> > supposed to add it.
 >
->[...]
 >
->> After integrating v4.14.186 commit 5410d158ca2a50 ("usb/ehci-platform:
->> Set PM runtime as active on resume") into downstream v4.14.x, we started
->> to consistently experience below panic [1] on every second s2ram of
->> R-Car H3 Salvator-X Renesas reference board.
->>
->> After some investigations, we concluded the following:
->>  - the issue does not exist in vanilla v5.8-rc4+
->>  - [bisecting shows that] the panic on v4.14.186 is caused by the lack
->>    of v5.6-rc1 commit 987351e1ea7772 ("phy: core: Add consumer device
->>    link support"). Getting evidence for that is easy. Reverting
->>    987351e1ea7772 in vanilla leads to a similar backtrace [2].
->>
->> Questions:
->>  - Backporting 987351e1ea7772 ("phy: core: Add consumer device
->>    link support") to v4.14.187 looks challenging enough, so probably not
->>    worth it. Anybody to contradict this?
->>  - Assuming no plans to backport the missing mainline commit to v4.14.x,
->>    should the following three v4.14.186 commits be reverted on v4.14.x?
->>    * baef809ea497a4 ("usb/ohci-platform: Fix a warning when hibernating")
->>    * 9f33eff4958885 ("usb/xhci-plat: Set PM runtime as active on resume")
->>    * 5410d158ca2a50 ("usb/ehci-platform: Set PM runtime as active on resume")
+> This implication is unclear.
 >
->Thanks for investigating this.
->
->Alan, Greg, do you have any ideas?
+> maxItems should literally only define the max, and
+> we should stick to json-schema as much as possible, IMHO.
 
-I've reverted these 3 commits from 5.4 and earlier, thank you for
-investigating this issue.
+Yes, but we already deviate a bit as the default json-schema behavior
+is a bit different than DT defaults. For example, with just:
 
--- 
-Thanks,
-Sasha
+items:
+  - const: a
+  - const: b
+  - const: c
+
+All of these pass validation:
+
+[]
+[ a ]
+[ a, b, c, 1, 2, true ]
+
+when we really only want [ a, b, c ] to pass (by default). So we add
+minItems, maxItems, and additionalItems if not specified.
+
+> It would be nice if json-schema had something like:
+>
+> numItems: 2
+>
+> as a shorthand for
+>
+> minItems: 2
+> maxItems: 2
+
+Yes, I've been thinking the same thing. It wouldn't be unprecedented
+as they added 'const' to shorten 'enum: [ one_entry ]'. We can add our
+own keywords too, but I try to avoid that so far. The only ones we
+have are internal to dtschema (typeSize and phandle).
+
+Rob
