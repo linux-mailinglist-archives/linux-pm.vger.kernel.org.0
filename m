@@ -2,91 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0457822406D
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 18:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20882240B8
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 18:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgGQQR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jul 2020 12:17:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:43376 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbgGQQR2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 17 Jul 2020 12:17:28 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A864B142F;
-        Fri, 17 Jul 2020 09:17:27 -0700 (PDT)
-Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB4FF3F68F;
-        Fri, 17 Jul 2020 09:17:25 -0700 (PDT)
-Date:   Fri, 17 Jul 2020 17:17:23 +0100
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Oliver Neukum <oneukum@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH 4.14 105/136] usb/ehci-platform: Set PM runtime as active
- on resume
-Message-ID: <20200717161639.37ptgbolborimcvs@e107158-lin.cambridge.arm.com>
-References: <20200623195303.601828702@linuxfoundation.org>
- <20200623195308.955410923@linuxfoundation.org>
- <20200709070023.GA18414@lxhi-065.adit-jv.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200709070023.GA18414@lxhi-065.adit-jv.com>
-User-Agent: NeoMutt/20171215
+        id S1726293AbgGQQm2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jul 2020 12:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726256AbgGQQm1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jul 2020 12:42:27 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804D3C0619D2
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 09:42:27 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id g10so7545635wmc.1
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jul 2020 09:42:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=+3rxnetOPA9YeqWq4tADlvynk7eUReArYRmyXTONGkI=;
+        b=VV3akQYOc7tirLe5YfeKr+2LvlfDrzSZOXmAQ6ZPLWiskx350quVklFgQg0yJQkTYa
+         eS6EeYav3uMhjFijSpqhTEPwEuX0ujOTKH6b8/dMoxs0MnRXqtq9aCb8Jpu5DQzHRspq
+         OGOGm2ggyX0OpAm71tGlpf+ZJpzM5Rqk68pv9hB8KFxXXXW1mrUVJyb8CwfEEsvOY0NR
+         rOpFbW8mxW1B3EzOxyUXGWKqUGw7iLtFBtTDsykH8CJ56lkvXhGIXZM+E7/KUsRww/Pr
+         k9TOAU8+1ydhyIl8VlQIEBcRFyOT9LC5ToM626vYpnDUE5fRw5IwLhNpcUyfkU7jPNJV
+         FFZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+3rxnetOPA9YeqWq4tADlvynk7eUReArYRmyXTONGkI=;
+        b=pG0HDA2Wb+nG8XH6Yrw0AxFYAfIuPhlUTDoaLTl89cQDmjov4usmo+DEFkJ3vuwLVs
+         PBbk7a06g48aqlHJv3XrfYXgridBwO30RQydDpkw9FavasoczQQP0ZG51av7pgIes+Qo
+         vgOb2BNjhTpZ5wheCAhUgC9Uwfi1OkhRlz5v2nnnvLVbsAc6g/+NdKmlsoe98upANKmv
+         U2ZlDOLTwUWf7A7GnIZLWi2DXtjUz0gbQZhbDYmm69hUXD5vaFBWc85LHm8EYc56Bw0l
+         N5AxU1RIaWFrFZmnGh138LOQAJcJ+ys5kIMyb4IwGdYz9WogepCcT7LCin4fc8SJlskD
+         g6eA==
+X-Gm-Message-State: AOAM533b8M1XxHe7OCUTktWcJ7OikWAcpv/jfhmUTObRqGFPryRFEjff
+        ocjPXZXVvstLE+AajSjqUjRwj2FC/m8=
+X-Google-Smtp-Source: ABdhPJz6ibl3EXJPZE9ZoeRR4tBj19Pijs9Q+8UEKUdJsN/HGgnGq9Ng0zgSSx9CCXPYISOa2oVzBA==
+X-Received: by 2002:a1c:4183:: with SMTP id o125mr10113012wma.101.1595004145968;
+        Fri, 17 Jul 2020 09:42:25 -0700 (PDT)
+Received: from localhost.localdomain (lns-bzn-59-82-252-131-168.adsl.proxad.net. [82.252.131.168])
+        by smtp.gmail.com with ESMTPSA id q5sm15312610wrp.60.2020.07.17.09.42.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2020 09:42:25 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        m.szyprowski@samsung.com, amit.kucheria@linaro.org
+Subject: [PATCH 1/2] thermal: netlink: Improve the initcall ordering
+Date:   Fri, 17 Jul 2020 18:42:16 +0200
+Message-Id: <20200717164217.18819-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Eugeniu
+The initcalls like to play joke. In our case, the thermal-netlink
+initcall is called after the thermal-core initcall but this one sends
+a notification before the former is initialzed. No issue was spotted,
+but it could lead to a memory corruption, so instead of relying on the
+core_initcall for the thermal-netlink, let's initialize directly from
+the thermal-core init routine, so we have full control of the init
+ordering.
 
-On 07/09/20 09:00, Eugeniu Rosca wrote:
-> Hello everyone,
-> 
-> Cc: linux-renesas-soc
-> Cc: linux-pm
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.c    | 4 ++++
+ drivers/thermal/thermal_netlink.c | 3 +--
+ drivers/thermal/thermal_netlink.h | 6 ++++++
+ 3 files changed, 11 insertions(+), 2 deletions(-)
 
-[...]
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 25ef29123f72..c2e7d7aaa354 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1581,6 +1581,10 @@ static int __init thermal_init(void)
+ {
+ 	int result;
+ 
++	result = thermal_netlink_init();
++	if (result)
++		goto error;
++
+ 	mutex_init(&poweroff_lock);
+ 	result = thermal_register_governors();
+ 	if (result)
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index dd0a3b889674..42eace7401da 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -641,8 +641,7 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
+ 	.n_mcgrps	= ARRAY_SIZE(thermal_genl_mcgrps),
+ };
+ 
+-static int __init thermal_netlink_init(void)
++int __init thermal_netlink_init(void)
+ {
+ 	return genl_register_family(&thermal_gnl_family);
+ }
+-core_initcall(thermal_netlink_init);
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index 0ec28d105da5..828d1dddfa98 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -6,6 +6,7 @@
+ 
+ /* Netlink notification function */
+ #ifdef CONFIG_THERMAL_NETLINK
++int __init thermal_netlink_init(void);
+ int thermal_notify_tz_create(int tz_id, const char *name);
+ int thermal_notify_tz_delete(int tz_id);
+ int thermal_notify_tz_enable(int tz_id);
+@@ -23,6 +24,11 @@ int thermal_notify_cdev_delete(int cdev_id);
+ int thermal_notify_tz_gov_change(int tz_id, const char *name);
+ int thermal_genl_sampling_temp(int id, int temp);
+ #else
++static inline int thermal_netlink_init(void)
++{
++	return 0;
++}
++
+ static inline int thermal_notify_tz_create(int tz_id, const char *name)
+ {
+ 	return 0;
+-- 
+2.17.1
 
-> After integrating v4.14.186 commit 5410d158ca2a50 ("usb/ehci-platform:
-> Set PM runtime as active on resume") into downstream v4.14.x, we started
-> to consistently experience below panic [1] on every second s2ram of
-> R-Car H3 Salvator-X Renesas reference board.
-> 
-> After some investigations, we concluded the following:
->  - the issue does not exist in vanilla v5.8-rc4+
->  - [bisecting shows that] the panic on v4.14.186 is caused by the lack
->    of v5.6-rc1 commit 987351e1ea7772 ("phy: core: Add consumer device
->    link support"). Getting evidence for that is easy. Reverting
->    987351e1ea7772 in vanilla leads to a similar backtrace [2].
-> 
-> Questions:
->  - Backporting 987351e1ea7772 ("phy: core: Add consumer device
->    link support") to v4.14.187 looks challenging enough, so probably not
->    worth it. Anybody to contradict this?
->  - Assuming no plans to backport the missing mainline commit to v4.14.x,
->    should the following three v4.14.186 commits be reverted on v4.14.x?
->    * baef809ea497a4 ("usb/ohci-platform: Fix a warning when hibernating")
->    * 9f33eff4958885 ("usb/xhci-plat: Set PM runtime as active on resume")
->    * 5410d158ca2a50 ("usb/ehci-platform: Set PM runtime as active on resume")
-
-Thanks for investigating this.
-
-Alan, Greg, do you have any ideas?
-
-Let me know if there's anything I can help with.
-
-Thanks
-
---
-Qais Yousef
