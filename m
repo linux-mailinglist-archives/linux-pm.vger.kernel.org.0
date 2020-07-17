@@ -2,165 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028892243E7
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 21:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5974F2245CF
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jul 2020 23:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728379AbgGQTKe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 17 Jul 2020 15:10:34 -0400
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:58472 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbgGQTKd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 17 Jul 2020 15:10:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1595013033; x=1626549033;
-  h=date:from:to:cc:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:subject;
-  bh=JXEp3fu4ueKSPTL/aTTxogwWbfIdE4zKSLg5x2ylncA=;
-  b=qFWB9M0p4V9EPFUX9w3CtmL975Re8xUfeScpOkbW6oj2DTGFjPIHiIMR
-   GADrCHxJI1cPfotygfYbnRJ/COloPrZfb1ZMYfW/sFDnXT5cFzuud0rta
-   2eyL3KD/Cvwb7/O/h0iya5YppUjJHaaNB/F4sTcRYTLJgxf514RxfGnFB
-   8=;
-IronPort-SDR: B7g8C+O+44k2rWyS1+qLZ7Ril88L7euUS5PHylv/wSxXaBC1vnDAauj2J020dgzo+5pOznIGT3
- 9bsyqNana+Aw==
-X-IronPort-AV: E=Sophos;i="5.75,364,1589241600"; 
-   d="scan'208";a="42640067"
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 17 Jul 2020 19:10:32 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com (Postfix) with ESMTPS id D73BFA20E1;
-        Fri, 17 Jul 2020 19:10:24 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 17 Jul 2020 19:10:09 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (10.43.61.77) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 17 Jul 2020 19:10:09 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.61.169) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Fri, 17 Jul 2020 19:10:09 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 3826A56980; Fri, 17 Jul 2020 19:10:09 +0000 (UTC)
-Date:   Fri, 17 Jul 2020 19:10:09 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
-        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <kamatam@amazon.com>, <sstabellini@kernel.org>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <cover.1593665947.git.anchalag@amazon.com>
- <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
- <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
+        id S1726698AbgGQVXC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 17 Jul 2020 17:23:02 -0400
+Received: from cmta16.telus.net ([209.171.16.89]:38156 "EHLO cmta16.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726204AbgGQVXC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 17 Jul 2020 17:23:02 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id wXoojGt2v5b7lwXopjA9Rr; Fri, 17 Jul 2020 15:23:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1595020980; bh=Obs7qdIUZIgX6dl7u6Axy0TTWM4tuguLOeMYKBQ0GWE=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=42DGB1ZbW8ZjfFDX5P4Dlp1CXsuH1jel1I42fWeqIEyXW690IiqO9+1t0H6zXk3aR
+         xlifKfVLgY2fFEBz3E+Ott3Z+0QetFbjhoXHAI0oTqhT0GSjbISAE2n8wcu/Tk16nW
+         felqP9XAPIxaI/bqErOgBRprcuAYRlOoFJv58uRjdHLRC8LC4aIKNaWX/vJ2EZCqgv
+         BoPC6GK/+Vg9aSbvxd6F8ysJfasFBvgGL4iMne9o5o76pd3FZDjNZj84yO0sa4X896
+         f67HDD4SSlssQ8zAIWUcxMOV6tcmvwg39n1sfMh7A/K9i6YjJoSlqOgxK+LawE55Ss
+         oiOhE9rWsfbEg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=aatUQebYAAAA:8
+ a=fdjANqkvx1eCgfwP2e0A:9 a=QEXdDO2ut3YA:10 a=7715FyvI7WU-l6oqrZBK:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rafael@kernel.org>
+Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>
+References: <000701d656be$c48083e0$4d818ba0$@net> <CAJZ5v0hKeHBNC2Bzdizm=42jtOqq8VOswCNNNk5HA9x_Y2T_Ng@mail.gmail.com> <001d01d65af9$6dd46180$497d2480$@net> <CAJZ5v0gvqhfHDDzVHNP4ODMfujaWA8Y8OuLF_i4JoM_1jVh=2w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gvqhfHDDzVHNP4ODMfujaWA8Y8OuLF_i4JoM_1jVh=2w@mail.gmail.com>
+Subject: RE: cpufreq: intel_pstate: EPB with performance governor
+Date:   Fri, 17 Jul 2020 14:22:57 -0700
+Message-ID: <004401d65c80$7254fcf0$56fef6d0$@net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdZbaLLjMG7mo7iNQZSVo7KyziRxbwA25HPg
+X-CMAE-Envelope: MS4wfK8LNHIcwYyiRS53l4Zy83oik+CZseLif7k+unmlNAqrpi4DOXkDSnC1mXvr8K5Xe4e359elHp/aQsL1Lx+sYFW+DzZqVGTUle2QSq/4Ia4oyRYrY0bI
+ fiJwlISue6bedlUMBA9BBpim0dQGz1OKnnythHf+XSLaZh73sX9Bb7rHnoqD2JC+FcPxFve+Q6Dw4gVL+vKJ9ODBIKfs5xGmlcpWNp3vVaLng193phjQluU3
+ Gibutn2fDKrEpH6xL2YGXg==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 15, 2020 at 05:18:08PM -0400, Boris Ostrovsky wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On 7/15/20 4:49 PM, Anchal Agarwal wrote:
-> > On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
-> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> >>
-> >>
-> >>
-> >> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
-> >>> +
-> >>> +bool xen_is_xen_suspend(void)
-> >>
-> >> Weren't you going to call this pv suspend? (And also --- is this suspend
-> >> or hibernation? Your commit messages and cover letter talk about fixing
-> >> hibernation).
-> >>
-> >>
-> > This is for hibernation is for pvhvm/hvm/pv-on-hvm guests as you may call it.
-> > The method is just there to check if "xen suspend" is in progress.
-> > I do not see "xen_suspend" differentiating between pv or hvm
-> > domain until later in the code hence, I abstracted it to xen_is_xen_suspend.
-> 
-> 
-> I meant "pv suspend" in the sense that this is paravirtual suspend, not
-> suspend for paravirtual guests. Just like pv drivers are for both pv and
-> hvm guests.
-> 
-> 
-> And then --- should it be pv suspend or pv hibernation?
-> 
->
-Ok so I think I am lot confused by this question. Here is what this
-function for, function xen_is_xen_suspend() just tells us whether 
-the guest is in "SHUTDOWN_SUSPEND" state or not. This check is needed
-for correct invocation of syscore_ops callbacks registered for guest's
-hibernation and for xenbus to invoke respective callbacks[suspend/resume
-vs freeze/thaw/restore].
-Since "shutting_down" state is defined static and is not directly available
-to other parts of the code, the function solves the purpose.
+Hi Rafael,
 
-I am having hard time understanding why this should be called pv
-suspend/hibernation unless you are suggesting something else?
-Am I missing your point here? 
+Thank you for your reply.
+I'll give it up after this, I promise.
+
+On 2020.07.16 05:00 Of Rafael J. Wysocki
+> On Thu, Jul 16, 2020 at 12:44 AM Doug Smythies <dsmythies@telus.net> wrote:
+> > On 2020.07.15 09:47 Rafael J. Wysocki wrote:
+> > > On Fri, Jul 10, 2020 at 3:34 PM Doug Smythies <dsmythies@telus.net> wrote:
+...
+> > > you can simply set the EPB to 0 via
+> > > energy_perf_bias for all CPUs and it should stick.
+> >
+> > And I am saying I should not have to do that, or even know about it,
+> > when I want to use the performance governor.
 > 
-> >>> +{
-> >>> +     return suspend_mode == XEN_SUSPEND;
-> >>> +}
-> >>> +
-> >>
-> >> +static int xen_setup_pm_notifier(void)
-> >> +{
-> >> +     if (!xen_hvm_domain())
-> >> +             return -ENODEV;
-> >>
-> >> I forgot --- what did we decide about non-x86 (i.e. ARM)?
-> > It would be great to support that however, its  out of
-> > scope for this patch set.
-> > I’ll be happy to discuss it separately.
+> Again, cpufreq governors are on top of the EPB.
 > 
+> > But yes, I expect the driver to remember the default, or otherwise set,
+> > value of EPB for all the other governors.
 > 
-> I wasn't implying that this *should* work on ARM but rather whether this
-> will break ARM somehow (because xen_hvm_domain() is true there).
-> 
-> 
-Ok makes sense. TBH, I haven't tested this part of code on ARM and the series
-was only support x86 guests hibernation.
-Moreover, this notifier is there to distinguish between 2 PM
-events PM SUSPEND and PM hibernation. Now since we only care about PM
-HIBERNATION I may just remove this code and rely on "SHUTDOWN_SUSPEND" state.
-However, I may have to fix other patches in the series where this check may
-appear and cater it only for x86 right?
-> 
-> >>
-> >> And PVH dom0.
-> > That's another good use case to make it work with however, I still
-> > think that should be tested/worked upon separately as the feature itself
-> > (PVH Dom0) is very new.
-> 
-> 
-> Same question here --- will this break PVH dom0?
-> 
-I haven't tested it as a part of this series. Is that a blocker here?
-> 
-Thanks,
-Anchal
-> -boris
-> 
-> 
+> We clearly don't agree here.
+
+Agreed. (That we disagree.)
+
+It is done with EPP in active mode with HWP between performance
+and powersave governors, so I struggle with treating the EPB
+case differently.
+ 
+> Also in the passive mode of intel_pstate, when the regular cpufreq
+> "performance" governor is in use, it's all about setting the frequency
+> to the max alone through min = max without touching any other knobs
+> which need to be adjusted separately.  That's how it's been always
+> working and changing it now may confuse the users who have learned to
+> rely on this behavior.
+
+But the behaviour is inconsistent anyhow.
+
+How can we possibly claim that this:
+
+doug@s18:~$ sudo ~/turbostat --quiet --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 6
+Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+18.12   3700    25782   38      13.94   0.00
+0.55    3701    3000    38      13.94   0.00
+0.01    3701    49
+19.29   3700    5529
+35.97   3700    6051
+26.99   3700    5177
+25.92   3700    5976
+Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+18.12   3700    27042   40      14.15   0.00
+0.55    3701    2978    40      14.15   0.00
+0.01    3701    22
+30.01   3700    6042
+28.09   3700    6044
+29.18   3700    6046
+20.91   3700    5910
+Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
+18.13   3700    27195   40      14.06   0.00
+0.55    3701    2983    40      14.06   0.00
+0.01    3701    20
+27.64   3700    6039
+20.31   3700    6043
+36.12   3700    6056
+24.18   3700    6054
+
+is "performance" mode?
+There is plenty enough load on 4 of the CPUs.
+In performance mode I would expect 4.6 GHz.
+
+You can see the request for pstate 46,
+But only pstate 37 is granted:
+
+root@s18:/home/doug# /home/doug/c/msr-decoder
+8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  37 :  37 :  37 :  37 :  37 :  37 :
+B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
+9.) 0x199: IA32_PERF_CTL        : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-5 :   6 :   6 :   6 :   6 :   6 :   6 :
+1.) 0x19C: IA32_THERM_STATUS: 883E0000
+2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 883C0000
+4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+
+... Doug
+
+
