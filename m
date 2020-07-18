@@ -2,96 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4112C2249D1
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jul 2020 10:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2F1224A63
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jul 2020 11:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728911AbgGRI31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 18 Jul 2020 04:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40546 "EHLO
+        id S1726564AbgGRJnt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 18 Jul 2020 05:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728045AbgGRI31 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jul 2020 04:29:27 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDFFC0619D3
-        for <linux-pm@vger.kernel.org>; Sat, 18 Jul 2020 01:29:26 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id g67so7784025pgc.8
-        for <linux-pm@vger.kernel.org>; Sat, 18 Jul 2020 01:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dPX5I2zvoaIfMrTJOaEVmZ8AJ80iRBsKVksO1GxJCNo=;
-        b=ZzHLgOEL6rfH/FrYghVSfVEQktV2G0Ir7o5GkPsQTPiSTXfAartacdCWERPApI4F4h
-         z/xNML4mDKErL7wVRlTVtBRcspOz9kDbKiYzv/yyiLNLwgvPEJoSN37amJBWnAxRy9V2
-         9hVGDkdUX8hOdVMJjPWlhR6l8UlkjZKc+fziFbkc/yru2iiCKqBHpaSOUK5RnZW2S/yn
-         Pn8cacEL/2XGSr+kepi8HbhO+UN1PagUSVAQCnGrKN9SjBqwzxGDJoQQDa/+JnKN6Shy
-         o1suzUkzCeetU7bWUPKA6K7RuhGSovE+CT7GHBU6X1HJ4Oh0B0JzqvprdhMf8kXfmmJ2
-         BA5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dPX5I2zvoaIfMrTJOaEVmZ8AJ80iRBsKVksO1GxJCNo=;
-        b=Lpn0ARB9unJP7m7JflqrF+VarZqBzpgCynxUgTZCUyghHZYnyCXYg2xgB/wzYT/UMQ
-         WOt1fKUKJ+ia4klAaIU7l+IL/NYD2AcATsB4LSWFVJnEOA/oRDwcaq5fNC8kv1BH004P
-         l6qPUCoGMZ0YvE8yHNG5blAO+R1mV0RMLEKKA26To+vvrUvMVoBPocYqPPVOxxLuMEcz
-         h4MAbaPm5LA0nU8yVq7vGMb4nLq1POZ0mvVB8+nHledwjbcIVrZ2a/k8PtNPTX0BVoKu
-         R1+TxPflgm8x2HVhUxGLZ8D7rlstwmKViDBNNkv00jcw5/Bs9pCPgA17oV6NlXmsww3L
-         ot9w==
-X-Gm-Message-State: AOAM532mf8XhhGUL6ICnGRRHeRFY3qVDoBBepnNuqZqspjDjws57f8ar
-        ZvAAzjVC7efi6oM8My/Fcri9Jw==
-X-Google-Smtp-Source: ABdhPJxpkjlVoi1K6zt3TxppMxnpJwdAYknEnoLeYjpkZ5qIgAHhN1uKddV4rWohLA2QlS4I+GW9GA==
-X-Received: by 2002:a65:620e:: with SMTP id d14mr11477128pgv.360.1595060966415;
-        Sat, 18 Jul 2020 01:29:26 -0700 (PDT)
-Received: from localhost ([223.190.30.182])
-        by smtp.gmail.com with ESMTPSA id k100sm4874773pjb.57.2020.07.18.01.29.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 18 Jul 2020 01:29:25 -0700 (PDT)
-Date:   Sat, 18 Jul 2020 13:59:14 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Sumit Gupta <sumitg@nvidia.com>, rjw@rjwysocki.net,
-        catalin.marinas@arm.com, will@kernel.org, robh+dt@kernel.org,
-        mirq-linux@rere.qmqm.pl, devicetree@vger.kernel.org,
-        jonathanh@nvidia.com, talho@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com,
-        mperttunen@nvidia.com
-Subject: Re: [TEGRA194_CPUFREQ PATCH v6 2/3] arm64: tegra: Add t194 ccplex
- compatible and bpmp property
-Message-ID: <20200718082914.ecyngrsoir7j5q6y@vireshk-mac-ubuntu>
-References: <1594819885-31016-1-git-send-email-sumitg@nvidia.com>
- <1594819885-31016-3-git-send-email-sumitg@nvidia.com>
- <20200716123715.GA535268@ulmo>
+        with ESMTP id S1726191AbgGRJnt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 18 Jul 2020 05:43:49 -0400
+Received: from smtp.al2klimov.de (smtp.al2klimov.de [IPv6:2a01:4f8:c0c:1465::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F41AC0619D2;
+        Sat, 18 Jul 2020 02:43:49 -0700 (PDT)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by smtp.al2klimov.de (Postfix) with ESMTPA id 2216EBC053;
+        Sat, 18 Jul 2020 09:43:46 +0000 (UTC)
+From:   "Alexander A. Klimov" <grandmaster@al2klimov.de>
+To:     ssantosh@kernel.org, sre@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Subject: [PATCH] power: reset: keystone-reset: Replace HTTP links with HTTPS ones
+Date:   Sat, 18 Jul 2020 11:43:40 +0200
+Message-Id: <20200718094340.93087-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200716123715.GA535268@ulmo>
-User-Agent: NeoMutt/20170609 (1.8.3)
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: +++++
+X-Spam-Level: *****
+Authentication-Results: smtp.al2klimov.de;
+        auth=pass smtp.auth=aklimov@al2klimov.de smtp.mailfrom=grandmaster@al2klimov.de
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-07-20, 14:37, Thierry Reding wrote:
-> On Wed, Jul 15, 2020 at 07:01:24PM +0530, Sumit Gupta wrote:
-> > On Tegra194, data on valid operating points for the CPUs needs to be
-> > queried from BPMP. In T194, there is no node representing CPU complex.
-> > So, add compatible string to the 'cpus' node instead of using dummy
-> > node to bind cpufreq driver. Also, add reference to the BPMP instance
-> > for the CPU complex.
-> > 
-> > Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> > ---
-> >  arch/arm64/boot/dts/nvidia/tegra194.dtsi | 2 ++
-> >  1 file changed, 2 insertions(+)
-> 
-> Looks like the DT bindings are now done so I've applied this for v5.9.
-> 
-> Viresh, are you going to pick up the other patches, or do you want me
-> to pick them up and send you a pull request?
+Rationale:
+Reduces attack surface on kernel devs opening the links for MITM
+as HTTPS traffic is much harder to manipulate.
 
-Applied the other two patches, Thanks.
+Deterministic algorithm:
+For each file:
+  If not .svg:
+    For each line:
+      If doesn't contain `\bxmlns\b`:
+        For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+            If both the HTTP and HTTPS versions
+            return 200 OK and serve the same content:
+              Replace HTTP with HTTPS.
 
+Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
+---
+ Continuing my work started at 93431e0607e5.
+ See also: git log --oneline '--author=Alexander A. Klimov <grandmaster@al2klimov.de>' v5.7..master
+
+ If there are any URLs to be removed completely
+ or at least not (just) HTTPSified:
+ Just clearly say so and I'll *undo my change*.
+ See also: https://lkml.org/lkml/2020/6/27/64
+
+ If there are any valid, but yet not changed URLs:
+ See: https://lkml.org/lkml/2020/6/26/837
+
+ If you apply the patch, please let me know.
+
+
+ drivers/power/reset/keystone-reset.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
+index ad11faae19c5..211eeef0c81a 100644
+--- a/drivers/power/reset/keystone-reset.c
++++ b/drivers/power/reset/keystone-reset.c
+@@ -2,7 +2,7 @@
+ /*
+  * TI keystone reboot driver
+  *
+- * Copyright (C) 2014 Texas Instruments Incorporated. http://www.ti.com/
++ * Copyright (C) 2014 Texas Instruments Incorporated. https://www.ti.com/
+  *
+  * Author: Ivan Khoronzhuk <ivan.khoronzhuk@ti.com>
+  */
 -- 
-viresh
+2.27.0
+
