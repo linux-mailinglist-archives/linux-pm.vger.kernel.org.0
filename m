@@ -2,45 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA8FF22519B
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jul 2020 13:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6ED2251AA
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jul 2020 13:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbgGSLWb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jul 2020 07:22:31 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:33160 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgGSLWb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jul 2020 07:22:31 -0400
-Received: by mail-ot1-f45.google.com with SMTP id h13so10111115otr.0
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jul 2020 04:22:30 -0700 (PDT)
+        id S1726284AbgGSLnM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jul 2020 07:43:12 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40152 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgGSLnL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jul 2020 07:43:11 -0400
+Received: by mail-ot1-f67.google.com with SMTP id c25so10125347otf.7;
+        Sun, 19 Jul 2020 04:43:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Fijpbbur1S++KIUSFgM8srzJEnK9yXo2y7NPk8w0gK4=;
-        b=A3REqtPJibfOJQiAMSkRb9/gEP9aA5qUO64r1oNJP0NhHmimVIteq6lZDwVtaWkbil
-         YD34+Au/ZtHo3ZsP5o6jKFS7wChrJaLgn7+9b2PficEY9s+G3nlOeitI/T0RpKHHIwQc
-         bqXYIJBbRI1BwS70LojIaytYDYuC2t8GylymJz6w4tTiJR8CzO/LkWXv9Uszm2CNFCaz
-         tM5XT+HoybiDPmuaNBtVAgcQXtH4TSHW6B4Qg2sq03JwXTKhkdlJ9+WR5OC8eXtxYiEy
-         lgC7z5q0l58iQGQCgoop1hJeNknTh/rM1QEmqO/6B76/T/o2d3Vp81AW26YYM8dwsMxg
-         3MOg==
-X-Gm-Message-State: AOAM530mvN+d1wxkEk9+kzsJbykMSPe1XmmcNaAM+3LbaQFvClVmWTx+
-        Vd7aHDfNbm3RNOgloQysEyNAaoobxrmgleBnNPc=
-X-Google-Smtp-Source: ABdhPJyzFj0qUvHL85U021kTWXRigg2UzqIIUBxK6jasu/ktsnKrdrEx73kMpRhQqZK4muYEMHMqDSSmjpNP3ras7J8=
-X-Received: by 2002:a9d:590a:: with SMTP id t10mr15964334oth.262.1595157750375;
- Sun, 19 Jul 2020 04:22:30 -0700 (PDT)
+        bh=qjnIe1TJ50gLn+p9kXcfYDqIZQuO/sCSJOJdD/xzjx0=;
+        b=X6psrmqSkI7JFgKASbjz/rFUxtXiLUPBeOxXS9ZgO736vtLJJrNKGc5m638ITzi7Da
+         58zxYFcPEdGbtilVWS8Ks4TuB0+WbU8yvTdReNAlWZzgiYJxyyEiDevFaOCBeptYEJq5
+         ukwYDCbFVqMP/jMgcP1UXebs8nHa2xK74FW5FFwgcGedW32FG734dfcCgf1H2F6w/ABO
+         k55aDjFmQdcunRiRguPH5BYCthZYTSpKNVRXEMXXkbQCPQk5A3vgg2QtjJNgsGQUKiz1
+         uT4x8v5rbN4gJmeXof4tjHLyqzuJ82VVCQCQkF4jpswYFoM0C+MWpQTlELQTqgD5HeE6
+         SzSw==
+X-Gm-Message-State: AOAM531fOjF/fYcSU/T7eXVqpCfgky+vNNl9OfdyF5FHlr6JNkpANS+Z
+        J2zgRTfAXpt/Wg2ilH7O1FjTJSJJL7yez7oImDU=
+X-Google-Smtp-Source: ABdhPJxrVwgTX8eq+bgwXf+Nz2z5hRxNnikw7DU/gnXd1DP0all26S5yyODzsfs23Hf3e46sRHhV1LyHhMsG15j5jYo=
+X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr15288802ots.118.1595158990718;
+ Sun, 19 Jul 2020 04:43:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <000701d656be$c48083e0$4d818ba0$@net> <CAJZ5v0hKeHBNC2Bzdizm=42jtOqq8VOswCNNNk5HA9x_Y2T_Ng@mail.gmail.com>
- <001d01d65af9$6dd46180$497d2480$@net> <CAJZ5v0gvqhfHDDzVHNP4ODMfujaWA8Y8OuLF_i4JoM_1jVh=2w@mail.gmail.com>
- <004401d65c80$7254fcf0$56fef6d0$@net>
-In-Reply-To: <004401d65c80$7254fcf0$56fef6d0$@net>
+References: <3955470.QvD6XneCf3@kreacher> <000f01d65ae8$0c607990$25216cb0$@net>
+ <CAJZ5v0jGbfqfqqoPLjneFD5HLb20Yv9p25juNTzaumL70iFogg@mail.gmail.com> <001201d65c3f$6e2371c0$4a6a5540$@net>
+In-Reply-To: <001201d65c3f$6e2371c0$4a6a5540$@net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 19 Jul 2020 13:22:19 +0200
-Message-ID: <CAJZ5v0gBtMSCtj4Kh-sSS3uAiybnXhFBSH8SBpN7sys-xbOgYQ@mail.gmail.com>
-Subject: Re: cpufreq: intel_pstate: EPB with performance governor
+Date:   Sun, 19 Jul 2020 13:42:59 +0200
+Message-ID: <CAJZ5v0j+gziYE0t+d2bBMZ3+4Daa0L_OiX+CeTtNU8Mkv0bCBA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
 To:     Doug Smythies <dsmythies@telus.net>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Francisco Jerez <francisco.jerez.plata@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
@@ -48,113 +53,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 11:23 PM Doug Smythies <dsmythies@telus.net> wrote:
+Hi Doug,
+
+On Fri, Jul 17, 2020 at 3:37 PM Doug Smythies <dsmythies@telus.net> wrote:
 >
 > Hi Rafael,
 >
 > Thank you for your reply.
-> I'll give it up after this, I promise.
 >
-> On 2020.07.16 05:00 Of Rafael J. Wysocki
-> > On Thu, Jul 16, 2020 at 12:44 AM Doug Smythies <dsmythies@telus.net> wrote:
-> > > On 2020.07.15 09:47 Rafael J. Wysocki wrote:
-> > > > On Fri, Jul 10, 2020 at 3:34 PM Doug Smythies <dsmythies@telus.net> wrote:
-> ...
-> > > > you can simply set the EPB to 0 via
-> > > > energy_perf_bias for all CPUs and it should stick.
-> > >
-> > > And I am saying I should not have to do that, or even know about it,
-> > > when I want to use the performance governor.
+> On 2020.07.16 05:08 Rafael J. Wysocki wrote:
+> > On Wed, Jul 15, 2020 at 10:39 PM Doug Smythies <dsmythies@telus.net> wrote:
+> >> On 2020.07.14 11:16 Rafael J. Wysocki wrote:
+> >> >
+> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >> ...
+> >> > Since the passive mode hasn't worked with HWP at all, and it is not going to
+> >> > the default for HWP systems anyway, I don't see any drawbacks related to making
+> >> > this change, so I would consider this as 5.9 material unless there are any
+> >> > serious objections.
+> >>
+> >> Good point.
+>
+> Actually, for those users that default to passive mode upon boot,
+> this would mean they would find themselves using this.
+> Also, it isn't obvious, from the typical "what driver and what governor"
+> inquiry.
+
+So the change in behavior is that after this patch
+intel_pstate=passive doesn't imply no_hwp any more.
+
+That's a very minor difference though and I'm not aware of any adverse
+effects it can cause on HWP systems anyway.
+
+The "what governor" is straightforward in the passive mode: that's
+whatever cpufreq governor has been selected.
+
+The driver is "intel_cpufreq" which means that the processor is
+requested to run at a frequency selected by the governor or higher,
+unless in the turbo range.  This works similarly in both the HWP and
+non-HWP cases, except that in the HWP case it is possible to adjust
+the EPP (through the additional sysfs knob) and the base frequency is
+exported (the latter two things can be used to distinguish between the
+two cases just fine IMO).
+
+> >> Some of the tests I do involve labour intensive post processing of data.
+> >> I want to automate some of that work, and it will take time.
+> >> We might be into the 5.9-rc series before I have detailed feedback.
+> >>
+> >> However, so far:
+> >>
+> >> Inverse impulse response test [1]:
+> >>
+> >> High level test, i5-9600K, HWP-passive (this patch), ondemand:
+> >> 3101 tests. 0 failures. (GOOD)
+> >>
+> >> From [1], re-stated:
+> >> > . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate. (HWP-active - powersave)
+> >> > . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests. 0 failures.
+> >>
+> >> My version of that cool Alexander named pipe test [2] serialized workflow:
+> >>
+> >> HWP-passive (this patch), performance: PASS.
+> >>
+> >> From [2], re-stated, and also re-tested.
+> >> HWP-disabled passive - performance: FAIL.
 > >
-> > Again, cpufreq governors are on top of the EPB.
+> > But I'm not quite sure how this is related to this patch?
+>
+> It isn't. The point being that it is different.
+
+It is different, but kind of in a positive way IMO.
+
+> But yes, that failure is because of our other discussion [3].
+
+OK
+
 > >
-> > > But yes, I expect the driver to remember the default, or otherwise set,
-> > > value of EPB for all the other governors.
-> >
-> > We clearly don't agree here.
+> > This test would still fail without the patch if the kernel was started
+> > with intel_pstate=passive in the kernel command line, wouldn't it.
 >
-> Agreed. (That we disagree.)
->
-> It is done with EPP in active mode with HWP between performance
-> and powersave governors, so I struggle with treating the EPB
-> case differently.
+> Yes.
 
-First, it is a different scope.  The EPP is the processor only (and
-specifically the CPU whose HWP request is updated) and the EPB is the
-whole SoC (at least).
+OK
 
-Second, the EPB is still there on HWP systems, so the EPP is not a
-replacement for it.  It is a separate control on top of it.
-
-Hence, whatever is done to the EPP has no bearing on what should be
-done to the EPB.  Moreover, because the other cpufreq drivers don't
-update the EPB, there is no reason for intel_pstate to do that.
-
-> > Also in the passive mode of intel_pstate, when the regular cpufreq
-> > "performance" governor is in use, it's all about setting the frequency
-> > to the max alone through min = max without touching any other knobs
-> > which need to be adjusted separately.  That's how it's been always
-> > working and changing it now may confuse the users who have learned to
-> > rely on this behavior.
->
-> But the behaviour is inconsistent anyhow.
->
-> How can we possibly claim that this:
->
-> doug@s18:~$ sudo ~/turbostat --quiet --show Busy%,Bzy_MHz,PkgTmp,PkgWatt,GFXWatt,IRQ --interval 6
-> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-> 18.12   3700    25782   38      13.94   0.00
-> 0.55    3701    3000    38      13.94   0.00
-> 0.01    3701    49
-> 19.29   3700    5529
-> 35.97   3700    6051
-> 26.99   3700    5177
-> 25.92   3700    5976
-> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-> 18.12   3700    27042   40      14.15   0.00
-> 0.55    3701    2978    40      14.15   0.00
-> 0.01    3701    22
-> 30.01   3700    6042
-> 28.09   3700    6044
-> 29.18   3700    6046
-> 20.91   3700    5910
-> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt GFXWatt
-> 18.13   3700    27195   40      14.06   0.00
-> 0.55    3701    2983    40      14.06   0.00
-> 0.01    3701    20
-> 27.64   3700    6039
-> 20.31   3700    6043
-> 36.12   3700    6056
-> 24.18   3700    6054
->
-> is "performance" mode?
-> There is plenty enough load on 4 of the CPUs.
-> In performance mode I would expect 4.6 GHz.
->
-> You can see the request for pstate 46,
-> But only pstate 37 is granted:
-
-Well, that's how it goes, on this particular system.
-
-What a "regular" cpufreq driver can do (and which also applies to
-intel_pstate in the passive mode) is to ask for the frequency selected
-by the governor.  Anything else is beyond the scope of its use.
-Anything else would be inconsistent and so it may be confusing.
-
-> root@s18:/home/doug# /home/doug/c/msr-decoder
-> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  37 :  37 :  37 :  37 :  37 :  37 :
-> B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
-> 9.) 0x199: IA32_PERF_CTL        : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
-> C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-5 :   6 :   6 :   6 :   6 :   6 :   6 :
-> 1.) 0x19C: IA32_THERM_STATUS: 883E0000
-> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
-> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 883C0000
-> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
-
-As a general rule, on Linux you'll never see EPB==0 after a fresh boot
-and so it needs to be adjusted via sysfs.
-
-If you get better results with EPB==0, set it to 0, but that may not
-match everybody's needs (which is why it is never 0 after a fresh boot
-in the first place).
+Thanks!
