@@ -2,138 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6ED2251AA
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jul 2020 13:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B769225212
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jul 2020 15:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726284AbgGSLnM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 19 Jul 2020 07:43:12 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40152 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbgGSLnL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jul 2020 07:43:11 -0400
-Received: by mail-ot1-f67.google.com with SMTP id c25so10125347otf.7;
-        Sun, 19 Jul 2020 04:43:11 -0700 (PDT)
+        id S1726192AbgGSN7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 19 Jul 2020 09:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgGSN7l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 19 Jul 2020 09:59:41 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2108C0619D2;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id m22so9045784pgv.9;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eAMuwrdgZT+muWB0jbfvOv3S8Lq4I5ca8nN0yy/ukz0=;
+        b=gQUNuyKuer2aVg+6zju4B6jW7FIv2GqsAgJ+M8TgSIPMdHFHkBjH1FGBEOtK3hR6fR
+         OA8w7cGg9AMlxtp1fign1fIN7Ez5zjqP+qpCVvCgvKnx4Vj7IgZzMUciGtTkX1jgOC+o
+         +1ae8Dw7u7tKH7O3VuTB0hP5ZJt2zcppNmiBRQCr5C7BYTP7UskNINiPTL3EYF+a2S+d
+         K0HVaUuftzhK4lyu/QwKa78yeAQ+IIgZiitzKNxJpc3GIWUteYIJ5dW4nOKTPAu5bDOL
+         zMeGzYozRgLB851TiCD1HLvFFblkR4j1WQlZYrdVm0mgO8eNR3BQ2LEqrZ1jhyAl5P0Z
+         goNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qjnIe1TJ50gLn+p9kXcfYDqIZQuO/sCSJOJdD/xzjx0=;
-        b=X6psrmqSkI7JFgKASbjz/rFUxtXiLUPBeOxXS9ZgO736vtLJJrNKGc5m638ITzi7Da
-         58zxYFcPEdGbtilVWS8Ks4TuB0+WbU8yvTdReNAlWZzgiYJxyyEiDevFaOCBeptYEJq5
-         ukwYDCbFVqMP/jMgcP1UXebs8nHa2xK74FW5FFwgcGedW32FG734dfcCgf1H2F6w/ABO
-         k55aDjFmQdcunRiRguPH5BYCthZYTSpKNVRXEMXXkbQCPQk5A3vgg2QtjJNgsGQUKiz1
-         uT4x8v5rbN4gJmeXof4tjHLyqzuJ82VVCQCQkF4jpswYFoM0C+MWpQTlELQTqgD5HeE6
-         SzSw==
-X-Gm-Message-State: AOAM531fOjF/fYcSU/T7eXVqpCfgky+vNNl9OfdyF5FHlr6JNkpANS+Z
-        J2zgRTfAXpt/Wg2ilH7O1FjTJSJJL7yez7oImDU=
-X-Google-Smtp-Source: ABdhPJxrVwgTX8eq+bgwXf+Nz2z5hRxNnikw7DU/gnXd1DP0all26S5yyODzsfs23Hf3e46sRHhV1LyHhMsG15j5jYo=
-X-Received: by 2002:a05:6830:30ba:: with SMTP id g26mr15288802ots.118.1595158990718;
- Sun, 19 Jul 2020 04:43:10 -0700 (PDT)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eAMuwrdgZT+muWB0jbfvOv3S8Lq4I5ca8nN0yy/ukz0=;
+        b=c1zh4R40VYT9Sa50a8NxGPHGYZyeOzyWP/JLlc6u2/G1z2tlUeYYzTo8xhNVjKJ75Q
+         FXMAkQW8uTjYJjzjVK5P2ruKacNhG3fEQj2vE/gWKxUUbImHV5GGUTgKQL9/NQyxzDDk
+         2A+JuI8AKmrv3UOsNo1i41YuRkf/+HaeT65BGrxyJYPRdUllnymrgx7kqYBjxSLOE+r3
+         TZEZerVwD96TWJlS3JOYeNcyZm9Du8n5flrb32iK5J/qEEqIUsXsa3HJIQsZOM9FzS4r
+         Ne4IBDvFaW7Itz95/hVSmK+oYb8O4fANBAkSg0fThahY5ffKFiCrjXB1GBYTlZ8iY/2s
+         kORg==
+X-Gm-Message-State: AOAM533TpjDqUblOUpURbuaKKnAIbOeYXhNfV2NiglIO/g2YPRktK7y9
+        knXJaRbu2W6bwb2VYx2RBQU=
+X-Google-Smtp-Source: ABdhPJzAcSGTRrLFOmP79A7ggudrEJgXuKyu8xMVkv0QQMyCBYdTZ/AamCIx35vhcp1GbD6dWOo6aA==
+X-Received: by 2002:a62:ce83:: with SMTP id y125mr14969637pfg.181.1595167180458;
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y24sm14438897pfp.217.2020.07.19.06.59.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 19 Jul 2020 06:59:40 -0700 (PDT)
+Date:   Sun, 19 Jul 2020 06:59:39 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Subject: Re: [PATCH 16/20] dt-bindings: watchdog: renesas,wdt: Document
+ r8a774e1 support
+Message-ID: <20200719135939.GA37256@roeck-us.net>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-References: <3955470.QvD6XneCf3@kreacher> <000f01d65ae8$0c607990$25216cb0$@net>
- <CAJZ5v0jGbfqfqqoPLjneFD5HLb20Yv9p25juNTzaumL70iFogg@mail.gmail.com> <001201d65c3f$6e2371c0$4a6a5540$@net>
-In-Reply-To: <001201d65c3f$6e2371c0$4a6a5540$@net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 19 Jul 2020 13:42:59 +0200
-Message-ID: <CAJZ5v0j+gziYE0t+d2bBMZ3+4Daa0L_OiX+CeTtNU8Mkv0bCBA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Francisco Jerez <francisco.jerez.plata@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1594811350-14066-17-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+On Wed, Jul 15, 2020 at 12:09:06PM +0100, Lad Prabhakar wrote:
+> RZ/G2H (a.k.a. R8A774E1) watchdog implementation is compatible
+> with R-Car Gen3, therefore add the relevant documentation.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-On Fri, Jul 17, 2020 at 3:37 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Rafael,
->
-> Thank you for your reply.
->
-> On 2020.07.16 05:08 Rafael J. Wysocki wrote:
-> > On Wed, Jul 15, 2020 at 10:39 PM Doug Smythies <dsmythies@telus.net> wrote:
-> >> On 2020.07.14 11:16 Rafael J. Wysocki wrote:
-> >> >
-> >> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >> ...
-> >> > Since the passive mode hasn't worked with HWP at all, and it is not going to
-> >> > the default for HWP systems anyway, I don't see any drawbacks related to making
-> >> > this change, so I would consider this as 5.9 material unless there are any
-> >> > serious objections.
-> >>
-> >> Good point.
->
-> Actually, for those users that default to passive mode upon boot,
-> this would mean they would find themselves using this.
-> Also, it isn't obvious, from the typical "what driver and what governor"
-> inquiry.
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-So the change in behavior is that after this patch
-intel_pstate=passive doesn't imply no_hwp any more.
-
-That's a very minor difference though and I'm not aware of any adverse
-effects it can cause on HWP systems anyway.
-
-The "what governor" is straightforward in the passive mode: that's
-whatever cpufreq governor has been selected.
-
-The driver is "intel_cpufreq" which means that the processor is
-requested to run at a frequency selected by the governor or higher,
-unless in the turbo range.  This works similarly in both the HWP and
-non-HWP cases, except that in the HWP case it is possible to adjust
-the EPP (through the additional sysfs knob) and the base frequency is
-exported (the latter two things can be used to distinguish between the
-two cases just fine IMO).
-
-> >> Some of the tests I do involve labour intensive post processing of data.
-> >> I want to automate some of that work, and it will take time.
-> >> We might be into the 5.9-rc series before I have detailed feedback.
-> >>
-> >> However, so far:
-> >>
-> >> Inverse impulse response test [1]:
-> >>
-> >> High level test, i5-9600K, HWP-passive (this patch), ondemand:
-> >> 3101 tests. 0 failures. (GOOD)
-> >>
-> >> From [1], re-stated:
-> >> > . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate. (HWP-active - powersave)
-> >> > . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests. 0 failures.
-> >>
-> >> My version of that cool Alexander named pipe test [2] serialized workflow:
-> >>
-> >> HWP-passive (this patch), performance: PASS.
-> >>
-> >> From [2], re-stated, and also re-tested.
-> >> HWP-disabled passive - performance: FAIL.
-> >
-> > But I'm not quite sure how this is related to this patch?
->
-> It isn't. The point being that it is different.
-
-It is different, but kind of in a positive way IMO.
-
-> But yes, that failure is because of our other discussion [3].
-
-OK
-
-> >
-> > This test would still fail without the patch if the kernel was started
-> > with intel_pstate=passive in the kernel command line, wouldn't it.
->
-> Yes.
-
-OK
-
-Thanks!
+> ---
+>  Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> index 572f4c912fef..6933005b52bd 100644
+> --- a/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> +++ b/Documentation/devicetree/bindings/watchdog/renesas,wdt.yaml
+> @@ -41,6 +41,7 @@ properties:
+>                - renesas,r8a774a1-wdt     # RZ/G2M
+>                - renesas,r8a774b1-wdt     # RZ/G2N
+>                - renesas,r8a774c0-wdt     # RZ/G2E
+> +              - renesas,r8a774e1-wdt     # RZ/G2H
+>                - renesas,r8a7795-wdt      # R-Car H3
+>                - renesas,r8a7796-wdt      # R-Car M3-W
+>                - renesas,r8a77961-wdt     # R-Car M3-W+
