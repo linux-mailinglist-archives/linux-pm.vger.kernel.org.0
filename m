@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5657F22571F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 07:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D4C225726
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 07:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgGTFjk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 01:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S1726677AbgGTFne (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 01:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726307AbgGTFjk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 01:39:40 -0400
-Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF75CC0619D4
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jul 2020 22:39:39 -0700 (PDT)
-Received: by mail-vk1-xa42.google.com with SMTP id t187so3418680vke.5
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jul 2020 22:39:39 -0700 (PDT)
+        with ESMTP id S1726673AbgGTFne (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 01:43:34 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE088C0619D4
+        for <linux-pm@vger.kernel.org>; Sun, 19 Jul 2020 22:43:33 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id j186so7848162vsd.10
+        for <linux-pm@vger.kernel.org>; Sun, 19 Jul 2020 22:43:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Mra/ak9D1+r3t7wzeEyhfxM6IMDYdP7DqDfcxJZ5WCA=;
-        b=q/BeaS6UMn4+h7XAy10XUDWX0sTf0GOY6JjFrVVsyzaFn5scLjVx6NpXfZpbWZSW3I
-         DhbYEXoJOV3WSsOZbdu44Z8teUBZNSupURzgAHu6Bo33JbJQxzj09w412BJ7xhhR5l4a
-         cTk8QdN13dvQSeGgQjrHLmkCFaPls0hPoxsg7LvhjcuTLQob36unB9kWB6vcKnHm6o2j
-         ibxieKxN6dl1NQopfoaCYTPmumk26LfNwtBAGWBAcQIXo9gTf9GFW1k1hkHsiRS9x649
-         lBi4ja7HhiihDwb/8nSneVhtWisEX6G3seVWAq3J+OupTWiEqh3XrsheQmgVWAugC86L
-         GQwg==
+         :cc;
+        bh=bbLapiGcJOFTbUyK//8Fe9PD8yV2JZi5AG9HjtvvQrA=;
+        b=jj1lurMJabflLy5RgODdvDSsqwg4LNBBvV2vJXasXqtYgo0+msjC1M2ABFQX2Hx0S5
+         JWRrVYPqvC6wx21kAa9FwFts+z6ojJytWWnpeK0SPmUSZortpePdjvlDiVu2PQnIcM/S
+         RsUIgoiQLAjSFOnQgadcWhqlix+fY4oThTwOJ95eghx9hxzF/NUGG347CBv/+2yQSd2v
+         ac9XPl9rkZpSEFqgHhK8ffVqcCUvfCEJJrDtuVT7HWHQWYx2YFmBfbM4G/hJweli/Zfn
+         ikouE1LntmptRTsrCvV19wZcTWEEsvSGyw+TAA5K/N07kmoqvT275Vq1a5AhRZS47OcC
+         FtLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Mra/ak9D1+r3t7wzeEyhfxM6IMDYdP7DqDfcxJZ5WCA=;
-        b=me1PiSMwH/aaCWLQTsRQwcdIE0pZGRSB+Z2eecYJbrCgVF3XoAupVG99WzzwBr6t2I
-         XyIzGG0Pc9E9pz4Ug0IFW3E9cci6UYl+CzZPjavg5GN1w++3xLWTzZqha4Hr4rtRoSv1
-         vAJ2LcCst9Cr6PtGQJEUYhpRZLKX4fi+fIj2tZPwNyN1U/Z1SLV2QRNjyA645q9eUVpJ
-         oPIM86VPiBZhmRjJhPEJIQGfAUQrywLFE1kFEt/DmMd+quYukr+6dlS0+CVAFWIExD3c
-         zuiIDrRy5PjwiZ5ZAVgx5MXSZrJ3blZj9m0Bq7UxgDXayGK6vgifmY7SFIdaYU011j5g
-         Na9A==
-X-Gm-Message-State: AOAM532n973RSevGzdw6vMsgKhxQDaLmqIDgW2m1J8SNbW0Nhu7YsSlx
-        P6SjZVbotF02lg4RA9QjIH01THVtRw3o53DCUKjUiCwE/YRpJQ==
-X-Google-Smtp-Source: ABdhPJwSL6+wbKxKzMbtERU799L37vOP/8fRp8XD+9XcElsSqaL4bAmBMNeevdVdVjS+F17sPVX7xGuiPuIkJ6k33wg=
-X-Received: by 2002:a1f:f848:: with SMTP id w69mr15006496vkh.86.1595223578965;
- Sun, 19 Jul 2020 22:39:38 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=bbLapiGcJOFTbUyK//8Fe9PD8yV2JZi5AG9HjtvvQrA=;
+        b=hFvae3PqYROZVqkYMuf8J9I1cNimwGkH8q1Z/S7c2OuMuBuV6esvD/93Q6PJUtUfqw
+         ZtH6ggL4ZaIyySnPO+RKuYxsGdxsgXizgrLKXmp4Zrc0B+ldnHTG5UxDW56DXjjmvxp3
+         y5T79Hgeyt7q+/lnDtQH7RuLSkPayhZd88C9lF/3IAkwc2BMHOJtJuWx2so+/DdnFqOD
+         Li3t1v1XPzH182n2nTYaf2TgEZuAGL3zo5Y+bESAHzxu+nBjnaRgSaI10etTmNkc6bbl
+         meJGctjLFC4m0qUTir0ZoefqYvCZs3LRKiUAmFqeTd9Zc05Q1AQ/prfchFoSfCrpCPta
+         fETA==
+X-Gm-Message-State: AOAM531BO8GpZGNWog8w8LvGqsBKSnN7oMojCyMtI6WFhO0wrDnw1+TR
+        STCLUf8JJVPXo5hiqGZ+lJqYZ5tMseMvY8NReJAQeFSQcBq+KA==
+X-Google-Smtp-Source: ABdhPJyjgOlgkreB2uvU8zXbH7F+KFhG4EFoZL6NjUMOyUv9H1nqnfOF2ArdbefVQmvPiC+CFEQwocwOCYmxkSO99Cg=
+X-Received: by 2002:a67:2285:: with SMTP id i127mr14138213vsi.159.1595223812879;
+ Sun, 19 Jul 2020 22:43:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200717164217.18819-1-daniel.lezcano@linaro.org> <20200717164217.18819-2-daniel.lezcano@linaro.org>
-In-Reply-To: <20200717164217.18819-2-daniel.lezcano@linaro.org>
+References: <20200717164217.18819-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20200717164217.18819-1-daniel.lezcano@linaro.org>
 From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 20 Jul 2020 11:09:26 +0530
-Message-ID: <CAHLCerNbA+cQJB++xbSaKhANX3n0PhCwgBL8Qeg4ZPDaUOcBBQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: core: Move initialization after core initcall
+Date:   Mon, 20 Jul 2020 11:13:21 +0530
+Message-ID: <CAHLCerNfKGmEz9g98VA6iMYy7MjfwfH=gaF9KR0o_qpJwFPekA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: netlink: Improve the initcall ordering
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>,
         Marek Szyprowski <m.szyprowski@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -65,47 +64,82 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On Fri, Jul 17, 2020 at 10:12 PM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> The generic netlink is initialized at subsys_initcall, so far after
-> the thermal init routine and the thermal generic netlink family
-> initialization.
->
-> On =C5=9Dome platforms, that leads to a memory corruption.
->
-> The fix was sent to netdev@ to move the genetlink framework
-> initialization at core_initcall.
->
-> Move the thermal core initialization to postcore level which is very
-> close to core level.
->
+> The initcalls like to play joke. In our case, the thermal-netlink
+> initcall is called after the thermal-core initcall but this one sends
+> a notification before the former is initialzed. No issue was spotted,
+
+typo: initialized
+
+> but it could lead to a memory corruption, so instead of relying on the
+> core_initcall for the thermal-netlink, let's initialize directly from
+> the thermal-core init routine, so we have full control of the init
+> ordering.
+
 > Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/thermal_core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index c2e7d7aaa354..79551bb6cd4c 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1617,4 +1617,4 @@ static int __init thermal_init(void)
->         mutex_destroy(&poweroff_lock);
->         return result;
->  }
-> -core_initcall(thermal_init);
-> +postcore_initcall(thermal_init);
-
-For posterity, we moved to core_initcall from fs_initcall since we had
-removed netlink support from the thermal framework and we wanted to
-initialise it as quickly as possible after cpufreq to allow early
-mitigation possibility.
-
-Given the addition of the new netlink-based API to thermal framework,
-I think moving to postcore_initcall is an acceptable compromise.
 
 Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
+> ---
+>  drivers/thermal/thermal_core.c    | 4 ++++
+>  drivers/thermal/thermal_netlink.c | 3 +--
+>  drivers/thermal/thermal_netlink.h | 6 ++++++
+>  3 files changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 25ef29123f72..c2e7d7aaa354 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1581,6 +1581,10 @@ static int __init thermal_init(void)
+>  {
+>         int result;
+>
+> +       result = thermal_netlink_init();
+> +       if (result)
+> +               goto error;
+> +
+>         mutex_init(&poweroff_lock);
+>         result = thermal_register_governors();
+>         if (result)
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> index dd0a3b889674..42eace7401da 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -641,8 +641,7 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
+>         .n_mcgrps       = ARRAY_SIZE(thermal_genl_mcgrps),
+>  };
+>
+> -static int __init thermal_netlink_init(void)
+> +int __init thermal_netlink_init(void)
+>  {
+>         return genl_register_family(&thermal_gnl_family);
+>  }
+> -core_initcall(thermal_netlink_init);
+> diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+> index 0ec28d105da5..828d1dddfa98 100644
+> --- a/drivers/thermal/thermal_netlink.h
+> +++ b/drivers/thermal/thermal_netlink.h
+> @@ -6,6 +6,7 @@
+>
+>  /* Netlink notification function */
+>  #ifdef CONFIG_THERMAL_NETLINK
+> +int __init thermal_netlink_init(void);
+>  int thermal_notify_tz_create(int tz_id, const char *name);
+>  int thermal_notify_tz_delete(int tz_id);
+>  int thermal_notify_tz_enable(int tz_id);
+> @@ -23,6 +24,11 @@ int thermal_notify_cdev_delete(int cdev_id);
+>  int thermal_notify_tz_gov_change(int tz_id, const char *name);
+>  int thermal_genl_sampling_temp(int id, int temp);
+>  #else
+> +static inline int thermal_netlink_init(void)
+> +{
+> +       return 0;
+> +}
+> +
+>  static inline int thermal_notify_tz_create(int tz_id, const char *name)
+>  {
+>         return 0;
 > --
 > 2.17.1
 >
