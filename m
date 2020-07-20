@@ -2,108 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0E5225D0F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 13:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D45A225D2C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 13:12:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgGTLDO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 07:03:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47696 "EHLO mail.kernel.org"
+        id S1728036AbgGTLMO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 07:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728348AbgGTLDN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 20 Jul 2020 07:03:13 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727094AbgGTLMN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 20 Jul 2020 07:12:13 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 979B222BF3;
-        Mon, 20 Jul 2020 11:03:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 689E92073A;
+        Mon, 20 Jul 2020 11:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595242993;
-        bh=dONBMDD5LZ2vZmwe51cbIkvnEd/Aviv6J8B5VLnLMwE=;
-        h=From:To:Subject:Date:From;
-        b=WtV5qGsmtTqSnUl+bSdlJIgXBC4W//GkRSqUNCjhs+mEzL7vpCKlL2XGpB+lQwUSR
-         CQb73fvHzx1S3eLMuESoI4dfNkB+nIShhMXl791Dixk78xNg4s3JH1wiLN+O/UGvmb
-         8N1G/zNJf9KeVXS4B5ZCCcwnrn1zadf1spI1sCuo=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>, Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] memory: samsung: exynos5422-dmc: Do not ignore return code of regmap_read()
-Date:   Mon, 20 Jul 2020 13:03:01 +0200
-Message-Id: <20200720110301.22996-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        s=default; t=1595243533;
+        bh=9Yy+1VjcfL5aQqBqsh+BDfHhT28teG125L+0sNy5ehc=;
+        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+        b=hAnDisAU5CkKAmHpE/TlDXaSa61cF0JA6RYkNQwVsbS2KHEPnHbsA064m/XFR1u/T
+         z//PW9qlfb6Lwl2oAr78zQ6ONpyQ79rnqVCxfhGpQ0WbjKfNRt5Zp9J68zrYhDPdF8
+         wriqqXI+iRwPMIMpW2FBryFhRaNOpStEuiSEMfmY=
+Date:   Mon, 20 Jul 2020 12:12:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     devicetree@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-i2c@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-spi@vger.kernel.org, Prabhakar <prabhakar.csengg@gmail.com>,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Amit Kucheria <amit.kucheria@verdurent.com>
+In-Reply-To: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH 00/20] Add support for [H]SCIF/TMU/CMT/THS/SDHI/MSIOF/CAN[FD]/I2C/IIC/RWDT on R8A774E1
+Message-Id: <159524352070.8289.9628744508547399473.b4-ty@kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Check for regmap_read() return code before using the read value in
-following write in exynos5_switch_timing_regs().  Pass reading error
-code to the callers.
+On Wed, 15 Jul 2020 12:08:50 +0100, Lad Prabhakar wrote:
+> This patch series enables support for following on RZ/G2H SoC,
+> * CPU OPP
+> * THS
+> * CMT/TMU
+> * I2C/IIC
+> * MSIOF
+> * RWDT
+> * SDHI
+> * SCIF/HSCIF
+> * CAN/CANFD
+> 
+> [...]
 
-This does not introduce proper error handling for such failed reads (and
-obviously regmap_write() error is still ignored) because the driver
-ignored this in all places.  Therefor it only fixes reported issue while
-matching current driver coding style:
+Applied to
 
-       drivers/memory/samsung/exynos5422-dmc.c: In function 'exynos5_switch_timing_regs':
-    >> drivers/memory/samsung/exynos5422-dmc.c:216:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/memory/samsung/exynos5422-dmc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+Thanks!
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 93e9c2429c0d..2c326998cb1c 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -270,12 +270,14 @@ static int find_target_freq_idx(struct exynos5_dmc *dmc,
-  * This function switches between these banks according to the
-  * currently used clock source.
-  */
--static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
-+static int exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
- {
- 	unsigned int reg;
- 	int ret;
- 
- 	ret = regmap_read(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, &reg);
-+	if (ret)
-+		return ret;
- 
- 	if (set)
- 		reg |= EXYNOS5_TIMING_SET_SWI;
-@@ -283,6 +285,8 @@ static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
- 		reg &= ~EXYNOS5_TIMING_SET_SWI;
- 
- 	regmap_write(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, reg);
-+
-+	return 0;
- }
- 
- /**
-@@ -516,7 +520,7 @@ exynos5_dmc_switch_to_bypass_configuration(struct exynos5_dmc *dmc,
- 	/*
- 	 * Delays are long enough, so use them for the new coming clock.
- 	 */
--	exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
-+	ret = exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
- 
- 	return ret;
- }
-@@ -577,7 +581,9 @@ exynos5_dmc_change_freq_and_volt(struct exynos5_dmc *dmc,
- 
- 	clk_set_rate(dmc->fout_bpll, target_rate);
- 
--	exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
-+	ret = exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
-+	if (ret)
-+		goto disable_clocks;
- 
- 	ret = clk_set_parent(dmc->mout_mclk_cdrex, dmc->mout_bpll);
- 	if (ret)
--- 
-2.17.1
+[1/1] spi: renesas,sh-msiof: Add r8a774e1 support
+      commit: b4f7f5f5470588e45e5d004f1dc4887af20f18c0
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
