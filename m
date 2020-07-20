@@ -2,54 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02070225BED
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 11:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9C3225C0D
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 11:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbgGTJl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 05:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
+        id S1728248AbgGTJuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 05:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728200AbgGTJl5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 05:41:57 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353B0C0619D5
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:41:57 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id e8so19540059ljb.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:41:57 -0700 (PDT)
+        with ESMTP id S1728233AbgGTJuY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 05:50:24 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43303C0619D6
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:50:23 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id s9so623564lfs.4
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:50:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=twhRHN8GmGnSaOWdhFH407w2bJQWN/XspQavxD2E7NU=;
-        b=vUBM16JedblSszCmKcUOtNNCpBXv3CIhGha5f39iVCq+GLQjc1+5sjVAf3MGajt6eb
-         js3i3eEdyXIM2MQPvSQWiAbe6gPeB4YjU2Sab0OH0PF9+7BZ1Hfg3dMIm6fiTGmnLQGE
-         WN52jmOtjrzVTwhA5TpOoRi5fzEqLaC3gBn8SKr5iixPXGEf8j0ueAKU4MbazsVA6aRf
-         FyvYHaaSBU57IPmfcX0ILw4NWbPu9l8TUYzGeGQoqnmJtc7HHBIKatEXj/thpaDFX2WV
-         Aokyu21j7CqO9w7d6xuJ7PUwJIG1UxxaIPnap6CCEB8zRyeuqnRZ3bACsucfj0UgkFkX
-         fSxQ==
+        bh=MRBYG5PaXpmuVbg9IqCWz5FWycJjiWEMOWVv1HmDXEY=;
+        b=WVZ4tQJ5ADD0VQ+bDg36V5Rw5hBx8Ta3ZtG34BvPB1wkriVnL14/C55+iYqW88gidT
+         yuS7kkbQazNWn5AerD3c7VrfVlK9FU6unNzQgm2llxznaIOxln49U9z21eyP590nkPEz
+         asiMTAgG740UxTGJ4JPgq36RnUgEqTOK/qZakOMMReumgojXy8gx80LdAih01rRfJZSX
+         FYkf5sTJFMr9Cu7F2yoTaYRfHdJPGCYm/uLLDLabE5cxErMriyclGImvf6930StLNvtm
+         JHqCwWMLN/iH+1KtdzE6VC90QaUwxOzTvMrUBPKzBOvH3C3Aap6+kZDGrLmHEyedgXhv
+         D1VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=twhRHN8GmGnSaOWdhFH407w2bJQWN/XspQavxD2E7NU=;
-        b=IqVGWthPmMqheJ+p+ck/y9BqILnBvZqNa7BAkBJP6P7RLdSnknMWYwZzGg+uVLkNzl
-         Z8nKaj8JQOKddCZZ9kyOX+IuffkDvdaDdMOuXOtwGCppWDmKSaj1vrvS24wBtq1sGLb5
-         sS7bNT37NElIVjxQ9O61e/0B9wtbpX8bsgcERoOwyox4N5JVfadBM5K7V4COTLNUr2ef
-         EokSsRFelUZbROryvebBfPSZdyITVzZyjsZDJgQSeGi+pVXUQ/p1YV+/Id9Zr9BqANuu
-         3xlaFsr1gaoLRXRO+0OMAIOF8vZbSGg/SfaWFPoJVFOIu7JSs5sgnCFXZGe/5NRsKSma
-         NsLA==
-X-Gm-Message-State: AOAM532cMBnQkRtGLDIWIdCBfsz1RX3LryMDwFjUEmMKlQJ9fam00xUJ
-        Sw6U8DCXp66DUi46/oGccNfI3FnvSFm9xzkIYJg3FA==
-X-Google-Smtp-Source: ABdhPJzp2xsR54WZ1Ot/7m0WsiusF7Y4zChVz+CNR+5Bym/Dcaq3ISLURbaFVL1WyVZW8pynmK9Y5DvEDxM1d6oFID4=
-X-Received: by 2002:a2e:9b8c:: with SMTP id z12mr10226971lji.35.1595238115661;
- Mon, 20 Jul 2020 02:41:55 -0700 (PDT)
+        bh=MRBYG5PaXpmuVbg9IqCWz5FWycJjiWEMOWVv1HmDXEY=;
+        b=CywaqItYquLmmduSWvnS3wpj0ADw+LAah21n1WSo/r1yBAyefG4LwERTcuvtGXbr00
+         duNhkUZopdR2Ek5uMvPpycxr+ttw66L04iivwwD/XrZ7xBSp80EPEVKhFStpJjVflxnE
+         1uUwnqKrc3d87HVTEloskZ3vQJ1MXtQguJlSMgJUSqv9hxzOgipuls7t7VRDnms3j1Is
+         h761GJvA3VeWzDWnzORHJSXDqYyveNanlsj7ifySUe8f1AWWuFiBVDAymmnZgCAnYvC6
+         9RDVpsGxvXIcXqxrtENrbMFX3lHVONJ0trVCQS7eewdRnxZu8Y2EhPbhcm0TPIX4yfF5
+         WDrw==
+X-Gm-Message-State: AOAM5312lLoixXoPwaG3PupeLxrJKQBugarK9vL133jrP78r2asEklVe
+        oJWmFDz+AtMbXhILTFIDc2DTwpEwAYU5m4ylkUB09Q==
+X-Google-Smtp-Source: ABdhPJzD8k7+rJYR6jlVIluELoADRO+Lwj3Vg2NSdUF2/ZwjTWMJBoIuK3PV3zisuEsa8VNsjNqpKgIlpqfu9Tasxp4=
+X-Received: by 2002:ac2:5325:: with SMTP id f5mr10437151lfh.6.1595238621552;
+ Mon, 20 Jul 2020 02:50:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200716022817.30439-1-ansuelsmth@gmail.com> <20200716022817.30439-2-ansuelsmth@gmail.com>
-In-Reply-To: <20200716022817.30439-2-ansuelsmth@gmail.com>
+References: <20200716022817.30439-1-ansuelsmth@gmail.com> <20200716022817.30439-3-ansuelsmth@gmail.com>
+In-Reply-To: <20200716022817.30439-3-ansuelsmth@gmail.com>
 From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 20 Jul 2020 15:11:44 +0530
-Message-ID: <CAP245DUqvTYENmaxG3rjUn1XrzrmvdFmKG_vaef2BxKL6jY+Rg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/7] ipq806x: gcc: add support for child probe
+Date:   Mon, 20 Jul 2020 15:20:10 +0530
+Message-ID: <CAP245DVBra9hr8-domt9FAoSTqy42DdkMRLeK1fC3WPrRH=HXg@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] drivers: thermal: tsens: try load regmap from
+ parent for 8960
 To:     Ansuel Smith <ansuelsmth@gmail.com>
 Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -70,31 +71,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Jul 16, 2020 at 7:58 AM Ansuel Smith <ansuelsmth@gmail.com> wrote:
 >
-> Add support for child probing needed for tsens driver that share the
-> seme regs of gcc for this platform.
+> Devices based on 8060 tsens driver (ipq8064) use the reg of the gcc
 
-Typo: same
+typo: 8960
 
-
+> driver. Try to load the regmap of the parent as they share the same
+> regs.
 >
 > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->  drivers/clk/qcom/gcc-ipq806x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/thermal/qcom/tsens-8960.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/clk/qcom/gcc-ipq806x.c b/drivers/clk/qcom/gcc-ipq806x.c
-> index a8456e09c44d..d6b7adb4be38 100644
-> --- a/drivers/clk/qcom/gcc-ipq806x.c
-> +++ b/drivers/clk/qcom/gcc-ipq806x.c
-> @@ -3089,7 +3089,7 @@ static int gcc_ipq806x_probe(struct platform_device *pdev)
->         regmap_write(regmap, 0x3cf8, 8);
->         regmap_write(regmap, 0x3d18, 8);
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 2a28a5af209e..45788eb3c666 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/delay.h>
+>  #include <linux/bitops.h>
+>  #include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+>  #include <linux/thermal.h>
+>  #include "tsens.h"
 >
-> -       return 0;
-> +       return of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
->  }
+> @@ -168,8 +169,17 @@ static int init_8960(struct tsens_priv *priv)
+>         u32 reg_cntl;
 >
->  static struct platform_driver gcc_ipq806x_driver = {
+>         priv->tm_map = dev_get_regmap(priv->dev, NULL);
+> -       if (!priv->tm_map)
+> +       if (!priv->tm_map) {
+> +               struct device *parent = priv->dev->parent;
+> +
+> +               if (parent)
+> +                       priv->tm_map = syscon_node_to_regmap(parent->of_node);
+> +       }
+> +
+> +       if (!priv->tm_map || IS_ERR(priv->tm_map)) {
+> +               dev_err(priv->dev, "failed to get tsens regmap\n");
+>                 return -ENODEV;
+> +       }
+>
+>         /*
+>          * The status registers for each sensor are discontiguous
 > --
 > 2.27.0
 >
