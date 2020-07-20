@@ -2,109 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8E4225B9E
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 11:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8594225BCB
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 11:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727901AbgGTJ1m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 05:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727769AbgGTJ1m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 05:27:42 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BABFC061794;
-        Mon, 20 Jul 2020 02:27:42 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id ga4so17292191ejb.11;
-        Mon, 20 Jul 2020 02:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i2oJzehZb8OInu2docosJSP0SU12+CFSPAkmMBNpOsA=;
-        b=sjpOSPXSl4bzZSUip1JJKRH6wjLEc6y6wTdpLgdOUYoOVTw9J/QeSW/DChRIrpNJam
-         VLkvCDhOHBUTpvpX+whQNiXXO3U/5pb/FzFY+yG48cXjw+aWI+UgoVbDnI/vtnAuyelD
-         jPHtRKIAzPj/qYvKggd8FI93EQKQFvKSMa0UTIxo7A38JEPEDsfjQA4MV8pVzw1++aSL
-         zmViUplQkVmBSLyZyd1/ck7Ouz/wqr5peAp18XDAavNSb3GqTBDCiz5qljmYwi76l5eX
-         G8aPD/w//2aXt74/0neYP/6YGvg09NoFGZt0bGt5s8UibQaovAyQOjS6J56ORwrVkwOK
-         4bKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i2oJzehZb8OInu2docosJSP0SU12+CFSPAkmMBNpOsA=;
-        b=bPMT9sh9AKGhxk6OxOynGPF87SHEK9GyxJc5AWxEdgXwvTdYKRaO2IEyirY5AMqwy/
-         alzAMB/N0euvQhOV705rGhECPYZQ8qUtZZ7ZQpRaRffSlLTwhVngYEfl5Zc4yeMSfmBw
-         LAoW6w2uDHFfXTEaE4NdbTmDmvSayMpfmwxvJwseaH32T6VeILFqkduKYhMuODkXxIeP
-         Z7NRWY98sO9v5+DjyYv/2HL3SktJ6l3rMgm0XOZ82Bag3Cml7VS5IYTOXnW93Ic6p6r/
-         SPqfy4/Bih8Ttz9xrzhZl2sEMPTTiFmqzf7NstN1VPJqe3O48HDK1DrPciBkYqCoH5le
-         BCyw==
-X-Gm-Message-State: AOAM5321Yi8o03xFlCguVmtwlg1Yo/askkiLpD+zRCJbECiLpuG5x1g9
-        w0a6MEjWmxbW23VTqX9tapbfFsqaSYZUQ8ue3VU=
-X-Google-Smtp-Source: ABdhPJyQHHakoLdELgPvkwJTPziVgkhT8/+bkeNWSKGuEAZEoPVZam3reeNo7zKlDysNI061zW+zgDRMoXPZab8/IOI=
-X-Received: by 2002:a17:906:6847:: with SMTP id a7mr19449731ejs.306.1595237260974;
- Mon, 20 Jul 2020 02:27:40 -0700 (PDT)
+        id S1727940AbgGTJhO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 05:37:14 -0400
+Received: from esa4.hc3370-68.iphmx.com ([216.71.155.144]:60760 "EHLO
+        esa4.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727062AbgGTJhO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 05:37:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1595237833;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nwPJa3NUFyEUiPP7p8oQoME8KchN1Curaq49nRiJSr0=;
+  b=fYMwKP8cenGPoU7mH9agCOVNlbUNuqtl+b/h67ELLn2z49ebvGng8oJ2
+   3uqQwOJ0cjk33uoNIULdGigKi6PU3/ilTjaQ9JflnIuX7KWFwKDk4GxCi
+   yGoIqY01MIY8rv4EVbQrwxaRWx3U5golWH8mIAx1jCiZ6uZMPx1PmzNdE
+   4=;
+Authentication-Results: esa4.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: 4hmgLSfnkocyYHfNLmECegraULYWfvgO+2ir3ZYwO5eOasBTEYVWmVfPwW4mzeVVL17AAtcZVd
+ bUVOns9d+KznUSTWedAW/WhA4LDQ6fI22ZVr7E0i6W1qt7UqqwxosEHno3/M1gQyUdpcDOjoqF
+ Nj70/QuhTm+JOMOwc9sysRtdWdhiTtL0p7pcoHDnQAPgaCsxfhMhr0r+0WqS9xxrS3GSrFbPO0
+ NyjgT8OXTOod2Cdp5jysswqlD0JX8QMphFc9cBJwZ90Kl5ucVrm3e0q6KBg1OKyPj5+tG+RRay
+ t54=
+X-SBRS: 2.7
+X-MesageID: 23586900
+X-Ironport-Server: esa4.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.75,374,1589256000"; 
+   d="scan'208";a="23586900"
+Date:   Mon, 20 Jul 2020 11:37:05 +0200
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+CC:     Anchal Agarwal <anchalag@amazon.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <x86@kernel.org>, <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
+ mode
+Message-ID: <20200720093705.GG7191@Air-de-Roger>
+References: <cover.1593665947.git.anchalag@amazon.com>
+ <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
+ <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
+ <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
 MIME-Version: 1.0
-References: <cover.1594708863.git.frank@allwinnertech.com> <b8761e036b25f20873534e5f8d10b37b5d2ce72c.1594708864.git.frank@allwinnertech.com>
- <4771acd6-ecd3-b8e1-8605-75d78720b1d3@linaro.org> <CAEExFWv9_1kec_b+t+nnvT3cziXzmVa8GzJT3pQAZiCf4KA0ig@mail.gmail.com>
- <836e1b23-1c75-57fe-6e45-f7141272071c@linaro.org>
-In-Reply-To: <836e1b23-1c75-57fe-6e45-f7141272071c@linaro.org>
-From:   Frank Lee <tiny.windzz@gmail.com>
-Date:   Mon, 20 Jul 2020 17:27:29 +0800
-Message-ID: <CAEExFWsJBizFArd+9Mh6D=o6rvD7GLPZ-1pNFzTvBiE+uKwVhQ@mail.gmail.com>
-Subject: Re: [PATCH v4 08/16] thermal: sun8i: add TEMP_CALIB_MASK for
- calibration data in sun50i_h6_ths_calibrate
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Frank Lee <frank@allwinnertech.com>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?6buE54OB55Sf?= <huangshuosheng@allwinnertech.com>,
-        liyong@allwinnertech.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
+X-ClientProxiedBy: AMSPEX02CAS01.citrite.net (10.69.22.112) To
+ AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-HI,
-On Fri, Jul 17, 2020 at 3:56 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 17/07/2020 09:35, Frank Lee wrote:
-> > On Fri, Jul 17, 2020 at 12:26 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
+On Sat, Jul 18, 2020 at 09:47:04PM -0400, Boris Ostrovsky wrote:
+> (Roger, question for you at the very end)
+> 
+> On 7/17/20 3:10 PM, Anchal Agarwal wrote:
+> > On Wed, Jul 15, 2020 at 05:18:08PM -0400, Boris Ostrovsky wrote:
+> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > >>
-> >> On 14/07/2020 09:13, Frank Lee wrote:
-> >>> From: Yangtao Li <frank@allwinnertech.com>
-> >>>
-> >>> For sun50i_h6_ths_calibrate(), the data read from nvmem needs a round of
-> >>> calculation. On the other hand, the newer SOC may store other data in
-> >>> the space other than 12bit sensor data. Add mask operation to read data
-> >>> to avoid conversion error.
-> >>>
-> >>> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
-> >>> Reviewed-by: Yangtao Li <tiny.windzz@gmail.com>
 > >>
-> >> Can you clarify these SoB ?
-> >
-> > Previously I used 'Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>',
-> > maybe this should be removed directly?
-> >
 > >>
-> >> Frank Lee==Yangtao Li==frank@allwinnertech.com==tiny.windzz@gmail.com ?
+> >> On 7/15/20 4:49 PM, Anchal Agarwal wrote:
+> >>> On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
+> >>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
+> >>>> And PVH dom0.
+> >>> That's another good use case to make it work with however, I still
+> >>> think that should be tested/worked upon separately as the feature itself
+> >>> (PVH Dom0) is very new.
 > >>
-> >
-> > Yeah.
->
-> You are not supposed to add reviewed-by yourself. Please remove it.
+> >> Same question here --- will this break PVH dom0?
+> >>
+> > I haven't tested it as a part of this series. Is that a blocker here?
+> 
+> 
+> I suspect dom0 will not do well now as far as hibernation goes, in which
+> case you are not breaking anything.
+> 
+> 
+> Roger?
 
-Should I resend the entire series or just the thermal patch?
-What about those that have been applied.
+I sadly don't have any box ATM that supports hibernation where I
+could test it. We have hibernation support for PV dom0, so while I
+haven't done anything specific to support or test hibernation on PVH
+dom0 I would at least aim to not make this any worse, and hence the
+check should at least also fail for a PVH dom0?
 
-Thx,
-Yangtao
+if (!xen_hvm_domain() || xen_initial_domain())
+    return -ENODEV;
+
+Ie: none of this should be applied to a PVH dom0, as it doesn't have
+PV devices and hence should follow the bare metal device suspend.
+
+Also I would contact the QubesOS guys, they rely heavily on the
+suspend feature for dom0, and that's something not currently tested by
+osstest so any breakages there go unnoticed.
+
+Thanks, Roger.
