@@ -2,187 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BACBE2259E9
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 10:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D76225A06
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 10:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgGTIVq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 04:21:46 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:65355 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726254AbgGTIVp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 04:21:45 -0400
-X-UUID: dfeb3b1a5b9f4728838d7827f6c72e12-20200720
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=g1ZpCrFRRkITcy2/cYkX9ggNIKxoHUd6Hg4M3iYk/hs=;
-        b=i4u1sZz8ljiE2cksXgO+V6A+p902sO6NZTUwjHASIdUbdtHr72P1eYPUdjgV1/wLn0Lt6iKibWtGKgh8bnvos+FxYOyy+wmm337VvnadSD3agCrfIS0pjdkfyYRWbKFwEuWDx0KmYZ9Z77Ip72RLKLOWfHCKKZ22pgwmv68JQWY=;
-X-UUID: dfeb3b1a5b9f4728838d7827f6c72e12-20200720
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <neal.liu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1871616624; Mon, 20 Jul 2020 16:21:40 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 20 Jul 2020 16:21:32 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 20 Jul 2020 16:21:33 +0800
-Message-ID: <1595233294.8055.0.camel@mtkswgap22>
-Subject: Re: [PATCH v2] cpuidle: change enter_s2idle() prototype
-From:   Neal Liu <neal.liu@mediatek.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Neal Liu <neal.liu@mediatek.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
+        id S1725845AbgGTI2P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 04:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgGTI2O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 04:28:14 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D63C061794;
+        Mon, 20 Jul 2020 01:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=O6HfgQ+/4qiZLGt2UojtUQ3Ga/x/jgpuR6s1a87yytM=; b=u7nt3GoCT7WBM27aXRtZnWNUD
+        bXmH223IdV7epuWwcz8hui1tkCQJvtfRu5hvQZkEMVcZmE60DFtMY8VD0hNJF0UubpeKhjIsXV0KV
+        wQml0xJTy9YZPIFESQKbMFRQY60X5KxoYD+m9vVq/30t4DlNFeJ74X0DZFJ31zENrDfg0+5XChBMX
+        87NF0WKQXOkI7CpKZnM+RFs8y8HtoYgi00zTMK9U3om7Pv5aPxBmcCtvotb9ASctJZcL52BbW6iaN
+        ag23tbDPGsTcJCtj6GmQypV1xEXZSJxh7N56EzdK+u3BZNeqU0YuZqMpVsbmrfqihoSQCkOba0Wvx
+        SXgUBjiBg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41816)
+        by pandora.armlinux.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1jxR9b-0002m6-AD; Mon, 20 Jul 2020 09:28:07 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1jxR9X-0004pY-Ga; Mon, 20 Jul 2020 09:28:03 +0100
+Date:   Mon, 20 Jul 2020 09:28:03 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Ondrej Jirman <megous@megous.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>
-Date:   Mon, 20 Jul 2020 16:21:34 +0800
-In-Reply-To: <1594350535.4670.13.camel@mtkswgap22>
-References: <1594005196-16327-1-git-send-email-neal.liu@mediatek.com>
-         <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
-         <CAJZ5v0ihB5AJwSRpjaOnXAmciregzxARL5xfudu1h+=_LXaE_w@mail.gmail.com>
-         <1594350535.4670.13.camel@mtkswgap22>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        open list <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        linux-sunxi@googlegroups.com, Zhang Rui <rui.zhang@intel.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] thermal: sun8i: Be loud when probe fails
+Message-ID: <20200720082803.GS1551@shell.armlinux.org.uk>
+References: <20200708105527.868987-1-megous@megous.com>
+ <20200708110301.GB1551@shell.armlinux.org.uk>
+ <86689f81367716e3f88ec363edd0d302deca0a1f.camel@aosc.io>
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <86689f81367716e3f88ec363edd0d302deca0a1f.camel@aosc.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-R2VudGxlIHBpbmcgb24gdGhpcyBwYXRjaC4NCg0KDQpPbiBGcmksIDIwMjAtMDctMTAgYXQgMTE6
-MDggKzA4MDAsIE5lYWwgTGl1IHdyb3RlOg0KPiBPbiBUaHUsIDIwMjAtMDctMDkgYXQgMTQ6MTgg
-KzAyMDAsIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3RlOg0KPiA+IE9uIE1vbiwgSnVsIDYsIDIwMjAg
-YXQgNToxMyBBTSBOZWFsIExpdSA8bmVhbC5saXVAbWVkaWF0ZWsuY29tPiB3cm90ZToNCj4gPiA+
-DQo+ID4gPiBDb250cm9sIEZsb3cgSW50ZWdyaXR5KENGSSkgaXMgYSBzZWN1cml0eSBtZWNoYW5p
-c20gdGhhdCBkaXNhbGxvd3MNCj4gPiA+IGNoYW5nZXMgdG8gdGhlIG9yaWdpbmFsIGNvbnRyb2wg
-ZmxvdyBncmFwaCBvZiBhIGNvbXBpbGVkIGJpbmFyeSwNCj4gPiA+IG1ha2luZyBpdCBzaWduaWZp
-Y2FudGx5IGhhcmRlciB0byBwZXJmb3JtIHN1Y2ggYXR0YWNrcy4NCj4gPiA+DQo+ID4gPiBpbml0
-X3N0YXRlX25vZGUoKSBhc3NpZ24gc2FtZSBmdW5jdGlvbiBjYWxsYmFjayB0byBkaWZmZXJlbnQN
-Cj4gPiA+IGZ1bmN0aW9uIHBvaW50ZXIgZGVjbGFyYXRpb25zLg0KPiA+ID4NCj4gPiA+IHN0YXRp
-YyBpbnQgaW5pdF9zdGF0ZV9ub2RlKHN0cnVjdCBjcHVpZGxlX3N0YXRlICppZGxlX3N0YXRlLA0K
-PiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IG9mX2RldmljZV9p
-ZCAqbWF0Y2hlcywNCj4gPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBkZXZp
-Y2Vfbm9kZSAqc3RhdGVfbm9kZSkgeyAuLi4NCj4gPiA+ICAgICAgICAgaWRsZV9zdGF0ZS0+ZW50
-ZXIgPSBtYXRjaF9pZC0+ZGF0YTsgLi4uDQo+ID4gPiAgICAgICAgIGlkbGVfc3RhdGUtPmVudGVy
-X3MyaWRsZSA9IG1hdGNoX2lkLT5kYXRhOyB9DQo+ID4gPg0KPiA+ID4gRnVuY3Rpb24gZGVjbGFy
-YXRpb25zOg0KPiA+ID4NCj4gPiA+IHN0cnVjdCBjcHVpZGxlX3N0YXRlIHsgLi4uDQo+ID4gPiAg
-ICAgICAgIGludCAoKmVudGVyKSAoc3RydWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsDQo+ID4gPiAg
-ICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsDQo+ID4gPiAg
-ICAgICAgICAgICAgICAgICAgICAgaW50IGluZGV4KTsNCj4gPiA+DQo+ID4gPiAgICAgICAgIHZv
-aWQgKCplbnRlcl9zMmlkbGUpIChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiA+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0K
-PiA+ID4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50IGluZGV4KTsgfTsNCj4gPiA+
-DQo+ID4gPiBJbiB0aGlzIGNhc2UsIGVpdGhlciBlbnRlcigpIG9yIGVudGVyX3MyaWRsZSgpIHdv
-dWxkIGNhdXNlIENGSSBjaGVjaw0KPiA+ID4gZmFpbGVkIHNpbmNlIHRoZXkgdXNlIHNhbWUgY2Fs
-bGVlLg0KPiA+IA0KPiA+IENhbiB5b3UgcGxlYXNlIGV4cGxhaW4gdGhpcyBpbiBhIGJpdCBtb3Jl
-IGRldGFpbD8NCj4gPiANCj4gPiBBcyBpdCBzdGFuZHMsIEkgZG9uJ3QgdW5kZXJzdGFuZCB0aGUg
-cHJvYmxlbSBzdGF0ZW1lbnQgZW5vdWdoIHRvIGFwcGx5DQo+ID4gdGhlIHBhdGNoLg0KPiA+IA0K
-PiANCj4gT2theSwgTGV0J3MgbWUgdHJ5IHRvIGV4cGxhaW4gbW9yZSBkZXRhaWxzLg0KPiBDb250
-cm9sIEZsb3cgSW50ZWdyaXR5KENGSSkgaXMgYSBzZWN1cml0eSBtZWNoYW5pc20gdGhhdCBkaXNh
-bGxvd3MNCj4gY2hhbmdlcyB0byB0aGUgb3JpZ2luYWwgY29udHJvbCBmbG93IGdyYXBoIG9mIGEg
-Y29tcGlsZWQgYmluYXJ5LCBtYWtpbmcNCj4gaXQgc2lnbmlmaWNhbnRseSBoYXJkZXIgdG8gcGVy
-Zm9ybSBzdWNoIGF0dGFja3MuDQo+IA0KPiBUaGVyZSBhcmUgbXVsdGlwbGUgY29udHJvbCBmbG93
-IGluc3RydWN0aW9ucyB0aGF0IGNvdWxkIGJlIG1hbmlwdWxhdGVkDQo+IGJ5IHRoZSBhdHRhY2tl
-ciBhbmQgc3VidmVydCBjb250cm9sIGZsb3cuIFRoZSB0YXJnZXQgaW5zdHJ1Y3Rpb25zIHRoYXQN
-Cj4gdXNlIGRhdGEgdG8gZGV0ZXJtaW5lIHRoZSBhY3R1YWwgZGVzdGluYXRpb24uDQo+IC0gaW5k
-aXJlY3QganVtcA0KPiAtIGluZGlyZWN0IGNhbGwNCj4gLSByZXR1cm4NCj4gDQo+IEluIHRoaXMg
-Y2FzZSwgZnVuY3Rpb24gcHJvdG90eXBlIGJldHdlZW4gY2FsbGVyIGFuZCBjYWxsZWUgYXJlIG1p
-c21hdGNoLg0KPiBDYWxsZXI6ICh0eXBlIEEpZnVuY0ENCj4gQ2FsbGVlOiAodHlwZSBBKWZ1bmNC
-DQo+IENhbGxlZTogKHR5cGUgQylmdW5jQw0KPiANCj4gZnVuY0EgY2FsbHMgZnVuY0IgLT4gbm8g
-cHJvYmxlbQ0KPiBmdW5jQSBjYWxscyBmdW5jQyAtPiBDRkkgY2hlY2sgZmFpbGVkDQo+IA0KPiBU
-aGF0J3Mgd2h5IHdlIHRyeSB0byBhbGlnbiBmdW5jdGlvbiBwcm90b3R5cGUuDQo+IFBsZWFzZSBm
-ZWVsIGZyZWUgdG8gZmVlZGJhY2sgaWYgeW91IGhhdmUgYW55IHF1ZXN0aW9ucy4NCj4gDQo+ID4g
-PiBBbGlnbiBmdW5jdGlvbiBwcm90b3R5cGUgb2YgZW50ZXIoKSBzaW5jZSBpdCBuZWVkcyByZXR1
-cm4gdmFsdWUgZm9yDQo+ID4gPiBzb21lIHVzZSBjYXNlcy4gVGhlIHJldHVybiB2YWx1ZSBvZiBl
-bnRlcl9zMmlkbGUoKSBpcyBubw0KPiA+ID4gbmVlZCBjdXJyZW50bHkuDQo+ID4gDQo+ID4gU28g
-bGFzdCB0aW1lIEkgcmVxdWVzdGVkIHlvdSB0byBkb2N1bWVudCB3aHkgLT5lbnRlcl9zMmlkbGUg
-bmVlZHMgdG8NCj4gPiByZXR1cm4gYW4gaW50IGluIHRoZSBjb2RlLCB3aGljaCBoYXMgbm90IGJl
-ZW4gZG9uZS4gIFBsZWFzZSBkbyB0aGF0Lg0KPiA+IA0KPiA+ID4gU2lnbmVkLW9mZi1ieTogTmVh
-bCBMaXUgPG5lYWwubGl1QG1lZGlhdGVrLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGRyaXZlcnMv
-YWNwaS9wcm9jZXNzb3JfaWRsZS5jICAgfCAgICA2ICsrKystLQ0KPiA+ID4gIGRyaXZlcnMvY3B1
-aWRsZS9jcHVpZGxlLXRlZ3JhLmMgfCAgICA4ICsrKysrLS0tDQo+ID4gPiAgZHJpdmVycy9pZGxl
-L2ludGVsX2lkbGUuYyAgICAgICB8ICAgIDYgKysrKy0tDQo+ID4gPiAgaW5jbHVkZS9saW51eC9j
-cHVpZGxlLmggICAgICAgICB8ICAgIDYgKysrLS0tDQo+ID4gPiAgNCBmaWxlcyBjaGFuZ2VkLCAx
-NiBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9hY3BpL3Byb2Nlc3Nvcl9pZGxlLmMgYi9kcml2ZXJzL2FjcGkvcHJvY2Vzc29y
-X2lkbGUuYw0KPiA+ID4gaW5kZXggNzU1MzRjNS4uNmZmYjZjOSAxMDA2NDQNCj4gPiA+IC0tLSBh
-L2RyaXZlcnMvYWNwaS9wcm9jZXNzb3JfaWRsZS5jDQo+ID4gPiArKysgYi9kcml2ZXJzL2FjcGkv
-cHJvY2Vzc29yX2lkbGUuYw0KPiA+ID4gQEAgLTY1NSw4ICs2NTUsOCBAQCBzdGF0aWMgaW50IGFj
-cGlfaWRsZV9lbnRlcihzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiA+ICAgICAgICAg
-cmV0dXJuIGluZGV4Ow0KPiA+ID4gIH0NCj4gPiA+DQo+ID4gPiAtc3RhdGljIHZvaWQgYWNwaV9p
-ZGxlX2VudGVyX3MyaWRsZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiA+IC0gICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYs
-IGludCBpbmRleCkNCj4gPiA+ICtzdGF0aWMgaW50IGFjcGlfaWRsZV9lbnRlcl9zMmlkbGUoc3Ry
-dWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsDQo+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsIGludCBpbmRleCkNCj4gPiA+ICB7
-DQo+ID4gPiAgICAgICAgIHN0cnVjdCBhY3BpX3Byb2Nlc3Nvcl9jeCAqY3ggPSBwZXJfY3B1KGFj
-cGlfY3N0YXRlW2luZGV4XSwgZGV2LT5jcHUpOw0KPiA+ID4NCj4gPiA+IEBAIC02NzQsNiArNjc0
-LDggQEAgc3RhdGljIHZvaWQgYWNwaV9pZGxlX2VudGVyX3MyaWRsZShzdHJ1Y3QgY3B1aWRsZV9k
-ZXZpY2UgKmRldiwNCj4gPiA+ICAgICAgICAgICAgICAgICB9DQo+ID4gPiAgICAgICAgIH0NCj4g
-PiA+ICAgICAgICAgYWNwaV9pZGxlX2RvX2VudHJ5KGN4KTsNCj4gPiA+ICsNCj4gPiA+ICsgICAg
-ICAgcmV0dXJuIDA7DQo+ID4gPiAgfQ0KPiA+ID4NCj4gPiA+ICBzdGF0aWMgaW50IGFjcGlfcHJv
-Y2Vzc29yX3NldHVwX2NwdWlkbGVfY3goc3RydWN0IGFjcGlfcHJvY2Vzc29yICpwciwNCj4gPiA+
-IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvY3B1aWRsZS10ZWdyYS5jIGIvZHJpdmVycy9j
-cHVpZGxlL2NwdWlkbGUtdGVncmEuYw0KPiA+ID4gaW5kZXggMTUwMDQ1OC4uYTEyZmIxNCAxMDA2
-NDQNCj4gPiA+IC0tLSBhL2RyaXZlcnMvY3B1aWRsZS9jcHVpZGxlLXRlZ3JhLmMNCj4gPiA+ICsr
-KyBiL2RyaXZlcnMvY3B1aWRsZS9jcHVpZGxlLXRlZ3JhLmMNCj4gPiA+IEBAIC0yNTMsMTEgKzI1
-MywxMyBAQCBzdGF0aWMgaW50IHRlZ3JhX2NwdWlkbGVfZW50ZXIoc3RydWN0IGNwdWlkbGVfZGV2
-aWNlICpkZXYsDQo+ID4gPiAgICAgICAgIHJldHVybiBlcnIgPyAtMSA6IGluZGV4Ow0KPiA+ID4g
-IH0NCj4gPiA+DQo+ID4gPiAtc3RhdGljIHZvaWQgdGVncmExMTRfZW50ZXJfczJpZGxlKHN0cnVj
-dCBjcHVpZGxlX2RldmljZSAqZGV2LA0KPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0KPiA+ID4gLSAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIGludCBpbmRleCkNCj4gPiA+ICtzdGF0aWMgaW50IHRlZ3JhMTE0
-X2VudGVyX3MyaWRsZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiA+ICsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0KPiA+
-ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaW50IGluZGV4KQ0KPiA+ID4gIHsN
-Cj4gPiA+ICAgICAgICAgdGVncmFfY3B1aWRsZV9lbnRlcihkZXYsIGRydiwgaW5kZXgpOw0KPiA+
-ID4gKw0KPiA+ID4gKyAgICAgICByZXR1cm4gMDsNCj4gPiA+ICB9DQo+ID4gPg0KPiA+ID4gIC8q
-DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pZGxlL2ludGVsX2lkbGUuYyBiL2RyaXZlcnMv
-aWRsZS9pbnRlbF9pZGxlLmMNCj4gPiA+IGluZGV4IGY0NDk1ODQuLmIxNzhkYTMgMTAwNjQ0DQo+
-ID4gPiAtLS0gYS9kcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jDQo+ID4gPiArKysgYi9kcml2ZXJz
-L2lkbGUvaW50ZWxfaWRsZS5jDQo+ID4gPiBAQCAtMTc1LDEzICsxNzUsMTUgQEAgc3RhdGljIF9f
-Y3B1aWRsZSBpbnQgaW50ZWxfaWRsZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCj4gPiA+
-ICAgKiBJbnZva2VkIGFzIGEgc3VzcGVuZC10by1pZGxlIGNhbGxiYWNrIHJvdXRpbmUgd2l0aCBm
-cm96ZW4gdXNlciBzcGFjZSwgZnJvemVuDQo+ID4gPiAgICogc2NoZWR1bGVyIHRpY2sgYW5kIHN1
-c3BlbmRlZCBzY2hlZHVsZXIgY2xvY2sgb24gdGhlIHRhcmdldCBDUFUuDQo+ID4gPiAgICovDQo+
-ID4gPiAtc3RhdGljIF9fY3B1aWRsZSB2b2lkIGludGVsX2lkbGVfczJpZGxlKHN0cnVjdCBjcHVp
-ZGxlX2RldmljZSAqZGV2LA0KPiA+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LCBpbnQgaW5kZXgpDQo+ID4gPiArc3Rh
-dGljIF9fY3B1aWRsZSBpbnQgaW50ZWxfaWRsZV9zMmlkbGUoc3RydWN0IGNwdWlkbGVfZGV2aWNl
-ICpkZXYsDQo+ID4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJ1
-Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwgaW50IGluZGV4KQ0KPiA+ID4gIHsNCj4gPiA+ICAgICAg
-ICAgdW5zaWduZWQgbG9uZyBlYXggPSBmbGcyTVdBSVQoZHJ2LT5zdGF0ZXNbaW5kZXhdLmZsYWdz
-KTsNCj4gPiA+ICAgICAgICAgdW5zaWduZWQgbG9uZyBlY3ggPSAxOyAvKiBicmVhayBvbiBpbnRl
-cnJ1cHQgZmxhZyAqLw0KPiA+ID4NCj4gPiA+ICAgICAgICAgbXdhaXRfaWRsZV93aXRoX2hpbnRz
-KGVheCwgZWN4KTsNCj4gPiA+ICsNCj4gPiA+ICsgICAgICAgcmV0dXJuIDA7DQo+ID4gPiAgfQ0K
-PiA+ID4NCj4gPiA+ICAvKg0KPiA+ID4gZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvY3B1aWRs
-ZS5oIGIvaW5jbHVkZS9saW51eC9jcHVpZGxlLmgNCj4gPiA+IGluZGV4IGVjMmVmNjMuLmJlZTEw
-YzAgMTAwNjQ0DQo+ID4gPiAtLS0gYS9pbmNsdWRlL2xpbnV4L2NwdWlkbGUuaA0KPiA+ID4gKysr
-IGIvaW5jbHVkZS9saW51eC9jcHVpZGxlLmgNCj4gPiA+IEBAIC02Niw5ICs2Niw5IEBAIHN0cnVj
-dCBjcHVpZGxlX3N0YXRlIHsNCj4gPiA+ICAgICAgICAgICogc3VzcGVuZGVkLCBzbyBpdCBtdXN0
-IG5vdCByZS1lbmFibGUgaW50ZXJydXB0cyBhdCBhbnkgcG9pbnQgKGV2ZW4NCj4gPiA+ICAgICAg
-ICAgICogdGVtcG9yYXJpbHkpIG9yIGF0dGVtcHQgdG8gY2hhbmdlIHN0YXRlcyBvZiBjbG9jayBl
-dmVudCBkZXZpY2VzLg0KPiA+ID4gICAgICAgICAgKi8NCj4gPiA+IC0gICAgICAgdm9pZCAoKmVu
-dGVyX3MyaWRsZSkgKHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0KPiA+ID4gLSAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsDQo+ID4gPiAt
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpbnQgaW5kZXgpOw0KPiA+ID4gKyAgICAgICBp
-bnQgKCplbnRlcl9zMmlkbGUpKHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0KPiA+ID4gKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0KPiA+
-ID4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgIGludCBpbmRleCk7DQo+ID4gPiAgfTsNCj4g
-PiA+DQo+ID4gPiAgLyogSWRsZSBTdGF0ZSBGbGFncyAqLw0KPiA+ID4gLS0NCj4gPiA+IDEuNy45
-LjUNCj4gDQo+IA0KDQo=
+On Mon, Jul 20, 2020 at 03:55:26PM +0800, Icenowy Zheng wrote:
+> 在 2020-07-08星期三的 12:03 +0100，Russell King - ARM Linux admin写道：
+> > On Wed, Jul 08, 2020 at 12:55:27PM +0200, Ondrej Jirman wrote:
+> > > I noticed several mobile Linux distributions failing to enable the
+> > > thermal regulation correctly, because the kernel is silent
+> > > when thermal driver fails to probe. Add enough error reporting
+> > > to debug issues and warn users in case thermal sensor is failing
+> > > to probe.
+> > > 
+> > > Failing to notify users means, that SoC can easily overheat under
+> > > load.
+> > > 
+> > > Signed-off-by: Ondrej Jirman <megous@megous.com>
+> > > ---
+> > >  drivers/thermal/sun8i_thermal.c | 55 ++++++++++++++++++++++++++---
+> > > ----
+> > >  1 file changed, 43 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/thermal/sun8i_thermal.c
+> > > b/drivers/thermal/sun8i_thermal.c
+> > > index 74d73be16496..9065e79ae743 100644
+> > > --- a/drivers/thermal/sun8i_thermal.c
+> > > +++ b/drivers/thermal/sun8i_thermal.c
+> > > @@ -287,8 +287,12 @@ static int sun8i_ths_calibrate(struct
+> > > ths_device *tmdev)
+> > >  
+> > >  	calcell = devm_nvmem_cell_get(dev, "calibration");
+> > >  	if (IS_ERR(calcell)) {
+> > > +		dev_err(dev, "Failed to get calibration nvmem cell
+> > > (%ld)\n",
+> > > +			PTR_ERR(calcell));
+> > 
+> > Consider using:
+> > 
+> > 		dev_err(dev, "Failed to get calibration nvmem cell
+> > (%pe)\n",
+> > 			calcell);
+> > 
+> > which means the kernel can print the symbolic errno value.
+> 
+> Oh interesting format here.
+> 
+> When we need to deal with a int return value, is it "%e"?
 
+No, because that will lose the ability for the compiler to check the
+format string and arguments correspond.  All the extensions are
+documented at Documentation/core-api/printk-formats.rst.
+
+Use %pe and ERR_PTR(...) to print an integer -ve errno return value.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
