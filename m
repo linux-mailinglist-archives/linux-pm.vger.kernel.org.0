@@ -2,160 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A5A22599D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 10:04:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EB02259A0
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 10:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726601AbgGTIEc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 04:04:32 -0400
-Received: from relay5.mymailcheap.com ([159.100.241.64]:56951 "EHLO
-        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726015AbgGTIEc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 04:04:32 -0400
-X-Greylist: delayed 509 seconds by postgrey-1.27 at vger.kernel.org; Mon, 20 Jul 2020 04:04:30 EDT
-Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.157])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 564BE200EA;
-        Mon, 20 Jul 2020 07:55:59 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay3.mymailcheap.com (Postfix) with ESMTPS id B9DA83F15F;
-        Mon, 20 Jul 2020 09:55:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id 967742A8B1;
-        Mon, 20 Jul 2020 09:55:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1595231757;
-        bh=JDIzmC6xzWVV+edmzQ2cj84tjI5FaofU5GCv/dpHT/U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=B2Eh2bjm0yxlT86fQf4ccOV63/dFBj3EfHSM8yVkHRDetMG7XTzId7/frV3RpS5wL
-         ltyTOQHmfkPylDTYID8gPaoAIQhe3yC16nCBNIiApdVORaGqy0FcrL68hUNsBCHCxS
-         5281KtsS8tH1dE/WJys0jijhML5JhvQx5JXH1oIo=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id SY47Ma7yVLDD; Mon, 20 Jul 2020 09:55:56 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Mon, 20 Jul 2020 09:55:56 +0200 (CEST)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 413BD40143;
-        Mon, 20 Jul 2020 07:55:55 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="SwXXCHi4";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from ice-e5v2.local (unknown [59.41.162.238])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 51ADD40143;
-        Mon, 20 Jul 2020 07:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1595231735; bh=JDIzmC6xzWVV+edmzQ2cj84tjI5FaofU5GCv/dpHT/U=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=SwXXCHi44C7Qrhq27xC5WSDidT3TJJzjZl2oG9Z5x3CyoYh1Li9OQGTk5+w589zcF
-         KjsiQ/wJ/84ankootRmH7ZtsJKfrKp9J9DD7YR7VYZ9BqG3IgS0acWqxiAm9nGRPEx
-         DDiWjuk8lwi4hKGkn9nsdnLYAClk8R5m3RYf5u7U=
-Message-ID: <86689f81367716e3f88ec363edd0d302deca0a1f.camel@aosc.io>
-Subject: Re: [PATCH] thermal: sun8i: Be loud when probe fails
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
-        Ondrej Jirman <megous@megous.com>
-Cc:     Amit Kucheria <amit.kucheria@verdurent.com>,
-        "open list:ALLWINNER THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        linux-sunxi@googlegroups.com, Zhang Rui <rui.zhang@intel.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        "moderated list:ARM/Allwinner sunXi SoC support" 
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 20 Jul 2020 15:55:26 +0800
-In-Reply-To: <20200708110301.GB1551@shell.armlinux.org.uk>
-References: <20200708105527.868987-1-megous@megous.com>
-         <20200708110301.GB1551@shell.armlinux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.0 
+        id S1726030AbgGTIGG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 04:06:06 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:37069 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgGTIGG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 04:06:06 -0400
+Received: by mail-wm1-f66.google.com with SMTP id o2so24236749wmh.2;
+        Mon, 20 Jul 2020 01:06:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vg09xK5q93RhjkSo+BtXD7JwKBjiF9ZCt45w+OmMMVY=;
+        b=fUTMldOGfkrptj+n6jUNqqziKMMf/cgU3ebuM7YHLJZ0XgOOJqWml/zNAXU9MZAt1a
+         mGZvgYzT/+3kYDfQLwSwmS+97D3X71N0LmiMg3B5PnXTfT/0q4jEw+ErAXYjQu39erMv
+         PbSgzLHrqupo1/SbayKs7x3vx2lM2nE46s3LgQ2TmVm+ZkJXuxqz7NI3BWncEoacBi4W
+         3tC4eBog3hxZ4MDad6D6MPar6pq5JdCYA3wpVYVNh5IRU/TZf7xK3PDgIHBjkIQX+I5R
+         8xh6BibHYZ5Pd+acRH32bmKIZlUob72pbi5dVB2V9g6pE1J188m3hqVTBDOtLLNTNlyR
+         jLsw==
+X-Gm-Message-State: AOAM531qDr6XfPxZ57hpenTGrvUIwQWgLD3OZ9TpTfXB+rzzmUYaao2z
+        dP8m+sbw2MRjojiVe49Jaz++uIB7z3g=
+X-Google-Smtp-Source: ABdhPJxJ8ZIsf7AKkJqYCmB3NDTY1+PGtOCnwv5Wvo5iWqmnU/v7hbUEipw+IMyAcld5Qa3frDje4g==
+X-Received: by 2002:a7b:c3d0:: with SMTP id t16mr21900753wmj.117.1595232364225;
+        Mon, 20 Jul 2020 01:06:04 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.200])
+        by smtp.googlemail.com with ESMTPSA id l67sm34178337wml.13.2020.07.20.01.06.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 20 Jul 2020 01:06:03 -0700 (PDT)
+Date:   Mon, 20 Jul 2020 10:06:01 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
+        Marian Mihailescu <mihailescu2m@gmail.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: Re: [PATCH] ARM: dts: exynos: Disable frequency scaling for FSYS bus
+Message-ID: <20200720080601.GA3845@kozik-lap>
+References: <CGME20200714064824eucas1p2ea0d2ee2c109c351fe489050905b4104@eucas1p2.samsung.com>
+ <20200714064759.31772-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 413BD40143
-X-Spamd-Result: default: False [1.40 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
-         MID_RHS_MATCH_FROM(0.00)[];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         FREEMAIL_ENVRCPT(0.00)[gmail.com];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         TAGGED_RCPT(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DMARC_NA(0.00)[aosc.io];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         DKIM_TRACE(0.00)[aosc.io:+];
-         RCPT_COUNT_TWELVE(0.00)[13];
-         RCVD_IN_DNSWL_NONE(0.00)[213.133.102.83:from];
-         RECEIVED_SPAMHAUS_PBL(0.00)[59.41.162.238:received];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         FREEMAIL_CC(0.00)[verdurent.com,vger.kernel.org,gmail.com,linaro.org,kernel.org,googlegroups.com,intel.com,csie.org,lists.infradead.org];
-         SUSPICIOUS_RECIPS(1.50)[];
-         RCVD_COUNT_TWO(0.00)[2]
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200714064759.31772-1-m.szyprowski@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-在 2020-07-08星期三的 12:03 +0100，Russell King - ARM Linux admin写道：
-> On Wed, Jul 08, 2020 at 12:55:27PM +0200, Ondrej Jirman wrote:
-> > I noticed several mobile Linux distributions failing to enable the
-> > thermal regulation correctly, because the kernel is silent
-> > when thermal driver fails to probe. Add enough error reporting
-> > to debug issues and warn users in case thermal sensor is failing
-> > to probe.
-> > 
-> > Failing to notify users means, that SoC can easily overheat under
-> > load.
-> > 
-> > Signed-off-by: Ondrej Jirman <megous@megous.com>
-> > ---
-> >  drivers/thermal/sun8i_thermal.c | 55 ++++++++++++++++++++++++++---
-> > ----
-> >  1 file changed, 43 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/sun8i_thermal.c
-> > b/drivers/thermal/sun8i_thermal.c
-> > index 74d73be16496..9065e79ae743 100644
-> > --- a/drivers/thermal/sun8i_thermal.c
-> > +++ b/drivers/thermal/sun8i_thermal.c
-> > @@ -287,8 +287,12 @@ static int sun8i_ths_calibrate(struct
-> > ths_device *tmdev)
-> >  
-> >  	calcell = devm_nvmem_cell_get(dev, "calibration");
-> >  	if (IS_ERR(calcell)) {
-> > +		dev_err(dev, "Failed to get calibration nvmem cell
-> > (%ld)\n",
-> > +			PTR_ERR(calcell));
+On Tue, Jul 14, 2020 at 08:47:59AM +0200, Marek Szyprowski wrote:
+> Commit 1019fe2c7280 ("ARM: dts: exynos: Adjust bus related OPPs to the
+> values correct for Exynos5422 Odroids") changed the parameters of the
+> OPPs for the FSYS bus. Besides the frequency adjustments, it also removed
+> the 'shared-opp' property from the OPP table used for FSYS_APB and FSYS
+> busses.
 > 
-> Consider using:
+> This revealed that in fact the FSYS bus frequency scaling never worked.
+> When one OPP table is marked as 'opp-shared', only the first bus which
+> selects the OPP sets the rate of its clock. Then OPP core assumes that
+> the other busses have been changed to that OPP and no change to their
+> clock rates are needed. Thus when FSYS_APB bus, which was registered
+> first, set the rate for its clock, the OPP core did not change the FSYS
+> bus clock later.
 > 
-> 		dev_err(dev, "Failed to get calibration nvmem cell
-> (%pe)\n",
-> 			calcell);
+> The mentioned commit removed that behavior, what introduced a regression
+> on some OdroidXU3 boards. Frequency scaling of the FSYS bus causes
+> instability of the USB host operation, what can be observed as network
+> hangs. To restore old behavior, simply disable frequency scaling for the
+> FSYS bus.
 > 
-> which means the kernel can print the symbolic errno value.
+> Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+> Fixes: 1019fe2c7280 ("ARM: dts: exynos: Adjust bus related OPPs to the values correct for Exynos5422 Odroids")
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+>  arch/arm/boot/dts/exynos5422-odroid-core.dtsi | 6 ------
+>  1 file changed, 6 deletions(-)
 
-Oh interesting format here.
+Thanks Willy and Marek for digging into this, applied.
 
-When we need to deal with a int return value, is it "%e"?
+A follow up question would be if other boards (Exynos4412) require the
+same?
 
-Thanks
+Best regards,
+Krzysztof
 
-> 
