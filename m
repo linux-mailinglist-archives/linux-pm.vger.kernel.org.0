@@ -2,101 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A80B225C26
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 11:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293A6225CBB
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 12:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728328AbgGTJ5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 05:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S1728385AbgGTKiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 06:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728310AbgGTJ5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 05:57:30 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD698C0619D2
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:57:29 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id gc9so9973414pjb.2
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 02:57:29 -0700 (PDT)
+        with ESMTP id S1728356AbgGTKiN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 06:38:13 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DB8C0619D2
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 03:38:13 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id r12so17222219wrj.13
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jul 2020 03:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6XyZ1vebKO6SQCUsj068hhsBNuOKRm7ZmD8BgAuoHaY=;
-        b=NQBiu1cOCISh1k3U4y2l52I5TOrTbmZzL+gIeTHwlzmCjlDf3IZD/ASeQl0xonnttT
-         BEBTV4O6+LnVxFo/P67buZg17mjeeDzQ6YW9F5upr2VTBMiQYdnb6LmiMrZPNLo2+AvX
-         FsJAD3xO/Y1XACZxNmQn5zgKtsx0Eu+Q/07copNlruVNsS3eDO7l4BJy7FS/XMOlVJAH
-         5Th+Fgrh0sVI/M+/7oxKgEHskmAki/NZIoebAOMDGHZHUq3J8eEwmT9bpNlf6LYbSdrz
-         KlJie1QrAVSirzAarzo8Xi9oPUU18PND6e9uVj5H5NfTEeulHQWwkzA5hfrywQOqvzd0
-         rptQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=N+KShEFnJxGX9yyx1xEF9LSqKvHu0acMJ8Lfm+hfvF0=;
+        b=InuP5ggHa1/pALofoPR9I3mpWK6lk35q8MGa+FJ0Cza+bBiYtFfAfJifs5zPiJVAKO
+         CSLgdxPzxyqBiXe2uGN/mkOvmK79TKhwicrYic0fPSwbvA1F2oYSeo6BnetKrChAk48K
+         RphsMD8e2J70zfqCIDM8f8/BX73vUE0Z2Ia+w26NKh8JaxhJndQox54CkzJLPm91UjXc
+         DczOioE6l7MGFL2/aBhgWuSQP6Va27Dm3aIXNq//YPAH0ckPXiXknmAjFN1Bo4N8Oyob
+         HjJp9feTK7Mg2/cI61mhCw7+gbtK7C6kpJ+P/DHeZGYRrsZfJ8RoYMxCiT2cGVJ3rtfD
+         ISlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6XyZ1vebKO6SQCUsj068hhsBNuOKRm7ZmD8BgAuoHaY=;
-        b=Lyw38ewH50QRrIjN7iW91mur1z80i3+ntUMPc/Jt46jKbxXn7Qar7oB8VuAD5l+mjM
-         3XyWBsI0LFtAidHCCuR8ogcINNNlVtl5P9VXVcLwdHjMbY4GH17ggCr9ZhZxFkW2WNoS
-         wvDrOB+YB+oQCzXYgG1TJzkvc2PzDmEYgNfqL2hGw9/Q84y/VdHuayH3d7u77WHVlCu5
-         uOByKpqKmaCJdG297GnPTVX+3ux//QdW+2rZIMRbOjMG/Q55LgHdDKLVpZeQJRaXPbxm
-         f3/MHPuMOYj963Kio0DZSVnY+G0lY+h4IUNTR+0t8UCUYOZhha+jEUG1r96TayQAFh2n
-         iQ/w==
-X-Gm-Message-State: AOAM530S6Md+uRlbC6sexu4st27ECJfD/fncYusZWJZXqYLD9apqaghv
-        cFztskyu24ZCD2GLr8YsUbXvuQ==
-X-Google-Smtp-Source: ABdhPJzkmZ+GQFeE1cVYyN6xa/AAWSvHNvngWQItcmxRGFYYYD7B/0wV++gqFg1j+Ya++WKQMwlFCA==
-X-Received: by 2002:a17:90a:2367:: with SMTP id f94mr23548839pje.20.1595239049209;
-        Mon, 20 Jul 2020 02:57:29 -0700 (PDT)
-Received: from localhost ([223.179.133.67])
-        by smtp.gmail.com with ESMTPSA id u20sm17765622pfk.91.2020.07.20.02.57.27
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 Jul 2020 02:57:28 -0700 (PDT)
-Date:   Mon, 20 Jul 2020 15:27:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com
-Subject: Re: opp: Modify opp API, dev_pm_opp_get_freq(), find freq in opp,
- even it is disabled
-Message-ID: <20200720095717.eer4pnh3y4stkems@vireshk-mac-ubuntu>
-References: <1595235326-6333-1-git-send-email-andrew-sh.cheng@mediatek.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N+KShEFnJxGX9yyx1xEF9LSqKvHu0acMJ8Lfm+hfvF0=;
+        b=nhGA6z6in01UEIPLBp9TlrWZZFm0uhWninqJrf66Db8Jny4E1Ovq2y2m7O680uqEo/
+         ON+jf9wzaKIoUm78nqQMov9Ln4/3Q6FZCDJ5BYjii75DIHYWPgBsfd34oCanvdVfxFTz
+         zKdB1YHzhztgz0zD8uxvXm2AP/3UW9cwwiY+E4QTlQH35hz/bxgrTCrjN4tvY4q6jbX0
+         ue++vJVa02GFWG9tr71z7w6+7wHbu7LsAkYGM+meoH/2wgCUpOINJo3CeEFOB7+7YfEe
+         aBsRixz4v3rrcBQ6MANPMdz8mid1GRmGWWa1nxg4zIILdr7dPkTP0ioQMCdoBuO9RV5v
+         zMoQ==
+X-Gm-Message-State: AOAM533QFiiKukKz5u6S+sULhpWz8oZYjdpx6Y/To/vkmzQllJbdtJd8
+        agzrXc2EP20TzAW6IXAVsVWQ7Q==
+X-Google-Smtp-Source: ABdhPJw1/id93mBovoy22Lfk5BHPwv61GWmvOT4Bygs+7ogCIaqufAY1PEFM0xd4XmzTqhaH/IU8vg==
+X-Received: by 2002:a5d:548f:: with SMTP id h15mr5097677wrv.331.1595241491766;
+        Mon, 20 Jul 2020 03:38:11 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:3590:b402:869a:11fc? ([2a01:e34:ed2f:f020:3590:b402:869a:11fc])
+        by smtp.googlemail.com with ESMTPSA id t141sm33345477wmt.26.2020.07.20.03.38.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Jul 2020 03:38:11 -0700 (PDT)
+Subject: Re: [PATCH v4 08/16] thermal: sun8i: add TEMP_CALIB_MASK for
+ calibration data in sun50i_h6_ths_calibrate
+To:     Frank Lee <tiny.windzz@gmail.com>
+Cc:     Frank Lee <frank@allwinnertech.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?B?6buE54OB55Sf?= <huangshuosheng@allwinnertech.com>,
+        liyong@allwinnertech.com
+References: <cover.1594708863.git.frank@allwinnertech.com>
+ <b8761e036b25f20873534e5f8d10b37b5d2ce72c.1594708864.git.frank@allwinnertech.com>
+ <4771acd6-ecd3-b8e1-8605-75d78720b1d3@linaro.org>
+ <CAEExFWv9_1kec_b+t+nnvT3cziXzmVa8GzJT3pQAZiCf4KA0ig@mail.gmail.com>
+ <836e1b23-1c75-57fe-6e45-f7141272071c@linaro.org>
+ <CAEExFWsJBizFArd+9Mh6D=o6rvD7GLPZ-1pNFzTvBiE+uKwVhQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c1491845-ebd0-27d2-cf50-a8c5847869ab@linaro.org>
+Date:   Mon, 20 Jul 2020 12:38:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1595235326-6333-1-git-send-email-andrew-sh.cheng@mediatek.com>
-User-Agent: NeoMutt/20170609 (1.8.3)
+In-Reply-To: <CAEExFWsJBizFArd+9Mh6D=o6rvD7GLPZ-1pNFzTvBiE+uKwVhQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-07-20, 16:55, Andrew-sh.Cheng wrote:
-> From: "Andrew-sh.Cheng" <andrew-sh.cheng@mediatek.com>
+On 20/07/2020 11:27, Frank Lee wrote:
+> HI,
+> On Fri, Jul 17, 2020 at 3:56 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 17/07/2020 09:35, Frank Lee wrote:
+>>> On Fri, Jul 17, 2020 at 12:26 PM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
+>>>>
+>>>> On 14/07/2020 09:13, Frank Lee wrote:
+>>>>> From: Yangtao Li <frank@allwinnertech.com>
+>>>>>
+>>>>> For sun50i_h6_ths_calibrate(), the data read from nvmem needs a round of
+>>>>> calculation. On the other hand, the newer SOC may store other data in
+>>>>> the space other than 12bit sensor data. Add mask operation to read data
+>>>>> to avoid conversion error.
+>>>>>
+>>>>> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+>>>>> Reviewed-by: Yangtao Li <tiny.windzz@gmail.com>
+>>>>
+>>>> Can you clarify these SoB ?
+>>>
+>>> Previously I used 'Signed-off-by: Yangtao Li <tiny.windzz@gmail.com>',
+>>> maybe this should be removed directly?
+>>>
+>>>>
+>>>> Frank Lee==Yangtao Li==frank@allwinnertech.com==tiny.windzz@gmail.com ?
+>>>>
+>>>
+>>> Yeah.
+>>
+>> You are not supposed to add reviewed-by yourself. Please remove it.
 > 
-> Modify dev_pm_opp_get_freq() to return freqeuncy
-> even this opp item is not available.
-> So that we can get the information of disable opp items.
-> 
-> Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> ---
->  drivers/opp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index eed42d6b2e6b..5213e0462382 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -118,7 +118,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_voltage);
->   */
->  unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
->  {
-> -	if (IS_ERR_OR_NULL(opp) || !opp->available) {
-> +	if (IS_ERR_OR_NULL(opp)) {
->  		pr_err("%s: Invalid parameters\n", __func__);
->  		return 0;
->  	}
+> Should I resend the entire series or just the thermal patch?
+> What about those that have been applied.
 
-Applied. Thanks.
+I can not speak on behalf of other maintainers.
+
+The simplest would be to ask them directly.
+
+If you want to go forward with the thermal changes, you can send them
+separately but Maxim's Ack will be needed anyway.
+
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
