@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CAA225746
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 07:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FF1225753
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jul 2020 08:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbgGTF4l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 20 Jul 2020 01:56:41 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54034 "EHLO
+        id S1726486AbgGTGJN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 20 Jul 2020 02:09:13 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34188 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725845AbgGTF4l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 01:56:41 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06K5Wdo2061721;
-        Mon, 20 Jul 2020 01:56:37 -0400
+        by vger.kernel.org with ESMTP id S1725805AbgGTGJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 20 Jul 2020 02:09:13 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06K65Vgu116672;
+        Mon, 20 Jul 2020 02:09:10 -0400
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32bw7yr4by-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d2m2uq4f-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 01:56:37 -0400
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06K5txpT132749;
-        Mon, 20 Jul 2020 01:56:37 -0400
+        Mon, 20 Jul 2020 02:09:10 -0400
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06K66ASq120782;
+        Mon, 20 Jul 2020 02:09:09 -0400
 Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32bw7yr4at-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32d2m2uq39-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 01:56:37 -0400
+        Mon, 20 Jul 2020 02:09:09 -0400
 Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06K5sQFY023365;
-        Mon, 20 Jul 2020 05:55:25 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04fra.de.ibm.com with ESMTP id 32brq814kw-1
+        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06K66VEA003323;
+        Mon, 20 Jul 2020 06:09:07 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 32brq814vf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 20 Jul 2020 05:55:25 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06K5tNaK30081306
+        Mon, 20 Jul 2020 06:09:06 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06K6946M44630240
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jul 2020 05:55:23 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8E437A405C;
-        Mon, 20 Jul 2020 05:55:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2667A405B;
-        Mon, 20 Jul 2020 05:55:21 +0000 (GMT)
+        Mon, 20 Jul 2020 06:09:04 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 815ACA4059;
+        Mon, 20 Jul 2020 06:09:04 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D71B9A404D;
+        Mon, 20 Jul 2020 06:09:02 +0000 (GMT)
 Received: from drishya.in.ibm.com (unknown [9.85.113.150])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 20 Jul 2020 05:55:21 +0000 (GMT)
-Date:   Mon, 20 Jul 2020 11:25:19 +0530
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 20 Jul 2020 06:09:02 +0000 (GMT)
+Date:   Mon, 20 Jul 2020 11:39:00 +0530
 From:   Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
 To:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 Cc:     Nicholas Piggin <npiggin@gmail.com>,
@@ -54,104 +54,223 @@ Cc:     Nicholas Piggin <npiggin@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Michael Neuling <mikey@neuling.org>, linuxppc-dev@ozlabs.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/5] cpuidle-pseries: Set the latency-hint before
- entering CEDE
-Message-ID: <20200720055519.GB4000@drishya.in.ibm.com>
+Subject: Re: [PATCH 2/5] cpuidle-pseries: Add function to parse extended CEDE
+ records
+Message-ID: <20200720060900.GC4000@drishya.in.ibm.com>
 Reply-To: svaidy@linux.ibm.com
 References: <1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com>
- <1594120299-31389-2-git-send-email-ego@linux.vnet.ibm.com>
+ <1594120299-31389-3-git-send-email-ego@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1594120299-31389-2-git-send-email-ego@linux.vnet.ibm.com>
+In-Reply-To: <1594120299-31389-3-git-send-email-ego@linux.vnet.ibm.com>
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-20_01:2020-07-17,2020-07-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- spamscore=0 bulkscore=0 impostorscore=0 clxscore=1015 suspectscore=1
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=948 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007200038
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1015 suspectscore=1 phishscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007200045
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Gautham R Shenoy <ego@linux.vnet.ibm.com> [2020-07-07 16:41:35]:
+* Gautham R Shenoy <ego@linux.vnet.ibm.com> [2020-07-07 16:41:36]:
 
 > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 > 
-> As per the PAPR, each H_CEDE call is associated with a latency-hint to
-> be passed in the VPA field "cede_latency_hint". The CEDE states that
-> we were implicitly entering so far is CEDE with latency-hint = 0.
+> Currently we use CEDE with latency-hint 0 as the only other idle state
+> on a dedicated LPAR apart from the polling "snooze" state.
 > 
-> This patch explicitly sets the latency hint corresponding to the CEDE
-> state that we are currently entering. While at it, we save the
-> previous hint, to be restored once we wakeup from CEDE. This will be
-> required in the future when we expose extended-cede states through the
-> cpuidle framework, where each of them will have a different
-> cede-latency hint.
+> The platform might support additional extended CEDE idle states, which
+> can be discovered through the "ibm,get-system-parameter" rtas-call
+> made with CEDE_LATENCY_TOKEN.
+> 
+> This patch adds a function to obtain information about the extended
+> CEDE idle states from the platform and parse the contents to populate
+> an array of extended CEDE states. These idle states thus discovered
+> will be added to the cpuidle framework in the next patch.
+> 
+> dmesg on a POWER9 LPAR, demonstrating the output of parsing the
+> extended CEDE latency parameters.
+> 
+> [    5.913180] xcede : xcede_record_size = 10
+> [    5.913183] xcede : Record 0 : hint = 1, latency =0x400 tb-ticks, Wake-on-irq = 1
+> [    5.913188] xcede : Record 1 : hint = 2, latency =0x3e8000 tb-ticks, Wake-on-irq = 0
+> [    5.913193] cpuidle : Skipping the 2 Extended CEDE idle states
 > 
 > Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
 
 Reviewed-by: Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
 
-
+>
 > ---
->  drivers/cpuidle/cpuidle-pseries.c | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  drivers/cpuidle/cpuidle-pseries.c | 129 +++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 127 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-> index 4a37252..39d4bb6 100644
+> index 39d4bb6..c13549b 100644
 > --- a/drivers/cpuidle/cpuidle-pseries.c
 > +++ b/drivers/cpuidle/cpuidle-pseries.c
-> @@ -105,19 +105,27 @@ static void check_and_cede_processor(void)
+> @@ -21,6 +21,7 @@
+>  #include <asm/runlatch.h>
+>  #include <asm/idle.h>
+>  #include <asm/plpar_wrappers.h>
+> +#include <asm/rtas.h>
+> 
+>  struct cpuidle_driver pseries_idle_driver = {
+>  	.name             = "pseries_idle",
+> @@ -105,9 +106,120 @@ static void check_and_cede_processor(void)
 >  	}
 >  }
 > 
-> +#define NR_CEDE_STATES		1  /* CEDE with latency-hint 0 */
-> +#define NR_DEDICATED_STATES	(NR_CEDE_STATES + 1) /* Includes snooze */
+> -#define NR_CEDE_STATES		1  /* CEDE with latency-hint 0 */
+> +struct xcede_latency_records {
+> +	u8  latency_hint;
+> +	u64 wakeup_latency_tb_ticks;
+> +	u8  responsive_to_irqs;
+> +};
 > +
-> +u8 cede_latency_hint[NR_DEDICATED_STATES];
+> +/*
+> + * XCEDE : Extended CEDE states discovered through the
+> + *         "ibm,get-systems-parameter" rtas-call with the token
+> + *         CEDE_LATENCY_TOKEN
+> + */
+> +#define MAX_XCEDE_STATES		4
+> +#define	XCEDE_LATENCY_RECORD_SIZE	10
+> +#define XCEDE_LATENCY_PARAM_MAX_LENGTH	(2 + 2 + \
+> +					(MAX_XCEDE_STATES * XCEDE_LATENCY_RECORD_SIZE))
+> +
+> +#define CEDE_LATENCY_TOKEN		45
+> +
+> +#define NR_CEDE_STATES		(MAX_XCEDE_STATES + 1) /* CEDE with latency-hint 0 */
+>  #define NR_DEDICATED_STATES	(NR_CEDE_STATES + 1) /* Includes snooze */
+> 
+> +struct xcede_latency_records xcede_records[MAX_XCEDE_STATES];
+> +unsigned int nr_xcede_records;
+> +char xcede_parameters[XCEDE_LATENCY_PARAM_MAX_LENGTH];
+> +
+> +static int parse_cede_parameters(void)
+> +{
+> +	int ret = -1, i;
+> +	u16 payload_length;
+> +	u8 xcede_record_size;
+> +	u32 total_xcede_records_size;
+> +	char *payload;
+> +
+> +	memset(xcede_parameters, 0, XCEDE_LATENCY_PARAM_MAX_LENGTH);
+> +
+> +	ret = rtas_call(rtas_token("ibm,get-system-parameter"), 3, 1,
+> +			NULL, CEDE_LATENCY_TOKEN, __pa(xcede_parameters),
+> +			XCEDE_LATENCY_PARAM_MAX_LENGTH);
+> +
+> +	if (ret) {
+> +		pr_err("xcede: Error parsing CEDE_LATENCY_TOKEN\n");
+> +		return ret;
+> +	}
+> +
+> +	payload_length = be16_to_cpu(*(__be16 *)(&xcede_parameters[0]));
+> +	payload = &xcede_parameters[2];
+> +
+> +	/*
+> +	 * If the platform supports the cede latency settings
+> +	 * information system parameter it must provide the following
+> +	 * information in the NULL terminated parameter string:
+> +	 *
+> +	 * a. The first byte is the length ???N??? of each cede
+> +	 *    latency setting record minus one (zero indicates a length
+> +	 *    of 1 byte).
+> +	 *
+> +	 * b. For each supported cede latency setting a cede latency
+> +	 *    setting record consisting of the first ???N??? bytes as per
+> +	 *    the following table.
+> +	 *
+> +	 *	-----------------------------
+> +	 *	| Field           | Field  |
+> +	 *	| Name            | Length |
+> +	 *	-----------------------------
+> +	 *	| Cede Latency    | 1 Byte |
+> +	 *	| Specifier Value |        |
+> +	 *	-----------------------------
+> +	 *	| Maximum wakeup  |        |
+> +	 *	| latency in      | 8 Bytes|
+> +	 *	| tb-ticks        |        |
+> +	 *	-----------------------------
+> +	 *	| Responsive to   |        |
+> +	 *	| external        | 1 Byte |
+> +	 *	| interrupts      |        |
+> +	 *	-----------------------------
+> +	 *
+> +	 * This version has cede latency record size = 10.
+> +	 */
+> +	xcede_record_size = (u8)payload[0] + 1;
+
+This is standard PAPR interface that has been defined long time ago.
+However, new H_CEDE hints that map to new platform features will
+appear in the same interface and Linux needs to prepare and be ready
+to check and exploit the new hints if they are useful for the given
+setup.
+
+
+> +
+> +	if (xcede_record_size != XCEDE_LATENCY_RECORD_SIZE) {
+> +		pr_err("xcede : Expected record-size %d. Observed size %d.\n",
+> +		       XCEDE_LATENCY_RECORD_SIZE, xcede_record_size);
+> +		return -EINVAL;
+> +	}
+> +
+> +	pr_info("xcede : xcede_record_size = %d\n", xcede_record_size);
+> +
+> +	/*
+> +	 * Since the payload_length includes the last NULL byte and
+> +	 * the xcede_record_size, the remaining bytes correspond to
+> +	 * array of all cede_latency settings.
+> +	 */
+> +	total_xcede_records_size = payload_length - 2;
+> +	nr_xcede_records = total_xcede_records_size / xcede_record_size;
+> +
+> +	payload++;
+> +	for (i = 0; i < nr_xcede_records; i++) {
+> +		struct xcede_latency_records *record = &xcede_records[i];
+> +
+> +		record->latency_hint = (u8)payload[0];
+> +		record->wakeup_latency_tb_ticks  =
+> +			be64_to_cpu(*(__be64 *)(&payload[1]));
+> +		record->responsive_to_irqs = (u8)payload[9];
+> +		payload += xcede_record_size;
+> +		pr_info("xcede : Record %d : hint = %u, latency =0x%llx tb-ticks, Wake-on-irq = %u\n",
+> +			i, record->latency_hint,
+> +			record->wakeup_latency_tb_ticks,
+> +			record->responsive_to_irqs);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  u8 cede_latency_hint[NR_DEDICATED_STATES];
 >  static int dedicated_cede_loop(struct cpuidle_device *dev,
 >  				struct cpuidle_driver *drv,
->  				int index)
->  {
-> +	u8 old_latency_hint;
+> @@ -238,6 +350,19 @@ static int pseries_cpuidle_driver_init(void)
+>  	return 0;
+>  }
 > 
->  	pseries_idle_prolog();
->  	get_lppaca()->donate_dedicated_cpu = 1;
-> +	old_latency_hint = get_lppaca()->cede_latency_hint;
-> +	get_lppaca()->cede_latency_hint = cede_latency_hint[index];
-> 
->  	HMT_medium();
->  	check_and_cede_processor();
-> 
->  	local_irq_disable();
->  	get_lppaca()->donate_dedicated_cpu = 0;
-> +	get_lppaca()->cede_latency_hint = old_latency_hint;
-> 
->  	pseries_idle_epilog();
-> 
-> @@ -149,7 +157,7 @@ static int shared_cede_loop(struct cpuidle_device *dev,
->  /*
->   * States for dedicated partition case.
->   */
-> -static struct cpuidle_state dedicated_states[] = {
-> +static struct cpuidle_state dedicated_states[NR_DEDICATED_STATES] = {
->  	{ /* Snooze */
->  		.name = "snooze",
->  		.desc = "snooze",
+> +static int add_pseries_idle_states(void)
+> +{
+> +	int nr_states = 2; /* By default we have snooze, CEDE */
+> +
+> +	if (parse_cede_parameters())
+> +		return nr_states;
+> +
+> +	pr_info("cpuidle : Skipping the %d Extended CEDE idle states\n",
+> +		nr_xcede_records);
+> +
+> +	return nr_states;
 
-
-Saving and restoring the current cede hint value helps in maintaining
-compatibility with other parts of the kernel.  Over long term we can
-make cpuidle driver deterministically set the CEDE hint at each
-invocation of H_CEDE call so that we do not have to do multiple
-redundant save-restore.
-
-This is a reasonable start to cleanup this cupidle subsystem on PAPR
-guests. 
+More logic will be added to this function in the subsequent patches to
+actually make use of the information that is obtained from the platform
+firmware.
 
 --Vaidy
 
