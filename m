@@ -2,66 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E17E22807D
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 15:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB982280B7
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 15:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgGUNCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 09:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S1728550AbgGUNN5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 09:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727782AbgGUNCF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 09:02:05 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCF6C061794
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 06:02:02 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id o8so2735480wmh.4
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 06:02:02 -0700 (PDT)
+        with ESMTP id S1727957AbgGUNN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 09:13:57 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C31C0619DB
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 06:13:56 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id o11so21161531wrv.9
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 06:13:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=c8CUr//Kxp2XCh4p6o730T9o4S7sMFdJMOUtCj1j6F4=;
-        b=bw8uGSatbx8JEykSQdqB4/pM6Y5W9YDJ+HrxrycGB/KKnlgQ1tGqqHaUo3ruAesCkO
-         KtJDfRbnxdgUxEAN4bdt7jLN87iY1/p+TNpMW8dXeLU4R9xLk5aGfbra3RJxOo0Vcaf2
-         JEsw8ACHXnyWjtbd1+TjBHTxd6GcBA6geynHphcAgndy7Mgg4hx6rRexdP2OJe5tUaU/
-         S5fYg8NTAqtDnoSia3nE64JcjLfVQZHsf5ljwqvq00kEYlNZ4jz84xde/BxXLrfCQsll
-         huoeg1XC90jTwBsIGsEVek/8qiMkAG97P0SahInpY655gh7e4RcFF7D8WARCYcbeKQoH
-         Lkjw==
+        bh=6cyLMOSBZeL+BpGOPZ4KnMd993F4LhWCmpRnBNnGfbE=;
+        b=pLrzDAuE9wXfoBg5tbB9EnQhEkgxhH8oujCWqkPZ7yPs1YY1iIAN3Htmby+FaeSNto
+         I0AsSJQSA14mKVeuZwpaosXjYyNdgjtE5Md2vtVDzF5SPMVyAKGYNQ4PIOHEG3MPgF6A
+         mZOW0+Bb5/X/p5NPn/GLaSwX82VnAeWXT8ZAGshNALVq1M3MvLoGZdddDwhJKJLFl+00
+         +i5Z5m8Zht+mRlzpG/0R25tzgs57MBR3QTMoD3UNlkFRi4PqhEkOMLhM2Mt5uL0O/ne2
+         M8FbFkGM0/NmhmKmCJwLFVHma6/oaFG80Y2XNLp4WcctcPX9+M7x/KrMfslAWLgEGoHR
+         RJ7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=c8CUr//Kxp2XCh4p6o730T9o4S7sMFdJMOUtCj1j6F4=;
-        b=lNKoMkn5NK2P56Nwu9ZX/OarywQFNWNQI01DgTFl/z/fAf4yJ7TvXM4knf0NQXIhPB
-         p6HsKkQTkXXHBxNzKSZ0DdnilI9YtfKIX2wz+wwyttL4i4F0z3mQHTpQYDlvsSTILdl4
-         TGjyZ5ygd9W3ddH3V0gAUnAZUe4yWO5S/6988b0A9/njLkrInUfUw7ZEhlCFG1V3FNeH
-         L+2iJbfiMOH4gfGED0Mok8nGr+m80N53/wIiLv8z6flr3LRpiSi9Hxk5+hpoE8MWMfbl
-         j4qSPmBpDd0VkflpbV/DrcoDVFE5PZHGGeZjgC+FdXfqcZo2iNlG2Vc2nzNXXJEDmVmC
-         zCMA==
-X-Gm-Message-State: AOAM532dt72Uf98jPzeHX1u3lKlvpe3IS1V1+Uh8lSAoNa6AeB9od76I
-        sQiX/LErloG7F8WOe0AjT3//z9FH2WU=
-X-Google-Smtp-Source: ABdhPJzfVYzFbylj/GkvVDxz4XsySFZ6mPsa4CopGsWKPMcR6Tu3vl5J2h6j93Hj0owhSUKAB/vj1g==
-X-Received: by 2002:a1c:a557:: with SMTP id o84mr4005676wme.42.1595336521352;
-        Tue, 21 Jul 2020 06:02:01 -0700 (PDT)
+        bh=6cyLMOSBZeL+BpGOPZ4KnMd993F4LhWCmpRnBNnGfbE=;
+        b=QrWMr9EcbgDydmdj1fnc+4IhaCFDcfxXbwz2odS3WuyJ9iQkYE7HtHizAFENU0V6X8
+         8HAuPVcfKULk/K0yZqtoet2yPAou7BgtHS9jbFoiAeTDMAfy7k+E2sRA+2f/qsIao+TA
+         SCjoJ+k2tvuXT+UqXMguxfaggszL5nfr3wMeObzL53lnmOha8CuO5xraJDJ+b6DYmFud
+         SfSQ28AkxYhRCHU2BfLm2DfCMHl5bDJsP/FPSOIUS2MA6f8Vhaj9yov3IuL6W+HOeAtm
+         dciTRttWNUPSBzgZlvJD67KtrYtg37dplYkJUpasRYpTZEHFZy8pUgPZX12tQgDed8ej
+         mXMA==
+X-Gm-Message-State: AOAM532ap9eruUG/P0MdPVduZcVkeTMQuTuPw8eM+kr1ZTxavQnQzyEm
+        rmB+FmkMwgK0SkrocBCCxJn+zw==
+X-Google-Smtp-Source: ABdhPJxx0VQc6B7QNxyrz8xAMr6fQIOSIIeCGxhOqrMXIku3RHo9gn7vVbH1A4tXfP0uGL/ot16u8A==
+X-Received: by 2002:a5d:65cd:: with SMTP id e13mr28879567wrw.213.1595337235242;
+        Tue, 21 Jul 2020 06:13:55 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:c144:5385:c824:85ce? ([2a01:e34:ed2f:f020:c144:5385:c824:85ce])
-        by smtp.googlemail.com with ESMTPSA id z25sm3125273wmk.28.2020.07.21.06.02.00
+        by smtp.googlemail.com with ESMTPSA id m2sm3516167wmg.0.2020.07.21.06.13.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2020 06:02:00 -0700 (PDT)
-Subject: Re: [PATCH v2] thermal: rcar_gen3_thermal: Do not shadow thcode
- variable
-To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>, linux-pm@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-References: <20200610003300.884258-1-niklas.soderlund+renesas@ragnatech.se>
+        Tue, 21 Jul 2020 06:13:54 -0700 (PDT)
+Subject: Re: [PATCH] thermal: ti-soc-thermal: Fix reversed condition in
+ ti_thermal_expose_sensor()
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20200616091949.GA11940@mwanda>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <72600ef0-54f6-cf88-1443-48e5c024fa50@linaro.org>
-Date:   Tue, 21 Jul 2020 15:02:00 +0200
+Message-ID: <145478f0-3db1-4121-ad7c-78bc67a69c66@linaro.org>
+Date:   Tue, 21 Jul 2020 15:13:53 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200610003300.884258-1-niklas.soderlund+renesas@ragnatech.se>
+In-Reply-To: <20200616091949.GA11940@mwanda>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,23 +73,13 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/06/2020 02:33, Niklas Söderlund wrote:
-> The function rcar_gen3_thermal_calc_coefs() takes an argument called
-> 'thcode' which shadows the static global 'thcode' variable. This is not
-> harmful but bad for readability and is harmful for planned changes to
-> the driver. The THCODE values should be read from hardware fuses if they
-> are available and only fallback to the global 'thcode' variable if they
-> are not fused.
+On 16/06/2020 11:19, Dan Carpenter wrote:
+> This condition is reversed and will cause breakage.
 > 
-> Rename the global 'thcode' variable to 'thcodes' to avoid shadowing the
-> symbol in functions that take it as an argument.
-> 
-> Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Fixes: 7440f518dad9 ("thermal/drivers/ti-soc-thermal: Avoid dereferencing ERR_PTR")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 > ---
-
-Applied.
-
+ Applied.
 
 
 -- 
