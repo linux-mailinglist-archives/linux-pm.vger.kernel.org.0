@@ -2,123 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F451227D23
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 12:34:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD9E227D45
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 12:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgGUKet (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 06:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S1729272AbgGUKkW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 06:40:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726084AbgGUKes (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 06:34:48 -0400
+        with ESMTP id S1728210AbgGUKkV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 06:40:21 -0400
 Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61E48C061794;
-        Tue, 21 Jul 2020 03:34:48 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 184so2378607wmb.0;
-        Tue, 21 Jul 2020 03:34:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AC6C061794;
+        Tue, 21 Jul 2020 03:40:21 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id j18so2324079wmi.3;
+        Tue, 21 Jul 2020 03:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PR207KjqevVDyNeFnarAVrMh7guCycUdfg2gqQY0iTw=;
-        b=grSCYZ9yfxXj1LTfpzEem6QVQiZA7XwJ9qI6PT6eA79VKuD74Dl7sgOOj3TEvMJlWF
-         DucXWL/7R8sZjsaHBePjWD/IgJWTJemThanbNtKutbbEr9B/7LoMNYf0L8T8x6y1iZss
-         kApA0a3L/NJ6A7aqrONOSTsvUc0Ss0uCgVlh+b5/p/qb5NI4Q85kT/PM0sQbWY3rMtXi
-         SreisLyl9YadxHSXNDwvCMTUxgTfMBJUQyXEpLy68P5yoLlp7MPGIfn4CL+XcoWgnBCj
-         OKOKdHnPFtEFrhrwwNx0VIlRNMrdDwBKsOthirQSNzJLdICjBR5z5pb12E8bhpDVqPBS
-         XpGA==
+         :cc;
+        bh=/hrwegn9jIZlfwVSBJg2Q9e2hdiS+7p2jeJiI2B1tZg=;
+        b=GUZPnTeD2J8NqDSP9WWLzmOQJngE2JShWf5MnBF9DhXIO/nlj0hJgKgpsEtvY5gEbT
+         RCsYzV5kY8oVxrlmD95NjoEa0D8dZhsUismEAoQ3/sm0kJ47GRMw9iDejtWbEyoyfS60
+         9YrWiHDKQkR9dyIB67BVyHXal3r4JKDYxEdyMqK6H5Fvel4goKQwe0ILREBJzKfsD4IL
+         oddpaPTwduKzajzjyV05JLwl+s0+et5ixn79RXRh9EI82rglF6wwQrOLezuDOr+e8Stf
+         azffswxDOcsC65h6P/eNXvi0ziU7FCHgS/2xFoF7c6qyO3lb+LIBxEEpvoNumaetTZ2I
+         7BrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PR207KjqevVDyNeFnarAVrMh7guCycUdfg2gqQY0iTw=;
-        b=ZWDVpH1s9iMz5yX7Ewl/QBqvkzZm1ZcSZeoCm7YNE0QGW3+DkdteqPsSCzdqXUOiAy
-         Abj39xl+Fw96/QY4UccBjdLl9RdXT3Bv2BtBxrwkcN2uOuFtfiSj/YiH7dSgnm4ps8C5
-         4ZGf6EfzC9bWQFm+Kf+kCeG8jiss7/SzgfyGO0nAu+J3Baw+QfeWOsYqEN8DoUzL7peK
-         mqdSVUVYeOPmD8Gr9Mhsd1zj2eSeyW1Zp9sCkkMbk9AUxwuzf7m0ai70wsksyHNNKy1i
-         3XLyJR68pi7Aj5aqr4el7eV1V76EvSGU8d5Os0GpRPkbMNqbN0VCkEZ2hLbtqQXoy6Na
-         SYtw==
-X-Gm-Message-State: AOAM532/KgMrRF+oP0wc51SEVGwPLjGV/TIZNmqxkfGV855jVGZvYYGh
-        zmPfNj1sNFdbMiTMBhccKqQfabU4Znrh+1QeEIM=
-X-Google-Smtp-Source: ABdhPJweggcxhMTjACf7jDYE4AzuHJqzfg26Cc0HUXoyVp0PlF/AqxyLVMLd7ow8vNLRCP3yKxc9VZzEM3QTSj6i+uk=
-X-Received: by 2002:a7b:c921:: with SMTP id h1mr3210338wml.29.1595327687081;
- Tue, 21 Jul 2020 03:34:47 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=/hrwegn9jIZlfwVSBJg2Q9e2hdiS+7p2jeJiI2B1tZg=;
+        b=tvJLqUog5yC9SD1jEBZU0qhftR1sQcQeGbgUSCmRx0znMoj5+8YGkt3PAOQqbiPbYB
+         cikrsLd0HEpeWoCqoxlZKIOSIiE+vRnmz8h+745JxE0fGZf3zK1/EtkEIre1UWYSuAAV
+         2mij26bD8ExQrZ4MZXyQkqST7DFAD5eZ+UMK307uCUEw0BLn/zE6wed3Q+2RKZNaKj4A
+         q2pmenLgTx/QSDl+IOpoTeDyZVkXTSMml4xRNEHLw3gIOk3fE4naT/uwunR+P3cEUEN5
+         r3Ytbscghp27LD25YF8/KQbO97wmmCcJun166X2tnYIvpTuvoTH52kK6Zquu/CQ+Vl+N
+         yOYQ==
+X-Gm-Message-State: AOAM532cxc40DNGCt/xn989Sb4Znxb6u2FIocv68KZYdaaotYTGL2WQd
+        G219KAo8s6NEwIw7Cduf3raiFrW5izbrpj8n3fARAKn5WKPBsw==
+X-Google-Smtp-Source: ABdhPJyT/1LtNdoeP9Cg9cvSP4SEo5TegkCuPatOEblBQakvVJOOQBQ9X5N76GvU79QNd1w1mkIoxMmbdiwNl8D/88w=
+X-Received: by 2002:a7b:c921:: with SMTP id h1mr3228394wml.29.1595328020057;
+ Tue, 21 Jul 2020 03:40:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1595301250.git.huangqiwu@xiaomi.com> <b383d79629d0afca00838fcbaad4458e383d7262.1595301250.git.huangqiwu@xiaomi.com>
- <20200721082000.GD1655283@kroah.com> <CAPtXDt2CXYJNoqnu3r7+vV2BZzT3fMR_G1yOyu1v0dgS8EkjNg@mail.gmail.com>
- <20200721103241.GA1675802@kroah.com>
-In-Reply-To: <20200721103241.GA1675802@kroah.com>
+References: <cover.1595301250.git.huangqiwu@xiaomi.com> <f58e4cc6f5235d463d96c950f2af2b9a47920e9d.1595301250.git.huangqiwu@xiaomi.com>
+ <20200721082128.GE1655283@kroah.com>
+In-Reply-To: <20200721082128.GE1655283@kroah.com>
 From:   ivan <yanziily@gmail.com>
-Date:   Tue, 21 Jul 2020 18:34:35 +0800
-Message-ID: <CAPtXDt04J10+cnG-U9e=W2Uq8XJNi13J7nr3xZFAgxRmVd0VWQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] power: supply: core: add wireless signal strength property
+Date:   Tue, 21 Jul 2020 18:40:08 +0800
+Message-ID: <CAPtXDt25yjb6twRC2xdL7k4rOanyJicEFGuW6P84eFjNa0J80g@mail.gmail.com>
+Subject: Re: [PATCH v5 4/4] power: supply: core: property to control reverse charge
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 21, 2020 at 6:32 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Tue, Jul 21, 2020 at 4:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> On Tue, Jul 21, 2020 at 06:21:20PM +0800, ivan wrote:
-> > On Tue, Jul 21, 2020 at 4:19 PM Greg KH <gregkh@linuxfoundation.org> wr=
-ote:
-> > >
-> > > On Tue, Jul 21, 2020 at 01:59:36PM +0800, Qiwu Huang wrote:
-> > > > From: Qiwu Huang <huangqiwu@xiaomi.com>
-> > > >
-> > > > reports wireless signal strength.
-> > > > The value show degree of coupling between tx and rx.
-> > > >
-> > > > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
-> > > >  drivers/power/supply/power_supply_sysfs.c   |  1 +
-> > > >  include/linux/power_supply.h                |  1 +
-> > > >  3 files changed, 12 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Document=
-ation/ABI/testing/sysfs-class-power
-> > > > index 03ab449fae8a..75ec7de2fe78 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-class-power
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > > > @@ -757,3 +757,13 @@ Description:
-> > > >                       13: ADAPTER_VOICE_BOX,
-> > > >                       14: ADAPTER_PRIVATE_PD_50W.
-> > > >
-> > > > +What:                /sys/class/power_supply/<supply_name>/signal_=
-strength
-> > > > +Date:                Jul 2020
-> > > > +Contact:     Fei Jiang <jiangfei1@xiaomi.com>
-> > > > +Description:
-> > > > +             In PING phase, RX transmits a signal strength packet =
-as the first
-> > >
-> > > What does "PING phase" mean?
+> On Tue, Jul 21, 2020 at 01:59:37PM +0800, Qiwu Huang wrote:
+> > From: Qiwu Huang <huangqiwu@xiaomi.com>
 > >
-> > The Qi Wireless Power Transfer System is published by the Wireless
-> > Power Consortium.
-> > The ping phase is the necessary stage for matching transmitter and
-> > receiver. In this phase,
-> > the Power Transmitter executes a Digital Ping, and listens for a
-> > response. If the
-> > Power Transmitter discovers a Power Receiver, the Power Transmitter
-> > may extend the Digital Ping,
-> > i.e. maintain the Power Signal at the level of the Digital Ping. This
-> > causes the system to proceed to the
-> > identification & configuration phase. If the Power Transmitter does
-> > not extend the Digital Ping, the
-> > system shall revert to the selection phase.
+> > Interface to control wireless reverse charge.
+> > Supply reverse charge function when enabled.
+> >
+> > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-class-power | 12 ++++++++++++
+> >  drivers/power/supply/power_supply_sysfs.c   |  1 +
+> >  include/linux/power_supply.h                |  1 +
+> >  3 files changed, 14 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> > index 75ec7de2fe78..54647d6995d3 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-power
+> > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > @@ -767,3 +767,15 @@ Description:
+> >
+> >               Access: Read-Only
+> >               Valid values: 0 - 100
+> > +
+> > +What:                /sys/class/power_supply/<supply_name>/reverse_chg_mode
+> > +Date:                Jul 2020
+> > +Contact:     Fei Jiang <jiangfei1@xiaomi.com>
+> > +Description:
+> > +             Some phones support wireless reverse charge function which charge other phones.
 >
-> Thanks for the description, so perhaps turning this response into the
-> text in the description would be good?
+> Replace "phones" with "devices"?
 
-OK=EF=BC=8C I will
+ Yes,  devices better than phones
+
+>
+> And shouldn't these lines be wrapped properly at 72 colums or so?
+
+Sorry, I will modify the format  to match this standard.
+
+
+>
+> > +             The property supply interface to control wireless reverse charge.
+>
+> I can't understand this sentance.
+
+The property provider interface to enable/disable wireless reverse charge.
+
+>
+> > +             If enabled, start TX mode and detect RX. Disabled when timeout or manual setting.
+>
+> Can this be set, or is it just something to be read?
+
+Sorry,I forgot the permission statement
+
+Access: Read, Write
+
+
+
 
 >
 > thanks,
@@ -127,7 +127,7 @@ OK=EF=BC=8C I will
 
 
 
---=20
+--
 Thanks
 
 Qiwu
