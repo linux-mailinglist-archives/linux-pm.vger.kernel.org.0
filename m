@@ -2,112 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A000B22837B
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 17:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF0F228540
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 18:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbgGUPUU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 11:20:20 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:20459 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728127AbgGUPUU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 11:20:20 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1595344819; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=sP+1vwr+zxdZpM1tMnq7FuFYXRL2RmZSOSnV6M8A46g=;
- b=TRJFFtuTiBYWydrdOlnqauQ45e5pOiuJS6hQ3EegPxyDz14GiNNLSqmuDOqz8e7PrBNRTl6G
- f8wA+mYuVyOF7kYF8x+mQ2e6Quq7t1ymh+np5rL5BoPupso5AEG3EeGMrLmSwkSyXkyorA/v
- Ih4oGpf/lJUQNwE0SalFUNQr7x8=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f1707b27c8ca473a86a819b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 21 Jul 2020 15:20:18
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4648BC433AD; Tue, 21 Jul 2020 15:20:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: adhudase)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF890C43395;
-        Tue, 21 Jul 2020 15:20:16 +0000 (UTC)
+        id S1728477AbgGUQZl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 12:25:41 -0400
+Received: from mga06.intel.com ([134.134.136.31]:38912 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728180AbgGUQZk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Jul 2020 12:25:40 -0400
+IronPort-SDR: zStfbMFIlpraalvVd4sJhSPU0HChG4ij78Ry+S5VUf2J6SjrMUj/9A3XOhRALQ8DONZK2pANlD
+ TCmFjU03gBLw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9689"; a="211715778"
+X-IronPort-AV: E=Sophos;i="5.75,379,1589266800"; 
+   d="scan'208";a="211715778"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2020 09:25:37 -0700
+IronPort-SDR: hryq/gywAQdtW3AZ3P9cFmuFkG1C1Uq9yicrFjyp1cWlHwY4DU4cxqNCrJ3fm8tqMsQ7pRxK4U
+ kpZFmQREgUKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,379,1589266800"; 
+   d="scan'208";a="327920958"
+Received: from jacoraci-mobl.amr.corp.intel.com ([10.212.210.224])
+  by orsmga007.jf.intel.com with ESMTP; 21 Jul 2020 09:25:36 -0700
+Message-ID: <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP
+ enabled
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Francisco Jerez <currojerez@riseup.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 21 Jul 2020 09:25:36 -0700
+In-Reply-To: <87mu3thiz5.fsf@riseup.net>
+References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net>
+         <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com>
+         <87imeoihqs.fsf@riseup.net>
+         <CAJZ5v0hhLWvbNA6w0yHtzKa5ANR9yF++u63dh8wWAgkhbtLXXA@mail.gmail.com>
+         <875zanhty6.fsf@riseup.net>
+         <CAJZ5v0g2U+1wD5rUQwJ4_x9sQyvGyGiBiLFs7MA-xdhRBX9zBQ@mail.gmail.com>
+         <87mu3thiz5.fsf@riseup.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
 Content-Transfer-Encoding: 7bit
-Date:   Tue, 21 Jul 2020 20:50:16 +0530
-From:   adhudase@codeaurora.org
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     linux-pm@vger.kernel.org, okukatla@codeaurora.org,
-        mka@chromium.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: Do not skip aggregation for disabled paths
-In-Reply-To: <20200721120740.3436-1-georgi.djakov@linaro.org>
-References: <20200721120740.3436-1-georgi.djakov@linaro.org>
-Message-ID: <51df476d9b3470a545042bd34812c79c@codeaurora.org>
-X-Sender: adhudase@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-07-21 17:37, Georgi Djakov wrote:
-> When an interconnect path is being disabled, currently we don't 
-> aggregate
-> the requests for it afterwards. But the re-aggregation step shouldn't 
-> be
-> skipped, as it may leave the nodes with outdated bandwidth data. This
-> outdated data may actually keep the path still enabled and prevent the
-> device from going into lower power states.
+On Mon, 2020-07-20 at 16:20 -0700, Francisco Jerez wrote:
+> "Rafael J. Wysocki" <rafael@kernel.org> writes:
 > 
-> Reported-by: Atul Dhudase <adhudase@codeaurora.org>
-> Fixes: 7d374b209083 ("interconnect: Add helpers for enabling/disabling 
-> a path")
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
+> > On Fri, Jul 17, 2020 at 2:21 AM Francisco Jerez <
+> > currojerez@riseup.net> wrote:
+> > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+> > > 
+{...]
 
-Tested-by: Atul Dhudase <adhudase@codeaurora.org>
-Reviewed-by: Atul Dhudase <adhudase@codeaurora.org>
+> > Overall, so far, I'm seeing a claim that the CPU subsystem can be
+> > made
+> > use less energy and do as much work as before (which is what
+> > improving
+> > the energy-efficiency means in general) if the maximum frequency of
+> > CPUs is limited in a clever way.
+> > 
+> > I'm failing to see what that clever way is, though.
+> Hopefully the clarifications above help some.
 
->  drivers/interconnect/core.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 37d5ec970cc1..5174dcb31ab7 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -243,6 +243,7 @@ static int aggregate_requests(struct icc_node 
-> *node)
->  {
->  	struct icc_provider *p = node->provider;
->  	struct icc_req *r;
-> +	u32 avg_bw, peak_bw;
-> 
->  	node->avg_bw = 0;
->  	node->peak_bw = 0;
-> @@ -251,9 +252,14 @@ static int aggregate_requests(struct icc_node 
-> *node)
->  		p->pre_aggregate(node);
-> 
->  	hlist_for_each_entry(r, &node->req_list, req_node) {
-> -		if (!r->enabled)
-> -			continue;
-> -		p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
-> +		if (r->enabled) {
-> +			avg_bw = r->avg_bw;
-> +			peak_bw = r->peak_bw;
-> +		} else {
-> +			avg_bw = 0;
-> +			peak_bw = 0;
-> +		}
-> +		p->aggregate(node, r->tag, avg_bw, peak_bw,
->  			     &node->avg_bw, &node->peak_bw);
->  	}
+To simplify:
+
+Suppose I called a function numpy.multiply() to multiply two big arrays
+and thread is a pegged to a CPU. Let's say it is causing CPU to
+finish the job in 10ms and it is using a P-State of 0x20. But the same
+job could have been done in 10ms even if it was using P-state of 0x16.
+So we are not energy efficient. To really know where is the bottle neck
+there are numbers of perf counters, may be cache was the issue, we
+could rather raise the uncore frequency a little. A simple APRF,MPERF
+counters are not enough. or we characterize the workload at different
+P-states and set limits.
+I think this is not you want to say for energy efficiency with your
+changes. 
+
+The way you are trying to improve "performance" is by caller (device
+driver) to say how important my job at hand. Here device driver suppose
+offload this calculations to some GPU and can wait up to 10 ms, you
+want to tell CPU to be slow. But the p-state driver at a movement
+observes that there is a chance of overshoot of latency, it will
+immediately ask for higher P-state. So you want P-state limits based on
+the latency requirements of the caller. Since caller has more knowledge
+of latency requirement, this allows other devices sharing the power
+budget to get more or less power, and improve overall energy efficiency
+as the combined performance of system is improved.
+Is this correct?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
