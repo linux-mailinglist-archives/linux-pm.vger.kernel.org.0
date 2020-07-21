@@ -2,126 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C53D227AA4
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 10:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3464E227AA8
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 10:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728638AbgGUI3T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 04:29:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727018AbgGUI3S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 04:29:18 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8D1C0619D9
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 01:29:17 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id q5so20289182wru.6
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jul 2020 01:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=BCc9lQHutdqUheCKRkROi161ZNJWwY3EPFExUcfdRiQ=;
-        b=nQZzuMkvsmF8UEWlQ2eMje2ox6IxIQnvVbZvACyM99WUCNYR4mar5iAsEGOMOc1+kZ
-         W47xjV3CaLmGqGyhv+1g8jpHCUH2OllbVfcJnsO2LuTUPFgblr8cB3VkvBPBU0eMoS8C
-         bDpo4AnqD9Ze142VKWzYhpOd238YloVY6mGh99Pj3KHwXg4yPC5MPHjeWWDd2+cLLFE7
-         VWXzcnWEMofCTSbJPcZGPf78ZW/wwbQR3UBjy0EiNgclwxf6YDw2IB5JTQ5l6nd72jFF
-         NzSBCKQA6U6T6hQYX5gxJm4mO0jp49pX79cI2b8LyY7hj/iq16n93wrUPjZMA62YVHHw
-         0F4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BCc9lQHutdqUheCKRkROi161ZNJWwY3EPFExUcfdRiQ=;
-        b=p+GQc7vBDsp0P5cFaPqlyxCI0sufVi0JkRBDVqLhDtKQVvgfUc5OtE6SqXcFAQ4aFJ
-         gaQK7CekVXz7tBjcBh57A+HIWs78hPUdojBWafmFYoVpr9ahqksfaeDL6c3/KtyXA0NO
-         GSzL2IETsKQufgUSJJqXC7CRvj1O+Py08rcBFSREV+fYcTCqvaQBTkRIy+wQI/FyMMxY
-         1pkQx5dTnIor/EDVACEUejPmutTuD0W2CoXRzhpm8JFRN7sRf/7jKEDaDmHwQ/WOvI93
-         /zjoHX+1RHhFiqyRfGpyO4qDkzqInBdoLkIR9nXhaaygeGAE5nI/GfkyplXMiyzyoVLu
-         iHsQ==
-X-Gm-Message-State: AOAM530sC4/8/ZIu4WKszmIvF0ELP9+17vT8e+MX7R8gYXpwYT7dkX4h
-        z6pglGMVY7XzmqzpzugVcbox0Q==
-X-Google-Smtp-Source: ABdhPJx7ILZH2KvjvBFVVZB5grxQumhwOHm/i3j36nylWvTrt1yjKSBvidlCH5i8FTEEGeIg8iA/PA==
-X-Received: by 2002:adf:fb06:: with SMTP id c6mr810292wrr.261.1595320156360;
-        Tue, 21 Jul 2020 01:29:16 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:3590:b402:869a:11fc? ([2a01:e34:ed2f:f020:3590:b402:869a:11fc])
-        by smtp.googlemail.com with ESMTPSA id d10sm36006628wrx.66.2020.07.21.01.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Jul 2020 01:29:15 -0700 (PDT)
-Subject: Re: [PATCH v2] dt-bindings: thermal: Get rid of thermal.txt and
- replace references
-To:     Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        lukasz.luba@arm.com, Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Talel Shenhar <talel@amazon.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Mans Rullgard <mans@mansr.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stefan Wahren <wahrenst@gmx.net>
-Cc:     Rob Herring <robh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <e9aacd33071a00568b67e110fa3bcc4d86d3e1e4.1595245166.git.amit.kucheria@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <8c7f5c41-746b-f26d-7b3e-4152c17c4812@linaro.org>
-Date:   Tue, 21 Jul 2020 10:29:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726734AbgGUIaa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 04:30:30 -0400
+Received: from esa1.hc3370-68.iphmx.com ([216.71.145.142]:57868 "EHLO
+        esa1.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726521AbgGUIaa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 04:30:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1595320229;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=BzY2QweQF/rQiDbWv7Jn9Mmq9ZfmwWs8Ov87vMZGyUU=;
+  b=EgMid7TNjyXMwcvfL5EWSkFvLKZOp3SiwIul+X1NQONWcx8nYYRaDkKT
+   Yp3BqBNCq+c58oYIKa6rgy3+oVHpFi3ZKSJqKQfxjW5Bvm3XctTEoY0TN
+   vWWzf4Jlovt1F4f7BUfYn07vujKfiWgiL0rWlb2KFLv5kT7+SnwNAzd63
+   o=;
+Authentication-Results: esa1.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
+IronPort-SDR: x0OiNrk4e0Kv/geF7/GsMS3ajUnY+7gsSFFEXbjmHoWrn0Lxe6gtvxgEn0GR/cqaG+YYQcjcmB
+ y9cXZDaFN18y2oIa9h8b9NAh7AkUkC7xN6pUY0g7UBLeXlTrlJ4gdZ2eS3wMmI4P/wL7ISLp8w
+ /rH69WDGB4HRSyD8Mi1RPaLwy67UwO/DxY+phNhaDtpaI/XDgb+g5Z7PhX+c3q5qRqoauEaBxR
+ Eblv/h6LWWnHOFZ3YXG0BABZ9rg/RT1Z7xPJGXBV02waTGeDtwxItb0TozFEIVA2hEWlnwbpcU
+ zt4=
+X-SBRS: 2.7
+X-MesageID: 23153757
+X-Ironport-Server: esa1.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.75,378,1589256000"; 
+   d="scan'208";a="23153757"
+Date:   Tue, 21 Jul 2020 10:30:18 +0200
+From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+To:     Anchal Agarwal <anchalag@amazon.com>,
+        <marmarek@invisiblethingslab.com>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <x86@kernel.org>, <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
+ mode
+Message-ID: <20200721083018.GM7191@Air-de-Roger>
+References: <cover.1593665947.git.anchalag@amazon.com>
+ <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
+ <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
+ <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
+ <20200720093705.GG7191@Air-de-Roger>
+ <20200721001736.GB19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-In-Reply-To: <e9aacd33071a00568b67e110fa3bcc4d86d3e1e4.1595245166.git.amit.kucheria@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200721001736.GB19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
+ AMSPEX02CL02.citrite.net (10.69.22.126)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/07/2020 13:53, Amit Kucheria wrote:
-> Now that we have yaml bindings for the thermal subsystem, get rid of the
-> old bindings (thermal.txt).
-> 
-> Replace all references to thermal.txt in the Documentation with a link
-> to the appropriate YAML bindings using the following search and replace
-> pattern:
->  - If the reference is specific to the thermal-sensor-cells property,
->  replace with a pointer to thermal-sensor.yaml
->  - If the reference is to the cooling-cells property, replace with a
->  pointer to thermal-cooling-devices.yaml
->  - If the reference is generic thermal bindings, replace with a
->  reference to thermal*.yaml.
-> 
-> Signed-off-by: Amit Kucheria <amit.kucheria@linaro.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Marek: I'm adding you in case you could be able to give this a try and
+make sure it doesn't break suspend for dom0.
 
-Applied, thanks
+On Tue, Jul 21, 2020 at 12:17:36AM +0000, Anchal Agarwal wrote:
+> On Mon, Jul 20, 2020 at 11:37:05AM +0200, Roger Pau Monné wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > 
+> > 
+> > 
+> > On Sat, Jul 18, 2020 at 09:47:04PM -0400, Boris Ostrovsky wrote:
+> > > (Roger, question for you at the very end)
+> > >
+> > > On 7/17/20 3:10 PM, Anchal Agarwal wrote:
+> > > > On Wed, Jul 15, 2020 at 05:18:08PM -0400, Boris Ostrovsky wrote:
+> > > >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > >>
+> > > >>
+> > > >>
+> > > >> On 7/15/20 4:49 PM, Anchal Agarwal wrote:
+> > > >>> On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
+> > > >>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > > >>>>
+> > > >>>>
+> > > >>>>
+> > > >>>> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
+> > > >>>> And PVH dom0.
+> > > >>> That's another good use case to make it work with however, I still
+> > > >>> think that should be tested/worked upon separately as the feature itself
+> > > >>> (PVH Dom0) is very new.
+> > > >>
+> > > >> Same question here --- will this break PVH dom0?
+> > > >>
+> > > > I haven't tested it as a part of this series. Is that a blocker here?
+> > >
+> > >
+> > > I suspect dom0 will not do well now as far as hibernation goes, in which
+> > > case you are not breaking anything.
+> > >
+> > >
+> > > Roger?
+> > 
+> > I sadly don't have any box ATM that supports hibernation where I
+> > could test it. We have hibernation support for PV dom0, so while I
+> > haven't done anything specific to support or test hibernation on PVH
+> > dom0 I would at least aim to not make this any worse, and hence the
+> > check should at least also fail for a PVH dom0?
+> > 
+> > if (!xen_hvm_domain() || xen_initial_domain())
+> >     return -ENODEV;
+> > 
+> > Ie: none of this should be applied to a PVH dom0, as it doesn't have
+> > PV devices and hence should follow the bare metal device suspend.
+> >
+> So from what I understand you meant for any guest running on pvh dom0 should not 
+> hibernate if hibernation is triggered from within the guest or should they?
 
+Er no to both I think. What I meant is that a PVH dom0 should be able
+to properly suspend, and we should make sure this work doesn't make
+this any harder (or breaks it if it's currently working).
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Or at least that's how I understood the question raised by Boris.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+You are adding code to the generic suspend path that's also used by dom0
+in order to perform bare metal suspension. This is fine now for a PV
+dom0 because the code is gated on xen_hvm_domain, but you should also
+take into account that a PVH dom0 is considered a HVM domain, and
+hence will get the notifier registered.
+
+> > Also I would contact the QubesOS guys, they rely heavily on the
+> > suspend feature for dom0, and that's something not currently tested by
+> > osstest so any breakages there go unnoticed.
+> > 
+> Was this for me or Boris? If its the former then I have no idea how to?
+
+I've now added Marek.
+
+Roger.
