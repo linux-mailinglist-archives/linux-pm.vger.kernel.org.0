@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F69227875
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 08:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30638227877
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 08:02:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728311AbgGUGBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 02:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
+        id S1725294AbgGUGCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 02:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725294AbgGUGBy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 02:01:54 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5183C061794;
-        Mon, 20 Jul 2020 23:01:53 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id q17so10202920pfu.8;
-        Mon, 20 Jul 2020 23:01:53 -0700 (PDT)
+        with ESMTP id S1728369AbgGUGB4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 02:01:56 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC5EC061794;
+        Mon, 20 Jul 2020 23:01:56 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id z5so11448562pgb.6;
+        Mon, 20 Jul 2020 23:01:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v31UIEz3Dwtg5YacEjDmu57JbCXcygtQk9X1DgLN9BA=;
-        b=OaqRnCNBbaOyf6gKkUaUpNXTA920VOonVO9JKbyrCKb9JnM6mbk6Y8rVHsiqJXI9cI
-         4sNjlLANtDOBE4DarnVTpgB6vomXFgz/yRLodo3ehYAto4yEqnL3/zQyEJ3zZ1YnYHD5
-         ZNfDulMhozXwCKDGmpdqbp7lSbMUGQPj8yVd31g+yOCxgKphbaPcXx8jnl7CalACOj3n
-         TCsfgOXDQSHV2KH3bnttaE54z86au0lpHiX8dfD+FwinHnzc/fh5vWuJq7BA74AL+7ta
-         7NXhmU7CNLrdsRUmZSMtFbycQl4vWlnCaf8unfV5lSwuL/MMOJ2Mkj7RPCWIHZNKnzLX
-         sFkw==
+        bh=rt6OILtoXvarYoblULhOIeiZp6zLUqn8NzrZ6DwL+ac=;
+        b=kT+OXrwkEGS0+Ojb/6qOa0SIOtWehMYks820nIZ3eTq6LzaNnAWPJcH9KdSIIsxZC3
+         z0etdpEAxLgyi8c9Wbf1aPs792Dr3yWd5BbSdqI47OiY8ozyZgY5clhT2qRswVlmOPOC
+         aRPjEu+3v28+UMIjrR9kZMVVtIsb3EbOJwhZqyer5kejhjzL/PfJ1CuMRJ/OUP7+MLd4
+         MUmrNxp0hE3clKfk8UJi0obw2MSli1Q5rrrfbabL6eu5iP/yMQrK5FNtVsF1JH8M2g1b
+         ceA4TGoqPFPSY3jG1u6Z62pBna1qKLGPGZRBXLFD8zXYyAbOONzRcNuYeqd0dvWWbyzM
+         +bIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v31UIEz3Dwtg5YacEjDmu57JbCXcygtQk9X1DgLN9BA=;
-        b=bGRHTjE03HJ2TgGFAbkMH1rpBwqndRYtVkQWaM6G1AYqac1JWBiK3BtF48LGOP0W3t
-         vDF00kRaJy1AbJx+ON49okpc+2z9J89Sjk0803UetQayS8vGMjtPmJDQvwRrUzDVUuEb
-         /aUM797U1qC3qo9ChrsmqTVvBCKVc2sn2itpISail4suBw8owPyfMtK0peF3IZjdPeMs
-         X6HbIjPmHDnbYq6eaTsZjDv/M0zs8B0hIKuFzp0GryxkVZ2y1uYauKJLreLjVP1c4XyP
-         V5R1J4DFYa/tNpsXjbWFu9pE/fjBjuIYcMi5IsgTKC39KBGqXNwMMRRSauJCWch0xd7l
-         b7gw==
-X-Gm-Message-State: AOAM533XWJ23iaoxSFtQLZO839a6dD8GrjUuoXpldsc5NoYYH8Q7MfhJ
-        8swBrC5z/7DXN/6Ai2Mmu87eZCOIGWw+bA==
-X-Google-Smtp-Source: ABdhPJwTYSkbKwOevB5V24tO9MuY1cErnW4rjdcoHJGWyUrcHI3aa4abdanfOIWD8LkKChzhPBWP2w==
-X-Received: by 2002:a63:1c61:: with SMTP id c33mr21269575pgm.350.1595311313373;
-        Mon, 20 Jul 2020 23:01:53 -0700 (PDT)
+        bh=rt6OILtoXvarYoblULhOIeiZp6zLUqn8NzrZ6DwL+ac=;
+        b=b2Gl0/cg1+NS/xqK28QqeSfb4rik7ir54C+VeQT0wXP54qgJh5Tg173jU01B8NaP/m
+         QGJkwNSxe8G4aQCpinDn+FRgJb1BsTgG/hsQFyigVGBWoYhV1MXqc0zfzv9qnW+5I2J/
+         n4cezs3rO32xlkhoVw90WkOaI7BOQDVsFzxlH+bRTO+TyfbnDHAJQnqUTv+AXkOEvxA8
+         QR6wfWqTctVdktyhFnuZ6e+BgoZfCXU5/67uO8wxbpmlrZkmZU0H1SP1em53q+yDQZ7J
+         N73z7DeNRAyXeg+ZjD6BTW+1/pvk2Sfc92gFxjcIc2jSg+pPv44AaYlsQXweURT1n6TC
+         XYyg==
+X-Gm-Message-State: AOAM532szm/v+ZBQ6HWfdKOEezroGiPIhB0J/JEEX3dbrJY00kwCjvkM
+        G6Zyk9gzg4gkXzMWvb/p1BiKzmVv9RQCZw==
+X-Google-Smtp-Source: ABdhPJzqvv70WYZkewPWyfP2lxpv0JLD+3Vxc0VZjOuKJHfuIExbVjRQYwH65ivzf4nJ0AJWURjBUw==
+X-Received: by 2002:a62:e206:: with SMTP id a6mr22659012pfi.24.1595311315868;
+        Mon, 20 Jul 2020 23:01:55 -0700 (PDT)
 Received: from xiaomi.mioffice.cn ([209.9.72.214])
-        by smtp.gmail.com with ESMTPSA id 129sm18368833pfv.161.2020.07.20.23.01.51
+        by smtp.gmail.com with ESMTPSA id 129sm18368833pfv.161.2020.07.20.23.01.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2020 23:01:52 -0700 (PDT)
+        Mon, 20 Jul 2020 23:01:55 -0700 (PDT)
 From:   Qiwu Huang <yanziily@gmail.com>
 To:     sre@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v5 3/4] power: supply: core: add wireless signal strength property
-Date:   Tue, 21 Jul 2020 13:59:36 +0800
-Message-Id: <b383d79629d0afca00838fcbaad4458e383d7262.1595301250.git.huangqiwu@xiaomi.com>
+Subject: [PATCH v5 4/4] power: supply: core: property to control reverse charge
+Date:   Tue, 21 Jul 2020 13:59:37 +0800
+Message-Id: <f58e4cc6f5235d463d96c950f2af2b9a47920e9d.1595301250.git.huangqiwu@xiaomi.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <cover.1595301250.git.huangqiwu@xiaomi.com>
 References: <cover.1595301250.git.huangqiwu@xiaomi.com>
@@ -67,55 +67,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-reports wireless signal strength.
-The value show degree of coupling between tx and rx.
+Interface to control wireless reverse charge.
+Supply reverse charge function when enabled.
 
 Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
 ---
- Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
+ Documentation/ABI/testing/sysfs-class-power | 12 ++++++++++++
  drivers/power/supply/power_supply_sysfs.c   |  1 +
  include/linux/power_supply.h                |  1 +
- 3 files changed, 12 insertions(+)
+ 3 files changed, 14 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 03ab449fae8a..75ec7de2fe78 100644
+index 75ec7de2fe78..54647d6995d3 100644
 --- a/Documentation/ABI/testing/sysfs-class-power
 +++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -757,3 +757,13 @@ Description:
- 			13: ADAPTER_VOICE_BOX,
- 			14: ADAPTER_PRIVATE_PD_50W.
+@@ -767,3 +767,15 @@ Description:
  
-+What:		/sys/class/power_supply/<supply_name>/signal_strength
+ 		Access: Read-Only
+ 		Valid values: 0 - 100
++
++What:		/sys/class/power_supply/<supply_name>/reverse_chg_mode
 +Date:		Jul 2020
 +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
 +Description:
-+		In PING phase, RX transmits a signal strength packet as the first
-+		communication packet to instruct the base to keep power signal on.
-+		The value reports wireless signal strength and show degree of coupling.
++		Some phones support wireless reverse charge function which charge other phones.
++		The property supply interface to control wireless reverse charge.
++		If enabled, start TX mode and detect RX. Disabled when timeout or manual setting.
 +
-+		Access: Read-Only
-+		Valid values: 0 - 100
++		Valid values:
++		- 1: enabled
++		- 0: disabled
 diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index f2458e21d02b..e420a453095e 100644
+index e420a453095e..81916b6b6ccf 100644
 --- a/drivers/power/supply/power_supply_sysfs.c
 +++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -208,6 +208,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(SERIAL_NUMBER),
+@@ -209,6 +209,7 @@ static struct power_supply_attr power_supply_attrs[] = {
  	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
  	POWER_SUPPLY_ATTR(TX_ADAPTER),
-+	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
+ 	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
++	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
  };
  
  static struct attribute *
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 0bbdec1630a4..346c6c9c0737 100644
+index 346c6c9c0737..a87ae1fff8d1 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -169,6 +169,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_SERIAL_NUMBER,
+@@ -170,6 +170,7 @@ enum power_supply_property {
  	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
  	POWER_SUPPLY_PROP_TX_ADAPTER,
-+	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
+ 	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
++	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
  };
  
  enum power_supply_type {
