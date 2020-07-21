@@ -2,150 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3464E227AA8
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 10:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570E7227CCF
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 12:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbgGUIaa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 04:30:30 -0400
-Received: from esa1.hc3370-68.iphmx.com ([216.71.145.142]:57868 "EHLO
-        esa1.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgGUIaa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 04:30:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1595320229;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BzY2QweQF/rQiDbWv7Jn9Mmq9ZfmwWs8Ov87vMZGyUU=;
-  b=EgMid7TNjyXMwcvfL5EWSkFvLKZOp3SiwIul+X1NQONWcx8nYYRaDkKT
-   Yp3BqBNCq+c58oYIKa6rgy3+oVHpFi3ZKSJqKQfxjW5Bvm3XctTEoY0TN
-   vWWzf4Jlovt1F4f7BUfYn07vujKfiWgiL0rWlb2KFLv5kT7+SnwNAzd63
-   o=;
-Authentication-Results: esa1.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-IronPort-SDR: x0OiNrk4e0Kv/geF7/GsMS3ajUnY+7gsSFFEXbjmHoWrn0Lxe6gtvxgEn0GR/cqaG+YYQcjcmB
- y9cXZDaFN18y2oIa9h8b9NAh7AkUkC7xN6pUY0g7UBLeXlTrlJ4gdZ2eS3wMmI4P/wL7ISLp8w
- /rH69WDGB4HRSyD8Mi1RPaLwy67UwO/DxY+phNhaDtpaI/XDgb+g5Z7PhX+c3q5qRqoauEaBxR
- Eblv/h6LWWnHOFZ3YXG0BABZ9rg/RT1Z7xPJGXBV02waTGeDtwxItb0TozFEIVA2hEWlnwbpcU
- zt4=
-X-SBRS: 2.7
-X-MesageID: 23153757
-X-Ironport-Server: esa1.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.75,378,1589256000"; 
-   d="scan'208";a="23153757"
-Date:   Tue, 21 Jul 2020 10:30:18 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Anchal Agarwal <anchalag@amazon.com>,
-        <marmarek@invisiblethingslab.com>
-CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
-        <x86@kernel.org>, <jgross@suse.com>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <kamatam@amazon.com>,
-        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
- mode
-Message-ID: <20200721083018.GM7191@Air-de-Roger>
-References: <cover.1593665947.git.anchalag@amazon.com>
- <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
- <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
- <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
- <20200720093705.GG7191@Air-de-Roger>
- <20200721001736.GB19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+        id S1728479AbgGUKVe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 06:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44044 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbgGUKVd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 06:21:33 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876E8C061794;
+        Tue, 21 Jul 2020 03:21:33 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id q5so20637092wru.6;
+        Tue, 21 Jul 2020 03:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tg7ZtznRb+b+yekzNeH8rbjkvPZT0rO0PfuB04Vn+lE=;
+        b=fOftbt2BlRb6Sdks3/IcQAdA5xeuHcFYKe+fcVO4MR3zvlKV0j2v8FojJ7NP4bgjCm
+         7kMxyrn2slElFlU2ueveJ8SB+z7sSw5RAzPAGCc2BpOVRJod8w74BWiJw/Q2SO25vw6f
+         WxWtfcOW3lWYk6jjq6qIRCy7hIY+LR6Yso+KJp3GnoI+Vaig9wMGwX5+DWY5N5tcUyKW
+         VwNRAyWBKJLEY4nNED0dtTojZFRnVOjXFCD1qgsFDdQG56VZNs4PKM/DqHn6OT2PD4h7
+         4Itp3AG66CA1RVLOUMqAXpCYcfD9LkzoGXdyTkrM/l6fQZ+Oc7dNEDK9wOszhKNLXILX
+         haZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tg7ZtznRb+b+yekzNeH8rbjkvPZT0rO0PfuB04Vn+lE=;
+        b=JYPMaFThCez7Ua3qyyNkvG17JnlF650STsXPo1OlBWTZLOCgnPRhGh0TJanwsDRa+L
+         hjOInRsuP30EyAJmnPwpi6440mQDiTMLF06iM9VSNRAdYqHVWJv9dXH+ZDd6DLrWKg9a
+         hOdJ0ueai0TenJOnRW4Jby/+ev8sXMGbYjc5mOMWva84nPL4hVEFelqtRbH1u5EHpgNB
+         mxAq+4YjC01jzSf+S/gPduuyiFAqh41kcCANbTp1vBnFSp/8LsQ9P/tWwl31U2RKh5k6
+         5iGCammbuvqZoWnGHEgiXn9tdwH3pwH3gKO8EkXbLsJK6KYxkZDWtr23Dl+NJACDpFTk
+         NpdA==
+X-Gm-Message-State: AOAM5318nEwFGa+U6aN8hE5NmhuKK6WfGILgUQAOtra2a1/HL/TrsR84
+        EEX/O9XjIeZwwqzcwdm+oWYwEA+CWUVHRztmqdI=
+X-Google-Smtp-Source: ABdhPJy/mfKYuTq2/E8DzFaP+q62IINJNJXkBqAMMUm3eKnVccRT6EEgv2aBQUj1kf0++jJNo/hcxHDPPg1g5kTKxNI=
+X-Received: by 2002:a5d:6683:: with SMTP id l3mr27206827wru.288.1595326892226;
+ Tue, 21 Jul 2020 03:21:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200721001736.GB19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
- AMSPEX02CL02.citrite.net (10.69.22.126)
+References: <cover.1595301250.git.huangqiwu@xiaomi.com> <b383d79629d0afca00838fcbaad4458e383d7262.1595301250.git.huangqiwu@xiaomi.com>
+ <20200721082000.GD1655283@kroah.com>
+In-Reply-To: <20200721082000.GD1655283@kroah.com>
+From:   ivan <yanziily@gmail.com>
+Date:   Tue, 21 Jul 2020 18:21:20 +0800
+Message-ID: <CAPtXDt2CXYJNoqnu3r7+vV2BZzT3fMR_G1yOyu1v0dgS8EkjNg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/4] power: supply: core: add wireless signal strength property
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jiangfei1@xiaomi.com,
+        Qiwu Huang <huangqiwu@xiaomi.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Marek: I'm adding you in case you could be able to give this a try and
-make sure it doesn't break suspend for dom0.
-
-On Tue, Jul 21, 2020 at 12:17:36AM +0000, Anchal Agarwal wrote:
-> On Mon, Jul 20, 2020 at 11:37:05AM +0200, Roger Pau Monné wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > 
-> > 
-> > 
-> > On Sat, Jul 18, 2020 at 09:47:04PM -0400, Boris Ostrovsky wrote:
-> > > (Roger, question for you at the very end)
-> > >
-> > > On 7/17/20 3:10 PM, Anchal Agarwal wrote:
-> > > > On Wed, Jul 15, 2020 at 05:18:08PM -0400, Boris Ostrovsky wrote:
-> > > >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > >>
-> > > >>
-> > > >>
-> > > >> On 7/15/20 4:49 PM, Anchal Agarwal wrote:
-> > > >>> On Mon, Jul 13, 2020 at 11:52:01AM -0400, Boris Ostrovsky wrote:
-> > > >>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> > > >>>>
-> > > >>>>
-> > > >>>>
-> > > >>>> On 7/2/20 2:21 PM, Anchal Agarwal wrote:
-> > > >>>> And PVH dom0.
-> > > >>> That's another good use case to make it work with however, I still
-> > > >>> think that should be tested/worked upon separately as the feature itself
-> > > >>> (PVH Dom0) is very new.
-> > > >>
-> > > >> Same question here --- will this break PVH dom0?
-> > > >>
-> > > > I haven't tested it as a part of this series. Is that a blocker here?
-> > >
-> > >
-> > > I suspect dom0 will not do well now as far as hibernation goes, in which
-> > > case you are not breaking anything.
-> > >
-> > >
-> > > Roger?
-> > 
-> > I sadly don't have any box ATM that supports hibernation where I
-> > could test it. We have hibernation support for PV dom0, so while I
-> > haven't done anything specific to support or test hibernation on PVH
-> > dom0 I would at least aim to not make this any worse, and hence the
-> > check should at least also fail for a PVH dom0?
-> > 
-> > if (!xen_hvm_domain() || xen_initial_domain())
-> >     return -ENODEV;
-> > 
-> > Ie: none of this should be applied to a PVH dom0, as it doesn't have
-> > PV devices and hence should follow the bare metal device suspend.
+On Tue, Jul 21, 2020 at 4:19 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jul 21, 2020 at 01:59:36PM +0800, Qiwu Huang wrote:
+> > From: Qiwu Huang <huangqiwu@xiaomi.com>
 > >
-> So from what I understand you meant for any guest running on pvh dom0 should not 
-> hibernate if hibernation is triggered from within the guest or should they?
+> > reports wireless signal strength.
+> > The value show degree of coupling between tx and rx.
+> >
+> > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+> > ---
+> >  Documentation/ABI/testing/sysfs-class-power | 10 ++++++++++
+> >  drivers/power/supply/power_supply_sysfs.c   |  1 +
+> >  include/linux/power_supply.h                |  1 +
+> >  3 files changed, 12 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+> > index 03ab449fae8a..75ec7de2fe78 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-power
+> > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > @@ -757,3 +757,13 @@ Description:
+> >                       13: ADAPTER_VOICE_BOX,
+> >                       14: ADAPTER_PRIVATE_PD_50W.
+> >
+> > +What:                /sys/class/power_supply/<supply_name>/signal_strength
+> > +Date:                Jul 2020
+> > +Contact:     Fei Jiang <jiangfei1@xiaomi.com>
+> > +Description:
+> > +             In PING phase, RX transmits a signal strength packet as the first
+>
+> What does "PING phase" mean?
 
-Er no to both I think. What I meant is that a PVH dom0 should be able
-to properly suspend, and we should make sure this work doesn't make
-this any harder (or breaks it if it's currently working).
+The Qi Wireless Power Transfer System is published by the Wireless
+Power Consortium.
+The ping phase is the necessary stage for matching transmitter and
+receiver. In this phase,
+the Power Transmitter executes a Digital Ping, and listens for a
+response. If the
+Power Transmitter discovers a Power Receiver, the Power Transmitter
+may extend the Digital Ping,
+i.e. maintain the Power Signal at the level of the Digital Ping. This
+causes the system to proceed to the
+identification & configuration phase. If the Power Transmitter does
+not extend the Digital Ping, the
+system shall revert to the selection phase.
 
-Or at least that's how I understood the question raised by Boris.
+>
+> Other than that, seems sane to me, thanks for the changes.
+>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-You are adding code to the generic suspend path that's also used by dom0
-in order to perform bare metal suspension. This is fine now for a PV
-dom0 because the code is gated on xen_hvm_domain, but you should also
-take into account that a PVH dom0 is considered a HVM domain, and
-hence will get the notifier registered.
 
-> > Also I would contact the QubesOS guys, they rely heavily on the
-> > suspend feature for dom0, and that's something not currently tested by
-> > osstest so any breakages there go unnoticed.
-> > 
-> Was this for me or Boris? If its the former then I have no idea how to?
 
-I've now added Marek.
+-- 
+Thanks
 
-Roger.
+Qiwu
