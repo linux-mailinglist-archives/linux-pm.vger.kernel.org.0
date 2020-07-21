@@ -2,188 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E785F228BA9
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jul 2020 23:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E1A228C90
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jul 2020 01:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728014AbgGUVuC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 17:50:02 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:41736 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727113AbgGUVuB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 21 Jul 2020 17:50:01 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LLbH1D053011;
-        Tue, 21 Jul 2020 21:49:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Wt6D8IQ+tsBZP6vphxS0dWXDmx3gxPrZp48cft8vOXU=;
- b=ZR4VdSvpet26tZX92/sCTy6vjJRFNCoCf79j4Li/q7cKsN4RA+SEgcehrgeXzYghI39g
- GYS4x0QEr3/UcchZE2HhK91MqIhJMoSV8kIuz9KF8yxpE3GFJORL/0kdVBy5cxXq/z3V
- E6eHSlwLWYh61MdbHNBMQ27s290U0bffq8ULeNHLH+JxD3rM5d9R3CEUibv0B65VdOIW
- oGKqsSKrFuSP3ym/tIxRphgdMC+k3Osf/01ZiVqNeBUfMOySghsQKwssHv2XWAZAR3f0
- BK03rso9V7f/kosi6JqKalp1nm3gcCxcWL+QfhK0sP7cBEhVkWUki/cpJQ6rw7fbBV1k Vg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 32d6ksm436-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 21 Jul 2020 21:49:01 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06LLYBKO109659;
-        Tue, 21 Jul 2020 21:49:01 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 32e83g9p8c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jul 2020 21:49:01 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06LLmuIO030407;
-        Tue, 21 Jul 2020 21:48:56 GMT
-Received: from [10.39.225.136] (/10.39.225.136)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jul 2020 21:48:56 +0000
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
- mode
-To:     Anchal Agarwal <anchalag@amazon.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
-        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
-        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
-        sblbir@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org
-References: <cover.1593665947.git.anchalag@amazon.com>
- <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
- <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
- <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
- <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
- 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
- Jg6OxFYd01z+a+oL
-Message-ID: <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
-Date:   Tue, 21 Jul 2020 17:48:45 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1731381AbgGUXOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 19:14:48 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:45742 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726148AbgGUXOs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Jul 2020 19:14:48 -0400
+Received: from bell.riseup.net (bell-pn.riseup.net [10.0.1.178])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4BBDvW5l4BzDsyq;
+        Tue, 21 Jul 2020 16:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1595373287; bh=xTMTPC9hzFXTn074+lx+RG5xa8F+eokxN3Wm7v/sl5w=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=tWan2osbkTAhw60D6EEvW6y1Sia0ZrAnYPzzghqfAXoRNpVy9Cios+mIuALUru9lT
+         YSibRGi5JuuTzKlyGI0e/JZGpjoCYPBmxY3Mhs1cIWqMLAKlcSuldVRoJkHXv+3qKD
+         4kZ5LY1Dt0oaUt/6s58z/9bhgGVOfZM/iSV5G3AY=
+X-Riseup-User-ID: 5D3B783D35A34F52B7A96CE5A467C9284C412353663B0286B37FB04230C3A720
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by bell.riseup.net (Postfix) with ESMTPSA id 4BBDvV6VbhzJqp6;
+        Tue, 21 Jul 2020 16:14:46 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+In-Reply-To: <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com>
+References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net> <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com> <87imeoihqs.fsf@riseup.net> <CAJZ5v0hhLWvbNA6w0yHtzKa5ANR9yF++u63dh8wWAgkhbtLXXA@mail.gmail.com> <875zanhty6.fsf@riseup.net> <CAJZ5v0g2U+1wD5rUQwJ4_x9sQyvGyGiBiLFs7MA-xdhRBX9zBQ@mail.gmail.com> <87mu3thiz5.fsf@riseup.net> <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com>
+Date:   Tue, 21 Jul 2020 16:14:42 -0700
+Message-ID: <87h7u0h34t.fsf@riseup.net>
 MIME-Version: 1.0
-In-Reply-To: <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- bulkscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007210138
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9689 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- bulkscore=0 mlxscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 phishscore=0 spamscore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007210138
+Content-Type: multipart/signed; boundary="==-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+--==-=-=
+Content-Type: multipart/mixed; boundary="=-=-="
 
->>>>>> +static int xen_setup_pm_notifier(void)
->>>>>> +{
->>>>>> +     if (!xen_hvm_domain())
->>>>>> +             return -ENODEV;
->>>>>>
->>>>>> I forgot --- what did we decide about non-x86 (i.e. ARM)?
->>>>> It would be great to support that however, its  out of
->>>>> scope for this patch set.
->>>>> I’ll be happy to discuss it separately.
->>>>
->>>> I wasn't implying that this *should* work on ARM but rather whether this
->>>> will break ARM somehow (because xen_hvm_domain() is true there).
->>>>
->>>>
->>> Ok makes sense. TBH, I haven't tested this part of code on ARM and the series
->>> was only support x86 guests hibernation.
->>> Moreover, this notifier is there to distinguish between 2 PM
->>> events PM SUSPEND and PM hibernation. Now since we only care about PM
->>> HIBERNATION I may just remove this code and rely on "SHUTDOWN_SUSPEND" state.
->>> However, I may have to fix other patches in the series where this check may
->>> appear and cater it only for x86 right?
->>
->>
->> I don't know what would happen if ARM guest tries to handle hibernation
->> callbacks. The only ones that you are introducing are in block and net
->> fronts and that's arch-independent.
->>
->>
->> You do add a bunch of x86-specific code though (syscore ops), would
->> something similar be needed for ARM?
->>
->>
-> I don't expect this to work out of the box on ARM. To start with something
-> similar will be needed for ARM too.
-> We may still want to keep the driver code as-is.
-> 
-> I understand the concern here wrt ARM, however, currently the support is only
-> proposed for x86 guests here and similar work could be carried out for ARM.
-> Also, if regular hibernation works correctly on arm, then all is needed is to
-> fix Xen side of things.
-> 
-> I am not sure what could be done to achieve any assurances on arm side as far as
-> this series is concerned.
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> writes:
 
-If you are not sure what the effects are (or sure that it won't work) on
-ARM then I'd add IS_ENABLED(CONFIG_X86) check, i.e.
+> On Mon, 2020-07-20 at 16:20 -0700, Francisco Jerez wrote:
+>> "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>>=20
+>> > On Fri, Jul 17, 2020 at 2:21 AM Francisco Jerez <
+>> > currojerez@riseup.net> wrote:
+>> > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
+>> > >=20
+> {...]
+>
+>> > Overall, so far, I'm seeing a claim that the CPU subsystem can be
+>> > made
+>> > use less energy and do as much work as before (which is what
+>> > improving
+>> > the energy-efficiency means in general) if the maximum frequency of
+>> > CPUs is limited in a clever way.
+>> >=20
+>> > I'm failing to see what that clever way is, though.
+>> Hopefully the clarifications above help some.
+>
+> To simplify:
+>
+> Suppose I called a function numpy.multiply() to multiply two big arrays
+> and thread is a pegged to a CPU. Let's say it is causing CPU to
+> finish the job in 10ms and it is using a P-State of 0x20. But the same
+> job could have been done in 10ms even if it was using P-state of 0x16.
+> So we are not energy efficient. To really know where is the bottle neck
+> there are numbers of perf counters, may be cache was the issue, we
+> could rather raise the uncore frequency a little. A simple APRF,MPERF
+> counters are not enough.=20
 
+Yes, that's right, APERF and MPERF aren't sufficient to identify every
+kind of possible bottleneck, some visibility of the utilization of other
+subsystems is necessary in addition -- Like e.g the instrumentation
+introduced in my series to detect a GPU bottleneck.  A bottleneck
+condition in an IO device can be communicated to CPUFREQ by adjusting a
+PM QoS latency request (link [2] in my previous reply) that effectively
+gives the governor permission to rearrange CPU work arbitrarily within
+the specified time frame (which should be of the order of the natural
+latency of the IO device -- e.g. at least the rendering time of a frame
+for a GPU) in order to minimize energy usage.
 
-if (!IS_ENABLED(CONFIG_X86) || !xen_hvm_domain())
-	return -ENODEV;
+> or we characterize the workload at different P-states and set limits.
+> I think this is not you want to say for energy efficiency with your
+> changes.=20
+>
+> The way you are trying to improve "performance" is by caller (device
+> driver) to say how important my job at hand. Here device driver suppose
+> offload this calculations to some GPU and can wait up to 10 ms, you
+> want to tell CPU to be slow. But the p-state driver at a movement
+> observes that there is a chance of overshoot of latency, it will
+> immediately ask for higher P-state. So you want P-state limits based on
+> the latency requirements of the caller. Since caller has more knowledge
+> of latency requirement, this allows other devices sharing the power
+> budget to get more or less power, and improve overall energy efficiency
+> as the combined performance of system is improved.
+> Is this correct?
 
+Yes, pretty much.
 
-(plus '|| xen_initial_domain()' for PVH dom0 as Roger suggested.)
+--=-=-=--
 
--boris
+--==-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXxd24gAKCRCDmTidfVK/
+W4GXAPwIcPQpg2P5WEtcbZXe6xj58DHrm74yDbNuqQ97/+QnOQD9EinC1l0jSaqa
+oDWAREm4nOKPJuHFuljv0ghORZ+GI6I=
+=aUj6
+-----END PGP SIGNATURE-----
+--==-=-=--
