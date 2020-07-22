@@ -2,132 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E1A228C90
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jul 2020 01:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0831C228D07
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jul 2020 02:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731381AbgGUXOs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 21 Jul 2020 19:14:48 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:45742 "EHLO mx1.riseup.net"
+        id S1726972AbgGVASh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 21 Jul 2020 20:18:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgGUXOs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 21 Jul 2020 19:14:48 -0400
-Received: from bell.riseup.net (bell-pn.riseup.net [10.0.1.178])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4BBDvW5l4BzDsyq;
-        Tue, 21 Jul 2020 16:14:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1595373287; bh=xTMTPC9hzFXTn074+lx+RG5xa8F+eokxN3Wm7v/sl5w=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=tWan2osbkTAhw60D6EEvW6y1Sia0ZrAnYPzzghqfAXoRNpVy9Cios+mIuALUru9lT
-         YSibRGi5JuuTzKlyGI0e/JZGpjoCYPBmxY3Mhs1cIWqMLAKlcSuldVRoJkHXv+3qKD
-         4kZ5LY1Dt0oaUt/6s58z/9bhgGVOfZM/iSV5G3AY=
-X-Riseup-User-ID: 5D3B783D35A34F52B7A96CE5A467C9284C412353663B0286B37FB04230C3A720
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 4BBDvV6VbhzJqp6;
-        Tue, 21 Jul 2020 16:14:46 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-In-Reply-To: <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com>
-References: <3955470.QvD6XneCf3@kreacher> <87r1tdiqpu.fsf@riseup.net> <CAJZ5v0jaRm-wv+ZKhOyGJrrKZAsTKc3sq2GYyv0uerTTe3gXbQ@mail.gmail.com> <87imeoihqs.fsf@riseup.net> <CAJZ5v0hhLWvbNA6w0yHtzKa5ANR9yF++u63dh8wWAgkhbtLXXA@mail.gmail.com> <875zanhty6.fsf@riseup.net> <CAJZ5v0g2U+1wD5rUQwJ4_x9sQyvGyGiBiLFs7MA-xdhRBX9zBQ@mail.gmail.com> <87mu3thiz5.fsf@riseup.net> <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com>
-Date:   Tue, 21 Jul 2020 16:14:42 -0700
-Message-ID: <87h7u0h34t.fsf@riseup.net>
+        id S1726587AbgGVASg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 21 Jul 2020 20:18:36 -0400
+Received: from localhost (c-67-164-102-47.hsd1.ca.comcast.net [67.164.102.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04D5F206F2;
+        Wed, 22 Jul 2020 00:18:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595377116;
+        bh=VJtScx2bVukP/mlcrClwkoR4ksqhOSgVTh+yFH7IWqM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=q/rbNlzMTu2d7h5yLJQ8MI4vWYi2LX7ozhDoYhAUPEoDZ8904PyP/6DGkZPlaa7h+
+         o8Fhe9tLoc59rwBt81rS8ZNb2x+kajIYiSDt6wqdK85Qfy3Jg1VyVaAQUbxbsTZyIp
+         xLurlKmXOP87yAI9egGiQP25yNvM/MDfjaezUFq0=
+Date:   Tue, 21 Jul 2020 17:18:34 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@sstabellini-ThinkPad-T480s
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
+cc:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        kamatam@amazon.com, sstabellini@kernel.org, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, axboe@kernel.dk, davem@davemloft.net,
+        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        peterz@infradead.org, eduval@amazon.com, sblbir@amazon.com,
+        xen-devel@lists.xenproject.org, vkuznets@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
+ mode
+In-Reply-To: <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
+Message-ID: <alpine.DEB.2.21.2007211640500.17562@sstabellini-ThinkPad-T480s>
+References: <cover.1593665947.git.anchalag@amazon.com> <20200702182136.GA3511@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com> <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com> <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com> <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com> <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com> <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: multipart/mixed; BOUNDARY="8323329-219213542-1595374972=:17562"
+Content-ID: <alpine.DEB.2.21.2007211643430.17562@sstabellini-ThinkPad-T480s>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--8323329-219213542-1595374972=:17562
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <alpine.DEB.2.21.2007211643431.17562@sstabellini-ThinkPad-T480s>
 
-Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> writes:
+On Tue, 21 Jul 2020, Boris Ostrovsky wrote:
+> >>>>>> +static int xen_setup_pm_notifier(void)
+> >>>>>> +{
+> >>>>>> +     if (!xen_hvm_domain())
+> >>>>>> +             return -ENODEV;
+> >>>>>>
+> >>>>>> I forgot --- what did we decide about non-x86 (i.e. ARM)?
+> >>>>> It would be great to support that however, its  out of
+> >>>>> scope for this patch set.
+> >>>>> I’ll be happy to discuss it separately.
+> >>>>
+> >>>> I wasn't implying that this *should* work on ARM but rather whether this
+> >>>> will break ARM somehow (because xen_hvm_domain() is true there).
+> >>>>
+> >>>>
+> >>> Ok makes sense. TBH, I haven't tested this part of code on ARM and the series
+> >>> was only support x86 guests hibernation.
+> >>> Moreover, this notifier is there to distinguish between 2 PM
+> >>> events PM SUSPEND and PM hibernation. Now since we only care about PM
+> >>> HIBERNATION I may just remove this code and rely on "SHUTDOWN_SUSPEND" state.
+> >>> However, I may have to fix other patches in the series where this check may
+> >>> appear and cater it only for x86 right?
+> >>
+> >>
+> >> I don't know what would happen if ARM guest tries to handle hibernation
+> >> callbacks. The only ones that you are introducing are in block and net
+> >> fronts and that's arch-independent.
+> >>
+> >>
+> >> You do add a bunch of x86-specific code though (syscore ops), would
+> >> something similar be needed for ARM?
+> >>
+> >>
+> > I don't expect this to work out of the box on ARM. To start with something
+> > similar will be needed for ARM too.
+> > We may still want to keep the driver code as-is.
+> > 
+> > I understand the concern here wrt ARM, however, currently the support is only
+> > proposed for x86 guests here and similar work could be carried out for ARM.
+> > Also, if regular hibernation works correctly on arm, then all is needed is to
+> > fix Xen side of things.
+> > 
+> > I am not sure what could be done to achieve any assurances on arm side as far as
+> > this series is concerned.
 
-> On Mon, 2020-07-20 at 16:20 -0700, Francisco Jerez wrote:
->> "Rafael J. Wysocki" <rafael@kernel.org> writes:
->>=20
->> > On Fri, Jul 17, 2020 at 2:21 AM Francisco Jerez <
->> > currojerez@riseup.net> wrote:
->> > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
->> > >=20
-> {...]
->
->> > Overall, so far, I'm seeing a claim that the CPU subsystem can be
->> > made
->> > use less energy and do as much work as before (which is what
->> > improving
->> > the energy-efficiency means in general) if the maximum frequency of
->> > CPUs is limited in a clever way.
->> >=20
->> > I'm failing to see what that clever way is, though.
->> Hopefully the clarifications above help some.
->
-> To simplify:
->
-> Suppose I called a function numpy.multiply() to multiply two big arrays
-> and thread is a pegged to a CPU. Let's say it is causing CPU to
-> finish the job in 10ms and it is using a P-State of 0x20. But the same
-> job could have been done in 10ms even if it was using P-state of 0x16.
-> So we are not energy efficient. To really know where is the bottle neck
-> there are numbers of perf counters, may be cache was the issue, we
-> could rather raise the uncore frequency a little. A simple APRF,MPERF
-> counters are not enough.=20
+Just to clarify: new features don't need to work on ARM or cause any
+addition efforts to you to make them work on ARM. The patch series only
+needs not to break existing code paths (on ARM and any other platforms).
+It should also not make it overly difficult to implement the ARM side of
+things (if there is one) at some point in the future.
 
-Yes, that's right, APERF and MPERF aren't sufficient to identify every
-kind of possible bottleneck, some visibility of the utilization of other
-subsystems is necessary in addition -- Like e.g the instrumentation
-introduced in my series to detect a GPU bottleneck.  A bottleneck
-condition in an IO device can be communicated to CPUFREQ by adjusting a
-PM QoS latency request (link [2] in my previous reply) that effectively
-gives the governor permission to rearrange CPU work arbitrarily within
-the specified time frame (which should be of the order of the natural
-latency of the IO device -- e.g. at least the rendering time of a frame
-for a GPU) in order to minimize energy usage.
+FYI drivers/xen/manage.c is compiled and working on ARM today, however
+Xen suspend/resume is not supported. I don't know for sure if
+guest-initiated hibernation works because I have not tested it.
 
-> or we characterize the workload at different P-states and set limits.
-> I think this is not you want to say for energy efficiency with your
-> changes.=20
->
-> The way you are trying to improve "performance" is by caller (device
-> driver) to say how important my job at hand. Here device driver suppose
-> offload this calculations to some GPU and can wait up to 10 ms, you
-> want to tell CPU to be slow. But the p-state driver at a movement
-> observes that there is a chance of overshoot of latency, it will
-> immediately ask for higher P-state. So you want P-state limits based on
-> the latency requirements of the caller. Since caller has more knowledge
-> of latency requirement, this allows other devices sharing the power
-> budget to get more or less power, and improve overall energy efficiency
-> as the combined performance of system is improved.
-> Is this correct?
 
-Yes, pretty much.
+ 
+> If you are not sure what the effects are (or sure that it won't work) on
+> ARM then I'd add IS_ENABLED(CONFIG_X86) check, i.e.
+> 
+> 
+> if (!IS_ENABLED(CONFIG_X86) || !xen_hvm_domain())
+> 	return -ENODEV;
 
---=-=-=--
+That is a good principle to have and thanks for suggesting it. However,
+in this specific case there is nothing in this patch that doesn't work
+on ARM. From an ARM perspective I think we should enable it and
+&xen_pm_notifier_block should be registered.
 
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Given that all guests are HVM guests on ARM, it should work fine as is.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXxd24gAKCRCDmTidfVK/
-W4GXAPwIcPQpg2P5WEtcbZXe6xj58DHrm74yDbNuqQ97/+QnOQD9EinC1l0jSaqa
-oDWAREm4nOKPJuHFuljv0ghORZ+GI6I=
-=aUj6
------END PGP SIGNATURE-----
---==-=-=--
+I gave a quick look at the rest of the series and everything looks fine
+to me from an ARM perspective. I cannot imaging that the new freeze,
+thaw, and restore callbacks for net and block are going to cause any
+trouble on ARM. The two main x86-specific functions are
+xen_syscore_suspend/resume and they look trivial to implement on ARM (in
+the sense that they are likely going to look exactly the same.)
+
+
+One question for Anchal: what's going to happen if you trigger a
+hibernation, you have the new callbacks, but you are missing
+xen_syscore_suspend/resume?
+
+Is it any worse than not having the new freeze, thaw and restore
+callbacks at all and try to do a hibernation?
+--8323329-219213542-1595374972=:17562--
