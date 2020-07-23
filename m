@@ -2,165 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38AF222B66B
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jul 2020 21:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C2822B9D5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 00:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728049AbgGWTHe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jul 2020 15:07:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727988AbgGWTHc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 15:07:32 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECBFC0619E3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 12:07:32 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id k5so3538083pjg.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 12:07:32 -0700 (PDT)
+        id S1726626AbgGWW6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jul 2020 18:58:09 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:45185 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726608AbgGWW6I (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 18:58:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fmy4tO1tW/yB2p+/DBGuPfpuvcNIPQV/6jKnfwUymaM=;
-        b=uJ/LXXd4WW3t/V9uP1pvh2+w7xCfmHmmU2q2MX994uvmdMhyUpnBd6wtTkFWVeSiVn
-         fni2Skynmv78aJ9rstIyOgTssb4uBzBQL6YPmxb5SzQaGZtm2sB0Ln7Qk9r6vt5a/SEE
-         gYzQRW0K8FC5lX9W9+bz+gbIOgybElEHRuMxxBvv7T+TJKJnGfXHkIe/b2UFhfrjNnt8
-         hmvs/pCT8mt2wp6eGsvntxKg2m7zjG9IalAT3RXT7FCW3qu0zRZl84tHISI7JSF/JPwL
-         M06pYkfoNbZamtdmUh5GU20hgxfU9YBtWQ50on6QDjz/h882N3ikL5uKYSp6UNdyl0GU
-         5IDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fmy4tO1tW/yB2p+/DBGuPfpuvcNIPQV/6jKnfwUymaM=;
-        b=dSvxTv9vkaENXEuSM+XK5bpcZgkINc1bSj97+Je8rsLU+GiDYXfGt1plSL+GRFn1yY
-         Y2JsM7BTFsEhEty/qaQhDq57AYoBjYrnkTwaCnbSNrtZlxwYsGBTkUCpAHOWr5Twnkk+
-         SRONrHeicoIoNbUz3Qh7cpcyOLFe4xUIThMHNSomx5M0GTezDkvPNAKcohrxmV7xjknm
-         HYyv2Ra8M6BwgQX7Pmi1pXxy/VMMpeaoFvj3ndc3wDDqPY96QQ539mqvCBVYlW3C6Ujn
-         gxGzeuZ5FMsWWKxw6gY+zv0u/+dvxr+LJREq0sIBbYs92Jse3W38N2v6NsCAEu6AlxYX
-         D1HA==
-X-Gm-Message-State: AOAM532m5R46FXISJqLnDWSMP051trpjv692ec/QZItBEqVLTZa/xZSM
-        GWwvomVPw+uoSI+mJx2Xbz3FuA==
-X-Google-Smtp-Source: ABdhPJyFY8SK2yrpGMIJYPZOm/XbUPFW09vVIwr7j2Oue2l2cEXybEXOCRDyJvKCGSvI32jjRGApEQ==
-X-Received: by 2002:a17:902:22:: with SMTP id 31mr4590106pla.120.1595531251889;
-        Thu, 23 Jul 2020 12:07:31 -0700 (PDT)
-Received: from google.com ([2620:15c:201:2:f693:9fff:fef4:1b6d])
-        by smtp.gmail.com with ESMTPSA id h6sm3716298pfo.123.2020.07.23.12.07.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jul 2020 12:07:31 -0700 (PDT)
-Date:   Thu, 23 Jul 2020 12:07:24 -0700
-From:   Sami Tolvanen <samitolvanen@google.com>
-To:     Neal Liu <neal.liu@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>
-Subject: Re: [PATCH v2] cpuidle: change enter_s2idle() prototype
-Message-ID: <20200723190724.GA1339461@google.com>
-References: <1594005196-16327-1-git-send-email-neal.liu@mediatek.com>
- <1594005196-16327-2-git-send-email-neal.liu@mediatek.com>
- <CAJZ5v0ihB5AJwSRpjaOnXAmciregzxARL5xfudu1h+=_LXaE_w@mail.gmail.com>
- <1594350535.4670.13.camel@mtkswgap22>
- <1595233294.8055.0.camel@mtkswgap22>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1595545086; x=1627081086;
+  h=date:from:to:cc:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:subject;
+  bh=y+Ab+qpN+drP51OsAVzLhFNy+EV/cJUJK2AzFsvossY=;
+  b=Q7k60bnGU9kk5Tdk9XgUbkFaaO8mXV0lPem+hleZJctIBDXgtGGBNHlR
+   4IREheUs4YRzU1a6GeXsCuJ1dHgQQ/RN7ldElzKPBoxYepm3cSwBmT1GL
+   V2yMAZW3DwFkIq9WhOlj5H0VJmslDY6KM4t/RZgZA68kAeJhpZ8hpULdV
+   A=;
+IronPort-SDR: dA+OGJwBfOOYugAkt1GR7i4MLo/b/uzrQfkdodJW7nqunoIzxIwSDzciIPUnI8o7Bc2FoRcL7e
+ 1mgdgdge/NFQ==
+X-IronPort-AV: E=Sophos;i="5.75,388,1589241600"; 
+   d="scan'208";a="43610901"
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 23 Jul 2020 22:58:05 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id D35D6A1FB9;
+        Thu, 23 Jul 2020 22:57:58 +0000 (UTC)
+Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
+ EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 23 Jul 2020 22:57:45 +0000
+Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
+ EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Thu, 23 Jul 2020 22:57:45 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Thu, 23 Jul 2020 22:57:45 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 5F7384CA2B; Thu, 23 Jul 2020 22:57:45 +0000 (UTC)
+Date:   Thu, 23 Jul 2020 22:57:45 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     Stefano Stabellini <sstabellini@kernel.org>
+CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
+        <x86@kernel.org>, <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Message-ID: <20200723225745.GB32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
+ <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
+ <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
+ <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
+ <alpine.DEB.2.21.2007211640500.17562@sstabellini-ThinkPad-T480s>
+ <20200722180229.GA32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <1595233294.8055.0.camel@mtkswgap22>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 20, 2020 at 04:21:34PM +0800, Neal Liu wrote:
-> Gentle ping on this patch.
+On Wed, Jul 22, 2020 at 04:49:16PM -0700, Stefano Stabellini wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
 > 
-> On Fri, 2020-07-10 at 11:08 +0800, Neal Liu wrote:
-> > On Thu, 2020-07-09 at 14:18 +0200, Rafael J. Wysocki wrote:
-> > > On Mon, Jul 6, 2020 at 5:13 AM Neal Liu <neal.liu@mediatek.com> wrote:
+> 
+> On Wed, 22 Jul 2020, Anchal Agarwal wrote:
+> > On Tue, Jul 21, 2020 at 05:18:34PM -0700, Stefano Stabellini wrote:
+> > > On Tue, 21 Jul 2020, Boris Ostrovsky wrote:
+> > > > >>>>>> +static int xen_setup_pm_notifier(void)
+> > > > >>>>>> +{
+> > > > >>>>>> +     if (!xen_hvm_domain())
+> > > > >>>>>> +             return -ENODEV;
+> > > > >>>>>>
+> > > > >>>>>> I forgot --- what did we decide about non-x86 (i.e. ARM)?
+> > > > >>>>> It would be great to support that however, its  out of
+> > > > >>>>> scope for this patch set.
+> > > > >>>>> I’ll be happy to discuss it separately.
+> > > > >>>>
+> > > > >>>> I wasn't implying that this *should* work on ARM but rather whether this
+> > > > >>>> will break ARM somehow (because xen_hvm_domain() is true there).
+> > > > >>>>
+> > > > >>>>
+> > > > >>> Ok makes sense. TBH, I haven't tested this part of code on ARM and the series
+> > > > >>> was only support x86 guests hibernation.
+> > > > >>> Moreover, this notifier is there to distinguish between 2 PM
+> > > > >>> events PM SUSPEND and PM hibernation. Now since we only care about PM
+> > > > >>> HIBERNATION I may just remove this code and rely on "SHUTDOWN_SUSPEND" state.
+> > > > >>> However, I may have to fix other patches in the series where this check may
+> > > > >>> appear and cater it only for x86 right?
+> > > > >>
+> > > > >>
+> > > > >> I don't know what would happen if ARM guest tries to handle hibernation
+> > > > >> callbacks. The only ones that you are introducing are in block and net
+> > > > >> fronts and that's arch-independent.
+> > > > >>
+> > > > >>
+> > > > >> You do add a bunch of x86-specific code though (syscore ops), would
+> > > > >> something similar be needed for ARM?
+> > > > >>
+> > > > >>
+> > > > > I don't expect this to work out of the box on ARM. To start with something
+> > > > > similar will be needed for ARM too.
+> > > > > We may still want to keep the driver code as-is.
+> > > > >
+> > > > > I understand the concern here wrt ARM, however, currently the support is only
+> > > > > proposed for x86 guests here and similar work could be carried out for ARM.
+> > > > > Also, if regular hibernation works correctly on arm, then all is needed is to
+> > > > > fix Xen side of things.
+> > > > >
+> > > > > I am not sure what could be done to achieve any assurances on arm side as far as
+> > > > > this series is concerned.
+> > >
+> > > Just to clarify: new features don't need to work on ARM or cause any
+> > > addition efforts to you to make them work on ARM. The patch series only
+> > > needs not to break existing code paths (on ARM and any other platforms).
+> > > It should also not make it overly difficult to implement the ARM side of
+> > > things (if there is one) at some point in the future.
+> > >
+> > > FYI drivers/xen/manage.c is compiled and working on ARM today, however
+> > > Xen suspend/resume is not supported. I don't know for sure if
+> > > guest-initiated hibernation works because I have not tested it.
+> > >
+> > >
+> > >
+> > > > If you are not sure what the effects are (or sure that it won't work) on
+> > > > ARM then I'd add IS_ENABLED(CONFIG_X86) check, i.e.
 > > > >
-> > > > Control Flow Integrity(CFI) is a security mechanism that disallows
-> > > > changes to the original control flow graph of a compiled binary,
-> > > > making it significantly harder to perform such attacks.
 > > > >
-> > > > init_state_node() assign same function callback to different
-> > > > function pointer declarations.
-> > > >
-> > > > static int init_state_node(struct cpuidle_state *idle_state,
-> > > >                            const struct of_device_id *matches,
-> > > >                            struct device_node *state_node) { ...
-> > > >         idle_state->enter = match_id->data; ...
-> > > >         idle_state->enter_s2idle = match_id->data; }
-> > > >
-> > > > Function declarations:
-> > > >
-> > > > struct cpuidle_state { ...
-> > > >         int (*enter) (struct cpuidle_device *dev,
-> > > >                       struct cpuidle_driver *drv,
-> > > >                       int index);
-> > > >
-> > > >         void (*enter_s2idle) (struct cpuidle_device *dev,
-> > > >                               struct cpuidle_driver *drv,
-> > > >                               int index); };
-> > > >
-> > > > In this case, either enter() or enter_s2idle() would cause CFI check
-> > > > failed since they use same callee.
-> > > 
-> > > Can you please explain this in a bit more detail?
-> > > 
-> > > As it stands, I don't understand the problem statement enough to apply
-> > > the patch.
-> > > 
-> > 
-> > Okay, Let's me try to explain more details.
-> > Control Flow Integrity(CFI) is a security mechanism that disallows
-> > changes to the original control flow graph of a compiled binary, making
-> > it significantly harder to perform such attacks.
-> > 
-> > There are multiple control flow instructions that could be manipulated
-> > by the attacker and subvert control flow. The target instructions that
-> > use data to determine the actual destination.
-> > - indirect jump
-> > - indirect call
-> > - return
-> > 
-> > In this case, function prototype between caller and callee are mismatch.
-> > Caller: (type A)funcA
-> > Callee: (type A)funcB
-> > Callee: (type C)funcC
-> > 
-> > funcA calls funcB -> no problem
-> > funcA calls funcC -> CFI check failed
-> > 
-> > That's why we try to align function prototype.
-> > Please feel free to feedback if you have any questions.
+> > > > if (!IS_ENABLED(CONFIG_X86) || !xen_hvm_domain())
+> > > >       return -ENODEV;
+> > >
+> > > That is a good principle to have and thanks for suggesting it. However,
+> > > in this specific case there is nothing in this patch that doesn't work
+> > > on ARM. From an ARM perspective I think we should enable it and
+> > > &xen_pm_notifier_block should be registered.
+> > >
+> > This question is for Boris, I think you we decided to get rid of the notifier
+> > in V3 as all we need  to check is SHUTDOWN_SUSPEND state which sounds plausible
+> > to me. So this check may go away. It may still be needed for sycore_ops
+> > callbacks registration.
+> > > Given that all guests are HVM guests on ARM, it should work fine as is.
+> > >
+> > >
+> > > I gave a quick look at the rest of the series and everything looks fine
+> > > to me from an ARM perspective. I cannot imaging that the new freeze,
+> > > thaw, and restore callbacks for net and block are going to cause any
+> > > trouble on ARM. The two main x86-specific functions are
+> > > xen_syscore_suspend/resume and they look trivial to implement on ARM (in
+> > > the sense that they are likely going to look exactly the same.)
+> > >
+> > Yes but for now since things are not tested I will put this
+> > !IS_ENABLED(CONFIG_X86) on syscore_ops calls registration part just to be safe
+> > and not break anything.
+> > >
+> > > One question for Anchal: what's going to happen if you trigger a
+> > > hibernation, you have the new callbacks, but you are missing
+> > > xen_syscore_suspend/resume?
+> > >
+> > > Is it any worse than not having the new freeze, thaw and restore
+> > > callbacks at all and try to do a hibernation?
+> > If callbacks are not there, I don't expect hibernation to work correctly.
+> > These callbacks takes care of xen primitives like shared_info_page,
+> > grant table, sched clock, runstate time which are important to save the correct
+> > state of the guest and bring it back up. Other patches in the series, adds all
+> > the logic to these syscore callbacks. Freeze/thaw/restore are just there for at driver
+> > level.
+> 
+> I meant the other way around :-)  Let me rephrase the question.
+> 
+> Do you think that implementing freeze/thaw/restore at the driver level
+> without having xen_syscore_suspend/resume can potentially make things
+> worse compared to not having freeze/thaw/restore at the driver level at
+> all?
+I think in both the cases I don't expect it to work. System may end up in
+different state if you register vs not. Hibernation does not work properly
+at least for domU instances without these changes on x86 and I am assuming the
+same for ARM.
 
-I think you should include a better explanation in the commit message.
-Perhaps something like this?
+If you do not register freeze/thaw/restore callbacks for arm, then on
+invocation of xenbus_dev_suspend, default suspend/resume callbacks
+will be called for each driver and since you do not have any code to save domU's
+xen primitives state (syscore_ops), hibernation will either fail or will demand a reboot.
+I do no have setup to test the current state of ARM's hibernation
 
-  init_state_node assigns the same callback function to both enter and
-  enter_s2idle despite mismatching function types, which trips indirect
-  call checking with Control-Flow Integrity (CFI).
+If you only register freeze/thaw/restore and no syscore_ops, it will again fail.
+Since, I do not have an ARM setup running, I quickly ran a similar test on x86,
+may not be an apple to apple comparison but instance failed to resume or I
+should say stuck showing huge jump in time and required a reboot.
 
-> > > > Align function prototype of enter() since it needs return value for
-> > > > some use cases. The return value of enter_s2idle() is no
-> > > > need currently.
-> > > 
-> > > So last time I requested you to document why ->enter_s2idle needs to
-> > > return an int in the code, which has not been done.  Please do that.
+Now if this doesn't happen currently when you trigger hibernation on arm domU
+instances or if system is still alive when you trigger hibernation in xen guest
+then not registering the callbacks may be a better idea. In that case  may be 
+I need to put arch specific check when registering freeze/thaw/restore handlers.
 
-Rafael, are you happy with the commit message documenting the reason,
-or would you prefer to also add a comment before enter_s2idle?
+Hope that answers your question.
 
-Sami
+Thanks,
+Anchal
+
