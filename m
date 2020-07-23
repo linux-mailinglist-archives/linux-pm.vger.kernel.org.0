@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 192E522AAC7
+	by mail.lfdr.de (Postfix) with ESMTP id F27C522AAC9
 	for <lists+linux-pm@lfdr.de>; Thu, 23 Jul 2020 10:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727847AbgGWIhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jul 2020 04:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S1727045AbgGWIhn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jul 2020 04:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727828AbgGWIhj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 04:37:39 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EF8C0619DC
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 01:37:39 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id q5so4313383wru.6
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 01:37:38 -0700 (PDT)
+        with ESMTP id S1727850AbgGWIhk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 04:37:40 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA4DC0619E2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 01:37:40 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id y3so4319212wrl.4
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jul 2020 01:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=h/yM4jsYCAifUDfs6hudfcj/emQNOmj9c2iS2RlrIxw=;
-        b=Xpie9hxHzBq4jxqHPSf9F7wibwb3a9HP3clbkUc00eoy8pjV/W4Mf0LSEbRjtqH3bP
-         dqPWckK3wfcmpHLj9Zw7KsVNCOWjFzwvairARL4+0e1ygnFpI7pNK/izhnUhBYEC2IYC
-         HDgmGON72x4lKUZYVIferkCFvxag4hPQDBnJeXuFLjKJkJLOmHxi2MqnnPCcD4AbDdVP
-         akwbkWbNQq0UeQtVH2kRjdzcRFBbGU3SGXGwopU3tp94lDumwBCLk4+zKOhqTwrTeBPH
-         4Nx6D0VvaN8qHKyrcz1kCfel3ZNl5mMRqMx/ML11FX0CmmSjpSzYceyucs6iBKTYVO7K
-         JA3A==
+        bh=FsnuFGDVv4psbzCMdUgLWW9kRE3eTQu9xp4X3h9oaFY=;
+        b=Fk35wGEnjwq6EBu8VQPDLzPRCiOJHdN3EeqYfHB68aXvg5EbEis3sIMi4yxjthJxEp
+         EWf0NBo+Znqi0dwwpTvH6eA85ghs+StgkSwlu6Qp1aoaJOTJnr3Qmhr121yK4Z17j6iI
+         +GlCK64b78nUZ2aSUl+AFHRMIs/Tfsz+wQBYAfBGUyJiXVpE0i7m9mTh2u0OXY70c2mj
+         FVYcyMHOTL4vFMqwWLLVA/RflRDJgZGBXp3dlkdtnOPLwBhfXooCk3E9cngI0OHPhJGT
+         qg+7u0ui7gcdWGMWaSpzzpayf4N0Dq3q7OZRBzgX49Qy1PqfFvPYDH1Ojmwwfw8YS+DK
+         lfkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=h/yM4jsYCAifUDfs6hudfcj/emQNOmj9c2iS2RlrIxw=;
-        b=P/EJoJKBVUfFh6yPBzdGAAFXJ0QKb2yNOS+HU7Ttm9YkWCaT8rXDMR80bnH75dZbGA
-         DEJHBfEMi6nT0YZJSb5lXgDFg/Pc2wqvBbp9lOPymQfKcO+3/ygZBmf0aS/iFRNCvrvM
-         /BpBnO1lywQHauBodo+pGpny8/vfsU0I6imIKDy8R+saadHSQZgQb7Vx6+vAI2y6dod6
-         GrzfPFg2TrX523Orr41ReJpuv4WhcYvJKnBXbyc7urrJPLtycIRJVUEXTBbW3Kz0Eq+c
-         EIoaGGbtBx3xk6Cx2h8NxV6uoQiJ2gPlDl5fvjE5MPHJCDZz+KlO5WnFD/PddFY4OGiA
-         u91A==
-X-Gm-Message-State: AOAM533rLbHsh7EreuOHgcR3r1MzHI0DNwzBRcSXiCy2ler+AijbWs2w
-        yn1ZPiLHmSuXxgd0JtctU4dUUTfla7M=
-X-Google-Smtp-Source: ABdhPJz5TYIUOxOdMwwJ3R4WMNEjfODtAaiBr6SLeg0J5aER+9hW7ruo9M0zHJkynOvH+TQpUGelig==
-X-Received: by 2002:adf:d1b2:: with SMTP id w18mr8808wrc.235.1595493457671;
-        Thu, 23 Jul 2020 01:37:37 -0700 (PDT)
+        bh=FsnuFGDVv4psbzCMdUgLWW9kRE3eTQu9xp4X3h9oaFY=;
+        b=pMSHrpiPGITH2PvduErm/6f8cGShd+0u6kB0geUmvMuGamvRTTyWqr/7jUPSP4fCgr
+         EdZlyhpdoS7RaXrddxEuVJcbNpjLa24SB4Apd6sFTsPlZBBhAB8fDW7YXNX435Jsp1kP
+         nk86TBKkpvqqCW9bnbrs8LHX4dG8n//ugO/aiiWpN5vJaMgcFKQ4T7kMScMk17lf/XxH
+         42eF/w451ssQdxWBuS9OSI3Y3En/mIV4jp4WsH4aTz/4Mcwm4Qoeh3rxBooWVnyWtdIE
+         D/igmlIVo4cRIowYdmvDhK/Q4D9u7kHzNqCvB640QBxXc7Y5UQF/ziKvcr0kGRZ34zZj
+         H3KQ==
+X-Gm-Message-State: AOAM533fJgJMYPuIjTTuqO5U3gd6lCNXVZPLC24AsThVckmy662SM60h
+        5NVCOtVdPp5HEgN++GUsE1QB4gRNGFE=
+X-Google-Smtp-Source: ABdhPJzKn3ACYZScxU5ip96Xth5sdO8Dw4NeLV6xvdeJfoqBzUvJABpgi4BG0pgJ11sdybPSWBzC+w==
+X-Received: by 2002:a5d:490c:: with SMTP id x12mr2920636wrq.238.1595493458933;
+        Thu, 23 Jul 2020 01:37:38 -0700 (PDT)
 Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id h11sm3105039wrb.68.2020.07.23.01.37.36
+        by smtp.googlemail.com with ESMTPSA id h11sm3105039wrb.68.2020.07.23.01.37.37
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 Jul 2020 01:37:37 -0700 (PDT)
+        Thu, 23 Jul 2020 01:37:38 -0700 (PDT)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        georgi.djakov@linaro.org, Atul Dhudase <adhudase@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH 1/2] interconnect: Do not skip aggregation for disabled paths
-Date:   Thu, 23 Jul 2020 11:37:34 +0300
-Message-Id: <20200723083735.5616-2-georgi.djakov@linaro.org>
+        georgi.djakov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        Mike Tipton <mdtipton@codeaurora.org>
+Subject: [PATCH 2/2] interconnect: msm8916: Fix buswidth of pcnoc_s nodes
+Date:   Thu, 23 Jul 2020 11:37:35 +0300
+Message-Id: <20200723083735.5616-3-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20200723083735.5616-1-georgi.djakov@linaro.org>
 References: <20200723083735.5616-1-georgi.djakov@linaro.org>
@@ -65,50 +65,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When an interconnect path is being disabled, currently we don't aggregate
-the requests for it afterwards. But the re-aggregation step shouldn't be
-skipped, as it may leave the nodes with outdated bandwidth data. This
-outdated data may actually keep the path still enabled and prevent the
-device from going into lower power states.
+The buswidth of the pcnoc_s_* nodes is actually not 8, but
+4 bytes. Let's fix it.
 
-Reported-by: Atul Dhudase <adhudase@codeaurora.org>
-Fixes: 7d374b209083 ("interconnect: Add helpers for enabling/disabling a path")
-Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
-Tested-by: Atul Dhudase <adhudase@codeaurora.org>
-Reviewed-by: Atul Dhudase <adhudase@codeaurora.org>
-Link: https://lore.kernel.org/r/20200721120740.3436-1-georgi.djakov@linaro.org
+Reported-by: Jun Nie <jun.nie@linaro.org>
+Reviewed-by: Mike Tipton <mdtipton@codeaurora.org>
+Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provider driver")
+Link: https://lore.kernel.org/r/20200709130004.12462-1-georgi.djakov@linaro.org
 Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- drivers/interconnect/core.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ drivers/interconnect/qcom/msm8916.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index e5f998744501..9e1ab701785c 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -243,6 +243,7 @@ static int aggregate_requests(struct icc_node *node)
- {
- 	struct icc_provider *p = node->provider;
- 	struct icc_req *r;
-+	u32 avg_bw, peak_bw;
- 
- 	node->avg_bw = 0;
- 	node->peak_bw = 0;
-@@ -251,9 +252,14 @@ static int aggregate_requests(struct icc_node *node)
- 		p->pre_aggregate(node);
- 
- 	hlist_for_each_entry(r, &node->req_list, req_node) {
--		if (!r->enabled)
--			continue;
--		p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
-+		if (r->enabled) {
-+			avg_bw = r->avg_bw;
-+			peak_bw = r->peak_bw;
-+		} else {
-+			avg_bw = 0;
-+			peak_bw = 0;
-+		}
-+		p->aggregate(node, r->tag, avg_bw, peak_bw,
- 			     &node->avg_bw, &node->peak_bw);
- 	}
- 
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index e94f3c5228b7..42c6c5581662 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -197,13 +197,13 @@ DEFINE_QNODE(pcnoc_int_0, MSM8916_PNOC_INT_0, 8, -1, -1, MSM8916_PNOC_SNOC_MAS,
+ DEFINE_QNODE(pcnoc_int_1, MSM8916_PNOC_INT_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
+ DEFINE_QNODE(pcnoc_m_0, MSM8916_PNOC_MAS_0, 8, -1, -1, MSM8916_PNOC_INT_0);
+ DEFINE_QNODE(pcnoc_m_1, MSM8916_PNOC_MAS_1, 8, -1, -1, MSM8916_PNOC_SNOC_MAS);
+-DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 8, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
+-DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 8, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
+-DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 8, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
+-DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 8, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
+-DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 8, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
+-DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 8, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
+-DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 8, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
++DEFINE_QNODE(pcnoc_s_0, MSM8916_PNOC_SLV_0, 4, -1, -1, MSM8916_SLAVE_CLK_CTL, MSM8916_SLAVE_TLMM, MSM8916_SLAVE_TCSR, MSM8916_SLAVE_SECURITY, MSM8916_SLAVE_MSS);
++DEFINE_QNODE(pcnoc_s_1, MSM8916_PNOC_SLV_1, 4, -1, -1, MSM8916_SLAVE_IMEM_CFG, MSM8916_SLAVE_CRYPTO_0_CFG, MSM8916_SLAVE_MSG_RAM, MSM8916_SLAVE_PDM, MSM8916_SLAVE_PRNG);
++DEFINE_QNODE(pcnoc_s_2, MSM8916_PNOC_SLV_2, 4, -1, -1, MSM8916_SLAVE_SPDM, MSM8916_SLAVE_BOOT_ROM, MSM8916_SLAVE_BIMC_CFG, MSM8916_SLAVE_PNOC_CFG, MSM8916_SLAVE_PMIC_ARB);
++DEFINE_QNODE(pcnoc_s_3, MSM8916_PNOC_SLV_3, 4, -1, -1, MSM8916_SLAVE_MPM, MSM8916_SLAVE_SNOC_CFG, MSM8916_SLAVE_RBCPR_CFG, MSM8916_SLAVE_QDSS_CFG, MSM8916_SLAVE_DEHR_CFG);
++DEFINE_QNODE(pcnoc_s_4, MSM8916_PNOC_SLV_4, 4, -1, -1, MSM8916_SLAVE_VENUS_CFG, MSM8916_SLAVE_CAMERA_CFG, MSM8916_SLAVE_DISPLAY_CFG);
++DEFINE_QNODE(pcnoc_s_8, MSM8916_PNOC_SLV_8, 4, -1, -1, MSM8916_SLAVE_USB_HS, MSM8916_SLAVE_SDCC_1, MSM8916_SLAVE_BLSP_1);
++DEFINE_QNODE(pcnoc_s_9, MSM8916_PNOC_SLV_9, 4, -1, -1, MSM8916_SLAVE_SDCC_2, MSM8916_SLAVE_LPASS, MSM8916_SLAVE_GRAPHICS_3D_CFG);
+ DEFINE_QNODE(pcnoc_snoc_mas, MSM8916_PNOC_SNOC_MAS, 8, 29, -1, MSM8916_PNOC_SNOC_SLV);
+ DEFINE_QNODE(pcnoc_snoc_slv, MSM8916_PNOC_SNOC_SLV, 8, -1, 45, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC, MSM8916_SNOC_INT_1);
+ DEFINE_QNODE(qdss_int, MSM8916_SNOC_QDSS_INT, 8, -1, -1, MSM8916_SNOC_INT_0, MSM8916_SNOC_INT_BIMC);
