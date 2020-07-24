@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAB922CDB5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27F122CDB8
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727905AbgGXSZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jul 2020 14:25:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34398 "EHLO mail.kernel.org"
+        id S1727923AbgGXSZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jul 2020 14:25:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34518 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbgGXSZQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Jul 2020 14:25:16 -0400
+        id S1726892AbgGXSZU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Jul 2020 14:25:20 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.213])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01060208E4;
-        Fri, 24 Jul 2020 18:25:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B899220737;
+        Fri, 24 Jul 2020 18:25:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595615115;
-        bh=ZHssgXFw9tdp7kd/8wRKNVCbGynFMRozJTxl7pkD+Og=;
+        s=default; t=1595615119;
+        bh=J8z6oVAg3btfniOa2wnidzkIdsuFVW7F3x0Ka94YABs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JjhYGXA27XLYt9lyspm8gFo+X/D5qtiSf7WzpvxzFrV94+N5wXza9uH45nrCfIiDr
-         hD7GrGNueoWRlGmxHVyJSwqUSJ+IWqojSDFuVggp6ARyZJgh0oUB8IvOl0xunJfYCP
-         yWj39eImA4yZWVOA5EvMwGxKEMJL5eXwG1G4X+gw=
+        b=mnA/D46Bizoe+ctnQKNGUrfUejSOEzP/vDhyKoS5C99/7PTwMsSSgcgAujh++pmrz
+         B0pagyHbuQEvnepwsRzCxyE3kEjt5D9z9HsXbma2TyLzMZjT+AsUQLk34Larw8WF5T
+         ROuIDPDjEXI9a7IOHgSWq+a6Ods4cZej2GFqC2do=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
@@ -42,9 +42,9 @@ To:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-pm@vger.kernel.org
 Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 14/16] memory: pl172: Enclose macro argument usage in parenthesis
-Date:   Fri, 24 Jul 2020 20:23:26 +0200
-Message-Id: <20200724182328.3348-15-krzk@kernel.org>
+Subject: [PATCH 15/16] memory: samsung: exynos-srom: Correct alignment
+Date:   Fri, 24 Jul 2020 20:23:27 +0200
+Message-Id: <20200724182328.3348-16-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200724182328.3348-1-krzk@kernel.org>
 References: <20200724182328.3348-1-krzk@kernel.org>
@@ -53,50 +53,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Macros arguments should be enclosed by parenthesis for safety.
+Align indentation with open parenthesis (or fix existing alignment).
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/memory/pl172.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/memory/samsung/exynos-srom.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/memory/pl172.c b/drivers/memory/pl172.c
-index 084891eb29cc..575fadbffa30 100644
---- a/drivers/memory/pl172.c
-+++ b/drivers/memory/pl172.c
-@@ -21,7 +21,7 @@
- #include <linux/of_platform.h>
- #include <linux/time.h>
+diff --git a/drivers/memory/samsung/exynos-srom.c b/drivers/memory/samsung/exynos-srom.c
+index 6510d7bab217..e73dd330af47 100644
+--- a/drivers/memory/samsung/exynos-srom.c
++++ b/drivers/memory/samsung/exynos-srom.c
+@@ -47,9 +47,9 @@ struct exynos_srom {
+ 	struct exynos_srom_reg_dump *reg_offset;
+ };
  
--#define MPMC_STATIC_CFG(n)		(0x200 + 0x20 * n)
-+#define MPMC_STATIC_CFG(n)		(0x200 + 0x20 * (n))
- #define  MPMC_STATIC_CFG_MW_8BIT	0x0
- #define  MPMC_STATIC_CFG_MW_16BIT	0x1
- #define  MPMC_STATIC_CFG_MW_32BIT	0x2
-@@ -31,17 +31,17 @@
- #define  MPMC_STATIC_CFG_EW		BIT(8)
- #define  MPMC_STATIC_CFG_B		BIT(19)
- #define  MPMC_STATIC_CFG_P		BIT(20)
--#define MPMC_STATIC_WAIT_WEN(n)		(0x204 + 0x20 * n)
-+#define MPMC_STATIC_WAIT_WEN(n)		(0x204 + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_WEN_MAX	0x0f
--#define MPMC_STATIC_WAIT_OEN(n)		(0x208 + 0x20 * n)
-+#define MPMC_STATIC_WAIT_OEN(n)		(0x208 + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_OEN_MAX	0x0f
--#define MPMC_STATIC_WAIT_RD(n)		(0x20c + 0x20 * n)
-+#define MPMC_STATIC_WAIT_RD(n)		(0x20c + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_RD_MAX	0x1f
--#define MPMC_STATIC_WAIT_PAGE(n)	(0x210 + 0x20 * n)
-+#define MPMC_STATIC_WAIT_PAGE(n)	(0x210 + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_PAGE_MAX	0x1f
--#define MPMC_STATIC_WAIT_WR(n)		(0x214 + 0x20 * n)
-+#define MPMC_STATIC_WAIT_WR(n)		(0x214 + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_WR_MAX	0x1f
--#define MPMC_STATIC_WAIT_TURN(n)	(0x218 + 0x20 * n)
-+#define MPMC_STATIC_WAIT_TURN(n)	(0x218 + 0x20 * (n))
- #define  MPMC_STATIC_WAIT_TURN_MAX	0x0f
+-static struct exynos_srom_reg_dump *exynos_srom_alloc_reg_dump(
+-		const unsigned long *rdump,
+-		unsigned long nr_rdump)
++static struct exynos_srom_reg_dump *
++exynos_srom_alloc_reg_dump(const unsigned long *rdump,
++			   unsigned long nr_rdump)
+ {
+ 	struct exynos_srom_reg_dump *rd;
+ 	unsigned int i;
+@@ -116,7 +116,7 @@ static int exynos_srom_probe(struct platform_device *pdev)
+ 	}
  
- /* Maximum number of static chip selects */
+ 	srom = devm_kzalloc(&pdev->dev,
+-			sizeof(struct exynos_srom), GFP_KERNEL);
++			    sizeof(struct exynos_srom), GFP_KERNEL);
+ 	if (!srom)
+ 		return -ENOMEM;
+ 
+@@ -130,7 +130,7 @@ static int exynos_srom_probe(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, srom);
+ 
+ 	srom->reg_offset = exynos_srom_alloc_reg_dump(exynos_srom_offsets,
+-			ARRAY_SIZE(exynos_srom_offsets));
++						      ARRAY_SIZE(exynos_srom_offsets));
+ 	if (!srom->reg_offset) {
+ 		iounmap(srom->reg_base);
+ 		return -ENOMEM;
+@@ -157,16 +157,16 @@ static int exynos_srom_probe(struct platform_device *pdev)
+ 
+ #ifdef CONFIG_PM_SLEEP
+ static void exynos_srom_save(void __iomem *base,
+-				    struct exynos_srom_reg_dump *rd,
+-				    unsigned int num_regs)
++			     struct exynos_srom_reg_dump *rd,
++			     unsigned int num_regs)
+ {
+ 	for (; num_regs > 0; --num_regs, ++rd)
+ 		rd->value = readl(base + rd->offset);
+ }
+ 
+ static void exynos_srom_restore(void __iomem *base,
+-				      const struct exynos_srom_reg_dump *rd,
+-				      unsigned int num_regs)
++				const struct exynos_srom_reg_dump *rd,
++				unsigned int num_regs)
+ {
+ 	for (; num_regs > 0; --num_regs, ++rd)
+ 		writel(rd->value, base + rd->offset);
+@@ -177,7 +177,7 @@ static int exynos_srom_suspend(struct device *dev)
+ 	struct exynos_srom *srom = dev_get_drvdata(dev);
+ 
+ 	exynos_srom_save(srom->reg_base, srom->reg_offset,
+-				ARRAY_SIZE(exynos_srom_offsets));
++			 ARRAY_SIZE(exynos_srom_offsets));
+ 	return 0;
+ }
+ 
+@@ -186,7 +186,7 @@ static int exynos_srom_resume(struct device *dev)
+ 	struct exynos_srom *srom = dev_get_drvdata(dev);
+ 
+ 	exynos_srom_restore(srom->reg_base, srom->reg_offset,
+-				ARRAY_SIZE(exynos_srom_offsets));
++			    ARRAY_SIZE(exynos_srom_offsets));
+ 	return 0;
+ }
+ #endif
 -- 
 2.17.1
 
