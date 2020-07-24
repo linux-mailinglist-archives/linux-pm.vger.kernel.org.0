@@ -2,82 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D73322BEB6
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 09:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250422C021
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 09:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgGXHMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jul 2020 03:12:32 -0400
-Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:47327 "EHLO
-        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726567AbgGXHMb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jul 2020 03:12:31 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.2465674|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0178585-0.00014203-0.981999;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03293;MF=frank@allwinnertech.com;NM=1;PH=DS;RN=15;RT=15;SR=0;TI=SMTPD_---.I6qVYnt_1595574739;
-Received: from allwinnertech.com(mailfrom:frank@allwinnertech.com fp:SMTPD_---.I6qVYnt_1595574739)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Fri, 24 Jul 2020 15:12:27 +0800
-From:   Frank Lee <frank@allwinnertech.com>
-To:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        robh+dt@kernel.org, mripard@kernel.org, wens@csie.org,
-        linux-pm@vger.kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        liyong@allwinnertech.com, Yangtao Li <frank@allwinnertech.com>
-Subject: [PATCH v5 09/16] thermal: sun8i: Add A100's THS controller support
-Date:   Fri, 24 Jul 2020 15:11:43 +0800
-Message-Id: <48cc75920b5c69027134626157089d8b94942711.1595572867.git.frank@allwinnertech.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <cover.1595572867.git.frank@allwinnertech.com>
-References: <cover.1595572867.git.frank@allwinnertech.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726567AbgGXHqG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jul 2020 03:46:06 -0400
+Received: from mga17.intel.com ([192.55.52.151]:11362 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726554AbgGXHqF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Jul 2020 03:46:05 -0400
+IronPort-SDR: JzdIJqygoMNZ8elYvIfNfd5i7AWHkopxuFPNNGQN1gtdoJJd8koGVPU3594nG/Qf9Y4rCav+SX
+ vZkQ7znw2oIg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9691"; a="130747285"
+X-IronPort-AV: E=Sophos;i="5.75,389,1589266800"; 
+   d="scan'208";a="130747285"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 00:46:05 -0700
+IronPort-SDR: rU/Cwu5qpqN4dqJvfokhsi58VqlnL7kKTPjeY/tZFS6nozV2LMlNKswJ03we88mGhFbs+vcFKC
+ cs6DEeMFv8Pg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,389,1589266800"; 
+   d="scan'208";a="311319087"
+Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Jul 2020 00:46:03 -0700
+From:   Sumeet R Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Cc:     sumeet.r.pawnikar@intel.com
+Subject: [PATCH] thermal: int340x: processor_thermal: fix: update Jasper Lake PCI id
+Date:   Fri, 24 Jul 2020 13:22:26 +0530
+Message-Id: <1595577146-1221-1-git-send-email-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yangtao Li <frank@allwinnertech.com>
+From: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 
-This patch add thermal sensor controller support for A100,
-which is similar to the previous ones.
+Update PCI device id for Jasper Lake processor thermal device.
+With this proc_thermal driver is getting loaded and processor
+thermal functionality works on Jasper Lake system.
 
-Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+Fixes: f64a6583d3f5 ("thermal: int340x: processor_thermal: Add Jasper Lake support")
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
 ---
- drivers/thermal/sun8i_thermal.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ .../int340x_thermal/processor_thermal_device.c     |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index f423d44b9290..f8b13071a6f4 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -590,6 +590,19 @@ static const struct ths_thermal_chip sun50i_a64_ths = {
- 	.calc_temp = sun8i_ths_calc_temp,
- };
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index 297db1d2d960..81e8b15ef405 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -43,7 +43,7 @@
+ #define PCI_DEVICE_ID_PROC_ICL_THERMAL	0x8a03
  
-+static const struct ths_thermal_chip sun50i_a100_ths = {
-+	.sensor_num = 3,
-+	.has_bus_clk_reset = true,
-+	.ft_deviation = 8000,
-+	.offset = 187744,
-+	.scale = 672,
-+	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
-+	.calibrate = sun50i_h6_ths_calibrate,
-+	.init = sun50i_h6_thermal_init,
-+	.irq_ack = sun50i_h6_irq_ack,
-+	.calc_temp = sun8i_ths_calc_temp,
-+};
-+
- static const struct ths_thermal_chip sun50i_h5_ths = {
- 	.sensor_num = 2,
- 	.has_mod_clk = true,
-@@ -619,6 +632,7 @@ static const struct of_device_id of_ths_match[] = {
- 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
- 	{ .compatible = "allwinner,sun8i-r40-ths", .data = &sun8i_r40_ths },
- 	{ .compatible = "allwinner,sun50i-a64-ths", .data = &sun50i_a64_ths },
-+	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
- 	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
- 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
- 	{ /* sentinel */ },
+ /* JasperLake thermal reporting device */
+-#define PCI_DEVICE_ID_PROC_JSL_THERMAL	0x4503
++#define PCI_DEVICE_ID_PROC_JSL_THERMAL	0x4E03
+ 
+ /* TigerLake thermal reporting device */
+ #define PCI_DEVICE_ID_PROC_TGL_THERMAL	0x9A03
 -- 
-2.24.0
+1.7.9.5
 
