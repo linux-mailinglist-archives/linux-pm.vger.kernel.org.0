@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF8022CDB3
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CAB922CDB5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727782AbgGXSZM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jul 2020 14:25:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34238 "EHLO mail.kernel.org"
+        id S1727905AbgGXSZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jul 2020 14:25:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34398 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbgGXSZL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Jul 2020 14:25:11 -0400
+        id S1726892AbgGXSZQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Jul 2020 14:25:16 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.213])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48CE120748;
-        Fri, 24 Jul 2020 18:25:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 01060208E4;
+        Fri, 24 Jul 2020 18:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595615110;
-        bh=muCyaGVz+SpXbnkfAtqPQlZm2UB0n+WNFxw7LeFuqDM=;
+        s=default; t=1595615115;
+        bh=ZHssgXFw9tdp7kd/8wRKNVCbGynFMRozJTxl7pkD+Og=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MyAQphoHz6ZKWzm8WDqVhc0uJvYtNKtckbOXOCw1edLC4wC3kxU8ua3nKzM0N21fG
-         CokWlmAbw0XmcN9V2uZ7EL5tfiB8UjFBz8bRjrLCsynP7kPzseOozm1iO9+Ghb3T21
-         Oswyr6CTGpkNmw4bGTO41hKWHjGDofJJHrx8KJlw=
+        b=JjhYGXA27XLYt9lyspm8gFo+X/D5qtiSf7WzpvxzFrV94+N5wXza9uH45nrCfIiDr
+         hD7GrGNueoWRlGmxHVyJSwqUSJ+IWqojSDFuVggp6ARyZJgh0oUB8IvOl0xunJfYCP
+         yWj39eImA4yZWVOA5EvMwGxKEMJL5eXwG1G4X+gw=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
@@ -42,9 +42,9 @@ To:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-pm@vger.kernel.org
 Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 13/16] memory: of: Correct kerneldoc
-Date:   Fri, 24 Jul 2020 20:23:25 +0200
-Message-Id: <20200724182328.3348-14-krzk@kernel.org>
+Subject: [PATCH 14/16] memory: pl172: Enclose macro argument usage in parenthesis
+Date:   Fri, 24 Jul 2020 20:23:26 +0200
+Message-Id: <20200724182328.3348-15-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200724182328.3348-1-krzk@kernel.org>
 References: <20200724182328.3348-1-krzk@kernel.org>
@@ -53,37 +53,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use proper kerneldoc to fix GCC warnings like:
-
-   drivers/memory/of_memory.c:30: warning: Function parameter or member 'dev' not described in 'of_get_min_tck'
+Macros arguments should be enclosed by parenthesis for safety.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/memory/of_memory.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/memory/pl172.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/memory/of_memory.c b/drivers/memory/of_memory.c
-index 67b811cb2cb9..d9f5437d3bce 100644
---- a/drivers/memory/of_memory.c
-+++ b/drivers/memory/of_memory.c
-@@ -18,7 +18,7 @@
- /**
-  * of_get_min_tck() - extract min timing values for ddr
-  * @np: pointer to ddr device tree node
-- * @device: device requesting for min timing values
-+ * @dev: device requesting for min timing values
-  *
-  * Populates the lpddr2_min_tck structure by extracting data
-  * from device tree node. Returns a pointer to the populated
-@@ -155,7 +155,7 @@ EXPORT_SYMBOL(of_get_ddr_timings);
- /**
-  * of_lpddr3_get_min_tck() - extract min timing values for lpddr3
-  * @np: pointer to ddr device tree node
-- * @device: device requesting for min timing values
-+ * @dev: device requesting for min timing values
-  *
-  * Populates the lpddr3_min_tck structure by extracting data
-  * from device tree node. Returns a pointer to the populated
+diff --git a/drivers/memory/pl172.c b/drivers/memory/pl172.c
+index 084891eb29cc..575fadbffa30 100644
+--- a/drivers/memory/pl172.c
++++ b/drivers/memory/pl172.c
+@@ -21,7 +21,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/time.h>
+ 
+-#define MPMC_STATIC_CFG(n)		(0x200 + 0x20 * n)
++#define MPMC_STATIC_CFG(n)		(0x200 + 0x20 * (n))
+ #define  MPMC_STATIC_CFG_MW_8BIT	0x0
+ #define  MPMC_STATIC_CFG_MW_16BIT	0x1
+ #define  MPMC_STATIC_CFG_MW_32BIT	0x2
+@@ -31,17 +31,17 @@
+ #define  MPMC_STATIC_CFG_EW		BIT(8)
+ #define  MPMC_STATIC_CFG_B		BIT(19)
+ #define  MPMC_STATIC_CFG_P		BIT(20)
+-#define MPMC_STATIC_WAIT_WEN(n)		(0x204 + 0x20 * n)
++#define MPMC_STATIC_WAIT_WEN(n)		(0x204 + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_WEN_MAX	0x0f
+-#define MPMC_STATIC_WAIT_OEN(n)		(0x208 + 0x20 * n)
++#define MPMC_STATIC_WAIT_OEN(n)		(0x208 + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_OEN_MAX	0x0f
+-#define MPMC_STATIC_WAIT_RD(n)		(0x20c + 0x20 * n)
++#define MPMC_STATIC_WAIT_RD(n)		(0x20c + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_RD_MAX	0x1f
+-#define MPMC_STATIC_WAIT_PAGE(n)	(0x210 + 0x20 * n)
++#define MPMC_STATIC_WAIT_PAGE(n)	(0x210 + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_PAGE_MAX	0x1f
+-#define MPMC_STATIC_WAIT_WR(n)		(0x214 + 0x20 * n)
++#define MPMC_STATIC_WAIT_WR(n)		(0x214 + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_WR_MAX	0x1f
+-#define MPMC_STATIC_WAIT_TURN(n)	(0x218 + 0x20 * n)
++#define MPMC_STATIC_WAIT_TURN(n)	(0x218 + 0x20 * (n))
+ #define  MPMC_STATIC_WAIT_TURN_MAX	0x0f
+ 
+ /* Maximum number of static chip selects */
 -- 
 2.17.1
 
