@@ -2,218 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C2822B9D5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 00:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583C922BB86
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 03:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgGWW6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 23 Jul 2020 18:58:09 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:45185 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726608AbgGWW6I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 18:58:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1595545086; x=1627081086;
-  h=date:from:to:cc:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:subject;
-  bh=y+Ab+qpN+drP51OsAVzLhFNy+EV/cJUJK2AzFsvossY=;
-  b=Q7k60bnGU9kk5Tdk9XgUbkFaaO8mXV0lPem+hleZJctIBDXgtGGBNHlR
-   4IREheUs4YRzU1a6GeXsCuJ1dHgQQ/RN7ldElzKPBoxYepm3cSwBmT1GL
-   V2yMAZW3DwFkIq9WhOlj5H0VJmslDY6KM4t/RZgZA68kAeJhpZ8hpULdV
-   A=;
-IronPort-SDR: dA+OGJwBfOOYugAkt1GR7i4MLo/b/uzrQfkdodJW7nqunoIzxIwSDzciIPUnI8o7Bc2FoRcL7e
- 1mgdgdge/NFQ==
-X-IronPort-AV: E=Sophos;i="5.75,388,1589241600"; 
-   d="scan'208";a="43610901"
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 23 Jul 2020 22:58:05 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1d-474bcd9f.us-east-1.amazon.com (Postfix) with ESMTPS id D35D6A1FB9;
-        Thu, 23 Jul 2020 22:57:58 +0000 (UTC)
-Received: from EX13D08UEE003.ant.amazon.com (10.43.62.118) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 23 Jul 2020 22:57:45 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX13D08UEE003.ant.amazon.com (10.43.62.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 23 Jul 2020 22:57:45 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Thu, 23 Jul 2020 22:57:45 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 5F7384CA2B; Thu, 23 Jul 2020 22:57:45 +0000 (UTC)
-Date:   Thu, 23 Jul 2020 22:57:45 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Stefano Stabellini <sstabellini@kernel.org>
-CC:     Boris Ostrovsky <boris.ostrovsky@oracle.com>, <tglx@linutronix.de>,
-        <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
-        <x86@kernel.org>, <jgross@suse.com>, <linux-pm@vger.kernel.org>,
-        <linux-mm@kvack.org>, <kamatam@amazon.com>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200723225745.GB32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <50298859-0d0e-6eb0-029b-30df2a4ecd63@oracle.com>
- <20200715204943.GB17938@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <0ca3c501-e69a-d2c9-a24c-f83afd4bdb8c@oracle.com>
- <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
- <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
- <alpine.DEB.2.21.2007211640500.17562@sstabellini-ThinkPad-T480s>
- <20200722180229.GA32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
+        id S1726430AbgGXB2u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 23 Jul 2020 21:28:50 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:33750 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726419AbgGXB2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 23 Jul 2020 21:28:50 -0400
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200724012845epoutp04e1d31d9d5fcc1df24c0ea52c9447e8b1~kjAYS3dzB3244732447epoutp04B
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jul 2020 01:28:45 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200724012845epoutp04e1d31d9d5fcc1df24c0ea52c9447e8b1~kjAYS3dzB3244732447epoutp04B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1595554125;
+        bh=pDxZQjEv7mBk0U/xfnx3R6uLnhFHeCtJTsQ5goSgaF4=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=mxNYSFNc6TWOIVyhpyyO0wEaPtwGWLxl8gnPF3P1cmXacf6DfASe64kqYnGwD4SJZ
+         tnOY6aVW+7NlE37pAOLF5doEs04xSUXS315xgnuMvOtDch3Wwal8FToccmlqFahbus
+         EGVyyiulDyqDlUqZ8PxDS61ee34mgfJQfv6OyiFw=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20200724012845epcas1p487b493d7fec5d7e17230792aa44edb2d~kjAX4yvYp0267402674epcas1p4m;
+        Fri, 24 Jul 2020 01:28:45 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.40.156]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4BCWn64lDPzMqYkm; Fri, 24 Jul
+        2020 01:28:42 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        12.EA.19033.7493A1F5; Fri, 24 Jul 2020 10:28:39 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200724012838epcas1p1ca5dba82e0500fbf14f004b21ed26289~kjARshl_r1209012090epcas1p1K;
+        Fri, 24 Jul 2020 01:28:38 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200724012838epsmtrp12bd29ec8e984c87d23d5c5c8d8dca47f~kjARroT-l3006530065epsmtrp1Y;
+        Fri, 24 Jul 2020 01:28:38 +0000 (GMT)
+X-AuditID: b6c32a36-16fff70000004a59-66-5f1a39470399
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BC.18.08303.6493A1F5; Fri, 24 Jul 2020 10:28:38 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200724012838epsmtip163ac4f6afb4f6349acb2e7b46cd0118a~kjARdgQcl3014530145epsmtip1Z;
+        Fri, 24 Jul 2020 01:28:38 +0000 (GMT)
+Subject: Re: [PATCH v2 0/2] Exynos5422 DMC: adjust to new devfreq monitoring
+ mechanism
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     willy.mh.wolff.ml@gmail.com, k.konieczny@samsung.com,
+        b.zolnierkie@samsung.com, krzk@kernel.org, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        s.nawrocki@samsung.com, kgene@kernel.org
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <b6e3e7af-203d-a24e-2757-c32236f494d4@samsung.com>
+Date:   Fri, 24 Jul 2020 10:40:25 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
+In-Reply-To: <20200710191122.11029-1-lukasz.luba@arm.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrIJsWRmVeSWpSXmKPExsWy7bCmrq67pVS8QfMVXouNM9azWky8cYXF
+        YsGnGawW/Y9fM1ucP7+B3eJs0xt2i02Pr7FaXN41h83ic+8RRosZ5/cxWSxsamG3uN24gs3i
+        8Jt2VotvJx4xOvB5rJm3htFj56y77B6bVnWyeWxeUu/Rt2UVo8fnTXIBbFHZNhmpiSmpRQqp
+        ecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+AbpumTlA1yoplCXmlAKFAhKLi5X0
+        7WyK8ktLUhUy8otLbJVSC1JyCiwL9IoTc4tL89L1kvNzrQwNDIxMgQoTsjN+Tj7OXrCcu6Jx
+        xmL2BsZJnF2MHBwSAiYSdxozuxi5OIQEdjBKnH6xmRXC+cQoMeXJEkYI5zOjxKJbzexdjJxg
+        HUeuf4FK7GKU2LCqmRnCec8ocetbLxNIlbBAhMSrCydYQBIiAqsYJb6/PwI2mFngDqPE18a5
+        jCBVbAJaEvtf3GADsfkFFCWu/ngMFucVsJOY8uYvK4jNIqAq8ePkSbC4qECYxMltLVA1ghIn
+        Zz5hAbE5BSwlzr+eDlbPLCAucevJfCYIW15i+9s5YOdJCNzgkNg1dzkrxBMuEvfn3WSCsIUl
+        Xh3fAvWclMTL/jYou1pi5ckjbBDNHYwSW/ZfgGo2lti/dDITKPyYBTQl1u/ShwgrSuz8DfEY
+        swCfxLuvPayQIOaV6GgTgihRlrj84C7UWkmJxe2dbBMYlWYheWcWkhdmIXlhFsKyBYwsqxjF
+        UguKc9NTiw0LjJDjexMjOC1rme1gnPT2g94hRiYOxkOMEhzMSiK8Oozi8UK8KYmVValF+fFF
+        pTmpxYcYTYEBPJFZSjQ5H5gZ8kriDU2NjI2NLUwMzUwNDZXEef+dZY8XEkhPLEnNTk0tSC2C
+        6WPi4JRqYJqd8p5lIcsnZjHXWLWH1uFhzvHzg0X+ptj+3dy6VfzUlw0rKqf9OO3GXaz/48Gq
+        LvmbW4/9L6iaeut8Y/0fi/y7tV8XXJn2K8X2YP+3C8/X7/75bpXFW+6L55bbaAsuqN63vO+d
+        253Vh0/+ENeLOLzR5Oh5peZz84snLEqxzymyu/3K8/okvTylzsezWMTn3ZwyM8vw74qvnzyz
+        2tt2HatJ+XXLgCW0uNrpdv92rrWpy/PYg08eXCrgkvLBz+XMRF+JVxZnM/4fO/1gi97iPwUc
+        1+xjnPNsTjVdKWE+MHOKquw3+9Kij/N35d2yF8+cfYvhwxf9qxvU8/e0FrEnVEXvE+FT1NgZ
+        4sQ53Wv2F/16JZbijERDLeai4kQASlYPmlQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrNIsWRmVeSWpSXmKPExsWy7bCSnK6bpVS8wZzbChYbZ6xntZh44wqL
+        xYJPM1gt+h+/ZrY4f34Du8XZpjfsFpseX2O1uLxrDpvF594jjBYzzu9jsljY1MJucbtxBZvF
+        4TftrBbfTjxidODzWDNvDaPHzll32T02repk89i8pN6jb8sqRo/Pm+QC2KK4bFJSczLLUov0
+        7RK4Mn5OPs5esJy7onHGYvYGxkmcXYycHBICJhJHrn9h7GLk4hAS2MEo8fHHGkaIhKTEtItH
+        mbsYOYBsYYnDh4shat4ySjyZvZcFpEZYIELi1YUTLCAJEYFVjBL37t9gB0kwC9xhlDjYEgnR
+        0cMo8er7N1aQBJuAlsT+FzfYQGx+AUWJqz8eg23jFbCTmPLmL1gNi4CqxI+TJ8HiogJhEjuX
+        PGaCqBGUODnzCdhmTgFLifOvp7NCLFOX+DPvEjOELS5x68l8JghbXmL72znMExiFZyFpn4Wk
+        ZRaSlllIWhYwsqxilEwtKM5Nzy02LDDKSy3XK07MLS7NS9dLzs/dxAiOTy2tHYx7Vn3QO8TI
+        xMF4iFGCg1lJhFeHUTxeiDclsbIqtSg/vqg0J7X4EKM0B4uSOO/XWQvjhATSE0tSs1NTC1KL
+        YLJMHJxSDUzCTPOqFFN4+Ldln0nJNkmSYbRjSo4KeZev560y77zL5H0Wk15f/LbN2sfhflzK
+        taL5yZOzjSc17p9ct//h9lwrda45+xY7OJ7c1W8981fFyyeyx5cwHr0zuWDpNN7p1W/28Rh0
+        6MzdX/ff5MyCm4HL3l1PUjp6MeKsP/OJU9OttXoqq3cydJ+WcfQ+x+8xb65I+nYZU3f5/Yyu
+        81zfqm1XELf79eXf1bRemak17He1lYM3TS60fLHdtNf2cpKrGfMZs31OpgzVyxucz11fM8vv
+        5pbtzs98MpdVdDMxfDP++2D5k6Ib89+wyz3heXK+hDudu6pt5pcIBt47LDIhzSFaMjOjuvJE
+        TTZcOn+hUFyJpTgj0VCLuag4EQCAQQkUPgMAAA==
+X-CMS-MailID: 20200724012838epcas1p1ca5dba82e0500fbf14f004b21ed26289
+X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200710191144epcas1p30f82bf6371f7f09a4e1ea1262234f392
+References: <CGME20200710191144epcas1p30f82bf6371f7f09a4e1ea1262234f392@epcas1p3.samsung.com>
+        <20200710191122.11029-1-lukasz.luba@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 04:49:16PM -0700, Stefano Stabellini wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+Hi Lukasz,
+
+On 7/11/20 4:11 AM, Lukasz Luba wrote:
+> Hi all,
 > 
+> This is a v2 patch set adjusting Exynos5422 DMC to the new devfreq monitoring
+> mechanism. This time the IRQ mode is explicitly controlled using module
+> parameter (in default the driver uses polling mode = devfreq monitoring).
 > 
+> The detailed cover letter describing the topic can be found here [1].
 > 
-> On Wed, 22 Jul 2020, Anchal Agarwal wrote:
-> > On Tue, Jul 21, 2020 at 05:18:34PM -0700, Stefano Stabellini wrote:
-> > > On Tue, 21 Jul 2020, Boris Ostrovsky wrote:
-> > > > >>>>>> +static int xen_setup_pm_notifier(void)
-> > > > >>>>>> +{
-> > > > >>>>>> +     if (!xen_hvm_domain())
-> > > > >>>>>> +             return -ENODEV;
-> > > > >>>>>>
-> > > > >>>>>> I forgot --- what did we decide about non-x86 (i.e. ARM)?
-> > > > >>>>> It would be great to support that however, its  out of
-> > > > >>>>> scope for this patch set.
-> > > > >>>>> I’ll be happy to discuss it separately.
-> > > > >>>>
-> > > > >>>> I wasn't implying that this *should* work on ARM but rather whether this
-> > > > >>>> will break ARM somehow (because xen_hvm_domain() is true there).
-> > > > >>>>
-> > > > >>>>
-> > > > >>> Ok makes sense. TBH, I haven't tested this part of code on ARM and the series
-> > > > >>> was only support x86 guests hibernation.
-> > > > >>> Moreover, this notifier is there to distinguish between 2 PM
-> > > > >>> events PM SUSPEND and PM hibernation. Now since we only care about PM
-> > > > >>> HIBERNATION I may just remove this code and rely on "SHUTDOWN_SUSPEND" state.
-> > > > >>> However, I may have to fix other patches in the series where this check may
-> > > > >>> appear and cater it only for x86 right?
-> > > > >>
-> > > > >>
-> > > > >> I don't know what would happen if ARM guest tries to handle hibernation
-> > > > >> callbacks. The only ones that you are introducing are in block and net
-> > > > >> fronts and that's arch-independent.
-> > > > >>
-> > > > >>
-> > > > >> You do add a bunch of x86-specific code though (syscore ops), would
-> > > > >> something similar be needed for ARM?
-> > > > >>
-> > > > >>
-> > > > > I don't expect this to work out of the box on ARM. To start with something
-> > > > > similar will be needed for ARM too.
-> > > > > We may still want to keep the driver code as-is.
-> > > > >
-> > > > > I understand the concern here wrt ARM, however, currently the support is only
-> > > > > proposed for x86 guests here and similar work could be carried out for ARM.
-> > > > > Also, if regular hibernation works correctly on arm, then all is needed is to
-> > > > > fix Xen side of things.
-> > > > >
-> > > > > I am not sure what could be done to achieve any assurances on arm side as far as
-> > > > > this series is concerned.
-> > >
-> > > Just to clarify: new features don't need to work on ARM or cause any
-> > > addition efforts to you to make them work on ARM. The patch series only
-> > > needs not to break existing code paths (on ARM and any other platforms).
-> > > It should also not make it overly difficult to implement the ARM side of
-> > > things (if there is one) at some point in the future.
-> > >
-> > > FYI drivers/xen/manage.c is compiled and working on ARM today, however
-> > > Xen suspend/resume is not supported. I don't know for sure if
-> > > guest-initiated hibernation works because I have not tested it.
-> > >
-> > >
-> > >
-> > > > If you are not sure what the effects are (or sure that it won't work) on
-> > > > ARM then I'd add IS_ENABLED(CONFIG_X86) check, i.e.
-> > > >
-> > > >
-> > > > if (!IS_ENABLED(CONFIG_X86) || !xen_hvm_domain())
-> > > >       return -ENODEV;
-> > >
-> > > That is a good principle to have and thanks for suggesting it. However,
-> > > in this specific case there is nothing in this patch that doesn't work
-> > > on ARM. From an ARM perspective I think we should enable it and
-> > > &xen_pm_notifier_block should be registered.
-> > >
-> > This question is for Boris, I think you we decided to get rid of the notifier
-> > in V3 as all we need  to check is SHUTDOWN_SUSPEND state which sounds plausible
-> > to me. So this check may go away. It may still be needed for sycore_ops
-> > callbacks registration.
-> > > Given that all guests are HVM guests on ARM, it should work fine as is.
-> > >
-> > >
-> > > I gave a quick look at the rest of the series and everything looks fine
-> > > to me from an ARM perspective. I cannot imaging that the new freeze,
-> > > thaw, and restore callbacks for net and block are going to cause any
-> > > trouble on ARM. The two main x86-specific functions are
-> > > xen_syscore_suspend/resume and they look trivial to implement on ARM (in
-> > > the sense that they are likely going to look exactly the same.)
-> > >
-> > Yes but for now since things are not tested I will put this
-> > !IS_ENABLED(CONFIG_X86) on syscore_ops calls registration part just to be safe
-> > and not break anything.
-> > >
-> > > One question for Anchal: what's going to happen if you trigger a
-> > > hibernation, you have the new callbacks, but you are missing
-> > > xen_syscore_suspend/resume?
-> > >
-> > > Is it any worse than not having the new freeze, thaw and restore
-> > > callbacks at all and try to do a hibernation?
-> > If callbacks are not there, I don't expect hibernation to work correctly.
-> > These callbacks takes care of xen primitives like shared_info_page,
-> > grant table, sched clock, runstate time which are important to save the correct
-> > state of the guest and bring it back up. Other patches in the series, adds all
-> > the logic to these syscore callbacks. Freeze/thaw/restore are just there for at driver
-> > level.
+> The patches should apply on top of Chanwoo's devfreq-next branch, where
+> the new devfreq mechanism is queued [2]. If there is no objections
+> I think they can go via this tree, since they logically use it.
 > 
-> I meant the other way around :-)  Let me rephrase the question.
+> Changes:
+> v2:
+> - added Reviewed-by from Chanwoo for patch 1/2
+> - added module_param which controls the mode in which the driver operates
+> - switched in default to devfreq monitoring mechanism instead of interrupts
 > 
-> Do you think that implementing freeze/thaw/restore at the driver level
-> without having xen_syscore_suspend/resume can potentially make things
-> worse compared to not having freeze/thaw/restore at the driver level at
-> all?
-I think in both the cases I don't expect it to work. System may end up in
-different state if you register vs not. Hibernation does not work properly
-at least for domU instances without these changes on x86 and I am assuming the
-same for ARM.
+> Regards,
+> Lukasz Luba
+> 
+> [1] https://lore.kernel.org/linux-pm/20200708153420.29484-1-lukasz.luba@arm.com/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/log/?h=devfreq-next
+> 
+> Lukasz Luba (2):
+>   memory: samsung: exynos5422-dmc: Adjust polling interval and
+>     uptreshold
+>   memory: samsung: exynos5422-dmc: Add module param to control IRQ mode
+> 
+>  drivers/memory/samsung/exynos5422-dmc.c | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
 
-If you do not register freeze/thaw/restore callbacks for arm, then on
-invocation of xenbus_dev_suspend, default suspend/resume callbacks
-will be called for each driver and since you do not have any code to save domU's
-xen primitives state (syscore_ops), hibernation will either fail or will demand a reboot.
-I do no have setup to test the current state of ARM's hibernation
+Applied them to devfreq-next branch. Thanks.
 
-If you only register freeze/thaw/restore and no syscore_ops, it will again fail.
-Since, I do not have an ARM setup running, I quickly ran a similar test on x86,
-may not be an apple to apple comparison but instance failed to resume or I
-should say stuck showing huge jump in time and required a reboot.
-
-Now if this doesn't happen currently when you trigger hibernation on arm domU
-instances or if system is still alive when you trigger hibernation in xen guest
-then not registering the callbacks may be a better idea. In that case  may be 
-I need to put arch specific check when registering freeze/thaw/restore handlers.
-
-Hope that answers your question.
-
-Thanks,
-Anchal
-
+-- 
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
