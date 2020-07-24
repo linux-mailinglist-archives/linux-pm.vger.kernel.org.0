@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5B322CD83
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC8E22CD88
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726890AbgGXSYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jul 2020 14:24:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32850 "EHLO mail.kernel.org"
+        id S1726973AbgGXSYb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jul 2020 14:24:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32972 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725822AbgGXSYZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 24 Jul 2020 14:24:25 -0400
+        id S1725822AbgGXSY3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 24 Jul 2020 14:24:29 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.213])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D42A206F6;
-        Fri, 24 Jul 2020 18:24:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F33B42070B;
+        Fri, 24 Jul 2020 18:24:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595615064;
-        bh=RYyMMVgWEW5lCfaf1U/r/2g9DqYwNBNdPlUu9TPs1gE=;
+        s=default; t=1595615069;
+        bh=PuO42SWKqXGKsVy8DEJzaXe0S+VggBkOX28YgE6UznU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qGalTqKQdG9AB0+FVyM/3wXLT5iBamCBhy9/dVYN8uAw+n7wXaldq22/Swb0GrnUv
-         g+opoNOZnYA0AAex3pQK4LmItDWwWPjGtozqtpkbXimlucvwGuAxIm3qAs3BrqbUHz
-         vJl8m47EPrzIBthvU/MS+EkFyou+yGlrrrOIcpMs=
+        b=Jw5r2T983VW2fPKtKoBaS8/S3bzyT22UZtHK2TUYkx4Lo7NyafZ6j/hIBZ9MQXPU4
+         ID348NpyVVLUhddFt1nZWIbMJm2UqUnO7TLeE592zNa4Qd2C/lsl7IZPEyqr1YfUiS
+         Jqn9VeiUfnZSfepXVsMath4uayXEJoH1rvgxpaO0=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>,
         Ray Jui <rjui@broadcom.com>,
@@ -42,9 +42,9 @@ To:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-pm@vger.kernel.org
 Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 03/16] memory: mvebu-devbus: Align with open parenthesis
-Date:   Fri, 24 Jul 2020 20:23:15 +0200
-Message-Id: <20200724182328.3348-4-krzk@kernel.org>
+Subject: [PATCH 04/16] memory: omap-gpmc: Correct kerneldoc
+Date:   Fri, 24 Jul 2020 20:23:16 +0200
+Message-Id: <20200724182328.3348-5-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200724182328.3348-1-krzk@kernel.org>
 References: <20200724182328.3348-1-krzk@kernel.org>
@@ -53,66 +53,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The line continuation contained spaces but still failed to properly
-align with open parenthesis.
+Use proper kerneldoc to fix GCC warnings like:
+
+    drivers/memory/omap-gpmc.c:299: warning: Function parameter or member 'cs' not described in 'gpmc_get_clk_period'
+    drivers/memory/omap-gpmc.c:432: warning: Excess function parameter 'ma' description in 'get_gpmc_timing_reg'
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/memory/mvebu-devbus.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/memory/omap-gpmc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/memory/mvebu-devbus.c b/drivers/memory/mvebu-devbus.c
-index 76efc653dc7e..8450638e8670 100644
---- a/drivers/memory/mvebu-devbus.c
-+++ b/drivers/memory/mvebu-devbus.c
-@@ -134,22 +134,22 @@ static int devbus_get_timing_params(struct devbus *devbus,
- 	}
+diff --git a/drivers/memory/omap-gpmc.c b/drivers/memory/omap-gpmc.c
+index 2675ea4e37fe..c91a021ac421 100644
+--- a/drivers/memory/omap-gpmc.c
++++ b/drivers/memory/omap-gpmc.c
+@@ -289,8 +289,8 @@ static unsigned long gpmc_get_fclk_period(void)
  
- 	err = get_timing_param_ps(devbus, node, "devbus,badr-skew-ps",
--				 &r->badr_skew);
-+				  &r->badr_skew);
- 	if (err < 0)
- 		return err;
+ /**
+  * gpmc_get_clk_period - get period of selected clock domain in ps
+- * @cs Chip Select Region.
+- * @cd Clock Domain.
++ * @cs: Chip Select Region.
++ * @cd: Clock Domain.
+  *
+  * GPMC_CS_CONFIG1 GPMCFCLKDIVIDER for cs has to be setup
+  * prior to calling this function with GPMC_CD_CLK.
+@@ -409,7 +409,7 @@ static void gpmc_cs_bool_timings(int cs, const struct gpmc_bool_timings *p)
+  * @reg:     GPMC_CS_CONFIGn register offset.
+  * @st_bit:  Start Bit
+  * @end_bit: End Bit. Must be >= @st_bit.
+- * @ma:x     Maximum parameter value (before optional @shift).
++ * @max:     Maximum parameter value (before optional @shift).
+  *           If 0, maximum is as high as @st_bit and @end_bit allow.
+  * @name:    DTS node name, w/o "gpmc,"
+  * @cd:      Clock Domain of timing parameter.
+@@ -1134,7 +1134,7 @@ static struct gpmc_nand_ops nand_ops = {
  
- 	err = get_timing_param_ps(devbus, node, "devbus,turn-off-ps",
--				 &r->turn_off);
-+				  &r->turn_off);
- 	if (err < 0)
- 		return err;
- 
- 	err = get_timing_param_ps(devbus, node, "devbus,acc-first-ps",
--				 &r->acc_first);
-+				  &r->acc_first);
- 	if (err < 0)
- 		return err;
- 
- 	err = get_timing_param_ps(devbus, node, "devbus,acc-next-ps",
--				 &r->acc_next);
-+				  &r->acc_next);
- 	if (err < 0)
- 		return err;
- 
-@@ -175,17 +175,17 @@ static int devbus_get_timing_params(struct devbus *devbus,
- 	}
- 
- 	err = get_timing_param_ps(devbus, node, "devbus,ale-wr-ps",
--				 &w->ale_wr);
-+				  &w->ale_wr);
- 	if (err < 0)
- 		return err;
- 
- 	err = get_timing_param_ps(devbus, node, "devbus,wr-low-ps",
--				 &w->wr_low);
-+				  &w->wr_low);
- 	if (err < 0)
- 		return err;
- 
- 	err = get_timing_param_ps(devbus, node, "devbus,wr-high-ps",
--				 &w->wr_high);
-+				  &w->wr_high);
- 	if (err < 0)
- 		return err;
- 
+ /**
+  * gpmc_omap_get_nand_ops - Get the GPMC NAND interface
+- * @regs: the GPMC NAND register map exclusive for NAND use.
++ * @reg: the GPMC NAND register map exclusive for NAND use.
+  * @cs: GPMC chip select number on which the NAND sits. The
+  *      register map returned will be specific to this chip select.
+  *
 -- 
 2.17.1
 
