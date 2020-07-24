@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD9422CDE4
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F7822CDE9
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jul 2020 20:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726636AbgGXSjK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 24 Jul 2020 14:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58044 "EHLO
+        id S1726573AbgGXSkR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 24 Jul 2020 14:40:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbgGXSjK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jul 2020 14:39:10 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07E7C0619D3;
-        Fri, 24 Jul 2020 11:39:09 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id o8so8763473wmh.4;
-        Fri, 24 Jul 2020 11:39:09 -0700 (PDT)
+        with ESMTP id S1726411AbgGXSkR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 24 Jul 2020 14:40:17 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FC8C0619D3;
+        Fri, 24 Jul 2020 11:40:16 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id p14so8407420wmg.1;
+        Fri, 24 Jul 2020 11:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eYMK/mqGXfEhPNQlVcVcGo+vzHMdqoBnr5Dqk/+C96Q=;
-        b=U6RMzRtvWPcalz5SnkLJ70HE0fg+HrsLlUz/gpNoLbtYxjVUOunbZS0hc93fYs1WyS
-         koaqZmpiWJWPeMUPGsdizggVtHIFY8RWXRgxqirTNpR7jgqTlsMbonnrcxwuXEGj7FEP
-         zKp9YVR/EeCc94omqs7ycZ/Zvd5CCgp10TVnbXc0HNiX0Bbultwzw1w7AKRDJ0VZCvfx
-         zdnzXYJNE1+JcZBdjWSLPjCuPOiHlrb4oBlM6YThcsBgHrOLTNf80n5NVM4bLE775XCf
-         JfDIiL82hheHt2Ft3TgzdpLAQWbl3eMSp+DAmn6kIzXrkK2TDBZa6ZWoZSmbWKHmviwT
-         NRSg==
+        bh=ZlSUbDhdE53sVd33d+LQLymoBYl1U1XEv8/R2vSrtz0=;
+        b=jsF8paOaXApGFBfZOQSFlI0uLFaS1BGCoABV96/OS83jhzEXtboABcU8LQVLhpAbnK
+         +dCqhmqrW+nSAo6uXRZyWXIYuWC7QyVXPNefO6NBGF0QIYh6cUVKTZyhENUKNIMclkMl
+         Yd4dYWUkBiBXp4RLtnL5daaHyTFmDQz/8l5YXqzz4fZDsT7UQAW8uwwJxyl3kW5hJNkP
+         kAItf8EfaWW9yZxTpEtNqg58QnACSPA5b2mW6Nln4Zsbdo7WUk5M0bvc13P8q+KpomVG
+         RA/furP4g9VRkvE8Gjyx1vgGb6lbqz41TZiyXKNEcKNrHf3n3w8Aa+FlIBQs1F3PmWaj
+         t42w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=eYMK/mqGXfEhPNQlVcVcGo+vzHMdqoBnr5Dqk/+C96Q=;
-        b=d3KeoqlDrvJ00HLE4vBMdGkviCh07eZ9xHWBOloQRbHjS7pQyRyWnwg3Xds/gDfwuj
-         qXT/SWrpiHkyF/i51sB3DD/46tjKNVXXLfxgWCu/5BXo2cXmLi9TDnPGOL/Z85csE0pO
-         Hb65nf1tytGH0junV42fcHCYfHHV7oOEorj2wbtaHG+6CTsPOUIoqQQqKLhTG+aQAodW
-         YpQhXRSpOpf5rPQ3WAvMA0uwYaEOj1bWV9ZhVNk4A7cXIc9e1WrkjeRa6HddsTmSOVZf
-         p3mR3m4VFAuA+3g0XS1AUQDwZT2NLS8wY7gGMv7yPNw+PN/Ozn2cl88xlckhLiirj8Oc
-         HGpQ==
-X-Gm-Message-State: AOAM530b9HiVy7hyMAZxJ3N7Hq5IMJbslv3hZswf7S1y2PHvkTnLss2X
-        x8GiJxU2AzLu+s6K7jqyNaU=
-X-Google-Smtp-Source: ABdhPJyPNH+laa6ulwNbrJb3mV549/hZw5+I+dnY+0R8vUblMwe6gmBFCNkUgyuaqbdA1iovLKELGA==
-X-Received: by 2002:a1c:2c0b:: with SMTP id s11mr8402063wms.48.1595615948406;
-        Fri, 24 Jul 2020 11:39:08 -0700 (PDT)
+        bh=ZlSUbDhdE53sVd33d+LQLymoBYl1U1XEv8/R2vSrtz0=;
+        b=c3jVxc69Xyo0CE/ecmrTvoNFvBgfGMU91tJe4yCotVXPWZZa1lyF6x1poPcsiC8sJZ
+         uDBDqz2jF3NVyjR1UPkb4yLQ1pk6CJz86i0Ef/TwOZQCFJXJzClyIoxl5Iteyou93Klf
+         OOhlN0YQEaGGI7srEEEwwbZDsKt303wMR9+k4JdogOwjgv0NlPD4W4jQUx7tmeCR9KQ+
+         n9/fsYi9OOcCaTrM1kWuh5dnxCtmDL9jjV4G+ebemigjTTujekjHE3jSzFZ2sW6lCP6I
+         GRKyzd3q8oiBTz4PigUW3LPEXDSFed6r4IVbd29FHv1plaInphdJd4La8jLy9Xs7CfT0
+         9JKw==
+X-Gm-Message-State: AOAM53222H08u9BrkivazcMxGA+9BDl7cj9Du16hapeFc84lxpKE5Z20
+        eWSxbNOIc+U/og35DyjEJb6JCnm4
+X-Google-Smtp-Source: ABdhPJzo7JuqMYGDQrYXjLAp2UKUWitZh530xrAbHgW4YAdM2WI3C+vNih5hZOkIy3zRJ+KZzLAvBg==
+X-Received: by 2002:a7b:cc92:: with SMTP id p18mr10355954wma.4.1595616015612;
+        Fri, 24 Jul 2020 11:40:15 -0700 (PDT)
 Received: from [10.67.50.75] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id q188sm8371676wma.46.2020.07.24.11.39.04
+        by smtp.googlemail.com with ESMTPSA id 2sm7865692wmo.44.2020.07.24.11.40.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jul 2020 11:39:07 -0700 (PDT)
-Subject: Re: [PATCH 11/16] memory: brcmstb_dpfe: Fix language typo
+        Fri, 24 Jul 2020 11:40:14 -0700 (PDT)
+Subject: Re: [RFT 12/16] memory: brcmstb_dpfe: Add separate entry for compile
+ test
 To:     Krzysztof Kozlowski <krzk@kernel.org>, Ray Jui <rjui@broadcom.com>,
         Scott Branden <sbranden@broadcom.com>,
         bcm-kernel-feedback-list@broadcom.com,
@@ -66,7 +67,7 @@ To:     Krzysztof Kozlowski <krzk@kernel.org>, Ray Jui <rjui@broadcom.com>,
         linux-pm@vger.kernel.org
 Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
 References: <20200724182328.3348-1-krzk@kernel.org>
- <20200724182328.3348-12-krzk@kernel.org>
+ <20200724182328.3348-13-krzk@kernel.org>
 From:   Florian Fainelli <f.fainelli@gmail.com>
 Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  xsDiBEjPuBIRBACW9MxSJU9fvEOCTnRNqG/13rAGsj+vJqontvoDSNxRgmafP8d3nesnqPyR
@@ -122,12 +123,12 @@ Autocrypt: addr=f.fainelli@gmail.com; prefer-encrypt=mutual; keydata=
  HvsHIcv4lxCWkFXkwsuWqzEKK6kxVpRDoEQPDj+Oy/ZJ5fYuMbkdHrlegwoQ64LrqdmiVVPC
  TwQYEQIADwIbDAUCVF/S8QUJHlwd3wAKCRBhV5kVtWN2Do+FAJ956xSz2XpDHql+Wg/2qv3b
  G10n8gCguORqNGMsVRxrlLs7/himep7MrCc=
-Message-ID: <ca3f8dd3-7fc7-85dc-5656-e1e95302d501@gmail.com>
-Date:   Fri, 24 Jul 2020 11:38:57 -0700
+Message-ID: <7797a55e-bbf0-ef0f-daec-d56326167586@gmail.com>
+Date:   Fri, 24 Jul 2020 11:40:09 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200724182328.3348-12-krzk@kernel.org>
+In-Reply-To: <20200724182328.3348-13-krzk@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -137,10 +138,93 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 7/24/20 11:23 AM, Krzysztof Kozlowski wrote:
-> Fix firwmare -> firmware.
+> Add separate entry for Broadcom STB DPFE driver, selected by platforms
+> by default.  This allows further customization and compile testing.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+> 
+> I have other changes around drivers/memory/Kconfig pending. Sending them
+> together would avoid conflicts.
+> 
+> ---
+>  arch/arm/mach-bcm/Kconfig    |  1 +
+>  arch/arm64/Kconfig.platforms |  1 +
+>  drivers/memory/Kconfig       | 11 +++++++++++
+>  drivers/memory/Makefile      |  2 +-
+>  4 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-bcm/Kconfig b/arch/arm/mach-bcm/Kconfig
+> index 1df0ee01ee02..b0c45238e69b 100644
+> --- a/arch/arm/mach-bcm/Kconfig
+> +++ b/arch/arm/mach-bcm/Kconfig
+> @@ -208,6 +208,7 @@ config ARCH_BRCMSTB
+>  	select ARM_GIC
+>  	select ARM_ERRATA_798181 if SMP
+>  	select HAVE_ARM_ARCH_TIMER
+> +	select BRCMSTB_DPFE
+>  	select BRCMSTB_L2_IRQ
+>  	select BCM7120_L2_IRQ
+>  	select ARCH_HAS_HOLES_MEMORYMODEL
+> diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
+> index ddc3bf75257f..f7791ed0ed6d 100644
+> --- a/arch/arm64/Kconfig.platforms
+> +++ b/arch/arm64/Kconfig.platforms
+> @@ -68,6 +68,7 @@ config ARCH_BRCMSTB
+>  	bool "Broadcom Set-Top-Box SoCs"
+>  	select ARCH_HAS_RESET_CONTROLLER
+>  	select BCM7038_L1_IRQ
+> +	select BRCMSTB_DPFE
+
+The select is probably not warranted, see below.
+
+>  	select BRCMSTB_L2_IRQ
+>  	select GENERIC_IRQ_CHIP
+>  	select PINCTRL
+> diff --git a/drivers/memory/Kconfig b/drivers/memory/Kconfig
+> index cd4fc93b50df..fef6f0873fda 100644
+> --- a/drivers/memory/Kconfig
+> +++ b/drivers/memory/Kconfig
+> @@ -54,6 +54,17 @@ config ATMEL_EBI
+>  	  tree is used. This bus supports NANDs, external ethernet controller,
+>  	  SRAMs, ATA devices, etc.
+>  
+> +config BRCMSTB_DPFE
+> +	bool "Broadcom STB DPFE driver" if COMPILE_TEST
+> +	depends on ARCH_BRCMSTB || COMPILE_TEST
+
+Can you make it default ARCH_BRCMSTB and remove the select above?
+
+With that:
 
 Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+
+> +	help
+> +	  This driver provides access to the DPFE interface of Broadcom
+> +	  STB SoCs. The firmware running on the DCPU inside the DDR PHY can
+> +	  provide current information about the system's RAM, for instance
+> +	  the DRAM refresh rate. This can be used as an indirect indicator
+> +	  for the DRAM's temperature. Slower refresh rate means cooler RAM,
+> +	  higher refresh rate means hotter RAM.
+> +
+>  config BT1_L2_CTL
+>  	bool "Baikal-T1 CM2 L2-RAM Cache Control Block"
+>  	depends on MIPS_BAIKAL_T1 || COMPILE_TEST
+> diff --git a/drivers/memory/Makefile b/drivers/memory/Makefile
+> index b4533ffff2bc..e71cf7b99641 100644
+> --- a/drivers/memory/Makefile
+> +++ b/drivers/memory/Makefile
+> @@ -10,7 +10,7 @@ endif
+>  obj-$(CONFIG_ARM_PL172_MPMC)	+= pl172.o
+>  obj-$(CONFIG_ATMEL_SDRAMC)	+= atmel-sdramc.o
+>  obj-$(CONFIG_ATMEL_EBI)		+= atmel-ebi.o
+> -obj-$(CONFIG_ARCH_BRCMSTB)	+= brcmstb_dpfe.o
+> +obj-$(CONFIG_BRCMSTB_DPFE)	+= brcmstb_dpfe.o
+>  obj-$(CONFIG_BT1_L2_CTL)	+= bt1-l2-ctl.o
+>  obj-$(CONFIG_TI_AEMIF)		+= ti-aemif.o
+>  obj-$(CONFIG_TI_EMIF)		+= emif.o
+> 
+
+
 -- 
 Florian
