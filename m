@@ -2,100 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 494FD22DF0B
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Jul 2020 14:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2C322DF63
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Jul 2020 14:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgGZMf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jul 2020 08:35:29 -0400
-Received: from www.zeus03.de ([194.117.254.33]:40036 "EHLO mail.zeus03.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727113AbgGZMf2 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Jul 2020 08:35:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=hAn/LE/O5d3kxI+zRKnrNTOzPNdu
-        g55BS3PlBbqbkJU=; b=3MJ7whwPdGP07MOckxZuQXNLp9AS5PydqOUWUjnhNGs0
-        /ygHQgdVM2x4IK/MtT1F3yEwT1ut9AYnVGGr9FqADjhd+oPIpAvZr+BNTWUX27L4
-        F6X/cRcF8BiDuVy6q1EvbMDmKS5Tk/FLrY9aLvfbfUvL9xR/BgY+7WIXIm+KyS0=
-Received: (qmail 40443 invoked from network); 26 Jul 2020 14:35:24 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 26 Jul 2020 14:35:24 +0200
-X-UD-Smtp-Session: l3s3148p1@wgOmcFer/o8gAwDPXy27AOM4pzPBFrIA
-Date:   Sun, 26 Jul 2020 14:35:23 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Niklas <niklas.soderlund@ragnatech.se>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH 12/20] dt-bindings: i2c: renesas,iic: Document r8a774e1
- support
-Message-ID: <20200726123523.GD2484@ninjato>
-References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <1594811350-14066-13-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        id S1726668AbgGZM6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Jul 2020 08:58:11 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:43051 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726719AbgGZM6L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Jul 2020 08:58:11 -0400
+Received: from pc.localdomain (unknown [195.189.32.242])
+        (Authenticated sender: contact@artur-rojek.eu)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 35ADE240007;
+        Sun, 26 Jul 2020 12:58:07 +0000 (UTC)
+From:   Artur Rojek <contact@artur-rojek.eu>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Artur Rojek <contact@artur-rojek.eu>
+Subject: [PATCH] dt-bindings: power: Convert ingenic,battery.txt to YAML
+Date:   Sun, 26 Jul 2020 14:56:05 +0200
+Message-Id: <20200726125605.7009-1-contact@artur-rojek.eu>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YToU2i3Vx8H2dn7O"
-Content-Disposition: inline
-In-Reply-To: <1594811350-14066-13-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Convert the textual documentation of Device Tree bindings for the
+Ingenic JZ47xx SoCs battery to YAML.
 
---YToU2i3Vx8H2dn7O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+---
+ .../bindings/power/supply/ingenic,battery.txt | 31 ---------
+ .../power/supply/ingenic,battery.yaml         | 67 +++++++++++++++++++
+ 2 files changed, 67 insertions(+), 31 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
+ create mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
 
-On Wed, Jul 15, 2020 at 12:09:02PM +0100, Lad Prabhakar wrote:
-> Document IIC controller for RZ/G2H (R8A774E1) SoC, which is compatible
-> with R-Car Gen3 SoC family.
->=20
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Marian-Cristian Rotariu <marian-cristian.rotariu.rb@bp.renes=
-as.com>
+diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt b/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
+deleted file mode 100644
+index 66430bf73815..000000000000
+--- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
++++ /dev/null
+@@ -1,31 +0,0 @@
+-* Ingenic JZ47xx battery bindings
+-
+-Required properties:
+-
+-- compatible: Must be "ingenic,jz4740-battery".
+-- io-channels: phandle and IIO specifier pair to the IIO device.
+-  Format described in iio-bindings.txt.
+-- monitored-battery: phandle to a "simple-battery" compatible node.
+-
+-The "monitored-battery" property must be a phandle to a node using the format
+-described in battery.txt, with the following properties being required:
+-
+-- voltage-min-design-microvolt: Drained battery voltage.
+-- voltage-max-design-microvolt: Fully charged battery voltage.
+-
+-Example:
+-
+-#include <dt-bindings/iio/adc/ingenic,adc.h>
+-
+-simple_battery: battery {
+-	compatible = "simple-battery";
+-	voltage-min-design-microvolt = <3600000>;
+-	voltage-max-design-microvolt = <4200000>;
+-};
+-
+-ingenic_battery {
+-	compatible = "ingenic,jz4740-battery";
+-	io-channels = <&adc INGENIC_ADC_BATTERY>;
+-	io-channel-names = "battery";
+-	monitored-battery = <&simple_battery>;
+-};
+diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+new file mode 100644
+index 000000000000..8d36216f6c0e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+@@ -0,0 +1,67 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019-2020 Artur Rojek
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/ingenic,battery.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Ingenic JZ47xx battery bindings
++
++maintainers:
++  - Artur Rojek <contact@artur-rojek.eu>
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++        - ingenic,jz4740-battery
++      - items:
++        - enum:
++          - ingenic,jz4725b-battery
++          - ingenic,jz4770-battery
++        - const: ingenic,jz4740-battery
++
++  io-channels:
++    items:
++      - description: >
++          phandle and IIO specifier pair to the IIO device.
++          See Documentation/devicetree/bindings/iio/iio-bindings.txt for more
++          details.
++
++  io-channel-names:
++    const: "battery"
++
++  monitored-battery:
++    items:
++      - description: >
++          phandle to a "simple-battery" compatible node.
++
++          This property must be a phandle to a node using the format described
++          in battery.txt, with the following properties being required:
++          - voltage-min-design-microvolt: drained battery voltage,
++          - voltage-max-design-microvolt: fully charged battery voltage.
++
++required:
++  - compatible
++  - io-channels
++  - io-channel-names
++  - monitored-battery
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/iio/adc/ingenic,adc.h>
++
++    simple_battery: battery {
++            compatible = "simple-battery";
++            voltage-min-design-microvolt = <3600000>;
++            voltage-max-design-microvolt = <4200000>;
++    };
++
++    ingenic-battery {
++            compatible = "ingenic,jz4740-battery";
++            io-channels = <&adc INGENIC_ADC_BATTERY>;
++            io-channel-names = "battery";
++            monitored-battery = <&simple_battery>;
++    };
+-- 
+2.27.0
 
-Applied to for-next, thanks!
-
-
---YToU2i3Vx8H2dn7O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl8deIsACgkQFA3kzBSg
-KbZtUQ/+JiFdXGopN/62fLmk1CxZX8mBIzoyojCZ2h3EScRmzR7ZPXc+JBB2nDdj
-LW1Rnv2JMK+Grggia9/QsY4fPQHIyclI36TdZjYSqN6pf1CNCj1edHRwG3UmH5NX
-wDE/uaHhcDuluDGRxx4yeRugfTrIu2uPVaLEmLnWxeQLNPQetBGOYkhqrQ1Nq124
-DlNu+O274kobkRLex7AgtEDKQifMt5+xxWddrfpuitktDS2GuOQameQlVxLP0KJ9
-WLZMlv1Axh9jF9J/Zj+i1q3c1HAk/I5coZ5GLE0v5tjm38/lzo2ysi8lJbW7qyJK
-g9z/XvhRfD3FVm9+0Pejmf9/gmhzV7xHJQgELNOXrUvLs5v4ZeqPJxjGIF3ioSZb
-cURJ14zLCLzDya8omSqxlw9A+efai0pmWCqf0TA7U43USV1fXt2w6FbevI+rpqZG
-xuo/XSRsXgKSXZpGHUzf/YmYVNTNXZ9220lFmBgBoM3716H+SXlSlXjW42n40J3q
-KxhmVu+kCjATOz67YUjGeHM03FDh2u2/qkPFgO5fQOSBqinaub81RYUbZEBlGggu
-+mr8XVxUe/GsIFHuevSwmRpSTyoSc1SCyt4W3OkyCEh1xsJWKnrbqeJhdjruqXZY
-HtmnMFsLCgIunvtHSMu7nQCJDI4Q7s9f+oxVxO1Wtx+RNrir5Yc=
-=YVyw
------END PGP SIGNATURE-----
-
---YToU2i3Vx8H2dn7O--
