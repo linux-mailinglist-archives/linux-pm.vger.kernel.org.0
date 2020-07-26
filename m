@@ -2,218 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 575C822E2B1
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Jul 2020 23:11:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2594D22E2CF
+	for <lists+linux-pm@lfdr.de>; Sun, 26 Jul 2020 23:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgGZVLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jul 2020 17:11:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48858 "EHLO mail.kernel.org"
+        id S1726522AbgGZVw1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Jul 2020 17:52:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726719AbgGZVLH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Jul 2020 17:11:07 -0400
+        id S1726253AbgGZVw1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 26 Jul 2020 17:52:27 -0400
 Received: from earth.universe (unknown [185.213.155.232])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E03552065C;
-        Sun, 26 Jul 2020 21:11:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52CC1206D7;
+        Sun, 26 Jul 2020 21:52:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595797866;
-        bh=KiVubal74AV8jhtlRHoRy6J5S1SLY5rer2hyCC5ooKM=;
+        s=default; t=1595800346;
+        bh=NbaAX64KN9s+U/Kyg1aOaFKymX1k2hdqJxg9pdMOuug=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bY1WRoM7Ehpn4XSH1kenSZhry5ttrRIASIBaok8KHF3Y18uGqmBe/+1pGqCmyzsuZ
-         uX/GSUJ4erLAUwatOXUQ4KFGkvyP2NUJ0qjlKITII+9v8tf8178yF5PE0HcJVRFTRc
-         X5DnbYV19qbOG46F6pAotAyfyQ2SWHUVQh/pI+Cc=
+        b=UfEL37rDZveHZB2G/SFDsfFGBAH2g4p+i0yTDIhtc8vs3d9syAQ92u3A1MtwuUcaa
+         9oGe06DKGWI+Zp7yhDAZLFc9EtqCZqxrU5Lh+CW/yiBg8Q+z0oVOHi5y7erOkvpMnm
+         4n3fqu7kWSGH2SNTLGNP8LDccd7Q56O/VQTTBUsw=
 Received: by earth.universe (Postfix, from userid 1000)
-        id A4FF23C0B87; Sun, 26 Jul 2020 23:11:03 +0200 (CEST)
-Date:   Sun, 26 Jul 2020 23:11:03 +0200
+        id 818E13C0B87; Sun, 26 Jul 2020 23:52:24 +0200 (CEST)
+Date:   Sun, 26 Jul 2020 23:52:24 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: Convert ingenic,battery.txt to YAML
-Message-ID: <20200726211103.gt735j6365vqrqmt@earth.universe>
-References: <20200726125605.7009-1-contact@artur-rojek.eu>
+To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
+Cc:     ssantosh@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: reset: keystone-reset: Replace HTTP links with
+ HTTPS ones
+Message-ID: <20200726215224.6lbxvs355gfsw6zr@earth.universe>
+References: <20200718094340.93087-1-grandmaster@al2klimov.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fshinpkyzrtxwpbz"
+        protocol="application/pgp-signature"; boundary="cg6ijbao55d5aul2"
 Content-Disposition: inline
-In-Reply-To: <20200726125605.7009-1-contact@artur-rojek.eu>
+In-Reply-To: <20200718094340.93087-1-grandmaster@al2klimov.de>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---fshinpkyzrtxwpbz
+--cg6ijbao55d5aul2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, Jul 26, 2020 at 02:56:05PM +0200, Artur Rojek wrote:
-> Convert the textual documentation of Device Tree bindings for the
-> Ingenic JZ47xx SoCs battery to YAML.
+On Sat, Jul 18, 2020 at 11:43:40AM +0200, Alexander A. Klimov wrote:
+> Rationale:
+> Reduces attack surface on kernel devs opening the links for MITM
+> as HTTPS traffic is much harder to manipulate.
 >=20
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> Deterministic algorithm:
+> For each file:
+>   If not .svg:
+>     For each line:
+>       If doesn't contain `\bxmlns\b`:
+>         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
+> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
+>             If both the HTTP and HTTPS versions
+>             return 200 OK and serve the same content:
+>               Replace HTTP with HTTPS.
+>=20
+> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
 > ---
->  .../bindings/power/supply/ingenic,battery.txt | 31 ---------
->  .../power/supply/ingenic,battery.yaml         | 67 +++++++++++++++++++
->  2 files changed, 67 insertions(+), 31 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/power/supply/ingeni=
-c,battery.txt
->  create mode 100644 Documentation/devicetree/bindings/power/supply/ingeni=
-c,battery.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,batte=
-ry.txt b/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
-> deleted file mode 100644
-> index 66430bf73815..000000000000
-> --- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
-> +++ /dev/null
-> @@ -1,31 +0,0 @@
-> -* Ingenic JZ47xx battery bindings
-> -
-> -Required properties:
-> -
-> -- compatible: Must be "ingenic,jz4740-battery".
-> -- io-channels: phandle and IIO specifier pair to the IIO device.
-> -  Format described in iio-bindings.txt.
-> -- monitored-battery: phandle to a "simple-battery" compatible node.
-> -
-> -The "monitored-battery" property must be a phandle to a node using the f=
-ormat
-> -described in battery.txt, with the following properties being required:
-> -
-> -- voltage-min-design-microvolt: Drained battery voltage.
-> -- voltage-max-design-microvolt: Fully charged battery voltage.
-> -
-> -Example:
-> -
-> -#include <dt-bindings/iio/adc/ingenic,adc.h>
-> -
-> -simple_battery: battery {
-> -	compatible =3D "simple-battery";
-> -	voltage-min-design-microvolt =3D <3600000>;
-> -	voltage-max-design-microvolt =3D <4200000>;
-> -};
-> -
-> -ingenic_battery {
-> -	compatible =3D "ingenic,jz4740-battery";
-> -	io-channels =3D <&adc INGENIC_ADC_BATTERY>;
-> -	io-channel-names =3D "battery";
-> -	monitored-battery =3D <&simple_battery>;
-> -};
-> diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,batte=
-ry.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.ya=
-ml
-> new file mode 100644
-> index 000000000000..8d36216f6c0e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2019-2020 Artur Rojek
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/power/supply/ingenic,battery.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Ingenic JZ47xx battery bindings
-> +
-> +maintainers:
-> +  - Artur Rojek <contact@artur-rojek.eu>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - enum:
-> +        - ingenic,jz4740-battery
 
-Can be simplified to:
-
-- const: ingenic,jz4740-battery
-
-> +      - items:
-> +        - enum:
-> +          - ingenic,jz4725b-battery
-> +          - ingenic,jz4770-battery
-> +        - const: ingenic,jz4740-battery
-
-The patch introduces new compatible values without any mention in
-the patch description. Please move this into a second patch.
-
-> +
-> +  io-channels:
-> +    items:
-> +      - description: >
-> +          phandle and IIO specifier pair to the IIO device.
-> +          See Documentation/devicetree/bindings/iio/iio-bindings.txt for=
- more
-> +          details.
-> +
-> +  io-channel-names:
-> +    const: "battery"
-> +
-> +  monitored-battery:
-> +    items:
-> +      - description: >
-> +          phandle to a "simple-battery" compatible node.
-> +
-> +          This property must be a phandle to a node using the format des=
-cribed
-> +          in battery.txt, with the following properties being required:
-> +          - voltage-min-design-microvolt: drained battery voltage,
-> +          - voltage-max-design-microvolt: fully charged battery voltage.
-> +
-> +required:
-> +  - compatible
-> +  - io-channels
-> +  - io-channel-names
-> +  - monitored-battery
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/iio/adc/ingenic,adc.h>
-> +
-> +    simple_battery: battery {
-> +            compatible =3D "simple-battery";
-> +            voltage-min-design-microvolt =3D <3600000>;
-> +            voltage-max-design-microvolt =3D <4200000>;
-> +    };
-> +
-> +    ingenic-battery {
-> +            compatible =3D "ingenic,jz4740-battery";
-> +            io-channels =3D <&adc INGENIC_ADC_BATTERY>;
-> +            io-channel-names =3D "battery";
-> +            monitored-battery =3D <&simple_battery>;
-> +    };
-
-Otherwise LGTM.
+Thanks, queued.
 
 -- Sebastian
 
---fshinpkyzrtxwpbz
+>  Continuing my work started at 93431e0607e5.
+>  See also: git log --oneline '--author=3DAlexander A. Klimov <grandmaster=
+@al2klimov.de>' v5.7..master
+>=20
+>  If there are any URLs to be removed completely
+>  or at least not (just) HTTPSified:
+>  Just clearly say so and I'll *undo my change*.
+>  See also: https://lkml.org/lkml/2020/6/27/64
+>=20
+>  If there are any valid, but yet not changed URLs:
+>  See: https://lkml.org/lkml/2020/6/26/837
+>=20
+>  If you apply the patch, please let me know.
+>=20
+>=20
+>  drivers/power/reset/keystone-reset.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/k=
+eystone-reset.c
+> index ad11faae19c5..211eeef0c81a 100644
+> --- a/drivers/power/reset/keystone-reset.c
+> +++ b/drivers/power/reset/keystone-reset.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * TI keystone reboot driver
+>   *
+> - * Copyright (C) 2014 Texas Instruments Incorporated. http://www.ti.com/
+> + * Copyright (C) 2014 Texas Instruments Incorporated. https://www.ti.com/
+>   *
+>   * Author: Ivan Khoronzhuk <ivan.khoronzhuk@ti.com>
+>   */
+> --=20
+> 2.27.0
+>=20
+
+--cg6ijbao55d5aul2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8d8WQACgkQ2O7X88g7
-+pq5rw//f36kz5rMPK/yVuL0cNKdLXzMLH4x8HrunW2UoyJl3WlHGGN2YP2fPl+N
-TL1Rwre1dmUDQkTPhaaEqj39bff8fkGHHuyWPW3qTFprwL8zuUrTU06VCzlKSc6p
-SwZWZ5sagmiBKDtSec6SiiO7F19UW5Jers+iiwA1aOcQIG+15M7dWAcdu2G6pzaJ
-2vHzxzCQlL08gL+IgVYYSF9HattEv9BnYljwWjVHF+48kP/G6/bT3tL7YHyY3DNZ
-0OmXU0IKmkZ7Q+ETQkfxeOjZ8PpbEWK58G5Dfv5t0iwIFLbpUKFTjVFmfrfmzdAT
-gZs9d2uWp1vCr6iQlOk5udxNWVEdRcAoPoMDtZg8g0zYR+ticKU6v028oOGnyPpr
-pMivGSHfo+7DFqMH5UBbibg6I5eXFKzQ9B0L2cDsEIZUwLRiGmko3eVF0qJAsoK8
-5x/4qU/Vz7XkZyma3KvrcDAmIB3HV1+HQv3GGEi76YG41mR82qbJ3EDejonXdKCM
-qXjhOg8SWxSJFVC7hZvGvndwXQxKe8PjU5zfkhO3nfCY25fkdE6qqewBqdQwxo6D
-6PPyHtjQ8gZ9k4gjTp1Rn1LH0x1LO8IFgLRq8oTkUDxQVJ3DUHausHlBpLjBycp1
-hJYClVa/tUYs2ppUmFpp7Wue/jcYSLqPu6dzyuFCe546VpSTeGc=
-=pmiS
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8d+xUACgkQ2O7X88g7
++pqvHRAApFb3Yl5hhhv1VEmFgGiArp4446cgOTu5x4B1BBt5DootWgKSLdsEDlMv
+DFlNckFPskaosl6UVZuQZz+6ka/CE9ojS0X4aiEEIjvnpDsI6LbjG7L3lFe7InDQ
+nnRr70b3UlwYGnrFZggjf1H+SEa/XKXNNigxf2dCzR/gMHj9u+K8OIHmSlYdJmkN
+4Fo7DnfbY7jOq49Bgtvek/gX65gteUmii971ERdjkXh/dSfap9nN1MyN6bwokOAH
+G7PmgiWGb8+xhi5g5t1IXBlqZFmGBlskiCV2KohXC6TwJiIS2l2w3ZN1Gl4p7xWe
+Q7h4kefAJVUS+7bAOvJP0l8domGV0u4RIS4Kt9hdD1LKdxBIzp9XPqmMgLd8aYp5
+ZQs1yTdkiBO60qSLmUqso+8JnQRwrLEoO3Fe3Td/dSZtSbjjvUW/aqTuASbOK6Wu
+l/6/CAKLJqent6THVyRFzfX/gU7iDTS7SPllcxsC2J9AV6fBKE4assPDQfA9PG5P
+4GmTw0wL9daf8cqcQPDOfX0qjcso/Abgk2lGErCydFRz/F2Lzj5FnuDegsTTYFMo
+FONlRhO6PxN87rK6Eci/hgPumvlVmZWTL8rZvK93rVL4RyWVr/MOVCZxgUrgk3el
+EZoqQrRqzntPcLBguLRSCp+4gA29zwLscBx8V7FBgOcUUqkkJq0=
+=daRY
 -----END PGP SIGNATURE-----
 
---fshinpkyzrtxwpbz--
+--cg6ijbao55d5aul2--
