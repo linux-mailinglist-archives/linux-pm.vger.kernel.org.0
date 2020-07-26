@@ -2,133 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2594D22E2CF
-	for <lists+linux-pm@lfdr.de>; Sun, 26 Jul 2020 23:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C38422E303
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 00:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbgGZVw1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jul 2020 17:52:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58252 "EHLO mail.kernel.org"
+        id S1726636AbgGZWJw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 26 Jul 2020 18:09:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726253AbgGZVw1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 26 Jul 2020 17:52:27 -0400
+        id S1726082AbgGZWJv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 26 Jul 2020 18:09:51 -0400
 Received: from earth.universe (unknown [185.213.155.232])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 52CC1206D7;
-        Sun, 26 Jul 2020 21:52:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 762762065F;
+        Sun, 26 Jul 2020 22:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595800346;
-        bh=NbaAX64KN9s+U/Kyg1aOaFKymX1k2hdqJxg9pdMOuug=;
+        s=default; t=1595801391;
+        bh=LfHWfBg1Qfp818BKW1nd9sxbwjERmwPxm12kyIqm0Ak=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfEL37rDZveHZB2G/SFDsfFGBAH2g4p+i0yTDIhtc8vs3d9syAQ92u3A1MtwuUcaa
-         9oGe06DKGWI+Zp7yhDAZLFc9EtqCZqxrU5Lh+CW/yiBg8Q+z0oVOHi5y7erOkvpMnm
-         4n3fqu7kWSGH2SNTLGNP8LDccd7Q56O/VQTTBUsw=
+        b=1pCHgWq75TDYeOlW/SX2FohhHJ4AAL4TKHTj80iEU+lD0wfmvWm8m5Gh/sqYbB8TF
+         Gjedib6n5Ej1KUI7qoPXQRJGNIzyrBmgLdbA9xJ5oApxzt3Iqt2tMusW2GONwyAwH1
+         yOdCW4E0nnppQom5b5kGK4UUJ7EjjDrNrPVtYv0g=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 818E13C0B87; Sun, 26 Jul 2020 23:52:24 +0200 (CEST)
-Date:   Sun, 26 Jul 2020 23:52:24 +0200
+        id B16DA3C0B87; Mon, 27 Jul 2020 00:09:49 +0200 (CEST)
+Date:   Mon, 27 Jul 2020 00:09:49 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     "Alexander A. Klimov" <grandmaster@al2klimov.de>
-Cc:     ssantosh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: reset: keystone-reset: Replace HTTP links with
- HTTPS ones
-Message-ID: <20200726215224.6lbxvs355gfsw6zr@earth.universe>
-References: <20200718094340.93087-1-grandmaster@al2klimov.de>
+To:     Qinglang Miao <miaoqinglang@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] power: Convert to DEFINE_SHOW_ATTRIBUTE
+Message-ID: <20200726220949.m456hoqcb5bis4ry@earth.universe>
+References: <20200716085849.11571-1-miaoqinglang@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cg6ijbao55d5aul2"
+        protocol="application/pgp-signature"; boundary="2twpfrl4w4tppxvr"
 Content-Disposition: inline
-In-Reply-To: <20200718094340.93087-1-grandmaster@al2klimov.de>
+In-Reply-To: <20200716085849.11571-1-miaoqinglang@huawei.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---cg6ijbao55d5aul2
+--2twpfrl4w4tppxvr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Jul 18, 2020 at 11:43:40AM +0200, Alexander A. Klimov wrote:
-> Rationale:
-> Reduces attack surface on kernel devs opening the links for MITM
-> as HTTPS traffic is much harder to manipulate.
+On Thu, Jul 16, 2020 at 04:58:49PM +0800, Qinglang Miao wrote:
+> From: Yongqiang Liu <liuyongqiang13@huawei.com>
 >=20
-> Deterministic algorithm:
-> For each file:
->   If not .svg:
->     For each line:
->       If doesn't contain `\bxmlns\b`:
->         For each link, `\bhttp://[^# \t\r\n]*(?:\w|/)`:
-> 	  If neither `\bgnu\.org/license`, nor `\bmozilla\.org/MPL\b`:
->             If both the HTTP and HTTPS versions
->             return 200 OK and serve the same content:
->               Replace HTTP with HTTPS.
+> Use DEFINE_SHOW_ATTRIBUTE macro to simplify the code.
 >=20
-> Signed-off-by: Alexander A. Klimov <grandmaster@al2klimov.de>
-> ---
+> Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
 
 Thanks, queued.
 
 -- Sebastian
 
->  Continuing my work started at 93431e0607e5.
->  See also: git log --oneline '--author=3DAlexander A. Klimov <grandmaster=
-@al2klimov.de>' v5.7..master
+>  drivers/power/supply/da9030_battery.c | 12 +-----------
+>  1 file changed, 1 insertion(+), 11 deletions(-)
 >=20
->  If there are any URLs to be removed completely
->  or at least not (just) HTTPSified:
->  Just clearly say so and I'll *undo my change*.
->  See also: https://lkml.org/lkml/2020/6/27/64
->=20
->  If there are any valid, but yet not changed URLs:
->  See: https://lkml.org/lkml/2020/6/26/837
->=20
->  If you apply the patch, please let me know.
->=20
->=20
->  drivers/power/reset/keystone-reset.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/k=
-eystone-reset.c
-> index ad11faae19c5..211eeef0c81a 100644
-> --- a/drivers/power/reset/keystone-reset.c
-> +++ b/drivers/power/reset/keystone-reset.c
-> @@ -2,7 +2,7 @@
->  /*
->   * TI keystone reboot driver
->   *
-> - * Copyright (C) 2014 Texas Instruments Incorporated. http://www.ti.com/
-> + * Copyright (C) 2014 Texas Instruments Incorporated. https://www.ti.com/
->   *
->   * Author: Ivan Khoronzhuk <ivan.khoronzhuk@ti.com>
->   */
+> diff --git a/drivers/power/supply/da9030_battery.c b/drivers/power/supply=
+/da9030_battery.c
+> index 292ecf875..0deba48d2 100644
+> --- a/drivers/power/supply/da9030_battery.c
+> +++ b/drivers/power/supply/da9030_battery.c
+> @@ -172,17 +172,7 @@ static int bat_debug_show(struct seq_file *s, void *=
+data)
+>  	return 0;
+>  }
+> =20
+> -static int debug_open(struct inode *inode, struct file *file)
+> -{
+> -	return single_open(file, bat_debug_show, inode->i_private);
+> -}
+> -
+> -static const struct file_operations bat_debug_fops =3D {
+> -	.open		=3D debug_open,
+> -	.read_iter		=3D seq_read_iter,
+> -	.llseek		=3D seq_lseek,
+> -	.release	=3D single_release,
+> -};
+> +DEFINE_SHOW_ATTRIBUTE(bat_debug);
+> =20
+>  static struct dentry *da9030_bat_create_debugfs(struct da9030_charger *c=
+harger)
+>  {
 > --=20
-> 2.27.0
+> 2.17.1
 >=20
 
---cg6ijbao55d5aul2
+--2twpfrl4w4tppxvr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8d+xUACgkQ2O7X88g7
-+pqvHRAApFb3Yl5hhhv1VEmFgGiArp4446cgOTu5x4B1BBt5DootWgKSLdsEDlMv
-DFlNckFPskaosl6UVZuQZz+6ka/CE9ojS0X4aiEEIjvnpDsI6LbjG7L3lFe7InDQ
-nnRr70b3UlwYGnrFZggjf1H+SEa/XKXNNigxf2dCzR/gMHj9u+K8OIHmSlYdJmkN
-4Fo7DnfbY7jOq49Bgtvek/gX65gteUmii971ERdjkXh/dSfap9nN1MyN6bwokOAH
-G7PmgiWGb8+xhi5g5t1IXBlqZFmGBlskiCV2KohXC6TwJiIS2l2w3ZN1Gl4p7xWe
-Q7h4kefAJVUS+7bAOvJP0l8domGV0u4RIS4Kt9hdD1LKdxBIzp9XPqmMgLd8aYp5
-ZQs1yTdkiBO60qSLmUqso+8JnQRwrLEoO3Fe3Td/dSZtSbjjvUW/aqTuASbOK6Wu
-l/6/CAKLJqent6THVyRFzfX/gU7iDTS7SPllcxsC2J9AV6fBKE4assPDQfA9PG5P
-4GmTw0wL9daf8cqcQPDOfX0qjcso/Abgk2lGErCydFRz/F2Lzj5FnuDegsTTYFMo
-FONlRhO6PxN87rK6Eci/hgPumvlVmZWTL8rZvK93rVL4RyWVr/MOVCZxgUrgk3el
-EZoqQrRqzntPcLBguLRSCp+4gA29zwLscBx8V7FBgOcUUqkkJq0=
-=daRY
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8d/ygACgkQ2O7X88g7
++pqmSA//fvwJAMXbsenKVkN26BoMn1sGqtCr6wiAveZsXonjqg6W8zMDW8AaDNJy
+RUid+1abBPkqEJ8Vvo9azVGmhHbauh+/467fY4mPyjf/Gill+FxIdap/hriiom5P
+XUKtQ9EzBroM55ktPkaH4W3lUjUTSpfuGdDc9DPKOi4Hr2VVo/pJ8PBrCm4g+MxE
+m2Ufzda9YYYzbN8Pj71k6PgYCFlUEAIuaOSPxCOrTu6hIGOyyenySooPlXtp1YbG
+Xd/o+1nHMuI+l/lKn9+ofh1xjrzz9uyOOKktPSlQhHtLG+zcfM9fHvTqpienqP3Z
+qZQ12CCjbraBkduQpJtVKlyYRDBX6/xmgpvx7qYCNk57V1dyzcwDlpOUho5dwQ9D
+Q2IzEpp6sP7R1Bj3Z03RSKtRtcl4GWumD1uKJFiZdObgIhqU8MobLE5nUYU5tdZt
+zUPTkDgxOInHxq8btmM/pWpA9OlEeqmsNffCE9k5UCaoA4kYnl56CeEBjf7fH14x
+IParuo95m1Ybi88QMu/grbXUmtHdZnGbqrSshF5zvSxaTqNupxFI+6WeEhYiRSWi
+2xOrzTe/DwuFNJ8SA1A96+v1txu8pk+JBXkwnY4NBju9+cBQJ31L8ebgTl0kpfhF
+c+a5z2qaLwCm/0/ECnVpd8xn1N20Ipgx83idM7zKQlB1qYYRr8w=
+=iYzJ
 -----END PGP SIGNATURE-----
 
---cg6ijbao55d5aul2--
+--2twpfrl4w4tppxvr--
