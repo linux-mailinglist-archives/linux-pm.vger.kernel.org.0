@@ -2,104 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1A22FC40
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 00:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6FA22FCAF
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 01:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgG0Wgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 18:36:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726171AbgG0Wgt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Jul 2020 18:36:49 -0400
-Received: from earth.universe (unknown [185.213.155.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 582DA206D7;
-        Mon, 27 Jul 2020 22:36:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595889408;
-        bh=Q1+CdX6g1uX5/O4dcOLZ5AB/jAjBef9C9fNZJmce1m0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OX4KJ4iq2Aza8rqPoReQm3fxVnq8XzWC0xaUVoAK0XQvyPTpJhf0sFbyztkBGJS/R
-         44zN+Ed8FCn80kX+4SeRqPFP6+mg7L0deOIXJ4mRqKXpxpLRN4nhk9r0PzvwTuTkCz
-         FFhDe6wqOUi7SVs1c8zJahy/rDixare7AmYGvnYQ=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 1A3243C0B87; Tue, 28 Jul 2020 00:36:46 +0200 (CEST)
-Date:   Tue, 28 Jul 2020 00:36:46 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Dan Murphy <dmurphy@ti.com>
-Cc:     afd@ti.com, pali@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robh@kernel.org
-Subject: Re: [PATCH v3 2/4] power: supply: bq27xxx_battery: Add the BQ27561
- Battery monitor
-Message-ID: <20200727223646.vjnkyrmipwin3pj6@earth.universe>
-References: <20200721163206.25438-1-dmurphy@ti.com>
- <20200721163206.25438-2-dmurphy@ti.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dzrshq2akzwyrchr"
-Content-Disposition: inline
-In-Reply-To: <20200721163206.25438-2-dmurphy@ti.com>
+        id S1726952AbgG0XKn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 19:10:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726340AbgG0XKm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 19:10:42 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0641C0619D2
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 16:10:41 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a5so6461422wrm.6
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 16:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=X+XgM3FnODj9118Te+p3joAjz7Jojf3SmbRCLLwhj1Q=;
+        b=SFtaoChSIVBjn4GTxMr4LGqSJOcKGWnGwvCGbiqriyC4uOo8+dg9nmzgnPtRC7FTRh
+         uOGbq3CCnd65nlR6sebeY0KzR9HYLloLLafgHKrURUl5gNbcmWUZ31YCxLBnxm5WGvk/
+         I38E1IgL8ajV5rbM+SaB3Lr5yeWAwUctBsMx9TyiU8VAcKCis3jkYV1zps4UsuvBYTlK
+         Q92nrF0djoq5tfDcCkk9WxR4m6r4+O36HUTR9KpuyFQoKyPHggmVP7Vqz+rk46tcdIqR
+         hPW06x8x4/IQ/rQ3F1Jni60zOpob1/c/qtAVNTG2ItvtEOlov78ckaEwr6i3zu0wl9M6
+         BCgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=X+XgM3FnODj9118Te+p3joAjz7Jojf3SmbRCLLwhj1Q=;
+        b=Cyh7JbUd6SS4/fIAgArd+8wXBr+vXQ8gnxKGtGCTjGIeKX2wGdiEJq9DQSANCpqw1L
+         O7rWGvQX0dA3QDDeODoaFx9To/NInkEQEl4REljYtg2m/yk/xQhryIccxBiOLpx7k6BR
+         G3UjBPdUuPmh6k+kT9B932hsnV+0uLd1It/QYPe0SSjoVCGX1HHeGyYMetrc3XhEBDs0
+         wxetkSDycgt/hTgsb2SDf+rnzojgBwPCJBwEJGTSzhOJwMpUKAMvVnMMJKf23w/gRPS6
+         Cu+DaTDpRqEVCs3WVQ2v4ccn/tFk349zAXAYyf4PcKpJkzDXUhv/F/R9XgO7ddJ0dIqJ
+         NQig==
+X-Gm-Message-State: AOAM533WjNQm6S4Mansn25HwUIt/Kw/yPBeSfH+4YoH/dK03FWbugwA3
+        GuP040j1YFJUkVn7lRkbWXbaPQ==
+X-Google-Smtp-Source: ABdhPJzZtV9IgcG34Ze8qQEdH3JL/CHLSiUvr9gZK/tVTWdYSUBgWbvgaxwCLT+zt2eZxNxYi/SrlQ==
+X-Received: by 2002:a5d:678a:: with SMTP id v10mr16540345wru.423.1595891440468;
+        Mon, 27 Jul 2020 16:10:40 -0700 (PDT)
+Received: from localhost.localdomain (lns-bzn-59-82-252-131-168.adsl.proxad.net. [82.252.131.168])
+        by smtp.gmail.com with ESMTPSA id w14sm14238251wrt.55.2020.07.27.16.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 16:10:39 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rui.zhang@intel.com
+Cc:     amit.kucheria@linaro.org, andrzej.p@collabora.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thierry.reding@gmail.com
+Subject: [PATCH] thermal: core: Add thermal zone enable/disable notification
+Date:   Tue, 28 Jul 2020 01:10:33 +0200
+Message-Id: <20200727231033.26512-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Now the calls to enable/disable a thermal zone are centralized in a
+call to a function, we can add in these the corresponding netlink
+notifications.
 
---dzrshq2akzwyrchr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Hi,
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9748fbb9a3a1..72bf159bcecc 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -509,6 +509,11 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+ 
+ 	thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+ 
++	if (mode == THERMAL_DEVICE_ENABLED)
++		thermal_notify_tz_enable(tz->id);
++	else
++		thermal_notify_tz_disable(tz->id);
++
+ 	return ret;
+ }
+ 
+-- 
+2.17.1
 
-On Tue, Jul 21, 2020 at 11:32:04AM -0500, Dan Murphy wrote:
-> Add the Texas Instruments BQ27561 battery monitor.  The register address
-> map is laid out the same as compared to other devices within the file.
-> The battery status register has differing bits to determine if the
-> battery is full, discharging or dead.
->=20
-> Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> ---
-
-Looks mostly good to me, but
-
-[...]
-
-> @@ -1710,6 +1769,13 @@ static int bq27xxx_battery_capacity_level(struct b=
-q27xxx_device_info *di,
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
->  		else
->  			level =3D POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
-> +	} else if (di->opts & BQ27561_O_BITS) {
-> +		if (di->cache.flags & BQ27561_FLAG_FC)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_FULL;
-> +		else if (di->cache.flags & BQ27561_FLAG_DIS_CH)
-> +			level =3D POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-
-Shouldn't this be checking for FLAG_FDC instead of FLAG_DIS_CH?
-
--- Sebastian
-
---dzrshq2akzwyrchr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8fVvsACgkQ2O7X88g7
-+pq4BhAAobVH8GBXmthjmhclE8H+qS3thRQaDNbpb4ind+SP2i5f9YdaIf9Nxa/e
-XFWS1SbU1AcTTs6jGE2OeGt8dHqIsp/fp/Nhpog17e+4/nujlMyYSqFJzasalGTd
-lz5zMvfmfIBbt++UcsccFXoUNG3YKNP/pc4rKMQNL4iyqEWyGj+S0SCqjBNe409U
-f0DMj2/32+RbJVB1GONooer/9drlpShdOND62ALDxXUBbVhT2Zh6bcMX0R7YRmSd
-RruoWxlHH1fUFeBNMQAcBal6WAxmPu23oLLDnXAvqcehioGnBWVMr4nVeeuMXpuV
-0/LLXgz5PIzwsGvVLq6jkLXzjPIH9uoaiyJoJyqGOBXVOal39tDG8Vt5stNilkNo
-zGUd9ebkxBVBcS5AhEWrPTEXkwKRwKs+wbIq6ccpfi22b3gI7GsjGLwBhdJBynvk
-DloHl/dM3+HpKo0h5S56cMnEFt/08WqetU2/83XW1+TRpVq3lH7jueTGWArK38qs
-FhHvs+pM3o2mWLrYIBTpEO3048Sb93vauby20MMP14CpSafrOfYZXYWcsoC4WIZa
-T99D19eSJvSpRULxjHHQqA+KN6lP+UZ4D8BDXCgeyXcen9DXr/N+WrE2CGzEWj5m
-1ImaoB45hu1HZgt53ezthI4Ak6EZzbg5ObRFl92zPSH/7hqD7rI=
-=G+a9
------END PGP SIGNATURE-----
-
---dzrshq2akzwyrchr--
