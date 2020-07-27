@@ -2,139 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4041622E469
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 05:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7586E22E5DC
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 08:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgG0DZy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 26 Jul 2020 23:25:54 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34566 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726817AbgG0DZy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 26 Jul 2020 23:25:54 -0400
-X-UUID: b5aec717104440f5817f9b1245681e01-20200727
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ts2TbemboXTjPLm3syKaYD/dvm0+IAdQpXqli+IsEmE=;
-        b=Q1oTugg20XjTN70cWrd9vhCDy6XdAgHFPySEZJiOVK058MKVnbRiFXQp+634LJBUdbzvy41lhfYSWLfQBGfbjF6W7N0r0JBq4BFf8hlto9iShD2aYxTPC4J1G2TTQKMpd94UHfI7yYv47nBBSbLPRWX0ia0VVSlz+8y/xNMTn48=;
-X-UUID: b5aec717104440f5817f9b1245681e01-20200727
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <neal.liu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1411802195; Mon, 27 Jul 2020 11:25:49 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 27 Jul 2020 11:25:47 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 27 Jul 2020 11:25:47 +0800
-From:   Neal Liu <neal.liu@mediatek.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>
-CC:     Neal Liu <neal.liu@mediatek.com>, <linux-acpi@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
-Subject: [PATCH v3] cpuidle: change enter_s2idle() prototype
-Date:   Mon, 27 Jul 2020 11:25:46 +0800
-Message-ID: <1595820346-4361-2-git-send-email-neal.liu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1595820346-4361-1-git-send-email-neal.liu@mediatek.com>
-References: <1595820346-4361-1-git-send-email-neal.liu@mediatek.com>
+        id S1726320AbgG0G1K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 02:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbgG0G1J (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 02:27:09 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B2DC0619D2
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jul 2020 23:27:09 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id j23so1443269vsq.7
+        for <linux-pm@vger.kernel.org>; Sun, 26 Jul 2020 23:27:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M0graZ8FFIpnmTRz+2ZkRPfr1C9GlUQ+dh9E2ZpySws=;
+        b=Vr0Jh1QFjAnD1Pu4tS+blqykY24ycyLQ2ZRzd6XRMDi5v+FD1T7L3WP4MDPBplgoBt
+         j2fXXl4nISH5YQQXMWmeH/s62Zbc8s2fxESYW54T+zY5zGI+nQhIBYNcfQXcGwy86g+E
+         8OUM5FgDULQ6oaIDQVYPUG64jvHPqeyOBsF3L87p8jhLjaCqCObyhQa/ZbqnsD3yPFgx
+         ffKrqlN3B9NY8dYPCIXNVLe/g3uKbv4R7og7nC4hcMhKwuPz3SND+v5+R/gd6zTx12zA
+         uO4fxvb1B+qp5VhC8bX4r7FNl8EPL78LfV/vknBUlz8EouIWDtuivtzPOOJbkaCsVJJm
+         rHIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M0graZ8FFIpnmTRz+2ZkRPfr1C9GlUQ+dh9E2ZpySws=;
+        b=YC93Xhi7c4ccdRwBlqOWF9ceIpwBdzaCbkYe/6lt2V/yorSPthy4t0DgPiMaEByuo5
+         FO6YmXa1bP6MVDeTYU861cFZ0LHsA53yQ11MVFMdgmIRyYd0AJWTRcBLz0IfzYin9XXU
+         ND8im2V49ZNg9xOTnvKBxU6cwyCWKjh4cBipMJiOAtdHPSY8WzH0/ta3MZNfVznLlGcp
+         s+ZFEfwfjQycmU1wrwxoMuyyov8F+pTD5DvKwiB7bdPqSqF+EHnzNIA67v+Neiji5qWV
+         oljbWmlVCpfSN15h1K/bPTT+Z9oREqoAUiIUIIOZwd+l3gurY2rmFdoiCvtBfRuguFnp
+         expQ==
+X-Gm-Message-State: AOAM533AvcCae11+HAunh06dsmNZQPb63DaX9dS0V5xksKM1veWHa/0z
+        pEIboj5sWGYIMANWM+uPjA5TLaksIJ5O15xqPFi0sQ==
+X-Google-Smtp-Source: ABdhPJxMquLnrdEoUVidLeVzJumC6EkyIEPo6Y42BA0b/l1V1bK0LHTV2eMYoKyMhPErKFKElkpbiqdT+e2zktvRqKg=
+X-Received: by 2002:a67:6b05:: with SMTP id g5mr14722654vsc.9.1595831228649;
+ Sun, 26 Jul 2020 23:27:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20200629144926.665-1-shawn.guo@linaro.org> <20200629144926.665-3-shawn.guo@linaro.org>
+In-Reply-To: <20200629144926.665-3-shawn.guo@linaro.org>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Mon, 27 Jul 2020 11:56:57 +0530
+Message-ID: <CAHLCerMyEsvuhNPnwDow5JYVAbem0Rzs+5-uzKZNeFt+3rYHQg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] thermal: qcom: tsens-v0_1: Add support for MSM8939
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Q29udHJvbCBGbG93IEludGVncml0eShDRkkpIGlzIGEgc2VjdXJpdHkgbWVjaGFuaXNtIHRoYXQg
-ZGlzYWxsb3dzDQpjaGFuZ2VzIHRvIHRoZSBvcmlnaW5hbCBjb250cm9sIGZsb3cgZ3JhcGggb2Yg
-YSBjb21waWxlZCBiaW5hcnksDQptYWtpbmcgaXQgc2lnbmlmaWNhbnRseSBoYXJkZXIgdG8gcGVy
-Zm9ybSBzdWNoIGF0dGFja3MuDQoNCmluaXRfc3RhdGVfbm9kZSgpIGFzc2lnbiBzYW1lIGZ1bmN0
-aW9uIGNhbGxiYWNrIHRvIGRpZmZlcmVudA0KZnVuY3Rpb24gcG9pbnRlciBkZWNsYXJhdGlvbnMu
-DQoNCnN0YXRpYyBpbnQgaW5pdF9zdGF0ZV9ub2RlKHN0cnVjdCBjcHVpZGxlX3N0YXRlICppZGxl
-X3N0YXRlLA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgY29uc3Qgc3RydWN0IG9mX2Rldmlj
-ZV9pZCAqbWF0Y2hlcywNCiAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cnVjdCBkZXZpY2Vf
-bm9kZSAqc3RhdGVfbm9kZSkgeyAuLi4NCiAgICAgICAgaWRsZV9zdGF0ZS0+ZW50ZXIgPSBtYXRj
-aF9pZC0+ZGF0YTsgLi4uDQogICAgICAgIGlkbGVfc3RhdGUtPmVudGVyX3MyaWRsZSA9IG1hdGNo
-X2lkLT5kYXRhOyB9DQoNCkZ1bmN0aW9uIGRlY2xhcmF0aW9uczoNCg0Kc3RydWN0IGNwdWlkbGVf
-c3RhdGUgeyAuLi4NCiAgICAgICAgaW50ICgqZW50ZXIpIChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2Ug
-KmRldiwNCiAgICAgICAgICAgICAgICAgICAgICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwN
-CiAgICAgICAgICAgICAgICAgICAgICBpbnQgaW5kZXgpOw0KDQogICAgICAgIHZvaWQgKCplbnRl
-cl9zMmlkbGUpIChzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIHN0cnVjdCBjcHVpZGxlX2RyaXZlciAqZHJ2LA0KICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgaW50IGluZGV4KTsgfTsNCg0KSW4gdGhpcyBjYXNlLCBlaXRoZXIgZW50
-ZXIoKSBvciBlbnRlcl9zMmlkbGUoKSB3b3VsZCBjYXVzZSBDRkkgY2hlY2sNCmZhaWxlZCBzaW5j
-ZSB0aGV5IHVzZSBzYW1lIGNhbGxlZS4NCg0KQWxpZ24gZnVuY3Rpb24gcHJvdG90eXBlIG9mIGVu
-dGVyKCkgc2luY2UgaXQgbmVlZHMgcmV0dXJuIHZhbHVlIGZvcg0Kc29tZSB1c2UgY2FzZXMuIFRo
-ZSByZXR1cm4gdmFsdWUgb2YgZW50ZXJfczJpZGxlKCkgaXMgbm8NCm5lZWQgY3VycmVudGx5Lg0K
-DQpTaWduZWQtb2ZmLWJ5OiBOZWFsIExpdSA8bmVhbC5saXVAbWVkaWF0ZWsuY29tPg0KUmV2aWV3
-ZWQtYnk6IFNhbWkgVG9sdmFuZW4gPHNhbWl0b2x2YW5lbkBnb29nbGUuY29tPg0KLS0tDQogZHJp
-dmVycy9hY3BpL3Byb2Nlc3Nvcl9pZGxlLmMgICB8ICAgIDYgKysrKy0tDQogZHJpdmVycy9jcHVp
-ZGxlL2NwdWlkbGUtdGVncmEuYyB8ICAgIDggKysrKystLS0NCiBkcml2ZXJzL2lkbGUvaW50ZWxf
-aWRsZS5jICAgICAgIHwgICAgNiArKysrLS0NCiBpbmNsdWRlL2xpbnV4L2NwdWlkbGUuaCAgICAg
-ICAgIHwgICAgOSArKysrKystLS0NCiA0IGZpbGVzIGNoYW5nZWQsIDE5IGluc2VydGlvbnMoKyks
-IDEwIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3Byb2Nlc3Nvcl9p
-ZGxlLmMgYi9kcml2ZXJzL2FjcGkvcHJvY2Vzc29yX2lkbGUuYw0KaW5kZXggNzU1MzRjNS4uNmZm
-YjZjOSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvYWNwaS9wcm9jZXNzb3JfaWRsZS5jDQorKysgYi9k
-cml2ZXJzL2FjcGkvcHJvY2Vzc29yX2lkbGUuYw0KQEAgLTY1NSw4ICs2NTUsOCBAQCBzdGF0aWMg
-aW50IGFjcGlfaWRsZV9lbnRlcihzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCiAJcmV0dXJu
-IGluZGV4Ow0KIH0NCiANCi1zdGF0aWMgdm9pZCBhY3BpX2lkbGVfZW50ZXJfczJpZGxlKHN0cnVj
-dCBjcHVpZGxlX2RldmljZSAqZGV2LA0KLQkJCQkgICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRy
-diwgaW50IGluZGV4KQ0KK3N0YXRpYyBpbnQgYWNwaV9pZGxlX2VudGVyX3MyaWRsZShzdHJ1Y3Qg
-Y3B1aWRsZV9kZXZpY2UgKmRldiwNCisJCQkJICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwg
-aW50IGluZGV4KQ0KIHsNCiAJc3RydWN0IGFjcGlfcHJvY2Vzc29yX2N4ICpjeCA9IHBlcl9jcHUo
-YWNwaV9jc3RhdGVbaW5kZXhdLCBkZXYtPmNwdSk7DQogDQpAQCAtNjc0LDYgKzY3NCw4IEBAIHN0
-YXRpYyB2b2lkIGFjcGlfaWRsZV9lbnRlcl9zMmlkbGUoc3RydWN0IGNwdWlkbGVfZGV2aWNlICpk
-ZXYsDQogCQl9DQogCX0NCiAJYWNwaV9pZGxlX2RvX2VudHJ5KGN4KTsNCisNCisJcmV0dXJuIDA7
-DQogfQ0KIA0KIHN0YXRpYyBpbnQgYWNwaV9wcm9jZXNzb3Jfc2V0dXBfY3B1aWRsZV9jeChzdHJ1
-Y3QgYWNwaV9wcm9jZXNzb3IgKnByLA0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1aWRsZS9jcHVp
-ZGxlLXRlZ3JhLmMgYi9kcml2ZXJzL2NwdWlkbGUvY3B1aWRsZS10ZWdyYS5jDQppbmRleCAxNTAw
-NDU4Li5hMTJmYjE0IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9jcHVpZGxlL2NwdWlkbGUtdGVncmEu
-Yw0KKysrIGIvZHJpdmVycy9jcHVpZGxlL2NwdWlkbGUtdGVncmEuYw0KQEAgLTI1MywxMSArMjUz
-LDEzIEBAIHN0YXRpYyBpbnQgdGVncmFfY3B1aWRsZV9lbnRlcihzdHJ1Y3QgY3B1aWRsZV9kZXZp
-Y2UgKmRldiwNCiAJcmV0dXJuIGVyciA/IC0xIDogaW5kZXg7DQogfQ0KIA0KLXN0YXRpYyB2b2lk
-IHRlZ3JhMTE0X2VudGVyX3MyaWRsZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCi0JCQkJ
-ICBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwNCi0JCQkJICBpbnQgaW5kZXgpDQorc3RhdGlj
-IGludCB0ZWdyYTExNF9lbnRlcl9zMmlkbGUoc3RydWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsDQor
-CQkJCSBzdHJ1Y3QgY3B1aWRsZV9kcml2ZXIgKmRydiwNCisJCQkJIGludCBpbmRleCkNCiB7DQog
-CXRlZ3JhX2NwdWlkbGVfZW50ZXIoZGV2LCBkcnYsIGluZGV4KTsNCisNCisJcmV0dXJuIDA7DQog
-fQ0KIA0KIC8qDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9pZGxlL2ludGVsX2lkbGUuYyBiL2RyaXZl
-cnMvaWRsZS9pbnRlbF9pZGxlLmMNCmluZGV4IGY0NDk1ODQuLmIxNzhkYTMgMTAwNjQ0DQotLS0g
-YS9kcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jDQorKysgYi9kcml2ZXJzL2lkbGUvaW50ZWxfaWRs
-ZS5jDQpAQCAtMTc1LDEzICsxNzUsMTUgQEAgc3RhdGljIF9fY3B1aWRsZSBpbnQgaW50ZWxfaWRs
-ZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCiAgKiBJbnZva2VkIGFzIGEgc3VzcGVuZC10
-by1pZGxlIGNhbGxiYWNrIHJvdXRpbmUgd2l0aCBmcm96ZW4gdXNlciBzcGFjZSwgZnJvemVuDQog
-ICogc2NoZWR1bGVyIHRpY2sgYW5kIHN1c3BlbmRlZCBzY2hlZHVsZXIgY2xvY2sgb24gdGhlIHRh
-cmdldCBDUFUuDQogICovDQotc3RhdGljIF9fY3B1aWRsZSB2b2lkIGludGVsX2lkbGVfczJpZGxl
-KHN0cnVjdCBjcHVpZGxlX2RldmljZSAqZGV2LA0KLQkJCQkJc3RydWN0IGNwdWlkbGVfZHJpdmVy
-ICpkcnYsIGludCBpbmRleCkNCitzdGF0aWMgX19jcHVpZGxlIGludCBpbnRlbF9pZGxlX3MyaWRs
-ZShzdHJ1Y3QgY3B1aWRsZV9kZXZpY2UgKmRldiwNCisJCQkJICAgICAgIHN0cnVjdCBjcHVpZGxl
-X2RyaXZlciAqZHJ2LCBpbnQgaW5kZXgpDQogew0KIAl1bnNpZ25lZCBsb25nIGVheCA9IGZsZzJN
-V0FJVChkcnYtPnN0YXRlc1tpbmRleF0uZmxhZ3MpOw0KIAl1bnNpZ25lZCBsb25nIGVjeCA9IDE7
-IC8qIGJyZWFrIG9uIGludGVycnVwdCBmbGFnICovDQogDQogCW13YWl0X2lkbGVfd2l0aF9oaW50
-cyhlYXgsIGVjeCk7DQorDQorCXJldHVybiAwOw0KIH0NCiANCiAvKg0KZGlmZiAtLWdpdCBhL2lu
-Y2x1ZGUvbGludXgvY3B1aWRsZS5oIGIvaW5jbHVkZS9saW51eC9jcHVpZGxlLmgNCmluZGV4IGVj
-MmVmNjMuLmI2NTkwOWEgMTAwNjQ0DQotLS0gYS9pbmNsdWRlL2xpbnV4L2NwdWlkbGUuaA0KKysr
-IGIvaW5jbHVkZS9saW51eC9jcHVpZGxlLmgNCkBAIC02NSwxMCArNjUsMTMgQEAgc3RydWN0IGNw
-dWlkbGVfc3RhdGUgew0KIAkgKiBDUFVzIGV4ZWN1dGUgLT5lbnRlcl9zMmlkbGUgd2l0aCB0aGUg
-bG9jYWwgdGljayBvciBlbnRpcmUgdGltZWtlZXBpbmcNCiAJICogc3VzcGVuZGVkLCBzbyBpdCBt
-dXN0IG5vdCByZS1lbmFibGUgaW50ZXJydXB0cyBhdCBhbnkgcG9pbnQgKGV2ZW4NCiAJICogdGVt
-cG9yYXJpbHkpIG9yIGF0dGVtcHQgdG8gY2hhbmdlIHN0YXRlcyBvZiBjbG9jayBldmVudCBkZXZp
-Y2VzLg0KKwkgKg0KKwkgKiBUaGlzIGNhbGxiYWNrIG1heSBwb2ludCB0byB0aGUgc2FtZSBmdW5j
-dGlvbiBhcyAtPmVudGVyIGlmIGFsbCBvZg0KKwkgKiB0aGUgYWJvdmUgcmVxdWlyZW1lbnRzIGFy
-ZSBtZXQgYnkgaXQuDQogCSAqLw0KLQl2b2lkICgqZW50ZXJfczJpZGxlKSAoc3RydWN0IGNwdWlk
-bGVfZGV2aWNlICpkZXYsDQotCQkJICAgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsDQot
-CQkJICAgICAgaW50IGluZGV4KTsNCisJaW50ICgqZW50ZXJfczJpZGxlKShzdHJ1Y3QgY3B1aWRs
-ZV9kZXZpY2UgKmRldiwNCisJCQkgICAgc3RydWN0IGNwdWlkbGVfZHJpdmVyICpkcnYsDQorCQkJ
-ICAgIGludCBpbmRleCk7DQogfTsNCiANCiAvKiBJZGxlIFN0YXRlIEZsYWdzICovDQotLSANCjEu
-Ny45LjUNCg==
+On Tue, Jun 30, 2020 at 1:09 AM Shawn Guo <shawn.guo@linaro.org> wrote:
+>
+> The TSENS integrated on MSM8939 is a v0_1 device with 10 sensors.
+> Different from its predecessor MSM8916, where 'calib_sel' bits sit in
+> separate qfprom word, MSM8939 has 'cailb' and 'calib_sel' bits mixed and
+> spread on discrete offsets.  That's why all qfprom bits are read as one
+> go and later mapped to calibration data for MSM8939.
+>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
 
+Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
+
+> ---
+>  drivers/thermal/qcom/tsens-v0_1.c | 144 +++++++++++++++++++++++++++++-
+>  drivers/thermal/qcom/tsens.c      |   3 +
+>  drivers/thermal/qcom/tsens.h      |   2 +-
+>  3 files changed, 147 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index 959a9371d205..e64db5f80d90 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -48,6 +48,63 @@
+>  #define MSM8916_CAL_SEL_MASK   0xe0000000
+>  #define MSM8916_CAL_SEL_SHIFT  29
+>
+> +/* eeprom layout data for 8939 */
+> +#define MSM8939_BASE0_MASK     0x000000ff
+> +#define MSM8939_BASE1_MASK     0xff000000
+> +#define MSM8939_BASE0_SHIFT    0
+> +#define MSM8939_BASE1_SHIFT    24
+> +
+> +#define MSM8939_S0_P1_MASK     0x000001f8
+> +#define MSM8939_S1_P1_MASK     0x001f8000
+> +#define MSM8939_S2_P1_MASK_0_4 0xf8000000
+> +#define MSM8939_S2_P1_MASK_5   0x00000001
+> +#define MSM8939_S3_P1_MASK     0x00001f80
+> +#define MSM8939_S4_P1_MASK     0x01f80000
+> +#define MSM8939_S5_P1_MASK     0x00003f00
+> +#define MSM8939_S6_P1_MASK     0x03f00000
+> +#define MSM8939_S7_P1_MASK     0x0000003f
+> +#define MSM8939_S8_P1_MASK     0x0003f000
+> +#define MSM8939_S9_P1_MASK     0x07e00000
+> +
+> +#define MSM8939_S0_P2_MASK     0x00007e00
+> +#define MSM8939_S1_P2_MASK     0x07e00000
+> +#define MSM8939_S2_P2_MASK     0x0000007e
+> +#define MSM8939_S3_P2_MASK     0x0007e000
+> +#define MSM8939_S4_P2_MASK     0x7e000000
+> +#define MSM8939_S5_P2_MASK     0x000fc000
+> +#define MSM8939_S6_P2_MASK     0xfc000000
+> +#define MSM8939_S7_P2_MASK     0x00000fc0
+> +#define MSM8939_S8_P2_MASK     0x00fc0000
+> +#define MSM8939_S9_P2_MASK_0_4 0xf8000000
+> +#define MSM8939_S9_P2_MASK_5   0x00002000
+> +
+> +#define MSM8939_S0_P1_SHIFT    3
+> +#define MSM8939_S1_P1_SHIFT    15
+> +#define MSM8939_S2_P1_SHIFT_0_4        27
+> +#define MSM8939_S2_P1_SHIFT_5  0
+> +#define MSM8939_S3_P1_SHIFT    7
+> +#define MSM8939_S4_P1_SHIFT    19
+> +#define MSM8939_S5_P1_SHIFT    8
+> +#define MSM8939_S6_P1_SHIFT    20
+> +#define MSM8939_S7_P1_SHIFT    0
+> +#define MSM8939_S8_P1_SHIFT    12
+> +#define MSM8939_S9_P1_SHIFT    21
+> +
+> +#define MSM8939_S0_P2_SHIFT    9
+> +#define MSM8939_S1_P2_SHIFT    21
+> +#define MSM8939_S2_P2_SHIFT    1
+> +#define MSM8939_S3_P2_SHIFT    13
+> +#define MSM8939_S4_P2_SHIFT    25
+> +#define MSM8939_S5_P2_SHIFT    14
+> +#define MSM8939_S6_P2_SHIFT    26
+> +#define MSM8939_S7_P2_SHIFT    6
+> +#define MSM8939_S8_P2_SHIFT    18
+> +#define MSM8939_S9_P2_SHIFT_0_4        27
+> +#define MSM8939_S9_P2_SHIFT_5  13
+> +
+> +#define MSM8939_CAL_SEL_MASK   0x7
+> +#define MSM8939_CAL_SEL_SHIFT  0
+> +
+>  /* eeprom layout data for 8974 */
+>  #define BASE1_MASK             0xff
+>  #define S0_P1_MASK             0x3f00
+> @@ -189,6 +246,76 @@ static int calibrate_8916(struct tsens_priv *priv)
+>         return 0;
+>  }
+>
+> +static int calibrate_8939(struct tsens_priv *priv)
+> +{
+> +       int base0 = 0, base1 = 0, i;
+> +       u32 p1[10], p2[10];
+> +       int mode = 0;
+> +       u32 *qfprom_cdata;
+> +       u32 cdata[6];
+> +
+> +       qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+> +       if (IS_ERR(qfprom_cdata))
+> +               return PTR_ERR(qfprom_cdata);
+> +
+> +       /* Mapping between qfprom nvmem and calibration data */
+> +       cdata[0] = qfprom_cdata[12];
+> +       cdata[1] = qfprom_cdata[13];
+> +       cdata[2] = qfprom_cdata[0];
+> +       cdata[3] = qfprom_cdata[1];
+> +       cdata[4] = qfprom_cdata[22];
+> +       cdata[5] = qfprom_cdata[21];
+> +
+> +       mode = (cdata[0] & MSM8939_CAL_SEL_MASK) >> MSM8939_CAL_SEL_SHIFT;
+> +       dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+> +
+> +       switch (mode) {
+> +       case TWO_PT_CALIB:
+> +               base1 = (cdata[3] & MSM8939_BASE1_MASK) >> MSM8939_BASE1_SHIFT;
+> +               p2[0] = (cdata[0] & MSM8939_S0_P2_MASK) >> MSM8939_S0_P2_SHIFT;
+> +               p2[1] = (cdata[0] & MSM8939_S1_P2_MASK) >> MSM8939_S1_P2_SHIFT;
+> +               p2[2] = (cdata[1] & MSM8939_S2_P2_MASK) >> MSM8939_S2_P2_SHIFT;
+> +               p2[3] = (cdata[1] & MSM8939_S3_P2_MASK) >> MSM8939_S3_P2_SHIFT;
+> +               p2[4] = (cdata[1] & MSM8939_S4_P2_MASK) >> MSM8939_S4_P2_SHIFT;
+> +               p2[5] = (cdata[2] & MSM8939_S5_P2_MASK) >> MSM8939_S5_P2_SHIFT;
+> +               p2[6] = (cdata[2] & MSM8939_S6_P2_MASK) >> MSM8939_S6_P2_SHIFT;
+> +               p2[7] = (cdata[3] & MSM8939_S7_P2_MASK) >> MSM8939_S7_P2_SHIFT;
+> +               p2[8] = (cdata[3] & MSM8939_S8_P2_MASK) >> MSM8939_S8_P2_SHIFT;
+> +               p2[9] = (cdata[4] & MSM8939_S9_P2_MASK_0_4) >> MSM8939_S9_P2_SHIFT_0_4;
+> +               p2[9] |= ((cdata[5] & MSM8939_S9_P2_MASK_5) >> MSM8939_S9_P2_SHIFT_5) << 5;
+> +               for (i = 0; i < priv->num_sensors; i++)
+> +                       p2[i] = (base1 + p2[i]) << 2;
+> +               fallthrough;
+> +       case ONE_PT_CALIB2:
+> +               base0 = (cdata[2] & MSM8939_BASE0_MASK) >> MSM8939_BASE0_SHIFT;
+> +               p1[0] = (cdata[0] & MSM8939_S0_P1_MASK) >> MSM8939_S0_P1_SHIFT;
+> +               p1[1] = (cdata[0] & MSM8939_S1_P1_MASK) >> MSM8939_S1_P1_SHIFT;
+> +               p1[2] = (cdata[0] & MSM8939_S2_P1_MASK_0_4) >> MSM8939_S2_P1_SHIFT_0_4;
+> +               p1[2] |= ((cdata[1] & MSM8939_S2_P1_MASK_5) >> MSM8939_S2_P1_SHIFT_5) << 5;
+> +               p1[3] = (cdata[1] & MSM8939_S3_P1_MASK) >> MSM8939_S3_P1_SHIFT;
+> +               p1[4] = (cdata[1] & MSM8939_S4_P1_MASK) >> MSM8939_S4_P1_SHIFT;
+> +               p1[5] = (cdata[2] & MSM8939_S5_P1_MASK) >> MSM8939_S5_P1_SHIFT;
+> +               p1[6] = (cdata[2] & MSM8939_S6_P1_MASK) >> MSM8939_S6_P1_SHIFT;
+> +               p1[7] = (cdata[3] & MSM8939_S7_P1_MASK) >> MSM8939_S7_P1_SHIFT;
+> +               p1[8] = (cdata[3] & MSM8939_S8_P1_MASK) >> MSM8939_S8_P1_SHIFT;
+> +               p1[9] = (cdata[4] & MSM8939_S9_P1_MASK) >> MSM8939_S9_P1_SHIFT;
+> +               for (i = 0; i < priv->num_sensors; i++)
+> +                       p1[i] = ((base0) + p1[i]) << 2;
+> +               break;
+> +       default:
+> +               for (i = 0; i < priv->num_sensors; i++) {
+> +                       p1[i] = 500;
+> +                       p2[i] = 780;
+> +               }
+> +               break;
+> +       }
+> +
+> +       compute_intercept_slope(priv, p1, p2, mode);
+> +       kfree(qfprom_cdata);
+> +
+> +       return 0;
+> +}
+> +
+>  static int calibrate_8974(struct tsens_priv *priv)
+>  {
+>         int base1 = 0, base2 = 0, i;
+> @@ -325,7 +452,7 @@ static int calibrate_8974(struct tsens_priv *priv)
+>         return 0;
+>  }
+>
+> -/* v0.1: 8916, 8974 */
+> +/* v0.1: 8916, 8939, 8974 */
+>
+>  static struct tsens_features tsens_v0_1_feat = {
+>         .ver_major      = VER_0_1,
+> @@ -386,6 +513,21 @@ struct tsens_plat_data data_8916 = {
+>         .fields = tsens_v0_1_regfields,
+>  };
+>
+> +static const struct tsens_ops ops_8939 = {
+> +       .init           = init_common,
+> +       .calibrate      = calibrate_8939,
+> +       .get_temp       = get_temp_common,
+> +};
+> +
+> +struct tsens_plat_data data_8939 = {
+> +       .num_sensors    = 10,
+> +       .ops            = &ops_8939,
+> +       .hw_ids         = (unsigned int []){ 0, 1, 2, 4, 5, 6, 7, 8, 9, 10 },
+> +
+> +       .feat           = &tsens_v0_1_feat,
+> +       .fields = tsens_v0_1_regfields,
+> +};
+> +
+>  static const struct tsens_ops ops_8974 = {
+>         .init           = init_common,
+>         .calibrate      = calibrate_8974,
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 8d3e94d2a9ed..52656a24f813 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -897,6 +897,9 @@ static const struct of_device_id tsens_table[] = {
+>         {
+>                 .compatible = "qcom,msm8916-tsens",
+>                 .data = &data_8916,
+> +       }, {
+> +               .compatible = "qcom,msm8939-tsens",
+> +               .data = &data_8939,
+>         }, {
+>                 .compatible = "qcom,msm8974-tsens",
+>                 .data = &data_8974,
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 59d01162c66a..f40b625f897e 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -585,7 +585,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp);
+>  extern struct tsens_plat_data data_8960;
+>
+>  /* TSENS v0.1 targets */
+> -extern struct tsens_plat_data data_8916, data_8974;
+> +extern struct tsens_plat_data data_8916, data_8939, data_8974;
+>
+>  /* TSENS v1 targets */
+>  extern struct tsens_plat_data data_tsens_v1, data_8976;
+> --
+> 2.17.1
+>
