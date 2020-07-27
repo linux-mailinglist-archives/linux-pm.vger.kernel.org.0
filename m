@@ -2,90 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2C822E7CE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 10:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD7322E7D8
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 10:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgG0Ie3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 04:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726272AbgG0Ie3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 04:34:29 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BAAC0619D2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 01:34:28 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id l2so3399805wrc.7
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 01:34:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QbPPYlMN+h235a7jgD9i8ACdPZM8KYrB1/GTDTLzrQI=;
-        b=vpKZ3UY4DFem2oskjktMQrNgs4lt17UqiuTnclQTlQyUA/nsBmlsi+tVJyXLvU/+mn
-         kqqiF4umDhGDXMiDgiZ2OSMBI3ij3TfrSBbxldLMQ7oh5/xmxjaJMg9xapDOtje5DuQb
-         qEfkrhkYeUXjIBfNl8RWY55FQ0G0L9KD+mVFKoQk7PLwjLpi7pvdBX1201FNmkYIWFqI
-         Lbhbz0Xhw2Qvct0eDrTzyllUp0n3ClStxZgIhxBqDSr/5r/qR+1f3E7dKoyPnt2gbPH0
-         N1TNUXS/XiTsTLw8RnQwcBlxwA+zc3ppgBLXggfleB3FfyyydZ0AxU4puGuRKxsLYJ9j
-         fUJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QbPPYlMN+h235a7jgD9i8ACdPZM8KYrB1/GTDTLzrQI=;
-        b=avAFwjpAXwd/nF7yvVFaETZzMZWVDpH/Qc9Kb5W6xW/KtGENWCFO+fTefoTyqWN5k+
-         G+X1UIIgn8jGgxboozn7t/Txeuf9Z7KbK0WdtrH5YJGp+ORVUP2de36vvDRNWT/d2W9o
-         IPNtxZ1xNYqxAAL1kCAbNQ2wJbiVoCVybDALuArmsRal49bIfemkbdIyAF3daUyf+l1V
-         4XVXzZIA692gCCysO1WhJEix1NEE7xThsi8dbbzHkKgpumc5h0gT/+uqMfhNU93/LJIC
-         PwSVsZglUi+2X7mjx0e8luNboayPkxu3ySZHglGUwV8vkeY6qaBXwN/WfWFgvXtRIeaK
-         ggEw==
-X-Gm-Message-State: AOAM532Mgd8BCzAcBK7hH9rFqVHX+kfS2uDQ+pDH60KInrX1/jVEiCBq
-        gZGnMNdfVprUK42ftuv8jFW/dPBRz7US0g==
-X-Google-Smtp-Source: ABdhPJzDV98tZ1uzg9NrcOmMoSNYWR9kZ+haVFfq1oQIrnjuOROGdSUUe3UOuSX+ZUtRAca3spe8AQ==
-X-Received: by 2002:adf:c981:: with SMTP id f1mr19141164wrh.14.1595838867340;
-        Mon, 27 Jul 2020 01:34:27 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:24ff:55c1:a76d:5341? ([2a01:e34:ed2f:f020:24ff:55c1:a76d:5341])
-        by smtp.googlemail.com with ESMTPSA id s205sm12141283wme.7.2020.07.27.01.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2020 01:34:26 -0700 (PDT)
-Subject: Re: [PATCH 0/2] Add msm8939 tsens support
-To:     Konrad Dybcio <konradybcio@gmail.com>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <20200629144926.665-1-shawn.guo@linaro.org>
- <6615ee72-d222-b16b-df72-0f5117c3e7f5@linaro.org>
- <CAMS8qEWNrU64p1YeS2+G=aSj27eYgvdpEGGMb9syXmKYJciUUQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <87a5f772-5e72-494a-cc1a-a69d66e0cc6d@linaro.org>
-Date:   Mon, 27 Jul 2020 10:34:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726297AbgG0Ifk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 04:35:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:39540 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726227AbgG0Ifj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 Jul 2020 04:35:39 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 259E6D6E;
+        Mon, 27 Jul 2020 01:35:39 -0700 (PDT)
+Received: from [10.37.12.33] (unknown [10.37.12.33])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A7AD63F718;
+        Mon, 27 Jul 2020 01:35:37 -0700 (PDT)
+Subject: Re: [PATCH] memory: samsung: exynos5422-dmc: Do not ignore return
+ code of regmap_read()
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20200720110301.22996-1-krzk@kernel.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <1f9f9bf2-d93e-5d8b-adcd-c63939b8cf8a@arm.com>
+Date:   Mon, 27 Jul 2020 09:35:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CAMS8qEWNrU64p1YeS2+G=aSj27eYgvdpEGGMb9syXmKYJciUUQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200720110301.22996-1-krzk@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/07/2020 14:25, Konrad Dybcio wrote:
-> Tested-by: Konrad Dybcio <konradybcio@gmail.com> /* on Asus Z00T smartphone */
-> Acked-by: Konrad Dybcio <konradybcio@gmail.com>
+Hi Krzysztof,
+
+On 7/20/20 12:03 PM, Krzysztof Kozlowski wrote:
+> Check for regmap_read() return code before using the read value in
+> following write in exynos5_switch_timing_regs().  Pass reading error
+> code to the callers.
 > 
-> Sorry for being (very) late with that, but I've been doing some
-> 630/36/60 stuff. In case anyone's interested in the progress, I'll
-> leave it there. [1]
+> This does not introduce proper error handling for such failed reads (and
+> obviously regmap_write() error is still ignored) because the driver
+> ignored this in all places.  Therefor it only fixes reported issue while
+> matching current driver coding style:
+> 
+>         drivers/memory/samsung/exynos5422-dmc.c: In function 'exynos5_switch_timing_regs':
+>      >> drivers/memory/samsung/exynos5422-dmc.c:216:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>   drivers/memory/samsung/exynos5422-dmc.c | 12 +++++++++---
+>   1 file changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+> index 93e9c2429c0d..2c326998cb1c 100644
+> --- a/drivers/memory/samsung/exynos5422-dmc.c
+> +++ b/drivers/memory/samsung/exynos5422-dmc.c
+> @@ -270,12 +270,14 @@ static int find_target_freq_idx(struct exynos5_dmc *dmc,
+>    * This function switches between these banks according to the
+>    * currently used clock source.
+>    */
+> -static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
+> +static int exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
+>   {
+>   	unsigned int reg;
+>   	int ret;
+>   
+>   	ret = regmap_read(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, &reg);
+> +	if (ret)
+> +		return ret;
+>   
+>   	if (set)
+>   		reg |= EXYNOS5_TIMING_SET_SWI;
+> @@ -283,6 +285,8 @@ static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
+>   		reg &= ~EXYNOS5_TIMING_SET_SWI;
+>   
+>   	regmap_write(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, reg);
+> +
+> +	return 0;
+>   }
+>   
+>   /**
+> @@ -516,7 +520,7 @@ exynos5_dmc_switch_to_bypass_configuration(struct exynos5_dmc *dmc,
+>   	/*
+>   	 * Delays are long enough, so use them for the new coming clock.
+>   	 */
+> -	exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
+> +	ret = exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
+>   
+>   	return ret;
+>   }
+> @@ -577,7 +581,9 @@ exynos5_dmc_change_freq_and_volt(struct exynos5_dmc *dmc,
+>   
+>   	clk_set_rate(dmc->fout_bpll, target_rate);
+>   
+> -	exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
+> +	ret = exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
+> +	if (ret)
+> +		goto disable_clocks;
+>   
+>   	ret = clk_set_parent(dmc->mout_mclk_cdrex, dmc->mout_bpll);
+>   	if (ret)
+> 
 
-Applied, thanks
+LGTM
 
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Lukasz
