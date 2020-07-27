@@ -2,124 +2,240 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B70422F887
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 20:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C38622F927
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 21:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726753AbgG0Szh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 14:55:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24234 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726196AbgG0Szh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 14:55:37 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIVn37032648;
-        Mon, 27 Jul 2020 14:55:30 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32hs0sdmy9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 14:55:30 -0400
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06RIXUjX039027;
-        Mon, 27 Jul 2020 14:55:30 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32hs0sdmxs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 14:55:29 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06RIsbAU029233;
-        Mon, 27 Jul 2020 18:55:29 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma02dal.us.ibm.com with ESMTP id 32gcy40b6g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Jul 2020 18:55:29 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06RItQBu58262010
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jul 2020 18:55:26 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 089E9C605F;
-        Mon, 27 Jul 2020 18:55:28 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DCEFC6057;
-        Mon, 27 Jul 2020 18:55:27 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.85.73.118])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Jul 2020 18:55:27 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 46A5D2E33AC; Tue, 28 Jul 2020 00:25:21 +0530 (IST)
-Date:   Tue, 28 Jul 2020 00:25:21 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Neuling <mikey@neuling.org>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
-        linuxppc-dev@ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 0/5] cpuidle-pseries: Parse extended CEDE information for
- idle.
-Message-ID: <20200727185521.GB26602@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com>
- <20200707113235.GM14120@in.ibm.com>
- <CAJZ5v0jA20TJyxRwtBu31zF5otkqbTW9R03Na3LgJsWB3nDmoQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jA20TJyxRwtBu31zF5otkqbTW9R03Na3LgJsWB3nDmoQ@mail.gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_13:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=999 spamscore=0
- mlxscore=0 priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007270122
+        id S1728096AbgG0TfZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 15:35:25 -0400
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:15634 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727887AbgG0TfY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 15:35:24 -0400
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 27 Jul 2020 12:35:23 -0700
+Received: from gurus-linux.qualcomm.com ([10.46.162.81])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 27 Jul 2020 12:35:23 -0700
+Received: by gurus-linux.qualcomm.com (Postfix, from userid 383780)
+        id 02FCC18FA; Mon, 27 Jul 2020 12:35:22 -0700 (PDT)
+From:   Guru Das Srinagesh <gurus@codeaurora.org>
+To:     Amit Kucheria <amit.kucheria@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
+        David Collins <collinsd@codeaurora.org>,
+        linux-kernel@vger.kernel.org,
+        Guru Das Srinagesh <gurus@codeaurora.org>
+Subject: [PATCH v1 1/2] thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 1 PMIC peripherals
+Date:   Mon, 27 Jul 2020 12:35:18 -0700
+Message-Id: <f22bb151d836f924b09cf80ffd6e58eb286be5d6.1595878198.git.gurus@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Rafael,
+From: David Collins <collinsd@codeaurora.org>
 
-On Mon, Jul 27, 2020 at 04:14:12PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Jul 7, 2020 at 1:32 PM Gautham R Shenoy <ego@linux.vnet.ibm.com> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Jul 07, 2020 at 04:41:34PM +0530, Gautham R. Shenoy wrote:
-> > > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> > >
-> > > Hi,
-> > >
-> > >
-> > >
-> > >
-> > > Gautham R. Shenoy (5):
-> > >   cpuidle-pseries: Set the latency-hint before entering CEDE
-> > >   cpuidle-pseries: Add function to parse extended CEDE records
-> > >   cpuidle-pseries : Fixup exit latency for CEDE(0)
-> > >   cpuidle-pseries : Include extended CEDE states in cpuidle framework
-> > >   cpuidle-pseries: Block Extended CEDE(1) which adds no additional
-> > >     value.
-> >
-> > Forgot to mention that these patches are on top of Nathan's series to
-> > remove extended CEDE offline and bogus topology update code :
-> > https://lore.kernel.org/linuxppc-dev/20200612051238.1007764-1-nathanl@linux.ibm.com/
-> 
-> OK, so this is targeted at the powerpc maintainers, isn't it?
+Add support for TEMP_ALARM GEN2 PMIC peripherals with digital
+major revision 1.  This revision utilizes a different temperature
+threshold mapping than earlier revisions.
 
-Yes, the code is powerpc specific.
+Signed-off-by: David Collins <collinsd@codeaurora.org>
+Signed-off-by: Guru Das Srinagesh <gurus@codeaurora.org>
+---
+Apologies for resending - My earlier two submissions were directed to the wrong
+reviewer audience and list.
 
-Also, I noticed that Nathan's patches have been merged by Michael
-Ellerman in the powerpc/merge tree. I will rebase and post a v2 of
-this patch series.
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 91 +++++++++++++++++++----------
+ 1 file changed, 61 insertions(+), 30 deletions(-)
 
---
-Thanks and Regards
-gautham.
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index bf7bae4..05a9601 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -17,6 +17,7 @@
+ 
+ #include "../thermal_core.h"
+ 
++#define QPNP_TM_REG_DIG_MAJOR		0x01
+ #define QPNP_TM_REG_TYPE		0x04
+ #define QPNP_TM_REG_SUBTYPE		0x05
+ #define QPNP_TM_REG_STATUS		0x08
+@@ -38,26 +39,30 @@
+ 
+ #define ALARM_CTRL_FORCE_ENABLE		BIT(7)
+ 
+-/*
+- * Trip point values based on threshold control
+- * 0 = {105 C, 125 C, 145 C}
+- * 1 = {110 C, 130 C, 150 C}
+- * 2 = {115 C, 135 C, 155 C}
+- * 3 = {120 C, 140 C, 160 C}
+-*/
+-#define TEMP_STAGE_STEP			20000	/* Stage step: 20.000 C */
+-#define TEMP_STAGE_HYSTERESIS		2000
++#define THRESH_COUNT			4
++#define STAGE_COUNT			3
++
++/* Over-temperature trip point values in mC */
++static const long temp_map_gen1[THRESH_COUNT][STAGE_COUNT] = {
++	{105000, 125000, 145000},
++	{110000, 130000, 150000},
++	{115000, 135000, 155000},
++	{120000, 140000, 160000},
++};
++
++static const long temp_map_gen2_v1[THRESH_COUNT][STAGE_COUNT] = {
++	{ 90000, 110000, 140000},
++	{ 95000, 115000, 145000},
++	{100000, 120000, 150000},
++	{105000, 125000, 155000},
++};
+ 
+-#define TEMP_THRESH_MIN			105000	/* Threshold Min: 105 C */
+-#define TEMP_THRESH_STEP		5000	/* Threshold step: 5 C */
++#define TEMP_THRESH_STEP		5000 /* Threshold step: 5 C */
+ 
+ #define THRESH_MIN			0
+ #define THRESH_MAX			3
+ 
+-/* Stage 2 Threshold Min: 125 C */
+-#define STAGE2_THRESHOLD_MIN		125000
+-/* Stage 2 Threshold Max: 140 C */
+-#define STAGE2_THRESHOLD_MAX		140000
++#define TEMP_STAGE_HYSTERESIS		2000
+ 
+ /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
+ #define DEFAULT_TEMP			37000
+@@ -77,6 +82,7 @@ struct qpnp_tm_chip {
+ 	bool				initialized;
+ 
+ 	struct iio_channel		*adc;
++	const long			(*temp_map)[THRESH_COUNT][STAGE_COUNT];
+ };
+ 
+ /* This array maps from GEN2 alarm state to GEN1 alarm stage */
+@@ -101,6 +107,23 @@ static int qpnp_tm_write(struct qpnp_tm_chip *chip, u16 addr, u8 data)
+ }
+ 
+ /**
++ * qpnp_tm_decode_temp() - return temperature in mC corresponding to the
++ *		specified over-temperature stage
++ * @chip:		Pointer to the qpnp_tm chip
++ * @stage:		Over-temperature stage
++ *
++ * Return: temperature in mC
++ */
++static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
++{
++	if (!chip->temp_map || chip->thresh >= THRESH_COUNT || stage == 0
++	    || stage > STAGE_COUNT)
++		return 0;
++
++	return (*chip->temp_map)[chip->thresh][stage - 1];
++}
++
++/**
+  * qpnp_tm_get_temp_stage() - return over-temperature stage
+  * @chip:		Pointer to the qpnp_tm chip
+  *
+@@ -149,14 +172,12 @@ static int qpnp_tm_update_temp_no_adc(struct qpnp_tm_chip *chip)
+ 
+ 	if (stage_new > stage_old) {
+ 		/* increasing stage, use lower bound */
+-		chip->temp = (stage_new - 1) * TEMP_STAGE_STEP +
+-			     chip->thresh * TEMP_THRESH_STEP +
+-			     TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
++		chip->temp = qpnp_tm_decode_temp(chip, stage_new)
++				+ TEMP_STAGE_HYSTERESIS;
+ 	} else if (stage_new < stage_old) {
+ 		/* decreasing stage, use upper bound */
+-		chip->temp = stage_new * TEMP_STAGE_STEP +
+-			     chip->thresh * TEMP_THRESH_STEP -
+-			     TEMP_STAGE_HYSTERESIS + TEMP_THRESH_MIN;
++		chip->temp = qpnp_tm_decode_temp(chip, stage_new + 1)
++				- TEMP_STAGE_HYSTERESIS;
+ 	}
+ 
+ 	chip->stage = stage;
+@@ -199,26 +220,28 @@ static int qpnp_tm_get_temp(void *data, int *temp)
+ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+ 					     int temp)
+ {
+-	u8 reg;
++	long stage2_threshold_min = (*chip->temp_map)[THRESH_MIN][1];
++	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
+ 	bool disable_s2_shutdown = false;
++	u8 reg;
+ 
+ 	WARN_ON(!mutex_is_locked(&chip->lock));
+ 
+ 	/*
+ 	 * Default: S2 and S3 shutdown enabled, thresholds at
+-	 * 105C/125C/145C, monitoring at 25Hz
++	 * lowest threshold set, monitoring at 25Hz
+ 	 */
+ 	reg = SHUTDOWN_CTRL1_RATE_25HZ;
+ 
+ 	if (temp == THERMAL_TEMP_INVALID ||
+-	    temp < STAGE2_THRESHOLD_MIN) {
++	    temp < stage2_threshold_min) {
+ 		chip->thresh = THRESH_MIN;
+ 		goto skip;
+ 	}
+ 
+-	if (temp <= STAGE2_THRESHOLD_MAX) {
++	if (temp <= stage2_threshold_max) {
+ 		chip->thresh = THRESH_MAX -
+-			((STAGE2_THRESHOLD_MAX - temp) /
++			((stage2_threshold_max - temp) /
+ 			 TEMP_THRESH_STEP);
+ 		disable_s2_shutdown = true;
+ 	} else {
+@@ -326,9 +349,7 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
+ 		? chip->stage : alarm_state_map[chip->stage];
+ 
+ 	if (stage)
+-		chip->temp = chip->thresh * TEMP_THRESH_STEP +
+-			     (stage - 1) * TEMP_STAGE_STEP +
+-			     TEMP_THRESH_MIN;
++		chip->temp = qpnp_tm_decode_temp(chip, stage);
+ 
+ 	crit_temp = qpnp_tm_get_critical_trip_temp(chip);
+ 	ret = qpnp_tm_update_critical_trip_temp(chip, crit_temp);
+@@ -350,7 +371,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ {
+ 	struct qpnp_tm_chip *chip;
+ 	struct device_node *node;
+-	u8 type, subtype;
++	u8 type, subtype, dig_major;
+ 	u32 res;
+ 	int ret, irq;
+ 
+@@ -400,6 +421,12 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MAJOR, &dig_major);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "could not read dig_major\n");
++		return ret;
++	}
++
+ 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
+ 				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
+ 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
+@@ -408,6 +435,10 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	chip->subtype = subtype;
++	if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
++		chip->temp_map = &temp_map_gen2_v1;
++	else
++		chip->temp_map = &temp_map_gen1;
+ 
+ 	/*
+ 	 * Register the sensor before initializing the hardware to be able to
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
