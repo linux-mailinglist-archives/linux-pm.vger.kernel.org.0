@@ -2,78 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9475C22F1EF
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 16:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB1022F178
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 16:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731274AbgG0Of6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 10:35:58 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42157 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730524AbgG0OOX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 10:14:23 -0400
-Received: by mail-ot1-f65.google.com with SMTP id v21so5132573otj.9;
-        Mon, 27 Jul 2020 07:14:23 -0700 (PDT)
+        id S1732148AbgG0Ocg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 10:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730544AbgG0OS4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 10:18:56 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BADC0619D2
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 07:18:56 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id d27so12268998qtg.4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 07:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pdmKQetK0QLJ8rFRGpIDAlZksqbKSxwq3s5x5iSj/6k=;
+        b=IJ6z7XlWdHP11wN6ofEIEZ8eiR6sqBYmqASCFE7tsyV0XaLFN6UBCLhSDxG3ZtxFiB
+         6UUQmZZQPtZ5gWL5TR/BbzcqU4PRy1rsZs1ydjdNLg3DukK8x+zI+T5IrylXKZcJrp7X
+         wgzsam6DyjyXmTzlExIy6Gz+ESwjakDY8S7H+WJNUPiGauBejJX9bL1UdYuOeP4pj6DE
+         upJWQuBQhzHG9jhW6jTcUmhVdyytehsFjMWOs5NLeA9zWbEPdR+c2Lh3HlXUFaiIaFfI
+         c4NcJMTaVP+qgpPKCcMERNPi8R+BSrrTeP2DhEflbq++A2XpC+Qam2kcKEcY1g6hCLWg
+         xxXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RwV/fYC6R5PVghDc7Xcfm5xADtIIp1K2tl3Z3YbTId0=;
-        b=EyX8oZgXnnyZ14gS8R68le0lWjEV7pUltjytZqZJTHMzrGP3kfFlD6aSKu2sUVX5qy
-         +r7/BwgrNFPi8NzabwoV+P7U4eWB8aHHtrzjF7e9TC6cyk1FLp/Naeun9VqE0X2TdTfN
-         d1b03WqVKQgdcEiteOXfr9uDxGghi/X+8R5HplMezJuFIIsPGMf7IegyoCe+5lqoa0Ye
-         NEnVBVKreCylidXQB4n8U6fZtjySGYO3BvZ2mb+t/q6LKmyCqxLQ4c0HB3jwh88TiMma
-         GHB+34AFs9M9PhYLaPzdKf4q7H3hbz/fQWrkS6Co5WGWdtvH6o3k6uOV8gbec6e5zdhx
-         6aKA==
-X-Gm-Message-State: AOAM531ZdEKEz0AZS7F/F0NBgGuZqAR95rrPeUTy7+KVN0QLJbWPYXhk
-        QKgmJDYO9iGTYXZYbnjBivWc4092QE7sCq/zFG4=
-X-Google-Smtp-Source: ABdhPJy3IQ4gWoo3GVjFr2jd6qToC3wtimm7RFwI0aGYMQzT7H7gS+icm3pzzCk7LtxkYZm+IgVNdSPw5XxX9M393tU=
-X-Received: by 2002:a9d:590a:: with SMTP id t10mr20554597oth.262.1595859262962;
- Mon, 27 Jul 2020 07:14:22 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pdmKQetK0QLJ8rFRGpIDAlZksqbKSxwq3s5x5iSj/6k=;
+        b=QhbjP7R9T2WzuCGw/fzufcow9C2pcZdvwuuRW9AmLAlTOnEnf0lnUOkRFs4eCUa3hH
+         YNic0S4Co+1UaBOCFO0xROE0uHJCAqAqFc8KUAUei1+7JWL+ShspnK99RS7jZ7XQ/5hN
+         YvheApbX5+ah475W2h4bYT1UC83FU7+0MM279MXr9ALFJ4poF44oZWMWmTxwiJCWHxBo
+         /H0NI9TEi3BrkvjIlDFP4Bzjez57KhPNrV1V9rLuDDSCnFZPOwEULCsWI63HP02/qV7A
+         y7xWgbXPti/48+fey4+da44pplqTVpxnGfxb/3ODy6KrMPpYsTUhCecTBS9Wg/7tlvRS
+         aIBQ==
+X-Gm-Message-State: AOAM532i7GMEo6ubKFCCMIlaimpKQlPTdCoD4BYo1dcpP0aYUGmdsVgX
+        YDOlqsXfwRRct377YxExNkc4rw==
+X-Google-Smtp-Source: ABdhPJy130C3D8M0rAarkjKcRWiHNErupodcdoc3UEhXmIRDecJWWcdT53d/lQhoGpyYSerZL6QGHQ==
+X-Received: by 2002:ac8:7a95:: with SMTP id x21mr7959782qtr.135.1595859535983;
+        Mon, 27 Jul 2020 07:18:55 -0700 (PDT)
+Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id k24sm14790073qtb.26.2020.07.27.07.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 07:18:55 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 10:18:48 -0400
+From:   Qian Cai <cai@lca.pw>
+To:     Valentin Schneider <valentin.schneider@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2 2/3] sched: Cleanup SCHED_THERMAL_PRESSURE kconfig
+ entry
+Message-ID: <20200727141825.GA4174@lca.pw>
+References: <20200712165917.9168-1-valentin.schneider@arm.com>
+ <20200712165917.9168-3-valentin.schneider@arm.com>
 MIME-Version: 1.0
-References: <1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com> <20200707113235.GM14120@in.ibm.com>
-In-Reply-To: <20200707113235.GM14120@in.ibm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jul 2020 16:14:12 +0200
-Message-ID: <CAJZ5v0jA20TJyxRwtBu31zF5otkqbTW9R03Na3LgJsWB3nDmoQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] cpuidle-pseries: Parse extended CEDE information for idle.
-To:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Neuling <mikey@neuling.org>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
-        linuxppc-dev@ozlabs.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200712165917.9168-3-valentin.schneider@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 7, 2020 at 1:32 PM Gautham R Shenoy <ego@linux.vnet.ibm.com> wrote:
->
-> Hi,
->
-> On Tue, Jul 07, 2020 at 04:41:34PM +0530, Gautham R. Shenoy wrote:
-> > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-> >
-> > Hi,
-> >
-> >
-> >
-> >
-> > Gautham R. Shenoy (5):
-> >   cpuidle-pseries: Set the latency-hint before entering CEDE
-> >   cpuidle-pseries: Add function to parse extended CEDE records
-> >   cpuidle-pseries : Fixup exit latency for CEDE(0)
-> >   cpuidle-pseries : Include extended CEDE states in cpuidle framework
-> >   cpuidle-pseries: Block Extended CEDE(1) which adds no additional
-> >     value.
->
-> Forgot to mention that these patches are on top of Nathan's series to
-> remove extended CEDE offline and bogus topology update code :
-> https://lore.kernel.org/linuxppc-dev/20200612051238.1007764-1-nathanl@linux.ibm.com/
+On Sun, Jul 12, 2020 at 05:59:16PM +0100, Valentin Schneider wrote:
+> As Russell pointed out [1], this option is severely lacking in the
+> documentation department, and figuring out if one has the required
+> dependencies to benefit from turning it on is not straightforward.
+> 
+> Make it non user-visible, and add a bit of help to it. While at it, make it
+> depend on CPU_FREQ_THERMAL.
+> 
+> [1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
+> 
+> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> ---
+>  init/Kconfig | 15 ++++++++++++++-
+>  1 file changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 0498af567f70..0a97d85568b2 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -492,8 +492,21 @@ config HAVE_SCHED_AVG_IRQ
+>  	depends on SMP
+>  
+>  config SCHED_THERMAL_PRESSURE
+> -	bool "Enable periodic averaging of thermal pressure"
+> +	bool
+>  	depends on SMP
+> +	depends on CPU_FREQ_THERMAL
+> +	help
+> +	  Select this option to enable thermal pressure accounting in the
+> +	  scheduler. Thermal pressure is the value conveyed to the scheduler
+> +	  that reflects the reduction in CPU compute capacity resulted from
+> +	  thermal throttling. Thermal throttling occurs when the performance of
+> +	  a CPU is capped due to high operating temperatures.
+> +
+> +	  If selected, the scheduler will be able to balance tasks accordingly,
+> +	  i.e. put less load on throttled CPUs than on non/less throttled ones.
+> +
+> +	  This requires the architecture to implement
+> +	  arch_set_thermal_pressure() and arch_get_thermal_pressure().
+>  
+>  config BSD_PROCESS_ACCT
+>  	bool "BSD Process Accounting"
+> -- 
 
-OK, so this is targeted at the powerpc maintainers, isn't it?
+On arm64 linux-next (20200727),
+
+https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
+
+WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
+  Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
+  Selected by [y]:
+  - ARM64 [=y]
