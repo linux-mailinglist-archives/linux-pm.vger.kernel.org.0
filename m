@@ -2,94 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FD922EBF1
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 14:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB91F22ED87
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 15:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727844AbgG0MUL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 08:20:11 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:36707 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727775AbgG0MUK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 08:20:10 -0400
-Received: by mail-oi1-f195.google.com with SMTP id s144so4207085oie.3;
-        Mon, 27 Jul 2020 05:20:09 -0700 (PDT)
+        id S1726946AbgG0NiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 09:38:15 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42994 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726298AbgG0NiO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 09:38:14 -0400
+Received: by mail-ot1-f68.google.com with SMTP id v21so5038867otj.9;
+        Mon, 27 Jul 2020 06:38:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VYdNJKGJtndbhOIlB1kpCwUiNVjH+51o2Mmpgcq8fg8=;
-        b=oVmhMJgcuva+Z2pRZEeBuVUBn+M8cuVfC05UMl5+WYQfIbybGD1w+uYg5rl2Rq0AJ+
-         OPPP/FW8xohoppIOHqj8UuNeveuBJhjYz2tYuDIOhqsN/cr4ThZUkVWLlCQrZwtwHY6L
-         a1NHwB3OULdLcdlsllFYRqUZCUAdHSkRI2pXIuiDdQ+O6UvnM+thVr3xDFdPPxYMIh43
-         BbU2qQ7BhofwjZb0/wNgWV7rDVyB31x/504MzjSrAda5srhC34tkMoRKYf/Vwn7MeOFs
-         E/1Tvt0x2V2ZqV7nXKO0vtiFlaESWJqt1AcjH7q3CxVFxOBVfNY+uYGHo+RY2BxQhDXp
-         Y5YQ==
-X-Gm-Message-State: AOAM531qz/ui9ZnDMcZ0mZuFZLa62mGsc9d6JSJcEFeCceIVZZejia6f
-        sQLg5bZBnMbDzY4Q7a8nC8i8LCcYHrhlPOWvWTs=
-X-Google-Smtp-Source: ABdhPJzESE2uHUqdDkzrQl8akjB+yPlCH6ucxF6MZ8U6NcVwVphYWXUbyfgNtAl73OF/Rb45GhRPevNJ/DK2nyFBJDo=
-X-Received: by 2002:a05:6808:34e:: with SMTP id j14mr18551226oie.110.1595852409614;
- Mon, 27 Jul 2020 05:20:09 -0700 (PDT)
+        bh=GDgvxbFtjoqaUGPEDtkInSIpJVJqkW3IcV+Wtsu5ITc=;
+        b=jhprwpJIoQNfyotKw7z1LMzWKpQo7AV2X/QKY3t2H76Hwhu7eN/1HnzYjb2qh0HDI4
+         CplFkvXn/D3yoviIItBgSxzuAmpst3iBWRHn6zp0WsOVFbvBnXCkpvt4oqP5Vb8LqFnl
+         NQSkw33fARMF841U/77bLsva5Yom0l/k01jZPZPyPQ/T11Cn5s05mYcuoB2faXzUDyPd
+         eIMLFblkpv2PWkmoMarPoJrGoj/Md1oAtrMCx5lxktzoG3wMItCwW4TkFQ7FKdk4wWPI
+         ijV0lWpKg/wzFSCWjj9DPla0Y5ypTH1dbwxubJUYASwrTNHFQbmAwePk9PmOeGvhZfok
+         lmAA==
+X-Gm-Message-State: AOAM5329GVgf1plMyji0Aph1G7BKFPeOmoxxUSeevX50toVbMWXTXEm5
+        Ms5rvLHWvDFB3XCPmzl4w8xXD6iqxbdsSIie1Ys=
+X-Google-Smtp-Source: ABdhPJy3txxI99b+fWzbhQVo+HWM4RYjrP2BIU1Ci2RDTj9GPs21eK4gnxtDjDTfKgLqwvw2gVDmbZ5VIuYYJXomKTc=
+X-Received: by 2002:a05:6830:1e5c:: with SMTP id e28mr2285084otj.118.1595857093698;
+ Mon, 27 Jul 2020 06:38:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <1594921495-519-1-git-send-email-sumeet.r.pawnikar@intel.com>
- <CAJZ5v0jQp2sHyzFKZu4ZL2HyN+kVax960+n2epTxBZbbZuZo8Q@mail.gmail.com> <20200727121316.GS3703480@smile.fi.intel.com>
-In-Reply-To: <20200727121316.GS3703480@smile.fi.intel.com>
+References: <20200707172845.4177903-1-abhishekpandit@chromium.org>
+ <20200707102823.v5.1.I51f5a0be89595b73c4dc17e6cf4cc6f26dc7f2fc@changeid> <20200723183235.GA3445384@kroah.com>
+In-Reply-To: <20200723183235.GA3445384@kroah.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 27 Jul 2020 14:19:41 +0200
-Message-ID: <CAJZ5v0iZvGzZU15-bkxaFi3Q=4Sd4h+B0Z9pHPMGzCgMvMDX2g@mail.gmail.com>
-Subject: Re: [PATCH v3] powercap: Add Power Limit4 support
-To:     "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+Date:   Mon, 27 Jul 2020 15:38:02 +0200
+Message-ID: <CAJZ5v0jXcfO3YiMgkc7u=qqZy+jyT=RGagF3yAFnAhiJfyfcuQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] power: Emit changed uevent on wakeup_sysfs_add/remove
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "open list:BLUETOOTH DRIVERS" <linux-bluetooth@vger.kernel.org>,
+        ChromeOS Bluetooth Upstreaming 
+        <chromeos-bluetooth-upstreaming@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 2:13 PM Shevchenko, Andriy
-<andriy.shevchenko@intel.com> wrote:
+On Thu, Jul 23, 2020 at 8:32 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Mon, Jul 27, 2020 at 01:46:12PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Jul 16, 2020 at 7:38 PM Sumeet Pawnikar
-> > <sumeet.r.pawnikar@intel.com> wrote:
-> > >
-> > > Modern Intel Mobile platforms support power limit4 (PL4), which is
-> > > the SoC package level maximum power limit (in Watts). It can be used
-> > > to preemptively limits potential SoC power to prevent power spikes
-> > > from tripping the power adapter and battery over-current protection.
-> > > This patch enables this feature by exposing package level peak power
-> > > capping control to userspace via RAPL sysfs interface. With this,
-> > > application like DTPF can modify PL4 power limit, the similar way
-> > > of other package power limit (PL1).
-> > > As this feature is not tested on previous generations, here it is
-> > > enabled only for the platform that has been verified to work,
-> > > for safety concerns.
+> On Tue, Jul 07, 2020 at 10:28:44AM -0700, Abhishek Pandit-Subedi wrote:
+> > Udev rules that depend on the power/wakeup attribute don't get triggered
+> > correctly if device_set_wakeup_capable is called after the device is
+> > created. This can happen for several reasons (driver sets wakeup after
+> > device is created, wakeup is changed on parent device, etc) and it seems
+> > reasonable to emit a changed event when adding or removing attributes on
+> > the device.
 > >
-> > Queued up as 5.9 material ->
-> >
-> > > Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> > > Co-developed-by: Zhang Rui <rui.zhang@intel.com>
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> >
-> > -> with this tag removed, because the only case in which you can
-> > include an S-o-b from someone else is when you also add a From:
-> > pointing to that person.  IOW, you add a From: with a matching S-o-b
-> > from someone else and you can add your own S-o-b to that.
-> >
-> > In this particular case, the C-d-b tag is sufficient to make a record
-> > of somebody else's contribution to a patch carrying a From: header
-> > that points to you (ie. your patch).
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 >
-> Rafael, it looks like it contradicts documentation. I mean your amendment.
-> SoB is specifically required to be coupled with Co-developed-by. That said,
-> both or none are acceptable. (I don't consider the chain of SoB when it goes
-> thru maintainers)
+> Rafael, any objection to this?  Do you want me to take it through my
+> tree, or are you going to take it through yours?  Either is fine for me.
 
-OK, I stand corrected and so I've added the Rui's S-o-b back to the commit.
+It's already there in my tree with the R-by tag from you.
 
-Thanks!
+Cheers!
