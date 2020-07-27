@@ -2,80 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D7522E830
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 10:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE32422E852
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 11:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgG0ItF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 04:49:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
+        id S1726269AbgG0JBi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 05:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbgG0ItF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 04:49:05 -0400
+        with ESMTP id S1726222AbgG0JBh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 05:01:37 -0400
 Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8EFC061794
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 01:49:04 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id c15so1877117edj.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 01:49:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71594C061794;
+        Mon, 27 Jul 2020 02:01:36 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id by13so11516610edb.11;
+        Mon, 27 Jul 2020 02:01:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z/V1tQA7MqQfKt4h9sViNsgkSyjbVHQAmfZFznk32RE=;
-        b=Q2sdqvZWBOfRDAkP37pekS7elYAaOeQ4HMc6Gg+v0IB5nFobNJACeCqWsCxMjQGNL0
-         rjLC/O6Ja8UkvKnw0ND1i7oUQcGJ3GG5pMQzFD9q27byvGAu6+NoCXU8MczXzpCoaLjx
-         ABKQ8s0Nw3w9thEonOld4DDNnyAwdBsOw8YJpZ8CrBvVRDDK/M/V4jL7IkNZwqjvYgto
-         na9YVa/Jseuj4/z1ijuy8ANtJ4v4WDC22t+u+9G/erN2B3z3093/lTeg2PcKTH2XYNKZ
-         nSQbIN1sBmOViMMPN4oS0lx3SxD1y5yFUPxWX4M2dHb1svUgRbLk/YU4W7xQsdJcZDCm
-         c9FA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JzEEhJ/gSEqeIPhKBNFMdZtgXlIDSYR3vaBxjVSErS4=;
+        b=ge2yrJpObzku3hqYB6XPsmzD6RqnM7NAA7SK3vvZYKMnJyN2FvALS22PctbgXQ4rW4
+         Fhd6dXSA7M/DqEOdNlj/YCoU39e71s6hf5nkY1vV6amNwVXagV6r6PTawElhR88tu/go
+         UVBJlRhzC2avJBCOgAHCbYA2bJi/zUlDeT2UR6hqJGwC3e4tg+FKkwsn8IPQ6iK4UYDB
+         xlJPOL2XE/x99z+Tw9IFi27yjV5exR3hh5FD41SiVCMtfTfsS0wgBh+obceJ44mLHm9P
+         n0fJTrymcfAtv7sJMgDdugRocPjRs+zbhIl2/B0C7ZAXklNcMCDGCN0fi0ENBTJCpOVE
+         WAig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z/V1tQA7MqQfKt4h9sViNsgkSyjbVHQAmfZFznk32RE=;
-        b=mvCHA+nMRLC0Dg5laVKcd/DxkwqVedsY+SlNThMK93i0UfggtxHY+T4ehuyoVWcDC5
-         Qbdi7HTCOKx93soEFG+nZf5a6FQCgNUqb4YhFJBHil0dxxEJVPt/ZPA02525xDFMEt4+
-         MJW/ZfJTrdfLMQHU2XLG/7ERwRsEZtcsJFiSnkNYaCIlva3ObIQm6O/geatCjSByVhHP
-         gcm3BV+1ptyOf0fYGTLCs1jJodIra+k8F/nbAZItSGtM9GmjHPDF9HuHydEfGuwiJhHT
-         jVGsdgOVJqsJNpQvxbD8eqB8bRxY2xDZvrVF8w2+cYrjjYseN/4L/e6Y1r8Piqp2Fh7d
-         UQzA==
-X-Gm-Message-State: AOAM530FjuE0qN6iuLQ4dC8MrZ8dy4FeuVISmwkUVE0MRKZJrtfDoR0C
-        sZAcB83ZCx+LmPIFsxGYY5HGt8qzo+1WM83XSzarPw==
-X-Google-Smtp-Source: ABdhPJwU3wXbWUKs7gxR574E1ZfQ2DR05JFJCQ0/aGE9lAdTXHl858ZCW0l+a3BSfczHMm+p0bh73X5e1+tkh/eWJbo=
-X-Received: by 2002:aa7:c9c2:: with SMTP id i2mr1980313edt.326.1595839743209;
- Mon, 27 Jul 2020 01:49:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629144926.665-1-shawn.guo@linaro.org> <6615ee72-d222-b16b-df72-0f5117c3e7f5@linaro.org>
- <CAMS8qEWNrU64p1YeS2+G=aSj27eYgvdpEGGMb9syXmKYJciUUQ@mail.gmail.com> <46b2420e-4c67-e9c8-f1fe-08c8c742f960@linaro.org>
-In-Reply-To: <46b2420e-4c67-e9c8-f1fe-08c8c742f960@linaro.org>
-From:   Shawn Guo <shawn.guo@linaro.org>
-Date:   Mon, 27 Jul 2020 16:48:52 +0800
-Message-ID: <CAAQ0ZWSVqwg=bcz_xmp43LtjTvrNukYtE3KodAJOJ7ie+3dbEQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add msm8939 tsens support
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JzEEhJ/gSEqeIPhKBNFMdZtgXlIDSYR3vaBxjVSErS4=;
+        b=XOwde3SYPZcbS5sB7v2Lcpq2z0vbVOO4LvyoI72CCXcuWN7ljO9pJFcS6+yhEcnkuH
+         bOAMJTCFW0HROvQ8LO98d3MUkbqVLDt1JZ2XREOBG8LOp2sYT5w6BKljQghx/ri1GK29
+         ZINKUleAlRbiL9/XvmZryzVinQTigeX1TeBzMhhfu1sVa5+ui+pn+u8I6Wc92tlPSUHz
+         oWrVMQrCEKGZ4+KmFCIwVWd/FL1x2r8C5KbA2FUqHuZqn92h4sMQ61SgRWVXcYqh8HmX
+         oTK1JDBt1p4LEVG2C4akDIfz5jmoRy3lwTDWJFHTAHREVUQuCoysGi3Do4ZPD5NlKldr
+         cQkg==
+X-Gm-Message-State: AOAM531KOVNFBtCEt4PtV5eUg5nBeipSP9P1QAwDYht8AsIbv/YyB0tc
+        MY31M2peXp6ZUVXqiRYl4nM=
+X-Google-Smtp-Source: ABdhPJy+W16tLSRAorS/TKv73RktJTDc+mCgc9hEqjcQbSBZKRilv/hpRbTfXvsFNEy7zkfLJzyScg==
+X-Received: by 2002:a05:6402:d0d:: with SMTP id eb13mr19567554edb.307.1595840495212;
+        Mon, 27 Jul 2020 02:01:35 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id gh24sm2545269ejb.45.2020.07.27.02.01.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 02:01:34 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 11:01:33 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Konrad Dybcio <konradybcio@gmail.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Zhang Rui <rui.zhang@intel.com>, Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: Fix zone lookup by ID
+Message-ID: <20200727090133.GG2781612@ulmo>
+References: <20200724170105.2705467-1-thierry.reding@gmail.com>
+ <db6efeab-b2bc-bad5-9c75-89e3e306256c@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="w/VI3ydZO+RcZ3Ux"
+Content-Disposition: inline
+In-Reply-To: <db6efeab-b2bc-bad5-9c75-89e3e306256c@linaro.org>
+User-Agent: Mutt/1.14.4 (2020-06-18)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 4:44 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 25/07/2020 14:25, Konrad Dybcio wrote:
-> > Tested-by: Konrad Dybcio <konradybcio@gmail.com> /* on Asus Z00T smartphone */
-> > Acked-by: Konrad Dybcio <konradybcio@gmail.com>
-> >
-> > Sorry for being (very) late with that, but I've been doing some
-> > 630/36/60 stuff. In case anyone's interested in the progress, I'll
-> > leave it there. [1]
->
-> In the future, when resending the same patches, please add a new
-> revision and on the same mailing lists.
 
-Noted.  Thanks, Daniel.
+--w/VI3ydZO+RcZ3Ux
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Shawn
+On Fri, Jul 24, 2020 at 07:12:49PM +0200, Daniel Lezcano wrote:
+> Hi Thierry,
+>=20
+> Applied, thanks for the fix!
+
+I ran into this as I was experimenting with the new netlink interface
+and got things wrong. Do you have any userspace that you use for testing
+this that I can use as a reference?
+
+I have managed to get it to work now, but I'm still interested in any
+userspace that you might have for this.
+
+Thierry
+
+--w/VI3ydZO+RcZ3Ux
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl8el+oACgkQ3SOs138+
+s6HOMg//f9Vxawx1IBVtdLfYPjp7vY5FLMOUjpu3SUKiyzjqyToDpWAsGPmBLTUJ
++uZmRHPp/tzkHG2yh9S/4EJV6dTDGi3QfxuvMM0PuYQpoPz8/20+LbNcvObHMrzi
+YMYWVhWWv65KTloweACuJzok32GAITuozNi0YLZaBqnFcGm36aNHdEU9XrTRDWuH
+NFnRfjwOheu83Rb3I3+maje9EpbalqW64VeRJkTU1oN2LgsrbzXxCV6bVDxOhX9i
+mwPnwedDz/IqW2AO9hKsfnnjRSbLreRKv/HdVjl3IY8R49Q9uJyiNK+OgBbSo966
++IK1Idl/HXLFuGCELMgle4ggq9dEnot45+iwwp9UnoNLETP96Tdc9OQFqEBDFx5r
+pHmruHxK/TNWQtca3MOKx0oIrURCiidkZR4g6wqlbmSufgNJ1lDsSO3z3Ki73Ixj
+bfRNqkwma7T1Rysh+8SrmNKTuJGyUfT+6dTkqwz3+nG0xNbl1RHi1OkuZWtuJhXY
+fHntFcU7tJkQMW0rN9PvIMU1Wnz0ihxTKNR911kI/dYjYIAzL7hiKI5BEdwWfIvG
+3pMG2kleSq7xPqVtJzri3jUht9qdqeuSTGPzq7cb08QMKjU6MW90ASoscLZWrIR7
+SCgDHqyEYPjV7SBF8+/QhSR6NkyrwuM4gEr2cm4x9DHxpeDyA7g=
+=1SZ3
+-----END PGP SIGNATURE-----
+
+--w/VI3ydZO+RcZ3Ux--
