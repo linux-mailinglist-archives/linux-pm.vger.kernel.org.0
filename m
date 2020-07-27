@@ -2,84 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB3722E5F3
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 08:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D4922E74B
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 10:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726854AbgG0GhH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 02:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726324AbgG0GhG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 02:37:06 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA5EC0619D2
-        for <linux-pm@vger.kernel.org>; Sun, 26 Jul 2020 23:37:06 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id p27so828396uaa.12
-        for <linux-pm@vger.kernel.org>; Sun, 26 Jul 2020 23:37:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uf+aO2RQUKn1d5pR2F4gMWCBxcjW+UPQkxCmy0LnZio=;
-        b=upbKdIBwvkJdjrPMzU3CVfC3OFLDXWGTpVERNLux2LV7rnb6xk5ZKpBzYOk9l/T2bI
-         dDu4FwrDvzpmYu+B/2i6RUYXj48rQFVJ2UL1eipn+oHuaXw7Dcxd8wkZmQxiQLfxvk3a
-         KAeUECRbR9dVTAMBZVkvpFFWJai1YH0Jj2mNmanbzhjJjCrmsyQ4EQFw6vwKGILMJZTq
-         squqYUin/91h2CjNC3ZAWXUu6Q3cpDKUy51RiB8pSurcl2BI7O+cc1hVmOPjvrYtuZHQ
-         HLOGh/TXEnxTIzJtW/UmxTFHvAQTA4p1pXP5J/3GzMauecoSExgBRbUX+wjgh84bZf5Z
-         emkQ==
+        id S1726957AbgG0IJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 04:09:27 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:44832 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbgG0IJ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 04:09:27 -0400
+Received: by mail-ej1-f66.google.com with SMTP id dk23so4232824ejb.11;
+        Mon, 27 Jul 2020 01:09:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uf+aO2RQUKn1d5pR2F4gMWCBxcjW+UPQkxCmy0LnZio=;
-        b=nhGzYJ0TMzJw18dM9qGWJlbQuUAbiq2agdw2HomJdUjJWr/vlo3YoWPoVgYsXLSmgl
-         yAy/V9nUeTN1xaqesNjmwTEcOU01o+h0zVktNjVG0jV59hvIVij1SG55jYi5QO+o3phk
-         GBXCeaH/MgIk1XzjjOdR3rHz+aYmNNCJ9C4s/ovCkFxjQcuIiu5sedX3i3EtXcrXPG4+
-         omINLNbi0bqLwPNUtA7KAjWqj5BWguHnxsCFcOOvZWd2k73TM9QVGfCO02SSyRb1kGBY
-         36gfVUWe+zh76NAFoldX+BBEHb/ggxCVkt5HxFpXb51jVlVBbUGRe47nnJOYHcmaOhAC
-         RgkA==
-X-Gm-Message-State: AOAM530S/Uz8Y574mZ73m8z6uVf2xortoXf88PS+B3afaK8V8TKfy4U2
-        rX4am+OWrY2nDiKLJ8cqy9ykgc2Mox8bQVK6rHSy2A==
-X-Google-Smtp-Source: ABdhPJwEmwIfpU2RpMZ7JAj4Jn0G+e8msqENJChRL0+/pzJa3t9qRcPIB0PXZi80AQn9Yhaa8tNAFpksT9HfCb4BeMA=
-X-Received: by 2002:a9f:24c2:: with SMTP id 60mr16301200uar.67.1595831825314;
- Sun, 26 Jul 2020 23:37:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hKkmbibPaaHyRRuXyUfERlU7BOY1YF76J3mADSkmBJI=;
+        b=V/bgkBXjr+/0E7EMcWPZTOxh+cr//Zq3EHVT8kZVi9ctW9jhjDidkShwmG7PA4w0Tw
+         LO0qV5gOAfU8VGfS2a+C/TXEk7+OeP3/BCqUP+/3cNYXz+61tZ+iMPCzQhXZkQUFHx0p
+         Am5DF5RURPP8L7WOuwVMVI+4HiFq0SozjE0OiUTuw73anoUTgrJnScSSgVzEAne3rsqw
+         0N9JwckAL4DtXGx4M42lTPHRbFIbVUDxTMaHvBTc2mOfq+FfZfPaVCWFujRhCQDZkS/G
+         bU9UM/pZa/qGxICgNqhDQjBO/Ucfgxi/Z6JNSSRuEHcBQ+MGztUrGlxDQ6iljF6TD985
+         Fatg==
+X-Gm-Message-State: AOAM533af+T2hOpl1SiTpuG7lA3i6B2WtmzkbvgfOmS3JCr/vbWU9SoL
+        zQjTwTF9e9fqx28O7CuynK8=
+X-Google-Smtp-Source: ABdhPJx9eLbrDIcbXbnQwv52xfDW9/pKccXusKjWlVpgQW8jvx+LdTDi/Zg9iyuhBC6wogl+k+76jA==
+X-Received: by 2002:a17:906:7f05:: with SMTP id d5mr2430608ejr.122.1595837365080;
+        Mon, 27 Jul 2020 01:09:25 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.213])
+        by smtp.googlemail.com with ESMTPSA id mf17sm2953883ejb.56.2020.07.27.01.09.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 27 Jul 2020 01:09:24 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 10:09:21 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Roger Quadros <rogerq@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kukjin Kim <kgene@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 14/16] memory: pl172: Enclose macro argument usage in
+ parenthesis
+Message-ID: <20200727080921.GA29255@kozik-lap>
+References: <20200724182328.3348-1-krzk@kernel.org>
+ <20200724182328.3348-15-krzk@kernel.org>
 MIME-Version: 1.0
-References: <20200629144926.665-1-shawn.guo@linaro.org> <20200629144926.665-3-shawn.guo@linaro.org>
- <CAHLCerMyEsvuhNPnwDow5JYVAbem0Rzs+5-uzKZNeFt+3rYHQg@mail.gmail.com>
-In-Reply-To: <CAHLCerMyEsvuhNPnwDow5JYVAbem0Rzs+5-uzKZNeFt+3rYHQg@mail.gmail.com>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 27 Jul 2020 12:06:54 +0530
-Message-ID: <CAHLCerPEPEOkkBd8MZq8T99eS7nE2pMio6ojnMn7bc54ian-3A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: qcom: tsens-v0_1: Add support for MSM8939
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200724182328.3348-15-krzk@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 11:56 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
->
-> On Tue, Jun 30, 2020 at 1:09 AM Shawn Guo <shawn.guo@linaro.org> wrote:
-> >
-> > The TSENS integrated on MSM8939 is a v0_1 device with 10 sensors.
-> > Different from its predecessor MSM8916, where 'calib_sel' bits sit in
-> > separate qfprom word, MSM8939 has 'cailb' and 'calib_sel' bits mixed and
-> > spread on discrete offsets.  That's why all qfprom bits are read as one
-> > go and later mapped to calibration data for MSM8939.
-> >
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
->
-> Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
+On Fri, Jul 24, 2020 at 08:23:26PM +0200, Krzysztof Kozlowski wrote:
+> Macros arguments should be enclosed by parenthesis for safety.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  drivers/memory/pl172.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 
-Shawn,
+Applied to drivers/memory tree.
 
-Have you not sent the change to the tsens.yaml and 8939 DT yet or did
-I miss them?
-
-Regards,
-Amit
+Best regards,
+Krzysztof
