@@ -2,83 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E49022FABE
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 22:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C600122FAD4
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 22:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbgG0Uzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 16:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S1726706AbgG0U65 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 16:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbgG0Uzr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 16:55:47 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92ECBC0619D4
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:55:47 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id o13so10645315pgf.0
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:55:47 -0700 (PDT)
+        with ESMTP id S1726313AbgG0U65 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 16:58:57 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CCAFC0619D4
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:58:57 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id e22so3195740pjt.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:58:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=bhP8c3ORdPWDlqnnbGuCZRHV46MZaJIZrpgZrFhGf0A=;
-        b=FTa08JumHKpL7dCKC6F3Y/47u+bsnLr2xoLj/mrKwMm9jY+pMPtRfLqaiYH5ajOiuy
-         gwazm9DFfePxGyl1LYAaSGP02ptms9TKzvb23nHDTO2FYNuIU9JcTYHTlwu84rQ516tL
-         nTujTvdWrvTobCmmr/ve2s3jKy/eDqOyoG5Ic=
+        bh=1oR/0P9ErtpTgrX+m0OBVrR3VYxPvi53ReAdjDAOr4Y=;
+        b=I5dX71/Uvcfwk/jblm750/2EXt9yjhsPtSEdC4N4lQ/AO2FGB8gfWH/WsjvuuSQOyj
+         ONY5pB87KzLdpaf2iZKf6HtgyagXcsssjLA0pBtIbfYXso5X7qhilKimVkhh0S66fKIy
+         UdZRRQbO/XKIGmFIbA50WIhCZmfQ+15/zHM9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=bhP8c3ORdPWDlqnnbGuCZRHV46MZaJIZrpgZrFhGf0A=;
-        b=MDF8XIfmvoYuOuhMZ7GiPMsXVhHvarV+brTmri01SrWfYvY3vPKD7OMf8rB0hHdG5P
-         WGTkn4U4v+gmre91QUtLBF01UzmE++KOqOY1Zi94pWz0TCpdTK45diO5QSdcp9vrXqWr
-         bn/RL2Y9vclZxOvGmMfnXeLN+W/yBLR711QOXynELzwsqauzVKiO4YcD54x3ysbXGRGP
-         linm9UW2WUAfvektTPYyOPsLG+Lf+pAYFb0JtVcvn+sOPSegXdXp7YxOgNYyhzlPMD7F
-         j0Bwi9X3JqEMhIxF4F19FBG+QfSD2sH9+nD/aYy7W7+2CBeGMouL/0+lLgcSJQDnunaD
-         4hbw==
-X-Gm-Message-State: AOAM5337H4Zme4p7gai7lqSBZdrqtAOtYFpwxoLIrYi95DnXnLxoDGxc
-        t9WO2f6o4qKvSOwTiG/SIaLnug==
-X-Google-Smtp-Source: ABdhPJxjpKz+El+vxYGRCL/Ty0XO15gWn2h9AfLlj9O3/ZH0J4sph2IftFtarPwxqF/aRzxx/DSE8Q==
-X-Received: by 2002:aa7:848b:: with SMTP id u11mr21353847pfn.72.1595883347093;
-        Mon, 27 Jul 2020 13:55:47 -0700 (PDT)
+        bh=1oR/0P9ErtpTgrX+m0OBVrR3VYxPvi53ReAdjDAOr4Y=;
+        b=D4rOZ/m4ri8O5lKnE/uvmU0RdZDUIukfo3D4AINS36gu6w1bZImYGbGVBnXOzLoSmv
+         jiZh0zFk6NN1Eoms9FOaePQTh0oMjNbbcAj0YfjmMrVu5QZZIdecgVC4i1xtiC7y2weK
+         6A1wlmcYEd3cvMjXK4xQ7JVVqy/YpmJ3MEVCCLL1536GrzNUnYbyhPENU2H64T0QfSRP
+         1V6r6WiFSKwqqe8Ys6s3NoDw5h34sN1luWjkxf8kd5gfYIrnLNnqFqqhSLqtGDfn3oAZ
+         +w8gl2Z4fIJYHN6IbeCxSY0AEtfav/xQ8XHXxKuocy+LQ2OoM5T6MWMapTAi3fH1klpf
+         3y/g==
+X-Gm-Message-State: AOAM533DM6Vk5GuXWUI5CtSMYvPG5seHhKs69x6hcfVSU2ROxpDDKzfz
+        YJdl+wM2SXzK6KrnzRileGUb+A==
+X-Google-Smtp-Source: ABdhPJwNPDS+cc+l5C6Fk46mxdaDL9PclHliTxJP5rQfP6oKuQNDrzGsoCx2t1y2JMkjPqG1jMFPKw==
+X-Received: by 2002:a17:902:7485:: with SMTP id h5mr7030550pll.282.1595883536582;
+        Mon, 27 Jul 2020 13:58:56 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id d9sm16200235pgv.45.2020.07.27.13.55.46
+        by smtp.gmail.com with ESMTPSA id g8sm15819746pgr.70.2020.07.27.13.58.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jul 2020 13:55:46 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 13:55:45 -0700
+        Mon, 27 Jul 2020 13:58:55 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 13:58:55 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, bjorn.andersson@linaro.org,
-        robh+dt@kernel.org, dianders@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kernel-owner@vger.kernel.org
-Subject: Re: [PATCH 4/6] arm64: dts: qcom: sdm845: Increase the number of
- interconnect cells
-Message-ID: <20200727205545.GH3191083@google.com>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        sibis@codeaurora.org, dianders@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/6] interconnect: qcom: sc7180: Replace xlate with
+ xlate_extended
+Message-ID: <20200727205855.GI3191083@google.com>
 References: <20200723130942.28491-1-georgi.djakov@linaro.org>
- <20200723130942.28491-5-georgi.djakov@linaro.org>
- <3c8c4aae7697d9d5a052b9dfd1ea0cf4@codeaurora.org>
+ <20200723130942.28491-6-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3c8c4aae7697d9d5a052b9dfd1ea0cf4@codeaurora.org>
+In-Reply-To: <20200723130942.28491-6-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 04:28:35PM +0530, Sibi Sankar wrote:
-> On 2020-07-23 18:39, Georgi Djakov wrote:
-> > Increase the number of interconnect-cells, as now we can include
-> > the tag information. The consumers can specify the path tag as an
-> > additional argument to the endpoints.
+On Thu, Jul 23, 2020 at 04:09:41PM +0300, Georgi Djakov wrote:
+> From: Sibi Sankar <sibis@codeaurora.org>
 > 
-> Tested-by: Sibi Sankar <sibis@codeaurora.org>
-> Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
+> Use the qcom_icc_xlate_extended() in order to parse tags, that are
+> specified as an additional arguments to the path endpoints in DT.
 > 
-> https://patchwork.kernel.org/patch/11655409/
-> I'll replace the tag ids with the
-> macros once ^^ lands.
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Great, I was going to ask about that :)
-
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
 Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
