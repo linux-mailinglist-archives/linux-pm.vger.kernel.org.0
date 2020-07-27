@@ -2,72 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B29A522F9B1
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 21:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E7A822F9D7
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 22:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728348AbgG0T7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 15:59:01 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:45473 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728092AbgG0T7A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 15:59:00 -0400
-Received: by mail-io1-f66.google.com with SMTP id e64so18277550iof.12;
-        Mon, 27 Jul 2020 12:59:00 -0700 (PDT)
+        id S1728933AbgG0UKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 16:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728840AbgG0UKX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 16:10:23 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B11C061794
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:10:23 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id x9so8738209plr.2
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 13:10:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UdLyNGTWMHvHhwOJiAVBynAmD0CjHGQzhSi/nggidvs=;
+        b=J/Vg4qI9eDkBhX0XginvSJghLnUks7HG7oSMGZrNKStY5y3R3v9/fujqIbakw/XA9G
+         ngFsdubO0Fsnh6ueE1f9sR1HTzu0n4v5xMMj/2sBd2bHfHtMuNXTvSBKlrKSYwYKhXe/
+         S9/4UA5qFjZ/sftKUkyuU6MoXy+Ch8HR+n+dw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=wDpeNiqqoyeATLrnrgf/k8/QCkhhtDi8rG/MLzLuc0k=;
-        b=DbmK052MzAjToZdvnG5RRb7lV+Wuzv+9oczMEOkSv1zvGxO+KgmsuAs4Jssn4fzeqn
-         MHg9cEjmd1HLRQR1ALrWmIpfCT/wcDUCnzmaBDKP9ZFGlTPgqsAnl19c1GBQo7GVFXlA
-         mHYvS78zINdfJJu0/AzpqmMsE3CIxnyfnUsPSfl2rnhPdEDSbA/hdO/ysI/475+GOoXi
-         oOXYqEEpqlYGmdwhAyDnSHkfIft3mQYTemuWzLV9TKGnq1NjzA+W6PF5JHX+RfcHHeBI
-         UWFmUbb5R1qjYA2ZbNphJscuGhb8TU0hhKtd7FLlT0TEdKeR7UclTuUtmF6BegkgUM7r
-         Jl7A==
-X-Gm-Message-State: AOAM5323DKbpDdz3Yn4QcAD+7zE5Te6hXA1k5GIlmgP++/K4sP1kbxtj
-        RnJ5sSXKKg6VdZr5zoujSA==
-X-Google-Smtp-Source: ABdhPJzW1pwaSNHbDZJzfOwWrG5ejhNl/nfoqakxm3RP0kGW2cWYySQVZ/+lFw/AjRp7TIf0aRuasQ==
-X-Received: by 2002:a05:6638:1414:: with SMTP id k20mr28371172jad.76.1595879939825;
-        Mon, 27 Jul 2020 12:58:59 -0700 (PDT)
-Received: from xps15 ([64.188.179.252])
-        by smtp.gmail.com with ESMTPSA id v5sm5428475ilg.88.2020.07.27.12.58.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 12:58:58 -0700 (PDT)
-Received: (nullmailer pid 782176 invoked by uid 1000);
-        Mon, 27 Jul 2020 19:58:56 -0000
-Date:   Mon, 27 Jul 2020 13:58:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [RFC PATCH v5 7/7] dt-bindings: thermal: tsens: Document ipq8064
- bindings
-Message-ID: <20200727195856.GA782129@bogus>
-References: <20200725181404.18951-1-ansuelsmth@gmail.com>
- <20200725181404.18951-8-ansuelsmth@gmail.com>
+        bh=UdLyNGTWMHvHhwOJiAVBynAmD0CjHGQzhSi/nggidvs=;
+        b=RkSMXoo9EoOP+YjDSX8sF85rhWD4ZojVk49VV6Fwo6L2lzznIwGQL37s6zBsWpqhku
+         WuEDIR3ub5yqa+rIkvspjoQl9sZguTYPnbY9Dy8Tc6FaQe/EvwyttpAJKbhAJoZk94yD
+         DP/7uWeoZa79xZfartjvNHxzBasK2toX5Mb0t5HuTeQzKKia4JAYE2oNqecWLYVVzt32
+         PNDLFcswKRqepRYdNmNHEciwukssxC4Arv7Cyt+RNzPdY70DA9JY3VuTFetGv5WYpQhB
+         ESwyYlY0AuXPKJ3luDn1bGPRP5HWUrXWleL4U/SOsoYk+tk3/tQzNe3sMJN6mMtAW6q7
+         dzqA==
+X-Gm-Message-State: AOAM530ktqMfGt/ipC2WUrsKQ9G/rux7n9br9si+vuG1jPs0FQgVfgNf
+        YN9N+XVGbHW4ddZtTUJ8nmnBBQ==
+X-Google-Smtp-Source: ABdhPJxBz1FXycwPTXTy/WCTt2NjfqcLLzcYIy4Yx9gFDji2WBixP5lH/qx3NIthBdl+34zBfkswGw==
+X-Received: by 2002:a17:902:680c:: with SMTP id h12mr20030463plk.86.1595880623009;
+        Mon, 27 Jul 2020 13:10:23 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id l62sm469449pjb.7.2020.07.27.13.10.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2020 13:10:22 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 13:10:21 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        sibis@codeaurora.org, dianders@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] interconnect: Introduce xlate_extended() callback
+Message-ID: <20200727201021.GE3191083@google.com>
+References: <20200723130942.28491-1-georgi.djakov@linaro.org>
+ <20200723130942.28491-2-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200725181404.18951-8-ansuelsmth@gmail.com>
+In-Reply-To: <20200723130942.28491-2-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 25 Jul 2020 20:14:03 +0200, Ansuel Smith wrote:
-> Document the use of bindings used for msm8960 tsens based devices.
-> msm8960 use the same gcc regs and is set as a child of the qcom gcc.
+On Thu, Jul 23, 2020 at 04:09:37PM +0300, Georgi Djakov wrote:
+> Currently there is the xlate() callback, which is provider-specific is
+> used for mapping the nodes from phandle arguments. This is fine for simple
+> mappings, but the phandle arguments could contain an additional data, such
+> as tag information. Let's create another callback xlate_extended() for the
+> cases where providers want also populate the tagging data.
 > 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../bindings/thermal/qcom-tsens.yaml          | 50 ++++++++++++++++---
->  1 file changed, 43 insertions(+), 7 deletions(-)
-> 
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
