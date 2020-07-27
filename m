@@ -2,274 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E8D22E8A4
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 11:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC54F22E903
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 11:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbgG0JPZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 05:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbgG0JPZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 05:15:25 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359B7C0619D2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 02:15:25 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id h18so5185589uao.6
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 02:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3lXFk4OkKW0RhlCVfH/wg1VKJylO9Hv/KMUScr2Ti0E=;
-        b=egtV1aXY3u/TJmL7NXsxrT/SgrePqFIhMC2CyIDQqAU7eILw1wihstpqr5jptZXfFx
-         x3krESYFTHGM2SEz7OMPQh76J975VsWLCEvPyoqGl9OehOON0JEBjvXd46JMVCCY/zZZ
-         dJgzPagqtx3pxJY4bYxfRpXifXAwhK+76s9UrIr0Hzh3TvNxjkXDiTQ8/f6A40ACKPbQ
-         th7GtpOCrzut5eNdbpfUHRTBhcptUa/JVUoeLQDoW4kR+w73zJW3RIgifOLRAd/C+kZm
-         vfPEnmHlUiWCevWCSh5koKKxnl2mUnfg+NE21FJzmH8l28dJ0c85O7zFQo3Nyzz7wWii
-         ko6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3lXFk4OkKW0RhlCVfH/wg1VKJylO9Hv/KMUScr2Ti0E=;
-        b=aUJ00Hpv4tIZRFjP9vuAxmZ9WApiGvaklLqjfiJak4QF1GZLYb1iakKUClwFWsmoac
-         FvCeg8NB/jBCHEZE3Ska2LFWsIqhm126IhVmiymIeo5VFQVZgQnFjrumICRPDwZRj7LU
-         2FSuHShg+YOEmkziGqd8Gjwab0v2AQMkLnlZW13mzNp86YCrveEg+qq+TBmEyJm/YZph
-         YbsjhSBqXdn/MY5kvV0o5C48VaR/+n3PJnAYqa1/pw50XihFwdpRjyWoTUoFAPPpohMT
-         NBBgCOg/dmEOB8kC3TFSumny3dG5mELsJrszXqDb5Xiqb2zLQbeAwW3+oRR2X8Npqf4t
-         IV9A==
-X-Gm-Message-State: AOAM532DGl6UbZQWE+emM4oBeLb38F7lTFv/lVo+3aKLXsX1fRW+b6Av
-        XVS/52uJJGZk5nucn+Zv9inz058kD9pJN9rNYuyVjA==
-X-Google-Smtp-Source: ABdhPJxNDSLsXIXsDG35VGWFqbQrbNQyXIwMD2fJdLXGnXGrMzAvcDYVd4Hz3cCpuYP6CvnckHIHZ2vyAMLI34aeqoQ=
-X-Received: by 2002:a9f:2742:: with SMTP id a60mr188119uaa.48.1595841324120;
- Mon, 27 Jul 2020 02:15:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200629144926.665-1-shawn.guo@linaro.org> <20200629144926.665-3-shawn.guo@linaro.org>
- <CAHLCerMyEsvuhNPnwDow5JYVAbem0Rzs+5-uzKZNeFt+3rYHQg@mail.gmail.com>
- <CAHLCerPEPEOkkBd8MZq8T99eS7nE2pMio6ojnMn7bc54ian-3A@mail.gmail.com> <20200727083322.GA12266@dragon>
-In-Reply-To: <20200727083322.GA12266@dragon>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Mon, 27 Jul 2020 14:45:13 +0530
-Message-ID: <CAHLCerNXtEDONQqXeeCbo3jSL8HNpP-OxW0es0ZQuWNnaAaPFQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: qcom: tsens-v0_1: Add support for MSM8939
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1727094AbgG0JaL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 05:30:11 -0400
+Received: from mail.loongson.cn ([114.242.206.163]:40116 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726302AbgG0JaK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 Jul 2020 05:30:10 -0400
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxOMWCnh5fqSYBAA--.683S2;
+        Mon, 27 Jul 2020 17:29:40 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Ning Sun <ning.sun@intel.com>,
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        tboot-devel@lists.sourceforge.net, linux-pm@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH] ACPI: Use valid link of ACPI specification
+Date:   Mon, 27 Jul 2020 17:29:38 +0800
+Message-Id: <1595842178-20351-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf9DxOMWCnh5fqSYBAA--.683S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr1fuF13Wr47ZrWrtry5urg_yoW8KFWrpF
+        s5KryIk34xtr1Uua18Cw17WFy5W3Z7uFW7Kr48Cw18uF4UWryvqF1akFyYya4UJr4fCFW0
+        qrZ7tF1Uu3WI9rJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
+        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
+        Uq38nUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 2:03 PM Shawn Guo <shawn.guo@linaro.org> wrote:
->
-> Hi Amit,
->
-> On Mon, Jul 27, 2020 at 12:06:54PM +0530, Amit Kucheria wrote:
-> > On Mon, Jul 27, 2020 at 11:56 AM Amit Kucheria <amit.kucheria@linaro.org> wrote:
-> > >
-> > > On Tue, Jun 30, 2020 at 1:09 AM Shawn Guo <shawn.guo@linaro.org> wrote:
-> > > >
-> > > > The TSENS integrated on MSM8939 is a v0_1 device with 10 sensors.
-> > > > Different from its predecessor MSM8916, where 'calib_sel' bits sit in
-> > > > separate qfprom word, MSM8939 has 'cailb' and 'calib_sel' bits mixed and
-> > > > spread on discrete offsets.  That's why all qfprom bits are read as one
-> > > > go and later mapped to calibration data for MSM8939.
-> > > >
-> > > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > >
-> > > Acked-by: Amit Kucheria <amit.kucheria@linaro.org>
-> >
-> > Shawn,
-> >
-> > Have you not sent the change to the tsens.yaml and 8939 DT yet or did
-> > I miss them?
->
-> You were copied on '[PATCH 1/2] dt-bindings: tsens: qcom: Document
-> MSM8939 compatible'.
+Currently, acpi.info is an invalid link to access ACPI specification,
+the new valid link is https://uefi.org/specifications.
 
-Aah ok, it was threaded weirdly but I see it now.
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
+ Documentation/hwmon/acpi_power_meter.rst      | 2 +-
+ drivers/acpi/Kconfig                          | 3 +--
+ include/linux/tboot.h                         | 2 +-
+ tools/power/cpupower/man/cpupower-idle-info.1 | 2 +-
+ 4 files changed, 4 insertions(+), 5 deletions(-)
 
-> For DTS change, I haven't sent them out.  In case
-> you want to have a look, here it is.
+diff --git a/Documentation/hwmon/acpi_power_meter.rst b/Documentation/hwmon/acpi_power_meter.rst
+index 4a0941a..8628c11 100644
+--- a/Documentation/hwmon/acpi_power_meter.rst
++++ b/Documentation/hwmon/acpi_power_meter.rst
+@@ -9,7 +9,7 @@ Supported systems:
+ 
+     Prefix: 'power_meter'
+ 
+-    Datasheet: http://acpi.info/, section 10.4.
++    Datasheet: https://uefi.org/specifications, section 10.4.
+ 
+ Author: Darrick J. Wong
+ 
+diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+index ce2730d..7428cd2 100644
+--- a/drivers/acpi/Kconfig
++++ b/drivers/acpi/Kconfig
+@@ -40,8 +40,7 @@ menuconfig ACPI
+ 	  the UEFI Forum and any UEFI member can join the ASWG and contribute
+ 	  to the ACPI specification.
+ 	  The specification is available at:
+-	  <http://www.acpi.info>
+-	  <http://www.uefi.org/acpi/specs>
++	  <https://uefi.org/specifications>
+ 
+ if ACPI
+ 
+diff --git a/include/linux/tboot.h b/include/linux/tboot.h
+index c7e4247..5146d25 100644
+--- a/include/linux/tboot.h
++++ b/include/linux/tboot.h
+@@ -44,7 +44,7 @@ struct tboot_acpi_generic_address {
+ 
+ /*
+  * combines Sx info from FADT and FACS tables per ACPI 2.0+ spec
+- * (http://www.acpi.info/)
++ * (https://uefi.org/specifications)
+  */
+ struct tboot_acpi_sleep_info {
+ 	struct tboot_acpi_generic_address pm1a_cnt_blk;
+diff --git a/tools/power/cpupower/man/cpupower-idle-info.1 b/tools/power/cpupower/man/cpupower-idle-info.1
+index 80a1311..20b6345 100644
+--- a/tools/power/cpupower/man/cpupower-idle-info.1
++++ b/tools/power/cpupower/man/cpupower-idle-info.1
+@@ -75,7 +75,7 @@ By default only values of core zero are displayed. How to display settings of
+ other cores is described in the cpupower(1) manpage in the \-\-cpu option
+ section.
+ .SH REFERENCES
+-http://www.acpi.info/spec.htm
++https://uefi.org/specifications
+ .SH "FILES"
+ .nf
+ \fI/sys/devices/system/cpu/cpu*/cpuidle/state*\fP
+-- 
+2.1.0
 
-This looks fine from a quick glance. Thanks.
-
->         thermal-zones {
->                 cpu0-thermal {
->                         polling-delay-passive = <250>;
->                         polling-delay = <1000>;
->
->                         thermal-sensors = <&tsens 5>;
->
->                         trips {
->                                 cpu0_alert: trip0 {
->                                         temperature = <75000>;
->                                         hysteresis = <2000>;
->                                         type = "passive";
->                                 };
->                                 cpu0_crit: trip1 {
->                                         temperature = <110000>;
->                                         hysteresis = <2000>;
->                                         type = "critical";
->                                 };
->                         };
->
->                         cooling-maps {
->                                 map0 {
->                                         trip = <&cpu0_alert>;
->                                         cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->                                 };
->                         };
->                 };
->
->                 cpu1-thermal {
->                         polling-delay-passive = <250>;
->                         polling-delay = <1000>;
->
->                         thermal-sensors = <&tsens 6>;
->
->                         trips {
->                                 cpu1_alert: trip0 {
->                                         temperature = <75000>;
->                                         hysteresis = <2000>;
->                                         type = "passive";
->                                 };
->                                 cpu1_crit: trip1 {
->                                         temperature = <110000>;
->                                         hysteresis = <2000>;
->                                         type = "critical";
->                                 };
->                         };
->
->                         cooling-maps {
->                                 map0 {
->                                         trip = <&cpu1_alert>;
->                                         cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->                                 };
->                         };
->                 };
->
->                 cpu2-thermal {
->                         polling-delay-passive = <250>;
->                         polling-delay = <1000>;
->
->                         thermal-sensors = <&tsens 7>;
->
->                         trips {
->                                 cpu2_alert: trip0 {
->                                         temperature = <75000>;
->                                         hysteresis = <2000>;
->                                         type = "passive";
->                                 };
->                                 cpu2_crit: trip1 {
->                                         temperature = <110000>;
->                                         hysteresis = <2000>;
->                                         type = "critical";
->                                 };
->                         };
->
->                         cooling-maps {
->                                 map0 {
->                                         trip = <&cpu2_alert>;
->                                         cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->                                 };
->                         };
->                 };
->
->                 cpu3-thermal {
->                         polling-delay-passive = <250>;
->                         polling-delay = <1000>;
->
->                         thermal-sensors = <&tsens 8>;
->
->                         trips {
->                                 cpu3_alert: trip0 {
->                                         temperature = <75000>;
->                                         hysteresis = <2000>;
->                                         type = "passive";
->                                 };
->                                 cpu3_crit: trip1 {
->                                         temperature = <110000>;
->                                         hysteresis = <2000>;
->                                         type = "critical";
->                                 };
->                         };
->
->                         cooling-maps {
->                                 map0 {
->                                         trip = <&cpu3_alert>;
->                                         cooling-device = <&CPU0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->                                 };
->                         };
->                 };
->
->                 cpu4567-thermal {
->                         polling-delay-passive = <250>;
->                         polling-delay = <1000>;
->
->                         thermal-sensors = <&tsens 9>;
->
->                         trips {
->                                 cpu4567_alert: trip0 {
->                                         temperature = <75000>;
->                                         hysteresis = <2000>;
->                                         type = "passive";
->                                 };
->                                 cpu4567_crit: trip1 {
->                                         temperature = <110000>;
->                                         hysteresis = <2000>;
->                                         type = "critical";
->                                 };
->                         };
->
->                         cooling-maps {
->                                 map0 {
->                                         trip = <&cpu4567_alert>;
->                                         cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->                                                          <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->                                 };
->                         };
->                 };
->
->         };
->
->         qfprom: qfprom@5c000 {
->                 compatible = "qcom,qfprom";
->                 reg = <0x5c000 0x1000>;
->                 #address-cells = <1>;
->                 #size-cells = <1>;
->                 tsens_caldata: caldata@a0 {
->                         reg = <0xa0 0x5c>;
->                 };
->         };
->
->         tsens: thermal-sensor@4a9000 {
->                 compatible = "qcom,msm8939-tsens";
->                 reg = <0x4a9000 0x1000>, /* TM */
->                       <0x4a8000 0x1000>; /* SROT */
->                 nvmem-cells = <&tsens_caldata>;
->                 nvmem-cell-names = "calib";
->                 #qcom,sensors = <10>;
->                 interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
->                 interrupt-names = "uplow";
->                 #thermal-sensor-cells = <1>;
->         };
->
-> Shawn
