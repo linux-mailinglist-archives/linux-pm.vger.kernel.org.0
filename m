@@ -2,130 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB1022F178
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 16:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CAD22F2F5
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 16:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732148AbgG0Ocg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 10:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730544AbgG0OS4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 10:18:56 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BADC0619D2
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 07:18:56 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id d27so12268998qtg.4
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 07:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=pdmKQetK0QLJ8rFRGpIDAlZksqbKSxwq3s5x5iSj/6k=;
-        b=IJ6z7XlWdHP11wN6ofEIEZ8eiR6sqBYmqASCFE7tsyV0XaLFN6UBCLhSDxG3ZtxFiB
-         6UUQmZZQPtZ5gWL5TR/BbzcqU4PRy1rsZs1ydjdNLg3DukK8x+zI+T5IrylXKZcJrp7X
-         wgzsam6DyjyXmTzlExIy6Gz+ESwjakDY8S7H+WJNUPiGauBejJX9bL1UdYuOeP4pj6DE
-         upJWQuBQhzHG9jhW6jTcUmhVdyytehsFjMWOs5NLeA9zWbEPdR+c2Lh3HlXUFaiIaFfI
-         c4NcJMTaVP+qgpPKCcMERNPi8R+BSrrTeP2DhEflbq++A2XpC+Qam2kcKEcY1g6hCLWg
-         xxXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pdmKQetK0QLJ8rFRGpIDAlZksqbKSxwq3s5x5iSj/6k=;
-        b=QhbjP7R9T2WzuCGw/fzufcow9C2pcZdvwuuRW9AmLAlTOnEnf0lnUOkRFs4eCUa3hH
-         YNic0S4Co+1UaBOCFO0xROE0uHJCAqAqFc8KUAUei1+7JWL+ShspnK99RS7jZ7XQ/5hN
-         YvheApbX5+ah475W2h4bYT1UC83FU7+0MM279MXr9ALFJ4poF44oZWMWmTxwiJCWHxBo
-         /H0NI9TEi3BrkvjIlDFP4Bzjez57KhPNrV1V9rLuDDSCnFZPOwEULCsWI63HP02/qV7A
-         y7xWgbXPti/48+fey4+da44pplqTVpxnGfxb/3ODy6KrMPpYsTUhCecTBS9Wg/7tlvRS
-         aIBQ==
-X-Gm-Message-State: AOAM532i7GMEo6ubKFCCMIlaimpKQlPTdCoD4BYo1dcpP0aYUGmdsVgX
-        YDOlqsXfwRRct377YxExNkc4rw==
-X-Google-Smtp-Source: ABdhPJy130C3D8M0rAarkjKcRWiHNErupodcdoc3UEhXmIRDecJWWcdT53d/lQhoGpyYSerZL6QGHQ==
-X-Received: by 2002:ac8:7a95:: with SMTP id x21mr7959782qtr.135.1595859535983;
-        Mon, 27 Jul 2020 07:18:55 -0700 (PDT)
-Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id k24sm14790073qtb.26.2020.07.27.07.18.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 07:18:55 -0700 (PDT)
-Date:   Mon, 27 Jul 2020 10:18:48 -0400
-From:   Qian Cai <cai@lca.pw>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v2 2/3] sched: Cleanup SCHED_THERMAL_PRESSURE kconfig
- entry
-Message-ID: <20200727141825.GA4174@lca.pw>
-References: <20200712165917.9168-1-valentin.schneider@arm.com>
- <20200712165917.9168-3-valentin.schneider@arm.com>
+        id S1729201AbgG0Orm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 10:47:42 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:11505 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728815AbgG0Orm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 10:47:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1595861261; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=TPb15OCnOsAowfP2BhokEuD7cKnbaHb+UsLNuqo/luU=; b=ZcJcgrZ9nvJzTpphNmUlmxQV6XblCwURm67FEBIlHRqXIXJHZgYQ00H3tsKv19XAT/ikepxj
+ IIj4BFtNX45qvE/RYE8A8W49PZVIhcJGrVuhRsaQfTcwWrRKGlkca5D8t9mpQcZrdQPX8sxN
+ xSbDQR50xoz/HG2tubt0f88L2f4=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f1ee90d634c4259e3b01e2d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 27 Jul 2020 14:47:41
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 20EDDC43391; Mon, 27 Jul 2020 14:47:41 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.8 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.79.43.230] (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 14B37C433C6;
+        Mon, 27 Jul 2020 14:47:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 14B37C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+Subject: Re: [PATCH 2/6] interconnect: qcom: Implement xlate_extended() to
+ parse tags
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org, mka@chromium.org,
+        dianders@chromium.org, linux-kernel@vger.kernel.org
+References: <20200723130942.28491-1-georgi.djakov@linaro.org>
+ <20200723130942.28491-3-georgi.djakov@linaro.org>
+From:   Sibi Sankar <sibis@codeaurora.org>
+Message-ID: <9bb9aa9c-b9da-ffb3-01e8-0e1ebece18a9@codeaurora.org>
+Date:   Mon, 27 Jul 2020 20:17:35 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200712165917.9168-3-valentin.schneider@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200723130942.28491-3-georgi.djakov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 12, 2020 at 05:59:16PM +0100, Valentin Schneider wrote:
-> As Russell pointed out [1], this option is severely lacking in the
-> documentation department, and figuring out if one has the required
-> dependencies to benefit from turning it on is not straightforward.
+Hey Georgi,
+
+Thanks for the patch!
+
+On 7/23/20 6:39 PM, Georgi Djakov wrote:
+> Implement a function to parse the arguments of the "interconnects" DT
+> property and populate the interconnect path tags if this information
+> is available.
 > 
-> Make it non user-visible, and add a bit of help to it. While at it, make it
-> depend on CPU_FREQ_THERMAL.
-> 
-> [1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
-> 
-> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 > ---
->  init/Kconfig | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+>   drivers/interconnect/qcom/icc-rpmh.c | 27 +++++++++++++++++++++++++++
+>   drivers/interconnect/qcom/icc-rpmh.h |  1 +
+>   2 files changed, 28 insertions(+)
 > 
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 0498af567f70..0a97d85568b2 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -492,8 +492,21 @@ config HAVE_SCHED_AVG_IRQ
->  	depends on SMP
->  
->  config SCHED_THERMAL_PRESSURE
-> -	bool "Enable periodic averaging of thermal pressure"
-> +	bool
->  	depends on SMP
-> +	depends on CPU_FREQ_THERMAL
-> +	help
-> +	  Select this option to enable thermal pressure accounting in the
-> +	  scheduler. Thermal pressure is the value conveyed to the scheduler
-> +	  that reflects the reduction in CPU compute capacity resulted from
-> +	  thermal throttling. Thermal throttling occurs when the performance of
-> +	  a CPU is capped due to high operating temperatures.
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+> index 3ac5182c9ab2..44144fabec32 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.c
+> +++ b/drivers/interconnect/qcom/icc-rpmh.c
+> @@ -6,6 +6,8 @@
+>   #include <linux/interconnect.h>
+>   #include <linux/interconnect-provider.h>
+>   #include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+>   
+>   #include "bcm-voter.h"
+>   #include "icc-rpmh.h"
+> @@ -92,6 +94,31 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_icc_set);
+>   
+> +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
+> +{
+> +	struct icc_node_data *ndata;
+> +	struct icc_node *node;
 > +
-> +	  If selected, the scheduler will be able to balance tasks accordingly,
-> +	  i.e. put less load on throttled CPUs than on non/less throttled ones.
+> +	if (!spec)
+> +		return ERR_PTR(-EINVAL);
 > +
-> +	  This requires the architecture to implement
-> +	  arch_set_thermal_pressure() and arch_get_thermal_pressure().
->  
->  config BSD_PROCESS_ACCT
->  	bool "BSD Process Accounting"
-> -- 
 
-On arm64 linux-next (20200727),
+you could probably skip ^^ check
 
-https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
+Tested-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
 
-WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
-  Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
-  Selected by [y]:
-  - ARM64 [=y]
+> +	node = of_icc_xlate_onecell(spec, data);
+> +	if (IS_ERR(node))
+> +		return ERR_CAST(node);
+> +
+> +	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
+> +	if (!ndata)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	ndata->node = node;
+> +
+> +	if (spec->args_count == 2)
+> +		ndata->tag = spec->args[1];
+> +
+> +	return ndata;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
+> +
+>   /**
+>    * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+>    * @bcm: bcm to be initialized
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> index 903d25e61984..1dac39bc255d 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.h
+> +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> @@ -143,6 +143,7 @@ struct qcom_icc_desc {
+>   int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>   		       u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+>   int qcom_icc_set(struct icc_node *src, struct icc_node *dst);
+> +struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+>   int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev);
+>   void qcom_icc_pre_aggregate(struct icc_node *node);
+>   
+> 
+> 
+> 
+
+-- 
+Qualcomm Innovation Center, Inc.
+Qualcomm Innovation Center, Inc, is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
