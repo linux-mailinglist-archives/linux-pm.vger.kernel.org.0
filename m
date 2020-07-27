@@ -2,192 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3C622FE08
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 01:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5D422FE33
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 01:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726753AbgG0XeR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 19:34:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42098 "EHLO mail.kernel.org"
+        id S1726222AbgG0X4O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 19:56:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46478 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726196AbgG0XeQ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Jul 2020 19:34:16 -0400
+        id S1726171AbgG0X4O (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:56:14 -0400
 Received: from earth.universe (unknown [185.213.155.232])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6B2F20809;
-        Mon, 27 Jul 2020 23:34:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E805620679;
+        Mon, 27 Jul 2020 23:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595892856;
-        bh=JgDpgk8Xkxp89oqH9VYbBX5FyFOiPbGIIgUQHEDfMQk=;
+        s=default; t=1595894173;
+        bh=FwIpB8P/hxYUnpPcq1dzkeRKvDDN/24T9qQAaLZtthY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B9xu8NxGiZ/IjMfRoOY5GDUznSz0VYP6sHDo/YO3sFh7Lm1PakNkKub0KuJ07kdD6
-         G/fcK+UqtARN45vcFdESB+KBWEtIaKvOBejZ10u9Rid9BfKQRp/8BDhgaTtL6s6uEj
-         BumCxP4LgFIA589ekGFgot1nHqZCZGGTmTs3N8FU=
+        b=SvgACDgsNYhzuuBfg2Imv2cI5wVXoTzvvKlDJ99rQJeC7nnTGOffll3RW+UoGzanC
+         UUmKr51oxnpyg3sGDXgJhuRPuhCxhpl7/Zja1ZOeIojWMKp2pdlcH3/0Ch1lSU/rQb
+         7tCoTpBEn2ZUmi13j9KEdlZVlaa7Qs/d6oDbR4cY=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 0B3A83C0B87; Tue, 28 Jul 2020 01:34:14 +0200 (CEST)
-Date:   Tue, 28 Jul 2020 01:34:14 +0200
+        id D33903C0B87; Tue, 28 Jul 2020 01:56:10 +0200 (CEST)
+Date:   Tue, 28 Jul 2020 01:56:10 +0200
 From:   Sebastian Reichel <sre@kernel.org>
-To:     Crag Wang <crag0715@gmail.com>
-Cc:     mathewk@chromium.org, mario.limonciello@dell.com,
-        campello@google.com, Crag Wang <crag.wang@dell.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/1] power_supply: wilco_ec: Add permanent long
- life charging mode
-Message-ID: <20200727233414.xu5eqyes76a5hpkw@earth.universe>
-References: <20200715145511.9464-1-crag.wang@dell.com>
+To:     Daniel =?utf-8?B?R29uesOhbGV6?= Cabanelas <dgcbueu@gmail.com>
+Cc:     linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4] power: reset: add driver for LinkStation power off
+Message-ID: <20200727235610.6vyp2uf2pyf57tbz@earth.universe>
+References: <2534992.hIiKHhy4eC@tool>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ze4425po6izm6pbt"
+        protocol="application/pgp-signature"; boundary="cxptfwneecvb7now"
 Content-Disposition: inline
-In-Reply-To: <20200715145511.9464-1-crag.wang@dell.com>
+In-Reply-To: <2534992.hIiKHhy4eC@tool>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ze4425po6izm6pbt
-Content-Type: text/plain; charset=us-ascii
+--cxptfwneecvb7now
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Jul 15, 2020 at 10:55:12PM +0800, Crag Wang wrote:
-> This is a long life mode set in the factory for extended warranty
-> battery, the power charging rate is customized so that battery at
-> work last longer.
+On Wed, Jul 15, 2020 at 03:35:14PM +0200, Daniel Gonz=E1lez Cabanelas wrote:
+> Some Buffalo LinkStations perform the power off operation, at restart
+> time, depending on the state of an output pin (LED2/INTn) at the ethernet
+> PHY. This pin is also used to wake the machine when a WoL packet is=20
+> received by the PHY.
 >=20
-> Presently switching to a different battery charging mode is through
-> EC PID 0x0710 to configure the battery firmware, this operation will
-> be blocked by EC with failure code 0x01 when PLL mode is already
-> in use.
+> The driver is required by the Buffalo LinkStation LS421DE (ARM MVEBU),
+> and other models. Without it, the board remains forever halted if a=20
+> power off command is executed, unless the PSU is disconnected and
+> connected again.
 >=20
-> Signed-off-by: Crag Wang <crag.wang@dell.com>
+> Add the driver to provide the power off function and also make the WoL
+> feature to be available.
+>=20
+> Signed-off-by: Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>
 > ---
->  Documentation/ABI/testing/sysfs-class-power-wilco | 3 +++
->  drivers/power/supply/power_supply_sysfs.c         | 1 +
->  drivers/power/supply/wilco-charger.c              | 5 +++++
->  include/linux/power_supply.h                      | 1 +
->  4 files changed, 10 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power-wilco b/Document=
-ation/ABI/testing/sysfs-class-power-wilco
-> index da1d6ffe5e3c..1c91b17b6fd4 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power-wilco
-> +++ b/Documentation/ABI/testing/sysfs-class-power-wilco
-> @@ -14,6 +14,9 @@ Description:
->  			Charging begins when level drops below
->  			charge_control_start_threshold, and ceases when
->  			level is above charge_control_end_threshold.
-> +		Permanent Long Life: Last longer battery life, this mode
-> +			is programmed once in the factory. Switching to a
-> +			different mode is unavailable.
 
-The documentation lacks one important aspect: What happens
-if I have a device where the factory did not program "Long Life"?
-I.e. what happens when
+Doing reboot/poweroff via network PHY pin is a really interesting
+hardware hack. Considering the circumstances the driver looks good,
+so: queued to power-supply's for-next branch.
 
-# cat /sys/class/power_supply/wilco-charger/charge_type
-Standard
-# echo "Long Life" > /sys/class/power_supply/wilco-charger/charge_type
-
-Will the controller switch into permanent long life battery mode
-without any exit strategy?
-
->  What:		/sys/class/power_supply/wilco-charger/charge_control_start_thresh=
-old
->  Date:		April 2019
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index bc79560229b5..af3884015ad8 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -87,6 +87,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT=
-[] =3D {
->  	[POWER_SUPPLY_CHARGE_TYPE_STANDARD]	=3D "Standard",
->  	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	=3D "Adaptive",
->  	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	=3D "Custom",
-> +	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	=3D "Permanent Long Life",
-
-The "Permanent" part is specific to the Wilco EC, so I think it's
-better to avoid it in the generic API. I think it's better to use
-just "Long Life" (and keep the wilco specific sysfs Documentation,
-that Long Life configuration is permanent).
+Thanks,
 
 -- Sebastian
 
->  };
-> =20
->  static const char * const POWER_SUPPLY_HEALTH_TEXT[] =3D {
-> diff --git a/drivers/power/supply/wilco-charger.c b/drivers/power/supply/=
-wilco-charger.c
-> index b3c6d7cdd731..713c3018652f 100644
-> --- a/drivers/power/supply/wilco-charger.c
-> +++ b/drivers/power/supply/wilco-charger.c
-> @@ -27,6 +27,7 @@ enum charge_mode {
->  	CHARGE_MODE_AC =3D 3,	/* Mostly AC use, used for Trickle */
->  	CHARGE_MODE_AUTO =3D 4,	/* Used for Adaptive */
->  	CHARGE_MODE_CUSTOM =3D 5,	/* Used for Custom */
-> +	CHARGE_MODE_LONGLIFE =3D 6, /* Used for Permanent Long Life */
->  };
-> =20
->  #define CHARGE_LOWER_LIMIT_MIN	50
-> @@ -48,6 +49,8 @@ static int psp_val_to_charge_mode(int psp_val)
->  		return CHARGE_MODE_AUTO;
->  	case POWER_SUPPLY_CHARGE_TYPE_CUSTOM:
->  		return CHARGE_MODE_CUSTOM;
-> +	case POWER_SUPPLY_CHARGE_TYPE_LONGLIFE:
-> +		return CHARGE_MODE_LONGLIFE;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -67,6 +70,8 @@ static int charge_mode_to_psp_val(enum charge_mode mode)
->  		return POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE;
->  	case CHARGE_MODE_CUSTOM:
->  		return POWER_SUPPLY_CHARGE_TYPE_CUSTOM;
-> +	case CHARGE_MODE_LONGLIFE:
-> +		return POWER_SUPPLY_CHARGE_TYPE_LONGLIFE;
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index ac1345a48ad0..528a3eaa2320 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -48,6 +48,7 @@ enum {
->  	POWER_SUPPLY_CHARGE_TYPE_STANDARD,	/* normal speed */
->  	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
->  	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
-> +	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
->  };
-> =20
->  enum {
-> --=20
-> 2.17.1
+> Changes in v4:
+>   - Deleted the power-off binding as suggested by Rob Herring. Therefore
+>     the binding patch isn't required. Now the device detection is made
+>     using the root node compatible string.
+> Changes in v3:
+>   - Code for PHY autodectection added, "phy-handle,intn" deleted.
+> Changes in v2:
+>   - The driver is now compatible with the WoL function, the LED2 pin outp=
+ut
+>     is now used as INTn. Added the required code to make INTn work proper=
+ly.
+>   - Code for PHY autodectection deleted, "phy-handle,intn" is now mandato=
+ry.
+>   - Replace a dev_info with a dev_dbg.
+>   - Use phy_device_free in the driver remove.
+>   - Cosmetic changes.
 >=20
-> ---
-> The original author, Nick no longer being around and that's why he's not =
-on CC.
+>  drivers/power/reset/Kconfig                |  11 ++
+>  drivers/power/reset/Makefile               |   1 +
+>  drivers/power/reset/linkstation-poweroff.c | 136 +++++++++++++++++++++
+>  3 files changed, 148 insertions(+)
+>  create mode 100644 drivers/power/reset/linkstation-poweroff.c
+>=20
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index f07b982c8d..0a1fb5c74f 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -99,6 +99,17 @@ config POWER_RESET_HISI
+>  	help
+>  	  Reboot support for Hisilicon boards.
+> =20
+> +config POWER_RESET_LINKSTATION
+> +	tristate "Buffalo LinkStation power-off driver"
+> +	depends on ARCH_MVEBU || COMPILE_TEST
+> +	depends on OF_MDIO && PHYLIB
+> +	help
+> +	  This driver supports turning off some Buffalo LinkStations by
+> +	  setting an output pin at the ethernet PHY to the correct state.
+> +	  It also makes the device compatible with the WoL function.
+> +
+> +	  Say Y here if you have a Buffalo LinkStation LS421D/E.
+> +
+>  config POWER_RESET_MSM
+>  	bool "Qualcomm MSM power-off driver"
+>  	depends on ARCH_QCOM
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index 5710ca4695..c51eceba9e 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) +=3D gemini-p=
+oweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO) +=3D gpio-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_GPIO_RESTART) +=3D gpio-restart.o
+>  obj-$(CONFIG_POWER_RESET_HISI) +=3D hisi-reboot.o
+> +obj-${CONFIG_POWER_RESET_LINKSTATION} +=3D linkstation-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_MSM) +=3D msm-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_MT6323) +=3D mt6323-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_OXNAS) +=3D oxnas-restart.o
+> diff --git a/drivers/power/reset/linkstation-poweroff.c b/drivers/power/r=
+eset/linkstation-poweroff.c
+> new file mode 100644
+> index 0000000000..1d1113d98c
+> --- /dev/null
+> +++ b/drivers/power/reset/linkstation-poweroff.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * LinkStation power off restart driver
+> + * Copyright (C) 2020 Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/notifier.h>
+> +#include <linux/of.h>
+> +#include <linux/of_mdio.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/reboot.h>
+> +#include <linux/phy.h>
+> +
+> +/* Defines from the eth phy Marvell driver */
+> +#define MII_MARVELL_COPPER_PAGE		0
+> +#define MII_MARVELL_LED_PAGE		3
+> +#define MII_MARVELL_WOL_PAGE		17
+> +#define MII_MARVELL_PHY_PAGE		22
+> +
+> +#define MII_PHY_LED_CTRL		16
+> +#define MII_88E1318S_PHY_LED_TCR	18
+> +#define MII_88E1318S_PHY_WOL_CTRL	16
+> +#define MII_M1011_IEVENT		19
+> +
+> +#define MII_88E1318S_PHY_LED_TCR_INTn_ENABLE		BIT(7)
+> +#define MII_88E1318S_PHY_LED_TCR_FORCE_INT		BIT(15)
+> +#define MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS	BIT(12)
+> +#define LED2_FORCE_ON					(0x8 << 8)
+> +#define LEDMASK						GENMASK(11,8)
+> +
+> +static struct phy_device *phydev;
+> +
+> +static void mvphy_reg_intn(u16 data)
+> +{
+> +	int rc =3D 0, saved_page;
+> +
+> +	saved_page =3D phy_select_page(phydev, MII_MARVELL_LED_PAGE);
+> +	if (saved_page < 0)
+> +		goto err;
+> +
+> +	/* Force manual LED2 control to let INTn work */
+> +	__phy_modify(phydev, MII_PHY_LED_CTRL, LEDMASK, LED2_FORCE_ON);
+> +
+> +	/* Set the LED[2]/INTn pin to the required state */
+> +	__phy_modify(phydev, MII_88E1318S_PHY_LED_TCR,
+> +		     MII_88E1318S_PHY_LED_TCR_FORCE_INT,
+> +		     MII_88E1318S_PHY_LED_TCR_INTn_ENABLE | data);
+> +
+> +	if (!data) {
+> +		/* Clear interrupts to ensure INTn won't be holded in high state */
+> +		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_COPPER_PAGE);
+> +		__phy_read(phydev, MII_M1011_IEVENT);
+> +
+> +		/* If WOL was enabled and a magic packet was received before powering
+> +		 * off, we won't be able to wake up by sending another magic packet.=
+=20
+> +		 * Clear WOL status.
+> +		 */
+> +		__phy_write(phydev, MII_MARVELL_PHY_PAGE, MII_MARVELL_WOL_PAGE);
+> +		__phy_set_bits(phydev, MII_88E1318S_PHY_WOL_CTRL,
+> +			       MII_88E1318S_PHY_WOL_CTRL_CLEAR_WOL_STATUS);
+> +	}
+> +err:
+> +	rc =3D phy_restore_page(phydev, saved_page, rc);
+> +	if (rc < 0)
+> +		dev_err(&phydev->mdio.dev, "Write register failed, %d\n", rc);
+> +}
+> +
+> +static int linkstation_reboot_notifier(struct notifier_block *nb,
+> +				       unsigned long action, void *unused)
+> +{
+> +	if (action =3D=3D SYS_RESTART)
+> +		mvphy_reg_intn(MII_88E1318S_PHY_LED_TCR_FORCE_INT);
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block linkstation_reboot_nb =3D {
+> +	.notifier_call =3D linkstation_reboot_notifier,
+> +};
+> +
+> +static void linkstation_poweroff(void)
+> +{
+> +	unregister_reboot_notifier(&linkstation_reboot_nb);
+> +	mvphy_reg_intn(0);
+> +
+> +	kernel_restart("Power off");
+> +}
+> +
+> +static const struct of_device_id ls_poweroff_of_match[] =3D {
+> +	{ .compatible =3D "buffalo,ls421d" },
+> +	{ .compatible =3D "buffalo,ls421de" },
+> +	{ },
+> +};
+> +
+> +static int __init linkstation_poweroff_init(void)
+> +{
+> +	struct mii_bus *bus;
+> +	struct device_node *dn;
+> +
+> +	dn =3D of_find_matching_node(NULL, ls_poweroff_of_match);
+> +	if (!dn)
+> +		return -ENODEV;
+> +	of_node_put(dn);
+> +
+> +	dn =3D of_find_node_by_name(NULL, "mdio");
+> +	if (!dn)
+> +		return -ENODEV;
+> +
+> +	bus =3D of_mdio_find_bus(dn);
+> +	of_node_put(dn);
+> +	if (!bus)
+> +		return -EPROBE_DEFER;
+> +
+> +	phydev =3D phy_find_first(bus);
+> +	if (!phydev)
+> +		return -EPROBE_DEFER;
+> +
+> +	register_reboot_notifier(&linkstation_reboot_nb);
+> +	pm_power_off =3D linkstation_poweroff;
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit linkstation_poweroff_exit(void)
+> +{
+> +	pm_power_off =3D NULL;
+> +	unregister_reboot_notifier(&linkstation_reboot_nb);
+> +}
+> +
+> +module_init(linkstation_poweroff_init);
+> +module_exit(linkstation_poweroff_exit);
+> +
+> +MODULE_AUTHOR("Daniel Gonz=E1lez Cabanelas <dgcbueu@gmail.com>");
+> +MODULE_DESCRIPTION("LinkStation power off driver");
+> +MODULE_LICENSE("GPL v2");
+> --=20
+> 2.27.0
+>=20
+>=20
+>=20
+>=20
 
---ze4425po6izm6pbt
+--cxptfwneecvb7now
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8fZHIACgkQ2O7X88g7
-+pon5Q//Q0ljbWhfCtEjqe2xMDCnjXF3rx1XwzK/m99ouLBowdasFvLQ3qG7/LAI
-O7lQvSo4pHfAFKy9+H0eZXtGSQwqjoF0DNhLiGuHbF3trqO4Tm7dxQhejlOtCpIj
-Eh7D2B2YIXley9jR3RuxTuL0dNStR0jB+DL3c6/8IO8gA7GSqjKcpXEPohm0++RI
-fwyOGOsqAKof3+98Ze1jal46vORiuwhTEcCahzqh8FWoO5VsiFMKkg6oxqIOwuWd
-8bRITrCgcEb+8ioxCYdm/Rh+65OptYFKDZMKTobZkS8qWqoxp+R/Mhky1tYey11V
-N85n5XZvTVbLQG/Y1RrxnGdEX6pCfMox/PWz4EsS3xE4JG0ra2MjvHcmGbzz7y8A
-d4wJORjUEw6p3HJaHIXcThyDgPHX+i5lhmdeTjW50sAf5CkRGjbLNnjoTbjpLu/1
-uutJEounTDhYxacfcUJL8xucaJKZY90y5PBruuzV8QOj8vcCayaTC8tQ44Qi+e7l
-hVXK30ZEUZ0sbgrn/VmcD6aIc9LRhbgy14ankeQQqKBB6jAViBQzx62yqqVsF8by
-DqbduN18BZi3z5Ad2i9bDgzT1BSbeE2kHH/zeCjAOSMU4Ol9y6YClHP4MclIGuOs
-KFodT5uRd3RIF9XpIASCa3m4oeB85VIdKNdq4cWBeir73vFVUj8=
-=lkV5
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8faZQACgkQ2O7X88g7
++ppRXRAAg4GHe2A4VKZSg91z+4uRpXFMzH4cKzdUy+d/J8Ax/6ZZ41qMoeNUQXKH
+jrcgfdbjFXhkjYSOBAQEb+YbV4RotbMVSdV165CzvqM5y2uA5kM1Zv/44Gv7Ev9r
+TMq2pDZ35fsc7bRfX9dpaJfydGgpSqovICSKBMNBBQvyJe6pPmSe6qRJXjDg0FHE
+rABdaD1I2+TxfngmrkYziJMIB/Kxn0AMJG3QPgZIAMtfiLF46PoLSUNvnfCxL9bL
+2TiHmIYJEEraA1ifdJkHVXhADocBVz09p+D/UnWVChEucD4MzB/X9zu8UeAUqtGc
+gmQr7ZkKpRFzJ3g68gRemdbOSyIOql1uPO17P8UYdj/JLmCoQz5sNJXAGMXpdJlt
+2ip+WfDTd01aQWcX426ukYPblnxc3qYeUalp4hVtAtwWpXlg/lEuw+5+wwjbBWYk
+BNB1TPugoN2hMGgKj/EgoZkd/i8GTcnfr6xt1cSUNQdhY8EoexVEohR7gk2uqcgw
+TuTaLYhhbiqJBu0VUJpMe4sQDhVipYj+ysLdEQsfzjd4QWywJD4TP1Fqf5C3wwTA
+y450jrXdkvUMxCGsiwncFf1KdG5qgRZ+oZlgPBX6WJiaStGL8+gSdoNhWY1P7Isz
+doie2K7BtlkJ9TJ0F8oZgU+t6vODXgS5kWN2MlEACJnn9Eqi5vs=
+=AmuE
 -----END PGP SIGNATURE-----
 
---ze4425po6izm6pbt--
+--cxptfwneecvb7now--
