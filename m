@@ -2,120 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A93022F67E
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 19:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE6022F6E0
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jul 2020 19:41:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730462AbgG0RXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 13:23:37 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:59756 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726617AbgG0RXg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 13:23:36 -0400
-Received: from 89-64-87-33.dynamic.chello.pl (89.64.87.33) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 52252b58e7e4f51e; Mon, 27 Jul 2020 19:23:33 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Mon, 27 Jul 2020 19:23:32 +0200
-Message-ID: <1712943.Luj0Z5seXe@kreacher>
-In-Reply-To: <87h7u0h34t.fsf@riseup.net>
-References: <3955470.QvD6XneCf3@kreacher> <babeff29a60d3fadb5515eaf57f7bb42a1c9c792.camel@linux.intel.com> <87h7u0h34t.fsf@riseup.net>
+        id S1729157AbgG0Rlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 13:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728347AbgG0Rlx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 13:41:53 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A25DC0619D2
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 10:41:53 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id e22so2847003pjt.3
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 10:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=anIhz+sUWSZj2LLbB+V68VzBj1HjbcN4RzXAFjEj7pk=;
+        b=A53/TAW3iJzAqM3UVSdj8n8yLACsMpMkFdUpHx7hdCQwG5BdtaS1xgwPMV27wBQGBX
+         ezA9FGjP8KpBIMFbq6O1w6hZ5uE9zlro/tDge9V3CGS8LA+F3KYOrKBXfNOBqsZ0N4op
+         Pnnt/7hiVk3as30/qnaqFkpxDj/Jth8sa2E98wzqaMrUnSHN6g9WHuFTrpjPorz0dF1w
+         uUZh5BYXRB6CQu8wdCgc/AYY1B+S4ZZSoz2LbWiJPBXSOxpMlGafLRIqQfP+VdgdMYgM
+         LufmOjVkc9jvN82+yXkl2ir4gO2HOOlSAWkfzpkioWoj8YS+kQePQp3n+03q9SMhyNE/
+         Qesw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=anIhz+sUWSZj2LLbB+V68VzBj1HjbcN4RzXAFjEj7pk=;
+        b=nsp8hNRAaTcNZaQsG7bnUR4jiIEYNb3bg8A5nFaQOOkT5k+eSQkz29AhRTXfYFA7uh
+         r1hwePc9STVoqAm/rHmKvLCNYp2kbppmNiQErOZuOUL25GWL5c6G9S+hgouzIrzHUt1k
+         gtQ0xBDa02og/rtOceHICDyXPaCjZkUXTpKBrRR3aeP5+wAn9CHQAtVkEborFftsYyOP
+         lFAJ5Efb4lM97oal1tFfCa7JffOJRjitmaxwnOow63QE9OJs3GskIFoR7lFAz03gISgs
+         PDcDLCXvcPdnkczFNQnk5ZGMmrRVORECqosqPcO0niN4AB3MbHjCWoxC79mXiVbJlh43
+         5TpQ==
+X-Gm-Message-State: AOAM533Nvba6xhseXcyLBFJNTF2AqnUng7A1qv5zVLTsdSyxq+LLxPrI
+        bTaud2dyPY3U360nkvXG5947Lw==
+X-Google-Smtp-Source: ABdhPJxonNO7C1s8c7dsZ01iiSbx7OWhiK4Kk7C7FePc4SZXpL20+c+k2aEeLh7w9nx+KMSqOYL4mg==
+X-Received: by 2002:a17:902:bb82:: with SMTP id m2mr19649190pls.61.1595871712379;
+        Mon, 27 Jul 2020 10:41:52 -0700 (PDT)
+Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id u13sm201376pjy.40.2020.07.27.10.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jul 2020 10:41:51 -0700 (PDT)
+Date:   Mon, 27 Jul 2020 10:38:18 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     linux-pm@vger.kernel.org, evgreen@chromium.org,
+        akashast@codeaurora.org, mka@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] interconnect: Add bulk API helpers
+Message-ID: <20200727173818.GE63496@builder.lan>
+References: <20200528162542.30158-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200528162542.30158-1-georgi.djakov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, July 22, 2020 1:14:42 AM CEST Francisco Jerez wrote:
-> 
-> --==-=-=
-> Content-Type: multipart/mixed; boundary="=-=-="
-> 
-> --=-=-=
-> Content-Type: text/plain; charset=utf-8
-> Content-Disposition: inline
-> Content-Transfer-Encoding: quoted-printable
-> 
-> Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> writes:
-> 
-> > On Mon, 2020-07-20 at 16:20 -0700, Francisco Jerez wrote:
-> >> "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> >>=20
-> >> > On Fri, Jul 17, 2020 at 2:21 AM Francisco Jerez <
-> >> > currojerez@riseup.net> wrote:
-> >> > > "Rafael J. Wysocki" <rafael@kernel.org> writes:
-> >> > >=20
-> > {...]
-> >
-> >> > Overall, so far, I'm seeing a claim that the CPU subsystem can be
-> >> > made
-> >> > use less energy and do as much work as before (which is what
-> >> > improving
-> >> > the energy-efficiency means in general) if the maximum frequency of
-> >> > CPUs is limited in a clever way.
-> >> >=20
-> >> > I'm failing to see what that clever way is, though.
-> >> Hopefully the clarifications above help some.
-> >
-> > To simplify:
-> >
-> > Suppose I called a function numpy.multiply() to multiply two big arrays
-> > and thread is a pegged to a CPU. Let's say it is causing CPU to
-> > finish the job in 10ms and it is using a P-State of 0x20. But the same
-> > job could have been done in 10ms even if it was using P-state of 0x16.
-> > So we are not energy efficient. To really know where is the bottle neck
-> > there are numbers of perf counters, may be cache was the issue, we
-> > could rather raise the uncore frequency a little. A simple APRF,MPERF
-> > counters are not enough.=20
-> 
-> Yes, that's right, APERF and MPERF aren't sufficient to identify every
-> kind of possible bottleneck, some visibility of the utilization of other
-> subsystems is necessary in addition -- Like e.g the instrumentation
-> introduced in my series to detect a GPU bottleneck.  A bottleneck
-> condition in an IO device can be communicated to CPUFREQ
+On Thu 28 May 09:25 PDT 2020, Georgi Djakov wrote:
+> diff --git a/drivers/interconnect/bulk.c b/drivers/interconnect/bulk.c
+> new file mode 100644
+> index 000000000000..9bd418594665
+> --- /dev/null
+> +++ b/drivers/interconnect/bulk.c
+> @@ -0,0 +1,119 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/device.h>
+> +#include <linux/export.h>
+> +
+> +/**
+> + * of_icc_bulk_get - get interconnect paths
 
-It generally is not sufficient to communicate it to cpufreq.  It needs to be
-communicated to the CPU scheduler.
+Parenthesis on the function name here, and on the other functions below.
 
-> by adjusting a
-> PM QoS latency request (link [2] in my previous reply) that effectively
-> gives the governor permission to rearrange CPU work arbitrarily within
-> the specified time frame (which should be of the order of the natural
-> latency of the IO device -- e.g. at least the rendering time of a frame
-> for a GPU) in order to minimize energy usage.
+> + * @dev: the device requesting the path
+> + * @num_paths: the number of icc_bulk_data
+> + * @paths: the table with the paths we want to get
+> + *
+> + * Returns 0 on success or -EERROR otherwise.
 
-OK, we need to talk more about this.
+s/-EERROR/negative errno/
 
-> > or we characterize the workload at different P-states and set limits.
-> > I think this is not you want to say for energy efficiency with your
-> > changes.=20
-> >
-> > The way you are trying to improve "performance" is by caller (device
-> > driver) to say how important my job at hand. Here device driver suppose
-> > offload this calculations to some GPU and can wait up to 10 ms, you
-> > want to tell CPU to be slow. But the p-state driver at a movement
-> > observes that there is a chance of overshoot of latency, it will
-> > immediately ask for higher P-state. So you want P-state limits based on
-> > the latency requirements of the caller. Since caller has more knowledge
-> > of latency requirement, this allows other devices sharing the power
-> > budget to get more or less power, and improve overall energy efficiency
-> > as the combined performance of system is improved.
-> > Is this correct?
-> 
-> Yes, pretty much.
+> + */
+> +int __must_check of_icc_bulk_get(struct device *dev, int num_paths,
+> +				 struct icc_bulk_data *paths)
+> +{
+> +	int ret, i;
+> +
+> +	for (i = 0; i < num_paths; i++) {
+> +		paths[i].path = of_icc_get(dev, paths[i].name);
+> +		if (IS_ERR(paths[i].path)) {
+> +			ret = PTR_ERR(paths[i].path);
+> +			dev_err(dev, "of_icc_get() failed on path %s (%d)\n",
+> +				paths[i].name, ret);
 
-OK
+I think you only should print this error if ret != -EPROBE_DEFER.
 
+> +			paths[i].path = NULL;
+> +			goto err;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	icc_bulk_put(i, paths);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(of_icc_bulk_get);
+> +
+> +/**
+> + * icc_bulk_put - put a list of interconnect paths
+> + * @num_paths: the number of icc_bulk_data
+> + * @paths: the icc_bulk_data table with the paths being put
+> + */
+> +void icc_bulk_put(int num_paths, struct icc_bulk_data *paths)
+> +{
+> +	while (--num_paths >= 0) {
+> +		icc_put(paths[num_paths].path);
+> +		paths[num_paths].path = NULL;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(icc_bulk_put);
+> +
+> +/**
+> + * icc_bulk_set - set bandwidth to a set of paths
+> + * @num_paths: the number of icc_bulk_data
+> + * @paths: the icc_bulk_data table containing the paths and bandwidth
+> + *
+> + * Returns 0 on success or -EERROR otherwise.
+> + */
+> +int icc_bulk_set_bw(int num_paths, const struct icc_bulk_data *paths)
+> +{
+> +	int ret = 0;
+> +	int i;
+> +
+> +	for (i = 0; i < num_paths; i++) {
+> +		ret = icc_set_bw(paths[i].path, paths[i].avg_bw,
+> +				 paths[i].peak_bw);
 
+You can unwrap this line.
 
+Regards,
+Bjorn
