@@ -2,108 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0138D22FE6E
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 02:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9219E22FE71
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 02:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgG1ATj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 27 Jul 2020 20:19:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49558 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726196AbgG1ATj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 27 Jul 2020 20:19:39 -0400
-Received: from earth.universe (unknown [185.213.155.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 12FA420786;
-        Tue, 28 Jul 2020 00:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595895579;
-        bh=vsiTrIcZ56SSOxyiEUoEwv+DpHiWDpQ4NqHzGqLqy3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QYCMeK0MW7pG2TuN8wCprFNbGTxiU0frezxvvY/Brck/TqRWqtKMY6p6ZDqYHgpzm
-         UYDLLpsfd6AVXo63eI70TvuKt7nSTWho9ggj2+P/cUKNT+sk7JbB0rWgFbmRyVjyhw
-         Gd5MZU0gk9jAAI7JRaR06EVHaKjML1OMPRUni7OQ=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 4F75B3C0B87; Tue, 28 Jul 2020 02:19:37 +0200 (CEST)
-Date:   Tue, 28 Jul 2020 02:19:37 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Peng Fan <fanpeng@loongson.cn>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH] power: supply: rt5033_battery: Fix error code in
- rt5033_battery_probe()
-Message-ID: <20200728001937.vtvneczrskc6cs4u@earth.universe>
-References: <1593680332-31884-1-git-send-email-fanpeng@loongson.cn>
+        id S1726196AbgG1AUY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 27 Jul 2020 20:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726821AbgG1AUX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 27 Jul 2020 20:20:23 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BCB1C061794
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 17:20:23 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id i19so9994906lfj.8
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 17:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Nc/nP5wKiguMneXbXSJeuwd2J2JdfIPm6d2gp9TDTp4=;
+        b=K57xCEgmCnx3un1myMyG3doUk8PfyAxh6wpSJCXTTatOfILXA2k61QBey0SYiLzT6A
+         hv0hibIl7n/ebSO6pNjoOBnaxB83yqhWFxsPhJVnk4N1s8fiN/QkHPTbrqWUojBe3AIK
+         n2Dy++TUdhfTGTKqOsw1597ysxfLrxiEzAnKY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Nc/nP5wKiguMneXbXSJeuwd2J2JdfIPm6d2gp9TDTp4=;
+        b=n7EMdJ0qY1GM8CJEcJ3RaySL7yzbxEdv+PkktIfCgxasf/ZEBIy7dO81SWxksFDcdb
+         bQmLR2CzsUbm76MFW3wlhtw9z06kvMmHL60PPoFQLdhO45UIda+TqoHObjc5TH3azTWl
+         45QdFpOsB4Pqo5n+Hw3zQnqt2Wu6Flnhy1zyk9uFJxIehI+m7egQbpy/i/vFvwU3DJZf
+         ELi9hm5XIk2gOSIwXLCZcWQm7gdjXzb0nWfluaEMbig20rHvSYGISb2B/Z8/YQ1nIuFr
+         ipI+dONZ9M6WS+S6QkTqIYOTnC/nJwTqYR93ylKIIa+/x2Az3CP4nBlCTxtEiPAEy+71
+         aWrQ==
+X-Gm-Message-State: AOAM530sFLdFKxrALHNS4DonEd/TVbWyGwNcuYfgqZpbN84vjYt74o16
+        Gh8mn9ZkUCAPLOIYFwM0YCWd6tl7ASs=
+X-Google-Smtp-Source: ABdhPJxoYldIlSVwrGd9fO3VFa3r/TYwY7xz45T3VRITzC0X8jI2r4Usa4TWZeVYC9HPWN2BnptBTg==
+X-Received: by 2002:a19:f207:: with SMTP id q7mr6555381lfh.148.1595895621225;
+        Mon, 27 Jul 2020 17:20:21 -0700 (PDT)
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com. [209.85.167.47])
+        by smtp.gmail.com with ESMTPSA id m20sm3731762lfb.72.2020.07.27.17.20.20
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jul 2020 17:20:20 -0700 (PDT)
+Received: by mail-lf1-f47.google.com with SMTP id b30so9985978lfj.12
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jul 2020 17:20:20 -0700 (PDT)
+X-Received: by 2002:ac2:522b:: with SMTP id i11mr13077378lfl.30.1595895619719;
+ Mon, 27 Jul 2020 17:20:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7od7w7hhl7sikvqk"
-Content-Disposition: inline
-In-Reply-To: <1593680332-31884-1-git-send-email-fanpeng@loongson.cn>
+References: <87h7tsllgw.fsf@x220.int.ebiederm.org>
+In-Reply-To: <87h7tsllgw.fsf@x220.int.ebiederm.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 27 Jul 2020 17:20:03 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wj34Pq1oqFVg1iWYAq_YdhCyvhyCYxiy-CG-o76+UXydQ@mail.gmail.com>
+Message-ID: <CAHk-=wj34Pq1oqFVg1iWYAq_YdhCyvhyCYxiy-CG-o76+UXydQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH] exec: Freeze the other threads during a
+ multi-threaded exec
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jul 27, 2020 at 2:06 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+>
+> Therefore make it simpler to get exec correct by freezing the other
+> threads at the beginning of exec.  This removes an entire class of
+> races, and makes it tractable to fix some of the long standing
+> issues with exec.
 
---7od7w7hhl7sikvqk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I hate the global state part of the freezer.
 
-Hi,
+It's also pointless. We don't want to trigger all the tests that
+various random driver kernel threads do.
 
-On Thu, Jul 02, 2020 at 04:58:52PM +0800, Peng Fan wrote:
-> In the function rt5033_battery_probe(), it should return -ENOMEM
-> instead of -EINVAL when call function devm_kzalloc() failed.
->=20
-> Signed-off-by: Peng Fan <fanpeng@loongson.cn>
-> ---
+I also really don't like how now execve() by any random person will
+suddenly impact everything that might be doing freezing.
 
-Thanks, queued.
+It also makes for a possible _huge_ latency regression for execve(),
+since freezing really has never been a very low-latency operation.
 
--- Sebastian
+Other threads doing IO can now basically block execve() for a long
+long long time.
 
->  drivers/power/supply/rt5033_battery.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply=
-/rt5033_battery.c
-> index d8667a9..f330452 100644
-> --- a/drivers/power/supply/rt5033_battery.c
-> +++ b/drivers/power/supply/rt5033_battery.c
-> @@ -125,7 +125,7 @@ static int rt5033_battery_probe(struct i2c_client *cl=
-ient,
-> =20
->  	battery =3D devm_kzalloc(&client->dev, sizeof(*battery), GFP_KERNEL);
->  	if (!battery)
-> -		return -EINVAL;
-> +		return -ENOMEM;
-> =20
->  	battery->client =3D client;
->  	battery->regmap =3D devm_regmap_init_i2c(client,
-> --=20
-> 2.1.0
->=20
+Finally, I think your patch is fundamentally broken for another
+reason: it depends on CONFIG_FREEZER, and that isn't even required to
+be set!
 
---7od7w7hhl7sikvqk
-Content-Type: application/pgp-signature; name="signature.asc"
+So no, this is not at all acceptable in that form.
 
------BEGIN PGP SIGNATURE-----
+Now, maybe we could _make_ it acceptable, by
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8fbxkACgkQ2O7X88g7
-+pog2A/8DVU5QYgx87Or/U3pWkw+/hgTRmm5UVuocenyM22SgCXnd+SHVLLpF12P
-NinS8uhYlufo7HRznagwQr1t2uy2AT8IpQ13VpwjcidHZYbCqudJtUNL9gJ0VYVO
-OKmwlQeROyXnjqiM5dKA48TXcFvXFmzsg9vOphwsN+uY0DsoZOimHmGHc2XRZ+dc
-x3HmlBNX9z8C+y1JoiP/b7H8oXXUhxXnZZ0Ogs04jmlE38CSClPwAhVvcd8umqyZ
-sZgnGlaG2uCV8/ZvSvstBzEJAwaP23VLEZoqccs+9v3nI97JVml0oAP1U8yq7Xah
-XF1h8bxRsxzxZ2cq1htGlXy7TlwNmHqgBiskM+AyuHOOViKyGJR5ug/RCUEGc5y+
-JT39Yk6rhrowEIZlsAaJGOWGeuXAHO1UwE1bg6nZDazRPZ9GExk9bmu7vrhnLODS
-CHnnaMh2oK+KW2oVenfm1y7Du1GAa3jiDCLTXXFV6ZACQu9jh7N55BzdfdnvmInR
-NzHV9+55pcbk9U/blUGn4A4LTzBdptv6z/Y42URoghn2ks4dxNlhtwKCWWIVEm3p
-uc24pzQJJp4YpexNlZr+giQ/jD6muqgUdS5lml8rPTw7Dui5Ya9Z4Q8YHNfhnzit
-ZwZfH8dlK7Z8uoKco4TeafPi91n25hyPgx//TgqyhMNvBCYaRvE=
-=xY1+
------END PGP SIGNATURE-----
+ (a) add a per-process freezer count to avoid the global state for this case
 
---7od7w7hhl7sikvqk--
+ (b)  make a small subset of the freezing code available for the
+!CONFIG_FREEZER thing
+
+ (c) fix this "simple freezer" to not actually force wakeups etc, but
+catch things in the
+
+but honestly, at that point nothing of the "CONFIG_FREEZER" code even
+really exists any more. It would be more of a "execve_synchronize()"
+thing, where we'd catch things in the scheduler and/or system call
+entry/exit or whatever.
+
+Also, that makes these kinds of nasty hacks that just make the
+existign freezer code even harder to figure out:
+
+> A new function exec_freeze_threads based upon
+> kernel/power/process.c:try_to_freeze_tasks is added.  To play well
+> with other uses of the kernel freezer it uses a killable sleep wrapped
+> with freezer_do_not_count/freezer_count.
+
+Ugh. Just _ugly_.
+
+And honestly, completely and utterly broken. See above.
+
+I understand the wish to re-use existing infrastructure. But the fact
+is, the FREEZER code is just about the _last_ thing you should want to
+use. That, and stop_machine(), is just too much of a big hammer.
+
+                Linus
