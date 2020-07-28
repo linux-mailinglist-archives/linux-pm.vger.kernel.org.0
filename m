@@ -2,188 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D48230F07
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 18:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C7A230F4E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 18:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731189AbgG1QRD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jul 2020 12:17:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:37808 "EHLO foss.arm.com"
+        id S1731449AbgG1Qbu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jul 2020 12:31:50 -0400
+Received: from mga09.intel.com ([134.134.136.24]:34128 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730556AbgG1QRD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 28 Jul 2020 12:17:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3D4B31B;
-        Tue, 28 Jul 2020 09:17:01 -0700 (PDT)
-Received: from e113632-lin (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E2193F718;
-        Tue, 28 Jul 2020 09:16:59 -0700 (PDT)
-References: <20200712165917.9168-1-valentin.schneider@arm.com> <20200712165917.9168-3-valentin.schneider@arm.com> <20200727141825.GA4174@lca.pw> <16f8c1d4-778b-3ab8-f328-bae80f3973b4@arm.com>
-User-agent: mu4e 0.9.17; emacs 26.3
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Qian Cai <cai@lca.pw>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: Re: [PATCH v2 2/3] sched: Cleanup SCHED_THERMAL_PRESSURE kconfig entry
-In-reply-to: <16f8c1d4-778b-3ab8-f328-bae80f3973b4@arm.com>
-Date:   Tue, 28 Jul 2020 17:16:57 +0100
-Message-ID: <jhjpn8fiphi.mognet@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1731383AbgG1Qbt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 28 Jul 2020 12:31:49 -0400
+IronPort-SDR: 7Ksq8ImbIzMdX5bYfxub3ocr4icRkY/YxzDslyI90dejYtyngIHqsOQH73vxiDQrSi3SBowU6q
+ UPL7T6BHMlAg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9696"; a="152502173"
+X-IronPort-AV: E=Sophos;i="5.75,406,1589266800"; 
+   d="scan'208";a="152502173"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2020 09:31:48 -0700
+IronPort-SDR: +QPBZKUrDVcXs3SicE62wIDczzMz+XCl3W2rJsusKE+NuUOdigJBcjIXvxVnQhAGp1LHubJJbJ
+ E0irz+pILeUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,406,1589266800"; 
+   d="scan'208";a="464536516"
+Received: from unknown (HELO localhost.lm.intel.com) ([10.232.116.74])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jul 2020 09:31:45 -0700
+From:   Jon Derrick <jonathan.derrick@intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Cc:     Jon Derrick <jonathan.derrick@intel.com>,
+        You-Sheng Yang <vicamo.yang@canonical.com>
+Subject: [RFC] PCI: vmd: Enable ASPM if BIOS requests it
+Date:   Tue, 28 Jul 2020 12:13:21 -0400
+Message-Id: <20200728161321.38229-1-jonathan.derrick@intel.com>
+X-Mailer: git-send-email 2.18.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+VMD domains are not ACPI-managed devices and do not have the necessary
+ACPI hooks to enable ASPM. However if the BIOS has requested ASPM
+enablement, we should try to honor that request regardless. This patch
+adds the ASPM support to VMD child devices if requested by the FADT
+table.
+
+Signed-off-by: Jon Derrick <jonathan.derrick@intel.com>
+Signed-off-by: You-Sheng Yang <vicamo.yang@canonical.com>
+---
+
 
 Hi,
 
-On 27/07/20 18:45, Dietmar Eggemann wrote:
-> On 27/07/2020 16:18, Qian Cai wrote:
->> On Sun, Jul 12, 2020 at 05:59:16PM +0100, Valentin Schneider wrote:
->>> As Russell pointed out [1], this option is severely lacking in the
->>> documentation department, and figuring out if one has the required
->>> dependencies to benefit from turning it on is not straightforward.
->>>
->>> Make it non user-visible, and add a bit of help to it. While at it, make it
->>> depend on CPU_FREQ_THERMAL.
->>>
->>> [1]: https://lkml.kernel.org/r/20200603173150.GB1551@shell.armlinux.org.uk
->>>
->>> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
->>> ---
->>>  init/Kconfig | 15 ++++++++++++++-
->>>  1 file changed, 14 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/init/Kconfig b/init/Kconfig
->>> index 0498af567f70..0a97d85568b2 100644
->>> --- a/init/Kconfig
->>> +++ b/init/Kconfig
->>> @@ -492,8 +492,21 @@ config HAVE_SCHED_AVG_IRQ
->>>     depends on SMP
->>>
->>>  config SCHED_THERMAL_PRESSURE
->>> -	bool "Enable periodic averaging of thermal pressure"
->>> +	bool
->>>     depends on SMP
->>> +	depends on CPU_FREQ_THERMAL
->>> +	help
->>> +	  Select this option to enable thermal pressure accounting in the
->>> +	  scheduler. Thermal pressure is the value conveyed to the scheduler
->>> +	  that reflects the reduction in CPU compute capacity resulted from
->>> +	  thermal throttling. Thermal throttling occurs when the performance of
->>> +	  a CPU is capped due to high operating temperatures.
->>> +
->>> +	  If selected, the scheduler will be able to balance tasks accordingly,
->>> +	  i.e. put less load on throttled CPUs than on non/less throttled ones.
->>> +
->>> +	  This requires the architecture to implement
->>> +	  arch_set_thermal_pressure() and arch_get_thermal_pressure().
->>>
->>>  config BSD_PROCESS_ACCT
->>>     bool "BSD Process Accounting"
->>> --
->>
->> On arm64 linux-next (20200727),
->>
->> https://gitlab.com/cailca/linux-mm/-/blob/master/arm64.config
->>
->> WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
->>   Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
->>   Selected by [y]:
->>   - ARM64 [=y]
->
-> Not sure, but:
->
-> (1) do we wan to let people enable SCHED_THERMAL_PRESSURE for arm64 so
-> arm64 can potentially run w/o a CPU freq cooling device?
->
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 2d4abbc9f8d0..baffe8b66da2 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -192,7 +192,6 @@ config ARM64
->         select PCI_SYSCALL if PCI
->         select POWER_RESET
->         select POWER_SUPPLY
-> -       select SCHED_THERMAL_PRESSURE
->         select SPARSE_IRQ
->         select SWIOTLB
->         select SYSCTL_EXCEPTION_TRACE
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 37b089f87804..8b36e07fb230 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -492,7 +492,7 @@ config HAVE_SCHED_AVG_IRQ
->         depends on SMP
->
->  config SCHED_THERMAL_PRESSURE
-> -       bool
-> +       bool "Thermal pressure accounting"
->         depends on SMP
->         depends on CPU_FREQ_THERMAL
->         help
->
-> Or
->
-> (2) should SCHED_THERMAL_PRESSURE for arm64 be enabled by default?
->
-> But then it makes no sense to allow the removal of CONFIG_CPU_FREQ_THERMAL.
->
-> linux-next/master$ make ARCH=arm64 defconfig
->
-> // Remove CONFIG_CPU_FREQ_THERMAL
-> linux-next/master$ grep CPU_FREQ_THERMAL .config
-> # CONFIG_CPU_FREQ_THERMAL is not set
->
-> linux-next/master$ make
-> scripts/kconfig/conf  --syncconfig Kconfig
->
-> WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
->   Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
->   Selected by [y]:
->   - ARM64 [=y]
->
-> WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
->   Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
->   Selected by [y]:
->   - ARM64 [=y]
->
-> WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
->   Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
->   Selected by [y]:
->   - ARM64 [=y]
->   HOSTCC  scripts/dtc/dtc.o
->
-> ---
->
-> There is a similar issue with arm.
->
-> I would prefer for (1).
+My knowledge on these kinds of power modes is limited, and we are having
+trouble bringing the Root Port child device out of L1 with this patch.
 
-I went for having SCHED_THERMAL_PRESSURE in arm64/Kconfig because of where
-the discussion went in the original thread ([1] in the changelog).
+Can you help me understand the correct flow for bringing the Root Port
+device out of L1 with kernel flow, and what I might be missing here?
 
-One point is that selecting this option requires having the right
-infrastructure in place (arch_{set, scale}_thermal_pressure() must be
-redefined by the architecture), which cannot be easily expressed in Kconfig
-terms. Russell's point was that this is difficult for a lambda user to make
-sense of, and Vincent argued that this option should simply be selected at
-architecture level, which, given the context, makes sense IMO.
 
-We could change the arch Kconfig into
 
-  select SCHED_THERMAL_PRESSURE if CPU_FREQ_THERMAL
+ drivers/pci/controller/vmd.c |  9 ++++++++-
+ drivers/pci/pcie/aspm.c      | 19 ++-----------------
+ include/linux/pci.h          | 17 +++++++++++++++++
+ 3 files changed, 27 insertions(+), 18 deletions(-)
 
-but that seems redundant; this dependency is already expressed in
-SCHED_THERMAL_PRESSURE's definition. Is there a proper pattern to select
-some Kconfig option only if all of its dependencies are met?
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index 76d8acbee7d5..f1b058efb642 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -14,6 +14,7 @@
+ #include <linux/srcu.h>
+ #include <linux/rculist.h>
+ #include <linux/rcupdate.h>
++#include <linux/acpi.h>
+ 
+ #include <asm/irqdomain.h>
+ #include <asm/device.h>
+@@ -601,8 +602,14 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 	 * and will fail pcie_bus_configure_settings() early. It can instead be
+ 	 * run on each of the real root ports.
+ 	 */
+-	list_for_each_entry(child, &vmd->bus->children, node)
++	list_for_each_entry(child, &vmd->bus->children, node) {
++#if IS_ENABLED(CONFIG_PCIEASPM)
++		if (!(acpi_gbl_FADT.boot_flags & ACPI_FADT_NO_ASPM))
++			pcie_config_aspm_link(child->self->link_state,
++					      ASPM_STATE_ALL);
++#endif
+ 		pcie_bus_configure_settings(child);
++	}
+ 
+ 	pci_bus_add_devices(vmd->bus);
+ 
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 253c30cc1967..04cdb0b5a672 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -25,22 +25,6 @@
+ #endif
+ #define MODULE_PARAM_PREFIX "pcie_aspm."
+ 
+-/* Note: those are not register definitions */
+-#define ASPM_STATE_L0S_UP	(1)	/* Upstream direction L0s state */
+-#define ASPM_STATE_L0S_DW	(2)	/* Downstream direction L0s state */
+-#define ASPM_STATE_L1		(4)	/* L1 state */
+-#define ASPM_STATE_L1_1		(8)	/* ASPM L1.1 state */
+-#define ASPM_STATE_L1_2		(0x10)	/* ASPM L1.2 state */
+-#define ASPM_STATE_L1_1_PCIPM	(0x20)	/* PCI PM L1.1 state */
+-#define ASPM_STATE_L1_2_PCIPM	(0x40)	/* PCI PM L1.2 state */
+-#define ASPM_STATE_L1_SS_PCIPM	(ASPM_STATE_L1_1_PCIPM | ASPM_STATE_L1_2_PCIPM)
+-#define ASPM_STATE_L1_2_MASK	(ASPM_STATE_L1_2 | ASPM_STATE_L1_2_PCIPM)
+-#define ASPM_STATE_L1SS		(ASPM_STATE_L1_1 | ASPM_STATE_L1_1_PCIPM |\
+-				 ASPM_STATE_L1_2_MASK)
+-#define ASPM_STATE_L0S		(ASPM_STATE_L0S_UP | ASPM_STATE_L0S_DW)
+-#define ASPM_STATE_ALL		(ASPM_STATE_L0S | ASPM_STATE_L1 |	\
+-				 ASPM_STATE_L1SS)
+-
+ struct aspm_latency {
+ 	u32 l0s;			/* L0s latency (nsec) */
+ 	u32 l1;				/* L1 latency (nsec) */
+@@ -748,7 +732,7 @@ static void pcie_config_aspm_dev(struct pci_dev *pdev, u32 val)
+ 					   PCI_EXP_LNKCTL_ASPMC, val);
+ }
+ 
+-static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
++void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
+ {
+ 	u32 upstream = 0, dwstream = 0;
+ 	struct pci_dev *child = link->downstream, *parent = link->pdev;
+@@ -798,6 +782,7 @@ static void pcie_config_aspm_link(struct pcie_link_state *link, u32 state)
+ 
+ 	link->aspm_enabled = state;
+ }
++EXPORT_SYMBOL_GPL(pcie_config_aspm_link);
+ 
+ static void pcie_config_aspm_path(struct pcie_link_state *link)
+ {
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 7a40cd5caed0..1c41781b160a 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -377,6 +377,22 @@ struct pci_dev {
+ 	unsigned int	d3cold_delay;	/* D3cold->D0 transition time in ms */
+ 
+ #ifdef CONFIG_PCIEASPM
++/* Note: those are not register definitions */
++#define ASPM_STATE_L0S_UP	(1)	/* Upstream direction L0s state */
++#define ASPM_STATE_L0S_DW	(2)	/* Downstream direction L0s state */
++#define ASPM_STATE_L1		(4)	/* L1 state */
++#define ASPM_STATE_L1_1		(8)	/* ASPM L1.1 state */
++#define ASPM_STATE_L1_2		(0x10)	/* ASPM L1.2 state */
++#define ASPM_STATE_L1_1_PCIPM	(0x20)	/* PCI PM L1.1 state */
++#define ASPM_STATE_L1_2_PCIPM	(0x40)	/* PCI PM L1.2 state */
++#define ASPM_STATE_L1_SS_PCIPM	(ASPM_STATE_L1_1_PCIPM | ASPM_STATE_L1_2_PCIPM)
++#define ASPM_STATE_L1_2_MASK	(ASPM_STATE_L1_2 | ASPM_STATE_L1_2_PCIPM)
++#define ASPM_STATE_L1SS		(ASPM_STATE_L1_1 | ASPM_STATE_L1_1_PCIPM |\
++				 ASPM_STATE_L1_2_MASK)
++#define ASPM_STATE_L0S		(ASPM_STATE_L0S_UP | ASPM_STATE_L0S_DW)
++#define ASPM_STATE_ALL		(ASPM_STATE_L0S | ASPM_STATE_L1 |	\
++				 ASPM_STATE_L1SS)
++
+ 	struct pcie_link_state	*link_state;	/* ASPM link state */
+ 	unsigned int	ltr_path:1;	/* Latency Tolerance Reporting
+ 					   supported from root to here */
+@@ -1577,6 +1593,7 @@ extern bool pcie_ports_native;
+ #define PCIE_LINK_STATE_L1_2_PCIPM	BIT(6)
+ 
+ #ifdef CONFIG_PCIEASPM
++void pcie_config_aspm_link(struct pcie_link_state *link, u32 state);
+ int pci_disable_link_state(struct pci_dev *pdev, int state);
+ int pci_disable_link_state_locked(struct pci_dev *pdev, int state);
+ void pcie_no_aspm(void);
+-- 
+2.18.1
+
