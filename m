@@ -2,186 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C4F230C1B
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 16:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5B11230D74
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 17:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730346AbgG1OLc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jul 2020 10:11:32 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:59488 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730344AbgG1OL1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jul 2020 10:11:27 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06SEBQhU112984;
-        Tue, 28 Jul 2020 09:11:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1595945486;
-        bh=I2R+2PF2epnAa3bOY1CVQ2VhJ+hdLW1QPoNVLY3D/BA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ot74DTPYtLmGC0zmJRH7M0Tfxtp33koHdqtUpW9571uNjeDlT5S4PlN2tPzwne1P9
-         gfN1qQ3vS2JMk1Nm/WjcdwkTi7Jm24EZqX2EYcQAm8nOARK2OC1By+WGoMB5b+NNcB
-         VNF+Qk+CUSworv1v/bdWV59dWT+QZIgGUS1WT3eE=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06SEBQXx020139;
-        Tue, 28 Jul 2020 09:11:26 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 28
- Jul 2020 09:11:25 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 28 Jul 2020 09:11:25 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06SEBPr5035341;
-        Tue, 28 Jul 2020 09:11:25 -0500
-From:   Dan Murphy <dmurphy@ti.com>
-To:     <sre@kernel.org>, <afd@ti.com>, <pali@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh@kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v4 4/4] power: supply: bq27xxx_battery: Add the BQ28z610 Battery monitor
-Date:   Tue, 28 Jul 2020 09:11:13 -0500
-Message-ID: <20200728141113.31518-4-dmurphy@ti.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200728141113.31518-1-dmurphy@ti.com>
-References: <20200728141113.31518-1-dmurphy@ti.com>
+        id S1730910AbgG1POi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jul 2020 11:14:38 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:53496 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730889AbgG1POb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jul 2020 11:14:31 -0400
+Received: from 89-64-88-69.dynamic.chello.pl (89.64.88.69) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 680a78bb8b8347f8; Tue, 28 Jul 2020 17:14:29 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Doug Smythies <dsmythies@telus.net>,
+        Francisco Jerez <francisco.jerez.plata@intel.com>
+Subject: [PATCH v4 0/2] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+Date:   Tue, 28 Jul 2020 17:09:35 +0200
+Message-ID: <13207937.r2GEYrEf4f@kreacher>
+In-Reply-To: <1709487.Bxjb1zNRZM@kreacher>
+References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the Texas Instruments BQ28z610 battery monitor.
-The register address map is laid out the same as compared to other
-devices within the file.
+Hi All,
 
-The battery status register bits are similar to the BQ27561 but they
-are different compared to other fuel gauge devices within this file.
+On Monday, July 27, 2020 5:13:40 PM CEST Rafael J. Wysocki wrote:
+> 
+> On Thursday, July 16, 2020 7:37:04 PM CEST Rafael J. Wysocki wrote:
+> >
+> > This really is a v2 of this patch:
+> > 
+> > https://patchwork.kernel.org/patch/11663271/
+> > 
+> > with an extra preceding cleanup patch to avoid making unrelated changes in the
+> > [2/2].
+> 
+> Almost the same as before, but the first patch has been reworked to handle
+> errors in store_energy_performance_preference() correctly and rebased on top
+> of the current linux-pm.git branch.
+> 
+> No functional changes otherwise.
 
-Signed-off-by: Dan Murphy <dmurphy@ti.com>
----
- drivers/power/supply/bq27xxx_battery.c     | 42 ++++++++++++++++++++++
- drivers/power/supply/bq27xxx_battery_i2c.c |  2 ++
- include/linux/power/bq27xxx_battery.h      |  1 +
- 3 files changed, 45 insertions(+)
+One more update of the second patch.
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 654d38bcd7e0..ae9080f2083c 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -44,6 +44,7 @@
-  * http://www.ti.com/product/bq27441-g1
-  * http://www.ti.com/product/bq27621-g1
-  * https://www.ti.com/lit/gpn/bq27z561
-+ * https://www.ti.com/lit/gpn/bq28z610
-  */
- 
- #include <linux/device.h>
-@@ -462,6 +463,26 @@ static u8
- 		[BQ27XXX_REG_DCAP] = 0x3c,
- 		[BQ27XXX_REG_AP] = 0x22,
- 		BQ27XXX_DM_REG_ROWS,
-+	},
-+	bq28z610_regs[BQ27XXX_REG_MAX] = {
-+		[BQ27XXX_REG_CTRL] = 0x00,
-+		[BQ27XXX_REG_TEMP] = 0x06,
-+		[BQ27XXX_REG_INT_TEMP] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_VOLT] = 0x08,
-+		[BQ27XXX_REG_AI] = 0x14,
-+		[BQ27XXX_REG_FLAGS] = 0x0a,
-+		[BQ27XXX_REG_TTE] = 0x16,
-+		[BQ27XXX_REG_TTF] = 0x18,
-+		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
-+		[BQ27XXX_REG_FCC] = 0x12,
-+		[BQ27XXX_REG_CYCT] = 0x2a,
-+		[BQ27XXX_REG_AE] = 0x22,
-+		[BQ27XXX_REG_SOC] = 0x2c,
-+		[BQ27XXX_REG_DCAP] = 0x3c,
-+		[BQ27XXX_REG_AP] = 0x22,
-+		BQ27XXX_DM_REG_ROWS,
- 	};
- 
- static enum power_supply_property bq27000_props[] = {
-@@ -717,6 +738,25 @@ static enum power_supply_property bq27561_props[] = {
- 	POWER_SUPPLY_PROP_MANUFACTURER,
- };
- 
-+static enum power_supply_property bq28z610_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
-+	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CYCLE_COUNT,
-+	POWER_SUPPLY_PROP_POWER_AVG,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+};
-+
- struct bq27xxx_dm_reg {
- 	u8 subclass_id;
- 	u8 offset;
-@@ -813,6 +853,7 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
- #endif
- 
- #define bq27561_dm_regs 0
-+#define bq28z610_dm_regs 0
- 
- #define BQ27XXX_O_ZERO	0x00000001
- #define BQ27XXX_O_OTDC	0x00000002 /* has OTC/OTD overtemperature flags */
-@@ -865,6 +906,7 @@ static struct {
- 	[BQ27441]   = BQ27XXX_DATA(bq27441,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
- 	[BQ27621]   = BQ27XXX_DATA(bq27621,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
- 	[BQ27561]   = BQ27XXX_DATA(bq27561,   0         , BQ27561_O_BITS),
-+	[BQ28Z610]  = BQ27XXX_DATA(bq28z610,  0         , BQ27561_O_BITS),
- };
- 
- static DEFINE_MUTEX(bq27xxx_list_lock);
-diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
-index d0d55e0959d5..12cf0c619d6d 100644
---- a/drivers/power/supply/bq27xxx_battery_i2c.c
-+++ b/drivers/power/supply/bq27xxx_battery_i2c.c
-@@ -254,6 +254,7 @@ static const struct i2c_device_id bq27xxx_i2c_id_table[] = {
- 	{ "bq27441", BQ27441 },
- 	{ "bq27621", BQ27621 },
- 	{ "bq27561", BQ27561 },
-+	{ "bq28z610", BQ28Z610 },
- 	{},
- };
- MODULE_DEVICE_TABLE(i2c, bq27xxx_i2c_id_table);
-@@ -288,6 +289,7 @@ static const struct of_device_id bq27xxx_battery_i2c_of_match_table[] = {
- 	{ .compatible = "ti,bq27441" },
- 	{ .compatible = "ti,bq27621" },
- 	{ .compatible = "ti,bq27561" },
-+	{ .compatible = "ti,bq28z610" },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, bq27xxx_battery_i2c_of_match_table);
-diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
-index 4a319950ea22..50f6230f42c4 100644
---- a/include/linux/power/bq27xxx_battery.h
-+++ b/include/linux/power/bq27xxx_battery.h
-@@ -31,6 +31,7 @@ enum bq27xxx_chip {
- 	BQ27441,
- 	BQ27621,
- 	BQ27561,
-+	BQ28Z610,
- };
- 
- struct bq27xxx_device_info;
--- 
-2.27.0
+Namely, I realized that the hwp_dynamic_boost sysfs switch was present in the
+passive mode after the v3 (and the previous versions) of that patch which isn't
+correct, so this modifies it to avoid exposing hwp_dynamic_boost in the passive
+mode.
+
+The first patch is the same as in the v2.
+
+Thanks!
+
+
 
