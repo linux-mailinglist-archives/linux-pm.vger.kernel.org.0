@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B11230D74
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 17:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5FD230D6E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jul 2020 17:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730910AbgG1POi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 28 Jul 2020 11:14:38 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:53496 "EHLO
+        id S1730891AbgG1POb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 28 Jul 2020 11:14:31 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:44850 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730889AbgG1POb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jul 2020 11:14:31 -0400
+        with ESMTP id S1730887AbgG1POa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 28 Jul 2020 11:14:30 -0400
 Received: from 89-64-88-69.dynamic.chello.pl (89.64.88.69) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 680a78bb8b8347f8; Tue, 28 Jul 2020 17:14:29 +0200
+ id 197c8e6c67be01ba; Tue, 28 Jul 2020 17:14:27 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
@@ -23,11 +23,11 @@ Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Doug Smythies <dsmythies@telus.net>,
         Francisco Jerez <francisco.jerez.plata@intel.com>
-Subject: [PATCH v4 0/2] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Tue, 28 Jul 2020 17:09:35 +0200
-Message-ID: <13207937.r2GEYrEf4f@kreacher>
-In-Reply-To: <1709487.Bxjb1zNRZM@kreacher>
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>
+Subject: [PATCH v4 1/2] cpufreq: intel_pstate: Rearrange the storing of new EPP values
+Date:   Tue, 28 Jul 2020 17:11:03 +0200
+Message-ID: <1665283.zxI7kaGBi8@kreacher>
+In-Reply-To: <13207937.r2GEYrEf4f@kreacher>
+References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher> <13207937.r2GEYrEf4f@kreacher>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -36,35 +36,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi All,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Monday, July 27, 2020 5:13:40 PM CEST Rafael J. Wysocki wrote:
-> 
-> On Thursday, July 16, 2020 7:37:04 PM CEST Rafael J. Wysocki wrote:
-> >
-> > This really is a v2 of this patch:
-> > 
-> > https://patchwork.kernel.org/patch/11663271/
-> > 
-> > with an extra preceding cleanup patch to avoid making unrelated changes in the
-> > [2/2].
-> 
-> Almost the same as before, but the first patch has been reworked to handle
-> errors in store_energy_performance_preference() correctly and rebased on top
-> of the current linux-pm.git branch.
-> 
-> No functional changes otherwise.
+Move the locking away from intel_pstate_set_energy_pref_index()
+into its only caller and drop the (now redundant) return_pref label
+from it.
 
-One more update of the second patch.
+Also move the "raw" EPP value check into the caller of that function,
+so as to do it before acquiring the mutex, and reduce code duplication
+related to the "raw" EPP values processing somewhat.
 
-Namely, I realized that the hwp_dynamic_boost sysfs switch was present in the
-passive mode after the v3 (and the previous versions) of that patch which isn't
-correct, so this modifies it to avoid exposing hwp_dynamic_boost in the passive
-mode.
+No intentional functional impact.
 
-The first patch is the same as in the v2.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Thanks!
+v2 -> v3:
+
+   * Fix error handling in intel_pstate_set_energy_pref_index() and
+     rebase.
+
+v3 -> v4: No changes
+
+---
+ drivers/cpufreq/intel_pstate.c |   35 +++++++++++++++--------------------
+ 1 file changed, 15 insertions(+), 20 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -649,28 +649,18 @@ static int intel_pstate_set_energy_pref_
+ 	if (!pref_index)
+ 		epp = cpu_data->epp_default;
+ 
+-	mutex_lock(&intel_pstate_limits_lock);
+-
+ 	if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
+ 		u64 value;
+ 
+ 		ret = rdmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, &value);
+ 		if (ret)
+-			goto return_pref;
++			return ret;
+ 
+ 		value &= ~GENMASK_ULL(31, 24);
+ 
+-		if (use_raw) {
+-			if (raw_epp > 255) {
+-				ret = -EINVAL;
+-				goto return_pref;
+-			}
+-			value |= (u64)raw_epp << 24;
+-			ret = wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
+-			goto return_pref;
+-		}
+-
+-		if (epp == -EINVAL)
++		if (use_raw)
++			epp = raw_epp;
++		else if (epp == -EINVAL)
+ 			epp = epp_values[pref_index - 1];
+ 
+ 		value |= (u64)epp << 24;
+@@ -680,8 +670,6 @@ static int intel_pstate_set_energy_pref_
+ 			epp = (pref_index - 1) << 2;
+ 		ret = intel_pstate_set_epb(cpu_data->cpu, epp);
+ 	}
+-return_pref:
+-	mutex_unlock(&intel_pstate_limits_lock);
+ 
+ 	return ret;
+ }
+@@ -708,8 +696,8 @@ static ssize_t store_energy_performance_
+ 	struct cpudata *cpu_data = all_cpu_data[policy->cpu];
+ 	char str_preference[21];
+ 	bool raw = false;
++	ssize_t ret;
+ 	u32 epp = 0;
+-	int ret;
+ 
+ 	ret = sscanf(buf, "%20s", str_preference);
+ 	if (ret != 1)
+@@ -724,14 +712,21 @@ static ssize_t store_energy_performance_
+ 		if (ret)
+ 			return ret;
+ 
++		if (epp > 255)
++			return -EINVAL;
++
+ 		raw = true;
+ 	}
+ 
++	mutex_lock(&intel_pstate_limits_lock);
++
+ 	ret = intel_pstate_set_energy_pref_index(cpu_data, ret, raw, epp);
+-	if (ret)
+-		return ret;
++	if (!ret)
++		ret = count;
+ 
+-	return count;
++	mutex_unlock(&intel_pstate_limits_lock);
++
++	return ret;
+ }
+ 
+ static ssize_t show_energy_performance_preference(
 
 
 
