@@ -2,109 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53799231AD6
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 10:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FF8231B5C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 10:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgG2IHe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 04:07:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:47184 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727985AbgG2IHd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jul 2020 04:07:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 383B631B;
-        Wed, 29 Jul 2020 01:07:33 -0700 (PDT)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BD393F71F;
-        Wed, 29 Jul 2020 01:07:24 -0700 (PDT)
-Subject: Re: [PATCH v2 2/3] sched: Cleanup SCHED_THERMAL_PRESSURE kconfig
- entry
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     Qian Cai <cai@lca.pw>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <20200712165917.9168-1-valentin.schneider@arm.com>
- <20200712165917.9168-3-valentin.schneider@arm.com>
- <20200727141825.GA4174@lca.pw> <16f8c1d4-778b-3ab8-f328-bae80f3973b4@arm.com>
- <jhjpn8fiphi.mognet@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <a8f6ebb5-0a49-a806-be6d-8d68cb99b75f@arm.com>
-Date:   Wed, 29 Jul 2020 10:07:21 +0200
+        id S1726710AbgG2IkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 04:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726707AbgG2IkL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 04:40:11 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D141C0619D2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 01:40:11 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id r12so20736464wrj.13
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 01:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YJUVSZqIXAUcxRK135uPMY26TWenUYdXUZWwq11zSBY=;
+        b=MqLsZu9YbOlKS6mFOepKH+8KAfFJ/mtQQ0W+tGHPTucR2LdBY1Q2npnk0CTYTUS82h
+         v9DXVj08hSt0kgyjKdoOiFBiDeVm3mN0e0cH5SF2aXtwwKbqUGuWParVuF+FOIY6B9gu
+         nKIxdcOP6Qlhvc8mKlcrghAM9VRsEDDMlPJbPBRZYj7C0flFcABs9hdykujWP/lbuoDA
+         lfMZx4bKXqnfr1p7MTXunNw5H7vnkDZX9KMEyp+HYWB9k7PyO/yV1VClXzcCBBG3M0Yj
+         WIMP2O9oXMJ4hwdq2iOJPGyCsPgyKU9TDPYTjek/WVV1BVvvemro+FkmjnfDBs26YF4I
+         PyYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YJUVSZqIXAUcxRK135uPMY26TWenUYdXUZWwq11zSBY=;
+        b=FuFf+QLQQlDFbc4rTVynfMCEkJf7uO/KlPpJy7VOQCK0k056shCcgA+Kr2GU2qXiiZ
+         K0jopJfwGC8UGMMRMH5yrbVcEC+k98Dikg6mBVW53UH57WK0zRYb6taf3r4o8dpTntl5
+         R6ztJKn4AZT8O7ds/7/IfrRcTqf1a+ZYVuzfS5Ihq9A47pgFHMA49BI/8NN5oWZIW7V0
+         Z9HZKRrQoWdcYrRVzvpRrl1M6HUcYGCNZ6sDaehgtZE08j3I6TWaPmsmPSfY1MPhkN70
+         /bUYBeHlHAxz62SdfXgSnQAl9uma9L/wMq+/sFLQRIqmgz2qjN/omCTCK57OscTs++cZ
+         dlOQ==
+X-Gm-Message-State: AOAM532/82LGNB8hJUecmW/LFrTsSJAanAAIjqcsbObUIuCnvRkd+FPG
+        Oi3vodl/Z1Cd7UNcfPQeA7HXrw==
+X-Google-Smtp-Source: ABdhPJw5yvp3nWT258bEQHmRZ9EmQ9SNB++YPU6N3KfBaR1N4H9HAOwkeizVkcJsFE7XH06WG/cGTA==
+X-Received: by 2002:adf:fd41:: with SMTP id h1mr30692686wrs.124.1596012009544;
+        Wed, 29 Jul 2020 01:40:09 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:812d:95b8:6384:6e20? ([2a01:e34:ed2f:f020:812d:95b8:6384:6e20])
+        by smtp.googlemail.com with ESMTPSA id x9sm3752135wmk.45.2020.07.29.01.40.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Jul 2020 01:40:08 -0700 (PDT)
+Subject: Re: [PATCH] thermal: core: Add thermal zone enable/disable
+ notification
+To:     Amit Kucheria <amit.kucheria@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+References: <20200727231033.26512-1-daniel.lezcano@linaro.org>
+ <CAHLCerO=KPUR-2qEuFpNV9UUV_O7GoXY-EPhyefOFfL_jZ_0gA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <90f14da8-a197-08cb-cf55-5c88fa8eed58@linaro.org>
+Date:   Wed, 29 Jul 2020 10:40:08 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <jhjpn8fiphi.mognet@arm.com>
+In-Reply-To: <CAHLCerO=KPUR-2qEuFpNV9UUV_O7GoXY-EPhyefOFfL_jZ_0gA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28/07/2020 18:16, Valentin Schneider wrote:
+On 29/07/2020 07:36, Amit Kucheria wrote:
+> On Tue, Jul 28, 2020 at 4:40 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> Now the calls to enable/disable a thermal zone are centralized in a
+>> call to a function, we can add in these the corresponding netlink
+>> notifications.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > 
-> Hi,
-> 
-> On 27/07/20 18:45, Dietmar Eggemann wrote:
->> On 27/07/2020 16:18, Qian Cai wrote:
->>> On Sun, Jul 12, 2020 at 05:59:16PM +0100, Valentin Schneider wrote:
+> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
 
-[...]
+I've applied the changes, thanks for the review.
 
-> I went for having SCHED_THERMAL_PRESSURE in arm64/Kconfig because of where
-> the discussion went in the original thread ([1] in the changelog).
-> 
-> One point is that selecting this option requires having the right
-> infrastructure in place (arch_{set, scale}_thermal_pressure() must be
-> redefined by the architecture), which cannot be easily expressed in Kconfig
-> terms. Russell's point was that this is difficult for a lambda user to make
-> sense of, and Vincent argued that this option should simply be selected at
-> architecture level, which, given the context, makes sense IMO.
-> 
-> We could change the arch Kconfig into
-> 
->   select SCHED_THERMAL_PRESSURE if CPU_FREQ_THERMAL
-> 
-> but that seems redundant; this dependency is already expressed in
-> SCHED_THERMAL_PRESSURE's definition. Is there a proper pattern to select
-> some Kconfig option only if all of its dependencies are met?
 
-The warning when disabling CPU_FREQ_THERMAL after make defconfig disappears, so
-this should be OK.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 939c4d6bbc2e..a677e71b3d5f 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -46,7 +46,7 @@ config ARM
-        select EDAC_ATOMIC_SCRUB
-        select GENERIC_ALLOCATOR
-        select GENERIC_ARCH_TOPOLOGY if ARM_CPU_TOPOLOGY
--       select SCHED_THERMAL_PRESSURE if ARM_CPU_TOPOLOGY
-+       select SCHED_THERMAL_PRESSURE if ARM_CPU_TOPOLOGY && CPU_FREQ_THERMAL
-        select GENERIC_ATOMIC64 if CPU_V7M || CPU_V6 || !CPU_32v6K || !AEABI
-        select GENERIC_CLOCKEVENTS_BROADCAST if SMP
-        select GENERIC_CPU_AUTOPROBE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index c403e6f5db86..59ae16f8b941 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -192,7 +192,7 @@ config ARM64
-        select PCI_SYSCALL if PCI
-        select POWER_RESET
-        select POWER_SUPPLY
--       select SCHED_THERMAL_PRESSURE
-+       select SCHED_THERMAL_PRESSURE if CPU_FREQ_THERMAL
-        select SPARSE_IRQ
-        select SWIOTLB
-        select SYSCTL_EXCEPTION_TRAC
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
