@@ -2,109 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 579E2231FB1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 15:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 458312320C3
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 16:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgG2N6t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 09:58:49 -0400
-Received: from foss.arm.com ([217.140.110.172]:52160 "EHLO foss.arm.com"
+        id S1726839AbgG2OjQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 10:39:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:52760 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgG2N6t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jul 2020 09:58:49 -0400
+        id S1726645AbgG2OjP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Jul 2020 10:39:15 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7721430E;
-        Wed, 29 Jul 2020 06:58:48 -0700 (PDT)
-Received: from e113632-lin.cambridge.arm.com (e113632-lin.cambridge.arm.com [10.1.194.46])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5E4F93F66E;
-        Wed, 29 Jul 2020 06:58:46 -0700 (PDT)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     Qian Cai <cai@lca.pw>, Russell King <linux@armlinux.org.uk>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE3F530E;
+        Wed, 29 Jul 2020 07:39:14 -0700 (PDT)
+Received: from localhost (unknown [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 901B63F66E;
+        Wed, 29 Jul 2020 07:39:14 -0700 (PDT)
+Date:   Wed, 29 Jul 2020 15:39:13 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Quentin Perret <qperret@google.com>
-Subject: [PATCH] arm, arm64: Fix selection of CONFIG_SCHED_THERMAL_PRESSURE
-Date:   Wed, 29 Jul 2020 14:57:18 +0100
-Message-Id: <20200729135718.1871-1-valentin.schneider@arm.com>
-X-Mailer: git-send-email 2.27.0
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] cpufreq: report whether cpufreq supports
+ Frequency Invariance (FI)
+Message-ID: <20200729143903.GC12941@arm.com>
+References: <20200722093732.14297-1-ionela.voinescu@arm.com>
+ <20200722093732.14297-5-ionela.voinescu@arm.com>
+ <CAJZ5v0jvvEvxs2dwsGd1kerTT3pJTJj6fVg0ndtdeUhiq+K_UQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jvvEvxs2dwsGd1kerTT3pJTJj6fVg0ndtdeUhiq+K_UQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qian reported that the current setup forgoes the Kconfig dependencies and
-results in warnings such as:
+Hi,
 
-  WARNING: unmet direct dependencies detected for SCHED_THERMAL_PRESSURE
-    Depends on [n]: SMP [=y] && CPU_FREQ_THERMAL [=n]
-    Selected by [y]:
-    - ARM64 [=y]
+On Monday 27 Jul 2020 at 16:02:18 (+0200), Rafael J. Wysocki wrote:
+> On Wed, Jul 22, 2020 at 11:38 AM Ionela Voinescu
+> <ionela.voinescu@arm.com> wrote:
+[..]
+> > +static inline
+> > +void enable_cpufreq_freq_invariance(struct cpufreq_driver *driver)
+> > +{
+> > +       if ((driver->target || driver->target_index || driver->fast_switch) &&
+> > +           !driver->setpolicy) {
+> > +
+> > +               static_branch_enable_cpuslocked(&cpufreq_set_freq_scale);
+> > +               pr_debug("%s: Driver %s can provide frequency invariance.",
+> > +                        __func__, driver->name);
+> > +       } else
+> > +               pr_err("%s: Driver %s cannot provide frequency invariance.",
+> > +               __func__, driver->name);
+> 
+> This doesn't follow the kernel coding style (the braces around the
+> pr_err() statement are missing).
+> 
 
-Revert commit
+I'll fix this.
 
-  e17ae7fea871 ("arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE")
+Also, depending on the result of the discussion below, it might be best
+for this to be a warning, not an error.
 
-and re-implement it by making the option default to 'y' for arm64 and arm,
-which respects Kconfig dependencies (i.e. will remain 'n' if
-CPU_FREQ_THERMAL=n).
+> Besides, IMO on architectures where arch_set_freq_scale() is empty,
+> this should be empty as well.
+>
 
-Fixes: e17ae7fea871 ("arm, arm64: Select CONFIG_SCHED_THERMAL_PRESSURE")
-Reported-by: Qian Cai <cai@lca.pw>
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
----
- arch/arm/Kconfig   | 1 -
- arch/arm64/Kconfig | 1 -
- init/Kconfig       | 2 ++
- 3 files changed, 2 insertions(+), 2 deletions(-)
+Yes, you are right, there are two aspects here:
+ - (1) Whether a driver *can* provide frequency invariance. IOW, whether
+   it implements the callbacks that result in the call to
+   arch_set_freq_scale().
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 6cd0f9f086f6..809e8047d669 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -47,7 +47,6 @@ config ARM
- 	select EDAC_ATOMIC_SCRUB
- 	select GENERIC_ALLOCATOR
- 	select GENERIC_ARCH_TOPOLOGY if ARM_CPU_TOPOLOGY
--	select SCHED_THERMAL_PRESSURE if ARM_CPU_TOPOLOGY
- 	select GENERIC_ATOMIC64 if CPU_V7M || CPU_V6 || !CPU_32v6K || !AEABI
- 	select GENERIC_CLOCKEVENTS_BROADCAST if SMP
- 	select GENERIC_CPU_AUTOPROBE
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 2d4abbc9f8d0..baffe8b66da2 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -192,7 +192,6 @@ config ARM64
- 	select PCI_SYSCALL if PCI
- 	select POWER_RESET
- 	select POWER_SUPPLY
--	select SCHED_THERMAL_PRESSURE
- 	select SPARSE_IRQ
- 	select SWIOTLB
- 	select SYSCTL_EXCEPTION_TRACE
-diff --git a/init/Kconfig b/init/Kconfig
-index 37b089f87804..f2244892d7a8 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -493,6 +493,8 @@ config HAVE_SCHED_AVG_IRQ
- 
- config SCHED_THERMAL_PRESSURE
- 	bool
-+	default y if ARM && ARM_CPU_TOPOLOGY
-+	default y if ARM64
- 	depends on SMP
- 	depends on CPU_FREQ_THERMAL
- 	help
--- 
-2.27.0
+ - (2) Whether cpufreq/driver *does* provide frequency invariance. IOW,
+   whether the call to arch_set_freq_scale() actually results in the
+   setting of the scale factor.
 
+Even when creating this v2 I was going back and forth between the options
+for this:
+
+(a) cpufreq should report whether it *can* provide frequency invariance
+    (as described at (1)). If we go for this, for clarity I should change
+
+    s/cpufreq_set_freq_scale/cpufreq_can_set_freq_scale_key
+    s/cpufreq_sets_freq_scale()/cpufreq_can_set_freq_scale()
+
+    Through this, cpufreq only reports that it calls
+    arch_set_freq_scale(), independent on whether that call results in a
+    scale factor being set. Then it would be up to the caller to ensure
+    this information is used with a proper definition of
+    arch_set_freq_scale().
+
+(b) cpufreq should report whether it *does* provide frequency invariance
+
+    A way of doing this is to use a arch_set_freq_scale define (as done
+    for other arch functions, for example arch_scale_freq_tick()) and
+    guard this enable_cpufreq_freq_invariance() function based on that
+    definition.
+    Therefore, cpufreq_sets_freq_scale() would report whether
+    enable_cpufreq_freq_invariance() was successful and there is an
+    external definition of arch_set_freq_scale() that sets the scale
+    factor.
+
+
+The current version is somewhat a combination of (a) and (b):
+cpufreq_set_freq_scale would initially be enabled if the proper callbacks
+are implemented (a), but later if the weak version of
+arch_set_freq_scale() is called, we disabled it (b) (as can be seen below).
+
+[..]
+> >  __weak void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
+> >                 unsigned long max_freq)
+> >  {
+> > +       if (cpufreq_sets_freq_scale())
+> > +               static_branch_disable_cpuslocked(&cpufreq_set_freq_scale);
+> > +
+> >  }
+> >  EXPORT_SYMBOL_GPL(arch_set_freq_scale);
+
+I suppose a clear (a) or (b) solution might be better here.
+
+IMO, given that (b) cannot actually guarantee that a scale factor is set
+through arch_set_freq_scale() given cpufreq information about current and
+maximum frequencies, for me (a) is preferred as it conveys the only
+information that cpufreq can convey - the fact that it *can* set the scale
+factor, not that it *does*.
+
+Can you please confirm whether you still prefer (b), given the details
+above?
+
+Thank you,
+Ionela.
