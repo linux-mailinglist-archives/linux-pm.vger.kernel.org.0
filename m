@@ -2,119 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACCD7231BDE
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 11:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE257231D05
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 12:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbgG2JOS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 05:14:18 -0400
-Received: from foss.arm.com ([217.140.110.172]:48378 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726336AbgG2JOS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jul 2020 05:14:18 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 98600101E;
-        Wed, 29 Jul 2020 02:14:17 -0700 (PDT)
-Received: from localhost (unknown [10.1.198.53])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A2E43F718;
-        Wed, 29 Jul 2020 02:14:17 -0700 (PDT)
-Date:   Wed, 29 Jul 2020 10:14:15 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/7] cpufreq: set invariance scale factor on
- transition end
-Message-ID: <20200729091405.GB12941@arm.com>
-References: <20200722093732.14297-1-ionela.voinescu@arm.com>
- <20200722093732.14297-3-ionela.voinescu@arm.com>
- <CAJZ5v0iiF75+POMF5oX8_NOBiLLqMQSYTTf-X0QoLAPV7fF0-g@mail.gmail.com>
+        id S1726353AbgG2K4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 06:56:11 -0400
+Received: from outbound.soverin.net ([116.202.65.218]:56213 "EHLO
+        outbound.soverin.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726299AbgG2K4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 06:56:11 -0400
+X-Greylist: delayed 385 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 Jul 2020 06:56:10 EDT
+Received: from smtp.soverin.net (unknown [10.10.3.24])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by outbound.soverin.net (Postfix) with ESMTPS id C67E86017B;
+        Wed, 29 Jul 2020 10:49:44 +0000 (UTC)
+Received: from smtp.soverin.net (smtp.soverin.net [159.69.232.138]) by soverin.net
+From:   Jack Mitchell <ml@embed.me.uk>
+To:     linux-pm@vger.kernel.org
+Cc:     Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        linux-kernel@vger.kernel.org,
+        Quentin Schulz <quentin.schulz@free-electrons.com>,
+        Jack Mitchell <ml@embed.me.uk>
+Subject: [PATCH] drivers: power: axp20x-battery: support setting charge_full_design
+Date:   Wed, 29 Jul 2020 11:49:13 +0100
+Message-Id: <20200729104913.627242-1-ml@embed.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0iiF75+POMF5oX8_NOBiLLqMQSYTTf-X0QoLAPV7fF0-g@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Virus-Scanned: clamav-milter 0.102.4 at c03mi01
+X-Virus-Status: Clean
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 27 Jul 2020 at 15:52:41 (+0200), Rafael J. Wysocki wrote:
-> On Wed, Jul 22, 2020 at 11:38 AM Ionela Voinescu
-> <ionela.voinescu@arm.com> wrote:
-> >
-> > While the move of the invariance setter calls (arch_set_freq_scale())
-> > from cpufreq drivers to cpufreq core maintained the previous
-> > functionality for existing drivers that use target_index() and
-> > fast_switch() for frequency switching, it also gives the possibility
-> > of adding support for users of the target() callback, which is exploited
-> > here.
-> >
-> > To be noted that the target() callback has been flagged as deprecated
-> > since:
-> >
-> > commit 9c0ebcf78fde ("cpufreq: Implement light weight ->target_index() routine")
-> >
-> > It also doesn't have that many users:
-> >
-> >   cpufreq-nforce2.c:371:2:      .target = nforce2_target,
-> >   cppc_cpufreq.c:416:2:         .target = cppc_cpufreq_set_target,
-> >   gx-suspmod.c:439:2:           .target = cpufreq_gx_target,
-> >   pcc-cpufreq.c:573:2:          .target = pcc_cpufreq_target,
-> >
-> > Similarly to the path taken for target_index() calls in the cpufreq core
-> > during a frequency change, all of the drivers above will mark the end of a
-> > frequency change by a call to cpufreq_freq_transition_end().
-> >
-> > Therefore, cpufreq_freq_transition_end() can be used as the location for
-> > the arch_set_freq_scale() call to potentially inform the scheduler of the
-> > frequency change.
-> >
-> > This change maintains the previous functionality for the drivers that
-> > implement the target_index() callback, while also adding support for the
-> > few drivers that implement the deprecated target() callback.
-> >
-> > Two notes are worthwhile here:
-> >  - In __target_index(), cpufreq_freq_transition_end() is called only for
-> >    drivers that have synchronous notifications enabled. There is only one
-> >    driver that disables them,
-> >
-> >    drivers/cpufreq/powernow-k8.c:1142: .flags = CPUFREQ_ASYNC_NOTIFICATION,
-> >
-> >    which is deprecated.
-> >
-> >  - Despite marking a successful frequency change, many cpufreq drivers
-> >    will populate the new policy->cur with the new requested frequency,
-> >    although this might not be the one granted by the hardware.
-> >
-> >    Therefore, the call to arch_set_freq_scale() is a "best effort" one,
-> >    and it is up to the architecture if the new frequency is used in the
-> >    new frequency scale factor setting or eventually used by the scheduler.
-> >    The architecture is in a better position to decide if it has better
-> >    methods to obtain more accurate information regarding the current
-> >    frequency (for example the use of counters).
-> >
-[..]
+Signed-off-by: Jack Mitchell <ml@embed.me.uk>
+---
+ drivers/power/supply/axp20x_battery.c | 39 +++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-> I would fold this patch into the previous one.
-> 
-> I don't see much reason for it to be separate and it looks like
-> folding it in would cause the previous patch to be simpler.
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+index fe96f77bffa7..8ce4ebe7ccd5 100644
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -60,6 +60,7 @@
+ 
+ #define AXP20X_V_OFF_MASK		GENMASK(2, 0)
+ 
++#define AXP20X_BAT_MAX_CAP_VALID	BIT(7)
+ 
+ struct axp20x_batt_ps;
+ 
+@@ -86,6 +87,7 @@ struct axp20x_batt_ps {
+ 	struct axp20x_thermal_sensor sensor;
+ 	/* Maximum constant charge current */
+ 	unsigned int max_ccc;
++	unsigned int charge_full_design;
+ 	const struct axp_data	*data;
+ };
+ 
+@@ -260,6 +262,10 @@ static int axp20x_battery_get_prop(struct power_supply *psy,
+ 		val->intval = POWER_SUPPLY_HEALTH_GOOD;
+ 		break;
+ 
++	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
++		val->intval = axp20x_batt->charge_full_design;
++		break;
++
+ 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+ 		ret = axp20x_get_constant_charge_current(axp20x_batt,
+ 							 &val->intval);
+@@ -401,6 +407,30 @@ static int axp20x_battery_set_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+ 				  AXP20X_CHRG_CTRL1_TGT_VOLT, val);
+ }
+ 
++static int axp20x_set_charge_full_design(struct axp20x_batt_ps *axp_batt,
++					      int charge_full_uah)
++{
++	/* (Unit: 1.456mAh) */
++	int max_capacity_units = charge_full_uah / 1456;
++	int ret;
++
++	u8 max_capacity_msb = (max_capacity_units & 0x7F00) >> 8;
++	u8 max_capacity_lsb = (max_capacity_units & 0xFF);
++
++	axp_batt->charge_full_design = max_capacity_units * 1456;
++
++	max_capacity_msb |= AXP20X_BAT_MAX_CAP_VALID;
++
++	ret = regmap_write(axp_batt->regmap, AXP288_FG_DES_CAP0_REG,
++			   max_capacity_lsb);
++
++	if (ret)
++		return ret;
++
++	return regmap_write(axp_batt->regmap, AXP288_FG_DES_CAP1_REG,
++			    max_capacity_msb);
++}
++
+ static int axp20x_set_constant_charge_current(struct axp20x_batt_ps *axp_batt,
+ 					      int charge_current)
+ {
+@@ -492,6 +522,7 @@ static enum power_supply_property axp20x_battery_props[] = {
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+ 	POWER_SUPPLY_PROP_HEALTH,
+@@ -675,6 +706,7 @@ static int axp20x_power_probe(struct platform_device *pdev)
+ 	if (!power_supply_get_battery_info(axp20x_batt->batt, &info)) {
+ 		int vmin = info.voltage_min_design_uv;
+ 		int ccc = info.constant_charge_current_max_ua;
++		int cfd = info.charge_full_design_uah;
+ 
+ 		if (vmin > 0 && axp20x_set_voltage_min_design(axp20x_batt,
+ 							      vmin))
+@@ -692,6 +724,13 @@ static int axp20x_power_probe(struct platform_device *pdev)
+ 			axp20x_batt->max_ccc = ccc;
+ 			axp20x_set_constant_charge_current(axp20x_batt, ccc);
+ 		}
++
++		if (cfd > 0 && axp20x_set_charge_full_design(axp20x_batt,
++							       cfd)) {
++			dev_err(&pdev->dev,
++				"couldn't set charge_full_design\n");
++			axp20x_batt->charge_full_design = 0;
++		}
+ 	}
+ 
+ 	error = axp20x_thermal_register_sensor(pdev, axp20x_batt);
+-- 
+2.28.0
 
-I kept it separate in this version as a proposal to move the call to
-cpufreq_freq_transition_end() and properly justify it in the commit
-message.
-
-I'll squash it into the previous one, as recommended.
-
-Thanks,
-Ionela.
