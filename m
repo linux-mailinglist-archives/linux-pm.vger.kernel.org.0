@@ -2,91 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CED1232205
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 17:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1335C2322DF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 18:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726449AbgG2P4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 11:56:02 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:60826 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgG2P4C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 11:56:02 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06TFu00U004597;
-        Wed, 29 Jul 2020 10:56:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1596038160;
-        bh=dErOzIho34fxvJcb68vhO2ZIVDb37+iIzl5rCrT1rGU=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=dAg2f074lHJEzqnf7SuTzPpJnsRcs1+O9lTJgE88Wp/dKdfxLv8sZOQCHD3CRtbp+
-         sKJOfC5RVJfCgg2XBspNiTRn1N7sMebq8Zgm5LDtpZ6DLe/sDQ8ezgGyIiiFrxkUFI
-         rAGkTJoBx7cp/KsOcO7/XVpB22HIVND6y/aLEzX0=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06TFu03E058504;
-        Wed, 29 Jul 2020 10:56:00 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 29
- Jul 2020 10:56:00 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 29 Jul 2020 10:56:00 -0500
-Received: from [10.250.35.195] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06TFtxOX006537;
-        Wed, 29 Jul 2020 10:55:59 -0500
-Subject: Re: [PATCH v5 2/4] power: supply: bq27xxx_battery: Add the BQ27z561
- Battery monitor
-To:     <sre@kernel.org>, <afd@ti.com>, <pali@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh@kernel.org>
-References: <20200729120609.22427-1-dmurphy@ti.com>
- <20200729120609.22427-2-dmurphy@ti.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <a757fcf1-0215-3926-f74c-22183457be3e@ti.com>
-Date:   Wed, 29 Jul 2020 10:55:54 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726496AbgG2Qqi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 12:46:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58492 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726581AbgG2Qqh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Jul 2020 12:46:37 -0400
+Received: from earth.universe (dyndsl-095-033-172-175.ewe-ip-backbone.de [95.33.172.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 21C1D20809;
+        Wed, 29 Jul 2020 16:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596041197;
+        bh=MNvYf6Zn28rLdP7ViMy29aZYD0eAurNF8FmA6PG23JU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lis10wwiitfP0LyrSXjMssjlm6eWl7WazeT8122FO4ao/JhL0ZMoiwM99GAMwOaoS
+         14i5g80JxD+Z/QzF3SZvVFLQ0gAuZjy5TFNMbU2IWECN2Brdb2+VsKM4LVqfmfYy4F
+         7PRwKpxRMNQYTJvbzRT95aKo+cp44lZIPeLuY2XE=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 7F44F3C0B87; Wed, 29 Jul 2020 18:46:35 +0200 (CEST)
+Date:   Wed, 29 Jul 2020 18:46:35 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Cc:     pali@kernel.org, robh@kernel.org, afd@ti.com, dmurphy@ti.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, sspatil@android.com
+Subject: Re: [PATCH v18 2/4] dt-bindings: power: Convert battery.txt to
+ battery.yaml
+Message-ID: <20200729164635.cnjbadpq22tigwlc@earth.universe>
+References: <20200728200814.26501-1-r-rivera-matos@ti.com>
+ <20200728200814.26501-3-r-rivera-matos@ti.com>
 MIME-Version: 1.0
-In-Reply-To: <20200729120609.22427-2-dmurphy@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pocjiyfjiv2tcf6l"
+Content-Disposition: inline
+In-Reply-To: <20200728200814.26501-3-r-rivera-matos@ti.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello
 
-On 7/29/20 7:06 AM, Dan Murphy wrote:
-> Add the Texas Instruments BQ27z561 battery monitor.  The register address
-> map is laid out the same as compared to other devices within the file.
-> The battery status register has differing bits to determine if the
-> battery is full, discharging or dead.
->
+--pocjiyfjiv2tcf6l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Ricardo and Dan,
+
+On Tue, Jul 28, 2020 at 03:08:12PM -0500, Ricardo Rivera-Matos wrote:
+> From: Dan Murphy <dmurphy@ti.com>
+>=20
+> Convert the battery.txt file to yaml and fix up the examples.
+>=20
 > Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/power/supply/bq27xxx_battery.c     | 69 +++++++++++++++++++++-
->   drivers/power/supply/bq27xxx_battery_i2c.c |  2 +
->   include/linux/power/bq27xxx_battery.h      |  1 +
->   3 files changed, 71 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-> index acaafed037be..a858e3b2a0ee 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -18,6 +18,7 @@
->    * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
->    *
->    * Datasheets:
-> +<<<<<<< HEAD
 
-Need to remove this artifact from a rebase.
-
-Not sure how this got here as it does not appear in my source.
-
-Dan
+I merged this doing some modifcations while applying, so that this
+is not postponed and risking conflicts due to added properties:
 
 
+> [...]
+> +patternProperties:
+> +  '^ocv-capacity-table-[0-100]$':
+> [...]
+
+[0-100] is a valid regex, but counterintuitively only allows 0 and
+1. For example it does not apply for ocv-capacity-table-2.
+
+I used [0-9]+ instead, which is being used by pinctrl.
+
+> +examples:
+> +  - |
+> +    power {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      battery: battery {
+> +        compatible =3D "simple-battery";
+> +        over-voltage-threshold-microvolt =3D <4500000>;
+> +        re-charge-voltage-microvolt =3D <250000>;
+> +        voltage-min-design-microvolt =3D <3200000>;
+> +        voltage-max-design-microvolt =3D <4200000>;
+> +        energy-full-design-microwatt-hours =3D <5290000>;
+> +        charge-full-design-microamp-hours =3D <1430000>;
+> +        precharge-current-microamp =3D <256000>;
+> +        precharge-upper-limit-microvolt =3D <2500000>;
+> +        charge-term-current-microamp =3D <128000>;
+> +        constant-charge-current-max-microamp =3D <900000>;
+> +        constant-charge-voltage-max-microvolt =3D <4200000>;
+> +        factory-internal-resistance-micro-ohms =3D <250000>;
+> +        ocv-capacity-celsius =3D <(-10) 10>;
+
+You state, that there is a table for -10 degrees and one for 10
+degrees...
+
+> +        ocv-capacity-table-0 =3D <4185000 100>, <4113000 95>, <4066000 9=
+0>;
+
+=2E.. and then you provide only the table for -10 degrees. I fixed
+this by simply using the previous example (tables for -10, 0 and 10
+degrees) and 3 tables and added a comment above the tables.
+
+-- Sebastian
+
+--pocjiyfjiv2tcf6l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8hp9kACgkQ2O7X88g7
++prgIA//fWkFK0IS/82O/WY4vEVu36fFAWgJ1uOcVLkDRPVz9DO7Q4TIyVY7FOzW
+B7+DuzvHS6/7HFcb89spYKCDPlVtx5dLgjd+wIsrGi2YpeiIIUus3+cKLmiHsi3t
++dHfFYq2Hgg7JFvRhmSi7a9f2tKtOYCeOlCfJ56MOxWVggHnl7v3ytOEiQEyeFN3
+/tE/HdIlXtRleLWXPWIBsR7QRW3TJEk7BRIgyfenwvrJXu27/w8AZoXeiisJaJBW
+VN4ApBkln1RYHzsiwoobo5j9Z2S/pWfl5AaRabOqdwtxbaZ6Tg96+vkb9J4hFNj6
+vXd6DKVOTBhHnQLqbM9pVGpasQoC2d/2v2e5jIRxpjp+5EqYOqTCEeH7SVDznAo+
+t5Kv7lvfozuakPOQHmaigyI27Eg1UJ8iLKBRycnwvnwdzm7tJqtOLq1Wj/50LacY
+/jjCZ3AG75wHzorusn2kKeBWEGRpFqG7iE7AW2z/sN5NREmyuvSVqXJ908VSMoVJ
+VpwRXpfsitMLQhmaKYQXyyeheopOfo69O1CDGk/KwHOtpl3eDatA45Nzn7XhDnsx
+n3HIRRl09R1ZE2p4RBU2p+fHN01CluJK+o0FL9JPfjAMB2lAT64OuPBww7TISl4H
+vQqDBKlRzOsYU57yvNCHfArwDx/fVp4VlTbTHU0lm7CjNreWw+8=
+=d5pW
+-----END PGP SIGNATURE-----
+
+--pocjiyfjiv2tcf6l--
