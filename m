@@ -2,95 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A3B231CF0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 12:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32359231CF4
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 12:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726644AbgG2KwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 06:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
+        id S1726841AbgG2Kwa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 06:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726757AbgG2KwQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 06:52:16 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F62C061794
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 03:52:16 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w11so3399333ybi.23
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 03:52:16 -0700 (PDT)
+        with ESMTP id S1726497AbgG2Kw3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 06:52:29 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA67C061794
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 03:52:29 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z5so13392345ybo.9
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 03:52:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=vSliGyBZQKvlS0+61F1LBEoXAn3W7oNlUuyzH64gKZ4=;
-        b=s6Br/iSuLIwOpryZlHRvpGvDbfddkW4PyoYgVr62dENEn+ac9CFU44qiia+IbgSEVW
-         Nnl2wQRXJsTqxLwAfcFWiLOu/yWLP+ryfzxB/x6ztWI2jsOZ2w70YbEfNh/6A6d4PhZ/
-         iMa2jkRQI8v9AfXr4C4y+07e1kKSuqHiyyRipNRzRNbeFAHK125rhYPIgBjRIyHWksfL
-         /3T7oqq34vijYmj83jeDTWOhwBWPvdFdrUsUvLosJNgnfy84Sh0fLDpjnMAZowz70BGS
-         fNni7Bnbk4PhkrdtAGdDO3uEUcN5KkA1icjYpeJh4rtHh86E6BobzTJydAOJUiwR86wo
-         WMIg==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=ugRMFAn0FzEH6U3MDRf2DGkDlPPr8KlzMep2WjY159g=;
+        b=S8LZfE1UmVZTz9fYRdg6DM85/f9Gra7EmKzW2069JUh7NZHp0og64X4enx7rfMc2nP
+         szolAcqFWys0eqKq9toHVNIVGqKXyU0TLONNS4UqmhTZtSE3jk1sh6OMNeBP0qp/GAE1
+         H1887XGT8CnmeRY05/0nLrWgi1K9toqkYkeoKgJhPrUDUoSqPH0VmhK2wi6GZFTBVwo3
+         bKj0WjCnLG2pIxncVj4bCQx+ou/PRFgpnwpZo0GWLGeoIE+t2v3hqrYKZvxWgbIdX9AI
+         i3G64ZNstAqZHJn/tCZCEdrGbKIul4KexaLZYaII9JXul5aygIxxFYEXBlaUjoQRaGvQ
+         ZOeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=vSliGyBZQKvlS0+61F1LBEoXAn3W7oNlUuyzH64gKZ4=;
-        b=fWrTU1o9pj9V7uIRSGtVYFsXIK7T2jgOMEF2g2NGl+Rcu42nku6wlb399AiGbI+Pia
-         G0y05K0MFpuaWFUBM1hmdxgf7bMGgsKqR5WYfXSdeHD8J2HcQfP1OnEbfPENbqCeLd3w
-         NaOdf45cowRj2GW6xy/a1Kr+f6oI2sbzxqnSAoJELdX9ZeKJi38tr31R7gsiYUn40jKL
-         afm6hSdorXsfQBrAbys8kIyXwmkyIgjIMfKOXAxM5LWbLwTDeKtA5wBypuDYI4ybnKjW
-         fv6fmzgX+YKvGNPSlbAWxbVZr/wneojMkIvuA3I59bUP0Hvr8VNBUfwcBkW3K8fFpvU0
-         uz2g==
-X-Gm-Message-State: AOAM531AYbmhWa5u2XASDQsXp34E3k6uO6EixZM9w6/qpDLD6cNVFhh5
-        m+kEgWfyqEVyVA0dBs1shChppjsz/EySS68a
-X-Google-Smtp-Source: ABdhPJzk4f0duQ0J4jmHCNnomr0GLgR7krVV4GTA4+LU/ZyuMeFIRYgUpNVsZX0U8Ck588k2y4lL6X82dJhicAgI
-X-Received: by 2002:a25:4945:: with SMTP id w66mr50685406yba.285.1596019935958;
- Wed, 29 Jul 2020 03:52:15 -0700 (PDT)
-Date:   Wed, 29 Jul 2020 20:52:03 +1000
-Message-Id: <20200729105206.2991064-1-victording@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=ugRMFAn0FzEH6U3MDRf2DGkDlPPr8KlzMep2WjY159g=;
+        b=Qrg5PNm9qe2cLimunNaLgR/rthECk655cZtV4yylSKLHjXhhBNuT1fYPcI37FFahY8
+         /lXiZ7uGHiTQoJzh5mWpy63IRXb0nTygGXYUtz6dunk2yQok0qxkO50mfcwXLhXYsRxZ
+         788pd7uLIxSRog3UJ15Kptp4hNeCX1aTW5gUbdPE99lUsJXx4F2TCoaUZg1eH0XVQexL
+         I+KhKI9RmLhOoHr+JN5AZFY5/R/zIGaN7DbxCRw8ykoQQJmlXn5fFoRJT/LxOl8cyVPJ
+         JgCXK1mQfAlEP2OO00fvAOUKUYEPRD+/7B+LvWtH5v/oo20H9B2cRlzmlHuBZWWmSbI1
+         j2UQ==
+X-Gm-Message-State: AOAM530pAYfHvvU/G/1BY9lpc1D/YAYhUeg6JtUGyaeNvPiEwEFPwxFZ
+        9PqnExZG9DcbXueWWJeTqN9QHup5gk+iiLxr
+X-Google-Smtp-Source: ABdhPJyC+ESInuKukVedQEyRAk0dWvO/+1m2ouUjYg7htdOlaWKS+kGjqlRyigue4QQY3YHIZgG6Sm3ic3cfRfgs
+X-Received: by 2002:a25:54f:: with SMTP id 76mr51294163ybf.367.1596019948823;
+ Wed, 29 Jul 2020 03:52:28 -0700 (PDT)
+Date:   Wed, 29 Jul 2020 20:52:05 +1000
+In-Reply-To: <20200729105206.2991064-1-victording@google.com>
+Message-Id: <20200729205144.2.I4cb96a95365506b77761c1416258672a7556b595@changeid>
 Mime-Version: 1.0
+References: <20200729105206.2991064-1-victording@google.com>
 X-Mailer: git-send-email 2.28.0.rc0.142.g3c755180ce-goog
-Subject: [PATCH 0/3] powercap: Enable RAPL for AMD Fam17h
+Subject: [PATCH 2/3] powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
 From:   Victor Ding <victording@google.com>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Victor Ding <victording@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        linux-pm@vger.kernel.org, x86@kernel.org
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch series adds support for AMD Fam17h RAPL counters. As per
-AMD PPR, Fam17h support RAPL counters to monitor power usage. The RAPL
-counter operates as with Intel RAPL. Therefore, it is beneficial to
-re-use existing framework for Intel, especially to allow existing tools
-to seamlessly run on AMD.
+This patch changes the static struct rapl_msr_priv to a pointer to allow
+using a different set of of RAPL MSR interface, preparing for supporting
+AMD's RAPL MSR interface.
 
-From the user's point view, this series enables the following two sysfs
-entry on AMD Fam17h:
-  /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
-  /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
+No functional changes.
 
+Signed-off-by: Victor Ding <victording@google.com>
+---
 
-Victor Ding (3):
-  x86/msr-index: sort AMD RAPL MSRs by address
-  powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
-  powercap: Add AMD Fam17h RAPL support
+ drivers/powercap/intel_rapl_msr.c | 33 +++++++++++++++++--------------
+ 1 file changed, 18 insertions(+), 15 deletions(-)
 
- arch/x86/include/asm/msr-index.h     |  3 +-
- drivers/powercap/intel_rapl_common.c |  2 +
- drivers/powercap/intel_rapl_msr.c    | 58 +++++++++++++++++++++-------
- 3 files changed, 47 insertions(+), 16 deletions(-)
-
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index d5487965bdfe..430b4819d6ab 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -30,7 +30,9 @@
+ #define MSR_PLATFORM_POWER_LIMIT	0x0000065C
+ 
+ /* private data for RAPL MSR Interface */
+-static struct rapl_if_priv rapl_msr_priv = {
++static struct rapl_if_priv *rapl_msr_priv;
++
++static struct rapl_if_priv rapl_msr_priv_intel = {
+ 	.reg_unit = MSR_RAPL_POWER_UNIT,
+ 	.regs[RAPL_DOMAIN_PACKAGE] = {
+ 		MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS, MSR_PKG_PERF_STATUS, 0, MSR_PKG_POWER_INFO },
+@@ -56,9 +58,9 @@ static int rapl_cpu_online(unsigned int cpu)
+ {
+ 	struct rapl_package *rp;
+ 
+-	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
++	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
+ 	if (!rp) {
+-		rp = rapl_add_package(cpu, &rapl_msr_priv);
++		rp = rapl_add_package(cpu, rapl_msr_priv);
+ 		if (IS_ERR(rp))
+ 			return PTR_ERR(rp);
+ 	}
+@@ -71,7 +73,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 	struct rapl_package *rp;
+ 	int lead_cpu;
+ 
+-	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
++	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
+ 	if (!rp)
+ 		return 0;
+ 
+@@ -127,37 +129,38 @@ static int rapl_msr_probe(struct platform_device *pdev)
+ {
+ 	int ret;
+ 
+-	rapl_msr_priv.read_raw = rapl_msr_read_raw;
+-	rapl_msr_priv.write_raw = rapl_msr_write_raw;
++	rapl_msr_priv = &rapl_msr_priv_intel;
++	rapl_msr_priv->read_raw = rapl_msr_read_raw;
++	rapl_msr_priv->write_raw = rapl_msr_write_raw;
+ 
+-	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+-	if (IS_ERR(rapl_msr_priv.control_type)) {
++	rapl_msr_priv->control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
++	if (IS_ERR(rapl_msr_priv->control_type)) {
+ 		pr_debug("failed to register powercap control_type.\n");
+-		return PTR_ERR(rapl_msr_priv.control_type);
++		return PTR_ERR(rapl_msr_priv->control_type);
+ 	}
+ 
+ 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "powercap/rapl:online",
+ 				rapl_cpu_online, rapl_cpu_down_prep);
+ 	if (ret < 0)
+ 		goto out;
+-	rapl_msr_priv.pcap_rapl_online = ret;
++	rapl_msr_priv->pcap_rapl_online = ret;
+ 
+ 	/* Don't bail out if PSys is not supported */
+-	rapl_add_platform_domain(&rapl_msr_priv);
++	rapl_add_platform_domain(rapl_msr_priv);
+ 
+ 	return 0;
+ 
+ out:
+ 	if (ret)
+-		powercap_unregister_control_type(rapl_msr_priv.control_type);
++		powercap_unregister_control_type(rapl_msr_priv->control_type);
+ 	return ret;
+ }
+ 
+ static int rapl_msr_remove(struct platform_device *pdev)
+ {
+-	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
+-	rapl_remove_platform_domain(&rapl_msr_priv);
+-	powercap_unregister_control_type(rapl_msr_priv.control_type);
++	cpuhp_remove_state(rapl_msr_priv->pcap_rapl_online);
++	rapl_remove_platform_domain(rapl_msr_priv);
++	powercap_unregister_control_type(rapl_msr_priv->control_type);
+ 	return 0;
+ }
+ 
 -- 
 2.28.0.rc0.142.g3c755180ce-goog
 
