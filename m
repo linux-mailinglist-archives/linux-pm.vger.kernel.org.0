@@ -2,95 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FF8231B5C
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 10:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D943C231BC5
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 11:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726710AbgG2IkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 04:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726707AbgG2IkL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 04:40:11 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D141C0619D2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 01:40:11 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id r12so20736464wrj.13
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 01:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YJUVSZqIXAUcxRK135uPMY26TWenUYdXUZWwq11zSBY=;
-        b=MqLsZu9YbOlKS6mFOepKH+8KAfFJ/mtQQ0W+tGHPTucR2LdBY1Q2npnk0CTYTUS82h
-         v9DXVj08hSt0kgyjKdoOiFBiDeVm3mN0e0cH5SF2aXtwwKbqUGuWParVuF+FOIY6B9gu
-         nKIxdcOP6Qlhvc8mKlcrghAM9VRsEDDMlPJbPBRZYj7C0flFcABs9hdykujWP/lbuoDA
-         lfMZx4bKXqnfr1p7MTXunNw5H7vnkDZX9KMEyp+HYWB9k7PyO/yV1VClXzcCBBG3M0Yj
-         WIMP2O9oXMJ4hwdq2iOJPGyCsPgyKU9TDPYTjek/WVV1BVvvemro+FkmjnfDBs26YF4I
-         PyYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YJUVSZqIXAUcxRK135uPMY26TWenUYdXUZWwq11zSBY=;
-        b=FuFf+QLQQlDFbc4rTVynfMCEkJf7uO/KlPpJy7VOQCK0k056shCcgA+Kr2GU2qXiiZ
-         K0jopJfwGC8UGMMRMH5yrbVcEC+k98Dikg6mBVW53UH57WK0zRYb6taf3r4o8dpTntl5
-         R6ztJKn4AZT8O7ds/7/IfrRcTqf1a+ZYVuzfS5Ihq9A47pgFHMA49BI/8NN5oWZIW7V0
-         Z9HZKRrQoWdcYrRVzvpRrl1M6HUcYGCNZ6sDaehgtZE08j3I6TWaPmsmPSfY1MPhkN70
-         /bUYBeHlHAxz62SdfXgSnQAl9uma9L/wMq+/sFLQRIqmgz2qjN/omCTCK57OscTs++cZ
-         dlOQ==
-X-Gm-Message-State: AOAM532/82LGNB8hJUecmW/LFrTsSJAanAAIjqcsbObUIuCnvRkd+FPG
-        Oi3vodl/Z1Cd7UNcfPQeA7HXrw==
-X-Google-Smtp-Source: ABdhPJw5yvp3nWT258bEQHmRZ9EmQ9SNB++YPU6N3KfBaR1N4H9HAOwkeizVkcJsFE7XH06WG/cGTA==
-X-Received: by 2002:adf:fd41:: with SMTP id h1mr30692686wrs.124.1596012009544;
-        Wed, 29 Jul 2020 01:40:09 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:812d:95b8:6384:6e20? ([2a01:e34:ed2f:f020:812d:95b8:6384:6e20])
-        by smtp.googlemail.com with ESMTPSA id x9sm3752135wmk.45.2020.07.29.01.40.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Jul 2020 01:40:08 -0700 (PDT)
-Subject: Re: [PATCH] thermal: core: Add thermal zone enable/disable
- notification
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-References: <20200727231033.26512-1-daniel.lezcano@linaro.org>
- <CAHLCerO=KPUR-2qEuFpNV9UUV_O7GoXY-EPhyefOFfL_jZ_0gA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <90f14da8-a197-08cb-cf55-5c88fa8eed58@linaro.org>
-Date:   Wed, 29 Jul 2020 10:40:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727777AbgG2JDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 05:03:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:48182 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726299AbgG2JDp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 29 Jul 2020 05:03:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1EFCB31B;
+        Wed, 29 Jul 2020 02:03:45 -0700 (PDT)
+Received: from localhost (unknown [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AEE463F718;
+        Wed, 29 Jul 2020 02:03:44 -0700 (PDT)
+Date:   Wed, 29 Jul 2020 10:03:43 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [PATCH v2 1/7] cpufreq: move invariance setter calls in cpufreq
+ core
+Message-ID: <20200729090343.GA12941@arm.com>
+References: <20200722093732.14297-1-ionela.voinescu@arm.com>
+ <20200722093732.14297-2-ionela.voinescu@arm.com>
+ <CAJZ5v0i5Xrk6oTt81aeXDi1F8gnEspJo9e6nGf10nSvBz-Dbkw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHLCerO=KPUR-2qEuFpNV9UUV_O7GoXY-EPhyefOFfL_jZ_0gA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0i5Xrk6oTt81aeXDi1F8gnEspJo9e6nGf10nSvBz-Dbkw@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/07/2020 07:36, Amit Kucheria wrote:
-> On Tue, Jul 28, 2020 at 4:40 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> Now the calls to enable/disable a thermal zone are centralized in a
->> call to a function, we can add in these the corresponding netlink
->> notifications.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Hi Rafael,
+
+On Monday 27 Jul 2020 at 15:48:39 (+0200), Rafael J. Wysocki wrote:
+> On Wed, Jul 22, 2020 at 11:38 AM Ionela Voinescu
+> <ionela.voinescu@arm.com> wrote:
+[..]
+> > target()
+> > =======
+> > This has been flagged as deprecated since:
+> >
+> >   commit 9c0ebcf78fde ("cpufreq: Implement light weight ->target_index() routine")
+> >
+> > It also doesn't have that many users:
+> >
+> >   cpufreq-nforce2.c:371:2:      .target = nforce2_target,
+> >   cppc_cpufreq.c:416:2:         .target = cppc_cpufreq_set_target,
+> >   gx-suspmod.c:439:2:           .target = cpufreq_gx_target,
+> >   pcc-cpufreq.c:573:2:          .target = pcc_cpufreq_target,
 > 
-> Reviewed-by: Amit Kucheria <amit.kucheria@linaro.org>
+> Also intel_pstate in the passive mode.
+> 
 
-I've applied the changes, thanks for the review.
+Thanks! I'll update the list. Somehow I missed a few others:
 
+$ grep -E -Hn -r '\.target\s*='
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+gx-suspmod.c:439:       .target         = cpufreq_gx_target,
+s3c24xx-cpufreq.c:428:  .target         = s3c_cpufreq_target,
+intel_pstate.c:2528:    .target         = intel_cpufreq_target,
+cppc_cpufreq.c:401:     .target = cppc_cpufreq_set_target,
+cpufreq-nforce2.c:371:  .target = nforce2_target,
+sh-cpufreq.c:163:       .target         = sh_cpufreq_target,
+pcc-cpufreq.c:573:      .target = pcc_cpufreq_target,
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Sorry about that!
+
+Many thanks for the review,
+Ionela.
