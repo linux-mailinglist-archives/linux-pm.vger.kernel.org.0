@@ -2,49 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 032F7231E05
+	by mail.lfdr.de (Postfix) with ESMTP id E594E231E07
 	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 14:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726353AbgG2MGS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 08:06:18 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:58366 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgG2MGS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 08:06:18 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06TC6GtO070023;
-        Wed, 29 Jul 2020 07:06:16 -0500
+        id S1726840AbgG2MGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 08:06:24 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:43994 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbgG2MGX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 08:06:23 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06TC6LjM019850;
+        Wed, 29 Jul 2020 07:06:21 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1596024376;
-        bh=Wd+6o7v/z+lrPDM15r+ykQGSZTFXBwT0Ene0dRfk5WE=;
-        h=From:To:CC:Subject:Date;
-        b=WPNx+y5Rd4uuPyd6eZByzi/p5ohdePdGL2RCNMCh4LwZKqFPJ/i431iatHkzgogOZ
-         npcEXqbb1BLXlvyIV448Q5v8isZTejzepdAimeEFg/ZmhdhR/pvh8ryaNw3qIqa6FZ
-         u747IcD63rBitSRWadYkX4ymG945AuBtHqr/fJzs=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06TC6Gwd117304
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 29 Jul 2020 07:06:16 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1596024381;
+        bh=cutApfJYWHE6qUGKX+bHcNwZHI64KaoDdW2GVBI2cN0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=c+2KMDXMnSqYKZTwb7vHk7vqXVrUhcAmYxgODgopQvd/Q0uIWrc8P0sxSQrhqqQQW
+         EZcmvH/b9nmhZHISqpmTFTfMmFo/4YD+ZYqL8XInfK5G/19jVdPEPVUj9y3i/AylRS
+         QOW7qFgaQIVOQvR5IqwwpWXJuccJrsson4tTJpq0=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06TC6LkL101251;
+        Wed, 29 Jul 2020 07:06:21 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 29
- Jul 2020 07:06:16 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2020 07:06:21 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 29 Jul 2020 07:06:16 -0500
+ Frontend Transport; Wed, 29 Jul 2020 07:06:21 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06TC6GCA097457;
-        Wed, 29 Jul 2020 07:06:16 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06TC6L5F038704;
+        Wed, 29 Jul 2020 07:06:21 -0500
 From:   Dan Murphy <dmurphy@ti.com>
 To:     <sre@kernel.org>, <afd@ti.com>, <pali@kernel.org>
 CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <robh@kernel.org>,
         Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v5 1/4] dt-bindings: power: Add BQ27z561 compatible
-Date:   Wed, 29 Jul 2020 07:06:06 -0500
-Message-ID: <20200729120609.22427-1-dmurphy@ti.com>
+Subject: [PATCH v5 2/4] power: supply: bq27xxx_battery: Add the BQ27z561 Battery monitor
+Date:   Wed, 29 Jul 2020 07:06:07 -0500
+Message-ID: <20200729120609.22427-2-dmurphy@ti.com>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200729120609.22427-1-dmurphy@ti.com>
+References: <20200729120609.22427-1-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -54,30 +55,210 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the Texas Instruments bq27z561 battery monitor to the bq27xxx
-binding.
+Add the Texas Instruments BQ27z561 battery monitor.  The register address
+map is laid out the same as compared to other devices within the file.
+The battery status register has differing bits to determine if the
+battery is full, discharging or dead.
 
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Dan Murphy <dmurphy@ti.com>
 ---
+ drivers/power/supply/bq27xxx_battery.c     | 69 +++++++++++++++++++++-
+ drivers/power/supply/bq27xxx_battery_i2c.c |  2 +
+ include/linux/power/bq27xxx_battery.h      |  1 +
+ 3 files changed, 71 insertions(+), 1 deletion(-)
 
-v5 - Rebased on power-next and changed bq27561->bq27z561
-
- Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-index 03d1020a2e47..0aa33590ac24 100644
---- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-@@ -49,6 +49,7 @@ properties:
-       - ti,bq27426
-       - ti,bq27441
-       - ti,bq27621
-+      - ti,bq27z561
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index acaafed037be..a858e3b2a0ee 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -18,6 +18,7 @@
+  * WARRANTIES OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  *
+  * Datasheets:
++<<<<<<< HEAD
+  * https://www.ti.com/product/bq27000
+  * https://www.ti.com/product/bq27200
+  * https://www.ti.com/product/bq27010
+@@ -43,6 +44,7 @@
+  * https://www.ti.com/product/bq27411-g1
+  * https://www.ti.com/product/bq27441-g1
+  * https://www.ti.com/product/bq27621-g1
++ * https://www.ti.com/lit/gpn/bq27z561
+  */
  
-   reg:
-     maxItems: 1
+ #include <linux/device.h>
+@@ -79,6 +81,11 @@
+ #define BQ27000_FLAG_FC		BIT(5)
+ #define BQ27000_FLAG_CHGS	BIT(7) /* Charge state flag */
+ 
++/* BQ27Z561 has different layout for Flags register */
++#define BQ27Z561_FLAG_FDC	BIT(4) /* Battery fully discharged */
++#define BQ27Z561_FLAG_FC		BIT(5) /* Battery fully charged */
++#define BQ27Z561_FLAG_DIS_CH	BIT(6) /* Battery is discharging */
++
+ /* control register params */
+ #define BQ27XXX_SEALED			0x20
+ #define BQ27XXX_SET_CFGUPDATE		0x13
+@@ -431,12 +438,32 @@ static u8
+ 		[BQ27XXX_REG_DCAP] = 0x3c,
+ 		[BQ27XXX_REG_AP] = 0x18,
+ 		BQ27XXX_DM_REG_ROWS,
+-	};
++	},
+ #define bq27411_regs bq27421_regs
+ #define bq27425_regs bq27421_regs
+ #define bq27426_regs bq27421_regs
+ #define bq27441_regs bq27421_regs
+ #define bq27621_regs bq27421_regs
++	bq27z561_regs[BQ27XXX_REG_MAX] = {
++		[BQ27XXX_REG_CTRL] = 0x00,
++		[BQ27XXX_REG_TEMP] = 0x06,
++		[BQ27XXX_REG_INT_TEMP] = INVALID_REG_ADDR,
++		[BQ27XXX_REG_VOLT] = 0x08,
++		[BQ27XXX_REG_AI] = 0x14,
++		[BQ27XXX_REG_FLAGS] = 0x0a,
++		[BQ27XXX_REG_TTE] = 0x16,
++		[BQ27XXX_REG_TTF] = 0x18,
++		[BQ27XXX_REG_TTES] = INVALID_REG_ADDR,
++		[BQ27XXX_REG_TTECP] = INVALID_REG_ADDR,
++		[BQ27XXX_REG_NAC] = INVALID_REG_ADDR,
++		[BQ27XXX_REG_FCC] = 0x12,
++		[BQ27XXX_REG_CYCT] = 0x2a,
++		[BQ27XXX_REG_AE] = 0x22,
++		[BQ27XXX_REG_SOC] = 0x2c,
++		[BQ27XXX_REG_DCAP] = 0x3c,
++		[BQ27XXX_REG_AP] = 0x22,
++		BQ27XXX_DM_REG_ROWS,
++	};
+ 
+ static enum power_supply_property bq27000_props[] = {
+ 	POWER_SUPPLY_PROP_STATUS,
+@@ -672,6 +699,25 @@ static enum power_supply_property bq27421_props[] = {
+ #define bq27441_props bq27421_props
+ #define bq27621_props bq27421_props
+ 
++static enum power_supply_property bq27z561_props[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CAPACITY_LEVEL,
++	POWER_SUPPLY_PROP_TEMP,
++	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
++	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_CHARGE_FULL,
++	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
++	POWER_SUPPLY_PROP_CYCLE_COUNT,
++	POWER_SUPPLY_PROP_POWER_AVG,
++	POWER_SUPPLY_PROP_HEALTH,
++	POWER_SUPPLY_PROP_MANUFACTURER,
++};
++
+ struct bq27xxx_dm_reg {
+ 	u8 subclass_id;
+ 	u8 offset;
+@@ -767,11 +813,14 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
+ #define bq27621_dm_regs 0
+ #endif
+ 
++#define bq27z561_dm_regs 0
++
+ #define BQ27XXX_O_ZERO	0x00000001
+ #define BQ27XXX_O_OTDC	0x00000002 /* has OTC/OTD overtemperature flags */
+ #define BQ27XXX_O_UTOT  0x00000004 /* has OT overtemperature flag */
+ #define BQ27XXX_O_CFGUP	0x00000008
+ #define BQ27XXX_O_RAM	0x00000010
++#define BQ27Z561_O_BITS	0x00000020
+ 
+ #define BQ27XXX_DATA(ref, key, opt) {		\
+ 	.opts = (opt),				\
+@@ -816,6 +865,7 @@ static struct {
+ 	[BQ27426]   = BQ27XXX_DATA(bq27426,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
+ 	[BQ27441]   = BQ27XXX_DATA(bq27441,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
+ 	[BQ27621]   = BQ27XXX_DATA(bq27621,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
++	[BQ27Z561]  = BQ27XXX_DATA(bq27z561,   0         , BQ27Z561_O_BITS),
+ };
+ 
+ static DEFINE_MUTEX(bq27xxx_list_lock);
+@@ -1551,6 +1601,8 @@ static bool bq27xxx_battery_dead(struct bq27xxx_device_info *di, u16 flags)
+ {
+ 	if (di->opts & BQ27XXX_O_ZERO)
+ 		return flags & (BQ27000_FLAG_EDV1 | BQ27000_FLAG_EDVF);
++	else if (di->opts & BQ27Z561_O_BITS)
++		return flags & BQ27Z561_FLAG_FDC;
+ 	else
+ 		return flags & (BQ27XXX_FLAG_SOC1 | BQ27XXX_FLAG_SOCF);
+ }
+@@ -1595,6 +1647,7 @@ void bq27xxx_battery_update(struct bq27xxx_device_info *di)
+ 				cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
+ 			if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
+ 				cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
++
+ 			cache.charge_full = bq27xxx_battery_read_fcc(di);
+ 			cache.capacity = bq27xxx_battery_read_soc(di);
+ 			if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
+@@ -1682,6 +1735,13 @@ static int bq27xxx_battery_status(struct bq27xxx_device_info *di,
+ 			status = POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		else
+ 			status = POWER_SUPPLY_STATUS_DISCHARGING;
++	} else if (di->opts & BQ27Z561_O_BITS) {
++		if (di->cache.flags & BQ27Z561_FLAG_FC)
++			status = POWER_SUPPLY_STATUS_FULL;
++		else if (di->cache.flags & BQ27Z561_FLAG_DIS_CH)
++			status = POWER_SUPPLY_STATUS_DISCHARGING;
++		else
++			status = POWER_SUPPLY_STATUS_CHARGING;
+ 	} else {
+ 		if (di->cache.flags & BQ27XXX_FLAG_FC)
+ 			status = POWER_SUPPLY_STATUS_FULL;
+@@ -1710,6 +1770,13 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
+ 		else
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
++	} else if (di->opts & BQ27Z561_O_BITS) {
++		if (di->cache.flags & BQ27Z561_FLAG_FC)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
++		else if (di->cache.flags & BQ27Z561_FLAG_FDC)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
++		else
++			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+ 	} else {
+ 		if (di->cache.flags & BQ27XXX_FLAG_FC)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+diff --git a/drivers/power/supply/bq27xxx_battery_i2c.c b/drivers/power/supply/bq27xxx_battery_i2c.c
+index 8e114a7abfc9..15f4e75786ab 100644
+--- a/drivers/power/supply/bq27xxx_battery_i2c.c
++++ b/drivers/power/supply/bq27xxx_battery_i2c.c
+@@ -253,6 +253,7 @@ static const struct i2c_device_id bq27xxx_i2c_id_table[] = {
+ 	{ "bq27426", BQ27426 },
+ 	{ "bq27441", BQ27441 },
+ 	{ "bq27621", BQ27621 },
++	{ "bq27z561", BQ27Z561 },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(i2c, bq27xxx_i2c_id_table);
+@@ -286,6 +287,7 @@ static const struct of_device_id bq27xxx_battery_i2c_of_match_table[] = {
+ 	{ .compatible = "ti,bq27426" },
+ 	{ .compatible = "ti,bq27441" },
+ 	{ .compatible = "ti,bq27621" },
++	{ .compatible = "ti,bq27z561" },
+ 	{},
+ };
+ MODULE_DEVICE_TABLE(of, bq27xxx_battery_i2c_of_match_table);
+diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
+index 507c5e214c42..1f6ea5d5063d 100644
+--- a/include/linux/power/bq27xxx_battery.h
++++ b/include/linux/power/bq27xxx_battery.h
+@@ -30,6 +30,7 @@ enum bq27xxx_chip {
+ 	BQ27426,
+ 	BQ27441,
+ 	BQ27621,
++	BQ27Z561,
+ };
+ 
+ struct bq27xxx_device_info;
 -- 
 2.28.0
 
