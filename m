@@ -2,211 +2,547 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7C22319C0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 08:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CECC2319EF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 08:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727069AbgG2Gr5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 02:47:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5756 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726367AbgG2Gry (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 02:47:54 -0400
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06T6WjnN140771;
-        Wed, 29 Jul 2020 02:47:49 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32jpwdc5uw-1
+        id S1726996AbgG2G7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 02:59:32 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:53476 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726536AbgG2G7c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 02:59:32 -0400
+Received: from pps.filterd (m0170390.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06T6q24i019477;
+        Wed, 29 Jul 2020 02:59:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=smtpout1; bh=mWufaI70cGALBLPSJ/ZXV+fdCFfKztKiKT7sZJFua7o=;
+ b=W601JMNrSXLZur1VRUEPklmlVEugKQ/xTmuRQMUiwKPpqIHRGvlPkfgQfH/RjlRcJIsz
+ FH/GvOGJ7O+5zY25M/VzYmFrQWtc6Rtm9QrDdAqsB+NTny2oRFUI5nt/OsvQFI0yswRB
+ 5CwZG7RPNntjLAtqMjVCyz5r5vAX7HWgNjFq2/Pwk1pn8LNqvDegrBcqQdoh9hga1TXh
+ DC+OKSexHikmesdCyk9JK3SlYxAMIfRFjk/kQkbwAyAQKwVE4k3PIQj0EheW8J5aD1eX
+ LAWpi0XwP/nbyRkkURifeWXU2QHIbMJsYcVMYZslO4GYF4wSbP5/anhhaXK4jYN8LNsU Sg== 
+Received: from mx0b-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0a-00154904.pphosted.com with ESMTP id 32jun0sdc5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jul 2020 02:47:49 -0400
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06T6Y0Dv144223;
-        Wed, 29 Jul 2020 02:47:48 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 32jpwdc5tu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jul 2020 02:47:47 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06T6Ugl3004588;
-        Wed, 29 Jul 2020 06:47:46 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02dal.us.ibm.com with ESMTP id 32gcy4fhd9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 29 Jul 2020 06:47:46 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06T6ljLM44564816
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jul 2020 06:47:46 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DFAC7AE05F;
-        Wed, 29 Jul 2020 06:47:45 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40635AE060;
-        Wed, 29 Jul 2020 06:47:45 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.85.85.173])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Jul 2020 06:47:45 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id B7D562E2FF5; Wed, 29 Jul 2020 12:17:39 +0530 (IST)
-From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Nathan Lynch <nathanl@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Neuling <mikey@neuling.org>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
-Cc:     linuxppc-dev@ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
-Subject: [PATCH v2 3/3] cpuidle-pseries : Fixup exit latency for CEDE(0)
-Date:   Wed, 29 Jul 2020 12:17:34 +0530
-Message-Id: <1596005254-25753-4-git-send-email-ego@linux.vnet.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1596005254-25753-1-git-send-email-ego@linux.vnet.ibm.com>
-References: <1596005254-25753-1-git-send-email-ego@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
+        Wed, 29 Jul 2020 02:59:31 -0400
+Received: from pps.filterd (m0090350.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06T6umvp195214;
+        Wed, 29 Jul 2020 02:59:31 -0400
+Received: from ausxipps310.us.dell.com (AUSXIPPS310.us.dell.com [143.166.148.211])
+        by mx0b-00154901.pphosted.com with ESMTP id 32k45x0404-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Jul 2020 02:59:30 -0400
+X-LoopCount0: from 10.69.132.19
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="525546279"
+From:   Perry Yuan <Perry.Yuan@dell.com>
+To:     sre@kernel.org, mjg59@srcf.ucam.org, pali@kernel.org,
+        dvhart@infradead.org, andy@infradead.org,
+        mario.limonciello@dell.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        perry_yuan <Perry.Yuan@dell.com>,
+        Limonciello Mario <Mario.Limonciello@dell.com>
+Subject: [PATCH] platform/x86:dell-laptop:Add battery charging thresholds and charging mode switch.
+Date:   Tue, 28 Jul 2020 23:54:24 -0700
+Message-Id: <20200729065424.12851-1-Perry_Yuan@Dell.com>
+X-Mailer: git-send-email 2.24.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-29_03:2020-07-28,2020-07-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=999 mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0
- adultscore=0 suspectscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007290043
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ spamscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 suspectscore=0 phishscore=0 mlxscore=0
+ adultscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007290045
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 suspectscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007290044
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+From: perry_yuan <perry_yuan@dell.com>
 
-We are currently assuming that CEDE(0) has exit latency 10us, since
-there is no way for us to query from the platform.  However, if the
-wakeup latency of an Extended CEDE state is smaller than 10us, then we
-can be sure that the exit latency of CEDE(0) cannot be more than that.
-that.
+The patch control battery charging thresholds when system is under custom
+charging mode through smbios API and driver`s sys attributes.It also set the
+percentage bounds for custom charge.
+Start value must lie in the range [50, 95],End value must lie in the range
+[55, 100],END must be at least (START + 5).
 
-In this patch, we fix the exit latency of CEDE(0) if we discover an
-Extended CEDE state with wakeup latency smaller than 10us.
+The patch also add the battery charging modes switch support.User can switch
+the battery charging mode through the new sysfs entry.
 
-Benchmark results:
+Primary battery charging modes valid choices are:
+['primarily_ac', 'adaptive', 'custom', 'standard', 'express']
 
-ebizzy:
-2 ebizzy threads bound to the same big-core. 25% improvement in the
-avg records/s with patch.
-x without_patch
-+ with_patch
-    N           Min           Max        Median           Avg        Stddev
-x  10       2491089       5834307       5398375       4244335     1596244.9
-+  10       2893813       5834474       5832448     5327281.3     1055941.4
-
-context_switch2 :
-There is no major regression observed with this patch as seen from the
-context_switch2 benchmark.
-
-context_switch2 across CPU0 CPU1 (Both belong to same big-core, but different
-small cores). We observe a minor 0.14% regression in the number of
-context-switches (higher is better).
-x without_patch
-+ with_patch
-    N           Min           Max        Median           Avg        Stddev
-x 500        348872        362236        354712     354745.69      2711.827
-+ 500        349422        361452        353942      354215.4     2576.9258
-Difference at 99.0% confidence
-    -530.288 +/- 430.963
-    -0.149484% +/- 0.121485%
-    (Student's t, pooled s = 2645.24)
-
-context_switch2 across CPU0 CPU8 (Different big-cores). We observe a 0.37%
-improvement in the number of context-switches (higher is better).
-x without_patch
-+ with_patch
-    N           Min           Max        Median           Avg        Stddev
-x 500        287956        294940        288896     288977.23     646.59295
-+ 500        288300        294646        289582     290064.76     1161.9992
-Difference at 99.0% confidence
-    1087.53 +/- 153.194
-    0.376337% +/- 0.0530125%
-    (Student's t, pooled s = 940.299)
-
-schbench:
-No major difference could be seen until the 99.9th percentile.
-
-Without-patch
-Latency percentiles (usec)
-	50.0th: 29
-	75.0th: 39
-	90.0th: 49
-	95.0th: 59
-	*99.0th: 13104
-	99.5th: 14672
-	99.9th: 15824
-	min=0, max=17993
-
-With-patch:
-Latency percentiles (usec)
-	50.0th: 29
-	75.0th: 40
-	90.0th: 50
-	95.0th: 61
-	*99.0th: 13648
-	99.5th: 14768
-	99.9th: 15664
-	min=0, max=29812
-
-Reviewed-by: Vaidyanathan Srinivasan <svaidy@linux.ibm.com>
-Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+Signed-off-by: Perry Yuan <perry_yuan@dell.com>
+Signed-off-by: Limonciello Mario <Mario_Limonciello@Dell.com>
 ---
- drivers/cpuidle/cpuidle-pseries.c | 34 ++++++++++++++++++++++++++++++++--
- 1 file changed, 32 insertions(+), 2 deletions(-)
+ Documentation/ABI/testing/sysfs-class-power |  23 ++
+ drivers/platform/x86/dell-laptop.c          | 344 ++++++++++++++++++++
+ drivers/platform/x86/dell-smbios.h          |  26 ++
+ 3 files changed, 393 insertions(+)
 
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index b1dc24d..0b2f115 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -334,12 +334,42 @@ static int pseries_cpuidle_driver_init(void)
- static int add_pseries_idle_states(void)
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index bf3b48f022dc..a8adc3b0ca4b 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -334,6 +334,29 @@ Description:
+ 		Access: Read
+ 		Valid values: Represented in microvolts
+ 
++What:		/sys/class/power_supply/<supply_name>/charge_control_charging_mode
++Date:		March 2020
++Contact:	linux-pm@vger.kernel.org
++Description:
++		Represents the type of charging modes currently being applied to the
++		battery."Express", "Primarily_ac", "Adaptive", "Custom" and
++		"Standard" all mean different charging speeds.
++
++		1: "Adaptive" means that the charger uses some
++		algorithm to adjust the charge rate dynamically, without
++		any user configuration required.
++		2: "Custom" means that the charger uses the charge_control_*
++		properties to start and stop charging
++		based on user input.
++		3: "Express" means the charger use fast charging technology
++		4: "Primarily_ac" means that users who primarily operate the system
++		while plugged into an external power source.
++		5: "Standard" fully charges the battery at a moderate rate.
++
++		Access: Read, Write
++		Valid values: "Express", "Primarily_ac", "Standard",
++			      "Adaptive", "Custom"
++
+ ===== USB Properties =====
+ 
+ What: 		/sys/class/power_supply/<supply_name>/current_avg
+diff --git a/drivers/platform/x86/dell-laptop.c b/drivers/platform/x86/dell-laptop.c
+index 74e988f839e8..8e45ce92a2d9 100644
+--- a/drivers/platform/x86/dell-laptop.c
++++ b/drivers/platform/x86/dell-laptop.c
+@@ -28,6 +28,8 @@
+ #include <linux/debugfs.h>
+ #include <linux/seq_file.h>
+ #include <acpi/video.h>
++#include <acpi/battery.h>
++#include <linux/string.h>
+ #include "dell-rbtn.h"
+ #include "dell-smbios.h"
+ 
+@@ -90,6 +92,14 @@ static struct rfkill *wifi_rfkill;
+ static struct rfkill *bluetooth_rfkill;
+ static struct rfkill *wwan_rfkill;
+ static bool force_rfkill;
++static enum battery_charging_mode bat_chg_current = BAT_NONE_MODE;
++static const char * const battery_state[BAT_MAX_MODE] = {
++	[BAT_PRIMARILY_AC_MODE] = "primarily_ac",
++	[BAT_ADAPTIVE_MODE] = "adaptive",
++	[BAT_CUSTOM_MODE] = "custom",
++	[BAT_STANDARD_MODE] = "standard",
++	[BAT_EXPRESS_MODE] = "express",
++};
+ 
+ module_param(force_rfkill, bool, 0444);
+ MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted models");
+@@ -2161,6 +2171,338 @@ static struct led_classdev micmute_led_cdev = {
+ 	.default_trigger = "audio-micmute",
+ };
+ 
++static int dell_battery_get(int *start, int *end)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int ret;
++
++	if (start) {
++		token = dell_smbios_find_token(BATTERY_CUSTOM_CHARGE_START);
++		if (!token)
++			return -ENODEV;
++		dell_fill_request(&buffer, token->location, 0, 0, 0);
++		ret = dell_send_request(&buffer,
++					CLASS_TOKEN_READ, SELECT_TOKEN_STD);
++		*start = buffer.output[1];
++	}
++
++	if (end) {
++		token = dell_smbios_find_token(BATTERY_CUSTOM_CHARGE_END);
++		if (!token)
++			return -ENODEV;
++		dell_fill_request(&buffer, token->location, 0, 0, 0);
++		ret = dell_send_request(&buffer,
++					CLASS_TOKEN_READ, SELECT_TOKEN_STD);
++		if (ret)
++			return -EIO;
++		*end = buffer.output[1];
++	}
++
++	return 0;
++}
++
++static int dell_battery_set(int start, int end)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int ret;
++
++	if (start < CHARGE_START_MIN || end < CHARGE_START_MAX ||
++		start > CHARGE_END_MIN || end > CHARGE_END_MAX)
++		return -EINVAL;
++
++	token = dell_smbios_find_token(BATTERY_CUSTOM_CHARGE_START);
++	if (!token)
++		return -ENODEV;
++
++	dell_fill_request(&buffer, token->location, start, 0, 0);
++	ret = dell_send_request(&buffer,
++				CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
++	if (ret)
++		return -EIO;
++
++	token = dell_smbios_find_token(BATTERY_CUSTOM_CHARGE_END);
++	if (!token)
++		return -ENODEV;
++
++	dell_fill_request(&buffer, token->location, end, 0, 0);
++	ret = dell_send_request(&buffer,
++				CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
++	if (ret)
++		return -EIO;
++
++	return ret;
++}
++
++static int battery_charging_mode_set(enum battery_charging_mode mode)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int ret;
++
++	if (mode <= BAT_NONE_MODE || mode >= BAT_MAX_MODE)
++		return -EINVAL;
++
++	switch (mode) {
++	case BAT_STANDARD_MODE:
++		token = dell_smbios_find_token(BAT_STANDARD_MODE_TOKEN);
++		if (!token)
++			return -ENODEV;
++		break;
++	case BAT_EXPRESS_MODE:
++		token = dell_smbios_find_token(BAT_EXPRESS_MODE_TOKEN);
++		if (!token)
++			return -ENODEV;
++		break;
++	case BAT_PRIMARILY_AC_MODE:
++		token = dell_smbios_find_token(BAT_PRIMARILY_AC_MODE_TOKEN);
++		if (!token)
++			return -ENODEV;
++		break;
++	case BAT_CUSTOM_MODE:
++		token = dell_smbios_find_token(BAT_CUSTOM_MODE_TOKEN);
++		if (!token)
++			return -ENODEV;
++		break;
++	case BAT_ADAPTIVE_MODE:
++		token = dell_smbios_find_token(BAT_ADAPTIVE_MODE_TOKEN);
++		if (!token)
++			return -ENODEV;
++		break;
++	default:
++		pr_warn("unspported charging mode!\n");
++		return -EINVAL;
++	}
++
++	dell_fill_request(&buffer, token->location, mode, 0, 0);
++	ret = dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
++	if (ret)
++		return -EIO;
++
++	return ret;
++}
++
++static int battery_charging_mode_get(enum battery_charging_mode *mode)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int ret;
++
++	token = dell_smbios_find_token(BAT_CUSTOM_MODE_TOKEN);
++	if (!token)
++		return -ENODEV;
++	dell_fill_request(&buffer, token->location, 0, 0, 0);
++	ret = dell_send_request(&buffer, CLASS_TOKEN_READ, SELECT_TOKEN_STD);
++	if (ret)
++		return -EIO;
++	if (ret == 0)
++		*mode = buffer.output[1];
++
++	return ret;
++}
++
++static ssize_t charge_control_charging_mode_show(struct device *dev,
++		struct device_attribute *attr,
++		char *buf)
++{
++	enum battery_charging_mode mode;
++	char *s = buf;
++
++	for (mode = BAT_STANDARD_MODE; mode < BAT_MAX_MODE; mode++) {
++		if (battery_state[mode]) {
++			if (mode == bat_chg_current)
++				s += sprintf(s, "[%s] ", battery_state[mode]);
++			else
++				s += sprintf(s, "%s ", battery_state[mode]);
++		}
++	}
++	if (s != buf)
++		/* convert the last space to a newline */
++		*(s-1) = '\n';
++	return (s - buf);
++}
++
++static ssize_t charge_control_charging_mode_store(struct device *dev,
++		struct device_attribute *attr,
++		const char *buf, size_t size)
++{
++	int err;
++	enum battery_charging_mode mode;
++	char *p;
++	int len;
++	const char *label;
++
++	p = memchr(buf, '\n', size);
++	len = p ? p - buf : size;
++
++	for (mode = BAT_STANDARD_MODE; mode < BAT_MAX_MODE; mode++) {
++		label = battery_state[mode];
++		if (label && len == strlen(label) &&
++			!strncmp(buf, label, len)) {
++			bat_chg_current = mode;
++			break;
++		}
++	}
++	if (mode > BAT_NONE_MODE && mode < BAT_MAX_MODE)
++		err = battery_charging_mode_set(mode);
++	else
++		err = -EINVAL;
++
++	return err ? err : size;
++}
++
++static ssize_t charge_control_start_threshold_show(struct device *dev,
++		struct device_attribute *attr,
++		char *buf)
++{
++	int err, start;
++
++	err = dell_battery_get(&start, NULL);
++	if (err)
++		return err;
++
++	return sprintf(buf, "%d\n", start);
++}
++
++static ssize_t charge_control_start_threshold_store(struct device *dev,
++		struct device_attribute *attr,
++		const char *buf, size_t size)
++{
++	int err, start, end;
++
++	err = dell_battery_get(NULL, &end);
++	if (err)
++		return err;
++	err = kstrtoint(buf, 10, &start);
++	if (err)
++		return err;
++	err = dell_battery_set(start, end);
++	if (err)
++		return err;
++
++	return size;
++}
++
++static ssize_t charge_control_end_threshold_show(struct device *dev,
++		struct device_attribute *attr,
++		char *buf)
++{
++	int err, end;
++
++	err = dell_battery_get(NULL, &end);
++	if (err)
++		return err;
++
++	return sprintf(buf, "%d\n", end);
++}
++
++static ssize_t charge_control_end_threshold_store(struct device *dev,
++		struct device_attribute *attr,
++		const char *buf, size_t size)
++{
++	int err, start, end;
++
++	err = dell_battery_get(&start, NULL);
++	if (err)
++		return err;
++	err = kstrtouint(buf, 10, &end);
++	if (err)
++		return err;
++	err = dell_battery_set(start, end);
++	if (err)
++		return err;
++
++	return size;
++}
++
++static ssize_t charge_control_thresholds_show(struct device *dev,
++		struct device_attribute *attr,
++		char *buf)
++{
++	int err, start, end;
++
++	err = dell_battery_get(&start, &end);
++	if (err)
++		return err;
++
++	return sprintf(buf, "%d %d\n", start, end);
++}
++
++static ssize_t charge_control_thresholds_store(struct device *dev,
++		struct device_attribute *attr,
++		const char *buf, size_t size)
++{
++	int err, start, end;
++
++	if (sscanf(buf, "%d %d", &start, &end) != 2)
++		return -EINVAL;
++
++	err = dell_battery_set(start, end);
++	if (err)
++		return err;
++
++	return size;
++}
++
++static DEVICE_ATTR_RW(charge_control_start_threshold);
++static DEVICE_ATTR_RW(charge_control_end_threshold);
++static DEVICE_ATTR_RW(charge_control_thresholds);
++static DEVICE_ATTR_RW(charge_control_charging_mode);
++
++static int dell_battery_add(struct power_supply *battery)
++{
++	device_create_file(&battery->dev,
++		&dev_attr_charge_control_start_threshold);
++	device_create_file(&battery->dev,
++		&dev_attr_charge_control_end_threshold);
++	device_create_file(&battery->dev,
++		&dev_attr_charge_control_charging_mode);
++
++	return 0;
++}
++
++static int dell_battery_remove(struct power_supply *battery)
++{
++	device_remove_file(&battery->dev,
++		&dev_attr_charge_control_start_threshold);
++	device_remove_file(&battery->dev,
++		&dev_attr_charge_control_end_threshold);
++	device_remove_file(&battery->dev,
++		&dev_attr_charge_control_charging_mode);
++
++	return 0;
++}
++
++static struct acpi_battery_hook dell_battery_hook = {
++	.add_battery = dell_battery_add,
++	.remove_battery = dell_battery_remove,
++	.name = "Dell Battery Extension"
++};
++
++static void dell_battery_setup(struct device *dev)
++{
++	enum battery_charging_mode current_mode = BAT_NONE_MODE;
++
++	battery_charging_mode_get(&current_mode);
++	if (current_mode) {
++		bat_chg_current = current_mode;
++		pr_debug("battery is present\n");
++	} else {
++		pr_debug("battery is not present\n");
++	}
++	battery_hook_register(&dell_battery_hook);
++	device_create_file(dev, &dev_attr_charge_control_thresholds);
++}
++
++static void dell_battery_exit(struct device *dev)
++{
++	if (bat_chg_current != BAT_NONE_MODE) {
++		battery_hook_unregister(&dell_battery_hook);
++		device_remove_file(dev, &dev_attr_charge_control_thresholds);
++	}
++}
++
+ static int __init dell_init(void)
  {
- 	int nr_states = 2; /* By default we have snooze, CEDE */
-+	int i;
-+	u64 min_latency_us = dedicated_states[1].exit_latency; /* CEDE latency */
+ 	struct calling_interface_token *token;
+@@ -2197,6 +2539,7 @@ static int __init dell_init(void)
+ 		touchpad_led_init(&platform_device->dev);
  
- 	if (parse_cede_parameters())
- 		return nr_states;
+ 	kbd_led_init(&platform_device->dev);
++	dell_battery_setup(&platform_device->dev);
  
--	pr_info("cpuidle : Skipping the %d Extended CEDE idle states\n",
--		nr_xcede_records);
-+	for (i = 0; i < nr_xcede_records; i++) {
-+		u64 latency_tb = xcede_records[i].wakeup_latency_tb_ticks;
-+		u64 latency_us = tb_to_ns(latency_tb) / NSEC_PER_USEC;
-+
-+		if (latency_us < min_latency_us)
-+			min_latency_us = latency_us;
-+	}
-+
-+	/*
-+	 * We are currently assuming that CEDE(0) has exit latency
-+	 * 10us, since there is no way for us to query from the
-+	 * platform.
-+	 *
-+	 * However, if the wakeup latency of an Extended CEDE state is
-+	 * smaller than 10us, then we can be sure that CEDE(0)
-+	 * requires no more than that.
-+	 *
-+	 * Perform the fix-up.
-+	 */
-+	if (min_latency_us < dedicated_states[1].exit_latency) {
-+		u64 cede0_latency = min_latency_us - 1;
-+
-+		if (cede0_latency <= 0)
-+			cede0_latency = min_latency_us;
-+
-+		dedicated_states[1].exit_latency = cede0_latency;
-+		dedicated_states[1].target_residency = 10 * (cede0_latency);
-+		pr_info("cpuidle : Fixed up CEDE exit latency to %llu us\n",
-+			cede0_latency);
-+	}
- 
- 	return nr_states;
+ 	dell_laptop_dir = debugfs_create_dir("dell_laptop", NULL);
+ 	debugfs_create_file("rfkill", 0444, dell_laptop_dir, NULL,
+@@ -2281,6 +2624,7 @@ static void __exit dell_exit(void)
+ 		platform_device_unregister(platform_device);
+ 		platform_driver_unregister(&platform_driver);
+ 	}
++	dell_battery_exit(&platform_device->dev);
  }
+ 
+ /* dell-rbtn.c driver export functions which will not work correctly (and could
+diff --git a/drivers/platform/x86/dell-smbios.h b/drivers/platform/x86/dell-smbios.h
+index a7ff9803f41a..36e6b06a0f47 100644
+--- a/drivers/platform/x86/dell-smbios.h
++++ b/drivers/platform/x86/dell-smbios.h
+@@ -35,6 +35,32 @@
+ #define GLOBAL_MIC_MUTE_ENABLE	0x0364
+ #define GLOBAL_MIC_MUTE_DISABLE	0x0365
+ 
++/*Battery Charging Modes Tokens*/
++#define BAT_CUSTOM_MODE_TOKEN		0x343
++#define BAT_PRIMARILY_AC_MODE_TOKEN	0x0341
++#define BAT_ADAPTIVE_MODE_TOKEN		0x0342
++#define BAT_STANDARD_MODE_TOKEN		0x0346
++#define BAT_EXPRESS_MODE_TOKEN		0x0347
++#define BATTERY_CUSTOM_CHARGE_START	0x0349
++#define BATTERY_CUSTOM_CHARGE_END	0x034A
++
++/* percentage bounds for custom charge */
++#define CHARGE_START_MIN	50
++#define CHARGE_START_MAX	95
++#define CHARGE_END_MIN		55
++#define CHARGE_END_MAX		100
++
++/*Battery Charging Modes */
++enum battery_charging_mode {
++	BAT_NONE_MODE = 0,
++	BAT_STANDARD_MODE,
++	BAT_EXPRESS_MODE,
++	BAT_PRIMARILY_AC_MODE,
++	BAT_ADAPTIVE_MODE,
++	BAT_CUSTOM_MODE,
++	BAT_MAX_MODE,
++};
++
+ struct notifier_block;
+ 
+ struct calling_interface_token {
 -- 
-1.9.4
+2.27.0
 
