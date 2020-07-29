@@ -2,138 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10717231936
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 07:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00E22319BF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jul 2020 08:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726314AbgG2Fry (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 01:47:54 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:44514 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726208AbgG2Frx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jul 2020 01:47:53 -0400
-Received: from bell.riseup.net (bell-pn.riseup.net [10.0.1.178])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4BGjHs2H3LzFdxZ;
-        Tue, 28 Jul 2020 22:47:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1596001673; bh=4XFW4u/+G5HXbt7eUIc8d7Sanex92jlfdr8B53S0Imc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=juhJkytj+hjPn4ZQHO/oBfnJKs6529z0CVNAeEx8byKPZ2/zSGC5+B3Wlufz3gS8o
-         RDarOIVA8pKMZjdhsAX6qSZw3nxR0k4tBPzU/EcZaDZM2TmkbvRvZLCHYmkRLULdM9
-         IAGOqOZTBUimiw3bhXnbYzdTNIduYeC+Y9CVIfrU=
-X-Riseup-User-ID: F6AB9DE493BA4FFF5239B6317CCD8B7E032182CC6BCC4533F2BFF0E278FFCC3D
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by bell.riseup.net (Postfix) with ESMTPSA id 4BGjHs03zPzJmmn;
-        Tue, 28 Jul 2020 22:47:52 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix EPP setting via sysfs in active mode
-In-Reply-To: <11585512.O9o76ZdvQC@kreacher>
-References: <11585512.O9o76ZdvQC@kreacher>
-Date:   Tue, 28 Jul 2020 22:47:52 -0700
-Message-ID: <87r1sug9dj.fsf@riseup.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        id S1727054AbgG2Gr5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 02:47:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49014 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726445AbgG2Grv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 02:47:51 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06T64WLj117379;
+        Wed, 29 Jul 2020 02:47:47 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32jw71196q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jul 2020 02:47:47 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06T6511m119473;
+        Wed, 29 Jul 2020 02:47:46 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32jw711967-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jul 2020 02:47:46 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06T6TjHF010667;
+        Wed, 29 Jul 2020 06:47:45 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma05wdc.us.ibm.com with ESMTP id 32gcy9qkku-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 29 Jul 2020 06:47:45 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06T6ljUp55247354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Jul 2020 06:47:45 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF943AC05B;
+        Wed, 29 Jul 2020 06:47:44 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2474DAC059;
+        Wed, 29 Jul 2020 06:47:44 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.85.85.173])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 29 Jul 2020 06:47:44 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 99BD22E2FF3; Wed, 29 Jul 2020 12:17:39 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Neuling <mikey@neuling.org>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Subject: [PATCH v2 0/3] cpuidle-pseries: Parse extended CEDE information for idle.
+Date:   Wed, 29 Jul 2020 12:17:31 +0530
+Message-Id: <1596005254-25753-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-29_02:2020-07-28,2020-07-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007290041
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+This is a v2 of the patch series to parse the extended CEDE
+information in the pseries-cpuidle driver.
 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Because intel_pstate_set_energy_pref_index() reads and writes the
-> MSR_HWP_REQUEST register without using the cached value of it used by
-> intel_pstate_hwp_boost_up() and intel_pstate_hwp_boost_down(), those
-> functions may overwrite the value written by it and so the EPP value
-> set via sysfs may be lost.
->
-> To avoid that, make intel_pstate_set_energy_pref_index() take the
-> cached value of MSR_HWP_REQUEST just like the other two routines
-> mentioned above and update it with the new EPP value coming from
-> user space in addition to updating the MSR.
->
-> Note that the MSR itself still needs to be updated too in case
-> hwp_boost is unset or the boosting mechanism is not active at the
-> EPP change time.
->
-> Fixes: e0efd5be63e8 ("cpufreq: intel_pstate: Add HWP boost utility and sc=
-hed util hooks")
-> Reported-by: Francisco Jerez <currojerez@riseup.net>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The v1 of this patchset can be found here :
+https://lore.kernel.org/linuxppc-dev/1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com/
 
-Reviewed-by: Francisco Jerez <currojerez@riseup.net>
+The change from v1 --> v2 :
 
-> ---
->
-> This patch is on top of https://patchwork.kernel.org/patch/11689347/
->
-> ---
->  drivers/cpufreq/intel_pstate.c |   17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
->
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -653,11 +653,12 @@ static int intel_pstate_set_energy_pref_
->  		epp =3D cpu_data->epp_default;
->=20=20
->  	if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-> -		u64 value;
-> -
-> -		ret =3D rdmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, &value);
-> -		if (ret)
-> -			return ret;
-> +		/*
-> +		 * Use the cached HWP Request MSR value, because the register
-> +		 * itself may be updated by intel_pstate_hwp_boost_up() or
-> +		 * intel_pstate_hwp_boost_down() at any time.
-> +		 */
-> +		u64 value =3D READ_ONCE(cpu_data->hwp_req_cached);
->=20=20
->  		value &=3D ~GENMASK_ULL(31, 24);
->=20=20
-> @@ -667,6 +668,12 @@ static int intel_pstate_set_energy_pref_
->  			epp =3D epp_values[pref_index - 1];
->=20=20
->  		value |=3D (u64)epp << 24;
-> +		/*
-> +		 * The only other updater of hwp_req_cached in the active mode,
-> +		 * intel_pstate_hwp_set(), is called under the same lock as this
-> +		 * function, so it cannot run in parallel with the update below.
-> +		 */
-> +		WRITE_ONCE(cpu_data->hwp_req_cached, value);
->  		ret =3D wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
->  	} else {
->  		if (epp =3D=3D -EINVAL)
+ * Dropped Patches 4 and 5 which would expose extended idle-states,
+   that wakeup on external interrupts, to cpuidle framework.  These
+   were RFC patches in v1. Dropped them because currently the only
+   extended CEDE state that wakesup on external interrupts is CEDE(1)
+   which adds no signifcant value over CEDE(0).
+   
+ * Rebased the patches onto powerpc/merge.
+ 
+ * No changes in code for Patches 1-3.
 
---=-=-=--
+Motivation:
+===========
+On pseries Dedicated Linux LPARs, apart from the polling snooze idle
+state, we currently have the CEDE idle state which cedes the CPU to
+the hypervisor with latency-hint = 0.
 
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+However, the PowerVM hypervisor supports additional extended CEDE
+states, which can be queried through the "ibm,get-systems-parameter"
+rtas-call with the CEDE_LATENCY_TOKEN. The hypervisor maps these
+extended CEDE states to appropriate platform idle-states in order to
+provide energy-savings as well as shifting power to the active
+units. On existing pseries LPARs today we have extended CEDE with
+latency-hints {1,2} supported.
 
------BEGIN PGP SIGNATURE-----
+The patches in this patchset, adds code to parse the CEDE latency
+records provided by the hypervisor. We use this information to
+determine the wakeup latency of the regular CEDE (which we have been
+so far hardcoding to 10us while experimentally it is much lesser ~
+1us), by looking at the wakeup latency provided by the hypervisor for
+Extended CEDE states. Since the platform currently advertises Extended
+CEDE 1 to have wakeup latency of 2us, we can be sure that the wakeup
+latency of the regular CEDE is no more than this.
 
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXyENiAAKCRCDmTidfVK/
-W2UeAP9fOoZ4v0COIC0iKbSqKUb36eboq2WI18E8Z+qS5CwVnwD5Aayo3jkIrJTv
-A09h7Eetf/QEkKWAk18YKfODZGjoH0E=
-=MqNe
------END PGP SIGNATURE-----
---==-=-=--
+With Patches 1-3, we see an improvement in the single-threaded
+performance on ebizzy.
+
+2 ebizzy threads bound to the same big-core. 25% improvement in the
+avg records/s (higher the better) with patches 1-3.
+x without_patches
+* with_patches
+    N           Min           Max        Median           Avg        Stddev
+x  10       2491089       5834307       5398375       4244335     1596244.9
+*  10       2893813       5834474       5832448     5327281.3     1055941.4
+
+We do not observe any major regression in either the context_switch2
+benchmark or the schbench benchmark
+
+context_switch2 across CPU0 CPU1 (Both belong to same big-core, but different
+small cores). We observe a minor 0.14% regression in the number of
+context-switches (higher is better).
+x without_patch
+* with_patch
+    N           Min           Max        Median           Avg        Stddev
+x 500        348872        362236        354712     354745.69      2711.827
+* 500        349422        361452        353942      354215.4     2576.9258
+
+context_switch2 across CPU0 CPU8 (Different big-cores). We observe a 0.37%
+improvement in the number of context-switches (higher is better).
+x without_patch
+* with_patch
+    N           Min           Max        Median           Avg        Stddev
+x 500        287956        294940        288896     288977.23     646.59295
+* 500        288300        294646        289582     290064.76     1161.9992
+
+schbench:
+No major difference could be seen until the 99.9th percentile.
+
+Without-patch
+Latency percentiles (usec)
+	50.0th: 29
+	75.0th: 39
+	90.0th: 49
+	95.0th: 59
+	*99.0th: 13104
+	99.5th: 14672
+	99.9th: 15824
+	min=0, max=17993
+
+With-patch:
+Latency percentiles (usec)
+	50.0th: 29
+	75.0th: 40
+	90.0th: 50
+	95.0th: 61
+	*99.0th: 13648
+	99.5th: 14768
+	99.9th: 15664
+	min=0, max=29812
+
+Gautham R. Shenoy (3):
+  cpuidle-pseries: Set the latency-hint before entering CEDE
+  cpuidle-pseries: Add function to parse extended CEDE records
+  cpuidle-pseries : Fixup exit latency for CEDE(0)
+
+ drivers/cpuidle/cpuidle-pseries.c | 167 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 165 insertions(+), 2 deletions(-)
+
+-- 
+1.9.4
+
