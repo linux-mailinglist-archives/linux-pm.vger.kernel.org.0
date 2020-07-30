@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD3B23347C
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 16:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C7C2334D8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 16:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729240AbgG3Obg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 10:31:36 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:41538 "EHLO
+        id S1729459AbgG3O6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 10:58:42 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:45166 "EHLO
         lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729448AbgG3Obf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 10:31:35 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06UEVYU4047766;
-        Thu, 30 Jul 2020 09:31:34 -0500
+        with ESMTP id S1726275AbgG3O6m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 10:58:42 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06UEwexe055492;
+        Thu, 30 Jul 2020 09:58:40 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1596119494;
-        bh=Gvewtn6QOCtRzHRM281q6j48RM/NbbVKXthVzouglho=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=uPbJgpxUZl9FN+WERXCVcY8W80oJ4mvtoS3+QvSq8IHatOTmjY8QyVoL3VrFS/Jzl
-         QNebaI1rBnwM3vihNh7DycQ73cNw88I13VITISh4kKqhM/JaglOAhKmOon7vFbzZpX
-         fM4VnAec1hirkXpyIAHhwuBu6KZBluJAvUj0LBvc=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06UEVYTl074378;
-        Thu, 30 Jul 2020 09:31:34 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+        s=ti-com-17Q1; t=1596121120;
+        bh=sBlylftWCXxQKT/KZPRF3PfU/JvWz7JLIy5pu6TfDUo=;
+        h=From:To:CC:Subject:Date;
+        b=uNHGqGNKFUsOmxCg/WxzcqdLiKUYVPNa1J6y9zS8IE+YWiTkJoAm1bXoXjC/5Ska0
+         uy1FumaMN4CsKydS2mIar/TTwmDgxJuQ/MbRjadEI8UIABeDsjO5XZAfry1Xqb8jD4
+         5/PgD62MTSnCo0GB1C4+VoJlKE88z1EC5RdPZPsU=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 06UEweFF130039
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 30 Jul 2020 09:58:40 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 30
- Jul 2020 09:31:34 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ Jul 2020 09:58:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 30 Jul 2020 09:31:34 -0500
+ Frontend Transport; Thu, 30 Jul 2020 09:58:40 -0500
 Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06UEVXTH010723;
-        Thu, 30 Jul 2020 09:31:33 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06UEweTp103620;
+        Thu, 30 Jul 2020 09:58:40 -0500
 From:   Dan Murphy <dmurphy@ti.com>
-To:     <sre@kernel.org>, <afd@ti.com>, <pali@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+To:     <sre@kernel.org>, <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <r-rivera-matos@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH 2/2] power: bq27xxx: Fix spacing style and white space issues
-Date:   Thu, 30 Jul 2020 09:31:22 -0500
-Message-ID: <20200730143122.28519-2-dmurphy@ti.com>
+Subject: [PATCH 1/2] dt-bindings: power: Add the bq25790 dt bindings
+Date:   Thu, 30 Jul 2020 09:58:33 -0500
+Message-ID: <20200730145834.29227-1-dmurphy@ti.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200730143122.28519-1-dmurphy@ti.com>
-References: <20200730143122.28519-1-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -54,116 +54,108 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix spacing style issues with the chip data array.  As well as fix
-missing new line after variable declaration.
+Add the bindings for the bq25790.
 
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
 Signed-off-by: Dan Murphy <dmurphy@ti.com>
 ---
- drivers/power/supply/bq27xxx_battery.c | 63 ++++++++++++++------------
- 1 file changed, 33 insertions(+), 30 deletions(-)
+ .../bindings/power/supply/bq25790.yaml        | 87 +++++++++++++++++++
+ 1 file changed, 87 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 8b112449ace8..e58039db8e64 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -871,35 +871,35 @@ static struct {
- 	enum power_supply_property *props;
- 	size_t props_size;
- } bq27xxx_chip_data[] = {
--	[BQ27000]   = BQ27XXX_DATA(bq27000,   0         , BQ27XXX_O_ZERO),
--	[BQ27010]   = BQ27XXX_DATA(bq27010,   0         , BQ27XXX_O_ZERO),
--	[BQ2750X]   = BQ27XXX_DATA(bq2750x,   0         , BQ27XXX_O_OTDC),
--	[BQ2751X]   = BQ27XXX_DATA(bq2751x,   0         , BQ27XXX_O_OTDC),
--	[BQ2752X]   = BQ27XXX_DATA(bq2752x,   0         , BQ27XXX_O_OTDC),
--	[BQ27500]   = BQ27XXX_DATA(bq27500,   0x04143672, BQ27XXX_O_OTDC),
--	[BQ27510G1] = BQ27XXX_DATA(bq27510g1, 0         , BQ27XXX_O_OTDC),
--	[BQ27510G2] = BQ27XXX_DATA(bq27510g2, 0         , BQ27XXX_O_OTDC),
--	[BQ27510G3] = BQ27XXX_DATA(bq27510g3, 0         , BQ27XXX_O_OTDC),
--	[BQ27520G1] = BQ27XXX_DATA(bq27520g1, 0         , BQ27XXX_O_OTDC),
--	[BQ27520G2] = BQ27XXX_DATA(bq27520g2, 0         , BQ27XXX_O_OTDC),
--	[BQ27520G3] = BQ27XXX_DATA(bq27520g3, 0         , BQ27XXX_O_OTDC),
--	[BQ27520G4] = BQ27XXX_DATA(bq27520g4, 0         , BQ27XXX_O_OTDC),
--	[BQ27521]   = BQ27XXX_DATA(bq27521,   0         , 0),
--	[BQ27530]   = BQ27XXX_DATA(bq27530,   0         , BQ27XXX_O_UTOT),
--	[BQ27531]   = BQ27XXX_DATA(bq27531,   0         , BQ27XXX_O_UTOT),
--	[BQ27541]   = BQ27XXX_DATA(bq27541,   0         , BQ27XXX_O_OTDC),
--	[BQ27542]   = BQ27XXX_DATA(bq27542,   0         , BQ27XXX_O_OTDC),
--	[BQ27546]   = BQ27XXX_DATA(bq27546,   0         , BQ27XXX_O_OTDC),
--	[BQ27742]   = BQ27XXX_DATA(bq27742,   0         , BQ27XXX_O_OTDC),
--	[BQ27545]   = BQ27XXX_DATA(bq27545,   0x04143672, BQ27XXX_O_OTDC),
--	[BQ27411]   = BQ27XXX_DATA(bq27411,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
--	[BQ27421]   = BQ27XXX_DATA(bq27421,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
--	[BQ27425]   = BQ27XXX_DATA(bq27425,   0x04143672, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP),
--	[BQ27426]   = BQ27XXX_DATA(bq27426,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
--	[BQ27441]   = BQ27XXX_DATA(bq27441,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
--	[BQ27621]   = BQ27XXX_DATA(bq27621,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
--	[BQ27Z561]  = BQ27XXX_DATA(bq27z561,  0         , BQ27Z561_O_BITS),
--	[BQ28Z610]  = BQ27XXX_DATA(bq28z610,  0         , BQ27Z561_O_BITS),
-+	[BQ27000]   = BQ27XXX_DATA(bq27000, 0, BQ27XXX_O_ZERO),
-+	[BQ27010]   = BQ27XXX_DATA(bq27010, 0, BQ27XXX_O_ZERO),
-+	[BQ2750X]   = BQ27XXX_DATA(bq2750x, 0, BQ27XXX_O_OTDC),
-+	[BQ2751X]   = BQ27XXX_DATA(bq2751x, 0, BQ27XXX_O_OTDC),
-+	[BQ2752X]   = BQ27XXX_DATA(bq2752x, 0, BQ27XXX_O_OTDC),
-+	[BQ27500]   = BQ27XXX_DATA(bq27500, 0x04143672, BQ27XXX_O_OTDC),
-+	[BQ27510G1] = BQ27XXX_DATA(bq27510g1, 0, BQ27XXX_O_OTDC),
-+	[BQ27510G2] = BQ27XXX_DATA(bq27510g2, 0, BQ27XXX_O_OTDC),
-+	[BQ27510G3] = BQ27XXX_DATA(bq27510g3, 0, BQ27XXX_O_OTDC),
-+	[BQ27520G1] = BQ27XXX_DATA(bq27520g1, 0, BQ27XXX_O_OTDC),
-+	[BQ27520G2] = BQ27XXX_DATA(bq27520g2, 0, BQ27XXX_O_OTDC),
-+	[BQ27520G3] = BQ27XXX_DATA(bq27520g3, 0, BQ27XXX_O_OTDC),
-+	[BQ27520G4] = BQ27XXX_DATA(bq27520g4, 0, BQ27XXX_O_OTDC),
-+	[BQ27521]   = BQ27XXX_DATA(bq27521, 0, 0),
-+	[BQ27530]   = BQ27XXX_DATA(bq27530, 0, BQ27XXX_O_UTOT),
-+	[BQ27531]   = BQ27XXX_DATA(bq27531, 0, BQ27XXX_O_UTOT),
-+	[BQ27541]   = BQ27XXX_DATA(bq27541, 0, BQ27XXX_O_OTDC),
-+	[BQ27542]   = BQ27XXX_DATA(bq27542, 0, BQ27XXX_O_OTDC),
-+	[BQ27546]   = BQ27XXX_DATA(bq27546, 0, BQ27XXX_O_OTDC),
-+	[BQ27742]   = BQ27XXX_DATA(bq27742, 0, BQ27XXX_O_OTDC),
-+	[BQ27545]   = BQ27XXX_DATA(bq27545, 0x04143672, BQ27XXX_O_OTDC),
-+	[BQ27411]   = BQ27XXX_DATA(bq27411, 0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
-+	[BQ27421]   = BQ27XXX_DATA(bq27421, 0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
-+	[BQ27425]   = BQ27XXX_DATA(bq27425, 0x04143672, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP),
-+	[BQ27426]   = BQ27XXX_DATA(bq27426, 0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
-+	[BQ27441]   = BQ27XXX_DATA(bq27441, 0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
-+	[BQ27621]   = BQ27XXX_DATA(bq27621, 0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
-+	[BQ27Z561]  = BQ27XXX_DATA(bq27z561, 0, BQ27Z561_O_BITS),
-+	[BQ28Z610]  = BQ27XXX_DATA(bq28z610, 0, BQ27Z561_O_BITS),
- };
- 
- static DEFINE_MUTEX(bq27xxx_list_lock);
-@@ -1235,6 +1235,7 @@ static int bq27xxx_battery_cfgupdate_priv(struct bq27xxx_device_info *di, bool a
- static inline int bq27xxx_battery_set_cfgupdate(struct bq27xxx_device_info *di)
- {
- 	int ret = bq27xxx_battery_cfgupdate_priv(di, true);
+diff --git a/Documentation/devicetree/bindings/power/supply/bq25790.yaml b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+new file mode 100644
+index 000000000000..97dd539c1625
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2020 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq25790.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
- 	if (ret < 0 && ret != -EINVAL)
- 		dev_err(di->dev, "bus error on set_cfgupdate: %d\n", ret);
- 
-@@ -1244,6 +1245,7 @@ static inline int bq27xxx_battery_set_cfgupdate(struct bq27xxx_device_info *di)
- static inline int bq27xxx_battery_soft_reset(struct bq27xxx_device_info *di)
- {
- 	int ret = bq27xxx_battery_cfgupdate_priv(di, false);
++title: TI BQ25790 Switch Mode Buck-Boost Charger
 +
- 	if (ret < 0 && ret != -EINVAL)
- 		dev_err(di->dev, "bus error on soft_reset: %d\n", ret);
- 
-@@ -1338,6 +1340,7 @@ static void bq27xxx_battery_set_config(struct bq27xxx_device_info *di,
- 
- 	if (info->voltage_min_design_uv != -EINVAL) {
- 		bool same = bd.class == bt.class && bd.block == bt.block;
++maintainers:
++  - Dan Murphy <dmurphy@ti.com>
 +
- 		if (!same)
- 			bq27xxx_battery_read_dm_block(di, &bt);
- 		bq27xxx_battery_update_dm_block(di, same ? &bd : &bt,
-@@ -1611,7 +1614,7 @@ static bool bq27xxx_battery_overtemp(struct bq27xxx_device_info *di, u16 flags)
- {
- 	if (di->opts & BQ27XXX_O_OTDC)
- 		return flags & (BQ27XXX_FLAG_OTC | BQ27XXX_FLAG_OTD);
--        if (di->opts & BQ27XXX_O_UTOT)
-+	if (di->opts & BQ27XXX_O_UTOT)
- 		return flags & BQ27XXX_FLAG_OT;
- 
- 	return false;
++description: |
++  BQ25790 is a highly integrated switch-mode buck-boost charger for 1-4 cell
++  Li-ion batteries and Li-polymer batteries. The device charges a battery from a
++  wide range of input sources including legacy USB adapters to high voltage USB
++  PD adapters and traditional barrel adapters.
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25790
++      - ti,bq25792
++
++  reg:
++    maxItems: 1
++
++  ti,watchdog-timer:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Watchdog timer in milli seconds. 0 (default) disables the watchdog.
++    minimum: 0
++    maximum: 160000
++    enum: [ 0, 500, 1000, 2000, 20000, 40000, 80000, 160000]
++
++  input-voltage-limit-microvolt:
++    description: |
++      Minimum input voltage limit in micro volts with a 100000 micro volt step.
++    minimum: 3600000
++    maximum: 22000000
++
++  input-current-limit-microamp:
++    description: |
++      Maximum input current limit in micro amps with a 100000 micro amp step.
++    minimum: 100000
++    maximum: 3300000
++
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to the battery node being monitored
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++
++examples:
++  - |
++    bat: battery {
++      compatible = "simple-battery";
++      constant-charge-current-max-microamp = <2000000>;
++      constant-charge-voltage-max-microvolt = <4200000>;
++      precharge-current-microamp = <160000>;
++      charge-term-current-microamp = <160000>;
++    };
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      bq25790: charger@6b {
++          compatible = "ti,bq25790";
++          reg = <0x6b>;
++          interrupt-parent = <&gpio1>;
++          interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++          ti,watchdog-timer = <2000>;
++          input-current-limit = <3000000>;
++          input-voltage-limit = <4500000>;
++          monitored-battery = <&bat>;
++      };
++    };
++
++...
 -- 
 2.28.0
 
