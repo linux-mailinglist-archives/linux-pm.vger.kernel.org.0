@@ -2,120 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E6F12335A1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 17:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C766A2335B2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 17:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729802AbgG3Pfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 11:35:30 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:49412 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726581AbgG3Pfa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 11:35:30 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 06UFZS8p120419;
-        Thu, 30 Jul 2020 10:35:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1596123328;
-        bh=qkK7AaYs5uCK3KrZbGZUjO5KrOQalLQCVGuPGcFJNZE=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=V+Wky63GNPKNXB/PwPyItMCJ+zq9RA7chWLxsZ3uIFhDJkK0DjPEr+ulTAR9j9R9a
-         ZCwv9OWVEptt8a0I/4RbCIRCl5zjkViI+2rqv8lbY9+XBmrexB0XQOeVKYFFHvPfDN
-         UdkzpUPgKuv6WCYPcmaffAUKM4xRHy9DfJFSGnLU=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06UFZSFo041942;
-        Thu, 30 Jul 2020 10:35:28 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 30
- Jul 2020 10:35:27 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 30 Jul 2020 10:35:27 -0500
-Received: from [10.250.33.191] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 06UFZRe2032994;
-        Thu, 30 Jul 2020 10:35:27 -0500
-Subject: Re: [PATCH 2/2] power: bq27xxx: Fix spacing style and white space
- issues
-To:     "Andrew F. Davis" <afd@ti.com>, <sre@kernel.org>, <pali@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200730143122.28519-1-dmurphy@ti.com>
- <20200730143122.28519-2-dmurphy@ti.com>
- <99e39cd9-3c7f-908b-263f-42c78575bb29@ti.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <309330ca-d528-e77d-7dab-4bd741426ea1@ti.com>
-Date:   Thu, 30 Jul 2020 10:35:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729762AbgG3Ph2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 11:37:28 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44024 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729484AbgG3Ph2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 11:37:28 -0400
+Received: by mail-ot1-f68.google.com with SMTP id r21so9871275ota.10
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 08:37:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X2G9V05Uu/lFGXS5tkPLUREaW27ero6f6QDUOuZvUI8=;
+        b=Uf92xmWSBQ+ZNGnfc5BkjkeUQPXAbhage4pxBmIXgiyXDbs5ecXNmtrnOlXh8D8nCx
+         hgbU0B1ykyzFfvwpsHzv41+XPd3yqt+ZA2rO4Cw1JtQ8SdP4m64UbPGufkoEYvrOKdqa
+         QAt+QhuKjm7ZRhEOoOsJgqT7T4p2LdNfIm6xhAnfevk06/TnlGpc5jzscDpPeaupDy0M
+         +/DczvnSUjqOmsRol9RGpfXS+LJAg275o2yIS/VrnanNSa4j4zYSupQnWyoznfbFJVT/
+         N5cidRG7OfMut8BAxW7+8VBtlA43MWRDY+lnqvZglVj1YHm+6rhdG5Pb5tOvXGq5qv20
+         jGug==
+X-Gm-Message-State: AOAM530yApFgQ29XjTskZ36gTR4g3Jjeauor1fw0uSok+dGyyWURK63D
+        ayL++bKG0HC/qV7TFVJcbiuAgoI7kWtbSsxSKJk=
+X-Google-Smtp-Source: ABdhPJyxWDqjJJD7i8c/NtPlfbv8mPRk7YFbe34Z7TWr5wmZdglajjlftODyHOpYyHRXmGv1LDA51QjsBX1giLqkyyQ=
+X-Received: by 2002:a9d:590a:: with SMTP id t10mr2783662oth.262.1596123447642;
+ Thu, 30 Jul 2020 08:37:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <99e39cd9-3c7f-908b-263f-42c78575bb29@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200730045842.v6sei7nh2jc3cjwo@vireshk-mac-ubuntu>
+In-Reply-To: <20200730045842.v6sei7nh2jc3cjwo@vireshk-mac-ubuntu>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 30 Jul 2020 17:37:16 +0200
+Message-ID: <CAJZ5v0iwua3JpSkG0psiuxgGjSQbO8UJ5fpLDy4eAdtGiKNCww@mail.gmail.com>
+Subject: Re: [GIT PULL] OPP fixes for 5.9
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Andrew
+Hi Viresh,
 
-On 7/30/20 10:25 AM, Andrew F. Davis wrote:
-> On 7/30/20 10:31 AM, Dan Murphy wrote:
->> Fix spacing style issues with the chip data array.  As well as fix
->> missing new line after variable declaration.
->>
->> Signed-off-by: Dan Murphy <dmurphy@ti.com>
->> ---
->>   drivers/power/supply/bq27xxx_battery.c | 63 ++++++++++++++------------
->>   1 file changed, 33 insertions(+), 30 deletions(-)
->>
->> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
->> index 8b112449ace8..e58039db8e64 100644
->> --- a/drivers/power/supply/bq27xxx_battery.c
->> +++ b/drivers/power/supply/bq27xxx_battery.c
->> @@ -871,35 +871,35 @@ static struct {
->>   	enum power_supply_property *props;
->>   	size_t props_size;
->>   } bq27xxx_chip_data[] = {
->> -	[BQ27000]   = BQ27XXX_DATA(bq27000,   0         , BQ27XXX_O_ZERO),
->> -	[BQ27010]   = BQ27XXX_DATA(bq27010,   0         , BQ27XXX_O_ZERO),
->> -	[BQ2750X]   = BQ27XXX_DATA(bq2750x,   0         , BQ27XXX_O_OTDC),
->> -	[BQ2751X]   = BQ27XXX_DATA(bq2751x,   0         , BQ27XXX_O_OTDC),
->> -	[BQ2752X]   = BQ27XXX_DATA(bq2752x,   0         , BQ27XXX_O_OTDC),
->> -	[BQ27500]   = BQ27XXX_DATA(bq27500,   0x04143672, BQ27XXX_O_OTDC),
->> -	[BQ27510G1] = BQ27XXX_DATA(bq27510g1, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27510G2] = BQ27XXX_DATA(bq27510g2, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27510G3] = BQ27XXX_DATA(bq27510g3, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27520G1] = BQ27XXX_DATA(bq27520g1, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27520G2] = BQ27XXX_DATA(bq27520g2, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27520G3] = BQ27XXX_DATA(bq27520g3, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27520G4] = BQ27XXX_DATA(bq27520g4, 0         , BQ27XXX_O_OTDC),
->> -	[BQ27521]   = BQ27XXX_DATA(bq27521,   0         , 0),
->> -	[BQ27530]   = BQ27XXX_DATA(bq27530,   0         , BQ27XXX_O_UTOT),
->> -	[BQ27531]   = BQ27XXX_DATA(bq27531,   0         , BQ27XXX_O_UTOT),
->> -	[BQ27541]   = BQ27XXX_DATA(bq27541,   0         , BQ27XXX_O_OTDC),
->> -	[BQ27542]   = BQ27XXX_DATA(bq27542,   0         , BQ27XXX_O_OTDC),
->> -	[BQ27546]   = BQ27XXX_DATA(bq27546,   0         , BQ27XXX_O_OTDC),
->> -	[BQ27742]   = BQ27XXX_DATA(bq27742,   0         , BQ27XXX_O_OTDC),
->> -	[BQ27545]   = BQ27XXX_DATA(bq27545,   0x04143672, BQ27XXX_O_OTDC),
->> -	[BQ27411]   = BQ27XXX_DATA(bq27411,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
->> -	[BQ27421]   = BQ27XXX_DATA(bq27421,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
->> -	[BQ27425]   = BQ27XXX_DATA(bq27425,   0x04143672, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP),
->> -	[BQ27426]   = BQ27XXX_DATA(bq27426,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
->> -	[BQ27441]   = BQ27XXX_DATA(bq27441,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
->> -	[BQ27621]   = BQ27XXX_DATA(bq27621,   0x80008000, BQ27XXX_O_UTOT | BQ27XXX_O_CFGUP | BQ27XXX_O_RAM),
->> -	[BQ27Z561]  = BQ27XXX_DATA(bq27z561,  0         , BQ27Z561_O_BITS),
->> -	[BQ28Z610]  = BQ27XXX_DATA(bq28z610,  0         , BQ27Z561_O_BITS),
->> +	[BQ27000]   = BQ27XXX_DATA(bq27000, 0, BQ27XXX_O_ZERO),
+On Thu, Jul 30, 2020 at 6:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> The spacing before improved readability.
+> Hi Rafael,
+>
+> This pull request contains following changes:
+>
+> - Fix HTTP links (Alexander A. Klimov).
+>
+> - Allow disabled OPPs in dev_pm_opp_get_freq() (Andrew-sh.Cheng).
+>
+> - Add missing export (Valdis Kletnieks).
+>
+> -------------------------8<-------------------------
+>
+> The following changes since commit 6544abc520f0fff701e9da382110dc29676c683a:
+>
+>   opp: Increase parsed_static_opps in _of_add_opp_table_v1() (2020-07-16 08:50:54 +0530)
+>
+> are available in the git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+>
+> for you to fetch changes up to 06a8a059e88bd73ee81a4ad19e97c04766f84def:
+>
+>   opp: Allow disabled OPPs in dev_pm_opp_get_freq() (2020-07-24 08:05:54 +0530)
 
-In my opinon reordering this would improve readability or #defining the 
-magic numbers to keep the alignment.
-
-Otherwise checkpatch produces 19 errors on this alone.
-
-Dan
-
-
+Pulled, thanks!
