@@ -2,98 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C042330D5
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 13:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91819233118
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 13:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbgG3LQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 07:16:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:38316 "EHLO foss.arm.com"
+        id S1727814AbgG3Lnb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 07:43:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51076 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726846AbgG3LQm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Jul 2020 07:16:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 684C930E;
-        Thu, 30 Jul 2020 04:16:41 -0700 (PDT)
-Received: from [10.37.12.66] (unknown [10.37.12.66])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74C303F71F;
-        Thu, 30 Jul 2020 04:16:38 -0700 (PDT)
-Subject: Re: [PATCH 2/2] thermal: cpufreq_cooling: Reuse effective_cpu_util()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Javi Merino <javi.merino@kernel.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-References: <cover.1594707424.git.viresh.kumar@linaro.org>
- <b051b42f0c4f36d7177978e090c6a85df17922c6.1594707424.git.viresh.kumar@linaro.org>
- <20200716115605.GR10769@hirez.programming.kicks-ass.net>
- <681fb3e8-d645-2558-38de-b39b372499de@arm.com>
- <CAKfTPtA+BPegK2h6PQMFs+p4dpxO+sk1FDQuOfJvSpGCJ-rBrA@mail.gmail.com>
- <20200730062414.uq3ip7ukpu7nkiyg@vireshk-mac-ubuntu>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <bc99342a-48ee-ce30-0116-4ba5c76787c2@arm.com>
-Date:   Thu, 30 Jul 2020 12:16:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726891AbgG3Lnb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Jul 2020 07:43:31 -0400
+Received: from gaia (unknown [95.146.230.158])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E96142082E;
+        Thu, 30 Jul 2020 11:43:28 +0000 (UTC)
+Date:   Thu, 30 Jul 2020 12:43:26 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        dietmar.eggemann@arm.com, sudeep.holla@arm.com, will@kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, peterz@infradead.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Valentin Schneider <valentin.schneider@arm.com>
+Subject: Re: [PATCH v2 5/7] arch_topology,cpufreq,sched/core: constify arch_*
+ cpumasks
+Message-ID: <20200730114326.GJ25149@gaia>
+References: <20200722093732.14297-1-ionela.voinescu@arm.com>
+ <20200722093732.14297-6-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-In-Reply-To: <20200730062414.uq3ip7ukpu7nkiyg@vireshk-mac-ubuntu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200722093732.14297-6-ionela.voinescu@arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
-
-On 7/30/20 7:24 AM, Viresh Kumar wrote:
-> On 17-07-20, 11:46, Vincent Guittot wrote:
->> On Thu, 16 Jul 2020 at 16:24, Lukasz Luba <lukasz.luba@arm.com> wrote:
->>> On 7/16/20 12:56 PM, Peter Zijlstra wrote:
->>>> Currently cpufreq_cooling appears to estimate the CPU energy usage by
->>>> calculating the percentage of idle time using the per-cpu cpustat stuff,
->>>> which is pretty horrific.
->>>
->>> Even worse, it then *samples* the *current* CPU frequency at that
->>> particular point in time and assumes that when the CPU wasn't idle
->>> during that period - it had *this* frequency...
->>
->> So there is 2 problems in the power calculation of cpufreq cooling device :
->> - How to get an accurate utilization level of the cpu which is what
->> this patch is trying to fix because using idle time is just wrong
->> whereas scheduler utilization is frequency invariant
+On Wed, Jul 22, 2020 at 10:37:30AM +0100, Ionela Voinescu wrote:
+> From: Valentin Schneider <valentin.schneider@arm.com>
 > 
-> Since this patch is targeted only towards fixing this particular
-> problem, should I change something in the patch to make it acceptable
-> ?
+> The passed cpumask arguments to:
+>  - arch_set_freq_scale(),
+>  - arch_set_thermal_pressure(), and
+>  - arch_freq_counters_available()
 > 
->> - How to get power estimate from this utilization level. And as you
->> pointed out, using the current freq which is not accurate.
+> are only iterated over, so reflect this in the prototype. This also
+> allows to pass system cpumasks like cpu_online_mask without getting
+> a warning.
 > 
-> This should be tackled separately I believe.
-> 
+> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
+> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
 
-I don't think that these two are separate. Furthermore, I think we
-would need this kind of information also in future in the powercap.
-I've discussed with Daniel this possible scenario.
-
-We have a vendor who presented issue with the IPA input power and
-pointed out these issues. Unfortunately, I don't have this vendor
-phone but I assume it can last a few minutes without changing the
-max allowed OPP. Based on their plots the frequency driven by the
-governor is changing, also the idles are present during the IPA period.
-
-Please give me a few days, because I am also plumbing these stuff
-and would like to present it. These two interfaces: involving cpufreq
-driver or fallback mode for utilization and EM.
-
-Regards,
-Lukasz
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
