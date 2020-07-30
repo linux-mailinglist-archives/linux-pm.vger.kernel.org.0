@@ -2,96 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4AD232B8F
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 07:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E89232B9E
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 08:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgG3Fwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 01:52:41 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:8858 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725892AbgG3Fwl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 30 Jul 2020 01:52:41 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id B3F6BC4A0DFB5A49D45D;
-        Thu, 30 Jul 2020 13:52:38 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.487.0; Thu, 30 Jul 2020 13:52:29 +0800
-From:   chenxiang <chenxiang66@hisilicon.com>
-To:     <rafael@kernel.org>, <pavel@ucw.cz>, <sre@kernel.org>
-CC:     <john.garry@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linuxarm@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
-Subject: [RFC PATCH] PM:runtime:Remove the link state check in function rpm_get_supplier()
-Date:   Thu, 30 Jul 2020 13:48:49 +0800
-Message-ID: <1596088129-88814-1-git-send-email-chenxiang66@hisilicon.com>
-X-Mailer: git-send-email 2.8.1
+        id S1728677AbgG3F7v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 01:59:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725892AbgG3F7u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Jul 2020 01:59:50 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ABB812083E
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 05:59:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596088789;
+        bh=BHc8sdSpTVccKCyLCgqnAxB5xRQXDAGKg4tyDUDECSM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ij677TMxu+aJeQS3sz3bSQlJu6dHpR1uCYS+d5ck5H2K+PAK2uQ26QwaGEORgsrRv
+         ytcryaIkP0wKcSq0gBAknAaLg7EnNghKW9E6CSaA4+NL1kE693FrKjhcceAEcOJbnh
+         KZuVBMxt2gtOiPkkXWSZwxie18gOizabhmD2kZR4=
+Received: by mail-vs1-f44.google.com with SMTP id j186so13335331vsd.10
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 22:59:49 -0700 (PDT)
+X-Gm-Message-State: AOAM532u0eCQxsiEVj8MXfFAUk2EKni9g2vgxqG0BhwOPEbZqD8xFcoD
+        BtBQj+MH8TxINVWKqzKKfgA4X9A7fKeqHw05ClbSIw==
+X-Google-Smtp-Source: ABdhPJxPBuuYiLcqs2lLQIQ7Uiliyjr+Ks2lXGLYVmoL+JZWEwX999c/bNDeqjRZ3CVGt4jRigJ1kfTR0eW5nTifMgc=
+X-Received: by 2002:a67:e40a:: with SMTP id d10mr650578vsf.95.1596088788824;
+ Wed, 29 Jul 2020 22:59:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+References: <d48d824ab3abacb2356878780979d7ed42191eaf.1596080365.git.viresh.kumar@linaro.org>
+In-Reply-To: <d48d824ab3abacb2356878780979d7ed42191eaf.1596080365.git.viresh.kumar@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Thu, 30 Jul 2020 11:29:38 +0530
+X-Gmail-Original-Message-ID: <CAHLCerP4YPHc4sKD_RTq=Gxfj+ex4F=J2is1Y-UzGXcOuEOrOQ@mail.gmail.com>
+Message-ID: <CAHLCerP4YPHc4sKD_RTq=Gxfj+ex4F=J2is1Y-UzGXcOuEOrOQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: cached_resolved_idx can not be negative
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        ionela.voinescu@arm.com,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+On Thu, Jul 30, 2020 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> It is not possible for cached_resolved_idx to be invalid here as the
+> cpufreq core always sets index to a positive value.
+>
+> Change its type to unsigned int and fix qcom usage a bit.
 
-To support runtime PM for hisi SAS driver (the dirver is in directory
-drivers/scsi/hisi_sas), we add device link between scsi_device->sdev_gendev
-(consumer device) and hisi_hba->dev(supplier device) with flags
-DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE.
-After runtime suspended consumers and supplier, unload the dirver which
-cause a hung. We find that it calls function device_release_driver_internal()
-to release supplier device hisi_hba->dev, as the device link is busy, 
-it sets the device link as DL_STATE_SUPPLIER_UNBIND, and then call function
-device_release_driver_internal() to release consumer device
-scsi_device->sdev_gendev). Then It will try to call pm_runtime_get_sync()
-to resume consumer device, as consumer-supplier relation exists, it will try
-to resume supplier first, but as the link state is already set as 
-DL_STATE_SUPPLIER_UNBIND, so it skips resuming supplier and only resume 
-consumer which cause a hung (it sends IOs to resume scsi_device while 
-SAS controller is suspended). Simple flow is as follows:
+Shouldn't you fix up idx in cpufreq_driver_resolve_freq() to be
+unsigned int too?
 
-device_release_driver_internal -> (supplier device)
-    if device_links_busy ->
-	    device_links_unbind_consumers ->
-		...
-		WRITE_ONCE(link->status, DL_STATE_SUPPLIER_UNBIND)
-		device_release_driver_internal (consumer device)
-    pm_runtime_get_sync -> (consumer device)
-	...
-	__rpm_callback ->
-	    rpm_get_suppliers ->
-		if link->state == DL_STATE_SUPPLIER_UNBIND -> skip the action of resuming the supplier
-		...
-    pm_runtime_clean_up_links
-    ...
-
-It should guarantee correct suspend/resume ordering between a supplier
-device and its consumer devices (resume the supplier device before resuming
-consumer devices, and suspend consumer devices before suspending supplier
-device) for runtime PM, but it seems the check in rpm_get_supplier() breaks 
-the rule, so remove it.
-
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
----
- drivers/base/power/runtime.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 9f62790..a8edd92 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -291,8 +291,7 @@ static int rpm_get_suppliers(struct device *dev)
- 				device_links_read_lock_held()) {
- 		int retval;
- 
--		if (!(link->flags & DL_FLAG_PM_RUNTIME) ||
--		    READ_ONCE(link->status) == DL_STATE_SUPPLIER_UNBIND)
-+		if (!(link->flags & DL_FLAG_PM_RUNTIME))
- 			continue;
- 
- 		retval = pm_runtime_get_sync(link->supplier);
--- 
-2.8.1
-
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 5 +----
+>  include/linux/cpufreq.h           | 2 +-
+>  2 files changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 0a04b6f03b9a..8c0842bd6c5a 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -66,13 +66,10 @@ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
+>                                                 unsigned int target_freq)
+>  {
+>         void __iomem *perf_state_reg = policy->driver_data;
+> -       int index;
+> +       unsigned int index;
+>         unsigned long freq;
+>
+>         index = policy->cached_resolved_idx;
+> -       if (index < 0)
+> -               return 0;
+> -
+>         writel_relaxed(index, perf_state_reg);
+>
+>         freq = policy->freq_table[index].frequency;
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index e62b022cb07e..58687a5bf9c8 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -127,7 +127,7 @@ struct cpufreq_policy {
+>
+>          /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
+>         unsigned int cached_target_freq;
+> -       int cached_resolved_idx;
+> +       unsigned int cached_resolved_idx;
+>
+>         /* Synchronization for frequency transitions */
+>         bool                    transition_ongoing; /* Tracks transition status */
+> --
+> 2.14.1
+>
