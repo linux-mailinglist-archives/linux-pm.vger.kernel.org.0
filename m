@@ -2,68 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFA1232CF1
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 10:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3E7232E3F
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 10:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbgG3IF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 04:05:26 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:16832 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729137AbgG3IFX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 04:05:23 -0400
-X-UUID: 644fe121202244c4b38649415137a0f5-20200730
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=gtc/7yIbUp5/Z/sZoviqQWwUV/DSInVUWpg1vFZLruY=;
-        b=TgqjfKTg2cR+y6eIfMj0fJSi1VFMiJkTpcLHe3zywndNhGyEWwGZEL77j/+3uUaqOws3JR2Kx7zGusNsmHiBX/3PmLHWOUfK0BkyXQ6/05MWFjmjJ4hz/hYZVaLXOgnWeXpN4P56usounCI43xOa9iMwCb4JvCcQ3UugEyhSFbw=;
-X-UUID: 644fe121202244c4b38649415137a0f5-20200730
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <henry.yen@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1605561292; Thu, 30 Jul 2020 16:05:18 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 30 Jul 2020 16:05:14 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 30 Jul 2020 16:05:15 +0800
-From:   Henry Yen <henry.yen@mediatek.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <henry.yen@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>
-Subject: [PATCH] thermal: mediatek: Fix missing selection
-Date:   Thu, 30 Jul 2020 16:05:04 +0800
-Message-ID: <1596096304-16422-1-git-send-email-henry.yen@mediatek.com>
-X-Mailer: git-send-email 1.9.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1729912AbgG3ISo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 04:18:44 -0400
+Received: from mga05.intel.com ([192.55.52.43]:20059 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729811AbgG3ISn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 30 Jul 2020 04:18:43 -0400
+IronPort-SDR: B1etKWDcpeaKtSExcsu6koGiIJtr4/CCePNTsRNXrLVUNgIqLhpJTIvPAHApXEaf1GsDgguif2
+ M4apBEynD8Jg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9697"; a="236423480"
+X-IronPort-AV: E=Sophos;i="5.75,413,1589266800"; 
+   d="scan'208";a="236423480"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 01:18:42 -0700
+IronPort-SDR: jT1YwYmjCO6/8hTme+5T0L3vRl94aFnGf3RgGPCm+PguQT6V7guNehPyrRwKo3NF0ZwE8lBKaz
+ S0V1eJl1hpYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,413,1589266800"; 
+   d="scan'208";a="491051305"
+Received: from unknown (HELO linuxpc.iind.intel.com) ([10.223.107.108])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Jul 2020 01:18:40 -0700
+From:   Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+To:     rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+Subject: [PATCH] thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH support
+Date:   Thu, 30 Jul 2020 13:55:03 +0530
+Message-Id: <1596097503-27924-1-git-send-email-sumeet.r.pawnikar@intel.com>
+X-Mailer: git-send-email 1.7.9.5
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-TWVkaWF0ZWsgdGhlcm1hbCBkcml2ZXIgaXMgY29tcGF0aWJsZSB3aXRoIG11bHRpcGxlIHBsYXRm
-b3Jtcy4NClNvbWUgb2YgdGhlIHBsYXRmb3JtcyAoZS5nLiwgTVQyNzAxKSByZXF1aXJlcyB0byBl
-bmFibGUNCk1FRElBVEVLX01UNjU3N19BVVhBREMgb3B0aW9uLiBJZiBsYWNrcyB0aGUgY29uZmln
-LCB0aGUgZHJpdmVyDQp3aWxsIG5vdCBiZSBhYmxlIHRvIHJlYWQgY29ycmVjdCB0ZW1wZXJhdHVy
-ZS4NCg0KVG8gZml4IGl0LCBzZWxlY3QgbWlzc2luZyBNRURJQVRFS19NVDY1NzdfQVVYQURDIGNv
-bmZpZy4NCg0KU2lnbmVkLW9mZi1ieTogSGVucnkgWWVuIDxoZW5yeS55ZW5AbWVkaWF0ZWsuY29t
-Pg0KLS0tDQogZHJpdmVycy90aGVybWFsL0tjb25maWcgfCAxICsNCiAxIGZpbGUgY2hhbmdlZCwg
-MSBpbnNlcnRpb24oKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC9LY29uZmlnIGIv
-ZHJpdmVycy90aGVybWFsL0tjb25maWcNCmluZGV4IDNlYjIzNDhlNTI0Mi4uM2EzN2Y2NzRmN2Yz
-IDEwMDY0NA0KLS0tIGEvZHJpdmVycy90aGVybWFsL0tjb25maWcNCisrKyBiL2RyaXZlcnMvdGhl
-cm1hbC9LY29uZmlnDQpAQCAtNDA5LDYgKzQwOSw3IEBAIGNvbmZpZyBNVEtfVEhFUk1BTA0KIAlk
-ZXBlbmRzIG9uIE5WTUVNIHx8IE5WTUVNPW4NCiAJZGVwZW5kcyBvbiBSRVNFVF9DT05UUk9MTEVS
-DQogCWRlZmF1bHQgeQ0KKwlzZWxlY3QgTUVESUFURUtfTVQ2NTc3X0FVWEFEQw0KIAloZWxwDQog
-CSAgRW5hYmxlIHRoaXMgb3B0aW9uIGlmIHlvdSB3YW50IHRvIGhhdmUgc3VwcG9ydCBmb3IgdGhl
-cm1hbCBtYW5hZ2VtZW50DQogCSAgY29udHJvbGxlciBwcmVzZW50IGluIE1lZGlhdGVrIFNvQ3MN
-Ci0tIA0KMi4xNy4xDQo=
+Add LP (Low Power) PCH id for Cannon Lake (CNL) based platforms.
+
+Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
+---
+ drivers/thermal/intel/intel_pch_thermal.c |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
+index 56401fd4708d..7ed66927d822 100644
+--- a/drivers/thermal/intel/intel_pch_thermal.c
++++ b/drivers/thermal/intel/intel_pch_thermal.c
+@@ -24,6 +24,7 @@
+ #define PCH_THERMAL_DID_SKL_H	0xA131 /* Skylake PCH 100 series */
+ #define PCH_THERMAL_DID_CNL	0x9Df9 /* CNL PCH */
+ #define PCH_THERMAL_DID_CNL_H	0xA379 /* CNL-H PCH */
++#define PCH_THERMAL_DID_CNL_LP	0x02F9 /* CNL-LP PCH */
+ #define PCH_THERMAL_DID_CML_H	0X06F9 /* CML-H PCH */
+ 
+ /* Wildcat Point-LP  PCH Thermal registers */
+@@ -405,6 +406,8 @@ static int intel_pch_thermal_resume(struct device *device)
+ 		.driver_data = board_cnl, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_CNL_H),
+ 		.driver_data = board_cnl, },
++	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_CNL_LP),
++		.driver_data = board_cnl, },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_CML_H),
+ 		.driver_data = board_cml, },
+ 	{ 0, },
+-- 
+1.7.9.5
 
