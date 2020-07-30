@@ -2,185 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 871B223298E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 03:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8669D232A5B
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 05:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbgG3BbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 29 Jul 2020 21:31:10 -0400
-Received: from mx1.riseup.net ([198.252.153.129]:52776 "EHLO mx1.riseup.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbgG3BbK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 29 Jul 2020 21:31:10 -0400
-Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
-        by mx1.riseup.net (Postfix) with ESMTPS id 4BHCY84wkyzFf0J;
-        Wed, 29 Jul 2020 18:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1596072668; bh=aUisLHgt6JsY1GKX1kNHTO+GIzCjTF9ZNIDBeF3Ng1c=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mcx6Rx5sIvR+Mz8ZWWO7PSOshswXZaF93E9hH1w+NlyYTbDo/g3ZtE2XdjhYfRO95
-         iJrA8xInIu0JMhSPfHUX6sJ0apCVvCPiDWiTPKnWc+BNNF0Tp3S6lhbO15DCMNdNfx
-         tX5WIlfMrKLCxFfOq6Fs4CryHm92IM/clqGeg1xo=
-X-Riseup-User-ID: 1FA0CC4141DEFDA066FBB3DC5B0B40BC23C0B84848AF0AEF793354A9C2D3F5BB
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by capuchin.riseup.net (Postfix) with ESMTPSA id 4BHCY771Grz8tJg;
-        Wed, 29 Jul 2020 18:31:07 -0700 (PDT)
-From:   Francisco Jerez <currojerez@riseup.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: Re: [PATCH v4 1/2] cpufreq: intel_pstate: Rearrange the storing of new EPP values
-In-Reply-To: <1665283.zxI7kaGBi8@kreacher>
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher> <13207937.r2GEYrEf4f@kreacher> <1665283.zxI7kaGBi8@kreacher>
-Date:   Wed, 29 Jul 2020 18:31:07 -0700
-Message-ID: <87wo2leqlg.fsf@riseup.net>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="==-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        id S1726519AbgG3D0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 29 Jul 2020 23:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726367AbgG3D0n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 29 Jul 2020 23:26:43 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1FBC061794;
+        Wed, 29 Jul 2020 20:26:43 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id d4so15745693pgk.4;
+        Wed, 29 Jul 2020 20:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=D3DSMcxAJBfVCzQ9tsL41B8n4WlMAXQgIZRXZY0d2fk=;
+        b=nhdvWdsp7OTR0ia6J6e7mP+rRJPbscgtYGVXox9eFXX3AXYXtIFRhNtuIFMGwApCRt
+         R/F6hAs2mBWQWItzVF85rWwDmVd3czfqDU9hK2Wsc68Ko/7JhV+teJiyvZqirGcD44gq
+         e191U0iXU/NNh6ZNa7ZrVVQr8AFex6SGGl674lMl4e4hNY+CTRetN/xafVmD31u7fGIH
+         dBwp3Yrx9uZjeoOLJhYD6FGXrMSJBh8QBkTUbZKjVCbn58scMKJ4ua99D/BL0OAz5fT9
+         yE6obEuznxRklacfwVrGi7TEu12I4q6jyRNm5sfG0eHWrK5n2lgxg0fwEYiLCTKUF1T3
+         nX/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=D3DSMcxAJBfVCzQ9tsL41B8n4WlMAXQgIZRXZY0d2fk=;
+        b=MCsuFLkeyk59Xbhs2bQc7g8isG3xByhoF2WWkY9LQjhk/fSslgOb7fzRJhC9PbEwqF
+         nFddEE5KqavOiq+ySZc9sGfi7uLUHl2pdrh4SwRfQnYsT9ifCxSL7e/QEIyasXI+w9YP
+         FE6UqNTuTtDKnqbBz3X0iScfzVOubDNHxI2dyn7EZ/dVBDPkn8fAVErU0euMLV3prGEW
+         gJkaG/x3EUX09ItJcs2f6VjPO6PaYU2rsZdWy4TP9UzVZeFV8J1yXnT2eEGPo17tpi3/
+         zS20/uuB+00HlkQkwNV2VWjEvQrRk/aRm191M/TZ4XdigySANEXAhmMmFIr2B+5XXMfa
+         N2BQ==
+X-Gm-Message-State: AOAM530+jqc8K3Pd2QWcVR6ehJFETkqwFvkqFBwgDlXPeEFIJo+WLBd1
+        SB7JQtFyqN8j1JvoiCt8LLk=
+X-Google-Smtp-Source: ABdhPJw1twExWZX4O4IqbAvyOz0gO0V+d8bMgclMUGMPZ3r6fvpxEQH8YriW+0ywdxR5zw0JVoXY6Q==
+X-Received: by 2002:a63:215e:: with SMTP id s30mr30435034pgm.87.1596079602914;
+        Wed, 29 Jul 2020 20:26:42 -0700 (PDT)
+Received: from localhost.localdomain ([132.237.175.251])
+        by smtp.googlemail.com with ESMTPSA id d29sm3978964pgb.54.2020.07.29.20.26.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jul 2020 20:26:42 -0700 (PDT)
+From:   Crag Wang <crag0715@gmail.com>
+X-Google-Original-From: Crag Wang <crag.wang@dell.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     mario.limonciello@dell.com, mathewk@chromium.org,
+        campello@google.com, crag.wang@dell.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] power_supply: wilco_ec: Add long life charging mode
+Date:   Thu, 30 Jul 2020 11:26:09 +0800
+Message-Id: <20200730032609.20330-1-crag.wang@dell.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200715145511.9464-1-crag.wang@dell.com>
+References: <20200715145511.9464-1-crag.wang@dell.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---==-=-=
-Content-Type: multipart/mixed; boundary="=-=-="
+This is a long life mode set in the factory for extended warranty
+battery, the power charging rate is customized so that battery at
+work last longer.
 
---=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Presently switching to a different battery charging mode is through
+EC PID 0x0710 to configure the battery firmware, this operation will
+be blocked by EC with failure code 0x01 when PLL mode is already
+in use.
 
-"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
+Signed-off-by: Crag Wang <crag.wang@dell.com>
+Reviewed-by: Mario Limonciello <mario.limonciello@dell.com>
+---
+ Documentation/ABI/testing/sysfs-class-power-wilco | 4 ++++
+ drivers/power/supply/power_supply_sysfs.c         | 1 +
+ drivers/power/supply/wilco-charger.c              | 5 +++++
+ include/linux/power_supply.h                      | 1 +
+ 4 files changed, 11 insertions(+)
 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Move the locking away from intel_pstate_set_energy_pref_index()
-> into its only caller and drop the (now redundant) return_pref label
-> from it.
->
-> Also move the "raw" EPP value check into the caller of that function,
-> so as to do it before acquiring the mutex, and reduce code duplication
-> related to the "raw" EPP values processing somewhat.
->
-> No intentional functional impact.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+diff --git a/Documentation/ABI/testing/sysfs-class-power-wilco b/Documentation/ABI/testing/sysfs-class-power-wilco
+index da1d6ffe5e3c..84fde1d0ada0 100644
+--- a/Documentation/ABI/testing/sysfs-class-power-wilco
++++ b/Documentation/ABI/testing/sysfs-class-power-wilco
+@@ -14,6 +14,10 @@ Description:
+ 			Charging begins when level drops below
+ 			charge_control_start_threshold, and ceases when
+ 			level is above charge_control_end_threshold.
++		Long Life: Customized charge rate for last longer battery life.
++			On Wilco device this mode is pre-configured in the factory
++			through EC's private PID. Swiching to a different mode will
++			be denied by Wilco EC when Long Life mode is enabled.
+ 
+ What:		/sys/class/power_supply/wilco-charger/charge_control_start_threshold
+ Date:		April 2019
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index bc79560229b5..cfb87b8b8392 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -87,6 +87,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT[] = {
+ 	[POWER_SUPPLY_CHARGE_TYPE_STANDARD]	= "Standard",
+ 	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	= "Adaptive",
+ 	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	= "Custom",
++	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	= "Long Life",
+ };
+ 
+ static const char * const POWER_SUPPLY_HEALTH_TEXT[] = {
+diff --git a/drivers/power/supply/wilco-charger.c b/drivers/power/supply/wilco-charger.c
+index b3c6d7cdd731..98ade073ef05 100644
+--- a/drivers/power/supply/wilco-charger.c
++++ b/drivers/power/supply/wilco-charger.c
+@@ -27,6 +27,7 @@ enum charge_mode {
+ 	CHARGE_MODE_AC = 3,	/* Mostly AC use, used for Trickle */
+ 	CHARGE_MODE_AUTO = 4,	/* Used for Adaptive */
+ 	CHARGE_MODE_CUSTOM = 5,	/* Used for Custom */
++	CHARGE_MODE_LONGLIFE = 6, /* Used for Long Life */
+ };
+ 
+ #define CHARGE_LOWER_LIMIT_MIN	50
+@@ -48,6 +49,8 @@ static int psp_val_to_charge_mode(int psp_val)
+ 		return CHARGE_MODE_AUTO;
+ 	case POWER_SUPPLY_CHARGE_TYPE_CUSTOM:
+ 		return CHARGE_MODE_CUSTOM;
++	case POWER_SUPPLY_CHARGE_TYPE_LONGLIFE:
++		return CHARGE_MODE_LONGLIFE;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -67,6 +70,8 @@ static int charge_mode_to_psp_val(enum charge_mode mode)
+ 		return POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE;
+ 	case CHARGE_MODE_CUSTOM:
+ 		return POWER_SUPPLY_CHARGE_TYPE_CUSTOM;
++	case CHARGE_MODE_LONGLIFE:
++		return POWER_SUPPLY_CHARGE_TYPE_LONGLIFE;
+ 	default:
+ 		return -EINVAL;
+ 	}
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index ac1345a48ad0..528a3eaa2320 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -48,6 +48,7 @@ enum {
+ 	POWER_SUPPLY_CHARGE_TYPE_STANDARD,	/* normal speed */
+ 	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
+ 	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
++	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
+ };
+ 
+ enum {
+-- 
+2.17.1
 
-Reviewed-by: Francisco Jerez <currojerez@riseup.net>
-
-> ---
->
-> v2 -> v3:
->
->    * Fix error handling in intel_pstate_set_energy_pref_index() and
->      rebase.
->
-> v3 -> v4: No changes
->
-> ---
->  drivers/cpufreq/intel_pstate.c |   35 +++++++++++++++--------------------
->  1 file changed, 15 insertions(+), 20 deletions(-)
->
-> Index: linux-pm/drivers/cpufreq/intel_pstate.c
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-> +++ linux-pm/drivers/cpufreq/intel_pstate.c
-> @@ -649,28 +649,18 @@ static int intel_pstate_set_energy_pref_
->  	if (!pref_index)
->  		epp =3D cpu_data->epp_default;
->=20=20
-> -	mutex_lock(&intel_pstate_limits_lock);
-> -
->  	if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
->  		u64 value;
->=20=20
->  		ret =3D rdmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, &value);
->  		if (ret)
-> -			goto return_pref;
-> +			return ret;
->=20=20
->  		value &=3D ~GENMASK_ULL(31, 24);
->=20=20
-> -		if (use_raw) {
-> -			if (raw_epp > 255) {
-> -				ret =3D -EINVAL;
-> -				goto return_pref;
-> -			}
-> -			value |=3D (u64)raw_epp << 24;
-> -			ret =3D wrmsrl_on_cpu(cpu_data->cpu, MSR_HWP_REQUEST, value);
-> -			goto return_pref;
-> -		}
-> -
-> -		if (epp =3D=3D -EINVAL)
-> +		if (use_raw)
-> +			epp =3D raw_epp;
-> +		else if (epp =3D=3D -EINVAL)
->  			epp =3D epp_values[pref_index - 1];
->=20=20
->  		value |=3D (u64)epp << 24;
-> @@ -680,8 +670,6 @@ static int intel_pstate_set_energy_pref_
->  			epp =3D (pref_index - 1) << 2;
->  		ret =3D intel_pstate_set_epb(cpu_data->cpu, epp);
->  	}
-> -return_pref:
-> -	mutex_unlock(&intel_pstate_limits_lock);
->=20=20
->  	return ret;
->  }
-> @@ -708,8 +696,8 @@ static ssize_t store_energy_performance_
->  	struct cpudata *cpu_data =3D all_cpu_data[policy->cpu];
->  	char str_preference[21];
->  	bool raw =3D false;
-> +	ssize_t ret;
->  	u32 epp =3D 0;
-> -	int ret;
->=20=20
->  	ret =3D sscanf(buf, "%20s", str_preference);
->  	if (ret !=3D 1)
-> @@ -724,14 +712,21 @@ static ssize_t store_energy_performance_
->  		if (ret)
->  			return ret;
->=20=20
-> +		if (epp > 255)
-> +			return -EINVAL;
-> +
->  		raw =3D true;
->  	}
->=20=20
-> +	mutex_lock(&intel_pstate_limits_lock);
-> +
->  	ret =3D intel_pstate_set_energy_pref_index(cpu_data, ret, raw, epp);
-> -	if (ret)
-> -		return ret;
-> +	if (!ret)
-> +		ret =3D count;
->=20=20
-> -	return count;
-> +	mutex_unlock(&intel_pstate_limits_lock);
-> +
-> +	return ret;
->  }
->=20=20
->  static ssize_t show_energy_performance_preference(
-
---=-=-=--
-
---==-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQST8OekYz69PM20/4aDmTidfVK/WwUCXyIi2wAKCRCDmTidfVK/
-W+bIAP9VI6QX7g2roqBKi/zof0Rfvrs5n3eeDvhO33ZmdO88nwEAjpv6+ZAvh6pk
-rKhiSm3lspzJ3ly69OUe1/IEeWcze5c=
-=ElU5
------END PGP SIGNATURE-----
---==-=-=--
+---
+The original author, Nick no longer being around and that's why he's not on CC.
