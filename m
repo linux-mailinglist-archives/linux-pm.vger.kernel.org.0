@@ -2,34 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A7D232CD0
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 10:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC565232CD1
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 10:02:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728724AbgG3ICI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 04:02:08 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:31352 "EHLO
+        id S1728646AbgG3ICH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 04:02:07 -0400
+Received: from mo4-p02-ob.smtp.rzone.de ([81.169.146.168]:27376 "EHLO
         mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726804AbgG3ICF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 04:02:05 -0400
+        with ESMTP id S1726774AbgG3ICG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 04:02:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1596096121;
         s=strato-dkim-0002; d=gerhold.net;
         h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=HaJwBOdIkjvs8im4/IU2I0knSpAyk7I2vquFxeVH9ME=;
-        b=tPj+che6PdMsJZIu4uEyy4FRuJ6xYfsz/4Yk62XyHhquRNQBi0twzgD8LZYK/+gKRL
-        gEXRtJucChVLPL9Ibjmb1WYMp03P5lIp0Ua8VcDm9cnZM4vByEHqyilghG5hSIGlebM4
-        F/ojWJDAcxtH+PzrAtOzK89KHg0SYTK4G6iBLQ3IwnaSicrevGjGyPKbtVeX83nqWQMc
-        aHEG3HSJZMvnG5pJNfEMsc5Vm6/5Zr+ndMzSGPmhwQdNc3EMhdmEt0VMOAUXXuwlg+4E
-        n/j6mNHPrkGZ6emI6Crhl8SL9Da5MiqsgWXcRoXbqAU4K8WFOY4YqKhgvUgh5oYXd+IG
-        zLDw==
+        bh=+WtiI0ygGdiZUF68UUWGgtshE7pdk3Dx6AuxN7BGWgU=;
+        b=U7m9vs2ExhWUf5A617LAEWY9hr4EN4A25dYKIxRFAAbkVxGBCGTPRvCxIcVjZA4fD9
+        +Ay4+bVLVNqGoJoVg33GpXoVcHFzcTy399+Lwb/NT1/rwaxnvWjljXI8O/XJcedswHxM
+        xMIGFdB0T4macqh+Bh9lwVn6nubqytU3vJ5fJYyP+ZuKpVsgjx4klRiRa5YhnWPSfTUJ
+        yPshvxB1A2Cf+KyJ1mC0wp2hwUFA1yU2tPv748OHn7xq2uRgZ1twWPRbrdunv9aKeZ6e
+        30OG3BVO1HWLkhVxu5QUlC6PV6W6gaPBzO36uSoxAaXe56u5FyzKdKjT0ikYDguBj7pR
+        IH9Q==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB4G6NeHYC"
 X-RZG-CLASS-ID: mo00
 Received: from localhost.localdomain
         by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id Y0939ew6U81xgut
+        with ESMTPSA id Y0939ew6U820guw
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-        Thu, 30 Jul 2020 10:01:59 +0200 (CEST)
+        Thu, 30 Jul 2020 10:02:00 +0200 (CEST)
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Stephan Gerhold <stephan@gerhold.net>,
@@ -39,9 +39,9 @@ Cc:     Stephan Gerhold <stephan@gerhold.net>,
         Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Niklas Cassel <nks@flawful.org>
-Subject: [RFC PATCH 2/3] opp: Set required OPPs in reverse order when scaling down
-Date:   Thu, 30 Jul 2020 10:01:45 +0200
-Message-Id: <20200730080146.25185-3-stephan@gerhold.net>
+Subject: [RFC PATCH 3/3] opp: Power on (virtual) power domains managed by the OPP core
+Date:   Thu, 30 Jul 2020 10:01:46 +0200
+Message-Id: <20200730080146.25185-4-stephan@gerhold.net>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200730080146.25185-1-stephan@gerhold.net>
 References: <20200730080146.25185-1-stephan@gerhold.net>
@@ -52,110 +52,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The OPP core already has well-defined semantics to ensure required
-OPPs/regulators are set before/after the frequency change, depending
-on if we scale up or down.
+dev_pm_opp_attach_genpd() allows attaching an arbitrary number of
+power domains to an OPP table. In that case, the genpd core will
+create a virtual device for each of the power domains.
 
-Similar requirements might exist for the order of required OPPs
-when multiple power domains need to be scaled for a frequency change.
+At the moment, the OPP core only calls
+dev_pm_genpd_set_performance_state() on these virtual devices.
+It does not attempt to power on the power domains. Therefore
+the required power domain might never get turned on.
 
-For example, on Qualcomm platforms using CPR (Core Power Reduction),
-we need to scale the VDDMX and CPR power domain. When scaling up,
-MX should be scaled up before CPR. When scaling down, CPR should be
-scaled down before MX.
+So far, dev_pm_opp_attach_genpd() is only used in qcom-cpufreq-nvmem.c
+to attach the CPR power domain to the CPU OPP table. The CPR driver
+does not check if it was actually powered on so this did not cause
+any problems. However, other drivers (e.g. rpmpd) might ignore the
+performance state until the power domain is actually powered on.
 
-In general, if there are multiple "required-opps" in the device tree
-I would expect that the order is either irrelevant, or there is some
-dependency between the power domains. In that case, the power domains
-should be scaled down in reverse order.
+Since these virtual devices are managed exclusively by the OPP core,
+I would say that it should also be responsible to ensure they are
+enabled. A similar approach is already used for regulators, see
+commit 8d45719caaf5 ("opp: core: add regulators enable and disable").
 
-This commit updates _set_required_opps() to set required OPPs in
-reverse order when scaling down.
+This commit implements similar functionality for the virtual genpd
+devices managed by the OPP core. The power domains are turned on
+the first time dev_pm_opp_set_rate() is called. They are turned off
+again when dev_pm_opp_set_rate(dev, 0) is called.
 
 Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 ---
-Related discussion: https://lore.kernel.org/linux-arm-msm/20200525194443.GA11851@flawful.org/
+Related discussion: https://lore.kernel.org/linux-arm-msm/20200426123140.GA190483@gerhold.net/
 
-The advantage of this approach is that the CPR driver does not need
-to bother with the VDDMX power domain at all - the requirements
-can be fully described within the device tree, see e.g. [1].
-An alternative option would be to modify the CPR driver to make these votes.
-
-[1]: https://lore.kernel.org/linux-arm-msm/20200507104603.GA581328@gerhold.net/2-msm8916-vdd-mx.patch
+There would be also other ways to implement this, e.g. device links,
+assuming that the device using the OPP table also makes use of runtime PM.
+My first thought was that it would be most consistent to handle this like
+regulators, bandwidth votes etc. RFC :)
 ---
- drivers/opp/core.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ drivers/opp/core.c | 55 ++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/opp/opp.h  |  1 +
+ 2 files changed, 56 insertions(+)
 
 diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index f7a476b55069..f93f551c911e 100644
+index f93f551c911e..66ecffe12f01 100644
 --- a/drivers/opp/core.c
 +++ b/drivers/opp/core.c
-@@ -799,7 +799,7 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
+@@ -17,6 +17,7 @@
+ #include <linux/device.h>
+ #include <linux/export.h>
+ #include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ 
+ #include "opp.h"
+@@ -796,6 +797,26 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
+ 	return ret;
+ }
+ 
++static int _enable_required_opp(struct device *dev, struct device *pd_dev,
++				bool on)
++{
++	int ret;
++
++	if (on) {
++		ret = pm_runtime_get_sync(pd_dev);
++		if (ret < 0) {
++			pm_runtime_put_noidle(pd_dev);
++			dev_err(dev, "Failed to enable %s: %d\n",
++				dev_name(pd_dev), ret);
++			return ret;
++		}
++	} else {
++		pm_runtime_put(pd_dev);
++	}
++
++	return 0;
++}
++
  /* This is only called for PM domain for now */
  static int _set_required_opps(struct device *dev,
  			      struct opp_table *opp_table,
--			      struct dev_pm_opp *opp)
-+			      struct dev_pm_opp *opp, bool up)
+@@ -803,6 +824,8 @@ static int _set_required_opps(struct device *dev,
  {
  	struct opp_table **required_opp_tables = opp_table->required_opp_tables;
  	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
-@@ -821,12 +821,24 @@ static int _set_required_opps(struct device *dev,
- 	 */
- 	mutex_lock(&opp_table->genpd_virt_dev_lock);
++	bool power_on = opp != NULL;
++	bool already_enabled = power_on == opp_table->genpd_virt_enabled;
+ 	struct device *pd_dev;
+ 	int i, ret = 0;
  
--	for (i = 0; i < opp_table->required_opp_count; i++) {
--		pd_dev = genpd_virt_devs[i];
-+	if (up) {
-+		/* Scaling up? Set required OPPs in normal order */
-+		for (i = 0; i < opp_table->required_opp_count; i++) {
-+			pd_dev = genpd_virt_devs[i];
- 
--		ret = _set_required_opp(dev, pd_dev, opp, i);
--		if (ret)
--			break;
-+			ret = _set_required_opp(dev, pd_dev, opp, i);
-+			if (ret)
-+				break;
-+		}
-+	} else {
-+		/* Scaling down? Set required OPPs in reverse order */
-+		for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
-+			pd_dev = genpd_virt_devs[i];
+@@ -829,6 +852,20 @@ static int _set_required_opps(struct device *dev,
+ 			ret = _set_required_opp(dev, pd_dev, opp, i);
+ 			if (ret)
+ 				break;
 +
-+			ret = _set_required_opp(dev, pd_dev, opp, i);
++			if (likely(already_enabled))
++				continue;
++
++			ret = _enable_required_opp(dev, pd_dev, power_on);
 +			if (ret)
 +				break;
 +		}
++
++		if (ret && !already_enabled) {
++			/* Rollback (skip current since it failed) */
++			for (i--; i >= 0; i--)
++				_enable_required_opp(dev, genpd_virt_devs[i],
++						     !power_on);
+ 		}
+ 	} else {
+ 		/* Scaling down? Set required OPPs in reverse order */
+@@ -838,8 +875,26 @@ static int _set_required_opps(struct device *dev,
+ 			ret = _set_required_opp(dev, pd_dev, opp, i);
+ 			if (ret)
+ 				break;
++
++			if (likely(already_enabled))
++				continue;
++
++			ret = _enable_required_opp(dev, pd_dev, power_on);
++			if (ret)
++				break;
++		}
++
++		if (ret && !already_enabled) {
++			/* Rollback (skip current since it failed) */
++			for (i++; i < opp_table->required_opp_count; i++)
++				_enable_required_opp(dev, genpd_virt_devs[i],
++						     !power_on);
+ 		}
  	}
++
++	if (ret == 0 && !already_enabled)
++		opp_table->genpd_virt_enabled = power_on;
++
  	mutex_unlock(&opp_table->genpd_virt_dev_lock);
  
-@@ -914,7 +926,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 			opp_table->regulator_enabled = false;
- 		}
+ 	return ret;
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index e51646ff279e..01ad9e136cc8 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -188,6 +188,7 @@ struct opp_table {
+ 	struct device **genpd_virt_devs;
+ 	struct opp_table **required_opp_tables;
+ 	unsigned int required_opp_count;
++	bool genpd_virt_enabled;
  
--		ret = _set_required_opps(dev, opp_table, NULL);
-+		ret = _set_required_opps(dev, opp_table, NULL, false);
- 		goto put_opp_table;
- 	}
- 
-@@ -973,7 +985,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 
- 	/* Scaling up? Configure required OPPs before frequency */
- 	if (freq >= old_freq) {
--		ret = _set_required_opps(dev, opp_table, opp);
-+		ret = _set_required_opps(dev, opp_table, opp, true);
- 		if (ret)
- 			goto put_opp;
- 	}
-@@ -993,7 +1005,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 
- 	/* Scaling down? Configure required OPPs after frequency */
- 	if (!ret && freq < old_freq) {
--		ret = _set_required_opps(dev, opp_table, opp);
-+		ret = _set_required_opps(dev, opp_table, opp, false);
- 		if (ret)
- 			dev_err(dev, "Failed to set required opps: %d\n", ret);
- 	}
+ 	unsigned int *supported_hw;
+ 	unsigned int supported_hw_count;
 -- 
 2.27.0
 
