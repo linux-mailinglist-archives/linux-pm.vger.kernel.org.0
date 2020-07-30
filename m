@@ -2,75 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C766A2335B2
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 17:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C507D2336B2
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 18:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbgG3Ph2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 11:37:28 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44024 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729484AbgG3Ph2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 11:37:28 -0400
-Received: by mail-ot1-f68.google.com with SMTP id r21so9871275ota.10
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 08:37:28 -0700 (PDT)
+        id S1728469AbgG3Q0L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 12:26:11 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38042 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbgG3Q0L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 12:26:11 -0400
+Received: by mail-oi1-f193.google.com with SMTP id u63so12465730oie.5;
+        Thu, 30 Jul 2020 09:26:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=X2G9V05Uu/lFGXS5tkPLUREaW27ero6f6QDUOuZvUI8=;
-        b=Uf92xmWSBQ+ZNGnfc5BkjkeUQPXAbhage4pxBmIXgiyXDbs5ecXNmtrnOlXh8D8nCx
-         hgbU0B1ykyzFfvwpsHzv41+XPd3yqt+ZA2rO4Cw1JtQ8SdP4m64UbPGufkoEYvrOKdqa
-         QAt+QhuKjm7ZRhEOoOsJgqT7T4p2LdNfIm6xhAnfevk06/TnlGpc5jzscDpPeaupDy0M
-         +/DczvnSUjqOmsRol9RGpfXS+LJAg275o2yIS/VrnanNSa4j4zYSupQnWyoznfbFJVT/
-         N5cidRG7OfMut8BAxW7+8VBtlA43MWRDY+lnqvZglVj1YHm+6rhdG5Pb5tOvXGq5qv20
-         jGug==
-X-Gm-Message-State: AOAM530yApFgQ29XjTskZ36gTR4g3Jjeauor1fw0uSok+dGyyWURK63D
-        ayL++bKG0HC/qV7TFVJcbiuAgoI7kWtbSsxSKJk=
-X-Google-Smtp-Source: ABdhPJyxWDqjJJD7i8c/NtPlfbv8mPRk7YFbe34Z7TWr5wmZdglajjlftODyHOpYyHRXmGv1LDA51QjsBX1giLqkyyQ=
-X-Received: by 2002:a9d:590a:: with SMTP id t10mr2783662oth.262.1596123447642;
- Thu, 30 Jul 2020 08:37:27 -0700 (PDT)
+        bh=4y0trLDvxFm6X9a9D00px5raiFD5iq1zLoW+q4WbwgE=;
+        b=S8DvwnfIkhcuck+8UPqNgoZDWdfAqKvhbSViRr7h0sycvWUl6elj9cMKfFsrAue19Z
+         ieczi74JoDRE4Mh3J5Q0nuqmQL9wimmiFBGZ/61g70YNxPDeDoHbU60CrAIrNGQ0cZeX
+         UTbrQYcNsMEjYuUwa1egfZwtW29KvBtQ7tNh2+NWgwhNiXWbV4bKfJFwfa/6Z6L2cxs5
+         O4EXdnFfUe6NndFmUfKLsgtnP94/fx/Ra8qWBZsm3RgrhgrJOuem3PlEbFDWLtv4vIck
+         eGe5MhqDV5lg0TTtOaDgQdWntUGV5EMEnO6uCnjwdpliN68+9h8A+WR3vDt2G44McPM1
+         HySA==
+X-Gm-Message-State: AOAM533v4UhV0gjcvyr6voDClTYTx8iESSzOl9klMKu+Kl/emLGYZ0WR
+        bXrIhTjL6EmxYL3/JAHUpaWh0wqbGgMsTOZxoKqbAA==
+X-Google-Smtp-Source: ABdhPJxrT6AUgXEocJmQ7pCL9/znNdw1t9+xZb+8yxum3NWoVzCoScjZAmBR1bARnutUs3y1OkCoh27fTFb25d29gug=
+X-Received: by 2002:aca:4a89:: with SMTP id x131mr12785075oia.103.1596126370279;
+ Thu, 30 Jul 2020 09:26:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200730045842.v6sei7nh2jc3cjwo@vireshk-mac-ubuntu>
-In-Reply-To: <20200730045842.v6sei7nh2jc3cjwo@vireshk-mac-ubuntu>
+References: <d48d824ab3abacb2356878780979d7ed42191eaf.1596080365.git.viresh.kumar@linaro.org>
+ <CAHLCerP4YPHc4sKD_RTq=Gxfj+ex4F=J2is1Y-UzGXcOuEOrOQ@mail.gmail.com>
+ <20200730061041.gyprgwfkzfb64t3m@vireshk-mac-ubuntu> <CAHLCerMD_spZFHER-y9dOzr7qo9xKXZdqy3cFt+W9QUW4Ng3jw@mail.gmail.com>
+ <20200730064112.lvbwas7zzqruvprk@vireshk-mac-ubuntu>
+In-Reply-To: <20200730064112.lvbwas7zzqruvprk@vireshk-mac-ubuntu>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 30 Jul 2020 17:37:16 +0200
-Message-ID: <CAJZ5v0iwua3JpSkG0psiuxgGjSQbO8UJ5fpLDy4eAdtGiKNCww@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP fixes for 5.9
+Date:   Thu, 30 Jul 2020 18:25:59 +0200
+Message-ID: <CAJZ5v0ia-kjAboeREyDESxp9f_E_SVdDNj0aU4Xgxjf4-=QGTw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: cached_resolved_idx can not be negative
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On Thu, Jul 30, 2020 at 8:41 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 30-07-20, 12:02, Amit Kucheria wrote:
+> > Looking at this more closely, I found another call site for
+> > cpufreq_frequency_table_target() in cpufreq.c that needs the index to
+> > be unsigned int.
+> >
+> > But then cpufreq_frequency_table_target() returns -EINVAL, so we
+>
+> It returns -EINVAL only in the case where the relation is not valid,
+> which will never happen. Maybe that should be marked with WARN or BUG
+> and we should drop return value of -EINVAL.
+>
+> Rafael ?
 
-On Thu, Jul 30, 2020 at 6:58 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> This pull request contains following changes:
->
-> - Fix HTTP links (Alexander A. Klimov).
->
-> - Allow disabled OPPs in dev_pm_opp_get_freq() (Andrew-sh.Cheng).
->
-> - Add missing export (Valdis Kletnieks).
->
-> -------------------------8<-------------------------
->
-> The following changes since commit 6544abc520f0fff701e9da382110dc29676c683a:
->
->   opp: Increase parsed_static_opps in _of_add_opp_table_v1() (2020-07-16 08:50:54 +0530)
->
-> are available in the git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
->
-> for you to fetch changes up to 06a8a059e88bd73ee81a4ad19e97c04766f84def:
->
->   opp: Allow disabled OPPs in dev_pm_opp_get_freq() (2020-07-24 08:05:54 +0530)
+Yeah, make it a WARN_ON_ONCE() IMO.
 
-Pulled, thanks!
+> > should be able to handle int values.
+>
+> And so no.
+>
+> > I think you will need to fix the unconditional assignment of
+> >     policy->cached_resolved_idx = idx
+> > in cpufreq_driver_resolve_freq(). It doesn't check for -EINVAL, so the
+> > qcom driver is write in checking for a negative value.
+>
+> Right, I don't want it to have that check for the reason stated above.
+>
+> The point is I don't want code that verifies cached-idx at all, it is
+> useless.
+>
+> --
+> viresh
