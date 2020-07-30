@@ -2,103 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1D0232B18
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 06:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B65232B63
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 07:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726194AbgG3E6q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 00:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbgG3E6q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 00:58:46 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1699DC061794
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 21:58:46 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id h12so4490719pgf.7
-        for <linux-pm@vger.kernel.org>; Wed, 29 Jul 2020 21:58:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=9RBYsM94bDUABPnAaYvdSq2HPDjCCcGmwAAvtZinn0Q=;
-        b=ENG0wdx3/PjdZhviJsfqvoGlRIa3P8kT0BiTYEwujuQoOmlwFXYYVo52X3yb7SL8+D
-         6FpRub9GpuWL+5MG+1ZXr4VZ8xtzYGxc9lplE7bdvWud6PmcmOL7HSsd5s6lU0eBr93w
-         cFv2RNtQnsFiZTi6QZdwjGjGf95fAezXhDTpwk7PSIKHLeG06PA2jnOeSqn0uyQw6afV
-         6+NeImD7WHEIS5HE1xx8QKt+pXmQMocQJ/sZ3Rz0ChyVN3Rzmd6AvMTEmQTqGIvEQ1X2
-         3nDO2Zym7bitVv2QaEwcgnTCJDrAdWCSWw1udp7Ye3eg/lqDujd7cGutVbK8e2fIXKai
-         VO4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=9RBYsM94bDUABPnAaYvdSq2HPDjCCcGmwAAvtZinn0Q=;
-        b=E7L7r/065L3zs9dbUCd49AQEv0DgJA4QKVHAuvqQn76XcLwUgY1F14FwDSQz6HIvTh
-         VqRiFDmzw7YLmnoYJuciiww206crSZOlU6PDzTP3BO/WpkzB5xco/YTQrCfyUJV/59hz
-         eVTqUyHfWbkD+0WQMhrw8CsxTuBMnelt21gRTQ+GmecurXTFHKHQH92sPgMU7SL6MflN
-         yMePZ4G9TWj0xkyLY3LQzHLohhvmyPup1luauHFxnuUha8SHiPAd60hi/DmvAoIjpseF
-         9R+1XDwHsY9Cvz7+slyZKD/wx5vc6Z6U9FTJLEaOrEf6ddPeAUr5AJuP/Sis6XyCv5sh
-         L4sQ==
-X-Gm-Message-State: AOAM533tZqbxL6N/HtXCe2HovZB9ME6G8YIZZfSq0uZe4y1/e0RUdTy0
-        aMbbFAhhBZnHdz2DALst8f1LeQ==
-X-Google-Smtp-Source: ABdhPJycdIwD9HnW9fJKNmgoDPisIgA1oSM3gwnBl0tFY/FnVDFYrHxLDOZNDTBuQdNrEffGLTQ8HQ==
-X-Received: by 2002:a65:688c:: with SMTP id e12mr9107726pgt.230.1596085125473;
-        Wed, 29 Jul 2020 21:58:45 -0700 (PDT)
-Received: from localhost ([106.201.14.19])
-        by smtp.gmail.com with ESMTPSA id b15sm4525723pje.52.2020.07.29.21.58.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 29 Jul 2020 21:58:44 -0700 (PDT)
-Date:   Thu, 30 Jul 2020 10:28:42 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP fixes for 5.9
-Message-ID: <20200730045842.v6sei7nh2jc3cjwo@vireshk-mac-ubuntu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: NeoMutt/20170609 (1.8.3)
+        id S1726774AbgG3FdV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 01:33:21 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:19214 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726287AbgG3FdU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 01:33:20 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06U5W9Y3088741;
+        Thu, 30 Jul 2020 01:33:17 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32jw724p5n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jul 2020 01:33:16 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 06U5WJbJ089679;
+        Thu, 30 Jul 2020 01:33:16 -0400
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 32jw724p50-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jul 2020 01:33:16 -0400
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06U5Oh7d020529;
+        Thu, 30 Jul 2020 05:33:15 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma02dal.us.ibm.com with ESMTP id 32gcy4srdu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 30 Jul 2020 05:33:15 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06U5XEXs50004444
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Jul 2020 05:33:14 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6F7CF28059;
+        Thu, 30 Jul 2020 05:33:14 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ECED428058;
+        Thu, 30 Jul 2020 05:33:13 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.102.0.230])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Thu, 30 Jul 2020 05:33:13 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id C80BB2E2D91; Thu, 30 Jul 2020 11:03:09 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Neuling <mikey@neuling.org>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Subject: [PATCH v3 0/3] cpuidle-pseries: Parse extended CEDE information for idle.
+Date:   Thu, 30 Jul 2020 11:02:54 +0530
+Message-Id: <1596087177-30329-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-30_03:2020-07-29,2020-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ spamscore=0 impostorscore=0 adultscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007300038
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-This pull request contains following changes:
+This is a v3 of the patch series to parse the extended CEDE
+information in the pseries-cpuidle driver.
 
-- Fix HTTP links (Alexander A. Klimov).
+The previous two versions of the patches can be found here:
 
-- Allow disabled OPPs in dev_pm_opp_get_freq() (Andrew-sh.Cheng).
+v2: https://lore.kernel.org/lkml/1596005254-25753-1-git-send-email-ego@linux.vnet.ibm.com/
 
-- Add missing export (Valdis Kletnieks).
+v1: https://lore.kernel.org/linuxppc-dev/1594120299-31389-1-git-send-email-ego@linux.vnet.ibm.com/
 
--------------------------8<-------------------------
+The change from v2 --> v1 :
 
-The following changes since commit 6544abc520f0fff701e9da382110dc29676c683a:
+ * Patch 1: Got rid of some #define-s which were needed mainly for Patches4 and
+   5 of v1, but were retained in v2.
 
-  opp: Increase parsed_static_opps in _of_add_opp_table_v1() (2020-07-16 08:50:54 +0530)
+ * Patch 2:
 
-are available in the git repository at:
+  	* Based on feedback from Michael Ellerman, rewrote the
+	  function to parse the extended idle states by explicitly
+	  defining the structure of the object that is returned by
+	  ibm,get-system-parameters(CEDE_LATENCY_TOKEN) rtas-call. In
+	  the previous versions we were passing a character array and
+	  subsequently parsing the individual elements which can be
+	  bug-prone. This also gets rid of the excessive (cast *)ing
+	  that was in the previous versions.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git opp/linux-next
+	  * Marked some of the functions static and annotated some of
+	  the functions with __init and data with __initdata. This
+	  makes Sparse happy.
 
-for you to fetch changes up to 06a8a059e88bd73ee81a4ad19e97c04766f84def:
+	  * Added comments for CEDE_LATENCY_TOKEN.
 
-  opp: Allow disabled OPPs in dev_pm_opp_get_freq() (2020-07-24 08:05:54 +0530)
+	  * Renamed add_pseries_idle_states() to
+            parse_xcede_idle_states(). Again, this is because Patch 4
+            and 5 from v1 are no longer there.
 
-----------------------------------------------------------------
-Alexander A. Klimov (1):
-      opp: ti-opp-supply: Replace HTTP links with HTTPS ones
+ * Patch 3: No functional changes, but minor changes to be consistent
+   with Patch 1 and 2 of this series.
+ 
+I have additionally tested the code on POWER8 dedicated LPAR and found
+that it has no impact, since the wakeup latency of CEDE(1) is 30us
+which is greater that default latency that we are assuming for
+CEDE(0). So we do not need to fixup CEDE(0) latency on POWER8.
 
-Andrew-sh.Cheng (1):
-      opp: Allow disabled OPPs in dev_pm_opp_get_freq()
+Vaidy, I have removed your Reviewed-by for v1, since the code has
+changed a little bit.
 
-Valdis Kletnieks (1):
-      opp: core: Add missing export for dev_pm_opp_adjust_voltage
+Gautham R. Shenoy (3):
+  cpuidle-pseries: Set the latency-hint before entering CEDE
+  cpuidle-pseries: Add function to parse extended CEDE records
+  cpuidle-pseries : Fixup exit latency for CEDE(0)
 
- drivers/opp/core.c          | 3 ++-
- drivers/opp/ti-opp-supply.c | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/cpuidle/cpuidle-pseries.c | 190 +++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 188 insertions(+), 2 deletions(-)
 
 -- 
-viresh
+1.9.4
+
