@@ -2,94 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B918232C96
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 09:30:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79826232CCE
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 10:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728953AbgG3HaU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 30 Jul 2020 03:30:20 -0400
-Received: from coyote.holtmann.net ([212.227.132.17]:47807 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726194AbgG3HaU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 03:30:20 -0400
-Received: from marcel-macbook.fritz.box (p4ff9f430.dip0.t-ipconnect.de [79.249.244.48])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 7D0B8CECF1;
-        Thu, 30 Jul 2020 09:40:19 +0200 (CEST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: [PATCH] Revert "Bluetooth: btusb: Disable runtime suspend on
- Realtek devices"
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <8DFB5D1A-AA7E-4960-9937-4FD00827937B@canonical.com>
-Date:   Thu, 30 Jul 2020 09:30:16 +0200
-Cc:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-        chromeos-bluetooth-upstreaming 
-        <chromeos-bluetooth-upstreaming@chromium.org>,
-        Bluetooth Kernel Mailing List 
-        <linux-bluetooth@vger.kernel.org>,
-        Alex Lu <alex_lu@realsil.com.cn>, linux-pm@vger.kernel.org,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <E52C04D8-67C6-4949-B988-A61F6FCD1434@holtmann.org>
-References: <20200729161740.1.Ib03d0827c8e48fc3df887fec698f79fa335c9274@changeid>
- <8DFB5D1A-AA7E-4960-9937-4FD00827937B@canonical.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+        id S1726819AbgG3ICE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 04:02:04 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.54]:35081 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725974AbgG3ICE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 04:02:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1596096120;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=Message-Id:Date:Subject:Cc:To:From:X-RZG-CLASS-ID:X-RZG-AUTH:From:
+        Subject:Sender;
+        bh=jAU4zx3KLqkuh8Fcd/ydkgYI0tR+fPGhEugBXGuulu4=;
+        b=ghpia/QWWSbJ+4iVQDDxiEZ7No2+czDYvO6nSObq7QZYuFZe2t0sSouGgOHAUBrVA7
+        tZUltMqEj7FuKT0HSuEtTIE2PBZr22xmRcb2zcgHN144e7bwv3OieYK1shqvjP+DJkTL
+        KzzbeUXV//lW0QCg/+vhF8CGj7wq6Xt+e6zK/6wo7D0lBeH2/bDWwCnUyiCLIYnI9OPt
+        3RXraJ/aLf7LcBR51Jf3S/KJnYCv3d6nabmMGTT082yIvtoFjIajRbVjRKgkjI0gg1VX
+        DK8FN5fCHuJ2LHhXA242sArbs/NjWq6pTdIv+9snC2BrfH/pY41xGZOTSaQL5xbSir3M
+        oeoA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVORvLd4SsytBXS7IYBkLahKxB4G6NeHYC"
+X-RZG-CLASS-ID: mo00
+Received: from localhost.localdomain
+        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
+        with ESMTPSA id Y0939ew6U81wgul
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 30 Jul 2020 10:01:58 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas Cassel <nks@flawful.org>
+Subject: [RFC PATCH 0/3] opp: required_opps: Power on genpd, scale down in reverse order
+Date:   Thu, 30 Jul 2020 10:01:43 +0200
+Message-Id: <20200730080146.25185-1-stephan@gerhold.net>
+X-Mailer: git-send-email 2.27.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kai-Heng,
+I'm trying to get CPR (Core Power Reduction, AVS) working for MSM8916 on mainline.
+Shortly said there are two power domains that must be scaled with the CPU OPP table:
 
->> On Jul 30, 2020, at 07:17, Abhishek Pandit-Subedi <abhishekpandit@chromium.org> wrote:
->> 
->> This reverts commit 7ecacafc240638148567742cca41aa7144b4fe1e.
->> 
->> Testing this change on a board with RTL8822CE, I found that enabling
->> autosuspend has no effect on the stability of the system. The board
->> continued working after autosuspend, suspend and reboot.
-> 
-> The original issue was found on 8723DE. Do you have one to test with?
-> The rtw88 codebase has changed a lot and maybe it's already fixed in mainline.
-> Let me do some test and I'll report back.
-> 
->> 
->> The original commit makes it impossible to enable autosuspend on working
->> systems so it should be reverted. Disabling autosuspend should be done
->> via module param or udev in userspace instead.
->> 
->> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->> ---
->> We have a few Chromebooks using the RTL 8822CE part over USB and they
->> are running without problems with autosuspend enabled. While bringing up
->> a new board, I found some power regressions that I was able to narrow
->> down to this change so I'm requesting a revert.
->> 
->> I tested this on Hp Chromebook 14a (running 4.14 kernel and 5.4 kernel)
->> with this revert:
->> * Enabled autosuspend, used it normally with a HID device
->> * Suspended the Chromebook and verified it worked normally on resume
->> * Rebooted the Chromebook and verified Bluetooth was working on next
->> boot
->> 
->> I didn't see the issue that was originally reported with this fix. For
->> the original reporter, if you're still seeing this issue, there are
->> other ways to disable autosuspend for your device:
->> * set module param: enable_autosuspend=0
->> * change your kconfig so BT_HCIBTUSB_AUTOSUSPEND=n
->> * use a udev rule to disable autosuspend for specific vid:pid
->> 
->> Keeping this change in the kernel makes it impossible to enable
->> autosuspend so it should be reverted.
-> 
-> It's apparently a driver/firmware/hardware issue, so the fix should keep inside the kernel.
-> However, the fix can be more precise and target only 8723DE.
+  - (VDD)MX
+  - CPR
 
-lets do that and lets do it quickly since the merge window is close. Otherwise I really have to revert that patch.
+My idea for this was to add both as "required-opps" to the CPR OPP table
+and let the OPP core take care of all the scaling.
 
-Regards
+There are two remaining problems that need to be addressed for that to work:
 
-Marcel
+  1. The power domains should be scaled down in reverse order
+     (MX, CPR when scaling up, CPR, MX when scaling down).
+  2. Something has to enable the virtual genpd devices to make the rpmpd driver
+     actually respect the performance states we vote for.
 
+Both issues were briefly discussed before (see links in the patches),
+but I think we did not agree on an exact solution yet. After some consideration,
+I thought it would be best to address these directly in the OPP core.
+
+However, note that this patch is RFC because it is just supposed to initiate
+discussion if alternative solutions would be better. :)
+
+Stephan Gerhold (3):
+  opp: Reduce code duplication in _set_required_opps()
+  opp: Set required OPPs in reverse order when scaling down
+  opp: Power on (virtual) power domains managed by the OPP core
+
+ drivers/opp/core.c | 115 ++++++++++++++++++++++++++++++++++++---------
+ drivers/opp/opp.h  |   1 +
+ 2 files changed, 93 insertions(+), 23 deletions(-)
+
+--
+2.27.0
