@@ -2,175 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A928E2338AA
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 21:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F72B233960
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jul 2020 21:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728644AbgG3TH6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 30 Jul 2020 15:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S1730583AbgG3TyF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 30 Jul 2020 15:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730411AbgG3TH5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 15:07:57 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C083C06174A
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 12:07:57 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id i92so3690165pje.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 12:07:57 -0700 (PDT)
+        with ESMTP id S1726838AbgG3TyE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 30 Jul 2020 15:54:04 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B1DC061574
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 12:54:04 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id m16so15132845pls.5
+        for <linux-pm@vger.kernel.org>; Thu, 30 Jul 2020 12:54:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yQqZ2MMm/8Cs5yn8qC9wISuJd6WR3cQ7bq1kU0X78gY=;
-        b=njK4CKRSnqz/4kzXOci0zfsSuCFC++5HVfGahiUteSV13O0mQJuO4aCpWv6gZZbvPh
-         /m8TZ8bDXUx4J2okW5Qy7Ct1B4UP5g7A9E0bqr9q2RraQGCBw/WCZPaqz+arHMQvWJpB
-         ZC8tFcP2gD3NkWjH9GRLocJugT/Q5jT2htO+tAq+nwrBPNtl+6amILJRHuK/7QNHs99J
-         SV3fxiK0BgmIIG2A0cotkrNX7RxZ7n/RxaNatkGjuiGPHx7yNBbe9lcz6Qe26zmMQ2at
-         l0uU8JLfKul+uv8ay8RejwYPELo/WJb1or5SErxVz9ycVOIbZzEl2SOcasTlJxb597cy
-         YKaw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=pJZpBqmNtZt8oWm2tkD+ZtaXFZZ5rEeIVhxi4WEtmxw=;
+        b=TDstOAz4R4yxpB7ZLYqD1GSZoEC7VyPd1SJfoNlvcWPupTvxkZVJgfkDzvInP/Giyk
+         6YTzvXLWxw7d1ytMVFxFJe8Z0/9+SgHNxN5Am6o36pzFBLIQU1U/RG8F6Dak6+1Ymkkt
+         KDVMWPk+Cuwg3MwHgBcKtSMumeBdNY6+/8B5KzpFBKSl3Ex8+vrN8W0vJYTZtCm82XkP
+         yaXDWwopF0CqtjSOQdFeXpECyyldutAAEu/QipuS01Uxd62Sy9bXp2px8EOXG2MtX3Cl
+         yDXbO+8if4v5VK2yEFano216/Ldr8QomQYj4Jp7ctnqSGVD8LAXa1n8uB5IE925Kotie
+         V7lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yQqZ2MMm/8Cs5yn8qC9wISuJd6WR3cQ7bq1kU0X78gY=;
-        b=Grj0gNvpw1yz5BGGZ8KOIH4bwcnNSe+hkx6OrzfQ2vsfKydFzNKO+vsNFx+f6qp7M6
-         n4A2Cz+DnhwVLXPOXityxVUThSvqF8j5lazD9Bc0UrFly28Ji4A1sepluqaSO1DDHeNb
-         NI0mZIGh8reH4LxaQiXLQTRBGOK8luTIWuWlhyDPpNVhkX2KkKxQqLEkEWjhG48tx8PO
-         liGxdEKIjgOl08kh+U/1XH4gUXUf4vXwHKbqI+XXBiZzip/oJm3khWMQ/mGCNZvcpnW7
-         nckKPo212EmhtWhy8vGNT3F1YdTLJ2oyTuA83oc/wvBeJE/97Yqegh6Wv0LiufsR8vJ/
-         eMug==
-X-Gm-Message-State: AOAM531K5SlieErYHvfLiHN0Ld5VD9RQQN2bLOxPNWDlOGv8XxIqZLk3
-        O1pSQLhk72LMDOILBRexYvMMFKuYa7FS3GTbzsjPZVAs
-X-Google-Smtp-Source: ABdhPJxpUre/sCyL5KQFAnJGST7trqtf7jiZxfkce+e8aNDKmYfAKlPnyRtQ8OFxu8QIw05HJaoAQiMCoHz2raocdGo=
-X-Received: by 2002:a17:90a:17e9:: with SMTP id q96mr526355pja.91.1596136076328;
- Thu, 30 Jul 2020 12:07:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=pJZpBqmNtZt8oWm2tkD+ZtaXFZZ5rEeIVhxi4WEtmxw=;
+        b=GmLk0Vx206lFwnN3wgDGvbvKMbXbStnE0tGNbkKE3THbgD6n6AxXJz4u80ERhRuZoG
+         Wt1AUlmc2ET+IGWacRXYx3zNTsLJzf2iYkgjwLe1eetyLlrINdCsVuCH9kmTSubSkQ9d
+         8l3bbSfew9y1rOWiD69JUWDutNahpjlEC39phaJfKevubUY2ATpNkfG9Umf1SRLpxkl+
+         AFVs1p4Rp3HIvxLtieYj7GxbxHDvlgFXqLtQnHE7kvUMk62t31Ig69NHxXe4e8Tr+Y+G
+         o+2NxImn/R3XEKnXOGqAjQzHnH+mIS8/if8/mPe4l9p9TvNk+TL7wGwUuwE1OM6/hXwv
+         ClMw==
+X-Gm-Message-State: AOAM530tFX4gXr+tMB++PLhbOrr28u0xZ+ksmsgDuHritepRhnS2Ac+v
+        1VXEGQ+9tQKsRQ1U+hdacLbabQ==
+X-Google-Smtp-Source: ABdhPJxsMWTbb0LpGl4e6TX51UzgPqmGQ4shGC6+pNjUPxB8WBj6joBDxNqq/Drp0m27kz0H9toweQ==
+X-Received: by 2002:a17:90a:2d7:: with SMTP id d23mr708718pjd.57.1596138844144;
+        Thu, 30 Jul 2020 12:54:04 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id b78sm7277298pfb.144.2020.07.30.12.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2020 12:54:03 -0700 (PDT)
+Message-ID: <5f23255b.1c69fb81.884b6.4713@mx.google.com>
+Date:   Thu, 30 Jul 2020 12:54:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200722110139.24778-1-georgi.djakov@linaro.org>
- <20200722110139.24778-2-georgi.djakov@linaro.org> <CAGETcx-QM8P2nVxcQJZz+m5Zwi==2qLfinb0FkDXJ7dNVP5bEA@mail.gmail.com>
- <e4f68ae5-5cf7-bac4-e7f2-c074327ea659@codeaurora.org>
-In-Reply-To: <e4f68ae5-5cf7-bac4-e7f2-c074327ea659@codeaurora.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Thu, 30 Jul 2020 12:07:20 -0700
-Message-ID: <CAGETcx-i=wBB4Ooch734B0ejK6F5mGPLQ6c_K4FeFyNmMLsL=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] interconnect: Add sync state support
-To:     Mike Tipton <mdtipton@codeaurora.org>
-Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>, okukatla@codeaurora.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.8-rc7-107-g97987ea7f86a
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 12 warnings (v5.8-rc7-107-g97987ea7f86a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 11:18 PM Mike Tipton <mdtipton@codeaurora.org> wrote:
->
-> On 7/22/2020 10:07 AM, Saravana Kannan wrote:
-> > On Wed, Jul 22, 2020 at 4:01 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
-> >>
-> >> The bootloaders often do some initial configuration of the interconnects
-> >> in the system and we want to keep this configuration until all consumers
-> >> have probed and expressed their bandwidth needs. This is because we don't
-> >> want to change the configuration by starting to disable unused paths until
-> >> every user had a chance to request the amount of bandwidth it needs.
-> >>
-> >> To accomplish this we will implement an interconnect specific sync_state
-> >> callback which will synchronize (aggregate and set) the current bandwidth
-> >> settings when all consumers have been probed.
-> >>
-> >> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> >> ---
-> >>   drivers/interconnect/core.c           | 61 +++++++++++++++++++++++++++
-> >>   include/linux/interconnect-provider.h |  5 +++
-> >>   2 files changed, 66 insertions(+)
-> >>
-> >> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> >> index e5f998744501..0c4e38d9f1fa 100644
-> >> --- a/drivers/interconnect/core.c
-> >> +++ b/drivers/interconnect/core.c
-> >> @@ -26,6 +26,8 @@
-> >>
-> >>   static DEFINE_IDR(icc_idr);
-> >>   static LIST_HEAD(icc_providers);
-> >> +static int providers_count;
-> >> +static bool synced_state;
-> >>   static DEFINE_MUTEX(icc_lock);
-> >>   static struct dentry *icc_debugfs_dir;
-> >>
-> >> @@ -255,6 +257,12 @@ static int aggregate_requests(struct icc_node *node)
-> >>                          continue;
-> >>                  p->aggregate(node, r->tag, r->avg_bw, r->peak_bw,
-> >>                               &node->avg_bw, &node->peak_bw);
-> >> +
-> >> +               /* during boot use the initial bandwidth as a floor value */
-> >> +               if (!synced_state) {
-> >> +                       node->avg_bw = max(node->avg_bw, node->init_avg);
-> >> +                       node->peak_bw = max(node->peak_bw, node->init_peak);
-> >> +               }
-> >
-> > Sorry I didn't reply earlier.
-> >
-> > I liked your previous approach with the get_bw ops. The v2 approach
-> > forces every interconnect provider driver to set up these values even
-> > if they are okay with just maxing out the bandwidth. Also, if they can
-> > actually query their hardware, this adds additional steps for them.
->
-> The problem with using something like get_bw() is that while we can
-> dynamically query the HW, we have far less granularity in HW than we
-> have nodes in the framework. We vote at BCM-level granularity, but each
-> BCM can have many nodes. For example, the sdm845 CN0 BCM has 47 nodes.
-> If we implement get_bw() generically, then it would return the BW for
-> each node, which would be the queried BCM vote scaled to account for
-> differences in BCM/node widths. While this could be useful in general as
-> an informational callback, we wouldn't want to use this as a proxy for
-> our initial BW vote requirements. For CN0, we wouldn't want or need to
-> vote 47 times for the same CN0 BCM. Each of the 47 node requests would
-> result in the same BCM request.
+pm/testing build: 7 builds: 0 failed, 7 passed, 12 warnings (v5.8-rc7-107-g=
+97987ea7f86a)
 
-Firstly most people in the list don't know what BCM means. Also, all
-of this is your provider driver specific issues. If you are exposing
-more nodes than available HW granularity, then you might want to
-question why it needs to be done (probably to make aggregation easier
-for the driver). If it's needed, then optimize your get/set() calls by
-caching the value in an internal variable so that you don't send a
-request to your BCM if you haven't changed the value since the last
-request. This is not a reason to not have get_bw() calls at the
-framework level. Other providers might support it and it'd make their
-lives easier.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+8-rc7-107-g97987ea7f86a/
 
-> All we'd really need is a single node per-BCM to serve as the proxy
-> node. We'd query the HW, scale the queried value for the chosen proxy
-> node, and set init_avg/init_peak appropriately. This would save a lot of
-> unnecessary votes. Based on the current implementation, the set() call
-> in icc_node_add() for initial BW wouldn't trigger any actual HW requests
-> since we only queue BCMs that require updating in the aggregate()
-> callback. However, the set() call in icc_sync_state() would, since we
-> re-aggregate each node that has a non-zero init_avg/init_peak.
+Tree: pm
+Branch: testing
+Git Describe: v5.8-rc7-107-g97987ea7f86a
+Git Commit: 97987ea7f86a35284fd54efc7412db246f178666
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Having a fake "proxy node" seems like a bad internal design. Also,
-have you timed the cost of these calls to justify your concern? If you
-cache the values after aggregation and check before you send it down
-to a "BCM", at worst you get one additional call to rpmh per BCM due
-to this feature. I'm guessing any time delta would be lost as noise
-compared to the boot up time.
+Warnings Detected:
 
-> There's nothing stopping us from implementing get_bw() as if it were
-> get_initial_bw(), but that only works until the framework decides to use
-> get_bw() for more things than just the initial vote. I suppose we could
-> also just have a "get_initial_bw" callback, but it only needs to be
-> called once, so doesn't necessarily need a callback as opposed to
-> additional init_avg/init_peak members in the icc_node struct.
+arc:
 
-The benefit of "ops" vs "fill up these variables" is that you can
-differentiate between "I don't care, framework can decide" vs "I need
-it to be 0". Put another way, there's no way to say "I don't care" if
-you use variables. And by default drivers that don't really care (as
-in, okay if it's set to INT_MAX) shouldn't have to do extra code/work.
+arm64:
+    defconfig (gcc-8): 8 warnings
 
-Long story short, there's nothing wrong with get_bw(). If your
-specific driver needs to optimize the calls to your RPMH hardware,
-that should be hidden inside your driver.
+arm:
 
--Saravana
+i386:
+    i386_defconfig (gcc-8): 2 warnings
+
+mips:
+
+riscv:
+
+x86_64:
+    x86_64_defconfig (gcc-8): 2 warnings
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    2    /scratch/linux/drivers/acpi/processor_idle.c:670:4: warning: =E2=
+=80=98return=E2=80=99 with no value, in function returning non-void [-Wretu=
+rn-type]
+    2    /scratch/linux/drivers/acpi/processor_idle.c:666:4: warning: =E2=
+=80=98return=E2=80=99 with no value, in function returning non-void [-Wretu=
+rn-type]
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    /scratch/linux/drivers/acpi/processor_idle.c:666:4: warning: =E2=80=98r=
+eturn=E2=80=99 with no value, in function returning non-void [-Wreturn-type]
+    /scratch/linux/drivers/acpi/processor_idle.c:670:4: warning: =E2=80=98r=
+eturn=E2=80=99 with no value, in function returning non-void [-Wreturn-type]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    /scratch/linux/drivers/acpi/processor_idle.c:666:4: warning: =E2=80=98r=
+eturn=E2=80=99 with no value, in function returning non-void [-Wreturn-type]
+    /scratch/linux/drivers/acpi/processor_idle.c:670:4: warning: =E2=80=98r=
+eturn=E2=80=99 with no value, in function returning non-void [-Wreturn-type]
+
+---
+For more info write to <info@kernelci.org>
