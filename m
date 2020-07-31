@@ -2,122 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628A0233F16
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 08:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21221233FFE
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 09:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731369AbgGaG2P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 02:28:15 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:49737 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731224AbgGaG2P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 02:28:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1596176894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pao/Sd97gVfvKhK6/6ymDqnN+qhbbP53Wl+E49WNZXc=;
-        b=Bd4W6Dp0QOOysfWHjZTJ1wysTkPyZWH0e6NQkRKIuvzPTvDRl1Vl+QWvqfbZ/jWMIXUDkQ
-        B+LwuQr5vrLH46V0o9+DDv5/lDaOlsTNdSETKWrUSfWMA86DOp/aPFtPI4w6cBmFmhyF9F
-        kp2s80ldW9O6vTA0mftjVZDVarIvUrM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-506-O3PKWmNBNGyrfEeyzkNZvg-1; Fri, 31 Jul 2020 02:28:10 -0400
-X-MC-Unique: O3PKWmNBNGyrfEeyzkNZvg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A6B67107ACCA;
-        Fri, 31 Jul 2020 06:28:08 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.159])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 3C1DF712D9;
-        Fri, 31 Jul 2020 06:28:05 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri, 31 Jul 2020 08:28:08 +0200 (CEST)
-Date:   Fri, 31 Jul 2020 08:28:05 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RFC][PATCH] exec: Conceal the other threads from wakeups during
- exec
-Message-ID: <20200731062804.GA26171@redhat.com>
-References: <87h7tsllgw.fsf@x220.int.ebiederm.org>
- <CAHk-=wj34Pq1oqFVg1iWYAq_YdhCyvhyCYxiy-CG-o76+UXydQ@mail.gmail.com>
- <87d04fhkyz.fsf@x220.int.ebiederm.org>
- <87h7trg4ie.fsf@x220.int.ebiederm.org>
- <CAHk-=wj+ynePRJC3U5Tjn+ZBRAE3y7=anc=zFhL=ycxyKP8BxA@mail.gmail.com>
- <878sf16t34.fsf@x220.int.ebiederm.org>
- <87pn8c1uj6.fsf_-_@x220.int.ebiederm.org>
+        id S1731419AbgGaHcR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 03:32:17 -0400
+Received: from mga11.intel.com ([192.55.52.93]:54108 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731560AbgGaHcR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 31 Jul 2020 03:32:17 -0400
+IronPort-SDR: 4+TuDbzBxczJI9veoqDDgXioF/dlaHw2gHqZeWb/HIYH+lnFzZcreSPr6CDoj7UxsGFKU5sAwe
+ 5GzH5Ar19uFQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="149569575"
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="149569575"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2020 00:32:15 -0700
+IronPort-SDR: +nUl9EM4FpqMaXI9kosk4hQ5eO8b4A/7exNMNeS/Ko6sPoId+ajjntrO3gzlmsw3RppFhNDo6Y
+ 6zoSi7kuTWVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,417,1589266800"; 
+   d="scan'208";a="304864548"
+Received: from lkp-server02.sh.intel.com (HELO d4d86dd808e0) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jul 2020 00:32:13 -0700
+Received: from kbuild by d4d86dd808e0 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k1PWX-0000TR-0E; Fri, 31 Jul 2020 07:32:13 +0000
+Date:   Fri, 31 Jul 2020 15:31:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ 97987ea7f86a35284fd54efc7412db246f178666
+Message-ID: <5f23c8ea.PWJ3lFt9FGpnoBxp%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87pn8c1uj6.fsf_-_@x220.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Eric, I won't comment the intent, but I too do not understand this idea.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 97987ea7f86a35284fd54efc7412db246f178666  Merge branch 'pm-devfreq' into linux-next
 
-On 07/30, Eric W. Biederman wrote:
->
-> [This change requires more work to handle TASK_STOPPED and TASK_TRACED]
+Warning in current branch:
 
-Yes. And it is not clear to me how can you solve this.
+drivers/acpi/processor_idle.c:666:4: warning: 'return' with no value, in function returning non-void [-Wreturn-type]
 
-> [This adds a new lock ordering dependency siglock -> pi_lock -> rq_lock ]
+Warning ids grouped by kconfigs:
 
-Not really, ttwu() can be safely called with siglock held and it takes
-pi_lock + rq_lock. Say, signal_wake_up().
+recent_errors
+|-- i386-allyesconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-defconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a011-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a012-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a013-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a014-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a015-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-a016-20200731
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-c001-20200730
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- i386-randconfig-r003-20200730
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- ia64-allmodconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- ia64-allyesconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- ia64-defconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- ia64-randconfig-r025-20200730
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-allmodconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-allyesconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-defconfig
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-kexec
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-rhel
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+|-- x86_64-rhel-7.6-kselftests
+|   `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
+`-- x86_64-rhel-8.3
+    `-- drivers-acpi-processor_idle.c:warning:return-with-no-value-in-function-returning-non-void
 
-> +int make_task_wakekill(struct task_struct *p)
-> +{
-> +	unsigned long flags;
-> +	int cpu, success = 0;
-> +	struct rq_flags rf;
-> +	struct rq *rq;
-> +	long state;
-> +
-> +	/* Assumes p != current */
-> +	preempt_disable();
-> +	/*
-> +	 * If we are going to change a thread waiting for CONDITION we
-> +	 * need to ensure that CONDITION=1 done by the caller can not be
-> +	 * reordered with p->state check below. This pairs with mb() in
-> +	 * set_current_state() the waiting thread does.
-> +	 */
-> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
-> +	smp_mb__after_spinlock();
-> +	state = p->state;
-> +
-> +	/* FIXME handle TASK_STOPPED and TASK_TRACED */
-> +	if ((state == TASK_KILLABLE) ||
-> +	    (state == TASK_INTERRUPTIBLE)) {
-> +		success = 1;
-> +		cpu = task_cpu(p);
-> +		rq = cpu_rq(cpu);
-> +		rq_lock(rq, &rf);
-> +		p->state = TASK_WAKEKILL;
+elapsed time: 840m
 
-You can only do this if the task was already deactivated. Just suppose it
-is preempted or does something like
+configs tested: 66
+configs skipped: 1
 
-	set_current_sate(TASK_INTERRUPTIBLE);
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20200731
+i386                 randconfig-a004-20200731
+i386                 randconfig-a006-20200731
+i386                 randconfig-a002-20200731
+i386                 randconfig-a001-20200731
+i386                 randconfig-a003-20200731
+x86_64               randconfig-a015-20200731
+x86_64               randconfig-a014-20200731
+x86_64               randconfig-a016-20200731
+x86_64               randconfig-a012-20200731
+x86_64               randconfig-a013-20200731
+x86_64               randconfig-a011-20200731
+i386                 randconfig-a016-20200731
+i386                 randconfig-a012-20200731
+i386                 randconfig-a014-20200731
+i386                 randconfig-a015-20200731
+i386                 randconfig-a011-20200731
+i386                 randconfig-a013-20200731
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-	if (CONDITION) {
-		// make_task_wakekill() sets state = TASK_WAKEKILL
-		__set_current_state(TASK_RUNNING);
-		return;
-	}
-
-	schedule();
-
-Oleg.
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
