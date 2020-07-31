@@ -2,123 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF6523490C
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 18:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3AA2349B5
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 18:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbgGaQQd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 12:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728779AbgGaQQd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 12:16:33 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89769C061574
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jul 2020 09:16:33 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id u185so14730064pfu.1
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jul 2020 09:16:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6IheWizVMmXTnFVSULn5nOsJnrMjElflkO/jj7vaLKM=;
-        b=GLJZ/1OOPUXfs8U7TCVRWUQvXYcsoKyKI1+fQyc/ENiI8uMZBhVf6FD7iJSQkTao+8
-         AeOIQ38zJzOoI5jihHLTWn6OXPtMqqGcb46ey+2Yw0lhHiWzqmSgrMiW3sJli3NfMIQM
-         Ep+51Pl++G+DtvVUdKX/f7HMFLe1vvkNEE64HZqlabxSyPAq6w4i9z9UlEHOTWaM2/t5
-         Rx/+hUU+WXYtC8H3CGzWLv93lDByiEJ3IjhgjUw6pVkxkW1XHaZPIrKuK2yLxux85Lem
-         tXe5CIsj0/wPvT2+kn/S8VVpqYuKmeJml13j4++tKnVQwJ8NGdit546JcG6JmtmneX62
-         VoHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6IheWizVMmXTnFVSULn5nOsJnrMjElflkO/jj7vaLKM=;
-        b=uD/o1Q3m992Msogkzu34zp/QWNrhlljUpAsRNFifnCOJJX8RVTB96mwfbk7aDAxwUF
-         +9AY3dVuTMXBItjUqH76mNm1s9GROzEmSk2O54khtK+d99sNntxAcVx6STCmqGlala++
-         gTG1sTGJ+E+yNLdYRS7SbrkNU+hzNb2Ajlg0+257SPO39qssa/h7pLtmhql4jsDrDwr+
-         yR1Ncr4gE0ib1k2StjWhkB8ejFvtsRZ6EcyZd+TVgnc6YBLnYmWcyZ+hDYdBIrjTiorY
-         2OpXPdFZLGEHb0NPb8N1tlGmczrl8T1XdQIGR2J0llfJnOgyJviopWMV7EGkGn/rnoOK
-         E9+g==
-X-Gm-Message-State: AOAM531WzUPvSLnAPaMCIyCmwWlcfTgSycTqcNi/zKMWsFvcUNdrBaFQ
-        xC7wfLmmi1ox68bFac/qCV6rug==
-X-Google-Smtp-Source: ABdhPJyYOBlGxkSe4PjAvNnrybEQBKLgbxMImHa1zQZH3yhKUBK7zjpCtITe07docJ+4lTEQw84OrA==
-X-Received: by 2002:aa7:8e9e:: with SMTP id a30mr4498635pfr.319.1596212192852;
-        Fri, 31 Jul 2020 09:16:32 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o4sm10453641pfd.25.2020.07.31.09.16.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2020 09:16:32 -0700 (PDT)
-Message-ID: <5f2443e0.1c69fb81.774d6.b1d2@mx.google.com>
-Date:   Fri, 31 Jul 2020 09:16:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1732793AbgGaQxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 12:53:21 -0400
+Received: from out02.mta.xmission.com ([166.70.13.232]:46164 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728958AbgGaQxV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 12:53:21 -0400
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out02.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1k1YHW-003sY1-8H; Fri, 31 Jul 2020 10:53:18 -0600
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
+        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1k1YHV-0000kf-F7; Fri, 31 Jul 2020 10:53:18 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+References: <87h7tsllgw.fsf@x220.int.ebiederm.org>
+        <CAHk-=wj34Pq1oqFVg1iWYAq_YdhCyvhyCYxiy-CG-o76+UXydQ@mail.gmail.com>
+        <87d04fhkyz.fsf@x220.int.ebiederm.org>
+        <87h7trg4ie.fsf@x220.int.ebiederm.org>
+        <CAHk-=wj+ynePRJC3U5Tjn+ZBRAE3y7=anc=zFhL=ycxyKP8BxA@mail.gmail.com>
+        <878sf16t34.fsf@x220.int.ebiederm.org>
+        <87pn8c1uj6.fsf_-_@x220.int.ebiederm.org>
+        <20200731062804.GA26171@redhat.com>
+Date:   Fri, 31 Jul 2020 11:50:07 -0500
+In-Reply-To: <20200731062804.GA26171@redhat.com> (Oleg Nesterov's message of
+        "Fri, 31 Jul 2020 08:28:05 +0200")
+Message-ID: <87sgd7zl1c.fsf@x220.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.8-rc7-109-g86ed8b05f597
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 8 runs, 1 regressions (v5.8-rc7-109-g86ed8b05f597)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain
+X-XM-SPF: eid=1k1YHV-0000kf-F7;;;mid=<87sgd7zl1c.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19AdY/PVTkYjPBRhTuY/YJb2t9RCuO9C/M=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
+X-Spam-Level: **
+X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4982]
+        *  0.7 XMSubLong Long Subject
+        *  1.5 TR_Symld_Words too many words that have symbols inside
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa06 0; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: ; sa06 0; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 404 ms - load_scoreonly_sql: 0.04 (0.0%),
+        signal_user_changed: 11 (2.8%), b_tie_ro: 10 (2.5%), parse: 1.09
+        (0.3%), extract_message_metadata: 4.1 (1.0%), get_uri_detail_list:
+        1.84 (0.5%), tests_pri_-1000: 3.5 (0.9%), tests_pri_-950: 1.19 (0.3%),
+        tests_pri_-900: 1.07 (0.3%), tests_pri_-90: 97 (24.0%), check_bayes:
+        96 (23.6%), b_tokenize: 7 (1.8%), b_tok_get_all: 7 (1.6%),
+        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 76 (18.8%), b_finish: 0.90
+        (0.2%), tests_pri_0: 259 (64.1%), check_dkim_signature: 0.55 (0.1%),
+        check_dkim_adsp: 2.5 (0.6%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
+        2.6 (0.6%), tests_pri_500: 14 (3.5%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [RFC][PATCH] exec: Conceal the other threads from wakeups during exec
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 8 runs, 1 regressions (v5.8-rc7-109-g86ed8b05f597)
+Oleg Nesterov <oleg@redhat.com> writes:
 
-Regressions Summary
--------------------
+> Eric, I won't comment the intent, but I too do not understand this idea.
+>
+> On 07/30, Eric W. Biederman wrote:
+>>
+>> [This change requires more work to handle TASK_STOPPED and TASK_TRACED]
+>
+> Yes. And it is not clear to me how can you solve this.
 
-platform             | arch | lab           | compiler | defconfig         =
- | results
----------------------+------+---------------+----------+-------------------=
--+--------
-exynos5422-odroidxu3 | arm  | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 0/1    =
+I was imagining something putting TASK_STOPPED and TASK_TRACED in a loop
+that verified they should be in that state before exiting so they could
+handle spurious wake ups.
 
+There are a many subtlties in that code, especially in the conversion
+fo TASK_STOPPED to TASK_TRACED.  So I suspect something more would be
+required but I have not looked yet to see how tricky that would be.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-rc7=
--109-g86ed8b05f597/plan/sleep/
+>> [This adds a new lock ordering dependency siglock -> pi_lock -> rq_lock ]
+>
+> Not really, ttwu() can be safely called with siglock held and it takes
+> pi_lock + rq_lock. Say, signal_wake_up().
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-rc7-109-g86ed8b05f597
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      86ed8b05f59717b20b75cd2a4a17cbd26788183a =
+Good point.
 
+>> +int make_task_wakekill(struct task_struct *p)
+>> +{
+>> +	unsigned long flags;
+>> +	int cpu, success = 0;
+>> +	struct rq_flags rf;
+>> +	struct rq *rq;
+>> +	long state;
+>> +
+>> +	/* Assumes p != current */
+>> +	preempt_disable();
+>> +	/*
+>> +	 * If we are going to change a thread waiting for CONDITION we
+>> +	 * need to ensure that CONDITION=1 done by the caller can not be
+>> +	 * reordered with p->state check below. This pairs with mb() in
+>> +	 * set_current_state() the waiting thread does.
+>> +	 */
+>> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
+>> +	smp_mb__after_spinlock();
+>> +	state = p->state;
+>> +
+>> +	/* FIXME handle TASK_STOPPED and TASK_TRACED */
+>> +	if ((state == TASK_KILLABLE) ||
+>> +	    (state == TASK_INTERRUPTIBLE)) {
+>> +		success = 1;
+>> +		cpu = task_cpu(p);
+>> +		rq = cpu_rq(cpu);
+>> +		rq_lock(rq, &rf);
+>> +		p->state = TASK_WAKEKILL;
+>
+> You can only do this if the task was already deactivated. Just suppose it
+> is preempted or does something like
+>
+> 	set_current_sate(TASK_INTERRUPTIBLE);
+>
+> 	if (CONDITION) {
+> 		// make_task_wakekill() sets state = TASK_WAKEKILL
+> 		__set_current_state(TASK_RUNNING);
+> 		return;
+> 	}
+>
+> 	schedule();
 
+You are quite right.
 
-Test Regressions
----------------- =
+So that bit of code would need to be:
+	if (!task->on_rq)
+        	goto out;
+	if ((state == TASK_KILLABLE) ||
+            (state == TASK_INTERRUPTIBLE)) {
+            ...
 
+Eric
 
-
-platform             | arch | lab           | compiler | defconfig         =
- | results
----------------------+------+---------------+----------+-------------------=
--+--------
-exynos5422-odroidxu3 | arm  | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f24377c615e15171e52c1b4
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-rc7-109-g86ed8=
-b05f597/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidx=
-u3.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-rc7-109-g86ed8=
-b05f597/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidx=
-u3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0729.0/armhf/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f24377c615e15171e52c1b5
-      failing since 0 day (last pass: v5.8-rc7-94-g89beac5dc8d0, first fail=
-: v5.8-rc7-107-g97987ea7f86a) =20
