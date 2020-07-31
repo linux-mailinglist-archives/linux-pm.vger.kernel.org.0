@@ -2,162 +2,458 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3AA2349B5
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 18:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E830D2349CF
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 19:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732793AbgGaQxV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 12:53:21 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:46164 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728958AbgGaQxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 12:53:21 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1k1YHW-003sY1-8H; Fri, 31 Jul 2020 10:53:18 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1k1YHV-0000kf-F7; Fri, 31 Jul 2020 10:53:18 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <87h7tsllgw.fsf@x220.int.ebiederm.org>
-        <CAHk-=wj34Pq1oqFVg1iWYAq_YdhCyvhyCYxiy-CG-o76+UXydQ@mail.gmail.com>
-        <87d04fhkyz.fsf@x220.int.ebiederm.org>
-        <87h7trg4ie.fsf@x220.int.ebiederm.org>
-        <CAHk-=wj+ynePRJC3U5Tjn+ZBRAE3y7=anc=zFhL=ycxyKP8BxA@mail.gmail.com>
-        <878sf16t34.fsf@x220.int.ebiederm.org>
-        <87pn8c1uj6.fsf_-_@x220.int.ebiederm.org>
-        <20200731062804.GA26171@redhat.com>
-Date:   Fri, 31 Jul 2020 11:50:07 -0500
-In-Reply-To: <20200731062804.GA26171@redhat.com> (Oleg Nesterov's message of
-        "Fri, 31 Jul 2020 08:28:05 +0200")
-Message-ID: <87sgd7zl1c.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1730924AbgGaRDa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 13:03:30 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:61504 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728958AbgGaRDa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 13:03:30 -0400
+Received: from 89-64-88-186.dynamic.chello.pl (89.64.88.186) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
+ id 665493960af42882; Fri, 31 Jul 2020 19:03:26 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH] PM: runtime: Add kerneldoc comments to multiple helpers
+Date:   Fri, 31 Jul 2020 19:03:26 +0200
+Message-ID: <2672940.cHDmkauF2A@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1k1YHV-0000kf-F7;;;mid=<87sgd7zl1c.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19AdY/PVTkYjPBRhTuY/YJb2t9RCuO9C/M=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa06.xmission.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.0 required=8.0 tests=ALL_TRUSTED,BAYES_50,
-        DCC_CHECK_NEGATIVE,TR_Symld_Words,T_TM2_M_HEADER_IN_MSG,XMSubLong
-        autolearn=disabled version=3.4.2
-X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4982]
-        *  0.7 XMSubLong Long Subject
-        *  1.5 TR_Symld_Words too many words that have symbols inside
-        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-        *      [sa06 0; Body=1 Fuz1=1 Fuz2=1]
-X-Spam-DCC: ; sa06 0; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Oleg Nesterov <oleg@redhat.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 404 ms - load_scoreonly_sql: 0.04 (0.0%),
-        signal_user_changed: 11 (2.8%), b_tie_ro: 10 (2.5%), parse: 1.09
-        (0.3%), extract_message_metadata: 4.1 (1.0%), get_uri_detail_list:
-        1.84 (0.5%), tests_pri_-1000: 3.5 (0.9%), tests_pri_-950: 1.19 (0.3%),
-        tests_pri_-900: 1.07 (0.3%), tests_pri_-90: 97 (24.0%), check_bayes:
-        96 (23.6%), b_tokenize: 7 (1.8%), b_tok_get_all: 7 (1.6%),
-        b_comp_prob: 2.1 (0.5%), b_tok_touch_all: 76 (18.8%), b_finish: 0.90
-        (0.2%), tests_pri_0: 259 (64.1%), check_dkim_signature: 0.55 (0.1%),
-        check_dkim_adsp: 2.5 (0.6%), poll_dns_idle: 0.93 (0.2%), tests_pri_10:
-        2.6 (0.6%), tests_pri_500: 14 (3.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC][PATCH] exec: Conceal the other threads from wakeups during exec
-X-Spam-Flag: No
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Oleg Nesterov <oleg@redhat.com> writes:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> Eric, I won't comment the intent, but I too do not understand this idea.
->
-> On 07/30, Eric W. Biederman wrote:
->>
->> [This change requires more work to handle TASK_STOPPED and TASK_TRACED]
->
-> Yes. And it is not clear to me how can you solve this.
+Add kerneldoc comments to multiple PM-runtime helper functions
+defined as static inline wrappers around lower-level routines to
+provide quick reference decumentation of their behavior.
 
-I was imagining something putting TASK_STOPPED and TASK_TRACED in a loop
-that verified they should be in that state before exiting so they could
-handle spurious wake ups.
+Some of them are similar to each other with subtle differences only
+and the behavior of some of them may appear as counter-intuitive, so
+clarify all that to avoid confusion.
 
-There are a many subtlties in that code, especially in the conversion
-fo TASK_STOPPED to TASK_TRACED.  So I suspect something more would be
-required but I have not looked yet to see how tricky that would be.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/linux/pm_runtime.h |  246 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 246 insertions(+)
 
->> [This adds a new lock ordering dependency siglock -> pi_lock -> rq_lock ]
->
-> Not really, ttwu() can be safely called with siglock held and it takes
-> pi_lock + rq_lock. Say, signal_wake_up().
+Index: linux-pm/include/linux/pm_runtime.h
+===================================================================
+--- linux-pm.orig/include/linux/pm_runtime.h
++++ linux-pm/include/linux/pm_runtime.h
+@@ -60,58 +60,151 @@ extern void pm_runtime_put_suppliers(str
+ extern void pm_runtime_new_link(struct device *dev);
+ extern void pm_runtime_drop_link(struct device *dev);
+ 
++/**
++ * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
++ * @dev: Target device.
++ *
++ * Increment the runtime PM usage counter of @dev if its runtime PM status is
++ * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
++ */
+ static inline int pm_runtime_get_if_in_use(struct device *dev)
+ {
+ 	return pm_runtime_get_if_active(dev, false);
+ }
+ 
++/**
++ * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
++ * @dev: Target device.
++ * @enable: Whether or not to ignore possible dependencies on children.
++ *
++ * The dependencies of @dev on its children will not be taken into account by
++ * the runtime PM framework going forward if @enable is %true, or they will
++ * be taken into account otherwise.
++ */
+ static inline void pm_suspend_ignore_children(struct device *dev, bool enable)
+ {
+ 	dev->power.ignore_children = enable;
+ }
+ 
++/**
++ * pm_runtime_get_noresume - Bump up runtime PM usage counter of a device.
++ * @dev: Target device.
++ */
+ static inline void pm_runtime_get_noresume(struct device *dev)
+ {
+ 	atomic_inc(&dev->power.usage_count);
+ }
+ 
++/**
++ * pm_runtime_put_noidle - Drop runtime PM usage counter of a device.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev unless it is 0 already.
++ */
+ static inline void pm_runtime_put_noidle(struct device *dev)
+ {
+ 	atomic_add_unless(&dev->power.usage_count, -1, 0);
+ }
+ 
++/**
++ * pm_runtime_suspended - Check whether or not a device is runtime-suspended.
++ * @dev: Target device.
++ *
++ * Return %true if runtime PM is enabled for @dev and its runtime PM status is
++ * %RPM_SUSPENDED, or %false otherwise.
++ *
++ * Note that the return value of this function can only be trusted if it is
++ * called under the runtime PM lock of @dev or under conditions in which
++ * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
++ * status cannot change.
++ */
+ static inline bool pm_runtime_suspended(struct device *dev)
+ {
+ 	return dev->power.runtime_status == RPM_SUSPENDED
+ 		&& !dev->power.disable_depth;
+ }
+ 
++/**
++ * pm_runtime_active - Check whether or not a device is runtime-active.
++ * @dev: Target device.
++ *
++ * Return %true if runtime PM is enabled for @dev and its runtime PM status is
++ * %RPM_ACTIVE, or %false otherwise.
++ *
++ * Note that the return value of this function can only be trusted if it is
++ * called under the runtime PM lock of @dev or under conditions in which
++ * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
++ * status cannot change.
++ */
+ static inline bool pm_runtime_active(struct device *dev)
+ {
+ 	return dev->power.runtime_status == RPM_ACTIVE
+ 		|| dev->power.disable_depth;
+ }
+ 
++/**
++ * pm_runtime_status_suspended - Check if runtime PM status is "suspended".
++ * @dev: Target device.
++ *
++ * Return %true if the runtime PM status of @dev is %RPM_SUSPENDED, or %false
++ * otherwise, regardless of whether or not runtime PM has been enabled for @dev.
++ *
++ * Note that the return value of this function can only be trusted if it is
++ * called under the runtime PM lock of @dev or under conditions in which the
++ * runtime PM status of @dev cannot change.
++ */
+ static inline bool pm_runtime_status_suspended(struct device *dev)
+ {
+ 	return dev->power.runtime_status == RPM_SUSPENDED;
+ }
+ 
++/**
++ * pm_runtime_enabled - Check if runtime PM is enabled.
++ * @dev: Target device.
++ *
++ * Return %true if runtime PM is enabled for @dev or %false otherwise.
++ *
++ * Note that the return value of this function can only be trusted if it is
++ * called under the runtime PM lock of @dev or under conditions in which
++ * runtime PM cannot be either disabled or enabled for @dev.
++ */
+ static inline bool pm_runtime_enabled(struct device *dev)
+ {
+ 	return !dev->power.disable_depth;
+ }
+ 
++/**
++ * pm_runtime_has_no_callbacks - Check if runtime PM callbacks may be present.
++ * @dev: Target device.
++ *
++ * Return %true if @dev is a special device without runtime PM callbacks or
++ * %false otherwise.
++ */
+ static inline bool pm_runtime_has_no_callbacks(struct device *dev)
+ {
+ 	return dev->power.no_callbacks;
+ }
+ 
++/**
++ * pm_runtime_mark_last_busy - Update the last access time of a device.
++ * @dev: Target device.
++ *
++ * Update the last access time of @dev used by the runtime PM autosuspend
++ * mechanism to the current time as returned by ktime_get_mono_fast_ns().
++ */
+ static inline void pm_runtime_mark_last_busy(struct device *dev)
+ {
+ 	WRITE_ONCE(dev->power.last_busy, ktime_get_mono_fast_ns());
+ }
+ 
++/**
++ * pm_runtime_is_irq_safe - Check if runtime PM can work in interrupt context.
++ * @dev: Target device.
++ *
++ * Return %true if @dev has been marked as an "IRQ-safe" device (with respect
++ * to runtime PM), in which case its runtime PM callabcks can be expected to
++ * work correctly when invoked from interrupt handlers.
++ */
+ static inline bool pm_runtime_is_irq_safe(struct device *dev)
+ {
+ 	return dev->power.irq_safe;
+@@ -191,97 +284,250 @@ static inline void pm_runtime_drop_link(
+ 
+ #endif /* !CONFIG_PM */
+ 
++/**
++ * pm_runtime_idle - Conditionally set up autosuspend of a device or suspend it.
++ * @dev: Target device.
++ *
++ * Invoke the "idle check" callback of @dev and, depending on its return value,
++ * set up autosuspend of @dev or suspend it (depending on whether or not
++ * autosuspend has been enabled for it).
++ */
+ static inline int pm_runtime_idle(struct device *dev)
+ {
+ 	return __pm_runtime_idle(dev, 0);
+ }
+ 
++/**
++ * pm_runtime_suspend - Suspend a device synchronously.
++ * @dev: Target device.
++ */
+ static inline int pm_runtime_suspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev, 0);
+ }
+ 
++/**
++ * pm_runtime_autosuspend - Set up autosuspend of a device or suspend it.
++ * @dev: Target device.
++ *
++ * Set up autosuspend of @dev or suspend it (depending on whether or not
++ * autosuspend is enabled for it) without engaging its "idle check" callback.
++ */
+ static inline int pm_runtime_autosuspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev, RPM_AUTO);
+ }
+ 
++/**
++ * pm_runtime_resume - Resume a device synchronously.
++ * @dev: Target device.
++ */
+ static inline int pm_runtime_resume(struct device *dev)
+ {
+ 	return __pm_runtime_resume(dev, 0);
+ }
+ 
++/**
++ * pm_request_idle - Queue up "idle check" execution for a device.
++ * @dev: Target device.
++ *
++ * Queue up a work item to run an equivalent of pm_runtime_idle() for @dev
++ * asynchronously.
++ */
+ static inline int pm_request_idle(struct device *dev)
+ {
+ 	return __pm_runtime_idle(dev, RPM_ASYNC);
+ }
+ 
++/**
++ * pm_request_resume - Queue up runtime-resume of a device.
++ * @dev: Target device.
++ */
+ static inline int pm_request_resume(struct device *dev)
+ {
+ 	return __pm_runtime_resume(dev, RPM_ASYNC);
+ }
+ 
++/**
++ * pm_request_autosuspend - Queue up autosuspend of a device.
++ * @dev: Target device.
++ *
++ * Queue up a work item to run an equivalent pm_runtime_autosuspend() for @dev
++ * asynchronously.
++ */
+ static inline int pm_request_autosuspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev, RPM_ASYNC | RPM_AUTO);
+ }
+ 
++/**
++ * pm_runtime_get - Bump up usage counter and queue up resume of a device.
++ * @dev: Target device.
++ *
++ * Bump up the runtime PM usage counter of @dev and queue up a work item to
++ * carry out runtime-resume of it.
++ */
+ static inline int pm_runtime_get(struct device *dev)
+ {
+ 	return __pm_runtime_resume(dev, RPM_GET_PUT | RPM_ASYNC);
+ }
+ 
++/**
++ * pm_runtime_get_sync - Bump up usage counter of a device and resume it.
++ * @dev: Target device.
++ *
++ * Bump up the runtime PM usage counter of @dev and carry out runtime-resume of
++ * it synchronously.
++ *
++ * The possible return values of this function are the same as for
++ * pm_runtime_resume() and the runtime PM usage counter of @dev remains
++ * incremented in all cases, even if it returns an error code.
++ */
+ static inline int pm_runtime_get_sync(struct device *dev)
+ {
+ 	return __pm_runtime_resume(dev, RPM_GET_PUT);
+ }
+ 
++/**
++ * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, queue up a work item for @dev like in pm_request_idle().
++ */
+ static inline int pm_runtime_put(struct device *dev)
+ {
+ 	return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
+ }
+ 
++/**
++ * pm_runtime_put_autosuspend - Drop device usage counter and queue autosuspend if 0.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
++ */
+ static inline int pm_runtime_put_autosuspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev,
+ 	    RPM_GET_PUT | RPM_ASYNC | RPM_AUTO);
+ }
+ 
++/**
++ * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, invoke the "idle check" callback of @dev and, depending on its
++ * return value, set up autosuspend of @dev or suspend it (depending on whether
++ * or not autosuspend has been enabled for it).
++ *
++ * The possible return values of this function are the same as for
++ * pm_runtime_idle() and the runtime PM usage counter of @dev remains
++ * decremented in all cases, even if it returns an error code.
++ */
+ static inline int pm_runtime_put_sync(struct device *dev)
+ {
+ 	return __pm_runtime_idle(dev, RPM_GET_PUT);
+ }
+ 
++/**
++ * pm_runtime_put_sync_suspend - Drop device usage counter and suspend if 0.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, carry out runtime-suspend of @dev synchronously.
++ *
++ * The possible return values of this function are the same as for
++ * pm_runtime_suspend() and the runtime PM usage counter of @dev remains
++ * decremented in all cases, even if it returns an error code.
++ */
+ static inline int pm_runtime_put_sync_suspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev, RPM_GET_PUT);
+ }
+ 
++/**
++ * pm_runtime_put_sync_autosuspend - Drop device usage counter and autosuspend if 0.
++ * @dev: Target device.
++ *
++ * Decrement the runtime PM usage counter of @dev and if it turns out to be
++ * equal to 0, set up autosuspend of @dev or suspend it synchronously (depending
++ * on whether or not autosuspend has been enabled for it).
++ *
++ * The possible return values of this function are the same as for
++ * pm_runtime_autosuspend() and the runtime PM usage counter of @dev remains
++ * decremented in all cases, even if it returns an error code.
++ */
+ static inline int pm_runtime_put_sync_autosuspend(struct device *dev)
+ {
+ 	return __pm_runtime_suspend(dev, RPM_GET_PUT | RPM_AUTO);
+ }
+ 
++/**
++ * pm_runtime_set_active - Set runtime PM status to "active".
++ * @dev: Target device.
++ *
++ * Set the runtime PM status of @dev to %RPM_ACTIVE and ensure that dependencies
++ * of it will be taken into account.
++ *
++ * It is not valid to call this function for devices with runtime PM enabled.
++ */
+ static inline int pm_runtime_set_active(struct device *dev)
+ {
+ 	return __pm_runtime_set_status(dev, RPM_ACTIVE);
+ }
+ 
++/**
++ * pm_runtime_set_suspended - Set runtime PM status to "active".
++ * @dev: Target device.
++ *
++ * Set the runtime PM status of @dev to %RPM_SUSPENDED and ensure that
++ * dependencies of it will be taken into account.
++ *
++ * It is not valid to call this function for devices with runtime PM enabled.
++ */
+ static inline int pm_runtime_set_suspended(struct device *dev)
+ {
+ 	return __pm_runtime_set_status(dev, RPM_SUSPENDED);
+ }
+ 
++/**
++ * pm_runtime_disable - Disable runtime PM for a device.
++ * @dev: Target device.
++ *
++ * Prevent the runtime PM framework from working with @dev (by incrementing its
++ * "blocking" counter).
++ *
++ * For each invocation of this function for @dev there must be a matching
++ * pm_runtime_enable() call in order for runtime PM to be enabled for it.
++ */
+ static inline void pm_runtime_disable(struct device *dev)
+ {
+ 	__pm_runtime_disable(dev, true);
+ }
+ 
++/**
++ * pm_runtime_use_autosuspend - Allow autosuspend to be used for a device.
++ * @dev: Target device.
++ *
++ * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
++ * requested (or "autosuspend" will be handled as direct runtime-suspend for
++ * it).
++ */
+ static inline void pm_runtime_use_autosuspend(struct device *dev)
+ {
+ 	__pm_runtime_use_autosuspend(dev, true);
+ }
+ 
++/**
++ * pm_runtime_dont_use_autosuspend - Prevent autosuspend from being used.
++ * @dev: Target device.
++ *
++ * Prevent the runtime PM autosuspend mechanism from being used for @dev which
++ * means that "autosuspend" will be handled as direct runtime-suspend for it
++ * going forward.
++ */
+ static inline void pm_runtime_dont_use_autosuspend(struct device *dev)
+ {
+ 	__pm_runtime_use_autosuspend(dev, false);
 
-Good point.
 
->> +int make_task_wakekill(struct task_struct *p)
->> +{
->> +	unsigned long flags;
->> +	int cpu, success = 0;
->> +	struct rq_flags rf;
->> +	struct rq *rq;
->> +	long state;
->> +
->> +	/* Assumes p != current */
->> +	preempt_disable();
->> +	/*
->> +	 * If we are going to change a thread waiting for CONDITION we
->> +	 * need to ensure that CONDITION=1 done by the caller can not be
->> +	 * reordered with p->state check below. This pairs with mb() in
->> +	 * set_current_state() the waiting thread does.
->> +	 */
->> +	raw_spin_lock_irqsave(&p->pi_lock, flags);
->> +	smp_mb__after_spinlock();
->> +	state = p->state;
->> +
->> +	/* FIXME handle TASK_STOPPED and TASK_TRACED */
->> +	if ((state == TASK_KILLABLE) ||
->> +	    (state == TASK_INTERRUPTIBLE)) {
->> +		success = 1;
->> +		cpu = task_cpu(p);
->> +		rq = cpu_rq(cpu);
->> +		rq_lock(rq, &rf);
->> +		p->state = TASK_WAKEKILL;
->
-> You can only do this if the task was already deactivated. Just suppose it
-> is preempted or does something like
->
-> 	set_current_sate(TASK_INTERRUPTIBLE);
->
-> 	if (CONDITION) {
-> 		// make_task_wakekill() sets state = TASK_WAKEKILL
-> 		__set_current_state(TASK_RUNNING);
-> 		return;
-> 	}
->
-> 	schedule();
-
-You are quite right.
-
-So that bit of code would need to be:
-	if (!task->on_rq)
-        	goto out;
-	if ((state == TASK_KILLABLE) ||
-            (state == TASK_INTERRUPTIBLE)) {
-            ...
-
-Eric
 
