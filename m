@@ -2,97 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E3F234494
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 13:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC642346A9
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 15:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732297AbgGaLdi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 07:33:38 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40075 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732104AbgGaLdi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 07:33:38 -0400
-Received: by mail-oi1-f195.google.com with SMTP id u24so16553690oiv.7;
-        Fri, 31 Jul 2020 04:33:37 -0700 (PDT)
+        id S1728379AbgGaNOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 09:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726843AbgGaNOa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 09:14:30 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D33C061574;
+        Fri, 31 Jul 2020 06:14:30 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id t18so25308106ilh.2;
+        Fri, 31 Jul 2020 06:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IpiXoaEfhRVC/TiOprnmSx5/CzTTYxkk2Z3fpn71RCE=;
+        b=Ic8H8EqmDSiSpRlFWR3J+0nYg5rJVN9lTRx3pbXRJk5H057eGeXS2L44ZflLe4pnUd
+         ww53jvYTDHPsM3TNbxQ3Vk6U25m/f41g+8cw0R93ZhglrpxPf5k+her8E7JzOLWfCzWc
+         E5WDl5nYtmPUtb7tLD8Psik/MuMduSFHyNKhJJMpfc9i2/Hix6hzSWFTE38sRKlrZq3/
+         wkxqWytqUHfJUIV/VAWOvnOdrj3LDT2i04f+SnUsR8pXKsOIo80tO6vAq/xNL6bKlmkh
+         CgkcyvnAmgQGcTAICZEfrC27wZsooZNqa8KFofw/xUyuZSW1ra81lWW4P46fPAsNH700
+         IR5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mpZwL9ptFKxq7FoZCH1xjumTWQNcssejfeTwP6RoxpQ=;
-        b=diuHMLwFGE03iB6FycWL3gzVKV7vJzuDP40K9hGRPOQcLzQIi9LpAbE+bb+iu1Zva7
-         b7hj6RtcnDvzlg7h3eYbSZvJLmYlNeNiRCKL900jpKHwv5KXYbY7L3g/VaYc1GjEyoJz
-         EE8UibbNHAQ2xvP8l3MH4L5l0FT4XlCfQzCJza6pD2tBjS5oTSksRX8gkBKX5BTHbyAj
-         SNrwrRNcYA3QhnfE9ylEFohlC84WnJz2erwTT4CWf6vKCMDutiNwj6fk+z3+F0SBtbNO
-         EugJdjKvoeNHJYWBqakqrimVl0NheHFYPhWy6JR2X2uYm3YS8xkhOyZaGfRIrMZeD5Ah
-         eHbA==
-X-Gm-Message-State: AOAM530dUNDrNfQUhFqddHrZ4wxeJDT4smiaX9qYbSJjy0kPyRTht2Sh
-        oStEZMDE27hETN8WPbTTQSjTqHdUHemGtOqXmik=
-X-Google-Smtp-Source: ABdhPJwjnTZ4vCcK+PJMw9f0cgXjEhaXp88nRbYUPJxc2xho6yL2W9vIsfi0PJ+loYFbKG0KfjHoOo6H/h7XzI4Nqoc=
-X-Received: by 2002:aca:a88e:: with SMTP id r136mr2704600oie.110.1596195217368;
- Fri, 31 Jul 2020 04:33:37 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IpiXoaEfhRVC/TiOprnmSx5/CzTTYxkk2Z3fpn71RCE=;
+        b=DXxoXcVXQ3cgCRfjxbM/xjz6uZCnobHfujPTMLvc3WB1uYYVkLNULst+Ypw3SWKAzI
+         rp+u1cHFtleCyLVhZBhLsDQLnIRvyf+f2BL/bcGBbxrSdMhrGv2DlgODaS7h+xGeFocc
+         ZDUxng+VW+12MM2k4f7NaUdnIsPrl8qlgiOb7AvZSsXJnL6ftrmprahfjz7ITFWkEvTI
+         85VqIOQBaSJS+3LJIDdFFwTVIhJMy7vsZpw6NO/EjAsQMMTkGFVl6Yy4+8diYtFTRepB
+         jqNxzHgFZFzhq0pFBow5UB7H4+Z+Xof/25XtCUdM/2BwiMt/tsqsKJ4mhrVqVt1yHaMt
+         1Ljg==
+X-Gm-Message-State: AOAM532qvnfJqgB4/qAEnzPB7izDT3j19IIgB9eITLkFiUdNRG9qPx98
+        TPofjoSVNax8kI9SND1XYMD1hRnGK4gFRw==
+X-Google-Smtp-Source: ABdhPJy9d85FEkeqqnEQaC/Th8l7Zp8/PAymqCSZ0KRDh7yYuZath1yYVLNCx1hLxXaUKzfBpI9JyA==
+X-Received: by 2002:a65:4507:: with SMTP id n7mr3511459pgq.180.1596199720490;
+        Fri, 31 Jul 2020 05:48:40 -0700 (PDT)
+Received: from yangdongdo-OptiPlex-9010.mioffice.cn ([209.9.72.214])
+        by smtp.gmail.com with ESMTPSA id m20sm10378742pgn.62.2020.07.31.05.48.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 Jul 2020 05:48:40 -0700 (PDT)
+From:   Dongdong Yang <contribute.kernel@gmail.com>
+To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de
+Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
+        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
+        rocking@linux.alibaba.com, fengwei@xiaomi.com,
+        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
+Subject: [PATCH v2] Provide USF for the portable equipment.
+Date:   Fri, 31 Jul 2020 20:46:29 +0800
+Message-Id: <cover.1596196060.git.yangdongdong@xiaomi.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1596166744-2954-1-git-send-email-neal.liu@mediatek.com> <1596166744-2954-2-git-send-email-neal.liu@mediatek.com>
-In-Reply-To: <1596166744-2954-2-git-send-email-neal.liu@mediatek.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Jul 2020 13:33:24 +0200
-Message-ID: <CAJZ5v0gk9a-PVr4+zerNWdBORyC563K8XgUdgxENAQ+Y5-85tg@mail.gmail.com>
-Subject: Re: [PATCH] acpi: fix 'return' with no value build warning
-To:     Neal Liu <neal.liu@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 5:39 AM Neal Liu <neal.liu@mediatek.com> wrote:
->
-> Fixing CFI issue which introduced by commit efe9711214e6 is
-> incomplete.
-> Add return value to fix return-type build warning.
->
-> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
+From: Dongdong Yang <yangdongdong@xiaomi.com>
 
-Applied with edited subject and changelog, but ->
+This patch provides USF(User Sensitive Feedback factor) auxiliary
+cpufreq governor to support high level layer sysfs inodes setting
+for utils adjustment purpose from the identified scenario on portable
+equipment. Because the power consumption and UI response are more cared
+for by portable equipment users. And the "screen off" status stands for
+no request from the user, however, the kernel is still expected to
+notify the user in time on modem, network or powerkey events occur. USF
+provides "sched_usf_non_ux_r" sysfs inode to cut down the utils from
+user space tasks according to high level scenario. In addition, it
+usually hints more cpufreq demand that the preemptive counts of the
+tasks on the cpu burst and over the user expecting completed time such
+as the ratio sysctl_sched_latency to sysctl_sched_min_granularity on
+"screen on" status, which more likely with more UI. The sysfs inodes
+"sched_usf_up_l0_r" and "sched_usf_down_r" have been provided to adjust
+the utils according to high level identified scenario to alloc the
+cpufreq in time.
 
-> ---
->  drivers/acpi/processor_idle.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-> index 6ffb6c9..6870020 100644
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -664,11 +664,11 @@ static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
->                 struct acpi_processor *pr = __this_cpu_read(processors);
->
->                 if (unlikely(!pr))
-> -                       return;
-> +                       return -EFAULT;
+Changes in v2
+  - Add adjust_task_pred_set switch.
+  - Move adjust_task_pred_demand declaration into sched.h
+  - Update comments.
 
--> there is no point returning an error code here, so I've made it
-just return 0.
+Dongdong Yang (1):
+  sched: Provide USF for the portable equipment.
 
->
->                 if (pr->flags.bm_check) {
->                         acpi_idle_enter_bm(pr, cx, false);
-> -                       return;
-> +                       return 0;
->                 } else {
->                         ACPI_FLUSH_CPU_CACHE();
->                 }
-> --
+ drivers/staging/Kconfig          |   2 +
+ drivers/staging/Makefile         |   1 +
+ drivers/staging/fbsched/Kconfig  |  10 ++
+ drivers/staging/fbsched/Makefile |   2 +
+ drivers/staging/fbsched/usf.c    | 346 +++++++++++++++++++++++++++++++++++++++
+ kernel/sched/cpufreq_schedutil.c |   3 +
+ kernel/sched/sched.h             |  10 ++
+ 7 files changed, 374 insertions(+)
+ create mode 100644 drivers/staging/fbsched/Kconfig
+ create mode 100644 drivers/staging/fbsched/Makefile
+ create mode 100644 drivers/staging/fbsched/usf.c
+
+-- 
+2.7.4
+
