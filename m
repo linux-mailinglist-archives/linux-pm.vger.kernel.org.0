@@ -2,115 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D6B2347B0
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 16:25:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5722347B7
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 16:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728838AbgGaOZZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 10:25:25 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:37639 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728713AbgGaOZZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 10:25:25 -0400
-Received: by mail-oi1-f195.google.com with SMTP id e6so6627474oii.4;
-        Fri, 31 Jul 2020 07:25:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LUq1ijDD9SyO2ufTXKPW9//vrm+uL0JQvV8OQ7tDtyA=;
-        b=euny89LaKj/ti2o9A9iETv+dPKl7u/fbq7O0uhp3G4jRWPy2bhLjCCsj0j8ExW6UMQ
-         H7u52fAfOLmEJP1TYyaXIyDsPptIjEQM6TNHWNcHfBQJEHQvi2BuBvwOY/oYdRdlWvV8
-         54MU9pUGegIj14pgoWSnpA7FCcLiE1TFsSj9ODoxWoLdZ21aWFp3l/41whzoYOfzwwf+
-         WmvJ0byILi3dqT+8S4BQS4L3Nl7SZF8B3PXcHLNu1h0bwY2TnWrhmL0oKRd7G/dMMVxp
-         Iph+WUpF9ZmULJjI2WkVOciYmV9r20zlhfCiD/+F4x2Yp35o+g78jKzQLea3LK50i1m7
-         wRlw==
-X-Gm-Message-State: AOAM532Hd4NAG1/QXjDc4NI/VHEHG2+6ZYeeqYW0K+POuyP7CiPznUE9
-        ejxgQIZGMG3GlT2LDDMv+mUN/gHWJw1B2GwIiwc=
-X-Google-Smtp-Source: ABdhPJwXQdnG1otKOfzVxyL9Pv5KPx5Dv3MAzyWKLAJcQfKXU/RGMyj9PAedIsxXvXnE+QB4qD60adxhPMBESDi6fDY=
-X-Received: by 2002:aca:a88e:: with SMTP id r136mr3259373oie.110.1596205523967;
- Fri, 31 Jul 2020 07:25:23 -0700 (PDT)
+        id S1728713AbgGaO0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 10:26:25 -0400
+Received: from foss.arm.com ([217.140.110.172]:60984 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728597AbgGaO0Z (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 31 Jul 2020 10:26:25 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B61BD31B;
+        Fri, 31 Jul 2020 07:26:24 -0700 (PDT)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B9013F66E;
+        Fri, 31 Jul 2020 07:26:05 -0700 (PDT)
+Subject: Re: [PATCH v2] sched: Provide USF for the portable equipment.
+To:     Dongdong Yang <contribute.kernel@gmail.com>,
+        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de
+Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
+        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
+        rocking@linux.alibaba.com, fengwei@xiaomi.com,
+        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
+References: <cover.1596196060.git.yangdongdong@xiaomi.com>
+ <e992fea6ad249694e615640862a28346936f8844.1596196062.git.yangdongdong@xiaomi.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <67e5566b-2ec5-0a1d-87e1-88e90a8fa715@arm.com>
+Date:   Fri, 31 Jul 2020 16:25:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com> <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com> <alpine.DEB.2.21.2007211640500.17562@sstabellini-ThinkPad-T480s>
- <20200722180229.GA32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
- <20200723225745.GB32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <alpine.DEB.2.21.2007241431280.17562@sstabellini-ThinkPad-T480s>
- <66a9b838-70ed-0807-9260-f2c31343a081@oracle.com> <20200730230634.GA17221@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <53b577a3-6af9-5587-7e47-485be38b3653@oracle.com>
-In-Reply-To: <53b577a3-6af9-5587-7e47-485be38b3653@oracle.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 31 Jul 2020 16:25:12 +0200
-Message-ID: <CAJZ5v0j2kqgEfbiQchiA_USwGKC-UFkn2J3bUU2xCWU=+1p9Mw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend mode
-To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Anchal Agarwal <anchalag@amazon.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        "Kamata, Munehisa" <kamatam@amazon.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        roger.pau@citrix.com, Jens Axboe <axboe@kernel.dk>,
-        David Miller <davem@davemloft.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eduardo Valentin <eduval@amazon.com>,
-        "Singh, Balbir" <sblbir@amazon.com>,
-        xen-devel@lists.xenproject.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e992fea6ad249694e615640862a28346936f8844.1596196062.git.yangdongdong@xiaomi.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 4:14 PM Boris Ostrovsky
-<boris.ostrovsky@oracle.com> wrote:
->
-> On 7/30/20 7:06 PM, Anchal Agarwal wrote:
-> > On Mon, Jul 27, 2020 at 06:08:29PM -0400, Boris Ostrovsky wrote:
-> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> >>
-> >>
-> >>
-> >> On 7/24/20 7:01 PM, Stefano Stabellini wrote:
-> >>> Yes, it does, thank you. I'd rather not introduce unknown regressions so
-> >>> I would recommend to add an arch-specific check on registering
-> >>> freeze/thaw/restore handlers. Maybe something like the following:
-> >>>
-> >>> #ifdef CONFIG_X86
-> >>>     .freeze = blkfront_freeze,
-> >>>     .thaw = blkfront_restore,
-> >>>     .restore = blkfront_restore
-> >>> #endif
-> >>>
-> >>>
-> >>> maybe Boris has a better suggestion on how to do it
-> >>
-> >> An alternative might be to still install pm notifier in
-> >> drivers/xen/manage.c (I think as result of latest discussions we decided
-> >> we won't need it) and return -ENOTSUPP for ARM for
-> >> PM_HIBERNATION_PREPARE and friends. Would that work?
-> >>
-> > I think the question here is for registering driver specific freeze/thaw/restore
-> > callbacks for x86 only. I have dropped the pm_notifier in the v3 still pending
-> > testing. So I think just registering driver specific callbacks for x86 only is a
-> > good option. What do you think?
->
->
-> I suggested using the notifier under assumption that if it returns an
-> error then that will prevent callbacks to be called because hibernation
-> will be effectively disabled.
+On 31/07/2020 14:46, Dongdong Yang wrote:
+> From: Dongdong Yang <yangdongdong@xiaomi.com>
 
-That's correct.
+[...]
+
+> +	if (unlikely(usf_vdev.enable_debug))
+> +		trace_printk
+> +		    ("%s: cpu_id=%d non_ux=%d usf_up=%d usf_down=%d util=%lu\n",
+> +		     USF_TAG, cpuid, usf_vdev.usf_non_ux,
+> +		     usf_vdev.usf_up_l0, usf_vdev.usf_down, *util);
+
+trace_printk in code ?
+
+> +static int usf_lcd_notifier(struct notifier_block *nb,
+> +			    unsigned long val, void *data)
+> +{
+> +	struct fb_event *evdata = data;
+> +	unsigned int blank;
+> +
+> +	if (!evdata)
+> +		return 0;
+> +
+> +	if (val != FB_EVENT_BLANK)
+> +		return 0;
+> +
+> +	if (evdata->data && val == FB_EVENT_BLANK) {
+> +		blank = *(int *)(evdata->data);
+> +
+> +		switch (blank) {
+> +		case FB_BLANK_POWERDOWN:
+> +			usf_vdev.is_screen_on = 0;
+> +			if (usf_vdev.sysctl_sched_usf_non_ux != 0)
+> +				static_branch_enable(&adjust_task_pred_set);
+> +			else
+> +				static_branch_disable(&adjust_task_pred_set);
+> +
+> +			break;
+> +
+> +		case FB_BLANK_UNBLANK:
+> +			usf_vdev.is_screen_on = 1;
+> +			if (usf_vdev.sysctl_sched_usf_up_l0 != 0 ||
+> +			    usf_vdev.sysctl_sched_usf_down != 0)
+> +				static_branch_enable(&adjust_task_pred_set);
+> +			else
+> +				static_branch_disable(&adjust_task_pred_set);
+> +			break;
+> +		default:
+> +			break;
+> +		}
+> +
+> +		usf_vdev.is_sched_usf_enabled = 1;
+> +		if (usf_vdev.enable_debug)
+> +			trace_printk("%s : usf_vdev.is_screen_on:%d\n",
+> +				     __func__, usf_vdev.is_screen_on);
+> +	}
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block usf_lcd_nb = {
+> +	.notifier_call = usf_lcd_notifier,
+> +	.priority = INT_MAX,
+> +};
+
+Looks like those notifications should enable/disable the schedutil
+extension adjust_task_pred_demand(). Who's calling them?
+
+The 3 sched_usf_FOO sys files somehow have an influence here too. How
+should this work?
+
+I see a fb_register_client() in intera_monitor_init further below.
+
+[...]
+
+> +usf_attr_rw(sched_usf_up_l0_r);
+> +usf_attr_rw(sched_usf_down_r);
+> +usf_attr_rw(sched_usf_non_ux_r);
+
+What can I do with these three files? What do they stand for?
+
+root@h620:/sys/devices/system/cpu/sched_usf# ls
+sched_usf_down_r  sched_usf_non_ux_r  sched_usf_up_l0_r
+
+[...]
+
+> +static int __init intera_monitor_init(void)
+> +{
+> +	int res = -1;
+> +	struct attribute_group *attr_group;
+> +
+> +	res = fb_register_client(&usf_lcd_nb);
+> +	if (res < 0) {
+> +		pr_err("Failed to register usf_lcd_nb!\n");
+> +		return res;
+
+[...]
