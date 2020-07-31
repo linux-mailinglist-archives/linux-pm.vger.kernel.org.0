@@ -2,122 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7FF2343CE
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 11:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E3F234494
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 13:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732371AbgGaJ7g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 05:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732075AbgGaJ7g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 05:59:36 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA403C061574
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jul 2020 02:59:35 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id q76so7475418wme.4
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jul 2020 02:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=39y7P5Gwjtd3AnR6h3PLwZ8s2R2z4M9PxJEGWiapqVU=;
-        b=gMBcfMGPW7ErBYTjBzW9QJveMfkgYy+NHBk+SKKkE3vKX6tn6MYhI5L9eaKWiCyrdT
-         dpdxpJHinGrmrxPUESyzm42z/NBEQiFWdbEnpE1i9XCy7F3Bq6MdcMODWuhs70/YnNkm
-         ki/EwEm6VNZJlhL6QTfSro3pePGkWLwPxHhweAuFvbMMHVKF5FaluqeHAWlhqN6ZKipk
-         k3fR+QMmx1+gGaakLPIJ+GqWYoirAt0rEuK6jQQ4z2GkfH4RhHmHMFkmT80EaUBVRrf9
-         dOB+yFdrvGIhzZt7yeSqOrXuPo/PihoNrsY1n5qO2BpPPhLlazO9ZUuTJ/OVGxL00hKj
-         B2XA==
+        id S1732297AbgGaLdi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 07:33:38 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40075 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732104AbgGaLdi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 07:33:38 -0400
+Received: by mail-oi1-f195.google.com with SMTP id u24so16553690oiv.7;
+        Fri, 31 Jul 2020 04:33:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=39y7P5Gwjtd3AnR6h3PLwZ8s2R2z4M9PxJEGWiapqVU=;
-        b=DkIvaidb14HnEZyeqT8xvP+f3h4XQW6HDzfu9R0lLHsTMPKSdm9gFLoaago/1HRrDm
-         KKhR4BkCiDE8vdLmxzTbjuUBiBvMEcGXbv2/dB+vzWxmD2FILczihWGrCsLBpkyenLlB
-         ZnGxWLnuk44MYSY65KGAqCafZuvvKgM5LxfUYMVgaA8qtSG+eDPKxbsnFn5NaAp/Bab1
-         UtXjyDJyJYR6MK139Tp6gIZYuasKfIA0cLqIJAQGNEoyYnoL28Z10faNYCo18HORS8Ju
-         u+vHWkmJBYufaW99+5l/LI8hivSXb4NOq/vzu+D5b6V/qyhMtvTb2jp8v1fVsjAXpGOd
-         LTJQ==
-X-Gm-Message-State: AOAM532fvDcy1LFIHgIy6UnPhn9v9gz/qa20SxxoWNZUpQ5loEwkCtmR
-        19J5nDO+KTdnNH5RdCFRnkKq0Q==
-X-Google-Smtp-Source: ABdhPJwX7zxARepQDDTP7uSmPjHKWK16wvj2up1Cti71adU9OAdqJiNWJ5CPpT1ecG7IJPqtGWIxxQ==
-X-Received: by 2002:a7b:c242:: with SMTP id b2mr3336543wmj.90.1596189574501;
-        Fri, 31 Jul 2020 02:59:34 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:e484:a7d1:6931:9059? ([2a01:e34:ed2f:f020:e484:a7d1:6931:9059])
-        by smtp.googlemail.com with ESMTPSA id s125sm12875748wmf.14.2020.07.31.02.59.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jul 2020 02:59:33 -0700 (PDT)
-Subject: Re: [PATCH] thermal: mediatek: Fix missing selection
-To:     Henry Yen <henry.yen@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Steven Liu <steven.liu@mediatek.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Arnd Bergmann <arnd.bergmann@linaro.org>
-References: <1596096304-16422-1-git-send-email-henry.yen@mediatek.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <69a4b653-9f47-63f1-7eb0-4880bf19497a@linaro.org>
-Date:   Fri, 31 Jul 2020 11:59:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mpZwL9ptFKxq7FoZCH1xjumTWQNcssejfeTwP6RoxpQ=;
+        b=diuHMLwFGE03iB6FycWL3gzVKV7vJzuDP40K9hGRPOQcLzQIi9LpAbE+bb+iu1Zva7
+         b7hj6RtcnDvzlg7h3eYbSZvJLmYlNeNiRCKL900jpKHwv5KXYbY7L3g/VaYc1GjEyoJz
+         EE8UibbNHAQ2xvP8l3MH4L5l0FT4XlCfQzCJza6pD2tBjS5oTSksRX8gkBKX5BTHbyAj
+         SNrwrRNcYA3QhnfE9ylEFohlC84WnJz2erwTT4CWf6vKCMDutiNwj6fk+z3+F0SBtbNO
+         EugJdjKvoeNHJYWBqakqrimVl0NheHFYPhWy6JR2X2uYm3YS8xkhOyZaGfRIrMZeD5Ah
+         eHbA==
+X-Gm-Message-State: AOAM530dUNDrNfQUhFqddHrZ4wxeJDT4smiaX9qYbSJjy0kPyRTht2Sh
+        oStEZMDE27hETN8WPbTTQSjTqHdUHemGtOqXmik=
+X-Google-Smtp-Source: ABdhPJwjnTZ4vCcK+PJMw9f0cgXjEhaXp88nRbYUPJxc2xho6yL2W9vIsfi0PJ+loYFbKG0KfjHoOo6H/h7XzI4Nqoc=
+X-Received: by 2002:aca:a88e:: with SMTP id r136mr2704600oie.110.1596195217368;
+ Fri, 31 Jul 2020 04:33:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1596096304-16422-1-git-send-email-henry.yen@mediatek.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1596166744-2954-1-git-send-email-neal.liu@mediatek.com> <1596166744-2954-2-git-send-email-neal.liu@mediatek.com>
+In-Reply-To: <1596166744-2954-2-git-send-email-neal.liu@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 31 Jul 2020 13:33:24 +0200
+Message-ID: <CAJZ5v0gk9a-PVr4+zerNWdBORyC563K8XgUdgxENAQ+Y5-85tg@mail.gmail.com>
+Subject: Re: [PATCH] acpi: fix 'return' with no value build warning
+To:     Neal Liu <neal.liu@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        wsd_upstream <wsd_upstream@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jul 31, 2020 at 5:39 AM Neal Liu <neal.liu@mediatek.com> wrote:
+>
+> Fixing CFI issue which introduced by commit efe9711214e6 is
+> incomplete.
+> Add return value to fix return-type build warning.
+>
+> Signed-off-by: Neal Liu <neal.liu@mediatek.com>
 
-Hi Henry,
+Applied with edited subject and changelog, but ->
 
-cc'ing Arnd
-
-On 30/07/2020 10:05, Henry Yen wrote:
-> Mediatek thermal driver is compatible with multiple platforms.
-> Some of the platforms (e.g., MT2701) requires to enable
-> MEDIATEK_MT6577_AUXADC option. If lacks the config, the driver
-> will not be able to read correct temperature.
-> 
-> To fix it, select missing MEDIATEK_MT6577_AUXADC config.
-
-The description states there is a dependency for some platforms not all
-of them.
-
-The change will select the option every time for any mediatek platform
-or compile test.
-
-I don't think it is the place to select the option.
-
-> Signed-off-by: Henry Yen <henry.yen@mediatek.com>
 > ---
->  drivers/thermal/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 3eb2348e5242..3a37f674f7f3 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -409,6 +409,7 @@ config MTK_THERMAL
->  	depends on NVMEM || NVMEM=n
->  	depends on RESET_CONTROLLER
->  	default y
-> +	select MEDIATEK_MT6577_AUXADC
->  	help
->  	  Enable this option if you want to have support for thermal management
->  	  controller present in Mediatek SoCs
-> 
+>  drivers/acpi/processor_idle.c |    4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
+> index 6ffb6c9..6870020 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -664,11 +664,11 @@ static int acpi_idle_enter_s2idle(struct cpuidle_device *dev,
+>                 struct acpi_processor *pr = __this_cpu_read(processors);
+>
+>                 if (unlikely(!pr))
+> -                       return;
+> +                       return -EFAULT;
 
+-> there is no point returning an error code here, so I've made it
+just return 0.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>
+>                 if (pr->flags.bm_check) {
+>                         acpi_idle_enter_bm(pr, cx, false);
+> -                       return;
+> +                       return 0;
+>                 } else {
+>                         ACPI_FLUSH_CPU_CACHE();
+>                 }
+> --
