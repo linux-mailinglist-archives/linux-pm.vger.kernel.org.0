@@ -2,181 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E552346DF
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 15:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3742E234785
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 16:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728087AbgGaNaE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 09:30:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38610 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727851AbgGaNaE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:30:04 -0400
-Received: from earth.universe (dyndsl-037-138-184-248.ewe-ip-backbone.de [37.138.184.248])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 217B222B3F;
-        Fri, 31 Jul 2020 13:30:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596202203;
-        bh=9J8+SfLgQFhaZ3UwUM5jsEeepNuEJuqZs4CrrlHx7iw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vEA5lavzfwAX4CezhW4qGMG4wqew2GF1sDPBODvp5Fer/OQ5yi9v1YO8g3WHofUTb
-         7cCKDoTRrfHvmFib3CvVaMb9z2h6I4DvqhOlr37F9egc9fpCWPLdkAbMeDvHZsmDoV
-         /EOFqPRS4sQ9T+gq+poScCiedkV5JIRFQ3z77b3Q=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 7F7623C0B87; Fri, 31 Jul 2020 15:30:01 +0200 (CEST)
-Date:   Fri, 31 Jul 2020 15:30:01 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Crag Wang <crag0715@gmail.com>
-Cc:     mario.limonciello@dell.com, mathewk@chromium.org,
-        campello@google.com, crag.wang@dell.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] power_supply: wilco_ec: Add long life charging
+        id S1728940AbgGaOOq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 10:14:46 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55888 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728752AbgGaOOp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 31 Jul 2020 10:14:45 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VEBlvI012994;
+        Fri, 31 Jul 2020 14:14:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=Qkoa98ueMEN0nIMXY0FuUYHUpYN7mcWFqQyjzv4PaLo=;
+ b=k/uCLfgZ8X9eVxW4isO626hrKf3+/2IjrLyTvdA9YLfqY5sygPd5v+5X2HYb5Ei0gSkZ
+ qTKLAw8RNOWa/bM0xOXHbYur22CTTRZhOAZeWgfRAJOb3S99aFDtHThi0Be10j4WgjX+
+ 3Z7X6KK7fFLq7dol6TKOMXZrz8HhbvtzyjFtjTAAxIrBGGz58+U0BU+TGnH8hElNFUjI
+ 5xl9NsWGf6whYw56/ly7ArxDz+rvEgywQrAEdcw9sw8wP5hMOMgHrD544jZq5WMFG5cb
+ pBxhjZXFZpV3UEdfE4iyKuKx6LYHdxBeWBAw+bPYVValzgBgTnbdjU+ZbeNCBtBY8Zrv kA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 32mf9g1kqj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 31 Jul 2020 14:14:03 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 06VECseV171471;
+        Fri, 31 Jul 2020 14:14:03 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 32hu5yy3ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 31 Jul 2020 14:14:03 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 06VEDq61018430;
+        Fri, 31 Jul 2020 14:13:52 GMT
+Received: from [10.39.217.162] (/10.39.217.162)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 31 Jul 2020 07:13:52 -0700
+Subject: Re: [PATCH v2 01/11] xen/manage: keep track of the on-going suspend
  mode
-Message-ID: <20200731133001.zlukj5wy5pzhlgnc@earth.universe>
-References: <20200715145511.9464-1-crag.wang@dell.com>
- <20200730032609.20330-1-crag.wang@dell.com>
+To:     Anchal Agarwal <anchalag@amazon.com>
+Cc:     Stefano Stabellini <sstabellini@kernel.org>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        kamatam@amazon.com, konrad.wilk@oracle.com, roger.pau@citrix.com,
+        axboe@kernel.dk, davem@davemloft.net, rjw@rjwysocki.net,
+        len.brown@intel.com, pavel@ucw.cz, peterz@infradead.org,
+        eduval@amazon.com, sblbir@amazon.com,
+        xen-devel@lists.xenproject.org, vkuznets@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org
+References: <20200717191009.GA3387@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5464f384-d4b4-73f0-d39e-60ba9800d804@oracle.com>
+ <20200721000348.GA19610@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <408d3ce9-2510-2950-d28d-fdfe8ee41a54@oracle.com>
+ <alpine.DEB.2.21.2007211640500.17562@sstabellini-ThinkPad-T480s>
+ <20200722180229.GA32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <alpine.DEB.2.21.2007221645430.17562@sstabellini-ThinkPad-T480s>
+ <20200723225745.GB32316@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <alpine.DEB.2.21.2007241431280.17562@sstabellini-ThinkPad-T480s>
+ <66a9b838-70ed-0807-9260-f2c31343a081@oracle.com>
+ <20200730230634.GA17221@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
+ 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
+ Jg6OxFYd01z+a+oL
+Message-ID: <53b577a3-6af9-5587-7e47-485be38b3653@oracle.com>
+Date:   Fri, 31 Jul 2020 10:13:48 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vqfmkacknvhfpg4v"
-Content-Disposition: inline
-In-Reply-To: <20200730032609.20330-1-crag.wang@dell.com>
+In-Reply-To: <20200730230634.GA17221@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 adultscore=0 spamscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007310105
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9698 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 malwarescore=0
+ bulkscore=0 adultscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
+ suspectscore=0 clxscore=1015 mlxscore=0 phishscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2007310105
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 7/30/20 7:06 PM, Anchal Agarwal wrote:
+> On Mon, Jul 27, 2020 at 06:08:29PM -0400, Boris Ostrovsky wrote:
+>> CAUTION: This email originated from outside of the organization. Do no=
+t click links or open attachments unless you can confirm the sender and k=
+now the content is safe.
+>>
+>>
+>>
+>> On 7/24/20 7:01 PM, Stefano Stabellini wrote:
+>>> Yes, it does, thank you. I'd rather not introduce unknown regressions=
+ so
+>>> I would recommend to add an arch-specific check on registering
+>>> freeze/thaw/restore handlers. Maybe something like the following:
+>>>
+>>> #ifdef CONFIG_X86
+>>>     .freeze =3D blkfront_freeze,
+>>>     .thaw =3D blkfront_restore,
+>>>     .restore =3D blkfront_restore
+>>> #endif
+>>>
+>>>
+>>> maybe Boris has a better suggestion on how to do it
+>>
+>> An alternative might be to still install pm notifier in
+>> drivers/xen/manage.c (I think as result of latest discussions we decid=
+ed
+>> we won't need it) and return -ENOTSUPP for ARM for
+>> PM_HIBERNATION_PREPARE and friends. Would that work?
+>>
+> I think the question here is for registering driver specific freeze/tha=
+w/restore
+> callbacks for x86 only. I have dropped the pm_notifier in the v3 still =
+pending
+> testing. So I think just registering driver specific callbacks for x86 =
+only is a
+> good option. What do you think?
 
---vqfmkacknvhfpg4v
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+I suggested using the notifier under assumption that if it returns an
+error then that will prevent callbacks to be called because hibernation
+will be effectively disabled. But I haven't looked at PM code so I don't
+know whether this is actually the case.
 
-On Thu, Jul 30, 2020 at 11:26:09AM +0800, Crag Wang wrote:
-> This is a long life mode set in the factory for extended warranty
-> battery, the power charging rate is customized so that battery at
-> work last longer.
->=20
-> Presently switching to a different battery charging mode is through
-> EC PID 0x0710 to configure the battery firmware, this operation will
-> be blocked by EC with failure code 0x01 when PLL mode is already
-> in use.
->=20
-> Signed-off-by: Crag Wang <crag.wang@dell.com>
-> Reviewed-by: Mario Limonciello <mario.limonciello@dell.com>
-> ---
 
-Thanks, queued.
+The advantage of doing it in the notifier is that instead of adding
+ifdefs to each driver you will be able to prevent callbacks from a
+single place. Plus you can use this do disable hibernation for PVH dom0
+as well.
 
--- Sebastian
 
->  Documentation/ABI/testing/sysfs-class-power-wilco | 4 ++++
->  drivers/power/supply/power_supply_sysfs.c         | 1 +
->  drivers/power/supply/wilco-charger.c              | 5 +++++
->  include/linux/power_supply.h                      | 1 +
->  4 files changed, 11 insertions(+)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power-wilco b/Document=
-ation/ABI/testing/sysfs-class-power-wilco
-> index da1d6ffe5e3c..84fde1d0ada0 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power-wilco
-> +++ b/Documentation/ABI/testing/sysfs-class-power-wilco
-> @@ -14,6 +14,10 @@ Description:
->  			Charging begins when level drops below
->  			charge_control_start_threshold, and ceases when
->  			level is above charge_control_end_threshold.
-> +		Long Life: Customized charge rate for last longer battery life.
-> +			On Wilco device this mode is pre-configured in the factory
-> +			through EC's private PID. Swiching to a different mode will
-> +			be denied by Wilco EC when Long Life mode is enabled.
-> =20
->  What:		/sys/class/power_supply/wilco-charger/charge_control_start_thresh=
-old
->  Date:		April 2019
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index bc79560229b5..cfb87b8b8392 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -87,6 +87,7 @@ static const char * const POWER_SUPPLY_CHARGE_TYPE_TEXT=
-[] =3D {
->  	[POWER_SUPPLY_CHARGE_TYPE_STANDARD]	=3D "Standard",
->  	[POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE]	=3D "Adaptive",
->  	[POWER_SUPPLY_CHARGE_TYPE_CUSTOM]	=3D "Custom",
-> +	[POWER_SUPPLY_CHARGE_TYPE_LONGLIFE]	=3D "Long Life",
->  };
-> =20
->  static const char * const POWER_SUPPLY_HEALTH_TEXT[] =3D {
-> diff --git a/drivers/power/supply/wilco-charger.c b/drivers/power/supply/=
-wilco-charger.c
-> index b3c6d7cdd731..98ade073ef05 100644
-> --- a/drivers/power/supply/wilco-charger.c
-> +++ b/drivers/power/supply/wilco-charger.c
-> @@ -27,6 +27,7 @@ enum charge_mode {
->  	CHARGE_MODE_AC =3D 3,	/* Mostly AC use, used for Trickle */
->  	CHARGE_MODE_AUTO =3D 4,	/* Used for Adaptive */
->  	CHARGE_MODE_CUSTOM =3D 5,	/* Used for Custom */
-> +	CHARGE_MODE_LONGLIFE =3D 6, /* Used for Long Life */
->  };
-> =20
->  #define CHARGE_LOWER_LIMIT_MIN	50
-> @@ -48,6 +49,8 @@ static int psp_val_to_charge_mode(int psp_val)
->  		return CHARGE_MODE_AUTO;
->  	case POWER_SUPPLY_CHARGE_TYPE_CUSTOM:
->  		return CHARGE_MODE_CUSTOM;
-> +	case POWER_SUPPLY_CHARGE_TYPE_LONGLIFE:
-> +		return CHARGE_MODE_LONGLIFE;
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -67,6 +70,8 @@ static int charge_mode_to_psp_val(enum charge_mode mode)
->  		return POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE;
->  	case CHARGE_MODE_CUSTOM:
->  		return POWER_SUPPLY_CHARGE_TYPE_CUSTOM;
-> +	case CHARGE_MODE_LONGLIFE:
-> +		return POWER_SUPPLY_CHARGE_TYPE_LONGLIFE;
->  	default:
->  		return -EINVAL;
->  	}
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index ac1345a48ad0..528a3eaa2320 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -48,6 +48,7 @@ enum {
->  	POWER_SUPPLY_CHARGE_TYPE_STANDARD,	/* normal speed */
->  	POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE,	/* dynamically adjusted speed */
->  	POWER_SUPPLY_CHARGE_TYPE_CUSTOM,	/* use CHARGE_CONTROL_* props */
-> +	POWER_SUPPLY_CHARGE_TYPE_LONGLIFE,	/* slow speed, longer life */
->  };
-> =20
->  enum {
-> --=20
-> 2.17.1
->=20
-> ---
-> The original author, Nick no longer being around and that's why he's not =
-on CC.
 
---vqfmkacknvhfpg4v
-Content-Type: application/pgp-signature; name="signature.asc"
+-boris
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8kHMYACgkQ2O7X88g7
-+pp3Og//YuxU67BOuDowvVcMiMqz5Wiawq/N/EAwbx8PnhJZKCOCZ3mV8Fo+w2bR
-1geFsg6GT5pShnNX6O2FmEIMhS74TpxqHHKfIHYHmR3zm5AfYthfe8g4KSLLmZ/p
-8jxODYpI322GsJ9OmpbeGCFVIcc61zgfbBZlmhhSQY81do/2Ca9iZsFDVcYIZvCO
-2keAIn3j6nt1+YipuYrLaB3uWGl+9Bdgo+UsezI6mFefz/DAvt7MCRTcBGNQQ81G
-0qT3BsLYjmiSclziT4pS9vzwuEqwOD2VXA7HcvJwK0TYa3LfibRA0YUa8s8g55Dl
-p4bgqZZqt7+fv+ZkYqIQWi7H6ij8wcFwZG+9J5mrZykmRyt3WKXjHN4B+FIuMJh8
-OQciR/z9Kt108K7jkorD8E0bAbntX6JBqUUZpj6IMjIiuVdBoK+aWgQe94GsmL2U
-2dEQOcnrOxk1lYfFVt7yJiN4QCZz4wPtFZ1Sbb8YmVo7+4gLiq8Z7YxLq6sOcvGy
-F43UMXPg6qRxs1/cmx+DrtVyrb8FpTc0oar0JlwKR3/X1nuiOirr3xoYCrFzoP+A
-7ajLtBwEclUkjKcGw9Zv9z5u5LGUyiedoUvEiOMh5asxHyJlpBLxB4BqyCBQKWkM
-biSZJOKZJj6HyKG9oOI6VokCbLAED2hQQjusCp02m+ZZFZPCuD8=
-=nxsr
------END PGP SIGNATURE-----
 
---vqfmkacknvhfpg4v--
