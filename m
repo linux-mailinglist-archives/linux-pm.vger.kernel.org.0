@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEF12346C7
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 15:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E6C2346DA
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jul 2020 15:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730752AbgGaNWW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 31 Jul 2020 09:22:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36982 "EHLO mail.kernel.org"
+        id S1728087AbgGaN2t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 31 Jul 2020 09:28:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387419AbgGaNWU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 31 Jul 2020 09:22:20 -0400
+        id S1727851AbgGaN2t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 31 Jul 2020 09:28:49 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A496E21744;
-        Fri, 31 Jul 2020 13:22:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D517B22B3F;
+        Fri, 31 Jul 2020 13:28:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596201740;
-        bh=fSZT8j8Q56S+X8wVCP0FfOqs/yNJDKaYWLtqjNf+5kM=;
+        s=default; t=1596202128;
+        bh=l7D6zlkmr4zMBr2PK4nmtQfto6+WhjExk/dpj0+RAj4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Le2hBFz8FZfk929djZVF90YdpLUaDO2LYKHKDoNNYI38z2Isfu3EXpllQ9gDpAEef
-         LmIBmoHq9LxlDex2+0hsMssnIUcexmDjeTutM+V+DsxCQCdgLpAPRwosPHcj9jJPDz
-         GtBwC47XzO6fXUT9A1v0EoltNY0QdDPWZpRLwkck=
-Date:   Fri, 31 Jul 2020 15:22:07 +0200
+        b=B3KNYczDqWxyXinafo8RrHvVe4oi2alKnZPYcHHgAETLVfoyXGkSLwDYF/Xy5W9OR
+         zEUaCYnR02D0fgvCGHjZnKY7gERG7luAi8ztxYaf96ZZPO55OFRQB+iax71ZkH7p3L
+         HabjYjWWb9fbcFU/HtIKDGZhWLr8cSO9GC6lyI8M=
+Date:   Fri, 31 Jul 2020 15:28:35 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Dongdong Yang <contribute.kernel@gmail.com>
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
@@ -36,7 +36,7 @@ Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
         rocking@linux.alibaba.com, fengwei@xiaomi.com,
         zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
 Subject: Re: [PATCH v2] sched: Provide USF for the portable equipment.
-Message-ID: <20200731132207.GB1712190@kroah.com>
+Message-ID: <20200731132835.GC1712190@kroah.com>
 References: <cover.1596196060.git.yangdongdong@xiaomi.com>
  <e992fea6ad249694e615640862a28346936f8844.1596196062.git.yangdongdong@xiaomi.com>
 MIME-Version: 1.0
@@ -49,77 +49,174 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On Fri, Jul 31, 2020 at 08:46:30PM +0800, Dongdong Yang wrote:
-> --- /dev/null
-> +++ b/drivers/staging/fbsched/usf.c
-> @@ -0,0 +1,346 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020 XiaoMi Inc.
-> + * Author: Yang Dongdong <yangdongdong@xiaomi.com>
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> + * See http://www.gnu.org/licenses/gpl-2.0.html for more details.
-
-Please remove the license "boilerplate" text as you have the SPDX line
-on top.
-
-> + */
+> +static ssize_t store_sched_usf_up_l0_r(struct kobject *kobj,
+> +				       struct kobj_attribute *attr,
+> +				       const char *buf, size_t count)
+> +{
+> +	int val = 0;
+> +	int ret;
 > +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/kthread.h>
-> +#include <linux/cpu.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/kthread.h>
-> +#include <linux/kobject.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/init.h>
-> +#include <linux/kallsyms.h>
-> +#include <linux/debugfs.h>
-> +#include <linux/fb.h>
-> +#include <linux/notifier.h>
+> +	ret = kstrtoint(buf, 0, &val);
+> +	if (ret) {
+> +		pr_err(USF_TAG "set state fail ret=%d\n", ret);
+> +		return ret;
+> +	}
 > +
-> +#define BOOST_MIN_V -100
-> +#define BOOST_MAX_V 100
-> +#define LEVEL_TOP 3
+> +	if ((val >= 0) && (val <= BOOST_MAX_V)) {
+> +		usf_vdev.sysctl_sched_usf_up_l0 = val;
+> +		usf_vdev.usf_up_l0 = LEVEL_TOP -
+> +				DIV_ROUND_UP(val, BOOST_MAX_V / 2);
+> +	} else {
+> +		pr_err(USF_TAG "%d should fall into [%d %d]",
+> +		       val, 0, BOOST_MAX_V);
+> +	}
+> +	if ((usf_vdev.sysctl_sched_usf_up_l0 == 0) &&
+> +	    (usf_vdev.sysctl_sched_usf_down == 0))
+> +		static_branch_disable(&adjust_task_pred_set);
+> +	else
+> +		static_branch_enable(&adjust_task_pred_set);
 > +
-> +#define USF_TAG	"[usf_sched]"
+> +	return count;
+> +}
 > +
-> +DEFINE_PER_CPU(unsigned long[PID_MAX_LIMIT], task_hist_nivcsw);
+> +static ssize_t store_sched_usf_down_r(struct kobject *kobj,
+> +				      struct kobj_attribute *attr,
+> +				      const char *buf, size_t count)
+> +{
+> +	int val = 0;
+> +	int ret;
 > +
-> +static struct {
-> +	bool is_sched_usf_enabled;
-> +	int enable_debug;
-> +	int is_screen_on;
-> +	struct kobject *kobj;
+> +	ret = kstrtoint(buf, 0, &val);
+> +	if (ret) {
+> +		pr_err(USF_TAG "set state fail ret=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	if ((val >= BOOST_MIN_V) && (val <= 0)) {
+> +		usf_vdev.sysctl_sched_usf_down = val;
+> +		usf_vdev.usf_down = DIV_ROUND_UP(-val, -BOOST_MIN_V / 2);
+> +	} else {
+> +		pr_err(USF_TAG "%d should fall into [%d %d]",
+> +		       val, BOOST_MIN_V, 0);
+> +	}
+> +	if ((usf_vdev.sysctl_sched_usf_up_l0 == 0) &&
+> +	    (usf_vdev.sysctl_sched_usf_down == 0))
+> +		static_branch_disable(&adjust_task_pred_set);
+> +	else
+> +		static_branch_enable(&adjust_task_pred_set);
+> +
+> +	return count;
+> +}
+> +
+> +static ssize_t store_sched_usf_non_ux_r(struct kobject *kobj,
+> +					struct kobj_attribute *attr,
+> +					const char *buf, size_t count)
+> +{
+> +	int val = 0;
+> +	int ret;
+> +
+> +	ret = kstrtoint(buf, 0, &val);
+> +	if (ret) {
+> +		pr_err(USF_TAG "set state fail ret=%d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	if ((val >= BOOST_MIN_V) && (val <= 0)) {
+> +		usf_vdev.sysctl_sched_usf_non_ux = val;
+> +		usf_vdev.usf_non_ux = DIV_ROUND_UP(-val, -BOOST_MIN_V / 2);
+> +	} else {
+> +		pr_err(USF_TAG "%d should fall into [%d %d]",
+> +		       val, BOOST_MIN_V, 0);
+> +	}
+> +	if (usf_vdev.sysctl_sched_usf_non_ux == 0)
+> +		static_branch_disable(&adjust_task_pred_set);
+> +	else
+> +		static_branch_enable(&adjust_task_pred_set);
+> +
+> +	return count;
+> +}
+> +
+> +#define usf_attr_rw(_name)						\
+> +static struct kobj_attribute _name =					\
+> +__ATTR(_name, 0664, show_##_name, store_##_name)
 
-A raw kobject?  For a driver?  are you _SURE_???
+You have a lot of sysfs files here, but no documentation for them at
+all, why not?
 
-> +	struct dentry *debugfs_entry;
+> +
+> +#define usf_show_node(_name, _value)					\
+> +static ssize_t show_##_name						\
+> +(struct kobject *kobj, struct kobj_attribute *attr,  char *buf)		\
+> +{									\
+> +	unsigned int len = 0;						\
+> +	unsigned int max_len = 8;					\
+> +	len +=								\
+> +	    snprintf(buf + len, max_len - len, "%d",			\
+> +		     usf_vdev.sysctl_##_value);				\
+> +	return len;							\
+> +}
+> +
+> +usf_show_node(sched_usf_up_l0_r, sched_usf_up_l0);
+> +usf_show_node(sched_usf_down_r, sched_usf_down);
+> +usf_show_node(sched_usf_non_ux_r, sched_usf_non_ux);
+> +
+> +usf_attr_rw(sched_usf_up_l0_r);
+> +usf_attr_rw(sched_usf_down_r);
+> +usf_attr_rw(sched_usf_non_ux_r);
+> +
+> +static struct attribute *sched_attrs[] = {
+> +	&sched_usf_up_l0_r.attr,
+> +	&sched_usf_down_r.attr,
+> +	&sched_usf_non_ux_r.attr,
+> +	NULL,
+> +};
+> +
+> +static struct attribute_group sched_attr_group = {
+> +	.attrs = sched_attrs,
+> +};
+> +
+> +static int usf_dbg_get(void *data, u64 *val)
+> +{
+> +	*val = (u64)usf_vdev.enable_debug;
+> +
+> +	return 0;
+> +}
+> +
+> +static int usf_dbg_set(void *data, u64 val)
+> +{
+> +	usf_vdev.enable_debug = !!val;
+> +	return 0;
+> +}
+> +
+> +DEFINE_SIMPLE_ATTRIBUTE(usf_dbg_fops, usf_dbg_get,
+> +			usf_dbg_set, "%llu\n");
+> +
+> +static int __init intera_monitor_init(void)
+> +{
+> +	int res = -1;
+> +	struct attribute_group *attr_group;
+> +
+> +	res = fb_register_client(&usf_lcd_nb);
+> +	if (res < 0) {
+> +		pr_err("Failed to register usf_lcd_nb!\n");
+> +		return res;
+> +	}
+> +
+> +	/*
+> +	 * create a sched_usf in cpu_subsys:
+> +	 * /sys/devices/system/cpu/sched_usf/...
+> +	 */
+> +	attr_group = &sched_attr_group;
+> +	usf_vdev.kobj = kobject_create_and_add("sched_usf",
+> +					       &cpu_subsys.dev_root->kobj);
+> +
 
-Why do you need this?
+Huh?  Why put this there?
 
-> +	usf_vdev.enable_debug = 0;
-> +	usf_vdev.debugfs_entry = debugfs_create_file("usf_dbg",
-> +						     0660, NULL, NULL,
-> +						     &usf_dbg_fops);
-> +	if (!usf_vdev.debugfs_entry)
-> +		pr_err("Failed to create usf_dbg!\n");
+And by making a "raw" kobject, you just kept userspace from seeing this
+information entirely :(
 
-How can that value be NULL?
-
-There is no need to check debugfs functions for error values.
-
-But in this case, why are you writing a single file to the root of
-debugfs?  Why not put it in a directory instead?  That would be much
-nicer, don't you think?
+Use a 'struct device' as you are a driver, do not use a raw kobject.
 
 thanks,
 
