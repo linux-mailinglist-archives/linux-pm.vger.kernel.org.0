@@ -2,129 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B98235194
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Aug 2020 11:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE6C235249
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Aug 2020 14:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726414AbgHAJ6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Aug 2020 05:58:11 -0400
-Received: from mga14.intel.com ([192.55.52.115]:62517 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725931AbgHAJ6L (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 1 Aug 2020 05:58:11 -0400
-IronPort-SDR: UnwnbRlA+ItkqMGZk9r/G1k4HJQy99aUzIYp0LoUwBqRXqa/M3llsjtNWS+GExX3cE111mxU6C
- 7zO684amoiPQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9699"; a="151124690"
-X-IronPort-AV: E=Sophos;i="5.75,420,1589266800"; 
-   d="scan'208";a="151124690"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 02:58:10 -0700
-IronPort-SDR: ZDfrZn0QjnUvJT/F2KL9TKKXAfrJ2U2lSt0oSGdxz+07/cPJk4sQM/LeozycpnDUboLRG4Ajkx
- aQPPVvgKQ83g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,420,1589266800"; 
-   d="scan'208";a="365827366"
-Received: from lkp-server01.sh.intel.com (HELO e21119890065) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 01 Aug 2020 02:58:08 -0700
-Received: from kbuild by e21119890065 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k1oHI-0000PD-1q; Sat, 01 Aug 2020 09:58:08 +0000
-Date:   Sat, 01 Aug 2020 17:57:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 86ed8b05f59717b20b75cd2a4a17cbd26788183a
-Message-ID: <5f253c88.I1tbN4ApJNdJ1Hl3%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1728937AbgHAMbQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Aug 2020 08:31:16 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:14255 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728609AbgHAMbP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Aug 2020 08:31:15 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1596285075; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=Q3UxvfdaSAZg3ceqWsx2yQaBTKuEUieAdlU+miZJLm0=; b=niM2LJoj87dlVzhcAqPmD7YbRbZxjhgCTba+JWwmwDCLQZNZlOiuVjm6e0VJEN8zirpo18FK
+ ZaTYfPgKoHCsf7BtLouAUExK6EcoUxS7EjhIVzRXomhPu6uRthFbQSaOKAkRQCly1izZHqLZ
+ bqe1LfcECi0YX5CvEvr1n/j5T70=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 5f256085eecfc978d3e73110 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 01 Aug 2020 12:31:01
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CEF0AC43395; Sat,  1 Aug 2020 12:31:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 6F83BC433C9;
+        Sat,  1 Aug 2020 12:30:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 6F83BC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     robh+dt@kernel.org, georgi.djakov@linaro.org
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, jonathan@marek.ca,
+        linux-pm@vger.kernel.org, Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH 0/7] Add L3 provider support for SM8150/SM8250
+Date:   Sat,  1 Aug 2020 18:00:42 +0530
+Message-Id: <20200801123049.32398-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 86ed8b05f59717b20b75cd2a4a17cbd26788183a  Merge branch 'pm-cpuidle' into linux-next
+Add Operation State Manager (OSM) L3 provider support on SM8150 and Epoch
+Subsystem (EPSS) L3 provider support on SM8250 SoCs.
 
-elapsed time: 1261m
+Depends on: https://patchwork.kernel.org/cover/11687925/
 
-configs tested: 66
-configs skipped: 1
+Sibi Sankar (7):
+  dt-bindings: interconnect: Add OSM L3 DT binding on SM8150
+  interconnect: qcom: Add OSM L3 support on SM8150
+  interconnect: qcom: Lay the groundwork for adding EPSS support
+  dt-bindings: interconnect: Add EPSS L3 DT binding on SM8250
+  interconnect: qcom: Add EPSS L3 support on SM8250
+  arm64: dts: qcom: sm8150: Add OSM L3 interconnect provider
+  arm64: dts: qcom: sm8250: Add EPSS L3 interconnect provider
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ .../bindings/interconnect/qcom,osm-l3.yaml    |  2 +
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 11 +++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 11 +++
+ drivers/interconnect/qcom/osm-l3.c            | 75 ++++++++++++++++---
+ drivers/interconnect/qcom/sm8150.h            |  2 +
+ drivers/interconnect/qcom/sm8250.h            |  2 +
+ .../dt-bindings/interconnect/qcom,osm-l3.h    |  3 +
+ 7 files changed, 95 insertions(+), 11 deletions(-)
 
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20200731
-i386                 randconfig-a004-20200731
-i386                 randconfig-a006-20200731
-i386                 randconfig-a002-20200731
-i386                 randconfig-a001-20200731
-i386                 randconfig-a003-20200731
-x86_64               randconfig-a015-20200731
-x86_64               randconfig-a014-20200731
-x86_64               randconfig-a016-20200731
-x86_64               randconfig-a012-20200731
-x86_64               randconfig-a013-20200731
-x86_64               randconfig-a011-20200731
-i386                 randconfig-a016-20200731
-i386                 randconfig-a012-20200731
-i386                 randconfig-a014-20200731
-i386                 randconfig-a015-20200731
-i386                 randconfig-a013-20200731
-i386                 randconfig-a011-20200731
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
