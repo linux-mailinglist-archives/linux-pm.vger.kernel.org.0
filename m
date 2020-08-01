@@ -2,34 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E0A235374
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Aug 2020 18:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29E723549C
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Aug 2020 01:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgHAQjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Aug 2020 12:39:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:28970 "EHLO mga03.intel.com"
+        id S1726937AbgHAXVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Aug 2020 19:21:31 -0400
+Received: from mga01.intel.com ([192.55.52.88]:60103 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726494AbgHAQjb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 1 Aug 2020 12:39:31 -0400
-IronPort-SDR: pZJAcrW2OCc/hHe7i4ZVYwcW1p/YDc5e0dvbSHPgRJNGzYT1uNmJMWBrKjCwL5uqaMr30+m/MF
- 0UUe+LzD6B3w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9699"; a="151911531"
-X-IronPort-AV: E=Sophos;i="5.75,423,1589266800"; 
-   d="txt'?scan'208";a="151911531"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1725883AbgHAXVb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 1 Aug 2020 19:21:31 -0400
+IronPort-SDR: 3x1Xp6NkbcooOBQllnf4Sk6TuhJsY/P5GR6gEB36KYnoP58QwXfC1sUBIldLjHpzQ+ix09e/Eu
+ /Y2segBVg5xw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9700"; a="170068290"
+X-IronPort-AV: E=Sophos;i="5.75,424,1589266800"; 
+   d="scan'208";a="170068290"
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 09:39:30 -0700
-IronPort-SDR: m3hGwR8wWzEDR7gwPNrUqOp6ge3BGSba3XDKFpf+5Ay5AKTPiIX+oGCnwXiylkKWU1IHsq1tRN
- XTSc9toW8UWQ==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 16:21:28 -0700
+IronPort-SDR: gELfJ4xrr/BqnSdRhhpjRFQyhtDSJpCovTVNTBmKLAd/mqsSpPNbErfaTjw2c32Sg0s1uR+njm
+ M33YZ8U2+ejQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,423,1589266800"; 
-   d="txt'?scan'208";a="365881424"
+X-IronPort-AV: E=Sophos;i="5.75,424,1589266800"; 
+   d="scan'208";a="314236881"
 Received: from ppurohit-mobl.amr.corp.intel.com ([10.212.162.156])
-  by orsmga001.jf.intel.com with ESMTP; 01 Aug 2020 09:39:30 -0700
-Message-ID: <6febe0592d1830dac04aab281f66b47498dda887.camel@linux.intel.com>
-Subject: Re: [PATCH v4 0/2] cpufreq: intel_pstate: Implement passive mode
+  by fmsmga004.fm.intel.com with ESMTP; 01 Aug 2020 16:21:27 -0700
+Message-ID: <0fad4951dbd0143b43d4ec7b0dcab6787e0c7a97.camel@linux.intel.com>
+Subject: Re: [PATCH v4 2/2] cpufreq: intel_pstate: Implement passive mode
  with HWP enabled
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
@@ -40,191 +39,767 @@ Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
         Giovanni Gherdovich <ggherdovich@suse.cz>,
         Doug Smythies <dsmythies@telus.net>,
         Francisco Jerez <francisco.jerez.plata@intel.com>
-Date:   Sat, 01 Aug 2020 09:39:30 -0700
-In-Reply-To: <13207937.r2GEYrEf4f@kreacher>
+Date:   Sat, 01 Aug 2020 16:21:27 -0700
+In-Reply-To: <4684795.LlGW2geaUc@kreacher>
 References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>
-         <13207937.r2GEYrEf4f@kreacher>
-Content-Type: multipart/mixed; boundary="=-bU21ZBsdw4g45G9I/wXt"
+         <13207937.r2GEYrEf4f@kreacher> <4684795.LlGW2geaUc@kreacher>
+Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---=-bU21ZBsdw4g45G9I/wXt
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-On Tue, 2020-07-28 at 17:09 +0200, Rafael J. Wysocki wrote:
-> Hi All,
+On Tue, 2020-07-28 at 17:13 +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> On Monday, July 27, 2020 5:13:40 PM CEST Rafael J. Wysocki wrote:
-> > On Thursday, July 16, 2020 7:37:04 PM CEST Rafael J. Wysocki wrote:
-> > > This really is a v2 of this patch:
-> > > 
-> > > https://patchwork.kernel.org/patch/11663271/
-> > > 
-> > > with an extra preceding cleanup patch to avoid making unrelated
-> > > changes in the
-> > > [2/2].
-> > 
-I applied this series along with
-[PATCH] cpufreq: intel_pstate: Fix EPP setting via sysfs in active mode
-on 5.8 latest master (On top of raw epp patchset).
+> Allow intel_pstate to work in the passive mode with HWP enabled and
+> make it set the HWP minimum performance limit (HWP floor) to the
+> P-state value given by the target frequency supplied by the cpufreq
+> governor, so as to prevent the HWP algorithm and the CPU scheduler
+> from working against each other, at least when the schedutil governor
+> is in use, and update the intel_pstate documentation accordingly.
+> 
+> Among other things, this allows utilization clamps to be taken
+> into account, at least to a certain extent, when intel_pstate is
+> in use and makes it more likely that sufficient capacity for
+> deadline tasks will be provided.
+> 
+> After this change, the resulting behavior of an HWP system with
+> intel_pstate in the passive mode should be close to the behavior
+> of the analogous non-HWP system with intel_pstate in the passive
+> mode, except that in the frequency range below the base frequency
+> (ie. the frequency retured by the base_frequency cpufreq attribute
+> in sysfs on HWP systems) the HWP algorithm is allowed to go above
+> the floor P-state set by intel_pstate with or without hardware
+> coordination of P-states among CPUs in the same package.
+> 
+Do you mean HWP.req.min will be below base_freq (unless user overrides
+it)?
+With busy workload I see HWP req.min = HWP req.max.
+The base freq: 1.3GHz (ratio 0x0d), MAX 1C turbo: 3.9GHz (ratio: 0x27)
+When I monitor MSR 0x774 (HWP_REQ), I see
+0x80002727
 
-When intel_pstate=passive from kernel command line then it is fine, no
-crash. But switch dynamically, crashed:
-Attached crash.txt. I may need to try your linux-pm tree.
-
-Then after some playing I reached a state when I monitor MSR 0x774:
-while true; do rdmsr 0x774; sleep 1; done
-80002704
-...
-...
-ff000101
-ff000101
-ff000101
-ff000101
-ff000101
-ff000101
-ff000101
-ff000101
-
-Don't have a recipe to reproduce this.
+Normally msr 0x774
+0x80002704 
 
 Thanks,
 Srinivas
 
-> > Almost the same as before, but the first patch has been reworked to
-> > handle
-> > errors in store_energy_performance_preference() correctly and
-> > rebased on top
-> > of the current linux-pm.git branch.
-> > 
-> > No functional changes otherwise.
+> Also note that the setting of the HWP floor may not be taken into
+> account by the processor in the following cases:
 > 
-> One more update of the second patch.
+>  * For the HWP floor in the range of P-states above the base
+>    frequency, referred to as the turbo range, the processor has a
+>    license to choose any P-state from that range, either below or
+>    above the HWP floor, just like a non-HWP processor in the case
+>    when the target P-state falls into the turbo range.
 > 
-> Namely, I realized that the hwp_dynamic_boost sysfs switch was
-> present in the
-> passive mode after the v3 (and the previous versions) of that patch
-> which isn't
-> correct, so this modifies it to avoid exposing hwp_dynamic_boost in
-> the passive
+>  * If P-states of the CPUs in the same package are coordinated
+>    at the hardware level, the processor may choose a P-state
+>    above the HWP floor, just like a non-HWP processor in the
+>    analogous case.
+> 
+> With this change applied, intel_pstate in the passive mode
+> assumes complete control over the HWP request MSR and concurrent
+> changes of that MSR (eg. via the direct MSR access interface) are
+> overridden by it.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2:
+>    * Avoid a race condition when updating the HWP request register
+> while
+>      setting a new EPP value via sysfs.
+> 
+> v2 -> v3:
+>    * Rebase.
+> 
+> v3 -> v4:
+>    * Avoid exposing the hwp_dynamic_boost sysfs switch in the passive
 > mode.
 > 
-> The first patch is the same as in the v2.
+> ---
+>  Documentation/admin-guide/pm/intel_pstate.rst |   89 +++++------
+>  drivers/cpufreq/intel_pstate.c                |  204
+> ++++++++++++++++++++------
+>  2 files changed, 204 insertions(+), 89 deletions(-)
 > 
-> Thanks!
+> Index: linux-pm/drivers/cpufreq/intel_pstate.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/intel_pstate.c
+> +++ linux-pm/drivers/cpufreq/intel_pstate.c
+> @@ -36,6 +36,7 @@
+>  #define INTEL_PSTATE_SAMPLING_INTERVAL	(10 * NSEC_PER_MSEC)
+>  
+>  #define INTEL_CPUFREQ_TRANSITION_LATENCY	20000
+> +#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP	5000
+>  #define INTEL_CPUFREQ_TRANSITION_DELAY		500
+>  
+>  #ifdef CONFIG_ACPI
+> @@ -220,6 +221,7 @@ struct global_params {
+>   *			preference/bias
+>   * @epp_saved:		Saved EPP/EPB during system suspend or
+> CPU offline
+>   *			operation
+> + * @epp_cached		Cached HWP energy-performance
+> preference value
+>   * @hwp_req_cached:	Cached value of the last HWP Request MSR
+>   * @hwp_cap_cached:	Cached value of the last HWP Capabilities MSR
+>   * @last_io_update:	Last time when IO wake flag was set
+> @@ -257,6 +259,7 @@ struct cpudata {
+>  	s16 epp_policy;
+>  	s16 epp_default;
+>  	s16 epp_saved;
+> +	s16 epp_cached;
+>  	u64 hwp_req_cached;
+>  	u64 hwp_cap_cached;
+>  	u64 last_io_update;
+> @@ -690,6 +693,8 @@ static ssize_t show_energy_performance_a
+>  
+>  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+>  
+> +static struct cpufreq_driver intel_pstate;
+> +
+>  static ssize_t store_energy_performance_preference(
+>  		struct cpufreq_policy *policy, const char *buf, size_t
+> count)
+>  {
+> @@ -718,14 +723,35 @@ static ssize_t store_energy_performance_
+>  		raw = true;
+>  	}
+>  
+> +	mutex_lock(&intel_pstate_driver_lock);
+> +
+> +	if (!intel_pstate_driver) {
+> +		mutex_unlock(&intel_pstate_driver_lock);
+> +		return -EAGAIN;
+> +	}
+> +
+>  	mutex_lock(&intel_pstate_limits_lock);
+>  
+> -	ret = intel_pstate_set_energy_pref_index(cpu_data, ret, raw,
+> epp);
+> -	if (!ret)
+> +	if (intel_pstate_driver == &intel_pstate) {
+> +		ret = intel_pstate_set_energy_pref_index(cpu_data, ret,
+> raw, epp);
+> +		if (!ret)
+> +			ret = count;
+> +	} else {
+> +		/*
+> +		 * In the passive mode simply update the cached EPP
+> value and
+> +		 * rely on intel_cpufreq_adjust_hwp() to pick it up
+> later.
+> +		 */
+> +		if (!raw)
+> +			epp = ret ? epp_values[ret - 1] : cpu_data-
+> >epp_default;
+> +
+> +		WRITE_ONCE(cpu_data->epp_cached, epp);
+>  		ret = count;
+> +	}
+>  
+>  	mutex_unlock(&intel_pstate_limits_lock);
+>  
+> +	mutex_unlock(&intel_pstate_driver_lock);
+> +
+>  	return ret;
+>  }
+>  
+> @@ -1138,8 +1164,6 @@ static ssize_t store_no_turbo(struct kob
+>  	return count;
+>  }
+>  
+> -static struct cpufreq_driver intel_pstate;
+> -
+>  static void update_qos_request(enum freq_qos_req_type type)
+>  {
+>  	int max_state, turbo_max, freq, i, perf_pct;
+> @@ -1323,9 +1347,10 @@ static const struct attribute_group inte
+>  
+>  static const struct x86_cpu_id intel_pstate_cpu_ee_disable_ids[];
+>  
+> +static struct kobject *intel_pstate_kobject;
+> +
+>  static void __init intel_pstate_sysfs_expose_params(void)
+>  {
+> -	struct kobject *intel_pstate_kobject;
+>  	int rc;
+>  
+>  	intel_pstate_kobject = kobject_create_and_add("intel_pstate",
+> @@ -1350,17 +1375,31 @@ static void __init intel_pstate_sysfs_ex
+>  	rc = sysfs_create_file(intel_pstate_kobject,
+> &min_perf_pct.attr);
+>  	WARN_ON(rc);
+>  
+> -	if (hwp_active) {
+> -		rc = sysfs_create_file(intel_pstate_kobject,
+> -				       &hwp_dynamic_boost.attr);
+> -		WARN_ON(rc);
+> -	}
+> -
+>  	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids)) {
+>  		rc = sysfs_create_file(intel_pstate_kobject,
+> &energy_efficiency.attr);
+>  		WARN_ON(rc);
+>  	}
+>  }
+> +
+> +static void intel_pstate_sysfs_expose_hwp_dynamic_boost(void)
+> +{
+> +	int rc;
+> +
+> +	if (!hwp_active)
+> +		return;
+> +
+> +	rc = sysfs_create_file(intel_pstate_kobject,
+> &hwp_dynamic_boost.attr);
+> +	WARN_ON_ONCE(rc);
+> +}
+> +
+> +static void intel_pstate_sysfs_hide_hwp_dynamic_boost(void)
+> +{
+> +	if (!hwp_active)
+> +		return;
+> +
+> +	sysfs_remove_file(intel_pstate_kobject,
+> &hwp_dynamic_boost.attr);
+> +}
+> +
+>  /************************** sysfs end ************************/
+>  
+>  static void intel_pstate_hwp_enable(struct cpudata *cpudata)
+> @@ -2041,6 +2080,7 @@ static int intel_pstate_init_cpu(unsigne
+>  		cpu->epp_default = -EINVAL;
+>  		cpu->epp_powersave = -EINVAL;
+>  		cpu->epp_saved = -EINVAL;
+> +		WRITE_ONCE(cpu->epp_cached, -EINVAL);
+>  	}
+>  
+>  	cpu = all_cpu_data[cpunum];
+> @@ -2239,7 +2279,10 @@ static int intel_pstate_verify_policy(st
+>  
+>  static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+>  {
+> -	intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> +	if (hwp_active)
+> +		intel_pstate_hwp_force_min_perf(policy->cpu);
+> +	else
+> +		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+>  }
+>  
+>  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+> @@ -2247,12 +2290,10 @@ static void intel_pstate_stop_cpu(struct
+>  	pr_debug("CPU %d exiting\n", policy->cpu);
+>  
+>  	intel_pstate_clear_update_util_hook(policy->cpu);
+> -	if (hwp_active) {
+> +	if (hwp_active)
+>  		intel_pstate_hwp_save_state(policy);
+> -		intel_pstate_hwp_force_min_perf(policy->cpu);
+> -	} else {
+> -		intel_cpufreq_stop_cpu(policy);
+> -	}
+> +
+> +	intel_cpufreq_stop_cpu(policy);
+>  }
+>  
+>  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+> @@ -2382,13 +2423,82 @@ static void intel_cpufreq_trace(struct c
+>  		fp_toint(cpu->iowait_boost * 100));
+>  }
+>  
+> +static void intel_cpufreq_adjust_hwp(struct cpudata *cpu, u32
+> target_pstate,
+> +				     bool fast_switch)
+> +{
+> +	u64 prev = READ_ONCE(cpu->hwp_req_cached), value = prev;
+> +	s16 epp;
+> +
+> +	value &= ~HWP_MIN_PERF(~0L);
+> +	value |= HWP_MIN_PERF(target_pstate);
+> +
+> +	/*
+> +	 * The entire MSR needs to be updated in order to update the
+> HWP min
+> +	 * field in it, so opportunistically update the max too if
+> needed.
+> +	 */
+> +	value &= ~HWP_MAX_PERF(~0L);
+> +	value |= HWP_MAX_PERF(cpu->max_perf_ratio);
+> +
+> +	/*
+> +	 * In case the EPP has been adjusted via sysfs, write the last
+> cached
+> +	 * value of it to the MSR as well.
+> +	 */
+> +	epp = READ_ONCE(cpu->epp_cached);
+> +	if (epp >= 0) {
+> +		value &= ~GENMASK_ULL(31, 24);
+> +		value |= (u64)epp << 24;
+> +	}
+> +
+> +	if (value == prev)
+> +		return;
+> +
+> +	WRITE_ONCE(cpu->hwp_req_cached, value);
+> +	if (fast_switch)
+> +		wrmsrl(MSR_HWP_REQUEST, value);
+> +	else
+> +		wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
+> +}
+> +
+> +static void intel_cpufreq_adjust_perf_ctl(struct cpudata *cpu,
+> +					  u32 target_pstate, bool
+> fast_switch)
+> +{
+> +	if (fast_switch)
+> +		wrmsrl(MSR_IA32_PERF_CTL,
+> +		       pstate_funcs.get_val(cpu, target_pstate));
+> +	else
+> +		wrmsrl_on_cpu(cpu->cpu, MSR_IA32_PERF_CTL,
+> +			      pstate_funcs.get_val(cpu,
+> target_pstate));
+> +}
+> +
+> +static int intel_cpufreq_update_pstate(struct cpudata *cpu, int
+> target_pstate,
+> +				       bool fast_switch)
+> +{
+> +	int old_pstate = cpu->pstate.current_pstate;
+> +
+> +	target_pstate = intel_pstate_prepare_request(cpu,
+> target_pstate);
+> +	if (target_pstate != old_pstate) {
+> +		cpu->pstate.current_pstate = target_pstate;
+> +		if (hwp_active)
+> +			intel_cpufreq_adjust_hwp(cpu, target_pstate,
+> +						 fast_switch);
+> +		else
+> +			intel_cpufreq_adjust_perf_ctl(cpu,
+> target_pstate,
+> +						      fast_switch);
+> +	}
+> +
+> +	intel_cpufreq_trace(cpu, fast_switch ?
+> INTEL_PSTATE_TRACE_FAST_SWITCH :
+> +			    INTEL_PSTATE_TRACE_TARGET, old_pstate);
+> +
+> +	return target_pstate;
+> +}
+> +
+>  static int intel_cpufreq_target(struct cpufreq_policy *policy,
+>  				unsigned int target_freq,
+>  				unsigned int relation)
+>  {
+>  	struct cpudata *cpu = all_cpu_data[policy->cpu];
+>  	struct cpufreq_freqs freqs;
+> -	int target_pstate, old_pstate;
+> +	int target_pstate;
+>  
+>  	update_turbo_state();
+>  
+> @@ -2396,6 +2506,7 @@ static int intel_cpufreq_target(struct c
+>  	freqs.new = target_freq;
+>  
+>  	cpufreq_freq_transition_begin(policy, &freqs);
+> +
+>  	switch (relation) {
+>  	case CPUFREQ_RELATION_L:
+>  		target_pstate = DIV_ROUND_UP(freqs.new, cpu-
+> >pstate.scaling);
+> @@ -2407,15 +2518,11 @@ static int intel_cpufreq_target(struct c
+>  		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu-
+> >pstate.scaling);
+>  		break;
+>  	}
+> -	target_pstate = intel_pstate_prepare_request(cpu,
+> target_pstate);
+> -	old_pstate = cpu->pstate.current_pstate;
+> -	if (target_pstate != cpu->pstate.current_pstate) {
+> -		cpu->pstate.current_pstate = target_pstate;
+> -		wrmsrl_on_cpu(policy->cpu, MSR_IA32_PERF_CTL,
+> -			      pstate_funcs.get_val(cpu,
+> target_pstate));
+> -	}
+> +
+> +	target_pstate = intel_cpufreq_update_pstate(cpu, target_pstate,
+> false);
+> +
+>  	freqs.new = target_pstate * cpu->pstate.scaling;
+> -	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_TARGET,
+> old_pstate);
+> +
+>  	cpufreq_freq_transition_end(policy, &freqs, false);
+>  
+>  	return 0;
+> @@ -2425,15 +2532,14 @@ static unsigned int intel_cpufreq_fast_s
+>  					      unsigned int target_freq)
+>  {
+>  	struct cpudata *cpu = all_cpu_data[policy->cpu];
+> -	int target_pstate, old_pstate;
+> +	int target_pstate;
+>  
+>  	update_turbo_state();
+>  
+>  	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
+> -	target_pstate = intel_pstate_prepare_request(cpu,
+> target_pstate);
+> -	old_pstate = cpu->pstate.current_pstate;
+> -	intel_pstate_update_pstate(cpu, target_pstate);
+> -	intel_cpufreq_trace(cpu, INTEL_PSTATE_TRACE_FAST_SWITCH,
+> old_pstate);
+> +
+> +	target_pstate = intel_cpufreq_update_pstate(cpu, target_pstate,
+> true);
+> +
+>  	return target_pstate * cpu->pstate.scaling;
+>  }
+>  
+> @@ -2453,7 +2559,6 @@ static int intel_cpufreq_cpu_init(struct
+>  		return ret;
+>  
+>  	policy->cpuinfo.transition_latency =
+> INTEL_CPUFREQ_TRANSITION_LATENCY;
+> -	policy->transition_delay_us = INTEL_CPUFREQ_TRANSITION_DELAY;
+>  	/* This reflects the intel_pstate_get_cpu_pstates() setting. */
+>  	policy->cur = policy->cpuinfo.min_freq;
+>  
+> @@ -2465,10 +2570,17 @@ static int intel_cpufreq_cpu_init(struct
+>  
+>  	cpu = all_cpu_data[policy->cpu];
+>  
+> -	if (hwp_active)
+> +	if (hwp_active) {
+> +		u64 value;
+> +
+>  		intel_pstate_get_hwp_max(policy->cpu, &turbo_max,
+> &max_state);
+> -	else
+> +		policy->transition_delay_us =
+> INTEL_CPUFREQ_TRANSITION_DELAY_HWP;
+> +		rdmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, &value);
+> +		WRITE_ONCE(cpu->hwp_req_cached, value);
+> +	} else {
+>  		turbo_max = cpu->pstate.turbo_pstate;
+> +		policy->transition_delay_us =
+> INTEL_CPUFREQ_TRANSITION_DELAY;
+> +	}
+>  
+>  	min_freq = DIV_ROUND_UP(turbo_max * global.min_perf_pct, 100);
+>  	min_freq *= cpu->pstate.scaling;
+> @@ -2545,6 +2657,10 @@ static void intel_pstate_driver_cleanup(
+>  		}
+>  	}
+>  	put_online_cpus();
+> +
+> +	if (intel_pstate_driver == &intel_pstate)
+> +		intel_pstate_sysfs_hide_hwp_dynamic_boost();
+> +
+>  	intel_pstate_driver = NULL;
+>  }
+>  
+> @@ -2552,6 +2668,9 @@ static int intel_pstate_register_driver(
+>  {
+>  	int ret;
+>  
+> +	if (driver == &intel_pstate)
+> +		intel_pstate_sysfs_expose_hwp_dynamic_boost();
+> +
+>  	memset(&global, 0, sizeof(global));
+>  	global.max_perf_pct = 100;
+>  
+> @@ -2569,9 +2688,6 @@ static int intel_pstate_register_driver(
+>  
+>  static int intel_pstate_unregister_driver(void)
+>  {
+> -	if (hwp_active)
+> -		return -EBUSY;
+> -
+>  	cpufreq_unregister_driver(intel_pstate_driver);
+>  	intel_pstate_driver_cleanup();
+>  
+> @@ -2827,7 +2943,10 @@ static int __init intel_pstate_init(void
+>  			hwp_active++;
+>  			hwp_mode_bdw = id->driver_data;
+>  			intel_pstate.attr = hwp_cpufreq_attrs;
+> -			default_driver = &intel_pstate;
+> +			intel_cpufreq.attr = hwp_cpufreq_attrs;
+> +			if (!default_driver)
+> +				default_driver = &intel_pstate;
+> +
+>  			goto hwp_cpu_matched;
+>  		}
+>  	} else {
+> @@ -2898,14 +3017,13 @@ static int __init intel_pstate_setup(cha
+>  	if (!str)
+>  		return -EINVAL;
+>  
+> -	if (!strcmp(str, "disable")) {
+> +	if (!strcmp(str, "disable"))
+>  		no_load = 1;
+> -	} else if (!strcmp(str, "active")) {
+> +	else if (!strcmp(str, "active"))
+>  		default_driver = &intel_pstate;
+> -	} else if (!strcmp(str, "passive")) {
+> +	else if (!strcmp(str, "passive"))
+>  		default_driver = &intel_cpufreq;
+> -		no_hwp = 1;
+> -	}
+> +
+>  	if (!strcmp(str, "no_hwp")) {
+>  		pr_info("HWP disabled\n");
+>  		no_hwp = 1;
+> Index: linux-pm/Documentation/admin-guide/pm/intel_pstate.rst
+> ===================================================================
+> --- linux-pm.orig/Documentation/admin-guide/pm/intel_pstate.rst
+> +++ linux-pm/Documentation/admin-guide/pm/intel_pstate.rst
+> @@ -54,10 +54,13 @@ registered (see `below <status_attr_>`_)
+>  Operation Modes
+>  ===============
+>  
+> -``intel_pstate`` can operate in three different modes: in the active
+> mode with
+> -or without hardware-managed P-states support and in the passive
+> mode.  Which of
+> -them will be in effect depends on what kernel command line options
+> are used and
+> -on the capabilities of the processor.
+> +``intel_pstate`` can operate in two different modes, active or
+> passive.  In the
+> +active mode, it uses its own internal preformance scaling governor
+> algorithm or
+> +allows the hardware to do preformance scaling by itself, while in
+> the passive
+> +mode it responds to requests made by a generic ``CPUFreq`` governor
+> implementing
+> +a certain performance scaling algorithm.  Which of them will be in
+> effect
+> +depends on what kernel command line options are used and on the
+> capabilities of
+> +the processor.
+>  
+>  Active Mode
+>  -----------
+> @@ -194,10 +197,11 @@ This is the default operation mode of ``
+>  hardware-managed P-states (HWP) support.  It is always used if the
+>  ``intel_pstate=passive`` argument is passed to the kernel in the
+> command line
+>  regardless of whether or not the given processor supports
+> HWP.  [Note that the
+> -``intel_pstate=no_hwp`` setting implies ``intel_pstate=passive`` if
+> it is used
+> -without ``intel_pstate=active``.]  Like in the active mode without
+> HWP support,
+> -in this mode ``intel_pstate`` may refuse to work with processors
+> that are not
+> -recognized by it.
+> +``intel_pstate=no_hwp`` setting causes the driver to start in the
+> passive mode
+> +if it is not combined with ``intel_pstate=active``.]  Like in the
+> active mode
+> +without HWP support, in this mode ``intel_pstate`` may refuse to
+> work with
+> +processors that are not recognized by it if HWP is prevented from
+> being enabled
+> +through the kernel command line.
+>  
+>  If the driver works in this mode, the ``scaling_driver`` policy
+> attribute in
+>  ``sysfs`` for all ``CPUFreq`` policies contains the string
+> "intel_cpufreq".
+> @@ -318,10 +322,9 @@ manuals need to be consulted to get to i
+>  
+>  For this reason, there is a list of supported processors in
+> ``intel_pstate`` and
+>  the driver initialization will fail if the detected processor is not
+> in that
+> -list, unless it supports the `HWP feature <Active Mode_>`_.  [The
+> interface to
+> -obtain all of the information listed above is the same for all of
+> the processors
+> -supporting the HWP feature, which is why they all are supported by
+> -``intel_pstate``.]
+> +list, unless it supports the HWP feature.  [The interface to obtain
+> all of the
+> +information listed above is the same for all of the processors
+> supporting the
+> +HWP feature, which is why ``intel_pstate`` works with all of them.]
+>  
+>  
+>  User Space Interface in ``sysfs``
+> @@ -425,22 +428,16 @@ argument is passed to the kernel in the
+>  	as well as the per-policy ones) are then reset to their default
+>  	values, possibly depending on the target operation mode.]
+>  
+> -	That only is supported in some configurations, though (for
+> example, if
+> -	the `HWP feature is enabled in the processor <Active Mode With
+> HWP_>`_,
+> -	the operation mode of the driver cannot be changed), and if it
+> is not
+> -	supported in the current configuration, writes to this
+> attribute will
+> -	fail with an appropriate error.
+> -
+>  ``energy_efficiency``
+> -	This attribute is only present on platforms, which have CPUs
+> matching
+> -	Kaby Lake or Coffee Lake desktop CPU model. By default
+> -	energy efficiency optimizations are disabled on these CPU
+> models in HWP
+> -	mode by this driver. Enabling energy efficiency may limit
+> maximum
+> -	operating frequency in both HWP and non HWP mode. In non HWP
+> mode,
+> -	optimizations are done only in the turbo frequency range. In
+> HWP mode,
+> -	optimizations are done in the entire frequency range. Setting
+> this
+> -	attribute to "1" enables energy efficiency optimizations and
+> setting
+> -	to "0" disables energy efficiency optimizations.
+> +	This attribute is only present on platforms with CPUs matching
+> the Kaby
+> +	Lake or Coffee Lake desktop CPU model. By default, energy-
+> efficiency
+> +	optimizations are disabled on these CPU models if HWP is
+> enabled.
+> +	Enabling energy-efficiency optimizations may limit maximum
+> operating
+> +	frequency with or without the HWP feature.  With HWP enabled,
+> the
+> +	optimizations are done only in the turbo frequency
+> range.  Without it,
+> +	they are done in the entire available frequency range.  Setting
+> this
+> +	attribute to "1" enables the energy-efficiency optimizations
+> and setting
+> +	to "0" disables them.
+>  
+>  Interpretation of Policy Attributes
+>  -----------------------------------
+> @@ -484,8 +481,8 @@ Next, the following policy attributes ha
+>  	policy for the time interval between the last two invocations
+> of the
+>  	driver's utilization update callback by the CPU scheduler for
+> that CPU.
+>  
+> -One more policy attribute is present if the `HWP feature is enabled
+> in the
+> -processor <Active Mode With HWP_>`_:
+> +One more policy attribute is present if the HWP feature is enabled
+> in the
+> +processor:
+>  
+>  ``base_frequency``
+>  	Shows the base frequency of the CPU. Any frequency above this
+> will be
+> @@ -526,11 +523,11 @@ on the following rules, regardless of th
+>  
+>   3. The global and per-policy limits can be set independently.
+>  
+> -If the `HWP feature is enabled in the processor <Active Mode With
+> HWP_>`_, the
+> -resulting effective values are written into its registers whenever
+> the limits
+> -change in order to request its internal P-state selection logic to
+> always set
+> -P-states within these limits.  Otherwise, the limits are taken into
+> account by
+> -scaling governors (in the `passive mode <Passive Mode_>`_) and by
+> the driver
+> +In the `active mode with the HWP feature enabled <Active Mode With
+> HWP_>`_, the
+> +resulting effective values are written into hardware registers
+> whenever the
+> +limits change in order to request its internal P-state selection
+> logic to always
+> +set P-states within these limits.  Otherwise, the limits are taken
+> into account
+> +by scaling governors (in the `passive mode <Passive Mode_>`_) and by
+> the driver
+>  every time before setting a new P-state for a CPU.
+>  
+>  Additionally, if the ``intel_pstate=per_cpu_perf_limits`` command
+> line argument
+> @@ -541,12 +538,11 @@ at all and the only way to set the limit
+>  Energy vs Performance Hints
+>  ---------------------------
+>  
+> -If ``intel_pstate`` works in the `active mode with the HWP feature
+> enabled
+> -<Active Mode With HWP_>`_ in the processor, additional attributes
+> are present
+> -in every ``CPUFreq`` policy directory in ``sysfs``.  They are
+> intended to allow
+> -user space to help ``intel_pstate`` to adjust the processor's
+> internal P-state
+> -selection logic by focusing it on performance or on energy-
+> efficiency, or
+> -somewhere between the two extremes:
+> +If the hardware-managed P-states (HWP) is enabled in the processor,
+> additional
+> +attributes, intended to allow user space to help ``intel_pstate`` to
+> adjust the
+> +processor's internal P-state selection logic by focusing it on
+> performance or on
+> +energy-efficiency, or somewhere between the two extremes, are
+> present in every
+> +``CPUFreq`` policy directory in ``sysfs``.  They are :
+>  
+>  ``energy_performance_preference``
+>  	Current value of the energy vs performance hint for the given
+> policy
+> @@ -650,12 +646,14 @@ of them have to be prepended with the ``
+>  	Do not register ``intel_pstate`` as the scaling driver even if
+> the
+>  	processor is supported by it.
+>  
+> +``active``
+> +	Register ``intel_pstate`` in the `active mode <Active Mode_>`_
+> to start
+> +	with.
+> +
+>  ``passive``
+>  	Register ``intel_pstate`` in the `passive mode <Passive
+> Mode_>`_ to
+>  	start with.
+>  
+> -	This option implies the ``no_hwp`` one described below.
+> -
+>  ``force``
+>  	Register ``intel_pstate`` as the scaling driver instead of
+>  	``acpi-cpufreq`` even if the latter is preferred on the given
+> system.
+> @@ -670,13 +668,12 @@ of them have to be prepended with the ``
+>  	driver is used instead of ``acpi-cpufreq``.
+>  
+>  ``no_hwp``
+> -	Do not enable the `hardware-managed P-states (HWP) feature
+> -	<Active Mode With HWP_>`_ even if it is supported by the
+> processor.
+> +	Do not enable the hardware-managed P-states (HWP) feature even
+> if it is
+> +	supported by the processor.
+>  
+>  ``hwp_only``
+>  	Register ``intel_pstate`` as the scaling driver only if the
+> -	`hardware-managed P-states (HWP) feature <Active Mode With
+> HWP_>`_ is
+> -	supported by the processor.
+> +	hardware-managed P-states (HWP) feature is supported by the
+> processor.
+>  
+>  ``support_acpi_ppc``
+>  	Take ACPI ``_PPC`` performance limits into account.
 > 
 > 
 > 
-
---=-bU21ZBsdw4g45G9I/wXt
-Content-Disposition: attachment; filename="crash.txt"
-Content-Type: text/plain; name="crash.txt"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-WyAgMjMyLjQ4MzQyMF0gQlVHOiBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlLCBhZGRy
-ZXNzOiAwMDAwMDAwMDAwMDAwMDMwClsgIDIzMi40ODM0MzVdICNQRjogc3VwZXJ2aXNvciByZWFk
-IGFjY2VzcyBpbiBrZXJuZWwgbW9kZQpbICAyMzIuNDgzNDQxXSAjUEY6IGVycm9yX2NvZGUoMHgw
-MDAwKSAtIG5vdC1wcmVzZW50IHBhZ2UKWyAgMjMyLjQ4MzQ0Nl0gUEdEIDAgUDREIDAgClsgIDIz
-Mi40ODM0NTddIE9vcHM6IDAwMDAgWyMxXSBTTVAgTk9QVEkKWyAgMjMyLjQ4MzQ2OV0gQ1BVOiA3
-IFBJRDogMjA2NCBDb21tOiBiYXNoIFRhaW50ZWQ6IEcgICAgICAgIFcgICAgICAgICA1LjguMC1y
-YzYrICM2ClsgIDIzMi40ODM0NzRdIEhhcmR3YXJlIG5hbWU6IERlbGwgSW5jLiBYUFMgMTMgNzM5
-MCAyLWluLTEvMDZDRFZZLCBCSU9TIDEuMy4xIDAzLzAyLzIwMjAKWyAgMjMyLjQ4MzQ5MV0gUklQ
-OiAwMDEwOnN5c2ZzX3JlbW92ZV9maWxlX25zKzB4Ni8weDIwClsgIDIzMi40ODM1MDBdIENvZGU6
-IGZmIDRjIDg5IGU3IGU4IGJiIGNlIGZmIGZmIDRjIDg5IGVmIGU4IDQzIGY5IDFkIDAwIDQxIDVj
-IDQxIDVkIDVkIGMzIDY2IDY2IDJlIDBmIDFmIDg0IDAwIDAwIDAwIDAwIDAwIDY2IDkwIDBmIDFm
-IDQ0IDAwIDAwIDU1IDw0OD4gOGIgN2YgMzAgNDggOGIgMzYgNDggODkgZTUgZTggY2IgZTIgZmYg
-ZmYgNWQgYzMgNjYgMGYgMWYgODQgMDAKWyAgMjMyLjQ4MzUwN10gUlNQOiAwMDE4OmZmZmZhYTM3
-YzFjOTNkZjggRUZMQUdTOiAwMDAxMDI0NgpbICAyMzIuNDgzNTE0XSBSQVg6IDAwMDAwMDAwMDAw
-MDAwMDEgUkJYOiAwMDAwMDAwMDAwMDAwMDA3IFJDWDogMDAwMDAwMDAwMDAwMDAwOApbICAyMzIu
-NDgzNTE5XSBSRFg6IDAwMDAwMDAwMDAwMDAwMDAgUlNJOiBmZmZmZmZmZmE4N2YxZjYwIFJESTog
-MDAwMDAwMDAwMDAwMDAwMApbICAyMzIuNDgzNTI0XSBSQlA6IGZmZmZhYTM3YzFjOTNlMTggUjA4
-OiAwMDAwMDAwMDAwMDAwMDAwIFIwOTogZmZmZmZmZmZhNzkxZmYwMApbICAyMzIuNDgzNTI5XSBS
-MTA6IGZmZmY4YTE1YmMwZjM2MDAgUjExOiAwMDAwMDAwMDAwMDAwMDAxIFIxMjogMDAwMDAwMDAw
-MDAwMDAwOApbICAyMzIuNDgzNTMzXSBSMTM6IGZmZmY4YTE1YjMwNTkxOTcgUjE0OiBmZmZmZmZm
-ZmZmZmZmZmYyIFIxNTogZmZmZjhhMTU5Zjk0NTAyMApbICAyMzIuNDgzNTQxXSBGUzogIDAwMDA3
-ZjA2OGEzZDQ3NDAoMDAwMCkgR1M6ZmZmZjhhMTViZjdjMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAw
-MDAwMDAwMDAwClsgIDIzMi40ODM1NDddIENTOiAgMDAxMCBEUzogMDAwMCBFUzogMDAwMCBDUjA6
-IDAwMDAwMDAwODAwNTAwMzMKWyAgMjMyLjQ4MzU1Ml0gQ1IyOiAwMDAwMDAwMDAwMDAwMDMwIENS
-MzogMDAwMDAwMDQ2ZWM3ODAwNCBDUjQ6IDAwMDAwMDAwMDA3NjBlZTAKWyAgMjMyLjQ4MzU1N10g
-UEtSVTogNTU1NTU1NTQKWyAgMjMyLjQ4MzU2MV0gQ2FsbCBUcmFjZToKWyAgMjMyLjQ4MzU4MV0g
-ID8gaW50ZWxfcHN0YXRlX2RyaXZlcl9jbGVhbnVwKzB4YmQvMHhkMApbICAyMzIuNDgzNTkwXSAg
-c3RvcmVfc3RhdHVzKzB4OWIvMHgxODAKWyAgMjMyLjQ4MzYwM10gIGtvYmpfYXR0cl9zdG9yZSsw
-eDEyLzB4MjAKWyAgMjMyLjQ4MzYxMF0gIHN5c2ZzX2tmX3dyaXRlKzB4M2UvMHg1MApbICAyMzIu
-NDgzNjIzXSAga2VybmZzX2ZvcF93cml0ZSsweGRhLzB4MWIwClsgIDIzMi40ODM2MzZdICB2ZnNf
-d3JpdGUrMHhjOS8weDIwMApbICAyMzIuNDgzNjQ3XSAga3N5c193cml0ZSsweDY3LzB4ZTAKWyAg
-MjMyLjQ4MzY1N10gIF9feDY0X3N5c193cml0ZSsweDFhLzB4MjAKWyAgMjMyLjQ4MzY2OF0gIGRv
-X3N5c2NhbGxfNjQrMHg1Mi8weGMwClsgIDIzMi40ODM2ODBdICBlbnRyeV9TWVNDQUxMXzY0X2Fm
-dGVyX2h3ZnJhbWUrMHg0NC8weGE5ClsgIDIzMi40ODM2ODldIFJJUDogMDAzMzoweDdmMDY4YTRl
-ODA1NwpbICAyMzIuNDgzNjkzXSBDb2RlOiBCYWQgUklQIHZhbHVlLgpbICAyMzIuNDgzNjk5XSBS
-U1A6IDAwMmI6MDAwMDdmZmUwZDRmYWVjOCBFRkxBR1M6IDAwMDAwMjQ2IE9SSUdfUkFYOiAwMDAw
-MDAwMDAwMDAwMDAxClsgIDIzMi40ODM3MDVdIFJBWDogZmZmZmZmZmZmZmZmZmZkYSBSQlg6IDAw
-MDAwMDAwMDAwMDAwMDggUkNYOiAwMDAwN2YwNjhhNGU4MDU3ClsgIDIzMi40ODM3MTBdIFJEWDog
-MDAwMDAwMDAwMDAwMDAwOCBSU0k6IDAwMDA1NWI1MmUzYTY3MDAgUkRJOiAwMDAwMDAwMDAwMDAw
-MDAxClsgIDIzMi40ODM3MTVdIFJCUDogMDAwMDU1YjUyZTNhNjcwMCBSMDg6IDAwMDAwMDAwMDAw
-MDAwMGEgUjA5OiAwMDAwMDAwMDAwMDAwMDA3ClsgIDIzMi40ODM3MTldIFIxMDogMDAwMDU1YjUy
-Y2NhNTAxNyBSMTE6IDAwMDAwMDAwMDAwMDAyNDYgUjEyOiAwMDAwMDAwMDAwMDAwMDA4ClsgIDIz
-Mi40ODM3MjRdIFIxMzogMDAwMDdmMDY4YTVjMzZhMCBSMTQ6IDAwMDA3ZjA2OGE1YzQ0YTAgUjE1
-OiAwMDAwN2YwNjhhNWMzOGEwClsgIDIzMi40ODM3MzVdIE1vZHVsZXMgbGlua2VkIGluOiBtc3Ig
-cmZjb21tIGNjbSBjbWFjIGFsZ2lmX2hhc2ggYWxnaWZfc2tjaXBoZXIgYWZfYWxnIHdhY29tIHVz
-YmhpZCBoaWRfbXVsdGl0b3VjaCBibmVwIGhpZF9zZW5zb3JfYWxzIGhpZF9zZW5zb3JfaW5jbF8z
-ZCBoaWRfc2Vuc29yX2FjY2VsXzNkIGhpZF9zZW5zb3JfbWFnbl8zZCBoaWRfc2Vuc29yX2d5cm9f
-M2QgaGlkX3NlbnNvcl9yb3RhdGlvbiBoaWRfc2Vuc29yX3RyaWdnZXIgaW5kdXN0cmlhbGlvX3Ry
-aWdnZXJlZF9idWZmZXIga2ZpZm9fYnVmIGhpZF9zZW5zb3JfaWlvX2NvbW1vbiBpbmR1c3RyaWFs
-aW8gaGlkX3NlbnNvcl9jdXN0b20geDg2X3BrZ190ZW1wX3RoZXJtYWwgaGlkX3NlbnNvcl9odWIg
-aW50ZWxfcG93ZXJjbGFtcCBoaWRfZ2VuZXJpYyBpbnRlbF9pc2h0cF9sb2FkZXIgc25kX3NvZl9w
-Y2kgc25kX3NvZl9pbnRlbF9ieXQgaW50ZWxfaXNodHBfaGlkIHNuZF9zb2ZfaW50ZWxfaXBjIGRl
-bGxfbGFwdG9wIGRlbGxfd21pIGNyb3NfZWNfaXNodHAgc25kX3NvZl9pbnRlbF9oZGFfY29tbW9u
-IG1laV9oZGNwIHJ0c3hfcGNpX3NkbW1jIGludGVsX3JhcGxfbXNyIGludGVsX3dtaV90aHVuZGVy
-Ym9sdCBjb3JldGVtcCB3bWlfYm1vZiBkZWxsX3NtYmlvcyBzbmRfc29jX2hkYWNfaGRhIGNyb3Nf
-ZWMgc25kX3NvZl94dGVuc2FfZHNwIHNuZF9zb2ZfaW50ZWxfaGRhIHNuZF9zb2Yga3ZtX2ludGVs
-IGRlbGxfd21pX2Rlc2NyaXB0b3Igc25kX2hkYV9jb2RlY19oZG1pIGRjZGJhcyBzbmRfaGRhX2V4
-dF9jb3JlIGRlbGxfc21tX2h3bW9uIG5sc19pc284ODU5XzEgc25kX3NvY19hY3BpX2ludGVsX21h
-dGNoIGt2bSBzbmRfaGRhX2NvZGVjX3JlYWx0ZWsgc25kX3NvY19hY3BpIHNuZF9oZGFfY29kZWNf
-Z2VuZXJpYyBpd2xtdm0gbGVkdHJpZ19hdWRpbyBzbmRfc29jX2NvcmUgY3JjdDEwZGlmX3BjbG11
-bCBjcmMzMl9wY2xtdWwgZ2hhc2hfY2xtdWxuaV9pbnRlbCBhZXNuaV9pbnRlbApbICAyMzIuNDgz
-ODIxXSAgY3J5cHRvX3NpbWQgY3J5cHRkIHNuZF9jb21wcmVzcyBnbHVlX2hlbHBlciBhYzk3X2J1
-cyBzbmRfcGNtX2RtYWVuZ2luZSByYXBsIG1hYzgwMjExIGludGVsX2NzdGF0ZSBzbmRfaGRhX2lu
-dGVsIHNuZF9pbnRlbF9kc3BjZmcgc25kX2hkYV9jb2RlYyBzbmRfaGRhX2NvcmUgam95ZGV2IHNu
-ZF9od2RlcCBzbmRfcGNtIGxpYmFyYzQgZWZpX3BzdG9yZSBpd2x3aWZpIGJ0dXNiIHNuZF9zZXFf
-bWlkaSBzbmRfc2VxX21pZGlfZXZlbnQgYnRydGwgc25kX3Jhd21pZGkgYnRiY20gYnRpbnRlbCBz
-bmRfc2VxIGJsdWV0b290aCBjZmc4MDIxMSBzbmRfc2VxX2RldmljZSBzbmRfdGltZXIgc25kIGky
-Y19pODAxIGkyY19zbWJ1cyB1Y3NpX2FjcGkgcHJvY2Vzc29yX3RoZXJtYWxfZGV2aWNlIHR5cGVj
-X3Vjc2kgaW50ZWxfcmFwbF9jb21tb24gaW50ZWxfbHBzc19wY2kgaW50ZWxfbHBzcyBpZG1hNjQg
-cnRzeF9wY2kgc291bmRjb3JlIG1laV9tZSBlY2RoX2dlbmVyaWMgbWVpIGludGVsX2lzaF9pcGMg
-ZWNjIGkyY19oaWQgaW50ZWxfaXNodHAgaW50ZWxfc29jX2R0c19pb3NmIHR5cGVjIHZpcnRfZG1h
-IHdtaSBoaWQgaW50MzQwM190aGVybWFsIHNvY19idXR0b25fYXJyYXkgaW50MzQweF90aGVybWFs
-X3pvbmUgaW50MzQwMF90aGVybWFsIGludGVsX2hpZCBhY3BpX3RoZXJtYWxfcmVsIHNwYXJzZV9r
-ZXltYXAgYWNwaV9wYWQgYWNwaV90YWQgc2NoX2ZxX2NvZGVsIHBhcnBvcnRfcGMgcHBkZXYgbHAg
-cGFycG9ydCBpcF90YWJsZXMgeF90YWJsZXMgYXV0b2ZzNCBpOTE1IGkyY19hbGdvX2JpdCBkcm1f
-a21zX2hlbHBlciBzeXNjb3B5YXJlYSBzeXNmaWxscmVjdCBzeXNpbWdibHQgZmJfc3lzX2ZvcHMg
-Y2VjIGRybSBwc21vdXNlIG52bWUgbnZtZV9jb3JlIGlucHV0X2xlZHMgc2VyaW9fcmF3IG1hY19o
-aWQgdmlkZW8gcGluY3RybF9pY2VsYWtlIHBpbmN0cmxfaW50ZWwKWyAgMjMyLjQ4Mzk0MF0gQ1Iy
-OiAwMDAwMDAwMDAwMDAwMDMwClsgIDIzMi40ODM5NTBdIC0tLVsgZW5kIHRyYWNlIDMxZGI0MWJh
-YjZmZGZmNmYgXS0tLQpbICAyMzMuODEyMjYwXSBSSVA6IDAwMTA6c3lzZnNfcmVtb3ZlX2ZpbGVf
-bnMrMHg2LzB4MjAKWyAgMjMzLjgxMjI4MV0gQ29kZTogZmYgNGMgODkgZTcgZTggYmIgY2UgZmYg
-ZmYgNGMgODkgZWYgZTggNDMgZjkgMWQgMDAgNDEgNWMgNDEgNWQgNWQgYzMgNjYgNjYgMmUgMGYg
-MWYgODQgMDAgMDAgMDAgMDAgMDAgNjYgOTAgMGYgMWYgNDQgMDAgMDAgNTUgPDQ4PiA4YiA3ZiAz
-MCA0OCA4YiAzNiA0OCA4OSBlNSBlOCBjYiBlMiBmZiBmZiA1ZCBjMyA2NiAwZiAxZiA4NCAwMApb
-ICAyMzMuODEyMjkyXSBSU1A6IDAwMTg6ZmZmZmFhMzdjMWM5M2RmOCBFRkxBR1M6IDAwMDEwMjQ2
-ClsgIDIzMy44MTIzMDJdIFJBWDogMDAwMDAwMDAwMDAwMDAwMSBSQlg6IDAwMDAwMDAwMDAwMDAw
-MDcgUkNYOiAwMDAwMDAwMDAwMDAwMDA4ClsgIDIzMy44MTIzMDhdIFJEWDogMDAwMDAwMDAwMDAw
-MDAwMCBSU0k6IGZmZmZmZmZmYTg3ZjFmNjAgUkRJOiAwMDAwMDAwMDAwMDAwMDAwClsgIDIzMy44
-MTIzMTNdIFJCUDogZmZmZmFhMzdjMWM5M2UxOCBSMDg6IDAwMDAwMDAwMDAwMDAwMDAgUjA5OiBm
-ZmZmZmZmZmE3OTFmZjAwClsgIDIzMy44MTIzMThdIFIxMDogZmZmZjhhMTViYzBmMzYwMCBSMTE6
-IDAwMDAwMDAwMDAwMDAwMDEgUjEyOiAwMDAwMDAwMDAwMDAwMDA4ClsgIDIzMy44MTIzMjNdIFIx
-MzogZmZmZjhhMTViMzA1OTE5NyBSMTQ6IGZmZmZmZmZmZmZmZmZmZjIgUjE1OiBmZmZmOGExNTlm
-OTQ1MDIwClsgIDIzMy44MTIzMzFdIEZTOiAgMDAwMDdmMDY4YTNkNDc0MCgwMDAwKSBHUzpmZmZm
-OGExNWJmN2MwMDAwKDAwMDApIGtubEdTOjAwMDAwMDAwMDAwMDAwMDAKWyAgMjMzLjgxMjMzN10g
-Q1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAwIENSMDogMDAwMDAwMDA4MDA1MDAzMwpbICAyMzMu
-ODEyMzQzXSBDUjI6IDAwMDAwMDAwMDAwMDAwMzAgQ1IzOiAwMDAwMDAwNDZlYzc4MDA0IENSNDog
-MDAwMDAwMDAwMDc2MGVlMApbICAyMzMuODEyMzQ5XSBQS1JVOiA1NTU1NTU1NAoK
-
-
---=-bU21ZBsdw4g45G9I/wXt--
 
