@@ -2,114 +2,301 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E14523595E
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Aug 2020 18:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC76F2359BB
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Aug 2020 20:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgHBQ56 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Aug 2020 12:57:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53438 "EHLO mail.kernel.org"
+        id S1726536AbgHBSS4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Aug 2020 14:18:56 -0400
+Received: from mga07.intel.com ([134.134.136.100]:49364 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726364AbgHBQ55 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 2 Aug 2020 12:57:57 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 699C2206E7;
-        Sun,  2 Aug 2020 16:57:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596387477;
-        bh=4kEI4l0aRvt5/h9g0xWJYrGj07HsmDRlUAaOJ6inO8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=y4kBPwEDJbjOZEMc2uLF1D0tsUTpknH0xW29TRuBcLEgXiLx4yHZIn2WnfIrkRR4C
-         4Yd3SnOSonYPM+9KKcRRRIQT7Lq6mcM0UJ4+wrbuU3aMnIXr7IoJAbsNBq/F8ax6iE
-         TimPI9pa+I4T1t74FfpoSVs6hrOK2uVf4dFxjufk=
-Date:   Sun, 2 Aug 2020 18:57:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Qiwu Huang <yanziily@gmail.com>, sre@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiangfei1@xiaomi.com, Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: Re: [PATCH v4 1/4] power: supply: core: add quick charge type
- property
-Message-ID: <20200802165738.GA293244@kroah.com>
-References: <cover.1595214246.git.huangqiwu@xiaomi.com>
- <c9d3199ec18625f9cc4448c3b2049ea2ae80358b.1595214246.git.huangqiwu@xiaomi.com>
- <20200802120015.GA1289@bug>
- <20200802123742.GA257810@kroah.com>
- <20200802142825.GA20261@amd>
+        id S1725910AbgHBSSz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 2 Aug 2020 14:18:55 -0400
+IronPort-SDR: /T3lzslNaqfXwMueqki7w8Mq1vk7wCaBM35Ns98zR/kFPyeSlzbwzDp1F09d4BTwbmVC+tis+f
+ LUdQaahP/e/w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9701"; a="216442026"
+X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
+   d="scan'208";a="216442026"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2020 11:18:55 -0700
+IronPort-SDR: XzGjGgnv1hICVgrcmNE0OiVSw7ViBAqCwmoSCOp41Kh7hKNhLHzfoCmFyMnrQTbUpaTEogUZ0v
+ P5am+3UK0pgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,427,1589266800"; 
+   d="scan'208";a="466234221"
+Received: from fchen82-mobl1.amr.corp.intel.com ([10.213.183.84])
+  by orsmga005.jf.intel.com with ESMTP; 02 Aug 2020 11:18:54 -0700
+Message-ID: <e33e435aa22cc68f832e7377b264278654c62e04.camel@linux.intel.com>
+Subject: Re: cpufreq: intel_pstate: HWP mode issue
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     'Len Brown' <len.brown@intel.com>,
+        'Peter Zijlstra' <peterz@infradead.org>,
+        'Giovanni Gherdovich' <ggherdovich@suse.cz>,
+        'Francisco Jerez' <francisco.jerez.plata@intel.com>,
+        'Linux PM' <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Date:   Sun, 02 Aug 2020 11:18:54 -0700
+In-Reply-To: <000501d668da$5bfd6260$13f82720$@net>
+References: <2931539.RsFqoHxarq@kreacher>
+         <000001d6376a$03bbaae0$0b3300a0$@net>
+         <b624a148cdb91340dd8d8831c7b033017cab737e.camel@linux.intel.com>
+         <000201d63776$2d56f330$8804d990$@net> <000b01d65535$d148b8c0$73da2a40$@net>
+         <000501d668da$5bfd6260$13f82720$@net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200802142825.GA20261@amd>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 02, 2020 at 04:28:25PM +0200, Pavel Machek wrote:
-> On Sun 2020-08-02 14:37:42, Greg KH wrote:
-> > On Sun, Aug 02, 2020 at 02:00:15PM +0200, Pavel Machek wrote:
-> > > On Mon 2020-07-20 13:47:14, Qiwu Huang wrote:
-> > > > From: Qiwu Huang <huangqiwu@xiaomi.com>
-> > > > 
-> > > > Reports the kind of quick charge type based on
-> > > > different adapter power.
-> > > > 
-> > > > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
-> > > > ---
-> > > >  Documentation/ABI/testing/sysfs-class-power | 21 +++++++++++++++++++++
-> > > >  drivers/power/supply/power_supply_sysfs.c   |  1 +
-> > > >  include/linux/power_supply.h                | 10 ++++++++++
-> > > >  3 files changed, 32 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-> > > > index 216d61a22f1e..dd3773dcf16a 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-class-power
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-power
-> > > > @@ -708,3 +708,24 @@ Description:
-> > > >  
-> > > >  		Access: Read
-> > > >  		Valid values: 1-31
-> > > > +
-> > > > +What:		/sys/class/power_supply/<supply_name>/quick_charge_type
-> > > > +Date:		Jul 2020
-> > > > +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
-> > > > +		Description:
-> > > > +		Reports the kind of quick charge type based on different adapter power.
-> > > > +		Different quick charge type represent different charging power.
-> > > > +		QUICK_CHARGE_NORMAL : Charging Power <= 10W
-> > > > +		QUICK_CHARGE_FAST : 10W < Charging Power <= 20W
-> > > > +		QUICK_CHARGE_FLASH : 20W < Charging Power <= 30W
-> > > > +		QUICK_CHARGE_TURBE : 30W < Charging Power <= 50W
-> > > > +		QUICK_CHARGE_SUPER : Charging Power > 50W
-> > > > +
-> > > > +		Access: Read-Only
-> > > > +		Valid values:
-> > > > +			0: QUICK_CHARGE_NORMAL,
-> > > > +			1: QUICK_CHARGE_FAST,
-> > > > +			2: QUICK_CHARGE_FLASH,
-> > > > +			3: QUICK_CHARGE_TURBE,
-> > > > +			4: QUICK_CHARGE_SUPER.
-> > > 
-> > > NAK.
-> > > 
-> > > Just expose value in watts or something... People are talking about > 100W charging, no
-> > > need to go with fast/turbe/super/hyper/nonsense.
-> > > 
-> > > BTW fast charge is already "well defined", and what you call Normal is usually fast charge.
-> > 
-> > I think these names come from the Qi charging spec, right?  So lets use
-> > what is given to us.
+On Sun, 2020-08-02 at 07:36 -0700, Doug Smythies wrote:
+> Hi Srinivas, or anybody at Intel,
 > 
-> There are other standards, and this should better be generic.
+> Any chance of you looking into this issue.
+> I first raised it over 2 months ago.
 
-What standard?  Why not go with this one, it's documented and out there
-and being used.
+Hi Doug,
 
-> Simply expose value in watts.
+Unfortunately, didn't reach to this yet.
 
-What if you do not know the watts, you just know these ranges.
+Thanks,
+Srinivas
 
-thanks,
 
-greg k-h
+> 
+> On 2020.07.08 07:41 Doug Smythies wrote:
+> > On 2020.06.30 11:41 Doug Smythies wrote:
+> > > Hi Srinivas,
+> > > 
+> > > O.K. let's try this again, starting a new thread, with address
+> > > list similar to a few weeks ago.
+> > > I believe I have untangled my multiple issues, such that this e-
+> > > mail should be only about
+> > > the single issue of HWP capable processors incorrectly deciding
+> > > to lower the CPU frequency
+> > > under some conditions. Also, my previous assertion as to the
+> > > issue was indeed incorrect.
+> > > 
+> > > I now:
+> > > . never use x86_energy_perf_policy.
+> > > . For HWP disabled: never change from active to passive or via
+> > > versa, but rather do it via boot.
+> > > . after boot always check and reset the various power limit log
+> > > bits that are set.
+> > > . never compile the kernel (well, until after any tests), which
+> > > will set those bits again.
+> > > . never run prime95 high heat torture test, which will set those
+> > > bits again.
+> > > . Note that the tests done for this e-mail never ever set those
+> > > bits again.
+> > > . Invented an entirely new way to manifest, demonstrate, and
+> > > exploit the issue (also mentioned June
+> > > 6th).
+> > > . All tests were repeated on another HWP capable computer, so a
+> > > i5-9600K and a i5-6200U.
+> > > 
+> > > New method (old was periodic workflow):
+> > > 
+> > > Long busy, short gap, busy but taking loop time samples so as to
+> > > estimate CPU frequency.
+> > > I am calling it an inverse impulse response test.
+> > > 
+> > > Assertion:
+> > > 
+> > > If the short sleep is somehow simultaneous with some sort of 5.0
+> > > millisecond (200 Hertz)
+> > > periodic event (either in HWP itself, or via the driver, I am
+> > > unable to determine which,
+> > > but think it is inside the black box that is HWP),
+> > 
+> > I have been attempting to characterise the "black box" that is HWP.
+> > In terms of system response verses EPP, I only observe the HWP loop
+> > time as the
+> > response variable.
+> > 
+> > 0 <= EPP <= 1 : My test can not measure loop time.
+> > 2 <= EPP <= 39 : HWP servo loop time 2 milliseconds
+> > 40 <= EPP <= 55 : HWP servo loop time 3 milliseconds
+> > 56 <= EPP <= 79 : HWP servo loop time 4 milliseconds
+> > 80 <= EPP <= 133 : HWP servo loop time 5 milliseconds
+> > 134 <= EPP <= 143 : HWP servo loop time 6 milliseconds
+> > 144 <= EPP <= 154 : HWP servo loop time 7 milliseconds
+> > 155 <= EPP <= 175 : HWP servo loop time 8 milliseconds
+> > 176 <= EPP <= 255 : HWP servo loop time 9 milliseconds
+> > 
+> > If there are other system response differences within
+> > those groups, I haven't been able to detect them,
+> > but would be grateful for any further insight.
+> > 
+> > Otherwise, in future, I do not see a need to test anything
+> > other than 9 values of EPP, one from each group.
+> > 
+> > > then there is a possibility that the
+> > > CPU frequency will drop significantly and will take an excessive
+> > > amount of time to recover.
+> > > Frequency step ups are exactly on 5.0 millisecond boundaries +/-
+> > > the short gap time.
+> > > 
+> > > . The probability is somewhat inconsistent and a function of
+> > > whatever else the computer is doing.
+> > > . The time to recover is a function of EPP, and if EPP is low
+> > > enough my test never fails.
+> > > . These tests were all done with default settings.
+> > > . The "5.0" mSec is only for those default settings, it actually
+> > > depends on EPP.
+> > >   . Crude step boundaries, mSec: EPP=32, 2; EPP=64, 4; EPP=128,
+> > > 5.00; EPP=196, 9
+> > 
+> > Now fully understood, as listed above.
+> > 
+> > > . High level: i5-9600K: 2453 tests, 60 failures, 2.45% fail rate.
+> > > (HWP - powersave)
+> > > . High level: i5-6200U: 4134 tests, 128 failures, 3.1% fail rate.
+> > > (HWP - powersave)
+> > > . Low level (capture waveforms): i5-9600K: 1842 captured failure
+> > > waveforms. See graph.
+> > > . Low level (capture waveforms): i5-6200U: 458 captured failure
+> > > waveforms. See graph.
+> > > . Verify acpi-cpufreq/ondemand works fine: i5-9600K: 8975 tests.
+> > > 0 failures.
+> > > . Verify acpi-cpufreq/ondemand works fine: i5-6200U: 8575 tests.
+> > > 0 failures.
+> > 
+> > The tests were all done using the teo idle governor.
+> > While the menu governor does not fail for this particular test, it
+> > fails
+> > in other scenarios.
+> > 
+> > I have yet to find a failure scenario when idle state 2 is
+> > disabled.
+> > I have captured and analyzed about 400 megabytes of trace data,
+> > and have not been able to isolate an exact correlation.
+> > 
+> > > The short gap was 842 uSeconds for all these tests, and for no
+> > > particular reason.
+> > > 
+> > > While I have not re-done the bounds investigation, I have no
+> > > reason to doubt
+> > > my previous work, re-stated below:
+> > > 
+> > > > Gap definition:
+> > > > lower limit not known, but < 747 uSeconds.
+> > > > Upper limit is between 952 and 955 uSeconds (there will be some
+> > > > overhead uncertainties).
+> > 
+> > The only new information I have is that the upper bound is bigger.
+> > 
+> > > > Must be preceded by busy time spanning a couple of HWP sampling
+> > > > boundaries
+> > > > or jiffy boundaries or something (I don't actually know how HWP
+> > > > does stuff).
+> > > 
+> > > Rather than point to graphs, which nobody seems to look at, they
+> > > are attached,
+> > > and so might get striped for some of you.
+> > > 
+> > > ... Doug
+> > > 
+> > > Addendum: Some of the MSRs you have requested in the past:
+> > > 
+> > > i5-9600K (HWP - powersave after test):
+> > > 
+> > > root@s18:/home/doug# /home/doug/c/msr-decoder
+> > > 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8
+> > > :   8 :   8 :
+> > > B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> > > 1.) 0x19C: IA32_THERM_STATUS: 88480000
+> > > 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination
+> > > enabled OOB Bit 8 reset OOB Bit 18
+> > > reset
+> > > 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460000
+> > > 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> > > A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable :
+> > > RHO disable
+> > > 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46
+> > > : guaranteed 37 : efficient 8 :
+> > > lowest 1
+> > > 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+> > >     raw: 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 :
+> > > 80002E08 :
+> > >     min:        8 :        8 :        8 :        8 :        8
+> > > :        8 :
+> > >     max:       46 :       46 :       46 :       46 :       46
+> > > :       46 :
+> > >     des:        0 :        0 :        0 :        0 :        0
+> > > :        0 :
+> > >     epp:      128 :      128 :      128 :      128 :      128
+> > > :      128 :
+> > >     act:        0 :        0 :        0 :        0 :        0
+> > > :        0 :
+> > > 7.) 0x777: IA32_HWP_STATUS: 0 : high 0 : guaranteed 0 : efficient
+> > > 0 : lowest 0
+> > > 
+> > > i5-9600K (no HWP - acpi-cpufreq/ondemand after test):
+> > > 
+> > > root@s18:/home/doug/c# /home/doug/c/msr-decoder
+> > > 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :   8 :   8 :   8 :   8
+> > > :   8 :   8 :
+> > > B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
+> > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-5 :   8 :   8 :   8 :   8
+> > > :   8 :   8 :
+> > > C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-5 :   6 :   6 :   6 :   6
+> > > :   6 :   6 :
+> > > 1.) 0x19C: IA32_THERM_STATUS: 88480000
+> > > 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination
+> > > enabled OOB Bit 8 reset OOB Bit 18
+> > > reset
+> > > 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88460000
+> > > 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> > > A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable :
+> > > RHO disable
+> > > 
+> > > i5-6200U (HWP - powersave after test):
+> > > 
+> > > 8.) 0x198: IA32_PERF_STATUS : CPU 0-3 : 19 : 19 : 19 : 19 :
+> > > B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> > > 1.) 0x19C: IA32_THERM_STATUS: 88430000
+> > > 2.) 0x1AA: MSR_MISC_PWR_MGMT: 4018C0 EIST enabled Coordination
+> > > enabled OOB Bit 8 reset OOB Bit 18
+> > > reset
+> > > 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88420000
+> > > 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> > > A.) 0x1FC: MSR_POWER_CTL: 24005D : C1E disable : EEO enable : RHO
+> > > enable
+> > > 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 105171C : high 28
+> > > : guaranteed 23 : efficient 5 :
+> > > lowest 1
+> > > 6.) 0x774: IA32_HWP_REQUEST: CPU 0-3 :
+> > >     raw: 80001B04 : 80001B04 : 80001B04 : 80001B04 :
+> > >     min:        4 :        4 :        4 :        4 :
+> > >     max:       27 :       27 :       27 :       27 :
+> > >     des:        0 :        0 :        0 :        0 :
+> > >     epp:      128 :      128 :      128 :      128 :
+> > >     act:        0 :        0 :        0 :        0 :
+> > > 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient
+> > > 0 : lowest 0
+> > > 
+> > > i5-6200U (no HWP - acpi-cpufreq/ondemand after test):
+> > > 
+> > > 8.) 0x198: IA32_PERF_STATUS     : CPU 0-3 :  23 :  23 :  23 :  23
+> > > :
+> > > B.) 0x770: IA32_PM_ENABLE: 0 : HWP disable
+> > > 9.) 0x199: IA32_PERF_CTL        : CPU 0-3 :  11 :   5 :   5 :   5
+> > > :
+> > > C.) 0x1B0: IA32_ENERGY_PERF_BIAS: CPU 0-3 :   6 :   6 :   6 :   6
+> > > :
+> > > 1.) 0x19C: IA32_THERM_STATUS: 88440000
+> > > 2.) 0x1AA: MSR_MISC_PWR_MGMT: 4018C0 EIST enabled Coordination
+> > > enabled OOB Bit 8 reset OOB Bit 18
+> > > reset
+> > > 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88430000
+> > > 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> > > A.) 0x1FC: MSR_POWER_CTL: 24005D : C1E disable : EEO enable : RHO
+> > > enable
+> 
+> 
+
