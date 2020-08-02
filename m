@@ -2,117 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF2F23575D
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Aug 2020 16:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8B7235795
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Aug 2020 16:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725859AbgHBOOm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Aug 2020 10:14:42 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:45141 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgHBOOm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 2 Aug 2020 10:14:42 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 2El3kztd8qUs32El4kwnOR; Sun, 02 Aug 2020 08:14:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1596377680; bh=CN/fUyh6opJ5vJi1/Nl1Yp+/imy9pfaN03xKOjmbT9E=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=gLYsrnb4IH6bArD+THINQqUeWy6q73DFicOjHiPwsFSF9Gh2GU3libf+0jS34FFty
-         1FWULe7Ar3kQd6V6IJ4CHJPa/DTkva8Ecgx6MbspFuT8qNTR2mP7FwbsxTZCIOr+WQ
-         jTVXJF7P77w3hkq46lateaksiOL3sPxVPftThQOwgVoJlSY6vtElkzgGQl0TzEuKNO
-         8MCt857dk6fODMxv3Scz7GesQnDXewI9XNlP70/epUnilInQQsrUNID1U9+Nd3LPmN
-         Hwlmzs+KjB1HbcFUQncAG6SLl9slYZPGSjhhR3Xh3PVTkXAg1Gme7TbIV61vXAkqNb
-         ebT6Lv8oCRLpQ==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Mo8sFFSe c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=QyXUC8HyAAAA:8
- a=UklZroHxuSD7NTiwK3MA:9 a=QEXdDO2ut3YA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
-Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>  <13207937.r2GEYrEf4f@kreacher> <4684795.LlGW2geaUc@kreacher> <0fad4951dbd0143b43d4ec7b0dcab6787e0c7a97.camel@linux.intel.com>
-In-Reply-To: <0fad4951dbd0143b43d4ec7b0dcab6787e0c7a97.camel@linux.intel.com>
-Subject: RE: [PATCH v4 2/2] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Sun, 2 Aug 2020 07:14:36 -0700
-Message-ID: <000401d668d7$426d8760$c7489620$@net>
+        id S1725951AbgHBO21 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Aug 2020 10:28:27 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:60200 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725853AbgHBO21 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Aug 2020 10:28:27 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DF1EC1C0BD4; Sun,  2 Aug 2020 16:28:25 +0200 (CEST)
+Date:   Sun, 2 Aug 2020 16:28:25 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Qiwu Huang <yanziily@gmail.com>, sre@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiangfei1@xiaomi.com, Qiwu Huang <huangqiwu@xiaomi.com>
+Subject: Re: [PATCH v4 1/4] power: supply: core: add quick charge type
+ property
+Message-ID: <20200802142825.GA20261@amd>
+References: <cover.1595214246.git.huangqiwu@xiaomi.com>
+ <c9d3199ec18625f9cc4448c3b2049ea2ae80358b.1595214246.git.huangqiwu@xiaomi.com>
+ <20200802120015.GA1289@bug>
+ <20200802123742.GA257810@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdZoWn0mlfrYeATWTAeD6K2eVgHS6QAegGvw
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfEzoaqLdow3a5Y6lALb9PkjOMLhyfrIOQNzzW+hgN4PayDZQydBAuIQ7pJgOMwT+Zl8VsL8Ome9hRnRjGFEQfE4OozrCJlZfRwq5d4/KzZh47FEnpv+k
- hbzCq9d6A56lOdlZIxlP+9+OQFqtD94KzmYilv/OGmEAWpf1LT+RLICX9G5qNyYcHdAlmPyMeBF4UeIOPkYQGS9LquVCnaDAH9YZBmjO4YqCm0GtQJaLjYZh
- v3/8MxFyGj7UxdBD1aLUpVYMR9vNZp+7eIm8NqijEAVjKcOkE0SEHfIBQW6TAZs6eHvmDGiCV+Y08ntOXviqOJ7egM76O/jmasiTCFDPYFIB7yp2ziwVTYue
- M0G42KoyEzecNyLlFzSXEOdah6lZcgh55SA2imcqOGBmDGtZMU4lniiFSXKdqDpDfLQY8bigt2Z6UtMJmAX1eiPTIaiBOA==
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="2fHTh5uZTiUOsy+g"
+Content-Disposition: inline
+In-Reply-To: <20200802123742.GA257810@kroah.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020.08.01 16:41 Srinivas Pandruvada wrote:
-> On Tue, 2020-07-28 at 17:13 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Allow intel_pstate to work in the passive mode with HWP enabled and
-> > make it set the HWP minimum performance limit (HWP floor) to the
-> > P-state value given by the target frequency supplied by the cpufreq
-> > governor, so as to prevent the HWP algorithm and the CPU scheduler
-> > from working against each other, at least when the schedutil governor
-> > is in use, and update the intel_pstate documentation accordingly.
-> >
-> > Among other things, this allows utilization clamps to be taken
-> > into account, at least to a certain extent, when intel_pstate is
-> > in use and makes it more likely that sufficient capacity for
-> > deadline tasks will be provided.
-> >
-> > After this change, the resulting behavior of an HWP system with
-> > intel_pstate in the passive mode should be close to the behavior
-> > of the analogous non-HWP system with intel_pstate in the passive
-> > mode, except that in the frequency range below the base frequency
-> > (ie. the frequency retured by the base_frequency cpufreq attribute
-> > in sysfs on HWP systems) the HWP algorithm is allowed to go above
-> > the floor P-state set by intel_pstate with or without hardware
-> > coordination of P-states among CPUs in the same package.
-> >
-> Do you mean HWP.req.min will be below base_freq (unless user overrides
-> it)?
 
-No.
+--2fHTh5uZTiUOsy+g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> With busy workload I see HWP req.min = HWP req.max.
-> The base freq: 1.3GHz (ratio 0x0d), MAX 1C turbo: 3.9GHz (ratio: 0x27)
-> When I monitor MSR 0x774 (HWP_REQ), I see
-> 0x80002727
+On Sun 2020-08-02 14:37:42, Greg KH wrote:
+> On Sun, Aug 02, 2020 at 02:00:15PM +0200, Pavel Machek wrote:
+> > On Mon 2020-07-20 13:47:14, Qiwu Huang wrote:
+> > > From: Qiwu Huang <huangqiwu@xiaomi.com>
+> > >=20
+> > > Reports the kind of quick charge type based on
+> > > different adapter power.
+> > >=20
+> > > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+> > > ---
+> > >  Documentation/ABI/testing/sysfs-class-power | 21 +++++++++++++++++++=
+++
+> > >  drivers/power/supply/power_supply_sysfs.c   |  1 +
+> > >  include/linux/power_supply.h                | 10 ++++++++++
+> > >  3 files changed, 32 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentat=
+ion/ABI/testing/sysfs-class-power
+> > > index 216d61a22f1e..dd3773dcf16a 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-power
+> > > +++ b/Documentation/ABI/testing/sysfs-class-power
+> > > @@ -708,3 +708,24 @@ Description:
+> > > =20
+> > >  		Access: Read
+> > >  		Valid values: 1-31
+> > > +
+> > > +What:		/sys/class/power_supply/<supply_name>/quick_charge_type
+> > > +Date:		Jul 2020
+> > > +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
+> > > +		Description:
+> > > +		Reports the kind of quick charge type based on different adapter p=
+ower.
+> > > +		Different quick charge type represent different charging power.
+> > > +		QUICK_CHARGE_NORMAL : Charging Power <=3D 10W
+> > > +		QUICK_CHARGE_FAST : 10W < Charging Power <=3D 20W
+> > > +		QUICK_CHARGE_FLASH : 20W < Charging Power <=3D 30W
+> > > +		QUICK_CHARGE_TURBE : 30W < Charging Power <=3D 50W
+> > > +		QUICK_CHARGE_SUPER : Charging Power > 50W
+> > > +
+> > > +		Access: Read-Only
+> > > +		Valid values:
+> > > +			0: QUICK_CHARGE_NORMAL,
+> > > +			1: QUICK_CHARGE_FAST,
+> > > +			2: QUICK_CHARGE_FLASH,
+> > > +			3: QUICK_CHARGE_TURBE,
+> > > +			4: QUICK_CHARGE_SUPER.
+> >=20
+> > NAK.
+> >=20
+> > Just expose value in watts or something... People are talking about > 1=
+00W charging, no
+> > need to go with fast/turbe/super/hyper/nonsense.
+> >=20
+> > BTW fast charge is already "well defined", and what you call Normal is =
+usually fast charge.
+>=20
+> I think these names come from the Qi charging spec, right?  So lets use
+> what is given to us.
 
-Yes, that is what I expect to see.
+There are other standards, and this should better be generic.
 
-> 
-> Normally msr 0x774
-> 0x80002704
+Simply expose value in watts.
 
-That would be "active" mode and the powersave governor, correct?.
-And yes that is what I expect for your processor.
-For mine, load or no load, decoded:
-0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 : 80002E08 :
-    min:        8 :        8 :        8 :        8 :        8 :        8 :
-    max:       46 :       46 :       46 :       46 :       46 :       46 :
-    des:        0 :        0 :        0 :        0 :        0 :        0 :
-    epp:      128 :      128 :      128 :      128 :      128 :      128 :
-    act:        0 :        0 :        0 :        0 :        0 :        0 :
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
 
-This thread is about passive mode, and myself, I do not expect the last byte to be
-4 (8 for mine) under load.
+--2fHTh5uZTiUOsy+g
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
 
-... Doug
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
 
+iEYEARECAAYFAl8mzYkACgkQMOfwapXb+vLHmwCfe58sH+wQnjUwSoQDY71diLxA
+W1gAnjcLHsCbfBEBb8DBVMKF+jM8H2MM
+=GuP/
+-----END PGP SIGNATURE-----
 
+--2fHTh5uZTiUOsy+g--
