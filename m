@@ -2,123 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 715E823AF77
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 23:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0C323AFBF
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 23:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729040AbgHCVIB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 17:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
+        id S1728318AbgHCVoX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 17:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728897AbgHCVIB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 17:08:01 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFD8C06174A
-        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 14:08:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id o1so21643917plk.1
-        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 14:08:01 -0700 (PDT)
+        with ESMTP id S1727923AbgHCVoX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 17:44:23 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB14BC06174A
+        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 14:44:22 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id g8so876447wmk.3
+        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 14:44:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=losNbT+2TsuE/SwCe/xJyWOmYSsUNE+BCtbKafaS2Vc=;
-        b=kbQc1FC4Ki++9S+45oBgVaSW1lDpOJTi6fNUcKT0nYS1wG1JyVF2BXU6kixqE1VYkn
-         qaAR/kh/qWc/rB0zfQD1KI0oAE/YuOmx0ehi7+CVduZvtD+7q9p6PrmbSaAgEt/FOL3M
-         3jXfqyGJkYvyjXnBJvSqHMS5cuDM2gpHF4hSEvgo6yUlAU5shxURd1yyFYvLdjrmJrW0
-         1Ime/5OJiRXJ+m/Utr7ra++8qr7QDYJYCCDoPWfouKXaIikcKyt6YOC3XiYokupBPN6h
-         Dxo+CuKKeFcf4PpjlhfwaauWtoSZo8NrVDAkSVM60P3GMPG5wvR7/xdFpkeeIunfu6Nv
-         N/XA==
+        d=linaro.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=yCdHtgnMm63zVeGJziowVfsBeAvNYTRHKplgeoaFkb4=;
+        b=jn/+eZrVkmkqTrg1LaN5e3FXF4+keQy4miRQb/FqHHnTqrTqQRQjKi92ZHc346xB9/
+         I8EovWTH3ibpATtjRqMu9XEuMm7XyvV8UrE0w3NYYabzVth281jSiZbfry2NtqOO49lO
+         ChzCmLcDZX7foL062faWavR4CX+R3SmRRLlhre898HMuHg4VHTqbfYvpACLUHdAHTyJJ
+         S6W8VYSU7Ea1kHLNNw58paQ3OVAji8HppEuuvzOIblXbqfSWO7K4Pp0esGYrIN2vUEfz
+         jRMY5L0D+1SYYMsoXCSzAgCtdu71JTZPAzF2oxEQM3pDZTPpoVdxvD13R+KcMjhVkjod
+         v5GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=losNbT+2TsuE/SwCe/xJyWOmYSsUNE+BCtbKafaS2Vc=;
-        b=HdQS46nMRZvq4DrulGrK2k/WQKZOjVQLoUboHDPtE7mS+2QqwEPV54NG8tJlgcJPAB
-         z40Ren8NBhdyT8EIRf7M4qtaloNmHOWSdgf5E8eLhV8gO/8VxlmKBvwdISTXCt+FPm0K
-         sbuEzqPvbCiAl0HZKJvlcL4AaStengKF4R7NawGYiKmO2EZGYRc108Gu7aHRpg9TxuNC
-         fqvLcwY1ysYzVvG9Mebc1oPScBkNTinJtHaIng1L7OZd9k7W0tFWRpvYXaAW8uhMcUO9
-         J8zGiXpvmopUfYFPDYbLN7vf0ikE6+5Xjo8XzTZhIxGD2g2Q+x4TA43XeywX7MF8FqiL
-         9BCQ==
-X-Gm-Message-State: AOAM531QQLJygVRrKF/NeSKxl4GbcPVXDN5BKLhWOoy+7SZj0ENEZd/D
-        Nlm1qLj6XMo2aFMfFw+10+TDZg==
-X-Google-Smtp-Source: ABdhPJxpotACMJMMWC9iTdWpZ+zsXJp1fxm1x3R7nViPK/V6r9qancdhDZhuZNmdhAFgsXf4kwpWhw==
-X-Received: by 2002:a17:90a:e57:: with SMTP id p23mr1097801pja.164.1596488880969;
-        Mon, 03 Aug 2020 14:08:00 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a10sm20561911pfk.26.2020.08.03.14.07.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 14:08:00 -0700 (PDT)
-Message-ID: <5f287cb0.1c69fb81.cc6d8.44ab@mx.google.com>
-Date:   Mon, 03 Aug 2020 14:08:00 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=yCdHtgnMm63zVeGJziowVfsBeAvNYTRHKplgeoaFkb4=;
+        b=YQWmQX7Hq2llOFDcqAywOlbt+dJtljiQ4vZwkk5g0KBrLWnSomVtgj6hlof7R371xS
+         /NYGuFKV8NvWFB7uaiKGKeokZYW+3LZUM2I4D+lAGUKqYjsYEdN0braCtURamyMFOX3x
+         DQj00S7ZbncFeILAG/2W+RXEqypbyAd4KHW6CkrOtDkbCqSqTSIdl4gc4Y63WQ0cZ7no
+         rUdxV1h+4QtMhNMgQnG3KUGaett6+4Ra15rti2THBFeAzoTH0FuXjO2eU2PPvch3s8p2
+         VarhJjRNCmWHHXKcedCw/8I5yaDSgKJisdbhXipRShy5DpxtnY2x85ksyeY+W9Jb/nbT
+         yIig==
+X-Gm-Message-State: AOAM533oklL1IjCsxIhq4uHYEP9oU0hj/coL6QTZZnxzAhqnv0Y7Honz
+        16NzV1ST14mZ91gBu4Zhr6y/cw==
+X-Google-Smtp-Source: ABdhPJz+m9iWFUQGO9pwUiDORjIkzgjwrxrfRS1hRYK3ywTh0yudh6eW0B4tWlKKekg7rZ+yTcl8vw==
+X-Received: by 2002:a1c:4e0d:: with SMTP id g13mr998387wmh.177.1596491061313;
+        Mon, 03 Aug 2020 14:44:21 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2? ([2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2])
+        by smtp.googlemail.com with ESMTPSA id j4sm1405436wmi.48.2020.08.03.14.44.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2020 14:44:20 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Colin King <colin.king@canonical.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v5.9-rc1
+Message-ID: <0b3dd92e-0aa0-6f23-fcef-178f2bf6a1c1@linaro.org>
+Date:   Mon, 3 Aug 2020 23:44:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.8-107-gb72b3ea38c81
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 8 runs, 1 regressions (v5.8-107-gb72b3ea38c81)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 8 runs, 1 regressions (v5.8-107-gb72b3ea38c81)
+The following changes since commit bcf876870b95592b52519ed4aafcf9d95999bc9c:
 
-Regressions Summary
+  Linux 5.8 (2020-08-02 14:21:45 -0700)
+
+are available in the Git repository at:
+
+
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.9-rc1
+
+for you to fetch changes up to aac5cac9851aa6b526c6ab3acb80ec7fb6646df8:
+
+  thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
+support (2020-08-03 23:16:28 +0200)
+
+----------------------------------------------------------------
+- Add support to enable/disable the thermal zones resulting on core code and
+  drivers cleanup (Andrzej Pietrasiewicz)
+
+- Add generic netlink support for userspace notifications: events,
+temperature
+  and discovery commands (Daniel Lezcano)
+
+- Fix redundant initialization for a ret variable (Colin Ian King)
+
+- Remove the clock cooling code as it is used nowhere (Amit Kucheria)
+
+- Add the rcar_gen3_thermal's r8a774e1 support (Marian-Cristian Rotariu)
+
+- Replace all references to thermal.txt in the documentation to the
+  corresponding yaml files (Amit Kucheria)
+
+- Add maintainer entry for the IPA (Lukasz Luba)
+
+- Add support for MSM8939 for the tsens (Shawn Guo)
+
+- Update power allocator and devfreq cooling to SPDX licensing (Lukasz Luba)
+
+- Add Cannon Lake Low Power PCH support (Sumeet Pawnikar)
+
+- Add tsensor support for V2 mediatek thermal system (Henry Yen)
+
+- Fix thermal zone lookup by ID for the core code (Thierry Reding)
+
+----------------------------------------------------------------
+Amit Kucheria (2):
+      thermal/drivers/clock_cooling: Remove clock_cooling code
+      dt-bindings: thermal: Get rid of thermal.txt and replace references
+
+Andrzej Pietrasiewicz (14):
+      acpi: thermal: Fix error handling in the register function
+      thermal: Store thermal mode in a dedicated enum
+      thermal: Add current mode to thermal zone device
+      thermal: Store device mode in struct thermal_zone_device
+      thermal: remove get_mode() operation of drivers
+      thermal: Add mode helpers
+      thermal: Use mode helpers in drivers
+      thermal: Explicitly enable non-changing thermal zone devices
+      thermal: core: Stop polling DISABLED thermal devices
+      thermal: Simplify or eliminate unnecessary set_mode() methods
+      thermal: Rename set_mode() to change_mode()
+      acpi: thermal: Don't call thermal_zone_device_is_enabled()
+      thermal: imx: Use driver's local data to decide whether to run a
+measurement
+      thermal: Make thermal_zone_device_is_enabled() available to core only
+
+Anson Huang (1):
+      thermal: imx8mm: Support module autoloading
+
+Colin Ian King (1):
+      thermal: core: remove redundant initialization of variable ret
+
+Dan Carpenter (1):
+      thermal: ti-soc-thermal: Fix reversed condition in
+ti_thermal_expose_sensor()
+
+Daniel Lezcano (9):
+      thermal: core: Add helpers to browse the cdev, tz and governor list
+      thermal: core: Get thermal zone by id
+      thermal: core: genetlink support for events/cmd/sampling
+      thermal: core: Add notifications call in the framework
+      thermal: netlink: Fix compilation error when CONFIG_NET=n
+      net: genetlink: Move initialization to core_initcall
+      thermal: netlink: Improve the initcall ordering
+      thermal: core: Move initialization after core initcall
+      thermal: core: Add thermal zone enable/disable notification
+
+Henry Yen (2):
+      thermal: mediatek: Prepare to add support for other platforms
+      thermal: mediatek: Add tsensor support for V2 thermal system
+
+Konrad Dybcio (1):
+      dt-bindings: tsens: qcom: Document MSM8939 compatible
+
+Lukas Bulwahn (1):
+      MAINTAINERS: update entry to thermal governors file name prefixing
+
+Lukasz Luba (2):
+      MAINTAINERS: Add maintenance information for IPA
+      thermal: Update power allocator and devfreq cooling to SPDX licensing
+
+Marian-Cristian Rotariu (1):
+      thermal: rcar_gen3_thermal: Add r8a774e1 support
+
+Niklas Söderlund (1):
+      thermal: rcar_gen3_thermal: Do not shadow thcode variable
+
+Shawn Guo (1):
+      thermal: qcom: tsens-v0_1: Add support for MSM8939
+
+Sumeet Pawnikar (2):
+      thermal: int340x: processor_thermal: fix: update Jasper Lake PCI id
+      thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
+support
+
+Thierry Reding (1):
+      thermal: core: Fix thermal zone lookup by ID
+
+ Documentation/devicetree/bindings/arm/arm,scmi.txt |   2 +-
+ Documentation/devicetree/bindings/arm/arm,scpi.txt |   2 +-
+ .../devicetree/bindings/arm/freescale/fsl,scu.txt  |   2 +-
+ .../arm/marvell/ap80x-system-controller.txt        |   2 +-
+ .../arm/marvell/cp110-system-controller.txt        |   2 +-
+ .../devicetree/bindings/cpufreq/cpufreq-dt.txt     |   3 +-
+ .../bindings/cpufreq/cpufreq-mediatek.txt          |   4 +-
+ .../bindings/cpufreq/nvidia,tegra20-cpufreq.txt    |   2 +-
+ .../devicetree/bindings/hwmon/gpio-fan.txt         |   3 +-
+ Documentation/devicetree/bindings/hwmon/lm90.txt   |   4 +-
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |   2 +-
+ .../bindings/thermal/amazon,al-thermal.txt         |   2 +-
+ .../bindings/thermal/brcm,avs-ro-thermal.yaml      |   2 +-
+ .../bindings/thermal/brcm,bcm2835-thermal.txt      |   2 +-
+ .../bindings/thermal/hisilicon-thermal.txt         |   2 +-
+ .../bindings/thermal/max77620_thermal.txt          |   6 +-
+ .../bindings/thermal/mediatek-thermal.txt          |   2 +-
+ .../bindings/thermal/nvidia,tegra124-soctherm.txt  |  10 +-
+ .../thermal/nvidia,tegra186-bpmp-thermal.txt       |   2 +-
+ .../bindings/thermal/qcom-spmi-temp-alarm.txt      |   2 +-
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+ .../bindings/thermal/rockchip-thermal.txt          |   2 +-
+ .../devicetree/bindings/thermal/tango-thermal.txt  |   2 +-
+ .../bindings/thermal/thermal-generic-adc.txt       |   2 +-
+ .../devicetree/bindings/thermal/thermal.txt        | 586
 -------------------
+ MAINTAINERS                                        |   8 +
+ drivers/acpi/thermal.c                             |  76 +--
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |   8 +
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |  91 +--
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |   9 +-
+ drivers/platform/x86/acerhdf.c                     |  33 +-
+ drivers/platform/x86/intel_mid_thermal.c           |   6 +
+ drivers/power/supply/power_supply_core.c           |   9 +-
+ drivers/thermal/Kconfig                            |  20 +-
+ drivers/thermal/Makefile                           |   6 +-
+ drivers/thermal/armada_thermal.c                   |   6 +
+ drivers/thermal/clock_cooling.c                    | 445 --------------
+ drivers/thermal/da9062-thermal.c                   |  16 +-
+ drivers/thermal/devfreq_cooling.c                  |  10 +-
+ drivers/thermal/dove_thermal.c                     |   6 +
+ drivers/thermal/gov_power_allocator.c              |   9 +-
+ drivers/thermal/hisi_thermal.c                     |   6 +-
+ drivers/thermal/imx8mm_thermal.c                   |   1 +
+ drivers/thermal/imx_thermal.c                      |  60 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |  38 +-
+ .../intel/int340x_thermal/int340x_thermal_zone.c   |   5 +
+ .../int340x_thermal/processor_thermal_device.c     |   2 +-
+ drivers/thermal/intel/intel_pch_thermal.c          |   8 +
+ drivers/thermal/intel/intel_quark_dts_thermal.c    |  34 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.c         |   3 +
+ drivers/thermal/intel/x86_pkg_temp_thermal.c       |   6 +
+ drivers/thermal/kirkwood_thermal.c                 |   7 +
+ drivers/thermal/mtk_thermal.c                      | 234 ++++++--
+ drivers/thermal/qcom/tsens-v0_1.c                  | 144 ++++-
+ drivers/thermal/qcom/tsens.c                       |   3 +
+ drivers/thermal/qcom/tsens.h                       |   2 +-
+ drivers/thermal/rcar_gen3_thermal.c                |  10 +-
+ drivers/thermal/rcar_thermal.c                     |   9 +-
+ drivers/thermal/rockchip_thermal.c                 |   6 +-
+ drivers/thermal/spear_thermal.c                    |   7 +
+ drivers/thermal/sprd_thermal.c                     |   6 +-
+ drivers/thermal/st/st_thermal.c                    |   5 +
+ drivers/thermal/thermal_core.c                     | 174 +++++-
+ drivers/thermal/thermal_core.h                     |  15 +
+ drivers/thermal/thermal_helpers.c                  |  13 +-
+ drivers/thermal/thermal_netlink.c                  | 647
++++++++++++++++++++++
+ drivers/thermal/thermal_netlink.h                  | 104 ++++
+ drivers/thermal/thermal_of.c                       |  41 +-
+ drivers/thermal/thermal_sysfs.c                    |  52 +-
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   2 +-
+ include/linux/clock_cooling.h                      |  57 --
+ include/linux/devfreq_cooling.h                    |   9 +-
+ include/linux/thermal.h                            |  31 +-
+ include/uapi/linux/thermal.h                       |  89 ++-
+ net/netlink/genetlink.c                            |   2 +-
+ 75 files changed, 1632 insertions(+), 1609 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/thermal.txt
+ delete mode 100644 drivers/thermal/clock_cooling.c
+ create mode 100644 drivers/thermal/thermal_netlink.c
+ create mode 100644 drivers/thermal/thermal_netlink.h
+ delete mode 100644 include/linux/clock_cooling.h
 
-platform             | arch | lab           | compiler | defconfig         =
- | results
----------------------+------+---------------+----------+-------------------=
--+--------
-exynos5422-odroidxu3 | arm  | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 0/1    =
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.8-107=
--gb72b3ea38c81/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.8-107-gb72b3ea38c81
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      b72b3ea38c81d6f9585d8e47c6cfa70efa383698 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch | lab           | compiler | defconfig         =
- | results
----------------------+------+---------------+----------+-------------------=
--+--------
-exynos5422-odroidxu3 | arm  | lab-collabora | gcc-8    | multi_v7_defconfig=
- | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f28732bbb3bdc998a52c1c2
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.8-107-gb72b3ea38=
-c81/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidxu3.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.8-107-gb72b3ea38=
-c81/arm/multi_v7_defconfig/gcc-8/lab-collabora/sleep-exynos5422-odroidxu3.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0729.0/armhf/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f28732bbb3bdc998a52c1c3
-      failing since 3 days (last pass: v5.8-rc7-94-g89beac5dc8d0, first fai=
-l: v5.8-rc7-107-g97987ea7f86a) =20
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
