@@ -2,79 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AAA23AC7E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 20:37:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 324D223ADF0
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 22:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728764AbgHCShZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 14:37:25 -0400
-Received: from mga04.intel.com ([192.55.52.120]:52139 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgHCShY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 3 Aug 2020 14:37:24 -0400
-IronPort-SDR: uRxGN6cHl4iWkPE48NT9Sxf/8kaTAQOJFSyA/VhAfu9zhmxW7jYH+NysKhkZANq6dFlzAngg4j
- ZGy0SmG4ejWA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9702"; a="149630908"
-X-IronPort-AV: E=Sophos;i="5.75,430,1589266800"; 
-   d="scan'208";a="149630908"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 11:37:22 -0700
-IronPort-SDR: F4v4HaqDRpeNzu6H96SRvtrH+se8ECVzBKnuOfsr5PeVIO8Z3ojtd5jruGuUynSQCAgPQcyh5a
- 4EKffRXzgU3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,430,1589266800"; 
-   d="scan'208";a="492505104"
-Received: from spandruv-mobl.amr.corp.intel.com ([10.254.116.3])
-  by fmsmga005.fm.intel.com with ESMTP; 03 Aug 2020 11:37:22 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rjw@rjwysocki.net, lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Fix cpuinfo_max_freq when MSR_TURBO_RATIO_LIMIT is 0
-Date:   Mon,  3 Aug 2020 11:37:20 -0700
-Message-Id: <20200803183720.13082-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.25.4
+        id S1726356AbgHCUJJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 16:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgHCUJJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 16:09:09 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABC8C06174A
+        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 13:09:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id c6so642395pje.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 13:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=6g9W2NEYgHvux1GXDh5UGff+G2y+TQHLfCYxnV7dGbk=;
+        b=g1Bs1DsGl1A9IzSdec8tXbTIFcK4nFb764kbHOETeiJZZnhxlxhMc+9vWQUwuYcDlc
+         I1FqyLcrffEAHnejGTXcybk8WEOD2Ja6rSO2RqwDg05mIfyvTRhFWzDXob3U7mKfpEjs
+         quOQf7xxJCbwnyekJFwXof9yWajpv2+CiGmN6x5/mVO7RcicIlMyKQK6q6P7bykeK8kc
+         T+s4/Q8vfv5vAcogFZAL6k537EjUjQJcvhen8fhZZg9GDTlhu+ssu/LUtoUuqas5HqKd
+         QjwVbSX0BgLsgPoG9MPJyTkOK9c/XTOtzr2COlG3wyEMa7nMwGQGhGvjTcU/ELQI2Xu+
+         iGWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=6g9W2NEYgHvux1GXDh5UGff+G2y+TQHLfCYxnV7dGbk=;
+        b=jGRFWvY/6RLlA9x/JPhaFsU1iWsRPhgBmQ0IEkLpzQls/WHbuqObomnJAf75y3AJS0
+         7OlNnZyZoRrtCNhchOhKULKVqsp1AsDQm4znoccCJFfYt8UIElLcTtlBhhocZ9lvsBuM
+         dF5mrhP9IDZuzsgNFHFBwVlEp7/RL+OvAqBxWZ6j2OohzxDvkioQTMfU5Gfm29OL2AMh
+         j9rs4eOc+FXRJ0hfJUj3448NHfFiTlZphSuDNcXTnUQGxUFr8hVIsFs6RxgHEeFrWBVR
+         ymdUbQCS5A7s/18EXpGs/VnmJTyoms187yLI3ugEX1TIgLR8tYSsFKBhR62joym4gYjy
+         A7ow==
+X-Gm-Message-State: AOAM530+3+Y9WJrN8j0q+lplb+jfVxwN6EP7n9x4jrUCxgjZP6fnq9/e
+        B0OcXNH736BE8KF28YGtSdsNkg==
+X-Google-Smtp-Source: ABdhPJy92FJFZtKpzIyIn1SQWcxCypMAV99AvRFk/tnK9fjd4+szr4Z0o7npQh/Fc03EAAMWupCpBw==
+X-Received: by 2002:a17:902:422:: with SMTP id 31mr15456319ple.202.1596485348573;
+        Mon, 03 Aug 2020 13:09:08 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 124sm700490pfb.19.2020.08.03.13.09.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2020 13:09:07 -0700 (PDT)
+Message-ID: <5f286ee3.1c69fb81.a13f0.1d7d@mx.google.com>
+Date:   Mon, 03 Aug 2020 13:09:07 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.8-107-gb72b3ea38c81
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 8 warnings (v5.8-107-gb72b3ea38c81)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MSR_TURBO_RATIO_LIMIT can be 0. This is not an error. User can update
-this MSR via BIOS settings on some systems or can use msr tools to update.
-Also some systems boot with value = 0.
+pm/testing build: 7 builds: 0 failed, 7 passed, 8 warnings (v5.8-107-gb72b3=
+ea38c81)
 
-This results in display of cpufreq/cpuinfo_max_freq wrong. This value
-will be equal to cpufreq/base_frequency, even though turbo is enabled.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+8-107-gb72b3ea38c81/
 
-But platform will still function normally in HWP mode as we get max
-1-core frequency from the MSR_HWP_CAPABILITIES. This MSR is already used
-to calculate cpu->pstate.turbo_freq, which is used for to set
-policy->cpuinfo.max_freq. But some other places cpu->pstate.turbo_pstate
-is used. For example to set policy->max.
+Tree: pm
+Branch: testing
+Git Describe: v5.8-107-gb72b3ea38c81
+Git Commit: b72b3ea38c81d6f9585d8e47c6cfa70efa383698
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-To fix this, also update cpu->pstate.turbo_pstate when updating
-cpu->pstate.turbo_freq.
+Warnings Detected:
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
- drivers/cpufreq/intel_pstate.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 7e0f7880b21a..c7540ad28995 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1572,6 +1572,7 @@ static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
- 
- 		intel_pstate_get_hwp_max(cpu->cpu, &phy_max, &current_max);
- 		cpu->pstate.turbo_freq = phy_max * cpu->pstate.scaling;
-+		cpu->pstate.turbo_pstate = phy_max;
- 	} else {
- 		cpu->pstate.turbo_freq = cpu->pstate.turbo_pstate * cpu->pstate.scaling;
- 	}
--- 
-2.17.1
-
+For more info write to <info@kernelci.org>
