@@ -2,161 +2,401 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5821D23A97D
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 17:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B5C23AAE4
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 18:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726773AbgHCPgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 11:36:02 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:47645 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726622AbgHCPf6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 11:35:58 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200803153556euoutp02088d999d238433fb17fad4fa75e4bc26~nzA69n2Z-2120821208euoutp02o
-        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 15:35:56 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200803153556euoutp02088d999d238433fb17fad4fa75e4bc26~nzA69n2Z-2120821208euoutp02o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1596468956;
-        bh=zaaAQhHr+G5KAp1EblCYce/6XgEeLyh+tfSOVg5NPdg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=YsNM689JcrrXW6j7FQEpk766uWvm1YmVqyrW+KC1Y/Qwx+nI4GZXJQu7l7y2LydQk
-         fWf3dr45/dr9BodFghEsU5sxL5beJP+24gvZm97jMxMWRBi8mkc9UTF3Uxm0CclPum
-         6eRBrmmuNMAUIUn35STmf4Mp0IKyhANrLfQViyyM=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200803153556eucas1p297b2224e6861b32226ea284d3c34c7eb~nzA6rUfrQ0425704257eucas1p2i;
-        Mon,  3 Aug 2020 15:35:56 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 39.5D.06456.CDE282F5; Mon,  3
-        Aug 2020 16:35:56 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200803153555eucas1p12cd471cea5b1674dfa5aa38ee669a2ac~nzA6UchAz2352423524eucas1p19;
-        Mon,  3 Aug 2020 15:35:55 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200803153555eusmtrp24b5f7ced7bad754419fa435264f2f557~nzA6TjUdZ3080930809eusmtrp2g;
-        Mon,  3 Aug 2020 15:35:55 +0000 (GMT)
-X-AuditID: cbfec7f2-809ff70000001938-62-5f282edc8bcc
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9B.AC.06017.BDE282F5; Mon,  3
-        Aug 2020 16:35:55 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200803153555eusmtip1d8db2ec29432bb2449eca306f6bc71ee~nzA5jtebj2941329413eusmtip1S;
-        Mon,  3 Aug 2020 15:35:55 +0000 (GMT)
-Subject: Re: [PATCH v2 2/2] memory: samsung: exynos5422-dmc: Add module
- param to control IRQ mode
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     willy.mh.wolff.ml@gmail.com, k.konieczny@samsung.com,
-        cw00.choi@samsung.com, b.zolnierkie@samsung.com, krzk@kernel.org,
-        chanwoo@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, s.nawrocki@samsung.com, kgene@kernel.org
-Message-ID: <ceaa668e-a60b-1916-243b-145b1bc7fc76@samsung.com>
-Date:   Mon, 3 Aug 2020 17:35:55 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.10.0
+        id S1726609AbgHCQuw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 12:50:52 -0400
+Received: from mail-oo1-f42.google.com ([209.85.161.42]:46206 "EHLO
+        mail-oo1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgHCQuw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 12:50:52 -0400
+Received: by mail-oo1-f42.google.com with SMTP id s190so7393245ooa.13;
+        Mon, 03 Aug 2020 09:50:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=d7lsX/juYpS8qv5Z3gL+5ZnOZBTEwatV3aK9NXHDoPg=;
+        b=OUpGqpzZGxRAyVRrBC8w6JArfl6/X/Ar8cSg4LqWDHm+L37zom/EahpF4o7J2WWncC
+         imhwX8sDVY+66xbflEjKn+97rOHeY+19f+/eisBDy1TGfkWUr5lWMO+op3KAKM13E2FL
+         6OoHlb0WqAaPbIo9cRELAq6epDREVXslC2+AgOgpjWxCqUHmjw/scqS3xlTb96x5t5ok
+         KxZ0AtKBoaZk6p0dVW3jdhAHn32DBpA0tbVUzqgJSbE9CD+tNyr/pZegG8EYI2NOP7pY
+         lFLdHmkal//QHbBg9Uvpu9tnrFujxYKHfLMU+X8yX4Qhn1U7WUuon8G+uEwzHoi+vqan
+         JJPA==
+X-Gm-Message-State: AOAM531SWnx4bdkWOUQOZ+dokdpxyJ65IHhD1kPNV+mOLK8W3hPImmi3
+        nym9akUevar5IEV/0ShX4Bz4SOq0+PrWSLbbCXeqR2Y7
+X-Google-Smtp-Source: ABdhPJzwTzK/kdfhDGQvVoWNOU9GHSR6aJB2Sjk0WHuT7flhcKgL61iwUWUVNH1SV5bP5YJKYeF0eS/ZVTJRyKib+Ns=
+X-Received: by 2002:a4a:d62c:: with SMTP id n12mr15004545oon.38.1596473450357;
+ Mon, 03 Aug 2020 09:50:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <db571467-48ec-8f11-de1d-00393d8aa99b@samsung.com>
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SWUwTURTldVYqxaFiuKJgbIiA0SLqx0QU1JhYDYkkxmg0WgtOCqFUMgO4
-        /FiLiKCASwxlMGxxAUQqVZElbqBUJFAjRpDFDRIUF6S4EjfKgPJ3zrnnvntO8mhM2Un40nHG
-        JI436gwqUo5XN/1oW9SjDtIuflkyja2yWAn2ZOcTnO34PECwRU4Lweb0vcNYh+MKxbaa31Os
-        re8pwbbXnSXZkax7iLU4bsnYYvNhiu0+VEqyje/TCfbrg9do1XRNRUEF0tSKvZTGVp5Baq6e
-        O6jJvlaONCM2/yhym3zFbs4Ql8LxIeG75LH5HZV4opPZ13jmGGlCZs9M5E4DswzEmmd4JpLT
-        SqYUQYE5j5LIZwT12f2EREYQDN7JxyZXnKNpE4OLCGrODMgkMoSg9HIz5XLNYGIgrf4N6cIk
-        EwqZHzJJl8mbKUfwbeje+DrmevfUp+LxdxVMOGS0lY1FoWmcCQBT2UqXPJPZCda3N2SSxQua
-        8/pxF3ZnIuBNb8X4KsbMhdTr+RPYB7r6C2VS1C8UVD+PlPBacFj6JyrMgEH7NUrCc+BPbeF4
-        A2BSEbxqu0xJ5DiCdrMFSa4w6GkbJV3hMCYYrHUhkrwaHt66gLlkYDyh84OXlMETTlXnTsgK
-        OHpEKbnng2iv/Hf27qPH2AmkEqc0E6e0Eae0Ef/fLUJ4OfLhkoUEPSeEGrm9akGXICQb9eqY
-        PQk2NPbfWn7bnTXoy+PoBsTQSOWhKCKCtEpClyLsT2hAQGMqb8Wa1padSsVu3f4DHL9Hyycb
-        OKEBzaZxlY9iacnbHUpGr0vi4jkukeMnpzLa3deEYjZ2f3Xb7lPpUTV/WD1r2DB9/bxXWzbn
-        nvv1QvZ8iV93l+D/o2V5U52skQ9aN3je32T9nhOR7paclBpg2xSYN7DeyS/Uy6pTW6Oe+Hms
-        vX+6+1JcT5jgZPmTiw/Hp920blDFVry0a8Ltedas21s5D/XHMPGnPlhM1wYHRkVHUq9VuBCr
-        C12A8YLuLzupyChrAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFIsWRmVeSWpSXmKPExsVy+t/xu7q39TTiDTpPG1lsnLGe1WLijSss
-        Fte/PGe1WPBpBqtF/+PXzBbnz29gtzjb9IbdYtPja6wWl3fNYbP43HuE0WLG+X1MFgubWtgt
-        bjeuYLM4/Kad1eLbiUeMDvwea+atYfTYOesuu8emVZ1sHpuX1Hv0bVnF6PF5k1wAW5SeTVF+
-        aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJexuzr61gKPglU
-        HJ7azdbA2MTXxcjJISFgIvHpVytrFyMXh5DAUkaJxkXXWSESMhInpzVA2cISf651sUEUvWWU
-        uPf1JTtIQlggWeLPjlNsIDabgKFE11uIIhGBVUBF92+wgzjMAp8ZJdrf7GcBqRIS+MAosf20
-        FYjNK2An0XluJVCcg4NFQEWiYaUtSFhUIE5i+Zb57BAlghInZz4Ba+UUsJd4cXcNM4jNLGAm
-        MW/zQyhbXqJ562woW1zi1pP5TBMYhWYhaZ+FpGUWkpZZSFoWMLKsYhRJLS3OTc8tNtIrTswt
-        Ls1L10vOz93ECIznbcd+btnB2PUu+BCjAAejEg/vAlaNeCHWxLLiytxDjBIczEoivE5nT8cJ
-        8aYkVlalFuXHF5XmpBYfYjQF+m0is5Rocj4w1eSVxBuaGppbWBqaG5sbm1koifN2CByMERJI
-        TyxJzU5NLUgtgulj4uCUamA8f2dG3oaop/Kn64y67hzeyr51ynv+tM9u6YW+UanNG5njvBJm
-        Xq66uNUutiO3x7ZpnQ1btu9piYRP7Fdaag9ZXnx13Efr9TUdnWa9QF37Q1+t2PuuHtp5xJ9L
-        7Jpa3v3/y29b79PpfSV4+e3iDTOV+acFsMft+fvrn8oSWaWnTJZrwm6Jl75XYinOSDTUYi4q
-        TgQAf0DYDf0CAAA=
-X-CMS-MailID: 20200803153555eucas1p12cd471cea5b1674dfa5aa38ee669a2ac
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200710191154eucas1p296561f285ee0730e5040fdfe3fc7e75e
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200710191154eucas1p296561f285ee0730e5040fdfe3fc7e75e
-References: <20200710191122.11029-1-lukasz.luba@arm.com>
-        <CGME20200710191154eucas1p296561f285ee0730e5040fdfe3fc7e75e@eucas1p2.samsung.com>
-        <20200710191122.11029-3-lukasz.luba@arm.com>
-        <db571467-48ec-8f11-de1d-00393d8aa99b@samsung.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 3 Aug 2020 18:50:39 +0200
+Message-ID: <CAJZ5v0gu2wsaPqb=qTVh1+AfQJQviHF=33EyB5kYS6-ZqZTE8Q@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.9-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi All,
+Hi Linus,
 
-On 03.08.2020 17:30, Marek Szyprowski wrote:
-> On 10.07.2020 21:11, Lukasz Luba wrote:
->> The driver can operate in two modes relaying on devfreq monitoring
->> mechanism which periodically checks the device status or it can use
->> interrupts when they are provided by loaded Device Tree. The newly
->> introduced module parameter can be used to choose between devfreq
->> monitoring and internal interrupts without modifying the Device Tree.
->> It also sets devfreq monitoring as default when the parameter is not set
->> (also the case for default when the driver is not built as a module).
->>
->> Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->
-> I've got back from my holidays and noticed that in meantime this 
-> commit got merged as commit 4fc9a0470d2d. It revealed that there is a 
-> race between registering exynos5422-dmc driver and exynos-ppmu driver, 
-> which can be observed sometimes as the following message and freeze on 
-> Odroid XU3 with multi_v7_defconfig:
->
-> [    8.767708] exynos5-dmc 10c20000.memory-controller: couldn't probe 
-> performance counters
->
-> I will check this later why the EPROBE_DEFER error is not properly 
-> propagated and why it causes a freeze.
+Please pull from the tag
 
-It looks that simply propagating return value from 
-exynos5_counters_get() in exynos5_dmc_get_status() fixes the boot:
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.9-rc1
 
-# dmesg | grep dmc
-[    8.838754] exynos-ppmu: new PPMU device registered 10d00000.ppmu 
-(ppmu-event3-dmc0_0)
-[    8.861344] exynos-ppmu: new PPMU device registered 10d10000.ppmu 
-(ppmu-event3-dmc0_1)
-[    8.868488] exynos5-dmc 10c20000.memory-controller: couldn't probe 
-performance counters
-[    8.874417] exynos-ppmu: new PPMU device registered 10d60000.ppmu 
-(ppmu-event3-dmc1_0)
-[    8.886612] exynos-ppmu: new PPMU device registered 10d70000.ppmu 
-(ppmu-event3-dmc1_1)
-[    9.396769] exynos5-dmc 10c20000.memory-controller: DMC initialized, 
-in irq mode: 0
+with top-most commit 86ba54fb0816480941cda78a99f107ab2bbd4249
 
-I'm still curious why it freezes if getting performance counters is not 
-possible.
+ Merge branches 'pm-sleep', 'pm-domains', 'powercap' and 'pm-tools'
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+on top of commit 92ed301919932f777713b9172e525674157e983d
 
+ Linux 5.8-rc7
+
+to receive power management updates for 5.9-rc1.
+
+The most significant change here is the extension of the Energy
+Model to cover non-CPU devices (as well as CPUs) from Lukasz Luba.
+
+There is also some new hardware support (Ice Lake server idle
+states table for intel_idle, Sapphire Rapids and Power Limit 4
+support in the RAPL driver), some new functionality in the existing
+drivers (eg. a new switch to disable/enable CPU energy-efficiency
+optimizations in intel_pstate, delayed timers in devfreq), some
+assorted fixes (cpufreq core, intel_pstate, intel_idle) and cleanups
+(eg. cpuidle-psci, devfreq), including the elimination of W=1 build
+warnings from cpufreq done by Lee Jones.
+
+Specifics:
+
+ - Make the Energy Model cover non-CPU devices (Lukasz Luba).
+
+ - Add Ice Lake server idle states table to the intel_idle driver
+   and eliminate a redundant static variable from it (Chen Yu,
+   Rafael Wysocki).
+
+ - Eliminate all W=1 build warnings from cpufreq (Lee Jones).
+
+ - Add support for Sapphire Rapids and for Power Limit 4 to the
+   Intel RAPL power capping driver (Sumeet Pawnikar, Zhang Rui).
+
+ - Fix function name in kerneldoc comments in the idle_inject power
+   capping driver (Yangtao Li).
+
+ - Fix locking issues with cpufreq governors and drop a redundant
+   "weak" function definition from cpufreq (Viresh Kumar).
+
+ - Rearrange cpufreq to register non-modular governors at the
+   core_initcall level and allow the default cpufreq governor to
+   be specified in the kernel command line (Quentin Perret).
+
+ - Extend, fix and clean up the intel_pstate driver (Srinivas
+   Pandruvada, Rafael Wysocki):
+
+   * Add a new sysfs attribute for disabling/enabling CPU
+     energy-efficiency optimizations in the processor.
+
+   * Make the driver avoid enabling HWP if EPP is not supported.
+
+   * Allow the driver to handle numeric EPP values in the sysfs
+     interface and fix the setting of EPP via sysfs in the active
+     mode.
+
+   * Eliminate a static checker warning and clean up a kerneldoc
+     comment.
+
+ - Clean up some variable declarations in the powernv cpufreq
+   driver (Wei Yongjun).
+
+ - Fix up the ->enter_s2idle callback definition to cover the case
+   when it points to the same function as ->idle correctly (Neal
+   Liu).
+
+ - Rearrange and clean up the PSCI cpuidle driver (Ulf Hansson).
+
+ - Make the PM core emit "changed" uevent when adding/removing the
+   "wakeup" sysfs attribute of devices (Abhishek Pandit-Subedi).
+
+ - Add a helper macro for declaring PM callbacks and use it in the
+   MMC jz4740 driver (Paul Cercueil).
+
+ - Fix white space in some places in the hibernate code and make the
+   system-wide PM code use "const char *" where appropriate (Xiang
+   Chen, Alexey Dobriyan).
+
+ - Add one more "unsafe" helper macro to the freezer to cover the NFS
+   use case (He Zhe).
+
+ - Change the language in the generic PM domains framework to use
+   parent/child terminology and clean up a typo and some comment
+   formatting in that code (Kees Cook, Geert Uytterhoeven).
+
+ - Update the operating performance points OPP framework (Lukasz
+   Luba, Andrew-sh.Cheng, Valdis Kletnieks):
+
+   * Refactor dev_pm_opp_of_register_em() and update related drivers.
+
+   * Add a missing function export.
+
+   * Allow disabled OPPs in dev_pm_opp_get_freq().
+
+ - Update devfreq core and drivers (Chanwoo Choi, Lukasz Luba, Enric
+   Balletbo i Serra, Dmitry Osipenko, Kieran Bingham, Marc Zyngier):
+
+   * Add support for delayed timers to the devfreq core and make the
+     Samsung exynos5422-dmc driver use it.
+
+   * Unify sysfs interface to use "df-" as a prefix in instance names
+     consistently.
+
+   * Fix devfreq_summary debugfs node indentation.
+
+   * Add the rockchip,pmu phandle to the rk3399_dmc driver DT
+     bindings.
+
+   * List Dmitry Osipenko as the Tegra devfreq driver maintainer.
+
+   * Fix typos in the core devfreq code.
+
+ - Update the pm-graph utility to version 5.7 including a number of
+   fixes related to suspend-to-idle (Todd Brandt).
+
+ - Fix coccicheck errors and warnings in the cpupower utility (Shuah
+   Khan).
+
+ - Replace HTTP links with HTTPs ones in multiple places (Alexander
+   A. Klimov).
+
+Thanks!
+
+
+---------------
+
+Abhishek Pandit-Subedi (1):
+      PM: sleep: core: Emit changed uevent on wakeup_sysfs_add/remove
+
+Alexander A. Klimov (3):
+      cpufreq: Replace HTTP links with HTTPS ones
+      cpupower: Replace HTTP links with HTTPS ones
+      opp: ti-opp-supply: Replace HTTP links with HTTPS ones
+
+Alexey Dobriyan (1):
+      PM: sleep: spread "const char *" correctness
+
+Andrew-sh.Cheng (1):
+      opp: Allow disabled OPPs in dev_pm_opp_get_freq()
+
+Chanwoo Choi (5):
+      PM / devfreq: Add support delayed timer for polling mode
+      memory: samsung: exynos5422-dmc: Use delayed timer as default
+      PM / devfreq: Clean up the devfreq instance name in sysfs attr
+      PM / devfreq: Fix indentaion of devfreq_summary debugfs node
+      PM / devfreq: Fix the wrong end with semicolon
+
+Chen Yu (1):
+      intel_idle: Customize IceLake server support
+
+Dmitry Osipenko (1):
+      PM / devfreq: tegra: Add Dmitry as a maintainer
+
+Enric Balletbo i Serra (1):
+      dt-bindings: devfreq: rk3399_dmc: Add rockchip,pmu phandle
+
+Geert Uytterhoeven (1):
+      PM: domains: Restore comment indentation for generic_pm_domain.child_links
+
+He Zhe (1):
+      freezer: Add unsafe version of
+freezable_schedule_timeout_interruptible() for NFS
+
+Kees Cook (1):
+      PM: domains: Fix up terminology with parent/child
+
+Kieran Bingham (1):
+      PM / devfreq: event: Fix trivial spelling
+
+Lee Jones (11):
+      cpufreq: freq_table: Demote obvious misuse of kerneldoc to
+standard comment blocks
+      cpufreq: cpufreq: Demote lots of function headers unworthy of
+kerneldoc status
+      cpufreq: cpufreq_governor: Demote store_sampling_rate() header
+to standard comment block
+      cpufreq: pasemi: Include header file for {check,restore}_astate prototypes
+      cpufreq: powernv-cpufreq: Fix a bunch of kerneldoc related issues
+      cpufreq: acpi-cpufreq: Mark 'dummy' variable as __always_unused
+      cpufreq: acpi-cpufreq: Mark sometimes used ID structs as __maybe_unused
+      cpufreq: powernow-k8: Mark 'hi' and 'lo' dummy variables as
+__always_unused
+      cpufreq: pcc-cpufreq: Mark sometimes used ID structs as __maybe_unused
+      cpufreq: intel_pstate: Supply struct attribute description for
+get_aperf_mperf_shift()
+      cpufreq: amd_freq_sensitivity: Mark sometimes used ID structs as
+__maybe_unused
+
+Lukasz Luba (10):
+      PM / EM: change naming convention from 'capacity' to 'performance'
+      PM / EM: introduce em_dev_register_perf_domain function
+      PM / EM: update callback structure and add device pointer
+      PM / EM: add support for other devices than CPUs in Energy Model
+      PM / EM: remove em_register_perf_domain
+      PM / EM: change name of em_pd_energy to em_cpu_energy
+      Documentation: power: update Energy Model description
+      OPP: refactor dev_pm_opp_of_register_em() and update related drivers
+      memory: samsung: exynos5422-dmc: Adjust polling interval and uptreshold
+      memory: samsung: exynos5422-dmc: Add module param to control IRQ mode
+
+Marc Zyngier (1):
+      PM / devfreq: rk3399_dmc: Fix kernel oops when rockchip,pmu is absent
+
+Neal Liu (2):
+      cpuidle: change enter_s2idle() prototype
+      cpuidle: ACPI: fix 'return' with no value build warning
+
+Paul Cercueil (3):
+      PM: core: introduce pm_ptr() macro
+      PM: Make *_DEV_PM_OPS macros use __maybe_unused
+      mmc: jz4740: Use pm_ptr() macro
+
+Quentin Perret (2):
+      cpufreq: Register governors at core_initcall
+      cpufreq: Specify default governor on command line
+
+Rafael J. Wysocki (5):
+      intel_idle: Eliminate redundant static variable
+      cpufreq: intel_pstate: Clean up aperf_mperf_shift description
+      cpufreq: intel_pstate: Avoid enabling HWP if EPP is not supported
+      cpufreq: intel_pstate: Rearrange the storing of new EPP values
+      cpufreq: intel_pstate: Fix EPP setting via sysfs in active mode
+
+Shuah Khan (2):
+      cpupower: Fix comparing pointer to 0 coccicheck warns
+      cpupower: Fix NULL but dereferenced coccicheck errors
+
+Srinivas Pandruvada (3):
+      cpufreq: intel_pstate: Allow enable/disable energy efficiency
+      cpufreq: intel_pstate: Allow raw energy performance preference value
+      cpufreq: intel_pstate: Fix static checker warning for epp variable
+
+Sumeet Pawnikar (1):
+      powercap: Add Power Limit4 support
+
+Todd Brandt (1):
+      pm-graph v5.7 - important s2idle fixes
+
+Ulf Hansson (5):
+      cpuidle: psci: Split into two separate build objects
+      cpuidle: psci: Fail cpuidle registration if set OSI mode failed
+      cpuidle: psci: Fix error path via converting to a platform driver
+      cpuidle: psci: Convert PM domain to platform driver
+      cpuidle: psci: Prevent domain idlestates until consumers are ready
+
+Valdis Kletnieks (1):
+      opp: core: Add missing export for dev_pm_opp_adjust_voltage
+
+Viresh Kumar (2):
+      cpufreq: Fix locking issues with governors
+      cpufreq: Remove the weakly defined cpufreq_default_governor()
+
+Wei Yongjun (1):
+      cpufreq: powernv: Make some symbols static
+
+Xiang Chen (1):
+      PM: hibernate: fix white space in a few places
+
+Yangtao Li (1):
+      powercap: idle_inject: Replace play_idle() with
+play_idle_precise() in comments
+
+Zhang Rui (1):
+      powercap: intel_rapl: add support for Sapphire Rapids
+
+---------------
+
+ Documentation/ABI/testing/sysfs-class-devfreq      |  12 +
+ Documentation/admin-guide/kernel-parameters.txt    |   5 +
+ Documentation/admin-guide/pm/cpufreq.rst           |   6 +-
+ Documentation/admin-guide/pm/intel_pstate.rst      |  17 +-
+ .../devicetree/bindings/devfreq/rk3399_dmc.txt     |   2 +
+ Documentation/power/energy-model.rst               | 135 +++++-----
+ Documentation/power/powercap/powercap.rst          |  15 +-
+ MAINTAINERS                                        |   9 +
+ arch/powerpc/platforms/cell/cpufreq_spudemand.c    |  26 +-
+ arch/x86/include/asm/msr-index.h                   |   6 +-
+ drivers/acpi/processor_idle.c                      |  10 +-
+ drivers/base/power/domain.c                        | 194 +++++++-------
+ drivers/base/power/domain_governor.c               |  12 +-
+ drivers/base/power/sysfs.c                         |   9 +-
+ drivers/cpufreq/acpi-cpufreq.c                     |  10 +-
+ drivers/cpufreq/amd_freq_sensitivity.c             |   2 +-
+ drivers/cpufreq/cpufreq-dt.c                       |   2 +-
+ drivers/cpufreq/cpufreq.c                          | 122 +++++----
+ drivers/cpufreq/cpufreq_conservative.c             |  22 +-
+ drivers/cpufreq/cpufreq_governor.c                 |   2 +-
+ drivers/cpufreq/cpufreq_ondemand.c                 |  24 +-
+ drivers/cpufreq/cpufreq_performance.c              |  14 +-
+ drivers/cpufreq/cpufreq_powersave.c                |  18 +-
+ drivers/cpufreq/cpufreq_userspace.c                |  18 +-
+ drivers/cpufreq/davinci-cpufreq.c                  |   2 +-
+ drivers/cpufreq/freq_table.c                       |   6 +-
+ drivers/cpufreq/imx6q-cpufreq.c                    |   2 +-
+ drivers/cpufreq/intel_pstate.c                     | 187 +++++++++----
+ drivers/cpufreq/mediatek-cpufreq.c                 |   2 +-
+ drivers/cpufreq/omap-cpufreq.c                     |   2 +-
+ drivers/cpufreq/pasemi-cpufreq.c                   |   2 +
+ drivers/cpufreq/pcc-cpufreq.c                      |   2 +-
+ drivers/cpufreq/powernow-k8.c                      |   4 +-
+ drivers/cpufreq/powernv-cpufreq.c                  |  19 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c                  |   2 +-
+ drivers/cpufreq/scmi-cpufreq.c                     |  11 +-
+ drivers/cpufreq/scpi-cpufreq.c                     |   2 +-
+ drivers/cpufreq/vexpress-spc-cpufreq.c             |   2 +-
+ drivers/cpuidle/Kconfig.arm                        |  10 +
+ drivers/cpuidle/Makefile                           |   5 +-
+ drivers/cpuidle/cpuidle-psci-domain.c              |  74 ++++--
+ drivers/cpuidle/cpuidle-psci.c                     | 141 +++++-----
+ drivers/cpuidle/cpuidle-psci.h                     |  11 +-
+ drivers/cpuidle/cpuidle-tegra.c                    |   8 +-
+ drivers/devfreq/devfreq-event.c                    |   4 +-
+ drivers/devfreq/devfreq.c                          | 195 ++++++++++----
+ drivers/devfreq/rk3399_dmc.c                       |  42 +--
+ drivers/idle/intel_idle.c                          |  53 +++-
+ drivers/memory/samsung/exynos5422-dmc.c            |  14 +-
+ drivers/mmc/host/jz4740_mmc.c                      |  12 +-
+ drivers/opp/core.c                                 |   3 +-
+ drivers/opp/of.c                                   |  76 +++---
+ drivers/opp/ti-opp-supply.c                        |   2 +-
+ drivers/powercap/idle_inject.c                     |  10 +-
+ drivers/powercap/intel_rapl_common.c               |  77 +++++-
+ drivers/powercap/intel_rapl_msr.c                  |  15 ++
+ drivers/thermal/cpufreq_cooling.c                  |  12 +-
+ fs/nfs/nfs4proc.c                                  |   2 +-
+ include/linux/cpufreq.h                            |  14 +
+ include/linux/cpuidle.h                            |   9 +-
+ include/linux/devfreq.h                            |   9 +
+ include/linux/device.h                             |   5 +
+ include/linux/energy_model.h                       | 149 ++++++-----
+ include/linux/freezer.h                            |  14 +
+ include/linux/intel_rapl.h                         |   5 +-
+ include/linux/pm.h                                 |  10 +-
+ include/linux/pm_domain.h                          |  12 +-
+ include/linux/pm_opp.h                             |  15 +-
+ kernel/power/energy_model.c                        | 290 ++++++++++++++-------
+ kernel/power/hibernate.c                           |   6 +-
+ kernel/power/power.h                               |   2 +-
+ kernel/power/snapshot.c                            |   4 +-
+ kernel/sched/cpufreq_schedutil.c                   |   6 +-
+ kernel/sched/fair.c                                |   2 +-
+ kernel/sched/topology.c                            |  20 +-
+ scripts/gdb/linux/genpd.py                         |  12 +-
+ tools/power/cpupower/lib/cpufreq.c                 |  10 +-
+ tools/power/cpupower/man/cpupower-monitor.1        |   4 +-
+ tools/power/cpupower/utils/helpers/bitmask.c       |   6 +-
+ tools/power/pm-graph/README                        |   2 +-
+ tools/power/pm-graph/sleepgraph.py                 | 249 +++++++++++-------
+ 81 files changed, 1596 insertions(+), 962 deletions(-)
