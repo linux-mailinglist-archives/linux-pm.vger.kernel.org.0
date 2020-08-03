@@ -2,115 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E81D323A8AC
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 16:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D34723A923
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 17:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbgHCOlF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 10:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgHCOlE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 10:41:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B21C06174A;
-        Mon,  3 Aug 2020 07:41:04 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 6EA3629A06E
-Subject: Re: [PATCH v4 0/7] Support inhibiting input devices
-To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Barry Song <baohua@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Nick Dyer <nick@shmanahar.org>,
-        Ferruh Yigit <fery@cypress.com>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Peter Hutterer <peter.hutterer@redhat.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        kernel@collabora.com
-References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
- <20200608112211.12125-1-andrzej.p@collabora.com>
- <1821a5b7-cbf3-a739-2203-a93b06f0c6f2@redhat.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <8fc3a97d-94b7-e073-3981-2f146f5f209e@collabora.com>
-Date:   Mon, 3 Aug 2020 16:40:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727907AbgHCPIQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 11:08:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49036 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726276AbgHCPIP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Aug 2020 11:08:15 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C71A12076E;
+        Mon,  3 Aug 2020 15:08:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596467294;
+        bh=Lrbi2rsIAExF59EuLBc7ucnI9amz38W6mCJdKugNiSY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICoWVarNkJzobZx++tnhhJngFcae6r4xhlEqj89aatZag49QjN5O7mXay7bxj7NCH
+         JQE6yTT6PfFgtOkugp3ORwOlnC4/BgyQYnlSHTNw08W/1cT7W8D1WHH92PsbDVprvw
+         hGrE+qO9QSqdzq+k0XSsdZeJMweV3FqiiRp79DUg=
+Date:   Mon, 3 Aug 2020 17:07:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dongdong Yang <contribute.kernel@gmail.com>
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        devel@driverdev.osuosl.org, gulinghua@xiaomi.com,
+        tanggeliang@xiaomi.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangdongdong@xiaomi.com,
+        duhui@xiaomi.com, zhangguoquan@xiaomi.com, fengwei@xiaomi.com,
+        taojun@xiaomi.com, rocking@linux.alibaba.com, huangqiwu@xiaomi.com
+Subject: Re: [PATCH v3] sched: Provide USF for the portable equipment.
+Message-ID: <20200803150756.GA1098726@kroah.com>
+References: <cover.1596464894.git.yangdongdong@xiaomi.com>
+ <23719695ee476715ec54d3310c95d535f8e1391a.1596464896.git.yangdongdong@xiaomi.com>
 MIME-Version: 1.0
-In-Reply-To: <1821a5b7-cbf3-a739-2203-a93b06f0c6f2@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23719695ee476715ec54d3310c95d535f8e1391a.1596464896.git.yangdongdong@xiaomi.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Mon, Aug 03, 2020 at 10:31:15PM +0800, Dongdong Yang wrote:
+> +	/*
+> +	 * create a sched_usf in cpu_subsys:
+> +	 * /sys/devices/system/cpu/sched_usf/...
 
-W dniu 12.06.2020 o 10:17, Hans de Goede pisze:
-> Hi,
-> 
-> On 6/8/20 1:22 PM, Andrzej Pietrasiewicz wrote:
->> This is a quick respin of v3, with just two small changes, please see
->> the changelog below.
->>
->> Userspace might want to implement a policy to temporarily disregard input
->> from certain devices.
->>
+I thought I asked you not to use a "raw" kobject, you are making this
+much harder than it has to be.
 
-<snip>
+Just use a normal struct device.
 
->> v3..v4:
->> - updated the comment in input_open_device() (Hans)
->> - used more straightforward locking pattern in adc/exynos (Michał)
->>
->> v2..v3:
->> - ignored autorepeat events in input_get_disposition() if a key is not
->> pressed (Hans)
->> - dropped inhibit()/uninhibit() driver callbacks (Hans)
->> - split ACPI button patch into taking the lock and using the helper (Rafael)
->> - dropped the elan_i2c conversion
->> - fixed typos in exynos adc
->>
->> v1..v2:
->> - added input_device_enabled() helper and used it in drivers (Dmitry)
->> - the fact of open() and close() being called in inhibit/uninhibit paths has
->> been emphasized in the commit message of PATCH 6/7 (Dmitry)
+Also you failed to document your new sysfs files in Documentation/ABI/
+like is required :(
 
-<snip>
+Because of both of those things, this isn't ok as-is, sorry.
 
-> 
-> The entire series looks good to me:
-> 
-> Acked-by: Hans de Goede <hdegoede@redhat.com>
-
-What are the prospects of this series being merged?
-
-Regards,
-
-Andrzej
+greg k-h
