@@ -2,286 +2,338 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0C323AFBF
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 23:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373B323B0A5
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 01:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbgHCVoX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 17:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727923AbgHCVoX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 17:44:23 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB14BC06174A
-        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 14:44:22 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id g8so876447wmk.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 14:44:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=yCdHtgnMm63zVeGJziowVfsBeAvNYTRHKplgeoaFkb4=;
-        b=jn/+eZrVkmkqTrg1LaN5e3FXF4+keQy4miRQb/FqHHnTqrTqQRQjKi92ZHc346xB9/
-         I8EovWTH3ibpATtjRqMu9XEuMm7XyvV8UrE0w3NYYabzVth281jSiZbfry2NtqOO49lO
-         ChzCmLcDZX7foL062faWavR4CX+R3SmRRLlhre898HMuHg4VHTqbfYvpACLUHdAHTyJJ
-         S6W8VYSU7Ea1kHLNNw58paQ3OVAji8HppEuuvzOIblXbqfSWO7K4Pp0esGYrIN2vUEfz
-         jRMY5L0D+1SYYMsoXCSzAgCtdu71JTZPAzF2oxEQM3pDZTPpoVdxvD13R+KcMjhVkjod
-         v5GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=yCdHtgnMm63zVeGJziowVfsBeAvNYTRHKplgeoaFkb4=;
-        b=YQWmQX7Hq2llOFDcqAywOlbt+dJtljiQ4vZwkk5g0KBrLWnSomVtgj6hlof7R371xS
-         /NYGuFKV8NvWFB7uaiKGKeokZYW+3LZUM2I4D+lAGUKqYjsYEdN0braCtURamyMFOX3x
-         DQj00S7ZbncFeILAG/2W+RXEqypbyAd4KHW6CkrOtDkbCqSqTSIdl4gc4Y63WQ0cZ7no
-         rUdxV1h+4QtMhNMgQnG3KUGaett6+4Ra15rti2THBFeAzoTH0FuXjO2eU2PPvch3s8p2
-         VarhJjRNCmWHHXKcedCw/8I5yaDSgKJisdbhXipRShy5DpxtnY2x85ksyeY+W9Jb/nbT
-         yIig==
-X-Gm-Message-State: AOAM533oklL1IjCsxIhq4uHYEP9oU0hj/coL6QTZZnxzAhqnv0Y7Honz
-        16NzV1ST14mZ91gBu4Zhr6y/cw==
-X-Google-Smtp-Source: ABdhPJz+m9iWFUQGO9pwUiDORjIkzgjwrxrfRS1hRYK3ywTh0yudh6eW0B4tWlKKekg7rZ+yTcl8vw==
-X-Received: by 2002:a1c:4e0d:: with SMTP id g13mr998387wmh.177.1596491061313;
-        Mon, 03 Aug 2020 14:44:21 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2? ([2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2])
-        by smtp.googlemail.com with ESMTPSA id j4sm1405436wmi.48.2020.08.03.14.44.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2020 14:44:20 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@linaro.org>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Colin King <colin.king@canonical.com>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Lukasz Luba <Lukasz.Luba@arm.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Henry Yen <henry.yen@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Marian-Cristian Rotariu 
-        <marian-cristian.rotariu.rb@bp.renesas.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal for v5.9-rc1
-Message-ID: <0b3dd92e-0aa0-6f23-fcef-178f2bf6a1c1@linaro.org>
-Date:   Mon, 3 Aug 2020 23:44:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728414AbgHCXDb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 19:03:31 -0400
+Received: from mga01.intel.com ([192.55.52.88]:23282 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726805AbgHCXDa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Aug 2020 19:03:30 -0400
+IronPort-SDR: jTHnkkyOL5/1TxmIMm2BvW1OcGVWHimSyZrstQid+Pnen+2tHjfGlakidMXLv7Pj5dbkKrjdII
+ l9bNGQ9XnaHQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9702"; a="170307901"
+X-IronPort-AV: E=Sophos;i="5.75,431,1589266800"; 
+   d="scan'208";a="170307901"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 16:03:27 -0700
+IronPort-SDR: TgtKtGH8T6UbnRZBc8qciAaCqirkGcqsrkOhPuAeRupXE3zbB9zD1vnDUN+O8nTQRJMISkXul+
+ e0220VBuMvTg==
+X-IronPort-AV: E=Sophos;i="5.75,431,1589266800"; 
+   d="scan'208";a="492149886"
+Received: from paasikivi.fi.intel.com ([10.237.72.42])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 16:03:25 -0700
+Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
+        id A148D20878; Tue,  4 Aug 2020 02:03:23 +0300 (EEST)
+Date:   Tue, 4 Aug 2020 02:03:23 +0300
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: Re: [PATCH] PM: runtime: Add kerneldoc comments to multiple helpers
+Message-ID: <20200803230323.GA13316@paasikivi.fi.intel.com>
+References: <2672940.cHDmkauF2A@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2672940.cHDmkauF2A@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following changes since commit bcf876870b95592b52519ed4aafcf9d95999bc9c:
+Hi Rafael,
 
-  Linux 5.8 (2020-08-02 14:21:45 -0700)
+One more comment below.
 
-are available in the Git repository at:
+On Fri, Jul 31, 2020 at 07:03:26PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Add kerneldoc comments to multiple PM-runtime helper functions
+> defined as static inline wrappers around lower-level routines to
+> provide quick reference decumentation of their behavior.
+> 
+> Some of them are similar to each other with subtle differences only
+> and the behavior of some of them may appear as counter-intuitive, so
+> clarify all that to avoid confusion.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm_runtime.h |  246 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 246 insertions(+)
+> 
+> Index: linux-pm/include/linux/pm_runtime.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm_runtime.h
+> +++ linux-pm/include/linux/pm_runtime.h
+> @@ -60,58 +60,151 @@ extern void pm_runtime_put_suppliers(str
+>  extern void pm_runtime_new_link(struct device *dev);
+>  extern void pm_runtime_drop_link(struct device *dev);
+>  
+> +/**
+> + * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+> + * @dev: Target device.
+> + *
+> + * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
+> + */
+>  static inline int pm_runtime_get_if_in_use(struct device *dev)
+>  {
+>  	return pm_runtime_get_if_active(dev, false);
+>  }
+>  
+> +/**
+> + * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
+> + * @dev: Target device.
+> + * @enable: Whether or not to ignore possible dependencies on children.
+> + *
+> + * The dependencies of @dev on its children will not be taken into account by
+> + * the runtime PM framework going forward if @enable is %true, or they will
+> + * be taken into account otherwise.
+> + */
+>  static inline void pm_suspend_ignore_children(struct device *dev, bool enable)
+>  {
+>  	dev->power.ignore_children = enable;
+>  }
+>  
+> +/**
+> + * pm_runtime_get_noresume - Bump up runtime PM usage counter of a device.
+> + * @dev: Target device.
+> + */
+>  static inline void pm_runtime_get_noresume(struct device *dev)
+>  {
+>  	atomic_inc(&dev->power.usage_count);
+>  }
+>  
+> +/**
+> + * pm_runtime_put_noidle - Drop runtime PM usage counter of a device.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev unless it is 0 already.
+> + */
+>  static inline void pm_runtime_put_noidle(struct device *dev)
+>  {
+>  	atomic_add_unless(&dev->power.usage_count, -1, 0);
+>  }
+>  
+> +/**
+> + * pm_runtime_suspended - Check whether or not a device is runtime-suspended.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev and its runtime PM status is
+> + * %RPM_SUSPENDED, or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
+> + * status cannot change.
+> + */
+>  static inline bool pm_runtime_suspended(struct device *dev)
+>  {
+>  	return dev->power.runtime_status == RPM_SUSPENDED
+>  		&& !dev->power.disable_depth;
+>  }
+>  
+> +/**
+> + * pm_runtime_active - Check whether or not a device is runtime-active.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev and its runtime PM status is
+> + * %RPM_ACTIVE, or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
+> + * status cannot change.
+> + */
+>  static inline bool pm_runtime_active(struct device *dev)
+>  {
+>  	return dev->power.runtime_status == RPM_ACTIVE
+>  		|| dev->power.disable_depth;
+>  }
+>  
+> +/**
+> + * pm_runtime_status_suspended - Check if runtime PM status is "suspended".
+> + * @dev: Target device.
+> + *
+> + * Return %true if the runtime PM status of @dev is %RPM_SUSPENDED, or %false
+> + * otherwise, regardless of whether or not runtime PM has been enabled for @dev.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which the
+> + * runtime PM status of @dev cannot change.
+> + */
+>  static inline bool pm_runtime_status_suspended(struct device *dev)
+>  {
+>  	return dev->power.runtime_status == RPM_SUSPENDED;
+>  }
+>  
+> +/**
+> + * pm_runtime_enabled - Check if runtime PM is enabled.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev.
+> + */
+>  static inline bool pm_runtime_enabled(struct device *dev)
+>  {
+>  	return !dev->power.disable_depth;
+>  }
+>  
+> +/**
+> + * pm_runtime_has_no_callbacks - Check if runtime PM callbacks may be present.
+> + * @dev: Target device.
+> + *
+> + * Return %true if @dev is a special device without runtime PM callbacks or
+> + * %false otherwise.
+> + */
+>  static inline bool pm_runtime_has_no_callbacks(struct device *dev)
+>  {
+>  	return dev->power.no_callbacks;
+>  }
+>  
+> +/**
+> + * pm_runtime_mark_last_busy - Update the last access time of a device.
+> + * @dev: Target device.
+> + *
+> + * Update the last access time of @dev used by the runtime PM autosuspend
+> + * mechanism to the current time as returned by ktime_get_mono_fast_ns().
+> + */
+>  static inline void pm_runtime_mark_last_busy(struct device *dev)
+>  {
+>  	WRITE_ONCE(dev->power.last_busy, ktime_get_mono_fast_ns());
+>  }
+>  
+> +/**
+> + * pm_runtime_is_irq_safe - Check if runtime PM can work in interrupt context.
+> + * @dev: Target device.
+> + *
+> + * Return %true if @dev has been marked as an "IRQ-safe" device (with respect
+> + * to runtime PM), in which case its runtime PM callabcks can be expected to
+> + * work correctly when invoked from interrupt handlers.
+> + */
+>  static inline bool pm_runtime_is_irq_safe(struct device *dev)
+>  {
+>  	return dev->power.irq_safe;
+> @@ -191,97 +284,250 @@ static inline void pm_runtime_drop_link(
+>  
+>  #endif /* !CONFIG_PM */
+>  
+> +/**
+> + * pm_runtime_idle - Conditionally set up autosuspend of a device or suspend it.
+> + * @dev: Target device.
+> + *
+> + * Invoke the "idle check" callback of @dev and, depending on its return value,
+> + * set up autosuspend of @dev or suspend it (depending on whether or not
+> + * autosuspend has been enabled for it).
+> + */
+>  static inline int pm_runtime_idle(struct device *dev)
+>  {
+>  	return __pm_runtime_idle(dev, 0);
+>  }
+>  
+> +/**
+> + * pm_runtime_suspend - Suspend a device synchronously.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_runtime_suspend(struct device *dev)
+>  {
+>  	return __pm_runtime_suspend(dev, 0);
+>  }
+>  
+> +/**
+> + * pm_runtime_autosuspend - Set up autosuspend of a device or suspend it.
+> + * @dev: Target device.
+> + *
+> + * Set up autosuspend of @dev or suspend it (depending on whether or not
+> + * autosuspend is enabled for it) without engaging its "idle check" callback.
+> + */
+>  static inline int pm_runtime_autosuspend(struct device *dev)
+>  {
+>  	return __pm_runtime_suspend(dev, RPM_AUTO);
+>  }
+>  
+> +/**
+> + * pm_runtime_resume - Resume a device synchronously.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_runtime_resume(struct device *dev)
+>  {
+>  	return __pm_runtime_resume(dev, 0);
+>  }
+>  
+> +/**
+> + * pm_request_idle - Queue up "idle check" execution for a device.
+> + * @dev: Target device.
+> + *
+> + * Queue up a work item to run an equivalent of pm_runtime_idle() for @dev
+> + * asynchronously.
+> + */
+>  static inline int pm_request_idle(struct device *dev)
+>  {
+>  	return __pm_runtime_idle(dev, RPM_ASYNC);
+>  }
+>  
+> +/**
+> + * pm_request_resume - Queue up runtime-resume of a device.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_request_resume(struct device *dev)
+>  {
+>  	return __pm_runtime_resume(dev, RPM_ASYNC);
+>  }
+>  
+> +/**
+> + * pm_request_autosuspend - Queue up autosuspend of a device.
+> + * @dev: Target device.
+> + *
+> + * Queue up a work item to run an equivalent pm_runtime_autosuspend() for @dev
+> + * asynchronously.
+> + */
+>  static inline int pm_request_autosuspend(struct device *dev)
+>  {
+>  	return __pm_runtime_suspend(dev, RPM_ASYNC | RPM_AUTO);
+>  }
+>  
+> +/**
+> + * pm_runtime_get - Bump up usage counter and queue up resume of a device.
+> + * @dev: Target device.
+> + *
+> + * Bump up the runtime PM usage counter of @dev and queue up a work item to
+> + * carry out runtime-resume of it.
+> + */
+>  static inline int pm_runtime_get(struct device *dev)
+>  {
+>  	return __pm_runtime_resume(dev, RPM_GET_PUT | RPM_ASYNC);
+>  }
+>  
+> +/**
+> + * pm_runtime_get_sync - Bump up usage counter of a device and resume it.
+> + * @dev: Target device.
+> + *
+> + * Bump up the runtime PM usage counter of @dev and carry out runtime-resume of
+> + * it synchronously.
+> + *
+> + * The possible return values of this function are the same as for
+> + * pm_runtime_resume() and the runtime PM usage counter of @dev remains
 
+I think it's fine to refer to return values of pm_runtime_resume(), but the
+return values of pm_runtime_resume() are not documented above. Could you
+add them?
 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-tags/thermal-v5.9-rc1
-
-for you to fetch changes up to aac5cac9851aa6b526c6ab3acb80ec7fb6646df8:
-
-  thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
-support (2020-08-03 23:16:28 +0200)
-
-----------------------------------------------------------------
-- Add support to enable/disable the thermal zones resulting on core code and
-  drivers cleanup (Andrzej Pietrasiewicz)
-
-- Add generic netlink support for userspace notifications: events,
-temperature
-  and discovery commands (Daniel Lezcano)
-
-- Fix redundant initialization for a ret variable (Colin Ian King)
-
-- Remove the clock cooling code as it is used nowhere (Amit Kucheria)
-
-- Add the rcar_gen3_thermal's r8a774e1 support (Marian-Cristian Rotariu)
-
-- Replace all references to thermal.txt in the documentation to the
-  corresponding yaml files (Amit Kucheria)
-
-- Add maintainer entry for the IPA (Lukasz Luba)
-
-- Add support for MSM8939 for the tsens (Shawn Guo)
-
-- Update power allocator and devfreq cooling to SPDX licensing (Lukasz Luba)
-
-- Add Cannon Lake Low Power PCH support (Sumeet Pawnikar)
-
-- Add tsensor support for V2 mediatek thermal system (Henry Yen)
-
-- Fix thermal zone lookup by ID for the core code (Thierry Reding)
-
-----------------------------------------------------------------
-Amit Kucheria (2):
-      thermal/drivers/clock_cooling: Remove clock_cooling code
-      dt-bindings: thermal: Get rid of thermal.txt and replace references
-
-Andrzej Pietrasiewicz (14):
-      acpi: thermal: Fix error handling in the register function
-      thermal: Store thermal mode in a dedicated enum
-      thermal: Add current mode to thermal zone device
-      thermal: Store device mode in struct thermal_zone_device
-      thermal: remove get_mode() operation of drivers
-      thermal: Add mode helpers
-      thermal: Use mode helpers in drivers
-      thermal: Explicitly enable non-changing thermal zone devices
-      thermal: core: Stop polling DISABLED thermal devices
-      thermal: Simplify or eliminate unnecessary set_mode() methods
-      thermal: Rename set_mode() to change_mode()
-      acpi: thermal: Don't call thermal_zone_device_is_enabled()
-      thermal: imx: Use driver's local data to decide whether to run a
-measurement
-      thermal: Make thermal_zone_device_is_enabled() available to core only
-
-Anson Huang (1):
-      thermal: imx8mm: Support module autoloading
-
-Colin Ian King (1):
-      thermal: core: remove redundant initialization of variable ret
-
-Dan Carpenter (1):
-      thermal: ti-soc-thermal: Fix reversed condition in
-ti_thermal_expose_sensor()
-
-Daniel Lezcano (9):
-      thermal: core: Add helpers to browse the cdev, tz and governor list
-      thermal: core: Get thermal zone by id
-      thermal: core: genetlink support for events/cmd/sampling
-      thermal: core: Add notifications call in the framework
-      thermal: netlink: Fix compilation error when CONFIG_NET=n
-      net: genetlink: Move initialization to core_initcall
-      thermal: netlink: Improve the initcall ordering
-      thermal: core: Move initialization after core initcall
-      thermal: core: Add thermal zone enable/disable notification
-
-Henry Yen (2):
-      thermal: mediatek: Prepare to add support for other platforms
-      thermal: mediatek: Add tsensor support for V2 thermal system
-
-Konrad Dybcio (1):
-      dt-bindings: tsens: qcom: Document MSM8939 compatible
-
-Lukas Bulwahn (1):
-      MAINTAINERS: update entry to thermal governors file name prefixing
-
-Lukasz Luba (2):
-      MAINTAINERS: Add maintenance information for IPA
-      thermal: Update power allocator and devfreq cooling to SPDX licensing
-
-Marian-Cristian Rotariu (1):
-      thermal: rcar_gen3_thermal: Add r8a774e1 support
-
-Niklas Söderlund (1):
-      thermal: rcar_gen3_thermal: Do not shadow thcode variable
-
-Shawn Guo (1):
-      thermal: qcom: tsens-v0_1: Add support for MSM8939
-
-Sumeet Pawnikar (2):
-      thermal: int340x: processor_thermal: fix: update Jasper Lake PCI id
-      thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
-support
-
-Thierry Reding (1):
-      thermal: core: Fix thermal zone lookup by ID
-
- Documentation/devicetree/bindings/arm/arm,scmi.txt |   2 +-
- Documentation/devicetree/bindings/arm/arm,scpi.txt |   2 +-
- .../devicetree/bindings/arm/freescale/fsl,scu.txt  |   2 +-
- .../arm/marvell/ap80x-system-controller.txt        |   2 +-
- .../arm/marvell/cp110-system-controller.txt        |   2 +-
- .../devicetree/bindings/cpufreq/cpufreq-dt.txt     |   3 +-
- .../bindings/cpufreq/cpufreq-mediatek.txt          |   4 +-
- .../bindings/cpufreq/nvidia,tegra20-cpufreq.txt    |   2 +-
- .../devicetree/bindings/hwmon/gpio-fan.txt         |   3 +-
- Documentation/devicetree/bindings/hwmon/lm90.txt   |   4 +-
- .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |   2 +-
- .../bindings/thermal/amazon,al-thermal.txt         |   2 +-
- .../bindings/thermal/brcm,avs-ro-thermal.yaml      |   2 +-
- .../bindings/thermal/brcm,bcm2835-thermal.txt      |   2 +-
- .../bindings/thermal/hisilicon-thermal.txt         |   2 +-
- .../bindings/thermal/max77620_thermal.txt          |   6 +-
- .../bindings/thermal/mediatek-thermal.txt          |   2 +-
- .../bindings/thermal/nvidia,tegra124-soctherm.txt  |  10 +-
- .../thermal/nvidia,tegra186-bpmp-thermal.txt       |   2 +-
- .../bindings/thermal/qcom-spmi-temp-alarm.txt      |   2 +-
- .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
- .../bindings/thermal/rockchip-thermal.txt          |   2 +-
- .../devicetree/bindings/thermal/tango-thermal.txt  |   2 +-
- .../bindings/thermal/thermal-generic-adc.txt       |   2 +-
- .../devicetree/bindings/thermal/thermal.txt        | 586
--------------------
- MAINTAINERS                                        |   8 +
- drivers/acpi/thermal.c                             |  76 +--
- drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |   8 +
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |  91 +--
- drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |   9 +-
- drivers/platform/x86/acerhdf.c                     |  33 +-
- drivers/platform/x86/intel_mid_thermal.c           |   6 +
- drivers/power/supply/power_supply_core.c           |   9 +-
- drivers/thermal/Kconfig                            |  20 +-
- drivers/thermal/Makefile                           |   6 +-
- drivers/thermal/armada_thermal.c                   |   6 +
- drivers/thermal/clock_cooling.c                    | 445 --------------
- drivers/thermal/da9062-thermal.c                   |  16 +-
- drivers/thermal/devfreq_cooling.c                  |  10 +-
- drivers/thermal/dove_thermal.c                     |   6 +
- drivers/thermal/gov_power_allocator.c              |   9 +-
- drivers/thermal/hisi_thermal.c                     |   6 +-
- drivers/thermal/imx8mm_thermal.c                   |   1 +
- drivers/thermal/imx_thermal.c                      |  60 +-
- .../intel/int340x_thermal/int3400_thermal.c        |  38 +-
- .../intel/int340x_thermal/int340x_thermal_zone.c   |   5 +
- .../int340x_thermal/processor_thermal_device.c     |   2 +-
- drivers/thermal/intel/intel_pch_thermal.c          |   8 +
- drivers/thermal/intel/intel_quark_dts_thermal.c    |  34 +-
- drivers/thermal/intel/intel_soc_dts_iosf.c         |   3 +
- drivers/thermal/intel/x86_pkg_temp_thermal.c       |   6 +
- drivers/thermal/kirkwood_thermal.c                 |   7 +
- drivers/thermal/mtk_thermal.c                      | 234 ++++++--
- drivers/thermal/qcom/tsens-v0_1.c                  | 144 ++++-
- drivers/thermal/qcom/tsens.c                       |   3 +
- drivers/thermal/qcom/tsens.h                       |   2 +-
- drivers/thermal/rcar_gen3_thermal.c                |  10 +-
- drivers/thermal/rcar_thermal.c                     |   9 +-
- drivers/thermal/rockchip_thermal.c                 |   6 +-
- drivers/thermal/spear_thermal.c                    |   7 +
- drivers/thermal/sprd_thermal.c                     |   6 +-
- drivers/thermal/st/st_thermal.c                    |   5 +
- drivers/thermal/thermal_core.c                     | 174 +++++-
- drivers/thermal/thermal_core.h                     |  15 +
- drivers/thermal/thermal_helpers.c                  |  13 +-
- drivers/thermal/thermal_netlink.c                  | 647
-+++++++++++++++++++++
- drivers/thermal/thermal_netlink.h                  | 104 ++++
- drivers/thermal/thermal_of.c                       |  41 +-
- drivers/thermal/thermal_sysfs.c                    |  52 +-
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   2 +-
- include/linux/clock_cooling.h                      |  57 --
- include/linux/devfreq_cooling.h                    |   9 +-
- include/linux/thermal.h                            |  31 +-
- include/uapi/linux/thermal.h                       |  89 ++-
- net/netlink/genetlink.c                            |   2 +-
- 75 files changed, 1632 insertions(+), 1609 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/thermal/thermal.txt
- delete mode 100644 drivers/thermal/clock_cooling.c
- create mode 100644 drivers/thermal/thermal_netlink.c
- create mode 100644 drivers/thermal/thermal_netlink.h
- delete mode 100644 include/linux/clock_cooling.h
+Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Kind regards,
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Sakari Ailus
