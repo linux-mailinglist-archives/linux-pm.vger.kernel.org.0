@@ -2,97 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF85523A7E2
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 15:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F9F23A7F8
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Aug 2020 15:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727792AbgHCNrM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 09:47:12 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:38118 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727790AbgHCNrL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 09:47:11 -0400
-Received: by mail-oi1-f193.google.com with SMTP id u63so21515204oie.5;
-        Mon, 03 Aug 2020 06:47:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h8dgWfdFWbvh9ZWZ1ZNBTHX4VAGf175AsYQyWP17dNI=;
-        b=RaSbfZuS52aO3YmqbAr3ZVDPgLhOeWHaJ+jj31gcLJE5P/JL5j+J/fDhbJtFpq+kil
-         QmLU+f2mFk/zKJoRRlaXaDPaqpmPuGEM1E1Jp6xjXrzKwSdaLcHKxQgGjFyCjGLlPzKn
-         fQmhDf7pZlbEo22R/CyTeqgc+AR0ewx/gvAouFb1SBsE6ajx7jjhTgyyiuQvvPU8z8S/
-         Qbt82EPkarhouJBklY4uniK5VzCCpIQqSev3zWegmKmMHVo0hBmRjEIrlE3e5E9Pkmdp
-         YLWe+N5ykTdT17/b6963lqAolfvrWoVuUX9XRc1D2TLqnJJibT0owIpUhbKL4noV4fIN
-         xKuw==
-X-Gm-Message-State: AOAM530cQBS2uTzw82PoVB7TQMmsi9iLb8RkAJS1vlcMrafgU2utQZFH
-        rN06kQwyAzx+FyArtaIF2hW1Z4poWf9udFys+L4=
-X-Google-Smtp-Source: ABdhPJyFUfBACH5XqP9tKDNYxFYYtA4RyrEcaKDspg6cpYPauGtzed7reeFZ0UlKtdcbE1mt7I5J5PAh4P2D1tNyOV4=
-X-Received: by 2002:a54:4f14:: with SMTP id e20mr10487303oiy.103.1596462430736;
- Mon, 03 Aug 2020 06:47:10 -0700 (PDT)
-MIME-Version: 1.0
+        id S1727846AbgHCN6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 09:58:41 -0400
+Received: from foss.arm.com ([217.140.110.172]:57992 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726785AbgHCN6l (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Aug 2020 09:58:41 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42E3230E;
+        Mon,  3 Aug 2020 06:58:40 -0700 (PDT)
+Received: from localhost (unknown [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9FDC3F718;
+        Mon,  3 Aug 2020 06:58:39 -0700 (PDT)
+Date:   Mon, 3 Aug 2020 14:58:38 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
+        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, peterz@infradead.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] cpufreq: set invariance scale factor on
+ transition end
+Message-ID: <20200803135838.GB9512@arm.com>
 References: <20200722093732.14297-1-ionela.voinescu@arm.com>
- <20200722093732.14297-2-ionela.voinescu@arm.com> <CAJZ5v0i5Xrk6oTt81aeXDi1F8gnEspJo9e6nGf10nSvBz-Dbkw@mail.gmail.com>
- <20200730034128.k4fmblfuwjcmqdze@vireshk-mac-ubuntu> <20200803132617.GA9512@arm.com>
-In-Reply-To: <20200803132617.GA9512@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Aug 2020 15:46:59 +0200
-Message-ID: <CAJZ5v0gOJXtpF4iy2v+Jbv9y9QZsAtEREMQwWv0u7Zks0Fvp1A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] cpufreq: move invariance setter calls in cpufreq core
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+ <20200722093732.14297-3-ionela.voinescu@arm.com>
+ <20200730041334.cjg5mc5xpopd2lst@vireshk-mac-ubuntu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200730041334.cjg5mc5xpopd2lst@vireshk-mac-ubuntu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 3, 2020 at 3:26 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
->
-> Hi guys,
->
-> On Thursday 30 Jul 2020 at 09:11:28 (+0530), Viresh Kumar wrote:
-> > On 27-07-20, 15:48, Rafael J. Wysocki wrote:
-> > > On Wed, Jul 22, 2020 at 11:38 AM Ionela Voinescu
-> > > <ionela.voinescu@arm.com> wrote:
-> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > index 036f4cc42ede..bac4101546db 100644
-> > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > @@ -2058,9 +2058,16 @@ EXPORT_SYMBOL(cpufreq_unregister_notifier);
-> > > >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> > > >                                         unsigned int target_freq)
-> > > >  {
-> > > > +       unsigned int freq;
-> > > > +
-> > > >         target_freq = clamp_val(target_freq, policy->min, policy->max);
-> > > > +       freq = cpufreq_driver->fast_switch(policy, target_freq);
-> > > > +
-> > > > +       if (freq)
-> > > > +               arch_set_freq_scale(policy->related_cpus, freq,
-> > > > +                                   policy->cpuinfo.max_freq);
-> > >
-> > > Why can't arch_set_freq_scale() handle freq == 0?
-> >
->
-> Sorry, I seem to have missed this question the first time around.
->
-> arch_set_freq_scale() could handle freq == 0, but given that freq == 0
-> is signaling an error here, I do believe this check is well placed, to
-> prevent a useless call to arch_set_freq_scale(). Also [1]:
+Hi Viresh,
 
-So let me rephrase:
+On Thursday 30 Jul 2020 at 09:43:34 (+0530), Viresh Kumar wrote:
+> On 22-07-20, 10:37, Ionela Voinescu wrote:
+> > While the move of the invariance setter calls (arch_set_freq_scale())
+> > from cpufreq drivers to cpufreq core maintained the previous
+> > functionality for existing drivers that use target_index() and
+> > fast_switch() for frequency switching, it also gives the possibility
+> > of adding support for users of the target() callback, which is exploited
+> > here.
+> > 
+> > To be noted that the target() callback has been flagged as deprecated
+> > since:
+> > 
+> > commit 9c0ebcf78fde ("cpufreq: Implement light weight ->target_index() routine")
+> > 
+> > It also doesn't have that many users:
+> > 
+> >   cpufreq-nforce2.c:371:2:      .target = nforce2_target,
+> >   cppc_cpufreq.c:416:2:         .target = cppc_cpufreq_set_target,
+> >   gx-suspmod.c:439:2:           .target = cpufreq_gx_target,
+> >   pcc-cpufreq.c:573:2:          .target = pcc_cpufreq_target,
+> > 
+> > Similarly to the path taken for target_index() calls in the cpufreq core
+> > during a frequency change, all of the drivers above will mark the end of a
+> > frequency change by a call to cpufreq_freq_transition_end().
+> > 
+> > Therefore, cpufreq_freq_transition_end() can be used as the location for
+> > the arch_set_freq_scale() call to potentially inform the scheduler of the
+> > frequency change.
+> > 
+> > This change maintains the previous functionality for the drivers that
+> > implement the target_index() callback, while also adding support for the
+> > few drivers that implement the deprecated target() callback.
+> > 
+> > Two notes are worthwhile here:
+> >  - In __target_index(), cpufreq_freq_transition_end() is called only for
+> >    drivers that have synchronous notifications enabled. There is only one
+> >    driver that disables them,
+> > 
+> >    drivers/cpufreq/powernow-k8.c:1142: .flags = CPUFREQ_ASYNC_NOTIFICATION,
+> > 
+> >    which is deprecated.
+> 
+> I don't think this is deprecated.
 
-Doesn't this check add overhead in the empty arch_set_freq_scale() case?
+Sorry, possibly 'deprecated' is a strong word.
+
+As far as I knew acpi_cpufreq was recommended more recently for K8/K10
+CPUs so that's why I decided not to create a special case for it, also
+considering that it was not supporting cpufreq-based frequency
+invariance to begin with.
+
+We could support this as well by having a call to arch_set_freq_scale()
+on the else path in __target_index(). But given that there was only this
+one user of CPUFREQ_ASYNC_NOTIFICATION, I thought I'd propose this simpler
+version first.
+
+Let me know if my reasoning is wrong.
+
+Thank you,
+Ionela.
+
+> 
+> -- 
+> viresh
