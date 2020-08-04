@@ -2,184 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E374523B5FD
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 09:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A3023B606
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 09:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726104AbgHDHsC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 03:48:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54016 "EHLO mail.kernel.org"
+        id S1728856AbgHDHtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 03:49:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54540 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726036AbgHDHsC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Aug 2020 03:48:02 -0400
+        id S1725932AbgHDHtd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Aug 2020 03:49:33 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9FB172086A;
-        Tue,  4 Aug 2020 07:48:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C37722B40;
+        Tue,  4 Aug 2020 07:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596527281;
-        bh=pS1WPK1i6yro2DLNjCjUZpZoNv0ByMmOkSSvxn+6F1o=;
+        s=default; t=1596527372;
+        bh=8p+XCJZnz+9HnH0A9r61I2MYnTcinVNhhgF+AKtpNpg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QR3Hg6B44CqSd0jBaGgC7l8EdzRxprSXs/tZkN+GLYXwGA0QXuHoiQay1oVd7+7iT
-         Qgog646pCVwry06e6Eb2tN1DdP9YaEKOTWpKbMGJiWdIrXaTABImI5q4i9tSZK1hUj
-         LGHwlw5aKnCqbsvuj9AeANPuw29rbzUcZwlOm7Rs=
-Date:   Tue, 4 Aug 2020 09:47:41 +0200
+        b=QEL7Ges95rD4FR5z0wQEU5DzHET9Wk0ntPfdgYF1QGb6pg+pTc/cxEXsOesX9z9b0
+         Kvl1wyaVyXgowih1ziv7uWRTg7o7qYi3oDRRYwhWiR52hhIchpByEHyMFIRYlrgbte
+         0PmNiV4WD6VTWfLuKlTns/SzYSokjI1e9OeNMeMw=
+Date:   Tue, 4 Aug 2020 09:49:13 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dongdong Yang <contribute.kernel@gmail.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, rjw@rjwysocki.net,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>, mgorman@suse.de,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
-        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
-        rocking@linux.alibaba.com, fengwei@xiaomi.com,
-        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
-Subject: Re: [PATCH v3] Provide USF for the portable equipment.
-Message-ID: <20200804074741.GA1761483@kroah.com>
-References: <cover.1596464894.git.yangdongdong@xiaomi.com>
- <20200804054728.ojudxu5fmd54lar5@vireshk-mac-ubuntu>
- <CADhdXfri8L6763ifBFMtP-cFSOuXO4isXhxZ4qF6M4vE=eeEjA@mail.gmail.com>
+To:     ivan <yanziily@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>, Pavel Machek <pavel@denx.de>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jiangfei1@xiaomi.com, Qiwu Huang <huangqiwu@xiaomi.com>
+Subject: Re: [PATCH v4 1/4] power: supply: core: add quick charge type
+ property
+Message-ID: <20200804074913.GC1761483@kroah.com>
+References: <cover.1595214246.git.huangqiwu@xiaomi.com>
+ <c9d3199ec18625f9cc4448c3b2049ea2ae80358b.1595214246.git.huangqiwu@xiaomi.com>
+ <20200802120015.GA1289@bug>
+ <20200802123742.GA257810@kroah.com>
+ <20200802142825.GA20261@amd>
+ <20200802165738.GA293244@kroah.com>
+ <20200803114950.oyb3gzyiccybah3u@earth.universe>
+ <20200803115644.GC955269@kroah.com>
+ <CAPtXDt1hMrgJ_9Zs6Zmkzf4b1-QfEcZPp7dKG26G6ZEqBxCgBw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADhdXfri8L6763ifBFMtP-cFSOuXO4isXhxZ4qF6M4vE=eeEjA@mail.gmail.com>
+In-Reply-To: <CAPtXDt1hMrgJ_9Zs6Zmkzf4b1-QfEcZPp7dKG26G6ZEqBxCgBw@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-http://daringfireball.net/2007/07/on_top
-
-On Tue, Aug 04, 2020 at 03:34:25PM +0800, Dongdong Yang wrote:
-> Appreciate Viresh for your help. I thought Peter's NAK was only for the
-> initial version. I am going to upload the verified version 4. Could you
-> please kindly help to further review?
+On Tue, Aug 04, 2020 at 10:11:19AM +0800, ivan wrote:
+> On Mon, Aug 3, 2020 at 7:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Aug 03, 2020 at 01:49:50PM +0200, Sebastian Reichel wrote:
+> > > More importantely I prefer not to merge new APIs without any users
+> > > (i.e. a driver making use of those values). Having a reference
+> > > driver means, that there is an example how to use the values
+> > > correctly and proves it is actually needed upstream. Right now
+> > > this looks like "let's modify the upstream kernel, so that we can
+> > > easily maintain our out of tree driver".
+> >
+> > Agreed.  Qiwu, can you also submit your driver so we can see these
+> > values be used?
 > 
-> 1. Motivation
-> =============
+> Our driver is based on qualcomm's driver secondary development.
 > 
-> The power consumption and UI response are more cared for by the portable
-> equipment users.
-
-That's not true, everyone cares about this.
-
-> USF(User Sensitive Feedback factor) auxiliary cpufreq
-> governor
-> is providing more utils adjustment settings to the high level by scenario
-> identification.
-
-Odd line-wrapping :(
-
-And what do you mean by "more utils adjustment settings to the high
-level by scenario identification"?  I can not parse that at all.
-
-> 2. Introduction
-> ===============
+> The driver code is for mi 10.
 > 
-> The USF auxiliary scheduling is based on FrameBuffer and schdeutil cpufreq
-> governor to adjust utils by the identificated scenario from User Space.
-
-What is "adjust utils"?
-
-And why is "User Space" in caps?
-
-> It is for portable equipment which "screen off" status stands for no request
-> from the user, however, the kernel is still expected to notify the user for
-> UI in
-> time on modem, network or powerkey events occur. In order to save power, the
-> sysfs inode nonux is provided to set the utils down level on userspace
-> tasks.
-
-Having custom sysfs apis is almost never a good idea.  Do other cpufreq
-governers do this?
-
-> In addition, the portable equipment users usually heavily interact with
-> devices
-> by touch, and other peripherals. On "screen on" status, The boost preemptive
-> counts are marking the load requirement urgent, vice versa. USF provides up
-> and
-> down sysfs inodes to adjust utils according to such feedback factor and the
-> level setting from the user space identified scenario.
+> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/qpnp-smb5.c#L1434
 > 
-> adjust_task_pred_set is as the switch to enable or disable the adjustment.
-> If no USF sysfs inodes is set and no screen on or off event be received,
-> adjust_task_pred_demand shall not be executed.
+> + case POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE:
+> +     val->intval = smblib_get_quick_charge_type(chg);
+> +     break;
 > 
-> 3. System wide settings
-> =======================
-> 
-> sched_usf_non_ux_r:
->         The ratio of utils is cut down on screen off. The default value is
-> 0,
+> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/smb5-lib.c#L7713
 
-The line-wrapping makes it almost impossible to read here, can you fix
-that up?
+<snip>
 
->         which no util be adjusted on sugov calculating utils to select
-
-"sugov"?
-
-> cpufreq.
->         Its range is [-100 , 0]. If its value falls into [-50, 0), the half
-> of
->         utils, which calculates cpufreq, shall be  cut down. If its value
-> falls
->         into [-100, -50), only a quarter of utils be left to continue to
->         calculates cpufreq.
->         It is expected to be set [-100, 0) once enter into the identificated
->         scenario, such as listen to music on screen off, and recover to 0 on
->         out of the scenario, such as screen on.
-
-sysfs files are "one value per file", please do not parse such complex
-things in the kernel.
-
-> 
-> sched_usf_up_l0_r:
->         The ratio of utils is boosted up on screen on. The default value is
-> 0,
->         which no util be adjusted on sugov calculates utils to select
-> cpufreq.
->         Its range is [0 , 100]. If its value falls into (0, 50], a quarter
-> of
->         extra utils, which calculates cpufreq, shall be added. If its value
->         falls into (50, 100], the half of extra utils be added to continue
-> to
->         calculates cpufreq.
->         It is expected to be set (0, 100] once enter into the identificated
->         scenario, such as browsing videolet on screen on, and recover to 0
-> on
->         out of the scenario, such as screen off or videolet into background.
-> 
-> sched_usf_down_r:
->         The ratio of utils is cut down on screen on. The default value is 0,
->         which no util be adjusted on sugov calculating utils to select
-> cpufreq.
->         Its range is [-100 , 0]. If its value falls into [-50, 0), the half
-> of
->         utils, which calculates cpufreq, shall be  cut down. If its value
-> falls
->         into [-100, -50), only a quarter of utils be left to continue to
->         calculates cpufreq.
->         It is expected to be set [-100, 0) once enter into the identificated
->         scenario, such as browsing videolet on screen on, and recover to 0
-> on
->         out of the scenario, such as screen off or vidolet into background.
-
-Why can't all of these work automatically?  Why do you need userspace
-interaction here?
+Great, can you submit these drivers as patches as part of this series?
+That's the best way for all of this to be integrated.
 
 thanks,
 
