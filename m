@@ -2,112 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5119323B537
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 08:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E374523B5FD
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 09:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726350AbgHDGrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 02:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726059AbgHDGrA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 02:47:00 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D1EC061756
-        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 23:47:00 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id l60so1443040pjb.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 23:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=DnhGljgxfzJeLlq9y9e/7VwoaSWViejckL3W26FCQPY=;
-        b=UueG+3z15qVK2BxckVCRjepMJOMHSHdHWYx8MT/s56DT3z3RtFe/nSLY6u9tf2ZzJ8
-         eMXgwJqof8xUczI7iHjHGThgYrEfWavNmoupNofQO6/R2wsJm1NzglZgMAwhp+yknPDK
-         wXa2CW0UqNzxav/1My/2A6rIXJ5YKQXFsJsuko0rDuZ26pwovnAbcbt36OQOSjbSt8LR
-         aCN8S7hG5dMZHcRB84/FG46LoCP6ZDI525Awim5YurR0M1wKIXOen6IsIg7ArGlt0LBm
-         5KuKYW03vVO0btus6/4Yg3chKAwddsyu2AFaisM3kjURSRe048PgLImAUFCF8knh+LE1
-         H01Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=DnhGljgxfzJeLlq9y9e/7VwoaSWViejckL3W26FCQPY=;
-        b=k2zxZrVGxfsTxKueJrbrJfjGhMX+pkO/Pvrrm9dheLap0jR2kTvFp0YtWdqouDH33v
-         zLYrQ6ZpP7NrHeBjJ670hkp0m6ftjxfuC2FktPbUOqeouiJQK3XrPUoamFnpXOsGxims
-         wJG17V/BAdJ3dSKZtgfdLvu3o7ZbmgO8Rw4TTXpVeIecn/29/HIrT/1wIFDxjhx/tWzd
-         7ffi/qMg1HsL/u+tAopUt9YICBkEkERUY1DR8scSq8jObuLBnyzhClvASwuwhU7Ho8Cp
-         tCjjGeYsYkjinXsGKqey/0lYGjybeuVfP/S+Ou7xj+U/vz+tTEg9BezDkjKE0xyt1YXB
-         dQKA==
-X-Gm-Message-State: AOAM531uRCqLoVq8XuTdZzbxGXu7P6zIrfaiN+DeBzT3hTBI07tp5msw
-        iQykNm+8ObaI4zl2bHsDMpa7jQ==
-X-Google-Smtp-Source: ABdhPJwJkKqdgXZJK1wqpAHnVHCHlWOIav+LLGoSZfd5dZ34R0P644MLXYy4TL5d6mUKKMaqtgjCVQ==
-X-Received: by 2002:a17:902:6bc2:: with SMTP id m2mr18395916plt.158.1596523619660;
-        Mon, 03 Aug 2020 23:46:59 -0700 (PDT)
-Received: from localhost ([122.162.244.227])
-        by smtp.gmail.com with ESMTPSA id u26sm20550893pgo.71.2020.08.03.23.46.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Aug 2020 23:46:58 -0700 (PDT)
-Date:   Tue, 4 Aug 2020 12:16:56 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
-        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
-        linux@armlinux.org.uk, mingo@redhat.com, peterz@infradead.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] cpufreq: report whether cpufreq supports
- Frequency Invariance (FI)
-Message-ID: <20200804064656.h25yapthuumdxjw7@vireshk-mac-ubuntu>
-References: <20200722093732.14297-1-ionela.voinescu@arm.com>
- <20200722093732.14297-5-ionela.voinescu@arm.com>
- <20200730044346.rgtaikotkgwdpc3m@vireshk-mac-ubuntu>
- <20200803152400.GB20312@arm.com>
+        id S1726104AbgHDHsC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 03:48:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726036AbgHDHsC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Aug 2020 03:48:02 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9FB172086A;
+        Tue,  4 Aug 2020 07:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596527281;
+        bh=pS1WPK1i6yro2DLNjCjUZpZoNv0ByMmOkSSvxn+6F1o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QR3Hg6B44CqSd0jBaGgC7l8EdzRxprSXs/tZkN+GLYXwGA0QXuHoiQay1oVd7+7iT
+         Qgog646pCVwry06e6Eb2tN1DdP9YaEKOTWpKbMGJiWdIrXaTABImI5q4i9tSZK1hUj
+         LGHwlw5aKnCqbsvuj9AeANPuw29rbzUcZwlOm7Rs=
+Date:   Tue, 4 Aug 2020 09:47:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dongdong Yang <contribute.kernel@gmail.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, rjw@rjwysocki.net,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>, mgorman@suse.de,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
+        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
+        rocking@linux.alibaba.com, fengwei@xiaomi.com,
+        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
+Subject: Re: [PATCH v3] Provide USF for the portable equipment.
+Message-ID: <20200804074741.GA1761483@kroah.com>
+References: <cover.1596464894.git.yangdongdong@xiaomi.com>
+ <20200804054728.ojudxu5fmd54lar5@vireshk-mac-ubuntu>
+ <CADhdXfri8L6763ifBFMtP-cFSOuXO4isXhxZ4qF6M4vE=eeEjA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200803152400.GB20312@arm.com>
-User-Agent: NeoMutt/20170609 (1.8.3)
+In-Reply-To: <CADhdXfri8L6763ifBFMtP-cFSOuXO4isXhxZ4qF6M4vE=eeEjA@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-08-20, 16:24, Ionela Voinescu wrote:
-> Right, cpufreq_register_driver() should check that at least one of them
-> is present
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-> (although currently cpufreq_register_driver() will return
-> -EINVAL if .fast_switch() alone is present - something to be fixed).
+A: No.
+Q: Should I include quotations after my reply?
 
-I think it is fine as there is no guarantee from cpufreq core if
-.fast_switch() will get called and so target/target_index must be
-present. We can't do fast-switch today without schedutil (as only that
-enables it) and if a notifier gets registered before the driver, then
-we are gone again.
+http://daringfireball.net/2007/07/on_top
 
-> Will do, on both accounts.
+On Tue, Aug 04, 2020 at 03:34:25PM +0800, Dongdong Yang wrote:
+> Appreciate Viresh for your help. I thought Peter's NAK was only for the
+> initial version. I am going to upload the verified version 4. Could you
+> please kindly help to further review?
 > 
+> 1. Motivation
+> =============
 > 
-> > > +		static_branch_enable_cpuslocked(&cpufreq_set_freq_scale);
-> > > +		pr_debug("%s: Driver %s can provide frequency invariance.",
-> > > +			 __func__, driver->name);
-> > 
-> > I think a simpler print will work well too.
-> > 
-> >                 pr_debug("Freq invariance enabled");
-> > 
+> The power consumption and UI response are more cared for by the portable
+> equipment users.
+
+That's not true, everyone cares about this.
+
+> USF(User Sensitive Feedback factor) auxiliary cpufreq
+> governor
+> is providing more utils adjustment settings to the high level by scenario
+> identification.
+
+Odd line-wrapping :(
+
+And what do you mean by "more utils adjustment settings to the high
+level by scenario identification"?  I can not parse that at all.
+
+> 2. Introduction
+> ===============
 > 
-> I think the right way of reporting this support is important here.
+> The USF auxiliary scheduling is based on FrameBuffer and schdeutil cpufreq
+> governor to adjust utils by the identificated scenario from User Space.
 
-Yeah, we can't say it is enabled as you explained, though I meant
-something else here then, i.e. getting rid of driver name and
-unimportant stuff. What about this now:
+What is "adjust utils"?
 
-pr_debug("supports frequency invariance");
+And why is "User Space" in caps?
 
-This shall get printed as this finally:
+> It is for portable equipment which "screen off" status stands for no request
+> from the user, however, the kernel is still expected to notify the user for
+> UI in
+> time on modem, network or powerkey events occur. In order to save power, the
+> sysfs inode nonux is provided to set the utils down level on userspace
+> tasks.
 
-cpufreq: supports frequency invariance
+Having custom sysfs apis is almost never a good idea.  Do other cpufreq
+governers do this?
 
--- 
-viresh
+> In addition, the portable equipment users usually heavily interact with
+> devices
+> by touch, and other peripherals. On "screen on" status, The boost preemptive
+> counts are marking the load requirement urgent, vice versa. USF provides up
+> and
+> down sysfs inodes to adjust utils according to such feedback factor and the
+> level setting from the user space identified scenario.
+> 
+> adjust_task_pred_set is as the switch to enable or disable the adjustment.
+> If no USF sysfs inodes is set and no screen on or off event be received,
+> adjust_task_pred_demand shall not be executed.
+> 
+> 3. System wide settings
+> =======================
+> 
+> sched_usf_non_ux_r:
+>         The ratio of utils is cut down on screen off. The default value is
+> 0,
+
+The line-wrapping makes it almost impossible to read here, can you fix
+that up?
+
+>         which no util be adjusted on sugov calculating utils to select
+
+"sugov"?
+
+> cpufreq.
+>         Its range is [-100 , 0]. If its value falls into [-50, 0), the half
+> of
+>         utils, which calculates cpufreq, shall be  cut down. If its value
+> falls
+>         into [-100, -50), only a quarter of utils be left to continue to
+>         calculates cpufreq.
+>         It is expected to be set [-100, 0) once enter into the identificated
+>         scenario, such as listen to music on screen off, and recover to 0 on
+>         out of the scenario, such as screen on.
+
+sysfs files are "one value per file", please do not parse such complex
+things in the kernel.
+
+> 
+> sched_usf_up_l0_r:
+>         The ratio of utils is boosted up on screen on. The default value is
+> 0,
+>         which no util be adjusted on sugov calculates utils to select
+> cpufreq.
+>         Its range is [0 , 100]. If its value falls into (0, 50], a quarter
+> of
+>         extra utils, which calculates cpufreq, shall be added. If its value
+>         falls into (50, 100], the half of extra utils be added to continue
+> to
+>         calculates cpufreq.
+>         It is expected to be set (0, 100] once enter into the identificated
+>         scenario, such as browsing videolet on screen on, and recover to 0
+> on
+>         out of the scenario, such as screen off or videolet into background.
+> 
+> sched_usf_down_r:
+>         The ratio of utils is cut down on screen on. The default value is 0,
+>         which no util be adjusted on sugov calculating utils to select
+> cpufreq.
+>         Its range is [-100 , 0]. If its value falls into [-50, 0), the half
+> of
+>         utils, which calculates cpufreq, shall be  cut down. If its value
+> falls
+>         into [-100, -50), only a quarter of utils be left to continue to
+>         calculates cpufreq.
+>         It is expected to be set [-100, 0) once enter into the identificated
+>         scenario, such as browsing videolet on screen on, and recover to 0
+> on
+>         out of the scenario, such as screen off or vidolet into background.
+
+Why can't all of these work automatically?  Why do you need userspace
+interaction here?
+
+thanks,
+
+greg k-h
