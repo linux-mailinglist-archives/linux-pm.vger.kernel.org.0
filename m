@@ -2,77 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB38323B0EF
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 01:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDAF223B205
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 03:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbgHCXbI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 19:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgHCXbH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 19:31:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0829C06174A;
-        Mon,  3 Aug 2020 16:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=nY1BD+OgwGXtiyrMMaJXadzrrIDNfHmtspydZcAV3LA=; b=iiUNiQD7jhIo194MEQM6uDkUtk
-        x1kY90nRb/wKVe8+MI4AG6Iq9ZvrzrtEC1LPQ7PPW00spxgPytuNPUX2Oc9EHRBaeIUimX+m/TQVY
-        6AmPmTRfIsnKmEq9CGN1pUZTo9plsKzGNZdAO4XYiUPc2u1Tsc98dIVozn1JNAFaO670yy+x4EE9P
-        mJ0TwsG1NnYlvL+p45itpZUi0AlyIbnGp+tEwIurSwxlaSdUG3oyS81GCA0AmQHAqp3VqGKU7A6a1
-        fi1GXneSNMf3FUwEP7AaAW+BNndMxzOOcbAlx1UxGP7UVnlwr9KlUkdjBec7YFS3Huo8RTmKNlmYJ
-        hPoIVsgw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k2juy-0007ex-8O; Mon, 03 Aug 2020 23:30:57 +0000
-Subject: Re: [PATCH v3] sched: Provide USF for the portable equipment.
-To:     Dongdong Yang <contribute.kernel@gmail.com>,
-        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de
-Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
-        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
-        rocking@linux.alibaba.com, fengwei@xiaomi.com,
-        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
-References: <cover.1596464894.git.yangdongdong@xiaomi.com>
- <23719695ee476715ec54d3310c95d535f8e1391a.1596464896.git.yangdongdong@xiaomi.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <cb8dc2cc-376a-f7e5-614b-400245204b34@infradead.org>
-Date:   Mon, 3 Aug 2020 16:30:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728743AbgHDA7w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 20:59:52 -0400
+Received: from mga07.intel.com ([134.134.136.100]:32859 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726276AbgHDA7w (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 3 Aug 2020 20:59:52 -0400
+IronPort-SDR: Mf5/xdU/E6rbq73Hpr6xbys512aoMpoY3PK6M5v8pHteOoW2C7Ll7nfJ9vyocCfW055jCxC90q
+ czeobynHh9hg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9702"; a="216629323"
+X-IronPort-AV: E=Sophos;i="5.75,432,1589266800"; 
+   d="scan'208";a="216629323"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2020 17:59:50 -0700
+IronPort-SDR: K2K55XGECUIW9eYWBnjf//j28DJhGLJ9VOABTTNR8tyK4vABB0JTQuMMBUhKkG/0J8NqMM32iI
+ glGNtfaH4AXQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,432,1589266800"; 
+   d="scan'208";a="324425919"
+Received: from lkp-server02.sh.intel.com (HELO 84ccfe698a63) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 03 Aug 2020 17:59:47 -0700
+Received: from kbuild by 84ccfe698a63 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k2lIx-0000Kr-28; Tue, 04 Aug 2020 00:59:47 +0000
+Date:   Tue, 04 Aug 2020 08:59:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ b72b3ea38c81d6f9585d8e47c6cfa70efa383698
+Message-ID: <5f28b2e8.UIsa3K9a0pVCRIo+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <23719695ee476715ec54d3310c95d535f8e1391a.1596464896.git.yangdongdong@xiaomi.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/3/20 7:31 AM, Dongdong Yang wrote:
-> diff --git a/drivers/staging/Kconfig b/drivers/staging/Kconfig
-> index 4ec5528..05b231e 100644
-> --- a/drivers/staging/Kconfig
-> +++ b/drivers/staging/Kconfig
-> @@ -120,4 +120,6 @@ source "drivers/staging/qlge/Kconfig"
->  
->  source "drivers/staging/wfx/Kconfig"
->  
-> +source "drivers/staging/fbsched/Kconfig"
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: b72b3ea38c81d6f9585d8e47c6cfa70efa383698  Merge branch 'acpi' into linux-next
 
-where is this fbsched/Kconfig and its associated source files?
+elapsed time: 725m
 
-> +
->  endif # STAGING
+configs tested: 80
+configs skipped: 5
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
--- 
-~Randy
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                        generic_defconfig
+m68k                       bvme6000_defconfig
+arm                          pxa168_defconfig
+nds32                             allnoconfig
+powerpc                          alldefconfig
+mips                      bmips_stb_defconfig
+arm                        magician_defconfig
+parisc                           alldefconfig
+mips                           ip32_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20200803
+i386                 randconfig-a005-20200803
+i386                 randconfig-a001-20200803
+i386                 randconfig-a002-20200803
+i386                 randconfig-a003-20200803
+i386                 randconfig-a006-20200803
+x86_64               randconfig-a013-20200803
+x86_64               randconfig-a011-20200803
+x86_64               randconfig-a012-20200803
+x86_64               randconfig-a016-20200803
+x86_64               randconfig-a015-20200803
+x86_64               randconfig-a014-20200803
+i386                 randconfig-a011-20200803
+i386                 randconfig-a012-20200803
+i386                 randconfig-a015-20200803
+i386                 randconfig-a014-20200803
+i386                 randconfig-a013-20200803
+i386                 randconfig-a016-20200803
+x86_64               randconfig-a006-20200804
+x86_64               randconfig-a001-20200804
+x86_64               randconfig-a004-20200804
+x86_64               randconfig-a005-20200804
+x86_64               randconfig-a002-20200804
+x86_64               randconfig-a003-20200804
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
