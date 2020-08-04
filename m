@@ -2,160 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25BD623BE94
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 19:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E9F23BEC4
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 19:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbgHDRHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 13:07:01 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:49311 "EHLO cmta16.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729610AbgHDRFr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Aug 2020 13:05:47 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 30Mhk7TkK5b7l30MjkMSUA; Tue, 04 Aug 2020 11:04:43 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1596560684; bh=JALEurWlvnPlBMa78OmCHzscxaUV9ayGqlorUWPpLOM=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=zVnmGtazlqkbIHxU1KvaCnW3nzLccpDF9ASaAOTmhWU5ao6Yx2cLjD3h/MTBwosWL
-         EcBqJIipYr0b9a9sRgQCDQFyqwv7ToTvf3HYhWClksm/SLRBVtnL4oXYlK699thob4
-         KWS0gQG8QteOJsg+8gYNpRrzJoW5+XTMiNChpuWjQZei1a/zjdv1OlivGu1jH/C7kJ
-         Ju3WPS4a3XsMMAvpcGc84ome4taezNNpaHPZ1BjEXRnRM1U5Yi28Ohiy/7Cx4LLkaP
-         jUV6CRaqb+StqS00Dusz6S3pVDJLr2TbZjJSQ3jxEgFvRrzt8hGG+bVYKwovRrhcxy
-         8HvtPLBF0AfiA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8
- a=Z_ZUgUZAPj2aFtWniJYA:9 a=cGtpBKYyCqBvOoDN:21 a=WcyYtQ8uXPS6tcuo:21
- a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher> <1633168.eVXp6ieOpF@kreacher>
-In-Reply-To: <1633168.eVXp6ieOpF@kreacher>
-Subject: RE: [PATCH v6] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Tue, 4 Aug 2020 10:04:39 -0700
-Message-ID: <000d01d66a81$59326a50$0b973ef0$@net>
+        id S1729984AbgHDRTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 13:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729778AbgHDRTc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 13:19:32 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029B3C06174A;
+        Tue,  4 Aug 2020 10:19:32 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id bh1so10359264plb.12;
+        Tue, 04 Aug 2020 10:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4w/Ljx5lsCqOPOdBCcxxVX9P69TJXsiTDGuIgF1vcBw=;
+        b=NBHUSzIGKhb6NUmUeOIXUxLVmH9RkXdBf4yyBesE29jjXSZC4EoHgbkSfudGxL+wNI
+         MRZaF2kq8vT4L2Kmv55+ABK9N+mD2kVf2h/4FnxTwFdbgBkIZeVhmYxSnz5XiVeEoA7p
+         y91ohIP+q5denOE2vALGF5Jod/piN+3PbCz5GT9tl+DeoAOxvbTFClCuRXd6l+LQN+Hl
+         w7/enjTq4MSYjz4pzYl8tLn/MIcfeBNwt3JwdE8ByERQo6zqaVf0DiwA/UrCGJsTSSZA
+         bnqW1wHbTzTFYkZvP2dmA5wClDZObwFcrkOvquM4Sw8TgktR5+5g6WkwL29Xr9FxHMGc
+         O4Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4w/Ljx5lsCqOPOdBCcxxVX9P69TJXsiTDGuIgF1vcBw=;
+        b=DeJViLRQC29+kUQldFbuDj6z4rh5oYjKIf+vtIgadFV70eFStYXZMACbIPJGaAquC7
+         UedojPoHGEVHMC6SZ5an+aAJsayfKFfWAuA0aj6QhErRJQkupYtx+WF/f7YdJ9T5YLPZ
+         EP/PoKK8+s4qOpul47YAwsKDo2mG4hKE+i90HUS2wGBQw/VXSQ1AXSK8IUQxndqm7bJv
+         fUZoyFQONNHZd98jJlsEl9aVW0vcl6YSbUHuEnGhlRgaKGD4otjv1lmxAcUQ756xVO9D
+         5NzFRgsu/OW7ANd4aEsjQsOnPtv1zq+vWOnyLv+m89fqwmshAY+PjofDpEAXlmkuSxet
+         2SyQ==
+X-Gm-Message-State: AOAM5307WN0WPnk58suG6owZd89/IZAh+2VIavviUqNag69NFZ7UA1s8
+        dh2SmayINJqBmvcrr8NP8/8LyIdy
+X-Google-Smtp-Source: ABdhPJxsvhyOma8LtgCrM0D2bxYl6kyeZUCw326WO0i/Vc+Ad8kORjOw/NSgm/IxSsxY/xCZ221Dyg==
+X-Received: by 2002:a17:902:b58f:: with SMTP id a15mr20346433pls.87.1596561571391;
+        Tue, 04 Aug 2020 10:19:31 -0700 (PDT)
+Received: from [10.230.30.107] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id na14sm2843191pjb.6.2020.08.04.10.19.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2020 10:19:30 -0700 (PDT)
+Subject: Re: [PATCH 0/4] CPUFreq statistics retrieved by drivers
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, cristian.marussi@arm.com,
+        rjw@rjwysocki.net
+References: <20200729151208.27737-1-lukasz.luba@arm.com>
+ <20200730085333.qubrsv7ufqninihd@vireshk-mac-ubuntu>
+ <20200730091014.GA13158@bogus> <3b3a56e9-29ec-958f-fb3b-c689a9389d2f@arm.com>
+ <20200731155650.GC14529@bogus>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <ae352c39-f7c4-c69e-0113-7c810c130ee0@gmail.com>
+Date:   Tue, 4 Aug 2020 10:19:23 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Firefox/68.0 Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+In-Reply-To: <20200731155650.GC14529@bogus>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZqcXRb5nHqAAAiRZmLFRLLJ0EJBwADBFCQ
-X-CMAE-Envelope: MS4wfBOrrTL5LsPq/idhG+0L5OvyXACBr/DULF4vCaqFGVMhei+w3S6yiPRw3grLdg+/glA+uxKI07NL98+BawXlQOhJgzZcp7fpBZnqXy1sMI39ZGNCWo63
- A2uFt62HCprVZQCBp8YnNS+wFr/4r2J6CqWPVnvxaqcaN560lgwWv1lsWWaIDaNI2rVJXMjeXDPyBI9yVrj/O83kCcnwrX956X7iTSoRcogG3U7PKAmxvKHs
- jMhESBBqhMZZFJzZ63PoLMUZ7vvLVsxaxk1uWwuO0yu8N7UoA+Wtl015NHE6AWBdftg/WWzbD6Or7rdN/lvuH80m5Vyh1Y1an06wtR8bv9xgx+Wb9SP2E6zR
- +n8jMdLbyLSbhYrLBsMSgxN3Ilt7w/IjAn2JPU7Def8Z3AGIa2xRzt1WyiK6UyHwPK8vsE4eYk54XPOUtuHCIQ3h6Q/w1nzjK+eQMfj/WeGlq8ep0Fk=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-I was just writing you about V5 when this V6 came.
-
-On 2020.08.04 08:11 Rafael J. Wysocki wrote:
-...
-> This is on top of the material already in the mainline.
-
-Oh, should have read that part better,
-but did get there in the end.
-...
-> v5 -> v6:
->    * Fix the problem with the EPP setting via sysfs not working with the
->      performance and powersave governors by stopping and restarting the
->      governor around the sysfs-based EPP updates in the passive mode.
->    * Because of that, use the epp_cached field just for avoiding the above
->      if the new EPP value for the given CPU is the same as the old one.
->    * Export cpufreq_start/stop_governor() from the core (for the above).
-
-EPP is still not right.
-I am not messing with it at all, just observing via my msr-decoder.
-
-I booted without any intel_pstate related directives for the
-kernel command line. The below is as expected (performance gov.):
-
-# /home/doug/c/msr-decoder
-How many CPUs?: 6
-8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
-B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-1.) 0x19C: IA32_THERM_STATUS: 88450000
-2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
-3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88430000
-4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
-5.) 0x771: IA32_HWP_CAPABILITIES (performance): 109252E : high 46 : guaranteed 37 : efficient 9 : lowest 1
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
-    min:       46 :       46 :       46 :       46 :       46 :       46 :
-    max:       46 :       46 :       46 :       46 :       46 :       46 :
-    des:        0 :        0 :        0 :        0 :        0 :        0 :
-    epp:        0 :        0 :        0 :        0 :        0 :        0 :
-    act:        0 :        0 :        0 :        0 :        0 :        0 :
-7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
-
-and then switched to passive mode later. EPP is not as expected. Expect 0
-(performance mode):
-
-# /home/doug/c/msr-decoder
-How many CPUs?: 6
-8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
-B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-1.) 0x19C: IA32_THERM_STATUS: 88440000
-2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
-3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88420000
-4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
-5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 : lowest 1
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E :
-    min:       46 :       46 :       46 :       46 :       46 :       46 :
-    max:       46 :       46 :       46 :       46 :       46 :       46 :
-    des:        0 :        0 :        0 :        0 :        0 :        0 :
-    epp:      255 :      255 :      255 :      255 :      255 :      255 :
-    act:        0 :        0 :        0 :        0 :        0 :        0 :
-7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
-
-Then switched to ondemand governor, and put 100% load on 2 CPUs.
-EPP is not as expected, which I don't actually know what to expect,
-but assume 128:
-
-# /home/doug/c/msr-decoder
-How many CPUs?: 6
-8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
-B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
-1.) 0x19C: IA32_THERM_STATUS: 883B0000
-2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
-3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 882B0000
-4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
-A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
-5.) 0x771: IA32_HWP_CAPABILITIES (performance): 10B252E : high 46 : guaranteed 37 : efficient 11 : lowest 1
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: FF002E09 : FF002E0C : FF002E2E : FF002E08 : FF002E2E : FF002E18 :
-    min:        9 :       12 :       46 :        8 :       46 :       24 :
-    max:       46 :       46 :       46 :       46 :       46 :       46 :
-    des:        0 :        0 :        0 :        0 :        0 :        0 :
-    epp:      255 :      255 :      255 :      255 :      255 :      255 :
-    act:        0 :        0 :        0 :        0 :        0 :        0 :
-7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
-
-For what it's worth, Kernel:
-
-78b39581ed85 (HEAD -> dtemp) cpufreq: intel_pstate: Implement passive mode with HWP enabled
-c0842fbc1b18 (origin/master, origin/HEAD, master) random32: move the pseudo-random 32-bit definitions to prandom.h
-2baa85d6927d Merge tag 'acpi-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-04084978003c Merge tag 'pm-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
-
-... Doug
 
 
+On 7/31/2020 8:56 AM, Sudeep Holla wrote:
+> On Thu, Jul 30, 2020 at 10:36:51AM +0100, Lukasz Luba wrote:
+>>
+>> In this case I think we would have to create debugfs.
+>> Sudeep do you think these debugfs should be exposed from the protocol
+>> layer:
+>> drivers/firmware/arm_scmi/perf.c
+> 
+> I prefer above over cpufreq as we can support for all the devices not
+> just cpus which avoids adding similar support elsewhere(mostly devfreq)
+> 
+>> or maybe from the cpufreq scmi driver? I would probably be safer to have
+>> it in the cpufreq driver because we have scmi_handle there.
+>>
+> 
+> Cristian was thinking if we can consolidate all such debugfs under one
+> device may be and that should eliminate your handle restriction. I would
+> like to see how that works out in implementation but I don't have any 
+> better suggestion ATM.
+
+debugfs is not enabled in production kernels, and especially not with
+Android kernels, so sticking those in sysfs like the existing cpufreq
+subsystem statistics may be a better choice.
+-- 
+Florian
