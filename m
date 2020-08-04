@@ -2,161 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C2823B4B4
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 07:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E47F023B4DD
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 08:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729822AbgHDF6B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 01:58:01 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:65290 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726514AbgHDF6B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 01:58:01 -0400
-Received: from pps.filterd (m0170389.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0745vLOf023730;
-        Tue, 4 Aug 2020 01:57:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=lTlyhEpdiQJocqUxalWtg8DPV2A3bUym/ZFs61HcPZQ=;
- b=GExOgq4/4CzaTiOTHovdTztuXDLRmPEqvsc4BK3ViD8jLo24wxyLquVMYWBl2MjzQ2vR
- 1tjTL0H+xfXiEBssBn2+r4udcaSgkOYyojjbi8EmRoZbVvJKrQL0T9fWCTvxDSCA1A/J
- eU3CcYs1X5NatgeOCVDgOLRSh1L8ERCji9Z6m1dtzbQveo9UDdm3RWjF/7yKexfD7/ED
- GSOpm2CuMPMe8y5E8FO+Zezvh6bqLXGWfPXAVMUJRN4VBnzFoXTex9DLN06plTohwqy5
- Y5ULi4myCeZDEaK7yp8rsY7tMfRrEkfo+wU65EXRa1f17paBixzgKtKYaZonNMywOcyv +g== 
-Received: from mx0a-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
-        by mx0a-00154904.pphosted.com with ESMTP id 32n7svqfbu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Aug 2020 01:57:52 -0400
-Received: from pps.filterd (m0089484.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0745sRxi053999;
-        Tue, 4 Aug 2020 01:57:51 -0400
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2058.outbound.protection.outlook.com [104.47.38.58])
-        by mx0b-00154901.pphosted.com with ESMTP id 32q0jps2xa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 04 Aug 2020 01:57:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kUKL0tyCCKxtDUssZvr0Y48t4tdTen0+2xkqwSh/vlfXxnSq8UkUwWhZIo/Absy+Ih0cfoYze6UjySLoqkrvSBUBNcJrt2dlZ8QSaidUFFQCtAtdM2rCE0GFJ7XyHQc+mBKcboLSKS3Pf+BlJt7wOOJx0MVQCxrt/hEtb46L7eGtYaxI9DBZj0E5Wt29g8bZ1PGJziVEz8B6/Be58z5xqQyAWz002bAqlaEecTsRKD1xvnuAqDiBBj29j/EriNEpHS9eLd/8SLXjOG1K/Wv5nblkd1Q3ycicCC/4nDwFsMxWO88GXhYaVLcSR/7fvjhgWprXIT7WpKusm0Xz2HtO8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lTlyhEpdiQJocqUxalWtg8DPV2A3bUym/ZFs61HcPZQ=;
- b=YIXrlJS8xfBe9//Ml58WzXoIxa7Uo5Fb0gw75YQ0MTnByq+ZcAuK32KUWcaF0AwcY2ZupJDjuyReRyyZCIjQ3fYhpEGfLVclNWI82kYxYhz+SIAnDZtUAZ9NO/L5LpHEKVDdCs1VFE+SGoFJCK4+ta6UMJE61OuQkL/llzbHmLGAC27u+uVWBMyGhZXG2cdiaITzvPGN1RFTIdGhCZ3cIjHJU177sA9WXPNCCr373cPWN8fxMGwuheRiOwv6HkQCNOOwcZg3zi83eWXJOn8dDa95d2xhiKTakCvQ+Nr7VTxBCjiHZAf1bqgvJDVj9wNseqrqmCI6WwBzItB51o+HkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dell.com; dmarc=pass action=none header.from=dell.com;
- dkim=pass header.d=dell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Dell.onmicrosoft.com;
- s=selector1-Dell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lTlyhEpdiQJocqUxalWtg8DPV2A3bUym/ZFs61HcPZQ=;
- b=IcfUXCtXiV2SFLEFUK23dU/eypMNr2L7FpjQwjCfilMPQ8BaC2OQ1IoP4MX9oJbuYLG2Zh4EW/S9S2RPDeIAbGraCMA+Kcku/Pt57mvViRZbwbo8CY4TnLCb9UkkCQwH1Uu1tZZmXTvwp60vGlC9R+6oHFQzzqefx5yJdClUyyg=
-Received: from SJ0PR19MB4528.namprd19.prod.outlook.com (2603:10b6:a03:28a::6)
- by BY5PR19MB3796.namprd19.prod.outlook.com (2603:10b6:a03:221::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.15; Tue, 4 Aug
- 2020 05:57:50 +0000
-Received: from SJ0PR19MB4528.namprd19.prod.outlook.com
- ([fe80::35ee:af12:500e:9f13]) by SJ0PR19MB4528.namprd19.prod.outlook.com
- ([fe80::35ee:af12:500e:9f13%3]) with mapi id 15.20.3239.021; Tue, 4 Aug 2020
- 05:57:50 +0000
-From:   "Yuan, Perry" <Perry.Yuan@dell.com>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-CC:     kernel test robot <lkp@intel.com>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "pali@kernel.org" <pali@kernel.org>,
-        "dvhart@infradead.org" <dvhart@infradead.org>,
-        "andy@infradead.org" <andy@infradead.org>,
-        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>
-Subject: RE: [PATCH] platform/x86:dell-laptop:Add battery charging thresholds
- and charging mode switch.
-Thread-Topic: [PATCH] platform/x86:dell-laptop:Add battery charging thresholds
- and charging mode switch.
-Thread-Index: AQHWZXUdJDuKgVR3CEC9cdT9c1KUKakiuGuAgATBmqCAAAJJgIAAAJkw
-Date:   Tue, 4 Aug 2020 05:57:50 +0000
-Message-ID: <SJ0PR19MB452858C9D87E62F5D5592703844A0@SJ0PR19MB4528.namprd19.prod.outlook.com>
-References: <20200729065424.12851-1-Perry_Yuan@Dell.com>
- <202008011345.5O4q2hta%lkp@intel.com>
- <SJ0PR19MB45281A4375E622F69642B526844A0@SJ0PR19MB4528.namprd19.prod.outlook.com>
- <20200804055343.mmkypi272sgfx6al@srcf.ucam.org>
-In-Reply-To: <20200804055343.mmkypi272sgfx6al@srcf.ucam.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: srcf.ucam.org; dkim=none (message not signed)
- header.d=none;srcf.ucam.org; dmarc=none action=none header.from=Dell.com;
-x-originating-ip: [101.80.141.212]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 209103cc-0f1a-49ba-077a-08d8383b5244
-x-ms-traffictypediagnostic: BY5PR19MB3796:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR19MB37964E25D56511E145C4E656844A0@BY5PR19MB3796.namprd19.prod.outlook.com>
-x-exotenant: 2khUwGVqB6N9v58KS13ncyUmMJd8q4
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1cLli/3NdzoaxxaPSJrkzdtYurqMjjQBIIE91CzZt4+0OumxOx2babrigKKLBwTSEUbVMo5kys3PjHTlSGkmyBgt/sxYh3dLzQ3K/pmplyDowcv9DUg1HEhByLkI//IgNOAoYUA2EdZdHPhR9CSXwBv1UHV8Ry6vYpnbZhLI5D5hXCaJGNRxgAni3oWIpgn/O83FWHzyw/OsFLf0CwUIx0xViAIJgwTJZtOOzSir4nqs/pJTw36DcBNYucYanePdVTHOmQPkFxwF8p8SFdH0zKm/rcE+1MIp5c74RFbHcDoIC0hk++m3RzxxjTsxukHF5J9RigzU5Scus9nzVivU+Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR19MB4528.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(366004)(39860400002)(396003)(346002)(376002)(136003)(8936002)(55016002)(7416002)(26005)(9686003)(33656002)(478600001)(71200400001)(4744005)(4326008)(53546011)(8676002)(186003)(5660300002)(6506007)(6916009)(52536014)(66446008)(66556008)(66476007)(76116006)(66946007)(786003)(64756008)(86362001)(316002)(7696005)(2906002)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: QE+41VWV541DZFQb8IqK/7DQi1mxkqr0R1Kh0EDXCWYUHpvkUMn/HKYSqiR7qRK2qjo9zvSe8j7kdMEZf0D+U4Ss1rIvdNXuEJoCIpdzoZE0PxFw0lJY2RYNGi0BhKfUbofDFYdiCDfL9Kn3UYBmwqC6RvmtwzHdtwaSgAS21Xy8Ib9QmDz67iQZ772wrJkSz7OylPhj43nIIDv0XIwVgKMVvH3+dsExdlEm2prM0JsDEgkcrEQ9ckP1XNpNbEsHIpkcPcI9i5kXNQmJq+ffvq+UWIx4ji08iaKS7zKQuG+xj6NF95V+Bsvm9xEAIHMCmqapyQZzNwil/j++eUN7mMtOeSEwN0EM6jTA9ZaCKNPY7p6yfpCNh6MHfzNdSGhsuLp1zYJoXOcD24gjbKgU8dvgu4vCwdM16iJwip6A13aFEhaAkfeXlD9iqJ7l0W3WC8gl1NeBDGXXjN/7aRkSkAre7eo4GWGNINkf+4pbNsdAfQ+1nxLlJwI0YR8ZKummqvdbJNSRVgibBFP+VOB0/b1HtaP2ArjhH/mAQUMDbjInPEPX/ED20YfS3KosF219WgkUsQ7j2lmw1yheZ/a4M+Q41rqv6JtgpcrKFLwXdKhRDVI5bygP0H+pttt4WLkwFEqV6NdOTHstpC6IG5/67A==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: Dell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR19MB4528.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 209103cc-0f1a-49ba-077a-08d8383b5244
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2020 05:57:50.5827
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 945c199a-83a2-4e80-9f8c-5a91be5752dd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: T1N8du987Y5Be5GuXLot72jcnArzNx1tBxks1vf3lRuLKW6eEiwmmn6JH1bpnpF82CRwFTYcVrrhvK2LQyc7Aw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR19MB3796
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-04_02:2020-08-03,2020-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- spamscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 suspectscore=0 bulkscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008040043
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 suspectscore=0 spamscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008040044
+        id S1729331AbgHDGM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 02:12:28 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:59388 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729323AbgHDGM1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 02:12:27 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200804061226euoutp01a38b7042f74481f284f19bf422653131~n__M4vAOp0732707327euoutp01N
+        for <linux-pm@vger.kernel.org>; Tue,  4 Aug 2020 06:12:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200804061226euoutp01a38b7042f74481f284f19bf422653131~n__M4vAOp0732707327euoutp01N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1596521546;
+        bh=h1MIe7+guqaF7sFDMh4fJlyTfxy7EDF7dzFmjh9wV8w=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=vEY7jUoQk+C2zGaMinQgVPU2BqGZzJwHWP9GUir948hqICNKmj6yCVOeNNn7OzFTW
+         WDDxWqXWLQTkln5gj5FNiMdrn0VgWy71yFZ7W5P8QugBIVzeiRESOsBOTlddFhDLcT
+         G/2v/LO7rh5LFGhw5Vst3xtMzHlj9W64apsG1Jw4=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20200804061226eucas1p1f69e5befcc49f7fe6b4db4dddd841b2f~n__Mu4wO82756627566eucas1p1S;
+        Tue,  4 Aug 2020 06:12:26 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 13.8F.06318.94CF82F5; Tue,  4
+        Aug 2020 07:12:26 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200804061225eucas1p283c1e0dc404bc420a2184480fdfd2b0d~n__MBUbYS2676826768eucas1p2q;
+        Tue,  4 Aug 2020 06:12:25 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200804061225eusmtrp12c203f5ad76b778325fddfedf6fc66e1~n__MAqmPJ0612206122eusmtrp10;
+        Tue,  4 Aug 2020 06:12:25 +0000 (GMT)
+X-AuditID: cbfec7f5-371ff700000018ae-0a-5f28fc4960f3
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 9B.DB.06314.94CF82F5; Tue,  4
+        Aug 2020 07:12:25 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200804061224eusmtip26b15d686a10db96dc73b8ed4fb28abd7~n__Lh-wUq0707607076eusmtip2Q;
+        Tue,  4 Aug 2020 06:12:24 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [PATCH] memory: samsung: exynos5422-dmc: propagate error from
+ exynos5_counters_get()
+Date:   Tue,  4 Aug 2020 08:12:10 +0200
+Message-Id: <20200804061210.5415-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRmVeSWpSXmKPExsWy7djP87pefzTiDd69Z7TYOGM9q8X1L89Z
+        Lc6f38BucXnXHDaLz71HGC1mnN/HZLGwqYXdYu2Ru+wOHB5r5q1h9Ni0qpPNo2/LKkaPz5vk
+        AliiuGxSUnMyy1KL9O0SuDJ6V01mKpjDUbF882/mBsaXbF2MnBwSAiYSrateM3UxcnEICaxg
+        lHi4fBsLhPOFUeL8v6nMEM5nRolDa14ww7Qcn3IbqmU5o0R/Vw8LSAKsZfcFCRCbTcBQoutt
+        F9gOEYF4ia0/u5lAbGaBm4wSS84adTFycAgDxfsPloOEWQRUJQ4e+c0KYvMK2EgcXneIBWKX
+        vMTqDQfAjpAQuM4mseXMaUaIhIvEtneLmSBsYYlXx7ewQ9gyEqcn97BANDQD/XNuLTuE08Mo
+        cblpBlS3tcSdc7/YQK5gFtCUWL9LHyLsKNF/6AczSFhCgE/ixltBiJv5JCZtmw4V5pXoaBOC
+        qFaTmHV8HdzagxcuQZV4SNy4VQQJkViJhQueM09glJuFsGoBI+MqRvHU0uLc9NRi47zUcr3i
+        xNzi0rx0veT83E2MwERw+t/xrzsY9/1JOsQowMGoxMO7gFUjXog1say4MvcQowQHs5IIr9PZ
+        03FCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeY0XvYwVEkhPLEnNTk0tSC2CyTJxcEo1MMZynPs1
+        efLf3uT9903n9C9ucSoryj6sKF/w+rItW/ieu5YPtj+s1v3Au9Sk6+vCyr79pVtN811XLW6N
+        nF8yqdnllu3rut01G7n9hGborw7Qmc/Bvid05iej+ktPov7/D/5Tk+tc9FVBaL/jIXXhg9kb
+        5l2pXXrj33vNO5kv7RZaFM2fcuxP5jYlluKMREMt5qLiRADPZ3xDAAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKLMWRmVeSWpSXmKPExsVy+t/xe7qefzTiDRZu5LXYOGM9q8X1L89Z
+        Lc6f38BucXnXHDaLz71HGC1mnN/HZLGwqYXdYu2Ru+wOHB5r5q1h9Ni0qpPNo2/LKkaPz5vk
+        Alii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DJ6
+        V01mKpjDUbF882/mBsaXbF2MnBwSAiYSx6fcZupi5OIQEljKKHHv5WtmiISMxMlpDawQtrDE
+        n2tdYA1CAp8YJXZs4QSx2QQMJbreQsRFBBIlvm1cyAgyiFngLqPElH0tLCAJYYFYifcHpzCB
+        2CwCqhIHj/wGG8orYCNxeN0hFogF8hKrNxxgnsDIs4CRYRWjSGppcW56brGhXnFibnFpXrpe
+        cn7uJkZgEG479nPzDsZLG4MPMQpwMCrx8C5g1YgXYk0sK67MPcQowcGsJMLrdPZ0nBBvSmJl
+        VWpRfnxRaU5q8SFGU6DlE5mlRJPzgRGSVxJvaGpobmFpaG5sbmxmoSTO2yFwMEZIID2xJDU7
+        NbUgtQimj4mDU6qBMfOcrVnDlrsLny7UO8BgxZ/8jeNDI6tA2t+5R1W+FPRb+T/sM3u+IDnl
+        icSqm65cB+LPXvZYpse5qU+SdcblqZMafYwONzGob8mVv75J+fgffjkdxtzE63MM5xQLnfJL
+        cvmpvjJM8JyCofOBj/K7mqzP3ug8VrLnXfEtHs1LhZVX2Ro5hSSFlFiKMxINtZiLihMBA8M6
+        TVgCAAA=
+X-CMS-MailID: 20200804061225eucas1p283c1e0dc404bc420a2184480fdfd2b0d
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200804061225eucas1p283c1e0dc404bc420a2184480fdfd2b0d
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200804061225eucas1p283c1e0dc404bc420a2184480fdfd2b0d
+References: <CGME20200804061225eucas1p283c1e0dc404bc420a2184480fdfd2b0d@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> From: Matthew Garrett <mjg59@srcf.ucam.org>
-> Sent: Tuesday, August 4, 2020 1:54 PM
-> To: Yuan, Perry
-> Cc: kernel test robot; sre@kernel.org; pali@kernel.org; dvhart@infradead.=
-org;
-> andy@infradead.org; Limonciello, Mario; kbuild-all@lists.01.org; linux-
-> pm@vger.kernel.org; linux-kernel@vger.kernel.org; platform-driver-
-> x86@vger.kernel.org
-> Subject: Re: [PATCH] platform/x86:dell-laptop:Add battery charging thresh=
-olds
-> and charging mode switch.
->=20
->=20
-> [EXTERNAL EMAIL]
->=20
-> On Tue, Aug 04, 2020 at 05:46:30AM +0000, Yuan, Perry wrote:
->=20
-> > It is not patch issue, the kernel config needs to add
-> "CONFIG_ACPI_BATTERY=3Dy"
->=20
-> In that case you probably want to add a dependency to ACPI_BATTERY in the
-> DELL_LAPTOP Kconfig.
->=20
-> --
-> Matthew Garrett | mjg59@srcf.ucam.org
+exynos5_counters_get() might fail with -EPROBE_DEFER if the driver for
+devfreq event counter is not yet probed. Propagate that error value to
+the caller to ensure that the exynos5422-dmc driver will be probed again
+when devfreq event contuner is available.
 
-Thank you Matthew.
-I will add it to the Kconfig as DELL_LAPTOP dependency.=20
+This fixes boot hang if both exynos5422-dmc and exynos-ppmu drivers are
+compiled as modules.
+
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/memory/samsung/exynos5422-dmc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+index b9c7956e5031..639811a3eecb 100644
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -914,7 +914,7 @@ static int exynos5_dmc_get_status(struct device *dev,
+ 	} else {
+ 		ret = exynos5_counters_get(dmc, &load, &total);
+ 		if (ret < 0)
+-			return -EINVAL;
++			return ret;
+ 
+ 		/* To protect from overflow, divide by 1024 */
+ 		stat->busy_time = load >> 10;
+-- 
+2.17.1
+
