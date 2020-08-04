@@ -2,94 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C3C23B8EB
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 12:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD3023B8FC
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 12:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbgHDKkL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 06:40:11 -0400
-Received: from foss.arm.com ([217.140.110.172]:42368 "EHLO foss.arm.com"
+        id S1729004AbgHDKni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 06:43:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:42406 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726212AbgHDKkL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Aug 2020 06:40:11 -0400
+        id S1728170AbgHDKni (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Aug 2020 06:43:38 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD2121FB;
-        Tue,  4 Aug 2020 03:40:10 -0700 (PDT)
-Received: from [10.37.12.45] (unknown [10.37.12.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 503063F718;
-        Tue,  4 Aug 2020 03:40:09 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Subject: Re: [RFC] memory: exynos5422-dmc: Document mutex scope
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20200724180857.22119-1-krzk@kernel.org>
-Message-ID: <3522860a-8158-6e71-9d65-01d0e0c15f0d@arm.com>
-Date:   Tue, 4 Aug 2020 11:40:07 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0389E1FB;
+        Tue,  4 Aug 2020 03:43:37 -0700 (PDT)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.195.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6B7B3F718;
+        Tue,  4 Aug 2020 03:43:34 -0700 (PDT)
+Date:   Tue, 4 Aug 2020 11:43:32 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Dongdong Yang <contribute.kernel@gmail.com>
+Cc:     gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, linux-kernel@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-pm@vger.kernel.org,
+        yangdongdong@xiaomi.com, yanziily@xiaomi.com,
+        rocking@linux.alibaba.com
+Subject: Re: [PATCH v4] sched: Provide USF for the portable equipment.
+Message-ID: <20200804104331.6vphb2iclwz3buig@e107158-lin.cambridge.arm.com>
+References: <cover.1596526941.git.yangdongdong@xiaomi.com>
+ <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
 MIME-Version: 1.0
-In-Reply-To: <20200724180857.22119-1-krzk@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
+User-Agent: NeoMutt/20171215
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krzysztof,
+Hi Dongdong
 
-On 7/24/20 7:08 PM, Krzysztof Kozlowski wrote:
-> Document scope of the mutex used by driver.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> 
-> ---
-> 
-> It seems mutex was introduced to protect:
-> 1. setting actual frequency/voltage,
-> 2. dmc->curr_rate (in exynos5_dmc_get_cur_freq()).
-> 
-> However dmc->curr_rate in exynos5_dmc_get_status() is not protected. Is
-> it a bug?
+On 08/04/20 15:50, Dongdong Yang wrote:
+> +What:		/sys/devices/system/cpu/sched_usf
+> +		/sys/devices/system/cpu/sched_usf/sched_usf_non_ux_r
+> +		/sys/devices/system/cpu/sched_usf/sched_usf_up_l0_r
+> +		/sys/devices/system/cpu/sched_usf/sched_usf_down_r
+> +Date:		Aug 2020
+> +Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+> +Description:	User Sensitive Feedback factor auxiliary scheduling which
+> +		is providing more utils adjustment settings to the high level
+> +		by scenario identification.
+> +		sched_usf_non_ux_r:
+> +			The ratio of utils is cut down on screen off. The
+> +			default value is 0, which no util is adjusted on sugov
+> +			calculating utils to select cpufreq. Its range is
+> +			[-100 , 0]. If its value falls into [-50, 0), the half
+> +			of utils, which	calculates cpufreq, shall be  cut down.
+> +			If its value falls into [-100, -50), only a quarter of
+> +			utils are left to continue to calculate cpufreq.
+> +			It is expected to be set [-100, 0) once enter into the
+> +			identificated scenario, such as listen to music on
+> +			screen off, and recover to 0 on out of the scenario,
+> +			such as	screen on.
+> +
+> +		sched_usf_up_l0_r:
+> +			The ratio of utils is boost up on screen on. The
+> +			default value is 0, which no util is adjusted on sugov
+> +			calculates utils to select cpufreq. Its range is [0 , 100].
+> +			If its value falls into (0, 50], a quarter of extra utils,
+> +			which calculate cpufreq, shall be added. If its value
+> +			falls into (50, 100], the half of extra utils are added
+> +			to continue to	calculate cpufreq.
+> +			It is expected to be set (0, 100] once enter into the
+> +			identificated scenario, such as browsing videolet on
+> +			screen on, and recover to 0 on out of the scenario,
+> +			such as screen off or videolet into background.
+> +
+> +		sched_usf_down_r:
+> +			The ratio of utils is cut down on screen on. The
+> +			default	value is 0, which no util is adjusted on sugov
+> +			calculating utils to select cpufreq. Its range is
+> +			[-100 , 0]. If its value falls into [-50, 0), the half
+> +			of utils, which	calculate cpufreq, shall be  cut down.
+> +			If its value falls into [-100, -50), only a quarter of
+> +			utils are left to continue to calculate cpufreq.
+> +			It is expected to be set [-100, 0) once enter into the
+> +			identificated scenario, such as browsing videolet on
+> +			screen on, and recover to 0 on	out of the scenario,
+> +			such as screen off or vidolet into background.
 
-The callback get_dev_status() from devfreq->profile, which here is the
-exynos5_dmc_get_status() should be already called with devfreq->lock
-mutex hold, like e.g from simple_ondemand governor or directly
-using update_devfreq exported function:
-update_devfreq()
-   ->get_target_freq()
-     devfreq_update_stats()
-         df->profile->get_dev_status()
+AFACS you're duplicating util clamp functionality here. You can already use
+util clamp to boost tasks on screen on, and cap them on screen off. And extra
+brownie points; you can already use that on android 4.19 and 5.4 kernels (I'm
+assuming the battery device is android based, sorry).
 
-The dmc->curr_rate is also used from sysfs interface from devfreq.
-The local dmc lock serializes also this use case (when the HW freq
-has changed but not set yet into curr_rate.
+Any reason why util clamp isn't giving you what you want?
+
+To cap the system on screen off you need to
+
+	# Don't allow the util to go above 512
+	echo  512 > /proc/sys/kernel/sched_util_clamp_min
+	echo  512 > /proc/sys/kernel/sched_util_clamp_max
+
+To boost the system on screen on, you need first to lift the capping done above
 
 
-> ---
->   drivers/memory/samsung/exynos5422-dmc.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> index 93e9c2429c0d..0388066a7d96 100644
-> --- a/drivers/memory/samsung/exynos5422-dmc.c
-> +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> @@ -114,6 +114,7 @@ struct exynos5_dmc {
->   	void __iomem *base_drexi0;
->   	void __iomem *base_drexi1;
->   	struct regmap *clk_regmap;
-> +	/* Protects curr_rate and frequency/voltage setting section */
->   	struct mutex lock;
->   	unsigned long curr_rate;
->   	unsigned long curr_volt;
-> 
+	# Allow util to use the full range again
+	echo  1024 > /proc/sys/kernel/sched_util_clamp_min
+	echo  1024 > /proc/sys/kernel/sched_util_clamp_max
 
-I assume this missing comment for the lock was required by some scripts.
-In this case LGTM:
+	# This is pseudo C code
+	for_each_important_task(p) {
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+		/*
+		 * boost the task utilization to start from 512.
+		 */
+		sched_attr attr = {
+			.util_min = 512,
+			.util_max = 1024
+		};
+		sched_setattr(p, attr);
+	}
 
-Regards,
-Lukasz
+	/* undo boosting once system has settled down */
+	for_each_important_task(p) {
+
+		/*
+		 * reset util_min back to 0, or whatever value you want.
+		 */
+		sched_attr attr = {
+			.util_min = 0,
+			.util_max = 1024
+		};
+		sched_setattr(p, attr);
+	}
+
+There's a cgroup API for util clamp too.
+
+Thanks
+
+--
+Qais Yousef
