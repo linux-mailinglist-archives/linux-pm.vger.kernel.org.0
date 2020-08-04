@@ -2,137 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D5323BD5B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 17:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25BD623BE94
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 19:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727823AbgHDPlx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 11:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40286 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725950AbgHDPlq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 11:41:46 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BF8C06174A;
-        Tue,  4 Aug 2020 08:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=4HYOsiWuipXA9W4Av6msL0bg5EM4ZU//zWeqQbSSb4Y=; b=AjZY9OLE4ER6XFJ2LVIu7XnO8R
-        x/MYxLmAhfurUe1u0rvS4b04CnTUXL/Bo8iCnghvFmgeg1saQ3q1aOKmqfzE3/qgJnVV3Y5avqAod
-        lCNKowcjrhCg//YQvJxo/84zGJdiuF6goSnR2lqUDLlgi4unVpeeHwE8bwvZLTdHzYTHVIRradfmz
-        WVr7MZ+gpANvhDltZd8un/D1I0DeqhsXNaUk6mG0xRFjx4LEuVp3rzSzvkBVidFuxxbwlZ8uftgG8
-        r1CaBHAgqUttriiMtjiV2LomrsJ3kV8NtaJJwV1S8TLpAtlo6HcAA7/LWp8df3gTMVMWRkSE1kPOS
-        1W2jPmGw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1k2z4H-0000fW-5v; Tue, 04 Aug 2020 15:41:34 +0000
-Subject: Re: [PATCH v4] sched: Provide USF for the portable equipment.
-To:     Dongdong Yang <contribute.kernel@gmail.com>,
-        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de
-Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
-        yanziily@xiaomi.com, rocking@linux.alibaba.com
-References: <cover.1596526941.git.yangdongdong@xiaomi.com>
- <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <2a35c303-6c28-cc16-3f12-3d7b25ff4dfc@infradead.org>
-Date:   Tue, 4 Aug 2020 08:41:27 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729990AbgHDRHB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 13:07:01 -0400
+Received: from cmta16.telus.net ([209.171.16.89]:49311 "EHLO cmta16.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729610AbgHDRFr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 4 Aug 2020 13:05:47 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id 30Mhk7TkK5b7l30MjkMSUA; Tue, 04 Aug 2020 11:04:43 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1596560684; bh=JALEurWlvnPlBMa78OmCHzscxaUV9ayGqlorUWPpLOM=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=zVnmGtazlqkbIHxU1KvaCnW3nzLccpDF9ASaAOTmhWU5ao6Yx2cLjD3h/MTBwosWL
+         EcBqJIipYr0b9a9sRgQCDQFyqwv7ToTvf3HYhWClksm/SLRBVtnL4oXYlK699thob4
+         KWS0gQG8QteOJsg+8gYNpRrzJoW5+XTMiNChpuWjQZei1a/zjdv1OlivGu1jH/C7kJ
+         Ju3WPS4a3XsMMAvpcGc84ome4taezNNpaHPZ1BjEXRnRM1U5Yi28Ohiy/7Cx4LLkaP
+         jUV6CRaqb+StqS00Dusz6S3pVDJLr2TbZjJSQ3jxEgFvRrzt8hGG+bVYKwovRrhcxy
+         8HvtPLBF0AfiA==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8
+ a=Z_ZUgUZAPj2aFtWniJYA:9 a=cGtpBKYyCqBvOoDN:21 a=WcyYtQ8uXPS6tcuo:21
+ a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Peter Zijlstra'" <peterz@infradead.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
+        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
+        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>
+References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher> <1633168.eVXp6ieOpF@kreacher>
+In-Reply-To: <1633168.eVXp6ieOpF@kreacher>
+Subject: RE: [PATCH v6] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+Date:   Tue, 4 Aug 2020 10:04:39 -0700
+Message-ID: <000d01d66a81$59326a50$0b973ef0$@net>
 MIME-Version: 1.0
-In-Reply-To: <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdZqcXRb5nHqAAAiRZmLFRLLJ0EJBwADBFCQ
+X-CMAE-Envelope: MS4wfBOrrTL5LsPq/idhG+0L5OvyXACBr/DULF4vCaqFGVMhei+w3S6yiPRw3grLdg+/glA+uxKI07NL98+BawXlQOhJgzZcp7fpBZnqXy1sMI39ZGNCWo63
+ A2uFt62HCprVZQCBp8YnNS+wFr/4r2J6CqWPVnvxaqcaN560lgwWv1lsWWaIDaNI2rVJXMjeXDPyBI9yVrj/O83kCcnwrX956X7iTSoRcogG3U7PKAmxvKHs
+ jMhESBBqhMZZFJzZ63PoLMUZ7vvLVsxaxk1uWwuO0yu8N7UoA+Wtl015NHE6AWBdftg/WWzbD6Or7rdN/lvuH80m5Vyh1Y1an06wtR8bv9xgx+Wb9SP2E6zR
+ +n8jMdLbyLSbhYrLBsMSgxN3Ilt7w/IjAn2JPU7Def8Z3AGIa2xRzt1WyiK6UyHwPK8vsE4eYk54XPOUtuHCIQ3h6Q/w1nzjK+eQMfj/WeGlq8ep0Fk=
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/4/20 12:50 AM, Dongdong Yang wrote:
-> From: Dongdong Yang <yangdongdong@xiaomi.com>
-> 
-> ---
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index b555df8..e299418 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -614,3 +614,51 @@ Description:	SPURR ticks for cpuX when it was idle.
->  
->  		This sysfs interface exposes the number of SPURR ticks
->  		for cpuX when it was idle.
-> +
-> +What:		/sys/devices/system/cpu/sched_usf
-> +		/sys/devices/system/cpu/sched_usf/sched_usf_non_ux_r
-> +		/sys/devices/system/cpu/sched_usf/sched_usf_up_l0_r
-> +		/sys/devices/system/cpu/sched_usf/sched_usf_down_r
-> +Date:		Aug 2020
-> +Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
-> +Description:	User Sensitive Feedback factor auxiliary scheduling which
-> +		is providing more utils adjustment settings to the high level
-> +		by scenario identification.
+Hi Rafael,
 
-what is "utils"?
+I was just writing you about V5 when this V6 came.
 
-> +		sched_usf_non_ux_r:
-> +			The ratio of utils is cut down on screen off. The
+On 2020.08.04 08:11 Rafael J. Wysocki wrote:
+...
+> This is on top of the material already in the mainline.
 
-same question.
+Oh, should have read that part better,
+but did get there in the end.
+...
+> v5 -> v6:
+>    * Fix the problem with the EPP setting via sysfs not working with the
+>      performance and powersave governors by stopping and restarting the
+>      governor around the sysfs-based EPP updates in the passive mode.
+>    * Because of that, use the epp_cached field just for avoiding the above
+>      if the new EPP value for the given CPU is the same as the old one.
+>    * Export cpufreq_start/stop_governor() from the core (for the above).
 
-> +			default value is 0, which no util is adjusted on sugov
+EPP is still not right.
+I am not messing with it at all, just observing via my msr-decoder.
 
-what is "sugov"?
+I booted without any intel_pstate related directives for the
+kernel command line. The below is as expected (performance gov.):
 
-> +			calculating utils to select cpufreq. Its range is
-> +			[-100 , 0]. If its value falls into [-50, 0), the half
-> +			of utils, which	calculates cpufreq, shall be  cut down.
-> +			If its value falls into [-100, -50), only a quarter of
-> +			utils are left to continue to calculate cpufreq.
-> +			It is expected to be set [-100, 0) once enter into the
-> +			identificated scenario, such as listen to music on
+# /home/doug/c/msr-decoder
+How many CPUs?: 6
+8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+1.) 0x19C: IA32_THERM_STATUS: 88450000
+2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88430000
+4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+5.) 0x771: IA32_HWP_CAPABILITIES (performance): 109252E : high 46 : guaranteed 37 : efficient 9 : lowest 1
+6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+    raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
+    min:       46 :       46 :       46 :       46 :       46 :       46 :
+    max:       46 :       46 :       46 :       46 :       46 :       46 :
+    des:        0 :        0 :        0 :        0 :        0 :        0 :
+    epp:        0 :        0 :        0 :        0 :        0 :        0 :
+    act:        0 :        0 :        0 :        0 :        0 :        0 :
+7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
 
-			^^^^^^^^^^^^^ not a word.
+and then switched to passive mode later. EPP is not as expected. Expect 0
+(performance mode):
 
+# /home/doug/c/msr-decoder
+How many CPUs?: 6
+8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+1.) 0x19C: IA32_THERM_STATUS: 88440000
+2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88420000
+4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 : lowest 1
+6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+    raw: FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E :
+    min:       46 :       46 :       46 :       46 :       46 :       46 :
+    max:       46 :       46 :       46 :       46 :       46 :       46 :
+    des:        0 :        0 :        0 :        0 :        0 :        0 :
+    epp:      255 :      255 :      255 :      255 :      255 :      255 :
+    act:        0 :        0 :        0 :        0 :        0 :        0 :
+7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
 
-> +			screen off, and recover to 0 on out of the scenario,
-> +			such as	screen on.
-> +
-> +		sched_usf_up_l0_r:
-> +			The ratio of utils is boost up on screen on. The
-> +			default value is 0, which no util is adjusted on sugov
-> +			calculates utils to select cpufreq. Its range is [0 , 100].
-> +			If its value falls into (0, 50], a quarter of extra utils,
-> +			which calculate cpufreq, shall be added. If its value
-> +			falls into (50, 100], the half of extra utils are added
-> +			to continue to	calculate cpufreq.
-> +			It is expected to be set (0, 100] once enter into the
-> +			identificated scenario, such as browsing videolet on
+Then switched to ondemand governor, and put 100% load on 2 CPUs.
+EPP is not as expected, which I don't actually know what to expect,
+but assume 128:
 
-what is "videolet"?
+# /home/doug/c/msr-decoder
+How many CPUs?: 6
+8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+1.) 0x19C: IA32_THERM_STATUS: 883B0000
+2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 882B0000
+4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+5.) 0x771: IA32_HWP_CAPABILITIES (performance): 10B252E : high 46 : guaranteed 37 : efficient 11 : lowest 1
+6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+    raw: FF002E09 : FF002E0C : FF002E2E : FF002E08 : FF002E2E : FF002E18 :
+    min:        9 :       12 :       46 :        8 :       46 :       24 :
+    max:       46 :       46 :       46 :       46 :       46 :       46 :
+    des:        0 :        0 :        0 :        0 :        0 :        0 :
+    epp:      255 :      255 :      255 :      255 :      255 :      255 :
+    act:        0 :        0 :        0 :        0 :        0 :        0 :
+7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
 
-> +			screen on, and recover to 0 on out of the scenario,
-> +			such as screen off or videolet into background.
-> +
-> +		sched_usf_down_r:
-> +			The ratio of utils is cut down on screen on. The
-> +			default	value is 0, which no util is adjusted on sugov
-> +			calculating utils to select cpufreq. Its range is
-> +			[-100 , 0]. If its value falls into [-50, 0), the half
-> +			of utils, which	calculate cpufreq, shall be  cut down.
-> +			If its value falls into [-100, -50), only a quarter of
-> +			utils are left to continue to calculate cpufreq.
-> +			It is expected to be set [-100, 0) once enter into the
-> +			identificated scenario, such as browsing videolet on
-> +			screen on, and recover to 0 on	out of the scenario,
-> +			such as screen off or vidolet into background.
+For what it's worth, Kernel:
 
+78b39581ed85 (HEAD -> dtemp) cpufreq: intel_pstate: Implement passive mode with HWP enabled
+c0842fbc1b18 (origin/master, origin/HEAD, master) random32: move the pseudo-random 32-bit definitions to prandom.h
+2baa85d6927d Merge tag 'acpi-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+04084978003c Merge tag 'pm-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
 
--- 
-~Randy
+... Doug
+
 
