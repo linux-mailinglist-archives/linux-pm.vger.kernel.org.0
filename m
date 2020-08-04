@@ -2,156 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F349123B29D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 04:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA7D23B2BE
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 04:28:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgHDCLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 22:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56804 "EHLO
+        id S1726624AbgHDC21 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 22:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgHDCLc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 22:11:32 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29485C06174A;
-        Mon,  3 Aug 2020 19:11:32 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id x5so1237069wmi.2;
-        Mon, 03 Aug 2020 19:11:32 -0700 (PDT)
+        with ESMTP id S1726394AbgHDC21 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 22:28:27 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0764AC06174A
+        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 19:28:27 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id lx9so1186800pjb.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 19:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bt5UFgIVNzgSToTOgOgFgr6yhak9k0sKa89zXpBPQ/o=;
-        b=YWK1Rhvx3dGueqYNAcG/nGaRyZZiUP/gaijNg+STgAuFO5r0jP74xHMHKBkRs/08jz
-         Npm2RU8T23pWw9ijnJqtMV5LLaKbKy5GhnSQXyTvwsGseW5cJa5xt4SxhtgsxaJsdtzb
-         +GQc7Nry2KIPkPR12EDkgk+Qu3nae6pQjRgSQbswTRs2AFM7PHHkeU+xJlujHKXJgvat
-         MBzd2XtmP+5Cmt+LFuFt6K84QZG0TGjy66E2XaM/+YZQq+MA6R+1Zxemr7mR1PwSx8IL
-         QRAwN1UpNJ2qkqaq9fVIl2uKM0kaO/gArXvdXlkMWC067hUjLQltV/P0T6bk5eoEor0g
-         5DUA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=6GVUv+9Fssf3xKqRVKcpxPPsCcpq2Nc/tJstBMhX99Y=;
+        b=rWlgg4urYnB+1iu37AEaNTNTFO8yrBiF/WxRrJ9X8uESfEmqAhDoIFdjGuh4L87zCU
+         8LA3R1qao/WbnsGPLKGESriXseRp79ZNGQUf0WCAGbkJIasE1HFAhY+YifOoM9Dvzip+
+         Obw9boXwoVC4RyKx46xYjKVywZkqdruHO+NQig+xkqF+ImW7KPSSvSKHv6cdtY885rCm
+         peK7xn/WsjAHhWkzRbb4mjg5mccMQ0bzlgkL9rf5DGU6dlT/Vj7d3E1JXxAeNYSn6dfy
+         CrVQ5fLtqWq10/4vk8Q7rwjdXS16zMv+ciexIkw3RBK+RNx9weZsD3mA0MNa6RZxXUG8
+         oZpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bt5UFgIVNzgSToTOgOgFgr6yhak9k0sKa89zXpBPQ/o=;
-        b=gzjtH4JDnfA3pfoFmVSKUBsJRBqqKTTeZhNm+c+CkXoCSf3gkiDYm3Y2wfdQ2SEsLN
-         seoUnx22pc+L0LE6t+X4zu0+WHDDodHh8zhYL7ZnUNzOgYWr6ZIq3/zAAjLv7srrY4Ae
-         M3t1iTKHFyeEKHwy1jkovLiGFlhjOooWf22TkWgV9yQiDknIhpXTDMTRdJaIpeCZvPYt
-         ZM4C3s1dwOa9oGi3/31PwQqBa/d7gs0Pwtr6KkkvCIu26nywYaAGg8n9Bt3LKUPK1fJj
-         xdqxA308XuSQRi/fUgv0tZ2Oss+RWAreSZT3niWLIUu/3FcOqJ26rFblYWKgd+3cD8RZ
-         z+Iw==
-X-Gm-Message-State: AOAM531hqvq7cMMltkMv5G9iB40NkDfH2twvNBsNcg1wFJFwUF3W2FbG
-        jyDAePJtS/TdJZeWhZZEx2LZS3nBmiXK3gpHikQ=
-X-Google-Smtp-Source: ABdhPJygM5XTxa4zb95ozIqOuJmCLISli03/sCKeqfp97aweoLOeBsV4PebEwTm8AHk0BUK/6k7Ahkk6FqIBjuehjSI=
-X-Received: by 2002:a05:600c:230e:: with SMTP id 14mr1654632wmo.3.1596507090954;
- Mon, 03 Aug 2020 19:11:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=6GVUv+9Fssf3xKqRVKcpxPPsCcpq2Nc/tJstBMhX99Y=;
+        b=SUaXfgiZlF36gYGjy87zamUxJmWvTRkxeNovWcS/lES2hwJRJ7GPnfluh25idHSujY
+         nzZXyIP9CNMgYRwdwTkKrrLvsgSqbynjmw3+pcS5AtSwmiqj2W8AW0cDZ78sVv27/aag
+         w8e8EG8xFvrNZc8SnkZobKT6jWbI78uevFliRXtCHoThb/uRO6fVt4iQZglZeHmRjj3w
+         qwXUs6sLH9Nqi8iSeOZoPxtjOvWb2XXbxZCLdmzYgRrybPcyjIyd6uJvqovdFcAPYGvL
+         e7KFKRhAp4G0IDtfGUK+QkGhpSpIEwaA6moVq2HXa/fjw17ujFfG6wBwTh+Ze5kG690p
+         bn1Q==
+X-Gm-Message-State: AOAM533qUXipClIOA2VTpUQpKmBaCjR4EIrbxvHCCNcV6cYoj/g19fqd
+        x5+nQgR5C8RTNu8ivls7HrRoqQTCLyY=
+X-Google-Smtp-Source: ABdhPJzTb0OHaHSoPAglvEIUEt/K95T0Nfir0S/vMoOeJE8k6Qdu9BLSI9YdthVkeZPsAYg1WC+MXA==
+X-Received: by 2002:a17:902:16a:: with SMTP id 97mr17200774plb.207.1596508106433;
+        Mon, 03 Aug 2020 19:28:26 -0700 (PDT)
+Received: from localhost ([122.162.244.227])
+        by smtp.gmail.com with ESMTPSA id i66sm20424577pfc.12.2020.08.03.19.28.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 03 Aug 2020 19:28:25 -0700 (PDT)
+Date:   Tue, 4 Aug 2020 07:58:22 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm changes for 5.9
+Message-ID: <20200804022822.raefjhxjvyqzrmho@vireshk-mac-ubuntu>
 MIME-Version: 1.0
-References: <cover.1595214246.git.huangqiwu@xiaomi.com> <c9d3199ec18625f9cc4448c3b2049ea2ae80358b.1595214246.git.huangqiwu@xiaomi.com>
- <20200802120015.GA1289@bug> <20200802123742.GA257810@kroah.com>
- <20200802142825.GA20261@amd> <20200802165738.GA293244@kroah.com>
- <20200803114950.oyb3gzyiccybah3u@earth.universe> <20200803115644.GC955269@kroah.com>
-In-Reply-To: <20200803115644.GC955269@kroah.com>
-From:   ivan <yanziily@gmail.com>
-Date:   Tue, 4 Aug 2020 10:11:19 +0800
-Message-ID: <CAPtXDt1hMrgJ_9Zs6Zmkzf4b1-QfEcZPp7dKG26G6ZEqBxCgBw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/4] power: supply: core: add quick charge type property
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Sebastian Reichel <sre@kernel.org>, Pavel Machek <pavel@denx.de>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiangfei1@xiaomi.com, Qiwu Huang <huangqiwu@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170609 (1.8.3)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 3, 2020 at 7:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Aug 03, 2020 at 01:49:50PM +0200, Sebastian Reichel wrote:
-> > More importantely I prefer not to merge new APIs without any users
-> > (i.e. a driver making use of those values). Having a reference
-> > driver means, that there is an example how to use the values
-> > correctly and proves it is actually needed upstream. Right now
-> > this looks like "let's modify the upstream kernel, so that we can
-> > easily maintain our out of tree driver".
->
-> Agreed.  Qiwu, can you also submit your driver so we can see these
-> values be used?
+Hi Rafael,
 
-Our driver is based on qualcomm's driver secondary development.
+I wanted to do this last week, but couldn't as some conflict came in
+for the OPP patch which multiple trees wanted for dependencies.
 
-The driver code is for mi 10.
+Here are the details:
 
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/qpnp-smb5.c#L1434
+- Adaptive voltage scaling (AVS) support and minor cleanups for
+  brcmstb driver (Florian Fainelli and Markus Mayer).
 
-+ case POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE:
-+     val->intval = smblib_get_quick_charge_type(chg);
-+     break;
+- A new tegra driver and cleanup for the existing one (Sumit Gupta and
+  Jon Hunter).
 
-https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/smb5-lib.c#L7713
+- Bandwidth level support for Qcom driver along with OPP changes (Sibi
+  Sankar).
 
-+struct quick_charge adapter_cap[10] = {
-+       { POWER_SUPPLY_TYPE_USB,        QUICK_CHARGE_NORMAL },
-+       { POWER_SUPPLY_TYPE_USB_DCP,    QUICK_CHARGE_NORMAL },
-+       { POWER_SUPPLY_TYPE_USB_CDP,    QUICK_CHARGE_NORMAL },
-+       { POWER_SUPPLY_TYPE_USB_ACA,    QUICK_CHARGE_NORMAL },
-+       { POWER_SUPPLY_TYPE_USB_FLOAT,  QUICK_CHARGE_NORMAL },
-+       { POWER_SUPPLY_TYPE_USB_PD,       QUICK_CHARGE_FAST },
-+       { POWER_SUPPLY_TYPE_USB_HVDCP,    QUICK_CHARGE_FAST },
-+       { POWER_SUPPLY_TYPE_USB_HVDCP_3,  QUICK_CHARGE_FAST },
-+       { POWER_SUPPLY_TYPE_WIRELESS,     QUICK_CHARGE_FAST },
-+       {0, 0},
-+};
-+
-+int smblib_get_quick_charge_type(struct smb_charger *chg)
-+{
-+       int i = 0, rc;
-+       union power_supply_propval pval = {0, };
-+
-+       if (!chg) {
-+               dev_err(chg->dev, "get quick charge type faied\n");
-+               return -EINVAL;
-+       }
-+
-+       rc = smblib_get_prop_batt_health(chg, &pval);
-+       if (rc < 0)
-+               smblib_err(chg, "Couldn't get batt health rc=%d\n", rc);
-+
-+       if ((pval.intval == POWER_SUPPLY_HEALTH_COLD) || (pval.intval
-== POWER_SUPPLY_HEALTH_HOT))
-+               return 0;
-+
-+       if ((chg->real_charger_type == POWER_SUPPLY_TYPE_USB_PD) &&
-chg->pd_verifed) {
-+               return QUICK_CHARGE_TURBE;
-+       }
-+
-+       if (chg->is_qc_class_b)
-+               return QUICK_CHARGE_FLASH;
-+
-+       if ((chg->real_charger_type == POWER_SUPPLY_TYPE_USB_DCP) &&
-+                      (chg->hvdcp_recheck_status ||
-chg->fake_plug_out == true))
-+               return QUICK_CHARGE_FLASH;
-+
-+       while (adapter_cap[i].adap_type != 0) {
-+               if (chg->real_charger_type == adapter_cap[i].adap_type) {
-+                       return adapter_cap[i].adap_cap;
-+               }
-+               i++;
-+       }
-+
-+       return 0;
-+}
+- Cleanups to sti, cpufreq-dt, ap806, CPPC drivers (Viresh Kumar, Lee
+  Jones, Ivan Kokshaysky, Sven Auhagen, and Xin Hao).
 
+- Make schedutil default governor for ARM (Valentin Schneider).
 
+- Fix dependency issues for imx (Walter Lozano).
 
->
-> thanks,
->
-> greg k-h
+- Cleanup around cached_resolved_idx in cpufreq core (Viresh Kumar).
 
+--
+viresh
 
+-------------------------8<-------------------------
+
+The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+
+  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
+
+are available in the git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
+
+for you to fetch changes up to f259eab3ea0e7ed73db91f6358274dd3a9a27d79:
+
+  cpufreq: make schedutil the default for arm and arm64 (2020-07-30 11:40:29 +0530)
+
+----------------------------------------------------------------
+Florian Fainelli (1):
+      cpufreq: brcmstb-avs-cpufreq: Support polling AVS firmware
+
+Ivan Kokshaysky (1):
+      cpufreq: dt: fix oops on armada37xx
+
+Jon Hunter (1):
+      cpufreq: tegra186: Simplify probe return path
+
+Lee Jones (1):
+      cpufreq: sti-cpufreq: Fix some formatting and misspelling issues
+
+Markus Mayer (2):
+      cpufreq: brcmstb-avs-cpufreq: more flexible interface for __issue_avs_command()
+      cpufreq: brcmstb-avs-cpufreq: send S2_ENTER / S2_EXIT commands to AVS
+
+Sibi Sankar (5):
+      cpufreq: blacklist SDM845 in cpufreq-dt-platdev
+      cpufreq: blacklist SC7180 in cpufreq-dt-platdev
+      OPP: Add and export helper to set bandwidth
+      cpufreq: qcom: Update the bandwidth levels on frequency change
+      cpufreq: qcom: Disable fast switch when scaling DDR/L3
+
+Sumit Gupta (2):
+      dt-bindings: arm: Add NVIDIA Tegra194 CPU Complex binding
+      cpufreq: Add Tegra194 cpufreq driver
+
+Sven Auhagen (1):
+      cpufreq: ap806: fix cpufreq driver needs ap cpu clk
+
+Valentin Schneider (1):
+      cpufreq: make schedutil the default for arm and arm64
+
+Viresh Kumar (2):
+      cpufreq: cppc: Reorder code and remove apply_hisi_workaround variable
+      cpufreq: cached_resolved_idx can not be negative
+
+Walter Lozano (1):
+      cpufreq: imx: Select NVMEM_IMX_OCOTP
+
+Xin Hao (1):
+      cpufreq: CPPC: Reuse caps variable in few routines
+
+ .../bindings/arm/nvidia,tegra194-ccplex.yaml       |  69 ++++
+ drivers/cpufreq/Kconfig                            |   2 +-
+ drivers/cpufreq/Kconfig.arm                        |   9 +
+ drivers/cpufreq/Makefile                           |   1 +
+ drivers/cpufreq/armada-37xx-cpufreq.c              |   1 +
+ drivers/cpufreq/brcmstb-avs-cpufreq.c              |  89 +++--
+ drivers/cpufreq/cppc_cpufreq.c                     |  95 +++--
+ drivers/cpufreq/cpufreq-dt-platdev.c               |   2 +
+ drivers/cpufreq/cpufreq.c                          |   2 +-
+ drivers/cpufreq/qcom-cpufreq-hw.c                  |  91 ++++-
+ drivers/cpufreq/sti-cpufreq.c                      |   8 +-
+ drivers/cpufreq/tegra186-cpufreq.c                 |   6 -
+ drivers/cpufreq/tegra194-cpufreq.c                 | 390 +++++++++++++++++++++
+ drivers/opp/core.c                                 |  31 ++
+ include/linux/cpufreq.h                            |   2 +-
+ include/linux/pm_opp.h                             |   6 +
+ 16 files changed, 702 insertions(+), 102 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/nvidia,tegra194-ccplex.yaml
+ create mode 100644 drivers/cpufreq/tegra194-cpufreq.c
 
 -- 
-Thanks
-
-Qiwu
+viresh
