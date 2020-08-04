@@ -2,354 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3695123B63B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 10:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07D923B63D
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 10:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgHDIDb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 04:03:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57590 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725811AbgHDIDa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Aug 2020 04:03:30 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0C1ED2086A;
-        Tue,  4 Aug 2020 08:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596528208;
-        bh=8ACzz0hFyrdliBwP3ZGGsA+CzNGBjmyGPttNftbCTF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XW93tlrDHQkukpqQqtosd3vY9T/vR11YrsjrEnab6W9UAf2Wii3KNygsuK3eZAOil
-         8MkSrShsDsKKYnWoi+51XYip64xk0dh6zGoHQq3hbP1SJEz6y3IiVdEyKVnZI6JXdw
-         i2XEKZr1MWiGDlPegm52HTs5DWqiq9se78qWxljQ=
-Date:   Tue, 4 Aug 2020 10:03:09 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dongdong Yang <contribute.kernel@gmail.com>
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        devel@driverdev.osuosl.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangdongdong@xiaomi.com,
-        yanziily@xiaomi.com, rocking@linux.alibaba.com
-Subject: Re: [PATCH v4] sched: Provide USF for the portable equipment.
-Message-ID: <20200804080309.GA1764192@kroah.com>
-References: <cover.1596526941.git.yangdongdong@xiaomi.com>
- <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
+        id S1726013AbgHDIDe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 04:03:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbgHDIDb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 04:03:31 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD9AC061756
+        for <linux-pm@vger.kernel.org>; Tue,  4 Aug 2020 01:03:30 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id f1so35924752wro.2
+        for <linux-pm@vger.kernel.org>; Tue, 04 Aug 2020 01:03:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lTWJ7gUCdoYUMpCmakbmpJnB2wh5StLRShmo1wJgTcU=;
+        b=XKGudFuNmqY3dVCyNtfAUCD2YM+3erxnt1etVDnxdn9YM44VZ3blVXMkM69ZOwrcTP
+         2J5XiyHtqN0xMjUEyutaDjvfKzoXkp547sIjwFClhvNZtGVSQdXmZgnT36NFmq/sMw8C
+         1cBdOZ+9GIB9UpeisRpDxIWkd2mqNJfnMHlnXUJR7xr9flmTqZNbYl3aEDlPa3B05Qyr
+         f+mmw5dnbyW8UB3hQucvb4b3gFQc2MRVuEItwZXoMtNSPJhO6stnv+afmk0pJkz68/Ez
+         GHsS8GfDHHg57EZ2TWtxwKX8lN08o+MZkOz8KlhEMLrtLr0shp6isDaI7o2z0wHUyB0e
+         BEBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lTWJ7gUCdoYUMpCmakbmpJnB2wh5StLRShmo1wJgTcU=;
+        b=tWBWmbxSm4p8Wejrlllt35gsp5k1i0hvuNxpRSMOEE9MP3BhN6HjkRC7msMLONJXSQ
+         VKbA9osgZwCmbQh3smobkmsl4EH8+rwTX0czluGxSLvCPRvT5tlwIovkhiVDzIahhmTW
+         j0Ix+xeTHUSK8YSoBO4lkwTFwKkLSvcVCJ2ZTun8CRzgsTg434/chJ+8YSVU9S2uPF8w
+         Vl5qZbdbu7NT3Ix4ztT5Y34ftJHni+bRQKaKOWuyL0ZCiIMyCwb/LeZbJrovkGgsCNh2
+         f9pqCKCsUeU2rD8pIhb6Kzfqi9O70ccUO8tYJMoJCX7rX/E1Ot4XR52ypq0k2ahe7OAh
+         9V0w==
+X-Gm-Message-State: AOAM5324YNy8+8wyAfFjBqMrSmtK/YpmzrrwW6AMqRGxNieDLkRDVGR+
+        r9vHPOSgDVXAySPY3U+LJehlew==
+X-Google-Smtp-Source: ABdhPJwh8pL7es2JVKKP8i4Y1bD+JgPv01swIBrnvKBJSnhRR9Qcj32oYQyYGZAZw2KkTj0nxENWWA==
+X-Received: by 2002:a5d:5086:: with SMTP id a6mr18346090wrt.304.1596528208089;
+        Tue, 04 Aug 2020 01:03:28 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2? ([2a01:e34:ed2f:f020:4d35:b6a4:4754:61f2])
+        by smtp.googlemail.com with ESMTPSA id z7sm3451793wmk.6.2020.08.04.01.03.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2020 01:03:27 -0700 (PDT)
+Subject: Re: [GIT PULL] thermal for v5.9-rc1
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Colin King <colin.king@canonical.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>
+References: <0b3dd92e-0aa0-6f23-fcef-178f2bf6a1c1@linaro.org>
+ <CAHk-=whbPwsdPom8pcJyo7P5KRRjDef_6ZEMbavJy=qArVoqVw@mail.gmail.com>
+ <91e715f73a3e9197d4a5f597c7b303284db11ac9.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <559ed41c-5975-2008-566b-6733ea403241@linaro.org>
+Date:   Tue, 4 Aug 2020 10:03:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <820a185b6765d6246ac34f612faedeb35189487c.1596526941.git.yangdongdong@xiaomi.com>
+In-Reply-To: <91e715f73a3e9197d4a5f597c7b303284db11ac9.camel@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 04, 2020 at 03:50:35PM +0800, Dongdong Yang wrote:
+On 04/08/2020 08:32, Zhang Rui wrote:
 
-Comments on code stuff only, not if this is actually a valid thing to be
-doing at all:
+[ ... ]
 
-> --- /dev/null
-> +++ b/kernel/sched/usf.c
-> @@ -0,0 +1,294 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020 XiaoMi Inc.
-> + * Author: Yang Dongdong <yangdongdong@xiaomi.com>
-> + * This program is free software; you can redistribute it and/or modify
-> + * it under the terms of the GNU General Public License version 2 as
-> + * published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope that it will be useful,
-> + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-> + * See http://www.gnu.org/licenses/gpl-2.0.html for more details.
+> There must be something wrong here, Daniel and I are following a strict
+> process to make sure that we don't lose any history.
+> 
+> For this PR, I'm not quite sure what happened, he probably did
+> something by mistake when generating it.
 
-No need for the two paragraph "boiler plate" license text now that you
-have a SPDX line, please remove them.
+Yes, I did something wrong, not sure yet what happened. I'll investigate
+before sending a new PR.
 
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/init.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/kthread.h>
-> +#include <linux/cpu.h>
-> +#include <linux/sysfs.h>
-> +#include <linux/kthread.h>
-> +#include <linux/kobject.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/init.h>
-> +#include <linux/kallsyms.h>
-> +#include <linux/fb.h>
-> +#include <linux/notifier.h>
-> +#include <trace/events/sched.h>
-> +#include "sched.h"
-> +
-> +#define BOOST_MIN_V -100
-> +#define BOOST_MAX_V 100
-> +#define LEVEL_TOP 3
-> +
-> +#define USF_TAG	"[usf_sched]"
+Sorry for that.
 
-Please pr_fmt instead.
+  -- Daniel
 
-> +
-> +DEFINE_PER_CPU(unsigned long[PID_MAX_DEFAULT], task_hist_nivcsw);
-> +
-> +static struct {
-> +	bool is_sched_usf_enabled;
-> +	bool is_screen_on;
-> +	int sysctl_sched_usf_up_l0;
-> +	int sysctl_sched_usf_down;
-> +	int sysctl_sched_usf_non_ux;
-> +	int usf_up_l0;
-> +	int usf_down;
-> +	int usf_non_ux;
-> +} usf_vdev;
-> +
-> +void adjust_task_pred_demand(int cpuid,
-> +			     unsigned long *util,
-> +			     struct rq *rq)
-> +{
-> +	/* sysctl_sched_latency/sysctl_sched_min_granularity */
-> +	u32 bl_sw_num = 3;
-> +
-> +	if (!usf_vdev.is_sched_usf_enabled || !rq || !rq->curr ||
-> +		(rq->curr->pid >= PID_MAX_DEFAULT))
-> +		return;
-> +
-> +	if (usf_vdev.is_screen_on) {
-> +		if (rq->curr->nivcsw >
-> +		    (per_cpu(task_hist_nivcsw, cpuid)[rq->curr->pid]
-> +		     + bl_sw_num + 1)) {
-> +			(*util) += (*util) >> usf_vdev.usf_up_l0;
-> +		} else if (rq->curr->nivcsw <
-> +			   (per_cpu(task_hist_nivcsw, cpuid)[rq->curr->pid]
-> +			    + bl_sw_num - 1) && (rq->nr_running < bl_sw_num)) {
-> +			(*util) >>= usf_vdev.usf_down;
-> +		}
-> +		per_cpu(task_hist_nivcsw, cpuid)[rq->curr->pid] =
-> +		    rq->curr->nivcsw;
-> +	} else if (rq->curr->mm) {
-> +		(*util) >>= usf_vdev.usf_non_ux;
-> +	}
-> +
-> +	trace_sched_usf_adjust_utils(cpuid, usf_vdev.usf_up_l0,
-> +				     usf_vdev.usf_down,
-> +				     usf_vdev.usf_non_ux, *util);
-> +}
-> +
-> +static int usf_lcd_notifier(struct notifier_block *nb,
-> +			    unsigned long val, void *data)
-> +{
-> +	struct fb_event *evdata = data;
-> +	unsigned int blank;
-> +
-> +	if (!evdata)
-> +		return 0;
-> +
-> +	if (val != FB_EVENT_BLANK)
-> +		return 0;
-> +
-> +	if (evdata->data && val == FB_EVENT_BLANK) {
-> +		blank = *(int *)(evdata->data);
-> +
-> +		switch (blank) {
-> +		case FB_BLANK_POWERDOWN:
-> +			usf_vdev.is_screen_on = false;
-> +			if (usf_vdev.sysctl_sched_usf_non_ux != 0)
-> +				static_branch_enable(&adjust_task_pred_set);
-> +			else
-> +				static_branch_disable(&adjust_task_pred_set);
-> +
-> +			break;
-> +
-> +		case FB_BLANK_UNBLANK:
-> +			usf_vdev.is_screen_on = true;
-> +			if (usf_vdev.sysctl_sched_usf_up_l0 != 0 ||
-> +			    usf_vdev.sysctl_sched_usf_down != 0)
-> +				static_branch_enable(&adjust_task_pred_set);
-> +			else
-> +				static_branch_disable(&adjust_task_pred_set);
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +
-> +		usf_vdev.is_sched_usf_enabled = true;
-> +		pr_info("%s : usf_vdev.is_screen_on:%b\n",
-> +				     __func__, usf_vdev.is_screen_on);
-> +	}
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block usf_lcd_nb = {
-> +	.notifier_call = usf_lcd_notifier,
-> +	.priority = INT_MAX,
-> +};
-> +
-> +static ssize_t store_sched_usf_up_l0_r(struct kobject *kobj,
-> +				       struct kobj_attribute *attr,
-> +				       const char *buf, size_t count)
-> +{
-> +	int val = 0;
-> +	int ret = 0;
-> +
-> +	ret = kstrtoint(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (val == 0) {
-> +		usf_vdev.sysctl_sched_usf_up_l0 = val;
-> +		usf_vdev.usf_up_l0 = 0;
-> +	} else if ((val > 0) && (val <= BOOST_MAX_V)) {
-> +		usf_vdev.sysctl_sched_usf_up_l0 = val;
-> +		usf_vdev.usf_up_l0 = LEVEL_TOP -
-> +				DIV_ROUND_UP(val, BOOST_MAX_V / 2);
-> +		ret = count;
-> +	} else {
-> +		pr_err(USF_TAG "%d should fall into [%d %d]",
-> +		       val, 0, BOOST_MAX_V);
-> +		ret = -EINVAL;
-> +	}
-> +	if ((usf_vdev.sysctl_sched_usf_up_l0 == 0) &&
-> +	    (usf_vdev.sysctl_sched_usf_down == 0))
-> +		static_branch_disable(&adjust_task_pred_set);
-> +	else
-> +		static_branch_enable(&adjust_task_pred_set);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t store_sched_usf_down_r(struct kobject *kobj,
-> +				      struct kobj_attribute *attr,
-> +				      const char *buf, size_t count)
-> +{
-> +	int val = 0;
-> +	int ret = 0;
-> +
-> +	ret = kstrtoint(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if ((val >= BOOST_MIN_V) && (val <= 0)) {
-> +		usf_vdev.sysctl_sched_usf_down = val;
-> +		usf_vdev.usf_down = DIV_ROUND_UP(-val, -BOOST_MIN_V / 2);
-> +		ret = count;
-> +	} else {
-> +		pr_err(USF_TAG "%d should fall into [%d %d]",
-> +		       val, BOOST_MIN_V, 0);
-> +		ret = -EINVAL;
-> +	}
-> +	if ((usf_vdev.sysctl_sched_usf_up_l0 == 0) &&
-> +	    (usf_vdev.sysctl_sched_usf_down == 0))
-> +		static_branch_disable(&adjust_task_pred_set);
-> +	else
-> +		static_branch_enable(&adjust_task_pred_set);
-> +
-> +	return ret;
-> +}
-> +
-> +static ssize_t store_sched_usf_non_ux_r(struct kobject *kobj,
-> +					struct kobj_attribute *attr,
-> +					const char *buf, size_t count)
-> +{
-> +	int val = 0;
-> +	int ret = 0;
-> +
-> +	ret = kstrtoint(buf, 0, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if ((val >= BOOST_MIN_V) && (val <= 0)) {
-> +		usf_vdev.sysctl_sched_usf_non_ux = val;
-> +		usf_vdev.usf_non_ux = DIV_ROUND_UP(-val, -BOOST_MIN_V / 2);
-> +		ret = count;
-> +	} else {
-> +		pr_err(USF_TAG "%d should fall into [%d %d]",
-> +		       val, BOOST_MIN_V, 0);
-> +		ret = -EINVAL;
-> +	}
-> +	if (usf_vdev.sysctl_sched_usf_non_ux == 0)
-> +		static_branch_disable(&adjust_task_pred_set);
-> +	else
-> +		static_branch_enable(&adjust_task_pred_set);
-> +
-> +	return ret;
-> +}
-> +
-> +#define usf_attr_rw(_name)						\
-> +static struct kobj_attribute _name =					\
-> +__ATTR(_name, 0664, show_##_name, store_##_name)
 
-__ATTR_RW()?
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> +
-> +#define usf_show_node(_name, _value)					\
-> +static ssize_t show_##_name						\
-> +(struct kobject *kobj, struct kobj_attribute *attr,  char *buf)		\
-> +{									\
-> +	return sprintf(buf, "%d", usf_vdev.sysctl_##_value);		\
-> +}
-
-Again do NOT use raw kobjects.
-
-> +
-> +usf_show_node(sched_usf_up_l0_r, sched_usf_up_l0);
-> +usf_show_node(sched_usf_down_r, sched_usf_down);
-> +usf_show_node(sched_usf_non_ux_r, sched_usf_non_ux);
-> +
-> +usf_attr_rw(sched_usf_up_l0_r);
-> +usf_attr_rw(sched_usf_down_r);
-> +usf_attr_rw(sched_usf_non_ux_r);
-> +
-> +static struct attribute *sched_attrs[] = {
-> +	&sched_usf_up_l0_r.attr,
-> +	&sched_usf_down_r.attr,
-> +	&sched_usf_non_ux_r.attr,
-> +	NULL,
-> +};
-> +
-> +static struct attribute_group sched_attr_group = {
-> +	.attrs = sched_attrs,
-> +};
-
-ATTRIBUTE_GROUPS()?
-
-> +
-> +static int __init intera_monitor_init(void)
-> +{
-> +	int res = -1;
-> +	struct device *dev;
-> +
-> +	res = fb_register_client(&usf_lcd_nb);
-> +	if (res < 0) {
-> +		pr_err("Failed to register usf_lcd_nb!\n");
-> +		return res;
-> +	}
-> +
-> +	/*
-> +	 * create a sched_usf in cpu_subsys:
-> +	 * /sys/devices/system/cpu/sched_usf/...
-> +	 */
-> +	dev = cpu_subsys.dev_root;
-> +	res = sysfs_create_group(&dev->kobj, &sched_attr_group);
-
-Do not just tack on random sysfs files to a random struct device that
-you do not own.  That's ripe for big problems.
-
-Ugh, that seems to be how others do it too, not nice.
-
-Ok, but at the very least, use DEVICE_ATTR_RW() and do not use kobjects,
-as you will get into problems there.
-
-How does userspace know that these new sysfs files have shown up?  You
-never told it about them, so does it just "guess"?
-
-thanks,
-
-greg k-h
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
