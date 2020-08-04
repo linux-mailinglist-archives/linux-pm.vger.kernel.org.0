@@ -2,85 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A3023B606
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 09:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5098223B614
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 09:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbgHDHtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 03:49:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54540 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbgHDHtd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 4 Aug 2020 03:49:33 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C37722B40;
-        Tue,  4 Aug 2020 07:49:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596527372;
-        bh=8p+XCJZnz+9HnH0A9r61I2MYnTcinVNhhgF+AKtpNpg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QEL7Ges95rD4FR5z0wQEU5DzHET9Wk0ntPfdgYF1QGb6pg+pTc/cxEXsOesX9z9b0
-         Kvl1wyaVyXgowih1ziv7uWRTg7o7qYi3oDRRYwhWiR52hhIchpByEHyMFIRYlrgbte
-         0PmNiV4WD6VTWfLuKlTns/SzYSokjI1e9OeNMeMw=
-Date:   Tue, 4 Aug 2020 09:49:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     ivan <yanziily@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, Pavel Machek <pavel@denx.de>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jiangfei1@xiaomi.com, Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: Re: [PATCH v4 1/4] power: supply: core: add quick charge type
- property
-Message-ID: <20200804074913.GC1761483@kroah.com>
-References: <cover.1595214246.git.huangqiwu@xiaomi.com>
- <c9d3199ec18625f9cc4448c3b2049ea2ae80358b.1595214246.git.huangqiwu@xiaomi.com>
- <20200802120015.GA1289@bug>
- <20200802123742.GA257810@kroah.com>
- <20200802142825.GA20261@amd>
- <20200802165738.GA293244@kroah.com>
- <20200803114950.oyb3gzyiccybah3u@earth.universe>
- <20200803115644.GC955269@kroah.com>
- <CAPtXDt1hMrgJ_9Zs6Zmkzf4b1-QfEcZPp7dKG26G6ZEqBxCgBw@mail.gmail.com>
+        id S1726916AbgHDHwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 03:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726198AbgHDHwo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 03:52:44 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703CFC06174A;
+        Tue,  4 Aug 2020 00:52:44 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id s15so10112645pgc.8;
+        Tue, 04 Aug 2020 00:52:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zYEc+6a7E/gabrUW1l1oa9EKsDvyQIWgJXIkTHUE6P0=;
+        b=MQKi9p+OTeU7KudYYa62FbuV/BULPjiYgzSkpxX0hFt239tzKILs5CMVfi2I1KxSZL
+         GfihFA6OtXRLxRQZD7oKwMeU6KXG34wfOsADEs28IGhmmbGqiDHJdzpccC0r6xQi6DWC
+         SmnN8OHk6s9e2JP/D9Q+JfazrLLzkvtesb7IIRikhyUkITFY5PbKPCZHHwbs2/apyclg
+         eNcuyJ6WnVTf9qPR9vDJKs7jVfL8wIU6TsQX4MyyqBMwS1E5Vd7SgH1otpekCUFEz6p4
+         PqxhKVpxcN5w3gGBM4dy1lH3mTxVsrUKrh4Mxpvh0oQEovzU9xkWFM83iZS3SVMQhlcV
+         TaQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zYEc+6a7E/gabrUW1l1oa9EKsDvyQIWgJXIkTHUE6P0=;
+        b=RV2YpjJTcdXYMxSzaMI8JT5F/qFPPlniw6iI45fVvroWET+RdYdW2IKh7JGXuydKDJ
+         Pr5/waLxnDOc1trXG/p0HaHv47VKbCcnaf8yy7q3v+KLPG0v23XNKU3tSEoJiH9S/Jda
+         Mq3GTMvOVFvx6l+x0xJX4wLaw8kWgGKOmfnjT4Sgf6Xtt0U7dUTQ5ccxQnrJFMGdPM79
+         b67zl3F141L1Aal0ZcTV0HJslxJbH3U/5vm3az0Uv9MKKeY9PiCQlvMfYaY7zQ55hGnX
+         tmDClgj4WAY3M8gvIrbUkcGC4kLqAuPHh4M4Y9kV3zy3Am2UQFHN3otA3zwUfvwTwudA
+         boKQ==
+X-Gm-Message-State: AOAM531uEGzD4r0+zKH1WjWwgg66N36PjirEV+9AKv0dyWE14AFCBaHg
+        /90w79YkOGi14AuUC2v3/mo=
+X-Google-Smtp-Source: ABdhPJy5sW+NQlKW9dHOgTUY65Od+XjtI8kIDLJBPZM2/PUy6h7MzNiFxtnGDWcOudMFF6TPeijAeA==
+X-Received: by 2002:a63:741b:: with SMTP id p27mr558733pgc.194.1596527563970;
+        Tue, 04 Aug 2020 00:52:43 -0700 (PDT)
+Received: from yangdongdo-OptiPlex-9010.mioffice.cn ([209.9.72.214])
+        by smtp.gmail.com with ESMTPSA id h18sm9462018pfo.21.2020.08.04.00.52.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Aug 2020 00:52:43 -0700 (PDT)
+From:   Dongdong Yang <contribute.kernel@gmail.com>
+To:     gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de
+Cc:     linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
+        yanziily@xiaomi.com, rocking@linux.alibaba.com
+Subject: [PATCH v4] Provide USF for the portable equipment.
+Date:   Tue,  4 Aug 2020 15:50:34 +0800
+Message-Id: <cover.1596526941.git.yangdongdong@xiaomi.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPtXDt1hMrgJ_9Zs6Zmkzf4b1-QfEcZPp7dKG26G6ZEqBxCgBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 04, 2020 at 10:11:19AM +0800, ivan wrote:
-> On Mon, Aug 3, 2020 at 7:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Aug 03, 2020 at 01:49:50PM +0200, Sebastian Reichel wrote:
-> > > More importantely I prefer not to merge new APIs without any users
-> > > (i.e. a driver making use of those values). Having a reference
-> > > driver means, that there is an example how to use the values
-> > > correctly and proves it is actually needed upstream. Right now
-> > > this looks like "let's modify the upstream kernel, so that we can
-> > > easily maintain our out of tree driver".
-> >
-> > Agreed.  Qiwu, can you also submit your driver so we can see these
-> > values be used?
-> 
-> Our driver is based on qualcomm's driver secondary development.
-> 
-> The driver code is for mi 10.
-> 
-> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/qpnp-smb5.c#L1434
-> 
-> + case POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE:
-> +     val->intval = smblib_get_quick_charge_type(chg);
-> +     break;
-> 
-> https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/umi-q-oss/drivers/power/supply/qcom/smb5-lib.c#L7713
+From: Dongdong Yang <yangdongdong@xiaomi.com>
 
-<snip>
+This patch provides USF(User Sensitive Feedback factor) auxiliary
+cpufreq governor to support high level layer sysfs inodes setting
+for utils adjustment purpose from the identified scenario on portable
+equipment. Because the power consumption and UI response are more cared
+for by portable equipment users. And the "screen off" status stands for
+no request from the user, however, the kernel is still expected to
+notify the user in time on modem, network or powerkey events occur. USF
+provides "sched_usf_non_ux_r" sysfs inode to cut down the utils from
+user space tasks according to high level scenario. In addition, it
+usually hints more cpufreq demand that the preemptive counts of the
+tasks on the cpu burst and over the user expecting completed time such
+as the ratio sysctl_sched_latency to sysctl_sched_min_granularity on
+"screen on" status, which more likely with more UI. The sysfs inodes
+"sched_usf_up_l0_r" and "sched_usf_down_r" have been provided to adjust
+the utils according to high level identified scenario to alloc the
+cpufreq in time.
 
-Great, can you submit these drivers as patches as part of this series?
-That's the best way for all of this to be integrated.
+Changes in v4
+Based on comments from Greg, Randy and Viresh
+  - Add USF sysfs to ABI
+  - Remove kobj field from usf.
+  - Clean Kconfig left at staging.
 
-thanks,
+Changes in v3
+Based on comments from Greg, Dietmar, Christoph and Randy
+  - Move usf.c to kernel/sched from staging.
+  - Remove trace_printk and debugfs.
+  - Add document draft.
+  - Update comments.
 
-greg k-h
+Changes in v2
+Based on comments from Steven, Greg, Peter and Dan:
+  - Add adjust_task_pred_set switch.
+  - Move adjust_task_pred_demand declaration into sched.h
+  - Update comments.
+  - Clean usf structure.
+
+Changes in v1
+Initial USF 
+
+Dongdong Yang (1):
+  sched: Provide USF for the portable equipment.
+
+ Documentation/ABI/testing/sysfs-devices-system-cpu |  48 ++++
+ drivers/cpufreq/Kconfig                            |  11 +
+ include/trace/events/sched.h                       |  35 +++
+ kernel/sched/Makefile                              |   1 +
+ kernel/sched/cpufreq_schedutil.c                   |   3 +
+ kernel/sched/sched.h                               |  10 +
+ kernel/sched/usf.c                                 | 294 +++++++++++++++++++++
+ 7 files changed, 402 insertions(+)
+ create mode 100644 kernel/sched/usf.c
+
+-- 
+2.7.4
+
