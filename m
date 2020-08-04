@@ -2,119 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F1323B490
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 07:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CBAC23B4A2
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 07:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727823AbgHDFrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Aug 2020 01:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        id S1726756AbgHDFyB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Aug 2020 01:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727076AbgHDFrc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 01:47:32 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B1C061756
-        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 22:47:32 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id o5so3503067pgb.2
-        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 22:47:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=vDqLDzenSWHFK8n0k98ye2lU5LkLmPsSvSRCb9qxZYw=;
-        b=hVuoAigv2raGWMd83qJY6Xz7QDJMBlSMXKKSrBXoHU9m3M17SJ0c9uH6OmVJvDEF5N
-         x4m6SqByvLXKRZXo592ojSYyEtM/vSn16TObpqVzepkkIa5oFHVouIlAZqGrC0iKtFxu
-         n5JwBYVxv4i6Pp9FKOi27oNl62DBwhQC7jnKDiTyebSGmiFCJi/zvS8hrNAyQA6eVmqu
-         u2i1M8JJ9VLoIo09Q3Op77rt3rhwbo99d+/C0DO7FHVT1AZReRC7RLVBHnDwX9uV6JXf
-         duyoVekZpyrBIMsHNlVf2DbTqgD3gGzZqciEayJsPAYsloT+PjnPk1YLnlcFFSbHBedh
-         iK+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=vDqLDzenSWHFK8n0k98ye2lU5LkLmPsSvSRCb9qxZYw=;
-        b=mJElfvrMi44YnQwZ2LmMi2wvTcuKwj+JVNMIobd0t01pjo8xkzfe7vYS7VnMlYBQTZ
-         UL0KKw1hw/o08SdaJCcd5aTwScQ8kTSECSixoLeRu1LZBvj7Av+KAoYJU7rivtWz5q/1
-         RT0agHt78/ErLfnwvAF3K6cGnZo5fbG1irC3wzlR1lL9wamaHnKuWaKm45hoAQrj8ZqX
-         KdzUDYXVUeRiqEOWIddu7YhEUrd9YMTAjxJLSIl4jmE0PFxdWmO4vr2ym7jurGCLlP5I
-         JTybvHJB9wueJqS2VAIRUnsGB5ZSYsv9qGSIM6jz/81eIB7Iqdga9VL3fbovlYwFS/yG
-         PuTw==
-X-Gm-Message-State: AOAM531StCa8qKIHkVnKV7qBBknHWu6Y65DvAoVjWZETQta1fR9Y0myK
-        m2CG6YLBRB+KS4uOtwcueCs3YApo8kc=
-X-Google-Smtp-Source: ABdhPJypAAH2b4OuHX0Wo/y3QyqH1t6HOyEPeMQOxwksBRX1krFfIabU82XdsK7AvSB1E6Vh2xzU9A==
-X-Received: by 2002:a63:210c:: with SMTP id h12mr17617691pgh.152.1596520052288;
-        Mon, 03 Aug 2020 22:47:32 -0700 (PDT)
-Received: from localhost ([122.162.244.227])
-        by smtp.gmail.com with ESMTPSA id r7sm19970036pfl.186.2020.08.03.22.47.30
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 03 Aug 2020 22:47:31 -0700 (PDT)
-Date:   Tue, 4 Aug 2020 11:17:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dongdong Yang <contribute.kernel@gmail.com>
-Cc:     gregkh@linuxfoundation.org, rjw@rjwysocki.net, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
-        linux-pm@vger.kernel.org, yangdongdong@xiaomi.com,
-        tanggeliang@xiaomi.com, taojun@xiaomi.com, huangqiwu@xiaomi.com,
-        rocking@linux.alibaba.com, fengwei@xiaomi.com,
-        zhangguoquan@xiaomi.com, gulinghua@xiaomi.com, duhui@xiaomi.com
-Subject: Re: [PATCH v3] Provide USF for the portable equipment.
-Message-ID: <20200804054728.ojudxu5fmd54lar5@vireshk-mac-ubuntu>
-References: <cover.1596464894.git.yangdongdong@xiaomi.com>
+        with ESMTP id S1726398AbgHDFyA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Aug 2020 01:54:00 -0400
+Received: from cavan.codon.org.uk (cavan.codon.org.uk [IPv6:2a00:1098:0:80:1000:c:0:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEE9C06174A;
+        Mon,  3 Aug 2020 22:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codon.org.uk; s=63138784; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=v+OUD80o2Hw94BU/0tGHUr10niN26MvbyLk9nOFbCJ0=; b=SI4z6yBBbsYqYYwn/UOluqwgT
+        7plWwyl/DxJAImKdjicCANk9aWw2PFd0oB5Nb6IR1+ukTGgfgJlP3UkNx6w0hFjRZoPNg8D4SDCvO
+        fkRPHvAC180Bl2XYPAJpR2hw2geL4cPywj8RGQMxKEoPVlZMh1+D1rbj+xAyP2Hyt7mHE=;
+Received: from mjg59 by cavan.codon.org.uk with local (Exim 4.89)
+        (envelope-from <mjg59@cavan.codon.org.uk>)
+        id 1k2ptP-0007uI-7c; Tue, 04 Aug 2020 06:53:43 +0100
+Date:   Tue, 4 Aug 2020 06:53:43 +0100
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     "Yuan, Perry" <Perry.Yuan@dell.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        "sre@kernel.org" <sre@kernel.org>,
+        "pali@kernel.org" <pali@kernel.org>,
+        "dvhart@infradead.org" <dvhart@infradead.org>,
+        "andy@infradead.org" <andy@infradead.org>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: Re: [PATCH] platform/x86:dell-laptop:Add battery charging thresholds
+ and charging mode switch.
+Message-ID: <20200804055343.mmkypi272sgfx6al@srcf.ucam.org>
+References: <20200729065424.12851-1-Perry_Yuan@Dell.com>
+ <202008011345.5O4q2hta%lkp@intel.com>
+ <SJ0PR19MB45281A4375E622F69642B526844A0@SJ0PR19MB4528.namprd19.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1596464894.git.yangdongdong@xiaomi.com>
-User-Agent: NeoMutt/20170609 (1.8.3)
+In-Reply-To: <SJ0PR19MB45281A4375E622F69642B526844A0@SJ0PR19MB4528.namprd19.prod.outlook.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: mjg59@cavan.codon.org.uk
+X-SA-Exim-Scanned: No (on cavan.codon.org.uk); SAEximRunCond expanded to false
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-08-20, 22:31, Dongdong Yang wrote:
-> From: Dongdong Yang <yangdongdong@xiaomi.com>
-> 
-> This patch provides USF(User Sensitive Feedback factor) auxiliary
-> cpufreq governor to support high level layer sysfs inodes setting
-> for utils adjustment purpose from the identified scenario on portable
-> equipment. Because the power consumption and UI response are more cared
-> for by portable equipment users. And the "screen off" status stands for
-> no request from the user, however, the kernel is still expected to
-> notify the user in time on modem, network or powerkey events occur. USF
-> provides "sched_usf_non_ux_r" sysfs inode to cut down the utils from
-> user space tasks according to high level scenario. In addition, it
-> usually hints more cpufreq demand that the preemptive counts of the
-> tasks on the cpu burst and over the user expecting completed time such
-> as the ratio sysctl_sched_latency to sysctl_sched_min_granularity on
-> "screen on" status, which more likely with more UI. The sysfs inodes
-> "sched_usf_up_l0_r" and "sched_usf_down_r" have been provided to adjust
-> the utils according to high level identified scenario to alloc the
-> cpufreq in time.
-> 
-> Changes in v3
->   - Move usf.c to kernel/sched.
->   - Remove trace_printk and debugfs.
->   - Add document draft.
->   - Update comments.
-> 
-> Changes in v2
->   - Add adjust_task_pred_set switch.
->   - Move adjust_task_pred_demand declaration into sched.h
->   - Update comments.
+On Tue, Aug 04, 2020 at 05:46:30AM +0000, Yuan, Perry wrote:
 
-Sending updated patchset for this isn't going to help you my friend. You need
-people (maintainers) to agree on the idea here first. The patch can be
-beautified later if required once the idea is agreed upon. I saw Peter already
-gave his NAK to it during V1. You need to discuss with people here to see why
-they don't like it first and as Greg said earlier, this should not go to staging
-at all if it ever makes it mainline.
+> It is not patch issue, the kernel config needs to add  "CONFIG_ACPI_BATTERY=y"
 
-The more versions you send now (without proper discussions first), the harder it
-will be for this stuff to get merged upstream.
+In that case you probably want to add a dependency to ACPI_BATTERY in 
+the DELL_LAPTOP Kconfig.
 
 -- 
-viresh
+Matthew Garrett | mjg59@srcf.ucam.org
