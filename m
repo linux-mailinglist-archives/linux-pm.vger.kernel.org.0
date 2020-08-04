@@ -2,75 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEAC923B2CA
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 04:37:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3F6323B341
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Aug 2020 05:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727083AbgHDChu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Aug 2020 22:37:50 -0400
-Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:56822 "EHLO
-        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725877AbgHDChu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 22:37:50 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R291e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01f04397;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0U4iAThY_1596508667;
-Received: from IT-C02ZL2E9LVDL.local(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0U4iAThY_1596508667)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 04 Aug 2020 10:37:48 +0800
-Subject: Re: [PATCH v3] cpufreq: CPPC: simply the code access 'highest_perf'
- value in cppc_perf_caps struct
-To:     rjw@rjwysocki.net
-Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200701042007.13333-1-xhao@linux.alibaba.com>
-From:   Xin Hao <xhao@linux.alibaba.com>
-Message-ID: <8643d122-c069-192e-8f3a-dc18f84eed9a@linux.alibaba.com>
-Date:   Tue, 4 Aug 2020 10:37:47 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.11.0
+        id S1725840AbgHDD0X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Aug 2020 23:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730200AbgHDD0W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Aug 2020 23:26:22 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF2BC06174A
+        for <linux-pm@vger.kernel.org>; Mon,  3 Aug 2020 20:26:21 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id i10so7177223ljn.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 20:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=L0S6wIAy1k59MLOMeNhD5yQSuBj8TSGhfKg4AV6YzCM=;
+        b=OvtZm4PLaQk00qzBS8G2+CcWXHzF7p+t/BFg7YcpEJNiKuxwZWP3j06xIQl0nuLvLU
+         FdxWptleTj2pfi3DR8NOqN6gSSYUlakIoh2i3lqBiFIDc4S3iAjOs0OdbtcArIUX/v/T
+         KURRMaRIqrf0qth5ixscu9IDOTHWWXxEqGC/U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L0S6wIAy1k59MLOMeNhD5yQSuBj8TSGhfKg4AV6YzCM=;
+        b=GSC7QGUXFdfaG/Oh6S63d1lsxc5SZDx0iOUShYxIEdN1HxKxu+1NQ8JMx15YOy1C2x
+         5iooF6wT+OqUZiSan0cfsP1u2ORsqqNRaHS/zOOR1Zaj4d+9e8ncs9y4Hn1VVkrawl+l
+         9l6M16mkWKnh/m1G8DOcpIHfUh6PoZGwjq1hHu/gKqmsleNGmZKaOS6iP8RRdY7C6ZSb
+         6H/2R9/+kRv+r9YTpCe4/Wgu+JLyeesKfYLjigfZxe4mgI2m3Hr99kkxz5Ug7SNov+x7
+         sAq9FrgF4KD6dtvCdUcjOaNUgfIP84a4XzbL/hL0udQS5V0a26sEgKPgu006YlBiLVhW
+         0muw==
+X-Gm-Message-State: AOAM530bAso/L6oJ7jkbRWocP39m4KvonsEjPKhD7m6REwv6W+tWMAFu
+        ehEJ7AigW++o9buvm1qkfdoL4+zoOG0=
+X-Google-Smtp-Source: ABdhPJwWLCI+rhiU+W/xM4gtIs2A3uf9+HBhEFqlF0LPd9Wizlbl8C1TV06egVsS/3wcUsIXoe8Faw==
+X-Received: by 2002:a2e:320c:: with SMTP id y12mr8811797ljy.399.1596511578987;
+        Mon, 03 Aug 2020 20:26:18 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id q20sm2285714ljj.42.2020.08.03.20.26.17
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2020 20:26:18 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id w14so12101571ljj.4
+        for <linux-pm@vger.kernel.org>; Mon, 03 Aug 2020 20:26:17 -0700 (PDT)
+X-Received: by 2002:a2e:545:: with SMTP id 66mr9565590ljf.285.1596511577146;
+ Mon, 03 Aug 2020 20:26:17 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200701042007.13333-1-xhao@linux.alibaba.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <0b3dd92e-0aa0-6f23-fcef-178f2bf6a1c1@linaro.org>
+In-Reply-To: <0b3dd92e-0aa0-6f23-fcef-178f2bf6a1c1@linaro.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 3 Aug 2020 20:26:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whbPwsdPom8pcJyo7P5KRRjDef_6ZEMbavJy=qArVoqVw@mail.gmail.com>
+Message-ID: <CAHk-=whbPwsdPom8pcJyo7P5KRRjDef_6ZEMbavJy=qArVoqVw@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal for v5.9-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Colin King <colin.king@canonical.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi everyone:
-
-I want to know why my patch didn't merge into upstream ?
-
-
-Thanks
-
-ÔÚ 2020/7/1 ÏÂÎç12:20, Xin Hao Ð´µÀ:
->   The 'caps' variable has been defined, so there is no need to get
->   'highest_perf' value through 'cpu->caps.highest_perf', you can use
->   'caps->highest_perf' instead.
+On Mon, Aug 3, 2020 at 2:44 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 >
-> Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-> ---
->   drivers/cpufreq/cppc_cpufreq.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 257d726a4456..051d0e56c67a 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -161,7 +161,7 @@ static unsigned int cppc_cpufreq_perf_to_khz(struct cppc_cpudata *cpu,
->   		if (!max_khz)
->   			max_khz = cppc_get_dmi_max_khz();
->   		mul = max_khz;
-> -		div = cpu->perf_caps.highest_perf;
-> +		div = caps->highest_perf;
->   	}
->   	return (u64)perf * mul / div;
->   }
-> @@ -184,7 +184,7 @@ static unsigned int cppc_cpufreq_khz_to_perf(struct cppc_cpudata *cpu,
->   	} else {
->   		if (!max_khz)
->   			max_khz = cppc_get_dmi_max_khz();
-> -		mul = cpu->perf_caps.highest_perf;
-> +		mul = caps->highest_perf;
->   		div = max_khz;
->   	}
->   
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v5.9-rc1
+
+This was all rebased just an hour before you sent it to me.
+
+Why?
+
+Maybe it's how you commonly work, and I just haven't noticed before,
+but it's wrong for all the reasons I've stated about a million times
+now.
+
+What makes it so hard for people to understand? What makes that "you
+sent me a completely untested pull request and that's not ok" so
+difficult a concept to get?
+
+And dammit, if you do it and have a good reason to do this despite
+literally *decades* of me telling people not to do that, and why it's
+wrong, then  you can spend the five minutes *explaining* why you do
+something that is widely documented to be bad.
+
+These commits sure as hell weren't in linux-next either.
+
+                   Linus
