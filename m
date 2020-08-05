@@ -2,143 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D97CD23C824
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 10:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095EC23C90C
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 11:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbgHEIte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Aug 2020 04:49:34 -0400
-Received: from mga04.intel.com ([192.55.52.120]:30474 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725868AbgHEItc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 5 Aug 2020 04:49:32 -0400
-IronPort-SDR: smC7siSlzqjFwgT/kPdk/a2Nx9+zxswaruDhYa80aan5QxqJQxc7mQFZk5TYbTmxFFRuK02Brc
- DROgBOkqFIow==
-X-IronPort-AV: E=McAfee;i="6000,8403,9703"; a="149930438"
-X-IronPort-AV: E=Sophos;i="5.75,436,1589266800"; 
-   d="scan'208";a="149930438"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 01:49:32 -0700
-IronPort-SDR: inDHEm7R7TbnfSeKEiELpSAlk4ItHNo7Wy9lelKgCwAQOdXVgxRrepaigoTrpsXk4kKj18gSwz
- AXzTNxOuhQZA==
-X-IronPort-AV: E=Sophos;i="5.75,436,1589266800"; 
-   d="scan'208";a="330870223"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2020 01:49:30 -0700
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 82C1220859; Wed,  5 Aug 2020 11:49:28 +0300 (EEST)
-Date:   Wed, 5 Aug 2020 11:49:28 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] PM: runtime: Add kerneldoc comments to multiple helpers
-Message-ID: <20200805084928.GK13316@paasikivi.fi.intel.com>
-References: <2672940.cHDmkauF2A@kreacher>
- <20200803085347.GV13316@paasikivi.fi.intel.com>
- <CAJZ5v0hRi3DZ69b1b=xes4qz2keq_aGDzX5kKQsR_rkwuFgk0w@mail.gmail.com>
- <20200803230536.GB13316@paasikivi.fi.intel.com>
- <CAJZ5v0jDpuKYJED90CveWgfYcoA60X5qYY6U6CJmEFd7KDiY-A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jDpuKYJED90CveWgfYcoA60X5qYY6U6CJmEFd7KDiY-A@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1728377AbgHEJTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Aug 2020 05:19:01 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:54173 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728574AbgHEJQS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 05:16:18 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200805091613euoutp021a3bdf18ec435f4ca7535a464e714c01~oVH9YmIIl3016230162euoutp02K
+        for <linux-pm@vger.kernel.org>; Wed,  5 Aug 2020 09:16:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200805091613euoutp021a3bdf18ec435f4ca7535a464e714c01~oVH9YmIIl3016230162euoutp02K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1596618973;
+        bh=UiCY4burw31eX0WgddWD+DELe95NCTyywlbqk5mMtB0=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=fqaluxcMKD7IHQgcWKQV3KYTrA/LEPWroy4V7/rcHr+uWshkgCsC3AX1va7aazk7j
+         yd+6VUsJXnJE7HWpy5igfuBhVDzmMqE+fZaeT2iR+HfxAmkpAoZBneBytZTZIKhc49
+         /R9iWaXRaWZMSB8wtXJzMv3WGm4wDB2Wz5ZJQfdY=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200805091613eucas1p26ff7229e1d378aa6026beffa778a8a89~oVH9IHzzk0179101791eucas1p2b;
+        Wed,  5 Aug 2020 09:16:13 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id C6.45.05997.DD87A2F5; Wed,  5
+        Aug 2020 10:16:13 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18~oVH8m01qO2393023930eucas1p2S;
+        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200805091612eusmtrp290fc50ac46c6fed521ebb8466d7bc885~oVH8mLMT41223712237eusmtrp2p;
+        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
+X-AuditID: cbfec7f4-65dff7000000176d-f1-5f2a78dd73f5
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 48.8F.06017.CD87A2F5; Wed,  5
+        Aug 2020 10:16:12 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200805091612eusmtip28c92a430366eb8ed83b364fafeb04671~oVH740-1H0273702737eusmtip2A;
+        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: [PATCH] clk: samsung: Mark top BPLL mux on Exynos542x as critical
+Date:   Wed,  5 Aug 2020 11:16:01 +0200
+Message-Id: <20200805091601.11983-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsWy7djP87p3K7TiDS7+kbXYOGM9q8X1L89Z
+        Lc6f38Bu8bHnHqvF594jjBYzzu9jsljY1MJusfbIXXaLf9c2sli0P33J7MDlsWbeGkaPTas6
+        2Tz6tqxi9Pi8SS6AJYrLJiU1J7MstUjfLoEro2leN1tBE2dF2+8X7A2MF9m7GDk5JARMJHYs
+        7geyuTiEBFYwSqy62cAM4XxhlLi+ezILhPOZUWLe920sMC3tlxayQiSWM0p8ebCIDa5l/5PN
+        YIPZBAwlut52sYHYIgIxEruuH2ECKWIWWMkk8eLUfSaQhLCAl8SDWWeBFnJwsAioShy8Xw8S
+        5hWwlVi14hArxDZ5idUbDoDdJCHwmE3i9cR7zBAJF4kLE69C2cISr45vgfpIRuL/zvlMEA3N
+        jBIPz61lh3B6GCUuN81ghKiylrhz7hcbyGZmAU2J9bv0IcKOEi1LG8EOkhDgk7jxVhAkzAxk
+        Tto2HSrMK9HRJgRRrSYx6/g6uLUHL1yCKvGQuHCmGiQsJBArMWfufcYJjHKzEFYtYGRcxSie
+        Wlqcm55abJSXWq5XnJhbXJqXrpecn7uJEZggTv87/mUH464/SYcYBTgYlXh4T4RoxguxJpYV
+        V+YeYpTgYFYS4XU6ezpOiDclsbIqtSg/vqg0J7X4EKM0B4uSOK/xopexQgLpiSWp2ampBalF
+        MFkmDk6pBsbYB4+D8pK+Xd3uvKs1ffvvst2124OP6ByzfnLoI+en5/eecBhEqbbe7tge5aYb
+        G5zaeEJPKXRzR/d5vwUMa9c49532Mktc9u1V5Mfuf87Fe5O+nijK2jhFdsda56sW7lc+xjQv
+        8paYOuWogK7uz2snputIbk/MXJZh+zzrmoRRZlg5d5D8h4NKLMUZiYZazEXFiQAQfldPDAMA
+        AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsVy+t/xe7p3KrTiDSaftLLYOGM9q8X1L89Z
+        Lc6f38Bu8bHnHqvF594jjBYzzu9jsljY1MJusfbIXXaLf9c2sli0P33J7MDlsWbeGkaPTas6
+        2Tz6tqxi9Pi8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1
+        J7MstUjfLkEvo2leN1tBE2dF2+8X7A2MF9m7GDk5JARMJNovLWTtYuTiEBJYyihx5dcOJoiE
+        jMTJaQ2sELawxJ9rXWwQRZ8YJQ4vbgZLsAkYSnS9BUlwcogIxEk86b4P1swssJZJ4s4teRBb
+        WMBL4sGss8xdjBwcLAKqEgfv14OEeQVsJVatOAQ1X15i9YYDzBMYeRYwMqxiFEktLc5Nzy02
+        0itOzC0uzUvXS87P3cQIDMttx35u2cHY9S74EKMAB6MSD++JEM14IdbEsuLK3EOMEhzMSiK8
+        TmdPxwnxpiRWVqUW5ccXleakFh9iNAXaPZFZSjQ5HxgzeSXxhqaG5haWhubG5sZmFkrivB0C
+        B2OEBNITS1KzU1MLUotg+pg4OKUaGEPOKfw2l89hyCv/LvnS6/O6GpmzH31cWKVaOZf47gxI
+        s1UNL882MVZ5nd0lIWq24fvsPnn+FXr6Jzof5z09tfsn692Tjx/7V/wUPbkrRWab8l6XyZ8j
+        Zkw4/Z3LIeihv2pqZ6y7l1PsEUfeNuMH8ZNSM5dfL1PLPt3jl3ha80eEMktqB2eBEktxRqKh
+        FnNRcSIA2lGulWECAAA=
+X-CMS-MailID: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
+References: <CGME20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18@eucas1p2.samsung.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+BPLL clock must not be disabled because it is needed for proper DRAM
+operation. This is normally handled by respective memory devfreq driver,
+but when that driver is not yet probed or its probe has been deferred the
+clock might got disabled what causes board hang. Fix this by marking it
+as critical.
 
-On Tue, Aug 04, 2020 at 12:15:03PM +0200, Rafael J. Wysocki wrote:
-> Hi Sakari,
-> 
-> On Tue, Aug 4, 2020 at 1:05 AM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Mon, Aug 03, 2020 at 01:36:52PM +0200, Rafael J. Wysocki wrote:
-> > > Hi Sakari,
-> > >
-> > > On Mon, Aug 3, 2020 at 10:53 AM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > >
-> > > > Hi Rafael,
-> > > >
-> > > > Thanks for the patch.
-> > > >
-> > > > On Fri, Jul 31, 2020 at 07:03:26PM +0200, Rafael J. Wysocki wrote:
-> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > >
-> > > > > Add kerneldoc comments to multiple PM-runtime helper functions
-> > > > > defined as static inline wrappers around lower-level routines to
-> > > > > provide quick reference decumentation of their behavior.
-> > > >
-> > > > > Some of them are similar to each other with subtle differences only
-> > > > > and the behavior of some of them may appear as counter-intuitive, so
-> > > > > clarify all that to avoid confusion.
-> > > > >
-> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > ---
-> > > > >  include/linux/pm_runtime.h |  246 +++++++++++++++++++++++++++++++++++++++++++++
-> > > > >  1 file changed, 246 insertions(+)
-> > > > >
-> > > > > Index: linux-pm/include/linux/pm_runtime.h
-> > > > > ===================================================================
-> > > > > --- linux-pm.orig/include/linux/pm_runtime.h
-> > > > > +++ linux-pm/include/linux/pm_runtime.h
-> > > > > @@ -60,58 +60,151 @@ extern void pm_runtime_put_suppliers(str
-> > > > >  extern void pm_runtime_new_link(struct device *dev);
-> > > > >  extern void pm_runtime_drop_link(struct device *dev);
-> > > > >
-> > > > > +/**
-> > > > > + * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-> > > > > + * @dev: Target device.
-> > > > > + *
-> > > > > + * Increment the runtime PM usage counter of @dev if its runtime PM status is
-> > > > > + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
-> > > >
-> > > > The implementation of the non-runtime PM variants (used when CONFIG_PM is
-> > > > disabled) isn't here but I think it'd be nice if their behaviour was also
-> > > > documented here. pm_runtime_get_if_in_use() returns -EINVAL if CONFIG_PM is
-> > > > disabled, for instance.
-> > >
-> > > These kerneldoc comments cover the CONFIG_PM case only.  The behavior
-> > > for !CONFIG_PM needs to be figured out from the code, if it matters.
-> > >
-> > > I'm not sure why it would matter for pm_runtime_get_if_in_use(), in particular?
-> >
-> > Just as an example. It depends on the use case, but there have been bugs
-> > related to these (e.g. commit 4d471563d87b2b83e73b8abffb9273950e6d2e36),
-> > likely at least partly because it's extra manual work to figure out what a
-> > given API function could return when it's not documented.
-> 
-> If it is a static inline wrapper around another exported function,
-> whoever uses it should look at the documentation of the function being
-> wrapped anyway, so IMO it is sufficient to document the return values
-> in there and also (as stated in another message) this avoids the need
-> to manually synchronize the kerneldoc comments every time a new return
-> value is added or removed.
-> 
-> In the particular case above it might be useful to change
-> pm_runtime_get_if_active() to return bool, make it return "false" if
-> PM-runtime is disabled for the device and update the callers
-> accordingly (some of them still appear to be doing the wrong thing).
-> 
-> IOW, it would return "true" only if the usage counter has been
-> incremented and so it needs to be decremented.
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+ drivers/clk/samsung/clk-exynos5420.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In the case of above commit, the driver is interested in knowing whether
-the device is powered on, and so accessible. That's the case if PM is
-disabled, so it should return true. Then we do lose the information whether
-the counter was touched. I guess we should keep it as-is.
-
+diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
+index fea33399a632..5ef78928938a 100644
+--- a/drivers/clk/samsung/clk-exynos5420.c
++++ b/drivers/clk/samsung/clk-exynos5420.c
+@@ -734,7 +734,7 @@ static const struct samsung_mux_clock exynos5x_mux_clks[] __initconst = {
+ 	MUX_F(CLK_MOUT_MCLK_CDREX, "mout_mclk_cdrex", mout_mclk_cdrex_p,
+ 			SRC_CDREX, 4, 1, CLK_SET_RATE_PARENT, 0),
+ 	MUX_F(CLK_MOUT_BPLL, "mout_bpll", mout_bpll_p, SRC_CDREX, 0, 1,
+-			CLK_SET_RATE_PARENT, 0),
++			CLK_SET_RATE_PARENT | CLK_IS_CRITICAL, 0),
+ 
+ 	/* MAU Block */
+ 	MUX(CLK_MOUT_MAUDIO0, "mout_maudio0", mout_maudio0_p, SRC_MAU, 28, 3),
 -- 
-Sakari Ailus
+2.17.1
+
