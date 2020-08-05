@@ -2,92 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D32A23D233
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 22:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C80B23D451
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 01:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726851AbgHEUJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Aug 2020 16:09:50 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43608 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726799AbgHEQ3G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 12:29:06 -0400
-Received: by mail-ot1-f66.google.com with SMTP id r21so23270791ota.10;
-        Wed, 05 Aug 2020 09:29:05 -0700 (PDT)
+        id S1726204AbgHEX5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Aug 2020 19:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726078AbgHEX5p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 19:57:45 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393ABC061757
+        for <linux-pm@vger.kernel.org>; Wed,  5 Aug 2020 16:57:45 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id f9so5533505pju.4
+        for <linux-pm@vger.kernel.org>; Wed, 05 Aug 2020 16:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=4ifd5xwQw/fF71sDAVj0NW6xVjjKI1lLoO8YrlRE1c0=;
+        b=W6CnF3IFM1qV4vtyI4l+BsHliSAapqyzRfwP5beGaDhXjDfZFPIU6UStOC92nizOTo
+         aWkDKwkFohx7OKn2mg8i/RSJrfwtBoR5s6iBJWAGa9yjAqbJVL7kn4mG5Ax8Ih/a0UGL
+         b1ZjUdMSZyOOwYExEooYKVQan12BTOgKsSKo0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=B2Pl0nxbT6UouzIoo2qIhPoj7Bo+fxndZdi1tAY/F2o=;
-        b=evdsFFTQx9K0IFg7PgdGrbOMSQEld9thfsrPXZJwH03tBm4zYVMNRf8kfpDrR0SMOz
-         Vp7hWNLLeib3bZ3y0RIn2y/6d3gwAOjLEDi5yFK8xPGIq2Y74SwikqT+fTf+opgWTsCZ
-         STEYf16frTl1sHxqC4oKPcrVK0yriSLj1CxzH2cRi4CSnqqlzXvEdr1eoT9eXKmzRlC/
-         fvd9DZRrUCg2lvR7E9dEijgr6nyAb5QyT/ZS1mi7cxWbDUL7KWI2Oz8+69YxKExWj9G1
-         VZi8DrBhik2E6mgTA5KVttslVkNaA9KB2+LSBPEbnxQ38DYPidC4xTFH2yJj5GSCYOmC
-         QMOA==
-X-Gm-Message-State: AOAM530e/iFMFhMeEY/MoXMYd6YMmTv1k65lG9OCj4B14GpK3rtaydLz
-        QWGHHOuOc/O/3RhDn3T6MJGmkpJzCRXOjYDBDaE=
-X-Google-Smtp-Source: ABdhPJzOYRjlDWBGFAd8+wHpr++Fx1aamqiZW3DaWfdMtrRewVD42Wv6SvyQfxbhnME5/3h2VMvoUcmBILP+cPAm8MM=
-X-Received: by 2002:a05:6830:1c74:: with SMTP id s20mr3262615otg.167.1596644944989;
- Wed, 05 Aug 2020 09:29:04 -0700 (PDT)
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=4ifd5xwQw/fF71sDAVj0NW6xVjjKI1lLoO8YrlRE1c0=;
+        b=B7lCaEQtismbKXbvxylPZ7/cRK0bxk4e8SF/Hz7HFAOKC4ZjKmtsfO4Ze2gUosqiaE
+         IRv7AAXbGyRN3izWrCY1Bt3bL1RKlQbLK51PP5IT4EPiIgB0Nr5HF/+yu3NowMSrjnI+
+         AW5Yr3YnKPxz6dektKXulVgl7W9GNwZC8PKHO5SctNyIH5jD+UXdfj/XatelsHyo4Riq
+         uvKDd2JeEgmx1LXE/hKywbBXklMKw9MYQ0t88Bo4Vn1AbqJW96bTicm/vhI09i4JrwGU
+         VdPHjUdR1J1T1VNfI0ndy+NdF33+w5vUXj1ftXTGuhy5Z52lZdLpBGRA4eKHVjy0rTp5
+         xiHA==
+X-Gm-Message-State: AOAM533f5EV9qVpwi3CRIA4MNAxFVzxAivQO0wAh9obu1kUBDDOxrkSm
+        JZJepz3LgDMDTqFFrqbg0/poR4HjPNY=
+X-Google-Smtp-Source: ABdhPJxdV4c+ByHIoyl3UTQ5JOq/H3l5NMy7snS9vWIKQev3DSMuRd8Yi8bmuJJTKYnajrrlgKX1jg==
+X-Received: by 2002:a17:90a:f68a:: with SMTP id cl10mr5578673pjb.40.1596671864307;
+        Wed, 05 Aug 2020 16:57:44 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id go12sm4214725pjb.2.2020.08.05.16.57.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2020 16:57:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>
- <1633168.eVXp6ieOpF@kreacher> <000d01d66a81$59326a50$0b973ef0$@net>
- <CAJZ5v0h7iKvO1-9R_JiVjM8j_a87B=LpTCoaUWRfrhXTRaMMOw@mail.gmail.com> <ff21e71060b589219c21b46b5e26b6c3aca9f951.camel@linux.intel.com>
-In-Reply-To: <ff21e71060b589219c21b46b5e26b6c3aca9f951.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 5 Aug 2020 18:28:51 +0200
-Message-ID: <CAJZ5v0hfoHpBX9-W4B7cMRpoxF6a0Ci-81zJC4pwbxGpd_9fGA@mail.gmail.com>
-Subject: Re: [PATCH v6] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Francisco Jerez <francisco.jerez.plata@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <98050322-9ba6-303c-4ca4-07baa56ebd80@codeaurora.org>
+References: <1596541616-27688-1-git-send-email-rnayak@codeaurora.org> <1596541616-27688-2-git-send-email-rnayak@codeaurora.org> <159660954201.1360974.5176671532597020049@swboyd.mtv.corp.google.com> <98050322-9ba6-303c-4ca4-07baa56ebd80@codeaurora.org>
+Subject: Re: [PATCH 1/3] dt-bindings: power: Introduce 'assigned-performance-states' property
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+To:     Rajendra Nayak <rnayak@codeaurora.org>, bjorn.andersson@linaro.org,
+        robh+dt@kernel.org, ulf.hansson@linaro.org
+Date:   Wed, 05 Aug 2020 16:57:41 -0700
+Message-ID: <159667186194.1360974.10053425753327700919@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 5:38 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Wed, 2020-08-05 at 11:34 +0200, Rafael J. Wysocki wrote:
-> > Hi Doug,
-> >
-> > On Tue, Aug 4, 2020 at 7:07 PM Doug Smythies <dsmythies@telus.net>
-> > wrote:
-> > > Hi Rafael,
-> > >
-> > >
-> [...]
->
-> > Note that the active mode performance scaling algorithm (which is not
-> > the same as the performance cpufreq governor) sets the EPP to 0 for
-> > all of the CPUs that it is used with and the driver sets the EPP to
-> > 255 in ->stop_cpu.
-> >
-> > That last bit is questionable, but that's the active mode behavior
-> > which is not changed by the $subject patch.
-> You need to set the CPU which is going offline to the lowest perf
-> settings. If not its sibling's performance can never be lowered than
-> offlined CPUs max/min/epp.
+Quoting Rajendra Nayak (2020-08-05 01:13:06)
+>=20
+> On 8/5/2020 12:09 PM, Stephen Boyd wrote:
+> > Quoting Rajendra Nayak (2020-08-04 04:46:54)
+> >=20
+> >> +       device's performance, also known as DVFS techniques. The list =
+of performance
+> >> +       state values should correspond to the list of power domains sp=
+ecified as part
+> >> +       of the power-domains property.
+> >=20
+> > This is different than assigned-clock-rates. I guess that's OK because
+> > we don't need to assign parents with more specifiers. Maybe it should be
+> > worded more strongly to clearly state that each cell corresponds to one
+> > power domain? And that it should match the opp-level inside any OPP
+> > table for the power domain?
+>=20
+> Sure, I'll reword it to make it clear that we need the same number of cel=
+ls
+> as power-domains, and as you pointed out below that 0 corresponds to not =
+setting
+> anything.
+>=20
+> For the matching of opp-level inside the OPP table of the power-domain, I=
+ don't
+> think from the power-domain bindings we limit providers with only OPP tab=
+les to
+> support performance states? It could be just a range that the provider ma=
+nages
+> internally?
 
-OK, fair enough.  I'm not going to make this change after all then. :-)
-
-This behavior is really confusing, though, because if you change the
-status from "active" to "passive" or the other way around, the EPP
-goes to 0xFF on all CPUs and cannot be restored.
-
-To fix this, we need an extra patch on top of the $subject one to
-introduce ->online and ->offline callbacks so that ->offline sets the
-EPP to 0xFF and either ->online or ->exit can restore it to the
-previous setting.
-
-Cheers!
+Ok. The example made it match so maybe that can be clarified as well
+that it doesn't need to match any OPP table performance state.
