@@ -2,127 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A887123CC8A
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 18:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8D323CD20
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 19:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728198AbgHEQvx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Aug 2020 12:51:53 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:54724 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728068AbgHEQtr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 12:49:47 -0400
-Received: from 89-64-88-23.dynamic.chello.pl (89.64.88.23) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 685fe47108670c4b; Wed, 5 Aug 2020 18:49:42 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: Re: [PATCH] PM: runtime: Add kerneldoc comments to multiple helpers
-Date:   Wed, 05 Aug 2020 18:49:41 +0200
-Message-ID: <2587608.ek5DdOIzB0@kreacher>
-In-Reply-To: <20200805084928.GK13316@paasikivi.fi.intel.com>
-References: <2672940.cHDmkauF2A@kreacher> <CAJZ5v0jDpuKYJED90CveWgfYcoA60X5qYY6U6CJmEFd7KDiY-A@mail.gmail.com> <20200805084928.GK13316@paasikivi.fi.intel.com>
+        id S1728669AbgHERUt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Aug 2020 13:20:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:33666 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728650AbgHERSG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:18:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F4401FB;
+        Wed,  5 Aug 2020 03:35:07 -0700 (PDT)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.198.53])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B26013FA32;
+        Wed,  5 Aug 2020 03:35:06 -0700 (PDT)
+Date:   Wed, 5 Aug 2020 11:35:05 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
+        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
+        linux@armlinux.org.uk, mingo@redhat.com, peterz@infradead.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/7] cpufreq: set invariance scale factor on
+ transition end
+Message-ID: <20200805103452.GA4817@arm.com>
+References: <20200722093732.14297-1-ionela.voinescu@arm.com>
+ <20200722093732.14297-3-ionela.voinescu@arm.com>
+ <20200730041334.cjg5mc5xpopd2lst@vireshk-mac-ubuntu>
+ <20200803135838.GB9512@arm.com>
+ <20200804062611.6jpra73hmhybdw3i@vireshk-mac-ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200804062611.6jpra73hmhybdw3i@vireshk-mac-ubuntu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, August 5, 2020 10:49:28 AM CEST Sakari Ailus wrote:
-> Hi Rafael,
+On Tuesday 04 Aug 2020 at 11:56:11 (+0530), Viresh Kumar wrote:
+[..]
+> > > >  - In __target_index(), cpufreq_freq_transition_end() is called only for
+> > > >    drivers that have synchronous notifications enabled. There is only one
+> > > >    driver that disables them,
+> > > > 
+> > > >    drivers/cpufreq/powernow-k8.c:1142: .flags = CPUFREQ_ASYNC_NOTIFICATION,
+> > > > 
+> > > >    which is deprecated.
+> > > 
+> > > I don't think this is deprecated.
 > 
-> On Tue, Aug 04, 2020 at 12:15:03PM +0200, Rafael J. Wysocki wrote:
-> > Hi Sakari,
-> > 
-> > On Tue, Aug 4, 2020 at 1:05 AM Sakari Ailus
-> > <sakari.ailus@linux.intel.com> wrote:
-> > >
-> > > Hi Rafael,
-> > >
-> > > On Mon, Aug 03, 2020 at 01:36:52PM +0200, Rafael J. Wysocki wrote:
-> > > > Hi Sakari,
-> > > >
-> > > > On Mon, Aug 3, 2020 at 10:53 AM Sakari Ailus
-> > > > <sakari.ailus@linux.intel.com> wrote:
-> > > > >
-> > > > > Hi Rafael,
-> > > > >
-> > > > > Thanks for the patch.
-> > > > >
-> > > > > On Fri, Jul 31, 2020 at 07:03:26PM +0200, Rafael J. Wysocki wrote:
-> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > Add kerneldoc comments to multiple PM-runtime helper functions
-> > > > > > defined as static inline wrappers around lower-level routines to
-> > > > > > provide quick reference decumentation of their behavior.
-> > > > >
-> > > > > > Some of them are similar to each other with subtle differences only
-> > > > > > and the behavior of some of them may appear as counter-intuitive, so
-> > > > > > clarify all that to avoid confusion.
-> > > > > >
-> > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > ---
-> > > > > >  include/linux/pm_runtime.h |  246 +++++++++++++++++++++++++++++++++++++++++++++
-> > > > > >  1 file changed, 246 insertions(+)
-> > > > > >
-> > > > > > Index: linux-pm/include/linux/pm_runtime.h
-> > > > > > ===================================================================
-> > > > > > --- linux-pm.orig/include/linux/pm_runtime.h
-> > > > > > +++ linux-pm/include/linux/pm_runtime.h
-> > > > > > @@ -60,58 +60,151 @@ extern void pm_runtime_put_suppliers(str
-> > > > > >  extern void pm_runtime_new_link(struct device *dev);
-> > > > > >  extern void pm_runtime_drop_link(struct device *dev);
-> > > > > >
-> > > > > > +/**
-> > > > > > + * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-> > > > > > + * @dev: Target device.
-> > > > > > + *
-> > > > > > + * Increment the runtime PM usage counter of @dev if its runtime PM status is
-> > > > > > + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
-> > > > >
-> > > > > The implementation of the non-runtime PM variants (used when CONFIG_PM is
-> > > > > disabled) isn't here but I think it'd be nice if their behaviour was also
-> > > > > documented here. pm_runtime_get_if_in_use() returns -EINVAL if CONFIG_PM is
-> > > > > disabled, for instance.
-> > > >
-> > > > These kerneldoc comments cover the CONFIG_PM case only.  The behavior
-> > > > for !CONFIG_PM needs to be figured out from the code, if it matters.
-> > > >
-> > > > I'm not sure why it would matter for pm_runtime_get_if_in_use(), in particular?
-> > >
-> > > Just as an example. It depends on the use case, but there have been bugs
-> > > related to these (e.g. commit 4d471563d87b2b83e73b8abffb9273950e6d2e36),
-> > > likely at least partly because it's extra manual work to figure out what a
-> > > given API function could return when it's not documented.
-> > 
-> > If it is a static inline wrapper around another exported function,
-> > whoever uses it should look at the documentation of the function being
-> > wrapped anyway, so IMO it is sufficient to document the return values
-> > in there and also (as stated in another message) this avoids the need
-> > to manually synchronize the kerneldoc comments every time a new return
-> > value is added or removed.
-> > 
-> > In the particular case above it might be useful to change
-> > pm_runtime_get_if_active() to return bool, make it return "false" if
-> > PM-runtime is disabled for the device and update the callers
-> > accordingly (some of them still appear to be doing the wrong thing).
-> > 
-> > IOW, it would return "true" only if the usage counter has been
-> > incremented and so it needs to be decremented.
+> Heh, maybe I misunderstood. I thought you are talking about the flag,
+> while you were talking about the driver.
 > 
-> In the case of above commit, the driver is interested in knowing whether
-> the device is powered on, and so accessible. That's the case if PM is
-> disabled, so it should return true. Then we do lose the information whether
-> the counter was touched. I guess we should keep it as-is.
+> > Sorry, possibly 'deprecated' is a strong word.
+> > 
+> > As far as I knew acpi_cpufreq was recommended more recently for K8/K10
+> > CPUs so that's why I decided not to create a special case for it, also
+> > considering that it was not supporting cpufreq-based frequency
+> > invariance to begin with.
+> > 
+> > We could support this as well by having a call to arch_set_freq_scale()
+> > on the else path in __target_index(). But given that there was only this
+> > one user of CPUFREQ_ASYNC_NOTIFICATION, I thought I'd propose this simpler
+> > version first.
+> > 
+> > Let me know if my reasoning is wrong.
+> 
+> Nevertheless, I don't think you need to mention this detail in
+> changelog for powernow-k8 as cpufreq_freq_transition_end() does get
+> called for it as well, by the driver instead of the core.
+> 
 
-Fair enough.
+Agreed!
 
+Many thanks,
+Ionela.
 
-
+> -- 
+> viresh
