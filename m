@@ -2,126 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 095EC23C90C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 11:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C6723C94E
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Aug 2020 11:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728377AbgHEJTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Aug 2020 05:19:01 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:54173 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728574AbgHEJQS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 05:16:18 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200805091613euoutp021a3bdf18ec435f4ca7535a464e714c01~oVH9YmIIl3016230162euoutp02K
-        for <linux-pm@vger.kernel.org>; Wed,  5 Aug 2020 09:16:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200805091613euoutp021a3bdf18ec435f4ca7535a464e714c01~oVH9YmIIl3016230162euoutp02K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1596618973;
-        bh=UiCY4burw31eX0WgddWD+DELe95NCTyywlbqk5mMtB0=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=fqaluxcMKD7IHQgcWKQV3KYTrA/LEPWroy4V7/rcHr+uWshkgCsC3AX1va7aazk7j
-         yd+6VUsJXnJE7HWpy5igfuBhVDzmMqE+fZaeT2iR+HfxAmkpAoZBneBytZTZIKhc49
-         /R9iWaXRaWZMSB8wtXJzMv3WGm4wDB2Wz5ZJQfdY=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200805091613eucas1p26ff7229e1d378aa6026beffa778a8a89~oVH9IHzzk0179101791eucas1p2b;
-        Wed,  5 Aug 2020 09:16:13 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id C6.45.05997.DD87A2F5; Wed,  5
-        Aug 2020 10:16:13 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18~oVH8m01qO2393023930eucas1p2S;
-        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200805091612eusmtrp290fc50ac46c6fed521ebb8466d7bc885~oVH8mLMT41223712237eusmtrp2p;
-        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
-X-AuditID: cbfec7f4-65dff7000000176d-f1-5f2a78dd73f5
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 48.8F.06017.CD87A2F5; Wed,  5
-        Aug 2020 10:16:12 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200805091612eusmtip28c92a430366eb8ed83b364fafeb04671~oVH740-1H0273702737eusmtip2A;
-        Wed,  5 Aug 2020 09:16:12 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH] clk: samsung: Mark top BPLL mux on Exynos542x as critical
-Date:   Wed,  5 Aug 2020 11:16:01 +0200
-Message-Id: <20200805091601.11983-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJIsWRmVeSWpSXmKPExsWy7djP87p3K7TiDS7+kbXYOGM9q8X1L89Z
-        Lc6f38Bu8bHnHqvF594jjBYzzu9jsljY1MJusfbIXXaLf9c2sli0P33J7MDlsWbeGkaPTas6
-        2Tz6tqxi9Pi8SS6AJYrLJiU1J7MstUjfLoEro2leN1tBE2dF2+8X7A2MF9m7GDk5JARMJHYs
-        7geyuTiEBFYwSqy62cAM4XxhlLi+ezILhPOZUWLe920sMC3tlxayQiSWM0p8ebCIDa5l/5PN
-        YIPZBAwlut52sYHYIgIxEruuH2ECKWIWWMkk8eLUfSaQhLCAl8SDWWeBFnJwsAioShy8Xw8S
-        5hWwlVi14hArxDZ5idUbDoDdJCHwmE3i9cR7zBAJF4kLE69C2cISr45vgfpIRuL/zvlMEA3N
-        jBIPz61lh3B6GCUuN81ghKiylrhz7hcbyGZmAU2J9bv0IcKOEi1LG8EOkhDgk7jxVhAkzAxk
-        Tto2HSrMK9HRJgRRrSYx6/g6uLUHL1yCKvGQuHCmGiQsJBArMWfufcYJjHKzEFYtYGRcxSie
-        Wlqcm55abJSXWq5XnJhbXJqXrpecn7uJEZggTv87/mUH464/SYcYBTgYlXh4T4RoxguxJpYV
-        V+YeYpTgYFYS4XU6ezpOiDclsbIqtSg/vqg0J7X4EKM0B4uSOK/xopexQgLpiSWp2ampBalF
-        MFkmDk6pBsbYB4+D8pK+Xd3uvKs1ffvvst2124OP6ByzfnLoI+en5/eecBhEqbbe7tge5aYb
-        G5zaeEJPKXRzR/d5vwUMa9c49532Mktc9u1V5Mfuf87Fe5O+nijK2jhFdsda56sW7lc+xjQv
-        8paYOuWogK7uz2snputIbk/MXJZh+zzrmoRRZlg5d5D8h4NKLMUZiYZazEXFiQAQfldPDAMA
-        AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHLMWRmVeSWpSXmKPExsVy+t/xe7p3KrTiDSaftLLYOGM9q8X1L89Z
-        Lc6f38Bu8bHnHqvF594jjBYzzu9jsljY1MJusfbIXXaLf9c2sli0P33J7MDlsWbeGkaPTas6
-        2Tz6tqxi9Pi8SS6AJUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1
-        J7MstUjfLkEvo2leN1tBE2dF2+8X7A2MF9m7GDk5JARMJNovLWTtYuTiEBJYyihx5dcOJoiE
-        jMTJaQ2sELawxJ9rXWwQRZ8YJQ4vbgZLsAkYSnS9BUlwcogIxEk86b4P1swssJZJ4s4teRBb
-        WMBL4sGss8xdjBwcLAKqEgfv14OEeQVsJVatOAQ1X15i9YYDzBMYeRYwMqxiFEktLc5Nzy02
-        0itOzC0uzUvXS87P3cQIDMttx35u2cHY9S74EKMAB6MSD++JEM14IdbEsuLK3EOMEhzMSiK8
-        TmdPxwnxpiRWVqUW5ccXleakFh9iNAXaPZFZSjQ5HxgzeSXxhqaG5haWhubG5sZmFkrivB0C
-        B2OEBNITS1KzU1MLUotg+pg4OKUaGEPOKfw2l89hyCv/LvnS6/O6GpmzH31cWKVaOZf47gxI
-        s1UNL882MVZ5nd0lIWq24fvsPnn+FXr6Jzof5z09tfsn692Tjx/7V/wUPbkrRWab8l6XyZ8j
-        Zkw4/Z3LIeihv2pqZ6y7l1PsEUfeNuMH8ZNSM5dfL1PLPt3jl3ha80eEMktqB2eBEktxRqKh
-        FnNRcSIA2lGulWECAAA=
-X-CMS-MailID: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18
-References: <CGME20200805091612eucas1p28c955b21e57898de60d3ed50c95b9d18@eucas1p2.samsung.com>
+        id S1728216AbgHEJgQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Aug 2020 05:36:16 -0400
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:43448 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726524AbgHEJfG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Aug 2020 05:35:06 -0400
+Received: by mail-oo1-f65.google.com with SMTP id z10so5766186ooi.10;
+        Wed, 05 Aug 2020 02:35:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cknFGMTHisqsJ8S6a0tn2BBuzfV98+CKybYSpiI5/Z8=;
+        b=uQ/GtYm2wYfAJW4o6/v5aNBcOXsxUgY+OY8B/HCQCW9p1xCBdvpreOPlRLneKQuFX8
+         yjyTudK1CNVfBYOedNV5peUiE5XM2sv//UXE+rgFd70ifU0LACDSeWGFKvzgaNVYYyd8
+         Fa0cuFqsmWluaZOkvwBsJ+pkfhMLuYeWrjyD5a29f/0453H0crgECSHnMWU/i+u/73wM
+         xdzuycImOz4EbYT+CpGoX3kF7WaqT998Bpu/pLEJvZ3i7PPbb+GxQTUS2hRkgTpAh1sJ
+         p58OrQ2Q4yguCdc/3l1scZsGADZ70xvyoxun5ifMjdWNMw+JtV+yUfYto0b2nkOblH7T
+         nGBg==
+X-Gm-Message-State: AOAM532+7/06yNyVnWi24XFYm+8GSc85JwgQA4Q/mIjKLsHJOZXwm6Sv
+        fjnmuqo5bi7DQMCDLoPEM1F0WS/jcbajvymk2MI=
+X-Google-Smtp-Source: ABdhPJyTS26vEw4LN0WnWkbY3aT8Hdud9gu0wLYWUVxubNL4SszBhzLEfpxTiNiAOzfdqJ5v4qGyJstA37wfGE/DuYY=
+X-Received: by 2002:a4a:d62c:: with SMTP id n12mr1966554oon.38.1596620105003;
+ Wed, 05 Aug 2020 02:35:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher>
+ <1633168.eVXp6ieOpF@kreacher> <000d01d66a81$59326a50$0b973ef0$@net>
+In-Reply-To: <000d01d66a81$59326a50$0b973ef0$@net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 5 Aug 2020 11:34:51 +0200
+Message-ID: <CAJZ5v0h7iKvO1-9R_JiVjM8j_a87B=LpTCoaUWRfrhXTRaMMOw@mail.gmail.com>
+Subject: Re: [PATCH v6] cpufreq: intel_pstate: Implement passive mode with HWP enabled
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Francisco Jerez <francisco.jerez.plata@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-BPLL clock must not be disabled because it is needed for proper DRAM
-operation. This is normally handled by respective memory devfreq driver,
-but when that driver is not yet probed or its probe has been deferred the
-clock might got disabled what causes board hang. Fix this by marking it
-as critical.
+Hi Doug,
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/clk/samsung/clk-exynos5420.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Aug 4, 2020 at 7:07 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> Hi Rafael,
+>
+> I was just writing you about V5 when this V6 came.
+>
+> On 2020.08.04 08:11 Rafael J. Wysocki wrote:
+> ...
+> > This is on top of the material already in the mainline.
+>
+> Oh, should have read that part better,
+> but did get there in the end.
+> ...
+> > v5 -> v6:
+> >    * Fix the problem with the EPP setting via sysfs not working with the
+> >      performance and powersave governors by stopping and restarting the
+> >      governor around the sysfs-based EPP updates in the passive mode.
+> >    * Because of that, use the epp_cached field just for avoiding the above
+> >      if the new EPP value for the given CPU is the same as the old one.
+> >    * Export cpufreq_start/stop_governor() from the core (for the above).
+>
+> EPP is still not right.
+> I am not messing with it at all, just observing via my msr-decoder.
 
-diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
-index fea33399a632..5ef78928938a 100644
---- a/drivers/clk/samsung/clk-exynos5420.c
-+++ b/drivers/clk/samsung/clk-exynos5420.c
-@@ -734,7 +734,7 @@ static const struct samsung_mux_clock exynos5x_mux_clks[] __initconst = {
- 	MUX_F(CLK_MOUT_MCLK_CDREX, "mout_mclk_cdrex", mout_mclk_cdrex_p,
- 			SRC_CDREX, 4, 1, CLK_SET_RATE_PARENT, 0),
- 	MUX_F(CLK_MOUT_BPLL, "mout_bpll", mout_bpll_p, SRC_CDREX, 0, 1,
--			CLK_SET_RATE_PARENT, 0),
-+			CLK_SET_RATE_PARENT | CLK_IS_CRITICAL, 0),
- 
- 	/* MAU Block */
- 	MUX(CLK_MOUT_MAUDIO0, "mout_maudio0", mout_maudio0_p, SRC_MAU, 28, 3),
--- 
-2.17.1
+If you are not touching it, then it should not change in the passive mode.
 
+> I booted without any intel_pstate related directives for the
+> kernel command line. The below is as expected (performance gov.):
+
+Note that the active mode performance scaling algorithm (which is not
+the same as the performance cpufreq governor) sets the EPP to 0 for
+all of the CPUs that it is used with and the driver sets the EPP to
+255 in ->stop_cpu.
+
+That last bit is questionable, but that's the active mode behavior
+which is not changed by the $subject patch.
+
+It would be more reasonable to restore the previous EPP when stopping
+CPUs.  Let me cut a v7 with that changed.
+
+> # /home/doug/c/msr-decoder
+> How many CPUs?: 6
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> 1.) 0x19C: IA32_THERM_STATUS: 88450000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88430000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 109252E : high 46 : guaranteed 37 : efficient 9 : lowest 1
+> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+>     raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
+>     min:       46 :       46 :       46 :       46 :       46 :       46 :
+>     max:       46 :       46 :       46 :       46 :       46 :       46 :
+>     des:        0 :        0 :        0 :        0 :        0 :        0 :
+>     epp:        0 :        0 :        0 :        0 :        0 :        0 :
+>     act:        0 :        0 :        0 :        0 :        0 :        0 :
+> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
+>
+> and then switched to passive mode later. EPP is not as expected. Expect 0
+> (performance mode):
+>
+> # /home/doug/c/msr-decoder
+> How many CPUs?: 6
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> 1.) 0x19C: IA32_THERM_STATUS: 88440000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 88420000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 108252E : high 46 : guaranteed 37 : efficient 8 : lowest 1
+> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+>     raw: FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E : FF002E2E :
+>     min:       46 :       46 :       46 :       46 :       46 :       46 :
+>     max:       46 :       46 :       46 :       46 :       46 :       46 :
+>     des:        0 :        0 :        0 :        0 :        0 :        0 :
+>     epp:      255 :      255 :      255 :      255 :      255 :      255 :
+>     act:        0 :        0 :        0 :        0 :        0 :        0 :
+> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
+
+The 0xFF EPP value is what the active mode left behind and the passive
+mode doesn't touch the EPP at all.
+
+> Then switched to ondemand governor, and put 100% load on 2 CPUs.
+> EPP is not as expected, which I don't actually know what to expect,
+> but assume 128:
+>
+> # /home/doug/c/msr-decoder
+> How many CPUs?: 6
+> 8.) 0x198: IA32_PERF_STATUS     : CPU 0-5 :  46 :  46 :  46 :  46 :  46 :  46 :
+> B.) 0x770: IA32_PM_ENABLE: 1 : HWP enable
+> 1.) 0x19C: IA32_THERM_STATUS: 883B0000
+> 2.) 0x1AA: MSR_MISC_PWR_MGMT: 401CC0 EIST enabled Coordination enabled OOB Bit 8 reset OOB Bit 18 reset
+> 3.) 0x1B1: IA32_PACKAGE_THERM_STATUS: 882B0000
+> 4.) 0x64F: MSR_CORE_PERF_LIMIT_REASONS: 0
+> A.) 0x1FC: MSR_POWER_CTL: 3C005D : C1E disable : EEO disable : RHO disable
+> 5.) 0x771: IA32_HWP_CAPABILITIES (performance): 10B252E : high 46 : guaranteed 37 : efficient 11 : lowest 1
+> 6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
+>     raw: FF002E09 : FF002E0C : FF002E2E : FF002E08 : FF002E2E : FF002E18 :
+>     min:        9 :       12 :       46 :        8 :       46 :       24 :
+>     max:       46 :       46 :       46 :       46 :       46 :       46 :
+>     des:        0 :        0 :        0 :        0 :        0 :        0 :
+>     epp:      255 :      255 :      255 :      255 :      255 :      255 :
+>     act:        0 :        0 :        0 :        0 :        0 :        0 :
+> 7.) 0x777: IA32_HWP_STATUS: 4 : high 4 : guaranteed 0 : efficient 0 : lowest 0
+
+It is still 0xFF as previously (because the passive mode doesn't
+change the EPP).
+
+> For what it's worth, Kernel:
+>
+> 78b39581ed85 (HEAD -> dtemp) cpufreq: intel_pstate: Implement passive mode with HWP enabled
+> c0842fbc1b18 (origin/master, origin/HEAD, master) random32: move the pseudo-random 32-bit definitions to prandom.h
+> 2baa85d6927d Merge tag 'acpi-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+> 04084978003c Merge tag 'pm-5.9-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+Thanks!
