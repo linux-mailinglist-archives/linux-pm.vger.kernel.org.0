@@ -2,91 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72A023D69C
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 07:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE93C23D7A9
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 09:48:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgHFFzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Aug 2020 01:55:09 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:47626 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728053AbgHFFzI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 Aug 2020 01:55:08 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 3YrokNSMVqUs33YrpkBwBc; Wed, 05 Aug 2020 23:55:07 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1596693307; bh=UdY9SBhzelhDfX04xJQMe/tnrZmIn+bwMhQh/d7gS14=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=M+qtjXCmrA7/G/ymG1TyeaJgy2oPWxHrtGABymuDkulMYUHYEQMRm72rghu6tr00J
-         GeNOqke41SHjOELaOF4GAV8QVwnu26wbWCIEjehINnlesMVoIbp6LJAw4emlBHT33n
-         uu8ivc0EN0J394QKemMHBPvSsKKrI+FrIYMrNU6sgX0/Hry66VunxBfUx4gRDzsTbH
-         SJ4jQYm0RY0Q8rj01jjLgvXG74nzreIBfi8bGqNaXN0xXXXYsJ2GYvEBmUwTSI5Ohi
-         EshHRPxqMW/k8xnjkABIyxUGj+JcODXWPDhH81fT/JCWtBauriO2h6/s9Y0mxNKndW
-         52EjvC48f+CmA==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Mo8sFFSe c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=BksG-UogcMQq9l1sBr8A:9
- a=WNjDzcG3-xvNU-Du:21 a=sI7P83wg1hG2aD_E:21 a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Linux Documentation'" <linux-doc@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <4981405.3kqTVLv5tO@kreacher> <1709487.Bxjb1zNRZM@kreacher> <3226770.pJcYkdRNc2@kreacher>
-In-Reply-To: <3226770.pJcYkdRNc2@kreacher>
-Subject: RE: [PATCH v7] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Wed, 5 Aug 2020 22:55:03 -0700
-Message-ID: <004701d66bb6$22a11410$67e33c30$@net>
+        id S1728724AbgHFHsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Aug 2020 03:48:38 -0400
+Received: from mailrelay2-3.pub.mailoutpod1-cph3.one.com ([46.30.212.11]:45574
+        "EHLO mailrelay2-3.pub.mailoutpod1-cph3.one.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726799AbgHFHsX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Aug 2020 03:48:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lechevalier.se; s=20191106;
+        h=content-transfer-encoding:content-type:mime-version:subject:message-id:to:
+         from:date:from;
+        bh=js6ddQGjshLYMBr3KACQwW7bxmSrcf7Ipr2yq9tUVhk=;
+        b=uzGk3f8Tbi2quAtVymDGokS/XFp/J6pLvgesU/QRUoL3pUNkqqOnUkWOk0Pgrz8hSawLk++mo9c6a
+         F0z4XI1VJ7oPrE1cXRaAtG4X4rulPVMp69Qznu9Q6HWo/RSz7F2YcpwTYx8SsawcyYXxI80Ds5ZYjv
+         H5sV75m5mcf/+y92KswT4AlfMM0iYMxiW7blR5l3+AfJCKHWF8cg5NhPmSaByooUS4G5m+wabyRWkY
+         sezxGh34hiC6tTOAUjyjyf32FwYqFUkmkGyNZWqM3QnEitaMOyYqS6LJXQhS/64wQO/fsdyHNJGltw
+         NUCNSKuEYEsFSbMmKSXThadbSkVqEvw==
+X-HalOne-Cookie: 35fd9665de40a721992ac6626549ec43b33e2414
+X-HalOne-ID: 2306380e-d7b9-11ea-8889-d0431ea8a290
+Received: from [192.168.0.126] (h-131-138.a357.priv.bahnhof.se [81.170.131.138])
+        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 2306380e-d7b9-11ea-8889-d0431ea8a290;
+        Thu, 06 Aug 2020 07:47:55 +0000 (UTC)
+Date:   Thu, 6 Aug 2020 09:47:54 +0200 (GMT+02:00)
+From:   A L <mail@lechevalier.se>
+To:     linux-pm@vger.kernel.org
+Message-ID: <cd04b10.40bfc293.173c2bda013@lechevalier.se>
+Subject: amd_energy supported cpus?
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdZrSU4IfOy1pyhARg2cUO2gNUQGyAAbEZuQ
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfE4hLMxmYldtWQ0VrnqMmaky8OnCKk9AJ11DLo7lGr1p7mIp04Qio1Ieh3xJEu5B/w5yZyrcESGncqPlckt23ApEzliATAfPpUCKfWKbTU29WS9eMOOG
- Ifmh10zUQD19Lbp5dS3q6xnLUftetkQjOZqJ5MzhHqydyJovoM0OT1nDsY7KJspil15dMl0Gn5rC4E+1NVmkNi7bp00PgUwUYVgeyPRVV4shsoJHO9a9Adhx
- 7jbAE0Kmpcnf5bGmwR5t9OnJp5E0AowyzTh0zvUC0DVdze5FoBPC/qWx+lYEfzFTmQ8g1Ocq9VmjFhD4iNCRYM5D96/ruSpprz0XE1QlkucD3PIf2OLpQO/8
- yVgv40IlP6llcuRGUkbUbaNf+g6LoXe66FRT5BNjoacWEBPmoZ5ETIt+AGbca657bVigugIyMtXVcI/RKoJuoN3iDH7HEI6/XtBJpEg5ugbz4fjGqLU=
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: R2Mail2
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020.08.05 09:56 Rafael J. Wysocki wrote:
+Hi,
 
-> v6 -> v7:
->    * Cosmetic changes in store_energy_performance_prefernce() to reduce the
->      LoC number and make it a bit easier to read.  No intentional functional
->      impact.
+According to https://www.kernel.org/doc/html/latest/hwmon/amd_energy.html f=
+amily 17h CPUs should be supported. But are there exceptions from this, for=
+ example the various APUs?
 
-??
-V7 is identical to V6.
+I'm running a AMD 3000G APU and Kernel 5.8 but the module doesn't load:
 
-Diff:
+# modprobe amd_energy
+modprobe: ERROR: could not insert 'amd_energy': No such device
 
-$ diff hwppassive-v6-2-2.patch hwppassive-v7-2-2.patch
-2c2
-< Sent: August 4, 2020 8:11 AM
----
-> Sent: August 5, 2020 9:56 AM
-5c5
-< Subject: [PATCH v6] cpufreq: intel_pstate: Implement passive mode with HWP enabled
----
-> Subject: [PATCH v7] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-76a77,81
->
-> v6 -> v7:
->    * Cosmetic changes in store_energy_performance_prefernce() to reduce the
->      LoC number and make it a bit easier to read.  No intentional functional
->      impact.
+There is no message in dmesg.
 
-... Doug
+I couldn't understand the data sheets from the documentation, but are there=
+ cpus within dam 17h (23) that are not supported?=20
 
+This is my CPU (APU)=20
+# lscpu=20
 
+Architecture:                    x86_64
+CPU op-mode(s):                  32-bit, 64-bit
+Byte Order:                      Little Endian
+Address sizes:                   43 bits physical, 48 bits virtual
+CPU(s):                          4
+On-line CPU(s) list:             0-3
+Thread(s) per core:              2
+Core(s) per socket:              2
+Socket(s):                       1
+NUMA node(s):                    1
+Vendor ID:                       AuthenticAMD
+CPU family:                      23
+Model:                           24
+Model name:                      AMD Athlon 3000G with Radeon Vega Graphics
+Stepping:                        1
+Frequency boost:                 enabled
+CPU MHz:                         2194.348
+CPU max MHz:                     3900.0000
+CPU min MHz:                     1600.0000
+BogoMIPS:                        7785.52
+Virtualization:                  AMD-V
+L1d cache:                       64 KiB
+L1i cache:                       128 KiB
+L2 cache:                        1 MiB
+L3 cache:                        4 MiB
+NUMA node0 CPU(s):               0-3
+Vulnerability Itlb multihit:     Not affected
+Vulnerability L1tf:              Not affected
+Vulnerability Mds:               Not affected
+Vulnerability Meltdown:          Not affected
+Vulnerability Spec store bypass: Vulnerable
+Vulnerability Spectre v1:        Vulnerable: __user pointer sanitization an=
+d usercopy barriers only; no swapgs barriers
+Vulnerability Spectre v2:        Vulnerable, IBPB: disabled, STIBP: disable=
+d
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
+Flags:                           fpu vme de pse tsc msr pae mce cx8 apic se=
+p mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxex=
+t fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid e=
+xtd_apicid aperfmperf pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 mo=
+vbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_leg=
+acy abm sse4a misalignsse 3dnowprefetch osvw skinit wdt tce topoext perfctr=
+_core perfctr_nb bpext perfctr_llc mwaitx cpb hw_pstate sme ssbd sev ibpb v=
+mmcall fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni xsave=
+opt xsavec xgetbv1 xsaves clzero irperf xsaveerptr arat npt lbrv svm_lock n=
+rip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthres=
+hold avic v_vmsave_vmload vgif overflow_recov succor smca
