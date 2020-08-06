@@ -2,332 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB82123E125
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 20:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEA523E307
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 22:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730052AbgHFSlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Aug 2020 14:41:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33612 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729545AbgHFSkX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 6 Aug 2020 14:40:23 -0400
-Received: from localhost.localdomain (unknown [194.230.155.117])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F2C1022E00;
-        Thu,  6 Aug 2020 18:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596738277;
-        bh=+oPAXSXGyEyQWXKKAwZUaBU75sxosxO6wve4tCGPEDU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R2y0iC6Hq3ahZm7Wp6ogjUBBHUZUqck/JJjzAi/lMAO9mpKEM7dNAzeXuXv9RhbDd
-         8HHVC2bYQQVDDRydsslvqSMU6VKY3kyNStUYUl3TV8MGW4MLKRbRqzNUA16tVYzD6Z
-         CGYET/C46D1/DYrHeQGgKgPbrdghqKu2n8PoLiJE=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Kukjin Kim <kgene@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 37/41] cpufreq: s3c24xx: move low-level clk reg access into platform code
-Date:   Thu,  6 Aug 2020 20:20:54 +0200
-Message-Id: <20200806182059.2431-37-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200806181932.2253-1-krzk@kernel.org>
-References: <20200806181932.2253-1-krzk@kernel.org>
+        id S1726250AbgHFUTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Aug 2020 16:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47542 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726058AbgHFUTH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Aug 2020 16:19:07 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CA1C061574
+        for <linux-pm@vger.kernel.org>; Thu,  6 Aug 2020 13:19:07 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id d190so9898163wmd.4
+        for <linux-pm@vger.kernel.org>; Thu, 06 Aug 2020 13:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=jN6H7gSQ3+o0bH9j1Dm5F5mz7YQDGK2LdjSj6lic1YU=;
+        b=e/GerVru/dRsJppM3t9SU+1h2Q9ppkZ6tLjpCU5onl8i989Z+aPGwbG3MKkP+4O/ks
+         FFTZ9ZQyH7/D7DgqBxy7OhXBl1Agtj0y9vFOxf6k5tS5ayKKxnT8ME/JUC/XG8AzzAEU
+         wLmqZn3Tidd3V9nf8LYyYtvKJVE6jI/gN93qG4YLksF+5+C9lK/JnhD9/6ediQDlnPcs
+         7KRDTGq8bOKa9D1c1Id9Ic8E/9sPJajEaZBo1xlUgzwfY2BdXPjvNmq2ipSrd/gQix2G
+         eTgEQCREIEpMX4eRwBcSBk+rm9/kobEfDrHnRolVuz4Zay9C+m9c2aCIVmoqjc6K5j2Q
+         fG6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=jN6H7gSQ3+o0bH9j1Dm5F5mz7YQDGK2LdjSj6lic1YU=;
+        b=FcusQa+a2MoHfWLHDGAJLI4NoLIeLxfSsWxQPScuLVFI0wvCjmePEarDx7zT3o/W5R
+         paE8x+8rGsbvmrKSHzBcCHZgECcEzT6GSs6H1qHnlnFrCPzD8HN8mZBfvHFjkGqoN3KP
+         wmY9VFIz6c9ex3aDe1Ej46MOLiTpgbVMmTa+5NI9Xfg813B3NgbGyxj4WRoacao6E9I8
+         S700aUgSlMBPQnLu/JXSjZg04NP9o+6K47xwnlOUn5t6StU9JHH2Bgi0EzgO3uTjJmM2
+         4ad+/2b1etzZuEm7nfF3OOEaVcujApgjKeI/8xgwUQ/KhNK938PhEYKxAw4D497Ov60N
+         R33Q==
+X-Gm-Message-State: AOAM533KJB8gMX03RORQ7FjDugst4ezVv0eAMbUaxJdGMPER7O7auGWb
+        x786p86/732EPAE5olFeSwf9Nw==
+X-Google-Smtp-Source: ABdhPJxPWiGvLzQjFl3tbtdsnigcN9QOJmStwA5cx3B/6QfmsG1TNEsOS+99IoiD2C2pV6KWqh0wCw==
+X-Received: by 2002:a1c:541b:: with SMTP id i27mr9335187wmb.179.1596745145990;
+        Thu, 06 Aug 2020 13:19:05 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:f457:5fc1:5262:84c? ([2a01:e34:ed2f:f020:f457:5fc1:5262:84c])
+        by smtp.googlemail.com with ESMTPSA id w1sm7809139wmc.18.2020.08.06.13.19.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Aug 2020 13:19:05 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] RESEND: thermal for v5.9-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Colin King <colin.king@canonical.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Marian-Cristian Rotariu 
+        <marian-cristian.rotariu.rb@bp.renesas.com>
+Message-ID: <db1dc155-0c7c-f4eb-7fa6-047a78829a82@linaro.org>
+Date:   Thu, 6 Aug 2020 22:18:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+The following changes since commit 9ebcfadb0610322ac537dd7aa5d9cbc2b2894c68:
 
-Rather than have the cpufreq drivers touch include the
-common headers to get the constants, add a small indirection.
-This is still not the proper way that would do this through
-the common clk API, but it lets us kill off the header file
-usage.
+  Linux 5.8-rc3 (2020-06-28 15:00:24 -0700)
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-[krzk: Rebase and fix -Wold-style-definition]
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+are available in the Git repository at:
 
----
 
-Changes since v1:
-1. Add 'void' argument to fix -Wold-style-definition warning.
----
- arch/arm/mach-s3c24xx/Kconfig                |  7 -----
- arch/arm/mach-s3c24xx/Makefile               |  2 +-
- arch/arm/mach-s3c24xx/cpufreq-utils.c        | 32 ++++++++++++++++++++
- drivers/cpufreq/Kconfig.arm                  |  2 --
- drivers/cpufreq/s3c2410-cpufreq.c            |  8 +----
- drivers/cpufreq/s3c2412-cpufreq.c            | 10 ++----
- drivers/cpufreq/s3c2440-cpufreq.c            | 16 +++-------
- drivers/cpufreq/s3c24xx-cpufreq.c            | 12 ++------
- include/linux/soc/samsung/s3c-cpufreq-core.h |  7 +++++
- 9 files changed, 51 insertions(+), 45 deletions(-)
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+tags/thermal-v5.9-rc1
 
-diff --git a/arch/arm/mach-s3c24xx/Kconfig b/arch/arm/mach-s3c24xx/Kconfig
-index 7673dde9671a..3a4b050b46a1 100644
---- a/arch/arm/mach-s3c24xx/Kconfig
-+++ b/arch/arm/mach-s3c24xx/Kconfig
-@@ -137,13 +137,6 @@ config S3C2410_IOTIMING
- 	  Internal node to select io timing code that is common to the s3c2410
- 	  and s3c2440/s3c2442 cpu frequency support.
- 
--config S3C2410_CPUFREQ_UTILS
--       bool
--       depends on ARM_S3C24XX_CPUFREQ
--       help
--         Internal node to select timing code that is common to the s3c2410
--         and s3c2440/s3c244 cpu frequency support.
--
- # cpu frequency support common to s3c2412, s3c2413 and s3c2442
- 
- config S3C2412_IOTIMING
-diff --git a/arch/arm/mach-s3c24xx/Makefile b/arch/arm/mach-s3c24xx/Makefile
-index 695573df00b1..195a4cb23ecb 100644
---- a/arch/arm/mach-s3c24xx/Makefile
-+++ b/arch/arm/mach-s3c24xx/Makefile
-@@ -38,7 +38,7 @@ obj-$(CONFIG_PM_SLEEP)		+= irq-pm.o sleep.o
- 
- # common code
- 
--obj-$(CONFIG_S3C2410_CPUFREQ_UTILS) += cpufreq-utils.o
-+obj-$(CONFIG_ARM_S3C24XX_CPUFREQ) += cpufreq-utils.o
- 
- obj-$(CONFIG_S3C2410_IOTIMING)	+= iotiming-s3c2410.o
- obj-$(CONFIG_S3C2412_IOTIMING)	+= iotiming-s3c2412.o
-diff --git a/arch/arm/mach-s3c24xx/cpufreq-utils.c b/arch/arm/mach-s3c24xx/cpufreq-utils.c
-index 43ab714eaa9e..3bc374dd0b2d 100644
---- a/arch/arm/mach-s3c24xx/cpufreq-utils.c
-+++ b/arch/arm/mach-s3c24xx/cpufreq-utils.c
-@@ -60,3 +60,35 @@ void s3c2410_set_fvco(struct s3c_cpufreq_config *cfg)
- 	if (!IS_ERR(cfg->mpll))
- 		clk_set_rate(cfg->mpll, cfg->pll.frequency);
- }
-+
-+#if defined(CONFIG_CPU_S3C2440) || defined(CONFIG_CPU_S3C2442)
-+u32 s3c2440_read_camdivn(void)
-+{
-+	return __raw_readl(S3C2440_CAMDIVN);
-+}
-+
-+void s3c2440_write_camdivn(u32 camdiv)
-+{
-+	__raw_writel(camdiv, S3C2440_CAMDIVN);
-+}
-+#endif
-+
-+u32 s3c24xx_read_clkdivn(void)
-+{
-+	return __raw_readl(S3C2410_CLKDIVN);
-+}
-+
-+void s3c24xx_write_clkdivn(u32 clkdiv)
-+{
-+	__raw_writel(clkdiv, S3C2410_CLKDIVN);
-+}
-+
-+u32 s3c24xx_read_mpllcon(void)
-+{
-+	return __raw_readl(S3C2410_MPLLCON);
-+}
-+
-+void s3c24xx_write_locktime(u32 locktime)
-+{
-+	return __raw_writel(locktime, S3C2410_LOCKTIME);
-+}
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index cb72fb507d57..6514a39981e1 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -196,7 +196,6 @@ config ARM_S3C24XX_CPUFREQ_DEBUGFS
- config ARM_S3C2410_CPUFREQ
- 	bool
- 	depends on ARM_S3C24XX_CPUFREQ && CPU_S3C2410
--	select S3C2410_CPUFREQ_UTILS
- 	help
- 	  CPU Frequency scaling support for S3C2410
- 
-@@ -233,7 +232,6 @@ config ARM_S3C2416_CPUFREQ_VCORESCALE
- config ARM_S3C2440_CPUFREQ
- 	bool "S3C2440/S3C2442 CPU Frequency scaling support"
- 	depends on ARM_S3C24XX_CPUFREQ && (CPU_S3C2440 || CPU_S3C2442)
--	select S3C2410_CPUFREQ_UTILS
- 	default y
- 	help
- 	  CPU Frequency scaling support for S3C2440 and S3C2442 SoC CPUs.
-diff --git a/drivers/cpufreq/s3c2410-cpufreq.c b/drivers/cpufreq/s3c2410-cpufreq.c
-index 9c2f29cacdd0..5dcfbf0bfb74 100644
---- a/drivers/cpufreq/s3c2410-cpufreq.c
-+++ b/drivers/cpufreq/s3c2410-cpufreq.c
-@@ -22,12 +22,6 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/map.h>
- 
--#include <mach/map.h>
--
--#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
--
--#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
--
- #define S3C2410_CLKDIVN_PDIVN	     (1<<0)
- #define S3C2410_CLKDIVN_HDIVN	     (1<<1)
- 
-@@ -43,7 +37,7 @@ static void s3c2410_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
- 	if (cfg->divs.p_divisor != cfg->divs.h_divisor)
- 		clkdiv |= S3C2410_CLKDIVN_PDIVN;
- 
--	__raw_writel(clkdiv, S3C2410_CLKDIVN);
-+	s3c24xx_write_clkdivn(clkdiv);
- }
- 
- static int s3c2410_cpufreq_calcdivs(struct s3c_cpufreq_config *cfg)
-diff --git a/drivers/cpufreq/s3c2412-cpufreq.c b/drivers/cpufreq/s3c2412-cpufreq.c
-index a77c63e92e1a..5945945ead7c 100644
---- a/drivers/cpufreq/s3c2412-cpufreq.c
-+++ b/drivers/cpufreq/s3c2412-cpufreq.c
-@@ -25,12 +25,6 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/map.h>
- 
--#include <mach/map.h>
--
--#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
--
--#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
--
- #define S3C2412_CLKDIVN_PDIVN		(1<<2)
- #define S3C2412_CLKDIVN_HDIVN_MASK	(3<<0)
- #define S3C2412_CLKDIVN_ARMDIVN		(1<<3)
-@@ -132,7 +126,7 @@ static void s3c2412_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
- 	unsigned long clkdiv;
- 	unsigned long olddiv;
- 
--	olddiv = clkdiv = __raw_readl(S3C2410_CLKDIVN);
-+	olddiv = clkdiv = s3c24xx_read_clkdivn();
- 
- 	/* clear off current clock info */
- 
-@@ -149,7 +143,7 @@ static void s3c2412_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
- 		clkdiv |= S3C2412_CLKDIVN_PDIVN;
- 
- 	s3c_freq_dbg("%s: div %08lx => %08lx\n", __func__, olddiv, clkdiv);
--	__raw_writel(clkdiv, S3C2410_CLKDIVN);
-+	s3c24xx_write_clkdivn(clkdiv);
- 
- 	clk_set_parent(armclk, cfg->divs.dvs ? hclk : fclk);
- }
-diff --git a/drivers/cpufreq/s3c2440-cpufreq.c b/drivers/cpufreq/s3c2440-cpufreq.c
-index 442abdccb9c1..148e8aedefa9 100644
---- a/drivers/cpufreq/s3c2440-cpufreq.c
-+++ b/drivers/cpufreq/s3c2440-cpufreq.c
-@@ -26,12 +26,6 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/map.h>
- 
--#include <mach/map.h>
--
--#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
--#define S3C2410_CLKDIVN	    S3C2410_CLKREG(0x14)
--#define S3C2440_CAMDIVN	    S3C2410_CLKREG(0x18)
--
- #define S3C2440_CLKDIVN_PDIVN	     (1<<0)
- #define S3C2440_CLKDIVN_HDIVN_MASK   (3<<1)
- #define S3C2440_CLKDIVN_HDIVN_1      (0<<1)
-@@ -162,8 +156,8 @@ static void s3c2440_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
- 	s3c_freq_dbg("%s: divisors: h=%d, p=%d\n", __func__,
- 		     cfg->divs.h_divisor, cfg->divs.p_divisor);
- 
--	clkdiv = __raw_readl(S3C2410_CLKDIVN);
--	camdiv = __raw_readl(S3C2440_CAMDIVN);
-+	clkdiv = s3c24xx_read_clkdivn();
-+	camdiv = s3c2440_read_camdivn();
- 
- 	clkdiv &= ~(S3C2440_CLKDIVN_HDIVN_MASK | S3C2440_CLKDIVN_PDIVN);
- 	camdiv &= ~CAMDIVN_HCLK_HALF;
-@@ -203,11 +197,11 @@ static void s3c2440_cpufreq_setdivs(struct s3c_cpufreq_config *cfg)
- 	 * then make a short delay and remove the hclk halving if necessary.
- 	 */
- 
--	__raw_writel(camdiv | CAMDIVN_HCLK_HALF, S3C2440_CAMDIVN);
--	__raw_writel(clkdiv, S3C2410_CLKDIVN);
-+	s3c2440_write_camdivn(camdiv | CAMDIVN_HCLK_HALF);
-+	s3c24xx_write_clkdivn(clkdiv);
- 
- 	ndelay(20);
--	__raw_writel(camdiv, S3C2440_CAMDIVN);
-+	s3c2440_write_camdivn(camdiv);
- 
- 	clk_set_parent(armclk, cfg->divs.dvs ? hclk : fclk);
- }
-diff --git a/drivers/cpufreq/s3c24xx-cpufreq.c b/drivers/cpufreq/s3c24xx-cpufreq.c
-index 27111fbca2ff..37efc0dc3f91 100644
---- a/drivers/cpufreq/s3c24xx-cpufreq.c
-+++ b/drivers/cpufreq/s3c24xx-cpufreq.c
-@@ -27,13 +27,7 @@
- #include <asm/mach/arch.h>
- #include <asm/mach/map.h>
- 
--#include <mach/map.h>
--
- /* note, cpufreq support deals in kHz, no Hz */
--#define S3C2410_CLKREG(x) ((x) + S3C24XX_VA_CLKPWR)
--#define S3C2410_LOCKTIME    S3C2410_CLKREG(0x00)
--#define S3C2410_MPLLCON     S3C2410_CLKREG(0x04)
--
- static struct cpufreq_driver s3c24xx_driver;
- static struct s3c_cpufreq_config cpu_cur;
- static struct s3c_iotimings s3c24xx_iotiming;
-@@ -70,7 +64,7 @@ static void s3c_cpufreq_getcur(struct s3c_cpufreq_config *cfg)
- 	cfg->freq.pclk = pclk = clk_get_rate(clk_pclk);
- 	cfg->freq.armclk = armclk = clk_get_rate(clk_arm);
- 
--	cfg->pll.driver_data = __raw_readl(S3C2410_MPLLCON);
-+	cfg->pll.driver_data = s3c24xx_read_mpllcon();
- 	cfg->pll.frequency = fclk;
- 
- 	cfg->freq.hclk_tns = 1000000000 / (cfg->freq.hclk / 10);
-@@ -388,7 +382,7 @@ static unsigned int suspend_freq;
- static int s3c_cpufreq_suspend(struct cpufreq_policy *policy)
- {
- 	suspend_pll.frequency = clk_get_rate(_clk_mpll);
--	suspend_pll.driver_data = __raw_readl(S3C2410_MPLLCON);
-+	suspend_pll.driver_data = s3c24xx_read_mpllcon();
- 	suspend_freq = clk_get_rate(clk_arm);
- 
- 	return 0;
-@@ -549,7 +543,7 @@ static void s3c_cpufreq_update_loctkime(void)
- 	val |= calc_locktime(rate, cpu_cur.info->locktime_m);
- 
- 	pr_info("%s: new locktime is 0x%08x\n", __func__, val);
--	__raw_writel(val, S3C2410_LOCKTIME);
-+	s3c24xx_write_locktime(val);
- }
- 
- static int s3c_cpufreq_build_freq(void)
-diff --git a/include/linux/soc/samsung/s3c-cpufreq-core.h b/include/linux/soc/samsung/s3c-cpufreq-core.h
-index e0c7217a0f53..3b278afb769b 100644
---- a/include/linux/soc/samsung/s3c-cpufreq-core.h
-+++ b/include/linux/soc/samsung/s3c-cpufreq-core.h
-@@ -289,4 +289,11 @@ static inline int s3c_cpufreq_addfreq(struct cpufreq_frequency_table *table,
- 	return index + 1;
- }
- 
-+u32 s3c2440_read_camdivn(void);
-+void s3c2440_write_camdivn(u32 camdiv);
-+u32 s3c24xx_read_clkdivn(void);
-+void s3c24xx_write_clkdivn(u32 clkdiv);
-+u32 s3c24xx_read_mpllcon(void);
-+void s3c24xx_write_locktime(u32 locktime);
-+
- #endif
+for you to fetch changes up to c569e805c7bcebdd069e5c97ce5f8543f6d02433:
+
+  thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
+support (2020-08-04 10:43:03 +0200)
+
+----------------------------------------------------------------
+- Add support to enable/disable the thermal zones resulting on core code and
+  drivers cleanup (Andrzej Pietrasiewicz)
+
+- Add generic netlink support for userspace notifications: events,
+temperature
+  and discovery commands (Daniel Lezcano)
+
+- Fix redundant initialization for a ret variable (Colin Ian King)
+
+- Remove the clock cooling code as it is used nowhere (Amit Kucheria)
+
+- Add the rcar_gen3_thermal's r8a774e1 support (Marian-Cristian Rotariu)
+
+- Replace all references to thermal.txt in the documentation to the
+  corresponding yaml files (Amit Kucheria)
+
+- Add maintainer entry for the IPA (Lukasz Luba)
+
+- Add support for MSM8939 for the tsens (Shawn Guo)
+
+- Update power allocator and devfreq cooling to SPDX licensing (Lukasz Luba)
+
+- Add Cannon Lake Low Power PCH support (Sumeet Pawnikar)
+
+- Add tsensor support for V2 mediatek thermal system (Henry Yen)
+
+- Fix thermal zone lookup by ID for the core code (Thierry Reding)
+
+----------------------------------------------------------------
+Amit Kucheria (2):
+      thermal/drivers/clock_cooling: Remove clock_cooling code
+      dt-bindings: thermal: Get rid of thermal.txt and replace references
+
+Andrzej Pietrasiewicz (14):
+      acpi: thermal: Fix error handling in the register function
+      thermal: Store thermal mode in a dedicated enum
+      thermal: Add current mode to thermal zone device
+      thermal: Store device mode in struct thermal_zone_device
+      thermal: remove get_mode() operation of drivers
+      thermal: Add mode helpers
+      thermal: Use mode helpers in drivers
+      thermal: Explicitly enable non-changing thermal zone devices
+      thermal: core: Stop polling DISABLED thermal devices
+      thermal: Simplify or eliminate unnecessary set_mode() methods
+      thermal: Rename set_mode() to change_mode()
+      acpi: thermal: Don't call thermal_zone_device_is_enabled()
+      thermal: imx: Use driver's local data to decide whether to run a
+measurement
+      thermal: Make thermal_zone_device_is_enabled() available to core only
+
+Anson Huang (1):
+      thermal: imx8mm: Support module autoloading
+
+Colin Ian King (1):
+      thermal: core: remove redundant initialization of variable ret
+
+Dan Carpenter (1):
+      thermal: ti-soc-thermal: Fix reversed condition in
+ti_thermal_expose_sensor()
+
+Daniel Lezcano (9):
+      thermal: core: Add helpers to browse the cdev, tz and governor list
+      thermal: core: Get thermal zone by id
+      thermal: core: genetlink support for events/cmd/sampling
+      thermal: core: Add notifications call in the framework
+      thermal: netlink: Fix compilation error when CONFIG_NET=n
+      net: genetlink: Move initialization to core_initcall
+      thermal: netlink: Improve the initcall ordering
+      thermal: core: Move initialization after core initcall
+      thermal: core: Add thermal zone enable/disable notification
+
+Henry Yen (2):
+      thermal: mediatek: Prepare to add support for other platforms
+      thermal: mediatek: Add tsensor support for V2 thermal system
+
+Konrad Dybcio (1):
+      dt-bindings: tsens: qcom: Document MSM8939 compatible
+
+Lukas Bulwahn (1):
+      MAINTAINERS: update entry to thermal governors file name prefixing
+
+Lukasz Luba (2):
+      MAINTAINERS: Add maintenance information for IPA
+      thermal: Update power allocator and devfreq cooling to SPDX licensing
+
+Marian-Cristian Rotariu (1):
+      thermal: rcar_gen3_thermal: Add r8a774e1 support
+
+Niklas Söderlund (1):
+      thermal: rcar_gen3_thermal: Do not shadow thcode variable
+
+Shawn Guo (1):
+      thermal: qcom: tsens-v0_1: Add support for MSM8939
+
+Sumeet Pawnikar (2):
+      thermal: int340x: processor_thermal: fix: update Jasper Lake PCI id
+      thermal: intel: intel_pch_thermal: Add Cannon Lake Low Power PCH
+support
+
+Thierry Reding (1):
+      thermal: core: Fix thermal zone lookup by ID
+
+ Documentation/devicetree/bindings/arm/arm,scmi.txt |   2 +-
+ Documentation/devicetree/bindings/arm/arm,scpi.txt |   2 +-
+ .../devicetree/bindings/arm/freescale/fsl,scu.txt  |   2 +-
+ .../arm/marvell/ap80x-system-controller.txt        |   2 +-
+ .../arm/marvell/cp110-system-controller.txt        |   2 +-
+ .../devicetree/bindings/cpufreq/cpufreq-dt.txt     |   3 +-
+ .../bindings/cpufreq/cpufreq-mediatek.txt          |   4 +-
+ .../bindings/cpufreq/nvidia,tegra20-cpufreq.txt    |   2 +-
+ .../devicetree/bindings/hwmon/gpio-fan.txt         |   3 +-
+ Documentation/devicetree/bindings/hwmon/lm90.txt   |   4 +-
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |   2 +-
+ .../bindings/thermal/amazon,al-thermal.txt         |   2 +-
+ .../bindings/thermal/brcm,avs-ro-thermal.yaml      |   2 +-
+ .../bindings/thermal/brcm,bcm2835-thermal.txt      |   2 +-
+ .../bindings/thermal/hisilicon-thermal.txt         |   2 +-
+ .../bindings/thermal/max77620_thermal.txt          |   6 +-
+ .../bindings/thermal/mediatek-thermal.txt          |   2 +-
+ .../bindings/thermal/nvidia,tegra124-soctherm.txt  |  10 +-
+ .../thermal/nvidia,tegra186-bpmp-thermal.txt       |   2 +-
+ .../bindings/thermal/qcom-spmi-temp-alarm.txt      |   2 +-
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+ .../bindings/thermal/rockchip-thermal.txt          |   2 +-
+ .../devicetree/bindings/thermal/tango-thermal.txt  |   2 +-
+ .../bindings/thermal/thermal-generic-adc.txt       |   2 +-
+ .../devicetree/bindings/thermal/thermal.txt        | 586
+-------------------
+ MAINTAINERS                                        |   8 +
+ drivers/acpi/thermal.c                             |  76 +--
+ drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |   8 +
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |  91 +--
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |   9 +-
+ drivers/platform/x86/acerhdf.c                     |  33 +-
+ drivers/platform/x86/intel_mid_thermal.c           |   6 +
+ drivers/power/supply/power_supply_core.c           |   9 +-
+ drivers/thermal/Kconfig                            |  20 +-
+ drivers/thermal/Makefile                           |   6 +-
+ drivers/thermal/armada_thermal.c                   |   6 +
+ drivers/thermal/clock_cooling.c                    | 445 --------------
+ drivers/thermal/da9062-thermal.c                   |  16 +-
+ drivers/thermal/devfreq_cooling.c                  |  10 +-
+ drivers/thermal/dove_thermal.c                     |   6 +
+ drivers/thermal/gov_power_allocator.c              |   9 +-
+ drivers/thermal/hisi_thermal.c                     |   6 +-
+ drivers/thermal/imx8mm_thermal.c                   |   1 +
+ drivers/thermal/imx_thermal.c                      |  60 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |  38 +-
+ .../intel/int340x_thermal/int340x_thermal_zone.c   |   5 +
+ .../int340x_thermal/processor_thermal_device.c     |   2 +-
+ drivers/thermal/intel/intel_pch_thermal.c          |   8 +
+ drivers/thermal/intel/intel_quark_dts_thermal.c    |  34 +-
+ drivers/thermal/intel/intel_soc_dts_iosf.c         |   3 +
+ drivers/thermal/intel/x86_pkg_temp_thermal.c       |   6 +
+ drivers/thermal/kirkwood_thermal.c                 |   7 +
+ drivers/thermal/mtk_thermal.c                      | 234 ++++++--
+ drivers/thermal/qcom/tsens-v0_1.c                  | 144 ++++-
+ drivers/thermal/qcom/tsens.c                       |   3 +
+ drivers/thermal/qcom/tsens.h                       |   2 +-
+ drivers/thermal/rcar_gen3_thermal.c                |  10 +-
+ drivers/thermal/rcar_thermal.c                     |   9 +-
+ drivers/thermal/rockchip_thermal.c                 |   6 +-
+ drivers/thermal/spear_thermal.c                    |   7 +
+ drivers/thermal/sprd_thermal.c                     |   6 +-
+ drivers/thermal/st/st_thermal.c                    |   5 +
+ drivers/thermal/thermal_core.c                     | 174 +++++-
+ drivers/thermal/thermal_core.h                     |  15 +
+ drivers/thermal/thermal_helpers.c                  |  13 +-
+ drivers/thermal/thermal_netlink.c                  | 647
++++++++++++++++++++++
+ drivers/thermal/thermal_netlink.h                  | 104 ++++
+ drivers/thermal/thermal_of.c                       |  41 +-
+ drivers/thermal/thermal_sysfs.c                    |  52 +-
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   2 +-
+ include/linux/clock_cooling.h                      |  57 --
+ include/linux/devfreq_cooling.h                    |   9 +-
+ include/linux/thermal.h                            |  31 +-
+ include/uapi/linux/thermal.h                       |  89 ++-
+ net/netlink/genetlink.c                            |   2 +-
+ 75 files changed, 1632 insertions(+), 1609 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/thermal/thermal.txt
+ delete mode 100644 drivers/thermal/clock_cooling.c
+ create mode 100644 drivers/thermal/thermal_netlink.c
+ create mode 100644 drivers/thermal/thermal_netlink.h
+ delete mode 100644 include/linux/clock_cooling.h
+
 -- 
-2.17.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
