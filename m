@@ -2,60 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A72D523DBCB
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 18:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C937523DBCF
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Aug 2020 18:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728675AbgHFQcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Aug 2020 12:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
+        id S1728735AbgHFQdZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Aug 2020 12:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728475AbgHFQcF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Aug 2020 12:32:05 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2D8C0086A9
-        for <linux-pm@vger.kernel.org>; Thu,  6 Aug 2020 09:31:30 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id k20so10268642wmi.5
-        for <linux-pm@vger.kernel.org>; Thu, 06 Aug 2020 09:31:30 -0700 (PDT)
+        with ESMTP id S1728648AbgHFQcg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Aug 2020 12:32:36 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA378C02B8C8
+        for <linux-pm@vger.kernel.org>; Thu,  6 Aug 2020 09:31:38 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id p14so9389133wmg.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Aug 2020 09:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8EjdHovA6pZhCGDIxpXlqTI6MPX2VaDhsI56ZjDVyws=;
-        b=srEzXbtVUdgu44HdzXkXf2AxcnIqodA/urxiuekKMnDaoiGV2acenxFr53rvkguLUf
-         dpASK/e72i8vVBbrtPa6ilthaekLyW9TgiLQxLjx0zIiNBiyzL5inBgxCzp/tHG2/keR
-         2Uj+FjF0ybIbPmYi55Sj/c3uFKzn6YSRiTOyNdCs8V8mwutMqzsWnpghadwHvsAH9E+G
-         HySprz3wc+JOVzTCPowsQaHape+e7GYavYYmHFGcRJJQghf4/VeIe7Rwe7H1ZlE6g/hb
-         +qf8FnvXGSiZ7OpV351VShW4oZcGHB6q2RLhQYzEnHBy7fOg0CvurHy0MbgHtjMShV67
-         3ZuQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=q/57p8pjM914Lcbk7bBCIqievLGqZS/SzbLkF/PRwXQ=;
+        b=GaCQ8rthE/nMuAM5wV0kJwOUiCLiJ1O/PjmZ9cvtFRhp860Y/1KNLhsaWLlTmphvuz
+         hlRMsnKPH/8Ao+JDlz11IKZSOWdyvyC6AYx38fj4JEnOzx/H35jIHKNco3qgooNf6Uvb
+         xhs2iO49EjwQSkXwhCozPt0qoXrfd7UnL2WV/UivPQptYp3RU3hmcqGZNscaKO5VCYrd
+         S95FKZ5yKa45pkdIe0lDqgYMq9TR7xk1tXXuzrCYIwcckD3XTR1W4d0aTHG/V9+Wbx5W
+         Cft02o6noz4dfOnAGO0nM72mE/atmPZhCwnz7Dq5+RBoAacsJQj7S+4JGWLqrzlabLXI
+         Usqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8EjdHovA6pZhCGDIxpXlqTI6MPX2VaDhsI56ZjDVyws=;
-        b=SsM1pgKA6cRNjrs0ALxN63ehLfYk9E3gh5GM/lKgjT1z6A5Uh1YcYT+bBKpWF5kzR8
-         2jOQ9SM3JwRB3uMoO8VzmRBeF3IJG4OaNmdtQUxCWyYc7naWc3/c3f4SGyA3YCipBCw6
-         M0gmDTJKBCDv5kdb5Ooy20hCeFp9+3+BMnzGfdcVEaVUJnZFUOQWp0Tp/VGGpfmVm555
-         UpXO4EjDJbp8tzOPS+Dr3jLQaWqz89s/zGd64FfSUidtcp2qx6P+TWwagrk8+EQXIlFn
-         jitPL/D4iNFPOe2bi5RHbrnxFpPRsDbmIXhtYBJgiqf7BmA0lKoH3I23eajSOnS+y9lQ
-         01uw==
-X-Gm-Message-State: AOAM531P/lmbVDMN1y7q7ffX7f+2HZeKKLFw18tDBNGIgzxp4gYvbUG/
-        VHpcbklVS5DfPdgN5HF+dFGOB5/5CBk=
-X-Google-Smtp-Source: ABdhPJypiYwGRpysEd1neDA1eIk52zMbC2H9K1CR8BaJUNaCtbcDui/TRhD4tJ0nfK9bVv3n+mzotQ==
-X-Received: by 2002:a7b:c1c3:: with SMTP id a3mr9046794wmj.111.1596731488952;
-        Thu, 06 Aug 2020 09:31:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=q/57p8pjM914Lcbk7bBCIqievLGqZS/SzbLkF/PRwXQ=;
+        b=eSRDbnyKa5nAzHAhbCVTATrXIeZheYufW0HR5puNgPzJ9lKhMOr2Vw6IcHt4oYtCw1
+         cmoSNRSv7ammG0VmwqcQ1sBU6ufH7JtlrMFf5C3XAI7nZ+c9GRMcfrfN+Jf5Rqst+gtz
+         B1Pc7iUdMj9OnipZ6777Mz4rjIbYoph+ERo08xpjNQaufiWZc7EZcMKbeLDE215i4JLp
+         mn1BIhAP+iajNvEYMZadS3Taaxk4z8eyyfghpDXmoyDW5uQ/mN/IUowuqg4ICiwDJRjX
+         8VBjsGZmg5/O4Gnd+PkmE+BYQJ6PW/8T9kHmiOQ3j2TXZhB6xOqCKfYSqfk3nBH+FGMJ
+         AusA==
+X-Gm-Message-State: AOAM530ZeM9UNxCgMOOM/dgRy1Gs5KmNg1txl+A8uvNgEKNWapskcd+r
+        gsJetvRVSFI/KGt6wdTho7a6t7vvkjQ=
+X-Google-Smtp-Source: ABdhPJxAesQbqbXg5mCZ+OU1K2tf6BHYH72efs+8li0fTcb6bfdNUKOyz5yU/K/UYMHymreyNE9JaQ==
+X-Received: by 2002:a1c:8094:: with SMTP id b142mr9284568wmd.59.1596731496969;
+        Thu, 06 Aug 2020 09:31:36 -0700 (PDT)
 Received: from localhost.localdomain ([87.120.218.65])
-        by smtp.googlemail.com with ESMTPSA id i66sm7468537wma.35.2020.08.06.09.31.27
+        by smtp.googlemail.com with ESMTPSA id i66sm7468537wma.35.2020.08.06.09.31.35
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Aug 2020 09:31:27 -0700 (PDT)
+        Thu, 06 Aug 2020 09:31:36 -0700 (PDT)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     robh+dt@kernel.org, bjorn.andersson@linaro.org,
         sibis@codeaurora.org, mka@chromium.org, dianders@chromium.org,
         georgi.djakov@linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/7] interconnect: Introduce xlate_extended()
-Date:   Thu,  6 Aug 2020 19:31:19 +0300
-Message-Id: <20200806163126.22667-1-georgi.djakov@linaro.org>
+Subject: [PATCH v2 5/7] arm64: dts: qcom: sdm845: Increase the number of interconnect cells
+Date:   Thu,  6 Aug 2020 19:31:24 +0300
+Message-Id: <20200806163126.22667-6-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200806163126.22667-1-georgi.djakov@linaro.org>
+References: <20200806163126.22667-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -63,58 +65,190 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the interconnect framework provides the xlate() callback for
-mapping the endpoints from phandle arguments in DT. This is implemented
-by the provider drivers. But the endpoints (or the path between the
-endpoints) might have an additional attributes, which should be parsed
-and populated. During previous discussions [1], it was suggested that
-adding more and more DT properties will not scale very well. So instead
-of adding DT properties, such data should be put into the 'interconnects'
-arguments.
+Increase the number of interconnect-cells, as now we can include
+the tag information. The consumers can specify the path tag as an
+additional argument to the endpoints.
 
-This patchset is introducing a new xlate_extended() callback, which
-would allow the interconnect provider drivers to parse additional data
-(such as path tags) and allow the framework to make use of them.
+Tested-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 44 ++++++++++++++--------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-Thanks to Sibi for the preliminary feedback and testing this patchset
-on the sc7180 platform.
-
-The patchset is based on linux-next (next-20200723).
-
-Changelog:
-v2:
-* Add a patch to update the DT documentation, which i missed initially.
-* Minor changes in commit text of patch 1/7. (Sibi)
-* Remove a useless null check in patch 4/7. (Sibi)
-* Print a warning if the number of DT args is higher than what we expect
-  in patch 3/7. (Matthias)
-* Pick Reviewed-by/Tested-by tags.
-* TODO: Replace tag IDs with macros in patches 5/7 and 7/7 when [2] lands.
-
-v1: http://lore.kernel.org/r/20200723130942.28491-1-georgi.djakov@linaro.org
-
-[1] https://lore.kernel.org/linux-devicetree/20200519185836.GA469006@bogus/
-[2] https://lore.kernel.org/r/20200801033215.1440-2-mdtipton@codeaurora.org
-
-Georgi Djakov (5):
-  interconnect: Introduce xlate_extended() callback
-  dt-bindings: interconnect: Document the support of optional path tag
-  interconnect: qcom: Implement xlate_extended() to parse tags
-  interconnect: qcom: sdm845: Replace xlate with xlate_extended
-  arm64: dts: qcom: sdm845: Increase the number of interconnect cells
-
-Sibi Sankar (2):
-  interconnect: qcom: sc7180: Replace xlate with xlate_extended
-  arm64: dts: qcom: sc7180: Increase the number of interconnect cells
-
- .../bindings/interconnect/interconnect.txt    |  24 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi          | 216 +++++++++---------
- arch/arm64/boot/dts/qcom/sdm845.dtsi          |  44 ++--
- drivers/interconnect/core.c                   |  73 ++++--
- drivers/interconnect/qcom/icc-rpmh.c          |  27 +++
- drivers/interconnect/qcom/icc-rpmh.h          |   1 +
- drivers/interconnect/qcom/sc7180.c            |   2 +-
- drivers/interconnect/qcom/sdm845.c            |   2 +-
- include/linux/interconnect-provider.h         |  17 +-
- 9 files changed, 248 insertions(+), 158 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index e506793407d8..94f5d27f2927 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -200,7 +200,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_0>;
+@@ -225,7 +225,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_100>;
+@@ -247,7 +247,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_200>;
+@@ -269,7 +269,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_300>;
+@@ -291,7 +291,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_400>;
+@@ -313,7 +313,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_500>;
+@@ -335,7 +335,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_600>;
+@@ -357,7 +357,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_700>;
+@@ -2011,49 +2011,49 @@ pcie1_lane: lanes@1c06200 {
+ 		mem_noc: interconnect@1380000 {
+ 			compatible = "qcom,sdm845-mem-noc";
+ 			reg = <0 0x01380000 0 0x27200>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		dc_noc: interconnect@14e0000 {
+ 			compatible = "qcom,sdm845-dc-noc";
+ 			reg = <0 0x014e0000 0 0x400>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		config_noc: interconnect@1500000 {
+ 			compatible = "qcom,sdm845-config-noc";
+ 			reg = <0 0x01500000 0 0x5080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		system_noc: interconnect@1620000 {
+ 			compatible = "qcom,sdm845-system-noc";
+ 			reg = <0 0x01620000 0 0x18080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		aggre1_noc: interconnect@16e0000 {
+ 			compatible = "qcom,sdm845-aggre1-noc";
+ 			reg = <0 0x016e0000 0 0x15080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		aggre2_noc: interconnect@1700000 {
+ 			compatible = "qcom,sdm845-aggre2-noc";
+ 			reg = <0 0x01700000 0 0x1f300>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+ 		mmss_noc: interconnect@1740000 {
+ 			compatible = "qcom,sdm845-mmss-noc";
+ 			reg = <0 0x01740000 0 0x1c100>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
+@@ -2156,8 +2156,8 @@ ipa: ipa@1e40000 {
+ 			clocks = <&rpmhcc RPMH_IPA_CLK>;
+ 			clock-names = "core";
+ 
+-			interconnects = <&aggre2_noc MASTER_IPA &mem_noc SLAVE_EBI1>,
+-				        <&aggre2_noc MASTER_IPA &system_noc SLAVE_IMEM>,
++			interconnects = <&aggre2_noc MASTER_IPA 0 &mem_noc SLAVE_EBI1 0>,
++					<&aggre2_noc MASTER_IPA 0 &system_noc SLAVE_IMEM 0>,
+ 					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_IPA_CFG>;
+ 			interconnect-names = "memory",
+ 					     "imem",
+@@ -3561,8 +3561,8 @@ usb_1: usb@a6f8800 {
+ 
+ 			resets = <&gcc GCC_USB30_PRIM_BCR>;
+ 
+-			interconnects = <&aggre2_noc MASTER_USB3_0 &mem_noc SLAVE_EBI1>,
+-					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_0>;
++			interconnects = <&aggre2_noc MASTER_USB3_0 0 &mem_noc SLAVE_EBI1 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
+ 			interconnect-names = "usb-ddr", "apps-usb";
+ 
+ 			usb_1_dwc3: dwc3@a600000 {
+@@ -3609,8 +3609,8 @@ usb_2: usb@a8f8800 {
+ 
+ 			resets = <&gcc GCC_USB30_SEC_BCR>;
+ 
+-			interconnects = <&aggre2_noc MASTER_USB3_1 &mem_noc SLAVE_EBI1>,
+-					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_1>;
++			interconnects = <&aggre2_noc MASTER_USB3_1 0 &mem_noc SLAVE_EBI1 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+ 			interconnect-names = "usb-ddr", "apps-usb";
+ 
+ 			usb_2_dwc3: dwc3@a800000 {
+@@ -4306,7 +4306,7 @@ lpasscc: clock-controller@17014000 {
+ 		gladiator_noc: interconnect@17900000 {
+ 			compatible = "qcom,sdm845-gladiator-noc";
+ 			reg = <0 0x17900000 0 0xd080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
