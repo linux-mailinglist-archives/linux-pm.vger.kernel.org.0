@@ -2,236 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DFE23F50E
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Aug 2020 00:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0BE23F521
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Aug 2020 01:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbgHGW7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Aug 2020 18:59:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58694 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726015AbgHGW7q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 7 Aug 2020 18:59:46 -0400
-Received: from earth.universe (unknown [95.33.152.0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5B61F20866;
-        Fri,  7 Aug 2020 22:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596841185;
-        bh=OKlwQpmZVQ3qO7aGJBHKETrCWwGnjbQlj5eQ6u796b4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BauPeCuOtKayFdlD3gtWq1yeXNsC3Xe2DCx5McCH/MrAv6RpNcPLX4M1rUltS3QDW
-         cOdr7zzSlkz9VytYHyjxoGvDSs61gnT1L377vWn/VDtL83IrM50U7gFFNxgbYZvGf8
-         ve/cW35XKcQXEApLrz9Yymf4dD83/FZ0y9ByzYT4=
-Received: by earth.universe (Postfix, from userid 1000)
-        id BEFD83C0C80; Sat,  8 Aug 2020 00:59:43 +0200 (CEST)
-Date:   Sat, 8 Aug 2020 00:59:43 +0200
-From:   Sebastian Reichel <sre@kernel.org>
+        id S1726198AbgHGXNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Aug 2020 19:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726166AbgHGXNB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Aug 2020 19:13:01 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432AFC061757
+        for <linux-pm@vger.kernel.org>; Fri,  7 Aug 2020 16:13:00 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a14so3029846wra.5
+        for <linux-pm@vger.kernel.org>; Fri, 07 Aug 2020 16:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=YL9zt2WbJU71Ga7dBvhNUaOuTYHvavWD2LcWl2hdkeQ=;
+        b=MEk0+oDcxuERPS6+TpI1fh80WorW8W3/693j0RsfCUY2mnT4NSTaA27wmxpwEV97+t
+         G9EyqKwnXK0jCl5kq58htMpvzBl76XR5Yyh2saUJIXAZ5oRNVeQpSINs+zTQUuFQ2D+8
+         Uafbik5MQcLpHqtyUEs9laHhCTRFndsrRY/5z4gzcAj2jxT96HZ/P/x+2j4b7hgCdWGd
+         8/i/cv7Jb0lyE6MHPmpSewbg9hcS+uZiNiERbA+3CbwSRP6Ych9bNj7zC+n8iyZ/V1IL
+         VIrUi9abmM638D+zQ7DEtinZ6n8gCwnb0ypxiN+Ie+qVWW7CcgveK0G3gqFA9bmsEngQ
+         Fh9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=YL9zt2WbJU71Ga7dBvhNUaOuTYHvavWD2LcWl2hdkeQ=;
+        b=czj5qJ4X3k4aGjhwZi+fC7FL4eIXuUWlBs4eU1cNyqjf8JALkfTMP1RKyraew8Qzy5
+         eCyefJ5A+o9zY+1hNYfRVI8GnJqCKQUtHzEOjqkbnlQb1gbebYXPa6ONhpHa3l2fLVw4
+         2cugCDm+Hb9zHsMTtckC94ZeCwnrXAqK/yAhjM71Guuog7kzE/zOj3EhlGaHXuImWQ6L
+         SDGspg6ZFVkHfiCVk9HyqTQqw/HHD9F/QcyvoosDMYpVAgoaQFUfrt1m3a62SZWp43h6
+         zeVfgsBFK/fEhqwSg+5J7FGP3H1tWA+F/I4oXr2HUxrjNCCEQuvSrrMINqY/wHOdpdYs
+         l8og==
+X-Gm-Message-State: AOAM530YCdltf6u4xUcdprW6y0eeOt8N1gD6ZfmzepJxwhwyk3U5gylM
+        I2660L1r38f2RxobojowcV35Jnz6RlCmcg==
+X-Google-Smtp-Source: ABdhPJy9eMExSO3JZlYfjT+S9umINTP7s5tBKiNZLG7O7ig3iEbWC0CeCyWsLgNPNHU/Jw6BiR4o2A==
+X-Received: by 2002:a5d:400e:: with SMTP id n14mr13690179wrp.75.1596841978607;
+        Fri, 07 Aug 2020 16:12:58 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:a9ac:cbdb:2935:5df0? ([2a01:e34:ed2f:f020:a9ac:cbdb:2935:5df0])
+        by smtp.googlemail.com with ESMTPSA id o2sm12939474wrh.70.2020.08.07.16.12.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2020 16:12:57 -0700 (PDT)
+Subject: Re: [GIT PULL] RESEND: thermal for v5.9-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [GIT PULL] power-supply changes for 5.9
-Message-ID: <20200807225943.cdfvw5m6h7ywgrmc@earth.universe>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Colin King <colin.king@canonical.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Lukasz Luba <Lukasz.Luba@arm.com>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Henry Yen <henry.yen@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <db1dc155-0c7c-f4eb-7fa6-047a78829a82@linaro.org>
+ <CAHk-=wgLt61owJ_eKwy43bBujxy3-s=xQXwsSi6VHME7SiAgiA@mail.gmail.com>
+ <b903cdd8-cbb5-1a6a-3943-9bb019f1eed7@linaro.org>
+ <CAHk-=wgSJwbghhQYCoAVq6ewGKZ+rZvxeKvxb-o_gMt7d7-Nbw@mail.gmail.com>
+ <88678a80-4ca2-5cb0-d9c5-3e64b7f113f5@linaro.org>
+ <CAHk-=whe9+soLhAtO2hctL4PgnnG67BGHpSPSyxTLAe0c2zqmQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <b3d73eaa-4954-dbe5-3a57-edf7bb502335@linaro.org>
+Date:   Sat, 8 Aug 2020 01:12:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n7bt4iw4u6yl7qkt"
-Content-Disposition: inline
+In-Reply-To: <CAHk-=whe9+soLhAtO2hctL4PgnnG67BGHpSPSyxTLAe0c2zqmQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 07/08/2020 20:12, Linus Torvalds wrote:
+> On Fri, Aug 7, 2020 at 11:06 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> Ok, I will send a fix.
+> 
+> I ended up doing it during my morning routine of looking around for,
+> and applying, random patches.
+> 
+> So it's commit 0f5d0a4c01cc ("thermal: don't make THERMAL_NETLINK
+> 'default y'") in my tree now.
 
---n7bt4iw4u6yl7qkt
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Great, thank you!
 
-Hi Linus,
 
-Please pull the power-supply changes for the 5.9 development cycle.
-Stephen mentioned one trivial merge conflict between the
-power-supply tree and the set_fs tree and has the correct solution:
+  -- Daniel
 
-https://lore.kernel.org/linux-next/20200727210137.01a5d03d@canb.auug.org.au/
 
-The following changes since commit b3a9e3b9622ae10064826dccb4f7a52bd88c7407:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-  Linux 5.8-rc1 (2020-06-14 12:45:04 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/for-v5.9
-
-for you to fetch changes up to 46cbd0b05799e8234b719d18f3a4b27679c4c92e:
-
-  power: supply: wilco_ec: Add long life charging mode (2020-07-31 14:33:56=
- +0200)
-
-----------------------------------------------------------------
-power supply and reset changes for the v5.9 series
-
-power-supply core:
- * add COOL/WARM/HOT state from JEITA JISC8712:2015 specification
- * convert simple-battery DT binding to YAML
- * add long-life charging mode
-
-battery/charger drivers:
- * bq25150: new charger driver
- * bq27xxx: add support for BQ27z561 and BQ28z610
- * max17040: support CAPACITY_ALERT_MIN
- * sbs-battery: add PEC support
- * wilco-ec: support long-life charging mode
- * bq25890: fix DT binding
- * misc. fixes and cleanups
-
-reset drivers:
- * linkstation: new reset driver
-
-----------------------------------------------------------------
-Alexander A. Klimov (2):
-      power: reset: keystone-reset: Replace HTTP links with HTTPS ones
-      power: supply: bq2xxxx: Replace HTTP links with HTTPS ones
-
-Chunyan Zhang (2):
-      math64: New DIV_S64_ROUND_CLOSEST helper
-      power: supply: sc27xx: prevent adc * 1000 from overflow
-
-Crag Wang (1):
-      power: supply: wilco_ec: Add long life charging mode
-
-Dan Murphy (6):
-      power_supply: Add additional health properties to the header
-      dt-bindings: power: Convert battery.txt to battery.yaml
-      dt-bindings: power: Add BQ27Z561 compatible
-      power: supply: bq27xxx_battery: Add the BQ27Z561 Battery monitor
-      dt-bindings: power: Add BQ28z610 compatible
-      power: supply: bq27xxx_battery: Add the BQ28z610 Battery monitor
-
-Daniel Gonz=E1lez Cabanelas (1):
-      power: reset: add driver for LinkStation power off
-
-Dinghao Liu (1):
-      power: supply: bq24190_charger: Fix runtime PM imbalance on error
-
-Jonathan Bakker (1):
-      power: supply: max8998_charger: Correct ONLINE and add STATUS props
-
-Keyur Patel (1):
-      power: supply: axp20x_usb_power: fix spelling mistake
-
-Krzysztof Kozlowski (4):
-      dt-bindings: power: supply: bq25890: Indent example with tabs
-      dt-bindings: power: supply: bq25890: Document required interrupt
-      power: supply: cpcap-battery: Fix kerneldoc of cpcap_battery_read_acc=
-umulated()
-      power: supply: Fix kerneldoc of power_supply_temp2resist_simple()
-
-LH Lin (1):
-      power: supply: test_power: Fix battery_current initial value
-
-Matheus Castello (1):
-      power: supply: max17040: Add POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN
-
-Peng Fan (1):
-      power: supply: rt5033_battery: Fix error code in rt5033_battery_probe=
-()
-
-Randy Dunlap (1):
-      power: fix duplicated words in bq2415x_charger.h
-
-Ricardo Rivera-Matos (2):
-      dt-bindings: power: Add the bindings for the bq2515x family of charge=
-rs.
-      power: supply: bq25150 introduce the bq25150
-
-Sebastian Reichel (4):
-      dt-bindings: power: supply: gpio-charger: convert to yaml
-      power: supply: gpio-charger: Make gpios optional
-      power: supply: sbs-battery: use i2c_smbus_read_block_data()
-      power: supply: sbs-battery: add PEC support
-
-Tom Rix (1):
-      power: supply: check if calc_soc succeeded in pm860x_init_battery
-
-Wang Qing (1):
-      power: supply: use kobj_to_dev
-
-Yongqiang Liu (1):
-      power: Convert to DEFINE_SHOW_ATTRIBUTE
-
- Documentation/ABI/testing/sysfs-class-power        |    3 +-
- Documentation/ABI/testing/sysfs-class-power-wilco  |    4 +
- .../devicetree/bindings/power/supply/battery.txt   |   86 +-
- .../devicetree/bindings/power/supply/battery.yaml  |  144 +++
- .../devicetree/bindings/power/supply/bq2515x.yaml  |   93 ++
- .../devicetree/bindings/power/supply/bq25890.txt   |   30 +-
- .../devicetree/bindings/power/supply/bq27xxx.yaml  |    2 +
- .../bindings/power/supply/gpio-charger.txt         |   31 -
- .../bindings/power/supply/gpio-charger.yaml        |   63 ++
- drivers/power/reset/Kconfig                        |   11 +
- drivers/power/reset/Makefile                       |    1 +
- drivers/power/reset/keystone-reset.c               |    2 +-
- drivers/power/reset/linkstation-poweroff.c         |  136 +++
- drivers/power/supply/88pm860x_battery.c            |    6 +-
- drivers/power/supply/Kconfig                       |   13 +
- drivers/power/supply/Makefile                      |    1 +
- drivers/power/supply/axp20x_usb_power.c            |    2 +-
- drivers/power/supply/bq2415x_charger.c             |   16 +-
- drivers/power/supply/bq24190_charger.c             |    4 +-
- drivers/power/supply/bq24257_charger.c             |    6 +-
- drivers/power/supply/bq2515x_charger.c             | 1169 ++++++++++++++++=
-++++
- drivers/power/supply/bq27xxx_battery.c             |  160 ++-
- drivers/power/supply/bq27xxx_battery_hdq.c         |    2 +-
- drivers/power/supply/bq27xxx_battery_i2c.c         |    6 +-
- drivers/power/supply/cpcap-battery.c               |    2 +-
- drivers/power/supply/da9030_battery.c              |   12 +-
- drivers/power/supply/gpio-charger.c                |   38 +-
- drivers/power/supply/max17040_battery.c            |   51 +-
- drivers/power/supply/max8998_charger.c             |   25 +-
- drivers/power/supply/power_supply_core.c           |    2 +-
- drivers/power/supply/power_supply_sysfs.c          |    6 +-
- drivers/power/supply/rt5033_battery.c              |    2 +-
- drivers/power/supply/sbs-battery.c                 |   89 +-
- drivers/power/supply/sc27xx_fuel_gauge.c           |    9 +-
- drivers/power/supply/test_power.c                  |    2 +-
- drivers/power/supply/wilco-charger.c               |    5 +
- include/linux/math64.h                             |   19 +
- include/linux/power/bq2415x_charger.h              |    4 +-
- include/linux/power/bq27xxx_battery.h              |    2 +
- include/linux/power_supply.h                       |    4 +
- 40 files changed, 2044 insertions(+), 219 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/supply/battery.=
-yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/bq2515x.=
-yaml
- delete mode 100644 Documentation/devicetree/bindings/power/supply/gpio-cha=
-rger.txt
- create mode 100644 Documentation/devicetree/bindings/power/supply/gpio-cha=
-rger.yaml
- create mode 100644 drivers/power/reset/linkstation-poweroff.c
- create mode 100644 drivers/power/supply/bq2515x_charger.c
-
---n7bt4iw4u6yl7qkt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl8t3M0ACgkQ2O7X88g7
-+poUrQ//eWJTZcVDFsWgWepCSQSYXVCnyFlQtX4yPjOh3FbdskDbaV4Lfw5oaRH8
-Q6wXY0lhEAHqQSYQac5BNTRMx3diA7UzjIqy5ovUMnB9Q886BX0D1VC9wcHyDvEL
-0JgF/8mD/DK75dAHC3DpcEyW7NcZ5dlKg4eCLxtL3e+Ak6s7/iNqm/F9DU+zPwLq
-W6h9u8+fr8jbbzfWdo/PkUSyemi/LvUHqC/vwywZZWSzOVBrRspFb54GFiM34/rJ
-LLTa6W4vuAS2yLqif5W+1e+qYy0/+LW8vLuAYE7ZBPRGPj1Fb+YqAy9OWVfJa0ab
-Ab2k1TwLHtz0CKdTn8lS/OpQdMBMmdVSQhN5VaMWrEmDHvBzyr2gk3r1Il3s1OMM
-FbXbtgZBOplCADANiqZEWc1uz4ztU4Uov4DKm8VNdOY6jJRPBCsz5XeLoSecKBmc
-MycotdH2dN0ii0DGRYFfctPPGqSPNxdwYiwcoTwL9o9F0OcYg3uLWUHpjL+rx2TZ
-vlR9yY1n83CE7lCg8m3iUsxALwOoRQ9Z8PdObuxyvi4yBOhXw0oWreRDsJEimgIQ
-OZMiXPY38GOTQY7E1zjOWFOBzwl4iVXvGFXK6A17EMUM+/EALuX2PvJ5EfVCdtgs
-eiOwSXNXiKLRPQ8kGtCzO0ydli9duRpZICVP/GHbSKA8AdbiWgo=
-=1wFC
------END PGP SIGNATURE-----
-
---n7bt4iw4u6yl7qkt--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
