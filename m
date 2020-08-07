@@ -2,68 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DF623E6E4
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Aug 2020 06:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DC023E6E8
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Aug 2020 06:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726045AbgHGE4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Aug 2020 00:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
+        id S1726123AbgHGE5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Aug 2020 00:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbgHGE4i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Aug 2020 00:56:38 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029ACC061574
-        for <linux-pm@vger.kernel.org>; Thu,  6 Aug 2020 21:56:37 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id f9so315474pju.4
-        for <linux-pm@vger.kernel.org>; Thu, 06 Aug 2020 21:56:37 -0700 (PDT)
+        with ESMTP id S1725936AbgHGE5m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Aug 2020 00:57:42 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20892C061756
+        for <linux-pm@vger.kernel.org>; Thu,  6 Aug 2020 21:57:42 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id u10so489635plr.7
+        for <linux-pm@vger.kernel.org>; Thu, 06 Aug 2020 21:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=Wd1MfQvSWLmmJO4zDD5azoRIzS7zA7zFDWuYNS3rHPI=;
-        b=wdxYhCbW/m9+zY/y0s3LI+VPcTgpUnboEDxgwnGr6LXNgCYUf5jwgSrVZ9BP9ToPOC
-         ObrAx0k+uhECSfgtk3CqG7vaa7z/DqKeS3kuNDs0gmWC9QUkHXWs3AH8xvhmwKQRC0JC
-         Dg/eOOioHwt5SvDMzv6zMwZ8ALjjGcHqRaQExTVpmEiH6ZsDa+4kkE3gZwlayWUHWH72
-         h7Mvr1zwPrdplvHtkSj8G6PVOUFheA7Wh3JF5zz2IK7MBBNaO52GZlf5GxAb0woqOiJb
-         7D4mu4iACmUXP9uKJAzyr4MmiIQiOKvyfM15qk8+28/xfJWbY9IUbT46EwxyqcLUCoGo
-         tVIA==
+        bh=RKSuRZnH7B8qwd05Kn2/tUaiHF4PaG/VCbDqHCt8jc8=;
+        b=OjdveiZ5BMzMt4uuuBFfbVyKjxX6XK2+AGeN6VCnojt4THMeCzJT0uoWCWUfuKZUNT
+         U2tctUfwtrU11T1yawCmWqczY0+tTEFo8wHCthmuevSco7dxSco6nitoSK2whpBy9jMl
+         RsY1NoVjR7dHTR9SvOS3XvJAG4jbBt9xg95/AiM33vpXDzIg09ca/ZDnOkmV0VNYiy86
+         IW8iBivM1FBJTzvuYi0zObHF53ambZhfBAhxD0Ab9jIvT9upu+crAr0kb4OuIaE0ftUl
+         Doul1zkdXMBaLdhTEgLYq/nJlbzn3w9Ojw87XLwYYXhRux1fGvjOQ0v956I1dXJwGGnu
+         VNYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Wd1MfQvSWLmmJO4zDD5azoRIzS7zA7zFDWuYNS3rHPI=;
-        b=ZkluhKGMKAGhkokKd3aA2+1Q4kQMSuqo7Pb1jnnck2UFjQloy0YUwBEbI9lTvRkM+1
-         GtFapUTId0S+wvuItKBxUiV1bXwWjEvtVsoqlPCKEjz8Ayc2dmtYX5oW8bGxFUoTNrSX
-         pq5VvbylDnPOlVW/HMsnQqtDFR5OXSdkpJjmWcHmKjg0Y94d4XHr84efPU0ybhFI1N3g
-         J9dd59eH2an6qtvyfpJ2oQYo6eXy8Gpp0I0hrYcO/01pxZQgOeDi0+yXfYg39R6wKc4/
-         xPZm0Y4Ud0jq3bVDGnGGVof2f4lbwn4oLWp/nYMY5h7kOHhKISZMx1/Ivecm4FYbYKjg
-         ZMUQ==
-X-Gm-Message-State: AOAM533erHG01Vihxkqw+UTzxC5DdhugpmRYheaRmCrSSIOilWVnAG0p
-        5fMEigW1DX7xJ45G2vB2ZkkyRA==
-X-Google-Smtp-Source: ABdhPJz9XIc3pjV5fb0FJWvryYU8Y62DTGqhWirVLCiOsji8ipi2ZdmEZzkrs4uzUoaN9T6Vh7TSoQ==
-X-Received: by 2002:a17:90a:3ccc:: with SMTP id k12mr10904883pjd.184.1596776197482;
-        Thu, 06 Aug 2020 21:56:37 -0700 (PDT)
+        bh=RKSuRZnH7B8qwd05Kn2/tUaiHF4PaG/VCbDqHCt8jc8=;
+        b=bt0td7+xhQ0u3tjh2bSjbq7JP7LeZ/IjBA1hMKjmMVgnQGufS9LOhWvAs7PSVIvPrS
+         w3qohrtZO8THSNLl9aN0Su5zij1nbt9vpmjRW1cjXzgPgVnYuFx3piQh4rvKxSJ3YGAh
+         gdTj9rW3LbaXUKqnyXKxKBoaDL9LxdjxEpqTJCt2SQ3z9hOGgpbNscpsXNWAteVI2s0G
+         i0GoqiUb0zOyqXklScFJZvUD5y6y67zPuhTDPOsuSxwgfNeKpYaek9d6ui50PjbfM6Iu
+         6MbX/K/jQ9I5Ryw8ml7qR9/K9NOjGcBgrtH9Y1VCQtJuIBbT88YFIlF/ntnmDHf5RUV8
+         iWDg==
+X-Gm-Message-State: AOAM531H6p6N3X+EjlQqW8pwRgezIBqDL9Yd4/E+CY/zOdoxgaZCX0M+
+        5vGNjZuGG3i+76+L2RIFa/zrGQ==
+X-Google-Smtp-Source: ABdhPJzuYLI2KYeV5yyGVoEvDb+KX0w0VZv7SeXrBF18U5ssl8L0wVqq9k258KyhPf3jdnGkhtWKRg==
+X-Received: by 2002:a17:90a:c7:: with SMTP id v7mr11862593pjd.139.1596776261665;
+        Thu, 06 Aug 2020 21:57:41 -0700 (PDT)
 Received: from localhost ([223.190.59.99])
-        by smtp.gmail.com with ESMTPSA id e14sm11011839pfh.108.2020.08.06.21.56.36
+        by smtp.gmail.com with ESMTPSA id f63sm8326666pjk.53.2020.08.06.21.57.40
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Aug 2020 21:56:36 -0700 (PDT)
-Date:   Fri, 7 Aug 2020 10:26:30 +0530
+        Thu, 06 Aug 2020 21:57:41 -0700 (PDT)
+Date:   Fri, 7 Aug 2020 10:27:35 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
         Kukjin Kim <kgene@kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 35/41] ARM: s3c: remove cpufreq header dependencies
-Message-ID: <20200807045630.zq6gayz65rdxaiy4@vireshk-mac-ubuntu>
+Subject: Re: [PATCH v2 36/41] cpufreq: s3c2412: use global
+ s3c2412_cpufreq_setrefresh
+Message-ID: <20200807045735.xnury5wtxst3vfyl@vireshk-mac-ubuntu>
 References: <20200806181932.2253-1-krzk@kernel.org>
- <20200806182059.2431-35-krzk@kernel.org>
+ <20200806182059.2431-36-krzk@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200806182059.2431-35-krzk@kernel.org>
+In-Reply-To: <20200806182059.2431-36-krzk@kernel.org>
 User-Agent: NeoMutt/20170609 (1.8.3)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
@@ -73,43 +73,21 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 06-08-20, 20:20, Krzysztof Kozlowski wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> The cpufreq drivers are split between the machine directory
-> and the drivers/cpufreq directory. In order to share header
-> files after we convert s3c to multiplatform, those headers
-> have to live in a different global location.
+> There are two identical copies of the s3c2412_cpufreq_setrefresh
+> function: a static one in the cpufreq driver and a global
+> version in iotiming-s3c2412.c.
 > 
-> Move them to linux/soc/samsung/ in lack of a better place.
+> As the function requires the use of a hardcoded register address
+> from a header that we want to not be visible to drivers, just
+> move the existing global function and add a declaration in
+> one of the cpufreq header files.
 > 
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  arch/arm/mach-s3c24xx/common.c                         |  1 -
->  arch/arm/mach-s3c24xx/cpufreq-utils.c                  |  2 +-
->  arch/arm/mach-s3c24xx/iotiming-s3c2410.c               |  2 +-
->  arch/arm/mach-s3c24xx/iotiming-s3c2412.c               |  2 +-
->  arch/arm/mach-s3c24xx/mach-bast.c                      |  2 +-
->  arch/arm/mach-s3c24xx/mach-osiris-dvs.c                |  2 +-
->  arch/arm/mach-s3c24xx/mach-osiris.c                    |  2 +-
->  arch/arm/mach-s3c24xx/pll-s3c2410.c                    |  4 ++--
->  arch/arm/mach-s3c24xx/pll-s3c2440-12000000.c           |  4 ++--
->  arch/arm/mach-s3c24xx/pll-s3c2440-16934400.c           |  4 ++--
->  arch/arm/mach-s3c24xx/s3c2410.c                        |  1 -
->  arch/arm/mach-s3c24xx/s3c2412.c                        |  1 -
->  arch/arm/mach-s3c24xx/s3c244x.c                        |  2 --
->  arch/arm/mach-s3c64xx/s3c6400.c                        |  1 -
->  arch/arm/mach-s3c64xx/s3c6410.c                        |  2 +-
->  arch/arm/plat-samsung/include/plat/cpu.h               |  9 ---------
->  drivers/cpufreq/s3c2410-cpufreq.c                      |  5 ++---
->  drivers/cpufreq/s3c2412-cpufreq.c                      |  5 ++---
->  drivers/cpufreq/s3c2440-cpufreq.c                      |  5 ++---
->  drivers/cpufreq/s3c24xx-cpufreq-debugfs.c              |  2 +-
->  drivers/cpufreq/s3c24xx-cpufreq.c                      |  5 ++---
->  .../linux/soc/samsung/s3c-cpu-freq.h                   |  4 ++++
->  .../linux/soc/samsung/s3c-cpufreq-core.h               |  6 +++++-
->  include/linux/soc/samsung/s3c-pm.h                     | 10 ++++++++++
->  24 files changed, 41 insertions(+), 42 deletions(-)
->  rename arch/arm/plat-samsung/include/plat/cpu-freq.h => include/linux/soc/samsung/s3c-cpu-freq.h (97%)
->  rename arch/arm/plat-samsung/include/plat/cpu-freq-core.h => include/linux/soc/samsung/s3c-cpufreq-core.h (98%)
+>  drivers/cpufreq/s3c2412-cpufreq.c            | 23 --------------------
+>  include/linux/soc/samsung/s3c-cpufreq-core.h |  1 +
+>  2 files changed, 1 insertion(+), 23 deletions(-)
 
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
