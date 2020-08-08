@@ -2,136 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FE223F675
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Aug 2020 06:36:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4930423F712
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Aug 2020 11:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbgHHEfQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Aug 2020 00:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbgHHEfQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Aug 2020 00:35:16 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D01C061756
-        for <linux-pm@vger.kernel.org>; Fri,  7 Aug 2020 21:35:16 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id 17so2210431pfw.9
-        for <linux-pm@vger.kernel.org>; Fri, 07 Aug 2020 21:35:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=FLH00sdB350zJ9xfj23oogVpb2S3tQu3JW6EcRNgLew=;
-        b=jxsmsVrPMXk3ia55RuurLWnSF4l/zKLQ3vl9KAAZyocpecHvuHBmvqNZ3/XplYR3Gu
-         n64wEa8PfUTVNoNBErV1lJqro5vuj1nM156YV6puxX0VwIGA00GjYcltZ/n0CHtTmuzl
-         K2dCPiCPxd74wNDhXQLkKGBo2IVHvYaeYFNG01vgjfXIz8zc4ApEPfoR14VwkWPo/3jX
-         gsEkm2oobSufzAL5Borf0uY3W1ZJuoPEjN+7yEoaVyebCPQbU6AoPggfRtKb3JqQ42/A
-         JwqVVpbzfnkJNscvxEW48HhBsrwYsNzeGeVgzqGq0KhbSns0HdL3r9jTSBsMGRJ+8XlJ
-         8GKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=FLH00sdB350zJ9xfj23oogVpb2S3tQu3JW6EcRNgLew=;
-        b=jy3SgdKyX52TW15EZgAMyQbBqVNqJcisJachSE2bbeesdOcOtemrRN6jZoaoBHBFPm
-         E1miBEMUtYsNaKrADHTKj9LeEXtBdu/dY9Uvv5JmJCylS5oeiw2JZbJSVvpdMip6m5cc
-         iSuFTRBnYmbJGY+5CYblFciGAEa89bZvxWsKt1VCF5yqSoe+TOIu17VcyTkyAd0r9HIz
-         TYSgyBgAtCmxYsGKO1ei/GbviKq6EzvkP1aFR/H5z/ByrJgc7WxUefixjCJ/cjG7dUk5
-         X278gBb5aRIYiKkfpuGN0aXvJx+MLvq3DNhwa68ijJaGRQUK0+eNKPXUce7OTiGLhgAE
-         HZkw==
-X-Gm-Message-State: AOAM530mv4L5cOPKA6f3YA2KsJfmZWa5p/iOJY9iSab5J2OGer0h5uL/
-        dJNCE03RYYnVh+khm+BZt7avCg==
-X-Google-Smtp-Source: ABdhPJwNTHQJhOGti3fSdIgHT3N5Ze4RXdBPrXTV4+YSlALH9wv8HLqMwbWjlTEZZ6jWzuIuQz6l9Q==
-X-Received: by 2002:a63:485f:: with SMTP id x31mr14308176pgk.49.1596861315980;
-        Fri, 07 Aug 2020 21:35:15 -0700 (PDT)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id u24sm14607963pfm.211.2020.08.07.21.35.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2020 21:35:15 -0700 (PDT)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>, linux-pm@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Todd Kjos <tkjos@google.com>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>
-Subject: [RFC][PATCH] pinctrl: Rework driver_deferred_probe_check_state() evaluation since default timeout has changed
-Date:   Sat,  8 Aug 2020 04:35:12 +0000
-Message-Id: <20200808043512.106865-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726198AbgHHJaB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Aug 2020 05:30:01 -0400
+Received: from mga03.intel.com ([134.134.136.65]:38270 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726074AbgHHJaA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 8 Aug 2020 05:30:00 -0400
+IronPort-SDR: nlh7/TtQ5Q0rAZ7Sm9nUhnJdljjqkWq0hkaz9P1U1SNoyaPDFJjJhj/68KynhQl1vKRdeeu606
+ 0AS/Y8J3X3Jw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9706"; a="153252133"
+X-IronPort-AV: E=Sophos;i="5.75,449,1589266800"; 
+   d="scan'208";a="153252133"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2020 02:29:59 -0700
+IronPort-SDR: Sjf/jNLYpjAyKHHpGtanYcDzqulvdgT2xSHxIwEVCzG1xqr4iWMiXVBsys6ERaTtS3rrIRj5Md
+ +FyOVnv/0arw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,449,1589266800"; 
+   d="scan'208";a="293905816"
+Received: from lkp-server02.sh.intel.com (HELO 65e25449d42f) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 08 Aug 2020 02:29:58 -0700
+Received: from kbuild by 65e25449d42f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k4LAr-00004f-Hg; Sat, 08 Aug 2020 09:29:57 +0000
+Date:   Sat, 08 Aug 2020 17:29:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ e3198ed26e1361c3863ba3ad7c9cf2cdd063cdfd
+Message-ID: <5f2e707d.8Q031Y3M5vLfPm0P%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In commit bec6c0ecb243 ("pinctrl: Remove use of
-driver_deferred_probe_check_state_continue()"), we removed the
-use of driver_deferred_probe_check_state_continue() which
-effectively never returned -ETIMED_OUT, with the
-driver_deferred_probe_check_state() function that had been
-reworked to properly return ETIMED_OUT when the deferred probe
-timeout expired. Along with that change, we set the default
-timeout to 30 seconds.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: e3198ed26e1361c3863ba3ad7c9cf2cdd063cdfd  Merge branch 'acpi-soc' into bleeding-edge
 
-However, since moving the timeout to 30 seconds caused some
-issues for some users with optional dt links, we set the
-default timeout back to zero - see commit ce68929f07de ("driver
-core: Revert default driver_deferred_probe_timeout value to 0")
+elapsed time: 724m
 
-This in essence changed the behavior of the pinctrl's usage
-of driver_deferred_probe_check_state(), as it now would return
-ETIMED_OUT by default. Thierry reported this caused problems with
-resume on tegra platforms.
+configs tested: 74
+configs skipped: 3
 
-Thus this patch tweaks the pinctrl logic so that it behaves as
-before. If modules are enabled, we'll only return EPROBE_DEFERRED
-while we're missing drivers linked in the DT.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Cc: linux-pm@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Thierry Reding <treding@nvidia.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Saravana Kannan <saravanak@google.com>
-Cc: Todd Kjos <tkjos@google.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Kevin Hilman <khilman@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Rob Herring <robh@kernel.org>
-Fixes: bec6c0ecb243 ("pinctrl: Remove use of driver_deferred_probe_check_state_continue()")
-Fixes: ce68929f07de ("driver core: Revert default driver_deferred_probe_timeout value to 0")
-Reported-by: Thierry Reding <thierry.reding@gmail.com>
-Signed-off-by: John Stultz <john.stultz@linaro.org>
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                         microdev_defconfig
+sparc64                             defconfig
+powerpc                    amigaone_defconfig
+m68k                          sun3x_defconfig
+parisc                generic-32bit_defconfig
+h8300                    h8300h-sim_defconfig
+mips                 decstation_r4k_defconfig
+sh                   rts7751r2dplus_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a004-20200808
+i386                 randconfig-a005-20200808
+i386                 randconfig-a001-20200808
+i386                 randconfig-a003-20200808
+i386                 randconfig-a002-20200808
+i386                 randconfig-a006-20200808
+x86_64               randconfig-a013-20200807
+x86_64               randconfig-a011-20200807
+x86_64               randconfig-a012-20200807
+x86_64               randconfig-a016-20200807
+x86_64               randconfig-a015-20200807
+x86_64               randconfig-a014-20200807
+i386                 randconfig-a011-20200807
+i386                 randconfig-a012-20200807
+i386                 randconfig-a013-20200807
+i386                 randconfig-a015-20200807
+i386                 randconfig-a014-20200807
+i386                 randconfig-a016-20200807
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
 ---
- drivers/pinctrl/devicetree.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-index c6fe7d64c913..09ddf567ccb4 100644
---- a/drivers/pinctrl/devicetree.c
-+++ b/drivers/pinctrl/devicetree.c
-@@ -129,9 +129,8 @@ static int dt_to_map_one_config(struct pinctrl *p,
- 		if (!np_pctldev || of_node_is_root(np_pctldev)) {
- 			of_node_put(np_pctldev);
- 			ret = driver_deferred_probe_check_state(p->dev);
--			/* keep deferring if modules are enabled unless we've timed out */
--			if (IS_ENABLED(CONFIG_MODULES) && !allow_default &&
--			    (ret == -ENODEV))
-+			/* keep deferring if modules are enabled */
-+			if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
- 				ret = -EPROBE_DEFER;
- 			return ret;
- 		}
--- 
-2.17.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
