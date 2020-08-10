@@ -2,121 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9156624022A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 09:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE226240232
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 09:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbgHJHCE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Aug 2020 03:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgHJHCE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Aug 2020 03:02:04 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80754C061786
-        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 00:02:04 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ha11so4418675pjb.1
-        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 00:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pZ2qWIvH6uYgIORKPoTfrdoIgrgh2dDxOhXUmAE4Cf8=;
-        b=KpnqMHq7NBNilrVqaRbw3aKNsVXzWCb5INK7cp772AVWrsz4eH2oMHnii03HUKebDF
-         sKwmAcBjk7W6fuU6t8JkjjFD4fW5OVsJA0Xkjnvk/fFKQuVuOaKBrsDpzhC5PL11XSji
-         nZRnV82G0uWGtneq1UepSdXDlm+v5tMeDGt3g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pZ2qWIvH6uYgIORKPoTfrdoIgrgh2dDxOhXUmAE4Cf8=;
-        b=Ua9aTLNwU4FNN9kfRrP2O1qyDrJd4qLSRr/0Vf/ccmwZuf/5dkJ7TlKWhF1UGqp+84
-         eQJk6qSILwKq7Oi3KZOZfUg3VgstM/vqVN3M3B9Hre00otcHkRKIdTWVD9IFvkU8SV9m
-         vsL+4hKF4AZP/7iL+OFoXtQMVBo6MS2C5N5ZbfLTngOcMiGnGXlfflC7/id7ukbr7YrS
-         427KGu0LirzRYPYXBDj79pu0yK5IDPj1gpT7dUUKphQmOnAoJtAO4d0ZIq7fsgiLLrOD
-         hKn9U0pjy4Mu0vxBfFQBXxhr0CKI+RglcBQnUi6mKjyBlzAn5dSVo8DDCt88Wh11BbwZ
-         SbGA==
-X-Gm-Message-State: AOAM530xp7/hpLufR0Kxto0sQ7ACSISeUTROfp4gX2s968IlS13Lv0U3
-        iiNXiPOqpcOFTAYxI6MKPkgDsw==
-X-Google-Smtp-Source: ABdhPJwq29g5B+z9vOnN/8SxV/4lwZhNZJ3DXjSvTK3I8zP9tzjif4SPCX6yHfMVVm+9lAwuebTscg==
-X-Received: by 2002:a17:90a:ca87:: with SMTP id y7mr24937606pjt.102.1597042924000;
-        Mon, 10 Aug 2020 00:02:04 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id w7sm20620571pfi.164.2020.08.10.00.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2020 00:02:03 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH] power: supply: sbs-battery: don't assume i2c errors as battery disconnect
-Date:   Mon, 10 Aug 2020 15:01:59 +0800
-Message-Id: <20200810070159.662863-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726115AbgHJHIb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Aug 2020 03:08:31 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:42243 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbgHJHI3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 Aug 2020 03:08:29 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597043308; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=DWno83mBRJaK7NOCf0kx0lg1MeEy1FowAQbEwyuoYr4=; b=eN6FIskGg7sU0DjXA5lxtZ0jb2akfaiUgEJtIeItOVWI6NFb2SdDBaJMQ4sY1AHL6Z8zHxgr
+ OHeZpSZNA5SOihl5O9H4S0l0TOVJeoD0nccs8suO3Yl9V+ogmAXQTUorvG3if5g8t4vcfql9
+ S5xxUCmjq371XKHwFUJSGARpkaw=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 5f30f20d1e4d3989d4ed2b27 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 10 Aug 2020 07:06:53
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 64E17C433CB; Mon, 10 Aug 2020 07:06:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7C2E4C433C6;
+        Mon, 10 Aug 2020 07:06:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7C2E4C433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
+Date:   Mon, 10 Aug 2020 12:36:19 +0530
+Message-Id: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Current sbs-battery considers all smbus errors as diconnection events
-when battery-detect pin isn't supplied, and restored to present state back
-on any successful transaction were made.
+dev_pm_opp_set_rate() can now be called with freq = 0 inorder
+to either drop performance or bandwidth votes or to disable
+regulators on platforms which support them.
+In such cases, a subsequent call to dev_pm_opp_set_rate() with
+the same frequency ends up returning early because 'old_freq == freq'
+Instead make it fall through and put back the dropped performance
+and bandwidth votes and/or enable back the regulators.
 
-This can leads to unlimited state changes between present and !present
-when one unsupported command was requested and other following commands
-were successful, e.g. udev rules tries to read multiple properties.
-
-This patch checks battery presence by reading well-known register to
-check battery existence.
-
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes")
+Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 ---
- drivers/power/supply/sbs-battery.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/opp/core.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 73461321eb05..483f814385a3 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -875,10 +875,17 @@ static int sbs_get_property(struct power_supply *psy,
- 		return -EINVAL;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 0c8c74a..a994f30 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -901,6 +901,9 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 
+ 	/* Return early if nothing to do */
+ 	if (old_freq == freq) {
++		if (opp_table->required_opp_tables || opp_table->regulators ||
++		    opp_table->paths)
++			goto skip_clk_only;
+ 		dev_dbg(dev, "%s: old/new frequencies (%lu Hz) are same, nothing to do\n",
+ 			__func__, freq);
+ 		ret = 0;
+@@ -919,6 +922,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 		goto put_opp_table;
  	}
  
--	if (!chip->gpio_detect &&
--		chip->is_present != (ret >= 0)) {
--		sbs_update_presence(chip, (ret >= 0));
--		power_supply_changed(chip->power_supply);
-+	if (!chip->gpio_detect && chip->is_present != (ret >=0)) {
-+		bool old_present = chip->is_present;
-+		union power_supply_propval val;
-+
-+		ret = sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+
-+		sbs_update_presence(chip, !ret && !!(val.intval));
-+
-+		if (old_present != chip->is_present)
-+			power_supply_changed(chip->power_supply);
++skip_clk_only:
+ 	temp_freq = old_freq;
+ 	old_opp = _find_freq_ceil(opp_table, &temp_freq);
+ 	if (IS_ERR(old_opp)) {
+@@ -954,8 +958,10 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 						 IS_ERR(old_opp) ? NULL : old_opp->supplies,
+ 						 opp->supplies);
+ 	} else {
++		ret = 0;
+ 		/* Only frequency scaling */
+-		ret = _generic_set_opp_clk_only(dev, clk, freq);
++		if (freq != old_freq)
++			ret = _generic_set_opp_clk_only(dev, clk, freq);
  	}
  
- done:
-@@ -1063,11 +1070,11 @@ static int sbs_probe(struct i2c_client *client)
- 	 * to the battery.
- 	 */
- 	if (!(force_load || chip->gpio_detect)) {
--		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
--
--		if (rc < 0) {
--			dev_err(&client->dev, "%s: Failed to get device status\n",
--				__func__);
-+		union power_supply_propval val;
-+		rc = sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+		if (rc < 0 || !val.intval) {
-+			dev_err(&client->dev, "Failed to get present status\n");
- 			goto exit_psupply;
- 		}
- 	}
+ 	/* Scaling down? Configure required OPPs after frequency */
 -- 
-2.28.0.236.gb10cc79966-goog
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
