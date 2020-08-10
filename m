@@ -2,121 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50AB52410D8
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 21:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E430A2411D0
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 22:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728533AbgHJTJa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Aug 2020 15:09:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728522AbgHJTJ3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 Aug 2020 15:09:29 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE48D22CA1;
-        Mon, 10 Aug 2020 19:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597086568;
-        bh=hNul+hpMOhhwF35fU5uL+jxA8siVHVf4No5zO0w65EM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ncjRr/4T9gZRR/vagqYNyissyW9Fa5VLDHAC++lVcybtp+dqZK8iMkDbIys4eMAMR
-         6ZhtVTww0n25A0BZMNJIKP2/7DNYiq2D+orhiEXKsjo4cjXe2UrTciCmKCION3oF2j
-         XTA8Oo51HsCj8beZG+ypAbcLKUw22E71QD0r2okg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.8 21/64] memory: samsung: exynos5422-dmc: Do not ignore return code of regmap_read()
-Date:   Mon, 10 Aug 2020 15:08:16 -0400
-Message-Id: <20200810190859.3793319-21-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200810190859.3793319-1-sashal@kernel.org>
-References: <20200810190859.3793319-1-sashal@kernel.org>
+        id S1726664AbgHJUgd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Aug 2020 16:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgHJUgd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Aug 2020 16:36:33 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1718C061787
+        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 13:36:32 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id 93so8409618otx.2
+        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 13:36:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HI5lYobBh5RFongYBHy3SxRT7R6Q8746klJDIeOy6qU=;
+        b=EA9XWL8ixJer6vvD9QKB92A7snrHrW1lP9KMNfKkrgDRKIm/boc70yBjqb5A3P6THW
+         /0DCP7NdG1s9AnFnaRyiNofaz8s8jhbkPYjsQ3hXZhmCDlofEAtyAneovWP2IwR8Us+D
+         cQHMHQGIzZj+AzPMHLwf8Vk6dSvpz/3omoDMU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HI5lYobBh5RFongYBHy3SxRT7R6Q8746klJDIeOy6qU=;
+        b=Mk9bFUX7orM72H3akfcGx58UAGVplKBGOGJgwhdYkJWp9zK2WpHd5tp1MfZ8zetxLF
+         Lt2YI4Xloj1do/uyxfpyJbvmkhh78gZqwXIIBWXeNc8vuhbjNSiA9XRx2HhmXzYki2tc
+         TuOuizq9rE6Yap9jOi+rSKPpG1Dz5h1vILLur4MMygu+BPTz8fygBuUJsPOjTzTZEsda
+         g4VkXgRI2rgfiAEngGQd4WqLg9eUOIeGWQUDEQXRojfQOjzb+MzWBM2Z9trk6PtcdVeK
+         vZtPHksbbtKQppNCby/x2JyIluondXAO1aciOlQVdrWOF9HWlCDfjoWLpPx3DiOJZBdh
+         9v4A==
+X-Gm-Message-State: AOAM533iJrbrKFxt1/ABspUEo9dZ0kOWyfbg8lBzgQW6QUM/gy8/8HW1
+        ndU+OQ6Rf4UqmUwPLjtP0DViRg==
+X-Google-Smtp-Source: ABdhPJwyXOGud5mnCnLyYllZBzTKdtqelYBxOZV4q9EeZkRhIBCLgeDowbbDa/iwkcMiZ05qI2Yvlg==
+X-Received: by 2002:a9d:6d1a:: with SMTP id o26mr2140683otp.84.1597091791948;
+        Mon, 10 Aug 2020 13:36:31 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id b10sm673545oiy.7.2020.08.10.13.36.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Aug 2020 13:36:31 -0700 (PDT)
+Subject: Re: [PATCH] cpupowerutils: fix spelling mistake "dependant" ->
+ "dependent"
+To:     Colin King <colin.king@canonical.com>,
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>, skhan@linuxfoundation.org
+References: <20200810102115.62405-1-colin.king@canonical.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <72e1bc33-5ac1-5719-196c-a9d8f265fbff@linuxfoundation.org>
+Date:   Mon, 10 Aug 2020 14:36:30 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200810102115.62405-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzk@kernel.org>
+On 8/10/20 4:21 AM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> There is a spelling mistake in a message. Fix it.
+> 
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>   tools/power/cpupower/debug/i386/intel_gsic.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/power/cpupower/debug/i386/intel_gsic.c b/tools/power/cpupower/debug/i386/intel_gsic.c
+> index e5e926f46d6b..befd837f07f8 100644
+> --- a/tools/power/cpupower/debug/i386/intel_gsic.c
+> +++ b/tools/power/cpupower/debug/i386/intel_gsic.c
+> @@ -71,7 +71,7 @@ int main (void)
+>   		printf("\tsmi_cmd=0x?? smi_port=0x?? smi_sig=1\n");
+>   		printf("\nUnfortunately, you have to know what exactly are "
+>   		       "smi_cmd and smi_port, and this\nis system "
+> -		       "dependant.\n");
+> +		       "dependent.\n");
+>   	}
+>   	return 1;
+>   }
+> 
 
-[ Upstream commit c4f16e96d8fdd62ef12898fc0965c42093bed237 ]
+Thanks for the patch. Applied to 
+git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git cpupower 
+branch and will be included in
+  my next pull request to Rafael.
 
-Check for regmap_read() return code before using the read value in
-following write in exynos5_switch_timing_regs().  Pass reading error
-code to the callers.
-
-This does not introduce proper error handling for such failed reads (and
-obviously regmap_write() error is still ignored) because the driver
-ignored this in all places.  Therefor it only fixes reported issue while
-matching current driver coding style:
-
-       drivers/memory/samsung/exynos5422-dmc.c: In function 'exynos5_switch_timing_regs':
-    >> drivers/memory/samsung/exynos5422-dmc.c:216:6: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/memory/samsung/exynos5422-dmc.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 25196d6268e21..85b31d3de57ad 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -270,12 +270,14 @@ static int find_target_freq_idx(struct exynos5_dmc *dmc,
-  * This function switches between these banks according to the
-  * currently used clock source.
-  */
--static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
-+static int exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
- {
- 	unsigned int reg;
- 	int ret;
- 
- 	ret = regmap_read(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, &reg);
-+	if (ret)
-+		return ret;
- 
- 	if (set)
- 		reg |= EXYNOS5_TIMING_SET_SWI;
-@@ -283,6 +285,8 @@ static void exynos5_switch_timing_regs(struct exynos5_dmc *dmc, bool set)
- 		reg &= ~EXYNOS5_TIMING_SET_SWI;
- 
- 	regmap_write(dmc->clk_regmap, CDREX_LPDDR3PHY_CON3, reg);
-+
-+	return 0;
- }
- 
- /**
-@@ -516,7 +520,7 @@ exynos5_dmc_switch_to_bypass_configuration(struct exynos5_dmc *dmc,
- 	/*
- 	 * Delays are long enough, so use them for the new coming clock.
- 	 */
--	exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
-+	ret = exynos5_switch_timing_regs(dmc, USE_MX_MSPLL_TIMINGS);
- 
- 	return ret;
- }
-@@ -577,7 +581,9 @@ exynos5_dmc_change_freq_and_volt(struct exynos5_dmc *dmc,
- 
- 	clk_set_rate(dmc->fout_bpll, target_rate);
- 
--	exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
-+	ret = exynos5_switch_timing_regs(dmc, USE_BPLL_TIMINGS);
-+	if (ret)
-+		goto disable_clocks;
- 
- 	ret = clk_set_parent(dmc->mout_mclk_cdrex, dmc->mout_bpll);
- 	if (ret)
--- 
-2.25.1
-
+thanks,
+-- Shuah
