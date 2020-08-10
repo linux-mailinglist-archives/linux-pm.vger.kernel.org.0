@@ -2,124 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFEE2404E2
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 12:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280D0240519
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Aug 2020 13:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbgHJKlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Aug 2020 06:41:23 -0400
-Received: from mail29.static.mailgun.info ([104.130.122.29]:29238 "EHLO
-        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726177AbgHJKlW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Aug 2020 06:41:22 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597056081; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=bOfrWCltEVI8DM/7pKEvaC9vrWo0+jptX7+Cco4h2KM=;
- b=UgBxCujiKv66KOoYmW5Xr7nJ8xwtzXOP3E+hT+A8NoYVyIsyYwaZO88G0X0s/8OPwbc8fB4R
- 9mlIbSRNQZq5YgRA+KfN0i5NmKyksPgvKVxocvDr16ipjyAjjnZd+H7BqCjWNnnt/vsAcuiX
- w+G3R6OZ9FAF28MsXvjRP7quU3o=
-X-Mailgun-Sending-Ip: 104.130.122.29
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n12.prod.us-west-2.postgun.com with SMTP id
- 5f31243d1e4d3989d43ac09f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 10 Aug 2020 10:41:01
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 36E27C433CA; Mon, 10 Aug 2020 10:41:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 80FD0C433C6;
-        Mon, 10 Aug 2020 10:41:00 +0000 (UTC)
+        id S1726146AbgHJLPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Aug 2020 07:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbgHJLPb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Aug 2020 07:15:31 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F58BC061756;
+        Mon, 10 Aug 2020 04:15:28 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id a15so7746904wrh.10;
+        Mon, 10 Aug 2020 04:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=jM/x2ogPXMvwtQt/xozdmqVBQPu8Fwaz54JOytXUpzU=;
+        b=FQVZgih9symQj4VmUqzuy5/O3o69bDPE03jXa5anR2KLy1aYIj6gP+vioW6Qs/8jx2
+         +oPVqOSobGoHWu2uFAvqg6Ikpe/IXpNgHjT5I/kZyOl/s6i0rauCf9WM3QRuUcceqFga
+         LKKgjupgWz8hcEo0OHNMkr8piLHKjfRvOy6holSnDoRtTDos6orfmrzIGUx1yIzX4h2T
+         /fKnDwHLkhFwyskcjMZlERHguAR+TcYrigfZVmpP4K4kbtnOf5KPXUUMgh4Vb1Zsceau
+         FcNmkHZy3l6Nh39qcVjHooZkZI9AkISbzLRkeO4imbg/3Ko3ZSANAZ/Dp5zJc10ue76p
+         PQxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=jM/x2ogPXMvwtQt/xozdmqVBQPu8Fwaz54JOytXUpzU=;
+        b=DD+6/L3WehnJgxT8hCF4ZCqt4cwFTb1Em8vN0laaeVZwEYCT7TtpLYK0G7rcFF2lHk
+         WfFMA6XBcTQyB1hj/Y/1/n9E/r0I3kaE6HBfM4UmVqcRd5S8zaLJEP9MggygTv2KMSGt
+         D1c3meJqOBY+gSIH74XyjG7SKaMOkVm/K8fxuBDH719DJRXGSpQUzpiclaVtA7oU/I6/
+         LXnd6YiRV5fWbXBIZCYovpscgog0dzDk4+XkxUbc9VgYvVzjMyzLFt/a38NE0a5otUkm
+         trkjmVSHCQG5t155Wu/mTu4ulrTRqK2dzIU48L1avzPwTtXdJnrSPXm+499uj6WFbjcU
+         EY5Q==
+X-Gm-Message-State: AOAM531pTiiOj2K97YIcCARxO9BD1Z7Gi5jEJ6uTynIX5+eIWkSPPivC
+        LDiy09zWKZxPz/0yRL2/I/475llm
+X-Google-Smtp-Source: ABdhPJwcPHCeAo0uTg5hEi7rDqLfIVZ9pqeTFyQLI1zqaFaT/2ollaueAscNjF2L8b2q2fbgrUdzLg==
+X-Received: by 2002:a5d:6381:: with SMTP id p1mr23595566wru.112.1597058126918;
+        Mon, 10 Aug 2020 04:15:26 -0700 (PDT)
+Received: from AnsuelXPS (host-79-13-255-165.retail.telecomitalia.it. [79.13.255.165])
+        by smtp.gmail.com with ESMTPSA id b203sm21323133wmc.22.2020.08.10.04.15.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 10 Aug 2020 04:15:26 -0700 (PDT)
+From:   <ansuelsmth@gmail.com>
+To:     "'Sudeep Holla'" <sudeep.holla@arm.com>
+Cc:     "'Viresh Kumar'" <viresh.kumar@linaro.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
+        "'Rob Herring'" <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200807234914.7341-1-ansuelsmth@gmail.com> <20200807234914.7341-3-ansuelsmth@gmail.com> <20200810080146.GA31434@bogus>
+In-Reply-To: <20200810080146.GA31434@bogus>
+Subject: R: [RFC PATCH v2 2/2] dt-bindings: cpufreq: Document Krait CPU Cache scaling
+Date:   Mon, 10 Aug 2020 13:15:24 +0200
+Message-ID: <061301d66f07$8beae690$a3c0b3b0$@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 10 Aug 2020 16:11:00 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-arm-msm-owner@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
-In-Reply-To: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
-References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
-Message-ID: <6b35716fbf56b2a37ed2a7e4e5bbec87@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: it
+Thread-Index: AQJQ3CWQUPMUi8qrdt9OPWHZDAmorwGMMbnpAk5rSZOoHXwVIA==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-08-10 12:36, Rajendra Nayak wrote:
-> dev_pm_opp_set_rate() can now be called with freq = 0 inorder
-> to either drop performance or bandwidth votes or to disable
-> regulators on platforms which support them.
-> In such cases, a subsequent call to dev_pm_opp_set_rate() with
-> the same frequency ends up returning early because 'old_freq == freq'
-> Instead make it fall through and put back the dropped performance
-> and bandwidth votes and/or enable back the regulators.
-> 
-> Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to
-> drop performance votes")
-> Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 
-Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
 
-> ---
->  drivers/opp/core.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 0c8c74a..a994f30 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -901,6 +901,9 @@ int dev_pm_opp_set_rate(struct device *dev,
-> unsigned long target_freq)
-> 
->  	/* Return early if nothing to do */
->  	if (old_freq == freq) {
-> +		if (opp_table->required_opp_tables || opp_table->regulators ||
-> +		    opp_table->paths)
-> +			goto skip_clk_only;
->  		dev_dbg(dev, "%s: old/new frequencies (%lu Hz) are same, nothing to 
-> do\n",
->  			__func__, freq);
->  		ret = 0;
-> @@ -919,6 +922,7 @@ int dev_pm_opp_set_rate(struct device *dev,
-> unsigned long target_freq)
->  		goto put_opp_table;
->  	}
-> 
-> +skip_clk_only:
->  	temp_freq = old_freq;
->  	old_opp = _find_freq_ceil(opp_table, &temp_freq);
->  	if (IS_ERR(old_opp)) {
-> @@ -954,8 +958,10 @@ int dev_pm_opp_set_rate(struct device *dev,
-> unsigned long target_freq)
->  						 IS_ERR(old_opp) ? NULL : old_opp->supplies,
->  						 opp->supplies);
->  	} else {
-> +		ret = 0;
->  		/* Only frequency scaling */
-> -		ret = _generic_set_opp_clk_only(dev, clk, freq);
-> +		if (freq != old_freq)
-> +			ret = _generic_set_opp_clk_only(dev, clk, freq);
->  	}
-> 
->  	/* Scaling down? Configure required OPPs after frequency */
+> -----Messaggio originale-----
+> Da: Sudeep Holla <sudeep.holla@arm.com>
+> Inviato: luned=EC 10 agosto 2020 10:02
+> A: Ansuel Smith <ansuelsmth@gmail.com>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>; Rafael J. Wysocki
+> <rjw@rjwysocki.net>; Rob Herring <robh+dt@kernel.org>; linux-
+> pm@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> kernel@vger.kernel.org
+> Oggetto: Re: [RFC PATCH v2 2/2] dt-bindings: cpufreq: Document Krait =
+CPU
+> Cache scaling
+>=20
+> On Sat, Aug 08, 2020 at 01:49:12AM +0200, Ansuel Smith wrote:
+> > Document dedicated Krait CPU Cache Scaling driver.
+> >
+> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > ---
+> >  .../bindings/cpufreq/krait-cache-scale.yaml   | 92
+> +++++++++++++++++++
+> >  1 file changed, 92 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/krait-
+> cache-scale.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/krait-cache-
+> scale.yaml b/Documentation/devicetree/bindings/cpufreq/krait-cache-
+> scale.yaml
+> > new file mode 100644
+> > index 000000000000..f10b1f386a99
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cpufreq/krait-cache-
+> scale.yaml
+> > @@ -0,0 +1,92 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cpufreq/krait-cache-scale.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Krait Cpu Cache Frequency Scaling dedicated driver
+> > +
+> > +maintainers:
+> > +  - Ansuel Smith <ansuelsmth@gmail.com>
+> > +
+> > +description: |
+> > +  This Scale the Krait CPU Cache Frequency and optionally voltage
+> > +  when the Cpu Frequency is changed (using the cpufreq notifier).
+> > +
+> > +  Cache is scaled with the max frequency across all core and the =
+cache
+> > +  frequency will scale based on the configured threshold in the =
+dts.
+> > +
+> > +  The cache is hardcoded to 3 frequency bin, idle, nominal and =
+high.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: qcom,krait-cache
+> > +
+>=20
+> How does this fit in the standard cache hierarchy nodes ? Extend the
+> example to cover that.
+>=20
 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+I think i didn't understand this question. You mean that I should put
+in the example how the standard l2 cache nodes are defined?
+
+> > +  clocks:
+> > +    description: Phandle to the L2 CPU clock
+> > +
+> > +  clock-names:
+> > +    const: "l2"
+> > +
+> > +  voltage-tolerance:
+> > +    description: Same voltage tollerance of the Krait CPU
+> > +
+> > +  l2-rates:
+> > +    description: |
+> > +      Frequency the L2 cache will be scaled at.
+> > +      Value is in Hz.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    items:
+> > +      - description: idle
+> > +      - description: nominal
+> > +      - description: high
+> > +
+>=20
+> Why can't you re-use the standard OPP v2 bindings ?
+>=20
+
+Isn't overkill to use the OPP v2 bindings to represent the the microvolt
+related
+to the le freq? Is the OPP v1 sufficient? Also I can't find a way to =
+reflect
+this specific
+case where the l2 rates are changed based on the cpu freq value? Any =
+idea
+about that?
+
+> --
+> Regards,
+> Sudeep
+
