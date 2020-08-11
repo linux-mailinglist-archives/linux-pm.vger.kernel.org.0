@@ -2,86 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27D62418DB
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 11:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D92D24197E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 12:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728368AbgHKJ1g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 05:27:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:35860 "EHLO foss.arm.com"
+        id S1728390AbgHKKQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 06:16:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:36362 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728224AbgHKJ1f (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 05:27:35 -0400
+        id S1727984AbgHKKQx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 06:16:53 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F0DC1063;
-        Tue, 11 Aug 2020 02:27:35 -0700 (PDT)
-Received: from [10.37.12.49] (unknown [10.37.12.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CED8D3F22E;
-        Tue, 11 Aug 2020 02:27:33 -0700 (PDT)
-Subject: Re: [RFC] memory: exynos5422-dmc: Document mutex scope
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-References: <20200724180857.22119-1-krzk@kernel.org>
- <3522860a-8158-6e71-9d65-01d0e0c15f0d@arm.com>
- <CAJKOXPe3OeKFhmtbF4OZup_ii_rxRHTaSK5BT-3T6ijqUukqtg@mail.gmail.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E69E331B;
+        Tue, 11 Aug 2020 03:16:52 -0700 (PDT)
+Received: from e123648.arm.com (unknown [10.37.12.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E4AE23F22E;
+        Tue, 11 Aug 2020 03:16:50 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <6db3a6a4-fe56-d448-14c7-ed43de809acb@arm.com>
-Date:   Tue, 11 Aug 2020 10:27:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <CAJKOXPe3OeKFhmtbF4OZup_ii_rxRHTaSK5BT-3T6ijqUukqtg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        krzk@kernel.org
+Cc:     kgene@kernel.org, b.zolnierkie@samsung.com, lukasz.luba@arm.com
+Subject: [PATCH] memory: samsung: exynos5422-dmc: Additional locking for 'curr_rate'
+Date:   Tue, 11 Aug 2020 11:16:33 +0100
+Message-Id: <20200811101633.3845-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The 'curr_rate' is protected by local 'dmc->lock' in various places, but
+not in a function exynos5_dmc_get_status(). The lock protects frequency
+(and voltage) change process and the corresponding value stored in
+'curr_rate'. Add the locking mechanism to protect the 'curr_rate' reading
+also in the exynos5_dmc_get_status().
 
+Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ drivers/memory/samsung/exynos5422-dmc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-On 8/9/20 10:12 AM, Krzysztof Kozlowski wrote:
-> On Tue, Aug 04, 2020 at 11:40:07AM +0100, Lukasz Luba wrote:
->> Hi Krzysztof,
->>
->> On 7/24/20 7:08 PM, Krzysztof Kozlowski wrote:
->>> Document scope of the mutex used by driver.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
->>>
->>> ---
->>>
->>> It seems mutex was introduced to protect:
->>> 1. setting actual frequency/voltage,
->>> 2. dmc->curr_rate (in exynos5_dmc_get_cur_freq()).
->>>
->>> However dmc->curr_rate in exynos5_dmc_get_status() is not protected. Is
->>> it a bug?
->>
->> The callback get_dev_status() from devfreq->profile, which here is the
->> exynos5_dmc_get_status() should be already called with devfreq->lock
->> mutex hold, like e.g from simple_ondemand governor or directly
->> using update_devfreq exported function:
->> update_devfreq()
->>    ->get_target_freq()
->>      devfreq_update_stats()
->>          df->profile->get_dev_status()
->>
->> The dmc->curr_rate is also used from sysfs interface from devfreq.
->> The local dmc lock serializes also this use case (when the HW freq
->> has changed but not set yet into curr_rate.
-> 
-> These are different locks. You cannot protect dmc->curr_rate with
-> devfreq->lock in one place and dmc-lock in other place. This won't
-> protect it.
+diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+index b9c7956e5031..952bc61e68f4 100644
+--- a/drivers/memory/samsung/exynos5422-dmc.c
++++ b/drivers/memory/samsung/exynos5422-dmc.c
+@@ -908,7 +908,10 @@ static int exynos5_dmc_get_status(struct device *dev,
+ 	int ret;
+ 
+ 	if (dmc->in_irq_mode) {
++		mutex_lock(&dmc->lock);
+ 		stat->current_frequency = dmc->curr_rate;
++		mutex_unlock(&dmc->lock);
++
+ 		stat->busy_time = dmc->load;
+ 		stat->total_time = dmc->total;
+ 	} else {
+-- 
+2.17.1
 
-There are different paths that framework goes and mainly they are
-protected by the df->lock.
-But I tend to agree, I will send a patch which adds some locking.
-
-Regards,
-Lukasz
