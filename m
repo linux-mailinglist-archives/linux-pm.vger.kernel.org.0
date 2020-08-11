@@ -2,133 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40504241474
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 03:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF8B24151E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 05:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgHKBPD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Aug 2020 21:15:03 -0400
-Received: from mga02.intel.com ([134.134.136.20]:28511 "EHLO mga02.intel.com"
+        id S1727777AbgHKDDe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Aug 2020 23:03:34 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:55292 "EHLO inva021.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727049AbgHKBPD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 10 Aug 2020 21:15:03 -0400
-IronPort-SDR: w8i/IoDHWhjyRdcPP6RtaAhC4pgg9wyYW0zLkxVwmX417b5ifV2Nupl+6+Ht++Dz8F+leL56uE
- OabhhFjgNhsQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9709"; a="141505476"
-X-IronPort-AV: E=Sophos;i="5.75,458,1589266800"; 
-   d="scan'208";a="141505476"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2020 18:15:02 -0700
-IronPort-SDR: 0CIfP7TD2K4trAC0Kbgml7/6PWtJoRmZCwDt06U/E1Yw7e8o5A1Tsnpe9rWl/oRfXUVtS2rWwE
- bUZdmY3oypag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,458,1589266800"; 
-   d="scan'208";a="290538784"
-Received: from lkp-server01.sh.intel.com (HELO 71729f5ca340) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Aug 2020 18:15:00 -0700
-Received: from kbuild by 71729f5ca340 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k5IsW-0000IG-2V; Tue, 11 Aug 2020 01:15:00 +0000
-Date:   Tue, 11 Aug 2020 09:14:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 7cd29e47553a773f54727d0756a57d0a3dcb3ab0
-Message-ID: <5f31f0e1.beJga6jjAQLhVagJ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S1727077AbgHKDDe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 10 Aug 2020 23:03:34 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id A1B91201D71;
+        Tue, 11 Aug 2020 05:03:32 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 37CCC20071A;
+        Tue, 11 Aug 2020 05:03:28 +0200 (CEST)
+Received: from 10.192.242.69 (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 6CFF0402B0;
+        Tue, 11 Aug 2020 05:03:22 +0200 (CEST)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH 1/2] thermal: imx: Use dev_err_probe() to simplify error handling
+Date:   Tue, 11 Aug 2020 10:58:34 +0800
+Message-Id: <1597114715-1073-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 7cd29e47553a773f54727d0756a57d0a3dcb3ab0  Merge branches 'pm-cpufreq' and 'acpi-soc' into linux-next
+dev_err_probe() can reduce code size, uniform error handling and record the
+defer probe reason etc., use it to simplify the code.
 
-elapsed time: 722m
-
-configs tested: 70
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                          r7780mp_defconfig
-arm                           stm32_defconfig
-arm                             ezx_defconfig
-arm                        multi_v7_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20200810
-i386                 randconfig-a001-20200810
-i386                 randconfig-a002-20200810
-i386                 randconfig-a003-20200810
-i386                 randconfig-a006-20200810
-i386                 randconfig-a004-20200810
-x86_64               randconfig-a013-20200810
-x86_64               randconfig-a012-20200810
-x86_64               randconfig-a016-20200810
-x86_64               randconfig-a011-20200810
-x86_64               randconfig-a014-20200810
-x86_64               randconfig-a015-20200810
-i386                 randconfig-a011-20200810
-i386                 randconfig-a013-20200810
-i386                 randconfig-a012-20200810
-i386                 randconfig-a016-20200810
-i386                 randconfig-a015-20200810
-i386                 randconfig-a014-20200810
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/thermal/imx_thermal.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 3f74ab4..df7fa73 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -716,14 +716,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 
+ 	if (of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
+ 		ret = imx_init_from_nvmem_cells(pdev);
+-		if (ret) {
+-			if (ret == -EPROBE_DEFER)
+-				return ret;
+-
+-			dev_err(&pdev->dev, "failed to init from nvmem: %d\n",
+-				ret);
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(&pdev->dev, ret,
++					     "failed to init from nvmem: %d\n", ret);
+ 	} else {
+ 		ret = imx_init_from_tempmon_data(pdev);
+ 		if (ret) {
+@@ -746,14 +741,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		     data->socdata->power_down_mask);
+ 
+ 	ret = imx_thermal_register_legacy_cooling(data);
+-	if (ret) {
+-		if (ret == -EPROBE_DEFER)
+-			return ret;
+-
+-		dev_err(&pdev->dev,
+-			"failed to register cpufreq cooling device: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to register cpufreq cooling device: %d\n", ret);
+ 
+ 	data->thermal_clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(data->thermal_clk)) {
+-- 
+2.7.4
+
