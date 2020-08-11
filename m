@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CDE2421C8
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 23:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C252421F5
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 23:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgHKVR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 17:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
+        id S1726528AbgHKV2j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 17:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726355AbgHKVR0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 17:17:26 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08B1C06174A
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 14:17:25 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id g11so3940241ual.2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 14:17:25 -0700 (PDT)
+        with ESMTP id S1726474AbgHKV2i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 17:28:38 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B873C061787
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 14:28:38 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id c6so85014pje.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 14:28:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y6METftXhKSKa4OJt8K+q8U+3V8Jq6aEorQMb99jfW0=;
-        b=aediAnXzrsIsrvtUll1amabGwpepmtJ394qjWBNHZ0ZsjYESbfEhdOR9crzTm+iKoc
-         C2znHUO5M7sdH7rb0Pkd1Ha0SusGVyHpnQlM7KjFQM0Ioa70gSeSag84l4BXHv84HhOb
-         i+vQZuMhUFtXeL04J/JHVzYQlobEA10bxYqVc=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kCT6jEWl7Ju91vm0nT1I8FuApKx+NvXpkLG15OsEHkE=;
+        b=esuzoFhsB/iEmKzuUt171SiF6FvHkUYdHIeocMRIgJV/ZGWEk08Efdxct8CTU/66c2
+         /0yjniyVDGe58g1ztBzVITg+/JIt463KXNCOhrC03F4dqm5zPHTql6AjqjA8qnW6PTyx
+         0jf0/9cR+hDst6jq8p/QWVhKHiSTnUbcKyd1c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y6METftXhKSKa4OJt8K+q8U+3V8Jq6aEorQMb99jfW0=;
-        b=EJZIwGk4MPd6CgnaQUw9kzjfUN0lERnTxD007lB5PsQ3Y3Os1ZCC+BflFlKou4DIaK
-         2lbJipmyBc9z4ILiWn0b1eC2XrSKp/aRHD8d9rVRNl/XJqZpv4cKhJBq7SsG/yhnQ64f
-         VJwGCe9C38hjt1zm5DEv1ai+xLP2yvHTVuOn4/1s0g4DTy/BUotE3ASTNNxPMPrrX0Px
-         nVQ7RkTx+O16m9MJpMG/YbjVZ7AkglsNvyFXGLLr0dxcopLBQsP8CqR0015aEjrj7Eat
-         R8ZrRLip1Az6hT+onQ5vfLK55eOo0+tiYPILoC9wUj5LJFz9M3vwDSQef/UprZEeQVG9
-         T7vA==
-X-Gm-Message-State: AOAM533ataQ1bH4ugrOdVn6dA9ieqlGLoNWOTKkfG9nCBTwFuDPyezEx
-        Esbv9BOzFRHwmjnxn+hpsbuiRbUKCso=
-X-Google-Smtp-Source: ABdhPJx1LPNy/ILyJSwUhiCKtLDYfYpscD+76GiksYl6KtWrXL4Kh2nvQk5kzySPRmN2AJF8gtPvgw==
-X-Received: by 2002:ab0:4d69:: with SMTP id k41mr8064508uag.131.1597180644716;
-        Tue, 11 Aug 2020 14:17:24 -0700 (PDT)
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
-        by smtp.gmail.com with ESMTPSA id 67sm18599vsl.13.2020.08.11.14.17.22
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 14:17:23 -0700 (PDT)
-Received: by mail-vs1-f51.google.com with SMTP id p8so13683vsm.12
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 14:17:22 -0700 (PDT)
-X-Received: by 2002:a67:fd67:: with SMTP id h7mr23572394vsa.121.1597180642357;
- Tue, 11 Aug 2020 14:17:22 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kCT6jEWl7Ju91vm0nT1I8FuApKx+NvXpkLG15OsEHkE=;
+        b=to9BtUfEF2ixyCksbMztLAVnq15+4PnhAPnMjZXNkmXQRGFJ8MuueLn1woK/9gaOb3
+         eoySnQsqlbbSOElE3uKQg4QJ1ZFbFIfECYFmf0SPGpGTrzvbFwxy1WJqk/62q7GQ6tjC
+         hd/pp+t7bLWPxs31ygFZjG6h+zMmD/ZtKMQljbvcJpo8TBygXvKdJ8lhp9wMdKmiDWak
+         oiU7bzn1a2fPszD3nsk+Z0SLbx+CPqU8H+q6tj8ED4gdfoZvH3bzFd0J38HEiuYwMrrg
+         NTXUu5wLMQR2evmKe5ZAaV7HkHmM37AwADHUIwxCObjLARndjhwG4gz5iOHP7v5Yuorl
+         RFRg==
+X-Gm-Message-State: AOAM533xz4+tM40R93cGw5cdMErXo311Gz3tbt3dGlQ5/BUbO/OZG/Hm
+        G3EBnNSjoeo6/jkhXbouIuBviw==
+X-Google-Smtp-Source: ABdhPJzD/W82CiysLDNV0dL8QhQty9JDkFCHdQcIDgUP++MlsuruBsxpl6Pt1LaJSLlMf2/Y4nZW8A==
+X-Received: by 2002:a17:90a:ca17:: with SMTP id x23mr3022737pjt.194.1597181317702;
+        Tue, 11 Aug 2020 14:28:37 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id 198sm20644pfz.120.2020.08.11.14.28.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2020 14:28:37 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Subject: [PATCH] OPP: Put opp table in dev_pm_opp_set_rate() all the time
+Date:   Tue, 11 Aug 2020 14:28:36 -0700
+Message-Id: <20200811212836.2531613-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
 MIME-Version: 1.0
-References: <20200811190252.10559-1-sibis@codeaurora.org>
-In-Reply-To: <20200811190252.10559-1-sibis@codeaurora.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 11 Aug 2020 14:17:11 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VtPX19o-tdyPBT=07AgbT7kWKhjpuU4d22SQ5D0r=jog@mail.gmail.com>
-Message-ID: <CAD=FV=VtPX19o-tdyPBT=07AgbT7kWKhjpuU4d22SQ5D0r=jog@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM / Domains: Add GENPD_FLAG_SUSPEND_ON flag
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andy Gross <agross@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Brown, Len" <len.brown@intel.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Kevin Hilman <khilman@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+We get the opp_table pointer at the top of the function and so we should
+put the pointer at the end of the function like all other exit paths
+from this function do.
 
-On Tue, Aug 11, 2020 at 12:03 PM Sibi Sankar <sibis@codeaurora.org> wrote:
->
-> This is for power domains which needs to stay powered on for suspend
-> but can be powered on/off as part of runtime PM. This flag is aimed at
-> power domains coupled to remote processors which enter suspend states
-> independent to that of the application processor. Such power domains
-> are turned off only on remote processor crash/shutdown.
->
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
-> ---
->  drivers/base/power/domain.c | 3 ++-
->  include/linux/pm_domain.h   | 5 +++++
->  2 files changed, 7 insertions(+), 1 deletion(-)
+Cc: Rajendra Nayak <rnayak@codeaurora.org>
+Fixes: aca48b61f963 ("opp: Manage empty OPP tables with clk handle")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/opp/core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Seems sane to me.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 9d7fb45b1786..bdb028c7793d 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -893,8 +893,10 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 		 * have OPP table for the device, while others don't and
+ 		 * opp_set_rate() just needs to behave like clk_set_rate().
+ 		 */
+-		if (!_get_opp_count(opp_table))
+-			return 0;
++		if (!_get_opp_count(opp_table)) {
++			ret = 0;
++			goto put_opp_table;
++		}
+ 
+ 		if (!opp_table->required_opp_tables && !opp_table->regulators &&
+ 		    !opp_table->paths) {
+@@ -905,7 +907,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 
+ 		ret = _set_opp_bw(opp_table, NULL, dev, true);
+ 		if (ret)
+-			return ret;
++			goto put_opp_table;
+ 
+ 		if (opp_table->regulator_enabled) {
+ 			regulator_disable(opp_table->regulators[0]);
+-- 
+Sent by a computer, using git, on the internet
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Tested-by: Douglas Anderson <dianders@chromium.org>
