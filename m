@@ -2,124 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 389A1241699
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 08:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DAA2416D9
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 09:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728271AbgHKG7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 02:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728116AbgHKG7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 02:59:06 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64489C06174A
-        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 23:59:06 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id y206so7088135pfb.10
-        for <linux-pm@vger.kernel.org>; Mon, 10 Aug 2020 23:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJFIXitVkGGB3OquEg0UyFCUv4pL9LxO2pe6bYqKtso=;
-        b=jL63M1JnD3F1yArg7W8QNSlW8MlF3QrcrBCZ9t//W4XmKBRTEHGcw7GhYfX0EUuc+G
-         DepzEo+TBYU7rr9vPQi8p5Nw1TbMB936DZsSp0xT82QBcQ+18zNeWpL5I/x51ZkA6+0B
-         lw/3UMHs8ECfpoXdOidsP2GnLr6ZjvVxmi0w4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uJFIXitVkGGB3OquEg0UyFCUv4pL9LxO2pe6bYqKtso=;
-        b=m/hhxy9rcKzJLxq9RsJdgT2onCZQgicskEWx373w27vn6e0dhHzt0AYEppCQ0BRrYx
-         v/LbPMM2NfmPM3OVdlLRA/Or0/gI2cgOlVnCdcEG1++jbU/ZD9uwbIkk7tXgSzEr4OTR
-         CxsQzmFLrHctzDjCmpUbuSEPfIteQjEdqpJD46XkXCGipJ8z7Sp/+/ns8mdpTrzG9wng
-         +KUNNqe5f7k1+vkZuOCwz5QoGY40OVy2kILJA5dtKTRk6IpXBDpja2J3rw7nOlWhl4iI
-         fINfufkvYY8wSSWJyUxHs9yc3Ct4nu2ma11CnppSS5p0+mZWrvCXwBlw/3eEJeBjTmKH
-         /w1A==
-X-Gm-Message-State: AOAM531UytDuv04mOsD2XvnsWpN0N1yJ7COdE8yvt+PZTXW8slOyhy0W
-        jlgXQimzA4qxNCVnryy3TrInHw==
-X-Google-Smtp-Source: ABdhPJwt7VZ9y0TDCOyGtiXGInmj8RP3FEOipZFy9pMwd7HbGwe6zkcbWrDe3CwzHsUOOuEao9qkyw==
-X-Received: by 2002:a62:ee06:: with SMTP id e6mr4734809pfi.313.1597129145927;
-        Mon, 10 Aug 2020 23:59:05 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id b15sm20487599pgk.14.2020.08.10.23.59.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2020 23:59:05 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH v2 2/2] power: supply: sbs-battery: don't assume every i2c errors as battery disconnect
-Date:   Tue, 11 Aug 2020 14:59:02 +0800
-Message-Id: <20200811065902.2100551-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1728167AbgHKHEp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 03:04:45 -0400
+Received: from inva020.nxp.com ([92.121.34.13]:41798 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727871AbgHKHEo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 03:04:44 -0400
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 2CCDE1A1E73;
+        Tue, 11 Aug 2020 09:04:43 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B1DC91A1E6D;
+        Tue, 11 Aug 2020 09:04:38 +0200 (CEST)
+Received: from 10.192.242.69 (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id E4A8240243;
+        Tue, 11 Aug 2020 09:04:32 +0200 (CEST)
+From:   Anson Huang <Anson.Huang@nxp.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+Subject: [PATCH V2 1/2] thermal: imx: Use dev_err_probe() to simplify error handling
+Date:   Tue, 11 Aug 2020 14:59:44 +0800
+Message-Id: <1597129185-8460-1-git-send-email-Anson.Huang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Current sbs-battery considers all smbus errors as diconnection events
-when battery-detect pin isn't supplied, and restored to present state back
-on any successful transaction were made.
+dev_err_probe() can reduce code size, uniform error handling and record the
+defer probe reason etc., use it to simplify the code.
 
-This can leads to unlimited state changes between present and !present
-when one unsupported command was requested and other following commands
-were successful, e.g. udev rules tries to read multiple properties.
-
-This patch checks battery presence by reading known good command to
-check battery existence.
-
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 ---
-v2: fix return value checking of sbs_get_battery_presence_and_health()
+changes since V1:
+	- remove redundant return value print.
 ---
- drivers/power/supply/sbs-battery.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+ drivers/thermal/imx_thermal.c | 22 ++++++----------------
+ 1 file changed, 6 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 6acb4ea25d2a..db964a470ebc 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -878,10 +878,17 @@ static int sbs_get_property(struct power_supply *psy,
- 	if (!chip->enable_detection)
- 		goto done;
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 3f74ab4..2c7473d 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -716,14 +716,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
  
--	if (!chip->gpio_detect &&
--		chip->is_present != (ret >= 0)) {
--		sbs_update_presence(chip, (ret >= 0));
--		power_supply_changed(chip->power_supply);
-+	if (!chip->gpio_detect && chip->is_present != (ret >=0)) {
-+		bool old_present = chip->is_present;
-+		union power_supply_propval val;
-+
-+		sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+
-+		sbs_update_presence(chip, val.intval);
-+
-+		if (old_present != chip->is_present)
-+			power_supply_changed(chip->power_supply);
- 	}
- 
- done:
-@@ -1067,11 +1074,12 @@ static int sbs_probe(struct i2c_client *client)
- 	 * to the battery.
- 	 */
- 	if (!(force_load || chip->gpio_detect)) {
--		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
+ 	if (of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
+ 		ret = imx_init_from_nvmem_cells(pdev);
+-		if (ret) {
+-			if (ret == -EPROBE_DEFER)
+-				return ret;
 -
--		if (rc < 0) {
--			dev_err(&client->dev, "%s: Failed to get device status\n",
--				__func__);
-+		union power_supply_propval val;
-+		sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+		if (!val.intval) {
-+			dev_err(&client->dev, "Failed to get present status\n");
-+			rc = -ENODEV;
- 			goto exit_psupply;
- 		}
- 	}
+-			dev_err(&pdev->dev, "failed to init from nvmem: %d\n",
+-				ret);
+-			return ret;
+-		}
++		if (ret)
++			return dev_err_probe(&pdev->dev, ret,
++					     "failed to init from nvmem\n");
+ 	} else {
+ 		ret = imx_init_from_tempmon_data(pdev);
+ 		if (ret) {
+@@ -746,14 +741,9 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		     data->socdata->power_down_mask);
+ 
+ 	ret = imx_thermal_register_legacy_cooling(data);
+-	if (ret) {
+-		if (ret == -EPROBE_DEFER)
+-			return ret;
+-
+-		dev_err(&pdev->dev,
+-			"failed to register cpufreq cooling device: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret,
++				     "failed to register cpufreq cooling device\n");
+ 
+ 	data->thermal_clk = devm_clk_get(&pdev->dev, NULL);
+ 	if (IS_ERR(data->thermal_clk)) {
 -- 
-2.28.0.236.gb10cc79966-goog
+2.7.4
 
