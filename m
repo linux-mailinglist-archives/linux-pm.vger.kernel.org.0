@@ -2,106 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A186242083
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 21:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E432421AE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 23:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgHKTne (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 15:43:34 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4628 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726428AbgHKTnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 15:43:33 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f32f4d60002>; Tue, 11 Aug 2020 12:43:18 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 11 Aug 2020 12:43:32 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 11 Aug 2020 12:43:32 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Aug
- 2020 19:43:24 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Tue, 11 Aug 2020 19:43:24 +0000
-Received: from sumitg-l4t.nvidia.com (Not Verified[10.24.37.103]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5f32f4d80006>; Tue, 11 Aug 2020 12:43:23 -0700
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <sudeep.holla@arm.com>, <rjw@rjwysocki.net>,
-        <viresh.kumar@linaro.org>, <catalin.marinas@arm.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <bbasu@nvidia.com>, <sumitg@nvidia.com>,
-        <wangkefeng.wang@huawei.com>
-Subject: [Patch] cpufreq: replace cpu_logical_map with read_cpuid_mpir
-Date:   Wed, 12 Aug 2020 01:13:17 +0530
-Message-ID: <1597174997-22505-1-git-send-email-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
+        id S1726173AbgHKVJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 17:09:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47704 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725987AbgHKVJx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 17:09:53 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DBF7B20756;
+        Tue, 11 Aug 2020 21:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597180193;
+        bh=tRswQoz3Io4eMiflFk/mgoD1e+JXoOIFlknWdgL+hpY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=WmURh5WkywPN/blLRM+aGB36g8bCzzVjMJpdf93L+PHOu3H1Ec6Dws0y5hOntY/NB
+         EzrviXE6f4BvXf0TjLYUbvZcWF8Qh7qv0iayQG2szwFLNFfSZsW6fLbu9HNSVW3Unj
+         XTnyr/QXj2bvdgtAiVza3O+LsVHICGzgxR3VGhZg=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1597174999; bh=bRBbhMbs7h3ckPB8wW+c1VeSnD+Qsd3GDY3eazmuf7I=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=n3To+SbS9L60gDx7dJi8lFE0LLYkF5biIwcWZi/gBrfsQupp24FCSJrrpyCCZIypu
-         uCxy/y5zqG9nYtpfeeAVETttRAmGC3k+PWS4G3IW6z6kmP54u53o5ag3YsIK8dEUGN
-         9EuYiZ9wHVH1sCzJAlhBYdPB5XBEhDCwOBumKYhqi/I2jKa+DIv4aJnT3TeTuZN4kL
-         jcmhhJ8DbgeT4otQm0mFjAlFK04Xxe0/OuY3RY5C02VntwvssqPQ8tbZPPNvnms4BQ
-         wVOOecuQkvleVlrvWlJ0joA3QkK/do4CUkJLBU2nVX0zgep+pGmgkdAX4X+CfLf5p6
-         aYiaJPYYmwLpA==
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>, nm@ti.com,
+        viresh.kumar@linaro.org, vireshk@kernel.org
+Date:   Tue, 11 Aug 2020 14:09:51 -0700
+Message-ID: <159718019170.1360974.4800051292737590657@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit eaecca9e7710 ("arm64: Fix __cpu_logical_map undefined issue")
-fixes the issue with building tegra194 cpufreq driver as module. But
-the fix might cause problem while supporting physical cpu hotplug[1].
+Quoting Rajendra Nayak (2020-08-10 00:06:19)
+> dev_pm_opp_set_rate() can now be called with freq =3D 0 inorder
+> to either drop performance or bandwidth votes or to disable
+> regulators on platforms which support them.
+> In such cases, a subsequent call to dev_pm_opp_set_rate() with
+> the same frequency ends up returning early because 'old_freq =3D=3D freq'
+> Instead make it fall through and put back the dropped performance
+> and bandwidth votes and/or enable back the regulators.
+>=20
+> Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq =3D 0 to dr=
+op performance votes")
+> Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  drivers/opp/core.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 0c8c74a..a994f30 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -901,6 +901,9 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned =
+long target_freq)
+> =20
+>         /* Return early if nothing to do */
+>         if (old_freq =3D=3D freq) {
+> +               if (opp_table->required_opp_tables || opp_table->regulato=
+rs ||
+> +                   opp_table->paths)
+> +                       goto skip_clk_only;
 
-This patch fixes the original problem by avoiding use of cpu_logical_map().
-Instead calling read_cpuid_mpidr() to get MPIDR on target cpu.
+This is a goto maze! Any chance we can clean this up?
 
-[1] https://lore.kernel.org/linux-arm-kernel/20200724131059.GB6521@bogus/
+        if (!opp_table->required_opp_tables && !opp_table->regulators &&
+	    !opp_table->paths)
+	    if (old_freq =3D=3D freq) {
+		    ret =3D 0
+		    dev_dbg(..)
+	    } else if (!_get_opp_count(opp_table)) {
+		    ret =3D _generic_set_opp_clk_only(dev, clk, freq);
+	    }
+	} else {
+		temp_freq =3D old_freq;
+		old_opp =3D _find_freq_ceil(opp_table, &temp_freq);
+		...
+	        dev_pm_opp_put(opp);
+	put_old_opp:
+		if (!IS_ERR(old_opp))
+			dev_pm_opp_put(old_opp);
+	}
+put_opp_table:
+	dev_pm_opp_put_opp_table(opp_table);
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
- drivers/cpufreq/tegra194-cpufreq.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+And that stuff in the else should probably go to another function.
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index bae527e..e1d931c 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -56,9 +56,11 @@ struct read_counters_work {
- 
- static struct workqueue_struct *read_counters_wq;
- 
--static enum cluster get_cpu_cluster(u8 cpu)
-+static void get_cpu_cluster(void *cluster)
- {
--	return MPIDR_AFFINITY_LEVEL(cpu_logical_map(cpu), 1);
-+	u64 mpidr = read_cpuid_mpidr() & MPIDR_HWID_BITMASK;
-+
-+	*((uint32_t *)cluster) = MPIDR_AFFINITY_LEVEL(mpidr, 1);
- }
- 
- /*
-@@ -186,8 +188,10 @@ static unsigned int tegra194_get_speed(u32 cpu)
- static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
- {
- 	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
--	int cl = get_cpu_cluster(policy->cpu);
- 	u32 cpu;
-+	u32 cl;
-+
-+	smp_call_function_single(policy->cpu, get_cpu_cluster, &cl, true);
- 
- 	if (cl >= data->num_clusters)
- 		return -EINVAL;
--- 
-2.7.4
+>                 dev_dbg(dev, "%s: old/new frequencies (%lu Hz) are same, =
+nothing to do\n",
+>                         __func__, freq);
+>                 ret =3D 0;
+> @@ -919,6 +922,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned =
+long target_freq)
+>                 goto put_opp_table;
+>         }
+> =20
+> +skip_clk_only:
+>         temp_freq =3D old_freq;
+>         old_opp =3D _find_freq_ceil(opp_table, &temp_freq);
+>         if (IS_ERR(old_opp)) {
+> @@ -954,8 +958,10 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned=
+ long target_freq)
+>                                                  IS_ERR(old_opp) ? NULL :=
+ old_opp->supplies,
+>                                                  opp->supplies);
+>         } else {
+> +               ret =3D 0;
+>                 /* Only frequency scaling */
+> -               ret =3D _generic_set_opp_clk_only(dev, clk, freq);
+> +               if (freq !=3D old_freq)
+> +                       ret =3D _generic_set_opp_clk_only(dev, clk, freq);
+>         }
 
+And write this as=20
+
+	else if (freq !=3D old_freq) {
+		ret =3D _generic_set_opp_clk_only(..)
+	} else {
+		ret =3D 0;
+	}
