@@ -2,29 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D92D24197E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 12:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B69F241984
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 12:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728390AbgHKKQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 06:16:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:36362 "EHLO foss.arm.com"
+        id S1728473AbgHKKRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 06:17:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:36370 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727984AbgHKKQx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 06:16:53 -0400
+        id S1728470AbgHKKRe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 06:17:34 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E69E331B;
-        Tue, 11 Aug 2020 03:16:52 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F302131B;
+        Tue, 11 Aug 2020 03:17:33 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.37.12.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E4AE23F22E;
-        Tue, 11 Aug 2020 03:16:50 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AA2543F22E;
+        Tue, 11 Aug 2020 03:17:31 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     oss-self-reviewed-patches@listhost.cambridge.arm.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         krzk@kernel.org
 Cc:     kgene@kernel.org, b.zolnierkie@samsung.com, lukasz.luba@arm.com
 Subject: [PATCH] memory: samsung: exynos5422-dmc: Additional locking for 'curr_rate'
-Date:   Tue, 11 Aug 2020 11:16:33 +0100
-Message-Id: <20200811101633.3845-1-lukasz.luba@arm.com>
+Date:   Tue, 11 Aug 2020 11:17:27 +0100
+Message-Id: <20200811101727.3976-1-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
