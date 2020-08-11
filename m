@@ -2,80 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBC54241EFC
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 19:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74773241F97
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 20:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729092AbgHKRMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 13:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729047AbgHKRMx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 13:12:53 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F208C061787
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 10:12:52 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id m71so7560537pfd.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 10:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EsxvtyjzAtXg5sUDRqzZVjThz8mBMWSIwRhZo+xufo4=;
-        b=Qiivl9DPtHJleh/lzS440/NKVhFXk3Yy1tWl92a2XnuJBOWGpKkpkGQl+QJmRmUPp0
-         sDzsmRLVz2R37jURWM0y4P3pazpzreDvZkb2OLaFUJlIpyR1cLyi7GqnTtnXBM0bio0o
-         bcboHwDwhb+GNzKUDQCnK2Y9fT3vbSkutIvV8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EsxvtyjzAtXg5sUDRqzZVjThz8mBMWSIwRhZo+xufo4=;
-        b=hSBkLfUqnvfGgnYWY802BkXGKLpmyTpVI/BmqFaKCFe3k31dY0/VkPl3LX3A58/fE9
-         PRlH+j9WOi0EdBksHsQMegv00hVqWIskNbCzcMFO39+k8dzxFXymUv0C6c9Au7XE1t9i
-         A36jDeTQ9GZDNtZTcsYTf/52lSZMrbgBdn6G6qtEgjjerXmrMES5VHsGIPrzDlvrYzrx
-         CAy0nC2XgYHw27/agLXJaa+vlMjv7T99YQJg0eEHE/0rB0MHGzlAksPgxB3FUZpIwRmB
-         1Z0QgwkTIpBjrx8L4JRrbqnWxPN1ehCYOo47f5Hf1mqZTbRW1pzXhPOWMBYb3cKPRfoL
-         xpjg==
-X-Gm-Message-State: AOAM530DAfYTvm557e2gkWx4Ib8Ie26L3L3Ol4ImW5hxXzoS7mwg3b+V
-        2JkwZYELxjuznwu9wHFDRZA25L8LRHI=
-X-Google-Smtp-Source: ABdhPJwCvHLKBQO7DAmqBUXQnYRCHWLQK/g0UXohIgdSsjGgJ0tacFUZGTDws11zC3WzqMh1Mwhn1Q==
-X-Received: by 2002:a63:ea41:: with SMTP id l1mr1644202pgk.419.1597165970845;
-        Tue, 11 Aug 2020 10:12:50 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id mp1sm3589375pjb.27.2020.08.11.10.12.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Aug 2020 10:12:50 -0700 (PDT)
-Date:   Tue, 11 Aug 2020 10:12:49 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
-Message-ID: <20200811171249.GL3191083@google.com>
-References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+        id S1725886AbgHKSTs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 14:19:48 -0400
+Received: from smtprelay0051.hostedemail.com ([216.40.44.51]:38036 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725862AbgHKSTs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 14:19:48 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id F096A100E7B73;
+        Tue, 11 Aug 2020 18:19:46 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:4321:5007:10004:10400:10848:11026:11232:11473:11658:11914:12048:12296:12297:12438:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30012:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: line52_260c3ae26fe4
+X-Filterd-Recvd-Size: 1813
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf16.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 11 Aug 2020 18:19:44 +0000 (UTC)
+Message-ID: <445d4b9039daca40a4d937959a0bc48ffe347f7f.camel@perches.com>
+Subject: Re: [PATCH v2 2/3] perf/x86/rapl: Support multiple rapl unit quirks
+From:   Joe Perches <joe@perches.com>
+To:     Zhang Rui <rui.zhang@intel.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org
+Cc:     linux-pm@vger.kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        kan.liang@linux.intel.com, len.brown@intel.com, rafael@kernel.org
+Date:   Tue, 11 Aug 2020 11:19:42 -0700
+In-Reply-To: <20200811153149.12242-3-rui.zhang@intel.com>
+References: <20200811153149.12242-1-rui.zhang@intel.com>
+         <20200811153149.12242-3-rui.zhang@intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 10, 2020 at 12:36:19PM +0530, Rajendra Nayak wrote:
-> dev_pm_opp_set_rate() can now be called with freq = 0 inorder
-> to either drop performance or bandwidth votes or to disable
-> regulators on platforms which support them.
-> In such cases, a subsequent call to dev_pm_opp_set_rate() with
-> the same frequency ends up returning early because 'old_freq == freq'
-> Instead make it fall through and put back the dropped performance
-> and bandwidth votes and/or enable back the regulators.
-> 
-> Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes")
-> Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+On Tue, 2020-08-11 at 23:31 +0800, Zhang Rui wrote:
+> There will be more platforms with different fixed energy units.
+> Enhance the code to support different rapl unit quirks for different
+> platforms.
 
-Tested-by: Matthias Kaehlcke <mka@chromium.org>
+This seems like one quirk per platform.
 
-Originally-reported-by: Matthias Kaehlcke <mka@chromium.org>
-  https://patchwork.kernel.org/patch/11675369/#23514895 :P
+Should multiple quirks on individual platforms be supported?
+
+> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+[]
+> @@ -130,11 +130,16 @@ struct rapl_pmus {
+>  	struct rapl_pmu		*pmus[];
+>  };
+>  
+> +enum rapl_unit_quirk {
+> +	RAPL_UNIT_QUIRK_NONE,
+> +	RAPL_UNIT_QUIRK_INTEL_HSW,
+> +};
+> +
+>  struct rapl_model {
+>  	struct perf_msr *rapl_msrs;
+>  	unsigned long	events;
+>  	unsigned int	msr_power_unit;
+> -	bool		apply_quirk;
+> +	enum rapl_unit_quirk	unit_quirk;
+>  };
+
+
