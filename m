@@ -2,63 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B69F241984
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 12:17:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6761241A6B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 13:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728473AbgHKKRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 06:17:34 -0400
-Received: from foss.arm.com ([217.140.110.172]:36370 "EHLO foss.arm.com"
+        id S1728770AbgHKLbg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 07:31:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49022 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728470AbgHKKRe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 06:17:34 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F302131B;
-        Tue, 11 Aug 2020 03:17:33 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.37.12.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AA2543F22E;
-        Tue, 11 Aug 2020 03:17:31 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     oss-self-reviewed-patches@listhost.cambridge.arm.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        krzk@kernel.org
-Cc:     kgene@kernel.org, b.zolnierkie@samsung.com, lukasz.luba@arm.com
-Subject: [PATCH] memory: samsung: exynos5422-dmc: Additional locking for 'curr_rate'
-Date:   Tue, 11 Aug 2020 11:17:27 +0100
-Message-Id: <20200811101727.3976-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728604AbgHKLbg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 07:31:36 -0400
+Received: from [192.168.0.50] (89-70-52-201.dynamic.chello.pl [89.70.52.201])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 180F020658;
+        Tue, 11 Aug 2020 11:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597145495;
+        bh=p32wtio7weVNEBp1zzXuw08zUK2gyCeyKmJ6OAdJXzU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=hHdRSnNaGnZMkyftRrvf1+SaxKcgzK/2X2eQqJISSMYEoErpZkrEsLuZCMKNFRvNh
+         1Bob9S49zn1cpSSkvIrV5shuxZhSaleCo8GDdh7CeXK5iL1cfOZD9tHCLDgeFf9YwQ
+         JkOVysaoM0bXMT4GY45/mZfvmOnqModxuO4QWHN4=
+Subject: Re: [PATCH v2] clk: samsung: Keep top BPLL mux on Exynos542x enabled
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <CGME20200807133152eucas1p1d83611a984f5c5d875192d08e2f5711f@eucas1p1.samsung.com>
+ <20200807133143.22748-1-m.szyprowski@samsung.com>
+From:   Sylwester Nawrocki <snawrocki@kernel.org>
+Message-ID: <2ab29b37-5e7f-1a7a-e29c-f20f95aec1a9@kernel.org>
+Date:   Tue, 11 Aug 2020 13:31:30 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <20200807133143.22748-1-m.szyprowski@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 'curr_rate' is protected by local 'dmc->lock' in various places, but
-not in a function exynos5_dmc_get_status(). The lock protects frequency
-(and voltage) change process and the corresponding value stored in
-'curr_rate'. Add the locking mechanism to protect the 'curr_rate' reading
-also in the exynos5_dmc_get_status().
+On 8/7/20 15:31, Marek Szyprowski wrote:
+> BPLL clock must not be disabled because it is needed for proper DRAM
+> operation. This is normally handled by respective memory devfreq driver,
+> but when that driver is not yet probed or its probe has been deferred the
+> clock might got disabled what causes board hang. Fix this by calling
+> clk_prepare_enable() directly from the clock provider driver.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Suggested-by: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/memory/samsung/exynos5422-dmc.c | 3 +++
- 1 file changed, 3 insertions(+)
+Should we add a "Fixes" tag so this commit gets backported down do the 
+kernels where the DMC driver was introduced?
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index b9c7956e5031..952bc61e68f4 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -908,7 +908,10 @@ static int exynos5_dmc_get_status(struct device *dev,
- 	int ret;
- 
- 	if (dmc->in_irq_mode) {
-+		mutex_lock(&dmc->lock);
- 		stat->current_frequency = dmc->curr_rate;
-+		mutex_unlock(&dmc->lock);
-+
- 		stat->busy_time = dmc->load;
- 		stat->total_time = dmc->total;
- 	} else {
--- 
-2.17.1
+Fixes: 6e7674c3c6df ("memory: Add DMC driver for Exynos5422") ?
+
+> ---
+>   drivers/clk/samsung/clk-exynos5420.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/clk/samsung/clk-exynos5420.c b/drivers/clk/samsung/clk-exynos5420.c
+> index fea33399a632..521cbbfc0987 100644
+> --- a/drivers/clk/samsung/clk-exynos5420.c
+> +++ b/drivers/clk/samsung/clk-exynos5420.c
+> @@ -1655,6 +1655,11 @@ static void __init exynos5x_clk_init(struct device_node *np,
+>   	 * main G3D clock enablement status.
+>   	 */
+>   	clk_prepare_enable(__clk_lookup("mout_sw_aclk_g3d"));
+> +	/*
+> +	 * Keep top BPLL mux enabled permanently to ensure that DRAM operates
+> +	 * properly.
+> +	 */
+> +	clk_prepare_enable(__clk_lookup("mout_bpll"));
+
+I'm going to apply the patch and then these two as a follow up:
+
+https://patchwork.kernel.org/patch/11709097
+https://patchwork.kernel.org/patch/11709101
 
