@@ -2,91 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01CE0241D43
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 17:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC54241EFC
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 19:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729051AbgHKPdx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 11:33:53 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:62204 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728859AbgHKPdw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 11:33:52 -0400
-Received: from 89-64-89-44.dynamic.chello.pl (89.64.89.44) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.415)
- id 2461079d11a94e2c; Tue, 11 Aug 2020 17:33:50 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Francisco Jerez <currojerez@riseup.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Doug Smythies <dsmythies@telus.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Subject: Re: [PATCH v7] cpufreq: intel_pstate: Implement passive mode with HWP enabled
-Date:   Tue, 11 Aug 2020 17:33:49 +0200
-Message-ID: <4931766.VNY61sLD3B@kreacher>
-In-Reply-To: <87mu32atsy.fsf@riseup.net>
-References: <4981405.3kqTVLv5tO@kreacher> <122847018.uQ7iJ9lzrg@kreacher> <87mu32atsy.fsf@riseup.net>
+        id S1729092AbgHKRMx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 13:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729047AbgHKRMx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 13:12:53 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F208C061787
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 10:12:52 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id m71so7560537pfd.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 10:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EsxvtyjzAtXg5sUDRqzZVjThz8mBMWSIwRhZo+xufo4=;
+        b=Qiivl9DPtHJleh/lzS440/NKVhFXk3Yy1tWl92a2XnuJBOWGpKkpkGQl+QJmRmUPp0
+         sDzsmRLVz2R37jURWM0y4P3pazpzreDvZkb2OLaFUJlIpyR1cLyi7GqnTtnXBM0bio0o
+         bcboHwDwhb+GNzKUDQCnK2Y9fT3vbSkutIvV8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EsxvtyjzAtXg5sUDRqzZVjThz8mBMWSIwRhZo+xufo4=;
+        b=hSBkLfUqnvfGgnYWY802BkXGKLpmyTpVI/BmqFaKCFe3k31dY0/VkPl3LX3A58/fE9
+         PRlH+j9WOi0EdBksHsQMegv00hVqWIskNbCzcMFO39+k8dzxFXymUv0C6c9Au7XE1t9i
+         A36jDeTQ9GZDNtZTcsYTf/52lSZMrbgBdn6G6qtEgjjerXmrMES5VHsGIPrzDlvrYzrx
+         CAy0nC2XgYHw27/agLXJaa+vlMjv7T99YQJg0eEHE/0rB0MHGzlAksPgxB3FUZpIwRmB
+         1Z0QgwkTIpBjrx8L4JRrbqnWxPN1ehCYOo47f5Hf1mqZTbRW1pzXhPOWMBYb3cKPRfoL
+         xpjg==
+X-Gm-Message-State: AOAM530DAfYTvm557e2gkWx4Ib8Ie26L3L3Ol4ImW5hxXzoS7mwg3b+V
+        2JkwZYELxjuznwu9wHFDRZA25L8LRHI=
+X-Google-Smtp-Source: ABdhPJwCvHLKBQO7DAmqBUXQnYRCHWLQK/g0UXohIgdSsjGgJ0tacFUZGTDws11zC3WzqMh1Mwhn1Q==
+X-Received: by 2002:a63:ea41:: with SMTP id l1mr1644202pgk.419.1597165970845;
+        Tue, 11 Aug 2020 10:12:50 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id mp1sm3589375pjb.27.2020.08.11.10.12.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Aug 2020 10:12:50 -0700 (PDT)
+Date:   Tue, 11 Aug 2020 10:12:49 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
+Message-ID: <20200811171249.GL3191083@google.com>
+References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tuesday, August 11, 2020 2:51:41 AM CEST Francisco Jerez wrote:
+On Mon, Aug 10, 2020 at 12:36:19PM +0530, Rajendra Nayak wrote:
+> dev_pm_opp_set_rate() can now be called with freq = 0 inorder
+> to either drop performance or bandwidth votes or to disable
+> regulators on platforms which support them.
+> In such cases, a subsequent call to dev_pm_opp_set_rate() with
+> the same frequency ends up returning early because 'old_freq == freq'
+> Instead make it fall through and put back the dropped performance
+> and bandwidth votes and/or enable back the regulators.
 > 
-> --==-=-=
-> Content-Type: multipart/mixed; boundary="=-=-="
-> 
-> --=-=-=
-> Content-Type: text/plain; charset=utf-8
-> Content-Disposition: inline
-> Content-Transfer-Encoding: quoted-printable
-> 
-> "Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
-> 
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Allow intel_pstate to work in the passive mode with HWP enabled and
-> > make it set the HWP minimum performance limit (HWP floor) to the
-> > P-state value given by the target frequency supplied by the cpufreq
-> > governor, so as to prevent the HWP algorithm and the CPU scheduler
-> > from working against each other, at least when the schedutil governor
-> > is in use, and update the intel_pstate documentation accordingly.
-> >
-> > Among other things, this allows utilization clamps to be taken
-> > into account, at least to a certain extent, when intel_pstate is
-> > in use and makes it more likely that sufficient capacity for
-> > deadline tasks will be provided.
-> >
-> > After this change, the resulting behavior of an HWP system with
-> > intel_pstate in the passive mode should be close to the behavior
-> > of the analogous non-HWP system with intel_pstate in the passive
-> > mode, except that in the frequency range below the base frequency
-> > (ie. the frequency retured by the base_frequency cpufreq attribute
-> > in sysfs on HWP systems) the HWP algorithm is allowed to make the
-> > CPU run at a frequency above the floor P-state set by intel_pstate,
-> > with or without hardware coordination of P-states among CPUs in the
-> > same package.
-> >
-> 
-> The "frequency range below the base frequency" part of the paragraph
-> above seems somewhat misleading, since AFAICT the same thing will happen
-> in the P-state range above the base frequency. 
+> Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes")
+> Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
 
-Fair enough.  I rephrased the changelog when applying the patch.
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
 
-> Another minor comment below, other than that LGTM:
-
-And this one has been fixed too.
-
-> Reviewed-by: Francisco Jerez <currojerez@riseup.net>
-
-Thanks!
-
-
-
+Originally-reported-by: Matthias Kaehlcke <mka@chromium.org>
+  https://patchwork.kernel.org/patch/11675369/#23514895 :P
