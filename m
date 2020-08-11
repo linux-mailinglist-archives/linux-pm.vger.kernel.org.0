@@ -2,74 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74773241F97
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 20:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393E324200F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 21:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbgHKSTs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 14:19:48 -0400
-Received: from smtprelay0051.hostedemail.com ([216.40.44.51]:38036 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725862AbgHKSTs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 14:19:48 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id F096A100E7B73;
-        Tue, 11 Aug 2020 18:19:46 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1539:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:4321:5007:10004:10400:10848:11026:11232:11473:11658:11914:12048:12296:12297:12438:12740:12760:12895:13069:13311:13357:13439:14659:14721:21080:21627:30012:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: line52_260c3ae26fe4
-X-Filterd-Recvd-Size: 1813
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf16.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 11 Aug 2020 18:19:44 +0000 (UTC)
-Message-ID: <445d4b9039daca40a4d937959a0bc48ffe347f7f.camel@perches.com>
-Subject: Re: [PATCH v2 2/3] perf/x86/rapl: Support multiple rapl unit quirks
-From:   Joe Perches <joe@perches.com>
-To:     Zhang Rui <rui.zhang@intel.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org
-Cc:     linux-pm@vger.kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        kan.liang@linux.intel.com, len.brown@intel.com, rafael@kernel.org
-Date:   Tue, 11 Aug 2020 11:19:42 -0700
-In-Reply-To: <20200811153149.12242-3-rui.zhang@intel.com>
-References: <20200811153149.12242-1-rui.zhang@intel.com>
-         <20200811153149.12242-3-rui.zhang@intel.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.3-0ubuntu1 
+        id S1726165AbgHKTD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 15:03:26 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:52059 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725886AbgHKTDY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 15:03:24 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597172604; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=HljQQp33frmN6u0YNBwroLG0IWIVB8zjZKCZzfIJiAM=; b=JtAs6GLil84z4ItNdtSk5AbZjckAWa3+Tc8+XvYAQdj0gbqsA3e9k+vtN4LNUYFKpW52CVp3
+ AlNfs+LWOMix/8ZVx554SiQWHrAg9e82/ammsThunsGUB3jhou6I7cpwU3+tkTeJ+FH4ew9y
+ vggR19TGqK5+CuaU+RwltG0gw6k=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n10.prod.us-east-1.postgun.com with SMTP id
+ 5f32eb75440a07969ac3ce68 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Aug 2020 19:03:17
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E616BC4339C; Tue, 11 Aug 2020 19:03:16 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1F7DCC433C6;
+        Tue, 11 Aug 2020 19:03:11 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1F7DCC433C6
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        gregkh@linuxfoundation.org, pavel@ucw.cz, len.brown@intel.com,
+        rnayak@codeaurora.org, dianders@chromium.org, khilman@kernel.org,
+        Sibi Sankar <sibis@codeaurora.org>
+Subject: [PATCH 1/2] PM / Domains: Add GENPD_FLAG_SUSPEND_ON flag
+Date:   Wed, 12 Aug 2020 00:32:51 +0530
+Message-Id: <20200811190252.10559-1-sibis@codeaurora.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-08-11 at 23:31 +0800, Zhang Rui wrote:
-> There will be more platforms with different fixed energy units.
-> Enhance the code to support different rapl unit quirks for different
-> platforms.
+This is for power domains which needs to stay powered on for suspend
+but can be powered on/off as part of runtime PM. This flag is aimed at
+power domains coupled to remote processors which enter suspend states
+independent to that of the application processor. Such power domains
+are turned off only on remote processor crash/shutdown.
 
-This seems like one quirk per platform.
+Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+---
+ drivers/base/power/domain.c | 3 ++-
+ include/linux/pm_domain.h   | 5 +++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Should multiple quirks on individual platforms be supported?
-
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-[]
-> @@ -130,11 +130,16 @@ struct rapl_pmus {
->  	struct rapl_pmu		*pmus[];
->  };
->  
-> +enum rapl_unit_quirk {
-> +	RAPL_UNIT_QUIRK_NONE,
-> +	RAPL_UNIT_QUIRK_INTEL_HSW,
-> +};
-> +
->  struct rapl_model {
->  	struct perf_msr *rapl_msrs;
->  	unsigned long	events;
->  	unsigned int	msr_power_unit;
-> -	bool		apply_quirk;
-> +	enum rapl_unit_quirk	unit_quirk;
->  };
-
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 2cb5e04cf86cd..ba78ac4a450d4 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -129,6 +129,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+ #define genpd_is_active_wakeup(genpd)	(genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+ #define genpd_is_cpu_domain(genpd)	(genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+ #define genpd_is_rpm_always_on(genpd)	(genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
++#define genpd_is_suspend_on(genpd)	(genpd->flags & GENPD_FLAG_SUSPEND_ON)
+ 
+ static inline bool irq_safe_dev_in_no_sleep_domain(struct device *dev,
+ 		const struct generic_pm_domain *genpd)
+@@ -949,7 +950,7 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ {
+ 	struct gpd_link *link;
+ 
+-	if (!genpd_status_on(genpd) || genpd_is_always_on(genpd))
++	if (!genpd_status_on(genpd) || genpd_is_always_on(genpd) || genpd_is_suspend_on(genpd))
+ 		return;
+ 
+ 	if (genpd->suspended_count != genpd->device_count
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index ee11502a575b0..3002a2d68936a 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -55,6 +55,10 @@
+  *
+  * GENPD_FLAG_RPM_ALWAYS_ON:	Instructs genpd to always keep the PM domain
+  *				powered on except for system suspend.
++ *
++ * GENPD_FLAG_SUSPEND_ON:	Instructs genpd to keep the PM domain powered
++ *				on during suspend and runtime PM controlled
++ *				otherwise.
+  */
+ #define GENPD_FLAG_PM_CLK	 (1U << 0)
+ #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+@@ -62,6 +66,7 @@
+ #define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+ #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+ #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
++#define GENPD_FLAG_SUSPEND_ON	 (1U << 6)
+ 
+ enum gpd_status {
+ 	GPD_STATE_ACTIVE = 0,	/* PM domain is active */
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
