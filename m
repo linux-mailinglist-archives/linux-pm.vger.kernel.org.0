@@ -2,89 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4DB242016
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 21:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A537A242031
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 21:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726258AbgHKTDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 15:03:39 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:60604 "EHLO m43-7.mailgun.net"
+        id S1726023AbgHKTVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 15:21:53 -0400
+Received: from mga03.intel.com ([134.134.136.65]:29015 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726164AbgHKTDj (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 15:03:39 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597172618; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=+3oLMOjRVphuPQ+PhEKkKC/mDHCGYkvA89mtuFU3+3Y=; b=hvhuJbOuGaphz0WsoSwyVu8F/m8qGmPfPj5IuOZdnQYf2GeqBm87IvPKH7dw05G5nknSla8N
- UhRXXwGyQMVEBgu0XoKCfD/9yEmkaJ4a7jlBsGpUI0/smEFYMHMoo1bWQ3uLt3DJ/2sC9lqK
- 97SAhe1tjtEgQDt8KSn3koOOjhc=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n11.prod.us-east-1.postgun.com with SMTP id
- 5f32eb79ba4c2cd3676fcc0c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 11 Aug 2020 19:03:21
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 15EF5C433C6; Tue, 11 Aug 2020 19:03:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from blr-ubuntu-253.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9FCB0C433CB;
-        Tue, 11 Aug 2020 19:03:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9FCB0C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sibis@codeaurora.org
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
-        rjw@rjwysocki.net
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        gregkh@linuxfoundation.org, pavel@ucw.cz, len.brown@intel.com,
-        rnayak@codeaurora.org, dianders@chromium.org, khilman@kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>
-Subject: [PATCH 2/2] soc: qcom: aoss: Use GENPD_FLAG_SUSPEND_ON flag
-Date:   Wed, 12 Aug 2020 00:32:52 +0530
-Message-Id: <20200811190252.10559-2-sibis@codeaurora.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200811190252.10559-1-sibis@codeaurora.org>
-References: <20200811190252.10559-1-sibis@codeaurora.org>
+        id S1725987AbgHKTVx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 15:21:53 -0400
+IronPort-SDR: 1QKtpfpgFufbNt9gba/8vEdFerlq9T7dD4N0M++xAdfD2U0CRwNNeQu+REKFSLbOqM9qP7QVdj
+ Z7KyyN/aehYw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="153789917"
+X-IronPort-AV: E=Sophos;i="5.76,301,1592895600"; 
+   d="scan'208";a="153789917"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 12:21:52 -0700
+IronPort-SDR: T2glGAwi/JsIJlV9BSkNjgkh4DJil+vf2k/n66DBeYvnSm4+hAGv3XtrwXvLcCzYiYjI6/xHE+
+ 7c9kWyYFrtDg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,301,1592895600"; 
+   d="scan'208";a="494786074"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.252.41.60]) ([10.252.41.60])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Aug 2020 12:21:50 -0700
+Subject: Re: [PATCH] genirq/PM: Always unlock IRQ descriptor in rearm_wake_irq
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-acpi <linux-acpi@intel.com>, rafael@kernel.org
+References: <20200811180001.80203-1-linux@roeck-us.net>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <a009f2e5-8bf9-fc7d-ece6-0ee2e4381cc1@intel.com>
+Date:   Tue, 11 Aug 2020 21:21:49 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
+In-Reply-To: <20200811180001.80203-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All the power domains exposed as part of AOSS QMP driver require to stay
-powered on for suspend. They are powered on when the remote processors
-boots up and powered off on remote processor crash/shutdown. Mark the
-power domains with GENPD_FLAG_SUSPEND_ON to model this behavior.
+On 8/11/2020 8:00 PM, Guenter Roeck wrote:
+> rearm_wake_irq() does not unlock the irq descriptor if the interrupt
+> is not suspended or if wakeup is not enabled on it. Fix it.
+>
+> Fixes: 3a79bc63d9075 ("PCI: irq: Introduce rearm_wake_irq()")
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
----
- drivers/soc/qcom/qcom_aoss.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-diff --git a/drivers/soc/qcom/qcom_aoss.c b/drivers/soc/qcom/qcom_aoss.c
-index ed2c687c16b31..5a5b4bf928147 100644
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -366,6 +366,7 @@ static int qmp_pd_add(struct qmp *qmp)
- 		res[i].pd.name = sdm845_resources[i];
- 		res[i].pd.power_on = qmp_pd_power_on;
- 		res[i].pd.power_off = qmp_pd_power_off;
-+		res[i].pd.flags = GENPD_FLAG_SUSPEND_ON;
- 
- 		ret = pm_genpd_init(&res[i].pd, NULL, true);
- 		if (ret < 0) {
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+And it needs to go to -stable (even though the bug is latent now, 
+because this function is called for suspended IRQs only AFAICS).
+
+Or I can apply this as the mistake was in my commit.  Please let me know 
+what you prefer.
+
+
+> ---
+>   kernel/irq/pm.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/irq/pm.c b/kernel/irq/pm.c
+> index 8f557fa1f4fe..c6c7e187ae74 100644
+> --- a/kernel/irq/pm.c
+> +++ b/kernel/irq/pm.c
+> @@ -185,14 +185,18 @@ void rearm_wake_irq(unsigned int irq)
+>   	unsigned long flags;
+>   	struct irq_desc *desc = irq_get_desc_buslock(irq, &flags, IRQ_GET_DESC_CHECK_GLOBAL);
+>   
+> -	if (!desc || !(desc->istate & IRQS_SUSPENDED) ||
+> -	    !irqd_is_wakeup_set(&desc->irq_data))
+> +	if (!desc)
+>   		return;
+>   
+> +	if (!(desc->istate & IRQS_SUSPENDED) ||
+> +	    !irqd_is_wakeup_set(&desc->irq_data))
+> +		goto unlock;
+> +
+>   	desc->istate &= ~IRQS_SUSPENDED;
+>   	irqd_set(&desc->irq_data, IRQD_WAKEUP_ARMED);
+>   	__enable_irq(desc);
+>   
+> +unlock:
+>   	irq_put_desc_busunlock(desc, flags);
+>   }
+>   
+
 
