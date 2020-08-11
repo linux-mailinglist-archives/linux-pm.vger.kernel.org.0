@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D82241B38
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 14:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49859241B3D
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Aug 2020 14:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbgHKM5y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 08:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S1728556AbgHKM6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 08:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728555AbgHKM5w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 08:57:52 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4B4C06178A
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 05:57:51 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id x2so2601281vkd.8
-        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 05:57:51 -0700 (PDT)
+        with ESMTP id S1728705AbgHKM6F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 08:58:05 -0400
+Received: from mail-vk1-xa41.google.com (mail-vk1-xa41.google.com [IPv6:2607:f8b0:4864:20::a41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59645C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 05:58:05 -0700 (PDT)
+Received: by mail-vk1-xa41.google.com with SMTP id m12so2602871vko.5
+        for <linux-pm@vger.kernel.org>; Tue, 11 Aug 2020 05:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=AL6Rc0fjEZsUIiqTKaF4QuZnNQMFT5drdpMHmwxBtLE=;
-        b=dOLn0qQiuPhr7thP74vx2KSfABzfXum3+YLt83xU5hH8EgFgq8mlO4lRH+rQs7BeP/
-         UT7/Agbj25A/CFn5jGgRTfO3EbgHSqajG/aiJyDwY3SkZcUkJr0ta4c+yr41x4kr87j8
-         QqX/JR0QoARZOxK7a2ak1khlq7CctO0tIBoloN+YxjSZnIaRYjL3caSUn5kOs+823UTu
-         s7Sug6qdrseeL9pWqMLjaP8d4m1yagaRvZnNkYQqTGwbl1b2Y6csg6CKVLUxt2j1S7YP
-         x83IXmLLFXvwUe/OpYSZ5B6eENKejjpQUXBLjb2dPsSGiSlmO/kJs+Lkvt9snleE9Fpp
-         KgrA==
+        bh=RBFHfl706h8Q/rIQEa117NC5OvZkkSKYk5SzCFZSYis=;
+        b=Obr5opiZuO2ryFJN5Sft0B2C2MHLQ7ZL/zDgEGPuxOTr85P1WaydVIimaASb/eZ80j
+         98/eZMLZHEIB5oct++4Zu9VYzBitp13gPamxYOcbradM9sfIVVIgSboowqFt9YjDLjgf
+         PVXsbzCIbV2FLjlLMIK0VmhJObzhkWjd5+s3iBU8jL2PcRcPVbNSWcobn+We+Xi4359s
+         UbNrKts1JWQLX5EwiV0GS7LQaSSJB6Wa+DcPXo4obiuxC0DWfUBwgVQVvDnonKDokD4n
+         a8ODAPNJlfoZsXNxaZIojz+9Xi0pDQPJOKKpJpXXrpNYTpNPt4P3uCU0UxUKXCXwpXmq
+         9WIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=AL6Rc0fjEZsUIiqTKaF4QuZnNQMFT5drdpMHmwxBtLE=;
-        b=ZSb+wLFhdUuzsML9Jx/4cF1sdsa1nNxZi5Wq6Z8RuqUfVM82/ngdBblxdpBnrZ03F0
-         Usc8vM691Zl2rIr4T2rzYAzmkfncJmWQQ0gaN3TndWQ1dz2JqhmLmePJSVmqM6ElS1GF
-         ejT5eIz7j6fnaOWvjqzb02y4SdUAwDqKs1XIoeCk2S3BWzJipAYjP3ZF9bo3PAm8OVN4
-         Jm2esfwPUJIoH9EHh2PXaWbM0/58SnlfsPLdUCHbe96aLrog+SQVUm2onnJuCMnDL4xw
-         rDXM21RQ20m7K6CU4GgdgsUi9tGMlQ2+vfyTWv3LSdHgkaEccwB6vEpcNyMxIdVZsNYj
-         NtBg==
-X-Gm-Message-State: AOAM530DtEwIr0YUyHR1lRCJqywBVgFZZnN5RuKXV7tMtxbvvyQITygp
-        lcHDVMmSMHmPIQMsustDkS2i373xWAgsgZf+abxDYg==
-X-Google-Smtp-Source: ABdhPJy7GhXD9WF+vFOxBmvqLYSQ9qGDvGcYcKLvAoiMERjbXwoEosLE/h7Z2U0e3Ob+MQEwh3ibR3YWWu/7+eIUqds=
-X-Received: by 2002:a1f:6282:: with SMTP id w124mr24283068vkb.46.1597150670494;
- Tue, 11 Aug 2020 05:57:50 -0700 (PDT)
+        bh=RBFHfl706h8Q/rIQEa117NC5OvZkkSKYk5SzCFZSYis=;
+        b=E7cVrfR9f878Bk0Zj7PsV/BQsO5FVs3xVBQch+2w1DxOBJEod9wPn0XysGpZ/JpY+N
+         CzyLNfuL7Qcy/vZT/csaHB9BBea/TznTR45FFOvYKjrKZu+0cX+4E8zA4MGHMk3IkpVi
+         JJ6uziypJJBKHxpTqRlXo/aXx78ezqBy2SEhbDpDySbMaNPlgcddLAmXjMv3fz2mgWd8
+         Sb6OfBvwe4lCEsaWAo4W+UDV9J+eu1YzMaGWfA0NTpacxuFWE6xyBtmPsLV3nowqPItW
+         RxuFByyQ4DJprNTn24OHe0iCUYCNjtHUXjyR+ZqbQLMjE8Y57kIDOGgfUxiI9cOS884/
+         pOEg==
+X-Gm-Message-State: AOAM533tSlMmDElmC4275jVLTxKbMHcEYhawVVWhEn83Rw6XzbDtAKnB
+        LjXMfObl3VzwxviwsnW52hC/FQaOA/YDDhYajmu9QA==
+X-Google-Smtp-Source: ABdhPJzDrXCZmbt9/m57eR99/eX0TO4r0pa0DE4iQxGP3NaiFrTboxgbCASK0cRRih00hTqSZictiDAc0M3qeyBgQrw=
+X-Received: by 2002:a1f:9048:: with SMTP id s69mr8450750vkd.73.1597150684496;
+ Tue, 11 Aug 2020 05:58:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200725181404.18951-1-ansuelsmth@gmail.com> <20200725181404.18951-2-ansuelsmth@gmail.com>
-In-Reply-To: <20200725181404.18951-2-ansuelsmth@gmail.com>
+References: <20200725181404.18951-1-ansuelsmth@gmail.com> <20200725181404.18951-3-ansuelsmth@gmail.com>
+In-Reply-To: <20200725181404.18951-3-ansuelsmth@gmail.com>
 From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Tue, 11 Aug 2020 18:27:39 +0530
-Message-ID: <CAHLCerMc8yUjh9qwUCa=jMZHs18GC4qeS3rqT1_6K90QJd=nVA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 1/7] drivers: thermal: tsens: Add VER_0 tsens version
+Date:   Tue, 11 Aug 2020 18:27:53 +0530
+Message-ID: <CAHLCerN_S+5G0oZrAjoui7U6H+H46uLeYHe3p3PVbmCDwJtC_Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 2/7] drivers: thermal: tsens: Convert msm8960 to reg_field
 To:     Ansuel Smith <ansuelsmth@gmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -68,304 +68,127 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Sat, Jul 25, 2020 at 11:44 PM Ansuel Smith <ansuelsmth@gmail.com> wrote:
 >
-> VER_0 is used to describe device based on tsens version before v0.1.
-> These device are devices based on msm8960 for example apq8064 or
-> ipq806x.
+> Covert msm9860 driver to reg_filed to use the init_common
+
+typo: field
+
+> function.
 >
 > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 > ---
->  drivers/thermal/qcom/tsens.c | 160 +++++++++++++++++++++++++++--------
->  drivers/thermal/qcom/tsens.h |   7 +-
->  2 files changed, 132 insertions(+), 35 deletions(-)
+>  drivers/thermal/qcom/tsens-8960.c | 74 +++++++++++++++++++++++++++++++
+>  1 file changed, 74 insertions(+)
 >
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 9fe9a2b26705..78840c1bc5d2 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -516,6 +516,15 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->                         dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
->                                 hw_id, __func__, temp);
->                 }
-> +
-> +               if (tsens_version(priv) < VER_0_1) {
-> +                       /* Constraint: There is only 1 interrupt control register for all
-> +                        * 11 temperature sensor. So monitoring more than 1 sensor based
-> +                        * on interrupts will yield inconsistent result. To overcome this
-> +                        * issue we will monitor only sensor 0 which is the master sensor.
-> +                        */
-> +                       break;
-> +               }
->         }
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 2a28a5af209e..45cd0cdff2f5 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -56,6 +56,18 @@
+>  #define TRDY_MASK              BIT(7)
+>  #define TIMEOUT_US             100
 >
->         return IRQ_HANDLED;
-> @@ -531,6 +540,13 @@ static int tsens_set_trips(void *_sensor, int low, int high)
->         int high_val, low_val, cl_high, cl_low;
->         u32 hw_id = s->hw_id;
->
-> +       if (tsens_version(priv) < VER_0_1) {
-> +               /* Pre v0.1 IP had a single register for each type of interrupt
-> +                * and thresholds
-> +                */
-> +               hw_id = 0;
-> +       }
-> +
->         dev_dbg(dev, "[%u] %s: proposed thresholds: (%d:%d)\n",
->                 hw_id, __func__, low, high);
->
-> @@ -550,6 +566,12 @@ static int tsens_set_trips(void *_sensor, int low, int high)
->         tsens_set_interrupt(priv, hw_id, LOWER, true);
->         tsens_set_interrupt(priv, hw_id, UPPER, true);
->
-> +       /* VER_0 require to set MIN and MAX THRESH */
-> +       if (tsens_version(priv) < VER_0_1) {
-> +               regmap_field_write(priv->rf[MIN_THRESH_0], 0);
-> +               regmap_field_write(priv->rf[MAX_THRESH_0], 120000);
+> +#define S0_STATUS_OFF          0x3628
+> +#define S1_STATUS_OFF          0x362c
+> +#define S2_STATUS_OFF          0x3630
+> +#define S3_STATUS_OFF          0x3634
+> +#define S4_STATUS_OFF          0x3638
+> +#define S5_STATUS_OFF          0x3664  /* Sensors 5 thru 10 found on apq8064/msm8960 */
 
-Since MIN_THRESH_0 and MAX_THRESH_0 are the only two threshold on pre
-0.1 IP, just (mis)use the already predefined LOW_THRESH_0 and
-UP_THRESH_0 in regfield_ids in init_common() below? Then we won't need
-this special casing here. All the special casing ugliness can then
-stay in init_common() with comments.
+Run checkpatch and fix spelling. :-) Or just say 'sensor 5-10'
 
-> +       }
+> +#define S6_STATUS_OFF          0x3668
+> +#define S7_STATUS_OFF          0x366c
+> +#define S8_STATUS_OFF          0x3670
+> +#define S9_STATUS_OFF          0x3674
+> +#define S10_STATUS_OFF         0x3678
 > +
->         spin_unlock_irqrestore(&priv->ul_lock, flags);
->
->         dev_dbg(dev, "[%u] %s: (%d:%d)->(%d:%d)\n",
-> @@ -584,18 +606,21 @@ int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp)
->         u32 valid;
+>  static int suspend_8960(struct tsens_priv *priv)
+>  {
 >         int ret;
+> @@ -269,6 +281,66 @@ static int get_temp_8960(const struct tsens_sensor *s, int *temp)
+>         return -ETIMEDOUT;
+>  }
 >
-> -       ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> -       if (ret)
-> -               return ret;
-> -       while (!valid) {
-> -               /* Valid bit is 0 for 6 AHB clock cycles.
-> -                * At 19.2MHz, 1 AHB clock is ~60ns.
-> -                * We should enter this loop very, very rarely.
-> -                */
-> -               ndelay(400);
-> +       /* VER_0 doesn't have VALID bit */
-> +       if (tsens_version(priv) >= VER_0_1) {
+> +static struct tsens_features tsens_8960_feat = {
+> +       .ver_major      = VER_0,
+> +       .crit_int       = 0,
+> +       .adc            = 1,
+> +       .srot_split     = 0,
+> +       .max_sensors    = 11,
 
-Since 8960 needs a custom get_temp function, is this change really needed?
+Align the equal to like in other files please.
 
->                 ret = regmap_field_read(priv->rf[valid_idx], &valid);
->                 if (ret)
->                         return ret;
-> +               while (!valid) {
-> +                       /* Valid bit is 0 for 6 AHB clock cycles.
-> +                        * At 19.2MHz, 1 AHB clock is ~60ns.
-> +                        * We should enter this loop very, very rarely.
-> +                        */
-> +                       ndelay(400);
-> +                       ret = regmap_field_read(priv->rf[valid_idx], &valid);
-> +                       if (ret)
-> +                               return ret;
-> +               }
->         }
->
->         /* Valid bit is set, OK to read the temperature */
-> @@ -765,8 +790,8 @@ int __init init_common(struct tsens_priv *priv)
->
->         if (tsens_version(priv) > VER_0_1) {
->                 for (i = VER_MAJOR; i <= VER_STEP; i++) {
-> -                       priv->rf[i] = devm_regmap_field_alloc(dev, priv->srot_map,
-> -                                                             priv->fields[i]);
-> +                       priv->rf[i] = devm_regmap_field_alloc(
-> +                               dev, priv->srot_map, priv->fields[i]);
-
-This doesn't change any code, simply reformats the code to 80 columns.
-Avoid adding such lines to other features, makes it harder to review
-changes.
-
-Please ignore the 80 column warning here and elsewhere below when it
-is only going over by a few characters. Run checkpatch on your patches
-which has now increased the number of columns to 100 now.
-
-
->                         if (IS_ERR(priv->rf[i]))
->                                 return PTR_ERR(priv->rf[i]);
->                 }
-> @@ -775,12 +800,80 @@ int __init init_common(struct tsens_priv *priv)
->                         goto err_put_device;
->         }
->
-> -       priv->rf[TSENS_EN] = devm_regmap_field_alloc(dev, priv->srot_map,
-> -                                                    priv->fields[TSENS_EN]);
-> -       if (IS_ERR(priv->rf[TSENS_EN])) {
-> -               ret = PTR_ERR(priv->rf[TSENS_EN]);
-> -               goto err_put_device;
-> +       if (tsens_version(priv) >= VER_0_1) {
-> +               priv->rf[TSENS_EN] = devm_regmap_field_alloc(
-> +                       dev, priv->srot_map, priv->fields[TSENS_EN]);
-> +               if (IS_ERR(priv->rf[TSENS_EN])) {
-> +                       ret = PTR_ERR(priv->rf[TSENS_EN]);
-> +                       goto err_put_device;
-> +               }
+> +};
 > +
-> +               priv->rf[SENSOR_EN] = devm_regmap_field_alloc(
-> +                       dev, priv->srot_map, priv->fields[SENSOR_EN]);
-> +               if (IS_ERR(priv->rf[SENSOR_EN])) {
-> +                       ret = PTR_ERR(priv->rf[SENSOR_EN]);
-> +                       goto err_put_device;
-> +               }
-> +               priv->rf[INT_EN] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[INT_EN]);
-> +               if (IS_ERR(priv->rf[INT_EN])) {
-> +                       ret = PTR_ERR(priv->rf[INT_EN]);
-> +                       goto err_put_device;
-> +               }
-> +       } else {
+> +static const struct reg_field tsens_8960_regfields[MAX_REGFIELDS] = {
+> +       /* ----- SROT ------ */
+> +       /* No VERSION information */
+> +
+> +       /* CNTL */
+> +       [TSENS_EN]     = REG_FIELD(CNTL_ADDR,  0, 0),
+> +       [TSENS_SW_RST] = REG_FIELD(CNTL_ADDR,  1, 1),
+> +       /* 8960 has 5 sensors, 8660 has 11, we only handle 5 */
+> +       [SENSOR_EN]    = REG_FIELD(CNTL_ADDR,  3, 7),
+> +
+> +       /* ----- TM ------ */
+> +       /* INTERRUPT ENABLE */
+> +       // [INT_EN] = REG_FIELD(TM_INT_EN_OFF, 0, 0),
 
-Let's not create two big sections with if-else for 8960 and everything
-else. For example, what is wrong with using common code for TSENS_EN?
+Get rid of these comments and at the very least use C-style comments.
 
-If the concern is memory wasted trying to allocate fields not present
-on this older platform, perhaps consider adding a check in the loop to
-break early in case of 8960?
+> +
+> +       /* Single UPPER/LOWER TEMPERATURE THRESHOLD for all sensors */
+> +       [LOW_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR,  0,  7),
+> +       [UP_THRESH_0]    = REG_FIELD(THRESHOLD_ADDR,  8, 15),
+> +       [MIN_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR, 16, 23),
+> +       [MAX_THRESH_0]   = REG_FIELD(THRESHOLD_ADDR, 24, 31),
+> +
+> +       // /* UPPER/LOWER INTERRUPT [CLEAR/STATUS] */
+> +       // /* 1 == clear, 0 == normal operation */
 
-> +               priv->rf[TSENS_EN] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[TSENS_EN]);
-> +               if (IS_ERR(priv->rf[TSENS_EN])) {
-> +                       ret = PTR_ERR(priv->rf[TSENS_EN]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               priv->rf[TSENS_SW_RST] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[TSENS_EN]);
-> +               if (IS_ERR(priv->rf[TSENS_EN])) {
-> +                       ret = PTR_ERR(priv->rf[TSENS_EN]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               /* enable TSENS */
-> +               regmap_field_write(priv->rf[TSENS_EN], 1);
-> +
-> +               priv->rf[LOW_INT_CLEAR_0] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[LOW_INT_CLEAR_0]);
-> +               if (IS_ERR(priv->rf[LOW_INT_CLEAR_0])) {
-> +                       ret = PTR_ERR(priv->rf[LOW_INT_CLEAR_0]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               priv->rf[UP_INT_CLEAR_0] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[UP_INT_CLEAR_0]);
-> +               if (IS_ERR(priv->rf[UP_INT_CLEAR_0])) {
-> +                       ret = PTR_ERR(priv->rf[UP_INT_CLEAR_0]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               priv->rf[MIN_THRESH_0] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[MIN_THRESH_0]);
-> +               if (IS_ERR(priv->rf[MIN_THRESH_0])) {
-> +                       ret = PTR_ERR(priv->rf[MIN_THRESH_0]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               priv->rf[MAX_THRESH_0] = devm_regmap_field_alloc(
-> +                       dev, priv->tm_map, priv->fields[MAX_THRESH_0]);
-> +               if (IS_ERR(priv->rf[MAX_THRESH_0])) {
-> +                       ret = PTR_ERR(priv->rf[MAX_THRESH_0]);
-> +                       goto err_put_device;
-> +               }
-> +
-> +               priv->rf[TRDY] = devm_regmap_field_alloc(dev, priv->tm_map,
-> +                                                        priv->fields[TRDY]);
-> +               if (IS_ERR(priv->rf[TRDY])) {
-> +                       ret = PTR_ERR(priv->rf[TRDY]);
-> +                       goto err_put_device;
-> +               }
->         }
-> +
->         ret = regmap_field_read(priv->rf[TSENS_EN], &enabled);
->         if (ret)
->                 goto err_put_device;
-> @@ -790,19 +883,6 @@ int __init init_common(struct tsens_priv *priv)
->                 goto err_put_device;
->         }
->
-> -       priv->rf[SENSOR_EN] = devm_regmap_field_alloc(dev, priv->srot_map,
-> -                                                     priv->fields[SENSOR_EN]);
-> -       if (IS_ERR(priv->rf[SENSOR_EN])) {
-> -               ret = PTR_ERR(priv->rf[SENSOR_EN]);
-> -               goto err_put_device;
-> -       }
-> -       priv->rf[INT_EN] = devm_regmap_field_alloc(dev, priv->tm_map,
-> -                                                  priv->fields[INT_EN]);
-> -       if (IS_ERR(priv->rf[INT_EN])) {
-> -               ret = PTR_ERR(priv->rf[INT_EN]);
-> -               goto err_put_device;
-> -       }
-> -
->         /* This loop might need changes if enum regfield_ids is reordered */
->         for (j = LAST_TEMP_0; j <= UP_THRESH_15; j += 16) {
->                 for (i = 0; i < priv->feat->max_sensors; i++) {
-> @@ -856,7 +936,11 @@ int __init init_common(struct tsens_priv *priv)
->         }
->
->         spin_lock_init(&priv->ul_lock);
-> -       tsens_enable_irq(priv);
-> +
-> +       /* VER_0 interrupt doesn't need to be enabled */
-> +       if (tsens_version(priv) >= VER_0_1)
-> +               tsens_enable_irq(priv);
-> +
->         tsens_debug_init(op);
->
->  err_put_device:
-> @@ -952,10 +1036,18 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
->                 if (irq == -ENXIO)
->                         ret = 0;
->         } else {
-> -               ret = devm_request_threaded_irq(&pdev->dev, irq,
-> -                                               NULL, thread_fn,
-> -                                               IRQF_ONESHOT,
-> -                                               dev_name(&pdev->dev), priv);
-> +               /* VER_0 have a different interrupt type */
-
-Say how it is different.
+Get rid of these comments and at the very least use C-style comments.
 
 
-> +               if (tsens_version(priv) > VER_0)
-> +                       ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-> +                                                       thread_fn, IRQF_ONESHOT,
-> +                                                       dev_name(&pdev->dev),
-> +                                                       priv);
-> +               else
-> +                       ret = devm_request_threaded_irq(&pdev->dev, irq,
-> +                                                       thread_fn, NULL,
-> +                                                       IRQF_TRIGGER_RISING,
-> +                                                       dev_name(&pdev->dev),
-> +                                                       priv);
->                 if (ret)
->                         dev_err(&pdev->dev, "%s: failed to get irq\n",
->                                 __func__);
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index 59d01162c66a..f1120791737c 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -25,7 +25,8 @@ struct tsens_priv;
->
->  /* IP version numbers in ascending order */
->  enum tsens_ver {
-> -       VER_0_1 = 0,
-> +       VER_0 = 0,
-> +       VER_0_1,
->         VER_1_X,
->         VER_2_X,
+> +       [LOW_INT_CLEAR_0]   = REG_FIELD(CNTL_ADDR,  9,  9),
+> +       [UP_INT_CLEAR_0]    = REG_FIELD(CNTL_ADDR, 10, 10),
+> +
+> +       /* NO CRITICAL INTERRUPT SUPPORT on 8960 */
+> +
+> +       /* Sn_STATUS */
+> +       [LAST_TEMP_0]  = REG_FIELD(S0_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_1]  = REG_FIELD(S1_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_2]  = REG_FIELD(S2_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_3]  = REG_FIELD(S3_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_4]  = REG_FIELD(S4_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_5]  = REG_FIELD(S5_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_6]  = REG_FIELD(S6_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_7]  = REG_FIELD(S7_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_8]  = REG_FIELD(S8_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_9]  = REG_FIELD(S9_STATUS_OFF,  0,  7),
+> +       [LAST_TEMP_10] = REG_FIELD(S10_STATUS_OFF, 0,  7),
+> +
+> +       /* No VALID field on 8960 */
+> +       /* TSENS_INT_STATUS bits: 1 == threshold violated */
+> +       [MIN_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 0, 0),
+> +       [LOWER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 1, 1),
+> +       [UPPER_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 2, 2),
+> +       /* No CRITICAL field on 8960 */
+> +       [MAX_STATUS_0] = REG_FIELD(INT_STATUS_ADDR, 3, 3),
+> +
+> +       /* TRDY: 1=ready, 0=in progress */
+> +       [TRDY] = REG_FIELD(INT_STATUS_ADDR, 7, 7),
+> +};
+> +
+>  static const struct tsens_ops ops_8960 = {
+>         .init           = init_8960,
+>         .calibrate      = calibrate_8960,
+> @@ -282,4 +354,6 @@ static const struct tsens_ops ops_8960 = {
+>  struct tsens_plat_data data_8960 = {
+>         .num_sensors    = 11,
+>         .ops            = &ops_8960,
+> +       .feat           = &tsens_8960_feat,
+> +       .fields         = tsens_8960_regfields,
 >  };
-> @@ -441,6 +442,10 @@ enum regfield_ids {
->         CRIT_THRESH_14,
->         CRIT_THRESH_15,
->
-> +       /* VER_0 MIN MAX THRESH */
-> +       MIN_THRESH_0,
-> +       MAX_THRESH_0,
-> +
->         /* WATCHDOG */
->         WDOG_BARK_STATUS,
->         WDOG_BARK_CLEAR,
 > --
 > 2.27.0
 >
