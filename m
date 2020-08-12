@@ -2,147 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DFF24245B
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 05:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3BAA242467
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 05:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726501AbgHLDjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 23:39:41 -0400
-Received: from mga17.intel.com ([192.55.52.151]:53732 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbgHLDjl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 23:39:41 -0400
-IronPort-SDR: diAlchiBGbXA0Oe4BxkqT7o6WSkNpNGzwX9oMYK3/Rm9+5N/0v4JSk7qtMcx9S6yYR7QBzwM6Q
- UtVyilC3xuZw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="133932736"
-X-IronPort-AV: E=Sophos;i="5.76,302,1592895600"; 
-   d="scan'208";a="133932736"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 20:39:40 -0700
-IronPort-SDR: rZDHZBGjVC7OHBZV2rTceKoMaTlsW7VXNJ1VX2TU+Hu8UGt0dKzDeTB7R/aST1I2s+9sq6fYa8
- 7jTkyPJNiqFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,302,1592895600"; 
-   d="scan'208";a="317949444"
-Received: from lkp-server01.sh.intel.com (HELO e03a785590b8) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2020 20:39:38 -0700
-Received: from kbuild by e03a785590b8 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k5hc2-00003w-2D; Wed, 12 Aug 2020 03:39:38 +0000
-Date:   Wed, 12 Aug 2020 11:39:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 395313eda1534576fc2440ea8907fb8ff9097485
-Message-ID: <5f33646d.7huDtKfgZy6XYDCZ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726637AbgHLDvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 23:51:37 -0400
+Received: from smtprelay0179.hostedemail.com ([216.40.44.179]:40552 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726635AbgHLDvh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Aug 2020 23:51:37 -0400
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 0AAFF18005B1E;
+        Wed, 12 Aug 2020 03:51:36 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 3ED6C8378BB9;
+        Wed, 12 Aug 2020 03:51:35 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:3870:3871:3872:4184:4321:5007:10004:10400:10848:11026:11232:11658:11914:12048:12297:12740:12760:12895:13069:13311:13357:13439:14096:14097:14180:14659:21060:21080:21222:21451:21627:30012:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
+X-HE-Tag: crow00_520afc026fe8
+X-Filterd-Recvd-Size: 2088
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf15.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 12 Aug 2020 03:51:33 +0000 (UTC)
+Message-ID: <d5af6b286fa6c9de8d71075b657b952bf775e557.camel@perches.com>
+Subject: Re: [PATCH v2 2/3] perf/x86/rapl: Support multiple rapl unit quirks
+From:   Joe Perches <joe@perches.com>
+To:     Zhang Rui <rui.zhang@intel.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org
+Cc:     linux-pm@vger.kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        kan.liang@linux.intel.com, len.brown@intel.com, rafael@kernel.org
+Date:   Tue, 11 Aug 2020 20:51:31 -0700
+In-Reply-To: <d7a19f05497b4137bacd639e576b7166e4a19842.camel@intel.com>
+References: <20200811153149.12242-1-rui.zhang@intel.com>
+         <20200811153149.12242-3-rui.zhang@intel.com>
+         <445d4b9039daca40a4d937959a0bc48ffe347f7f.camel@perches.com>
+         <d7a19f05497b4137bacd639e576b7166e4a19842.camel@intel.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 395313eda1534576fc2440ea8907fb8ff9097485  Merge branches 'acpi-soc' and 'pm-cpufreq' into linux-next
+On Wed, 2020-08-12 at 11:29 +0800, Zhang Rui wrote:
+> Hi,
+> 
+> Thanks for reviewing.
+> 
+> On Tue, 2020-08-11 at 11:19 -0700, Joe Perches wrote:
+> > On Tue, 2020-08-11 at 23:31 +0800, Zhang Rui wrote:
+> > > There will be more platforms with different fixed energy units.
+> > > Enhance the code to support different rapl unit quirks for
+> > > different
+> > > platforms.
+> > 
+> > This seems like one quirk per platform.
+> > 
+> > Should multiple quirks on individual platforms be supported?
+> > 
+> enum rapl_unit_quirk is just used as a flag.
+> multiple quirks can be deployed with the same flag, just like what I
+> did in patch 3/3.
+> Also different platforms can either have different flags or share the
+> same flag.
 
-elapsed time: 725m
+Sure, but it does lead to possible code duplication in the quirks
+as enums can not be combined like bit flags.
 
-configs tested: 84
-configs skipped: 2
+No worries, your code, your choice...
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                            xcep_defconfig
-mips                          ath25_defconfig
-sh                           se7619_defconfig
-powerpc                        cell_defconfig
-m68k                          multi_defconfig
-i386                             alldefconfig
-c6x                         dsk6455_defconfig
-mips                          malta_defconfig
-m68k                       bvme6000_defconfig
-arm                          iop32x_defconfig
-powerpc                       maple_defconfig
-sh                          urquell_defconfig
-arc                    vdk_hs38_smp_defconfig
-powerpc                         wii_defconfig
-sh                         ecovec24_defconfig
-m68k                          hp300_defconfig
-sh                           se7206_defconfig
-arm                           stm32_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                            allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20200811
-x86_64               randconfig-a005-20200811
-x86_64               randconfig-a001-20200811
-x86_64               randconfig-a003-20200811
-x86_64               randconfig-a004-20200811
-x86_64               randconfig-a002-20200811
-i386                 randconfig-a005-20200811
-i386                 randconfig-a001-20200811
-i386                 randconfig-a002-20200811
-i386                 randconfig-a003-20200811
-i386                 randconfig-a006-20200811
-i386                 randconfig-a004-20200811
-i386                 randconfig-a016-20200811
-i386                 randconfig-a011-20200811
-i386                 randconfig-a015-20200811
-i386                 randconfig-a013-20200811
-i386                 randconfig-a012-20200811
-i386                 randconfig-a014-20200811
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                                  kexec
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
