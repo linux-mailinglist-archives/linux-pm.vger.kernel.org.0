@@ -2,75 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3648242861
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 12:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED604242870
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 12:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbgHLKyd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 06:54:33 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:14181 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727078AbgHLKyF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 06:54:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1597229619;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=WzJqEDzrqFMuFhAdXgFsojKRmC5Xhk7nkSHAZykB/8o=;
-        b=Lcnic/xWYZbD/VaRj9htbJcjsBktafxNXbq2kN2sdlHLLkv3ZaYWV0pJElfJwBnFGG
-        IUpmCDYYCbgjR4iUcGqWCNCfJ2WzzUwEl2lCEM+Yt/ODrL+p5B9ONj7KJyxiTTqL/26Z
-        CcyAH26IhHVIvbF2LB96a5ctB0hFOgBkug09P3NYL0mMNTx5I0QDDY0UY3SI4yc29Z69
-        NwqexLyjWA3065UXR8NeAC5UjumEazonQtwgpyFJ+BUQ7dfS2GpE8k1OiHmlDraFLtaH
-        V4r1rx5aNjOqQHRRnuVCFUgkBsBlreu/0UXMUv+0un+zjKnwAYa7sGjW234eaxC9NXvH
-        bSGA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j6Ic/MbIo="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id Y0939ew7CArbqST
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 12 Aug 2020 12:53:37 +0200 (CEST)
-Date:   Wed, 12 Aug 2020 12:53:33 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Niklas Cassel <nks@flawful.org>
-Subject: Re: [RFC PATCH 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
- -EPROBE_DEFER
-Message-ID: <20200812105333.GA913@gerhold.net>
-References: <20200727093047.8274-1-stephan@gerhold.net>
- <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
+        id S1727849AbgHLK4r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 06:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41698 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727843AbgHLKzj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 06:55:39 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78751C06178C
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 03:54:20 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id c9so1140236ybq.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 03:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
+        b=eHtAeuj7bl+NqyA/LfsHaO+6oyAIxBkO+xaPddsTkjseO3G/4FMwJLJZ3d+diuxq/O
+         YffChG6lM/ut84kiK2GdqizvnXUTzqNXiKNeOCFMCHYmku2UrRGBn1y3T1OsOwMYOEKv
+         LBmDv2mjmGXbF3KwlPMtLwFc3xM6G+0bvX65YPeFgFlF5FcqfYFe6/ujnqj6ZwqtqzRx
+         CRsXYh37MAdT1niXt9HvyCtXxvFJMDNle0UTFpVQ2TzE6EUtu97WN+v6jDd+jOD/fhNs
+         NHhfILPNMrGbOKQ0K/3+sSXJpmcDIWxt9q3WVW0iG0t9vhqzhK4edfeGY8dzuTRSQOKD
+         0iWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=h1Wep4bWm4c6UJ7FpYIC1ACXuPoB2ZCMfU6PJTjxU/k=;
+        b=eS/QKY75I8Ex+moapQIiXGoG+C7++I1naAwzPqaPNnRrQt23CLdbRT9j+q8R8hfeX5
+         JUyKwGu6Poh+Hrqvm0gUGa8mWfDwaRQd57FO34QgK6XJQg0bGiz1vN/YhuBgnsTTTrTE
+         pP5nGaIQDiEo2RulU+UuEXo+YUfQnBnl2ycyd4RejqQW7TkcpeqtLmIdUT+tEOwyYlIS
+         boBHCb/Mh2XVVexk9e232SpHSdClcIaXftpAFBBFMEehH3yfb9l9BojVQi9vGrNSNFBf
+         YKddiNVg4cr11Aq6VgadenHByHMlqRUw21LDE9T8va1loa8FFkm+RTJYNezxNVWV/r0+
+         hKcw==
+X-Gm-Message-State: AOAM533XJFOmfMuGF/pmtFw9WTmhFowGKVURo2LqaInXrJHtdvZHoZo0
+        FamgkSE6Nqnnz4JTWyPbqcYXEU4JEu67cdHSwiE=
+X-Google-Smtp-Source: ABdhPJxlNC8oUTUc5nL8/QI7Vh+VC7WTqcpf0G2Ip8kZv1WBdyY0VUrpvwJDuXU1Jl7EvF/Yh6KiQFr+AHCrWs7YdRU=
+X-Received: by 2002:a25:234a:: with SMTP id j71mr54485670ybj.504.1597229657758;
+ Wed, 12 Aug 2020 03:54:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
+Received: by 2002:a05:7000:229b:0:0:0:0 with HTTP; Wed, 12 Aug 2020 03:54:17
+ -0700 (PDT)
+Reply-To: alexanadi0005@gmail.com
+From:   Alex Anadi <diplomatagency2011@gmail.com>
+Date:   Wed, 12 Aug 2020 11:54:17 +0100
+Message-ID: <CAG2PG9VSNH2ukcO6fsJhaDp9DqTRw4ujLo-DJjtej2T=gVdW3A@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 11:10:38AM +0200, Ulf Hansson wrote:
-> > I wasn't sure if the changes in drivers/base/power/domain.c
-> > should be made in a separate commit, but they need to be made together
-> > with the other changes.
-> 
-> I would suggest to move the changes in drivers/base/power/domain.c
-> into a separate patch, still part of the series, but let it preceed
-> $subject patch.
-> 
+Attention: Sir/Madam,
 
-OK, will do that in v2 - thank you!
+Compliments of the season.
 
-I have another small build fix reported by the kernel test robot,
-but will wait with sending that out until Viresh had a chance to give
-some feedback on the basic idea. :)
+I am Mr Alex Anadi a senior staff of Computer Telex Dept of central
+bank of Nigeria.
 
-Thanks!
-Stephan
+I decided to contact you because of the prevailing security report
+reaching my office and the intense nature of polity in Nigeria.
+
+This is to inform you about the recent plan of federal government of
+Nigeria to send your fund to you via diplomatic immunity CASH DELIVERY
+SYSTEM valued at $10.6 Million United states dollars only, contact me
+for further details.
+
+Regards,
+Mr Alex Anadi.
