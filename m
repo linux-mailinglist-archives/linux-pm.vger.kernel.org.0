@@ -2,84 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BE82426A3
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 10:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9172426A9
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 10:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726745AbgHLIUT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 04:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S1726826AbgHLIWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 04:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgHLIUR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 04:20:17 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D44DC061787
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 01:20:17 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id u10so755409plr.7
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 01:20:17 -0700 (PDT)
+        with ESMTP id S1726712AbgHLIWK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 04:22:10 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D31AC061787
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 01:22:10 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id c10so2622626pjn.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 01:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=igrwOs5BXdzFng9lpBaC8fjOPPwu57+v42SpgMKbqgU=;
-        b=ekQqof34/jYII1w6eBa5yIVw96SVBqqiPBeqi1r8kNGotFvG8q3FaMHTpLsluhhoq/
-         ApxVRamFwOA/nterYJKvHNHF1SJQaIZc5AAJSgEXuPxNUbYw9x8Ig5LYe5k+A6iRXC5d
-         Y+L1ZRGSoRqHakcIZeh/nyGzfuZvlM2g/3g2jM73/1LwYrPpgWSIEYYO1aBDohQ1wBMl
-         5KyQux2z4InuWHfQJlZOdbFcuTTgJdoHl2VGxjf+aaH+WOnpAdTJ3QdrTW9MAQZCdR1E
-         f8snFe8Jn4hcZcWz56vApw3ValbNLHpqDan9voCXY3MrKmi5baBv8X1azIUcX1/4EaIH
-         JU0A==
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=Qt2PjikeIkI2EUX4ADEcXn16jTvw0LsjlGfLtlN38oE=;
+        b=F038C5a+nLvJOfAonRrqZA0FIkVAhCSoLb2/qlDVx5+e7m6jSFI+IRIAk71igRv6VC
+         iv1dtE8ZfnqpA2aqjolHpYjxJ7laKe1EDMvbqz1d/jOyTSrGQRAktKXnb2ca86SL3w8w
+         BdNiVpzce1xc8tt46zlmoSpB/BdiN8H0f1TiQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=igrwOs5BXdzFng9lpBaC8fjOPPwu57+v42SpgMKbqgU=;
-        b=SMpXKxMU0zyND8CflL1flbxJTu/ZFiZfTHIrdcyMqBgQyopvKoXtQUelmMiFV6PSDg
-         TuJ5BgZvHJAzgdH+eVnjJCr2oTcmyxDgMFUOVm4WhbMCqh0vNawTBvsfgMWTCEsOfItc
-         yqLvcWAgi3JjH62aNepPcaoxa7/XxyjYPbCYh6YHxYLMJBAxvmDzJQw/RGfetJscfJBc
-         49Nwl1kmygv6nfyl31LIa6AYX/v//DkxzEsX+sJVT601DNbQdaKCFDgDtZxgUUiwmiTD
-         acFOegRiFjYwvB+yjrWlvkcAu1Sbb8WHA6VJynxPTHa69fVof+/H06tlhucJYPr9z6fm
-         PxEg==
-X-Gm-Message-State: AOAM533bzu3VYR7R0UCQcvmSQ0DyANo1l4BdZu89DHb2iy6Cn2menIYi
-        6gI7JLRQ9SWMECkHB8lDR5enRg==
-X-Google-Smtp-Source: ABdhPJxPwOmfgTz1iL8sWxWSIdNppBzTK3OVbY8JYR/pC5JUmKvQqsmT/mvySzfjGAVPo8AAxC5GVw==
-X-Received: by 2002:a17:90a:4e42:: with SMTP id t2mr4927711pjl.121.1597220416855;
-        Wed, 12 Aug 2020 01:20:16 -0700 (PDT)
-Received: from localhost ([122.161.126.124])
-        by smtp.gmail.com with ESMTPSA id o17sm1429142pgn.73.2020.08.12.01.20.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Aug 2020 01:20:16 -0700 (PDT)
-Date:   Wed, 12 Aug 2020 13:50:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=Qt2PjikeIkI2EUX4ADEcXn16jTvw0LsjlGfLtlN38oE=;
+        b=B6ZCg721XIZJblUtMs5in+i9tOzzScuk1hoG6n8maSOGVlIEXWH6YuzTXdOBj0Tghw
+         FpkWsXghd/Mzf5H1anxFd9+U0StgxjoXziI+z1YsNxjoi34b/bAEt2VXEunL/aYiS/Jx
+         h0DN5rQt1TTocDUalbu6sAO71pXklhs29NHfSFnS1qqZC8Ey/SMyf/mswAh4UqbIRU5/
+         Yf8aLm1n3oY+T6ZkjWkjd8amAJ+vIYZ5yeNNSqG5pIBLlLXz0cR6ijpHCmHbybKLGml3
+         dQZB5cjOwcOaHSuJM4shKkKWbrQJ66U3l1zmzhnLzpsers78aqUYLFBqKFzEoBNrkccB
+         A3Mg==
+X-Gm-Message-State: AOAM531Of9YRz1Mk00wxGsT8gS5SC8jXCdRyn5TXjIN8DosvMxsgtoav
+        mPFfQW7pF85IdQMCBu20XKAGDQ==
+X-Google-Smtp-Source: ABdhPJxUu7oGLLG5+Yc0JrlYpmac2lDJvq+Yfl+8kSn6NlG+H76p87SJVx3Xmg+Duprs/I1Obmm+Fw==
+X-Received: by 2002:a17:90a:80c4:: with SMTP id k4mr4808663pjw.222.1597220529963;
+        Wed, 12 Aug 2020 01:22:09 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id 144sm1498207pfu.114.2020.08.12.01.22.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2020 01:22:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200812082013.64xc6hmt4nchcmab@vireshk-mac-ubuntu>
+References: <20200811212836.2531613-1-swboyd@chromium.org> <20200812082013.64xc6hmt4nchcmab@vireshk-mac-ubuntu>
+Subject: Re: [PATCH] OPP: Put opp table in dev_pm_opp_set_rate() all the time
+From:   Stephen Boyd <swboyd@chromium.org>
 Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, Rajendra Nayak <rnayak@codeaurora.org>
-Subject: Re: [PATCH] OPP: Put opp table in dev_pm_opp_set_rate() all the time
-Message-ID: <20200812082013.64xc6hmt4nchcmab@vireshk-mac-ubuntu>
-References: <20200811212836.2531613-1-swboyd@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200811212836.2531613-1-swboyd@chromium.org>
-User-Agent: NeoMutt/20170609 (1.8.3)
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Wed, 12 Aug 2020 01:22:08 -0700
+Message-ID: <159722052820.33733.14125029118837266849@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-08-20, 14:28, Stephen Boyd wrote:
-> @@ -905,7 +907,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->  
->  		ret = _set_opp_bw(opp_table, NULL, dev, true);
->  		if (ret)
-> -			return ret;
-> +			goto put_opp_table;
+Quoting Viresh Kumar (2020-08-12 01:20:13)
+> On 11-08-20, 14:28, Stephen Boyd wrote:
+> > @@ -905,7 +907,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigne=
+d long target_freq)
+> > =20
+> >               ret =3D _set_opp_bw(opp_table, NULL, dev, true);
+> >               if (ret)
+> > -                     return ret;
+> > +                     goto put_opp_table;
+>=20
+> This was broken by a different patch.
+>=20
+> Fixes: b00e667a6d8b ("opp: Remove bandwidth votes when target_freq is zer=
+o")
+>=20
+> I did split the patch into two and applied the correct tags (not yet
+> pushed though).
 
-This was broken by a different patch.
-
-Fixes: b00e667a6d8b ("opp: Remove bandwidth votes when target_freq is zero")
-
-I did split the patch into two and applied the correct tags (not yet
-pushed though).
-
--- 
-viresh
+Ok, makes sense. Thanks!
