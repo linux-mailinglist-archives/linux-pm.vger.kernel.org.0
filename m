@@ -2,366 +2,496 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6A0242737
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66554242771
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726601AbgHLJLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 05:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
+        id S1727791AbgHLJZy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 05:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726629AbgHLJLQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 05:11:16 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC02C061787
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:11:16 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id l2so1302310wrc.7
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:11:16 -0700 (PDT)
+        with ESMTP id S1726629AbgHLJZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 05:25:54 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9601C061787
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:25:53 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id 184so1274051wmb.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:25:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=5JuupEkp5vod5HA205R9gxX6KMWGdIQCej3+1g8f03s=;
-        b=USymMjrzE5SS30e13s++ZulJ4UxF8cO7xOEECOXqe5PQdc4o/pM7q96P8uhG/K8JsR
-         vra5IZXOoU4ZU1ack01V3mvQ6LSvUyDe8VGmKu0E9wGUo6Wt39e2iowmhwwsz7AHGjsg
-         Vm69i4ZbFNSjhuYj7f57xSTxYjhNvwvscsMImG2BPP9969+HvDWu1WKXmBGN8FXQReVa
-         EIF1VJIjwjlLMlw4Yq9ukjVy8qzaoq9r/79AJ7htqqXtD6b4Mb8iQ7lIB6o+0VgNBRua
-         YlkUeYM5yJJUC44Ygu23l0z7DDQrYr+H2jc3uRHsg3+XMA1WBr4KfOWhSCGkticoikIz
-         EvxQ==
+        bh=SvfFqPMBYHrIBngvtKGyeRUH8F4npQzcI9U5KAItnhs=;
+        b=n9UaiMW4ZPenoCeeKXhhAhpZn7yEMBJYCgDMSeNC2frPa7mh0beU01XNVCrphshei+
+         U4FzQHE/0Dj6m0Qhu5591Kt2vn+Q0GsMlGdLY2G04SBUQvxnlNkYX5cQeNnY+1ozClC6
+         /W7r5qVT01i8N69LPejgyhsauTf8eM9iVponY82AvRQdyGoaErXEskVz1soec/NnNizv
+         z9fsThWN6mWQ3/Tg02xL9IpW3QAy0IJ3T4lgP2tbEriv688ExcUhxXud+E1VyFmNdn3F
+         rog35negzbsd5rsJhjSBGJyf3VxEEXKbB7ccO30qkxmdqkUtXl3j2Jk0uhKCtVr0dYr9
+         aZnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=5JuupEkp5vod5HA205R9gxX6KMWGdIQCej3+1g8f03s=;
-        b=PL+iW+wqxHUIlyRnyowui9kTCSqQ8hYRpfYEUCxteih7eFAYHZjc7FbTQGSBVDYyae
-         BjVHefhWpJczx49Ti9MhnaYkAd6ztGeAcEQQ+kKuCLgtC4T7gVQJHxcluM3nx3b6j0TT
-         G/u0xNrx+EFU1Cc3+XYXk7BXk1YR4eJhmnFz6hFv2HJn5DytdxOm69QbG3gnWrnF2HEO
-         moF7UgTXXf5u4Cfj/CRhnqwS2O7QTDsy6uLof7CdF/BnE+WRrC+atUUHh0lS4fl6Txgx
-         4sAmasuEDuVKN6RERfNErkAtuWmUaLwoEDm/SSvzylD5ZQQ81qVHujeBKomEx+MzcpmU
-         RQ+Q==
-X-Gm-Message-State: AOAM532328vpewseN+FsZPnz08PME7BSW/wRR6qrL/87E2BrDBAAsadx
-        ZpAP5o9erhUrqZ4BDNQy5BJJ81cp4kbnhKJShNiSqw==
-X-Google-Smtp-Source: ABdhPJxSYn57aBvxRMTSZ5fhuCgjCRJB77iTZyOHH6wA5r3SVDJbWMSFqMbPNZVWfTwffREQggHHiadxZW8Jf1XYbgk=
-X-Received: by 2002:a05:6000:1203:: with SMTP id e3mr33611384wrx.324.1597223474540;
- Wed, 12 Aug 2020 02:11:14 -0700 (PDT)
+        bh=SvfFqPMBYHrIBngvtKGyeRUH8F4npQzcI9U5KAItnhs=;
+        b=nS2yJoR/gDQwHlEk4g6LcYLkkDnlZiXnFuiTkmxNTFqjgBCUzAkDq3rSNq+/8JS9aH
+         AEivK6MTM0NIpCrBHty2+mqPWmHxnnpNPA8DNJVfcSpsfa1kab38Sp0CtArt/8ITR84i
+         dJtRD7hi+9L4aiZ1c0BQGOAFf5BcieiunEculEOMJfoW/3Ieh3vvYVRbEfOOLfch56Vc
+         fvLjetiHhtDjMXv91n02FBnzxwQCAVm8dRcZhKYY6sKKNluvHCouZHFZ1ZmdGGKPtPEW
+         lZTEeBkCE1FLRjj3lwXEwP7lvWGfboUrqN+zDLH2mHodphAtcxxqxjsOyjY68QoEFwxC
+         AitA==
+X-Gm-Message-State: AOAM531lfIgvi8HMo1B4OToGXb6TrEE9SF8DD//mNP5IORmB5VxekIPH
+        PUhKZVimIwZ3Z7cvIZEaZy23nNBYjaf5IcHsuOVRxg==
+X-Google-Smtp-Source: ABdhPJxjn+fo768OEogx63fWH7VDmBt9D0oBJBEehNtMfHTAnbcVln0rj3JKOMoHL2S3zYREX2gp28pDsaf1k+8Y3Ik=
+X-Received: by 2002:a1c:a385:: with SMTP id m127mr8201295wme.189.1597224351619;
+ Wed, 12 Aug 2020 02:25:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200727093047.8274-1-stephan@gerhold.net>
-In-Reply-To: <20200727093047.8274-1-stephan@gerhold.net>
+References: <2672940.cHDmkauF2A@kreacher>
+In-Reply-To: <2672940.cHDmkauF2A@kreacher>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 12 Aug 2020 11:10:38 +0200
-Message-ID: <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Niklas Cassel <nks@flawful.org>
+Date:   Wed, 12 Aug 2020 11:25:15 +0200
+Message-ID: <CAPDyKFqLOHL46Mb2PQ=hCpEhxKXtNE-t7KbrmYXD8aL=UeLyVg@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Add kerneldoc comments to multiple helpers
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Wolfram Sang <wsa@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 27 Jul 2020 at 11:31, Stephan Gerhold <stephan@gerhold.net> wrote:
+On Fri, 31 Jul 2020 at 19:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> The OPP core manages various resources, e.g. clocks or interconnect paths.
-> These resources are looked up when the OPP table is allocated once
-> dev_pm_opp_get_opp_table() is called the first time (either directly
-> or indirectly through one of the many helper functions).
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> At this point, the resources may not be available yet, i.e. looking them
-> up will result in -EPROBE_DEFER. Unfortunately, dev_pm_opp_get_opp_table()
-> is currently unable to propagate this error code since it only returns
-> the allocated OPP table or NULL.
+> Add kerneldoc comments to multiple PM-runtime helper functions
+> defined as static inline wrappers around lower-level routines to
+> provide quick reference decumentation of their behavior.
 >
-> This means that all consumers of the OPP core are required to make sure
-> that all necessary resources are available. Usually this happens by
-> requesting them, checking the result and releasing them immediately after.
+> Some of them are similar to each other with subtle differences only
+> and the behavior of some of them may appear as counter-intuitive, so
+> clarify all that to avoid confusion.
 >
-> For example, we have added "dev_pm_opp_of_find_icc_paths(dev, NULL)" to
-> several drivers now just to make sure the interconnect providers are
-> ready before the OPP table is allocated. If this call is missing,
-> the OPP core will only warn about this and then attempt to continue
-> without interconnect. This will eventually fail horribly, e.g.:
->
->     cpu cpu0: _allocate_opp_table: Error finding interconnect paths: -517
->     ... later ...
->     of: _read_bw: Mismatch between opp-peak-kBps and paths (1 0)
->     cpu cpu0: _opp_add_static_v2: opp key field not found
->     cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -22
->
-> This example happens when trying to use interconnects for a CPU OPP
-> table together with qcom-cpufreq-nvmem.c. qcom-cpufreq-nvmem calls
-> dev_pm_opp_set_supported_hw(), which ends up allocating the OPP table
-> early. To fix the problem with the current approach we would need to add
-> yet another call to dev_pm_opp_of_find_icc_paths(dev, NULL).
-> But actually qcom-cpufreq-nvmem.c has nothing to do with interconnects...
->
-> This commit attempts to make this more robust by allowing
-> dev_pm_opp_get_opp_table() to return an error pointer. Fixing all
-> the usages is trivial because the function is usually used indirectly
-> through another helper (e.g. dev_pm_opp_set_supported_hw() above).
-> These other helpers already return an error pointer.
->
-> The example above then works correctly because set_supported_hw() will
-> return -EPROBE_DEFER, and qcom-cpufreq-nvmem.c already propagates that
-> error. It should also be possible to remove the remaining usages of
-> "dev_pm_opp_of_find_icc_paths(dev, NULL)" from other drivers as well.
->
-> Note that this commit currently only handles -EPROBE_DEFER for the
-> clock/interconnects within _allocate_opp_table(). Other errors are just
-> ignored as before. Eventually those should be propagated as well.
->
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-> I wasn't sure if the changes in drivers/base/power/domain.c
-> should be made in a separate commit, but they need to be made together
-> with the other changes.
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I would suggest to move the changes in drivers/base/power/domain.c
-into a separate patch, still part of the series, but let it preceed
-$subject patch.
-
->
-> Also note that this is RFC because this is just something I got really
-> frustrated about. There might be situations where this won't work correctly...?
-> ---
->  drivers/base/power/domain.c | 28 ++++++++++++++++++-----
-
-The above changes look good to me.
-
-For the below, at a quick look I have no objections, but I am
-deferring to Viresh to have a closer look.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
 
->  drivers/opp/core.c          | 45 ++++++++++++++++++++++---------------
->  drivers/opp/of.c            |  8 +++----
->  3 files changed, 53 insertions(+), 28 deletions(-)
+> ---
+>  include/linux/pm_runtime.h |  246 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 246 insertions(+)
 >
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 2cb5e04cf86c..c50f2de952c4 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2044,8 +2044,9 @@ int of_genpd_add_provider_simple(struct device_node *np,
->         if (genpd->set_performance_state) {
->                 ret = dev_pm_opp_of_add_table(&genpd->dev);
->                 if (ret) {
-> -                       dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> -                               ret);
-> +                       if (ret != -EPROBE_DEFER)
-> +                               dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
-> +                                       ret);
->                         goto unlock;
->                 }
+> Index: linux-pm/include/linux/pm_runtime.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm_runtime.h
+> +++ linux-pm/include/linux/pm_runtime.h
+> @@ -60,58 +60,151 @@ extern void pm_runtime_put_suppliers(str
+>  extern void pm_runtime_new_link(struct device *dev);
+>  extern void pm_runtime_drop_link(struct device *dev);
 >
-> @@ -2054,7 +2055,14 @@ int of_genpd_add_provider_simple(struct device_node *np,
->                  * state.
->                  */
->                 genpd->opp_table = dev_pm_opp_get_opp_table(&genpd->dev);
-> -               WARN_ON(!genpd->opp_table);
-> +               if (IS_ERR(genpd->opp_table)) {
-> +                       if (PTR_ERR(genpd->opp_table) != -EPROBE_DEFER)
-> +                               dev_err(&genpd->dev, "Failed to get OPP table: %pe\n",
-> +                                       genpd->opp_table);
-> +
-> +                       dev_pm_opp_of_remove_table(&genpd->dev);
-> +                       goto unlock;
-> +               }
->         }
->
->         ret = genpd_add_provider(np, genpd_xlate_simple, genpd);
-> @@ -2111,8 +2119,9 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->                 if (genpd->set_performance_state) {
->                         ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
->                         if (ret) {
-> -                               dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
-> -                                       i, ret);
-> +                               if (ret != -EPROBE_DEFER)
-> +                                       dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
-> +                                               i, ret);
->                                 goto error;
->                         }
->
-> @@ -2121,7 +2130,14 @@ int of_genpd_add_provider_onecell(struct device_node *np,
->                          * performance state.
->                          */
->                         genpd->opp_table = dev_pm_opp_get_opp_table_indexed(&genpd->dev, i);
-> -                       WARN_ON(!genpd->opp_table);
-> +                       if (IS_ERR(genpd->opp_table)) {
-> +                               if (PTR_ERR(genpd->opp_table) != -EPROBE_DEFER)
-> +                                       dev_err(&genpd->dev, "Failed to get OPP table: %pe\n",
-> +                                               genpd->opp_table);
-> +
-> +                               dev_pm_opp_of_remove_table(&genpd->dev);
-> +                               goto error;
-> +                       }
->                 }
->
->                 genpd->provider = &np->fwnode;
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 9d7fb45b1786..45d24de75e0e 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1063,7 +1063,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
->          */
->         opp_table = kzalloc(sizeof(*opp_table), GFP_KERNEL);
->         if (!opp_table)
-> -               return NULL;
-> +               return ERR_PTR(-ENOMEM);
->
->         mutex_init(&opp_table->lock);
->         mutex_init(&opp_table->genpd_virt_dev_lock);
-> @@ -1074,8 +1074,8 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
->
->         opp_dev = _add_opp_dev(dev, opp_table);
->         if (!opp_dev) {
-> -               kfree(opp_table);
-> -               return NULL;
-> +               ret = -ENOMEM;
-> +               goto err;
->         }
->
->         _of_init_opp_table(opp_table, dev, index);
-> @@ -1087,13 +1087,18 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
->                 if (ret != -EPROBE_DEFER)
->                         dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__,
->                                 ret);
-> +               else
-> +                       goto err;
->         }
->
->         /* Find interconnect path(s) for the device */
->         ret = dev_pm_opp_of_find_icc_paths(dev, opp_table);
-> -       if (ret)
-> +       if (ret) {
-> +               if (ret == -EPROBE_DEFER)
-> +                       goto err;
->                 dev_warn(dev, "%s: Error finding interconnect paths: %d\n",
->                          __func__, ret);
-> +       }
->
->         BLOCKING_INIT_NOTIFIER_HEAD(&opp_table->head);
->         INIT_LIST_HEAD(&opp_table->opp_list);
-> @@ -1102,6 +1107,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
->         /* Secure the device table modification */
->         list_add(&opp_table->node, &opp_tables);
->         return opp_table;
-> +
-> +err:
-> +       kfree(opp_table);
-> +       return ERR_PTR(ret);
+> +/**
+> + * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+> + * @dev: Target device.
+> + *
+> + * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
+> + */
+>  static inline int pm_runtime_get_if_in_use(struct device *dev)
+>  {
+>         return pm_runtime_get_if_active(dev, false);
 >  }
 >
->  void _get_opp_table_kref(struct opp_table *opp_table)
-> @@ -1568,8 +1577,8 @@ struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
->         struct opp_table *opp_table;
+> +/**
+> + * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
+> + * @dev: Target device.
+> + * @enable: Whether or not to ignore possible dependencies on children.
+> + *
+> + * The dependencies of @dev on its children will not be taken into account by
+> + * the runtime PM framework going forward if @enable is %true, or they will
+> + * be taken into account otherwise.
+> + */
+>  static inline void pm_suspend_ignore_children(struct device *dev, bool enable)
+>  {
+>         dev->power.ignore_children = enable;
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_get_noresume - Bump up runtime PM usage counter of a device.
+> + * @dev: Target device.
+> + */
+>  static inline void pm_runtime_get_noresume(struct device *dev)
+>  {
+>         atomic_inc(&dev->power.usage_count);
+>  }
 >
->         /* Make sure there are no concurrent readers while updating opp_table */
->         WARN_ON(!list_empty(&opp_table->opp_list));
-> @@ -1627,8 +1636,8 @@ struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
->         struct opp_table *opp_table;
+> +/**
+> + * pm_runtime_put_noidle - Drop runtime PM usage counter of a device.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev unless it is 0 already.
+> + */
+>  static inline void pm_runtime_put_noidle(struct device *dev)
+>  {
+>         atomic_add_unless(&dev->power.usage_count, -1, 0);
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_suspended - Check whether or not a device is runtime-suspended.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev and its runtime PM status is
+> + * %RPM_SUSPENDED, or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
+> + * status cannot change.
+> + */
+>  static inline bool pm_runtime_suspended(struct device *dev)
+>  {
+>         return dev->power.runtime_status == RPM_SUSPENDED
+>                 && !dev->power.disable_depth;
+>  }
 >
->         /* Make sure there are no concurrent readers while updating opp_table */
->         WARN_ON(!list_empty(&opp_table->opp_list));
-> @@ -1720,8 +1729,8 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
->         int ret, i;
+> +/**
+> + * pm_runtime_active - Check whether or not a device is runtime-active.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev and its runtime PM status is
+> + * %RPM_ACTIVE, or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev and its runtime PM
+> + * status cannot change.
+> + */
+>  static inline bool pm_runtime_active(struct device *dev)
+>  {
+>         return dev->power.runtime_status == RPM_ACTIVE
+>                 || dev->power.disable_depth;
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_status_suspended - Check if runtime PM status is "suspended".
+> + * @dev: Target device.
+> + *
+> + * Return %true if the runtime PM status of @dev is %RPM_SUSPENDED, or %false
+> + * otherwise, regardless of whether or not runtime PM has been enabled for @dev.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which the
+> + * runtime PM status of @dev cannot change.
+> + */
+>  static inline bool pm_runtime_status_suspended(struct device *dev)
+>  {
+>         return dev->power.runtime_status == RPM_SUSPENDED;
+>  }
 >
->         /* This should be called before OPPs are initialized */
->         if (WARN_ON(!list_empty(&opp_table->opp_list))) {
-> @@ -1830,8 +1839,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
->         int ret;
+> +/**
+> + * pm_runtime_enabled - Check if runtime PM is enabled.
+> + * @dev: Target device.
+> + *
+> + * Return %true if runtime PM is enabled for @dev or %false otherwise.
+> + *
+> + * Note that the return value of this function can only be trusted if it is
+> + * called under the runtime PM lock of @dev or under conditions in which
+> + * runtime PM cannot be either disabled or enabled for @dev.
+> + */
+>  static inline bool pm_runtime_enabled(struct device *dev)
+>  {
+>         return !dev->power.disable_depth;
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_has_no_callbacks - Check if runtime PM callbacks may be present.
+> + * @dev: Target device.
+> + *
+> + * Return %true if @dev is a special device without runtime PM callbacks or
+> + * %false otherwise.
+> + */
+>  static inline bool pm_runtime_has_no_callbacks(struct device *dev)
+>  {
+>         return dev->power.no_callbacks;
+>  }
 >
->         /* This should be called before OPPs are initialized */
->         if (WARN_ON(!list_empty(&opp_table->opp_list))) {
-> @@ -1898,8 +1907,8 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
->                 return ERR_PTR(-EINVAL);
+> +/**
+> + * pm_runtime_mark_last_busy - Update the last access time of a device.
+> + * @dev: Target device.
+> + *
+> + * Update the last access time of @dev used by the runtime PM autosuspend
+> + * mechanism to the current time as returned by ktime_get_mono_fast_ns().
+> + */
+>  static inline void pm_runtime_mark_last_busy(struct device *dev)
+>  {
+>         WRITE_ONCE(dev->power.last_busy, ktime_get_mono_fast_ns());
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (!IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_is_irq_safe - Check if runtime PM can work in interrupt context.
+> + * @dev: Target device.
+> + *
+> + * Return %true if @dev has been marked as an "IRQ-safe" device (with respect
+> + * to runtime PM), in which case its runtime PM callabcks can be expected to
+> + * work correctly when invoked from interrupt handlers.
+> + */
+>  static inline bool pm_runtime_is_irq_safe(struct device *dev)
+>  {
+>         return dev->power.irq_safe;
+> @@ -191,97 +284,250 @@ static inline void pm_runtime_drop_link(
 >
->         /* This should be called before OPPs are initialized */
->         if (WARN_ON(!list_empty(&opp_table->opp_list))) {
-> @@ -1979,8 +1988,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
->         const char **name = names;
+>  #endif /* !CONFIG_PM */
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return ERR_PTR(-ENOMEM);
-> +       if (IS_ERR(opp_table))
-> +               return opp_table;
+> +/**
+> + * pm_runtime_idle - Conditionally set up autosuspend of a device or suspend it.
+> + * @dev: Target device.
+> + *
+> + * Invoke the "idle check" callback of @dev and, depending on its return value,
+> + * set up autosuspend of @dev or suspend it (depending on whether or not
+> + * autosuspend has been enabled for it).
+> + */
+>  static inline int pm_runtime_idle(struct device *dev)
+>  {
+>         return __pm_runtime_idle(dev, 0);
+>  }
 >
->         /*
->          * If the genpd's OPP table isn't already initialized, parsing of the
-> @@ -2150,8 +2159,8 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
->         int ret;
+> +/**
+> + * pm_runtime_suspend - Suspend a device synchronously.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_runtime_suspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev, 0);
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table(dev);
-> -       if (!opp_table)
-> -               return -ENOMEM;
-> +       if (IS_ERR(opp_table))
-> +               return PTR_ERR(opp_table);
+> +/**
+> + * pm_runtime_autosuspend - Set up autosuspend of a device or suspend it.
+> + * @dev: Target device.
+> + *
+> + * Set up autosuspend of @dev or suspend it (depending on whether or not
+> + * autosuspend is enabled for it) without engaging its "idle check" callback.
+> + */
+>  static inline int pm_runtime_autosuspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev, RPM_AUTO);
+>  }
 >
->         /* Fix regulator count for dynamic OPPs */
->         opp_table->regulator_count = 1;
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 0430290670ab..d8b623cc015a 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -947,8 +947,8 @@ int dev_pm_opp_of_add_table(struct device *dev)
->         int ret;
+> +/**
+> + * pm_runtime_resume - Resume a device synchronously.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_runtime_resume(struct device *dev)
+>  {
+>         return __pm_runtime_resume(dev, 0);
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table_indexed(dev, 0);
-> -       if (!opp_table)
-> -               return -ENOMEM;
-> +       if (IS_ERR(opp_table))
-> +               return PTR_ERR(opp_table);
+> +/**
+> + * pm_request_idle - Queue up "idle check" execution for a device.
+> + * @dev: Target device.
+> + *
+> + * Queue up a work item to run an equivalent of pm_runtime_idle() for @dev
+> + * asynchronously.
+> + */
+>  static inline int pm_request_idle(struct device *dev)
+>  {
+>         return __pm_runtime_idle(dev, RPM_ASYNC);
+>  }
 >
->         /*
->          * OPPs have two version of bindings now. Also try the old (v1)
-> @@ -1002,8 +1002,8 @@ int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
->         }
+> +/**
+> + * pm_request_resume - Queue up runtime-resume of a device.
+> + * @dev: Target device.
+> + */
+>  static inline int pm_request_resume(struct device *dev)
+>  {
+>         return __pm_runtime_resume(dev, RPM_ASYNC);
+>  }
 >
->         opp_table = dev_pm_opp_get_opp_table_indexed(dev, index);
-> -       if (!opp_table)
-> -               return -ENOMEM;
-> +       if (IS_ERR(opp_table))
-> +               return PTR_ERR(opp_table);
+> +/**
+> + * pm_request_autosuspend - Queue up autosuspend of a device.
+> + * @dev: Target device.
+> + *
+> + * Queue up a work item to run an equivalent pm_runtime_autosuspend() for @dev
+> + * asynchronously.
+> + */
+>  static inline int pm_request_autosuspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev, RPM_ASYNC | RPM_AUTO);
+>  }
 >
->         ret = _of_add_opp_table_v2(dev, opp_table);
->         if (ret)
-> --
-> 2.27.0
+> +/**
+> + * pm_runtime_get - Bump up usage counter and queue up resume of a device.
+> + * @dev: Target device.
+> + *
+> + * Bump up the runtime PM usage counter of @dev and queue up a work item to
+> + * carry out runtime-resume of it.
+> + */
+>  static inline int pm_runtime_get(struct device *dev)
+>  {
+>         return __pm_runtime_resume(dev, RPM_GET_PUT | RPM_ASYNC);
+>  }
+>
+> +/**
+> + * pm_runtime_get_sync - Bump up usage counter of a device and resume it.
+> + * @dev: Target device.
+> + *
+> + * Bump up the runtime PM usage counter of @dev and carry out runtime-resume of
+> + * it synchronously.
+> + *
+> + * The possible return values of this function are the same as for
+> + * pm_runtime_resume() and the runtime PM usage counter of @dev remains
+> + * incremented in all cases, even if it returns an error code.
+> + */
+>  static inline int pm_runtime_get_sync(struct device *dev)
+>  {
+>         return __pm_runtime_resume(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_put - Drop device usage counter and queue up "idle check" if 0.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev and if it turns out to be
+> + * equal to 0, queue up a work item for @dev like in pm_request_idle().
+> + */
+>  static inline int pm_runtime_put(struct device *dev)
+>  {
+>         return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
+>  }
+>
+> +/**
+> + * pm_runtime_put_autosuspend - Drop device usage counter and queue autosuspend if 0.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev and if it turns out to be
+> + * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
+> + */
+>  static inline int pm_runtime_put_autosuspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev,
+>             RPM_GET_PUT | RPM_ASYNC | RPM_AUTO);
+>  }
+>
+> +/**
+> + * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev and if it turns out to be
+> + * equal to 0, invoke the "idle check" callback of @dev and, depending on its
+> + * return value, set up autosuspend of @dev or suspend it (depending on whether
+> + * or not autosuspend has been enabled for it).
+> + *
+> + * The possible return values of this function are the same as for
+> + * pm_runtime_idle() and the runtime PM usage counter of @dev remains
+> + * decremented in all cases, even if it returns an error code.
+> + */
+>  static inline int pm_runtime_put_sync(struct device *dev)
+>  {
+>         return __pm_runtime_idle(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_put_sync_suspend - Drop device usage counter and suspend if 0.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev and if it turns out to be
+> + * equal to 0, carry out runtime-suspend of @dev synchronously.
+> + *
+> + * The possible return values of this function are the same as for
+> + * pm_runtime_suspend() and the runtime PM usage counter of @dev remains
+> + * decremented in all cases, even if it returns an error code.
+> + */
+>  static inline int pm_runtime_put_sync_suspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev, RPM_GET_PUT);
+>  }
+>
+> +/**
+> + * pm_runtime_put_sync_autosuspend - Drop device usage counter and autosuspend if 0.
+> + * @dev: Target device.
+> + *
+> + * Decrement the runtime PM usage counter of @dev and if it turns out to be
+> + * equal to 0, set up autosuspend of @dev or suspend it synchronously (depending
+> + * on whether or not autosuspend has been enabled for it).
+> + *
+> + * The possible return values of this function are the same as for
+> + * pm_runtime_autosuspend() and the runtime PM usage counter of @dev remains
+> + * decremented in all cases, even if it returns an error code.
+> + */
+>  static inline int pm_runtime_put_sync_autosuspend(struct device *dev)
+>  {
+>         return __pm_runtime_suspend(dev, RPM_GET_PUT | RPM_AUTO);
+>  }
+>
+> +/**
+> + * pm_runtime_set_active - Set runtime PM status to "active".
+> + * @dev: Target device.
+> + *
+> + * Set the runtime PM status of @dev to %RPM_ACTIVE and ensure that dependencies
+> + * of it will be taken into account.
+> + *
+> + * It is not valid to call this function for devices with runtime PM enabled.
+> + */
+>  static inline int pm_runtime_set_active(struct device *dev)
+>  {
+>         return __pm_runtime_set_status(dev, RPM_ACTIVE);
+>  }
+>
+> +/**
+> + * pm_runtime_set_suspended - Set runtime PM status to "active".
+> + * @dev: Target device.
+> + *
+> + * Set the runtime PM status of @dev to %RPM_SUSPENDED and ensure that
+> + * dependencies of it will be taken into account.
+> + *
+> + * It is not valid to call this function for devices with runtime PM enabled.
+> + */
+>  static inline int pm_runtime_set_suspended(struct device *dev)
+>  {
+>         return __pm_runtime_set_status(dev, RPM_SUSPENDED);
+>  }
+>
+> +/**
+> + * pm_runtime_disable - Disable runtime PM for a device.
+> + * @dev: Target device.
+> + *
+> + * Prevent the runtime PM framework from working with @dev (by incrementing its
+> + * "blocking" counter).
+> + *
+> + * For each invocation of this function for @dev there must be a matching
+> + * pm_runtime_enable() call in order for runtime PM to be enabled for it.
+> + */
+>  static inline void pm_runtime_disable(struct device *dev)
+>  {
+>         __pm_runtime_disable(dev, true);
+>  }
+>
+> +/**
+> + * pm_runtime_use_autosuspend - Allow autosuspend to be used for a device.
+> + * @dev: Target device.
+> + *
+> + * Allow the runtime PM autosuspend mechanism to be used for @dev whenever
+> + * requested (or "autosuspend" will be handled as direct runtime-suspend for
+> + * it).
+> + */
+>  static inline void pm_runtime_use_autosuspend(struct device *dev)
+>  {
+>         __pm_runtime_use_autosuspend(dev, true);
+>  }
+>
+> +/**
+> + * pm_runtime_dont_use_autosuspend - Prevent autosuspend from being used.
+> + * @dev: Target device.
+> + *
+> + * Prevent the runtime PM autosuspend mechanism from being used for @dev which
+> + * means that "autosuspend" will be handled as direct runtime-suspend for it
+> + * going forward.
+> + */
+>  static inline void pm_runtime_dont_use_autosuspend(struct device *dev)
+>  {
+>         __pm_runtime_use_autosuspend(dev, false);
+>
+>
 >
