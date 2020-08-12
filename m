@@ -2,179 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C5C242788
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E7D2427B8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgHLJ01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 05:26:27 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:10528 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727880AbgHLJ01 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Aug 2020 05:26:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597224385; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
- Subject: Sender; bh=Ut7UsXyyt3w1ZkSYeaLSTk9Ej6vXqnbWm3dpszGQbYk=; b=d20ue8ZG+WnVsgznsTyLSMkrNVmrN1V0RWSyg4BGAZaSVelC/JqE1l1oPQYl4fMcP7yaXcpG
- O1yzklwDHur+sJf1WOxIsi8m2epuw1YGbv8FyM6oWE95msaN3oC3jINQlupT6V7MEda3679e
- AKYhoWosGDgy3YYA5TAXPSQ0k9g=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n13.prod.us-east-1.postgun.com with SMTP id
- 5f33b5c1247ccc308cb55fff (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Aug 2020 09:26:25
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9D184C433A0; Wed, 12 Aug 2020 09:26:24 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.16] (unknown [61.1.229.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B0A60C433CA;
-        Wed, 12 Aug 2020 09:26:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B0A60C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [RFC v2 03/11] tty: serial: qcom_geni_serial: Use OPP API to set
- clk/perf state
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-scsi@vger.kernel.org,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-4-rnayak@codeaurora.org>
- <CALAqxLV2TBk9ScUM6MeJMCkL8kJnCihjQ7ac5fLzcqOg1rREVQ@mail.gmail.com>
- <CALAqxLWg3jJKJFLnnne-mrQEnH=m7R_9azCGaGnEmFYR4EMh=A@mail.gmail.com>
- <ec5eeb21-48e4-5dcc-583a-ac9419659e44@codeaurora.org>
- <CAMi1Hd1O+3bjQN6c9WQr+t0YXGBAukfFzJWtkgXDp1Zcir-0-w@mail.gmail.com>
- <aab760b8-2a06-ae96-584a-301d5326fc0d@codeaurora.org>
-Message-ID: <fb5b6abf-b26a-5db2-1f8f-23d457c7235e@codeaurora.org>
-Date:   Wed, 12 Aug 2020 14:56:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726755AbgHLJhm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 05:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726595AbgHLJhl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 05:37:41 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5712C061787
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:37:40 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id r4so1366852wrx.9
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xUJA54KTzQJyhxDXIqR9ReX2WN+bK5CjNuAWDhsdb8w=;
+        b=crr6oK1RJrz1nT63FwEgbS3gquu/Ncq38lBd42GrnhhkTBXb4cMsIlG2foOG5WIA8O
+         WkSv44SczGIHDr0xQlOkRWLczZs2351YnlOSc/9gsjx0xFZJRC7wcaB7NoFJsWsGG+SN
+         SmsMBj7Jo5Dj4AXLZjJeu86fS842ynrwKjltjgDHVc97wIM0xMlbrGgFu23CA43WZEqK
+         JluWeEigpXi6/Zq/Dk5dOHooEgLZQJFZYbRixqFTNYsugm2NhqJb7gSCxy2lM10cX9e1
+         mT9KIr53nqS+l1kKtdPhUZ2wzeIcpbb64uuZIZ0X9Ks7YmGuJOwkG3Tl09d+rKzm2r/a
+         m42w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xUJA54KTzQJyhxDXIqR9ReX2WN+bK5CjNuAWDhsdb8w=;
+        b=TcQ58ljcFox1JbzV8hkx5NcJzfHtWsT06txtOH4QsUTF5f6cUfqZljGHkQ6HKvyv4b
+         n1VmwZ6aqE1EyZWzSjMMRS7A+qsGw8+CXtesXsX0Tuc4Mmoi8NS+9gcQi52uXZCeANVG
+         YKqxt0HCf3G9RFPUO9zw3SYcwzcQVN5DpnV446H6FMXE6pIhDEpvOcmNPHlyHsSBEmKO
+         qQCBUHuhRHouoxpJGgyqxwlJWGdlnMDd+K4YYCeQpYWG8gvC7Oo6cfKGJdg08nKtaD6Z
+         LurI4qhEStLqgYO2P0OIyTUi0j2y3BJ3w1tUXIdjTtk3SuygwAXkFgZDMF/0Fb/uqXq3
+         BrYg==
+X-Gm-Message-State: AOAM532/Umu002qKneqAJxJNBOHJCXLu6SK8kav+o48dh7TEjCWvKnqp
+        Y8e5LsZTEfbb3SV+lA+HG4GY5zr70UPNL+g6i4rLwcZJ
+X-Google-Smtp-Source: ABdhPJzyVACqW0P5GX9T7WEr0tB2SFQ6077mmdaufTh9FO15OFL7AzToRKYCZQO33CyJbC41uGaJ5fCGYkTuz7UxjFw=
+X-Received: by 2002:a5d:43c4:: with SMTP id v4mr34386550wrr.426.1597225059226;
+ Wed, 12 Aug 2020 02:37:39 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <aab760b8-2a06-ae96-584a-301d5326fc0d@codeaurora.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <1596541616-27688-1-git-send-email-rnayak@codeaurora.org> <1596541616-27688-3-git-send-email-rnayak@codeaurora.org>
+In-Reply-To: <1596541616-27688-3-git-send-email-rnayak@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 12 Aug 2020 11:37:03 +0200
+Message-ID: <CAPDyKFoRv49jKi-4UW6EVyAzo1emb=rs2h7CWavON+JoXXh1kA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] PM / Domains: Add support for 'assigned-performance-states'
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 4 Aug 2020 at 13:47, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+> For devices which have 'assigned-performance-states' specified in DT,
+> set the specified performance state during attach and drop it on detach.
+> Also drop/set as part of runtime suspend/resume callbacks.
 
-On 8/12/2020 1:09 PM, Rajendra Nayak wrote:
-> 
-> On 8/12/2020 1:05 PM, Amit Pundir wrote:
->> Hi Rajendra,
->>
->> On Wed, 12 Aug 2020 at 11:18, Rajendra Nayak <rnayak@codeaurora.org> wrote:
->>>
->>>
->>> On 8/12/2020 7:03 AM, John Stultz wrote:
->>>> On Tue, Aug 11, 2020 at 4:11 PM John Stultz <john.stultz@linaro.org> wrote:
->>>>>
->>>>> On Wed, Mar 20, 2019 at 2:49 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
->>>>>>
->>>>>> geni serial needs to express a perforamnce state requirement on CX
->>>>>> depending on the frequency of the clock rates. Use OPP table from
->>>>>> DT to register with OPP framework and use dev_pm_opp_set_rate() to
->>>>>> set the clk/perf state.
->>>>>>
->>>>>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
->>>>>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
->>>>>> ---
->>>>>>    drivers/tty/serial/qcom_geni_serial.c | 15 +++++++++++++--
->>>>>>    1 file changed, 13 insertions(+), 2 deletions(-)
->>>>>>
->>>>>
->>>>> Hey,
->>>>>     I just wanted to follow up on this patch, as I've bisected it
->>>>> (a5819b548af0) down as having broken qca bluetooth on the Dragonboard
->>>>> 845c.
->>>>>
->>>>> I haven't yet had time to debug it yet, but wanted to raise the issue
->>>>> in case anyone else has seen similar trouble.
->>>>
->>>> So I dug in a bit further, and this chunk seems to be causing the issue:
->>>>> @@ -961,7 +963,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
->>>>>                   goto out_restart_rx;
->>>>>
->>>>>           uport->uartclk = clk_rate;
->>>>> -       clk_set_rate(port->se.clk, clk_rate);
->>>>> +       dev_pm_opp_set_rate(port->dev, clk_rate);
->>>>>           ser_clk_cfg = SER_CLK_EN;
->>>>>           ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
->>>>>
->>>>
->>>>
->>>> With that applied, I see the following errors in dmesg and bluetooth
->>>> fails to function:
->>>> [    4.763467] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate:
->>>> failed to find OPP for freq 102400000 (-34)
->>>> [    4.773493] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate:
->>>> failed to find OPP for freq 102400000 (-34)
->>>>
->>>> With just that chunk reverted on linus/HEAD, bluetooth seems to work ok.
->>>
->>> This seems like the same issue that was also reported on venus [1] because the
->>> clock frequency tables apparently don;t exactly match the achievable clock
->>> frequencies (which we also used to construct the OPP tables)
->>>
->>> Can you try updating the OPP table for QUP to have 102400000 instead of the
->>> current 100000000 and see if that fixes it?
->>
->> That worked. Thanks.
->>
->> Should this change be common to base sdm845.dtsi or platform specific dts?
->> For what it's worth, we see this BT breakage on PocoF1 phone too.
-> 
-> Thanks for confirming, it will have to be part of the SoC dtsi, and I am
-> guessing a similar change is perhaps also needed on sc7180.
-> I will send a patch out to fix the OPP tables for both.
+To allow flexibility, I would prefer to keep the performance state
+being orthogonal to the power on/off state for a genpd.
 
-I spent some more time looking at this and it does not look like this is the
-rounding issues with clock FMAX tables. I had these tables picked from downstream
-clock code and it turns out these tables were reworked at clock init based on
-the silicon rev, so I need to fix up the OPP tables accordingly which will add
-a new OPP entry for 102.4Mhz. I'll post a patch shortly.
+Therefore, I am wondering if this is better handled by the consumer
+driver instead?
 
-> 
->>
->> Regards,
->> Amit Pundir
->>
->>
->>>
->>> [1] https://lkml.org/lkml/2020/7/27/507
->>>
->>>>
->>>> thanks
->>>> -john
->>>>
->>>
->>> -- 
->>> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
->>> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+Kind regards
+Uffe
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
+>  drivers/base/power/domain.c | 27 +++++++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  1 +
+>  2 files changed, 28 insertions(+)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 0a01df60..8704823 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -810,6 +810,10 @@ static int genpd_runtime_suspend(struct device *dev)
+>         if (irq_safe_dev_in_no_sleep_domain(dev, genpd))
+>                 return 0;
+>
+> +       /* Drop the assigned performance state */
+> +       if (dev_gpd_data(dev)->assigned_pstate)
+> +               dev_pm_genpd_set_performance_state(dev, 0);
+> +
+>         genpd_lock(genpd);
+>         genpd_power_off(genpd, true, 0);
+>         genpd_unlock(genpd);
+> @@ -829,6 +833,7 @@ static int genpd_runtime_resume(struct device *dev)
+>  {
+>         struct generic_pm_domain *genpd;
+>         struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
+> +       unsigned int assigned_pstate = dev_gpd_data(dev)->assigned_pstate;
+>         bool runtime_pm = pm_runtime_enabled(dev);
+>         ktime_t time_start;
+>         s64 elapsed_ns;
+> @@ -857,6 +862,9 @@ static int genpd_runtime_resume(struct device *dev)
+>         if (ret)
+>                 return ret;
+>
+> +       /* Set the assigned performance state */
+> +       if (assigned_pstate)
+> +               dev_pm_genpd_set_performance_state(dev, assigned_pstate);
+>   out:
+>         /* Measure resume latency. */
+>         time_start = 0;
+> @@ -890,6 +898,8 @@ static int genpd_runtime_resume(struct device *dev)
+>  err_poweroff:
+>         if (!pm_runtime_is_irq_safe(dev) ||
+>                 (pm_runtime_is_irq_safe(dev) && genpd_is_irq_safe(genpd))) {
+> +               if (assigned_pstate)
+> +                       dev_pm_genpd_set_performance_state(dev, 0);
+>                 genpd_lock(genpd);
+>                 genpd_power_off(genpd, true, 0);
+>                 genpd_unlock(genpd);
+> @@ -2405,6 +2415,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
+>
+>         dev_dbg(dev, "removing from PM domain %s\n", pd->name);
+>
+> +       /* Drop the assigned performance state */
+> +       if (dev_gpd_data(dev)->assigned_pstate) {
+> +               dev_pm_genpd_set_performance_state(dev, 0);
+> +               dev_gpd_data(dev)->assigned_pstate = 0;
+> +       }
+> +
+>         for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
+>                 ret = genpd_remove_device(pd, dev);
+>                 if (ret != -EAGAIN)
+> @@ -2442,6 +2458,7 @@ static void genpd_dev_pm_sync(struct device *dev)
+>  static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                                  unsigned int index, bool power_on)
+>  {
+> +       unsigned int assigned_pstate;
+>         struct of_phandle_args pd_args;
+>         struct generic_pm_domain *pd;
+>         int ret;
+> @@ -2485,6 +2502,16 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>         if (ret)
+>                 genpd_remove_device(pd, dev);
+>
+> +       /* Set the assigned performance state */
+> +       if (!of_property_read_u32_index(base_dev->of_node,
+> +                                       "assigned-performance-states",
+> +                                       index, &assigned_pstate)) {
+> +               if (assigned_pstate) {
+> +                       dev_pm_genpd_set_performance_state(dev, assigned_pstate);
+> +                       dev_gpd_data(dev)->assigned_pstate = assigned_pstate;
+> +               }
+> +       }
+> +
+>         return ret ? -EPROBE_DEFER : 1;
+>  }
+>
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 9ec78ee..4a415ee 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -180,6 +180,7 @@ struct generic_pm_domain_data {
+>         struct notifier_block nb;
+>         int cpu;
+>         unsigned int performance_state;
+> +       unsigned int assigned_pstate;
+>         void *data;
+>  };
+>
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
+>
