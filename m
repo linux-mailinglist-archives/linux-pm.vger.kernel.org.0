@@ -2,93 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 628B6242C6A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 17:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87211242CE9
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 18:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgHLP4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 11:56:34 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.51]:18906 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgHLP4e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 11:56:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1597247792;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=OSjvd7G+zioql212JD4p59KZiEpBAmk13HwupraTamg=;
-        b=ck1I2Xw5jcVneUBZ9Qr+6SHMKqEva+gM1W5US6RC3aQ7FVnfrvXfqaphGLs/BL88Yf
-        WgZUGCCX9TxT7frWn7bVZ8bV1nX1OVrf+bYBYyMNODtYQOQQocWNIp0cMfWWz+zOvfmn
-        /DXo2zdgq4JgLAAiQ/dYLc8NLM8C5GrC3Z3HNEK9HywQXvtswVofBqHzYamPdKAGm5gd
-        k0wRN6GiXeQjX+PLyV8F8CksuFSh/8pWk1Tz93rznaXOwk65yDwDEnGZUt63Znjtreo4
-        XsJvscflepWZsY/IZ6gL/IpP9cKdyjFes2YVga+I0rgqVXUA1tPvuU8sF/OMjow9udU8
-        hvcg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j6Ic/MbIo="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.5 DYNA|AUTH)
-        with ESMTPSA id Y0939ew7CFuUtTn
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 12 Aug 2020 17:56:30 +0200 (CEST)
-Date:   Wed, 12 Aug 2020 17:56:25 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Niklas Cassel <nks@flawful.org>
-Subject: Re: [RFC PATCH 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
- -EPROBE_DEFER
-Message-ID: <20200812155625.GA1048@gerhold.net>
-References: <20200727093047.8274-1-stephan@gerhold.net>
- <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
- <20200812105333.GA913@gerhold.net>
- <20200812150122.dennzvxfzk4fyxm2@vireshk-mac-ubuntu>
+        id S1726670AbgHLQNL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 12:13:11 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:44376 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726658AbgHLQNL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 12 Aug 2020 12:13:11 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597248790; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=VfMixFtX/OTlr/zRJajyB7g4shFSBIZI0I68qcvTqMQ=;
+ b=oC38/lHQsSk8ZL/Qf9VzCgvKboTCJMUAru4SR4HGecFhgS79HcbkKZEmKVkKONvF4+mccnCe
+ vYa6AaW5fGT9QWsTQ75M2BZaB16gDh5dpxbtCbSLJNJvmdkhC7fM/V/HsJWSdstf6mcavisf
+ +iIY7MpDzrYbPLaMDsfMTG5dtJg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 5f34150d46ed9966744cf830 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Aug 2020 16:13:01
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B8738C433AF; Wed, 12 Aug 2020 16:13:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF06EC433C9;
+        Wed, 12 Aug 2020 16:12:59 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200812150122.dennzvxfzk4fyxm2@vireshk-mac-ubuntu>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 12 Aug 2020 21:42:59 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     bjorn.andersson@linaro.org, ulf.hansson@linaro.org,
+        rjw@rjwysocki.net, agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        gregkh@linuxfoundation.org, pavel@ucw.cz, len.brown@intel.com,
+        rnayak@codeaurora.org, dianders@chromium.org, khilman@kernel.org,
+        linux-arm-msm-owner@vger.kernel.org
+Subject: Re: [PATCH 1/2] PM / Domains: Add GENPD_FLAG_SUSPEND_ON flag
+In-Reply-To: <7heeoc3edk.fsf@baylibre.com>
+References: <20200811190252.10559-1-sibis@codeaurora.org>
+ <7heeoc3edk.fsf@baylibre.com>
+Message-ID: <340a7aafcf0301ff3158a4e211992041@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+Kevin,
+Thanks for taking time to review the
+series!
 
-On Wed, Aug 12, 2020 at 08:31:22PM +0530, Viresh Kumar wrote:
-> On 12-08-20, 12:53, Stephan Gerhold wrote:
-> > I have another small build fix reported by the kernel test robot,
-> > but will wait with sending that out until Viresh had a chance to give
-> > some feedback on the basic idea. :)
+On 2020-08-12 05:49, Kevin Hilman wrote:
+> Sibi Sankar <sibis@codeaurora.org> writes:
 > 
-> What was the issue that was reported ? I may end up applying V1 only
-> with some of my changes.
+>> This is for power domains which needs to stay powered on for suspend
+>> but can be powered on/off as part of runtime PM. This flag is aimed at
+>> power domains coupled to remote processors which enter suspend states
+>> independent to that of the application processor. Such power domains
+>> are turned off only on remote processor crash/shutdown.
+>> 
+>> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 > 
+> Seems like a useful use-case, but i think there should be a bit more
+> description/documentation about what is the expected/desired behavior
+> during system suspsend when a power-domain with this flag is already
+> runtime-PM suspended.  Similarily, on system resume, what is the
+> expected/desired behavior?
 
-It was this build error on SH (for the second patch):
+SUSPEND_ON flag is only aimed at
+keeping power domains powered on
+across suspend (only if its already
+powered on). Also if the power domain
+is runtime-PM suspended we wouldn't
+want to power it on during resume.
 
->> drivers/cpufreq/cpufreq-dt.c:36:29: error: conflicting types for 'cpu_data'
-      36 | static struct private_data *cpu_data;
-         |                             ^~~~~~~~
-   In file included from arch/sh/include/asm/thread_info.h:27,
-                    from include/linux/thread_info.h:38,
-                    from include/asm-generic/current.h:5,
-                    from ./arch/sh/include/generated/asm/current.h:1,
-                    from include/linux/mutex.h:14,
-                    from include/linux/notifier.h:14,
-                    from include/linux/clk.h:14,
-                    from drivers/cpufreq/cpufreq-dt.c:11:
-   arch/sh/include/asm/processor.h:90:26: note: previous declaration of 'cpu_data' was here
-      90 | extern struct sh_cpuinfo cpu_data[];
-         |                          ^~~~~~~~
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 0a5afca250d03..547c091618008 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1003,7 +1003,7 @@ static void genpd_sync_power_on(struct 
+generic_pm_domain *genpd, bool use_lock,
+  {
+         struct gpd_link *link;
 
-I fixed it by renaming "cpu_data" to "cpufreq_dt_data". (I could not
-think of a better name so feel free to use something else...)
+-       if (genpd_status_on(genpd))
++       if (genpd_status_on(genpd) || genpd_is_suspend_on(genpd))
+                 return;
 
-Thanks!
-Stephan
+I'll add the ^^ diff in the next
+re-spin to prevent power on of
+a runtime-PM suspended power
+domain.
+
+> 
+> Kevin
+
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
