@@ -2,111 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15D242535
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 08:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0A0242625
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 09:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbgHLGK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 02:10:27 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:53940 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725944AbgHLGK0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Aug 2020 02:10:26 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1597212625; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=w7DFpPJTUNfnqStvwlCVQRQJO4go+5/iJnCBBavzYZs=; b=OROHmqYUdVJAMoxEb0xXF2ce3nKzxvgjHWOED8eT1dV5V/tzlXSzkM0ta+AJKoub3GwcLOCk
- yx+CeK1JRy6vlITL4s675Gol9lTUWwndnyGc2R5UtboKkUuQTSDqEZKMvFJzpYp/Q39oqO/j
- mEMSWXCScaB5yGUQP0xLRkow7aM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n08.prod.us-east-1.postgun.com with SMTP id
- 5f3387ced78a2e583357db19 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 12 Aug 2020 06:10:22
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1C748C433C9; Wed, 12 Aug 2020 06:10:22 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.15] (unknown [61.1.229.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 99A5FC433C6;
-        Wed, 12 Aug 2020 06:10:19 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 99A5FC433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH] OPP: Put opp table in dev_pm_opp_set_rate() all the time
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20200811212836.2531613-1-swboyd@chromium.org>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <006c62c2-e946-954b-6f11-2c5ab131d93d@codeaurora.org>
-Date:   Wed, 12 Aug 2020 11:40:16 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726618AbgHLHfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 03:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39282 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726474AbgHLHfm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 03:35:42 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACDDC061787
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 00:35:41 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 184so995629wmb.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 00:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XfihqZsdjcdv5tVC7wFsr1o1gj8RLJpLWlctKxN00t8=;
+        b=D1jFIJxPQA80z4Eomgeer1iZdbOW9i+Hnn/nDZS6eevvWKao7/cwonferaNNU0lDOn
+         R2PlHUawpbNnQy2lpSfhVmDKCpV5+3ZZrjVrht4ftusjDyemANZuF8poyrzzDdkZlrTP
+         NZWxV8t02OVEbriVK59+v/oTltvWcdYasg/x6cSmxX27Wg20UEftg5v0pjztSMFzgZdh
+         1a4OACCvYZAA6lgr4+CZ7aADb2ZEqDAMxLN4T6H+YvD3OwPPhY5yrXswYmBip4mAW08o
+         s32CNccl/Xgg1SNdFl8S9DlNGqKtX+ZK0qkzi6pf7thn24wUWViiOHhaojWLqpgSqA6A
+         oj9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XfihqZsdjcdv5tVC7wFsr1o1gj8RLJpLWlctKxN00t8=;
+        b=R7syKWomgGKmSqAEXsfMyuD//6Y55UjK2XdnRR4gUNOc/XiIozaPnuejnmAzkEjj92
+         ozXLacTtURS5bEJkmiKkbnMs7d/hZksWMZWT7BV8H0yJanvnyLyEhyhzOHQVAmsvUq1I
+         18AxwJZJUAM3fbQHjzWFvTcHiTlQrJ0TWOVp2cyIz48KuDKQDSpShr1YeFCYrq/4vRbF
+         gvcd/GQy9Q94woPa5w6tmdlKwybTS4IXoSmmJQymkTPZF16klq2+SiHYySZG7pFXR0Yy
+         yE9jYw0CuXb7L/uuQaWf5jfg0nqo51u3RMBFxSmxcDAX7N79Ejsx3QR9EvE2g598Df+w
+         JKEA==
+X-Gm-Message-State: AOAM533WxrG0hIl8o3YQo0VYsnHXt1mFyKcmfKuiFsI9I/BW3fvxMMl5
+        Z4JE8g2Kt3HlFYyh6rjvaF9ziqqRTVG5+DOlOj5Zpg==
+X-Google-Smtp-Source: ABdhPJzBNC/YM9uamzZ0gfpPsY6JeU/UxZmU8cQyqqtnB+YoX60CEAXzfjO07RBy0Wno5duRrD7MVej1m1/TUxoj2w8=
+X-Received: by 2002:a05:600c:2209:: with SMTP id z9mr7122422wml.70.1597217740367;
+ Wed, 12 Aug 2020 00:35:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200811212836.2531613-1-swboyd@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190320094918.20234-1-rnayak@codeaurora.org> <20190320094918.20234-4-rnayak@codeaurora.org>
+ <CALAqxLV2TBk9ScUM6MeJMCkL8kJnCihjQ7ac5fLzcqOg1rREVQ@mail.gmail.com>
+ <CALAqxLWg3jJKJFLnnne-mrQEnH=m7R_9azCGaGnEmFYR4EMh=A@mail.gmail.com> <ec5eeb21-48e4-5dcc-583a-ac9419659e44@codeaurora.org>
+In-Reply-To: <ec5eeb21-48e4-5dcc-583a-ac9419659e44@codeaurora.org>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Wed, 12 Aug 2020 13:05:04 +0530
+Message-ID: <CAMi1Hd1O+3bjQN6c9WQr+t0YXGBAukfFzJWtkgXDp1Zcir-0-w@mail.gmail.com>
+Subject: Re: [RFC v2 03/11] tty: serial: qcom_geni_serial: Use OPP API to set
+ clk/perf state
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-scsi@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rajendra,
 
-On 8/12/2020 2:58 AM, Stephen Boyd wrote:
-> We get the opp_table pointer at the top of the function and so we should
-> put the pointer at the end of the function like all other exit paths
-> from this function do.
-> 
-> Cc: Rajendra Nayak <rnayak@codeaurora.org>
-> Fixes: aca48b61f963 ("opp: Manage empty OPP tables with clk handle")
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+On Wed, 12 Aug 2020 at 11:18, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+>
+>
+> On 8/12/2020 7:03 AM, John Stultz wrote:
+> > On Tue, Aug 11, 2020 at 4:11 PM John Stultz <john.stultz@linaro.org> wrote:
+> >>
+> >> On Wed, Mar 20, 2019 at 2:49 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
+> >>>
+> >>> geni serial needs to express a perforamnce state requirement on CX
+> >>> depending on the frequency of the clock rates. Use OPP table from
+> >>> DT to register with OPP framework and use dev_pm_opp_set_rate() to
+> >>> set the clk/perf state.
+> >>>
+> >>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> >>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> >>> ---
+> >>>   drivers/tty/serial/qcom_geni_serial.c | 15 +++++++++++++--
+> >>>   1 file changed, 13 insertions(+), 2 deletions(-)
+> >>>
+> >>
+> >> Hey,
+> >>    I just wanted to follow up on this patch, as I've bisected it
+> >> (a5819b548af0) down as having broken qca bluetooth on the Dragonboard
+> >> 845c.
+> >>
+> >> I haven't yet had time to debug it yet, but wanted to raise the issue
+> >> in case anyone else has seen similar trouble.
+> >
+> > So I dug in a bit further, and this chunk seems to be causing the issue:
+> >> @@ -961,7 +963,7 @@ static void qcom_geni_serial_set_termios(struct uart_port *uport,
+> >>                  goto out_restart_rx;
+> >>
+> >>          uport->uartclk = clk_rate;
+> >> -       clk_set_rate(port->se.clk, clk_rate);
+> >> +       dev_pm_opp_set_rate(port->dev, clk_rate);
+> >>          ser_clk_cfg = SER_CLK_EN;
+> >>          ser_clk_cfg |= clk_div << CLK_DIV_SHFT;
+> >>
+> >
+> >
+> > With that applied, I see the following errors in dmesg and bluetooth
+> > fails to function:
+> > [    4.763467] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate:
+> > failed to find OPP for freq 102400000 (-34)
+> > [    4.773493] qcom_geni_serial 898000.serial: dev_pm_opp_set_rate:
+> > failed to find OPP for freq 102400000 (-34)
+> >
+> > With just that chunk reverted on linus/HEAD, bluetooth seems to work ok.
+>
+> This seems like the same issue that was also reported on venus [1] because the
+> clock frequency tables apparently don;t exactly match the achievable clock
+> frequencies (which we also used to construct the OPP tables)
+>
+> Can you try updating the OPP table for QUP to have 102400000 instead of the
+> current 100000000 and see if that fixes it?
 
-Thanks for the fix.
-Reviewed-by: Rajendra Nayak <rnayak@codeaurora.org>
+That worked. Thanks.
 
-> ---
->   drivers/opp/core.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 9d7fb45b1786..bdb028c7793d 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -893,8 +893,10 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->   		 * have OPP table for the device, while others don't and
->   		 * opp_set_rate() just needs to behave like clk_set_rate().
->   		 */
-> -		if (!_get_opp_count(opp_table))
-> -			return 0;
-> +		if (!_get_opp_count(opp_table)) {
-> +			ret = 0;
-> +			goto put_opp_table;
-> +		}
->   
->   		if (!opp_table->required_opp_tables && !opp_table->regulators &&
->   		    !opp_table->paths) {
-> @@ -905,7 +907,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
->   
->   		ret = _set_opp_bw(opp_table, NULL, dev, true);
->   		if (ret)
-> -			return ret;
-> +			goto put_opp_table;
->   
->   		if (opp_table->regulator_enabled) {
->   			regulator_disable(opp_table->regulators[0]);
-> 
+Should this change be common to base sdm845.dtsi or platform specific dts?
+For what it's worth, we see this BT breakage on PocoF1 phone too.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Regards,
+Amit Pundir
+
+
+>
+> [1] https://lkml.org/lkml/2020/7/27/507
+>
+> >
+> > thanks
+> > -john
+> >
+>
+> --
+> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+> of Code Aurora Forum, hosted by The Linux Foundation
