@@ -2,92 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 470D2242EEF
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 21:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE99C243096
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 23:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgHLTNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 15:13:01 -0400
-Received: from vern.gendns.com ([98.142.107.122]:33598 "EHLO vern.gendns.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726456AbgHLTNB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Aug 2020 15:13:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=lechnology.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=qM5nPDBhBvPAsBEzD4c5quUlPti/t71UOuDeVlipCnk=; b=yBZ/lJsmAhiQfmQmFQIEb+kyby
-        zSVg2C/e6xITeR5yuLQq4dJPj10q3mXtqhetnbdZv6TnvOq0ZEhQdV4XMSqriFpA4Pg+rPXEP62Ar
-        zoY4yuXBq9V8Wu33TgCRzJ8pacTa3fDcE8TPcSlGaOZU8sidQKYDRMz9b4ck1eljH0fC3xspbgAe0
-        cKJ+jfNzJNU3cCScCelc+QL3j6buDMzsjCuTmZVsTDqA15qBpguRwom+i+bUFi35OhTMcWvyXYA6Y
-        iht3rpzso0bjtyrr6ha92pSh6odhuTQTGetN5aHyj8VvZb1IVUtbuVX4LC4BQb3uDSwPJERtP6BKi
-        eefhZqBQ==;
-Received: from [2600:1700:4830:165f::19e] (port=36036)
-        by vern.gendns.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <david@lechnology.com>)
-        id 1k5wBG-0008ER-Iu; Wed, 12 Aug 2020 15:12:58 -0400
-Subject: Re: [PATCH] power: supply: Add dependency to lego-ev3-battery Kconfig
- options
-To:     Alex Dewar <alex.dewar90@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Go??aszewski <bgolaszewski@baylibre.com>
-References: <20200809185444.54247-1-alex.dewar90@gmail.com>
- <d6c98ee6-f2f3-c55a-be16-3794ccf30a28@lechnology.com>
- <20200812133711.ddwhxypmvr27pxdu@lenovo-laptop>
- <ce0ae241-10e1-de5c-e694-2c00dc01a2c4@lechnology.com>
- <20200812190253.zewvdfvyu6cnggcl@lenovo-laptop>
-From:   David Lechner <david@lechnology.com>
-Message-ID: <0927eaf0-62d6-adaf-c4b0-89d7f4cc7b4a@lechnology.com>
-Date:   Wed, 12 Aug 2020 14:12:57 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726622AbgHLVfE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 17:35:04 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:53986 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726512AbgHLVfD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 17:35:03 -0400
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk3.altibox.net (Postfix) with ESMTPS id DE6062002E;
+        Wed, 12 Aug 2020 23:34:54 +0200 (CEST)
+Date:   Wed, 12 Aug 2020 23:34:53 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-pm@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+Message-ID: <20200812213453.GA690477@ravnborg.org>
+References: <20200812203618.2656699-1-robh@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200812190253.zewvdfvyu6cnggcl@lenovo-laptop>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - vern.gendns.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lechnology.com
-X-Get-Message-Sender-Via: vern.gendns.com: authenticated_id: davidmain+lechnology.com/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: vern.gendns.com: davidmain@lechnology.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200812203618.2656699-1-robh@kernel.org>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=f+hm+t6M c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=7gkXJVJtAAAA:8 a=S2FyQyr5uj24keYp2QUA:9
+        a=CjuIK1q_8ugA:10 a=c0zojPR3vx4A:10 a=E9Po1WZjFZOl8hwRPBS3:22
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/12/20 2:02 PM, Alex Dewar wrote:
-> On Wed, Aug 12, 2020 at 10:24:30AM -0500, David Lechner wrote:
->> On 8/12/20 8:37 AM, Alex Dewar wrote:
->>> On Tue, Aug 11, 2020 at 09:24:10AM -0500, David Lechner wrote:
->>>> On 8/9/20 1:54 PM, Alex Dewar wrote:
->>>>> This battery appears only to be used by a single board (DA850), so it
->>>>> makes sense to add this to the Kconfig file so that users don't build
->>>>> the module unnecessarily. It currently seems to be built for the x86
->>>>> Arch Linux kernel where it's probably not doing much good.
->>>>
->>>> It would probably also make sense to add "default n" since it only
->>>> applies to one board in the entire arch.
->>>
->>> Ah ok. That makes sense. Would you like me to send a follow-on patch for
->>> this?
->>
->> You can just send a v2 patch that includes the change below and the
->> additional change.
-> 
-> I've just had a look at the documentation[1] and it seems that as there's
-> no "default y" there it'll default to n anyway. Have I got that right?
-> 
-> [1] https://www.kernel.org/doc/html/latest/kbuild/kconfig-language.html#menu-attributes
-> 
+Hi Rob.
 
-Yes, that seems right. That makes me wonder why this would have been enabled in
-the Arch Linux kernel for x86 then.
+On Wed, Aug 12, 2020 at 02:36:18PM -0600, Rob Herring wrote:
+> Clean-up incorrect indentation, extra spaces, long lines, and missing
+> EOF newline in schema files. Most of the clean-ups are for list
+> indentation which should always be 2 spaces more than the preceding
+> keyword.
+> 
+> Found with yamllint (which I plan to integrate into the checks).
+
+I have browsed through the patch - and there was only a few things
+that jumped at me.
+
+With these points considered:
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
+
+I expect only some (few) of my points to actually results in any updates.
+
+I look forward to have the lint functionality as part of the built-in
+tools so we catch these things early.
+
+	Sam
+
+> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+> index f63895c8ce2d..88814a2a14a5 100644
+> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
+> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+> @@ -273,8 +273,8 @@ properties:
+>                - fsl,imx6ull-14x14-evk     # i.MX6 UltraLiteLite 14x14 EVK Board
+>                - kontron,imx6ull-n6411-som # Kontron N6411 SOM
+>                - myir,imx6ull-mys-6ulx-eval # MYiR Tech iMX6ULL Evaluation Board
+> -              - toradex,colibri-imx6ull-eval            # Colibri iMX6ULL Module on Colibri Evaluation Board
+> -              - toradex,colibri-imx6ull-wifi-eval       # Colibri iMX6ULL Wi-Fi / Bluetooth Module on Colibri Evaluation Board
+> +              - toradex,colibri-imx6ull-eval      # Colibri iMX6ULL Module on Colibri Eval Board
+> +              - toradex,colibri-imx6ull-wifi-eval # Colibri iMX6ULL Wi-Fi / BT Module on Colibri Eval Board
+>            - const: fsl,imx6ull
+
+This change looks bad as it drops the alignment with the comments below.
+See following patch chunck:
+
+>
+>        - description: Kontron N6411 S Board
+> @@ -312,9 +312,12 @@ properties:
+>                - toradex,colibri-imx7d                   # Colibri iMX7 Dual Module
+>                - toradex,colibri-imx7d-aster             # Colibri iMX7 Dual Module on Aster Carrier Board
+>                - toradex,colibri-imx7d-emmc              # Colibri iMX7 Dual 1GB (eMMC) Module
+> -              - toradex,colibri-imx7d-emmc-aster        # Colibri iMX7 Dual 1GB (eMMC) Module on Aster Carrier Board
+> -              - toradex,colibri-imx7d-emmc-eval-v3      # Colibri iMX7 Dual 1GB (eMMC) Module on Colibri Evaluation Board V3
+> -              - toradex,colibri-imx7d-eval-v3           # Colibri iMX7 Dual Module on Colibri Evaluation Board V3
+> +              - toradex,colibri-imx7d-emmc-aster        # Colibri iMX7 Dual 1GB (eMMC) Module on
+> +                                                        #  Aster Carrier Board
+
+
+
+> diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> index 177d48c5bd97..e89c1ea62ffa 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9322.yaml
+> @@ -25,8 +25,7 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> -        - dlink,dir-685-panel
+> -
+> +          - dlink,dir-685-panel
+>        - const: ilitek,ili9322
+>
+>    reset-gpios: true
+> diff --git a/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml b/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> index a39332276bab..76a9068a85dd 100644
+> --- a/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/ilitek,ili9881c.yaml
+> @@ -13,8 +13,7 @@ properties:
+>    compatible:
+>      items:
+>        - enum:
+> -        - bananapi,lhr050h41
+> -
+> +          - bananapi,lhr050h41
+>        - const: ilitek,ili9881c
+>
+
+The extra lines is a simple way to indicate that here shall be added
+more in the future. So I like the empty line.
+
+
+> diff --git a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> index 32e0896c6bc1..47938e372987 100644
+> --- a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> +++ b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
+> @@ -79,7 +79,8 @@ properties:
+>      description: |
+>        kHz; switching frequency.
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> -    enum: [ 600, 640, 685, 738, 800, 872, 960, 1066, 1200, 1371, 1600, 1920, 2400, 3200, 4800, 9600 ]
+> +    enum: [ 600, 640, 685, 738, 800, 872, 960, 1066, 1200, 1371, 1600, 1920,
+> +            2400, 3200, 4800, 9600 ]
+>
+>    qcom,ovp:
+>      description: |
+
+In the modern world we are living in now line length of 100 chars are
+OK. checkpatch and coding_style is updated to reflected this.
+
+> diff --git a/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml b/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> index 4ddb42a4ae05..9102feae90a2 100644
+> --- a/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/mikrotik,rb4xx-spi.yaml
+> @@ -33,4 +33,5 @@ examples:
+>          reg = <0x1f000000 0x10>;
+>      };
+>
+> -...
+> \ No newline at end of file
+> +...
+> +
+
+Added one line too much?
+
+ diff --git a/Documentation/devicetree/bindings/spi/spi-mux.yaml b/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> index 0ae692dc28b5..3d3fed63409b 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-mux.yaml
+> @@ -43,47 +43,47 @@ properties:
+>      maxItems: 1
+>
+>  required:
+> -   - compatible
+> -   - reg
+> -   - spi-max-frequency
+> -   - mux-controls
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +  - mux-controls
+>
+>  examples:
+> -   - |
+> -     #include <dt-bindings/gpio/gpio.h>
+> -     mux: mux-controller {
+> -       compatible = "gpio-mux";
+> -       #mux-control-cells = <0>;
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    mux: mux-controller {
+> +        compatible = "gpio-mux";
+> +        #mux-control-cells = <0>;
+>
+> -       mux-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+> -     };
+> +        mux-gpios = <&gpio0 3 GPIO_ACTIVE_HIGH>;
+> +    };
+
+Example is updated to use 4-space indent. I like.
+
+But many other examples are left untouched.
+
+So I wonder if updating all examples to the same indent should
+be left for another mega-patch?
+
+> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index f3d847832fdc..2baee2c817c1 100644
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@ -993,7 +993,8 @@ patternProperties:
+>    "^sst,.*":
+>      description: Silicon Storage Technology, Inc.
+>    "^sstar,.*":
+> -    description: Xiamen Xingchen(SigmaStar) Technology Co., Ltd. (formerly part of MStar Semiconductor, Inc.)
+> +    description: Xiamen Xingchen(SigmaStar) Technology Co., Ltd.
+> +      (formerly part of MStar Semiconductor, Inc.)
+>    "^st,.*":
+>      description: STMicroelectronics
+>    "^starry,.*":
+
+Did you check that they are all in alphabetical order?
+I would be suprised if this is the only issue in this file.
+
+
