@@ -2,182 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E7D2427B8
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:37:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26632427D6
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 11:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726755AbgHLJhm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 05:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S1726695AbgHLJpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Aug 2020 05:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726595AbgHLJhl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 05:37:41 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5712C061787
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:37:40 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id r4so1366852wrx.9
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:37:40 -0700 (PDT)
+        with ESMTP id S1726618AbgHLJpp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Aug 2020 05:45:45 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6ECC061788
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:45:44 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id f12so1373353wru.13
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 02:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xUJA54KTzQJyhxDXIqR9ReX2WN+bK5CjNuAWDhsdb8w=;
-        b=crr6oK1RJrz1nT63FwEgbS3gquu/Ncq38lBd42GrnhhkTBXb4cMsIlG2foOG5WIA8O
-         WkSv44SczGIHDr0xQlOkRWLczZs2351YnlOSc/9gsjx0xFZJRC7wcaB7NoFJsWsGG+SN
-         SmsMBj7Jo5Dj4AXLZjJeu86fS842ynrwKjltjgDHVc97wIM0xMlbrGgFu23CA43WZEqK
-         JluWeEigpXi6/Zq/Dk5dOHooEgLZQJFZYbRixqFTNYsugm2NhqJb7gSCxy2lM10cX9e1
-         mT9KIr53nqS+l1kKtdPhUZ2wzeIcpbb64uuZIZ0X9Ks7YmGuJOwkG3Tl09d+rKzm2r/a
-         m42w==
+        bh=uTy4yxB/Sy2GGkpTfgcW5WshNn/nrvlwrV1YyVelTU4=;
+        b=O4fnuMvWm+m/y/xQ0sZI/HIuQwooizkMH82l/TS46A58WPBrGQ2fg1RcF7FPXOc/uN
+         wGvqCpbqCqZ94aojOfgfjR8gSTqFgSaPWYpwCLTXoskRKo+nASOq98bW4AGubTGej9xz
+         8KKXSAtg3QNIgTKlvF/fHwA7OyVUVO5PumRwCtfguGmzxiLLoqDWSQA4ueyXzTj0lPZR
+         uJyVkhOx+/09BOmXvnZCyHW1BLepSasJY6gnEXnqJ8hePPtH0KAFLS24Erk1233a6h6N
+         tRMZItKx6uepKGjsGt6n2V1ast7orB2wzRS6HFa0euRuxOgUAcqU91Bk0CY+m8Gmgqze
+         6uGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xUJA54KTzQJyhxDXIqR9ReX2WN+bK5CjNuAWDhsdb8w=;
-        b=TcQ58ljcFox1JbzV8hkx5NcJzfHtWsT06txtOH4QsUTF5f6cUfqZljGHkQ6HKvyv4b
-         n1VmwZ6aqE1EyZWzSjMMRS7A+qsGw8+CXtesXsX0Tuc4Mmoi8NS+9gcQi52uXZCeANVG
-         YKqxt0HCf3G9RFPUO9zw3SYcwzcQVN5DpnV446H6FMXE6pIhDEpvOcmNPHlyHsSBEmKO
-         qQCBUHuhRHouoxpJGgyqxwlJWGdlnMDd+K4YYCeQpYWG8gvC7Oo6cfKGJdg08nKtaD6Z
-         LurI4qhEStLqgYO2P0OIyTUi0j2y3BJ3w1tUXIdjTtk3SuygwAXkFgZDMF/0Fb/uqXq3
-         BrYg==
-X-Gm-Message-State: AOAM532/Umu002qKneqAJxJNBOHJCXLu6SK8kav+o48dh7TEjCWvKnqp
-        Y8e5LsZTEfbb3SV+lA+HG4GY5zr70UPNL+g6i4rLwcZJ
-X-Google-Smtp-Source: ABdhPJzyVACqW0P5GX9T7WEr0tB2SFQ6077mmdaufTh9FO15OFL7AzToRKYCZQO33CyJbC41uGaJ5fCGYkTuz7UxjFw=
-X-Received: by 2002:a5d:43c4:: with SMTP id v4mr34386550wrr.426.1597225059226;
- Wed, 12 Aug 2020 02:37:39 -0700 (PDT)
+        bh=uTy4yxB/Sy2GGkpTfgcW5WshNn/nrvlwrV1YyVelTU4=;
+        b=FJ/sSpexkdxhDJiNOXW8E1P9GabmtkcrizA+BPlDzSPCxbSeUUISTD18yJ8u+T7YOL
+         5aw8lDP8fz6pkkD6RGGPZqyz/2csrlaLdH+IPxo673y1THvxDRFsW/CeScVLabJwjuPv
+         ic07bTQX+DwZGbF9FqphhhwkTnxME/3Hgr23W8+EtZvUDzSCmKJRuIQTQJ670E9B4yh4
+         NMj91MSI2z2JD1/xXhPYZvPqmpfXG1i1vh3BOxU0gWOwDhjFC+VNsNGCrk2o6/B7g4M9
+         mLunONG0q7uEW3lOderVvhJLgyA+dSwPGOCuPgqE08dz2SCSQkrWumeX28anQM+YD8u0
+         LYrQ==
+X-Gm-Message-State: AOAM531YJn6mJJrWvxw5tWRjS5deriJbAlGhdMGodCYHVXk/zzqcNTv2
+        uuI4N5YKkn10Vv9mc/SQ2BJv2Mbi+bGaSz+nPR6IpQ==
+X-Google-Smtp-Source: ABdhPJweHtfwdTZ/38ShtwHpwcAIIJYfGimC5tyUNMlQ+k4jS8cib5W994DhMFiRcslMHtBRQJDioz2En/eBT/O5qWQ=
+X-Received: by 2002:a05:6000:1203:: with SMTP id e3mr33739356wrx.324.1597225543416;
+ Wed, 12 Aug 2020 02:45:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <1596541616-27688-1-git-send-email-rnayak@codeaurora.org> <1596541616-27688-3-git-send-email-rnayak@codeaurora.org>
-In-Reply-To: <1596541616-27688-3-git-send-email-rnayak@codeaurora.org>
+References: <20200811190252.10559-1-sibis@codeaurora.org>
+In-Reply-To: <20200811190252.10559-1-sibis@codeaurora.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 12 Aug 2020 11:37:03 +0200
-Message-ID: <CAPDyKFoRv49jKi-4UW6EVyAzo1emb=rs2h7CWavON+JoXXh1kA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] PM / Domains: Add support for 'assigned-performance-states'
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
+Date:   Wed, 12 Aug 2020 11:45:06 +0200
+Message-ID: <CAPDyKFqNMEtHwcJFxYQP5H1Yjrsr1T3UUZoXes69EthSjAYs2A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PM / Domains: Add GENPD_FLAG_SUSPEND_ON flag
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Gross <agross@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Kevin Hilman <khilman@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 4 Aug 2020 at 13:47, Rajendra Nayak <rnayak@codeaurora.org> wrote:
+On Tue, 11 Aug 2020 at 21:03, Sibi Sankar <sibis@codeaurora.org> wrote:
 >
-> For devices which have 'assigned-performance-states' specified in DT,
-> set the specified performance state during attach and drop it on detach.
-> Also drop/set as part of runtime suspend/resume callbacks.
+> This is for power domains which needs to stay powered on for suspend
+> but can be powered on/off as part of runtime PM. This flag is aimed at
+> power domains coupled to remote processors which enter suspend states
+> independent to that of the application processor. Such power domains
+> are turned off only on remote processor crash/shutdown.
 
-To allow flexibility, I would prefer to keep the performance state
-being orthogonal to the power on/off state for a genpd.
+As Kevin also requested, please elaborate more on the use case.
 
-Therefore, I am wondering if this is better handled by the consumer
-driver instead?
+Why exactly must the PM domain stay powered on during system suspend?
+Is there a wakeup configured that needs to be managed - or is there a
+co-processor/FW behaviour that needs to be obeyed to?
 
 Kind regards
 Uffe
 
 >
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
 > ---
->  drivers/base/power/domain.c | 27 +++++++++++++++++++++++++++
->  include/linux/pm_domain.h   |  1 +
->  2 files changed, 28 insertions(+)
+>  drivers/base/power/domain.c | 3 ++-
+>  include/linux/pm_domain.h   | 5 +++++
+>  2 files changed, 7 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 0a01df60..8704823 100644
+> index 2cb5e04cf86cd..ba78ac4a450d4 100644
 > --- a/drivers/base/power/domain.c
 > +++ b/drivers/base/power/domain.c
-> @@ -810,6 +810,10 @@ static int genpd_runtime_suspend(struct device *dev)
->         if (irq_safe_dev_in_no_sleep_domain(dev, genpd))
->                 return 0;
+> @@ -129,6 +129,7 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+>  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+>  #define genpd_is_rpm_always_on(genpd)  (genpd->flags & GENPD_FLAG_RPM_ALWAYS_ON)
+> +#define genpd_is_suspend_on(genpd)     (genpd->flags & GENPD_FLAG_SUSPEND_ON)
 >
-> +       /* Drop the assigned performance state */
-> +       if (dev_gpd_data(dev)->assigned_pstate)
-> +               dev_pm_genpd_set_performance_state(dev, 0);
-> +
->         genpd_lock(genpd);
->         genpd_power_off(genpd, true, 0);
->         genpd_unlock(genpd);
-> @@ -829,6 +833,7 @@ static int genpd_runtime_resume(struct device *dev)
+>  static inline bool irq_safe_dev_in_no_sleep_domain(struct device *dev,
+>                 const struct generic_pm_domain *genpd)
+> @@ -949,7 +950,7 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
 >  {
->         struct generic_pm_domain *genpd;
->         struct gpd_timing_data *td = &dev_gpd_data(dev)->td;
-> +       unsigned int assigned_pstate = dev_gpd_data(dev)->assigned_pstate;
->         bool runtime_pm = pm_runtime_enabled(dev);
->         ktime_t time_start;
->         s64 elapsed_ns;
-> @@ -857,6 +862,9 @@ static int genpd_runtime_resume(struct device *dev)
->         if (ret)
->                 return ret;
+>         struct gpd_link *link;
 >
-> +       /* Set the assigned performance state */
-> +       if (assigned_pstate)
-> +               dev_pm_genpd_set_performance_state(dev, assigned_pstate);
->   out:
->         /* Measure resume latency. */
->         time_start = 0;
-> @@ -890,6 +898,8 @@ static int genpd_runtime_resume(struct device *dev)
->  err_poweroff:
->         if (!pm_runtime_is_irq_safe(dev) ||
->                 (pm_runtime_is_irq_safe(dev) && genpd_is_irq_safe(genpd))) {
-> +               if (assigned_pstate)
-> +                       dev_pm_genpd_set_performance_state(dev, 0);
->                 genpd_lock(genpd);
->                 genpd_power_off(genpd, true, 0);
->                 genpd_unlock(genpd);
-> @@ -2405,6 +2415,12 @@ static void genpd_dev_pm_detach(struct device *dev, bool power_off)
+> -       if (!genpd_status_on(genpd) || genpd_is_always_on(genpd))
+> +       if (!genpd_status_on(genpd) || genpd_is_always_on(genpd) || genpd_is_suspend_on(genpd))
+>                 return;
 >
->         dev_dbg(dev, "removing from PM domain %s\n", pd->name);
->
-> +       /* Drop the assigned performance state */
-> +       if (dev_gpd_data(dev)->assigned_pstate) {
-> +               dev_pm_genpd_set_performance_state(dev, 0);
-> +               dev_gpd_data(dev)->assigned_pstate = 0;
-> +       }
-> +
->         for (i = 1; i < GENPD_RETRY_MAX_MS; i <<= 1) {
->                 ret = genpd_remove_device(pd, dev);
->                 if (ret != -EAGAIN)
-> @@ -2442,6 +2458,7 @@ static void genpd_dev_pm_sync(struct device *dev)
->  static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                                  unsigned int index, bool power_on)
->  {
-> +       unsigned int assigned_pstate;
->         struct of_phandle_args pd_args;
->         struct generic_pm_domain *pd;
->         int ret;
-> @@ -2485,6 +2502,16 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->         if (ret)
->                 genpd_remove_device(pd, dev);
->
-> +       /* Set the assigned performance state */
-> +       if (!of_property_read_u32_index(base_dev->of_node,
-> +                                       "assigned-performance-states",
-> +                                       index, &assigned_pstate)) {
-> +               if (assigned_pstate) {
-> +                       dev_pm_genpd_set_performance_state(dev, assigned_pstate);
-> +                       dev_gpd_data(dev)->assigned_pstate = assigned_pstate;
-> +               }
-> +       }
-> +
->         return ret ? -EPROBE_DEFER : 1;
->  }
->
+>         if (genpd->suspended_count != genpd->device_count
 > diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 9ec78ee..4a415ee 100644
+> index ee11502a575b0..3002a2d68936a 100644
 > --- a/include/linux/pm_domain.h
 > +++ b/include/linux/pm_domain.h
-> @@ -180,6 +180,7 @@ struct generic_pm_domain_data {
->         struct notifier_block nb;
->         int cpu;
->         unsigned int performance_state;
-> +       unsigned int assigned_pstate;
->         void *data;
->  };
+> @@ -55,6 +55,10 @@
+>   *
+>   * GENPD_FLAG_RPM_ALWAYS_ON:   Instructs genpd to always keep the PM domain
+>   *                             powered on except for system suspend.
+> + *
+> + * GENPD_FLAG_SUSPEND_ON:      Instructs genpd to keep the PM domain powered
+> + *                             on during suspend and runtime PM controlled
+> + *                             otherwise.
+>   */
+>  #define GENPD_FLAG_PM_CLK       (1U << 0)
+>  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> @@ -62,6 +66,7 @@
+>  #define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+>  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+>  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+> +#define GENPD_FLAG_SUSPEND_ON   (1U << 6)
 >
+>  enum gpd_status {
+>         GPD_STATE_ACTIVE = 0,   /* PM domain is active */
 > --
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
 >
