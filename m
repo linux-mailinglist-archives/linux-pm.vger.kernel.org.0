@@ -2,97 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A928A24244A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 05:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DFF24245B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Aug 2020 05:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726503AbgHLD3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Aug 2020 23:29:18 -0400
-Received: from mga01.intel.com ([192.55.52.88]:7518 "EHLO mga01.intel.com"
+        id S1726501AbgHLDjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Aug 2020 23:39:41 -0400
+Received: from mga17.intel.com ([192.55.52.151]:53732 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726489AbgHLD3R (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 11 Aug 2020 23:29:17 -0400
-IronPort-SDR: /7J+l1MoZ5JBa6MEkb/MqhzHG2A0gAyXIqZkOIkFqXVVBhTt6SxmAsFMXzWCNnRs9MMrFd12FP
- 3gFczto2laBQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="171920306"
+        id S1726483AbgHLDjl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 11 Aug 2020 23:39:41 -0400
+IronPort-SDR: diAlchiBGbXA0Oe4BxkqT7o6WSkNpNGzwX9oMYK3/Rm9+5N/0v4JSk7qtMcx9S6yYR7QBzwM6Q
+ UtVyilC3xuZw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9710"; a="133932736"
 X-IronPort-AV: E=Sophos;i="5.76,302,1592895600"; 
-   d="scan'208";a="171920306"
+   d="scan'208";a="133932736"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 20:29:12 -0700
-IronPort-SDR: 1x5ar2IoxHPK6E5QFOa/BOF8uldjd4mlwpX0kDzWCj6/gzr0PW+53qIwkIO6J3+PgurAT2yu1R
- /hG16jfPhW0g==
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2020 20:39:40 -0700
+IronPort-SDR: rZDHZBGjVC7OHBZV2rTceKoMaTlsW7VXNJ1VX2TU+Hu8UGt0dKzDeTB7R/aST1I2s+9sq6fYa8
+ 7jTkyPJNiqFg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,302,1592895600"; 
-   d="scan'208";a="439261099"
-Received: from wangbolu-mobl1.ccr.corp.intel.com ([10.255.29.211])
-  by orsmga004.jf.intel.com with ESMTP; 11 Aug 2020 20:29:07 -0700
-Message-ID: <d7a19f05497b4137bacd639e576b7166e4a19842.camel@intel.com>
-Subject: Re: [PATCH v2 2/3] perf/x86/rapl: Support multiple rapl unit quirks
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Joe Perches <joe@perches.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org
-Cc:     linux-pm@vger.kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, linux-kernel@vger.kernel.org,
-        kan.liang@linux.intel.com, len.brown@intel.com, rafael@kernel.org
-Date:   Wed, 12 Aug 2020 11:29:06 +0800
-In-Reply-To: <445d4b9039daca40a4d937959a0bc48ffe347f7f.camel@perches.com>
-References: <20200811153149.12242-1-rui.zhang@intel.com>
-         <20200811153149.12242-3-rui.zhang@intel.com>
-         <445d4b9039daca40a4d937959a0bc48ffe347f7f.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
+   d="scan'208";a="317949444"
+Received: from lkp-server01.sh.intel.com (HELO e03a785590b8) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2020 20:39:38 -0700
+Received: from kbuild by e03a785590b8 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1k5hc2-00003w-2D; Wed, 12 Aug 2020 03:39:38 +0000
+Date:   Wed, 12 Aug 2020 11:39:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 395313eda1534576fc2440ea8907fb8ff9097485
+Message-ID: <5f33646d.7huDtKfgZy6XYDCZ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 395313eda1534576fc2440ea8907fb8ff9097485  Merge branches 'acpi-soc' and 'pm-cpufreq' into linux-next
 
-Thanks for reviewing.
+elapsed time: 725m
 
-On Tue, 2020-08-11 at 11:19 -0700, Joe Perches wrote:
-> On Tue, 2020-08-11 at 23:31 +0800, Zhang Rui wrote:
-> > There will be more platforms with different fixed energy units.
-> > Enhance the code to support different rapl unit quirks for
-> > different
-> > platforms.
-> 
-> This seems like one quirk per platform.
-> 
-> Should multiple quirks on individual platforms be supported?
-> 
-enum rapl_unit_quirk is just used as a flag.
-multiple quirks can be deployed with the same flag, just like what I
-did in patch 3/3.
-Also different platforms can either have different flags or share the
-same flag.
+configs tested: 84
+configs skipped: 2
 
-thanks,
-rui
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> > diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> 
-> []
-> > @@ -130,11 +130,16 @@ struct rapl_pmus {
-> >  	struct rapl_pmu		*pmus[];
-> >  };
-> >  
-> > +enum rapl_unit_quirk {
-> > +	RAPL_UNIT_QUIRK_NONE,
-> > +	RAPL_UNIT_QUIRK_INTEL_HSW,
-> > +};
-> > +
-> >  struct rapl_model {
-> >  	struct perf_msr *rapl_msrs;
-> >  	unsigned long	events;
-> >  	unsigned int	msr_power_unit;
-> > -	bool		apply_quirk;
-> > +	enum rapl_unit_quirk	unit_quirk;
-> >  };
-> 
-> 
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                            xcep_defconfig
+mips                          ath25_defconfig
+sh                           se7619_defconfig
+powerpc                        cell_defconfig
+m68k                          multi_defconfig
+i386                             alldefconfig
+c6x                         dsk6455_defconfig
+mips                          malta_defconfig
+m68k                       bvme6000_defconfig
+arm                          iop32x_defconfig
+powerpc                       maple_defconfig
+sh                          urquell_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                         wii_defconfig
+sh                         ecovec24_defconfig
+m68k                          hp300_defconfig
+sh                           se7206_defconfig
+arm                           stm32_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                            allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20200811
+x86_64               randconfig-a005-20200811
+x86_64               randconfig-a001-20200811
+x86_64               randconfig-a003-20200811
+x86_64               randconfig-a004-20200811
+x86_64               randconfig-a002-20200811
+i386                 randconfig-a005-20200811
+i386                 randconfig-a001-20200811
+i386                 randconfig-a002-20200811
+i386                 randconfig-a003-20200811
+i386                 randconfig-a006-20200811
+i386                 randconfig-a004-20200811
+i386                 randconfig-a016-20200811
+i386                 randconfig-a011-20200811
+i386                 randconfig-a015-20200811
+i386                 randconfig-a013-20200811
+i386                 randconfig-a012-20200811
+i386                 randconfig-a014-20200811
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                               rhel-8.3
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                                  kexec
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
