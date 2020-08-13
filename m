@@ -2,138 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5555243151
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 01:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1446243317
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbgHLXFX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Aug 2020 19:05:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726533AbgHLXFV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 12 Aug 2020 19:05:21 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9B05822BF3;
-        Wed, 12 Aug 2020 23:05:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597273520;
-        bh=6kwxpshrOlbOHxWnmXC6+dWtt2L5X/Drj58h8rpdMCA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pXDZRt76CPWxVlpilBeAf66pO/Ch1+UOaSOgdUpIGMcw2xAS2mFHBEgkKJVucyrd/
-         hFrdQmO7EEU0DOv8a5XHHMAntvFEpH8ijK+mCysryubzOS2R2XGypW54K9swm6SsIs
-         b7zU39V5JMU64Uhe2oipgDLWWHGgSe5VXnIpigps=
-Received: by mail-oi1-f170.google.com with SMTP id u63so3384377oie.5;
-        Wed, 12 Aug 2020 16:05:20 -0700 (PDT)
-X-Gm-Message-State: AOAM531IZBzkm9SW7u4Ll0dz2BzE1TEIB7GJrdP7SZFkd9Fl6578K6/D
-        TZuN3gv5Y+jYhGEA04MJz9gQHCjYIc3va2d6mQ==
-X-Google-Smtp-Source: ABdhPJx2qQebZiNBPQzgE1fpdypeYG9ycnPVX3JxYluiX5nbkNkxeZlpxpCsMAonDMWnL7JIOVI286FePABwvHucHl8=
-X-Received: by 2002:aca:bb82:: with SMTP id l124mr1235268oif.106.1597273520003;
- Wed, 12 Aug 2020 16:05:20 -0700 (PDT)
+        id S1725747AbgHMEGQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 00:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725298AbgHMEGP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:06:15 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795EBC061757
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:06:15 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id y8so2233418vsq.8
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:06:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uFADKmKh7X3diP0daFq4Uh/PnuNyIFdsVOnr2X8DxEQ=;
+        b=YZOkuBJsgTHvjSG9g5a/xPxSZTOJqLyRy5QvKnBhTb1LmpDhPoDH0G+SwUIP8hDuPC
+         Kd6o2Vn2ksK+EGfYUQO1sKlBCj1lPLSED3wGvd6pb/aR0VOGkNhNHXM0bodOhZpy1LQH
+         NehGXzZu+3AQNedbVRYBnAW25PW3VOvt+hfpY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uFADKmKh7X3diP0daFq4Uh/PnuNyIFdsVOnr2X8DxEQ=;
+        b=XxqNJUhiB1zFfpcq6FZbROdait5CJ5FSRzcqqqgWHmoSmIliaute2L2asfhELS3Xed
+         idlqQxo48+nlFQZrQ6p82ack28gLa8Z2Gtl3nbUd64gjeKC1EhANNmPJx2PsK7k4NWRd
+         yaT1vngK8veEdrOnNFPqs4Ml60VkAMeyiaPrxJvBT8f+gi3eHmlT+I1IDhNF9kUubASE
+         tGTcjMIaLF+P24ExvLTVU4Pm8GiUX2pfnJkYR/9qSSQ3Pon0jA3LlCWH7qbFvM9Z956O
+         i350Orl2BHbiBY2ZiVUFCL8Ymf3EuKTgkx8NTCxYz1vqkIxIndQkl8SH0HjAUGEhc2ar
+         TADg==
+X-Gm-Message-State: AOAM533jGqt2AHWvsEIa4iV29M40k+n3tIUv1yd9aZXa8T6lJYWhacHv
+        iSpcJ1XP0p5QvL8rk9wU18bsGdtxpF6twpIe4i+Vc9r0jCs=
+X-Google-Smtp-Source: ABdhPJxOLU/xPfybMFGa215m/YHXhxhvxAG948nEvYLq+qYAi4i1/TNCntTeQOm53HE/NsCM/5k/TRa7EtCXCzZwwLs=
+X-Received: by 2002:a05:6102:85:: with SMTP id t5mr1848857vsp.1.1597291574574;
+ Wed, 12 Aug 2020 21:06:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200812203618.2656699-1-robh@kernel.org> <f5dedf2d8d8057de3eaa2f9126f44cebb0653b09.camel@perches.com>
-In-Reply-To: <f5dedf2d8d8057de3eaa2f9126f44cebb0653b09.camel@perches.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 12 Aug 2020 17:05:08 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKBzqMHMMRwBJUjomxOpZAop_+TXBjLCb6ntwZzNMy=3Q@mail.gmail.com>
-Message-ID: <CAL_JsqKBzqMHMMRwBJUjomxOpZAop_+TXBjLCb6ntwZzNMy=3Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Joe Perches <joe@perches.com>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
+References: <20200811065902.2100551-1-ikjn@chromium.org>
+In-Reply-To: <20200811065902.2100551-1-ikjn@chromium.org>
+From:   Nicolas Boichat <drinkcat@chromium.org>
+Date:   Thu, 13 Aug 2020 12:06:03 +0800
+Message-ID: <CANMq1KDzDGJiRDQSPAvdXEt5iDCggZyjQkmUKoY4huYQu3UDeg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] power: supply: sbs-battery: don't assume every i2c
+ errors as battery disconnect
+To:     Ikjoon Jang <ikjn@chromium.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
         "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
+        lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 4:32 PM Joe Perches <joe@perches.com> wrote:
+On Tue, Aug 11, 2020 at 2:59 PM Ikjoon Jang <ikjn@chromium.org> wrote:
 >
-> On Wed, 2020-08-12 at 14:36 -0600, Rob Herring wrote:
-> > Clean-up incorrect indentation, extra spaces, long lines, and missing
-> > EOF newline in schema files. Most of the clean-ups are for list
-> > indentation which should always be 2 spaces more than the preceding
->                                      ^
-> > keyword.
+> Current sbs-battery considers all smbus errors as diconnection events
 
-keyword is the key part...
+disconnection
 
-> []
-> > diff --git a/Documentation/devicetree/bindings/arm/arm,integrator.yaml b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > index 192ded470e32..f0daf990e077 100644
-> > --- a/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/arm,integrator.yaml
-> > @@ -67,9 +67,9 @@ patternProperties:
-> >        compatible:
-> >          items:
-> >            - enum:
-> > -            - arm,integrator-ap-syscon
-> > -            - arm,integrator-cp-syscon
-> > -            - arm,integrator-sp-syscon
-> > +              - arm,integrator-ap-syscon
-> > +              - arm,integrator-cp-syscon
-> > +              - arm,integrator-sp-syscon
+> when battery-detect pin isn't supplied, and restored to present state back
+> on any successful transaction were made.
+
+when any... is made
+
 >
-> Confused a bit here.
->           - enum:
->         10 spaces to dash
-> old line:
->             - arm,integrator-ap-syscon
->         12 spaces to dash
-> new line:
->               - arm,integrator-ap-syscon
->         14 spaces to dash
+> This can leads
+
+lead
+
+> to unlimited state changes between present and !present
+> when one unsupported command was requested and other following commands
+> were successful, e.g. udev rules tries to read multiple properties.
 >
-> Is it supposed to be 2 spaces more than the preceding line
-> or 4 more?
+> This patch checks battery presence by reading known good command to
+> check battery existence.
+>
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> ---
+> v2: fix return value checking of sbs_get_battery_presence_and_health()
+> ---
+>  drivers/power/supply/sbs-battery.c | 26 +++++++++++++++++---------
+>  1 file changed, 17 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+> index 6acb4ea25d2a..db964a470ebc 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -878,10 +878,17 @@ static int sbs_get_property(struct power_supply *psy,
+>         if (!chip->enable_detection)
+>                 goto done;
+>
+> -       if (!chip->gpio_detect &&
+> -               chip->is_present != (ret >= 0)) {
+> -               sbs_update_presence(chip, (ret >= 0));
+> -               power_supply_changed(chip->power_supply);
+> +       if (!chip->gpio_detect && chip->is_present != (ret >=0)) {
+> +               bool old_present = chip->is_present;
+> +               union power_supply_propval val;
+> +
+> +               sbs_get_battery_presence_and_health(
+> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
+> +
+> +               sbs_update_presence(chip, val.intval);
 
-If the preceding line is a list entry (i.e. starts with '-'), then
-it's 4 more spaces. It's always 2 more spaces than the preceding
-keyword start (aka json-schema vocabulary).
+I don't think you can/should assume that val.intval will be set
+correctly if the return value is negative (even if that's what the
+functions currently do, it'd be too easy to accidentally change them).
 
-Arguably, this style is a bit inconsistent in that the '-' counts
-toward as indentation of the current line, but not the preceding line.
-However, I think this style is a bit less error prone and easier to
-review. With the other style (always N more spaces) it's harder to
-distinguish lists vs. dicts. For example, you can have something like
-this:
+So I still think you need to have:
 
-- key:
-  - foo
-  - bar
+ret = sbs_get_battery_presence_and_health...
 
-- key:
-    foo
-    bar
+sbs_update_presence(chip, !ret && val.intval);
 
-- key:
-  - foo
-    bar
-
-All 3 of these could be valid. Which one was intended? (Can't really
-tell here, but you can with actual DT schema.)
-
-Rob
+> +
+> +               if (old_present != chip->is_present)
+> +                       power_supply_changed(chip->power_supply);
+>         }
+>
+>  done:
+> @@ -1067,11 +1074,12 @@ static int sbs_probe(struct i2c_client *client)
+>          * to the battery.
+>          */
+>         if (!(force_load || chip->gpio_detect)) {
+> -               rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
+> -
+> -               if (rc < 0) {
+> -                       dev_err(&client->dev, "%s: Failed to get device status\n",
+> -                               __func__);
+> +               union power_supply_propval val;
+> +               sbs_get_battery_presence_and_health(
+> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
+> +               if (!val.intval) {
+> +                       dev_err(&client->dev, "Failed to get present status\n");
+> +                       rc = -ENODEV;
+>                         goto exit_psupply;
+>                 }
+>         }
+> --
+> 2.28.0.236.gb10cc79966-goog
+>
