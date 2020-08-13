@@ -2,150 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D64243357
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C082824335B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgHME30 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 00:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
+        id S1726531AbgHME3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 00:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbgHME30 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:29:26 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A6FC061383
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:26 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y6so2078651plt.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:26 -0700 (PDT)
+        with ESMTP id S1726106AbgHME3o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:29:44 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA67C061384
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id d188so2171218pfd.2
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :in-reply-to:references;
-        bh=R39mZXnsq0qTraesNliee1MsAVA33s9QnxlmS7GVZbI=;
-        b=H1n9tH4E5LR0hLMncTHZa2OqXcJNGM/3MvpETAWc3xKJJ9siDUlT2ZUQURgpPlKa+J
-         HmNGgAwmwoRAWO6F/0Qlx0qr2uy8Ou0s3fXMQKoOkwTYAHCuC+KQPUQzw6216SHg0e77
-         RMghBXdyNvyQ9Rnz+XnB5xM1BBL9L9cYbN+AUFMbmwsLkgjbtB3IPnG6JYQyWTh63eOj
-         GDW6niGkwGcCDGMtHG6O98TsJtdMXPvxOFABUPHKrQm8YqX4InK55oS29bDncwbabq43
-         10SCYCle0cQ9QfVH4RGsUb6sIJKd7PiVwJhdnY2zhfZxfPlFLhaQRp7Wqc/s9LGz1IbS
-         G1zg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xIdIpbnx60CzDLvbTVQD5OyHFhB3i0JZtsYS6xXe3jc=;
+        b=MejU3VUHQfeX/8vP4xljEDExyeMgyTbHPaDCkHdMQ3sPCnWKfITG1MPAnqQR12gc+r
+         VPzYyjc24N79BG8NU2kpGB7/BBYiTcvI+ZmxfkIUC7I9iZW2g1Jsjeraj83mbk7P8LFu
+         Tz3n9Z5OSUaheVep1IHXkIGK0KxGMwo0XThXEjv2jMJ/RUS6pZ999qKL7XswloRgrhAB
+         9Nb5ZBJHT2wfgzR/ayhogd3alNISpLYKx2a8dYsxQM8uqOgHauYx3z+uA13O05Mj7U2m
+         GkjAWeHjcX+VE6QK+T/23OFOzL4mXHU/zzEnKcBjTpoEZEALz0dcf7hco+DrRMnw1WyB
+         Papg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:in-reply-to:references;
-        bh=R39mZXnsq0qTraesNliee1MsAVA33s9QnxlmS7GVZbI=;
-        b=goFS8HSRddZL/6qqTPzzZ8dJqgeVODtkmX6saB63zNeaI3T/n4HXZc18UqcKs/Mty8
-         VZ1kr4Y3JsFawjz6/PMK7c0AxhECcH+MELJz0bcXeXNItRCx1RSuXlB/1+knDgnhPkHr
-         Fa/kRrBwib3/Py97KmizHvCGqtSVVnO33Lpz/L6Gc3aG+RUYNY7s5cbhFOgHK1Oi79gx
-         0zkT3fyFO21ww2bxqB6Y/sQi0gcBK2m1TwjK2FcAmyLhgpfhOvUoaooWK2nFu+jCc7BC
-         Zssga2p7dipga2Sl6aJbHf04PhQpbqUNauvymMUWnBM5bswJxL9eWDf9LY6iyiaPkgu/
-         jqtw==
-X-Gm-Message-State: AOAM531cxabgQOYR6DPKPplnLsdLDjmipX21FhLbcTBvT7W7qudGv8dl
-        DClnntLSffMLyljt1rkqecXYDw==
-X-Google-Smtp-Source: ABdhPJyiHs3lx6zA/+e4gEiWWHS7Z1ltMlLkHBMkgHHERccGq0Yjc56OGchqNhaTJkR9ZYmw4IVAUQ==
-X-Received: by 2002:a17:902:b788:: with SMTP id e8mr2354217pls.117.1597292965549;
-        Wed, 12 Aug 2020 21:29:25 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xIdIpbnx60CzDLvbTVQD5OyHFhB3i0JZtsYS6xXe3jc=;
+        b=XoJ8BLeSzvZxa2q7gBG2SS1+R8/o5Er8zi8Wt56ZBP8zOsxQyhFsm3kmYWh3FOqX2r
+         hixRHMhAJmJOPdgMdCTJYfMk1WnmCS/Lmdq54eTeWVr83Dk3ggNrLdtArDe74/QeI54O
+         r7AnPKcZ80mF027ambOcmB5Q+Z7WLjfdIrporM9GhqiFcdH+AWbS/wNVPF+dfHGXTs7q
+         YZGsRjdAvrjg0YnzI3MjOYpTi3Ynv5YTUH2IvFQf2ihrgRgeRJSeMIJ73XcwXV8SX77Z
+         4K3Ic6irw8hrPshp8DlQNfeEfJ+csFP4HSjDoUlR/x+mYsFtCg3kRkFD6ABIuCvsz6lD
+         Mmgg==
+X-Gm-Message-State: AOAM532AgdVQrKhlF/GlJTzdlMrCGxhVXfxdufTLvV/wZPMqOCTw2n8i
+        d0N3VAh1UbM6P3ooItgknqdetQ==
+X-Google-Smtp-Source: ABdhPJx6frQktQqrAUHEZ1iFW6nmiLYBgM7XrzuzOuqkpNDkGl/pJc+JVQoakHmORATi5XJ8nxy2AA==
+X-Received: by 2002:a05:6a00:1509:: with SMTP id q9mr2625321pfu.24.1597292983508;
+        Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
 Received: from localhost ([171.79.32.211])
-        by smtp.gmail.com with ESMTPSA id e26sm4100031pfj.197.2020.08.12.21.29.24
+        by smtp.gmail.com with ESMTPSA id u14sm4080239pfm.103.2020.08.12.21.29.42
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Aug 2020 21:29:25 -0700 (PDT)
+        Wed, 12 Aug 2020 21:29:42 -0700 (PDT)
+Date:   Thu, 13 Aug 2020 09:59:40 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>, mka@chromium.org,
-        sibis@codeaurora.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] opp: Split out _opp_set_rate_zero()
-Date:   Thu, 13 Aug 2020 09:59:01 +0530
-Message-Id: <c30377622c4f4754fb709f6bd2eb3ba61db38f19.1597292833.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.14.1
-In-Reply-To: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>, nm@ti.com,
+        vireshk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
+Message-ID: <20200813042940.dg75g7oj3iiyuu4k@vireshk-mac-ubuntu>
 References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
- <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
-In-Reply-To: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
-References: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
+ <159718019170.1360974.4800051292737590657@swboyd.mtv.corp.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <159718019170.1360974.4800051292737590657@swboyd.mtv.corp.google.com>
+User-Agent: NeoMutt/20170609 (1.8.3)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Create separate routine _opp_set_rate_zero() to handle !target_freq
-case.
+On 11-08-20, 14:09, Stephen Boyd wrote:
+> This is a goto maze! Any chance we can clean this up?
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 52 +++++++++++++++++++++++++++++-----------------------
- 1 file changed, 29 insertions(+), 23 deletions(-)
+I have sent a short series in reply to this series, please have a
+look. It should look better now.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 5f5da257f58a..e198b57efcf8 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -860,6 +860,34 @@ int dev_pm_opp_set_bw(struct device *dev, struct dev_pm_opp *opp)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_set_bw);
- 
-+static int _opp_set_rate_zero(struct device *dev, struct opp_table *opp_table)
-+{
-+	int ret;
-+
-+	if (!opp_table->enabled)
-+		return 0;
-+
-+	/*
-+	 * Some drivers need to support cases where some platforms may
-+	 * have OPP table for the device, while others don't and
-+	 * opp_set_rate() just needs to behave like clk_set_rate().
-+	 */
-+	if (!_get_opp_count(opp_table))
-+		return 0;
-+
-+	ret = _set_opp_bw(opp_table, NULL, dev, true);
-+	if (ret)
-+		return ret;
-+
-+	regulator_disable(opp_table->regulators[0]);
-+
-+	ret = _set_required_opps(dev, opp_table, NULL);
-+	if (!ret)
-+		opp_table->enabled = false;
-+
-+	return ret;
-+}
-+
- /**
-  * dev_pm_opp_set_rate() - Configure new OPP based on frequency
-  * @dev:	 device for which we do this operation
-@@ -886,29 +914,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 	}
- 
- 	if (unlikely(!target_freq)) {
--		ret = 0;
--
--		if (!opp_table->enabled)
--			goto put_opp_table;
--
--		/*
--		 * Some drivers need to support cases where some platforms may
--		 * have OPP table for the device, while others don't and
--		 * opp_set_rate() just needs to behave like clk_set_rate().
--		 */
--		if (!_get_opp_count(opp_table))
--			goto put_opp_table;
--
--		ret = _set_opp_bw(opp_table, NULL, dev, true);
--		if (ret)
--			goto put_opp_table;
--
--		regulator_disable(opp_table->regulators[0]);
--
--		ret = _set_required_opps(dev, opp_table, NULL);
--		if (!ret)
--			opp_table->enabled = false;
--
-+		ret = _opp_set_rate_zero(dev, opp_table);
- 		goto put_opp_table;
- 	}
- 
 -- 
-2.14.1
-
+viresh
