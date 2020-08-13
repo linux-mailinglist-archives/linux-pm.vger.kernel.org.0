@@ -2,126 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870D424393C
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 13:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE822439DB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 14:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgHMLTK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 07:19:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41156 "EHLO
+        id S1726292AbgHMMe4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 08:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbgHMLTJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 07:19:09 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8B8C061385
-        for <linux-pm@vger.kernel.org>; Thu, 13 Aug 2020 04:19:08 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id h19so5717729ljg.13
-        for <linux-pm@vger.kernel.org>; Thu, 13 Aug 2020 04:19:08 -0700 (PDT)
+        with ESMTP id S1726531AbgHMMex (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 08:34:53 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D6BC061383
+        for <linux-pm@vger.kernel.org>; Thu, 13 Aug 2020 05:34:51 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id k8so4899876wma.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Aug 2020 05:34:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qcVxyjLOc1XVQD85n/+izIou9HNM43cYVLg/SeyZZMI=;
-        b=bNUdBuTwV/3TZ/Z2ohABO3rXzw8ixSfjeDWsfXjjDrX20nyzrlw+kFWqi3ovJUynzQ
-         T1jyIFdxNfWCxLqjjyxSHXr5s0oW5LxFuvCml7jlfGz/Es56tr8LGQJ0Ayd8iqZPt9ZY
-         PsDEcqKEmN8WW+xd7XLaSVnCibx6LBsuymT1hEUj+XD/gGeGo2ourVChPri6ZJkqQOVR
-         ceDCAPqSkGUMysZ8x4Jtlz5llwNp3sqtR86ChhD8zQbr6L7twY6lDI+UEQ3DiEXxQa/F
-         8Qku+cOjt+2i4dOy7CD3axyIFL6EvdiknM+KuArG/9J4BcsypOjwY3z7KRAA02hS0wBv
-         06Ng==
+        bh=w3uEAwJLgL9HOnp4WfEgQ6HPIoDO6xpaWopK8Q+HmGk=;
+        b=fQQTnjytAsYYb6U28l4hea+cVyA8Oa4Y6wLtWv7R4Eb3hEI5Q9QUYTlskJemGUUOQC
+         bt+7UirIqACAbvxy81mTMDFViioTzbmlM2nOkDad4aMGNkpuOqqZJ5V9O6yjdZx/Spso
+         qCg59PcJquzfQaSddP8yuED5h4jl1PrnfXJxl3Cu9bvVS0X/rmqirGh93O/hNDFx49uU
+         iXM0YI6MaZKQ+z99PMvWOg5oqSKpYX2v3Z8pFtm4/jfrc6JfbhaNmWmATzeLvlb4dWrP
+         vzz9H9MICwsqXK7DErrKI0FTfapIX4rf68880SbgvyYgo+BswLk0UQlcAhBwwhtyWS4t
+         FQsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qcVxyjLOc1XVQD85n/+izIou9HNM43cYVLg/SeyZZMI=;
-        b=onFVA6OVSr4KzHwoyfaKECSAnB+M9PY/DKNRzfP510l3EqRc+7Ntk0rEY1EpIg/srz
-         CMqPyFsGJNIc4ecCZSTM3oyBFS07MQiI2aA5UO0C5d1AvWBXS516QSo+z9cLTn0fM9nO
-         x5yFL8GtIo1ofvZTidefYpFmY4BX1nhA0FezZdowrrL1nP9ScWkIxegCFcqlWtInIpPX
-         WC/IDYkalabOvbej0/mFzW5x99YicstMAt6KqBecTDTN4V1UnzWG38zMR4nSWGq7e0uW
-         pLYpKhdjSFL8IUYqyKyUOwkOjsunXjMHuli5MJJeHPAGkUQBIzTot4nS72lv7emTo5YU
-         gahg==
-X-Gm-Message-State: AOAM533Kz72HBf63tDt4mxBpVaS35x6WzZJOb68TRqr2Yep1fSoOEhB9
-        PDa6fj2Xe8AS7+CTZbAxaClDz1+kdPwenT5ncfx8EQ==
-X-Google-Smtp-Source: ABdhPJzYfGbMEn7r8RSAZZZ27h0Qx8uCYkmnUIyQdLzHLY2mY0DXgQIKq5PcNQCWG8lcb6/k/8aEZqf77v7vU/NmbRA=
-X-Received: by 2002:a05:651c:91:: with SMTP id 17mr1857137ljq.173.1597317546530;
- Thu, 13 Aug 2020 04:19:06 -0700 (PDT)
+        bh=w3uEAwJLgL9HOnp4WfEgQ6HPIoDO6xpaWopK8Q+HmGk=;
+        b=s85C9XLS/ohKfSNrYbIQL1pO4GcWV4RnyZS1k5hgy0298b3DA1rC/S8/wtUAvZrTid
+         9lAPIaaOZWQtmxnwE6EM7JGCHqTRzSzRdcwPEw79+eYPyrs4nFUFvbouu1ZUwEsqEiiA
+         35aVPzSeo3/xnJW1o9nq/v6Z11Dq8XpuKA22Sf/PaR9r4zvW1ihXBrY1z09Cti+1BCdo
+         P8D9p536DLhWQ8WxYqZCz7+BY+DixCJpIhMYetyjI6ILFaNqxT7SmWizJmIAMJM3zNsT
+         qKx38hqfV4c2vH2bw/u5E/7KZqK2op+Tv/hM0xOJ+6hHhJZxI/ThUmP5NzkXruJqIaui
+         abkg==
+X-Gm-Message-State: AOAM530AHUP23eepLOMMZXBOl29s/NZk9I/8umuzR0jQFPH7eyqNbO9H
+        9HhMDDMEWpQ5BdVyaqv50io5d2E75pqN0MZV9hOd5YKEx7BzvA==
+X-Google-Smtp-Source: ABdhPJyFT4uz/eeLKFjW8ZpZRSmHtA8nhNF+nipha3H4ZWg8H5FDUBEfBmgaiDE9vS22eNpiBvDsx1dD2wgkiZIWk64=
+X-Received: by 2002:a1c:4e10:: with SMTP id g16mr3926900wmh.146.1597322089935;
+ Thu, 13 Aug 2020 05:34:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200725181404.18951-1-ansuelsmth@gmail.com> <20200725181404.18951-2-ansuelsmth@gmail.com>
- <CAHLCerMc8yUjh9qwUCa=jMZHs18GC4qeS3rqT1_6K90QJd=nVA@mail.gmail.com> <006f01d66fe1$e6c0d450$b4427cf0$@gmail.com>
-In-Reply-To: <006f01d66fe1$e6c0d450$b4427cf0$@gmail.com>
-From:   Amit Kucheria <amit.kucheria@linaro.org>
-Date:   Thu, 13 Aug 2020 16:48:55 +0530
-Message-ID: <CAP245DWuMh6Bkv7P4Y6mV3n59KFyCGKoy7e00E9d9ijR_rr1WA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 1/7] drivers: thermal: tsens: Add VER_0 tsens version
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
+References: <20200811190252.10559-1-sibis@codeaurora.org> <CAPDyKFqNMEtHwcJFxYQP5H1Yjrsr1T3UUZoXes69EthSjAYs2A@mail.gmail.com>
+ <1ba3e4d703dd0a52547d63fa014451eb@codeaurora.org>
+In-Reply-To: <1ba3e4d703dd0a52547d63fa014451eb@codeaurora.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 13 Aug 2020 14:34:13 +0200
+Message-ID: <CAPDyKFrH9WTg4O5L+e1AijNvsagLYZ9QVTeoD0x0SQgYd3hkBg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PM / Domains: Add GENPD_FLAG_SUSPEND_ON flag
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-kernel-owner@vger.kernel.org,
+        Kevin Hilman <khilman@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 6:48 PM <ansuelsmth@gmail.com> wrote:
+On Wed, 12 Aug 2020 at 19:03, Sibi Sankar <sibis@codeaurora.org> wrote:
 >
+> Uffe,
+> Thanks for taking time to review the
+> series!
 >
+> On 2020-08-12 15:15, Ulf Hansson wrote:
+> > On Tue, 11 Aug 2020 at 21:03, Sibi Sankar <sibis@codeaurora.org> wrote:
+> >>
+> >> This is for power domains which needs to stay powered on for suspend
+> >> but can be powered on/off as part of runtime PM. This flag is aimed at
+> >> power domains coupled to remote processors which enter suspend states
+> >> independent to that of the application processor. Such power domains
+> >> are turned off only on remote processor crash/shutdown.
+> >
+> > As Kevin also requested, please elaborate more on the use case.
+> >
+> > Why exactly must the PM domain stay powered on during system suspend?
+> > Is there a wakeup configured that needs to be managed - or is there a
+> > co-processor/FW behaviour that needs to be obeyed to?
 >
-> > -----Messaggio originale-----
-> > Da: Amit Kucheria <amit.kucheria@linaro.org>
+> Yes this is a co-processor behavior that
+> needs to be obeyed. Specifically application
+> processor notifies the Always on Subsystem
+> (AOSS) that a particular co-processor is up
+> using the power domains exposed by AOSS QMP
+> driver. AOSS uses this information to wait
+> for the co-processors to suspend before
+> starting its sleep sequence. The application
+> processor powers off these power domains only
+> if the co-processor has crashed or powered
+> off.
+
+Thanks for clarifying!
+
+Although, can you please elaborate a bit more on the actual use case?
+What are the typical co-processor and what drivers are involved in
+managing it?
+
+As you may know, runtime PM becomes disabled during system suspend of
+a device. Which means, if the driver tries to power off the
+coprocessor (via calling pm_runtime_put() for example), somewhere in
+the system suspend phase of the corresponding device, its attached PM
+domain stays powered on when managed by genpd.
+
+Then in the suspend_noirq phase, genpd tries to power off the PM
+domain, unless there are wakeups to consider.
+
+Taking the above into account, wouldn't that mean that you potentially
+may end up keeping the PM domain powered on, even if it actually can
+be powered off in the suspend_noirq phase by genpd?
+
+Kind regards
+Uffe
 
 > >
-> > >                         if (IS_ERR(priv->rf[i]))
-> > >                                 return PTR_ERR(priv->rf[i]);
-> > >                 }
-> > > @@ -775,12 +800,80 @@ int __init init_common(struct tsens_priv
-> > *priv)
-> > >                         goto err_put_device;
-> > >         }
-> > >
-> > > -       priv->rf[TSENS_EN] = devm_regmap_field_alloc(dev, priv->srot_map,
-> > > -                                                    priv->fields[TSENS_EN]);
-> > > -       if (IS_ERR(priv->rf[TSENS_EN])) {
-> > > -               ret = PTR_ERR(priv->rf[TSENS_EN]);
-> > > -               goto err_put_device;
-> > > +       if (tsens_version(priv) >= VER_0_1) {
-> > > +               priv->rf[TSENS_EN] = devm_regmap_field_alloc(
-> > > +                       dev, priv->srot_map, priv->fields[TSENS_EN]);
-> > > +               if (IS_ERR(priv->rf[TSENS_EN])) {
-> > > +                       ret = PTR_ERR(priv->rf[TSENS_EN]);
-> > > +                       goto err_put_device;
-> > > +               }
-> > > +
-> > > +               priv->rf[SENSOR_EN] = devm_regmap_field_alloc(
-> > > +                       dev, priv->srot_map, priv->fields[SENSOR_EN]);
-> > > +               if (IS_ERR(priv->rf[SENSOR_EN])) {
-> > > +                       ret = PTR_ERR(priv->rf[SENSOR_EN]);
-> > > +                       goto err_put_device;
-> > > +               }
-> > > +               priv->rf[INT_EN] = devm_regmap_field_alloc(
-> > > +                       dev, priv->tm_map, priv->fields[INT_EN]);
-> > > +               if (IS_ERR(priv->rf[INT_EN])) {
-> > > +                       ret = PTR_ERR(priv->rf[INT_EN]);
-> > > +                       goto err_put_device;
-> > > +               }
-> > > +       } else {
-> >
-> > Let's not create two big sections with if-else for 8960 and everything
-> > else. For example, what is wrong with using common code for TSENS_EN?
-> >
-> > If the concern is memory wasted trying to allocate fields not present
-> > on this older platform, perhaps consider adding a check in the loop to
-> > break early in case of 8960?
-> >
+> >>
+> >> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> >> ---
+> >>  drivers/base/power/domain.c | 3 ++-
+> >>  include/linux/pm_domain.h   | 5 +++++
+> >>  2 files changed, 7 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> >> index 2cb5e04cf86cd..ba78ac4a450d4 100644
+> >> --- a/drivers/base/power/domain.c
+> >> +++ b/drivers/base/power/domain.c
+> >> @@ -129,6 +129,7 @@ static const struct genpd_lock_ops genpd_spin_ops
+> >> = {
+> >>  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
+> >> GENPD_FLAG_ACTIVE_WAKEUP)
+> >>  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
+> >> GENPD_FLAG_CPU_DOMAIN)
+> >>  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
+> >> GENPD_FLAG_RPM_ALWAYS_ON)
+> >> +#define genpd_is_suspend_on(genpd)     (genpd->flags &
+> >> GENPD_FLAG_SUSPEND_ON)
+> >>
+> >>  static inline bool irq_safe_dev_in_no_sleep_domain(struct device
+> >> *dev,
+> >>                 const struct generic_pm_domain *genpd)
+> >> @@ -949,7 +950,7 @@ static void genpd_sync_power_off(struct
+> >> generic_pm_domain *genpd, bool use_lock,
+> >>  {
+> >>         struct gpd_link *link;
+> >>
+> >> -       if (!genpd_status_on(genpd) || genpd_is_always_on(genpd))
+> >> +       if (!genpd_status_on(genpd) || genpd_is_always_on(genpd) ||
+> >> genpd_is_suspend_on(genpd))
+> >>                 return;
+> >>
+> >>         if (genpd->suspended_count != genpd->device_count
+> >> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> >> index ee11502a575b0..3002a2d68936a 100644
+> >> --- a/include/linux/pm_domain.h
+> >> +++ b/include/linux/pm_domain.h
+> >> @@ -55,6 +55,10 @@
+> >>   *
+> >>   * GENPD_FLAG_RPM_ALWAYS_ON:   Instructs genpd to always keep the PM
+> >> domain
+> >>   *                             powered on except for system suspend.
+> >> + *
+> >> + * GENPD_FLAG_SUSPEND_ON:      Instructs genpd to keep the PM domain
+> >> powered
+> >> + *                             on during suspend and runtime PM
+> >> controlled
+> >> + *                             otherwise.
+> >>   */
+> >>  #define GENPD_FLAG_PM_CLK       (1U << 0)
+> >>  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> >> @@ -62,6 +66,7 @@
+> >>  #define GENPD_FLAG_ACTIVE_WAKEUP (1U << 3)
+> >>  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+> >>  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+> >> +#define GENPD_FLAG_SUSPEND_ON   (1U << 6)
+> >>
+> >>  enum gpd_status {
+> >>         GPD_STATE_ACTIVE = 0,   /* PM domain is active */
+> >> --
+> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora
+> >> Forum,
+> >> a Linux Foundation Collaborative Project
+> >>
 >
-> About TSENS_EN the old platform doesn't have SROT so I need to use TM_MAP.
-> Should I set the srot map to match the tm map so we can use the common function?
-> Aside from this problem, I will try to remove the big if-else.
-
-Ick. I guess srot_map and tm_map pointing to the same region is the
-lesser of two evils? It makes it so this will be constrained to a
-single place in init_common().
+> --
+> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+> a Linux Foundation Collaborative Project.
