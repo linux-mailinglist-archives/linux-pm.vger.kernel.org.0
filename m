@@ -2,147 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1446243317
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9407243352
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725747AbgHMEGQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 00:06:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S1726107AbgHME3M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 00:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbgHMEGP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:06:15 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795EBC061757
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:06:15 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id y8so2233418vsq.8
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:06:15 -0700 (PDT)
+        with ESMTP id S1726112AbgHME3L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:29:11 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36737C061384
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:11 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id g7so936393plq.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uFADKmKh7X3diP0daFq4Uh/PnuNyIFdsVOnr2X8DxEQ=;
-        b=YZOkuBJsgTHvjSG9g5a/xPxSZTOJqLyRy5QvKnBhTb1LmpDhPoDH0G+SwUIP8hDuPC
-         Kd6o2Vn2ksK+EGfYUQO1sKlBCj1lPLSED3wGvd6pb/aR0VOGkNhNHXM0bodOhZpy1LQH
-         NehGXzZu+3AQNedbVRYBnAW25PW3VOvt+hfpY=
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=Ir/TwzXKrJIx51xeXWtP2nIBfHcRYk10KeY/pHei49E=;
+        b=cw5cxSfF05qeFRq/yk4IykzVTQKt+ejdPbbRjGsyg/WGZhkFrKF00uBXuRFmqkBWBm
+         98GqMuTdvn6Mtq462o7lNv0ssoRrhq5Zaqd+sPVDqifRhHFQMCB7ldDQtH38zcb8oicr
+         c2TPJLMk56kk3nZFMw06Qc7bs3wnqYZw2wGnPNJ8QvhGJX/pLIktodr7y8ETRFwa+rK3
+         gFgwLS1CCmHfM7ZsfQNhSuuwymXv1An9GAZonvlgOcr/gen2W33MQX/ksR3PoVLxwTT3
+         5UugXjZLpAx8CUMMcrMtOtNVHhOAxRHoz+oBziu8uolZhrZ8iksDpxLOThUGpPgMo7ql
+         +sww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uFADKmKh7X3diP0daFq4Uh/PnuNyIFdsVOnr2X8DxEQ=;
-        b=XxqNJUhiB1zFfpcq6FZbROdait5CJ5FSRzcqqqgWHmoSmIliaute2L2asfhELS3Xed
-         idlqQxo48+nlFQZrQ6p82ack28gLa8Z2Gtl3nbUd64gjeKC1EhANNmPJx2PsK7k4NWRd
-         yaT1vngK8veEdrOnNFPqs4Ml60VkAMeyiaPrxJvBT8f+gi3eHmlT+I1IDhNF9kUubASE
-         tGTcjMIaLF+P24ExvLTVU4Pm8GiUX2pfnJkYR/9qSSQ3Pon0jA3LlCWH7qbFvM9Z956O
-         i350Orl2BHbiBY2ZiVUFCL8Ymf3EuKTgkx8NTCxYz1vqkIxIndQkl8SH0HjAUGEhc2ar
-         TADg==
-X-Gm-Message-State: AOAM533jGqt2AHWvsEIa4iV29M40k+n3tIUv1yd9aZXa8T6lJYWhacHv
-        iSpcJ1XP0p5QvL8rk9wU18bsGdtxpF6twpIe4i+Vc9r0jCs=
-X-Google-Smtp-Source: ABdhPJxOLU/xPfybMFGa215m/YHXhxhvxAG948nEvYLq+qYAi4i1/TNCntTeQOm53HE/NsCM/5k/TRa7EtCXCzZwwLs=
-X-Received: by 2002:a05:6102:85:: with SMTP id t5mr1848857vsp.1.1597291574574;
- Wed, 12 Aug 2020 21:06:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200811065902.2100551-1-ikjn@chromium.org>
-In-Reply-To: <20200811065902.2100551-1-ikjn@chromium.org>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Thu, 13 Aug 2020 12:06:03 +0800
-Message-ID: <CANMq1KDzDGJiRDQSPAvdXEt5iDCggZyjQkmUKoY4huYQu3UDeg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] power: supply: sbs-battery: don't assume every i2c
- errors as battery disconnect
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=Ir/TwzXKrJIx51xeXWtP2nIBfHcRYk10KeY/pHei49E=;
+        b=EHKutfRFIfMfiYkNb2vlWrnKLCysQTYDNeLNC0zWxRUsPzZuLMTRA8TutiD8lJcFJ4
+         vN3uuUGWJ9p4cxPDVJkBzOdsP/5+JAjZ+ZWCLOBBIulm4929HjJHQzNJ6xFtPkpPNKWx
+         sOVxxZKKmUn7sSaeIhpa+0y/AHYPRyt/agdF13bUw2rIAH0EKwwm/yWT0aZfK5Rz+TsO
+         zQUsL4qfoAi/IBwtbs7aZnP3hvjBAKitVkoLf9OJH2MsRAYPrCQ/rmXlFsJ69+UZBimT
+         5OuBKWWrY+Vsg74Y7B73BKke8gd+bLhFy380372Q/+irwZFMfvep8qu9ByAu8ynbCSCL
+         M4/g==
+X-Gm-Message-State: AOAM530mPLImjGCzxYvyzF675UXzo4Lj4Dff1q2sfXaBzKyOsUoRqRPC
+        DEEKuuW7sMG2V26h2o3855J59Q==
+X-Google-Smtp-Source: ABdhPJw7kd7Nj7HnhrH5uzzC1xBDC35wPSobc/wx1hyTVReps59e9du1sKbdnJmSDTiVT+nD1YJs9A==
+X-Received: by 2002:a17:902:8b8b:: with SMTP id ay11mr2405922plb.241.1597292950502;
+        Wed, 12 Aug 2020 21:29:10 -0700 (PDT)
+Received: from localhost ([171.79.32.211])
+        by smtp.gmail.com with ESMTPSA id w7sm4008522pfi.164.2020.08.12.21.29.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 12 Aug 2020 21:29:09 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>, mka@chromium.org,
+        sibis@codeaurora.org, "v5 . 3+" <stable@vger.kernel.org>,
+        Sajida Bhanu <sbhanu@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 1/4] opp: Enable resources again if they were disabled earlier
+Date:   Thu, 13 Aug 2020 09:58:58 +0530
+Message-Id: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
+References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 2:59 PM Ikjoon Jang <ikjn@chromium.org> wrote:
->
-> Current sbs-battery considers all smbus errors as diconnection events
+From: Rajendra Nayak <rnayak@codeaurora.org>
 
-disconnection
+dev_pm_opp_set_rate() can now be called with freq = 0 in order
+to either drop performance or bandwidth votes or to disable
+regulators on platforms which support them.
 
-> when battery-detect pin isn't supplied, and restored to present state back
-> on any successful transaction were made.
+In such cases, a subsequent call to dev_pm_opp_set_rate() with
+the same frequency ends up returning early because 'old_freq == freq'
 
-when any... is made
+Instead make it fall through and put back the dropped performance
+and bandwidth votes and/or enable back the regulators.
 
->
-> This can leads
+Cc: v5.3+ <stable@vger.kernel.org> # v5.3+
+Fixes: cd7ea582 ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes")
+Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
+Reported-by: Matthias Kaehlcke <mka@chromium.org>
+Tested-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+[ Viresh: Don't skip clk_set_rate() and massaged changelog ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Hi Rajendra,
 
-lead
+I wasn't able to test this stuff, please give it a try. I have
+simplified your patch and cleaned up a bunch of stuff as well.
 
-> to unlimited state changes between present and !present
-> when one unsupported command was requested and other following commands
-> were successful, e.g. udev rules tries to read multiple properties.
->
-> This patch checks battery presence by reading known good command to
-> check battery existence.
->
-> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> ---
-> v2: fix return value checking of sbs_get_battery_presence_and_health()
-> ---
->  drivers/power/supply/sbs-battery.c | 26 +++++++++++++++++---------
->  1 file changed, 17 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-> index 6acb4ea25d2a..db964a470ebc 100644
-> --- a/drivers/power/supply/sbs-battery.c
-> +++ b/drivers/power/supply/sbs-battery.c
-> @@ -878,10 +878,17 @@ static int sbs_get_property(struct power_supply *psy,
->         if (!chip->enable_detection)
->                 goto done;
->
-> -       if (!chip->gpio_detect &&
-> -               chip->is_present != (ret >= 0)) {
-> -               sbs_update_presence(chip, (ret >= 0));
-> -               power_supply_changed(chip->power_supply);
-> +       if (!chip->gpio_detect && chip->is_present != (ret >=0)) {
-> +               bool old_present = chip->is_present;
-> +               union power_supply_propval val;
-> +
-> +               sbs_get_battery_presence_and_health(
-> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
-> +
-> +               sbs_update_presence(chip, val.intval);
+ drivers/opp/core.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-I don't think you can/should assume that val.intval will be set
-correctly if the return value is negative (even if that's what the
-functions currently do, it'd be too easy to accidentally change them).
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index bdb028c7793d..9668ea04cc80 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -934,10 +934,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+ 
+ 	/* Return early if nothing to do */
+ 	if (old_freq == freq) {
+-		dev_dbg(dev, "%s: old/new frequencies (%lu Hz) are same, nothing to do\n",
+-			__func__, freq);
+-		ret = 0;
+-		goto put_opp_table;
++		if (!opp_table->required_opp_tables && !opp_table->regulators &&
++		    !opp_table->paths) {
++			dev_dbg(dev, "%s: old/new frequencies (%lu Hz) are same, nothing to do\n",
++				__func__, freq);
++			ret = 0;
++			goto put_opp_table;
++		}
+ 	}
+ 
+ 	/*
+-- 
+2.14.1
 
-So I still think you need to have:
-
-ret = sbs_get_battery_presence_and_health...
-
-sbs_update_presence(chip, !ret && val.intval);
-
-> +
-> +               if (old_present != chip->is_present)
-> +                       power_supply_changed(chip->power_supply);
->         }
->
->  done:
-> @@ -1067,11 +1074,12 @@ static int sbs_probe(struct i2c_client *client)
->          * to the battery.
->          */
->         if (!(force_load || chip->gpio_detect)) {
-> -               rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-> -
-> -               if (rc < 0) {
-> -                       dev_err(&client->dev, "%s: Failed to get device status\n",
-> -                               __func__);
-> +               union power_supply_propval val;
-> +               sbs_get_battery_presence_and_health(
-> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
-> +               if (!val.intval) {
-> +                       dev_err(&client->dev, "Failed to get present status\n");
-> +                       rc = -ENODEV;
->                         goto exit_psupply;
->                 }
->         }
-> --
-> 2.28.0.236.gb10cc79966-goog
->
