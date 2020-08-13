@@ -2,76 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C082824335B
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 06:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CAF24337F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 07:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgHME3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 00:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
+        id S1725848AbgHMFLA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 01:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgHME3o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 00:29:44 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA67C061384
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id d188so2171218pfd.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
+        with ESMTP id S1725794AbgHMFK7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 01:10:59 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6526C061757
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 22:10:59 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id d4so2200236pjx.5
+        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 22:10:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xIdIpbnx60CzDLvbTVQD5OyHFhB3i0JZtsYS6xXe3jc=;
-        b=MejU3VUHQfeX/8vP4xljEDExyeMgyTbHPaDCkHdMQ3sPCnWKfITG1MPAnqQR12gc+r
-         VPzYyjc24N79BG8NU2kpGB7/BBYiTcvI+ZmxfkIUC7I9iZW2g1Jsjeraj83mbk7P8LFu
-         Tz3n9Z5OSUaheVep1IHXkIGK0KxGMwo0XThXEjv2jMJ/RUS6pZ999qKL7XswloRgrhAB
-         9Nb5ZBJHT2wfgzR/ayhogd3alNISpLYKx2a8dYsxQM8uqOgHauYx3z+uA13O05Mj7U2m
-         GkjAWeHjcX+VE6QK+T/23OFOzL4mXHU/zzEnKcBjTpoEZEALz0dcf7hco+DrRMnw1WyB
-         Papg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=xPZ6SG/zYPhOh4F1hrC3AfjzUbgPD+IZVvEp6h306j8=;
+        b=fEl/Jq/IgbTmIkW1eFw7j5PmpSOA8UBiPp5t3w904WZTHkDJEq/ZZ70kMgDTGl8a0r
+         SwlJ3GCcXfKEBKDCanVitTiE3DrwVmGy6PQpol/PJAUKrkGRDX6+8JyqzOZmQJJwH9gG
+         YCcys+vF7D+sRiPBBbE619Go7a0cY/tLQYkf8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xIdIpbnx60CzDLvbTVQD5OyHFhB3i0JZtsYS6xXe3jc=;
-        b=XoJ8BLeSzvZxa2q7gBG2SS1+R8/o5Er8zi8Wt56ZBP8zOsxQyhFsm3kmYWh3FOqX2r
-         hixRHMhAJmJOPdgMdCTJYfMk1WnmCS/Lmdq54eTeWVr83Dk3ggNrLdtArDe74/QeI54O
-         r7AnPKcZ80mF027ambOcmB5Q+Z7WLjfdIrporM9GhqiFcdH+AWbS/wNVPF+dfHGXTs7q
-         YZGsRjdAvrjg0YnzI3MjOYpTi3Ynv5YTUH2IvFQf2ihrgRgeRJSeMIJ73XcwXV8SX77Z
-         4K3Ic6irw8hrPshp8DlQNfeEfJ+csFP4HSjDoUlR/x+mYsFtCg3kRkFD6ABIuCvsz6lD
-         Mmgg==
-X-Gm-Message-State: AOAM532AgdVQrKhlF/GlJTzdlMrCGxhVXfxdufTLvV/wZPMqOCTw2n8i
-        d0N3VAh1UbM6P3ooItgknqdetQ==
-X-Google-Smtp-Source: ABdhPJx6frQktQqrAUHEZ1iFW6nmiLYBgM7XrzuzOuqkpNDkGl/pJc+JVQoakHmORATi5XJ8nxy2AA==
-X-Received: by 2002:a05:6a00:1509:: with SMTP id q9mr2625321pfu.24.1597292983508;
-        Wed, 12 Aug 2020 21:29:43 -0700 (PDT)
-Received: from localhost ([171.79.32.211])
-        by smtp.gmail.com with ESMTPSA id u14sm4080239pfm.103.2020.08.12.21.29.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 12 Aug 2020 21:29:42 -0700 (PDT)
-Date:   Thu, 13 Aug 2020 09:59:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>, nm@ti.com,
-        vireshk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix dev_pm_opp_set_rate() to not return early
-Message-ID: <20200813042940.dg75g7oj3iiyuu4k@vireshk-mac-ubuntu>
-References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org>
- <159718019170.1360974.4800051292737590657@swboyd.mtv.corp.google.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=xPZ6SG/zYPhOh4F1hrC3AfjzUbgPD+IZVvEp6h306j8=;
+        b=Dr1xsy3Pp3Ezf5ixSlxpAp3D+uWRrCJR+mcpVBxb2HcJo6IOrX4/W0vMdWgwcKPHqy
+         cmcmwqqJatv3nKu5Uzl+Swq+8mtqelNluM0tM/bG8K12yd7M1PxCO4KaLCmsvSSY6oRn
+         9X3Z1HMZPHP5D8IdiecIUxEankk8K2C4rh+aBmcw/S2koFiPFyJnmhTIBoPLVi2EvK/+
+         UWhBnUxXlIYVlksyPcbyxJ+mJ2D3O09RSRJwkyUF1nSzhdoTotw+bPeZOsg+hc8Y+l3b
+         MXLzkcEhgWpFFx086X/JYIXQ/9VhdjZfHcTA2g+YC0JlOiy39L6co5HoJyIvlzX8PcSC
+         e2VQ==
+X-Gm-Message-State: AOAM530yQ0+65W/0JoILjcCp825nJyaRVd3c/8qKMeTDuMQ2AdGL/oML
+        AbZGoK+1z36D/VZ/6x24facOUg==
+X-Google-Smtp-Source: ABdhPJyJ84Z1Cr6z9ApwODz+2nouy9c+f2cgePFP3YjXMx7fv4qXRXtOiQNR2ld5kJT4Ti8CYyBWZA==
+X-Received: by 2002:a17:902:b193:: with SMTP id s19mr2445834plr.72.1597295459232;
+        Wed, 12 Aug 2020 22:10:59 -0700 (PDT)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
+        by smtp.gmail.com with ESMTPSA id fh14sm3720153pjb.38.2020.08.12.22.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2020 22:10:58 -0700 (PDT)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, drinkcat@chromium.org,
+        Ikjoon Jang <ikjn@chromium.org>
+Subject: [PATCH v3 0/2] power: supply: sbs-battery: fix presence check
+Date:   Thu, 13 Aug 2020 13:10:06 +0800
+Message-Id: <20200813051008.3461515-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
+In-Reply-To: <0200811065307.2094930-1-ikjn@chromium.org>
+References: <0200811065307.2094930-1-ikjn@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <159718019170.1360974.4800051292737590657@swboyd.mtv.corp.google.com>
-User-Agent: NeoMutt/20170609 (1.8.3)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-08-20, 14:09, Stephen Boyd wrote:
-> This is a goto maze! Any chance we can clean this up?
+When gpio detection is not supplied, presence state transitions depend
+on every smbus transfer result from get_property(). This patch tries to
+check battery presence again with well supported command before
+state transition.
 
-I have sent a short series in reply to this series, please have a
-look. It should look better now.
+Changes:
+v3: check return value of get_presence_and_health()
+v2: combine get_presence_and_health functions to reuse
+
+Ikjoon Jang (2):
+  power: supply: sbs-battery: combine get_presence_and_health
+  power: supply: sbs-battery: don't assume i2c errors as battery
+    disconnect
+
+ drivers/power/supply/sbs-battery.c | 98 ++++++++++++++++--------------
+ 1 file changed, 53 insertions(+), 45 deletions(-)
 
 -- 
-viresh
+2.28.0.236.gb10cc79966-goog
+
