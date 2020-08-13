@@ -2,130 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA6B243399
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 07:26:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2DE624345F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 09:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbgHMF00 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 01:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgHMF0Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 01:26:25 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3A85C061383
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 22:26:25 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id g11so1306133ual.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Aug 2020 22:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1rCJ4q+KoNSXFkFuWqVDiKXpOMoV1SjKATNbbYf89MU=;
-        b=nERanXOEelRjMIEt3IHqFWvSp9Zgn371nAANhRijyP8pGdoXeNmNMvcYL3i+6BS4TA
-         stwfvcRTCqqq+ULufLYkL7IKvKAxxFD7LFbv98VIKPsP79Oovh7PW5IAa/zuhzrY+IJu
-         tm1REjtH6S62Grx3JmA1usq0/EZBDxrsaqIaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1rCJ4q+KoNSXFkFuWqVDiKXpOMoV1SjKATNbbYf89MU=;
-        b=A8KKJQc9zbve5B1ZHZo0DOHhho+YLpzauKDrderoOhnQc0dj1Z3va0GWsdMcleWwuk
-         B0+UinphLbG+j6jijtVu6Q7cJy+3pbuf6trRkEBOSrMi3lm+S5877v/B4pugk5sZ9Mma
-         6NKn/NlakRY4Bsv1Q+ptIHM9kI5XNmNlyUNsaOJrEev9Zc29gbZ4jVBq73uM7wIj7gDe
-         AWASotnBfllKDD+KzXgW9zaP5xyZBwcCMZzTVJI8H7NOGVsNHi0c3halw9cOR6oyOPiX
-         N2935AM+TcTg/mzRRQ1qnjh2SoW+Ra45PXJgjNXxFNc+4mgu4sOIZByX2L5tx999sIqa
-         HOJg==
-X-Gm-Message-State: AOAM530FlgWEdBTU2ybPPGTB5TAFlNa2hc2ZfSvaYBmdFSgSdY4Mo9r2
-        FoWlMBLcp5ABPLIV7nSt6Ot7RMNZCPHaUfMmQTV/eA==
-X-Google-Smtp-Source: ABdhPJxQsB0ulqavL6/Gla0u7Eswn9tjRqoMOHD+9KlFXl+HJTVxLZUHENDVltOOlWttivWvwVq8hTI13yLrdQvkYYI=
-X-Received: by 2002:ab0:1696:: with SMTP id e22mr1910356uaf.1.1597296384671;
- Wed, 12 Aug 2020 22:26:24 -0700 (PDT)
+        id S1726044AbgHMHIH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 03:08:07 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:55533 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725982AbgHMHIG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 03:08:06 -0400
+X-UUID: 2c024129dac94eefb06f8e9923260d7e-20200813
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Em+aZRblnSBBXfbIqqdD7o9UIm1k6YffKGxm9JLcp40=;
+        b=GJymZi33EF/dF6e1Y00qJmDN/6669Y/F3GNzCAAiaH1F+lSaDZsXD5tW5gWiygBqymQffYZ6VAy0ap8b5vAbCtNmqhkx1GMpqnybIdu1UdTbhQPwiianQzm9JFf8AJEIZdTfmAdEfHB8GRk0Ekt1xzf8Gzp6mWdSkMfOgNXWydc=;
+X-UUID: 2c024129dac94eefb06f8e9923260d7e-20200813
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1870755673; Thu, 13 Aug 2020 15:08:01 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 13 Aug 2020 15:07:58 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 13 Aug 2020 15:07:58 +0800
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Olof Johansson <olof@lixom.net>
+CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
+        <hector.yuan@mediatek.com>
+Subject: [PATCH v1] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Thu, 13 Aug 2020 15:07:53 +0800
+Message-ID: <1597302475-15484-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-References: <0200811065307.2094930-1-ikjn@chromium.org> <20200813051008.3461515-1-ikjn@chromium.org>
- <20200813051008.3461515-3-ikjn@chromium.org>
-In-Reply-To: <20200813051008.3461515-3-ikjn@chromium.org>
-From:   Nicolas Boichat <drinkcat@chromium.org>
-Date:   Thu, 13 Aug 2020 13:26:09 +0800
-Message-ID: <CANMq1KBtTj3LqPBS4P7-njo=JobFN+2WSAzAAi6tb7O_7gBYGw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] power: supply: sbs-battery: don't assume i2c
- errors as battery disconnect
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 22E7736455FFC7AFAC1005B33F5D3A93FDE664E47FE8A993C0634980A15532C92000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 13, 2020 at 1:11 PM Ikjoon Jang <ikjn@chromium.org> wrote:
->
-> Current sbs-battery considers all smbus errors as disconnection events
-> when battery-detect pin isn't supplied, and restored to present state back
-> when any successful transaction is made.
->
-> This can lead to unlimited state changes between present and !present
-> when one unsupported command was requested and other following commands
-> were successful, e.g. udev rules tries to read multiple properties.
->
-> This patch checks battery presence by reading known good command to
-> check battery existence.
->
-> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+VGhlIENQVWZyZXEgSFcgcHJlc2VudCBpbiBzb21lIE1lZGlhdGVrIGNoaXBzZXRzIG9mZmxvYWRz
+DQp0aGUgc3RlcHMgbmVjZXNzYXJ5IGZvciBjaGFuZ2luZyB0aGUgZnJlcXVlbmN5IG9mIENQVXMu
+DQpUaGUgZHJpdmVyIGltcGxlbWVudHMgdGhlIGNwdWZyZXEgZHJpdmVyIGludGVyZmFjZSBmb3IN
+CnRoaXMgaGFyZHdhcmUgZW5naW5lLiANCg0KVGhpcyBwYXRjaCBkZXBlbmRzIG9uIHRoZSBNVDY3
+NzkgRFRTIHBhdGNoIHN1Ym1pdHRlZCBieSBIYW5rcyBDaGVuDQogaHR0cHM6Ly9sa21sLm9yZy9s
+a21sLzIwMjAvOC80LzEwOTQNCg0KDQpIZWN0b3IuWXVhbiAoMik6DQogIGR0LWJpbmRpbmdzOiBj
+cHVmcmVxOiBhZGQgYmluZGluZ3MgZm9yIE1lZGlhVGVrIGNwdWZyZXEgSFcNCiAgY3B1ZnJlcTog
+bWVkaWF0ZWstaHc6IEFkZCBzdXBwb3J0IGZvciBNZWRpYXRlayBjcHVmcmVxIEhXIGRyaXZlcg0K
+DQogLi4uL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sICAgICAgfCAg
+IDYxICsrKysrDQogYXJjaC9hcm02NC9jb25maWdzL2RlZmNvbmZpZyAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgICAxICsNCiBkcml2ZXJzL2NwdWZyZXEvS2NvbmZpZy5hcm0gICAgICAgICAgICAg
+ICAgICAgICAgICB8ICAgMTEgKw0KIGRyaXZlcnMvY3B1ZnJlcS9NYWtlZmlsZSAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgICAgMSArDQogZHJpdmVycy9jcHVmcmVxL21lZGlhdGVrLWNwdWZy
+ZXEtaHcuYyAgICAgICAgICAgICAgfCAgMjU1ICsrKysrKysrKysrKysrKysrKysrDQogNSBmaWxl
+cyBjaGFuZ2VkLCAzMjkgaW5zZXJ0aW9ucygrKQ0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3Lnlh
+bWwNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jcHVmcmVxL21lZGlhdGVrLWNwdWZyZXEt
+aHcuYw0K
 
-Looks good now, AFAICT. Thanks!
-
-Reviewed-by: Nicolas Boichat <drinkcat@chromium.org>
-
-> ---
->  drivers/power/supply/sbs-battery.c | 25 +++++++++++++++++--------
->  1 file changed, 17 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-> index 6acb4ea25d2a..2e32fde04628 100644
-> --- a/drivers/power/supply/sbs-battery.c
-> +++ b/drivers/power/supply/sbs-battery.c
-> @@ -878,10 +878,17 @@ static int sbs_get_property(struct power_supply *psy,
->         if (!chip->enable_detection)
->                 goto done;
->
-> -       if (!chip->gpio_detect &&
-> -               chip->is_present != (ret >= 0)) {
-> -               sbs_update_presence(chip, (ret >= 0));
-> -               power_supply_changed(chip->power_supply);
-> +       if (!chip->gpio_detect && chip->is_present != (ret >= 0)) {
-> +               bool old_present = chip->is_present;
-> +               union power_supply_propval val;
-> +
-> +               ret = sbs_get_battery_presence_and_health(
-> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
-> +
-> +               sbs_update_presence(chip, !ret && val.intval);
-> +
-> +               if (old_present != chip->is_present)
-> +                       power_supply_changed(chip->power_supply);
->         }
->
->  done:
-> @@ -1067,11 +1074,13 @@ static int sbs_probe(struct i2c_client *client)
->          * to the battery.
->          */
->         if (!(force_load || chip->gpio_detect)) {
-> -               rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-> +               union power_supply_propval val;
->
-> -               if (rc < 0) {
-> -                       dev_err(&client->dev, "%s: Failed to get device status\n",
-> -                               __func__);
-> +               rc = sbs_get_battery_presence_and_health(
-> +                               client, POWER_SUPPLY_PROP_PRESENT, &val);
-> +               if (rc < 0 || !val.intval) {
-> +                       dev_err(&client->dev, "Failed to get present status\n");
-> +                       rc = -ENODEV;
->                         goto exit_psupply;
->                 }
->         }
-> --
-> 2.28.0.236.gb10cc79966-goog
->
