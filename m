@@ -2,142 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B9D24409E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 23:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C67C2440D5
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Aug 2020 23:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgHMVfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 17:35:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbgHMVeo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 17:34:44 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31599C061757;
-        Thu, 13 Aug 2020 14:34:44 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id m15so3794365lfp.7;
-        Thu, 13 Aug 2020 14:34:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YV+mrC5kiC7QQYV/FBFX4qMy1dVded4Mn/XHB6H0W0I=;
-        b=VoBDyM+tte4MJ8a9yQorB2SaOnVDp2m49O31ggdeuUOxgsZx/NdLhq0Lqoaza/aDu2
-         wG8TmQIstDiqk4lLJajdCpj/ybwYDk3jrTLNqAHricGuQR0o/oByfcj9Yd41TH/oSmap
-         +oxIDH2XqJptS6rFqsY+gUp8ePI5Q2uZg6sjDTbgGYxN9fkBU1XaFHdjLGeShR6F3pn+
-         fTDl2QL2bkosXZrtZMUpaByw39DtX7+wv4AwWdxVfssNHPUiq9+hvFd++KOFL8xFkS1a
-         1zv7MOcU4SBPk7RdhyN1k0e+7k2OwVXzKppK9kH6YOYUSjk9fXfNLuUzQ08QIP4G0DbH
-         BLeA==
+        id S1726467AbgHMVni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 17:43:38 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:45569 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgHMVni (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 17:43:38 -0400
+Received: by mail-ed1-f66.google.com with SMTP id di22so5305688edb.12;
+        Thu, 13 Aug 2020 14:43:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YV+mrC5kiC7QQYV/FBFX4qMy1dVded4Mn/XHB6H0W0I=;
-        b=mex+ij+MbQJA7twT+a/OYgVEkKOWiNiAYMNysEiMFc62PMrPtDYqXAl+7I1j8ql7LM
-         OeLjOaBF1CuuAzIdl9uvlEYTiKMY7ZCakMZbh+9s/xTXu/GouM5+9jyX34C69ZQ2I06Y
-         lkq/4axaYdQKYb7wFhiezgdKGw/bgk0+0GxgpJssDiFfczy+PDwgzhnA3zvKek0zGn5P
-         FNcNziSl1c16wJ1vMWMDsw+6HUhu/komppWVB7zhOC2AXTFJsBmuLwYvwxBk3a2bWtOv
-         vtWLkNX2zwzu54yrw/jmuGBUFa3jg3anmeG8m66jX8VAn7O3Z+af349YoXUFGgdlix7M
-         /kHA==
-X-Gm-Message-State: AOAM532NmcbQgbxhiQbpObTgAT8oaFb2nxoJSxTRCs2g39OkloOm49sy
-        lDeYuNzGzjOjqXD2M0LLWJQ7jacm
-X-Google-Smtp-Source: ABdhPJwXiz7uILUNUhDvRcL8o6/prwxG95Ifu0ZfXuChgZ6XNpf2ZV/Dw7EJODy4vNJYOdKNnPjysg==
-X-Received: by 2002:a19:8452:: with SMTP id g79mr3227883lfd.29.1597354482652;
-        Thu, 13 Aug 2020 14:34:42 -0700 (PDT)
-Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id j2sm1345309ljb.98.2020.08.13.14.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 14:34:41 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        David Heidelberg <david@ixit.cz>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Bruce E . Robertson" <bruce.e.robertson@intel.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Vinay Simha BN <simhavcs@gmail.com>,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v3 10/10] ARM: tegra: nexus7: Add SMB347 battery charger
-Date:   Fri, 14 Aug 2020 00:34:09 +0300
-Message-Id: <20200813213409.24222-11-digetx@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200813213409.24222-1-digetx@gmail.com>
-References: <20200813213409.24222-1-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P2eZuP6c506YZ5zFEOeI1NqJOh6HdWASDT5YVO36Yfc=;
+        b=MXxoEzbv/R7sMMN1okBlMNVuvbdhbtqaSV82wFn9kzSHk3SCKfKKMtufntnxyb7VP1
+         7KRWjlR28PLzL+glBKTaR0Yeir9jOOOOSlbk92Zn3JnKcmbWB72KCG/xQ0zDMRkac070
+         vi/QyfVnQI5kzQLlt9NICAUE2JomaNhnFhqPS7+KaPb64QCT8D9hefmED0bDJsW/cJBP
+         cYSKuGE4p8PlXcXoyfFiK8U1vcfn6E0HOnBdRv4CmtV+8s2t412kAQO+uO8Xb7FmQZbj
+         2/2n5KoMoJvYvdgahO8o1JWOKy1Uhk4QuK859H/7rNTmdw/HkAVXNi36lWuSDP+O+egH
+         lQKA==
+X-Gm-Message-State: AOAM533cPProeDKbAmEDXSOc6ScGKoiEPg1qgjsvnn6CvU2tGcxW/isX
+        g290+AbWyPyHHmgIHvamVqTcbomGT12EI0i78zU=
+X-Google-Smtp-Source: ABdhPJzd09nmrrCJYoR3gE7APmEQpllycPVmHXQVWNHLO79PNceUxD67BkFknbF7vgEWXuPDaTov9VIKDiVyDBBgmdo=
+X-Received: by 2002:a50:af86:: with SMTP id h6mr6825875edd.132.1597355016709;
+ Thu, 13 Aug 2020 14:43:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200717060849.12469-1-liwei.song@windriver.com>
+In-Reply-To: <20200717060849.12469-1-liwei.song@windriver.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Thu, 13 Aug 2020 17:43:25 -0400
+Message-ID: <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com>
+Subject: Re: [PATCH] tools/power turbostat: call pread64 in kernel directly
+To:     Liwei Song <liwei.song@windriver.com>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: David Heidelberg <david@ixit.cz>
+Huh?
 
-SMB347 is a battery charger controller which is found on the Nexus 7
-device.
+On Fri, Jul 17, 2020 at 2:09 AM Liwei Song <liwei.song@windriver.com> wrote:
+>
+> with 32-bit rootfs, the offset may out of range when set it
+> to 0xc0010299, define it as "unsigned long long" type and
+> call pread64 directly in kernel.
+>
+> Signed-off-by: Liwei Song <liwei.song@windriver.com>
+> ---
+>  tools/power/x86/turbostat/turbostat.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+> index 33b370865d16..4c5cdfcb5721 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -33,6 +33,7 @@
+>  #include <sys/capability.h>
+>  #include <errno.h>
+>  #include <math.h>
+> +#include <sys/syscall.h>
+>
+>  char *proc_stat = "/proc/stat";
+>  FILE *outf;
+> @@ -381,11 +382,11 @@ int get_msr_fd(int cpu)
+>         return fd;
+>  }
+>
+> -int get_msr(int cpu, off_t offset, unsigned long long *msr)
+> +int get_msr(int cpu, unsigned long long offset, unsigned long long *msr)
+>  {
+>         ssize_t retval;
+>
+> -       retval = pread(get_msr_fd(cpu), msr, sizeof(*msr), offset);
+> +       retval = syscall(SYS_pread64, get_msr_fd(cpu), msr, sizeof(*msr), offset);
+>
+>         if (retval != sizeof *msr)
+>                 err(-1, "cpu%d: msr offset 0x%llx read failed", cpu, (unsigned long long)offset);
+> --
+> 2.17.1
+>
 
-Signed-off-by: David Heidelberg <david@ixit.cz>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- .../tegra30-asus-nexus7-grouper-common.dtsi   | 24 ++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-index e2d5fbacf9b4..903457292c04 100644
---- a/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-nexus7-grouper-common.dtsi
-@@ -2,6 +2,7 @@
- 
- #include <dt-bindings/input/gpio-keys.h>
- #include <dt-bindings/input/input.h>
-+#include <dt-bindings/power/summit,smb347-charger.h>
- #include <dt-bindings/thermal/thermal.h>
- 
- #include "tegra30.dtsi"
-@@ -919,9 +920,24 @@ nct72: temperature-sensor@4c {
- 			#thermal-sensor-cells = <1>;
- 		};
- 
--		battery@55 {
-+		fuel-gauge@55 {
- 			compatible = "ti,bq27541";
- 			reg = <0x55>;
-+			power-supplies = <&power_supply>;
-+			monitored-battery = <&battery_cell>;
-+		};
-+
-+		power_supply: charger@6a {
-+			compatible = "summit,smb347";
-+			reg = <0x6a>;
-+
-+			interrupt-parent = <&gpio>;
-+			interrupts = <TEGRA_GPIO(V, 1) IRQ_TYPE_EDGE_BOTH>;
-+
-+			summit,enable-charge-control = <SMB3XX_CHG_ENABLE_PIN_ACTIVE_LOW>;
-+			summit,enable-usb-charging;
-+
-+			monitored-battery = <&battery_cell>;
- 		};
- 	};
- 
-@@ -1011,6 +1027,12 @@ backlight: backlight {
- 		default-brightness-level = <15>;
- 	};
- 
-+	battery_cell: battery-cell {
-+		compatible = "simple-battery";
-+		constant-charge-current-max-microamp = <1800000>;
-+		operating-range-celsius = <0 45>;
-+	};
-+
- 	/* PMIC has a built-in 32KHz oscillator which is used by PMC */
- 	clk32k_in: clock@0 {
- 		compatible = "fixed-clock";
 -- 
-2.27.0
-
+Len Brown, Intel Open Source Technology Center
