@@ -2,92 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC2D32442F2
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 04:17:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3C82443F4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 05:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbgHNCRN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 22:17:13 -0400
-Received: from mail1.windriver.com ([147.11.146.13]:65530 "EHLO
-        mail1.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726522AbgHNCRN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 22:17:13 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail1.windriver.com (8.15.2/8.15.2) with ESMTPS id 07E2H8i0010343
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Thu, 13 Aug 2020 19:17:09 -0700 (PDT)
-Received: from [128.224.162.157] (128.224.162.157) by ALA-HCA.corp.ad.wrs.com
- (147.11.189.50) with Microsoft SMTP Server id 14.3.487.0; Thu, 13 Aug 2020
- 19:17:08 -0700
-Subject: Re: [PATCH] tools/power turbostat: call pread64 in kernel directly
-To:     Len Brown <lenb@kernel.org>
-CC:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200717060849.12469-1-liwei.song@windriver.com>
- <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com>
-From:   Liwei Song <liwei.song@windriver.com>
-Message-ID: <52f16995-6d2d-fa7d-ed5e-682db3461d03@windriver.com>
-Date:   Fri, 14 Aug 2020 10:17:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726568AbgHNDtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 23:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726567AbgHNDtK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 23:49:10 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A737BC061757;
+        Thu, 13 Aug 2020 20:49:10 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 128so3890582pgd.5;
+        Thu, 13 Aug 2020 20:49:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9UcRAYSeL0jNLaTeq0ZQKJeIrLT699AYEwZvDI49xCA=;
+        b=OhD6d46fPfM9Goj3SPsorYzgqDl0C+lUpvcVL1VG2De1YMMBmD9YEDJ9HCbz9HlEBU
+         RlmqFSgR271m7nHASmFtl21WZQ2vHwHPHQdHhvzW4b+j7kY6cnOI4n6e18oB09pMDsPy
+         Is/pAP7ySe/D2xB0AI+rhTOzL+hUokKasIpn9izaASneqAfS4vyoy49RnvjPcqCe+JQg
+         xmavOG11SOpbGFInH2DzgbG/fg7ARK+iuevR3aqJ7qE7qEPwzKwpUeDy/K46TESVqiPV
+         LpV1NKV3w5t0rDLdzCQBGFhHAb32Flv6Ze5MQLf4/D5jyUPDyb9zykAXV6oNo56HxVwG
+         FSvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9UcRAYSeL0jNLaTeq0ZQKJeIrLT699AYEwZvDI49xCA=;
+        b=DglMs8raVpkFghPtllVbNAH3y/w4a2Y8OipQk4TZhseUbD4qK8XUh8qTE5x/aMi4sf
+         uID6Lc7iTzIp6YuDg9GRK84Ad6DhmFu+8trgadwo7gNbgGLDRnFOtTSscUrg2d1DBV+Z
+         SYBwUNBduwTJWYLd3JqqsPO/tK378iNPfVfvV0eDX4sod95P5F14H0hrYjACaXLS4bw+
+         alB4Gye3553o20kX3DIZuAAtt7n6ddyobuGOu9FQawLdaiYN4d6GV2syCNSEdpxS+FLp
+         rO+tb9pS7KBtT4PAm5/OFSfvqRpYkE8+dP0TeNijPSCF+ylNPoMxcmM4KYoLXO8GmT4/
+         aQfw==
+X-Gm-Message-State: AOAM533mrvwk3B2U9T4jShZ+f9r4fI1KHGfw3o6smE2Ao+JNEP/XTegM
+        LuivshR6Gml4YoBcM+buHB8=
+X-Google-Smtp-Source: ABdhPJzrz6NU42ssElkxLSxke9H82VkiapwJnWdOQ/IvpJ1ceWs0zlOEsMsuGcPd6PR+JRf6qRT55A==
+X-Received: by 2002:a63:1814:: with SMTP id y20mr502992pgl.45.1597376949644;
+        Thu, 13 Aug 2020 20:49:09 -0700 (PDT)
+Received: from xiaomi.mioffice.cn ([209.9.72.214])
+        by smtp.gmail.com with ESMTPSA id n26sm7253385pff.30.2020.08.13.20.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2020 20:49:08 -0700 (PDT)
+From:   Qiwu Huang <yanziily@gmail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
+        Qiwu Huang <huangqiwu@xiaomi.com>
+Subject: [PATCH v8 0/4] add some power supply properties about wireless/wired charging
+Date:   Fri, 14 Aug 2020 11:46:53 +0800
+Message-Id: <cover.1597376585.git.huangqiwu@xiaomi.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-with multilib lib32 support, the rootfs will be 32-bit, 
-the kernel is still 64-bit, in this case run turbostat
-will failed with "out of range" error.
+From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-Thanks,
-Liwei.
+This patchset aims to provide power supply properties about wireless/wired charging.
+"quick_charge_type" reports different types of quick charge based on the charging power;
+"tx_adapter" shows" the type of wireless charging adapter;
+"signal_strength" shows the coupling level between TX and RX;
+"reverse_chg_mode" provides the interface of enabling/disabling wireless reverse charging.
 
-On 8/14/20 05:43, Len Brown wrote:
-> Huh?
-> 
-> On Fri, Jul 17, 2020 at 2:09 AM Liwei Song <liwei.song@windriver.com> wrote:
->>
->> with 32-bit rootfs, the offset may out of range when set it
->> to 0xc0010299, define it as "unsigned long long" type and
->> call pread64 directly in kernel.
->>
->> Signed-off-by: Liwei Song <liwei.song@windriver.com>
->> ---
->>  tools/power/x86/turbostat/turbostat.c | 5 +++--
->>  1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
->> index 33b370865d16..4c5cdfcb5721 100644
->> --- a/tools/power/x86/turbostat/turbostat.c
->> +++ b/tools/power/x86/turbostat/turbostat.c
->> @@ -33,6 +33,7 @@
->>  #include <sys/capability.h>
->>  #include <errno.h>
->>  #include <math.h>
->> +#include <sys/syscall.h>
->>
->>  char *proc_stat = "/proc/stat";
->>  FILE *outf;
->> @@ -381,11 +382,11 @@ int get_msr_fd(int cpu)
->>         return fd;
->>  }
->>
->> -int get_msr(int cpu, off_t offset, unsigned long long *msr)
->> +int get_msr(int cpu, unsigned long long offset, unsigned long long *msr)
->>  {
->>         ssize_t retval;
->>
->> -       retval = pread(get_msr_fd(cpu), msr, sizeof(*msr), offset);
->> +       retval = syscall(SYS_pread64, get_msr_fd(cpu), msr, sizeof(*msr), offset);
->>
->>         if (retval != sizeof *msr)
->>                 err(-1, "cpu%d: msr offset 0x%llx read failed", cpu, (unsigned long long)offset);
->> --
->> 2.17.1
->>
-> 
-> 
+Changes in v8
+ - Add quick charge type driver in qcom_smbb suggested by GregKH
+
+Changes in v7
+ - Fix PATCH version error in 0/X email
+
+Changes in v6
+ - Replace "phones" with "devices" suggested by GregKH
+ - Add permission statement for "reverse_chg_mode"
+ - Update description for "reverse_chg_mode" in ABI suggested by GregKH
+ - Update description for "PING phase" in ABI suggested by GregKH
+
+Changes in v5
+ - Add details in 0/X email
+
+Changes in v4
+ - Exclude the patch of "power: supply: supply battery soc with decimal form"
+ - Fix some typo
+
+Changes in v3
+ - Add enumederated for quick charge type
+ - Add enumederated for tx adapter type
+ - Update the return type and description in ABI
+
+Changes in v2
+ - modify to capital letters for "power_supply_attrs"
+ - Update the return type and description in ABI
+Qiwu Huang (4):
+  power: supply: core: add quick charge type property
+  power: supply: core: add wireless charger adapter type property
+  power: supply: core: add wireless signal strength property
+  power: supply: core: property to control reverse charge
+
+ Documentation/ABI/testing/sysfs-class-power | 85 +++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c   |  4 +
+ drivers/power/supply/qcom_smbb.c            | 51 +++++++++++++
+ include/linux/power_supply.h                | 35 +++++++++
+ 4 files changed, 175 insertions(+)
+
+-- 
+2.28.0
+
