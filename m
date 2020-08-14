@@ -2,95 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F28D244B3F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 16:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF128244B66
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 16:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726455AbgHNOeH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Aug 2020 10:34:07 -0400
-Received: from mga06.intel.com ([134.134.136.31]:51886 "EHLO mga06.intel.com"
+        id S1728257AbgHNOvk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Aug 2020 10:51:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43326 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726185AbgHNOeG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 14 Aug 2020 10:34:06 -0400
-IronPort-SDR: C5gWgV4PRCGItDAdVwmOB+y3KXWAhYO1a2tmdvll0xQRyU6gTmqDgUDKqDQbtpQEXJb4WFGbxJ
- ONE+C3UabA1w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="215934347"
-X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
-   d="scan'208";a="215934347"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2020 07:34:05 -0700
-IronPort-SDR: hEwMxEqTQbCj+KcldmgCK79wj1LbFOMrjXXsFy3yKi93ocZBUIeh7cyedW0QqbF8QMFPKnxNFO
- OPBdG3KpO1ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
-   d="scan'208";a="291748905"
-Received: from unknown (HELO fmsmsx605.amr.corp.intel.com) ([10.18.84.215])
-  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2020 07:34:05 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 14 Aug 2020 07:34:04 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Fri, 14 Aug 2020 07:34:04 -0700
-Received: from shsmsx102.ccr.corp.intel.com (10.239.4.154) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Fri, 14 Aug 2020 07:34:04 -0700
-Received: from shsmsx103.ccr.corp.intel.com ([169.254.4.23]) by
- shsmsx102.ccr.corp.intel.com ([169.254.2.153]) with mapi id 14.03.0439.000;
- Fri, 14 Aug 2020 22:34:02 +0800
-From:   "Chen, Yu C" <yu.c.chen@intel.com>
-To:     Len Brown <lenb@kernel.org>
-CC:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>
-Subject: RE: [PATCH 2/2][RFC] tools/power turbostat: Introduce reliable RAPL
- display
-Thread-Topic: [PATCH 2/2][RFC] tools/power turbostat: Introduce reliable
- RAPL display
-Thread-Index: AQHWcbvesZTef024kEWykIjRcnKuMak3qdMw
-Date:   Fri, 14 Aug 2020 14:34:01 +0000
-Message-ID: <36DF59CE26D8EE47B0655C516E9CE6405F3966F2@SHSMSX103.ccr.corp.intel.com>
-References: <cover.1585679838.git.yu.c.chen@intel.com>
- <3e5aa6e7b34827c0245e10c14ca9457512ae8586.1585679838.git.yu.c.chen@intel.com>
- <CAJvTdK=niWaTjwPwXaxr6EGfH8vxzJS01e+k5TgknEMPSDYLvQ@mail.gmail.com>
-In-Reply-To: <CAJvTdK=niWaTjwPwXaxr6EGfH8vxzJS01e+k5TgknEMPSDYLvQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.5.1.3
-dlp-reaction: no-action
-x-originating-ip: [10.239.127.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726193AbgHNOvi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Aug 2020 10:51:38 -0400
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2C6E208B3;
+        Fri, 14 Aug 2020 14:51:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597416697;
+        bh=2azDCJAW0WmwzjFoNP1+Xf1baXp64Ykp/VUpBlKju0s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bjfRL+mBKQdeXNIPuXX+sib3fYs2/XZWJHPOjPd4x196xwXtWkEnxkwGCGKCP+vXy
+         CxGeqKP68MgYI300g+hNTJd4uQCvZb/zOsnBdJ/cEKlyynKbLGyhuMbkA+R9Y9MLDY
+         rajai6Sqx8HGb8L035zTD4t0BSpxCLooD+BQeHTA=
+Received: by mail-ot1-f54.google.com with SMTP id t7so7776444otp.0;
+        Fri, 14 Aug 2020 07:51:36 -0700 (PDT)
+X-Gm-Message-State: AOAM531YqcS4MUxvcGOYChGHRoRMcVsEFsDHYR5LbkHA90TiOSl6Dmh8
+        R/b9TCtT0vzAo6TEwQr7L0CGI1coatN8YZannA==
+X-Google-Smtp-Source: ABdhPJzAQOVgwIRLTeJz+4kS8jI7uSM4yy2bV/QUkiEz2152JH8sgfiQxJMSY+wk4abg95jsoFr6h5Ymz6ZJoeFhB2g=
+X-Received: by 2002:a05:6830:1b79:: with SMTP id d25mr1995774ote.107.1597416696235;
+ Fri, 14 Aug 2020 07:51:36 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200812203618.2656699-1-robh@kernel.org> <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+In-Reply-To: <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 14 Aug 2020 08:51:24 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+Message-ID: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Linux HWMON List <linux-hwmon@vger.kernel.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        Linux Input <linux-input@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgTGVuLA0KPiBGcm9tOiBMZW4gQnJvd24gPGxlbmJAa2VybmVsLm9yZz4NCj4gU2VudDogRnJp
-ZGF5LCBBdWd1c3QgMTQsIDIwMjAgNTo1MSBBTQ0KPiBUbzogQ2hlbiwgWXUgQyA8eXUuYy5jaGVu
-QGludGVsLmNvbT4NCj4gQ2M6IExpbnV4IFBNIGxpc3QgPGxpbnV4LXBtQHZnZXIua2VybmVsLm9y
-Zz47IExpbnV4IEtlcm5lbCBNYWlsaW5nIExpc3QgPGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJu
-ZWwub3JnPjsgWmhhbmcsIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4NCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCAyLzJdW1JGQ10gdG9vbHMvcG93ZXIgdHVyYm9zdGF0OiBJbnRyb2R1Y2UgcmVsaWFi
-bGUgUkFQTA0KPiBkaXNwbGF5DQo+IA0KPiB3aHkgbm90IHNpbXBseSB1c2UgbmFub3NsZWVwKDIp
-DQo+IA0KPiANCkRvIHlvdSBtZWFuLCB1c2UgbmFub3NsZWVwIHJhdGhlciB0aGFuIHRoZSB0aW1l
-ciB0byBhY2N1bXVsYXRlIHRoZSBSQVBMIGRhdGE/DQpBZnRlciB0aGlua2luZyBmb3IgYSB3aGls
-ZSwgaXQgbG9va3MgbGlrZSBpZiB3ZSB1c2UgbmFub3NsZWVwIHdlIG1pZ2h0DQogbmVlZCB0byBj
-cmVhdGUgYSBuZXcgdGhyZWFkIHdpdGhpbiB0aGUgdHVyYm9zdGF0ICBhbmQgc2xlZXAgZXZlcnkg
-ZmV3IHNlY29uZHMNCiAoYWNjb3JkaW5nIHRvIHRoZSBSQVBMIHJlZ2lzdGVyIHRpbWVvdXQpIHRv
-IGFjY3VtdWxhdGUgdGhlIHJ1bm5pbmcgUkFQTC4gQW5kIG1pZ2h0DQpuZWVkIHRvIGRlYWwgd2l0
-aCBzb21lIHJhY2UgY29uZGl0aW9ucyBiZXR3ZWVuIG5ldyB0aHJlYWQgYW5kIHRoZSBtYWluIHR1
-cmJvc3RhdA0KdGhyZWFkLiBCdXQgeWVzLCBpdCBjYW4gYmUgc3dpdGNoZWQgdG8gbmFub3NsZWVw
-KCkgdG8gY2hlY2sgaWYgdGhlIGNvZGUgd291bGQgbG9vaw0Kc2ltcGxlci4NCg0KQlRXLCB3ZSBo
-YXZlIGEgdjMgb2YgdGhlIHBhdGNoIGF0DQpodHRwczovL2xvcmUua2VybmVsLm9yZy9wYXRjaHdv
-cmsvcHJvamVjdC9sa21sL2xpc3QvP3Nlcmllcz00MzkzMzANCg0KDQpUaGFua3MsDQpDaGVueXUN
-Cg0KPiAtLQ0KPiBMZW4gQnJvd24sIEludGVsIE9wZW4gU291cmNlIFRlY2hub2xvZ3kgQ2VudGVy
-DQo=
+On Thu, Aug 13, 2020 at 4:31 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
+>
+> Hi Rob,
+>
+> On 12/08/20 22:36, Rob Herring wrote:
+> > Clean-up incorrect indentation, extra spaces, long lines, and missing
+> > EOF newline in schema files. Most of the clean-ups are for list
+> > indentation which should always be 2 spaces more than the preceding
+> > keyword.
+> >
+> > Found with yamllint (which I plan to integrate into the checks).
+>
+> [...]
+>
+> > diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > index 3d4e1685cc55..28c6461b9a9a 100644
+> > --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
+> > @@ -95,10 +95,10 @@ allOf:
+> >        # Devices without builtin crystal
+> >        properties:
+> >          clock-names:
+> > -            minItems: 1
+> > -            maxItems: 2
+> > -            items:
+> > -              enum: [ xin, clkin ]
+> > +          minItems: 1
+> > +          maxItems: 2
+> > +          items:
+> > +            enum: [ xin, clkin ]
+> >          clocks:
+> >            minItems: 1
+> >            maxItems: 2
+>
+> Thanks for noticing, LGTM.
+>
+> [...]
+>
+> > diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > index d7dac16a3960..36dc7b56a453 100644
+> > --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
+> > @@ -33,8 +33,8 @@ properties:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >
+> >    touchscreen-min-pressure:
+> > -    description: minimum pressure on the touchscreen to be achieved in order for the
+> > -                 touchscreen driver to report a touch event.
+> > +    description: minimum pressure on the touchscreen to be achieved in order
+> > +      for the touchscreen driver to report a touch event.
+>
+> Out of personal taste, I find the original layout more pleasant and
+> readable. This third option is also good, especially for long descriptions:
+>
+>   description:
+>     minimum pressure on the touchscreen to be achieved in order for the
+>     touchscreen driver to report a touch event.
+>
+> At first glance yamllint seems to support exactly these two by default:
+>
+> > With indentation: {spaces: 4, check-multi-line-strings: true}
+
+Turning on check-multi-line-strings results in 10K+ warnings, so no.
+
+The other issue is the style ruamel.yaml wants to write out is as the
+patch does above. This matters when doing some scripted
+transformations where we read in the files and write them back out. I
+can somewhat work around that by first doing a pass with no changes
+and then another pass with the actual changes, but that's completely
+scriptable. Hopefully, ruamel learns to preserve the style better.
+
+Rob
