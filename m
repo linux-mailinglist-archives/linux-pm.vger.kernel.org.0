@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F66244220
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 02:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD54A24421A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 02:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726700AbgHNAIa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 20:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S1727041AbgHNAHm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 20:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727023AbgHNAHj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 20:07:39 -0400
+        with ESMTP id S1727030AbgHNAHk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 20:07:40 -0400
 Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7C7C061757;
-        Thu, 13 Aug 2020 17:07:38 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id v12so8092672ljc.10;
-        Thu, 13 Aug 2020 17:07:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D53FC061757;
+        Thu, 13 Aug 2020 17:07:39 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id 185so8091014ljj.7;
+        Thu, 13 Aug 2020 17:07:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8yAUvmC7dB1AvZufMoltXCEKaZJYFALPQadvIxchYtE=;
-        b=nZnuIFn4NQ7251gwYTws9nLSOUpePnWTN0wUR3sYcp5FQ9RWkjtClffkh7lFP53eh8
-         ugWvszqZJIIGDUX4I3Y1FZgdXBimv4gOIrfNH2l+zxC4vj+5RsroRnqxON7cW4RVu/jQ
-         gqp23VL7L0+kGSefSR5HudzGvkDgywh0nkcZ3fVzjkmILhkUf1/Lnlv3GZnkKG4HPQv9
-         f0e9uWIE3vUCTO6C+/tXTKWmmquU9N7AeonqQqCVzPfg8ZrRoAIcdwQjF34x9TkNh5UV
-         mMmm4YDoocFJlQCkhpPc+17BnKW7mTsThNqB55qwge+Qkdc5zlH4V/kg1uhEk1Ovug+O
-         8V9w==
+        bh=7TkimZ5+ZanNr21bgLfqvhgfqk+ZgY/gXpLxl0PyeFo=;
+        b=Y3djZHIrj67JLuLCM1VemhFmWn4UyJHQqMsQY5mCi1zCiRPBrszuWyZTavAkS8gCJ+
+         /ENLS39pn2gScE8vW1jMRp2kWicPjPmiU3T7JThipiZLOQXlgncpWczrlL/k+oyYxe1g
+         g/Bf48xdr7C2A+nex+ke6ZaNShD8iqbsoQtWotw4XFPq/rk/2l1xSIvb8VFLCeymTW5W
+         ok2BUmkzWWLlWYl9Mxx02eVwrbnwAfai6ZX+6BmkS7nsT6mLfbGU0czS4YiY8Q4upnUC
+         OsJQgFPqnvBYZI2bdidrpOjfTgq6pBv9D6OozGXGktcHrg+CH+JYbB+EzwL9usq1fgOV
+         v9OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8yAUvmC7dB1AvZufMoltXCEKaZJYFALPQadvIxchYtE=;
-        b=hxOBbVBDhr+MLj/q4yFLh4+vxIRhzvWAmHq6V6FLrpzUBj6g37f6+npfwo9nh9B0+o
-         lbop9M93tYThlk2VjP/HPeHo4EY1RO6N+wPhrGoR0BO3nigiIUQdkkp6p7sUtNxpp8Me
-         RtR4UdVzSLZ3TKKCFlKKm8xSZBIdYz7r8shG7JKDSKPEkLE2cabHSW2A9mMk+hWa03DQ
-         bhNsTdHv92TX2QwszEZ2iw1Hy7ttaJlaaxJs8LVTqCcHwWRJl7mZ/80wvS6WnwQ8YcQo
-         797BN5s7ga2xTjGjSroM1Ec3M4k+eAF7M+YT9cp+xCo4nMUn8jSXH2CE+rrK+itGapDC
-         nTMw==
-X-Gm-Message-State: AOAM531+/BL3zxgH1w6u/DvOLrOX5Rv2Vrj8sfNOeqxouKpCP/AhueOd
-        V3Nq2N+1KbfUIQNaqKXQRFI=
-X-Google-Smtp-Source: ABdhPJwiHCAsmpwTHY7fxXYOvVp2r9Jve/fNJ/xQBu7FZzCkI2bJBYxqcixmLnYy4dsrjOhGDpzE3A==
-X-Received: by 2002:a2e:9010:: with SMTP id h16mr114446ljg.316.1597363657009;
-        Thu, 13 Aug 2020 17:07:37 -0700 (PDT)
+        bh=7TkimZ5+ZanNr21bgLfqvhgfqk+ZgY/gXpLxl0PyeFo=;
+        b=Wm/VhC017ozvGBQ4zqsGteHSOzxBTlIpk/hgqLBht+TVE8+nRxqLZgwawnbHywe6KK
+         AIC+p71z51snVUzYmqrNG+WMRz3VzefRGNA/qC/FiBp7fHmErE+Myp01l8m9tVktn64q
+         ez6vlVlOgBzbDrRA7kW/UaOEfU2xWlVUv/gxHS/7FxAjyUzNZ7I/uauJzTGsXryeATsE
+         zzLD5JsurDqRhg1rtc8Jpba/Zx68FMJw0boX4Vr9NW5rTa/vd1qiOkjoC/Csz1n84SaG
+         IjpX5Q0Ol7/AnhwjJs6+PUT0uBs49dmCYNh5gibdcSlmNyG9GP+1F44mOisRcDAlL1My
+         6h6g==
+X-Gm-Message-State: AOAM533gst451hkiYnfPTveIKvIscY1XLSARr7BIOV75FpzDnVDqZXfD
+        jPwWbYOKO3cMksApIWRcsGE=
+X-Google-Smtp-Source: ABdhPJw7QEKf9n3D4WplTgINfkfjS1BdzdYLpsTpIGP3VcZFhnEkM1j1W9oW03Odr/MhaJocJzsKnw==
+X-Received: by 2002:a2e:b058:: with SMTP id d24mr108109ljl.265.1597363658086;
+        Thu, 13 Aug 2020 17:07:38 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id c17sm1504450lfr.23.2020.08.13.17.07.35
+        by smtp.gmail.com with ESMTPSA id c17sm1504450lfr.23.2020.08.13.17.07.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 17:07:36 -0700 (PDT)
+        Thu, 13 Aug 2020 17:07:37 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -62,9 +62,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v5 32/36] memory: tegra30-emc: Continue probing if timings are missing in device-tree
-Date:   Fri, 14 Aug 2020 03:06:17 +0300
-Message-Id: <20200814000621.8415-33-digetx@gmail.com>
+Subject: [PATCH v5 33/36] memory: tegra30-emc: Register as interconnect provider
+Date:   Fri, 14 Aug 2020 03:06:18 +0300
+Message-Id: <20200814000621.8415-34-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200814000621.8415-1-digetx@gmail.com>
 References: <20200814000621.8415-1-digetx@gmail.com>
@@ -75,84 +75,156 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-EMC driver will become mandatory after turning it into interconnect
-provider because interconnect users, like display controller driver, will
-fail to probe using newer device-trees that have interconnect properties.
-Thus make EMC driver to probe even if timings are missing in device-tree.
+Now external memory controller is a memory interconnection provider.
+This allows us to use interconnect API to change memory configuration.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/memory/tegra/tegra30-emc.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+ drivers/memory/tegra/tegra30-emc.c | 110 +++++++++++++++++++++++++++++
+ 1 file changed, 110 insertions(+)
 
 diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
-index f3082964cfb6..0cd39bf5f393 100644
+index 0cd39bf5f393..29448d02f750 100644
 --- a/drivers/memory/tegra/tegra30-emc.c
 +++ b/drivers/memory/tegra/tegra30-emc.c
-@@ -988,6 +988,11 @@ static struct device_node *emc_find_node_by_ram_code(struct device *dev)
- 	u32 value, ram_code;
- 	int err;
+@@ -14,6 +14,7 @@
+ #include <linux/debugfs.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
++#include <linux/interconnect-provider.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+@@ -327,6 +328,7 @@ struct tegra_emc {
+ 	struct device *dev;
+ 	struct tegra_mc *mc;
+ 	struct notifier_block clk_nb;
++	struct icc_provider provider;
+ 	struct clk *clk;
+ 	void __iomem *regs;
+ 	unsigned int irq;
+@@ -1264,6 +1266,113 @@ static void tegra_emc_debugfs_init(struct tegra_emc *emc)
+ 			    emc, &tegra_emc_debug_max_rate_fops);
+ }
  
-+	if (of_get_child_count(dev->of_node) == 0) {
-+		dev_info(dev, "device-tree doesn't have memory timings\n");
-+		return NULL;
++static inline struct tegra_emc *
++to_tegra_emc_provider(struct icc_provider *provider)
++{
++	return container_of(provider, struct tegra_emc, provider);
++}
++
++static struct icc_node *
++emc_of_icc_xlate(struct of_phandle_args *spec, void *data)
++{
++	struct icc_provider *provider = data;
++	struct icc_node *node;
++
++	/* External Memory is the only possible ICC route */
++	list_for_each_entry(node, &provider->nodes, node_list) {
++		if (node->id == TEGRA_ICC_EMEM)
++			return node;
 +	}
 +
- 	ram_code = tegra_read_ram_code();
- 
- 	for_each_child_of_node(dev->of_node, np) {
-@@ -1057,6 +1062,9 @@ static long emc_round_rate(unsigned long rate,
- 	struct tegra_emc *emc = arg;
- 	unsigned int i;
- 
-+	if (!emc->num_timings)
-+		return clk_get_rate(emc->clk);
++	return ERR_PTR(-EINVAL);
++}
 +
- 	min_rate = min(min_rate, emc->timings[emc->num_timings - 1].rate);
++static int emc_icc_set(struct icc_node *src, struct icc_node *dst)
++{
++	struct tegra_emc *emc = to_tegra_emc_provider(dst->provider);
++	unsigned long long rate = icc_units_to_bps(dst->avg_bw);
++	unsigned int dram_data_bus_width_bytes = 4;
++	unsigned int ddr = 2;
++	int err;
++
++	do_div(rate, ddr * dram_data_bus_width_bytes);
++	rate = min_t(u64, rate, U32_MAX);
++
++	err = clk_set_min_rate(emc->clk, rate);
++	if (err)
++		return err;
++
++	err = clk_set_rate(emc->clk, rate);
++	if (err)
++		return err;
++
++	return 0;
++}
++
++static int emc_icc_aggregate(struct icc_node *node,
++			     u32 tag, u32 avg_bw, u32 peak_bw,
++			     u32 *agg_avg, u32 *agg_peak)
++{
++	*agg_avg = min((u64)avg_bw + (*agg_avg), (u64)U32_MAX);
++	*agg_peak = max(*agg_peak, peak_bw);
++
++	return 0;
++}
++
++static int tegra_emc_interconnect_init(struct tegra_emc *emc)
++{
++	struct icc_node *node;
++	int err;
++
++	/* older device-trees don't have interconnect properties */
++	if (!of_find_property(emc->dev->of_node, "#interconnect-cells", NULL))
++		return 0;
++
++	emc->provider.dev = emc->dev;
++	emc->provider.set = emc_icc_set;
++	emc->provider.data = &emc->provider;
++	emc->provider.xlate = emc_of_icc_xlate;
++	emc->provider.aggregate = emc_icc_aggregate;
++
++	err = icc_provider_add(&emc->provider);
++	if (err)
++		goto err_msg;
++
++	/* create External Memory Controller node */
++	node = icc_node_create(TEGRA_ICC_EMC);
++	err = PTR_ERR_OR_ZERO(node);
++	if (err)
++		goto del_provider;
++
++	node->name = "External Memory Controller";
++	icc_node_add(node, &emc->provider);
++
++	/* link External Memory Controller to External Memory (DRAM) */
++	err = icc_link_create(node, TEGRA_ICC_EMEM);
++	if (err)
++		goto remove_nodes;
++
++	/* create External Memory node */
++	node = icc_node_create(TEGRA_ICC_EMEM);
++	err = PTR_ERR_OR_ZERO(node);
++	if (err)
++		goto remove_nodes;
++
++	node->name = "External Memory (DRAM)";
++	icc_node_add(node, &emc->provider);
++
++	return 0;
++
++remove_nodes:
++	icc_nodes_remove(&emc->provider);
++del_provider:
++	icc_provider_del(&emc->provider);
++err_msg:
++	dev_err(emc->dev, "failed to initialize ICC: %d\n", err);
++
++	return err;
++}
++
+ static int tegra_emc_probe(struct platform_device *pdev)
+ {
+ 	struct platform_device *mc;
+@@ -1343,6 +1452,7 @@ static int tegra_emc_probe(struct platform_device *pdev)
  
- 	for (i = 0; i < emc->num_timings; i++) {
-@@ -1263,12 +1271,6 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	struct tegra_emc *emc;
- 	int err;
+ 	platform_set_drvdata(pdev, emc);
+ 	tegra_emc_debugfs_init(emc);
++	tegra_emc_interconnect_init(emc);
  
--	if (of_get_child_count(pdev->dev.of_node) == 0) {
--		dev_info(&pdev->dev,
--			 "device-tree node doesn't have memory timings\n");
--		return -ENODEV;
--	}
--
- 	np = of_parse_phandle(pdev->dev.of_node, "nvidia,memory-controller", 0);
- 	if (!np) {
- 		dev_err(&pdev->dev, "could not get memory controller node\n");
-@@ -1280,10 +1282,6 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	if (!mc)
- 		return -ENOENT;
- 
--	np = emc_find_node_by_ram_code(&pdev->dev);
--	if (!np)
--		return -EINVAL;
--
- 	emc = devm_kzalloc(&pdev->dev, sizeof(*emc), GFP_KERNEL);
- 	if (!emc) {
- 		of_node_put(np);
-@@ -1297,10 +1295,13 @@ static int tegra_emc_probe(struct platform_device *pdev)
- 	emc->clk_nb.notifier_call = emc_clk_change_notify;
- 	emc->dev = &pdev->dev;
- 
--	err = emc_load_timings_from_dt(emc, np);
--	of_node_put(np);
--	if (err)
--		return err;
-+	np = emc_find_node_by_ram_code(&pdev->dev);
-+	if (np) {
-+		err = emc_load_timings_from_dt(emc, np);
-+		of_node_put(np);
-+		if (err)
-+			return err;
-+	}
- 
- 	emc->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(emc->regs))
+ 	/*
+ 	 * Don't allow the kernel module to be unloaded. Unloading adds some
 -- 
 2.27.0
 
