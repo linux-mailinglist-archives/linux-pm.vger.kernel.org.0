@@ -2,79 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B49E244CF5
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 18:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC182244E3C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 19:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726658AbgHNQrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Aug 2020 12:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S1728556AbgHNRxk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Aug 2020 13:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726270AbgHNQrG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Aug 2020 12:47:06 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30578C061384;
-        Fri, 14 Aug 2020 09:47:06 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id g6so10566397ljn.11;
-        Fri, 14 Aug 2020 09:47:06 -0700 (PDT)
+        with ESMTP id S1728488AbgHNRxj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Aug 2020 13:53:39 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A24C061384;
+        Fri, 14 Aug 2020 10:53:39 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id b11so5236486lfe.10;
+        Fri, 14 Aug 2020 10:53:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ZmnQ4vUhgXM2is2ULbt6oEQrTJKTXGTCE402XB71Dck=;
-        b=We/FVSeWrjP0+MIiJxhGwCzfNF3FWjWCzWB0nN5SzPgQeyXr9kou5Fg1G6xwmODZ9W
-         zExpR2CW8OFInlbyttpitOEdHHPVzSF71HNvUTn4l1VP6YEPQPc5pGgNRcbcYUfYDWJN
-         HUsiKIWEGgsiYUuz/OVIsK2RGGZwLMlO9vQWI+c3/aaEXs+0qdGtpf9rVeFD6fG7WeDf
-         G1HKVVIYwVUN0QPDX+ccBKdcifMjTU2ihgqzA/QrFXkLPvkeW19oC7PqU9s4PagQK27z
-         ewemK3ELH1ss9E0v2Qlqb6QFRu43KeADbn7yTJQVw00RXb8KL7qPH6taCW/IERgVRHJz
-         g9+A==
+        bh=1sUTWBUIPKO37P0lkqPAAoPd12fhovrUXjY7Y2QOAA8=;
+        b=cC/K+J7+hu48LaNPdtU86F6S2jC38HU2Y8+CHRnRaB2/My6nLqOB26YsOQLLw9cFQH
+         YK4EIQ1XFBFZ9HM3AiHipfU8qJ1ukLTFn93A7Ac6CsXNu/iGgrl7iP4QFTJRajZcdHIp
+         q3UHMaXaQuhCZyngxoWd4K4Yyp40Xcw/XRa63gOOSQUDQzmsJwDDtd5zdLK6IcQujfZK
+         5uYoy/bfdqqgcFQLUj6cQ/z0qfjwxTBv10lZLMtYZypOURt3n3AIEgMELJVWyeSg+juN
+         CAqRf/T/36m7GceOfkBk/5V1Z0yLC+iswPMlQpC+vGQRG3C5sYdtr2pev/A2sLIS5UFA
+         x7yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ZmnQ4vUhgXM2is2ULbt6oEQrTJKTXGTCE402XB71Dck=;
-        b=f7ro3F+b05bEuDvCo6+tbhx5QOGIMrsVYJ6mi+3gbpJRQclznO/sW8mBnsoZ29xSjB
-         qiqNVO/wucws44bXDWSs4NqO9IrA1XpFnYb5EY4GiurGfiKa9vkFbmt0lvtnv4Kt3W+g
-         G3PMioEEPUBU05cTcSk6kS50VTWsOtDkpJaRkdA09ThhMrbpIK3nUgE8/cWYRCvX/lM3
-         0JlQ/bb7BHnQWjLY8MXyZztAmN+3LNAkY5iog9J72TT4TLn6AZTo8w9WFOHJyGP/98TR
-         fPj+TMs5L5pqkBVdVC5XD42oYkwWXecESqrlhclysT4dj2bVs/FdU7rRzIY93LDEeClH
-         20hA==
-X-Gm-Message-State: AOAM530Z/lI4xWDCNgAFfmgq9b2m/hzUySYJ1vm/qfBiDRwKuHFXighM
-        nTHm85AWa/WKHOW3F6ZDCDFlmG0y5Sc=
-X-Google-Smtp-Source: ABdhPJxRFdX8dMKX0zpz4P0YHR+SyK3OD8HyoKXvo125A32O6XK/VTWaU2KYfAdlkk4oum8Xf4i2FQ==
-X-Received: by 2002:a05:651c:106a:: with SMTP id y10mr1705452ljm.296.1597423624384;
-        Fri, 14 Aug 2020 09:47:04 -0700 (PDT)
+        bh=1sUTWBUIPKO37P0lkqPAAoPd12fhovrUXjY7Y2QOAA8=;
+        b=ccA3+uDZ/V09zlIDk+nGEFbEwac1q9dYVTjetoL1smfmMX3i4HOr7Bu8346qF9iuWS
+         pw3je/TBWTWtsSyUvClcAQhsElowWZbQHhgxXgNewteWAT98yzYHYeLj5NBzG8gts09L
+         EDb3A6fyjL85j9MNxemkkv+eEWDj0c72PWu9uMGgMijV9TfikDUKfepgt+HeABnLuv6e
+         RvNjN1cVL/ZEZSYlbimBq5FuajSKHLYJjvE9MsgQ5CCPPo27HELpkGZo71EhZ+GdshN6
+         Tq5YWJMQy61GDE8Yd9trheqQV8DRYlHr+d5NWsWaIG6wl3nBmTv92Cm6rELHgjvGGegi
+         L+Dw==
+X-Gm-Message-State: AOAM533g3DjBpPXTqpH6sa3XN13HRJXISOaCzRi0YCRHS8/u0vmdVTJf
+        CNZwrN0oNyKqxB5sJnx5l6x/FETf8iM=
+X-Google-Smtp-Source: ABdhPJwr8NmlymrxjdJ9qpa67z9oE9f9YLWy5VCGV+mjs21CLT39KYmGhbu1VuvHGaO58330puc7CA==
+X-Received: by 2002:a05:6512:5c7:: with SMTP id o7mr1779728lfo.124.1597427617525;
+        Fri, 14 Aug 2020 10:53:37 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id v23sm1992608lfa.5.2020.08.14.09.47.02
+        by smtp.googlemail.com with ESMTPSA id 203sm2028329lfk.49.2020.08.14.10.53.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Aug 2020 09:47:03 -0700 (PDT)
-Subject: Re: [PATCH v5 13/36] PM / devfreq: tegra30: Use MC timings for
- building OPP table
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Mikko Perttunen <cyndis@kapsi.fi>
-Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-References: <20200814000621.8415-1-digetx@gmail.com>
- <CGME20200814000944epcas1p3dfd0104c5fa640695dfcd4949f6b1818@epcas1p3.samsung.com>
- <20200814000621.8415-14-digetx@gmail.com>
- <1b0d75fe-79af-70eb-8450-999a3bc72bac@samsung.com>
+        Fri, 14 Aug 2020 10:53:36 -0700 (PDT)
+Subject: Re: [PATCH v3] cpuidle: tegra: Correctly handle result of
+ arm_cpuidle_simple_enter()
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <1de8aa41-8001-cf46-026c-b00f8df0b9a3@gmail.com>
-Date:   Fri, 14 Aug 2020 19:47:02 +0300
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20200709173532.15431-1-digetx@gmail.com>
+Message-ID: <69c57c9c-a8e4-2367-3f72-232b6b3456b8@gmail.com>
+Date:   Fri, 14 Aug 2020 20:53:36 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <1b0d75fe-79af-70eb-8450-999a3bc72bac@samsung.com>
+In-Reply-To: <20200709173532.15431-1-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -83,63 +71,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-14.08.2020 05:02, Chanwoo Choi пишет:
-> Hi Dmitry,
+09.07.2020 20:35, Dmitry Osipenko пишет:
+> The enter() callback of CPUIDLE drivers returns index of the entered idle
+> state on success or a negative value on failure. The negative value could
+> any negative value, i.e. it doesn't necessarily needs to be a error code.
+> That's because CPUIDLE core only cares about the fact of failure and not
+> about the reason of the enter() failure.
 > 
-> I add the minor comment. Except of some comments, it looks good to me.
-
-Hello, Chanwoo! Thank you for the review!
-
-...
->> +struct tegra_devfreq_soc_data {
->> +	const char *mc_compatible;
->> +};
->> +
->> +static const struct tegra_devfreq_soc_data tegra30_soc = {
->> +	.mc_compatible = "nvidia,tegra30-mc",
->> +};
->> +
->> +static const struct tegra_devfreq_soc_data tegra124_soc = {
->> +	.mc_compatible = "nvidia,tegra124-mc",
->> +};
-.
->> +	soc_data = of_device_get_match_data(&pdev->dev);
+> Like every other enter() callback, the arm_cpuidle_simple_enter() returns
+> the entered idle-index on success. Unlike some of other drivers, it never
+> fails. It happened that TEGRA_C1=index=err=0 in the code of cpuidle-tegra
+> driver, and thus, there is no problem for the cpuidle-tegra driver created
+> by the typo in the code which assumes that the arm_cpuidle_simple_enter()
+> returns a error code.
 > 
-> I think that better to check whether 'soc_data' is not NULL.
-
-It's a quite common misconception among kernel developers that
-of_device_get_match_data() may "accidentally" return NULL, but it
-couldn't if every driver's of_match[] entry has a non-NULL .data field
-and because the OF-matching already happened at the driver's probe-time
-[1], which is the case of this driver.
-
-[1] https://elixir.bootlin.com/linux/v5.8/source/drivers/of/device.c#L189
-
-Hence the NULL-checking is unnecessary.
-
-When I first encountered the of_device_get_match_data(), I was also
-thinking that adding the NULL-checks is a good idea, but later on
-somebody pointed out to me (maybe Thierry) that it's unnecessary to do.
-
->> +
->> +	mc = tegra_get_memory_controller(soc_data->mc_compatible);
->> +	if (IS_ERR(mc))
->> +		return PTR_ERR(mc);
+> The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_IDLE
+> is disabled in a kernel's config, but all CPUIDLE drivers are disabled if
+> CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't ever
+> see the error code from arm_cpuidle_simple_enter() today.
 > 
-> You better to add error log.
+> Of course the code may get some changes in the future and then the
+> typo may transform into a real bug, so let's correct the typo! The
+> tegra_cpuidle_state_enter() is now changed to make it return the entered
+> idle-index on success and negative error code on fail, which puts it on
+> par with the arm_cpuidle_simple_enter(), making code consistent in regards
+> to the error handling.
+> 
+> This patch fixes a minor typo in the code, it doesn't fix any bugs.
+> 
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+> 
+> Changelog:
+> 
+> v3: The tegra_cpuidle_state_enter() now returns entered idle-index on
+>     success instead of 0. Hence the error message will be shown by the
+>     tegra-cpuidle driver if arm_cpuidle_simple_enter() will ever fail.
+>     Again thanks to Jon Hunter!
 
-In practice we should get only -EPROBE_DEFER here ever. I'll consider
-adding the message in the next revision, at least just for consistency.
-
-Thanks!
-
-...
->>  static const struct of_device_id tegra_devfreq_of_match[] = {
->> -	{ .compatible = "nvidia,tegra30-actmon" },
->> -	{ .compatible = "nvidia,tegra124-actmon" },
->> +	{ .compatible = "nvidia,tegra30-actmon",  .data = &tegra30_soc, },
->> +	{ .compatible = "nvidia,tegra124-actmon", .data = &tegra124_soc, },
->>  	{ },
->>  };
-
+Hello, Jon! Do you see anything else that could be improved in this patch?
 
