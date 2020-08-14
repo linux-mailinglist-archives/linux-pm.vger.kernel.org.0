@@ -2,65 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C733244AFF
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 15:58:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F28D244B3F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 16:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbgHNN6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Aug 2020 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728212AbgHNN63 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Aug 2020 09:58:29 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF7DC061384
-        for <linux-pm@vger.kernel.org>; Fri, 14 Aug 2020 06:58:27 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id i10so5218320ybt.11
-        for <linux-pm@vger.kernel.org>; Fri, 14 Aug 2020 06:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ADSxHTiClFeEpnekIgxMm+4vNveMDrQOPCHPEgxRQmY=;
-        b=OuCR0lVGqzd5H5FQmJLbFMNQ+eyV0gzEwr4HY3cd3GF6Lnsu1xJVt3zglMz7Jw3m6g
-         6tlQS1f9t9BYgSgXfDaRlV7w8WD3il1PEMBvmswjf0OZgEHzc1jHtX67zkOtBSyBoxLc
-         xSp/eQJ4+Ex7HAoy43U5Nx1I2rFcFsarYX4GCS2LVaBXZjUMWYC5HD7BH4nlOsnKw5vX
-         zu9ygJ4Ak8kbLaUIR+Wg4wOkXpQbQFuB6AS3nSIngBGrfhH2iurIYvgHPK9vFRdVn4tn
-         No2wYXX7H+1SF39WsLEjuvUdeAfdZx1+eqojEu1sK7RLckN57Cb59z1zh3/DfitQjmxg
-         khiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ADSxHTiClFeEpnekIgxMm+4vNveMDrQOPCHPEgxRQmY=;
-        b=O/X8Ll75ppJ/GNBc9J4kkoUMex+2uTUhZ0yH34wpqGDNPdlYOVp/SfGrdUeZD2pBk2
-         igqTVMq/9NE40l2P8ZoVS4YvNTVrWIa1v72M/oS1pU3AN38glhSjG/koAjmWt7qQuZAk
-         zCzeNf6Kx57gCQi4ufJMfols6ifHZ8mRM4wxUkj6zRoGr7f0gpzWf8lIik1jCHnTbXq5
-         Sgp3xmmIHgwx/HzzWHzq1mNAk6fo+U9m6ALVmkWNWIBAKxz6hmL/9+FbpMBB4o7icr3c
-         YHmnXIFsU+MDvxGf0KIYVHB0Sm3Rr0xVz4h1TXLrTKkVTl7cR1yEsBKGJ5jno4+QOvrx
-         ktRQ==
-X-Gm-Message-State: AOAM533WU7w0/gBGxulXcTUAgubM/01I9HHJbbhB7+WuresCn3uLb6L/
-        u36lZIaBSsNF35z1Jg96qQWYkMMjlp6A5qSIbYc=
-X-Google-Smtp-Source: ABdhPJxSW2CH4l3gAV3UQbiDhKcbIln2aHe6a5DgwtK9XXMnm22hlYpRVpHOZ1RfSDgnZMpqgrmaN7TH4tMfw5Vx2lE=
-X-Received: by 2002:a25:7c01:: with SMTP id x1mr782217ybc.357.1597413505967;
- Fri, 14 Aug 2020 06:58:25 -0700 (PDT)
+        id S1726455AbgHNOeH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Aug 2020 10:34:07 -0400
+Received: from mga06.intel.com ([134.134.136.31]:51886 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726185AbgHNOeG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 14 Aug 2020 10:34:06 -0400
+IronPort-SDR: C5gWgV4PRCGItDAdVwmOB+y3KXWAhYO1a2tmdvll0xQRyU6gTmqDgUDKqDQbtpQEXJb4WFGbxJ
+ ONE+C3UabA1w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9712"; a="215934347"
+X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
+   d="scan'208";a="215934347"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2020 07:34:05 -0700
+IronPort-SDR: hEwMxEqTQbCj+KcldmgCK79wj1LbFOMrjXXsFy3yKi93ocZBUIeh7cyedW0QqbF8QMFPKnxNFO
+ OPBdG3KpO1ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,312,1592895600"; 
+   d="scan'208";a="291748905"
+Received: from unknown (HELO fmsmsx605.amr.corp.intel.com) ([10.18.84.215])
+  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2020 07:34:05 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 14 Aug 2020 07:34:04 -0700
+Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 14 Aug 2020 07:34:04 -0700
+Received: from shsmsx102.ccr.corp.intel.com (10.239.4.154) by
+ fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
+ via Frontend Transport; Fri, 14 Aug 2020 07:34:04 -0700
+Received: from shsmsx103.ccr.corp.intel.com ([169.254.4.23]) by
+ shsmsx102.ccr.corp.intel.com ([169.254.2.153]) with mapi id 14.03.0439.000;
+ Fri, 14 Aug 2020 22:34:02 +0800
+From:   "Chen, Yu C" <yu.c.chen@intel.com>
+To:     Len Brown <lenb@kernel.org>
+CC:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>
+Subject: RE: [PATCH 2/2][RFC] tools/power turbostat: Introduce reliable RAPL
+ display
+Thread-Topic: [PATCH 2/2][RFC] tools/power turbostat: Introduce reliable
+ RAPL display
+Thread-Index: AQHWcbvesZTef024kEWykIjRcnKuMak3qdMw
+Date:   Fri, 14 Aug 2020 14:34:01 +0000
+Message-ID: <36DF59CE26D8EE47B0655C516E9CE6405F3966F2@SHSMSX103.ccr.corp.intel.com>
+References: <cover.1585679838.git.yu.c.chen@intel.com>
+ <3e5aa6e7b34827c0245e10c14ca9457512ae8586.1585679838.git.yu.c.chen@intel.com>
+ <CAJvTdK=niWaTjwPwXaxr6EGfH8vxzJS01e+k5TgknEMPSDYLvQ@mail.gmail.com>
+In-Reply-To: <CAJvTdK=niWaTjwPwXaxr6EGfH8vxzJS01e+k5TgknEMPSDYLvQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.5.1.3
+dlp-reaction: no-action
+x-originating-ip: [10.239.127.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Received: by 2002:a25:ce42:0:0:0:0:0 with HTTP; Fri, 14 Aug 2020 06:58:25
- -0700 (PDT)
-Reply-To: alexanadi111@gmail.com
-From:   Alex Anadi <debtpaymentsettlementcenter201@gmail.com>
-Date:   Fri, 14 Aug 2020 14:58:25 +0100
-Message-ID: <CANm_i2ZZaffMNzbC+-T=vYbsmQZ-2aL-nGfz+G8fS=qjR86-6w@mail.gmail.com>
-Subject: OK.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dear Sir/Madam,
-
-I want to know if you authorized Ms Diane Webb to put claims for your
-funds valued at $10.6M
-
-Regards,
-Alex Anadi.
+SGkgTGVuLA0KPiBGcm9tOiBMZW4gQnJvd24gPGxlbmJAa2VybmVsLm9yZz4NCj4gU2VudDogRnJp
+ZGF5LCBBdWd1c3QgMTQsIDIwMjAgNTo1MSBBTQ0KPiBUbzogQ2hlbiwgWXUgQyA8eXUuYy5jaGVu
+QGludGVsLmNvbT4NCj4gQ2M6IExpbnV4IFBNIGxpc3QgPGxpbnV4LXBtQHZnZXIua2VybmVsLm9y
+Zz47IExpbnV4IEtlcm5lbCBNYWlsaW5nIExpc3QgPGxpbnV4LQ0KPiBrZXJuZWxAdmdlci5rZXJu
+ZWwub3JnPjsgWmhhbmcsIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4NCj4gU3ViamVjdDogUmU6
+IFtQQVRDSCAyLzJdW1JGQ10gdG9vbHMvcG93ZXIgdHVyYm9zdGF0OiBJbnRyb2R1Y2UgcmVsaWFi
+bGUgUkFQTA0KPiBkaXNwbGF5DQo+IA0KPiB3aHkgbm90IHNpbXBseSB1c2UgbmFub3NsZWVwKDIp
+DQo+IA0KPiANCkRvIHlvdSBtZWFuLCB1c2UgbmFub3NsZWVwIHJhdGhlciB0aGFuIHRoZSB0aW1l
+ciB0byBhY2N1bXVsYXRlIHRoZSBSQVBMIGRhdGE/DQpBZnRlciB0aGlua2luZyBmb3IgYSB3aGls
+ZSwgaXQgbG9va3MgbGlrZSBpZiB3ZSB1c2UgbmFub3NsZWVwIHdlIG1pZ2h0DQogbmVlZCB0byBj
+cmVhdGUgYSBuZXcgdGhyZWFkIHdpdGhpbiB0aGUgdHVyYm9zdGF0ICBhbmQgc2xlZXAgZXZlcnkg
+ZmV3IHNlY29uZHMNCiAoYWNjb3JkaW5nIHRvIHRoZSBSQVBMIHJlZ2lzdGVyIHRpbWVvdXQpIHRv
+IGFjY3VtdWxhdGUgdGhlIHJ1bm5pbmcgUkFQTC4gQW5kIG1pZ2h0DQpuZWVkIHRvIGRlYWwgd2l0
+aCBzb21lIHJhY2UgY29uZGl0aW9ucyBiZXR3ZWVuIG5ldyB0aHJlYWQgYW5kIHRoZSBtYWluIHR1
+cmJvc3RhdA0KdGhyZWFkLiBCdXQgeWVzLCBpdCBjYW4gYmUgc3dpdGNoZWQgdG8gbmFub3NsZWVw
+KCkgdG8gY2hlY2sgaWYgdGhlIGNvZGUgd291bGQgbG9vaw0Kc2ltcGxlci4NCg0KQlRXLCB3ZSBo
+YXZlIGEgdjMgb2YgdGhlIHBhdGNoIGF0DQpodHRwczovL2xvcmUua2VybmVsLm9yZy9wYXRjaHdv
+cmsvcHJvamVjdC9sa21sL2xpc3QvP3Nlcmllcz00MzkzMzANCg0KDQpUaGFua3MsDQpDaGVueXUN
+Cg0KPiAtLQ0KPiBMZW4gQnJvd24sIEludGVsIE9wZW4gU291cmNlIFRlY2hub2xvZ3kgQ2VudGVy
+DQo=
