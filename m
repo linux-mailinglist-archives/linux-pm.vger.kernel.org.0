@@ -2,154 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37357244CB9
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 18:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B49E244CF5
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 18:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbgHNQa2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Aug 2020 12:30:28 -0400
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:58597 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728099AbgHNQa1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Aug 2020 12:30:27 -0400
-Received: from [37.160.38.175] (port=40734 helo=[192.168.42.162])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1k6cay-0001mB-F9; Fri, 14 Aug 2020 18:30:20 +0200
-Subject: Re: [PATCH] dt-bindings: Whitespace clean-ups in schema files
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
-        <linux-remoteproc@vger.kernel.org>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>
-References: <20200812203618.2656699-1-robh@kernel.org>
- <d5808e9c-07fe-1c28-b9a6-a16abe9df458@lucaceresoli.net>
- <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <f1963eb9-283f-e903-2a3a-4f324d71d418@lucaceresoli.net>
-Date:   Fri, 14 Aug 2020 18:30:17 +0200
+        id S1726658AbgHNQrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Aug 2020 12:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbgHNQrG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Aug 2020 12:47:06 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30578C061384;
+        Fri, 14 Aug 2020 09:47:06 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id g6so10566397ljn.11;
+        Fri, 14 Aug 2020 09:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZmnQ4vUhgXM2is2ULbt6oEQrTJKTXGTCE402XB71Dck=;
+        b=We/FVSeWrjP0+MIiJxhGwCzfNF3FWjWCzWB0nN5SzPgQeyXr9kou5Fg1G6xwmODZ9W
+         zExpR2CW8OFInlbyttpitOEdHHPVzSF71HNvUTn4l1VP6YEPQPc5pGgNRcbcYUfYDWJN
+         HUsiKIWEGgsiYUuz/OVIsK2RGGZwLMlO9vQWI+c3/aaEXs+0qdGtpf9rVeFD6fG7WeDf
+         G1HKVVIYwVUN0QPDX+ccBKdcifMjTU2ihgqzA/QrFXkLPvkeW19oC7PqU9s4PagQK27z
+         ewemK3ELH1ss9E0v2Qlqb6QFRu43KeADbn7yTJQVw00RXb8KL7qPH6taCW/IERgVRHJz
+         g9+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZmnQ4vUhgXM2is2ULbt6oEQrTJKTXGTCE402XB71Dck=;
+        b=f7ro3F+b05bEuDvCo6+tbhx5QOGIMrsVYJ6mi+3gbpJRQclznO/sW8mBnsoZ29xSjB
+         qiqNVO/wucws44bXDWSs4NqO9IrA1XpFnYb5EY4GiurGfiKa9vkFbmt0lvtnv4Kt3W+g
+         G3PMioEEPUBU05cTcSk6kS50VTWsOtDkpJaRkdA09ThhMrbpIK3nUgE8/cWYRCvX/lM3
+         0JlQ/bb7BHnQWjLY8MXyZztAmN+3LNAkY5iog9J72TT4TLn6AZTo8w9WFOHJyGP/98TR
+         fPj+TMs5L5pqkBVdVC5XD42oYkwWXecESqrlhclysT4dj2bVs/FdU7rRzIY93LDEeClH
+         20hA==
+X-Gm-Message-State: AOAM530Z/lI4xWDCNgAFfmgq9b2m/hzUySYJ1vm/qfBiDRwKuHFXighM
+        nTHm85AWa/WKHOW3F6ZDCDFlmG0y5Sc=
+X-Google-Smtp-Source: ABdhPJxRFdX8dMKX0zpz4P0YHR+SyK3OD8HyoKXvo125A32O6XK/VTWaU2KYfAdlkk4oum8Xf4i2FQ==
+X-Received: by 2002:a05:651c:106a:: with SMTP id y10mr1705452ljm.296.1597423624384;
+        Fri, 14 Aug 2020 09:47:04 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id v23sm1992608lfa.5.2020.08.14.09.47.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Aug 2020 09:47:03 -0700 (PDT)
+Subject: Re: [PATCH v5 13/36] PM / devfreq: tegra30: Use MC timings for
+ building OPP table
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200814000621.8415-1-digetx@gmail.com>
+ <CGME20200814000944epcas1p3dfd0104c5fa640695dfcd4949f6b1818@epcas1p3.samsung.com>
+ <20200814000621.8415-14-digetx@gmail.com>
+ <1b0d75fe-79af-70eb-8450-999a3bc72bac@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <1de8aa41-8001-cf46-026c-b00f8df0b9a3@gmail.com>
+Date:   Fri, 14 Aug 2020 19:47:02 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAL_JsqKekx0VO4NROwLrgrU8+L584HaLHM9i3kCZvU+g5myeGw@mail.gmail.com>
+In-Reply-To: <1b0d75fe-79af-70eb-8450-999a3bc72bac@samsung.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 14/08/20 16:51, Rob Herring wrote:
-> On Thu, Aug 13, 2020 at 4:31 AM Luca Ceresoli <luca@lucaceresoli.net> wrote:
->>
->> Hi Rob,
->>
->> On 12/08/20 22:36, Rob Herring wrote:
->>> Clean-up incorrect indentation, extra spaces, long lines, and missing
->>> EOF newline in schema files. Most of the clean-ups are for list
->>> indentation which should always be 2 spaces more than the preceding
->>> keyword.
->>>
->>> Found with yamllint (which I plan to integrate into the checks).
->>
->> [...]
->>
->>> diff --git a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> index 3d4e1685cc55..28c6461b9a9a 100644
->>> --- a/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> +++ b/Documentation/devicetree/bindings/clock/idt,versaclock5.yaml
->>> @@ -95,10 +95,10 @@ allOf:
->>>        # Devices without builtin crystal
->>>        properties:
->>>          clock-names:
->>> -            minItems: 1
->>> -            maxItems: 2
->>> -            items:
->>> -              enum: [ xin, clkin ]
->>> +          minItems: 1
->>> +          maxItems: 2
->>> +          items:
->>> +            enum: [ xin, clkin ]
->>>          clocks:
->>>            minItems: 1
->>>            maxItems: 2
->>
->> Thanks for noticing, LGTM.
->>
->> [...]
->>
->>> diff --git a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> index d7dac16a3960..36dc7b56a453 100644
->>> --- a/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> +++ b/Documentation/devicetree/bindings/input/touchscreen/touchscreen.yaml
->>> @@ -33,8 +33,8 @@ properties:
->>>      $ref: /schemas/types.yaml#/definitions/uint32
->>>
->>>    touchscreen-min-pressure:
->>> -    description: minimum pressure on the touchscreen to be achieved in order for the
->>> -                 touchscreen driver to report a touch event.
->>> +    description: minimum pressure on the touchscreen to be achieved in order
->>> +      for the touchscreen driver to report a touch event.
->>
->> Out of personal taste, I find the original layout more pleasant and
->> readable. This third option is also good, especially for long descriptions:
->>
->>   description:
->>     minimum pressure on the touchscreen to be achieved in order for the
->>     touchscreen driver to report a touch event.
->>
->> At first glance yamllint seems to support exactly these two by default:
->>
->>> With indentation: {spaces: 4, check-multi-line-strings: true}
+14.08.2020 05:02, Chanwoo Choi пишет:
+> Hi Dmitry,
 > 
-> Turning on check-multi-line-strings results in 10K+ warnings, so no.
+> I add the minor comment. Except of some comments, it looks good to me.
+
+Hello, Chanwoo! Thank you for the review!
+
+...
+>> +struct tegra_devfreq_soc_data {
+>> +	const char *mc_compatible;
+>> +};
+>> +
+>> +static const struct tegra_devfreq_soc_data tegra30_soc = {
+>> +	.mc_compatible = "nvidia,tegra30-mc",
+>> +};
+>> +
+>> +static const struct tegra_devfreq_soc_data tegra124_soc = {
+>> +	.mc_compatible = "nvidia,tegra124-mc",
+>> +};
+.
+>> +	soc_data = of_device_get_match_data(&pdev->dev);
 > 
-> The other issue is the style ruamel.yaml wants to write out is as the
-> patch does above. This matters when doing some scripted
-> transformations where we read in the files and write them back out. I
-> can somewhat work around that by first doing a pass with no changes
-> and then another pass with the actual changes, but that's completely
-> scriptable. Hopefully, ruamel learns to preserve the style better.
+> I think that better to check whether 'soc_data' is not NULL.
 
-Kind of sad, but I understand the reason as far as my understanding of
-the yaml world allows. Thanks for the explanation.
+It's a quite common misconception among kernel developers that
+of_device_get_match_data() may "accidentally" return NULL, but it
+couldn't if every driver's of_match[] entry has a non-NULL .data field
+and because the OF-matching already happened at the driver's probe-time
+[1], which is the case of this driver.
 
-[For idt,versaclock5.yaml, plus an overview of whole patch]
-Reviewed-by: Luca Ceresoli <luca@lucaceresoli.net>
+[1] https://elixir.bootlin.com/linux/v5.8/source/drivers/of/device.c#L189
 
--- 
-Luca
+Hence the NULL-checking is unnecessary.
+
+When I first encountered the of_device_get_match_data(), I was also
+thinking that adding the NULL-checks is a good idea, but later on
+somebody pointed out to me (maybe Thierry) that it's unnecessary to do.
+
+>> +
+>> +	mc = tegra_get_memory_controller(soc_data->mc_compatible);
+>> +	if (IS_ERR(mc))
+>> +		return PTR_ERR(mc);
+> 
+> You better to add error log.
+
+In practice we should get only -EPROBE_DEFER here ever. I'll consider
+adding the message in the next revision, at least just for consistency.
+
+Thanks!
+
+...
+>>  static const struct of_device_id tegra_devfreq_of_match[] = {
+>> -	{ .compatible = "nvidia,tegra30-actmon" },
+>> -	{ .compatible = "nvidia,tegra124-actmon" },
+>> +	{ .compatible = "nvidia,tegra30-actmon",  .data = &tegra30_soc, },
+>> +	{ .compatible = "nvidia,tegra124-actmon", .data = &tegra124_soc, },
+>>  	{ },
+>>  };
+
+
