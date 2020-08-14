@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 304742443F7
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 05:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168FB2443F9
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Aug 2020 05:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbgHNDtN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Aug 2020 23:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S1726680AbgHNDtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Aug 2020 23:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726567AbgHNDtM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 23:49:12 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A16C061757;
-        Thu, 13 Aug 2020 20:49:12 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mt12so3778442pjb.4;
-        Thu, 13 Aug 2020 20:49:12 -0700 (PDT)
+        with ESMTP id S1726567AbgHNDtP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Aug 2020 23:49:15 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465DEC061757;
+        Thu, 13 Aug 2020 20:49:15 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id v5so1420905plo.4;
+        Thu, 13 Aug 2020 20:49:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3DLfzJVrBSOZWmYXjqG2fAv5M0QawyCzsLKQxAdZ2PQ=;
-        b=GLo2AdQdNI/G3osOfYAUnskpbAu2Z1grvhWQ1jjXxh5bWl0TuundBkJvYMgrxBpsgh
-         sS9xg7bLsHVfRFYauOVhBeDLNEc+bVVprC86ZbmlnH7dCvYI1x4foccQWixLoOyAiXyK
-         lxQS1xf1kLpHcOETUjUezf/cOO+aeeHWlQrax+o/356idgz57bFeqjZxQz5/oR7jjD5Z
-         SB0iXYFM5Io9bKit83v8FY2ixH+V5xwxhYK6nS7oOl15SubAbtxFM9cThvUPQWML9+FV
-         qwXOZMZHvDsoxYcXO2B3RpSzBX8+JHQUBRPhaF4OHZpo+qMwpiYJaqgGTZ3iHwY+KIS8
-         jHPA==
+        bh=ricGGIi0rSFfCMhWo07vOBDDcXPDfivbO4AsrdYg3Sk=;
+        b=fxXpTUDfPU6zUvUa9bNeaMMx5lIsisqOZqNETLYlIT3zsGtLIPsJZtBgfPsHPJwmUq
+         nKAx7vKcUN4dvtyfDEgppsnNrnjir6nGGGp639h/9lNzop6n+IEwvE1b5RaQ5qkegeBF
+         DLX3H091XsbaqVLGyQXEecZEAlFL5azLBs0wuoG8XJRGzDd8avXyQ+4HkbFAfDznebxs
+         mymSDccCpUxB+1zG2QVesh2sFWoT5DvPegkDHDYcO6aiN6IG3I9LZuspt4xrlukKqpeu
+         bKtFtAY0BNptXA4BtKNrtVRSLXlHN/Q7NPxIpy426ShyE8bQ9Ly9uZRe6K8OfkVAqBu8
+         76kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3DLfzJVrBSOZWmYXjqG2fAv5M0QawyCzsLKQxAdZ2PQ=;
-        b=mBmYD8TClVva8xJSdvBpVcPtP3pwWmjaVBJSYATZttfjJzbcg+mvuaxrr+HYsBuey6
-         p+nbVPhP6gGn4UXfLPK64YVPF02miPAO++CxhGgiI8APUMlrhdQ7L8aW3CxiemX4CK7g
-         ur3cHg9wpvLqheNsL+FLGXx4DUBcmG/6RX8+nZqIBUy9ZzVrUtPw76aonx+zdEqkw1kU
-         KjgjcoM99qVVEt0waDj8ywF4QBfugKrm4JS0JaL1Lnuy05c3e1ZkN8nKjpF9k6DKROx2
-         1ciZJUE6YRBQsMq9C8kvtkEmJws1YNmcPnSGi5JCDgJED0YeCQTYDiuTaWVXTwvliOrk
-         FOwA==
-X-Gm-Message-State: AOAM530NEAU2bQXBFdlRzhomOr+NWuLuKwCNyY5VxxNdYdHcxd1JJ0CR
-        8HMYfb45iEC/CdBefUOXFudeC9BaVXU=
-X-Google-Smtp-Source: ABdhPJwMIbJH2G/JXMjdI4pnmUNbXPctvOPt5tw4dWRd9qzf8TSL2rV/Mo4dCc56OztiCYWSO6092Q==
-X-Received: by 2002:a17:90a:c693:: with SMTP id n19mr704616pjt.53.1597376952252;
-        Thu, 13 Aug 2020 20:49:12 -0700 (PDT)
+        bh=ricGGIi0rSFfCMhWo07vOBDDcXPDfivbO4AsrdYg3Sk=;
+        b=V2Q/dy85vewM7s89KBdVE9CnqCZUb1XNqRfaYbQwW/yef10tVb6QVJLJO4R5DZZhWc
+         tFrBT/VhJnGKdRmmPJ+WRi+3murez79YdRxeJS1qp7RyW2s7ENDFgD3aUAMCscjJdZJa
+         isH6Z013UtYoY1072hLiL2Mdflr9gW54LqN58g2Joo53jX6UXFOVNtzymTvnuin4+U2N
+         beHgUUBjuZuDf4h/fyxeUzBNcT6+7e7YgA/Md0yJr5mnJovUchiSNPE4a3LhODQyZhpq
+         yRBy+zGi8/ykuYPbWw0evqztVyu3WqBpYK12nQ3OW00NJ9Pfju8m1L1HbIBjTKNUUIIV
+         TPgA==
+X-Gm-Message-State: AOAM531xr5ca7XFO7b6B/0GmzuJvGxK6dpYrgLUfDSOFqvM+enyJl16j
+        hZL3fRDQurWCk6M1ywZILUM=
+X-Google-Smtp-Source: ABdhPJwPqUeyIYBIfykWcAiFmJqn55tlU+d6Xmz8Ykh3DJZTE4lhEKT3acbhNMn1ic4q1MdTk9ME3Q==
+X-Received: by 2002:a17:90b:f09:: with SMTP id br9mr692763pjb.11.1597376954711;
+        Thu, 13 Aug 2020 20:49:14 -0700 (PDT)
 Received: from xiaomi.mioffice.cn ([209.9.72.214])
-        by smtp.gmail.com with ESMTPSA id n26sm7253385pff.30.2020.08.13.20.49.10
+        by smtp.gmail.com with ESMTPSA id n26sm7253385pff.30.2020.08.13.20.49.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2020 20:49:11 -0700 (PDT)
+        Thu, 13 Aug 2020 20:49:14 -0700 (PDT)
 From:   Qiwu Huang <yanziily@gmail.com>
 To:     sre@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         gregkh@linuxfoundation.org, jiangfei1@xiaomi.com,
         Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v8 1/4] power: supply: core: add quick charge type property
-Date:   Fri, 14 Aug 2020 11:46:54 +0800
-Message-Id: <ced256ea8ac2f3e54c33677facc4c2ef04dee643.1597376585.git.huangqiwu@xiaomi.com>
+Subject: [PATCH v8 2/4] power: supply: core: add wireless charger adapter type property
+Date:   Fri, 14 Aug 2020 11:46:55 +0800
+Message-Id: <07b666877e4eb64d1a431e56146b9a9e2d61b7f7.1597376585.git.huangqiwu@xiaomi.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1597376585.git.huangqiwu@xiaomi.com>
 References: <cover.1597376585.git.huangqiwu@xiaomi.com>
@@ -67,168 +67,97 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-Reports the kind of quick charge type based on
-different adapter power.
+Reports what type of wireless adapter connection is
+currently active for the supply.
+for example it can show if ADAPTER_PD capable source is attached.
 
 Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
 ---
- Documentation/ABI/testing/sysfs-class-power | 21 +++++++++
+ Documentation/ABI/testing/sysfs-class-power | 28 +++++++++++++++++++++
  drivers/power/supply/power_supply_sysfs.c   |  1 +
- drivers/power/supply/qcom_smbb.c            | 51 +++++++++++++++++++++
- include/linux/power_supply.h                | 14 ++++++
- 4 files changed, 87 insertions(+)
+ include/linux/power_supply.h                | 19 ++++++++++++++
+ 3 files changed, 48 insertions(+)
 
 diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 216d61a22f1e..dd3773dcf16a 100644
+index dd3773dcf16a..03ab449fae8a 100644
 --- a/Documentation/ABI/testing/sysfs-class-power
 +++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -708,3 +708,24 @@ Description:
+@@ -729,3 +729,31 @@ Contact:	Fei Jiang <jiangfei1@xiaomi.com>
+ 			3: QUICK_CHARGE_TURBE,
+ 			4: QUICK_CHARGE_SUPER.
  
- 		Access: Read
- 		Valid values: 1-31
-+
-+What:		/sys/class/power_supply/<supply_name>/quick_charge_type
++===== Wireless Charger Properties =====
++What:		/sys/class/power_supply/<supply_name>/tx_adapter
 +Date:		Jul 2020
 +Contact:	Fei Jiang <jiangfei1@xiaomi.com>
-+		Description:
-+		Reports the kind of quick charge type based on different adapter power.
-+		Different quick charge type represent different charging power.
-+		QUICK_CHARGE_NORMAL : Charging Power <= 10W
-+		QUICK_CHARGE_FAST : 10W < Charging Power <= 20W
-+		QUICK_CHARGE_FLASH : 20W < Charging Power <= 30W
-+		QUICK_CHARGE_TURBE : 30W < Charging Power <= 50W
-+		QUICK_CHARGE_SUPER : Charging Power > 50W
++Description:
++		Reports the type of wireless adapter connection is currently active for
++		the supply, for example it can show if ADAPTER_PD capable source
++		is attached. Expect common wireless adapter type, also increase by
++		some vendor private adapter type(ex. ADAPTER_PD_40W).
 +
 +		Access: Read-Only
 +		Valid values:
-+			0: QUICK_CHARGE_NORMAL,
-+			1: QUICK_CHARGE_FAST,
-+			2: QUICK_CHARGE_FLASH,
-+			3: QUICK_CHARGE_TURBE,
-+			4: QUICK_CHARGE_SUPER.
++			0: ADAPTER_NONE,
++			1: ADAPTER_SDP,
++			2: ADAPTER_DCP,
++			3: ADAPTER_CDP,
++			4: ADAPTER_OCP,
++			5: ADAPTER_QC2,
++			6: ADAPTER_QC3,
++			7: ADAPTER_PD,
++			8: ADAPTER_AUTH_FAILED,
++			9: ADAPTER_PRIVATE_QC3,
++			10: ADAPTER_PRIVATE_PD,
++			11: ADAPTER_CAR_POWER,
++			12: ADAPTER_PRIVATE_PD_40W,
++			13: ADAPTER_VOICE_BOX,
++			14: ADAPTER_PRIVATE_PD_50W.
 +
 diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index bc79560229b5..9554d7907373 100644
+index 9554d7907373..f2458e21d02b 100644
 --- a/drivers/power/supply/power_supply_sysfs.c
 +++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -206,6 +206,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(MODEL_NAME),
+@@ -207,6 +207,7 @@ static struct power_supply_attr power_supply_attrs[] = {
  	POWER_SUPPLY_ATTR(MANUFACTURER),
  	POWER_SUPPLY_ATTR(SERIAL_NUMBER),
-+	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
+ 	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
++	POWER_SUPPLY_ATTR(TX_ADAPTER),
  };
  
  static struct attribute *
-diff --git a/drivers/power/supply/qcom_smbb.c b/drivers/power/supply/qcom_smbb.c
-index c890e1cec720..afd38cf38832 100644
---- a/drivers/power/supply/qcom_smbb.c
-+++ b/drivers/power/supply/qcom_smbb.c
-@@ -485,6 +485,53 @@ static const struct smbb_irq {
- 	{ "dc-valid", smbb_dc_valid_handler },
- };
- 
-+struct quick_charge {
-+	enum power_supply_type adap_type;
-+	enum power_supply_quick_charge_type adap_cap;
-+};
-+
-+static struct quick_charge adapter_cap[10] = {
-+	{ POWER_SUPPLY_TYPE_USB,		QUICK_CHARGE_NORMAL },
-+	{ POWER_SUPPLY_TYPE_USB_DCP,		QUICK_CHARGE_NORMAL },
-+	{ POWER_SUPPLY_TYPE_USB_CDP,		QUICK_CHARGE_NORMAL },
-+	{ POWER_SUPPLY_TYPE_USB_ACA,		QUICK_CHARGE_NORMAL },
-+	{ POWER_SUPPLY_TYPE_USB_FLOAT,		QUICK_CHARGE_NORMAL },
-+	{ POWER_SUPPLY_TYPE_USB_PD,		QUICK_CHARGE_FAST },
-+	{ POWER_SUPPLY_TYPE_USB_HVDCP,		QUICK_CHARGE_FAST },
-+	{ POWER_SUPPLY_TYPE_USB_HVDCP_3,	QUICK_CHARGE_FAST },
-+	{ POWER_SUPPLY_TYPE_USB_HVDCP_3P5,	QUICK_CHARGE_FAST },
-+	{0, 0},
-+};
-+
-+static int get_quick_charge_type(struct smbb_charger *chg)
-+{
-+	union power_supply_propval prop = {0, };
-+	int charger_type, rc;
-+	int i = 0;
-+
-+	rc = power_supply_get_property(chg->bat_psy,
-+			POWER_SUPPLY_PROP_STATUS, &prop);
-+	if (rc < 0)
-+		return rc;
-+	if (prop.intval == POWER_SUPPLY_STATUS_DISCHARGING)
-+		return 0;
-+
-+	rc = power_supply_get_property(chg->usb_psy,
-+			POWER_SUPPLY_PROP_USB_TYPE, &prop);
-+	if (rc < 0)
-+		return rc;
-+	charger_type = prop.intval;
-+
-+	while (adapter_cap[i].adap_type != 0) {
-+		if (charger_type == adapter_cap[i].adap_type) {
-+			return adapter_cap[i].adap_cap;
-+		}
-+		i++;
-+	}
-+
-+	return 0;
-+}
-+
- static int smbb_usbin_get_property(struct power_supply *psy,
- 		enum power_supply_property psp,
- 		union power_supply_propval *val)
-@@ -505,6 +552,9 @@ static int smbb_usbin_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX:
- 		val->intval = 2500000;
- 		break;
-+	case POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE:
-+		val->intval = get_quick_charge_type(chg);
-+		break;
- 	default:
- 		rc = -EINVAL;
- 		break;
-@@ -695,6 +745,7 @@ static enum power_supply_property smbb_charger_properties[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT,
- 	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
-+	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
- };
- 
- static enum power_supply_property smbb_battery_properties[] = {
 diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index ac1345a48ad0..bd99658c05be 100644
+index bd99658c05be..00254e096a4a 100644
 --- a/include/linux/power_supply.h
 +++ b/include/linux/power_supply.h
-@@ -167,6 +167,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_MODEL_NAME,
+@@ -168,6 +168,7 @@ enum power_supply_property {
  	POWER_SUPPLY_PROP_MANUFACTURER,
  	POWER_SUPPLY_PROP_SERIAL_NUMBER,
-+	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
+ 	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
++	POWER_SUPPLY_PROP_TX_ADAPTER,
  };
  
  enum power_supply_type {
-@@ -182,6 +183,10 @@ enum power_supply_type {
- 	POWER_SUPPLY_TYPE_USB_PD,		/* Power Delivery Port */
- 	POWER_SUPPLY_TYPE_USB_PD_DRP,		/* PD Dual Role Port */
- 	POWER_SUPPLY_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
-+	POWER_SUPPLY_TYPE_USB_HVDCP,		/* High Voltage DCP */
-+	POWER_SUPPLY_TYPE_USB_HVDCP_3,		/* Efficient High Voltage DCP */
-+	POWER_SUPPLY_TYPE_USB_HVDCP_3P5,	/* Efficient High Voltage DCP */
-+	POWER_SUPPLY_TYPE_USB_FLOAT,		/* Floating charger */
+@@ -211,6 +212,24 @@ enum power_supply_quick_charge_type {
+ 	QUICK_CHARGE_MAX,
  };
  
- enum power_supply_usb_type {
-@@ -197,6 +202,15 @@ enum power_supply_usb_type {
- 	POWER_SUPPLY_USB_TYPE_APPLE_BRICK_ID,	/* Apple Charging Method */
- };
- 
-+enum power_supply_quick_charge_type {
-+	QUICK_CHARGE_NORMAL = 0,		/* Charging Power <= 10W */
-+	QUICK_CHARGE_FAST,			/* 10W < Charging Power <= 20W */
-+	QUICK_CHARGE_FLASH,			/* 20W < Charging Power <= 30W */
-+	QUICK_CHARGE_TURBE,			/* 30W < Charging Power <= 50W */
-+	QUICK_CHARGE_SUPER,			/* Charging Power > 50W */
-+	QUICK_CHARGE_MAX,
++enum power_supply_tx_adapter_type {
++	ADAPTER_NONE = 0,			/* Nothing Attached */
++	ADAPTER_SDP,				/* Standard Downstream Port */
++	ADAPTER_CDP,				/* Charging Downstream Port */
++	ADAPTER_DCP,				/* Dedicated Charging Port */
++	ADAPTER_OCP,				/* Other Charging Port */
++	ADAPTER_QC2,				/* Qualcomm Charge 2.0 */
++	ADAPTER_QC3,				/* Qualcomm Charge 3.0 */
++	ADAPTER_PD,				/* Power Delivery Port */
++	ADAPTER_AUTH_FAILED,			/* Authenticated Failed Adapter */
++	ADAPTER_PRIVATE_QC3,			/* Qualcomm Charge 3.0 with Private Protocol */
++	ADAPTER_PRIVATE_PD,			/* PD Adapter with Private Protocol */
++	ADAPTER_CAR_POWER,			/* Wireless Car Charger */
++	ADAPTER_PRIVATE_PD_40W,			/* 40W PD Adapter with Private Protocol */
++	ADAPTER_VOICE_BOX,			/* Voice Box which Support Wireless Charger */
++	ADAPTER_PRIVATE_PD_50W,			/* 50W PD Adapter with Private Protocol */
 +};
 +
  enum power_supply_notifier_events {
