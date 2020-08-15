@@ -2,76 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 835DE24534A
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Aug 2020 00:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A0F245406
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Aug 2020 00:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729085AbgHOWAF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Aug 2020 18:00:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728857AbgHOVvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Aug 2020 17:51:37 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1804C0F26D1
-        for <linux-pm@vger.kernel.org>; Sat, 15 Aug 2020 10:22:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1mv06P/Fmb+hv86TbcEFiG1+z16o6FdI5If3i2x/DyE=; b=hoSO6p9bS+kR8vbBuexHU/cSA6
-        YmNuj+3iFwr08A2WOcohKj0yw0Q1WW+VDLfZiHk3dewzbesob8LVQijRzMgRS3xFxmDpPD/6KQV14
-        9EsWs+eRr6x1Fl2zEryJUHvSXNH5CdHcAaLer0g4ZMFeVrPTfrYKHpNvXdNQT8q68ios=;
-Received: from p200300ccff3e9c001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff3e:9c00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1k6zTx-0007JG-VE; Sat, 15 Aug 2020 18:56:38 +0200
-Received: from andi by aktux with local (Exim 4.92)
-        (envelope-from <andreas@kemnade.info>)
-        id 1k6zTx-0002n2-Kc; Sat, 15 Aug 2020 18:56:37 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee.jones@linaro.org, sre@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 2/2] mfd: rn5t618: Add a power supply subdevice
-Date:   Sat, 15 Aug 2020 18:56:10 +0200
-Message-Id: <20200815165610.10647-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200815165610.10647-1-andreas@kemnade.info>
-References: <20200815165610.10647-1-andreas@kemnade.info>
+        id S1729603AbgHOWLF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Aug 2020 18:11:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41790 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729475AbgHOWKb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 15 Aug 2020 18:10:31 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49F522078D;
+        Sat, 15 Aug 2020 07:55:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597478126;
+        bh=1xWL3OUbyTr894ufEXenLPaJIkNLutYTw8RXVEGQrNQ=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=BYS1jtankkHzJKx8pLSKDeCyoDquM4rFZEt4s1jTIU1WJLJLwFgQpv2/0oarVaimQ
+         nmJ2dSvGjAqCxM677HpuUPrhthfGWN9/hueT9GPIyZbdknjMbjUPRTdeuAOT5igjFM
+         HzWACWNEr6OBJYZ+pA7yL/aq4b5QXRvnGdPTLdSs=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <359b588928b7e58b009f786b17ddc088c6a7d18b.1597292833.git.viresh.kumar@linaro.org>
+References: <1597043179-17903-1-git-send-email-rnayak@codeaurora.org> <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org> <359b588928b7e58b009f786b17ddc088c6a7d18b.1597292833.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH 3/4] opp: Reused enabled flag and remove regulator_enabled
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>, mka@chromium.org,
+        sibis@codeaurora.org, linux-kernel@vger.kernel.org
+To:     Nishanth Menon <nm@ti.com>, Viresh Kumar <viresh.kumar@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Date:   Sat, 15 Aug 2020 00:55:25 -0700
+Message-ID: <159747812515.33733.6233341429546003955@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The RN5T618 and RC5T619 both have a charger and a fuel gauge, so add
-a subdevice for it. According to drivers in the wild, things
-should be at least similar, but since it is not tested, add it
-only to the RC5T619.
+Quoting Viresh Kumar (2020-08-12 21:29:00)
+> The common "enabled" flag can be used here instead of
+> "regulator_enabled" now.
+>=20
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- drivers/mfd/rn5t618.c | 1 +
- 1 file changed, 1 insertion(+)
+Why not put this before the other patch? And mention that it will be
+reused in another place soon? Then the previous patch won't look like
+we're adding a variable to the struct when it is only used inside a
+single function. Or at least squash it with the previous patch.
 
-diff --git a/drivers/mfd/rn5t618.c b/drivers/mfd/rn5t618.c
-index e25407ed3ad4..dc452df1f1bf 100644
---- a/drivers/mfd/rn5t618.c
-+++ b/drivers/mfd/rn5t618.c
-@@ -25,6 +25,7 @@ static const struct mfd_cell rn5t618_cells[] = {
- 
- static const struct mfd_cell rc5t619_cells[] = {
- 	{ .name = "rn5t618-adc" },
-+	{ .name = "rn5t618-power" },
- 	{ .name = "rn5t618-regulator" },
- 	{ .name = "rc5t619-rtc" },
- 	{ .name = "rn5t618-wdt" },
--- 
-2.20.1
+> ---
+>  drivers/opp/core.c | 13 +++----------
+>  drivers/opp/opp.h  |  2 --
+>  2 files changed, 3 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index e8882e7fd8a5..5f5da257f58a 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -703,12 +703,10 @@ static int _generic_set_opp_regulator(struct opp_ta=
+ble *opp_table,
+>          * Enable the regulator after setting its voltages, otherwise it =
+breaks
+>          * some boot-enabled regulators.
+>          */
+> -       if (unlikely(!opp_table->regulator_enabled)) {
+> +       if (unlikely(!opp_table->enabled)) {
+>                 ret =3D regulator_enable(reg);
+>                 if (ret < 0)
+>                         dev_warn(dev, "Failed to enable regulator: %d", r=
+et);
+> -               else
+> -                       opp_table->regulator_enabled =3D true;
 
+A quick glance makes this look unsafe now because we're only checking
+'enabled' and not actually setting it when this function is called. I
+have to go back to the previous patch to understand where enabled is now
+set to confirm that it is OK. If it was all one patch all the context
+would be here.
