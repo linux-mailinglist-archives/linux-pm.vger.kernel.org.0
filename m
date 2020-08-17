@@ -2,140 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9592468FF
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Aug 2020 17:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297B624693E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Aug 2020 17:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728651AbgHQPDw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Aug 2020 11:03:52 -0400
-Received: from mga02.intel.com ([134.134.136.20]:11694 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726630AbgHQPDv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 17 Aug 2020 11:03:51 -0400
-IronPort-SDR: vGdWbnySBWE8gjnuUinndkJx4XNZl3NMrlA93IL4uLL/h1IA9vCAkV7G3S1p/aPor8is8AcG5H
- fVz6L5PXwuCw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9715"; a="142554479"
-X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="142554479"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2020 08:03:50 -0700
-IronPort-SDR: Gk6fFwOHFag2J3YYo/eqzmPCIarcxbk3hM6+P5/On4bzUD5KDCHT4tTicjgH3gHQfePuYSWAhw
- NyjyJLDIyLiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,322,1592895600"; 
-   d="scan'208";a="370592521"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by orsmga001.jf.intel.com with ESMTP; 17 Aug 2020 08:03:49 -0700
-From:   Antti Laakso <antti.laakso@linux.intel.com>
-To:     linux-pm@vger.kernel.org
-Cc:     lenb@kernel.org
-Subject: [PATCH] tools/power turbostat: adjust columns for Jacobsville
-Date:   Mon, 17 Aug 2020 18:03:48 +0300
-Message-Id: <20200817150348.3976515-1-antti.laakso@linux.intel.com>
-X-Mailer: git-send-email 2.26.2
+        id S1729097AbgHQPQh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Aug 2020 11:16:37 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:35790 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728778AbgHQPQd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Aug 2020 11:16:33 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07HFGUbe083374;
+        Mon, 17 Aug 2020 10:16:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1597677390;
+        bh=NP+m4DM9evitJfx1NGVBxAFzXwAe985/WtezLdTg1LI=;
+        h=From:To:CC:Subject:Date;
+        b=iQY2tb1eXX5BHuyCA7VBHBfddP9NivHqrzWo+U4YgpVk7KcUklAgy7vFAoLQZRXUb
+         8rj4apEdH0RPEhj9wl1prTlg+c69Wfeo3AwHt9bDoXwhVBEfYSsEylO3FAvsl34bKG
+         GUGBQmBeV+4nbOT6gHki2f67U0FPYhpun1fk2LV4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07HFGUZ2093097
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 17 Aug 2020 10:16:30 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 17
+ Aug 2020 10:16:30 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Mon, 17 Aug 2020 10:16:30 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07HFGT3P040477;
+        Mon, 17 Aug 2020 10:16:30 -0500
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <sre@kernel.org>, <robh@kernel.org>
+CC:     <devicetree@vger.kernel.org>, <r-rivera-matos@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: [PATCH v2 1/2] dt-bindings: power: Add the bq25790 dt bindings
+Date:   Mon, 17 Aug 2020 10:16:28 -0500
+Message-ID: <20200817151629.11019-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Jacobsville doesn't have Package C2 and C6. Also
-Core and DRAM RAPL are not available. Adjust output
-accordingly.
+Add the bindings for the bq25790.
 
-Signed-off-by: Antti Laakso <antti.laakso@linux.intel.com>
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 33 ++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 33b370865d16..f210128f27a5 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2173,6 +2173,7 @@ int has_turbo_ratio_group_limits(int family, int model)
- 	case INTEL_FAM6_ATOM_GOLDMONT:
- 	case INTEL_FAM6_SKYLAKE_X:
- 	case INTEL_FAM6_ATOM_GOLDMONT_D:
-+	case INTEL_FAM6_ATOM_TREMONT_D:
- 		return 1;
- 	}
- 	return 0;
-@@ -3279,6 +3280,7 @@ int probe_nhm_msrs(unsigned int family, unsigned int model)
- 	case INTEL_FAM6_ATOM_GOLDMONT_PLUS:
- 	case INTEL_FAM6_ATOM_GOLDMONT_D:	/* DNV */
- 	case INTEL_FAM6_ATOM_TREMONT:	/* EHL */
-+	case INTEL_FAM6_ATOM_TREMONT_D: /* JVL */
- 		pkg_cstate_limits = glm_pkg_cstate_limits;
- 		break;
- 	default:
-@@ -3361,6 +3363,17 @@ int is_ehl(unsigned int family, unsigned int model)
- 	}
- 	return 0;
- }
-+int is_jvl(unsigned int family, unsigned int model)
-+{
-+	if (!genuine_intel)
-+		return 0;
+v2 - Changed ti,watchdog property, documented the interrupts, fixed exxamples
+for input-current and input-voltage
+
+ .../bindings/power/supply/bq25790.yaml        | 95 +++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
+
+diff --git a/Documentation/devicetree/bindings/power/supply/bq25790.yaml b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+new file mode 100644
+index 000000000000..6d9178ce5a2b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+@@ -0,0 +1,95 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2020 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq25790.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+	switch (model) {
-+	case INTEL_FAM6_ATOM_TREMONT_D:
-+		return 1;
-+	}
-+	return 0;
-+}
- 
- int has_turbo_ratio_limit(unsigned int family, unsigned int model)
- {
-@@ -3959,6 +3972,14 @@ void rapl_probe_intel(unsigned int family, unsigned int model)
- 			BIC_PRESENT(BIC_GFXWatt);
- 		}
- 		break;
-+	case INTEL_FAM6_ATOM_TREMONT_D:	/* JVL */
-+		do_rapl = RAPL_PKG | RAPL_PKG_PERF_STATUS | RAPL_PKG_POWER_INFO;
-+		BIC_PRESENT(BIC_PKG__);
-+		if (rapl_joules)
-+			BIC_PRESENT(BIC_Pkg_J);
-+		else
-+			BIC_PRESENT(BIC_PkgWatt);
-+		break;
- 	case INTEL_FAM6_SKYLAKE_L:	/* SKL */
- 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
- 		do_rapl = RAPL_PKG | RAPL_CORES | RAPL_CORE_POLICY | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_PKG_PERF_STATUS | RAPL_GFX | RAPL_PKG_POWER_INFO;
-@@ -4361,6 +4382,7 @@ int has_snb_msrs(unsigned int family, unsigned int model)
- 	case INTEL_FAM6_ATOM_GOLDMONT_PLUS:
- 	case INTEL_FAM6_ATOM_GOLDMONT_D:	/* DNV */
- 	case INTEL_FAM6_ATOM_TREMONT:		/* EHL */
-+	case INTEL_FAM6_ATOM_TREMONT_D:		/* JVL */
- 		return 1;
- 	}
- 	return 0;
-@@ -4687,9 +4709,6 @@ unsigned int intel_model_duplicates(unsigned int model)
- 	case INTEL_FAM6_TIGERLAKE:
- 		return INTEL_FAM6_CANNONLAKE_L;
- 
--	case INTEL_FAM6_ATOM_TREMONT_D:
--		return INTEL_FAM6_ATOM_GOLDMONT_D;
--
- 	case INTEL_FAM6_ATOM_TREMONT_L:
- 		return INTEL_FAM6_ATOM_TREMONT;
- 
-@@ -4916,6 +4935,14 @@ void process_cpuid()
- 		BIC_PRESENT(BIC_Mod_c6);
- 		use_c1_residency_msr = 1;
- 	}
-+	if (is_jvl(family, model)) {
-+		BIC_NOT_PRESENT(BIC_CPU_c3);
-+		BIC_NOT_PRESENT(BIC_CPU_c7);
-+		BIC_NOT_PRESENT(BIC_Pkgpc2);
-+		BIC_NOT_PRESENT(BIC_Pkgpc3);
-+		BIC_NOT_PRESENT(BIC_Pkgpc6);
-+		BIC_NOT_PRESENT(BIC_Pkgpc7);
-+	}
- 	if (is_dnv(family, model)) {
- 		BIC_PRESENT(BIC_CPU_c1);
- 		BIC_NOT_PRESENT(BIC_CPU_c3);
++title: TI BQ25790 Switch Mode Buck-Boost Charger
++
++maintainers:
++  - Dan Murphy <dmurphy@ti.com>
++
++description: |
++  BQ25790 is a highly integrated switch-mode buck-boost charger for 1-4 cell
++  Li-ion batteries and Li-polymer batteries. The device charges a battery from a
++  wide range of input sources including legacy USB adapters to high voltage USB
++  PD adapters and traditional barrel adapters.
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25790
++      - ti,bq25792
++
++  reg:
++    maxItems: 1
++
++  ti,watchdog-timeout-ms:
++    default: 0
++    description: |
++      Watchdog timer in milli seconds. 0 (default) disables the watchdog.
++    minimum: 0
++    maximum: 160000
++    enum: [ 0, 500, 1000, 2000, 20000, 40000, 80000, 160000]
++
++  input-voltage-limit-microvolt:
++    description: |
++      Minimum input voltage limit in micro volts with a 100000 micro volt step.
++    minimum: 3600000
++    maximum: 22000000
++
++  input-current-limit-microamp:
++    description: |
++      Maximum input current limit in micro amps with a 100000 micro amp step.
++    minimum: 100000
++    maximum: 3300000
++
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to the battery node being monitored
++
++  interrupts:
++    maxItems: 1
++    description: |
++      Interrupt sends an active low, 256 μs pulse to host to report the charger
++      device status and faults.
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    bat: battery {
++      compatible = "simple-battery";
++      constant-charge-current-max-microamp = <2000000>;
++      constant-charge-voltage-max-microvolt = <4200000>;
++      precharge-current-microamp = <160000>;
++      charge-term-current-microamp = <160000>;
++    };
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      bq25790: charger@6b {
++          compatible = "ti,bq25790";
++          reg = <0x6b>;
++          interrupt-parent = <&gpio1>;
++          interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++          ti,watchdog-timeout-ms = <2000>;
++          input-current-limit-microamp = <3000000>;
++          input-voltage-limit-microvolt = <4500000>;
++          monitored-battery = <&bat>;
++      };
++    };
++
++...
 -- 
-2.26.2
+2.28.0
 
