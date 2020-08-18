@@ -2,81 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEBE247E3E
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Aug 2020 08:07:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A0D247E71
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Aug 2020 08:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgHRGHL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Aug 2020 02:07:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44472 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726476AbgHRGHK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 Aug 2020 02:07:10 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0E59E20709;
-        Tue, 18 Aug 2020 06:07:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597730830;
-        bh=6n7HKQ8FG9mYV1YWzHcAkCOw1Hb+vs4gc4MNYclnHAI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lh2kBDkZjRtgPYNuX+Ey0wdXvDKxr8aaLHJqYr2eOHgBvU3qvQvys3YQq3YUkAECD
-         PNdlqtHYONuEasE8+luhaRYqqmuJwvKKzca1oNMfgi66KmSLOPMmdKzXlSfgcDaupz
-         twoXNXrG/OdFb8k+qPpKU7z4Htcc0uk6tWS5/3F8=
-Date:   Tue, 18 Aug 2020 08:07:07 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Qiwu Huang <yanziily@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jiangfei1@xiaomi.com,
-        Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: Re: [PATCH v8 1/4] power: supply: core: add quick charge type
- property
-Message-ID: <20200818060707.GB1742213@kroah.com>
-References: <cover.1597376585.git.huangqiwu@xiaomi.com>
- <ced256ea8ac2f3e54c33677facc4c2ef04dee643.1597376585.git.huangqiwu@xiaomi.com>
- <20200814060909.GD1409566@kroah.com>
- <CAPtXDt1e3fi7ymW0-FSknUAYCQ80aL=4btbeA2e4Xre7+e7OtA@mail.gmail.com>
+        id S1726545AbgHRGaR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Aug 2020 02:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726519AbgHRGaP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Aug 2020 02:30:15 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E7CC061389;
+        Mon, 17 Aug 2020 23:30:15 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id m71so9474758pfd.1;
+        Mon, 17 Aug 2020 23:30:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4QHL6A8uyFKbDV2P19zFKn9zEQqqmFB/XApBSU9BFw=;
+        b=W5b/Tfm0+LD9Z7cvao+vMTNs9ijNvX7eXiw9ZsZ/7TGir/QSEaMH65fRi3PbZY7TUo
+         RYENSmFLiLWoLgg06zUoCHo3PhEYejSAhdyujGtoWZrYXfHmNjrycZ4kk/mu2KaSspaU
+         dNmEUQnnB83A3TdVIVXJMjCt0pajG+gbk67LVdM7qufEB6RXDBM4b+gtAGUXlhEY01x/
+         YR/2UMmLU5obRUsA+3hfRcgcbuCN8ChlBl1fNxsmFRnUjNyp98hqzB8btOhclU+gqjeX
+         kR5BllY6FvJckr5H19WeKKpZxaRN8EBdFf1wPdHEsN28QKT9wgI6UHnBsbynSNtdMauO
+         4v1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=q4QHL6A8uyFKbDV2P19zFKn9zEQqqmFB/XApBSU9BFw=;
+        b=ejwOfQxJ59yYQ3SYqz+wRYnfmv6iIe8GyxQhO5iTvZ1eS/rXc1WWs58F6OaJT+kpW0
+         VIPxkEEIvVZERaIP6VIx3913SzFmUrNCMbReOKZIGH16yu2htG18j8LmLxOk+KvtEOad
+         Ke/LDYcpfIsSlXC0+mQibBCmW2pUh0VTIRi5RlTq4umOLxNULpqh+xDtil4oUJExnP3z
+         C3ObBjAKhIRg4PN88S1UqHoeMwap37qllOZchseLzer1xTgI1JuJNFm5Wz2pkXTE7g0g
+         MTC+muTQLSKtPvkTujKTY1C8+dQV8k7sOAFXH328EQzl3a61Xis2j94t+2R2gJTlmrZN
+         wccA==
+X-Gm-Message-State: AOAM531XyGrB0eSq3Zj5n2qS8TzJbYDJpihf7R5p3Ambwrt/s6lpa3gq
+        Yz7+rOGcqK4jYKaDJWdeVkM=
+X-Google-Smtp-Source: ABdhPJwbqB7FRtldYEWCEwLz0lnKf/pdK1wAl2llvb5R0ejJ/742o9gwl5IRmSTx+MNxi8KBz8Hirg==
+X-Received: by 2002:aa7:9a1c:: with SMTP id w28mr10809351pfj.116.1597732214919;
+        Mon, 17 Aug 2020 23:30:14 -0700 (PDT)
+Received: from huyue2.ccdomain.com ([124.156.176.71])
+        by smtp.gmail.com with ESMTPSA id f6sm21532959pje.16.2020.08.17.23.30.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Aug 2020 23:30:14 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        amit.kucheria@verdurent.com, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+Subject: [PATCH] thermal: sysfs: fall back to vzalloc for cooling device's statistics
+Date:   Tue, 18 Aug 2020 14:30:04 +0800
+Message-Id: <20200818063005.13828-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.19.1.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPtXDt1e3fi7ymW0-FSknUAYCQ80aL=4btbeA2e4Xre7+e7OtA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 09:56:28AM +0800, Qiwu Huang wrote:
-> On Fri, Aug 14, 2020 at 2:09 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Aug 14, 2020 at 11:46:54AM +0800, Qiwu Huang wrote:
-> > > From: Qiwu Huang <huangqiwu@xiaomi.com>
-> > >
-> > > Reports the kind of quick charge type based on
-> > > different adapter power.
-> > >
-> > > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-power | 21 +++++++++
-> > >  drivers/power/supply/power_supply_sysfs.c   |  1 +
-> > >  drivers/power/supply/qcom_smbb.c            | 51 +++++++++++++++++++++
-> > >  include/linux/power_supply.h                | 14 ++++++
-> > >  4 files changed, 87 insertions(+)
-> >
-> > You should also submit your driver that uses these new attributes at the
-> > same time.  What happened to that request?  Otherwise no one really
-> > knows how these are being used, or if they even are used by anyone.
-> >
-> 
-> I don't think I can submit the whole driver because our drivers are
-> divided into three parts, the first part is in ADSP, the second part
-> is in kernel and the third part is in Android Hal.This is the second
-> part.
+From: Yue Hu <huyue2@yulong.com>
 
-WHat is "ADSP"?
+We observed warning about kzalloc() when register thermal cooling device
+in backlight_device_register(). backlight display can be a cooling device
+since reducing screen brightness will can help reduce temperature.
 
-Just submit your kernel driver code, that's all we care about here.
-Userspace code is not anything we can do anything with :)
+However, ->get_max_state of backlight will assign max brightness of 1024
+to states. The memory size can be getting 1MB+ due to states * states.
+That is so large to trigger kmalloc() warning.
 
-thanks,
+So, let's remove it and try vzalloc() if kzalloc() fails.
 
-greg k-h
+Signed-off-by: Yue Hu <huyue2@yulong.com>
+---
+ drivers/thermal/thermal_sysfs.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index aa99edb..9bae0b6 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -16,6 +16,8 @@
+ #include <linux/device.h>
+ #include <linux/err.h>
+ #include <linux/slab.h>
++#include <linux/vmalloc.h>
++#include <linux/mm.h>
+ #include <linux/string.h>
+ #include <linux/jiffies.h>
+ 
+@@ -919,7 +921,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ 	var += sizeof(*stats->time_in_state) * states;
+ 	var += sizeof(*stats->trans_table) * states * states;
+ 
+-	stats = kzalloc(var, GFP_KERNEL);
++	stats = kzalloc(var, GFP_KERNEL | __GFP_NOWARN);
++	if (!stats)
++		stats = vzalloc(var);
+ 	if (!stats)
+ 		return;
+ 
+@@ -938,7 +942,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ 
+ static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+ {
+-	kfree(cdev->stats);
++	kvfree(cdev->stats);
+ 	cdev->stats = NULL;
+ }
+ 
+-- 
+1.9.1
+
