@@ -2,174 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7AE248C52
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Aug 2020 19:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA808248E46
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Aug 2020 20:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727098AbgHRRAe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Aug 2020 13:00:34 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:32996 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728481AbgHRQ4T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Aug 2020 12:56:19 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07IGuFU8108023;
-        Tue, 18 Aug 2020 11:56:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1597769775;
-        bh=GsIk/233sXDbKwSAqxENWcQiMVlD1bZlmMIXu/P3m3s=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=ZykcEFHRfrpX++PtZ3aG6D2q0R1u7Xw4LTbvwwQVJFoeh5VnQ80kXP+TxqXH7IN/c
-         2lWDQ4fvx8ldYI+z9PYHnX2kBF8TFBtQ8l9lpI/Ndj+89/BLuZMOVrPdi88rbOh0fi
-         wQwX/IIgvHgrHAKENX1fShgZkK/tP69oWxhMKqX0=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07IGuF40024785;
-        Tue, 18 Aug 2020 11:56:15 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 18
- Aug 2020 11:56:10 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 18 Aug 2020 11:56:10 -0500
-Received: from [10.250.38.37] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07IGuA2I028209;
-        Tue, 18 Aug 2020 11:56:10 -0500
-Subject: Re: [PATCH v1 1/2] dt-bindings: power: Add the bq256xx dt bindings
-To:     Rob Herring <robh@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-CC:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200817191723.22416-1-r-rivera-matos@ti.com>
- <20200817191723.22416-2-r-rivera-matos@ti.com>
- <20200818164305.GB3586878@bogus>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <3928a95f-1f60-5f0f-2cfa-ab9b40038003@ti.com>
-Date:   Tue, 18 Aug 2020 11:56:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200818164305.GB3586878@bogus>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1726772AbgHRSzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Aug 2020 14:55:08 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:53045 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726739AbgHRSyo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Aug 2020 14:54:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1597776883; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=vfiuCTct4hAHdpafOBx0+18YNtmCRa6E9a+yCwaEzcU=; b=Azbz45FQcXObhI8ECC9G9Mb6STvULOPGTyBayytk//S1UGt2QFgibOyRZLCoqL4cLEUGnu9+
+ 0HFCcisRAazG2rS4ySWd/IcgcCE9l2TQMvF9FtlTLryuluoqI0JTfZwDYCfnLwF0euMSsXN/
+ deS9WT4tdESikOLGlJBoY287PcA=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 5f3c23e0f2b697637a94b24d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 18 Aug 2020 18:54:24
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D8DA6C43395; Tue, 18 Aug 2020 18:54:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from eberman-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: eberman)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F28BCC433CA;
+        Tue, 18 Aug 2020 18:54:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F28BCC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=eberman@codeaurora.org
+From:   Elliot Berman <eberman@codeaurora.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Elliot Berman <eberman@codeaurora.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Trilok Soni <tsoni@codeaurora.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+Subject: [RESEND PATCH v1 0/4] Support spaces in reboot mode framework
+Date:   Tue, 18 Aug 2020 11:54:12 -0700
+Message-Id: <1597776856-12014-1-git-send-email-eberman@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Rob
+Resending with updated recepients and cover subject.
 
-On 8/18/20 11:43 AM, Rob Herring wrote:
-> On Mon, Aug 17, 2020 at 02:17:22PM -0500, Ricardo Rivera-Matos wrote:
->> Add the bindings for the bq256xx series of battery charging ICs.
->>
->> Datasheets:
->> - https://www.ti.com/lit/ds/symlink/bq25600.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25601.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25600d.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25601d.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25611d.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25618.pdf
->> - https://www.ti.com/lit/ds/symlink/bq25619.pdf
->>
->> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
->> ---
->>   .../bindings/power/supply/bq256xx.yaml        | 99 +++++++++++++++++++
->>   1 file changed, 99 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/power/supply/bq256xx.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
->> new file mode 100644
->> index 000000000000..67db4ba9fdb6
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
->> @@ -0,0 +1,99 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
->> +# Copyright (C) 2020 Texas Instruments Incorporated
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/power/supply/bq256xx.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: TI bq256xx Switch Mode Buck Charger
->> +
->> +maintainers:
->> +  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
->> +
->> +description: |
->> +  The bq256xx devices are a family of highly-integrated battery charge
->> +  management and system power management ICs for single cell Li-ion and Li-
->> +  polymer batteries.
->> +
->> +  Datasheets:
->> +    - https://www.ti.com/lit/ds/symlink/bq25600.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25601.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25600d.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25601d.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25611d.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25618.pdf
->> +    - https://www.ti.com/lit/ds/symlink/bq25619.pdf
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,bq25600
->> +      - ti,bq25601
->> +      - ti,bq25600d
->> +      - ti,bq25601d
->> +      - ti,bq25611d
->> +      - ti,bq25618
->> +      - ti,bq25619
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  ti,watchdog-timer:
-> Poorly named since we have 'ti,watchdog-timers' already and is
-> completely different.
+PM8150 uses reboot-mode framework to set magic values for bootloader to read
+during next boot. dm-verity wants to use "dm-verity device corrupted" [1] as
+the restart command, however the reboot-mode framework does not support spaces
+in the command line as devicetree property names cannot have spaces. In order
+to support the PM8150 comamnds, this patch series adds two new optional array
+properties to reboot-mode framework: reboot-mode-names and reboot-mode-magic.
+The arrays supply the commands and magic values, respectively.
 
-I think you made a comment on my DT to make this ti,watchdog-timeout-ms 
-and then we can remove the type.
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-verity-target.c?h=v5.5#n255
 
+Elliot Berman (4):
+  dt-bindings: power: reset: Convert reboot-mode to YAML
+  dt-bindings: power: reset: Add alternate reboot mode format
+  power: reset: Add support for reboot mode alternate properties
+  arm64: dts: qcom: pm8150: Add reboot magic
 
->
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description: |
->> +      Watchdog timer in milli seconds. 0 (default) disables the watchdog
-> If you have units, then you should use standard unit suffix.
->
->> +    minimum: 0
->> +    maximum: 160000
->> +    enum: [ 0, 40000, 80000, 160000]
->> +
->> +  input-voltage-limit-microvolt:
->> +    description: |
->> +       Minimum input voltage limit in micro volts with a 100000 micro volt step
->> +    minimum: 3900000
->> +    maximum: 5400000
->> +
->> +  input-current-limit-microamp:
->> +    description: |
->> +       Maximum input current limit in micro amps with a 100000 micro amp step
->> +    minimum: 100000
->> +    maximum: 3200000
-> Aren't these properties of the battery, not the charger?
->
->> +
->> +required:
->> +  - compatible
->> +  - reg
-> monitored-battery not required?
->
-> Add:
->
-> additionalProperties: false
+ .../bindings/power/reset/reboot-mode.txt           | 25 ---------
+ .../bindings/power/reset/reboot-mode.yaml          | 64 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8150.dtsi               |  5 ++
+ drivers/power/reset/reboot-mode.c                  | 42 +++++++++++++-
+ 4 files changed, 110 insertions(+), 26 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/reboot-mode.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
 
-What about using
-
-unevaluatedProperties: false
-
-Dan
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
