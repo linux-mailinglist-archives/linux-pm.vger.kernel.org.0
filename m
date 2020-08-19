@@ -2,62 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 492C9249356
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 05:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F420724943A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 06:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727945AbgHSDOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Aug 2020 23:14:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47766 "EHLO mail.kernel.org"
+        id S1725816AbgHSE6u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 00:58:50 -0400
+Received: from muru.com ([72.249.23.125]:40838 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727077AbgHSDON (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 18 Aug 2020 23:14:13 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6AE392065F;
-        Wed, 19 Aug 2020 03:14:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597806853;
-        bh=hLuwTC7klaEgIk64JrkEA7uqeW5wvcuVuslfVY4Brv8=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Z8MP8FCwKQucUhc1d23z5aT8pfgxeSEVQ4qA4Z4OKn5culdPfiUhljFQPZa9wn1ap
-         Oeeb3+G7yA9VhJP7iu+UV4wPAbfpriAh3KIqZHqcVUIjJvyYhSvuqcTVUNH7kxsbWd
-         UiKCDUEaT4WF0hae7Wa4ngIxAqstH1tE8TkqgvKE=
-Content-Type: text/plain; charset="utf-8"
+        id S1725280AbgHSE6u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Aug 2020 00:58:50 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 2718F810D;
+        Wed, 19 Aug 2020 04:58:46 +0000 (UTC)
+Date:   Wed, 19 Aug 2020 07:59:14 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-omap@vger.kernel.org, aford@beaconembedded.com,
+        Russell King <linux@armlinux.org.uk>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/2] thermal: ti-soc-thermal: Enable addition power
+ management
+Message-ID: <20200819045914.GS2994@atomide.com>
+References: <20200818154633.5421-1-aford173@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200807133143.22748-1-m.szyprowski@samsung.com>
-References: <CGME20200807133152eucas1p1d83611a984f5c5d875192d08e2f5711f@eucas1p1.samsung.com> <20200807133143.22748-1-m.szyprowski@samsung.com>
-Subject: Re: [PATCH v2] clk: samsung: Keep top BPLL mux on Exynos542x enabled
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <snawrocki@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Date:   Tue, 18 Aug 2020 20:14:12 -0700
-Message-ID: <159780685238.334488.5802955284004610550@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200818154633.5421-1-aford173@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Marek Szyprowski (2020-08-07 06:31:43)
-> BPLL clock must not be disabled because it is needed for proper DRAM
-> operation. This is normally handled by respective memory devfreq driver,
-> but when that driver is not yet probed or its probe has been deferred the
-> clock might got disabled what causes board hang. Fix this by calling
-> clk_prepare_enable() directly from the clock provider driver.
->=20
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
+* Adam Ford <aford173@gmail.com> [200818 15:46]:
+> @@ -1153,6 +1166,38 @@ static int ti_bandgap_suspend(struct device *dev)
+>  	return err;
+>  }
+>  
+> +static int bandgap_omap_cpu_notifier(struct notifier_block *nb,
+> +				  unsigned long cmd, void *v)
+> +{
+> +	struct ti_bandgap *bgp;
+> +
+> +	bgp = container_of(nb, struct ti_bandgap, nb);
+> +
+> +	spin_lock(&bgp->lock);
+> +	switch (cmd) {
+> +	case CPU_CLUSTER_PM_ENTER:
+> +		if (bgp->is_suspended)
+> +			break;
+> +		ti_bandgap_save_ctxt(bgp);
+> +		ti_bandgap_power(bgp, false);
+> +		if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
+> +			clk_disable(bgp->fclock);
+> +		break;
+> +	case CPU_CLUSTER_PM_ENTER_FAILED:
+> +	case CPU_CLUSTER_PM_EXIT:
+> +		if (bgp->is_suspended)
+> +			break;
+> +		if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
+> +			clk_enable(bgp->fclock);
+> +		ti_bandgap_power(bgp, true);
+> +		ti_bandgap_restore_ctxt(bgp);
+> +		break;
+> +	}
+> +	spin_unlock(&bgp->lock);
+> +
+> +	return NOTIFY_OK;
+> +}
 
-Can I pick this up for clk-fixes?
+Hmm to me it looks like is_suspended is not used right now?
+I guess you want to set it in ti_bandgap_suspend() and clear
+it in ti_bandgap_resume()?
+
+Otherwise looks good to me, I can't test the power consumption
+right now though so you may want to check it to make sure
+device still hits off mode during idle.
+
+Regards,
+
+Tony
