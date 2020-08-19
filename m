@@ -2,110 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9869249B82
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 13:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CF4249DB3
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 14:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727970AbgHSLRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Aug 2020 07:17:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728007AbgHSLRg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:17:36 -0400
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C509120882
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 11:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597835832;
-        bh=S4JeXgaIYqH870icTp/ZF+VXZdF6R8JasYiuW19iz/Y=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qqbxZGtYZgxgtLMF2wfe3l7F3tyKjqeYOD1nS4d+9S/xGf/FYUZCi600jppnY9Xb5
-         MOjB7nF64kGjPnpUXHS1kZtdzQCzw//AoAr8n4rd7c2YSnuv/y7S+1UFz8STxzjvla
-         VSd4lnXmqszm4PBjoEg0FMyEG3Me3HMRWUfnr8ic=
-Received: by mail-ua1-f42.google.com with SMTP id s29so6767891uae.1
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 04:17:12 -0700 (PDT)
-X-Gm-Message-State: AOAM532IeNDAuB3Plw8JQgOAMo9SwUTJU2oZ1E/oT6FmyIOLthzekU/7
-        6zT0HkpVie6lNwB0iS1euYKQoynkDTYST9aKKNTvOA==
-X-Google-Smtp-Source: ABdhPJz8VEY5TV0a9IZK1zYmrdjhB3ILc5ouUTn29PK0y6mVGHfn0sueCIWIdxukuNZdEWXc9pIB+X/WCqZJ1cIhL2E=
-X-Received: by 2002:a9f:226b:: with SMTP id 98mr13208054uad.94.1597835831911;
- Wed, 19 Aug 2020 04:17:11 -0700 (PDT)
+        id S1727926AbgHSMVW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 08:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727046AbgHSMVV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Aug 2020 08:21:21 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FF7C061757;
+        Wed, 19 Aug 2020 05:21:21 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id v6so24355058iow.11;
+        Wed, 19 Aug 2020 05:21:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HDXvGIgO4qr56J5pc+T+Ke6IzH5SYLMXSn24/sPplxw=;
+        b=pZLYSCTL7Cu78WmtherjVYFOkJMi+wdtF9ZcyUieW0OPhIjZcPNeB/VVYR+RFQ4DD2
+         0jFOWYb6dfTxXH5DDzxukA9J3ocPNKzuymsVG3cUBJH/2STXL6DK9hfBBszPl/Tw5J2C
+         yz/QuHxtWzmBFkpQvnmZHvRANLz+ODAOe9zREz39LNjHl9wIAjM7K2vhB4dEm8sLvAb1
+         Iyc/FA2df5B8l1zp9X5cSmzY6djuP2gTr8d57itnmEbGkJt+rOt0WtVLwbN48GnUewS2
+         chR5727ntKoKEzRyqPiEf8LR1cwOkSzC2huFN/y2KejdeLXo/gvvrSKF8Ijetav7Ia2e
+         6+LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HDXvGIgO4qr56J5pc+T+Ke6IzH5SYLMXSn24/sPplxw=;
+        b=sfMi9n5sgELrxBC3iOJwHwlqFPC4+5nCt/tqbsP9SinxjpYB/ryvxudG1iONq0eeX8
+         cpUdR6v5IB4TusujWvsL4ZxGBg8ghalaS/U3Oku66reE40/OWGR9QxcEmBgwiiC8CPuz
+         qsqdjIWKO81/OZtbNoiK+ttXbF+dQ+43WUy1NbdlSqlHw1yH2ETxosClOXV9HvBh/Dg4
+         iq+jU2kzby0XgslvjSE8hFydYsxIJGKL5KsW46yif1IqW9y33ZDl4cbq9q7ENHTPKHqN
+         l26VcBLrYil7mUQMer3CIBlfLhy+Cd69c+Am0mtqO+njOwg01MiC6ruutZeexqQZC8r3
+         ZeBg==
+X-Gm-Message-State: AOAM53134IXqTWxC3zSo3dKEwPBqj7wVVUiQSgo5MFU1BPH8OwB2jXON
+        eDsNKqpDsn54bdFRH41oTcAvoLhsgO5yYsNGtKU=
+X-Google-Smtp-Source: ABdhPJxnurhXiQvzQfUbCrg4tnJkVP5y3QBbi20nLK+kb1MEy6AkyYCqs56cIeXNtREnXzd0q/nennp+xvMEYGSFBFA=
+X-Received: by 2002:a6b:e002:: with SMTP id z2mr19868369iog.178.1597839678885;
+ Wed, 19 Aug 2020 05:21:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200818063005.13828-1-zbestahu@gmail.com>
-In-Reply-To: <20200818063005.13828-1-zbestahu@gmail.com>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Wed, 19 Aug 2020 16:47:01 +0530
-X-Gmail-Original-Message-ID: <CAHLCerPpsFoy=MZSQiHyCCoHLU2X=pT=NR6b0pkX93C+cd5uCg@mail.gmail.com>
-Message-ID: <CAHLCerPpsFoy=MZSQiHyCCoHLU2X=pT=NR6b0pkX93C+cd5uCg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling device's statistics
-To:     Yue Hu <zbestahu@gmail.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
+References: <20200818154633.5421-1-aford173@gmail.com> <20200819045914.GS2994@atomide.com>
+In-Reply-To: <20200819045914.GS2994@atomide.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 19 Aug 2020 07:21:07 -0500
+Message-ID: <CAHCN7xKBzRfByvdYBPS=uWF2QvECAOf5zGZE0-pxjJ6A2-d95g@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: ti-soc-thermal: Enable addition power management
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Linux-OMAP <linux-omap@vger.kernel.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, huyue2@yulong.com,
-        zbestahu@163.com
+        Amit Kucheria <amitk@kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 12:00 PM Yue Hu <zbestahu@gmail.com> wrote:
+On Tue, Aug 18, 2020 at 11:58 PM Tony Lindgren <tony@atomide.com> wrote:
 >
-> From: Yue Hu <huyue2@yulong.com>
+> * Adam Ford <aford173@gmail.com> [200818 15:46]:
+> > @@ -1153,6 +1166,38 @@ static int ti_bandgap_suspend(struct device *dev)
+> >       return err;
+> >  }
+> >
+> > +static int bandgap_omap_cpu_notifier(struct notifier_block *nb,
+> > +                               unsigned long cmd, void *v)
+> > +{
+> > +     struct ti_bandgap *bgp;
+> > +
+> > +     bgp = container_of(nb, struct ti_bandgap, nb);
+> > +
+> > +     spin_lock(&bgp->lock);
+> > +     switch (cmd) {
+> > +     case CPU_CLUSTER_PM_ENTER:
+> > +             if (bgp->is_suspended)
+> > +                     break;
+> > +             ti_bandgap_save_ctxt(bgp);
+> > +             ti_bandgap_power(bgp, false);
+> > +             if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
+> > +                     clk_disable(bgp->fclock);
+> > +             break;
+> > +     case CPU_CLUSTER_PM_ENTER_FAILED:
+> > +     case CPU_CLUSTER_PM_EXIT:
+> > +             if (bgp->is_suspended)
+> > +                     break;
+> > +             if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
+> > +                     clk_enable(bgp->fclock);
+> > +             ti_bandgap_power(bgp, true);
+> > +             ti_bandgap_restore_ctxt(bgp);
+> > +             break;
+> > +     }
+> > +     spin_unlock(&bgp->lock);
+> > +
+> > +     return NOTIFY_OK;
+> > +}
 >
-> We observed warning about kzalloc() when register thermal cooling device
-> in backlight_device_register(). backlight display can be a cooling device
-> since reducing screen brightness will can help reduce temperature.
+> Hmm to me it looks like is_suspended is not used right now?
+> I guess you want to set it in ti_bandgap_suspend() and clear
+> it in ti_bandgap_resume()?
 >
-> However, ->get_max_state of backlight will assign max brightness of 1024
-> to states. The memory size can be getting 1MB+ due to states * states.
-> That is so large to trigger kmalloc() warning.
->
-> So, let's remove it and try vzalloc() if kzalloc() fails.
->
-> Signed-off-by: Yue Hu <huyue2@yulong.com>
-> ---
->  drivers/thermal/thermal_sysfs.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index aa99edb..9bae0b6 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -16,6 +16,8 @@
->  #include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/slab.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/mm.h>
->  #include <linux/string.h>
->  #include <linux/jiffies.h>
->
-> @@ -919,7 +921,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
->         var += sizeof(*stats->time_in_state) * states;
->         var += sizeof(*stats->trans_table) * states * states;
->
-> -       stats = kzalloc(var, GFP_KERNEL);
-> +       stats = kzalloc(var, GFP_KERNEL | __GFP_NOWARN);
-> +       if (!stats)
-> +               stats = vzalloc(var);
+> Otherwise looks good to me, I can't test the power consumption
+> right now though so you may want to check it to make sure
+> device still hits off mode during idle.
 
-Couldn't this be replaced by kvzalloc()?
+I have a V2.  Do you want me to re-post 2/2 with V2 as no change, or
+should I just submit this patch alone?
 
->         if (!stats)
->                 return;
+adam
 >
-> @@ -938,7 +942,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+> Regards,
 >
->  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
->  {
-> -       kfree(cdev->stats);
-> +       kvfree(cdev->stats);
->         cdev->stats = NULL;
->  }
->
-> --
-> 1.9.1
->
+> Tony
