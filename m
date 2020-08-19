@@ -2,87 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F420724943A
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 06:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2945824982A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 10:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725816AbgHSE6u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Aug 2020 00:58:50 -0400
-Received: from muru.com ([72.249.23.125]:40838 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbgHSE6u (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Aug 2020 00:58:50 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 2718F810D;
-        Wed, 19 Aug 2020 04:58:46 +0000 (UTC)
-Date:   Wed, 19 Aug 2020 07:59:14 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-omap@vger.kernel.org, aford@beaconembedded.com,
-        Russell King <linux@armlinux.org.uk>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: ti-soc-thermal: Enable addition power
- management
-Message-ID: <20200819045914.GS2994@atomide.com>
-References: <20200818154633.5421-1-aford173@gmail.com>
+        id S1726414AbgHSIVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 04:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725275AbgHSIVb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Aug 2020 04:21:31 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EA1C061389
+        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 01:21:31 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id g11so6660836ual.2
+        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 01:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c45aDnJ/Q5ZsW77ryPPt/NNsusAK15OUQsO7V3bIfoI=;
+        b=JqCyxqYDvZz/5gqpx7va1k++GIciGQkUctbPAlRuIej6NPLIq8cDdz95xCYeSe3dZD
+         yItQnuel200CpG7H5Ku6Z/QCMdYLsgEJ00s4ssWCEdx4gG7atOmlimnUips/nSHmT1f1
+         Oht7VHLWTsB+jA0PM/k49Orm2ecclxg8uBcDzwlD0CmOEr11ICVFC0wmm1eN3nS/GdJy
+         qT9zKyx6K8UE94ke+cTLsEVjG3VeAkYZGCptSnUShxBBarb4RAWaWABFj+9WyhA0iu90
+         P8bgZ3OlWBz+sM4RCGHV0vTZ4ZHiMeZB/okPAcvh3SuAx3TFubAHNUO65AtmAyJ6RFKF
+         pagg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c45aDnJ/Q5ZsW77ryPPt/NNsusAK15OUQsO7V3bIfoI=;
+        b=IeZfzDCKrwzEJVnQNl8LLjLyQfmVabV01HrtBfIgWZqIxzfbDE8HbI+9U8o1J0aDwU
+         THuuhLLqqtsNX4J0nnChr6iJM6B/mPcifWDE+OWEl6oGydOA3qodRUkGX2IWwFU0YGRo
+         Cj5DYm4yaSxxfIXHW354Vs4QTOiCjRyWoFGlTcBmkjUQsyiWqz0ip039QW4flHBe6AXe
+         yi5KD5GF8vYx4HlcElOaeMuLFMtjxRiKofXeOQbnaNwHfRfAGQc2XQv5jIyR4M1MxtDr
+         PvZ4QI7lOigpPaQRfj5pVo8Bu507ndYF2daz9nj5dgRtA/+ulN+nu9izumg43AbwHJmk
+         X4Uw==
+X-Gm-Message-State: AOAM5307TVQ20Snd+CEgbaR8vuowtLelwIB/lqFBKmDKBlbgubveY8PJ
+        /pRtv3o00XUKensCu948U4WsWdBnuTu+eXDJxUJKRA==
+X-Google-Smtp-Source: ABdhPJyQexNZWPolJk/glsJDH74cOwILhrdGO3edUtll5pHLX+XY4zn96ehrGy7GgqT4ojTgQpToKxBOqt/LhwIed4o=
+X-Received: by 2002:ab0:3114:: with SMTP id e20mr13355919ual.104.1597825288139;
+ Wed, 19 Aug 2020 01:21:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200818154633.5421-1-aford173@gmail.com>
+References: <20200814123436.61851-1-ulf.hansson@linaro.org> <20200818123507.GD6873@bogus>
+In-Reply-To: <20200818123507.GD6873@bogus>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 19 Aug 2020 10:20:52 +0200
+Message-ID: <CAPDyKFqi4uOBQkTZMvSnDTCsKdNoToCO4s7h1CnR-mkJ2vBNSw@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: psci: Allow PM domain to be initialized even if
+ no OSI mode
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Adam Ford <aford173@gmail.com> [200818 15:46]:
-> @@ -1153,6 +1166,38 @@ static int ti_bandgap_suspend(struct device *dev)
->  	return err;
->  }
->  
-> +static int bandgap_omap_cpu_notifier(struct notifier_block *nb,
-> +				  unsigned long cmd, void *v)
-> +{
-> +	struct ti_bandgap *bgp;
-> +
-> +	bgp = container_of(nb, struct ti_bandgap, nb);
-> +
-> +	spin_lock(&bgp->lock);
-> +	switch (cmd) {
-> +	case CPU_CLUSTER_PM_ENTER:
-> +		if (bgp->is_suspended)
-> +			break;
-> +		ti_bandgap_save_ctxt(bgp);
-> +		ti_bandgap_power(bgp, false);
-> +		if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
-> +			clk_disable(bgp->fclock);
-> +		break;
-> +	case CPU_CLUSTER_PM_ENTER_FAILED:
-> +	case CPU_CLUSTER_PM_EXIT:
-> +		if (bgp->is_suspended)
-> +			break;
-> +		if (TI_BANDGAP_HAS(bgp, CLK_CTRL))
-> +			clk_enable(bgp->fclock);
-> +		ti_bandgap_power(bgp, true);
-> +		ti_bandgap_restore_ctxt(bgp);
-> +		break;
-> +	}
-> +	spin_unlock(&bgp->lock);
-> +
-> +	return NOTIFY_OK;
-> +}
+On Tue, 18 Aug 2020 at 14:35, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Fri, Aug 14, 2020 at 02:34:36PM +0200, Ulf Hansson wrote:
+> > If the PSCI OSI mode isn't supported or fails to be enabled, the PM domain
+> > topology with the genpd providers isn't initialized. This is perfectly fine
+> > from cpuidle-psci point of view.
+> >
+>
+> Indeed.
+>
+> > However, since the PM domain topology in the DTS files is a description of
+> > the HW, no matter of whether the PSCI OSI mode is supported or not, other
+> > consumers besides the CPUs may rely on it.
+> >
+>
+> And why are they even registered as part of cpuidle-psci-domain ?
+> If they have to be, can be decouple it completely from cpuidle then ?
 
-Hmm to me it looks like is_suspended is not used right now?
-I guess you want to set it in ti_bandgap_suspend() and clear
-it in ti_bandgap_resume()?
+These devices can't be decoupled as they are a part of the CPU cluster
+PM domain.
 
-Otherwise looks good to me, I can't test the power consumption
-right now though so you may want to check it to make sure
-device still hits off mode during idle.
+This is for example the case RPMH (rsc) device for Qcom platforms, but
+there are other platforms that need this too.
 
-Regards,
+>
+> > Therefore, let's always allow the initialization of the PM domain topology
+> > to succeed, independently of whether the PSCI OSI mode is supported.
+> > Consequentially we need to track if we succeed to enable the OSI mode, as
+> > to know when a domain idlestate can be selected.
+> >
+>
+> I thought we had discussed this in past, why are we back to the same
+> discussion ? I may need to read those again to get the context.
 
-Tony
+That discussion was according to my understanding about whether we
+should allow CPU devices to be managed by runtime PM and the CPU PM
+domains, if OSI was *not* supported.
+
+We concluded that we didn't want to allow that, which makes sense -
+and I am not changing that in $subject patch.
+
+>
+> > Note that, CPU devices are still not being attached to the PM domain
+> > topology, unless the PSCI OSI mode is supported.
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 49 +++++++++++++--------------
+> >  1 file changed, 24 insertions(+), 25 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index b6e9649ab0da..55653c110e3a 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -28,6 +28,7 @@ struct psci_pd_provider {
+> >
+> >  static LIST_HEAD(psci_pd_providers);
+> >  static bool psci_pd_allow_domain_state;
+> > +static bool psci_osi_mode_enabled;
+> >
+> >  static int psci_pd_power_off(struct generic_pm_domain *pd)
+> >  {
+> > @@ -37,7 +38,7 @@ static int psci_pd_power_off(struct generic_pm_domain *pd)
+> >       if (!state->data)
+> >               return 0;
+> >
+> > -     if (!psci_pd_allow_domain_state)
+> > +     if (!psci_pd_allow_domain_state || !psci_osi_mode_enabled)
+>
+> I really don't like this check. Why do we have to keep checking
+> psci_osi_mode_enabled every single time and that is the reason IIRC
+> I was against this and just don't add the domains.
+
+You have a point about the check, it's not very nice - but from an
+execution point of view, I don't think it's the end of the world.
+
+Note that, when not using OSI, then the ->power_off() callback will
+not be invoked in the cpuidle path.
+
+Anyway, if you like, I can try to rework the code, so that the
+->power_off() callback doesn't get assigned, if we are not using OSI.
+Although, I am not sure the trouble is worth it, as I probably need to
+try to enable OSI before initializing the genpd data structures. Then,
+if failing with genpd initializations, I need to revert back to PC
+mode.
+
+What do you think?
+
+Kind regards
+Uffe
