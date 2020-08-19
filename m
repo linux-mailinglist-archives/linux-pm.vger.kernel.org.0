@@ -2,106 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF7D24A88D
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 23:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE2F24AA2D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 01:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgHSVe0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Aug 2020 17:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbgHSVeY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Aug 2020 17:34:24 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0888C061383
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 14:34:23 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id r25so762977lfe.5
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 14:34:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TmxKWg+zeaBFLrlAPu0JZ2vMhBqmRy61xEUqEuv7Nzk=;
-        b=izgieEu2E3A4FxtPnwU7NeBeZPRVe2sTFPakvv4yKoPR+NOhJ7DklvQO26yxlzwCW8
-         ioABTvm3lKKtwYwRoysSjmXUmYIrPriMI1r7sLcuHY+QFG07exdakC6wbtuWmwNUfayZ
-         F9x0QFgsvBQFKOeS5/QaMkjoLanj6PcHnLTlSOxHJfwU1h/yg6uVDMPc9URSXSpRKNcR
-         wFlc/zEniMpXidbGw8EZ42r9FVLu25eD5SC5lOFaHuNV5pIWPp7HQxCBp2/tSs1jh0a7
-         vI+Kgi5VbSa9BSaf3yLqYETkPykWLyMYpwfDbtoXepDZvcDXFd29EvRelPMnbWdaEorN
-         kY6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=TmxKWg+zeaBFLrlAPu0JZ2vMhBqmRy61xEUqEuv7Nzk=;
-        b=biRlsx0ZfepezGEIgW409rCBnj8KxX+Va0cDk9t7sT26kIQwE22kOC7aq1IeeLRzjP
-         EKi+0DXGSkcVDORCm7maebPlaA1i6XEQ2AHo6qjL3p0vdHowBxtMIbxdfcEnJoXJyPMW
-         yw0SyMiQhs1uheJiPXn+KKL0i629HbuQKq2xBC/wa7OABtCmtzrEaHH0P3R0mDQjNuiW
-         UrdMy9GX7N7vMh2C/l1aRqBo2kaao6RHN4vcuNzPjhRxAkdPK5IMDYNBLgnoHGdFge7v
-         wpoNIYb7wRUsWtYnzuNTihuQ+puKTuURRCqP4EOutRn8YNLXi0j4rUpiTeb3GxpaBb/L
-         faqA==
-X-Gm-Message-State: AOAM533tyzicmkQy2yjIybshiGN1VXSbmrTEi95yKtP/XpmPpMzkeJf7
-        vUKLDVuIurPxdj/5hOGeVqXPWbJ5NX0/RsoAwnA=
-X-Google-Smtp-Source: ABdhPJwjNs7mcNeYloOy13VJD4dvvPKr9IRzWMH+/ZJ4ufrlunBIx1zTjOCABg8La8PXOpfoN5qVCkll0MYBaEs0SUE=
-X-Received: by 2002:a19:4ace:: with SMTP id x197mr59375lfa.70.1597872861759;
- Wed, 19 Aug 2020 14:34:21 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: evanaprso@gmail.com
-Received: by 2002:a19:7d06:0:0:0:0:0 with HTTP; Wed, 19 Aug 2020 14:34:21
- -0700 (PDT)
-From:   Evana Prso <rm2568590@gmail.com>
-Date:   Wed, 19 Aug 2020 23:34:21 +0200
-X-Google-Sender-Auth: LEX3GnKBCFnI4sucn29quVA9VMY
-Message-ID: <CAKq9YDhXvwfeTeqOZ4SgDfSZ=3dyfpcXNYG4aBj5oUue-DGYDA@mail.gmail.com>
-Subject: Please co-operate with me
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1726983AbgHSX5F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 19:57:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726715AbgHSX45 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Aug 2020 19:56:57 -0400
+Received: from localhost (unknown [70.37.104.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 45FC4214F1;
+        Wed, 19 Aug 2020 23:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597881417;
+        bh=Z5hn4H4ZvyhXgv02/fBxCxLA88wbrpC1HZyB5g2nP1s=;
+        h=Date:From:To:To:To:To:Cc:Cc:Subject:In-Reply-To:References:From;
+        b=cssiTjIuJPntuFjgaM485t3pKL5LnIlsyILozqgLn6oP7gvjDxknF/o8esyneHzOu
+         99lcHJKdlvnRwUsXIjdmN9NO7PpI2PkPllcanm+8mLVLud+WiDqSFpAHixUAd1LUM1
+         8rIoe9rgP35ijerb002GjZ0BIGzSLBjWbo3GPGFM=
+Date:   Wed, 19 Aug 2020 23:56:56 +0000
+From:   Sasha Levin <sashal@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org
+Cc:     stable@vger.kernel.org
+Subject: Re: [PATCH V2 1/4] opp: Enable resources again if they were disabled earlier
+In-Reply-To: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
+References: <c6bba235a9a6fd777255bb4f1d16492fdcabc847.1597292833.git.viresh.kumar@linaro.org>
+Message-Id: <20200819235657.45FC4214F1@mail.kernel.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-my Dear friend,
+Hi
 
-My Name is Mrs.Evana Prso, from Norway. I know that this message will
-be a surprise to you. Firstly, I am married to Mr.Patrick Prso.A gold
-merchant who owns a small gold Mine in Syria; He died of
-Cardiovascular Disease in mid-March 2011. During his life time he
-deposited the sum of (=E2=82=AC16.1 Million Euro) sixteen million, one hund=
-red
-thousand Euros in a bank in Ouagadougou the capital city of Burkina
-Faso in West Africa. The deposited money was from the sale of the
-shares, death benefits payment and entitlements of my deceased husband
-by his company. I am sending this message to you praying that it will
-reach you in good health, since I am not in good health condition in
-which I sleep every night without knowing if I may be alive to see the
-next day.
+[This is an automated email]
 
-I am suffering from long time cancer and presently i am partially
-suffering from a stroke illness which has become almost impossible for
-me to move around. I am married to my late husband for over 4 years
-before he died and is unfortunately that we don't have a child, my
-doctor confinded in me that i have less chance to live. Having known
-my health condition, I decided to contact you to claim the fund since
-I don't have any relation I grew up from the orphanage home, I have
-decided to donate what I have to you for the support of helping
-Motherless babies/Less privileged/Widows' because I am dying and
-diagnosed of cancer for about 2 years ago. I have been touched by God
-almighty to donate from what I have inherited from my late husband to
-you for good work of God Almighty. I have asked Almighty God to
-forgive me and believe he has, because He is a Merciful God I will be
-going in for an operation surgery soon.
+This commit has been processed because it contains a "Fixes:" tag
+fixing commit: cd7ea582866f ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes").
 
-This is the reason i need your services to stand as my next of kin or
-an executor to claim the funds for charity purposes. If this money
-remains unclaimed after my death, the bank executives or the
-government will take the money as unclaimed fund and maybe use it for
-selfish and worthless ventures, I need a very honest person who can
-claim this money and use it for Charity works, for orphanages, widows
-and also build schools for less privilege that will be named after my
-late husband and my name; I need your urgent answer to know if you
-will be able to execute this project, and I will give you more
-information on how the fund will be transferred to your bank account.
+The bot has tested the following trees: v5.8.1, v5.7.15, v5.4.58.
+
+v5.8.1: Build OK!
+v5.7.15: Build failed! Errors:
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:849:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:849:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:849:17: error: 'struct opp_table' has no member named 'paths'
+
+v5.4.58: Build failed! Errors:
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: 'struct opp_table' has no member named 'paths'
+    drivers/opp/core.c:847:17: error: ‘struct opp_table’ has no member named ‘paths’
+    drivers/opp/core.c:847:17: error: 'struct opp_table' has no member named 'paths'
 
 
-Thanks,
-Mrs.Evana Prso.
+NOTE: The patch will not be queued to stable trees until it is upstream.
+
+How should we proceed with this patch?
+
+-- 
+Thanks
+Sasha
