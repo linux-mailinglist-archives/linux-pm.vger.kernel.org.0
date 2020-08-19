@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236D9249B58
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 13:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9869249B82
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Aug 2020 13:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727074AbgHSLFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Aug 2020 07:05:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45494 "EHLO mail.kernel.org"
+        id S1727970AbgHSLRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 07:17:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726752AbgHSLFP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Aug 2020 07:05:15 -0400
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
+        id S1728007AbgHSLRg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Aug 2020 07:17:36 -0400
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 718E620772
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 11:05:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C509120882
+        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 11:17:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597835114;
-        bh=qPmqAtB5kIlL9CLvyvLMssKURPyMFOvitfa8TYvP0fA=;
+        s=default; t=1597835832;
+        bh=S4JeXgaIYqH870icTp/ZF+VXZdF6R8JasYiuW19iz/Y=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=0J3VhVx8LMcvrlzwxlwsuXkv8inwZY/nckToHljNV9ideetAqMXYPTD9/cfdQ80bY
-         BSRm3deJCd7YEJx4yhg26v4rApWzuPsuZj3n9YRcssqChXBE8hGrWAr6/thzOGOG41
-         81UlfMfbTbMeD0Unup77kbrNc8vZZ/iyvuoQx6e8=
-Received: by mail-ua1-f49.google.com with SMTP id u15so6761894uau.10
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 04:05:14 -0700 (PDT)
-X-Gm-Message-State: AOAM533vrxjbpJXw5bS2IL0rTzRUnUES08uPCVXYFJP+vM6wc+fulMWm
-        NBQ2D68X/pjYPtIGPmJUliGLCYfvStWYq1r+IbPtQQ==
-X-Google-Smtp-Source: ABdhPJyD0UglYBq8i1MxNJwsh1Hl91rwRFZ202eXtS0Tb7JGoCFVZhhpi1lQID75+bQ14YBE2fGt+CFQO79gZ0/0+S4=
-X-Received: by 2002:ab0:20b6:: with SMTP id y22mr13393349ual.77.1597835113615;
- Wed, 19 Aug 2020 04:05:13 -0700 (PDT)
+        b=qqbxZGtYZgxgtLMF2wfe3l7F3tyKjqeYOD1nS4d+9S/xGf/FYUZCi600jppnY9Xb5
+         MOjB7nF64kGjPnpUXHS1kZtdzQCzw//AoAr8n4rd7c2YSnuv/y7S+1UFz8STxzjvla
+         VSd4lnXmqszm4PBjoEg0FMyEG3Me3HMRWUfnr8ic=
+Received: by mail-ua1-f42.google.com with SMTP id s29so6767891uae.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 04:17:12 -0700 (PDT)
+X-Gm-Message-State: AOAM532IeNDAuB3Plw8JQgOAMo9SwUTJU2oZ1E/oT6FmyIOLthzekU/7
+        6zT0HkpVie6lNwB0iS1euYKQoynkDTYST9aKKNTvOA==
+X-Google-Smtp-Source: ABdhPJz8VEY5TV0a9IZK1zYmrdjhB3ILc5ouUTn29PK0y6mVGHfn0sueCIWIdxukuNZdEWXc9pIB+X/WCqZJ1cIhL2E=
+X-Received: by 2002:a9f:226b:: with SMTP id 98mr13208054uad.94.1597835831911;
+ Wed, 19 Aug 2020 04:17:11 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200818063005.13828-1-zbestahu@gmail.com>
 In-Reply-To: <20200818063005.13828-1-zbestahu@gmail.com>
 From:   Amit Kucheria <amitk@kernel.org>
-Date:   Wed, 19 Aug 2020 16:35:02 +0530
-X-Gmail-Original-Message-ID: <CAHLCerOzFTy2iEbaXefvTHCs79L6=nUJtJOcgcMAzV4pd6qpYg@mail.gmail.com>
-Message-ID: <CAHLCerOzFTy2iEbaXefvTHCs79L6=nUJtJOcgcMAzV4pd6qpYg@mail.gmail.com>
+Date:   Wed, 19 Aug 2020 16:47:01 +0530
+X-Gmail-Original-Message-ID: <CAHLCerPpsFoy=MZSQiHyCCoHLU2X=pT=NR6b0pkX93C+cd5uCg@mail.gmail.com>
+Message-ID: <CAHLCerPpsFoy=MZSQiHyCCoHLU2X=pT=NR6b0pkX93C+cd5uCg@mail.gmail.com>
 Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling device's statistics
 To:     Yue Hu <zbestahu@gmail.com>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
@@ -64,10 +64,6 @@ On Tue, Aug 18, 2020 at 12:00 PM Yue Hu <zbestahu@gmail.com> wrote:
 > That is so large to trigger kmalloc() warning.
 >
 > So, let's remove it and try vzalloc() if kzalloc() fails.
-
-If we can do with vzalloc()'ed memory i.e. we don't need contiguous
-physical memory, why even attempt kzalloc?
-
 >
 > Signed-off-by: Yue Hu <huyue2@yulong.com>
 > ---
@@ -95,6 +91,9 @@ physical memory, why even attempt kzalloc?
 > +       stats = kzalloc(var, GFP_KERNEL | __GFP_NOWARN);
 > +       if (!stats)
 > +               stats = vzalloc(var);
+
+Couldn't this be replaced by kvzalloc()?
+
 >         if (!stats)
 >                 return;
 >
