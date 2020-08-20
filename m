@@ -2,115 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE4024AF66
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 08:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAE424AF79
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 08:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725824AbgHTGpU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Aug 2020 02:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725819AbgHTGpU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Aug 2020 02:45:20 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C79C061757
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 23:45:19 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id x24so375440lfe.11
-        for <linux-pm@vger.kernel.org>; Wed, 19 Aug 2020 23:45:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ZCw+J3eNKvckpSGIv9R1A41dRAL10YAzemWWZZj2TxM=;
-        b=gn4feuvIJRGcm17jNvIi+Cs0oQkhPwFrCcF1fwZXkZsTBCf1COMIIzY9I3aoT1OO+D
-         j8Ro8j93yknlukw/XCHHy/tpUxs5i6s2i6XuFepcDMxFfEtIRmr39aXwsi0MOaCxZQAH
-         aJ5Z46auWf3uLNrTsxfSDedLWaRyb8P55xL8CRuBDRZlS09EawojZC3YNm3FkHCt0CPJ
-         b8BqVrItpwW6qNYBqd84jEDIYSh20ou4l8zb47H5Mg2UUYH/yAHAeLSfkPVk5SJxbdWR
-         nMNxEPunJJ0bWJ74vQqG66BdOjWdefZxFb9kV1Gb3ph+dGDg1xQcWjQLIpJjUzGNmTb1
-         8AJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZCw+J3eNKvckpSGIv9R1A41dRAL10YAzemWWZZj2TxM=;
-        b=Q0XNNKm39M2jPGG9lHSQKyshebtVFs+UAOBJR3DE1WNWdYx8FIvzKvjD7md2BJsTDa
-         6bHPVchLRAjZ23rtZxa9XNr7OlUg2BhVk0wQDj79nadG1hM68F788M/cXw3zFT5PDiQc
-         8IcVR9h4sT4q/PQTEaLRqU3nvcItWiIzrHkMYH5rUdA7i6VmCdbdgPRFaPypDsYnuP47
-         56VUlwkF2aH5jHNniWmyFhGj/4PqEMvH0u7fun/TIWIAbx9OLClFAFaMNGI4ZhYXKcT1
-         8sGsyZ8xjTqOUYGr0sCtYoiG5+PcENP55r/YauBGm+66A/GXhjUfBRNNjb0tF1pX/k5N
-         vSHg==
-X-Gm-Message-State: AOAM530lyHxYylGMdY4pKf7eOBfHJN5PqY424SSR08tziHYPAoYcCy4W
-        y0ENq3bgtm99HXh3K1hlwmBAUQ==
-X-Google-Smtp-Source: ABdhPJynGUW99aFPoSyRjPgckV+XoFAgcLbRS9hMSatRFjRqiz5jjL87Dz4FdSu2A+dvMdSEDdFfCQ==
-X-Received: by 2002:ac2:5f48:: with SMTP id 8mr872579lfz.157.1597905918034;
-        Wed, 19 Aug 2020 23:45:18 -0700 (PDT)
-Received: from localhost (host-78-79-224-122.mobileonline.telia.com. [78.79.224.122])
-        by smtp.gmail.com with ESMTPSA id h26sm283755lfj.20.2020.08.19.23.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2020 23:45:16 -0700 (PDT)
-Date:   Thu, 20 Aug 2020 08:45:14 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] thermal: rcar_thermal: Add missing braces to conditional
- statement
-Message-ID: <20200820064514.GA33898@wyvern>
-References: <20200819092716.3191-1-geert+renesas@glider.be>
+        id S1725916AbgHTG67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Aug 2020 02:58:59 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:42708 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725778AbgHTG67 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Aug 2020 02:58:59 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 81FCC1C0BB4; Thu, 20 Aug 2020 08:58:56 +0200 (CEST)
+Date:   Thu, 20 Aug 2020 08:58:56 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, sre@kernel.org, nekit1000@gmail.com,
+        mpartap@gmx.net, merlijn@wizzup.org, martin_rysavy@centrum.cz,
+        linux-pm@vger.kernel.org, "Arthur D." <spinal.by@gmail.com>
+Subject: Re: [RFC] Limiting charge current on Droid 4 (and N900)
+Message-ID: <20200820065855.GA9738@amd>
+References: <20200615140557.GA22781@duo.ucw.cz>
+ <20200629155515.GR37466@atomide.com>
+ <20200820041512.GH2994@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200819092716.3191-1-geert+renesas@glider.be>
+In-Reply-To: <20200820041512.GH2994@atomide.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Geert,
 
-Thanks for your work.
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2020-08-19 11:27:16 +0200, Geert Uytterhoeven wrote:
-> According to Documentation/process/coding-style.rst, if one branch of a
-> conditional statement needs braces, both branches should use braces.
-> 
-> Fixes: bbcf90c0646ac797 ("thermal: Explicitly enable non-changing thermal zone devices")
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Hi!
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+> > > Droid 4 has same problem as N900: it is often neccessary to manually
+> > > tweak current draw from USB, for example when using thin charging cab=
+le.
+> > >=20
+> > > N900 creates unique attribute by hand, but I believe
+> > > POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT looks suitable. (Should N900 be
+> > > converted?)
+> > >=20
+> > > Comments? Would the patch be acceptable after fixing whitespace?
+> >=20
+> > Looks OK to me. Until we have better charger vs host vs usb3 charging h=
+ub
+> > detection in place this seems like a good thing to do.
+>=20
+> FYI, I'm cleaning up the pending charger and battery patches to send out
+> for review. So that includes my earlier RFC battery status patches, and
+> Spinal's additions, and this patch. It will likely be several days before
+> I have the series ready for posting though.
 
-> ---
->  drivers/thermal/rcar_thermal.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index 787710bb88fee890..5c2a13bf249ccb87 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -546,11 +546,11 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  		if (ret < 0)
->  			goto error_unregister;
->  
-> -		if (chip->use_of_thermal)
-> +		if (chip->use_of_thermal) {
->  			priv->zone = devm_thermal_zone_of_sensor_register(
->  						dev, i, priv,
->  						&rcar_thermal_zone_of_ops);
-> -		else {
-> +		} else {
->  			priv->zone = thermal_zone_device_register(
->  						"rcar_thermal",
->  						1, 0, priv,
-> -- 
-> 2.17.1
-> 
+Thanks for heads-up.
 
--- 
-Regards,
-Niklas Söderlund
+I had issue when I could not charge _empty_ droid4 battery from
+powerbank. Green light was blinking and current was going up and down
+but never stabilized. I thought I had dmesg from that but can't find
+it now :-(.
+
+Plus, I left D4 on charger overnight, and found battery empty in the
+morning. It apparently charged in the evening but then discharged.
+
+Best regards,
+									Pavel
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl8+Hy8ACgkQMOfwapXb+vINSgCgwqDjvKoMVjGwrmlpzth44pKJ
+HuAAnRj18b8ySC+VOYnVFyO5jFV9QHol
+=/9vO
+-----END PGP SIGNATURE-----
+
+--oyUTqETQ0mS9luUI--
