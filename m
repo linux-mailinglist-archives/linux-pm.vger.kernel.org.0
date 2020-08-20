@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCC624C36D
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB5224C374
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 18:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729983AbgHTQjM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1729989AbgHTQjM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 20 Aug 2020 12:39:12 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:57068 "EHLO
+Received: from cloudserver094114.home.pl ([79.96.170.134]:41938 "EHLO
         cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728753AbgHTQjL (ORCPT
+        with ESMTP id S1728987AbgHTQjL (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Aug 2020 12:39:11 -0400
 Received: from 89-64-87-57.dynamic.chello.pl (89.64.87.57) (HELO kreacher.localnet)
  by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.459)
- id a3d0785267e228d1; Thu, 20 Aug 2020 18:39:07 +0200
+ id 48e50a6e30a2fd8e; Thu, 20 Aug 2020 18:39:06 +0200
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Doug Smythies <dsmythies@telus.net>
-Subject: [PATCH 3/4] cpufreq: intel_pstate: Add ->offline and ->online callbacks
-Date:   Thu, 20 Aug 2020 18:38:01 +0200
-Message-ID: <1879185.C8Vd3vmt8n@kreacher>
+Subject: [PATCH 4/4] cpufreq: intel_pstate: Free memory only when turning off
+Date:   Thu, 20 Aug 2020 18:38:40 +0200
+Message-ID: <5545992.MujegtMJko@kreacher>
 In-Reply-To: <2283366.Lr8yYYnyev@kreacher>
 References: <2283366.Lr8yYYnyev@kreacher>
 MIME-Version: 1.0
@@ -34,102 +34,143 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Add ->offline and ->online driver callbacksto to do the cleanup
-before taking a CPU offline and to restore its working configuration
-when it goes back online, respectively, to avoid invoking the ->init
-callback on every CPU online which is quite a bit of unnecessary
-overhead.
+When intel_pstate switches the operation mode from "active" to
+"passive" or the other way around, freeing its data structures
+representing CPUs and allocating them again from scratch is not
+necessary and wasteful.  Moreover, if these data structures are
+preserved, the cached HWP Request MSR value from there may be
+written to the MSR to start with to reinitialize it and help to
+restore the EPP value set previously (it is set to 0xFF when CPUs
+go offline to allow their SMT siblings to use the full range of
+EPP values and that also happens when the driver gets unregistered).
 
-Define ->offline and ->online so that they can be used in the
-passive as well as in the active mode and because ->offline will
-do the majority of ->stop_cpu work, the passive mode does not
-need that callback any more, so drop it.
+Accordingly, modify the driver to only do a full cleanup on driver
+object registration errors and when its status is changed to "off"
+via sysfs and to write the cached HWP Request MSR value back to
+the MSR on CPU init if the data structure representing the given
+CPU is still there.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
- 1 file changed, 32 insertions(+), 6 deletions(-)
+ drivers/cpufreq/intel_pstate.c | 51 +++++++++++++---------------------
+ 1 file changed, 19 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 3d18934fa975..aca0587b176f 100644
+index aca0587b176f..a7c6491f2b4a 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
+@@ -2091,30 +2091,32 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
+ 
+ 	cpu = all_cpu_data[cpunum];
+ 
+-	if (!cpu) {
++	if (cpu) {
++		if (hwp_active)
++			wrmsrl_on_cpu(cpunum, MSR_HWP_REQUEST,
++				      cpu->hwp_req_cached);
++	} else {
+ 		cpu = kzalloc(sizeof(*cpu), GFP_KERNEL);
+ 		if (!cpu)
+ 			return -ENOMEM;
+ 
+ 		all_cpu_data[cpunum] = cpu;
+ 
++		cpu->cpu = cpunum;
++
+ 		cpu->epp_default = -EINVAL;
+ 		cpu->epp_powersave = -EINVAL;
+ 		cpu->epp_saved = -EINVAL;
+-	}
+-
+-	cpu = all_cpu_data[cpunum];
+ 
+-	cpu->cpu = cpunum;
++		if (hwp_active) {
++			const struct x86_cpu_id *id;
+ 
+-	if (hwp_active) {
+-		const struct x86_cpu_id *id;
++			intel_pstate_hwp_enable(cpu);
+ 
+-		intel_pstate_hwp_enable(cpu);
+-
+-		id = x86_match_cpu(intel_pstate_hwp_boost_ids);
+-		if (id && intel_pstate_acpi_pm_profile_server())
+-			hwp_boost = true;
++			id = x86_match_cpu(intel_pstate_hwp_boost_ids);
++			if (id && intel_pstate_acpi_pm_profile_server())
++				hwp_boost = true;
++		}
+ 	}
+ 
+ 	intel_pstate_get_cpu_pstates(cpu);
+@@ -2701,9 +2703,6 @@ static void intel_pstate_driver_cleanup(void)
+ 	}
+ 	put_online_cpus();
+ 
+-	if (intel_pstate_driver == &intel_pstate)
+-		intel_pstate_sysfs_hide_hwp_dynamic_boost();
+-
+ 	intel_pstate_driver = NULL;
+ }
+ 
+@@ -2729,14 +2728,6 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
  	return 0;
  }
  
--static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
-+static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
- {
-+	pr_debug("CPU %d going offline\n", policy->cpu);
-+
-+	intel_pstate_exit_perf_limits(policy);
-+
-+	/*
-+	 * If the CPU is an SMT thread and it goes offline with the performance
-+	 * settings different from the minimum, it will prevent its sibling
-+	 * from getting to lower performance levels, so force the minimum
-+	 * performance on CPU offline to prevent that form happening.
-+	 */
- 	if (hwp_active)
- 		intel_pstate_hwp_force_min_perf(policy->cpu);
- 	else
- 		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-+
-+	return 0;
-+}
-+
-+static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
-+{
-+	pr_debug("CPU %d going online\n", policy->cpu);
-+
-+	intel_pstate_init_acpi_perf_limits(policy);
-+
-+	if (hwp_active)
-+		wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
-+			      all_cpu_data[policy->cpu]->hwp_req_cached);
-+
-+	return 0;
- }
- 
- static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
- {
--	pr_debug("CPU %d exiting\n", policy->cpu);
-+	pr_debug("CPU %d stopping\n", policy->cpu);
- 
- 	intel_pstate_clear_update_util_hook(policy->cpu);
- 	if (hwp_active)
- 		intel_pstate_hwp_save_state(policy);
+-static int intel_pstate_unregister_driver(void)
+-{
+-	cpufreq_unregister_driver(intel_pstate_driver);
+-	intel_pstate_driver_cleanup();
 -
--	intel_cpufreq_stop_cpu(policy);
- }
- 
- static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+-	return 0;
+-}
+-
+ static ssize_t intel_pstate_show_status(char *buf)
  {
--	intel_pstate_exit_perf_limits(policy);
-+	pr_debug("CPU %d exiting\n", policy->cpu);
+ 	if (!intel_pstate_driver)
+@@ -2748,8 +2739,6 @@ static ssize_t intel_pstate_show_status(char *buf)
  
- 	policy->fast_switch_possible = false;
+ static int intel_pstate_update_status(const char *buf, size_t size)
+ {
+-	int ret;
+-
+ 	if (size == 3 && !strncmp(buf, "off", size)) {
+ 		if (!intel_pstate_driver)
+ 			return -EINVAL;
+@@ -2757,7 +2746,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
+ 		if (hwp_active)
+ 			return -EBUSY;
  
-@@ -2398,6 +2421,8 @@ static struct cpufreq_driver intel_pstate = {
- 	.init		= intel_pstate_cpu_init,
- 	.exit		= intel_pstate_cpu_exit,
- 	.stop_cpu	= intel_pstate_stop_cpu,
-+	.offline	= intel_pstate_cpu_offline,
-+	.online		= intel_pstate_cpu_online,
- 	.update_limits	= intel_pstate_update_limits,
- 	.name		= "intel_pstate",
- };
-@@ -2652,7 +2677,8 @@ static struct cpufreq_driver intel_cpufreq = {
- 	.fast_switch	= intel_cpufreq_fast_switch,
- 	.init		= intel_cpufreq_cpu_init,
- 	.exit		= intel_cpufreq_cpu_exit,
--	.stop_cpu	= intel_cpufreq_stop_cpu,
-+	.offline	= intel_pstate_cpu_offline,
-+	.online		= intel_pstate_cpu_online,
- 	.update_limits	= intel_pstate_update_limits,
- 	.name		= "intel_cpufreq",
- };
+-		return intel_pstate_unregister_driver();
++		cpufreq_unregister_driver(intel_pstate_driver);
++		intel_pstate_driver_cleanup();
+ 	}
+ 
+ 	if (size == 6 && !strncmp(buf, "active", size)) {
+@@ -2765,9 +2755,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
+ 			if (intel_pstate_driver == &intel_pstate)
+ 				return 0;
+ 
+-			ret = intel_pstate_unregister_driver();
+-			if (ret)
+-				return ret;
++			cpufreq_unregister_driver(intel_pstate_driver);
+ 		}
+ 
+ 		return intel_pstate_register_driver(&intel_pstate);
+@@ -2778,9 +2766,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
+ 			if (intel_pstate_driver == &intel_cpufreq)
+ 				return 0;
+ 
+-			ret = intel_pstate_unregister_driver();
+-			if (ret)
+-				return ret;
++			cpufreq_unregister_driver(intel_pstate_driver);
++			intel_pstate_sysfs_hide_hwp_dynamic_boost();
+ 		}
+ 
+ 		return intel_pstate_register_driver(&intel_cpufreq);
 -- 
 2.26.2
 
