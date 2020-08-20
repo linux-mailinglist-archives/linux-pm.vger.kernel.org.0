@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CD124AB80
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 02:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA94C24AB44
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 02:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbgHTAKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Aug 2020 20:10:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58962 "EHLO mail.kernel.org"
+        id S1728122AbgHTAJM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Aug 2020 20:09:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59812 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727888AbgHTACS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 19 Aug 2020 20:02:18 -0400
+        id S1728111AbgHTACu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 19 Aug 2020 20:02:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 76BB2214F1;
-        Thu, 20 Aug 2020 00:02:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8905620FC3;
+        Thu, 20 Aug 2020 00:02:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597881738;
-        bh=qIN9iri9QNfy/KZFqXfOtLmo6m1lKdco5QEV4ggVQxM=;
+        s=default; t=1597881770;
+        bh=dCAY1/5cj0Mc5sodwYE/kMvFDeBX4kjWx8QWkQtuaLg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pha+KjiPJfWsxms8SIj/H++i33ct6Nbrlj9KOTG5efA75lso8nWgOVnw4InpsHYFQ
-         6ADrGcZL0ItApbzhzqIH5v+Jt1jl/NSSrFJe+9bXMIadR8otaNeHhLhoAYpk/PRYSU
-         GXORSM5yHl5nzvMXhu+HHrxnmnpG18ZV/GH2Fc60=
+        b=0/kge6E5Th30TGdPn2cjOsyO2N/Fi2m6e1p29waSGTAADL3WO8VPJt2n1ZUjvqvvf
+         AitS9rEPE1dUFwxhyCJtWGBOo6qCpmawqPHbIgfAkQt42/O3jgtaX0GBJDoIYO6Pgu
+         1YPFs4uZtQQlT9RiGdkuQ+amg2x58XYk1bjcI13U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 17/24] cpufreq: intel_pstate: Fix cpuinfo_max_freq when MSR_TURBO_RATIO_LIMIT is 0
-Date:   Wed, 19 Aug 2020 20:01:48 -0400
-Message-Id: <20200820000155.215089-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 15/22] cpufreq: intel_pstate: Fix cpuinfo_max_freq when MSR_TURBO_RATIO_LIMIT is 0
+Date:   Wed, 19 Aug 2020 20:02:22 -0400
+Message-Id: <20200820000229.215333-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820000155.215089-1-sashal@kernel.org>
-References: <20200820000155.215089-1-sashal@kernel.org>
+In-Reply-To: <20200820000229.215333-1-sashal@kernel.org>
+References: <20200820000229.215333-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -71,10 +71,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 4d3429b2058fc..8c4d86032c7a3 100644
+index d3d7c4ef7d045..53dc0fd6f6d3c 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -1572,6 +1572,7 @@ static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
+@@ -1571,6 +1571,7 @@ static void intel_pstate_get_cpu_pstates(struct cpudata *cpu)
  
  		intel_pstate_get_hwp_max(cpu->cpu, &phy_max, &current_max);
  		cpu->pstate.turbo_freq = phy_max * cpu->pstate.scaling;
