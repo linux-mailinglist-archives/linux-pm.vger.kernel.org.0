@@ -2,178 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB5224C374
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 18:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8DB24C4E5
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Aug 2020 19:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729989AbgHTQjM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Aug 2020 12:39:12 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:41938 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728987AbgHTQjL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Aug 2020 12:39:11 -0400
-Received: from 89-64-87-57.dynamic.chello.pl (89.64.87.57) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.459)
- id 48e50a6e30a2fd8e; Thu, 20 Aug 2020 18:39:06 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Subject: [PATCH 4/4] cpufreq: intel_pstate: Free memory only when turning off
-Date:   Thu, 20 Aug 2020 18:38:40 +0200
-Message-ID: <5545992.MujegtMJko@kreacher>
-In-Reply-To: <2283366.Lr8yYYnyev@kreacher>
-References: <2283366.Lr8yYYnyev@kreacher>
+        id S1725820AbgHTR4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Aug 2020 13:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726664AbgHTR4G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Aug 2020 13:56:06 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86697C061385
+        for <linux-pm@vger.kernel.org>; Thu, 20 Aug 2020 10:56:06 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id a79so1400572pfa.8
+        for <linux-pm@vger.kernel.org>; Thu, 20 Aug 2020 10:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=KVK0gSpvqykJDr5HNbFAMvmoRNbH1Orc7FXLxvYkYI4=;
+        b=NGdwn2CRUZ7/LTYkk/Un6ZYEx5LA3OmBXQKbfkaSG/LYADTEY5UMU4gACc658kG+K8
+         4UpnRBz32nrPQkhcXZZHV07a2z1WxERVsHGTU0fB4I0PpP8HPT7wa1mOaY6o5zCvnRnN
+         BBB04jiwbmY615+N8PfHfqzhsaR5DckAZ7XpfvbboLhZNAnEZ2CoMgz/qrNrQexroN3q
+         tB1UTNGmyFCc73WzMNmEpBn4TcKLwmqbRTlYJZjV9TBF04PGrWoxm//PO/aIVQtOrACr
+         y9/YsfDwAx2PnxYZUrtjbHahJu58muH3LMva9RJ02OBwKa83P97NbLXyp8P5v81Nl8hN
+         3l+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=KVK0gSpvqykJDr5HNbFAMvmoRNbH1Orc7FXLxvYkYI4=;
+        b=H1gemxiDArlMjxAsGd14y/CaJDoRX2x7NP3AlWx9qdVUybgNnTmI4UaV75cpHmOyyc
+         nnCpl2q+/LJyHY7nFsitdHOxHaSMTBJPNkX2Mhxn9s9sVsgOAhn5uvzG60OV5qBubVC0
+         3INCvxkcCEvm+XPg4vEUyFGlcE/DZBeBmG+lKrgw4ulf5Z/PXLJyFpRGD9mo4zzlGP3A
+         jqlq5WpEsKQZQvJ16yrX/F2CnofMc9hMvKpNR/EGstJh1ebYhq4gycfPCPDsCUOoTLYl
+         3+IaNTJU3MleqiKpp6suGSxvlTdzQP483mfHXDvOLLDo0FgKbVMNE74Zp9sKneKj7CC4
+         DJPA==
+X-Gm-Message-State: AOAM5314zk8YEsFsGp+JkJ5xCdlvJ06IechXMMrX2znNxFrHkxN7qMig
+        whG2gWIryy72+kOg0bzGgCIhBw==
+X-Google-Smtp-Source: ABdhPJxNMqYx5fFjw1lDaGMkNN+D76lPzGWKbMmHWYcDsw9amhh7B9ONEVVJPX7AjtCHyZKic7W2Sw==
+X-Received: by 2002:a62:758f:: with SMTP id q137mr3019272pfc.170.1597946164771;
+        Thu, 20 Aug 2020 10:56:04 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x8sm3719271pfp.101.2020.08.20.10.56.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2020 10:56:03 -0700 (PDT)
+Message-ID: <5f3eb933.1c69fb81.4fbe8.8f51@mx.google.com>
+Date:   Thu, 20 Aug 2020 10:56:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.9-rc1-4-gcc15fd9892e2
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 11 warnings (v5.9-rc1-4-gcc15fd9892e2)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc1-4-gcc=
+15fd9892e2)
 
-When intel_pstate switches the operation mode from "active" to
-"passive" or the other way around, freeing its data structures
-representing CPUs and allocating them again from scratch is not
-necessary and wasteful.  Moreover, if these data structures are
-preserved, the cached HWP Request MSR value from there may be
-written to the MSR to start with to reinitialize it and help to
-restore the EPP value set previously (it is set to 0xFF when CPUs
-go offline to allow their SMT siblings to use the full range of
-EPP values and that also happens when the driver gets unregistered).
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc1-4-gcc15fd9892e2/
 
-Accordingly, modify the driver to only do a full cleanup on driver
-object registration errors and when its status is changed to "off"
-via sysfs and to write the cached HWP Request MSR value back to
-the MSR on CPU init if the data structure representing the given
-CPU is still there.
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc1-4-gcc15fd9892e2
+Git Commit: cc15fd9892e28689b6e17dbd6e28d00c55d62928
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
 ---
- drivers/cpufreq/intel_pstate.c | 51 +++++++++++++---------------------
- 1 file changed, 19 insertions(+), 32 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index aca0587b176f..a7c6491f2b4a 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2091,30 +2091,32 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
- 
- 	cpu = all_cpu_data[cpunum];
- 
--	if (!cpu) {
-+	if (cpu) {
-+		if (hwp_active)
-+			wrmsrl_on_cpu(cpunum, MSR_HWP_REQUEST,
-+				      cpu->hwp_req_cached);
-+	} else {
- 		cpu = kzalloc(sizeof(*cpu), GFP_KERNEL);
- 		if (!cpu)
- 			return -ENOMEM;
- 
- 		all_cpu_data[cpunum] = cpu;
- 
-+		cpu->cpu = cpunum;
-+
- 		cpu->epp_default = -EINVAL;
- 		cpu->epp_powersave = -EINVAL;
- 		cpu->epp_saved = -EINVAL;
--	}
--
--	cpu = all_cpu_data[cpunum];
- 
--	cpu->cpu = cpunum;
-+		if (hwp_active) {
-+			const struct x86_cpu_id *id;
- 
--	if (hwp_active) {
--		const struct x86_cpu_id *id;
-+			intel_pstate_hwp_enable(cpu);
- 
--		intel_pstate_hwp_enable(cpu);
--
--		id = x86_match_cpu(intel_pstate_hwp_boost_ids);
--		if (id && intel_pstate_acpi_pm_profile_server())
--			hwp_boost = true;
-+			id = x86_match_cpu(intel_pstate_hwp_boost_ids);
-+			if (id && intel_pstate_acpi_pm_profile_server())
-+				hwp_boost = true;
-+		}
- 	}
- 
- 	intel_pstate_get_cpu_pstates(cpu);
-@@ -2701,9 +2703,6 @@ static void intel_pstate_driver_cleanup(void)
- 	}
- 	put_online_cpus();
- 
--	if (intel_pstate_driver == &intel_pstate)
--		intel_pstate_sysfs_hide_hwp_dynamic_boost();
--
- 	intel_pstate_driver = NULL;
- }
- 
-@@ -2729,14 +2728,6 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 	return 0;
- }
- 
--static int intel_pstate_unregister_driver(void)
--{
--	cpufreq_unregister_driver(intel_pstate_driver);
--	intel_pstate_driver_cleanup();
--
--	return 0;
--}
--
- static ssize_t intel_pstate_show_status(char *buf)
- {
- 	if (!intel_pstate_driver)
-@@ -2748,8 +2739,6 @@ static ssize_t intel_pstate_show_status(char *buf)
- 
- static int intel_pstate_update_status(const char *buf, size_t size)
- {
--	int ret;
--
- 	if (size == 3 && !strncmp(buf, "off", size)) {
- 		if (!intel_pstate_driver)
- 			return -EINVAL;
-@@ -2757,7 +2746,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 		if (hwp_active)
- 			return -EBUSY;
- 
--		return intel_pstate_unregister_driver();
-+		cpufreq_unregister_driver(intel_pstate_driver);
-+		intel_pstate_driver_cleanup();
- 	}
- 
- 	if (size == 6 && !strncmp(buf, "active", size)) {
-@@ -2765,9 +2755,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 			if (intel_pstate_driver == &intel_pstate)
- 				return 0;
- 
--			ret = intel_pstate_unregister_driver();
--			if (ret)
--				return ret;
-+			cpufreq_unregister_driver(intel_pstate_driver);
- 		}
- 
- 		return intel_pstate_register_driver(&intel_pstate);
-@@ -2778,9 +2766,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 			if (intel_pstate_driver == &intel_cpufreq)
- 				return 0;
- 
--			ret = intel_pstate_unregister_driver();
--			if (ret)
--				return ret;
-+			cpufreq_unregister_driver(intel_pstate_driver);
-+			intel_pstate_sysfs_hide_hwp_dynamic_boost();
- 		}
- 
- 		return intel_pstate_register_driver(&intel_cpufreq);
--- 
-2.26.2
-
-
-
-
+For more info write to <info@kernelci.org>
