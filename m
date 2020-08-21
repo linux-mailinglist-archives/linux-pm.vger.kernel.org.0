@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E616124D6D4
+	by mail.lfdr.de (Postfix) with ESMTP id DA27224D6D3
 	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 16:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728798AbgHUOAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 10:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
+        id S1728854AbgHUOAu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 10:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728765AbgHUOAm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 10:00:42 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C09CC061573;
-        Fri, 21 Aug 2020 07:00:42 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id bo3so2365239ejb.11;
-        Fri, 21 Aug 2020 07:00:42 -0700 (PDT)
+        with ESMTP id S1728780AbgHUOAp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 10:00:45 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CE5C061574;
+        Fri, 21 Aug 2020 07:00:45 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u21so1724325ejz.0;
+        Fri, 21 Aug 2020 07:00:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WOzTbuxhz01ec0FHvxjhTgrsLeXxnaxSQj60N4kzxmU=;
-        b=suFRImbGuCdDd8M7GsBJWgbr2BJ4tbwwknXQx6EeMenUXKRX91YRIBiclvdzfs+IdW
-         PWpSldu3O2F9/ys9IPGzIPxCSB33+Qv4M//mMspbDe49MpSQlDyTxuPZnWAtXOWzeejk
-         RalOtMVqQigY/vxYCM2FlbjIkhBNEz0DMQDCFNK23hvWYnZjjJaYVOIK/gw+uYRJy4pT
-         yMWsUol3cMsxPdPig+hHvJ/qs8EiEX3+0iawia/83k9FaiANZ0Q3aHhnZphzKAzIwzaQ
-         8K3E77lO7KYULivQ2i6XWMRJoKuWqXxTi8dvOF21IGICIsyGczu4nHiZxGzdnIqT0VCT
-         +b4g==
+        bh=OSZpK9kwGLydB4QOqHGik97SZh68Cr5AJapAdxuuNUg=;
+        b=kgeWtd3NVY9p+WPW8IHdDM5phyXLxXa4QsFkPvx1y8lfNncmDzM2Cc0lJuRKfE8f6m
+         7b5cmM6BuXT3brvf1suue+T25ztJbL6bUn/r39Bcc1vn1a1hGGbdZLbmOJdGMZ0G1C5W
+         P8SQ1Zhuq+/Flkhmwgibg3OzFRxNcmBTxE4NNKpVhlgBPla3HJ1u2vaPOwNU87jNK/gc
+         LZBbbDCqkMk6Tr0RjMWkakgWUWJh+YN3wPeeEdlja4CAeH2vv21ycGYqix2+n4A0R8Mt
+         8/BQn+dP/RTMyhbs2g8NJ4E0ucgrP1A6VYOex9wTckb7sg4dVXT9+GKj9TOUUI2T34//
+         Q2QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WOzTbuxhz01ec0FHvxjhTgrsLeXxnaxSQj60N4kzxmU=;
-        b=ENXDL0gy2dV0sio43LuetQtbUthK/Ou+MRCB8DHS6RPRJeDsgHi/cAeVrJhjSMvzMy
-         CW1I05PMuGiRQhFFJ+RLl43rpli1+DbhiVr13dP9B5AAr+0IoGvyo/lZgp+ETwdfkaOt
-         UTY2oxfO1PlG+NutjEn7i5AD+k5RnpGs7phEO8L8MXrS5SUA3ikMdlsZwOUVNn+TttN7
-         uI5d8MoOer3rLcVMcsgqoBS3jkkz6+Y1Lnd7vv6YGLbenfXlR+jG14zdcvaQS1WWyrnu
-         Y/ADLf1loifrLZE1TnC86sdZ+Jz9FkO0TgN8fxPvON21m3BzCU0InFKOHmVlwvDxcN9T
-         9HKw==
-X-Gm-Message-State: AOAM530lZu3sdFIYb1KiNIYBOPTXqeYEFHN99lLCm0foKSvCgJSwQl8w
-        xwHdjKsA3GENaiXz/iGjfcY=
-X-Google-Smtp-Source: ABdhPJzQAAOjSWV81PFf97gqBSgjnqxmlqmojOErkHKasq710GNkFvX6TojY269E2Mi1yAzbuVeNNw==
-X-Received: by 2002:a17:906:ce59:: with SMTP id se25mr3046802ejb.359.1598018440511;
-        Fri, 21 Aug 2020 07:00:40 -0700 (PDT)
+        bh=OSZpK9kwGLydB4QOqHGik97SZh68Cr5AJapAdxuuNUg=;
+        b=rsO/v/F+T3Kf5H3VWBYcsONr3L84g4dk5yWq02CHWMc5DF/+puqnLyJ/1o1wiCRf57
+         Vi1pEYseK4ZAtcGUkOQoQacTaCJfO5ktsBYr2O8ATYqCIk0paWkISbSxczOSekwVtBZc
+         ATq5E4uNUHf0jSxNYmwAUsfRX5eZLkNkaTUIWGsG2CSqNWOh7l0Lt0PJXdSasvgk7QdJ
+         CWRRC9ytmAmqkHDjfNCrYUuih5/pQyPcHEQG8hZ7JZXOm1VLYh/rosPxkNwzoxRLCpCL
+         jivWhM5wwGqyuYmzlq36/N60S3k1gGVCQfeBFuC2JDubeUiYFModEmELaM/60jqsguYl
+         BNHQ==
+X-Gm-Message-State: AOAM532PXM/ur6u1l/fyoYWxe4myjAQqJYWYO/C4q2/oOWWzrr+Wfuzt
+        C22mkkScraIKKW4RtYuzEdo=
+X-Google-Smtp-Source: ABdhPJy+rPt9DWKhlUipa4kKD90D+bKkwDOBPSwRPiv+ydWboWDvB6uFb+NlKgbbPD3g4Zfzh/S8tA==
+X-Received: by 2002:a17:907:36b:: with SMTP id rs11mr3168147ejb.544.1598018443883;
+        Fri, 21 Aug 2020 07:00:43 -0700 (PDT)
 Received: from Ansuel-XPS.localdomain (host-87-10-16-66.retail.telecomitalia.it. [87.10.16.66])
-        by smtp.googlemail.com with ESMTPSA id c7sm1152969edf.1.2020.08.21.07.00.39
+        by smtp.googlemail.com with ESMTPSA id c7sm1152969edf.1.2020.08.21.07.00.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 07:00:39 -0700 (PDT)
+        Fri, 21 Aug 2020 07:00:43 -0700 (PDT)
 From:   Ansuel Smith <ansuelsmth@gmail.com>
 To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
@@ -54,9 +54,9 @@ Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 1/2] cpufreq: qcom: Add Krait Cache Scaling support
-Date:   Fri, 21 Aug 2020 16:00:20 +0200
-Message-Id: <20200821140026.19643-2-ansuelsmth@gmail.com>
+Subject: [RFC PATCH v3 2/2] dt-bindings: cpufreq: Document Krait CPU Cache scaling
+Date:   Fri, 21 Aug 2020 16:00:21 +0200
+Message-Id: <20200821140026.19643-3-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200821140026.19643-1-ansuelsmth@gmail.com>
 References: <20200821140026.19643-1-ansuelsmth@gmail.com>
@@ -67,292 +67,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qcom Krait CPUs use the generic cpufreq-dt driver and doesn't actually
-scale the Cache frequency when the CPU frequency is changed. This
-companion driver register with the cpu notifier and scale the Cache
-based on the max Freq across all core as the CPU cache is shared across
-all of them. If provided this also scale the voltage of the regulator
-attached to the CPU cache. The scaling logic is based on the CPU freq
-and the 3 scaling interval are set by the device dts.
+Document dedicated Krait CPU Cache Scaling driver.
 
 Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
 ---
- drivers/cpufreq/Kconfig.arm   |   9 ++
- drivers/cpufreq/Makefile      |   1 +
- drivers/cpufreq/krait-cache.c | 232 ++++++++++++++++++++++++++++++++++
- 3 files changed, 242 insertions(+)
- create mode 100644 drivers/cpufreq/krait-cache.c
+ .../bindings/cpufreq/krait-cache-scale.yaml   | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index c6cbfc8baf72..4ed5e73051df 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -126,6 +126,15 @@ config ARM_OMAP2PLUS_CPUFREQ
- 	depends on ARCH_OMAP2PLUS
- 	default ARCH_OMAP2PLUS
- 
-+config ARM_QCOM_KRAIT_CACHE_SCALE
-+	tristate "Scaling support for Krait CPU Cache"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	help
-+	  This adds the Scaling support for the Krait CPU Cache shared by
-+	  all cores.
-+
-+	  If in doubt, say N.
-+
- config ARM_QCOM_CPUFREQ_NVMEM
- 	tristate "Qualcomm nvmem based CPUFreq"
- 	depends on ARCH_QCOM
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index f6670c4abbb0..eee53d7e8b09 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -61,6 +61,7 @@ obj-$(CONFIG_MACH_MVEBU_V7)		+= mvebu-cpufreq.o
- obj-$(CONFIG_ARM_OMAP2PLUS_CPUFREQ)	+= omap-cpufreq.o
- obj-$(CONFIG_ARM_PXA2xx_CPUFREQ)	+= pxa2xx-cpufreq.o
- obj-$(CONFIG_PXA3xx)			+= pxa3xx-cpufreq.o
-+obj-$(CONFIG_ARM_QCOM_KRAIT_CACHE_SCALE) += krait-cache.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_HW)	+= qcom-cpufreq-hw.o
- obj-$(CONFIG_ARM_QCOM_CPUFREQ_NVMEM)	+= qcom-cpufreq-nvmem.o
- obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
-diff --git a/drivers/cpufreq/krait-cache.c b/drivers/cpufreq/krait-cache.c
+diff --git a/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml b/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
 new file mode 100644
-index 000000000000..0646fde9d920
+index 000000000000..f5f1c9b76656
 --- /dev/null
-+++ b/drivers/cpufreq/krait-cache.c
-@@ -0,0 +1,232 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/cpufreq/krait-cache-scale.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/cpufreq.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/clk.h>
-+#include <linux/slab.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/pm_opp.h>
++title: Krait Cpu Cache Frequency Scaling dedicated driver
 +
-+struct krait_data {
-+	struct device *dev;
++maintainers:
++  - Ansuel Smith <ansuelsmth@gmail.com>
 +
-+	unsigned int *l2_rates; /* L2 bus clock rate */
-+	unsigned int *l2_cpufreq; /* L2 target CPU frequency */
++description: |
++  This Scale the Krait CPU Cache Frequency and optionally voltage
++  when the Cpu Frequency is changed (using the cpufreq notifier).
 +
-+	struct notifier_block nb;
-+};
++  Cache is scaled with the max frequency across all core and the cache
++  frequency will scale based on the configured threshold in the dts.
 +
-+static int krait_cache_set_opp(struct dev_pm_set_opp_data *data)
-+{
-+	unsigned long old_freq = data->old_opp.rate, freq = data->new_opp.rate;
-+	struct dev_pm_opp_supply *supply = &data->new_opp.supplies[0];
-+	struct regulator *reg = data->regulators[0];
-+	struct clk *clk = data->clk;
-+	struct krait_data *kdata;
-+	unsigned long idle_freq;
-+	int ret;
++  The cache thresholds can be set to 3+ frequency bin, idle, nominal and
++  high.
 +
-+	kdata = (struct krait_data *)dev_get_drvdata(data->dev);
++properties:
++  compatible:
++    const: qcom,krait-cache
 +
-+	idle_freq = kdata->l2_rates[0];
++  clocks:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: Phandle to the L2 CPU clock
 +
-+	ret = regulator_set_voltage_triplet(reg, supply->u_volt_min,
-+					    supply->u_volt, supply->u_volt_max);
-+	if (ret)
-+		goto exit;
++  clock-names:
++    const: "l2"
 +
-+	/*
-+	 * Set to idle bin if switching from normal to high bin
-+	 * or vice versa. It has been notice that a bug is triggered
-+	 * in cache scaling when more than one bin is scaled, to fix
-+	 * this we first need to transition to the base rate and then
-+	 * to target rate
-+	 */
-+	if (likely(freq != idle_freq && old_freq != idle_freq)) {
-+		ret = clk_set_rate(clk, idle_freq);
-+		if (ret)
-+			goto exit;
-+	}
++  voltage-tolerance:
++    description: Same voltage tollerance of the Krait CPU
 +
-+	ret = clk_set_rate(clk, freq);
-+	if (ret)
-+		goto exit;
++  l2-cpufreq:
++    description: |
++      Threshold used by the driver to scale the L2 cache.
++      If the max CPU Frequency is more than the set frequency,
++      the driver will transition to the next frequency bin.
++      Value is in kHz
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    minItems: 3
++    items:
++      - description: idle
++      - description: nominal
++      - description: high
 +
-+exit:
-+	return ret;
-+}
++  l2-supply:
++    $ref: "/schemas/types.yaml#/definitions/phandle"
++    description: Phandle to the L2 regulator supply.
 +
-+static int krait_cache_notifier(struct notifier_block *nb, unsigned long cmd,
-+				void *v)
-+{
-+	unsigned int target_freq, cpu, cur_cpu;
-+	unsigned int *freq_tbl, *freq_l2tbl;
-+	struct cpufreq_freqs *freqs;
-+	struct krait_data *data;
-+	int ret = 0;
++  opp-table: true
 +
-+	if (cmd == CPUFREQ_PRECHANGE) {
-+		freqs = (struct cpufreq_freqs *)v;
-+		target_freq = freqs->new;
-+		cur_cpu = freqs->policy->cpu;
++required:
++  - compatible
++  - clocks
++  - clock-names
++  - voltage-tolerance
++  - l2-cpufreq
++  - l2-supply
 +
-+		data = container_of(nb, struct krait_data, nb);
++examples:
++  - |
++    qcom-krait-cache {
++      compatible = "qcom,krait-cache";
++      clocks = <&kraitcc 4>;
++      clock-names = "l2";
++      voltage-tolerance = <5>;
++      l2-cpufreq = <384000 600000 1200000>;
++      l2-supply = <&smb208_s1a>;
 +
-+		freq_tbl = data->l2_cpufreq;
-+		freq_l2tbl = data->l2_rates;
-+
-+		/* find the max freq across all core */
-+		for_each_present_cpu(cpu)
-+			if (cpu != cur_cpu)
-+				target_freq = max(target_freq,
-+						  cpufreq_quick_get(cpu));
-+
-+		while (*(freq_tbl = freq_tbl + 1) && target_freq >= *freq_tbl)
-+			freq_l2tbl = freq_l2tbl + 1;
-+
-+		ret = dev_pm_opp_set_rate(data->dev, *freq_l2tbl);
-+		if (ret)
-+			goto exit;
-+	}
-+
-+exit:
-+	return notifier_from_errno(ret);
-+}
-+
-+static int krait_cache_probe(struct platform_device *pdev)
-+{
-+	struct clk *l2_clk;
-+	int ret, i = 0, count;
-+	unsigned long freq = 0;
-+	struct dev_pm_opp *opp;
-+	struct opp_table *table;
-+	struct device_node *vdd;
-+	struct krait_data *data;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = dev->of_node;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->dev = dev;
-+
-+	l2_clk = devm_clk_get(dev, "l2");
-+	if (IS_ERR(l2_clk)) {
-+		ret = PTR_ERR(l2_clk);
-+		goto exit;
-+	}
-+
-+	vdd = of_parse_phandle(node, "l2-supply", 0);
-+	if (!vdd) {
-+		dev_err(dev, "missing L2 supply\n");
-+		ret = -EINVAL;
-+		goto exit;
-+	}
-+
-+	table = dev_pm_opp_set_regulators(dev, (const char *[]){ vdd->name },
-+					  1);
-+	if (IS_ERR(table)) {
-+		ret = PTR_ERR(table);
-+		dev_err(dev, "failed to set regulators %d\n", ret);
-+		goto exit_vdd;
-+	}
-+
-+	dev_pm_opp_put(opp);
-+
-+	ret = PTR_ERR_OR_ZERO(
-+		dev_pm_opp_register_set_opp_helper(dev, krait_cache_set_opp));
-+	if (ret)
-+		goto exit_vdd;
-+
-+	ret = dev_pm_opp_of_add_table(dev);
-+	if (ret) {
-+		dev_err(dev, "failed to parse L2 freq thresholds\n");
-+		goto exit_vdd;
-+	}
-+
-+	count = dev_pm_opp_get_opp_count(dev);
-+
-+	data->l2_cpufreq =
-+		devm_kzalloc(dev, sizeof(unsigned int) * count, GFP_KERNEL);
-+	if (!data->l2_cpufreq) {
-+		ret = -ENOMEM;
-+		goto exit_vdd;
-+	}
-+
-+	ret = of_property_read_u32_array(node, "l2-cpufreq", data->l2_cpufreq,
-+					 count);
-+	if (ret) {
-+		dev_err(dev, "failed to parse L2 cpufreq thresholds\n");
-+		goto exit_vdd;
-+	}
-+
-+	/* Allocate space for opp_count + 1, the last index is used as sentinel */
-+	data->l2_rates =
-+		devm_kzalloc(dev, sizeof(unsigned int) * count + 1, GFP_KERNEL);
-+	if (!data->l2_rates) {
-+		ret = -ENOMEM;
-+		goto exit_vdd;
-+	}
-+
-+	/* populate the table in increasing order */
-+	while (!IS_ERR(opp = dev_pm_opp_find_freq_ceil(dev, &freq))) {
-+		data->l2_rates[i] = freq;
-+		freq++;
-+		i++;
-+		dev_pm_opp_put(opp);
-+	}
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	data->nb.notifier_call = krait_cache_notifier;
-+	cpufreq_register_notifier(&data->nb, CPUFREQ_TRANSITION_NOTIFIER);
-+
-+exit_vdd:
-+	of_node_put(vdd);
-+exit:
-+	return ret;
-+}
-+
-+static int krait_cache_remove(struct platform_device *pdev)
-+{
-+	struct krait_data *data = platform_get_drvdata(pdev);
-+
-+	dev_pm_opp_remove_table(data->dev);
-+	cpufreq_unregister_notifier(&data->nb, CPUFREQ_TRANSITION_NOTIFIER);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id krait_cache_match_table[] = {
-+	{ .compatible = "qcom,krait-cache" },
-+	{}
-+};
-+
-+static struct platform_driver krait_cache_driver = {
-+	.probe		= krait_cache_probe,
-+	.remove		= krait_cache_remove,
-+	.driver		= {
-+		.name   = "krait-cache-scaling",
-+		.of_match_table = krait_cache_match_table,
-+	},
-+};
-+
-+static int __init krait_cache_init(void)
-+{
-+	return platform_driver_register(&krait_cache_driver);
-+}
-+late_initcall(krait_cache_init);
-+
-+static void __exit krait_cache_exit(void)
-+{
-+	platform_driver_unregister(&krait_cache_driver);
-+}
-+module_exit(krait_cache_exit);
-+
-+MODULE_DESCRIPTION("Krait CPU Cache Scaling driver");
-+MODULE_LICENSE("GPL v2");
++      operating-points = <
++        /* kHz    uV */
++        384000  1100000
++        1000000  1100000
++        1200000  1150000
++      >;
++    };
 -- 
 2.27.0
 
