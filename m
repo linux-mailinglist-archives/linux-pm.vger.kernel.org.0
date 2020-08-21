@@ -2,164 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA27224D6D3
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 16:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A8324DB04
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 18:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728854AbgHUOAu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 10:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728780AbgHUOAp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 10:00:45 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CE5C061574;
-        Fri, 21 Aug 2020 07:00:45 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id u21so1724325ejz.0;
-        Fri, 21 Aug 2020 07:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=OSZpK9kwGLydB4QOqHGik97SZh68Cr5AJapAdxuuNUg=;
-        b=kgeWtd3NVY9p+WPW8IHdDM5phyXLxXa4QsFkPvx1y8lfNncmDzM2Cc0lJuRKfE8f6m
-         7b5cmM6BuXT3brvf1suue+T25ztJbL6bUn/r39Bcc1vn1a1hGGbdZLbmOJdGMZ0G1C5W
-         P8SQ1Zhuq+/Flkhmwgibg3OzFRxNcmBTxE4NNKpVhlgBPla3HJ1u2vaPOwNU87jNK/gc
-         LZBbbDCqkMk6Tr0RjMWkakgWUWJh+YN3wPeeEdlja4CAeH2vv21ycGYqix2+n4A0R8Mt
-         8/BQn+dP/RTMyhbs2g8NJ4E0ucgrP1A6VYOex9wTckb7sg4dVXT9+GKj9TOUUI2T34//
-         Q2QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=OSZpK9kwGLydB4QOqHGik97SZh68Cr5AJapAdxuuNUg=;
-        b=rsO/v/F+T3Kf5H3VWBYcsONr3L84g4dk5yWq02CHWMc5DF/+puqnLyJ/1o1wiCRf57
-         Vi1pEYseK4ZAtcGUkOQoQacTaCJfO5ktsBYr2O8ATYqCIk0paWkISbSxczOSekwVtBZc
-         ATq5E4uNUHf0jSxNYmwAUsfRX5eZLkNkaTUIWGsG2CSqNWOh7l0Lt0PJXdSasvgk7QdJ
-         CWRRC9ytmAmqkHDjfNCrYUuih5/pQyPcHEQG8hZ7JZXOm1VLYh/rosPxkNwzoxRLCpCL
-         jivWhM5wwGqyuYmzlq36/N60S3k1gGVCQfeBFuC2JDubeUiYFModEmELaM/60jqsguYl
-         BNHQ==
-X-Gm-Message-State: AOAM532PXM/ur6u1l/fyoYWxe4myjAQqJYWYO/C4q2/oOWWzrr+Wfuzt
-        C22mkkScraIKKW4RtYuzEdo=
-X-Google-Smtp-Source: ABdhPJy+rPt9DWKhlUipa4kKD90D+bKkwDOBPSwRPiv+ydWboWDvB6uFb+NlKgbbPD3g4Zfzh/S8tA==
-X-Received: by 2002:a17:907:36b:: with SMTP id rs11mr3168147ejb.544.1598018443883;
-        Fri, 21 Aug 2020 07:00:43 -0700 (PDT)
-Received: from Ansuel-XPS.localdomain (host-87-10-16-66.retail.telecomitalia.it. [87.10.16.66])
-        by smtp.googlemail.com with ESMTPSA id c7sm1152969edf.1.2020.08.21.07.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 07:00:43 -0700 (PDT)
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ansuel Smith <ansuelsmth@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v3 2/2] dt-bindings: cpufreq: Document Krait CPU Cache scaling
-Date:   Fri, 21 Aug 2020 16:00:21 +0200
-Message-Id: <20200821140026.19643-3-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200821140026.19643-1-ansuelsmth@gmail.com>
-References: <20200821140026.19643-1-ansuelsmth@gmail.com>
+        id S1728511AbgHUQce (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 12:32:34 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:18647 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728122AbgHUQcQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 12:32:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598027524;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=5oM6hmHrkxSTh2VeiPEAHTyoVLjwfurKxWYpMhitciA=;
+        b=M/KVTksU1p3DnoGrWCOFV3S16GhMXigs6zNTYa6Ps/mQHpp7FoTQWk90YclJeUCZBk
+        vaQ1Zx86QhUZ814akr4NwjdgA8WMmr9eqoP4j5lff+v0GMOfFNVyvtJCTz7UHEvVAMQP
+        84c2RMMWhKEjSQo1nZOJtkm7V56+696yIE73JaH1YT2P1nmqxURvDepFmwc2QqlX1vZI
+        dGMpTmxSCW0gfw56YedVk2WOsT9u0+cfw7Vejr2etSAcU0jNzi1Zop2stgtLj5PwEby8
+        /xzScXcrR7NCfd4P/6HMrccilo8bnsZ+PMzTdGdPWfCf8hmdYIW4fstVZo8pkP+GAyM+
+        ITWw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/Fboo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id g0b6c1w7LGW2KXw
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Fri, 21 Aug 2020 18:32:02 +0200 (CEST)
+Date:   Fri, 21 Aug 2020 18:31:52 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas Cassel <nks@flawful.org>
+Subject: Re: [RFC PATCH 2/3] opp: Set required OPPs in reverse order when
+ scaling down
+Message-ID: <20200821163152.GA3422@gerhold.net>
+References: <20200730080146.25185-1-stephan@gerhold.net>
+ <20200730080146.25185-3-stephan@gerhold.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200730080146.25185-3-stephan@gerhold.net>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document dedicated Krait CPU Cache Scaling driver.
+Hi Viresh,
 
-Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
----
- .../bindings/cpufreq/krait-cache-scale.yaml   | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
+On Thu, Jul 30, 2020 at 10:01:45AM +0200, Stephan Gerhold wrote:
+> The OPP core already has well-defined semantics to ensure required
+> OPPs/regulators are set before/after the frequency change, depending
+> on if we scale up or down.
+> 
+> Similar requirements might exist for the order of required OPPs
+> when multiple power domains need to be scaled for a frequency change.
+> 
+> For example, on Qualcomm platforms using CPR (Core Power Reduction),
+> we need to scale the VDDMX and CPR power domain. When scaling up,
+> MX should be scaled up before CPR. When scaling down, CPR should be
+> scaled down before MX.
+> 
+> In general, if there are multiple "required-opps" in the device tree
+> I would expect that the order is either irrelevant, or there is some
+> dependency between the power domains. In that case, the power domains
+> should be scaled down in reverse order.
+> 
+> This commit updates _set_required_opps() to set required OPPs in
+> reverse order when scaling down.
+> 
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml b/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
-new file mode 100644
-index 000000000000..f5f1c9b76656
---- /dev/null
-+++ b/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/cpufreq/krait-cache-scale.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Krait Cpu Cache Frequency Scaling dedicated driver
-+
-+maintainers:
-+  - Ansuel Smith <ansuelsmth@gmail.com>
-+
-+description: |
-+  This Scale the Krait CPU Cache Frequency and optionally voltage
-+  when the Cpu Frequency is changed (using the cpufreq notifier).
-+
-+  Cache is scaled with the max frequency across all core and the cache
-+  frequency will scale based on the configured threshold in the dts.
-+
-+  The cache thresholds can be set to 3+ frequency bin, idle, nominal and
-+  high.
-+
-+properties:
-+  compatible:
-+    const: qcom,krait-cache
-+
-+  clocks:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: Phandle to the L2 CPU clock
-+
-+  clock-names:
-+    const: "l2"
-+
-+  voltage-tolerance:
-+    description: Same voltage tollerance of the Krait CPU
-+
-+  l2-cpufreq:
-+    description: |
-+      Threshold used by the driver to scale the L2 cache.
-+      If the max CPU Frequency is more than the set frequency,
-+      the driver will transition to the next frequency bin.
-+      Value is in kHz
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 3
-+    items:
-+      - description: idle
-+      - description: nominal
-+      - description: high
-+
-+  l2-supply:
-+    $ref: "/schemas/types.yaml#/definitions/phandle"
-+    description: Phandle to the L2 regulator supply.
-+
-+  opp-table: true
-+
-+required:
-+  - compatible
-+  - clocks
-+  - clock-names
-+  - voltage-tolerance
-+  - l2-cpufreq
-+  - l2-supply
-+
-+examples:
-+  - |
-+    qcom-krait-cache {
-+      compatible = "qcom,krait-cache";
-+      clocks = <&kraitcc 4>;
-+      clock-names = "l2";
-+      voltage-tolerance = <5>;
-+      l2-cpufreq = <384000 600000 1200000>;
-+      l2-supply = <&smb208_s1a>;
-+
-+      operating-points = <
-+        /* kHz    uV */
-+        384000  1100000
-+        1000000  1100000
-+        1200000  1150000
-+      >;
-+    };
--- 
-2.27.0
+This patch does not apply anymore after the cleanup you pushed to
+opp/linux-next. I would be happy to send a v2 with that fixed.
 
+On my other OPP patch set you mentioned that you might apply these
+directly with some of your own changes - would you also prefer to do it
+yourself in this case or should I send a v2?
+
+Still looking for your feedback on both patch sets by the way! :)
+
+Thanks!
+Stephan
+
+> ---
+> Related discussion: https://lore.kernel.org/linux-arm-msm/20200525194443.GA11851@flawful.org/
+> 
+> The advantage of this approach is that the CPR driver does not need
+> to bother with the VDDMX power domain at all - the requirements
+> can be fully described within the device tree, see e.g. [1].
+> An alternative option would be to modify the CPR driver to make these votes.
+> 
+> [1]: https://lore.kernel.org/linux-arm-msm/20200507104603.GA581328@gerhold.net/2-msm8916-vdd-mx.patch
+> ---
+>  drivers/opp/core.c | 30 +++++++++++++++++++++---------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index f7a476b55069..f93f551c911e 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -799,7 +799,7 @@ static int _set_required_opp(struct device *dev, struct device *pd_dev,
+>  /* This is only called for PM domain for now */
+>  static int _set_required_opps(struct device *dev,
+>  			      struct opp_table *opp_table,
+> -			      struct dev_pm_opp *opp)
+> +			      struct dev_pm_opp *opp, bool up)
+>  {
+>  	struct opp_table **required_opp_tables = opp_table->required_opp_tables;
+>  	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
+> @@ -821,12 +821,24 @@ static int _set_required_opps(struct device *dev,
+>  	 */
+>  	mutex_lock(&opp_table->genpd_virt_dev_lock);
+>  
+> -	for (i = 0; i < opp_table->required_opp_count; i++) {
+> -		pd_dev = genpd_virt_devs[i];
+> +	if (up) {
+> +		/* Scaling up? Set required OPPs in normal order */
+> +		for (i = 0; i < opp_table->required_opp_count; i++) {
+> +			pd_dev = genpd_virt_devs[i];
+>  
+> -		ret = _set_required_opp(dev, pd_dev, opp, i);
+> -		if (ret)
+> -			break;
+> +			ret = _set_required_opp(dev, pd_dev, opp, i);
+> +			if (ret)
+> +				break;
+> +		}
+> +	} else {
+> +		/* Scaling down? Set required OPPs in reverse order */
+> +		for (i = opp_table->required_opp_count - 1; i >= 0; i--) {
+> +			pd_dev = genpd_virt_devs[i];
+> +
+> +			ret = _set_required_opp(dev, pd_dev, opp, i);
+> +			if (ret)
+> +				break;
+> +		}
+>  	}
+>  	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+>  
+> @@ -914,7 +926,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  			opp_table->regulator_enabled = false;
+>  		}
+>  
+> -		ret = _set_required_opps(dev, opp_table, NULL);
+> +		ret = _set_required_opps(dev, opp_table, NULL, false);
+>  		goto put_opp_table;
+>  	}
+>  
+> @@ -973,7 +985,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  
+>  	/* Scaling up? Configure required OPPs before frequency */
+>  	if (freq >= old_freq) {
+> -		ret = _set_required_opps(dev, opp_table, opp);
+> +		ret = _set_required_opps(dev, opp_table, opp, true);
+>  		if (ret)
+>  			goto put_opp;
+>  	}
+> @@ -993,7 +1005,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
+>  
+>  	/* Scaling down? Configure required OPPs after frequency */
+>  	if (!ret && freq < old_freq) {
+> -		ret = _set_required_opps(dev, opp_table, opp);
+> +		ret = _set_required_opps(dev, opp_table, opp, false);
+>  		if (ret)
+>  			dev_err(dev, "Failed to set required opps: %d\n", ret);
+>  	}
+> -- 
+> 2.27.0
+> 
