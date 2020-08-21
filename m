@@ -2,108 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC6224CD37
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 07:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B7224CE00
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 08:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgHUFWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 01:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbgHUFWO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 01:22:14 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD0CC061387
-        for <linux-pm@vger.kernel.org>; Thu, 20 Aug 2020 22:22:13 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id t6so332654pjr.0
-        for <linux-pm@vger.kernel.org>; Thu, 20 Aug 2020 22:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gJPbQJM9jJ86fcPi19ptKXRC2I1mbN7SAmvcRcwLux0=;
-        b=GUWTB/OPy3T59+AQh2JxbbvVrkeifOpDos6Tl7NzF8Gqy4ZMTHKMc47U7wH+wDn0/T
-         llxnOfpSBGYj9LpPZ0bz+BC3OI3nD/k22wBJhUeiE4dwfBQrzkz8M4U8LmuoWl4vH8ZF
-         R0OxWA0qHvfuazjTQG/R2CVQFoGbUcsOFO/JaBZkqMCvkuyg+dxADzhkum0aZUPaTxkU
-         9pILLtAuLcx06h/ekAAhFuJNM3KWrZX8ZFrQWOVZ0aWjGGUzjn4PurNzxFeFB4weYjWa
-         y5S5gdxtPgeJNJ0vWLbCFLt7Fek3naJjcLIaYC2EZJJDqI/KVNlkyDLSiN8flRgjwSZt
-         21LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gJPbQJM9jJ86fcPi19ptKXRC2I1mbN7SAmvcRcwLux0=;
-        b=f1mgxWUbylTGZIvGPy4HdmW8JywTqwStBc4YRQgr982uTSXC73UeXSSQ8qrZRyuG8v
-         CVxYkXGg27F51Ew47iSmX2+zJxX+z5a2admLI1auLcX1esgO7bIewNKwuXcMQq4zdnwg
-         W/KO31/OyYxj2J6hbnN11rjoAvNeRQEjeRkubWyHjEdMmhXWKCRTorV3TSPCRhDeFuxT
-         1by1SraHRK4sweDRkJtSMuPxCvriMVM15DucPLuJZ6397VlqK7M8u63KJ8+B6CaQq2AV
-         uQzHhsQFTLKcoL5NVwgPyEZN3ozRdglorS5hzxo+aeZMeKD308cCwcpl84WwFDu+N+YN
-         xZKQ==
-X-Gm-Message-State: AOAM533lIHOLo/8593m6K+i/e9eDyFWDrx4IBbB/iPXMowwNyLKRd5wJ
-        6DJwp9ymsnTMJdpfu3Yu2rYcRw==
-X-Google-Smtp-Source: ABdhPJxbHY56srGn6G5rqtXaD33bgNntHBcb5EblCKiLBWgFl5HHCNv12wCAR5ncDzWqdj65SHLbDQ==
-X-Received: by 2002:a17:90a:6d96:: with SMTP id a22mr1070139pjk.165.1597987332523;
-        Thu, 20 Aug 2020 22:22:12 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id s67sm940535pfs.117.2020.08.20.22.22.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Aug 2020 22:22:11 -0700 (PDT)
-Date:   Fri, 21 Aug 2020 10:52:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     rjw@rjwysocki.net, Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Sumit Gupta <sumitg@nvidia.com>, catalin.marinas@arm.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        bbasu@nvidia.com, wangkefeng.wang@huawei.com
-Subject: Re: [Patch] cpufreq: replace cpu_logical_map with read_cpuid_mpir
-Message-ID: <20200821052209.efturkzs2kp4nbcn@vireshk-i7>
-References: <1597174997-22505-1-git-send-email-sumitg@nvidia.com>
- <20200820053945.xlwtpkvbt4o23flk@vireshk-i7>
- <20200820123711.GA19989@bogus>
+        id S1726243AbgHUGbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 02:31:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42060 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725951AbgHUGbm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Aug 2020 02:31:42 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D848B20732;
+        Fri, 21 Aug 2020 06:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597991501;
+        bh=nlYLizszK9f9v583kG2r3NUZircSq8a0b7ncAj+8nCE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=icHK5nj5ReIwEwsVtVm7zKaYGoNmULev+0nWZpsolGw0fskgZbyej0dJjTasvCJSl
+         dyVIbbFqKdtRskezltcj/zCCcfZtT8K9Q6wL39HyrObOtZ2QmFy5ZvDRlDs24PSRB4
+         OuHhul5XgUWTX5ZquBlRv7fRWehPVzRQGg81x9TI=
+Received: by mail-ej1-f52.google.com with SMTP id bo3so1004135ejb.11;
+        Thu, 20 Aug 2020 23:31:40 -0700 (PDT)
+X-Gm-Message-State: AOAM530bQ0KMHn63PX+jdczb14N/tE4X2urd7fx6GNrBQoVI/+OVC7/a
+        Ca0YB2LGtJYljHP/ouXDT1xUkn2NtPXijx/uRAI=
+X-Google-Smtp-Source: ABdhPJzmsRwacUgF9wp7sh4Uo7RCl0p0/BWQy6sNA1lK7shnUeEfA2XLjnyNUqiOPykidWM5/kQR7817vJYiPMs1QXw=
+X-Received: by 2002:a17:906:9989:: with SMTP id af9mr1305560ejc.385.1597991499427;
+ Thu, 20 Aug 2020 23:31:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200820123711.GA19989@bogus>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200708153420.29484-1-lukasz.luba@arm.com> <20200708153420.29484-3-lukasz.luba@arm.com>
+ <20200817155021.GC15887@kozik-lap> <2099aea9-5a63-6e5b-d7f9-4e6476584461@arm.com>
+In-Reply-To: <2099aea9-5a63-6e5b-d7f9-4e6476584461@arm.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Fri, 21 Aug 2020 08:31:28 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPc063m_YcouAO2Q9piJ_GV1Fh9XeS3ZZ3KR=ZyMxPKZ5w@mail.gmail.com>
+Message-ID: <CAJKOXPc063m_YcouAO2Q9piJ_GV1Fh9XeS3ZZ3KR=ZyMxPKZ5w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] ARM: dts: exynos: Remove interrupts from DMC
+ controller in Exynos5422
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>, willy.mh.wolff.ml@gmail.com,
+        k.konieczny@samsung.com, Chanwoo Choi <cw00.choi@samsung.com>,
+        =?UTF-8?B?QmFydMWCb21pZWogxbtvxYJuaWVya2lld2ljeg==?= 
+        <b.zolnierkie@samsung.com>, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        s.nawrocki@samsung.com, kgene@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-08-20, 13:37, Sudeep Holla wrote:
-> On Thu, Aug 20, 2020 at 11:09:45AM +0530, Viresh Kumar wrote:
-> > On 12-08-20, 01:13, Sumit Gupta wrote:
-> > > Commit eaecca9e7710 ("arm64: Fix __cpu_logical_map undefined issue")
-> > > fixes the issue with building tegra194 cpufreq driver as module. But
-> > > the fix might cause problem while supporting physical cpu hotplug[1].
-> > > 
-> > > This patch fixes the original problem by avoiding use of cpu_logical_map().
-> > > Instead calling read_cpuid_mpidr() to get MPIDR on target cpu.
-> > > 
-> > > [1] https://lore.kernel.org/linux-arm-kernel/20200724131059.GB6521@bogus/
-> > > 
-> > > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> > > ---
-> > >  drivers/cpufreq/tegra194-cpufreq.c | 10 +++++++---
-> > >  1 file changed, 7 insertions(+), 3 deletions(-)
-> > 
-> > Applied. Thanks.
-> 
-> Just to confirm, is this going as a fix ? We want to drop exporting
-> cpu_logical_map in v5.9 so this needs to go as fix. I missed it earlier,
-> actually,
-> 
-> Fixes: df320f89359c ("cpufreq: Add Tegra194 cpufreq driver")
-> is appropriate here so that we can drop export symbol which was part of
-> Commit eaecca9e7710 ("arm64: Fix __cpu_logical_map undefined issue")
-> as a workaround to  fix the build.
+On Mon, 17 Aug 2020 at 19:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Krzysztof,
+>
+> On 8/17/20 4:50 PM, Krzysztof Kozlowski wrote:
+> > On Wed, Jul 08, 2020 at 04:34:20PM +0100, Lukasz Luba wrote:
+> >> The interrupts in Dynamic Memory Controller in Exynos5422 and Odroid
+> >> XU3-family boards are no longer needed. They have been used in order
+> >> to workaround some issues in scheduled work in devfreq. Now when the
+> >> devfreq framework design is improved, remove the interrupt driven
+> >> approach and rely on devfreq monitoring mechanism with fixed intervals.
+> >>
+> >> Reported-by: Willy Wolff <willy.mh.wolff.ml@gmail.com>
+> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >> ---
+> >>   arch/arm/boot/dts/exynos5420.dtsi | 3 ---
+> >>   1 file changed, 3 deletions(-)
+> >
+> > I think the dependencies were merged so this can be safely applied
+> > without bisectability problems?
+>
+> I have created v2 of that fix and it got merged
+> via Chanwoo's tree, the commit 4fc9a0470d2dc37028
+> https://lkml.org/lkml/2020/7/10/1048
+>
+> That commit switched the driver default mode from 'irq driven' to
+> new devfreq monitoring mechanism. Furthermore, when the driver is
+> built as a module, you can try to use the 'irq mode', but for this
+> you would need the DT IRQs description (this $subject tries to remove).
+>
+> I would like to keep this IRQ mode for experimentation, as I
+> described in answers to Bartek's questions:
+> https://lkml.org/lkml/2020/7/14/315
+>
+> Unfortunately, I am quite busy and won't make any progress before the
+> LPC.
 
-Okay.
+None of these were the actual answer to my question, unless by "v2 of
+that fix and it got merged" means the dependencies?
 
-Rafael: Please pick this patch directly for next rc with 
+I'll drop it from the queue. Please resend if it is valid.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+Best regards,
+Krzysztof
