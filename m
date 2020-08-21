@@ -2,167 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4022C24E34D
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 00:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58ABF24E356
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 00:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbgHUW1A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 18:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726761AbgHUW06 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 18:26:58 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50CEC061573;
-        Fri, 21 Aug 2020 15:26:57 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id l23so2843764edv.11;
-        Fri, 21 Aug 2020 15:26:57 -0700 (PDT)
+        id S1726761AbgHUW1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 18:27:38 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:38559 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726873AbgHUW1i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 18:27:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=2xVtjZRNRS3E8MVTp7lHDkvpy13Q1fp6Wa/UA+c8+FM=;
-        b=Bxa+FV2CpjigcBwmlJ0mAZ6CFy5eNN8qLauJWLCHmjyOrmPjCKQX+oKc18WbH/dX96
-         lQtBKJRd9iNGtLhKGRWVePgG+4jOgBBsRYArMhBWZTvPRueWGD9ko+My68SQN5wGQ6wN
-         VLKk6MMJ8BfmYZDprO6rX9nxtc2GlFJ1nGKYgOgBm7og9JbzxZMrPuTPN+aQY0j1Mij2
-         fXDi4vBb3kClkMtAtzx9z6UfZE95+mrx4bApQtyDd+5GUJ7isAJpriROBxvYzmXfAhvh
-         xa6LxLtqBDrGn6/lGLt4IzpFLqpvfrKGjVDaN3pTa8dOvkP7mGkcUGRgplgLJ9cX6XEE
-         pSyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=2xVtjZRNRS3E8MVTp7lHDkvpy13Q1fp6Wa/UA+c8+FM=;
-        b=OA2DJFdejpEQmcNzP15Y87NQzFjYEWHXQsEd9cqK9O5fbWrsPc5Al7MAoecWOAA36c
-         gFTqxj/8IgyZW/BkNeqsW+uCK5zYcAh1m2zU2nVSXZNUf4YI7qiGjxivvgLnIfnSxsf7
-         XLJIhr6PRMvg8wMYZhb+pzbjdfd/LKt3Lfyn273iZzXS71qArL1IEu9v/vfTggX42FjV
-         czqOfhH654OhZUpWJD9kIlmGjun/hxrA4lWSNkhxoXphqUvh1dttQm6rlkWsOX0L7TL2
-         3jERgnAFDWxGLc/s1IxopWj5Kw5DtuDzrzQONG96e1oWpI3AO9RVi1vPp1FXTXQ8g8vB
-         WPVA==
-X-Gm-Message-State: AOAM531axZ7Iod8BX+DaJdtXY4gR1l5cOpVSDA4xD7sEYlhyJjDdVzpw
-        LeH79yrESPF63QmgCZ8tCvw=
-X-Google-Smtp-Source: ABdhPJxLrBiXYSrNYXMVCMuh+sIT//JDR2ezQOjASjRkpp2BLAQVyiAzZ32tZvDhOURB2PDhXBmssQ==
-X-Received: by 2002:a05:6402:6da:: with SMTP id n26mr5103065edy.262.1598048816550;
-        Fri, 21 Aug 2020 15:26:56 -0700 (PDT)
-Received: from BV030612LT ([188.24.159.61])
-        by smtp.gmail.com with ESMTPSA id bx22sm2057801ejc.18.2020.08.21.15.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 15:26:56 -0700 (PDT)
-Date:   Sat, 22 Aug 2020 01:26:53 +0300
-From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] Add initial support for ATC260x PMICs
-Message-ID: <20200821222653.GA2255465@BV030612LT>
-References: <cover.1598043782.git.cristian.ciocaltea@gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1598048857; x=1629584857;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=pnNXSAi218kX4gixFJtZ3Iig1xRXyX/Xb2Q2WiRjc+w=;
+  b=HFG0wtmbk7Tj/C5tVa4u5QW79GpfD7XtRwd1gPEw1xihzWbTiTJtLL6A
+   U6sb4IFgazJVXraM5ewAs6iI1ryi0q7aL0PdPe8zWOy+CA4ADCiMy3WLB
+   kNK5QeV/ZUKtSjwA8irfL9TCn6ZcBN6I7Lsc8hnxJMlc+5ZNizJIKC9wh
+   Y=;
+X-IronPort-AV: E=Sophos;i="5.76,338,1592870400"; 
+   d="scan'208";a="49306994"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-579b7f5b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 21 Aug 2020 22:27:34 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2c-579b7f5b.us-west-2.amazon.com (Postfix) with ESMTPS id AA474A2B36;
+        Fri, 21 Aug 2020 22:27:32 +0000 (UTC)
+Received: from EX13D05UWB003.ant.amazon.com (10.43.161.26) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 21 Aug 2020 22:27:26 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D05UWB003.ant.amazon.com (10.43.161.26) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 21 Aug 2020 22:27:25 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Fri, 21 Aug 2020 22:27:25 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id E96BE40362; Fri, 21 Aug 2020 22:27:25 +0000 (UTC)
+Date:   Fri, 21 Aug 2020 22:27:25 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
+        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
+        <anchalag@amazon.com>, <xen-devel@lists.xenproject.org>,
+        <vkuznets@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dwmw@amazon.co.uk>,
+        <benh@kernel.crashing.org>
+Subject: [PATCH v3 04/11] x86/xen: add system core suspend and resume
+ callbacks
+Message-ID: <6b86a4bf71ee3e3e9b0bb00f594a4edc85da19a9.1598042152.git.anchalag@amazon.com>
+References: <cover.1598042152.git.anchalag@amazon.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <cover.1598043782.git.cristian.ciocaltea@gmail.com>
+In-Reply-To: <cover.1598042152.git.anchalag@amazon.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I have just realized I had omitted the changelog - sorry:
+From: Munehisa Kamata <kamatam@amazon.com>
 
-Changes in v2:
-- Reworked MFD core & I2C driver
-  * Integrated Lee's feedback
-  * Added support for using the regmap within atomic contexts
-  * Added support for ATC2603C chip variant
-  * Reorganized KConfig entries
-- Improved regulator driver
-  * Added support for ATC2603C variant
-  * Used helper macros for more compact specification of regulator_desc items
-  * Added more regulator capabilities
-- Added power controller driver
-  * Provides system poweroff/reboot functionalities
-  * Requires support for I2C Atomic transfers in the Owl driver (already submitted)
-- Added onkey driver: exposes the power button as an input device
-- Added yaml binding doc
-- Rebased patchset on kernel v5.9-rc1
+Add Xen PVHVM specific system core callbacks for PM
+hibernation support. The callbacks suspend and resume
+Xen primitives like shared_info, pvclock and grant table.
+These syscore_ops are specifically for domU hibernation.
+xen_suspend() calls syscore_suspend() during Xen suspend
+operation however, during xen suspend lock_system_sleep()
+lock is taken and thus system cannot trigger hibernation.
+These system core callbacks will be called only from the
+hibernation context.
 
-Kind regards,
-Cristi
+[Anchal Agarwal: Changelog]:
+v1->v2: Edit commit message
+        Fixed syscore_suspend() to call gnntab_suspend
+        Removed suspend mode check in syscore_suspend()/
+        syscore_resume()
+v2->v3: Re-introduced check for xen suspend mode to avoid
+        syscore osp callbacks getting executed during xen
+	suspend/resume
 
-On Sat, Aug 22, 2020 at 01:19:46AM +0300, Cristian Ciocaltea wrote:
-> This is re-spin of the patch series submitted some time ago by Mani,
-> who added initial support (MFD core and regulators) for the Actions
-> Semi ATC260x PMICs:
-> https://lore.kernel.org/lkml/20190617155011.15376-1-manivannan.sadhasivam@linaro.org/
-> 
-> The ATC260x family of PMICs integrates Audio Codec, Power management,
-> Clock generation and GPIO controller blocks. There are currently 3
-> variants: ATC2603A, ATC2603C and ATC2609A.
-> 
-> In addition to the ATC2609A regulator functionality provided that time,
-> this patchset adds support for the ATC2603C variant, together with some
-> new functionalities for both chips: power controller and onkey input.
-> The ATC2603A variant remains unsupported for the moment.
-> 
-> This has been tested on RoseapplePi, a SBC based on the Action Semi S500
-> SoC, which integrates ATC2603C PMIC. An initial support for this board
-> has been already submitted:
-> https://lore.kernel.org/lkml/cover.1592123160.git.cristian.ciocaltea@gmail.com/
-> 
-> Please note that enabling the ATC260x PMICs on the compatible Actions
-> Semi Owl SoC based boards depends on the following:
-> 
-> * Actions Semi SIRQ driver (for PMIC DTS setup):
->   https://lore.kernel.org/lkml/cover.1597852360.git.cristian.ciocaltea@gmail.com/
-> 
-> * I2C Atomic transfers in Actions Semi Owl driver (for proper operation
->   of the power controller driver):
->   https://lore.kernel.org/lkml/b086ef6d355d9730c839359e15eb06175283e323.1596485741.git.cristian.ciocaltea@gmail.com/
->   
-> Thanks,
-> Cristi
-> 
-> Cristian Ciocaltea (6):
->   dt-bindings: mfd: Add Actions Semi ATC260x PMIC binding
->   mfd: Add MFD driver for ATC260x PMICs
->   regulator: Add regulator driver for ATC260x PMICs
->   power: reset: Add poweroff driver for ATC260x PMICs
->   input: atc260x: Add onkey driver for ATC260x PMICs
->   MAINTAINERS: Add entry for ATC260x PMIC
-> 
->  .../bindings/mfd/actions,atc260x.yaml         | 221 ++++++++
->  MAINTAINERS                                   |  12 +
->  drivers/input/misc/Kconfig                    |  11 +
->  drivers/input/misc/Makefile                   |   2 +-
->  drivers/input/misc/atc260x-onkey.c            | 304 +++++++++++
->  drivers/mfd/Kconfig                           |  18 +
->  drivers/mfd/Makefile                          |   3 +
->  drivers/mfd/atc260x-core.c                    | 290 ++++++++++
->  drivers/mfd/atc260x-i2c.c                     |  73 +++
->  drivers/power/reset/Kconfig                   |   8 +-
->  drivers/power/reset/Makefile                  |   1 +
->  drivers/power/reset/atc260x-poweroff.c        | 274 ++++++++++
->  drivers/regulator/Kconfig                     |   8 +
->  drivers/regulator/Makefile                    |   1 +
->  drivers/regulator/atc260x-regulator.c         | 511 ++++++++++++++++++
->  include/linux/mfd/atc260x/atc2603c.h          | 281 ++++++++++
->  include/linux/mfd/atc260x/atc2609a.h          | 308 +++++++++++
->  include/linux/mfd/atc260x/core.h              |  86 +++
->  18 files changed, 2410 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
->  create mode 100644 drivers/input/misc/atc260x-onkey.c
->  create mode 100644 drivers/mfd/atc260x-core.c
->  create mode 100644 drivers/mfd/atc260x-i2c.c
->  create mode 100644 drivers/power/reset/atc260x-poweroff.c
->  create mode 100644 drivers/regulator/atc260x-regulator.c
->  create mode 100644 include/linux/mfd/atc260x/atc2603c.h
->  create mode 100644 include/linux/mfd/atc260x/atc2609a.h
->  create mode 100644 include/linux/mfd/atc260x/core.h
-> 
-> -- 
-> 2.28.0
-> 
+Signed-off-by: Agarwal Anchal <anchalag@amazon.com>
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+---
+ arch/x86/xen/enlighten_hvm.c |  1 +
+ arch/x86/xen/suspend.c       | 55 ++++++++++++++++++++++++++++++++++++++++++++
+ include/xen/xen-ops.h        |  2 ++
+ 3 files changed, 58 insertions(+)
+
+diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+index ff7c69278f63..4b6ad30106dd 100644
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -216,6 +216,7 @@ static void __init xen_hvm_guest_init(void)
+ 	if (xen_feature(XENFEAT_hvm_callback_vector))
+ 		xen_have_vector_callback = 1;
+ 
++	xen_setup_syscore_ops();
+ 	xen_hvm_smp_init();
+ 	WARN_ON(xen_cpuhp_setup(xen_cpu_up_prepare_hvm, xen_cpu_dead_hvm));
+ 	xen_unplug_emulated_devices();
+diff --git a/arch/x86/xen/suspend.c b/arch/x86/xen/suspend.c
+index 1d83152c761b..550aa0fc9465 100644
+--- a/arch/x86/xen/suspend.c
++++ b/arch/x86/xen/suspend.c
+@@ -2,17 +2,22 @@
+ #include <linux/types.h>
+ #include <linux/tick.h>
+ #include <linux/percpu-defs.h>
++#include <linux/syscore_ops.h>
++#include <linux/kernel_stat.h>
+ 
+ #include <xen/xen.h>
+ #include <xen/interface/xen.h>
++#include <xen/interface/memory.h>
+ #include <xen/grant_table.h>
+ #include <xen/events.h>
++#include <xen/xen-ops.h>
+ 
+ #include <asm/cpufeatures.h>
+ #include <asm/msr-index.h>
+ #include <asm/xen/hypercall.h>
+ #include <asm/xen/page.h>
+ #include <asm/fixmap.h>
++#include <asm/pvclock.h>
+ 
+ #include "xen-ops.h"
+ #include "mmu.h"
+@@ -82,3 +87,53 @@ void xen_arch_suspend(void)
+ 
+ 	on_each_cpu(xen_vcpu_notify_suspend, NULL, 1);
+ }
++
++static int xen_syscore_suspend(void)
++{
++	struct xen_remove_from_physmap xrfp;
++	int ret;
++
++	/* Xen suspend does similar stuffs in its own logic */
++	if (is_xen_suspend())
++		return 0;
++
++	gnttab_suspend();
++
++	xrfp.domid = DOMID_SELF;
++	xrfp.gpfn = __pa(HYPERVISOR_shared_info) >> PAGE_SHIFT;
++
++	ret = HYPERVISOR_memory_op(XENMEM_remove_from_physmap, &xrfp);
++	if (!ret)
++		HYPERVISOR_shared_info = &xen_dummy_shared_info;
++
++	return ret;
++}
++
++static void xen_syscore_resume(void)
++{
++	/* Xen suspend does similar stuffs in its own logic */
++	if (is_xen_suspend())
++		return;
++
++	/* No need to setup vcpu_info as it's already moved off */
++	xen_hvm_map_shared_info();
++
++	pvclock_resume();
++
++	gnttab_resume();
++}
++
++/*
++ * These callbacks will be called with interrupts disabled and when having only
++ * one CPU online.
++ */
++static struct syscore_ops xen_hvm_syscore_ops = {
++	.suspend = xen_syscore_suspend,
++	.resume = xen_syscore_resume
++};
++
++void __init xen_setup_syscore_ops(void)
++{
++	if (xen_hvm_domain())
++		register_syscore_ops(&xen_hvm_syscore_ops);
++}
+diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
+index e8b08734fab1..bad334cd55d7 100644
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -41,6 +41,8 @@ u64 xen_steal_clock(int cpu);
+ int xen_setup_shutdown_event(void);
+ 
+ bool is_xen_suspend(void);
++void xen_setup_syscore_ops(void);
++
+ extern unsigned long *xen_contiguous_bitmap;
+ 
+ #if defined(CONFIG_XEN_PV) || defined(CONFIG_ARM) || defined(CONFIG_ARM64)
+-- 
+2.16.6
+
