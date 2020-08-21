@@ -2,141 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE7324DFF5
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 20:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2082824E0AF
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 21:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbgHUSuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 14:50:19 -0400
-Received: from mail-ej1-f67.google.com ([209.85.218.67]:33914 "EHLO
-        mail-ej1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725768AbgHUSuS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 14:50:18 -0400
-Received: by mail-ej1-f67.google.com with SMTP id o23so3526321ejr.1;
-        Fri, 21 Aug 2020 11:50:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sYzLZgwpvbGKths6LYp8+ddZvzUQfeDT+gGev5xd+mQ=;
-        b=uANUCq4AkqWLkoH2FU99OPkqwdK+63+Q+fuAQiZtQj6PdoZpe2WIL2I8kN5ZossFXX
-         1ojLCVg6HqESB0klZGeNRh1RolTaEKgTZFfQ4M3O2OyqC7mw4v6/UFrmXKtPtR60Tf4S
-         j3Ry+IMl6hzhPmx1YcIVNrgAuse6sDUNrwnN/V9YhznzRup0373t3M3gMZYmilUmcHyR
-         N7jN2DHAYx/pgJo23rP9lrW8Vl/IqZjwMMY+dmRS/9hpRnNlngKPnwU06DyLGnzj/xFz
-         IhPOyFITZJqD9JHrB5dHkpXo3QAmsGablkAzarrDhflfhhVn6wfRc8t4gjqoxqEKITQu
-         AaZg==
-X-Gm-Message-State: AOAM532DwVbC/H4P7zXTr3jPX4mq9QvjjWSrwUby5CoPEnts52PjAetf
-        6ARLXzzAuEwgJmm31cH5/VKxxLaGvZ+fkIsq7wUW82fPtIY=
-X-Google-Smtp-Source: ABdhPJy/3f/bgh6Ufo4q/gpnOxySM0lm90ZX/2duRJBB/eV9Nk76yTVwEcSKbIuZwDEUYC+1H1UmBaDPnP42ZotHBv4=
-X-Received: by 2002:a17:906:b157:: with SMTP id bt23mr4451828ejb.354.1598035815823;
- Fri, 21 Aug 2020 11:50:15 -0700 (PDT)
+        id S1726243AbgHUTeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 15:34:44 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54089 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725801AbgHUTeo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 15:34:44 -0400
+Received: (qmail 266418 invoked by uid 1000); 21 Aug 2020 15:34:42 -0400
+Date:   Fri, 21 Aug 2020 15:34:42 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PM: sleep: core: Fix the handling of pending runtime
+ resume requests
+Message-ID: <20200821193442.GA264863@rowland.harvard.edu>
+References: <7969920.MVx1BpXlEM@kreacher>
 MIME-Version: 1.0
-References: <20200717060849.12469-1-liwei.song@windriver.com>
- <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com> <52f16995-6d2d-fa7d-ed5e-682db3461d03@windriver.com>
-In-Reply-To: <52f16995-6d2d-fa7d-ed5e-682db3461d03@windriver.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Fri, 21 Aug 2020 14:50:04 -0400
-Message-ID: <CAJvTdKms0Qj3d+g_tK8oboMXebYgnPm51EdSL_UvLdw3GV6A3A@mail.gmail.com>
-Subject: Re: [PATCH] tools/power turbostat: call pread64 in kernel directly
-To:     Liwei Song <liwei.song@windriver.com>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7969920.MVx1BpXlEM@kreacher>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Re: offset size
+On Fri, Aug 21, 2020 at 07:41:02PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> It has been reported that system-wide suspend may be aborted in the
+> absence of any wakeup events due to unforseen interactions of it with
+> the runtume PM framework.
+> 
+> One failing scenario is when there are multiple devices sharing an
+> ACPI power resource and runtime-resume needs to be carried out for
+> one of them during system-wide suspend (for example, because it needs
+> to be reconfigured before the whole system goes to sleep).  In that
+> case, the runtime-resume of that device involves turning the ACPI
+> power resource "on" which in turn causes runtime resume requests
+> to be queued up for all of the other devices sharing it.  Those
+> requests go to the runtime PM workqueue which is frozen during
+> system-wide suspend, so they are not actually taken care of until
+> the resume of the whole system, but the pm_runtime_barrier()
+> call in __device_suspend() sees them and triggers system wakeup
+> events for them which then cause the system-wide suspend to be
+> aborted if wakeup source objects are in active use.
+> 
+> Of course, the logic that leads to triggering those wakeup events is
+> questionable in the first place, because clearly there are cases in
+> which a pending runtime resume request for a device is not connected
+> to any real wakeup events in any way (like the one above).  Moreover,
+> if there is a pending runtime resume request for a device while
+> __device_suspend() is running for it, the physical state of the
+> device may not be in agreement with the "suspended" runtime PM status
+> of it (which may be the very reason for queuing up the runtime resume
+> request for it).
+> 
+> For these reasons, rework __device_suspend() to carry out synchronous
+> runtime-resume for devices with pending runtime resume requests before
+> attempting to invoke system-wide suspend callbacks for them with the
+> expectation that their drivers will trigger system-wide wakeup events
+> in the process of handling the runtime resume, if necessary.
+> 
+> Fixes: 1e2ef05bb8cf8 ("PM: Limit race conditions between runtime PM and system sleep (v2)")
+> Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/main.c |   12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> Index: linux-pm/drivers/base/power/main.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/main.c
+> +++ linux-pm/drivers/base/power/main.c
+> @@ -1606,13 +1606,13 @@ static int __device_suspend(struct devic
+>  	}
+>  
+>  	/*
+> -	 * If a device configured to wake up the system from sleep states
+> -	 * has been suspended at run time and there's a resume request pending
+> -	 * for it, this is equivalent to the device signaling wakeup, so the
+> -	 * system suspend operation should be aborted.
+> +	 * If there's a runtime resume request pending for the device, resume
+> +	 * it before proceeding with invoking the system-wide suspend callbacks
+> +	 * for it, because the physical state of the device may not reflect the
+> +	 * "suspended" runtime PM status already in that case.
+>  	 */
+> -	if (pm_runtime_barrier(dev) && device_may_wakeup(dev))
+> -		pm_wakeup_event(dev, 0);
+> +	if (pm_runtime_barrier(dev))
+> +		pm_runtime_resume(dev);
 
-The offsets on this file are the MSR offsets.
-What MSR are you trying to access at offset 0xc0010299?
+Is this really right?  Note that whenever pm_runtime_barrier() returns a 
+nonzero value, it already calls rpm_resume(dev, 0).  So the 
+pm_runtime_resume() call added here is redundant.
 
-Re: pread vs pread64
+Furthermore, by the logic used in this patch, the call to 
+pm_wakeup_event() in the original code is also redundant: Any required 
+wakeup event should have been generated when the runtime resume inside 
+pm_runtime_barrer() was carried out.  Removing a redundant function call 
+can't fix a bug!
 
-If I take on faith that you have some kind of 32-bit execution
-environment that makes pread into pread32 instead of pread64, and that
-truncates an off_t to 32-bits from 64-bits, and it actually makes
-sense to request a read at this large offset...
+This means that the code could be simplified to just:
 
-would we really have to invoke syscall() directly -- couldn't we
-invoke pread64() directly? (eg. below)
+	pm_runtime_barrier(dev);
 
-thanks,
--Len
+Will this fix the reported bug?  It seems likely to me that the actual 
+problem with the failure scenario in the patch description was that 
+turning on an ACPI power resource causes runtime-resume requests to be 
+queued for all devices sharing that resource.  Wouldn't it make more 
+sense to resume only the device that requested it and leave the others 
+in runtime suspend?
 
-
-@@ -490,11 +491,12 @@ int get_msr_fd(int cpu)
-        return fd;
- }
-
--int get_msr(int cpu, off_t offset, unsigned long long *msr)
-+int get_msr(int cpu, unsigned long long offset, unsigned long long *msr)
- {
-        ssize_t retval;
-
--       retval = pread(get_msr_fd(cpu), msr, sizeof(*msr), offset);
-+       retval = pread64(get_msr_fd(cpu), msr, sizeof(*msr), offset);
-
-        if (retval != sizeof *msr)
-                err(-1, "cpu%d: msr offset 0x%llx read failed", cpu,
-(unsigned long long)offset);
-
-On Thu, Aug 13, 2020 at 10:17 PM Liwei Song <liwei.song@windriver.com> wrote:
->
-> with multilib lib32 support, the rootfs will be 32-bit,
-> the kernel is still 64-bit, in this case run turbostat
-> will failed with "out of range" error.
->
-> Thanks,
-> Liwei.
->
-> On 8/14/20 05:43, Len Brown wrote:
-> > Huh?
-> >
-> > On Fri, Jul 17, 2020 at 2:09 AM Liwei Song <liwei.song@windriver.com> wrote:
-> >>
-> >> with 32-bit rootfs, the offset may out of range when set it
-> >> to 0xc0010299, define it as "unsigned long long" type and
-> >> call pread64 directly in kernel.
-> >>
-> >> Signed-off-by: Liwei Song <liwei.song@windriver.com>
-> >> ---
-> >>  tools/power/x86/turbostat/turbostat.c | 5 +++--
-> >>  1 file changed, 3 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-> >> index 33b370865d16..4c5cdfcb5721 100644
-> >> --- a/tools/power/x86/turbostat/turbostat.c
-> >> +++ b/tools/power/x86/turbostat/turbostat.c
-> >> @@ -33,6 +33,7 @@
-> >>  #include <sys/capability.h>
-> >>  #include <errno.h>
-> >>  #include <math.h>
-> >> +#include <sys/syscall.h>
-> >>
-> >>  char *proc_stat = "/proc/stat";
-> >>  FILE *outf;
-> >> @@ -381,11 +382,11 @@ int get_msr_fd(int cpu)
-> >>         return fd;
-> >>  }
-> >>
-> >> -int get_msr(int cpu, off_t offset, unsigned long long *msr)
-> >> +int get_msr(int cpu, unsigned long long offset, unsigned long long *msr)
-> >>  {
-> >>         ssize_t retval;
-> >>
-> >> -       retval = pread(get_msr_fd(cpu), msr, sizeof(*msr), offset);
-> >> +       retval = syscall(SYS_pread64, get_msr_fd(cpu), msr, sizeof(*msr), offset);
-> >>
-> >>         if (retval != sizeof *msr)
-> >>                 err(-1, "cpu%d: msr offset 0x%llx read failed", cpu, (unsigned long long)offset);
-> >> --
-> >> 2.17.1
-> >>
-> >
-> >
-
-
-
--- 
-Len Brown, Intel Open Source Technology Center
+Alan Stern
