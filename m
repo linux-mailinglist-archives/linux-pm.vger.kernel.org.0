@@ -2,65 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D92EB24DF6C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 20:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE5D24DFE8
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Aug 2020 20:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgHUSXj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 14:23:39 -0400
-Received: from mail-ej1-f66.google.com ([209.85.218.66]:44428 "EHLO
-        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgHUSXi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Aug 2020 14:23:38 -0400
-Received: by mail-ej1-f66.google.com with SMTP id bo3so3370593ejb.11;
-        Fri, 21 Aug 2020 11:23:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ik24Pn50+AFSzC/zSLjdolgrHNOwiWrGKLY+tyLf6y0=;
-        b=U3uAWmAM8cM9zKJNmyPNPB1xStNLANuE/X+x2cdKaLZxri4cj169hCQx+BOJS9sa0p
-         bLCReuCX8x1hQTXz6aG1zcSG9bYAzbJb+6yHzxhx5U8zyHAxzCXUsPuJWNa0T6wXLwbz
-         1rytH7gDJoAmj8TqsKqlF73PekWP/IgK/4yfAoLF5pwhEOaMw0fokRh3ZAmBLQyZ5VN5
-         RTEm8g5NkP5bM9HsNp38Qv7VuX2s4Z+q5s4zCJyJDlvSacCOciiHaELmpkx5Pt/olEmN
-         j9vi34w1Nfx+b6FfGosoNSYtTBsFyUrJXVfU3Gxoje+gUowetatZDdmDWLZP08w02bYy
-         31dw==
-X-Gm-Message-State: AOAM5307UYjhf36sNr9NWMn9PyiDJu6BlQMyj8o1ojYwCLAIfOA4Qh3u
-        ugB6Jqt49X1CDGo7Q9m59DoGgJrYOybk8lOoA6y8JwJ2
-X-Google-Smtp-Source: ABdhPJyfhHKvLdCjmom4XAojkrgk5ZNIN1FBTEoRjtkk3wCieNVVu/zuLSNK2hdo6lUDcZgllT3qR8arxEDagQfDrJw=
-X-Received: by 2002:a17:906:a219:: with SMTP id r25mr4211610ejy.201.1598034216965;
- Fri, 21 Aug 2020 11:23:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200810144330.75613-1-darcari@redhat.com>
-In-Reply-To: <20200810144330.75613-1-darcari@redhat.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Fri, 21 Aug 2020 14:23:25 -0400
-Message-ID: <CAJvTdKms-sO=Qvpnhe4OjE48gXHPzDKbT0i5vK2QuDCxZTt_+Q@mail.gmail.com>
-Subject: Re: [PATCH] tools/power turbostat: fix output formatting for ACPI CST enumeration
-To:     David Arcari <darcari@redhat.com>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1725883AbgHUSqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 14:46:21 -0400
+Received: from mga12.intel.com ([192.55.52.136]:7757 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725768AbgHUSqT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Aug 2020 14:46:19 -0400
+IronPort-SDR: Wmb7D1cXgUImjchpB3JRogAFGAvDgQU8vHTEcvMHFswBetNo+k74bFlMUmIqImriTGu8zGHRP2
+ qEibt6uc4kTA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="135144430"
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="135144430"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 11:46:18 -0700
+IronPort-SDR: UusSSuzq5wx29QFY0zBg333sXnSz69BQ9rIZdMBuw25WER6ClzCEQjEd+rUaQJIV7V2d6wkbWd
+ ZfkpNRsZNinA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="498064093"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 21 Aug 2020 11:46:18 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+Subject: [PATCH] powercap/rapl: Add support for Lakefield
+Date:   Fri, 21 Aug 2020 11:48:10 -0700
+Message-Id: <20200821184810.22484-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dave,
+Simply add Lakefield model ID. No additional changes are needed.
 
-I think this is fine.
-Indeed, I actually went ahead and applied it a week or so ago.
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+---
+ drivers/powercap/intel_rapl_common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-the only alternative that I can think of is actually shortening the
-ACPI C-state names in the intel_idle driver -- which is still an
-option.  It would not be the first time we have tweaked the names used
-in that driver to make tools more happy...
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 6f55aaef8afc..d85a3d95ef20 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1036,6 +1036,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		&rapl_defaults_core),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&rapl_defaults_spr_server),
++	X86_MATCH_INTEL_FAM6_MODEL(LAKEFIELD,		&rapl_defaults_core),
+ 
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,	&rapl_defaults_byt),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ATOM_AIRMONT,	&rapl_defaults_cht),
+-- 
+2.17.1
 
-My apology for neglecting to send you an ACK.
-I had intended to send my queued series to the list, which would
-suffice for all the ACKs, but that send and the subsequent push got
-delayed by this and that.  So I'll try to ack as I go, so it is clear
-at any time where a patch stands.
-
-thanks!
-
-Len Brown, Intel Open Source Technology Center
