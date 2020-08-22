@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 843C424E445
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 02:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B296A24E447
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 02:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726795AbgHVArM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 20:47:12 -0400
-Received: from cmta16.telus.net ([209.171.16.89]:49840 "EHLO cmta16.telus.net"
+        id S1726923AbgHVArW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Aug 2020 20:47:22 -0400
+Received: from cmta17.telus.net ([209.171.16.90]:35744 "EHLO cmta17.telus.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726747AbgHVArK (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Aug 2020 20:47:10 -0400
+        id S1726817AbgHVArW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 21 Aug 2020 20:47:22 -0400
 Received: from dougxps ([173.180.45.4])
         by cmsmtp with SMTP
-        id 9HgYkzvRm5b7l9HgZkaPn6; Fri, 21 Aug 2020 18:47:08 -0600
+        id 9HgikQMyfYgvr9HgkkWUBK; Fri, 21 Aug 2020 18:47:19 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1598057228; bh=Psa7fI7Z3L3lxeYPlncS5NMGLnaW8PNZQHPuQ8gGcvM=;
+        t=1598057239; bh=hlUDJ5ST80f1AO5TYhBYs0t+5xKCeLNh/7y2T2AZj0w=;
         h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=AnovVmBj5cZaY/dsWCErSoUlUNFwKqxrZgg+sQCwnZFxuB+lTPtVZ0sCR/h75Fxaf
-         Iu8+yZRTGbhELG97roWU6XDSi9XBlPC00bWC2pZoxAWYk1AHX7s178s1S+KmquQjLN
-         KaWnK72CzwccDsWjsbJJ/5qm3nKof7qjP/9vg+/xrc0x5IHNNW/HBfZjr6upwxUhbu
-         biik0SEcN2UUXEuvFi4cGt70nRojEBIhZIlw3XSwo/i2n65VkYSzJ5o17RfmHW92ei
-         LFjA3k4ScaHecC3Cjxke3qOlboevPHnKLlq66GDr7JObEf3uK8kc+Rhlxi0A/uiYuW
-         DtILc/3ZQkSaA==
+        b=qOoQsQplcE6kJSLMMslU4TWXJbJmcItDui+L4GH8serM9Jd4Ynm1wjO43TGY2I7gp
+         bMrMEYdYsKeOGOA46qI7RS/i7PyFrv2K4624jEPzuH0fVY5jHpjp4frGYvn32KA8eS
+         OLOlioltj279BuC3LhiatoNVt1cKXEfMFCbJEPecFi7hN+EILCIWOjjUyP4qgfKAom
+         gpWWPz363WgvuRXZZ5lXrI34PBN/cX7vAIaZXAaFlHScs0S+ED5lbu3tLXR5y2a+Yc
+         QBWnq3BmtCO+ekqVUs6PbvQqNsxzD+7uWUoHx0MIvj5gZ5RJ+F/iD4S4qitln1i0cr
+         yTcB0/+tjLzAw==
 X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=YPHhNiOx c=1 sm=1 tr=0
+X-Authority-Analysis: v=2.3 cv=MIQeZ/Rl c=1 sm=1 tr=0
  a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=VwQbUJbxAAAA:8
- a=Y7FGJ6OeAZ36y6Ov-ncA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
+ a=gBtYq6a83Dkie4k6gS8A:9 a=+jEqtf1s3R9VXZ0wqowq2kgwd+I=:19 a=CjuIK1q_8ugA:10
 From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
+To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "'LKML'" <linux-kernel@vger.kernel.org>,
         "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <2283366.Lr8yYYnyev@kreacher>
-In-Reply-To: <2283366.Lr8yYYnyev@kreacher>
-Subject: RE: [PATCH 0/4] cpufreq: intel_pstate: Address some HWP-related oddities
-Date:   Fri, 21 Aug 2020 17:47:05 -0700
-Message-ID: <000401d6781d$c33910d0$49ab3270$@net>
+References: <2283366.Lr8yYYnyev@kreacher> <1879185.C8Vd3vmt8n@kreacher>
+In-Reply-To: <1879185.C8Vd3vmt8n@kreacher>
+Subject: RE: [PATCH 3/4] cpufreq: intel_pstate: Add ->offline and ->online callbacks
+Date:   Fri, 21 Aug 2020 17:47:16 -0700
+Message-ID: <000501d6781d$c953def0$5bfb9cd0$@net>
 MIME-Version: 1.0
 Content-Type: text/plain;
         charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdZ3EHA5sccuDNJbQaKe6bdcNjj7fgA8T6rA
+Thread-Index: AdZ3EG3XorcUUxNqQrCUgF1ZBLd4VgA+ob2A
 Content-Language: en-ca
-X-CMAE-Envelope: MS4wfMVlZzu426mFyMmsXVUWyBEA/NOQhZfn/VxzgpsIox71t2ZTuUM1BiQoOfLUprFpzZ6ZAa7n+wsxYlWxteCIHrM1fSIpqQvYWM0ZZK7DLcgZ5BsezGP7
- DfyHSniqIy1ZcE6NWXGXavQ7uRxxvxOatMZKIWG4wSfG7Gs8BhTkqBlLi2CLD1/586fEAj3E7Nu0IL5wz/RtdyjtiagwqsNQW3o6owpFCGQHZvYOsEhc81B2
- ri2Uv2AMo5XzMyG0aqi9vCNO8/Cx0Rfph3Nm7gDihNj8gL8OxUsw2jEHM4k5vKBS
+X-CMAE-Envelope: MS4wfEAxiWoQus0jeBhvVzXaq5194q+rvRIu5j+0oBE1fS/5T4o+yHrvxzSTwtCeLocK61RrsGwdG2Vt6sWWDDaCsO1uvj55607SJHZQ7sLqp5vIW8FN6IBj
+ Hzm8ZuEgLZif3TLCeU0rr6DZ52pd7JCiJyho9vmNxv5oc0qGsSrjPpHeDMaYzcm9epz50USJmpouG/RLQuT+bsXNdu5gsgijfxNd1fApGwiKPdgtJEErQA5+
+ 4Z+QkaPATdAMX7Z6BbeXn27WIMdRSyfWRwcxQzyVtI+iBn+xVrOP9quEsBL45yg4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
@@ -55,150 +55,123 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Rafael,
 
-On 2020.08.20 09:35 Rafael J. Wysocki wrote:
+Just annoying typo type feedback.
+
+On 2020.08.20 09:38 Rafael J. Wysocki wrote:
+
 > 
-> The purpose of this series is to address some peculiarities related to
-> taking CPUs offline/online and switching between different operation
-> modes with HWP enabled that have become visible after allowing the
-> driver to work in the passive mode with HWP enabled in 5.9-rc1 (and
-> one that was there earlier, but can be addressed easily after the
-> changes madein 5.9-rc1).
+> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 > 
-> Please refer to the patch changelogs for details.
+> Add ->offline and ->online driver callbacksto to do the cleanup
+
+"to to" and suggest this:
+
+Add ->offline and ->online driver callbacks to cleanup
+
+> before taking a CPU offline and to restore its working configuration
+> when it goes back online, respectively, to avoid invoking the ->init
+> callback on every CPU online which is quite a bit of unnecessary
+> overhead.
 > 
-> For easier testing/review, the series is available from the git branch at:
+> Define ->offline and ->online so that they can be used in the
+> passive as well as in the active mode and because ->offline will
+
+  passive mode
+
+> do the majority of ->stop_cpu work, the passive mode does not
+> need that callback any more, so drop it.
 > 
->  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
->  intel_pstate-testing
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
+>  1 file changed, 32 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 3d18934fa975..aca0587b176f 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
+>  	return 0;
+>  }
+> 
+> -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
+> +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
+>  {
+> +	pr_debug("CPU %d going offline\n", policy->cpu);
+> +
+> +	intel_pstate_exit_perf_limits(policy);
+> +
+> +	/*
+> +	 * If the CPU is an SMT thread and it goes offline with the performance
+> +	 * settings different from the minimum, it will prevent its sibling
+> +	 * from getting to lower performance levels, so force the minimum
+> +	 * performance on CPU offline to prevent that form happening.
 
-Thanks for that.
+form/from
 
-There still seems to be a problem with EPP getting messed up.
-I have not been able to find the exact spot in the code.
-
-One problem is that EPP can end up as 0, and thereafter stays
-at 0. In sysfs terms, it ends up as "performance" and thereafter
-stays as "performance". Meanwhile I never modified it, and it started
-as "balance_performance".
-
-It happens when changing from active to passive if the governor is performance.
-If the governor is not performance things work as expected.
-
-Another problem is that EPP will end up as 128 when changing from passive
-to active. This erroneous condition is cleared by changing the governor to
-powersave and back to performance. It also doesn't occur the first
-time after boot, when booting to intel_cpufreq/performance/HWP.
-(confused yet?) The sysfs value is O.K. during this.
-
-Supporting data:
-Example 1:
-
-Grub:
-GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=450 msr.allow_writes=on cpuidle.governor=teo"
-
-So I boot to intel_pstate/performance/HWP:
-
-# /home/doug/c/msr-decoder (always edited for only relevant parts)
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
-    epp:        0 :        0 :        0 :        0 :        0 :        0 :
-
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver
-intel_pstate
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-performance
-# cat  /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-balance_performance
-
-# echo passive > /sys/devices/system/cpu/intel_pstate/status
-
-Note: the following results are incorrect:
-
-# cat  /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-performance
-# echo "ondemand" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-ondemand
-# cat  /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-performance
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 00002E08 : 00002E08 : 00002E08 : 00002E0B : 00002E13 : 00002E08 :
-    epp:        0 :        0 :        0 :        0 :        0 :        0 :
-
-# echo active > /sys/devices/system/cpu/intel_pstate/status
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-performance
-# cat  /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-performance
-# echo "powersave" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-powersave
-# cat  /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-performance
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-powersave
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver
-intel_pstate
-
-Example 2:
-Grub:
-GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 consoleblank=450 intel_pstate=passive msr.allow_writes=on cpuidle.governor=teo"
-
-So I boot to intel_cpufreq/performance/HWP:
-
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E :
-    epp:      128 :      128 :      128 :      128 :      128 :      128 :
-
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver
-intel_cpufreq
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-performance
-# cat /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-balance_performance
-# echo active > /sys/devices/system/cpu/intel_pstate/status
-# cat /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-balance_performance
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-performance
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver
-intel_pstate
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
-    epp:        0 :        0 :        0 :        0 :        0 :        0 :
-
-# echo passive > /sys/devices/system/cpu/intel_pstate/status
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E :
-    epp:      128 :      128 :      128 :      128 :      128 :      128 :
-# echo active > /sys/devices/system/cpu/intel_pstate/status
-
-Note: the following results are incorrect:
-
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E : 80002E2E :
-    epp:      128 :      128 :      128 :      128 :      128 :      128 :
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
-performance
-# cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_driver
-intel_pstate
-# cat /sys/devices/system/cpu/cpufreq/policy3/energy_performance_preference
-balance_performance
-
-Note: But the problem can be cleared:
-
-# echo "powersave" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-powersave
-# echo "performance" | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-performance
-# /home/doug/c/msr-decoder
-6.) 0x774: IA32_HWP_REQUEST:    CPU 0-5 :
-    raw: 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E : 00002E2E :
-    epp:        0 :        0 :        0 :        0 :        0 :        0 :
-
-... Doug
+> +	 */
+>  	if (hwp_active)
+>  		intel_pstate_hwp_force_min_perf(policy->cpu);
+>  	else
+>  		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
+> +
+> +	return 0;
+> +}
+> +
+> +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+> +{
+> +	pr_debug("CPU %d going online\n", policy->cpu);
+> +
+> +	intel_pstate_init_acpi_perf_limits(policy);
+> +
+> +	if (hwp_active)
+> +		wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
+> +			      all_cpu_data[policy->cpu]->hwp_req_cached);
+> +
+> +	return 0;
+>  }
+> 
+>  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
+>  {
+> -	pr_debug("CPU %d exiting\n", policy->cpu);
+> +	pr_debug("CPU %d stopping\n", policy->cpu);
+> 
+>  	intel_pstate_clear_update_util_hook(policy->cpu);
+>  	if (hwp_active)
+>  		intel_pstate_hwp_save_state(policy);
+> -
+> -	intel_cpufreq_stop_cpu(policy);
+>  }
+> 
+>  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
+>  {
+> -	intel_pstate_exit_perf_limits(policy);
+> +	pr_debug("CPU %d exiting\n", policy->cpu);
+> 
+>  	policy->fast_switch_possible = false;
+> 
+> @@ -2398,6 +2421,8 @@ static struct cpufreq_driver intel_pstate = {
+>  	.init		= intel_pstate_cpu_init,
+>  	.exit		= intel_pstate_cpu_exit,
+>  	.stop_cpu	= intel_pstate_stop_cpu,
+> +	.offline	= intel_pstate_cpu_offline,
+> +	.online		= intel_pstate_cpu_online,
+>  	.update_limits	= intel_pstate_update_limits,
+>  	.name		= "intel_pstate",
+>  };
+> @@ -2652,7 +2677,8 @@ static struct cpufreq_driver intel_cpufreq = {
+>  	.fast_switch	= intel_cpufreq_fast_switch,
+>  	.init		= intel_cpufreq_cpu_init,
+>  	.exit		= intel_cpufreq_cpu_exit,
+> -	.stop_cpu	= intel_cpufreq_stop_cpu,
+> +	.offline	= intel_pstate_cpu_offline,
+> +	.online		= intel_pstate_cpu_online,
+>  	.update_limits	= intel_pstate_update_limits,
+>  	.name		= "intel_cpufreq",
+>  };
+> --
+> 2.26.2
+> 
+> 
 
 
