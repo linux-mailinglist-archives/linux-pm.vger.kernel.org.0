@@ -2,176 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B296A24E447
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 02:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A9C24E6E0
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 12:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbgHVArW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Aug 2020 20:47:22 -0400
-Received: from cmta17.telus.net ([209.171.16.90]:35744 "EHLO cmta17.telus.net"
+        id S1727858AbgHVKbY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Aug 2020 06:31:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40550 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726817AbgHVArW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 21 Aug 2020 20:47:22 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id 9HgikQMyfYgvr9HgkkWUBK; Fri, 21 Aug 2020 18:47:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1598057239; bh=hlUDJ5ST80f1AO5TYhBYs0t+5xKCeLNh/7y2T2AZj0w=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=qOoQsQplcE6kJSLMMslU4TWXJbJmcItDui+L4GH8serM9Jd4Ynm1wjO43TGY2I7gp
-         bMrMEYdYsKeOGOA46qI7RS/i7PyFrv2K4624jEPzuH0fVY5jHpjp4frGYvn32KA8eS
-         OLOlioltj279BuC3LhiatoNVt1cKXEfMFCbJEPecFi7hN+EILCIWOjjUyP4qgfKAom
-         gpWWPz363WgvuRXZZ5lXrI34PBN/cX7vAIaZXAaFlHScs0S+ED5lbu3tLXR5y2a+Yc
-         QBWnq3BmtCO+ekqVUs6PbvQqNsxzD+7uWUoHx0MIvj5gZ5RJ+F/iD4S4qitln1i0cr
-         yTcB0/+tjLzAw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=MIQeZ/Rl c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=QyXUC8HyAAAA:8
- a=gBtYq6a83Dkie4k6gS8A:9 a=+jEqtf1s3R9VXZ0wqowq2kgwd+I=:19 a=CjuIK1q_8ugA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <2283366.Lr8yYYnyev@kreacher> <1879185.C8Vd3vmt8n@kreacher>
-In-Reply-To: <1879185.C8Vd3vmt8n@kreacher>
-Subject: RE: [PATCH 3/4] cpufreq: intel_pstate: Add ->offline and ->online callbacks
-Date:   Fri, 21 Aug 2020 17:47:16 -0700
-Message-ID: <000501d6781d$c953def0$5bfb9cd0$@net>
+        id S1726728AbgHVKbY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 22 Aug 2020 06:31:24 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94925206BE;
+        Sat, 22 Aug 2020 10:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598092283;
+        bh=G4d1AxGKI6RgOaaY8/R9+o86gZntS45T+KnKLQ326qw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UCh92EUc9zHxR0ZBUXGjsI4U0VHy5Z+abYmzNbW+pQR1OLH6JM59r2SfInO6EFqAR
+         VZGO4BGkrbEESR7Vkk+MOcfAfraT0jYuLZhOv/3B4QFjzM50O1sJ87jjftCHVL3yBi
+         JbPFR4OZhks62VVWQIhtF6nC2zBfnAIW5g6BfAU0=
+Date:   Sat, 22 Aug 2020 11:31:13 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        "knaack.h@gmx.de" <knaack.h@gmx.de>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "pmeerw@pmeerw.net" <pmeerw@pmeerw.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/6] iio: dac: ad5686: Constify static struct
+ iio_chan_spec
+Message-ID: <20200822113113.01876cfc@archlinux>
+In-Reply-To: <20200818193017.GA1610@rikard>
+References: <20200526210223.1672-1-rikard.falkeborn@gmail.com>
+        <20200526210223.1672-5-rikard.falkeborn@gmail.com>
+        <d822bd34435902f096cdeb27ae0dc029d29bfb2c.camel@analog.com>
+        <20200531144715.089886ce@archlinux>
+        <20200818193017.GA1610@rikard>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="US-ASCII"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Thread-Index: AdZ3EG3XorcUUxNqQrCUgF1ZBLd4VgA+ob2A
-Content-Language: en-ca
-X-CMAE-Envelope: MS4wfEAxiWoQus0jeBhvVzXaq5194q+rvRIu5j+0oBE1fS/5T4o+yHrvxzSTwtCeLocK61RrsGwdG2Vt6sWWDDaCsO1uvj55607SJHZQ7sLqp5vIW8FN6IBj
- Hzm8ZuEgLZif3TLCeU0rr6DZ52pd7JCiJyho9vmNxv5oc0qGsSrjPpHeDMaYzcm9epz50USJmpouG/RLQuT+bsXNdu5gsgijfxNd1fApGwiKPdgtJEErQA5+
- 4Z+QkaPATdAMX7Z6BbeXn27WIMdRSyfWRwcxQzyVtI+iBn+xVrOP9quEsBL45yg4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, 18 Aug 2020 21:30:17 +0200
+Rikard Falkeborn <rikard.falkeborn@gmail.com> wrote:
 
-Just annoying typo type feedback.
+> On Sun, May 31, 2020 at 02:47:15PM +0100, Jonathan Cameron wrote:
+> > On Wed, 27 May 2020 04:50:46 +0000
+> > "Ardelean, Alexandru" <alexandru.Ardelean@analog.com> wrote:
+> >   
+> > > On Tue, 2020-05-26 at 23:02 +0200, Rikard Falkeborn wrote:  
+> > > > [External]
+> > > > 
+> > > > These are never modified and can be made const to allow the compiler to
+> > > > put it in read-only memory.
+> > > > 
+> > > > Before:
+> > > >    text    data     bss     dec     hex filename
+> > > >    6642   12608      64   19314    4b72 drivers/iio/dac/ad5686.o
+> > > > 
+> > > > After:
+> > > >    text    data     bss     dec     hex filename
+> > > >   16946    2304      64   19314    4b72 drivers/iio/dac/ad5686.o
+> > > >     
+> > > 
+> > > Acked-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+> > >   
+> > Applied.
+> > 
+> > thanks,  
+> 
+> Was this one really applied? I can't see it anywhere? The rest of the
+> patches in the series are in Linus' tree.
+> 
+No idea what happened here.  Now applied to the togreg branch of iio.git
+and pushed out as testing.  Sorry about that!
 
-On 2020.08.20 09:38 Rafael J. Wysocki wrote:
+Jonathan
 
+> Rikard
 > 
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> 
-> Add ->offline and ->online driver callbacksto to do the cleanup
-
-"to to" and suggest this:
-
-Add ->offline and ->online driver callbacks to cleanup
-
-> before taking a CPU offline and to restore its working configuration
-> when it goes back online, respectively, to avoid invoking the ->init
-> callback on every CPU online which is quite a bit of unnecessary
-> overhead.
-> 
-> Define ->offline and ->online so that they can be used in the
-> passive as well as in the active mode and because ->offline will
-
-  passive mode
-
-> do the majority of ->stop_cpu work, the passive mode does not
-> need that callback any more, so drop it.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 38 ++++++++++++++++++++++++++++------
->  1 file changed, 32 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 3d18934fa975..aca0587b176f 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2297,28 +2297,51 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
->  	return 0;
->  }
-> 
-> -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
-> +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
->  {
-> +	pr_debug("CPU %d going offline\n", policy->cpu);
-> +
-> +	intel_pstate_exit_perf_limits(policy);
-> +
-> +	/*
-> +	 * If the CPU is an SMT thread and it goes offline with the performance
-> +	 * settings different from the minimum, it will prevent its sibling
-> +	 * from getting to lower performance levels, so force the minimum
-> +	 * performance on CPU offline to prevent that form happening.
-
-form/from
-
-> +	 */
->  	if (hwp_active)
->  		intel_pstate_hwp_force_min_perf(policy->cpu);
->  	else
->  		intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> +
-> +	return 0;
-> +}
-> +
-> +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
-> +{
-> +	pr_debug("CPU %d going online\n", policy->cpu);
-> +
-> +	intel_pstate_init_acpi_perf_limits(policy);
-> +
-> +	if (hwp_active)
-> +		wrmsrl_on_cpu(policy->cpu, MSR_HWP_REQUEST,
-> +			      all_cpu_data[policy->cpu]->hwp_req_cached);
-> +
-> +	return 0;
->  }
-> 
->  static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
->  {
-> -	pr_debug("CPU %d exiting\n", policy->cpu);
-> +	pr_debug("CPU %d stopping\n", policy->cpu);
-> 
->  	intel_pstate_clear_update_util_hook(policy->cpu);
->  	if (hwp_active)
->  		intel_pstate_hwp_save_state(policy);
-> -
-> -	intel_cpufreq_stop_cpu(policy);
->  }
-> 
->  static int intel_pstate_cpu_exit(struct cpufreq_policy *policy)
->  {
-> -	intel_pstate_exit_perf_limits(policy);
-> +	pr_debug("CPU %d exiting\n", policy->cpu);
-> 
->  	policy->fast_switch_possible = false;
-> 
-> @@ -2398,6 +2421,8 @@ static struct cpufreq_driver intel_pstate = {
->  	.init		= intel_pstate_cpu_init,
->  	.exit		= intel_pstate_cpu_exit,
->  	.stop_cpu	= intel_pstate_stop_cpu,
-> +	.offline	= intel_pstate_cpu_offline,
-> +	.online		= intel_pstate_cpu_online,
->  	.update_limits	= intel_pstate_update_limits,
->  	.name		= "intel_pstate",
->  };
-> @@ -2652,7 +2677,8 @@ static struct cpufreq_driver intel_cpufreq = {
->  	.fast_switch	= intel_cpufreq_fast_switch,
->  	.init		= intel_cpufreq_cpu_init,
->  	.exit		= intel_cpufreq_cpu_exit,
-> -	.stop_cpu	= intel_cpufreq_stop_cpu,
-> +	.offline	= intel_pstate_cpu_offline,
-> +	.online		= intel_pstate_cpu_online,
->  	.update_limits	= intel_pstate_update_limits,
->  	.name		= "intel_cpufreq",
->  };
-> --
-> 2.26.2
-> 
-> 
-
+> >   
+> > > > Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> > > > ---
+> > > >  drivers/iio/dac/ad5686.c | 8 ++++----
+> > > >  drivers/iio/dac/ad5686.h | 2 +-
+> > > >  2 files changed, 5 insertions(+), 5 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/iio/dac/ad5686.c b/drivers/iio/dac/ad5686.c
+> > > > index 8dd67da0a7da..6de48f618c95 100644
+> > > > --- a/drivers/iio/dac/ad5686.c
+> > > > +++ b/drivers/iio/dac/ad5686.c
+> > > > @@ -206,12 +206,12 @@ static const struct iio_chan_spec_ext_info
+> > > > ad5686_ext_info[] = {
+> > > >  }
+> > > >  
+> > > >  #define DECLARE_AD5693_CHANNELS(name, bits, _shift)		\
+> > > > -static struct iio_chan_spec name[] = {				\
+> > > > +static const struct iio_chan_spec name[] = {			\
+> > > >  		AD5868_CHANNEL(0, 0, bits, _shift),		\
+> > > >  }
+> > > >  
+> > > >  #define DECLARE_AD5686_CHANNELS(name, bits, _shift)		\
+> > > > -static struct iio_chan_spec name[] = {				\
+> > > > +static const struct iio_chan_spec name[] = {			\
+> > > >  		AD5868_CHANNEL(0, 1, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(1, 2, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(2, 4, bits, _shift),		\
+> > > > @@ -219,7 +219,7 @@ static struct iio_chan_spec name[] = {			
+> > > > 	\
+> > > >  }
+> > > >  
+> > > >  #define DECLARE_AD5676_CHANNELS(name, bits, _shift)		\
+> > > > -static struct iio_chan_spec name[] = {				\
+> > > > +static const struct iio_chan_spec name[] = {			\
+> > > >  		AD5868_CHANNEL(0, 0, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(1, 1, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(2, 2, bits, _shift),		\
+> > > > @@ -231,7 +231,7 @@ static struct iio_chan_spec name[] = {			
+> > > > 	\
+> > > >  }
+> > > >  
+> > > >  #define DECLARE_AD5679_CHANNELS(name, bits, _shift)		\
+> > > > -static struct iio_chan_spec name[] = {				\
+> > > > +static const struct iio_chan_spec name[] = {			\
+> > > >  		AD5868_CHANNEL(0, 0, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(1, 1, bits, _shift),		\
+> > > >  		AD5868_CHANNEL(2, 2, bits, _shift),		\
+> > > > diff --git a/drivers/iio/dac/ad5686.h b/drivers/iio/dac/ad5686.h
+> > > > index 52009b5eef88..a15f2970577e 100644
+> > > > --- a/drivers/iio/dac/ad5686.h
+> > > > +++ b/drivers/iio/dac/ad5686.h
+> > > > @@ -104,7 +104,7 @@ typedef int (*ad5686_read_func)(struct ad5686_state
+> > > > *st, u8 addr);
+> > > >  struct ad5686_chip_info {
+> > > >  	u16				int_vref_mv;
+> > > >  	unsigned int			num_channels;
+> > > > -	struct iio_chan_spec		*channels;
+> > > > +	const struct iio_chan_spec	*channels;
+> > > >  	enum ad5686_regmap_type		regmap_type;
+> > > >  };
+> > > >      
+> >   
 
