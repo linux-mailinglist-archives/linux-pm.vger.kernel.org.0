@@ -2,129 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFB3724E700
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 13:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B02B824E753
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Aug 2020 14:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgHVLG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Aug 2020 07:06:28 -0400
-Received: from mga11.intel.com ([192.55.52.93]:15159 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726938AbgHVLG1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 22 Aug 2020 07:06:27 -0400
-IronPort-SDR: rPV/Is9sZ33pnuhh8wTZX2zKtFb8iYiup5wLjcYLK0EQNDpiO8boP0W/52gbcnDVvjavs33P1i
- S09pMawS06ew==
-X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="153297199"
-X-IronPort-AV: E=Sophos;i="5.76,340,1592895600"; 
-   d="scan'208";a="153297199"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2020 04:06:26 -0700
-IronPort-SDR: tLlcr2mnL40jtE9NyyTIEjBziRe/Ovl1o95FyEeleG1ss854SqbNMhsm63KZ2h/SG/F3xmVYAi
- 5PR6s+nSn1uA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,340,1592895600"; 
-   d="scan'208";a="311677987"
-Received: from lkp-server01.sh.intel.com (HELO 91ed66e1ca04) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2020 04:06:23 -0700
-Received: from kbuild by 91ed66e1ca04 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1k9RLq-0001jt-CX; Sat, 22 Aug 2020 11:06:22 +0000
-Date:   Sat, 22 Aug 2020 19:05:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- ccad8c4a8d37a8a6c5b01b180e52eb1ba7f9f295
-Message-ID: <5f40fc16.qFzs3PMTJKiWmkS1%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1727827AbgHVMQw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Aug 2020 08:16:52 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:29119 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726920AbgHVMQv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Aug 2020 08:16:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1598098609;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s1PhZ9//qAtXW+wBZ1G+cKJixVit0c5kcvX8lH+2smM=;
+        b=RMEHyVTGCor9U8vZKExK2be91MdptBbl60VnTdp8r0x96GnPfNAl3+PszeNYWYmnmWMp8V
+        wLIG/XDifdOugW18769zugOhRtFNq6keojn60i8/MsmqMS5Jgj2dOrRGKUhlrCzmLDAikV
+        /DgCI7TxMK8nG9QFUOSffMOFiUalWQk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-474-d0lPOpulONucBFQHxX5_vg-1; Sat, 22 Aug 2020 08:16:48 -0400
+X-MC-Unique: d0lPOpulONucBFQHxX5_vg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1E7C91DE14;
+        Sat, 22 Aug 2020 12:16:47 +0000 (UTC)
+Received: from darcari.bos.csb (ovpn-113-99.rdu2.redhat.com [10.10.113.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A3C4B7B41F;
+        Sat, 22 Aug 2020 12:16:46 +0000 (UTC)
+Subject: Re: [PATCH] tools/power turbostat: fix output formatting for ACPI CST
+ enumeration
+To:     Len Brown <lenb@kernel.org>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200810144330.75613-1-darcari@redhat.com>
+ <CAJvTdKms-sO=Qvpnhe4OjE48gXHPzDKbT0i5vK2QuDCxZTt_+Q@mail.gmail.com>
+From:   David Arcari <darcari@redhat.com>
+Organization: Red Hat
+Message-ID: <d8f50a6a-be68-f92b-e15f-c9f70335643f@redhat.com>
+Date:   Sat, 22 Aug 2020 08:16:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <CAJvTdKms-sO=Qvpnhe4OjE48gXHPzDKbT0i5vK2QuDCxZTt_+Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: ccad8c4a8d37a8a6c5b01b180e52eb1ba7f9f295  Merge branch 'devprop' into bleeding-edge
 
-elapsed time: 721m
+Hi Len,
 
-configs tested: 66
-configs skipped: 1
+Thanks for the quick turn around.  My apologies for not checking the tree before 
+sending a follow-up email.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+If you decide you prefer to change intel_idle - I'd be happy to do the work if 
+you'd like.  Just let me know.
 
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20200820
-i386                 randconfig-a004-20200820
-i386                 randconfig-a005-20200820
-i386                 randconfig-a003-20200820
-i386                 randconfig-a006-20200820
-i386                 randconfig-a001-20200820
-x86_64               randconfig-a015-20200820
-x86_64               randconfig-a012-20200820
-x86_64               randconfig-a016-20200820
-x86_64               randconfig-a014-20200820
-x86_64               randconfig-a011-20200820
-x86_64               randconfig-a013-20200820
-i386                 randconfig-a013-20200820
-i386                 randconfig-a012-20200820
-i386                 randconfig-a011-20200820
-i386                 randconfig-a016-20200820
-i386                 randconfig-a014-20200820
-i386                 randconfig-a015-20200820
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Thanks,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-Dave
+
+
+On 8/21/20 2:23 PM, Len Brown wrote:
+> Hi Dave,
+> 
+> I think this is fine.
+> Indeed, I actually went ahead and applied it a week or so ago.
+> 
+> the only alternative that I can think of is actually shortening the
+> ACPI C-state names in the intel_idle driver -- which is still an
+> option.  It would not be the first time we have tweaked the names used
+> in that driver to make tools more happy...
+> 
+> My apology for neglecting to send you an ACK.
+> I had intended to send my queued series to the list, which would
+> suffice for all the ACKs, but that send and the subsequent push got
+> delayed by this and that.  So I'll try to ack as I go, so it is clear
+> at any time where a patch stands.
+> 
+> thanks!
+> 
+> Len Brown, Intel Open Source Technology Center
+> 
+
