@@ -2,124 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21BC324EAF5
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 04:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D300A24EBAC
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 07:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgHWCyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Aug 2020 22:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726700AbgHWCyM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Aug 2020 22:54:12 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0E6C061573;
-        Sat, 22 Aug 2020 19:54:12 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id w13so5046539wrk.5;
-        Sat, 22 Aug 2020 19:54:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JO459KxhJEzf2IEvI+josGJJ60W1ooA97Y5knTsxYNo=;
-        b=Rb5WNI8n/gZRSeMt+vb40+nrepp/iM3BAw0azlstiR+TmHzSf13RqQXBLUE+Su0NLw
-         fce1d1ywY5xSM/jbls95zUoVSn7t/r1AYVRsIzSGU6NfVWMsbkep9Vhtxw36ZeWRU1NY
-         whI/eHHCx59CIvp2SlyiJwbmHXHvoCGowkEBZ8tMj7V0xT5q57zH8KAWqG7bkNvaSNKt
-         2IqCrm54R7PLM0/IFnA4bVXzuDOHfd+SGvSkzCjICGk7EKpjmWdKOj6esTyEQ3ahlI3Q
-         iwQh6GybEajGdzEhNyDFHdn4DND7Hm4lSxQeEjBeK8lKWeBqoAkBqc/TZWHOQAuBcTK6
-         dsJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JO459KxhJEzf2IEvI+josGJJ60W1ooA97Y5knTsxYNo=;
-        b=e1ySMhfz0/6pZui9/VnL6TEd1TKKhF4amloTsBz5u7Q592vEz8hY3YDRwz8IFA0UV0
-         fXnh54V2ayqbao8cvC+sG0FHnLUmA/qkR+oNIq5zl96QDw0OUo6WJAhk/wgMZjPrpJ+b
-         cawbAFbi7V8/qUP1dh5UOVC8DWNRgQxzcVlbwSDBotxzaii0mbLAuLKjPQPhX3K4kPow
-         7LRtRk5OJqYlgt6myWUO1WMmMgPdlIOz1GvuwD+DaTHScZgEUiztfiXIxpamf4doLwYJ
-         OWiglq1nLsJ4T7G6wdjvtJrJokGdIkw2vQw7nB99FuGZGVhvARtkvu2hD9PNkXzWy90r
-         T95g==
-X-Gm-Message-State: AOAM531VSIogmgMd0bv2kzbbuHUhaUPjWAxxYNq10n3AlqW/w0L28lC3
-        ht5jjI+U6SscoJhoXe5YH4J/nxGMbHhAzGbD6Yo=
-X-Google-Smtp-Source: ABdhPJxVBi+fxXUP+tAoUQKNyIfnLypZr9quB2wxZNg+UUdCRFGmKVwAS0GkY0xptxxCJF0laNsknAkD1vUkiXyqd8Q=
-X-Received: by 2002:a5d:4e8c:: with SMTP id e12mr147495wru.19.1598151250584;
- Sat, 22 Aug 2020 19:54:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1597919647.git.viresh.kumar@linaro.org> <56f1c76a0061dc3ed2d6ea115a3ba8b2e2dee9fd.1597919647.git.viresh.kumar@linaro.org>
-In-Reply-To: <56f1c76a0061dc3ed2d6ea115a3ba8b2e2dee9fd.1597919647.git.viresh.kumar@linaro.org>
-From:   Qiang Yu <yuq825@gmail.com>
-Date:   Sun, 23 Aug 2020 10:53:59 +0800
-Message-ID: <CAKGbVbukA=M=a5uNwPJ3=tXYVT3QTVSJKb5VJFCq2JGwV0TSCw@mail.gmail.com>
-Subject: Re: [PATCH 2/8] drm/lima: Unconditionally call dev_pm_opp_of_remove_table()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     rnayak@codeaurora.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-pm@vger.kernel.org,
+        id S1726079AbgHWFtH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Aug 2020 01:49:07 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:13869 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725908AbgHWFtH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 23 Aug 2020 01:49:07 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598161746; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=VVsAV6RJurfzrc+Bc09hMPCBHRTFLKJUd/JUAnKTN6c=; b=QoZo+SsKtpHF6/k1SjEQ/n4WUy8wkAR4boNNOnWYhdeOlpm0jTKawdXr5k2iyowd2McY+ESe
+ yNj1WmmEjAWQZQXssZkHTqEl9hlUkcoDxGARtbJqoeYr1ljfSJc30QJDzIsNYD1zZntItMEC
+ P5Bfq/R/e48o9bFI5jp+7gy4fv8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5f42034d52709f5476d9e156 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 23 Aug 2020 05:49:01
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 86C34C4339C; Sun, 23 Aug 2020 05:49:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.4 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.16] (unknown [61.3.22.212])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3A823C433CA;
+        Sun, 23 Aug 2020 05:48:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3A823C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [PATCH V3 0/4] opp: general cleanups
+To:     Viresh Kumar <viresh.kumar@linaro.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        lima@lists.freedesktop.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rafael Wysocki <rjw@rjwysocki.net>, sibis@codeaurora.org,
+        sbhanu@codeaurora.org, linux-kernel@vger.kernel.org
+References: <cover.1597909885.git.viresh.kumar@linaro.org>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <11c1cb5f-2ac3-3d30-f554-c782c1ab8a42@codeaurora.org>
+Date:   Sun, 23 Aug 2020 11:18:55 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+In-Reply-To: <cover.1597909885.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Looks good for me, patch is:
-Reviewed-by: Qiang Yu <yuq825@gmail.com>
 
-Regards,
-Qiang
+On 8/20/2020 1:26 PM, Viresh Kumar wrote:
+> Hi,
+> 
+> Here is another version of the cleanups I sent earlier.
+> 
+> Rajendra: Please see if these work fine now.
 
-On Thu, Aug 20, 2020 at 6:44 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
-> find the OPP table with error -ENODEV (i.e. OPP table not present for
-> the device). And we can call dev_pm_opp_of_remove_table()
-> unconditionally here.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/gpu/drm/lima/lima_devfreq.c | 6 +-----
->  drivers/gpu/drm/lima/lima_devfreq.h | 1 -
->  2 files changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/gpu/drm/lima/lima_devfreq.c b/drivers/gpu/drm/lima/lima_devfreq.c
-> index bbe02817721b..cd290d866a04 100644
-> --- a/drivers/gpu/drm/lima/lima_devfreq.c
-> +++ b/drivers/gpu/drm/lima/lima_devfreq.c
-> @@ -105,10 +105,7 @@ void lima_devfreq_fini(struct lima_device *ldev)
->                 devfreq->devfreq = NULL;
->         }
->
-> -       if (devfreq->opp_of_table_added) {
-> -               dev_pm_opp_of_remove_table(ldev->dev);
-> -               devfreq->opp_of_table_added = false;
-> -       }
-> +       dev_pm_opp_of_remove_table(ldev->dev);
->
->         if (devfreq->regulators_opp_table) {
->                 dev_pm_opp_put_regulators(devfreq->regulators_opp_table);
-> @@ -162,7 +159,6 @@ int lima_devfreq_init(struct lima_device *ldev)
->         ret = dev_pm_opp_of_add_table(dev);
->         if (ret)
->                 goto err_fini;
-> -       ldevfreq->opp_of_table_added = true;
->
->         lima_devfreq_reset(ldevfreq);
->
-> diff --git a/drivers/gpu/drm/lima/lima_devfreq.h b/drivers/gpu/drm/lima/lima_devfreq.h
-> index 5eed2975a375..2d9b3008ce77 100644
-> --- a/drivers/gpu/drm/lima/lima_devfreq.h
-> +++ b/drivers/gpu/drm/lima/lima_devfreq.h
-> @@ -18,7 +18,6 @@ struct lima_devfreq {
->         struct opp_table *clkname_opp_table;
->         struct opp_table *regulators_opp_table;
->         struct thermal_cooling_device *cooling;
-> -       bool opp_of_table_added;
->
->         ktime_t busy_time;
->         ktime_t idle_time;
-> --
-> 2.25.0.rc1.19.g042ed3e048af
->
+I gave these a quick spin, and they don';t result in the crash I
+earlier observed
+
+Tested-by: Rajendra Nayak <rnayak@codeaurora.org>
+
+> 
+> V3:
+> - Dropped v2 1/4 as it is already merged.
+> - New patch 4/4 added.
+> - Reordered the first two patches here (Stephen)
+> - disable regulator only if present
+> 
+> Viresh Kumar (4):
+>    opp: Rename regulator_enabled and use it as status of all resources
+>    opp: Track device's resources configuration status
+>    opp: Split out _opp_set_rate_zero()
+>    opp: Remove _dev_pm_opp_find_and_remove_table() wrapper
+> 
+>   drivers/opp/core.c | 103 +++++++++++++++++++++------------------------
+>   drivers/opp/cpu.c  |   2 +-
+>   drivers/opp/of.c   |   2 +-
+>   drivers/opp/opp.h  |   5 +--
+>   4 files changed, 52 insertions(+), 60 deletions(-)
+> 
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
