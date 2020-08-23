@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCF224ED7D
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 16:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A6424ED81
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 16:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbgHWOKK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Aug 2020 10:10:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S1727066AbgHWOKP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Aug 2020 10:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgHWOKF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Aug 2020 10:10:05 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AF1C061573;
-        Sun, 23 Aug 2020 07:10:04 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id i10so6748868ljn.2;
-        Sun, 23 Aug 2020 07:10:04 -0700 (PDT)
+        with ESMTP id S1726977AbgHWOKG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Aug 2020 10:10:06 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFAC061574;
+        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id i10so6748900ljn.2;
+        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=IrKpeaWDCIbs0elrD0ervQn0EwoALOJQTmF6gmGudwk=;
-        b=A3ankdiXKQcXxNVb464Y9CSK8uZmn/v7wkTOr8ZC32VSlRfBoFrDH9dldQUNZ7q0db
-         be4up2EcJQJBIdQQz9wiwmaqw3OWktrzv2EWG6NF8TEhxszYwHIYQHWbNrGRy7yXxsxj
-         lwljaYDN0oder2d2R+V/5pkX7BJBeiYRdExzhzeNnEuBvxypdCPmh6zhNzDv1iB5KMHe
-         Y9x88UI5AEnSAelmciveimSf60PLvJtOj6Sp40TlaKfppYSiiTU2lNiyyyAVkK+0XMn4
-         VX2XrODp+74zcfNE8IdwYMb/Y5OfIBRzLTT3ea1lZxvDnKTMHsQhEBTBBdNZIiwGElyX
-         556A==
+        bh=d0/iqnz3eh4YT0SPBZ7HT6PtoyWEl2aG7pq1uIcFnsA=;
+        b=gtRZ6LA/hPM1PhW0zRukgaHDTK4C/dNipt79Xq3/ybtRrQLAdiLH0ue9FTX7h4RaBC
+         u4CsSXry1snsPO2+YhvGNS2grmCQwQdMfIcZu7A5anUZhMM9zWiy18WF8omjylEKyZU9
+         hie1oVH1Po6NsEnfnSpV6X9rNMYhRZ0Cb5NW7a99FKLJzpcSkCTjrPUVdxvVkM6kIqol
+         n/t10s5TSVcFblc0Z/R8ad+LTB8F+E4AZztV1m2QPyTBv8lACggowAWqFNGvP3zWBgm6
+         2eXaUP2dM+w5wnW7u/0zk73L4xQou730tzfxD/uE5oU+I7nCWeOeh+3JVnmzXsEInpq4
+         Y81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=IrKpeaWDCIbs0elrD0ervQn0EwoALOJQTmF6gmGudwk=;
-        b=eWkZsLwWWhXzjx93r90U9S37Oh1HdLfjisGd3I8WyipTAk1Mzc2XAP1pDzuUHCL5Kl
-         9muzBfsqyDMO81MKnlIvCTv0yhkeuq5oKFX+V8HDHs3Grz80JjKEiCtApyUDsZHxmdqb
-         3uXdz0AijQgwMfJpS+a4EZ7cu4VWzUy25j3rhdvIb6u6MtXGX/Seb5MDY94HRYg1eULf
-         Fb8TLlFrtMYE8Lh4GaWisiqQZ5xxTrw5nOZnJmhqMy4te2Qi2L3+mrIDHX3/649ItmNy
-         QUX4unH5bB1AdELWTdp6daBnu1IJNpYXjCSt8RJ//4oaIBuKzLoxBnLd/u7WxCvUDZ/5
-         TZlw==
-X-Gm-Message-State: AOAM532DiR321wedcAM0wvR+vnKMpQSMpiOgpwuvnGY59vBdp2h4uO1z
-        qsbLY1oztMsadOPduU7X7+0=
-X-Google-Smtp-Source: ABdhPJwekZiY1NZHt+Cdvdzj6xO2L+gKT49464XJ7ZAmN4KyeCBtxLFZpi+kAiwchVtaC4TrvVludg==
-X-Received: by 2002:a2e:80c9:: with SMTP id r9mr626731ljg.95.1598191803007;
-        Sun, 23 Aug 2020 07:10:03 -0700 (PDT)
+        bh=d0/iqnz3eh4YT0SPBZ7HT6PtoyWEl2aG7pq1uIcFnsA=;
+        b=mgALyyGQTXk+iE4D52/ivtCAeiXk3/1Lmr06qTb2BWBquZfG94a4qfcrEOlxaBXPRD
+         Ly6yVTFWc3hkZnmJMTP8MET0jQb8xxU1WKsSJvx1krgQZbdyDSFLtTZ9Q+OHHw2zm9QE
+         WXmWBkAvcrFBH0L6TX0HyqCAlyenr2JPeEwN2xmmM4Crawv5wQKvVnQNatjZmcKVUlqQ
+         kRB5nfHZHkmcNlONzkNX0jvsHO1h4M1v6FW4yJAVC50Iz6zYzelbVg8GzxKZEtoIok47
+         eB8noL7IchxAeJyZIHd+OFw+5JAyw7tCJY0eVDfzeTKwtOYxp7o1tBN1rO13YRCFCck8
+         8zng==
+X-Gm-Message-State: AOAM532/yDWEb/4N2yTIqNi1R9Q3C5JN7nZWsoPNikfVNJxXH9bOwzf4
+        LWVGqmLr7pmA+JVLfsSxerk=
+X-Google-Smtp-Source: ABdhPJxY3oK+0Juf0WVBhBw5hn+u7TUWOfMJRioQYQVCU6RkCxN1CzJAOvaCf1PWYVay117RKB/2SQ==
+X-Received: by 2002:a2e:9284:: with SMTP id d4mr673013ljh.64.1598191804186;
+        Sun, 23 Aug 2020 07:10:04 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id b17sm1641342ljp.9.2020.08.23.07.10.02
+        by smtp.gmail.com with ESMTPSA id b17sm1641342ljp.9.2020.08.23.07.10.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2020 07:10:02 -0700 (PDT)
+        Sun, 23 Aug 2020 07:10:03 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -57,9 +57,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/6] leds: Add driver for Acer Iconia Tab A500
-Date:   Sun, 23 Aug 2020 17:08:43 +0300
-Message-Id: <20200823140846.19299-4-digetx@gmail.com>
+Subject: [PATCH v1 4/6] dt-bindings: mfd: ene-kb3930: Add compatibles for KB930 and Acer A500
+Date:   Sun, 23 Aug 2020 17:08:44 +0300
+Message-Id: <20200823140846.19299-5-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200823140846.19299-1-digetx@gmail.com>
 References: <20200823140846.19299-1-digetx@gmail.com>
@@ -70,176 +70,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Acer Iconia Tab A500 is an Android tablet device which has two LEDs
-embedded into the Power Button. Orange LED indicates "battery charging"
-status and white LED indicates "wake-up/charge-done" status. The new LED
-driver provides control over both LEDs to userspace.
+The ENE KB930 hardware is compatible with KB3930.
+
+Acer A500 Iconia Tab is Android tablet device, it has KB930 controller
+that is running firmware specifically customized for the needs of the
+Acer A500 hardware. This means that firmware interface isn't re-usable
+by other non-Acer devices. Some akin models of Acer tablets should be
+able to re-use the FW interface of A500 model, like A200 for example.
+
+This patch adds the new compatibles to the binding.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/leds/Kconfig          |   7 ++
- drivers/leds/Makefile         |   1 +
- drivers/leds/leds-acer-a500.c | 121 ++++++++++++++++++++++++++++++++++
- 3 files changed, 129 insertions(+)
- create mode 100644 drivers/leds/leds-acer-a500.c
+ Documentation/devicetree/bindings/mfd/ene-kb3930.yaml | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
-index 4f6464a169d5..4c39b53bcf1f 100644
---- a/drivers/leds/Kconfig
-+++ b/drivers/leds/Kconfig
-@@ -921,6 +921,13 @@ config LEDS_SGM3140
- 	  This option enables support for the SGM3140 500mA Buck/Boost Charge
- 	  Pump LED Driver.
+diff --git a/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml b/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
+index 074243c40891..5a1c4a959d9c 100644
+--- a/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
++++ b/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
+@@ -17,8 +17,11 @@ properties:
+   compatible:
+     items:
+       - enum:
++        - acer,a500-iconia-ec # Acer A500 Iconia tablet device
+         - dell,wyse-ariel-ec  # Dell Wyse Ariel board (3020)
+-      - const: ene,kb3930
++      - enum:
++        - ene,kb3930
++        - ene,kb930
+   reg:
+     maxItems: 1
  
-+config LEDS_ACER_A500
-+	tristate "Power button LED support for Acer Iconia Tab A500"
-+	depends on LEDS_CLASS && MFD_ACER_A500_EC
-+	help
-+	  This option enables support for the Power Button LED of
-+	  Acer Iconia Tab A500.
-+
- comment "LED Triggers"
- source "drivers/leds/trigger/Kconfig"
- 
-diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
-index 778cb4bb8c52..73e603e1727e 100644
---- a/drivers/leds/Makefile
-+++ b/drivers/leds/Makefile
-@@ -10,6 +10,7 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+= led-triggers.o
- # LED Platform Drivers (keep this sorted, M-| sort)
- obj-$(CONFIG_LEDS_88PM860X)		+= leds-88pm860x.o
- obj-$(CONFIG_LEDS_AAT1290)		+= leds-aat1290.o
-+obj-$(CONFIG_LEDS_ACER_A500)		+= leds-acer-a500.o
- obj-$(CONFIG_LEDS_ADP5520)		+= leds-adp5520.o
- obj-$(CONFIG_LEDS_AN30259A)		+= leds-an30259a.o
- obj-$(CONFIG_LEDS_APU)			+= leds-apu.o
-diff --git a/drivers/leds/leds-acer-a500.c b/drivers/leds/leds-acer-a500.c
-new file mode 100644
-index 000000000000..65e69a40a91a
---- /dev/null
-+++ b/drivers/leds/leds-acer-a500.c
-@@ -0,0 +1,121 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Power button LED driver for Acer Iconia Tab A500.
-+ *
-+ * Copyright 2020 GRATE-driver project.
-+ */
-+
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include <linux/mfd/acer-ec-a500.h>
-+
-+struct a500_ec_led {
-+	struct led_classdev cdev;
-+	struct a500_ec_led *other_led;
-+	const struct a500_ec_cmd *cmd;
-+};
-+
-+/*					cmd	delay ms */
-+A500_EC_COMMAND(RESET_LEDS,		0x40,	100);
-+A500_EC_COMMAND(POWER_LED_ON,		0x42,	100);
-+A500_EC_COMMAND(CHARGE_LED_ON,		0x43,	100);
-+A500_EC_COMMAND(ANDROID_LEDS_OFF,	0x5A,	100);
-+
-+static int a500_ec_led_brightness_set(struct led_classdev *led_cdev,
-+				      enum led_brightness value)
-+{
-+	struct device *a500_ec_leds_dev = led_cdev->dev->parent;
-+	struct a500_ec *ec_chip = dev_get_drvdata(a500_ec_leds_dev->parent);
-+	struct a500_ec_led *led = container_of(led_cdev, struct a500_ec_led,
-+					       cdev);
-+	int ret;
-+
-+	a500_ec_lock(ec_chip);
-+
-+	if (value) {
-+		ret = a500_ec_write_locked(ec_chip, led->cmd, 0);
-+	} else {
-+		/*
-+		 * There is no separate controls which can disable LEDs
-+		 * individually, there is only RESET_LEDS command that turns
-+		 * off both LEDs.
-+		 */
-+		ret = a500_ec_write_locked(ec_chip, RESET_LEDS, 0);
-+		if (ret)
-+			goto unlock;
-+
-+		led = led->other_led;
-+
-+		/* RESET_LEDS turns off both LEDs, thus restore other LED */
-+		if (led->cdev.brightness == LED_ON)
-+			ret = a500_ec_write_locked(ec_chip, led->cmd, 0);
-+	}
-+
-+unlock:
-+	a500_ec_unlock(ec_chip);
-+
-+	return ret;
-+}
-+
-+static int a500_ec_leds_probe(struct platform_device *pdev)
-+{
-+	struct a500_ec *ec_chip = dev_get_drvdata(pdev->dev.parent);
-+	struct a500_ec_led *white_led, *orange_led;
-+	int err;
-+
-+	/* reset and turn off all LEDs */
-+	a500_ec_write(ec_chip, RESET_LEDS, 0);
-+	a500_ec_write(ec_chip, ANDROID_LEDS_OFF, 0);
-+
-+	white_led = devm_kzalloc(&pdev->dev, sizeof(*white_led), GFP_KERNEL);
-+	if (!white_led)
-+		return -ENOMEM;
-+
-+	white_led->cdev.name = "power-button-white";
-+	white_led->cdev.brightness_set_blocking = a500_ec_led_brightness_set;
-+	white_led->cdev.flags = LED_CORE_SUSPENDRESUME;
-+	white_led->cdev.max_brightness = LED_ON;
-+	white_led->cmd = &A500_EC_POWER_LED_ON;
-+
-+	orange_led = devm_kzalloc(&pdev->dev, sizeof(*orange_led), GFP_KERNEL);
-+	if (!orange_led)
-+		return -ENOMEM;
-+
-+	orange_led->cdev.name = "power-button-orange";
-+	orange_led->cdev.brightness_set_blocking = a500_ec_led_brightness_set;
-+	orange_led->cdev.flags = LED_CORE_SUSPENDRESUME;
-+	orange_led->cdev.max_brightness = LED_ON;
-+	orange_led->cmd = &A500_EC_CHARGE_LED_ON;
-+
-+	white_led->other_led = orange_led;
-+	orange_led->other_led = white_led;
-+
-+	err = devm_led_classdev_register(&pdev->dev, &white_led->cdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "failed to register white LED\n");
-+		return err;
-+	}
-+
-+	err = devm_led_classdev_register(&pdev->dev, &orange_led->cdev);
-+	if (err) {
-+		dev_err(&pdev->dev, "failed to register orange LED\n");
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver a500_ec_leds_driver = {
-+	.driver = {
-+		.name = "acer-a500-iconia-leds",
-+	},
-+	.probe = a500_ec_leds_probe,
-+};
-+module_platform_driver(a500_ec_leds_driver);
-+
-+MODULE_DESCRIPTION("LED driver for Acer Iconia Tab A500 Power Button");
-+MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
-+MODULE_ALIAS("platform:acer-a500-iconia-leds");
-+MODULE_LICENSE("GPL v2");
 -- 
 2.27.0
 
