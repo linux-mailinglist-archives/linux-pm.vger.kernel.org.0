@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A6424ED81
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E73324ED8C
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 16:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbgHWOKP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Aug 2020 10:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
+        id S1727827AbgHWOK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Aug 2020 10:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726977AbgHWOKG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Aug 2020 10:10:06 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFAC061574;
-        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id i10so6748900ljn.2;
-        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
+        with ESMTP id S1726999AbgHWOKH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Aug 2020 10:10:07 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE880C061755;
+        Sun, 23 Aug 2020 07:10:06 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id w14so6741505ljj.4;
+        Sun, 23 Aug 2020 07:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=d0/iqnz3eh4YT0SPBZ7HT6PtoyWEl2aG7pq1uIcFnsA=;
-        b=gtRZ6LA/hPM1PhW0zRukgaHDTK4C/dNipt79Xq3/ybtRrQLAdiLH0ue9FTX7h4RaBC
-         u4CsSXry1snsPO2+YhvGNS2grmCQwQdMfIcZu7A5anUZhMM9zWiy18WF8omjylEKyZU9
-         hie1oVH1Po6NsEnfnSpV6X9rNMYhRZ0Cb5NW7a99FKLJzpcSkCTjrPUVdxvVkM6kIqol
-         n/t10s5TSVcFblc0Z/R8ad+LTB8F+E4AZztV1m2QPyTBv8lACggowAWqFNGvP3zWBgm6
-         2eXaUP2dM+w5wnW7u/0zk73L4xQou730tzfxD/uE5oU+I7nCWeOeh+3JVnmzXsEInpq4
-         Y81g==
+        bh=g/A5BJAqO3o60ofL2OeIr3Lct01dCdXmoNfEGqHHX7U=;
+        b=JjBN7AHhSwp2xb1TUIgSXzCe/4yD2jVrnUC0Qhv+K23T7MbkDm6ce15rwF5bXR5X55
+         R8yc9Ex9UwIOFG3XJVIQe0lfNtfLKQ8U9lR4xpKTg384kSzCETY5Wbvw6IQOiuAjlrt+
+         1D2dp8lWtaYrvpRwA9aQBEj7MJ9/Q4Xdi14YbZVdh6KwuRFffbTY+jiEY82wRFeTb19D
+         4xbIeNiBSlSpZDkVrpVwWr326wPbCXpmyQ1vVEXUyjA23VE/ypRlh2hn9tG0N2uiG6h+
+         H5GkyLBgPke0H/Xn+BsZOiF1ScJAxG27DFWTvnW0il5X6yjBY2ZEGB5gRwyOF+JxL4ZK
+         ajNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=d0/iqnz3eh4YT0SPBZ7HT6PtoyWEl2aG7pq1uIcFnsA=;
-        b=mgALyyGQTXk+iE4D52/ivtCAeiXk3/1Lmr06qTb2BWBquZfG94a4qfcrEOlxaBXPRD
-         Ly6yVTFWc3hkZnmJMTP8MET0jQb8xxU1WKsSJvx1krgQZbdyDSFLtTZ9Q+OHHw2zm9QE
-         WXmWBkAvcrFBH0L6TX0HyqCAlyenr2JPeEwN2xmmM4Crawv5wQKvVnQNatjZmcKVUlqQ
-         kRB5nfHZHkmcNlONzkNX0jvsHO1h4M1v6FW4yJAVC50Iz6zYzelbVg8GzxKZEtoIok47
-         eB8noL7IchxAeJyZIHd+OFw+5JAyw7tCJY0eVDfzeTKwtOYxp7o1tBN1rO13YRCFCck8
-         8zng==
-X-Gm-Message-State: AOAM532/yDWEb/4N2yTIqNi1R9Q3C5JN7nZWsoPNikfVNJxXH9bOwzf4
-        LWVGqmLr7pmA+JVLfsSxerk=
-X-Google-Smtp-Source: ABdhPJxY3oK+0Juf0WVBhBw5hn+u7TUWOfMJRioQYQVCU6RkCxN1CzJAOvaCf1PWYVay117RKB/2SQ==
-X-Received: by 2002:a2e:9284:: with SMTP id d4mr673013ljh.64.1598191804186;
-        Sun, 23 Aug 2020 07:10:04 -0700 (PDT)
+        bh=g/A5BJAqO3o60ofL2OeIr3Lct01dCdXmoNfEGqHHX7U=;
+        b=WVSxyRE0wFe1rqvdMsJl6ESsygZOxM5m0SVV3UfjToYBExzYyaYz2VIawbUZc/CM9t
+         dL13T5+CVJvTqAW1SDZ57JYkCiF3Xi9fsq/Z0Uxy7/f9pAiZJU7UJCHFVs0ePdyacAd5
+         nHDh9G8cCiEblcuAfz6A+C9EnES3mgQUo4lvJ83XuBv3YY8JAhXyaYk6aifjiRMWYilI
+         fC5sbptMwUDER2Kh+nr10Jf4hzZaqZ1H4vtmsli2KGJsx57knvEqpAoz+9u0/byKr42R
+         6pW1OHQUnAotC1Au/7dltH4GBK2r39ayJSIv3qSZD1L1Mrkm0XbwE+USv3HifARxp6EE
+         O6fw==
+X-Gm-Message-State: AOAM530GrWH+sEpB8qxw1FyukS8vRYy4bB1vVTB37YiLQdDIBUPPz9cn
+        OItxZKCF49TnczDb0aUfn3A=
+X-Google-Smtp-Source: ABdhPJx8D96B8T4FXjs4YzL/JnebMSsAmx2Yz/x+2JS+7sByGFV7qsXKEhfRROpuF67tJ3sJpWVcHg==
+X-Received: by 2002:a2e:86d6:: with SMTP id n22mr662601ljj.440.1598191805168;
+        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id b17sm1641342ljp.9.2020.08.23.07.10.03
+        by smtp.gmail.com with ESMTPSA id b17sm1641342ljp.9.2020.08.23.07.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2020 07:10:03 -0700 (PDT)
+        Sun, 23 Aug 2020 07:10:04 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -57,9 +57,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/6] dt-bindings: mfd: ene-kb3930: Add compatibles for KB930 and Acer A500
-Date:   Sun, 23 Aug 2020 17:08:44 +0300
-Message-Id: <20200823140846.19299-5-digetx@gmail.com>
+Subject: [PATCH v1 5/6] dt-bindings: mfd: ene-kb3930: Document power-supplies and monitored-battery properties
+Date:   Sun, 23 Aug 2020 17:08:45 +0300
+Message-Id: <20200823140846.19299-6-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200823140846.19299-1-digetx@gmail.com>
 References: <20200823140846.19299-1-digetx@gmail.com>
@@ -70,37 +70,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ENE KB930 hardware is compatible with KB3930.
+Battery could be connected to the controller and in this case controller
+will provide a battery-monitor function.
 
-Acer A500 Iconia Tab is Android tablet device, it has KB930 controller
-that is running firmware specifically customized for the needs of the
-Acer A500 hardware. This means that firmware interface isn't re-usable
-by other non-Acer devices. Some akin models of Acer tablets should be
-able to re-use the FW interface of A500 model, like A200 for example.
+The power-supplies phandle property is needed in order to describe the
+power supply which is used for charging of the battery, this allows to
+determine whither battery is charging or discharging, depending on the
+supply state.
 
-This patch adds the new compatibles to the binding.
+The monitored-battery phandle provides information about the battery cell
+characteristics.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- Documentation/devicetree/bindings/mfd/ene-kb3930.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/mfd/ene-kb3930.yaml    | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml b/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
-index 074243c40891..5a1c4a959d9c 100644
+index 5a1c4a959d9c..435728054f3a 100644
 --- a/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
 +++ b/Documentation/devicetree/bindings/mfd/ene-kb3930.yaml
-@@ -17,8 +17,11 @@ properties:
-   compatible:
-     items:
-       - enum:
-+        - acer,a500-iconia-ec # Acer A500 Iconia tablet device
-         - dell,wyse-ariel-ec  # Dell Wyse Ariel board (3020)
--      - const: ene,kb3930
-+      - enum:
-+        - ene,kb3930
-+        - ene,kb930
-   reg:
-     maxItems: 1
+@@ -29,6 +29,8 @@ properties:
+     description: GPIO used with the shutdown protocol on Ariel
+     maxItems: 2
+ 
++  monitored-battery: true
++  power-supplies: true
+   system-power-controller: true
+ 
+ required:
+@@ -41,6 +43,19 @@ examples:
+   - |
+     #include <dt-bindings/gpio/gpio.h>
+ 
++    battery: battery-cell {
++            compatible = "simple-battery";
++            charge-full-design-microamp-hours = <3260000>;
++            energy-full-design-microwatt-hours = <24000000>;
++            operating-range-celsius = <0 40>;
++    };
++
++    mains: ac-adapter {
++      compatible = "gpio-charger";
++      charger-type = "mains";
++      gpios = <&gpio 125 GPIO_ACTIVE_LOW>;
++    };
++
+     i2c {
+       #address-cells = <1>;
+       #size-cells = <0>;
+@@ -52,6 +67,9 @@ examples:
+ 
+         off-gpios = <&gpio 126 GPIO_ACTIVE_HIGH>,
+                     <&gpio 127 GPIO_ACTIVE_HIGH>;
++
++        monitored-battery = <&battery>;
++        power-supplies = <&mains>;
+       };
+     };
  
 -- 
 2.27.0
