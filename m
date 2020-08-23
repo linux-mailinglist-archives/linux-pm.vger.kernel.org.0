@@ -2,119 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFC024ED87
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 16:10:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00B924EE1C
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Aug 2020 18:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727768AbgHWOKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Aug 2020 10:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726912AbgHWOKI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Aug 2020 10:10:08 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89BCC0613ED;
-        Sun, 23 Aug 2020 07:10:07 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id f26so6725602ljc.8;
-        Sun, 23 Aug 2020 07:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=35wLUHHiL0jcYl7dr+ydbL6W/M+IENF1DgF9AQYM8t8=;
-        b=ViEZr59xlFFxHAnvxlgRZc5ssiXQT0tzUGBTDv4KYhMnBX4cL3HYXEhKeV4X6q53mZ
-         Gsa/A5B34Coz+f9z5jB8hRMsbh4soP1UUqGjvUzx5WX4pYY38a2jEqINeekxEGxNq737
-         ssRpEZ+FRFKBIbZ+lG7mUfRcSB+fFprInOdoEa+iUzJC1+WxIrnKAYPYLi93IZM9Bgsa
-         n7TEZLWkHPo0eLDn4nv5HqsPKHh207111jOcsknhv2FJ/+MutqkNnR1I7GHpVXtTozHS
-         2k2u5b9QlNVmBvtMMVzbXmWDlpolC4Omgsu+gPNiv7uQ1CoK04RG7d1TMg/gOeQneZ7Y
-         kJqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=35wLUHHiL0jcYl7dr+ydbL6W/M+IENF1DgF9AQYM8t8=;
-        b=TTxZehyuqs65e1M+axUL//z7yukLfnQkzsJ7DrQQrasBUC/fFCbbsu2NSrKsJ4b8nZ
-         2qmd1rkGpekQN/QYkgjMw3949T7VnbpMWznhBjCnVCLGHWtKUJ++HywlT4H2AZJnHOLa
-         vaJpNXKbWHqYPvFEUqAmJRCVGZ5tNhhBAUv3eQ7vja0Mw0Dl4vnTQcQejBkEw2OJv2cq
-         uNZ2UKS1pPE6f34xhXcmA46e1YsmABJjJXRFOTKIudwLsNp4ofLRL63WUvFXcX0mEMOT
-         QXxLscGder8cCHhTMKCvzusrAyvXFy0qHDhevo3jXMgbEFm4j7kwsyR87i22+PRmz3Rm
-         hn/A==
-X-Gm-Message-State: AOAM531BfQkNz1DfAiwfdamGYeM9+VwLVTLmLo86ik7hQUak+r09Lz6V
-        rkg3F8PCNttHq3oWq9eTYEQ=
-X-Google-Smtp-Source: ABdhPJzU2EqrkTFmH1289oQBf1AS7N5fRURLGWkSQCB7ihkYlFD87c3JcUWU8O9Fzhze9kCZLws/Lg==
-X-Received: by 2002:a2e:9557:: with SMTP id t23mr676484ljh.85.1598191806202;
-        Sun, 23 Aug 2020 07:10:06 -0700 (PDT)
-Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id b17sm1641342ljp.9.2020.08.23.07.10.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2020 07:10:05 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Lubomir Rintel <lkundrak@v3.sk>
-Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 6/6] ARM: tegra: acer-a500: Add Embedded Controller
-Date:   Sun, 23 Aug 2020 17:08:46 +0300
-Message-Id: <20200823140846.19299-7-digetx@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200823140846.19299-1-digetx@gmail.com>
-References: <20200823140846.19299-1-digetx@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726923AbgHWQQD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Aug 2020 12:16:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43796 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725996AbgHWQQC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 23 Aug 2020 12:16:02 -0400
+Received: from kozik-lap.proceq-device.com (unknown [194.230.155.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 685DC2072D;
+        Sun, 23 Aug 2020 16:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598199361;
+        bh=lnBHoUXioLOrOWNKvWtcrwmt13u6QaY0trxOTodHtew=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M4jcEMVojBCm6n6VI1JLybJ3HkimOMO74lwgXpcMV4RvKKHZeawHTgV8XtBvp9UtQ
+         ULqXZ3K+wsEaxZPwJSqX2sGxr7+iuFaZhY48Xna/0DmrwbZmpnIbv+wrnX/1RoSgBl
+         yb2ljxrWBvbfEbhd6Rk/f+zaCNTZCX+gnvm5j4Ys=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 01/22] dt-bindings: gpio: fsl-imx-gpio: Add i.MX 8 compatibles
+Date:   Sun, 23 Aug 2020 18:15:29 +0200
+Message-Id: <20200823161550.3981-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds device-tree node for the Embedded Controller which is
-found on the Picasso board. The Embedded Controller itself is ENE KB930,
-it provides functions like battery-gauge/LED/GPIO/etc and it uses firmware
-that is specifically customized for the Acer A500 device.
+DTSes with new i.MX 8 SoCs introduce their own compatibles so add them
+to fix dtbs_check warnings like:
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible:0: 'fsl,imx8mm-gpio' is not one of ['fsl,imx1-gpio', 'fsl,imx21-gpio', 'fsl,imx31-gpio', 'fsl,imx35-gpio', 'fsl,imx7d-gpio']
+    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: ['fsl,imx8mm-gpio', 'fsl,imx35-gpio'] is too long
+
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000:
+    compatible: Additional items are not allowed ('fsl,imx35-gpio' was unexpected)
+
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- arch/arm/boot/dts/tegra20-acer-a500-picasso.dts | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ .../bindings/gpio/fsl-imx-gpio.yaml           | 21 +++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-index 2d683c9a1a5d..f92712e4bd34 100644
---- a/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-+++ b/arch/arm/boot/dts/tegra20-acer-a500-picasso.dts
-@@ -502,6 +502,16 @@ panel_ddc: i2c@1 {
- 			reg = <1>;
- 			#address-cells = <1>;
- 			#size-cells = <0>;
-+
-+			embedded-controller@58 {
-+				compatible = "acer,a500-iconia-ec", "ene,kb930";
-+				reg = <0x58>;
-+
-+				system-power-controller;
-+
-+				monitored-battery = <&bat1010>;
-+				power-supplies = <&mains>;
-+			};
- 		};
- 	};
+diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+index 0b223abe8cfb..454db20c2d1a 100644
+--- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
++++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+@@ -11,12 +11,21 @@ maintainers:
  
-@@ -780,6 +790,13 @@ backlight: backlight {
- 		default-brightness-level = <20>;
- 	};
+ properties:
+   compatible:
+-    enum:
+-      - fsl,imx1-gpio
+-      - fsl,imx21-gpio
+-      - fsl,imx31-gpio
+-      - fsl,imx35-gpio
+-      - fsl,imx7d-gpio
++    oneOf:
++      - enum:
++          - fsl,imx1-gpio
++          - fsl,imx21-gpio
++          - fsl,imx31-gpio
++          - fsl,imx35-gpio
++          - fsl,imx7d-gpio
++      - items:
++          - enum:
++              - fsl,imx8mm-gpio
++              - fsl,imx8mn-gpio
++              - fsl,imx8mp-gpio
++              - fsl,imx8mq-gpio
++              - fsl,imx8qxp-gpio
++          - const: fsl,imx35-gpio
  
-+	bat1010: battery-2s1p {
-+		compatible = "simple-battery";
-+		charge-full-design-microamp-hours = <3260000>;
-+		energy-full-design-microwatt-hours = <24000000>;
-+		operating-range-celsius = <0 40>;
-+	};
-+
- 	/* PMIC has a built-in 32KHz oscillator which is used by PMC */
- 	clk32k_in: clock@0 {
- 		compatible = "fixed-clock";
+   reg:
+     maxItems: 1
 -- 
-2.27.0
+2.17.1
 
