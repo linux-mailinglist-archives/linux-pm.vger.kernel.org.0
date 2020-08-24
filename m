@@ -2,145 +2,372 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3889524F678
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D60A24F726
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730820AbgHXJAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 05:00:38 -0400
-Received: from mail-eopbgr30073.outbound.protection.outlook.com ([40.107.3.73]:1239
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729064AbgHXJAZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Aug 2020 05:00:25 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IGQLYBAOUvkgGSljhGAu5G6xFtKdD+mfC8RBAb3oeTeOIjXC8PHDBAKZ8lbz72Of1bIdXnRtVo3Dcd2xRgHYYb0Um0EH5/vO3VNoD7v4rAH8BOVlm+jjQ56Vd7vgSmXmc0lKuMDqnF4OUnm8gu7RCGZRjrU9FKwK405Yiy/0UdiGN44hK6GLuOZMFr3GLHBs7tBsXGbt4n9p2Wh7qju4gcfZze37DaPHgMs5/neKCZaugdIFJRXCFet/jmFtIDGhoEzhi8nosnrhobu/51PNNpjVPrc+xe0B9B1AyxBu19XsidWI4Us0lR1QP7WIR/KoQGSk8ZG0ub0464IvUfUAdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Oi07fpJKhwidrgeiwmkna4p8Jzdtdd08CuuGi7iEqQ=;
- b=fiw407YCAcraZ7XGHx6W3vb8cd/a1AXY9+9W1wC+j0DpeX6WPVR00GWsR94SR1xuGxNL35hllUbFQlbweDPet7IDjrQrRy0mxLtspiRevA8pbvZjhKakRzM8ZLFzts6m0Xbj16diyWdTzCN4WwoTVvylLIHjFhKXmoaVgeuiiyJweOeG+aD7rFeP0uo5fsKTXJ8tryM9Oe720aKw44gTvRFHtpTZ5by2KzsNeQnO02MHIdAC/pENZ5xepOC8t0yiTVa3TXZfA99boY+q43z7jbQu7mGsTG/gkeHyXwf4c7KjYfxLo5U+2tCFEUml/OQiAIpjHmt91PnqLdB9LcgsHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Oi07fpJKhwidrgeiwmkna4p8Jzdtdd08CuuGi7iEqQ=;
- b=fOf2jCyrVMDFH/YYVps6YuPEphvx76u90mJYkfArfa82WG0vWO1SIogABWFktWPBB5p4gDX7HUsaYOJDd6l+EI5kHgXVafsBAKNo3b0QF+PwzNjrSN05U/i7ajjZ2uqWItSb8p942iFaEl0cd8QtbpYsJdtvJZtv22cmI6oVtO8=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM6PR0402MB3894.eurprd04.prod.outlook.com (2603:10a6:209:20::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Mon, 24 Aug
- 2020 09:00:20 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::99b5:145d:16cc:78ca]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::99b5:145d:16cc:78ca%3]) with mapi id 15.20.3305.026; Mon, 24 Aug 2020
- 09:00:19 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-CC:     Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <anson.huang@nxp.com>
-Subject: RE: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible from
- USDHC
-Thread-Topic: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible from
- USDHC
-Thread-Index: AQHWeWjs3+F925Bk106zrc9FAFewr6lG9uLw
-Date:   Mon, 24 Aug 2020 09:00:19 +0000
-Message-ID: <AM6PR04MB49668B0F67B02B2A33603B4880560@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <20200823161550.3981-1-krzk@kernel.org>
- <20200823161550.3981-21-krzk@kernel.org>
-In-Reply-To: <20200823161550.3981-21-krzk@kernel.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 3f9b0d02-acba-4307-918e-08d8480c20c6
-x-ms-traffictypediagnostic: AM6PR0402MB3894:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM6PR0402MB389430D49307CE2BAA78F7BC80560@AM6PR0402MB3894.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1443;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 67I/EcZQbxLD8cgq45bPaFHWiAgYKRlN6FdV/oA7EsQbON53d7MTJrro7YJ+LXT92IfXAgjDJDviHocnXa1xVQ6KI003EMt7a+M/3Q+O1YO39MiQ8T48jwio62qhcOxJC11ugn45a3cudhkehhdoIQhiMxqWy0AyR6HoM4HEmoQWz0uiicUzGX0gOU0NcECeQl3/lAryj/SHhcBNJV3EPMdODrKx5ubPAU3co7eq8AFbRBybfcRNByfzd4J4/J+HPr9pifpgtHg2UaOiUOd1eIwofpB1D2fPH3opy9mGlEHEcGj8iEpBC80qOHH9Jbf/Ewz/5girr/oLsCXmpP7uD8AlbQx/OtWzcq/wDGoZe+dkdYbwTghS75HLbK/dEUis3s+bpaIZKHzo8XwEDiGjKg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(39860400002)(366004)(136003)(376002)(396003)(316002)(110136005)(44832011)(8936002)(7696005)(9686003)(26005)(4326008)(186003)(7416002)(2906002)(478600001)(8676002)(54906003)(6506007)(66946007)(76116006)(5660300002)(83380400001)(66476007)(33656002)(86362001)(66556008)(66446008)(64756008)(52536014)(55016002)(71200400001)(921003)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: RkLyOxMxPiIXid+HwKWJ/5uHIVEUO0bTM+49E57o2YxuyHxmxIDTCZM9HqxdIcxhO3do+NdNJn9+oeQPfkfibdKlIwZD50XB3qvs29Nc6hcTDBSTGcQbrnso1Edpsy75EVL/sv/tfZwxF99WQboSJ7C+FsOIFwKUSHxhGnbUxi7gahLgLK1DcTJi3MSFe8wSTGvtFeu3FuYO+wG0iZV7KDnWAlOzhV36kAXv+skpesA4AuO07q55j8YzXvi1qGqOaubt4lKCRsfujpUjJyBnO6lcCMGm1vt4FA+bb8NTABeppxdgPxz3Bi9tuW7oDAiDXW7I94magYMUK18jLl93q2IrUEmU11K8TLuPbXh79UV5ncUPBN3eu/tKQxGPSYn9DJdPAOjEUz8K5P4XO3W8PAcIYWtXc6Hr4XS9FsI2uxKI994TJYZSRC+tV94+OQ+R4hnqfClFA1uie90Al4IprD9pz5cey2/NDNRlDc/lhymVzr2zj0VmmZuDzAVsxHoNXlCmXwNwWBRIVdYePOxwL229UjoiXmn0gBFUs73cI7H7FKIl+xQbkic1L59HhVBij3kfmaOBb3tWy5IufVKpsdWEeLuZNYP6Wf8a8H0h7PDMWEXYlHV0i88O4tq+jfD5B1vub5G1lX3kZ6mtgOPaKw==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727008AbgHXJJt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 05:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728725AbgHXJJl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 05:09:41 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A7CC061575
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:09:40 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id o5so4263856pgb.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KkjksCGs4AQuVWCwGfdEcJFYrQa9D8++X80GpI0F1Zo=;
+        b=BPXypc1U/ODzYLqbC9yrqE4xPIwzl1Ox4y5aPhPJ66J/ahwQz/B0ppevelkSK8WqFo
+         eIIpvjrVmIgJaU5e1AwKWm8c6KhLAb4hq8CQsSlOUddaO9LiCKKfPeM28Ie1Iv/0Qd6p
+         +6Pipv/rmD59wKhGKvZ4J0zLYEkvkSF/FwU5zTxTjvzkYz4fUfXLqBnOKCELssTmv4c4
+         e8NmNd0QyeFsNdtjg/VtMqUEQcarutVcdG2JCnKMjQrQIqemG6Y2YcB8zzA8P3ksArMW
+         nVVoi2mo0ra88W0QtZECvg/Rn2TXtjM3isK00WZ1zhu92BqbXJX1cfV9DVESbXYO7njY
+         pHBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KkjksCGs4AQuVWCwGfdEcJFYrQa9D8++X80GpI0F1Zo=;
+        b=NkJSPeYN+dd0zMrdhZ1sQBDsbLQxkAc64BTUlk0RqNg3DsYPBhdyepMGB8GB0GjO59
+         rVPbVdaUcFBMCH/uvu0PrPdEXzDzVKJPK8dq8SRKjF6WRG/jYgkoZJ40Z6AoFmgur7xJ
+         tvpb1sx/gzBqn0KS+i3o7XfYspp1e3XLj9FOVi2fanAYUcjmAKjYNJm+cBnzMGo0aRhf
+         YRysowEin+JtGi0O2tkESdV0je3iPEYjqk8G8GeOMpyiWrygAXdTms/1PwhcQOFtsrjN
+         ohJE6YBCglIM2REpE4fYTrzrBLQ/yBOvIXO+Hvt8N+mrvPrwsCZi1gzEYGBnuUDIgaBi
+         3qTA==
+X-Gm-Message-State: AOAM533oHPq0mAuWpuDVG3iDb/mc1TocRA2QzlutdJD5Opci6aKgXidP
+        qQ/Pwje2XCXLorHTtqfaV98O9w==
+X-Google-Smtp-Source: ABdhPJyJVYyNtoeLgVn3sekF5Av1U4evkK87vnqaw33gDUhUL13Ji8mvBsdyrgxvAjnJnWQ6qyhGwA==
+X-Received: by 2002:a63:5542:: with SMTP id f2mr2822925pgm.196.1598260180107;
+        Mon, 24 Aug 2020 02:09:40 -0700 (PDT)
+Received: from localhost ([122.172.43.13])
+        by smtp.gmail.com with ESMTPSA id r7sm10965833pfl.186.2020.08.24.02.09.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Aug 2020 02:09:39 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     ulf.hansson@linaro.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>, nks@flawful.org,
+        georgi.djakov@linaro.org, Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: [PATCH V2 1/2] opp: Allow dev_pm_opp_get_opp_table() to return -EPROBE_DEFER
+Date:   Mon, 24 Aug 2020 14:39:32 +0530
+Message-Id: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f9b0d02-acba-4307-918e-08d8480c20c6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2020 09:00:19.7937
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: P2X+PmlpoE6tIjOjAM2mB1F0wDKpA7ypCLWmTpoFTCbMfQwijkKRz6eEFG8L0wjQUMC78JXRWFpB0AC1geZxeA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR0402MB3894
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IE1v
-bmRheSwgQXVndXN0IDI0LCAyMDIwIDEyOjE2IEFNDQo+IA0KPiBUaGUgVVNESEMgb24gaS5NWCA4
-UVhQIGhhcyBpdHMgb3duIGNvbXBhdGlibGUgZGVzY3JpYmVkIGluIGJpbmRpbmdzIGFuZA0KPiB1
-c2VkIGluIHRoZSBkcml2ZXIgKHdpdGggaXRzIG93biBxdWlya3MpLiAgUmVtb3ZlIGFkZGl0aW9u
-YWwgZnNsLGlteDdkLXVzZGhjDQo+IGNvbXBhdGlibGUgdG8gZml4IGR0YnNfY2hlY2sgd2Fybmlu
-Z3MgbGlrZToNCj4gDQo+ICAgYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC1h
-aV9tbC5kdC55YW1sOiBtbWNANWIwMTAwMDA6DQo+ICAgICBjb21wYXRpYmxlOiBbJ2ZzbCxpbXg4
-cXhwLXVzZGhjJywgJ2ZzbCxpbXg3ZC11c2RoYyddIGlzIHRvbyBsb25nDQo+ICAgICBGcm9tIHNj
-aGVtYToNCj4gL29jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL21tYy9mc2wtaW14LWVz
-ZGhjLnlhbWwNCj4gDQo+ICAgYXJjaC9hcm02NC9ib290L2R0cy9mcmVlc2NhbGUvaW14OHF4cC1h
-aV9tbC5kdC55YW1sOiBtbWNANWIwMTAwMDA6DQo+ICAgICBjb21wYXRpYmxlOiBBZGRpdGlvbmFs
-IGl0ZW1zIGFyZSBub3QgYWxsb3dlZCAoJ2ZzbCxpbXg3ZC11c2RoYycgd2FzDQo+IHVuZXhwZWN0
-ZWQpDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnprQGtlcm5l
-bC5vcmc+DQoNCkZvciBQYXRjaCAxOS0yMiwgSSB0aGluayB3ZSBzaG91bGQgZml4IGR0IGJpbmRp
-bmcgZG9jLg0KDQpSZWdhcmRzDQpBaXNoZW5nDQoNCj4gLS0tDQo+ICBhcmNoL2FybTY0L2Jvb3Qv
-ZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLmR0c2kgfCA2ICsrKy0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQs
-IDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNo
-L2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLmR0c2kNCj4gYi9hcmNoL2FybTY0L2Jv
-b3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhwLmR0c2kNCj4gaW5kZXggNjFiY2NiNjlmMDllLi4yNmM0
-ZmNkZmUyOTAgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtNjQvYm9vdC9kdHMvZnJlZXNjYWxlL2lt
-eDhxeHAuZHRzaQ0KPiArKysgYi9hcmNoL2FybTY0L2Jvb3QvZHRzL2ZyZWVzY2FsZS9pbXg4cXhw
-LmR0c2kNCj4gQEAgLTM2Miw3ICszNjIsNyBAQA0KPiAgCQl9Ow0KPiANCj4gIAkJdXNkaGMxOiBt
-bWNANWIwMTAwMDAgew0KPiAtCQkJY29tcGF0aWJsZSA9ICJmc2wsaW14OHF4cC11c2RoYyIsICJm
-c2wsaW14N2QtdXNkaGMiOw0KPiArCQkJY29tcGF0aWJsZSA9ICJmc2wsaW14OHF4cC11c2RoYyI7
-DQo+ICAJCQlpbnRlcnJ1cHRzID0gPEdJQ19TUEkgMjMyIElSUV9UWVBFX0xFVkVMX0hJR0g+Ow0K
-PiAgCQkJcmVnID0gPDB4NWIwMTAwMDAgMHgxMDAwMD47DQo+ICAJCQljbG9ja3MgPSA8JmNvbm5f
-bHBjZyBJTVhfQ09OTl9MUENHX1NESEMwX0lQR19DTEs+LCBAQA0KPiAtMzc0LDcgKzM3NCw3IEBA
-DQo+ICAJCX07DQo+IA0KPiAgCQl1c2RoYzI6IG1tY0A1YjAyMDAwMCB7DQo+IC0JCQljb21wYXRp
-YmxlID0gImZzbCxpbXg4cXhwLXVzZGhjIiwgImZzbCxpbXg3ZC11c2RoYyI7DQo+ICsJCQljb21w
-YXRpYmxlID0gImZzbCxpbXg4cXhwLXVzZGhjIjsNCj4gIAkJCWludGVycnVwdHMgPSA8R0lDX1NQ
-SSAyMzMgSVJRX1RZUEVfTEVWRUxfSElHSD47DQo+ICAJCQlyZWcgPSA8MHg1YjAyMDAwMCAweDEw
-MDAwPjsNCj4gIAkJCWNsb2NrcyA9IDwmY29ubl9scGNnIElNWF9DT05OX0xQQ0dfU0RIQzFfSVBH
-X0NMSz4sIEBADQo+IC0zODgsNyArMzg4LDcgQEANCj4gIAkJfTsNCj4gDQo+ICAJCXVzZGhjMzog
-bW1jQDViMDMwMDAwIHsNCj4gLQkJCWNvbXBhdGlibGUgPSAiZnNsLGlteDhxeHAtdXNkaGMiLCAi
-ZnNsLGlteDdkLXVzZGhjIjsNCj4gKwkJCWNvbXBhdGlibGUgPSAiZnNsLGlteDhxeHAtdXNkaGMi
-Ow0KPiAgCQkJaW50ZXJydXB0cyA9IDxHSUNfU1BJIDIzNCBJUlFfVFlQRV9MRVZFTF9ISUdIPjsN
-Cj4gIAkJCXJlZyA9IDwweDViMDMwMDAwIDB4MTAwMDA+Ow0KPiAgCQkJY2xvY2tzID0gPCZjb25u
-X2xwY2cgSU1YX0NPTk5fTFBDR19TREhDMl9JUEdfQ0xLPiwNCj4gLS0NCj4gMi4xNy4xDQoNCg==
+From: Stephan Gerhold <stephan@gerhold.net>
+
+The OPP core manages various resources, e.g. clocks or interconnect paths.
+These resources are looked up when the OPP table is allocated once
+dev_pm_opp_get_opp_table() is called the first time (either directly
+or indirectly through one of the many helper functions).
+
+At this point, the resources may not be available yet, i.e. looking them
+up will result in -EPROBE_DEFER. Unfortunately, dev_pm_opp_get_opp_table()
+is currently unable to propagate this error code since it only returns
+the allocated OPP table or NULL.
+
+This means that all consumers of the OPP core are required to make sure
+that all necessary resources are available. Usually this happens by
+requesting them, checking the result and releasing them immediately after.
+
+For example, we have added "dev_pm_opp_of_find_icc_paths(dev, NULL)" to
+several drivers now just to make sure the interconnect providers are
+ready before the OPP table is allocated. If this call is missing,
+the OPP core will only warn about this and then attempt to continue
+without interconnect. This will eventually fail horribly, e.g.:
+
+    cpu cpu0: _allocate_opp_table: Error finding interconnect paths: -517
+    ... later ...
+    of: _read_bw: Mismatch between opp-peak-kBps and paths (1 0)
+    cpu cpu0: _opp_add_static_v2: opp key field not found
+    cpu cpu0: _of_add_opp_table_v2: Failed to add OPP, -22
+
+This example happens when trying to use interconnects for a CPU OPP
+table together with qcom-cpufreq-nvmem.c. qcom-cpufreq-nvmem calls
+dev_pm_opp_set_supported_hw(), which ends up allocating the OPP table
+early. To fix the problem with the current approach we would need to add
+yet another call to dev_pm_opp_of_find_icc_paths(dev, NULL).
+But actually qcom-cpufreq-nvmem.c has nothing to do with interconnects...
+
+This commit attempts to make this more robust by allowing
+dev_pm_opp_get_opp_table() to return an error pointer. Fixing all
+the usages is trivial because the function is usually used indirectly
+through another helper (e.g. dev_pm_opp_set_supported_hw() above).
+These other helpers already return an error pointer.
+
+The example above then works correctly because set_supported_hw() will
+return -EPROBE_DEFER, and qcom-cpufreq-nvmem.c already propagates that
+error. It should also be possible to remove the remaining usages of
+"dev_pm_opp_of_find_icc_paths(dev, NULL)" from other drivers as well.
+
+Note that this commit currently only handles -EPROBE_DEFER for the
+clock/interconnects within _allocate_opp_table(). Other errors are just
+ignored as before. Eventually those should be propagated as well.
+
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+[ Viresh: skip checking return value of dev_pm_opp_get_opp_table() for
+	  EPROBE_DEFER in domain.c, fix NULL return value and reorder
+	  code a bit in core.c, and update exynos-asv.c ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Stephan, I have made some changes to the code. Please try it again and
+lemme know if it works fine.
+
+ drivers/base/power/domain.c      | 14 +++++----
+ drivers/opp/core.c               | 53 +++++++++++++++++++-------------
+ drivers/opp/of.c                 |  8 ++---
+ drivers/soc/samsung/exynos-asv.c |  2 +-
+ 4 files changed, 44 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 2cb5e04cf86c..b92bb61550d3 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -2044,8 +2044,9 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 	if (genpd->set_performance_state) {
+ 		ret = dev_pm_opp_of_add_table(&genpd->dev);
+ 		if (ret) {
+-			dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
+-				ret);
++			if (ret != -EPROBE_DEFER)
++				dev_err(&genpd->dev, "Failed to add OPP table: %d\n",
++					ret);
+ 			goto unlock;
+ 		}
+ 
+@@ -2054,7 +2055,7 @@ int of_genpd_add_provider_simple(struct device_node *np,
+ 		 * state.
+ 		 */
+ 		genpd->opp_table = dev_pm_opp_get_opp_table(&genpd->dev);
+-		WARN_ON(!genpd->opp_table);
++		WARN_ON(IS_ERR(genpd->opp_table));
+ 	}
+ 
+ 	ret = genpd_add_provider(np, genpd_xlate_simple, genpd);
+@@ -2111,8 +2112,9 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 		if (genpd->set_performance_state) {
+ 			ret = dev_pm_opp_of_add_table_indexed(&genpd->dev, i);
+ 			if (ret) {
+-				dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
+-					i, ret);
++				if (ret != -EPROBE_DEFER)
++					dev_err(&genpd->dev, "Failed to add OPP table for index %d: %d\n",
++						i, ret);
+ 				goto error;
+ 			}
+ 
+@@ -2121,7 +2123,7 @@ int of_genpd_add_provider_onecell(struct device_node *np,
+ 			 * performance state.
+ 			 */
+ 			genpd->opp_table = dev_pm_opp_get_opp_table_indexed(&genpd->dev, i);
+-			WARN_ON(!genpd->opp_table);
++			WARN_ON(IS_ERR(genpd->opp_table));
+ 		}
+ 
+ 		genpd->provider = &np->fwnode;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 6978b9218c6e..8c69a764d0a4 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1068,7 +1068,7 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 	 */
+ 	opp_table = kzalloc(sizeof(*opp_table), GFP_KERNEL);
+ 	if (!opp_table)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 
+ 	mutex_init(&opp_table->lock);
+ 	mutex_init(&opp_table->genpd_virt_dev_lock);
+@@ -1079,8 +1079,8 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 
+ 	opp_dev = _add_opp_dev(dev, opp_table);
+ 	if (!opp_dev) {
+-		kfree(opp_table);
+-		return NULL;
++		ret = -ENOMEM;
++		goto err;
+ 	}
+ 
+ 	_of_init_opp_table(opp_table, dev, index);
+@@ -1089,16 +1089,21 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 	opp_table->clk = clk_get(dev, NULL);
+ 	if (IS_ERR(opp_table->clk)) {
+ 		ret = PTR_ERR(opp_table->clk);
+-		if (ret != -EPROBE_DEFER)
+-			dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__,
+-				ret);
++		if (ret == -EPROBE_DEFER)
++			goto err;
++
++		dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+ 	}
+ 
+ 	/* Find interconnect path(s) for the device */
+ 	ret = dev_pm_opp_of_find_icc_paths(dev, opp_table);
+-	if (ret)
++	if (ret) {
++		if (ret == -EPROBE_DEFER)
++			goto err;
++
+ 		dev_warn(dev, "%s: Error finding interconnect paths: %d\n",
+ 			 __func__, ret);
++	}
+ 
+ 	BLOCKING_INIT_NOTIFIER_HEAD(&opp_table->head);
+ 	INIT_LIST_HEAD(&opp_table->opp_list);
+@@ -1107,6 +1112,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+ 	/* Secure the device table modification */
+ 	list_add(&opp_table->node, &opp_tables);
+ 	return opp_table;
++
++err:
++	kfree(opp_table);
++	return ERR_PTR(ret);
+ }
+ 
+ void _get_opp_table_kref(struct opp_table *opp_table)
+@@ -1129,7 +1138,7 @@ static struct opp_table *_opp_get_opp_table(struct device *dev, int index)
+ 	if (opp_table) {
+ 		if (!_add_opp_dev_unlocked(dev, opp_table)) {
+ 			dev_pm_opp_put_opp_table(opp_table);
+-			opp_table = NULL;
++			opp_table = ERR_PTR(-ENOMEM);
+ 		}
+ 		goto unlock;
+ 	}
+@@ -1573,8 +1582,8 @@ struct opp_table *dev_pm_opp_set_supported_hw(struct device *dev,
+ 	struct opp_table *opp_table;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/* Make sure there are no concurrent readers while updating opp_table */
+ 	WARN_ON(!list_empty(&opp_table->opp_list));
+@@ -1632,8 +1641,8 @@ struct opp_table *dev_pm_opp_set_prop_name(struct device *dev, const char *name)
+ 	struct opp_table *opp_table;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/* Make sure there are no concurrent readers while updating opp_table */
+ 	WARN_ON(!list_empty(&opp_table->opp_list));
+@@ -1725,8 +1734,8 @@ struct opp_table *dev_pm_opp_set_regulators(struct device *dev,
+ 	int ret, i;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/* This should be called before OPPs are initialized */
+ 	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+@@ -1833,8 +1842,8 @@ struct opp_table *dev_pm_opp_set_clkname(struct device *dev, const char *name)
+ 	int ret;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/* This should be called before OPPs are initialized */
+ 	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+@@ -1901,8 +1910,8 @@ struct opp_table *dev_pm_opp_register_set_opp_helper(struct device *dev,
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (!IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/* This should be called before OPPs are initialized */
+ 	if (WARN_ON(!list_empty(&opp_table->opp_list))) {
+@@ -1982,8 +1991,8 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ 	const char **name = names;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return ERR_PTR(-ENOMEM);
++	if (IS_ERR(opp_table))
++		return opp_table;
+ 
+ 	/*
+ 	 * If the genpd's OPP table isn't already initialized, parsing of the
+@@ -2153,8 +2162,8 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+ 	int ret;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+-	if (!opp_table)
+-		return -ENOMEM;
++	if (IS_ERR(opp_table))
++		return PTR_ERR(opp_table);
+ 
+ 	/* Fix regulator count for dynamic OPPs */
+ 	opp_table->regulator_count = 1;
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 7d9d4455a59e..e39ddcc779af 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -947,8 +947,8 @@ int dev_pm_opp_of_add_table(struct device *dev)
+ 	int ret;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table_indexed(dev, 0);
+-	if (!opp_table)
+-		return -ENOMEM;
++	if (IS_ERR(opp_table))
++		return PTR_ERR(opp_table);
+ 
+ 	/*
+ 	 * OPPs have two version of bindings now. Also try the old (v1)
+@@ -1002,8 +1002,8 @@ int dev_pm_opp_of_add_table_indexed(struct device *dev, int index)
+ 	}
+ 
+ 	opp_table = dev_pm_opp_get_opp_table_indexed(dev, index);
+-	if (!opp_table)
+-		return -ENOMEM;
++	if (IS_ERR(opp_table))
++		return PTR_ERR(opp_table);
+ 
+ 	ret = _of_add_opp_table_v2(dev, opp_table);
+ 	if (ret)
+diff --git a/drivers/soc/samsung/exynos-asv.c b/drivers/soc/samsung/exynos-asv.c
+index 30bb7b7cc769..8abf4dfaa5c5 100644
+--- a/drivers/soc/samsung/exynos-asv.c
++++ b/drivers/soc/samsung/exynos-asv.c
+@@ -93,7 +93,7 @@ static int exynos_asv_update_opps(struct exynos_asv *asv)
+ 			continue;
+ 
+ 		opp_table = dev_pm_opp_get_opp_table(cpu);
+-		if (IS_ERR_OR_NULL(opp_table))
++		if (IS_ERR(opp_table))
+ 			continue;
+ 
+ 		if (!last_opp_table || opp_table != last_opp_table) {
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
