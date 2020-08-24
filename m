@@ -2,103 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A013924FC2B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAB824FC31
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbgHXLB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 07:01:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50674 "EHLO mail.kernel.org"
+        id S1726529AbgHXLBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 07:01:51 -0400
+Received: from foss.arm.com ([217.140.110.172]:59610 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726483AbgHXLBU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Aug 2020 07:01:20 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 560C2206B5;
-        Mon, 24 Aug 2020 11:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598266879;
-        bh=6SZzRMN5GGlyh79co29gSLTZO76H+8JYL5VE28sGF20=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e23Bob6o6Xo0hBCl442jnXgXQlakT98GnZpvR/3dAMkOWhgYz0m51RsIAvILsTzlg
-         1qScDMQv4rSd6Go0kH9xUQkOIomoMoFi6WN0w2dPPPhCgmOPc0yvIWeU2vNQ8w2qfJ
-         vRNQJmC6J0WQWl1hlDoM4WBydqnrrehLjrrRhP2Y=
-Date:   Mon, 24 Aug 2020 12:00:45 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] regulator: Add regulator driver for ATC260x PMICs
-Message-ID: <20200824110045.GA4676@sirena.org.uk>
-References: <cover.1598043782.git.cristian.ciocaltea@gmail.com>
- <8da70f0b19de17fb8edead7ff06461ae2451b0e9.1598043782.git.cristian.ciocaltea@gmail.com>
+        id S1726483AbgHXLBg (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Aug 2020 07:01:36 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F22741063;
+        Mon, 24 Aug 2020 04:01:35 -0700 (PDT)
+Received: from [10.37.12.65] (unknown [10.37.12.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 653203F66B;
+        Mon, 24 Aug 2020 04:01:34 -0700 (PDT)
+Subject: Re: [PATCH 3/3] memory: samsung: exynos5422-dmc: add missing and fix
+ kerneldoc
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20200822163218.21857-1-krzk@kernel.org>
+ <20200822163218.21857-3-krzk@kernel.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6a87531f-a16f-5597-a10f-bdc2130077f1@arm.com>
+Date:   Mon, 24 Aug 2020 12:01:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2fHTh5uZTiUOsy+g"
-Content-Disposition: inline
-In-Reply-To: <8da70f0b19de17fb8edead7ff06461ae2451b0e9.1598043782.git.cristian.ciocaltea@gmail.com>
-X-Cookie: Weekend, where are you?
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200822163218.21857-3-krzk@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---2fHTh5uZTiUOsy+g
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Sat, Aug 22, 2020 at 01:19:49AM +0300, Cristian Ciocaltea wrote:
+On 8/22/20 5:32 PM, Krzysztof Kozlowski wrote:
+> Add missing kerneldoc to struct exynos5_dmc and correct the existing
+> kerneldoc in other places to fix W=1 warnings like:
+> 
+>      drivers/memory/samsung/exynos5422-dmc.c:107: warning: Function parameter or member 'freq_hz' not described in 'dmc_opp_table'
+>      drivers/memory/samsung/exynos5422-dmc.c:154: warning: Function parameter or member 'dev' not described in 'exynos5_dmc'
+>      drivers/memory/samsung/exynos5422-dmc.c:357: warning: Excess function parameter 'param' description in 'exynos5_set_bypass_dram_timings'
+>      drivers/memory/samsung/exynos5422-dmc.c:630: warning: Function parameter or member 'flags' not described in 'exynos5_dmc_get_volt_freq'
+>      drivers/memory/samsung/exynos5422-dmc.c:962: warning: cannot understand function prototype: 'struct devfreq_dev_profile exynos5_dmc_df_profile = '
+>      drivers/memory/samsung/exynos5422-dmc.c:1011: warning: Function parameter or member 'reg_timing_row' not described in 'create_timings_aligned'
+>      drivers/memory/samsung/exynos5422-dmc.c:1011: warning: Excess function parameter 'idx' description in 'create_timings_aligned'
+>      drivers/memory/samsung/exynos5422-dmc.c:1345: warning: Excess function parameter 'set' description in 'exynos5_dmc_set_pause_on_switching'
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-> +static int atc260x_set_voltage_time_sel(struct regulator_dev *rdev,
-> +					unsigned int old_selector,
-> +					unsigned int new_selector)
-> +{
-> +	struct atc260x_regulator_data *data = rdev_get_drvdata(rdev);
-> +	int id = rdev_get_id(rdev);
-> +
-> +	if (new_selector > old_selector)
-> +		return id > data->last_dcdc_reg_id ? data->voltage_time_ldo
-> +						   : data->voltage_time_dcdc;
+Acked-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Please write normal conditional statements to make things easier to
-read.  It also looks like this would be more robustly written by just
-having separate ops for DCDCs and LDOs, this could easily break if
-another device is supported in the driver.
-
-> +static const struct of_device_id atc260x_regulator_of_match[] = {
-> +	{ .compatible = "actions,atc2603c-regulator" },
-> +	{ .compatible = "actions,atc2609a-regulator" },
-> +	{ /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, atc260x_regulator_of_match);
-
-We don't need compatibles here, this is just reflecting the current
-Linux device model into the OS neutral DT bindings.  Another OS may
-choose to split regulators up differently.  We should just instantiate
-the regulator device from the MFD based on identifying the chip overall.
-
---2fHTh5uZTiUOsy+g
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9DndwACgkQJNaLcl1U
-h9CXoAf6AzUFwxgd0S5ClrLwTuv/z8XNl93mNAnQI+Lgte0VWytWqrO+qCtOPcAq
-sQgGC4jUOMfZR2vcx+UGMuCCoYjDO75ApLLyN4Z79wUeNApY/VVVoSpMCy1/yvtf
-wneUL9d6TNL0S/Po6/RBm0kII2vbhPcRXdJxGo1JAefjao0cc6OC7ep6OtxsnQF9
-sr9aCXfvloI95sl6bc/QVaWqd5/dP7WuPINxzY6Xd20TJ4bL9gVmwv87uBdZXLZZ
-8jjoAg+/7ma13fxdt7CuaGJLuXZNW+WusMKy/Bx5CqFwqpDkEPuRpA5zXXPI8/5c
-axFmXEOlJ7MAB8WZg4fNbeBHCsbekg==
-=H2HJ
------END PGP SIGNATURE-----
-
---2fHTh5uZTiUOsy+g--
+Regards,
+Lukasz
