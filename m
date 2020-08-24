@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C70DC250267
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 18:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0A9250270
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 18:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgHXQ2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 12:28:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57434 "EHLO mail.kernel.org"
+        id S1727068AbgHXQbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 12:31:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57468 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727991AbgHXQ2J (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:28:09 -0400
+        id S1727896AbgHXQ2Q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:28:16 -0400
 Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2A0120738;
-        Mon, 24 Aug 2020 16:28:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3037A2074D;
+        Mon, 24 Aug 2020 16:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286488;
-        bh=NxgEI35oyykqhboGx/XN/M8uVZEQeFJp9m/hyO8Zrz8=;
+        s=default; t=1598286495;
+        bh=D0lGql3068l0qoya1++oR3DiMvBwPOUE4frjDG+x5vE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XTqczjKjHJ68aZnCriupqIDy8TROXvBw+2pPtLlrlOKEyMUyJywYCE7/2lYvNrxRw
-         ha7HID//r9sRGPIYqiLmmZ8JbiUpGlnqTZhe8cbr/CYB3VHatZuJ2JkhoKQBM2XoH/
-         Mwkr8XWX4EOf8VySp4knB+IW2IZIEeYqjHGpIxco=
+        b=ZFNO5DdkEiEzZ/CI+2ciB/9994joymxRDDFV80yw9eyP9da5eItooQLa42+hABTXX
+         rvJ1Z4+jH5dpazhjihHiJN+0JgvVCBxCNPMqi8bYa6CXdeoz741ZrpAkZUnrkAzU+W
+         7jG1Ex7uw8jDCBFUndsBneeOxMmYKI9I9sOMWInE=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -50,9 +50,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 08/19] dt-bindings: watchdog: fsl-imx-wdt: Add i.MX 8M compatibles
-Date:   Mon, 24 Aug 2020 18:26:41 +0200
-Message-Id: <20200824162652.21047-8-krzk@kernel.org>
+Subject: [PATCH v2 09/19] dt-bindings: mtd: gpmi-nand: Add i.MX 8M compatibles
+Date:   Mon, 24 Aug 2020 18:26:42 +0200
+Message-Id: <20200824162652.21047-9-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200824162652.21047-1-krzk@kernel.org>
 References: <20200824162652.21047-1-krzk@kernel.org>
@@ -64,43 +64,50 @@ X-Mailing-List: linux-pm@vger.kernel.org
 DTSes with new i.MX 8M SoCs introduce their own compatibles so add them
 to fix dtbs_check warnings like:
 
-  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
-    compatible:0: 'fsl,imx8mm-wdt' is not one of ['fsl,imx21-wdt']
-    From schema: Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: nand-controller@33002000:
+    compatible:0: 'fsl,imx8mm-gpmi-nand' is not one of ['fsl,imx23-gpmi-nand', 'fsl,imx28-gpmi-nand', 'fsl,imx6q-gpmi-nand', 'fsl,imx6sx-gpmi-nand', 'fsl,imx7d-gpmi-nand']
+    From schema: Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
 
-  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
-    compatible: ['fsl,imx8mm-wdt', 'fsl,imx21-wdt'] is too long
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: nand-controller@33002000:
+    compatible: ['fsl,imx8mm-gpmi-nand', 'fsl,imx7d-gpmi-nand'] is too long
 
-  arch/arm64/boot/dts/freescale/imx8mm-var-som-symphony.dt.yaml: watchdog@30280000:
-    compatible: Additional items are not allowed ('fsl,imx21-wdt' was unexpected)
+  arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: nand-controller@33002000:
+    compatible: Additional items are not allowed ('fsl,imx7d-gpmi-nand' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- .../devicetree/bindings/watchdog/fsl-imx-wdt.yaml     | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/mtd/gpmi-nand.yaml     | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
-index d96b93b11fad..991b4e33486e 100644
---- a/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml
-@@ -14,8 +14,15 @@ allOf:
+diff --git a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
+index 3201372b7f85..28ff8c581837 100644
+--- a/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
++++ b/Documentation/devicetree/bindings/mtd/gpmi-nand.yaml
+@@ -20,12 +20,18 @@ description: |
  
  properties:
    compatible:
 -    enum:
--      - fsl,imx21-wdt
+-      - fsl,imx23-gpmi-nand
+-      - fsl,imx28-gpmi-nand
+-      - fsl,imx6q-gpmi-nand
+-      - fsl,imx6sx-gpmi-nand
+-      - fsl,imx7d-gpmi-nand
 +    oneOf:
-+      - const: fsl,imx21-wdt
++      - enum:
++          - fsl,imx23-gpmi-nand
++          - fsl,imx28-gpmi-nand
++          - fsl,imx6q-gpmi-nand
++          - fsl,imx6sx-gpmi-nand
++          - fsl,imx7d-gpmi-nand
 +      - items:
 +          - enum:
-+              - fsl,imx8mm-wdt
-+              - fsl,imx8mn-wdt
-+              - fsl,imx8mp-wdt
-+              - fsl,imx8mq-wdt
-+          - const: fsl,imx21-wdt
++              - fsl,imx8mm-gpmi-nand
++              - fsl,imx8mn-gpmi-nand
++          - const: fsl,imx7d-gpmi-nand
  
    reg:
-     maxItems: 1
+     items:
 -- 
 2.17.1
 
