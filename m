@@ -2,121 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E623B250620
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 19:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72971250626
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 19:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbgHXR2I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 13:28:08 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:61345 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726374AbgHXR2H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 13:28:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1598290086; x=1629826086;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=sJKVrhjRdjFhSQhYyBL/Jhi9uLQHVJpNK4GZYxSA/dc=;
-  b=CvPpBnyw8hNNnY4IPnBFDrXoro9F1g0NILcb8GHoOD+YmiZ4Ofemxrqc
-   dndVhC9tYiZEMmA0J5Osb7qa82j1Bd0RfhbR9BDsNZHZQhJLbBI3QHA1B
-   J9rrjFAc6b4TIvjpuUxX/2/MtKeYKWInQuG8QJ6n+xPZRwsKu3nxmOSAc
-   I=;
-X-IronPort-AV: E=Sophos;i="5.76,349,1592870400"; 
-   d="scan'208";a="70457034"
-Subject: Re: [PATCH v3 05/11] genirq: Shutdown irq chips in suspend/resume during
- hibernation
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1a-821c648d.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 24 Aug 2020 17:25:48 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan2.iad.amazon.com [10.40.159.162])
-        by email-inbound-relay-1a-821c648d.us-east-1.amazon.com (Postfix) with ESMTPS id CCA4AA1B8E;
-        Mon, 24 Aug 2020 17:25:41 +0000 (UTC)
-Received: from EX13D10UWA001.ant.amazon.com (10.43.160.216) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 24 Aug 2020 17:25:15 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
- EX13D10UWA001.ant.amazon.com (10.43.160.216) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Mon, 24 Aug 2020 17:25:15 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Mon, 24 Aug 2020 17:25:15 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id A16DC40770; Mon, 24 Aug 2020 17:25:15 +0000 (UTC)
-Date:   Mon, 24 Aug 2020 17:25:15 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-CC:     <mingo@redhat.com>, <bp@alien8.de>, <hpa@zytor.com>,
-        <x86@kernel.org>, <boris.ostrovsky@oracle.com>, <jgross@suse.com>,
-        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <kamatam@amazon.com>, <sstabellini@kernel.org>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200824172515.GA19449@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <cover.1598042152.git.anchalag@amazon.com>
- <d9bcd552c946ac56f3f17cc0c1be57247d4a3004.1598042152.git.anchalag@amazon.com>
- <87h7svqzxm.fsf@nanos.tec.linutronix.de>
+        id S1727909AbgHXR2Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 13:28:25 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:44047 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728382AbgHXR2R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 13:28:17 -0400
+Received: by mail-il1-f193.google.com with SMTP id j9so7957408ilc.11;
+        Mon, 24 Aug 2020 10:28:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=x7C6eQok8Pl7UAFU0rsUV0+mcmV/0wTU7nSxBfhdONU=;
+        b=f64I7DgNzbLxLaQnXMunJZw4KYJ6lGCWrmUgDXGiwGXxh8er6TKzChrs++41rVg6ii
+         qD88bvDZWqXlrUZDRG2GjSbonyyB4j0D/BWzk361Vi7qY9wt3lFN5hRKJoddtnv9IOVO
+         kNvyU6zoXyyiV0tbwD9rXIkEDnEEVwW85gemPFyQr1Q1eX6JMNf5/656nYCHPMtIjcDN
+         1Vq9yGfZIiaWWZxGljFOI9vfJB8uqxdlZxPti3tU+2cW39ET4qDDOYpKaV/wc8smnEqK
+         eQEZtmvke6eTtAG6LIKox5zBBy5/iYknb0ORup9hvhCTmAaehLcc203pt2dIRh1SPPfu
+         ZgAw==
+X-Gm-Message-State: AOAM532nwip8f3v4qiorOW+YLDsko6vCNzCxMpiBDN2raVM6trBLyiKB
+        gDf2Av9ORnkk63yr7+Jb3A==
+X-Google-Smtp-Source: ABdhPJzkYfjUhbsSi6w7J4evk76kL04eVABwUGbo+mtIu1y8X5HK24uHDZUNBkjNVX1Iq4Z3YR///g==
+X-Received: by 2002:a92:c7d4:: with SMTP id g20mr5927212ilk.40.1598290096298;
+        Mon, 24 Aug 2020 10:28:16 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id y8sm6835601iom.26.2020.08.24.10.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 10:28:15 -0700 (PDT)
+Received: (nullmailer pid 2933345 invoked by uid 1000);
+        Mon, 24 Aug 2020 17:28:13 -0000
+Date:   Mon, 24 Aug 2020 11:28:13 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [RFC PATCH v3 2/2] dt-bindings: cpufreq: Document Krait CPU
+ Cache scaling
+Message-ID: <20200824172813.GA2932192@bogus>
+References: <20200821140026.19643-1-ansuelsmth@gmail.com>
+ <20200821140026.19643-3-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87h7svqzxm.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20200821140026.19643-3-ansuelsmth@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 22, 2020 at 02:36:37AM +0200, Thomas Gleixner wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+On Fri, 21 Aug 2020 16:00:21 +0200, Ansuel Smith wrote:
+> Document dedicated Krait CPU Cache Scaling driver.
 > 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../bindings/cpufreq/krait-cache-scale.yaml   | 79 +++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
 > 
-> 
-> On Fri, Aug 21 2020 at 22:27, Thomas Gleixner wrote:
-> > Add a new quirk flag IRQCHIP_SHUTDOWN_ON_SUSPEND and add support for
-> > it the core interrupt suspend/resume paths.
-> >
-> > Changelog:
-> > v1->v2: Corrected the author's name to tglx@
-> 
-> Can you please move that Changelog part below the --- seperator next
-> time because that's really not part of the final commit messaage and the
-> maintainer has then to strip it off manually
-> 
-Ack.
-> > Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> These SOB lines are just wrongly ordered as they suggest:
-> 
->      Anchal has authored the patch and Thomas transported it
-> 
-> which is clearly not the case. So the right order is:
-> 
-I must admit I wasn't aware of that. Will fix.
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-> 
-> And that needs another tweak at the top of the change log. The first
-> line in the mail body wants to be:
-> 
-> From: Thomas Gleixner <tglx@linutronix.de>
-Yes I accidentally missed that in this patch.
-Others have that line on all the patches and even v2 for this patch
-has. Will fix.
-> 
-> followed by an empty new line before the actual changelog text
-> starts. That way the attribution of the patch when applying it will be
-> correct.
-> 
-> Documentation/process/ is there for a reason and following the few
-> simple rules to get that straight is not rocket science.
-> 
-> Thanks,
-> 
->         tglx
-> 
-> 
-Anchal
+
+
+My bot found errors running 'make dt_binding_check' on your patch:
+
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.example.dt.yaml: qcom-krait-cache: clocks:0:1: missing phandle tag in 4
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.example.dt.yaml: qcom-krait-cache: clocks:0: [4294967295, 4] is too long
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/cpufreq/krait-cache-scale.yaml
+
+
+See https://patchwork.ozlabs.org/patch/1349260
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
