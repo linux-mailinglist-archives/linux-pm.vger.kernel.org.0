@@ -2,104 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6025625069B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 19:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216EA250652
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 19:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgHXRd1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 13:33:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56840 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726666AbgHXQ1p (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:27:45 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 84EEC207CD;
-        Mon, 24 Aug 2020 16:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286454;
-        bh=xV9upgJFUdWJViQpTgljw0h9O9Oy/nU6sRG9fJrRqIA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Rbb5Xsxg/cfMuBlbOhmadtnzMEI+gV19eqcQz5I6FbgH9EE9d9S8KhzNKQoMQL/KP
-         UnqVKL7CBXxTmSlJC5S4xiX7r8RilT3hhfyDXF6IB/0wiSM/RJhVZB0jeyLvmP4DFa
-         8I3AJahzpeTvWZTFk/XhSw6z8DAu5DHFfokfQOiM=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH v2 03/19] dt-bindings: gpio: fsl-imx-gpio: Add parsing of hogs
-Date:   Mon, 24 Aug 2020 18:26:36 +0200
-Message-Id: <20200824162652.21047-3-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200824162652.21047-1-krzk@kernel.org>
-References: <20200824162652.21047-1-krzk@kernel.org>
+        id S1728437AbgHXRbN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 13:31:13 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:52580 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728466AbgHXRbF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 13:31:05 -0400
+Received: from 89-64-88-199.dynamic.chello.pl (89.64.88.199) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.459)
+ id 9706e1a0a736e6e0; Mon, 24 Aug 2020 19:31:02 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH] PM: sleep: core: Fix the handling of pending runtime resume requests
+Date:   Mon, 24 Aug 2020 19:31:01 +0200
+Message-ID: <3393548.q2lFjJrsnI@kreacher>
+In-Reply-To: <20200824150421.GD329866@rowland.harvard.edu>
+References: <7969920.MVx1BpXlEM@kreacher> <4922509.6NPD9QEisq@kreacher> <20200824150421.GD329866@rowland.harvard.edu>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allow parsing GPIO controller children nodes with GPIO hogs to fix
-warning:
+On Monday, August 24, 2020 5:04:21 PM CEST Alan Stern wrote:
+> On Mon, Aug 24, 2020 at 03:36:36PM +0200, Rafael J. Wysocki wrote:
+> > > Furthermore, by the logic used in this patch, the call to 
+> > > pm_wakeup_event() in the original code is also redundant: Any required 
+> > > wakeup event should have been generated when the runtime resume inside 
+> > > pm_runtime_barrer() was carried out.
+> > 
+> > It should be redundant in the real wakeup event cases, but it may cause
+> > spurious suspend aborts to occur when there are no real system wakeup
+> > events.
+> > 
+> > Actually, the original code is racy with respect to system wakeup events,
+> > because it depends on the exact time when the runtime-resume starts.  Namely,
+> > if it manages to start before the freezing of pm_wq, the wakeup will be lost
+> > unless the driver takes care of reporting it, which means that drivers really
+> > need to do that anyway.  And if they do that (which hopefully is the case), the
+> > pm_wakeup_event() call in the core may be dropped.
+> 
+> In other words, wakeup events are supposed to be reported at the time 
+> the wakeup request is first noticed, right?
 
-  arch/arm64/boot/dts/freescale/imx8mq-evk.dt.yaml: gpio@30240000: 'wl-reg-on' does not match any of the regexes: 'pinctrl-[0-9]+'
-    From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+That's correct.
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- .../devicetree/bindings/gpio/fsl-imx-gpio.yaml  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> We don't want to wait until 
+> a resume or runtime_resume callback runs; thanks to this race the 
+> callback might not run at all if the event isn't reported first.
 
-diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-index dffd9171ea66..620a52f944e8 100644
---- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-+++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
-@@ -53,6 +53,23 @@ properties:
- 
-   gpio-ranges: true
- 
-+patternProperties:
-+  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
-+    type: object
-+    properties:
-+      gpio-hog: true
-+      gpios: true
-+      input: true
-+      output-high: true
-+      output-low: true
-+      line-name: true
-+
-+    required:
-+      - gpio-hog
-+      - gpios
-+
-+    additionalProperties: false
-+
- required:
-   - compatible
-   - reg
--- 
-2.17.1
+The callback will run, either through the wq or by the pm_runtime_barrier(),
+but if it runs through the wq, pm_runtime_barrier() will return 0 and
+pm_wakeup_event() will not called by the core, so it must be called from
+elsewhere anyway.
+
+> Therefore the reasoning behind the original code appears to have been 
+> highly suspect.
+
+Indeed.
+
+> If there already was a queued runtime-resume request 
+> for the device and the device was wakeup-enabled, the wakeup event 
+> should _already_ have been reported at the time the request was queued.  
+> And we shouldn't rely on it being reported by the runtime-resume 
+> callback routine.
+
+Right.
+
+> > > This means that the code could be simplified to just:
+> > > 
+> > > 	pm_runtime_barrier(dev);
+> > 
+> > Yes, it could, so I'm going to re-spin the patch with this code simplification
+> > and updated changelog.
+> > 
+> > > Will this fix the reported bug?
+> > 
+> > I think so.
+> 
+> Okay, we'll see!
+
+Fair enough!
+
+
+
 
