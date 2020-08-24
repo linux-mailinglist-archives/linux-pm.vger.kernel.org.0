@@ -2,132 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BD1250C45
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 01:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6C1250C49
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 01:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728073AbgHXXWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 19:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S1728198AbgHXXXQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 19:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHXXWr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 19:22:47 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A926C061574;
-        Mon, 24 Aug 2020 16:22:47 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id v9so11650542ljk.6;
-        Mon, 24 Aug 2020 16:22:47 -0700 (PDT)
+        with ESMTP id S1726090AbgHXXXP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 19:23:15 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FA8C061574;
+        Mon, 24 Aug 2020 16:23:15 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id l63so6548263edl.9;
+        Mon, 24 Aug 2020 16:23:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJC/UBgyWpfgi2eM97bxX8k1Z19oULrPgPyyWbwUwmw=;
-        b=dwHmQnD2RQ9x9a0EgnJ6wBZSSpi2fEDGnepPRGx2uPWjCqllwwmP9vDI6bm5i8Z4Om
-         aX5ElKLCKGiXpTMd5biNiwAcICYUBfFGvWiI+NwJBeyQkyuGo6OnF/DeS7H9eeA7AzhU
-         MvnQcWu83AZvE8pvHxlUuCo6XKw8OzMerYecmwPRIT5D9n2zZu57hPspuwTacUNPXPCK
-         kqkYGXak3+jEZuA8EeSgTdxiUSskqWBEXSfqL+X45uq/Iib4XyuNe5LgEJZJDonjtOk5
-         dQL/P7g52jafoj3ugJ1laDxFkNxfJroxoG7IIj15hMxMgxJhEKyPHhYsOUq4HRYfCVPr
-         HMug==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IMKGdqUT+Wm0EM2slFZGgokEf7SVcwurGsjspfBC4Vw=;
+        b=rD8Vonqj5fif4pBYbR9r7Vi70mcoVG/5u1oM018c4xJ2uhNW3MvdLEerdf0N/naDEZ
+         E1j/y+v02nbdqyN2pY5wd1o6wcGWzIeH7pgJ70Rbdc6P4LBXrzv5iT00Pf7bBkmTN4RC
+         qe/bZzHGf/UATzFlwIpqJpcKCHUKKobTQoLT5s4jWqw4I5S4s51HXn0EY/oBaMsVjl5n
+         VgBKf9y1b86K4TlY/K3cGAqsEy+Yx1ZETfLYtASnEEqMf9xmm9hR0cHIqi5tHlbujfll
+         ISZicku4izGO/b/Sii+ttgpCCXKkj7wQ9uDQ/QydAk8qPN9dMcVcFMqTY5Ql8zrMsxlX
+         LGQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=tJC/UBgyWpfgi2eM97bxX8k1Z19oULrPgPyyWbwUwmw=;
-        b=q6xa3Zn68GK6dDI95/+g93AFVwz1Qj/SMBRwtcUXrBZeQjKHs5XaMfj94HOhGsR+Ao
-         A07+n+FSFS50PvlQ7yPwFWe/95ZHhYE55OfrEUNzaoXm96Gj2j36M+Ad3fJWTW3LcGOo
-         xwJqe0u+gBYsg5IK9+fJXglj3iUY0PcbbkEz2sNjbBksdOuxJtWt0o9aTuql3EXwdJTs
-         Ocr6ZZ6Hwi2FIZB6rEVk7Bbzo7CggJ0Vcj08JC7KhVAFgkG0NVVFeOwhDckrytHLMkmp
-         F8AN1LpfptXJq3ezoLoAy0ijgVfr8PKdseKYKzboQDhKW6Bk5pwAxuhnQqV0R0T+v1Ib
-         buPQ==
-X-Gm-Message-State: AOAM531P6/WVjVN8zB9wcc9EFpUOSdgxvKQvsWvQ7entrqzku2UCxZXu
-        7126HibFHWIlJOHNxe7+DqyQ+toOOo+sOQ==
-X-Google-Smtp-Source: ABdhPJwBfzQamH/59LWQDRfJZrX8tHgPvlC6jdfu4OpMpb0Gha5XCBFcvaV6Hklo2fImc9985Vuyaw==
-X-Received: by 2002:a2e:918a:: with SMTP id f10mr3749128ljg.78.1598311365605;
-        Mon, 24 Aug 2020 16:22:45 -0700 (PDT)
-Received: from localhost.localdomain (h-82-196-111-59.NA.cust.bahnhof.se. [82.196.111.59])
-        by smtp.gmail.com with ESMTPSA id o16sm2454414ljc.66.2020.08.24.16.22.44
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IMKGdqUT+Wm0EM2slFZGgokEf7SVcwurGsjspfBC4Vw=;
+        b=pH71E5I4OtGVRSAR3dmRnsT4T2s5l9UAvL7KCVbG+ENInnxhoXS2kjXcC7B6XdnxGM
+         zcdkEGwoc7nZzItqgOjZhIP5PSn0HujvPZPtgm0lYhSnIkZMOJ1ndBYOHdUbumihCSe3
+         PMYabwK8rruLE/jH8ZC2xzR/0qYAb/RDIcmdyZggdptyWqqCB7s2oJb37K4wexeyNs8u
+         xYUhOOpTuGsEEfQtD8amHXiNXfDTffJkW7Oyyb57qoGfPQKXVSz7oN+CAZXtgVf3MqB4
+         +w0HYDSGGT9RvxjPDpKMKBpq7P4CA/Tfc1M3+OpBBPvbhOcijvBjNYY1MgEEOt2A5GYz
+         EuiQ==
+X-Gm-Message-State: AOAM530bdXoswRb8/oa87pHcKWKxxiory/1fyb1vmmzWGim0fyLD7WVi
+        H0EittbjEeFZg3uMvHtxDMw=
+X-Google-Smtp-Source: ABdhPJwZKBlW9Oh2kcLlQDcMGwt1oIpnizxaEklu1dZLnaBBinI4xPTlwpC98tK8BDEzK9upr3L73A==
+X-Received: by 2002:a50:c38b:: with SMTP id h11mr7783148edf.308.1598311393688;
+        Mon, 24 Aug 2020 16:23:13 -0700 (PDT)
+Received: from BV030612LT ([188.24.159.61])
+        by smtp.gmail.com with ESMTPSA id j3sm11691701eje.75.2020.08.24.16.23.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 16:22:44 -0700 (PDT)
-From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Subject: [PATCH] power: supply: bq2515x: Constify static variables
-Date:   Tue, 25 Aug 2020 01:22:28 +0200
-Message-Id: <20200824232228.38423-1-rikard.falkeborn@gmail.com>
-X-Mailer: git-send-email 2.28.0
+        Mon, 24 Aug 2020 16:23:13 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 02:23:10 +0300
+From:   Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] regulator: Add regulator driver for ATC260x PMICs
+Message-ID: <20200824232310.GA2301286@BV030612LT>
+References: <cover.1598043782.git.cristian.ciocaltea@gmail.com>
+ <8da70f0b19de17fb8edead7ff06461ae2451b0e9.1598043782.git.cristian.ciocaltea@gmail.com>
+ <20200824110045.GA4676@sirena.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200824110045.GA4676@sirena.org.uk>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Constify a number of static variables that are not modified to allow the
-compiler to put them in read-only memory.
+Hi Mark,
 
-Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
----
- drivers/power/supply/bq2515x_charger.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Thanks for reviewing!
 
-diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/supply/bq2515x_charger.c
-index 36b0c8c98d40..9dcb61ea4cf2 100644
---- a/drivers/power/supply/bq2515x_charger.c
-+++ b/drivers/power/supply/bq2515x_charger.c
-@@ -188,7 +188,7 @@ struct bq2515x_device {
- 	struct bq2515x_init_data init_data;
- };
- 
--static struct reg_default bq25150_reg_defaults[] = {
-+static const struct reg_default bq25150_reg_defaults[] = {
- 	{BQ2515X_FLAG0, 0x0},
- 	{BQ2515X_FLAG1, 0x0},
- 	{BQ2515X_FLAG2, 0x0},
-@@ -227,7 +227,7 @@ static struct reg_default bq25150_reg_defaults[] = {
- 	{BQ2515X_DEVICE_ID, 0x20},
- };
- 
--static struct reg_default bq25155_reg_defaults[] = {
-+static const struct reg_default bq25155_reg_defaults[] = {
- 	{BQ2515X_FLAG0, 0x0},
- 	{BQ2515X_FLAG1, 0x0},
- 	{BQ2515X_FLAG2, 0x0},
-@@ -886,14 +886,14 @@ static int bq2515x_battery_get_property(struct power_supply *psy,
- 	return 0;
- }
- 
--static enum power_supply_property bq2515x_battery_properties[] = {
-+static const enum power_supply_property bq2515x_battery_properties[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
- 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
- };
- 
--static enum power_supply_property bq2515x_mains_properties[] = {
-+static const enum power_supply_property bq2515x_mains_properties[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_STATUS,
- 	POWER_SUPPLY_PROP_HEALTH,
-@@ -905,7 +905,7 @@ static enum power_supply_property bq2515x_mains_properties[] = {
- 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
- };
- 
--static struct power_supply_desc bq2515x_mains_desc = {
-+static const struct power_supply_desc bq2515x_mains_desc = {
- 	.name			= "bq2515x-mains",
- 	.type			= POWER_SUPPLY_TYPE_MAINS,
- 	.get_property		= bq2515x_mains_get_property,
-@@ -915,7 +915,7 @@ static struct power_supply_desc bq2515x_mains_desc = {
- 	.property_is_writeable	= bq2515x_power_supply_property_is_writeable,
- };
- 
--static struct power_supply_desc bq2515x_battery_desc = {
-+static const struct power_supply_desc bq2515x_battery_desc = {
- 	.name			= "bq2515x-battery",
- 	.type			= POWER_SUPPLY_TYPE_BATTERY,
- 	.get_property		= bq2515x_battery_get_property,
--- 
-2.28.0
+On Mon, Aug 24, 2020 at 12:00:45PM +0100, Mark Brown wrote:
+> On Sat, Aug 22, 2020 at 01:19:49AM +0300, Cristian Ciocaltea wrote:
+> 
+> > +static int atc260x_set_voltage_time_sel(struct regulator_dev *rdev,
+> > +					unsigned int old_selector,
+> > +					unsigned int new_selector)
+> > +{
+> > +	struct atc260x_regulator_data *data = rdev_get_drvdata(rdev);
+> > +	int id = rdev_get_id(rdev);
+> > +
+> > +	if (new_selector > old_selector)
+> > +		return id > data->last_dcdc_reg_id ? data->voltage_time_ldo
+> > +						   : data->voltage_time_dcdc;
+> 
+> Please write normal conditional statements to make things easier to
+> read.  It also looks like this would be more robustly written by just
+> having separate ops for DCDCs and LDOs, this could easily break if
+> another device is supported in the driver.
 
+Sure, I can provide separate ops, but in this case we duplicate almost
+all of them. If this is not acceptable, then I will just rewrite the
+conditional statement.
+
+> > +static const struct of_device_id atc260x_regulator_of_match[] = {
+> > +	{ .compatible = "actions,atc2603c-regulator" },
+> > +	{ .compatible = "actions,atc2609a-regulator" },
+> > +	{ /* sentinel */ }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, atc260x_regulator_of_match);
+> 
+> We don't need compatibles here, this is just reflecting the current
+> Linux device model into the OS neutral DT bindings.  Another OS may
+> choose to split regulators up differently.  We should just instantiate
+> the regulator device from the MFD based on identifying the chip overall.
+
+I have actually seen this in some MFD drivers I had been studying before
+starting this work. I wasn't sure what is the rationale behind, I
+assumed they have just an informative purpose.
+
+So, if I understand correctly, this approach is deprecated now and I
+should remove the compatibles from both the function driver and the
+corresponding mfd_cell in the core implementation. And not only for
+regulators, but for all the other functions of the MFD device.
+
+Regards,
+Cristi
