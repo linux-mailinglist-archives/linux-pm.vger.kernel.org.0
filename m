@@ -2,102 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2844D24F858
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177AF24F986
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbgHXJaS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 05:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S1728392AbgHXJq2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 05:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728432AbgHXJaP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 05:30:15 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12FAC061574
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:30:14 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id mt12so3974816pjb.4
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:30:14 -0700 (PDT)
+        with ESMTP id S1728937AbgHXImU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 04:42:20 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436DDC061573;
+        Mon, 24 Aug 2020 01:42:19 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id a5so7812800wrm.6;
+        Mon, 24 Aug 2020 01:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pK5bVNvEUkGmkHt7h+22p1PRjllmkBfGKoPd86o06Lw=;
-        b=zb6H8ukRfhieLWr3DBnUXOTmg55+e5EVKeqsfa2altwwB4K1VmjB+xm8dp0KBc1B0F
-         KH/tRUbVH5H9kDw1etY4+d/Urtgr+0Uix5vBzCbL7jtkQ1eORBWByV8kv2G/GTNO34Vt
-         mSH6FAZHzaRAefjA6cu7fJfPaD6DxdXrTBmzBKhB6v3cEnUrPrwh8faxFALumEMVOqJA
-         CTTMXQeHQ8MSlQBI1kcnwyGWnp1vQ2Y8z7P0NgI/6mlqv0ZgTeOsB4RhP2gBC/WJvl+H
-         E/7v/z49lP1blJipG/yCn02u9NiwT7GRfdVRKXa+EBMMQvQmxFyFlkyzbmIzDvLjy4lx
-         1+hg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FbqblzJhgrxr4jZgi3Lq34QqMg+Ttkj3vGhG8H42MbE=;
+        b=QP3WPu9b1QKlz3sDPT/E0l4eLPgQXgf9j16xq2ixoEUc4YlJj12mlVBgfq9loGF/TJ
+         inbamtbamkfPkYT3SfI0Eh4mq32N8+pl52ApN5zilY94tGLgqlZnZYGEg3vBl30ec3Rc
+         lRekNLBhwn7fVnXk6ocbZNYwxvicu0x1ikJHlNCEtv/eZmpH0IShjDQNXnVLqgCSsCM7
+         66JACXsjbYo5b75KtgOu33NpuUIcU/PsrlkUQ72cIXvlI+CtvFNRiFB0TS50tEk2t43h
+         PbfgiKOCWJRUf+GNeUadfRHUmsRxLBN0hqYkbF0TzgTh2NrcqM1Yw3UzBJbNiIaHD2Hi
+         WuiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pK5bVNvEUkGmkHt7h+22p1PRjllmkBfGKoPd86o06Lw=;
-        b=BYAVCixrz1TI/ZwNF6WDJ+7MFm0Lju+NNB/WqtK+M7pME/OzK8hJoC1PZLQ2iquD4t
-         lja/hA27tPetJn9+aKHbDk2e+aYfIZMfodxQ2+8iSDE//E4j51vl9lAzF/IGe4XEhVr7
-         Nnz7Fw0sUjkGIgt17B9JJ6NKN2uY1PttemOdepeXLLKKE8MIBCInScceJNb7R9fJQ5o6
-         Q0HpDMcaTkOT2w+Jl4A0/lt7c7kMHvZ1ZsP/+6QS4mPiYmctoztSXeu7Y5HgRnxhY3Pr
-         9U2arlaCdtvvikzSXUR/tQ0LtfbixkW1LryMoHrcZW8uDQ71pTLi+UPYE429Vwpaz8Kc
-         0kjg==
-X-Gm-Message-State: AOAM5301fk4f/4ZR7tdO5n5ITr1zUSkXrZp9clMvFzPO0ZZG2eWnKt9K
-        FVY2EyrHmyLATI1GnC0nr86Wqw==
-X-Google-Smtp-Source: ABdhPJwzqLJz/+aP8JzlsLfMYGqG9zUEjWrPHt0rxu0+/5xAZOVgSxNCJ+v8x4WUX1WjzQRFq4pUgA==
-X-Received: by 2002:a17:90a:448e:: with SMTP id t14mr3829392pjg.59.1598261414267;
-        Mon, 24 Aug 2020 02:30:14 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id y3sm9647312pjg.8.2020.08.24.02.30.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Aug 2020 02:30:13 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     stable@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH - for v5.7 stable] opp: Put opp table in dev_pm_opp_set_rate() for empty tables
-Date:   Mon, 24 Aug 2020 15:00:03 +0530
-Message-Id: <e7e9f887328c06800a79f3b48feb623fd15aa3d5.1598261323.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FbqblzJhgrxr4jZgi3Lq34QqMg+Ttkj3vGhG8H42MbE=;
+        b=ZQ18iiHRs/prN1Ei63AtBQJJL//DQBzTxXkw2fXaI4AlVfHCMxAlnx9UG5DljWnDzv
+         gaqewKYe1YZWpUmKTsnDKmIoPhUfCeXh5dr8xc6S17j9z4wnsrjnRucBfw8QrFnHNjzX
+         xsAtz17ZubqtTHe57JU6BW6+ly0EI6hWTRfHP8+2I7IRGuRolJcP4XBNiMlS9KTt4ZT2
+         jMUum3FS2riayoYtIEOVpHK9CdqTx/Mxz5nEKfY1cWvF7bW1yK7OqFjH8CTI/q700cdZ
+         mrv5I2JuzY6/wkUhbsGTJRxLWA/flNJ4DpgBzf6Npc9XRqWh13j4ZSO2vtYbwarJCP9w
+         q1Hg==
+X-Gm-Message-State: AOAM532BI97XU5AVvURpGpNSiwCUGiAFcoSXByA0NPYoHH+cFGSNfruz
+        D/v2dSYZqvUrkWSzmDvarlF80vJ8rTOckKUFJVJzirDaJE3fQA==
+X-Google-Smtp-Source: ABdhPJzAg8uQC8Mrf0XcBKdIu2nrOS4XC7CNiYSaA3zhrvxiaasEP+kVaYJgjFUamKAVfjf08TugaCoK1jLRBUkbid8=
+X-Received: by 2002:adf:9283:: with SMTP id 3mr4718276wrn.70.1598258537988;
+ Mon, 24 Aug 2020 01:42:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1597376585.git.huangqiwu@xiaomi.com> <ced256ea8ac2f3e54c33677facc4c2ef04dee643.1597376585.git.huangqiwu@xiaomi.com>
+ <20200814060909.GD1409566@kroah.com> <CAPtXDt1e3fi7ymW0-FSknUAYCQ80aL=4btbeA2e4Xre7+e7OtA@mail.gmail.com>
+ <20200818060707.GB1742213@kroah.com> <CAPtXDt26DdOi6JG7x3mTrR5YwArjkAeXY2TogRnK_xkSabhL2g@mail.gmail.com>
+ <20200824074357.GB4133866@kroah.com>
+In-Reply-To: <20200824074357.GB4133866@kroah.com>
+From:   Qiwu Huang <yanziily@gmail.com>
+Date:   Mon, 24 Aug 2020 16:42:06 +0800
+Message-ID: <CAPtXDt0yW7Kh6a9JGfXaha_wKVjae7U74m6K=631Ofh8_m4uvg@mail.gmail.com>
+Subject: Re: [PATCH v8 1/4] power: supply: core: add quick charge type property
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qiwu Huang <huangqiwu@xiaomi.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+On Mon, Aug 24, 2020 at 3:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 24, 2020 at 08:54:56AM +0800, Qiwu Huang wrote:
+> > On Tue, Aug 18, 2020 at 2:07 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Aug 18, 2020 at 09:56:28AM +0800, Qiwu Huang wrote:
+> > > > On Fri, Aug 14, 2020 at 2:09 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Fri, Aug 14, 2020 at 11:46:54AM +0800, Qiwu Huang wrote:
+> > > > > > From: Qiwu Huang <huangqiwu@xiaomi.com>
+> > > > > >
+> > > > > > Reports the kind of quick charge type based on
+> > > > > > different adapter power.
+> > > > > >
+> > > > > > Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
+> > > > > > ---
+> > > > > >  Documentation/ABI/testing/sysfs-class-power | 21 +++++++++
+> > > > > >  drivers/power/supply/power_supply_sysfs.c   |  1 +
+> > > > > >  drivers/power/supply/qcom_smbb.c            | 51 +++++++++++++++++++++
+> > > > > >  include/linux/power_supply.h                | 14 ++++++
+> > > > > >  4 files changed, 87 insertions(+)
+> > > > >
+> > > > > You should also submit your driver that uses these new attributes at the
+> > > > > same time.  What happened to that request?  Otherwise no one really
+> > > > > knows how these are being used, or if they even are used by anyone.
+> > > > >
+> > > >
+> > > > I don't think I can submit the whole driver because our drivers are
+> > > > divided into three parts, the first part is in ADSP, the second part
+> > > > is in kernel and the third part is in Android Hal.This is the second
+> > > > part.
+> > >
+> > > WHat is "ADSP"?
+> >
+> > ADSP: advanced digital signal processor
+>
+> Ok, then just send the kernel driver.
+>
+> > > Just submit your kernel driver code, that's all we care about here.
+> > > Userspace code is not anything we can do anything with :)
+> >
+> > If we ported the full driver, we would break the existing driver
+> > structure because we would introduce more Qualcomm code. I think
+> > that's an unreasonable change.
+>
+> That doesn't make much sense.  You have a working driver for these apis,
+> just submit it for inclusion, it should never break any existing
+> drivers, otherwise your code wouldn't work either.
 
-commit 8979ef70850eb469e1094279259d1ef393ffe85f upstream.
+We're an Android device, we're working on a Qualcomm based code, and
+from the current code tree, the current code tree is missing the QTI
+Charger code
 
-We get the opp_table pointer at the top of the function and so we should
-put the pointer at the end of the function like all other exit paths
-from this function do.
+>
+> thanks,
+>
+> greg k-h
 
-Cc: v5.7+ <stable@vger.kernel.org> # v5.7+
-Fixes: aca48b61f963 ("opp: Manage empty OPP tables with clk handle")
-Reviewed-by: Rajendra Nayak <rnayak@codeaurora.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-[ Viresh: Split the patch into two ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-[ Viresh: Update the code for v5.7-stable ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index bb7060d52eec..c94e725e6522 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -820,7 +820,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 		if (opp_table->required_opp_tables) {
- 			ret = _set_required_opps(dev, opp_table, NULL);
- 		} else if (!_get_opp_count(opp_table)) {
--			return 0;
-+			ret = 0;
- 		} else {
- 			dev_err(dev, "target frequency can't be 0\n");
- 			ret = -EINVAL;
+
 -- 
-2.25.0.rc1.19.g042ed3e048af
+Thanks
 
+Qiwu
