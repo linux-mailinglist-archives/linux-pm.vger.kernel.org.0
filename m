@@ -2,147 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79FE624F743
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 172F724F73B
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 11:11:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729570AbgHXJLa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 05:11:30 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34220 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728511AbgHXJLJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 05:11:09 -0400
-Received: by mail-wr1-f67.google.com with SMTP id f7so7916161wrw.1;
-        Mon, 24 Aug 2020 02:11:06 -0700 (PDT)
+        id S1728730AbgHXJLY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 05:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729516AbgHXJLT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 05:11:19 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682E9C061573
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:11:18 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id 31so2008498pgy.13
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 02:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YNxY4kfLHU4NI5WKAgDu+DEPuEBGxlooKlqn38YKqQM=;
+        b=YB4jM4MosToH/mDNnWjV5zQyDng5Ybc2G22Wi0KNgl/VwAamvernQ4ydNQOfclYFqR
+         jI6EoeF52j6ZODBHCwrTc221nROMTRlQD0prm0BOWlcxJ0CxgljFHLDtnFVzwNWt0bDn
+         AaN+qY1UWTbyLit5nOdUj1LXe4WwBD6Rfefa4yVsE/2HSJxV5YzwBmocZ0YCgMtTSnsO
+         XWzWShhaT0pIe4DNP+n++owwwFj+WzUiXUAIWuKfhq/YGukadWvs3b3swq2MI44QyRsV
+         1YO48QAcLsov+TbxYX7FkyVS7SpBiVsagnJKc8yUdvL/6FCWZXmH+JMegBSVxpmPB45I
+         ZkZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=pUF3QN5qpBvG5fN8G2Ybjf+ixCnkDOi3rCaIBYZPN7k=;
-        b=ouW01Ugyoltiz0Tx3d9PGq3yilZvXygJuQHcRAAJ9HRDxccD35sORb7bGyMHOGRuc4
-         /tDhxaT+pfJvDL5DhOzwyUDvgxNkE08LfpHx1xYYFauC9GcBu4yGLqKdHtOdYTLfogpu
-         s4XQbNccL/KuCNmRQ1xC8AkUcj8kdoCuMRKuSslnpIvwWxoylFLUnSmjRmLY3EeUtzP4
-         qAdjf+udAjrsgY2JGo05AzLad6qApmRkflnVDfeszoJk2L5EVve/gSromwZ3AYfwSqtc
-         RF83qvovbQ2PmWgIEeXsaGOhK+AUrWU1uU83cnUPepa6TB3iiUXxA17IqhxqV4PFrAWY
-         UldQ==
-X-Gm-Message-State: AOAM531YOWNKYyGkZoiFt4aTQW1TkcRsR4Ia3vhcAObpZlYiB3iaefGS
-        4VuhqXZTDFBb0FY8N3hQs8s=
-X-Google-Smtp-Source: ABdhPJwE3kGFDhN1s/hoJjFR2sSwbpKpOgvJl8AK3ZwbGzN+OM9ankAAiOzMdDiYIc2qELP19gLoww==
-X-Received: by 2002:adf:ea4f:: with SMTP id j15mr4845334wrn.253.1598260266068;
-        Mon, 24 Aug 2020 02:11:06 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id y24sm21368601wmi.17.2020.08.24.02.11.04
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Aug 2020 02:11:05 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 11:11:02 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Aisheng Dong <aisheng.dong@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Anson Huang <anson.huang@nxp.com>
-Subject: Re: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible from
- USDHC
-Message-ID: <20200824091102.GA20819@kozik-lap>
-References: <20200823161550.3981-1-krzk@kernel.org>
- <20200823161550.3981-21-krzk@kernel.org>
- <AM6PR04MB49668B0F67B02B2A33603B4880560@AM6PR04MB4966.eurprd04.prod.outlook.com>
+        bh=YNxY4kfLHU4NI5WKAgDu+DEPuEBGxlooKlqn38YKqQM=;
+        b=jaxtkoiwkwxKzD3Tll4qZRpXccdrKoUAl707ecdAlxBsCT85mNpWtsiXUD6mub6tNA
+         Dv+5OP4FKZoIgFH7MKImEdwn3g6F/2DNODMvsC9Z+JZ8CdgLv/zfsQrsCAIummCJUQdm
+         b15+c7Ll5YACibsWqGQiYkGyFeqcdOsUMUh53fgPDHy+NcqUIgDqMBc3cSgketllQFEV
+         /nTKqYD96kmsHQSpUTTdjHTBS55RKFFm+0eQlA/tgHED3ONbDdTZpAhjhL7Hs5wHEoO3
+         Gx+kLAvP++su3Xok/Vhw+w8yCk9RxWQUrNhh4G819ACbXrtKQo2eYFdZXS3pm5M7MLII
+         m/CA==
+X-Gm-Message-State: AOAM533AipfPpm6dQ4cmsfhg6ehM5fVzYQ5t20KU2xAZiuWjFTJLmnx9
+        91tK8Tm4U2fm+BDfzX2GLXKLFg==
+X-Google-Smtp-Source: ABdhPJyCLKjG8Jw0aVnUr6DrPqJTZOe8+DOo5xokZWSfVfKz6DoRfx+QN8xCclGwg6DhcFYV/yTnhg==
+X-Received: by 2002:aa7:9a1c:: with SMTP id w28mr3369115pfj.116.1598260277962;
+        Mon, 24 Aug 2020 02:11:17 -0700 (PDT)
+Received: from localhost ([122.172.43.13])
+        by smtp.gmail.com with ESMTPSA id z77sm10919535pfc.199.2020.08.24.02.11.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Aug 2020 02:11:17 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 14:41:15 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Stephan Gerhold <stephan@gerhold.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Niklas Cassel <nks@flawful.org>
+Subject: Re: [RFC PATCH 1/2] opp: Allow dev_pm_opp_get_opp_table() to return
+ -EPROBE_DEFER
+Message-ID: <20200824091115.ljsaoaaui5kbykpi@vireshk-i7>
+References: <20200727093047.8274-1-stephan@gerhold.net>
+ <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM6PR04MB49668B0F67B02B2A33603B4880560@AM6PR04MB4966.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAPDyKFq9bbMZD7ifF=ipfBD3ayiLuc6RPwW8_RWZBxMGv_WZkw@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 09:00:19AM +0000, Aisheng Dong wrote:
-> > From: Krzysztof Kozlowski <krzk@kernel.org>
-> > Sent: Monday, August 24, 2020 12:16 AM
-> > 
-> > The USDHC on i.MX 8QXP has its own compatible described in bindings and
-> > used in the driver (with its own quirks).  Remove additional fsl,imx7d-usdhc
-> > compatible to fix dtbs_check warnings like:
-> > 
-> >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml: mmc@5b010000:
-> >     compatible: ['fsl,imx8qxp-usdhc', 'fsl,imx7d-usdhc'] is too long
-> >     From schema:
-> > /ocumentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > 
-> >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml: mmc@5b010000:
-> >     compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was
-> > unexpected)
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+On 12-08-20, 11:10, Ulf Hansson wrote:
+> On Mon, 27 Jul 2020 at 11:31, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > I wasn't sure if the changes in drivers/base/power/domain.c
+> > should be made in a separate commit, but they need to be made together
+> > with the other changes.
 > 
-> For Patch 19-22, I think we should fix dt binding doc.
+> I would suggest to move the changes in drivers/base/power/domain.c
+> into a separate patch, still part of the series, but let it preceed
+> $subject patch.
 
-Are you sure that these USDHC controllers are compatible with i.MX 7D?
-Could they really run with fsl,imx7d-usdhc compatible?
+That can't be done as the return type of a routine was changing and that needs
+to be sorted out in the same patch.
 
-The implementation (Linux kernel driver) is different, I guess on
-purpose...
-
-Best regards,
-Krzysztof
-
-> 
-> Regards
-> Aisheng
-> 
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx8qxp.dtsi | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > index 61bccb69f09e..26c4fcdfe290 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8qxp.dtsi
-> > @@ -362,7 +362,7 @@
-> >  		};
-> > 
-> >  		usdhc1: mmc@5b010000 {
-> > -			compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-> > +			compatible = "fsl,imx8qxp-usdhc";
-> >  			interrupts = <GIC_SPI 232 IRQ_TYPE_LEVEL_HIGH>;
-> >  			reg = <0x5b010000 0x10000>;
-> >  			clocks = <&conn_lpcg IMX_CONN_LPCG_SDHC0_IPG_CLK>, @@
-> > -374,7 +374,7 @@
-> >  		};
-> > 
-> >  		usdhc2: mmc@5b020000 {
-> > -			compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-> > +			compatible = "fsl,imx8qxp-usdhc";
-> >  			interrupts = <GIC_SPI 233 IRQ_TYPE_LEVEL_HIGH>;
-> >  			reg = <0x5b020000 0x10000>;
-> >  			clocks = <&conn_lpcg IMX_CONN_LPCG_SDHC1_IPG_CLK>, @@
-> > -388,7 +388,7 @@
-> >  		};
-> > 
-> >  		usdhc3: mmc@5b030000 {
-> > -			compatible = "fsl,imx8qxp-usdhc", "fsl,imx7d-usdhc";
-> > +			compatible = "fsl,imx8qxp-usdhc";
-> >  			interrupts = <GIC_SPI 234 IRQ_TYPE_LEVEL_HIGH>;
-> >  			reg = <0x5b030000 0x10000>;
-> >  			clocks = <&conn_lpcg IMX_CONN_LPCG_SDHC2_IPG_CLK>,
-> > --
-> > 2.17.1
-> 
+-- 
+viresh
