@@ -2,202 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 813F624FD75
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 14:07:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4E324FD7E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 14:10:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgHXMHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 08:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        id S1726243AbgHXMKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 08:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbgHXMHo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 08:07:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38F2C061573
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:07:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id p15so573200pli.6
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:07:43 -0700 (PDT)
+        with ESMTP id S1725963AbgHXMKI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 08:10:08 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0407CC061574
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:10:07 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id t11so4133034plr.5
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6MGQkbhDjem3IdR91ZmIEu5m3F/jetN+cunD4ZgWqnQ=;
-        b=nJbI34lVlgEdM0exNCiwMJi4eBH6aBwTxWPhkKzROh/5VJNCRupdL9pMgY1ZqM5YZq
-         DyQ8hF0Hkw9afaTjG5R6fSVfLPgClDvAr/ZWq/nOieZubr0gwmdROYLMpJ3k2YivJ+4C
-         2Zmh/CIXHkv62HFMGmX9KzpuPOjS9zyYqbpONFWmuO1szmJgPLKvqtAUEKbGBuoUMah+
-         4E1vyD/KjmatROMcIP3w9rKqR10kfRfMUzMEo+u8/kELjIrX5rP3n31m2AXTNhC1VB/s
-         6YReV4N00QBZV4yHtCnxMGH17uAoDcS1PBWpKxFfVAK+a9kQb/c4itaUP+dv3BpAQxhP
-         o7+g==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UE8GsvqgRfc/MyLKuyAyg2OP5wLsadeZZ0TASbpeOos=;
+        b=KTv84FgOZYRLZaVzaKcnEGSiCtWts+r2p99KbkS11TfoNQ/BrCBvN7N4i/4/qHxOsq
+         CP1xcENdSEXYN3VrgKiqm3XSXW5FZLjPbs2bnilRxS0c5ke1bpt6oMDLCBzVUaNmI80H
+         Uu2UdzVMM5csaNwdlcoX5mKA85TnAmliqBPhjktUQ6XmF+2ys2vH5kzZ+JlPDWoLUdiV
+         Hzkwd7Ff+WKIKcm7fLxxNJivNlQEmdVhz/ohvd2+cyIRibD6OjtMjt2+pN+F8sHqYPzS
+         Cyzh7HmJxTSzw7GgnJBd6B0xw5MX0UN3U/zwLzLPWvlekTPwJpjnEqlUGPtg5808CLSM
+         96tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6MGQkbhDjem3IdR91ZmIEu5m3F/jetN+cunD4ZgWqnQ=;
-        b=bbpWbPh5woC+BBoMIpLvQSR8qJRkV+03DQifZrsvCEzlxKPbv1f2EWRiLFqhPiol4i
-         kSXr0gc7o5U2uVw5Uox4Idm+B/clfpMaULQxwa+JfcbXYjJlE94t+26eMmEtJBcjrXMK
-         keg0SMxxsicqjoJpctSQev7JhAsXd4aHSpMFP3gemXmQdIDVGQRdGztDgAq95pynyd2s
-         9ph9Wtc6dalj92XOtoL38X2smQzKxlb851+YkaiD9rQGcF4fi+vWU0W08oGDe9w6qxGg
-         tU6vRnw0BQD2ZLc7DRZ2q3R95+z+NJGZUHZC5Ik2Fsk0kloxngAfeDQb8zcocaRuyyez
-         Y3eA==
-X-Gm-Message-State: AOAM532iDlB9w2fYNItFaAkU+/umbVumFwrcW08E/848Fycn9BbGuEVu
-        aLnTx5/q8M6RiF/hmfP7JInVSg==
-X-Google-Smtp-Source: ABdhPJwrBCu2YqU0TPAsxKDuiDcJ8zPMBWUC4Ew7iX1o7SU+UDrogfD4esQm+qHaqAI6mB+9ma+hHA==
-X-Received: by 2002:a17:902:a404:: with SMTP id p4mr3755436plq.35.1598270861035;
-        Mon, 24 Aug 2020 05:07:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n26sm11107427pff.30.2020.08.24.05.07.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 05:07:40 -0700 (PDT)
-Message-ID: <5f43ad8c.1c69fb81.49787.39d7@mx.google.com>
-Date:   Mon, 24 Aug 2020 05:07:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UE8GsvqgRfc/MyLKuyAyg2OP5wLsadeZZ0TASbpeOos=;
+        b=Ba7oRpHKY0r8+NsBTBCC6TZMQExJ95ps5+cpkptvNNeFyWOu5FyVdD6N97vbGL4F8o
+         8XUlx8EY0RICFyEWTo3WUvnrmE/nzd8rg2p2SxvcLA6nvbE+6qlijH2SUQjdRQAeIhcN
+         fy1YWB2cFfGkMOttiHes3Vbdqd/vHNhzz8x+MOzB1htn4raosYRUb+Bfw4y96WM6y0Rr
+         D4omj7leT/FvwoOksRZDcB9kKfTA1Sx34LXm1TX540DzrgZcCPR1B2h43YB7IoS5RzEm
+         /CNqGhzqNBtbaRW3K4HzJmnHIi9uo12xDGppJDYioT+uwAk5/n3+iUEmSyEbC29lO0NM
+         J2aA==
+X-Gm-Message-State: AOAM5315LF1Grg7uBYybBct6ukBzbg468FOxcXYfpTZ3DMv2orOxj0Lq
+        OE/fD1umVCtUM9rVBWWkLo11tVc6bOmZAw==
+X-Google-Smtp-Source: ABdhPJzTb31VyJiQjxBciWNtrTi8EcV65QqVW5MQGVt8MNlXhG3Y/Wn8eVkWOXBIr1qDQ+OLlpCMkQ==
+X-Received: by 2002:a17:90a:dc13:: with SMTP id i19mr4052844pjv.161.1598271007440;
+        Mon, 24 Aug 2020 05:10:07 -0700 (PDT)
+Received: from localhost ([122.172.43.13])
+        by smtp.gmail.com with ESMTPSA id 124sm11616600pfb.19.2020.08.24.05.10.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Aug 2020 05:10:06 -0700 (PDT)
+Date:   Mon, 24 Aug 2020 17:40:04 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas Cassel <nks@flawful.org>
+Subject: Re: [RFC PATCH 1/3] opp: Reduce code duplication in
+ _set_required_opps()
+Message-ID: <20200824121004.mvssnqu4khg75cyb@vireshk-i7>
+References: <20200730080146.25185-1-stephan@gerhold.net>
+ <20200730080146.25185-2-stephan@gerhold.net>
+ <20200824111820.rcaingohxw3wozgd@vireshk-i7>
+ <20200824113016.GA131681@gerhold.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.9-rc2-8-gf5eba0ea1052
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 11 warnings (v5.9-rc2-8-gf5eba0ea1052)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200824113016.GA131681@gerhold.net>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc2-8-gf5=
-eba0ea1052)
+On 24-08-20, 13:30, Stephan Gerhold wrote:
+> You're right. Not sure why I removed it.
+> 
+> I suspect I had it in _set_required_opp() at some point, but I moved
+> code around several times until I was happy with the result.
+> 
+> We should just add it back.
+> Should I send a v2 with it fixed or would you like to handle it?
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-9-rc2-8-gf5eba0ea1052/
+I have applied the first two patches to linux-next branch in my tree,
+please have a look.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.9-rc2-8-gf5eba0ea1052
-Git Commit: f5eba0ea1052daba08e3fcf50be669b13fd7953d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-8): 8 warnings
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-
-mips:
-
-riscv:
-
-x86_64:
-
-
-Warnings summary:
-
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
-
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+-- 
+viresh
