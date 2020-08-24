@@ -2,100 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B072A250043
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 16:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0BC250049
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 16:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725973AbgHXO6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 10:58:21 -0400
-Received: from cmta19.telus.net ([209.171.16.92]:38114 "EHLO cmta19.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgHXO5a (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 24 Aug 2020 10:57:30 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id ADs7kzTNopULuADs8k2802; Mon, 24 Aug 2020 08:54:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1598280898; bh=J3BJ7qX7HVt5vAQT7eANT29lUGuCe6JLwEzkmWDSZh4=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=aujTPU5q0SWxI9dXbNemMM2wZfAJfyN3DMY5OMLYBI4UVfmY1BviO/ySRAUq6eELC
-         lO8z7h/3eCL31F6WR4LATLiru0AfOOE2o/uKp3RMPt8tqQURtDCCVsPgPEWNn423yY
-         +rI27kp6tqriuYAIZpsKnChNvHSy1y+j4yjf7HQMOGv32AAxia7GxfG3JK1nitH313
-         SiDyP2RYw53Tx2hLdkYylUCjLLCU54SS91yTrdLMV9jEZsRFABrEq8QR0PV14RUqG0
-         NxFjlvoNpCfnTh1CmX2S+OwOGMuw/U4QMk92S9TGQcIWy9c7i2DgqhN0J1ODlSqyqd
-         kx3VDQX/CEtpw==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=T9TysMCQ c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=kj9zAlcOel0A:10 a=gu6fZOg2AAAA:8
- a=cUYKOWGz9U0kq_ISi6IA:9 a=CjuIK1q_8ugA:10 a=-FEs8UIgK8oA:10
- a=NWVoK91CQyQA:10 a=2RSlZUUhi9gRBrsHwhhZ:22
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Len Brown'" <len.brown@intel.com>,
-        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
-        "'Peter Zijlstra'" <peterz@infradead.org>,
-        "'Giovanni Gherdovich'" <ggherdovich@suse.cz>,
-        "'Francisco Jerez'" <francisco.jerez.plata@intel.com>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>
-References: <3169564.ZRsPWhXyMD@kreacher>
-In-Reply-To: <3169564.ZRsPWhXyMD@kreacher>
-Subject: RE: [RFC/RFT][PATCH] cpufreq: intel_pstate: Work in passive mode with HWP enabled
-Date:   Mon, 24 Aug 2020 07:54:54 -0700
-Message-ID: <000f01d67a26$891b9340$9b52b9c0$@net>
+        id S1726631AbgHXO7R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 10:59:17 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:18555 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgHXO7Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 10:59:16 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f43d5860000>; Mon, 24 Aug 2020 07:58:14 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 24 Aug 2020 07:59:15 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 24 Aug 2020 07:59:15 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 24 Aug
+ 2020 14:59:15 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 24 Aug 2020 14:59:15 +0000
+Received: from moonraker.nvidia.com (Not Verified[10.26.74.138]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5f43d5c10000>; Mon, 24 Aug 2020 07:59:14 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Jon Hunter <jonathanh@nvidia.com>
+Subject: [PATCH V2] cpufreq: tegra186: Fix initial frequency
+Date:   Mon, 24 Aug 2020 15:59:07 +0100
+Message-ID: <20200824145907.331899-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdYvk3X5bnwqpX6hRwi7ciAthJfS0BKjLYKg
-X-CMAE-Envelope: MS4wfOmjarjI9dsl1fU5e3KC3UMjpvV86vTn7EqucnGmaYrvCTJMINyW1WAcl5RIEfPIyez1VwmkpoBOhjwxq0cQooS8KsWwvbzM+Kimxtun2h0rx1xQ4S4A
- KatdgSXQGwJgJ4lqX8flOjl6mTJXwBh3gEkSXzly/uBvMpdKXOWjKm9w83w5GU/ZEGbJvXR+zOr3+KHXQO2HlMj+iO06zAneBZ+fMv1PnUJ0Rvo4k1AK8ldw
- l+I/6ND2WpxO1fFl0uVL7qwkP4OMzTF+waySQZC6KgL4nPPePJYpNfpYnvXI7zDucVrHCn/LCMuojwGa4D9iW5tO0rDo+Z9vP/fD6WzBUkcDHAvomsSbXR0+
- pP8SnzMe0ATFLg0xqTwAxU7VQjAOzvy/JWNRLH0K+zJzj1cKPQj7O5/rsWP+JOUYmpnknS4E
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1598281094; bh=EmuB4is9VINRVTLC+GeQuqGP2D8AcHAOKBPg4Mi7SQ8=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=i0RiXfl0RArXB2ERXcAAdV5/PXOm5Z4aMm/cu0PkFOxYwalCltIQ8oT4iUQjDPynX
+         wL/O9yF2f+Sy0x1N5XMNi4zBpCzScvZnAobQcQIt6Q47/lFP3u6NuHlqyxHII8tozM
+         7wc2cw7NQmp97/krVV0P/0VYa+R3pA9QQ67k2OrCKu4kkt9LYruTsdgWvsDJqzBzbE
+         Klysni5Ia7QhVfdzz9aNOgYn92scUyi3rZQCDAouQnSrmcAUXTTWdRgAe07wnXoo+a
+         k+drvz9EGxx84N8ETxupW9lWqS3Qk9fjPFqU20FRGa6XFF3Ldi96hWgrazt5fUJ4W8
+         tcBwv4HModW3g==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020.05.21 10:16 Rafael J. Wysocki wrote:
+Commit 6cc3d0e9a097 ("cpufreq: tegra186: add
+CPUFREQ_NEED_INITIAL_FREQ_CHECK flag") fixed CPUFREQ support for
+Tegra186 but as a consequence the following warnings are now seen on
+boot ...
 
-...
-> 
-> The INTEL_CPUFREQ_TRANSITION_DELAY_HWP value has been guessed and it very well
-> may turn out to be either too high or too low for the general use, which is one
-> reason why getting as much testing coverage as possible is key here.
-> 
-> If you can play with different INTEL_CPUFREQ_TRANSITION_DELAY_HWP values,
-> please do so and let me know the conclusions.
-...
+ cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 2035=
+200 KHz
+ cpufreq: cpufreq_online: CPU1: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU1: Unlisted initial frequency changed to: 2035=
+200 KHz
+ cpufreq: cpufreq_online: CPU2: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU2: Unlisted initial frequency changed to: 2035=
+200 KHz
+ cpufreq: cpufreq_online: CPU3: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU3: Unlisted initial frequency changed to: 2035=
+200 KHz
+ cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU4: Unlisted initial frequency changed to: 2035=
+200 KHz
+ cpufreq: cpufreq_online: CPU5: Running at unlisted freq: 0 KHz
+ cpufreq: cpufreq_online: CPU5: Unlisted initial frequency changed to: 2035=
+200 KHz
 
-Hi Rafael,
+Fix this by adding a 'get' callback for the Tegra186 CPUFREQ driver to
+retrieve the current operating frequency for a given CPU. The 'get'
+callback uses the current 'ndiv' value that is programmed to determine
+that current operating frequency.
 
-Since my v7 reply the other day about results for 347 Hz work/sleep frequency
-periodic workflows [1], I have been testing at 73 Hertz work/sleep frequency.
-And am now testing this:
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+---
+Changes since V1:
+- Moved code into a 'get' callback
 
--#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP     5000
-+#define INTEL_CPUFREQ_TRANSITION_DELAY_HWP     10000
+ drivers/cpufreq/tegra186-cpufreq.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-Which shows promise for the schedutil governor, which no
-longer drives prematurely into the turbo range, consuming
-excessive amounts of energy as compared to passive without
-HWP.
-
-The ondemand governor is still very bad. The only way I
-have found to get it behave is to force max=min=target_pstate,
-in addition to the above.
-
-It will be quite some time before I have well organized feedback.
-In the meantime if anyone has suggestions for an optimal
-INTEL_CPUFREQ_TRANSITION_DELAY_HWP value, I would be grateful.
-Otherwise I'll attempt to find it via tests.
-
-... Doug
-
-[1] https://marc.info/?l=linux-pm&m=159769839401767&w=2
-
+diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-=
+cpufreq.c
+index 01e1f58ba422..0d0fcff60765 100644
+--- a/drivers/cpufreq/tegra186-cpufreq.c
++++ b/drivers/cpufreq/tegra186-cpufreq.c
+@@ -14,6 +14,7 @@
+=20
+ #define EDVD_CORE_VOLT_FREQ(core)		(0x20 + (core) * 0x4)
+ #define EDVD_CORE_VOLT_FREQ_F_SHIFT		0
++#define EDVD_CORE_VOLT_FREQ_F_MASK		0xffff
+ #define EDVD_CORE_VOLT_FREQ_V_SHIFT		16
+=20
+ struct tegra186_cpufreq_cluster_info {
+@@ -91,10 +92,39 @@ static int tegra186_cpufreq_set_target(struct cpufreq_p=
+olicy *policy,
+ 	return 0;
+ }
+=20
++static unsigned int tegra186_cpufreq_get(unsigned int cpu)
++{
++	struct cpufreq_frequency_table *tbl;
++	struct cpufreq_policy *policy;
++	void __iomem *edvd_reg;
++	unsigned int i, freq =3D 0;
++	u32 ndiv;
++
++	policy =3D cpufreq_cpu_get(cpu);
++	if (!policy)
++		return -EINVAL;
++
++	tbl =3D policy->freq_table;
++	edvd_reg =3D policy->driver_data;
++	ndiv =3D readl(edvd_reg) & EDVD_CORE_VOLT_FREQ_F_MASK;
++
++	for (i =3D 0; tbl[i].frequency !=3D CPUFREQ_TABLE_END; i++) {
++		if ((tbl[i].driver_data & EDVD_CORE_VOLT_FREQ_F_MASK) =3D=3D ndiv) {
++			freq =3D tbl[i].frequency;
++			break;
++		}
++	}
++
++	cpufreq_cpu_put(policy);
++
++	return freq;
++}
++
+ static struct cpufreq_driver tegra186_cpufreq_driver =3D {
+ 	.name =3D "tegra186",
+ 	.flags =3D CPUFREQ_STICKY | CPUFREQ_HAVE_GOVERNOR_PER_POLICY |
+ 			CPUFREQ_NEED_INITIAL_FREQ_CHECK,
++	.get =3D tegra186_cpufreq_get,
+ 	.verify =3D cpufreq_generic_frequency_table_verify,
+ 	.target_index =3D tegra186_cpufreq_set_target,
+ 	.init =3D tegra186_cpufreq_init,
+--=20
+2.25.1
 
