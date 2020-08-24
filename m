@@ -2,111 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A59C250C20
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 01:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BD1250C45
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 01:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726551AbgHXXKB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 19:10:01 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:37783 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHXXKB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 19:10:01 -0400
-Received: by mail-il1-f196.google.com with SMTP id v2so8827720ilq.4;
-        Mon, 24 Aug 2020 16:10:00 -0700 (PDT)
+        id S1728073AbgHXXWs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 19:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgHXXWr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 19:22:47 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A926C061574;
+        Mon, 24 Aug 2020 16:22:47 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id v9so11650542ljk.6;
+        Mon, 24 Aug 2020 16:22:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tJC/UBgyWpfgi2eM97bxX8k1Z19oULrPgPyyWbwUwmw=;
+        b=dwHmQnD2RQ9x9a0EgnJ6wBZSSpi2fEDGnepPRGx2uPWjCqllwwmP9vDI6bm5i8Z4Om
+         aX5ElKLCKGiXpTMd5biNiwAcICYUBfFGvWiI+NwJBeyQkyuGo6OnF/DeS7H9eeA7AzhU
+         MvnQcWu83AZvE8pvHxlUuCo6XKw8OzMerYecmwPRIT5D9n2zZu57hPspuwTacUNPXPCK
+         kqkYGXak3+jEZuA8EeSgTdxiUSskqWBEXSfqL+X45uq/Iib4XyuNe5LgEJZJDonjtOk5
+         dQL/P7g52jafoj3ugJ1laDxFkNxfJroxoG7IIj15hMxMgxJhEKyPHhYsOUq4HRYfCVPr
+         HMug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pNW+FpExzUZzKAgdzLbbC3mRjgc/ErkF14qzkePzpao=;
-        b=rCGPujwGgeuFwBJk9BqeNd7TFwV8sYSsw3S3vkJzcLzULZnDUnVbwv8pxDYZsRmx3A
-         SrH6Sb0mMVh+ToK/wemOglj+9l0DV6bwazvD1R0XnNeDzuXDL483kkSI6M2EeqEler76
-         kxqQHeD7zlMJXZQPdb9ENbBsxN+vVnVxswK8MBQv5QBHrWlabnwhnNJI3Bbgz3ukD9NY
-         uAwaVBX60vKaB0VoND4UWDxF+AfHKJtVqAfA3jVXyLYcSxhZIfm/Bv+cq6QZwuXKHTR4
-         0QnmnlJXI2k3kBjSYJ8dioD+S679U11Db8WssC6KLBd6FAF4lj2ZsobU6PBcBgxqXi4S
-         qBmg==
-X-Gm-Message-State: AOAM532KPMGGoQldfLTE5F5cJR2QoyvtDwVOE6AdMFRxL0KAEGUQhngV
-        f5j+QycN9A6meVkG9gmOehDYeSX1CA==
-X-Google-Smtp-Source: ABdhPJye+VWIVLJXB8wHyD0hNc5m+JPXvkFWV50q8MkRfj/wsTQkYrcYnZUWZ+rtqsOfgrGDN5f5SA==
-X-Received: by 2002:a05:6e02:13ee:: with SMTP id w14mr7059209ilj.4.1598310599896;
-        Mon, 24 Aug 2020 16:09:59 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id n7sm7456664iop.45.2020.08.24.16.09.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tJC/UBgyWpfgi2eM97bxX8k1Z19oULrPgPyyWbwUwmw=;
+        b=q6xa3Zn68GK6dDI95/+g93AFVwz1Qj/SMBRwtcUXrBZeQjKHs5XaMfj94HOhGsR+Ao
+         A07+n+FSFS50PvlQ7yPwFWe/95ZHhYE55OfrEUNzaoXm96Gj2j36M+Ad3fJWTW3LcGOo
+         xwJqe0u+gBYsg5IK9+fJXglj3iUY0PcbbkEz2sNjbBksdOuxJtWt0o9aTuql3EXwdJTs
+         Ocr6ZZ6Hwi2FIZB6rEVk7Bbzo7CggJ0Vcj08JC7KhVAFgkG0NVVFeOwhDckrytHLMkmp
+         F8AN1LpfptXJq3ezoLoAy0ijgVfr8PKdseKYKzboQDhKW6Bk5pwAxuhnQqV0R0T+v1Ib
+         buPQ==
+X-Gm-Message-State: AOAM531P6/WVjVN8zB9wcc9EFpUOSdgxvKQvsWvQ7entrqzku2UCxZXu
+        7126HibFHWIlJOHNxe7+DqyQ+toOOo+sOQ==
+X-Google-Smtp-Source: ABdhPJwBfzQamH/59LWQDRfJZrX8tHgPvlC6jdfu4OpMpb0Gha5XCBFcvaV6Hklo2fImc9985Vuyaw==
+X-Received: by 2002:a2e:918a:: with SMTP id f10mr3749128ljg.78.1598311365605;
+        Mon, 24 Aug 2020 16:22:45 -0700 (PDT)
+Received: from localhost.localdomain (h-82-196-111-59.NA.cust.bahnhof.se. [82.196.111.59])
+        by smtp.gmail.com with ESMTPSA id o16sm2454414ljc.66.2020.08.24.16.22.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 16:09:58 -0700 (PDT)
-Received: (nullmailer pid 3506628 invoked by uid 1000);
-        Mon, 24 Aug 2020 23:09:56 -0000
-Date:   Mon, 24 Aug 2020 17:09:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Finley Xiao <finley.xiao@rock-chips.com>
-Cc:     heiko@sntech.de, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        huangtao@rock-chips.com, tony.xie@rock-chips.com, cl@rock-chips.com
-Subject: Re: [PATCH v1] thermal/of: Introduce k-po, k-pu and k-i for a
- thermal zone
-Message-ID: <20200824230956.GA3500214@bogus>
-References: <20200811123115.8144-1-finley.xiao@rock-chips.com>
+        Mon, 24 Aug 2020 16:22:44 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] power: supply: bq2515x: Constify static variables
+Date:   Tue, 25 Aug 2020 01:22:28 +0200
+Message-Id: <20200824232228.38423-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200811123115.8144-1-finley.xiao@rock-chips.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 11, 2020 at 08:31:15PM +0800, Finley Xiao wrote:
-> The default value for k_pu is:
->     2 * sustainable_power / (desired_temperature - switch_on_temp)
-> The default value for k_po is:
->     sustainable_power / (desired_temperature - switch_on_temp)
-> The default value for k_i is 10.
-> 
-> Even though these parameters of the PID controller can be changed
-> by the following sysfs files:
->     /sys/class/thermal/thermal_zoneX/k_pu
->     /sys/class/thermal/thermal_zoneX/k_po
->     /sys/class/thermal/thermal_zoneX/k_i
-> 
-> But it's still more convenient to change the default values by devicetree,
-> so introduce these three optional properties. If provided these properties,
-> they will be parsed and associated with the thermal zone via the thermal
-> zone parameters.
-> 
-> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-> ---
->  Documentation/devicetree/bindings/thermal/thermal.txt | 14 ++++++++++++++
+Constify a number of static variables that are not modified to allow the
+compiler to put them in read-only memory.
 
-Bindings should be a separate file and this one is a DT schema now.
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ drivers/power/supply/bq2515x_charger.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
->  drivers/thermal/thermal_of.c                          |  7 +++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt b/Documentation/devicetree/bindings/thermal/thermal.txt
-> index f78bec19ca35..ebe936b57ded 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
-> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
-> @@ -165,6 +165,20 @@ Optional property:
->  			2000mW, while on a 10'' tablet is around
->  			4500mW.
->  
-> +- k-po:			Proportional parameter of the PID controller when
-> +			current temperature is above the target.
-> +  Type: signed
-> +  Size: one cell
-> +
-> +- k-pu:			Proportional parameter of the PID controller when
-> +			current temperature is below the target.
-> +  Type: signed
-> +  Size: one cell
-> +
-> +- k-i:			Integral parameter of the PID controller.
-> +  Type: signed
-> +  Size: one cell
+diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/supply/bq2515x_charger.c
+index 36b0c8c98d40..9dcb61ea4cf2 100644
+--- a/drivers/power/supply/bq2515x_charger.c
++++ b/drivers/power/supply/bq2515x_charger.c
+@@ -188,7 +188,7 @@ struct bq2515x_device {
+ 	struct bq2515x_init_data init_data;
+ };
+ 
+-static struct reg_default bq25150_reg_defaults[] = {
++static const struct reg_default bq25150_reg_defaults[] = {
+ 	{BQ2515X_FLAG0, 0x0},
+ 	{BQ2515X_FLAG1, 0x0},
+ 	{BQ2515X_FLAG2, 0x0},
+@@ -227,7 +227,7 @@ static struct reg_default bq25150_reg_defaults[] = {
+ 	{BQ2515X_DEVICE_ID, 0x20},
+ };
+ 
+-static struct reg_default bq25155_reg_defaults[] = {
++static const struct reg_default bq25155_reg_defaults[] = {
+ 	{BQ2515X_FLAG0, 0x0},
+ 	{BQ2515X_FLAG1, 0x0},
+ 	{BQ2515X_FLAG2, 0x0},
+@@ -886,14 +886,14 @@ static int bq2515x_battery_get_property(struct power_supply *psy,
+ 	return 0;
+ }
+ 
+-static enum power_supply_property bq2515x_battery_properties[] = {
++static const enum power_supply_property bq2515x_battery_properties[] = {
+ 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+ 	POWER_SUPPLY_PROP_CURRENT_NOW,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+ 	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
+ };
+ 
+-static enum power_supply_property bq2515x_mains_properties[] = {
++static const enum power_supply_property bq2515x_mains_properties[] = {
+ 	POWER_SUPPLY_PROP_ONLINE,
+ 	POWER_SUPPLY_PROP_STATUS,
+ 	POWER_SUPPLY_PROP_HEALTH,
+@@ -905,7 +905,7 @@ static enum power_supply_property bq2515x_mains_properties[] = {
+ 	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+ };
+ 
+-static struct power_supply_desc bq2515x_mains_desc = {
++static const struct power_supply_desc bq2515x_mains_desc = {
+ 	.name			= "bq2515x-mains",
+ 	.type			= POWER_SUPPLY_TYPE_MAINS,
+ 	.get_property		= bq2515x_mains_get_property,
+@@ -915,7 +915,7 @@ static struct power_supply_desc bq2515x_mains_desc = {
+ 	.property_is_writeable	= bq2515x_power_supply_property_is_writeable,
+ };
+ 
+-static struct power_supply_desc bq2515x_battery_desc = {
++static const struct power_supply_desc bq2515x_battery_desc = {
+ 	.name			= "bq2515x-battery",
+ 	.type			= POWER_SUPPLY_TYPE_BATTERY,
+ 	.get_property		= bq2515x_battery_get_property,
+-- 
+2.28.0
 
-What's PID?
-
-I know nothing about the sysfs params, but the binding needs to stand on 
-it's own and needs enough detail to educate me.
-
-Rob
