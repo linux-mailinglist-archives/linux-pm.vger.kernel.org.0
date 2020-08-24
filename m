@@ -2,114 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B84024FBBF
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86FD24FBE1
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727047AbgHXKns (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 06:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S1726964AbgHXKqK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 06:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726580AbgHXKnl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:43:41 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E12EC061575
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:43:40 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id o21so7692998wmc.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:43:40 -0700 (PDT)
+        with ESMTP id S1727000AbgHXKps (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:45:48 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D75C061574
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:45:47 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id a5so8181341wrm.6
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:45:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=vfeJpdo+reXlUp8I9Xltf/bKT4P5/2EZI29RPHRcGTo=;
-        b=zYrP/1bzSHAaUnEcj4HL//n+vYvLSDc9feOiIUJl31IuKVau98RwHMSK/ozNps5bTR
-         oYKfl5nukEcPBR6oPloC6dUWnJMYinAJ5ZTA0uCMCnjENm12q3qNJLyM9fX7fpZsWKwf
-         sAjPWWliJ59AzuScUI1swcfCyVp7j0p8T+bs9qKTAtSAIjqsg799vQKGdoz1rKObLU80
-         SnesywaeXAUN22biSQs84mCq1cEZwFAayZBmrDkSk+3c1GHDVa2eLVFKtTdmZE4yO4bU
-         pDA3wJDt5ycrQrRl1889ScC1ZC/OoaxJjElqCH337TWJtCl4rjt6zn/82C+A0UGm+nIp
-         4SzA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=X8bdXVUd2ZafGrZsydrb9Z2SDYX2iihTQNdU7gM/cJc=;
+        b=djzw2pFL0sp4R2OU4tnnwlDJLAAGiiLxvawtf/pn6iCIU6rKtkt8eaf+BO9jA5tE2W
+         HZovWyr/D7Ev8X3iAu7c+3MY4uzodttKCiscrln/O2s/iYqiN9YbWpUN4FyV4nGzBjg9
+         Do35p2yVIlrImH/KJctjLq2ogKxPgGIZeBKnMc+TspcSiWZOExXE41sQDtBBlRuHaz6a
+         XmI+4kdnLPo5RHDZnS4V1DlhaO2+G1oWBmVUvkplQ9h8RurrZRW5GakuTOQFrmqktkfX
+         ZzwwzpzXtTHBsetSZT4X3vJEMR66UvXTTL2O4Jh1ApfFSG6mYBIkW0Vs8orRt2G65qIq
+         bHHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vfeJpdo+reXlUp8I9Xltf/bKT4P5/2EZI29RPHRcGTo=;
-        b=C0flaK41Nn0M+4U2sMkOvMjrTnn9eTHptEkQrilGLcqtFDT4Kjes4p+ASBuEGRTXUh
-         5N199pCXgEDWkXOS2BaodPY9ANrstYa/r8Pu0SqXUHIs8/Ki0m8rsDQd7XCJgLi5cXlk
-         y6KkOmJNQKwm5RX1N4SO4mH3vHBWe7uQjCvQg7Txn4R37fnPuMOh50HmgRs5wlDtuRGi
-         QBntUdc4XmxSV+rjijE6CjbPlZ0dZKyeG+vC8R4Gkk5oJwu0XMugOD+ZltgQgsxRnasQ
-         nj6A3jY+3VTvm16TRE0pghvJA7Rps+3C1d3CWYQUlWgn9afLDR5NY7Fikgkm/au9kJVj
-         q1KA==
-X-Gm-Message-State: AOAM530nwhFMDLyi2J8c4oujq2S06vBr2LXMhm6V810+rabzHDXxV4wK
-        Cq/pqdMA7pRxDj+0KSfQ7DuYkw==
-X-Google-Smtp-Source: ABdhPJyv9b5avO7XGdhprlSuqd/FKoiXA07sKRZlFBmahtp9hFgwnfD9BWbBCvoEh+hvSuNaA8PC7w==
-X-Received: by 2002:a1c:68c3:: with SMTP id d186mr5179539wmc.68.1598265818867;
-        Mon, 24 Aug 2020 03:43:38 -0700 (PDT)
-Received: from dell ([95.149.164.62])
-        by smtp.gmail.com with ESMTPSA id f9sm1783125wrm.5.2020.08.24.03.43.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 03:43:38 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 11:43:36 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Lubomir Rintel <lkundrak@v3.sk>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/6] mfd: Add driver for Embedded Controller found on
- Acer Iconia Tab A500
-Message-ID: <20200824104336.GK3248864@dell>
-References: <20200823140846.19299-1-digetx@gmail.com>
- <20200823140846.19299-2-digetx@gmail.com>
- <20200823181653.GC209852@demiurge.local>
- <82abab10-9af6-a9c4-b241-d5a3af5b588d@gmail.com>
- <20200824073331.GG3248864@dell>
- <f12d287a-f088-4c43-479d-5c044e554b30@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=X8bdXVUd2ZafGrZsydrb9Z2SDYX2iihTQNdU7gM/cJc=;
+        b=r6SbnKhw4t5/wk8pdF5SNf9etY0y+dOPFRCYYXWbReW9e6dG3fvkL1ZpwZfoTiNP6w
+         kVVMXvKhXc9AO0Tlf0GFTQLevSgKO/94t4dad4Iykm5Gs+B6SdufjtUlaozn0s9696LD
+         5Oqir4exc3Fg9Ib44CdbBhvyhjX0wTi0SRNLmaLB+uq1jQNZ7h0vH1EvVnOkForP1K5e
+         8tlt6uADbYKYPo7Ddj/09XYhW7hdDkzDLK6O0/JsNNN9QaQi3dtHlF1mdGFvl5QrLzrd
+         NDhLBTNLbxagTASthL4m+bwgQjY05WMzOOireUigXQ+HJYfMWoKQR+RtKC46g9cYtVYE
+         SoQg==
+X-Gm-Message-State: AOAM5316hfcX95AxLexcJRO+6qQTQHUkvpWHu9XgYnL5M4D2JtThXoFb
+        VORDwN1OPONAtA6LLXbnFleK7A==
+X-Google-Smtp-Source: ABdhPJwJNM3y0nTcF+wtJ6Cz0O5X4b7N5G51v7E2SaMTd8WX5GsGNsYigj8nrXHBthl9cvaB+mDhtg==
+X-Received: by 2002:adf:fe50:: with SMTP id m16mr5499738wrs.27.1598265946046;
+        Mon, 24 Aug 2020 03:45:46 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0? ([2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0])
+        by smtp.googlemail.com with ESMTPSA id j7sm10146855wmj.38.2020.08.24.03.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 03:45:45 -0700 (PDT)
+Subject: Re: [PATCH] thermal: ti-soc-thermal: Fix bogus thermal shutdowns for
+ omap4430
+To:     Pavel Machek <pavel@ucw.cz>, Tony Lindgren <tony@atomide.com>
+Cc:     Eduardo Valentin <edubezval@gmail.com>, Keerthy <j-keerthy@ti.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, Merlijn Wajer <merlijn@wizzup.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20200706183338.25622-1-tony@atomide.com>
+ <20200823211204.zerldmljfd6rrk7g@duo.ucw.cz>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <d359b309-7fa2-5089-df14-e27eafed96d1@linaro.org>
+Date:   Mon, 24 Aug 2020 12:45:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20200823211204.zerldmljfd6rrk7g@duo.ucw.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f12d287a-f088-4c43-479d-5c044e554b30@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 24 Aug 2020, Dmitry Osipenko wrote:
-
-> 24.08.2020 10:33, Lee Jones пишет:
-> >> ...
-> >>>> +static struct a500_ec *a500_ec_scratch;
-> >>>
-> >>> If this is only used for power_off, please rename it. I've been told to
-> >>> do so in my driver: https://lore.kernel.org/lkml/20200519104933.GX271301@dell/
-> >>
-> >> I don't mind to rename the variable, but not sure whether it will be a
-> >> worthwhile change since _scratch is also a common naming scheme among
-> >> MFD drivers. Please see max77620_scratch for example, which I added
-> >> about a year ago.
-> > 
-> > If something is used once, it does not make it 'common'.
-> > 
-> > Not sure how this slipped my notice before, but I don't like it.
-> > 
-> > Ensure any global struct used for power_off only includes items
-> > required for this purpose.  It's unfortunate this API requires a
-> > global variable at all.
-> > 
+On 23/08/2020 23:12, Pavel Machek wrote:
+> Hi!
 > 
-> Okay! I'll change it in the v2, thanks!
+>> We can sometimes get bogus thermal shutdowns on omap4430 at least with
+>> droid4 running idle with a battery charger connected:
+>>
+>> thermal thermal_zone0: critical temperature reached (143 C), shutting down
+>>
+>> Dumping out the register values shows we can occasionally get a 0x7f value
+>> that is outside the TRM listed values in the ADC conversion table. And then
+>> we get a normal value when reading again after that. Reading the register
+>> multiple times does not seem help avoiding the bogus values as they stay
+>> until the next sample is ready.
+>>
+>> Looking at the TRM chapter "18.4.10.2.3 ADC Codes Versus Temperature", we
+>> should have values from 13 to 107 listed with a total of 95 values. But
+>> looking at the omap4430_adc_to_temp array, the values are off, and the
+>> end values are missing. And it seems that the 4430 ADC table is similar
+>> to omap3630 rather than omap4460.
+>>
+>> Let's fix the issue by using values based on the omap3630 table and just
+>> ignoring invalid values. Compared to the 4430 TRM, the omap3630 table has
+>> the missing values added while the TRM table only shows every second
+>> value.
+>>
+>> Note that sometimes the ADC register values within the valid table can
+>> also be way off for about 1 out of 10 values. But it seems that those
+>> just show about 25 C too low values rather than too high values. So those
+>> do not cause a bogus thermal shutdown.
 > 
-> Thierry Reding was working on the shutdown API which should replace the
-> global variables, unfortunately he doesn't have enough time to finish
-> that work yet.
+> This does not seem to be in recent -next. Ping?
 
-That would be really good. :)
+Pong.
+
+Going back from vacation. Will be in next very soon.
+
 
 -- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
