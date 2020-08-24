@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C637A24FB19
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B5524FB2E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726542AbgHXKLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 06:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S1726737AbgHXKRL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 06:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725921AbgHXKLI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:11:08 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F806C061573;
-        Mon, 24 Aug 2020 03:11:07 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id c8so4152847lfh.9;
-        Mon, 24 Aug 2020 03:11:07 -0700 (PDT)
+        with ESMTP id S1725906AbgHXKRE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:17:04 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766D3C061573;
+        Mon, 24 Aug 2020 03:17:03 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id y2so8986403ljc.1;
+        Mon, 24 Aug 2020 03:17:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eCM1MY9fL6XG/g9S5/R519/+dhVf/rR5iiVNVW9wNCM=;
-        b=iZtbAURe/TcGpxgHsdxjWk+OBcVapW76EJhdem0MYolKHHUTpp7lpODnmH7+Vbf34w
-         1OiD6R7tRTqvOZiScHDAcYR2tKiLLBO2KJ9ykXgEresO+HNuDPGDBhxwao7N//UWo1cV
-         7nelPhDcGThb5Lh0+z6m1BFSPFrFCFPFJk0a45oCQoiTHZw5JTpih6g+K/Yp2zLwFVjh
-         SZkf04JtwtIYCBa27oO3lZXiDWLLFjruvNIIN+6ov/w2gWAbfTL7Tv4nINtax5mo+N7L
-         045CsgP4gdbbr/fCE2mQvngCsiAolJo9DmJZyhPtBBAFB9n2h2nlk3bZuDhV7d29r/G9
-         8WfA==
+        bh=EO6NpAg0w4GDPViUfV2sBM0Yy3icsdCv6CnK4KTImqc=;
+        b=NVxFQX8hvxJpgbMYgWDP8ljVHy+fJWPMXrej1XIN0mQJrxqZqZ7rZ7q5Jr3ijgyGlf
+         T3OdrM5cuz0hbZsZDGoiDq6Qac6igGMQUNV8ExM7LTC0YIBGX9lNSqiEeB8rxnqeUu2W
+         /m2pfPwGkZ/XhhspBiEDuDE82+a5usjw734uegAh6VfTqoirraDGyDeuPQRyHEI8vdqs
+         Gq/wyUmgCK6/o0p8Z+REYA4rkSupFZ8tMdvOe5iyVLRkONnmKN11ajMV3MQLSiewiWwt
+         7Rx4vkTe3vIO/BL5NR7FylxG9n/shFmmXbMS19pVax/PyPZHWUY5v1v57bfQIZBn2+M5
+         EjEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=eCM1MY9fL6XG/g9S5/R519/+dhVf/rR5iiVNVW9wNCM=;
-        b=oixOVDFp+YXA7WIV9XHFoXWiZOJV6Fq/Q+LjpaSRyRAqG9u92k9ZkHCGFpeRrvHaa1
-         XdIgK4VIYB+TyKdx7UWXyqmm2TuDDcYH8f/mBfHFlyFw29OIGLqcgxTPvjKgtiFqFVg5
-         EQ4W20V4w1Gu8OjOa0Xc8VUxawjCDQyj4ZfQ3ac5AInHV/Qa7LCcJttG/vhJkkwXjEIu
-         9jU+WFGfyKoYUvas5etDH7qJ+ptXgk8fYQcFb4OenOcBUKIZbKiR1PdBjwPJ5EmIW2kj
-         +Wx0Q2b7doZoEr8Q4TtPnBv0tUqBsb7ri6LBHYGm4Gee/onBvA0IGs1scx1+WFsbZGF0
-         IDYg==
-X-Gm-Message-State: AOAM5316GIGXCizt76gYA8TqV+31hqb4+IH2b1ClEa1MmIINVpjwy2xs
-        q1oatYQgPUxlZDGxnMZNMdOc2Bsjkew=
-X-Google-Smtp-Source: ABdhPJxvtbBhDZM+Ig1AWobTyAP+bnsWRaGngsk0KGvGCf5SE5DqpM2UiJhgMN4XuNz5SFNsE1yirg==
-X-Received: by 2002:a19:2202:: with SMTP id i2mr2316168lfi.35.1598263865536;
-        Mon, 24 Aug 2020 03:11:05 -0700 (PDT)
+        bh=EO6NpAg0w4GDPViUfV2sBM0Yy3icsdCv6CnK4KTImqc=;
+        b=Ptnh0JCIMkprXszF2tofnoE7WrYg//iRatLCSPwaMgPHv9nAftKbcKjAn5MGwGggxc
+         J1BIKzXOGBHT1/EEjqE2sOPwTLu0reEjZNTzHHR0HAcwscEikmtvDMfLEmlYFhGtUZWt
+         m2dGHxYvbJUVQ1aMOYO3p4LEYYYeA6N2u+NJsyn6M/D+JKD12QRIpj7KsaoHMzSPbhCr
+         cRd3IJsMsbNpgmGaVLLQQfOCCFHXNUIuS5f/76XPh29bL5ZlHz25s3NdDUvMMyAlXR9s
+         37ug/CZYQEerG7u09gGM+q085p2e8Wy86NwL4sPBFAq+ZJs3w3lw+bMxRZ7NF+xQQMQq
+         w9BQ==
+X-Gm-Message-State: AOAM533RpymZKFV7KXN2SF17hMf8AI23Noqj7+GDiqUcxnvONOaf3goI
+        a65dU8vxx0BpphHL2ak6NX7BrNcpAjA=
+X-Google-Smtp-Source: ABdhPJy/u/4LLu9r4mhcxwDPpCC7JjeLfk00HvQSpyKtVoG0ldd1sVtB6GCZfVC6S4L1b5e/fmkjSg==
+X-Received: by 2002:a2e:b708:: with SMTP id j8mr2411912ljo.375.1598264217513;
+        Mon, 24 Aug 2020 03:16:57 -0700 (PDT)
 Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id t19sm2079121ljc.137.2020.08.24.03.11.04
+        by smtp.googlemail.com with ESMTPSA id t18sm2111855ljc.126.2020.08.24.03.16.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2020 03:11:05 -0700 (PDT)
+        Mon, 24 Aug 2020 03:16:56 -0700 (PDT)
 Subject: Re: [PATCH v1 3/6] leds: Add driver for Acer Iconia Tab A500
 To:     Pavel Machek <pavel@ucw.cz>
 Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
@@ -60,14 +60,14 @@ Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20200823140846.19299-1-digetx@gmail.com>
  <20200823140846.19299-4-digetx@gmail.com>
- <20200823223037.5fkeg5ai6hry3axj@duo.ucw.cz>
+ <20200823223434.cjxo762ehxgo4caz@duo.ucw.cz>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <eb2da40a-9dbb-0a18-4dbc-3eb93bd2968c@gmail.com>
-Date:   Mon, 24 Aug 2020 13:11:04 +0300
+Message-ID: <c7d37174-1dcd-206d-01ac-eb95aa0b5dc8@gmail.com>
+Date:   Mon, 24 Aug 2020 13:16:56 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200823223037.5fkeg5ai6hry3axj@duo.ucw.cz>
+In-Reply-To: <20200823223434.cjxo762ehxgo4caz@duo.ucw.cz>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -76,43 +76,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-24.08.2020 01:30, Pavel Machek пишет:
-> Hi!
-
-Hello, Pavel! Thank you very much for the review! I'll take into account
-yours comments in the v2!
-
+24.08.2020 01:34, Pavel Machek пишет:
+> On Sun 2020-08-23 17:08:43, Dmitry Osipenko wrote:
 >> Acer Iconia Tab A500 is an Android tablet device which has two LEDs
 >> embedded into the Power Button. Orange LED indicates "battery charging"
 >> status and white LED indicates "wake-up/charge-done" status. The new LED
 >> driver provides control over both LEDs to userspace.
 > 
->> @@ -0,0 +1,121 @@
->> +// SPDX-License-Identifier: GPL-2.0+
+> Hmm. If the ENE controller is similar to other devices, should it also
+> share LED driver?
 > 
-> Nice.
-> 
->> + * Copyright 2020 GRATE-driver project.
-> 
-> Probably untrue.
-> 
-> 
->> +	white_led->cdev.name = "power-button-white";
-> 
-> "white:power"
-> 
->> +	white_led->cdev.max_brightness = LED_ON;
-> 
-> = 1. (And you'll need other adjustments over the code).
-> 
->> +	orange_led->cdev.name = "power-button-orange";
-> 
-> "orange:power" -- or what is this LED usually used for?
-> 
->> +MODULE_LICENSE("GPL v2");
-> 
-> Should be "GPL"?
+> And I guess the cdev names should be different based on info above (I
+> gave you wrong suggestions before)... and they probably should be
+> parsed from the device tree.
 
-Yes, apparently it should be "GPL". I'll try to double-check it for the v2.
+The ENE controller hardware is the same on all devices that use it, but
+firmware isn't the same and apparently every vendor invents its own
+thing in regards to the firmware because firmware features and interface
+varies vastly from device to device. Hence, unfortunately, usually there
+is very little compatibility even if devices come form the same vendor
+
+AFAIK, the ENE controller provides some compatibility on x86 machines
+via ACPI EC standard, but this doesn't apply to the ARM devices.
+
+I know that Acer A200 should be able to re-use the A500 EC driver as-is,
+but A200 is pretty much the same device as A500, so it's not surprising.
+IIRC, A200 model only misses back camera in comparison to A500. Hence
+there shouldn't be a need to parse the names from a device-tree, but
+I'll try to double-check it to be sure.
 
 Thanks!
