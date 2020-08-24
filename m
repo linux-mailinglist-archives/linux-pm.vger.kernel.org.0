@@ -2,86 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E23AE24FCDC
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B93B924FCDE
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726347AbgHXLnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 07:43:09 -0400
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:9933 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726306AbgHXLnI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 07:43:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598269386;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=L8FpAL/QNc5PlqFAg2tSEIydb3LWy4d4tNr31Xlb1hQ=;
-        b=tv1pHU3MHv1Mrz4JHi/uE2Uv2FBEHTAoFa5fgL9RD9aoZb0srjDvyE4mGws8oI5z97
-        Uy6sGLFNjNgAseyLCKQ0TIjYDfvv9qSPY631y0J1WKwetGFjqtgVc6hh/F+CmAA9wSv3
-        DLYIgvd4FjvxLOJsm228zPBMp0/7Imop2muOxVYZurbmeDprMsaqYsaGYbUCYfR+7eOj
-        rGc/TgyyuXWybVITNWrk+HUI4S5JBoBUY+hW1XGd75Ac6r2lQ16P6EQpITtO0nstIeEQ
-        6+USbti05nUucoxo4xqoZMSigOf5CWMVcY6X2LvWcoROpABTHi9B0QXQBePStKJvwZwI
-        mkUw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/MbIo="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
-        with ESMTPSA id g0b6c1w7OBh4WqW
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Mon, 24 Aug 2020 13:43:04 +0200 (CEST)
-Date:   Mon, 24 Aug 2020 13:42:54 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas Cassel <nks@flawful.org>
-Subject: Re: [RFC PATCH 2/3] opp: Set required OPPs in reverse order when
- scaling down
-Message-ID: <20200824114254.GA208090@gerhold.net>
-References: <20200730080146.25185-1-stephan@gerhold.net>
- <20200730080146.25185-3-stephan@gerhold.net>
- <20200821163152.GA3422@gerhold.net>
- <20200824113027.lzh6fp4bottjl6cc@vireshk-i7>
+        id S1726306AbgHXLni (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 07:43:38 -0400
+Received: from foss.arm.com ([217.140.110.172]:60374 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726466AbgHXLnh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Aug 2020 07:43:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F21631063;
+        Mon, 24 Aug 2020 04:43:36 -0700 (PDT)
+Received: from [10.37.12.65] (unknown [10.37.12.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9399D3F66B;
+        Mon, 24 Aug 2020 04:43:35 -0700 (PDT)
+Subject: Re: [PATCH 2/3] memory: samsung: exynos5422-dmc: remove unused
+ exynos5_dmc members
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20200822163218.21857-1-krzk@kernel.org>
+ <20200822163218.21857-2-krzk@kernel.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6c61572d-ef7a-ca0a-2253-7a3c0736f0a5@arm.com>
+Date:   Mon, 24 Aug 2020 12:43:33 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200824113027.lzh6fp4bottjl6cc@vireshk-i7>
+In-Reply-To: <20200822163218.21857-2-krzk@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 05:00:27PM +0530, Viresh Kumar wrote:
-> On 21-08-20, 18:31, Stephan Gerhold wrote:
-> > This patch does not apply anymore after the cleanup you pushed to
-> > opp/linux-next. I would be happy to send a v2 with that fixed.
-> > 
-> > On my other OPP patch set you mentioned that you might apply these
-> > directly with some of your own changes - would you also prefer to do it
-> > yourself in this case or should I send a v2?
-> 
-> I will pick the first 2 myself, that's fine. Lets see where we go with
-> the third one :)
-> 
+Hi Krzysztof,
 
-OK, please ignore my question in my reply to PATCH 1/3 then. I replied
-before I read this one. Just add back the NULL checks and it should be
-fine :)
-
-> > Still looking for your feedback on both patch sets by the way! :)
+On 8/22/20 5:32 PM, Krzysztof Kozlowski wrote:
+> The struct exynos5_dmc members bypass_rate, mx_mspll_ccore_phy,
+> mout_mx_mspll_ccore_phy and opp_bypass are not actually used.
 > 
-> Sorry about the delay, I was on vacation for over a week in between and
-> this and the other patchset was a bit tricky (which you may have not
-> realized, not sure, as I wondered if something will not work within
-> the OPP core for v1 binding, but it did finally I believe) :)
+> Apparently there was a plan to store the OPP for the bypass mode in
+> opp_bypass member, but drivers fails to do it and instead always sets
+> target voltage during bypass mode.
 > 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>   drivers/memory/samsung/exynos5422-dmc.c | 9 ---------
+>   1 file changed, 9 deletions(-)
+> 
+> diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
+> index 31864ce59b25..df02afa8aa90 100644
+> --- a/drivers/memory/samsung/exynos5422-dmc.c
+> +++ b/drivers/memory/samsung/exynos5422-dmc.c
+> @@ -123,9 +123,7 @@ struct exynos5_dmc {
+>   	struct mutex lock;
+>   	unsigned long curr_rate;
+>   	unsigned long curr_volt;
+> -	unsigned long bypass_rate;
+>   	struct dmc_opp_table *opp;
+> -	struct dmc_opp_table opp_bypass;
+>   	int opp_count;
+>   	u32 timings_arr_size;
+>   	u32 *timing_row;
+> @@ -143,8 +141,6 @@ struct exynos5_dmc {
+>   	struct clk *mout_bpll;
+>   	struct clk *mout_mclk_cdrex;
+>   	struct clk *mout_mx_mspll_ccore;
+> -	struct clk *mx_mspll_ccore_phy;
+> -	struct clk *mout_mx_mspll_ccore_phy;
+>   	struct devfreq_event_dev **counter;
+>   	int num_counters;
+>   	u64 last_overflow_ts[2];
+> @@ -455,9 +451,6 @@ static int exynos5_dmc_align_bypass_voltage(struct exynos5_dmc *dmc,
+>   					    unsigned long target_volt)
+>   {
+>   	int ret = 0;
+> -	unsigned long bypass_volt = dmc->opp_bypass.volt_uv;
+> -
+> -	target_volt = max(bypass_volt, target_volt);
 
-No problem! I guess I did indeed not realize potential problems for the
-v1 bindings, all this compatibility code is quite confusing. :)
 
-Thanks!
-Stephan
+Could you explain which use cases you considered when you decided to
+remove these lines?
+
+Regards,
+Lukasz
