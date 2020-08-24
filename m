@@ -2,117 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BABA7250AF6
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 23:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0AD250BC8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 00:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726241AbgHXVjF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 17:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHXVjE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 17:39:04 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B179AC061574;
-        Mon, 24 Aug 2020 14:39:04 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 99FF2297C57
-Received: by earth.universe (Postfix, from userid 1000)
-        id D3FA43C0C82; Mon, 24 Aug 2020 23:38:59 +0200 (CEST)
-Date:   Mon, 24 Aug 2020 23:38:59 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Lubomir Rintel <lkundrak@v3.sk>, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/6] power: supply: Add battery gauge driver for Acer
- Iconia Tab A500
-Message-ID: <20200824213859.6o3q5i2kvtk44lqi@earth.universe>
-References: <20200823140846.19299-1-digetx@gmail.com>
- <20200823140846.19299-3-digetx@gmail.com>
- <20200824140718.apoavlny6hlkm2ql@earth.universe>
- <31ec6865-4a33-bde8-73a6-20c188ec2ee7@gmail.com>
+        id S1726551AbgHXWnd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 18:43:33 -0400
+Received: from mga05.intel.com ([192.55.52.43]:8912 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726519AbgHXWnd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 24 Aug 2020 18:43:33 -0400
+IronPort-SDR: RUe4osnl3R3xgafqKqB2ls1fotA4n6WI/CTV8KOMJbpev2rfUSmBuQZWO2x0r6Gmrsd4GuxfON
+ LpYIaC1cl08Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="240820237"
+X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
+   d="scan'208";a="240820237"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2020 15:43:31 -0700
+IronPort-SDR: u1z/xUe4j8gQH4MrgrR5Hjd0ZcbIll/5oUuA4A5mS3WiKExfjpS3DpTTBSZb9/kctskQ9hOfMj
+ UUQ/JgpRM0XA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,350,1592895600"; 
+   d="scan'208";a="474102761"
+Received: from lkp-server01.sh.intel.com (HELO c420d4f0765f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 24 Aug 2020 15:43:30 -0700
+Received: from kbuild by c420d4f0765f with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kALBZ-0000Xs-Kp; Mon, 24 Aug 2020 22:43:29 +0000
+Date:   Tue, 25 Aug 2020 06:42:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ f5eba0ea1052daba08e3fcf50be669b13fd7953d
+Message-ID: <5f444257.SkK/XdWlJtDhiWH9%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rq3bkynnovf3rl57"
-Content-Disposition: inline
-In-Reply-To: <31ec6865-4a33-bde8-73a6-20c188ec2ee7@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: f5eba0ea1052daba08e3fcf50be669b13fd7953d  Merge branch 'pm-cpufreq' into linux-next
 
---rq3bkynnovf3rl57
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+elapsed time: 726m
 
-Hi,
+configs tested: 84
+configs skipped: 3
 
-On Mon, Aug 24, 2020 at 09:55:14PM +0300, Dmitry Osipenko wrote:
-> 24.08.2020 17:07, Sebastian Reichel =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> +static int a500_battery_get_serial_number(struct a500_battery *bat,
-> >> +					  union power_supply_propval *val)
-> >> +{
-> >> +	unsigned int i;
-> >> +	s32 ret =3D 0;
-> >> +
-> >> +	if (bat->serial[0])
-> >> +		goto done;
-> >> +
-> >> +	a500_ec_lock(bat->ec_chip);
-> >> +	for (i =3D 0; i < BATTERY_SERIAL_LEN / 2; i++) {
-> >> +		ret =3D a500_ec_read_locked(bat->ec_chip,
-> >> +					  &ec_data[REG_SERIAL_NUMBER].cmd);
-> >> +		if (ret < 0) {
-> >> +			bat->serial[0] =3D '\0';
-> >> +			break;
-> >> +		}
-> >> +
-> >> +		bat->serial[i * 2 + 0] =3D (ret >> 0) & 0xff;
-> >> +		bat->serial[i * 2 + 1] =3D (ret >> 8) & 0xff;
-> >> +	}
-> >> +	a500_ec_unlock(bat->ec_chip);
-> >> +done:
-> >> +	val->strval =3D bat->serial;
-> >> +
-> >> +	return ret;
-> >> +}
-> >=20
-> > If battery is swapped, this will keep the old serial.
->=20
-> Hello, Sebastian! The battery isn't hot-swappable on A500, but it also
-> should be okay to always re-read the serialno. I'll consider removing
-> the caching in the v2, thanks.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I assumed it would be hot-swappable because of a500_battery_get_presence().
-If it's not hot-swappable, the caching is fine.
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+xtensa                         virt_defconfig
+powerpc                      mgcoge_defconfig
+ia64                          tiger_defconfig
+sh                        dreamcast_defconfig
+xtensa                           alldefconfig
+xtensa                generic_kc705_defconfig
+powerpc                      ppc64e_defconfig
+arm                            xcep_defconfig
+mips                      pistachio_defconfig
+mips                        vocore2_defconfig
+h8300                     edosk2674_defconfig
+mips                            ar7_defconfig
+c6x                        evmc6472_defconfig
+c6x                        evmc6474_defconfig
+sh                          sdk7780_defconfig
+sh                          r7785rp_defconfig
+arm                             rpc_defconfig
+h8300                    h8300h-sim_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200824
+i386                 randconfig-a004-20200824
+i386                 randconfig-a005-20200824
+i386                 randconfig-a003-20200824
+i386                 randconfig-a006-20200824
+i386                 randconfig-a001-20200824
+x86_64               randconfig-a015-20200824
+x86_64               randconfig-a016-20200824
+x86_64               randconfig-a012-20200824
+x86_64               randconfig-a014-20200824
+x86_64               randconfig-a011-20200824
+x86_64               randconfig-a013-20200824
+i386                 randconfig-a013-20200824
+i386                 randconfig-a012-20200824
+i386                 randconfig-a011-20200824
+i386                 randconfig-a016-20200824
+i386                 randconfig-a015-20200824
+i386                 randconfig-a014-20200824
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
--- Sebastian
-
---rq3bkynnovf3rl57
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9EM20ACgkQ2O7X88g7
-+prI2BAAn2AN5O1hII/9SN9g6Y9PKVjcObQgTSKI9W8g16d0g+g6swLv4SOI5w+1
-gYt3Zi3X8uRK1kc92X2ZXQBdtacuqfArU+nK6fpwLfC13spffvpob9bBtNWMT0s1
-6tdpQ7yJtrRfTdIr+cVCrM6rj3Cp06gcd2+xF5+zpenaZZScR5g/bF9X05RYoplZ
-G9Nvjhwm6Rvm6O4XvzuNwDON4CGa0RG94th2W07FkGTrkob4FTJJ0bKgI/vtodAB
-gIkrcSaC4qcW5tkeZzt0iq+Fj5Ztm5aTH7voZ/AfBrCznMVgO9JjOnEH+ecRWexQ
-XcXrCT8z+FKUHIG+oUkM0WkqfaaOqB5NeeghwOnOCf41V1JVJIcm9GOTM7i1J8yF
-wwmY3aa8k3shIN6UfG7DqdW8DziqmS8vjHcdaprLCDjLfmJagWnSmYuU+3I2adsA
-ayydD8AJxGFIHPzUW0svjTCfSOHQPm2hM1U4Anye73WByf3zxGcSWTKMWCNYoLal
-COLYxVJIDNq2lkaHtme/7z0i84dnHzXvsrsUMJ4SXhCKYH0YQp8CzbkkXglgYtYe
-DjZptysEJL3RZPmQa0ft0J75oLvQ+VwrIEtPRWID7dry6i8RONP4SI5L6LxiQBYe
-fz/4qbyvmu/HQ/8nJsvYUMwFjmG/EVzN0cQGHuSxknM0H6Mq0+g=
-=pUMB
------END PGP SIGNATURE-----
-
---rq3bkynnovf3rl57--
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
