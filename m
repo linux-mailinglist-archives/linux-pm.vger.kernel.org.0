@@ -2,143 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EE824FB7D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556B924FBA7
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 12:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726852AbgHXKcp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 24 Aug 2020 06:32:45 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:44609 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725968AbgHXKco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:32:44 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c15so8105705wrs.11;
-        Mon, 24 Aug 2020 03:32:41 -0700 (PDT)
+        id S1726750AbgHXKkm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 06:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbgHXKkj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 06:40:39 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9496DC061573
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:40:38 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 83so7823883wme.4
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 03:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=xXjN98vY17whUxsx/oA3AARLFaFdhmecrXTXMA2ceZ0=;
+        b=lomQdcUNQx+/BxL2/+icLxnlxbiRV/LR5R2ymI+4HGtFQ8RSLrGnfqXK2lMYpZvZG2
+         8TabI/D0LBChfXt6c99KjWo8mAci6c4SMSc1rJPArLIen1a1dSlhRjk1YxVf3b7WQkWR
+         E3DdXYxofDOIVNKMlxTKIbzVlc3xkhggRGR3bChMVlJLyUE/+ZJtq1M8CrTvTFnz+dUt
+         tb7TdOkzaGhbz2jRs+gMTXT7BBbDqAbnvkot5a1Gau0fzfzv6sDOXKA/hBvPKoRkHUlj
+         vpUd9JV73CmvJxUpat2KioQEW21uLmhmY5OrgpEIR5blEN2m4M+dKgyW74PCaSjLq51/
+         q5hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=3kC1j2VGz3irmMnTu7OSvcIF5sgB8GN7svCyG6bNmQc=;
-        b=GwtRoBAqEhZXPoO6GRQC0NFLkAKbwreCd8CzvDJlOnNI+CyR7tVsp5c2wAr7Y6At26
-         ZiDKoD2iOmyNbkaqpnH/sm8Z6uV9OrKiMLUWcyjLic0r5Vn2L8MsEaPSIojq8ALuW3eT
-         Nj3oiME+eEnLIP0S8MPayC4j2o7dGagtLdLVI/uk5IZsLNA+z9qLfKjyQyZYIcp82I87
-         UEo37ielR9G8fZL5XypFRzEk4+Re6HEj7qdIJB58lNaP7cup8PVsGfbNKuLuOuNRL281
-         bh/rkTv4VvGQTZIccPWtfAzhhfnVgwJ8jE2kk7gsSM43qQ9L3CW7Uvdykb83LunqpvvU
-         E0sg==
-X-Gm-Message-State: AOAM530AdW6lg5HRHJaFr+Lz8okp38HGiJNxNx8GMDrLq+KFLP+HZsdL
-        SpGtqE3B5EZW3h1c7/gImEE=
-X-Google-Smtp-Source: ABdhPJweVUT7a41DfLWZjKJnJ7ppNGMhfph8/pfsheA41o3Lgtr9MDX7LDVdL1I0kuB6ivdiZ0Q/PQ==
-X-Received: by 2002:adf:e68f:: with SMTP id r15mr5135544wrm.196.1598265161023;
-        Mon, 24 Aug 2020 03:32:41 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id b1sm614772wmj.8.2020.08.24.03.32.39
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Aug 2020 03:32:40 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 12:32:37 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Bough Chen <haibo.chen@nxp.com>
-Cc:     Dong Aisheng <dongas86@gmail.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Anson Huang <anson.huang@nxp.com>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Subject: Re: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible from
- USDHC
-Message-ID: <20200824103237.GA26120@kozik-lap>
-References: <20200823161550.3981-1-krzk@kernel.org>
- <20200823161550.3981-21-krzk@kernel.org>
- <AM6PR04MB49668B0F67B02B2A33603B4880560@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <20200824091102.GA20819@kozik-lap>
- <CAA+hA=S=2SoF8egOq8h-eB9wZGDqrAw66VtW-bU9oBmzFSj9Bw@mail.gmail.com>
- <VI1PR04MB52949085DFA5D29C2858094290560@VI1PR04MB5294.eurprd04.prod.outlook.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=xXjN98vY17whUxsx/oA3AARLFaFdhmecrXTXMA2ceZ0=;
+        b=s4mEiXlGimP3rd3phyPM6+kYUTbYgKcGXr2D1IqxSOnOBKLCoAJ6wVai+e8PtQh3Kr
+         oaW2V9QspJEvs1gpBD6L5g9U2QGlBpEBoSDfMT/sKoD9ppXrBoJN/UrcW+J0Sv/DExOc
+         ShYPbDXumG43RXTb58KxW+gLUU7uDcIAJXpVighjy7KxWog1oGdJaS7igiYc61HO4aYW
+         zKLuAnyerZuxP0zZ5hvgT/PFsi6zg1xp6jkOpLNV1XL2KZtsO/xJElLr6CFH/azGNN1M
+         WXDzlOVB1CWm0fqKrOp3QIVHDNaUMJt7N6U70mE/4zIO1OdNagvryuR1tqRatkNenhUi
+         /hkw==
+X-Gm-Message-State: AOAM530wBeb92D83f2bsx4fHRhwjsS/GKWz2F6mJmLdLytWo3Y+4LqTX
+        MP5WA+jRuHT2ADn5cupMzl2uBQ==
+X-Google-Smtp-Source: ABdhPJxFuPfgQN+XAAAD/huWOB+bvWyVMgaMusM4/pvjAeoiSzfFV78YiImZRZfoXOaKrvd5GngR7Q==
+X-Received: by 2002:a1c:96d7:: with SMTP id y206mr5011905wmd.9.1598265637208;
+        Mon, 24 Aug 2020 03:40:37 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0? ([2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0])
+        by smtp.googlemail.com with ESMTPSA id k13sm23239684wmj.14.2020.08.24.03.40.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 03:40:36 -0700 (PDT)
+Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling device's
+ statistics
+To:     Yue Hu <zbestahu@gmail.com>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+References: <20200818063005.13828-1-zbestahu@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
+Date:   Mon, 24 Aug 2020 12:40:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200818063005.13828-1-zbestahu@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <VI1PR04MB52949085DFA5D29C2858094290560@VI1PR04MB5294.eurprd04.prod.outlook.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 10:31:31AM +0000, Bough Chen wrote:
-> > -----Original Message-----
-> > From: Dong Aisheng [mailto:dongas86@gmail.com]
-> > Sent: 2020年8月24日 17:45
-> > To: Krzysztof Kozlowski <krzk@kernel.org>
-> > Cc: Aisheng Dong <aisheng.dong@nxp.com>; devicetree@vger.kernel.org;
-> > linux-serial@vger.kernel.org; Anson Huang <anson.huang@nxp.com>;
-> > linux-gpio@vger.kernel.org; Fabio Estevam <festevam@gmail.com>; Linus
-> > Walleij <linus.walleij@linaro.org>; linux-pm@vger.kernel.org;
-> > linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org;
-> > linux-pwm@vger.kernel.org; Bartosz Golaszewski
-> > <bgolaszewski@baylibre.com>; Rob Herring <robh+dt@kernel.org>;
-> > linux-mtd@lists.infradead.org; dl-linux-imx <linux-imx@nxp.com>; Pengutronix
-> > Kernel Team <kernel@pengutronix.de>; Thierry Reding
-> > <thierry.reding@gmail.com>; Shawn Guo <shawnguo@kernel.org>; Sascha
-> > Hauer <s.hauer@pengutronix.de>; linux-arm-kernel@lists.infradead.org;
-> > linux-watchdog@vger.kernel.org; Bough Chen <haibo.chen@nxp.com>
-> > Subject: Re: [PATCH 21/22] arm64: dts: imx8qxp: Remove i.MX7 compatible
-> > from USDHC
-> > 
-> > On Mon, Aug 24, 2020 at 5:15 PM Krzysztof Kozlowski <krzk@kernel.org>
-> > wrote:
-> > >
-> > > On Mon, Aug 24, 2020 at 09:00:19AM +0000, Aisheng Dong wrote:
-> > > > > From: Krzysztof Kozlowski <krzk@kernel.org>
-> > > > > Sent: Monday, August 24, 2020 12:16 AM
-> > > > >
-> > > > > The USDHC on i.MX 8QXP has its own compatible described in
-> > > > > bindings and used in the driver (with its own quirks).  Remove
-> > > > > additional fsl,imx7d-usdhc compatible to fix dtbs_check warnings like:
-> > > > >
-> > > > >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml:
-> > mmc@5b010000:
-> > > > >     compatible: ['fsl,imx8qxp-usdhc', 'fsl,imx7d-usdhc'] is too long
-> > > > >     From schema:
-> > > > > /ocumentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-> > > > >
-> > > > >   arch/arm64/boot/dts/freescale/imx8qxp-ai_ml.dt.yaml:
-> > mmc@5b010000:
-> > > > >     compatible: Additional items are not allowed
-> > > > > ('fsl,imx7d-usdhc' was
-> > > > > unexpected)
-> > > > >
-> > > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > > >
-> > > > For Patch 19-22, I think we should fix dt binding doc.
-> > >
-> > > Are you sure that these USDHC controllers are compatible with i.MX 7D?
-> > > Could they really run with fsl,imx7d-usdhc compatible?
-> > 
-> > AFAIK uSDHC on QXP is derived from the former platforms with adding a few
-> > more new features. e.g. HS400ES/CMDQ.
-> > Let me loop in uSDHC driver owner Haibo Chen to double confirm.
+On 18/08/2020 08:30, Yue Hu wrote:
+> From: Yue Hu <huyue2@yulong.com>
 > 
-> Yes, usdhc of imx8qxp can work by using the compatible "fsl, imx7d-usdhc", but will not support HS400ES/Command Queue any more. Also imx8qxp support Auto CMD23, but imx7d not.
-> And imx8qxp need to re-config the clock rate after system PM, imx7d do not need to do this.
+> We observed warning about kzalloc() when register thermal cooling device
+> in backlight_device_register(). backlight display can be a cooling device
+> since reducing screen brightness will can help reduce temperature.
+> 
+> However, ->get_max_state of backlight will assign max brightness of 1024
+> to states. The memory size can be getting 1MB+ due to states * states.
 
-Then we can leave the compatible in DTS and I will correct the device
-tree schema.
+What are the benefits of a 1024 states cooling device ? Is the
+difference noticeable with a such small step ?
 
-Best regards,
-Krzysztof
+
+> That is so large to trigger kmalloc() warning.
+> 
+> So, let's remove it and try vzalloc() if kzalloc() fails.
+> 
+> Signed-off-by: Yue Hu <huyue2@yulong.com>
+> ---
+>  drivers/thermal/thermal_sysfs.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index aa99edb..9bae0b6 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -16,6 +16,8 @@
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+>  #include <linux/slab.h>
+> +#include <linux/vmalloc.h>
+> +#include <linux/mm.h>
+>  #include <linux/string.h>
+>  #include <linux/jiffies.h>
+>  
+> @@ -919,7 +921,9 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>  	var += sizeof(*stats->time_in_state) * states;
+>  	var += sizeof(*stats->trans_table) * states * states;
+>  
+> -	stats = kzalloc(var, GFP_KERNEL);
+> +	stats = kzalloc(var, GFP_KERNEL | __GFP_NOWARN);
+> +	if (!stats)
+> +		stats = vzalloc(var);
+>  	if (!stats)
+>  		return;
+>  
+> @@ -938,7 +942,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+>  
+>  static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+>  {
+> -	kfree(cdev->stats);
+> +	kvfree(cdev->stats);
+>  	cdev->stats = NULL;
+>  }
+>  
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
