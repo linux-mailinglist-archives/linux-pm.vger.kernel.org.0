@@ -2,114 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AE324FD4D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 14:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813F624FD75
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 14:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727060AbgHXMCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 08:02:12 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51067 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727039AbgHXMCL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 08:02:11 -0400
-Received: by mail-wm1-f65.google.com with SMTP id t2so7830232wma.0;
-        Mon, 24 Aug 2020 05:02:09 -0700 (PDT)
+        id S1726784AbgHXMHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 08:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbgHXMHo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 08:07:44 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38F2C061573
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:07:43 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id p15so573200pli.6
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 05:07:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=6MGQkbhDjem3IdR91ZmIEu5m3F/jetN+cunD4ZgWqnQ=;
+        b=nJbI34lVlgEdM0exNCiwMJi4eBH6aBwTxWPhkKzROh/5VJNCRupdL9pMgY1ZqM5YZq
+         DyQ8hF0Hkw9afaTjG5R6fSVfLPgClDvAr/ZWq/nOieZubr0gwmdROYLMpJ3k2YivJ+4C
+         2Zmh/CIXHkv62HFMGmX9KzpuPOjS9zyYqbpONFWmuO1szmJgPLKvqtAUEKbGBuoUMah+
+         4E1vyD/KjmatROMcIP3w9rKqR10kfRfMUzMEo+u8/kELjIrX5rP3n31m2AXTNhC1VB/s
+         6YReV4N00QBZV4yHtCnxMGH17uAoDcS1PBWpKxFfVAK+a9kQb/c4itaUP+dv3BpAQxhP
+         o7+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ShrC8bNE0fWXwV7cdyP50z+72KVJ6UwIOeGyUMMXgFg=;
-        b=BhwfE80zmdA2gaCYrqcu5zf8o508nnPGSb7cngxGXetbAI2ilugFu69kzeLgQ/zq1D
-         7o1WrjM3BHCMtRq634rXUYFm472Nc6Jc0hIMu6gZAYhubBQnflFdCqMS3RV4223yEr/U
-         ipqpFLUhjQPXts/jAdlde3HPVAGOsx24Ie9GIx1hgWrcE0aPggyWbLny7+lcDuQrmu1K
-         PqgUEAKRpCqJcQTyxaXOXQn2Kg/zq64iUKNq0Tkh+6Y0Rk5cDpl3jwSJ8DGQzFL71B7n
-         z1iaDML4I98mJXvtMza5hwMBClU0fC24Y/AaP3dykvItExrfTBcuezOrgM5fCmioQoOy
-         sf9A==
-X-Gm-Message-State: AOAM5339cS/UkzfeqhZerIwYdrXL7EASucvhaCz+mD/GRk8tz+Sr/YWp
-        tFSl00POYpHGeFNgFYrPhFk=
-X-Google-Smtp-Source: ABdhPJzF1cM0Zjw0kxDgr2wLhdwUVnQA5czSUo+QkX5E+42+jzTSTB2poBG97XmO5GaNvpJJfYU/Wg==
-X-Received: by 2002:a1c:48c2:: with SMTP id v185mr5294620wma.5.1598270528919;
-        Mon, 24 Aug 2020 05:02:08 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id y2sm25347861wmg.25.2020.08.24.05.01.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Aug 2020 05:02:08 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 14:01:39 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Kukjin Kim <kgene@kernel.org>, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/3] memory: samsung: exynos5422-dmc: remove unused
- exynos5_dmc members
-Message-ID: <20200824115815.GA5258@kozik-lap>
-References: <20200822163218.21857-1-krzk@kernel.org>
- <20200822163218.21857-2-krzk@kernel.org>
- <6c61572d-ef7a-ca0a-2253-7a3c0736f0a5@arm.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=6MGQkbhDjem3IdR91ZmIEu5m3F/jetN+cunD4ZgWqnQ=;
+        b=bbpWbPh5woC+BBoMIpLvQSR8qJRkV+03DQifZrsvCEzlxKPbv1f2EWRiLFqhPiol4i
+         kSXr0gc7o5U2uVw5Uox4Idm+B/clfpMaULQxwa+JfcbXYjJlE94t+26eMmEtJBcjrXMK
+         keg0SMxxsicqjoJpctSQev7JhAsXd4aHSpMFP3gemXmQdIDVGQRdGztDgAq95pynyd2s
+         9ph9Wtc6dalj92XOtoL38X2smQzKxlb851+YkaiD9rQGcF4fi+vWU0W08oGDe9w6qxGg
+         tU6vRnw0BQD2ZLc7DRZ2q3R95+z+NJGZUHZC5Ik2Fsk0kloxngAfeDQb8zcocaRuyyez
+         Y3eA==
+X-Gm-Message-State: AOAM532iDlB9w2fYNItFaAkU+/umbVumFwrcW08E/848Fycn9BbGuEVu
+        aLnTx5/q8M6RiF/hmfP7JInVSg==
+X-Google-Smtp-Source: ABdhPJwrBCu2YqU0TPAsxKDuiDcJ8zPMBWUC4Ew7iX1o7SU+UDrogfD4esQm+qHaqAI6mB+9ma+hHA==
+X-Received: by 2002:a17:902:a404:: with SMTP id p4mr3755436plq.35.1598270861035;
+        Mon, 24 Aug 2020 05:07:41 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n26sm11107427pff.30.2020.08.24.05.07.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 05:07:40 -0700 (PDT)
+Message-ID: <5f43ad8c.1c69fb81.49787.39d7@mx.google.com>
+Date:   Mon, 24 Aug 2020 05:07:40 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6c61572d-ef7a-ca0a-2253-7a3c0736f0a5@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.9-rc2-8-gf5eba0ea1052
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 11 warnings (v5.9-rc2-8-gf5eba0ea1052)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 12:43:33PM +0100, Lukasz Luba wrote:
-> Hi Krzysztof,
-> 
-> On 8/22/20 5:32 PM, Krzysztof Kozlowski wrote:
-> > The struct exynos5_dmc members bypass_rate, mx_mspll_ccore_phy,
-> > mout_mx_mspll_ccore_phy and opp_bypass are not actually used.
-> > 
-> > Apparently there was a plan to store the OPP for the bypass mode in
-> > opp_bypass member, but drivers fails to do it and instead always sets
-> > target voltage during bypass mode.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >   drivers/memory/samsung/exynos5422-dmc.c | 9 ---------
-> >   1 file changed, 9 deletions(-)
-> > 
-> > diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-> > index 31864ce59b25..df02afa8aa90 100644
-> > --- a/drivers/memory/samsung/exynos5422-dmc.c
-> > +++ b/drivers/memory/samsung/exynos5422-dmc.c
-> > @@ -123,9 +123,7 @@ struct exynos5_dmc {
-> >   	struct mutex lock;
-> >   	unsigned long curr_rate;
-> >   	unsigned long curr_volt;
-> > -	unsigned long bypass_rate;
-> >   	struct dmc_opp_table *opp;
-> > -	struct dmc_opp_table opp_bypass;
-> >   	int opp_count;
-> >   	u32 timings_arr_size;
-> >   	u32 *timing_row;
-> > @@ -143,8 +141,6 @@ struct exynos5_dmc {
-> >   	struct clk *mout_bpll;
-> >   	struct clk *mout_mclk_cdrex;
-> >   	struct clk *mout_mx_mspll_ccore;
-> > -	struct clk *mx_mspll_ccore_phy;
-> > -	struct clk *mout_mx_mspll_ccore_phy;
-> >   	struct devfreq_event_dev **counter;
-> >   	int num_counters;
-> >   	u64 last_overflow_ts[2];
-> > @@ -455,9 +451,6 @@ static int exynos5_dmc_align_bypass_voltage(struct exynos5_dmc *dmc,
-> >   					    unsigned long target_volt)
-> >   {
-> >   	int ret = 0;
-> > -	unsigned long bypass_volt = dmc->opp_bypass.volt_uv;
-> > -
-> > -	target_volt = max(bypass_volt, target_volt);
-> 
-> 
-> Could you explain which use cases you considered when you decided to
-> remove these lines?
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc2-8-gf5=
+eba0ea1052)
 
-There are no use cases attached to these. These are simply not used,
-never assigned a value. For example max(0, target_volt) is always equal
-to target_volt for unsigned numbers...
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc2-8-gf5eba0ea1052/
 
-Best regards,
-Krzysztof
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc2-8-gf5eba0ea1052
+Git Commit: f5eba0ea1052daba08e3fcf50be669b13fd7953d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
