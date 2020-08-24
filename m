@@ -2,114 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D86D24F1B9
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 06:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E644624F22C
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 07:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgHXEJS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 00:09:18 -0400
-Received: from mail.windriver.com ([147.11.1.11]:58956 "EHLO
-        mail.windriver.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725271AbgHXEJQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 00:09:16 -0400
-Received: from ALA-HCA.corp.ad.wrs.com (ala-hca.corp.ad.wrs.com [147.11.189.40])
-        by mail.windriver.com (8.15.2/8.15.2) with ESMTPS id 07O48tMV028285
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=FAIL);
-        Sun, 23 Aug 2020 21:08:55 -0700 (PDT)
-Received: from [128.224.162.157] (128.224.162.157) by ALA-HCA.corp.ad.wrs.com
- (147.11.189.50) with Microsoft SMTP Server id 14.3.487.0; Sun, 23 Aug 2020
- 21:08:54 -0700
-Subject: Re: [PATCH] tools/power turbostat: call pread64 in kernel directly
-To:     Alexander Monakov <amonakov@ispras.ru>, Len Brown <lenb@kernel.org>
-CC:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200717060849.12469-1-liwei.song@windriver.com>
- <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com>
- <52f16995-6d2d-fa7d-ed5e-682db3461d03@windriver.com>
- <CAJvTdKms0Qj3d+g_tK8oboMXebYgnPm51EdSL_UvLdw3GV6A3A@mail.gmail.com>
- <alpine.LNX.2.20.13.2008232345570.12553@monopod.intra.ispras.ru>
-From:   Liwei Song <liwei.song@windriver.com>
-Message-ID: <cce63c40-1633-5b86-6aaf-7f9a93c63eac@windriver.com>
-Date:   Mon, 24 Aug 2020 12:08:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1726765AbgHXFmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 01:42:00 -0400
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:37107 "EHLO
+        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727858AbgHXFmA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 01:42:00 -0400
+Received: from [2001:67c:670:100:1d::c0] (helo=ptx.hi.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kA4yP-0002k3-0d; Mon, 24 Aug 2020 07:24:49 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1kA4yM-0000FJ-Og; Mon, 24 Aug 2020 07:24:46 +0200
+Date:   Mon, 24 Aug 2020 07:24:46 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Subject: Re: [PATCH 02/22] dt-bindings: gpio: fsl-imx-gpio: Add gpio-ranges
+ property
+Message-ID: <20200824052446.GE13023@pengutronix.de>
+References: <20200823161550.3981-1-krzk@kernel.org>
+ <20200823161550.3981-2-krzk@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LNX.2.20.13.2008232345570.12553@monopod.intra.ispras.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200823161550.3981-2-krzk@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 07:22:41 up 186 days, 12:53, 138 users,  load average: 0.06, 0.11,
+ 0.10
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 8/24/20 04:54, Alexander Monakov wrote:
-> Hi,
+On Sun, Aug 23, 2020 at 06:15:30PM +0200, Krzysztof Kozlowski wrote:
+> The GPIO controller node can have gpio-ranges property.  This fixes
+> dtbs_check warnings like:
 > 
-> I am not the original submitter, but I have answers and a proper patch :)
+>   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: gpio@30200000: 'gpio-ranges' does not match any of the regexes: 'pinctrl-[0-9]+'
+>     From schema: Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
 > 
-> On Fri, 21 Aug 2020, Len Brown wrote:
-> 
->> Re: offset size
->>
->> The offsets on this file are the MSR offsets.
->> What MSR are you trying to access at offset 0xc0010299?
-> 
-> This MSR is particular is part of AMD RAPL (energy measurements) interface.
-> 
->> Re: pread vs pread64
->>
->> If I take on faith that you have some kind of 32-bit execution
->> environment that makes pread into pread32 instead of pread64, and that
->> truncates an off_t to 32-bits from 64-bits, and it actually makes
->> sense to request a read at this large offset...
-> 
-> The problem here stems from the backward compatibility in Glibc: off_t is
-> 32-bit on 32-bit x86, unless compiled with -D_FILE_OFFSET_BITS=64. This
-> macro should be used for all new code. Distros should enable it for all
-> builds, but when one builds turbostat 'by hand', they hit the issue.
-> 
->> would we really have to invoke syscall() directly -- couldn't we
->> invoke pread64() directly? (eg. below)
-> 
-> No, the proper fix is to pass -D_FILE_OFFSET_BITS=64 to the compiler.
-> 
-> Here's the patch:
-
-This path works with my case.
-
-Thanks,
-Liwei.
-
-
-> 
-> ---8<---
-> 
-> From: Alexander Monakov <amonakov@ispras.ru>
-> Date: Sun, 23 Aug 2020 23:27:02 +0300
-> Subject: [PATCH] turbostat: build with _FILE_OFFSET_BITS=64
-> 
-> For compatibility reasons, Glibc off_t is a 32-bit type on 32-bit x86
-> unless _FILE_OFFSET_BITS=64 is defined. Add this define, as otherwise
-> reading MSRs with index 0x80000000 and above attempts a pread with a
-> negative offset, which fails.
-> 
-> Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 > ---
->  tools/power/x86/turbostat/Makefile | 1 +
->  1 file changed, 1 insertion(+)
+>  .../devicetree/bindings/gpio/fsl-imx-gpio.yaml    | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> diff --git a/tools/power/x86/turbostat/Makefile b/tools/power/x86/turbostat/Makefile
-> index 2b6551269e43..40ae44402eec 100644
-> --- a/tools/power/x86/turbostat/Makefile
-> +++ b/tools/power/x86/turbostat/Makefile
-> @@ -12,6 +12,7 @@ turbostat : turbostat.c
->  override CFLAGS +=	-O2 -Wall -I../../../include
->  override CFLAGS +=	-DMSRHEADER='"../../../../arch/x86/include/asm/msr-index.h"'
->  override CFLAGS +=	-DINTEL_FAMILY_HEADER='"../../../../arch/x86/include/asm/intel-family.h"'
-> +override CFLAGS +=	-D_FILE_OFFSET_BITS=64
->  override CFLAGS +=	-D_FORTIFY_SOURCE=2
+> diff --git a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+> index 454db20c2d1a..1fac69573bb9 100644
+> --- a/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/fsl-imx-gpio.yaml
+> @@ -51,6 +51,9 @@ properties:
 >  
->  %: %.c
-> 
+>    gpio-controller: true
+>  
+> +  gpio-ranges:
+> +    maxItems: 1
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -62,6 +65,18 @@ required:
+>  
+>  additionalProperties: false
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: fsl,imx8mp-gpio
+> +    then:
+> +      properties:
+> +        gpio-ranges:
+> +          minItems: 1
+> +          maxItems: 2
+
+Why do you limit this to fsl,imx8mp-gpio? The i.MX5,6,7 dtsi files use
+gpio-ranges as well and other i.MX dtsi files could also use it.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
