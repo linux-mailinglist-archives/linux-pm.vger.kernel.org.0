@@ -2,66 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D6624F301
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 09:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9721824F302
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 09:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726222AbgHXHTv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 03:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50178 "EHLO
+        id S1726306AbgHXHUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 03:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725976AbgHXHTt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 03:19:49 -0400
+        with ESMTP id S1725850AbgHXHUC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 03:20:02 -0400
 Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8B7C061574
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 00:19:49 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id o21so7172046wmc.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 00:19:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B0FC061574
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 00:20:01 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id t14so7158066wmi.3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 00:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A4jrcUKhNyq6Ips6PWENqMHRhy4MlDm4qFkTIUeY6sU=;
-        b=Zh2M+CReCdB2DseDfEg+S/ILDu5sh9phoSgnmyvis+VRzOt3gmJamiBVybr2DBJ0BY
-         cikhFUufbOjs789a2MCxgb3HIjF5D3/xa9DbYXZ0kRAf8tfyA2EUfVcpGdTcK+FZOJ3a
-         rjti/cvJ4St0QbexsEFngNr4lWMcMRkIyU1WhRatyXjQh4bPiTByH5oXVqfnHTU/AiuU
-         gZAwrZL92ny/djvuJ23htyoYiQ7ATW6XAODpulq8J8gGmAaE3lUt49DwuCXZgQiTVgz+
-         vMXraotcCTAvaMM2+fq3QYvAxb/HA0ah5c3QYsx4ZXyMlPXFLS/5OA0QGc7MwEeo0NbG
-         Wi+A==
+        bh=reqXcMDpBFa4nYd/sRCzxWGTMfaKofdqaoTHA8YL5jU=;
+        b=R2IO1/rKgB4kevOAzme8tKBDShJcSDt3s354Sl/aYMiiQkkEbFngHXV7bUEVikyzUF
+         kfUGgAWuY9JP0Mik/ylx/4RS42BcCKxgjbk/jf3rP+8B6vQaTXWBeJbnV+KPxj4MmVQ5
+         wqt1PnXow8A4CrJAfKUcDNHK+i6UhM6KzaCCi9CJpwCWzwohwSk9OK9YuGsizV/ogB7J
+         u9DO0DuctP22OdNw7V0HAyw13uIVhmVS6HjpfL41CehkKiXoDxgW5Z9SHBsFjEhCNSJP
+         HNNbXEZivAx3m00yThAPmIT0tUMk3vCbq8KYB+hJL5z4c+SLxQyn2PrxXfkrgYglQCMW
+         lUCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=A4jrcUKhNyq6Ips6PWENqMHRhy4MlDm4qFkTIUeY6sU=;
-        b=U8SjrbxFXVqqNFsr8Fj/wxvaBpXapRkzK6q2K5m10q455h7rDY1QAiE5yk2jtBEpPa
-         MXHg3k/+ZbrNhur3M7yrZJrZZwt5a1OELUAy7nPJaYBmvaX+CfUuS+0yenU746jOCFJw
-         FnOlX9owGeyMckMzKhEQx6iL7eGScFjHekLJLWcpOmvXdsLlY/OVFEH0836llY1qGinB
-         GwPF7c/6QSjPlXdG/FWiFzEUUxBxSGpDfy8Urtnpa6U7u2lZo1Tbtb97081k5hFT/rMv
-         28eZUUUK0Q43ZUjUlQ2+AVvYXlPYoVkvn/V+oIqn1NuIoa4dgqRb4b/6+vYqsN9Dk15n
-         RmTg==
-X-Gm-Message-State: AOAM532OPWcSEWx1DSi++ZJHCfZce/fHvJ7Mpnd4OCIhoA8lrsHjSeyy
-        jYLCh+CIuaS4GVzQrcTliBNyjfHomrkKfg==
-X-Google-Smtp-Source: ABdhPJxSuUa0KM13DRe5+ateKWf+FPyJpUyDzLii4cr5Vd9MNz3oLrpbagXrGXXemMNa/KjKiddxrQ==
-X-Received: by 2002:a1c:16:: with SMTP id 22mr2436523wma.75.1598253587747;
-        Mon, 24 Aug 2020 00:19:47 -0700 (PDT)
+        bh=reqXcMDpBFa4nYd/sRCzxWGTMfaKofdqaoTHA8YL5jU=;
+        b=BPcJLNI6Q3pjYC3RzMAO4y6angZqL/tx8hHR8A5UaOAscGtyZgO7a2mGFNjaTEv2ZI
+         Gd1fTWRjccPXE1oCaSB8Nos6px0KJw240t/+eLFm1rHMMlxyAMu8FjLa0Q5xhHSlO9gO
+         UvMdpfjlpT4JIidFi5OGTmKKelcg2jOlbtHkJGxtxXLicNuAQ+ix9svSMBNcYuJaOGgF
+         /3o8T3JVNKezj105j7KCM9a8Ik7vCNTqvHVmw7asVkQ1ulhorHsbLLHQ8475OyRcs/2X
+         81I11hiFLfypGXbwIHY3DpINBkjWf3AGOsJFylewHvp1BHPfPzfYRJH0xfiVL31N/9a4
+         r1rQ==
+X-Gm-Message-State: AOAM531/V/RfsKeEOKSfnHAY+FLZbdpur8wp7QyLSIZ3MjTPA424CRbO
+        c5Y4hsv5DSjRJr27wt+9svAhHA==
+X-Google-Smtp-Source: ABdhPJxsam8YumJPfMFvbtMrlrypSkgydBai0hoxrJg5BlpWVl5jjht7CzJFZRBoaf5S3Wzo+//Y/g==
+X-Received: by 2002:a1c:2dcc:: with SMTP id t195mr4089190wmt.166.1598253599962;
+        Mon, 24 Aug 2020 00:19:59 -0700 (PDT)
 Received: from ?IPv6:2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0? ([2a01:e34:ed2f:f020:cd42:2fa4:120f:76b0])
-        by smtp.googlemail.com with ESMTPSA id u13sm7501851wmm.20.2020.08.24.00.19.46
+        by smtp.googlemail.com with ESMTPSA id t13sm21234923wru.65.2020.08.24.00.19.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Aug 2020 00:19:47 -0700 (PDT)
-Subject: Re: [PATCH] drivers: thermal: Kconfig: fix spelling mistake "acces"
- -> "access"
-To:     Colin King <colin.king@canonical.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200810082739.48007-1-colin.king@canonical.com>
+        Mon, 24 Aug 2020 00:19:59 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: imx: Use dev_err_probe() to simplify error
+ handling
+To:     Anson Huang <Anson.Huang@nxp.com>, rui.zhang@intel.com,
+        amitk@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Linux-imx@nxp.com
+References: <1597114715-1073-1-git-send-email-Anson.Huang@nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c317ce98-c20d-3c24-2f77-1758dc784de9@linaro.org>
-Date:   Mon, 24 Aug 2020 09:19:46 +0200
+Message-ID: <340444ab-a360-f1e5-2d69-9c4ae9cbbf57@linaro.org>
+Date:   Mon, 24 Aug 2020 09:19:58 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200810082739.48007-1-colin.king@canonical.com>
+In-Reply-To: <1597114715-1073-1-git-send-email-Anson.Huang@nxp.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -70,12 +72,11 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/08/2020 10:27, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On 11/08/2020 04:58, Anson Huang wrote:
+> dev_err_probe() can reduce code size, uniform error handling and record the
+> defer probe reason etc., use it to simplify the code.
 > 
-> There is a spelling mistake in the Kconfig text, fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Signed-off-by: Anson Huang <Anson.Huang@nxp.com>
 > ---
 
 Applied, thanks
