@@ -2,112 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EC02501C4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 18:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E91A2501E9
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 18:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727095AbgHXQKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 12:10:35 -0400
-Received: from wnew1-smtp.messagingengine.com ([64.147.123.26]:41179 "EHLO
-        wnew1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725958AbgHXQKf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 12:10:35 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id EABCC10C7;
-        Mon, 24 Aug 2020 12:10:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 24 Aug 2020 12:10:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=ro+rwv7AObJQS7gsI/+u11qWbHt
-        zXSw24/6H9jgVM/Q=; b=iUUhlZoU5mGQP+5qTazZWAsMBmoLTM6JMYP5/klFgi4
-        xoRUtVS95yWZA1Exb117Gn6FLb6nPPrHJbwZ5N6lTf11vATzIeaDCKfW/LWAGPuh
-        kaA6R1eBFiZoxHxcrvRVF8KaSIODGqKc9hk7YlD3jyhf6YwuikJsnInbA7JBtcyo
-        BdgvHRpsNEcqJWOpq1KkfxBsZ1v89P2xugpvkGtZNoXwP48mdP9WkfOhZmtKxB7L
-        28PLimpFogUYiM/d1d0WFqJB1OSU/DZiMNrFvlurltxBj3YRqeSx+U+RdkUbMnkC
-        fligHiZSK8HyF0NIglrLEfHq6ci9Ru71NafI9AJ94hg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=ro+rwv
-        7AObJQS7gsI/+u11qWbHtzXSw24/6H9jgVM/Q=; b=Njs+/a++23hWyavD9D7I83
-        5keNeyBat0iIAmhOQ7mUL/jR/hHCPXW4lXuzaRtdM1MYBq6LBfkKkd7jrAqCAiJs
-        duE/jmUDzB1d1Keu/YaGs3KiA5Q8ku1RsEQzFG5qVjoVBEyZiOCtHn27NjqxRLJa
-        xu2V9Dt9RgXJ39Jk4NOqwaqGq9BewABR4awDtXbSNOYN4BQm/ZDNf0VEV6f6BBqy
-        G31bypDHbdgJG6Qj6doeCyLiZOslM+60ahOEF7FVI2Y593rCXGjF88xsElJ6TvnM
-        EiFdq+GH9/ILt3H/EO6JLD3JxhXUuFEltJUBjFD96/friMcHU5GtXdwxe1mEtjYA
-        ==
-X-ME-Sender: <xms:d-ZDX58ngR626vRUNYiOoxJpvqyyQNUbGbBstYXU_FF_T5DaH0FZ-Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddukedghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucfkphepkeef
-    rdekiedrkeelrddutdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:d-ZDX9vUILdMGvs7U55PP0EI2gDKz7YvKsTP4XOCu99xljvJK4Yw_w>
-    <xmx:d-ZDX3C7e5PlQ7C8ilhMxIrSQJboXqlkao6VHnSz_O-005fq62l5Jg>
-    <xmx:d-ZDX9faOCYGkaUDluvpTY1xWRaC3DjvsjDw-tpUcKXGzDqcRCWjDw>
-    <xmx:eOZDX9dLpUZmUk_77I6dNPnEdifo0KX8tBQDflbCP-YYkpfsIe8JeySltpo>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7456530600B1;
-        Mon, 24 Aug 2020 12:10:31 -0400 (EDT)
-Date:   Mon, 24 Aug 2020 18:10:49 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     stable@vger.kernel.org, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Sajida Bhanu <sbhanu@codeaurora.org>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH - stable v5.4 and v5.7] opp: Enable resources again if
- they were disabled earlier
-Message-ID: <20200824161049.GE435319@kroah.com>
-References: <31f315cf2b0c4afd60b07b7121058dcaa6e4afa1.1598260882.git.viresh.kumar@linaro.org>
+        id S1726770AbgHXQXA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 12:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725921AbgHXQW6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 12:22:58 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA7EC061573;
+        Mon, 24 Aug 2020 09:22:57 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id j15so4798901lfg.7;
+        Mon, 24 Aug 2020 09:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=8SE2/PBYTcg3YOOGVssHW9UdXmQ9vzkd0F1vzB4ywX0=;
+        b=DnnoeX87A92PXfQdNg94MVeLYDAT3zqKbPKbpHGZ1FuIrV4WzlqZVzOGNoozEFsnm2
+         ED75DE/5XDhnG8rdvn8Y9kpCziRwd2N/G2dHYzq/Nur0sJjLIUylqrUTHpxvMl7rULpA
+         /EnnRVAkUjgDcN+ScF3wR9jW3sHUo9427B+u1CUUOHA2/ftPWIaANvFn6e7MzCWfOHwH
+         dg509aUThMclSy+TaAsfT637zjnXrzrwCQPkOAvmO5/dkoeD2R0ODp6UVP+FJlm2FHt6
+         EXNPImxGFft5HjcMQKDlJl7R2NTj8A4NUaJHuayayTS/2nL0PgY9nkRMfrFiL3CeWxyM
+         5z3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=8SE2/PBYTcg3YOOGVssHW9UdXmQ9vzkd0F1vzB4ywX0=;
+        b=K6ACY7ECnuXQ4he1L3IFQL9XNncFHLU1VNSjXgK3ch5DHXT10SqL2Gt6FAYGrOP1Jt
+         q8RVzmy00NaPbhtZkFnSVP96hY9XPY3IAga3ik8K4XPToOPiG8tmCadvP2wlNIFixKpU
+         jOwJDAVTHe+5/5YMX0xLkUw4WzAcz91dCAtVOeeFp1/tpmPO8Phtor9gdvW23pK/0oDx
+         Iv63rpfjDmcw5xsZj5+MJY0dvi0kUfPTVSPvExjy5F4a5EwLiaGolF9I6w51EDOWTHtW
+         EErPVKhKhqUt9QLYPi4WJLHANneuaYlIdoa0EdzzQaF/9qawj/+mhmUogmlhQPktQI1f
+         6Siw==
+X-Gm-Message-State: AOAM531X1AzaU+ejJarsgsBh522rh7Re29pZSqHyn44gRFO7kyVw2xsF
+        C/tDndDirGETkWfKx5/9IPFD+dBjMbg=
+X-Google-Smtp-Source: ABdhPJyTB7OeM6e/0yyqMX24QqKUrWykp5KkGVjiypWExtGCjYMNFSGGdklt4RHFZ6A/jaA4ghujbw==
+X-Received: by 2002:a19:ae0a:: with SMTP id f10mr2935544lfc.100.1598286171416;
+        Mon, 24 Aug 2020 09:22:51 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id u17sm2272041ljk.56.2020.08.24.09.22.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Aug 2020 09:22:50 -0700 (PDT)
+Subject: Re: [PATCH v3] cpuidle: tegra: Correctly handle result of
+ arm_cpuidle_simple_enter()
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20200709173532.15431-1-digetx@gmail.com>
+ <69c57c9c-a8e4-2367-3f72-232b6b3456b8@gmail.com>
+ <c7e79586-f948-3681-6046-a51852ab2523@nvidia.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <988cf17e-c824-cd6c-f682-084aab97afc1@gmail.com>
+Date:   Mon, 24 Aug 2020 19:22:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <31f315cf2b0c4afd60b07b7121058dcaa6e4afa1.1598260882.git.viresh.kumar@linaro.org>
+In-Reply-To: <c7e79586-f948-3681-6046-a51852ab2523@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 02:52:23PM +0530, Viresh Kumar wrote:
-> From: Rajendra Nayak <rnayak@codeaurora.org>
+24.08.2020 19:02, Jon Hunter пишет:
 > 
-> commit a4501bac0e553bed117b7e1b166d49731caf7260 upstream.
+> On 14/08/2020 18:53, Dmitry Osipenko wrote:
+>> 09.07.2020 20:35, Dmitry Osipenko пишет:
+>>> The enter() callback of CPUIDLE drivers returns index of the entered idle
+>>> state on success or a negative value on failure. The negative value could
+>>> any negative value, i.e. it doesn't necessarily needs to be a error code.
+>>> That's because CPUIDLE core only cares about the fact of failure and not
+>>> about the reason of the enter() failure.
+>>>
+>>> Like every other enter() callback, the arm_cpuidle_simple_enter() returns
+>>> the entered idle-index on success. Unlike some of other drivers, it never
+>>> fails. It happened that TEGRA_C1=index=err=0 in the code of cpuidle-tegra
+>>> driver, and thus, there is no problem for the cpuidle-tegra driver created
+>>> by the typo in the code which assumes that the arm_cpuidle_simple_enter()
+>>> returns a error code.
+>>>
+>>> The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_IDLE
+>>> is disabled in a kernel's config, but all CPUIDLE drivers are disabled if
+>>> CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't ever
+>>> see the error code from arm_cpuidle_simple_enter() today.
+>>>
+>>> Of course the code may get some changes in the future and then the
+>>> typo may transform into a real bug, so let's correct the typo! The
+>>> tegra_cpuidle_state_enter() is now changed to make it return the entered
+>>> idle-index on success and negative error code on fail, which puts it on
+>>> par with the arm_cpuidle_simple_enter(), making code consistent in regards
+>>> to the error handling.
+>>>
+>>> This patch fixes a minor typo in the code, it doesn't fix any bugs.
+>>>
+>>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>>> ---
+>>>
+>>> Changelog:
+>>>
+>>> v3: The tegra_cpuidle_state_enter() now returns entered idle-index on
+>>>     success instead of 0. Hence the error message will be shown by the
+>>>     tegra-cpuidle driver if arm_cpuidle_simple_enter() will ever fail.
+>>>     Again thanks to Jon Hunter!
+>>
+>> Hello, Jon! Do you see anything else that could be improved in this patch?
+>>
 > 
-> dev_pm_opp_set_rate() can now be called with freq = 0 in order
-> to either drop performance or bandwidth votes or to disable
-> regulators on platforms which support them.
+> Sorry for the delay. Looks good to me ...
 > 
-> In such cases, a subsequent call to dev_pm_opp_set_rate() with
-> the same frequency ends up returning early because 'old_freq == freq'
-> 
-> Instead make it fall through and put back the dropped performance
-> and bandwidth votes and/or enable back the regulators.
-> 
-> Cc: v5.3+ <stable@vger.kernel.org> # v5.3+
-> Fixes: cd7ea582866f ("opp: Make dev_pm_opp_set_rate() handle freq = 0 to drop performance votes")
-> Reported-by: Sajida Bhanu <sbhanu@codeaurora.org>
-> Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
-> Reported-by: Matthias Kaehlcke <mka@chromium.org>
-> Tested-by: Matthias Kaehlcke <mka@chromium.org>
-> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> [ Viresh: Don't skip clk_set_rate() and massaged changelog ]
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> [ Viresh: Updated the patch to apply to v5.4 ]
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/core.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
-This too is already in the 5.7 and 5.4 queues, why add it again?
+No problems, thank you! :)
 
-thanks,
-
-greg k-h
