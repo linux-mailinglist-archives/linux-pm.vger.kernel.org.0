@@ -2,115 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0B7C24FC82
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E9F24FCA1
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Aug 2020 13:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbgHXL1y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 07:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbgHXL1r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 07:27:47 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3E7C061574
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 04:27:47 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id mw10so4044563pjb.2
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 04:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=baquQjNt6PFNzFAsQ0kh01MX49ZmJ/9Yg6dF7IDX3SI=;
-        b=XDcppkVsrS82tADPSlchfl+fIh7vjbha2AfE+pdlL+dJ4n9F9wb1id39Ttudz+OTBs
-         cFU9iqWtUav7j6WClzSX/OhkCoe1H1Y+cYGgH6+22Q/bqMxYaNG5gRYq8fYPrCjBefGA
-         e6GF5Wz440cGa9dudTTei2vce+57RSDFLiPk1KFZnF7Au0jzS9njjNGoVc0P0j7JcrGH
-         OdZr7uFAbOavvmBxm7gywnOXW29xYh/jqHEdNnawVNDoo2dlqw8WgG1sEDDhzfkFqKye
-         k420NbCI+aCLYLnAv9aFcQhYfS3JRz7+TZ0K9FO6EZoQfMsl2v2VNV2uoyWikZR9FOJ5
-         5nwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=baquQjNt6PFNzFAsQ0kh01MX49ZmJ/9Yg6dF7IDX3SI=;
-        b=RthfGDf8riwWDZyp7n8ypptSiMdCVYtKzdSmHyJ4OmgcZTIs0vaN01lmC/20ExIVEx
-         e7gRFE6VLMdmeU4fWq9VZvzE3KLAEIxwuTqAHf6lvNyYLEmgxLwsYxvqZ/rxIwTVV7sa
-         iTU/F7lg0hrILsSQqzxeJL00Whc2nsa+ACUPLPln+58CofLaI75qUT2ApIElut5feRkz
-         QPVI+Y6jlSwD/ecSXjMrQrRDGmMOuoB7jQvbviR4BMymHz4N3UsgnMhs8PT5HR0KZ6RP
-         yzJJpsF6qHoEFf8ae8ohS4m6+zQYdabUKaBMbAXNuFw4VFTujwC1UC/lhTiX5LamBicY
-         /JRw==
-X-Gm-Message-State: AOAM530x8g6DfItOCcioPP/TWlXHU8KaQbobkZ98wTUdJaSbHVTQ9m+c
-        kXvf8DI3L1KunHGNKb++K3Udww==
-X-Google-Smtp-Source: ABdhPJxwW1lXpSca83U1QtZjsMBccasNeRma6uXMIzqn9tVduIk2Swl1So0zZQR6DP5Sviepgt2TFA==
-X-Received: by 2002:a17:90a:1f8c:: with SMTP id x12mr4384709pja.186.1598268466779;
-        Mon, 24 Aug 2020 04:27:46 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id k20sm5925428pfu.197.2020.08.24.04.27.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Aug 2020 04:27:46 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 16:57:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
+        id S1726934AbgHXLcq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 07:32:46 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:13489 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbgHXLal (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 07:30:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598268623;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=LNrpIGVjKdlFFg7JrV48iDL/9D5btHkuQx1faS/GNEU=;
+        b=MdmzlP1FocVEqd05o+I0ToPylCOtIS6VLYqpWPGuqLgzYwMMxdDcPhkLJ/GMU/6XE0
+        7h3x3SU7tC1fHdA6zLYLI8O+KmbNT++Dvl52SclXHSJoU7nhc4kgXaxZYOFTzpyxsyU2
+        qM3FkngAxR3goZPpBIDzLkiSjBsgi2Xx9KjFGFDQTd+GuD+CYWwti3gcSGkWJO7uisQG
+        aw3TIomsglInr/qMpKc4owMnymEmEC97tpa6O8QLegh4KG/WtYFUkaIxQgt/rwkXTO7I
+        g5keka+Aqwi+Qw8zHT13OV7OxCSvoj4xx8ENlrkH2VVqqU6vqG1mUjBUgd2WuTsLRZvH
+        tlBg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/MbIo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id g0b6c1w7OBULWmA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Mon, 24 Aug 2020 13:30:21 +0200 (CEST)
+Date:   Mon, 24 Aug 2020 13:30:16 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Niklas Cassel <nks@flawful.org>
-Subject: Re: [RFC PATCH 3/3] opp: Power on (virtual) power domains managed by
- the OPP core
-Message-ID: <20200824112744.jsyaxrfbybyjpwex@vireshk-i7>
+Subject: Re: [RFC PATCH 1/3] opp: Reduce code duplication in
+ _set_required_opps()
+Message-ID: <20200824113016.GA131681@gerhold.net>
 References: <20200730080146.25185-1-stephan@gerhold.net>
- <20200730080146.25185-4-stephan@gerhold.net>
+ <20200730080146.25185-2-stephan@gerhold.net>
+ <20200824111820.rcaingohxw3wozgd@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200730080146.25185-4-stephan@gerhold.net>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200824111820.rcaingohxw3wozgd@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-07-20, 10:01, Stephan Gerhold wrote:
-> dev_pm_opp_attach_genpd() allows attaching an arbitrary number of
-> power domains to an OPP table. In that case, the genpd core will
-> create a virtual device for each of the power domains.
+On Mon, Aug 24, 2020 at 04:48:20PM +0530, Viresh Kumar wrote:
+> On 30-07-20, 10:01, Stephan Gerhold wrote:
+> > Move call to dev_pm_genpd_set_performance_state() to a separate
+> > function so we can avoid duplicating the code for the single and
+> > multiple genpd case.
+> > 
+> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> > ---
+> >  drivers/opp/core.c | 40 +++++++++++++++++++++-------------------
+> >  1 file changed, 21 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > index 9d7fb45b1786..f7a476b55069 100644
+> > --- a/drivers/opp/core.c
+> > +++ b/drivers/opp/core.c
+> > @@ -781,6 +781,21 @@ static int _set_opp_custom(const struct opp_table *opp_table,
+> >  	return opp_table->set_opp(data);
+> >  }
+> >  
+> > +static int _set_required_opp(struct device *dev, struct device *pd_dev,
+> > +			     struct dev_pm_opp *opp, int i)
+> > +{
+> > +	unsigned int pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
+> > +	int ret;
+> > +
+> > +	ret = dev_pm_genpd_set_performance_state(pd_dev, pstate);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to set performance rate of %s: %d (%d)\n",
+> > +			dev_name(pd_dev), pstate, ret);
+> > +	}
+> > +
+> > +	return ret;
+> > +}
+> > +
+> >  /* This is only called for PM domain for now */
+> >  static int _set_required_opps(struct device *dev,
+> >  			      struct opp_table *opp_table,
+> > @@ -788,22 +803,15 @@ static int _set_required_opps(struct device *dev,
+> >  {
+> >  	struct opp_table **required_opp_tables = opp_table->required_opp_tables;
+> >  	struct device **genpd_virt_devs = opp_table->genpd_virt_devs;
+> > -	unsigned int pstate;
+> > +	struct device *pd_dev;
+> >  	int i, ret = 0;
+> >  
+> >  	if (!required_opp_tables)
+> >  		return 0;
+> >  
+> >  	/* Single genpd case */
+> > -	if (!genpd_virt_devs) {
+> > -		pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
+> > -		ret = dev_pm_genpd_set_performance_state(dev, pstate);
+> > -		if (ret) {
+> > -			dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
+> > -				dev_name(dev), pstate, ret);
+> > -		}
+> > -		return ret;
+> > -	}
+> > +	if (!genpd_virt_devs)
+> > +		return _set_required_opp(dev, dev, opp, 0);
+> >  
+> >  	/* Multiple genpd case */
+> >  
+> > @@ -814,17 +822,11 @@ static int _set_required_opps(struct device *dev,
+> >  	mutex_lock(&opp_table->genpd_virt_dev_lock);
+> >  
+> >  	for (i = 0; i < opp_table->required_opp_count; i++) {
+> > -		pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
+> > -
+> > -		if (!genpd_virt_devs[i])
+> > -			continue;
 > 
-> At the moment, the OPP core only calls
-> dev_pm_genpd_set_performance_state() on these virtual devices.
-> It does not attempt to power on the power domains. Therefore
-> the required power domain might never get turned on.
+> Don't we need this check anymore ?
 > 
-> So far, dev_pm_opp_attach_genpd() is only used in qcom-cpufreq-nvmem.c
-> to attach the CPR power domain to the CPU OPP table. The CPR driver
-> does not check if it was actually powered on so this did not cause
-> any problems. However, other drivers (e.g. rpmpd) might ignore the
-> performance state until the power domain is actually powered on.
-> 
-> Since these virtual devices are managed exclusively by the OPP core,
-> I would say that it should also be responsible to ensure they are
-> enabled. A similar approach is already used for regulators, see
-> commit 8d45719caaf5 ("opp: core: add regulators enable and disable").
-> 
-> This commit implements similar functionality for the virtual genpd
-> devices managed by the OPP core. The power domains are turned on
-> the first time dev_pm_opp_set_rate() is called. They are turned off
-> again when dev_pm_opp_set_rate(dev, 0) is called.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-> Related discussion: https://lore.kernel.org/linux-arm-msm/20200426123140.GA190483@gerhold.net/
-> 
-> There would be also other ways to implement this, e.g. device links,
-> assuming that the device using the OPP table also makes use of runtime PM.
-> My first thought was that it would be most consistent to handle this like
-> regulators, bandwidth votes etc. RFC :)
 
-This stuff was done ages back and I am starting to forget almost
-everything now :)
+You're right. Not sure why I removed it.
 
-Ulf, why doesn't pm_runtime_get(dev) take care of enabling multiple
-power domain case ? RFP (request for patience) :)
+I suspect I had it in _set_required_opp() at some point, but I moved
+code around several times until I was happy with the result.
 
--- 
-viresh
+We should just add it back.
+Should I send a v2 with it fixed or would you like to handle it?
+
+Thanks,
+Stephan
+
+> > +		pd_dev = genpd_virt_devs[i];
+> >  
+> > -		ret = dev_pm_genpd_set_performance_state(genpd_virt_devs[i], pstate);
+> > -		if (ret) {
+> > -			dev_err(dev, "Failed to set performance rate of %s: %d (%d)\n",
+> > -				dev_name(genpd_virt_devs[i]), pstate, ret);
+> > +		ret = _set_required_opp(dev, pd_dev, opp, i);
+> > +		if (ret)
+> >  			break;
+> > -		}
+> >  	}
+> >  	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+> >  
+> > -- 
+> > 2.27.0
