@@ -2,705 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23FBF251108
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 06:57:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033DD2511BB
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 07:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728962AbgHYE5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 00:57:43 -0400
-Received: from smtprelay0114.hostedemail.com ([216.40.44.114]:35744 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728942AbgHYE5m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 00:57:42 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay04.hostedemail.com (Postfix) with ESMTP id D89A0180A7FD3;
-        Tue, 25 Aug 2020 04:57:37 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:305:327:355:379:541:800:960:968:973:988:989:1260:1311:1314:1345:1359:1437:1515:1605:1730:1747:1777:1792:1801:2393:2538:2559:2562:2897:2898:2899:3138:3139:3140:3141:3142:3867:3868:3870:3871:3874:4250:4321:4605:5007:6119:6261:7875:7903:8531:8603:10004:11026:11473:11657:11658:11914:12043:12296:12297:12438:12555:12663:12895:12986:13894:13972:14394:21080:21324:21611:21627:21987:21990:30003:30029:30030:30054:30056:30070:30079,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: oven52_591853927059
-X-Filterd-Recvd-Size: 21532
-Received: from joe-laptop.perches.com (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf08.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 25 Aug 2020 04:57:36 +0000 (UTC)
-From:   Joe Perches <joe@perches.com>
-To:     Jiri Kosina <trivial@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 29/29] tools: Avoid comma separated statements
-Date:   Mon, 24 Aug 2020 21:56:26 -0700
-Message-Id: <52b68acfeb441b483de188f7e100600291f8c3ec.1598331149.git.joe@perches.com>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <cover.1598331148.git.joe@perches.com>
-References: <cover.1598331148.git.joe@perches.com>
+        id S1726090AbgHYFuI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 01:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728929AbgHYFuI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 01:50:08 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327FAC0613ED
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 22:50:07 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id w186so3943432pgb.8
+        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 22:50:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vnJNUHtuFQUFx13e1DH6FdQTNcSlnOczZJdYD+gETKQ=;
+        b=sUtrjydErcLgPizhn/Xtx4ItBgxoAz/OtzMIkDhh/Q2SE9qFJyNZ2IWh/2wrLbP6F3
+         vMtRByRkp1mYza87avjNVjpHkG6lCbqxvXdcHvDFWIUUDogaJ2wO/o4/rENLnkbuOACB
+         Hps0Tvpynh9hWCbsYRkAKdJwaeblvE+o/JQuCsq1VknHKEl6aAc7zlJDEZijhlYuLR3i
+         ND/Go6sn4ST2/vDfSmtmhqTcmAI2UtUsC21eT/h6OZwd1Ipp6dRZnrCk2yFlAF7tZXmf
+         RGy1hmTFbfTZYLSQluB5wNe7oBjCkvwFyXaDTcVXAOzhh74RtFdCJtggaXeZT7b5TZrc
+         YyRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vnJNUHtuFQUFx13e1DH6FdQTNcSlnOczZJdYD+gETKQ=;
+        b=fKVHrjFZByKpoeXCehbd4kiNjoapduNlrFvD5S50PnXtDGH1AXcMAqOOukUln2Dofh
+         GKn1OslcsBPju2lfDw8VnBkg9SlyZxQjvIhnNeq4bNV3Gsuon0q0Ni49wMlUzPfVdVxA
+         Of5ootTxo/pA9NSP3rMmxgWnkgo55Q1VR0E6Xwfyua9DrpioJhmIO/IiQEg6bdKCZyCM
+         L2XFK2t+29hHbbb8jl23xCf8IPpAYRdmYd4q4LktJy43C16bgyzy6nuPqgIfciWxtGch
+         0B4emMZgc88H7zEZN+Vxvg1MnS/79TkryUU2DYJTZ89Ev0wlTMrbelYsQtZcUVMiemCu
+         3qmw==
+X-Gm-Message-State: AOAM532r1NiZpk15G5ymZ9lpPyhsW/Y+p41Z5z/m0XWpdD2mLjWZRCcI
+        GxwUn9mpepcnmvCr97kpnojSCg==
+X-Google-Smtp-Source: ABdhPJx7LW43H/WEVT3wFqJuqlI6n26TIbT5/snnF9dSqDbHnlNMONApn7rCm69tVvLefn/LYmHMeQ==
+X-Received: by 2002:a63:31d0:: with SMTP id x199mr5238003pgx.99.1598334606437;
+        Mon, 24 Aug 2020 22:50:06 -0700 (PDT)
+Received: from localhost ([122.172.43.13])
+        by smtp.gmail.com with ESMTPSA id o5sm2988556pgi.18.2020.08.24.22.50.05
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Aug 2020 22:50:05 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 11:20:03 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] cpufreq: tegra186: Fix initial frequency
+Message-ID: <20200825055003.qfsuktsv7cyouxei@vireshk-i7>
+References: <20200824145907.331899-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200824145907.331899-1-jonathanh@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use semicolons and braces.
+On 24-08-20, 15:59, Jon Hunter wrote:
+> Commit 6cc3d0e9a097 ("cpufreq: tegra186: add
+> CPUFREQ_NEED_INITIAL_FREQ_CHECK flag") fixed CPUFREQ support for
+> Tegra186 but as a consequence the following warnings are now seen on
+> boot ...
+> 
+>  cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 2035200 KHz
+>  cpufreq: cpufreq_online: CPU1: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU1: Unlisted initial frequency changed to: 2035200 KHz
+>  cpufreq: cpufreq_online: CPU2: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU2: Unlisted initial frequency changed to: 2035200 KHz
+>  cpufreq: cpufreq_online: CPU3: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU3: Unlisted initial frequency changed to: 2035200 KHz
+>  cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU4: Unlisted initial frequency changed to: 2035200 KHz
+>  cpufreq: cpufreq_online: CPU5: Running at unlisted freq: 0 KHz
+>  cpufreq: cpufreq_online: CPU5: Unlisted initial frequency changed to: 2035200 KHz
+> 
+> Fix this by adding a 'get' callback for the Tegra186 CPUFREQ driver to
+> retrieve the current operating frequency for a given CPU. The 'get'
+> callback uses the current 'ndiv' value that is programmed to determine
+> that current operating frequency.
+> 
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+> Changes since V1:
+> - Moved code into a 'get' callback
+> 
+>  drivers/cpufreq/tegra186-cpufreq.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/tegra186-cpufreq.c b/drivers/cpufreq/tegra186-cpufreq.c
+> index 01e1f58ba422..0d0fcff60765 100644
+> --- a/drivers/cpufreq/tegra186-cpufreq.c
+> +++ b/drivers/cpufreq/tegra186-cpufreq.c
+> @@ -14,6 +14,7 @@
+>  
+>  #define EDVD_CORE_VOLT_FREQ(core)		(0x20 + (core) * 0x4)
+>  #define EDVD_CORE_VOLT_FREQ_F_SHIFT		0
+> +#define EDVD_CORE_VOLT_FREQ_F_MASK		0xffff
+>  #define EDVD_CORE_VOLT_FREQ_V_SHIFT		16
+>  
+>  struct tegra186_cpufreq_cluster_info {
+> @@ -91,10 +92,39 @@ static int tegra186_cpufreq_set_target(struct cpufreq_policy *policy,
+>  	return 0;
+>  }
+>  
+> +static unsigned int tegra186_cpufreq_get(unsigned int cpu)
+> +{
+> +	struct cpufreq_frequency_table *tbl;
+> +	struct cpufreq_policy *policy;
+> +	void __iomem *edvd_reg;
+> +	unsigned int i, freq = 0;
+> +	u32 ndiv;
+> +
+> +	policy = cpufreq_cpu_get(cpu);
+> +	if (!policy)
+> +		return -EINVAL;
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
- tools/lib/subcmd/help.c                    |  10 +-
- tools/power/cpupower/utils/cpufreq-set.c   |  14 +-
- tools/testing/selftests/vm/gup_benchmark.c |  18 +-
- tools/testing/selftests/vm/userfaultfd.c   | 296 +++++++++++++--------
- 4 files changed, 210 insertions(+), 128 deletions(-)
+This should be return 0;
 
-diff --git a/tools/lib/subcmd/help.c b/tools/lib/subcmd/help.c
-index 2859f107abc8..bf02d62a3b2b 100644
---- a/tools/lib/subcmd/help.c
-+++ b/tools/lib/subcmd/help.c
-@@ -65,12 +65,14 @@ void exclude_cmds(struct cmdnames *cmds, struct cmdnames *excludes)
- 	ci = cj = ei = 0;
- 	while (ci < cmds->cnt && ei < excludes->cnt) {
- 		cmp = strcmp(cmds->names[ci]->name, excludes->names[ei]->name);
--		if (cmp < 0)
-+		if (cmp < 0) {
- 			cmds->names[cj++] = cmds->names[ci++];
--		else if (cmp == 0)
--			ci++, ei++;
--		else if (cmp > 0)
-+		} else if (cmp == 0) {
-+			ci++;
- 			ei++;
-+		} else if (cmp > 0) {
-+			ei++;
-+		}
- 	}
- 
- 	while (ci < cmds->cnt)
-diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
-index 6ed82fba5aaa..7b2164e07057 100644
---- a/tools/power/cpupower/utils/cpufreq-set.c
-+++ b/tools/power/cpupower/utils/cpufreq-set.c
-@@ -99,13 +99,17 @@ static unsigned long string_to_frequency(const char *str)
- 		continue;
- 
- 	if (str[cp] == '.') {
--		while (power > -1 && isdigit(str[cp+1]))
--			cp++, power--;
-+		while (power > -1 && isdigit(str[cp+1])) {
-+			cp++;
-+			power--;
-+		}
- 	}
--	if (power >= -1)	/* not enough => pad */
-+	if (power >= -1) {		/* not enough => pad */
- 		pad = power + 1;
--	else			/* to much => strip */
--		pad = 0, cp += power + 1;
-+	} else {			/* too much => strip */
-+		pad = 0;
-+		cp += power + 1;
-+	}
- 	/* check bounds */
- 	if (cp <= 0 || cp + pad > NORM_FREQ_LEN - 1)
- 		return 0;
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/selftests/vm/gup_benchmark.c
-index 31f8bb086907..1d4359341e44 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -105,12 +105,16 @@ int main(int argc, char **argv)
- 		gup.flags |= FOLL_WRITE;
- 
- 	fd = open("/sys/kernel/debug/gup_benchmark", O_RDWR);
--	if (fd == -1)
--		perror("open"), exit(1);
-+	if (fd == -1) {
-+		perror("open");
-+		exit(1);
-+	}
- 
- 	p = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
--	if (p == MAP_FAILED)
--		perror("mmap"), exit(1);
-+	if (p == MAP_FAILED) {
-+		perror("mmap");
-+		exit(1);
-+	}
- 	gup.addr = (unsigned long)p;
- 
- 	if (thp == 1)
-@@ -123,8 +127,10 @@ int main(int argc, char **argv)
- 
- 	for (i = 0; i < repeats; i++) {
- 		gup.size = size;
--		if (ioctl(fd, cmd, &gup))
--			perror("ioctl"), exit(1);
-+		if (ioctl(fd, cmd, &gup)) {
-+			perror("ioctl");
-+			exit(1);
-+		}
- 
- 		printf("Time: get:%lld put:%lld us", gup.get_delta_usec,
- 			gup.put_delta_usec);
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 61e5cfeb1350..9b0912a01777 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -227,8 +227,10 @@ static void hugetlb_allocate_area(void **alloc_area)
- 				  huge_fd, *alloc_area == area_src ? 0 :
- 				  nr_pages * page_size);
- 		if (area_alias == MAP_FAILED) {
--			if (munmap(*alloc_area, nr_pages * page_size) < 0)
--				perror("hugetlb munmap"), exit(1);
-+			if (munmap(*alloc_area, nr_pages * page_size) < 0) {
-+				perror("hugetlb munmap");
-+				exit(1);
-+			}
- 			*alloc_area = NULL;
- 			return;
- 		}
-@@ -337,9 +339,10 @@ static void wp_range(int ufd, __u64 start, __u64 len, bool wp)
- 	/* Undo write-protect, do wakeup after that */
- 	prms.mode = wp ? UFFDIO_WRITEPROTECT_MODE_WP : 0;
- 
--	if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms))
--		fprintf(stderr, "clear WP failed for address 0x%Lx\n",
--			start), exit(1);
-+	if (ioctl(ufd, UFFDIO_WRITEPROTECT, &prms)) {
-+		fprintf(stderr, "clear WP failed for address 0x%Lx\n", start);
-+		exit(1);
-+	}
- }
- 
- static void *locking_thread(void *arg)
-@@ -359,8 +362,10 @@ static void *locking_thread(void *arg)
- 			seed += cpu;
- 		bzero(&rand, sizeof(rand));
- 		bzero(&randstate, sizeof(randstate));
--		if (initstate_r(seed, randstate, sizeof(randstate), &rand))
--			fprintf(stderr, "srandom_r error\n"), exit(1);
-+		if (initstate_r(seed, randstate, sizeof(randstate), &rand)) {
-+			fprintf(stderr, "srandom_r error\n");
-+			exit(1);
-+		}
- 	} else {
- 		page_nr = -bounces;
- 		if (!(bounces & BOUNCE_RACINGFAULTS))
-@@ -369,12 +374,16 @@ static void *locking_thread(void *arg)
- 
- 	while (!finished) {
- 		if (bounces & BOUNCE_RANDOM) {
--			if (random_r(&rand, &rand_nr))
--				fprintf(stderr, "random_r 1 error\n"), exit(1);
-+			if (random_r(&rand, &rand_nr)) {
-+				fprintf(stderr, "random_r 1 error\n");
-+				exit(1);
-+			}
- 			page_nr = rand_nr;
- 			if (sizeof(page_nr) > sizeof(rand_nr)) {
--				if (random_r(&rand, &rand_nr))
--					fprintf(stderr, "random_r 2 error\n"), exit(1);
-+				if (random_r(&rand, &rand_nr)) {
-+					fprintf(stderr, "random_r 2 error\n");
-+					exit(1);
-+				}
- 				page_nr |= (((unsigned long) rand_nr) << 16) <<
- 					   16;
- 			}
-@@ -385,11 +394,13 @@ static void *locking_thread(void *arg)
- 		start = time(NULL);
- 		if (bounces & BOUNCE_VERIFY) {
- 			count = *area_count(area_dst, page_nr);
--			if (!count)
-+			if (!count) {
- 				fprintf(stderr,
- 					"page_nr %lu wrong count %Lu %Lu\n",
- 					page_nr, count,
--					count_verify[page_nr]), exit(1);
-+					count_verify[page_nr]);
-+				exit(1);
-+			}
- 
- 
- 			/*
-@@ -401,11 +412,12 @@ static void *locking_thread(void *arg)
- 			 */
- #if 1
- 			if (!my_bcmp(area_dst + page_nr * page_size, zeropage,
--				     page_size))
-+				     page_size)) {
- 				fprintf(stderr,
- 					"my_bcmp page_nr %lu wrong count %Lu %Lu\n",
--					page_nr, count,
--					count_verify[page_nr]), exit(1);
-+					page_nr, count, count_verify[page_nr]);
-+				exit(1);
-+			}
- #else
- 			unsigned long loops;
- 
-@@ -437,7 +449,7 @@ static void *locking_thread(void *arg)
- 			fprintf(stderr,
- 				"page_nr %lu memory corruption %Lu %Lu\n",
- 				page_nr, count,
--				count_verify[page_nr]), exit(1);
-+				count_verify[page_nr]); exit(1);
- 		}
- 		count++;
- 		*area_count(area_dst, page_nr) = count_verify[page_nr] = count;
-@@ -461,12 +473,14 @@ static void retry_copy_page(int ufd, struct uffdio_copy *uffdio_copy,
- 				     offset);
- 	if (ioctl(ufd, UFFDIO_COPY, uffdio_copy)) {
- 		/* real retval in ufdio_copy.copy */
--		if (uffdio_copy->copy != -EEXIST)
-+		if (uffdio_copy->copy != -EEXIST) {
- 			fprintf(stderr, "UFFDIO_COPY retry error %Ld\n",
--				uffdio_copy->copy), exit(1);
-+				uffdio_copy->copy);
-+			exit(1);
-+		}
- 	} else {
- 		fprintf(stderr,	"UFFDIO_COPY retry unexpected %Ld\n",
--			uffdio_copy->copy), exit(1);
-+			uffdio_copy->copy); exit(1);
- 	}
- }
- 
-@@ -474,9 +488,10 @@ static int __copy_page(int ufd, unsigned long offset, bool retry)
- {
- 	struct uffdio_copy uffdio_copy;
- 
--	if (offset >= nr_pages * page_size)
--		fprintf(stderr, "unexpected offset %lu\n",
--			offset), exit(1);
-+	if (offset >= nr_pages * page_size) {
-+		fprintf(stderr, "unexpected offset %lu\n", offset);
-+		exit(1);
-+	}
- 	uffdio_copy.dst = (unsigned long) area_dst + offset;
- 	uffdio_copy.src = (unsigned long) area_src + offset;
- 	uffdio_copy.len = page_size;
-@@ -487,12 +502,14 @@ static int __copy_page(int ufd, unsigned long offset, bool retry)
- 	uffdio_copy.copy = 0;
- 	if (ioctl(ufd, UFFDIO_COPY, &uffdio_copy)) {
- 		/* real retval in ufdio_copy.copy */
--		if (uffdio_copy.copy != -EEXIST)
-+		if (uffdio_copy.copy != -EEXIST) {
- 			fprintf(stderr, "UFFDIO_COPY error %Ld\n",
--				uffdio_copy.copy), exit(1);
-+				uffdio_copy.copy);
-+			exit(1);
-+		}
- 	} else if (uffdio_copy.copy != page_size) {
- 		fprintf(stderr, "UFFDIO_COPY unexpected copy %Ld\n",
--			uffdio_copy.copy), exit(1);
-+			uffdio_copy.copy); exit(1);
- 	} else {
- 		if (test_uffdio_copy_eexist && retry) {
- 			test_uffdio_copy_eexist = false;
-@@ -521,11 +538,11 @@ static int uffd_read_msg(int ufd, struct uffd_msg *msg)
- 		if (ret < 0) {
- 			if (errno == EAGAIN)
- 				return 1;
--			else
--				perror("blocking read error"), exit(1);
-+			perror("blocking read error");
- 		} else {
--			fprintf(stderr, "short read\n"), exit(1);
-+			fprintf(stderr, "short read\n");
- 		}
-+		exit(1);
- 	}
- 
- 	return 0;
-@@ -536,9 +553,10 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
- {
- 	unsigned long offset;
- 
--	if (msg->event != UFFD_EVENT_PAGEFAULT)
--		fprintf(stderr, "unexpected msg event %u\n",
--			msg->event), exit(1);
-+	if (msg->event != UFFD_EVENT_PAGEFAULT) {
-+		fprintf(stderr, "unexpected msg event %u\n", msg->event);
-+		exit(1);
-+	}
- 
- 	if (msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WP) {
- 		wp_range(uffd, msg->arg.pagefault.address, page_size, false);
-@@ -546,8 +564,10 @@ static void uffd_handle_page_fault(struct uffd_msg *msg,
- 	} else {
- 		/* Missing page faults */
- 		if (bounces & BOUNCE_VERIFY &&
--		    msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE)
--			fprintf(stderr, "unexpected write fault\n"), exit(1);
-+		    msg->arg.pagefault.flags & UFFD_PAGEFAULT_FLAG_WRITE) {
-+			fprintf(stderr, "unexpected write fault\n");
-+			exit(1);
-+		}
- 
- 		offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
- 		offset &= ~(page_size-1);
-@@ -574,25 +594,32 @@ static void *uffd_poll_thread(void *arg)
- 
- 	for (;;) {
- 		ret = poll(pollfd, 2, -1);
--		if (!ret)
--			fprintf(stderr, "poll error %d\n", ret), exit(1);
--		if (ret < 0)
--			perror("poll"), exit(1);
-+		if (!ret) {
-+			fprintf(stderr, "poll error %d\n", ret);
-+			exit(1);
-+		}
-+		if (ret < 0) {
-+			perror("poll");
-+			exit(1);
-+		}
- 		if (pollfd[1].revents & POLLIN) {
--			if (read(pollfd[1].fd, &tmp_chr, 1) != 1)
--				fprintf(stderr, "read pipefd error\n"),
--					exit(1);
-+			if (read(pollfd[1].fd, &tmp_chr, 1) != 1) {
-+				fprintf(stderr, "read pipefd error\n");
-+				exit(1);
-+			}
- 			break;
- 		}
--		if (!(pollfd[0].revents & POLLIN))
-+		if (!(pollfd[0].revents & POLLIN)) {
- 			fprintf(stderr, "pollfd[0].revents %d\n",
--				pollfd[0].revents), exit(1);
-+				pollfd[0].revents);
-+			exit(1);
-+		}
- 		if (uffd_read_msg(uffd, &msg))
- 			continue;
- 		switch (msg.event) {
- 		default:
- 			fprintf(stderr, "unexpected msg event %u\n",
--				msg.event), exit(1);
-+				msg.event); exit(1);
- 			break;
- 		case UFFD_EVENT_PAGEFAULT:
- 			uffd_handle_page_fault(&msg, stats);
-@@ -606,8 +633,10 @@ static void *uffd_poll_thread(void *arg)
- 			uffd_reg.range.start = msg.arg.remove.start;
- 			uffd_reg.range.len = msg.arg.remove.end -
- 				msg.arg.remove.start;
--			if (ioctl(uffd, UFFDIO_UNREGISTER, &uffd_reg.range))
--				fprintf(stderr, "remove failure\n"), exit(1);
-+			if (ioctl(uffd, UFFDIO_UNREGISTER, &uffd_reg.range)) {
-+				fprintf(stderr, "remove failure\n");
-+				exit(1);
-+			}
- 			break;
- 		case UFFD_EVENT_REMAP:
- 			area_dst = (char *)(unsigned long)msg.arg.remap.to;
-@@ -879,8 +908,10 @@ static int faulting_process(int signal_test)
- 
- 	area_dst = mremap(area_dst, nr_pages * page_size,  nr_pages * page_size,
- 			  MREMAP_MAYMOVE | MREMAP_FIXED, area_src);
--	if (area_dst == MAP_FAILED)
--		perror("mremap"), exit(1);
-+	if (area_dst == MAP_FAILED) {
-+		perror("mremap");
-+		exit(1);
-+	}
- 
- 	for (; nr < nr_pages; nr++) {
- 		count = *area_count(area_dst, nr);
-@@ -888,7 +919,7 @@ static int faulting_process(int signal_test)
- 			fprintf(stderr,
- 				"nr %lu memory corruption %Lu %Lu\n",
- 				nr, count,
--				count_verify[nr]), exit(1);
-+				count_verify[nr]); exit(1);
- 		}
- 		/*
- 		 * Trigger write protection if there is by writting
-@@ -901,8 +932,10 @@ static int faulting_process(int signal_test)
- 		return 1;
- 
- 	for (nr = 0; nr < nr_pages; nr++) {
--		if (my_bcmp(area_dst + nr * page_size, zeropage, page_size))
--			fprintf(stderr, "nr %lu is not zero\n", nr), exit(1);
-+		if (my_bcmp(area_dst + nr * page_size, zeropage, page_size)) {
-+			fprintf(stderr, "nr %lu is not zero\n", nr);
-+			exit(1);
-+		}
- 	}
- 
- 	return 0;
-@@ -916,12 +949,14 @@ static void retry_uffdio_zeropage(int ufd,
- 				     uffdio_zeropage->range.len,
- 				     offset);
- 	if (ioctl(ufd, UFFDIO_ZEROPAGE, uffdio_zeropage)) {
--		if (uffdio_zeropage->zeropage != -EEXIST)
-+		if (uffdio_zeropage->zeropage != -EEXIST) {
- 			fprintf(stderr, "UFFDIO_ZEROPAGE retry error %Ld\n",
--				uffdio_zeropage->zeropage), exit(1);
-+				uffdio_zeropage->zeropage);
-+			exit(1);
-+		}
- 	} else {
- 		fprintf(stderr, "UFFDIO_ZEROPAGE retry unexpected %Ld\n",
--			uffdio_zeropage->zeropage), exit(1);
-+			uffdio_zeropage->zeropage); exit(1);
- 	}
- }
- 
-@@ -933,9 +968,10 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- 
- 	has_zeropage = uffd_test_ops->expected_ioctls & (1 << _UFFDIO_ZEROPAGE);
- 
--	if (offset >= nr_pages * page_size)
--		fprintf(stderr, "unexpected offset %lu\n",
--			offset), exit(1);
-+	if (offset >= nr_pages * page_size) {
-+		fprintf(stderr, "unexpected offset %lu\n", offset);
-+		exit(1);
-+	}
- 	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
- 	uffdio_zeropage.range.len = page_size;
- 	uffdio_zeropage.mode = 0;
-@@ -943,22 +979,26 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- 	if (ret) {
- 		/* real retval in ufdio_zeropage.zeropage */
- 		if (has_zeropage) {
--			if (uffdio_zeropage.zeropage == -EEXIST)
--				fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n"),
--					exit(1);
--			else
-+			if (uffdio_zeropage.zeropage == -EEXIST) {
-+				fprintf(stderr, "UFFDIO_ZEROPAGE -EEXIST\n");
-+				exit(1);
-+			} else {
- 				fprintf(stderr, "UFFDIO_ZEROPAGE error %Ld\n",
--					uffdio_zeropage.zeropage), exit(1);
-+					uffdio_zeropage.zeropage);
-+				exit(1);
-+			}
- 		} else {
--			if (uffdio_zeropage.zeropage != -EINVAL)
-+			if (uffdio_zeropage.zeropage != -EINVAL) {
- 				fprintf(stderr,
- 					"UFFDIO_ZEROPAGE not -EINVAL %Ld\n",
--					uffdio_zeropage.zeropage), exit(1);
-+					uffdio_zeropage.zeropage);
-+				exit(1);
-+			}
- 		}
- 	} else if (has_zeropage) {
- 		if (uffdio_zeropage.zeropage != page_size) {
- 			fprintf(stderr, "UFFDIO_ZEROPAGE unexpected %Ld\n",
--				uffdio_zeropage.zeropage), exit(1);
-+				uffdio_zeropage.zeropage); exit(1);
- 		} else {
- 			if (test_uffdio_zeropage_eexist && retry) {
- 				test_uffdio_zeropage_eexist = false;
-@@ -970,7 +1010,7 @@ static int __uffdio_zeropage(int ufd, unsigned long offset, bool retry)
- 	} else {
- 		fprintf(stderr,
- 			"UFFDIO_ZEROPAGE succeeded %Ld\n",
--			uffdio_zeropage.zeropage), exit(1);
-+			uffdio_zeropage.zeropage); exit(1);
- 	}
- 
- 	return 0;
-@@ -1000,19 +1040,24 @@ static int userfaultfd_zeropage_test(void)
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
- 	if (test_uffdio_wp)
- 		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
--	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
--		fprintf(stderr, "register failure\n"), exit(1);
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register)) {
-+		fprintf(stderr, "register failure\n");
-+		exit(1);
-+	}
- 
- 	expected_ioctls = uffd_test_ops->expected_ioctls;
- 	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
-+	    expected_ioctls) {
- 		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+			"unexpected missing ioctl for anon memory\n");
-+		exit(1);
-+	}
- 
- 	if (uffdio_zeropage(uffd, 0)) {
--		if (my_bcmp(area_dst, zeropage, page_size))
--			fprintf(stderr, "zeropage is not zero\n"), exit(1);
-+		if (my_bcmp(area_dst, zeropage, page_size)) {
-+			fprintf(stderr, "zeropage is not zero\n");
-+			exit(1);
-+		}
- 	}
- 
- 	close(uffd);
-@@ -1047,32 +1092,41 @@ static int userfaultfd_events_test(void)
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
- 	if (test_uffdio_wp)
- 		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
--	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
--		fprintf(stderr, "register failure\n"), exit(1);
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register)) {
-+		fprintf(stderr, "register failure\n");
-+		exit(1);
-+	}
- 
- 	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
--		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls) {
-+		fprintf(stderr, "unexpected missing ioctl for anon memory\n");
-+		exit(1);
-+	}
- 
--	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
--		perror("uffd_poll_thread create"), exit(1);
-+	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats)) {
-+		perror("uffd_poll_thread create");
-+		exit(1);
-+	}
- 
- 	pid = fork();
--	if (pid < 0)
--		perror("fork"), exit(1);
-+	if (pid < 0) {
-+		perror("fork");
-+		exit(1);
-+	}
- 
- 	if (!pid)
- 		return faulting_process(0);
- 
- 	waitpid(pid, &err, 0);
--	if (err)
--		fprintf(stderr, "faulting process failed\n"), exit(1);
-+	if (err) {
-+		fprintf(stderr, "faulting process failed\n");
-+		exit(1);
-+	}
- 
--	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
--		perror("pipe write"), exit(1);
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c)) {
-+		perror("pipe write");
-+		exit(1);
-+	}
- 	if (pthread_join(uffd_mon, NULL))
- 		return 1;
- 
-@@ -1110,38 +1164,49 @@ static int userfaultfd_sig_test(void)
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
- 	if (test_uffdio_wp)
- 		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
--	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
--		fprintf(stderr, "register failure\n"), exit(1);
-+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register)) {
-+		fprintf(stderr, "register failure\n");
-+		exit(1);
-+	}
- 
- 	expected_ioctls = uffd_test_ops->expected_ioctls;
--	if ((uffdio_register.ioctls & expected_ioctls) !=
--	    expected_ioctls)
--		fprintf(stderr,
--			"unexpected missing ioctl for anon memory\n"),
--			exit(1);
-+	if ((uffdio_register.ioctls & expected_ioctls) != expected_ioctls) {
-+		fprintf(stderr, "unexpected missing ioctl for anon memory\n");
-+		exit(1);
-+	}
- 
--	if (faulting_process(1))
--		fprintf(stderr, "faulting process failed\n"), exit(1);
-+	if (faulting_process(1)) {
-+		fprintf(stderr, "faulting process failed\n");
-+		exit(1);
-+	}
- 
- 	if (uffd_test_ops->release_pages(area_dst))
- 		return 1;
- 
--	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats))
--		perror("uffd_poll_thread create"), exit(1);
-+	if (pthread_create(&uffd_mon, &attr, uffd_poll_thread, &stats)) {
-+		perror("uffd_poll_thread create");
-+		exit(1);
-+	}
- 
- 	pid = fork();
--	if (pid < 0)
--		perror("fork"), exit(1);
-+	if (pid < 0) {
-+		perror("fork");
-+		exit(1);
-+	}
- 
- 	if (!pid)
- 		exit(faulting_process(2));
- 
- 	waitpid(pid, &err, 0);
--	if (err)
--		fprintf(stderr, "faulting process failed\n"), exit(1);
-+	if (err) {
-+		fprintf(stderr, "faulting process failed\n");
-+		exit(1);
-+	}
- 
--	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
--		perror("pipe write"), exit(1);
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c)) {
-+		perror("pipe write");
-+		exit(1);
-+	}
- 	if (pthread_join(uffd_mon, (void **)&userfaults))
- 		return 1;
- 
-@@ -1395,7 +1460,7 @@ static void set_test_type(const char *type)
- 		test_type = TEST_SHMEM;
- 		uffd_test_ops = &shmem_uffd_test_ops;
- 	} else {
--		fprintf(stderr, "Unknown test type: %s\n", type), exit(1);
-+		fprintf(stderr, "Unknown test type: %s\n", type); exit(1);
- 	}
- 
- 	if (test_type == TEST_HUGETLB)
-@@ -1403,12 +1468,15 @@ static void set_test_type(const char *type)
- 	else
- 		page_size = sysconf(_SC_PAGE_SIZE);
- 
--	if (!page_size)
--		fprintf(stderr, "Unable to determine page size\n"),
--				exit(2);
-+	if (!page_size) {
-+		fprintf(stderr, "Unable to determine page size\n");
-+		exit(2);
-+	}
- 	if ((unsigned long) area_count(NULL, 0) + sizeof(unsigned long long) * 2
--	    > page_size)
--		fprintf(stderr, "Impossible to run this test\n"), exit(2);
-+	    > page_size) {
-+		fprintf(stderr, "Impossible to run this test\n");
-+		exit(2);
-+	}
- }
- 
- static void sigalrm(int sig)
-@@ -1425,8 +1493,10 @@ int main(int argc, char **argv)
- 	if (argc < 4)
- 		usage();
- 
--	if (signal(SIGALRM, sigalrm) == SIG_ERR)
--		fprintf(stderr, "failed to arm SIGALRM"), exit(1);
-+	if (signal(SIGALRM, sigalrm) == SIG_ERR) {
-+		fprintf(stderr, "failed to arm SIGALRM");
-+		exit(1);
-+	}
- 	alarm(ALARM_INTERVAL_SECS);
- 
- 	set_test_type(argv[1]);
+Applied with that change. Thanks.
+
 -- 
-2.26.0
-
+viresh
