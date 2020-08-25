@@ -2,133 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9A0251B29
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 16:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20307251B50
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 16:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726740AbgHYOrw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 10:47:52 -0400
-Received: from mail-mw2nam10on2068.outbound.protection.outlook.com ([40.107.94.68]:41440
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726633AbgHYOrs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Aug 2020 10:47:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ErA8CfaGhsDXmbSxmZ2R4+wImXl185Xy0muxrhbZ2eq8ENPp8yJ9HI59eeXmcU0pbfVtAN53HfvyF1KIaw5TO7azNXLeZD1bfgjsxK3v7AYAGvhBeNbNWS9DWVngPwjozM6IaQZUzercX++wJG+B9eb3652Wz3MCx6rSmZ4D7B01EAxV2Ye6egesjEpD0HSZVze8gWtWyz6hiLe7nGKB3pYZpUpLajXRrWBxUXDnA6ZJokgneHj9kSq/WiMFUbCZ985YS8tylJ+edbuQnkfWm2fyxv3Dp6FVKttiYBxlV9ycMmH6rBWOAJkQ9CFjqotHnVN26nVlHgkENe6/O7s/4w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SvKJMY36SVfX1e+Zj1DiTkT3fLYrUBMN119zIddnrsY=;
- b=SX82AGLLNdlsaZhjiZWZGkCqk1MZoARWW0xxrN/UpuygNM2H4ObPEBzUOGQKO3Jvd5H7YyHkZeoln2gimtAsYUtbqO+Tr9hzAdRAzXaKQ86d+3eeM8but/D8xDh9kDEhlSZ9KgmTlfagEgniVL7TZTwDLP4xFOLi0eaS9ZPnhKtKxj7zFaFFVaJ7r70CJcF6b98DAhCdUhBYzValixUtRJmkX6cS98BFMUKMRuPZ/nzaEjBB5I9JhurEQ2LRcMivjLvKJTQXb7AoZ6+1rec1xrlmM2f445uYZBsaGDEr0bEhI1X5dpB2ISqhMbnQUw3U/mG9A/qCrL/TvBJpD74o/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SvKJMY36SVfX1e+Zj1DiTkT3fLYrUBMN119zIddnrsY=;
- b=iJxeFHAQ4XkhD2aMyd+YTIB3sQWX9YrCwnPG6sv/l0neRAp7wkiBa35hB+zmUcQghD3BdN9oxe6jOygrvJqe5Wf1O2r1NQBDzpCyL1UsY/tA2vB6p53Yeg/1DOq2H0UHGALofTD8fESLPTQUrAMT2NTxc+KrS6HpNWDuDd7h1mM=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
- by SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.26; Tue, 25 Aug
- 2020 14:47:44 +0000
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::48e9:c9c:7cd7:de86]) by SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::48e9:c9c:7cd7:de86%5]) with mapi id 15.20.3305.025; Tue, 25 Aug 2020
- 14:47:44 +0000
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita.KoralahalliChannabasappa@amd.com
-Subject: [PATCH 2/2] x86/mce/dev-mcelog: Fix updating kflags in AMD systems
-Date:   Tue, 25 Aug 2020 09:47:10 -0500
-Message-Id: <20200825144710.23584-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200825144710.23584-1-Smita.KoralahalliChannabasappa@amd.com>
-References: <20200825144710.23584-1-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SA0PR11CA0070.namprd11.prod.outlook.com
- (2603:10b6:806:d2::15) To SN6PR12MB2685.namprd12.prod.outlook.com
- (2603:10b6:805:67::33)
+        id S1726610AbgHYOwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 10:52:00 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34009 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725998AbgHYOvw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 10:51:52 -0400
+Received: by mail-oi1-f195.google.com with SMTP id z22so11831213oid.1;
+        Tue, 25 Aug 2020 07:51:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+ylVPg9/PXce4pT2IR4gKle+fSVW1ZRt1vDCYod4rN8=;
+        b=HI0uJ5ca375SW36B0Qqv9rSR83yIsIobvbzGIRzOQokQ2xOtYOF4HMA2qnS50c7/rm
+         ilV6/LXdBsNwKLht5ZAW6hgoJddexutbxZzuDT2PU3+tHzn33mbt7Vp30EMFjMZVJaWe
+         nHkJSPAJyuGZ4IvSVIgVGHMjF/Ai/z/M7fB6FLbV1h/r1mmoaKPWcZXZR76BOqQ/W8pt
+         UrGWqXRS+8QqNg3MUPPE2MXmkIqa/5tag0xRTb3h8/30+0rQOxJF/g5ckiTfQkiFYYUP
+         mJZilsuNasJxrr/OtcZVf/gQfzuSkgPGUf2NgYEV3hO2BTrcHsrzPUMNcBcVXKUQzZpx
+         lYdw==
+X-Gm-Message-State: AOAM532xjSD7xyK7iPzJX3gfTvKc9kNOwfKWAVTFHhklDXWNvq7k4ksq
+        dR4U3xXPrCDG7tAy1os2lUNSTOuA48x+mOQORhQ=
+X-Google-Smtp-Source: ABdhPJwqJQS2tbUF7jqx3k1gHhGfoM4gKMhNdMHaSpRuHkR0DsUvna55zZygMHn8se8UyztTq7pobqnChzlnhKJ6j+4=
+X-Received: by 2002:a05:6808:3d5:: with SMTP id o21mr1287215oie.110.1598367111572;
+ Tue, 25 Aug 2020 07:51:51 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by SA0PR11CA0070.namprd11.prod.outlook.com (2603:10b6:806:d2::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.24 via Frontend Transport; Tue, 25 Aug 2020 14:47:44 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [165.204.78.1]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: ea2afc48-2ab6-4a41-f91f-08d84905d379
-X-MS-TrafficTypeDiagnostic: SN6PR12MB2767:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR12MB276729DB82F13B63A8038F6E90570@SN6PR12MB2767.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tebwr3FM2GBHEbTNDxf7qw2fWEHHdKshitV0HGScGkPKw0Qx6pSI72gf1b7i7nxSsGIDieV2uHV/U2zp6lIbeQEdP8BiPIWzF2K8Id8bT87nYU36BBor0fk+sC7HkBrSt/xoBYINdZ0Vlq9P5Lj6xgYmrUIpyRn1OtyMsCVRpQwHPejT+ZTgnna5ZvSPla0nhU0p9/ORFfa+S9ZDHtEK2wA43kecHnWwPIOdRXqhJJCAA9boh4w6n9Juy0HNk+3EQbDIBIJxlusIIYhU4JzoZzCdfm/puf1rsvBSuVJ9K/LmaJawhYz0FVBzo4pkJkgJg+iJJkLWIzIsfrenzNehoA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(376002)(136003)(366004)(396003)(346002)(5660300002)(956004)(186003)(6486002)(2906002)(52116002)(8936002)(26005)(4326008)(8676002)(2616005)(1076003)(66946007)(7416002)(83380400001)(6666004)(16576012)(316002)(86362001)(66476007)(36756003)(478600001)(66556008)(54906003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: /Hjg5Y3W8Fhl4ISosLOq7qmq7CQO7VJgW+6kjBQ4FAibtrzobsTc/m0+U051OW/1mg/d5wZofgvrvbSMTwX5ngfZLWIACtzIQugCqBH336mS/b1asH4z0R3bB9vpX3RAlpqKUnrXLf0z46T1o2nwN6OSSi+Ve68EYgeRosq/KbZm8Ld1DjCS3GWn9JicA19EN/k6m6IhxhegABOdFmdPRNa2AG8Q3EMaVFv2O7rI3oNpvQN/xPkilrenNJirQOXjkON1q4/ayiKxH7BxjvNiVvGOfntZRzyMmmkZsft70PT17AtHZIYlv8AHGRgCHkne+1YwYCiGyzLCmi0G8Zku8HWcVLwfTH1ojIaw0FZfEAM5ndalcpTeFVnbB4J72opjO2SpaqEwOviOtbt0T+wTprmGMGJfaeIbtdE+mKXrifASgzAjUid3suzu1Po3bNYbteiPRUsoy8E4QUEcpMTfGNY5sR+6slQiGwin4ZUUNnfdutEYhEK5AcmcQCZvbngd2gw3Ry9aQZw+qVOtrfT3P1iXaucORKYcSuHbertAO/pb8GKWaEGwMvItelPcrcvUFgSsfaiO1slS1YC+QNb64kpni/J2Hnf23AWTavDSS654n3dMqiwG7NekEgpK5bzW8q8yfAJbBvYS34ZXQ3UmtA==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ea2afc48-2ab6-4a41-f91f-08d84905d379
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2020 14:47:44.6484
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vF9WN8+USNjSFwOYmFa0diIVyRCresQs2s+eb0qqkiiudk86CgizeqwVuyDOQeK644TJgPB7by6YfNeUsTtMIA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2767
+References: <4169555.5IIHXK4Dsd@kreacher> <2064342.aRc67yb0pC@kreacher> <61ea43fce7dd8700d94f12236a86ffec6f76a898.camel@gmail.com>
+In-Reply-To: <61ea43fce7dd8700d94f12236a86ffec6f76a898.camel@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Aug 2020 16:51:40 +0200
+Message-ID: <CAJZ5v0hkmcAuCsnfjCSWTarr4pkQry2VCtk2aWM74fOW2guzmg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] cpufreq: intel_pstate: Always return last EPP
+ value from sysfs
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The mcelog utility is not commonly used on AMD systems. Therefore, errors
-logged only by the dev_mce_log() notifier will be missed. This may occur
-if the EDAC modules are not loaded in which case it's preferable to print
-the error record by the default notifier.
+On Tue, Aug 25, 2020 at 8:20 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
+>
+> On Mon, 2020-08-24 at 19:42 +0200, Rafael J. Wysocki wrote:
+> > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> >
+> > Make the energy_performance_preference policy attribute in sysfs
+> > always return the last EPP value written to it instead of the one
+> > currently in the HWP Request MSR to avoid possible confusion when
+> > the performance scaling algorithm is used in the active mode with
+> > HWP enabled (in which case the EPP is forced to 0 regardless of
+> > what value it has been set to via sysfs).
+>
+> Why is this a good idea, I wonder. If there was a prior discussion,
+> please, point to it.
+>
+> The general approach to changing settings via sysfs is often like this:
+>
+> 1. Write new value.
+> 2. Read it back and verify that it is the same. Because there is no
+> better way to verify that the kernel "accepted" the value.
 
-However, the mce->kflags set by dev_mce_log() notifier makes the default
-notifier to skip over the errors assuming they are processed by
-dev_mce_log().
+If the write is successful (ie. no errors returned and the value
+returned is equal to the number of written characters), the kernel
+*has* accepted the written value, but it may not have taken effect.
+These are two different things.
 
-Do not update kflags in the dev_mce_log() notifier on AMD systems.
+The written value may take an effect immediately or it may take an
+effect later, depending on the current configuration etc.  If you
+don't see the effect of it immediately, it doesn't matter that there
+was a failure of some sort.
 
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc: Tony Luck <tony.luck@intel.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Yazen Ghannam <yazen.ghannam@amd.com>
-Cc: x86@kernel.org
-Cc: linux-edac@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/x86/kernel/cpu/mce/dev-mcelog.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> Let's say I write 'balanced' to energy_performance_preference. I read
+> it back, and it contains 'balanced', so I am happy, I trust the kernel
+> changed EPP to "balanced".
+>
+> If the kernel, in fact, uses something else, I want to know about it
+> and have my script fail.
 
-diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-index 03e51053592a..100fbeebdc72 100644
---- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-+++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-@@ -67,7 +67,9 @@ static int dev_mce_log(struct notifier_block *nb, unsigned long val,
- unlock:
- 	mutex_unlock(&mce_chrdev_read_mutex);
- 
--	mce->kflags |= MCE_HANDLED_MCELOG;
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-+		mce->kflags |= MCE_HANDLED_MCELOG;
-+
- 	return NOTIFY_OK;
- }
- 
--- 
-2.17.1
+Why do you want it to fail then?
 
+> Why caching the value and making my script _think_ it succeeded is a good idea.
+
+Because when you change the scaling algorithm or the driver's
+operation mode, the value you have written will take effect.
+
+In this particular case it is explained in the driver documentation
+that the performance scaling algorithm in the active mode overrides
+the sysfs value and that's the only case when it can be overridden.
+So whatever you write to this attribute will not take effect
+immediately anyway, but it may take an effect later.
+
+> In other words, in my usage scenarios at list, I prefer kernel telling
+> the true EPP value, not some "cached, but not used" value.
+
+An alternative is to fail writes to energy_performance_preference if
+the driver works in the active mode and the scaling algorithm for the
+scaling CPU is performance and *then* to make reads from it return the
+value in the register.
+
+Accepting a write and returning a different value in a subsequent read
+is confusing.
+
+Thanks!
