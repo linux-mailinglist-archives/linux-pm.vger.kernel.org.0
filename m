@@ -2,160 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CACC8251D55
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 18:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68603251DB7
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 19:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726946AbgHYQiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 12:38:08 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:52125 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725805AbgHYQiI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Aug 2020 12:38:08 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1598373486; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=/lwIoJgA3N5kyPnMGSl5QZyU7eZUloRHW8mD2xzFjXQ=;
- b=cnFpRk51D3c3cQwppAdhisetI0oVddV0c1btCYcGC+tiWLkWC688EJc5vmlhrc6lRvl+8eJB
- jh/hqjH5rvTcoYYKDRUGvY5Qvv6ZBGlectLah+6Ko9tr0b8DpAus8ljZauR32RTPtNkvmAc8
- J44vvDdxKeeGgeJfv6HUMALsKgA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 5f453e55f558dbf2802aa87f (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 25 Aug 2020 16:37:41
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9456BC43395; Tue, 25 Aug 2020 16:37:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 70C32C433C6;
-        Tue, 25 Aug 2020 16:37:39 +0000 (UTC)
+        id S1726119AbgHYRB6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 13:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbgHYRB4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 13:01:56 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A141AC061756
+        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 10:01:55 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id 83so3221786wme.4
+        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 10:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpKO1n0QanBgjBcMclGlpuxhhM/1GVFlZi03A2YqmvY=;
+        b=M+RkbNAFYMBm5BznXBwWgdcU8fHg3/Plxeo7geh65W6uhfjeWskcp1RMI0yxk6ANgp
+         lTWk7LNPF8ElsHi2hCy+w/nyedqZxLdq1usGzYOtKvq9yBs9AfGtnxAqs/YF/yVOO74S
+         A2WeolrcChlt6ckXcvUDGkF5xuWZPKpcWFNkiwnFVoEd3LUyFs9nuZS2HdgVYsKGnMcG
+         7zej4HWNccEQw0C8UWiH76pTZhB1ioRXPCHJcczW2TmdNAYFuTf04VH+7EFFZ0D5vKSQ
+         /hna1rSAi1Dqxj1P7ocxPHqaYBxko4jimqNRV+suoPuyqBaenyEIc/NyxwxuLg/uWvTU
+         Y72g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpKO1n0QanBgjBcMclGlpuxhhM/1GVFlZi03A2YqmvY=;
+        b=SohxhfjnnT5AQS+tFK2cuyufzaiyB3WwO4KDmUTuXlVEbl+0jHbmIlQoOTatijJnwH
+         W0d2/qK6yiPrE8JK8/cXQYzwdAWVGKc4w+UpmoiCC5AzdEklen/F5n90QuPo2w6a3xYa
+         N7PTLYLQ9UmIrP0US467wQ5WTBxOarYpYOegrLEYOGhXzzHiWWkil6Gialo3dz6DJ+IP
+         CUnJKlgOEk9uHLpUy/MrGR/k3FMRojD21ZwODNCxYO7KP53t0Hsrvne94KADlUR9hIfL
+         HsCovlNWbWJ4kOXdu2q3lZiQIoReYK5G+ZJ87V57V6ACuG3UDx9/NAEDM1IVqDDXakq3
+         nIjA==
+X-Gm-Message-State: AOAM532VqkQugEPLi1uj91qURmxy6KKRDYi1F3JFPITRPCAjvLvGEajj
+        MuqAChsScjeGgGz8a0xqOf9Zg1EX+Ah17A==
+X-Google-Smtp-Source: ABdhPJzgcQ9N/3zFlxhqBdnwDCEAiD1zyiBMaMhORxfxzm5UhZrj6CQJOQMsYYBg/61mRxEadCr6rA==
+X-Received: by 2002:a1c:2dcb:: with SMTP id t194mr2821188wmt.94.1598374913846;
+        Tue, 25 Aug 2020 10:01:53 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id y17sm6669008wma.17.2020.08.25.10.01.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Aug 2020 10:01:53 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org
+Cc:     saravanak@google.com, mdtipton@codeaurora.org,
+        okukatla@codeaurora.org, bjorn.andersson@linaro.org,
+        vincent.guittot@linaro.org, akashast@codeaurora.org,
+        georgi.djakov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Add interconnect sync state support
+Date:   Tue, 25 Aug 2020 20:01:49 +0300
+Message-Id: <20200825170152.6434-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 25 Aug 2020 22:07:39 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, khilman@kernel.org,
-        ulf.hansson@linaro.org, rjw@rjwysocki.net, agross@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, gregkh@linuxfoundation.org, pavel@ucw.cz,
-        len.brown@intel.com, rnayak@codeaurora.org, dianders@chromium.org,
-        mka@chromium.org, linux-kernel-owner@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] PM / Domains: Add GENPD_FLAG_NO_SUSPEND/RESUME
- flags
-In-Reply-To: <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
-References: <20200821204921.32536-1-sibis@codeaurora.org>
- <159804608868.334488.2486130699850456264@swboyd.mtv.corp.google.com>
- <20200824164212.GA3715@yoga>
- <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
-Message-ID: <c79fa653edb13ee88e5d4708675cd64f@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-08-25 12:50, Stephen Boyd wrote:
-> Quoting Bjorn Andersson (2020-08-24 09:42:12)
->> On Fri 21 Aug 14:41 PDT 2020, Stephen Boyd wrote:
->> 
->> > Quoting Sibi Sankar (2020-08-21 13:49:20)
->> > > Add GENPD_FLAG_NO_SUSPEND/RESUME flags to instruct genpd to keep the
->> > > status of the PM domain unaltered during suspend/resume respectively.
->> > > The flags are aimed at power domains coupled to co-processors which
->> > > enter low-power modes independent to that of the application processor.
->> > >
->> > > Specifically the flags are to be used by the power domains exposed
->> > > by the AOSS QMP driver linked to modem, adsp, cdsp remoteprocs. These
->> > > power domains are used to notify the Always on Subsystem (AOSS) that
->> > > a particular co-processor is up. AOSS uses this information to wait
->> > > for the co-processors to suspend before starting its sleep sequence.
->> > > The application processor powers off these power domains only if the
->> > > co-processor has crashed or powered off and remains unaltered during
->> > > system suspend/resume.
->> >
->> > Why are these power domains instead of some QMP message sent during
->> > remote proc power up?
->> 
->> The understanding I gained as I researched this, was that with this
->> property enabled resources related to the particular subsystem will be
->> kept enabled when the apss enters some power save mode. So my
->> interpretation was that it does "keep something powered".
-> 
-> It looks like it tells AOSS that the processor is booted and to start
-> considering these processors in the SoC wide system suspend sequence.
-> Otherwise I guess the RPMh buckets associated with these remoteprocs
-> don't count in the aggregation and sleep/wake sequences that AOSS runs
-> through when putting the SoC into low power mode. I'm not sure it
-> actually "keeps something powered" so much as it lets something be
-> powered off. Sibi?
+Bootloaders often leave some system resources enabled such as clocks,
+regulators, interconnects etc. We want to keep these resources enabled
+until all their consumers are probed. These resources are often shared,
+so we must wait for all the consumers to come up, before deciding
+whether to turn them off or change the configuration. This patchset is
+trying to solve the above problem just for the on-chip interconnects.
 
-That is just a part of equation i.e
-AOSS doesn't enter sleep until the
-remote processors enter RPMh assisted
-sleep. This also implies that if the
-respective remote processor has to come
-out of low power states it will need
-to wait for AOSS to come out of sleep.
-So clearly remote processors are dependent
-on certain resources to be enabled by
-the AOSS but the resources may not be
-restricted to just corners.
+The problem is solved by allowing the providers to implement the get_bw()
+function which should return the current average/peak bandwidth. These are
+used as floor values, that are enforced during boot while the requests from
+all consumers are being collected. Then the sync_state() callback is used
+to signal that all consumers have been probed, meaning that the floor
+bandwidth is not needed anymore and the framework is ready to re-aggregate
+and process all requests. If get_bw() is not implemented, the framework
+will use INT_MAX as default bandwidth value.
 
-> 
-> Another question, why can't the processors tell AOSS themselves about
-> their boot state? I guess because they may crash or be powered down and
-> then AOSS wouldn't know? Fair enough I guess, but I don't think this is
-> mentioned anywhere.
-> 
->> 
->> > If this has been discussed before feel free to
->> > disregard and please link to prior mailing list discussions.
->> >
->> 
->> There where some discussions related to the "QDSS clk" in that series,
->> but I don't remember getting any feedback on modelling these things as
->> power-domains.
->> 
->> > I find it odd that this is modeled as a power domain instead of some
->> > Qualcomm specific message that the remoteproc driver sends to AOSS. Is
->> > there some sort of benefit the driver gets from using the power domain
->> > APIs for this vs. using a custom API?
->> 
->> We need to send "up" and "down" notifications and this needs to happen
->> at the same time as other standard resources are enabled/disabled.
->> 
->> Further more, at the time the all resources handled by the downstream
->> driver was either power-domains (per above understanding) or clocks, 
->> so
->> it made sense to me not to spin up a custom API.
->> 
-> 
-> So the benefit is not spinning up a custom API? I'm not Ulf, but it
-> looks like this is hard to rationalize about as a power domain. It
-> doesn't have any benefit to model it this way besides to make it
-> possible to turn on with other power domains.
-> 
-> This modem remoteproc drivers isn't SoC agnostic anyway, it relies on
-> SMEM APIs, so standing up another small qmp_remoteproc_booted() and
-> qmp_remoteproc_shutdown() API would avoid adding a genpd flag here that
-> probably will never be used outside of this corner-case. There is also
-> some get/put EPROBE_DEFER sort of logic to implement, but otherwise it
-> would be possible to do this outside of power domains, and that seems
-> better given that this isn't really a power domain to start with.
+v3:
+* Go back to introducing the get_bw() function as in v1. (Saravana)
+* If querying the current bandwidth is not supported, max out the
+  bandwidth. (Saravana)
+* Use icc_sync_state also for sc7180.
 
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+v2: https://lore.kernel.org/r/20200722110139.24778-1-georgi.djakov@linaro.org/
+* Support initial values for both average and peak bandwidth (Mike)
+* Skip aggregating/setting for nodes that don't specify initial bw (Mike)
+* Drop patch 2/4: Add get_bw() callback (Mike)
+* Squash patches 3 and 4.
+
+v1: https://lore.kernel.org/lkml/20200709110705.30359-1-georgi.djakov@linaro.org/
+
+Georgi Djakov (3):
+  interconnect: Add get_bw() callback
+  interconnect: Add sync state support
+  interconnect: qcom: Use icc_sync_state
+
+ drivers/interconnect/core.c           | 67 +++++++++++++++++++++++++++
+ drivers/interconnect/qcom/osm-l3.c    |  1 +
+ drivers/interconnect/qcom/sc7180.c    |  1 +
+ drivers/interconnect/qcom/sdm845.c    |  1 +
+ include/linux/interconnect-provider.h |  7 +++
+ 5 files changed, 77 insertions(+)
+
