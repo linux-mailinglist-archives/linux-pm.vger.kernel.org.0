@@ -2,67 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF947251EF4
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 20:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 567FA251FA6
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 21:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgHYST7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 14:19:59 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:38626 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgHYST5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 14:19:57 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id A673A1C0BB9; Tue, 25 Aug 2020 20:19:55 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 20:19:54 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Qiwu Huang <yanziily@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: Re: [PATCH v8 1/4] power: supply: core: add quick charge type
- property
-Message-ID: <20200825181954.GB989@bug>
-References: <cover.1597376585.git.huangqiwu@xiaomi.com>
- <ced256ea8ac2f3e54c33677facc4c2ef04dee643.1597376585.git.huangqiwu@xiaomi.com>
- <20200814060909.GD1409566@kroah.com>
- <CAPtXDt1e3fi7ymW0-FSknUAYCQ80aL=4btbeA2e4Xre7+e7OtA@mail.gmail.com>
- <20200818060707.GB1742213@kroah.com>
- <CAPtXDt26DdOi6JG7x3mTrR5YwArjkAeXY2TogRnK_xkSabhL2g@mail.gmail.com>
- <20200824074357.GB4133866@kroah.com>
- <CAPtXDt0yW7Kh6a9JGfXaha_wKVjae7U74m6K=631Ofh8_m4uvg@mail.gmail.com>
- <20200824085715.GB402243@kroah.com>
+        id S1726444AbgHYTPz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 15:15:55 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42551 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726066AbgHYTPy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 15:15:54 -0400
+Received: by mail-io1-f66.google.com with SMTP id g13so13658159ioo.9;
+        Tue, 25 Aug 2020 12:15:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4XX8wc3/JRpkim1j+2JUNKKUtXnfWYfbxiWac/2q+tE=;
+        b=Ex3qqW5TBAWr7RuHy3KDKHKdmPPmg6bHlTQEMta7VgVyp/CfHGxzxeZfIHshNjpDBI
+         0clii4UuFN0bDOPSfUVWBIJMNkL9Vmzm+Ds4Fs8w8EJ9bZS6lR6uWcbM9eTQTZCyqalE
+         p6vPxhxLUaBOfnWt1gJj8G2OvlC6m2JC2R0sFeUGcAS8+W5BmLmQ0w+IGOaBfysV3Xsl
+         wIXfcaBhCIqdZMu9k9Ft+qAU3EULt5gwFqXwA3j3cGriNF0840w0RX7kvysS9WFhlmj2
+         dJrdwWKlLoHGvyaB+K8eHJEFAxNBcwuXnlSTYO1tde2UXDkaYlQ1qByp+CW32WyJZ0/M
+         n0ag==
+X-Gm-Message-State: AOAM530ZjshRXJxxXez2TW3R5oa4Vb1XYcEHnJ1lwuyXNxJbrxiLDFSg
+        q5+rSxmbqrSaqljhorhXOQ==
+X-Google-Smtp-Source: ABdhPJya7bOtWneAGJyNFuSvpzB78bRFjz7WwvHIGRGiD8aNkQdrGL44XodlaT9L8x9Oazvpe5/YLA==
+X-Received: by 2002:a02:2b2e:: with SMTP id h46mr11697935jaa.118.1598382952928;
+        Tue, 25 Aug 2020 12:15:52 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id w13sm9635592ilj.70.2020.08.25.12.15.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 12:15:52 -0700 (PDT)
+Received: (nullmailer pid 1155009 invoked by uid 1000);
+        Tue, 25 Aug 2020 19:15:50 -0000
+Date:   Tue, 25 Aug 2020 13:15:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dan Murphy <dmurphy@ti.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        sre@kernel.org, r-rivera-matos@ti.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: Add the bq25790 dt bindings
+Message-ID: <20200825191550.GA1154979@bogus>
+References: <20200817151629.11019-1-dmurphy@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200824085715.GB402243@kroah.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20200817151629.11019-1-dmurphy@ti.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi!
-
-> > > > If we ported the full driver, we would break the existing driver
-> > > > structure because we would introduce more Qualcomm code. I think
-> > > > that's an unreasonable change.
-> > >
-> > > That doesn't make much sense.  You have a working driver for these apis,
-> > > just submit it for inclusion, it should never break any existing
-> > > drivers, otherwise your code wouldn't work either.
-> > 
-> > We're an Android device, we're working on a Qualcomm based code, and
-> > from the current code tree, the current code tree is missing the QTI
-> > Charger code
+On Mon, 17 Aug 2020 10:16:28 -0500, Dan Murphy wrote:
+> Add the bindings for the bq25790.
 > 
-> I don't know what that means, sorry.  Just submit your driver, and any
-> needed dependencies as well.  There's no other way to evaluate this api
-> addition without that, right?
+> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+> Signed-off-by: Dan Murphy <dmurphy@ti.com>
+> ---
+> 
+> v2 - Changed ti,watchdog property, documented the interrupts, fixed exxamples
+> for input-current and input-voltage
+> 
+>  .../bindings/power/supply/bq25790.yaml        | 95 +++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
+> 
 
-Actually, there's a way to evaluate the API without the driver... if the API
-is pretty obviously unacceptable.
-
-									Pavel
--- 
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+Reviewed-by: Rob Herring <robh@kernel.org>
