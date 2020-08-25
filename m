@@ -2,84 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D43250EB0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 04:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C77250EB8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 04:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbgHYCIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Aug 2020 22:08:36 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:40534 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgHYCIf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 22:08:35 -0400
-Received: by mail-io1-f67.google.com with SMTP id q132so448651iod.7;
-        Mon, 24 Aug 2020 19:08:34 -0700 (PDT)
+        id S1726794AbgHYCJv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Aug 2020 22:09:51 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:46479 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbgHYCJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Aug 2020 22:09:50 -0400
+Received: by mail-io1-f68.google.com with SMTP id d18so1576661iop.13;
+        Mon, 24 Aug 2020 19:09:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=rftte33K9X8W4i2yhAHfYadgnzv4cujRdhAJKZI2Ty4=;
-        b=iZOWsfzDRiu63QBoJqqfxsGynJKsQMEfCjBWyRoKktjMoFf1T2JMdu7o67L45qLd6S
-         ERyl3sfqT3Du3VDBkZUO7BC+ax3lRTXug2tE3LcHtp1tiQf0MUHFtqCU2E/+Jltg5ojl
-         HRxWXyEU1hW/jewTLlGSKvSoMmNbdU/sx1dT/tmjXj6ryCDTDEm7D0uXzsLicpzmM0if
-         zhjxSkl61uryQvcUwjVQpGv6ffVg8oznFgM9+HFQH0fl2cVcqNlDiY97LWtgTBmm5sDv
-         M0oReuXUhgPu3/95wjbArgrowT1QghyOvD2giNBdRM8igVBj2agcLTeYUXaeJ4zEgFf5
-         TqUQ==
-X-Gm-Message-State: AOAM530BplRT6Z8W7gRWzBVaRiBIt2THEYuNHLCdkbWgpF0a+a6416Pt
-        o+JsD+CLP5+nnMsvYMdJxQ==
-X-Google-Smtp-Source: ABdhPJz1vzKft6egaSzEgZqE3U+MF2iN7p7VQ4sVzHA8LE6oqB/qexZ7jcHxbimsqXP33WOz1cUejw==
-X-Received: by 2002:a02:9f87:: with SMTP id a7mr8190898jam.35.1598321314588;
-        Mon, 24 Aug 2020 19:08:34 -0700 (PDT)
+        bh=p24wmINxw5ACsrgiOLfq84gw2srTWDcxVk5SINBeDzc=;
+        b=d+QPmzzr6rTzmiqxMRhLvqUr0EoBhvZlDJoPcVYsoSKdHjl6XTzSGZw5KlPy4+SeXC
+         mf5/+dkSv2M1hInB5RRrp9CGiLo8JR/8E+tfYeivFSt+2RCd12vEz1asF66NxHBzQu5+
+         nDNjyfkQeI27YWewkHSMYUFCogdIu/hFvmADS3XEDvL+w0AZQlGpmGo4ZqZqApFmCrTL
+         iuIV3JV0XKMjJ9X+VgR088nn4OmGDAecJPXZAaECvf3I94nGiRKFpoN+TlRT+axVA+JJ
+         ApjCX8OLjp0m4+YlAwx4gbb/BhCNPV5jjvcVXi4SOdviB5RdBi2a4NXCmbbTjQnBKFcd
+         KDKg==
+X-Gm-Message-State: AOAM532yVE+klvyWWDCQ0RhRishWD65RgMWhp25sDL8iftOZpxE8wSeD
+        fpMERFN2XaBwD3GZVDfRgg==
+X-Google-Smtp-Source: ABdhPJyR64UEBk7XMJS3xaNhsQOHAvXTybO+KgsxIlNUDqaIOvnKq7x6Bf0G/VyGmP353HDAmwZHfQ==
+X-Received: by 2002:a5d:88da:: with SMTP id i26mr7193353iol.158.1598321389515;
+        Mon, 24 Aug 2020 19:09:49 -0700 (PDT)
 Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id f18sm8399898ilj.24.2020.08.24.19.08.33
+        by smtp.gmail.com with ESMTPSA id r9sm8205705iln.18.2020.08.24.19.09.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 19:08:34 -0700 (PDT)
-Received: (nullmailer pid 3787077 invoked by uid 1000);
-        Tue, 25 Aug 2020 02:08:32 -0000
-Date:   Mon, 24 Aug 2020 20:08:32 -0600
+        Mon, 24 Aug 2020 19:09:49 -0700 (PDT)
+Received: (nullmailer pid 3789123 invoked by uid 1000);
+        Tue, 25 Aug 2020 02:09:45 -0000
+Date:   Mon, 24 Aug 2020 20:09:45 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, Vinay Simha BN <simhavcs@gmail.com>,
+Cc:     Mikko Perttunen <cyndis@kapsi.fi>, devicetree@vger.kernel.org,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-        "Bruce E . Robertson" <bruce.e.robertson@intel.com>,
-        devicetree@vger.kernel.org, John Stultz <john.stultz@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org,
         Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        David Heidelberg <david@ixit.cz>,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>
-Subject: Re: [PATCH v3 02/10] dt-bindings: power: supply: Add device-tree
- binding for Summit SMB3xx
-Message-ID: <20200825020832.GA3787024@bogus>
-References: <20200813213409.24222-1-digetx@gmail.com>
- <20200813213409.24222-3-digetx@gmail.com>
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        linux-tegra@vger.kernel.org,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: [PATCH v5 22/36] dt-bindings: host1x: Document new interconnect
+ properties
+Message-ID: <20200825020945.GA3789072@bogus>
+References: <20200814000621.8415-1-digetx@gmail.com>
+ <20200814000621.8415-23-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200813213409.24222-3-digetx@gmail.com>
+In-Reply-To: <20200814000621.8415-23-digetx@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 14 Aug 2020 00:34:01 +0300, Dmitry Osipenko wrote:
-> From: David Heidelberg <david@ixit.cz>
+On Fri, 14 Aug 2020 03:06:07 +0300, Dmitry Osipenko wrote:
+> Most of Host1x devices have at least one memory client. These clients
+> are directly connected to the memory controller. The new interconnect
+> properties represent the memory client's connection to the memory
+> controller.
 > 
-> Summit SMB3xx series is a Programmable Switching Li+ Battery Charger.
-> This patch adds device-tree binding for Summit SMB345, SMB347 and SMB358
-> chargers.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->  .../power/supply/summit,smb347-charger.yaml   | 152 ++++++++++++++++++
->  .../dt-bindings/power/summit,smb347-charger.h |  19 +++
->  2 files changed, 171 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/summit,smb347-charger.yaml
->  create mode 100644 include/dt-bindings/power/summit,smb347-charger.h
+>  .../display/tegra/nvidia,tegra20-host1x.txt   | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
