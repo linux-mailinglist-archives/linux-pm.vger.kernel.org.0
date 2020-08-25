@@ -2,115 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C004252273
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 23:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D53252276
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 23:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbgHYVFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 17:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38598 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726627AbgHYVFT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 17:05:19 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94EAC061574
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 14:05:18 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id g1so3886930pgm.9
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 14:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=iAainpUZO5gX4o0s2Jcjw3r67Vi+Z+iEnBtAwMCvpsE=;
-        b=lw7V40CC4BpahdAXqOjEC7OzlNBXLNZsCF8OLVfdXUrIHjkli//AViERCIr5xkCtQg
-         PHyYq6NBLW7HHqIAq0dniLvE2mQhbUk2Qo2H+JehPYIRtXs1KT9CNNrkJTslxWVpWJbF
-         8gOk5zWJenckUe3S9goGlfrLDB+HoGG41M9FRILL9M/NZWzAAcIdnuC9Edq5iSyK8qD/
-         pjrY+2/uCsLePSXCrZa0C8nC4Wwpg6uKkJcWGYuJI6cJqK7GA2LE/UeG0K2gk5rNKNzU
-         PrR7EDA2o8CswA/ZMmNo8DjQFknO9LcDFwMGueNh0Iav/cCQzu04QawFF2cML5qBeGFH
-         xlZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=iAainpUZO5gX4o0s2Jcjw3r67Vi+Z+iEnBtAwMCvpsE=;
-        b=nh7Dk58jPfsY3yCsHJmH1f/BM+6a+Wt65MIA7Zn3HuzLB4pXWL5yS1Hjf6+z5eE8VP
-         StySy1euHMe+btnWrhSxZ0B3hm30xWtoelA+pMBvysHee8Y5gzBaiufJM/PVrf6UB82E
-         36zer5BPLnnFut+KI1dlOxx4PHKVqMvqtYuuMc9NRd6oMoHVoHdgzthPx/gtXeDR1Afk
-         lvWXMKRdDJIdR55Iayy8G7artsq0JWWYA462UZAJZahij7s1KCE6BRB2mZgVcnT23Ryj
-         nnQ+JU0jaTfEYZGxwpZJ6IZTdtv5Z1xlchkUIWJ+3z45RNbqrK2EXM9ohsVpHXGh/O84
-         rL3A==
-X-Gm-Message-State: AOAM530up3X4NNWwfAAMSpQiIk7Sxf4pbFRirBL8SOGz74HEO+KoAAIn
-        exIpkefJD8GQZIkKPBamDWLk0A==
-X-Google-Smtp-Source: ABdhPJyP35rvw44un16hz7S+kWCdUO22NcL4c6gdt/hsC71ELNeW/shX4n21wCPt2l9Olczew/JTlQ==
-X-Received: by 2002:a63:e615:: with SMTP id g21mr7857855pgh.404.1598389517326;
-        Tue, 25 Aug 2020 14:05:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a12sm130985pfr.217.2020.08.25.14.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 14:05:16 -0700 (PDT)
-Message-ID: <5f457d0c.1c69fb81.b5af9.0aee@mx.google.com>
-Date:   Tue, 25 Aug 2020 14:05:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726483AbgHYVHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 17:07:53 -0400
+Received: from cmta18.telus.net ([209.171.16.91]:42278 "EHLO cmta18.telus.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726222AbgHYVHv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Aug 2020 17:07:51 -0400
+Received: from dougxps ([173.180.45.4])
+        by cmsmtp with SMTP
+        id AgAVkQs0IqUs3AgAWkWBnA; Tue, 25 Aug 2020 15:07:50 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
+        t=1598389670; bh=okfs/gSusVf/W8ubFP2qX6KtZJzytKM0afb0qqjR/Eg=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date;
+        b=4zfsWlqxGLKOlEUpukz8dh81lSKCN2RHp4GG2TOj1tlEOJ9WLxtUm7BNJlDFlEgkZ
+         9+1aITVhEpyNa3/xjRqkVtzQnZ7oFcgN0StGFJ8AGLmiCkPbiUMc+GGqDvmhBKZjpk
+         ZDHVzC13+783zLEHXEnCvc7mAuDB/UNGUPpcdxU28UFH7xff4yZjAmxf+WeAyc38Ei
+         DonDDmH8x10J4GE7mjBF1JgszfmNJu08VvfUKBmY0QbrAhN2iNAWnsqwBVWvgT+URN
+         /EH5vAyUAd1WjNv4n0dOzTl17LhNVqPyfTAL1u2AemmmdL8eb9I194HLE6xEdrIU+l
+         3Yr88rf/CIFxg==
+X-Telus-Authed: none
+X-Authority-Analysis: v=2.3 cv=Mo8sFFSe c=1 sm=1 tr=0
+ a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
+ a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=2s2tET4dTWZ_aRCLoUoA:9
+ a=QEXdDO2ut3YA:10
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
+Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
+        "'Linux PM'" <linux-pm@vger.kernel.org>,
+        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
+References: <4169555.5IIHXK4Dsd@kreacher>        <5cf44a75c9f73740d2a22dbfc5c7a57489b1a3ca.camel@linux.intel.com>        <002001d67a7b$2b46e1c0$81d4a540$@net> <d07cd980439d999b060dccdd16cb44c390cbf66d.camel@linux.intel.com>
+In-Reply-To: <d07cd980439d999b060dccdd16cb44c390cbf66d.camel@linux.intel.com>
+Subject: RE: [PATCH v2 0/5] cpufreq: intel_pstate: Address some HWP-related oddities
+Date:   Tue, 25 Aug 2020 14:07:46 -0700
+Message-ID: <004a01d67b23$c9829b60$5c87d220$@net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc2-12-g4958dfca3d0f
-Subject: pm/testing sleep: 2 runs, 1 regressions (v5.9-rc2-12-g4958dfca3d0f)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Office Outlook 12.0
+Content-Language: en-ca
+Thread-Index: AdZ68u9Uyt9nR49dTce4yZVhEfzmlQAEGlEQ
+X-CMAE-Envelope: MS4wfIDvh/3kq5OxzYmu7kehd7AzqqKrivKj6FoX406cZFn35t6L5jEJJrAy/xmpYMXe5q2D2Frhoe4BywGq9rwxFkvqoHHvaGOyFTDDthzNfhjCzj3UtAWt
+ 18TIYhyMzVOBRfLgQp7hg/aSqjl6/2UtAnC3WjlWK9v4hqbWP8Q7oYiP8xkkKnizFIYdNStQqpwTwh4AIIvQlQp+jtPa83QTaeeGz3hhZGhRIJ1N+SdFqctD
+ Xc+sc09umctwSgWe/LAy8iTkcWQq9Gf5QePERGC3PihgM2D4Max8rLIfqVuxa5w4
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 2 runs, 1 regressions (v5.9-rc2-12-g4958dfca3d0f)
+Hi Srinivas,
 
-Regressions Summary
--------------------
+Thanks for your reply.
 
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
+On 2020.08.25 08:12 Srinivas Pandruvada wrote:
+> On Mon, 2020-08-24 at 18:00 -0700, Doug Smythies wrote:
+> > I think there is a disconnect between your written
+> > description of what is going on and your supporting MSR reads.
+> >
+> I reproduced again.
+> I see the copy paste individual at the first place swapped.
+
+Yes, and that had me confused, initially.
+
+> I pasted the full output by direct copy - paste from the screen.
+> 
+> But the issues are still there.
+
+Agreed.
+I didn't try your offline/online of CPU 1 part previously,
+but did now, and get the same results as you.
+
+I did not know that "rdmsr -a 0x774" lists
+stuff in the order that CPU were last brought on-line.
+I had assumed the list was in CPU order. Weird.
+
+My example (nothing new here, just me catching up.
+The offline/online order was cpu1, then cpu3, then cpu2):
+
+root@s18:/sys/devices/system/cpu# grep . cpu*/cpufreq/energy_performance_preference
+cpu0/cpufreq/energy_performance_preference:balance_performance
+cpu1/cpufreq/energy_performance_preference:127
+cpu2/cpufreq/energy_performance_preference:125
+cpu3/cpufreq/energy_performance_preference:126
+cpu4/cpufreq/energy_performance_preference:balance_performance
+cpu5/cpufreq/energy_performance_preference:balance_performance
+root@s18:/sys/devices/system/cpu# rdmsr -p 0 0x774
+80002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -p 1 0x774
+7f002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -p 2 0x774
+7d002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -p 3 0x774
+7e002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -p 4 0x774
+80002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -p 5 0x774
+80002e2e
+root@s18:/sys/devices/system/cpu# rdmsr -a 0x774
+80002e2e
+80002e2e
+80002e2e
+7f002e2e
+7e002e2e
+7d002e2e
+
+... Doug
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc2=
--12-g4958dfca3d0f/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc2-12-g4958dfca3d0f
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      4958dfca3d0f6a66ff603d8ffe5a8c232987cc21 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f456c56eda22fc2889fb451
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc2-12-g4958df=
-ca3d0f/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc2-12-g4958df=
-ca3d0f/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0821.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f456c56eda22fc2889fb452
-      failing since 6 days (last pass: v5.8-107-gb72b3ea38c81, first fail: =
-v5.9-rc1-4-g1f08d51cd57f)  =20
