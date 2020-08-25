@@ -2,152 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3497F251C9F
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 17:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD983251CB2
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 17:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726749AbgHYPu0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 11:50:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33288 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726610AbgHYPuZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Aug 2020 11:50:25 -0400
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0274D207BC;
-        Tue, 25 Aug 2020 15:50:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598370625;
-        bh=kkJkXhmioIJQwsukGCwJD/oWEwK9HwwT7ICNctF3euE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iepPZMUxPPfNV4NgNQvKYw0bKlAp+7ff2+icC5HJDfMTos6esrkPTtqMOCHQw+xKh
-         J+a0izz+d2S5jk2Ch/ERGJZd8ZXaRCpkI5mT16bZHcFof/vxMgzKyvSp2C0LN6ToU5
-         Ze9SAt6kOgakUjZJJOcd2OI8hQRX8747inBg5RoA=
-Received: by mail-ot1-f45.google.com with SMTP id n23so997868otq.11;
-        Tue, 25 Aug 2020 08:50:24 -0700 (PDT)
-X-Gm-Message-State: AOAM530P/8tJNuKGnB+K7A33DwtwLfw5iz+tFIXtrswUXLMTL+0Q0Y/U
-        +WOBrHJUHr3w1UGByBBLjC33Xsm+yx9cwoafiA==
-X-Google-Smtp-Source: ABdhPJzwQ9ZH34bliWvfQGeu3USdo0K8TRmckV2s4StillhPTdBNCd1F3rQthdZKBSrONLJMcgBLlGMcftceTr+YEvg=
-X-Received: by 2002:a9d:32e5:: with SMTP id u92mr6653653otb.107.1598370624203;
- Tue, 25 Aug 2020 08:50:24 -0700 (PDT)
+        id S1725805AbgHYPxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 11:53:14 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46350 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgHYPxO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 11:53:14 -0400
+Received: by mail-oi1-f195.google.com with SMTP id v13so12012190oiv.13;
+        Tue, 25 Aug 2020 08:53:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+EXZxt6bvtlHUS5SX4TpE5JhZOZFVfpCdsIvD6bUnoY=;
+        b=eBmQIPNECVy2CcgxQa/Y2XX4GSt7flZYz7lCx87e3ZF4uodPYtfTPrJgEFrmKdbG4Y
+         2pRCoN5KS7EIUGgv6oCf2zwGr4xkExkZ8r3lBcBRTYC1QwxFnr1B3G1HnPibe8DSwZqk
+         E6L5oDtBaMXVN937jFaaT0zX7NqK01TtQIUV0JHshBDIniZ7Az200CXwkYnsaNA5z1YR
+         uvrR0FuiwzW9dSRo3xhzE7g5BCP75V9tvY8jU5Wocm2e87K5i3fyx0Ya4Ez+Ggihhcvp
+         VMqEDfEwKkJfwgNgFCiJQOPJPMpxvScUpoN4hU5vNAQKVRDYh7uZlMdMQseS8LZ20e4v
+         dYMA==
+X-Gm-Message-State: AOAM531/401z5c0eUBBU29lk04O7cF5S0iy/gYXGykslLWghMEEh/7QB
+        oMhO0RJY+edr9UaOv7Nz12D6nWgEccQiRiyWg9o=
+X-Google-Smtp-Source: ABdhPJy0oxG3uzafUkAVrJQWE3ctgSPczZK9J9ZrAMpOIHMXOa0SFzh/Aa7gCYme+Job4EiPtI7eVf58hi5FOcjim8A=
+X-Received: by 2002:a05:6808:3d5:: with SMTP id o21mr1468912oie.110.1598370793137;
+ Tue, 25 Aug 2020 08:53:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200811123115.8144-1-finley.xiao@rock-chips.com>
- <20200824230956.GA3500214@bogus> <c3f54e18-8683-8bd9-90fa-e3465cddf8e8@arm.com>
- <13b84e7e-adfe-5939-e78d-0a20fce0a92e@linaro.org>
-In-Reply-To: <13b84e7e-adfe-5939-e78d-0a20fce0a92e@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 25 Aug 2020 09:50:12 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJO7PFYMpO-eDaCOzz5MxyjkfOScw9Q_ZzF=bEswCweGA@mail.gmail.com>
-Message-ID: <CAL_JsqJO7PFYMpO-eDaCOzz5MxyjkfOScw9Q_ZzF=bEswCweGA@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal/of: Introduce k-po, k-pu and k-i for a thermal zone
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Finley Xiao <finley.xiao@rock-chips.com>,
-        "heiko@sntech.de" <heiko@sntech.de>,
-        Zhang Rui <rui.zhang@intel.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        devicetree@vger.kernel.org, Tao Huang <huangtao@rock-chips.com>,
-        Tony Xie <tony.xie@rock-chips.com>,
-        Liang Chen <cl@rock-chips.com>
+References: <4169555.5IIHXK4Dsd@kreacher> <2064342.aRc67yb0pC@kreacher>
+ <61ea43fce7dd8700d94f12236a86ffec6f76a898.camel@gmail.com>
+ <CAJZ5v0hkmcAuCsnfjCSWTarr4pkQry2VCtk2aWM74fOW2guzmg@mail.gmail.com>
+ <1341038e00d965e913ee9f0c7a1e739eadef42f7.camel@linux.intel.com>
+ <CAJZ5v0gf9WCwm8Bdzo02Jfbz5vgdH8c_T9y89SaVvTNXH7p4hA@mail.gmail.com> <bb272be6e251129d0ec248ab53b8515907340e7a.camel@linux.intel.com>
+In-Reply-To: <bb272be6e251129d0ec248ab53b8515907340e7a.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Aug 2020 17:53:02 +0200
+Message-ID: <CAJZ5v0hLMboPt7jti5GZXgus2jbQ5z-9-NGwKiQjYbnu9mcA6A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] cpufreq: intel_pstate: Always return last EPP
+ value from sysfs
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Artem Bityutskiy <dedekind1@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Doug Smythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 3:44 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Tue, Aug 25, 2020 at 5:27 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> On 25/08/2020 10:25, Lukasz Luba wrote:
-> > Hi Rob,
+> On Tue, 2020-08-25 at 17:14 +0200, Rafael J. Wysocki wrote:
+> > On Tue, Aug 25, 2020 at 5:06 PM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > > On Tue, 2020-08-25 at 16:51 +0200, Rafael J. Wysocki wrote:
+> > > > On Tue, Aug 25, 2020 at 8:20 AM Artem Bityutskiy <
+> > > > dedekind1@gmail.com
+> > > > > wrote:
+> > > > > On Mon, 2020-08-24 at 19:42 +0200, Rafael J. Wysocki wrote:
+> > > > > > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+> > > > > >
+> > > > > > Make the energy_performance_preference policy attribute in
+> > > > > > sysfs
+> > > > > > always return the last EPP value written to it instead of the
+> > > > > > one
+> > > > > > currently in the HWP Request MSR to avoid possible confusion
+> > > > > > when
+> > > > > > the performance scaling algorithm is used in the active mode
+> > > > > > with
+> > > > > > HWP enabled (in which case the EPP is forced to 0 regardless
+> > > > > > of
+> > > > > > what value it has been set to via sysfs).
+> > > > >
+> > > > > Why is this a good idea, I wonder. If there was a prior
+> > > > > discussion,
+> > > > > please, point to it.
+> > > > >
+> > > > > The general approach to changing settings via sysfs is often
+> > > > > like
+> > > > > this:
+> > > > >
+> > > > > 1. Write new value.
+> > > > > 2. Read it back and verify that it is the same. Because there
+> > > > > is no
+> > > > > better way to verify that the kernel "accepted" the value.
+> > > >
+> > > > If the write is successful (ie. no errors returned and the value
+> > > > returned is equal to the number of written characters), the
+> > > > kernel
+> > > > *has* accepted the written value, but it may not have taken
+> > > > effect.
+> > > > These are two different things.
+> > > >
+> > > > The written value may take an effect immediately or it may take
+> > > > an
+> > > > effect later, depending on the current configuration etc.  If you
+> > > > don't see the effect of it immediately, it doesn't matter that
+> > > > there
+> > > > was a failure of some sort.
+> > > >
+> > > > > Let's say I write 'balanced' to energy_performance_preference.
+> > > > > I
+> > > > > read
+> > > > > it back, and it contains 'balanced', so I am happy, I trust the
+> > > > > kernel
+> > > > > changed EPP to "balanced".
+> > > > >
+> > > > > If the kernel, in fact, uses something else, I want to know
+> > > > > about
+> > > > > it
+> > > > > and have my script fail.
+> > > >
+> > > > Why do you want it to fail then?
+> > > >
+> > > > > Why caching the value and making my script _think_ it succeeded
+> > > > > is
+> > > > > a good idea.
+> > > >
+> > > > Because when you change the scaling algorithm or the driver's
+> > > > operation mode, the value you have written will take effect.
+> > > >
+> > > > In this particular case it is explained in the driver
+> > > > documentation
+> > > > that the performance scaling algorithm in the active mode
+> > > > overrides
+> > > > the sysfs value and that's the only case when it can be
+> > > > overridden.
+> > > > So whatever you write to this attribute will not take effect
+> > > > immediately anyway, but it may take an effect later.
+> > >
+> > > In some cases without even changing active/passive this is
+> > > happening
+> > > when there was some error previously. For example:
+> > >
+> > > #cat energy_performance_preference
+> > > 127
+> > > [root@otcpl-perf-test-skx-i9 cpufreq]# rdmsr -p 1 0x774
+> > > 8000ff00
+> > >
+> > > I think we should show reality. In mode change can be a special
+> > > case
+> > > and use the stored value to restore in new mode.
 > >
-> > On 8/25/20 12:09 AM, Rob Herring wrote:
-> >> On Tue, Aug 11, 2020 at 08:31:15PM +0800, Finley Xiao wrote:
-> >>> The default value for k_pu is:
-> >>>      2 * sustainable_power / (desired_temperature - switch_on_temp)
-> >>> The default value for k_po is:
-> >>>      sustainable_power / (desired_temperature - switch_on_temp)
-> >>> The default value for k_i is 10.
-> >>>
-> >>> Even though these parameters of the PID controller can be changed
-> >>> by the following sysfs files:
-> >>>      /sys/class/thermal/thermal_zoneX/k_pu
-> >>>      /sys/class/thermal/thermal_zoneX/k_po
-> >>>      /sys/class/thermal/thermal_zoneX/k_i
-> >>>
-> >>> But it's still more convenient to change the default values by
-> >>> devicetree,
-> >>> so introduce these three optional properties. If provided these
-> >>> properties,
-> >>> they will be parsed and associated with the thermal zone via the thermal
-> >>> zone parameters.
-> >>>
-> >>> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
-> >>> ---
-> >>>   Documentation/devicetree/bindings/thermal/thermal.txt | 14
-> >>> ++++++++++++++
-> >>
-> >> Bindings should be a separate file and this one is a DT schema now.
-> >>
-> >>>   drivers/thermal/thermal_of.c                          |  7 +++++++
-> >>>   2 files changed, 21 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt
-> >>> b/Documentation/devicetree/bindings/thermal/thermal.txt
-> >>> index f78bec19ca35..ebe936b57ded 100644
-> >>> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
-> >>> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
-> >>> @@ -165,6 +165,20 @@ Optional property:
-> >>>               2000mW, while on a 10'' tablet is around
-> >>>               4500mW.
-> >>>   +- k-po:            Proportional parameter of the PID controller when
-> >>> +            current temperature is above the target.
-> >>> +  Type: signed
-> >>> +  Size: one cell
-> >>> +
-> >>> +- k-pu:            Proportional parameter of the PID controller when
-> >>> +            current temperature is below the target.
-> >>> +  Type: signed
-> >>> +  Size: one cell
-> >>> +
-> >>> +- k-i:            Integral parameter of the PID controller.
-> >>> +  Type: signed
-> >>> +  Size: one cell
-> >>
-> >> What's PID?
-> >>
-> >> I know nothing about the sysfs params, but the binding needs to stand on
-> >> it's own and needs enough detail to educate me.
-> > Sorry for the delay, I missed that patch.
-> > These parameters are the coefficients for the
-> > Proportional-Integral-Derivative (PID) controller [1], which is the
-> > core of the Intelligent Power Allocation (IPA) thermal governor.
+> > OK, so I'll make it fail on attempts to change the EPP from 0
+> > (performance) in the active mode with the performance "governor".
+> >
+> Here the scaling governor is powersave.
 >
-> Just a few words to elaborate a bit for Rob who may not have time to
-> digest the whole concept from Wikipedia :)
->
-> The PID is an regulation loop where the input is compared to the output.
->
-> For example when driving a car and you aim a speed cruise of 90km/h. You
-> press the accelerator and watch the current speed. The smaller the
-> current speed is, the stronger you will push the accelerator. And the
-> closer to the cruise speed the car is, the lesser you push the
-> accelerator until the car stabilize to the cruise to speed.
->
-> The k-* describes how strong you push the accelerator and release it.
->
-> In the thermal framework, that has an impact on how brutal the
-> mitigation acts and depending on them it results in a flat temperature
-> curve or a sawtooth aspect.
->
-> These coefficient depends on the ambient temperature (casing, room
-> temperature), the heat sink and the load. Depending on the use cases,
-> you may want to change their values at runtime.
->
-> From my POV, setting these values in the DT does not really make sense.
+> # cat scaling_governor
+> powersave
 
-I pretty much always agree with not putting things in DT. :)
+What I'm saying is that reads from energy_performance_preference will
+still return the register value, but writes to it will fail on
+attempts to change to anything different from "performance" when in
+the active mode and the current governor is "performance".
 
-Rob
+Cheers!
