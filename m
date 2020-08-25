@@ -2,144 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB526251D24
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CACC8251D55
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 18:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbgHYQXz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 12:23:55 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:60526 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726356AbgHYQXj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 12:23:39 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id A99E72929C6
-Received: by earth.universe (Postfix, from userid 1000)
-        id B04B43C0C82; Tue, 25 Aug 2020 18:23:35 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 18:23:35 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Elliot Berman <eberman@codeaurora.org>
-Cc:     Andy Yan <andy.yan@rock-chips.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Trilok Soni <tsoni@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>
-Subject: Re: [RESEND PATCH v1 2/4] dt-bindings: power: reset: Add alternate
- reboot mode format
-Message-ID: <20200825162335.ctyc3trvraiwihhg@earth.universe>
-References: <1597776856-12014-1-git-send-email-eberman@codeaurora.org>
- <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
+        id S1726946AbgHYQiI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 12:38:08 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:52125 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725805AbgHYQiI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Aug 2020 12:38:08 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598373486; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=/lwIoJgA3N5kyPnMGSl5QZyU7eZUloRHW8mD2xzFjXQ=;
+ b=cnFpRk51D3c3cQwppAdhisetI0oVddV0c1btCYcGC+tiWLkWC688EJc5vmlhrc6lRvl+8eJB
+ jh/hqjH5rvTcoYYKDRUGvY5Qvv6ZBGlectLah+6Ko9tr0b8DpAus8ljZauR32RTPtNkvmAc8
+ J44vvDdxKeeGgeJfv6HUMALsKgA=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 5f453e55f558dbf2802aa87f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 25 Aug 2020 16:37:41
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9456BC43395; Tue, 25 Aug 2020 16:37:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sibis)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 70C32C433C6;
+        Tue, 25 Aug 2020 16:37:39 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="hylhkgvtyey2ignd"
-Content-Disposition: inline
-In-Reply-To: <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 25 Aug 2020 22:07:39 +0530
+From:   Sibi Sankar <sibis@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, khilman@kernel.org,
+        ulf.hansson@linaro.org, rjw@rjwysocki.net, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, gregkh@linuxfoundation.org, pavel@ucw.cz,
+        len.brown@intel.com, rnayak@codeaurora.org, dianders@chromium.org,
+        mka@chromium.org, linux-kernel-owner@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] PM / Domains: Add GENPD_FLAG_NO_SUSPEND/RESUME
+ flags
+In-Reply-To: <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
+References: <20200821204921.32536-1-sibis@codeaurora.org>
+ <159804608868.334488.2486130699850456264@swboyd.mtv.corp.google.com>
+ <20200824164212.GA3715@yoga>
+ <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
+Message-ID: <c79fa653edb13ee88e5d4708675cd64f@codeaurora.org>
+X-Sender: sibis@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 2020-08-25 12:50, Stephen Boyd wrote:
+> Quoting Bjorn Andersson (2020-08-24 09:42:12)
+>> On Fri 21 Aug 14:41 PDT 2020, Stephen Boyd wrote:
+>> 
+>> > Quoting Sibi Sankar (2020-08-21 13:49:20)
+>> > > Add GENPD_FLAG_NO_SUSPEND/RESUME flags to instruct genpd to keep the
+>> > > status of the PM domain unaltered during suspend/resume respectively.
+>> > > The flags are aimed at power domains coupled to co-processors which
+>> > > enter low-power modes independent to that of the application processor.
+>> > >
+>> > > Specifically the flags are to be used by the power domains exposed
+>> > > by the AOSS QMP driver linked to modem, adsp, cdsp remoteprocs. These
+>> > > power domains are used to notify the Always on Subsystem (AOSS) that
+>> > > a particular co-processor is up. AOSS uses this information to wait
+>> > > for the co-processors to suspend before starting its sleep sequence.
+>> > > The application processor powers off these power domains only if the
+>> > > co-processor has crashed or powered off and remains unaltered during
+>> > > system suspend/resume.
+>> >
+>> > Why are these power domains instead of some QMP message sent during
+>> > remote proc power up?
+>> 
+>> The understanding I gained as I researched this, was that with this
+>> property enabled resources related to the particular subsystem will be
+>> kept enabled when the apss enters some power save mode. So my
+>> interpretation was that it does "keep something powered".
+> 
+> It looks like it tells AOSS that the processor is booted and to start
+> considering these processors in the SoC wide system suspend sequence.
+> Otherwise I guess the RPMh buckets associated with these remoteprocs
+> don't count in the aggregation and sleep/wake sequences that AOSS runs
+> through when putting the SoC into low power mode. I'm not sure it
+> actually "keeps something powered" so much as it lets something be
+> powered off. Sibi?
 
---hylhkgvtyey2ignd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That is just a part of equation i.e
+AOSS doesn't enter sleep until the
+remote processors enter RPMh assisted
+sleep. This also implies that if the
+respective remote processor has to come
+out of low power states it will need
+to wait for AOSS to come out of sleep.
+So clearly remote processors are dependent
+on certain resources to be enabled by
+the AOSS but the resources may not be
+restricted to just corners.
 
-Hi,
+> 
+> Another question, why can't the processors tell AOSS themselves about
+> their boot state? I guess because they may crash or be powered down and
+> then AOSS wouldn't know? Fair enough I guess, but I don't think this is
+> mentioned anywhere.
+> 
+>> 
+>> > If this has been discussed before feel free to
+>> > disregard and please link to prior mailing list discussions.
+>> >
+>> 
+>> There where some discussions related to the "QDSS clk" in that series,
+>> but I don't remember getting any feedback on modelling these things as
+>> power-domains.
+>> 
+>> > I find it odd that this is modeled as a power domain instead of some
+>> > Qualcomm specific message that the remoteproc driver sends to AOSS. Is
+>> > there some sort of benefit the driver gets from using the power domain
+>> > APIs for this vs. using a custom API?
+>> 
+>> We need to send "up" and "down" notifications and this needs to happen
+>> at the same time as other standard resources are enabled/disabled.
+>> 
+>> Further more, at the time the all resources handled by the downstream
+>> driver was either power-domains (per above understanding) or clocks, 
+>> so
+>> it made sense to me not to spin up a custom API.
+>> 
+> 
+> So the benefit is not spinning up a custom API? I'm not Ulf, but it
+> looks like this is hard to rationalize about as a power domain. It
+> doesn't have any benefit to model it this way besides to make it
+> possible to turn on with other power domains.
+> 
+> This modem remoteproc drivers isn't SoC agnostic anyway, it relies on
+> SMEM APIs, so standing up another small qmp_remoteproc_booted() and
+> qmp_remoteproc_shutdown() API would avoid adding a genpd flag here that
+> probably will never be used outside of this corner-case. There is also
+> some get/put EPROBE_DEFER sort of logic to implement, but otherwise it
+> would be possible to do this outside of power domains, and that seems
+> better given that this isn't really a power domain to start with.
 
-On Tue, Aug 18, 2020 at 11:54:14AM -0700, Elliot Berman wrote:
-> Current reboot-mode device tree schema does not support reboot commands
-> with spaces in them [1]. Add an optional new node "reboot-mode-names"
-> and "reboot-mode-magic" which add an array of strings and u32s,
-> respectively which would permit any string in this framework.
->=20
-> [1]:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
-rivers/md/dm-verity-target.c?h=3Dv5.5#n255
->=20
-> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
-> ---
-
-I'm waiting for an Ack from Rob for this one.
-
--- Sebastian
-
->  .../devicetree/bindings/power/reset/reboot-mode.yaml    | 17 +++++++++++=
-++++++
->  1 file changed, 17 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.ya=
-ml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-> index a6c9102..4ea6b33 100644
-> --- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
-> @@ -19,6 +19,9 @@ description: |
->    the bootloader what to do when the system reboots, and should be named
->    as mode-xxx =3D <magic> (xxx is mode name, magic should be a non-zero =
-value).
-> =20
-> +  reboot-mode-magic and reboot-mode-names may be used in addition/instea=
-d of
-> +  mode-xxx style.
-> +
->    For example, modes common Android platform are:
->      - normal: Normal reboot mode, system reboot with command "reboot".
->      - recovery: Android Recovery mode, it is a mode to format the device=
- or update a new image.
-> @@ -32,6 +35,14 @@ properties:
->        description: |
->          Default value to set on a reboot if no command was provided.
-> =20
-> +  reboot-mode-names:
-> +    $ref: /schemas/types.yaml#/definitions/string-array
-> +    description: List of reboot commands, paired with reboot-mode-magic =
-by index
-> +
-> +  reboot-mode-magic:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: List of reboot magic, paired with reboot-mode-names by =
-index
-> +
->  patternProperties:
->    "^mode-.*$":
->      $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -44,4 +55,10 @@ examples:
->        mode-bootloader =3D <2>;
->        mode-loader =3D <3>;
->      };
-> +
-> +  - |
-> +    reboot-mode {
-> +      reboot-mode-names =3D "normal", "bootloader", "dm-verity device co=
-rrupted";
-> +      reboot-mode-magic =3D <0x0>, <0x1>, <0xf>;
-> +    };
->  ...
-> --=20
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->=20
-
---hylhkgvtyey2ignd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9FOwcACgkQ2O7X88g7
-+poO+g//br2c8K72ObA/SO3efTGrTSV5mBor3AwZW2VvoeT0tJN8RBQhqME+5wzS
-zZkGOC6fd23loTaGdh85ZWQz/2K2TUUjWd2+PdExAOChjzUa1CeF1y9wSjQJ5cli
-VOnUE68D3Mn7DaFWz64IAcJr/YKGf4+SXuJ1LhtYrtEPtugdq6kFkNbM3eDUlL2b
-c0HF+dD4mi+r4p24ZceTHsN5Y1lA+D9IH883e0wOW5wwNXB46aNWP6QteNWWsgeS
-3y1n8WPRMJ1Ru92OJ/4eIpEyJC5TfZLwnXEveeLLSgDb4MqoDAk1GoCM8JvfLyAa
-hTK18eJzphJ2Fn0IjtpqytzKzuq82gq3d9NtqVhxeXn6JvOEY36nz8Op4GRjjtQi
-84B7wU6nhGYpGbHIpWRKU3cICYI8HrV+idHLJrZY+NXMjq2q71NHHJfQoZ4K1at1
-R/qU66qGnXdKFLaE2NM15RljhdpJUqA/GhsqcAPm5vPjU9yyp120QKr4cnIckhhJ
-iwPJA8HuWunLlSmTuem9P1ICpli+gqzsBVAfQeCrOnGxSHfQC5wFQN/vbbeF/tWa
-QwTXqro2kM8aDmBtwCag6Coyy7Vt75SeuQL9zcIO7ZBHTTK/OazqSNpxC7FJCW5U
-hj2RY9NdlZlPwUx46+GBnP3mNIEJhaTFlpsCdPwV5Q7QxL/fizo=
-=cqmB
------END PGP SIGNATURE-----
-
---hylhkgvtyey2ignd--
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project.
