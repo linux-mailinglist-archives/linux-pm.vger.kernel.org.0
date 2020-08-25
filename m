@@ -2,125 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55093251681
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 12:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5B22516B0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 12:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729723AbgHYKSy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 06:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729772AbgHYKSd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 06:18:33 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A319C061574;
-        Tue, 25 Aug 2020 03:18:33 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id ep8so993846pjb.3;
-        Tue, 25 Aug 2020 03:18:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=89yx6cZZLpORQougS6qytDdcNI/14e8vNGHS/0MWLQk=;
-        b=Tvoi3Cd+GhzfJdhGcbR+Za137QeGhHkwTtX2Ah8CMRgWQNGdVcGn7G5AgZv8Nx1F5d
-         beXn4Zi2DuCmXdDVR5FqHPDA6WeUCKTEZaRXsHXlHfG+2zPs0iMtZv0byLRBOvgOeKKK
-         LWP+nXhmHI+EtCetztp++sBzvCtqihUNduhF79Gg4FZb5JvHKrC3QqBZTINfUTy43f4Y
-         rJXX+LiI41/KnYvMnj8QgPKZ8KfvT+ot5k2KMC+wv+ybWlPeQEhnE2ES+bKsxRU0m3OV
-         Z/35jaV1Wi5TU16fWxIxyCollHJOnjP5xLRt3Lkg+S93iqV4BLHY9SKlGJmynH0TFIsC
-         p+hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=89yx6cZZLpORQougS6qytDdcNI/14e8vNGHS/0MWLQk=;
-        b=NosaVSvkd768+sWySecg0KN+5ZmLQ5ZNHYEF7NCmos8mGlkpE+KEFB7q3n5r1rSWrs
-         dHQzgKH01FnC7dLSYXt3zw5clhZoGBUhllytU0hUBtbAYd7S0axHqCyUEO6abWTgHsof
-         7vN2XMSSc8Rd56WWNT7reiNi/C3yri2cYIAn+hsOMHZvL81omzl2HsigOtOJDrbto//A
-         7D+ZBQmT2ByCODEyNzNFLEK4oiJxqQcITY/vno+N6OXy4mEnxKFmxPsDcice1YC/ynVw
-         LNS6xkRJTbPWQFsodG4kHRLS4e3CHO9wh+xMQrHUNE8bCAbt7HMtZg+hAqsqTCkT1OUm
-         y0Uw==
-X-Gm-Message-State: AOAM530UmQ9+vcWFWpha+jTRe8JZMw41pdjaBc3qy169aVB3Ywx9OAeP
-        jZnk8kgg+I8+5pS7C191c6sCi087/BSx8w==
-X-Google-Smtp-Source: ABdhPJyPGsv9HterPKrRxpy49SbPX+uZaB4Wie9X0WMnEzVNLlz2lgCK9b5uL3R4+tudTN7AIsCP6w==
-X-Received: by 2002:a17:90a:2c06:: with SMTP id m6mr1034869pjd.129.1598350712776;
-        Tue, 25 Aug 2020 03:18:32 -0700 (PDT)
-Received: from xiaomi.mioffice.cn ([43.224.245.179])
-        by smtp.gmail.com with ESMTPSA id 19sm1788911pjk.28.2020.08.25.03.18.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 03:18:32 -0700 (PDT)
-From:   Qiwu Huang <yanziily@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org, Qiwu Huang <huangqiwu@xiaomi.com>
-Subject: [PATCH v10 4/4] power: supply: core: property to control reverse charge
-Date:   Tue, 25 Aug 2020 18:16:17 +0800
-Message-Id: <d2a4960e5641c4360a9360f438669ec03a2c3d0d.1598349907.git.huangqiwu@xiaomi.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <cover.1598349907.git.huangqiwu@xiaomi.com>
-References: <cover.1598349907.git.huangqiwu@xiaomi.com>
+        id S1729789AbgHYKf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 06:35:56 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([81.169.146.162]:12272 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729698AbgHYKfz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 06:35:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598351753;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=8p4pt70rYl2YWhdxdIzzZLImHV6uhJpM2ohDsVuBjnM=;
+        b=TXosNAgAo/T9uQzZsbMr0ZLipFPQrDv40/x2H7s8E/3KuMD1kPmfIpe3uT47RERljE
+        R38kNnsl1BX7hCj7ZKlDuVji7CZE2eEgUVzqkgxQ4S8DuEFC3Z5Xbu8T0jXfyWX+BKfe
+        rSnaOjLZ9XIS5m2ax+7qZhdQaNpd3XBkXrZp7Nh96JtAZPrSGiRx2qN4drTWAyOi7pA0
+        krf+Z3ZeTJmpdebiBgaLdX4koM87KsRWgeB1R0DLjjJkjoUTPDoyUFeGWUXFKvhnDcir
+        DcbOdnHVRcwUZvFU3bkfxDu6iO9QqtbExgQQj0srUi3pqiV8uxuDpXEWhVe6lOnXN1Mz
+        VJqg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7IcjDBg=="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id g0b6c1w7PAZre9f
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Tue, 25 Aug 2020 12:35:53 +0200 (CEST)
+Date:   Tue, 25 Aug 2020 12:35:44 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: Re: opp: How to use multiple opp-supported-hw versions properly?
+Message-ID: <20200825103407.GA847@gerhold.net>
+References: <20200825074452.GA1322@gerhold.net>
+ <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
+ <20200825085740.GA855@gerhold.net>
+ <20200825095633.wzlpsxhabkfd27km@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200825095633.wzlpsxhabkfd27km@vireshk-i7>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Qiwu Huang <huangqiwu@xiaomi.com>
+On Tue, Aug 25, 2020 at 03:26:33PM +0530, Viresh Kumar wrote:
+> On 25-08-20, 10:57, Stephan Gerhold wrote:
+> > but it doesn't mention anything about the problem I described
+> > ("conflicting" ranges for one of the "sub-versions").
+> > 
+> > I have to admit that I keep getting confused with these bit masks...
+> > I think this is also one option I considered but actually it doesn't
+> > work:
+> > 
+> > Essentially you suggest to encode a version using:
+> > 
+> > static int ver(int version1, int version2) {
+> > 	return BIT(version1) << 16 | BIT(version2);
+> > }
+> > 
+> > Now let's take a look at my example again:
+> > 
+> > So for the versions I mentioned we get:
+> >   - ver(0, 1) = 0x10002
+> >   - ver(1, 0) = 0x20001
+> >   - ver(1, 1) = 0x20002
+> >   - ver(0, 0) = 0x10001 (this one should be excluded)
+> > 
+> > So to mark v0.1, v1.0 and v1.1 as supported I'd set:
+> >      opp-supported-hw = <(ver(0, 1) | ver(1, 0) | ver(1, 1))>;
+> > i.e. opp-supported-hw = <0x30003>;
+> > 
+> > Now let's say I'm running v0.0 = 0x10001. This version should not
+> > support the OPP. But actually 0x30003 & 0x10001 = 0x10001 != 0,
+> > so the OPP would consider it as supported.
+> > 
+> > I tried many different approaches, but you end up being unable to
+> > control subversions independently for most of them.
+> 
+> This should work fine for your case I believe, with two 32 bit words.
+> 
+> static int ver(int version1, int version2)
+> {
+> 	return BIT(version1 * 8 + version2); //Here 8 is size-of version2
+> }
+> 
 
-Interface to control wireless reverse charge.
+Actually this does not work properly either, at least if you have
+64 possible versions :-)
 
-Signed-off-by: Qiwu Huang <huangqiwu@xiaomi.com>
----
- Documentation/ABI/testing/sysfs-class-power | 14 ++++++++++++++
- drivers/power/supply/power_supply_sysfs.c   |  1 +
- include/linux/power_supply.h                |  1 +
- 3 files changed, 16 insertions(+)
+Let's take version v5.0 for example:
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index c3a547037d07..e0adb22a6648 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -780,3 +780,17 @@ Description:
- 
- 		Access: Read-Only
- 		Valid values: 0 - 100
-+
-+What:		/sys/class/power_supply/<supply_name>/reverse_chg_mode
-+Date:		Jul 2020
-+Contact:	Fei Jiang <jiangfei1@xiaomi.com>
-+Description:
-+		Some devices support wireless reverse charge function which
-+		charge other devices.The property provider interface to
-+		enable/disable wireless reverse charge.If enabled, start TX
-+		mode and detect RX. Disabled when timeout or manual setting.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 64e6bdd91edf..403a1787fada 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -213,6 +213,7 @@ static struct power_supply_attr power_supply_attrs[] = {
- 	POWER_SUPPLY_ATTR(QUICK_CHARGE_TYPE),
- 	POWER_SUPPLY_ATTR(TX_ADAPTER),
- 	POWER_SUPPLY_ATTR(SIGNAL_STRENGTH),
-+	POWER_SUPPLY_ATTR(REVERSE_CHG_MODE),
- };
- 
- static struct attribute *
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 496d1faecdd1..ee156492c566 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -174,6 +174,7 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
- 	POWER_SUPPLY_PROP_TX_ADAPTER,
- 	POWER_SUPPLY_PROP_SIGNAL_STRENGTH,
-+	POWER_SUPPLY_PROP_REVERSE_CHG_MODE,
- };
- 
- enum power_supply_type {
--- 
-2.28.0
+	ver(5, 0) = BIT(5 * 8 + 0) = BIT(40) = <0x00000100 0x00000000>
 
+For each of the two masks the OPP core checks:
+
+	if (!(version & opp_table->supported_hw[count]))
+		return false;
+
+The second 0x00000000 will always run into "return false",
+because 0 & <something> = 0.
+
+I suppose something like this could work if you need 63 versions only.
+For all versions > 32 you would set one particular bit in the second
+version, e.g. <0x00000100 0x00000001>, only to make the check happy.
+
+For 64 versions it would work with three 32 bit words, in my case
+I could probably ignore one of the versions and fit it into the two
+32 bit words with some weird glue code.
+
+But at least in my opinion this is getting to the point where this will
+be terribly complicated to understand from looking at the device tree.
+
+> Okay, the binding doesn't really work well with subversions properly (as I
+> believed earlier), but because the implementation was simple enough and very
+> basic we can still work around it in your specific case. I am not sure I want to
+> touch the bindings at this point of time, unless they aren't workable for
+> someone.
+> 
+
+Note that my original suggestion does not change the behavior of the
+bindings for any of the existing uses. It just lets you define multiple
+such version ranges for one OPP definition.
+
+We know the number of version masks we want to check
+(opp_table->supported_hw_count), then we check the number in the device
+tree and if it's a multiple of supported_hw_count we check those ranges
+separately.
+
+While it's certainly not ideal to list several version masks there,
+I think this would be the most readable and flexible way to handle
+the "subversion issue".
+
+Or I could just do it like in tegra20-cpu-opp.dtsi, and specify the OPPs
+multiple times with different ranges. It works as-is, it's just quite
+a bit of duplication. At least it's quite easy to understand.
+
+What do you think? :)
+
+Thanks!
+Stephan
