@@ -2,117 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38EF12513FB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 10:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12433251413
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 10:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728115AbgHYIQn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 04:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725924AbgHYIQk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 04:16:40 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C503C061574
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 01:16:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id nv17so840919pjb.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 01:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4mBxqIdxfkLhY8dbHb2mAezOdwymjj8Y4qldp2QzK8k=;
-        b=IobyTMBhDxUyb2xLkbmgbUenk0/HVFFtTy18WLfjWX5f0vJYloelts+oqw5wPzMMAM
-         GN7/qx3aWYpXknWUbYrqdVmdO6vGt5WuwQW79wJGU6aZwJtaWEtJBa8fffTT4pxfJ3rm
-         zXZdB+FFK+lsQ/jYi4KV27E6fInAjSS7WMzhzAgbWbfD4b43XGbZufSjr3OJ/dXn4iWU
-         2TuxRMeLwXw5LCf0G7SO/2MoO3fUzCaThvvk0p08ugfC1KgShM6BPivVV5ejMl+co0tN
-         0PedZsrAD52I5R2GvOuGnuFUa92tQPVH7hRI2XydtD4Wl+0jRRutJxfduNXUVlUjMGnl
-         7IDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4mBxqIdxfkLhY8dbHb2mAezOdwymjj8Y4qldp2QzK8k=;
-        b=ZDWh8uB3LxLL6JFAtN2aU7A1Qd6zZbkszNCqYtVDGN9A/HJwZDdxu1j1yvTmqnoOeI
-         Fx2lrJuxhfk5Onn724JfuYzS0CT0Ir0nyHVjrUwq8ikVzwQTRnmYtwdms3uLI3XN7Kh5
-         w1L+jrOhhsedtCuCDBmLLVox00ZccTjKwj/dA+TRLv1KCcwYuqyNZhoxGVzd5Z7JG9vj
-         XvdylNl4Buu06GPfEjuFZeC7eA54Ul1iUkUAUyubi8Gprd/ZoVPFaa6RjcgtMZTd0pcU
-         lSxiigSN0qPxKpAG6VNSK/VUFucDOM0m/aY0k3zrsYKLpRBNyWKfUtS3NNzQ4xwJV0oX
-         ogtQ==
-X-Gm-Message-State: AOAM530JjsAdtPWh2HJgAZOdyoXofv3gDifPPL05R5Y5t6vaUEQNSEtN
-        0JEZhZ7U5/WNCuqOS/MoUVRMSw==
-X-Google-Smtp-Source: ABdhPJwLk+MGDicSf1tyuPkBpARnPc+hdMSYuvZzgH3KlOFtGynSK6c9RCWkDisG7+p+rXPo+ot3OQ==
-X-Received: by 2002:a17:90a:f2d7:: with SMTP id gt23mr707131pjb.0.1598343400041;
-        Tue, 25 Aug 2020 01:16:40 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id mw8sm1801732pjb.47.2020.08.25.01.16.38
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Aug 2020 01:16:39 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 13:46:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: opp: How to use multiple opp-supported-hw versions properly?
-Message-ID: <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
-References: <20200825074452.GA1322@gerhold.net>
+        id S1728543AbgHYIWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 04:22:30 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59286 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725970AbgHYIW3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Aug 2020 04:22:29 -0400
+IronPort-SDR: +uvwERLmVArAAaOMKDcOu7+R8IaZgBeZdq06o+Z1oS586d4US5i6CwnDHi/3C5hF8J0xqzudpH
+ tu1W9D3lb8Dw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9723"; a="153637398"
+X-IronPort-AV: E=Sophos;i="5.76,351,1592895600"; 
+   d="scan'208";a="153637398"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2020 01:22:28 -0700
+IronPort-SDR: 0ShbA1Ett/jB2ldH4FHGwyu6LSx4xmAZ4qy2+qLFaPU236w4oBROoZWlPtWCntXpEi2v7yCrgB
+ z0g3a3U2lBFg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,351,1592895600"; 
+   d="scan'208";a="402643628"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 25 Aug 2020 01:22:25 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 25 Aug 2020 11:22:24 +0300
+Date:   Tue, 25 Aug 2020 11:22:24 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Utkarsh H Patel <utkarsh.h.patel@intel.com>,
+        Pengfei Xu <pengfei.xu@intel.com>
+Subject: Re: [PATCH v2] PM: sleep: core: Fix the handling of pending runtime
+ resume requests
+Message-ID: <20200825082224.GX1375436@lahna.fi.intel.com>
+References: <1954100.8R8RjBe1nF@kreacher>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200825074452.GA1322@gerhold.net>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <1954100.8R8RjBe1nF@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-08-20, 09:44, Stephan Gerhold wrote:
-> Hi Viresh,
+Hi Rafael,
+
+On Mon, Aug 24, 2020 at 07:35:31PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> (an unrelated questions while I investigate the device links ;) )
+> It has been reported that system-wide suspend may be aborted in the
+> absence of any wakeup events due to unforseen interactions of it with
+> the runtume PM framework.
 > 
-> I'm a bit confused about how to use "opp-supported-hw" properly
-> when you have multiple versions defined.
-
-Documentation/devicetree/bindings/opp/opp.txt gives some explanation which I
-thought should be enough, maybe it isn't :(
-
-Or maybe I am oversimplifying your problem and I myself have forgotten this
-property and its usage :)
-
-> In my case I have two version numbers from 0-7, so theoretically up to
-> 64 versions. This does not fit into a single version mask
-
-I don't think this is correct. The opp-supported-hw property must be thought of
-as a bitfield where each bit represents a version.
-
-In your case a single 32 bit value should be enough IMO.
-
-<0x00FF00FF>, here each FF can support upto 8 versions, which is exactly what
-you need. Now if you want to support version 3-3 (where version are numbered
-from 0-7) for an OPP, you set this value to: <0x00080008>
-
-Does that make sense ?
-
-> so I added
-> them as separate versions to the OPP table.
+> One failing scenario is when there are multiple devices sharing an
+> ACPI power resource and runtime-resume needs to be carried out for
+> one of them during system-wide suspend (for example, because it needs
+> to be reconfigured before the whole system goes to sleep).  In that
+> case, the runtime-resume of that device involves turning the ACPI
+> power resource "on" which in turn causes runtime-resume requests
+> to be queued up for all of the other devices sharing it.  Those
+> requests go to the runtime PM workqueue which is frozen during
+> system-wide suspend, so they are not actually taken care of until
+> the resume of the whole system, but the pm_runtime_barrier()
+> call in __device_suspend() sees them and triggers system wakeup
+> events for them which then cause the system-wide suspend to be
+> aborted if wakeup source objects are in active use.
 > 
-> Now let's say I want to limit an OPP to v0.1, v1.0 and v1.1, but not
-> v0.0. With a single "opp-supported-hw" I think I can only say:
+> Of course, the logic that leads to triggering those wakeup events is
+> questionable in the first place, because clearly there are cases in
+> which a pending runtime resume request for a device is not connected
+> to any real wakeup events in any way (like the one above).  Moreover,
+> it is racy, because the device may be resuming already by the time
+> the pm_runtime_barrier() runs and so if the driver doesn't take care
+> of signaling the wakeup event as appropriate, it will be lost.
+> However, if the driver does take care of that, the extra
+> pm_wakeup_event() call in the core is redundant.
 > 
-> 	opp-supported-hw = <0x3 0x3>;
+> Accordingly, drop the conditional pm_wakeup_event() call fron
+> __device_suspend() and make the latter call pm_runtime_barrier()
+> alone.  Also modify the comment next to that call to reflect the new
+> code and extend it to mention the need to avoid unwanted interactions
+> between runtime PM and system-wide device suspend callbacks.
 > 
-> but that does also include v0.0...
-> I think to exclude that I would need multiple version ranges, e.g.
-> 
-> 	opp-supported-hw = <0x1 0x2>, <0x2 0x3>;
-> 
-> This does not seem to be supported, though.
-> 
-> I believe a similar situation exists in tegra20-cpu-opp.dtsi:
+> Fixes: 1e2ef05bb8cf8 ("PM: Limit race conditions between runtime PM and system sleep (v2)")
+> Reported-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Dmitry, can you please explain why you were required to have multiple entries
-for each OPP ?
+I guess the more correct here is
 
--- 
-viresh
+Reported-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
+
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+I also got confirmation that this fixes the reported issue and did not
+seem to cause regressions either :)
+
+Please add the following tags:
+
+Tested-by: Utkarsh H Patel <utkarsh.h.patel@intel.com>
+Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+
+Thanks for fixing this!
