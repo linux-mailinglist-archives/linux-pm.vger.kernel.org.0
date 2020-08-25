@@ -2,117 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 233C22515CC
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 11:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E35DE251679
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 12:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728944AbgHYJ4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 05:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46412 "EHLO
+        id S1729748AbgHYKSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 06:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729546AbgHYJ4i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 05:56:38 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FDCC061574
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 02:56:38 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id p37so6471705pgl.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 02:56:38 -0700 (PDT)
+        with ESMTP id S1729253AbgHYKSZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 06:18:25 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C515CC061574;
+        Tue, 25 Aug 2020 03:18:24 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id k18so6961182pfp.7;
+        Tue, 25 Aug 2020 03:18:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=3hb7xRsidzWGH04NoxVFZtbiOXINRMxpgebbkQO0YCc=;
-        b=U4R63Muouiok7AW+JBenAp8hr6gyhfzcZlB3ww9XweVJjNuvqDQ6GTWQq0FuGb0KkX
-         L3NmdyRCryeMVNjau4LI6FDJ0gjwptqP0aZD67ardm3AHWAVT201eWsZwpBGDDSSkdLp
-         mMB3mbMU1fdaxqFghxiBb9l7dB4oqdZE1XRq1dTmhLgxNKQ4nxotDb1BmR0va7AeVxV2
-         Swzf/fkfciexqX9ZftG1TM7ogadvVaWO3qBD3BsfvFrgO4Cs1bgEKIEFfrL2RbQvvSe/
-         M8ldtG4Hn3PIdSQcBKNzRCqQJZkF9/EWMV4z5VUYbzC+sJ+EIJ55nqp8TesTBSnEDMpv
-         s6Wg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HGcOqNhZLhnAwiVvDmN/ctXcgXqADodUT+Mo4Ml8vjI=;
+        b=IuopKSXiM81mdVx2zqo1INWZi4EBaHhGIClt8zZMDCtmf3Gx6wOkxUZl6CE8sh7zZj
+         0qJrlRmAAlMrfZMkmW+Vsk6R8PnPMg+c6eKhh9hsphZa1+SKvbrmOs4qFqlw0cuV6sIA
+         9GfSzRGrPU2Kg2JtmFgCjAGaNtatM6iUgK+l9cUkSXFhHcpDtNWTaacwI9K739paB5Go
+         RbOn/3CHi+ZERlRw7lDC9mWDLbNrVrtJuvj3wcigtgQCQ8ntR23B19TzNoVmUfCqdilk
+         1ua9Ez3ihTGK4q8GcFxr84nT3vWnDHh5n1fxN4OYxPMfnViIsq6GAkZPYRsNfDWyv0ws
+         csWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=3hb7xRsidzWGH04NoxVFZtbiOXINRMxpgebbkQO0YCc=;
-        b=pg1za4xssGDxrhFlqZOXBKtARQ9mxcX4BuiVdZlCkMHnsujHeEieajM42xqBsHv2ce
-         OCFzLnDjZWlPQF/UBMT77qV8uQHOZ29acLOhh3hUxwsE9wo52zUGc2hmSOF6ArxuIqb9
-         WH9Du5qhU4JI1hrjcjZEZn50RU6YrErXFvcZnDPMCLHi1XokvSKz0oUpE4/EFOgJPSvN
-         TrseaqZkFJB57XdqH20Cj+SF9CvJS+v2U/kSIT+rvg22G54T3EvEHs3BFWGZqsKPb6mw
-         B78YT5W048FII7xIvUiNa/xWYvbA9WZNeSRzbVi/PWQkffdybcuQEyVXq2bPZr6sXl5P
-         Kdow==
-X-Gm-Message-State: AOAM532cL8Q5mStjMBIlIWlQAxGWL2GsZmYucwMZYI1LGDF+zNjMupq1
-        cWALMEGjUSxJpynm17i3CHk6jg==
-X-Google-Smtp-Source: ABdhPJw4wFDaRSEuOFZLlCRLWe9xn1InlYQDyKa9u02LH9qgWDR8cmIscJ3bsYp85jEuyeyXyT2ilQ==
-X-Received: by 2002:a62:18a:: with SMTP id 132mr6208576pfb.46.1598349396080;
-        Tue, 25 Aug 2020 02:56:36 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id q5sm11538666pgi.31.2020.08.25.02.56.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Aug 2020 02:56:35 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 15:26:33 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: opp: How to use multiple opp-supported-hw versions properly?
-Message-ID: <20200825095633.wzlpsxhabkfd27km@vireshk-i7>
-References: <20200825074452.GA1322@gerhold.net>
- <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
- <20200825085740.GA855@gerhold.net>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=HGcOqNhZLhnAwiVvDmN/ctXcgXqADodUT+Mo4Ml8vjI=;
+        b=WFOenVruYhSAMxuuBVKgxwBnBBnKCAv7szsPIXvqjUqSbTmGfkHFDwEH3mGpqi6PZ6
+         u7N1RFL1kXoeYoyMGOXim9XrVpQ/z7KigMrgp5wEHKTH8VNiKLfdMRzrwkfNYR5MfGSc
+         YEZXA3tMEPUYBMLB+xgvndMHB7u7g0ZaWB7wGd2vjZ1hBnjEbRdpO5zRHXIGYE43bTid
+         cBNU6yi7+HOL7SbZOKbRIPFKsMfOLEKZvrxo3dvBftW+CccU0pzjVHJnnMbghDyuIDrK
+         0TLkggrBbSN0GzQUJTmWjz6QrYXFzJF5PU1HyMilXSsSQf0AtlfEfK5O3vfnb9gFIVR/
+         9dBw==
+X-Gm-Message-State: AOAM5309jqk2E7AGnhasH9uOxzME0Uk+2IkYwG1+oSdfyHoa+MBqz7mS
+        5Zt83xKyLlgGmsRKxW9I3mQ=
+X-Google-Smtp-Source: ABdhPJyySJ+X/YpxtMb92YjOn1n+OGKqbaPkneHV8VsE2B5wvSSt0Csfxyf0Ai/itkpKJQc9sDypKw==
+X-Received: by 2002:aa7:9427:: with SMTP id y7mr7379937pfo.12.1598350703143;
+        Tue, 25 Aug 2020 03:18:23 -0700 (PDT)
+Received: from xiaomi.mioffice.cn ([43.224.245.179])
+        by smtp.gmail.com with ESMTPSA id 19sm1788911pjk.28.2020.08.25.03.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 03:18:22 -0700 (PDT)
+From:   Qiwu Huang <yanziily@gmail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, Qiwu Huang <huangqiwu@xiaomi.com>
+Subject: [PATCH v10 0/4]  add some power supply properties about wireless/wired charging
+Date:   Tue, 25 Aug 2020 18:16:13 +0800
+Message-Id: <cover.1598349907.git.huangqiwu@xiaomi.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825085740.GA855@gerhold.net>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-08-20, 10:57, Stephan Gerhold wrote:
-> but it doesn't mention anything about the problem I described
-> ("conflicting" ranges for one of the "sub-versions").
-> 
-> I have to admit that I keep getting confused with these bit masks...
-> I think this is also one option I considered but actually it doesn't
-> work:
-> 
-> Essentially you suggest to encode a version using:
-> 
-> static int ver(int version1, int version2) {
-> 	return BIT(version1) << 16 | BIT(version2);
-> }
-> 
-> Now let's take a look at my example again:
-> 
-> So for the versions I mentioned we get:
->   - ver(0, 1) = 0x10002
->   - ver(1, 0) = 0x20001
->   - ver(1, 1) = 0x20002
->   - ver(0, 0) = 0x10001 (this one should be excluded)
-> 
-> So to mark v0.1, v1.0 and v1.1 as supported I'd set:
->      opp-supported-hw = <(ver(0, 1) | ver(1, 0) | ver(1, 1))>;
-> i.e. opp-supported-hw = <0x30003>;
-> 
-> Now let's say I'm running v0.0 = 0x10001. This version should not
-> support the OPP. But actually 0x30003 & 0x10001 = 0x10001 != 0,
-> so the OPP would consider it as supported.
-> 
-> I tried many different approaches, but you end up being unable to
-> control subversions independently for most of them.
+From: Qiwu Huang <huangqiwu@xiaomi.com>
 
-Okay, the binding doesn't really work well with subversions properly (as I
-believed earlier), but because the implementation was simple enough and very
-basic we can still work around it in your specific case. I am not sure I want to
-touch the bindings at this point of time, unless they aren't workable for
-someone.
+This patchset aims to provide power supply properties about wireless/wired charging.
+"quick_charge_type" reports different types of quick charge based on the charging power;
+"tx_adapter" shows" the type of wireless charging adapter;
+"signal_strength" shows the coupling level between TX and RX;
+"reverse_chg_mode" provides the interface of enabling/disabling wireless reverse charging.
 
-This should work fine for your case I believe, with two 32 bit words.
+Changes in V10
+ - Fix build error on linus/master v5.9-rc2 next-20200824 Reported-by: kernel test robot <lkp@intel.com>
+ - Fix build error on power-supply/for-next Reported-by: kernel test robot <lkp@intel.com>
 
-static int ver(int version1, int version2)
-{
-	return BIT(version1 * 8 + version2); //Here 8 is size-of version2
-}
+Changes in v9
+ - Set bat_imax When get quick charger type
 
+Changes in v8
+ - Add quick charge type driver in qcom_smbb suggested by GregKH
+
+Changes in v7
+ - Fix PATCH version error in 0/X email
+
+Changes in v6
+ - Replace "phones" with "devices" suggested by GregKH
+ - Add permission statement for "reverse_chg_mode"
+ - Update description for "reverse_chg_mode" in ABI suggested by GregKH
+ - Update description for "PING phase" in ABI suggested by GregKH
+
+Changes in v5
+ - Add details in 0/X email
+
+Changes in v4
+ - Exclude the patch of "power: supply: supply battery soc with decimal form"
+ - Fix some typo
+
+Changes in v3
+ - Add enumederated for quick charge type
+ - Add enumederated for tx adapter type
+ - Update the return type and description in ABI
+
+Changes in v2
+ - modify to capital letters for "power_supply_attrs"
+ - Update the return type and description in ABI
+
+Qiwu Huang (4):
+  power: supply: core: add quick charge type property
+  power: supply: core: add wireless charger adapter type property
+  power: supply: core: add wireless signal strength property
+  power: supply: core: property to control reverse charge
+
+ Documentation/ABI/testing/sysfs-class-power | 85 +++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c   |  4 +
+ drivers/power/supply/qcom_smbb.c            | 81 +++++++++++++++++++-
+ include/linux/power_supply.h                | 35 +++++++++
+ 4 files changed, 204 insertions(+), 1 deletion(-)
+
+
+base-commit: 6a9dc5fd6170d0a41c8a14eb19e63d94bea5705a
 -- 
-viresh
+2.28.0
+
