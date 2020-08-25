@@ -2,113 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D53252276
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 23:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A2F2522B9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 23:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgHYVHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 17:07:53 -0400
-Received: from cmta18.telus.net ([209.171.16.91]:42278 "EHLO cmta18.telus.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgHYVHv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 25 Aug 2020 17:07:51 -0400
-Received: from dougxps ([173.180.45.4])
-        by cmsmtp with SMTP
-        id AgAVkQs0IqUs3AgAWkWBnA; Tue, 25 Aug 2020 15:07:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=telus.net; s=neo;
-        t=1598389670; bh=okfs/gSusVf/W8ubFP2qX6KtZJzytKM0afb0qqjR/Eg=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date;
-        b=4zfsWlqxGLKOlEUpukz8dh81lSKCN2RHp4GG2TOj1tlEOJ9WLxtUm7BNJlDFlEgkZ
-         9+1aITVhEpyNa3/xjRqkVtzQnZ7oFcgN0StGFJ8AGLmiCkPbiUMc+GGqDvmhBKZjpk
-         ZDHVzC13+783zLEHXEnCvc7mAuDB/UNGUPpcdxU28UFH7xff4yZjAmxf+WeAyc38Ei
-         DonDDmH8x10J4GE7mjBF1JgszfmNJu08VvfUKBmY0QbrAhN2iNAWnsqwBVWvgT+URN
-         /EH5vAyUAd1WjNv4n0dOzTl17LhNVqPyfTAL1u2AemmmdL8eb9I194HLE6xEdrIU+l
-         3Yr88rf/CIFxg==
-X-Telus-Authed: none
-X-Authority-Analysis: v=2.3 cv=Mo8sFFSe c=1 sm=1 tr=0
- a=zJWegnE7BH9C0Gl4FFgQyA==:117 a=zJWegnE7BH9C0Gl4FFgQyA==:17
- a=Pyq9K9CWowscuQLKlpiwfMBGOR0=:19 a=IkcTkHD0fZMA:10 a=2s2tET4dTWZ_aRCLoUoA:9
- a=QEXdDO2ut3YA:10
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        "'Linux PM'" <linux-pm@vger.kernel.org>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>
-References: <4169555.5IIHXK4Dsd@kreacher>        <5cf44a75c9f73740d2a22dbfc5c7a57489b1a3ca.camel@linux.intel.com>        <002001d67a7b$2b46e1c0$81d4a540$@net> <d07cd980439d999b060dccdd16cb44c390cbf66d.camel@linux.intel.com>
-In-Reply-To: <d07cd980439d999b060dccdd16cb44c390cbf66d.camel@linux.intel.com>
-Subject: RE: [PATCH v2 0/5] cpufreq: intel_pstate: Address some HWP-related oddities
-Date:   Tue, 25 Aug 2020 14:07:46 -0700
-Message-ID: <004a01d67b23$c9829b60$5c87d220$@net>
+        id S1726336AbgHYVZ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 17:25:27 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:42928 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726158AbgHYVZ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 17:25:27 -0400
+Received: by mail-io1-f68.google.com with SMTP id g13so253100ioo.9;
+        Tue, 25 Aug 2020 14:25:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lg+hqZTHAe/BLEKS5GJeE0Rlebpak0rX9eme2hF12Uo=;
+        b=pt8OKLrQxekaTUmYFH9DNinNZAFtaaqhRfmB+7WMVgluxvcJBcD/JE9qqiXryxc85T
+         u97gXtLOAWKcPHNaIsShJS0iR3VsFR2dSXb7HFAJKer+Ka9KGydIgvCin4QRRs6gKEHr
+         /42yNHB/j/EHPXuWBQdYf28rJyMSNWDN8fZpildrM0jSAUmpiEqmr6oZSEjqSoiWhzsY
+         zcHZSDqGdndKMhs4CS//R0mYK9xFnIuP93wEnfELFXLB1eoLhIyUZzsxqj5Fwr29yGni
+         wQny6JPJ8DaX4g12ogovcLr+m/PFH22suTI6+f5y2YnQgdZ5jpd6PPiY2B9HD1u+0hBQ
+         Lpwg==
+X-Gm-Message-State: AOAM532BJ6kKPybOSKiV7NrBKG9KrFG+1cJ/hYd0woP/6UQFTYcgyV+g
+        wXm7r6BIjBd1VgN3fmtGxA==
+X-Google-Smtp-Source: ABdhPJx4FI3lgeilzIN4tG2HvKODEoeqep4y4IVVx4DDUmrw72padF0yehfdQVg1boNW+VeEFuytVA==
+X-Received: by 2002:a05:6638:24cf:: with SMTP id y15mr12384197jat.137.1598390725844;
+        Tue, 25 Aug 2020 14:25:25 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id p18sm123644ils.82.2020.08.25.14.25.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 14:25:25 -0700 (PDT)
+Received: (nullmailer pid 1359816 invoked by uid 1000);
+        Tue, 25 Aug 2020 21:25:21 -0000
+Date:   Tue, 25 Aug 2020 15:25:21 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Elliot Berman <eberman@codeaurora.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Trilok Soni <tsoni@codeaurora.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+Subject: Re: [RESEND PATCH v1 2/4] dt-bindings: power: reset: Add alternate
+ reboot mode format
+Message-ID: <20200825212521.GA1346433@bogus>
+References: <1597776856-12014-1-git-send-email-eberman@codeaurora.org>
+ <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Office Outlook 12.0
-Content-Language: en-ca
-Thread-Index: AdZ68u9Uyt9nR49dTce4yZVhEfzmlQAEGlEQ
-X-CMAE-Envelope: MS4wfIDvh/3kq5OxzYmu7kehd7AzqqKrivKj6FoX406cZFn35t6L5jEJJrAy/xmpYMXe5q2D2Frhoe4BywGq9rwxFkvqoHHvaGOyFTDDthzNfhjCzj3UtAWt
- 18TIYhyMzVOBRfLgQp7hg/aSqjl6/2UtAnC3WjlWK9v4hqbWP8Q7oYiP8xkkKnizFIYdNStQqpwTwh4AIIvQlQp+jtPa83QTaeeGz3hhZGhRIJ1N+SdFqctD
- Xc+sc09umctwSgWe/LAy8iTkcWQq9Gf5QePERGC3PihgM2D4Max8rLIfqVuxa5w4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+On Tue, Aug 18, 2020 at 11:54:14AM -0700, Elliot Berman wrote:
+> Current reboot-mode device tree schema does not support reboot commands
+> with spaces in them [1]. Add an optional new node "reboot-mode-names"
+> and "reboot-mode-magic" which add an array of strings and u32s,
+> respectively which would permit any string in this framework.
 
-Thanks for your reply.
+Kind of a weak justification. The intent was for the names to be a key, 
+not a multi word description which your example seems to be. Is 
+"dm-verity device corrupted" something Android has already standardized 
+on?
 
-On 2020.08.25 08:12 Srinivas Pandruvada wrote:
-> On Mon, 2020-08-24 at 18:00 -0700, Doug Smythies wrote:
-> > I think there is a disconnect between your written
-> > description of what is going on and your supporting MSR reads.
-> >
-> I reproduced again.
-> I see the copy paste individual at the first place swapped.
-
-Yes, and that had me confused, initially.
-
-> I pasted the full output by direct copy - paste from the screen.
 > 
-> But the issues are still there.
+> [1]:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-verity-target.c?h=v5.5#n255
+> 
+> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
+> ---
+>  .../devicetree/bindings/power/reset/reboot-mode.yaml    | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> index a6c9102..4ea6b33 100644
+> --- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+> @@ -19,6 +19,9 @@ description: |
+>    the bootloader what to do when the system reboots, and should be named
+>    as mode-xxx = <magic> (xxx is mode name, magic should be a non-zero value).
+>  
+> +  reboot-mode-magic and reboot-mode-names may be used in addition/instead of
+> +  mode-xxx style.
 
-Agreed.
-I didn't try your offline/online of CPU 1 part previously,
-but did now, and get the same results as you.
+It should be either/or in my opinion, not both.
 
-I did not know that "rdmsr -a 0x774" lists
-stuff in the order that CPU were last brought on-line.
-I had assumed the list was in CPU order. Weird.
+> +
+>    For example, modes common Android platform are:
+>      - normal: Normal reboot mode, system reboot with command "reboot".
+>      - recovery: Android Recovery mode, it is a mode to format the device or update a new image.
+> @@ -32,6 +35,14 @@ properties:
+>        description: |
+>          Default value to set on a reboot if no command was provided.
+>  
+> +  reboot-mode-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description: List of reboot commands, paired with reboot-mode-magic by index
+> +
+> +  reboot-mode-magic:
 
-My example (nothing new here, just me catching up.
-The offline/online order was cpu1, then cpu3, then cpu2):
+'reboot-modes' would align with normal patterns.
 
-root@s18:/sys/devices/system/cpu# grep . cpu*/cpufreq/energy_performance_preference
-cpu0/cpufreq/energy_performance_preference:balance_performance
-cpu1/cpufreq/energy_performance_preference:127
-cpu2/cpufreq/energy_performance_preference:125
-cpu3/cpufreq/energy_performance_preference:126
-cpu4/cpufreq/energy_performance_preference:balance_performance
-cpu5/cpufreq/energy_performance_preference:balance_performance
-root@s18:/sys/devices/system/cpu# rdmsr -p 0 0x774
-80002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -p 1 0x774
-7f002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -p 2 0x774
-7d002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -p 3 0x774
-7e002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -p 4 0x774
-80002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -p 5 0x774
-80002e2e
-root@s18:/sys/devices/system/cpu# rdmsr -a 0x774
-80002e2e
-80002e2e
-80002e2e
-7f002e2e
-7e002e2e
-7d002e2e
-
-... Doug
-
-
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description: List of reboot magic, paired with reboot-mode-names by index
+> +
+>  patternProperties:
+>    "^mode-.*$":
+>      $ref: /schemas/types.yaml#/definitions/uint32
+> @@ -44,4 +55,10 @@ examples:
+>        mode-bootloader = <2>;
+>        mode-loader = <3>;
+>      };
+> +
+> +  - |
+> +    reboot-mode {
+> +      reboot-mode-names = "normal", "bootloader", "dm-verity device corrupted";
+> +      reboot-mode-magic = <0x0>, <0x1>, <0xf>;
+> +    };
+>  ...
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
