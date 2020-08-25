@@ -2,164 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD983251CB2
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 17:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF04251CDD
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 18:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgHYPxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 11:53:14 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46350 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgHYPxO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 11:53:14 -0400
-Received: by mail-oi1-f195.google.com with SMTP id v13so12012190oiv.13;
-        Tue, 25 Aug 2020 08:53:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+EXZxt6bvtlHUS5SX4TpE5JhZOZFVfpCdsIvD6bUnoY=;
-        b=eBmQIPNECVy2CcgxQa/Y2XX4GSt7flZYz7lCx87e3ZF4uodPYtfTPrJgEFrmKdbG4Y
-         2pRCoN5KS7EIUGgv6oCf2zwGr4xkExkZ8r3lBcBRTYC1QwxFnr1B3G1HnPibe8DSwZqk
-         E6L5oDtBaMXVN937jFaaT0zX7NqK01TtQIUV0JHshBDIniZ7Az200CXwkYnsaNA5z1YR
-         uvrR0FuiwzW9dSRo3xhzE7g5BCP75V9tvY8jU5Wocm2e87K5i3fyx0Ya4Ez+Ggihhcvp
-         VMqEDfEwKkJfwgNgFCiJQOPJPMpxvScUpoN4hU5vNAQKVRDYh7uZlMdMQseS8LZ20e4v
-         dYMA==
-X-Gm-Message-State: AOAM531/401z5c0eUBBU29lk04O7cF5S0iy/gYXGykslLWghMEEh/7QB
-        oMhO0RJY+edr9UaOv7Nz12D6nWgEccQiRiyWg9o=
-X-Google-Smtp-Source: ABdhPJy0oxG3uzafUkAVrJQWE3ctgSPczZK9J9ZrAMpOIHMXOa0SFzh/Aa7gCYme+Job4EiPtI7eVf58hi5FOcjim8A=
-X-Received: by 2002:a05:6808:3d5:: with SMTP id o21mr1468912oie.110.1598370793137;
- Tue, 25 Aug 2020 08:53:13 -0700 (PDT)
+        id S1726878AbgHYQFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 12:05:06 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:60340 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726706AbgHYQFF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 12:05:05 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 21141299AB4
+Received: by earth.universe (Postfix, from userid 1000)
+        id 830E73C0C82; Tue, 25 Aug 2020 18:05:00 +0200 (CEST)
+Date:   Tue, 25 Aug 2020 18:05:00 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: Re: [PATCH] power: supply: bq2515x: Constify static variables
+Message-ID: <20200825160500.wxigzcoergyrqapj@earth.universe>
+References: <20200824232228.38423-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
-References: <4169555.5IIHXK4Dsd@kreacher> <2064342.aRc67yb0pC@kreacher>
- <61ea43fce7dd8700d94f12236a86ffec6f76a898.camel@gmail.com>
- <CAJZ5v0hkmcAuCsnfjCSWTarr4pkQry2VCtk2aWM74fOW2guzmg@mail.gmail.com>
- <1341038e00d965e913ee9f0c7a1e739eadef42f7.camel@linux.intel.com>
- <CAJZ5v0gf9WCwm8Bdzo02Jfbz5vgdH8c_T9y89SaVvTNXH7p4hA@mail.gmail.com> <bb272be6e251129d0ec248ab53b8515907340e7a.camel@linux.intel.com>
-In-Reply-To: <bb272be6e251129d0ec248ab53b8515907340e7a.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Aug 2020 17:53:02 +0200
-Message-ID: <CAJZ5v0hLMboPt7jti5GZXgus2jbQ5z-9-NGwKiQjYbnu9mcA6A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] cpufreq: intel_pstate: Always return last EPP
- value from sysfs
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Artem Bityutskiy <dedekind1@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qi5obm626a6gxj6s"
+Content-Disposition: inline
+In-Reply-To: <20200824232228.38423-1-rikard.falkeborn@gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 5:27 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Tue, 2020-08-25 at 17:14 +0200, Rafael J. Wysocki wrote:
-> > On Tue, Aug 25, 2020 at 5:06 PM Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com> wrote:
-> > > On Tue, 2020-08-25 at 16:51 +0200, Rafael J. Wysocki wrote:
-> > > > On Tue, Aug 25, 2020 at 8:20 AM Artem Bityutskiy <
-> > > > dedekind1@gmail.com
-> > > > > wrote:
-> > > > > On Mon, 2020-08-24 at 19:42 +0200, Rafael J. Wysocki wrote:
-> > > > > > From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > Make the energy_performance_preference policy attribute in
-> > > > > > sysfs
-> > > > > > always return the last EPP value written to it instead of the
-> > > > > > one
-> > > > > > currently in the HWP Request MSR to avoid possible confusion
-> > > > > > when
-> > > > > > the performance scaling algorithm is used in the active mode
-> > > > > > with
-> > > > > > HWP enabled (in which case the EPP is forced to 0 regardless
-> > > > > > of
-> > > > > > what value it has been set to via sysfs).
-> > > > >
-> > > > > Why is this a good idea, I wonder. If there was a prior
-> > > > > discussion,
-> > > > > please, point to it.
-> > > > >
-> > > > > The general approach to changing settings via sysfs is often
-> > > > > like
-> > > > > this:
-> > > > >
-> > > > > 1. Write new value.
-> > > > > 2. Read it back and verify that it is the same. Because there
-> > > > > is no
-> > > > > better way to verify that the kernel "accepted" the value.
-> > > >
-> > > > If the write is successful (ie. no errors returned and the value
-> > > > returned is equal to the number of written characters), the
-> > > > kernel
-> > > > *has* accepted the written value, but it may not have taken
-> > > > effect.
-> > > > These are two different things.
-> > > >
-> > > > The written value may take an effect immediately or it may take
-> > > > an
-> > > > effect later, depending on the current configuration etc.  If you
-> > > > don't see the effect of it immediately, it doesn't matter that
-> > > > there
-> > > > was a failure of some sort.
-> > > >
-> > > > > Let's say I write 'balanced' to energy_performance_preference.
-> > > > > I
-> > > > > read
-> > > > > it back, and it contains 'balanced', so I am happy, I trust the
-> > > > > kernel
-> > > > > changed EPP to "balanced".
-> > > > >
-> > > > > If the kernel, in fact, uses something else, I want to know
-> > > > > about
-> > > > > it
-> > > > > and have my script fail.
-> > > >
-> > > > Why do you want it to fail then?
-> > > >
-> > > > > Why caching the value and making my script _think_ it succeeded
-> > > > > is
-> > > > > a good idea.
-> > > >
-> > > > Because when you change the scaling algorithm or the driver's
-> > > > operation mode, the value you have written will take effect.
-> > > >
-> > > > In this particular case it is explained in the driver
-> > > > documentation
-> > > > that the performance scaling algorithm in the active mode
-> > > > overrides
-> > > > the sysfs value and that's the only case when it can be
-> > > > overridden.
-> > > > So whatever you write to this attribute will not take effect
-> > > > immediately anyway, but it may take an effect later.
-> > >
-> > > In some cases without even changing active/passive this is
-> > > happening
-> > > when there was some error previously. For example:
-> > >
-> > > #cat energy_performance_preference
-> > > 127
-> > > [root@otcpl-perf-test-skx-i9 cpufreq]# rdmsr -p 1 0x774
-> > > 8000ff00
-> > >
-> > > I think we should show reality. In mode change can be a special
-> > > case
-> > > and use the stored value to restore in new mode.
-> >
-> > OK, so I'll make it fail on attempts to change the EPP from 0
-> > (performance) in the active mode with the performance "governor".
-> >
-> Here the scaling governor is powersave.
->
-> # cat scaling_governor
-> powersave
 
-What I'm saying is that reads from energy_performance_preference will
-still return the register value, but writes to it will fail on
-attempts to change to anything different from "performance" when in
-the active mode and the current governor is "performance".
+--qi5obm626a6gxj6s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Cheers!
+Hi,
+
+On Tue, Aug 25, 2020 at 01:22:28AM +0200, Rikard Falkeborn wrote:
+> Constify a number of static variables that are not modified to allow the
+> compiler to put them in read-only memory.
+>=20
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/bq2515x_charger.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/bq2515x_charger.c b/drivers/power/suppl=
+y/bq2515x_charger.c
+> index 36b0c8c98d40..9dcb61ea4cf2 100644
+> --- a/drivers/power/supply/bq2515x_charger.c
+> +++ b/drivers/power/supply/bq2515x_charger.c
+> @@ -188,7 +188,7 @@ struct bq2515x_device {
+>  	struct bq2515x_init_data init_data;
+>  };
+> =20
+> -static struct reg_default bq25150_reg_defaults[] =3D {
+> +static const struct reg_default bq25150_reg_defaults[] =3D {
+>  	{BQ2515X_FLAG0, 0x0},
+>  	{BQ2515X_FLAG1, 0x0},
+>  	{BQ2515X_FLAG2, 0x0},
+> @@ -227,7 +227,7 @@ static struct reg_default bq25150_reg_defaults[] =3D {
+>  	{BQ2515X_DEVICE_ID, 0x20},
+>  };
+> =20
+> -static struct reg_default bq25155_reg_defaults[] =3D {
+> +static const struct reg_default bq25155_reg_defaults[] =3D {
+>  	{BQ2515X_FLAG0, 0x0},
+>  	{BQ2515X_FLAG1, 0x0},
+>  	{BQ2515X_FLAG2, 0x0},
+> @@ -886,14 +886,14 @@ static int bq2515x_battery_get_property(struct powe=
+r_supply *psy,
+>  	return 0;
+>  }
+> =20
+> -static enum power_supply_property bq2515x_battery_properties[] =3D {
+> +static const enum power_supply_property bq2515x_battery_properties[] =3D=
+ {
+>  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+>  	POWER_SUPPLY_PROP_CURRENT_NOW,
+>  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+>  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
+>  };
+> =20
+> -static enum power_supply_property bq2515x_mains_properties[] =3D {
+> +static const enum power_supply_property bq2515x_mains_properties[] =3D {
+>  	POWER_SUPPLY_PROP_ONLINE,
+>  	POWER_SUPPLY_PROP_STATUS,
+>  	POWER_SUPPLY_PROP_HEALTH,
+> @@ -905,7 +905,7 @@ static enum power_supply_property bq2515x_mains_prope=
+rties[] =3D {
+>  	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+>  };
+> =20
+> -static struct power_supply_desc bq2515x_mains_desc =3D {
+> +static const struct power_supply_desc bq2515x_mains_desc =3D {
+>  	.name			=3D "bq2515x-mains",
+>  	.type			=3D POWER_SUPPLY_TYPE_MAINS,
+>  	.get_property		=3D bq2515x_mains_get_property,
+> @@ -915,7 +915,7 @@ static struct power_supply_desc bq2515x_mains_desc =
+=3D {
+>  	.property_is_writeable	=3D bq2515x_power_supply_property_is_writeable,
+>  };
+> =20
+> -static struct power_supply_desc bq2515x_battery_desc =3D {
+> +static const struct power_supply_desc bq2515x_battery_desc =3D {
+>  	.name			=3D "bq2515x-battery",
+>  	.type			=3D POWER_SUPPLY_TYPE_BATTERY,
+>  	.get_property		=3D bq2515x_battery_get_property,
+> --=20
+> 2.28.0
+>=20
+
+--qi5obm626a6gxj6s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9FNqIACgkQ2O7X88g7
++ppT7hAAkzQO5mGX9BUXEjs4drahR2s3CGaToZ4uHFLxPruncGAO6FRiNeXbSCxF
+GDl2O6Bv2oDSX7vKQqs0KgVE3VB+SiWj8OV9aNhTbAqjJQR587qnagBB7p0UZg3l
+uHUMSJAVy8YOyx2AOUuVovqX9FsRoKcg3QhpH/dNGCxiM+Lpps1H2lHllH5fNSZV
+St8grBKX2NG1Azgnr2CG2TS3lnNL5bmJt1AdpPduR0KmHSFjXz/VgPmmQjdsxo91
+2i+r2B4Re/UZ+EEIMRp0vzSm/Ak08aGkIsJTYi9MtIRx8aBUnOm6wNP7lZCkNeuZ
+LkqFVuOnZDbAOYTuRTTeVX/zbddJNuVf/yNTzMm+rA4At2s9rO5eoi533Bz8/+8w
+qhBrpXSj2Nr65FATcm6x6WKDSX4F1LV6yXWuYu3PYNEVEkxKlKTYSYaqCwFOI0pD
+LpCRYFCsz8qBmW9AOY0eyDPY1aXNKJ7cuNALh8oYM48P1e/zaLxICLBEr3fZzojk
+4sokMfNUr5yc4U0T1GY5SIFP5Hj50Z/c6Q+o/Wr+RCQk+dh/UnDccDcMHckFufNK
+3/jWZFmtxWNheQflCzesx9oBaU6ukmO9DEPeqPLC6Uu5HRP/aZGo6NuMvjUHKHBL
+GGhGR1C0L539j4RqO0k2u91pvWnjvd8CSjP31AT5KBonMnwJv0E=
+=DTzh
+-----END PGP SIGNATURE-----
+
+--qi5obm626a6gxj6s--
