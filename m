@@ -2,188 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 962882515AE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 11:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF03F2515CA
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 11:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729568AbgHYJoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 05:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729560AbgHYJof (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 05:44:35 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7FFC061574
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 02:44:34 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id h15so5288143wrt.12
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 02:44:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ujkEUSo+hKd0F+n+n+4eow5fQiAPWkhZFl/qY+hEm7I=;
-        b=rXlaG4lBk/9ZFQ80LD+zjXCgcILpe2q3j7aSpFOOGyjedptgjQU5mRZrzy6a23UqiI
-         bnM4EzVnnxX90gRM6vUv2uga1xs3JH3eXF+My1IkgkO5PR7XUki0KTgOHXQBPBoZON01
-         6wPPHiMKU7a2l1F1ZU0T63cr8N908vdaFBBKmpSuf7nmcI1gkdfeM4AfJB+qFW8P0bMM
-         lTuNAH9Csf5IeDvgHVHClgVHGNIHDQRvMPYoI3MSFBFun8+oUAU3tv+5pj8m7LnQvig0
-         kFrauL6FQC6Z9r25I0NbgRbrNjlHCBlQdUkGyf096c+NA6ai0+EGhV4+PDy0ZteQdrFh
-         AsKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ujkEUSo+hKd0F+n+n+4eow5fQiAPWkhZFl/qY+hEm7I=;
-        b=PaQta5K7BlpNhVwqdr+PwraDI6A7vJHEjX0u0mE0WOSSsxT3vpV7eV5lWXDw6JoYQo
-         AWuVvCCy3yMaZuwKieX8OnR/hiZ2jijxQFlEfTLRju3o0LcxXtIvuF4rQNEnF9Jr75GV
-         P4O2WyA+pI/kPEij4h3I7Lg4tZekOPFl9mMSRCD9JPBa3tkEPbUmYoiQ5Ztvb/s3casW
-         OgNnng9ocssHBX1VY5V10cP7kMuBH1QOrNAJLlw07//GrgHGDm4okdiV9T1NJ1ZQ5STM
-         1+MytJ8IuEa04wU3CLlWzgSyylgrl9wS7vc/yCIB56a5L+il4Six28gSd2IgdcRnpevj
-         8gAw==
-X-Gm-Message-State: AOAM5309co6BcTk3vIPqgpv1U7q+MV5u3yyQ/Zz1iRR0x9WhjUHBi0AW
-        k897hnxRMRvAC2AQH2cHyyTiXA==
-X-Google-Smtp-Source: ABdhPJz7G7kxb5c0oWnqP8sVrGmfNv6GBtMKj9praqksNl3MmSemmfB6dRZWvkyjd6gM3062nySHqw==
-X-Received: by 2002:a05:6000:124f:: with SMTP id j15mr9545856wrx.287.1598348673000;
-        Tue, 25 Aug 2020 02:44:33 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:30ce:e04c:9454:bbf8? ([2a01:e34:ed2f:f020:30ce:e04c:9454:bbf8])
-        by smtp.googlemail.com with ESMTPSA id z8sm4516749wmf.10.2020.08.25.02.44.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2020 02:44:32 -0700 (PDT)
-Subject: Re: [PATCH v1] thermal/of: Introduce k-po, k-pu and k-i for a thermal
- zone
-To:     Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>
-Cc:     Finley Xiao <finley.xiao@rock-chips.com>, heiko@sntech.de,
-        rui.zhang@intel.com, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, huangtao@rock-chips.com,
-        tony.xie@rock-chips.com, cl@rock-chips.com
-References: <20200811123115.8144-1-finley.xiao@rock-chips.com>
- <20200824230956.GA3500214@bogus>
- <c3f54e18-8683-8bd9-90fa-e3465cddf8e8@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <13b84e7e-adfe-5939-e78d-0a20fce0a92e@linaro.org>
-Date:   Tue, 25 Aug 2020 11:44:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1729456AbgHYJ4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 05:56:34 -0400
+Received: from foss.arm.com ([217.140.110.172]:55038 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728944AbgHYJ4c (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 25 Aug 2020 05:56:32 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B095530E;
+        Tue, 25 Aug 2020 02:56:31 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51D3B3F66B;
+        Tue, 25 Aug 2020 02:56:31 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 10:56:29 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Puhov <peter.puhov@linaro.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC 0/3] cpufreq: cppc: Add support for frequency invariance
+Message-ID: <20200825095629.GA15469@arm.com>
+References: <cover.1594289009.git.viresh.kumar@linaro.org>
+ <20200709124349.GA15342@arm.com>
+ <20200710030032.3yq3lqqybhy5m744@vireshk-i7>
+ <CAKfTPtBpOdRSV0gb2CoC8J9GnuPiqZ+MbQLLc6NdSmjJhb0cgA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <c3f54e18-8683-8bd9-90fa-e3465cddf8e8@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtBpOdRSV0gb2CoC8J9GnuPiqZ+MbQLLc6NdSmjJhb0cgA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/08/2020 10:25, Lukasz Luba wrote:
-> Hi Rob,
+Hi guys,
+
+On Friday 24 Jul 2020 at 11:38:59 (+0200), Vincent Guittot wrote:
+> On Fri, 10 Jul 2020 at 05:00, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > Thanks for the quick reply Ionela.
+> >
+> > On 09-07-20, 13:43, Ionela Voinescu wrote:
+> > > I'll put all my comments here for now, as they refer more to the design
+> > > of the solution.
+> > >
+> > > I hope it won't be too repetitive compared to what we previously discussed
+> > > offline.
+> >
+> > > I understand you want to get additional points of view.
+> >
+> > Not necessarily, I knew you would be one of the major reviewers here
+> > :)
+> >
+> > I posted so you don't need to review in private anymore and then the
+> > code is somewhat updated since the previous time.
+> >
+> > > On Thursday 09 Jul 2020 at 15:43:32 (+0530), Viresh Kumar wrote:
+> > > I believe the code is unnecessarily invasive for the functionality it
+> > > tries to introduce and it does break existing functionality.
+> > >
+> > >
+> > >  - (1) From code readability and design point of view, this switching
+> > >        between an architectural method and a driver method complicates
+> > >        an already complicated situation. We already have code that
+> > >        chooses between a cpufreq-based method and a counter based method
+> > >        for frequency invariance. This would basically introduce a choice
+> > >        between a cpufreq-based method through arch_set_freq_scale(), an
+> > >        architectural counter-based method through arch_set_freq_tick(),
+> > >        and another cpufreq-based method that piggy-backs on the
+> > >        architectural arch_set_freq_tick().
+> >
+> > I agree.
+> >
+> > >        As discussed offline, before I even try to begin accepting the
+> > >        possibility of this complicated mix, I would like to know why
+> > >        methods of obtaining the same thing by using the cpufreq
+> > >        arch_set_freq_scale()
+> >
+> > The problem is same as that was in case of x86, we don't know the real
+> > frequency the CPU may be running at and we need something that fires
+> > up periodically in a guaranteed way to capture the freq-scale.
 > 
-> On 8/25/20 12:09 AM, Rob Herring wrote:
->> On Tue, Aug 11, 2020 at 08:31:15PM +0800, Finley Xiao wrote:
->>> The default value for k_pu is:
->>>      2 * sustainable_power / (desired_temperature - switch_on_temp)
->>> The default value for k_po is:
->>>      sustainable_power / (desired_temperature - switch_on_temp)
->>> The default value for k_i is 10.
->>>
->>> Even though these parameters of the PID controller can be changed
->>> by the following sysfs files:
->>>      /sys/class/thermal/thermal_zoneX/k_pu
->>>      /sys/class/thermal/thermal_zoneX/k_po
->>>      /sys/class/thermal/thermal_zoneX/k_i
->>>
->>> But it's still more convenient to change the default values by
->>> devicetree,
->>> so introduce these three optional properties. If provided these
->>> properties,
->>> they will be parsed and associated with the thermal zone via the thermal
->>> zone parameters.
->>>
->>> Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
->>> ---
->>>   Documentation/devicetree/bindings/thermal/thermal.txt | 14
->>> ++++++++++++++
->>
->> Bindings should be a separate file and this one is a DT schema now.
->>
->>>   drivers/thermal/thermal_of.c                          |  7 +++++++
->>>   2 files changed, 21 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/thermal/thermal.txt
->>> b/Documentation/devicetree/bindings/thermal/thermal.txt
->>> index f78bec19ca35..ebe936b57ded 100644
->>> --- a/Documentation/devicetree/bindings/thermal/thermal.txt
->>> +++ b/Documentation/devicetree/bindings/thermal/thermal.txt
->>> @@ -165,6 +165,20 @@ Optional property:
->>>               2000mW, while on a 10'' tablet is around
->>>               4500mW.
->>>   +- k-po:            Proportional parameter of the PID controller when
->>> +            current temperature is above the target.
->>> +  Type: signed
->>> +  Size: one cell
->>> +
->>> +- k-pu:            Proportional parameter of the PID controller when
->>> +            current temperature is below the target.
->>> +  Type: signed
->>> +  Size: one cell
->>> +
->>> +- k-i:            Integral parameter of the PID controller.
->>> +  Type: signed
->>> +  Size: one cell
->>
->> What's PID?
->>
->> I know nothing about the sysfs params, but the binding needs to stand on
->> it's own and needs enough detail to educate me.
-> Sorry for the delay, I missed that patch.
-> These parameters are the coefficients for the
-> Proportional-Integral-Derivative (PID) controller [1], which is the
-> core of the Intelligent Power Allocation (IPA) thermal governor.
-
-Just a few words to elaborate a bit for Rob who may not have time to
-digest the whole concept from Wikipedia :)
-
-The PID is an regulation loop where the input is compared to the output.
-
-For example when driving a car and you aim a speed cruise of 90km/h. You
-press the accelerator and watch the current speed. The smaller the
-current speed is, the stronger you will push the accelerator. And the
-closer to the cruise speed the car is, the lesser you push the
-accelerator until the car stabilize to the cruise to speed.
-
-The k-* describes how strong you push the accelerator and release it.
-
-In the thermal framework, that has an impact on how brutal the
-mitigation acts and depending on them it results in a flat temperature
-curve or a sawtooth aspect.
-
-These coefficient depends on the ambient temperature (casing, room
-temperature), the heat sink and the load. Depending on the use cases,
-you may want to change their values at runtime.
-
-From my POV, setting these values in the DT does not really make sense.
-
-It would make much more sense to have the thermal specifications of the
-board (heat sink capacity, resistivity, max temperature or TDP), so from
-there we should be able to compute anything related to the thermal
-profile and configure from the kernel.
-
-
-> Only IPA uses them, thus I don't think the governors parameters:
-> k-po, k-pu, k-i
-> should be part of the DeviceTree. I haven't seen such governors
-> tunnables in the DT, please point me if they exist somewhere.
+> Yeah it's exactly the same behavior as x86 and re using the same
+> mechanism seems the  best solution
 > 
-> Do you think Rob they might be specified in the DT?
+> The main problem is that AMU currently assumes that it will be the
+> only to support such tick based mechanism whereas others like cppc can
+> provides similar information
 > 
-> Regards,
-> Lukasz
+
+Yes, I agree that a similar method to the use of AMUs or APERF/MPERF would
+result in a more accurate frequency scale factor.
+
+> >
+> > Though I am thinking now if we can trust the target_index() helper and
+> > keep updating the freq-scale based on the delta between last call to
+> > it and the latest call. I am not sure if it will be sufficient.
+> >
+> > >        or even the more invasive wrapping of the
+> > >        counter read functions is not working.
+> >
+> > I am not sure I understood this one.
+> >
+
+I've been putting some more thought/code into this one and I believe
+something as follows might look nicer as well as cover a few corner cases
+(ignore implementation details for now, they can be changed):
+
+- Have a per cpu value that marks the use of either AMUs, CPPC, or
+  cpufreq for freq invariance (can be done with per-cpu variable or with
+  cpumasks)
+
+- arch_topology.c: initialization code as follows:
+
+	for_each_present_cpu(cpu) {
+		if (freq_inv_amus_valid(cpu) &&
+		    !freq_inv_set_max_ratio(cpufreq_get_hw_max_freq(cpu) * 1000,
+					    arch_timer_get_rate(), cpu)) {
+			per_cpu(inv_source, cpu) = INV_AMU_COUNTERS;
+			continue;
+		}
+		if (freq_inv_cppc_counters_valid(cpu) &&
+		    !freq_inv_set_max_ratio(cppc_max_perf, cppc_ref_perf, cpu)) {
+			per_cpu(inv_source, cpu) = INV_CPPC_COUNTERS;
+			continue;
+		}
+		if (!cpufreq_supports_freq_invariance() ||
+		    freq_inv_set_max_ratio(cpufreq_get_hw_max_freq(cpu),
+					   1, cpu)) {
+			pr_info("FIE disabled: no valid source for CPU%d.", cpu);
+			return 0;
+		}
+	}
+  This would live in an equivalent of the init function we have now for
+  AMU counters only (init_amu_fie), made to handle more sources and moved
+  to arch_topology.c.
+  The freq_inv_set_max_ratio() would be a generic version of what is now
+  validate_cpu_freq_invariance_counters() (only the ratio computation and
+  setting).
+
+ - Finally, 
+	void freq_inv_update_counter_refs(void)
+	{
+		this_cpu_write(arch_core_cycles_prev, read_corecnt());
+		this_cpu_write(arch_const_cycles_prev, read_constcnt());
+	}
+  This would be an equivalent of init_cpu_freq_invariance_counters().
+  There is the option of either read_{corecnt/constcnt}() to either do AMU
+  reads or CPPC counter reads depending on inv_source, or for either arm64
+  or cppc code to define the entire freq_inv_update_counter_refs().
+
+ - Given all of the above, topology_scale_freq_tick() can then be made generic
+
+	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
+	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
+	freq_inv_update_counter_refs();
+	const_cnt = this_cpu_read(arch_const_cycles_prev);
+	core_cnt = this_cpu_read(arch_core_cycles_prev);
+
+I have some versions of code that do this generalisation for AMUs and cpufreq
+with a common topology_set_freq_scale() that is to be used for both
+arch_set_freq_scale() and arch_set_freq_tick(). But it's written with this
+usecase in mind so it can be extended to use CPPC counters as source as well,
+as detailed above.
+
+So, this is basically what I had in mind when recommending "wrapping of the
+counter read functions" :). This would basically reuse much of what is now
+the AMU invariance code while allowing for CPPC counters as a possible source.
+
+I'll stop here for now to see what you guys think about this.
+
+Thanks,
+Ionela.
+
+> > >  - (2) For 1/3, the presence of AMU counters does not guarantee their
+> > >        usability for frequency invariance. I know you wanted to avoid
+> > >        the complications of AMUs being marked as supporting invariance
+> > >        after the cpufreq driver init function, but this breaks the
+> > >        scenario in which the maximum frequency is invalid.
+> >
+> > Is that really a scenario ? i.e. Invalid maximum frequency ? Why would
+> > that ever happen ?
+> >
+> > And I am not sure if this breaks anything which already exists,
+> > because all we are doing in this case now is not registering cppc for
+> > FI, which should be fine.
 > 
-> [1] https://en.wikipedia.org/wiki/PID_controller
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> IIUC, AMU must wait for cpufreq drivers to be registered in order to
+> get the maximum freq and being able to enable its FIE support.
+> Could we have a sequence like:
+> cppc register its scale_freq_tick function
+> AMU can then override the tick function for cpu which supports AMU
+> 
+> >
+> > >  - (3) For 2/3, currently we support platforms that have partial support
+> > >        for AMUs, while this would not be supported here. The suggestions
+> > >        at (1) would give us this for free.
+> >
+> > As both were counter based mechanisms, I thought it would be better
+> > and more consistent if only one of them is picked. Though partial
+> > support of AMUs would still work without the CPPC driver.
+> >
+> > --
+> > viresh
