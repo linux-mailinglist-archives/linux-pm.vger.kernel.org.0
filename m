@@ -2,143 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 094492512EC
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 09:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77EB2512EE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729367AbgHYHTO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 03:19:14 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:41704 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729194AbgHYHTM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 03:19:12 -0400
-Received: by mail-wr1-f68.google.com with SMTP id p17so5931634wrj.8;
-        Tue, 25 Aug 2020 00:19:09 -0700 (PDT)
+        id S1729322AbgHYHUV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 03:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729287AbgHYHUT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 03:20:19 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC2EC061755
+        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 00:20:19 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id p37so6204646pgl.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 00:20:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:content-transfer-encoding:in-reply-to:references
+         :subject:from:cc:to:date:message-id:user-agent;
+        bh=vg5jAvVQXxT9NoQtlYydmDlexL/3ZUaKgzWx4DPbqMc=;
+        b=PtcLxUsUsen/kCOn1Qu+UpVo4UmeYVlFBp/3mrHIwuuvQGD4Tb+Wu5PLYRRFP/gc1s
+         y4Pq+CTtelzAq6PBaRYVbXnk+EoRMmI80F/FoEz8CXXTU10OOK5yHzXYNo66W7fVQq8U
+         vNLP0+0ENzRz8UG37xRLcwyjrlH/h7tMlBywU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WzjocZ6AbgdZxSRavuClgS3bWv6X8HTLysz12xiMgeg=;
-        b=qyVhXj9agD5+H3XVK+tGkvhZNeQX6hvhMZSkWy/nLUggaEVvTuapXW7pPIk6cU8A+K
-         nuZwvr16njwOmCPuhbfNSaYUSm/wW2RcplMrJjJGrnfkw0EC9OfZ3Vd/AqaB9ydKN88Z
-         VwCe5YDfCKE+3LptNqpWKyrj/C+Y97JUV5IReEapkIPmPeI16SryBOTUP9l/2IHbEnZk
-         IQtlCVM5/vt00leFHp2O2D1ipL20vQ8Qn91XNyi5YtMc6pzkrcV6IujgEdWvuGn9F5OW
-         NXOspjyjzl2cK8rdda58N2BQOb3WlXwXyKBSBh3svaRl+uMGyCtbXrNwiH4uABvqLG8w
-         rzDA==
-X-Gm-Message-State: AOAM533G7Z/K85Dollgia6nd7o08jhVncziIKOhq/nmJGdYEE5b1nhpt
-        isX4TtDpsynKsLZEK/7wAik=
-X-Google-Smtp-Source: ABdhPJwkhdWQGkLwZ00kAqnPEmqc8N+HVtkEdsjRUBu5ZaCv9oCeqT0wAbIggVlRGDIzjGcy8OFy8Q==
-X-Received: by 2002:a5d:51c3:: with SMTP id n3mr9451383wrv.104.1598339948999;
-        Tue, 25 Aug 2020 00:19:08 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.216])
-        by smtp.googlemail.com with ESMTPSA id c6sm1611593wrr.15.2020.08.25.00.19.06
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 25 Aug 2020 00:19:08 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 09:19:05 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v2 13/19] dt-bindings: nvmem: imx-ocotp: Update i.MX 8M
- compatibles
-Message-ID: <20200825071905.GE3458@kozik-lap>
-References: <20200824162652.21047-1-krzk@kernel.org>
- <20200824162652.21047-13-krzk@kernel.org>
- <20200825023904.GA3837236@bogus>
+        h=x-gm-message-state:mime-version:content-transfer-encoding
+         :in-reply-to:references:subject:from:cc:to:date:message-id
+         :user-agent;
+        bh=vg5jAvVQXxT9NoQtlYydmDlexL/3ZUaKgzWx4DPbqMc=;
+        b=KN27sSy2A3He/NzuigMHJpE9PKyvWKu+PlmJza3HWRdWvhNe59viuzUkpB7dJz2DA1
+         U2y5XlqhbHWaTk4AJlyPHIJUSFoYIWDA2aUUaeU4VQ7JSt0+D0CPWnwUyDqslT5pkE3S
+         aqeuSgxrZMNQqkSbUMo9jpYgzpmuhupUqelwmBQcnP3XU1jYV12oyOfoWaVy8QUeU9p6
+         kwn7ndXp8STErBfAM5qU3ByXMR5RvFfdc4+r36TQjwb7C6GAjCW4mB2cNuc3Hyv2tKsr
+         NUvpzy2TtLawFt/0IzH0rUZoKBKNZodn8Z5cbWJpco39Z3Z0PuL2HQvSEG5TIT/H9uRK
+         0rJQ==
+X-Gm-Message-State: AOAM530L30X0rbvnHk7NS3GhyBuYs3Kn4mj/GBkO0bZm/O06XQOgGUV5
+        79RLLYYmEWPd1zrrnDUiRnxHdw==
+X-Google-Smtp-Source: ABdhPJyzNUCbdnBjGxXGVwGQwQsAzmGrWhlHRrFkyhNvHPB0nHjuj4tILIjEYc9j4vEy2nHcmu4W8g==
+X-Received: by 2002:a62:2704:: with SMTP id n4mr7083175pfn.246.1598340019012;
+        Tue, 25 Aug 2020 00:20:19 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:3e52:82ff:fe6c:83ab])
+        by smtp.gmail.com with ESMTPSA id x136sm13701355pfc.28.2020.08.25.00.20.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2020 00:20:18 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200825023904.GA3837236@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200824164212.GA3715@yoga>
+References: <20200821204921.32536-1-sibis@codeaurora.org> <159804608868.334488.2486130699850456264@swboyd.mtv.corp.google.com> <20200824164212.GA3715@yoga>
+Subject: Re: [PATCH v2 1/2] PM / Domains: Add GENPD_FLAG_NO_SUSPEND/RESUME flags
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Sibi Sankar <sibis@codeaurora.org>, khilman@kernel.org,
+        ulf.hansson@linaro.org, rjw@rjwysocki.net, agross@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, gregkh@linuxfoundation.org, pavel@ucw.cz,
+        len.brown@intel.com, rnayak@codeaurora.org, dianders@chromium.org,
+        mka@chromium.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Tue, 25 Aug 2020 00:20:17 -0700
+Message-ID: <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
+User-Agent: alot/0.9.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 08:39:04PM -0600, Rob Herring wrote:
-> On Mon, Aug 24, 2020 at 06:26:46PM +0200, Krzysztof Kozlowski wrote:
-> > DTSes with new i.MX 8M SoCs use two compatibles so update the binding to
-> > fix dtbs_check warnings like:
-> > 
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000: compatible:1: 'syscon' was expected
-> >     From schema: Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-> > 
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000:
-> >     compatible: ['fsl,imx8mn-ocotp', 'fsl,imx8mm-ocotp', 'syscon'] is too long
-> > 
-> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: efuse@30350000:
-> >     compatible: Additional items are not allowed ('syscon' was unexpected)
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >  .../devicetree/bindings/nvmem/imx-ocotp.yaml  | 39 ++++++++++++-------
-> >  1 file changed, 24 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-> > index 1c9d7f05f173..b5b250185afd 100644
-> > --- a/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-> > +++ b/Documentation/devicetree/bindings/nvmem/imx-ocotp.yaml
-> > @@ -19,21 +19,30 @@ allOf:
-> >  
-> >  properties:
-> >    compatible:
-> > -    items:
-> > -      - enum:
-> > -          - fsl,imx6q-ocotp
-> > -          - fsl,imx6sl-ocotp
-> > -          - fsl,imx6sx-ocotp
-> > -          - fsl,imx6ul-ocotp
-> > -          - fsl,imx6ull-ocotp
-> > -          - fsl,imx7d-ocotp
-> > -          - fsl,imx6sll-ocotp
-> > -          - fsl,imx7ulp-ocotp
-> > -          - fsl,imx8mq-ocotp
-> > -          - fsl,imx8mm-ocotp
-> > -          - fsl,imx8mn-ocotp
-> > -          - fsl,imx8mp-ocotp
-> > -      - const: syscon
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - fsl,imx6q-ocotp
-> > +              - fsl,imx6sl-ocotp
-> > +              - fsl,imx6sx-ocotp
-> > +              - fsl,imx6ul-ocotp
-> > +              - fsl,imx6ull-ocotp
-> > +              - fsl,imx7d-ocotp
-> > +              - fsl,imx6sll-ocotp
-> > +              - fsl,imx7ulp-ocotp
-> > +              - fsl,imx8mq-ocotp
-> > +              - fsl,imx8mm-ocotp
-> 
-> > +              - fsl,imx8mn-ocotp
-> > +              - fsl,imx8mp-ocotp
-> 
-> Should be dropped.
+Quoting Bjorn Andersson (2020-08-24 09:42:12)
+> On Fri 21 Aug 14:41 PDT 2020, Stephen Boyd wrote:
+>=20
+> > Quoting Sibi Sankar (2020-08-21 13:49:20)
+> > > Add GENPD_FLAG_NO_SUSPEND/RESUME flags to instruct genpd to keep the
+> > > status of the PM domain unaltered during suspend/resume respectively.
+> > > The flags are aimed at power domains coupled to co-processors which
+> > > enter low-power modes independent to that of the application processo=
+r.
+> > >=20
+> > > Specifically the flags are to be used by the power domains exposed
+> > > by the AOSS QMP driver linked to modem, adsp, cdsp remoteprocs. These
+> > > power domains are used to notify the Always on Subsystem (AOSS) that
+> > > a particular co-processor is up. AOSS uses this information to wait
+> > > for the co-processors to suspend before starting its sleep sequence.
+> > > The application processor powers off these power domains only if the
+> > > co-processor has crashed or powered off and remains unaltered during
+> > > system suspend/resume.
+> >=20
+> > Why are these power domains instead of some QMP message sent during
+> > remote proc power up?
+>=20
+> The understanding I gained as I researched this, was that with this
+> property enabled resources related to the particular subsystem will be
+> kept enabled when the apss enters some power save mode. So my
+> interpretation was that it does "keep something powered".
 
-OK
+It looks like it tells AOSS that the processor is booted and to start
+considering these processors in the SoC wide system suspend sequence.
+Otherwise I guess the RPMh buckets associated with these remoteprocs
+don't count in the aggregation and sleep/wake sequences that AOSS runs
+through when putting the SoC into low power mode. I'm not sure it
+actually "keeps something powered" so much as it lets something be
+powered off. Sibi?
 
-Best regards,
-Krzysztof
+Another question, why can't the processors tell AOSS themselves about
+their boot state? I guess because they may crash or be powered down and
+then AOSS wouldn't know? Fair enough I guess, but I don't think this is
+mentioned anywhere.
 
+>=20
+> > If this has been discussed before feel free to
+> > disregard and please link to prior mailing list discussions.
+> >=20
+>=20
+> There where some discussions related to the "QDSS clk" in that series,
+> but I don't remember getting any feedback on modelling these things as
+> power-domains.
+>=20
+> > I find it odd that this is modeled as a power domain instead of some
+> > Qualcomm specific message that the remoteproc driver sends to AOSS. Is
+> > there some sort of benefit the driver gets from using the power domain
+> > APIs for this vs. using a custom API?
+>=20
+> We need to send "up" and "down" notifications and this needs to happen
+> at the same time as other standard resources are enabled/disabled.
+>=20
+> Further more, at the time the all resources handled by the downstream
+> driver was either power-domains (per above understanding) or clocks, so
+> it made sense to me not to spin up a custom API.
+>=20
+=20
+So the benefit is not spinning up a custom API? I'm not Ulf, but it
+looks like this is hard to rationalize about as a power domain. It
+doesn't have any benefit to model it this way besides to make it
+possible to turn on with other power domains.
+
+This modem remoteproc drivers isn't SoC agnostic anyway, it relies on
+SMEM APIs, so standing up another small qmp_remoteproc_booted() and
+qmp_remoteproc_shutdown() API would avoid adding a genpd flag here that
+probably will never be used outside of this corner-case. There is also
+some get/put EPROBE_DEFER sort of logic to implement, but otherwise it
+would be possible to do this outside of power domains, and that seems
+better given that this isn't really a power domain to start with.
