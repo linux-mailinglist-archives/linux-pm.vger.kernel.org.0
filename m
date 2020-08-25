@@ -2,141 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA4825123B
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 08:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5D92512A2
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 09:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729131AbgHYGoV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 02:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729116AbgHYGoU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 02:44:20 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA41C061755
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 23:44:20 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id s81so2582982vkb.3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Aug 2020 23:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XJAMoTU8iPJ2XHvID+aYODKfhNhGKA98hb1eoQOOBaY=;
-        b=fWkqe7h2JlXjqCBifsBo1DomqyFcxD+MwZ64RmxkM3ByyKCVfF9elGSBuoMHyCcYS2
-         UBFKwj7oQqabnf5QdJMBg0f5GAJ6FwQnfiak89uIJm1t+JNeQblGGufYjQ80PPqMsKEo
-         lL1x7n/UwbjttP1Jy8jahAMssBJYJVA+5Qc7RsKvuXbccBeJK0wszJi70P2A5pclYVSR
-         PcA3bTxqE9kVnIz8YndYmtQ/PmmNACGwmSBny44NBdm0yMHag/Fr8LCbcPqVqd3RVb3L
-         crWd1nkGx9CbX6JZ44OMVT/pKD5PX79JDc+sHU03ACLJPDt7AAeevgp7IyWYcdJ96y0N
-         Eslg==
+        id S1729258AbgHYHI4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 03:08:56 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:34705 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728936AbgHYHI4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 03:08:56 -0400
+Received: by mail-wr1-f68.google.com with SMTP id f7so11614882wrw.1;
+        Tue, 25 Aug 2020 00:08:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XJAMoTU8iPJ2XHvID+aYODKfhNhGKA98hb1eoQOOBaY=;
-        b=Ce/GHIkxTocvG+HyYrPjjSvQFRSOv9n72JqkO9tEpuGjkMbstIl66ZQLkG/5IR2f0j
-         rrPuuYGRZmxQASn9WU0n0foyy2+Vl0RTgIuSADte55/ta5WBpOCgeAKx8GssjA1p9Due
-         MPcqt6m1/iOqPWSwufkqemBHJHdKD4SEBIQArmLEJSf/ZGkbInGXKyNKSMDvCeuGdd18
-         T47u+8dpd/D0w/ASLEigcSjTwvrbHCkcZUWAhxgHeKlTVFjJ+qRGpK3UpoqLl/xVIXu6
-         ZeZsiQeeqnDxqG3QXC4WWIuMOw3y41bH1PMy14YH6aCzmZlDMJGubuL86PE5kR2dclBy
-         xa0g==
-X-Gm-Message-State: AOAM533VOCrg8rxZNcy7pLozZXc6vMFKHyg3Ylvig7XcWxkoxnSOsLbJ
-        aIk0G2M+eXrtrrIhFZw6kibiavLeupE+0a0yY3CL1Q==
-X-Google-Smtp-Source: ABdhPJzKdRlKnr0X6BmbjTIZvsC9IPRFVtH+69UI+kMPkRKZFeq0AzmE4bQnjN3zfh/5kBle3QGy1jR+/FwARY/V9iQ=
-X-Received: by 2002:a1f:2cd0:: with SMTP id s199mr4733615vks.25.1598337859183;
- Mon, 24 Aug 2020 23:44:19 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=l54b9M6lsfNgFjV5LriaXZxkCjRvfaXuheWXTmhA8H0=;
+        b=IhJpiKm5Vp3VzhjSJT571kVboqOooMmXwHKQfrJe0v5jcYoZJz7rmdoIugP8nLVVY4
+         vg9RUGaJYw2SrljnPJEtWjZRYziyBEPhRJOC4XXnxx4Vk7HTOFB6DZWPhhXekF9un+2B
+         VwXIrn6Pn3M/g7x1U7ktjlhhtnjkMsgQv8cU2dgwK8GNN62uco1YPUNIr0I9JUYVkvwf
+         IjXc6yx0F817c+m/n+bRScmigY9RCumpvnbwtz1Qhtoo9hMU7zX34WLt9PDMo+V/ZACn
+         jyYOghhxSYRIILxzX2UuJUT/h75RhjChvRLVoICg7zISWdeLAMvNOEY4yERqO/zp7DAL
+         1Gbg==
+X-Gm-Message-State: AOAM533YmdK5ORUcDXJ2Bh2wSimS/8BDJLipqZzbFpn/GeEaB/JkbGOA
+        t7459voHH9YXg04qQ5Ec0KE=
+X-Google-Smtp-Source: ABdhPJx6Y8Pp2Xu+VQIJdGvRDGKdAFvlXR7vDcNPN4yTT16XHARtlil/gzCAiQcAzCm0WH80KJ2xHQ==
+X-Received: by 2002:a5d:494b:: with SMTP id r11mr9680913wrs.419.1598339333020;
+        Tue, 25 Aug 2020 00:08:53 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id h11sm29004318wrb.68.2020.08.25.00.08.50
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Aug 2020 00:08:52 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 09:08:49 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 12/19] dt-bindings: mmc: fsl-imx-esdhc: Fix i.MX 8
+ compatible matching
+Message-ID: <20200825070849.GC3458@kozik-lap>
+References: <20200824162652.21047-1-krzk@kernel.org>
+ <20200824162652.21047-12-krzk@kernel.org>
+ <20200825023801.GA3835035@bogus>
 MIME-Version: 1.0
-References: <20200730080146.25185-1-stephan@gerhold.net> <20200730080146.25185-4-stephan@gerhold.net>
- <20200824112744.jsyaxrfbybyjpwex@vireshk-i7> <20200824115549.GB208090@gerhold.net>
- <CAPDyKFojtArMRfO+Z8YaWCWw2fFYcO62x3eL1paNi5pKRg3Jww@mail.gmail.com>
- <20200824150831.GA842@gerhold.net> <20200825044308.4y3w2urcikban7if@vireshk-i7>
-In-Reply-To: <20200825044308.4y3w2urcikban7if@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 25 Aug 2020 08:43:42 +0200
-Message-ID: <CAPDyKFp+71_WGwvdZ6DYamsDjgoRk57H5MjDAdQUtCtJpEHp2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] opp: Power on (virtual) power domains managed by
- the OPP core
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Niklas Cassel <nks@flawful.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200825023801.GA3835035@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 25 Aug 2020 at 06:43, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 24-08-20, 17:08, Stephan Gerhold wrote:
-> > On Mon, Aug 24, 2020 at 04:36:57PM +0200, Ulf Hansson wrote:
-> > > That said, perhaps should rely on the consumer to deploy runtime PM
-> > > support, but let the OPP core to set up the device links for the genpd
-> > > virtual devices!?
-> > >
-> >
-> > Yes, that would be the alternative option.
->
-> That is the right option IMO.
->
-> > I would be fine with it as long as it also works for the CPUfreq case.
-> >
-> > I don't think anything manages runtime PM for the CPU device, just
-> > like no-one calls dev_pm_opp_set_rate(cpu_dev, 0). So with my patch the
-> > power domain is essentially kept always-on (except for system suspend).
-> > At least in my case this is intended.
-> >
-> > If device links also keep the power domains on if the consumer device
-> > does not make use of runtime PM it should work fine for my case.
->
-> With device link, you only need to do rpm enable/disable on the consumer device
-> and it will get propagated by itself.
+On Mon, Aug 24, 2020 at 08:38:01PM -0600, Rob Herring wrote:
+> On Mon, Aug 24, 2020 at 06:26:45PM +0200, Krzysztof Kozlowski wrote:
+> > The i.MX 8 DTSes use two compatibles so update the binding to fix
+> > dtbs_check warnings like:
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+> >     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+> >     From schema: Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+> >     compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was unexpected)
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dt.yaml: mmc@30b40000:
+> >     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > 
+> > ---
+> > 
+> > Changes since v1:
+> > 1. Handle also fsl,imx8mm-usdhc and fsl,imx8qxp-usdhc
+> > ---
+> >  .../bindings/mmc/fsl-imx-esdhc.yaml           | 40 +++++++++++--------
+> >  1 file changed, 23 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > index 10b45966f1b8..54f05e2a4246 100644
+> > --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> > @@ -21,23 +21,29 @@ description: |
+> >  
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - fsl,imx25-esdhc
+> > -      - fsl,imx35-esdhc
+> > -      - fsl,imx51-esdhc
+> > -      - fsl,imx53-esdhc
+> > -      - fsl,imx6q-usdhc
+> > -      - fsl,imx6sl-usdhc
+> > -      - fsl,imx6sx-usdhc
+> > -      - fsl,imx6ull-usdhc
+> > -      - fsl,imx7d-usdhc
+> > -      - fsl,imx7ulp-usdhc
+> > -      - fsl,imx8mq-usdhc
+> > -      - fsl,imx8mm-usdhc
+> > -      - fsl,imx8mn-usdhc
+> > -      - fsl,imx8mp-usdhc
+> > -      - fsl,imx8qm-usdhc
+> > -      - fsl,imx8qxp-usdhc
+> > +    oneOf:
+> > +      - enum:
+> > +          - fsl,imx25-esdhc
+> > +          - fsl,imx35-esdhc
+> > +          - fsl,imx51-esdhc
+> > +          - fsl,imx53-esdhc
+> > +          - fsl,imx6q-usdhc
+> > +          - fsl,imx6sl-usdhc
+> > +          - fsl,imx6sx-usdhc
+> > +          - fsl,imx6ull-usdhc
+> > +          - fsl,imx7d-usdhc
+> > +          - fsl,imx7ulp-usdhc
+> 
+> > +          - fsl,imx8mq-usdhc
+> > +          - fsl,imx8mm-usdhc
+> > +          - fsl,imx8qxp-usdhc
+> 
+> These should be dropped.
 
-Note that the default state for the genpd virtual device(s) is that
-runtime PM has been enabled for them. This means it's left in runtime
-suspended state, which allows its PM domain to be powered off (if all
-other devices and child domains for it allow that too, of course).
+You're right, thanks.
 
->
-> > Personally, I think my original patch (without device links) fits better
-> > into the OPP API, for the following two reasons.
-> >
-> > With device links:
-> >
-> >   1. Unlike regulators/interconnects, attached power domains would be
-> >      controlled by runtime PM instead of dev_pm_opp_set_rate(opp_dev, 0).
-> >
-> >   2. ... some driver using OPP tables might not make use of runtime PM.
-> >      In that case, the power domains would stay on the whole time,
-> >      even if dev_pm_opp_set_rate(opp_dev, 0) was called.
-> >
-> > With my patch, the power domain state is directly related to the
-> > dev_pm_opp_set_rate(opp_dev, 0) call, which is more intuitive than
-> > relying on the runtime PM state in my opinion.
->
-> So opp-set-rate isn't in the best of shape TBH, some things are left for the
-> drivers while other are done by it. Regulator-enable/disable was moved to it
-> some time back as people needed something like that. While on the other hand,
-> clk_enable/disable doesn't happen there, nor does rpm enable/disable.
->
-> Maybe one day we may want to do that, but lets make sure someone wants to do
-> that first.
->
-> Anyway, even in that case both of the changes would be required. We must make
-> device links nevertheless first. And later on if required, we may want to do rpm
-> enable/disable on the consumer device itself.
+Best regards,
+Krzysztof
 
-This sounds like a reasonable step-by-step approach.
-
-Then, to create the device links, we should use DL_FLAG_PM_RUNTIME,
-DL_FLAG_STATELESS.
-
-But whether we should use DL_FLAG_RPM_ACTIVE as well, to initially
-runtime resume the supplier (the genpd virtual device), is harder to
-know - as that kind of depends on expectations by the consumer device
-driver.
-
-Kind regards
-Uffe
