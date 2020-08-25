@@ -2,146 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C00B22514B4
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 10:57:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0AF25155D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 11:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbgHYI5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 04:57:49 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.21]:23214 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728033AbgHYI5t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 04:57:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598345866;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=lC83DjmLOBHgJU8+9zEoBSzON5ADdijXCUJWFjompmo=;
-        b=emssEqPmEwVLPSLYQkRry+KI3p1Dzginvqgm4WuKY5VOenLO8xbvcLG9OY0DB3dnpf
-        zS4vdFYw8mP5goreAID4ACrjokMbvkcCm/u6yAK4m+nE45IWUK6zJu67hD9F2ALbnRMj
-        qR4pCvczXYAcdutHjNhnm8SDYJAczJVlGEuYYn6MBIUKDvdnFs4PWqmWHYPXroyDbSNT
-        DWiqbDQmcHVx2mGrQLszg3IXdLyKvA6L6tTFnCBEsEvj0m4gTI3O2jp1QSQobkKkn+91
-        nVJyqOZWB8jhCge1iXm0k3ULydc92q/3M+AErw8cLN53QTG2gHASg5ZRgh8/5kOOT+qf
-        aRFQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7IcjDBg=="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
-        with ESMTPSA id g0b6c1w7P8vjdNu
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Tue, 25 Aug 2020 10:57:45 +0200 (CEST)
-Date:   Tue, 25 Aug 2020 10:57:40 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: opp: How to use multiple opp-supported-hw versions properly?
-Message-ID: <20200825085740.GA855@gerhold.net>
-References: <20200825074452.GA1322@gerhold.net>
- <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
+        id S1726015AbgHYJ3m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 05:29:42 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:12754 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726149AbgHYJ3m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 05:29:42 -0400
+X-UUID: 4ab557a0b8c348b6879857d307f40f92-20200825
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=pzm6RISn/tNeKbUICcBC7qg5/+/y+MTOUCaljQkJv5I=;
+        b=WjBc9ONPbH2xD4WxLXUJLuFNUrmcxAywnOvIJ56DGvSswJiwg0LamrKhcxY5oqiO5LdTTv9IfQqfxnRx8yvmDo8BgWleofTk4jQACBZTpakTIO4qfIW9ISIz0PPvCaGnfIJnQclKIh9g2UwPm+2XSDs36z68lNqveiE2RCurNwU=;
+X-UUID: 4ab557a0b8c348b6879857d307f40f92-20200825
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1131286243; Tue, 25 Aug 2020 17:29:37 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 25 Aug 2020 17:29:34 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 25 Aug 2020 17:29:34 +0800
+Message-ID: <1598347775.16267.0.camel@mtksdccf07>
+Subject: Re: [PATCH] thermal: power_allocate: add upper and lower limits
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+CC:     Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>, <hsinyi@chromium.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Tue, 25 Aug 2020 17:29:35 +0800
+In-Reply-To: <03286571-c110-7f5e-a911-24f8c3e4fd42@arm.com>
+References: <20200424071601.2636-1-michael.kao@mediatek.com>
+         <accb83e0-ffbe-b6e3-6bf9-e7cc8b9fe19c@arm.com>
+         <1588156776.3573.1.camel@mtksdccf07>
+         <03286571-c110-7f5e-a911-24f8c3e4fd42@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 01:46:37PM +0530, Viresh Kumar wrote:
-> On 25-08-20, 09:44, Stephan Gerhold wrote:
-> > Hi Viresh,
-> > 
-> > (an unrelated questions while I investigate the device links ;) )
-> > 
-> > I'm a bit confused about how to use "opp-supported-hw" properly
-> > when you have multiple versions defined.
-> 
-> Documentation/devicetree/bindings/opp/opp.txt gives some explanation which I
-> thought should be enough, maybe it isn't :(
-> 
-> Or maybe I am oversimplifying your problem and I myself have forgotten this
-> property and its usage :)
-> 
-> > In my case I have two version numbers from 0-7, so theoretically up to
-> > 64 versions. This does not fit into a single version mask
-> 
-> I don't think this is correct. The opp-supported-hw property must be thought of
-> as a bitfield where each bit represents a version.
-> 
-> In your case a single 32 bit value should be enough IMO.
-> 
+T24gV2VkLCAyMDIwLTA0LTI5IGF0IDIxOjI0ICswMTAwLCBMdWthc3ogTHViYSB3cm90ZToNCj4g
+DQo+IE9uIDQvMjkvMjAgMTE6MzkgQU0sIE1pY2hhZWwgS2FvIHdyb3RlOg0KPiA+IE9uIEZyaSwg
+MjAyMC0wNC0yNCBhdCAxMDoyMiArMDEwMCwgTHVrYXN6IEx1YmEgd3JvdGU6DQo+ID4+IEhpIE1p
+Y2hhZWwsDQo+ID4+DQo+ID4+IE9uIDQvMjQvMjAgODoxNiBBTSwgTWljaGFlbCBLYW8gd3JvdGU6
+DQo+ID4+PiBUaGUgdXBwZXIgYW5kIGxvd2VyIGxpbWl0cyBvZiB0aGVybWFsIHRocm90dGxlIHN0
+YXRlIGluIHRoZQ0KPiA+Pj4gZGV2aWNlIHRyZWUgZG8gbm90IGFwcGx5IHRvIHRoZSBwb3dlcl9h
+bGxvY2F0ZSBnb3Zlcm5vci4NCj4gPj4+IEFkZCB0aGUgdXBwZXIgYW5kIGxvd2VyIGxpbWl0cyB0
+byB0aGUgcG93ZXJfYWxsb2NhdGUgZ292ZXJub3IuDQo+ID4+Pg0KPiA+Pj4gU2lnbmVkLW9mZi1i
+eTogTWljaGFlbCBLYW8gPG1pY2hhZWwua2FvQG1lZGlhdGVrLmNvbT4NCj4gPj4+IC0tLQ0KPiA+
+Pj4gICAgZHJpdmVycy90aGVybWFsL3RoZXJtYWxfY29yZS5jIHwgMiArLQ0KPiA+Pj4gICAgMSBm
+aWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4+Pg0KPiA+Pj4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUuYyBiL2RyaXZlcnMvdGhl
+cm1hbC90aGVybWFsX2NvcmUuYw0KPiA+Pj4gaW5kZXggOWEzMjFkYzU0OGM4Li5mNmZlZWQyMjY1
+YmQgMTAwNjQ0DQo+ID4+PiAtLS0gYS9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMNCj4g
+Pj4+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUuYw0KPiA+Pj4gQEAgLTU5OCw3
+ICs1OTgsNyBAQCBpbnQgcG93ZXJfYWN0b3Jfc2V0X3Bvd2VyKHN0cnVjdCB0aGVybWFsX2Nvb2xp
+bmdfZGV2aWNlICpjZGV2LA0KPiA+Pj4gICAgCWlmIChyZXQpDQo+ID4+PiAgICAJCXJldHVybiBy
+ZXQ7DQo+ID4+PiAgICANCj4gPj4+IC0JaW5zdGFuY2UtPnRhcmdldCA9IHN0YXRlOw0KPiA+Pj4g
+KwlpbnN0YW5jZS0+dGFyZ2V0ID0gY2xhbXBfdmFsKHN0YXRlLCBpbnN0YW5jZS0+bG93ZXIsIGlu
+c3RhbmNlLT51cHBlcik7DQo+ID4+PiAgICAJbXV0ZXhfbG9jaygmY2Rldi0+bG9jayk7DQo+ID4+
+PiAgICAJY2Rldi0+dXBkYXRlZCA9IGZhbHNlOw0KPiA+Pj4gICAgCW11dGV4X3VubG9jaygmY2Rl
+di0+bG9jayk7DQo+ID4+Pg0KPiA+Pg0KPiA+PiBUaGFuayB5b3UgZm9yIHRoZSBwYXRjaCBhbmQg
+aGF2aW5nIHRvIGxvb2sgYXQgaXQuIEkgaGF2ZSBzb21lIGNvbmNlcm5zDQo+ID4+IHdpdGggdGhp
+cyBhcHByb2FjaC4gTGV0J3MgYW5hbHl6ZSBpdCBmdXJ0aGVyLg0KPiA+Pg0KPiA+PiBJbiBkZWZh
+dWx0IHRoZSBjb29saW5nIGRldmljZXMgaW4gdGhlIHRoZXJtYWwgem9uZSB3aGljaCBpcyB1c2Vk
+IGJ5IElQQQ0KPiA+PiBkbyBub3QgaGF2ZSB0aGlzICdsb3dlcicgYW5kICd1cHBlcicgbGltaXRz
+LiBUaGV5IGFyZSBzZXQgdG8NCj4gPj4gVEhFUk1BTF9OT19MSU1JVCBpbiBEVCB0byBnaXZlIGZ1
+bGwgY29udHJvbCB0byBJUEEgb3ZlciB0aGUgc3RhdGVzLg0KPiA+Pg0KPiA+PiBUaGlzIHRoZSBm
+dW5jdGlvbiAncG93ZXJfYWN0b3Jfc2V0X3Bvd2VyJyBhY3R1YWxseSB0cmFuc2xhdGVzIGdyYW50
+ZWQNCj4gPj4gcG93ZXIgdG8gdGhlIHN0YXRlIHRoYXQgZGV2aWNlIHdpbGwgcnVuIGZvciB0aGUg
+bmV4dCBwZXJpb2QuDQo+ID4+IFRoZSBJUEEgYWxnb3JpdGhtIGhhcyBhbHJlYWR5IHNwbGl0IHRo
+ZSBwb3dlciBidWRnZXQuDQo+ID4+IE5vdyB3aGF0IGhhcHBlbiB3aGVuIHRoZSAnbG93ZXInIHZh
+bHVlIHdpbGwgY2hhbmdlIHRoZSBzdGF0ZSB0byBhIHN0YXRlDQo+ID4+IHdoaWNoIGNvbnN1bWVz
+IG1vcmUgcG93ZXIgdGhhbiB3YXMgY2FsY3VsYXRlZCBpbiB0aGUgSVBBIGFsZy4uLiBJdCB3aWxs
+DQo+ID4+IGJlY2FtZSB1bnN0YWJsZS4NCj4gPj4NCj4gPj4gSSB3b3VsZCByYXRoZXIgc2VlIGEg
+Y2hhbmdlIHdoaWNoIHVzZXMgdGhlc2UgJ2xvd2VyJyBhbmQgJ3VwcGVyJyBsaW1pdHMNCj4gPj4g
+YmVmb3JlIHRoZSBJUEEgZG8gdGhlIGNhbGN1bGF0aW9uIG9mIHRoZSBwb3dlciBidWRnZXQuIEJ1
+dCB0aGlzIHdhc24ndA0KPiA+PiBhIHJlcXVpcmVtZW50IGFuZCB3ZSBhc3N1bWVkIHRoYXQgSVBB
+IGhhcyBmdWxsIGNvbnRyb2wgb3ZlciB0aGUgY29vbGluZw0KPiA+PiBkZXZpY2UgKHdoaWNoIEkg
+ZGVzY3JpYmVkIGFib3ZlIHdpdGggdGhpcyBEVCBUSEVSTUFMX05PX0xJTUlUKS4NCj4gPj4NCj4g
+Pj4gSXMgdGhlcmUgYSBwcm9ibGVtIHdpdGggeW91ciBwbGF0Zm9ybSB0aGF0IGl0IGhhcyB0byBw
+cm92aWRlIHNvbWUNCj4gPj4gbWluaW1hbCBwZXJmb3JtYW5jZSwgc28geW91IHRyaWVkIHRvIGlu
+dHJvZHVjZSB0aGlzIGNsYW1waW5nPw0KPiA+Pg0KPiA+PiBSZWdhcmRzLA0KPiA+PiBMdWthc3oN
+Cj4gPiANCj4gPiANCj4gPiBIaSBMdWthc3osDQo+ID4gDQo+ID4gSSByZWZlciB0byB0aGUgZG9j
+dW1lbnRhdGlvbiBzZXR0aW5ncyBvZiB0aGUgdGhlcm1hbCBkZXZpY2UgdHJlZQ0KPiA+IChEb2N1
+bWVudGF0aW9uIC8gZGV2aWNldHJlZSAvIGJpbmRpbmdzIC8gdGhlcm1hbCAvIHRoZXJtYWwudHh0
+KS4NCj4gPiANCj4gPiBJdCBzaG93cyB0aGF0IGNvb2xpbmctZGV2aWNlIGlzIGEgbWFuZGF0b3J5
+IHByb3BlcnR5LCBzbyBtYXgvbWluIGNvb2xpbmcNCj4gPiBzdGF0ZSBzaG91bGQgYmUgYWJsZSB0
+byBzdXBwb3J0IGluIGZyYW1ld29yayBwb2ludCBvZiB2aWV3Lg0KPiA+IE90aGVyd2lzZSwgdGhl
+IGxpbWl0YXRpb24gc2hvdWxkIGJlIGFkZGVkIGluIGJpbmRpbmcgZG9jdW1lbnQuDQo+ID4gDQo+
+ID4gRGlmZmVyZW50IGhhcmR3YXJlIG1lY2hhbmlzbXMgaGF2ZSBkaWZmZXJlbnQgaGVhdCBkaXNz
+aXBhdGlvbg0KPiA+IGNhcGFiaWxpdGllcy4NCj4gPiBMaW1pdGluZyB0aGUgaW5wdXQgaGVhdCBz
+b3VyY2UgY2FuIHNsb3cgZG93biB0aGUgaGVhdCBhY2N1bXVsYXRpb24gYW5kDQo+ID4gdGVtcGVy
+YXR1cmUgYnVyc3QuDQo+ID4gV2Ugd2FudCB0byByZWR1Y2UgdGhlIGFjY3VtdWxhdGlvbiBvZiBo
+ZWF0IGF0IGhpZ2ggdGVtcGVyYXR1cmUgYnkNCj4gPiBsaW1pdGluZyB0aGUgbWluaW11bSBnZWFy
+IG9mIHRoZXJtYWwgdGhyb3R0bGUuDQo+IA0KPiBJIGFncmVlIHRoYXQgdGhlc2UgJ2xvd2VyJyBh
+bmQgJ3VwcGVyJyBsaW1pdHMgc2hvdWxkbid0IGJlIGp1c3QNCj4gaWdub3JlZCBhcyBpcyBjdXJy
+ZW50bHkuIFRoaXMgcGF0Y2ggY2xhbXBzIHRoZSB2YWx1ZSBhdCBsYXRlIHN0YWdlLA0KPiB0aG91
+Z2guDQo+IA0KPiBMZXQgbWUgaGF2ZSBhIGxvb2sgaG93IGl0IGNvdWxkIGJlIHRha2VuIGludG8g
+YWNjb3VudCBpbiB0aGUgZWFybHkNCj4gc3RhZ2UsIGJlZm9yZSB0aGUgcG93ZXIgY2FsY3VsYXRp
+b24gYW5kIHNwbGl0IGFyZSBkb25lLiBNYXliZSB0aGVyZQ0KPiBpcyBhIGNsZWFuIHdheSB0byBp
+bmplY3QgdGhpcy4NCj4gDQo+IFJlZ2FyZHMsDQo+IEx1a2Fzeg0KSGkgTHVrYXN6LA0KDQpBZnRl
+ciB0aGUgcmVzZWFyY2gsIGRvIHlvdSBoYXZlIGFueSBpZGVhcyBvciBzdWdnZXN0aW9ucz8NCg0K
+QmVzdCBSZWdhcmRzLA0KTWljaGFlbA0KDQo=
 
-I took this from Documentation/devicetree/bindings/opp/opp.txt:
-
-"Each level of hierarchy is represented by a 32 bit value, and so there
- can be only 32 different supported version per hierarchy. i.e. 1 bit
- per version. A value of 0xFFFFFFFF will enable the OPP for all versions
- for that hierarchy level. And a value of 0x00000000 will disable the
- OPP completely, and so we never want that to happen."
-
-Also:
-
-"If 32 values aren't sufficient for a version hierarchy, than that
- version hierarchy can be contained in multiple 32 bit values. i.e.
- <X Y Z1 Z2> in the above example, Z1 & Z2 refer to the version
- hierarchy Z."
-
-but it doesn't mention anything about the problem I described
-("conflicting" ranges for one of the "sub-versions").
-
-> <0x00FF00FF>, here each FF can support upto 8 versions, which is exactly what
-> you need. Now if you want to support version 3-3 (where version are numbered
-> from 0-7) for an OPP, you set this value to: <0x00080008>
-> 
-> Does that make sense ?
-> 
-
-I have to admit that I keep getting confused with these bit masks...
-I think this is also one option I considered but actually it doesn't
-work:
-
-Essentially you suggest to encode a version using:
-
-static int ver(int version1, int version2) {
-	return BIT(version1) << 16 | BIT(version2);
-}
-
-Now let's take a look at my example again:
-
-> > Now let's say I want to limit an OPP to v0.1, v1.0 and v1.1, but not
-> > v0.0. With a single "opp-supported-hw" I think I can only say:
-> > 
-> > 	opp-supported-hw = <0x3 0x3>;
-> > 
-> > but that does also include v0.0...
-> > I think to exclude that I would need multiple version ranges, e.g.
-> > 
-> > 	opp-supported-hw = <0x1 0x2>, <0x2 0x3>;
-> > 
-> > This does not seem to be supported, though.
-> > 
-
-So for the versions I mentioned we get:
-  - ver(0, 1) = 0x10002
-  - ver(1, 0) = 0x20001
-  - ver(1, 1) = 0x20002
-  - ver(0, 0) = 0x10001 (this one should be excluded)
-
-So to mark v0.1, v1.0 and v1.1 as supported I'd set:
-     opp-supported-hw = <(ver(0, 1) | ver(1, 0) | ver(1, 1))>;
-i.e. opp-supported-hw = <0x30003>;
-
-Now let's say I'm running v0.0 = 0x10001. This version should not
-support the OPP. But actually 0x30003 & 0x10001 = 0x10001 != 0,
-so the OPP would consider it as supported.
-
-I tried many different approaches, but you end up being unable to
-control subversions independently for most of them.
-
-But as I mentioned I keep getting really confused with these bitmasks,
-so maybe I'm wrong :)
-
-Thanks!
-Stephan
