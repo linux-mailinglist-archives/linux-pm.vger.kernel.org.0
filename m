@@ -2,68 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA7125196B
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 15:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A5D2519ED
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 15:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726241AbgHYNUh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 09:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725792AbgHYNUf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 09:20:35 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E071C061574;
-        Tue, 25 Aug 2020 06:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=LRm0a/AB7+1jHaa0sot49R1mIGi0p1SlyxSDm8WQBUY=; b=lrAraWCD0S6gbXfgpQDHWUO/c9
-        h9fHLCFKRmzwX3tEO6KmBBJPdc2hC2xC5WOzhw8pvEPStATv125pL/mG+LzD+hfrKqJVp27Y0mNER
-        9aeCh3lIVcvwz3xMQ30QSJ9oELZaSR2ANlcR1FM80B7yrdX7N9ZB8JEqVgcWQp0CQfufwfzgf9B+W
-        feHcq1Y1tQnTThv0sDdbo49HNl0TnG08P6WBYs3Ic3AfN5b814aejFz/QqC408/5ipz+8R/Eb/wk0
-        IaozjHE1Ud/5cy0pdrYHwhGtwPqKow6xBRZvgY7qyHtHQjlGwSR+Y2nXk7DN6GtMra4WkUZ9wvtcg
-        v36HK0hA==;
-Received: from hch by casper.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kAYrq-0006b2-89; Tue, 25 Aug 2020 13:20:02 +0000
-Date:   Tue, 25 Aug 2020 14:20:02 +0100
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
-        boris.ostrovsky@oracle.com, jgross@suse.com,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org, kamatam@amazon.com,
-        sstabellini@kernel.org, konrad.wilk@oracle.com,
-        roger.pau@citrix.com, axboe@kernel.dk, davem@davemloft.net,
-        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
-        peterz@infradead.org, eduval@amazon.com, sblbir@amazon.com,
-        anchalag@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org
-Subject: Re: [PATCH v3 05/11] genirq: Shutdown irq chips in suspend/resume
- during hibernation
-Message-ID: <20200825132002.GA25009@infradead.org>
-References: <cover.1598042152.git.anchalag@amazon.com>
- <d9bcd552c946ac56f3f17cc0c1be57247d4a3004.1598042152.git.anchalag@amazon.com>
- <87h7svqzxm.fsf@nanos.tec.linutronix.de>
+        id S1726578AbgHYNjY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 09:39:24 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:47361 "EHLO
+        wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726700AbgHYNgG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 09:36:06 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id 184A1CBD;
+        Tue, 25 Aug 2020 09:36:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 25 Aug 2020 09:36:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=gR3pweVv8Px8rFqGtFTwA22x2JV
+        zhJpDs8kjnfvQrwU=; b=ZKthbNBZD5TqTReje9//nICE81ovQp6WKQ7Y+fkpX0r
+        342iOhR96x763J39eXLcp7DI1mlD3YDZhDLJATm4gLEsLe/RNUoCaI9NeaYsvGLZ
+        0zlkVOeB1kkv4PxAtLZo9u7Qj4JLJ8iczPcWJDqiVuTtxggRY9oMSl7gg2lTvBAd
+        oLNJ3rJ+TyBzvy8JnYqkAS1Ixz4kt+IyMs+6wnTTyLmC+4HQqeXt/eE8EpuQ1LHB
+        dPBWtkO5q5YdFUd/YtS9ZtuZf1eCgccExUR5TgdAJvhHVL0G8l+Rpt01L1kqO3ez
+        G11749iSX9SO+7KvmVlo7N4gKahSgFmy2YRlZJFIj/g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=gR3pwe
+        Vv8Px8rFqGtFTwA22x2JVzhJpDs8kjnfvQrwU=; b=XeouHkmSMaPgZGgkwK9gBE
+        UNk2kjv0ZMQZ2Fr/KgSKzkdqDaPRWGYFmg4lLN/tpy8/x8TCJiGOpnGUhoIeWjZ1
+        oXKim7/EoCdZKIdHUCsJmdEjDN59vQPwXhKWOtCTfnZwZIodjq+DEzHZe6Urw54Z
+        AVM62ScUqZq3e4oSqkajrSkywskehZdcqEEKQwEtraWbFWsIA/a+b9DGUQtP7xeS
+        EfK3tcq6IB1o0tiWeu4c8soUqh1YG5Exe7SHSSPFe/10lKi+LGWix+r7Cyg5nQvK
+        6VoIkcw5CnZ/ZwQ522Hs+g17LZl2iCJ2iYJ2vCMBs39H1IEAvALOATEGePYpCmCQ
+        ==
+X-ME-Sender: <xms:xBNFX-GTizd1cJM1xroLOltRl634NIUAvifSBznZOzNHqiQtNi1iGw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvtddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepudegne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:xBNFX_U4rMYrAkLqnBfQTY0RMlnEj1Qh37H7CKzSwosC8p_-pfrG6g>
+    <xmx:xBNFX4K2vEGqg2mVktNWhMEBQTreRrbm7KAhpc2GJsmiLPL4w3LoBQ>
+    <xmx:xBNFX4HtDcqV4TQ3LcRfY7CLwE2J9YphicWvZBcxR-Bmu8juqzJzNA>
+    <xmx:xBNFXzOfOYUySZsapVxWYa_Lou44xH7I27efKX-UM8Rlmr95B_CRmkxyzZk>
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 070873060067;
+        Tue, 25 Aug 2020 09:36:03 -0400 (EDT)
+Date:   Tue, 25 Aug 2020 10:45:54 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
+        robh+dt@kernel.org, wens@csie.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, huangshuosheng@allwinnertech.com,
+        liyong@allwinnertech.com, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 07/16] dt-bindings: thermal: sun8i: Add binding for
+ A100's THS controller
+Message-ID: <20200825084554.rdml64n6qofjfzaa@gilmour.lan>
+References: <cover.1595572867.git.frank@allwinnertech.com>
+ <8280af8ad82ed340c0ef1c171684aaad91600679.1595572867.git.frank@allwinnertech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2mi2ra6dsuvemjwu"
 Content-Disposition: inline
-In-Reply-To: <87h7svqzxm.fsf@nanos.tec.linutronix.de>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <8280af8ad82ed340c0ef1c171684aaad91600679.1595572867.git.frank@allwinnertech.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 22, 2020 at 02:36:37AM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
-> 
-> followed by an empty new line before the actual changelog text
-> starts. That way the attribution of the patch when applying it will be
-> correct.
 
-The way he sent it attribution will be correct as he managed to get his
-MTU to send out the mail claiming to be from you.  But yes, it needs
-the second From line, _and_ the first from line needs to be fixed to
-be from him.
+--2mi2ra6dsuvemjwu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 24, 2020 at 03:10:57PM +0800, Frank Lee wrote:
+> From: Yangtao Li <frank@allwinnertech.com>
+>=20
+> Add a binding for A100's ths controller.
+>=20
+> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+Acked-by: Maxime Ripard <mripard@kernel.org>
+
+Thanks!
+Maxime
+
+--2mi2ra6dsuvemjwu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0TPwgAKCRDj7w1vZxhR
+xVXvAQCVS2UqbwhCN/0iWdJ29Re42njcjQn+u6Um4jTsFzJ4/gEA27LfAfTDUWdz
+xfaa1CgE73i2sYEqd69AtcBdh3AJPgo=
+=/qrb
+-----END PGP SIGNATURE-----
+
+--2mi2ra6dsuvemjwu--
