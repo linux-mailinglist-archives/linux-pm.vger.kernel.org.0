@@ -2,140 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA53251394
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 09:51:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3790F2513AB
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 09:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729560AbgHYHvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 03:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729556AbgHYHvB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 03:51:01 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0369C061755
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 00:51:00 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id kx11so362618pjb.5
-        for <linux-pm@vger.kernel.org>; Tue, 25 Aug 2020 00:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mCcFd+Ib+D6NrRVBcY3zB0ASaxSirffeaKtrRg05oPg=;
-        b=cUVxWd5YAFtVgmxWog/tnuEbxeMvYWs96FCO8CWBQmTDbXPISCaykrwOFmDu95K18q
-         4jtUPFXHnAMTpBcqoX320no4HwcQcdddT/Ats8ziLGPfaNiTUwTpD/xs3Mp7YCNBcg7E
-         k7rOhB33YG18rRnvnU1nBkLLb+M3Pyf9Ft8Fn0vGnKtAtfTx8liLtZnZ/OCR0MlTN2Om
-         8hohoQi+EzKFk6wCeYIK7QMoDPWDmmDl4tpp5SWTxxsNgTZAwvJnEA5ay/MkUDa8T8xA
-         R1mExTRjWlQqt1GOuR4xb/Pdlw7titRqOEkOyCWLZ+a4uU+XDWIt0DGfVBM9vhUaJrA4
-         /Z7w==
+        id S1728907AbgHYHzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 03:55:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45806 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbgHYHzv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 03:55:51 -0400
+Received: by mail-wr1-f65.google.com with SMTP id h15so4958434wrt.12;
+        Tue, 25 Aug 2020 00:55:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mCcFd+Ib+D6NrRVBcY3zB0ASaxSirffeaKtrRg05oPg=;
-        b=kkuV56KISTGiU8SRryXHwsbnMqKpjtaee5mcyVja5jQeVSsD9makE4UFgU2JdGYZpk
-         5Ng0yN17GQLCyhJx28TC9GEL0cfcx8zAgQCFCYfAnqZRR9mWhTx4dCmYjG3OCT1S8Zgp
-         qxI55ZajAmOvPesBLUedv08y3E/0GpODOe5CkhTtvBUF3WNzeUcbARV8ZRc1e80DRrSw
-         ZYJSx9X/pRQTX+tw/zeOKHwc2bHt0RcbeROf+A8g3uSdssIe2SaK2RKasYbzPBWuQXyG
-         RzI2wZ3pyyz0nraCyFmzl0SsdQvF0SsUCETPc4zfeXPSIz30Aadhf11Zn7U/UfI9QiYx
-         vmsg==
-X-Gm-Message-State: AOAM5332GFSdfCPURSiVy25z6KCoFniFNpK9exSUexKVmGkKJAfKy+v7
-        W9mEOpIZ5tsg2Sxz96nmcNf30Q==
-X-Google-Smtp-Source: ABdhPJwNEYPlzbhGOubSsxb+BsVE+Afz7ijxDKwxJjN6y2MlrRDMZI/5cg5muv/8e4oEFOQiQy7j9A==
-X-Received: by 2002:a17:90a:4214:: with SMTP id o20mr588108pjg.232.1598341860202;
-        Tue, 25 Aug 2020 00:51:00 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id n72sm9788264pfd.93.2020.08.25.00.50.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Aug 2020 00:50:59 -0700 (PDT)
-Date:   Tue, 25 Aug 2020 13:20:57 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
-        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
-        valentin.schneider@arm.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] arch_topology, arm, arm64: define
- arch_scale_freq_invariant()
-Message-ID: <20200825075057.rpeg6d6uziqzogsa@vireshk-i7>
-References: <20200824210252.27486-1-ionela.voinescu@arm.com>
- <20200824210252.27486-6-ionela.voinescu@arm.com>
+        bh=aBjVw1JG0tpm4bk51wIknFht9NwTSZ65KB4U3gClblQ=;
+        b=pVQLT+8ijKQCPTJ9nJSzGdtsvR4/qHb2QG9MgKgdIdQ2hG1dj2KpBB8/UQzGdjBnrG
+         YyCru7GkjEW1Z2avQWxiG/fCrKBPJ8QLh7Ak9F4nZ797j6oRUqOhRDx1vcJ0Didy1eh4
+         pterNAMGOBwZ+SC1cypGNjD7gNwVaG1ORbIDM9wyKISr3dMwnhqVxIvWq+/cECtf1ZVT
+         i2nYue89aCsbjA1z3gQLqGHe7hFUPHIhQUW8NA+ARK/3s5DEwLOyri6XUavdKa7MBTJJ
+         yvhAgAaQK4/bMkq+sxNvowGly71mHlHX7xdg0tdijpLF57CchJpgSl+5bPAc9qDr96s5
+         bjIw==
+X-Gm-Message-State: AOAM531VaZJ9MZnL9VRgwXymUo0hQu1KXP7Pt3vjMMEplrw4cCwPLMhE
+        xhxP7RtNtC49OSmDbRJDYO8=
+X-Google-Smtp-Source: ABdhPJy11J0dvtltETiMUmgoqOGY5vwRYKznzFSM+Jn9Jhy70mulHl9VGChcIKqtFo0jH3ClWuVjng==
+X-Received: by 2002:adf:f5c7:: with SMTP id k7mr9247503wrp.230.1598342147767;
+        Tue, 25 Aug 2020 00:55:47 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.216])
+        by smtp.googlemail.com with ESMTPSA id f9sm8049134wrm.5.2020.08.25.00.55.45
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Aug 2020 00:55:47 -0700 (PDT)
+Date:   Tue, 25 Aug 2020 09:55:43 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v2 17/19] dt-bindings: serial: fsl-lpuart: Fix compatible
+ matching
+Message-ID: <20200825075543.GA10369@kozik-lap>
+References: <20200824162652.21047-1-krzk@kernel.org>
+ <20200824162652.21047-17-krzk@kernel.org>
+ <20200825024226.GA3843643@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200824210252.27486-6-ionela.voinescu@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20200825024226.GA3843643@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-08-20, 22:02, Ionela Voinescu wrote:
-> From: Valentin Schneider <valentin.schneider@arm.com>
+On Mon, Aug 24, 2020 at 08:42:26PM -0600, Rob Herring wrote:
+> On Mon, Aug 24, 2020 at 06:26:50PM +0200, Krzysztof Kozlowski wrote:
+> > The i.MX 8QXP DTSes use two compatibles so update the binding to fix
+> > dtbs_check warnings like:
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8qxp-mek.dt.yaml: serial@5a060000:
+> >     compatible: ['fsl,imx8qxp-lpuart', 'fsl,imx7ulp-lpuart'] is too long
+> >     From schema: Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > 
+> >   arch/arm64/boot/dts/freescale/imx8qxp-mek.dt.yaml: serial@5a060000:
+> >     compatible: Additional items are not allowed ('fsl,imx7ulp-lpuart' was unexpected)
+> > 
+> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > 
+> > ---
+> > 
+> > Changes since v1:
+> > 1. New patch.
+> > ---
+> >  .../devicetree/bindings/serial/fsl-lpuart.yaml | 18 +++++++++++-------
+> >  1 file changed, 11 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > index e82c2cf9fef7..8ee651f2ef0b 100644
+> > --- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+> > @@ -14,13 +14,17 @@ allOf:
+> >  
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - fsl,vf610-lpuart
+> > -      - fsl,ls1021a-lpuart
+> > -      - fsl,ls1028a-lpuart
+> > -      - fsl,imx7ulp-lpuart
+> > -      - fsl,imx8qxp-lpuart
+> > -      - fsl,imx8qm-lpuart
+> > +    oneOf:
+> > +      - enum:
+> > +          - fsl,vf610-lpuart
+> > +          - fsl,ls1021a-lpuart
+> > +          - fsl,ls1028a-lpuart
+> > +          - fsl,imx7ulp-lpuart
+> > +          - fsl,imx8qxp-lpuart
 > 
-> arch_scale_freq_invariant() is used by schedutil to determine whether
-> the scheduler's load-tracking signals are frequency invariant. Its
-> definition is overridable, though by default it is hardcoded to 'true'
-> if arch_scale_freq_capacity() is defined ('false' otherwise).
-> 
-> This behaviour is not overridden on arm, arm64 and other users of the
-> generic arch topology driver, which is somewhat precarious:
-> arch_scale_freq_capacity() will always be defined, yet not all cpufreq
-> drivers are guaranteed to drive the frequency invariance scale factor
-> setting. In other words, the load-tracking signals may very well *not*
-> be frequency invariant.
-> 
-> Now that cpufreq can be queried on whether the current driver is driving
-> the Frequency Invariance (FI) scale setting, the current situation can
-> be improved. This combines the query of whether cpufreq supports the
-> setting of the frequency scale factor, with whether all online CPUs are
-> counter-based FI enabled.
-> 
-> While cpufreq FI enablement applies at system level, for all CPUs,
-> counter-based FI support could also be used for only a subset of CPUs to
-> set the invariance scale factor. Therefore, if cpufreq-based FI support
-> is present, we consider the system to be invariant. If missing, we
-> require all online CPUs to be counter-based FI enabled in order for the
-> full system to be considered invariant.
-> 
-> If the system ends up not being invariant, a new condition is needed in
-> the counter initialization code that disables all scale factor setting
-> based on counters.
-> 
-> Precedence of counters over cpufreq use is not important here. The
-> invariant status is only given to the system if all CPUs have at least
-> one method of setting the frequency scale factor.
-> 
-> Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  arch/arm/include/asm/topology.h   | 1 +
->  arch/arm64/include/asm/topology.h | 1 +
->  arch/arm64/kernel/topology.c      | 7 +++++++
->  drivers/base/arch_topology.c      | 6 ++++++
->  include/linux/arch_topology.h     | 2 ++
->  5 files changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-> index e0593cf095d0..9219e67befbe 100644
-> --- a/arch/arm/include/asm/topology.h
-> +++ b/arch/arm/include/asm/topology.h
-> @@ -9,6 +9,7 @@
->  
->  /* Replace task scheduler's default frequency-invariant accounting */
->  #define arch_scale_freq_capacity topology_get_freq_scale
-> +#define arch_scale_freq_invariant topology_scale_freq_invariant
+> This should be dropped.
 
-Maybe this macro should have been named arch_is_freq_invariant as all other ones
-are actually getting us a scaled number and this one is just a flag. But yeah,
-that is out of this series's scope, but maybe you should name
-topology_scale_freq_invariant() to topology_is_freq_invariant() or something
-else on those lines ? Anyway:
+Right.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Best regards,
+Krzysztof
 
--- 
-viresh
