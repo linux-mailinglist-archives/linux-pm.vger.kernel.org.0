@@ -2,108 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 195412519C4
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 15:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABFD92519C8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Aug 2020 15:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgHYNgV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Aug 2020 09:36:21 -0400
-Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:54433 "EHLO
+        id S1726818AbgHYNgy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Aug 2020 09:36:54 -0400
+Received: from wnew4-smtp.messagingengine.com ([64.147.123.18]:34481 "EHLO
         wnew4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726690AbgHYNgJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 09:36:09 -0400
+        by vger.kernel.org with ESMTP id S1726749AbgHYNgX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Aug 2020 09:36:23 -0400
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id 8E1B1C3F;
-        Tue, 25 Aug 2020 09:36:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 25 Aug 2020 09:36:08 -0400
+        by mailnew.west.internal (Postfix) with ESMTP id B57FBCCD;
+        Tue, 25 Aug 2020 09:36:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Tue, 25 Aug 2020 09:36:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=zIntnBuXpSaR3WFttpC6Z14pmK0
-        kj+KtCt/Fp/W1l5Y=; b=lGWpth+a8r/ZvS7rtzWVn9X0gS8TO+csaGZXXkrlcfa
-        mj1BQz9G3duhMcmGVb8b8CNVEqOoLQw/kEzaRVjtvJ26RSHOZuc+Nqabs6LnXIN6
-        +76QGjnXKpnoTwqwBV/EpQX1fZ44WmhhCy1JWEbvIK712Z4b6DlOmM5yCLwud28t
-        bHd3wMwGN+6B4s/CW4zkoPLfELmqx1PboJuDPldNI6bfA7AOzElkgmcsQ22JaT2j
-        r5s3gjFxU8GRLB5FiTETGIcOwYnnMvj40fnEgPypgyKyBAZLmj7IQN935MnJ7fEZ
-        VaXwdBZ9Yo31//4UuAc5nt5x7LMhql7EWHH81siEjzA==
+        :content-type:in-reply-to; s=fm3; bh=POEurteasFjtErahfEjgvleBxyP
+        Dp8wZRReEbv/IAys=; b=i8UhYGZnZjo037lPyii2wA/CX7LkgMwr9a3XbcVjYtH
+        Wmv4F/2SE2c8N6spUbl7zBloi9b8wwCB+yERBHAut3kTCUOpHgNgbOA4LR/Ew0vV
+        zHWRGcEy9u2JN0gE1wGX9XTkLkCrA7Mkx86YSG14ttmT+Uj6+qHU7u84BFVAS5sH
+        fXYnmp4r3f7OD7prv9BfPZedMze1b1hMbGqK9suB0YzsZo+r1Pwlb71TifHAQdcZ
+        T8olniVwYsB8msCX1/AJnol0C48g8QdEGfJm6UpKwcj6f5GUa8fq4cMTtm0kveAB
+        Q8qOXt9jXKfa556Nf62m8CjIn3OfmFnNPZlpFx0bL9g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:content-type:date:from:in-reply-to
         :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=zIntnB
-        uXpSaR3WFttpC6Z14pmK0kj+KtCt/Fp/W1l5Y=; b=Sz0AYd5GZIofWgsXVWunT4
-        7C2x3rRtrodahcssA4o50ODgTN9LQ5JAxK6wAwwroXETMluH2YrwCsdR0cYIqOuZ
-        FetGbtUEwk1exx5bemtdxTGFZ4ORY+IY2FVfX9L2T9tLgE28c773PprywJetrWMc
-        Y4RzZHPT06Tr1UcEpj8SIuCwbTxmzmLiz3hQNjRVVX+itGtiv4FRMQK8gCe0vHdd
-        mCgoQVjcE26HI6w7dmuaM3Pa8d3YINN1zWBKA42Z3QygIARxJBlfhkBWycXSFn3I
-        uu5QicyICAay8X/wVLRag92+WjUesjLCMkDNW7QAr30p8tSX+IyrK80UMpFUqAEQ
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=POEurt
+        easFjtErahfEjgvleBxyPDp8wZRReEbv/IAys=; b=XJMuObmrP1KF2fiCudIQoF
+        Uw9YdDA9nRFLxEgXw4Mjs9KyCgAEczVVNqFx6J1rHndHBdOO5lsN9hYTd5dtYd2o
+        SiQ+GHyPrGNtuolY4oY5F0wdDLm6p9aUtcwVif+FX4vxcDyt7PIfORygP+kHk+PU
+        5y82npqA9hHXInV1zafBoPumQHM2nxY8MkCgYYQDh0chHba0IOTKOzdhfCFpUmqr
+        mRM5PpYFzv8lUAPcy88JZ84iEz+emJjwyCr0JgsRaWbO7k2o/042PGFoKQHO+cX6
+        3W2gjd2837hYtUzxOdHL8tBTnRCazMAGQiti0R8NLNtESi0NhEQEDTSm2jxGeohQ
         ==
-X-ME-Sender: <xms:xxNFX70lvcFM3fLIKcBW1UaDrsY-pAJt7OlBnCd2N5FJDqnicHvQUQ>
+X-ME-Sender: <xms:1BNFX-4Ec6Wt06BBmqcZp-stJ36Ws-Pz6M9S0fH9vKfHtHaYRipLhQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduiedruddvtddgieelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
     vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
     htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepudegne
+    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgepvddune
     curfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:xxNFX6H7omXavv2gD_Bxs4Sk5cGKPZgswA-UZWPoSkxNCbPsGw3TPw>
-    <xmx:xxNFX74hREJYwgUv3l9HegXmWYpbWG1rE9BOlRDOhCCjXFm5IsaGlg>
-    <xmx:xxNFXw1-XpF8oeVbkfPMYvXdzsPyh2FAH5KHidbQCrFl9jJ9fFnBGQ>
-    <xmx:xxNFX2_qGKAorNi0f_WqSrCf8pmEphkvN_A2Y_NzUPHpXaGk1p-8cpU67Bc>
+X-ME-Proxy: <xmx:1BNFX34Jxf_MxSBsPQgv3osZA2IUOm9RuGW3he0GaDIb-Crt_jqsNQ>
+    <xmx:1BNFX9eW9OggrB-x6yam3EuKH9xSnH4r8TBzbmLawHnDvILI2Ef81w>
+    <xmx:1BNFX7LPwLSpf-QM7m7LqSbRD0zLgnVPKcNN9eWu5vFhQibCKW1fKQ>
+    <xmx:1BNFX6AWjA-EcPGV4346e34oYz6jt_QRUfA4kEdsWppp3Zws0d7Ei3LzJcE>
 Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id DAC1F306005F;
-        Tue, 25 Aug 2020 09:36:06 -0400 (EDT)
-Date:   Tue, 25 Aug 2020 10:46:29 +0200
+        by mail.messagingengine.com (Postfix) with ESMTPA id ABAA63280059;
+        Tue, 25 Aug 2020 09:36:19 -0400 (EDT)
+Date:   Tue, 25 Aug 2020 10:55:32 +0200
 From:   Maxime Ripard <maxime@cerno.tech>
-To:     Frank Lee <frank@allwinnertech.com>
-Cc:     anarsoul@gmail.com, tiny.windzz@gmail.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        robh+dt@kernel.org, wens@csie.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, huangshuosheng@allwinnertech.com,
-        liyong@allwinnertech.com
-Subject: Re: [PATCH v5 09/16] thermal: sun8i: Add A100's THS controller
- support
-Message-ID: <20200825084629.e6y27bz7ot33ychu@gilmour.lan>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Frank Lee <tiny.windzz@gmail.com>,
+        Frank Lee <frank@allwinnertech.com>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, gregory.clement@bootlin.com,
+        Thomas Gleixner <tglx@linutronix.de>, jason@lakedaemon.net,
+        Marc Zyngier <maz@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        "p.zabel" <p.zabel@pengutronix.de>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        clabbe@baylibre.com, bage@linutronix.de,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, linux-i2c@vger.kernel.org,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
+Message-ID: <20200825085532.vv4dpuzmjnshm5qn@gilmour.lan>
 References: <cover.1595572867.git.frank@allwinnertech.com>
- <48cc75920b5c69027134626157089d8b94942711.1595572867.git.frank@allwinnertech.com>
+ <CAEExFWsvScMgi_Dftfq06HZiF8CFAmym8Z_tgQoHHAfiGxWt0g@mail.gmail.com>
+ <CAEExFWuwjmqAh0c3kMLS3Gs6UC2A8TtY-9nJeWxFPRDugtR4pA@mail.gmail.com>
+ <20200824080327.GH3248864@dell>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="josxa6guw2ghbxyp"
+        protocol="application/pgp-signature"; boundary="auueqe22v4rtftcj"
 Content-Disposition: inline
-In-Reply-To: <48cc75920b5c69027134626157089d8b94942711.1595572867.git.frank@allwinnertech.com>
+In-Reply-To: <20200824080327.GH3248864@dell>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---josxa6guw2ghbxyp
+--auueqe22v4rtftcj
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 24, 2020 at 03:11:43PM +0800, Frank Lee wrote:
-> From: Yangtao Li <frank@allwinnertech.com>
+On Mon, Aug 24, 2020 at 09:03:27AM +0100, Lee Jones wrote:
+> On Mon, 24 Aug 2020, Frank Lee wrote:
 >=20
-> This patch add thermal sensor controller support for A100,
-> which is similar to the previous ones.
+> > ping......
 >=20
-> Signed-off-by: Yangtao Li <frank@allwinnertech.com>
+> "Please don't send content free pings and please allow a reasonable
+>  time for review.  People get busy, go on holiday, attend conferences
+>  and so on so unless there is some reason for urgency (like critical
+>  bug fixes) please allow at least a couple of weeks for review.  If
+>  there have been review comments then people may be waiting for those
+>  to be addressed.  Sending content free pings just adds to the mail
+>  volume (if they are seen at all) and if something has gone wrong
+>  you'll have to resend the patches anyway so [RESEND]ing with any
+>  comments addressed is generally a much better approach."
 
-Acked-by: Maxime Ripard <mripard@kernel.org>
+This is true to some extent, but pinging after a month doesn't seem
+unreasonable either.
 
-Thanks!
 Maxime
 
---josxa6guw2ghbxyp
+--auueqe22v4rtftcj
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0TP5QAKCRDj7w1vZxhR
-xWG7AP9ycCoJEEoU3y3szHM+UrV64jwpMJbJkqSRhWjjkX8F9QD+K2RIXAF7clKR
-QdTaqcpDsiiVINawzQ9tHkIRczGUvw0=
-=DZKj
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCX0TSBAAKCRDj7w1vZxhR
+xQ6OAP9rRoEY6LGAwA8rIYGP9nqZkGQvX8jYgLKgy8LDGLzgHwD9FpLVh5zaq2PN
+wZuijCenTGRJcOzorN0M0qrwWwjOnwM=
+=/bST
 -----END PGP SIGNATURE-----
 
---josxa6guw2ghbxyp--
+--auueqe22v4rtftcj--
