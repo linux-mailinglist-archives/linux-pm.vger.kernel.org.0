@@ -2,176 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3D125375D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 20:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2B425396F
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 22:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727013AbgHZSj2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 14:39:28 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:51118 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726794AbgHZSj1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Aug 2020 14:39:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1598467166; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To:
- Subject: From: Sender; bh=q+XvvfuKUIwhEAgsca/TePOG2B1+EPWz6HL4VPktJps=;
- b=T8E4InEQoubjHATLjMTvXw1xI3jze9V5Z1lsH8CuuA42EcsPd8Np/TP8VzLvSnOQrAXLuPlb
- tqQJ7jDXzskEfsf+CJzOZ7gk3Wlp/HyALmgKf+66A9C25CvOYYBPy/JUOaTCNSNOeLDXFF8R
- 8GXUdwVFALM0zaSwgrBou/EBglg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 5f46ac5137ae730e33e75cc3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 26 Aug 2020 18:39:13
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4CE93C43391; Wed, 26 Aug 2020 18:39:12 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
-        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.134] (unknown [172.98.141.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: eberman)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id ACF60C433CA;
-        Wed, 26 Aug 2020 18:39:09 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ACF60C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=eberman@codeaurora.org
-From:   Elliot Berman <eberman@codeaurora.org>
-Subject: Re: [RESEND PATCH v1 2/4] dt-bindings: power: reset: Add alternate
- reboot mode format
-To:     Rob Herring <robh@kernel.org>, ebiggers@google.com,
-        samitolvanen@google.com
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Trilok Soni <tsoni@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>
-References: <1597776856-12014-1-git-send-email-eberman@codeaurora.org>
- <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
- <20200825212521.GA1346433@bogus>
-Message-ID: <a77491b3-3917-8380-cf94-a4e3ccbbf22c@codeaurora.org>
-Date:   Wed, 26 Aug 2020 14:39:08 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.1.1
+        id S1726753AbgHZU5L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 16:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726609AbgHZU5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 16:57:11 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1941AC061574
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 13:57:11 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id p37so1758364pgl.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 13:57:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=WXV6sMWC2xGYLJjlj3Olmod0E3eq3zLxTh2J6UYO7rA=;
+        b=E2yrr1bRevxeDwuAEtoyyN3guVTBZuPhmANlrULKGuiPBHS5f+QBV4w8ZSmznIUYdy
+         fs/m/HeNgqdW0sulKQkZ1ipuTy21scdo0cpKmeO7+CtypuXopcC3F/Z7yLyqcWb56U7j
+         X0psdHdo5TnOLU2gDy+aTi5kwYO+Wa0KtIrengI7X60Ct5SYGgudX16w48McYPxLzZqq
+         JEGYcGkgktgg+7TrBAOLKJBPhV3p8kqK+NF3KDYU9gKCXmNihZkZxdr9f0iRoSgqy6L7
+         dqtMZPexLX10L+vPhbQF4t0wvzirYWTlPO+tCwVXjXN4qc3LBTAS9sVFf4JPoAPfDden
+         2HRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=WXV6sMWC2xGYLJjlj3Olmod0E3eq3zLxTh2J6UYO7rA=;
+        b=BL+r4Unrk9Jt/sAimwW5xLaQi1Q8DBiWmC247aX4juxyGLTHuXMttvxxGFIcZbGREB
+         0EpEnbz4sNNAtKSJGVRIu6Lyo0ysu5iGnwa9ldJdkVwlrezfKXGq3HJGuWsHiv74VfpZ
+         MIYNXZQu+pC8b58b7fGAITlR/Xg0sXpS8JBi/GUnRYYf0LBYLk6Hsob6+UUkDuAZ/g9l
+         KM7Kz1cy1bKRznjSD3Re2NZ2/iCCzYZSvozBKKFxE2thIKd9yCmyz2VjvH2rbgMcPVfb
+         gWEj/x7s3JfD7j0pkp2r5Jk/xRjK9yLtbHU7gY2t+dpDTAdAK2VQP1a/pkZjeTO233ZG
+         KLHQ==
+X-Gm-Message-State: AOAM531E/E56RXPRKYmCA+5nP0C73892IJGR9vuhuEfTa8p0UvB+9/Qc
+        mDxqxfZsc+51sRzRgzoHHRa8XyiqPyKoIg==
+X-Google-Smtp-Source: ABdhPJzcDzGQ4zUgYBqyl7FWhvwPd67jYuDQg51+G40CYWGpkqneO20T+iKBYthG8sN20J9HLkmbdw==
+X-Received: by 2002:a62:ea01:: with SMTP id t1mr13852033pfh.125.1598475430504;
+        Wed, 26 Aug 2020 13:57:10 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id t63sm3284517pgt.50.2020.08.26.13.57.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 13:57:09 -0700 (PDT)
+Message-ID: <5f46cca5.1c69fb81.777bd.7c48@mx.google.com>
+Date:   Wed, 26 Aug 2020 13:57:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200825212521.GA1346433@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.9-rc2-14-gfe784821d630
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 11 warnings (v5.9-rc2-14-gfe784821d630)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/25/2020 5:25 PM, Rob Herring wrote:
-> On Tue, Aug 18, 2020 at 11:54:14AM -0700, Elliot Berman wrote:
->> Current reboot-mode device tree schema does not support reboot commands
->> with spaces in them [1]. Add an optional new node "reboot-mode-names"
->> and "reboot-mode-magic" which add an array of strings and u32s,
->> respectively which would permit any string in this framework.
-> 
-> Kind of a weak justification. The intent was for the names to be a key,
-> not a multi word description which your example seems to be. Is
-> "dm-verity device corrupted" something Android has already standardized
-> on?
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc2-14-gf=
+e784821d630)
 
-+Eric/Sami to comment further
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc2-14-gfe784821d630/
 
-I wonder if you're thinking it's better to change the kernel_restart in 
-dm-verity-target.c?
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc2-14-gfe784821d630
+Git Commit: fe784821d630f71eee1f431f10e08518db42dc02
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-Alternatively, I could respin so that spaces in the reboot cmd is 
-replaced with "-" in reboot_mode_notify(). This way, there is no need to 
-change dm-verity driver or change devicetree schema. i.e.:
+Warnings Detected:
 
-@@ -44,9 +44,13 @@ static int reboot_mode_notify(struct notifier_block 
-*this,
-  {
-         struct reboot_mode_driver *reboot;
-         unsigned int magic;
-+       char *reboot_cmd;
-+
-+       reboot_cmd = kstrdup(cmd, GFP_KERNEL);
-+       strreplace(reboot_cmd, ' ', '-');
+arc:
 
-         reboot = container_of(this, struct reboot_mode_driver, 
-reboot_notifier);
--       magic = get_reboot_mode_magic(reboot, cmd);
-+       magic = get_reboot_mode_magic(reboot, reboot_cmd);
-         if (magic)
-                 reboot->write(reboot, magic);
+arm64:
+    defconfig (gcc-8): 8 warnings
 
-> 
->>
->> [1]:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-verity-target.c?h=v5.5#n255
->>
->> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
->> ---
->>   .../devicetree/bindings/power/reset/reboot-mode.yaml    | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
->> index a6c9102..4ea6b33 100644
->> --- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
->> +++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
->> @@ -19,6 +19,9 @@ description: |
->>     the bootloader what to do when the system reboots, and should be named
->>     as mode-xxx = <magic> (xxx is mode name, magic should be a non-zero value).
->>   
->> +  reboot-mode-magic and reboot-mode-names may be used in addition/instead of
->> +  mode-xxx style.
-> 
-> It should be either/or in my opinion, not both.
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
 
-OK, I can fix in the next patch.
+i386:
 
-> 
->> +
->>     For example, modes common Android platform are:
->>       - normal: Normal reboot mode, system reboot with command "reboot".
->>       - recovery: Android Recovery mode, it is a mode to format the device or update a new image.
->> @@ -32,6 +35,14 @@ properties:
->>         description: |
->>           Default value to set on a reboot if no command was provided.
->>   
->> +  reboot-mode-names:
->> +    $ref: /schemas/types.yaml#/definitions/string-array
->> +    description: List of reboot commands, paired with reboot-mode-magic by index
->> +
->> +  reboot-mode-magic:
-> 
-> 'reboot-modes' would align with normal patterns.
+mips:
 
-Ditto
+riscv:
 
-> 
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description: List of reboot magic, paired with reboot-mode-names by index
->> +
->>   patternProperties:
->>     "^mode-.*$":
->>       $ref: /schemas/types.yaml#/definitions/uint32
->> @@ -44,4 +55,10 @@ examples:
->>         mode-bootloader = <2>;
->>         mode-loader = <3>;
->>       };
->> +
->> +  - |
->> +    reboot-mode {
->> +      reboot-mode-names = "normal", "bootloader", "dm-verity device corrupted";
->> +      reboot-mode-magic = <0x0>, <0x1>, <0xf>;
->> +    };
->>   ...
->> -- 
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    2    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    2    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    2    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
