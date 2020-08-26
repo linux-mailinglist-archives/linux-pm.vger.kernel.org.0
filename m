@@ -2,82 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC800252CE9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 13:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4937252DB3
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 14:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729058AbgHZLvy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 07:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728668AbgHZLvr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 07:51:47 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4767C061574
-        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 04:51:46 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id o13so926701pgf.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 04:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=d5syma3Hm2xgpjYoCUfH5dx/fNvVtugVzGMU+rBDjb4=;
-        b=lQG780WbiVqGfjwKV6LroLuIY3BVig9byZ5oVDCFMGK3nIVflGCp64lH3lxSdOTw9V
-         e4kFeBYitXXNHSqx6Jsm/b3jgeUopo/gwIXUP3EJM8vF44yJw29+xNZr7JUblr9cIuNf
-         sYsx5ebT0trr3Fljajn3EJccf9TakxAiQM8Fu2DNuxb2cBqlCBuEM/nZDCv7blfSCJzS
-         yeVKscKogFC7EIEu22lLW7kOGkP16OfRiNlEJCGVWwZjuw4fYlKBwrUmjteZQbLwohU0
-         r2EOfEiAGg6H4caq6Px8EWQwDOmA8X7TCl1uPhZeshiosMS/2Yt5laBHksA4kwbgX1Z1
-         PbEQ==
+        id S1729673AbgHZMFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 08:05:08 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42821 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729677AbgHZMFB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 08:05:01 -0400
+Received: by mail-wr1-f67.google.com with SMTP id q14so1528555wrn.9;
+        Wed, 26 Aug 2020 05:05:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=d5syma3Hm2xgpjYoCUfH5dx/fNvVtugVzGMU+rBDjb4=;
-        b=eF/YS5nQDyvcBESsnKggnny9pH/RfcZDZSOZ8Rc071Jabos7DBrCEQCXNV95jdSb1K
-         owwcZ/3pM0pKKmwTp5uY5iqzhYXvs+c9SWUdpxxBxzzfWbcuiyhfm0owhyi9g51OzWRm
-         iQ1z/pS34OhBEyLCi9i/1qnFt+B/odlr5R9kzt8hvJKQKexwJvOKsKMzvYDBE7EJuw+f
-         Kc1EVMhL3w30GJTNX9pMW4ff5RPHBp6oIWuH4Bxb87XAhkip33KMqMoi+dCa8nAI0x+y
-         tjAYK72HxH1YIyzxWx/AjAtiOw3D24PMquklg6OoqBWSJjOQFxSQIC4lhcR3nLPSM6Kg
-         sAMg==
-X-Gm-Message-State: AOAM532hTHda2M9xnimgNyZVtmrtEuhGQiHW+rQNcl/G3x6WqRczubVR
-        jrJTz0N49V3IS4elOyQBPJxqSA==
-X-Google-Smtp-Source: ABdhPJxW+8PNMdyqhaG+5tXru5ltIFVeIrhcF+B6nSKr9/33OvHJxPKi9pnj47apZOMcd7m9BlZlzw==
-X-Received: by 2002:a63:6346:: with SMTP id x67mr10344346pgb.121.1598442704021;
-        Wed, 26 Aug 2020 04:51:44 -0700 (PDT)
-Received: from localhost ([122.172.43.13])
-        by smtp.gmail.com with ESMTPSA id o30sm2401619pgc.45.2020.08.26.04.51.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Aug 2020 04:51:43 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 17:21:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>
-Subject: Re: opp: How to use multiple opp-supported-hw versions properly?
-Message-ID: <20200826115140.n4zgz2dutu7xxfew@vireshk-i7>
-References: <20200825074452.GA1322@gerhold.net>
- <20200825081637.opfmtccwczn6jtlo@vireshk-i7>
- <20200825085740.GA855@gerhold.net>
- <20200825095633.wzlpsxhabkfd27km@vireshk-i7>
- <20200825103407.GA847@gerhold.net>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yeR3qMxY8QK4/wvsoj5cuxH3mWn/t2ot23DexX4h7MA=;
+        b=IxdmjIAk61phj86Vx2aVeUtyV1ZPH6KSc6YbsU2upSKiejQ2+9+5qYpeJ0vwQ1Ft4K
+         yBA/x5JdIzT2RFVMchiz886iNCuDWnEyLHUHakwU3eL9BNqVIQGscVT6s/uhE7zHPeyZ
+         1Peh8dJwsx6AgyoXqQkD6BVloLi9NBXaLjv0z9xgAKm9EF+d62CaFjPNm7ifPMrfgxzF
+         Lt3RKsbOBJNyf9ZFCrLIRKpfeshH0BFblASsrNDaY5gKMIkxRGKi8GyDlLW/VtlG3S9A
+         sQl674qG4AUx1TxijPipxKuofwQyhfGH1BofPnrl+xkzqvyWbYaxo5smqopN51ieUnWm
+         E0oA==
+X-Gm-Message-State: AOAM532RTMuiB3z/59l1yZhmZQCDDr5vZLxbi5MTtxhb0hWRedR50Qi8
+        5RWPrFjQLB55qJTyzQgffj6b+4oQm6983A==
+X-Google-Smtp-Source: ABdhPJzsVm84CbbIOidcz8nD79LPK/Ny1lXC+ZG5qTLEMI14VHYwfiCaAadaxv6yHSvDMychEJr93w==
+X-Received: by 2002:adf:e452:: with SMTP id t18mr14333704wrm.109.1598443498258;
+        Wed, 26 Aug 2020 05:04:58 -0700 (PDT)
+Received: from localhost.localdomain (static-176-175-69-188.ftth.abo.bbox.fr. [176.175.69.188])
+        by smtp.googlemail.com with ESMTPSA id k24sm4728420wmj.19.2020.08.26.05.04.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 05:04:57 -0700 (PDT)
+From:   Guilhem Lettron <guilhem@barpilot.io>
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guilhem Lettron <guilhem@barpilot.io>
+Subject: [PATCH] intel_idle: Add ICL support
+Date:   Wed, 26 Aug 2020 14:04:21 +0200
+Message-Id: <20200826120421.44356-1-guilhem@barpilot.io>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825103407.GA847@gerhold.net>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-08-20, 12:35, Stephan Gerhold wrote:
-> Actually this does not work properly either, at least if you have
-> 64 possible versions :-)
+Use the same C-states as SKL
 
-I must have been very crazy yesterday :)
+Signed-off-by: Guilhem Lettron <guilhem@barpilot.io>
+---
+ drivers/idle/intel_idle.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I think your idea was the only sensible approach and I have sent a patchset with
-relevant updates. Please let me know how it looks.
-
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 8e0fb1a5bdbd..1bb539f09a4f 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1145,6 +1145,8 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,		&idle_cpu_skl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		&idle_cpu_skl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,		&idle_cpu_skx),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE,		&idle_cpu_skl),
++	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L,		&idle_cpu_skl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		&idle_cpu_icx),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
 -- 
-viresh
+2.27.0
+
