@@ -2,94 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4C8253629
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 19:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E789325362E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 19:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbgHZRrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 13:47:55 -0400
-Received: from mga06.intel.com ([134.134.136.31]:46505 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726820AbgHZRrs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Aug 2020 13:47:48 -0400
-IronPort-SDR: tSkMt0h2C2xvxL20YBYOVsfOddsy0s7nIl8V1v/DHaRRZOCfBLxVXFSo4+gDbebgXZLOi0ThEN
- UscQ4ZQsd38Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="217902690"
-X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
-   d="scan'208";a="217902690"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 10:47:48 -0700
-IronPort-SDR: 8AHFNJF+3w8JSgd/qPHH74lfBlMW2ftlBY3qS9VhpxGUhQk3o9DQvNNzE5+uzuO7gqJVgD88Lg
- oLXajWwEF7EQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,356,1592895600"; 
-   d="scan'208";a="500328324"
-Received: from leike-mobl.ccr.corp.intel.com ([10.255.28.177])
-  by fmsmga005.fm.intel.com with ESMTP; 26 Aug 2020 10:47:46 -0700
-Message-ID: <82c789766e71d29cf1a90f519d21ba310ae8fa95.camel@intel.com>
-Subject: Re: [PATCH] intel_idle: Add ICL support
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guilhem Lettron <guilhem@barpilot.io>
-Cc:     Artem Bityutskiy <dedekind1@gmail.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Thu, 27 Aug 2020 01:47:44 +0800
-In-Reply-To: <CAJZ5v0gJscMWLsjCm_L6jCDdZ2hdRB2mPtUBSgd1va7Xm7GyVA@mail.gmail.com>
-References: <20200826120421.44356-1-guilhem@barpilot.io>
-         <CAJZ5v0i8XUF39Vv=EM4TgyXgK6zHniZW3tGYFPweO3kg+BrxOQ@mail.gmail.com>
-         <CAGX5Wg2OOgY6d1RH514Kh9D6b+siga+jzH7qubcmE+ukq+6KKA@mail.gmail.com>
-         <d0ca671465e6ce72c6c4d5178440ebc1e4814da8.camel@gmail.com>
-         <e82c121057c4496238d3de7f7c919b7039d23b7c.camel@gmail.com>
-         <CAGX5Wg0LrzPwf=2pGrQHAbFMVkOoYDxOoFa+ZmLBYshPvZQUXg@mail.gmail.com>
-         <8fa7622dacc03f2fbd67e810f53389e3ede544e8.camel@intel.com>
-         <CAGX5Wg0=K5AaTut5KH3R3+oasM5MM7PaJ9Z_L56xSNckMbWC9g@mail.gmail.com>
-         <CAJZ5v0j4FXH26rZCjM9Csd56skPVbRpM7iFcKYAFMmLFX54+bg@mail.gmail.com>
-         <e9e6823d63fe2b9938e43a14c136b89aec0c503b.camel@gmail.com>
-         <CAJZ5v0gPY+7YBeWwszoNBwsbKLFOEeuLaekdX62_gvbHXB8xoA@mail.gmail.com>
-         <CAGX5Wg3bVpgaFXHb1=4ikGk0P+4=XRqROBU4pqw1mpsY06dbHQ@mail.gmail.com>
-         <CAJZ5v0gJscMWLsjCm_L6jCDdZ2hdRB2mPtUBSgd1va7Xm7GyVA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726851AbgHZRs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 13:48:28 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:45500 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726947AbgHZRs0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 13:48:26 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: sre)
+        with ESMTPSA id 8944F294D9C
+Received: by earth.universe (Postfix, from userid 1000)
+        id 54F1E3C0C82; Wed, 26 Aug 2020 19:48:17 +0200 (CEST)
+Date:   Wed, 26 Aug 2020 19:48:17 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH 1/2] power: supply: Add support for RN5T618/RC5T619
+ charger and fuel gauge
+Message-ID: <20200826174817.vhus3j4i4t7u7jc4@earth.universe>
+References: <20200815165610.10647-1-andreas@kemnade.info>
+ <20200815165610.10647-2-andreas@kemnade.info>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="y3moyevmvc7nmaqp"
+Content-Disposition: inline
+In-Reply-To: <20200815165610.10647-2-andreas@kemnade.info>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2020-08-26 at 19:00 +0200, Rafael J. Wysocki wrote:
-> On Wed, Aug 26, 2020 at 6:46 PM Guilhem Lettron <guilhem@barpilot.io>
-> wrote:
-> > 
-> > I've done more tests, maybe it can give you more hints.
-> > I don't see that much differences between both (with and without
-> > patches) in this cases.
-> 
-> OK, thanks!
-> 
-> I'm assuming that the topmost two sets of data are for the "without
-> the patch" case whereas the other three correspond to the "with the
-> patch" case.
 
-I think the sample period is too short.
-Even with the same kernel, I can see the Busy% varies from 1% to 9%,
-and the PkgWatt varies from 0.4W to 2.4W.
+--y3moyevmvc7nmaqp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-thanks,
-rui
+Hi,
 
-> 
-> If so, the processor clearly enters PC10 in both cases and the
-> residency percentages are similar.
-> 
-> The numbers of times the POLL state was selected in the first test
-> look kind of unusual (relatively very large), but other than this the
-> patch doesn't seem to make much of a difference, so I'm not going to
-> apply it.
-> 
-> Thanks!
+Driver looks mostly good.
 
+On Sat, Aug 15, 2020 at 06:56:09PM +0200, Andreas Kemnade wrote:
+> [...]
+> +static int rn5t618_battery_current_now(struct rn5t618_power_info *info,
+> +				       union power_supply_propval *val)
+> +{
+> +	u16 res;
+> +	int ret;
+> +
+> +	ret = rn5t618_battery_read_doublereg(info, RN5T618_CC_AVEREG1, &res);
+> +	if (ret)
+> +		return ret;
+> +
+> +	val->intval = res;
+> +	/* 2's complement */
+> +	if (val->intval & (1 << 13))
+> +		val->intval = val->intval - (1 << 14);
+> +
+> +	/* negate current to be positive when discharging */
+> +	val->intval *= -1000;
+
+mh, the sign is not documented (which should be fixed). At least
+sbs-battery does it the other way around (negative current when
+discharging, positive otherwise). Some drivers do not support
+signed current and always report positive values (e.g. ACPI driver).
+
+What did you use as reference for swapping the sign?
+
+> +	return 0;
+> +}
+> [...]
+> +static const struct power_supply_desc rn5t618_adp_desc = {
+> +	.name                   = "rn5t618-adp",
+> +	.type                   = POWER_SUPPLY_TYPE_MAINS,
+> +	.properties             = rn5t618_usb_props,
+
+wrong property array, works by accident since usb and adp property
+lists are the same.
+
+> +	.num_properties         = ARRAY_SIZE(rn5t618_adp_props),
+> +	.get_property           = rn5t618_adp_get_property,
+> +};
+> [...]
+
+-- Sebastian
+
+--y3moyevmvc7nmaqp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9GoFsACgkQ2O7X88g7
++prupQ/+PUw6LW965p9e0EajZ5HB7SF2KwRWx6T+uXRreV8R2dMAS1s8K1gJplca
+0/U5ZqMf3BjI5lP9m4h7/ccgUNEp/Iuk6tl143dCHutV+33SzTMgsucZVkuB+C7l
+te75mJdDcxlf54+A2YBTLJkWoeFuznG9Cnecz0+KYJVpFia5Y6IJDQhmuAkW1UQ/
+iSe8LnvAIZH+HQ9dyU0/wTSYhlidecfybKJL2i4o9Rv0l0jp4eKYnb/vhFQ7tW/u
+4IXtEuc+CPSMy4wWC0gFMx2fo7EMBVmMLgxKOw3p5E3+26yG0tMoR/q8Pp4paIqk
+CC/YZolAbU0nPWm71gCbisiZc3V/FE10SA6v65mFU/PyDIdCFHxmpWYb3A+LaOim
+Z/HAcKzJj3mtmTDBu/O7sezuIgULfx2Zb3lAZ2HtuqWKJ/KYaZ0Z10TXtiBNGm14
+3jWp2hEBVHsktNNVf4kjTQwENGwMaI85Kjsx9e2YNXJoESpyJh32M3HMKiBpDUKh
+v/Qkb2Y5SSlgMb0E+StPIbRpVQ46vZpV2Ys04X5dfOp81UoG7NhvSECI5fOLRpo7
+Kpa2/mrPMhe1gha/LEk2OItqXAZF8P95PL1obXVXWyV39vYm/v5oUd51wnOdnlu1
+oyc2RLOgLW0Ae3KZsywx7ZgqD9XhhM076V0NaSMfSd5AAMQt0vI=
+=TU9+
+-----END PGP SIGNATURE-----
+
+--y3moyevmvc7nmaqp--
