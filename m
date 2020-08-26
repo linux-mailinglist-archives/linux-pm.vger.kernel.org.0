@@ -2,91 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82447252AD1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 11:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100A0252B2A
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 12:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728046AbgHZJyW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 05:54:22 -0400
-Received: from mga11.intel.com ([192.55.52.93]:14627 "EHLO mga11.intel.com"
+        id S1728089AbgHZKMr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 06:12:47 -0400
+Received: from mga17.intel.com ([192.55.52.151]:15487 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727942AbgHZJyW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Aug 2020 05:54:22 -0400
-IronPort-SDR: 2/TTzkZ5gG/wQasxgz+TL1FTFMj8gTg+Q4MwT1uvdUfwfM8T+laC2F16LoqFZUdTY5xF763keg
- uKq/2by4RB8g==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="153835283"
+        id S1728015AbgHZKMq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Aug 2020 06:12:46 -0400
+IronPort-SDR: oF34jg9OiDXoOe7DUaWhXFBJhCBEuEyJTazrC0jHX5yzRlo03pXckxvu5RJ9MTAemhb9dKLAAo
+ BH1XNb+JVkWA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="136328149"
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="153835283"
+   d="scan'208";a="136328149"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 02:54:18 -0700
-IronPort-SDR: aKZ1nbtpzd2mAGNtCYvZa4u9d31Wtw/GoGfc/vEAuEh7HDFwSdsiBaOSutwoQNSWGqXc2g3v+Y
- 6xI71ibo1P8Q==
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 03:12:45 -0700
+IronPort-SDR: RtEC8g9zf8RAbiGUrMMyNvXPDm6MvvrpEvtzOfgsZFBCb2z+5bhMy7KCNY9bf4fleiNpu4AMGZ
+ uZ8BS9ac/fIA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="373327012"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 26 Aug 2020 02:54:18 -0700
-Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.186])
-        by linux.intel.com (Postfix) with ESMTP id D064D5806C4;
-        Wed, 26 Aug 2020 02:54:16 -0700 (PDT)
-Message-ID: <91190a53b9d78ffe08d4b001d021868ad7ba6d1c.camel@gmail.com>
-Subject: Re: [PATCH v2 2/5] cpufreq: intel_pstate: Always return last EPP
- value from sysfs
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 26 Aug 2020 12:54:15 +0300
-In-Reply-To: <CAJZ5v0hkmcAuCsnfjCSWTarr4pkQry2VCtk2aWM74fOW2guzmg@mail.gmail.com>
-References: <4169555.5IIHXK4Dsd@kreacher> <2064342.aRc67yb0pC@kreacher>
-         <61ea43fce7dd8700d94f12236a86ffec6f76a898.camel@gmail.com>
-         <CAJZ5v0hkmcAuCsnfjCSWTarr4pkQry2VCtk2aWM74fOW2guzmg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+   d="scan'208";a="336793744"
+Received: from lkp-server01.sh.intel.com (HELO 4f455964fc6c) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 26 Aug 2020 03:12:43 -0700
+Received: from kbuild by 4f455964fc6c with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kAsQ7-0001OF-1P; Wed, 26 Aug 2020 10:12:43 +0000
+Date:   Wed, 26 Aug 2020 18:12:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ a64f0b6a746f0133e361f4c99e4c17a1e481f6d8
+Message-ID: <5f463594.OY5tAiGY2Itzo0xd%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks for answer Rafael, it looks like there are 2 different things
-now.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: a64f0b6a746f0133e361f4c99e4c17a1e481f6d8  Merge branch 'pm-sleep' into bleeding-edge
 
-1. What kernel returns when I _read_ e_p_p file - truth or "cached" ?
+elapsed time: 720m
 
-2. How kernel behaves when I _write_ to e_p_p file something it cannot
-provide - error or success.
+configs tested: 75
+configs skipped: 3
 
-For #1, I think we need to keep it simple and always return true policy
-value. Does not matter what someone wrote there. If some process wrote
-"powersave", but kernel uses EPP 0 anyway, the other process probably
-wants to know the truth and get "performance" when reading e_p_p.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-On Tue, 2020-08-25 at 16:51 +0200, Rafael J. Wysocki wrote:
-> An alternative is to fail writes to energy_performance_preference if
-> the driver works in the active mode and the scaling algorithm for the
-> scaling CPU is performance and *then* to make reads from it return the
-> value in the register.
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                      tct_hammer_defconfig
+mips                  maltasmvp_eva_defconfig
+arm                            dove_defconfig
+mips                          ath79_defconfig
+arm                           sunxi_defconfig
+arm                    vt8500_v6_v7_defconfig
+arc                        vdk_hs38_defconfig
+mips                         bigsur_defconfig
+arm                           omap1_defconfig
+arm                           h5000_defconfig
+arm                  colibri_pxa300_defconfig
+arm                          moxart_defconfig
+nios2                         3c120_defconfig
+powerpc                    amigaone_defconfig
+sh                             shx3_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                             defconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a015-20200826
+x86_64               randconfig-a016-20200826
+x86_64               randconfig-a012-20200826
+x86_64               randconfig-a014-20200826
+x86_64               randconfig-a011-20200826
+x86_64               randconfig-a013-20200826
+i386                 randconfig-a013-20200826
+i386                 randconfig-a012-20200826
+i386                 randconfig-a011-20200826
+i386                 randconfig-a016-20200826
+i386                 randconfig-a015-20200826
+i386                 randconfig-a014-20200826
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Yes, this is #2. This sounds like the _right_ way to do it.
-
-Suppose my script wants to exercise the system with 4 different EPP
-policies. It changes the policy and runs measurements, each run takes
-few _days_.
-
-Now, my script asks for "powersave". Kernel _knows_ it cannot provide
-it (performance+active enabled). Why would it not return error ("can't
-do") instead of success ("yes, Sir!")?
-
-Note, I deliberately use simple words like "my script" instead of "a
-user-space process" to make it easier to convey the idea.
-
-Anyway, if kernel returns error, I can go and improve my script WRT
-controlling the performance+active mode knobs.
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
