@@ -2,94 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F56A25371E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 20:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3D125375D
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 20:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbgHZS2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 14:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726753AbgHZS2l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 14:28:41 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A349EC061756;
-        Wed, 26 Aug 2020 11:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ayROP4MQKiCNpNKT6GTubMn3ATg0Pxrq17ErVXh+buk=; b=JHtANQ1UL5uHlW5ZRQQ1RWhb5l
-        VWwp7qajTArQCrjN7yuOSdtWq0CJYECBPhC5LKEN/9voxKMpidJ2kQfoLUH0EwObGcIiSrTpKv+X3
-        PrN0KvByWYlstelbhZFoHtNsof65sOnT9kfsxG/lDypPGwbw8Y0bkc/LFLzI/2Unqjxc=;
-Received: from p200300ccff0d72001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0d:7200:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kB09z-0008KM-RV; Wed, 26 Aug 2020 20:28:36 +0200
-Date:   Wed, 26 Aug 2020 20:28:34 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH 1/2] power: supply: Add support for RN5T618/RC5T619
- charger and fuel gauge
-Message-ID: <20200826202834.42b1673f@aktux>
-In-Reply-To: <20200826174817.vhus3j4i4t7u7jc4@earth.universe>
-References: <20200815165610.10647-1-andreas@kemnade.info>
-        <20200815165610.10647-2-andreas@kemnade.info>
-        <20200826174817.vhus3j4i4t7u7jc4@earth.universe>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727013AbgHZSj2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 14:39:28 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:51118 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726794AbgHZSj1 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Aug 2020 14:39:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1598467166; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To:
+ Subject: From: Sender; bh=q+XvvfuKUIwhEAgsca/TePOG2B1+EPWz6HL4VPktJps=;
+ b=T8E4InEQoubjHATLjMTvXw1xI3jze9V5Z1lsH8CuuA42EcsPd8Np/TP8VzLvSnOQrAXLuPlb
+ tqQJ7jDXzskEfsf+CJzOZ7gk3Wlp/HyALmgKf+66A9C25CvOYYBPy/JUOaTCNSNOeLDXFF8R
+ 8GXUdwVFALM0zaSwgrBou/EBglg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 5f46ac5137ae730e33e75cc3 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 26 Aug 2020 18:39:13
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4CE93C43391; Wed, 26 Aug 2020 18:39:12 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.2 required=2.0 tests=ALL_TRUSTED,NICE_REPLY_A,
+        SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.134] (unknown [172.98.141.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: eberman)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id ACF60C433CA;
+        Wed, 26 Aug 2020 18:39:09 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org ACF60C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=eberman@codeaurora.org
+From:   Elliot Berman <eberman@codeaurora.org>
+Subject: Re: [RESEND PATCH v1 2/4] dt-bindings: power: reset: Add alternate
+ reboot mode format
+To:     Rob Herring <robh@kernel.org>, ebiggers@google.com,
+        samitolvanen@google.com
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Trilok Soni <tsoni@codeaurora.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>
+References: <1597776856-12014-1-git-send-email-eberman@codeaurora.org>
+ <1597776856-12014-3-git-send-email-eberman@codeaurora.org>
+ <20200825212521.GA1346433@bogus>
+Message-ID: <a77491b3-3917-8380-cf94-a4e3ccbbf22c@codeaurora.org>
+Date:   Wed, 26 Aug 2020 14:39:08 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20200825212521.GA1346433@bogus>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 26 Aug 2020 19:48:17 +0200
-Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+On 8/25/2020 5:25 PM, Rob Herring wrote:
+> On Tue, Aug 18, 2020 at 11:54:14AM -0700, Elliot Berman wrote:
+>> Current reboot-mode device tree schema does not support reboot commands
+>> with spaces in them [1]. Add an optional new node "reboot-mode-names"
+>> and "reboot-mode-magic" which add an array of strings and u32s,
+>> respectively which would permit any string in this framework.
+> 
+> Kind of a weak justification. The intent was for the names to be a key,
+> not a multi word description which your example seems to be. Is
+> "dm-verity device corrupted" something Android has already standardized
+> on?
 
-> Hi,
-> 
-> Driver looks mostly good.
-> 
-> On Sat, Aug 15, 2020 at 06:56:09PM +0200, Andreas Kemnade wrote:
-> > [...]
-> > +static int rn5t618_battery_current_now(struct rn5t618_power_info *info,
-> > +				       union power_supply_propval *val)
-> > +{
-> > +	u16 res;
-> > +	int ret;
-> > +
-> > +	ret = rn5t618_battery_read_doublereg(info, RN5T618_CC_AVEREG1, &res);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	val->intval = res;
-> > +	/* 2's complement */
-> > +	if (val->intval & (1 << 13))
-> > +		val->intval = val->intval - (1 << 14);
-> > +
-> > +	/* negate current to be positive when discharging */
-> > +	val->intval *= -1000;  
-> 
-> mh, the sign is not documented (which should be fixed). At least
-> sbs-battery does it the other way around (negative current when
-> discharging, positive otherwise). Some drivers do not support
-> signed current and always report positive values (e.g. ACPI driver).
-> 
-> What did you use as reference for swapping the sign?
-> 
-Well, I have searched for documentation, found nothing and used the
-bq27xxx driver as reference  which I am used to from the GTA04/GTA02,
-so things behave equal. That are the devices where a was most
-intensively looking at those values.
-I thought that there would be some unwritten rule about that.
++Eric/Sami to comment further
 
-Regards,
-Andreas
+I wonder if you're thinking it's better to change the kernel_restart in 
+dm-verity-target.c?
+
+Alternatively, I could respin so that spaces in the reboot cmd is 
+replaced with "-" in reboot_mode_notify(). This way, there is no need to 
+change dm-verity driver or change devicetree schema. i.e.:
+
+@@ -44,9 +44,13 @@ static int reboot_mode_notify(struct notifier_block 
+*this,
+  {
+         struct reboot_mode_driver *reboot;
+         unsigned int magic;
++       char *reboot_cmd;
++
++       reboot_cmd = kstrdup(cmd, GFP_KERNEL);
++       strreplace(reboot_cmd, ' ', '-');
+
+         reboot = container_of(this, struct reboot_mode_driver, 
+reboot_notifier);
+-       magic = get_reboot_mode_magic(reboot, cmd);
++       magic = get_reboot_mode_magic(reboot, reboot_cmd);
+         if (magic)
+                 reboot->write(reboot, magic);
+
+> 
+>>
+>> [1]:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/md/dm-verity-target.c?h=v5.5#n255
+>>
+>> Signed-off-by: Elliot Berman <eberman@codeaurora.org>
+>> ---
+>>   .../devicetree/bindings/power/reset/reboot-mode.yaml    | 17 +++++++++++++++++
+>>   1 file changed, 17 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+>> index a6c9102..4ea6b33 100644
+>> --- a/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+>> +++ b/Documentation/devicetree/bindings/power/reset/reboot-mode.yaml
+>> @@ -19,6 +19,9 @@ description: |
+>>     the bootloader what to do when the system reboots, and should be named
+>>     as mode-xxx = <magic> (xxx is mode name, magic should be a non-zero value).
+>>   
+>> +  reboot-mode-magic and reboot-mode-names may be used in addition/instead of
+>> +  mode-xxx style.
+> 
+> It should be either/or in my opinion, not both.
+
+OK, I can fix in the next patch.
+
+> 
+>> +
+>>     For example, modes common Android platform are:
+>>       - normal: Normal reboot mode, system reboot with command "reboot".
+>>       - recovery: Android Recovery mode, it is a mode to format the device or update a new image.
+>> @@ -32,6 +35,14 @@ properties:
+>>         description: |
+>>           Default value to set on a reboot if no command was provided.
+>>   
+>> +  reboot-mode-names:
+>> +    $ref: /schemas/types.yaml#/definitions/string-array
+>> +    description: List of reboot commands, paired with reboot-mode-magic by index
+>> +
+>> +  reboot-mode-magic:
+> 
+> 'reboot-modes' would align with normal patterns.
+
+Ditto
+
+> 
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    description: List of reboot magic, paired with reboot-mode-names by index
+>> +
+>>   patternProperties:
+>>     "^mode-.*$":
+>>       $ref: /schemas/types.yaml#/definitions/uint32
+>> @@ -44,4 +55,10 @@ examples:
+>>         mode-bootloader = <2>;
+>>         mode-loader = <3>;
+>>       };
+>> +
+>> +  - |
+>> +    reboot-mode {
+>> +      reboot-mode-names = "normal", "bootloader", "dm-verity device corrupted";
+>> +      reboot-mode-magic = <0x0>, <0x1>, <0xf>;
+>> +    };
+>>   ...
+>> -- 
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
