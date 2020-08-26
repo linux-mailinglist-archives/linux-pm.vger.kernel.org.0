@@ -2,169 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 479EA25293D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 10:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683D62529DA
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 11:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbgHZIcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 04:32:05 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([85.215.255.52]:24972 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbgHZIcE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 04:32:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598430717;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
-        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
-        bh=5qbPZwOrGjfVjPer5Q3VTjDIEHM+8e+46OrFUHxkQFA=;
-        b=th8H/aEs0w3hgC1F/cXwliYNoI4Yp5N+h4FASob8o2FwyT1nXSTBgBkJa2ASEqhhql
-        4BtOAbGbQFC3qqLr5Lh+lwrrp5brDfNcgTFTTFIh9pLSXf99rT48YKzMeZEQ82Qmn4U5
-        xuuck+/4YfeX4lx1qNGaOr95qc5NGWxy6I8QQO4Mm9NugRz+l98UFE+c6/+AKM3zruuE
-        9Arw4ENLCSqxJYUmFoD0oNXQrCacito7VW2Zr7BMeGA3BM9yaGVivUg/Y5RsLaWfjFrj
-        fu7BYXZFsNsYsKMI6GWw89O4Ffp8Xrt6h5ZlwzFEnW6C0lgfURPzTwOAeK3Fw7IKh5Qq
-        gr7w==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/Fboo="
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
-        with ESMTPSA id g0b6c1w7Q8VskYv
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Wed, 26 Aug 2020 10:31:54 +0200 (CEST)
-Date:   Wed, 26 Aug 2020 10:31:48 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Niklas Cassel <nks@flawful.org>
-Subject: Re: [RFC PATCH 3/3] opp: Power on (virtual) power domains managed by
- the OPP core
-Message-ID: <20200826083148.GA869@gerhold.net>
-References: <20200730080146.25185-1-stephan@gerhold.net>
- <20200730080146.25185-4-stephan@gerhold.net>
- <20200824112744.jsyaxrfbybyjpwex@vireshk-i7>
- <20200824115549.GB208090@gerhold.net>
- <CAPDyKFojtArMRfO+Z8YaWCWw2fFYcO62x3eL1paNi5pKRg3Jww@mail.gmail.com>
- <20200824150831.GA842@gerhold.net>
- <20200825044308.4y3w2urcikban7if@vireshk-i7>
- <CAPDyKFp+71_WGwvdZ6DYamsDjgoRk57H5MjDAdQUtCtJpEHp2Q@mail.gmail.com>
- <20200825073348.GA1048@gerhold.net>
- <CAPDyKFr-gfpVypFs_13hb9Pi5FfQoB32fg=C_gtdSKVDN1U=gQ@mail.gmail.com>
+        id S1728030AbgHZJTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 05:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728022AbgHZJTG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 05:19:06 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 476CDC061574
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 02:19:05 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x5so1035709wmi.2
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 02:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=aQcWyWsk38YmTkWkQQedY4JUFqd5lel0GI59fGELsZY=;
+        b=Re5YAll6kM+/qHPCwaFGTdAnaHmZFyhlrOR8z0SsaMrpkbz9oS7+ticj73RwOxcTDi
+         RsOCnIs8KaS/IqFMdZfnjdweWuO9R3Kjcx64KRlceaGgkhy31LEhdxX+uTl+lAGRafEc
+         lGLwqWRl4u6I3+rFr+hEryjlZXhDFSEBtpmFVAPd4BS+gsjT9cgbd6KOSLWBZldrMFfc
+         pkezhSnTJ7ARy9H55SYkJoxVM+NfD0V45Q9cQd48Ci1O5Okj8A3qS1GRxFwlFFagJzPE
+         DzYfsQtpLWJdpIIZ6tBHIlw6PejlOz+cejV8SeLwemZ4xXVghtUvtTa0XWwqYC5fPXGj
+         lkrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=aQcWyWsk38YmTkWkQQedY4JUFqd5lel0GI59fGELsZY=;
+        b=J8cHmr2GgbmhJIitqfuHhlvxWnaiRuSfW74A9KkJMdBc1/O3QrZP096+wNgvLToVRr
+         k/GaYs/gSSKQIP9ZMl7qPWEA+tRexlXjZhmYbxlo4Rm9wX+/ALePM8x62eH42UJ09k5+
+         fpoFwQvs0Jo/IRh2Ve8fPpd8qVRKcx+qszUWdXpd0lCI6zjsNnyJknEZkeJisHgOoWee
+         VIuytrQ32iZCnKxaSVdq7WdYDfEV3guSBGNWoZkDcCMjueqhSGGT27hhJkNYN4pWnLFf
+         X+ANyrw1U4d7WSx+iA20Hp7DxzD+OEJxnOqUlG5dM/Urg+Wd0Qps6k1a2ckchYC9l/vJ
+         myLw==
+X-Gm-Message-State: AOAM530QJ06JgkT9VjIPUKLw1bw0T9qUf6GC868PcWrihlxnqlZj7qPs
+        k2qcgAtBWcC5uBN7lI+2+PdqqQ==
+X-Google-Smtp-Source: ABdhPJx/tuIFtWZKSy7AJh6YwPDzBe15yli6WSJ1VCxEeq3keSaGzRbAVGb3KLflm17pbZnrvz1zbA==
+X-Received: by 2002:a1c:b143:: with SMTP id a64mr5924451wmf.43.1598433543749;
+        Wed, 26 Aug 2020 02:19:03 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:5838:da98:5a96:aea3? ([2a01:e34:ed2f:f020:5838:da98:5a96:aea3])
+        by smtp.googlemail.com with ESMTPSA id a85sm4581111wmd.26.2020.08.26.02.19.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Aug 2020 02:19:03 -0700 (PDT)
+Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling device's
+ statistics
+To:     Yue Hu <zbestahu@gmail.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com
+References: <20200818063005.13828-1-zbestahu@gmail.com>
+ <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
+ <20200826101319.00003048.zbestahu@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
+Date:   Wed, 26 Aug 2020 11:19:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFr-gfpVypFs_13hb9Pi5FfQoB32fg=C_gtdSKVDN1U=gQ@mail.gmail.com>
+In-Reply-To: <20200826101319.00003048.zbestahu@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 25, 2020 at 02:42:54PM +0200, Ulf Hansson wrote:
-> On Tue, 25 Aug 2020 at 09:34, Stephan Gerhold <stephan@gerhold.net> wrote:
-> >
-> > On Tue, Aug 25, 2020 at 08:43:42AM +0200, Ulf Hansson wrote:
-> > > On Tue, 25 Aug 2020 at 06:43, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > >
-> > > > On 24-08-20, 17:08, Stephan Gerhold wrote:
-> > > > > On Mon, Aug 24, 2020 at 04:36:57PM +0200, Ulf Hansson wrote:
-> > > > > > That said, perhaps should rely on the consumer to deploy runtime PM
-> > > > > > support, but let the OPP core to set up the device links for the genpd
-> > > > > > virtual devices!?
-> > > > > >
-> > > > >
-> > > > > Yes, that would be the alternative option.
-> > > >
-> > > > That is the right option IMO.
-> > > >
-> > > > > I would be fine with it as long as it also works for the CPUfreq case.
-> > > > >
-> > > > > I don't think anything manages runtime PM for the CPU device, just
-> > > > > like no-one calls dev_pm_opp_set_rate(cpu_dev, 0). So with my patch the
-> > > > > power domain is essentially kept always-on (except for system suspend).
-> > > > > At least in my case this is intended.
-> > > > >
-> > > > > If device links also keep the power domains on if the consumer device
-> > > > > does not make use of runtime PM it should work fine for my case.
-> > > >
-> > > > With device link, you only need to do rpm enable/disable on the consumer device
-> > > > and it will get propagated by itself.
-> > >
-> > > Note that the default state for the genpd virtual device(s) is that
-> > > runtime PM has been enabled for them. This means it's left in runtime
-> > > suspended state, which allows its PM domain to be powered off (if all
-> > > other devices and child domains for it allow that too, of course).
-> > >
-> > > >
-> > > > > Personally, I think my original patch (without device links) fits better
-> > > > > into the OPP API, for the following two reasons.
-> > > > >
-> > > > > With device links:
-> > > > >
-> > > > >   1. Unlike regulators/interconnects, attached power domains would be
-> > > > >      controlled by runtime PM instead of dev_pm_opp_set_rate(opp_dev, 0).
-> > > > >
-> > > > >   2. ... some driver using OPP tables might not make use of runtime PM.
-> > > > >      In that case, the power domains would stay on the whole time,
-> > > > >      even if dev_pm_opp_set_rate(opp_dev, 0) was called.
-> > > > >
-> > > > > With my patch, the power domain state is directly related to the
-> > > > > dev_pm_opp_set_rate(opp_dev, 0) call, which is more intuitive than
-> > > > > relying on the runtime PM state in my opinion.
-> > > >
-> > > > So opp-set-rate isn't in the best of shape TBH, some things are left for the
-> > > > drivers while other are done by it. Regulator-enable/disable was moved to it
-> > > > some time back as people needed something like that. While on the other hand,
-> > > > clk_enable/disable doesn't happen there, nor does rpm enable/disable.
-> > > >
-> > > > Maybe one day we may want to do that, but lets make sure someone wants to do
-> > > > that first.
-> > > >
-> > > > Anyway, even in that case both of the changes would be required. We must make
-> > > > device links nevertheless first. And later on if required, we may want to do rpm
-> > > > enable/disable on the consumer device itself.
-> > >
-> > > This sounds like a reasonable step-by-step approach.
-> > >
-> > > Then, to create the device links, we should use DL_FLAG_PM_RUNTIME,
-> > > DL_FLAG_STATELESS.
-> > >
-> >
-> > OK, I will give this a try later this week.
-> >
-> > > But whether we should use DL_FLAG_RPM_ACTIVE as well, to initially
-> > > runtime resume the supplier (the genpd virtual device), is harder to
-> > > know - as that kind of depends on expectations by the consumer device
-> > > driver.
-> > >
-> >
-> > I'm not sure I understand the purpose of that flag. I thought we want to
-> > link the PM state of the virtual genpd device (supplier) to the PM state
-> > of the device of the OPP table (consumer).
-> 
-> Correct, but this is about synchronizing the initial runtime PM state
-> of the consumer and supplier.
-> 
-> >
-> > Shouldn't it just determine the initial state based on the state of the
-> > consumer device?
-> 
-> We could do that. Then something along the lines of the below, should work:
-> 
-> pm_runtime_get_noresume(consumer) - to prevent runtime suspend, temporarily.
-> 
-> if(pm_runtime_active(consumer))
->     create links with DL_FLAG_RPM_ACTIVE
-> else
->     create links without DL_FLAG_RPM_ACTIVE
-> 
-> pm_runtime_put(consumer)
-> 
 
-This seems to work as expected, thanks for the suggestion!
-I will submit a v2 with that shortly.
+Hi Yue,
 
-Thanks!
-Stephan
+On 26/08/2020 04:13, Yue Hu wrote:
+> On Mon, 24 Aug 2020 12:40:35 +0200
+> Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> 
+>> On 18/08/2020 08:30, Yue Hu wrote:
+>>> From: Yue Hu <huyue2@yulong.com>
+>>>
+>>> We observed warning about kzalloc() when register thermal cooling device
+>>> in backlight_device_register(). backlight display can be a cooling device
+>>> since reducing screen brightness will can help reduce temperature.
+>>>
+>>> However, ->get_max_state of backlight will assign max brightness of 1024
+>>> to states. The memory size can be getting 1MB+ due to states * states.  
+>>
+>> What are the benefits of a 1024 states cooling device ? Is the
+>> difference noticeable with a such small step ?
+> 
+> Okay, this issue is happened under MSM/Android platform. QCOM spmi wled driver
+> will define the max brightness. We needs to fix the issue to get thermal statistics.
+
+Let me rephrase my questions:
+
+Don't you think there is something wrong in creating a 1024 x 1024
+matrix to show transitions ?
+
+What is the benefit of such stats ?
+
+What is the benefit of having a 1024 states cooling device ?
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
