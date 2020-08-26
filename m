@@ -2,35 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCFF252F5C
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 15:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AC8252F6B
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 15:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729334AbgHZNJI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 09:09:08 -0400
-Received: from mga07.intel.com ([134.134.136.100]:29512 "EHLO mga07.intel.com"
+        id S1729334AbgHZNQY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 09:16:24 -0400
+Received: from mga18.intel.com ([134.134.136.126]:7576 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729324AbgHZNJF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Aug 2020 09:09:05 -0400
-IronPort-SDR: fc6cxJhinkYUE5uiCQx7DPhk4tscW1z8grFp0NlBqqZVgYFOGLY7SxIcGmu67IMRJjOzQgpY1n
- 1N7yWIfBsa5Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="220545448"
+        id S1729177AbgHZNQX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 26 Aug 2020 09:16:23 -0400
+IronPort-SDR: XX3+JDuVw15eJTYxVi53cVFFpjhoZ+bzppdrwhD/wx4xZHBL9WHVw005OesBM9pIEA3WZFwyjo
+ TRdqNpzhGHBQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9724"; a="143949317"
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="220545448"
+   d="scan'208";a="143949317"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 06:09:04 -0700
-IronPort-SDR: eVRqeD7SzJm0BvDs6PX+bkOvlprh4PlU7IV2Ttf0xB3W7icl8mzguvYhuoAYovMKtB1jwfIAfj
- e0p2P2q52ojw==
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 06:16:22 -0700
+IronPort-SDR: NWV84qiBbzuGF6u+v34yNbY3wZEIE7Blm4wTVprLCU/eHyE7uHEVhGWI5MfL1TLAgkvLGnUV5/
+ KLQkSKGbq0Pg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,355,1592895600"; 
-   d="scan'208";a="403059832"
+   d="scan'208";a="499719031"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Aug 2020 06:09:04 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 26 Aug 2020 06:16:22 -0700
 Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.186])
-        by linux.intel.com (Postfix) with ESMTP id 512F75806C4;
-        Wed, 26 Aug 2020 06:09:02 -0700 (PDT)
-Message-ID: <a7c8ee4b54b5f205548c055b7b8d599c1bd7ddeb.camel@gmail.com>
+        by linux.intel.com (Postfix) with ESMTP id 4FAC05806C4;
+        Wed, 26 Aug 2020 06:16:20 -0700 (PDT)
+Message-ID: <d0ca671465e6ce72c6c4d5178440ebc1e4814da8.camel@gmail.com>
 Subject: Re: [PATCH] intel_idle: Add ICL support
 From:   Artem Bityutskiy <dedekind1@gmail.com>
 Reply-To: dedekind1@gmail.com
@@ -40,7 +40,7 @@ Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Len Brown <lenb@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Wed, 26 Aug 2020 16:09:01 +0300
+Date:   Wed, 26 Aug 2020 16:16:19 +0300
 In-Reply-To: <CAGX5Wg2OOgY6d1RH514Kh9D6b+siga+jzH7qubcmE+ukq+6KKA@mail.gmail.com>
 References: <20200826120421.44356-1-guilhem@barpilot.io>
          <CAJZ5v0i8XUF39Vv=EM4TgyXgK6zHniZW3tGYFPweO3kg+BrxOQ@mail.gmail.com>
@@ -64,8 +64,13 @@ On Wed, 2020-08-26 at 15:03 +0200, Guilhem Lettron wrote:
 > On my laptop, a Dell XPS 13 7390 2-in-1 with i7-1065G7, ACPI only
 > report "C1_ACPI", "C2_ACPI" and "C3_ACPI".
 
-Did you try to dig into the BIOS menus and check if you can enable
-more/deeper C-states?
+Also, if you could runt turbostat - we could see which _actual_ HW C-
+states are used on your system, which Package C-states are reached.
+
+Just get a reasonably new turbostat (it is part of the kernel tree, you
+can compile it yourself) and run it for few seconds (like 'turbostat
+sleep 10'), get the output (will be a lot of it), and we can check what
+is actually going on with regards to C-states.
 
 Artem.
 
