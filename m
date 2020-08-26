@@ -2,33 +2,33 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1C2253517
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 18:42:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2807D253527
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Aug 2020 18:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbgHZQl6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 12:41:58 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:43431 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbgHZQl4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 12:41:56 -0400
-Received: by mail-oi1-f195.google.com with SMTP id j21so2056131oii.10;
-        Wed, 26 Aug 2020 09:41:55 -0700 (PDT)
+        id S1728015AbgHZQoH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Aug 2020 12:44:07 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:37432 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727001AbgHZQoE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Aug 2020 12:44:04 -0400
+Received: by mail-ot1-f68.google.com with SMTP id k2so2036621ots.4;
+        Wed, 26 Aug 2020 09:44:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wsy5zXuBQviVStdVeCGrMTAX227JSl/kynJ+bRrUqhw=;
-        b=uL0EDsf6hJ5sYmTPNDda8Fn3aZoHQUNP/ul1Zg2uDqq8fYYbtzvot0ih3lIrn/Y9pB
-         g82NPkvOgM3zldlh9M67dEQi3MaMJjxny7+jZYgmcuZmtPOwzoKqFdmbyiZoSkTBRdgJ
-         ykan7vd4zD6+4pUMcAad6pefnvPiPMVNMChZC0WFZoPLukictI+qb8OIVNDQiNN7zc3K
-         3JHxX2lW86AO8oXWpdVvsF4iGom1xgGZ1l4XedbGEQbfw7GFLnzkYuF6yjyZ5KWyMTO0
-         lzB04jzWn0AcdB2+iixkegKEBzH/fysOj+H3WFszyvWxpthM+9wEz0gETrlZ5+5EBWpL
-         gs3w==
-X-Gm-Message-State: AOAM531YtMLODrgjU0sIfxFAWcXIwqop//BQHCZd16o1H1k/82iDZqH8
-        JYjcsPTY3dhjMAn2R/vAUE6We+cGhbOSWinDqw8=
-X-Google-Smtp-Source: ABdhPJy2nXYl0RJfHQH7KCX/v6XWxgIJw5+i8hypA0vKnYTy4GFLpfksuMvG0V355VFbpomGojLtzxqFcnWQisTKKjo=
-X-Received: by 2002:aca:3e8b:: with SMTP id l133mr1553553oia.110.1598460115467;
- Wed, 26 Aug 2020 09:41:55 -0700 (PDT)
+        bh=jH4wibIHuCcEwllO6DgrXF/htZORsEMet+armapO0n0=;
+        b=mJz0ibDAzHUK5eOzee7cy9gJNm/wZbWf3Tse5wx0FUeIma8PLLVQymxWvE2ZpNSR65
+         APMnHye9F1nDw8omv7M/Ei9Nt//puJEDDnxXdEwr4L40RjbjU/qcx/IbG+fCKHI3UmqK
+         9xBJ6u7KsKdO1rQ9/vuZ7RZMI4MYPBU38pID2ucqP78BWInx8hdeBCvXp1sXOUfwOPh+
+         iOBpvN4JcsjwiSvL57GuzXatQYkSNS7kMi+s9xc/5mNTnbBtkDAzIY0eZmuV0pfqlwFj
+         EM+4eXKXacDOMZIBisFhB3/0GaoCTgNET+naR5xXivtwIDtoUmT1QP6rhNopPuvozu1D
+         V08g==
+X-Gm-Message-State: AOAM531+rT9YWOY1Uhh73NObLxsXel3zhgIkuLQkhBdTglZUBXpIlh6I
+        uvrSvwk3cJHA/FJ3jfq5A9gylHTsRo2sCVEVAEI=
+X-Google-Smtp-Source: ABdhPJz5xiffM35sGX3JT3AaPNyDW+xPveZU3bIPUBQ9aDyDpJEp5TWnii7aoLt8i3odYg6WgzZj4iL5bRKsHms97C4=
+X-Received: by 2002:a9d:5c06:: with SMTP id o6mr10542989otk.262.1598460243163;
+ Wed, 26 Aug 2020 09:44:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200826120421.44356-1-guilhem@barpilot.io> <CAJZ5v0i8XUF39Vv=EM4TgyXgK6zHniZW3tGYFPweO3kg+BrxOQ@mail.gmail.com>
  <CAGX5Wg2OOgY6d1RH514Kh9D6b+siga+jzH7qubcmE+ukq+6KKA@mail.gmail.com>
@@ -36,16 +36,17 @@ References: <20200826120421.44356-1-guilhem@barpilot.io> <CAJZ5v0i8XUF39Vv=EM4Tg
  <e82c121057c4496238d3de7f7c919b7039d23b7c.camel@gmail.com>
  <CAGX5Wg0LrzPwf=2pGrQHAbFMVkOoYDxOoFa+ZmLBYshPvZQUXg@mail.gmail.com>
  <8fa7622dacc03f2fbd67e810f53389e3ede544e8.camel@intel.com>
- <CAGX5Wg0=K5AaTut5KH3R3+oasM5MM7PaJ9Z_L56xSNckMbWC9g@mail.gmail.com> <72fab2376722c6169549669016933217d3da34a0.camel@gmail.com>
-In-Reply-To: <72fab2376722c6169549669016933217d3da34a0.camel@gmail.com>
+ <CAGX5Wg0=K5AaTut5KH3R3+oasM5MM7PaJ9Z_L56xSNckMbWC9g@mail.gmail.com>
+ <CAJZ5v0j4FXH26rZCjM9Csd56skPVbRpM7iFcKYAFMmLFX54+bg@mail.gmail.com> <e9e6823d63fe2b9938e43a14c136b89aec0c503b.camel@gmail.com>
+In-Reply-To: <e9e6823d63fe2b9938e43a14c136b89aec0c503b.camel@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Aug 2020 18:41:44 +0200
-Message-ID: <CAJZ5v0jDY62HYWF-QKE8kH4kFx9Ympjwk1Dbhdm_VCFaP28RZg@mail.gmail.com>
+Date:   Wed, 26 Aug 2020 18:43:52 +0200
+Message-ID: <CAJZ5v0gPY+7YBeWwszoNBwsbKLFOEeuLaekdX62_gvbHXB8xoA@mail.gmail.com>
 Subject: Re: [PATCH] intel_idle: Add ICL support
 To:     Artem Bityutskiy <dedekind1@gmail.com>
-Cc:     Guilhem Lettron <guilhem@barpilot.io>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Guilhem Lettron <guilhem@barpilot.io>,
         Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
         Jacob Pan <jacob.jun.pan@linux.intel.com>,
         Len Brown <lenb@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
@@ -56,56 +57,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 26, 2020 at 6:19 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
+On Wed, Aug 26, 2020 at 6:39 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
 >
-> Indeed, when I compare them:
+> On Wed, 2020-08-26 at 18:02 +0200, Rafael J. Wysocki wrote:
+> > To that end, I would try to upgrade the graphics firmware and see if
+> > you can get some nonzero PC8 residency then.
 >
-> acpi_idle (without the patch):
+> I am curious, somehow that patch makes a difference.
 
-Does this come from the Guilhem's data?  It's intel_idle in both
-cases, but in the "without the patch" case it uses ACPI.
-
-> CPU%c1  CPU%c6  CPU%c7  CoreTmp PkgTmp  GFX%rc6 Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc7 Pkg%pc8 Pkg%pc9 Pk%pc10 PkgWatt
-> 29.48   0.00    60.71   58      58      97.96   16.96   0.00    0.00    0.00    0.00    0.00    0.00    6.08
-
-and I get the same data here, but
-
-> intel_idle (with the patch):
->
-> CPU%c1  CPU%c6  CPU%c7  CoreTmp PkgTmp  GFX%rc6 Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc7 Pkg%pc8 Pkg%pc9 Pk%pc10 PkgWatt
-> 56      56      96.64   300     68.29   48.58   0.00    0.00    0.00    0.00    0.00    0.00    7.38    0.00
-
-you seem to have columns wrong here.
-
-I get something like this
-
-CPU%c1     CPU%c6     CPU%c7     CoreTmp PkgTmp     GFX%rc6 GFXMHz
-Totl%C0 Any%C0     GFX%C0     CPUGFX% Pkg%pc2    Pkg%pc3 Pkg%pc6
-Pkg%pc7 Pkg%pc8 Pkg%pc9 Pk%pc10
-16.07     26.24     49.10     56     56     96.64     300     68.29
- 48.58     3.08     2.10     30.36     0.04     0.00     0.00     0.00
-    0.00     0.00
-
-so still no PC10 residency (and it would be rather strange to get PC10
-residency without any PC6 or higher residency).  The 7.38 is the
-PkgWatt number AFAICS.
-
-> With intel_idle we reach PC10, without it we only go as deep as PC2 - huge difference.
-
-Not really.  We don't get any PC10 residency in both cases.
-
-> I really wonder why the BIOS does not expose deeper C-states...
-
-It does expose C10.
-
-> And if it does not, is this for a reason? And how windows works then?
-
-It can only expose 3 C-states and it chose to expose C1, C7s and C10.
-
-> May be there is a BIOS update that fixes this problem? May be Windows
-> user get it quickly because stuff like this is often well-integrated in
-> Windows? Would you please check if there is newer BIOS?
-
-I doubt it.
-
-Cheers!
+It does make a difference, because it makes the processor spend more
+time in PC2.  Which very well may be because the processor cannot
+enter deeper C-states.
