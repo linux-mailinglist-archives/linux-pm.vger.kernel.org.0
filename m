@@ -2,85 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4BC254B3E
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 18:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A714254B54
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 19:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbgH0Qza (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 12:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52828 "EHLO
+        id S1726157AbgH0RA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 13:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726147AbgH0Qza (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 12:55:30 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E36FC061264;
-        Thu, 27 Aug 2020 09:55:30 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id z195so5191160oia.6;
-        Thu, 27 Aug 2020 09:55:30 -0700 (PDT)
+        with ESMTP id S1726009AbgH0RA4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 13:00:56 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4523C061264;
+        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id q16so3334209ybk.6;
+        Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=v483s8xrYSzjz1MKg/llYnen68ml62j7JXePfBOF9rc=;
-        b=inMF9EfPRyYR2v4n6gY75VgLNyLRETpRc3y8AyJgW5+38mlskrltryQHFET/r/RfM0
-         cIeD24Seaz0xI8pgPVUEsfPJ9RPDrfGcySpko5K4T6BjuUXpmawoMcRc33/kgwHY0oq1
-         4kZ0FvNRPebKH528um81q98eDrnGBvD8Q7c7UMByKn79jYh+ZJpnmNFItSzsHFRhJ6Tb
-         fkdcjhSOVSr9a2AGRlQvs0qXQiOYxZyWWrW+pMuJXKxf0cLc1nPWvPHl1mtmCsNxlNmq
-         87db7/xfxEe6MSFAStZMd1nIdwX21pkwOVU1e7XiDlGzW84h7tq7dmQRuXnkExuKhUyo
-         /g/g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
+        b=PS28p8gtpgp5Vzmtu8C8Fn69h9JbIZLvzinkhZ2VyIy3eTvrrbRHZKK4e0X+S2HoYc
+         2ht0sqrAPSZP5wC4rEdgvlanP38jwoYA5gvs1a6CG9GeHyR6ac+LqKIr0bwn7rKWAksT
+         +Jnz6WdeesntSn4mFO+1jVcTpyth5j7J+Vy/05SMpk56xcAWcqLVcn2GMXnukQUowFqk
+         +Lwbfs1JMDSfElZQK2Vus32IYWbcURmEHaMfH2pztvogga5OyHAjbpZP8CIrX0OXtSrc
+         MmZzCb5KDFWhzu+f2jWG6oR83iyADCOYDUjDiDurt8cV8fborBSzq1yr88HVmzwc8eiJ
+         tPxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=v483s8xrYSzjz1MKg/llYnen68ml62j7JXePfBOF9rc=;
-        b=tqTOln8LjaesL7zsybr9PkN/0CEK/3Ut8Vk6Hz/ynFRvR4WSEBf0TrpOZOeZZw6T2c
-         a87dWh/HWjbJd4+xI33t3D9TNIHm3o5rugFUwFGRvqbQxMEQFgg7lyNtbBSU5g6j0bWy
-         25yNeazvkGClDPm3PnLf3oEBEK29YkVTBDQPpSQp9Jn1TX2DI1YAwRo0BgHsC4LU6X0i
-         +ZXRT6e0UGdvnBkZfGHKFZ7BUiaU9yXLhKRfud+TYwqbXtywPyCYEkM8paKQPjhylRqG
-         zBxwbYNqRUqqwhsdTxGO8vezVbdp8GI6HhCcnlRsZHdJz6cIBysfoXJQjSZVBhWrewLG
-         NOrA==
-X-Gm-Message-State: AOAM530kVjX1D7LjAG5bh8UrLau1TsTZFcO2eMJiUPb0WMZq1PqTh5sU
-        /z7e0iA7x1e0qK4HzQaF2K4U+STSOg8FH4WrbutIBSKkc5XuWw==
-X-Google-Smtp-Source: ABdhPJzBb4znbCq+tSfuo+l/bexoPkojJHO8z/p18PIp9VlwwPQliWukGo/wol5DzaPS0vkOe7ULIOaGrRB44dSrX+c=
-X-Received: by 2002:aca:3a84:: with SMTP id h126mr7565692oia.125.1598547327976;
- Thu, 27 Aug 2020 09:55:27 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xn9e8QiSfQjfmv9dvYGGI9EBZKWaBpd/I2U5mUE1tdE=;
+        b=UNPO/PjxGsd0qgUbgjV0iKkSk/VGkHudUh/q2d+Y/WJDNOX2Ff+b9u17hbAzBzH6ql
+         1Mfl0FPLCWKrN3pusNWV0XXVRiVPKfXYi6F0jQSgtcmoQZr6fSomLA3ISwOF77P8pzoF
+         mgcb9EWX0eSHE63Hdr/WGrcAhTQOvlDFi+h+PJGSZxHVHnvD49r2gwhULCl/f1Kc+2iG
+         3Kg9/M4m7345z75ZYhKLAMge7EiXcBctG6Mj805PLBBA4bw0Xxj4hazglEO7S1Ah8VC1
+         C/I0f9ouXYFeqJZznxawk/qPQVqI/hzDuMkWnjaI/3RTIYo+ALugl2VjhchkpCTTee/l
+         9/Vg==
+X-Gm-Message-State: AOAM530ER8RXWUHa6d2E04BJMBLotc2wdZiREVoBTTJTa0vEe/B6I9O8
+        nsx9+nFwMw1mCtYcWcBDiGyR/ty74FGYXJeJXXs=
+X-Google-Smtp-Source: ABdhPJzWiP13RDlFWXYqZS9M+n/syiQtjHPq+mDPjJNKGxrQjLeEpeZ4VcNxTZaUseudqJ0OnSwa50hS9cPCBO2SK/M=
+X-Received: by 2002:a25:e712:: with SMTP id e18mr28991911ybh.395.1598547655180;
+ Thu, 27 Aug 2020 10:00:55 -0700 (PDT)
 MIME-Version: 1.0
-From:   Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
-Date:   Thu, 27 Aug 2020 22:25:16 +0530
-Message-ID: <CAPY=qRRekJonX_iX3s4bfietm9D_GM+S4cDGXbj9nMOefJBdTw@mail.gmail.com>
-Subject: cpu-freq: running the perf increases the data rate?
-To:     linux-pm@vger.kernel.org,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <1594811350-14066-1-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <1594811350-14066-6-git-send-email-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Thu, 27 Aug 2020 18:00:29 +0100
+Message-ID: <CA+V-a8sBF2ak+dYd9g=Tf_2Kwz_Om2mpK=z+KzGQQG4qJM-+zA@mail.gmail.com>
+Subject: Re: [PATCH 05/20] dt-bindings: timer: renesas,cmt: Document r8a774e1
+ CMT support
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Niklas <niklas.soderlund@ragnatech.se>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, linux-can@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
- [ Please keep me in CC as I'm not subscribed to the list]
+Hi Daniel and Thomas,
 
-Hi all,
+On Wed, Jul 15, 2020 at 12:09 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> Document SoC specific bindings for RZ/G2H (r8a774e1) SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/timer/renesas,cmt.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+Gentle ping.
 
-I have an application which finds the data rate over the PCIe
-interface. I=E2=80=99m getting the lesser data rate in one of my Linux X86
-systems.
-When I change the scaling_governor from "powersave" to "performance"
-mode for each CPU, then there is slight improvement in the PCIe data
-rate.
-Parallely I started profiling the workload with perf. Whenever I start
-running the profile command =E2=80=9Cperf stat -a -d -p <PID>=E2=80=9D surp=
-risingly
-the application resulted in excellent data rate over PCIe, but when I
-kill the perf command again PCIe data rate drops. I am really confused
-about this behavior.Any clues from this behaviour?
-
-
-Also I noticed my system not having the 'cpuinfo_cur_freq' sys file.
-Is that okay?
-cat: /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq: No such
-file or directory
-
-
---=20
-Thanks,
+Cheers,
+Prabhakar
