@@ -2,78 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0055D2544BF
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 14:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF892544D8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 14:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728982AbgH0MFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 08:05:53 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:43612 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728899AbgH0MCU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 08:02:20 -0400
-Received: by mail-oi1-f194.google.com with SMTP id j21so4348967oii.10;
-        Thu, 27 Aug 2020 05:02:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=w87Wjrt0hH5OBUFHY4Ofs51H+e/iPgf40ZaoFuUim6c=;
-        b=qan5h1BODPXOIyL15mJe0fpHyNcBVRiaQftXM9Vd3xTvAeGwo+bu1IUJUqyFut2QZ9
-         YC0y6HpCILRka2bEKbK7Zm41fafDizTzo1C6fXHzYJdHBQEmOlTY4pJRLedStJ+6evHb
-         4UDCrvtWADVX6VFqH3GxTYyP2yj7E3h/l4MtghwsQLaMQsRQpaNLNax82//FsYSmkvPw
-         4ETGTC3MdRuG8Czt1xDlYcLviGx3SD34+5LMdEVTL/bLoOuEcwwEeYaqOqs6T2wIl3Tg
-         1yaa0lnST+R8sUADjZ4ONIBnkgQZ1uWuBzKUwYI+DxTP5za/TQJNxORwfy5UoxDcHePj
-         my7A==
-X-Gm-Message-State: AOAM5336dmSkADWLHoHoBAXuegZ83v7GSOzsTJSWo1Le4C5TENDc+m1K
-        Ak5GmQxWtO8DLo47EHWCuqmvGVLkGqp/0wqUqPbT4+f1
-X-Google-Smtp-Source: ABdhPJzV+sSj3VgjAs1ALzDiBgJpH5s/BbK9M6Z51fs6trVCmIFa01P8Nl7JAaX5UBSFeJsJfheOg1+NTiCNPTDLBJY=
-X-Received: by 2002:aca:110a:: with SMTP id 10mr6149426oir.68.1598525705214;
- Thu, 27 Aug 2020 03:55:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <906198d77aa73613a1b588425aa45e5025ee60cb.1598505843.git.viresh.kumar@linaro.org>
-In-Reply-To: <906198d77aa73613a1b588425aa45e5025ee60cb.1598505843.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Aug 2020 12:54:53 +0200
-Message-ID: <CAJZ5v0iTmowt48RHZGrx6aFm4OsJ0FXHk1WWstAJ=hvc7oJ_dw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: No need to verify cpufreq_driver in show_scaling_cur_freq()
+        id S1728778AbgH0MPa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 08:15:30 -0400
+Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.165]:16044 "EHLO
+        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729035AbgH0MPK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 08:15:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1598530497;
+        s=strato-dkim-0002; d=gerhold.net;
+        h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:
+        X-RZG-CLASS-ID:X-RZG-AUTH:From:Subject:Sender;
+        bh=s0ziZsW1eWa4IKIjQ+u0Ec5vtYjwpjgOTZnjWgtRR/0=;
+        b=hWVPBlho+RqUPiCjIcp/n+U6qUknoD4aNeLbaWMan9QlOVa4FcpfMc0OqsP9mHptgK
+        WEN9Eoyx1PxncYz3xh8KCuRWlfwf7+zFJ7QUgmw93Q+LMw4M0OMXVW5OGHZjd3qKz/xO
+        hWekvibgsSItzb+5NiEJnrdDCwzvk8xEqkJi9Vy6hKpE5YGlfRPS+yhr/xbDmFZLHcci
+        u2sdDPugEE30CuFWaHtxgSesLhmGkLegCkU6fa/A33hoSv4X4Ej0X8+RNXSO9Cxql7VQ
+        MnjfGk7ZwwmewtGNrSStbPGlOPgwhfRchljZKFtIIfkxfstdktPiITPmdIwxV8srzv/c
+        ubTw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEodhPgRDZ8j7Ic/Fboo="
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
+        with ESMTPSA id g0b6c1w7RCEutYs
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+        Thu, 27 Aug 2020 14:14:56 +0200 (CEST)
+Date:   Thu, 27 Aug 2020 14:14:49 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: Drop unnecessary check frmo
+ dev_pm_opp_attach_genpd()
+Message-ID: <20200827121449.GA21147@gerhold.net>
+References: <88c8522b556d15bd44b8388d47cf25ac6f06b057.1598522635.git.viresh.kumar@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88c8522b556d15bd44b8388d47cf25ac6f06b057.1598522635.git.viresh.kumar@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 7:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> "cpufreq_driver" is guaranteed to be valid here, no need to check it
-> here.
->
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 02ab56b2a0d8..47aa90f9a7c2 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -703,8 +703,7 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->         freq = arch_freq_get_on_cpu(policy->cpu);
->         if (freq)
->                 ret = sprintf(buf, "%u\n", freq);
-> -       else if (cpufreq_driver && cpufreq_driver->setpolicy &&
-> -                       cpufreq_driver->get)
-> +       else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
->                 ret = sprintf(buf, "%u\n", cpufreq_driver->get(policy->cpu));
->         else
->                 ret = sprintf(buf, "%u\n", policy->cur);
-> --
+On Thu, Aug 27, 2020 at 03:35:15PM +0530, Viresh Kumar wrote:
+> Since commit c0ab9e0812da ("opp: Allocate genpd_virt_devs from
+> dev_pm_opp_attach_genpd()"), the allocation of the virtual devices is
+> moved to dev_pm_opp_attach_genpd() and this check isn't required anymore
+> as it will always fail. Drop it.
+> 
 
-This and the [2/2] applied, the latter with some minor edits in the
-subject/changelog.
+Only partially related to this patch, but actually I noticed that
+dev_pm_opp_attach_genpd() does not work correctly if it is called
+multiple times.
 
-Thanks!
+For example, qcom-cpufreq-nvmem calls this for every CPU because it is
+not aware that the OPP table is shared between the CPUs.
+dev_pm_opp_attach_genpd() does not check if opp_table->genpd_virt_devs
+is already set, so when it is called again for other CPUs we will:
+
+  - Cause a memory leak (opp_table->genpd_virt_devs is just replaced
+    with new memory)
+  - Attach the power domains multiple times
+  - Never detach the power domains from earlier calls
+  - Crash when dev_pm_opp_detach_genpd() is called the second time
+
+Oh well. :)
+
+I think the function should just return and do nothing if the power
+domains were already attached, just like dev_pm_opp_set_supported_hw()
+etc. But this is a bit complicated to implement with the "virt_devs"
+parameter, since callers will probably assume that to be valid if we
+return success.
+
+Another advantage of my proposal to remove the virt_devs parameter [1] :)
+
+Stephan
