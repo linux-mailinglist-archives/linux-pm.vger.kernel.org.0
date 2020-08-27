@@ -2,234 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1554C253B7A
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 03:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549DA253C6C
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 06:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbgH0Bhg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Aug 2020 21:37:36 -0400
-Received: from mga12.intel.com ([192.55.52.136]:41677 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726784AbgH0Bhf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 26 Aug 2020 21:37:35 -0400
-IronPort-SDR: h48TaLE4d2+zniE4rq3go7DBy/qqQOgioP81jW4A+Y/5UvNOdS/yArCICIGFYLGz/+BrG91NcA
- PRSGKNSwSRug==
-X-IronPort-AV: E=McAfee;i="6000,8403,9725"; a="135956593"
-X-IronPort-AV: E=Sophos;i="5.76,358,1592895600"; 
-   d="scan'208";a="135956593"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2020 18:37:34 -0700
-IronPort-SDR: 5XFhXibLbpkIMpHcBNhIumgI44vHd78teNWOrHXR9SBkGjZKV8PLc/lfyrkmsvt1GmVYtyc/aB
- 9zaRozIYYY4Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,358,1592895600"; 
-   d="scan'208";a="337009847"
-Received: from lkp-server01.sh.intel.com (HELO 4f455964fc6c) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 26 Aug 2020 18:37:32 -0700
-Received: from kbuild by 4f455964fc6c with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kB6r6-0001o5-21; Thu, 27 Aug 2020 01:37:32 +0000
-Date:   Thu, 27 Aug 2020 09:36:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- fe784821d630f71eee1f431f10e08518db42dc02
-Message-ID: <5f470e37.8DkUgOSXArNPoJai%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1725847AbgH0EDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 00:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725790AbgH0EDs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 00:03:48 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AFBC0612A3;
+        Wed, 26 Aug 2020 21:03:27 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id m8so2465100pfh.3;
+        Wed, 26 Aug 2020 21:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6bQeuePNqH7dWbqUFgjlTSNlzBof5RgofuNEIyHakwM=;
+        b=X3MR6zMdfOgPqvRfgQkzGhLn/dxi02axDYvVL7GX/lmX+cA98U0F7qPCwN5R826MPt
+         P6f278VM9YOweJuu39pPhgqodUBu+ASdBdcZZwSSfYTgdzpBm5DLE9iwNIUmdt9bZ/dU
+         YgTTt9tbCeTgNibdS+a4BNHlRVfY0bKqaX6Rpsnx70swdhJFBmB8FNDJ4upzP7eFStyf
+         xTRKRq8CRQ35RLoLaC0Ct7s+xT4NSHWhCXZ9OAAXJeSZV6VnIddS8rQbEC2ylVXwzStu
+         LUXFNe8kgTUMCa337MPXi93vLwJBUj2x8ZZM/unRuBZoYo6Dmnp2RCOohjZeV6HUmy90
+         VaHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6bQeuePNqH7dWbqUFgjlTSNlzBof5RgofuNEIyHakwM=;
+        b=sW8nrtNQlFbJxeJ2BDWDdO4ry5+1oYO1+9RtIuYUElkuSQhb9ZGeW0LgS3sUSOb/A6
+         Z64oww97SZ5dlPTDfG8klgnQTR2Y0MYSkwgbNMtbpV+a2chQv2/c4UWn4FpxtwJvso0A
+         l/sblpd9oBMwHFSoGdZZqFC4sD473BlqPh6YEyIhSqw5jbXTL/xmPUEzFFBAKCSdHmPH
+         m38OpHCSmx4OLApUH5Gnbnhl4qepKJpBoGUdp+ojJRYcAyI3ORPj49MCJjkp/duPLGtF
+         SlHCRfHWoQhBIvFQlSzw4hQfBmsh3u9P67OvTu8PHBvkjrNWKAxj/Zmb1Z64hGdZE80W
+         PCTQ==
+X-Gm-Message-State: AOAM5330XpPh/wylHm26m9AatvXHN1KSFdtlXjfjOoMGmmS37+3D3YDB
+        gRmTOjJuWsLsuf6gt8O2bpI=
+X-Google-Smtp-Source: ABdhPJzh9mqw7jcuL/gdVISt/cqtAADn6a8e73oWM42h68OTeYpnn525+zrB4ZLZwskwsGEGF/z01w==
+X-Received: by 2002:a65:6882:: with SMTP id e2mr13324535pgt.290.1598501005803;
+        Wed, 26 Aug 2020 21:03:25 -0700 (PDT)
+Received: from localhost ([124.156.176.71])
+        by smtp.gmail.com with ESMTPSA id v78sm800705pfc.121.2020.08.26.21.03.23
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 26 Aug 2020 21:03:25 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 12:03:27 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, viresh.kumar@linaro.org
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling
+ device's statistics
+Message-ID: <20200827120327.00003740.zbestahu@gmail.com>
+In-Reply-To: <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
+References: <20200818063005.13828-1-zbestahu@gmail.com>
+        <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
+        <20200826101319.00003048.zbestahu@gmail.com>
+        <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: fe784821d630f71eee1f431f10e08518db42dc02  Merge branch 'pm-sleep' into linux-next
+On Wed, 26 Aug 2020 11:19:02 +0200
+Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
 
-elapsed time: 720m
+> Hi Yue,
+> 
+> On 26/08/2020 04:13, Yue Hu wrote:
+> > On Mon, 24 Aug 2020 12:40:35 +0200
+> > Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >   
+> >> On 18/08/2020 08:30, Yue Hu wrote:  
+> >>> From: Yue Hu <huyue2@yulong.com>
+> >>>
+> >>> We observed warning about kzalloc() when register thermal cooling device
+> >>> in backlight_device_register(). backlight display can be a cooling device
+> >>> since reducing screen brightness will can help reduce temperature.
+> >>>
+> >>> However, ->get_max_state of backlight will assign max brightness of 1024
+> >>> to states. The memory size can be getting 1MB+ due to states * states.    
+> >>
+> >> What are the benefits of a 1024 states cooling device ? Is the
+> >> difference noticeable with a such small step ?  
+> > 
+> > Okay, this issue is happened under MSM/Android platform. QCOM spmi wled driver
+> > will define the max brightness. We needs to fix the issue to get thermal statistics.  
+> 
+> Let me rephrase my questions:
+> 
+> Don't you think there is something wrong in creating a 1024 x 1024
+> matrix to show transitions ?
+> 
+> What is the benefit of such stats ?
+> 
+> What is the benefit of having a 1024 states cooling device ?
 
-configs tested: 171
-configs skipped: 9
+Hi Daniel,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Now, i'm just focus on removing the kernel warning based on current code logic.
+Commit 8ea229511e06 (thermal: Add cooling device's statistics in sysfs) added
+the thermal statistics by viresh and viresh gived the patch an acknowledgement
+in anther mail thread. 
 
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                               defconfig
-mips                      fuloong2e_defconfig
-arm                          pxa910_defconfig
-arc                          axs103_defconfig
-mips                        workpad_defconfig
-mips                        maltaup_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                        oxnas_v6_defconfig
-sh                        edosk7705_defconfig
-arm                         ebsa110_defconfig
-m68k                          sun3x_defconfig
-mips                       capcella_defconfig
-openrisc                    or1ksim_defconfig
-mips                      maltaaprp_defconfig
-powerpc                     pseries_defconfig
-arm                        mvebu_v7_defconfig
-c6x                        evmc6472_defconfig
-arm                       multi_v4t_defconfig
-arm                          simpad_defconfig
-sh                          lboxre2_defconfig
-arm                            zeus_defconfig
-m68k                            q40_defconfig
-arm                              zx_defconfig
-mips                        jmr3927_defconfig
-sh                        sh7757lcr_defconfig
-mips                      malta_kvm_defconfig
-mips                           jazz_defconfig
-arm                        multi_v5_defconfig
-riscv                            allmodconfig
-m68k                         apollo_defconfig
-sh                ecovec24-romimage_defconfig
-sh                        apsh4ad0a_defconfig
-arm                       spear13xx_defconfig
-arm                        trizeps4_defconfig
-m68k                       m5249evb_defconfig
-arm                         palmz72_defconfig
-m68k                          multi_defconfig
-arc                                 defconfig
-powerpc                    adder875_defconfig
-sh                           se7751_defconfig
-powerpc                          g5_defconfig
-mips                     loongson1c_defconfig
-ia64                          tiger_defconfig
-mips                         cobalt_defconfig
-sh                           se7722_defconfig
-sh                   sh7770_generic_defconfig
-mips                         tb0226_defconfig
-powerpc                     skiroot_defconfig
-x86_64                              defconfig
-c6x                        evmc6474_defconfig
-mips                malta_kvm_guest_defconfig
-sh                          sdk7780_defconfig
-sh                         apsh4a3a_defconfig
-mips                           mtx1_defconfig
-powerpc                          alldefconfig
-arm                         lpc18xx_defconfig
-sh                          urquell_defconfig
-mips                         bigsur_defconfig
-ia64                            zx1_defconfig
-arm                      integrator_defconfig
-powerpc                 mpc8272_ads_defconfig
-arm                          ixp4xx_defconfig
-sparc                       sparc64_defconfig
-arm                          iop32x_defconfig
-arm                           tegra_defconfig
-arm                            mps2_defconfig
-arm                            qcom_defconfig
-sh                          kfr2r09_defconfig
-mips                          rb532_defconfig
-arm                            dove_defconfig
-mips                          ath25_defconfig
-powerpc                         wii_defconfig
-m68k                        stmark2_defconfig
-sh                                  defconfig
-arc                    vdk_hs38_smp_defconfig
-arc                             nps_defconfig
-arm                  colibri_pxa270_defconfig
-mips                         rt305x_defconfig
-xtensa                generic_kc705_defconfig
-ia64                        generic_defconfig
-x86_64                           alldefconfig
-arm                          pxa3xx_defconfig
-sh                             sh03_defconfig
-mips                 decstation_r4k_defconfig
-arc                     nsimosci_hs_defconfig
-mips                malta_qemu_32r6_defconfig
-mips                         mpc30x_defconfig
-arm                          collie_defconfig
-arc                 nsimosci_hs_smp_defconfig
-xtensa                          iss_defconfig
-arm                         lubbock_defconfig
-powerpc                  storcenter_defconfig
-ia64                      gensparse_defconfig
-arm                           viper_defconfig
-mips                        bcm47xx_defconfig
-sh                            shmin_defconfig
-sh                     sh7710voipgw_defconfig
-mips                  cavium_octeon_defconfig
-nios2                         10m50_defconfig
-arm                            mmp2_defconfig
-m68k                       m5275evb_defconfig
-m68k                           sun3_defconfig
-sh                          sdk7786_defconfig
-mips                       rbtx49xx_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                         orion5x_defconfig
-sh                           se7206_defconfig
-sh                          r7785rp_defconfig
-arm                           h5000_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                             defconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a002-20200826
-i386                 randconfig-a004-20200826
-i386                 randconfig-a003-20200826
-i386                 randconfig-a005-20200826
-i386                 randconfig-a006-20200826
-i386                 randconfig-a001-20200826
-x86_64               randconfig-a015-20200826
-x86_64               randconfig-a016-20200826
-x86_64               randconfig-a012-20200826
-x86_64               randconfig-a014-20200826
-x86_64               randconfig-a011-20200826
-x86_64               randconfig-a013-20200826
-i386                 randconfig-a013-20200826
-i386                 randconfig-a012-20200826
-i386                 randconfig-a011-20200826
-i386                 randconfig-a016-20200826
-i386                 randconfig-a015-20200826
-i386                 randconfig-a014-20200826
-riscv                            allyesconfig
-riscv                             allnoconfig
-riscv                               defconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Hi viresh,
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Could you review the patch again about the question above?
+
+Thank you.
+
+> 
+> 
+> 
+> 
+
