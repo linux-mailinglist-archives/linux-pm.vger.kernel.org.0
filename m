@@ -2,121 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF576253D7D
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 08:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E49253D9B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 08:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726123AbgH0GKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 02:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S1726157AbgH0GUC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 02:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbgH0GKZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 02:10:25 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9EDC061251
-        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 23:10:25 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id g29so1571914pgl.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 23:10:25 -0700 (PDT)
+        with ESMTP id S1725909AbgH0GUB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 02:20:01 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD3C06125E;
+        Wed, 26 Aug 2020 23:20:01 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id g6so2066370pjl.0;
+        Wed, 26 Aug 2020 23:20:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kvUmPPEUXRUMMdd71p7IlSZliwOvsu9WLjoTLyHc+GE=;
-        b=f72xNZaz8DpYkB5MJNVJu0AzbPGIOy4RnTLZtogP9xbbhQ3XFFiaM9QuhnVSXWHvgB
-         dSUo6tuIW9rTvXljZSKzbA33k2/y7pUWaE0Qh0AerIErSeTJZ4yrb91HzAtErFUN63r7
-         wHpBiVuQR6YLn/pjD3GY4RZ07Oz/2Fd6rZLcjY/8xEwdAkvHnVU8z7QwUn39KZ9pbMJe
-         Pt08mGBbUVsqXyPuRPDl+tqtkawYpIAq/RBPTIQKKEIYiTaTOlkMA9e0BGwuC8KfqGvC
-         /GlXwAkUoApLcqRhmp8phKv6Z6CH2OY3iVHdkuZoDbt6bBVeJjW4hiuUpqZ50K4xoA2w
-         PhfA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2DyhFZJ3L50RHCjnfyOFFSA1C8Bx+09mqhOcCqewIw0=;
+        b=gBs5DsGVImY9h2NdkLBA8VAbLClDmYf5k2JzfxV4NQDIUkz5iE220JF3pbKR+IKQFK
+         XEK8sV8YVio9/4ea8Kfz265u4SGZdsJ+SMCKBEMy9lskCqqCV5DHsDaury2NC+f08Nd6
+         KCGYFjOFxHXZ+XzAcQyGjZsyDSfjMgL9yt23ODOP3CnLG54e5PXWusKtBta6yR/1vBGK
+         6Q6fwPpgntt4QCeUPMufE4aTAidoXLekUL8434j9w4xOoz22S5FFaj4cNeFhPPmB3c2E
+         LlUoBJjDV8K/g5JKVrhglMLbhDRwCQzkHBwo6Hx5tEUWyyD0Jitw7a+VGFJSo/I82FK/
+         cf9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kvUmPPEUXRUMMdd71p7IlSZliwOvsu9WLjoTLyHc+GE=;
-        b=RyoPVLZWOm6lJICEz/6hxQ51Sf5iQ16pjg5MmDpun5EwE304cP9LHJPfQIbC0xLcJ0
-         sVdvX8ytOAlxRHJhm1qw5upPX14uLbllBocM972MZZkpg3WOLf0PMPDNvvokXlW0ZxFl
-         qPz7MhX7OvYTdYoPMP5Qnd7R8+JQs2JvJICEZzgU3/WVoW8kg5WMNcVktK6NY7BDvr54
-         X+EVFYENECAtfY8/j0YiEW9DU0cgHpUA3XlfCNoaIGD7qgAlWG6aGh9EyEofmjgzNIWx
-         +nLfeaRKeXJyxPgQqTiH7akUJFJX11+Su6F8gWDpsb2gUvpPV97PsgP49uBakrTfXnNR
-         LYAw==
-X-Gm-Message-State: AOAM532HmQ+iyqvkBXYKLuwlwN9WSTwil5uzgNcPL7NJAWhkVl3svIWM
-        BIrzskOriWWR/5ZuVbl1M/GBdw==
-X-Google-Smtp-Source: ABdhPJz9EcfAFlLK5x87WyF1Q/fc1QZ+/EIqezZ1IWw70vQsIRnTvx6EZEy81qENub+O/Yf5DKp5bQ==
-X-Received: by 2002:a17:902:7788:: with SMTP id o8mr87243pll.43.1598508624806;
-        Wed, 26 Aug 2020 23:10:24 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id 37sm989677pjo.8.2020.08.26.23.10.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 26 Aug 2020 23:10:24 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 11:40:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
-        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
-        valentin.schneider@arm.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/5] arch_topology: validate input frequencies to
- arch_set_freq_scale()
-Message-ID: <20200827061022.aocb2wunyxjl2lc6@vireshk-i7>
-References: <20200824210252.27486-1-ionela.voinescu@arm.com>
- <20200824210252.27486-2-ionela.voinescu@arm.com>
- <20200825055618.ybght3enlpuwo3va@vireshk-i7>
- <20200825113131.GB12506@arm.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2DyhFZJ3L50RHCjnfyOFFSA1C8Bx+09mqhOcCqewIw0=;
+        b=fvxoBQKFXrH1ZFvUcimaPL2nxJlots+PqgahwtwXR6bJ7eYUtY5yzzinFV9uSuUu2C
+         PZbnf3+ix/XyuSniBafS4enrhthwIDSHGqDzTzsBiz85j3Ktko2zy2fUL99+Gi+nWdDm
+         zywU8jeZk6OtyjlrxFxRTj0ts4/qf3uBtEan+6Uwxreo3pxlI/5/9YiLNIyWm2rZOqdi
+         3fV2JYTmMdhnZXlmuSyTx/ZndJWbUQMb4OlH24Zjgo5ARdRBKUWMBP8GHi8w0Q6UcMXG
+         N15z4MqeQLx51tcK4qZ3glZAMu6F1ydKIcNcHE/Vi1rPUdSFzmePGuJBP7dB27SQ/dlC
+         yfiA==
+X-Gm-Message-State: AOAM530AwzRGcefqWiquH5fGYC8fBNdTQf6kc5t/C1h1poM1OV3X3mT8
+        YTRh9Hsd4dmrZ0NQ2t3NwnA=
+X-Google-Smtp-Source: ABdhPJwGY57wBq9Nl0yoEK8w45h6104ykZ45Oyp8862f/UAYES7K8QKJ582f8eTRHoNYGRoft3kYFw==
+X-Received: by 2002:a17:90b:fd8:: with SMTP id gd24mr4569589pjb.234.1598509200731;
+        Wed, 26 Aug 2020 23:20:00 -0700 (PDT)
+Received: from localhost ([124.156.176.71])
+        by smtp.gmail.com with ESMTPSA id h65sm1269103pfb.210.2020.08.26.23.19.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 26 Aug 2020 23:20:00 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 14:20:03 +0800
+From:   Yue Hu <zbestahu@gmail.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rafael.j.wysocki@intel.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        huyue2@yulong.com, zbestahu@163.com
+Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling
+ device's statistics
+Message-ID: <20200827142003.000071c1.zbestahu@gmail.com>
+In-Reply-To: <20200827051401.yryitpgq2gi3nkbh@vireshk-i7>
+References: <20200818063005.13828-1-zbestahu@gmail.com>
+        <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
+        <20200826101319.00003048.zbestahu@gmail.com>
+        <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
+        <20200827120327.00003740.zbestahu@gmail.com>
+        <20200827051401.yryitpgq2gi3nkbh@vireshk-i7>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200825113131.GB12506@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-08-20, 12:31, Ionela Voinescu wrote:
-> On Tuesday 25 Aug 2020 at 11:26:18 (+0530), Viresh Kumar wrote:
-> > On 24-08-20, 22:02, Ionela Voinescu wrote:
-> > > The current frequency passed to arch_set_freq_scale() could end up
-> > > being 0, signaling an error in setting a new frequency. Also, if the
-> > > maximum frequency in 0, this will result in a division by 0 error.
-> > > 
-> > > Therefore, validate these input values before using them for the
-> > > setting of the frequency scale factor.
-> > > 
-> > > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> > > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > > ---
-> > >  drivers/base/arch_topology.c | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> > > index 75f72d684294..1aca82fcceb8 100644
-> > > --- a/drivers/base/arch_topology.c
-> > > +++ b/drivers/base/arch_topology.c
-> > > @@ -33,6 +33,9 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
-> > >  	unsigned long scale;
-> > >  	int i;
-> > >  
-> > > +	if (!cur_freq || !max_freq)
+On Thu, 27 Aug 2020 10:44:01 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
+
+> On 27-08-20, 12:03, Yue Hu wrote:
+> > Hi Daniel,
 > > 
-> > We should probably use unlikely() here.
+> > Now, i'm just focus on removing the kernel warning based on current code logic.
+> > Commit 8ea229511e06 (thermal: Add cooling device's statistics in sysfs) added
+> > the thermal statistics by viresh and viresh gived the patch an acknowledgement
+> > in anther mail thread. 
 > > 
-> > Rafael: Shouldn't this have a WARN_ON_ONCE() as well ?
+> > Hi viresh,
 > > 
+> > Could you review the patch again about the question above?  
 > 
-> I'll add the unlikely() as it's definitely useful.
+> Yeah, I Acked it but the questions raised by Daniel are very valid and must be
+> answered.
+
+Yes, sure.
+
 > 
-> I'm somewhat on the fence about WARN_ON_ONCE() here. Wouldn't it work
-> better in cpufreq_driver_fast_switch()? It would cover scenarios where
-> the default arch_set_freq_scale() is used and flag potential hardware
-> issues with setting frequency that are currently just ignored both here
-> and in sugov_fast_switch().
+> I understand that you only cared about fixing the warning, but maybe we need to
+> fix the driver and the warning will go away by itself. If you don't want to do
+> it, then someone who is responsible for the driver should do it.
 
-I think validation and the WARN (if required) must all happen at the
-same place. Considering that there can be many callers of a routine,
-like this one, it is better to put all that in the end function only.
+Yes, maybe the patch is not totally correct. maybe the driver has issue. Let's
+check the driver firstly.
 
-Maybe we can add the same in the dummy arch_set_freq_scale() if
-required.
+> 
+> Was it the acpi_video.c driver that you got the warning from ? I have added
+> Rafael to the email in case that driver needs getting fixed.
+> 
 
--- 
-viresh
+Currenly, drivers/video/backlight does not call thermal_of_cooling_device_register()
+to register thermal cooling device. The issue happened in msm-4.19 kernel for
+QCOM/Android platform. Backlight in msm-4.19 kernel will register thermal cooling
+device as below:
+
++static int bd_cdev_get_max_brightness(struct thermal_cooling_device *cdev,
++                                 unsigned long *state)
++{
++ struct backlight_device *bd = (struct backlight_device *)cdev->devdata;
++
++ *state = bd->props.max_brightness;
++
++ return 0;
++}
+
+
++static struct thermal_cooling_device_ops bd_cdev_ops = {
++ .get_max_state = bd_cdev_get_max_brightness,
+
++static void backlight_cdev_register(struct device *parent,
++                             struct backlight_device *bd)
++{
++ if (of_find_property(parent->of_node, "#cooling-cells", NULL)) {
++         bd->cdev = thermal_of_cooling_device_register(parent->of_node,
++                         (char *)dev_name(&bd->dev), bd, &bd_cdev_ops);
+
+And the bd->props.max_brightness is getting from video/backlight/qcom-wled.c. Maybe
+the driver should not assign 1024 to states/max_brightness. I'm not sure about it.
+So i consider to change memory allocation methord. That's the origin of the patch.
+
+Thank you.
+
