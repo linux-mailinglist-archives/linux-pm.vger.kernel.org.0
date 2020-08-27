@@ -2,78 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C57C254BB1
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 19:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09324255054
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 23:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726820AbgH0RLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 13:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726232AbgH0RLs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 13:11:48 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D031C06121B;
-        Thu, 27 Aug 2020 10:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=va1W/wu0D2iKj3V3xi8LWa26LKykVBSskhKiiZRnxsM=; b=Wc+72D4Setyn4hb763n+bQ0Ll0
-        rWVVCK4Cwpy33AK+exuym+jzlUoVQij9cNl7t3cVf2cyjktpJenJc/oSEmSKq34rxofCc8Z3Dk9ZE
-        GC1/Sd6Ta1McDcJfEF3HIMMFpWJhDWnqwauhdq9RGSc5u9HC/ZUKfreAM7rLSZhgjUMGuYOH6Y9DB
-        WceTwioIp00zsvMNx5ztgvn0k5TZMYcg/6gMVPsYoyArICjCTy5MsfrRPsiEBeK8FqhKiu5/Qgbj3
-        v2ve7Udg1uHQCvt4KS1Rflp6qYhdtao2EHnC3hTberxOb3+HPaKtDNkB3WoLsLac/CTJKsr4XtPb6
-        /p3O2jvA==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kBLR4-0000T0-UW; Thu, 27 Aug 2020 17:11:39 +0000
-Subject: Re: [PATCH v2] power: supply: Add support for RN5T618/RC5T619 charger
- and fuel gauge
-To:     Andreas Kemnade <andreas@kemnade.info>, lee.jones@linaro.org,
-        sre@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-References: <20200827170713.12142-1-andreas@kemnade.info>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <68444fa7-895d-3d64-2afd-43fc6d73a8d0@infradead.org>
-Date:   Thu, 27 Aug 2020 10:11:34 -0700
+        id S1726236AbgH0VHt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 17:07:49 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:53710 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbgH0VHs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 17:07:48 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 07RL7kW9085385;
+        Thu, 27 Aug 2020 16:07:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1598562466;
+        bh=orOymVe73TBSkWAYk73bDZMOSqPRJVCgZxMk1N12HM4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=tMbOvipiJAoNYEyyAUvoNpvDYzLS8ljsdiRBT9LmbJscw69BQCWYlnChd0RMXc+5j
+         Iqwby4p+0kJqZMx7K1xDG+7UnAUAdM+Ld/qTuSYynC+q/N7xb3B1E/9O1X29LfSp4r
+         i4zjQjRSS80J/CM3NPffNutZmNEfLtSsqMiy+ZXQ=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 07RL7kXd060964
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 27 Aug 2020 16:07:46 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 27
+ Aug 2020 16:07:46 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 27 Aug 2020 16:07:46 -0500
+Received: from [10.250.66.180] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 07RL7j3I073126;
+        Thu, 27 Aug 2020 16:07:45 -0500
+Subject: Re: [EXTERNAL] Re: [PATCH v1 1/2] dt-bindings: power: Add the bq256xx
+ dt bindings
+To:     Rob Herring <robh@kernel.org>
+CC:     <sre@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dmurphy@ti.com>
+References: <20200817191723.22416-1-r-rivera-matos@ti.com>
+ <20200817191723.22416-2-r-rivera-matos@ti.com>
+ <20200818164305.GB3586878@bogus>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <cf979e7d-2108-8bef-77af-25e152a80173@ti.com>
+Date:   Thu, 27 Aug 2020 16:07:45 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200827170713.12142-1-andreas@kemnade.info>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200818164305.GB3586878@bogus>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi--
+Rob
 
-On 8/27/20 10:07 AM, Andreas Kemnade wrote:
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 44d3c8512fb8..28cea178f6f1 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -739,4 +739,12 @@ config CHARGER_WILCO
->  	  information can be found in
->  	  Documentation/ABI/testing/sysfs-class-power-wilco
->  
-> +config RN5T618_POWER
-> +	tristate "RN5T618 charger/fuel gauge support"
-> +	depends on MFD_RN5T618
-> +	help
-> +	  Say Y here to have support for RN5T618 PMIC family fuel gauge and charger
-
-Missing period at the end of the sentence above.
-
-> +	  This driver can also be built as a module. If so, the module will be
-> +	  called rn5t618_power.
-> +
->  endif # POWER_SUPPLY
-
-
--- 
-~Randy
-
+On 8/18/20 11:43 AM, Rob Herring wrote:
+> On Mon, Aug 17, 2020 at 02:17:22PM -0500, Ricardo Rivera-Matos wrote:
+>> Add the bindings for the bq256xx series of battery charging ICs.
+>>
+>> Datasheets:
+>> - https://www.ti.com/lit/ds/symlink/bq25600.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25601.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25600d.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25601d.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25611d.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25618.pdf
+>> - https://www.ti.com/lit/ds/symlink/bq25619.pdf
+>>
+>> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+>> ---
+>>   .../bindings/power/supply/bq256xx.yaml        | 99 +++++++++++++++++++
+>>   1 file changed, 99 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+>> new file mode 100644
+>> index 000000000000..67db4ba9fdb6
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+>> @@ -0,0 +1,99 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+>> +# Copyright (C) 2020 Texas Instruments Incorporated
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/power/supply/bq256xx.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+>> +
+>> +title: TI bq256xx Switch Mode Buck Charger
+>> +
+>> +maintainers:
+>> +  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+>> +
+>> +description: |
+>> +  The bq256xx devices are a family of highly-integrated battery charge
+>> +  management and system power management ICs for single cell Li-ion and Li-
+>> +  polymer batteries.
+>> +
+>> +  Datasheets:
+>> +    - https://www.ti.com/lit/ds/symlink/bq25600.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25601.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25600d.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25601d.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25611d.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25618.pdf
+>> +    - https://www.ti.com/lit/ds/symlink/bq25619.pdf
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - ti,bq25600
+>> +      - ti,bq25601
+>> +      - ti,bq25600d
+>> +      - ti,bq25601d
+>> +      - ti,bq25611d
+>> +      - ti,bq25618
+>> +      - ti,bq25619
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  ti,watchdog-timer:
+> Poorly named since we have 'ti,watchdog-timers' already and is
+> completely different.
+ACK, will use ti,watchdog-timeout-ms  instead
+>
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: |
+>> +      Watchdog timer in milli seconds. 0 (default) disables the watchdog
+> If you have units, then you should use standard unit suffix.
+ACK
+>
+>> +    minimum: 0
+>> +    maximum: 160000
+>> +    enum: [ 0, 40000, 80000, 160000]
+>> +
+>> +  input-voltage-limit-microvolt:
+>> +    description: |
+>> +       Minimum input voltage limit in micro volts with a 100000 micro volt step
+>> +    minimum: 3900000
+>> +    maximum: 5400000
+>> +
+>> +  input-current-limit-microamp:
+>> +    description: |
+>> +       Maximum input current limit in micro amps with a 100000 micro amp step
+>> +    minimum: 100000
+>> +    maximum: 3200000
+> Aren't these properties of the battery, not the charger?
+These are input current and voltage limit for the charger, not the battery
+>
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+> monitored-battery not required?
+ACK
+>
+> Add:
+>
+> additionalProperties: false
+additionalProperties: false or unevaluatedProperties: false
+>
+>
+>> +
+>> +examples:
+>> +  - |
+>> +    bat: battery {
+>> +      compatible = "simple-battery";
+>> +      constant-charge-current-max-microamp = <2040000>;
+>> +      constant-charge-voltage-max-microvolt = <4352000>;
+>> +      precharge-current-microamp = <180000>;
+>> +      termination-current-microamp = <180000>;
+>> +    };
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    i2c0 {
+> i2c {
+ACK
+>
+>> +      pinctrl-names = "default";
+>> +      pinctrl-0 = <&i2c2_pins>;
+> Not relevant to the example.
+ACK
+>
+>> +
+>> +      status = "okay";
+> Don't show status in examples.
+ACK
+>
+>> +      clock-frequency = <400000>;
+>> +
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      bq25601@6b {
+> charger@6b
+ACK
+>
+>> +        compatible = "ti,bq25601";
+>> +        reg = <0x6b>;
+>> +        monitored-battery = <&bat>;
+>> +
+>> +        interrupt-parent = <&gpio1>;
+>> +        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
+>> +        watchdog-timer = <40000>;
+>> +
+>> +        input-voltage-limit-microvolt = <4500000>;
+>> +        input-current-limit-microamp = <2400000>;
+>> +       };
+>> +    };
+>> +...
+>> -- 
+>> 2.28.0
+>>
+Ricardo
