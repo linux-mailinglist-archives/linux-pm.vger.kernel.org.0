@@ -2,147 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD37253D18
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 07:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D43B253D20
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 07:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726147AbgH0FLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 01:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55198 "EHLO
+        id S1726242AbgH0FOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 01:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726028AbgH0FLD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 01:11:03 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC8CC061240;
-        Wed, 26 Aug 2020 22:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=FtBbdyMfeeBQSJz0ZhSXfAlqnNGhPBDN8gv9qmafBlo=; b=ncsiABwTDcPMYRpZQckinWUIn
-        O7LSRHxQSLYCyO9iuP16qlLKPIeGWSMZeEl/bnRgjRA5NF0DnuI+cjiHGli8HHyv/ZZMZESRS7ojy
-        BID0JCcXJZh2fKbKWz8vGSGnq6LRhpriWSxc3EAer13xTphughtNmBlWjelv6HSnxBl/k=;
-Received: from ip-109-41-66-178.web.vodafone.de ([109.41.66.178] helo=localhost)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kBABd-0004Yq-Oj; Thu, 27 Aug 2020 07:10:59 +0200
-Received: from [::1] (helo=localhost)
-        by localhost with esmtp (Exim 4.92)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kBABa-0001DP-Ty; Thu, 27 Aug 2020 07:10:54 +0200
-Date:   Thu, 27 Aug 2020 07:10:19 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH 1/2] power: supply: Add support for RN5T618/RC5T619
- charger and fuel gauge
-Message-ID: <20200827071019.7022301c@kemnade.info>
-In-Reply-To: <20200826215950.bkzk76lwax7l6arz@earth.universe>
-References: <20200815165610.10647-1-andreas@kemnade.info>
-        <20200815165610.10647-2-andreas@kemnade.info>
-        <20200826174817.vhus3j4i4t7u7jc4@earth.universe>
-        <20200826202834.42b1673f@aktux>
-        <20200826215950.bkzk76lwax7l6arz@earth.universe>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-pc-linux-gnu)
+        with ESMTP id S1725909AbgH0FOE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 01:14:04 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77DFEC061240
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 22:14:04 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id o13so2516715pgf.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 22:14:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cBHoE76BRmIWjK8GBasxXIFwFSuyPmo/sqEtV0bmcP4=;
+        b=qSnnev9F/aZWHDr5/8MADrCSBktScfoAZvPVSqSgnZdkziAqjFfTRRcxe4Ewqh0sYs
+         XeEhcux2DoeJwCgpnte2jo+Tb5IgC/gyag4xlBz0QWgANA/PNEiiEeicsD/PC3fozLm7
+         3vrVjrTtNAonXrOcT4sWCsQmSY/UAjtjypb2+6BDa7Cif8XCMh6A3uRK8FW7LMmYYjeO
+         ytQZ1CvUKwcq9zNIXW6giAXvavTGYs0FOqyMdSWkwUR1uJ04iVGndaI37i03jdrzP8mG
+         14xh5z8mNaR0wCuWBJdX0gLiyj6k5mDswyq8av8csip/G83PUPyh/BjqzADRBCZdf68l
+         8nXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cBHoE76BRmIWjK8GBasxXIFwFSuyPmo/sqEtV0bmcP4=;
+        b=faMENqNPqda8qE7dFC7ndCN9XWr9b8vH/KFU0bZICm8cPcqfiFdsd+PxnodpvKIgqS
+         cSFsBjfKl5Wo7++8v8mDYPqmMepaaVt4u/9Yghv+IST4ty2GCoNFBfcxlHoNqQQn7VKI
+         2kiqw4U8VJl/R66bi7Uq/Qhtkm6a4WjGnf4p8tk6hADhx771AD92J18HXI/BXMYdRggu
+         wgl7LTMki7uR/zNisongzjaUx/1CWgfgc79MPnAeX403OF3PhvtKLbxaZVRzO4dph+3Z
+         RP63yl5i4N1JfmfmMLJqc2NQONMpNSRzwcGVBnwWP2pRV2oyjE+cPDbJLynsgAhgA+6M
+         J3TA==
+X-Gm-Message-State: AOAM533QbQt8CpsA7PiaQKO2R/uYBqQfwJPjDevYnjlGNAfX69VUjKPW
+        wJX9ZZLDmQfXCD4VerRQPg5ifw==
+X-Google-Smtp-Source: ABdhPJw2o3vKKmT5+jk9Yh7g4SdntLbf3XgImV3KGAJcmCCFpFNBAB55zgqUX2cTpO2gqRBSlzvkjw==
+X-Received: by 2002:a17:902:ee8b:: with SMTP id a11mr15130201pld.30.1598505243978;
+        Wed, 26 Aug 2020 22:14:03 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id z15sm856087pjz.12.2020.08.26.22.14.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Aug 2020 22:14:03 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 10:44:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yue Hu <zbestahu@gmail.com>, rafael.j.wysocki@intel.com
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huyue2@yulong.com, zbestahu@163.com
+Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling
+ device's statistics
+Message-ID: <20200827051401.yryitpgq2gi3nkbh@vireshk-i7>
+References: <20200818063005.13828-1-zbestahu@gmail.com>
+ <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
+ <20200826101319.00003048.zbestahu@gmail.com>
+ <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
+ <20200827120327.00003740.zbestahu@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
- boundary="Sig_/kyTL0mKiSKwRlAhHZgPo7Ph"; protocol="application/pgp-signature"
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200827120327.00003740.zbestahu@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---Sig_/kyTL0mKiSKwRlAhHZgPo7Ph
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 27-08-20, 12:03, Yue Hu wrote:
+> Hi Daniel,
+> 
+> Now, i'm just focus on removing the kernel warning based on current code logic.
+> Commit 8ea229511e06 (thermal: Add cooling device's statistics in sysfs) added
+> the thermal statistics by viresh and viresh gived the patch an acknowledgement
+> in anther mail thread. 
+> 
+> Hi viresh,
+> 
+> Could you review the patch again about the question above?
 
-Hi,
+Yeah, I Acked it but the questions raised by Daniel are very valid and must be
+answered.
 
-On Wed, 26 Aug 2020 23:59:50 +0200
-Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+I understand that you only cared about fixing the warning, but maybe we need to
+fix the driver and the warning will go away by itself. If you don't want to do
+it, then someone who is responsible for the driver should do it.
 
-> Hi,
->=20
-> On Wed, Aug 26, 2020 at 08:28:34PM +0200, Andreas Kemnade wrote:
-> > On Wed, 26 Aug 2020 19:48:17 +0200
-> > Sebastian Reichel <sebastian.reichel@collabora.com> wrote: =20
-> > > On Sat, Aug 15, 2020 at 06:56:09PM +0200, Andreas Kemnade wrote: =20
-> > > > [...]
-> > > > +static int rn5t618_battery_current_now(struct rn5t618_power_info *=
-info,
-> > > > +				       union power_supply_propval *val)
-> > > > +{
-> > > > +	u16 res;
-> > > > +	int ret;
-> > > > +
-> > > > +	ret =3D rn5t618_battery_read_doublereg(info, RN5T618_CC_AVEREG1, =
-&res);
-> > > > +	if (ret)
-> > > > +		return ret;
-> > > > +
-> > > > +	val->intval =3D res;
-> > > > +	/* 2's complement */
-> > > > +	if (val->intval & (1 << 13))
-> > > > +		val->intval =3D val->intval - (1 << 14); =20
->=20
-> Btw. I think sign_extend32() can be used here?
->=20
-> > > > +	/* negate current to be positive when discharging */
-> > > > +	val->intval *=3D -1000;   =20
-> > >=20
-> > > mh, the sign is not documented (which should be fixed). At least
-> > > sbs-battery does it the other way around (negative current when
-> > > discharging, positive otherwise). Some drivers do not support
-> > > signed current and always report positive values (e.g. ACPI driver).
-> > >=20
-> > > What did you use as reference for swapping the sign?
-> > >  =20
-> > Well, I have searched for documentation, found nothing and used the
-> > bq27xxx driver as reference  which I am used to from the GTA04/GTA02,
-> > so things behave equal. That are the devices where a was most
-> > intensively looking at those values.
-> > I thought that there would be some unwritten rule about that. =20
->=20
-> The mess is mostly due to lacking reviewing from my side
-> (and possibly my predecessors). I just went through a dozen of
-> drivers and it looks like most either do not support signed current
-> (and use negative values as error code :() or use negative current
-> for discharge. I could not find any other driver using negative
-> numbers for charging. I think it's best to negative =3D discharge as
-> official correct value and will send an update patch for the
-> documentation later.
->=20
-ok, I will remove that sign-change and keep/update the comment
-so that you know that the driver does it the official way
-and send a v2 with the other things you mentioned.
+Was it the acpi_video.c driver that you got the warning from ? I have added
+Rafael to the email in case that driver needs getting fixed.
 
-Regards,
-Andreas
-
---Sig_/kyTL0mKiSKwRlAhHZgPo7Ph
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEPIWxmAFyOaBcwCpFl4jFM1s/ye8FAl9HQDsACgkQl4jFM1s/
-ye8x/w//ddKmAMtDh/yN1Lq+lECRNbWAZpc4SP4ObqqZZ+O+a/a1J7Op5FLYfLHN
-YeLYLUymiotJLKlY6WtJDsUHSzlAUGA2qXSmN+tqzlIgENjr0JWY3rlCwRQ+SZaP
-CJ1Iyygx68x+DDFHpsmWDyeDkMYRLxzYLX+Ps+iw0MNIjqGStqkngZ8SoOj1Yqwl
-3LZ3FNV/MzMDdHJVk7WeYkRX9y/j6eCc4noiXeM0BJbC6Xv9UcLLz4d6RfYhBZLn
-vqETJt0v/IBXTy2rap38Hd+Sa0l7gmg9MPKzn30LbxYbzkCXSMlcbDV/lvtQvddN
-+UBjKBnwNcvdH0NJOpALZ8DcXlG+YPEg3n61eL2VLLDkSN/vmtij0Fy+L0paIF31
-Diee1W/uuAj7CAU9nP9jjgx3nC281gEvBq2UpqZzbB9ElALE2pEMzq70CO5AloZQ
-ObVC076t0jpulMl97sIqDdgiJoqDckMjVOEXtc97osuFQYECBLoV+ievO1vd++Cl
-R08ht6tHai+BKrlbHhaWw45ztrJJu3sOGUOHYWyWduywHYT8E5zzJBRRYxGUpMi4
-YksqSX2JKcCP0U/mchQZs0V8FV8i/kTOJREHL6jYTDjGjAi1OfYOYwWoD03L63pP
-5q9/Z63sXbmkX3uQtbHuGvRI2+ChpY6zAOzn0XHJMHK3XpwdimM=
-=5h+f
------END PGP SIGNATURE-----
-
---Sig_/kyTL0mKiSKwRlAhHZgPo7Ph--
+-- 
+viresh
