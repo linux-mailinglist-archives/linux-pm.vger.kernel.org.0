@@ -2,242 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F3C25412E
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 10:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A21B254155
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 10:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgH0Ius (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 04:50:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbgH0Iur (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 04:50:47 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD8BC061264
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 01:50:46 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id f26so5495745ljc.8
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 01:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bQaUG7xBh2HjSNskZY89kjazXkJDEmZNO2sZfI4TKyk=;
-        b=QmgdF1iN6lMcE8BhMHvgKf3D4iGv0vkpTtNJ0kwg745FZJp+6w2xLfGFe9m/fUNysY
-         EfT8Q8WvMYE8RdPy3xTr4NR9XN0AvFjML9WiNkVYSKucJppc6J2L0XlpJiUgm/Pr8D6s
-         V6yzdqaFtKDI6afEQ56fMZH37HlbVmjQ1ZWKNJpLROc5Px6lGs4AQGYBneaOGapObD2B
-         whhLHldR1JPp87fw7iHuIJrG/cy9Z3cvePIXZph5hzok/ofYUyOmaQKmr32pyaDAR43L
-         cHoo+xZ81AkPtKWIUR/5YaowQgdYjMo2v9UoQ4kIlz30ndoYdUIJhJa6EgSJjQaQYnez
-         7acg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bQaUG7xBh2HjSNskZY89kjazXkJDEmZNO2sZfI4TKyk=;
-        b=bM/27AOch9cmrzhnlBXDsWe3DNMVZhz6u8o04pJPGP5n3ABuE799p9oQ7grGIhtlkl
-         n/0py6iUlQAZqExFr5WFkRC9CTW2n1XGDK8T/z4a4qQ4W3nkryVORyYlAv05E11vIxhg
-         VBOIIESvdQ5PlqZJZbuHH/WUOeiWQs/XfFEORQLHSCkEEBDXbDOWmn14+q1o3cMkmsM7
-         mEWHENEgAwiabTZhNEjSuwTR1s0O+tDfpf/W20FotxrnTMSh7g/SlkNqdfEHIcDAcS99
-         74sdfLnT40kLkKq8OkFK2w2b0hpYPLqV1jxnKeMnEFmQ/WPU3FmG7rfnnYclEOqn+Qcg
-         mnVw==
-X-Gm-Message-State: AOAM5313/NSpHdZ5MPQ0lAXJ+zPvrXtEqXB0Xw+I6fQFRDCmmdk4kPu5
-        f4UGk1tVSQ94EFaff0Fu0TBIjg==
-X-Google-Smtp-Source: ABdhPJwn7lc+guBAZW0Dww4flilB0w432ThtGD3tncScvIOLhOh4qby3fG0+KfltO49dCMTVA5fNpQ==
-X-Received: by 2002:a2e:92d0:: with SMTP id k16mr8568440ljh.70.1598518245058;
-        Thu, 27 Aug 2020 01:50:45 -0700 (PDT)
-Received: from localhost.localdomain (c-92d7225c.014-348-6c756e10.bbcust.telenor.se. [92.34.215.146])
-        by smtp.gmail.com with ESMTPSA id g63sm297611lfd.28.2020.08.27.01.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 01:50:44 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
-Subject: [PATCH v2] power: supply: gpio-charger: Convert to GPIO descriptors
-Date:   Thu, 27 Aug 2020 10:48:28 +0200
-Message-Id: <20200827084828.190841-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.26.2
+        id S1727048AbgH0I6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 04:58:14 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:52835 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726882AbgH0I6N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 04:58:13 -0400
+X-UUID: 002c42f5b3e746409b131c11eb235ba8-20200827
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=z4HtARY63qecmM+UTuwL38oHkQEk8xUNbn1/BUzTchw=;
+        b=gnl17B6QIji7Vk8I0qsLqDwLBR+kzjndRD6X2fZvthnuA0e3y6d3sYZmQLv0O6HvAcFkZzjaLlbZP56WErBUbdZ4IjfNtGGyXKtYTFTUOgGlmWblo/uPsv+80K3u2DC2AGSQJRN+yjXMQ8ayDgYqRCe9SsoHJVRrQQjRaGXAU+A=;
+X-UUID: 002c42f5b3e746409b131c11eb235ba8-20200827
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 765371042; Thu, 27 Aug 2020 16:58:08 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 27 Aug 2020 16:58:04 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 27 Aug 2020 16:58:05 +0800
+Message-ID: <1598518685.4204.8.camel@mtkswgap22>
+Subject: Re: [PATCH v2 1/2] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Olof Johansson" <olof@lixom.net>, <linux-kernel@vger.kernel.org>,
+        <wsd_upstream@mediatek.com>
+Date:   Thu, 27 Aug 2020 16:58:05 +0800
+In-Reply-To: <20200827042653.5ttsxnjjhpslmrcv@vireshk-i7>
+References: <1597302475-15484-1-git-send-email-hector.yuan@mediatek.com>
+         <1597302475-15484-2-git-send-email-hector.yuan@mediatek.com>
+         <20200824100619.o6uwnlsaxdgc3l7r@vireshk-i7>
+         <1598446624.24220.10.camel@mtkswgap22>
+         <20200827042653.5ttsxnjjhpslmrcv@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-TM-SNTS-SMTP: BD4260F00D8F1BF7AF40A81B24370BFC97A30A7B409831315CBF6869CF9669432000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This converts the GPIO charger to use exclusively GPIO
-descriptors, moving the two remaining platforms passing
-global GPIO numbers over to using a GPIO descriptor table.
-
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>
-Cc: Dmitry Eremin-Solenikov <dbaryshkov@gmail.com>
----
-ChangeLog v1->v2:
-- Rebased on v5.9-rc1
----
- arch/arm/mach-pxa/tosa.c            | 12 ++++++++++--
- arch/arm/mach-sa1100/collie.c       | 14 ++++++++++++--
- drivers/power/supply/gpio-charger.c | 26 +-------------------------
- include/linux/power/gpio-charger.h  |  6 ------
- 4 files changed, 23 insertions(+), 35 deletions(-)
-
-diff --git a/arch/arm/mach-pxa/tosa.c b/arch/arm/mach-pxa/tosa.c
-index 3d2c108e911e..431709725d02 100644
---- a/arch/arm/mach-pxa/tosa.c
-+++ b/arch/arm/mach-pxa/tosa.c
-@@ -369,6 +369,15 @@ static struct pxaficp_platform_data tosa_ficp_platform_data = {
- /*
-  * Tosa AC IN
-  */
-+static struct gpiod_lookup_table tosa_power_gpiod_table = {
-+	.dev_id = "gpio-charger",
-+	.table = {
-+		GPIO_LOOKUP("gpio-pxa", TOSA_GPIO_AC_IN,
-+			    NULL, GPIO_ACTIVE_LOW),
-+		{ },
-+	},
-+};
-+
- static char *tosa_ac_supplied_to[] = {
- 	"main-battery",
- 	"backup-battery",
-@@ -378,8 +387,6 @@ static char *tosa_ac_supplied_to[] = {
- static struct gpio_charger_platform_data tosa_power_data = {
- 	.name			= "charger",
- 	.type			= POWER_SUPPLY_TYPE_MAINS,
--	.gpio			= TOSA_GPIO_AC_IN,
--	.gpio_active_low	= 1,
- 	.supplied_to		= tosa_ac_supplied_to,
- 	.num_supplicants	= ARRAY_SIZE(tosa_ac_supplied_to),
- };
-@@ -951,6 +958,7 @@ static void __init tosa_init(void)
- 	clk_add_alias("CLK_CK3P6MI", tc6393xb_device.name, "GPIO11_CLK", NULL);
- 
- 	gpiod_add_lookup_table(&tosa_udc_gpiod_table);
-+	gpiod_add_lookup_table(&tosa_power_gpiod_table);
- 	platform_add_devices(devices, ARRAY_SIZE(devices));
- }
- 
-diff --git a/arch/arm/mach-sa1100/collie.c b/arch/arm/mach-sa1100/collie.c
-index 3cc2b71e16f0..bd3a52fd09ce 100644
---- a/arch/arm/mach-sa1100/collie.c
-+++ b/arch/arm/mach-sa1100/collie.c
-@@ -30,6 +30,7 @@
- #include <linux/gpio_keys.h>
- #include <linux/input.h>
- #include <linux/gpio.h>
-+#include <linux/gpio/machine.h>
- #include <linux/power/gpio-charger.h>
- 
- #include <video/sa1100fb.h>
-@@ -131,16 +132,23 @@ static struct irda_platform_data collie_ir_data = {
- /*
-  * Collie AC IN
-  */
-+static struct gpiod_lookup_table collie_power_gpiod_table = {
-+	.dev_id = "gpio-charger",
-+	.table = {
-+		GPIO_LOOKUP("gpio", COLLIE_GPIO_AC_IN,
-+			    NULL, GPIO_ACTIVE_HIGH),
-+		{ },
-+	},
-+};
-+
- static char *collie_ac_supplied_to[] = {
- 	"main-battery",
- 	"backup-battery",
- };
- 
--
- static struct gpio_charger_platform_data collie_power_data = {
- 	.name			= "charger",
- 	.type			= POWER_SUPPLY_TYPE_MAINS,
--	.gpio			= COLLIE_GPIO_AC_IN,
- 	.supplied_to		= collie_ac_supplied_to,
- 	.num_supplicants	= ARRAY_SIZE(collie_ac_supplied_to),
- };
-@@ -386,6 +394,8 @@ static void __init collie_init(void)
- 
- 	platform_scoop_config = &collie_pcmcia_config;
- 
-+	gpiod_add_lookup_table(&collie_power_gpiod_table);
-+
- 	ret = platform_add_devices(devices, ARRAY_SIZE(devices));
- 	if (ret) {
- 		printk(KERN_WARNING "collie: Unable to register LoCoMo device\n");
-diff --git a/drivers/power/supply/gpio-charger.c b/drivers/power/supply/gpio-charger.c
-index 875735d50716..ae778f110101 100644
---- a/drivers/power/supply/gpio-charger.c
-+++ b/drivers/power/supply/gpio-charger.c
-@@ -5,7 +5,6 @@
-  */
- 
- #include <linux/device.h>
--#include <linux/gpio.h> /* For legacy platform data */
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
-@@ -131,7 +130,6 @@ static int gpio_charger_probe(struct platform_device *pdev)
- 	struct power_supply_desc *charger_desc;
- 	struct gpio_desc *charge_status;
- 	int charge_status_irq;
--	unsigned long flags;
- 	int ret;
- 	int num_props = 0;
- 
-@@ -149,29 +147,7 @@ static int gpio_charger_probe(struct platform_device *pdev)
- 	 * boardfile descriptor tables. It's good to try this first.
- 	 */
- 	gpio_charger->gpiod = devm_gpiod_get_optional(dev, NULL, GPIOD_IN);
--
--	/*
--	 * Fallback to legacy platform data method, if no GPIO is specified
--	 * using boardfile descriptor tables.
--	 */
--	if (!gpio_charger->gpiod && pdata) {
--		/* Non-DT: use legacy GPIO numbers */
--		if (!gpio_is_valid(pdata->gpio)) {
--			dev_err(dev, "Invalid gpio pin in pdata\n");
--			return -EINVAL;
--		}
--		flags = GPIOF_IN;
--		if (pdata->gpio_active_low)
--			flags |= GPIOF_ACTIVE_LOW;
--		ret = devm_gpio_request_one(dev, pdata->gpio, flags,
--					    dev_name(dev));
--		if (ret) {
--			dev_err(dev, "Failed to request gpio pin: %d\n", ret);
--			return ret;
--		}
--		/* Then convert this to gpiod for now */
--		gpio_charger->gpiod = gpio_to_desc(pdata->gpio);
--	} else if (IS_ERR(gpio_charger->gpiod)) {
-+	if (IS_ERR(gpio_charger->gpiod)) {
- 		/* Just try again if this happens */
- 		if (PTR_ERR(gpio_charger->gpiod) == -EPROBE_DEFER)
- 			return -EPROBE_DEFER;
-diff --git a/include/linux/power/gpio-charger.h b/include/linux/power/gpio-charger.h
-index 5a5a8de98181..c0b7657ac1df 100644
---- a/include/linux/power/gpio-charger.h
-+++ b/include/linux/power/gpio-charger.h
-@@ -13,18 +13,12 @@
-  * struct gpio_charger_platform_data - platform_data for gpio_charger devices
-  * @name:		Name for the chargers power_supply device
-  * @type:		Type of the charger
-- * @gpio:		GPIO which is used to indicate the chargers status
-- * @gpio_active_low:	Should be set to 1 if the GPIO is active low otherwise 0
-  * @supplied_to:	Array of battery names to which this chargers supplies power
-  * @num_supplicants:	Number of entries in the supplied_to array
-  */
- struct gpio_charger_platform_data {
- 	const char *name;
- 	enum power_supply_type type;
--
--	int gpio;
--	int gpio_active_low;
--
- 	char **supplied_to;
- 	size_t num_supplicants;
- };
--- 
-2.26.2
+T24gVGh1LCAyMDIwLTA4LTI3IGF0IDA5OjU2ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
+IE9uIDI2LTA4LTIwLCAyMDo1NywgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gT24gTW9uLCAyMDIw
+LTA4LTI0IGF0IDE1OjM2ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+ID4gPiBPbiAxMy0w
+OC0yMCwgMTU6MDcsIEhlY3RvciBZdWFuIHdyb3RlOg0KPiA+ID4gPiAgQ09ORklHX0FSTV9BTExX
+SU5ORVJfU1VONTBJX0NQVUZSRVFfTlZNRU09bQ0KPiA+ID4gPiAgQ09ORklHX0FSTV9BUk1BREFf
+MzdYWF9DUFVGUkVRPXkNCj4gPiA+ID4gK0NPTkZJR19BUk1fTUVESUFURUtfQ1BVRlJFUV9IVz1t
+DQo+ID4gPiANCj4gPiA+IFdoYXQgYWJvdXQgYSAnZGVmYXVsdCBtJyBpbiBLY29uZmlnIGl0c2Vs
+ZiA/DQo+ID4gPiBPSywgd2lsbCB1cGRhdGUgaW4gVjMuDQo+IA0KPiBIZWN0b3IsIHlvdSBuZWVk
+IHRvIHJlbW92ZSAob3Igbm90IGFkZCkgdGhlIHJpZ2h0IGJyYWNrZXQgKD4pIGJlZm9yZSB0aGUN
+Cj4gYmVnaW5uaW5nIG9mIHlvdXIgbGluZXMuIFRoaXMgbWFrZXMgaXQgaW5jcmVkaWJseSBkaWZm
+aWN1bHQgdG8gcmVhZC4NCg0KT0ssIEkgZ2V0IGl0LiBTb3JyeSBmb3IgdGhlIGluY29udmVuaWVu
+Y2UuDQo+ID4gPiA+ICsJZm9yIChpID0gMDsgaSA8IExVVF9NQVhfRU5UUklFUzsgaSsrKSB7DQo+
+ID4gPiA+ICsJCWRhdGEgPSByZWFkbF9yZWxheGVkKGJhc2UgKyAoaSAqIExVVF9ST1dfU0laRSkp
+Ow0KPiA+ID4gPiArCQlmcmVxID0gRklFTERfR0VUKExVVF9GUkVRLCBkYXRhKSAqIDEwMDA7DQo+
+ID4gPiA+ICsJCXZvbHQgPSBGSUVMRF9HRVQoTFVUX1ZPTFQsIGRhdGEpOw0KPiA+ID4gPiArCQlp
+ZiAoZnJlcSAhPSBwcmV2X2ZyZXEpIHsNCj4gPiA+ID4gKwkJCXRhYmxlW2ldLmZyZXF1ZW5jeSA9
+IGZyZXE7DQo+ID4gPiA+ICsJCQlkZXZfcG1fb3BwX2FkZChjcHVfZGV2LCBmcmVxICogMTAwMCwg
+dm9sdCk7DQo+ID4gPiANCj4gPiA+IFdoeSBhcmUgeW91IGFkZGluZyBPUFBzIGhlcmUgYW5kIHJh
+dGhlciB3aHkgdXNpbmcgT1BQIHNwZWNpZmljIHN0dWZmDQo+ID4gPiBhdCBhbGwgaW4gdGhlIGRy
+aXZlciA/DQo+ID4gPiB5ZXMsIHRoZSBvcHAgaW5mb3JtYXRpb24gaXMgcmVhZCBmcm9tIENQVSBI
+VyBlbmdpbmUuVGhlbiBhZGQgaXQgdG8gdGhlIENQVSBkZXYgT1BQIG9uZSBieSBvbmUuICANCj4g
+DQo+IEkgYXNrZWQgYSBkaWZmZXJlbnQgcXVlc3Rpb24sIHdoeSBhcmUgeW91IGFkZGluZyBPUFBz
+ID8gWW91IGRvbid0IG5lZWQgdGhlIE9QUHMNCj4gYXQgYWxsIGluIG15IG9waW5pb24uIFlvdSBj
+YW4ganVzdCBjcmVhdGUgdGhlIGZyZXF1ZW5jeSB0YWJsZSBhbmQgdGhhdCdzIGl0Lg0KDQpJIGp1
+c3QgYWRkIE9QUCBpbmZvIHRvIE9QUCBmcmFtZXdvcmsgc28gdGhhdCBvdGhlcnMgbW9kdWxlcyBj
+YW4gZ2V0IGl0DQpmcm9tIE9QUCBmcmFtZXdvcmsuDQpCdXQgbGlrZSB5b3Ugc2FpZCwgSSBkb24n
+dCBuZWVkIGl0IGluIHRoaXMgZHJpdmVyLiBJIHdpbGwgcmVtb3ZlIHRoaXMNCmNvZGUgc2VnbWVu
+dCBpbiBWNC4NCkkgYWxyZWFkeSBzZW5kIFYzIHllc3RlcmRheSBidXQgbm90IGluY2x1ZGluZyB0
+aGlzIG1vZGlmaWNhdGlvbi4NCg0KPiA+ID4gPiArCWZvcl9lYWNoX3Bvc3NpYmxlX2NwdShjcHUp
+IHsNCj4gPiA+ID4gKwkJY3B1X25wID0gb2ZfY3B1X2RldmljZV9ub2RlX2dldChjcHUpOw0KPiA+
+ID4gPiArCQlpZiAoIWNwdV9ucCkNCj4gPiA+ID4gKwkJCWNvbnRpbnVlOw0KPiA+ID4gPiArDQo+
+ID4gPiA+ICsJCXJldCA9IG9mX3BhcnNlX3BoYW5kbGVfd2l0aF9hcmdzKGNwdV9ucCwgIm10ayxm
+cmVxLWRvbWFpbiIsDQo+ID4gPiANCj4gPiA+IFdoZXJlIGFyZSBiaW5kaW5ncyBvZiB0aGlzIG5v
+ZGUgYW5kIGhvdyBkb2VzIHRoaXMgbG9vayA/DQo+ID4gPiBDYW4gcmVmZXIgdG8gdGhlIHNhbWUg
+cGF0Y2ggc2VyaWVzLCBJIHNwbGl0IGl0IHRvIGFub3RoZXIgcGF0Y2guRWFjaCBjcHUgd2lsbCBi
+ZSBncm91cCBpbnRvIG9uZSBmcmVxdWVuY3kgZG9tYWluIGZvciB0aGUgQ1BVIERWRlMuIA0KPiAN
+Cj4gVGhhdCBiaW5kaW5nIG9ubHkgZGVmaW5lcyAibWVkaWF0ZWssY3B1ZnJlcS1odyIgYW5kIG5v
+dCAibXRrLGZyZXEtZG9tYWluIi4NCg0KUGxlYXNlIHJlZmVyIHRvIHRoZSBkdCBiaW5kaW5nIGlu
+IFYzLCB0aGFuayB5b3UuICAobGttbCBub3Qgc2hvdyB1cCB5ZXQsDQpzbyBJIHBvc3QgdGhlIGJl
+bG93IGxpbmsgaW5zdGVhZCkNCmh0dHBzOi8vd3d3LnNwaW5pY3MubmV0L2xpc3RzL2FybS1rZXJu
+ZWwvbXNnODMyNTkyLmh0bWwNCj4gDQoNCg==
 
