@@ -2,96 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE84E254324
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 12:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0055D2544BF
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 14:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728409AbgH0KFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 06:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728384AbgH0KFU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 06:05:20 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76E6C061264
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 03:05:19 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id p11so3106540pfn.11
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 03:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MY9vWqi8io8Q/KjFZpL5UnBPSsLhfZfobXaFG+SgOqk=;
-        b=zO5xaZyH5NBB+g4FkyMZLdJPv05aiY5r0BLK9s2kZG019uiBNqS4nZLXOUc3mRpPI2
-         5FrqdwuJl2R/C8CN2uQD3HjvsFD5uHOwL/StxxRfaPssdEomiavjQqsuqN6uv1uxrHC4
-         wr3MU2wmm+AUJupiwa4JH4lkULPVfIDAN28ujoeEMVPBQ5T+5Px6ffPlLZjrwbSQfLQb
-         lT+8MrZAHcHmkH8EDl51eBhkxPLl/ZOhyZIQ0dygBVEWKmOBkUFMTg250ikuM6GVsqm1
-         nrGVdfiQM0NN+XA27rxEbfTXhJ/WY8fYlI9irkBP7FR0KwmMwPjsAgigSZp3xv/2GV3+
-         1z8g==
+        id S1728982AbgH0MFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 08:05:53 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:43612 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728899AbgH0MCU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 08:02:20 -0400
+Received: by mail-oi1-f194.google.com with SMTP id j21so4348967oii.10;
+        Thu, 27 Aug 2020 05:02:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MY9vWqi8io8Q/KjFZpL5UnBPSsLhfZfobXaFG+SgOqk=;
-        b=rV10VeX2J1kuLGG4p4bCCZNQMCh8nTgr30eEC5zfe/PQ9DaG298LFiHRo7yy+DPEtJ
-         Pfiutw0quWW2PBCfaXnI9I2JN+eoROnNOiqT87yeZjc/yTm4yynj5fu/SxOWKd8CD1tP
-         I1WBp5GyhOQtKu2qNXbEIXhnO9eKFDChtizl10Rdc5LsdHBNvBpbJkW2YdQtmtC2R9Qf
-         F2XmmOk3daFrMinjeBYXtg0qu20g/NGcT5hJFrUc0k0/C/ESR1nHXj3CZQfLDt1PcN3H
-         w7RYUBfMN6PbEVQf68hko4uCEiEIkH05cVjGzLWHQR7kYaPOMLbmT7jr5lI8muNUZaza
-         ZJAg==
-X-Gm-Message-State: AOAM5339Hik7QEICLF78dgq8y5C++EUL5dhTt3jbkzyn0VkzjLdxz+iz
-        S0WB7NazFGpj7mxP4Av9Yk2yoA==
-X-Google-Smtp-Source: ABdhPJxc3HNQBhVYTuNOywoWV07oFElapsdKQi1sNWkbDWdd6btWY5ytriyBJr0/a4vXEGR1/V7ZXA==
-X-Received: by 2002:a65:4847:: with SMTP id i7mr13871837pgs.385.1598522719424;
-        Thu, 27 Aug 2020 03:05:19 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id lt23sm1751841pjb.52.2020.08.27.03.05.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Aug 2020 03:05:18 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Drop unnecessary check frmo dev_pm_opp_attach_genpd()
-Date:   Thu, 27 Aug 2020 15:35:15 +0530
-Message-Id: <88c8522b556d15bd44b8388d47cf25ac6f06b057.1598522635.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w87Wjrt0hH5OBUFHY4Ofs51H+e/iPgf40ZaoFuUim6c=;
+        b=qan5h1BODPXOIyL15mJe0fpHyNcBVRiaQftXM9Vd3xTvAeGwo+bu1IUJUqyFut2QZ9
+         YC0y6HpCILRka2bEKbK7Zm41fafDizTzo1C6fXHzYJdHBQEmOlTY4pJRLedStJ+6evHb
+         4UDCrvtWADVX6VFqH3GxTYyP2yj7E3h/l4MtghwsQLaMQsRQpaNLNax82//FsYSmkvPw
+         4ETGTC3MdRuG8Czt1xDlYcLviGx3SD34+5LMdEVTL/bLoOuEcwwEeYaqOqs6T2wIl3Tg
+         1yaa0lnST+R8sUADjZ4ONIBnkgQZ1uWuBzKUwYI+DxTP5za/TQJNxORwfy5UoxDcHePj
+         my7A==
+X-Gm-Message-State: AOAM5336dmSkADWLHoHoBAXuegZ83v7GSOzsTJSWo1Le4C5TENDc+m1K
+        Ak5GmQxWtO8DLo47EHWCuqmvGVLkGqp/0wqUqPbT4+f1
+X-Google-Smtp-Source: ABdhPJzV+sSj3VgjAs1ALzDiBgJpH5s/BbK9M6Z51fs6trVCmIFa01P8Nl7JAaX5UBSFeJsJfheOg1+NTiCNPTDLBJY=
+X-Received: by 2002:aca:110a:: with SMTP id 10mr6149426oir.68.1598525705214;
+ Thu, 27 Aug 2020 03:55:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <906198d77aa73613a1b588425aa45e5025ee60cb.1598505843.git.viresh.kumar@linaro.org>
+In-Reply-To: <906198d77aa73613a1b588425aa45e5025ee60cb.1598505843.git.viresh.kumar@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 27 Aug 2020 12:54:53 +0200
+Message-ID: <CAJZ5v0iTmowt48RHZGrx6aFm4OsJ0FXHk1WWstAJ=hvc7oJ_dw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: No need to verify cpufreq_driver in show_scaling_cur_freq()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit c0ab9e0812da ("opp: Allocate genpd_virt_devs from
-dev_pm_opp_attach_genpd()"), the allocation of the virtual devices is
-moved to dev_pm_opp_attach_genpd() and this check isn't required anymore
-as it will always fail. Drop it.
+On Thu, Aug 27, 2020 at 7:24 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> "cpufreq_driver" is guaranteed to be valid here, no need to check it
+> here.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 02ab56b2a0d8..47aa90f9a7c2 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -703,8 +703,7 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+>         freq = arch_freq_get_on_cpu(policy->cpu);
+>         if (freq)
+>                 ret = sprintf(buf, "%u\n", freq);
+> -       else if (cpufreq_driver && cpufreq_driver->setpolicy &&
+> -                       cpufreq_driver->get)
+> +       else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+>                 ret = sprintf(buf, "%u\n", cpufreq_driver->get(policy->cpu));
+>         else
+>                 ret = sprintf(buf, "%u\n", policy->cur);
+> --
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 6 ------
- 1 file changed, 6 deletions(-)
+This and the [2/2] applied, the latter with some minor edits in the
+subject/changelog.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 8b3c3986f589..000d0fcb4680 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -2031,12 +2031,6 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
- 			goto err;
- 		}
- 
--		if (opp_table->genpd_virt_devs[index]) {
--			dev_err(dev, "Genpd virtual device already set %s\n",
--				*name);
--			goto err;
--		}
--
- 		virt_dev = dev_pm_domain_attach_by_name(dev, *name);
- 		if (IS_ERR(virt_dev)) {
- 			ret = PTR_ERR(virt_dev);
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+Thanks!
