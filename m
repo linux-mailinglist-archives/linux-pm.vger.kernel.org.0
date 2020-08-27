@@ -2,123 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 549DA253C6C
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 06:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE31253CB2
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Aug 2020 06:27:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbgH0EDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Aug 2020 00:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
+        id S1726058AbgH0E05 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Aug 2020 00:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbgH0EDs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 00:03:48 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AFBC0612A3;
-        Wed, 26 Aug 2020 21:03:27 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id m8so2465100pfh.3;
-        Wed, 26 Aug 2020 21:03:27 -0700 (PDT)
+        with ESMTP id S1725385AbgH0E05 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Aug 2020 00:26:57 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDBEC0612A9
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 21:26:56 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id i13so1963883pjv.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Aug 2020 21:26:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6bQeuePNqH7dWbqUFgjlTSNlzBof5RgofuNEIyHakwM=;
-        b=X3MR6zMdfOgPqvRfgQkzGhLn/dxi02axDYvVL7GX/lmX+cA98U0F7qPCwN5R826MPt
-         P6f278VM9YOweJuu39pPhgqodUBu+ASdBdcZZwSSfYTgdzpBm5DLE9iwNIUmdt9bZ/dU
-         YgTTt9tbCeTgNibdS+a4BNHlRVfY0bKqaX6Rpsnx70swdhJFBmB8FNDJ4upzP7eFStyf
-         xTRKRq8CRQ35RLoLaC0Ct7s+xT4NSHWhCXZ9OAAXJeSZV6VnIddS8rQbEC2ylVXwzStu
-         LUXFNe8kgTUMCa337MPXi93vLwJBUj2x8ZZM/unRuBZoYo6Dmnp2RCOohjZeV6HUmy90
-         VaHg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bn7ZvG4ybcooDrNm25U4C10jlmrGjFdQ/FaC/rxAetw=;
+        b=JWGdadunye66WMfXu1P4p7JU12j51p8o/dw5xBp05k4WBlQSeSFjHzokSYn55bVV3o
+         J4tcFBW+K0k9bbB0ds4GyUbQ9KAjULJVcytETxzcrQeP3yifDm/M/suCNnYmsgY5Qzlv
+         bYLOwZvhvgDdXRldn4DmRvNGzykpHvQF1muP3pcCByHjEYtEHbeJDDqUjNpus61Fowov
+         JyoN9QhOtYitibsWLrqe+FQ9q4BVoMTkmiVKZ/RQ8BzwYqbwxbkzyx1YBIYj6oYH/uoi
+         E6OZ9hPBdCD4DEyRV0Y3/EiRxpSeNBUdMXvmYIiHxOPHTWp3rcwr9/3wHDVTWkLGz5kb
+         6DjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6bQeuePNqH7dWbqUFgjlTSNlzBof5RgofuNEIyHakwM=;
-        b=sW8nrtNQlFbJxeJ2BDWDdO4ry5+1oYO1+9RtIuYUElkuSQhb9ZGeW0LgS3sUSOb/A6
-         Z64oww97SZ5dlPTDfG8klgnQTR2Y0MYSkwgbNMtbpV+a2chQv2/c4UWn4FpxtwJvso0A
-         l/sblpd9oBMwHFSoGdZZqFC4sD473BlqPh6YEyIhSqw5jbXTL/xmPUEzFFBAKCSdHmPH
-         m38OpHCSmx4OLApUH5Gnbnhl4qepKJpBoGUdp+ojJRYcAyI3ORPj49MCJjkp/duPLGtF
-         SlHCRfHWoQhBIvFQlSzw4hQfBmsh3u9P67OvTu8PHBvkjrNWKAxj/Zmb1Z64hGdZE80W
-         PCTQ==
-X-Gm-Message-State: AOAM5330XpPh/wylHm26m9AatvXHN1KSFdtlXjfjOoMGmmS37+3D3YDB
-        gRmTOjJuWsLsuf6gt8O2bpI=
-X-Google-Smtp-Source: ABdhPJzh9mqw7jcuL/gdVISt/cqtAADn6a8e73oWM42h68OTeYpnn525+zrB4ZLZwskwsGEGF/z01w==
-X-Received: by 2002:a65:6882:: with SMTP id e2mr13324535pgt.290.1598501005803;
-        Wed, 26 Aug 2020 21:03:25 -0700 (PDT)
-Received: from localhost ([124.156.176.71])
-        by smtp.gmail.com with ESMTPSA id v78sm800705pfc.121.2020.08.26.21.03.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 26 Aug 2020 21:03:25 -0700 (PDT)
-Date:   Thu, 27 Aug 2020 12:03:27 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, viresh.kumar@linaro.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        huyue2@yulong.com, zbestahu@163.com
-Subject: Re: [PATCH] thermal: sysfs: fall back to vzalloc for cooling
- device's statistics
-Message-ID: <20200827120327.00003740.zbestahu@gmail.com>
-In-Reply-To: <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
-References: <20200818063005.13828-1-zbestahu@gmail.com>
-        <40b69f97-46e5-d62e-0d2f-604dfd4dafa1@linaro.org>
-        <20200826101319.00003048.zbestahu@gmail.com>
-        <c3fd7949-b33a-aca3-8dd5-1c2df35fb63d@linaro.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bn7ZvG4ybcooDrNm25U4C10jlmrGjFdQ/FaC/rxAetw=;
+        b=dOrh2u7GAhGOwsgueLaQu2wX5tAogDco+1tTtL7v1A4rzZfE1OPDSNls9TJT8njTAy
+         OXYOwwywXmQ7yK7PFafPc3ZBJGNiolzRs1xfmn+P4ma7GGU9u2q+QsjSLuvePMxEwAr6
+         mipKYJqE7oAGz9nAkxixZIFE1bqAxCXwIX5yapyXuErxkG7bUeNjeROOhTDuLuaXubEO
+         rLan87dqX+DXIJLvdZGMMByB9+A1I2VE8I/gf3ohvwkUue8QMMA3wwa1TaQryRlFhCtf
+         qDX6WP0z5WW+KAlSnMU+c7QIlQMtMpZvPskWhxgnG0gShYy7ZKhGqVrH29CLKtMk0iYE
+         a0TQ==
+X-Gm-Message-State: AOAM533Ph73YXJQv1piUOh7nWsLy7XIvl3UFPc0wMHfukCumkB0eu4IH
+        otkvZpwg/5cNzXt4xTgrIDgP1w==
+X-Google-Smtp-Source: ABdhPJynFu/KaCKX/yeZQJO1i0iZEbs8inUUMkKE06wJFLYUgtfBDrVZ4/4+/uHiY6WLXxuxzu5BQQ==
+X-Received: by 2002:a17:90a:f593:: with SMTP id ct19mr9163811pjb.36.1598502416374;
+        Wed, 26 Aug 2020 21:26:56 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id nu14sm631975pjb.19.2020.08.26.21.26.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 26 Aug 2020 21:26:55 -0700 (PDT)
+Date:   Thu, 27 Aug 2020 09:56:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Olof Johansson <olof@lixom.net>, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v2 1/2] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+Message-ID: <20200827042653.5ttsxnjjhpslmrcv@vireshk-i7>
+References: <1597302475-15484-1-git-send-email-hector.yuan@mediatek.com>
+ <1597302475-15484-2-git-send-email-hector.yuan@mediatek.com>
+ <20200824100619.o6uwnlsaxdgc3l7r@vireshk-i7>
+ <1598446624.24220.10.camel@mtkswgap22>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1598446624.24220.10.camel@mtkswgap22>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 26 Aug 2020 11:19:02 +0200
-Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-
-> Hi Yue,
-> 
-> On 26/08/2020 04:13, Yue Hu wrote:
-> > On Mon, 24 Aug 2020 12:40:35 +0200
-> > Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >   
-> >> On 18/08/2020 08:30, Yue Hu wrote:  
-> >>> From: Yue Hu <huyue2@yulong.com>
-> >>>
-> >>> We observed warning about kzalloc() when register thermal cooling device
-> >>> in backlight_device_register(). backlight display can be a cooling device
-> >>> since reducing screen brightness will can help reduce temperature.
-> >>>
-> >>> However, ->get_max_state of backlight will assign max brightness of 1024
-> >>> to states. The memory size can be getting 1MB+ due to states * states.    
-> >>
-> >> What are the benefits of a 1024 states cooling device ? Is the
-> >> difference noticeable with a such small step ?  
+On 26-08-20, 20:57, Hector Yuan wrote:
+> On Mon, 2020-08-24 at 15:36 +0530, Viresh Kumar wrote:
+> > On 13-08-20, 15:07, Hector Yuan wrote:
+> > >  CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM=m
+> > >  CONFIG_ARM_ARMADA_37XX_CPUFREQ=y
+> > > +CONFIG_ARM_MEDIATEK_CPUFREQ_HW=m
 > > 
-> > Okay, this issue is happened under MSM/Android platform. QCOM spmi wled driver
-> > will define the max brightness. We needs to fix the issue to get thermal statistics.  
-> 
-> Let me rephrase my questions:
-> 
-> Don't you think there is something wrong in creating a 1024 x 1024
-> matrix to show transitions ?
-> 
-> What is the benefit of such stats ?
-> 
-> What is the benefit of having a 1024 states cooling device ?
+> > What about a 'default m' in Kconfig itself ?
+> > OK, will update in V3.
 
-Hi Daniel,
+Hector, you need to remove (or not add) the right bracket (>) before the
+beginning of your lines. This makes it incredibly difficult to read.
 
-Now, i'm just focus on removing the kernel warning based on current code logic.
-Commit 8ea229511e06 (thermal: Add cooling device's statistics in sysfs) added
-the thermal statistics by viresh and viresh gived the patch an acknowledgement
-in anther mail thread. 
+> > > +	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
+> > > +		data = readl_relaxed(base + (i * LUT_ROW_SIZE));
+> > > +		freq = FIELD_GET(LUT_FREQ, data) * 1000;
+> > > +		volt = FIELD_GET(LUT_VOLT, data);
+> > > +		if (freq != prev_freq) {
+> > > +			table[i].frequency = freq;
+> > > +			dev_pm_opp_add(cpu_dev, freq * 1000, volt);
+> > 
+> > Why are you adding OPPs here and rather why using OPP specific stuff
+> > at all in the driver ?
+> > yes, the opp information is read from CPU HW engine.Then add it to the CPU dev OPP one by one.  
 
-Hi viresh,
+I asked a different question, why are you adding OPPs ? You don't need the OPPs
+at all in my opinion. You can just create the frequency table and that's it.
 
-Could you review the patch again about the question above?
+> > > +	for_each_possible_cpu(cpu) {
+> > > +		cpu_np = of_cpu_device_node_get(cpu);
+> > > +		if (!cpu_np)
+> > > +			continue;
+> > > +
+> > > +		ret = of_parse_phandle_with_args(cpu_np, "mtk,freq-domain",
+> > 
+> > Where are bindings of this node and how does this look ?
+> > Can refer to the same patch series, I split it to another patch.Each cpu will be group into one frequency domain for the CPU DVFS. 
 
-Thank you.
+That binding only defines "mediatek,cpufreq-hw" and not "mtk,freq-domain".
 
-> 
-> 
-> 
-> 
-
+-- 
+viresh
