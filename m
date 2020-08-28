@@ -2,184 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 223B82559C1
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 14:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF34B255A49
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 14:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729172AbgH1MCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 08:02:05 -0400
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4714 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729040AbgH1MCE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 08:02:04 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5f48f22b0001>; Fri, 28 Aug 2020 05:01:47 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 28 Aug 2020 05:02:01 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 28 Aug 2020 05:02:01 -0700
-Received: from localhost (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 28 Aug
- 2020 12:01:57 +0000
-Date:   Fri, 28 Aug 2020 14:01:54 +0200
-From:   Thierry Reding <treding@nvidia.com>
-To:     John Stultz <john.stultz@linaro.org>
-CC:     lkml <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Todd Kjos <tkjos@google.com>,
-        "Len Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [RFC][PATCH] pinctrl: Rework driver_deferred_probe_check_state()
- evaluation since default timeout has changed
-Message-ID: <20200828120154.GA1674264@ulmo>
-References: <20200808043512.106865-1-john.stultz@linaro.org>
+        id S1729411AbgH1MfF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 08:35:05 -0400
+Received: from mga04.intel.com ([192.55.52.120]:12447 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729123AbgH1Me6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Aug 2020 08:34:58 -0400
+IronPort-SDR: Mo1GVfPQPC/Y5T5cP0aDd0GVUrA6cCz1H7zNtNYGABaJRQqr8GdjN6a8qEG4hUFOE3rmi9QBqy
+ kStZ25+62pDg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="154069923"
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="154069923"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 05:34:57 -0700
+IronPort-SDR: LsAdrySqa4ZJHrIuWvSuTOi9BQr1x7uyQGuh3GmkbXvlDM53I0PQZaHaeHOY/Fi6c2wRAg8XXv
+ X5xoeVVrdmDA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
+   d="scan'208";a="337486445"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 28 Aug 2020 05:34:57 -0700
+Received: from abityuts-desk1.fi.intel.com (abityuts-desk1.fi.intel.com [10.237.72.186])
+        by linux.intel.com (Postfix) with ESMTP id 045F9580628;
+        Fri, 28 Aug 2020 05:34:55 -0700 (PDT)
+Message-ID: <71c9048e530e1b67b6750b1a9eda175d98096ccc.camel@gmail.com>
+Subject: Re: cpu-freq: running the perf increases the data rate?
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To:     Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>,
+        linux-pm@vger.kernel.org,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Fri, 28 Aug 2020 15:34:54 +0300
+In-Reply-To: <CAPY=qRRekJonX_iX3s4bfietm9D_GM+S4cDGXbj9nMOefJBdTw@mail.gmail.com>
+References: <CAPY=qRRekJonX_iX3s4bfietm9D_GM+S4cDGXbj9nMOefJBdTw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
 MIME-Version: 1.0
-In-Reply-To: <20200808043512.106865-1-john.stultz@linaro.org>
-X-NVConfidentiality: public
-User-Agent: Mutt/1.14.6 (2020-07-11)
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
-Content-Disposition: inline
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1598616107; bh=9/WgoaqX9XSKJ6CVVc6mTKsdaYJII81w8EyRtpIjqyc=;
-        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
-         MIME-Version:In-Reply-To:X-NVConfidentiality:User-Agent:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:
-         Content-Disposition;
-        b=P1jDO76FMdxtRG297kU0Ll5W2Clgq2JZgLeWFlK+B+5Dk7gmszUlTpyYP8CriuQo0
-         u9DO4q7ZKzzt7u5zzz5JEWPApsTLF9xjNbJU7f6No4GkUShWIj6v3t5zcRLgtA5zfc
-         vATLsVmfv1nBengn0oeMdo/Cez9jXluVgUYQiVSxG4UbCP5lUYzZhcZz5DE7X0y2BW
-         3rP1g5Mr/0RnT7bGOQoUiKxvue8J7B75glHpV/ssKC3ZDThoBih4R7Ym8dZ3bgZaT6
-         1Qozh9r3CnMpiLYyBrhvJLfQzRFTtTiYF+SY2k0/cEkis3Twmjegkpia+gKY7ncrzQ
-         YFrNODcSFOX5g==
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---uAKRQypu60I7Lcqm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2020-08-27 at 22:25 +0530, Subhashini Rao Beerisetty wrote:
+> I have an application which finds the data rate over the PCIe
+> interface. I’m getting the lesser data rate in one of my Linux X86
+> systems.
 
-On Sat, Aug 08, 2020 at 04:35:12AM +0000, John Stultz wrote:
-> In commit bec6c0ecb243 ("pinctrl: Remove use of
-> driver_deferred_probe_check_state_continue()"), we removed the
-> use of driver_deferred_probe_check_state_continue() which
-> effectively never returned -ETIMED_OUT, with the
-> driver_deferred_probe_check_state() function that had been
-> reworked to properly return ETIMED_OUT when the deferred probe
-> timeout expired. Along with that change, we set the default
-> timeout to 30 seconds.
->=20
-> However, since moving the timeout to 30 seconds caused some
-> issues for some users with optional dt links, we set the
-> default timeout back to zero - see commit ce68929f07de ("driver
-> core: Revert default driver_deferred_probe_timeout value to 0")
->=20
-> This in essence changed the behavior of the pinctrl's usage
-> of driver_deferred_probe_check_state(), as it now would return
-> ETIMED_OUT by default. Thierry reported this caused problems with
-> resume on tegra platforms.
->=20
-> Thus this patch tweaks the pinctrl logic so that it behaves as
-> before. If modules are enabled, we'll only return EPROBE_DEFERRED
-> while we're missing drivers linked in the DT.
->=20
-> Cc: linux-pm@vger.kernel.org
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Thierry Reding <treding@nvidia.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Saravana Kannan <saravanak@google.com>
-> Cc: Todd Kjos <tkjos@google.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Kevin Hilman <khilman@kernel.org>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Rob Herring <robh@kernel.org>
-> Fixes: bec6c0ecb243 ("pinctrl: Remove use of driver_deferred_probe_check_=
-state_continue()")
-> Fixes: ce68929f07de ("driver core: Revert default driver_deferred_probe_t=
-imeout value to 0")
-> Reported-by: Thierry Reding <thierry.reding@gmail.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->  drivers/pinctrl/devicetree.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-> index c6fe7d64c913..09ddf567ccb4 100644
-> --- a/drivers/pinctrl/devicetree.c
-> +++ b/drivers/pinctrl/devicetree.c
-> @@ -129,9 +129,8 @@ static int dt_to_map_one_config(struct pinctrl *p,
->  		if (!np_pctldev || of_node_is_root(np_pctldev)) {
->  			of_node_put(np_pctldev);
->  			ret =3D driver_deferred_probe_check_state(p->dev);
-> -			/* keep deferring if modules are enabled unless we've timed out */
-> -			if (IS_ENABLED(CONFIG_MODULES) && !allow_default &&
-> -			    (ret =3D=3D -ENODEV))
-> +			/* keep deferring if modules are enabled */
-> +			if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
->  				ret =3D -EPROBE_DEFER;
->  			return ret;
->  		}
+Some more description, may be? Do you have a PCIe device reading one
+RAM buffer and then writing to another RAM buffer? Or does it generate
+dome data and writes them to a RAM buffer? Presumably it uses DMA? How
+much is the CPU involved into the process? Are we talking about
+transferring few kilobytes or gigabytes?
 
-I posted almost exactly the same patch a couple of days ago since I
-hadn't noticed this:
+> When I change the scaling_governor from "powersave" to "performance"
+> mode for each CPU, then there is slight improvement in the PCIe data
+> rate.
 
-	https://patchwork.ozlabs.org/project/linux-gpio/patch/20200825143348.13586=
-79-1-thierry.reding@gmail.com/
+Definitely this makes your CPU(s) run at max speed, but depending on
+platform and settings, this may also affect C-states. Are the CPU(s)
+generally idle while you measure, or busy (involved into the test)? You
+could run 'turbostat' while measuring the bandwidth, to get some CPU
+statistics (e.g., do C-states happen during the PCI test, how busy are
+the CPUs).
 
-I like that slightly better because it keeps the "ret < 0" condition,
-which I think is perhaps a bit more future-proof. Thinking about it, I'm
-not sure your version above is entirely correct. For example if the call
-to driver_deferred_probe_check_state() were to ever return 0, we might
-still be returning -EPROBE_DEFER here.
+> Parallely I started profiling the workload with perf. Whenever I start
+> running the profile command “perf stat -a -d -p <PID>” surprisingly
+> the application resulted in excellent data rate over PCIe, but when I
+> kill the perf command again PCIe data rate drops. I am really confused
+> about this behavior.Any clues from this behaviour?
 
-That's not something that happens currently, but I suspect that these
-implications will be easy to overlook.
+Well, one possible reason that comes to mind - you get rid of C-states
+when you rung perf, and this increases the PCI bandwidth. You can just
+try disabling C-states (there are sysfs knobs) and check it out.
+Turbostat could be useful to check for this (with and without perf, run
+'turbostat sleep 10' or something like this (measure for 10 seconds in
+this example), do this while running your PCI test.
 
-Actually... I think it might be best to just bring back (albeit perhaps
-in a modified form) driver_deferred_probe_check_state_continue() because
-we're now basically doing exactly what that was supposed to do: special-
-casing the case where we do want to continue returning -EPROBE_DEFER in
-some special cases.
+But I am really just guessing here, I do not know enough about your
+test and the system (e.g., "a Linux x86" system can be so many things,
+like Intel or AMD server or a mobile device)...
 
-Thierry
 
---uAKRQypu60I7Lcqm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9I8jAACgkQ3SOs138+
-s6Hu9hAApfTBuRlf69eu2V0wppfR0Fzbbw6OA9g1weChMOg1z/IqvffHjpQNLkz5
-j2Invo8QExFJIMZjFR6HAutSd/ZziRkfuufF4FE769UFF7dD8qjlbov2lw02esPZ
-81y9IgVf2Xmmyhu/P9JcoR+LkqSWRBqvddvGvF6dJoAYLum8lO6/B0PVz3zGSo4q
-KlkthLC2acc857c1UFo5suK9oi5n924WvHXTDwvTaJx/FNsMBLWdVgjauzksEFCW
-bE/dR2Kp0SbZKRlJi3qg7ACE6rB83NYhB9ttYafZKMerJOgqTFIWjtp9QiD4gtgp
-huW+E/+NFDgZFsUdzuhhfUiX3QBw7qeoe2AqQdR0XtSsQYiNJjOq/V9RAqj+CgZX
-MRU27mKzVOVAXV1kI5BRAWodO7WFz/55arOcp0/3+jua2Je8i4mtqW7K1/oJ4WFe
-hAXcJTvwFG++Bhq9Q80Ryo2wQtu5hEWMs9dG93SEvaJm+ShSpux2lSeiQ1h6gP0F
-AJqWgA2NdILCCxz2g2Aq2AQEcob5XhtK36rNAbyr2oJ3zTdB/vyro++/3f+fvrjE
-MwcNODW/Qny4JwNRTGXzQ4eChDaCjZhQVZaoe2r0ToFbXZAnThWDqxlw+UPWM5wf
-Nv8XWHnl+LFc+AQ+98StnEgBhb0hQLsVfZ9er4e0YqhwswHGa6E=
-=bfLv
------END PGP SIGNATURE-----
-
---uAKRQypu60I7Lcqm--
