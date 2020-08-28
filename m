@@ -2,92 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C062A255EBC
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 18:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5EF255FC7
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 19:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbgH1Q0n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 12:26:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33464 "EHLO mail.kernel.org"
+        id S1726851AbgH1Rdu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 13:33:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:54116 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726033AbgH1Q0m (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 28 Aug 2020 12:26:42 -0400
-Received: from localhost (104.sub-72-107-126.myvzw.com [72.107.126.104])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 765D22080C;
-        Fri, 28 Aug 2020 16:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598632001;
-        bh=4Vnh1C/RoVVBKrT7SjMj6aee4KReTZw02BiPUaRhAQ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QVOV/M0eLCw2BVGQp4zvew/mE1Q4RL7hiEsH79cNpyPCxwSZe05WMETsy+9Db+hDj
-         sKvWOaB1vh6jVlK2lN5CmqNofr7zadr76rZ5qfeZphI3NzUxMq7O8ZX0a8uuo4+Hex
-         1gmGg+jCAvGxgygQHK+NpsxfUpiX7u90xwPUIC7M=
-Date:   Fri, 28 Aug 2020 11:26:40 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Subject: Re: [PATCH 1/2] i2c: i801: Fix runtime PM
-Message-ID: <20200828162640.GA2160001@bjorn-Precision-5520>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180627212340.GA161569@bhelgaas-glaptop.roam.corp.google.com>
+        id S1725979AbgH1Rdt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 28 Aug 2020 13:33:49 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36F851FB;
+        Fri, 28 Aug 2020 10:33:49 -0700 (PDT)
+Received: from e108754-lin.cambridge.arm.com (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C11833F71F;
+        Fri, 28 Aug 2020 10:33:47 -0700 (PDT)
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        dietmar.eggemann@arm.com, catalin.marinas@arm.com,
+        sudeep.holla@arm.com, will@kernel.org, valentin.schneider@arm.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ionela.voinescu@arm.com
+Subject: [PATCH v4 0/5] cpufreq: improve frequency invariance support
+Date:   Fri, 28 Aug 2020 18:32:58 +0100
+Message-Id: <20200828173303.11939-1-ionela.voinescu@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Vaibhav]
+Hi guys,
 
-On Wed, Jun 27, 2018 at 04:23:40PM -0500, Bjorn Helgaas wrote:
-> [+cc Rafael, linux-pm, linux-kernel]
-> 
-> On Wed, Jun 27, 2018 at 10:15:50PM +0200, Jean Delvare wrote:
-> > Hi Jarkko,
-> > 
-> > On Tue, 26 Jun 2018 17:39:12 +0300, Jarkko Nikula wrote:
-> > > Commit 9c8088c7988 ("i2c: i801: Don't restore config registers on
-> > > runtime PM") nullified the runtime PM suspend/resume callback pointers
-> > > while keeping the runtime PM enabled. This causes that device stays in
-> > > D0 power state and sysfs /sys/bus/pci/devices/.../power/runtime_status
-> > > shows "error" when runtime PM framework attempts to autosuspend the
-> > > device.
-> > > 
-> > > This is due PCI bus runtime PM which checks for driver runtime PM
-> > > callbacks and returns with -ENOSYS if they are not set. Fix this by
-> > > having a shared dummy runtime PM callback that returns with success.
-> > > 
-> > > Fixes: a9c8088c7988 ("i2c: i801: Don't restore config registers on runtime PM")
-> > 
-> > I don't want to sound like I'm trying to decline all responsibility for
-> > a regression I caused, but frankly, if just using SIMPLE_DEV_PM_OPS()
-> > breaks runtime PM, then it's the PM model which is broken, not the
-> > i2c-i801 driver.
-> > 
-> > I will boldly claim that the PCI bus runtime code is simply wrong in
-> > returning -ENOSYS in the absence of runtime PM callbacks, and it should
-> > be changed to return 0 instead. Or whoever receives that -ENOSYS should
-> > not treat it as an error - whatever makes more sense.
-> > 
-> > Having to add dummy functions in every PCI driver that doesn't need to
-> > do anything special for runtime PM sounds plain stupid. It should be
-> > pretty obvious that a whole lot of drivers are going to use
-> > SIMPLE_DEV_PM_OPS() because it exists and seems to do what they want,
-> > and all of them will be bugged because the PCI core is doing something
-> > silly and unexpected.
-> > 
-> > So please let's fix it at the PCI subsystem core level. Adding Bjorn
-> > and the linux-pci list to Cc.
-> 
-> Thanks Jean.  What you describe does sound broken.  I think the PM
-> guys (cc'd) will have a better idea of how to deal with this.
+Please find here v4: 
+ - addressing Viresh's comments on patches 1/5 and 3/5, and
+ - with his Acked-by applied for the rest of the patches;
+ - v3 can be found at [3], and
+ - this is based on linux-next 20200827.
 
-Did we ever get anywhere with this?  It seems like the thread petered
-out.
+Many thanks for the review,
+Ionela.
+
+---
+v2->v3
+ - v2 can be found at [2]
+ - 1/5 was introduced to check input frequencies to
+   arch_set_freq_scale() as recommended by Rafael
+ - The previous 2/7 was squashed into 1/7 - now 2/5, with additions to
+   the changelog as suggested by Rafael.
+ - The previous 3/7 (BL_SWITCHER handling) was dropped to be handled
+   in a separate patch. This does not change the current functionality.
+ - The previous 4/7 - now 3/5 is simplified as suggested by Viresh.
+ - 3/5 - cpufreq_supports_freq_invariance() replaces
+   cpufreq_sets_freq_scale(). The meaning chosen for
+   cpufreq_supports_freq_invariance() is whether it can set the frequency
+   scale factor, not whether arch_set_freq_scale() actually does.
+ - 4/5 - Change after Catalin's Ack: The changes to
+   arch_set_thermal_pressure() were dropped as they were done in a separate
+   patch. Therefore this patch now has a subset of the previous changes
+   at 5/7
+ - 5/5 - Change after Catalin's Ack:
+   s/cpufreq_sets_freq_scale/cpufreq_supports_freq_invariance
+ - v3 is based on linux-next 20200814
+
+
+v1 -> v2:
+ - v1 can be found at [1]
+ - No cpufreq flags are introduced
+ - Previous patches 2/8 and 3/8 were squashed in this series under 1/7,
+   to ensure bisection.
+ - 2/7 was introduced as a proposal for Viresh's suggestion to use
+   policy->cur in the call to arch_set_freq_scale() and is extended to
+   support drivers that implement the target() callback as well
+ - Additional commit message changes are added to 1/7 and 2/7, to
+   clarify that the definition of arch_set_freq_scale() will filter 
+   settings of the scale factor, if unwanted
+ - 3/7 disables setting of the scale factor for
+   CONFIG_BL_SWITCHER, as Dietmar suggested
+ - Small change introduced in 4/7 to disable cpufreq-based frequency
+   invariance for the users of the default arch_set_freq_scale() call
+   which will not actually set a scale factor
+ - build issue solved (reported by 0day test)
+ - v2 is based on linux-next 20200716
+ - all functional tests in v1 were repeated for v2
+
+
+[1] https://lore.kernel.org/lkml/20200701090751.7543-1-ionela.voinescu@arm.com/
+[2] https://lore.kernel.org/lkml/20200722093732.14297-1-ionela.voinescu@arm.com/
+[3] https://lore.kernel.org/lkml/20200824210252.27486-1-ionela.voinescu@arm.com/
+
+Ionela Voinescu (3):
+  arch_topology: validate input frequencies to arch_set_freq_scale()
+  cpufreq: move invariance setter calls in cpufreq core
+  cpufreq: report whether cpufreq supports Frequency Invariance (FI)
+
+Valentin Schneider (2):
+  arch_topology, cpufreq: constify arch_* cpumasks
+  arch_topology, arm, arm64: define arch_scale_freq_invariant()
+
+ arch/arm/include/asm/topology.h        |  1 +
+ arch/arm64/include/asm/topology.h      |  1 +
+ arch/arm64/kernel/topology.c           |  9 ++++++-
+ drivers/base/arch_topology.c           | 15 ++++++++++--
+ drivers/cpufreq/cpufreq-dt.c           | 10 +-------
+ drivers/cpufreq/cpufreq.c              | 33 +++++++++++++++++++++++---
+ drivers/cpufreq/qcom-cpufreq-hw.c      |  9 +------
+ drivers/cpufreq/scmi-cpufreq.c         | 12 ++--------
+ drivers/cpufreq/scpi-cpufreq.c         |  6 +----
+ drivers/cpufreq/vexpress-spc-cpufreq.c | 12 ++--------
+ include/linux/arch_topology.h          |  4 +++-
+ include/linux/cpufreq.h                |  8 ++++++-
+ 12 files changed, 70 insertions(+), 50 deletions(-)
+
+
+base-commit: 88abac0b753dfdd85362a26d2da8277cb1e0842b
+-- 
+2.17.1
+
