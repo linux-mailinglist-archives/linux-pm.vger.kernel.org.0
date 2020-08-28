@@ -2,128 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A35142553D2
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 06:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8102B2553E3
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 06:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725849AbgH1Egc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 00:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S1725969AbgH1Evd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 00:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726524AbgH1Egc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 00:36:32 -0400
+        with ESMTP id S1725808AbgH1Evc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 00:51:32 -0400
 Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D92C061264
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 21:36:31 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id z15so74228plo.7
-        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 21:36:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B9FC061232
+        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 21:51:32 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id 10so1351292plg.8
+        for <linux-pm@vger.kernel.org>; Thu, 27 Aug 2020 21:51:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ORs9f1UOAtT2viX41nJ/6iEMC1Azc173oplMVvoqxmM=;
-        b=f7OeKoa0Pcm7olyIzX+v5pd5mvHCvxUBvrlEDY0ekXqJSlL4WKknpzZqBJ/82maHea
-         KQYEcrT0bf2VngjOOMPgDpy3lMHw8iO6VMSDPvzyaMz7GNygLd5UFjB5syxH/fZL3WBm
-         0snaJ/U2+xKyKTFiQVQ+HupF+oSh7DNTRE0zE=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=G0VefugDvgS42hjIAoPJ8ISUdYbIoXgY2KSJmzSYe5M=;
+        b=A+VsjOtC36XhaswB06qIx+rbBgUaaLAIjugHfk+EIrxxf4Rh5nbZYd0sn+aQtsKlfY
+         nI9mB5700rbFAZTsXSZ+96t94xs6IB+ScLwy+1S3V6oQb7Js698iK3VMpGOhjbSYp0Br
+         6WwFiKajog8Xw7dxvUboaQGw4BG36xj8dgRZSh0B820UEB8iH6uIxHvhdDN1f6X/jwd/
+         VlOwxwNNKKXDlMVl2M4tf78pvRKuYn6CwP/C/56Ri+v7X9xtpM/YQP4qUWpS1Ku7DT8n
+         PesbyiHrNtHyOjveB5croFlMlZFiuFxBJg4g7Mp6STEx+HHJkOwpa5xI7beKz2pRG+8t
+         n2fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ORs9f1UOAtT2viX41nJ/6iEMC1Azc173oplMVvoqxmM=;
-        b=fC6DC3gdlJA/P+qBLeiYSmTdozz7YmVuntxa5MwieNgKOhkc/QJE3bkVGoWlWv58Ho
-         Ql/iFY+kwn0RJMed5W4vz+8KKZza8tC1OgWe10DFggeNswapLuN+7lKT/u/3hGFCtpe/
-         JszQdC0OhwzJzGv3KBPkNU3IFYYf/kOXwF6CJdh+qciNUh0Wib/WJBoyIrk68C2SiNWT
-         FwklI75dyMtWdkZZ6PzoH5+RsCcbnH6o/Txy8dxocbhmGWEQvNtqtC+eaT/X2/htoZ7V
-         wW3syt9OLMu5gxsZoaVNzJaCnjMBc3NL3HC/mxjnasTYvhQm99ULzPj5VJDB8Qz/MnvW
-         zjNQ==
-X-Gm-Message-State: AOAM533uUqpfqBc7lGZskXZ2dGbtDfIw3D4wuk3osqrt3gFc+Z75Yyff
-        IQX3m0noR6IdY6GzweMenNcl7w==
-X-Google-Smtp-Source: ABdhPJwFow1Lq1np1cDfVHJqKmvRPvzRdkF5nhcT1UTIhHeL+poe26lDXUSPP5pAwljJG7edd3FZEQ==
-X-Received: by 2002:a17:90a:e286:: with SMTP id d6mr53814pjz.98.1598589390900;
-        Thu, 27 Aug 2020 21:36:30 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id u14sm4568098pfm.103.2020.08.27.21.36.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 21:36:30 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, drinkcat@chromium.org,
-        dianders@chromium.org, briannorris@chromium.org,
-        Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH v4] power: supply: sbs-battery: don't assume i2c errors as battery disconnect
-Date:   Fri, 28 Aug 2020 12:36:26 +0800
-Message-Id: <20200828043626.1247250-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=G0VefugDvgS42hjIAoPJ8ISUdYbIoXgY2KSJmzSYe5M=;
+        b=kZO9ccUYM/nCMx0UEsf5WrMyvt94ZeFDVLjY8r/2YyHnkc9dPGF2/haYlPdl1SLGI6
+         acxJJLmmGlhPJYJzFuhVxM1JjhqG3H0g1PinYEQQZX/pHRZkqZYlPMbU5nPiF2nk7v6J
+         3dvgEvKAhV0bHd7a119aUVMjKIYmW5JwQYI2IyKd0eEoMNpVGCiMWp0mVFxrmC0l1iEZ
+         Vefw8R99KKfXUg1iWmxo8piRFv0UeL3ijLITNTJiMTVU0Jn3ClBarTdo7/2xyU+WWfwf
+         A5JK9iKIKnj4D3entzM/EZzQfx12I37QMEIzlndpXqhUSIamTGco7eku+TMujM07h8pp
+         pLiA==
+X-Gm-Message-State: AOAM532APAPyKN3AhjIB9Sn/Hrcw8dGewdX1anF4RPXBipum/DSMedpE
+        s0MLvNbeoBf3jjoekk0nmBebiA==
+X-Google-Smtp-Source: ABdhPJy3YVFbXTROjqz+6HxX2wvPQtcLh2VQes+fyTjs7QckGVTwa69aPqxaHfs4We6PGYSEGpfmiA==
+X-Received: by 2002:a17:902:820b:: with SMTP id x11mr19055375pln.229.1598590291450;
+        Thu, 27 Aug 2020 21:51:31 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id m7sm4433763pfm.31.2020.08.27.21.51.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 27 Aug 2020 21:51:30 -0700 (PDT)
+Date:   Fri, 28 Aug 2020 10:21:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>, sbhanu@codeaurora.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Stephen Boyd <sboyd@kernel.org>, nm@ti.com
+Subject: Re: WARNING: at drivers/opp/core.c:678
+ dev_pm_opp_set_rate+0x4cc/0x5d4 - on arm x15
+Message-ID: <20200828045128.y7ybkd7dnvn4h6dt@vireshk-i7>
+References: <CA+G9fYvK5UkERLuBSRH5t2=j5==dbtw45GTMta9MafyJDqFsFA@mail.gmail.com>
+ <20200827094651.3grvs6ungv3dh7y3@vireshk-i7>
+ <20200827211832.3ebeda8a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200827211832.3ebeda8a@canb.auug.org.au>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Current sbs-battery considers all smbus errors as disconnection events
-when battery-detect pin isn't supplied, and restored to present state back
-when any successful transaction is made.
+On 27-08-20, 21:18, Stephen Rothwell wrote:
+> Hi Viresh,
+> 
+> On Thu, 27 Aug 2020 15:16:51 +0530 Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 27-08-20, 15:04, Naresh Kamboju wrote:
+> > > While boot testing arm x15 devices the Kernel warning noticed with linux next
+> > > tag 20200825.
+> > > 
+> > > BAD:  next-20200825
+> > > GOOD:  next-20200824
+> > > 
+> > > metadata:
+> > >   git branch: master
+> > >   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> > >   git commit: 3a00d3dfd4b68b208ecd5405e676d06c8ad6bb63
+> > >   git describe: next-20200825
+> > >   make_kernelversion: 5.9.0-rc2
+> > >   kernel-config:
+> > > https://builds.tuxbuild.com/LDTu4GFMmvkJspza5LJIjQ/kernel.config
+> > > 
+> > > We are working on git bisect and boot testing on x15 and get back to you.  
+> > 
+> > Was this working earlier ? But considering that multiple things
+> > related to OPP broke recently, it may be a OPP core bug as well. Not
+> > sure though.
+> > 
+> > Can you give me delta between both the next branches for drivers/opp/
+> > path ? I didn't get these tags after fetching linux-next.
+> 
+> Yeah, you need to explicitly fetch the tags as only the latest tag is
+> part of the branches in the tree.
 
-This can lead to unwanted state changes between present and !present
-when there's one i2c error and other following commands were successful.
+Ah, I see. Thanks.
 
-This patch provides a unified way of checking presence by calling
-sbs_get_battery_presence_and_health() when detect pin is not used.
-
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
----
-v4: rebase from merge conflict, amend commit messages
-v3: check return value of get_presence_and_health()
-v2: combine get_presence_and_health functions to reuse
----
-
- drivers/power/supply/sbs-battery.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 6273211cd673..dacc4bc1c013 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -959,10 +959,17 @@ static int sbs_get_property(struct power_supply *psy,
- 		return -EINVAL;
- 	}
- 
--	if (!chip->gpio_detect &&
--		chip->is_present != (ret >= 0)) {
--		sbs_update_presence(chip, (ret >= 0));
--		power_supply_changed(chip->power_supply);
-+	if (!chip->gpio_detect && chip->is_present != (ret >= 0)) {
-+		bool old_present = chip->is_present;
-+		union power_supply_propval val;
-+
-+		ret = sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+
-+		sbs_update_presence(chip, !ret && val.intval);
-+
-+		if (old_present != chip->is_present)
-+			power_supply_changed(chip->power_supply);
- 	}
- 
- done:
-@@ -1147,11 +1154,13 @@ static int sbs_probe(struct i2c_client *client)
- 	 * to the battery.
- 	 */
- 	if (!(force_load || chip->gpio_detect)) {
--		rc = sbs_read_word_data(client, sbs_data[REG_STATUS].addr);
-+		union power_supply_propval val;
- 
--		if (rc < 0) {
--			dev_err(&client->dev, "%s: Failed to get device status\n",
--				__func__);
-+		rc = sbs_get_battery_presence_and_health(
-+				client, POWER_SUPPLY_PROP_PRESENT, &val);
-+		if (rc < 0 || !val.intval) {
-+			dev_err(&client->dev, "Failed to get present status\n");
-+			rc = -ENODEV;
- 			goto exit_psupply;
- 		}
- 	}
 -- 
-2.28.0.402.g5ffc5be6b7-goog
-
+viresh
