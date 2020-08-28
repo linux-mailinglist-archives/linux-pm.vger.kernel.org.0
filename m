@@ -2,672 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D31EC2559A2
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 13:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223B82559C1
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 14:02:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729156AbgH1Lt1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 07:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729028AbgH1LtX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 07:49:23 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB4AC061264;
-        Fri, 28 Aug 2020 04:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9XHv3W4LKjZFPZDmwFRmqM5OGtZHuAAs50ZSDVzzViE=; b=Ox9/eGhJsgAJD/2+5LN1mp1/rU
-        SoosUjIP1jbGI2A0V0+HTFpyJjGYA4Gm171Rrac6sRoIGdnoRLYss/dPzd8cRp0CKPJ6p8Cl2t/B5
-        gH+u5hmNUE/XiB0vu8qBgECT9I3fz66T8kne08m+wghDt0mwK2LF8hPuzKyL64TKMlPk=;
-Received: from p200300ccff0cf1001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0c:f100:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kBcse-0005W9-7d; Fri, 28 Aug 2020 13:49:16 +0200
-Received: from andi by aktux with local (Exim 4.92)
-        (envelope-from <andreas@kemnade.info>)
-        id 1kBcsd-0002d7-QM; Fri, 28 Aug 2020 13:49:15 +0200
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     lee.jones@linaro.org, sre@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, b.galvani@gmail.com, phh@phh.me,
-        letux-kernel@openphoenux.org, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v3] power: supply: Add support for RN5T618/RC5T619 charger and fuel gauge
-Date:   Fri, 28 Aug 2020 13:49:06 +0200
-Message-Id: <20200828114906.10056-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.20.1
+        id S1729172AbgH1MCF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 08:02:05 -0400
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4714 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729040AbgH1MCE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 08:02:04 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5f48f22b0001>; Fri, 28 Aug 2020 05:01:47 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 28 Aug 2020 05:02:01 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 28 Aug 2020 05:02:01 -0700
+Received: from localhost (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 28 Aug
+ 2020 12:01:57 +0000
+Date:   Fri, 28 Aug 2020 14:01:54 +0200
+From:   Thierry Reding <treding@nvidia.com>
+To:     John Stultz <john.stultz@linaro.org>
+CC:     lkml <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Todd Kjos <tkjos@google.com>,
+        "Len Brown" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [RFC][PATCH] pinctrl: Rework driver_deferred_probe_check_state()
+ evaluation since default timeout has changed
+Message-ID: <20200828120154.GA1674264@ulmo>
+References: <20200808043512.106865-1-john.stultz@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+In-Reply-To: <20200808043512.106865-1-john.stultz@linaro.org>
+X-NVConfidentiality: public
+User-Agent: Mutt/1.14.6 (2020-07-11)
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="uAKRQypu60I7Lcqm"
+Content-Disposition: inline
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1598616107; bh=9/WgoaqX9XSKJ6CVVc6mTKsdaYJII81w8EyRtpIjqyc=;
+        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
+         MIME-Version:In-Reply-To:X-NVConfidentiality:User-Agent:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:
+         Content-Disposition;
+        b=P1jDO76FMdxtRG297kU0Ll5W2Clgq2JZgLeWFlK+B+5Dk7gmszUlTpyYP8CriuQo0
+         u9DO4q7ZKzzt7u5zzz5JEWPApsTLF9xjNbJU7f6No4GkUShWIj6v3t5zcRLgtA5zfc
+         vATLsVmfv1nBengn0oeMdo/Cez9jXluVgUYQiVSxG4UbCP5lUYzZhcZz5DE7X0y2BW
+         3rP1g5Mr/0RnT7bGOQoUiKxvue8J7B75glHpV/ssKC3ZDThoBih4R7Ym8dZ3bgZaT6
+         1Qozh9r3CnMpiLYyBrhvJLfQzRFTtTiYF+SY2k0/cEkis3Twmjegkpia+gKY7ncrzQ
+         YFrNODcSFOX5g==
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Both chips have charger and a fuel gauge.
+--uAKRQypu60I7Lcqm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This adds basic support for displaying the state of the battery and the
-input power, settings are not modified. There are some defaults set via
-OTP.
+On Sat, Aug 08, 2020 at 04:35:12AM +0000, John Stultz wrote:
+> In commit bec6c0ecb243 ("pinctrl: Remove use of
+> driver_deferred_probe_check_state_continue()"), we removed the
+> use of driver_deferred_probe_check_state_continue() which
+> effectively never returned -ETIMED_OUT, with the
+> driver_deferred_probe_check_state() function that had been
+> reworked to properly return ETIMED_OUT when the deferred probe
+> timeout expired. Along with that change, we set the default
+> timeout to 30 seconds.
+>=20
+> However, since moving the timeout to 30 seconds caused some
+> issues for some users with optional dt links, we set the
+> default timeout back to zero - see commit ce68929f07de ("driver
+> core: Revert default driver_deferred_probe_timeout value to 0")
+>=20
+> This in essence changed the behavior of the pinctrl's usage
+> of driver_deferred_probe_check_state(), as it now would return
+> ETIMED_OUT by default. Thierry reported this caused problems with
+> resume on tegra platforms.
+>=20
+> Thus this patch tweaks the pinctrl logic so that it behaves as
+> before. If modules are enabled, we'll only return EPROBE_DEFERRED
+> while we're missing drivers linked in the DT.
+>=20
+> Cc: linux-pm@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Cc: Todd Kjos <tkjos@google.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Fixes: bec6c0ecb243 ("pinctrl: Remove use of driver_deferred_probe_check_=
+state_continue()")
+> Fixes: ce68929f07de ("driver core: Revert default driver_deferred_probe_t=
+imeout value to 0")
+> Reported-by: Thierry Reding <thierry.reding@gmail.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+>  drivers/pinctrl/devicetree.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
+> index c6fe7d64c913..09ddf567ccb4 100644
+> --- a/drivers/pinctrl/devicetree.c
+> +++ b/drivers/pinctrl/devicetree.c
+> @@ -129,9 +129,8 @@ static int dt_to_map_one_config(struct pinctrl *p,
+>  		if (!np_pctldev || of_node_is_root(np_pctldev)) {
+>  			of_node_put(np_pctldev);
+>  			ret =3D driver_deferred_probe_check_state(p->dev);
+> -			/* keep deferring if modules are enabled unless we've timed out */
+> -			if (IS_ENABLED(CONFIG_MODULES) && !allow_default &&
+> -			    (ret =3D=3D -ENODEV))
+> +			/* keep deferring if modules are enabled */
+> +			if (IS_ENABLED(CONFIG_MODULES) && !allow_default)
+>  				ret =3D -EPROBE_DEFER;
+>  			return ret;
+>  		}
 
-Charging also starts after plugging USB.
+I posted almost exactly the same patch a couple of days ago since I
+hadn't noticed this:
 
-Known issues of the fuel gauge: There are drivers in the wild which disable
-the fuel gauge at shutdown. If a kernel is booted without fuel gauge
-support, after such a driver has been used, the fuel gauge will stay off
-and decalibrate.
-If this driver is used after that, it might display wrong values for charge
-level.
+	https://patchwork.ozlabs.org/project/linux-gpio/patch/20200825143348.13586=
+79-1-thierry.reding@gmail.com/
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-Changes in v3:
-- punctuation fixed
+I like that slightly better because it keeps the "ret < 0" condition,
+which I think is perhaps a bit more future-proof. Thinking about it, I'm
+not sure your version above is entirely correct. For example if the call
+to driver_deferred_probe_check_state() were to ever return 0, we might
+still be returning -EPROBE_DEFER here.
 
-Changes in v2:
-- patch 2/2 is already accepted, so it is not included, this
-  one can be applied independantly
-- cleanup of sign handling
-- adp properties fixed
+That's not something that happens currently, but I suspect that these
+implications will be easy to overlook.
 
- drivers/power/supply/Kconfig         |   8 +
- drivers/power/supply/Makefile        |   1 +
- drivers/power/supply/rn5t618_power.c | 556 +++++++++++++++++++++++++++
- 3 files changed, 565 insertions(+)
- create mode 100644 drivers/power/supply/rn5t618_power.c
+Actually... I think it might be best to just bring back (albeit perhaps
+in a modified form) driver_deferred_probe_check_state_continue() because
+we're now basically doing exactly what that was supposed to do: special-
+casing the case where we do want to continue returning -EPROBE_DEFER in
+some special cases.
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 44d3c8512fb8..1117a79860b6 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -739,4 +739,12 @@ config CHARGER_WILCO
- 	  information can be found in
- 	  Documentation/ABI/testing/sysfs-class-power-wilco
- 
-+config RN5T618_POWER
-+	tristate "RN5T618 charger/fuel gauge support"
-+	depends on MFD_RN5T618
-+	help
-+	  Say Y here to have support for RN5T618 PMIC family fuel gauge and charger.
-+	  This driver can also be built as a module. If so, the module will be
-+	  called rn5t618_power.
-+
- endif # POWER_SUPPLY
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index b9644663e435..23866b6ccdae 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -95,3 +95,4 @@ obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
- obj-$(CONFIG_CHARGER_BD70528)	+= bd70528-charger.o
- obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
- obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
-+obj-$(CONFIG_RN5T618_POWER)	+= rn5t618_power.o
-diff --git a/drivers/power/supply/rn5t618_power.c b/drivers/power/supply/rn5t618_power.c
-new file mode 100644
-index 000000000000..424d2817bee5
---- /dev/null
-+++ b/drivers/power/supply/rn5t618_power.c
-@@ -0,0 +1,556 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Power supply driver for the RICOH RN5T618 power management chip family
-+ *
-+ * Copyright (C) 2020 Andreas Kemnade
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/device.h>
-+#include <linux/bitops.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/mfd/rn5t618.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+
-+#define CHG_STATE_ADP_INPUT 0x40
-+#define CHG_STATE_USB_INPUT 0x80
-+#define CHG_STATE_MASK	0x1f
-+#define CHG_STATE_CHG_OFF	0
-+#define CHG_STATE_CHG_READY_VADP	1
-+#define CHG_STATE_CHG_TRICKLE	2
-+#define CHG_STATE_CHG_RAPID	3
-+#define CHG_STATE_CHG_COMPLETE	4
-+#define CHG_STATE_SUSPEND	5
-+#define CHG_STATE_VCHG_OVER_VOL	6
-+#define CHG_STATE_BAT_ERROR	7
-+#define CHG_STATE_NO_BAT	8
-+#define CHG_STATE_BAT_OVER_VOL	9
-+#define CHG_STATE_BAT_TEMP_ERR	10
-+#define CHG_STATE_DIE_ERR	11
-+#define CHG_STATE_DIE_SHUTDOWN	12
-+#define CHG_STATE_NO_BAT2	13
-+#define CHG_STATE_CHG_READY_VUSB	14
-+
-+#define FG_ENABLE 1
-+
-+struct rn5t618_power_info {
-+	struct rn5t618 *rn5t618;
-+	struct platform_device *pdev;
-+	struct power_supply *battery;
-+	struct power_supply *usb;
-+	struct power_supply *adp;
-+	int irq;
-+};
-+
-+static enum power_supply_property rn5t618_usb_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+static enum power_supply_property rn5t618_adp_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_ONLINE,
-+};
-+
-+
-+static enum power_supply_property rn5t618_battery_props[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW,
-+	POWER_SUPPLY_PROP_TIME_TO_FULL_NOW,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_CHARGE_FULL,
-+	POWER_SUPPLY_PROP_CHARGE_NOW,
-+};
-+
-+static int rn5t618_battery_read_doublereg(struct rn5t618_power_info *info,
-+					  u8 reg, u16 *result)
-+{
-+	int ret, i;
-+	u8 data[2];
-+	u16 old, new;
-+
-+	old = 0;
-+	/* Prevent races when registers are changing. */
-+	for (i = 0; i < 3; i++) {
-+		ret = regmap_bulk_read(info->rn5t618->regmap,
-+				       reg, data, sizeof(data));
-+		if (ret)
-+			return ret;
-+
-+		new = data[0] << 8;
-+		new |= data[1];
-+		if (new == old)
-+			break;
-+
-+		old = new;
-+	}
-+
-+	*result = new;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_decode_status(unsigned int status)
-+{
-+	switch (status & CHG_STATE_MASK) {
-+	case CHG_STATE_CHG_OFF:
-+	case CHG_STATE_SUSPEND:
-+	case CHG_STATE_VCHG_OVER_VOL:
-+	case CHG_STATE_DIE_SHUTDOWN:
-+		return POWER_SUPPLY_STATUS_DISCHARGING;
-+
-+	case CHG_STATE_CHG_TRICKLE:
-+	case CHG_STATE_CHG_RAPID:
-+		return POWER_SUPPLY_STATUS_CHARGING;
-+
-+	case CHG_STATE_CHG_COMPLETE:
-+		return POWER_SUPPLY_STATUS_FULL;
-+
-+	default:
-+		return POWER_SUPPLY_STATUS_NOT_CHARGING;
-+	}
-+}
-+
-+static int rn5t618_battery_status(struct rn5t618_power_info *info,
-+				  union power_supply_propval *val)
-+{
-+	unsigned int v;
-+	int ret;
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_CHGSTATE, &v);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
-+
-+	if (v & 0xc0) { /* USB or ADP plugged */
-+		val->intval = rn5t618_decode_status(v);
-+	} else
-+		val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-+
-+	return ret;
-+}
-+
-+static int rn5t618_battery_present(struct rn5t618_power_info *info,
-+				   union power_supply_propval *val)
-+{
-+	unsigned int v;
-+	int ret;
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_CHGSTATE, &v);
-+	if (ret)
-+		return ret;
-+
-+	v &= CHG_STATE_MASK;
-+	if ((v == CHG_STATE_NO_BAT) || (v == CHG_STATE_NO_BAT2))
-+		val->intval = 0;
-+	else
-+		val->intval = 1;
-+
-+	return ret;
-+}
-+
-+static int rn5t618_battery_voltage_now(struct rn5t618_power_info *info,
-+				       union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_VOLTAGE_1, &res);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = res * 2 * 2500 / 4095 * 1000;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_current_now(struct rn5t618_power_info *info,
-+				       union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_CC_AVEREG1, &res);
-+	if (ret)
-+		return ret;
-+
-+	/* current is negative when discharging */
-+	val->intval = sign_extend32(res, 13) * 1000;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_capacity(struct rn5t618_power_info *info,
-+				    union power_supply_propval *val)
-+{
-+	unsigned int v;
-+	int ret;
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_SOC, &v);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = v;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_temp(struct rn5t618_power_info *info,
-+				union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_TEMP_1, &res);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = sign_extend32(res, 11) * 10 / 16;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_tte(struct rn5t618_power_info *info,
-+			       union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_TT_EMPTY_H, &res);
-+	if (ret)
-+		return ret;
-+
-+	if (res == 65535)
-+		return -ENODATA;
-+
-+	val->intval = res * 60;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_ttf(struct rn5t618_power_info *info,
-+			       union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_TT_FULL_H, &res);
-+	if (ret)
-+		return ret;
-+
-+	if (res == 65535)
-+		return -ENODATA;
-+
-+	val->intval = res * 60;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_charge_full(struct rn5t618_power_info *info,
-+				       union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_FA_CAP_H, &res);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = res * 1000;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_charge_now(struct rn5t618_power_info *info,
-+				      union power_supply_propval *val)
-+{
-+	u16 res;
-+	int ret;
-+
-+	ret = rn5t618_battery_read_doublereg(info, RN5T618_RE_CAP_H, &res);
-+	if (ret)
-+		return ret;
-+
-+	val->intval = res * 1000;
-+
-+	return 0;
-+}
-+
-+static int rn5t618_battery_get_property(struct power_supply *psy,
-+					enum power_supply_property psp,
-+					union power_supply_propval *val)
-+{
-+	int ret = 0;
-+	struct rn5t618_power_info *info = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		ret = rn5t618_battery_status(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		ret = rn5t618_battery_present(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		ret = rn5t618_battery_voltage_now(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+		ret = rn5t618_battery_current_now(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		ret = rn5t618_battery_capacity(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_TEMP:
-+		ret = rn5t618_battery_temp(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
-+		ret = rn5t618_battery_tte(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_TIME_TO_FULL_NOW:
-+		ret = rn5t618_battery_ttf(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_TECHNOLOGY:
-+		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_FULL:
-+		ret = rn5t618_battery_charge_full(info, val);
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_NOW:
-+		ret = rn5t618_battery_charge_now(info, val);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int rn5t618_adp_get_property(struct power_supply *psy,
-+				    enum power_supply_property psp,
-+				    union power_supply_propval *val)
-+{
-+	struct rn5t618_power_info *info = power_supply_get_drvdata(psy);
-+	unsigned int chgstate;
-+	bool online;
-+	int ret;
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_CHGSTATE, &chgstate);
-+	if (ret)
-+		return ret;
-+
-+	online = !!(chgstate & CHG_STATE_ADP_INPUT);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = online;
-+		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		if (!online) {
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+			break;
-+		}
-+		val->intval = rn5t618_decode_status(chgstate);
-+		if (val->intval != POWER_SUPPLY_STATUS_CHARGING)
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int rn5t618_usb_get_property(struct power_supply *psy,
-+				    enum power_supply_property psp,
-+				    union power_supply_propval *val)
-+{
-+	struct rn5t618_power_info *info = power_supply_get_drvdata(psy);
-+	unsigned int chgstate;
-+	bool online;
-+	int ret;
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_CHGSTATE, &chgstate);
-+	if (ret)
-+		return ret;
-+
-+	online = !!(chgstate & CHG_STATE_USB_INPUT);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = online;
-+		break;
-+	case POWER_SUPPLY_PROP_STATUS:
-+		if (!online) {
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+			break;
-+		}
-+		val->intval = rn5t618_decode_status(chgstate);
-+		if (val->intval != POWER_SUPPLY_STATUS_CHARGING)
-+			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct power_supply_desc rn5t618_battery_desc = {
-+	.name                   = "rn5t618-battery",
-+	.type                   = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties             = rn5t618_battery_props,
-+	.num_properties         = ARRAY_SIZE(rn5t618_battery_props),
-+	.get_property           = rn5t618_battery_get_property,
-+};
-+
-+static const struct power_supply_desc rn5t618_adp_desc = {
-+	.name                   = "rn5t618-adp",
-+	.type                   = POWER_SUPPLY_TYPE_MAINS,
-+	.properties             = rn5t618_adp_props,
-+	.num_properties         = ARRAY_SIZE(rn5t618_adp_props),
-+	.get_property           = rn5t618_adp_get_property,
-+};
-+
-+static const struct power_supply_desc rn5t618_usb_desc = {
-+	.name                   = "rn5t618-usb",
-+	.type                   = POWER_SUPPLY_TYPE_USB,
-+	.properties             = rn5t618_usb_props,
-+	.num_properties         = ARRAY_SIZE(rn5t618_usb_props),
-+	.get_property           = rn5t618_usb_get_property,
-+};
-+
-+static irqreturn_t rn5t618_charger_irq(int irq, void *data)
-+{
-+	struct device *dev = data;
-+	struct rn5t618_power_info *info = dev_get_drvdata(dev);
-+
-+	unsigned int ctrl, stat1, stat2, err;
-+
-+	regmap_read(info->rn5t618->regmap, RN5T618_CHGERR_IRR, &err);
-+	regmap_read(info->rn5t618->regmap, RN5T618_CHGCTRL_IRR, &ctrl);
-+	regmap_read(info->rn5t618->regmap, RN5T618_CHGSTAT_IRR1, &stat1);
-+	regmap_read(info->rn5t618->regmap, RN5T618_CHGSTAT_IRR2, &stat2);
-+
-+	regmap_write(info->rn5t618->regmap, RN5T618_CHGERR_IRR, 0);
-+	regmap_write(info->rn5t618->regmap, RN5T618_CHGCTRL_IRR, 0);
-+	regmap_write(info->rn5t618->regmap, RN5T618_CHGSTAT_IRR1, 0);
-+	regmap_write(info->rn5t618->regmap, RN5T618_CHGSTAT_IRR2, 0);
-+
-+	dev_dbg(dev, "chgerr: %x chgctrl: %x chgstat: %x chgstat2: %x\n",
-+		err, ctrl, stat1, stat2);
-+
-+	power_supply_changed(info->usb);
-+	power_supply_changed(info->adp);
-+	power_supply_changed(info->battery);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int rn5t618_power_probe(struct platform_device *pdev)
-+{
-+	int ret = 0;
-+	unsigned int v;
-+	struct power_supply_config psy_cfg = {};
-+	struct rn5t618_power_info *info;
-+
-+	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	info->pdev = pdev;
-+	info->rn5t618 = dev_get_drvdata(pdev->dev.parent);
-+	info->irq = -1;
-+
-+	platform_set_drvdata(pdev, info);
-+
-+	ret = regmap_read(info->rn5t618->regmap, RN5T618_CONTROL, &v);
-+	if (ret)
-+		return ret;
-+
-+	if (!(v & FG_ENABLE)) {
-+		/* E.g. the vendor kernels of various Kobo and Tolino Ebook
-+		 * readers disable the fuel gauge on shutdown. If a kernel
-+		 * without fuel gauge support is booted after that, the fuel
-+		 * gauge will get decalibrated.
-+		 */
-+		dev_info(&pdev->dev, "Fuel gauge not enabled, enabling now\n");
-+		dev_info(&pdev->dev, "Expect unprecise results\n");
-+		regmap_update_bits(info->rn5t618->regmap, RN5T618_CONTROL,
-+				   FG_ENABLE, FG_ENABLE);
-+	}
-+
-+	psy_cfg.drv_data = info;
-+	info->battery = devm_power_supply_register(&pdev->dev,
-+						   &rn5t618_battery_desc,
-+						   &psy_cfg);
-+	if (IS_ERR(info->battery)) {
-+		ret = PTR_ERR(info->battery);
-+		dev_err(&pdev->dev, "failed to register battery: %d\n", ret);
-+		return ret;
-+	}
-+
-+	info->adp = devm_power_supply_register(&pdev->dev,
-+					       &rn5t618_adp_desc,
-+					       &psy_cfg);
-+	if (IS_ERR(info->adp)) {
-+		ret = PTR_ERR(info->adp);
-+		dev_err(&pdev->dev, "failed to register adp: %d\n", ret);
-+		return ret;
-+	}
-+
-+	info->usb = devm_power_supply_register(&pdev->dev,
-+					       &rn5t618_usb_desc,
-+					       &psy_cfg);
-+	if (IS_ERR(info->usb)) {
-+		ret = PTR_ERR(info->usb);
-+		dev_err(&pdev->dev, "failed to register usb: %d\n", ret);
-+		return ret;
-+	}
-+
-+	if (info->rn5t618->irq_data)
-+		info->irq = regmap_irq_get_virq(info->rn5t618->irq_data,
-+						RN5T618_IRQ_CHG);
-+
-+	if (info->irq < 0)
-+		info->irq = -1;
-+	else {
-+		ret = devm_request_threaded_irq(&pdev->dev, info->irq, NULL,
-+						rn5t618_charger_irq,
-+						IRQF_ONESHOT,
-+						"rn5t618_power",
-+						&pdev->dev);
-+
-+		if (ret < 0) {
-+			dev_err(&pdev->dev, "request IRQ:%d fail\n",
-+				info->irq);
-+			info->irq = -1;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static struct platform_driver rn5t618_power_driver = {
-+	.driver = {
-+		.name   = "rn5t618-power",
-+	},
-+	.probe = rn5t618_power_probe,
-+};
-+
-+module_platform_driver(rn5t618_power_driver);
-+MODULE_ALIAS("platform:rn5t618-power");
-+MODULE_DESCRIPTION("Power supply driver for RICOH RN5T618");
-+MODULE_LICENSE("GPL");
--- 
-2.20.1
+Thierry
 
+--uAKRQypu60I7Lcqm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9I8jAACgkQ3SOs138+
+s6Hu9hAApfTBuRlf69eu2V0wppfR0Fzbbw6OA9g1weChMOg1z/IqvffHjpQNLkz5
+j2Invo8QExFJIMZjFR6HAutSd/ZziRkfuufF4FE769UFF7dD8qjlbov2lw02esPZ
+81y9IgVf2Xmmyhu/P9JcoR+LkqSWRBqvddvGvF6dJoAYLum8lO6/B0PVz3zGSo4q
+KlkthLC2acc857c1UFo5suK9oi5n924WvHXTDwvTaJx/FNsMBLWdVgjauzksEFCW
+bE/dR2Kp0SbZKRlJi3qg7ACE6rB83NYhB9ttYafZKMerJOgqTFIWjtp9QiD4gtgp
+huW+E/+NFDgZFsUdzuhhfUiX3QBw7qeoe2AqQdR0XtSsQYiNJjOq/V9RAqj+CgZX
+MRU27mKzVOVAXV1kI5BRAWodO7WFz/55arOcp0/3+jua2Je8i4mtqW7K1/oJ4WFe
+hAXcJTvwFG++Bhq9Q80Ryo2wQtu5hEWMs9dG93SEvaJm+ShSpux2lSeiQ1h6gP0F
+AJqWgA2NdILCCxz2g2Aq2AQEcob5XhtK36rNAbyr2oJ3zTdB/vyro++/3f+fvrjE
+MwcNODW/Qny4JwNRTGXzQ4eChDaCjZhQVZaoe2r0ToFbXZAnThWDqxlw+UPWM5wf
+Nv8XWHnl+LFc+AQ+98StnEgBhb0hQLsVfZ9er4e0YqhwswHGa6E=
+=bfLv
+-----END PGP SIGNATURE-----
+
+--uAKRQypu60I7Lcqm--
