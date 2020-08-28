@@ -2,191 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6655F255FFD
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 19:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F48256072
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 20:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbgH1Rrp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 13:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725979AbgH1Rrp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 13:47:45 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D89C061264;
-        Fri, 28 Aug 2020 10:47:44 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 2C2CB29AF41
-Received: by earth.universe (Postfix, from userid 1000)
-        id C48DE3C0C82; Fri, 28 Aug 2020 19:47:40 +0200 (CEST)
-Date:   Fri, 28 Aug 2020 19:47:40 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Jack Mitchell <ml@embed.me.uk>
-Cc:     linux-pm@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        linux-kernel@vger.kernel.org,
-        Quentin Schulz <quentin.schulz@free-electrons.com>
-Subject: Re: [PATCH] drivers: power: axp20x-battery: support setting
- charge_full_design
-Message-ID: <20200828174740.iimgpn7lzjr3cm3f@earth.universe>
-References: <20200729104913.627242-1-ml@embed.me.uk>
+        id S1726010AbgH1S04 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 14:26:56 -0400
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:42402 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726714AbgH1S0z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 14:26:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1598639213; x=1630175213;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=YlXbxw/O9okB0AahvRarA2ldWVFp/ZEo5xO3UByBIcM=;
+  b=vOYlFM74MDWVojXBzRaAMsJzXq8viV8GqMjP0GfSqwMQMt4Fsfu5kvyT
+   G4sNkn34osHmRQs+u3Djc0Htnh6k60rMHAm4muSyEzGIlN4hNGEhLxAhY
+   kjn9nd05R5GyC930LiAs1X2uBI4klZenva+N97hQWye2cK4O0JZOlAish
+   M=;
+X-IronPort-AV: E=Sophos;i="5.76,364,1592870400"; 
+   d="scan'208";a="50648672"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-c6afef2e.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 28 Aug 2020 18:26:50 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2c-c6afef2e.us-west-2.amazon.com (Postfix) with ESMTPS id C3D3AA2536;
+        Fri, 28 Aug 2020 18:26:48 +0000 (UTC)
+Received: from EX13D10UWA003.ant.amazon.com (10.43.160.248) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.58) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 28 Aug 2020 18:26:40 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX13D10UWA003.ant.amazon.com (10.43.160.248) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 28 Aug 2020 18:26:40 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Fri, 28 Aug 2020 18:26:39 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id 2E14F4087C; Fri, 28 Aug 2020 18:26:40 +0000 (UTC)
+Date:   Fri, 28 Aug 2020 18:26:40 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <boris.ostrovsky@oracle.com>,
+        <jgross@suse.com>, <linux-pm@vger.kernel.org>,
+        <linux-mm@kvack.org>, <kamatam@amazon.com>,
+        <sstabellini@kernel.org>, <konrad.wilk@oracle.com>,
+        <roger.pau@citrix.com>, <axboe@kernel.dk>, <davem@davemloft.net>,
+        <rjw@rjwysocki.net>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <peterz@infradead.org>, <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Subject: Re: [PATCH v3 00/11] Fix PM hibernation in Xen guests
+Message-ID: <20200828182640.GA20719@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1598042152.git.anchalag@amazon.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6auyag4duaqdgbyd"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20200729104913.627242-1-ml@embed.me.uk>
+In-Reply-To: <cover.1598042152.git.anchalag@amazon.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Aug 21, 2020 at 10:22:43PM +0000, Anchal Agarwal wrote:
+> Hello,
+> This series fixes PM hibernation for hvm guests running on xen hypervisor.
+> The running guest could now be hibernated and resumed successfully at a
+> later time. The fixes for PM hibernation are added to block and
+> network device drivers i.e xen-blkfront and xen-netfront. Any other driver
+> that needs to add S4 support if not already, can follow same method of
+> introducing freeze/thaw/restore callbacks.
+> The patches had been tested against upstream kernel and xen4.11. Large
+> scale testing is also done on Xen based Amazon EC2 instances. All this testing
+> involved running memory exhausting workload in the background.
+>   
+> Doing guest hibernation does not involve any support from hypervisor and
+> this way guest has complete control over its state. Infrastructure
+> restrictions for saving up guest state can be overcome by guest initiated
+> hibernation.
+>   
+> These patches were send out as RFC before and all the feedback had been
+> incorporated in the patches. The last v1 & v2 could be found here:
+>   
+> [v1]: https://lkml.org/lkml/2020/5/19/1312
+> [v2]: https://lkml.org/lkml/2020/7/2/995
+> All comments and feedback from v2 had been incorporated in v3 series.
+> 
+> Known issues:
+> 1.KASLR causes intermittent hibernation failures. VM fails to resumes and
+> has to be restarted. I will investigate this issue separately and shouldn't
+> be a blocker for this patch series.
+> 2. During hibernation, I observed sometimes that freezing of tasks fails due
+> to busy XFS workqueuei[xfs-cil/xfs-sync]. This is also intermittent may be 1
+> out of 200 runs and hibernation is aborted in this case. Re-trying hibernation
+> may work. Also, this is a known issue with hibernation and some
+> filesystems like XFS has been discussed by the community for years with not an
+> effectve resolution at this point.
+> 
+> Testing How to:
+> ---------------
+> 1. Setup xen hypervisor on a physical machine[ I used Ubuntu 16.04 +upstream
+> xen-4.11]
+> 2. Bring up a HVM guest w/t kernel compiled with hibernation patches
+> [I used ubuntu18.04 netboot bionic images and also Amazon Linux on-prem images].
+> 3. Create a swap file size=RAM size
+> 4. Update grub parameters and reboot
+> 5. Trigger pm-hibernation from within the VM
+> 
+> Example:
+> Set up a file-backed swap space. Swap file size>=Total memory on the system
+> sudo dd if=/dev/zero of=/swap bs=$(( 1024 * 1024 )) count=4096 # 4096MiB
+> sudo chmod 600 /swap
+> sudo mkswap /swap
+> sudo swapon /swap
+> 
+> Update resume device/resume offset in grub if using swap file:
+> resume=/dev/xvda1 resume_offset=200704 no_console_suspend=1
+> 
+> Execute:
+> --------
+> sudo pm-hibernate
+> OR
+> echo disk > /sys/power/state && echo reboot > /sys/power/disk
+> 
+> Compute resume offset code:
+> "
+> #!/usr/bin/env python
+> import sys
+> import array
+> import fcntl
+> 
+> #swap file
+> f = open(sys.argv[1], 'r')
+> buf = array.array('L', [0])
+> 
+> #FIBMAP
+> ret = fcntl.ioctl(f.fileno(), 0x01, buf)
+> print buf[0]
+> "
+> 
+> Aleksei Besogonov (1):
+>   PM / hibernate: update the resume offset on SNAPSHOT_SET_SWAP_AREA
+> 
+> Anchal Agarwal (4):
+>   x86/xen: Introduce new function to map HYPERVISOR_shared_info on
+>     Resume
+>   x86/xen: save and restore steal clock during PM hibernation
+>   xen: Introduce wrapper for save/restore sched clock offset
+>   xen: Update sched clock offset to avoid system instability in
+>     hibernation
+> 
+> Munehisa Kamata (5):
+>   xen/manage: keep track of the on-going suspend mode
+>   xenbus: add freeze/thaw/restore callbacks support
+>   x86/xen: add system core suspend and resume callbacks
+>   xen-blkfront: add callbacks for PM suspend and hibernation
+>   xen-netfront: add callbacks for PM suspend and hibernation
+> 
+> Thomas Gleixner (1):
+>   genirq: Shutdown irq chips in suspend/resume during hibernation
+> 
+>  arch/x86/xen/enlighten_hvm.c      |   7 +++
+>  arch/x86/xen/suspend.c            |  63 ++++++++++++++++++++
+>  arch/x86/xen/time.c               |  15 ++++-
+>  arch/x86/xen/xen-ops.h            |   3 +
+>  drivers/block/xen-blkfront.c      | 122 ++++++++++++++++++++++++++++++++++++--
+>  drivers/net/xen-netfront.c        |  96 +++++++++++++++++++++++++++++-
+>  drivers/xen/events/events_base.c  |   1 +
+>  drivers/xen/manage.c              |  46 ++++++++++++++
+>  drivers/xen/xenbus/xenbus_probe.c |  96 +++++++++++++++++++++++++-----
+>  include/linux/irq.h               |   2 +
+>  include/xen/xen-ops.h             |   3 +
+>  include/xen/xenbus.h              |   3 +
+>  kernel/irq/chip.c                 |   2 +-
+>  kernel/irq/internals.h            |   1 +
+>  kernel/irq/pm.c                   |  31 +++++++---
+>  kernel/power/user.c               |   7 ++-
+>  16 files changed, 464 insertions(+), 34 deletions(-)
+> 
+> -- 
+> 2.16.6
+>
+A gentle ping on the series in case there is any more feedback or can we plan to
+merge this? I can then send the series with minor fixes pointed by tglx@
 
---6auyag4duaqdgbyd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Wed, Jul 29, 2020 at 11:49:13AM +0100, Jack Mitchell wrote:
-> Signed-off-by: Jack Mitchell <ml@embed.me.uk>
-> ---
-
-^ missing long description
-
-Also the patch does not apply and needs to be rebased.
-
--- Sebastian
-
->  drivers/power/supply/axp20x_battery.c | 39 +++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
->=20
-> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply=
-/axp20x_battery.c
-> index fe96f77bffa7..8ce4ebe7ccd5 100644
-> --- a/drivers/power/supply/axp20x_battery.c
-> +++ b/drivers/power/supply/axp20x_battery.c
-> @@ -60,6 +60,7 @@
-> =20
->  #define AXP20X_V_OFF_MASK		GENMASK(2, 0)
-> =20
-> +#define AXP20X_BAT_MAX_CAP_VALID	BIT(7)
-> =20
->  struct axp20x_batt_ps;
-> =20
-> @@ -86,6 +87,7 @@ struct axp20x_batt_ps {
->  	struct axp20x_thermal_sensor sensor;
->  	/* Maximum constant charge current */
->  	unsigned int max_ccc;
-> +	unsigned int charge_full_design;
->  	const struct axp_data	*data;
->  };
-> =20
-> @@ -260,6 +262,10 @@ static int axp20x_battery_get_prop(struct power_supp=
-ly *psy,
->  		val->intval =3D POWER_SUPPLY_HEALTH_GOOD;
->  		break;
-> =20
-> +	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +		val->intval =3D axp20x_batt->charge_full_design;
-> +		break;
-> +
-
-So it reports 0 instead of the hardware information before
-setting it once when no setup happens through DT?
-
--- Sebastian
-
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->  		ret =3D axp20x_get_constant_charge_current(axp20x_batt,
->  							 &val->intval);
-> @@ -401,6 +407,30 @@ static int axp20x_battery_set_max_voltage(struct axp=
-20x_batt_ps *axp20x_batt,
->  				  AXP20X_CHRG_CTRL1_TGT_VOLT, val);
->  }
-> =20
-> +static int axp20x_set_charge_full_design(struct axp20x_batt_ps *axp_batt,
-> +					      int charge_full_uah)
-> +{
-> +	/* (Unit: 1.456mAh) */
-> +	int max_capacity_units =3D charge_full_uah / 1456;
-> +	int ret;
-> +
-> +	u8 max_capacity_msb =3D (max_capacity_units & 0x7F00) >> 8;
-> +	u8 max_capacity_lsb =3D (max_capacity_units & 0xFF);
-> +
-> +	axp_batt->charge_full_design =3D max_capacity_units * 1456;
-> +
-> +	max_capacity_msb |=3D AXP20X_BAT_MAX_CAP_VALID;
-> +
-> +	ret =3D regmap_write(axp_batt->regmap, AXP288_FG_DES_CAP0_REG,
-> +			   max_capacity_lsb);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	return regmap_write(axp_batt->regmap, AXP288_FG_DES_CAP1_REG,
-> +			    max_capacity_msb);
-> +}
-> +
->  static int axp20x_set_constant_charge_current(struct axp20x_batt_ps *axp=
-_batt,
->  					      int charge_current)
->  {
-> @@ -492,6 +522,7 @@ static enum power_supply_property axp20x_battery_prop=
-s[] =3D {
->  	POWER_SUPPLY_PROP_STATUS,
->  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
->  	POWER_SUPPLY_PROP_CURRENT_NOW,
-> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT,
->  	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
->  	POWER_SUPPLY_PROP_HEALTH,
-> @@ -675,6 +706,7 @@ static int axp20x_power_probe(struct platform_device =
-*pdev)
->  	if (!power_supply_get_battery_info(axp20x_batt->batt, &info)) {
->  		int vmin =3D info.voltage_min_design_uv;
->  		int ccc =3D info.constant_charge_current_max_ua;
-> +		int cfd =3D info.charge_full_design_uah;
-> =20
->  		if (vmin > 0 && axp20x_set_voltage_min_design(axp20x_batt,
->  							      vmin))
-> @@ -692,6 +724,13 @@ static int axp20x_power_probe(struct platform_device=
- *pdev)
->  			axp20x_batt->max_ccc =3D ccc;
->  			axp20x_set_constant_charge_current(axp20x_batt, ccc);
->  		}
-> +
-> +		if (cfd > 0 && axp20x_set_charge_full_design(axp20x_batt,
-> +							       cfd)) {
-> +			dev_err(&pdev->dev,
-> +				"couldn't set charge_full_design\n");
-> +			axp20x_batt->charge_full_design =3D 0;
-> +		}
->  	}
-> =20
->  	error =3D axp20x_thermal_register_sensor(pdev, axp20x_batt);
-> --=20
-> 2.28.0
->=20
-
---6auyag4duaqdgbyd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9JQzwACgkQ2O7X88g7
-+prXTA//Qa9UDgZshqfY+c4VrYiZSbcx7tDahRBRWF1trTeXBtgfozIhlWCX1UPo
-RnLURYl+n0fTykBdjW42panoCxUWo8+45wyAigmR+mnSDN+pzJgPQsb1GKHipuLN
-gm3pVVEH+346GeJrDJbcAMrB50WEf0KQqQWmweG3lA77l3VcOtCYMJLiMyw5W94A
-23PYpvVZRBSsN6lje6e9XYt/DLeESXorecz3TI8lbUHTMaepXFX7aaWUZR9ey99t
-1075Drpnh/r3eo4tZwwiXhFyh6Yk69mrU62q8O7ePtHzOWJtLVJYO/mt2/yKSAyN
-xjae8qEYUZGfIkf0t8gfwXewRo42yeBkoKAoeWrdHlUIlC5yplPEea2lkfDD73Ig
-DBWBdmoAj1AJGhgdXJo6FYqINoTd6heptTrtu0ednwVhS2cqEFTLUi9u3Jois2fL
-iz/D79tRaeHTovH/f8RVYjJLZ3tKB864C2N08i1NArDy7H0ocapLwvoWrEEvx/sT
-TieBT8qTFes1R7y4QHd3Ni/ZesUIfsf8S7SVraRlvuqpZcyax7GsAfe1nVmmpKtO
-lnpY4YcvLAz7RWasZx7eC/GOXynr0D3k69FaUwtYDyfAWHCM87g7GrjDIt4KEVhk
-NucqgO89JEx+rNYEQYS7ILFZ5e5frBSlxWZ6vFZxLXQJaM1OfpU=
-=Upaq
------END PGP SIGNATURE-----
-
---6auyag4duaqdgbyd--
+Thanks,
+Anchal
