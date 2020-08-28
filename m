@@ -2,177 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E800255D09
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 16:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030CA255D0F
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 16:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727993AbgH1Oto (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 10:49:44 -0400
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:33441 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbgH1Oti (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 10:49:38 -0400
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200828144936euoutp01b40862b3ba0e8ec7f4c5846c23f2c69d~vdgmevpX41155411554euoutp01B
-        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 14:49:36 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200828144936euoutp01b40862b3ba0e8ec7f4c5846c23f2c69d~vdgmevpX41155411554euoutp01B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1598626176;
-        bh=rnJHZDd3J2Cg79B07RVoEV7HxwE8uhmX3bSXaJNxqDs=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=pnpm4ey7TSKo/uhiM2rz4EYvwE7vHPTKFc2Q0m61F6qEDlZ9yAZfspJuUk7YoI0G6
-         LO936QYAvhpEfm1VbmXNNnpKwDrE9z2RoEAilyE96uB6pk/tFhLxvQsKpedZOXAH1T
-         d/qnIegvCOZDOyeg61HDf9pYy1ci8h+tgJRTxy+w=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200828144935eucas1p21bc6d076e38045d6b6e8590b1b889724~vdgmDisXY0200302003eucas1p2D;
-        Fri, 28 Aug 2020 14:49:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id C6.3D.06318.F79194F5; Fri, 28
-        Aug 2020 15:49:35 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200828144935eucas1p144aa5bfceb24dc26b5149a4bcd462a48~vdglnRCu41371413714eucas1p1-;
-        Fri, 28 Aug 2020 14:49:35 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200828144935eusmtrp1a5ca3fb1aa00dd2762742fb47b3cb456~vdglmZUdP0687706877eusmtrp1K;
-        Fri, 28 Aug 2020 14:49:35 +0000 (GMT)
-X-AuditID: cbfec7f5-38bff700000018ae-5c-5f49197f0318
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 7C.1B.06017.F79194F5; Fri, 28
-        Aug 2020 15:49:35 +0100 (BST)
-Received: from [106.210.123.115] (unknown [106.210.123.115]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200828144934eusmtip164aea37a1e5a1a68977a9bb8f8567f7e~vdgkZI_v01183611836eusmtip18;
-        Fri, 28 Aug 2020 14:49:34 +0000 (GMT)
-Subject: Re: [PATCH RFC v6 1/6] dt-bindings: exynos-bus: Add documentation
- for interconnect properties
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-To:     Rob Herring <robh@kernel.org>, georgi.djakov@linaro.org
-Cc:     cw00.choi@samsung.com, krzk@kernel.org, devicetree@vger.kernel.org,
-        a.swigon@samsung.com, myungjoo.ham@samsung.com,
-        inki.dae@samsung.com, sw0312.kim@samsung.com,
-        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org
-Message-ID: <35d9d396-b553-a815-1f3b-1af4dc37a2ca@samsung.com>
-Date:   Fri, 28 Aug 2020 16:49:33 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.11.0
+        id S1728090AbgH1Ovi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 10:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbgH1Ovf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 10:51:35 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B22C061264
+        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 07:51:34 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id v12so1600104ljc.10
+        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 07:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ImiWhFwiMiRaDILGK2vYxwtK6H1QbPrDWNEB8Fo5yp0=;
+        b=m3SH83JhPp5zysOZ8UGaOASaGvHwyBdy+dMZYhDz9IjeZrOUNDL7DGC2IYkYpae6UT
+         FpGAiEisi2hdICi2QBwVlxCRBlQYajQ6kIl3apwv6Zd5zwaMsm+woTJe0VxhXsJCBmVB
+         /Krz+up/rlea+pltJEx57NrY0mSwXBmgaoM8eBGVocnnO/EabniaNW7LYGT8om9EynVv
+         CIC9WHLTJ4TqH3GGF/DLZDlPvjr7OZ+u5Gmua0OvS7bbxfJ/KVP9l6u2f80iB9oWA4S5
+         XcREjqO8mQbwzNglMH6NjTAUpG2SBhzd1ox2KvfQMgaZMf3Rcty3gxm60W7RrjIkgx2T
+         DCMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ImiWhFwiMiRaDILGK2vYxwtK6H1QbPrDWNEB8Fo5yp0=;
+        b=MzJvgBe1QRZmlIXeE4ecNM1btJN004cPm1yWF4TbB7PTZmPRy6q2fEGoYBKRVvoDLj
+         rDDRS0uJ4KuxWtcWSJaoOP1jIm2YAWoz7RH5t0zPM6gKl2cIUMAV6uCPbjFOFOHKcFcM
+         WfooJfLTiEavpjnN7XixfW2hQy21nNZZzF3NKG2q1wNJ0gtSHjoIKENtKT1R7U+7PElS
+         1xF+Arcmd8zdAXSnSIifX8kzpP6a/yzfQ7WwXEhoy5lt9XWD1A9sPX/vTc63D0rLuxfj
+         dmHhIDUsBRMSc4FsEw5HjHDkFHz9xYj6Vjs7bRjCMlwo6vbOSJ4lvMMlSoiIaH4QnCc3
+         LmJg==
+X-Gm-Message-State: AOAM5305Ee1Goe48LuDmwPA0JheJael6oQJoBjVaVSLNsdNe72Ty2h5v
+        28R/IIp4aUCMGUO9TPBorWiWlPoOtWOKIVq1xx9q3A==
+X-Google-Smtp-Source: ABdhPJz7nqwPZB2YVbmFth99db1dEuQGwLTN+Hy4/7RmCxHXULzHeBqpJLldBTh4ZZ0VSRoDavwoeUh9uKGkK6yVJPw=
+X-Received: by 2002:a2e:9dd0:: with SMTP id x16mr1026817ljj.144.1598626291535;
+ Fri, 28 Aug 2020 07:51:31 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <65af1a5c-8f8a-ef65-07f8-e0b3d04c336c@samsung.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTcRTH+e3e3V2lyfVqelpRMgysyAf6xy3DzAomVERQZKW27KKSU9tV
-        SwkfvXPTzB7qDF8YipGu+cgsh4o1xJzQfJWvHqOYZBLzgSktt2vkf5/vOd/D9xw4JEaPCSVk
-        fGIKq0yUJ0gJZ7zl7aJxZ9aG8Gj/GWMQM1l2AzHPixuEzPDsdyFT3m0UMgNzMwRT1K4jmMLJ
-        Apzp79eKGN3XISFjantMMNa8bsQU9+sFzLPucREzmlNLMLbXrSKm+L6FCKVkuro7hGxs6DUh
-        m1QZBLLG6ixZflMdkll1m48Sp5z3nGcT4tNYpV/IWee4paKUZC19efynRZSN5l1ykRMJVBA8
-        Kn6P5yJnkqZqEZjuTot4MYugcbAM44UVwberVdi/kcJPPauNGgT63D4BL34hmO0dENldblQc
-        LL5QE3YmqADIe5OP7OxOBcPTkR+OQIy6jkGe5amjIaZCQFc54hjGqa1gelLjGF5PRUGzYVDA
-        e1yhp8SM29mJ2gs2VafDg1Ge8NFcLuB5C1xrLl1dNYeEhbdZPB8ATbVFxLMbTBmaVnkT9N5X
-        OxYC6hoC9atRES8KEEwaKhDvCoYx4++VNHIlYRs0tPnx5X2gtb0U2MtAucDItCu/gwsUthRh
-        fFkMt2/SvNsbluqKBDxLQGW24QVIqllzmWbNNZo112j+51YgvA55sqmcIpblAhPZS76cXMGl
-        Jsb6xiQpdGjl53r/GOZakX75XBeiSCRdJx4hwqNpoTyNS1d0ISAxqbs4rK83ihafl6dnsMqk
-        aGVqAst1oY0kLvUUB1ZZImkqVp7CXmDZZFb5rysgnSTZaHfa5uQEetcO75Izn49HeNLjA1qX
-        g5r+qY5bb465hl6RHJgJq52YV0aYvMjlw/hovv9FVfCw+nRnvTJ9z6hfpDbT4sNNyJLivfaF
-        xQx1eLzzsH2w4ldL9m9SlFaaT2wJrT32xePkYP38wqF206MYfYb4XmlZ5pGHqgdBPjne+lKx
-        FOfi5AHbMSUn/wvR+ny4bwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrHIsWRmVeSWpSXmKPExsVy+t/xu7r1kp7xBts+i1vcn9fKaLFxxnpW
-        i+tfnrNazD9yjtXiytf3bBbT925is5h0fwKLxfnzG9gtNj2+xmpxedccNovPvUcYLWac38dk
-        sfbIXXaL240r2Cz+79nBbjFj8ks2BwGPTas62TzuXNvD5nG/+ziTx+Yl9R59W1YxenzeJBfA
-        FqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CX8Xt6
-        ScEGoYq7716yNzB+4+ti5OSQEDCRmPTgJHMXIxeHkMBSRokV7/YzdTFyACWkJOa3KEHUCEv8
-        udbFBlHznlGi7/g7VpCEsECGxLJ9LxhBbDYBQ4neo31gtoiAtcTqG29YQBqYBVqYJb5OmsEE
-        0T2NSeJY70IWkCpeATuJTQtvsIPYLAKqEpeXLmcDsUUF4iQe9/5nhqgRlDg58wlYPaeAvcT/
-        7oNgNcwC6hJ/5l1ihrDFJW49mc8EYctLNG+dzTyBUWgWkvZZSFpmIWmZhaRlASPLKkaR1NLi
-        3PTcYiO94sTc4tK8dL3k/NxNjMC43nbs55YdjF3vgg8xCnAwKvHw3mDzjBdiTSwrrsw9xCjB
-        wawkwut09nScEG9KYmVValF+fFFpTmrxIUZToOcmMkuJJucDU05eSbyhqaG5haWhubG5sZmF
-        kjhvh8DBGCGB9MSS1OzU1ILUIpg+Jg5OqQbGOZdvnHhyVU3kzdId3pL/tbQ0U/euK2ZP+LXv
-        Wmdn3NMcFf1d9/VusG76/PfKB8vb8x4Ifuh9JHK1VCHkjETDOrf1T8wZctNe5Kzu//965/9Z
-        fvdbUp3THl+canvvAHOfyHbF/f0Cfl5n7EW3T/aWmLS7/fRRzaclYXW9LAcLn4VKPY17l6Xe
-        q8RSnJFoqMVcVJwIAIbpuC0BAwAA
-X-CMS-MailID: 20200828144935eucas1p144aa5bfceb24dc26b5149a4bcd462a48
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3
-References: <20200702163724.2218-1-s.nawrocki@samsung.com>
-        <CGME20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3@eucas1p2.samsung.com>
-        <20200702163724.2218-2-s.nawrocki@samsung.com>
-        <20200709210448.GA876103@bogus>
-        <65af1a5c-8f8a-ef65-07f8-e0b3d04c336c@samsung.com>
+References: <20200825193536.7332-1-krzk@kernel.org> <CACRpkdb4j2kJvpY23G-os9gTktZW5HT287MsvMZxC=ovgn_9LQ@mail.gmail.com>
+ <20200828130837.GA14163@kozik-lap>
+In-Reply-To: <20200828130837.GA14163@kozik-lap>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 28 Aug 2020 16:51:20 +0200
+Message-ID: <CACRpkdaWAzJQz_Z1zsRbyVQNPO2wUogH8U_mDNV2fSkW22zmtQ@mail.gmail.com>
+Subject: Re: [PATCH v3 00/19] dt-bindings / arm64: Cleanup of i.MX 8 bindings
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30.07.2020 14:28, Sylwester Nawrocki wrote:
-> On 09.07.2020 23:04, Rob Herring wrote:
->> On Thu, Jul 02, 2020 at 06:37:19PM +0200, Sylwester Nawrocki wrote:
->>> Add documentation for new optional properties in the exynos bus nodes:
->>> samsung,interconnect-parent, #interconnect-cells, bus-width.
->>> These properties allow to specify the SoC interconnect structure which
->>> then allows the interconnect consumer devices to request specific
->>> bandwidth requirements.
->>>
->>> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
->>> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+On Fri, Aug 28, 2020 at 3:08 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Fri, Aug 28, 2020 at 02:51:20PM +0200, Linus Walleij wrote:
+> > On Tue, Aug 25, 2020 at 9:35 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > > This is a v3 of cleanup of i.XM 8 bindings and DTSes.
+> >
+> > If you are going to be working a lot on Freescale SoC code going forward
+> > I wouldn't mind if you could add yourself as maintainer for the
+> > Freescale pin controller and GPIO at least, I already have high trust
+> > in you in general so if the Freescale maintainers also have that I think you
+> > should just sign up as maintainer. This makes it easier to do pull requests
+> > and things like that.
+>
+> Thanks for encouragement.  Indeed I am planning to do more work around
+> i.MX 8M platforms from NXP/Freescale. However there are already four
+> maintainers for Freescale pin controller drivers so I doubt there is
+> need for fifth entry :).
 
->>> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
->>> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
->>> @@ -51,6 +51,13 @@ Optional properties only for parent bus device:
->>>  - exynos,saturation-ratio: the percentage value which is used to calibrate
->>>  			the performance count against total cycle count.
->>>  
->>> +Optional properties for interconnect functionality (QoS frequency constraints):
->>> +- samsung,interconnect-parent: phandle to the parent interconnect node; for
->>> +  passive devices should point to same node as the exynos,parent-bus property.
+I beg to differ. As subsystem maintainer it has happened to me more
+than once that the i.MX pin control patches went unreviewed for weeks.
+Everyone listed for this driver is a kitchen sink maintainer that get
+way too much traffic and things fall over the edge.
 
->> Adding vendor specific properties for a common binding defeats the 
->> point.
+> Different question is the GPIO driver which apparently lacks entry in
+> Maintainers file.
 
-Actually we could do without any new property if we used existing interconnect
-consumers binding to specify linking between the provider nodes. I think those
-exynos-bus nodes could well be considered both the interconnect providers 
-and consumers. The example would then be something along the lines 
-(yes, I know the bus node naming needs to be fixed):
+That's probably just an oversight. Feel free to add it!
 
-	soc {
-		bus_dmc: bus_dmc {
-			compatible = "samsung,exynos-bus";
-			/* ... */
-			samsung,data-clock-ratio = <4>;
-			#interconnect-cells = <0>;
-		};
-
-		bus_leftbus: bus_leftbus {
-			compatible = "samsung,exynos-bus";
-			/* ... */
-			interconnects = <&bus_leftbus &bus_dmc>;
-			#interconnect-cells = <0>;
-		};
-
-		bus_display: bus_display {
-			compatible = "samsung,exynos-bus";
-			/* ... */
-			interconnects = <&bus_display &bus_leftbus>;
-			#interconnect-cells = <0>;
-		};
-
-
-		&mixer {
-			compatible = "samsung,exynos4212-mixer";
-			interconnects = <&bus_display &bus_dmc>;
-			/* ... */
-		};
-	};
-
-What do you think, Georgi, Rob?
-
--- 
-Regards
-Sylwester
+Yours,
+Linus Walleij
