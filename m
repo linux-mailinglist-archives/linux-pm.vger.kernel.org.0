@@ -2,149 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D332B2556B3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 10:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD562556D1
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Aug 2020 10:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728727AbgH1Ioq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Aug 2020 04:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58610 "EHLO
+        id S1728573AbgH1Iqd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Aug 2020 04:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728556AbgH1Io1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 04:44:27 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19D0C061236
-        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 01:44:26 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id v20so145502ual.4
-        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 01:44:26 -0700 (PDT)
+        with ESMTP id S1728791AbgH1IqY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Aug 2020 04:46:24 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0616C061237
+        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 01:46:17 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id p185so191732vsp.8
+        for <linux-pm@vger.kernel.org>; Fri, 28 Aug 2020 01:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=gXt9Q9JzZETS81jIoUxLoqXvrTil078ywtA5O94Qp5M=;
-        b=cZfQmQi9hWGwyYWZumY+UzKzIWhbwnbZ+WB0Mli8xkb71lhMQdCqMrDGQJVS8UPhgF
-         kRw87kX+G6sHBiNxkMAUg+h57A+mdI2yeBNJvOiqr+BuHL+g4y7wjgulRsnswqQTK1eP
-         Ryw1XedotPqnjH+mIoZ14gfz+U3ZhL6HAq1qZfrD997Zzv8dnTgUTQG+NH1O1Kuv9ECv
-         lzrrRhXX4w7r2ck/Ci/TZLaQh7/5BTuWTX8Fe2OsV2Bg8Jt7ofsxiWCaPwLRmUPpROp2
-         AUNJAjjwaD3Lw0PQwcFCtcZaiun5oJwGnQizJSkRduxHx5OIIKYPlNvF/7pOJBUc2VwZ
-         k52Q==
+        bh=189lzAWfQfsXqTmFG0edsCDCtQB53S1O0XCFYRVJy0M=;
+        b=aIm4qyEymVO5ohXmss62q8J7ZsU21OeX87DHri44FY+MtB8kKPRTRN8fC2fuIy9zvX
+         Z9GTB09WEFGr+7TVAWibwyGyVwol+ajGdpcyUuC4mEf8pIP20ndS3jHWcXKurf5SVAhY
+         V+KCtnocv+7SjPRR+/YrhNgmkynyreSovR2OBYvRS0xkDojpgFoNajirehBgyh2Hrzif
+         0zPrbgW8qQ+iLRDMParVC4EFTYOfC0SYgcE9hKp/OLDf4Z3U/WxlgJJAx8ImgeFHI7Ms
+         K2rPmiftA1He8wyBKNzMVDF2IAg9gwh+r+motN/9SM691+1Dlb6EM3f2CTGjxwoc2hSk
+         YCSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=gXt9Q9JzZETS81jIoUxLoqXvrTil078ywtA5O94Qp5M=;
-        b=E9Mhvw7/Npv1zNJ7umYIhl3GxHHoKRKexujcaMtUQoMdpgCZFOfWZz6uVNuhyG5o3V
-         PmVgOA5YtLScZ9C7DS2gYE36EGrmeuBsbw+INQCUDxo9ocoAh8j2BZkuFseqiI9tL753
-         vIagZnVK+vlWB3Ldda+Ben+hY5Wd15BnajajrjVwwQ/7tpM+P2LmgqzJybBVLXHOOhcy
-         XaKvWpTfIEfMjUpFJpxtixXRLq4HdqOMmhLLp1eFhIFEH7Ndm3rTjxfbZxFkdSWFIE6e
-         sVG288dMDnuhj4rQH8JEdBl0gF73HEJ1xhk4has1x/lq7fc/vECqjpzYRtmpwH2ufEE9
-         b8vg==
-X-Gm-Message-State: AOAM530y7xCv7iACUwsBQI1pQuMy9K6pocl8UldUga7FhIS2X+fWjTOK
-        fCo6802/RAHYE9z0zHbJ2bQkb7CJUQ5LOslnjNGNKA==
-X-Google-Smtp-Source: ABdhPJwlsrZNGXcRdT6d1zKA0fBdobWfyrKc51R/SB46kVSG8V+qyZNKPtREddGXxPnciNO5n+yHrWSbHDynYCa9gNQ=
-X-Received: by 2002:ab0:3114:: with SMTP id e20mr306035ual.104.1598604266122;
- Fri, 28 Aug 2020 01:44:26 -0700 (PDT)
+        bh=189lzAWfQfsXqTmFG0edsCDCtQB53S1O0XCFYRVJy0M=;
+        b=ZovDHG6DceFgGWZ8yFu5fmIBTGXjWb1NLaSOpMv6g9jj6NHwVQwQmQay4btgKi0H7m
+         WsRMfOgWUEXoBJhaAe8N5RNUU6JhwEFsASe16KoxPRGwThMmC41cJaUZwIJnjEbhmjXO
+         VMFKv2fq+aBMcesk47uoYQ/niUPBGbE4x+JF9RjMQuXqkA24fIXSBHXX5OOH/obVJjub
+         3F0RszVSMDX9z+Cn2/3XYHE2cp7BSVWagvOeFVoyvBSKv8tfQS5Vi4U5taN3a+dCtUVn
+         vyio+1WasuW+m8I1A3Bphp59Oj41dn13XqJTSF5+jcT/RVC97TdoNK10Ew4UEnB0OBnP
+         7PKQ==
+X-Gm-Message-State: AOAM530jXXLn4/S1DirA/kAYBm5kDJemQjx9p4N0qTKENMPWhuhqpgho
+        c+UzZBCPxHI97GQIisDU0U7fE4b8aN2qlRyOROZjhQ==
+X-Google-Smtp-Source: ABdhPJwdM//IK26BNKLGQTKBrolM5NysJSl2j+QUGwsOTG7KyqNDjalKpnYeND/9ptvlwZBlFInKLZnPBJM5EgFzpWg=
+X-Received: by 2002:a67:f8ce:: with SMTP id c14mr189781vsp.14.1598604376960;
+ Fri, 28 Aug 2020 01:46:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1598594714.git.viresh.kumar@linaro.org> <1d7c97524b9e1fbc60271d9c246c5461ca8a106c.1598594714.git.viresh.kumar@linaro.org>
-In-Reply-To: <1d7c97524b9e1fbc60271d9c246c5461ca8a106c.1598594714.git.viresh.kumar@linaro.org>
+References: <20200825193536.7332-1-krzk@kernel.org> <20200825193536.7332-13-krzk@kernel.org>
+In-Reply-To: <20200825193536.7332-13-krzk@kernel.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 28 Aug 2020 10:43:50 +0200
-Message-ID: <CAPDyKFpdZhzXQv3hpTzf3UkJDhFqBhgMXCqVfAfE6PejLCxvfg@mail.gmail.com>
-Subject: Re: [PATCH V2 4/8] mmc: sdhci-msm: Unconditionally call dev_pm_opp_of_remove_table()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+Date:   Fri, 28 Aug 2020 10:45:40 +0200
+Message-ID: <CAPDyKFp9m6xBJMGn2TgwD8VEUZ0JwzgowU32qUbL1qgEPua-GA@mail.gmail.com>
+Subject: Re: [PATCH v3 12/19] dt-bindings: mmc: fsl-imx-esdhc: Fix i.MX 8
+ compatible matching
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
+        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-mtd@lists.infradead.org, linux-pwm@vger.kernel.org,
+        linux-serial@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>,
+        linux-watchdog@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 28 Aug 2020 at 08:08, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Tue, 25 Aug 2020 at 21:37, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
-> find the OPP table with error -ENODEV (i.e. OPP table not present for
-> the device). And we can call dev_pm_opp_of_remove_table()
-> unconditionally here.
+> The i.MX 8 DTSes use two compatibles so update the binding to fix
+> dtbs_check warnings like:
 >
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+>     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+>     From schema: Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+>
+>   arch/arm64/boot/dts/freescale/imx8mn-evk.dt.yaml: mmc@30b40000:
+>     compatible: Additional items are not allowed ('fsl,imx7d-usdhc' was unexpected)
+>
+>   arch/arm64/boot/dts/freescale/imx8mn-ddr4-evk.dt.yaml: mmc@30b40000:
+>     compatible: ['fsl,imx8mn-usdhc', 'fsl,imx7d-usdhc'] is too long
+>
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
-Replaced v1 with v2 on my next branch, thanks!
-
-Just to be sure, this patch doesn't depend on any changes for the opp
-core that are queued for v5.10?
+Rob, Krzysztof - do you want me to pick this one?
 
 Kind regards
 Uffe
 
-
-
 >
 > ---
-> V2:
-> - Compare with -ENODEV only for failures.
-> - Create new label to put clkname.
+>
+> Changes since v2:
+> 1. Remove moved compatibles.
+>
+> Changes since v1:
+> 1. Handle also fsl,imx8mm-usdhc and fsl,imx8qxp-usdhc
 > ---
->  drivers/mmc/host/sdhci-msm.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+>  .../bindings/mmc/fsl-imx-esdhc.yaml           | 37 ++++++++++---------
+>  1 file changed, 20 insertions(+), 17 deletions(-)
 >
-> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> index 5a33389037cd..f7beaec6412e 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -263,7 +263,6 @@ struct sdhci_msm_host {
->         unsigned long clk_rate;
->         struct mmc_host *mmc;
->         struct opp_table *opp_table;
-> -       bool has_opp_table;
->         bool use_14lpp_dll_reset;
->         bool tuning_done;
->         bool calibration_done;
-> @@ -2285,11 +2284,9 @@ static int sdhci_msm_probe(struct platform_device *pdev)
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index 10b45966f1b8..e71d13c2d109 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -21,23 +21,26 @@ description: |
 >
->         /* OPP table is optional */
->         ret = dev_pm_opp_of_add_table(&pdev->dev);
-> -       if (!ret) {
-> -               msm_host->has_opp_table = true;
-> -       } else if (ret != -ENODEV) {
-> +       if (ret && ret != -ENODEV) {
->                 dev_err(&pdev->dev, "Invalid OPP table in Device tree\n");
-> -               goto opp_cleanup;
-> +               goto opp_put_clkname;
->         }
+>  properties:
+>    compatible:
+> -    enum:
+> -      - fsl,imx25-esdhc
+> -      - fsl,imx35-esdhc
+> -      - fsl,imx51-esdhc
+> -      - fsl,imx53-esdhc
+> -      - fsl,imx6q-usdhc
+> -      - fsl,imx6sl-usdhc
+> -      - fsl,imx6sx-usdhc
+> -      - fsl,imx6ull-usdhc
+> -      - fsl,imx7d-usdhc
+> -      - fsl,imx7ulp-usdhc
+> -      - fsl,imx8mq-usdhc
+> -      - fsl,imx8mm-usdhc
+> -      - fsl,imx8mn-usdhc
+> -      - fsl,imx8mp-usdhc
+> -      - fsl,imx8qm-usdhc
+> -      - fsl,imx8qxp-usdhc
+> +    oneOf:
+> +      - enum:
+> +          - fsl,imx25-esdhc
+> +          - fsl,imx35-esdhc
+> +          - fsl,imx51-esdhc
+> +          - fsl,imx53-esdhc
+> +          - fsl,imx6q-usdhc
+> +          - fsl,imx6sl-usdhc
+> +          - fsl,imx6sx-usdhc
+> +          - fsl,imx6ull-usdhc
+> +          - fsl,imx7d-usdhc
+> +          - fsl,imx7ulp-usdhc
+> +      - items:
+> +          - enum:
+> +              - fsl,imx8mm-usdhc
+> +              - fsl,imx8mn-usdhc
+> +              - fsl,imx8mp-usdhc
+> +              - fsl,imx8mq-usdhc
+> +              - fsl,imx8qxp-usdhc
+> +          - const: fsl,imx7d-usdhc
 >
->         /* Vote for maximum clock rate for maximum performance */
-> @@ -2453,8 +2450,8 @@ static int sdhci_msm_probe(struct platform_device *pdev)
->         clk_bulk_disable_unprepare(ARRAY_SIZE(msm_host->bulk_clks),
->                                    msm_host->bulk_clks);
->  opp_cleanup:
-> -       if (msm_host->has_opp_table)
-> -               dev_pm_opp_of_remove_table(&pdev->dev);
-> +       dev_pm_opp_of_remove_table(&pdev->dev);
-> +opp_put_clkname:
->         dev_pm_opp_put_clkname(msm_host->opp_table);
->  bus_clk_disable:
->         if (!IS_ERR(msm_host->bus_clk))
-> @@ -2474,8 +2471,7 @@ static int sdhci_msm_remove(struct platform_device *pdev)
->
->         sdhci_remove_host(host, dead);
->
-> -       if (msm_host->has_opp_table)
-> -               dev_pm_opp_of_remove_table(&pdev->dev);
-> +       dev_pm_opp_of_remove_table(&pdev->dev);
->         dev_pm_opp_put_clkname(msm_host->opp_table);
->         pm_runtime_get_sync(&pdev->dev);
->         pm_runtime_disable(&pdev->dev);
+>    reg:
+>      maxItems: 1
 > --
-> 2.25.0.rc1.19.g042ed3e048af
+> 2.17.1
 >
