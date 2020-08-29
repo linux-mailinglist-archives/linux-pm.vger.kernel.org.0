@@ -2,104 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A34842567D5
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Aug 2020 15:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CA225686B
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Aug 2020 16:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728237AbgH2NNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Aug 2020 09:13:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56632 "EHLO mail.kernel.org"
+        id S1728069AbgH2OvN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sat, 29 Aug 2020 10:51:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728202AbgH2NKo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 29 Aug 2020 09:10:44 -0400
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 007632076D;
-        Sat, 29 Aug 2020 13:10:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598706643;
-        bh=z1sTsa1dpruwAUEEfp1W27KJA2xFmbwqQp5IOMzOoU4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DNFZoUQs+N4C1jS97X4sJiyIy1gDiwUEBZhvmyiTp3eqOC5xhZOUhxi3e6iR19L8o
-         A/esD5eCS3bR55GtU6QfbScIxxlABrEtTI/RlRBwwVkR2KsFPUv7HmUgt1oMrT8T5c
-         zY096JfQb2KaZXURE/Bx9vAmU+jLpTTyouiK8Oho=
-Received: by mail-lj1-f178.google.com with SMTP id t23so1857001ljc.3;
-        Sat, 29 Aug 2020 06:10:42 -0700 (PDT)
-X-Gm-Message-State: AOAM533FzM3Ly/BqVLgmku5UCe9WnwUo0EUFzqy9C1z6CPI/IBWqvuJa
-        45yuQgZeqBB8ZsDXxhuQFB1hF+LB7geP7xUwZHo=
-X-Google-Smtp-Source: ABdhPJzcoYwMbQDiFlTomIEruCL5TFbgX/szDz7jSloxr/PA2l7GtagUnsDtLuSgrs6u+KeuSH6Y+qbAcRFt/NYA8xQ=
-X-Received: by 2002:a2e:910b:: with SMTP id m11mr1571569ljg.159.1598706641354;
- Sat, 29 Aug 2020 06:10:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200828153100.19006-1-krzk@kernel.org>
-In-Reply-To: <20200828153100.19006-1-krzk@kernel.org>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Date:   Sat, 29 Aug 2020 22:10:04 +0900
-X-Gmail-Original-Message-ID: <CAGTfZH3+mxBXzVp5Wz=F6nbx3bfubrmJozVzVdt8s1e45WQOqg@mail.gmail.com>
-Message-ID: <CAGTfZH3+mxBXzVp5Wz=F6nbx3bfubrmJozVzVdt8s1e45WQOqg@mail.gmail.com>
-Subject: Re: [PATCH] devfreq: rk3399_dmc: Simplify with dev_err_probe()
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1727772AbgH2OvM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 29 Aug 2020 10:51:12 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 209069] New: CPU stuck at 800 MHz at any load
+Date:   Sat, 29 Aug 2020 14:51:11 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tg@gmplib.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-209069-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 29, 2020 at 12:31 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> Common pattern of handling deferred probe can be simplified with
-> dev_err_probe().  Less code and the error value gets printed.
->
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  drivers/devfreq/rk3399_dmc.c | 20 ++++++--------------
->  1 file changed, 6 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-> index 027769e39f9b..35b3542f1f7b 100644
-> --- a/drivers/devfreq/rk3399_dmc.c
-> +++ b/drivers/devfreq/rk3399_dmc.c
-> @@ -324,22 +324,14 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
->         mutex_init(&data->lock);
->
->         data->vdd_center = devm_regulator_get(dev, "center");
-> -       if (IS_ERR(data->vdd_center)) {
-> -               if (PTR_ERR(data->vdd_center) == -EPROBE_DEFER)
-> -                       return -EPROBE_DEFER;
-> -
-> -               dev_err(dev, "Cannot get the regulator \"center\"\n");
-> -               return PTR_ERR(data->vdd_center);
-> -       }
-> +       if (IS_ERR(data->vdd_center))
-> +               return dev_err_probe(dev, PTR_ERR(data->vdd_center),
-> +                                    "Cannot get the regulator \"center\"\n");
->
->         data->dmc_clk = devm_clk_get(dev, "dmc_clk");
-> -       if (IS_ERR(data->dmc_clk)) {
-> -               if (PTR_ERR(data->dmc_clk) == -EPROBE_DEFER)
-> -                       return -EPROBE_DEFER;
-> -
-> -               dev_err(dev, "Cannot get the clk dmc_clk\n");
-> -               return PTR_ERR(data->dmc_clk);
-> -       }
-> +       if (IS_ERR(data->dmc_clk))
-> +               return dev_err_probe(dev, PTR_ERR(data->dmc_clk),
-> +                                    "Cannot get the clk dmc_clk\n");
->
->         data->edev = devfreq_event_get_edev_by_phandle(dev, 0);
->         if (IS_ERR(data->edev))
-> --
-> 2.17.1
->
+https://bugzilla.kernel.org/show_bug.cgi?id=209069
 
-Applied it. Thanks.
+            Bug ID: 209069
+           Summary: CPU stuck at 800 MHz at any load
+           Product: Power Management
+           Version: 2.5
+    Kernel Version: 5.8.5
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: tg@gmplib.org
+        Regression: No
+
+Environment 1:
+  OS:     GNU/Linux/Xen Gentoo 17.1 (ker=5.8.5 xen=4.12.3)
+  mbd:    Supermicro X10SLH-F-O S1150 µATX (BIOS 3.3 2020-06-13)
+  cpu:    Intel HWL X4 3600MHz (Xeon E3-1271v3, ECC)
+  memory: 8192MB SDRAM DDR3L-1600 ECC (Samsung M391B1G73QH0-YK0Q)
+  memory: 8192MB SDRAM DDR3L-1600 ECC (Samsung M391B1G73QH0-YK0Q)
+  memory: 8192MB SDRAM DDR3L-1600 ECC (Samsung M391B1G73QH0-YK0Q)
+  memory: 8192MB SDRAM DDR3L-1600 ECC (Samsung M391B1G73QH0-YK0Q)
+  disk:   SATA SSD 2.5" 120GB Samsung SM863
+  case:   Supermicro CSE-510T-203B
+
+Environment 2. Almost identical, but with this cpu:
+  cpu:    Intel BWL X4 3400MHz LLC=6M+128M (Xeon E3-1285Lv4)
+
+I upgraded from 5.4.48 to 5.8.x for various versions of x to finally reach x =
+5. Now, the systems get stuck at what is displayed as 800 MHz in /proc/cpuinfo.
+
+When booted to run Xen, the problem goes away. When booting the (Xen
+Dom0-capable) kernel without Xen, the clock gets stuck at 800 MHz at any load.
+
+It's certainly not just a problem with /proc/cpuinfo's displayed frequency; the
+systems are really, really sluggish.
+
+A similarly configured Skylake system does NOT exhibit the same problem. (The
+motherboard of that system is Supermicro X11SSM.) Similarly configured Sandy
+Bridge and Westmere systems also do not exhibit this problem.
 
 -- 
-Best Regards,
-Chanwoo Choi
-Samsung Electronics
+You are receiving this mail because:
+You are the assignee for the bug.
