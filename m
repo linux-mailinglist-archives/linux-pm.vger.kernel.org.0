@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EA5256FEC
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Aug 2020 20:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C42256FD5
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Aug 2020 20:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbgH3S4C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Aug 2020 14:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
+        id S1726506AbgH3SzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Aug 2020 14:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726412AbgH3SzF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Aug 2020 14:55:05 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2674BC061575;
+        with ESMTP id S1726468AbgH3SzG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Aug 2020 14:55:06 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA45C061573;
         Sun, 30 Aug 2020 11:55:05 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id c15so2325197lfi.3;
+Received: by mail-lj1-x241.google.com with SMTP id v12so4236351ljc.10;
         Sun, 30 Aug 2020 11:55:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=gyFVRrq7oNAkyBDcab1pW5QCuvDZJBB4EknZ7t3FCyQ=;
-        b=eqfaNI4/kuXYQV3upPkbU1Poja6coHGtkB3x+Zbdd5q/kvBXoQ3WVV9lVlV7SmiKJ2
-         u21imvSfFW/H0FNjchmlvEAXLj4xmsNmVgUbbZrvwGeNwR9G/mRS4eRzGYBM+cyW+gTg
-         IZ17Q0jzzEWXu17fMMVPiuT5wqW0NWC57P0Pb8ZN+uf/HwK04jKAr42E5pQtSYOVOchw
-         3DbZh8uUm1VtQllkW3Oh6HsMoH+tB0dT2jLFkUdlyPf9BO8wKy9EN1j0BhBtphNMxdgg
-         UYiUIxzauGngNYfKiHmjcosKfLOX1vKH1B5D91Ft2SIqdsTRkvsZwLx0nLnm/4RChzTF
-         Y6HQ==
+        bh=bfkugI/LH5e/fdWRheFGhtoVkFSs2RbzC3QtJXx//30=;
+        b=eSLpIkR4N6ywW9V7JdCundGyX+rsmoIUbuxQemwY84A+Nd67XcTfTg0OQkdoi9DaH3
+         PiX3MSSoS0lgV/zRFQlsRp3Y7OL1wGrZqPLgYYDNdRKW0VkE6PFTqUo3c4hW2goqotcQ
+         Xanmi5x43qhTJLRPWjbf0+VnCbselVkfPxEKX7odWzjr46yFG4uI98s5L+1n3H+aRUzu
+         6PUBbK1Rp5u8N7xGRyifGK9eqK+Hwdx0otSUyYydn0Hp52HqOSoAfJ3rnnkGtgFoH0Ny
+         Iw7B7fKkIkM0Z6KXX0F0Zz8Mm90Mch0Usi8h9d9vx4UajR3+Qqb9e6KquIkVQ4DwTnpA
+         uGQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gyFVRrq7oNAkyBDcab1pW5QCuvDZJBB4EknZ7t3FCyQ=;
-        b=jvMu5R0E45gw2ptg3+6JANJyTs4ec0hUXNN7cbDT3sIRpAJqO04fFM1wKJkd2eYvjt
-         nZfV1yRt1iPeLroCYAsiCp6o+bjz5bheuPsffytGejAsy3OpZQ0a0KML8B5iYlqTPTuZ
-         DYKUZ4uQa5Lw+kbmSqXFQ0DhrMKpp8R625fFlr2vMneJWbJOUyYv3bhH2stMoOnegC3g
-         S/y3lIcpBYFL1wbwQWoVsTcktQpZ/ccC1dCEyDjysSq7tHIKdnFbgPT2rWM5xDr3kZoO
-         sVFqlJ29uEj9Y8ZGFZArvzINagdFXvBB0Rfqzrfj7VFz7+NykoONkHd7r2ZuFuTDGx7c
-         iXKg==
-X-Gm-Message-State: AOAM532l4G5JV47ZAxThsu1HaAVoqBMyo9cH2yiG8k1ptXnXRIbwuaYh
-        XG/3nMHD4o0nqBgS2s4B+Hc=
-X-Google-Smtp-Source: ABdhPJxSgb/zvqZMjCfnMXtPsXy8CIvbp061yJoZhxOfVfnVI7ZEnO98gX7KcwhZ8GNi9zDUFR/Yeg==
-X-Received: by 2002:ac2:51b4:: with SMTP id f20mr3884946lfk.188.1598813703445;
-        Sun, 30 Aug 2020 11:55:03 -0700 (PDT)
+        bh=bfkugI/LH5e/fdWRheFGhtoVkFSs2RbzC3QtJXx//30=;
+        b=HMlpCvaSPGYEe+SUHrgLLJUysn1VlUoea6IPhlxMwqmd5bwDH16e604Mkpu25NT80h
+         +IkFBEzGPpFwmRjZQPACJlx+g5fc4ZHU5kdJuFlkewt6jwcvLu6O8jGPFjFHQIWRFeVa
+         rMQ6RumPdFLUOfYvbtj7uvF579/jFonydTiZsXjZDtoaybKA9cPc04Y25lfVUMjf8lMd
+         pyNZAKoUezRMwPOLETExSzgQM4uG6sASYrUcicA45F/YpSMUrDsg4qjD10VVtMFtwE5k
+         P3dnFPAN6g/13H+JX5jU0b6Z2Ra3MRFHM/B/7oKUqz9yaLC0Ekhj0ri7EllR30THug0F
+         gU7Q==
+X-Gm-Message-State: AOAM532BujqQmHYiIVBwBa2Kw2N/2aLc5wnZUeWcHC4oUHq4IduyPLBK
+        LF8MmE7lLZyrHwEOzNCMkU8=
+X-Google-Smtp-Source: ABdhPJyTua/0i+etpjIH7cfPsBa9xJiXpna9WtQiXng9CI46B2MDoc8yOJ7cUtJGuciz0gKzZCs5Dg==
+X-Received: by 2002:a2e:895a:: with SMTP id b26mr860324ljk.468.1598813704457;
+        Sun, 30 Aug 2020 11:55:04 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id n21sm21630ljc.89.2020.08.30.11.55.02
+        by smtp.gmail.com with ESMTPSA id n21sm21630ljc.89.2020.08.30.11.55.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 11:55:02 -0700 (PDT)
+        Sun, 30 Aug 2020 11:55:04 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -58,9 +58,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/6] dt-bindings: mfd: Add ENE KB930 Embedded Controller binding
-Date:   Sun, 30 Aug 2020 21:53:51 +0300
-Message-Id: <20200830185356.5365-2-digetx@gmail.com>
+Subject: [PATCH v2 2/6] regmap: Use flexible sleep
+Date:   Sun, 30 Aug 2020 21:53:52 +0300
+Message-Id: <20200830185356.5365-3-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200830185356.5365-1-digetx@gmail.com>
 References: <20200830185356.5365-1-digetx@gmail.com>
@@ -71,86 +71,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add binding document for the ENE KB930 Embedded Controller.
+The multi-reg write function uses udelay(), which is a busy-loop based
+delaying function that is not suitable for a long delays. Hence let's
+replace the udelay() with fsleep(), which is flexible sleep function that
+selects best delay function based on the delay-time.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- .../devicetree/bindings/mfd/ene-kb930.yaml    | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+ drivers/base/regmap/regmap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/mfd/ene-kb930.yaml b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
-new file mode 100644
-index 000000000000..635c8966ca22
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/ene-kb930.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: ENE KB930 Embedded Controller bindings
-+
-+description: |
-+  This binding describes the ENE KB930 Embedded Controller attached to an
-+  I2C bus.
-+
-+maintainers:
-+  - Dmitry Osipenko <digetx@gmail.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+        - acer,a500-iconia-ec # Acer A500 Iconia tablet device
-+      - enum:
-+        - ene,kb930
-+  reg:
-+    maxItems: 1
-+
-+  monitored-battery: true
-+  power-supplies: true
-+  system-power-controller: true
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    battery: battery-cell {
-+      compatible = "simple-battery";
-+      charge-full-design-microamp-hours = <3260000>;
-+      energy-full-design-microwatt-hours = <24000000>;
-+      operating-range-celsius = <0 40>;
-+    };
-+
-+    mains: ac-adapter {
-+      compatible = "gpio-charger";
-+      charger-type = "mains";
-+      gpios = <&gpio 125 0>;
-+    };
-+
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      embedded-controller@58 {
-+        compatible = "acer,a500-iconia-ec", "ene,kb930";
-+        reg = <0x58>;
-+
-+        system-power-controller;
-+
-+        monitored-battery = <&battery>;
-+        power-supplies = <&mains>;
-+      };
-+    };
-+
-+...
+diff --git a/drivers/base/regmap/regmap.c b/drivers/base/regmap/regmap.c
+index e93700af7e6e..a417cb1a11dc 100644
+--- a/drivers/base/regmap/regmap.c
++++ b/drivers/base/regmap/regmap.c
+@@ -2231,7 +2231,7 @@ static int _regmap_range_multi_paged_reg_write(struct regmap *map,
+ 					return ret;
+ 
+ 				if (regs[i].delay_us)
+-					udelay(regs[i].delay_us);
++					fsleep(regs[i].delay_us);
+ 
+ 				base += n;
+ 				n = 0;
+@@ -2268,7 +2268,7 @@ static int _regmap_multi_reg_write(struct regmap *map,
+ 				return ret;
+ 
+ 			if (regs[i].delay_us)
+-				udelay(regs[i].delay_us);
++				fsleep(regs[i].delay_us);
+ 		}
+ 		return 0;
+ 	}
 -- 
 2.27.0
 
