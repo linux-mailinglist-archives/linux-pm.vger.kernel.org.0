@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18276256FDE
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Aug 2020 20:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE5C256FDA
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Aug 2020 20:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbgH3Szq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Aug 2020 14:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S1726771AbgH3Szp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Aug 2020 14:55:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726488AbgH3SzJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Aug 2020 14:55:09 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AA6C061236;
-        Sun, 30 Aug 2020 11:55:08 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id k25so1255465ljg.9;
-        Sun, 30 Aug 2020 11:55:08 -0700 (PDT)
+        with ESMTP id S1726489AbgH3SzK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Aug 2020 14:55:10 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422FCC061239;
+        Sun, 30 Aug 2020 11:55:09 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id w14so4272983ljj.4;
+        Sun, 30 Aug 2020 11:55:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=iKBN4c5URU3NkY5gudwPieJ8G8N2ImGEckJC0tR3bQ4=;
-        b=Zeggtg79FI/kG9YvwJfDa1+8emzm7Sa47YneXv2LWpduISYJF5tElBJH9xsfg023Fn
-         Pn7xWZ1fTtAdVJuLfRnK9jJr5wxM66n/W5bWl7Geds8KKDpoAAhNyc4Go9nIzxak7Ku6
-         rrhrgcuXskF3oMWWFq927qDVnWGXcspapiYCyqKeyPCPHGV7xcCM85EvqhitIqKFUihq
-         dc26iNKzZ2UUBMuLH3E6sgRfA1VkYgtgwWUgPRXhvTa4zt8yhTTf0aiPAciLpRJO2rN3
-         QD53waqxNMVrOhsrD2H7Ypmj5+MSxTqrWP9VDR7DilEJyWJLcjxGqp2NY7Z3sAvVuDdF
-         XQGQ==
+        bh=oLLo2YzfCJjR+A6TXZa0FxvLUMyx5MYAmbSNQ7sUe68=;
+        b=Afwk3TSy4sfLwMLjGO+EDRVsjqOvPM9pk89DxOyzW7fXmZpzkXduUllrxVHQ35pxjK
+         Tv4jKMJT4Iys13a5mQkuQYd8XAAqlQpAXs/E/MDlaGf73MSZ8qxNLLEWa+Al4grVEFFg
+         vwTw9ZU/HOUv/OoO0RRu+2s92mrnxH1Qghji0W/NNJSOeJYnF0UKpwi5FJT2MRywmdpj
+         3WArW6qM4b4TUF9DTuZydI4JCI2Vwl7w551W/P0HJGEG5ztcY5d1kKff9Y6mCFf/lxLR
+         pnZwAa3DObosJPswSmZDBjthlhx7QdOzC7B8ReruuRUu90WrjyYlG5fjZ22ghHELo0kz
+         4APQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=iKBN4c5URU3NkY5gudwPieJ8G8N2ImGEckJC0tR3bQ4=;
-        b=bHMn8VTXDbbP7QJZKpXHE2Bp0YVPyYvqT5yn91GY8hBsv7YzgElE5p9TVhLzc4IKqL
-         AXn4SD7Y15oyVmpUwynzL2zTuMcu2VLHWbi4Qy97ysKkZuteTnNgr7GITTlLf5capcHL
-         gYc7oKx/0WzmxAhKg3048n/oCl3Vc/EVA6aLho/Vp5Mjw9Fc/pcUhCeeQlfLY2SFP2yN
-         /VfLFxILD6wGcjW5LZxMv1mYL1SAyIs3ri+uF4WCbwyS8FJADS92duIwC+W6W8e1JTj8
-         UVBfg6IsJq1Oc5W9WVZRNFr8Zijf+xu+Tl/Z4uxxd/otJRU/WKeGQ2vFdYscQ2CFVKOb
-         TuxQ==
-X-Gm-Message-State: AOAM5319QLI5B9r7Gkae2iyLJ5zjBwtNnUqycO5CrkmrLSIg/7HkJuca
-        UmNo70P5N4Lv3OPu4GYQRdA=
-X-Google-Smtp-Source: ABdhPJxbe0JBfxWKV/6NSjmi1mPXIXnK4XB7IBnEwsa3Dm0p/FOmm7LMFXKSanu0rdkfG55Ykh45kA==
-X-Received: by 2002:a2e:a28d:: with SMTP id k13mr3602274lja.11.1598813706596;
-        Sun, 30 Aug 2020 11:55:06 -0700 (PDT)
+        bh=oLLo2YzfCJjR+A6TXZa0FxvLUMyx5MYAmbSNQ7sUe68=;
+        b=sWPmXuYQdqh51sxiMLDDJFH2RAzOlAH0pusXTSXRsjoKoblPeT0lp+A2BxF9WE5bAU
+         coiJ1sTgCsP/YWt355LBndvZyPf5JPldgqDubkiz+Qnm+di9oCeZE1ZUcgjkkb4ZNvFk
+         L2HCDAFOxKpiq1o3HYvcmwo4o1jEcPhilV+ETUbb68XpwRTyvgk72k7FQJ2suK+pVscU
+         inzZ3HCtka2W5Hpm33kPsBI1md1cf/GH6pgc4BI3P80uqgUnDnrkCRGPusnXrgHe1/BQ
+         lBsDEX4pP0H8FjUzfGU5rCwZk5X57ZH/Db2DT+I18Nfj2mUjYkBOQGOy9IzRvlYvZnWB
+         6spw==
+X-Gm-Message-State: AOAM531ZDCfr1R6byV04u7HxHzEuNNet6p6euSz8QsZD5Q2xwXGWLRrQ
+        gwkzjAe4u0WMcPBchdKrbnI=
+X-Google-Smtp-Source: ABdhPJzURtHEnjnqDQ4crPdSoGwkqybZp8NvhdCp7iCjxQziqlSIqzy1nwrl3buNCRoylZUvMrUCwA==
+X-Received: by 2002:a2e:910d:: with SMTP id m13mr4046237ljg.240.1598813707670;
+        Sun, 30 Aug 2020 11:55:07 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id n21sm21630ljc.89.2020.08.30.11.55.05
+        by smtp.gmail.com with ESMTPSA id n21sm21630ljc.89.2020.08.30.11.55.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2020 11:55:06 -0700 (PDT)
+        Sun, 30 Aug 2020 11:55:07 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -58,9 +58,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] power: supply: Add battery gauge driver for Acer Iconia Tab A500
-Date:   Sun, 30 Aug 2020 21:53:54 +0300
-Message-Id: <20200830185356.5365-5-digetx@gmail.com>
+Subject: [PATCH v2 5/6] leds: Add driver for Acer Iconia Tab A500
+Date:   Sun, 30 Aug 2020 21:53:55 +0300
+Message-Id: <20200830185356.5365-6-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200830185356.5365-1-digetx@gmail.com>
 References: <20200830185356.5365-1-digetx@gmail.com>
@@ -71,344 +71,184 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds battery gauge driver for Acer Iconia Tab A500 device.
-The battery gauge function is provided via the Embedded Controller,
-which is found on the Acer A500.
+Acer Iconia Tab A500 is an Android tablet device which has two LEDs
+embedded into the Power Button. Orange LED indicates "battery charging"
+status and white LED indicates "wake-up/charge-done" status. The new LED
+driver provides control over both LEDs to userspace.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/power/supply/Kconfig             |   6 +
- drivers/power/supply/Makefile            |   1 +
- drivers/power/supply/acer_a500_battery.c | 297 +++++++++++++++++++++++
- 3 files changed, 304 insertions(+)
- create mode 100644 drivers/power/supply/acer_a500_battery.c
+ drivers/leds/Kconfig          |   7 ++
+ drivers/leds/Makefile         |   1 +
+ drivers/leds/leds-acer-a500.c | 130 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 138 insertions(+)
+ create mode 100644 drivers/leds/leds-acer-a500.c
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index d1ccf17df42e..3daf0e359964 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -752,4 +752,10 @@ config CHARGER_WILCO
- 	  information can be found in
- 	  Documentation/ABI/testing/sysfs-class-power-wilco
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 4f6464a169d5..4c39b53bcf1f 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -921,6 +921,13 @@ config LEDS_SGM3140
+ 	  This option enables support for the SGM3140 500mA Buck/Boost Charge
+ 	  Pump LED Driver.
  
-+config BATTERY_ACER_A500
-+	tristate "Acer Iconia Tab A500 battery driver"
-+	depends on MFD_ACER_A500_EC
++config LEDS_ACER_A500
++	tristate "Power button LED support for Acer Iconia Tab A500"
++	depends on LEDS_CLASS && MFD_ACER_A500_EC
 +	help
-+	  Say Y to include support for Acer Iconia Tab A500 battery fuel gauge.
++	  This option enables support for the Power Button LED of
++	  Acer Iconia Tab A500.
 +
- endif # POWER_SUPPLY
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index b3c694a65114..08a5b49e2936 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -96,3 +96,4 @@ obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
- obj-$(CONFIG_CHARGER_BD70528)	+= bd70528-charger.o
- obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
- obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
-+obj-$(CONFIG_BATTERY_ACER_A500)	+= acer_a500_battery.o
-diff --git a/drivers/power/supply/acer_a500_battery.c b/drivers/power/supply/acer_a500_battery.c
+ comment "LED Triggers"
+ source "drivers/leds/trigger/Kconfig"
+ 
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index 778cb4bb8c52..73e603e1727e 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -10,6 +10,7 @@ obj-$(CONFIG_LEDS_TRIGGERS)		+= led-triggers.o
+ # LED Platform Drivers (keep this sorted, M-| sort)
+ obj-$(CONFIG_LEDS_88PM860X)		+= leds-88pm860x.o
+ obj-$(CONFIG_LEDS_AAT1290)		+= leds-aat1290.o
++obj-$(CONFIG_LEDS_ACER_A500)		+= leds-acer-a500.o
+ obj-$(CONFIG_LEDS_ADP5520)		+= leds-adp5520.o
+ obj-$(CONFIG_LEDS_AN30259A)		+= leds-an30259a.o
+ obj-$(CONFIG_LEDS_APU)			+= leds-apu.o
+diff --git a/drivers/leds/leds-acer-a500.c b/drivers/leds/leds-acer-a500.c
 new file mode 100644
-index 000000000000..93135933c8af
+index 000000000000..790238cebfb5
 --- /dev/null
-+++ b/drivers/power/supply/acer_a500_battery.c
-@@ -0,0 +1,297 @@
++++ b/drivers/leds/leds-acer-a500.c
+@@ -0,0 +1,130 @@
 +// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Battery driver for Acer Iconia Tab A500.
-+ *
-+ * Copyright 2020 GRATE-driver project.
-+ *
-+ * Based on downstream driver from Acer Inc.
-+ * Based on NVIDIA Gas Gauge driver for SBS Compliant Batteries.
-+ *
-+ * Copyright (c) 2010, NVIDIA Corporation.
-+ */
 +
++#include <linux/leds.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
 +#include <linux/regmap.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/workqueue.h>
++
++#define A500_EC_LED_DELAY_USEC	(100 * 1000)
 +
 +enum {
-+	REG_CAPACITY,
-+	REG_VOLTAGE,
-+	REG_CURRENT,
-+	REG_DESIGN_CAPACITY,
-+	REG_TEMPERATURE,
++	REG_RESET_LEDS = 0x40,
++	REG_POWER_LED_ON = 0x42,
++	REG_CHARGE_LED_ON = 0x43,
++	REG_ANDROID_LEDS_OFF = 0x5a,
 +};
 +
-+#define EC_DATA(_reg, _psp) {			\
-+	.psp = POWER_SUPPLY_PROP_ ## _psp,	\
-+	.reg = _reg,				\
++struct a500_ec_led {
++	struct led_classdev cdev;
++	struct a500_ec_led *other;
++	const struct reg_sequence *enable_seq;
++	struct regmap *rmap;
++};
++
++static const struct reg_sequence a500_ec_leds_reset_seq[] = {
++	REG_SEQ(REG_RESET_LEDS, 0x0, A500_EC_LED_DELAY_USEC),
++	REG_SEQ(REG_ANDROID_LEDS_OFF, 0x0, A500_EC_LED_DELAY_USEC),
++};
++
++static const struct reg_sequence a500_ec_white_led_enable_seq[] = {
++	REG_SEQ(REG_POWER_LED_ON, 0x0, A500_EC_LED_DELAY_USEC),
++};
++
++static const struct reg_sequence a500_ec_orange_led_enable_seq[] = {
++	REG_SEQ(REG_CHARGE_LED_ON, 0x0, A500_EC_LED_DELAY_USEC),
++};
++
++static int a500_ec_led_brightness_set(struct led_classdev *led_cdev,
++				      enum led_brightness value)
++{
++	struct a500_ec_led *led = container_of(led_cdev, struct a500_ec_led,
++					       cdev);
++	struct reg_sequence control_seq[2];
++	unsigned int num_regs = 1;
++
++	if (value) {
++		control_seq[0] = led->enable_seq[0];
++	} else {
++		/*
++		 * There is no separate controls which can disable LEDs
++		 * individually, there is only RESET_LEDS command that turns
++		 * off both LEDs.
++		 *
++		 * RESET_LEDS turns off both LEDs, thus restore other LED if
++		 * it's turned ON.
++		 */
++		if (led->other->cdev.brightness)
++			num_regs = 2;
++
++		control_seq[0] = a500_ec_leds_reset_seq[0];
++		control_seq[1] = led->other->enable_seq[0];
++	}
++
++	return regmap_multi_reg_write(led->rmap, control_seq, num_regs);
 +}
 +
-+static const struct battery_register {
-+	enum power_supply_property psp;
-+	unsigned int reg;
-+} ec_data[] = {
-+	[REG_CAPACITY]		= EC_DATA(0x00, CAPACITY),
-+	[REG_VOLTAGE]		= EC_DATA(0x01, VOLTAGE_NOW),
-+	[REG_CURRENT]		= EC_DATA(0x03, CURRENT_NOW),
-+	[REG_DESIGN_CAPACITY]	= EC_DATA(0x08, CHARGE_FULL_DESIGN),
-+	[REG_TEMPERATURE]	= EC_DATA(0x0a, TEMP),
-+};
-+
-+static const enum power_supply_property a500_battery_properties[] = {
-+	POWER_SUPPLY_PROP_CAPACITY,
-+	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-+	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_TECHNOLOGY,
-+	POWER_SUPPLY_PROP_TEMP,
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+};
-+
-+struct a500_battery {
-+	struct delayed_work poll_work;
-+	struct power_supply *psy;
-+	struct regmap *rmap;
-+	unsigned int capacity;
-+};
-+
-+static bool a500_battery_update_capacity(struct a500_battery *bat)
++static int a500_ec_leds_probe(struct platform_device *pdev)
 +{
-+	unsigned int capacity;
++	struct a500_ec_led *white_led, *orange_led;
++	struct regmap *rmap;
 +	int err;
 +
-+	err = regmap_read(bat->rmap, ec_data[REG_CAPACITY].reg, &capacity);
-+	if (err)
-+		return false;
-+
-+	/* capacity can be >100% even if max value is 100% */
-+	capacity = min(capacity, 100u);
-+
-+	if (bat->capacity != capacity) {
-+		bat->capacity = capacity;
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static int a500_battery_get_status(struct a500_battery *bat)
-+{
-+	if (bat->capacity < 100) {
-+		if (power_supply_am_i_supplied(bat->psy))
-+			return POWER_SUPPLY_STATUS_CHARGING;
-+		else
-+			return POWER_SUPPLY_STATUS_DISCHARGING;
-+	}
-+
-+	return POWER_SUPPLY_STATUS_FULL;
-+}
-+
-+static void a500_battery_unit_adjustment(struct device *dev,
-+					 enum power_supply_property psp,
-+					 union power_supply_propval *val)
-+{
-+	const unsigned int base_unit_conversion = 1000;
-+	const unsigned int temp_kelvin_to_celsius = 2731;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+		val->intval *= base_unit_conversion;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_TEMP:
-+		val->intval -= temp_kelvin_to_celsius;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = !!val->intval;
-+		break;
-+
-+	default:
-+		dev_dbg(dev,
-+			"%s: no need for unit conversion %d\n", __func__, psp);
-+	}
-+}
-+
-+static int a500_battery_get_ec_data_index(struct device *dev,
-+					  enum power_supply_property psp)
-+{
-+	unsigned int i;
-+
-+	/*
-+	 * DESIGN_CAPACITY register always returns a non-zero value if
-+	 * battery is connected and zero if disconnected, hence we'll use
-+	 * it for judging the battery presence.
-+	 */
-+	if (psp == POWER_SUPPLY_PROP_PRESENT)
-+		psp = POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN;
-+
-+	for (i = 0; i < ARRAY_SIZE(ec_data); i++)
-+		if (psp == ec_data[i].psp)
-+			return i;
-+
-+	dev_dbg(dev, "%s: invalid property %u\n", __func__, psp);
-+
-+	return -EINVAL;
-+}
-+
-+static int a500_battery_get_property(struct power_supply *psy,
-+				     enum power_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+	struct a500_battery *bat = power_supply_get_drvdata(psy);
-+	struct device *dev = psy->dev.parent;
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		val->intval = a500_battery_get_status(bat);
-+		break;
-+
-+	case POWER_SUPPLY_PROP_TECHNOLOGY:
-+		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_CAPACITY:
-+		a500_battery_update_capacity(bat);
-+		val->intval = bat->capacity;
-+		break;
-+
-+	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-+	case POWER_SUPPLY_PROP_CURRENT_NOW:
-+	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+	case POWER_SUPPLY_PROP_PRESENT:
-+	case POWER_SUPPLY_PROP_TEMP:
-+		ret = a500_battery_get_ec_data_index(dev, psp);
-+		if (ret < 0)
-+			break;
-+
-+		ret = regmap_read(bat->rmap, ec_data[ret].reg, &val->intval);
-+		break;
-+
-+	default:
-+		dev_err(dev, "%s: invalid property %u\n", __func__, psp);
++	rmap = dev_get_regmap(pdev->dev.parent, "KB930");
++	if (!rmap)
 +		return -EINVAL;
-+	}
 +
-+	if (!ret) {
-+		/* convert units to match requirements of power supply class */
-+		a500_battery_unit_adjustment(dev, psp, val);
-+	}
++	/* reset and turn off LEDs */
++	regmap_multi_reg_write(rmap, a500_ec_leds_reset_seq, 2);
 +
-+	dev_dbg(dev, "%s: property = %d, value = %x\n",
-+		__func__, psp, val->intval);
-+
-+	/* return NODATA for properties if battery not presents */
-+	if (ret)
-+		return -ENODATA;
-+
-+	return 0;
-+}
-+
-+static void a500_battery_poll_work(struct work_struct *work)
-+{
-+	struct a500_battery *bat;
-+	bool capacity_changed;
-+
-+	bat = container_of(work, struct a500_battery, poll_work.work);
-+	capacity_changed = a500_battery_update_capacity(bat);
-+
-+	if (capacity_changed)
-+		power_supply_changed(bat->psy);
-+
-+	/* continuously send uevent notification */
-+	schedule_delayed_work(&bat->poll_work, 30 * HZ);
-+}
-+
-+static const struct power_supply_desc a500_battery_desc = {
-+	.name = "ec-battery",
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = a500_battery_properties,
-+	.get_property = a500_battery_get_property,
-+	.num_properties = ARRAY_SIZE(a500_battery_properties),
-+	.external_power_changed = power_supply_changed,
-+};
-+
-+static int a500_battery_probe(struct platform_device *pdev)
-+{
-+	struct power_supply_config psy_cfg = {};
-+	struct a500_battery *bat;
-+
-+	bat = devm_kzalloc(&pdev->dev, sizeof(*bat), GFP_KERNEL);
-+	if (!bat)
++	white_led = devm_kzalloc(&pdev->dev, sizeof(*white_led), GFP_KERNEL);
++	if (!white_led)
 +		return -ENOMEM;
 +
-+	platform_set_drvdata(pdev, bat);
++	white_led->cdev.name = "power:white";
++	white_led->cdev.brightness_set_blocking = a500_ec_led_brightness_set;
++	white_led->cdev.flags = LED_CORE_SUSPENDRESUME;
++	white_led->cdev.max_brightness = 1;
++	white_led->enable_seq = a500_ec_white_led_enable_seq;
++	white_led->rmap = rmap;
 +
-+	psy_cfg.of_node = pdev->dev.parent->of_node;
-+	psy_cfg.drv_data = bat;
++	orange_led = devm_kzalloc(&pdev->dev, sizeof(*orange_led), GFP_KERNEL);
++	if (!orange_led)
++		return -ENOMEM;
 +
-+	bat->rmap = dev_get_regmap(pdev->dev.parent, "KB930");
-+	if (!bat->rmap)
-+		return -EINVAL;
++	orange_led->cdev.name = "power:orange";
++	orange_led->cdev.brightness_set_blocking = a500_ec_led_brightness_set;
++	orange_led->cdev.flags = LED_CORE_SUSPENDRESUME;
++	orange_led->cdev.max_brightness = 1;
++	orange_led->enable_seq = a500_ec_orange_led_enable_seq;
++	orange_led->rmap = rmap;
 +
-+	bat->psy = devm_power_supply_register_no_ws(&pdev->dev,
-+						    &a500_battery_desc,
-+						    &psy_cfg);
-+	if (IS_ERR(bat->psy))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(bat->psy),
-+				     "failed to register battery\n");
++	white_led->other = orange_led;
++	orange_led->other = white_led;
 +
-+	INIT_DELAYED_WORK(&bat->poll_work, a500_battery_poll_work);
-+	schedule_delayed_work(&bat->poll_work, HZ);
++	err = devm_led_classdev_register(&pdev->dev, &white_led->cdev);
++	if (err) {
++		dev_err(&pdev->dev, "failed to register white LED\n");
++		return err;
++	}
 +
-+	return 0;
-+}
-+
-+static int a500_battery_remove(struct platform_device *pdev)
-+{
-+	struct a500_battery *bat = dev_get_drvdata(&pdev->dev);
-+
-+	cancel_delayed_work_sync(&bat->poll_work);
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused a500_battery_suspend(struct device *dev)
-+{
-+	struct a500_battery *bat = dev_get_drvdata(dev);
-+
-+	cancel_delayed_work_sync(&bat->poll_work);
++	err = devm_led_classdev_register(&pdev->dev, &orange_led->cdev);
++	if (err) {
++		dev_err(&pdev->dev, "failed to register orange LED\n");
++		return err;
++	}
 +
 +	return 0;
 +}
 +
-+static int __maybe_unused a500_battery_resume(struct device *dev)
-+{
-+	struct a500_battery *bat = dev_get_drvdata(dev);
-+
-+	schedule_delayed_work(&bat->poll_work, HZ);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(a500_battery_pm_ops,
-+			 a500_battery_suspend, a500_battery_resume);
-+
-+static struct platform_driver a500_battery_driver = {
++static struct platform_driver a500_ec_leds_driver = {
 +	.driver = {
-+		.name = "acer-a500-iconia-battery",
-+		.pm = &a500_battery_pm_ops,
++		.name = "acer-a500-iconia-leds",
 +	},
-+	.probe = a500_battery_probe,
-+	.remove = a500_battery_remove,
++	.probe = a500_ec_leds_probe,
 +};
-+module_platform_driver(a500_battery_driver);
++module_platform_driver(a500_ec_leds_driver);
 +
-+MODULE_DESCRIPTION("Battery gauge driver for Acer Iconia Tab A500");
++MODULE_DESCRIPTION("LED driver for Acer Iconia Tab A500 Power Button");
 +MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
-+MODULE_ALIAS("platform:acer-a500-iconia-battery");
++MODULE_ALIAS("platform:acer-a500-iconia-leds");
 +MODULE_LICENSE("GPL");
 -- 
 2.27.0
