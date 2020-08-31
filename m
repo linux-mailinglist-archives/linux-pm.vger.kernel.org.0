@@ -2,317 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A93258093
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 20:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B91112581FF
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 21:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbgHaSQG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 14:16:06 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:38893 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727058AbgHaSQF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 14:16:05 -0400
-Received: by mail-ot1-f66.google.com with SMTP id y5so1557373otg.5;
-        Mon, 31 Aug 2020 11:16:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=o4n5ZY7UK+Af711a+jkirN1+LhqqnwPtEvzee1EZgVQ=;
-        b=jnp6EMzvOqwqbMx5rsei2Xtbr5yfT+Mh6MVq+zMokVlLHBgijWG1rqw0Rbqex4X+LQ
-         JAffiqnCur/eM41gwne8BCTjy4sKJKjBOPQP7WurATr84WyK1zz53BzezcrCyOkW4lsm
-         sA1nYVflHWCCf2P46v5Nux83g0L9Wc9FBBK9iVPjYcRRg3dGeFPAPKzIYHZ+5UQSkoka
-         hGb2Mag1cX41jinbui2582Jd69fM5D8IeclYuRwMOo03PHw1HU2BVrGV3FUf2zVxN6MJ
-         rViUrYU4603O2Z6TWT6LjSLfCNHWl7TGWyFe3QrTC8HM6qBVyTf4kPNta91+g/h9TTR1
-         OLrQ==
-X-Gm-Message-State: AOAM530qpcdW4gLNedOINseo+MGJ1Mp3/4mHD3W9AANCiaZtgcTqfDrg
-        9HkaqZlt3ctH8J7RFXgfL/0h6ZFT4n6niws64S4=
-X-Google-Smtp-Source: ABdhPJzBJPQaRTojkCAeMdHSRkL6m9XTsC8VIs0zJxh80sleWqbwgkmE6e3Q5Lca8pSIYGlWpVPWMcb9NsPkjJpc9P8=
-X-Received: by 2002:a9d:7e99:: with SMTP id m25mr1679295otp.118.1598897764330;
- Mon, 31 Aug 2020 11:16:04 -0700 (PDT)
+        id S1728555AbgHaToD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 15:44:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41544 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726755AbgHaToD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 31 Aug 2020 15:44:03 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 53792206E3;
+        Mon, 31 Aug 2020 19:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598903042;
+        bh=9B6/M6/43/N+VrQX6UwnkiY8uNrfSqXz8/e67LODxn8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=w8hFO41BDU39LCL9ZCa1qgGOdeuxpAELFO0uNMmN+YWn0MQE0cqn/xsnvz7GmpE0i
+         Idi3UfMleZwXdWRWcy8+s2LBiyXN9+KTwpuUelORm8OFRQs1kGO1+7KG4KRrPrIIqv
+         04mCkuDoeGVSo+I13lAazkwxXcbztxOIKCmnxBG4=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 36D2B35230F1; Mon, 31 Aug 2020 12:44:02 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 12:44:02 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        madhuparnabhowmik10@gmail.com,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        peterz@infrdead.org
+Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
+ OF driver helper
+Message-ID: <20200831194402.GD2855@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
 MIME-Version: 1.0
-References: <2240881.fzTuzKk6Gz@kreacher> <1825858.9IUoltcDtD@kreacher>
-In-Reply-To: <1825858.9IUoltcDtD@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 31 Aug 2020 20:15:52 +0200
-Message-ID: <CAJZ5v0gJciEDUYwz80cAOTyZ7+3yDdzkKtGB3X6wjEh4aUM6BQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] cpufreq: intel_pstate: Add ->offline and ->online callbacks
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 27, 2020 at 5:28 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
->
-> Add ->offline and ->online driver callbacks to prepare for taking a
-> CPU offline and to restore its working configuration when it goes
-> back online, respectively, to avoid invoking the ->init callback on
-> every CPU online which is quite a bit of unnecessary overhead.
->
-> Define ->offline and ->online so that they can be used in the
-> passive mode as well as in the active mode and because ->offline
-> will do the majority of ->stop_cpu work, the passive mode does
-> not need that callback any more, so drop it from there.
->
-> Also modify the active mode ->suspend and ->resume callbacks to
-> prevent them from interfering with the new ->offline and ->online
-> ones in case the latter are invoked withing the system-wide suspend
-> and resume code flow and make the passive mode use them too.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->
-> -> v2: Rearrange intel_pstate_init_cpu() to restore some of the previous
->        behavior of it to retain the current active-mode EPP management.
->
-> v2 -> v3:
->    * Fold the previous [5/5] in, rework intel_pstate_resume(), add
->      intel_pstate_suspend().
->    * Drop intel_pstate_hwp_save_state() and drop epp_saved from struct cpudata.
->    * Update the changelog.
->
-> ---
->  drivers/cpufreq/intel_pstate.c | 139 +++++++++++++++++++++------------
->  1 file changed, 91 insertions(+), 48 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index b308c39b6204..a265ccbcbbd7 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -219,14 +219,13 @@ struct global_params {
->   * @epp_policy:                Last saved policy used to set EPP/EPB
->   * @epp_default:       Power on default HWP energy performance
->   *                     preference/bias
-> - * @epp_saved:         Saved EPP/EPB during system suspend or CPU offline
-> - *                     operation
->   * @epp_cached         Cached HWP energy-performance preference value
->   * @hwp_req_cached:    Cached value of the last HWP Request MSR
->   * @hwp_cap_cached:    Cached value of the last HWP Capabilities MSR
->   * @last_io_update:    Last time when IO wake flag was set
->   * @sched_flags:       Store scheduler flags for possible cross CPU update
->   * @hwp_boost_min:     Last HWP boosted min performance
-> + * @suspended:         Whether or not the driver has been suspended.
->   *
->   * This structure stores per CPU instance data for all CPUs.
->   */
-> @@ -258,13 +257,13 @@ struct cpudata {
->         s16 epp_powersave;
->         s16 epp_policy;
->         s16 epp_default;
-> -       s16 epp_saved;
->         s16 epp_cached;
->         u64 hwp_req_cached;
->         u64 hwp_cap_cached;
->         u64 last_io_update;
->         unsigned int sched_flags;
->         u32 hwp_boost_min;
-> +       bool suspended;
->  };
->
->  static struct cpudata **all_cpu_data;
-> @@ -871,12 +870,6 @@ static void intel_pstate_hwp_set(unsigned int cpu)
->
->         cpu_data->epp_policy = cpu_data->policy;
->
-> -       if (cpu_data->epp_saved >= 0) {
-> -               epp = cpu_data->epp_saved;
-> -               cpu_data->epp_saved = -EINVAL;
-> -               goto update_epp;
-> -       }
-> -
->         if (cpu_data->policy == CPUFREQ_POLICY_PERFORMANCE) {
->                 epp = intel_pstate_get_epp(cpu_data, value);
->                 cpu_data->epp_powersave = epp;
-> @@ -903,7 +896,6 @@ static void intel_pstate_hwp_set(unsigned int cpu)
->
->                 epp = cpu_data->epp_powersave;
->         }
-> -update_epp:
->         if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
->                 value &= ~GENMASK_ULL(31, 24);
->                 value |= (u64)epp << 24;
-> @@ -915,14 +907,24 @@ static void intel_pstate_hwp_set(unsigned int cpu)
->         wrmsrl_on_cpu(cpu, MSR_HWP_REQUEST, value);
->  }
->
-> -static void intel_pstate_hwp_force_min_perf(int cpu)
-> +static void intel_pstate_hwp_offline(struct cpudata *cpu)
->  {
-> -       u64 value;
-> +       u64 value = READ_ONCE(cpu->hwp_req_cached);
->         int min_perf;
->
-> -       value = all_cpu_data[cpu]->hwp_req_cached;
-> +       if (boot_cpu_has(X86_FEATURE_HWP_EPP)) {
-> +               /*
-> +                * In case the EPP has been set to "performance" by the
-> +                * active mode "performance" scaling algorithm, replace that
-> +                * temporary value with the cached EPP one.
-> +                */
-> +               value &= ~GENMASK_ULL(31, 24);
-> +               value |= HWP_ENERGY_PERF_PREFERENCE(cpu->epp_cached);
-> +               WRITE_ONCE(cpu->hwp_req_cached, value);
-> +       }
-> +
->         value &= ~GENMASK_ULL(31, 0);
-> -       min_perf = HWP_LOWEST_PERF(all_cpu_data[cpu]->hwp_cap_cached);
-> +       min_perf = HWP_LOWEST_PERF(cpu->hwp_cap_cached);
->
->         /* Set hwp_max = hwp_min */
->         value |= HWP_MAX_PERF(min_perf);
-> @@ -932,19 +934,7 @@ static void intel_pstate_hwp_force_min_perf(int cpu)
->         if (boot_cpu_has(X86_FEATURE_HWP_EPP))
->                 value |= HWP_ENERGY_PERF_PREFERENCE(HWP_EPP_POWERSAVE);
->
-> -       wrmsrl_on_cpu(cpu, MSR_HWP_REQUEST, value);
-> -}
-> -
-> -static int intel_pstate_hwp_save_state(struct cpufreq_policy *policy)
-> -{
-> -       struct cpudata *cpu_data = all_cpu_data[policy->cpu];
-> -
-> -       if (!hwp_active)
-> -               return 0;
-> -
-> -       cpu_data->epp_saved = intel_pstate_get_epp(cpu_data, 0);
-> -
-> -       return 0;
-> +       wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST, value);
->  }
->
->  #define POWER_CTL_EE_ENABLE    1
-> @@ -971,8 +961,22 @@ static void set_power_ctl_ee_state(bool input)
->
->  static void intel_pstate_hwp_enable(struct cpudata *cpudata);
->
-> +static int intel_pstate_suspend(struct cpufreq_policy *policy)
-> +{
-> +       struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +
-> +       pr_debug("CPU %d suspending\n", cpu->cpu);
-> +
-> +       cpu->suspended = true;
-> +
-> +       return 0;
-> +}
-> +
->  static int intel_pstate_resume(struct cpufreq_policy *policy)
->  {
-> +       struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +
-> +       pr_debug("CPU %d resuming\n", cpu->cpu);
->
->         /* Only restore if the system default is changed */
->         if (power_ctl_ee_state == POWER_CTL_EE_ENABLE)
-> @@ -980,18 +984,22 @@ static int intel_pstate_resume(struct cpufreq_policy *policy)
->         else if (power_ctl_ee_state == POWER_CTL_EE_DISABLE)
->                 set_power_ctl_ee_state(false);
->
-> -       if (!hwp_active)
-> -               return 0;
-> +       if (hwp_active) {
-> +               mutex_lock(&intel_pstate_limits_lock);
->
-> -       mutex_lock(&intel_pstate_limits_lock);
-> +               /*
-> +                * Enable for all CPUs, because the boot CPU may not be the
-> +                * first one to resume.
-> +                */
-> +               intel_pstate_hwp_enable(cpu);
->
-> -       if (policy->cpu == 0)
-> -               intel_pstate_hwp_enable(all_cpu_data[policy->cpu]);
-> +               wrmsrl_on_cpu(cpu->cpu, MSR_HWP_REQUEST,
-> +                             READ_ONCE(cpu->hwp_req_cached));
->
-> -       all_cpu_data[policy->cpu]->epp_policy = 0;
-> -       intel_pstate_hwp_set(policy->cpu);
-> +               mutex_unlock(&intel_pstate_limits_lock);
-> +       }
->
-> -       mutex_unlock(&intel_pstate_limits_lock);
-> +       cpu->suspended = false;
->
->         return 0;
->  }
-> @@ -1440,7 +1448,6 @@ static void intel_pstate_hwp_enable(struct cpudata *cpudata)
->                 wrmsrl_on_cpu(cpudata->cpu, MSR_HWP_INTERRUPT, 0x00);
->
->         wrmsrl_on_cpu(cpudata->cpu, MSR_PM_ENABLE, 0x1);
-> -       cpudata->epp_policy = 0;
->         if (cpudata->epp_default == -EINVAL)
->                 cpudata->epp_default = intel_pstate_get_epp(cpudata, 0);
->  }
-> @@ -2111,7 +2118,6 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
->
->                 cpu->epp_default = -EINVAL;
->                 cpu->epp_powersave = -EINVAL;
-> -               cpu->epp_saved = -EINVAL;
->         }
->
->         cpu = all_cpu_data[cpunum];
-> @@ -2122,6 +2128,7 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
->                 const struct x86_cpu_id *id;
->
->                 intel_pstate_hwp_enable(cpu);
-> +               cpu->epp_policy = 0;
->
->                 id = x86_match_cpu(intel_pstate_hwp_boost_ids);
->                 if (id && intel_pstate_acpi_pm_profile_server())
-> @@ -2308,28 +2315,59 @@ static int intel_pstate_verify_policy(struct cpufreq_policy_data *policy)
->         return 0;
->  }
->
-> -static void intel_cpufreq_stop_cpu(struct cpufreq_policy *policy)
-> +static int intel_pstate_cpu_offline(struct cpufreq_policy *policy)
->  {
-> +       struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +
-> +       pr_debug("CPU %d going offline\n", cpu->cpu);
-> +
-> +       if (cpu->suspended)
-> +               return 0;
-> +
-> +       intel_pstate_exit_perf_limits(policy);
-> +
-> +       /*
-> +        * If the CPU is an SMT thread and it goes offline with the performance
-> +        * settings different from the minimum, it will prevent its sibling
-> +        * from getting to lower performance levels, so force the minimum
-> +        * performance on CPU offline to prevent that from happening.
-> +        */
->         if (hwp_active)
-> -               intel_pstate_hwp_force_min_perf(policy->cpu);
-> +               intel_pstate_hwp_offline(cpu);
->         else
-> -               intel_pstate_set_min_pstate(all_cpu_data[policy->cpu]);
-> +               intel_pstate_set_min_pstate(cpu);
-> +
-> +       return 0;
->  }
->
-> -static void intel_pstate_stop_cpu(struct cpufreq_policy *policy)
-> +static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
->  {
-> -       pr_debug("CPU %d exiting\n", policy->cpu);
-> +       struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +
-> +       pr_debug("CPU %d going online\n", cpu->cpu);
-> +
-> +       if (cpu->suspended)
+On Mon, Aug 31, 2020 at 12:02:31PM +0530, Naresh Kamboju wrote:
+> While booting linux mainline kernel on arm64 db410c this kernel warning
+> noticed.
+> 
+> metadata:
+>   git branch: master
+>   git repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>   git commit: f75aef392f869018f78cfedf3c320a6b3fcfda6b
+>   git describe: v5.9-rc3
+>   make_kernelversion: 5.9.0-rc3
+>   kernel-config:
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/dragonboard-410c/lkft/linux-mainline/2965/config
+> 
+> Boot log,
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
+> [    0.000000] Linux version 5.9.0-rc3 (oe-user@oe-host)
+> (aarch64-linaro-linux-gcc (GCC) 7.3.0, GNU ld (GNU Binutils)
+> 2.30.0.20180208) #1 SMP PREEMPT Mon Aug 31 00:23:15 UTC 2020
+> [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+> <>
+> [    5.299090] sdhci: Secure Digital Host Controller Interface driver
+> [    5.299140] sdhci: Copyright(c) Pierre Ossman
+> [    5.304313]
+> [    5.307771] Synopsys Designware Multimedia Card Interface Driver
+> [    5.308588] =============================
+> [    5.308593] WARNING: suspicious RCU usage
+> [    5.316628] sdhci-pltfm: SDHCI platform and OF driver helper
+> [    5.320052] 5.9.0-rc3 #1 Not tainted
+> [    5.320057] -----------------------------
+> [    5.320063] /usr/src/kernel/include/trace/events/lock.h:37
+> suspicious rcu_dereference_check() usage!
+> [    5.320068]
+> [    5.320068] other info that might help us debug this:
+> [    5.320068]
+> [    5.320074]
+> [    5.320074] rcu_scheduler_active = 2, debug_locks = 1
+> [    5.320078] RCU used illegally from extended quiescent state!
+> [    5.320084] no locks held by swapper/0/0.
+> [    5.320089]
+> [    5.320089] stack backtrace:
+> [    5.320098] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.9.0-rc3 #1
+> [    5.346354] sdhci_msm 7864900.sdhci: Got CD GPIO
+> [    5.346446] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    5.346452] Call trace:
+> [    5.346463]  dump_backtrace+0x0/0x1f8
+> [    5.346471]  show_stack+0x2c/0x38
+> [    5.346480]  dump_stack+0xec/0x15c
+> [    5.346490]  lockdep_rcu_suspicious+0xd4/0xf8
+> [    5.346499]  lock_acquire+0x3d0/0x440
+> [    5.346510]  _raw_spin_lock_irqsave+0x80/0xb0
+> [    5.413118]  __pm_runtime_suspend+0x34/0x1d0
+> [    5.417457]  psci_enter_domain_idle_state+0x4c/0xb0
+> [    5.421795]  cpuidle_enter_state+0xc8/0x610
+> [    5.426392]  cpuidle_enter+0x3c/0x50
+> [    5.430561]  call_cpuidle+0x44/0x80
+> [    5.434378]  do_idle+0x240/0x2a0
 
-_cpu_online() needs to enable HWP if "suspended", or the MSR accesses
-in _set_policy() will trigger warnings when resuming from ACPI S3.
+RCU ignores CPUs in the idle loop, which means that you cannot use
+rcu_read_lock() from the idle loop without use of something like
+RCU_NONIDLE().  If this is due to event tracing, you should use the
+_rcuidle() variant of the event trace statement.
 
-This has been fixed in the intel_pstate-testing branch already and I
-will send an update of the patch tomorrow.
+Note also that Peter Zijlstra (CCed) is working to shrink the portion
+of the idle loop that RCU ignores.  Not sure that it covers your
+case, but it is worth checking.
 
-Thanks!
+							Thanx, Paul
+
+> [    5.437589]  cpu_startup_entry+0x2c/0x78
+> [    5.441063]  rest_init+0x1ac/0x280
+> [    5.444970]  arch_call_rest_init+0x14/0x1c
+> [    5.448180]  start_kernel+0x50c/0x544
+> [    5.452395]
+> [    5.452399]
+> [    5.452403] =============================
+> [    5.452406] WARNING: suspicious RCU usage
+> [    5.452409] 5.9.0-rc3 #1 Not tainted
+> [    5.452412] -----------------------------
+> [    5.452417] /usr/src/kernel/include/trace/events/ipi.h:36
+> suspicious rcu_dereference_check() usage!
+> [    5.452420]
+> [    5.452424] other info that might help us debug this:
+> [    5.452426]
+> [    5.452429]
+> [    5.452432] rcu_scheduler_active = 2, debug_locks = 1
+> [    5.452436] RCU used illegally from extended quiescent state!
+> [    5.452440] 1 lock held by swapper/0/0:
+> [    5.452443]  #0: ffff8000127408f8 (logbuf_lock){-...}-{2:2}, at:
+> vprintk_emit+0xb0/0x358
+> [    5.452458]
+> [    5.452461] stack backtrace:
+> [    5.452465] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.9.0-rc3 #1
+> [    5.452469] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    5.452472] Call trace:
+> [    5.452476]  dump_backtrace+0x0/0x1f8
+> [    5.452479]  show_stack+0x2c/0x38
+> [    5.452481]  dump_stack+0xec/0x15c
+> [    5.452485]  lockdep_rcu_suspicious+0xd4/0xf8
+> [    5.452489]  arch_irq_work_raise+0x208/0x210
+> [    5.452493]  __irq_work_queue_local+0x64/0x88
+> [    5.452495]  irq_work_queue+0x3c/0x88
+> [    5.452499]  printk_safe_log_store+0x148/0x178
+> [    5.452502]  vprintk_func+0x1cc/0x2b8
+> [    5.452506]  printk+0x74/0x94
+> [    5.452509]  lockdep_rcu_suspicious+0x28/0xf8
+> [    5.452512]  lock_release+0x338/0x360
+> [    5.452516]  _raw_spin_unlock+0x3c/0xa0
+> [    5.452519]  vprintk_emit+0xf8/0x358
+> [    5.452522]  vprintk_default+0x48/0x58
+> [    5.452526]  vprintk_func+0xec/0x2b8
+> [    5.452528]  printk+0x74/0x94
+> [    5.452532]  lockdep_rcu_suspicious+0x28/0xf8
+> [    5.452535]  lock_acquire+0x3d0/0x440
+> [    5.452538]  _raw_spin_lock_irqsave+0x80/0xb0
+> [    5.452542]  __pm_runtime_suspend+0x34/0x1d0
+> [    5.452545]  psci_enter_domain_idle_state+0x4c/0xb0
+> [    5.452549]  cpuidle_enter_state+0xc8/0x610
+> [    5.452552]  cpuidle_enter+0x3c/0x50
+> [    5.452555]  call_cpuidle+0x44/0x80
+> [    5.452559]  do_idle+0x240/0x2a0
+> [    5.452562]  cpu_startup_entry+0x2c/0x78
+> [    5.452564]  rest_init+0x1ac/0x280
+> [    5.452568]  arch_call_rest_init+0x14/0x1c
+> [    5.452571]  start_kernel+0x50c/0x544
+> [    5.452575] =============================
+> [    5.452578] WARNING: suspicious RCU usage
+> [    5.452582] 5.9.0-rc3 #1 Not tainted
+> [    5.452585] -----------------------------
+> [    5.452590] /usr/src/kernel/include/trace/events/lock.h:63
+> suspicious rcu_dereference_check() usage!
+> [    5.452593]
+> [    5.452596] other info that might help us debug this:
+> [    5.452599]
+> [    5.452601]
+> [    5.452605] rcu_scheduler_active = 2, debug_locks = 1
+> [    5.452609] RCU used illegally from extended quiescent state!
+> [    5.452612] 1 lock held by swapper/0/0:
+> [    5.452615]  #0: ffff8000127408f8 (logbuf_lock){-...}-{2:2}, at:
+> vprintk_emit+0xb0/0x358
+> [    5.452630]
+> [    5.452633] stack backtrace:
+> [    5.452636] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.9.0-rc3 #1
+> [    5.452640] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [    5.452643] Call trace:
+> [    5.452646]  dump_backtrace+0x0/0x1f8
+> [    5.452649]  show_stack+0x2c/0x38
+> [    5.452652]  dump_stack+0xec/0x15c
+> [    5.452656]  lockdep_rcu_suspicious+0xd4/0xf8
+> [    5.452659]  lock_release+0x338/0x360
+> [    5.452662]  _raw_spin_unlock+0x3c/0xa0
+> [    5.452665]  vprintk_emit+0xf8/0x358
+> [    5.452669]  vprintk_default+0x48/0x58
+> [    5.452671]  vprintk_func+0xec/0x2b8
+> [    5.452674]  printk+0x74/0x94
+> [    5.452677]  lockdep_rcu_suspicious+0x28/0xf8
+> [    5.452680]  lock_acquire+0x3d0/0x440
+> [    5.452683]  _raw_spin_lock_irqsave+0x80/0xb0
+> [    5.452686]  __pm_runtime_suspend+0x34/0x1d0
+> [    5.452690]  psci_enter_domain_idle_state+0x4c/0xb0
+> [    5.452693]  cpuidle_enter_state+0xc8/0x610
+> [    5.452696]  cpuidle_enter+0x3c/0x50
+> [    5.452698]  call_cpuidle+0x44/0x80
+> [    5.452701]  do_idle+0x240/0x2a0
+> [    5.452704]  cpu_startup_entry+0x2c/0x78
+> [    5.452708]  rest_init+0x1ac/0x280
+> [    5.452711]  arch_call_rest_init+0x14/0x1c
+> [    5.452714]  start_kernel+0x50c/0x544
+> 
+> full test log link,
+> https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.9-rc3/testrun/3137660/suite/linux-log-parser/test/check-kernel-warning-1722813/log
+> 
+> -- 
+> Linaro LKFT
+> https://lkft.linaro.org
