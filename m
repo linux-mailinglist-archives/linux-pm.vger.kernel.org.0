@@ -2,112 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 808812576F5
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 11:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E982725778F
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 12:45:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726081AbgHaJyr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 05:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
+        id S1726252AbgHaKpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 06:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbgHaJyl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 05:54:41 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6A2C061573;
-        Mon, 31 Aug 2020 02:54:22 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id g6so5882570ljn.11;
-        Mon, 31 Aug 2020 02:54:22 -0700 (PDT)
+        with ESMTP id S1726144AbgHaKpG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 06:45:06 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60042C061573
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 03:45:06 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id c15so2840400plq.4
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 03:45:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TSm8Xir2qHLM4KnvUNa9QAiKGDLz5dH6Zq6NNkg0IXQ=;
-        b=kurhuhNueqi6Go7ZBSzHHlC2VATfsEJ18kcOG0TtB7QnuhDk2JAqZNyWAev7TBzYkz
-         CiP5BBA5nDhYGxWPvdTHEM3NhEE76P/YLA+6sVzE9ptTSR4lvQ6U9Fz3VCaIPnv32BAL
-         FZ6kHKgDbxvcOlstFWUomxLz9Gs2BNXfsfP9Gg6Z0voNpQrkTh1RmAnL5VAwZthtO2fg
-         I1B/orxzR62QrpHX62BXGDknIrnk2A7vD1sCjZnI8chUENqi6RoZGQ8FvyKNJPYkZ+bb
-         OKa9i4zJ4xkwbKdT3lpLqL/M4W2gl+hmPOVXCmvkZ8ZiSG9OYoJIcawMs5XiuHyCSFjy
-         7Aug==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LTjNuf+4HDb4ylh7ga9ASwLKTNx5USoQDR62ZwnBw0Q=;
+        b=QPVXhTnBxUmkPbv3F29VXSio/tiyHbxa5KkZd80nOptWc/leJh9X9TjcMzoOjC60iP
+         VgGn4GjhV2GWkcnuf8pvbmSELvngSJ/PGInoQL2f8QAYG6K/cbDPxUdFeAoOjUwYtvCn
+         ZmTy1yyraKhtleKUrGW0nrOm55Pqr28ikFCFGmpULITULAfxe/zRECVmNWJg94UyeU7t
+         fW9aqY4F63qj7HxzzqJxM50sw6sTk581rQAczy7+JJD5LDskTedWs33i19BNUjlY7wy+
+         xkfKkaDCk6ZLsUrpHgLolyojtTZa+SNbDw4zF3RK1jbc7qX+qpSxXw57SShdFKpLxVSG
+         +WOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TSm8Xir2qHLM4KnvUNa9QAiKGDLz5dH6Zq6NNkg0IXQ=;
-        b=SnN6pldGoJQInx/m1zeGmteApodgzbnlZJmK2f5pYudoBhyVOdvKvoFg5N5sdS4S5S
-         D6dsnbGmgY4ooudUKVMW/uocyfaW70OwF9D6Fhw53GrvqTRp+h2OTlvuArTqcg6Lo8vz
-         AZmhBvGagNx3BG8kLa6zUqcTzVae0P4hmRYF8SJNVFOwGlA5Di12RkqW606ie/revFGw
-         20/myo5p31UNvdfJoCQdnPNAg66jIsz5Vn9IJXW7lPjwuCFKijKEXUjnSUhM8TrSktZK
-         uUOGyf9DEAcs1pvdPnsvbR1hdy2Q05LAKhQhTsQLaBgutc7C4CKQbvXZtXju4gk3IBbI
-         PVxA==
-X-Gm-Message-State: AOAM5333RUoiFysFOzYMo0KGwZH15LB0KdqOXgTW3trd1BSiNIzey+Z5
-        6C1Jx9rtFr2IIaTtg33URT8oxyTUPKM=
-X-Google-Smtp-Source: ABdhPJy8KZjk72a5eEDT0IuSYdmnLR/C/55LTP2RBCq87JBLCuN6xfMUdvGBtMMHsODr7dV4jftXMg==
-X-Received: by 2002:a2e:b4f4:: with SMTP id s20mr251794ljm.339.1598867660906;
-        Mon, 31 Aug 2020 02:54:20 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id f20sm1863068lfk.70.2020.08.31.02.54.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2020 02:54:20 -0700 (PDT)
-Subject: Re: [PATCH 3/3] ARM: tegra: Pass multiple versions in
- opp-supported-hw property
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LTjNuf+4HDb4ylh7ga9ASwLKTNx5USoQDR62ZwnBw0Q=;
+        b=gJORk3Fu/3LLN9hwe478sKscUuknzvegngP2VmOejeOz/utQRfkC5qRnv6K/vvbZaT
+         NCKxJi9QkYYQuXChqZF9cWj3yIjX+9MORiK/fZAZSrBDu+u89Nrk3SV8+XfM6Ds4Hxq7
+         i7UUx3kSf7FLwpd3JvrpluTLqlGrRXzOc7MvdiUBKNMIQGA+ZDVH17eNZ+u9iwv8Hy8T
+         h76sq3N5P7vqWRG+cOlPrP9cpMQN+J7o2VLJAHbiSjSH91QyW5O3LdgLyIcXZ/CoZLms
+         YLBHOqwIufYPejtZ832Uquvinm8meSjIQUUcLkO4elte4B0NNNlPco2nYzkgGH1MwbRo
+         kSfg==
+X-Gm-Message-State: AOAM532WWsV0gJBfs11tDEOFpN8ZMsNfmTTTnTK747aap69ynLvJxInk
+        Muig6PEXlU2rddy44cD6dciJJw==
+X-Google-Smtp-Source: ABdhPJygxplFkMGZQpt6GSdWy76OfK4XavrXsjjZzwVY6vR5cyeAHdXL7iFT8xF5Nap5B/MxOmM9iQ==
+X-Received: by 2002:a17:902:44f:: with SMTP id 73mr600714ple.178.1598870705884;
+        Mon, 31 Aug 2020 03:45:05 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id t20sm6747600pjg.21.2020.08.31.03.45.04
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 31 Aug 2020 03:45:04 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 16:14:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
         Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1598442485.git.viresh.kumar@linaro.org>
- <b13f1b112532fe0189d1f7bbb50903d9e1defb07.1598442485.git.viresh.kumar@linaro.org>
- <b0763074-859f-fccb-dde4-03d1a50ea021@gmail.com>
- <20200831043908.mtw4dglybcmcabjb@vireshk-i7>
- <0da380c2-9161-d450-afd2-4b159c8cfb7d@gmail.com>
- <20200831084111.6udzvrdonxgzju4l@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <cbfa012b-8f50-e460-972c-c51fa52bb858@gmail.com>
-Date:   Mon, 31 Aug 2020 12:54:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Douglas Anderson <dianders@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 4/8] mmc: sdhci-msm: Unconditionally call
+ dev_pm_opp_of_remove_table()
+Message-ID: <20200831104453.ux5fb5bpt57tj5am@vireshk-i7>
+References: <cover.1598594714.git.viresh.kumar@linaro.org>
+ <1d7c97524b9e1fbc60271d9c246c5461ca8a106c.1598594714.git.viresh.kumar@linaro.org>
+ <CAPDyKFpdZhzXQv3hpTzf3UkJDhFqBhgMXCqVfAfE6PejLCxvfg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200831084111.6udzvrdonxgzju4l@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpdZhzXQv3hpTzf3UkJDhFqBhgMXCqVfAfE6PejLCxvfg@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-31.08.2020 11:41, Viresh Kumar пишет:
-> On 31-08-20, 10:54, Dmitry Osipenko wrote:
->> 31.08.2020 07:39, Viresh Kumar пишет:
->> ...
->>>>> Dmitry, I think there is further scope of simplifying stuff here by
->>>>> using the opp-microvolt-<name> property and corresponding
->>>>> dev_pm_opp_set_prop_name() call.
->>>
->>> Any inputs on this Dmitry ?
->>
->> Could you please give an example?
+On 28-08-20, 10:43, Ulf Hansson wrote:
+> On Fri, 28 Aug 2020 at 08:08, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
+> > find the OPP table with error -ENODEV (i.e. OPP table not present for
+> > the device). And we can call dev_pm_opp_of_remove_table()
+> > unconditionally here.
+> >
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > 
-> There are many users of it in the kernel. grep for "opp-microvolt-" in
-> the DT files and you will see.
+> Replaced v1 with v2 on my next branch, thanks!
 > 
-> The use of this property is to specific multiple microvolt properties
-> to the same frequency without a need to create separate nodes for them
-> all. The right microvolt property will be selected based on the call
-> made to dev_pm_opp_set_prop_name(), search for that too in kernel.
-> 
+> Just to be sure, this patch doesn't depend on any changes for the opp
+> core that are queued for v5.10?
 
-It's not clear to me how it could be applicable to the Tegra CPU OPP
-because Tegra depends on a combination of SPEEDO + PROCESS versions.
+The recent crashes reported by Anders and Naresh were related to a OPP
+core bug, for which I have just sent the fix here:
 
-It's not like all voltages are the same for all OPPs that have the same
-PROCESS ID, otherwise it indeed would be nice to have
-"opp-microvolt-process0", but unfortunately this variant is not suitable
-for Tegra because some freqs have different voltages using the same
-PROCESS ID and the same applies to the SPEEDO ID.
+https://lore.kernel.org/lkml/922ff0759a16299e24cacfc981ac07914d8f1826.1598865786.git.viresh.kumar@linaro.org/
+
+This is already tested by Naresh now and finally everything works as
+expected.
+
+I am going to get this fix merged in 5.9-rc4, but we do have a
+dependency now with that fix.
+
+What's the best way to handle this stuff now ? The easiest IMO would
+be for me to send these patches through the OPP tree, otherwise people
+need to carry this and the OPP fix (for which I can provide the
+branch/tag).
+
+-- 
+viresh
