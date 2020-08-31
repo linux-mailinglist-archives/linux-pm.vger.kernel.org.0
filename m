@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B102525739D
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 08:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDAE25739A
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 08:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgHaGRy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 02:17:54 -0400
-Received: from st43p00im-zteg10073501.me.com ([17.58.63.180]:59669 "EHLO
-        st43p00im-zteg10073501.me.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725949AbgHaGRx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 02:17:53 -0400
+        id S1725937AbgHaGQc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 02:16:32 -0400
+Received: from st43p00im-ztbu10063701.me.com ([17.58.63.178]:33091 "EHLO
+        st43p00im-ztbu10063701.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725848AbgHaGQc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 02:16:32 -0400
+X-Greylist: delayed 316 seconds by postgrey-1.27 at vger.kernel.org; Mon, 31 Aug 2020 02:16:32 EDT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
-        t=1598854276; bh=Qfuzybr979VMJFYuutCB+9GTM8ocBV/zhEcZJGiJypY=;
+        t=1598854279; bh=ot9oPwvCbcx3VziBeqQtXktHy0PvnAf0hNNzlroGiFs=;
         h=From:To:Subject:Date:Message-Id;
-        b=A9NHYq4gRgTpiFYf1sDY6b4PyXd/sHtJp0p2MdXnqAANZMGJYrJhV9d10i838QBPe
-         TUtZltqPACc8HKviGV3CdZAO3uVJn39AwkOEAARkFpG6onblBf7fVVCDk5iVVMJspX
-         aomelzYy2iHFCpyX3GLqfKN7POxeFodiC8W39pZ56pQE8FbK+qSysxcKDGelmvvxMs
-         Rb+Y/ECut4Ad9+0chm8vEdInYO+Zs3WkN1BECzj4HyLogW972RZH7jJGg9FxryGKHG
-         w0rZ7/Y68qej40vb9/Sqg1MK662SxTAjEk7xsL9j/+XxpIl6/snv1CY8TE2kDvSW2F
-         PBCJr9bDCU9gA==
+        b=Gb83WBSmJW+7LpcT2/C0tJHFwZMECiCEHAEeN+Os8XXe1Dq9Jk9S4cIkDE3LmfoPq
+         CfoU9Gd2uwaPO4+4p7byMhDokHVLBZN8ZskPdtKdi+bOJuSAWOvO2v4cceUkWiUDf7
+         CtFmG6RJyWyNYdpnN83MBxJ9Os4jPtUyqxwReY+IneFKyRPfuUskn/s9HaL4XzmRrx
+         Pcr4glPk194/WnOk/45U4t9S7AB3kVFDOJZGPyuDwXFzrrL0DfCA+ic7n6FBJGJQMi
+         Y81FnebSY/nA2UxiCUqnIOgBwXwY4LiDB+RLs3jtAYU7Ss70PfO/xwk/25wnXKJu/E
+         9g5BO7ZhAAv9w==
 Received: from localhost (unknown [80.214.144.204])
-        by st43p00im-zteg10073501.me.com (Postfix) with ESMTPSA id 5BD82AE06E4;
-        Mon, 31 Aug 2020 06:11:16 +0000 (UTC)
+        by st43p00im-ztbu10063701.me.com (Postfix) with ESMTPSA id BF8289A04C8;
+        Mon, 31 Aug 2020 06:11:18 +0000 (UTC)
 From:   Alain Volmat <avolmat@me.com>
 To:     Patrice Chotard <patrice.chotard@st.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     avolmat@me.com
-Subject: [PATCH 1/3] cpufreq: sti-cpufreq: add stih418 support
-Date:   Mon, 31 Aug 2020 08:10:11 +0200
-Message-Id: <20200831061013.4327-2-avolmat@me.com>
+Subject: [PATCH 2/3] cpufreq: dt-platdev: Blacklist st,stih418 SoC
+Date:   Mon, 31 Aug 2020 08:10:12 +0200
+Message-Id: <20200831061013.4327-3-avolmat@me.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200831061013.4327-1-avolmat@me.com>
 References: <20200831061013.4327-1-avolmat@me.com>
@@ -45,38 +46,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The STiH418 can be controlled the same way as STiH407 &
-STiH410 regarding cpufreq.
+Add st,stih418 SoC in the blacklist since the cpufreq driver
+for this platform is already registering the driver.
 
 Signed-off-by: Alain Volmat <avolmat@me.com>
 ---
- drivers/cpufreq/sti-cpufreq.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/cpufreq/sti-cpufreq.c b/drivers/cpufreq/sti-cpufreq.c
-index a5ad96d29adc..4ac6fb23792a 100644
---- a/drivers/cpufreq/sti-cpufreq.c
-+++ b/drivers/cpufreq/sti-cpufreq.c
-@@ -141,7 +141,8 @@ static const struct reg_field sti_stih407_dvfs_regfields[DVFS_MAX_REGFIELDS] = {
- static const struct reg_field *sti_cpufreq_match(void)
- {
- 	if (of_machine_is_compatible("st,stih407") ||
--	    of_machine_is_compatible("st,stih410"))
-+	    of_machine_is_compatible("st,stih410") ||
-+	    of_machine_is_compatible("st,stih418"))
- 		return sti_stih407_dvfs_regfields;
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 7d01df7bfa6c..3776d960f405 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -137,6 +137,7 @@ static const struct of_device_id blacklist[] __initconst = {
  
- 	return NULL;
-@@ -258,7 +259,8 @@ static int sti_cpufreq_init(void)
- 	int ret;
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
++	{ .compatible = "st,stih418", },
  
- 	if ((!of_machine_is_compatible("st,stih407")) &&
--		(!of_machine_is_compatible("st,stih410")))
-+		(!of_machine_is_compatible("st,stih410")) &&
-+		(!of_machine_is_compatible("st,stih418")))
- 		return -ENODEV;
+ 	{ .compatible = "sigma,tango4", },
  
- 	ddata.cpu = get_cpu_device(0);
 -- 
 2.17.1
 
