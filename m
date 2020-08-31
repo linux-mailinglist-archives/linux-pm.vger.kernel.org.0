@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6A8257D3F
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 17:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DB61257D1B
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 17:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728798AbgHaPbG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 11:31:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41398 "EHLO mail.kernel.org"
+        id S1728787AbgHaPeD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 11:34:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728789AbgHaPbE (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 31 Aug 2020 11:31:04 -0400
+        id S1728904AbgHaPbc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 31 Aug 2020 11:31:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EFCF620FC3;
-        Mon, 31 Aug 2020 15:31:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E87AA21556;
+        Mon, 31 Aug 2020 15:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598887864;
-        bh=aR6oCd9xnL61cRmpczx7OpnLHeesfGws1c6tF4Jg7TA=;
+        s=default; t=1598887892;
+        bh=MEokPjVflEq2PyM5DqEXjd/vCI5oiXcl4gUH3vH5M7o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F8lM138BaJIbhLyWurDWy8mMrjpwcyxhyVIFZOAl3c8PpKVGL3ZCUomF29Ekulyyv
-         BhbYTgomeEMyXtB2ucqeBKRgAuWyreMz71B0xH5hfiRF6uHntdyz5YaGPGE7JNMri4
-         /ZfSSzPJO1TaqXn7FZthOVGuNrwYylx9TDuUBzQg=
+        b=EHOJypAzA6HiwVeRMeQKpIoCfVsPye7fS2cYzfi1XdwqZO29b+0CYRyhID6vYDKEC
+         SNSib/vmSgwLyBMqzDvT/w9XYx9aHMULfnG86dVftDzlOIAyfk3hvGcVEKB2seMFG1
+         143C0XWtfUYtVApfRQ6yZrFH8NHtWQY3tzf1cr+c=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -31,12 +31,12 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Marco Elver <elver@google.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/23] cpuidle: Fixup IRQ state
-Date:   Mon, 31 Aug 2020 11:30:31 -0400
-Message-Id: <20200831153039.1024302-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 09/11] cpuidle: Fixup IRQ state
+Date:   Mon, 31 Aug 2020 11:31:15 -0400
+Message-Id: <20200831153117.1024537-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200831153039.1024302-1-sashal@kernel.org>
-References: <20200831153039.1024302-1-sashal@kernel.org>
+In-Reply-To: <20200831153117.1024537-1-sashal@kernel.org>
+References: <20200831153117.1024537-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,7 +64,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 29d2d7a21bd7b..73f08cda21e0e 100644
+index 6df894d65d9e2..2d182dc1b49ed 100644
 --- a/drivers/cpuidle/cpuidle.c
 +++ b/drivers/cpuidle/cpuidle.c
 @@ -148,7 +148,8 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
