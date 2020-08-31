@@ -2,81 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9CA257CDD
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 17:35:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEAA257D81
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728990AbgHaPbr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 11:31:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42954 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728948AbgHaPbr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 31 Aug 2020 11:31:47 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A888521655;
-        Mon, 31 Aug 2020 15:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598887906;
-        bh=LEXzpf0Yr1MJMeyZOqHXNeywTob//8NuwXE8+HwZI8o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZATA1DhIiaYK2nobtRN3xHpkmhEJYrVbQGzXEBz8qLE0aRnD71N5uCz1dPQSR8X3
-         3OK+DiMoAzXWChMgtowi0Pgq26cXKHfdEhZtxb6Niuh39T2RUTREc7k4w8PJTf/SuL
-         yqV8Vok0UAlrdj87uGpNyLfQQA3tprCqeR1eArW0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Marco Elver <elver@google.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 7/9] cpuidle: Fixup IRQ state
-Date:   Mon, 31 Aug 2020 11:31:34 -0400
-Message-Id: <20200831153136.1024676-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200831153136.1024676-1-sashal@kernel.org>
-References: <20200831153136.1024676-1-sashal@kernel.org>
+        id S1729234AbgHaPiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 11:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728885AbgHaPhz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 11:37:55 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A48C061573;
+        Mon, 31 Aug 2020 08:37:53 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id g13so6372009ioo.9;
+        Mon, 31 Aug 2020 08:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eKhPg2peu0bzgNag4eCqNzrqsBROFucfPoSefuXeaw4=;
+        b=s8V6n0xALCLBzggML/oL2yBo0b4sDJ8Fn3DqT0kDfs/UOSNjzu72iqpAcc/jOJMKfr
+         A/X2ov0QZLPmxbLfzmr20VzbN4QpLVcB8/ifn3Hnv709YWR2nhhjTxPG24HCRl5kcDT/
+         vk5JoQYRHzNAmuWsYm7HmliEhq5ubgdI3t/2C8Ogm/yL+V7S3MJLBZ323Oq5Vt2/D3DB
+         OKh8Y2eauBBIl0MR/puj5LHTeekB602eHpsIHDKNxTijC2Ktrupnf9uOB+L0aFc+bCT8
+         3JIMkJ1d0l9l6M/R9X1Keodws4gRxelxxxJlBKkosrBYvuZneLQIHkRn4f6Sx1K7ePq5
+         lAzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eKhPg2peu0bzgNag4eCqNzrqsBROFucfPoSefuXeaw4=;
+        b=n1hODbegBkoUw54XoTSBBzD8QeRjRpSzlSTgUW38Mf6oZqjwMEJ74kw1fIxS7vsUmx
+         vP8XWMBisTR6kulnH6kj7xaQUEep2NHs3OI8PM008MxWbPpmuaXt44LfafJ8ycHQhWCW
+         JMUOR1yWkJ29ewRsiEHNJbY16UnsRBuOHefZXMW1MGnfsJQo4U+zcGGTeKnNJwrCQDI+
+         ajKoqwkV+mplbVqKxFZkhveLjcneOwhVaiSqMO7JWvfilR4XH/D3xa2G7usQmlKtRagx
+         LqXkEsfivxDP4L6/UcJovCMZQgmtLumXt5kKaVmWomixFhDV/Z1YfG1d39XYwF1Q/HGV
+         747A==
+X-Gm-Message-State: AOAM531kkzl5xMwZTiz4q7MrG5DST0qLn5gcdRhvMGz/FcFeLAxMBmvy
+        ziI5isq7HNOOO9E5nn9vqApOOTkD08i+BzmH3vM=
+X-Google-Smtp-Source: ABdhPJwNBcqnCmmfCXu/qtgS8DcU6uT+FMOssh+c39rLoFbOIo6hVA6Vu3hW/p2ti6dlo5FyhXDcPgG1rpZIIDrEP2o=
+X-Received: by 2002:a5d:80c6:: with SMTP id h6mr1735767ior.2.1598888272759;
+ Mon, 31 Aug 2020 08:37:52 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <cover.1593243079.git.syednwaris@gmail.com> <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+In-Reply-To: <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+From:   Syed Nayyar Waris <syednwaris@gmail.com>
+Date:   Mon, 31 Aug 2020 21:07:41 +0530
+Message-ID: <CACG_h5oW1o9JTngqUi7X2u4mrfjcjA5D9Kz-r6TmBw3orRQ63A@mail.gmail.com>
+Subject: Re: [PATCH v9 0/4] Introduce the for_each_set_clump macro
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Richter <rrichter@marvell.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Thu, Jul 16, 2020 at 6:19 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> Hi Syed,
+>
+> sorry for taking so long. I was on vacation and a bit snowed
+> under by work.
+>
+> On Sat, Jun 27, 2020 at 10:10 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+>
+> > Since this patchset primarily affects GPIO drivers, would you like
+> > to pick it up through your GPIO tree?
+>
+> I have applied the patches to an immutable branch and pushed
+> to kernelorg for testing (autobuilders will play with it I hope).
+>
+> If all works fine I will merge this into my devel branch for v5.9.
+>
+> It would be desirable if Andrew gave his explicit ACK on it too.
+>
+> Yours,
+> Linus Walleij
 
-[ Upstream commit 49d9c5936314e44d314c605c39cce0fd947f9c3a ]
+Hi Linus,
 
-Match the pattern elsewhere in this file.
+As a reminder, I would like to point out about the
+'for_each_set_clump' patchset. If it's alright and if anything is
+needed to take it further so that it is finally accepted.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Tested-by: Marco Elver <elver@google.com>
-Link: https://lkml.kernel.org/r/20200821085348.251340558@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/cpuidle/cpuidle.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index ed4df58a855e1..da9eb38d79d9c 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -144,7 +144,8 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
- 	 */
- 	stop_critical_timings();
- 	drv->states[index].enter_s2idle(dev, drv, index);
--	WARN_ON(!irqs_disabled());
-+	if (WARN_ON_ONCE(!irqs_disabled()))
-+		local_irq_disable();
- 	/*
- 	 * timekeeping_resume() that will be called by tick_unfreeze() for the
- 	 * first CPU executing it calls functions containing RCU read-side
--- 
-2.25.1
-
+Regards
+Syed Nayyar Waris
