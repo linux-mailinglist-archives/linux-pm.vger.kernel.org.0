@@ -2,142 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BC3257470
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 09:41:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C222574BB
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 09:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725937AbgHaHlO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 03:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S1727092AbgHaHx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 03:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725794AbgHaHlO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 03:41:14 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9736EC061573;
-        Mon, 31 Aug 2020 00:41:13 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id d11so7106072ejt.13;
-        Mon, 31 Aug 2020 00:41:13 -0700 (PDT)
+        with ESMTP id S1725794AbgHaHx6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 03:53:58 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BF8C061573
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 00:53:57 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id n3so1895399pjq.1
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 00:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=7Z43O8JfZGEOJbTzWct2j97b+Vzag2iDAFjhrBOZbh0=;
-        b=S+MWB5xid8EsnfOETftW1wAbWseRY5MXzdNZM9USHLL8XGbBlAeLuQ2FfISqCHQ92x
-         8CSeMUqgJhww2DGgnCZ94v9R1b3HLuvlPWvdjFriEP5s7hnW/KRpAWGyrWhXUY/ZJ3HW
-         qeC3JxMviUK2YLQsK2gUSk7DAgwpo2y80xuMeQsO4zs60qGdzdWHuVQoIZ5lkAW5YX/1
-         kGTCLmizZqGvOe/GediJrnutq/Kz+Cdq9dFAp9XxUTp11PH3QnEWMX2Pj6vrNWSJYFWD
-         OiduQgH3tT6FcXc7HmWZ0vHF3jG1qgSYQRNBEQfG2Scg41+jlou8ZoxCYjXW0wD6U7SW
-         0exA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=1ejUKm/YqmNXifqLJ7YW1JgKaUcKOtRzhgy9Apva5Rk=;
+        b=yOCs14nHNGS4VJc/sR2rI4csRD9hM14paW3Qto8WkLBwTfXqb/A5UAOsyTALxnw7Zx
+         nArasdRsaP0IJRwdRF3gbyQtVwm+8b7y8DHX6shWMudu3eUVPPKNcwlfUdem+5Rgt9Ov
+         CiyV2l6nQ4UmN3m4SwV55N7145HnmDwy/RcSvVXxF8LgUVUviD3BDyVuPR0P0E2EP0rQ
+         nfWv+xs5fwoO4SQT3j1Z7Qt7m9LNPR1hyXWfKRVSoA9nZawnZk0nXHlZOBNUscH6hq1O
+         DK0eHpYXctDLHi1zW16n061pOwye0KhxE3PqhNyTXEHTLPJHQJv7yJoO0FUteKXSCh7B
+         Lh3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=7Z43O8JfZGEOJbTzWct2j97b+Vzag2iDAFjhrBOZbh0=;
-        b=j6OS+qXysPwVPskxM6/7Y62IrS8TSmkORHQCUWy4wxgY4c8Jfl6oc3OoOeXCTJWufj
-         MrdsM01LlRFIUxNEE9ip0jcn3lvwvPl2Kqi0ttIeO4an8pxD1rYxre2JlhVvRLCZISVc
-         Or4aAW9Da9ssbWUtgc1PKbOzW3YTdHjp7R/hTrS0XN6J56/KnKIMq2chzn+3jF0VyVaw
-         OZ02gi0gKQKs+hNbxeq1/eMhZkygzu5h4ogyvM+kC0P7rP5wWv4gF5BelyI62JOcggg2
-         T7t0h9xikW+vRA6+L0ET/Wa4iPrpr0gKF2KTd53Yb/orDDDcMp092KHiMpl2zG7MVitl
-         WkMA==
-X-Gm-Message-State: AOAM533+GpfQLXg6Uc/H3LQGGRu7CWqZpNThDrCCQbgIOGJdKD/aQBJI
-        pshQGrTG29jOt5PooR0CwP4Yos1huGTcBQ==
-X-Google-Smtp-Source: ABdhPJwxxiJehrUW9GHFwB1NqvNIaDSokucVYNCAH43/+KBG9jum7Hb1k5l5vKcsxSDmbwlJRS7Eow==
-X-Received: by 2002:a17:906:28c4:: with SMTP id p4mr6211271ejd.345.1598859671637;
-        Mon, 31 Aug 2020 00:41:11 -0700 (PDT)
-Received: from AnsuelXPS (host-95-235-252-96.retail.telecomitalia.it. [95.235.252.96])
-        by smtp.gmail.com with ESMTPSA id fy8sm7466618ejb.9.2020.08.31.00.41.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 00:41:10 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Sibi Sankar'" <sibis@codeaurora.org>,
-        "'Viresh Kumar'" <viresh.kumar@linaro.org>
-Cc:     <vincent.guittot@linaro.org>, <saravanak@google.com>,
-        "'Sudeep Holla'" <sudeep.holla@arm.com>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        "'Rob Herring'" <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20200821140026.19643-1-ansuelsmth@gmail.com> <20200824104053.kpjpwzl2iw3lpg2m@vireshk-i7> <b339e01f9d1e955137120daa06d26228@codeaurora.org>
-In-Reply-To: <b339e01f9d1e955137120daa06d26228@codeaurora.org>
-Subject: R: [RFC PATCH v3 0/2] Add Krait Cache Scaling support
-Date:   Mon, 31 Aug 2020 09:41:08 +0200
-Message-ID: <039d01d67f6a$188700d0$49950270$@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: it
-Thread-Index: AQHE1KUT8lrzCHz2sVzN5qwVSE5wCwFurxwcAoW98xCpVYZpUA==
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1ejUKm/YqmNXifqLJ7YW1JgKaUcKOtRzhgy9Apva5Rk=;
+        b=dX8fs+g04D3kFoS+WBDBZpJzLeBdrKGfmEcbpnNpa7voUY88K6WDL2fqCcAJvD4/Js
+         vTSp8QdnKwkfagoNhL8+yeScmsWNRvcjBDEqnmUG3r6VJRsJ+ncS2JP8uC9oAz97Xqep
+         zKgg1xIg97hiOOUN48ydrg+Xi09WJMBGI97LaEOA/KFH7/FeU7bozhID7i9lVqB7rA3F
+         DSWQjcssl//nqGHgoTSdycWSG+4GhdaN9MLK6p/7P9L1pKKojdadOjEwm87xDTPjIpEb
+         /pJU6YqQPZRz0/I7XzG2aQif+h5OrPa/jzxgcf9U364ekpmBbtB86BR1eWV9Kx+d+9BN
+         DLFw==
+X-Gm-Message-State: AOAM530HtUKGFZqbJA6uch6ByS1BH304YaIOjD6V8tyxO8KOuii7DdCf
+        oDojKJ+ggN6qwUfRE8J+MYaBCw==
+X-Google-Smtp-Source: ABdhPJyYnSB5VeT13P6k3ZhLAvzXhS44WQcrZ78u7h7s6gmrMvpPjPPa7gXl2mUltXpCbP/QAWSE3g==
+X-Received: by 2002:a17:902:7596:: with SMTP id j22mr190129pll.309.1598860436523;
+        Mon, 31 Aug 2020 00:53:56 -0700 (PDT)
+Received: from localhost.localdomain (li519-153.members.linode.com. [66.175.222.153])
+        by smtp.gmail.com with ESMTPSA id u191sm6425552pgu.56.2020.08.31.00.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2020 00:53:55 -0700 (PDT)
+From:   Jun Nie <jun.nie@linaro.org>
+To:     shawn.guo@linaro.org, georgi.djakov@linaro.org,
+        linux-pm@vger.kernel.org
+Cc:     Jun Nie <jun.nie@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm MSM8939 DT bindings
+Date:   Mon, 31 Aug 2020 15:53:28 +0800
+Message-Id: <20200831075329.30374-1-jun.nie@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The Qualcomm MSM8939 platform has several bus fabrics that could be
+controlled and tuned dynamically according to the bandwidth demand.
 
+Signed-off-by: Jun Nie <jun.nie@linaro.org>
+---
+ .../bindings/interconnect/qcom,msm8939.yaml   |  87 +++++++++++++++
+ .../dt-bindings/interconnect/qcom,msm8939.h   | 105 ++++++++++++++++++
+ 2 files changed, 192 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8939.h
 
-> -----Messaggio originale-----
-> Da: sibis=3Dcodeaurora.org@mg.codeaurora.org
-> <sibis=3Dcodeaurora.org@mg.codeaurora.org> Per conto di Sibi Sankar
-> Inviato: luned=EC 31 agosto 2020 07:46
-> A: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Ansuel Smith <ansuelsmth@gmail.com>; vincent.guittot@linaro.org;
-> saravanak@google.com; Sudeep Holla <sudeep.holla@arm.com>; Rafael J.
-> Wysocki <rjw@rjwysocki.net>; Rob Herring <robh+dt@kernel.org>; linux-
-> pm@vger.kernel.org; devicetree@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Oggetto: Re: [RFC PATCH v3 0/2] Add Krait Cache Scaling support
->=20
-> On 2020-08-24 16:10, Viresh Kumar wrote:
-> > +Vincent/Saravana/Sibi
-> >
-> > On 21-08-20, 16:00, Ansuel Smith wrote:
-> >> This adds Krait Cache scaling support using the cpufreq notifier.
-> >> I have some doubt about where this should be actually placed (clk =
-or
-> >> cpufreq)?
-> >> Also the original idea was to create a dedicated cpufreq driver =
-(like
-> >> it's done in
-> >> the codeaurora qcom repo) by copying the cpufreq-dt driver and =
-adding
-> >> the cache
-> >> scaling logic but i still don't know what is better. Have a very
-> >> similar driver or
-> >> add a dedicated driver only for the cache using the cpufreq =
-notifier
-> >> and do the
-> >> scale on every freq transition.
-> >> Thanks to everyone who will review or answer these questions.
-> >
-> > Saravana was doing something with devfreq to solve such issues if I
-> > wasn't mistaken.
-> >
-> > Sibi ?
->=20
-> IIRC the final plan was to create a devfreq device
-> and devfreq-cpufreq based governor to scale them, this
-> way one can switch to a different governor if required.
-
-So in this case I should convert this patch to a devfreq driver-=20
-Isn't overkill to use a governor for such a task?
-(3 range based on the cpufreq?)
-
-> (I don't see if ^^ applies well for l2 though). In the
-> interim until such a solution is acked on the list we
-> just scale the resources directly from the cpufreq
-
-In this case for this SoC we can't really scale the L2 freq
-with the cpu since we observed a bug and we need to switch
-back to the idle freq sometimes. Also this SoC use the generic
-cpufreq-dt driver and doesn't have a dedicated driver. So we
-must use a notifier.
-
-> driver. On SDM845/SC7180 SoCs, L3 is modeled as a
-> interconnect provider and is directly scaled from the
-> cpufreq-hw driver.
->=20
-> --
-> Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-> a Linux Foundation Collaborative Project.
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+new file mode 100644
+index 000000000000..99a827143723
+--- /dev/null
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/interconnect/qcom,msm8939.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm MSM8939 Network-On-Chip interconnect
++
++maintainers:
++  - Jun Nie <jun.nie@linaro.org>
++
++description: |
++   The Qualcomm MSM8939 interconnect providers support adjusting the
++   bandwidth requirements between the various NoC fabrics.
++
++properties:
++  compatible:
++    enum:
++      - qcom,msm8939-bimc
++      - qcom,msm8939-pcnoc
++      - qcom,msm8939-snoc
++      - qcom,msm8939-snoc-mm
++
++  reg:
++    maxItems: 1
++
++  '#interconnect-cells':
++    const: 1
++
++  clock-names:
++    items:
++      - const: bus
++      - const: bus_a
++
++  clocks:
++    items:
++      - description: Bus Clock
++      - description: Bus A Clock
++
++required:
++  - compatible
++  - reg
++  - '#interconnect-cells'
++  - clock-names
++  - clocks
++
++additionalProperties: false
++
++examples:
++  - |
++      #include <dt-bindings/clock/qcom,rpmcc.h>
++
++      bimc: interconnect@400000 {
++              compatible = "qcom,msm8939-bimc";
++              reg = <0x00400000 0x62000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
++                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
++      };
++
++      pcnoc: interconnect@500000 {
++              compatible = "qcom,msm8939-pcnoc";
++              reg = <0x00500000 0x11000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_PCNOC_CLK>,
++                       <&rpmcc RPM_SMD_PCNOC_A_CLK>;
++      };
++
++      snoc: interconnect@580000 {
++              compatible = "qcom,msm8939-snoc";
++              reg = <0x00580000 0x14000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++              clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
++                       <&rpmcc RPM_SMD_SNOC_A_CLK>;
++      };
++
++      snoc_mm: interconnect@580000 {
++              compatible = "qcom,msm8939-snoc-mm";
++              reg = <0x00580000 0x14000>;
++              #interconnect-cells = <1>;
++              clock-names = "bus", "bus_a";
++	      clocks = <&rpmcc RPM_SMD_MMSSNOC_AHB_CLK>,
++		       <&rpmcc RPM_SMD_MMSSNOC_AHB_A_CLK>;
++      };
+diff --git a/include/dt-bindings/interconnect/qcom,msm8939.h b/include/dt-bindings/interconnect/qcom,msm8939.h
+new file mode 100644
+index 000000000000..f306e88a86fe
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,msm8939.h
+@@ -0,0 +1,105 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Qualcomm interconnect IDs
++ *
++ * Copyright (c) 2020, Linaro Ltd.
++ * Author: Jun Nie <jun.nie@linaro.org>
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_MSM8939_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_MSM8939_H
++
++#define BIMC_SNOC_SLV			0
++#define MASTER_QDSS_BAM			1
++#define MASTER_QDSS_ETR			2
++#define MASTER_SNOC_CFG			3
++#define PCNOC_SNOC_SLV			4
++#define SLAVE_APSS			5
++#define SLAVE_CATS_128			6
++#define SLAVE_OCMEM_64			7
++#define SLAVE_IMEM			8
++#define SLAVE_QDSS_STM			9
++#define SLAVE_SRVC_SNOC			10
++#define SNOC_BIMC_0_MAS			11
++#define SNOC_BIMC_1_MAS			12
++#define SNOC_BIMC_2_MAS			13
++#define SNOC_INT_0			14
++#define SNOC_INT_1			15
++#define SNOC_INT_BIMC			16
++#define SNOC_PCNOC_MAS			17
++#define SNOC_QDSS_INT			18
++
++#define MASTER_VIDEO_P0			0
++#define MASTER_JPEG			1
++#define MASTER_VFE			2
++#define MASTER_MDP_PORT0		3
++#define MASTER_MDP_PORT1		4
++#define MASTER_CPP			5
++#define SNOC_MM_INT_0			6
++#define SNOC_MM_INT_1			7
++#define SNOC_MM_INT_2			8
++
++#define BIMC_SNOC_MAS			0
++#define MASTER_AMPSS_M0			1
++#define MASTER_GRAPHICS_3D		2
++#define MASTER_TCU0			3
++#define SLAVE_AMPSS_L2			4
++#define SLAVE_EBI_CH0			5
++#define SNOC_BIMC_0_SLV			6
++#define SNOC_BIMC_1_SLV			7
++#define SNOC_BIMC_2_SLV			8
++
++#define MASTER_BLSP_1			0
++#define MASTER_DEHR			1
++#define MASTER_LPASS			2
++#define MASTER_CRYPTO_CORE0		3
++#define MASTER_SDCC_1			4
++#define MASTER_SDCC_2			5
++#define MASTER_SPDM			6
++#define MASTER_USB_HS1			7
++#define MASTER_USB_HS2			8
++#define PCNOC_INT_0			9
++#define PCNOC_INT_1			10
++#define PCNOC_MAS_0			11
++#define PCNOC_MAS_1			12
++#define PCNOC_SLV_0			13
++#define PCNOC_SLV_1			14
++#define PCNOC_SLV_2			15
++#define PCNOC_SLV_3			16
++#define PCNOC_SLV_4			17
++#define PCNOC_SLV_8			18
++#define PCNOC_SLV_9			19
++#define PCNOC_SNOC_MAS			20
++#define SLAVE_BIMC_CFG			21
++#define SLAVE_BLSP_1			22
++#define SLAVE_BOOT_ROM			23
++#define SLAVE_CAMERA_CFG		24
++#define SLAVE_CLK_CTL			25
++#define SLAVE_CRYPTO_0_CFG		26
++#define SLAVE_DEHR_CFG			27
++#define SLAVE_DISPLAY_CFG		28
++#define SLAVE_GRAPHICS_3D_CFG		29
++#define SLAVE_IMEM_CFG			30
++#define SLAVE_LPASS			31
++#define SLAVE_MPM			32
++#define SLAVE_MSG_RAM			33
++#define SLAVE_MSS			34
++#define SLAVE_PDM			35
++#define SLAVE_PMIC_ARB			36
++#define SLAVE_PCNOC_CFG			37
++#define SLAVE_PRNG			38
++#define SLAVE_QDSS_CFG			39
++#define SLAVE_RBCPR_CFG			40
++#define SLAVE_SDCC_1			41
++#define SLAVE_SDCC_2			42
++#define SLAVE_SECURITY			43
++#define SLAVE_SNOC_CFG			44
++#define SLAVE_SPDM			45
++#define SLAVE_TCSR			46
++#define SLAVE_TLMM			47
++#define SLAVE_USB_HS1			48
++#define SLAVE_USB_HS2			49
++#define SLAVE_VENUS_CFG			50
++#define SNOC_PCNOC_SLV			51
++
++#endif
+-- 
+2.17.1
 
