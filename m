@@ -2,182 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4F625785C
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 13:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEB0257904
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 14:15:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgHaL1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 07:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S1726726AbgHaMPC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 08:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727008AbgHaL0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 07:26:42 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD8AC061239
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 04:26:41 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id k13so2865136plk.13
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 04:26:41 -0700 (PDT)
+        with ESMTP id S1726326AbgHaMPC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 08:15:02 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A98C061575
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 05:15:01 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id q1so2862577pjd.1
+        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 05:15:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=tH82aWUMA2UBnyH/sX2Mzmczxh4jcROvZV+v6BjFVRo=;
-        b=VMIbLDRMLVktTIUf5zOOIdeqrwLw/V7tJr4rRKsS1JoGBJ4suScF0zyi0gT9tVpLrC
-         0lbZBiw/vQDNteulBImtfq+TUOpnBVGJJMUe2LVFOt/Iuo1GUg67zn6rE2hqO1ORDqyr
-         3EQUaprmf2kbt/cbgoqmqyE8C1aev6T+LMoAEDt5WWW/OXkazfVvq5D/n3CanLDTsDCX
-         4hPMsJeJcQ6Mvnv7ZPUUJ9TAaApOTyW6vLz6pmpX109HfW33joz+K619BG9tXjGJlt1m
-         TWULz0V7MTagWxrZynTRiXPxujWKXMxLwnH9q0In6SNZFrk2xoBqukRM8t5/2KhNTloH
-         a8pw==
+        bh=nIooSS36mtQC1Oee0ilIZhL51ovS8/MOftc7lgwrhZk=;
+        b=j+O8vW6W1Gc50LTKk+bPWDl2aD/Y/8v0pN3M5ooAkHOOfnKXNv8lHpBa+hz5hQ9Qdm
+         aQzNQDduTCwPIejvzPLN+j3zImKOghfg2di9S+GDHQQyV7t8crdnPp+kW+MXD4tMddBJ
+         mBsLbCHxIRFFOHvyAbcro/zDqrQEDkrChrMU1bTr4c/QKBICKZvWlt621mhde4OTEQnF
+         nPWfBjH11OUH07SsJ9O14NieyiySbMT0SYcFpxHwXwrAC3vmGtQGgfD6uSL0D+ObZ5TK
+         UAtpVpS9uj7SipfCzgmclRHOHaN4jKHiihAIDptj/PeyC0LNgihCLtYkHyY04Hf9bIX3
+         scfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=tH82aWUMA2UBnyH/sX2Mzmczxh4jcROvZV+v6BjFVRo=;
-        b=PAqit6l5Rj7iFYhddquaegTkZaYzfPsO5tvTUkzzIldN2CZQhG+CoeFkrIQw9Pv8uM
-         jsIF34gnauX/goYbhrsa19QxVknCBhms19QYbeBhTLJCKrWuylZy3mlD5kuVQUDT07uX
-         hTNBiGVA6nuWgDSMTt4vOL/WLyhrhdgvxlpLQdfP/aPMeqRn9PuHp53PvSyC40pmWyy8
-         Ihw8R4WrE5DzvXo03LjHapuHPSVMipKGGYnaIgC/Adp1eWAXyXg/ZKzMun31kPNb6UKY
-         hCuy4PJ2VjEmj6rOyl6JIpvNb1hJJWSnBvoyVt/oxiP1+zFHjvM4n0J5ybk+/4WUdnCG
-         nong==
-X-Gm-Message-State: AOAM533GOFrwIatnmQyOU3g1pt80z+19wwOSYRxHNyFWmMh3+JK99uFl
-        ZOHTY5DzYkLD53P3qXV+isQaAQ==
-X-Google-Smtp-Source: ABdhPJw7Qs9sAfIfxfyEUjotME5wfjebiejj1Z5GBugIjslzE7U6vI8f7h5B/OqApj9KB4CR3Arysg==
-X-Received: by 2002:a17:902:bd06:: with SMTP id p6mr714908pls.255.1598873200817;
-        Mon, 31 Aug 2020 04:26:40 -0700 (PDT)
+        bh=nIooSS36mtQC1Oee0ilIZhL51ovS8/MOftc7lgwrhZk=;
+        b=gIIgTh1k6MjaN430svmTNepbd5WWJxh8e6vXVrm13an5YaCf45RYWs0LujgOCPNyeh
+         1DSx1vDzaPqeagZ96o93v0bjofFEvTbsw3rzSyvVdiFT0hm5K6VMKr023c+W1UxZuAyi
+         HYJAy/OkpxNPo19JUt6Kh+71T2rXLoQKhAcTvwFJFZe7k+R5P8BVigQ5DSa/QpOSDb9F
+         WvqAZxaqsbXZi17sLAE93E8qDAhpaeWDZ3LALqgnYKh6Pru3Jf1qlxMV5sibtqjnO2TI
+         QacE9KjZ3A7wy3omtoY0+JHJRJfLiGXdvTDIFetWmiuVr0RBN7rfI9C/jcyWeR2QO8ul
+         XAJA==
+X-Gm-Message-State: AOAM530p2lKmtsx+WSMIb2Ql77ZjNPGBy1PjN3amXXRestGj/pfNWCmZ
+        OfJWZfQEMJxqBTOYBoLBwOKTwg==
+X-Google-Smtp-Source: ABdhPJxKWJ0rCeInmPfUSpGM2WCVJBJ1w1idLupTRD9Q7rQbKYLU49QfLGAqAh/76r6mL1e990sjGg==
+X-Received: by 2002:a17:90b:a44:: with SMTP id gw4mr1105729pjb.26.1598876101178;
+        Mon, 31 Aug 2020 05:15:01 -0700 (PDT)
 Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id v20sm7018867pju.14.2020.08.31.04.26.39
+        by smtp.gmail.com with ESMTPSA id t10sm7650745pfq.77.2020.08.31.05.14.59
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 04:26:39 -0700 (PDT)
-Date:   Mon, 31 Aug 2020 16:56:38 +0530
+        Mon, 31 Aug 2020 05:14:59 -0700 (PDT)
+Date:   Mon, 31 Aug 2020 17:44:57 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ben Segall <bsegall@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Puhov <peter.puhov@linaro.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Subject: Re: [RFC 0/3] cpufreq: cppc: Add support for frequency invariance
-Message-ID: <20200831112638.v6vyljefggptij2v@vireshk-i7>
-References: <cover.1594289009.git.viresh.kumar@linaro.org>
- <20200709124349.GA15342@arm.com>
- <20200710030032.3yq3lqqybhy5m744@vireshk-i7>
- <CAKfTPtBpOdRSV0gb2CoC8J9GnuPiqZ+MbQLLc6NdSmjJhb0cgA@mail.gmail.com>
- <20200825095629.GA15469@arm.com>
- <20200827075149.ixunmyi3m6ygtehu@vireshk-i7>
- <20200827112740.GA9923@arm.com>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Niklas Cassel <nks@flawful.org>
+Subject: Re: [PATCH v2] opp: Power on (virtual) power domains managed by the
+ OPP core
+Message-ID: <20200831121457.2v6avendroclvrn5@vireshk-i7>
+References: <20200826093328.88268-1-stephan@gerhold.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200827112740.GA9923@arm.com>
+In-Reply-To: <20200826093328.88268-1-stephan@gerhold.net>
 User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27-08-20, 12:27, Ionela Voinescu wrote:
-> I don't see it as anyone registering for freq invariance, rather the
-> freq invariance framework chooses its source of information (AMU, CPPC,
-> cpufreq).
-
-Yeah, either way is fine for me.
-
-> > i.e. if CPPC registers for it first then there is no need to check
-> > AMUs further (as CPPC will be using AMUs anyway), else we will
->                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> Not necessarily. Even if AMUs are present, they are only used for CPPC's
-> delivered and reference performance counters if the ACPI _CPC entry
-> specifies FFH as method:
+On 26-08-20, 11:33, Stephan Gerhold wrote:
+> dev_pm_opp_attach_genpd() allows attaching an arbitrary number of
+> power domains to an OPP table. In that case, the genpd core will
+> create a virtual device for each of the power domains.
 > 
->   ResourceTemplate(){Register(FFixedHW, 0x40, 0, 1, 0x4)},
->   ResourceTemplate(){Register(FFixedHW, 0x40, 0, 0, 0x4)},
-
-Right.
-
-> While I understand your point (accessing AMUs through CPPC's read
-> functions to implement invariance) I don't think it's worth tying the
-> two together.
+> At the moment, the OPP core only calls
+> dev_pm_genpd_set_performance_state() on these virtual devices.
+> It does not attempt to power on the power domains. Therefore
+> the required power domain might never get turned on.
 > 
-> I see the two functionalities as independent:
->  - frequency invariance with whichever source of information is valid
->    (AMUs, cpufreq, etc) is separate from
->  - CPPC's delivered and reference performance counters, which currently
->    are used in cpufreq's .get() function.
+> So far, dev_pm_opp_attach_genpd() is only used in qcom-cpufreq-nvmem.c
+> to attach the CPR power domain to the CPU OPP table. The CPR driver
+> does not check if it was actually powered on so this did not cause
+> any problems. However, other drivers (e.g. rpmpd) might ignore the
+> performance state until the power domain is actually powered on.
 > 
-> Therefore, taking each of the scenarios one by one:
->  - All CPUs support AMUs: the freq invariance initialisation code will
->    find AMUs valid and it will use them to set the scale factor;
->    completely independently, if the FFH method is specified for CPPC's
->    delivered and reference performance counters, it will also use
->    AMUs, even if, let's say, invariance is disabled.
+> Since these virtual devices are managed exclusively by the OPP core,
+> I would say that it should also be responsible to ensure they are
+> enabled.
 > 
->  - None of the CPUs support AMUs, but the _CPC entry specifies some
->    platform specific counters for delivered and reference performance.
->    With the current mainline code neither cpufreq or counter based
->    invariance is supported, but the CPPC counters can be used in the
->    cppc_cpufreq driver for the .get() function.
+> This commit implements this similar to the non-virtual power domains;
+> we create device links for each of attached power domains so that they
+> are turned on whenever the consumer device is active.
 > 
->    But with the above new functionality we can detect that AMUs are not
->    supported and expose the CPPC counters to replace them in
->    implementing invariance.
-> 
->  - Mixed scenarios are also supported if we play our cards right and
->    implement the above per-cpu.
-> 
-> 
-> I'm thinking that having some well defined invariance sources might work
-> well: it will simplify the init function (go through all registered
-> sources and choose (per-cpu) the one that's valid) and allow for
-> otherwise generic invariance support. Something like:
-> 
-> enum freq_inv_source {INV_CPUFREQ, INV_AMU_COUNTERS, INV_CPPC_COUNTERS};
-> 
-> struct freq_inv_source {
-> 	enum freq_inv_source source;
-> 	bool (*valid)(int cpu);
-> 	u64 (*read_corecnt)(int cpu);
-> 	u64 (*read_constcnt)(int cpu);
-> 	u64 (*max_rate)(int cpu);
-> 	u64 (*ref_rate)(int cpu);
-> }
-> 
-> I am in the middle of unifying AMU counter and cpufreq invariance through
-> something like this, so if you like the idea and you don't think I'm
-> stepping too much on your toes with this, I can consider the usecase in
-> my (what should be) generic support. So in the end this might end up
-> being just a matter of adding a new invariance source (CPPC counters).
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
 
-Okay, if you have already started working on that, no issues from my
-side. I can just get the relevant stuff from CPPC added once you
-provide that layer..
+Applied with some changes, hope that is fine:
 
-> My only worry is that while I know how a cpufreq source behaves and how
-> AMU counters behave, I'm not entirely sure what to expect from CPPC
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+[ Viresh: Rearranged the code to remove extra loop and minor cleanup ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/core.c | 37 ++++++++++++++++++++++++++++++++++++-
+ drivers/opp/opp.h  |  1 +
+ 2 files changed, 37 insertions(+), 1 deletion(-)
 
-Neither do I :)
-
-> counters: if they are always appropriate for updates on the tick (not
-> blocking),
-
-The update stuff may sleep here and so I had to do stuff in the
-irq-work handler in my patch.
-
-> if they both stop during idle, if there is save/restore
-> functionality before/after idle, etc.
-
-This I will check.
-
--- 
-viresh
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index e65174725a4d..b608b0253079 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -17,6 +17,7 @@
+ #include <linux/device.h>
+ #include <linux/export.h>
+ #include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+ 
+ #include "opp.h"
+@@ -1967,10 +1968,15 @@ static void _opp_detach_genpd(struct opp_table *opp_table)
+ 		if (!opp_table->genpd_virt_devs[index])
+ 			continue;
+ 
++		if (opp_table->genpd_virt_links[index])
++			device_link_del(opp_table->genpd_virt_links[index]);
++
+ 		dev_pm_domain_detach(opp_table->genpd_virt_devs[index], false);
+ 		opp_table->genpd_virt_devs[index] = NULL;
+ 	}
+ 
++	kfree(opp_table->genpd_virt_links);
++	opp_table->genpd_virt_links = NULL;
+ 	kfree(opp_table->genpd_virt_devs);
+ 	opp_table->genpd_virt_devs = NULL;
+ }
+@@ -2002,8 +2008,10 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ {
+ 	struct opp_table *opp_table;
+ 	struct device *virt_dev;
++	struct device_link *dev_link;
+ 	int index = 0, ret = -EINVAL;
+ 	const char **name = names;
++	u32 flags;
+ 
+ 	opp_table = dev_pm_opp_get_opp_table(dev);
+ 	if (IS_ERR(opp_table))
+@@ -2030,6 +2038,21 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ 	if (!opp_table->genpd_virt_devs)
+ 		goto unlock;
+ 
++	opp_table->genpd_virt_links = kcalloc(opp_table->required_opp_count,
++					      sizeof(*opp_table->genpd_virt_links),
++					      GFP_KERNEL);
++	if (!opp_table->genpd_virt_links) {
++		kfree(opp_table->genpd_virt_devs);
++		opp_table->genpd_virt_devs = NULL;
++		goto unlock;
++	}
++
++	/* Turn on power domain initially if consumer is active */
++	pm_runtime_get_noresume(dev);
++	flags = DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS;
++	if (pm_runtime_active(dev))
++		flags |= DL_FLAG_RPM_ACTIVE;
++
+ 	while (*name) {
+ 		if (index >= opp_table->required_opp_count) {
+ 			dev_err(dev, "Index can't be greater than required-opp-count - 1, %s (%d : %d)\n",
+@@ -2043,12 +2066,23 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ 			dev_err(dev, "Couldn't attach to pm_domain: %d\n", ret);
+ 			goto err;
+ 		}
+-
+ 		opp_table->genpd_virt_devs[index] = virt_dev;
++
++		/* Create device links to manage runtime PM */
++		dev_link = device_link_add(dev, opp_table->genpd_virt_devs[index],
++					   flags);
++		if (!dev_link) {
++			dev_err(dev, "Failed to create device link\n");
++			goto err;
++		}
++		opp_table->genpd_virt_links[index] = dev_link;
++
+ 		index++;
+ 		name++;
+ 	}
+ 
++	pm_runtime_put(dev);
++
+ 	if (virt_devs)
+ 		*virt_devs = opp_table->genpd_virt_devs;
+ 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+@@ -2056,6 +2090,7 @@ struct opp_table *dev_pm_opp_attach_genpd(struct device *dev,
+ 	return opp_table;
+ 
+ err:
++	pm_runtime_put(dev);
+ 	_opp_detach_genpd(opp_table);
+ unlock:
+ 	mutex_unlock(&opp_table->genpd_virt_dev_lock);
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 78e876ec803e..be5526cdbdba 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -186,6 +186,7 @@ struct opp_table {
+ 
+ 	struct mutex genpd_virt_dev_lock;
+ 	struct device **genpd_virt_devs;
++	struct device_link **genpd_virt_links;
+ 	struct opp_table **required_opp_tables;
+ 	unsigned int required_opp_count;
