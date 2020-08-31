@@ -2,158 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C80257679
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 11:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808812576F5
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 11:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726174AbgHaJ1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 05:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S1726081AbgHaJyr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 05:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726117AbgHaJ1O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 05:27:14 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D161C061573
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 02:27:14 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id i13so2833401pjv.0
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 02:27:14 -0700 (PDT)
+        with ESMTP id S1726334AbgHaJyl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 05:54:41 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6A2C061573;
+        Mon, 31 Aug 2020 02:54:22 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id g6so5882570ljn.11;
+        Mon, 31 Aug 2020 02:54:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zU+ye3DFPZbAV6pQiN8wFPJa6aARNezf++/kyW/uVuI=;
-        b=EpoiQoXcv7ag2BZboESNDV8ueXVg7gPRhJwh0HJmK0jjxVOplU9RU+KzVm9W9WqBC9
-         JHHOX0WWO9bODH9Di16FMFHq8OzWErkqnpA9HXxWGtiN+LyEjiMmfESPZ+kv+Do6OqVX
-         ifi6XiPNhiW9ZYjFRCo6WupZEH13dMoZ4x4+Y4VBrmhcq/1SAN4c6raMNNuV0n8rqLrR
-         RPONK2LGjM13mM60e+GgF6Vl5vCeZJw5JbuMxChUkW5ixwPuVph9G2oEQpUYvLEuxAKh
-         W7GxKOLwkKM/AuTgHjiG0ZocABjLNggfN5OauAJ0iUnqFcmhtB7mGUUisQm65OcULL5R
-         qhCQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TSm8Xir2qHLM4KnvUNa9QAiKGDLz5dH6Zq6NNkg0IXQ=;
+        b=kurhuhNueqi6Go7ZBSzHHlC2VATfsEJ18kcOG0TtB7QnuhDk2JAqZNyWAev7TBzYkz
+         CiP5BBA5nDhYGxWPvdTHEM3NhEE76P/YLA+6sVzE9ptTSR4lvQ6U9Fz3VCaIPnv32BAL
+         FZ6kHKgDbxvcOlstFWUomxLz9Gs2BNXfsfP9Gg6Z0voNpQrkTh1RmAnL5VAwZthtO2fg
+         I1B/orxzR62QrpHX62BXGDknIrnk2A7vD1sCjZnI8chUENqi6RoZGQ8FvyKNJPYkZ+bb
+         OKa9i4zJ4xkwbKdT3lpLqL/M4W2gl+hmPOVXCmvkZ8ZiSG9OYoJIcawMs5XiuHyCSFjy
+         7Aug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=zU+ye3DFPZbAV6pQiN8wFPJa6aARNezf++/kyW/uVuI=;
-        b=lhWU1KPwD3xSFDcaOuIzdK/6xebwykweCZPfifn1f2UlqgGogn/ohGy22Ui8WfoT0W
-         cWyCLHABdevUS6JMOZ2HIEbzn/31FjeImu8WUELyFZWrnEIk1xtCS3mUBz/b9aYv0hgH
-         Jv+NChECKKpIqiQ4SLmZ+jJDJ/7jH7B4gxKkLNxDGPnG7bEVdVwJCNOYNORVbtkhRZIA
-         rTv/tI9qNHFfSMoKXf4O8ByNOMP+Dp/JldQ8/iq1dJrz2vowKUAy9tPftHoI9mUmPatx
-         aEdI5w7I3RIaKe0MJYo1LsJ5JFYzZQJ/2LXH+ke2nrMP6Fslbc5fUDSEbKgIkcwlfDoY
-         nlZw==
-X-Gm-Message-State: AOAM530cErZzz/d/3x1m2f/LuOlB8Y3TRwP3jcRUgVIQl70E16KAkLB0
-        n8x4D2/+PzGy8R/s57V2fZA66Q==
-X-Google-Smtp-Source: ABdhPJwMKSI/DxgWWVduGT7bfBgazAzmC0cUQbGNmOrklC5B/CSMw6tk2YWg7AIdKXeKpPRtr5YA9Q==
-X-Received: by 2002:a17:902:8a93:: with SMTP id p19mr426722plo.320.1598866033880;
-        Mon, 31 Aug 2020 02:27:13 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id h5sm7865081pfk.0.2020.08.31.02.27.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 02:27:13 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        bh=TSm8Xir2qHLM4KnvUNa9QAiKGDLz5dH6Zq6NNkg0IXQ=;
+        b=SnN6pldGoJQInx/m1zeGmteApodgzbnlZJmK2f5pYudoBhyVOdvKvoFg5N5sdS4S5S
+         D6dsnbGmgY4ooudUKVMW/uocyfaW70OwF9D6Fhw53GrvqTRp+h2OTlvuArTqcg6Lo8vz
+         AZmhBvGagNx3BG8kLa6zUqcTzVae0P4hmRYF8SJNVFOwGlA5Di12RkqW606ie/revFGw
+         20/myo5p31UNvdfJoCQdnPNAg66jIsz5Vn9IJXW7lPjwuCFKijKEXUjnSUhM8TrSktZK
+         uUOGyf9DEAcs1pvdPnsvbR1hdy2Q05LAKhQhTsQLaBgutc7C4CKQbvXZtXju4gk3IBbI
+         PVxA==
+X-Gm-Message-State: AOAM5333RUoiFysFOzYMo0KGwZH15LB0KdqOXgTW3trd1BSiNIzey+Z5
+        6C1Jx9rtFr2IIaTtg33URT8oxyTUPKM=
+X-Google-Smtp-Source: ABdhPJy8KZjk72a5eEDT0IuSYdmnLR/C/55LTP2RBCq87JBLCuN6xfMUdvGBtMMHsODr7dV4jftXMg==
+X-Received: by 2002:a2e:b4f4:: with SMTP id s20mr251794ljm.339.1598867660906;
+        Mon, 31 Aug 2020 02:54:20 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id f20sm1863068lfk.70.2020.08.31.02.54.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Aug 2020 02:54:20 -0700 (PDT)
+Subject: Re: [PATCH 3/3] ARM: tegra: Pass multiple versions in
+ opp-supported-hw property
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Rafael Wysocki <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] opp: Don't drop reference for an OPP table that was never parsed
-Date:   Mon, 31 Aug 2020 14:56:56 +0530
-Message-Id: <922ff0759a16299e24cacfc981ac07914d8f1826.1598865786.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+References: <cover.1598442485.git.viresh.kumar@linaro.org>
+ <b13f1b112532fe0189d1f7bbb50903d9e1defb07.1598442485.git.viresh.kumar@linaro.org>
+ <b0763074-859f-fccb-dde4-03d1a50ea021@gmail.com>
+ <20200831043908.mtw4dglybcmcabjb@vireshk-i7>
+ <0da380c2-9161-d450-afd2-4b159c8cfb7d@gmail.com>
+ <20200831084111.6udzvrdonxgzju4l@vireshk-i7>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <cbfa012b-8f50-e460-972c-c51fa52bb858@gmail.com>
+Date:   Mon, 31 Aug 2020 12:54:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200831084111.6udzvrdonxgzju4l@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-dev_pm_opp_remove_table() should drop a reference to the OPP table only
-if the DT OPP table was parsed earlier with a call to
-dev_pm_opp_of_add_table() earlier. Else it may end up dropping the
-reference to the OPP table, which was added as a result of other calls
-like dev_pm_opp_set_clkname(). And would hence result in undesirable
-behavior later on when caller would try to free the resource again.
+31.08.2020 11:41, Viresh Kumar пишет:
+> On 31-08-20, 10:54, Dmitry Osipenko wrote:
+>> 31.08.2020 07:39, Viresh Kumar пишет:
+>> ...
+>>>>> Dmitry, I think there is further scope of simplifying stuff here by
+>>>>> using the opp-microvolt-<name> property and corresponding
+>>>>> dev_pm_opp_set_prop_name() call.
+>>>
+>>> Any inputs on this Dmitry ?
+>>
+>> Could you please give an example?
+> 
+> There are many users of it in the kernel. grep for "opp-microvolt-" in
+> the DT files and you will see.
+> 
+> The use of this property is to specific multiple microvolt properties
+> to the same frequency without a need to create separate nodes for them
+> all. The right microvolt property will be selected based on the call
+> made to dev_pm_opp_set_prop_name(), search for that too in kernel.
+> 
 
-Fixes: 03758d60265c ("opp: Replace list_kref with a local counter")
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
-Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 22 ++++++++++++++++------
- drivers/opp/opp.h  |  2 +-
- 2 files changed, 17 insertions(+), 7 deletions(-)
+It's not clear to me how it could be applicable to the Tegra CPU OPP
+because Tegra depends on a combination of SPEEDO + PROCESS versions.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 9d7fb45b1786..31ce5d19ee9e 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1291,13 +1291,19 @@ void dev_pm_opp_remove(struct device *dev, unsigned long freq)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_remove);
- 
--void _opp_remove_all_static(struct opp_table *opp_table)
-+bool _opp_remove_all_static(struct opp_table *opp_table)
- {
- 	struct dev_pm_opp *opp, *tmp;
-+	bool ret = true;
- 
- 	mutex_lock(&opp_table->lock);
- 
--	if (!opp_table->parsed_static_opps || --opp_table->parsed_static_opps)
-+	if (!opp_table->parsed_static_opps) {
-+		ret = false;
-+		goto unlock;
-+	}
-+
-+	if (--opp_table->parsed_static_opps)
- 		goto unlock;
- 
- 	list_for_each_entry_safe(opp, tmp, &opp_table->opp_list, node) {
-@@ -1307,6 +1313,8 @@ void _opp_remove_all_static(struct opp_table *opp_table)
- 
- unlock:
- 	mutex_unlock(&opp_table->lock);
-+
-+	return ret;
- }
- 
- /**
-@@ -2409,13 +2417,15 @@ void _dev_pm_opp_find_and_remove_table(struct device *dev)
- 		return;
- 	}
- 
--	_opp_remove_all_static(opp_table);
-+	/*
-+	 * Drop the extra reference only if the OPP table was successfully added
-+	 * with dev_pm_opp_of_add_table() earlier.
-+	 **/
-+	if (_opp_remove_all_static(opp_table))
-+		dev_pm_opp_put_opp_table(opp_table);
- 
- 	/* Drop reference taken by _find_opp_table() */
- 	dev_pm_opp_put_opp_table(opp_table);
--
--	/* Drop reference taken while the OPP table was added */
--	dev_pm_opp_put_opp_table(opp_table);
- }
- 
- /**
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index e51646ff279e..c3fcd571e446 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -212,7 +212,7 @@ struct opp_table {
- 
- /* Routines internal to opp core */
- void dev_pm_opp_get(struct dev_pm_opp *opp);
--void _opp_remove_all_static(struct opp_table *opp_table);
-+bool _opp_remove_all_static(struct opp_table *opp_table);
- void _get_opp_table_kref(struct opp_table *opp_table);
- int _get_opp_count(struct opp_table *opp_table);
- struct opp_table *_find_opp_table(struct device *dev);
--- 
-2.25.0.rc1.19.g042ed3e048af
-
+It's not like all voltages are the same for all OPPs that have the same
+PROCESS ID, otherwise it indeed would be nice to have
+"opp-microvolt-process0", but unfortunately this variant is not suitable
+for Tegra because some freqs have different voltages using the same
+PROCESS ID and the same applies to the SPEEDO ID.
