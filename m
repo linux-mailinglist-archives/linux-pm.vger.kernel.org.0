@@ -2,115 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8930E258A39
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 10:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D31258A53
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 10:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726064AbgIAITn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 04:19:43 -0400
-Received: from mga05.intel.com ([192.55.52.43]:35392 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725848AbgIAITl (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 04:19:41 -0400
-IronPort-SDR: X0Wvf8wimY16R7gC3xoraD0NCRagIrDGhSXWOh9R82X85SnbPcAzs4vDYm5++Wujbsz35uN/FZ
- iYTQ4FcM8vdw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="241939710"
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="241939710"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2020 01:19:41 -0700
-IronPort-SDR: NXpBjrSeVHMCMdhfGfBLnvrMfuYNHl07U+ch2qk3t5MKV/eKLEdVe1unBu2xHER7rKfcFkPfOC
- dHadQhR6MNaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
-   d="scan'208";a="338498788"
-Received: from mylly.fi.intel.com (HELO [10.237.72.198]) ([10.237.72.198])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Sep 2020 01:19:38 -0700
-Subject: Re: [PATCH 1/2] i2c: i801: Fix runtime PM
-To:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jean Delvare <jdelvare@suse.de>, linux-i2c@vger.kernel.org,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        stable@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20180627212340.GA161569@bhelgaas-glaptop.roam.corp.google.com>
- <20200828162640.GA2160001@bjorn-Precision-5520>
- <20200831151159.GA11707@gmail.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <e40561b7-9b85-4f9d-48d5-7dc11bfb873c@linux.intel.com>
-Date:   Tue, 1 Sep 2020 11:19:37 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726105AbgIAI1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 04:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgIAI1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 04:27:17 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E92C061244
+        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 01:27:16 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id h19so440485ljg.13
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 01:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DyiOO2gbTzhegJyR3eptVxnGlyGt5L5+5gJciUVklg0=;
+        b=b8KDdpxd05PgoF9MHDaCNP0ApfE/tdGhbeERtfXhhQoMnHfrBxXx6nTCRQO3Fyfig4
+         uOlPir09j6feYspZvqwHBM7ZiuiDOiOgGJ0zoNAycftk3UfTsh8WkLz32LllUt89IRKM
+         eiwZSF4upyDKFYalT2uJ/ScemNnB66gculNqFBg+0PkUDvtVUJbjM0wg/0BVvxFxDjmY
+         qPr77Z2vDu6fwpman6NUPF34mXSVFVR6ugshExq11iszAeYyQBvYylCQUOMp6u1SvVvT
+         +np6ByUyhx5swVLhVbc3Ulb5imlGcd8dp3sMu8ki+uTbzMbR3hqO3KyldMnb7SXpUvqk
+         yfzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DyiOO2gbTzhegJyR3eptVxnGlyGt5L5+5gJciUVklg0=;
+        b=dtN2Ggz8+T06R+NdGl7Q7Dgo9Fq7Z9eaQpRJLQdcvJl0qoJZFElbS+JqJhd0BfllOk
+         MpFnvUwNml0vRPQBR/YoPhc6dUFtb8yuACPSLo7kUtggMw8cKaqFKsC3ziHcT5LhCMg7
+         W/9m1EGYZ3/L2q5UtoiqHVOgwgq85ayfeZGm//uSFFuCoRuzC+sAS7ZFvkyxcMDEQnxP
+         2yKPuk+0NKcA7XvbZpHvsOmZ6uLfX65JFb/srBw3s5t0SQFBG3GXHIWsXwQBP/9MI4Ay
+         KdjOFPplg5TLREpkLtO7SZml4AaPWmk8XOyb3stTN0v+35v/AlSu3oCMO9vpL3eT8cSX
+         Pv0Q==
+X-Gm-Message-State: AOAM5324I2rD3HN+i96XL5IZ2dk9+66JlO0bOSZvm4w5h8a64IybgB0s
+        typ8vVbdsL8lmdzxh8laOO1RLez2/AJhFAuA
+X-Google-Smtp-Source: ABdhPJwUVxJuaHjXXhTGDUrbiL4sCIdcVh822bFUMtb8+IPh6zPjQMIRDXRRyKZvRak+dwcc5AWgHA==
+X-Received: by 2002:a2e:8648:: with SMTP id i8mr5046ljj.288.1598948835288;
+        Tue, 01 Sep 2020 01:27:15 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-180-79.NA.cust.bahnhof.se. [98.128.180.79])
+        by smtp.gmail.com with ESMTPSA id c5sm111252lfb.24.2020.09.01.01.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 01:27:14 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/2] cpuidle: psci: Enable s2idle when using PSCI OSI
+Date:   Tue,  1 Sep 2020 10:27:05 +0200
+Message-Id: <20200901082707.106860-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20200831151159.GA11707@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/31/20 6:15 PM, Vaibhav Gupta wrote:
-> On Fri, Aug 28, 2020 at 11:26:40AM -0500, Bjorn Helgaas wrote:
->> [+cc Vaibhav]
->>
->> On Wed, Jun 27, 2018 at 04:23:40PM -0500, Bjorn Helgaas wrote:
->>> [+cc Rafael, linux-pm, linux-kernel]
->>>
->>> On Wed, Jun 27, 2018 at 10:15:50PM +0200, Jean Delvare wrote:
->>>> Hi Jarkko,
->>>>
->>>> On Tue, 26 Jun 2018 17:39:12 +0300, Jarkko Nikula wrote:
->>>>> Commit 9c8088c7988 ("i2c: i801: Don't restore config registers on
->>>>> runtime PM") nullified the runtime PM suspend/resume callback pointers
->>>>> while keeping the runtime PM enabled. This causes that device stays in
->>>>> D0 power state and sysfs /sys/bus/pci/devices/.../power/runtime_status
->>>>> shows "error" when runtime PM framework attempts to autosuspend the
->>>>> device.
->>>>>
->>>>> This is due PCI bus runtime PM which checks for driver runtime PM
->>>>> callbacks and returns with -ENOSYS if they are not set. Fix this by
->>>>> having a shared dummy runtime PM callback that returns with success.
->>>>>
->>>>> Fixes: a9c8088c7988 ("i2c: i801: Don't restore config registers on runtime PM")
->>>>
->>>> I don't want to sound like I'm trying to decline all responsibility for
->>>> a regression I caused, but frankly, if just using SIMPLE_DEV_PM_OPS()
->>>> breaks runtime PM, then it's the PM model which is broken, not the
->>>> i2c-i801 driver.
->>>>
->>>> I will boldly claim that the PCI bus runtime code is simply wrong in
->>>> returning -ENOSYS in the absence of runtime PM callbacks, and it should
->>>> be changed to return 0 instead. Or whoever receives that -ENOSYS should
->>>> not treat it as an error - whatever makes more sense.
->>>>
->>>> Having to add dummy functions in every PCI driver that doesn't need to
->>>> do anything special for runtime PM sounds plain stupid. It should be
->>>> pretty obvious that a whole lot of drivers are going to use
->>>> SIMPLE_DEV_PM_OPS() because it exists and seems to do what they want,
->>>> and all of them will be bugged because the PCI core is doing something
->>>> silly and unexpected.
->>>>
->>>> So please let's fix it at the PCI subsystem core level. Adding Bjorn
->>>> and the linux-pci list to Cc.
->>>
->>> Thanks Jean.  What you describe does sound broken.  I think the PM
->>> guys (cc'd) will have a better idea of how to deal with this.
->>
->> Did we ever get anywhere with this?  It seems like the thread petered
->> out.
-> This does seems worrying. I remember, few days earlier you pointed out a driver
-> i2c-nvidia-gpuc.c. In the code, gpu_i2c_suspend() is an empty-body function. And
-> comment mentioned that empty stub is necessary for runtime_pm to work.
-> 
-> And this driver also uses UNIVERSAL_DEV_PM_OPS.
-> 
-This was fixed by c5eb1190074c ("PCI / PM: Allow runtime PM without 
-callback functions"). So no need for empty runtime PM callbacks anymore.
+When using PSCI OSI together with the PM domain topology, the domain idle
+states becomes selected via calls to pm_runtime_put_sync_suspend(). This works
+fine for the regular idle path, but not for system wide suspend-to-idle.
+
+This problem is because runtime PM gets disabled by the PM core, during system
+wide suspend. In this small series, these issues are being fixed.
+
+Kind regards
+Ulf Hansson
+
+Ulf Hansson (2):
+  PM / Domains: Enable locking for syscore devices for IRQ safe genpds
+  cpuidle: psci: Enable s2idle when using OSI with the PM domain
+    topology
+
+ drivers/base/power/domain.c           | 13 ++++++++++--
+ drivers/cpuidle/cpuidle-psci-domain.c |  2 ++
+ drivers/cpuidle/cpuidle-psci.c        | 30 +++++++++++++++++++++++----
+ 3 files changed, 39 insertions(+), 6 deletions(-)
 
 -- 
-Jarkko
+2.25.1
+
