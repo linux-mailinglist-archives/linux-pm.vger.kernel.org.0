@@ -2,102 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BABE5259D73
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 19:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89098259DC5
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 19:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728969AbgIARma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 13:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728516AbgIARm3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 13:42:29 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E8C061244;
-        Tue,  1 Sep 2020 10:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=L5+iKG5i9fFPHpLQKtEzdQO5HXzkEnTIXwpxe3If020=; b=stdjs9CM1DFY4aiDaHudhWDJKU
-        s6Hpvn/DWs26Mh7Z8oSw5OtKqQbVdj5SUUKsJ1RzZsqkZ39iCtnmLzLab8+w9xopeoSAKgcoJn6jZ
-        ZUdshd6E0AdA9iKpriv90RAayQNk0C70iq733aVy7W2zU/HsFVzkiBnQAP3pbXRftxhNJfEHVTJ9u
-        UmFULOER0xmaxEZN3kArygBpf/4g90Zo7eLjoRZkwxRpRaG5MPMPil2KZzQTNGZvVKsOilhf4aK+b
-        pMi98ShaxU07nrCWfxpRZlQ+p1FZxTk+EQKLdULpiD/p+qzQGDZ3px05LdXW42p9dOheyfnLt3CAr
-        aL9eBGIg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kDAIU-0000zX-AR; Tue, 01 Sep 2020 17:42:19 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 26867980D85; Tue,  1 Sep 2020 19:42:16 +0200 (CEST)
-Date:   Tue, 1 Sep 2020 19:42:16 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Lina Iyer <ilina@codeaurora.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Saravana Kannan <saravanak@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        madhuparnabhowmik10@gmail.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
- OF driver helper
-Message-ID: <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
-References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
- <20200831194402.GD2855@paulmck-ThinkPad-P72>
- <CAPDyKFq7KWo=4VmPhgrt7vEEQ_P6NdVgQp+MO_1cg1dtoVR_Fw@mail.gmail.com>
- <CAPDyKFrTERjpLrPOFtkqLyNsk2T_58Ye2FQ1mPf-0u78aWW=Xw@mail.gmail.com>
- <20200901104206.GU1362448@hirez.programming.kicks-ass.net>
- <CAPDyKFo0VkW-cgRSkvPQ0whpuJCo4OKcL1nmH7nz1tDEChOtVg@mail.gmail.com>
- <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
- <20200901154417.GD20303@codeaurora.org>
- <20200901155014.GF2674@hirez.programming.kicks-ass.net>
- <20200901161340.GC29330@paulmck-ThinkPad-P72>
+        id S1729980AbgIAR7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 13:59:48 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:46716 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729720AbgIAR7s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 13:59:48 -0400
+Received: by mail-oi1-f194.google.com with SMTP id u126so1920626oif.13
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 10:59:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sujYt6371DvOb0s7i1+78EW9f+rIkLXLI0G2kq9t9d0=;
+        b=bEWN3TIACxkw4NpJMBGzTIrsszI94GcgQhK+qWsXPxRdjXLZD5eDnqVDfZHWePzufW
+         Q/4MN/kRQdttfoDxSPOI5ldnGdMjy59/zH4FQ3sgbqU1aPcmXokDFWAjYMCzBwFeBPXO
+         E0YOMvSesKkL64QuwC9S+pm3wGC4fbDAFH9lkRwk2hCL+HuP1bEBdhv+eV/xzSQ/Kpe/
+         43KcV5numPzBXMh02XcR+wGSagk/bBtmDuqAgV10hNhmOG91f6kkdRuzvnStlWVT4zxL
+         S43RzN/5VmCEeAagbvPWL4wYz/XYHiCtFFC8GQ9RLt7vjP3Eo9xB1ZM6LT83HcGOHT9o
+         M8QQ==
+X-Gm-Message-State: AOAM530I+IvLKipCR/AwbXnnxPAebup7l21O2QVuatFiwZPpYrSovT6L
+        RVh4Ppceb9PdiwKhQAnD1wZDQERMSleJvhC2TBM=
+X-Google-Smtp-Source: ABdhPJxbDvOsdcV2qAQseNhACAMxLsfdFDpZ22mi+4zbTUPkL1PexutwxAQF2pFHwz0EsuoZ4aE8t3p/dWHN0SzDFrc=
+X-Received: by 2002:aca:3e8b:: with SMTP id l133mr1957037oia.110.1598983187655;
+ Tue, 01 Sep 2020 10:59:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200901161340.GC29330@paulmck-ThinkPad-P72>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20200901030250.495928-1-currojerez@riseup.net> <81b98c58eab0bf075d9ded2154a7a88020628c80.camel@linux.intel.com>
+In-Reply-To: <81b98c58eab0bf075d9ded2154a7a88020628c80.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 1 Sep 2020 19:59:36 +0200
+Message-ID: <CAJZ5v0hQadTdCoz08OusMukJ0xNz-5HKNg1YGFsYXmn9JfH7QA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Fix intel_pstate_get_hwp_max() for
+ turbo disabled cases.
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Francisco Jerez <currojerez@riseup.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Caleb Callaway <caleb.callaway@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 09:13:40AM -0700, Paul E. McKenney wrote:
-> On Tue, Sep 01, 2020 at 05:50:14PM +0200, peterz@infradead.org wrote:
-> > On Tue, Sep 01, 2020 at 09:44:17AM -0600, Lina Iyer wrote:
-> > > > > > > > I could add RCU_NONIDLE for the calls to pm_runtime_put_sync_suspend()
-> > > > > > > > and pm_runtime_get_sync() in psci_enter_domain_idle_state(). Perhaps
-> > > > > > > > that's the easiest approach, at least to start with.
-> > 
-> > > I think this would be nice. This should also cover the case, where PM domain
-> > > power off notification callbacks call trace function internally. Right?
-> > 
-> > That's just more crap for me to clean up later :-(
-> > 
-> > trace_*_rcuidle() and RCU_NONIDLE() need to die, not proliferate.
-> 
-> Moving the idle-entry boundary further in is good in any number of ways.
-> But experience indicates that no matter how far you move it, there will
-> be something complex further in.  Unless you are pushing it all the way
-> into all the arch-specific code down as far as it can possibly go?
+On Tue, Sep 1, 2020 at 5:48 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Mon, 2020-08-31 at 20:02 -0700, Francisco Jerez wrote:
+> > This fixes the behavior of the scaling_max_freq and scaling_min_freq
+> > sysfs files in systems which had turbo disabled by the BIOS.
+> >
+> > Caleb noticed that the HWP is programmed to operate in the wrong
+> > P-state range on his system when the CPUFREQ policy min/max frequency
+> > is set via sysfs.  This seems to be because in his system
+> > intel_pstate_get_hwp_max() is returning the maximum turbo P-state
+> > even
+> > though turbo was disabled by the BIOS, which causes intel_pstate to
+> > scale kHz frequencies incorrectly e.g. setting the maximum turbo
+> > frequency whenever the maximum guaranteed frequency is requested via
+> > sysfs.
+>
+> When  turbo is disabled via MSR_IA32_MISC_ENABLE_TURBO_DISABLE (From
+> BIOS), then no matter what we write to HWP. max, the hardware will clip
+> to HWP_GUARANTEED_PERF.
+>
+> But it looks like this is some issue on properly disabling turbo from
+> BIOS, since you observe turbo frequencies (via aperf, mperf) not just
+> sysfs display issue.
+>
+>
+>
+> >
+> > Tested-by: Caleb Callaway <caleb.callaway@intel.com>
+> > Signed-off-by: Francisco Jerez <currojerez@riseup.net>
+> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Not all; the simple cpuidle drivers should be good already. The more
-complicated ones need some help.
+Applied as 5.9-rc material with minor edits in the subject.
 
-The patch provided earlier:
+Thanks!
 
-  https://lkml.kernel.org/r/20200901104206.GU1362448@hirez.programming.kicks-ass.net
-
-should allow the complicated drivers to take over and DTRT.
+> > ---
+> >  drivers/cpufreq/intel_pstate.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/intel_pstate.c
+> > b/drivers/cpufreq/intel_pstate.c
+> > index e0220a6fbc69..7eb7b62bd5c4 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -825,7 +825,7 @@ static void intel_pstate_get_hwp_max(unsigned int
+> > cpu, int *phy_max,
+> >
+> >       rdmsrl_on_cpu(cpu, MSR_HWP_CAPABILITIES, &cap);
+> >       WRITE_ONCE(all_cpu_data[cpu]->hwp_cap_cached, cap);
+> > -     if (global.no_turbo)
+> > +     if (global.no_turbo || global.turbo_disabled)
+> >               *current_max = HWP_GUARANTEED_PERF(cap);
+> >       else
+> >               *current_max = HWP_HIGHEST_PERF(cap);
+>
