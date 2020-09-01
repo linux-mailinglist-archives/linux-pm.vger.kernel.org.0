@@ -2,43 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9290A25956E
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 17:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0395D259766
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 18:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731947AbgIAPvC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 11:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgIAPu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 11:50:27 -0400
-Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6356C061247;
-        Tue,  1 Sep 2020 08:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tHPi+SjkOF6w9APKcpbiTQrV0DyQaBz6SgJbSF6lXMk=; b=3NjA7NmECoivZ7oLm1KxCRgUdI
-        gcm8mw9F1Z8G3GoMzLr1uhEe84sAtLIki46X+4JpIaR7wmlZB8eyeWkPscMyUauxVt2QhcldUDJhu
-        N7Bv7E8wgOmUSrXr561FZuMQhOw6QWKNQRgQtDqbWInsG1Pe2tUPw5tDx3n7GugRm7rfQNcN70TkM
-        bMaZ5J4hqMKSrjKSjP7eJgvWSnmHBM2IETGWnLmyF/pgz6fBOjDKT9BJJw4oP3lgyzK8THMYh6bTX
-        svOA2UkXDiIopjcIIfQ1h1rvsR74sGInfUraA3hmPzVvFT2nqTYtD+EDxH6ZUswkP5IYdTAr02s8E
-        hmIvzZCQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kD8Y4-0001I2-Tt; Tue, 01 Sep 2020 15:50:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        id S1728355AbgIAQNq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 12:13:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731108AbgIAQNo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Sep 2020 12:13:44 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2A878307936;
-        Tue,  1 Sep 2020 17:50:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 03B3220D7C0E3; Tue,  1 Sep 2020 17:50:14 +0200 (CEST)
-Date:   Tue, 1 Sep 2020 17:50:14 +0200
-From:   peterz@infradead.org
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>, paulmck@kernel.org,
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 76C99204EC;
+        Tue,  1 Sep 2020 16:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598976820;
+        bh=wSYh3X+qxwyoZekqoM20nCWZcWw1dfhsCUJVuXIEPaE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WKc3b7+l3qEJxpTCJykOhIL5mC4+Tc+4xUuoNh86NmlHnYI62zNec4SSfKIrB0rAl
+         ejM533Ibu1SyDPQ5Dx6TmnAip7Lh6b8EbpmM29rchZrIEuzNWLMiSMXe5Dank5qQjr
+         uH/ubRDB/JaW46oPe7Zn39dD8nr2lIcTL1jF36E8=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 1FB1F35226A5; Tue,  1 Sep 2020 09:13:40 -0700 (PDT)
+Date:   Tue, 1 Sep 2020 09:13:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     peterz@infradead.org
+Cc:     Lina Iyer <ilina@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Saravana Kannan <saravanak@google.com>,
         open list <linux-kernel@vger.kernel.org>,
@@ -57,7 +49,8 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>
 Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
  OF driver helper
-Message-ID: <20200901155014.GF2674@hirez.programming.kicks-ass.net>
+Message-ID: <20200901161340.GC29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
 References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
  <20200831194402.GD2855@paulmck-ThinkPad-P72>
  <CAPDyKFq7KWo=4VmPhgrt7vEEQ_P6NdVgQp+MO_1cg1dtoVR_Fw@mail.gmail.com>
@@ -66,23 +59,33 @@ References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
  <CAPDyKFo0VkW-cgRSkvPQ0whpuJCo4OKcL1nmH7nz1tDEChOtVg@mail.gmail.com>
  <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
  <20200901154417.GD20303@codeaurora.org>
+ <20200901155014.GF2674@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200901154417.GD20303@codeaurora.org>
+In-Reply-To: <20200901155014.GF2674@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 09:44:17AM -0600, Lina Iyer wrote:
-> > > > > > I could add RCU_NONIDLE for the calls to pm_runtime_put_sync_suspend()
-> > > > > > and pm_runtime_get_sync() in psci_enter_domain_idle_state(). Perhaps
-> > > > > > that's the easiest approach, at least to start with.
+On Tue, Sep 01, 2020 at 05:50:14PM +0200, peterz@infradead.org wrote:
+> On Tue, Sep 01, 2020 at 09:44:17AM -0600, Lina Iyer wrote:
+> > > > > > > I could add RCU_NONIDLE for the calls to pm_runtime_put_sync_suspend()
+> > > > > > > and pm_runtime_get_sync() in psci_enter_domain_idle_state(). Perhaps
+> > > > > > > that's the easiest approach, at least to start with.
+> 
+> > I think this would be nice. This should also cover the case, where PM domain
+> > power off notification callbacks call trace function internally. Right?
+> 
+> That's just more crap for me to clean up later :-(
+> 
+> trace_*_rcuidle() and RCU_NONIDLE() need to die, not proliferate.
 
-> I think this would be nice. This should also cover the case, where PM domain
-> power off notification callbacks call trace function internally. Right?
+Moving the idle-entry boundary further in is good in any number of ways.
+But experience indicates that no matter how far you move it, there will
+be something complex further in.  Unless you are pushing it all the way
+into all the arch-specific code down as far as it can possibly go?
 
-That's just more crap for me to clean up later :-(
-
-trace_*_rcuidle() and RCU_NONIDLE() need to die, not proliferate.
+							Thanx, Paul
