@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31472259067
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 16:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7DD259069
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 16:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbgIAO30 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 10:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S1728465AbgIAO3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 10:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728364AbgIAO3K (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 10:29:10 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBA6C061245
-        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 07:29:09 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id r13so1800323ljm.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 07:29:09 -0700 (PDT)
+        with ESMTP id S1728316AbgIAO3O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 10:29:14 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6A1C061246
+        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 07:29:12 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id j15so892879lfg.7
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 07:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LTilAKx6uhyrrDCSQGM9DUga+qKc7kxrp8ADcGsaoJo=;
-        b=WDHB19AGJeh66EVd4uru7yOjVuBjxtiQGn+tHoHz1rkFf4LoQ14AJI8XoVMOkqK1y+
-         tP4yxQX7bkHab4DxtpYpGgaL2Wj7b4sr7vFGIS875JY2yLLMr/+gOFObjVzJ8V5FQV0/
-         sqtEblQh1nYuMiWsgwjzDQOOf2C7f1lZKdda/US6QBJvCn3uCGsYuXIWdEi14gHxGdXW
-         LOpgn9Zy3O3S3ZJTfxKNMlWHX2My2WRvMuIxhqAVheK1sA+i/kkAy3n9J+qAX4FE32Ml
-         B4Et8qXF96r9/1hws7RdaLIcK8AL5WV3C9/OZroNUOaWitkbW4uLMmzRpSEQchNDGkPl
-         3ePg==
+        bh=G8BpIdoUWarD6YsNR5keyc/R3LV3nr8+EDPnN27oa5w=;
+        b=OTEkxGHMQo6lwO7qWEQS2nyPIV/ZoNJAB8hDU6ChkbgvxwNGtDewDKJtFveHjZzp/i
+         PhZPCdhzh82f/yTaY/0usjl1LHnulS839xOg82DPgxEgo/CgC7TLxL479PBtD2fZhqO7
+         lI/JnOvhYQjtu3BYAcB1posah3WmMsckT4zi9C0dKjfCYlRXN7hpZ77HGsJlJZjIK6Tm
+         rPxtcJIuobY348SoLcmpP1GydVYZu2iY6w+QxF731AZdgLmbcSKkHfJEvE68M/i2e0eX
+         3LvLsiYsWQIGGKIodQI6FR7wu6hoGhAFnEU61O1utmljufbDwhM15eKkAiX6GMVRhd8W
+         vbGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LTilAKx6uhyrrDCSQGM9DUga+qKc7kxrp8ADcGsaoJo=;
-        b=kyOrIugZAMnwby/OENEu8VY89Z3oJLVdFU19GIZ2TR+f8K5HT6rj9Drkjpe0QX41mm
-         Cs6qWuuhSBqd+aLex/aReQmy1v2NR+UQUUs3jW3+d69UPMB8yS69QLo4mnKc8vrj7rjk
-         Z3yvPM7Mcz5s8RyxjhLj71FWfr/IzLYpXZnaDIGKqDRJkwTXvd6uyIV/T9Wt6qEFJdCu
-         h4rW/SmLhQSWFOYkM2iBy6nZpi8Sc0IBR7l9DKgLU39WDo2y13bZGe1f2mmQkmoTeOQc
-         6VRlN1D0uRnhUgb5MVq0rYtgpPIHa/syS4Lg88ykLHqRJeJ8grwZwrJPf18XUDO9YOZp
-         FowQ==
-X-Gm-Message-State: AOAM530a9WvpShwPQ5JLbl1huPjaG1gwQIoymoyIWxtUKgr3K6wAu0TL
-        cfgQHRt7W2OpVxetKN6U7uh1sg==
-X-Google-Smtp-Source: ABdhPJyWQNEbbmEJWXfQWRgICw8JuT0MwqJbc8qwxQ+05+O9Zg1NEAZsOpYK5ll8S0N/aewyZdl5/w==
-X-Received: by 2002:a05:651c:505:: with SMTP id o5mr755471ljp.306.1598970547217;
-        Tue, 01 Sep 2020 07:29:07 -0700 (PDT)
+        bh=G8BpIdoUWarD6YsNR5keyc/R3LV3nr8+EDPnN27oa5w=;
+        b=W0qlSXeNvEgnAxKBE/NG/qtworuCNMkpZ0BrBO/AAtdj9AXWaleiyrZUI48saTe+df
+         KqzivonB1gwzWHSLDY/PXwn3JhHfqhrxUU1RP86cPLB6DZs6tHDHDdgh9tHYyoKZTj4W
+         eIe4NdvQ+MGbFhL8hYDSrWYR2vTBPSIDfIG4JDjvtNoJlRIFQCJHtvlRLXHn0W+UU9uK
+         EAjtz4wN5kVEwRiRIdBUtGBqKg5ke5Fja91EYeKwBdxX1p8cRldT6ncCpkFUA85lMqEY
+         SlMzZ15+MJbnzkkzf9CcTD0083GDk82r9k/45gtt4T/wKVPxbKLJ1rAgla+HVGfMMs8+
+         ElLg==
+X-Gm-Message-State: AOAM533XeWNdX6ViOLC1+B+bdSMbJcx8ZipgfzKWB5Y8G9wG8wBHpaIo
+        xNM1yDtdQU6WbAlemN9A3103LA==
+X-Google-Smtp-Source: ABdhPJyfXiM4Okzd/SRkCrEceXeq0ysdCqTtfeVh0J2LAdPZF7qAOjGHIdlheefSoZzDhHIGzHmNWw==
+X-Received: by 2002:a05:6512:200e:: with SMTP id a14mr749683lfb.49.1598970549872;
+        Tue, 01 Sep 2020 07:29:09 -0700 (PDT)
 Received: from localhost.localdomain (h-98-128-180-79.NA.cust.bahnhof.se. [98.128.180.79])
-        by smtp.gmail.com with ESMTPSA id r7sm318313lfn.84.2020.09.01.07.29.04
+        by smtp.gmail.com with ESMTPSA id r7sm318313lfn.84.2020.09.01.07.29.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2020 07:29:06 -0700 (PDT)
+        Tue, 01 Sep 2020 07:29:08 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
@@ -62,9 +62,9 @@ Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 1/2] firmware: psci: Extend psci_set_osi_mode() to allow reset to PC mode
-Date:   Tue,  1 Sep 2020 16:28:58 +0200
-Message-Id: <20200901142859.224381-2-ulf.hansson@linaro.org>
+Subject: [PATCH v3 2/2] cpuidle: psci: Allow PM domain to be initialized even if no OSI mode
+Date:   Tue,  1 Sep 2020 16:28:59 +0200
+Message-Id: <20200901142859.224381-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200901142859.224381-1-ulf.hansson@linaro.org>
 References: <20200901142859.224381-1-ulf.hansson@linaro.org>
@@ -75,86 +75,177 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The current user (cpuidle-psci) of psci_set_osi_mode() only needs to enable
-the PSCI OSI mode. Although, as subsequent changes shows, there is a need
-to be able to reset back into the PSCI PC mode.
+If the PSCI OSI mode isn't supported or fails to be enabled, the PM domain
+topology with the genpd providers isn't initialized. This is perfectly fine
+from cpuidle-psci point of view.
 
-Therefore, let's extend psci_set_osi_mode() to take a bool as in-parameter,
-to let the user indicate whether to enable OSI or to switch back to PC
-mode.
+However, since the PM domain topology in the DTS files is a description of
+the HW, no matter of whether the PSCI OSI mode is supported or not, other
+consumers besides the CPUs may rely on it.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Therefore, let's always allow the initialization of the PM domain topology
+to succeed, independently of whether the PSCI OSI mode is supported.
+Consequentially we need to track if we succeed to enable the OSI mode, as
+to know when a domain idlestate can be selected.
+
+Note that, CPU devices are still not being attached to the PM domain
+topology, unless the PSCI OSI mode is supported.
+
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
 
 Changes in v3:
-	- Added reviewed-by tag.
+	- Added acked-by tag.
+	- Use GENPD_FLAG_ALWAYS_ON to prevent power off, unless OSI has been
+	successfully enabled.
 
 ---
- drivers/cpuidle/cpuidle-psci-domain.c |  2 +-
- drivers/firmware/psci/psci.c          | 12 +++++++-----
- include/linux/psci.h                  |  2 +-
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ drivers/cpuidle/cpuidle-psci-domain.c | 59 ++++++++++++++-------------
+ 1 file changed, 31 insertions(+), 28 deletions(-)
 
 diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index b6e9649ab0da..b6ab0415f450 100644
+index b6ab0415f450..4a031c62f92a 100644
 --- a/drivers/cpuidle/cpuidle-psci-domain.c
 +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -278,7 +278,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+@@ -105,7 +105,7 @@ static void psci_pd_free_states(struct genpd_power_state *states,
+ 	kfree(states);
+ }
+ 
+-static int psci_pd_init(struct device_node *np)
++static int psci_pd_init(struct device_node *np, bool use_osi)
+ {
+ 	struct generic_pm_domain *pd;
+ 	struct psci_pd_provider *pd_provider;
+@@ -135,11 +135,16 @@ static int psci_pd_init(struct device_node *np)
+ 
+ 	pd->free_states = psci_pd_free_states;
+ 	pd->name = kbasename(pd->name);
+-	pd->power_off = psci_pd_power_off;
+ 	pd->states = states;
+ 	pd->state_count = state_count;
+ 	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
+ 
++	/* Allow power off when OSI has been successfully enabled. */
++	if (use_osi)
++		pd->power_off = psci_pd_power_off;
++	else
++		pd->flags |= GENPD_FLAG_ALWAYS_ON;
++
+ 	/* Use governor for CPU PM domains if it has some states to manage. */
+ 	pd_gov = state_count > 0 ? &pm_domain_cpu_gov : NULL;
+ 
+@@ -190,7 +195,7 @@ static void psci_pd_remove(void)
+ 	}
+ }
+ 
+-static int psci_pd_init_topology(struct device_node *np, bool add)
++static int psci_pd_init_topology(struct device_node *np)
+ {
+ 	struct device_node *node;
+ 	struct of_phandle_args child, parent;
+@@ -203,9 +208,7 @@ static int psci_pd_init_topology(struct device_node *np, bool add)
+ 
+ 		child.np = node;
+ 		child.args_count = 0;
+-
+-		ret = add ? of_genpd_add_subdomain(&parent, &child) :
+-			of_genpd_remove_subdomain(&parent, &child);
++		ret = of_genpd_add_subdomain(&parent, &child);
+ 		of_node_put(parent.np);
+ 		if (ret) {
+ 			of_node_put(node);
+@@ -216,14 +219,20 @@ static int psci_pd_init_topology(struct device_node *np, bool add)
+ 	return 0;
+ }
+ 
+-static int psci_pd_add_topology(struct device_node *np)
++static bool psci_pd_try_set_osi_mode(void)
+ {
+-	return psci_pd_init_topology(np, true);
+-}
++	int ret;
+ 
+-static void psci_pd_remove_topology(struct device_node *np)
+-{
+-	psci_pd_init_topology(np, false);
++	if (!psci_has_osi_support())
++		return false;
++
++	ret = psci_set_osi_mode(true);
++	if (ret) {
++		pr_warn("failed to enable OSI mode: %d\n", ret);
++		return false;
++	}
++
++	return true;
+ }
+ 
+ static void psci_cpuidle_domain_sync_state(struct device *dev)
+@@ -244,14 +253,14 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ {
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct device_node *node;
++	bool use_osi;
+ 	int ret = 0, pd_count = 0;
+ 
+ 	if (!np)
+ 		return -ENODEV;
+ 
+-	/* Currently limit the hierarchical topology to be used in OSI mode. */
+-	if (!psci_has_osi_support())
+-		return 0;
++	/* If OSI mode is supported, let's try to enable it. */
++	use_osi = psci_pd_try_set_osi_mode();
+ 
+ 	/*
+ 	 * Parse child nodes for the "#power-domain-cells" property and
+@@ -261,7 +270,7 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 		if (!of_find_property(node, "#power-domain-cells", NULL))
+ 			continue;
+ 
+-		ret = psci_pd_init(node);
++		ret = psci_pd_init(node, use_osi);
+ 		if (ret)
+ 			goto put_node;
+ 
+@@ -270,30 +279,24 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
+ 
+ 	/* Bail out if not using the hierarchical CPU topology. */
+ 	if (!pd_count)
+-		return 0;
++		goto no_pd;
+ 
+ 	/* Link genpd masters/subdomains to model the CPU topology. */
+-	ret = psci_pd_add_topology(np);
++	ret = psci_pd_init_topology(np);
+ 	if (ret)
  		goto remove_pd;
  
- 	/* Try to enable OSI mode. */
--	ret = psci_set_osi_mode();
-+	ret = psci_set_osi_mode(true);
- 	if (ret) {
- 		pr_warn("failed to enable OSI mode: %d\n", ret);
- 		psci_pd_remove_topology(np);
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index 92013ecc2d9e..00af99b6f97c 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -151,12 +151,15 @@ static u32 psci_get_version(void)
- 	return invoke_psci_fn(PSCI_0_2_FN_PSCI_VERSION, 0, 0, 0);
- }
- 
--int psci_set_osi_mode(void)
-+int psci_set_osi_mode(bool enable)
- {
-+	unsigned long suspend_mode;
- 	int err;
- 
--	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
--			     PSCI_1_0_SUSPEND_MODE_OSI, 0, 0);
-+	suspend_mode = enable ? PSCI_1_0_SUSPEND_MODE_OSI :
-+			PSCI_1_0_SUSPEND_MODE_PC;
-+
-+	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
- 	return psci_to_linux_errno(err);
- }
- 
-@@ -546,8 +549,7 @@ static int __init psci_1_0_init(struct device_node *np)
- 		pr_info("OSI mode supported.\n");
- 
- 		/* Default to PC mode. */
--		invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE,
--			       PSCI_1_0_SUSPEND_MODE_PC, 0, 0);
-+		psci_set_osi_mode(false);
- 	}
- 
+-	/* Try to enable OSI mode. */
+-	ret = psci_set_osi_mode(true);
+-	if (ret) {
+-		pr_warn("failed to enable OSI mode: %d\n", ret);
+-		psci_pd_remove_topology(np);
+-		goto remove_pd;
+-	}
+-
+ 	pr_info("Initialized CPU PM domain topology\n");
  	return 0;
-diff --git a/include/linux/psci.h b/include/linux/psci.h
-index 14ad9b9ebcd6..2a1bfb890e58 100644
---- a/include/linux/psci.h
-+++ b/include/linux/psci.h
-@@ -18,7 +18,7 @@ bool psci_tos_resident_on(int cpu);
  
- int psci_cpu_suspend_enter(u32 state);
- bool psci_power_state_is_valid(u32 state);
--int psci_set_osi_mode(void);
-+int psci_set_osi_mode(bool enable);
- bool psci_has_osi_support(void);
+ put_node:
+ 	of_node_put(node);
+ remove_pd:
+-	if (pd_count)
+-		psci_pd_remove();
++	psci_pd_remove();
+ 	pr_err("failed to create CPU PM domains ret=%d\n", ret);
++no_pd:
++	if (use_osi)
++		psci_set_osi_mode(false);
+ 	return ret;
+ }
  
- struct psci_operations {
 -- 
 2.25.1
 
