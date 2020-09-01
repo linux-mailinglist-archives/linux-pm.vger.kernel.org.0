@@ -2,115 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A132582F8
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Aug 2020 22:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8060258605
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 05:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgHaUqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Aug 2020 16:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725993AbgHaUqx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Aug 2020 16:46:53 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF071C061573
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 13:46:52 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id u128so1329477pfb.6
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 13:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=manNEt+UQQD7kjg19l8QJSwddufPASSJLlBIzLjxPXQ=;
-        b=jylcYB8fxOqaHeWR+3Y0QTqHrSekCJzYY6LTy8YluRoIQw/pXI5oO29PzkT39DAO3T
-         7Umyojy1ffDObx9pGBUkInAkLO95aRkkMwot762l7uTYHO58hHHVEoB6ftCmRhyasmqj
-         C0TRd6/u263FIW2xb1iALlSMIyBAymQ6fbvTPUAmCjLdgSWnSU1ZU7nBnVUxp5pRHbKp
-         saczUsOx/ZjhxUGXeBkUhzOmwzrCOZPodAbRAJ2evpzQtkKo6RSCs5hTr4LF7IIJE2dc
-         KWU8XG3HALkNZttd/h+jZI4jZShQoilU62LC4u+KC5Ic9s2vCjFx67MNd1PtvYYZlTSR
-         i56A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=manNEt+UQQD7kjg19l8QJSwddufPASSJLlBIzLjxPXQ=;
-        b=k8SaAvJ5bpjLU9qU8jkcQ0gJpv5hmSdgv2QIw9JCuH/KNWnWt9rK7LgibyJdOvh+fO
-         FKt5aL5QLFpC2HcaCrLtzeZE2t1RhLkGycpIAffXKNex7362kYXxe2ldwl5yjbmDxl1f
-         /QFB4Bsn0eONNWLPpHzMuTKmkl61HJ3423FruPxXLyX6AYtv6OrVYiDb2vBdfIZJ8rDD
-         Uws6sRyCNHgXO5kQnsMJ8jKORbdD/g0HKipoEWzAOFo8Rl0zSu2sk3dR+6NOis5rR4uR
-         3C/YDX2r+Qd1o5SrZ2Ho7P2olynV7x9Dkli9+tMPbLFL52MQxupbPFQZTVxUDIENbz+T
-         87Jg==
-X-Gm-Message-State: AOAM53200zWoPb8E6K7QeYdsfmDij+m5E1TVqhgpATTXjv3hQZvYqADP
-        NLh0zFGBTcQDLj16V0DiLz0dfw==
-X-Google-Smtp-Source: ABdhPJxblZe2yW6OOtlJVd54Y3T5BUXiD1l8mK8CEudvAa3erxxLItyRTzSkd02kXq6rO1L29VplPw==
-X-Received: by 2002:a65:4588:: with SMTP id o8mr2556661pgq.229.1598906812027;
-        Mon, 31 Aug 2020 13:46:52 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l12sm453405pjq.31.2020.08.31.13.46.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2020 13:46:51 -0700 (PDT)
-Message-ID: <5f4d61bb.1c69fb81.3b735.135e@mx.google.com>
-Date:   Mon, 31 Aug 2020 13:46:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726292AbgIADIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Aug 2020 23:08:15 -0400
+Received: from mx1.riseup.net ([198.252.153.129]:33410 "EHLO mx1.riseup.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725901AbgIADIP (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 31 Aug 2020 23:08:15 -0400
+Received: from capuchin.riseup.net (capuchin-pn.riseup.net [10.0.1.176])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "*.riseup.net", Issuer "Sectigo RSA Domain Validation Secure Server CA" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4BgX7z18dBzDscJ;
+        Mon, 31 Aug 2020 20:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1598929695; bh=3GPF7Cw72U3yHpqxGlFHkg0kPLWIKtlZEbT6AbwqCGU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eLCGrpr6+LXztoyZqmgjzxkigiAJsfdGN8n1W3mxXJ+77SKLY3q1sme8DLbH1bVfd
+         rBss4lkSTQ/c0TK47fat1baddKMplMJiQaolDBbsHvuWkUg29clnbD6Cl8SmU/6Ci1
+         ghmpgOxW70kmPn1Wbdc+RUNqOprlCnVU9xHikL2c=
+X-Riseup-User-ID: 48DFEEBA4ED917C81B8707E2D8F6791FD2D18DF7AF7E19EFB7B107AA66C59906
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by capuchin.riseup.net (Postfix) with ESMTPSA id 4BgX7y5nYvz8tRn;
+        Mon, 31 Aug 2020 20:08:14 -0700 (PDT)
+From:   Francisco Jerez <currojerez@riseup.net>
+To:     linux-pm@vger.kernel.org
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Caleb Callaway <caleb.callaway@intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Fix intel_pstate_get_hwp_max() for turbo disabled cases.
+Date:   Mon, 31 Aug 2020 20:02:50 -0700
+Message-Id: <20200901030250.495928-1-currojerez@riseup.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v5.9-rc3-3-g7c174c127f32
-Subject: pm/testing sleep: 7 runs, 1 regressions (v5.9-rc3-3-g7c174c127f32)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 7 runs, 1 regressions (v5.9-rc3-3-g7c174c127f32)
+This fixes the behavior of the scaling_max_freq and scaling_min_freq
+sysfs files in systems which had turbo disabled by the BIOS.
 
-Regressions Summary
--------------------
+Caleb noticed that the HWP is programmed to operate in the wrong
+P-state range on his system when the CPUFREQ policy min/max frequency
+is set via sysfs.  This seems to be because in his system
+intel_pstate_get_hwp_max() is returning the maximum turbo P-state even
+though turbo was disabled by the BIOS, which causes intel_pstate to
+scale kHz frequencies incorrectly e.g. setting the maximum turbo
+frequency whenever the maximum guaranteed frequency is requested via
+sysfs.
 
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
+Tested-by: Caleb Callaway <caleb.callaway@intel.com>
+Signed-off-by: Francisco Jerez <currojerez@riseup.net>
+---
+ drivers/cpufreq/intel_pstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index e0220a6fbc69..7eb7b62bd5c4 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -825,7 +825,7 @@ static void intel_pstate_get_hwp_max(unsigned int cpu, int *phy_max,
+ 
+ 	rdmsrl_on_cpu(cpu, MSR_HWP_CAPABILITIES, &cap);
+ 	WRITE_ONCE(all_cpu_data[cpu]->hwp_cap_cached, cap);
+-	if (global.no_turbo)
++	if (global.no_turbo || global.turbo_disabled)
+ 		*current_max = HWP_GUARANTEED_PERF(cap);
+ 	else
+ 		*current_max = HWP_HIGHEST_PERF(cap);
+-- 
+2.28.0
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc3=
--3-g7c174c127f32/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc3-3-g7c174c127f32
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      7c174c127f32dcf647020ca02663846973075298 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f4d4eeecddf1231c8081123
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc3-3-g7c174c1=
-27f32/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc3-3-g7c174c1=
-27f32/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0821.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f4d4eeecddf1231c8081124
-      failing since 12 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =20
