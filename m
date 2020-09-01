@@ -2,190 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5DB259D61
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 19:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABE5259D73
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 19:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728896AbgIARkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 13:40:18 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:60874 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbgIARjz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 13:39:55 -0400
-Received: from 89-64-88-247.dynamic.chello.pl (89.64.88.247) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.459)
- id 0a7eba54eafc963d; Tue, 1 Sep 2020 19:39:49 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Doug Smythies <dsmythies@telus.net>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Subject: [PATCH v4 5/5] cpufreq: intel_pstate: Free memory only when turning off
-Date:   Tue, 01 Sep 2020 19:39:32 +0200
-Message-ID: <28055847.QciAqr1Adi@kreacher>
-In-Reply-To: <3748218.V0HrpZKF9g@kreacher>
-References: <3748218.V0HrpZKF9g@kreacher>
+        id S1728969AbgIARma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 13:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728516AbgIARm3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 13:42:29 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A5E8C061244;
+        Tue,  1 Sep 2020 10:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=L5+iKG5i9fFPHpLQKtEzdQO5HXzkEnTIXwpxe3If020=; b=stdjs9CM1DFY4aiDaHudhWDJKU
+        s6Hpvn/DWs26Mh7Z8oSw5OtKqQbVdj5SUUKsJ1RzZsqkZ39iCtnmLzLab8+w9xopeoSAKgcoJn6jZ
+        ZUdshd6E0AdA9iKpriv90RAayQNk0C70iq733aVy7W2zU/HsFVzkiBnQAP3pbXRftxhNJfEHVTJ9u
+        UmFULOER0xmaxEZN3kArygBpf/4g90Zo7eLjoRZkwxRpRaG5MPMPil2KZzQTNGZvVKsOilhf4aK+b
+        pMi98ShaxU07nrCWfxpRZlQ+p1FZxTk+EQKLdULpiD/p+qzQGDZ3px05LdXW42p9dOheyfnLt3CAr
+        aL9eBGIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kDAIU-0000zX-AR; Tue, 01 Sep 2020 17:42:19 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 26867980D85; Tue,  1 Sep 2020 19:42:16 +0200 (CEST)
+Date:   Tue, 1 Sep 2020 19:42:16 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Lina Iyer <ilina@codeaurora.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Saravana Kannan <saravanak@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        madhuparnabhowmik10@gmail.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
+ OF driver helper
+Message-ID: <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
+References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
+ <20200831194402.GD2855@paulmck-ThinkPad-P72>
+ <CAPDyKFq7KWo=4VmPhgrt7vEEQ_P6NdVgQp+MO_1cg1dtoVR_Fw@mail.gmail.com>
+ <CAPDyKFrTERjpLrPOFtkqLyNsk2T_58Ye2FQ1mPf-0u78aWW=Xw@mail.gmail.com>
+ <20200901104206.GU1362448@hirez.programming.kicks-ass.net>
+ <CAPDyKFo0VkW-cgRSkvPQ0whpuJCo4OKcL1nmH7nz1tDEChOtVg@mail.gmail.com>
+ <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
+ <20200901154417.GD20303@codeaurora.org>
+ <20200901155014.GF2674@hirez.programming.kicks-ass.net>
+ <20200901161340.GC29330@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200901161340.GC29330@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+On Tue, Sep 01, 2020 at 09:13:40AM -0700, Paul E. McKenney wrote:
+> On Tue, Sep 01, 2020 at 05:50:14PM +0200, peterz@infradead.org wrote:
+> > On Tue, Sep 01, 2020 at 09:44:17AM -0600, Lina Iyer wrote:
+> > > > > > > > I could add RCU_NONIDLE for the calls to pm_runtime_put_sync_suspend()
+> > > > > > > > and pm_runtime_get_sync() in psci_enter_domain_idle_state(). Perhaps
+> > > > > > > > that's the easiest approach, at least to start with.
+> > 
+> > > I think this would be nice. This should also cover the case, where PM domain
+> > > power off notification callbacks call trace function internally. Right?
+> > 
+> > That's just more crap for me to clean up later :-(
+> > 
+> > trace_*_rcuidle() and RCU_NONIDLE() need to die, not proliferate.
+> 
+> Moving the idle-entry boundary further in is good in any number of ways.
+> But experience indicates that no matter how far you move it, there will
+> be something complex further in.  Unless you are pushing it all the way
+> into all the arch-specific code down as far as it can possibly go?
 
-When intel_pstate switches the operation mode from "active" to
-"passive" or the other way around, freeing its data structures
-representing CPUs and allocating them again from scratch is not
-necessary and wasteful.  Moreover, if these data structures are
-preserved, the cached HWP Request MSR value from there may be
-written to the MSR to start with to reinitialize it and help to
-restore the EPP value set previously (it is set to 0xFF when CPUs
-go offline to allow their SMT siblings to use the full range of
-EPP values and that also happens when the driver gets unregistered).
+Not all; the simple cpuidle drivers should be good already. The more
+complicated ones need some help.
 
-Accordingly, modify the driver to only do a full cleanup on driver
-object registration errors and when its status is changed to "off"
-via sysfs and to write the cached HWP Request MSR value back to
-the MSR on CPU init if the data structure representing the given
-CPU is still there.
+The patch provided earlier:
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+  https://lkml.kernel.org/r/20200901104206.GU1362448@hirez.programming.kicks-ass.net
 
--> v2: Rearrange intel_pstate_init_cpu() to restore some of the previous
-       behavior of it to retain the current active-mode EPP management.
-
-v2 -> v3:
-   * Rebase (it was [4/5] previously).
-
-v3 -> v4:
-   * Re-enable HWP in "init" even if the data structures are in there.
-
----
- drivers/cpufreq/intel_pstate.c | 57 ++++++++++++++--------------------
- 1 file changed, 24 insertions(+), 33 deletions(-)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 8181a1f1dc79..c92c085fc495 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -2116,25 +2116,31 @@ static int intel_pstate_init_cpu(unsigned int cpunum)
- 
- 		all_cpu_data[cpunum] = cpu;
- 
--		cpu->epp_default = -EINVAL;
--		cpu->epp_powersave = -EINVAL;
--	}
-+		cpu->cpu = cpunum;
- 
--	cpu = all_cpu_data[cpunum];
-+		cpu->epp_default = -EINVAL;
- 
--	cpu->cpu = cpunum;
-+		if (hwp_active) {
-+			const struct x86_cpu_id *id;
- 
--	if (hwp_active) {
--		const struct x86_cpu_id *id;
-+			intel_pstate_hwp_enable(cpu);
- 
--		intel_pstate_hwp_enable(cpu);
--		cpu->epp_policy = 0;
--
--		id = x86_match_cpu(intel_pstate_hwp_boost_ids);
--		if (id && intel_pstate_acpi_pm_profile_server())
--			hwp_boost = true;
-+			id = x86_match_cpu(intel_pstate_hwp_boost_ids);
-+			if (id && intel_pstate_acpi_pm_profile_server())
-+				hwp_boost = true;
-+		}
-+	} else if (hwp_active) {
-+		/*
-+		 * Re-enable HWP in case this happens after a resume from ACPI
-+		 * S3 if the CPU was offline during the whole system/resume
-+		 * cycle.
-+		 */
-+		intel_pstate_hwp_reenable(cpu);
- 	}
- 
-+	cpu->epp_powersave = -EINVAL;
-+	cpu->epp_policy = 0;
-+
- 	intel_pstate_get_cpu_pstates(cpu);
- 
- 	pr_debug("controlling: cpu %d\n", cpunum);
-@@ -2730,9 +2736,6 @@ static void intel_pstate_driver_cleanup(void)
- 	}
- 	put_online_cpus();
- 
--	if (intel_pstate_driver == &intel_pstate)
--		intel_pstate_sysfs_hide_hwp_dynamic_boost();
--
- 	intel_pstate_driver = NULL;
- }
- 
-@@ -2758,14 +2761,6 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 	return 0;
- }
- 
--static int intel_pstate_unregister_driver(void)
--{
--	cpufreq_unregister_driver(intel_pstate_driver);
--	intel_pstate_driver_cleanup();
--
--	return 0;
--}
--
- static ssize_t intel_pstate_show_status(char *buf)
- {
- 	if (!intel_pstate_driver)
-@@ -2777,8 +2772,6 @@ static ssize_t intel_pstate_show_status(char *buf)
- 
- static int intel_pstate_update_status(const char *buf, size_t size)
- {
--	int ret;
--
- 	if (size == 3 && !strncmp(buf, "off", size)) {
- 		if (!intel_pstate_driver)
- 			return -EINVAL;
-@@ -2786,7 +2779,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 		if (hwp_active)
- 			return -EBUSY;
- 
--		return intel_pstate_unregister_driver();
-+		cpufreq_unregister_driver(intel_pstate_driver);
-+		intel_pstate_driver_cleanup();
- 	}
- 
- 	if (size == 6 && !strncmp(buf, "active", size)) {
-@@ -2794,9 +2788,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 			if (intel_pstate_driver == &intel_pstate)
- 				return 0;
- 
--			ret = intel_pstate_unregister_driver();
--			if (ret)
--				return ret;
-+			cpufreq_unregister_driver(intel_pstate_driver);
- 		}
- 
- 		return intel_pstate_register_driver(&intel_pstate);
-@@ -2807,9 +2799,8 @@ static int intel_pstate_update_status(const char *buf, size_t size)
- 			if (intel_pstate_driver == &intel_cpufreq)
- 				return 0;
- 
--			ret = intel_pstate_unregister_driver();
--			if (ret)
--				return ret;
-+			cpufreq_unregister_driver(intel_pstate_driver);
-+			intel_pstate_sysfs_hide_hwp_dynamic_boost();
- 		}
- 
- 		return intel_pstate_register_driver(&intel_cpufreq);
--- 
-2.26.2
-
-
-
-
+should allow the complicated drivers to take over and DTRT.
