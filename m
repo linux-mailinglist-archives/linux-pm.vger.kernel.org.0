@@ -2,152 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9DE259F48
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 21:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B171259F89
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 21:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728217AbgIATgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 15:36:36 -0400
-Received: from mail-mw2nam10on2066.outbound.protection.outlook.com ([40.107.94.66]:42637
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728117AbgIATge (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 15:36:34 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RGrf+u/qWUFnZSed13F3TgYDajRi5qgE3P254CBF3TBHu9JfIHLn82nAIHcIxB91hZLiZEY07Gu/zuMbCedDeM+F7SeK/db8wTQCzfnQmZzIGDijSgSZB0rWgdpXPJRG1d2Q4k5JlA7oizhJ6AXhc/jRFbsM4VrSnco3ezMrjMfYQ3nf72pJ+Tk3xqYmO8i+JpNUO6ILI2LUzC8Pd3zpAjw6Bu3TKcu6YBFkKp6uPzDV7CW5XkOC1ZwF5XtVLE5PnRzozftSkdiOTaQzh/1dw9YDaW4ef/HKcU5hIZPUTau7H8afKY3NeYzaKA0szvw3TWu2vozPC68i1eCtMOe1MA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nNd19dy8/IdiwIdZO+CH46S4dujPVG65h56Y/eFMdak=;
- b=IBw28q9h8xHPNcLJdIwetEVrQ12fSMss7h98P+cJSnQqx0BS49Aej/meVP/tQ1YObvoTSBBgRGtDkjLnepaoFMF9sPrGpLWO4EO6XGz8JBeD0ZqtcOQfedJKF2GZ0eLLGoiBKDtTqtU95+Sz9ZbJoLZwqx7bN89fLl3D1NNAiBXlmqeynMtxTHO++EsYyh+HsCUpkS0A3+2frnkrCwAv1+mfj/sN1e1rDJ8BRrQv8ld8YraNv85cTWuojB114DSNU8RK1/VFThcG4OBOiKmiIfWYtSskRlG69cuzujgUsodNk1F6FlW+M80X/1FCo0di7Kc3Swg7o+Ro59SV8al28w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1732739AbgIAT4p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 15:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730149AbgIAT4p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 15:56:45 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1B1EC061244
+        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 12:56:44 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 5so1265155pgl.4
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 12:56:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nNd19dy8/IdiwIdZO+CH46S4dujPVG65h56Y/eFMdak=;
- b=WSN1LTNmTZvQ+58gxgWpb8+4LFoEozzcMp5SlUBhBWWhig/lzG4CTdVuxwMKcRaVLxUNvMiO/lkp5+fa8XyEGwwzoB1ggijK+AB5gsRggHGTWezc1HpPYzwV6QwCXWLJApniCjRhavD4FCXd/x0bAE1XOZVroVaJ3EVnNKbxYVk=
-Authentication-Results: amd.com; dkim=none (message not signed)
- header.d=none;amd.com; dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB3116.namprd12.prod.outlook.com (2603:10b6:5:38::12) by
- DM5PR12MB1242.namprd12.prod.outlook.com (2603:10b6:3:6d::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3326.23; Tue, 1 Sep 2020 19:36:31 +0000
-Received: from DM6PR12MB3116.namprd12.prod.outlook.com
- ([fe80::d950:4d1b:55d0:9720]) by DM6PR12MB3116.namprd12.prod.outlook.com
- ([fe80::d950:4d1b:55d0:9720%5]) with mapi id 15.20.3326.025; Tue, 1 Sep 2020
- 19:36:31 +0000
-Date:   Tue, 1 Sep 2020 14:36:24 -0500
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, Borislav Petkov <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v2 1/2] cper, apei, mce: Pass x86 CPER through the MCA
- handling chain
-Message-ID: <20200901193624.GA3558296@yaz-nikka.amd.com>
-References: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
- <20200828203332.11129-2-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200828203332.11129-2-Smita.KoralahalliChannabasappa@amd.com>
-X-ClientProxiedBy: DM5PR07CA0123.namprd07.prod.outlook.com
- (2603:10b6:3:13e::13) To DM6PR12MB3116.namprd12.prod.outlook.com
- (2603:10b6:5:38::12)
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gJvCuWQHMKjjkVfCnA0o3F8tOahUgPKbEkS5KEULLJ0=;
+        b=r4wDtGaZEHd3Piqm1Mu71b+t/39zGbzlRueVGtfJGY2obFSqb6lWGadRnj4k4W+P5m
+         xj4370VwvbMFEiBej/vL9xdSQfVLcSxhAYfevqSR0G2XD1Iht5wJ3hzmaqHseDY5ZXKh
+         /B6oL/OKvkorBSd/Zr0xORzZtNV8lxm6wR8xcSOffHPs9hMhg5RLayQkuCd0cwChjJr5
+         wviXa+qp9fneR9VrT2hA6gpkJ6/x5J0Lkv2BZdXUNi5oy6cH8VKGfBDw2kIWNkzDS82D
+         VHKcuyTNN/kzoRxrq2sRjB5XvTXT8yY8hbSSuEgm5QBieENh8w2Bs+nxwiC/MEg44zTo
+         uP/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gJvCuWQHMKjjkVfCnA0o3F8tOahUgPKbEkS5KEULLJ0=;
+        b=f1ftJDTtnhbFFxoefwenQMD3yrU1x9YEkAVsPYfNLRqRBSuDyu/L3qHK41PhrfFxDA
+         g2VYFF8GeL90aANwiJ5X7YOHIC4sQJolfQ/rM08+8PE3KzPQvDzognVZdeVJqhrzKP00
+         0Ae/ub40pFvR2JwtP2CaeZSkEt6wGtm5Atnrf6fgyqUcwgjSY55DFMttNtADsbFVrEtB
+         DH8EX2I7Q3hARI6yhcCpmy7hMHRLOuI7mCpzqDVgK5AxVJjgN4cEHRGJURZtwDwx3gdy
+         T+GIiF1e9pcF+Rlj4cvooKhfIAEdAA/pkeOk5JaDLRCmLYywknHRZ+oyxiLi9BaaCQzv
+         t2Ig==
+X-Gm-Message-State: AOAM533kWOu6GAQQvaPzafDmeLN/VYt9b6lmCB/S9O3+oH6kETclu4uj
+        V1CsBB587EjG0y31TqN37FI0DDFW2tl/uw==
+X-Google-Smtp-Source: ABdhPJxFpHfSnDde2bkAAu66qkYOduFEeEFgg+GpwhEM0RtNKNy7P5FjmC6ZLMoxVeQFT4obyEIBSw==
+X-Received: by 2002:aa7:8edc:0:b029:138:695c:a024 with SMTP id b28-20020aa78edc0000b0290138695ca024mr3581079pfr.2.1598990202526;
+        Tue, 01 Sep 2020 12:56:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y126sm2907207pfy.138.2020.09.01.12.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 12:56:41 -0700 (PDT)
+Message-ID: <5f4ea779.1c69fb81.bdb6c.6f3b@mx.google.com>
+Date:   Tue, 01 Sep 2020 12:56:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by DM5PR07CA0123.namprd07.prod.outlook.com (2603:10b6:3:13e::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.19 via Frontend Transport; Tue, 1 Sep 2020 19:36:30 +0000
-X-Originating-IP: [165.204.77.1]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 3ec7343e-2549-4500-9ac0-08d84eae5427
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1242:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1242C8FB875BE4D60FE0DF23F82E0@DM5PR12MB1242.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QZquAWb5osKduiKJss+Ov7P/nUFj4CUYkASj7JfFLMZRZWDHcjSoLoz5aU7SuzC35PY2hwN8efb95lEDTHj4YlkkrZGudjfdTI56wsCv5b1lNZ/qjFR7d/t2asf2gtyPqoEhzwEc6x0v2UXUdtcU25ncqWMVbVGDAZnrMcSgMaDcWCcZXii/Fxgg1gbu35jRGENXoikZFesfINHJYc6MAwXapSWeT0eTw5u/7igD2Cn4agD/luNlH//gcy4RNwC2yWodllf4toggNIJHPbwMbZpoAufdRs9f5EzFfrKRjDzm4MVEionQeGt5LPTtApyxHwTuNhvzRm3BdXkrAejx+g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3116.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(83380400001)(7416002)(6666004)(186003)(4326008)(8936002)(8676002)(33656002)(1076003)(2906002)(478600001)(6862004)(52116002)(16576012)(44832011)(5660300002)(26005)(956004)(6636002)(66476007)(6486002)(54906003)(66556008)(66946007)(86362001)(316002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: cucAVbATLQnv4CaEE4iT1ttOQZSYwWJjlfB7BOwakQVrDkjGNC2sk2mpIPUya4qvTxiF3lAwXcJ+ZrbW1j66WR1lr8SNW+PfgDRf61eenkuFL9YXgpOYRnQ/xNfOmK3rTTAI0qIK5y4TyRFxTsxV4tB2YlhyLqD2OruJoEf7n+5yY9kB8hGMR4LLNnmznSeEGH/HCHE7bn4oLOirbilNG07mvD8gqb3J1knhs4X5naH//LNi99q94RxAgVKjVbuKA8hiqlVpAxCVSii5Y57su1HV+GeQ49WspEb31KQGEDbfad8OZMC7MJHPjX5bZS6LPdMXidk315x221jxP5LNSYctt+6soJ9CHDfbcA73uTbSJVwYL9Oubc9dg+7yvp8saQWEZuwwH1SYIwgr4+kv+dk9jibLoaU4BqSToMFSGByyV39Hf5sV44rvii4JShTt/aDRNEHcn9VnirM9PGIT0KFs5JhtAjiTaPT0TO4Bf/mAw23z8jTJmwNh0e3Z+ng84ZrL47toSB/UPxD7/sZHTKiV/O/LGTmDphgGTqjuHTTLyhl3Xvkh79Sl973ReGrnxj/zAEWrGostwkVv+xXt5ku8N5Ar0+qprXSvelmN7e7jmKYYw0hhuQcfrd4gioiULjvlyeovYKR5yb0JITfVbg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3ec7343e-2549-4500-9ac0-08d84eae5427
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3116.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2020 19:36:31.7342
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 01AydhYxT/jyy0H3MZrR/myLBMvPEh21YGq7cXoTa0Wr29S3CDkDKqlGH7ac4j/RVPV14bNV39SyEknO58xb9w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1242
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v5.9-rc3-9-g7eada1ae101b
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 11 warnings (v5.9-rc3-9-g7eada1ae101b)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 28, 2020 at 03:33:31PM -0500, Smita Koralahalli wrote:
-...
-> +int apei_mce_report_x86_error(struct cper_ia_proc_ctx *ctx_info, u64 lapic_id)
-> +{
-> +	const u64 *i_mce = ((const void *) (ctx_info + 1));
-> +	unsigned int cpu;
-> +	struct mce m;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_SMCA))
-> +		return -EINVAL;
-> +
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc3-9-g7e=
+ada1ae101b)
 
-This function is called on any context type, but it can only decode
-"MSR" types that follow the MCAX register layout used on Scalable MCA
-systems.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc3-9-g7eada1ae101b/
 
-So I think there should be a couple of checks added:
-1) Context type is "MSR".
-2) Register layout follows what is expected below. There's no explict
-way to do this, since the data is implemenation-specific. But at least
-there can be a check that the starting MSR address matches the first
-expected register: Bank's MCA_STATUS in MCAX space (0xC0002XX1).
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc3-9-g7eada1ae101b
+Git Commit: 7eada1ae101b2de8a32fb7125db0162b00965d48
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-For example:
+Warnings Detected:
 
-	(ctx_info->msr_addr & 0xC0002001) == 0xC0002001
+arc:
 
-The raw value in the example should be defined with a name.
+arm64:
+    defconfig (gcc-8): 8 warnings
 
-> +	mce_setup(&m);
-> +
-> +	m.extcpu = -1;
-> +	m.socketid = -1;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		if (cpu_data(cpu).initial_apicid == lapic_id) {
-> +			m.extcpu = cpu;
-> +			m.socketid = cpu_data(m.extcpu).phys_proc_id;
-> +			break;
-> +		}
-> +	}
-> +
-> +	m.apicid = lapic_id;
-> +	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
-> +	m.status = *i_mce;
-> +	m.addr = *(i_mce + 1);
-> +	m.misc = *(i_mce + 2);
-> +	/* Skipping MCA_CONFIG */
-> +	m.ipid = *(i_mce + 4);
-> +	m.synd = *(i_mce + 5);
-> +
-> +	mce_log(&m);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(apei_mce_report_x86_error);
-> +
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
 
-Thanks,
-Yazen
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
