@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B5425A044
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F95F25A043
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728160AbgIAU5N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 16:57:13 -0400
-Received: from foss.arm.com ([217.140.110.172]:50402 "EHLO foss.arm.com"
+        id S1728141AbgIAU5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 16:57:07 -0400
+Received: from foss.arm.com ([217.140.110.172]:50414 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728098AbgIAU45 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 16:56:57 -0400
+        id S1728111AbgIAU47 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Sep 2020 16:56:59 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CEDB1424;
-        Tue,  1 Sep 2020 13:56:56 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1C75142F;
+        Tue,  1 Sep 2020 13:56:58 -0700 (PDT)
 Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 00F483F66F;
-        Tue,  1 Sep 2020 13:56:54 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 385AD3F66F;
+        Tue,  1 Sep 2020 13:56:57 -0700 (PDT)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
         dietmar.eggemann@arm.com, catalin.marinas@arm.com,
         sudeep.holla@arm.com, will@kernel.org, valentin.schneider@arm.com
 Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, ionela.voinescu@arm.com
-Subject: [PATCH v5 4/5] arch_topology, cpufreq: constify arch_* cpumasks
-Date:   Tue,  1 Sep 2020 21:55:48 +0100
-Message-Id: <20200901205549.30096-5-ionela.voinescu@arm.com>
+Subject: [PATCH v5 5/5] arch_topology, arm, arm64: define arch_scale_freq_invariant()
+Date:   Tue,  1 Sep 2020 21:55:49 +0100
+Message-Id: <20200901205549.30096-6-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200901205549.30096-1-ionela.voinescu@arm.com>
 References: <20200901205549.30096-1-ionela.voinescu@arm.com>
@@ -36,10 +36,38 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Valentin Schneider <valentin.schneider@arm.com>
 
-The passed cpumask arguments to arch_set_freq_scale() and
-arch_freq_counters_available() are only iterated over, so reflect this
-in the prototype. This also allows to pass system cpumasks like
-cpu_online_mask without getting a warning.
+arch_scale_freq_invariant() is used by schedutil to determine whether
+the scheduler's load-tracking signals are frequency invariant. Its
+definition is overridable, though by default it is hardcoded to 'true'
+if arch_scale_freq_capacity() is defined ('false' otherwise).
+
+This behaviour is not overridden on arm, arm64 and other users of the
+generic arch topology driver, which is somewhat precarious:
+arch_scale_freq_capacity() will always be defined, yet not all cpufreq
+drivers are guaranteed to drive the frequency invariance scale factor
+setting. In other words, the load-tracking signals may very well *not*
+be frequency invariant.
+
+Now that cpufreq can be queried on whether the current driver is driving
+the Frequency Invariance (FI) scale setting, the current situation can
+be improved. This combines the query of whether cpufreq supports the
+setting of the frequency scale factor, with whether all online CPUs are
+counter-based FI enabled.
+
+While cpufreq FI enablement applies at system level, for all CPUs,
+counter-based FI support could also be used for only a subset of CPUs to
+set the invariance scale factor. Therefore, if cpufreq-based FI support
+is present, we consider the system to be invariant. If missing, we
+require all online CPUs to be counter-based FI enabled in order for the
+full system to be considered invariant.
+
+If the system ends up not being invariant, a new condition is needed in
+the counter initialization code that disables all scale factor setting
+based on counters.
+
+Precedence of counters over cpufreq use is not important here. The
+invariant status is only given to the system if all CPUs have at least
+one method of setting the frequency scale factor.
 
 Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
 Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
@@ -48,92 +76,86 @@ Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- arch/arm64/kernel/topology.c  | 2 +-
- drivers/base/arch_topology.c  | 4 ++--
- drivers/cpufreq/cpufreq.c     | 5 +++--
- include/linux/arch_topology.h | 2 +-
- include/linux/cpufreq.h       | 3 ++-
- 5 files changed, 9 insertions(+), 7 deletions(-)
+ arch/arm/include/asm/topology.h   | 1 +
+ arch/arm64/include/asm/topology.h | 1 +
+ arch/arm64/kernel/topology.c      | 7 +++++++
+ drivers/base/arch_topology.c      | 6 ++++++
+ include/linux/arch_topology.h     | 2 ++
+ 5 files changed, 17 insertions(+)
 
+diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
+index e0593cf095d0..9219e67befbe 100644
+--- a/arch/arm/include/asm/topology.h
++++ b/arch/arm/include/asm/topology.h
+@@ -9,6 +9,7 @@
+ 
+ /* Replace task scheduler's default frequency-invariant accounting */
+ #define arch_scale_freq_capacity topology_get_freq_scale
++#define arch_scale_freq_invariant topology_scale_freq_invariant
+ 
+ /* Replace task scheduler's default cpu-invariant accounting */
+ #define arch_scale_cpu_capacity topology_get_cpu_scale
+diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
+index e042f6527981..7cb519473fbd 100644
+--- a/arch/arm64/include/asm/topology.h
++++ b/arch/arm64/include/asm/topology.h
+@@ -27,6 +27,7 @@ void topology_scale_freq_tick(void);
+ 
+ /* Replace task scheduler's default frequency-invariant accounting */
+ #define arch_scale_freq_capacity topology_get_freq_scale
++#define arch_scale_freq_invariant topology_scale_freq_invariant
+ 
+ /* Replace task scheduler's default cpu-invariant accounting */
+ #define arch_scale_cpu_capacity topology_get_cpu_scale
 diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 0801a0f3c156..9a9f2b8dedf5 100644
+index 9a9f2b8dedf5..4064d39bb66d 100644
 --- a/arch/arm64/kernel/topology.c
 +++ b/arch/arm64/kernel/topology.c
-@@ -253,7 +253,7 @@ static int __init init_amu_fie(void)
- }
- late_initcall_sync(init_amu_fie);
+@@ -246,6 +246,13 @@ static int __init init_amu_fie(void)
+ 		static_branch_enable(&amu_fie_key);
+ 	}
  
--bool arch_freq_counters_available(struct cpumask *cpus)
-+bool arch_freq_counters_available(const struct cpumask *cpus)
- {
- 	return amu_freq_invariant() &&
- 	       cpumask_subset(cpus, amu_fie_cpus);
++	/*
++	 * If the system is not fully invariant after AMU init, disable
++	 * partial use of counters for frequency invariance.
++	 */
++	if (!topology_scale_freq_invariant())
++		static_branch_disable(&amu_fie_key);
++
+ free_valid_mask:
+ 	free_cpumask_var(valid_cpus);
+ 
 diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 42a08ef693ae..91de5331ac8a 100644
+index 91de5331ac8a..89cae168b076 100644
 --- a/drivers/base/arch_topology.c
 +++ b/drivers/base/arch_topology.c
-@@ -21,13 +21,13 @@
+@@ -21,6 +21,12 @@
  #include <linux/sched.h>
  #include <linux/smp.h>
  
--__weak bool arch_freq_counters_available(struct cpumask *cpus)
-+__weak bool arch_freq_counters_available(const struct cpumask *cpus)
++bool topology_scale_freq_invariant(void)
++{
++	return cpufreq_supports_freq_invariance() ||
++	       arch_freq_counters_available(cpu_online_mask);
++}
++
+ __weak bool arch_freq_counters_available(const struct cpumask *cpus)
  {
  	return false;
- }
- DEFINE_PER_CPU(unsigned long, freq_scale) = SCHED_CAPACITY_SCALE;
- 
--void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
-+void arch_set_freq_scale(const struct cpumask *cpus, unsigned long cur_freq,
- 			 unsigned long max_freq)
- {
- 	unsigned long scale;
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 570bf2ebe9d4..2ea245a6c0c0 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -160,8 +160,9 @@ u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy)
- }
- EXPORT_SYMBOL_GPL(get_cpu_idle_time);
- 
--__weak void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
--		unsigned long max_freq)
-+__weak void arch_set_freq_scale(const struct cpumask *cpus,
-+				unsigned long cur_freq,
-+				unsigned long max_freq)
- {
- }
- EXPORT_SYMBOL_GPL(arch_set_freq_scale);
 diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 69b1dabe39dc..810c83336257 100644
+index 810c83336257..083df331a3c9 100644
 --- a/include/linux/arch_topology.h
 +++ b/include/linux/arch_topology.h
-@@ -30,7 +30,7 @@ static inline unsigned long topology_get_freq_scale(int cpu)
+@@ -30,6 +30,8 @@ static inline unsigned long topology_get_freq_scale(int cpu)
  	return per_cpu(freq_scale, cpu);
  }
  
--bool arch_freq_counters_available(struct cpumask *cpus);
-+bool arch_freq_counters_available(const struct cpumask *cpus);
++bool topology_scale_freq_invariant(void);
++
+ bool arch_freq_counters_available(const struct cpumask *cpus);
  
  DECLARE_PER_CPU(unsigned long, thermal_pressure);
- 
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index e54767e2a68a..9f779fbdbe7b 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -1011,7 +1011,8 @@ static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
- extern void arch_freq_prepare_all(void);
- extern unsigned int arch_freq_get_on_cpu(int cpu);
- 
--extern void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
-+extern void arch_set_freq_scale(const struct cpumask *cpus,
-+				unsigned long cur_freq,
- 				unsigned long max_freq);
- 
- /* the following are really really optional */
 -- 
 2.17.1
 
