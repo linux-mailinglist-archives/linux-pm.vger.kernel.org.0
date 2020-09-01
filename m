@@ -2,61 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109ED25904A
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 16:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9689259066
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 16:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728289AbgIAOYo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 10:24:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1728402AbgIAO3X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 10:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbgIAOYV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 10:24:21 -0400
-Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DACE9C061245
-        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 07:24:10 -0700 (PDT)
-Received: by mail-ua1-x944.google.com with SMTP id s29so482679uae.1
-        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 07:24:10 -0700 (PDT)
+        with ESMTP id S1728060AbgIAO3G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 10:29:06 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055CAC061244
+        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 07:29:05 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id s205so1770877lja.7
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 07:29:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i0841vRD0P3xU4E/LUpIQiuM2rN2CsHVvCQKZ7w10Uw=;
-        b=GZs/zG6eHNK+WjKNjW7IzC4WYMno0udiUVtSq444fIe4zuGGPZUx/ZXFe25f73OFic
-         t9B7aKLCuw1fi+jzwM92b43u11MusM2nrochD0Nx/bSlw0NXxJWhWmNApBT7TMUCKR3X
-         ZWXH7YNRTl1Xurjb5EWMXO3FsGDO9nLIknvc2l6slQMZB1ZCgpAksjCo+Flr3OoNSK8u
-         XQ/KruqKFNKh3tJUe2oqayjpJNJsv4q3kL7uAwm3xCkOvaj6XGK+k7gLtKJOelbhTyul
-         fHTb9Sykx809lYq9KoWsLCvELnKkdqnbeZeCmXG6AI44QFz/dwCkXOxUCnaDCXwtT4Ss
-         vA5w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8r0GGXDUyWzO1yQhe44+kpzKtZu+hSLAG2hxx4RFcqg=;
+        b=vMQjkKXBLiPUbN4DyTDFr9jvb5/4FGzFXnutFtp3zk4J1bGbOWUtaXIIOdjQCe3tr6
+         tsslovJBANSxPGjom7m+wza718pGmrQKLRdHGOuW+mefYWEg5t33MikidCZEcrIgsZsd
+         yxeE8980DV9VeZDA7WyetRBFS4BA87CB3WPI7KtSKN1ejFQoSfPt8p7KJkIj0cY6qV7V
+         IWFIJW6r6yDbKWNn3lZdPy2x22YFn0P2DauVj3PKRlr3c6+nrc7FvEDZufq12o6/N250
+         6gMya87peFdAnqRT/o3eui4YRPwgC+mNDPb9nsRpjWhtEoAhqG5liPjY6L/yfVWMAFic
+         z0Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i0841vRD0P3xU4E/LUpIQiuM2rN2CsHVvCQKZ7w10Uw=;
-        b=Q0xHjuI71ovd7cvzAY4+440c3DO0kHJ3FU9HTLYMqCoKhu1asL5M6fRAr79z0wZ7Py
-         TZYfCDDSskgZN7YqRFtStp95eNS57JxrP5hlWein6MBsn/ExydyTZshrnApUU/zQWWu4
-         XMiPSVUO93yP+2/a2b00QNZg8tklWDcXz5sRKhQbDrfCbp0vRj5mFq6/9roUZArL8M6O
-         +CdEj7YudVJ3GJyYNpj7JFQk+xoKG7v0iJ/7I+WRBYquGGJ/Z6saGEa9LnzRs5KDB8Ue
-         JnrAs+N+gdoFN1sIS0VUIqp0PBiiEFh2bVH66N8h6+w+eWI8ennwMBVSqJ99eSlzFPcr
-         VMwg==
-X-Gm-Message-State: AOAM531txFPT88q6lzouaWRPD4Q0YWpflBzS6WFtK4gsYJAmNEja2n35
-        db7r3hg29N0AXJ9Yw6sF6OmnZp2D+sEQeIMlnn/ZsQ==
-X-Google-Smtp-Source: ABdhPJwdsePHI6TV++yYCuYXGcfVM4sRFxJ+tMHz7V77U4vhv8yutcpQfdnhB1E5KhQvnmJglapawas6yt3nKG9T2CY=
-X-Received: by 2002:ab0:2848:: with SMTP id c8mr1466021uaq.15.1598970248358;
- Tue, 01 Sep 2020 07:24:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200901121226.217568-1-ulf.hansson@linaro.org>
- <20200901121226.217568-3-ulf.hansson@linaro.org> <20200901133218.GB27090@bogus>
- <CAPDyKFrpfXD4tdghXyFPZUNT138FOi643rxTgrtjTBXP1S1nSg@mail.gmail.com> <20200901141141.GA11121@bogus>
-In-Reply-To: <20200901141141.GA11121@bogus>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8r0GGXDUyWzO1yQhe44+kpzKtZu+hSLAG2hxx4RFcqg=;
+        b=daSLdCVAC931XSvHSgd18i4rMVwG4UAjbWCg0SbMmtZAyMwPUkeYB19p1d6bvBCrlu
+         z070/KW7ihnf4HM2h5ofWbZ4HXPbLMCmqpJE6tYgDTODBw9RZ12dYD4y6gSM7sAjy+tu
+         pXCiuySXcZGg4xOJFcDinQzCb8v5LQOM6ngHxHlMaQjSe3AIdsFiyBe1p1hEkFJOVm68
+         ZhAz4cqottYkOL70G4lyK740zDbv3/ryoR2vbWk7SwPsX9vjJl+FcuFMCNuoRVkXjqF1
+         B5N3sK8r/6BkVEShRCIuAeldT36Y2uOmGeIBZWfUAqVVCfzRZN/jA2XYN20bQaLynHv2
+         23gA==
+X-Gm-Message-State: AOAM531MFK2Z3M1M7+uhJdCGxQ+QLg/HWq9A8OD6qHxoXU9NKHgud3zZ
+        096PO8L/eDqc1OIvKaDXmvlI7A==
+X-Google-Smtp-Source: ABdhPJwM9jXlVeuDf4nVw+bhzh3toIu125PwHgmX3p19ZtLGCpivJhYXeHA7a60S81qS3mfD5g4pJw==
+X-Received: by 2002:a2e:b5a3:: with SMTP id f3mr720227ljn.70.1598970544272;
+        Tue, 01 Sep 2020 07:29:04 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-180-79.NA.cust.bahnhof.se. [98.128.180.79])
+        by smtp.gmail.com with ESMTPSA id r7sm318313lfn.84.2020.09.01.07.29.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2020 07:29:03 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Sep 2020 16:23:31 +0200
-Message-ID: <CAPDyKFq8CGwEMFna-dU-OqBHog35j1NC=Yi7U1ZtecEUrih75Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpuidle: psci: Allow PM domain to be initialized
- even if no OSI mode
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Lina Iyer <ilina@codeaurora.org>,
@@ -65,95 +60,35 @@ Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/2] cpuidle: psci: Always create the PM domains
+Date:   Tue,  1 Sep 2020 16:28:57 +0200
+Message-Id: <20200901142859.224381-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 1 Sep 2020 at 16:11, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Tue, Sep 01, 2020 at 03:49:55PM +0200, Ulf Hansson wrote:
-> > On Tue, 1 Sep 2020 at 15:32, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > >
-> > > On Tue, Sep 01, 2020 at 02:12:26PM +0200, Ulf Hansson wrote:
-> > > > If the PSCI OSI mode isn't supported or fails to be enabled, the PM domain
-> > > > topology with the genpd providers isn't initialized. This is perfectly fine
-> > > > from cpuidle-psci point of view.
-> > > >
-> > > > However, since the PM domain topology in the DTS files is a description of
-> > > > the HW, no matter of whether the PSCI OSI mode is supported or not, other
-> > > > consumers besides the CPUs may rely on it.
-> > > >
-> > > > Therefore, let's always allow the initialization of the PM domain topology
-> > > > to succeed, independently of whether the PSCI OSI mode is supported.
-> > > > Consequentially we need to track if we succeed to enable the OSI mode, as
-> > > > to know when a domain idlestate can be selected.
-> > > >
-> > > > Note that, CPU devices are still not being attached to the PM domain
-> > > > topology, unless the PSCI OSI mode is supported.
-> > > >
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > ---
-> > > >
-> > > > Changes in v2:
-> > > >       - Assign the genpd ->power_off() callback, only when the PSCI OSI mode
-> > > >       has been successfully enabled.
-> > > >
-> > > > ---
-> > > >  drivers/cpuidle/cpuidle-psci-domain.c | 57 ++++++++++++++-------------
-> > > >  1 file changed, 29 insertions(+), 28 deletions(-)
-> > > >
-> > > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > index b6ab0415f450..256e7e35b5af 100644
-> > > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > @@ -105,7 +105,7 @@ static void psci_pd_free_states(struct genpd_power_state *states,
-> > > >       kfree(states);
-> > > >  }
-> > > >
-> > > > -static int psci_pd_init(struct device_node *np)
-> > > > +static int psci_pd_init(struct device_node *np, bool use_osi)
-> > > >  {
-> > > >       struct generic_pm_domain *pd;
-> > > >       struct psci_pd_provider *pd_provider;
-> > > > @@ -135,11 +135,14 @@ static int psci_pd_init(struct device_node *np)
-> > > >
-> > > >       pd->free_states = psci_pd_free_states;
-> > > >       pd->name = kbasename(pd->name);
-> > > > -     pd->power_off = psci_pd_power_off;
-> > > >       pd->states = states;
-> > > >       pd->state_count = state_count;
-> > > >       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
-> > > >
-> > > > +     /* Use the ->power_off() callback when OSI is enabled. */
-> > >
-> > > IIUC, you did mention that we need to attach PD even when the OSI fails
-> > > as this could be shared domain. With the below conditional assignment
-> > > of power_off, I understand that if OSI fails and we have domains attached,
-> > > then it will be always ON ?
-> >
-> > From a genpd point of view, the corresponding PM domain can be powered
-> > off (as long as all attached consumers allow that as well, of course).
-> >
->
-> Can be powered off ? Or will be powered off ? It sounds wrong if it will
-> be powered off as the domain needs to be powered up for CPU to be running.
-> It sounds like we may be out of sync though not a big issue, it sounds
-> weird for me.
-
-You are right, it's a bit weird.
-
->
-> > Hmm, maybe we should add a GENPD_FLAG_ALWAYS_ON, to really enforce
-> > that it stays on?
-> >
->
-> Should that not be default for CPU power domains if OSI can't be enabled ?
-
-Yes, that makes perfect sense to me as well. Let me respin and fix it,
-I will also add your acks/reviewed-by.
+This coverletter is mainly to help keeping track of the patches part in the
+series. Please have a look at each patch for more details.
 
 Kind regards
-Uffe
+Ulf Hansson
+
+
+Ulf Hansson (2):
+  firmware: psci: Extend psci_set_osi_mode() to allow reset to PC mode
+  cpuidle: psci: Allow PM domain to be initialized even if no OSI mode
+
+ drivers/cpuidle/cpuidle-psci-domain.c | 59 ++++++++++++++-------------
+ drivers/firmware/psci/psci.c          | 12 +++---
+ include/linux/psci.h                  |  2 +-
+ 3 files changed, 39 insertions(+), 34 deletions(-)
+
+-- 
+2.25.1
+
