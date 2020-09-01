@@ -2,160 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F95F25A043
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBD025A04D
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728141AbgIAU5H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 16:57:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:50414 "EHLO foss.arm.com"
+        id S1727927AbgIAU6A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 16:58:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:50462 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728111AbgIAU47 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 16:56:59 -0400
+        id S1727788AbgIAU6A (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Sep 2020 16:58:00 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1C75142F;
-        Tue,  1 Sep 2020 13:56:58 -0700 (PDT)
-Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 385AD3F66F;
-        Tue,  1 Sep 2020 13:56:57 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 50D011063;
+        Tue,  1 Sep 2020 13:57:59 -0700 (PDT)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E72AA3F66F;
+        Tue,  1 Sep 2020 13:57:58 -0700 (PDT)
+Date:   Tue, 1 Sep 2020 21:57:57 +0100
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
-        dietmar.eggemann@arm.com, catalin.marinas@arm.com,
-        sudeep.holla@arm.com, will@kernel.org, valentin.schneider@arm.com
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ionela.voinescu@arm.com
-Subject: [PATCH v5 5/5] arch_topology, arm, arm64: define arch_scale_freq_invariant()
-Date:   Tue,  1 Sep 2020 21:55:49 +0100
-Message-Id: <20200901205549.30096-6-ionela.voinescu@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200901205549.30096-1-ionela.voinescu@arm.com>
-References: <20200901205549.30096-1-ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     rjw@rjwysocki.net, dietmar.eggemann@arm.com,
+        catalin.marinas@arm.com, sudeep.holla@arm.com, will@kernel.org,
+        valentin.schneider@arm.com, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] arch_topology: validate input frequencies to
+ arch_set_freq_scale()
+Message-ID: <20200901205757.GA31302@arm.com>
+References: <20200828173303.11939-1-ionela.voinescu@arm.com>
+ <20200828173303.11939-2-ionela.voinescu@arm.com>
+ <20200831111308.h5j652dnpgys2doe@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200831111308.h5j652dnpgys2doe@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Valentin Schneider <valentin.schneider@arm.com>
+Hi Viresh,
 
-arch_scale_freq_invariant() is used by schedutil to determine whether
-the scheduler's load-tracking signals are frequency invariant. Its
-definition is overridable, though by default it is hardcoded to 'true'
-if arch_scale_freq_capacity() is defined ('false' otherwise).
+On Monday 31 Aug 2020 at 16:43:08 (+0530), Viresh Kumar wrote:
+> On 28-08-20, 18:32, Ionela Voinescu wrote:
+> > The current frequency passed to arch_set_freq_scale() could end up
+> > being 0, signaling an error in setting a new frequency. Also, if the
+> > maximum frequency in 0, this will result in a division by 0 error.
+> > 
+> > Therefore, validate these input values before using them for the
+> > setting of the frequency scale factor.
+> > 
+> > Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
+> > ---
+> >  drivers/base/arch_topology.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> > index 75f72d684294..5708eb724790 100644
+> > --- a/drivers/base/arch_topology.c
+> > +++ b/drivers/base/arch_topology.c
+> > @@ -33,6 +33,11 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
+> >  	unsigned long scale;
+> >  	int i;
+> >  
+> > +	if (unlikely(!cur_freq || !max_freq)) {
+> > +		WARN_ON_ONCE(1);
+> > +		return;
+> > +	}
+> 
+> This can be written as:
+> 
+>         if (WARN_ON_ONCE(!cur_freq || !max_freq))
+>                 return;
 
-This behaviour is not overridden on arm, arm64 and other users of the
-generic arch topology driver, which is somewhat precarious:
-arch_scale_freq_capacity() will always be defined, yet not all cpufreq
-drivers are guaranteed to drive the frequency invariance scale factor
-setting. In other words, the load-tracking signals may very well *not*
-be frequency invariant.
+Yes, that's better.
 
-Now that cpufreq can be queried on whether the current driver is driving
-the Frequency Invariance (FI) scale setting, the current situation can
-be improved. This combines the query of whether cpufreq supports the
-setting of the frequency scale factor, with whether all online CPUs are
-counter-based FI enabled.
+I've pushed v5 with this and your Acked-by.
 
-While cpufreq FI enablement applies at system level, for all CPUs,
-counter-based FI support could also be used for only a subset of CPUs to
-set the invariance scale factor. Therefore, if cpufreq-based FI support
-is present, we consider the system to be invariant. If missing, we
-require all online CPUs to be counter-based FI enabled in order for the
-full system to be considered invariant.
+Thanks for all your reviews,
+Ionela.
 
-If the system ends up not being invariant, a new condition is needed in
-the counter initialization code that disables all scale factor setting
-based on counters.
-
-Precedence of counters over cpufreq use is not important here. The
-invariant status is only given to the system if all CPUs have at least
-one method of setting the frequency scale factor.
-
-Signed-off-by: Valentin Schneider <valentin.schneider@arm.com>
-Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
----
- arch/arm/include/asm/topology.h   | 1 +
- arch/arm64/include/asm/topology.h | 1 +
- arch/arm64/kernel/topology.c      | 7 +++++++
- drivers/base/arch_topology.c      | 6 ++++++
- include/linux/arch_topology.h     | 2 ++
- 5 files changed, 17 insertions(+)
-
-diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-index e0593cf095d0..9219e67befbe 100644
---- a/arch/arm/include/asm/topology.h
-+++ b/arch/arm/include/asm/topology.h
-@@ -9,6 +9,7 @@
- 
- /* Replace task scheduler's default frequency-invariant accounting */
- #define arch_scale_freq_capacity topology_get_freq_scale
-+#define arch_scale_freq_invariant topology_scale_freq_invariant
- 
- /* Replace task scheduler's default cpu-invariant accounting */
- #define arch_scale_cpu_capacity topology_get_cpu_scale
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index e042f6527981..7cb519473fbd 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -27,6 +27,7 @@ void topology_scale_freq_tick(void);
- 
- /* Replace task scheduler's default frequency-invariant accounting */
- #define arch_scale_freq_capacity topology_get_freq_scale
-+#define arch_scale_freq_invariant topology_scale_freq_invariant
- 
- /* Replace task scheduler's default cpu-invariant accounting */
- #define arch_scale_cpu_capacity topology_get_cpu_scale
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 9a9f2b8dedf5..4064d39bb66d 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -246,6 +246,13 @@ static int __init init_amu_fie(void)
- 		static_branch_enable(&amu_fie_key);
- 	}
- 
-+	/*
-+	 * If the system is not fully invariant after AMU init, disable
-+	 * partial use of counters for frequency invariance.
-+	 */
-+	if (!topology_scale_freq_invariant())
-+		static_branch_disable(&amu_fie_key);
-+
- free_valid_mask:
- 	free_cpumask_var(valid_cpus);
- 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 91de5331ac8a..89cae168b076 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -21,6 +21,12 @@
- #include <linux/sched.h>
- #include <linux/smp.h>
- 
-+bool topology_scale_freq_invariant(void)
-+{
-+	return cpufreq_supports_freq_invariance() ||
-+	       arch_freq_counters_available(cpu_online_mask);
-+}
-+
- __weak bool arch_freq_counters_available(const struct cpumask *cpus)
- {
- 	return false;
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index 810c83336257..083df331a3c9 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -30,6 +30,8 @@ static inline unsigned long topology_get_freq_scale(int cpu)
- 	return per_cpu(freq_scale, cpu);
- }
- 
-+bool topology_scale_freq_invariant(void);
-+
- bool arch_freq_counters_available(const struct cpumask *cpus);
- 
- DECLARE_PER_CPU(unsigned long, thermal_pressure);
--- 
-2.17.1
-
+> 
+> With that.
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> > +
+> >  	/*
+> >  	 * If the use of counters for FIE is enabled, just return as we don't
+> >  	 * want to update the scale factor with information from CPUFREQ.
+> > -- 
+> > 2.17.1
+> 
+> -- 
+> viresh
