@@ -2,126 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E0225A040
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:56:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10D725A049
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 22:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726167AbgIAU4w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 16:56:52 -0400
-Received: from foss.arm.com ([217.140.110.172]:50354 "EHLO foss.arm.com"
+        id S1728029AbgIAU4z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 16:56:55 -0400
+Received: from foss.arm.com ([217.140.110.172]:50364 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726091AbgIAU4s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 16:56:48 -0400
+        id S1727035AbgIAU4t (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Sep 2020 16:56:49 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E8C551063;
-        Tue,  1 Sep 2020 13:56:45 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 51FB1113E;
+        Tue,  1 Sep 2020 13:56:49 -0700 (PDT)
 Received: from e108754-lin.cambridge.arm.com (e108754-lin.cambridge.arm.com [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7DE163F66F;
-        Tue,  1 Sep 2020 13:56:44 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D1F7C3F66F;
+        Tue,  1 Sep 2020 13:56:47 -0700 (PDT)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
         dietmar.eggemann@arm.com, catalin.marinas@arm.com,
         sudeep.holla@arm.com, will@kernel.org, valentin.schneider@arm.com
 Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, ionela.voinescu@arm.com
-Subject: [PATCH v5 0/5] cpufreq: improve frequency invariance support
-Date:   Tue,  1 Sep 2020 21:55:44 +0100
-Message-Id: <20200901205549.30096-1-ionela.voinescu@arm.com>
+Subject: [PATCH v5 1/5] arch_topology: validate input frequencies to arch_set_freq_scale()
+Date:   Tue,  1 Sep 2020 21:55:45 +0100
+Message-Id: <20200901205549.30096-2-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200901205549.30096-1-ionela.voinescu@arm.com>
+References: <20200901205549.30096-1-ionela.voinescu@arm.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+The current frequency passed to arch_set_freq_scale() could end up
+being 0, signaling an error in setting a new frequency. Also, if the
+maximum frequency in 0, this will result in a division by 0 error.
 
-v4->v5
- - I've applied Viresh's remaining suggestion and Acked-by/s
- - v4 can be found at [4]
- - v5 is based on linux-next 20200828
+Therefore, validate these input values before using them for the
+setting of the frequency scale factor.
 
-Thank you,
-Ionela.
-
+Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
 ---
-v3->v4:
- - addressing Viresh's comments on patches 1/5 and 3/5, and
- - with his Acked-by applied for the rest of the patches;
- - v3 can be found at [3], and
- - this is based on linux-next 20200827.
+ drivers/base/arch_topology.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-v2->v3
- - v2 can be found at [2]
- - 1/5 was introduced to check input frequencies to
-   arch_set_freq_scale() as recommended by Rafael
- - The previous 2/7 was squashed into 1/7 - now 2/5, with additions to
-   the changelog as suggested by Rafael.
- - The previous 3/7 (BL_SWITCHER handling) was dropped to be handled
-   in a separate patch. This does not change the current functionality.
- - The previous 4/7 - now 3/5 is simplified as suggested by Viresh.
- - 3/5 - cpufreq_supports_freq_invariance() replaces
-   cpufreq_sets_freq_scale(). The meaning chosen for
-   cpufreq_supports_freq_invariance() is whether it can set the frequency
-   scale factor, not whether arch_set_freq_scale() actually does.
- - 4/5 - Change after Catalin's Ack: The changes to
-   arch_set_thermal_pressure() were dropped as they were done in a separate
-   patch. Therefore this patch now has a subset of the previous changes
-   at 5/7
- - 5/5 - Change after Catalin's Ack:
-   s/cpufreq_sets_freq_scale/cpufreq_supports_freq_invariance
- - v3 is based on linux-next 20200814
-
-
-v1 -> v2:
- - v1 can be found at [1]
- - No cpufreq flags are introduced
- - Previous patches 2/8 and 3/8 were squashed in this series under 1/7,
-   to ensure bisection.
- - 2/7 was introduced as a proposal for Viresh's suggestion to use
-   policy->cur in the call to arch_set_freq_scale() and is extended to
-   support drivers that implement the target() callback as well
- - Additional commit message changes are added to 1/7 and 2/7, to
-   clarify that the definition of arch_set_freq_scale() will filter 
-   settings of the scale factor, if unwanted
- - 3/7 disables setting of the scale factor for
-   CONFIG_BL_SWITCHER, as Dietmar suggested
- - Small change introduced in 4/7 to disable cpufreq-based frequency
-   invariance for the users of the default arch_set_freq_scale() call
-   which will not actually set a scale factor
- - build issue solved (reported by 0day test)
- - v2 is based on linux-next 20200716
- - all functional tests in v1 were repeated for v2
-
-
-[1] https://lore.kernel.org/lkml/20200701090751.7543-1-ionela.voinescu@arm.com/
-[2] https://lore.kernel.org/lkml/20200722093732.14297-1-ionela.voinescu@arm.com/
-[3] https://lore.kernel.org/lkml/20200824210252.27486-1-ionela.voinescu@arm.com/
-[4] https://lore.kernel.org/lkml/20200828173303.11939-1-ionela.voinescu@arm.com/
-
-Ionela Voinescu (3):
-  arch_topology: validate input frequencies to arch_set_freq_scale()
-  cpufreq: move invariance setter calls in cpufreq core
-  cpufreq: report whether cpufreq supports Frequency Invariance (FI)
-
-Valentin Schneider (2):
-  arch_topology, cpufreq: constify arch_* cpumasks
-  arch_topology, arm, arm64: define arch_scale_freq_invariant()
-
- arch/arm/include/asm/topology.h        |  1 +
- arch/arm64/include/asm/topology.h      |  1 +
- arch/arm64/kernel/topology.c           |  9 ++++++-
- drivers/base/arch_topology.c           | 13 ++++++++--
- drivers/cpufreq/cpufreq-dt.c           | 10 +-------
- drivers/cpufreq/cpufreq.c              | 33 +++++++++++++++++++++++---
- drivers/cpufreq/qcom-cpufreq-hw.c      |  9 +------
- drivers/cpufreq/scmi-cpufreq.c         | 12 ++--------
- drivers/cpufreq/scpi-cpufreq.c         |  6 +----
- drivers/cpufreq/vexpress-spc-cpufreq.c | 12 ++--------
- include/linux/arch_topology.h          |  4 +++-
- include/linux/cpufreq.h                |  8 ++++++-
- 12 files changed, 68 insertions(+), 50 deletions(-)
-
-
-base-commit: b36c969764ab12faebb74711c942fa3e6eaf1e96
+diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+index 75f72d684294..42a08ef693ae 100644
+--- a/drivers/base/arch_topology.c
++++ b/drivers/base/arch_topology.c
+@@ -33,6 +33,9 @@ void arch_set_freq_scale(struct cpumask *cpus, unsigned long cur_freq,
+ 	unsigned long scale;
+ 	int i;
+ 
++	if (WARN_ON_ONCE(!cur_freq || !max_freq))
++		return;
++
+ 	/*
+ 	 * If the use of counters for FIE is enabled, just return as we don't
+ 	 * want to update the scale factor with information from CPUFREQ.
 -- 
 2.17.1
 
