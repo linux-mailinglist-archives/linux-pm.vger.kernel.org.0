@@ -2,171 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6AE258C95
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 12:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772AC258CBA
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 12:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbgIAKRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 06:17:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:39876 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726064AbgIAKRh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 06:17:37 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A03830E;
-        Tue,  1 Sep 2020 03:17:35 -0700 (PDT)
-Received: from bogus (unknown [10.57.5.92])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 45A443F71F;
-        Tue,  1 Sep 2020 03:17:32 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 11:17:25 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
+        id S1726126AbgIAK12 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 06:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726107AbgIAK11 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 06:27:27 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C2DC061245
+        for <linux-pm@vger.kernel.org>; Tue,  1 Sep 2020 03:27:26 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id o68so545024pfg.2
+        for <linux-pm@vger.kernel.org>; Tue, 01 Sep 2020 03:27:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpn9D/5jf8Cl22DmcPIsP0D+8jPdGfJ5t9xD++zoV1Y=;
+        b=tk/7VJW1f+B+d95M0Sy7avts3U1k6DUjgFMhJuU1znFnZ+74BtL+25cGrXcRehXyX+
+         3oBs28+vr+MiH7bp1nKwcRuK8fqq5HZoZ5aUojM2/4bF4Hh8aoNHubPGlMZkEzr/AHtH
+         N3eISZ78fEOZPQbtjjLM59p97evtmvWwMieOYQrQEM1bwxPogJq8m3n0s3axUTkMAV0i
+         GI82DiLS2enBEh4KJKTnyRljMFBHIp5jb68ZrDBBUGiQKCpDXJJfX0aDMqJ51+ITJY8n
+         I8BSLwfr9A1aYCOKzMMYtB3GueAvRNZR26g8vI0/IrMknt4YGwkg6xq+8VJET5ea/vT1
+         bnZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rpn9D/5jf8Cl22DmcPIsP0D+8jPdGfJ5t9xD++zoV1Y=;
+        b=oGOkb3cW34wmvYO5XO2rEfj/5Fx8bYtVAKPScfeysR+HM2MxDoKpYJQaefszavZR3Z
+         9RRv8RUySbXrVRHLa3mdnJxlavdwMWrhaNsVO7PpdYoWxjIlrwhjmMnGY3DLexezhJ8D
+         QqWP7YE/KRNKmMOoJR3fLaSsA76cs4g0HCTgyUysU8siCEtz04ndIHIHWy2Gh8Qpbskv
+         mi7tyQn7MeSOZEsB6CTqdHjsvTY/dTaSoIMKU2eS5Gq2nDym8fQmWowAF5Hb43/wEiYN
+         2gQSiikvdc4QinoaQNnSWn0yJdlUghTo/BJL+s3NxG9il7SfiXilJ9mzw5PiznZO0VLi
+         sqSA==
+X-Gm-Message-State: AOAM532K2B/AaV6TdF4NHcKtiUp21/kznuiMywOlv09j22nmYW2DYKBd
+        95OM6UzzUQWyVsz1ieQqnjxc0w==
+X-Google-Smtp-Source: ABdhPJyAoTXZaC+iT5BOYZfnb359nfLCt/TY8um+EGWfET2XBrG/hBr5Oh1T2GiOkJ2tbRfhoWcYGQ==
+X-Received: by 2002:a63:4401:: with SMTP id r1mr881229pga.331.1598956046238;
+        Tue, 01 Sep 2020 03:27:26 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id h11sm1419135pfq.101.2020.09.01.03.27.25
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Sep 2020 03:27:25 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] cpuidle: psci: Allow PM domain to be initialized even if
- no OSI mode
-Message-ID: <20200901101725.GA23815@bogus>
-References: <20200814123436.61851-1-ulf.hansson@linaro.org>
- <20200818123507.GD6873@bogus>
- <CAPDyKFqi4uOBQkTZMvSnDTCsKdNoToCO4s7h1CnR-mkJ2vBNSw@mail.gmail.com>
- <20200901090125.GA14397@bogus>
- <CAPDyKFo-8D0HTmkrd1pC3hcCH5JvRP8nUCUYJKR2ZkrROPNGYQ@mail.gmail.com>
+        Rafael Wysocki <rjw@rjwysocki.net>, stephan@gerhold.net,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] opp: Handle multiple calls for same OPP table in _of_add_opp_table_v1()
+Date:   Tue,  1 Sep 2020 15:57:18 +0530
+Message-Id: <99f1c7ff37b00d2f59fbce9d934abf23932363c5.1598956021.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFo-8D0HTmkrd1pC3hcCH5JvRP8nUCUYJKR2ZkrROPNGYQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 01, 2020 at 11:43:34AM +0200, Ulf Hansson wrote:
-> On Tue, 1 Sep 2020 at 11:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Wed, Aug 19, 2020 at 10:20:52AM +0200, Ulf Hansson wrote:
-> > > On Tue, 18 Aug 2020 at 14:35, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > On Fri, Aug 14, 2020 at 02:34:36PM +0200, Ulf Hansson wrote:
-> > > > > If the PSCI OSI mode isn't supported or fails to be enabled, the PM domain
-> > > > > topology with the genpd providers isn't initialized. This is perfectly fine
-> > > > > from cpuidle-psci point of view.
-> > > > >
-> > > >
-> > > > Indeed.
-> > > >
-> > > > > However, since the PM domain topology in the DTS files is a description of
-> > > > > the HW, no matter of whether the PSCI OSI mode is supported or not, other
-> > > > > consumers besides the CPUs may rely on it.
-> > > > >
-> > > >
-> > > > And why are they even registered as part of cpuidle-psci-domain ?
-> > > > If they have to be, can be decouple it completely from cpuidle then ?
-> > >
-> > > These devices can't be decoupled as they are a part of the CPU cluster
-> > > PM domain.
-> > >
-> > > This is for example the case RPMH (rsc) device for Qcom platforms, but
-> > > there are other platforms that need this too.
-> > >
-> > > >
-> > > > > Therefore, let's always allow the initialization of the PM domain topology
-> > > > > to succeed, independently of whether the PSCI OSI mode is supported.
-> > > > > Consequentially we need to track if we succeed to enable the OSI mode, as
-> > > > > to know when a domain idlestate can be selected.
-> > > > >
-> > > >
-> > > > I thought we had discussed this in past, why are we back to the same
-> > > > discussion ? I may need to read those again to get the context.
-> > >
-> > > That discussion was according to my understanding about whether we
-> > > should allow CPU devices to be managed by runtime PM and the CPU PM
-> > > domains, if OSI was *not* supported.
-> > >
-> > > We concluded that we didn't want to allow that, which makes sense -
-> > > and I am not changing that in $subject patch.
-> > >
-> > > >
-> > > > > Note that, CPU devices are still not being attached to the PM domain
-> > > > > topology, unless the PSCI OSI mode is supported.
-> > > > >
-> > > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > > ---
-> > > > >  drivers/cpuidle/cpuidle-psci-domain.c | 49 +++++++++++++--------------
-> > > > >  1 file changed, 24 insertions(+), 25 deletions(-)
-> > > > >
-> > > > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > index b6e9649ab0da..55653c110e3a 100644
-> > > > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > > > @@ -28,6 +28,7 @@ struct psci_pd_provider {
-> > > > >
-> > > > >  static LIST_HEAD(psci_pd_providers);
-> > > > >  static bool psci_pd_allow_domain_state;
-> > > > > +static bool psci_osi_mode_enabled;
-> > > > >
-> > > > >  static int psci_pd_power_off(struct generic_pm_domain *pd)
-> > > > >  {
-> > > > > @@ -37,7 +38,7 @@ static int psci_pd_power_off(struct generic_pm_domain *pd)
-> > > > >       if (!state->data)
-> > > > >               return 0;
-> > > > >
-> > > > > -     if (!psci_pd_allow_domain_state)
-> > > > > +     if (!psci_pd_allow_domain_state || !psci_osi_mode_enabled)
-> > > >
-> > > > I really don't like this check. Why do we have to keep checking
-> > > > psci_osi_mode_enabled every single time and that is the reason IIRC
-> > > > I was against this and just don't add the domains.
-> > >
-> > > You have a point about the check, it's not very nice - but from an
-> > > execution point of view, I don't think it's the end of the world.
-> > >
-> > > Note that, when not using OSI, then the ->power_off() callback will
-> > > not be invoked in the cpuidle path.
-> > >
-> >
-> > Then drop the check. I am confused as why we need that runtime check if
-> > we get the setup right.
-> >
-> > > Anyway, if you like, I can try to rework the code, so that the
-> > > ->power_off() callback doesn't get assigned, if we are not using OSI.
-> >
-> > +1 for sure.
-> >
-> > > Although, I am not sure the trouble is worth it, as I probably need to
-> > > try to enable OSI before initializing the genpd data structures. Then,
-> > > if failing with genpd initializations, I need to revert back to PC
-> > > mode.
-> > >
-> >
-> > Just to clarify, you can use psci_osi_mode_enabled anytime during
-> > initialisation and get the setup right so that we can drop unnecessary
-> > runtime check every single poweroff call. I prefer to remove that.
->
-> Okay, I will respin the series then.
->
-> Although, just to be clear, this means that I will have to invoke
-> psci_set_osi_mode() prior to initializing the PM domains. Then if it
-> turns out that initializing the PM domain fails, I will have to switch
-> back to PC mode.
->
-> To do that, I will probably need to extend psci_set_osi_mode() to take
-> a bool as a parameter (to indicate enable or disable OSI mode). You
-> are okay with this, right?
->
+Until now for V1 OPP bindings we used to call
+dev_pm_opp_of_cpumask_add_table() first and then
+dev_pm_opp_set_sharing_cpus() in the cpufreq-dt driver.
 
-I am fine with that. I assume by disable OSI mode, you are referring to
-switch back to PC mode.
+A later patch will though update the cpufreq-dt driver to optimize the
+code a bit and we will call dev_pm_opp_set_sharing_cpus() first followed
+by dev_pm_opp_of_cpumask_add_table(), which doesn't work well today as
+it tries to re parse the OPP entries. This should work nevertheless for
+V1 bindings as the same works for V2 bindings.
 
---
-Regards,
-Sudeep
+Adapt the same approach from V2 bindings and fix this.
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/of.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index d8b623cc015a..6fc56660fa52 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -886,6 +886,16 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 	const __be32 *val;
+ 	int nr, ret = 0;
+ 
++	mutex_lock(&opp_table->lock);
++	if (opp_table->parsed_static_opps) {
++		opp_table->parsed_static_opps++;
++		mutex_unlock(&opp_table->lock);
++		return 0;
++	}
++
++	opp_table->parsed_static_opps = 1;
++	mutex_unlock(&opp_table->lock);
++
+ 	prop = of_find_property(dev->of_node, "operating-points", NULL);
+ 	if (!prop)
+ 		return -ENODEV;
+@@ -902,10 +912,6 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 		return -EINVAL;
+ 	}
+ 
+-	mutex_lock(&opp_table->lock);
+-	opp_table->parsed_static_opps = 1;
+-	mutex_unlock(&opp_table->lock);
+-
+ 	val = prop->value;
+ 	while (nr) {
+ 		unsigned long freq = be32_to_cpup(val++) * 1000;
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
