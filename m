@@ -2,84 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A339425917D
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 16:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD3025924E
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 17:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728333AbgIAOvM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 10:51:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727037AbgIAOvI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 1 Sep 2020 10:51:08 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 70B8A206EB;
-        Tue,  1 Sep 2020 14:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598971867;
-        bh=hfukjQ/MUILfw8yDC7cf0oDeEgXFfD/okOKu4FWtQjo=;
-        h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-        b=KdZkKrPbJPR6PVQp86UaHDX+HsDJrrw5I5U4tYBdv8Pl0BBqfci5MRo14nfvRMDZw
-         MRR1yz/s4kYCrYRB1Vw2MjvW/WsWHTc8nezzIGOQVoqvC8/QlhSntVTYcCUTBlmyrB
-         LsYvyQzhb74p2tAKSwJ1WvFh4/h2Dk3Uz7uVy3/o=
-Date:   Tue, 01 Sep 2020 15:50:27 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Pavel Machek <pavel@ucw.cz>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Dan Murphy <dmurphy@ti.com>, Lee Jones <lee.jones@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20200830185356.5365-1-digetx@gmail.com>
-References: <20200830185356.5365-1-digetx@gmail.com>
-Subject: Re: [PATCH v2 0/6] Introduce Embedded Controller driver for Acer A500
-Message-Id: <159897181721.47861.7031289432829890619.b4-ty@kernel.org>
+        id S1728717AbgIAPHc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 11:07:32 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:23396 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727886AbgIAPHa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 11:07:30 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 081Di55p087820;
+        Tue, 1 Sep 2020 10:08:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=xFcTUIX01cLLAjK4w1JAdadIh0Qdzl7X/zatSLI9ejQ=;
+ b=Z302qOXKFuUrmf4blDuX0goYyb0LfiStAGSSJkRdEHWAu4NTgU0+vntAQqSnklVBS45h
+ AiylFju0oTxnN3PYcEPLMXjoKaHlBe+Z5LhNEnWc8ULccqyJy26dEyv2lbwvwLz/Ssgs
+ 11iL4aD97aLmA1JbQnessMa3y6bFB9LLHfZAXK/y5mh4cXMusdvqtDZWHom/8HWxGANZ
+ 7TyWBjXvrgms+q3WGxOuVUgm47hmyC7jSWy86+qQCODgg6yOIIXCkz4BD4iNZ6exzOs7
+ hHf7lb39zBniyW2dceTz9tZxc1QXnVMaxuose8Jyyzm8AEHuSZKLV22boHWLzdmybcwm Bg== 
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 339msjne7m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Sep 2020 10:08:49 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 081E7M0t006465;
+        Tue, 1 Sep 2020 14:08:48 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 337en90h4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Sep 2020 14:08:48 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 081E8ix356754552
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 1 Sep 2020 14:08:44 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 190E3C6059;
+        Tue,  1 Sep 2020 14:08:47 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8F0FBC6055;
+        Tue,  1 Sep 2020 14:08:46 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.77.196.208])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue,  1 Sep 2020 14:08:46 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id B10CB2E301D; Tue,  1 Sep 2020 19:38:41 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>
+Cc:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Subject: [PATCH] cpuidle-pseries: Fix CEDE latency conversion from tb to us
+Date:   Tue,  1 Sep 2020 19:38:13 +0530
+Message-Id: <1598969293-29228-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-01_08:2020-09-01,2020-09-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 phishscore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ mlxlogscore=784 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009010113
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 30 Aug 2020 21:53:50 +0300, Dmitry Osipenko wrote:
-> This series adds support for the Embedded Controller which is found on
-> Acer Iconia Tab A500 (Android tablet device).
-> 
-> The Embedded Controller is ENE KB930 and it's running firmware customized
-> for the A500. The firmware interface may be reused by some other sibling
-> Acer tablets, although none of those tablets are supported in upstream yet.
-> Please review and apply, thanks in advance!
-> 
-> [...]
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-Applied to
+commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+of the Extended CEDE states advertised by the platform. The values
+advertised by the platform are in timebase ticks. However the cpuidle
+framework requires the latency values in microseconds.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+If the tb-ticks value advertised by the platform correspond to a value
+smaller than 1us, during the conversion from tb-ticks to microseconds,
+in the current code, the result becomes zero. This is incorrect as it
+puts a CEDE state on par with the snooze state.
 
-Thanks!
+This patch fixes this by rounding up the result obtained while
+converting the latency value from tb-ticks to microseconds.
 
-[1/1] regmap: Use flexible sleep
-      commit: 2b32d2f7ce0a54ce74a75f0d939b5ee063a05ec5
+Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)")
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+---
+ drivers/cpuidle/cpuidle-pseries.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index ff6d99e..9043358 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -361,7 +361,7 @@ static void __init fixup_cede0_latency(void)
+ 	for (i = 0; i < nr_xcede_records; i++) {
+ 		struct xcede_latency_record *record = &payload->records[i];
+ 		u64 latency_tb = be64_to_cpu(record->latency_ticks);
+-		u64 latency_us = tb_to_ns(latency_tb) / NSEC_PER_USEC;
++		u64 latency_us = DIV_ROUND_UP_ULL(tb_to_ns(latency_tb), NSEC_PER_USEC);
+ 
+ 		if (latency_us < min_latency_us)
+ 			min_latency_us = latency_us;
+-- 
+1.9.4
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
