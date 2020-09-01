@@ -2,126 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3432587B6
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 08:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB62C258834
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Sep 2020 08:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgIAGAW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Sep 2020 02:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbgIAGAV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Sep 2020 02:00:21 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FDFC0612A4
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 23:00:21 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id v16so17696plo.1
-        for <linux-pm@vger.kernel.org>; Mon, 31 Aug 2020 23:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xfNNJUqlo12EqEl+OZqmK3D7Dp4+eSw5NmHR85YZ3AE=;
-        b=f9oKyBNl4lW+ONVYjUpKz1+clo6GSvJYPMw9ycWx5m89ci5i//YkPO1O+mHulx4/qm
-         1BahhljIYUhGcNHEO7BGViJ/xOu+rCVudyAn/jYOdAnKcDa2mC9Clgq4BeJVZmoS/G0L
-         OM35AFprOpZmMdAkhfZsM0umC+GFXroOHL9qznGkahrORRfBLG/LZIhcqFxE+jdWRfta
-         KPh0b0DDDUDyZOM+4BK2TGGMAYOqfLUIsKjFb0KTg8jrZP6qbo94+0q+bUTVk4qQQnty
-         7R66JOZ+/04wH2EZlIsljMENGy3OfT5STvUrIWzAuOIwY2OmgrlsdJuF8KJmqJIRa5J3
-         8zeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xfNNJUqlo12EqEl+OZqmK3D7Dp4+eSw5NmHR85YZ3AE=;
-        b=pGhBhMUVhux8znn2pbfeOStQ/IMNPFRY+zFdeD1Tnn8hIWbblnxxBp4vt7pT7iansZ
-         zrmpAlqEbcxuvKHQQ8T5/X/8BB0WuUBiN6Nkuk6sK/7SsDw8pH80d+yiAgGusFstP404
-         qwhXiwJgEqaL5sgX/Z9j6VW82sGTAjcQ24k/P0hprKSWfkVdo+S1iCeMMF3y1n5z2RmH
-         6TIAxvNzqknyk1/A+495FoFHFcZV7JUGKMf27QkdkQJBYycnShugf4Uv3puXd5scS3YT
-         w5RjdzYzshlU0qt+pib6Gm1E6RjlP9TGFIHZNOEO0tN3ZqX5pnzWvreAQ6QShzDBb9xK
-         wo9g==
-X-Gm-Message-State: AOAM5335tXNCVg7ZUPmUGd1PUGP5YMfdcCOZrXo85jKt6PqhkzOVLEvM
-        JU995cQNxN/PF18neMYkOzQuGg==
-X-Google-Smtp-Source: ABdhPJxML0AqWpoEUuGVmEbnBXr5j52FVANb+S4GiK9TUWQGhDXyWpp8+Ctn6UVM/8757wrBPlfcVA==
-X-Received: by 2002:a17:90a:9405:: with SMTP id r5mr67195pjo.74.1598940019489;
-        Mon, 31 Aug 2020 23:00:19 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id u191sm553190pgu.56.2020.08.31.23.00.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Aug 2020 23:00:18 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 11:30:09 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas Cassel <nks@flawful.org>
-Subject: Re: [PATCH v2] opp: Power on (virtual) power domains managed by the
- OPP core
-Message-ID: <20200901060009.w6pkmbnxmjarvqcc@vireshk-i7>
-References: <20200826093328.88268-1-stephan@gerhold.net>
- <20200831121457.2v6avendroclvrn5@vireshk-i7>
- <20200831154938.GA33622@gerhold.net>
+        id S1726526AbgIAG2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Sep 2020 02:28:47 -0400
+Received: from mga12.intel.com ([192.55.52.136]:9801 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726521AbgIAG2r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 1 Sep 2020 02:28:47 -0400
+IronPort-SDR: bxgH18P7yI+ZJZQeDSSgUO7wrUn0jZVeWCTePDWShz+zavyFtq21ZZhWtRezi/bxjkWaHbw5Z2
+ WQTEhIjwm8/Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9730"; a="136634004"
+X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
+   d="scan'208";a="136634004"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2020 23:28:46 -0700
+IronPort-SDR: Cw09YFFMzPZUArOH2X8NxLQHd6lpLpcf2jFhwd0GLi2fpln9mbUcSnRPRXqp58zNxEfI8wAodG
+ cZOJELsUBb6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,378,1592895600"; 
+   d="scan'208";a="301330694"
+Received: from lkp-server02.sh.intel.com (HELO 713faec3b0e5) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 31 Aug 2020 23:28:44 -0700
+Received: from kbuild by 713faec3b0e5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kCzme-0000an-4B; Tue, 01 Sep 2020 06:28:44 +0000
+Date:   Tue, 01 Sep 2020 14:28:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 13f46f822831fb135644e4d61137fd4d53c9c0ad
+Message-ID: <5f4dea05.kZCzYZ8bPsvFZiK6%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200831154938.GA33622@gerhold.net>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31-08-20, 17:49, Stephan Gerhold wrote:
-> I appreciate it, thank you! But actually after our discussion regarding
-> the "manage multiple power domains which might not always need to be on"
-> use case I would like to explore that a bit further before we decide on
-> a final solution that complicates changes later.
-> 
-> The reason I mention this is that after our discussion I have been
-> (again) staring at the vendor implementation of CPU frequency scaling of
-> the platform I'm working on (qcom msm8916). Actually there seems to be yet
-> another power domain that is scaled only for some CPU frequencies within
-> the clock driver. (The vendor driver implies this is a requirement of
-> the PLL clock that is used for higher CPU frequencies, but not sure...)
-> 
-> I don't fully understand how to implement this in mainline yet. I have
-> started some research on these "voltage requirements" for clocks, and
-> based on previous discussions [1] and patches [2] it seems like I'm
-> *not* supposed to add this to the clock driver, but rather as another
-> required-opp to the CPU OPP table.
-> 
-> If that is the case, we would pretty much have a situation like you
-> described, a power domain that should only be scaled for some of the
-> OPPs (the higher CPU frequencies).
-> 
-> But first I need to do some more research, and probably discuss how to
-> handle that power domain separately first. I think it would be easier if
-> we postpone this patch till then. I don't think anyone else needs this
-> patch at the moment.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 13f46f822831fb135644e4d61137fd4d53c9c0ad  cpufreq: intel_pstate: Free memory only when turning off
 
-Heh, okay, I can keep it out of my tree then :)
+elapsed time: 725m
 
-> [1]: https://lore.kernel.org/linux-clk/9439bd29e3ccd5424a8e9b464c8c7bd9@codeaurora.org/
-> [2]: https://lore.kernel.org/linux-pm/20190320094918.20234-1-rnayak@codeaurora.org/
-> 
-> > Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> > [ Viresh: Rearranged the code to remove extra loop and minor cleanup ]
-> 
-> FWIW, the reason I put this into an extra loop is that the
-> dev_pm_domain_attach_by_name() might return -EPROBE_DEFER (or some other
-> error) for some of the power domains. If you create the device links
-> before attaching all domains you might unnecessarily turn on+off some of
-> them.
+configs tested: 103
+configs skipped: 6
 
-Hmm, but that shouldn't have any significant side affects, right ? And
-shouldn't result in some other sort of error. It makes the code look
-more sensible/readable and so I would prefer to keep a single loop if
-it doesn't make something not-work.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Having it in a separate loop avoids that, because we only start powering
-> on the power domains when we know that all the power domains are
-> available.
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         s3c6400_defconfig
+ia64                            zx1_defconfig
+m68k                          sun3x_defconfig
+sh                           se7751_defconfig
+arm                           u8500_defconfig
+parisc                generic-32bit_defconfig
+m68k                        mvme147_defconfig
+powerpc                          allmodconfig
+m68k                         apollo_defconfig
+sh                          r7785rp_defconfig
+powerpc                     mpc83xx_defconfig
+arm                            u300_defconfig
+powerpc                      pmac32_defconfig
+arc                                 defconfig
+parisc                           allyesconfig
+arm                            zeus_defconfig
+m68k                          atari_defconfig
+arm                        cerfcube_defconfig
+sh                     sh7710voipgw_defconfig
+mips                      malta_kvm_defconfig
+sh                         microdev_defconfig
+mips                      bmips_stb_defconfig
+arm                            mps2_defconfig
+sh                           se7750_defconfig
+sh                           se7206_defconfig
+nios2                            allyesconfig
+sh                ecovec24-romimage_defconfig
+nios2                               defconfig
+arm                       imx_v6_v7_defconfig
+mips                           rs90_defconfig
+mips                           gcw0_defconfig
+arm                         bcm2835_defconfig
+arc                            hsdk_defconfig
+arm                         s5pv210_defconfig
+powerpc                         wii_defconfig
+sh                        sh7757lcr_defconfig
+powerpc                      tqm8xx_defconfig
+nios2                            alldefconfig
+powerpc                      ppc64e_defconfig
+sh                               alldefconfig
+arm                           stm32_defconfig
+mips                        jmr3927_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                             defconfig
+i386                 randconfig-a001-20200831
+i386                 randconfig-a002-20200831
+i386                 randconfig-a004-20200831
+i386                 randconfig-a006-20200831
+i386                 randconfig-a005-20200831
+i386                 randconfig-a003-20200831
+x86_64               randconfig-a012-20200831
+x86_64               randconfig-a015-20200831
+x86_64               randconfig-a014-20200831
+x86_64               randconfig-a011-20200831
+x86_64               randconfig-a016-20200831
+x86_64               randconfig-a013-20200831
+i386                 randconfig-a013-20200831
+i386                 randconfig-a011-20200831
+i386                 randconfig-a012-20200831
+i386                 randconfig-a015-20200831
+i386                 randconfig-a016-20200831
+i386                 randconfig-a014-20200831
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
--- 
-viresh
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
