@@ -2,225 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C13BF25A660
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 09:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7B025A698
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 09:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbgIBHVx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 03:21:53 -0400
-Received: from mga12.intel.com ([192.55.52.136]:6613 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbgIBHVw (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Sep 2020 03:21:52 -0400
-IronPort-SDR: /hfAT/Jl8scjlII55hsj4ih4CbEvPIxscAG5RKmTtnG48DFCjHzt3GNJxqLzIiufLHP7cZasHW
- p9WQ1Hu05JJg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9731"; a="136853159"
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="136853159"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 00:21:45 -0700
-IronPort-SDR: Z7GrvDM/cBMVIzZ7UXbLoeVo/LJC8bEk/wyWGhczdy+INdp3kVqYq8gvUG1vvXTxc41o2dludi
- o+QA/X87ZDTA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,381,1592895600"; 
-   d="scan'208";a="405068649"
-Received: from lkp-server02.sh.intel.com (HELO f0c22d07a430) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Sep 2020 00:21:43 -0700
-Received: from kbuild by f0c22d07a430 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kDN5S-000029-Sk; Wed, 02 Sep 2020 07:21:42 +0000
-Date:   Wed, 02 Sep 2020 15:21:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 7eada1ae101b2de8a32fb7125db0162b00965d48
-Message-ID: <5f4f47f6.s2YfTcbKz+FOq38u%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1726871AbgIBHZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Sep 2020 03:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726490AbgIBHY7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 03:24:59 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3027C061245
+        for <linux-pm@vger.kernel.org>; Wed,  2 Sep 2020 00:24:58 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id g6so1935084pjl.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Sep 2020 00:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jzMZYoVKwDdmao+58sFzZ/CXFeupmKrayPkTlA4XixE=;
+        b=E0/BSbuSPpbXLYOMMXyaUHNxnQ3tUzUVqYOpieWEbT2qOzkNODpjg9XY/ClTXLllz/
+         gmqTDGD1TqF4jmX/0icaIde6OBrsCAEJJWvktUPkgIQ3Abw7EY5nmYS2M8XXQwC+Vc1o
+         kn83b7CBn/U7TapHGOgNskPmpoKC6RRYQjlxvJUpu8RjxCJlRe4T7lCJRXMV/g6N0IQP
+         7Hf4f6atIEUA9x06GnjmMfiVHz92M+w6iVP6+7ExTr6p9TqWmnaCATwADBfp5Ho0J3Au
+         XXMdDsW9X+2X17BQlN5wS4w0ISNN+HfhyPLTDTMgdSzQPtTb2qhfH2UWRvVr4OtnyC6l
+         5fCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jzMZYoVKwDdmao+58sFzZ/CXFeupmKrayPkTlA4XixE=;
+        b=AcTv6bUyhvSBb/AfuDeQZcBrK7/AfVcoxeRdAczbr2v5+xCiDWrKLFJvFb/PtVQ7wD
+         hkbn4G3/t095bpDZOrXA1xUtCOL+J47moom3H8hAO1fNk8XamQWs7+v/PpzI5QNDdZQi
+         mWnSuEV7D+fOUlGixTZTuOh3On/Y6qxbLKjzUNZghaz7Nek6QZ2Ff1mND1V31DsQmgdW
+         lvQiIGYvJ9YcNIBj+VG2r45Qzgfv7LvzUS1nfsAFLrppZi/GlbdCk5qU4JFcE8IyTAHl
+         Ffu+eIe3DDkr456yAjYIfcqrPoBNhRl/dBt4BSpa9KVICDKNUerHwS686T29qMswCSdH
+         DUcQ==
+X-Gm-Message-State: AOAM530JpApPWjl6hllIuki5Ct0FLCUhl66Qq6kTKRN56m0UJFaLckQ7
+        baJXnw9KaH+xz9z76EW/NKOVuA==
+X-Google-Smtp-Source: ABdhPJxcrLNX45rZJ9+2vEO70afE8r94mzy9Wa+nZEObcHVhSiGQnzZBwiaBcE7S3cl7jVwMFiqh+w==
+X-Received: by 2002:a17:902:ed14:: with SMTP id b20mr1030492pld.310.1599031498295;
+        Wed, 02 Sep 2020 00:24:58 -0700 (PDT)
+Received: from localhost ([122.167.135.199])
+        by smtp.gmail.com with ESMTPSA id e2sm4272366pgl.38.2020.09.02.00.24.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Sep 2020 00:24:57 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        cristian.marussi@arm.com, sudeep.holla@arm.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] cpufreq: Record stats with fast-switching
+Date:   Wed,  2 Sep 2020 12:54:40 +0530
+Message-Id: <cover.1599031227.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 7eada1ae101b2de8a32fb7125db0162b00965d48  Merge branch 'pm-cpufreq' into linux-next
+Hi,
 
-elapsed time: 722m
+We disabled recording cpufreq stats when fast switching was introduced
+to the cpufreq core as the cpufreq stats required to take a spinlock and
+that can't be allowed (for performance reasons) on scheduler's hot path.
 
-configs tested: 159
-configs skipped: 14
+Here is an attempt to get rid of the lock and bring back the support.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--
+Viresh
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-sh                           se7206_defconfig
-mips                 pnx8335_stb225_defconfig
-arm                            mmp2_defconfig
-sh                           sh2007_defconfig
-sh                        edosk7705_defconfig
-mips                      bmips_stb_defconfig
-sh                             espt_defconfig
-mips                           rs90_defconfig
-c6x                        evmc6474_defconfig
-powerpc                           allnoconfig
-arm                         shannon_defconfig
-arm                     eseries_pxa_defconfig
-arm                      footbridge_defconfig
-riscv                             allnoconfig
-sh                            migor_defconfig
-sh                          rsk7264_defconfig
-powerpc                      mgcoge_defconfig
-sh                          r7780mp_defconfig
-sh                           se7712_defconfig
-sparc                       sparc64_defconfig
-powerpc                             defconfig
-arm                             pxa_defconfig
-arm                          gemini_defconfig
-microblaze                    nommu_defconfig
-s390                       zfcpdump_defconfig
-arm                        clps711x_defconfig
-powerpc                    mvme5100_defconfig
-sh                   sh7770_generic_defconfig
-sh                           se7343_defconfig
-arm                           efm32_defconfig
-arm                        shmobile_defconfig
-sh                         microdev_defconfig
-arm                             rpc_defconfig
-powerpc                      ppc40x_defconfig
-powerpc                  mpc885_ads_defconfig
-arm                       imx_v6_v7_defconfig
-c6x                                 defconfig
-ia64                         bigsur_defconfig
-mips                        bcm63xx_defconfig
-sh                          rsk7269_defconfig
-ia64                                defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                         hackkit_defconfig
-arm                        mvebu_v5_defconfig
-xtensa                       common_defconfig
-arm                            lart_defconfig
-arm                      pxa255-idp_defconfig
-arm                         mv78xx0_defconfig
-arm                         s3c2410_defconfig
-arm                              alldefconfig
-riscv                    nommu_k210_defconfig
-nios2                         3c120_defconfig
-m68k                             alldefconfig
-m68k                       m5475evb_defconfig
-sh                ecovec24-romimage_defconfig
-powerpc                  storcenter_defconfig
-mips                         tb0287_defconfig
-mips                     cu1000-neo_defconfig
-mips                          malta_defconfig
-powerpc                    gamecube_defconfig
-mips                      malta_kvm_defconfig
-m68k                       m5249evb_defconfig
-x86_64                              defconfig
-sh                          kfr2r09_defconfig
-arm                       aspeed_g5_defconfig
-m68k                        stmark2_defconfig
-nds32                               defconfig
-sh                          r7785rp_defconfig
-mips                         tb0226_defconfig
-xtensa                         virt_defconfig
-mips                         tb0219_defconfig
-arm                          moxart_defconfig
-arc                              allyesconfig
-arm                        magician_defconfig
-nds32                            alldefconfig
-mips                    maltaup_xpa_defconfig
-arm                            dove_defconfig
-powerpc                     mpc512x_defconfig
-arm                            qcom_defconfig
-mips                          rm200_defconfig
-arc                         haps_hs_defconfig
-powerpc                      ppc64e_defconfig
-arm                          ixp4xx_defconfig
-mips                         cobalt_defconfig
-powerpc                       maple_defconfig
-arm                          simpad_defconfig
-sh                          rsk7201_defconfig
-arm                         nhk8815_defconfig
-mips                         bigsur_defconfig
-arm                        realview_defconfig
-mips                           ip28_defconfig
-sh                          polaris_defconfig
-m68k                            q40_defconfig
-sparc                            allyesconfig
-mips                 decstation_r4k_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-x86_64               randconfig-a004-20200901
-x86_64               randconfig-a006-20200901
-x86_64               randconfig-a003-20200901
-x86_64               randconfig-a005-20200901
-x86_64               randconfig-a001-20200901
-x86_64               randconfig-a002-20200901
-i386                 randconfig-a004-20200901
-i386                 randconfig-a005-20200901
-i386                 randconfig-a006-20200901
-i386                 randconfig-a002-20200901
-i386                 randconfig-a001-20200901
-i386                 randconfig-a003-20200901
-i386                 randconfig-a016-20200901
-i386                 randconfig-a015-20200901
-i386                 randconfig-a011-20200901
-i386                 randconfig-a013-20200901
-i386                 randconfig-a014-20200901
-i386                 randconfig-a012-20200901
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
+Viresh Kumar (4):
+  cpufreq: stats: Defer stats update to
+    cpufreq_stats_record_transition()
+  cpufreq: stats: Remove locking
+  cpufreq: stats: Enable stats for fast-switch as well
+  cpufreq: Move traces and update to policy->cur to cpufreq core
 
-clang tested configs:
-x86_64               randconfig-a013-20200901
-x86_64               randconfig-a016-20200901
-x86_64               randconfig-a011-20200901
-x86_64               randconfig-a012-20200901
-x86_64               randconfig-a015-20200901
-x86_64               randconfig-a014-20200901
+ drivers/cpufreq/cpufreq.c        | 16 +++++-
+ drivers/cpufreq/cpufreq_stats.c  | 87 ++++++++++++++++++++------------
+ kernel/sched/cpufreq_schedutil.c | 12 +----
+ 3 files changed, 72 insertions(+), 43 deletions(-)
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+2.25.0.rc1.19.g042ed3e048af
+
