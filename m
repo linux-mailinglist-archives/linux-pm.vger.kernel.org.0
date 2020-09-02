@@ -2,159 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F8C525B1FD
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 18:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA64525B266
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 19:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727776AbgIBQqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 12:46:55 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60594 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728161AbgIBQqw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 12:46:52 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1kDVuK-0008QT-VV; Wed, 02 Sep 2020 16:46:49 +0000
-Subject: Re: [PATCH v2] power: supply: charger-manager: Fix info message in
- check_charging_duration()
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jonghwa Lee <jonghwa3.lee@samsung.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200902162315.GA11384@embeddedor>
- <f93c0fa0-51a1-291f-feda-fbd8d7397e88@infradead.org>
- <20200902164344.GC31464@embeddedor>
-From:   Colin Ian King <colin.king@canonical.com>
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <33793c11-0705-f072-00c8-adfd1bee8915@canonical.com>
-Date:   Wed, 2 Sep 2020 17:46:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728367AbgIBQ61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Sep 2020 12:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727026AbgIBQ6X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 12:58:23 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464A4C061244;
+        Wed,  2 Sep 2020 09:58:22 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id z1so178144wrt.3;
+        Wed, 02 Sep 2020 09:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JcXQvmAkY/k2J1p9we4yfCScXrpnX5eBNUZhNJtw/Hk=;
+        b=jaDoR8zHGWv18DZ+k2xRN07EgfAnZ+2OtQTUEsDgS2Nvtiwv4dbl7FdLnw+v8ogXKP
+         IMQQbEAkaVY21jp4yPHkzkdnmeSKvw2i7L+6m+oITeHfBtrLGKyWUByU2JIh7fgnkQbp
+         bbg99vBEaeAYHE0xgr/9QZi1zx5d+2cnSbNhKc+IA804dttxHFV2YRdv5EMjr9DoY/qb
+         Yi2lVRfBCAutj3gUwyx5hQY+957XlH6H+Zix/qZuAs6QtD/SpLwRYbLNCFgmjk0N9QTw
+         0o4y6hpEJ1zIl7Wfl09nMZpS0hLGJ5Ae+VOfnr4xFTvFEz6ispXooDBEzykBeCcR9384
+         cDfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JcXQvmAkY/k2J1p9we4yfCScXrpnX5eBNUZhNJtw/Hk=;
+        b=KIZV47ZKQNePAhyQYW/F2G5xTRqjhwLmaryX/4jZXR+n/gfbPURF/37lKU0Eeyk7lg
+         j15do3nLMTcAQTjcavoq/uYUIUzOdGcPkohj4bVqG6H+5lcS76fNSfSSq3/IF6rlkbvW
+         ybguXjZjaTVgeCj9hda8VvGGYyWK5qIlK/b000m9xyWh2iX7GQLTSiJkRO437n3Jlgry
+         WCFLRY+emba9WOoaE8SDGtcEawxz+eXPkTKxwhoEJNaPckSlqU+sM1myGDpSPDJb4gYS
+         MaIlDJ4zMPA5qcklBWNw8LY6r+LEF/ml7viw+EK6VF/AYQjfhP4IsPmyMfjQKYp1Fmqf
+         YNqQ==
+X-Gm-Message-State: AOAM532XNCBO1o6fSVWTDpeR0TVR2wo80wPnb/xUVVn54quWOwxJejYK
+        4TCXEAGY2zTeV8aj+6FR24g=
+X-Google-Smtp-Source: ABdhPJyGog7lMzfBNy5rF2ditlUSIh4T71Lu/c3ROK2tC/kiQgMwPGZcTxRdjEoeV/4SjVJlTa4jew==
+X-Received: by 2002:a5d:4e0b:: with SMTP id p11mr7711127wrt.13.1599065900919;
+        Wed, 02 Sep 2020 09:58:20 -0700 (PDT)
+Received: from localhost.localdomain (cpc83661-brig20-2-0-cust443.3-3.cable.virginm.net. [82.28.105.188])
+        by smtp.gmail.com with ESMTPSA id c205sm369795wmd.33.2020.09.02.09.58.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2020 09:58:20 -0700 (PDT)
+From:   Alex Dewar <alex.dewar90@gmail.com>
+Cc:     Alex Dewar <alex.dewar90@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: charger-manager: Tidy function
+Date:   Wed,  2 Sep 2020 17:58:16 +0100
+Message-Id: <20200902165816.401213-1-alex.dewar90@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200902164344.GC31464@embeddedor>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/09/2020 17:43, Gustavo A. R. Silva wrote:
-> On Wed, Sep 02, 2020 at 09:29:31AM -0700, Randy Dunlap wrote:
->> On 9/2/20 9:23 AM, Gustavo A. R. Silva wrote:
->>> A few months ago, commit e132fc6bb89b ("power: supply: charger-manager: Make decisions focussed on battery status")
->>> changed the expression in the if statement from "duration > desc->discharging_max_duration_ms"
->>> to "duration > desc->charging_max_duration_ms", but the arguments for dev_info() were left unchanged.
->>> Apparently, due to a copy-paste error.
->>>
->>> Fix this by using the proper arguments for dev_info().
->>>
->>> Also, while there, replace "exceed" with "exceeds", for both messages.
->>>
->>> Addresses-Coverity-ID: 1496803 ("Copy-paste error")
->>> Fixes: e132fc6bb89b ("power: supply: charger-manager: Make decisions focussed on battery status")
->>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>> ---
->>> Changes in v2:
->>>  -  Replace "exceed" with "exceeds"
->>>
->>>  drivers/power/supply/charger-manager.c | 6 +++---
->>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
->>> index 07992821e252..a6d5dbd55e37 100644
->>> --- a/drivers/power/supply/charger-manager.c
->>> +++ b/drivers/power/supply/charger-manager.c
->>> @@ -464,7 +464,7 @@ static int check_charging_duration(struct charger_manager *cm)
->>>  		duration = curr - cm->charging_start_time;
->>>  
->>>  		if (duration > desc->charging_max_duration_ms) {
->>> -			dev_info(cm->dev, "Charging duration exceed %ums\n",
->>> +			dev_info(cm->dev, "Charging duration exceeds %ums\n",
->>>  				 desc->charging_max_duration_ms);
->>>  			ret = true;
->>>  		}
->>> @@ -472,8 +472,8 @@ static int check_charging_duration(struct charger_manager *cm)
->>>  		duration = curr - cm->charging_end_time;
->>>  
->>>  		if (duration > desc->charging_max_duration_ms) {
->>> -			dev_info(cm->dev, "Discharging duration exceed %ums\n",
->>> -				 desc->discharging_max_duration_ms);
->>> +			dev_info(cm->dev, "Charging duration exceeds %ums\n",
->>> +				 desc->charging_max_duration_ms);
->>>  			ret = true;
->>>  		}
->>>  	}
->>>
->>
->> Hi,
->>
->> It looks to me like the second block (else if) should be about discharging,
->> not charging, more like Colin King's patch had it:
->>
-> 
-> I had the same impression for a moment, but what makes me think this is
-> more about charging than discharging, is this line:
-> 
-> 471         } else if (cm->battery_status == POWER_SUPPLY_STATUS_NOT_CHARGING) {
-> 
-> which was introduced by the same commit:
-> 
-> e132fc6bb89b ("power: supply: charger-manager: Make decisions focussed on battery status")
-> 
-> let's find out... :)
+check_charging_duration() contains some copy-pasted code, which makes it
+less readable. Refactor the function to be a bit tidier.
 
-It's a 50/50 bet :-)
+I've also fixed a couple of typos.
 
-> 
-> Thanks
-> --
-> Gustavo
-> 
+Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
+---
+ drivers/power/supply/charger-manager.c | 39 +++++++++-----------------
+ 1 file changed, 14 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index 07992821e252..67c7b1fb6601 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -443,42 +443,31 @@ static int try_charger_enable(struct charger_manager *cm, bool enable)
+  * check_charging_duration - Monitor charging/discharging duration
+  * @cm: the Charger Manager representing the battery.
+  *
+- * If whole charging duration exceed 'charging_max_duration_ms',
++ * If whole charging duration exceeds 'charging_max_duration_ms',
+  * cm stop charging to prevent overcharge/overheat. If discharging
+- * duration exceed 'discharging _max_duration_ms', charger cable is
++ * duration exceeds 'discharging _max_duration_ms', charger cable is
+  * attached, after full-batt, cm start charging to maintain fully
+  * charged state for battery.
+  */
+ static int check_charging_duration(struct charger_manager *cm)
+ {
+ 	struct charger_desc *desc = cm->desc;
+-	u64 curr = ktime_to_ms(ktime_get());
+ 	u64 duration;
+-	int ret = false;
+ 
+-	if (!desc->charging_max_duration_ms &&
+-			!desc->discharging_max_duration_ms)
+-		return ret;
+-
+-	if (cm->charger_enabled) {
+-		duration = curr - cm->charging_start_time;
+-
+-		if (duration > desc->charging_max_duration_ms) {
+-			dev_info(cm->dev, "Charging duration exceed %ums\n",
+-				 desc->charging_max_duration_ms);
+-			ret = true;
+-		}
+-	} else if (cm->battery_status == POWER_SUPPLY_STATUS_NOT_CHARGING) {
+-		duration = curr - cm->charging_end_time;
++	if ((desc->charging_max_duration_ms == 0 &&
++			desc->discharging_max_duration_ms == 0))
++		return false;
++	if (!cm->charger_enabled &&
++			cm->battery_status != POWER_SUPPLY_STATUS_NOT_CHARGING)
++		return false;
+ 
+-		if (duration > desc->charging_max_duration_ms) {
+-			dev_info(cm->dev, "Discharging duration exceed %ums\n",
+-				 desc->discharging_max_duration_ms);
+-			ret = true;
+-		}
++	duration = ktime_to_ms(ktime_get()) - cm->charging_start_time;
++	if (duration > desc->charging_max_duration_ms) {
++		dev_info(cm->dev, "Charging duration exceeds %ums\n",
++				desc->charging_max_duration_ms);
++		return true;
+ 	}
+-
+-	return ret;
++	return false;
+ }
+ 
+ static int cm_get_battery_temperature_by_psy(struct charger_manager *cm,
+-- 
+2.28.0
 
