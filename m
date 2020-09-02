@@ -2,91 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDE625A6B6
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 09:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A071425A7DC
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 10:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726800AbgIBH0n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 03:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbgIBH0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 03:26:42 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC380C061245
-        for <linux-pm@vger.kernel.org>; Wed,  2 Sep 2020 00:26:41 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id 17so2348806pfw.9
-        for <linux-pm@vger.kernel.org>; Wed, 02 Sep 2020 00:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sK/FM/QqHW73s3zW3v2JjJSuecpEd7zSzI7DvlhgvtQ=;
-        b=XqtKCU8lMX15QFQGjsxyjexwZtP40XT3gg9pHdjWkBLYqpOqAUiqyaoTAA/4b/UiYA
-         hqUUsfjkjxpJrPkI/LDSoFIOynR2ThCRlObFMDYSNq/dDCpP8AzvWQRbbEpP3ffA787F
-         0xR5/pdIJD/6H8GsEiMts4Z4bqsubw4rFzV5kQmGEm0q9YoIPmady1TKXYPFi54ikjRb
-         pdbbAl0EnhBeo0WN+HRZgIrzEIwdbv0MqGB5EJB+MkNGZxmtZhKiHXK1XaO5xyrmsucY
-         rYFCTvtJuduPYWfJrIHm84Ou9znEOkSQ7HGUgMz1XN1c4WOhGPKJrC+w/mdH5PO0QESD
-         B4zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sK/FM/QqHW73s3zW3v2JjJSuecpEd7zSzI7DvlhgvtQ=;
-        b=qpOXeXR9L7ejUP/1wE60PzSVaHVh1P3MuwMgaoWqnvKz3byOs5Mm+JAEgZ6qgyit20
-         uXVHG5kqkVeWtX3VTlrY/mRll9NAtdW+yxr2uuT6hszZ8crWuqhVtrhUDlIKrpb7jvcb
-         uqFU6a03XUEx34JDYuxh8x0t29fmhL1nlXjpoZOvUGs+//bBE0wI00c67PcVbwbmKAOx
-         5YVLRq1BnB8jA9pI56qUbymLeI9QOKkp07ssl4pxIb2UwXmr4U7oEQx7rc2PBr9Ekarc
-         95RB82SXEi8D3V0NIaUsWiRgse/d9QOg2s7FOoTNXpEKNOgQQBr+Oc72l8zSzLuSTdMu
-         +hnA==
-X-Gm-Message-State: AOAM533JNbBZiKeLsJqVMqUAzhuajyz1I07gUCVzNRc8An5obMjsd/12
-        AVRZmqRr0yhCOEICTyyMiN3p6A==
-X-Google-Smtp-Source: ABdhPJyVyMe5GyvJB6vhb2TIoerfQydgDh9IXBXNBhHQurkhmi11WCku0J1xI1XV3iAgoQsk7MwdKg==
-X-Received: by 2002:a05:6a00:16c2:: with SMTP id l2mr2067448pfc.112.1599031601377;
-        Wed, 02 Sep 2020 00:26:41 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id ih11sm3543286pjb.51.2020.09.02.00.26.40
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Sep 2020 00:26:40 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 12:56:38 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        cristian.marussi@arm.com, rjw@rjwysocki.net
-Subject: Re: [PATCH 0/4] CPUFreq statistics retrieved by drivers
-Message-ID: <20200902072638.zc352inj236ydgz7@vireshk-i7>
-References: <20200729151208.27737-1-lukasz.luba@arm.com>
- <20200730085333.qubrsv7ufqninihd@vireshk-mac-ubuntu>
- <20200730091014.GA13158@bogus>
- <3b3a56e9-29ec-958f-fb3b-c689a9389d2f@arm.com>
- <20200804053502.35d3x3vnb3mggtqs@vireshk-mac-ubuntu>
- <f784bf30-83a6-55ff-8fa6-f7bd2d4399b9@arm.com>
- <20200804103857.mxgkmt6qmmzejuzb@vireshk-mac-ubuntu>
- <1f978078-b2df-a2e5-6af8-e73f65044ba7@arm.com>
+        id S1726177AbgIBIg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Sep 2020 04:36:57 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51336 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726140AbgIBIgZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 04:36:25 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0828VZFQ160336;
+        Wed, 2 Sep 2020 04:36:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : mime-version : content-type
+ : in-reply-to; s=pp1; bh=G92Hnl95YGBFYaXfwRX/u5OBkMFB+BAE9YB8vdXBHZ8=;
+ b=RA9h04GfqI9EWNcAyotn22fDX6A9FMRDHjAfoAocoiXi/b8U5HuxCPmwMgv8yblS3f2e
+ ouADjAfIpySmbm4ZTMX+jb1nJ3/3PSJOJuta07UZjSuQiXIeXsq2m82ctQhEU9JeqPHO
+ 6pi7I798W7JLRSlmJSnyKxqw76gSCnurm8jpWobd4b1zcE5Hq/IYYHTABZVAOkctnJ+g
+ I9kJWVneYIU3V+lBKqSUW1XvR37aZZXULhU+KslWremtubgV6kpA2NrTTOJ+RLPfmxKK
+ o7E1/3u8xoUiR14mv/aueVcMLKXSWGR64G7nENJbMgHdwhNLEKAyfPQHkUSiBsgIa1/d UQ== 
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33a6je2rm1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Sep 2020 04:36:15 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0828XEp5000387;
+        Wed, 2 Sep 2020 08:36:13 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma04wdc.us.ibm.com with ESMTP id 337en9eeey-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Sep 2020 08:36:13 +0000
+Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0828aDIV52036084
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Sep 2020 08:36:13 GMT
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 261D3124058;
+        Wed,  2 Sep 2020 08:36:13 +0000 (GMT)
+Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B62D4124052;
+        Wed,  2 Sep 2020 08:36:11 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.79.220.196])
+        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Sep 2020 08:36:11 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 000A72E3027; Wed,  2 Sep 2020 14:05:32 +0530 (IST)
+Date:   Wed, 2 Sep 2020 14:05:32 +0530
+From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle-pseries: Fix CEDE latency conversion from tb to
+ us
+Message-ID: <20200902083532.GA14369@in.ibm.com>
+Reply-To: ego@linux.vnet.ibm.com
+References: <1598969293-29228-1-git-send-email-ego@linux.vnet.ibm.com>
+ <CACPK8XfZdnKusEuu8i=-aH=Wfr6X6sMrvX=btFq9PtnXJ2w-SQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1f978078-b2df-a2e5-6af8-e73f65044ba7@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CACPK8XfZdnKusEuu8i=-aH=Wfr6X6sMrvX=btFq9PtnXJ2w-SQ@mail.gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-02_03:2020-09-02,2020-09-02 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 priorityscore=1501 mlxlogscore=999
+ clxscore=1011 impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009020074
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-08-20, 11:44, Lukasz Luba wrote:
-> On 8/4/20 11:38 AM, Viresh Kumar wrote:
-> > I don't think doing it with help of firmware is the right thing to do
-> > here then. For another platform we may not have a firmware which can
-> > help us, we need something in the opp core itself for that. Lemme see
-> > if I can do something about it.
+Hello Joel,
+
+On Wed, Sep 02, 2020 at 01:08:35AM +0000, Joel Stanley wrote:
+> On Tue, 1 Sep 2020 at 14:09, Gautham R. Shenoy <ego@linux.vnet.ibm.com> wrote:
+> >
+> > From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+> >
+> > commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> > of the Extended CEDE states advertised by the platform. The values
+> > advertised by the platform are in timebase ticks. However the cpuidle
+> > framework requires the latency values in microseconds.
+> >
+> > If the tb-ticks value advertised by the platform correspond to a value
+> > smaller than 1us, during the conversion from tb-ticks to microseconds,
+> > in the current code, the result becomes zero. This is incorrect as it
+> > puts a CEDE state on par with the snooze state.
+> >
+> > This patch fixes this by rounding up the result obtained while
+> > converting the latency value from tb-ticks to microseconds.
+> >
+> > Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> > CEDE(0)")
+> >
+> > Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
 > 
-> OK, great, I will wait then with this patch series v2 which would change
-> into debugfs scmi only. Could you please add me on CC, I am very
-> interested in.
+> Reviewed-by: Joel Stanley <joel@jms.id.au>
+>
 
-Here is an attempt.
+Thanks for reviewing the fix.
 
-http://lore.kernel.org/lkml/cover.1599031227.git.viresh.kumar@linaro.org
+> Should you check for the zero case and print a warning?
 
--- 
-viresh
+Yes, that would be better. I will post a v2 with that.
+
+> 
+> > ---
+> >  drivers/cpuidle/cpuidle-pseries.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+> > index ff6d99e..9043358 100644
+> > --- a/drivers/cpuidle/cpuidle-pseries.c
+> > +++ b/drivers/cpuidle/cpuidle-pseries.c
+> > @@ -361,7 +361,7 @@ static void __init fixup_cede0_latency(void)
+> >         for (i = 0; i < nr_xcede_records; i++) {
+> >                 struct xcede_latency_record *record = &payload->records[i];
+> >                 u64 latency_tb = be64_to_cpu(record->latency_ticks);
+> > -               u64 latency_us = tb_to_ns(latency_tb) / NSEC_PER_USEC;
+> > +               u64 latency_us = DIV_ROUND_UP_ULL(tb_to_ns(latency_tb), NSEC_PER_USEC);
+> >
+> >                 if (latency_us < min_latency_us)
+> >                         min_latency_us = latency_us;
+> > --
+> > 1.9.4
+> >
