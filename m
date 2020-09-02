@@ -2,109 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CF425AE1E
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 16:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5972D25AED0
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 17:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727771AbgIBO7Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 10:59:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39724 "EHLO mail.kernel.org"
+        id S1726936AbgIBPZ4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Sep 2020 11:25:56 -0400
+Received: from mga04.intel.com ([192.55.52.120]:10435 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727037AbgIBNwD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Sep 2020 09:52:03 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2D3F020767;
-        Wed,  2 Sep 2020 13:52:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599054722;
-        bh=s6nqfBIuq3dFoDRkLqgA8cQMjG1yVZ4UtRlISUFc8VE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IbeQzyFkL0L1Xx0MynJJM3KNt2ZzKm747XMqTTSZrHK5HGG1gK3K6+OcBg5Zpw390
-         8UBtwQJ/QuRKdnq6FdcKrsbpA98aFmiAnH7wlT2JxLVtma/p5+Ma9v005KFEEZT76T
-         Q6zZtSxr2fDTjJhybaShUyWoecF+njvfmRhpJL3M=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 0D17F3520DED; Wed,  2 Sep 2020 06:52:02 -0700 (PDT)
-Date:   Wed, 2 Sep 2020 06:52:02 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Saravana Kannan <saravanak@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        madhuparnabhowmik10@gmail.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        peterz@infrdead.org, Lina Iyer <ilina@codeaurora.org>
-Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
- OF driver helper
-Message-ID: <20200902135202.GG29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <CA+G9fYuiJwN1ad955Xw4ShamX2=373r+56KsbpeverEs+i_NAg@mail.gmail.com>
- <20200831194402.GD2855@paulmck-ThinkPad-P72>
- <CAPDyKFq7KWo=4VmPhgrt7vEEQ_P6NdVgQp+MO_1cg1dtoVR_Fw@mail.gmail.com>
- <20200901150047.GB29330@paulmck-ThinkPad-P72>
- <CAPDyKFptZK-OqnAuJYGnpfPbZ1qw-iSd4t5SuE7SmWic=ms48Q@mail.gmail.com>
+        id S1726927AbgIBPZs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Sep 2020 11:25:48 -0400
+IronPort-SDR: CmAeaSXKEuI2EX3CGO99S4RiPWEK8rouML4cKz2J2P5WbP12Orp0MPN/3cCSe55zZ2Qr5U6uHo
+ 5PqNXGDO+2DQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="154808921"
+X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
+   d="scan'208";a="154808921"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 08:25:28 -0700
+IronPort-SDR: L67woUpoVuqgVtgy6pkvyyzRjvNctYT8LWivC1LtOEmUFWlgEn3YgaVHpkdyYY9cehcrxZ7c+N
+ uMZlBfRn1XBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,383,1592895600"; 
+   d="scan'208";a="325821419"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Sep 2020 08:25:28 -0700
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
+        by linux.intel.com (Postfix) with ESMTP id 341F158041C;
+        Wed,  2 Sep 2020 08:25:25 -0700 (PDT)
+Message-ID: <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Date:   Wed, 02 Sep 2020 18:25:24 +0300
+In-Reply-To: <20200902114506.45809-2-psampat@linux.ibm.com>
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+         <20200902114506.45809-2-psampat@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFptZK-OqnAuJYGnpfPbZ1qw-iSd4t5SuE7SmWic=ms48Q@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 08:49:11AM +0200, Ulf Hansson wrote:
-> On Tue, 1 Sep 2020 at 17:00, Paul E. McKenney <paulmck@kernel.org> wrote:
+On Wed, 2020-09-02 at 17:15 +0530, Pratik Rajesh Sampat wrote:
+> Measure cpuidle latencies on wakeup to determine and compare with the
+> advertsied wakeup latencies for each idle state.
 
-[ . . . ]
+It looks like the measurements include more than just C-state wake,
+they also include the overhead of waking up the proces, context switch,
+and potentially any interrupts that happen on that CPU. I am not saying
+this is not interesting data, it surely is, but it is going to be
+larger than you see in cpuidle latency tables. Potentially
+significantly larger.
 
-> > Here is the list, though it is early in the morning here:
-> >
-> > 1.      RCU_NONIDLE().
-> >
-> > 2.      Peter's patch, if it turns out to hoist your code out of what
-> >         RCU considers to be the idle loop.
-> >
-> > 3.      If the problem is trace events, use the _rcuidle() variant of the
-> >         trace event.  Instead of trace_blah(), use trace_blah_rcuidle().
-> >
-> > 4.      Switch from RCU (as in rcu_read_lock()) to SRCU (as in
-> >         srcu_read_lock()).
-> >
-> > 5.      Take Peter's patch a step further, moving the rcu_idle_enter()
-> >         and rcu_idle_exit() calls as needed.  But please keep in mind
-> >         that these two functions require that irqs be disabled by their
-> >         callers.
-> >
-> > 6.      If RCU_NONIDLE() in inconvenient due to early exits and such,
-> >         you could use the rcu_irq_enter_irqson() and rcu_irq_exit_irqson()
-> >         functions that it calls.
-> >
-> > Do any of those help?
-> 
-> Yes, they will, in one way or the other. Thanks for providing me with
-> all the available options.
-> 
-> BTW, I still don't get what good rcu_idle_enter|exit() does, but I am
-> assuming those need to be called at some point before the CPU goes to
-> sleep.
+Therefore, I am not sure this program should be advertised as "cpuidle
+measurement". It really measures the "IPI latency" in case of the IPI
+method.
 
-These functions allow RCU to leave idle CPUs undisturbed.  If they
-were not invoked, RCU would periodically IPI idle CPUs to verify that
-there were no RCU readers running on them.  This would be quite bad for
-battery lifetime, among other things.  So the call to rcu_idle_enter()
-tells RCU that it may safely completely ignore this CPU until its next
-call to rcu_idle_exit().
+> A baseline measurement for each case of IPI and timers is taken at
+> 100 percent CPU usage to quantify for the kernel-userpsace overhead
+> during execution.
 
-							Thanx, Paul
+At least on Intel platforms, this will mean that the IPI method won't
+cover deep C-states like, say, PC6, because one CPU is busy. Again, not
+saying this is not interesting, just pointing out the limitation.
+
+I was working on a somewhat similar stuff for x86 platforms, and I am
+almost ready to publish that on github. I can notify you when I do so
+if you are interested. But here is a small presentation of the approach
+that I did on Plumbers last year:
+
+https://youtu.be/Opk92aQyvt0?t=8266
+
+(the link points to the start of my talk)
+
