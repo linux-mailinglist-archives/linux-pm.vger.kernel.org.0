@@ -2,74 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EECC25B2E8
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 19:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5F225B3CC
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 20:36:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgIBRYp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 13:24:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41724 "EHLO mail.kernel.org"
+        id S1726821AbgIBSgM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 2 Sep 2020 14:36:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727099AbgIBRYn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 2 Sep 2020 13:24:43 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B93D5208B3;
-        Wed,  2 Sep 2020 17:24:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599067483;
-        bh=G1e1N+vAOi4kbFZHzVHU/3lyBf8Cc2vYI1vHSa5+dfY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wkFXRPZcRtdhnx3I4RzJ5mXvfWyt2AwSCas4j3NWbXuF6Gaa8MXGEE/TY+0qIlahp
-         pqzByt8G5nNO+m+HMW/OPyXw9Mtr7cHBguWhhQNE4UCtA3BqJDVSTMZn8FTKaBrk/E
-         h9ROmV91G5kF8Em10AJZKGKXC5REQ4krX+ve9Sds=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Georgi Djakov <georgi.djakov@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Leonard Crestez <leonard.crestez@nxp.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 2/2] interconnect: imx: Simplify with dev_err_probe()
-Date:   Wed,  2 Sep 2020 19:24:33 +0200
-Message-Id: <20200902172433.1138-2-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200902172433.1138-1-krzk@kernel.org>
-References: <20200902172433.1138-1-krzk@kernel.org>
+        id S1726567AbgIBSgM (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 2 Sep 2020 14:36:12 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 209069] CPU stuck at 800 MHz at any load
+Date:   Wed, 02 Sep 2020 18:36:11 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dsmythies@telus.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209069-137361-eHpC01T6l9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209069-137361@https.bugzilla.kernel.org/>
+References: <bug-209069-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Common pattern of handling deferred probe can be simplified with
-dev_err_probe().  Less code and the error value gets printed.
+https://bugzilla.kernel.org/show_bug.cgi?id=209069
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/interconnect/imx/imx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+--- Comment #8 from Doug Smythies (dsmythies@telus.net) ---
+My best guess is that with kernel 5.4.48 you were running with the intel_pstate
+CPU frequency scaling driver in active mode, and that you are now running in
+passive mode. As of kernel 5.8-rc1 by default processors without HWP will
+default to passive mode. If you still have kernel 5.4.48, you could check.
 
-diff --git a/drivers/interconnect/imx/imx.c b/drivers/interconnect/imx/imx.c
-index ac420f86008e..b364d339f797 100644
---- a/drivers/interconnect/imx/imx.c
-+++ b/drivers/interconnect/imx/imx.c
-@@ -184,10 +184,8 @@ static int imx_icc_register_nodes(struct icc_provider *provider,
- 
- 		node = imx_icc_node_add(provider, node_desc);
- 		if (IS_ERR(node)) {
--			ret = PTR_ERR(node);
--			if (ret != -EPROBE_DEFER)
--				dev_err(provider->dev, "failed to add %s: %d\n",
--					node_desc->name, ret);
-+			ret = dev_err_probe(provider->dev, PTR_ERR(node),
-+					    "failed to add %s\n", node_desc->name);
- 			goto err;
- 		}
- 		provider_data->nodes[node->id] = node;
+Your Skylake system has HWP, and wouldn't default to passive mode.
+
+However, you also mentioned Sandy Bridge and Westmere systems being unaffected.
+Sandy Bridge doesn't have HWP, and Westmere might even pre-date the pstate
+driver, I don't know. Anyway, this seems inconsistent with my "best guess"
+above. Suggest you check them, with those same instructions from comment 1.
+
+If you think, or conclude, that you used to run in active mode you can either
+force active mode or force the schedutil governor in passive mode via the grub
+command line to get out of your locked low frequency state.
+
 -- 
-2.17.1
-
+You are receiving this mail because:
+You are the assignee for the bug.
