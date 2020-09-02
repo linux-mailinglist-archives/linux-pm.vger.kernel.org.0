@@ -2,92 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7229525AAB5
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 14:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 511B425AAF0
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Sep 2020 14:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgIBMAj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 08:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S1726654AbgIBMOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Sep 2020 08:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726247AbgIBMAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 08:00:25 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007B6C061246
-        for <linux-pm@vger.kernel.org>; Wed,  2 Sep 2020 05:00:24 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id q16so2798196ybk.6
-        for <linux-pm@vger.kernel.org>; Wed, 02 Sep 2020 05:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
-        b=tqEif33geefr3UOI9C2cV1A5F8yhPUTbhfy5UO2juL5NNW6+vltFHx9BGpBLsavfAj
-         IvTHHAUI4RTycbrFyVqaUJ+7BrniC8f9ak8YkkRfKVSy3A/8Fbmeemm7gP+Kzbf1NUkY
-         8oiS5PD56WZ3kiUPm0MPhOCWj1p9E6dQiwm45hvNkoon0ryNB4zIHpv3xT2jydEoJWVA
-         7LQDBS9Ffu0EnJlQRrc208OgPT7ln22OjciygKKvrduo+GO3fHVGFiATMXcfZzxO61KV
-         QJCApPDFSEK6ireTqZCVr0K625ic6srCmBmasyQPBTQxaOjh/+vZpfEBBHZpJRiuxNv8
-         f46w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=fQu188afTkltHrR3sb1HUtHfPblsmAmHFIs4oHSfTdQ=;
-        b=k7dyXiJLJfdnfniGJBPbfRq6RzRT2Q9i9NRi3KHdqJiLBagSGMQo8R5E1wcaBUV1xG
-         KJ5zbsJbDt9Yu47hwcLLsX3aNW7yA26TDDyg07GuXzztMBEWEd2EmtojqaUmdNLMVtMM
-         ySRSsFFqYZyF5Ivg+wqw6AQ21U04YxZonHz3WqW89rnZHCrwWsyKdIexzTvmt6jwCu0A
-         q0Ic0tvTre3r+TmaxCiiHYmBKwETVdYh8aproeXf4O3tt0a7Rb6jGaOZpW6tNWjGzWGb
-         +GCypSnoFYbO8BRHNP+586dcsTSLpcx/s2ywtD4iqGJSMWtdGzsfpWIKUZizhwvGg8wf
-         YogQ==
-X-Gm-Message-State: AOAM532T4xezjWH87lk6djnQQvpI0rL4sxswo8S0OSjiHXDgVAAiymFn
-        S0Hz+YPHNVjmK9Ksi6nJSt4i9t1YgM2UVhZdF+g=
-X-Google-Smtp-Source: ABdhPJx90rIXDzP0WqCBd2B5XUvtT8eRu02CVBiY7PXohG7vuX/5Y3ioZjiE9R8cXOmpKUK2DAFKYWR9N0j+Yle35js=
-X-Received: by 2002:a25:e791:: with SMTP id e139mr10035958ybh.67.1599048022257;
- Wed, 02 Sep 2020 05:00:22 -0700 (PDT)
+        with ESMTP id S1726377AbgIBMOL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 08:14:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150C9C061244;
+        Wed,  2 Sep 2020 05:14:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NadokaudFgFu9nMqgW3AlEN/gjoKd9NcBHIQBLterQc=; b=cNHyhKqUc+bx3k9nQ7UUWDCZaU
+        S3o+RQdCG0YXb+ogIN83rwNSwWanJEnCLsxrjV8MtSAGJG1RjGRPQ3GcUaecix2yWLKI0q9Hgiyt/
+        JtAfRFzWy8t15wcwatM8mJr/KXTngtKdH3XlLhkh5dyNPVsWgCRIe7QkCo0YKXjp/bvq1Rr/gsCHP
+        hXlbG7hbnps9N+UP/GAgKgl0JeD57Zbx0oZiLqNsqnVx9Pyrcz3PEGfXn9yp7vUPHG4plQsq5/CSD
+        NK06IP8lJJjJ9NGZ4Il1Wt3x2S1pjySa6oKFp3C7y7qs/ct4VF2zYuTL55+GR8C1qENhjWzsfAndD
+        0NlgetLg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kDReH-0007On-AX; Wed, 02 Sep 2020 12:13:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BB1E93003E5;
+        Wed,  2 Sep 2020 14:13:55 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A43C123D3D72C; Wed,  2 Sep 2020 14:13:55 +0200 (CEST)
+Date:   Wed, 2 Sep 2020 14:13:55 +0200
+From:   peterz@infradead.org
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Saravana Kannan <saravanak@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        madhuparnabhowmik10@gmail.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: WARNING: suspicious RCU usage - sdhci-pltfm: SDHCI platform and
+ OF driver helper
+Message-ID: <20200902121355.GE1362448@hirez.programming.kicks-ass.net>
+References: <CAPDyKFq7KWo=4VmPhgrt7vEEQ_P6NdVgQp+MO_1cg1dtoVR_Fw@mail.gmail.com>
+ <CAPDyKFrTERjpLrPOFtkqLyNsk2T_58Ye2FQ1mPf-0u78aWW=Xw@mail.gmail.com>
+ <20200901104206.GU1362448@hirez.programming.kicks-ass.net>
+ <CAPDyKFo0VkW-cgRSkvPQ0whpuJCo4OKcL1nmH7nz1tDEChOtVg@mail.gmail.com>
+ <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
+ <20200901154417.GD20303@codeaurora.org>
+ <20200901155014.GF2674@hirez.programming.kicks-ass.net>
+ <20200901161340.GC29330@paulmck-ThinkPad-P72>
+ <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
+ <CAPDyKFqPh7bg16AsitGv2QQHgwOPnWx9DiPPCMuD1EGA5TFFdg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a25:d311:0:0:0:0:0 with HTTP; Wed, 2 Sep 2020 05:00:21 -0700 (PDT)
-Reply-To: jlmv002@gmail.com
-From:   DR JIM <advocate.mary002@gmail.com>
-Date:   Wed, 2 Sep 2020 13:00:21 +0100
-Message-ID: <CA+omnrhnyejQKdCCiWuaSQo2Wk-JsQ7cobAe-XfQcwOQXUXE_w@mail.gmail.com>
-Subject: ATTENTION: DELIVERY OF YOUR ATM VISA CARD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqPh7bg16AsitGv2QQHgwOPnWx9DiPPCMuD1EGA5TFFdg@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Attention:Beneficiary,
+On Wed, Sep 02, 2020 at 09:03:37AM +0200, Ulf Hansson wrote:
+> Lots of cpuidle drivers are using CPU_PM notifiers (grep for
+> cpu_pm_enter and you will see) from their idlestates ->enter()
+> callbacks. And for those we are already calling
+> rcu_irq_enter_irqson|off() in cpu_pm_notify() when firing them.
 
-This is to official inform you that we have been having a meeting for
-the past Seven month which ended Two days ago with Dr. David  R.
-Malpass, the World Bank President and Hon. Mrs. Christine Laggard
-(IMF) Director General, in the meeting we treated on Email programs
-victim problems.
+Yeah, that particular trainwreck is on my todo list already ... then
+again, that list is forever overflowing.
 
-United Nation have agreed to compensate you with the sum of One
-million two Hundred Thousand Dollars (USD$1.200,000.00) this also
-includes international businesses that failed due to Government
-problems etc?. We have arranged your payment through Master Card ATM
-which is the latest  instruction from World Bank Group.
+I'm thinking cpu_pm_unregister_notifier() is not a common thing? The few
+I looked at seem to suggest 'never' is a good approximation.
 
-For the collection of your Master Card ATM contact our representative
-Dr.JIM LAW  and forward the following details to him.
-
-1. Full Name:.........
-2. Country:........
-3. Delivery Address:..........
-4. Telephone:..............&  Occupation.......
-5. Your Age...... /Sex..........
-
-
-Contact Dr.JIM LAW  with below email  and forward all your details to
-him.Email:( jlmv002@gmail.com)Note: for the immediate collection of
-your Master Card ATM contact ourrepresentative Agent.
-
-Dr.JIM  LAW  to enable you confirm your payment without further delay
-and note any other contact  you made out side his office is at of your
-own risk.
-
-Thanks
-
-Mrs, Zongo Che
+It would be fairly trivial to replace the atomic_notifier usage with a
+raw_notifier a lock and either stop-machine or IPIs. Better still would
+be if we can get rid of it entirely, but I can't tell in a hurry if that
+is possible.
