@@ -2,264 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6FA25C478
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA99025C404
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:02:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgICPLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 11:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728975AbgICN5y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 09:57:54 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280A8C061A01
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:31:45 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id v4so2899181wmj.5
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Uz4Jw+zKdFJ0416tNACRop3YdQEnLlXpW/XophXNKMc=;
-        b=SsJ+pR+jva11YMNYXuR8oKRz3WkjfDu0N2/d1aBy3h3hrm7VEI8InTw0eMtSsOHgyu
-         MzWwXYA11zNdok0KLUzWuTw14F3zPuhNNIVOtN+Az/NGR8ltkOdMawjTB80Wv0qgTKLm
-         8Q/B7J7qKDDjV46D4v7vn0X6K5GWf97hKFgKJOA0y/3Ud8XypXCmY7yY+zMwfK4NCjGp
-         onI2tSuL8PJJnsGGX9PGWb3jbnRwFO9ZR5rxaAJtZ0ghiE7L4RpAtWfXO+VWpfDCgRWE
-         EGYt3RaMCZ1IQLTHE5TBzew0hFAnVFz/ah2tM8QQOM8r2EktwqxZ/UP8O2enS0MttAZp
-         jItA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Uz4Jw+zKdFJ0416tNACRop3YdQEnLlXpW/XophXNKMc=;
-        b=E5+9K9sqw6dEsZTl/fXORwjqy29QQTF/6f0MzmzkMkkYbjrLKYYSvC1UbGtUNFmGGV
-         aE7jOHtomZrcy7nUpPn/dhYWzEsrhN84vCiWgnXksPc9kC4wb5cwYUXX7lJ0Fbho39eq
-         /XsCn1cGpdDFMCY27JyIk1RoM7hk7wjf7Y0YfFBDpEzXlEXBd/fd+TpoTxB/PNh5ptht
-         tWGZ/jCf0SU3WgIPi/E4zqn0EsE62r8AjaKTIKB0PvR687reQQr0Nb0l3J0slKuCKXqm
-         RJXa6GCw87ZPOfdtKcJZjITRiMafgzJUUYIEuy/5jP1yPc+J9OSAGg1RevIvJVRmGGWV
-         Bg9Q==
-X-Gm-Message-State: AOAM5301XR0LP+1kQgp7uV+6qpmzRp4qOQ8vNeQcjIYK0EovaTBvi6VP
-        ER7t9jJxhZRTibU80dmqOBaFlzSHkvuHSg==
-X-Google-Smtp-Source: ABdhPJxaF4E+1j0XqyCtqYw54pZtJdjO9j2lnQ6PJO6Azl5mINnM05AxHMUeDBjRV0V0132YGxxFWg==
-X-Received: by 2002:a7b:c1d4:: with SMTP id a20mr2600512wmj.30.1599139903444;
-        Thu, 03 Sep 2020 06:31:43 -0700 (PDT)
-Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id b2sm4310768wmh.47.2020.09.03.06.31.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Sep 2020 06:31:42 -0700 (PDT)
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        sibis@codeaurora.org, mka@chromium.org, dianders@chromium.org,
-        georgi.djakov@linaro.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/7] arm64: dts: qcom: sdm845: Increase the number of interconnect cells
-Date:   Thu,  3 Sep 2020 16:31:32 +0300
-Message-Id: <20200903133134.17201-6-georgi.djakov@linaro.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20200903133134.17201-1-georgi.djakov@linaro.org>
-References: <20200903133134.17201-1-georgi.djakov@linaro.org>
+        id S1729059AbgICPBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 11:01:43 -0400
+Received: from foss.arm.com ([217.140.110.172]:34346 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728942AbgICOFq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:05:46 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 953441045;
+        Thu,  3 Sep 2020 06:32:05 -0700 (PDT)
+Received: from localhost (e108754-lin.cambridge.arm.com [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 363963F66F;
+        Thu,  3 Sep 2020 06:32:05 -0700 (PDT)
+Date:   Thu, 3 Sep 2020 14:32:03 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        dietmar.eggemann@arm.com, catalin.marinas@arm.com,
+        sudeep.holla@arm.com, will@kernel.org, valentin.schneider@arm.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] cpufreq: improve frequency invariance support
+Message-ID: <20200903133203.GA29370@arm.com>
+References: <20200901205549.30096-1-ionela.voinescu@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200901205549.30096-1-ionela.voinescu@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Increase the number of interconnect-cells, as now we can include
-the tag information. The consumers can specify the path tag as an
-additional argument to the endpoints.
+Hi Rafael, Viresh,
 
-Tested-by: Sibi Sankar <sibis@codeaurora.org>
-Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 48 ++++++++++++++--------------
- 1 file changed, 24 insertions(+), 24 deletions(-)
+Would it be okay for you to apply this series, as the majority of
+changes are in cpufreq? For arch_topology and arm64 changes, they have
+been reviewed and acked-by Catalin and Sudeep.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index 2884577dcb77..253d95f43152 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -200,7 +200,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <100>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_0>;
-@@ -225,7 +225,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <100>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_100>;
-@@ -247,7 +247,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <100>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_200>;
-@@ -269,7 +269,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <100>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_300>;
-@@ -291,7 +291,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <396>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			operating-points-v2 = <&cpu4_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_400>;
-@@ -313,7 +313,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <396>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			operating-points-v2 = <&cpu4_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_500>;
-@@ -335,7 +335,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <396>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			operating-points-v2 = <&cpu4_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_600>;
-@@ -357,7 +357,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <396>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			operating-points-v2 = <&cpu4_opp_table>;
--			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
-+			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
- 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			next-level-cache = <&L2_700>;
-@@ -2011,49 +2011,49 @@ pcie1_lane: lanes@1c06200 {
- 		mem_noc: interconnect@1380000 {
- 			compatible = "qcom,sdm845-mem-noc";
- 			reg = <0 0x01380000 0 0x27200>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		dc_noc: interconnect@14e0000 {
- 			compatible = "qcom,sdm845-dc-noc";
- 			reg = <0 0x014e0000 0 0x400>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		config_noc: interconnect@1500000 {
- 			compatible = "qcom,sdm845-config-noc";
- 			reg = <0 0x01500000 0 0x5080>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		system_noc: interconnect@1620000 {
- 			compatible = "qcom,sdm845-system-noc";
- 			reg = <0 0x01620000 0 0x18080>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		aggre1_noc: interconnect@16e0000 {
- 			compatible = "qcom,sdm845-aggre1-noc";
- 			reg = <0 0x016e0000 0 0x15080>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		aggre2_noc: interconnect@1700000 {
- 			compatible = "qcom,sdm845-aggre2-noc";
- 			reg = <0 0x01700000 0 0x1f300>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
- 		mmss_noc: interconnect@1740000 {
- 			compatible = "qcom,sdm845-mmss-noc";
- 			reg = <0 0x01740000 0 0x1c100>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
-@@ -2156,9 +2156,9 @@ ipa: ipa@1e40000 {
- 			clocks = <&rpmhcc RPMH_IPA_CLK>;
- 			clock-names = "core";
- 
--			interconnects = <&aggre2_noc MASTER_IPA &mem_noc SLAVE_EBI1>,
--				        <&aggre2_noc MASTER_IPA &system_noc SLAVE_IMEM>,
--					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_IPA_CFG>;
-+			interconnects = <&aggre2_noc MASTER_IPA 0 &mem_noc SLAVE_EBI1 0>,
-+					<&aggre2_noc MASTER_IPA 0 &system_noc SLAVE_IMEM 0>,
-+					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_IPA_CFG 0>;
- 			interconnect-names = "memory",
- 					     "imem",
- 					     "config";
-@@ -3569,8 +3569,8 @@ usb_1: usb@a6f8800 {
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
--			interconnects = <&aggre2_noc MASTER_USB3_0 &mem_noc SLAVE_EBI1>,
--					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_0>;
-+			interconnects = <&aggre2_noc MASTER_USB3_0 0 &mem_noc SLAVE_EBI1 0>,
-+					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
- 			usb_1_dwc3: dwc3@a600000 {
-@@ -3617,8 +3617,8 @@ usb_2: usb@a8f8800 {
- 
- 			resets = <&gcc GCC_USB30_SEC_BCR>;
- 
--			interconnects = <&aggre2_noc MASTER_USB3_1 &mem_noc SLAVE_EBI1>,
--					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_1>;
-+			interconnects = <&aggre2_noc MASTER_USB3_1 0 &mem_noc SLAVE_EBI1 0>,
-+					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
- 			usb_2_dwc3: dwc3@a800000 {
-@@ -4007,7 +4007,7 @@ gpu: gpu@5000000 {
- 
- 			qcom,gmu = <&gmu>;
- 
--			interconnects = <&mem_noc MASTER_GFX3D &mem_noc SLAVE_EBI1>;
-+			interconnects = <&mem_noc MASTER_GFX3D 0 &mem_noc SLAVE_EBI1 0>;
- 			interconnect-names = "gfx-mem";
- 
- 			gpu_opp_table: opp-table {
-@@ -4324,7 +4324,7 @@ lpasscc: clock-controller@17014000 {
- 		gladiator_noc: interconnect@17900000 {
- 			compatible = "qcom,sdm845-gladiator-noc";
- 			reg = <0 0x17900000 0 0xd080>;
--			#interconnect-cells = <1>;
-+			#interconnect-cells = <2>;
- 			qcom,bcm-voters = <&apps_bcm_voter>;
- 		};
- 
+Also, please let me know if I should send v6 with Sudeep's Reviewed-by/s
+applied.
+
+Thank you,
+Ionela.
+
+
+On Tuesday 01 Sep 2020 at 21:55:44 (+0100), Ionela Voinescu wrote:
+> Hi,
+> 
+> v4->v5
+>  - I've applied Viresh's remaining suggestion and Acked-by/s
+>  - v4 can be found at [4]
+>  - v5 is based on linux-next 20200828
+> 
+> Thank you,
+> Ionela.
+> 
+> ---
+> v3->v4:
+>  - addressing Viresh's comments on patches 1/5 and 3/5, and
+>  - with his Acked-by applied for the rest of the patches;
+>  - v3 can be found at [3], and
+>  - this is based on linux-next 20200827.
+> 
+> v2->v3
+>  - v2 can be found at [2]
+>  - 1/5 was introduced to check input frequencies to
+>    arch_set_freq_scale() as recommended by Rafael
+>  - The previous 2/7 was squashed into 1/7 - now 2/5, with additions to
+>    the changelog as suggested by Rafael.
+>  - The previous 3/7 (BL_SWITCHER handling) was dropped to be handled
+>    in a separate patch. This does not change the current functionality.
+>  - The previous 4/7 - now 3/5 is simplified as suggested by Viresh.
+>  - 3/5 - cpufreq_supports_freq_invariance() replaces
+>    cpufreq_sets_freq_scale(). The meaning chosen for
+>    cpufreq_supports_freq_invariance() is whether it can set the frequency
+>    scale factor, not whether arch_set_freq_scale() actually does.
+>  - 4/5 - Change after Catalin's Ack: The changes to
+>    arch_set_thermal_pressure() were dropped as they were done in a separate
+>    patch. Therefore this patch now has a subset of the previous changes
+>    at 5/7
+>  - 5/5 - Change after Catalin's Ack:
+>    s/cpufreq_sets_freq_scale/cpufreq_supports_freq_invariance
+>  - v3 is based on linux-next 20200814
+> 
+> 
+> v1 -> v2:
+>  - v1 can be found at [1]
+>  - No cpufreq flags are introduced
+>  - Previous patches 2/8 and 3/8 were squashed in this series under 1/7,
+>    to ensure bisection.
+>  - 2/7 was introduced as a proposal for Viresh's suggestion to use
+>    policy->cur in the call to arch_set_freq_scale() and is extended to
+>    support drivers that implement the target() callback as well
+>  - Additional commit message changes are added to 1/7 and 2/7, to
+>    clarify that the definition of arch_set_freq_scale() will filter 
+>    settings of the scale factor, if unwanted
+>  - 3/7 disables setting of the scale factor for
+>    CONFIG_BL_SWITCHER, as Dietmar suggested
+>  - Small change introduced in 4/7 to disable cpufreq-based frequency
+>    invariance for the users of the default arch_set_freq_scale() call
+>    which will not actually set a scale factor
+>  - build issue solved (reported by 0day test)
+>  - v2 is based on linux-next 20200716
+>  - all functional tests in v1 were repeated for v2
+> 
+> 
+> [1] https://lore.kernel.org/lkml/20200701090751.7543-1-ionela.voinescu@arm.com/
+> [2] https://lore.kernel.org/lkml/20200722093732.14297-1-ionela.voinescu@arm.com/
+> [3] https://lore.kernel.org/lkml/20200824210252.27486-1-ionela.voinescu@arm.com/
+> [4] https://lore.kernel.org/lkml/20200828173303.11939-1-ionela.voinescu@arm.com/
+> 
+> Ionela Voinescu (3):
+>   arch_topology: validate input frequencies to arch_set_freq_scale()
+>   cpufreq: move invariance setter calls in cpufreq core
+>   cpufreq: report whether cpufreq supports Frequency Invariance (FI)
+> 
+> Valentin Schneider (2):
+>   arch_topology, cpufreq: constify arch_* cpumasks
+>   arch_topology, arm, arm64: define arch_scale_freq_invariant()
+> 
+>  arch/arm/include/asm/topology.h        |  1 +
+>  arch/arm64/include/asm/topology.h      |  1 +
+>  arch/arm64/kernel/topology.c           |  9 ++++++-
+>  drivers/base/arch_topology.c           | 13 ++++++++--
+>  drivers/cpufreq/cpufreq-dt.c           | 10 +-------
+>  drivers/cpufreq/cpufreq.c              | 33 +++++++++++++++++++++++---
+>  drivers/cpufreq/qcom-cpufreq-hw.c      |  9 +------
+>  drivers/cpufreq/scmi-cpufreq.c         | 12 ++--------
+>  drivers/cpufreq/scpi-cpufreq.c         |  6 +----
+>  drivers/cpufreq/vexpress-spc-cpufreq.c | 12 ++--------
+>  include/linux/arch_topology.h          |  4 +++-
+>  include/linux/cpufreq.h                |  8 ++++++-
+>  12 files changed, 68 insertions(+), 50 deletions(-)
+> 
+> 
+> base-commit: b36c969764ab12faebb74711c942fa3e6eaf1e96
+> -- 
+> 2.17.1
+> 
