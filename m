@@ -2,70 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3B325C408
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6FA25C478
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729036AbgICPCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 11:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
+        id S1729161AbgICPLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 11:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729043AbgICN6z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 09:58:55 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E76C0619C2
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:21:34 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id k25so3630079ljg.9
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:21:34 -0700 (PDT)
+        with ESMTP id S1728975AbgICN5y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 09:57:54 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280A8C061A01
+        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:31:45 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id v4so2899181wmj.5
+        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=NJ6dnvU6tawXGRSTiBP3anVjiYXIVlH9Ps9tz0zz888=;
-        b=GolWSDctM+KfzQckYaqoCbMGtHVAaUo7qufck4NB76mB0tLIyoA/zoe8FDXhKQre3f
-         DEgS/7hpzO4WC0ffObC8hYw4feSyVMrZtXBUbBRh+9cJAPiH4/PYtqSp6fDU2whxdHlC
-         y9TxEvvMrtHRvmwGAxCP1xL++4ph5RV/jKJ+iVI+vEPnn8JQcruWeNif7hgGsZa1mJhW
-         qzNk4hDFK4aRsGaEBVOYDYY0/NkLvTn3q+mzSDRAkqoayj0dQ5uNDlWHSzbz0IDN8cvk
-         0WapM6uVuxfu+dA8xwKAbni73ILvIbrUYIfYfCFzNp7ienKBr7Jg/KnplSnQCmX3a6gX
-         keqw==
+        bh=Uz4Jw+zKdFJ0416tNACRop3YdQEnLlXpW/XophXNKMc=;
+        b=SsJ+pR+jva11YMNYXuR8oKRz3WkjfDu0N2/d1aBy3h3hrm7VEI8InTw0eMtSsOHgyu
+         MzWwXYA11zNdok0KLUzWuTw14F3zPuhNNIVOtN+Az/NGR8ltkOdMawjTB80Wv0qgTKLm
+         8Q/B7J7qKDDjV46D4v7vn0X6K5GWf97hKFgKJOA0y/3Ud8XypXCmY7yY+zMwfK4NCjGp
+         onI2tSuL8PJJnsGGX9PGWb3jbnRwFO9ZR5rxaAJtZ0ghiE7L4RpAtWfXO+VWpfDCgRWE
+         EGYt3RaMCZ1IQLTHE5TBzew0hFAnVFz/ah2tM8QQOM8r2EktwqxZ/UP8O2enS0MttAZp
+         jItA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=NJ6dnvU6tawXGRSTiBP3anVjiYXIVlH9Ps9tz0zz888=;
-        b=Bt5fAGjRF/cKyq4I8+7gyA0ND73qVtC7WsLLU2TwTPbmeHmItc3tpFhzTDkR7aJvK7
-         PeO4QjIfsbCkWuTRA1BAc25L9AP9syj9jbCo+LfmLhuqYy3Nv7p+CO9/ljX/tjfB80FV
-         ri43jPPB/uV7SXh8FV4ek9QzBjuIZLssdDeTlATENQsflvPFF13JPVP2oVF73fdRusqc
-         u3rm8lG3QonjkzLtB1iIWFQPfduPA8UBzzFBKqM3YWvGVItbMnzb+sE77yl0T+/ZyKpK
-         qz+oWkLJ6GBF6YL5QDQhwAa+EVUpJGI/9rTB4wsKrYYFRECXFODLf18+HDaXCCESZ07H
-         XFgg==
-X-Gm-Message-State: AOAM5315xmejHlRXu6tzU/zEPhukMc9uis+fPQxFHPPZcNOCwRJmrn74
-        ng63k0FBKPCz1GduzrIARO58pLiQ15CxUQ==
-X-Google-Smtp-Source: ABdhPJxgbRcwt17Fe1oZSLAG1sKRCg/l0mN4oHfN4nI1Xv0vr1wyFE5Ae7ujoQUAqKPFW2QMMeN5lg==
-X-Received: by 2002:a2e:9b0a:: with SMTP id u10mr1206378lji.275.1599139292977;
-        Thu, 03 Sep 2020 06:21:32 -0700 (PDT)
-Received: from eriador.lan ([188.162.64.138])
-        by smtp.gmail.com with ESMTPSA id e23sm584220lfj.80.2020.09.03.06.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 06:21:32 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH v2 7/9] thermal: qcom: add support for adc-tm5 PMIC thermal monitor
-Date:   Thu,  3 Sep 2020 16:21:07 +0300
-Message-Id: <20200903132109.1914011-8-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
-References: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
+        bh=Uz4Jw+zKdFJ0416tNACRop3YdQEnLlXpW/XophXNKMc=;
+        b=E5+9K9sqw6dEsZTl/fXORwjqy29QQTF/6f0MzmzkMkkYbjrLKYYSvC1UbGtUNFmGGV
+         aE7jOHtomZrcy7nUpPn/dhYWzEsrhN84vCiWgnXksPc9kC4wb5cwYUXX7lJ0Fbho39eq
+         /XsCn1cGpdDFMCY27JyIk1RoM7hk7wjf7Y0YfFBDpEzXlEXBd/fd+TpoTxB/PNh5ptht
+         tWGZ/jCf0SU3WgIPi/E4zqn0EsE62r8AjaKTIKB0PvR687reQQr0Nb0l3J0slKuCKXqm
+         RJXa6GCw87ZPOfdtKcJZjITRiMafgzJUUYIEuy/5jP1yPc+J9OSAGg1RevIvJVRmGGWV
+         Bg9Q==
+X-Gm-Message-State: AOAM5301XR0LP+1kQgp7uV+6qpmzRp4qOQ8vNeQcjIYK0EovaTBvi6VP
+        ER7t9jJxhZRTibU80dmqOBaFlzSHkvuHSg==
+X-Google-Smtp-Source: ABdhPJxaF4E+1j0XqyCtqYw54pZtJdjO9j2lnQ6PJO6Azl5mINnM05AxHMUeDBjRV0V0132YGxxFWg==
+X-Received: by 2002:a7b:c1d4:: with SMTP id a20mr2600512wmj.30.1599139903444;
+        Thu, 03 Sep 2020 06:31:43 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id b2sm4310768wmh.47.2020.09.03.06.31.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Sep 2020 06:31:42 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        sibis@codeaurora.org, mka@chromium.org, dianders@chromium.org,
+        georgi.djakov@linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 5/7] arm64: dts: qcom: sdm845: Increase the number of interconnect cells
+Date:   Thu,  3 Sep 2020 16:31:32 +0300
+Message-Id: <20200903133134.17201-6-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200903133134.17201-1-georgi.djakov@linaro.org>
+References: <20200903133134.17201-1-georgi.djakov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -73,739 +65,201 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for Thermal Monitoring part of PMIC5. This part is closely
-coupled with ADC, using it's channels directly. ADC-TM support
-generating interrupts on ADC value crossing low or high voltage bounds,
-which is used to support thermal trip points.
+Increase the number of interconnect-cells, as now we can include
+the tag information. The consumers can specify the path tag as an
+additional argument to the endpoints.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Tested-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- drivers/iio/adc/qcom-vadc-common.c       |  74 ++-
- drivers/iio/adc/qcom-vadc-common.h       |   3 +
- drivers/thermal/qcom/Kconfig             |  11 +
- drivers/thermal/qcom/Makefile            |   1 +
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 565 +++++++++++++++++++++++
- 5 files changed, 648 insertions(+), 6 deletions(-)
- create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 48 ++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-index 40d77b3af1bb..fbdf501954ed 100644
---- a/drivers/iio/adc/qcom-vadc-common.c
-+++ b/drivers/iio/adc/qcom-vadc-common.c
-@@ -377,6 +377,42 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
- 	return 0;
- }
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 2884577dcb77..253d95f43152 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -200,7 +200,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_0>;
+@@ -225,7 +225,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_100>;
+@@ -247,7 +247,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_200>;
+@@ -269,7 +269,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <100>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_300>;
+@@ -291,7 +291,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_400>;
+@@ -313,7 +313,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_500>;
+@@ -335,7 +335,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_600>;
+@@ -357,7 +357,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <396>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu4_opp_table>;
+-			interconnects = <&gladiator_noc MASTER_APPSS_PROC &mem_noc SLAVE_EBI1>,
++			interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_EBI1 3>,
+ 					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			next-level-cache = <&L2_700>;
+@@ -2011,49 +2011,49 @@ pcie1_lane: lanes@1c06200 {
+ 		mem_noc: interconnect@1380000 {
+ 			compatible = "qcom,sdm845-mem-noc";
+ 			reg = <0 0x01380000 0 0x27200>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-+static s32 qcom_vadc_map_temp_voltage(const struct vadc_map_pt *pts,
-+				      u32 tablesize, int input)
-+{
-+	bool descending = 1;
-+	u32 i = 0;
-+
-+	/* Check if table is descending or ascending */
-+	if (tablesize > 1) {
-+		if (pts[0].y < pts[1].y)
-+			descending = 0;
-+	}
-+
-+	while (i < tablesize) {
-+		if (descending && pts[i].y < input) {
-+			/* table entry is less than measured*/
-+			 /* value and table is descending, stop */
-+			break;
-+		} else if ((!descending) && pts[i].y > input) {
-+			/* table entry is greater than measured*/
-+			/*value and table is ascending, stop */
-+			break;
-+		}
-+		i++;
-+	}
-+
-+	if (i == 0)
-+		return pts[0].x;
-+	if (i == tablesize)
-+		return pts[tablesize - 1].x;
-+
-+	/* result is between search_index and search_index-1 */
-+	/* interpolate linearly */
-+	return fixp_linear_interpolate(pts[i - 1].y, pts[i - 1].x,
-+			pts[i].y, pts[i].x, input);
-+}
-+
- static void qcom_vadc_scale_calib(const struct vadc_linear_graph *calib_graph,
- 				  u16 adc_code,
- 				  bool absolute,
-@@ -474,10 +510,23 @@ static int qcom_vadc_scale_chg_temp(const struct vadc_linear_graph *calib_graph,
- 	return 0;
- }
+ 		dc_noc: interconnect@14e0000 {
+ 			compatible = "qcom,sdm845-dc-noc";
+ 			reg = <0 0x014e0000 0 0x400>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-+static u16 qcom_vadc_scale_voltage_code(int voltage,
-+					const struct vadc_prescale_ratio *prescale,
-+					const u32 full_scale_code_volt,
-+					unsigned int factor)
-+{
-+	s64 volt = voltage, adc_vdd_ref_mv = 1875;
-+
-+	volt *= prescale->num * factor * full_scale_code_volt;
-+	volt = div64_s64(volt, (s64)prescale->den * adc_vdd_ref_mv * 1000);
-+
-+	return volt;
-+}
-+
- static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
--				const struct vadc_prescale_ratio *prescale,
--				const struct adc5_data *data,
--				unsigned int factor)
-+					       const struct vadc_prescale_ratio *prescale,
-+					       const struct adc5_data *data,
-+					       unsigned int factor)
- {
- 	s64 voltage, temp, adc_vdd_ref_mv = 1875;
+ 		config_noc: interconnect@1500000 {
+ 			compatible = "qcom,sdm845-config-noc";
+ 			reg = <0 0x01500000 0 0x5080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-@@ -658,10 +707,23 @@ int qcom_vadc_scale(enum vadc_scale_fn_type scaletype,
- }
- EXPORT_SYMBOL(qcom_vadc_scale);
+ 		system_noc: interconnect@1620000 {
+ 			compatible = "qcom,sdm845-system-noc";
+ 			reg = <0 0x01620000 0 0x18080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-+u16 qcom_adc_tm5_temp_volt_scale(unsigned int prescale_ratio,
-+				 u32 full_scale_code_volt, int temp)
-+{
-+	const struct vadc_prescale_ratio *prescale = &adc5_prescale_ratios[prescale_ratio];
-+	s32 voltage;
-+
-+	voltage = qcom_vadc_map_temp_voltage(adcmap_100k_104ef_104fb_1875_vref,
-+					     ARRAY_SIZE(adcmap_100k_104ef_104fb_1875_vref),
-+					     temp);
-+	return qcom_vadc_scale_voltage_code(voltage, prescale, full_scale_code_volt, 1000);
-+}
-+EXPORT_SYMBOL(qcom_adc_tm5_temp_volt_scale);
-+
- int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
--		    unsigned int prescale_ratio,
--		    const struct adc5_data *data,
--		    u16 adc_code, int *result)
-+		       unsigned int prescale_ratio,
-+		       const struct adc5_data *data,
-+		       u16 adc_code, int *result)
- {
- 	const struct vadc_prescale_ratio *prescale = &adc5_prescale_ratios[prescale_ratio];
+ 		aggre1_noc: interconnect@16e0000 {
+ 			compatible = "qcom,sdm845-aggre1-noc";
+ 			reg = <0 0x016e0000 0 0x15080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-diff --git a/drivers/iio/adc/qcom-vadc-common.h b/drivers/iio/adc/qcom-vadc-common.h
-index 7e5f6428e311..9af41201ad77 100644
---- a/drivers/iio/adc/qcom-vadc-common.h
-+++ b/drivers/iio/adc/qcom-vadc-common.h
-@@ -172,6 +172,9 @@ int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
- 		    const struct adc5_data *data,
- 		    u16 adc_code, int *result_mdec);
+ 		aggre2_noc: interconnect@1700000 {
+ 			compatible = "qcom,sdm845-aggre2-noc";
+ 			reg = <0 0x01700000 0 0x1f300>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
-+u16 qcom_adc_tm5_temp_volt_scale(unsigned int prescale_ratio,
-+				 u32 full_scale_code_volt, int temp);
-+
- int qcom_adc5_prescaling_from_dt(u32 num, u32 den);
+ 		mmss_noc: interconnect@1740000 {
+ 			compatible = "qcom,sdm845-mmss-noc";
+ 			reg = <0 0x01740000 0 0x1c100>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
  
- int qcom_adc5_hw_settle_time_from_dt(u32 value, const unsigned int *hw_settle);
-diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-index aa9c1d80fae4..8d5ac2df26dc 100644
---- a/drivers/thermal/qcom/Kconfig
-+++ b/drivers/thermal/qcom/Kconfig
-@@ -10,6 +10,17 @@ config QCOM_TSENS
- 	  Also able to set threshold temperature for both hot and cold and update
- 	  when a threshold is reached.
+@@ -2156,9 +2156,9 @@ ipa: ipa@1e40000 {
+ 			clocks = <&rpmhcc RPMH_IPA_CLK>;
+ 			clock-names = "core";
  
-+config QCOM_SPMI_ADC_TM5
-+	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5"
-+	depends on OF && SPMI && IIO
-+	select REGMAP_SPMI
-+	select QCOM_VADC_COMMON
-+	help
-+	  This enables the thermal driver for the ADC thermal monitoring
-+	  device. It shows up as a thermal zone with multiple trip points.
-+	  Thermal client sets threshold temperature for both warm and cool and
-+	  gets updated when a threshold is reached.
-+
- config QCOM_SPMI_TEMP_ALARM
- 	tristate "Qualcomm SPMI PMIC Temperature Alarm"
- 	depends on OF && SPMI && IIO
-diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
-index ec86eef7f6a6..252ea7d9da0b 100644
---- a/drivers/thermal/qcom/Makefile
-+++ b/drivers/thermal/qcom/Makefile
-@@ -3,4 +3,5 @@ obj-$(CONFIG_QCOM_TSENS)	+= qcom_tsens.o
+-			interconnects = <&aggre2_noc MASTER_IPA &mem_noc SLAVE_EBI1>,
+-				        <&aggre2_noc MASTER_IPA &system_noc SLAVE_IMEM>,
+-					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_IPA_CFG>;
++			interconnects = <&aggre2_noc MASTER_IPA 0 &mem_noc SLAVE_EBI1 0>,
++					<&aggre2_noc MASTER_IPA 0 &system_noc SLAVE_IMEM 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_IPA_CFG 0>;
+ 			interconnect-names = "memory",
+ 					     "imem",
+ 					     "config";
+@@ -3569,8 +3569,8 @@ usb_1: usb@a6f8800 {
  
- qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
- 				   tsens-8960.o
-+obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
- obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-new file mode 100644
-index 000000000000..367050a9764b
---- /dev/null
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-@@ -0,0 +1,565 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2020 Linaro Limited
-+ */
-+
-+#include <linux/iio/consumer.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/thermal.h>
-+
-+#include "../../iio/adc/qcom-vadc-common.h"
-+
-+#define ADC5_MAX_CHANNEL                        0xc0
-+#define ADC_TM5_NUM_CHANNELS		8
-+
-+#define ADC_TM5_STATUS_LOW			0x0a
-+
-+#define ADC_TM5_STATUS_HIGH			0x0b
-+
-+#define ADC_TM5_NUM_BTM				0x0f
-+
-+#define ADC_TM5_ADC_DIG_PARAM			0x42
-+
-+#define ADC_TM5_FAST_AVG_CTL			(ADC_TM5_ADC_DIG_PARAM + 1)
-+#define ADC_TM5_FAST_AVG_EN				BIT(7)
-+
-+#define ADC_TM5_MEAS_INTERVAL_CTL		(ADC_TM5_ADC_DIG_PARAM + 2)
-+#define ADC_TM5_TIMER1					3 /* 3.9ms */
-+
-+#define ADC_TM5_MEAS_INTERVAL_CTL2		(ADC_TM5_ADC_DIG_PARAM + 3)
-+#define ADC_TM5_MEAS_INTERVAL_CTL2_MASK			0xf0
-+#define ADC_TM5_TIMER2					10 /* 1 second */
-+#define ADC_TM5_MEAS_INTERVAL_CTL3_MASK			0xf
-+#define ADC_TM5_TIMER3					4 /* 4 second */
-+
-+#define ADC_TM5_M_CHAN_BASE			0x60
-+
-+#define ADC_TM5_M_ADC_CH_SEL_CTL(n)		(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 0)
-+#define ADC_TM5_M_LOW_THR0(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 1)
-+#define ADC_TM5_M_LOW_THR1(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 2)
-+#define ADC_TM5_M_HIGH_THR0(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 3)
-+#define ADC_TM5_M_HIGH_THR1(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 4)
-+#define ADC_TM5_M_MEAS_INTERVAL_CTL(n)		(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 5)
-+#define ADC_TM5_M_CTL(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 6)
-+#define ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK		0xf
-+#define ADC_TM5_M_CTL_CAL_SEL_MASK			0x30
-+#define ADC_TM5_M_CTL_CAL_VAL				0x40
-+#define ADC_TM5_M_EN(n)				(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 7)
-+#define ADC_TM5_M_MEAS_EN				BIT(7)
-+#define ADC_TM5_M_HIGH_THR_INT_EN			BIT(1)
-+#define ADC_TM5_M_LOW_THR_INT_EN			BIT(0)
-+
-+enum adc5_timer_select {
-+	ADC5_TIMER_SEL_1 = 0,
-+	ADC5_TIMER_SEL_2,
-+	ADC5_TIMER_SEL_3,
-+	ADC5_TIMER_SEL_NONE,
-+};
-+
-+struct adc_tm5_data {
-+	const u32	full_scale_code_volt;
-+	unsigned int	*decimation;
-+	unsigned int	*hw_settle;
-+};
-+
-+enum adc_tm5_cal_method {
-+	ADC_TM5_NO_CAL = 0,
-+	ADC_TM5_RATIOMETRIC_CAL,
-+	ADC_TM5_ABSOLUTE_CAL
-+};
-+
-+struct adc_tm5_chip;
-+
-+struct adc_tm5_channel {
-+	unsigned int		channel;
-+	unsigned int		adc_channel;
-+	enum adc_tm5_cal_method	cal_method;
-+	unsigned int		prescale;
-+	unsigned int		hw_settle_time;
-+	struct iio_channel	*iio;
-+	struct adc_tm5_chip	*chip;
-+	struct thermal_zone_device *tzd;
-+};
-+
-+/**
-+ * struct adc_tm5_chip - ADC Thermal Monitoring properties
-+ * @nchannels: amount of channels defined/allocated
-+ * @decimation: sampling rate supported for the channel.
-+ * @avg_samples: ability to provide single result from the ADC
-+ *	that is an average of multiple measurements.
-+ * @base: base address of TM registers.
-+ */
-+struct adc_tm5_chip {
-+	struct regmap		*regmap;
-+	struct device		*dev;
-+	const struct adc_tm5_data	*data;
-+	struct adc_tm5_channel	*channels;
-+	unsigned int		nchannels;
-+	unsigned int		decimation;
-+	unsigned int		avg_samples;
-+	u16			base;
-+};
-+
-+static const struct adc_tm5_data adc_tm5_data_pmic = {
-+	.full_scale_code_volt = 0x70e4,
-+	.decimation = (unsigned int []) {250, 420, 840},
-+	.hw_settle = (unsigned int []) {15, 100, 200, 300, 400, 500, 600, 700,
-+					1, 2, 4, 8, 16, 32, 64, 128},
-+};
-+
-+static int adc_tm5_read(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
-+{
-+	return regmap_bulk_read(adc_tm->regmap, adc_tm->base + offset, data, len);
-+}
-+
-+static int adc_tm5_write(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
-+{
-+	return regmap_bulk_write(adc_tm->regmap, adc_tm->base + offset, data, len);
-+}
-+
-+static int adc_tm5_reg_update(struct adc_tm5_chip *adc_tm, u16 offset, u8 mask, u8 val)
-+{
-+	return regmap_write_bits(adc_tm->regmap, adc_tm->base + offset, mask, val);
-+}
-+
-+static irqreturn_t adc_tm5_isr(int irq, void *data)
-+{
-+	struct adc_tm5_chip *chip = data;
-+	u8 status_low, status_high, ctl;
-+	int ret = 0, i = 0;
-+
-+	ret = adc_tm5_read(chip, ADC_TM5_STATUS_LOW, &status_low, 1);
-+	if (ret) {
-+		dev_err(chip->dev, "read status low failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	ret = adc_tm5_read(chip, ADC_TM5_STATUS_HIGH, &status_high, 1);
-+	if (ret) {
-+		dev_err(chip->dev, "read status high failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	for (i = 0; i < chip->nchannels; i++) {
-+		bool upper_set = false, lower_set = false;
-+		unsigned int ch = chip->channels[i].channel;
-+
-+		if (!chip->channels[i].tzd) {
-+			dev_err_once(chip->dev, "thermal device not found\n");
-+			continue;
-+		}
-+
-+		ret = adc_tm5_read(chip, ADC_TM5_M_EN(ch), &ctl, 1);
-+
-+		if (ret) {
-+			dev_err(chip->dev, "ctl read failed with %d\n", ret);
-+			continue;
-+		}
-+
-+		lower_set = (status_low & BIT(ch)) &&
-+			(ctl & ADC_TM5_M_MEAS_EN) &&
-+			(ctl & ADC_TM5_M_LOW_THR_INT_EN);
-+
-+		upper_set = (status_high & BIT(ch)) &&
-+			(ctl & ADC_TM5_M_MEAS_EN) &&
-+			(ctl & ADC_TM5_M_HIGH_THR_INT_EN);
-+
-+		if (upper_set || lower_set)
-+			thermal_zone_device_update(chip->channels[i].tzd,
-+						   THERMAL_EVENT_UNSPECIFIED);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int adc_tm5_get_temp(void *data, int *temp)
-+{
-+	struct adc_tm5_channel *channel = data;
-+	int ret, milli_celsius;
-+
-+	if (!channel || !channel->iio)
-+		return -EINVAL;
-+
-+	ret = iio_read_channel_processed(channel->iio, &milli_celsius);
-+	if (ret < 0)
-+		return ret;
-+
-+	*temp = milli_celsius;
-+
-+	return 0;
-+}
-+
-+static int adc_tm5_disable_channel(struct adc_tm5_channel *channel)
-+{
-+	struct adc_tm5_chip *chip = channel->chip;
-+	unsigned int reg = ADC_TM5_M_EN(channel->channel);
-+
-+	return adc_tm5_reg_update(chip, reg,
-+			ADC_TM5_M_MEAS_EN | ADC_TM5_M_HIGH_THR_INT_EN | ADC_TM5_M_LOW_THR_INT_EN,
-+			0);
-+}
-+
-+static int adc_tm5_configure(struct adc_tm5_channel *channel, int low_temp, int high_temp)
-+{
-+	struct adc_tm5_chip *chip = channel->chip;
-+	u8 buf[8];
-+	u16 reg = ADC_TM5_M_ADC_CH_SEL_CTL(channel->channel);
-+	int ret = 0;
-+
-+	ret = adc_tm5_read(chip, reg, buf, 8);
-+	if (ret) {
-+		dev_err(chip->dev, "block read failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Update ADC channel select */
-+	buf[0] = channel->adc_channel;
-+
-+	/* Warm temperature corresponds to low voltage threshold */
-+	if (high_temp != INT_MAX) {
-+		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-+				chip->data->full_scale_code_volt, high_temp);
-+
-+		buf[1] = adc_code & 0xff;
-+		buf[2] = adc_code >> 8;
-+		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
-+	}
-+
-+	/* Cool temperature corresponds to high voltage threshold */
-+	if (low_temp != -INT_MAX) {
-+		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-+				chip->data->full_scale_code_volt, low_temp);
-+
-+		buf[3] = adc_code & 0xff;
-+		buf[4] = adc_code >> 8;
-+		buf[7] |= ADC_TM5_M_HIGH_THR_INT_EN;
-+	}
-+
-+	/* Update timer select */
-+	buf[5] = ADC5_TIMER_SEL_2;
-+
-+	/* Set calibration select, hw_settle delay */
-+	buf[6] &= ~ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK;
-+	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK, channel->hw_settle_time);
-+	buf[6] &= ~ADC_TM5_M_CTL_CAL_SEL_MASK;
-+	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_CAL_SEL_MASK, channel->cal_method);
-+
-+	buf[7] |= ADC_TM5_M_MEAS_EN;
-+
-+	ret = adc_tm5_write(chip, reg, buf, 8);
-+	if (ret)
-+		dev_err(chip->dev, "buf write failed\n");
-+
-+	return ret;
-+}
-+
-+static int adc_tm5_set_trips(void *data, int low_temp, int high_temp)
-+{
-+	struct adc_tm5_channel *channel = data;
-+	struct adc_tm5_chip *chip;
-+	int ret;
-+
-+	if (!channel)
-+		return -EINVAL;
-+
-+	chip = channel->chip;
-+	dev_dbg(chip->dev, "%d:low_temp(mdegC):%d, high_temp(mdegC):%d\n",
-+		channel->channel, low_temp, high_temp);
-+
-+	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
-+		ret = adc_tm5_disable_channel(channel);
-+	else
-+		ret = adc_tm5_configure(channel, low_temp, high_temp);
-+
-+	return ret;
-+}
-+
-+static struct thermal_zone_of_device_ops adc_tm5_ops = {
-+	.get_temp = adc_tm5_get_temp,
-+	.set_trips = adc_tm5_set_trips,
-+};
-+
-+static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
-+{
-+	unsigned int i;
-+	struct thermal_zone_device *tzd;
-+
-+	for (i = 0; i < adc_tm->nchannels; i++) {
-+		adc_tm->channels[i].chip = adc_tm;
-+
-+		tzd = devm_thermal_zone_of_sensor_register(adc_tm->dev,
-+							   adc_tm->channels[i].channel,
-+							   &adc_tm->channels[i],
-+							   &adc_tm5_ops);
-+		if (IS_ERR(tzd)) {
-+			dev_err(adc_tm->dev, "Error registering TZ zone:%ld for channel:%d\n",
-+				PTR_ERR(tzd), adc_tm->channels[i].channel);
-+			continue;
-+		}
-+		adc_tm->channels[i].tzd = tzd;
-+	}
-+
-+	return 0;
-+}
-+
-+static int adc_tm5_init(struct adc_tm5_chip *chip)
-+{
-+	u8 buf[4], channels_available;
-+	int ret;
-+	unsigned int i;
-+
-+	ret = adc_tm5_read(chip, ADC_TM5_NUM_BTM, &channels_available, 1);
-+	if (ret) {
-+		dev_err(chip->dev, "read failed for BTM channels\n");
-+		return ret;
-+	}
-+
-+	ret = adc_tm5_read(chip, ADC_TM5_ADC_DIG_PARAM, buf, 4);
-+	if (ret) {
-+		dev_err(chip->dev, "block read failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Select decimation */
-+	buf[0] = chip->decimation;
-+
-+	/* Select number of samples in fast average mode */
-+	buf[1] = chip->avg_samples | ADC_TM5_FAST_AVG_EN;
-+
-+	/* Select timer1 */
-+	buf[2] = ADC_TM5_TIMER1;
-+
-+	/* Select timer2 and timer3 */
-+	buf[3] = FIELD_PREP(ADC_TM5_MEAS_INTERVAL_CTL2_MASK, ADC_TM5_TIMER2) |
-+		 FIELD_PREP(ADC_TM5_MEAS_INTERVAL_CTL3_MASK, ADC_TM5_TIMER3);
-+
-+	ret = adc_tm5_write(chip, ADC_TM5_ADC_DIG_PARAM, buf, 4);
-+	if (ret)
-+		dev_err(chip->dev, "block write failed with %d\n", ret);
-+
-+	for (i = 0; i < chip->nchannels; i++) {
-+		if (chip->channels[i].channel >= channels_available) {
-+			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int adc_tm5_get_dt_channel_data(struct adc_tm5_chip *adc_tm,
-+				       struct adc_tm5_channel *channel,
-+				       struct device_node *node)
-+{
-+	const char *name = node->name;
-+	u32 chan, value, varr[2];
-+	int ret;
-+	struct device *dev = adc_tm->dev;
-+
-+	ret = of_property_read_u32(node, "reg", &chan);
-+	if (ret) {
-+		dev_err(dev, "invalid channel number %s\n", name);
-+		return ret;
-+	}
-+
-+	if (chan >= ADC_TM5_NUM_CHANNELS) {
-+		dev_err(dev, "%s invalid channel number %d\n", name, chan);
-+		return -EINVAL;
-+	}
-+
-+	/* the channel has DT description */
-+	channel->channel = chan;
-+
-+	ret = of_property_read_u32(node, "qcom,adc-channel", &chan);
-+	if (ret) {
-+		dev_err(dev, "invalid channel number %s\n", name);
-+		return ret;
-+	}
-+	if (chan >= ADC5_MAX_CHANNEL) {
-+		dev_err(dev, "%s invalid ADC channel number %d\n", name, chan);
-+		return ret;
-+	}
-+	channel->adc_channel = chan;
-+
-+	channel->iio = devm_iio_channel_get(adc_tm->dev, name);
-+	if (IS_ERR(channel->iio)) {
-+		ret = PTR_ERR(channel->iio);
-+		channel->iio = NULL;
-+		dev_err(dev, "error getting channel %s: %d\n", name, ret);
-+		return ret;
-+	}
-+
-+	ret = of_property_read_u32_array(node, "qcom,pre-scaling", varr, 2);
-+	if (!ret) {
-+		ret = qcom_adc5_prescaling_from_dt(varr[0], varr[1]);
-+		if (ret < 0) {
-+			dev_err(dev, "%02x invalid pre-scaling <%d %d>\n",
-+				chan, varr[0], varr[1]);
-+			return ret;
-+		}
-+		channel->prescale = ret;
-+	} else {
-+		/* 1:1 prescale is index 0 */
-+		channel->prescale = 0;
-+	}
-+
-+	ret = of_property_read_u32(node, "qcom,hw-settle-time", &value);
-+	if (!ret) {
-+		ret = qcom_adc5_hw_settle_time_from_dt(value, adc_tm->data->hw_settle);
-+		if (ret < 0) {
-+			dev_err(dev, "%02x invalid hw-settle-time %d us\n",
-+				chan, value);
-+			return ret;
-+		}
-+		channel->hw_settle_time = ret;
-+	} else {
-+		channel->hw_settle_time = VADC_DEF_HW_SETTLE_TIME;
-+	}
-+
-+	if (of_property_read_bool(node, "qcom,ratiometric"))
-+		channel->cal_method = ADC_TM5_RATIOMETRIC_CAL;
-+	else
-+		channel->cal_method = ADC_TM5_ABSOLUTE_CAL;
-+
-+	return 0;
-+}
-+
-+static int adc_tm5_get_dt_data(struct adc_tm5_chip *adc_tm, struct device_node *node)
-+{
-+	struct adc_tm5_channel *channels;
-+	struct device_node *child;
-+	unsigned int index = 0;
-+	u32 value;
-+	int ret;
-+	struct device *dev = adc_tm->dev;
-+
-+	adc_tm->nchannels = of_get_available_child_count(node);
-+	if (!adc_tm->nchannels)
-+		return -EINVAL;
-+
-+	adc_tm->channels = devm_kcalloc(dev, adc_tm->nchannels,
-+					sizeof(*adc_tm->channels), GFP_KERNEL);
-+	if (!adc_tm->channels)
-+		return -ENOMEM;
-+
-+	channels = adc_tm->channels;
-+
-+	adc_tm->data = of_device_get_match_data(dev);
-+
-+	ret = of_property_read_u32(node, "qcom,decimation", &value);
-+	if (!ret) {
-+		ret = qcom_adc5_decimation_from_dt(value, adc_tm->data->decimation);
-+		if (ret < 0) {
-+			dev_err(dev, "invalid decimation %d\n", value);
-+			return ret;
-+		}
-+		adc_tm->decimation = ret;
-+	} else {
-+		adc_tm->decimation = ADC5_DECIMATION_DEFAULT;
-+	}
-+
-+	ret = of_property_read_u32(node, "qcom,avg-samples", &value);
-+	if (!ret) {
-+		ret = qcom_adc5_avg_samples_from_dt(value);
-+		if (ret < 0) {
-+			dev_err(dev, "invalid avg-samples %d\n", value);
-+			return ret;
-+		}
-+		adc_tm->avg_samples = ret;
-+	} else {
-+		adc_tm->avg_samples = VADC_DEF_AVG_SAMPLES;
-+	}
-+
-+	for_each_available_child_of_node(node, child) {
-+		ret = adc_tm5_get_dt_channel_data(adc_tm, channels, child);
-+		if (ret) {
-+			of_node_put(child);
-+			return ret;
-+		}
-+
-+		channels++;
-+		index++;
-+	}
-+
-+	return 0;
-+}
-+
-+static int adc_tm5_probe(struct platform_device *pdev)
-+{
-+	struct device_node *node = pdev->dev.of_node;
-+	struct device *dev = &pdev->dev;
-+	struct adc_tm5_chip *adc_tm;
-+	struct regmap *regmap;
-+	int ret, irq;
-+	u32 reg;
-+
-+	regmap = dev_get_regmap(dev->parent, NULL);
-+	if (!regmap)
-+		return -ENODEV;
-+
-+	ret = of_property_read_u32(node, "reg", &reg);
-+	if (ret)
-+		return ret;
-+
-+	adc_tm = devm_kzalloc(&pdev->dev, sizeof(*adc_tm), GFP_KERNEL);
-+	if (!adc_tm)
-+		return -ENOMEM;
-+
-+	adc_tm->regmap = regmap;
-+	adc_tm->dev = dev;
-+	adc_tm->base = reg;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0) {
-+		dev_err(dev, "get_irq failed: %d\n", irq);
-+		return irq;
-+	}
-+
-+	ret = adc_tm5_get_dt_data(adc_tm, node);
-+	if (ret) {
-+		dev_err(dev, "get dt data failed: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = adc_tm5_init(adc_tm);
-+	if (ret) {
-+		dev_err(dev, "adc-tm init failed\n");
-+		return ret;
-+	}
-+
-+	ret = adc_tm5_register_tzd(adc_tm);
-+	if (ret) {
-+		dev_err(dev, "tzd register failed\n");
-+		return ret;
-+	}
-+
-+	return devm_request_irq(dev, irq, adc_tm5_isr, 0,
-+			       "pm-adc-tm5", adc_tm);
-+}
-+
-+static const struct of_device_id adc_tm5_match_table[] = {
-+	{
-+		.compatible = "qcom,spmi-adc-tm5",
-+		.data = &adc_tm5_data_pmic,
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, adc_tm5_match_table);
-+
-+static struct platform_driver adc_tm5_driver = {
-+	.driver = {
-+		.name = "spmi-adc-tm5",
-+		.of_match_table = adc_tm5_match_table,
-+	},
-+	.probe = adc_tm5_probe,
-+};
-+module_platform_driver(adc_tm5_driver);
-+
-+MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
-+MODULE_LICENSE("GPL v2");
--- 
-2.28.0
-
+ 			resets = <&gcc GCC_USB30_PRIM_BCR>;
+ 
+-			interconnects = <&aggre2_noc MASTER_USB3_0 &mem_noc SLAVE_EBI1>,
+-					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_0>;
++			interconnects = <&aggre2_noc MASTER_USB3_0 0 &mem_noc SLAVE_EBI1 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
+ 			interconnect-names = "usb-ddr", "apps-usb";
+ 
+ 			usb_1_dwc3: dwc3@a600000 {
+@@ -3617,8 +3617,8 @@ usb_2: usb@a8f8800 {
+ 
+ 			resets = <&gcc GCC_USB30_SEC_BCR>;
+ 
+-			interconnects = <&aggre2_noc MASTER_USB3_1 &mem_noc SLAVE_EBI1>,
+-					<&gladiator_noc MASTER_APPSS_PROC &config_noc SLAVE_USB3_1>;
++			interconnects = <&aggre2_noc MASTER_USB3_1 0 &mem_noc SLAVE_EBI1 0>,
++					<&gladiator_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_1 0>;
+ 			interconnect-names = "usb-ddr", "apps-usb";
+ 
+ 			usb_2_dwc3: dwc3@a800000 {
+@@ -4007,7 +4007,7 @@ gpu: gpu@5000000 {
+ 
+ 			qcom,gmu = <&gmu>;
+ 
+-			interconnects = <&mem_noc MASTER_GFX3D &mem_noc SLAVE_EBI1>;
++			interconnects = <&mem_noc MASTER_GFX3D 0 &mem_noc SLAVE_EBI1 0>;
+ 			interconnect-names = "gfx-mem";
+ 
+ 			gpu_opp_table: opp-table {
+@@ -4324,7 +4324,7 @@ lpasscc: clock-controller@17014000 {
+ 		gladiator_noc: interconnect@17900000 {
+ 			compatible = "qcom,sdm845-gladiator-noc";
+ 			reg = <0 0x17900000 0 0xd080>;
+-			#interconnect-cells = <1>;
++			#interconnect-cells = <2>;
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 		};
+ 
