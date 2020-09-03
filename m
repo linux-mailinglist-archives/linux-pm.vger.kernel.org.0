@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 325BB25C2FC
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D9D25C2F6
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728918AbgICOmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 10:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S1729432AbgICOle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 10:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729395AbgICOif (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 10:38:35 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523C3C0619EA
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:31:41 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z4so3260232wrr.4
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:31:41 -0700 (PDT)
+        with ESMTP id S1729397AbgICOix (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 10:38:53 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CBEC0619ED
+        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:31:42 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id w5so3243435wrp.8
+        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:31:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=4v7riCkWqOW12WqwNbdYgi3MhtDbA8fxMcLkKxaVn1Q=;
-        b=FxSMag+QeOzVZzZ+W/d4wUZ228qXnTc22tAxz97IrORD8jZ1HYcP+sq2f2Lx6LfZL3
-         hCQmI3l6sISeNn78F6Z3VYf7cXFECd9N8RKUZSKARukgkj2KPTDjIQ10GSUQZ2e4kU1i
-         5lq3epDjkN01sN0gOs9C3LbtQ6sDJ/49NDuxEpQXTerjREMHIdAX7obuKgHhjQb7KXWQ
-         Z2+WlBaT30YpbYgKs+NkWSUG4DKGwNe0EF60dRWyW7HFlwDhxELhqAmCvLa6/kBrW/87
-         TrIVqzw/5wBYmDyhC465Zn9R9K5WBAHLQZxAy/QZRgflKb/yJcaMeT2obJzIRa5fJ54F
-         x3YQ==
+        bh=p6XrrMy9U9a6D72/M7vouTgDf12ccI5j+g02H66Xr7c=;
+        b=L2JFU0UnIqcJXPhPG2tVj2XRHoqRM6PPI5htL1hCEyDVp4E0ETfFHDLkACalSGr/NL
+         1mCI0n24LD+c5P+pvefpfp+1P64ZVlcoM1fLYHA0aj8SIe8lK6Gf0kMOng5ACRm29Pev
+         Brm3/jFTBNR8jRWdOEKq/gutqsBKLsGgfg5JSOx3H3DCAEteJPvlgPUGtcXxnZMlI6wx
+         mX8ZQ2TkLPLDLMNb3AuNWuPrZ6eNN1TWphSfPTazFkMEsLYtGL9Uz39FMmtDbgpBDBX/
+         X+GDQkpSDK+NqJpBfPREEhLu7NiM/5zYIdNZCYDlFKNQ8yosDa3G2RX8z3T90pGBzAXj
+         daGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4v7riCkWqOW12WqwNbdYgi3MhtDbA8fxMcLkKxaVn1Q=;
-        b=Yb2dyE3qcMfIyP0AO6lZi+2XVAJhjPqJsrN3zZJTrOzRke36U4yFuG8xN2yhhmM4QI
-         ctKIjCLqC0Ysds4/H54avodGObVAlx3Bf3E88OVwWuY3TxzcCHsNqPu6lieV9UwenJJq
-         B6ikikbLYvt9QK+atvVaGBT4Mc69aZgSRb0sE/rwOke/ei8iLem5taqd9brKq/EzkRqF
-         9O8XqLhqIC6tIAFmFvE20afpfssYPFQNuXB+AJiyFlgHex0vKpr04tKZlD6+3+T8IIfv
-         hwPoOLvLcyusUfBLtoARXqdeDhPUKOREtzQDPgv+iifs+T/kStn1YJlYTyARiCLhg5PQ
-         p0QQ==
-X-Gm-Message-State: AOAM532GoB+h6OPeQZHwjFyWQAR1uMS4fI5Zebie3pEm+ApygrSmzIph
-        lr1jP7+VWogsB46+XsxNgwfxwacnRMxTCw==
-X-Google-Smtp-Source: ABdhPJy2mm+MBBMVkV5XJikd7HS9L+iWlSQLCxuxQL9VOQRGQ/LByHjHzHNmXzyk4i662snmvdW6GA==
-X-Received: by 2002:a5d:514e:: with SMTP id u14mr2485171wrt.211.1599139899481;
-        Thu, 03 Sep 2020 06:31:39 -0700 (PDT)
+        bh=p6XrrMy9U9a6D72/M7vouTgDf12ccI5j+g02H66Xr7c=;
+        b=FBzubZJHhzKO7nE7GIQgOMv8hcr3mE/0HXXd+JXjYnmpkftiR6CU4ZFKHZqMBnIZr7
+         gpbSk7+9w1UFOllAsIsV0R60qMRhJAqBJnzBXzvx6ZhvQ4vH3R5nZiqc9G/SejQMnIC+
+         ORWD7R1fsqlum50TdXmjR3yzU9KIG1jxKcfdqy9UFbBGeq0RoPzQc17uhH0Y5h4PoW+K
+         mnmakrE5cqXK95GRSBPahAte9QrR+4QKZBkxm82RKle+V1J7VMmp4XbKJVNSTyrA29XQ
+         sTkSyvE5gF7d/DMFfgBICNPdy2de7rexfMUiNYaau3Y50pM7kNjiwg5RTa8dBEUOG5pe
+         /XQw==
+X-Gm-Message-State: AOAM530oq0FLzAb+jby7jY3gYU6cNeR1uouplEuN/5pMwL5gKZYVZQ3t
+        Wz4i0aqf/SpLmpwbTs6CEqIhPjX66ue/KA==
+X-Google-Smtp-Source: ABdhPJyfSdIyuKbBOmnhuXtH81KE55IYjPFKRa6w/R89qr724BOshRxg5zZ27zOXQWH4OsXv3j/CDA==
+X-Received: by 2002:adf:dcc3:: with SMTP id x3mr2500760wrm.120.1599139900643;
+        Thu, 03 Sep 2020 06:31:40 -0700 (PDT)
 Received: from localhost.localdomain ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id b2sm4310768wmh.47.2020.09.03.06.31.38
+        by smtp.googlemail.com with ESMTPSA id b2sm4310768wmh.47.2020.09.03.06.31.39
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Sep 2020 06:31:38 -0700 (PDT)
+        Thu, 03 Sep 2020 06:31:40 -0700 (PDT)
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
 Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
         sibis@codeaurora.org, mka@chromium.org, dianders@chromium.org,
-        georgi.djakov@linaro.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 2/7] dt-bindings: interconnect: Document the support of optional path tag
-Date:   Thu,  3 Sep 2020 16:31:29 +0300
-Message-Id: <20200903133134.17201-3-georgi.djakov@linaro.org>
+        georgi.djakov@linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 3/7] interconnect: qcom: Implement xlate_extended() to parse tags
+Date:   Thu,  3 Sep 2020 16:31:30 +0300
+Message-Id: <20200903133134.17201-4-georgi.djakov@linaro.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200903133134.17201-1-georgi.djakov@linaro.org>
 References: <20200903133134.17201-1-georgi.djakov@linaro.org>
@@ -66,63 +65,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Let's document that we now support specifying path tag information in the
-arg cells of the 'interconnects' DT property. This information would be
-populated when the xlate_extended() callback is used.
+Implement a function to parse the arguments of the "interconnects" DT
+property and populate the interconnect path tags if this information
+is available.
 
-Specifying the tag in DT will allow the interconnect framework to do the
-aggregation based on the tag automatically. The users can still use the
-icc_set_tag() API if/when needed.
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+Tested-by: Sibi Sankar <sibis@codeaurora.org>
+Reviewed-by: Sibi Sankar <sibis@codeaurora.org>
 Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 ---
- .../bindings/interconnect/interconnect.txt    | 24 ++++++++++++++++++-
- 1 file changed, 23 insertions(+), 1 deletion(-)
+ drivers/interconnect/qcom/icc-rpmh.c | 27 +++++++++++++++++++++++++++
+ drivers/interconnect/qcom/icc-rpmh.h |  1 +
+ 2 files changed, 28 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/interconnect.txt b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-index 6f5d23a605b7..138c544c8c8c 100644
---- a/Documentation/devicetree/bindings/interconnect/interconnect.txt
-+++ b/Documentation/devicetree/bindings/interconnect/interconnect.txt
-@@ -19,7 +19,8 @@ directly.
- Required properties:
- - compatible : contains the interconnect provider compatible string
- - #interconnect-cells : number of cells in a interconnect specifier needed to
--			encode the interconnect node id
-+			encode the interconnect node id and optionally add a
-+			path tag
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index 3ac5182c9ab2..7e538155e486 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -6,6 +6,8 @@
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
++#include <linux/of.h>
++#include <linux/slab.h>
  
- Example:
+ #include "bcm-voter.h"
+ #include "icc-rpmh.h"
+@@ -92,6 +94,31 @@ int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+ }
+ EXPORT_SYMBOL_GPL(qcom_icc_set);
  
-@@ -44,6 +45,10 @@ components it has to interact with.
- Required properties:
- interconnects : Pairs of phandles and interconnect provider specifier to denote
- 	        the edge source and destination ports of the interconnect path.
-+		An optional path tag value could specified as additional argument
-+		to both endpoints and in such cases, this information will be passed
-+		to the interconnect framework to do aggregation based on the attached
-+		tag.
++struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
++{
++	struct icc_node_data *ndata;
++	struct icc_node *node;
++
++	node = of_icc_xlate_onecell(spec, data);
++	if (IS_ERR(node))
++		return ERR_CAST(node);
++
++	ndata = kzalloc(sizeof(*ndata), GFP_KERNEL);
++	if (!ndata)
++		return ERR_PTR(-ENOMEM);
++
++	ndata->node = node;
++
++	if (spec->args_count == 2)
++		ndata->tag = spec->args[1];
++
++	if (spec->args_count > 2)
++		pr_warn("%pOF: Too many arguments, path tag is not parsed\n", spec->np);
++
++	return ndata;
++}
++EXPORT_SYMBOL_GPL(qcom_icc_xlate_extended);
++
+ /**
+  * qcom_icc_bcm_init - populates bcm aux data and connect qnodes
+  * @bcm: bcm to be initialized
+diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+index 903d25e61984..1dac39bc255d 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.h
++++ b/drivers/interconnect/qcom/icc-rpmh.h
+@@ -143,6 +143,7 @@ struct qcom_icc_desc {
+ int qcom_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ 		       u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+ int qcom_icc_set(struct icc_node *src, struct icc_node *dst);
++struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
+ int qcom_icc_bcm_init(struct qcom_icc_bcm *bcm, struct device *dev);
+ void qcom_icc_pre_aggregate(struct icc_node *node);
  
- Optional properties:
- interconnect-names : List of interconnect path name strings sorted in the same
-@@ -62,3 +67,20 @@ Example:
- 		interconnects = <&pnoc MASTER_SDCC_1 &bimc SLAVE_EBI_CH0>;
- 		interconnect-names = "sdhc-mem";
- 	};
-+
-+Example with path tags:
-+
-+	gnoc: interconnect@17900000 {
-+		...
-+		interconnect-cells = <2>;
-+	};
-+
-+	mnoc: interconnect@1380000 {
-+		...
-+		interconnect-cells = <2>;
-+	};
-+
-+	cpu@0 {
-+		...
-+		interconnects = <&gnoc MASTER_APPSS_PROC 3 &mnoc SLAVE_EBI1 3>;
-+	}
