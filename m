@@ -2,123 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F9A25BB74
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 09:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921A625BDFA
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 10:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbgICHNp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 03:13:45 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:16152 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgICHNo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Sep 2020 03:13:44 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1599117223; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=4z34Z3fn8MgWcmuiduYWqSNTgBUNPiswOSFypKcoKAo=;
- b=rG41yKIjNj9veZxjdrK8ryteNWXNNDsmZGOy52+LdG8yHq9Uq8PZmLXetnixVCVCXBvWudTu
- /IFxLYxbt0YVfW18z/dKYWySa+9o+B7QAN+psw/gCwcwV+kiqeZNtpU1XqXfEuVwc2bibGW4
- bhx+pI9kdD2m69PpjT6yN2QRFXg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 5f5097999bdf68cc036d7acf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 03 Sep 2020 07:13:29
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 11D5DC433C9; Thu,  3 Sep 2020 07:13:29 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 19B63C433C6;
-        Thu,  3 Sep 2020 07:13:27 +0000 (UTC)
+        id S1726397AbgICI7M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 04:59:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbgICI7L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 04:59:11 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA05C061244
+        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 01:59:09 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id b79so2055013wmb.4
+        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 01:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mcuO/YRTkHMtsRTTDq5UBJwMUZ7koaTnJHXnA+FiBmU=;
+        b=WfRaPugmqj1X57/YKAr3RlaDPEx9TMmvr5cSnhcEmibTe7+c59hhv149PN/V9gGs81
+         feRxwbtK8AcBl2+EX8h7i/p2YcV45UzT37c51Qjnj17bd6o5KlI4VA7IQ646Df4/qy31
+         uYM7vDY0lhr+mWxOeWr2KS3TjcEFPIUfB137hM08X2itLOioNinnrVnLu5kx/PgcvJtw
+         SQdeRrJwpEfuDsVvJcUMJwJw8nZFO+23IDvt9xKzTLaaRu60zmrvX8oglC/Ahl+rCQQt
+         //kPLzg4VRvrckm109E1C5REo9jSGTK4+/k20MzNyA0vFiIqOZSMB45tdqwz1ShG8Jig
+         VQKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mcuO/YRTkHMtsRTTDq5UBJwMUZ7koaTnJHXnA+FiBmU=;
+        b=i4sdGbErZIEFsVOZEvdbrYVkwAfg/qQHK4jATg4XkM6X9X/LLD/9AlovF87t91P+RM
+         y5beuOCIcvfGcFdahBss8/UknP20cgddO3fTc2peIWseKkndvG6VfFuVPujhWyOouOWt
+         eRxktLzjcAQ1RpEZ89+fu+dP2DPJAaAf3TYxcyRSF9FkbkcfyyD+jdb4u974bcy5pR10
+         R3ftDnDxTUvPIax0lhZD6xUO7/qU39igDrKQo73TsEC4u5H5uzvoTe4Vz72B42GOT0R1
+         l/PN018wyrSZv+N4OzW4jF9zkHSq5k8dKSjCbdWJO0mmnUCUlEmxUEY20f77bzzqRxCM
+         oN7g==
+X-Gm-Message-State: AOAM533c5Wf4nLPCS+BLT1kE7uGmPUkbGVBaxV2S4NEMb9dKzi3JklZr
+        C2yEzcxBl5lfB1CVYBZOKQc7GG4vsPnkVA==
+X-Google-Smtp-Source: ABdhPJxA6mQMSjqHWEt2VqGhOmiHHX9y+dvcyCUr02EContrJoPKTbw97sOV7edz+qSvi77dsXYtpA==
+X-Received: by 2002:a7b:cf29:: with SMTP id m9mr1390175wmg.88.1599123547268;
+        Thu, 03 Sep 2020 01:59:07 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:3cd8:a0e1:de28:dec8? ([2a01:e34:ed2f:f020:3cd8:a0e1:de28:dec8])
+        by smtp.googlemail.com with ESMTPSA id s124sm3349555wme.29.2020.09.03.01.59.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2020 01:59:06 -0700 (PDT)
+Subject: Re: TMU driver query
+To:     Andy Tang <andy.tang@nxp.com>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <DBBPR04MB609057FF54F6A1D868438373F32C0@DBBPR04MB6090.eurprd04.prod.outlook.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <c9c64a1a-2837-3fd1-9e28-fed7fdad1cd8@linaro.org>
+Date:   Thu, 3 Sep 2020 10:59:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 03 Sep 2020 12:43:27 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     ansuelsmth@gmail.com, vincent.guittot@linaro.org,
-        saravanak@google.com, 'Sudeep Holla' <sudeep.holla@arm.com>,
-        "'Rafael J. Wysocki'" <rjw@rjwysocki.net>,
-        'Rob Herring' <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: R: [RFC PATCH v3 0/2] Add Krait Cache Scaling support
-In-Reply-To: <20200903065314.y3ynhwydahaeg6o6@vireshk-i7>
-References: <20200821140026.19643-1-ansuelsmth@gmail.com>
- <20200824104053.kpjpwzl2iw3lpg2m@vireshk-i7>
- <b339e01f9d1e955137120daa06d26228@codeaurora.org>
- <039d01d67f6a$188700d0$49950270$@gmail.com>
- <20200903065314.y3ynhwydahaeg6o6@vireshk-i7>
-Message-ID: <6dc62d231c776b2cdfdc36cfe36e4140@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+In-Reply-To: <DBBPR04MB609057FF54F6A1D868438373F32C0@DBBPR04MB6090.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2020-09-03 12:23, Viresh Kumar wrote:
-> On 31-08-20, 09:41, ansuelsmth@gmail.com wrote:
->> On 31-08-20, Sibi wrote:
->> > On 2020-08-24 16:10, Viresh Kumar wrote:
->> > > +Vincent/Saravana/Sibi
->> > >
->> > > On 21-08-20, 16:00, Ansuel Smith wrote:
->> > >> This adds Krait Cache scaling support using the cpufreq notifier.
->> > >> I have some doubt about where this should be actually placed (clk or
->> > >> cpufreq)?
->> > >> Also the original idea was to create a dedicated cpufreq driver (like
->> > >> it's done in
->> > >> the codeaurora qcom repo) by copying the cpufreq-dt driver and adding
->> > >> the cache
->> > >> scaling logic but i still don't know what is better. Have a very
->> > >> similar driver or
->> > >> add a dedicated driver only for the cache using the cpufreq notifier
->> > >> and do the
->> > >> scale on every freq transition.
->> > >> Thanks to everyone who will review or answer these questions.
->> > >
->> > > Saravana was doing something with devfreq to solve such issues if I
->> > > wasn't mistaken.
->> > >
->> > > Sibi ?
->> >
->> > IIRC the final plan was to create a devfreq device
->> > and devfreq-cpufreq based governor to scale them, this
->> > way one can switch to a different governor if required.
->> 
->> So in this case I should convert this patch to a devfreq driver-
-> 
-> I think this should happen nevertheless. You are doing DVFS for a
-> device which isn't a CPU and devfreq looks to be the right place of
-> doing so.
-> 
->> Isn't overkill to use a governor for such a task?
->> (3 range based on the cpufreq?)
-> 
-> I am not sure about the governor part here, maybe it won't be required
-> ?
 
-Yeah I don't see it being needed in ^^
-case as well. I just mentioned them as
-an advantage in case you wanted to switch
-to a different governor in the future.
+Hi Andy,
 
-https://lore.kernel.org/lkml/d0bc8877-6d41-f54e-1c4c-2fadbb9dcd0b@samsung.com/
+On 03/09/2020 05:06, Andy Tang wrote:
+> Hi,
+> 
+>  
+> 
+> I have a query about the TMU driver.
+> 
+> Currently our driver qoriq_thermal.c is using polling instead of
+> interrupt method to report the temperature.
+> 
+> Are there any limitations in the TMU framework if I convert it to use
+> interrupt way? At least our soc supports Interrupt.
 
-A devfreq governor tracking cpufreq was
-generally accepted but using a cpufreq
-notifier to achieve that was discouraged.
+I'm not sure to understand the 'TMU framework'. I assume you meant the
+qoriq sensor, right ?
+
+> That is to say when temperature reaches to critical temperature,
+> interrupt handler will take care of the situation.
+
+Are we talking about critical or passive trip point ?
+
+> Also if I enabled the Interrupt, what about the thermal zone? If thermal
+> zone exists, both thermal zone and interrupt
+> 
+> handler would deal with critical warning.
+
+I'm not sure to understand your question.
+
+The thermal zone is the software component. It does the association
+between the sensor, the trip point and the cooling device.
+
+The polling values are there to give the sampling rate.
+
+If the sensor supports the interrupt mode, then set the polling rate to
+zero, enable the interrupt for the first passive trip point temperature
+and in the handler do a thermal zone update.
+
+So when the interrupt fires, the thermal zone is updated, the
+temperature is read and if it is greater than the passive trip point
+then the passive polling will takeover and the mitigation will happen.
+
+Does it answer your question ?
+
+
 
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
