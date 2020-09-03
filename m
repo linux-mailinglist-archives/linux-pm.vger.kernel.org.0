@@ -2,165 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A8E25C2ED
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4605825C360
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729383AbgICOkc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 10:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729405AbgICOi4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 10:38:56 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB3C061247
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 07:37:13 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id k1so860666vkb.7
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 07:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kLSg32zqZ1uwFhUQgFcon/VKvTPBahvcvor+61b9Y2o=;
-        b=zgd2rOKCWNgbCnJWXnh44ZDoxhEral6Emwexd7kiirr8wCHd/0yXVlAzK3KL5dPaKm
-         S5xjJ6F7XDedhaKcOwhxa/r2qRzjW0S4sMRxXeIhQJE14GYbMbMEjGz8YEBOS+9ZNHD7
-         JX5Ug4XQLqLFfyAg1+R1pRWRoAWQ/fjpxcSOTDTXadYdAKECLtDIK852FPb9LfY7o9wU
-         tHdKqRzEmAUT35ppQjItABIv5EYLCH6id9/WykRkwGPEwMFbM0R84gnHMbUkNbnF7nQL
-         HJTyO/epUTizMmCuW2ZIUin9VCHRDWEinx3pukDX9Dw9R0Ka+2eNEwYbepMEaztvJRi7
-         tNbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kLSg32zqZ1uwFhUQgFcon/VKvTPBahvcvor+61b9Y2o=;
-        b=S4m02IlE6rrWmrqkqUmvudrSj4X6V7PQgTGybHsc2oYSMuies/VHDmSDFY/PcNyk8B
-         tOz0SLpmd1nIBNRiPH7ypjSozHSi4CcZJPMaQAVxFhHfSfPOifTvRP17z/T+v/HNltRw
-         XL632jEe3y7G8dNr9Ank/HyWBlsheYR3qCVQQ6kI2RV8HEw7Z6TnrI49yRzudvyD89IH
-         uB0/90Hz1SGfohzuLnBa3x8CYgubOcANsgLMtPF/xAkXFcIGvjvCUV8J5pyZ54MSsADC
-         7Cz9+3M+BDdQxFXALPAkFpbDkDfkWizvvp0VYB/hAFTUHayBN7a6uPvZMycrfchs/Qti
-         4yDg==
-X-Gm-Message-State: AOAM531VeS1Vc2zWarDzoVk6UCaUt6IHkdDlOmOzSxsaoWkawbulvnf5
-        PQchAJsWttAvBnXddxGhtzHzGdNR7tNLFlstiNO64rnR3pxl/lHt
-X-Google-Smtp-Source: ABdhPJxVBD/I9k3j29ntwBERLlwmUh+XdA4TLiaA+ldSn5HoDrbT+XvZ9K1ienLPG0zjVT/1zM3yMdHFGfj8JQO3z2I=
-X-Received: by 2002:a05:6122:6bb:: with SMTP id r27mr1616268vkq.3.1599143832258;
- Thu, 03 Sep 2020 07:37:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200901104206.GU1362448@hirez.programming.kicks-ass.net>
- <CAPDyKFo0VkW-cgRSkvPQ0whpuJCo4OKcL1nmH7nz1tDEChOtVg@mail.gmail.com>
- <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
- <20200901154417.GD20303@codeaurora.org> <20200901155014.GF2674@hirez.programming.kicks-ass.net>
- <20200901161340.GC29330@paulmck-ThinkPad-P72> <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
- <CAPDyKFqPh7bg16AsitGv2QQHgwOPnWx9DiPPCMuD1EGA5TFFdg@mail.gmail.com>
- <20200902121355.GE1362448@hirez.programming.kicks-ass.net>
- <CAPDyKFrGj+8hOXi7sWxWNv2QP0=mx9pFKLG0JM-L5VNKUPDgeA@mail.gmail.com> <20200903135347.GC1362448@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200903135347.GC1362448@hirez.programming.kicks-ass.net>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 3 Sep 2020 16:36:35 +0200
-Message-ID: <CAPDyKFqduU65YmhBZ8PwDRTZDLtWhWX087LBy0bx56go+ra4Ow@mail.gmail.com>
-Subject: Re: [RFC][PATCH] cpu_pm: Remove RCU abuse
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Saravana Kannan <saravanak@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        madhuparnabhowmik10@gmail.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
+        id S1729216AbgICOuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 10:50:32 -0400
+Received: from mga02.intel.com ([134.134.136.20]:58808 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729221AbgICOua (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Sep 2020 10:50:30 -0400
+IronPort-SDR: 6Sz4wc/NfUDnUKmYLIKE3ehT6FTSAK8RQN8MaQmqjtIT7BnyqH6lAczhzd/iKRcXq4DjjBpPZu
+ ACJx+DChaFqw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="145321772"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="145321772"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 07:50:29 -0700
+IronPort-SDR: BwfK41eGLvTp+sj057B+tx268htgpgChICs9sUe69HpeljkYMvFuz5O4Phxc8mh3C6kWui8ZDp
+ jglQq2nL/hvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="375890461"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga001.jf.intel.com with ESMTP; 03 Sep 2020 07:50:29 -0700
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
+        by linux.intel.com (Postfix) with ESMTP id 586515807B5;
+        Thu,  3 Sep 2020 07:50:26 -0700 (PDT)
+Message-ID: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To:     Pratik Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Date:   Thu, 03 Sep 2020 17:50:25 +0300
+In-Reply-To: <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+         <20200902114506.45809-2-psampat@linux.ibm.com>
+         <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+         <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 3 Sep 2020 at 15:53, <peterz@infradead.org> wrote:
->
-> On Wed, Sep 02, 2020 at 05:58:55PM +0200, Ulf Hansson wrote:
-> > On Wed, 2 Sep 2020 at 14:14, <peterz@infradead.org> wrote:
-> > >
-> > > On Wed, Sep 02, 2020 at 09:03:37AM +0200, Ulf Hansson wrote:
-> > > > Lots of cpuidle drivers are using CPU_PM notifiers (grep for
-> > > > cpu_pm_enter and you will see) from their idlestates ->enter()
-> > > > callbacks. And for those we are already calling
-> > > > rcu_irq_enter_irqson|off() in cpu_pm_notify() when firing them.
-> > >
-> > > Yeah, that particular trainwreck is on my todo list already ... then
-> > > again, that list is forever overflowing.
-> > >
-> > > I'm thinking cpu_pm_unregister_notifier() is not a common thing? The few
-> > > I looked at seem to suggest 'never' is a good approximation.
-> >
-> > The trend is that drivers are turning into regular modules that may
-> > also need to manage "->remove()", which may mean unregistering the
-> > notifier. Of course, I don't know for sure whether that becomes a
-> > problem, but it seems quite limiting.
->
-> You can pin modules, once they're loaded they can never be removed
-> again.
->
-> Anyway, the below should 'work', I think.
->
-> ---
-> diff --git a/kernel/cpu_pm.c b/kernel/cpu_pm.c
-> index f7e1d0eccdbc..72804e0883d5 100644
-> --- a/kernel/cpu_pm.c
-> +++ b/kernel/cpu_pm.c
-> @@ -12,21 +12,18 @@
->  #include <linux/notifier.h>
->  #include <linux/spinlock.h>
->  #include <linux/syscore_ops.h>
-> +#include <linux/cpu.h>
-> +#include <linux/smp.h>
->
-> -static ATOMIC_NOTIFIER_HEAD(cpu_pm_notifier_chain);
-> +static RAW_NOTIFIER_HEAD(cpu_pm_notifier_chain);
-> +static DEFINE_SPINLOCK(cpu_pm_lock);
->
->  static int cpu_pm_notify(enum cpu_pm_event event)
->  {
->         int ret;
->
-> -       /*
-> -        * atomic_notifier_call_chain has a RCU read critical section, which
-> -        * could be disfunctional in cpu idle. Copy RCU_NONIDLE code to let
-> -        * RCU know this.
-> -        */
-> -       rcu_irq_enter_irqson();
-> -       ret = atomic_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
-> -       rcu_irq_exit_irqson();
-> +       lockdep_assert_irqs_disabled();
+On Thu, 2020-09-03 at 17:30 +0530, Pratik Sampat wrote:
+> I certainly did not know about that the Intel architecture being aware
+> of timers and pre-wakes the CPUs which makes the timer experiment
+> observations void.
 
-Nitpick, maybe the lockdep should be moved to a separate patch.
+Well, things depend on platform, it is really "void", it is just
+different and it measures an optimized case. The result may be smaller
+observed latency. And things depend on the platform.
 
-> +       ret = raw_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
+> However, we are also collecting a baseline measurement wherein we run
+> the same test on a 100% busy CPU and the measurement of latency from
+> that could be considered to the kernel-userspace overhead.
+> The rest of the measurements would be considered keeping this baseline
+> in mind.
 
-Converting to raw_notifiers seems reasonable - if we need to avoid the
-RCU usage.
+Yes, this should give the idea of the overhead, but still, at least for
+many Intel platforms I would not be comfortable using the resulting
+number (measured latency - baseline) for a cpuidle driver, because
+there are just too many variables there. I am not sure I could assume
+the baseline measured this way is an invariant - it could be noticeably
+different depending on whether you use C-states or not.
 
-My point is, I wonder about if the notifier callbacks themselves are
-safe from RCU usage. For example, I would not be surprised if tracing
-is happening behind them.
+> > At least on Intel platforms, this will mean that the IPI method won't
+> > cover deep C-states like, say, PC6, because one CPU is busy. Again, not
+> > saying this is not interesting, just pointing out the limitation.
+> 
+> That's a valid point. We have similar deep idle states in POWER too.
+> The idea here is that this test should be run on an already idle
+> system, of course there will be kernel jitters along the way
+> which can cause little skewness in observations across some CPUs but I
+> believe the observations overall should be stable.
 
-Moreover, I am not sure that we really need to prevent and limit
-tracing from happening. Instead we could push rcu_idle_enter|exit()
-further down to the arch specific code in the cpuidle drivers, as you
-kind of all proposed earlier.
+If baseline and cpuidle latency are numbers of same order of magnitude,
+and you are measuring in a controlled lab system, may be yes. But if
+baseline is, say, in milliseconds, and you are measuring a 10
+microseconds C-state, then probably no.
 
-In this way, we can step by step, move to a new "version" of
-cpu_pm_enter() that doesn't have to deal with rcu_irq_enter_irqson(),
-because RCU hasn't been pushed to idle yet.
+> Another solution to this could be using isolcpus, but that just
+> increases the complexity all the more.
+> If you have any suggestions of any other way that could guarantee
+> idleness that would be great.
 
-[...]
+Well, I did not try to guarantee idleness. I just use timers and
+external device (the network card), so no CPUs needs to be busy and the
+system can enter deep C-states. Then I just look at median, 99%-th
+percentile, etc.
 
-Kind regards
-Uffe
+But by all means IPI is also a very interesting experiment. Just covers
+a different usage scenario.
+
+When I started experimenting in this area, one of my main early
+takeaways was realization that C-state latency really depends on the
+event source.
+
+HTH,
+Artem.
+
