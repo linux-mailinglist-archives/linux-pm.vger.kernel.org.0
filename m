@@ -2,65 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B07025C65C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 18:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2744C25C6F8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 18:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728431AbgICQNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 12:13:24 -0400
-Received: from mga14.intel.com ([192.55.52.115]:51539 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728575AbgICQNU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Sep 2020 12:13:20 -0400
-IronPort-SDR: SEn1VCuIgsSlG4ssSl4gkLqRSlIVgUEbUNeVCbYmj9ma/kuteeNfItz+Nevx6P9/Werl/LkiwM
- yHstA9pgaOVA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="156874695"
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="156874695"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 09:13:19 -0700
-IronPort-SDR: fk5N31e8TGXqszp/hkGx3Y27Do4CNUaLdLlqnJp1760vL/L5dq2hrU3xSP3351G+w/bgBSa+0U
- R2mw+5q6ydyw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
-   d="scan'208";a="331834658"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 09:13:19 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
-        by linux.intel.com (Postfix) with ESMTP id 247D458079D;
-        Thu,  3 Sep 2020 09:13:15 -0700 (PDT)
-Message-ID: <515651b2caa08799df03f07dcc429321b4dcc05e.camel@gmail.com>
-Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
- measurement
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To:     Pratik Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
-        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
-        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pratik.r.sampat@gmail.com
-Date:   Thu, 03 Sep 2020 19:13:15 +0300
-In-Reply-To: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
-References: <20200902114506.45809-1-psampat@linux.ibm.com>
-         <20200902114506.45809-2-psampat@linux.ibm.com>
-         <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
-         <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
-         <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+        id S1728454AbgICQfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 12:35:10 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:37689 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726292AbgICQfE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 12:35:04 -0400
+Received: by mail-il1-f195.google.com with SMTP id b17so3273200ilh.4;
+        Thu, 03 Sep 2020 09:35:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iIfLZ14oR+6kVVplGeYdY3QZelcTYNmiPq+fUE3RZP4=;
+        b=sCXDsd1ndeUvn1hXSgDSo19yqG+ius/m2Q8eEq8Ijmi/0ZymIEpV4Qr04VxMYXxvai
+         jiQ9+4bRiEXwJD8jnYBGJ0KpGaEMrY+jG95/YGxYecqLav/vc6JPC28i8NV2tyLoq94M
+         eAgpj+MIuGyGgcJfz9bG6UxHD/VaI09s7DhyigBbMPJSiOyp+hSA/H5Ga8Rpm0HKc+M4
+         Xt9f8egzb57xyYNSHI38HYUBcwJy90c9n3C1jHD4DCGOSjMhXzRsQ6bQw1nJRH3JfYe1
+         t0pkJGUktfbePMOKpTvreMGaBnJ/aTbKEc5GDnEG68cToJP40gHePjVTcz0eD3nfFp/J
+         AnKQ==
+X-Gm-Message-State: AOAM530wOJeeqzDm+ItcB239Kol+ghldG3Yb965ijzHK9n+II+aiMCRy
+        5RLm+mPFbp34z3Erv+ZLVw==
+X-Google-Smtp-Source: ABdhPJzAEffp2WonM7repJTb9yyQNn/3Nmi+Nn/JwPHkxriL04JXnRwvW1ue7iajeKEDm4+9ErJo6Q==
+X-Received: by 2002:a05:6e02:1141:: with SMTP id o1mr1095908ill.275.1599150902693;
+        Thu, 03 Sep 2020 09:35:02 -0700 (PDT)
+Received: from xps15 ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id w70sm1713310ilk.87.2020.09.03.09.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2020 09:35:02 -0700 (PDT)
+Received: (nullmailer pid 2909825 invoked by uid 1000);
+        Thu, 03 Sep 2020 16:34:58 -0000
+Date:   Thu, 3 Sep 2020 10:34:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lars-Peter Clausen <lars@metafoo.de>, linux-pm@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v2 1/9] dt-bindings: thermal: qcom: add adc-thermal
+ monitor bindings
+Message-ID: <20200903163458.GA2909612@bogus>
+References: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
+ <20200903132109.1914011-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200903132109.1914011-2-dmitry.baryshkov@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 2020-09-03 at 17:50 +0300, Artem Bityutskiy wrote:
-> Well, things depend on platform, it is really "void", it is just
-> different and it measures an optimized case. The result may be smaller
-> observed latency.
+On Thu, 03 Sep 2020 16:21:01 +0300, Dmitry Baryshkov wrote:
+> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
+> close counterpart of VADC part of those PMICs.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> 
 
-Sorry, I meant to say it is _not_ really "void".
+
+My bot found errors running 'make dt_binding_check' on your patch:
+
+Error: Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dts:23.24-25 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1366: dt_binding_check] Error 2
+
+
+See https://patchwork.ozlabs.org/patch/1356633
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
 
