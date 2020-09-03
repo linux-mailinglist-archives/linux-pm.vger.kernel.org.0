@@ -2,128 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4378825B90B
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 05:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0EB25BB1D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 08:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgICDE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Sep 2020 23:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726523AbgICDEz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Sep 2020 23:04:55 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511DCC061244
-        for <linux-pm@vger.kernel.org>; Wed,  2 Sep 2020 20:04:55 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 31so891591pgy.13
-        for <linux-pm@vger.kernel.org>; Wed, 02 Sep 2020 20:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j6ZbavePedjhnfU79o3iQRLIDz1F7LpY5/tY3kRYH2I=;
-        b=ZOK4yYlBIO8Z0jgxrFvwOCT/sjcNTC39bYH6ajJhH9WN8TBngwyJVUB27jctJ4Kvok
-         va0DKBExk4lXAXHlId6x0RrPy4dya1A8Eg62cS211NLG4W+Zc8j6BbbeS8WsMCInVNA0
-         1RuxtjONt7HjtlqEy1GaBxfkvGWqArrkpvI+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j6ZbavePedjhnfU79o3iQRLIDz1F7LpY5/tY3kRYH2I=;
-        b=UFlV99PZqIfwF5KnaC7snscVAJCj+UqUjXr8ZiZktPeEx1VODKPppOsahmt946Zphc
-         H2RKkImB0KyiODASaw7cNcmTnQUvtUoOlNOR2mZVE/+VBY8+gtnOT2Nqydbc6ncIZKDi
-         GGnrojxcyfkQTGWngAlsBS9DrfP6gmoP5UuKTEDbU699CTkeXmwLLa8jfPXRnAarbaeM
-         SLkcxOHNo5sfb+I0Syj7UVf0wRUD7oBnoZvPyf8nPgfo7KsODjlMAluq0pXNo4DwVk18
-         0la69lS5n2YZORVQQrQHL+3EMAHMyqlATJXap+64qi/uJWyLLdC352crawkJB1LDCCVG
-         wBtg==
-X-Gm-Message-State: AOAM5327zDOBT6WipVUXEdtLNcMK/HGGwaOeW+e31iv1Zh6at9EIJK94
-        ACERhppiFuMHjz/a/sDVjiXazw==
-X-Google-Smtp-Source: ABdhPJwdWm3XvRRulvRARovi0fdDDyEZakdEq37nM+b/0BRaKbYUMSCt7KjLe+/u59Y7pOIGeuPyPQ==
-X-Received: by 2002:a17:902:6f01:: with SMTP id w1mr1529786plk.49.1599102294791;
-        Wed, 02 Sep 2020 20:04:54 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:f693:9fff:fef4:a8fc])
-        by smtp.gmail.com with ESMTPSA id b203sm955960pfb.205.2020.09.02.20.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2020 20:04:54 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, drinkcat@chromium.org,
-        dianders@chromium.org, briannorris@chromium.org,
-        Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH] power: supply: sbs-battery: keep error code when get_property() fails
-Date:   Thu,  3 Sep 2020 11:04:40 +0800
-Message-Id: <20200903030440.2505496-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-In-Reply-To: <20200828155843.33xb2ig2gpawigsw@earth.universe>
-References: <20200828155843.33xb2ig2gpawigsw@earth.universe>
+        id S1727825AbgICGeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 02:34:22 -0400
+Received: from mo-csw1114.securemx.jp ([210.130.202.156]:52200 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725986AbgICGeW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 02:34:22 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 0836XqkV026096; Thu, 3 Sep 2020 15:33:52 +0900
+X-Iguazu-Qid: 2wGqimZzpdodzp3qKb
+X-Iguazu-QSIG: v=2; s=0; t=1599114831; q=2wGqimZzpdodzp3qKb; m=3lD5yTuNA9UipE4IT4HqtHJpMosJZhyi/NRwtDEowSQ=
+Received: from imx12.toshiba.co.jp (imx12.toshiba.co.jp [61.202.160.132])
+        by relay.securemx.jp (mx-mr1111) id 0836Xnhn027327;
+        Thu, 3 Sep 2020 15:33:49 +0900
+Received: from enc02.toshiba.co.jp ([61.202.160.51])
+        by imx12.toshiba.co.jp  with ESMTP id 0836XnKm019408;
+        Thu, 3 Sep 2020 15:33:49 +0900 (JST)
+Received: from hop101.toshiba.co.jp ([133.199.85.107])
+        by enc02.toshiba.co.jp  with ESMTP id 0836XmiJ027896;
+        Thu, 3 Sep 2020 15:33:48 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Smita Koralahalli Channabasappa <skoralah@amd.com>
+Cc:     <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
+        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <devel@acpica.org>, Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v2 1/2] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+References: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
+        <20200828203332.11129-2-Smita.KoralahalliChannabasappa@amd.com>
+        <878sdvv20h.fsf@kokedama.swc.toshiba.co.jp>
+        <102d0c75-d642-8f8b-68c7-792499c2a62a@amd.com>
+Date:   Thu, 03 Sep 2020 15:33:47 +0900
+In-Reply-To: <102d0c75-d642-8f8b-68c7-792499c2a62a@amd.com> (Smita Koralahalli
+        Channabasappa's message of "Wed, 2 Sep 2020 14:29:28 -0500")
+X-TSB-HOP: ON
+Message-ID: <87a6y7qshg.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit c4f382930145 (power: supply: sbs-battery: don't assume
-i2c errors as battery disconnect) overwrites the original error code
-returned from internal functions. On such a sporadic i2c error,
-a user will get a wrong value without errors.
+Hi Smita,
 
-Fixes: c4f382930145 (power: supply: sbs-battery: don't assume i2c errors as battery disconnect)
+Smita Koralahalli Channabasappa <skoralah@amd.com> writes:
 
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
----
-Sorry, I missed an case with present state unchanged.
-Sebastian, if you're okay with this patch,
-I think this could be squashed into original commit c4f382930145 in your
-branch.
----
- drivers/power/supply/sbs-battery.c | 24 +++++++++---------------
- 1 file changed, 9 insertions(+), 15 deletions(-)
+> On 8/31/20 12:05 AM, Punit Agrawal wrote:
+>
+>> Hi Smita,
+>>
+>> A couple of comments below -
+>>
+>> Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> writes:
+>>
+>> [...]
+>>
+>>
+>>> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
+>>> index 2531de49f56c..374b8e18552a 100644
+>>> --- a/drivers/firmware/efi/cper-x86.c
+>>> +++ b/drivers/firmware/efi/cper-x86.c
+>>> @@ -1,7 +1,7 @@
+>>>   // SPDX-License-Identifier: GPL-2.0
+>>>   // Copyright (C) 2018, Advanced Micro Devices, Inc.
+>>>   -#include <linux/cper.h>
+>> Why is the include dropped? AFAICT, the definitions from there are still
+>> being used after this patch.
+>
+> Dropped because <acpi/apei.h> already includes <linux/cper.h>
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index dacc4bc1c013..13192cbcce71 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -962,11 +962,10 @@ static int sbs_get_property(struct power_supply *psy,
- 	if (!chip->gpio_detect && chip->is_present != (ret >= 0)) {
- 		bool old_present = chip->is_present;
- 		union power_supply_propval val;
--
--		ret = sbs_get_battery_presence_and_health(
-+		int err = sbs_get_battery_presence_and_health(
- 				client, POWER_SUPPLY_PROP_PRESENT, &val);
- 
--		sbs_update_presence(chip, !ret && val.intval);
-+		sbs_update_presence(chip, !err && val.intval);
- 
- 		if (old_present != chip->is_present)
- 			power_supply_changed(chip->power_supply);
-@@ -976,19 +975,14 @@ static int sbs_get_property(struct power_supply *psy,
- 	if (!ret) {
- 		/* Convert units to match requirements for power supply class */
- 		sbs_unit_adjustment(client, psp, val);
-+		dev_dbg(&client->dev,
-+			"%s: property = %d, value = %x\n", __func__,
-+			psp, val->intval);
-+	} else if (!chip->is_present)  {
-+		/* battery not present, so return NODATA for properties */
-+		ret = -ENODATA;
- 	}
--
--	dev_dbg(&client->dev,
--		"%s: property = %d, value = %x\n", __func__, psp, val->intval);
--
--	if (ret && chip->is_present)
--		return ret;
--
--	/* battery not present, so return NODATA for properties */
--	if (ret)
--		return -ENODATA;
--
--	return 0;
-+	return ret;
- }
- 
- static void sbs_supply_changed(struct sbs_info *chip)
--- 
-2.28.0.402.g5ffc5be6b7-goog
+Generally, you want to follow the rule that if a declaration from a
+header file is being used, it should show up in the includes. The same
+applies to both source as well as header files.
 
+It doesn't matter if another include in the source file in turn ends up
+including the same header again; the #ifdef guards are there to prevent
+duplicate declarations.
+
+The rationale is that if future changes remove the usage of
+<acpi/apei.h>, the C file can still be compiled after dropping the
+include; there should be no need to then re-introduce <linux/cper.h> at
+that point.
+
+Hope that makes sense.
+
+Thanks,
+Punit
+
+>>> +#include <acpi/apei.h>
+>
+> [...]
+>
+>>> diff --git a/include/acpi/apei.h b/include/acpi/apei.h
+>>> index 680f80960c3d..44d4d08acce0 100644
+>>> --- a/include/acpi/apei.h
+>>> +++ b/include/acpi/apei.h
+>>> @@ -33,8 +33,15 @@ extern bool ghes_disable;
+>>>     #ifdef CONFIG_ACPI_APEI
+>>>   void __init acpi_hest_init(void);
+>>> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
+>>> +			       u64 lapic_id);
+>>>   #else
+>>>   static inline void acpi_hest_init(void) { return; }
+>>> +static inline int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
+>>> +					     u64 lapic_id)
+>>> +{
+>>> +	return -EINVAL;
+>>> +}
+>>>   #endif
+>> Adding the declaration to this include violates the separation of
+>> generic and architecture specific code.
+>>
+>> Can this be moved to the appropriate architecture specific header?
+>> Perhaps arch/x86/include/asm/apei.h.
+>
+> Yes, I have fixed this and moved into arch/x86/include/asm/acpi.h.
+>
+>>>   typedef int (*apei_hest_func_t)(struct acpi_hest_header *hest_hdr, void *data);
+>>> @@ -51,6 +58,8 @@ int erst_clear(u64 record_id);
+>>>     int arch_apei_enable_cmcff(struct acpi_hest_header *hest_hdr,
+>>> void *data);
+>>>   void arch_apei_report_mem_error(int sev, struct cper_sec_mem_err *mem_err);
+>>> +int arch_apei_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
+>>> +			       u64 lapic_id);
+>>
+>> Why is the additional declaration needed?
+>
+> Will fix in the next revision.
+>
+> Thanks,
+> Smita
+>
+> [...]
