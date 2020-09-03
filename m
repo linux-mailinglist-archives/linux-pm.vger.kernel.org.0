@@ -2,123 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921A625BDFA
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 10:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B7025BE82
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 11:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbgICI7M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 04:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41584 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgICI7L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 04:59:11 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA05C061244
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 01:59:09 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id b79so2055013wmb.4
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 01:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mcuO/YRTkHMtsRTTDq5UBJwMUZ7koaTnJHXnA+FiBmU=;
-        b=WfRaPugmqj1X57/YKAr3RlaDPEx9TMmvr5cSnhcEmibTe7+c59hhv149PN/V9gGs81
-         feRxwbtK8AcBl2+EX8h7i/p2YcV45UzT37c51Qjnj17bd6o5KlI4VA7IQ646Df4/qy31
-         uYM7vDY0lhr+mWxOeWr2KS3TjcEFPIUfB137hM08X2itLOioNinnrVnLu5kx/PgcvJtw
-         SQdeRrJwpEfuDsVvJcUMJwJw8nZFO+23IDvt9xKzTLaaRu60zmrvX8oglC/Ahl+rCQQt
-         //kPLzg4VRvrckm109E1C5REo9jSGTK4+/k20MzNyA0vFiIqOZSMB45tdqwz1ShG8Jig
-         VQKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mcuO/YRTkHMtsRTTDq5UBJwMUZ7koaTnJHXnA+FiBmU=;
-        b=i4sdGbErZIEFsVOZEvdbrYVkwAfg/qQHK4jATg4XkM6X9X/LLD/9AlovF87t91P+RM
-         y5beuOCIcvfGcFdahBss8/UknP20cgddO3fTc2peIWseKkndvG6VfFuVPujhWyOouOWt
-         eRxktLzjcAQ1RpEZ89+fu+dP2DPJAaAf3TYxcyRSF9FkbkcfyyD+jdb4u974bcy5pR10
-         R3ftDnDxTUvPIax0lhZD6xUO7/qU39igDrKQo73TsEC4u5H5uzvoTe4Vz72B42GOT0R1
-         l/PN018wyrSZv+N4OzW4jF9zkHSq5k8dKSjCbdWJO0mmnUCUlEmxUEY20f77bzzqRxCM
-         oN7g==
-X-Gm-Message-State: AOAM533c5Wf4nLPCS+BLT1kE7uGmPUkbGVBaxV2S4NEMb9dKzi3JklZr
-        C2yEzcxBl5lfB1CVYBZOKQc7GG4vsPnkVA==
-X-Google-Smtp-Source: ABdhPJxA6mQMSjqHWEt2VqGhOmiHHX9y+dvcyCUr02EContrJoPKTbw97sOV7edz+qSvi77dsXYtpA==
-X-Received: by 2002:a7b:cf29:: with SMTP id m9mr1390175wmg.88.1599123547268;
-        Thu, 03 Sep 2020 01:59:07 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:3cd8:a0e1:de28:dec8? ([2a01:e34:ed2f:f020:3cd8:a0e1:de28:dec8])
-        by smtp.googlemail.com with ESMTPSA id s124sm3349555wme.29.2020.09.03.01.59.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2020 01:59:06 -0700 (PDT)
-Subject: Re: TMU driver query
-To:     Andy Tang <andy.tang@nxp.com>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <DBBPR04MB609057FF54F6A1D868438373F32C0@DBBPR04MB6090.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <c9c64a1a-2837-3fd1-9e28-fed7fdad1cd8@linaro.org>
-Date:   Thu, 3 Sep 2020 10:59:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <DBBPR04MB609057FF54F6A1D868438373F32C0@DBBPR04MB6090.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726268AbgICJf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 05:35:28 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22710 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726109AbgICJf1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 05:35:27 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0839WPsr005957;
+        Thu, 3 Sep 2020 05:35:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id; s=pp1;
+ bh=AA1gFtAyaxygtrYTd+c/verju5XPl8nITJZZ/eIZWUE=;
+ b=DNTNzVVy6ZffwNRsO2npK3xeXI7itKkc56BYiSdJ3XjOQuBW6Sp0PbpcNe5Pn2etoFku
+ IKzGXIaWUMRwWq6YpO/1p75jZAwGvQA98UkngZc+iYQJZEoxmnuUlqkTps2hXRwUU9aH
+ tioFoEI8n8NL57G8q74OqLjrZLishGntfyX1nbQbQONyPHwvj3ih0BOqG/Ijr/cmtt9t
+ QvyyXdq7+cBUU7jUEQ8WiG1lYkAyOlxL9IZcsgbQSapQVJgD+G+60NL1SdXHj+xlFRHe
+ RW+kmwxa1vThqJbeD22NMIllTQYl1oD2oKeBuYds613I0WzbeJ7/ueTiL8c0NmhGHvPp 0A== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33awrp0bv8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Sep 2020 05:35:11 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0839VRK5031343;
+        Thu, 3 Sep 2020 09:35:10 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma02wdc.us.ibm.com with ESMTP id 337en9xk5b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Sep 2020 09:35:10 +0000
+Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0839Z9ZR19661198
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Sep 2020 09:35:09 GMT
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B14626A054;
+        Thu,  3 Sep 2020 09:35:09 +0000 (GMT)
+Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 500AE6A04F;
+        Thu,  3 Sep 2020 09:35:09 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.85.75.144])
+        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Sep 2020 09:35:09 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 970602E2FE5; Thu,  3 Sep 2020 14:57:34 +0530 (IST)
+From:   "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
+        Joel Stanley <joel@jms.id.au>
+Cc:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
+Subject: [PATCH v2] cpuidle-pseries: Fix CEDE latency conversion from tb to us
+Date:   Thu,  3 Sep 2020 14:57:27 +0530
+Message-Id: <1599125247-28488-1-git-send-email-ego@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.8.3.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-03_04:2020-09-03,2020-09-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=952 phishscore=0
+ priorityscore=1501 suspectscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009030084
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>
 
-Hi Andy,
+commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+of the Extended CEDE states advertised by the platform. The values
+advertised by the platform are in timebase ticks. However the cpuidle
+framework requires the latency values in microseconds.
 
-On 03/09/2020 05:06, Andy Tang wrote:
-> Hi,
-> 
->  
-> 
-> I have a query about the TMU driver.
-> 
-> Currently our driver qoriq_thermal.c is using polling instead of
-> interrupt method to report the temperature.
-> 
-> Are there any limitations in the TMU framework if I convert it to use
-> interrupt way? At least our soc supports Interrupt.
+If the tb-ticks value advertised by the platform correspond to a value
+smaller than 1us, during the conversion from tb-ticks to microseconds,
+in the current code, the result becomes zero. This is incorrect as it
+puts a CEDE state on par with the snooze state.
 
-I'm not sure to understand the 'TMU framework'. I assume you meant the
-qoriq sensor, right ?
+This patch fixes this by rounding up the result obtained while
+converting the latency value from tb-ticks to microseconds. It also
+prints a warning in case we discover an extended-cede state with
+wakeup latency to be 0. In such a case, ensure that CEDE(0) has a
+non-zero wakeup latency.
 
-> That is to say when temperature reaches to critical temperature,
-> interrupt handler will take care of the situation.
+Fixes: commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+CEDE(0)")
 
-Are we talking about critical or passive trip point ?
+Signed-off-by: Gautham R. Shenoy <ego@linux.vnet.ibm.com>
+---
+v1-->v2: Added a warning if a CEDE state has 0 wakeup latency (Suggested by Joel Stanley)
+         Also added code to ensure that CEDE(0) has a non-zero wakeup latency.	 
+ drivers/cpuidle/cpuidle-pseries.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-> Also if I enabled the Interrupt, what about the thermal zone? If thermal
-> zone exists, both thermal zone and interrupt
-> 
-> handler would deal with critical warning.
-
-I'm not sure to understand your question.
-
-The thermal zone is the software component. It does the association
-between the sensor, the trip point and the cooling device.
-
-The polling values are there to give the sampling rate.
-
-If the sensor supports the interrupt mode, then set the polling rate to
-zero, enable the interrupt for the first passive trip point temperature
-and in the handler do a thermal zone update.
-
-So when the interrupt fires, the thermal zone is updated, the
-temperature is read and if it is greater than the passive trip point
-then the passive polling will takeover and the mitigation will happen.
-
-Does it answer your question ?
-
-
-
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index ff6d99e..a2b5c6f 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -361,7 +361,10 @@ static void __init fixup_cede0_latency(void)
+ 	for (i = 0; i < nr_xcede_records; i++) {
+ 		struct xcede_latency_record *record = &payload->records[i];
+ 		u64 latency_tb = be64_to_cpu(record->latency_ticks);
+-		u64 latency_us = tb_to_ns(latency_tb) / NSEC_PER_USEC;
++		u64 latency_us = DIV_ROUND_UP_ULL(tb_to_ns(latency_tb), NSEC_PER_USEC);
++
++		if (latency_us == 0)
++			pr_warn("cpuidle: xcede record %d has an unrealistic latency of 0us.\n", i);
+ 
+ 		if (latency_us < min_latency_us)
+ 			min_latency_us = latency_us;
+@@ -378,10 +381,14 @@ static void __init fixup_cede0_latency(void)
+ 	 * Perform the fix-up.
+ 	 */
+ 	if (min_latency_us < dedicated_states[1].exit_latency) {
+-		u64 cede0_latency = min_latency_us - 1;
++		/*
++		 * We set a minimum of 1us wakeup latency for cede0 to
++		 * distinguish it from snooze
++		 */
++		u64 cede0_latency = 1;
+ 
+-		if (cede0_latency <= 0)
+-			cede0_latency = min_latency_us;
++		if (min_latency_us > cede0_latency)
++			cede0_latency = min_latency_us - 1;
+ 
+ 		dedicated_states[1].exit_latency = cede0_latency;
+ 		dedicated_states[1].target_residency = 10 * (cede0_latency);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+1.9.4
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
