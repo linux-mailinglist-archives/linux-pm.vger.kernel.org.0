@@ -2,88 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8147B25C63A
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 18:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B07025C65C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 18:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728688AbgICQK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 12:10:27 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:35034 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbgICQK1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 12:10:27 -0400
-Received: by mail-il1-f194.google.com with SMTP id l4so3157741ilq.2;
-        Thu, 03 Sep 2020 09:10:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ub/YDXcxHDsGS0dDuXZfKNg7N1487AgGtWs2ISNYV0w=;
-        b=KO3s42VYbzabC5gmMd9r54DJ0SZxApw7havc6vUUF8c+m0HBQkdS9PSyAKB1PvDkhH
-         xPVchF6YkwfTjUy2QW+KIRmp26MfNammQVt8hiqwWeqax2zvOH/ZH0XEAPFjKbSUtZWr
-         AOpUEc4c6F6JWeM+1A2MLCuAxyxhmEV2KGkFrMvNduXNfnbwFsfx6Gc60eAgd/wkj91M
-         rE371is2dFvMLtLDT3LCfU5Su/RIXy0cKVOq4qJJu2ahtsSYg6UW3K+lCPCM9AP84OqA
-         G3zYj5tkqP/XuTz53YdQMGFYXpUyzDiACbiWAYHPWJs5RXXGISbcMRlFcdmuGF11Xijv
-         VHJQ==
-X-Gm-Message-State: AOAM531ISQGDoCUQVwcz0dk4IVQUZ5k0hjqgIIeLmvaXVlw+sIZktbYE
-        YW4NaVXWeok470OX/Zxf6Q==
-X-Google-Smtp-Source: ABdhPJxLZ9ZiPkSL+rOvAxAf3g+LEBXr7Jjhv24bCXU19LypWZMrwzhwOhCFPx9l8w9NZ9RW+7oU5Q==
-X-Received: by 2002:a92:7991:: with SMTP id u139mr3437463ilc.62.1599149426172;
-        Thu, 03 Sep 2020 09:10:26 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id c7sm1610386ilk.49.2020.09.03.09.10.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 09:10:25 -0700 (PDT)
-Received: (nullmailer pid 2870752 invoked by uid 1000);
-        Thu, 03 Sep 2020 16:10:22 -0000
-Date:   Thu, 3 Sep 2020 10:10:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lubomir Rintel <lkundrak@v3.sk>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Dan Murphy <dmurphy@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: Add ENE KB930 Embedded
- Controller binding
-Message-ID: <20200903161022.GA2707794@bogus>
-References: <20200830185356.5365-1-digetx@gmail.com>
- <20200830185356.5365-2-digetx@gmail.com>
+        id S1728431AbgICQNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 12:13:24 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51539 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728575AbgICQNU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Sep 2020 12:13:20 -0400
+IronPort-SDR: SEn1VCuIgsSlG4ssSl4gkLqRSlIVgUEbUNeVCbYmj9ma/kuteeNfItz+Nevx6P9/Werl/LkiwM
+ yHstA9pgaOVA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9733"; a="156874695"
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="156874695"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2020 09:13:19 -0700
+IronPort-SDR: fk5N31e8TGXqszp/hkGx3Y27Do4CNUaLdLlqnJp1760vL/L5dq2hrU3xSP3351G+w/bgBSa+0U
+ R2mw+5q6ydyw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,387,1592895600"; 
+   d="scan'208";a="331834658"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 03 Sep 2020 09:13:19 -0700
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.ger.corp.intel.com [10.237.72.186])
+        by linux.intel.com (Postfix) with ESMTP id 247D458079D;
+        Thu,  3 Sep 2020 09:13:15 -0700 (PDT)
+Message-ID: <515651b2caa08799df03f07dcc429321b4dcc05e.camel@gmail.com>
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To:     Pratik Sampat <psampat@linux.ibm.com>, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, srivatsa@csail.mit.edu,
+        shuah@kernel.org, npiggin@gmail.com, ego@linux.vnet.ibm.com,
+        svaidy@linux.ibm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Date:   Thu, 03 Sep 2020 19:13:15 +0300
+In-Reply-To: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+         <20200902114506.45809-2-psampat@linux.ibm.com>
+         <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+         <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
+         <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200830185356.5365-2-digetx@gmail.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 30 Aug 2020 21:53:51 +0300, Dmitry Osipenko wrote:
-> Add binding document for the ENE KB930 Embedded Controller.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../devicetree/bindings/mfd/ene-kb930.yaml    | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/ene-kb930.yaml
-> 
+On Thu, 2020-09-03 at 17:50 +0300, Artem Bityutskiy wrote:
+> Well, things depend on platform, it is really "void", it is just
+> different and it measures an optimized case. The result may be smaller
+> observed latency.
 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/ene-kb930.example.dt.yaml: battery-cell: 'operating-range-celsius' does not match any of the regexes: '^ocv-capacity-table-[0-9]+$', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/battery.yaml
-
-
-See https://patchwork.ozlabs.org/patch/1354004
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
+Sorry, I meant to say it is _not_ really "void".
 
