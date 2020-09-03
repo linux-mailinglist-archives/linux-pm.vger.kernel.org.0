@@ -2,70 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 474B925C35E
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F74325C306
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 16:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729261AbgICOuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 10:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S1729386AbgICOmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 10:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729242AbgICORO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 10:17:14 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B75FC0619CA
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:21:39 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id d2so1913313lfj.1
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:21:39 -0700 (PDT)
+        with ESMTP id S1729378AbgICOgy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 10:36:54 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB3C0619D1
+        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 06:31:38 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z1so3284797wrt.3
+        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 06:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V7/RoZUDbSidbaVmS9FeqN+fWeyUR1JKVWNxeicmHMg=;
-        b=zEWstPZ31aBryWxYNemcI3JoczurqsIM+kowklx4XBCk00IVh/93S1NcSLqpa8dESZ
-         iIyASHxbXJswE7RfL5pxrCIFdVShNGxkSCTpYifIDBG9byHWzuDDJwxOuAP25A2x/EZ7
-         yyDic2OOU7DpPvzVjfeEX4wAAhWZfZ/vKO/0xhaI2Wdhx3CAVMUpu3zHPtLe0+SSdQhe
-         ORBQo6jKrVIMZ4Eyk/B/nfD4PaETNV2pEDSIc+XHroBqNiGmxlY82t8PmnxS0E5mmQR3
-         thibgp7bjY7uHBPJ2sM8nBg9kMTRAW3Tfz9tz85nhMbyP4oe2w96+4I8//6+5ECGgKhn
-         zGjw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1ZdEfEgmL9xMVW+zYcpKfDQO7HkBHnE+KMZRuI8Lf9k=;
+        b=d72daTpVXoFFKFMcoZerr4SN73VKG7KBahyo81SxAWwlnUIXnP4Hiu0wEqMahwIn2o
+         LGa/L5PaDhSKkW6A2aKmCvXUc1Y7CQlo1vIRokt4mjGZ/E8C0NkC8DFHdRcyR6zzGStq
+         jD2svGqpzvApSdfm4Yd9u3HDuCaTuayg11hPq4rk7boRhViVFGOwYD1DCSGWHHEQPuyv
+         Umy4g1qdPh5N+ALxnFjOayg/Yw5EsjlS2OOxZcPUTLLLIom3LVSgdN+akv4yZOHb/LFw
+         B4/tzmmeCZek/9PDbgTIoQnidxfXI7T4MJGG1/VXEKZXqpOHHbbuMB+oiIF9CfadmXbU
+         KNRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V7/RoZUDbSidbaVmS9FeqN+fWeyUR1JKVWNxeicmHMg=;
-        b=DL0dpcjzKOu6VadYZXxNcFiFBinh/F0TLUHZ/fx8LGaAnf3uPkIgVkRyzVlL3m4Eww
-         919BLrJDHIoxZ6rXgw9N84RShmuaAUnci/GcityN/ysugf1A4aM97Jhb6SOoeEYxwfug
-         bBSU1YZknLwV7a+f1SZqxe+QGB5GcWdm6GrrQqmlhvzdO3qHAxGGi8MlNLCsgPbYXMrS
-         nDAByYIYOl4MWlmxwP3x1wSw9qNKYyPP85T5x+t+5m3ZmilpTsNNwIzHmShXelj+CNyE
-         JSGbVB8FWfjXqpcJy0lsIvkwQ7djrhqqD5WWUw9dOY2340ktVZ4Z3QEZaN0q6g+3Ala5
-         An9g==
-X-Gm-Message-State: AOAM531PVs+2YuZdUuB/pzqAichVuCjADetxWDNxyw+On4EYuuvISZQu
-        rjkuN3a/h5btNyk5+FBrt+Qn6g==
-X-Google-Smtp-Source: ABdhPJwJHC6RwnosYTlCNIMZruGq97X9zWxdMV8v4PXrUw4KhG99TMUWZdIe92dYoflftgWkWzCLxA==
-X-Received: by 2002:a19:4ad8:: with SMTP id x207mr1273135lfa.73.1599139297531;
-        Thu, 03 Sep 2020 06:21:37 -0700 (PDT)
-Received: from eriador.lan ([188.162.64.138])
-        by smtp.gmail.com with ESMTPSA id e23sm584220lfj.80.2020.09.03.06.21.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 06:21:36 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: [PATCH v2 9/9] arm64: dts: sm8250-mtp: add thermal zones using pmic's adc-tm5
-Date:   Thu,  3 Sep 2020 16:21:09 +0300
-Message-Id: <20200903132109.1914011-10-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
-References: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1ZdEfEgmL9xMVW+zYcpKfDQO7HkBHnE+KMZRuI8Lf9k=;
+        b=gTE4hEZx50rR5nrFQtYCsyUsN/pjWic8mQegXsqD8i4xjEVNBWKvIpNkAJWs+hufuO
+         PP9C21jlBqVaTBxuMopRT8d8YhY+3L0/mA4Y1COeKkm9pP6zByPcqjaIvfXWwINIl/3r
+         38aEa3uLRX+dhVuRAT4yzbRN+Te+0yidOElSH9pi789MFSJHCBMlFPHCuC0WvAfrdqcZ
+         S9kGiGACW1IYMs8hQfxeqosO3TAlzwFiy82cAkRwBFivmROPeweWe68QNqEudDzE//EH
+         eCPAs6/m/uljGd3FVlqaZjCesiWI7quFD3p05aA4umWB4ONhiDE4CSfAlZWVWHioe1Bm
+         rEIw==
+X-Gm-Message-State: AOAM530lw8y73GbljLaq5TttBrFw68VZcTn/G/X50MmmFMGcOupc1jG/
+        7QGPclwdLs5vUuA9QO+Jx3XHHwdM4Is1xA==
+X-Google-Smtp-Source: ABdhPJwhjR2MLxPCogbMWCND1xPIuqqI6Vt+eUGTlk9kaW1cSI5oFWJ5vZON7txdbDjoS+wkK1t6og==
+X-Received: by 2002:a5d:5602:: with SMTP id l2mr2677121wrv.410.1599139896777;
+        Thu, 03 Sep 2020 06:31:36 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id b2sm4310768wmh.47.2020.09.03.06.31.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Sep 2020 06:31:36 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     linux-pm@vger.kernel.org, bjorn.andersson@linaro.org
+Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
+        sibis@codeaurora.org, mka@chromium.org, dianders@chromium.org,
+        georgi.djakov@linaro.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/7] interconnect: Introduce xlate_extended()
+Date:   Thu,  3 Sep 2020 16:31:27 +0300
+Message-Id: <20200903133134.17201-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
@@ -73,250 +63,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Port thermal zones definitions from msm-4.19 tree. Enable and add
-channel configuration to PMIC's ADC-TM definitions. Declare thermal
-zones and respective trip points.
+Currently the interconnect framework provides the xlate() callback for
+mapping the endpoints from phandle arguments in DT. This is implemented
+by the provider drivers. But the endpoints (or the path between the
+endpoints) might have an additional attributes, which should be parsed
+and populated. During previous discussions [1], it was suggested that
+adding more and more DT properties will not scale very well. So instead
+of adding DT properties, such data should be put into the 'interconnects'
+arguments.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 217 ++++++++++++++++++++++++
- 1 file changed, 217 insertions(+)
+This patchset is introducing a new xlate_extended() callback, which
+would allow the interconnect provider drivers to parse additional data
+(such as path tags) and allow the framework to make use of them.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-index 6894f8490dae..4db5c1e4269e 100644
---- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-@@ -24,6 +24,104 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	thermal-zones {
-+		xo-therm {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150_adc_tm 0>;
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		skin-therm {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150_adc_tm 1>;
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		mmw-pa1 {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150_adc_tm 2>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		conn-therm {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150b_adc_tm 0>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		camera-therm {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150l_adc_tm 0>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		skin-msm-therm {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150l_adc_tm 1>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		mmw-pa2 {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&pm8150l_adc_tm 2>;
-+
-+			trips {
-+				active-config0 {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+	};
-+
- 	vph_pwr: vph-pwr-regulator {
- 		compatible = "regulator-fixed";
- 		regulator-name = "vph_pwr";
-@@ -358,6 +456,125 @@ &cdsp {
- 	firmware-name = "qcom/sm8250/cdsp.mbn";
- };
- 
-+&pm8150_adc {
-+	xo-therm@4c {
-+		reg = <ADC5_XO_THERM_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	skin-therm@4d {
-+		reg = <ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	pa-therm1@4e {
-+		reg = <ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
-+&pm8150b_adc {
-+	conn-therm@4f {
-+		reg = <ADC5_AMUX_THM3_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
-+&pm8150l_adc {
-+	camera-flash-therm@4d {
-+		reg = <ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	skin-msm-therm@4e {
-+		reg = <ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	pa-therm2@4f {
-+		reg = <ADC5_AMUX_THM3_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
-+&pm8150_adc_tm {
-+	status = "okay";
-+	io-channels = <&pm8150_adc ADC5_XO_THERM_100K_PU>,
-+			<&pm8150_adc ADC5_AMUX_THM1_100K_PU>,
-+			<&pm8150_adc ADC5_AMUX_THM2_100K_PU>;
-+	io-channel-names = "xo-therm", "skin-therm", "pa-therm1";
-+
-+	xo-therm@0 {
-+		reg = <0>;
-+		qcom,adc-channel = <ADC5_XO_THERM_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	skin-therm@1 {
-+		reg = <1>;
-+		qcom,adc-channel = <ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	pa-therm1@2 {
-+		reg = <2>;
-+		qcom,adc-channel = <ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
-+&pm8150b_adc_tm {
-+	status = "okay";
-+	io-channels = <&pm8150b_adc ADC5_AMUX_THM3_100K_PU>;
-+	io-channel-names = "conn-therm";
-+
-+	conn-therm@0 {
-+		reg = <0>;
-+		qcom,adc-channel = <ADC5_AMUX_THM3_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
-+&pm8150l_adc_tm {
-+	status = "okay";
-+	io-channels = <&pm8150l_adc ADC5_AMUX_THM1_100K_PU>,
-+			<&pm8150l_adc ADC5_AMUX_THM2_100K_PU>,
-+			<&pm8150l_adc ADC5_AMUX_THM3_100K_PU>;
-+	io-channel-names = "camera-flash-therm", "skin-msm-therm", "pa-therm2";
-+
-+	camera-flash-therm@0 {
-+		reg = <0>;
-+		qcom,adc-channel = <ADC5_AMUX_THM1_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	skin-msm-therm@1 {
-+		reg = <1>;
-+		qcom,adc-channel = <ADC5_AMUX_THM2_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+
-+	pa-therm2@2 {
-+		reg = <2>;
-+		qcom,adc-channel = <ADC5_AMUX_THM3_100K_PU>;
-+		qcom,ratiometric;
-+		qcom,hw-settle-time = <200>;
-+	};
-+};
-+
- &qupv3_id_1 {
- 	status = "okay";
- };
--- 
-2.28.0
+Thanks to Sibi for the preliminary feedback and testing this patchset
+on the sc7180 platform.
+
+The patchset is based on linux-next (next-20200903).
+
+Changelog:
+v3:
+* Rebase and update both dts patches as Doug reported that i missed to
+  update the cells for the GPU and also other stuff changed in DT recently.
+* Pick Rob's Reviewed-by
+
+v2: http://lore.kernel.org/r/20200806163126.22667-1-georgi.djakov@linaro.org
+* Add a patch to update the DT documentation, which i missed initially.
+* Minor changes in commit text of patch 1/7. (Sibi)
+* Remove a useless null check in patch 4/7. (Sibi)
+* Print a warning if the number of DT args is higher than what we expect
+  in patch 3/7. (Matthias)
+* Pick Reviewed-by/Tested-by tags.
+* TODO: Replace tag IDs with macros in patches 5/7 and 7/7 when [2] lands.
+
+v1: http://lore.kernel.org/r/20200723130942.28491-1-georgi.djakov@linaro.org
+
+[1] https://lore.kernel.org/linux-devicetree/20200519185836.GA469006@bogus/
+[2] https://lore.kernel.org/r/20200801033215.1440-2-mdtipton@codeaurora.org
+
+Georgi Djakov (5):
+  interconnect: Introduce xlate_extended() callback
+  dt-bindings: interconnect: Document the support of optional path tag
+  interconnect: qcom: Implement xlate_extended() to parse tags
+  interconnect: qcom: sdm845: Replace xlate with xlate_extended
+  arm64: dts: qcom: sdm845: Increase the number of interconnect cells
+
+Sibi Sankar (2):
+  interconnect: qcom: sc7180: Replace xlate with xlate_extended
+  arm64: dts: qcom: sc7180: Increase the number of interconnect cells
+
+ .../bindings/interconnect/interconnect.txt    |  24 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          | 218 +++++++++---------
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  48 ++--
+ drivers/interconnect/core.c                   |  73 ++++--
+ drivers/interconnect/qcom/icc-rpmh.c          |  27 +++
+ drivers/interconnect/qcom/icc-rpmh.h          |   1 +
+ drivers/interconnect/qcom/sc7180.c            |   2 +-
+ drivers/interconnect/qcom/sdm845.c            |   2 +-
+ include/linux/interconnect-provider.h         |  17 +-
+ 9 files changed, 251 insertions(+), 161 deletions(-)
 
