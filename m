@@ -2,93 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2744C25C6F8
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 18:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1AC25C822
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 19:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbgICQfK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 12:35:10 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:37689 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726292AbgICQfE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 12:35:04 -0400
-Received: by mail-il1-f195.google.com with SMTP id b17so3273200ilh.4;
-        Thu, 03 Sep 2020 09:35:03 -0700 (PDT)
+        id S1726327AbgICRg2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 13:36:28 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:39140 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726025AbgICRg1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Sep 2020 13:36:27 -0400
+Received: by mail-ed1-f67.google.com with SMTP id c10so3505107edk.6;
+        Thu, 03 Sep 2020 10:36:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=iIfLZ14oR+6kVVplGeYdY3QZelcTYNmiPq+fUE3RZP4=;
-        b=sCXDsd1ndeUvn1hXSgDSo19yqG+ius/m2Q8eEq8Ijmi/0ZymIEpV4Qr04VxMYXxvai
-         jiQ9+4bRiEXwJD8jnYBGJ0KpGaEMrY+jG95/YGxYecqLav/vc6JPC28i8NV2tyLoq94M
-         eAgpj+MIuGyGgcJfz9bG6UxHD/VaI09s7DhyigBbMPJSiOyp+hSA/H5Ga8Rpm0HKc+M4
-         Xt9f8egzb57xyYNSHI38HYUBcwJy90c9n3C1jHD4DCGOSjMhXzRsQ6bQw1nJRH3JfYe1
-         t0pkJGUktfbePMOKpTvreMGaBnJ/aTbKEc5GDnEG68cToJP40gHePjVTcz0eD3nfFp/J
-         AnKQ==
-X-Gm-Message-State: AOAM530wOJeeqzDm+ItcB239Kol+ghldG3Yb965ijzHK9n+II+aiMCRy
-        5RLm+mPFbp34z3Erv+ZLVw==
-X-Google-Smtp-Source: ABdhPJzAEffp2WonM7repJTb9yyQNn/3Nmi+Nn/JwPHkxriL04JXnRwvW1ue7iajeKEDm4+9ErJo6Q==
-X-Received: by 2002:a05:6e02:1141:: with SMTP id o1mr1095908ill.275.1599150902693;
-        Thu, 03 Sep 2020 09:35:02 -0700 (PDT)
-Received: from xps15 ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id w70sm1713310ilk.87.2020.09.03.09.35.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Sep 2020 09:35:02 -0700 (PDT)
-Received: (nullmailer pid 2909825 invoked by uid 1000);
-        Thu, 03 Sep 2020 16:34:58 -0000
-Date:   Thu, 3 Sep 2020 10:34:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lars-Peter Clausen <lars@metafoo.de>, linux-pm@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-iio@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v2 1/9] dt-bindings: thermal: qcom: add adc-thermal
- monitor bindings
-Message-ID: <20200903163458.GA2909612@bogus>
-References: <20200903132109.1914011-1-dmitry.baryshkov@linaro.org>
- <20200903132109.1914011-2-dmitry.baryshkov@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gh69+24/Chdrnxcf6KgQPJmRC4c9fN5aU1ZFyq23BhM=;
+        b=g9uKFjziYXjDVHYf0ALrhfihIehF1nlnfyWvwi0tVgdp2nPiEFDHKbKB8v0UwBfbu+
+         XRL6EC71e0QxI2cYMQWs9CTZ1A+YwUoWUyzVNDSw+oPVtZ8goxc1f1tubY9Hivzavl/8
+         JifHXR/zKelCuYFp7ARM0IzdHP7H5wJKRsEz9Xt1WhPt/FKim4ROQsQH4dYcfiL4qQZ9
+         GIBaRmEOS8eVHplonVfiOt4aWdbUp2fdqk/pOjeLGbPL815mP46JxYVKRDN37llKXEca
+         /uHmKEWyDIcuI9IqpVew9I+kzB2YpsGN9QyH7NYzmISMi5KZkgByca3YSvWmkw/pVvl/
+         8tKA==
+X-Gm-Message-State: AOAM532X0JhBSo5wIEJH0wkxRiD7CcY4qghWKtq1np43aOUaNFv2Qm7D
+        eZI1fXTIy0tOrUbOON6WPjUqfkfxSUz2TDpPSLq/QnknSPc=
+X-Google-Smtp-Source: ABdhPJx7Im4zZcqn+QWwgAsgUOeBpXbqj93qwsM7wEGQ3Tf5TTX74jmGTxVUg7FM0dZMbsAGdWlM6dbuB0Hgkf7PjWQ=
+X-Received: by 2002:a05:6402:1495:: with SMTP id e21mr4155933edv.146.1599154585348;
+ Thu, 03 Sep 2020 10:36:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903132109.1914011-2-dmitry.baryshkov@linaro.org>
+References: <20200717060849.12469-1-liwei.song@windriver.com>
+ <CAJvTdKm9WHgQuP38Y2o1zQ-VgLKMMDup4crAPrW3pexoWft+6Q@mail.gmail.com>
+ <52f16995-6d2d-fa7d-ed5e-682db3461d03@windriver.com> <CAJvTdKms0Qj3d+g_tK8oboMXebYgnPm51EdSL_UvLdw3GV6A3A@mail.gmail.com>
+ <alpine.LNX.2.20.13.2008232345570.12553@monopod.intra.ispras.ru> <cce63c40-1633-5b86-6aaf-7f9a93c63eac@windriver.com>
+In-Reply-To: <cce63c40-1633-5b86-6aaf-7f9a93c63eac@windriver.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Thu, 3 Sep 2020 13:36:14 -0400
+Message-ID: <CAJvTdKk7Gd3G4K7um=6HC3YJu48aVW+4WFvr8jVqyOKcSZc7qQ@mail.gmail.com>
+Subject: Re: [PATCH] tools/power turbostat: call pread64 in kernel directly
+To:     Liwei Song <liwei.song@windriver.com>
+Cc:     Alexander Monakov <amonakov@ispras.ru>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 03 Sep 2020 16:21:01 +0300, Dmitry Baryshkov wrote:
-> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
-> close counterpart of VADC part of those PMICs.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 142 ++++++++++++++++++
->  1 file changed, 142 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> 
+> -D_FILE_OFFSET_BITS=64
+
+Applied.
+
+thanks!
+-Len
+
+On Mon, Aug 24, 2020 at 12:09 AM Liwei Song <liwei.song@windriver.com> wrote:
+>
+>
+>
+> On 8/24/20 04:54, Alexander Monakov wrote:
+> > Hi,
+> >
+> > I am not the original submitter, but I have answers and a proper patch :)
+> >
+> > On Fri, 21 Aug 2020, Len Brown wrote:
+> >
+> >> Re: offset size
+> >>
+> >> The offsets on this file are the MSR offsets.
+> >> What MSR are you trying to access at offset 0xc0010299?
+> >
+> > This MSR is particular is part of AMD RAPL (energy measurements) interface.
+> >
+> >> Re: pread vs pread64
+> >>
+> >> If I take on faith that you have some kind of 32-bit execution
+> >> environment that makes pread into pread32 instead of pread64, and that
+> >> truncates an off_t to 32-bits from 64-bits, and it actually makes
+> >> sense to request a read at this large offset...
+> >
+> > The problem here stems from the backward compatibility in Glibc: off_t is
+> > 32-bit on 32-bit x86, unless compiled with -D_FILE_OFFSET_BITS=64. This
+> > macro should be used for all new code. Distros should enable it for all
+> > builds, but when one builds turbostat 'by hand', they hit the issue.
+> >
+> >> would we really have to invoke syscall() directly -- couldn't we
+> >> invoke pread64() directly? (eg. below)
+> >
+> > No, the proper fix is to pass -D_FILE_OFFSET_BITS=64 to the compiler.
+> >
+> > Here's the patch:
+>
+> This path works with my case.
+>
+> Thanks,
+> Liwei.
+>
+>
+> >
+> > ---8<---
+> >
+> > From: Alexander Monakov <amonakov@ispras.ru>
+> > Date: Sun, 23 Aug 2020 23:27:02 +0300
+> > Subject: [PATCH] turbostat: build with _FILE_OFFSET_BITS=64
+> >
+> > For compatibility reasons, Glibc off_t is a 32-bit type on 32-bit x86
+> > unless _FILE_OFFSET_BITS=64 is defined. Add this define, as otherwise
+> > reading MSRs with index 0x80000000 and above attempts a pread with a
+> > negative offset, which fails.
+> >
+> > Signed-off-by: Alexander Monakov <amonakov@ispras.ru>
+> > ---
+> >  tools/power/x86/turbostat/Makefile | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/power/x86/turbostat/Makefile b/tools/power/x86/turbostat/Makefile
+> > index 2b6551269e43..40ae44402eec 100644
+> > --- a/tools/power/x86/turbostat/Makefile
+> > +++ b/tools/power/x86/turbostat/Makefile
+> > @@ -12,6 +12,7 @@ turbostat : turbostat.c
+> >  override CFLAGS +=   -O2 -Wall -I../../../include
+> >  override CFLAGS +=   -DMSRHEADER='"../../../../arch/x86/include/asm/msr-index.h"'
+> >  override CFLAGS +=   -DINTEL_FAMILY_HEADER='"../../../../arch/x86/include/asm/intel-family.h"'
+> > +override CFLAGS +=   -D_FILE_OFFSET_BITS=64
+> >  override CFLAGS +=   -D_FORTIFY_SOURCE=2
+> >
+> >  %: %.c
+> >
 
 
-My bot found errors running 'make dt_binding_check' on your patch:
 
-Error: Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dts:23.24-25 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.example.dt.yaml] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1366: dt_binding_check] Error 2
-
-
-See https://patchwork.ozlabs.org/patch/1356633
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+-- 
+Len Brown, Intel Open Source Technology Center
