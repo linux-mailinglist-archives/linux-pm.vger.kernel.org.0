@@ -2,135 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC6325C57D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643F425C5BE
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Sep 2020 17:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726543AbgICPf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Sep 2020 11:35:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48196 "EHLO mail.kernel.org"
+        id S1728514AbgICPuU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Sep 2020 11:50:20 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:45813 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728544AbgICPf4 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 3 Sep 2020 11:35:56 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728372AbgICPuS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 3 Sep 2020 11:50:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1599148218; h=In-Reply-To: Content-Transfer-Encoding:
+ Content-Type: MIME-Version: References: Message-ID: Subject: Cc: To:
+ From: Date: Sender; bh=YmNSPzX7Rssmeydnknj+Kk/0kRWPES/mHUw8d72by64=; b=u0GIW3h1VbD+mH6VAvIaqoluxEnJQDWOICUqIBmJaV1PnwD3KeF6zxogdzp5t+7KFNlBZn6Z
+ qpA+DD1BgYgZBwAvwEi1GPhJ/2pWWlvk7aq1pumv0JOEjqVnDml7dyqgp1gnzMFQtO8y2Out
+ Tz/HtFFdDwX8epxrOMLAiAKKezY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 5f5110b89f3347551f9d0025 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 03 Sep 2020 15:50:16
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C7A6FC433C8; Thu,  3 Sep 2020 15:50:15 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CCFF2206D4;
-        Thu,  3 Sep 2020 15:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599147355;
-        bh=JR84vgCXorxtUvG4+aI+4Bgc7iGowrRkYIuSHGWT5Uo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=CCTB9qF1Ay1/yVA3EyLWZbNSrgUmBts55JK7t7TpwYwpN7iKPJZE52eYtatFUGzNL
-         Nxxvn+jYud7FYgOh0qJJ2+MUQkMRW3L7yok09BL0YQ+MX0BzP6ID6FjErpU8IEiM9i
-         syHYG6gUn3kp6NgCFflQlZ3BuHlZrJIlA4z4xsbw=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 881FA3520CF9; Thu,  3 Sep 2020 08:35:55 -0700 (PDT)
-Date:   Thu, 3 Sep 2020 08:35:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     peterz@infradead.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Saravana Kannan <saravanak@google.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        madhuparnabhowmik10@gmail.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC][PATCH] cpu_pm: Remove RCU abuse
-Message-ID: <20200903153555.GN29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200901154417.GD20303@codeaurora.org>
- <20200901155014.GF2674@hirez.programming.kicks-ass.net>
- <20200901161340.GC29330@paulmck-ThinkPad-P72>
- <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
- <CAPDyKFqPh7bg16AsitGv2QQHgwOPnWx9DiPPCMuD1EGA5TFFdg@mail.gmail.com>
- <20200902121355.GE1362448@hirez.programming.kicks-ass.net>
- <CAPDyKFrGj+8hOXi7sWxWNv2QP0=mx9pFKLG0JM-L5VNKUPDgeA@mail.gmail.com>
- <20200903135347.GC1362448@hirez.programming.kicks-ass.net>
- <CAPDyKFqduU65YmhBZ8PwDRTZDLtWhWX087LBy0bx56go+ra4Ow@mail.gmail.com>
- <20200903150819.GE1362448@hirez.programming.kicks-ass.net>
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4358EC433C9;
+        Thu,  3 Sep 2020 15:50:15 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4358EC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=ilina@codeaurora.org
+Date:   Thu, 3 Sep 2020 09:50:14 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] cpuidle: governor: export cpuidle_register_governor
+Message-ID: <20200903155014.GB481@codeaurora.org>
+References: <20200902205720.2548-1-ilina@codeaurora.org>
+ <a36052ae-d9a9-37e4-53fc-5d8d6b541a50@linaro.org>
+ <20200903152354.GA481@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20200903150819.GE1362448@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200903152354.GA481@codeaurora.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 05:08:19PM +0200, peterz@infradead.org wrote:
-> On Thu, Sep 03, 2020 at 04:36:35PM +0200, Ulf Hansson wrote:
-> > On Thu, 3 Sep 2020 at 15:53, <peterz@infradead.org> wrote:
-> > >  static int cpu_pm_notify(enum cpu_pm_event event)
-> > >  {
-> > >         int ret;
-> > >
-> > > +       lockdep_assert_irqs_disabled();
-> > 
-> > Nitpick, maybe the lockdep should be moved to a separate patch.
-> 
-> Well, the unregister relies on IRQs being disabled here, so I figured
-> asserting this was a good thing ;-)
-> 
-> Starting the audit below, this might not in fact be true, which then
-> invalidates the unregister implementation. In particular the notifier in
-> arch/arm/kernel/hw_breakpoint.c seems to unconditionally enable IRQs.
-> 
-> > > +       ret = raw_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
-> > 
-> > Converting to raw_notifiers seems reasonable - if we need to avoid the
-> > RCU usage.
-> > 
-> > My point is, I wonder about if the notifier callbacks themselves are
-> > safe from RCU usage. For example, I would not be surprised if tracing
-> > is happening behind them.
-> 
-> A bunch of them seem to call into the clk domain stuff, and I think
-> there's tracepoints in that.
-> 
-> > Moreover, I am not sure that we really need to prevent and limit
-> > tracing from happening. Instead we could push rcu_idle_enter|exit()
-> > further down to the arch specific code in the cpuidle drivers, as you
-> > kind of all proposed earlier.
-> 
-> Well, at some point the CPU is in a really dodgy state, ISTR there being
-> ARM platforms where you have to manually leave the cache coherency
-> fabric and all sorts of insanity. There should be a definite cut-off on
-> tracing before that.
-> 
-> Also, what is the point of all this clock and power domain callbacks, if
-> not to put the CPU into an extremely low power state, surely you want to
-> limit the amount of code that's ran when the CPU is in such a state.
-> 
-> > In this way, we can step by step, move to a new "version" of
-> > cpu_pm_enter() that doesn't have to deal with rcu_irq_enter_irqson(),
-> > because RCU hasn't been pushed to idle yet.
-> 
-> That should be easy enough to audit. The thing is that mainline is now
-> generating (debug) splats, and some people are upset with this.
-> 
-> If you're ok with ARM not being lockdep clean while this is being
-> reworked I'm perfectly fine with that.
-> 
-> (There used to be a separate CONFIG for RCU-lockdep, but that seems to
-> have been removed)
+On Thu, Sep 03 2020 at 09:23 -0600, Lina Iyer wrote:
+>On Thu, Sep 03 2020 at 04:35 -0600, Daniel Lezcano wrote:
+>>On 02/09/2020 22:57, Lina Iyer wrote:
+>>>Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
+>>>capability of registering cpuidle governors, which was unused at that
+>>>time. By exporting the symbol, let's allow platform specific modules to
+>>>register cpuidle governors.
+>>
+>>That would make sense as that follows the same pattern than the cpufreq
+>>framework. However, the unregister part is missing.
+>>
+>Sure, let me add that too and repost.
+>
+Looks like there isn't any call to unregister a governor, which seems
+fair.
 
-CONFIG_PROVE_RCU still gates RCU_LOCKDEP_WARN(), but it is now a
-def_bool that follows CONFIG_PROVE_LOCKING.
+Also, what do you think about exporting cpuidle_governor_latency_req()?
+This could prove quite useful for a governor. I could add that in a
+repost.
 
-It would not be hard to make CONFIG_PROVE_RCU separately settable only
-for arm, if that would help.
-
-							Thanx, Paul
+>--Lina
+>
+>>>Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>>>---
+>>> drivers/cpuidle/governor.c | 1 +
+>>> 1 file changed, 1 insertion(+)
+>>>
+>>>diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+>>>index 29acaf48e575..480ec58cffa9 100644
+>>>--- a/drivers/cpuidle/governor.c
+>>>+++ b/drivers/cpuidle/governor.c
+>>>@@ -102,6 +102,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
+>>>
+>>> 	return ret;
+>>> }
+>>>+EXPORT_SYMBOL_GPL(cpuidle_register_governor);
+>>>
+>>> /**
+>>>  * cpuidle_governor_latency_req - Compute a latency constraint for CPU
+>>>
+>>
+>>
+>>-- 
+>><http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>
+>>Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+>><http://twitter.com/#!/linaroorg> Twitter |
+>><http://www.linaro.org/linaro-blog/> Blog
