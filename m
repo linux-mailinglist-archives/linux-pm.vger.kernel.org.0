@@ -2,221 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D667225D0CD
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Sep 2020 07:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817A825D11B
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Sep 2020 08:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbgIDFGV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Sep 2020 01:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S1725812AbgIDGJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Sep 2020 02:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725765AbgIDFGU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Sep 2020 01:06:20 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C82C061244
-        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 22:06:18 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id h2so615717plr.0
-        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 22:06:18 -0700 (PDT)
+        with ESMTP id S1726445AbgIDGJO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Sep 2020 02:09:14 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82111C061247
+        for <linux-pm@vger.kernel.org>; Thu,  3 Sep 2020 23:09:14 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id j185so3068957vsc.3
+        for <linux-pm@vger.kernel.org>; Thu, 03 Sep 2020 23:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CBbMB4VPz7Fp/I3o67RU25C6dBsW7GnQgeenEJJuSTw=;
-        b=Rvfn1BnhAg+y/6coc//ePKxc7FZWsnd+hdeOXshn2MhZk5umuXuTThMjqB6FCKmbff
-         sgSmeAxPftQyIsN6rRK6yq6eE7RaKVePVWgHwoeNSSWVlwgKrcDJ9eZp4zkRGgypdDQQ
-         C8GSqzK7knDsU4dsHYYwNo5gJbV1fMaQaIi0A34jEORfJ0nVevNrVUM708Yy5cu4u5ox
-         pRFflSiQUPMq7Z3rLGXpxE7EJlqUxp4P0XK/B2In77Y5KUmqSe7eeQ8alxgankoZD0tV
-         lajoUaOcV/2iBqQknr7bnsXqKGXOMcKtv25aMGxMJ4MEh9AhAOHCGnEQZhTTh/bX4ZUn
-         PoGg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ug4djtA5GZ9Jcit3pQqACaL05SGu8YRJeDr/hO2jPpU=;
+        b=G8Rfx90DHK4ZYfswSSLH6HpnzpkwheLzgRangJCN6O4g0PWanGj2nHjjGDTPCoO9Nf
+         xWnOZ6/OkLqjUKVYKlOXMXG/wuim9/+4Lld6jb5ZMG0RdBnx5BcrEkXGILkOLCswU783
+         jvIxh1NHB9JlNe08AHoKeBrdXPw95pexGZ+iEhUwJ76GFFQ8CpD49J8iPkPVEGc2BgI/
+         xnP/VL2J95FeQAZZ304tFrFjpeJ8WpU+VKzCVEWtFadg+Nssg+PdYA2gvN3B3PzcDGHg
+         TsgmKqSlGWo27zLby4VckCBLmTKYg/5IQAV1aOYTosxFSR1/lVgnK2hDCXb43Gnl1Tdv
+         Q2OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CBbMB4VPz7Fp/I3o67RU25C6dBsW7GnQgeenEJJuSTw=;
-        b=kDm/aY29TZ35FOqWG2KWG29FD8D7IKYj0Vv8D86VQT8eH1DYga7DA4uV2Z7ca7ClUD
-         CKSIvdHwWq+aYRigC384oeHi8t5tm8blJ4SavHL5PsoKEPNeWuJxjk6E3L17xz6z1jSC
-         MFhc2hYof6fITJCsO4gsil61wWTpXbQdRU1fB9rfMNsoqDc5eRY5Yf3uHmUMAsTDAAFL
-         wi5P7lQp0F0ZFhnmj6sAmVummp5a1E6i0jAl5c6yzDdQDjcBGGELYHLjjDXFHZn4BtOc
-         pkjnVdNG+CCTOFugIz0GF3KG/Ff+lHA/dUAEy8caTXMhlAAICp7WEDOaTIk5CkfQrERU
-         oSyQ==
-X-Gm-Message-State: AOAM5322X8LXblCg6nTGrOqfjdLi/20eS5wTw+HFZWtM2YQMAjelVt8h
-        WfBoQOYbBdvNy5Y2P2vR8TcWlw==
-X-Google-Smtp-Source: ABdhPJwyHx/64jYDWTs4ttIoXGIjsEOyTW7OJHFB9S6rqlWJHC8IE9cTP+9hhRz8wSvzYxnEaCUYlg==
-X-Received: by 2002:a17:902:9a90:: with SMTP id w16mr7481201plp.188.1599195977499;
-        Thu, 03 Sep 2020 22:06:17 -0700 (PDT)
-Received: from localhost ([122.167.135.199])
-        by smtp.gmail.com with ESMTPSA id c5sm4254341pgj.0.2020.09.03.22.06.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Sep 2020 22:06:16 -0700 (PDT)
-Date:   Fri, 4 Sep 2020 10:36:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     rjw@rjwysocki.net, sudeep.holla@arm.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq,cppc: fix issue when hotplugging out policy->cpu
-Message-ID: <20200904050604.yoar2c6fofcikipp@vireshk-i7>
-References: <20200903111955.31029-1-ionela.voinescu@arm.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ug4djtA5GZ9Jcit3pQqACaL05SGu8YRJeDr/hO2jPpU=;
+        b=e8g48Qg35puv5APRA2/6zkqtkbCru+Hc5M1SYcrY4gUtUUhAQVrEjyltlbXFzca21V
+         FwN0hCzD+C3h04/lzKpQ5b/S3mW7GIybxQ8CYluHx+kD6NwEkqL4REW9QVlSzdefa7hq
+         SzRYrLfFqDjARDDpPqwlS8ZcRclloyKvG2zyf+zfz0CBqzHsAg/KXVlpSKhObGBoqaDL
+         OAdRollf2z1k1pTCUs/3yyenr2PU5V8Y+pWU9+m+i3MTP/OjhwloXPknMxbYzL2FhRuB
+         rmF4D9w1sQa0OTWYtDDjo6odsniZhAiXUsXAbmsVVio2Js3ZgYDN/cW9HNwLuPXEM9wD
+         9caA==
+X-Gm-Message-State: AOAM533OXm56veLT5CrIFNA70kKRKzEgJkepLDNhetoLEYZ+j1qRouL9
+        0fKGeow1bQGpRifDGSY81yuGEo0LgeY8XJ98ssr6kA==
+X-Google-Smtp-Source: ABdhPJxKdB1QJpJEKTAddkB6TjKNR3jmY8BhaNTS68k9yGl8ABJujx6Xf7Yf+QrFjnS5AhQ1RytJYEHYVPKAcRKcYBU=
+X-Received: by 2002:a67:e45:: with SMTP id 66mr4494095vso.191.1599199753154;
+ Thu, 03 Sep 2020 23:09:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200903111955.31029-1-ionela.voinescu@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <CAPDyKFrv+DTF8=twZZk_tenB-sLg6H-CFn9HVDVA5S2kK2=U5Q@mail.gmail.com>
+ <20200901154417.GD20303@codeaurora.org> <20200901155014.GF2674@hirez.programming.kicks-ass.net>
+ <20200901161340.GC29330@paulmck-ThinkPad-P72> <20200901174216.GJ29142@worktop.programming.kicks-ass.net>
+ <CAPDyKFqPh7bg16AsitGv2QQHgwOPnWx9DiPPCMuD1EGA5TFFdg@mail.gmail.com>
+ <20200902121355.GE1362448@hirez.programming.kicks-ass.net>
+ <CAPDyKFrGj+8hOXi7sWxWNv2QP0=mx9pFKLG0JM-L5VNKUPDgeA@mail.gmail.com>
+ <20200903135347.GC1362448@hirez.programming.kicks-ass.net>
+ <CAPDyKFqduU65YmhBZ8PwDRTZDLtWhWX087LBy0bx56go+ra4Ow@mail.gmail.com> <20200903150819.GE1362448@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200903150819.GE1362448@hirez.programming.kicks-ass.net>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 4 Sep 2020 08:08:36 +0200
+Message-ID: <CAPDyKFqozsYk--rThgVZpuM86ohCNRCoRXum5NTxPOt2SoG2og@mail.gmail.com>
+Subject: Re: [RFC][PATCH] cpu_pm: Remove RCU abuse
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Saravana Kannan <saravanak@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, rcu@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        madhuparnabhowmik10@gmail.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03-09-20, 12:19, Ionela Voinescu wrote:
-> An issue is observed in the cpufreq CPPC driver when having dependency
-> domains (PSD) and the policy->cpu is hotplugged out.
-> 
-> Considering a platform with 4 CPUs and 2 PSD domains (CPUs 0 and 1 in
-> PSD-1, CPUs 2 and 3 in PSD-2), cppc_cpufreq_cpu_init() will be called
-> for the two cpufreq policies that are created and it will set
-> all_cpu_data[policy->cpu]->cpu = policy->cpu.
-> 
-> Therefore all_cpu_data[0]->cpu=0, and all_cpu_data[2]->cpu=2. But for
-> CPUs 1 and 3, all_cpu_data[{1,3}]->cpu will remain 0 from the structure
-> allocation.
-> 
-> If CPU 2 is hotplugged out, CPU 3 will become policy->cpu. But its
-> all_cpu_data[3]->cpu will remain 0. Later, when the .target() function
-> is called for policy2, the cpu argument to cppc_set_perf() will be 0 and
-> therefore it will use the performance controls of CPU 0, which will
-> result in a performance level change for the wrong domain.
-> 
-> While the possibility of setting a correct CPU value in the per-cpu
-> cppc_cpudata structure is available, it can be noticed that this cpu value
-> is not used at all outside the .target() function, where it's not actually
-> necessary. Therefore, remove the cpu variable from the cppc_cpudata
-> structure and use policy->cpu in the .target() function as done for the
-> other CPPC cpufreq functions.
-> 
-> Fixes: 5477fb3bd1e8  ("ACPI / CPPC: Add a CPUFreq driver for use with CPPC")
-> Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> 
-> Testing was done on a Juno R2 platform (with the proper ACPI/CPPC setup):
-> CPUs 0, 1, 2, 3 are in PSD-0 (policy0), CPUs 4 and 5 are in PSD-4
-> (policy4).
-> 
-> Before the fix:
-> 
-> root@sqwt-ubuntu:~# dmesg | grep address
-> [    2.165177] ACPI CPPC: ACPI desired perf address 0: - ffff80001004d200
-> [    2.174226] ACPI CPPC: ACPI desired perf address 1: - ffff800010055200
-> [    2.183231] ACPI CPPC: ACPI desired perf address 2: - ffff80001005d200
-> [    2.192234] ACPI CPPC: ACPI desired perf address 3: - ffff800010065200
-> [    2.201245] ACPI CPPC: ACPI desired perf address 4: - ffff80001006d218
-> [    2.210256] ACPI CPPC: ACPI desired perf address 5: - ffff800011ff1218
-> [..]
-> [    2.801940] ACPI CPPC: Writing to address for CPU 0:ffff80001004d200: 38300
-> [    2.835286] ACPI CPPC: Writing to address for CPU 4:ffff80001006d218: 102400
-> [..]
-> root@sqwt-ubuntu:~# cd /sys/devices/system/cpu/cpufreq/
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 600000 > policy4/scaling_setspeed
-> [   72.098758] ACPI CPPC: Writing to address for CPU 4:ffff80001006d218: 51200
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 1200000 > policy4/scaling_setspeed
-> [   85.430645] ACPI CPPC: Writing to address for CPU 4:ffff80001006d218: 102400
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 0 > ../cpu4/online
-> [  102.606380] CPPC Cpufreq:CPPC: Calculate: (6285/261)*4266=102727.
-> [  102.612491] CPPC Cpufreq:CPPC: Core rate = 1203832, arch timer rate: 50000000
-> [  102.619659] ACPI CPPC: Writing to address for CPU 0:ffff80001004d200: 102400
-> [  102.626898] CPU4: shutdown
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 600000 > policy4/scaling_setspeed
-> [  141.116882] ACPI CPPC: Writing to address for CPU 0:ffff80001004d200: 51200
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 1200000 > policy4/scaling_setspeed
-> [  159.288273] ACPI CPPC: Writing to address for CPU 0:ffff80001004d200: 102400
-> 
-> 
-> After the fix:
-> 
-> root@sqwt-ubuntu:~# cd /sys/devices/system/cpu/cpufreq/
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 600000 > policy4/scaling_setspeed
-> [  139.903322] ACPI CPPC: Writing to address for CPU 4:ffff80001006d218: 51200
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 1200000 > policy4/scaling_setspeed
-> [  147.279040] ACPI CPPC: Writing to address for CPU 4:ffff80001006d218: 102400
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 0 > ../cpu4/online
-> [  153.598686] CPPC Cpufreq:CPPC: Calculate: (6171/253)*4266=104053.
-> [  153.604797] CPPC Cpufreq:CPPC: Core rate = 1219371, arch timer rate: 50000000
-> [  153.611960] ACPI CPPC: Writing to address for CPU 5:ffff800011ff1218: 102400
-> [  153.619190] CPU4: shutdown
-> [  153.621911] psci: CPU4 killed (polled 0 ms)
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 600000 > policy4/scaling_setspeed
-> [  170.122495] ACPI CPPC: Writing to address for CPU 5:ffff800011ff1218: 51200
-> root@sqwt-ubuntu:/sys/devices/system/cpu/cpufreq# echo 1200000 > policy4/scaling_setspeed
-> [  177.206342] ACPI CPPC: Writing to address for CPU 5:ffff800011ff1218: 102400
-> 
-> Thanks,
-> Ionela.
-> 
->  drivers/cpufreq/cppc_cpufreq.c | 8 ++++----
->  include/acpi/cppc_acpi.h       | 1 -
->  2 files changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index f29e8d0553a8..54457f5fe49e 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -149,8 +149,9 @@ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
->  		unsigned int target_freq,
->  		unsigned int relation)
->  {
-> -	struct cppc_cpudata *cpu;
->  	struct cpufreq_freqs freqs;
-> +	int cpu_num = policy->cpu;
-> +	struct cppc_cpudata *cpu;
->  	u32 desired_perf;
->  	int ret = 0;
->  
-> @@ -166,12 +167,12 @@ static int cppc_cpufreq_set_target(struct cpufreq_policy *policy,
->  	freqs.new = target_freq;
->  
->  	cpufreq_freq_transition_begin(policy, &freqs);
-> -	ret = cppc_set_perf(cpu->cpu, &cpu->perf_ctrls);
-> +	ret = cppc_set_perf(cpu_num, &cpu->perf_ctrls);
->  	cpufreq_freq_transition_end(policy, &freqs, ret != 0);
->  
->  	if (ret)
->  		pr_debug("Failed to set target on CPU:%d. ret:%d\n",
-> -				cpu->cpu, ret);
-> +				cpu_num, ret);
->  
->  	return ret;
->  }
-> @@ -247,7 +248,6 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  
->  	cpu = all_cpu_data[policy->cpu];
->  
-> -	cpu->cpu = cpu_num;
->  	ret = cppc_get_perf_caps(policy->cpu, &cpu->perf_caps);
->  
->  	if (ret) {
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index a6a9373ab863..451132ec83c9 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -124,7 +124,6 @@ struct cppc_perf_fb_ctrs {
->  
->  /* Per CPU container for runtime CPPC management. */
->  struct cppc_cpudata {
-> -	int cpu;
->  	struct cppc_perf_caps perf_caps;
->  	struct cppc_perf_ctrls perf_ctrls;
->  	struct cppc_perf_fb_ctrs perf_fb_ctrs;
+On Thu, 3 Sep 2020 at 17:08, <peterz@infradead.org> wrote:
+>
+> On Thu, Sep 03, 2020 at 04:36:35PM +0200, Ulf Hansson wrote:
+> > On Thu, 3 Sep 2020 at 15:53, <peterz@infradead.org> wrote:
+> > >  static int cpu_pm_notify(enum cpu_pm_event event)
+> > >  {
+> > >         int ret;
+> > >
+> > > +       lockdep_assert_irqs_disabled();
+> >
+> > Nitpick, maybe the lockdep should be moved to a separate patch.
+>
+> Well, the unregister relies on IRQs being disabled here, so I figured
+> asserting this was a good thing ;-)
 
-With the way things are designed, I believe this is one of the bugs
-out of many.
+Okay, make sense then.
 
-The structure cppc_cpudata must be shared across all CPUs of the same
-policy, so they all end up using the same set of values for different
-variables. i.e. it shouldn't be a per-cpu thing at all. Just allocate
-it from cpufreq_driver->init and store in policy->driver_data for use
-elsewhere.
+>
+> Starting the audit below, this might not in fact be true, which then
+> invalidates the unregister implementation. In particular the notifier in
+> arch/arm/kernel/hw_breakpoint.c seems to unconditionally enable IRQs.
 
-That would be a proper fix IMO, we just avoided one of the bugs here
-otherwise.
+I see.
 
--- 
-viresh
+>
+> > > +       ret = raw_notifier_call_chain(&cpu_pm_notifier_chain, event, NULL);
+> >
+> > Converting to raw_notifiers seems reasonable - if we need to avoid the
+> > RCU usage.
+> >
+> > My point is, I wonder about if the notifier callbacks themselves are
+> > safe from RCU usage. For example, I would not be surprised if tracing
+> > is happening behind them.
+>
+> A bunch of them seem to call into the clk domain stuff, and I think
+> there's tracepoints in that.
+>
+> > Moreover, I am not sure that we really need to prevent and limit
+> > tracing from happening. Instead we could push rcu_idle_enter|exit()
+> > further down to the arch specific code in the cpuidle drivers, as you
+> > kind of all proposed earlier.
+>
+> Well, at some point the CPU is in a really dodgy state, ISTR there being
+> ARM platforms where you have to manually leave the cache coherency
+> fabric and all sorts of insanity. There should be a definite cut-off on
+> tracing before that.
+
+That's probably the case for some platforms, but I don't see why we
+need to make everybody "suffer".
+
+>
+> Also, what is the point of all this clock and power domain callbacks, if
+> not to put the CPU into an extremely low power state, surely you want to
+> limit the amount of code that's ran when the CPU is in such a state.
+>
+> > In this way, we can step by step, move to a new "version" of
+> > cpu_pm_enter() that doesn't have to deal with rcu_irq_enter_irqson(),
+> > because RCU hasn't been pushed to idle yet.
+>
+> That should be easy enough to audit. The thing is that mainline is now
+> generating (debug) splats, and some people are upset with this.
+>
+> If you're ok with ARM not being lockdep clean while this is being
+> reworked I'm perfectly fine with that.
+
+I think the splats can easily be fixed. Short term.
+
+Adding RCU_NONIDLE (or similar) around pm_runtime calls in
+psci_enter_domain_idle_state() does the trick. I have a patch for
+that, it's tested and ready. Let me send it out.
+
+Perhaps we should just accept that this is needed, as to allow us to
+move step by step into a better situation, while also avoiding the
+current splats.
+
+>
+> (There used to be a separate CONFIG for RCU-lockdep, but that seems to
+> have been removed)
+
+I don't think that would help. Infrastructure for testing will just
+enable that Kconfig anyway still complains to us.
+
+Kind regards
+Uffe
