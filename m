@@ -2,74 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FE625EE55
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Sep 2020 16:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA53525EF81
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Sep 2020 20:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728778AbgIFOsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Sep 2020 10:48:09 -0400
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:53565 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728028AbgIFOsI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Sep 2020 10:48:08 -0400
-X-Originating-IP: 195.189.32.242
-Received: from pc.localdomain (unknown [195.189.32.242])
-        (Authenticated sender: contact@artur-rojek.eu)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 1121C40002;
-        Sun,  6 Sep 2020 14:48:04 +0000 (UTC)
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>
-Subject: [PATCH v2 2/2] dt-bindings: power: ingenic,battery: add new compatibles
-Date:   Sun,  6 Sep 2020 16:47:26 +0200
-Message-Id: <20200906144726.8852-2-contact@artur-rojek.eu>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200906144726.8852-1-contact@artur-rojek.eu>
-References: <20200906144726.8852-1-contact@artur-rojek.eu>
+        id S1729150AbgIFShI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 6 Sep 2020 14:37:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56570 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728969AbgIFShI (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sun, 6 Sep 2020 14:37:08 -0400
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 209069] CPU stuck at 800 MHz at any load
+Date:   Sun, 06 Sep 2020 18:37:07 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dsmythies@telus.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209069-137361-R0sIDJRNpQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209069-137361@https.bugzilla.kernel.org/>
+References: <bug-209069-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This binding can support Ingenic JZ4725B and JZ4770 SoCs, as they are
-compatible with Ingenic JZ4740 battery.
+https://bugzilla.kernel.org/show_bug.cgi?id=209069
 
-Introduce the following compatible property combinations:
- compatible = "ingenic,jz4725b-battery", "ingenic,jz4740-battery",
- compatible = "ingenic,jz4770-battery", "ingenic,jz4740-battery"
+--- Comment #14 from Doug Smythies (dsmythies@telus.net) ---
+Thanks. I re-created your results on my no-hwp processor, by also setting this
+in my kernel configuration:
 
-Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+< CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
+< # CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
 ---
+> # CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE is not set
+> CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE=y
 
-Changes:
-    v2: new patch
+The related commits are:
 
- .../devicetree/bindings/power/supply/ingenic,battery.yaml | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+a00ec3874e7d cpufreq: intel_pstate: Select schedutil as the default governor
+33aa46f252c7 cpufreq: intel_pstate: Use passive mode by default without HWP
 
-diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-index b4e0275ac63a..b9e5458499bf 100644
---- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-@@ -12,7 +12,13 @@ maintainers:
- 
- properties:
-   compatible:
--    const: ingenic,jz4740-battery
-+    oneOf:
-+      - const: ingenic,jz4740-battery
-+      - items:
-+        - enum:
-+          - ingenic,jz4725b-battery
-+          - ingenic,jz4770-battery
-+        - const: ingenic,jz4740-battery
- 
-   io-channels:
-     items:
+I had thought it would default to the schedutil governor, but didn't.
+
 -- 
-2.28.0
-
+You are receiving this mail because:
+You are the assignee for the bug.
