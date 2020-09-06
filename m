@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CACE25F059
-	for <lists+linux-pm@lfdr.de>; Sun,  6 Sep 2020 21:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4DE25F061
+	for <lists+linux-pm@lfdr.de>; Sun,  6 Sep 2020 21:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgIFTwC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Sep 2020 15:52:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S1726667AbgIFTv5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Sep 2020 15:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbgIFTv0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Sep 2020 15:51:26 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B260DC061574;
-        Sun,  6 Sep 2020 12:51:25 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id c2so13611936ljj.12;
-        Sun, 06 Sep 2020 12:51:25 -0700 (PDT)
+        with ESMTP id S1726482AbgIFTv1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Sep 2020 15:51:27 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AA1C061575;
+        Sun,  6 Sep 2020 12:51:26 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id t23so13687475ljc.3;
+        Sun, 06 Sep 2020 12:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5TUxA8XatXP4/Be/gKKaW1Zqc6zH5qP5Od3gWtx/EpE=;
-        b=tJCKAx0LGXsVSpQXUIK24lHXsyZ6xDbBk0kR6OyUFrhJ119ou/kqGL2pW5YSt6irND
-         p/fYoIc73b5aSnsrxBqkQT0siW9mBIGtysc+exKDV0mzrxLZ2y5kh5WnkRW1jiQ9ePp/
-         AAllXg9eXtJkl33ZF15a8LFQ3MIbBMThhGKG8JRYKndX4976vkIIszIKDV2ZqLmPGXYp
-         P+eo1bcae/jcNzi9DOhrcZcDMxC+PbmV0WJS9yEZd1jPdjpYUAbaxGYrbAifl+UApCTh
-         qcq8A9QqXNuQIrurL7W9tBdHAgLdthqKmve1dPE63OBMw6k0f5mdpMgSdEJwuebT24Tp
-         kPAA==
+        bh=i9kECGEmFpeu/YlzXuXIcv9eZGuOQH1eLhQ/SORGYyY=;
+        b=S/oBveru7SpaDKNVtEI2y0DaW9Krc4+eQZaCKOM5mJOZ3FplbXP6H++vJ9d9vTNhuC
+         H51+mhfBlWwN5/qhQCDcjS5Fpbi0Y72UilCayhK/0K6dTSqNf1SJmUVWb88E0m6bIHIT
+         4LQs2rte/SxpOOHkmBgIXoKORXkCp3r6v7Z6XZmDoN472CcUmfxI5Ppiq9sI/4b1ZJdx
+         Xtyz9VBh71N0C4XDZbMldqOEt2F+6q5gDPeyKKvSOyzbJ5rbGPZi42lxKiODx0ddF1xE
+         1XodI3LVtwgJ1bOEkROiMjyJ/yCmr1rqXz4t6AgyOEzCtf39AWebwFMy7CyqxGau8Yn+
+         8wBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5TUxA8XatXP4/Be/gKKaW1Zqc6zH5qP5Od3gWtx/EpE=;
-        b=LodMwt8b6iWxORfi0oEFHBi4v9aDURr2BrVHzf8xjPC+IAJBeiTjc9q6s+q+fOfngE
-         ACuNPPX5zq2yypWfEjBbvv+asKhc61HB8804rvgE+pEadmS0h4BaoaNn/beoEubz78pn
-         0xysKbdxSYoFFdszAbqcC8iCpUNKKbXjIkuZP61KrgPUsGomWa8XavtuYqqAxc+2UVhB
-         tBETs73bTeHtCwCV9SWhqXcOrr8+R76UQRx75w+TuLr7AzFT7ZvkT+yUSbN7Kio4WWYp
-         c/HRJFqZczV81lNCjWGctefyTjxJTpTyspb/vbHi33drlsTzhqr+yEuPsy/9AMC9Vpug
-         Ye1Q==
-X-Gm-Message-State: AOAM530MY6vvfTiQLVs/w6QV4JQCfWbJAqcV+/f3tPhAiPke8W+P6AXV
-        DnAlh0mdVpjQoLkHbyYc5Ys=
-X-Google-Smtp-Source: ABdhPJxc5o6Vlqz3HteWECIMToBeT/TMPBDjvRR3Xn6Gp34Po8WFPFKn1qoeZ8CtZXXlTjjnqwDmuA==
-X-Received: by 2002:a2e:91c7:: with SMTP id u7mr8311531ljg.413.1599421884063;
-        Sun, 06 Sep 2020 12:51:24 -0700 (PDT)
+        bh=i9kECGEmFpeu/YlzXuXIcv9eZGuOQH1eLhQ/SORGYyY=;
+        b=WeXtL1VMpN+EHc2VRtqhn2NPOdpu7JLM3w8CThUm69TbFz3UdudsDV519pCKN02k1m
+         snPsMFjS6ov4U86umVadyKCDuf/P3SFOQFvOW83uBcGpaUDoF1S5ZMrWTH6VLtAd+ndd
+         ppP9vtJhb6MOBeu6aPkLXYsPqOj1CdMfQPyCNG45iyzKi466Wb0Yp7czOYIq6tDLfKUX
+         Eii/RItL2gQbQrSLXkviBJd0jcFt07hcQzorvZHOf9RPDhvUgdAmkcDc3GaV4R+iw9bR
+         gDlx+TzrryyW3vuGT/Jz+GM/BI/0CCh+Acczrkd54krIty6lquxYrexxTEsnnkn4fXt3
+         worw==
+X-Gm-Message-State: AOAM531Yn81WojldHu+RTKStiRjFvbl62RznSAFjCcrKPGMMyHjfPj81
+        1x86bOh8uQUXeraPob6LyP8=
+X-Google-Smtp-Source: ABdhPJyJxrY1v/eSNxhu4uRp5af6bIOu5LzG1jrGW4IxNf5z3eetZrmesBTdZywW5H9z/oeXoE1EUg==
+X-Received: by 2002:a2e:8046:: with SMTP id p6mr8236843ljg.372.1599421885040;
+        Sun, 06 Sep 2020 12:51:25 -0700 (PDT)
 Received: from localhost.localdomain (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.gmail.com with ESMTPSA id b7sm4942574lfq.36.2020.09.06.12.51.23
+        by smtp.gmail.com with ESMTPSA id b7sm4942574lfq.36.2020.09.06.12.51.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2020 12:51:23 -0700 (PDT)
+        Sun, 06 Sep 2020 12:51:24 -0700 (PDT)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
@@ -57,9 +57,9 @@ To:     Lee Jones <lee.jones@linaro.org>, Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/5] mfd: Add driver for Embedded Controller found on Acer Iconia Tab A500
-Date:   Sun,  6 Sep 2020 22:51:00 +0300
-Message-Id: <20200906195103.1347-3-digetx@gmail.com>
+Subject: [PATCH v3 3/5] power: supply: Add battery gauge driver for Acer Iconia Tab A500
+Date:   Sun,  6 Sep 2020 22:51:01 +0300
+Message-Id: <20200906195103.1347-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20200906195103.1347-1-digetx@gmail.com>
 References: <20200906195103.1347-1-digetx@gmail.com>
@@ -70,263 +70,344 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Acer Iconia Tab A500 is an Android tablet device, it has ENE KB930
-Embedded Controller which provides battery-gauge, LED, GPIO and some
-other functions. The EC uses firmware that is specifically customized
-for Acer A500. This patch adds MFD driver for the Embedded Controller
-which allows to power-off / reboot the A500 device, it also provides
-a common register read/write API that will be used by the sub-devices.
+This patch adds battery gauge driver for Acer Iconia Tab A500 device.
+The battery gauge function is provided via the Embedded Controller,
+which is found on the Acer A500.
 
 Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 ---
- drivers/mfd/Kconfig        |  12 +++
- drivers/mfd/Makefile       |   1 +
- drivers/mfd/acer-ec-a500.c | 203 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 216 insertions(+)
- create mode 100644 drivers/mfd/acer-ec-a500.c
+ drivers/power/supply/Kconfig             |   6 +
+ drivers/power/supply/Makefile            |   1 +
+ drivers/power/supply/acer_a500_battery.c | 297 +++++++++++++++++++++++
+ 3 files changed, 304 insertions(+)
+ create mode 100644 drivers/power/supply/acer_a500_battery.c
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 231095933778..9b10e5895136 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -2062,6 +2062,18 @@ config MFD_KHADAS_MCU
- 	  additional drivers must be enabled in order to use the functionality
- 	  of the device.
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index a4657484f38b..21257a81b55b 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -760,4 +760,10 @@ config RN5T618_POWER
+ 	  This driver can also be built as a module. If so, the module will be
+ 	  called rn5t618_power.
  
-+config MFD_ACER_A500_EC
-+	tristate "Embedded Controller driver for Acer Iconia Tab A500"
-+	depends on I2C
-+	depends on ARCH_TEGRA_2x_SOC || COMPILE_TEST
-+	select MFD_CORE
-+	select REGMAP
++config BATTERY_ACER_A500
++	tristate "Acer Iconia Tab A500 battery driver"
++	depends on MFD_ACER_A500_EC
 +	help
-+	  Support for Acer Iconia Tab A500 Embedded Controller.
++	  Say Y to include support for Acer Iconia Tab A500 battery fuel gauge.
 +
-+	  The controller itself is ENE KB930, it is running firmware
-+	  customized for the specific needs of the Acer A500 hardware.
-+
- menu "Multimedia Capabilities Port drivers"
- 	depends on ARCH_SA1100
- 
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index a60e5f835283..6e3a6162ad94 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -262,5 +262,6 @@ obj-$(CONFIG_MFD_ROHM_BD71828)	+= rohm-bd71828.o
- obj-$(CONFIG_MFD_ROHM_BD718XX)	+= rohm-bd718x7.o
- obj-$(CONFIG_MFD_STMFX) 	+= stmfx.o
- obj-$(CONFIG_MFD_KHADAS_MCU) 	+= khadas-mcu.o
-+obj-$(CONFIG_MFD_ACER_A500_EC)	+= acer-ec-a500.o
- 
- obj-$(CONFIG_SGI_MFD_IOC3)	+= ioc3.o
-diff --git a/drivers/mfd/acer-ec-a500.c b/drivers/mfd/acer-ec-a500.c
+ endif # POWER_SUPPLY
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 293d4a5d80d3..d0f1b77c5c49 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -97,3 +97,4 @@ obj-$(CONFIG_CHARGER_BD70528)	+= bd70528-charger.o
+ obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
+ obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
+ obj-$(CONFIG_RN5T618_POWER)	+= rn5t618_power.o
++obj-$(CONFIG_BATTERY_ACER_A500)	+= acer_a500_battery.o
+diff --git a/drivers/power/supply/acer_a500_battery.c b/drivers/power/supply/acer_a500_battery.c
 new file mode 100644
-index 000000000000..2785a6d9bcc4
+index 000000000000..93135933c8af
 --- /dev/null
-+++ b/drivers/mfd/acer-ec-a500.c
-@@ -0,0 +1,203 @@
++++ b/drivers/power/supply/acer_a500_battery.c
+@@ -0,0 +1,297 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * MFD driver for Acer Iconia Tab A500 Embedded Controller.
++ * Battery driver for Acer Iconia Tab A500.
 + *
 + * Copyright 2020 GRATE-driver project.
 + *
 + * Based on downstream driver from Acer Inc.
++ * Based on NVIDIA Gas Gauge driver for SBS Compliant Batteries.
++ *
++ * Copyright (c) 2010, NVIDIA Corporation.
 + */
 +
-+#include <linux/delay.h>
-+#include <linux/i2c.h>
-+#include <linux/mfd/core.h>
 +#include <linux/module.h>
-+#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/power_supply.h>
 +#include <linux/regmap.h>
-+#include <linux/reboot.h>
-+
-+#define A500_EC_I2C_ERR_TIMEOUT		500
-+#define A500_EC_POWER_CMD_TIMEOUT	1000
++#include <linux/sched.h>
++#include <linux/slab.h>
++#include <linux/workqueue.h>
 +
 +enum {
-+	REG_CURRENT_NOW = 0x03,
-+	REG_SHUTDOWN = 0x52,
-+	REG_WARM_REBOOT = 0x54,
-+	REG_COLD_REBOOT = 0x55,
++	REG_CAPACITY,
++	REG_VOLTAGE,
++	REG_CURRENT,
++	REG_DESIGN_CAPACITY,
++	REG_TEMPERATURE,
 +};
 +
-+static struct i2c_client *a500_ec_client_pm_off;
-+
-+static int a500_ec_read(void *context, const void *reg_buf, size_t reg_size,
-+			void *val_buf, size_t val_sizel)
-+{
-+	struct i2c_client *client = context;
-+	unsigned int reg, retries = 5;
-+	u16 *ret_val = val_buf;
-+	s32 ret = 0;
-+
-+	if (reg_size != 1 || val_sizel != 2)
-+		return -EOPNOTSUPP;
-+
-+	reg = *(u8 *)reg_buf;
-+
-+	while (retries-- > 0) {
-+		ret = i2c_smbus_read_word_data(client, reg);
-+		if (ret >= 0)
-+			break;
-+
-+		msleep(A500_EC_I2C_ERR_TIMEOUT);
-+	}
-+
-+	if (ret < 0) {
-+		dev_err(&client->dev, "read 0x%x failed: %d\n", reg, ret);
-+		return ret;
-+	}
-+
-+	*ret_val = ret;
-+
-+	if (reg == REG_CURRENT_NOW)
-+		fsleep(10000);
-+
-+	return 0;
++#define EC_DATA(_reg, _psp) {			\
++	.psp = POWER_SUPPLY_PROP_ ## _psp,	\
++	.reg = _reg,				\
 +}
 +
-+static int a500_ec_write(void *context, const void *data, size_t count)
-+{
-+	struct i2c_client *client = context;
-+	unsigned int reg, val, retries = 5;
-+	s32 ret = 0;
-+
-+	if (count != 3)
-+		return -EOPNOTSUPP;
-+
-+	reg = *(u8  *)(data + 0);
-+	val = *(u16 *)(data + 1);
-+
-+	while (retries-- > 0) {
-+		ret = i2c_smbus_write_word_data(client, reg, val);
-+		if (ret >= 0)
-+			break;
-+
-+		msleep(A500_EC_I2C_ERR_TIMEOUT);
-+	}
-+
-+	if (ret < 0) {
-+		dev_err(&client->dev, "write 0x%x failed: %d\n", reg, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct regmap_config a500_ec_regmap_config = {
-+	.name = "KB930",
-+	.reg_bits = 8,
-+	.val_bits = 16,
-+	.max_register = 0xff,
++static const struct battery_register {
++	enum power_supply_property psp;
++	unsigned int reg;
++} ec_data[] = {
++	[REG_CAPACITY]		= EC_DATA(0x00, CAPACITY),
++	[REG_VOLTAGE]		= EC_DATA(0x01, VOLTAGE_NOW),
++	[REG_CURRENT]		= EC_DATA(0x03, CURRENT_NOW),
++	[REG_DESIGN_CAPACITY]	= EC_DATA(0x08, CHARGE_FULL_DESIGN),
++	[REG_TEMPERATURE]	= EC_DATA(0x0a, TEMP),
 +};
 +
-+static const struct regmap_bus a500_ec_regmap_bus = {
-+	.reg_format_endian_default = REGMAP_ENDIAN_NATIVE,
-+	.val_format_endian_default = REGMAP_ENDIAN_LITTLE,
-+	.write = a500_ec_write,
-+	.read = a500_ec_read,
-+	.max_raw_read = 2,
++static const enum power_supply_property a500_battery_properties[] = {
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_TEMP,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
 +};
 +
-+static void a500_ec_poweroff(void)
-+{
-+	i2c_smbus_write_word_data(a500_ec_client_pm_off, REG_SHUTDOWN, 0);
-+
-+	mdelay(A500_EC_POWER_CMD_TIMEOUT);
-+}
-+
-+static int a500_ec_restart_notify(struct notifier_block *this,
-+				  unsigned long reboot_mode, void *data)
-+{
-+	if (reboot_mode == REBOOT_WARM)
-+		i2c_smbus_write_word_data(a500_ec_client_pm_off,
-+					  REG_WARM_REBOOT, 0);
-+	else
-+		i2c_smbus_write_word_data(a500_ec_client_pm_off,
-+					  REG_COLD_REBOOT, 1);
-+
-+	mdelay(A500_EC_POWER_CMD_TIMEOUT);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static struct notifier_block a500_ec_restart_handler = {
-+	.notifier_call = a500_ec_restart_notify,
-+	.priority = 200,
-+};
-+
-+static const struct mfd_cell a500_ec_cells[] = {
-+	{ .name = "acer-a500-iconia-battery", },
-+	{ .name = "acer-a500-iconia-leds", },
-+};
-+
-+static int a500_ec_probe(struct i2c_client *client)
-+{
++struct a500_battery {
++	struct delayed_work poll_work;
++	struct power_supply *psy;
 +	struct regmap *rmap;
++	unsigned int capacity;
++};
++
++static bool a500_battery_update_capacity(struct a500_battery *bat)
++{
++	unsigned int capacity;
 +	int err;
 +
-+	rmap = devm_regmap_init(&client->dev, &a500_ec_regmap_bus,
-+				client, &a500_ec_regmap_config);
-+	if (IS_ERR(rmap))
-+		return PTR_ERR(rmap);
++	err = regmap_read(bat->rmap, ec_data[REG_CAPACITY].reg, &capacity);
++	if (err)
++		return false;
 +
-+	/* register battery and LED sub-devices */
-+	err = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_AUTO,
-+				   a500_ec_cells, ARRAY_SIZE(a500_ec_cells),
-+				   NULL, 0, NULL);
-+	if (err) {
-+		dev_err(&client->dev, "failed to add sub-devices: %d\n", err);
-+		return err;
++	/* capacity can be >100% even if max value is 100% */
++	capacity = min(capacity, 100u);
++
++	if (bat->capacity != capacity) {
++		bat->capacity = capacity;
++		return true;
 +	}
 +
-+	/* set up power management functions */
-+	if (of_device_is_system_power_controller(client->dev.of_node)) {
-+		a500_ec_client_pm_off = client;
-+
-+		err = register_restart_handler(&a500_ec_restart_handler);
-+		if (err)
-+			return err;
-+
-+		if (!pm_power_off)
-+			pm_power_off = a500_ec_poweroff;
-+	}
-+
-+	return 0;
++	return false;
 +}
 +
-+static int a500_ec_remove(struct i2c_client *client)
++static int a500_battery_get_status(struct a500_battery *bat)
 +{
-+	if (of_device_is_system_power_controller(client->dev.of_node)) {
-+		if (pm_power_off == a500_ec_poweroff)
-+			pm_power_off = NULL;
-+
-+		unregister_restart_handler(&a500_ec_restart_handler);
++	if (bat->capacity < 100) {
++		if (power_supply_am_i_supplied(bat->psy))
++			return POWER_SUPPLY_STATUS_CHARGING;
++		else
++			return POWER_SUPPLY_STATUS_DISCHARGING;
 +	}
++
++	return POWER_SUPPLY_STATUS_FULL;
++}
++
++static void a500_battery_unit_adjustment(struct device *dev,
++					 enum power_supply_property psp,
++					 union power_supply_propval *val)
++{
++	const unsigned int base_unit_conversion = 1000;
++	const unsigned int temp_kelvin_to_celsius = 2731;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		val->intval *= base_unit_conversion;
++		break;
++
++	case POWER_SUPPLY_PROP_TEMP:
++		val->intval -= temp_kelvin_to_celsius;
++		break;
++
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = !!val->intval;
++		break;
++
++	default:
++		dev_dbg(dev,
++			"%s: no need for unit conversion %d\n", __func__, psp);
++	}
++}
++
++static int a500_battery_get_ec_data_index(struct device *dev,
++					  enum power_supply_property psp)
++{
++	unsigned int i;
++
++	/*
++	 * DESIGN_CAPACITY register always returns a non-zero value if
++	 * battery is connected and zero if disconnected, hence we'll use
++	 * it for judging the battery presence.
++	 */
++	if (psp == POWER_SUPPLY_PROP_PRESENT)
++		psp = POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN;
++
++	for (i = 0; i < ARRAY_SIZE(ec_data); i++)
++		if (psp == ec_data[i].psp)
++			return i;
++
++	dev_dbg(dev, "%s: invalid property %u\n", __func__, psp);
++
++	return -EINVAL;
++}
++
++static int a500_battery_get_property(struct power_supply *psy,
++				     enum power_supply_property psp,
++				     union power_supply_propval *val)
++{
++	struct a500_battery *bat = power_supply_get_drvdata(psy);
++	struct device *dev = psy->dev.parent;
++	int ret = 0;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = a500_battery_get_status(bat);
++		break;
++
++	case POWER_SUPPLY_PROP_TECHNOLOGY:
++		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
++		break;
++
++	case POWER_SUPPLY_PROP_CAPACITY:
++		a500_battery_update_capacity(bat);
++		val->intval = bat->capacity;
++		break;
++
++	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++	case POWER_SUPPLY_PROP_PRESENT:
++	case POWER_SUPPLY_PROP_TEMP:
++		ret = a500_battery_get_ec_data_index(dev, psp);
++		if (ret < 0)
++			break;
++
++		ret = regmap_read(bat->rmap, ec_data[ret].reg, &val->intval);
++		break;
++
++	default:
++		dev_err(dev, "%s: invalid property %u\n", __func__, psp);
++		return -EINVAL;
++	}
++
++	if (!ret) {
++		/* convert units to match requirements of power supply class */
++		a500_battery_unit_adjustment(dev, psp, val);
++	}
++
++	dev_dbg(dev, "%s: property = %d, value = %x\n",
++		__func__, psp, val->intval);
++
++	/* return NODATA for properties if battery not presents */
++	if (ret)
++		return -ENODATA;
 +
 +	return 0;
 +}
 +
-+static const struct of_device_id a500_ec_match[] = {
-+	{ .compatible = "acer,a500-iconia-ec" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, a500_ec_match);
++static void a500_battery_poll_work(struct work_struct *work)
++{
++	struct a500_battery *bat;
++	bool capacity_changed;
 +
-+static struct i2c_driver a500_ec_driver = {
++	bat = container_of(work, struct a500_battery, poll_work.work);
++	capacity_changed = a500_battery_update_capacity(bat);
++
++	if (capacity_changed)
++		power_supply_changed(bat->psy);
++
++	/* continuously send uevent notification */
++	schedule_delayed_work(&bat->poll_work, 30 * HZ);
++}
++
++static const struct power_supply_desc a500_battery_desc = {
++	.name = "ec-battery",
++	.type = POWER_SUPPLY_TYPE_BATTERY,
++	.properties = a500_battery_properties,
++	.get_property = a500_battery_get_property,
++	.num_properties = ARRAY_SIZE(a500_battery_properties),
++	.external_power_changed = power_supply_changed,
++};
++
++static int a500_battery_probe(struct platform_device *pdev)
++{
++	struct power_supply_config psy_cfg = {};
++	struct a500_battery *bat;
++
++	bat = devm_kzalloc(&pdev->dev, sizeof(*bat), GFP_KERNEL);
++	if (!bat)
++		return -ENOMEM;
++
++	platform_set_drvdata(pdev, bat);
++
++	psy_cfg.of_node = pdev->dev.parent->of_node;
++	psy_cfg.drv_data = bat;
++
++	bat->rmap = dev_get_regmap(pdev->dev.parent, "KB930");
++	if (!bat->rmap)
++		return -EINVAL;
++
++	bat->psy = devm_power_supply_register_no_ws(&pdev->dev,
++						    &a500_battery_desc,
++						    &psy_cfg);
++	if (IS_ERR(bat->psy))
++		return dev_err_probe(&pdev->dev, PTR_ERR(bat->psy),
++				     "failed to register battery\n");
++
++	INIT_DELAYED_WORK(&bat->poll_work, a500_battery_poll_work);
++	schedule_delayed_work(&bat->poll_work, HZ);
++
++	return 0;
++}
++
++static int a500_battery_remove(struct platform_device *pdev)
++{
++	struct a500_battery *bat = dev_get_drvdata(&pdev->dev);
++
++	cancel_delayed_work_sync(&bat->poll_work);
++
++	return 0;
++}
++
++static int __maybe_unused a500_battery_suspend(struct device *dev)
++{
++	struct a500_battery *bat = dev_get_drvdata(dev);
++
++	cancel_delayed_work_sync(&bat->poll_work);
++
++	return 0;
++}
++
++static int __maybe_unused a500_battery_resume(struct device *dev)
++{
++	struct a500_battery *bat = dev_get_drvdata(dev);
++
++	schedule_delayed_work(&bat->poll_work, HZ);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(a500_battery_pm_ops,
++			 a500_battery_suspend, a500_battery_resume);
++
++static struct platform_driver a500_battery_driver = {
 +	.driver = {
-+		.name = "acer-a500-embedded-controller",
-+		.of_match_table = a500_ec_match,
++		.name = "acer-a500-iconia-battery",
++		.pm = &a500_battery_pm_ops,
 +	},
-+	.probe_new = a500_ec_probe,
-+	.remove = a500_ec_remove,
++	.probe = a500_battery_probe,
++	.remove = a500_battery_remove,
 +};
-+module_i2c_driver(a500_ec_driver);
++module_platform_driver(a500_battery_driver);
 +
-+MODULE_DESCRIPTION("Acer Iconia Tab A500 Embedded Controller driver");
++MODULE_DESCRIPTION("Battery gauge driver for Acer Iconia Tab A500");
 +MODULE_AUTHOR("Dmitry Osipenko <digetx@gmail.com>");
++MODULE_ALIAS("platform:acer-a500-iconia-battery");
 +MODULE_LICENSE("GPL");
 -- 
 2.27.0
