@@ -2,40 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A28BB26007D
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Sep 2020 18:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5DD260058
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Sep 2020 18:47:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730928AbgIGQuR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Sep 2020 12:50:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48718 "EHLO mail.kernel.org"
+        id S1730434AbgIGQra (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Sep 2020 12:47:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49218 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730776AbgIGQe7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:34:59 -0400
+        id S1730815AbgIGQfU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:35:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 850E321D1A;
-        Mon,  7 Sep 2020 16:34:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6D8721D94;
+        Mon,  7 Sep 2020 16:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599496493;
-        bh=RCKCSrE4tU5GQj7iM0MpN+Aw8Ju1nJbqwLZpXZDF2Fc=;
+        s=default; t=1599496519;
+        bh=Wvu8NGaWM525ZYiB8wDCt6ajdHm2w09PCo61MkOKhLI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DHOwiICLhACJClQ5XLSjGNR/k9fLPZAisQY87VeMqa2GVcBDTsQ0VrqYJlEJgNGH/
-         X3UOhCS21wE2w+hhziMfniekgI5/9GRH0403sOpzGItmNvKrdyqxnXo9Rq54Kd6GBh
-         YZkGFEQPFz+1/ScjhMi70I7YnoUYGZUo7ODohhXw=
+        b=aSX6PHErAvmcusnqoaeg2dmdxVuqJYswp8tETIme3Wckk6Kgm8W8ywYkxV6exgKq8
+         yOFH6TfpNb8UR2dyJovoY2WSIG73Z2BMq4X0bFbR6LhCSyyYEigxzECDWETuUsFra9
+         VDZCJbkrpNeikmVM29eMKDaVbldQo7yx7veZSJFI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Francisco Jerez <currojerez@riseup.net>,
-        Caleb Callaway <caleb.callaway@intel.com>,
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 21/26] cpufreq: intel_pstate: Fix intel_pstate_get_hwp_max() for turbo disabled
-Date:   Mon,  7 Sep 2020 12:34:21 -0400
-Message-Id: <20200907163426.1281284-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 14/17] cpufreq: intel_pstate: Refuse to turn off with HWP enabled
+Date:   Mon,  7 Sep 2020 12:34:57 -0400
+Message-Id: <20200907163500.1281543-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200907163426.1281284-1-sashal@kernel.org>
-References: <20200907163426.1281284-1-sashal@kernel.org>
+In-Reply-To: <20200907163500.1281543-1-sashal@kernel.org>
+References: <20200907163500.1281543-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,45 +43,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Francisco Jerez <currojerez@riseup.net>
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-[ Upstream commit eacc9c5a927e474c173a5d53dd7fb8e306511768 ]
+[ Upstream commit 43298db3009f06fe5c69e1ca8b6cfc2565772fa1 ]
 
-This fixes the behavior of the scaling_max_freq and scaling_min_freq
-sysfs files in systems which had turbo disabled by the BIOS.
+After commit f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive
+mode with HWP enabled") it is possible to change the driver status
+to "off" via sysfs with HWP enabled, which effectively causes the
+driver to unregister itself, but HWP remains active and it forces the
+minimum performance, so even if another cpufreq driver is loaded,
+it will not be able to control the CPU frequency.
 
-Caleb noticed that the HWP is programmed to operate in the wrong
-P-state range on his system when the CPUFREQ policy min/max frequency
-is set via sysfs.  This seems to be because in his system
-intel_pstate_get_hwp_max() is returning the maximum turbo P-state even
-though turbo was disabled by the BIOS, which causes intel_pstate to
-scale kHz frequencies incorrectly e.g. setting the maximum turbo
-frequency whenever the maximum guaranteed frequency is requested via
-sysfs.
+For this reason, make the driver refuse to change the status to
+"off" with HWP enabled.
 
-Tested-by: Caleb Callaway <caleb.callaway@intel.com>
-Signed-off-by: Francisco Jerez <currojerez@riseup.net>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-[ rjw: Minor subject edits ]
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpufreq/intel_pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpufreq/intel_pstate.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 8fa22aa2ac65b..864a7e8ebdfc3 100644
+index 5c41dc9aaa46d..be1a7bb0b4011 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -712,7 +712,7 @@ static void intel_pstate_get_hwp_max(unsigned int cpu, int *phy_max,
+@@ -2098,9 +2098,15 @@ static int intel_pstate_update_status(const char *buf, size_t size)
+ {
+ 	int ret;
  
- 	rdmsrl_on_cpu(cpu, MSR_HWP_CAPABILITIES, &cap);
- 	WRITE_ONCE(all_cpu_data[cpu]->hwp_cap_cached, cap);
--	if (global.no_turbo)
-+	if (global.no_turbo || global.turbo_disabled)
- 		*current_max = HWP_GUARANTEED_PERF(cap);
- 	else
- 		*current_max = HWP_HIGHEST_PERF(cap);
+-	if (size == 3 && !strncmp(buf, "off", size))
+-		return intel_pstate_driver ?
+-			intel_pstate_unregister_driver() : -EINVAL;
++	if (size == 3 && !strncmp(buf, "off", size)) {
++		if (!intel_pstate_driver)
++			return -EINVAL;
++
++		if (hwp_active)
++			return -EBUSY;
++
++		return intel_pstate_unregister_driver();
++	}
+ 
+ 	if (size == 6 && !strncmp(buf, "active", size)) {
+ 		if (intel_pstate_driver) {
 -- 
 2.25.1
 
