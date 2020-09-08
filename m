@@ -2,133 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59402617D4
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 19:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53C326186F
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 19:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728442AbgIHRnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 13:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S1731384AbgIHRx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 13:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731665AbgIHQOE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 12:14:04 -0400
-Received: from mail-ua1-x942.google.com (mail-ua1-x942.google.com [IPv6:2607:f8b0:4864:20::942])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B17C0617A9
-        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 05:15:02 -0700 (PDT)
-Received: by mail-ua1-x942.google.com with SMTP id i22so4405320uat.8
-        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 05:15:02 -0700 (PDT)
+        with ESMTP id S1731575AbgIHQMs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 12:12:48 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDF9C0612A0;
+        Tue,  8 Sep 2020 06:02:31 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id x77so9136842lfa.0;
+        Tue, 08 Sep 2020 06:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JP5ABl/qB8z1t9ORLAQA+/JSalJwDSSlxl4YBrhJyRk=;
-        b=PLnrTJ0hdvX/RLFzIJe95N6ZWOVasNl2pHn+rmILMDZHrxBzQhQ5DJrUQSNKLxnMct
-         m4VKclZwkvCEzZCSuRuxj7A6yH5yAn1bPQ6bUBmQYD+QA8enAXn1/p8e6VfRStsXVQDi
-         Z+KljRsXXdwS3sCizlNxFr8U9lrvxjXyuERrX7sC0UMs5uL+2/QSa7tYbZjJaqkViJij
-         97fd2ZRI9oJgUllw/h5Oy8EXKHsrpI4RFdVlrrvliUzGBW/DTmzDJU2vWl5a4XyRJ8QG
-         70c9/F0PNQn0q9wmTMdpzTx1NW+4ocohTaKl5t+tyNOD2TIFsUqDGXQgCX+nintoaCxv
-         CRMw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sXdYuavoSim9Tcuk44WZc9LhOUgtTFe2gPoDBIPVjng=;
+        b=k3aS2dqgVxh8tukyJeMOiUKibIP2o5EK1HbLTyoj1EIHk7TXBXfx91plVBpAbo35qy
+         NaXcni2JH8medKewgjiZU/CwZhuyyzDFlI/Z9xpUeCU0lkCyZD45E5ZPHdBEouYyaXdg
+         xlEfoR8jczhnh9u9zzBkqeqjV3Blq31P2SC6AssPsVcuDQqHqKt7eow30dWh3i1Cr3vV
+         dG7WT7DbQUgb+vMjiIpI8zjM+S5d5DWAK86VF9S+L70rvooQyCzTJanbXzRP6oXzAFbn
+         QrqjtwB0bL4Bj4ik0lsOJeVFZjAvfnQ/X+Qw1d8e+ajyQj5kGEZOGd7OE2CvQF5FS4D5
+         aDeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JP5ABl/qB8z1t9ORLAQA+/JSalJwDSSlxl4YBrhJyRk=;
-        b=uX9bqjqPCNBGfn+EmBvz8CE5XTR8Nzp8lc79PqCbCYCjbcxMrsl07p8Kfh9FzVd5Oy
-         bZeT8bKyGRwa9fvrZb243WeMyL9vgQPTVOZaPnc2dFXcHDy1aPu7CL7aCl3bjuAM+AyN
-         1hsgd/P4UJZd17yOpj0twPhEbAvxHq7BJUMDJelf9DdqIJADE0kxTqxypTHUpSN1secO
-         3ymFTSQNWZ35O33NUqumtZ/waIhCDFhA3gp4Pxbw4px6wmUFHdYXsSyB+ERCaudVz/pz
-         XlJl/ikTmA7b0b2Dl8qzYXVUkU7NpaIwJgLR/tg1OWembf2cGZEbWaeqj2YrhKZTrTVl
-         UdHw==
-X-Gm-Message-State: AOAM532gG8a7pC4nyTLteh/xPNUUG/Q1N2+cjrPJKo6IPpx3AbKy6+PL
-        kgqUf+tmzARKVaLFZf+rvKk/NwGZbMg3Vr5mTr/4lQ==
-X-Google-Smtp-Source: ABdhPJxo3gMKdzXcjGyQn5fW6DvzchcJXxBNn6iNKQFA7ZfaNDR7GleDHdOB1QCQw5E3cvxYEedzaCbJPIlPUm6Ey4U=
-X-Received: by 2002:ab0:130a:: with SMTP id g10mr4250187uae.100.1599567301004;
- Tue, 08 Sep 2020 05:15:01 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sXdYuavoSim9Tcuk44WZc9LhOUgtTFe2gPoDBIPVjng=;
+        b=VmCVc9rfIotMPNgc37q0ACxdPm+ZjfxTFqzUhdwQTVxR0l88OWaUkGIfGgxBUm7Enq
+         ZcsVgLFG5JeQzPSI+jsxGwX1xtfHXH0FljM7Ed57/FDJQ6pK1SIfqLyCylwqNW7wbDsT
+         KOCzGwRgVaHBa3ezLpBmv6z1AaP+39cxt75Z271BL8Z8qPiDfDVi1xfQlMCLwDHJR4eO
+         SGL3zUiFdKKidb29xW/63ls1KZSvyviW26w8eq3pIjy0GoLrdBNzkpxfUKPRmpYDw4rA
+         B7sUcqk7Wn9fJQnPz4vK2AN/GI5Lr1EmCqKvdeo5HQvZEYqCzvJi7locVQnNH9VplIhb
+         zdaA==
+X-Gm-Message-State: AOAM530sOEJdPd6P2q5jg517yPWD6P/f/W8yDBG58AYlChQUwGbBZe3p
+        T1RxsP3TcdF2yi+R60NVoNsynQ/IWh4=
+X-Google-Smtp-Source: ABdhPJyW70T/kdnCb/1pV8W77Azb/IMUM2E4AXoICzEHT0yIVQzTbi8wqv56HWe91+MN1H6JJWYFWw==
+X-Received: by 2002:a19:8446:: with SMTP id g67mr12202070lfd.87.1599570149663;
+        Tue, 08 Sep 2020 06:02:29 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id x11sm10286424ljh.106.2020.09.08.06.02.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2020 06:02:28 -0700 (PDT)
+Subject: Re: [PATCH] PM / devfreq: tegra30: disable clock on error in probe
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20200908072557.GC294938@mwanda>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <0d7fd969-8957-5db0-8c4d-2077e924181b@gmail.com>
+Date:   Tue, 8 Sep 2020 16:02:28 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200902232546.31240-1-ilina@codeaurora.org>
-In-Reply-To: <20200902232546.31240-1-ilina@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Sep 2020 14:14:24 +0200
-Message-ID: <CAPDyKFr+nA-EwbN_sOCj=R0EEtMNEaqfMqB+uV5+uzMTjS4rMA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Better domain idle from device wakeup patterns
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200908072557.GC294938@mwanda>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 3 Sep 2020 at 01:26, Lina Iyer <ilina@codeaurora.org> wrote:
->
-> Hello,
->
-> I was looking for an option to do better power management for some
-> domains where the devices enter runtime PM in a predictable fashion. For
-> example a display device that sends a vsync interrupt every 16 ms for a
-> 60 Hz panel. These interrupts are not timer interrupts but tend to
-> interrupt periodically to service the workflow and the devices and
-> domains may go back to idle soon after. Two domains are affected by this
-> - the device's PM domain and the CPU PM domain.
->
-> As a first step, I am looking to solve for the device's PM domain idle
-> state (and hopefully solve for the CPU PM domains subsequently). The PM
-> domain could have multiple idle states and/or the enter/exit latencies
-> could be high. In either case, it may not always be beneficial to power
-> off the domain, only to turn it back on before satisfying the idle state
-> residency. When the wakeup is known for the device, we could use that to
-> determine the worthiness of entering a domain idle state. Only the
-> device can tell us when the future event would be and that could change
-> as the usecase changes. Like, when the panel refresh rate increases to
-> 120 Hz. If this information was made available to runtime PM, we could
-> use that in the domain governor to determine a suitable idle state. This
-> is the idea behind these patches.
+08.09.2020 10:25, Dan Carpenter пишет:
+> This error path needs to call clk_disable_unprepare().
+> 
+> Fixes: 7296443b900e ("PM / devfreq: tegra30: Handle possible round-rate error")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> ---
+>  drivers/devfreq/tegra30-devfreq.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index e94a27804c20..dedd39de7367 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -836,7 +836,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+>  	if (rate < 0) {
+>  		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+> -		return rate;
+> +		err = rate;
+> +		goto disable_clk;
+>  	}
+>  
+>  	tegra->max_freq = rate / KHZ;
+> @@ -897,6 +898,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>  	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+>  
+>  	reset_control_reset(tegra->reset);
+> +disable_clk:
+>  	clk_disable_unprepare(tegra->clock);
+>  
+>  	return err;
+> 
 
-While striving towards entering the most optimal (energy and
-performance wise) idle state, I think it's an interesting approach.
+Hello, Dan! Thank you for the patch!
 
->
-> In the first patch, I am proposing an API for devices to specify their
-> wakeup as a time in the future and in the second patch, I am updating
-> the PM domain governor to use this information to determine the idle
-> state. I have not had a chance to test this out yet, but I wanted to
-> know if I am on the right track.
-
-I don't have any immediate objections - I think the approach seems
-reasonable. Still, my first thought that this could be an extension to
-the dev_pm_qos interface, but perhaps that isn't a good fit.
-
-I also have a couple of comments to the code, but I will reply to each
-patch separately about that.
-
->
-> Would appreciate your thoughts on this.
-
-When it comes to showing real results, other than in theory, I think
-we need to make the genpd's cpu governor to cope with the next wakeup
-event as well.
-
->
-> Thanks,
-> Lina
->
->
-> Lina Iyer (2):
->   PM / runtime: register device's next wakeup
->   PM / Domains: use device's next wakeup to determine domain idle state
->
->  drivers/base/power/domain_governor.c | 87 ++++++++++++++++++++++++++--
->  drivers/base/power/runtime.c         | 31 ++++++++++
->  include/linux/pm.h                   |  2 +
->  include/linux/pm_domain.h            |  1 +
->  include/linux/pm_runtime.h           |  1 +
->  5 files changed, 116 insertions(+), 6 deletions(-)
->
-> --
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
->
-
-Kind regards
-Uffe
+Reviewed-by: Dmitry Osipenko <digetx@gmail.com>
