@@ -2,134 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9405D260C24
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 09:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113B1260CB2
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 09:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729341AbgIHHgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 03:36:03 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:35023 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728759AbgIHHgB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 03:36:01 -0400
-X-UUID: 69998a3b23ce4643aa78f01e7cfdaa0a-20200908
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=CxyzFCyyAUAD9dzrQYeXJkejylJ8fCzMCpGiZ2fc9dM=;
-        b=ADMe/P0blLIvvBFOlW1DhlU/rn1DELwfX7mxFtdgY6KwnUVWXAEalPcNRNb7vVxOFFSpq342TTPWdpXMeWj5mgKlBevTzXmaJXZ0Tg88wpf1EgvxW7n1u05S69ErfJ7SPzwjMXuLxU0tJeMuzUReL7IimGkQAGUK92Iym1QoXlQ=;
-X-UUID: 69998a3b23ce4643aa78f01e7cfdaa0a-20200908
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1114967565; Tue, 08 Sep 2020 15:35:57 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 8 Sep 2020 15:35:56 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Sep 2020 15:35:56 +0800
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <hector.yuan@mediatek.com>
-Subject: [PATCH v4 2/2] dt-bindings: cpufreq: add bindings for MediaTek cpufreq HW
-Date:   Tue, 8 Sep 2020 15:35:47 +0800
-Message-ID: <1599550547-27767-3-git-send-email-hector.yuan@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
-References: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1729953AbgIHH5z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 03:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729922AbgIHH5s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 03:57:48 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F84EC061795
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 00:57:40 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id 34so58935pgo.13
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 00:57:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=dVSf2eOrndrAFT6QUUuIacL06FJeCrpQS/XjWnR+m+g=;
+        b=mvoXEciH3g8cWyPFw9lkTqVILJbvJy/xomNt+JSdkBHHQNF2MlRH3EQjTsB8fq73HL
+         2OZCi1DOBNI99po5o1KJh8+/J1arFAi5xBt0YYPBLBFwx9NqCcwg5QyVZt+CFyU4APy4
+         yc7mNeeXusKRsmrPx3hq6my8gSLdit/IQwU3NM0Q8MlimrqEOp8DNDuQ5G99nQ860Yh3
+         GnlwLFicuh0PSeLacjzMz5W0R+65KY9RJ2tj4FsCgn2cYAQ4WTwPQAukCbnzwIrP5ylZ
+         kwStDaBvKbOHy67PH4dMpLliQneKVF9eTGavJE0tB+kI1GaRpozoAnjlCxcB4yjo1L4y
+         nEsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=dVSf2eOrndrAFT6QUUuIacL06FJeCrpQS/XjWnR+m+g=;
+        b=R+UpWOf0hN3fPS65+c00UNRBPaz5JKq7F+27cNT0e0U0bOoa3x4J0NY4aGK8Tsew4Z
+         dRljswLWe/ZzYGixbH616XCMCokBVkKGJOtix4GtgWyKOrcgYNPxSF2TfIUVPXdMX5KI
+         mlstXAHPAlaI/QLJkEIbXjFfkSBUc9QWEmj77I2nv3dy06VHm1H19NASUmwBcOiDBhk6
+         gl/y+IZ0vMejik5E9a3d00/zLae2PMgeOwzECoPxZp5sWXWf3j0dRp1Tg+87QebcTVGH
+         e0KOjG+078CUzsg6ps3+rtiR7XQEO8BSWCl4IOdtrZk7pGLpvR1hOm1vgrZ1SBx4Yys0
+         r0mQ==
+X-Gm-Message-State: AOAM531IiBd2p2yvnjE+7MpaIIBmYko+MwhKkLyhauH9sNdUEPptaxqp
+        3BGcX8vYJJjhVEY9TPffZ323
+X-Google-Smtp-Source: ABdhPJz/6SYkXXQgE0eri63Ih9i/RSuXmfp61Yk7DuB2kZHEvH+aPSAfVL87BCXdO2+di1y4Y24kkQ==
+X-Received: by 2002:a63:2055:: with SMTP id r21mr6448504pgm.118.1599551858556;
+        Tue, 08 Sep 2020 00:57:38 -0700 (PDT)
+Received: from localhost.localdomain ([103.59.133.81])
+        by smtp.googlemail.com with ESMTPSA id m21sm7560154pfo.13.2020.09.08.00.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 00:57:38 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org,
+        tdas@codeaurora.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 2/7] arm64: dts: qcom: sm8250: Add cpufreq hw node
+Date:   Tue,  8 Sep 2020 13:27:11 +0530
+Message-Id: <20200908075716.30357-3-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200908075716.30357-1-manivannan.sadhasivam@linaro.org>
+References: <20200908075716.30357-1-manivannan.sadhasivam@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogIkhlY3Rvci5ZdWFuIiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KDQpBZGQgZGV2
-aWNldHJlZSBiaW5kaW5ncyBmb3IgTWVkaWFUZWsgSFcgZHJpdmVyLg0KDQpTaWduZWQtb2ZmLWJ5
-OiBIZWN0b3IuWXVhbiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogLi4uL2JpbmRp
-bmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sICAgICAgfCAgMTQxICsrKysrKysr
-KysrKysrKysrKysrDQogMSBmaWxlIGNoYW5nZWQsIDE0MSBpbnNlcnRpb25zKCspDQogY3JlYXRl
-IG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2Nw
-dWZyZXEtbWVkaWF0ZWstaHcueWFtbA0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXZp
-Y2V0cmVlL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sIGIvRG9jdW1l
-bnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55
-YW1sDQpuZXcgZmlsZSBtb2RlIDEwMDY0NA0KaW5kZXggMDAwMDAwMC4uNWJlNTg2Nw0KLS0tIC9k
-ZXYvbnVsbA0KKysrIGIvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NwdWZyZXEv
-Y3B1ZnJlcS1tZWRpYXRlay1ody55YW1sDQpAQCAtMCwwICsxLDE0MSBAQA0KKyMgU1BEWC1MaWNl
-bnNlLUlkZW50aWZpZXI6IChHUEwtMi4wLW9ubHkgT1IgQlNELTItQ2xhdXNlKQ0KKyVZQU1MIDEu
-Mg0KKy0tLQ0KKyRpZDogaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvY3B1ZnJlcS9jcHVm
-cmVxLW1lZGlhdGVrLWh3LnlhbWwjDQorJHNjaGVtYTogaHR0cDovL2RldmljZXRyZWUub3JnL21l
-dGEtc2NoZW1hcy9jb3JlLnlhbWwjDQorDQordGl0bGU6IE1lZGlhVGVrJ3MgQ1BVRlJFUSBCaW5k
-aW5ncw0KKw0KK21haW50YWluZXJzOg0KKyAgLSBIZWN0b3IgWXVhbiA8aGVjdG9yLnl1YW5AbWVk
-aWF0ZWsuY29tPg0KKw0KK2Rlc2NyaXB0aW9uOg0KKyAgQ1BVRlJFUSBIVyBpcyBhIGhhcmR3YXJl
-IGVuZ2luZSB1c2VkIGJ5IE1lZGlhVGVrDQorICBTb0NzIHRvIG1hbmFnZSBmcmVxdWVuY3kgaW4g
-aGFyZHdhcmUuIEl0IGlzIGNhcGFibGUgb2YgY29udHJvbGxpbmcgZnJlcXVlbmN5DQorICBmb3Ig
-bXVsdGlwbGUgY2x1c3RlcnMuDQorDQorcHJvcGVydGllczoNCisgIGNvbXBhdGlibGU6DQorICAg
-IGNvbnN0OiBtZWRpYXRlayxjcHVmcmVxLWh3DQorDQorICByZWc6DQorICAgIG1pbkl0ZW1zOiAx
-DQorICAgIG1heEl0ZW1zOiAyDQorICAgIGRlc2NyaXB0aW9uOiB8DQorICAgICAgQWRkcmVzc2Vz
-IGFuZCBzaXplcyBmb3IgdGhlIG1lbW9yeSBvZiB0aGUgSFcgYmFzZXMgaW4gZWFjaCBmcmVxdWVu
-Y3kgZG9tYWluLg0KKw0KKyAgcmVnLW5hbWVzOg0KKyAgICBpdGVtczoNCisgICAgICAtIGNvbnN0
-OiAiZnJlcS1kb21haW4wIg0KKyAgICAgIC0gY29uc3Q6ICJmcmVxLWRvbWFpbjEiDQorICAgIGRl
-c2NyaXB0aW9uOiB8DQorICAgICAgRnJlcXVlbmN5IGRvbWFpbiBuYW1lLiBpLmUuDQorICAgICAg
-ImZyZXEtZG9tYWluMCIsICJmcmVxLWRvbWFpbjEiLg0KKw0KKyAgIiNmcmVxLWRvbWFpbi1jZWxs
-cyI6DQorICAgIGNvbnN0OiAxDQorICAgIGRlc2NyaXB0aW9uOiB8DQorICAgICAgTnVtYmVyIG9m
-IGNlbGxzIGluIGEgZnJlcWVuY3kgZG9tYWluIHNwZWNpZmllci4NCisNCisgIG10ay1mcmVxLWRv
-bWFpbjoNCisgICAgbWF4SXRlbXM6IDENCisgICAgZGVzY3JpcHRpb246IHwNCisgICAgICBEZWZp
-bmUgdGhpcyBjcHUgYmVsb25ncyB0byB3aGljaCBmcmVxdWVuY3kgZG9tYWluLiBpLmUuDQorICAg
-ICAgY3B1MC0zIGJlbG9uZyB0byBmcmVxdWVuY3kgZG9tYWluMCwNCisgICAgICBjcHU0LTYgYmVs
-b25nIHRvIGZyZXF1ZW5jeSBkb21haW4xLg0KKw0KK3JlcXVpcmVkOg0KKyAgLSBjb21wYXRpYmxl
-DQorICAtIHJlZw0KKyAgLSByZWctbmFtZXMNCisgIC0gIiNmcmVxLWRvbWFpbi1jZWxscyINCisN
-CitleGFtcGxlczoNCisgIC0gfA0KKyAgICBjcHVzIHsNCisgICAgICAgICAgICAjYWRkcmVzcy1j
-ZWxscyA9IDwxPjsNCisgICAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCisNCisgICAgICAg
-ICAgICBjcHUwOiBjcHVAMCB7DQorICAgICAgICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7
-DQorICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUiOw0KKyAgICAg
-ICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0KKyAgICAgICAgICAgICAgICBtdGst
-ZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMD47DQorICAgICAgICAgICAgICAgIHJlZyA9IDww
-eDAwMD47DQorICAgICAgICAgICAgfTsNCisNCisgICAgICAgICAgICBjcHUxOiBjcHVAMSB7DQor
-ICAgICAgICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQorICAgICAgICAgICAgICAgIGNv
-bXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUiOw0KKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0
-aG9kID0gInBzY2kiOw0KKyAgICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZy
-ZXFfaHcgMD47DQorICAgICAgICAgICAgICAgIHJlZyA9IDwweDEwMD47DQorICAgICAgICAgICAg
-fTsNCisNCisgICAgICAgICAgICBjcHUyOiBjcHVAMiB7DQorICAgICAgICAgICAgICAgIGRldmlj
-ZV90eXBlID0gImNwdSI7DQorICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRl
-eC1hNTUiOw0KKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0KKyAgICAg
-ICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMD47DQorICAgICAgICAg
-ICAgICAgIHJlZyA9IDwweDIwMD47DQorICAgICAgICAgICAgfTsNCisNCisgICAgICAgICAgICBj
-cHUzOiBjcHVAMyB7DQorICAgICAgICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQorICAg
-ICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUiOw0KKyAgICAgICAgICAg
-ICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0KKyAgICAgICAgICAgICAgICBtdGstZnJlcS1k
-b21haW4gPSA8JmNwdWZyZXFfaHcgMD47DQorICAgICAgICAgICAgICAgIHJlZyA9IDwweDMwMD47
-DQorICAgICAgICAgICAgfTsNCisNCisgICAgICAgICAgICBjcHU0OiBjcHVANCB7DQorICAgICAg
-ICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQorICAgICAgICAgICAgICAgIGNvbXBhdGli
-bGUgPSAiYXJtLGNvcnRleC1hNTUiOw0KKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0g
-InBzY2kiOw0KKyAgICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcg
-MT47DQorICAgICAgICAgICAgICAgIHJlZyA9IDwweDQwMD47DQorICAgICAgICAgICAgfTsNCisN
-CisgICAgICAgICAgICBjcHU1OiBjcHVANSB7DQorICAgICAgICAgICAgICAgIGRldmljZV90eXBl
-ID0gImNwdSI7DQorICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUi
-Ow0KKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0KKyAgICAgICAgICAg
-ICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMT47DQorICAgICAgICAgICAgICAg
-IHJlZyA9IDwweDUwMD47DQorICAgICAgICAgICAgfTsNCisNCisgICAgICAgICAgICBjcHU2OiBj
-cHVANiB7DQorICAgICAgICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQorICAgICAgICAg
-ICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNzUiOw0KKyAgICAgICAgICAgICAgICBl
-bmFibGUtbWV0aG9kID0gInBzY2kiOw0KKyAgICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4g
-PSA8JmNwdWZyZXFfaHcgMT47DQorICAgICAgICAgICAgICAgIHJlZyA9IDwweDYwMD47DQorICAg
-ICAgICAgICAgfTsNCisNCisgICAgICAgICAgICBjcHU3OiBjcHVANyB7DQorICAgICAgICAgICAg
-ICAgIGRldmljZV90eXBlID0gImNwdSI7DQorICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAi
-YXJtLGNvcnRleC1hNzUiOw0KKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2ki
-Ow0KKyAgICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMT47DQor
-ICAgICAgICAgICAgICAgIHJlZyA9IDwweDcwMD47DQorICAgICAgICAgICAgfTsNCisgICAgfTsN
-CisNCisgICAgLyogLi4uICovDQorDQorICAgIHNvYyB7DQorICAgICAgICAjYWRkcmVzcy1jZWxs
-cyA9IDwyPjsNCisgICAgICAgICNzaXplLWNlbGxzID0gPDI+Ow0KKw0KKyAgICAgICAgY3B1ZnJl
-cV9odzogY3B1ZnJlcUAxMWJjMDAgew0KKyAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibWVkaWF0
-ZWssY3B1ZnJlcS1odyI7DQorICAgICAgICAgICAgcmVnID0gPDAgMHgxMWJjMTAgMCAweDhjPiwN
-CisgICAgICAgICAgICAgICA8MCAweDExYmNhMCAwIDB4OGM+Ow0KKyAgICAgICAgICAgIHJlZy1u
-YW1lcyA9ICJmcmVxLWRvbWFpbjAiLCAiZnJlcS1kb21haW4xIjsNCisgICAgICAgICAgICAjZnJl
-cS1kb21haW4tY2VsbHMgPSA8MT47DQorICAgICAgICB9Ow0KKyAgICB9Ow0KKw0KKw0KKw0KKw0K
-LS0gDQoxLjcuOS41DQo=
+From: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Add cpufreq HW device node to scale 4-Silver/3-Gold/1-Gold+ cores
+on SM8250 SoCs.
+
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8250.dtsi | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+index e7d139e1a6ce..aafb46a26a9c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+@@ -87,6 +87,7 @@
+ 			reg = <0x0 0x0>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_0>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_0: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -102,6 +103,7 @@
+ 			reg = <0x0 0x100>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_100>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_100: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -114,6 +116,7 @@
+ 			reg = <0x0 0x200>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_200>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_200: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -126,6 +129,7 @@
+ 			reg = <0x0 0x300>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_300>;
++			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_300: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -138,6 +142,7 @@
+ 			reg = <0x0 0x400>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_400>;
++			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			L2_400: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -150,6 +155,7 @@
+ 			reg = <0x0 0x500>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_500>;
++			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			L2_500: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -163,6 +169,7 @@
+ 			reg = <0x0 0x600>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_600>;
++			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			L2_600: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -175,6 +182,7 @@
+ 			reg = <0x0 0x700>;
+ 			enable-method = "psci";
+ 			next-level-cache = <&L2_700>;
++			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			L2_700: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -2076,6 +2084,20 @@
+ 				};
+ 			};
+ 		};
++
++		cpufreq_hw: cpufreq@18591000 {
++			compatible = "qcom,sm8250-epss";
++			reg = <0 0x18591000 0 0x1000>,
++			      <0 0x18592000 0 0x1000>,
++			      <0 0x18593000 0 0x1000>;
++			reg-names = "freq-domain0", "freq-domain1",
++				    "freq-domain2";
++
++			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++			clock-names = "xo", "alternate";
++
++			#freq-domain-cells = <1>;
++		};
+ 	};
+ 
+ 	timer {
+-- 
+2.17.1
 
