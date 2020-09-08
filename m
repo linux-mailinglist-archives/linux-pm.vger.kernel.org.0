@@ -2,81 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC4A261203
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 15:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F29261288
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 16:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729738AbgIHN2o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 09:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729773AbgIHLOX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 07:14:23 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6EEC061798
-        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 04:13:35 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id x123so546573pfc.7
-        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 04:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=WVsW5/h4oQT6F2Ccs9ZaXWGd8sXTP+0lzm/VdEkOoNU=;
-        b=karhH+PgSODWREXm0p54GPAS5fuKpXKJt+8Af39CQ0dmYw1iBiarVafXJpzDWywJmJ
-         DIKSvOLWtEqV5fTY4VG41E0KD8ebLBehgL3RGJ7bpbnAf3kVBO4L850CEl8A1aJapJd7
-         JQ3QoaevsqfxrykTQpknub/IQdeBSPVV2v1liXvQT2jv+GzKuquHLazpZ/Ra8aAaE5di
-         U3EAuJzzwcfDuAfXJ4PkAGDasgeNGCzwoNghhN0Z4N7KoQlb2nuph1iguJVETLTA6O1l
-         eVacXWnmpIcXJtfgaNMO215NZqqgddBf552Xa7E+yvy/iBppLvv++FcgttQzzlql+Vxn
-         GyEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WVsW5/h4oQT6F2Ccs9ZaXWGd8sXTP+0lzm/VdEkOoNU=;
-        b=tBZDYAhJMfFVyFXOZOxQANP+LZbhbq6DG9OWqNqUlgfWg68WmQpDRNnGfoWot3UIT3
-         vulbdZchuBsLM5R/CoIsLIkBw2qD46Z+fJ2WOlwHDDDO3Q9eEKMp2TjbZq6z3kXpGm/P
-         MNfF6X8JUuBgvX+LYsOlPl+bAvrbVx9+KjGfgO/yEpnqSYWNKqDv0CpH24iAXlLMhf5o
-         dQFXaR7pANPDKj0OTaY6XRnzNNScNWR7Ol4dK+AZEFrC6ypwBnRBGBaXNU04YraCOcJs
-         u4FqHDLRYrnGAyhFnD+2g5G6JzPzRDvsiCOO6DYu93Xs4wI9uE0MFDN1AlXUpk9M3dTj
-         jI2g==
-X-Gm-Message-State: AOAM532YV/pa+7QxwL+tUKKMHWYoMbGzyW39uBjmJnTJ6lSEXRMxZR5T
-        kt59acs+F9YWqjKk1QXGc1Ictg==
-X-Google-Smtp-Source: ABdhPJx8styTZ/vn74fTMnB2guiXpmFzAePJU+SGLWP0r0xJfiKvSMVi9vEJfHQyKmPs/jo/hm/Hnw==
-X-Received: by 2002:a17:902:c3d3:: with SMTP id j19mr23528672plj.59.1599563615251;
-        Tue, 08 Sep 2020 04:13:35 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id q18sm13906333pfg.158.2020.09.08.04.13.34
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Sep 2020 04:13:34 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 16:43:31 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v4 1/2] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-Message-ID: <20200908111331.rdvtrvttoapqxaib@vireshk-i7>
-References: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
- <1599550547-27767-2-git-send-email-hector.yuan@mediatek.com>
- <20200908102752.r2n6xvghl4fcdrcv@vireshk-i7>
- <1599563425.2621.5.camel@mtkswgap22>
+        id S1729935AbgIHOUv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 10:20:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38074 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729721AbgIHOPu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 8 Sep 2020 10:15:50 -0400
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 86E1E21D90
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 12:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599567012;
+        bh=lq9eTjrWEGZEa2yiJKmSBpUchaqnuHBGfVpng6L9Aqc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=2JBREKU6JRgGxsJ1r8Ce2Iju6vIu8ns/qPUApwNkh+GlxhyVWmZki8K1pkhPaBIMI
+         oIjpxoan1Owvg0lws/TNOUleSTdKu7+AxYmUfIWC1QVQyHVnrSntCmcm31oOP9BeIn
+         XhujwMCmWKaMS2a2Z8abpw9lH+pT866FkY6uho3Y=
+Received: by mail-ua1-f53.google.com with SMTP id e41so4960511uad.6
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 05:10:12 -0700 (PDT)
+X-Gm-Message-State: AOAM533CR5QcDejYbod0ttkwfG+qCN7ECE+cJiArEIgyZWPDZkfzd2Jx
+        r2CbvILAW2eJJE56eL8v/Zwv5zs52pBaH1K2H1McaA==
+X-Google-Smtp-Source: ABdhPJzVyQm6/6q5OjrV7nqU3MI7oMJGT7K1lFXypEJBdr8i/tOI9S8ZGFWCl5CSa7p27tf/aSMle29PYGnK5195eZQ=
+X-Received: by 2002:ab0:384a:: with SMTP id h10mr5065875uaw.77.1599567011727;
+ Tue, 08 Sep 2020 05:10:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599563425.2621.5.camel@mtkswgap22>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200908075716.30357-1-manivannan.sadhasivam@linaro.org> <20200908075716.30357-7-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20200908075716.30357-7-manivannan.sadhasivam@linaro.org>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Tue, 8 Sep 2020 17:40:00 +0530
+X-Gmail-Original-Message-ID: <CAHLCerNaf6hdC5etZoiq2pvvRt85CpD0yEW5_pcfpQKDjHk5Fw@mail.gmail.com>
+Message-ID: <CAHLCerNaf6hdC5etZoiq2pvvRt85CpD0yEW5_pcfpQKDjHk5Fw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] cpufreq: qcom-hw: Add cpufreq support for SM8250 SoC
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08-09-20, 19:10, Hector Yuan wrote:
-> OK, I will define the corresponding exit function. 
+On Tue, Sep 8, 2020 at 1:27 PM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> SM8250 SoC uses EPSS block for carrying out the cpufreq duties. Hence, add
+> support for it in the driver with relevant of_match data.
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Also please add remove() corresponding to probe().
+Reviewed-by: Amit Kucheria <amitk@kernel.org>
 
--- 
-viresh
+
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index de816bcafd33..c3c397cc3dc6 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -285,8 +285,17 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
+>         .lut_row_size = 32,
+>  };
+>
+> +static const struct qcom_cpufreq_soc_data sm8250_soc_data = {
+> +       .reg_enable = 0x0,
+> +       .reg_freq_lut = 0x100,
+> +       .reg_volt_lut = 0x200,
+> +       .reg_perf_state = 0x320,
+> +       .lut_row_size = 4,
+> +};
+> +
+>  static const struct of_device_id qcom_cpufreq_hw_match[] = {
+>         { .compatible = "qcom,cpufreq-hw", .data = &qcom_soc_data },
+> +       { .compatible = "qcom,sm8250-epss", .data = &sm8250_soc_data },
+>         {}
+>  };
+>  MODULE_DEVICE_TABLE(of, qcom_cpufreq_hw_match);
+> --
+> 2.17.1
+>
