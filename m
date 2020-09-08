@@ -2,281 +2,453 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D26B260F60
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 12:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB9C260FBC
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 12:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728971AbgIHKNQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 06:13:16 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:28566 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729171AbgIHKMp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 06:12:45 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200908101235epoutp0227b33087180057b879d4c5c99c864590~yx04DU_Ty0048600486epoutp02C
-        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 10:12:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200908101235epoutp0227b33087180057b879d4c5c99c864590~yx04DU_Ty0048600486epoutp02C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1599559955;
-        bh=J/Dt3B5epxM2hfl2xSuuQL+o/kFO8VBmHsh0AA6NAv0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAZEZSc02t00u0GNIy9jtsUimxQ0iOXA+7AMthZyvozKVFLrnJlVjsCe7+7NJL/Bp
-         f/BsIYn/+XpyPvp2pvO+Dm/WTwH2HRRsiaIlEMM/5GwftZpLuJdvl3ksVB9/7FqtPZ
-         t2nG8UIAHga3vyPavMIe5CPRMd2Ujv1BComv5MlY=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20200908101235epcas1p4e665b4bd0dc7ee631a31d9be8c14de24~yx03wozhq1793617936epcas1p4m;
-        Tue,  8 Sep 2020 10:12:35 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.40.158]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4Bm1DH5tFZzMqYlv; Tue,  8 Sep
-        2020 10:12:31 +0000 (GMT)
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2B.C9.18978.F09575F5; Tue,  8 Sep 2020 19:12:31 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
-        20200908101231epcas1p4b6262aae4d5272f6cce366ac1ffbb955~yx0z5w8121795917959epcas1p4b;
-        Tue,  8 Sep 2020 10:12:31 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200908101231epsmtrp19a55fde1eb3c2658931f53fc9c6b87b2~yx0z5FRHu1887518875epsmtrp1c;
-        Tue,  8 Sep 2020 10:12:31 +0000 (GMT)
-X-AuditID: b6c32a35-603ff70000004a22-e2-5f57590fda38
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        6E.99.08382.E09575F5; Tue,  8 Sep 2020 19:12:30 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.113.221.102]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20200908101230epsmtip2282421ce7b62a585df96a94121857b21~yx0zqf2h81256012560epsmtip2k;
-        Tue,  8 Sep 2020 10:12:30 +0000 (GMT)
-From:   Chanwoo Choi <cw00.choi@samsung.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, krzk@kernel.org, lukasz.luba@arm.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3 3/3] PM / devfreq: event: Change prototype of
- devfreq_event_get_edev_by_phandle function
-Date:   Tue,  8 Sep 2020 19:24:47 +0900
-Message-Id: <20200908102447.15097-4-cw00.choi@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200908102447.15097-1-cw00.choi@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGKsWRmVeSWpSXmKPExsWy7bCmni5/ZHi8QdcJXYvrX56zWpw/v4Hd
-        4mzTG3aLTY+vsVpc3jWHzeJz7xFGixnn9zFZLGxqYbe43biCzYHTY828NYwem1Z1snlsXlLv
-        0bdlFaPH501yAaxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkou
-        PgG6bpk5QPcoKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgosC/SKE3OLS/PS9ZLz
-        c60MDQyMTIEKE7Iz1nX/Zy54aFbx7fZu1gbG/bpdjJwcEgImEouPbGMHsYUEdjBK7Jpo0MXI
-        BWR/YpQ4f+ElM0TiG6PEnUMOMA2zfv1lhyjayyjRuXAbM4TzhVFi9ukeJpAqNgEtif0vbrCB
-        2CICZRK3v1wFK2IWaGWUuPf8GliRsECuxNr+02C7WQRUJZqnrQGL8wpYSdw4/JgVYp28xOoN
-        B8DO4BSwlti+aiEbyCAJgWvsEv9ffIAqcpE42XaLEcIWlnh1fAs7hC0l8bK/Dcqullh58ghU
-        cwejxJb9F6CajSX2L50MtJkD6DxNifW79CHCihI7f88Fm8kswCfx7msPK0iJhACvREebEESJ
-        ssTlB3eZIGxJicXtnWwQtofEhy/zGCGh0scosfz+V6YJjHKzEDYsYGRcxSiWWlCcm55abFhg
-        iBxlmxjBCU7LdAfjxLcf9A4xMnEwHmKU4GBWEuHtOhQaL8SbklhZlVqUH19UmpNafIjRFBh6
-        E5mlRJPzgSk2ryTe0NTI2NjYwsTQzNTQUEmc9+EthXghgfTEktTs1NSC1CKYPiYOTqkGJplF
-        q+YfPn2Jfa5x9IxXXhYZbu//bOxWOHvoUffO1RfX9y5mrwxi4BFPrdysuvGp/6Xcsv9sm8+0
-        COhKXTxg8WT73Lqnqit77CpZ4lyDH0k+SexY8lj9jdxH7XBLX/5dE8Oydj1d2ZEgahq480Pp
-        XZPWv4x7kjxOJn681WtqIXTjZ9Vc77LnJxf/XC8S2ubn01Hk0+4Zn5PB7OEydcZpa1OTM9+Y
-        nC6rPi9+PHFLuHHHteANUxknnWZf467V5lPc6+9U8KBd/GCjcfe3RQfkeFYkmRxh0pNWOXx4
-        x7YbObX/G3/5n+faIvHNmM1T04w5UZknUSTsh8ca5lXq8yS2fFu8VlKgzW6LlvJOE+1SJZbi
-        jERDLeai4kQA66q/UfkDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrALMWRmVeSWpSXmKPExsWy7bCSvC5fZHi8wapflhbXvzxntTh/fgO7
-        xdmmN+wWmx5fY7W4vGsOm8Xn3iOMFjPO72OyWNjUwm5xu3EFmwOnx5p5axg9Nq3qZPPYvKTe
-        o2/LKkaPz5vkAlijuGxSUnMyy1KL9O0SuDLWdf9nLnhoVvHt9m7WBsb9ul2MnBwSAiYSs379
-        Ze9i5OIQEtjNKPHkzllmiISkxLSLR4FsDiBbWOLw4WKImk+MEkv+7WADqWET0JLY/+IGmC0i
-        UCOxbO4eNpAiZoFORomT016CJYQFsiWW/u1nAbFZBFQlmqetYQKxeQWsJG4cfswKsUxeYvWG
-        A2CLOQWsJbavWgjWKwRUc23JDsYJjHwLGBlWMUqmFhTnpucWGxYY5qWW6xUn5haX5qXrJefn
-        bmIEB6KW5g7G7as+6B1iZOJgPMQowcGsJMLbdSg0Xog3JbGyKrUoP76oNCe1+BCjNAeLkjjv
-        jcKFcUIC6YklqdmpqQWpRTBZJg5OqQam+ZsURflqjy1vO672PpJj79ZbCjl3RGdF1d8sP6I4
-        xTx4r3NNJPfEikmzJwX63JW4fLZxV9C6fvFjK8SX9AsX5W5W/bN/hcD5lSLzch9kax3p2pVX
-        1ZpzkH9X5OGDnCuMmyKLZDjzjzF/T3xeYfG/YZvr0i2CB86eXsB0RkyUn//XOq+LzV1e33d2
-        /va/W6RZ9Tyz6TufGYvHA631WiqGLsv23rtRm3HoUFrZrx2NgROqdibeu7e16PGMRx3qy/0W
-        G5f1MLf/Oa5n5nJ0nurs7mkXZ598oyz55VzRsXcFn77kKf3fbigUYnHI6uO/7ItrApilQhg/
-        +n/lTL1e3iN6i9/08bGMZxdKri6S9rRNUmIpzkg01GIuKk4EALtnlsyzAgAA
-X-CMS-MailID: 20200908101231epcas1p4b6262aae4d5272f6cce366ac1ffbb955
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200908101231epcas1p4b6262aae4d5272f6cce366ac1ffbb955
-References: <20200908102447.15097-1-cw00.choi@samsung.com>
-        <CGME20200908101231epcas1p4b6262aae4d5272f6cce366ac1ffbb955@epcas1p4.samsung.com>
+        id S1729179AbgIHK2I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 06:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729345AbgIHK2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 06:28:01 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFA2C061756
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 03:28:00 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id d6so3535082pfn.9
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 03:28:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=+gAskG72/avqJ1yxIp8aoIKzGzAKF3CxoapI4iul8TM=;
+        b=HnBXwtxLkAIQ18DrlheRotwL+JrpR4ECbj3sLxvP/FCBkGwWe4BZhe+UQk9+TsX2Fd
+         9zYO2+VbgCwH0gYHwFeqOAEqCKunkowzYcbg7H2MqzWmJJ+b3NjzawHwbfZZRg6jvjXH
+         g0dgmqkjaX7/k3BPJ26MX54ZNLBbfnqZCSlw8xdnyXylBS2hYJOKEOmrOKdTmFv4bqzo
+         GcvAMhW4MOZLQSp8+PrcJASXLOM+h36YfbxQbB0baCnond6Uca7mhZO2BoN/V1/oLP4n
+         cegFNl/+ioiWtNP1Tr6okwQ90LMZSxo8C6P7vGhIRlwZewIMYv+K8mr0+guSbcpGpNSJ
+         AqsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=+gAskG72/avqJ1yxIp8aoIKzGzAKF3CxoapI4iul8TM=;
+        b=XKcUv95zZoS9sjslQ7PxdNXUCsshg9m53VTE+VceMG+EEC/W1VdcjH0r+s3ho7RF09
+         SMdf1byCuLn06DaM3G6LKcAxeAXOVhfLcFL/N8HfTVDbuXQf324JXNPmV3w8ekxRixkn
+         v8JSsn6wUl30E6Q59hTJvO6MzxHCvCIM5EN6sBMKRFjjMPbkFF8PSgWt/SUP3qn77eox
+         wxq+U26wW5oKoJ86qcnW9vRGf7G59uOO2HIuwz3rrjojuDW4Wi70DShqyd9whxXLfq9r
+         KN2l9vTCeFoqhpi41QpZO/5sw96+s2a1Llm5GB4glw0WTONxXBuu/DV6KfOW5mSljo1f
+         7zCg==
+X-Gm-Message-State: AOAM531o66mtndQhJAfQvtfbDpIt11Zbh18fph119pt7b87FI/1zH00Q
+        xC9FP61t6nR6bSlxKMFgkmmFCQ==
+X-Google-Smtp-Source: ABdhPJxe7b5v4o/jeeYbIMz5EpsffrmanBmr44LfNSgD7ZqL4oG7D2i9bAAqvSOUpPNMFrsnIp4F9Q==
+X-Received: by 2002:a17:902:7844:b029:d0:cbe1:e704 with SMTP id e4-20020a1709027844b02900d0cbe1e704mr567397pln.18.1599560878657;
+        Tue, 08 Sep 2020 03:27:58 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id l21sm14432485pgb.35.2020.09.08.03.27.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Sep 2020 03:27:57 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 15:57:52 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v4 1/2] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+Message-ID: <20200908102752.r2n6xvghl4fcdrcv@vireshk-i7>
+References: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
+ <1599550547-27767-2-git-send-email-hector.yuan@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1599550547-27767-2-git-send-email-hector.yuan@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Previously, devfreq core support 'devfreq-events' property in order to get
-the devfreq-event device by phandle. But, 'devfreq-events' property name is
-not proper on devicetree binding because this name doesn't mean
-the any h/w attribute.
+On 08-09-20, 15:35, Hector Yuan wrote:
+> From: "Hector.Yuan" <hector.yuan@mediatek.com>
+> 
+> Add MT6779 cpufreq HW support.
+> 
+> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> ---
+>  drivers/cpufreq/Kconfig.arm           |   12 ++
+>  drivers/cpufreq/Makefile              |    1 +
+>  drivers/cpufreq/mediatek-cpufreq-hw.c |  294 +++++++++++++++++++++++++++++++++
+>  3 files changed, 307 insertions(+)
+>  create mode 100644 drivers/cpufreq/mediatek-cpufreq-hw.c
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index c6cbfc8..8e58c12 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -121,6 +121,18 @@ config ARM_MEDIATEK_CPUFREQ
+>  	help
+>  	  This adds the CPUFreq driver support for MediaTek SoCs.
+>  
+> +config ARM_MEDIATEK_CPUFREQ_HW
+> +	tristate "MediaTek CPUFreq HW driver"
+> +	depends on ARCH_MEDIATEK || COMPILE_TEST
+> +	default m
+> +	help
+> +	  Support for the CPUFreq HW driver.
+> +	  Some MediaTek chipsets have a HW engine to offload the steps
+> +	  necessary for changing the frequency of the CPUs. Firmware loaded
+> +	  in this engine exposes a programming interface to the OS.
+> +	  The driver implements the cpufreq interface for this HW engine.
+> +	  Say Y if you want to support CPUFreq HW.
+> +
+>  config ARM_OMAP2PLUS_CPUFREQ
+>  	bool "TI OMAP2+"
+>  	depends on ARCH_OMAP2PLUS
+> diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+> index f6670c4..dc1f371 100644
+> --- a/drivers/cpufreq/Makefile
+> +++ b/drivers/cpufreq/Makefile
+> @@ -57,6 +57,7 @@ obj-$(CONFIG_ARM_IMX6Q_CPUFREQ)		+= imx6q-cpufreq.o
+>  obj-$(CONFIG_ARM_IMX_CPUFREQ_DT)	+= imx-cpufreq-dt.o
+>  obj-$(CONFIG_ARM_KIRKWOOD_CPUFREQ)	+= kirkwood-cpufreq.o
+>  obj-$(CONFIG_ARM_MEDIATEK_CPUFREQ)	+= mediatek-cpufreq.o
+> +obj-$(CONFIG_ARM_MEDIATEK_CPUFREQ_HW)	+= mediatek-cpufreq-hw.o
+>  obj-$(CONFIG_MACH_MVEBU_V7)		+= mvebu-cpufreq.o
+>  obj-$(CONFIG_ARM_OMAP2PLUS_CPUFREQ)	+= omap-cpufreq.o
+>  obj-$(CONFIG_ARM_PXA2xx_CPUFREQ)	+= pxa2xx-cpufreq.o
+> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> new file mode 100644
+> index 0000000..61040b8
+> --- /dev/null
+> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+> @@ -0,0 +1,294 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2020 MediaTek Inc.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/slab.h>
+> +
+> +#define LUT_MAX_ENTRIES			32U
+> +#define LUT_FREQ			GENMASK(11, 0)
+> +#define LUT_ROW_SIZE			0x4
+> +
+> +enum {
+> +	REG_LUT_TABLE,
+> +	REG_ENABLE,
+> +	REG_PERF_STATE,
+> +
+> +	REG_ARRAY_SIZE,
+> +};
+> +
+> +struct cpufreq_mtk {
+> +	struct cpufreq_frequency_table *table;
+> +	void __iomem *reg_bases[REG_ARRAY_SIZE];
+> +	cpumask_t related_cpus;
+> +};
+> +
+> +static const u16 cpufreq_mtk_offsets[REG_ARRAY_SIZE] = {
+> +	[REG_LUT_TABLE]		= 0x0,
+> +	[REG_ENABLE]	= 0x84,
+> +	[REG_PERF_STATE]	= 0x88,
+> +};
+> +
+> +static struct cpufreq_mtk *mtk_freq_domain_map[NR_CPUS];
+> +
+> +static int mtk_cpufreq_hw_target_index(struct cpufreq_policy *policy,
+> +				       unsigned int index)
+> +{
+> +	struct cpufreq_mtk *c = policy->driver_data;
+> +
+> +	writel_relaxed(index, c->reg_bases[REG_PERF_STATE]);
+> +	arch_set_freq_scale(policy->related_cpus,
+> +			    policy->freq_table[index].frequency,
+> +			    policy->cpuinfo.max_freq);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int mtk_cpufreq_hw_get(unsigned int cpu)
+> +{
+> +	struct cpufreq_mtk *c;
+> +	struct cpufreq_policy *policy;
+> +	unsigned int index;
+> +
+> +	policy = cpufreq_cpu_get_raw(cpu);
+> +	if (!policy)
+> +		return 0;
+> +
+> +	c = policy->driver_data;
+> +
+> +	index = readl_relaxed(c->reg_bases[REG_PERF_STATE]);
+> +	index = min(index, LUT_MAX_ENTRIES - 1);
+> +
+> +	return policy->freq_table[index].frequency;
+> +}
+> +
+> +static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+> +{
+> +	struct cpufreq_mtk *c;
+> +	struct device *cpu_dev;
+> +
+> +	cpu_dev = get_cpu_device(policy->cpu);
+> +	if (!cpu_dev) {
+> +		pr_err("%s: failed to get cpu%d device\n", __func__,
+> +		       policy->cpu);
+> +		return -ENODEV;
+> +	}
+> +
+> +	c = mtk_freq_domain_map[policy->cpu];
+> +	if (!c) {
+> +		pr_err("No scaling support for CPU%d\n", policy->cpu);
+> +		return -ENODEV;
+> +	}
+> +
+> +	cpumask_copy(policy->cpus, &c->related_cpus);
+> +
+> +	policy->freq_table = c->table;
+> +	policy->driver_data = c;
+> +
+> +	/* HW should be in enabled state to proceed now */
+> +	writel_relaxed(0x1, c->reg_bases[REG_ENABLE]);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct freq_attr *mtk_cpufreq_hw_attr[] = {
+> +	&cpufreq_freq_attr_scaling_available_freqs,
+> +	NULL
+> +};
+> +
+> +static struct cpufreq_driver cpufreq_mtk_hw_driver = {
+> +	.flags		= CPUFREQ_STICKY | CPUFREQ_NEED_INITIAL_FREQ_CHECK |
+> +			  CPUFREQ_HAVE_GOVERNOR_PER_POLICY,
+> +	.verify		= cpufreq_generic_frequency_table_verify,
+> +	.target_index	= mtk_cpufreq_hw_target_index,
+> +	.get		= mtk_cpufreq_hw_get,
+> +	.init		= mtk_cpufreq_hw_cpu_init,
+> +	.name		= "mtk-cpufreq-hw",
+> +	.attr		= mtk_cpufreq_hw_attr,
 
-The devfreq-event core hand over the rights to decide the property name
-for getting the devfreq-event device on devicetree. Each devfreq-event driver
-will decide the property name on devicetree binding and then pass
-the their own property name to devfreq_event_get_edev_by_phandle function.
+You can use cpufreq_generic_attr instead.
 
-And change the prototype of devfreq_event_get_edev_count function
-because of used deprecated 'devfreq-events' property.
+> +};
+> +
+> +static int mtk_cpufreq_hw_opp_create(struct platform_device *pdev,
+> +				     struct cpufreq_mtk *c)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	void __iomem *base_table;
+> +	u32 data, i, freq, prev_freq = 0;
+> +
+> +	c->table = devm_kcalloc(dev, LUT_MAX_ENTRIES + 1,
+> +				sizeof(*c->table), GFP_KERNEL);
+> +	if (!c->table)
+> +		return -ENOMEM;
+> +
+> +	base_table = c->reg_bases[REG_LUT_TABLE];
+> +
+> +	for (i = 0; i < LUT_MAX_ENTRIES; i++) {
+> +		data = readl_relaxed(base_table + (i * LUT_ROW_SIZE));
+> +		freq = FIELD_GET(LUT_FREQ, data) * 1000;
+> +
+> +		if (freq == prev_freq)
+> +			break;
+> +
+> +		c->table[i].frequency = freq;
+> +
+> +		dev_dbg(dev, "index=%d freq=%d\n",
+> +			i, c->table[i].frequency);
+> +
+> +		prev_freq = freq;
+> +	}
+> +
+> +	c->table[i].frequency = CPUFREQ_TABLE_END;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_get_related_cpus(int index, struct cpumask *m)
+> +{
+> +	struct device_node *cpu_np;
+> +	struct of_phandle_args args;
+> +	int cpu, ret;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		cpu_np = of_cpu_device_node_get(cpu);
+> +		if (!cpu_np)
+> +			continue;
+> +
+> +		ret = of_parse_phandle_with_args(cpu_np, "mtk-freq-domain",
+> +						 "#freq-domain-cells", 0,
+> +						 &args);
+> +		of_node_put(cpu_np);
+> +		if (ret < 0)
+> +			continue;
+> +
+> +		if (index == args.args[0])
+> +			cpumask_set_cpu(cpu, m);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_cpu_resources_init(struct platform_device *pdev,
+> +				  unsigned int cpu, int index)
+> +{
+> +	struct cpufreq_mtk *c;
+> +	struct resource *res;
+> +	struct device *dev = &pdev->dev;
+> +	const u16 *offsets;
+> +	int ret, i, cpu_r;
+> +	void __iomem *base;
+> +
+> +	if (mtk_freq_domain_map[cpu])
+> +		return 0;
+> +
+> +	c = devm_kzalloc(dev, sizeof(*c), GFP_KERNEL);
+> +	if (!c)
+> +		return -ENOMEM;
+> +
+> +	offsets = of_device_get_match_data(&pdev->dev);
+> +	if (!offsets)
+> +		return -EINVAL;
 
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
----
- drivers/devfreq/devfreq-event.c         | 14 ++++++++------
- drivers/devfreq/exynos-bus.c            |  5 +++--
- drivers/devfreq/rk3399_dmc.c            |  2 +-
- drivers/memory/samsung/exynos5422-dmc.c |  6 ++++--
- include/linux/devfreq-event.h           | 14 ++++++++++----
- 5 files changed, 26 insertions(+), 15 deletions(-)
+Just do this once in probe and pass it to this routine. You don't need
+to do this again and again.
 
-diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-index 56efbeb7851e..6765c03334bc 100644
---- a/drivers/devfreq/devfreq-event.c
-+++ b/drivers/devfreq/devfreq-event.c
-@@ -213,20 +213,21 @@ EXPORT_SYMBOL_GPL(devfreq_event_reset_event);
-  * devfreq_event_get_edev_by_phandle() - Get the devfreq-event dev from
-  *					 devicetree.
-  * @dev		: the pointer to the given device
-+ * @phandle_name: name of property holding a phandle value
-  * @index	: the index into list of devfreq-event device
-  *
-  * Note that this function return the pointer of devfreq-event device.
-  */
- struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(struct device *dev,
--						      int index)
-+					const char *phandle_name, int index)
- {
- 	struct device_node *node;
- 	struct devfreq_event_dev *edev;
- 
--	if (!dev->of_node)
-+	if (!dev->of_node || !phandle_name)
- 		return ERR_PTR(-EINVAL);
- 
--	node = of_parse_phandle(dev->of_node, "devfreq-events", index);
-+	node = of_parse_phandle(dev->of_node, phandle_name, index);
- 	if (!node)
- 		return ERR_PTR(-ENODEV);
- 
-@@ -258,19 +259,20 @@ EXPORT_SYMBOL_GPL(devfreq_event_get_edev_by_phandle);
- /**
-  * devfreq_event_get_edev_count() - Get the count of devfreq-event dev
-  * @dev		: the pointer to the given device
-+ * @phandle_name: name of property holding a phandle value
-  *
-  * Note that this function return the count of devfreq-event devices.
-  */
--int devfreq_event_get_edev_count(struct device *dev)
-+int devfreq_event_get_edev_count(struct device *dev, const char *phandle_name)
- {
- 	int count;
- 
--	if (!dev->of_node) {
-+	if (!dev->of_node || !phandle_name) {
- 		dev_err(dev, "device does not have a device node entry\n");
- 		return -EINVAL;
- 	}
- 
--	count = of_property_count_elems_of_size(dev->of_node, "devfreq-events",
-+	count = of_property_count_elems_of_size(dev->of_node, phandle_name,
- 						sizeof(u32));
- 	if (count < 0) {
- 		dev_err(dev,
-diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
-index 58dbf51f0983..1e684a448c9e 100644
---- a/drivers/devfreq/exynos-bus.c
-+++ b/drivers/devfreq/exynos-bus.c
-@@ -193,7 +193,7 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
- 	 * Get the devfreq-event devices to get the current utilization of
- 	 * buses. This raw data will be used in devfreq ondemand governor.
- 	 */
--	count = devfreq_event_get_edev_count(dev);
-+	count = devfreq_event_get_edev_count(dev, "devfreq-events");
- 	if (count < 0) {
- 		dev_err(dev, "failed to get the count of devfreq-event dev\n");
- 		ret = count;
-@@ -209,7 +209,8 @@ static int exynos_bus_parent_parse_of(struct device_node *np,
- 	}
- 
- 	for (i = 0; i < count; i++) {
--		bus->edev[i] = devfreq_event_get_edev_by_phandle(dev, i);
-+		bus->edev[i] = devfreq_event_get_edev_by_phandle(dev,
-+							"devfreq-events", i);
- 		if (IS_ERR(bus->edev[i])) {
- 			ret = -EPROBE_DEFER;
- 			goto err_regulator;
-diff --git a/drivers/devfreq/rk3399_dmc.c b/drivers/devfreq/rk3399_dmc.c
-index 027769e39f9b..2e912166a993 100644
---- a/drivers/devfreq/rk3399_dmc.c
-+++ b/drivers/devfreq/rk3399_dmc.c
-@@ -341,7 +341,7 @@ static int rk3399_dmcfreq_probe(struct platform_device *pdev)
- 		return PTR_ERR(data->dmc_clk);
- 	}
- 
--	data->edev = devfreq_event_get_edev_by_phandle(dev, 0);
-+	data->edev = devfreq_event_get_edev_by_phandle(dev, "devfreq-events", 0);
- 	if (IS_ERR(data->edev))
- 		return -EPROBE_DEFER;
- 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index b9c7956e5031..714d1f6f077c 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -1293,7 +1293,8 @@ static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- 	int counters_size;
- 	int ret, i;
- 
--	dmc->num_counters = devfreq_event_get_edev_count(dmc->dev);
-+	dmc->num_counters = devfreq_event_get_edev_count(dmc->dev,
-+							"devfreq-events");
- 	if (dmc->num_counters < 0) {
- 		dev_err(dmc->dev, "could not get devfreq-event counters\n");
- 		return dmc->num_counters;
-@@ -1306,7 +1307,8 @@ static int exynos5_performance_counters_init(struct exynos5_dmc *dmc)
- 
- 	for (i = 0; i < dmc->num_counters; i++) {
- 		dmc->counter[i] =
--			devfreq_event_get_edev_by_phandle(dmc->dev, i);
-+			devfreq_event_get_edev_by_phandle(dmc->dev,
-+						"devfreq-events", i);
- 		if (IS_ERR_OR_NULL(dmc->counter[i]))
- 			return -EPROBE_DEFER;
- 	}
-diff --git a/include/linux/devfreq-event.h b/include/linux/devfreq-event.h
-index f14f17f8cb7f..4a50a5c71a5f 100644
---- a/include/linux/devfreq-event.h
-+++ b/include/linux/devfreq-event.h
-@@ -106,8 +106,11 @@ extern int devfreq_event_get_event(struct devfreq_event_dev *edev,
- 				struct devfreq_event_data *edata);
- extern int devfreq_event_reset_event(struct devfreq_event_dev *edev);
- extern struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(
--				struct device *dev, int index);
--extern int devfreq_event_get_edev_count(struct device *dev);
-+				struct device *dev,
-+				const char *phandle_name,
-+				int index);
-+extern int devfreq_event_get_edev_count(struct device *dev,
-+				const char *phandle_name);
- extern struct devfreq_event_dev *devfreq_event_add_edev(struct device *dev,
- 				struct devfreq_event_desc *desc);
- extern int devfreq_event_remove_edev(struct devfreq_event_dev *edev);
-@@ -152,12 +155,15 @@ static inline int devfreq_event_reset_event(struct devfreq_event_dev *edev)
- }
- 
- static inline struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(
--					struct device *dev, int index)
-+					struct device *dev,
-+					const char *phandle_name,
-+					int index)
- {
- 	return ERR_PTR(-EINVAL);
- }
- 
--static inline int devfreq_event_get_edev_count(struct device *dev)
-+static inline int devfreq_event_get_edev_count(struct device *dev,
-+					const char *phandle_name)
- {
- 	return -EINVAL;
- }
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> +	base = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	for (i = REG_LUT_TABLE; i < REG_ARRAY_SIZE; i++)
+> +		c->reg_bases[i] = base + offsets[i];
+> +
+> +	ret = mtk_get_related_cpus(index, &c->related_cpus);
+> +	if (ret) {
+> +		dev_err(dev, "Domain-%d failed to get related CPUs\n", index);
+> +		return ret;
+> +	}
+> +
+> +	ret = mtk_cpufreq_hw_opp_create(pdev, c);
+
+This isn't creating an OPP table anymore but just a frequency table.
+Name it mtk_cpu_create_freq_table() rather.
+
+> +	if (ret) {
+> +		dev_err(dev, "Domain-%d failed to create OPP\n", index);
+> +		return ret;
+> +	}
+> +
+> +	for_each_cpu(cpu_r, &c->related_cpus)
+> +		mtk_freq_domain_map[cpu_r] = c;
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_resources_init(struct platform_device *pdev)
+> +{
+> +	struct device_node *cpu_np;
+> +	struct of_phandle_args args;
+> +	unsigned int cpu;
+> +	int ret;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		cpu_np = of_cpu_device_node_get(cpu);
+> +		if (!cpu_np) {
+> +			dev_dbg(&pdev->dev, "Failed to get cpu %d device\n",
+> +				cpu);
+> +			continue;
+> +		}
+> +
+> +		ret = of_parse_phandle_with_args(cpu_np, "mtk-freq-domain",
+> +						 "#freq-domain-cells", 0, &args);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		ret = mtk_cpu_resources_init(pdev, cpu, args.args[0]);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_cpufreq_hw_driver_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +
+> +	/* Get the bases of cpufreq for domains */
+> +	ret = mtk_resources_init(pdev);
+
+Just open-code this here. No need of a separate routine really, there
+is not much there.
+
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "CPUFreq resource init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = cpufreq_register_driver(&cpufreq_mtk_hw_driver);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "CPUFreq HW driver failed to register\n");
+> +		return ret;
+> +	}
+> +
+> +	dev_dbg(&pdev->dev, "Mediatek CPUFreq HW driver initialized\n");
+
+Just drop this, this isn't really required. The cpufreq core also
+print some messages for this.
+
+> +	of_platform_populate(pdev->dev.of_node, NULL, NULL, &pdev->dev);
+
+Why do you need to do this ? This should happen automatically.
+
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mtk_cpufreq_hw_match[] = {
+> +	{ .compatible = "mediatek,cpufreq-hw", .data = &cpufreq_mtk_offsets },
+> +	{}
+> +};
+> +
+> +static struct platform_driver mtk_cpufreq_hw_driver = {
+> +	.probe = mtk_cpufreq_hw_driver_probe,
+> +	.driver = {
+> +		.name = "mtk-cpufreq-hw",
+> +		.of_match_table = mtk_cpufreq_hw_match,
+> +	},
+> +};
+> +
+> +static int __init mtk_cpufreq_hw_init(void)
+> +{
+> +	return platform_driver_register(&mtk_cpufreq_hw_driver);
+> +}
+> +subsys_initcall(mtk_cpufreq_hw_init);
+
+subsys_init ? Why this ?
+
+You made your driver as a "tristate" driver, and you don't have any
+exit/remove level stuff ?
+
+> +
+> +MODULE_DESCRIPTION("mtk CPUFREQ HW Driver");
+> +MODULE_LICENSE("GPL v2");
+> -- 
+> 1.7.9.5
+
 -- 
-2.17.1
-
+viresh
