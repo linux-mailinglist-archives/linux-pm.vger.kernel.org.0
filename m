@@ -2,122 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C97260DC2
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 10:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7D1260F4A
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 12:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730000AbgIHIkY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 04:40:24 -0400
-Received: from smtprelay0004.hostedemail.com ([216.40.44.4]:48732 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729234AbgIHIkX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 04:40:23 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 35BFF181D330D;
-        Tue,  8 Sep 2020 08:40:22 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:960:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2194:2198:2199:2200:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3354:3622:3865:3866:3867:3868:3871:3872:3873:3874:4321:4605:5007:6119:7903:10004:10400:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12740:12760:12895:13439:14659:14721:21080:21433:21627:21990:30012:30029:30045:30054:30070:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:1,LUA_SUMMARY:none
-X-HE-Tag: brass58_2210106270d3
-X-Filterd-Recvd-Size: 3468
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Tue,  8 Sep 2020 08:40:20 +0000 (UTC)
-Message-ID: <97e79472f42c8d4fd04acfbde62d014e4ca33917.camel@perches.com>
-Subject: Re: [PATCH 2/4] drivers core: Remove strcat uses around sysfs_emit
- and neaten
-From:   Joe Perches <joe@perches.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Date:   Tue, 08 Sep 2020 01:40:19 -0700
-In-Reply-To: <20200908083249.GB704757@kroah.com>
-References: <cover.1599501047.git.joe@perches.com>
-         <4efea815a9fddfc0dc1b29d16f7485de0f8ee866.1599501047.git.joe@perches.com>
-         <20200908083249.GB704757@kroah.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        id S1729031AbgIHKHp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 06:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728676AbgIHKHm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 06:07:42 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5183AC061755
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 03:07:41 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id d9so4267680pfd.3
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 03:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hU3oOvvnKV3sVS60ywXkD1wU0kB70X7AUVyTyZd2RY4=;
+        b=AJ5s0TM9s5OJw66KaolPB8BsjovKw8GrEqoKSEGdJRI8ZS3Xh22wOFQ72Jp5UEz9QT
+         QL14QkPFwkvl96bfp3dchyut4RLzlQqsVf5x1mwYYY1ZUo/vcJBg5evkvgZMdz+OZiFO
+         ejQuvUh9+00emp0HrgEBJePDPEjuP9ERlmDgq2vfWH8a+TJqz3lUit2tW6+d9KqCszKf
+         x3B0HD2+XG0KZZl3Ov/+RAv9oldBfoGC04efRlw9TosIeO3L9TtIjALv2b5zw/qnxOa2
+         effhj1ijvXKzFiSKxYItEwdlRgjXYWztCYzBFmRwBEPppenKGFSdDN0Sg7r4aaqZVssz
+         yk6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hU3oOvvnKV3sVS60ywXkD1wU0kB70X7AUVyTyZd2RY4=;
+        b=slqxKNm/QR5GsXwzWSYb22yKn6liUfQC16U6WVZfFVYtJXsLW6/+RxoM6g/0+m6Vw3
+         JToi0v6gwnEmkLmXNuEswATng8gE208Klv9ti/9rUkXsE89CAmZtiaRSysyG+0Ok3tRn
+         BsIJodqIVdWy6PQ9g0sJSLcCYiK4kOIJbTB1aOYDfgSIKJukBvCCENKarvFng/oQXMCx
+         xxEcN+TeOalNyRxZaCbF+H1AO3p1RTRU9aQkU4zUVAJT40kebDCDDSTG8G3yf1+Fe2O7
+         XQDGvZvRygQoXMD5pdQBBHQIlEVAwAdbRlIoWvlFrjDNySW3XCIGJ0luMpVZdSp5qi+f
+         Z9Jg==
+X-Gm-Message-State: AOAM5301xDV7oTfbWZ4FW6rhvLz1A5hs4LKO6rEtaUDibKswJx29rGAI
+        Gj60L11UO8nkjWsWTv5WZ7llSQ==
+X-Google-Smtp-Source: ABdhPJweEpB8wgJ9j3N1o+hvbAzIUldosNCWC9AYOg0yuTLIAoB7iMZYQXNSkkxkjZQyFOSNJIhNnw==
+X-Received: by 2002:a65:6545:: with SMTP id a5mr20129366pgw.43.1599559661151;
+        Tue, 08 Sep 2020 03:07:41 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id s198sm14749540pgc.4.2020.09.08.03.07.39
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Sep 2020 03:07:40 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 15:37:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Yuan <hector.yuan@mediatek.com>
+Cc:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH v4 2/2] dt-bindings: cpufreq: add bindings for MediaTek
+ cpufreq HW
+Message-ID: <20200908100733.pbizjorq3lmn7bew@vireshk-i7>
+References: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
+ <1599550547-27767-3-git-send-email-hector.yuan@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1599550547-27767-3-git-send-email-hector.yuan@mediatek.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2020-09-08 at 10:32 +0200, Greg Kroah-Hartman wrote:
-> On Mon, Sep 07, 2020 at 10:58:06AM -0700, Joe Perches wrote:
-> > strcat is no longer necessary for sysfs_emit and sysfs_emit_at uses.
-> > 
-> > Convert the strcat uses to sysfs_emit calls and neaten other block
-> > uses of direct returns to use an intermediate const char *.
-[]
-> This function is now longer, with an assignment that is not needed
-> (type=NULL), so why make this "cleanup"?
-
-It's smaller object code.
-
-[]
-> > Again, not a type, it's a state.  And you did not merge all sysfs_emit()
-> calls into one here, so it's messier now, don't you think?
-
-You can't because the default type uses an argument and not
-a fixed string.  I don't think it's messier, no.
-
-> >  int memory_notify(unsigned long val, void *v)
-> > @@ -307,17 +305,16 @@ static ssize_t phys_device_show(struct device *dev,
-> >  }
-> >  
-> >  #ifdef CONFIG_MEMORY_HOTREMOVE
-> > -static void print_allowed_zone(char *buf, int nid, unsigned long start_pfn,
-> > -		unsigned long nr_pages, int online_type,
-> > -		struct zone *default_zone)
-> > +static int print_allowed_zone(char *buf, int len, int nid,
-> > +			      unsigned long start_pfn, unsigned long nr_pages,
-> > +			      int online_type, struct zone *default_zone)
+On 08-09-20, 15:35, Hector Yuan wrote:
+> From: "Hector.Yuan" <hector.yuan@mediatek.com>
 > 
-> Unrelated change :(
-
-No it's not, it's outputting to buf so it
-needs len to output to appropriate spot to
-be able to use sysfs_emit_at.
-
-> >  {
-> >  	struct zone *zone;
-> >  
-> >  	zone = zone_for_pfn_range(online_type, nid, start_pfn, nr_pages);
-> > -	if (zone != default_zone) {
-> > -		strcat(buf, " ");
-> > -		strcat(buf, zone->name);
-> > -	}
-> > +	if (zone == default_zone)
-> > +		return 0;
-> > +	return sysfs_emit_at(buf, len, " %s", zone->name);
-
-here.
-
-> []
-
-> This is better.
-
-All of it is better. <smile>
-
-> > diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-[]
-> > @@ -255,9 +255,9 @@ static ssize_t pm_qos_latency_tolerance_us_show(struct device *dev,
-> >  	s32 value = dev_pm_qos_get_user_latency_tolerance(dev);
-> >  
-> >  	if (value < 0)
-> > -		return sysfs_emit(buf, "auto\n");
-> > +		return sysfs_emit(buf, "%s\n", "auto");
-> >  	if (value == PM_QOS_LATENCY_ANY)
-> > -		return sysfs_emit(buf, "any\n");
-> > +		return sysfs_emit(buf, "%s\n", "any");
-> >  
-> >  	return sysfs_emit(buf, "%d\n", value);
-> >  }
+> Add devicetree bindings for MediaTek HW driver.
 > 
-> Unrelated change :(
+> Signed-off-by: Hector.Yuan <hector.yuan@mediatek.com>
+> ---
+>  .../bindings/cpufreq/cpufreq-mediatek-hw.yaml      |  141 ++++++++++++++++++++
+>  1 file changed, 141 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+> new file mode 100644
+> index 0000000..5be5867
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
+> @@ -0,0 +1,141 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-mediatek-hw.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek's CPUFREQ Bindings
+> +
+> +maintainers:
+> +  - Hector Yuan <hector.yuan@mediatek.com>
+> +
+> +description:
+> +  CPUFREQ HW is a hardware engine used by MediaTek
+> +  SoCs to manage frequency in hardware. It is capable of controlling frequency
+> +  for multiple clusters.
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,cpufreq-hw
 
-Again, no it's not unrelated, it's consistent.
+Missing "" here ?
 
+> +
+> +  reg:
+> +    minItems: 1
+> +    maxItems: 2
+> +    description: |
+> +      Addresses and sizes for the memory of the HW bases in each frequency domain.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: "freq-domain0"
+> +      - const: "freq-domain1"
+> +    description: |
+> +      Frequency domain name. i.e.
+> +      "freq-domain0", "freq-domain1".
+> +
+> +  "#freq-domain-cells":
+> +    const: 1
+> +    description: |
+> +      Number of cells in a freqency domain specifier.
+> +
+> +  mtk-freq-domain:
+> +    maxItems: 1
+> +    description: |
+> +      Define this cpu belongs to which frequency domain. i.e.
+> +      cpu0-3 belong to frequency domain0,
+> +      cpu4-6 belong to frequency domain1.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - "#freq-domain-cells"
+> +
+> +examples:
+> +  - |
+> +    cpus {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            cpu0: cpu@0 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 0>;
+> +                reg = <0x000>;
+> +            };
+> +
+> +            cpu1: cpu@1 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 0>;
+> +                reg = <0x100>;
+> +            };
+> +
+> +            cpu2: cpu@2 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 0>;
+> +                reg = <0x200>;
+> +            };
+> +
+> +            cpu3: cpu@3 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 0>;
+> +                reg = <0x300>;
+> +            };
+> +
+> +            cpu4: cpu@4 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 1>;
+> +                reg = <0x400>;
+> +            };
+> +
+> +            cpu5: cpu@5 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a55";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 1>;
+> +                reg = <0x500>;
+> +            };
+> +
+> +            cpu6: cpu@6 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a75";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 1>;
+> +                reg = <0x600>;
+> +            };
+> +
+> +            cpu7: cpu@7 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a75";
+> +                enable-method = "psci";
+> +                mtk-freq-domain = <&cpufreq_hw 1>;
+> +                reg = <0x700>;
+> +            };
+> +    };
+> +
+> +    /* ... */
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        cpufreq_hw: cpufreq@11bc00 {
+> +            compatible = "mediatek,cpufreq-hw";
+> +            reg = <0 0x11bc10 0 0x8c>,
+> +               <0 0x11bca0 0 0x8c>;
+> +            reg-names = "freq-domain0", "freq-domain1";
+> +            #freq-domain-cells = <1>;
+> +        };
+> +    };
+> +
+> +
+> +
+> +
 
+I would need Ack from Rob for this.
+
+-- 
+viresh
