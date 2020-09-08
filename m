@@ -2,73 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A05B4260A5C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 07:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79103260BEB
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 09:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728676AbgIHFwc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 01:52:32 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:41239 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728531AbgIHFwa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 01:52:30 -0400
-X-UUID: ce9e17ac8b57459482247ad4bb65b26e-20200908
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=zrrwNcnMPIRlU5Qw4X9J4deUAZZqqjlSu2mS7e67eO4=;
-        b=RtY0yWVrwUzjJg10Cb21GFHewHWBECdQfDstxSFLlq8NR9QxZvOKr+x1uDDpSk3LuWj135bWOMLnRQhPFGlpf/TNFhUbzKVtDh7ilOomp2C8TaFbxfr01xQrD17l/Iozv+7V886ShVZAErx+ylY2mA7mQ5xXIGhG/Dmt7/jz5VY=;
-X-UUID: ce9e17ac8b57459482247ad4bb65b26e-20200908
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 73886558; Tue, 08 Sep 2020 13:52:26 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 8 Sep 2020 13:52:23 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 8 Sep 2020 13:52:24 +0800
-Message-ID: <1599544344.17800.2.camel@mtkswgap22>
-Subject: Re: [PATCH v3] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Olof Johansson" <olof@lixom.net>, <wsd_upstream@mediatek.com>
-Date:   Tue, 8 Sep 2020 13:52:24 +0800
-In-Reply-To: <20200908051416.na567g3mr7zbyr6h@vireshk-i7>
-References: <1598446913-24325-1-git-send-email-hector.yuan@mediatek.com>
-         <1599532510.17707.4.camel@mtkswgap22>
-         <20200908051416.na567g3mr7zbyr6h@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1729246AbgIHH0Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 03:26:24 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43822 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728654AbgIHH0X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 03:26:23 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0887JCrE066271;
+        Tue, 8 Sep 2020 07:26:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=bawZ+qkotJJUNR3jAzaw4OMRLke9UerfCkDJof+Pk2o=;
+ b=r09QjtYOWQuYJlWBzVXwnbFqfSatriWYDe/PR35BhgwqArEGkZnPN+g1wbhjOFPhNs8e
+ danQd4r8jWOgN2mliGbgWY/EZD0ETS3/AyfPEKMfYioKUzLc6rDizyoTw+6uIxICnKxl
+ eLy2rb8eooVHDVmyVICrzplnDbPh3fi6RYMyp+DaWoDwhs7gAHgKRqqaIcxrb/STZb+P
+ pMV5qrZHxy3+RekIe3Gk9fDV15diamNlWtAC8uiRmcLUzajxhp4ADM+OV0tCEG1JyMqv
+ lXTdWXvFi/vJEC/Sqa+VM8oNOcWudZxlWDgpkxwvAx852nGO9ZKNX2u6kwvWlOVEleMI 3w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 33c23qskxd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 08 Sep 2020 07:26:17 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0887QHcc119885;
+        Tue, 8 Sep 2020 07:26:17 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 33cmkvfg79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Sep 2020 07:26:17 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0887Q57x027851;
+        Tue, 8 Sep 2020 07:26:05 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 08 Sep 2020 00:26:05 -0700
+Date:   Tue, 8 Sep 2020 10:25:57 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] PM / devfreq: tegra30:  disable clock on error in probe
+Message-ID: <20200908072557.GC294938@mwanda>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 267856DCEFB91F9263896297BDB66F042192EFBF9467B861CC1DC02360CBEFF02000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9737 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
+ spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009080069
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9737 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
+ mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080068
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVHVlLCAyMDIwLTA5LTA4IGF0IDEwOjQ0ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
-IE9uIDA4LTA5LTIwLCAxMDozNSwgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gSGksIFNpcnM6DQo+
-ID4gDQo+ID4gUGxlYXNlIGtpbmRseSBsZXQgbWUga25vdyB5b3VyIHJldmlldyB0aG91Z2h0cyBv
-ZiB0aGlzIHBhdGNoLg0KPiA+IEFwcHJlY2lhdGVkLg0KPiANCj4gUGxlYXNlIGRvbid0IHNlbmQg
-bmV3IHBhdGNoc2V0cyBpbiBodXJyeSwgaXQgaXNuJ3QgZ29pbmcgdG8gaGVscCBhbnkNCj4gb2Yg
-dXMuIFYzIGRvZXNuJ3QgYWRkcmVzcyBhbGwgdGhlIHJldmlldyBjb21tZW50cyB5b3UgcmVjZWl2
-ZWQgaW4gVjINCj4gYW5kIHNvIHRoZXJlIGlzIG5vIHBvaW50IHJldmlld2luZyBpdC4NCj4gDQo+
-IFBsZWFzZSBzZW5kIGEgbmV3IHZlcnNpb24gd2hpY2ggYWRkcmVzc2VzIGFsbCB0aGUgY29tbWVu
-dHMgeW91IGdvdC4NCj4gDQpPSywgSSB3aWxsIHNlbmQgVjQgd2hpY2ggYWRkcmVzc2VzIGFsbCB0
-aGUgY29tbWVudHMuDQoNCg==
+This error path needs to call clk_disable_unprepare().
+
+Fixes: 7296443b900e ("PM / devfreq: tegra30: Handle possible round-rate error")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+---
+ drivers/devfreq/tegra30-devfreq.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+index e94a27804c20..dedd39de7367 100644
+--- a/drivers/devfreq/tegra30-devfreq.c
++++ b/drivers/devfreq/tegra30-devfreq.c
+@@ -836,7 +836,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+ 	if (rate < 0) {
+ 		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+-		return rate;
++		err = rate;
++		goto disable_clk;
+ 	}
+ 
+ 	tegra->max_freq = rate / KHZ;
+@@ -897,6 +898,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+ 	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+ 
+ 	reset_control_reset(tegra->reset);
++disable_clk:
+ 	clk_disable_unprepare(tegra->clock);
+ 
+ 	return err;
+-- 
+2.28.0
 
