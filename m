@@ -2,123 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F98261D95
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 21:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70558261EE9
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 21:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730187AbgIHTjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 15:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
+        id S1731223AbgIHT5E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 15:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730329AbgIHPzg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 11:55:36 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F511C061A1C
-        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 08:29:57 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id jw11so2311438pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 08:29:57 -0700 (PDT)
+        with ESMTP id S1730567AbgIHPgL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 11:36:11 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FD9C061365
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 08:35:58 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id g10so15188533otq.9
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 08:35:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NfYkZqMIYJWE0D6hAZLp/L+b7/9lJ1uqdfG5LMXNgTI=;
-        b=j7xh1mezDjKnq8jlEyx3H7PuoKGQjIYYsw35I2dMoIM1UN9WYzIjFvAn03GXXuq9yJ
-         mqhaMLnzZT38dHrvFh+bK60nqJ/8lpK15o+FGGp+4i2JqPBztH9gy1AtLWpd5GTs63T3
-         n9+m9g3wrBRCi9s3EuhzbkZkrvLTU1GQBmyhB9jwGAHGyIEMUCwOQAwxjxt+ncA7Hp+i
-         MUGb3ghi19LyECNbZeYA5fh311uFHZNyRgajh3nuFepjp4xfUzVfKeXJkU6HiR4QAAZQ
-         emdqELmuOR1N0AnYwTsV2PpATECgkYBSgk+7ONtkvWJew8lQh/RusK6saWuItXajVSit
-         JiaA==
+         :content-disposition:in-reply-to;
+        bh=/DW0Pv++fUgCZxfo9rYcn7qda+ZUC8ohqv27lkw1ucQ=;
+        b=G1KRjLzjqiJVs5Jo0i8Ep+KEXzN1G+zUkbUqGWsKVVHCcm4PnHAJE9Da81N4V7p0OC
+         Ch4wJ2osMI1Tu7nf379jWemywMcKIO8BKFsmN3R5vMvG5Tr/YnO6kRDUhDGO6sWOCTDY
+         MOwXmI+zGKnjiNNB5W+sZAdrA/ULr5l3r4utIgOL0g1hjbrZRUVN+QOzJIfDSiknfF8i
+         0TiMdv2Z719+Y9C9tk1SfTB2UPlKBN2SKrAFoWf5M26Cpli6K2ppX5riwg0b1kN+vFFC
+         rlpPwhGA7JRzWHskGvipioh/WSCllEZkW7c4TpRSGxnzv/aO7EgyugG8S89tRWDb6QXj
+         3Zog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NfYkZqMIYJWE0D6hAZLp/L+b7/9lJ1uqdfG5LMXNgTI=;
-        b=BrYkYMl2NmOtFO9+D6NiEUT6oSuOb0FoOWtlwYLANxLcIc6H5hG9N/AZekLQ9mWePx
-         xFJJ1lBYlEeeiRM8ApWTaXaQ71eDfob0dwRhKe5y7AvBMqftyPwQUdJQ+0t9+otCpF1U
-         PomFe+xz4ed9xWzP1Rr6Xe9Y3dLMRbce6z0CHE3pFO9lOhVAJIHJFjQ/r7d2IEy6zgpA
-         s7B99qqN0xcAAaE27026dKIa72TmOYgMV8dt1vMp4vr86VkO2Base/dQ+tTeMUGK1fP7
-         G/jV3MbzgJfDToQeMOuHlAp8sxtA406STy2knZO3Qwiu2fSOGRqtGaEBD4oQmqucJru7
-         t3Ug==
-X-Gm-Message-State: AOAM532pQ450CI4r3FxObzXCfO1PV4a9dxeHdprBS/JrqocnUZLYNSF6
-        AztB75DjFx6FCdDXfGySnxL7
-X-Google-Smtp-Source: ABdhPJwvA55i99BI5DTakOAt3ONRK/7kr2GEgohy/WyiAcHOxFtI1VU+SLt/pjiJAsV6uwWlM4oDEQ==
-X-Received: by 2002:a17:90a:fe04:: with SMTP id ck4mr4687810pjb.210.1599578996799;
-        Tue, 08 Sep 2020 08:29:56 -0700 (PDT)
-Received: from mani-NUC7i5DNKE ([2409:4072:6213:6149:94b7:eeb3:82a5:2b53])
-        by smtp.gmail.com with ESMTPSA id c199sm19091498pfc.128.2020.09.08.08.29.51
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 08 Sep 2020 08:29:56 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 20:59:47 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+         :mime-version:content-disposition:in-reply-to;
+        bh=/DW0Pv++fUgCZxfo9rYcn7qda+ZUC8ohqv27lkw1ucQ=;
+        b=gU/xG+YjP6uxmLkAl+5+25rQReyWInz8CuS5omrR0ZSpoqeYbJUmMvPpbAw5VSNjCt
+         qI/GPG9DECjGPkUxGedeehpC2Wyzma7ThNbq3lZvu8IQWprlrA4AZrztPYvcHC0JZQos
+         1Jui6P+wJn1Zm6irUwOZUmkqC3P49oLg4DA95Skm6EYXY0mApJDg0K032fJvdRqwJwaK
+         RK0UfaVFHZkoJjdcGYPiFlDnaD/LQLdCBHTZRmJhnl4rsUCbFyXc6m6YLoWJsVM8t1sQ
+         5sK0GHBg832O2lcr4C45KxMcdamgY/NKQ5Bjw7/j2iEOa2JrLfk61ZhzZPt6PKK7llC+
+         dYEA==
+X-Gm-Message-State: AOAM533jGHXatQW9eM3DWFiqFEcfi0WYoi783yaGqSXetU/rBlAQ2uvY
+        uv7aA8/IGbiT4LOf0XQb/BGpoQ==
+X-Google-Smtp-Source: ABdhPJzASL9cBRJCM2R8eqEuUTsxBq1o0FtmeN3bHyw1qVZM60i+l330TfHGLpPohTTmc3QpgtEwqw==
+X-Received: by 2002:a9d:21c4:: with SMTP id s62mr18414200otb.350.1599579357887;
+        Tue, 08 Sep 2020 08:35:57 -0700 (PDT)
+Received: from yoga ([2605:6000:e5cb:c100:8898:14ff:fe6d:34e])
+        by smtp.gmail.com with ESMTPSA id e7sm2948400otk.59.2020.09.08.08.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 08:35:57 -0700 (PDT)
+Date:   Tue, 8 Sep 2020 10:35:54 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, robh+dt@kernel.org,
         agross@kernel.org, amitk@kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, dmitry.baryshkov@linaro.org,
         tdas@codeaurora.org
-Subject: Re: [PATCH 6/7] cpufreq: qcom-hw: Add cpufreq support for SM8250 SoC
-Message-ID: <20200908152926.GD2352@mani-NUC7i5DNKE>
+Subject: Re: [PATCH 7/7] cpufreq: qcom-hw: Use
+ devm_platform_ioremap_resource() to simplify code
+Message-ID: <20200908153554.GQ3715@yoga>
 References: <20200908075716.30357-1-manivannan.sadhasivam@linaro.org>
- <20200908075716.30357-7-manivannan.sadhasivam@linaro.org>
- <20200908152217.GO3715@yoga>
+ <20200908075716.30357-8-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200908152217.GO3715@yoga>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200908075716.30357-8-manivannan.sadhasivam@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 0908, Bjorn Andersson wrote:
-> On Tue 08 Sep 02:57 CDT 2020, Manivannan Sadhasivam wrote:
-> 
-> > SM8250 SoC uses EPSS block for carrying out the cpufreq duties. Hence, add
-> > support for it in the driver with relevant of_match data.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index de816bcafd33..c3c397cc3dc6 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -285,8 +285,17 @@ static const struct qcom_cpufreq_soc_data qcom_soc_data = {
-> >  	.lut_row_size = 32,
-> >  };
-> >  
-> > +static const struct qcom_cpufreq_soc_data sm8250_soc_data = {
-> 
-> Could it be that this is the "epss_soc_data" (i.e. not sm8250 specific)?
-> (We should still use/include the platform specific compatible though).
+On Tue 08 Sep 02:57 CDT 2020, Manivannan Sadhasivam wrote:
+
+> devm_platform_ioremap_resource() is the combination of
+> platform_get_resource() and devm_ioremap_resource(). Hence, use it to
+> simplify the code a bit.
 > 
 
-Hmm, makes sense. Will change it.
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Thanks,
-Mani
-
-> Regards,
-> Bjorn
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
 > 
-> > +	.reg_enable = 0x0,
-> > +	.reg_freq_lut = 0x100,
-> > +	.reg_volt_lut = 0x200,
-> > +	.reg_perf_state = 0x320,
-> > +	.lut_row_size = 4,
-> > +};
-> > +
-> >  static const struct of_device_id qcom_cpufreq_hw_match[] = {
-> >  	{ .compatible = "qcom,cpufreq-hw", .data = &qcom_soc_data },
-> > +	{ .compatible = "qcom,sm8250-epss", .data = &sm8250_soc_data },
-> >  	{}
-> >  };
-> >  MODULE_DEVICE_TABLE(of, qcom_cpufreq_hw_match);
-> > -- 
-> > 2.17.1
-> > 
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index c3c397cc3dc6..6eeeb2bd4dfa 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -307,7 +307,6 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  	struct of_phandle_args args;
+>  	struct device_node *cpu_np;
+>  	struct device *cpu_dev;
+> -	struct resource *res;
+>  	void __iomem *base;
+>  	struct qcom_cpufreq_data *data;
+>  	const struct of_device_id *match;
+> @@ -333,13 +332,9 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+>  
+>  	index = args.args[0];
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
+> -	if (!res)
+> -		return -ENODEV;
+> -
+> -	base = devm_ioremap(dev, res->start, resource_size(res));
+> -	if (!base)
+> -		return -ENOMEM;
+> +	base = devm_platform_ioremap_resource(pdev, index);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data) {
+> -- 
+> 2.17.1
+> 
