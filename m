@@ -2,106 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79103260BEB
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EF1260C22
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Sep 2020 09:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729246AbgIHH0Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Sep 2020 03:26:24 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:43822 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728654AbgIHH0X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 03:26:23 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0887JCrE066271;
-        Tue, 8 Sep 2020 07:26:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=bawZ+qkotJJUNR3jAzaw4OMRLke9UerfCkDJof+Pk2o=;
- b=r09QjtYOWQuYJlWBzVXwnbFqfSatriWYDe/PR35BhgwqArEGkZnPN+g1wbhjOFPhNs8e
- danQd4r8jWOgN2mliGbgWY/EZD0ETS3/AyfPEKMfYioKUzLc6rDizyoTw+6uIxICnKxl
- eLy2rb8eooVHDVmyVICrzplnDbPh3fi6RYMyp+DaWoDwhs7gAHgKRqqaIcxrb/STZb+P
- pMV5qrZHxy3+RekIe3Gk9fDV15diamNlWtAC8uiRmcLUzajxhp4ADM+OV0tCEG1JyMqv
- lXTdWXvFi/vJEC/Sqa+VM8oNOcWudZxlWDgpkxwvAx852nGO9ZKNX2u6kwvWlOVEleMI 3w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 33c23qskxd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 08 Sep 2020 07:26:17 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0887QHcc119885;
-        Tue, 8 Sep 2020 07:26:17 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 33cmkvfg79-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 08 Sep 2020 07:26:17 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0887Q57x027851;
-        Tue, 8 Sep 2020 07:26:05 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 08 Sep 2020 00:26:05 -0700
-Date:   Tue, 8 Sep 2020 10:25:57 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] PM / devfreq: tegra30:  disable clock on error in probe
-Message-ID: <20200908072557.GC294938@mwanda>
+        id S1729223AbgIHHfz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Sep 2020 03:35:55 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:45193 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729190AbgIHHfz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Sep 2020 03:35:55 -0400
+X-UUID: ae21a226dfcb4941a56d39e028f66fea-20200908
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=hbb4qHCvH9B4+P53YMJXs/+DzoBkaX6B2n9wmkiuJ2o=;
+        b=jPMYkV0kjsIzzOpYXxT30YR2KWkxzE4+5AAY+PjTptrRiS6wHZn9K33FfGNDon5stDB1eqwK3/exxWDV7T5REONp4zxPAmTcTRTs8PJKtV6t6KhheI4NcwD6k1HbzrPQxPMMN4rp2GLFXmXp503XuOIssXbuU4D16XAoG0KwV/A=;
+X-UUID: ae21a226dfcb4941a56d39e028f66fea-20200908
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 911027175; Tue, 08 Sep 2020 15:35:53 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 8 Sep 2020 15:35:50 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 8 Sep 2020 15:35:51 +0800
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
+        <hector.yuan@mediatek.com>
+Subject: [PATCH v4] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Tue, 8 Sep 2020 15:35:45 +0800
+Message-ID: <1599550547-27767-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9737 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
- spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009080069
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9737 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- mlxlogscore=999 mlxscore=0 bulkscore=0 suspectscore=0 spamscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 clxscore=1011
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080068
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This error path needs to call clk_disable_unprepare().
-
-Fixes: 7296443b900e ("PM / devfreq: tegra30: Handle possible round-rate error")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
----
- drivers/devfreq/tegra30-devfreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index e94a27804c20..dedd39de7367 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -836,7 +836,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
- 	if (rate < 0) {
- 		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
--		return rate;
-+		err = rate;
-+		goto disable_clk;
- 	}
- 
- 	tegra->max_freq = rate / KHZ;
-@@ -897,6 +898,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	dev_pm_opp_remove_all_dynamic(&pdev->dev);
- 
- 	reset_control_reset(tegra->reset);
-+disable_clk:
- 	clk_disable_unprepare(tegra->clock);
- 
- 	return err;
--- 
-2.28.0
+VGhpcyBwYXRjaCBkZXBlbmRzIG9uIHRoZSBNVDY3OTkgRFRTIHBhdGNoIHN1Ym1pdHRlZCBieSBI
+YW5rcyBDaGVuDQogaHR0cHM6Ly9sa21sLm9yZy9sa21sLzIwMjAvOC80LzEwOTQNCg0KDQpIZWN0
+b3IuWXVhbiAoMik6DQogIGNwdWZyZXE6IG1lZGlhdGVrLWh3OiBBZGQgc3VwcG9ydCBmb3IgTWVk
+aWF0ZWsgY3B1ZnJlcSBIVyBkcml2ZXINCiAgZHQtYmluZGluZ3M6IGNwdWZyZXE6IGFkZCBiaW5k
+aW5ncyBmb3IgTWVkaWFUZWsgY3B1ZnJlcSBIVw0KDQogLi4uL2JpbmRpbmdzL2NwdWZyZXEvY3B1
+ZnJlcS1tZWRpYXRlay1ody55YW1sICAgICAgfCAgMTQxICsrKysrKysrKysNCiBkcml2ZXJzL2Nw
+dWZyZXEvS2NvbmZpZy5hcm0gICAgICAgICAgICAgICAgICAgICAgICB8ICAgMTIgKw0KIGRyaXZl
+cnMvY3B1ZnJlcS9NYWtlZmlsZSAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAgMSArDQog
+ZHJpdmVycy9jcHVmcmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYyAgICAgICAgICAgICAgfCAgMjk0
+ICsrKysrKysrKysrKysrKysrKysrDQogNCBmaWxlcyBjaGFuZ2VkLCA0NDggaW5zZXJ0aW9ucygr
+KQ0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
+Y3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3LnlhbWwNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJp
+dmVycy9jcHVmcmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYw==
 
