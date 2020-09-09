@@ -2,222 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E50426265B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 06:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1842D262661
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 06:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726169AbgIIE1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 00:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S1725864AbgIIEfV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 00:35:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbgIIE1w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 00:27:52 -0400
-Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFC5C061573
-        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 21:27:51 -0700 (PDT)
-Received: by mail-vk1-xa29.google.com with SMTP id b4so365899vkh.9
-        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 21:27:51 -0700 (PDT)
+        with ESMTP id S1725772AbgIIEfT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 00:35:19 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF71C061756
+        for <linux-pm@vger.kernel.org>; Tue,  8 Sep 2020 21:35:18 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id q4so701231pjh.5
+        for <linux-pm@vger.kernel.org>; Tue, 08 Sep 2020 21:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=lmdiyj/70FAt1MqnYepgOMsvppkz9UCOyxgtuK4ZyWA=;
-        b=LlBjRsfGVocQsRFr2x4XqQQ0Ty8BjXNNX5hLS9LfrwoJA6MjKUtE35EDCn/LBzS4CG
-         aNr0+gOY0quhsgPcB14zVpaVykYjejPU+uhiJ5GRE3iwFomYPUGPGXf62ZIsjmZpPwFV
-         lqVZbnRXUHReaVVOHTccZmTw1LSeAB4Opg+ydikg6vOnVf0WR9P1sRE+5yVCqwsTlfIw
-         S13WUJRZ/w8lBOUSwV6ykm6lDc6ijVB3AGZ4jiP4o+Z2+ME/hKlmK/uNGE9YolYp2s0f
-         eTScFsRpMbXXifxnWAdh+Fpnv/hOkPOW2npsPkA6FnuOFY0mpN525qDu/0fSzg9faqx4
-         vWjA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z/ZqzCBddoOe6cElQsXSPaPa9YScgcb1RA++AVKK45o=;
+        b=S0iEEtWHdVMdH4ZvaQfDsFtl52bOxgDUnqEKCqK13oLiS7xCyycKXwY2VIuvCNRPuU
+         MSMSWLy3KV532CJHWDObBmAImM+Kzyow0iB/WZ3vpgmbaMoVLL821tpO+eFo5FFbgrip
+         H7WtG7PWAs8H4fLvNoMTxm2fnGS9vJwhmTdrbe82kgfVzhvuaFov6fTPRbh0lO5ZKflO
+         Haw9eVq2OgvUPoE2rL6YdKWsv7pYA+ceRcl26RdHS9M9oNwAW+fhUhipZi0KXjCARbKD
+         MqKTbptINtOsGNz24PX9A9eWoXX/U0uIV5kr4VBcKo7COkJ+CR8pJi1GbbmuzpY6+PS2
+         PANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=lmdiyj/70FAt1MqnYepgOMsvppkz9UCOyxgtuK4ZyWA=;
-        b=m4Q6PymZvVnb5pHNU22b/OEioUmb9vSXjHHpmrsRAzUEC9X8jno0qVWktCTXcv5yG+
-         fYPdEee58uELnx83Res5RDwgaBvEj10bUTVFDBZjvOlBfEjRjB5MRe0oSkSD/O03/4L/
-         G/QjlM51YtayApZAFO/GRflXJtmxH6VS93KQZo+BpOvco4OZXSBhRrMMEzNWy0EuEfZs
-         fYM8NFWUNT3NchcWvui/8FrSRKOtuLebXIYwsQ2Lh6ebxOzlwRvHcY48BW54lV6demHr
-         JiPl/82D7MvuOU3bPOIWyEiwFkoqgPm896W7tVOCUNeUwJYwq1ctZ09O5b03Skc8KvgA
-         6D3g==
-X-Gm-Message-State: AOAM532o01Rf/Hf2r1s+980EhlP8GGm0g6kCxuYHR7MshYyaOmv8/u91
-        ekL+5JSC0q0tof6z+zbq5y5vEiVdMLpvnXFtUygw3A==
-X-Google-Smtp-Source: ABdhPJxgsedb4wzLubajLwc+AXqKhZq/N1Y5DdrQccSR11g4h11PRQvX+vIyEpJVxQq713ke0dbJ9eoL+b86mSCEpEo=
-X-Received: by 2002:a1f:9f87:: with SMTP id i129mr1538929vke.46.1599625667666;
- Tue, 08 Sep 2020 21:27:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z/ZqzCBddoOe6cElQsXSPaPa9YScgcb1RA++AVKK45o=;
+        b=h2pJFbK4ZT8eucxD/kEP3X9EZwIwkTbvQPPHGMmg90fkPcOb9Gkom0VDcBdmzlkr1p
+         G9hekDP7ijAfHktBP1fEXRJwV5yDYSdPLZX2XB8fX05g7eqGmag5umIwQjWjvfHCZPIM
+         quK2s6xUAlkQHqxRtKunaTooMybLGZ4Ne4t6JHCS1TYR4Oz0umDnsy0qsBS1ttQoBE7g
+         Sp7hGmtbKzjg7qctsiXfEMpINYjxeXupIRfc9wp/MlEIo/QJMgzmOmeuBNAGKW43nchS
+         VnEEQPcrDUar9PxsojajBjOOIdLlsq1sczd1gXDY+40SND9LVY79RkRtRaw88+4X8da6
+         rTFg==
+X-Gm-Message-State: AOAM532bbMVTb3+/QiNnpWt3Rm+R3rw8lorxckduiYHf2pqCxS3dfts+
+        nL0L0f2capIb5Aoe2m9wY98vaA==
+X-Google-Smtp-Source: ABdhPJym123jrDQyOmckTomGRhHglYxlPrWudYpouUVfZSewDsr/fa/uKEO4Gqv50DZEE8lcrCB6yw==
+X-Received: by 2002:a17:90b:4a4b:: with SMTP id lb11mr1891666pjb.111.1599626117949;
+        Tue, 08 Sep 2020 21:35:17 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id z1sm355353pfz.70.2020.09.08.21.35.16
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 08 Sep 2020 21:35:16 -0700 (PDT)
+Date:   Wed, 9 Sep 2020 10:05:14 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Taniya Das <tdas@codeaurora.org>
+Subject: Re: [PATCH 5/7] cpufreq: qcom-hw: Use regmap for accessing hardware
+ registers
+Message-ID: <20200909043514.kuchag27eb255lgk@vireshk-i7>
+References: <20200908075716.30357-1-manivannan.sadhasivam@linaro.org>
+ <20200908075716.30357-6-manivannan.sadhasivam@linaro.org>
+ <20200908103444.5e526uawa45om6lt@vireshk-i7>
+ <20200908111141.GB23095@mani>
+ <20200908111813.bbgfxo5v7qt6ujpc@vireshk-i7>
+ <CAHLCerMndYeEBOxtj8mV7OdOP9pufx+C7n1F9m+CFAneuh8DnA@mail.gmail.com>
+ <CAHLCerPm6MXr662CaA3zZm4fQ3dJ_StJt3Ehutc3xnc0L9wj3Q@mail.gmail.com>
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 9 Sep 2020 09:57:36 +0530
-Message-ID: <CA+G9fYvFOw2NFtUz7DT_2_bKfHPVo8Vrsc+F=ub_R+b1wXpQOQ@mail.gmail.com>
-Subject: WARNING: suspicious RCU usage: include/trace/events/tlb.h:57
- suspicious rcu_dereference_check() usage!
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        rcu@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHLCerPm6MXr662CaA3zZm4fQ3dJ_StJt3Ehutc3xnc0L9wj3Q@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-While booting i386 with Linux next 20200908 tag kernel this warning noticed.
+On 08-09-20, 17:38, Amit Kucheria wrote:
+> On Tue, Sep 8, 2020 at 5:18 PM Amit Kucheria <amitk@kernel.org> wrote:
+> >
+> > On Tue, Sep 8, 2020 at 4:48 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 08-09-20, 16:41, Manivannan Sadhasivam wrote:
+> > > > On 0908, Viresh Kumar wrote:
+> > > > > On 08-09-20, 13:27, Manivannan Sadhasivam wrote:
+> > > > > > Use regmap for accessing cpufreq registers in hardware.
+> > > > >
+> > > > > Why ? Please mention why a change is required in the log.
+> > > > >
+> > > >
+> > > > Only because it is recommended to use regmap for abstracting the hw access.
+> > >
+> > > Yes it can be very useful in abstracting the hw access in case of
+> > > busses like SPI/I2C, others, but in this case there is only one way of
+> > > doing it with the exact same registers. I am not sure it is worth it
+> > > here. FWIW, I have never played with regmaps personally, and so every
+> > > chance I can be wrong here.
+> >
+> > One could handle the reg offsets through a struct initialisation, but
+> > then you end up with lots of #defines for bitmasks and bits for each
+> > version of the IP. And the core code becomes a bit convoluted IMO,
+> > trying to handle the differences.
+> >
+> > regmap hides the differences of the bit positions and register offsets
+> > between several IP versions.
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: dff9f829e5b0181d4ed9d35aa62d695292399b54
-  git describe: next-20200908
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-core2-32/lkft/linux-next/853/config
+Right and I agree that is another useful aspect of it which I missed
+mentioning.
 
-warning log:
------------------
-[   11.451223] Write protecting kernel text and read-only data: 20800k
-[   11.457522] Run /sbin/init as init process
-[   11.463807] random: fast init done
-[   11.471527]
-[   11.473118] =============================
-[   11.477129] WARNING: suspicious RCU usage
-[   11.481135] 5.9.0-rc4-next-20200908 #1 Not tainted
-[   11.485926] -----------------------------
-[   11.489931] /usr/src/kernel/include/trace/events/tlb.h:57
-suspicious rcu_dereference_check() usage!
-[   11.498970]
-[   11.498970] other info that might help us debug this:
-[   11.498970]
-[   11.506961]
-[   11.506961] rcu_scheduler_active = 2, debug_locks = 1
-[   11.513476] RCU used illegally from extended quiescent state!
-[   11.519215] no locks held by swapper/0/0.
-[   11.523217]
-[   11.523217] stack backtrace:
-[   11.527569] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-5.9.0-rc4-next-20200908 #1
-[   11.534955] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.2 05/23/2018
-[   11.542345] Call Trace:
-[   11.544792]  dump_stack+0x6d/0x8b
-[   11.548112]  lockdep_rcu_suspicious+0xb2/0xd0
-[   11.552473]  switch_mm_irqs_off+0x508/0x510
-[   11.556658]  switch_mm+0x19/0x50
-[   11.559890]  leave_mm+0x2d/0x40
-[   11.563034]  acpi_idle_enter_bm+0x1c/0x120
-[   11.567127]  acpi_idle_enter+0x13b/0x230
-[   11.571049]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
-[   11.576008]  ? acpi_idle_enter_s2idle+0x50/0x50
-[   11.580542]  cpuidle_enter_state+0x87/0x560
-[   11.584732]  cpuidle_enter+0x27/0x40
-[   11.588316]  do_idle+0x20b/0x2a0
-[   11.591551]  cpu_startup_entry+0x25/0x30
-[   11.595474]  rest_init+0x166/0x230
-[   11.598881]  arch_call_rest_init+0xd/0x19
-[   11.602893]  start_kernel+0x481/0x4a0
-[   11.606562]  i386_start_kernel+0x48/0x4a
-[   11.610485]  startup_32_smp+0x164/0x168
-[   11.614338]
-[   11.614339] =============================
-[   11.614339] WARNING: suspicious RCU usage
-[   11.614340] 5.9.0-rc4-next-20200908 #1 Not tainted
-[   11.614340] -----------------------------
-[   11.614341] /usr/src/kernel/include/trace/events/lock.h:37
-suspicious rcu_dereference_check() usage!
-[   11.614341]
-[   11.614341] other info that might help us debug this:
-[   11.614342]
-[   11.614342]
-[   11.614342] rcu_scheduler_active = 2, debug_locks = 1
-[   11.614343] RCU used illegally from extended quiescent state!
-[   11.614343] no locks held by swapper/0/0.
-[   11.614343]
-[   11.614344] stack backtrace:
-[   11.614344] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-5.9.0-rc4-next-20200908 #1
-[   11.614345] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.2 05/23/2018
-[   11.614345] Call Trace:
-[   11.614345]  dump_stack+0x6d/0x8b
-[   11.614346]  lockdep_rcu_suspicious+0xb2/0xd0
-[   11.614346]  lock_acquire+0x2d8/0x340
-[   11.614346]  _raw_spin_lock+0x27/0x40
-[   11.614347]  ? vprintk_emit+0x57/0x2c0
-[   11.614347]  vprintk_emit+0x57/0x2c0
-[   11.614347]  vprintk_default+0x17/0x20
-[   11.614348]  vprintk_func+0x4f/0xd0
-[   11.614348]  printk+0x13/0x15
-[   11.614348]  lockdep_rcu_suspicious+0x21/0xd0
-[   11.614349]  switch_mm_irqs_off+0x508/0x510
-[   11.614349]  switch_mm+0x19/0x50
-[   11.614349]  leave_mm+0x2d/0x40
-[   11.614350]  acpi_idle_enter_bm+0x1c/0x120
-[   11.614350]  acpi_idle_enter+0x13b/0x230
-[   11.614351]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
-[   11.614351]  ? acpi_idle_enter_s2idle+0x50/0x50
-[   11.614351]  cpuidle_enter_state+0x87/0x560
-[   11.614352]  cpuidle_enter+0x27/0x40
-[   11.614352]  do_idle+0x20b/0x2a0
-[   11.614352]  cpu_startup_entry+0x25/0x30
-[   11.614353]  rest_init+0x166/0x230
-[   11.614353]  arch_call_rest_init+0xd/0x19
-[   11.614353]  start_kernel+0x481/0x4a0
-[   11.614354]  i386_start_kernel+0x48/0x4a
-[   11.614354]  startup_32_smp+0x164/0x168
-[   11.614354]
-[   11.614355] =============================
-[   11.614355] WARNING: suspicious RCU usage
-[   11.614356] 5.9.0-rc4-next-20200908 #1 Not tainted
-[   11.614356] -----------------------------
-[   11.614356] /usr/src/kernel/include/trace/events/lock.h:63
-suspicious rcu_dereference_check() usage!
-[   11.614357]
-[   11.614357] other info that might help us debug this:
-[   11.614357]
-[   11.614358]
-[   11.614358] rcu_scheduler_active = 2, debug_locks = 1
-[   11.614358] RCU used illegally from extended quiescent state!
-[   11.614359] 1 lock held by swapper/0/0:
-[   11.614359]  #0: c82fd670 (logbuf_lock){-...}-{2:2}, at:
-vprintk_emit+0x57/0x2c0
-[   11.614361]
-[   11.614361] stack backtrace:
-[   11.614362] CPU: 0 PID: 0 Comm: swapper/0 Not tainted
-5.9.0-rc4-next-20200908 #1
-[   11.614362] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.2 05/23/2018
-[   11.614362] Call Trace:
-[   11.614363]  dump_stack+0x6d/0x8b
-[   11.614363]  lockdep_rcu_suspicious+0xb2/0xd0
-[   11.614364]  lock_release+0x23c/0x260
-[   11.614364]  ? vprintk_emit+0x79/0x2c0
-[   11.614364]  _raw_spin_unlock+0x16/0x30
-[   11.614365]  vprintk_emit+0x79/0x2c0
-[   11.614365]  vprintk_default+0x17/0x20
-[   11.614365]  vprintk_func+0x4f/0xd0
-[   11.614366]  printk+0x13/0x15
-[   11.614366]  lockdep_rcu_suspicious+0x21/0xd0
-[   11.614366]  switch_mm_irqs_off+0x508/0x510
-[   11.614367]  switch_mm+0x19/0x50
-[   11.614367]  leave_mm+0x2d/0x40
-[   11.614367]  acpi_idle_enter_bm+0x1c/0x120
-[   11.614368]  acpi_idle_enter+0x13b/0x230
-[   11.614368]  ? rcu_eqs_enter.constprop.87+0x9e/0x180
-[   11.614368]  ? acpi_idle_enter_s2idle+0x50/0x50
-[   11.614369]  cpuidle_enter_state+0x87/0x560
-[   11.614369]  cpuidle_enter+0x27/0x40
-[   11.614369]  do_idle+0x20b/0x2a0
-[   11.614370]  cpu_startup_entry+0x25/0x30
-[   11.614370]  rest_init+0x166/0x230
-[   11.614370]  arch_call_rest_init+0xd/0x19
-[   11.614371]  start_kernel+0x481/0x4a0
-[   11.614371]  i386_start_kernel+0x48/0x4a
-[   11.614371]  startup_32_smp+0x164/0x168
+> > > > Moreover it handles the proper locking for us in the core (spinlock vs mutex).
+> > >
+> > > What locking do you need here ?
+> >
+> > Right, locking isn't the main reason here.
+> 
+> Having said this, perhaps this patch can be held back for now, since
+> we're not yet using some of the features of regmap to abstract away
+> bit fields and such.
+> 
+> We don't strictly need it for just different register offsets.
 
-Full test log,
-https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200908/testrun/3171106/suite/linux-log-parser/test/check-kernel-warning-1743529/log
-
+Right, I just didn't understood why it was required currently as it
+wasn't all that complex at all.
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+viresh
