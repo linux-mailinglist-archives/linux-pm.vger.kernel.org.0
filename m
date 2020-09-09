@@ -2,200 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCC226316C
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE08263161
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730943AbgIIQM4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 12:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730978AbgIIQMs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 12:12:48 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61D5C061251
-        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 07:43:26 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id c2so3853180ljj.12
-        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 07:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w8xJywszUviG8IlaqXvca0F9+J7Th0C+yfpGZ/wtGyc=;
-        b=lUSkWeyIUec2i/cBga+S8HrTxW+ryKchb0HdSyWyFjDQ3a1DoOKagtRL/bhDjM8XEB
-         r/4WoPAur60pdcxmZyRCeDipW2BURPTCj5tCd6EGuV1TF4figfLkSntz/JcYVGqHXuNO
-         fUOKzOkZzywnmRyJhMo4IT4Y/iYwh+3RmTxZqJQXd6MT/i1TZqxnpf6DhBCeryADhfgW
-         ClUaTJltGTwPRxN7YwpjD8ExFaQ21n+EyNoG3J0uCANCYZGIkNvTkK29cX+R5MCS5Xag
-         o160tnnuvAMm8tOdTs5eKduTghR0WswwGygkIWGKIH5m1j63pO0OlN0aKTVArNRwcNqK
-         OR4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w8xJywszUviG8IlaqXvca0F9+J7Th0C+yfpGZ/wtGyc=;
-        b=htS32MaKWvyg+Anrqks2RUarcmUxCQvJkr2A6g2NJKUZaCMqyGzo87rVzc1i5voev7
-         IFeldHZaYZCnKsBRVzovt7AHlHCgWKpxY54GBxFbXJI6960XBJ0AQcn7jTPH5zlFNhmh
-         UOC1V0e71TCgSXkW8gvvheRlZ2a8PQurqrqb0lFPL7uB2A7ck3ujjI9aJA4YWt0YKT+/
-         04nDGNjtSW+t6mjNxDpdo3dEqVq897WtQ7Qul7rIhmlS5W324zoZpt66X09NG0dxKaiO
-         KECuxIryezE4g/MU1qDdV/4i6NwwnwnUV49z1+PmSswW9nWmF7FEMQtYNxcEzY3b2SGK
-         3WQw==
-X-Gm-Message-State: AOAM532g3b/sI4+XIarSvhlS0szI3koEBA7yp0GU+Q5NgjhmihAEa9uZ
-        zHgZHWHqmBXt/xHUxarDjXkFSg==
-X-Google-Smtp-Source: ABdhPJy7Lm4n8uPvYsm6+724Esh0DNoPvYm4lbou2WBs4gB+mNKGDPZN+zRhRKpTUwch3oJT9CNOZw==
-X-Received: by 2002:a2e:6a04:: with SMTP id f4mr1895466ljc.119.1599662600908;
-        Wed, 09 Sep 2020 07:43:20 -0700 (PDT)
-Received: from eriador.lan ([188.162.64.155])
-        by smtp.gmail.com with ESMTPSA id t12sm621665lfk.26.2020.09.09.07.43.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 07:43:20 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 07/10] iio: provide of_iio_channel_get_by_name() and devm_ version it
-Date:   Wed,  9 Sep 2020 17:42:45 +0300
-Message-Id: <20200909144248.54327-8-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
-References: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
+        id S1730885AbgIIQLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 12:11:01 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:58548 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730817AbgIIQK1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 12:10:27 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200909144709euoutp016689f1f3810d7bd9839de67283a444a2~zJN5VsXr02864228642euoutp014
+        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 14:47:09 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200909144709euoutp016689f1f3810d7bd9839de67283a444a2~zJN5VsXr02864228642euoutp014
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1599662830;
+        bh=6pD2jBm6l4NY8TMCPp0T0+uNfiB/x7JVe6XpoPosFww=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=Ab58mHj/nrCKS1ik30p5kv8vxCIElYMllX720IHeoWDLwdpv5Xdxd+2F0lItj/7+p
+         Id2qc+lEGkNFIv6MInMB6llvVd53Z+n07yMGIIwShjk+QiX4fU/IRyi0FrrD7Rt3RJ
+         dp1rwJ0SYVMxViFYkWxDkgThm3HUmN230Sq+MBFo=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200909144709eucas1p2b4703806571a6b7d4677bb44b1129e64~zJN4vjCO_0720307203eucas1p2H;
+        Wed,  9 Sep 2020 14:47:09 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 54.DC.05997.DEAE85F5; Wed,  9
+        Sep 2020 15:47:09 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200909144708eucas1p22c7a9c941f4656ff4efc94e1d156a9a6~zJN4U79yv0034700347eucas1p20;
+        Wed,  9 Sep 2020 14:47:08 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200909144708eusmtrp1cea369908fda34b63479819aba3041e8~zJN4UJEpe1317213172eusmtrp1G;
+        Wed,  9 Sep 2020 14:47:08 +0000 (GMT)
+X-AuditID: cbfec7f4-65dff7000000176d-0e-5f58eaed414a
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id B1.1E.06017.CEAE85F5; Wed,  9
+        Sep 2020 15:47:08 +0100 (BST)
+Received: from [106.210.123.115] (unknown [106.210.123.115]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200909144707eusmtip2e63e94961e81d7208ff2d3503e173a61~zJN3U6Wu32459124591eusmtip2b;
+        Wed,  9 Sep 2020 14:47:07 +0000 (GMT)
+Subject: Re: [PATCH RFC v6 1/6] dt-bindings: exynos-bus: Add documentation
+ for interconnect properties
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     cw00.choi@samsung.com, krzk@kernel.org, devicetree@vger.kernel.org,
+        a.swigon@samsung.com, myungjoo.ham@samsung.com,
+        inki.dae@samsung.com, sw0312.kim@samsung.com,
+        b.zolnierkie@samsung.com, m.szyprowski@samsung.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org
+From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
+Message-ID: <e6e369fb-ccf2-09ed-ad6a-680e67198359@samsung.com>
+Date:   Wed, 9 Sep 2020 16:47:06 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        Thunderbird/68.12.0
 MIME-Version: 1.0
+In-Reply-To: <b711257d-c34b-b609-3ada-312871967b98@linaro.org>
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0hTYRjG+XYuO462jsvyRcVqSRelqRnxSSXdqFH/BFmElLb04Cy3YnPV
+        Qsgww3uW1dastAso01iuMjXtDy9ZWq60THJmmCWO7KaRdtE6nkX+93ue93n5nhc+hpD3Un5M
+        ki6F0+vUyQpaQlY9GHcuHXbvjAt7NyjDfZczEK602Cn8cnSQwsVN7RR+/u0Tjc31Dhqf6Ssg
+        sdN5U4wdb7so3Fl7kcYjeU0IW5z3RfhGU68Y9xwvo/FkXbUYWwqH6DWsymHLolWurjpa1ZfT
+        IlLdun5MlX/bhlQjjsCtdIxkVQKXnHSI04dG7ZFoskq6xQc/zj8y5rKhNFTpn428GGCXg9v6
+        gs5GEkbOliEo63lDCWIUQXHveY8YQdD4I1/0b6Wr87VnUIqg3fLYI74g6HCWUnxqFquB8bu5
+        NM8+7BZ4erWO4EMEe4KAvKFyxA9oNhzymvOnWMpGQeOp72Q2YhiSDYJPmTLens3GwoPWflKI
+        eMOjCwNT7PU3/sE5QfBMsL7waqBYJPBcSL9TNPUWsMcZ+DqY4am9AZ5VnqUEngXulttigQOg
+        rTCXFBbSEeTe6xELogBBX0sJElIrwdX+g+bbEewSsNeGCvZauDlZI+JtYGXQPewtlJDBmSoz
+        IdhSyDwpF9JB8NNm9tTxg5yBSbIAKazTTrNOO8c67Rzr/3dLEGlDvpzRoE3kDMt03GGlQa01
+        GHWJyvgDWgf6++naJlpGq1Htr70NiGWQYoY0s3dnnJxSHzKYtA0IGELhI133pC1WLk1Qm45y
+        +gNxemMyZ2hA/gyp8JVGXB3aLWcT1Sncfo47yOn/TUWMl18aOrlZMVY+HjLvpbmgvzzkdGi8
+        O/LStYhXqLk4ZsG9U67mnMiNHa31mmjb5J6IYP/UfXuv0DUVWWAPiMRPF7a+XRRo3JXU+RAb
+        w7aj8ni8WnK+7VxK5jufinNVmqIVnz9bTcbu0NjCCeX76E39QWEzg43KbYuHTXNSf5dutK6P
+        3mFXkAaNOjyY0BvUfwBBw3q3cAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLIsWRmVeSWpSXmKPExsVy+t/xe7pvXkXEG2zu1re4P6+V0WLjjPWs
+        Fte/PGe1mH/kHKvFla/v2Sym793EZjHp/gQWi/PnN7BbbHp8jdXi8q45bBafe48wWsw4v4/J
+        Yu2Ru+wWtxtXsFn837OD3WLG5JdsDgIem1Z1snncubaHzeN+93Emj81L6j36tqxi9Pi8SS6A
+        LUrPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEvo3PB
+        DfaCd4oVP+6sYmxg3CjdxcjJISFgInHt8j1WEFtIYCmjRP+E8C5GDqC4lMT8FiWIEmGJP9e6
+        2LoYuYBK3jNKPDn0lw0kISyQIbFs3wtGEFtEwFviwqI9zCBFzAItzBJfJ81gguj4zyTR0PIW
+        bAObgKFE79E+sA5eATuJw/3fWUC2sQioSLzv4AMJiwrESZzpecEGUSIocXLmExYQmxOo/M35
+        f8wgNrOAusSfeZegbHGJW0/mM0HY8hLNW2czT2AUmoWkfRaSlllIWmYhaVnAyLKKUSS1tDg3
+        PbfYSK84Mbe4NC9dLzk/dxMjMKq3Hfu5ZQdj17vgQ4wCHIxKPLwddyPihVgTy4orcw8xSnAw
+        K4nwOp09HSfEm5JYWZValB9fVJqTWnyI0RTot4nMUqLJ+cCEk1cSb2hqaG5haWhubG5sZqEk
+        ztshcDBGSCA9sSQ1OzW1ILUIpo+Jg1OqgbHZKfJ1pMsdHmPmi1Mju2In5gtEaGjr/3TT+HH7
+        WPAD9tOvvXef2/dz4Trpd8u32K5esXSmZ/ncKo61qrc2FPOaTj37WuPFm1/r5VdMzVNsm3j1
+        nHl6mOZlL++nu3lvTzfeov13xvzLt1kSP/JWeRQw+7MbfA7gf/G4lXVm+bGdh1KYzObEPPZS
+        YinOSDTUYi4qTgQABaXelwADAAA=
+X-CMS-MailID: 20200909144708eucas1p22c7a9c941f4656ff4efc94e1d156a9a6
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3
+References: <20200702163724.2218-1-s.nawrocki@samsung.com>
+        <CGME20200702163748eucas1p2cf7eab70bc072dea9a95183018b38ad3@eucas1p2.samsung.com>
+        <20200702163724.2218-2-s.nawrocki@samsung.com>
+        <20200709210448.GA876103@bogus>
+        <65af1a5c-8f8a-ef65-07f8-e0b3d04c336c@samsung.com>
+        <35d9d396-b553-a815-1f3b-1af4dc37a2ca@samsung.com>
+        <b711257d-c34b-b609-3ada-312871967b98@linaro.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There might be cases when the IIO channel is attached to the device
-subnode instead of being attached to the main device node. Allow drivers
-to query IIO channels by using device tree nodes.
+Hi Georgi,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/iio/inkern.c         | 33 +++++++++++++++++++++++++--------
- include/linux/iio/consumer.h | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+), 8 deletions(-)
+On 09.09.2020 11:07, Georgi Djakov wrote:
+> On 8/28/20 17:49, Sylwester Nawrocki wrote:
+>> On 30.07.2020 14:28, Sylwester Nawrocki wrote:
+>>> On 09.07.2020 23:04, Rob Herring wrote:
+>>>> On Thu, Jul 02, 2020 at 06:37:19PM +0200, Sylwester Nawrocki wrote:
+>>>>> Add documentation for new optional properties in the exynos bus nodes:
+>>>>> samsung,interconnect-parent, #interconnect-cells, bus-width.
+>>>>> These properties allow to specify the SoC interconnect structure which
+>>>>> then allows the interconnect consumer devices to request specific
+>>>>> bandwidth requirements.
+>>>>>
+>>>>> Signed-off-by: Artur Świgoń <a.swigon@samsung.com>
+>>>>> Signed-off-by: Sylwester Nawrocki <s.nawrocki@samsung.com>
+>>
+>>>>> --- a/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
+>>>>> +++ b/Documentation/devicetree/bindings/devfreq/exynos-bus.txt
 
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index ede99e0d5371..3083f886d3da 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -180,8 +180,8 @@ static struct iio_channel *of_iio_channel_get(struct device_node *np, int index)
- 	return ERR_PTR(err);
- }
- 
--static struct iio_channel *of_iio_channel_get_by_name(struct device_node *np,
--						      const char *name)
-+struct iio_channel *of_iio_channel_get_by_name(struct device_node *np,
-+					       const char *name)
- {
- 	struct iio_channel *chan = NULL;
- 
-@@ -261,12 +261,6 @@ static struct iio_channel *of_iio_channel_get_all(struct device *dev)
- 
- #else /* CONFIG_OF */
- 
--static inline struct iio_channel *
--of_iio_channel_get_by_name(struct device_node *np, const char *name)
--{
--	return NULL;
--}
--
- static inline struct iio_channel *of_iio_channel_get_all(struct device *dev)
- {
- 	return NULL;
-@@ -382,6 +376,29 @@ struct iio_channel *devm_iio_channel_get(struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_iio_channel_get);
- 
-+struct iio_channel *devm_of_iio_channel_get_by_name(struct device *dev,
-+						    struct device_node *np,
-+						    const char *channel_name)
-+{
-+	struct iio_channel **ptr, *channel;
-+
-+	ptr = devres_alloc(devm_iio_channel_free, sizeof(*ptr), GFP_KERNEL);
-+	if (!ptr)
-+		return ERR_PTR(-ENOMEM);
-+
-+	channel = of_iio_channel_get_by_name(np, channel_name);
-+	if (IS_ERR(channel)) {
-+		devres_free(ptr);
-+		return channel;
-+	}
-+
-+	*ptr = channel;
-+	devres_add(dev, ptr);
-+
-+	return channel;
-+}
-+EXPORT_SYMBOL_GPL(devm_of_iio_channel_get_by_name);
-+
- struct iio_channel *iio_channel_get_all(struct device *dev)
- {
- 	const char *name;
-diff --git a/include/linux/iio/consumer.h b/include/linux/iio/consumer.h
-index c4118dcb8e05..0a90ba8fa1bb 100644
---- a/include/linux/iio/consumer.h
-+++ b/include/linux/iio/consumer.h
-@@ -13,6 +13,7 @@
- struct iio_dev;
- struct iio_chan_spec;
- struct device;
-+struct device_node;
- 
- /**
-  * struct iio_channel - everything needed for a consumer to use a channel
-@@ -97,6 +98,41 @@ void iio_channel_release_all(struct iio_channel *chan);
-  */
- struct iio_channel *devm_iio_channel_get_all(struct device *dev);
- 
-+/**
-+ * of_iio_channel_get_by_name() - get description of all that is needed to access channel.
-+ * @np:			Pointer to consumer device tree node
-+ * @consumer_channel:	Unique name to identify the channel on the consumer
-+ *			side. This typically describes the channels use within
-+ *			the consumer. E.g. 'battery_voltage'
-+ */
-+#ifdef CONFIG_OF
-+struct iio_channel *of_iio_channel_get_by_name(struct device_node *np, const char *name);
-+#else
-+static inline struct iio_channel *
-+of_iio_channel_get_by_name(struct device_node *np, const char *name)
-+{
-+	return NULL;
-+}
-+#endif
-+
-+/**
-+ * devm_of_iio_channel_get_by_name() - Resource managed version of of_iio_channel_get_by_name().
-+ * @dev:		Pointer to consumer device.
-+ * @np:			Pointer to consumer device tree node
-+ * @consumer_channel:	Unique name to identify the channel on the consumer
-+ *			side. This typically describes the channels use within
-+ *			the consumer. E.g. 'battery_voltage'
-+ *
-+ * Returns a pointer to negative errno if it is not able to get the iio channel
-+ * otherwise returns valid pointer for iio channel.
-+ *
-+ * The allocated iio channel is automatically released when the device is
-+ * unbound.
-+ */
-+struct iio_channel *devm_of_iio_channel_get_by_name(struct device *dev,
-+						    struct device_node *np,
-+						    const char *consumer_channel);
-+
- struct iio_cb_buffer;
- /**
-  * iio_channel_get_all_cb() - register callback for triggered capture
+>>>>> +Optional properties for interconnect functionality (QoS frequency constraints):
+>>>>> +- samsung,interconnect-parent: phandle to the parent interconnect node; for
+>>>>> +  passive devices should point to same node as the exynos,parent-bus property.
+>>
+>>>> Adding vendor specific properties for a common binding defeats the 
+>>>> point.
+>>
+>> Actually we could do without any new property if we used existing interconnect
+>> consumers binding to specify linking between the provider nodes. I think those
+>> exynos-bus nodes could well be considered both the interconnect providers 
+>> and consumers. The example would then be something along the lines 
+>> (yes, I know the bus node naming needs to be fixed):
+>>
+>> 	soc {
+>> 		bus_dmc: bus_dmc {
+>> 			compatible = "samsung,exynos-bus";
+>> 			/* ... */
+>> 			samsung,data-clock-ratio = <4>;
+>> 			#interconnect-cells = <0>;
+>> 		};
+>>
+>> 		bus_leftbus: bus_leftbus {
+>> 			compatible = "samsung,exynos-bus";
+>> 			/* ... */
+>> 			interconnects = <&bus_leftbus &bus_dmc>;
+>> 			#interconnect-cells = <0>;
+>> 		};
+>>
+>> 		bus_display: bus_display {
+>> 			compatible = "samsung,exynos-bus";
+>> 			/* ... */
+>> 			interconnects = <&bus_display &bus_leftbus>;
+> 
+> Hmm, bus_display being a consumer of itself is a bit odd? Did you mean:
+>  			interconnects = <&bus_dmc &bus_leftbus>;
+
+Might be, but we would need to swap the phandles so <source, destination>
+order is maintained, i.e. interconnects = <&bus_leftbus &bus_dmc>;
+
+My intention here was to describe the 'bus_display -> bus_leftbus' part 
+of data path 'bus_display -> bus_leftbus -> bus_dmc', bus_display is
+really a consumer of 'bus_leftbus -> bus_dmc' path.
+
+I'm not sure if it is allowed to specify only single phandle (and 
+interconnect provider specifier) in the interconnect property, that would
+be needed for the bus_leftbus node to define bus_dmc as the interconnect 
+destination port. There seems to be such a use case in arch/arm64/boot/
+dts/allwinner/sun50i-a64.dtsi. 
+
+>> 			#interconnect-cells = <0>;
+>> 		};
+>>
+>>
+>> 		&mixer {
+>> 			compatible = "samsung,exynos4212-mixer";
+>> 			interconnects = <&bus_display &bus_dmc>;
+>> 			/* ... */
+>> 		};
+>> 	};
+>>
+>> What do you think, Georgi, Rob?
+> 
+> I can't understand the above example with bus_display being it's own consumer.
+> This seems strange to me. Could you please clarify it?
+
+> Otherwise the interconnect consumer DT bindings are already well established
+> and i don't see anything preventing a node to be both consumer and provider.
+> So this should be okay in general.
+
+Thanks, below is an updated example according to your suggestions. 
+Does it look better now?
+
+---------------------------8<------------------------------
+soc {
+	bus_dmc: bus_dmc {
+		compatible = "samsung,exynos-bus";
+		/* ... */
+		samsung,data-clock-ratio = <4>;
+		#interconnect-cells = <0>;
+	};
+
+	bus_leftbus: bus_leftbus {
+		compatible = "samsung,exynos-bus";
+		/* ... */
+		interconnects = <&bus_dmc>;
+		#interconnect-cells = <0>;
+	};
+
+	bus_display: bus_display {
+		compatible = "samsung,exynos-bus";
+		/* ... */
+		interconnects = <&bus_leftbus &bus_dmc>;
+		#interconnect-cells = <0>;
+	};
+
+	&mixer {
+		compatible = "samsung,exynos4212-mixer";
+		interconnects = <&bus_display &bus_dmc>;
+		/* ... */
+	};
+};
+---------------------------8<------------------------------
+
 -- 
-2.28.0
-
+Regards,
+Sylwester
