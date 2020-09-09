@@ -2,52 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F229265452
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81593265755
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 05:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728573AbgIJVms (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 17:42:48 -0400
-Received: from ozlabs.org ([203.11.71.1]:33465 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730878AbgIJM40 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:56:26 -0400
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 4BnJlT4jccz9sTr; Thu, 10 Sep 2020 22:55:33 +1000 (AEST)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Joel Stanley <joel@jms.id.au>,
-        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
-        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-pm@vger.kernel.org
-In-Reply-To: <1599125247-28488-1-git-send-email-ego@linux.vnet.ibm.com>
-References: <1599125247-28488-1-git-send-email-ego@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2] cpuidle-pseries: Fix CEDE latency conversion from tb to us
-Message-Id: <159974250748.1017939.3766182148722011711.b4-ty@ellerman.id.au>
-Date:   Thu, 10 Sep 2020 22:55:33 +1000 (AEST)
+        id S1725306AbgIKDWf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 10 Sep 2020 23:22:35 -0400
+Received: from mail.flex.co.jp ([211.8.82.123]:58369 "EHLO www.flex.co.jp"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725300AbgIKDWf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Sep 2020 23:22:35 -0400
+Received: from live.com.mx ([103.89.89.225])
+        (authenticated bits=0)
+        by www.flex.co.jp (MTA) with ESMTP id 0898njWS009557
+        for <linux-pm@vger.kernel.org>; Wed, 9 Sep 2020 17:49:55 +0900
+Reply-To: powerinthewords@yahoo.co.jp
+From:   piyin.crhe@live.com.mx
+To:     linux-pm@vger.kernel.org
+Subject: =?utf-8?Q?=5BSpam=5D?=
+ We are still waiting for your email...
+Date:   09 Sep 2020 01:49:53 -0700
+Message-ID: <20200909014953.341205A0FA30C5A3@live.com.mx>
+MIME-Version: 1.0
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-SpamInfo: FortiGuard-AntiSpam ip, connection black ip 103.89.89.225
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 3 Sep 2020 14:57:27 +0530, Gautham R. Shenoy wrote:
-> commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
-> CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
-> of the Extended CEDE states advertised by the platform. The values
-> advertised by the platform are in timebase ticks. However the cpuidle
-> framework requires the latency values in microseconds.
-> 
-> If the tb-ticks value advertised by the platform correspond to a value
-> smaller than 1us, during the conversion from tb-ticks to microseconds,
-> in the current code, the result becomes zero. This is incorrect as it
-> puts a CEDE state on par with the snooze state.
-> 
-> [...]
+Dear Beneficiary,
 
-Applied to powerpc/fixes.
+We wish to inform you that a power of attorney was forwarded to 
+our office  by two gentlemen regarding your unclaimed fund of $56 
+Million Dollar. One of them is an American citizen named Mr. 
+Robert Porter and the other is Mr. Wilhelm Berg a Swedish 
+citizen.We have be waiting for you to contact us since last year.
 
-[1/1] cpuidle: pseries: Fix CEDE latency conversion from tb to us
-      https://git.kernel.org/powerpc/c/1d3ee7df009a46440c58508b8819213c09503acd
+The document claims these gentlemen to be your authorized 
+representatives, and the power of attorney states that you are 
+already deceased.  It further states that your death was due to 
+lung cancer, with your date of death being January 27th, 2020.
 
-cheers
+They have now submitted a new account to replace the receiving 
+account that was in the original claim of funds. These funds have 
+remained unclaimed for quite some time and the need for 
+resolution is pressing. Below is the new account they have 
+submitted.
+
+Account Name's :  Robert Porter /Wilhelm Berg
+Account: 5007-29 438 66
+IBAN-nr: SE4150000000050072943866
+Bic-kod: ESSESESS
+Skandinaviska Enskilda Banken. (SEB :)
+SWEDEN .
+
+In the event that you are in fact still alive, we ask that you 
+confirm your existence by responding to this email. You are to 
+view this as a matter requiring immediate attention and response. 
+We have 48 hr monitoring of all activities within Federal Reserve 
+Bank.On this regard,you will be directed to any of our office 
+center that you will go in person to sign the final papers,
+because we have our payment center in Europe,Asia,America and 
+Canada.You will go to any of the office that you will be directed 
+to with the copy of the documents of your fund.
+
+We have contacted the bank in the Sweden asking them to wait for 
+further directives from Federal Reserve Bank, prior to 
+authorizing any withdrawals in any form.  Our request is based 
+entirely on our attempt to verify that you are in fact deceased, 
+before money is wrongly disbursed.
+
+Your in Service,
+
+Robert Steven Kaplan
+2200 N Pearl St, Dallas, TX 75201, United States
