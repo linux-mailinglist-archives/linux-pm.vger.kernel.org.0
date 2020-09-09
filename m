@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 594902632B7
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B46592632B5
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730614AbgIIQtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 12:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53092 "EHLO
+        id S1730435AbgIIQte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 12:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730883AbgIIQHR (ORCPT
+        with ESMTP id S1730881AbgIIQHR (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 12:07:17 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A72C0612A2
-        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 07:43:06 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id r24so3921512ljm.3
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8618CC0612A6
+        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 07:43:07 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s205so3883940lja.7
         for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 07:43:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=yMvVXpSpVGDfdX14bLkO7U8LOBlYVmYuUOGPXx5qIqI=;
-        b=QQ9REk01gK8HMw9gq+R0GrwFAdnxdqqge4xTp6/7MQehjUS9y+wbanI6/644+8Jnoj
-         x0nJwH1JzaP99Y4Hk5xD20aNtEKBUGH0vq49poqM4naz0TVy8S/HlIIcdrZP2oqOeOH3
-         zNdU0CdhhsfgfqUeeFUekq/yFA4pUaabVp4C+U6M876Z7NXB9goGBQ3vVPEoweS3CBYC
-         aOvRW9r2zP4QTK8f3VY3ESF1+nLxm7MK5IODm0FOMDFG6p7h0/3cDGbRhTaYZrxxZpNL
-         A1NwBLGGTbORcve/wW4AtG16KNmL0sZ60qAoC2gqAPDu7L0zJJcEUQJ74JYoO0hjCH6j
-         IORw==
+        bh=wcVYXgQ5pttw1IKCDgQFlSKYdGXdwjbBjMlIEbUjqiQ=;
+        b=OqjBqEAWPDnfTgGoQjNBjYeKg4K9GLkX+Bw8XJ40eGAnEnptk7yRupxf6JWaCD3JmN
+         5RsG/GLVMzpJiJHXxHhGdf2uNA8I5Ti9uw3PbTjKXGjl7tXt/Lh+00q2uqsGRLua4bpz
+         c0xwDeKX8dqKrNq1y6poqRfUh+qMciJUiOGJ1aEbPxjGGqtUdA1xchxaDu0XrEBPxg2t
+         2EtWKUuNJThIs44LYt4kbj5pee+7qcsqeQorMdD1UcHjN5e7IFGFQAW4kqhOXP47C5sS
+         sq40F/txN46g5H8AVsWXBkPwPDLuurGMmnKh5rU/9dl2kro650tFs24zR8g1lE8OeIOt
+         cn7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=yMvVXpSpVGDfdX14bLkO7U8LOBlYVmYuUOGPXx5qIqI=;
-        b=BbGwd3JrMkBvhdYFcYxgftulrKLAED7GVQcYCf1cuWMs2xEU6CQOZvlGdGCT8MR1Jj
-         z1E9lx1RdqKZTJOhv1X2hAs2GMbe+WeoXwYtpAEFbNXd4UX5g3PFgtWIfM+p2aOxNdT+
-         3BRZ57dcHVX6W/F8Phw2BXcT7Kyp0h1Wf1c0KYDSwjzXA7PffZ4Xbd24IuJbfBic+7SN
-         drL6ASoRAfuIXxEKITyd3RIAru+YDTFF9I869KVpTtsAblubpdScrJxA7w23g14D0svX
-         ca0nbcUGSR/JkPPObydMAxcLbXtA+ktq30L2AGDoNKo7xZGRAut2u113cItPelQy0Q2k
-         iEIA==
-X-Gm-Message-State: AOAM533T4yxtRk3aPzwBC40QVsOxHpKVDwyRFL1k/aznTFYfcN1lrYn3
-        dzOo/oeBvDSLqXmsY+xzo0FC2g==
-X-Google-Smtp-Source: ABdhPJxXHYgt5utpdo1iDhw6xcrA0sfYrG3fGr8zUuYpZCCfG44ZvKKajKg2fIEZzIw61sghcU/i2A==
-X-Received: by 2002:a2e:b4f5:: with SMTP id s21mr2161986ljm.270.1599662580464;
-        Wed, 09 Sep 2020 07:43:00 -0700 (PDT)
+        bh=wcVYXgQ5pttw1IKCDgQFlSKYdGXdwjbBjMlIEbUjqiQ=;
+        b=M1jVZAJVWNziihlBrVp6UeAb2HpsxuTXh3v9r1PHFDPmFmtYtqxuA+EWtwW468OEW3
+         iWd93A9Uu3jmKFj1OnbvE5GB3iCpPIWXHImwIdmGSSK4pi8RuHKZaSyYIMzm1QpQinUS
+         zEqrOMKNP/3wOgnTqYgIQ3mlWHn5Bc9WPgrIgQCiogr/lMeC4kw6yORvKg+8z3KhR06V
+         9+qqT2lFCM+JyDRtXk72GPLbhdIq5x5bYrjQ49pm9GPCd+5I+qBFmx7KQTjKSUEihPjJ
+         d5gFyC76WzG7WJJC8Uj9NasYtFr7Yu0ovvCkOVT+xRIkblAaJA7pbIExRfehyAcQzKyj
+         9CRw==
+X-Gm-Message-State: AOAM533LmT7JRxkDf21FDqysXNlSpCAWhpTV7NDv4Wvk0NMpHIk1Vdlh
+        VjHmIrvg8xoy4LetY056Pc2Npg==
+X-Google-Smtp-Source: ABdhPJyWwfksQxPk2Tnm2ER0m9k37Twox0OGJe88A6KO3gv3HM/BUcjQ+SFEmloMY+FO5ietjnqs7A==
+X-Received: by 2002:a2e:6c08:: with SMTP id h8mr2031092ljc.66.1599662584166;
+        Wed, 09 Sep 2020 07:43:04 -0700 (PDT)
 Received: from eriador.lan ([188.162.64.155])
-        by smtp.gmail.com with ESMTPSA id t12sm621665lfk.26.2020.09.09.07.42.58
+        by smtp.gmail.com with ESMTPSA id t12sm621665lfk.26.2020.09.09.07.43.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 07:42:59 -0700 (PDT)
+        Wed, 09 Sep 2020 07:43:03 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -60,10 +60,11 @@ To:     Andy Gross <agross@kernel.org>,
         Peter Meerwald-Stadler <pmeerw@pmeerw.net>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 02/10] dt-bindings: thermal: qcom: add adc-thermal monitor bindings
-Date:   Wed,  9 Sep 2020 17:42:40 +0300
-Message-Id: <20200909144248.54327-3-dmitry.baryshkov@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Craig Tatlor <ctatlor97@gmail.com>
+Subject: [PATCH v3 03/10] fixp-arith: add a linear interpolation function
+Date:   Wed,  9 Sep 2020 17:42:41 +0300
+Message-Id: <20200909144248.54327-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
 References: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
@@ -74,162 +75,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
-close counterpart of VADC part of those PMICs.
+From: Craig Tatlor <ctatlor97@gmail.com>
 
+Adds a function to interpolate against two points,
+this is carried arount as a helper function by tons of drivers.
+
+Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 141 ++++++++++++++++++
- 1 file changed, 141 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+ include/linux/fixp-arith.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-new file mode 100644
-index 000000000000..b3818357808b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-@@ -0,0 +1,141 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/qcom-spmi-adc-tm5.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/include/linux/fixp-arith.h b/include/linux/fixp-arith.h
+index 8396013785ef..281cb4f83dbe 100644
+--- a/include/linux/fixp-arith.h
++++ b/include/linux/fixp-arith.h
+@@ -141,4 +141,23 @@ static inline s32 fixp_sin32_rad(u32 radians, u32 twopi)
+ #define fixp_cos32_rad(rad, twopi)	\
+ 	fixp_sin32_rad(rad + twopi / 4, twopi)
+ 
++/**
++ * fixp_linear_interpolate() - interpolates a value from two known points
++ *
++ * @x0: x value of point 0
++ * @y0: y value of point 0
++ * @x1: x value of point 1
++ * @y1: y value of point 1
++ * @x: the linear interpolant
++ */
++static inline int fixp_linear_interpolate(int x0, int y0, int x1, int y1, int x)
++{
++	if (y0 == y1 || x == x0)
++		return y0;
++	if (x1 == x0 || x == x1)
++		return y1;
 +
-+title: Qualcomm's SPMI PMIC ADC-TM
-+maintainers:
-+  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
++	return y0 + ((y1 - y0) * (x - x0) / (x1 - x0));
++}
 +
-+properties:
-+  compatible:
-+    const: qcom,spmi-adc-tm5
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+    description:
-+      Number of cells required to uniquely identify the thermal sensors. Since
-+      we have multiple sensors this is set to 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  qcom,avg-samples:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of samples to be used for measurement.
-+    enum:
-+      - 1
-+      - 2
-+      - 4
-+      - 8
-+      - 16
-+    default: 1
-+
-+  qcom,decimation:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: This parameter is used to decrease ADC sampling rate.
-+            Quicker measurements can be made by reducing decimation ratio.
-+    enum:
-+      - 250
-+      - 420
-+      - 840
-+    default: 840
-+
-+patternProperties:
-+  "^([-a-z0-9]*)@[0-9]+$":
-+    type: object
-+    description:
-+      Represent one thermal sensor.
-+
-+    properties:
-+      reg:
-+        description: Specify the sensor channel.
-+        maxItems: 1
-+
-+      io-channels:
-+        description:
-+          From common IIO binding. Used to pipe PMIC ADC channel to thermal monitor
-+
-+      qcom,adc-channel:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Corresponding ADC channel ID.
-+
-+      qcom,ratiometric:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description:
-+          Channel calibration type.
-+          If this property is specified VADC will use the VDD reference
-+          (1.875V) and GND for channel calibration. If property is not found,
-+          channel will be calibrated with 0V and 1.25V reference channels,
-+          also known as absolute calibration.
-+
-+      qcom,hw-settle-time:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Time between AMUX getting configured and the ADC starting conversion.
-+
-+      qcom,pre-scaling:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: Used for scaling the channel input signal before the
-+          signal is fed to VADC. See qcom,spi-vadc specification for the list
-+          of possible values.
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+      - qcom,adc-channel
-+
-+    additionalProperties:
-+      false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        #include <dt-bindings/iio/qcom,spmi-vadc.h>
-+        #include <dt-bindings/interrupt-controller/irq.h>
-+        pm8150b_adc: adc@3100 {
-+            compatible = "qcom,spmi-adc5";
-+            /* Other propreties are omitted */
-+            conn-therm@4f {
-+                reg = <ADC5_AMUX_THM3_100K_PU>;
-+                qcom,ratiometric;
-+                qcom,hw-settle-time = <200>;
-+            };
-+        };
-+
-+        pm8150b_adc_tm: adc-tm@3500 {
-+            compatible = "qcom,spmi-adc-tm5";
-+            reg = <0x3500>;
-+            interrupts = <0x2 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
-+            #thermal-sensor-cells = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            conn-therm@0 {
-+                reg = <0>;
-+                io-channels = <&pm8150b_adc ADC5_AMUX_THM3_100K_PU>;
-+                qcom,adc-channel = <ADC5_AMUX_THM3_100K_PU>;
-+                qcom,ratiometric;
-+                qcom,hw-settle-time = <200>;
-+            };
-+        };
-+...
+ #endif
 -- 
 2.28.0
 
