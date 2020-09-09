@@ -2,191 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A264F26348B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 19:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DBA263585
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 20:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727005AbgIIRXE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 13:23:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33998 "EHLO mail.kernel.org"
+        id S1729988AbgIISF6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 14:05:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32824 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726036AbgIIRXC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Sep 2020 13:23:02 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728663AbgIISFz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 9 Sep 2020 14:05:55 -0400
+Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C0452166E;
-        Wed,  9 Sep 2020 17:23:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 884A52065E;
+        Wed,  9 Sep 2020 18:05:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599672181;
-        bh=ojYXfjO2DurN2C/opB53TRYM7STqyjyLj7tArEbYnYU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W40okwbvhzb3YNdQWWE61AnHf+7XtiOdb6MNYys5tClUSQqHRyUMpvh3j0fpRj3NS
-         33B56q0jVNPBQ3AsfsIRkXkarAFSMhPU2JsKSxRbZo06tvNmgrXsWwK3ewSbwGSrxC
-         B3BdieaaNhVMHkaDJiSZWYP+jSTalp6OSB3k8Ud8=
-Received: by mail-ot1-f42.google.com with SMTP id g10so2954608otq.9;
-        Wed, 09 Sep 2020 10:23:01 -0700 (PDT)
-X-Gm-Message-State: AOAM532QNqalj6R3eFLxyi/WKh/V+wpgcVI5mHOwFIhUjqcJfy/ZkstH
-        Yg8ez7sZHgduM4r4zDXprgUh9ezNBpfhIC0Ihg==
-X-Google-Smtp-Source: ABdhPJwF/BBwg1karh3OP6yS1l/x+0g03zifHTvvij6uGN/zcwIb/C59SHbjSoa84vatAmS8zyZQIW9jDnoPNpIu7AQ=
-X-Received: by 2002:a9d:411:: with SMTP id 17mr1405892otc.192.1599672180697;
- Wed, 09 Sep 2020 10:23:00 -0700 (PDT)
+        s=default; t=1599674755;
+        bh=P2PJd2Cj1YO32Kcj40Y0x+JDFRs0I/YINmaP2FrUJCE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y7VspjkE+FMJjGtUQGOQgINgRntSZM1pSFMFoRT7KUQdkiZxWuHKBads+W9KwtEPX
+         hmWxIwfddxp9pOR+RfEyYdOR+Howebbx6wcxpJin/NRtkZEGFW8/Eg/LrWCCTM4bnI
+         9f6GaHF6iAi13fGKiXBbv+s3mssaGw03EEzu/bLk=
+Date:   Wed, 9 Sep 2020 19:05:48 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: Re: [PATCH v3 06/10] iio: adc: qcom-spmi-adc5: use
+ of_device_get_match_data
+Message-ID: <20200909190548.22153db9@archlinux>
+In-Reply-To: <20200909144248.54327-7-dmitry.baryshkov@linaro.org>
+References: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
+        <20200909144248.54327-7-dmitry.baryshkov@linaro.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <cover.1598043782.git.cristian.ciocaltea@gmail.com>
- <863c9c1e44cfbe6184bf0bd4893ff456af0e7bb8.1598043782.git.cristian.ciocaltea@gmail.com>
- <20200908214724.GA959481@bogus> <20200909160334.GA385382@BV030612LT>
-In-Reply-To: <20200909160334.GA385382@BV030612LT>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 9 Sep 2020 11:22:48 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL+21YH+_w3e6PnW0GqPyEAD6uU-hqHZercKK0xQwCOjg@mail.gmail.com>
-Message-ID: <CAL_JsqL+21YH+_w3e6PnW0GqPyEAD6uU-hqHZercKK0xQwCOjg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: mfd: Add Actions Semi ATC260x PMIC binding
-To:     Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        linux-actions@lists.infradead.org, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 10:03 AM Cristian Ciocaltea
-<cristian.ciocaltea@gmail.com> wrote:
->
-> Hi Rob,
->
-> Thanks for reviewing!
->
-> On Tue, Sep 08, 2020 at 03:47:24PM -0600, Rob Herring wrote:
-> > On Sat, Aug 22, 2020 at 01:19:47AM +0300, Cristian Ciocaltea wrote:
-> > > Add devicetree binding for Actions Semi ATC260x PMICs.
-> > >
-> > > Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> > > ---
-> > >  .../bindings/mfd/actions,atc260x.yaml         | 221 ++++++++++++++++++
-> > >  1 file changed, 221 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml b/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
-> > > new file mode 100644
-> > > index 000000000000..4a55bbe1306e
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/mfd/actions,atc260x.yaml
-> > > @@ -0,0 +1,221 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/mfd/actions,atc260x.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Actions Semi ATC260x Power Management IC bindings
-> > > +
-> > > +maintainers:
-> > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > +  - Cristian Ciocaltea <cristian.ciocaltea@gmail.com>
-> > > +
-> > > +description: |
-> > > +  ATC260x series PMICs integrates Audio Codec, Power Management, RTC, IR
-> > > +  and GPIO controller blocks. Currently only the PM related functionalities
-> > > +  (i.e. regulators and system power-off/reboot) for the ATC2603C and ATC2609A
-> > > +  chip variants are supported.
-> > > +  ATC2603C includes 3 programmable DC-DC converters and 9 LDO regulators.
-> > > +  ATC2609A includes 5 programmable DC-DC converters and 10 LDO regulators.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - actions,atc2603c
-> > > +      - actions,atc2609a
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  pwrc:
-> > > +    type: object
-> > > +    description: |
-> > > +      The power controller integrated in ATC260x provides system power-off
-> > > +      and reboot operations.
-> >
-> > No need for this node as there are no properties, just instantiate
-> > what's needed in the MFD driver.
->
-> My intention was to allow the user specify what functionality in the MFD
-> shall be enabled. For this particular case, if the 'pwrc' node is not
-> provided, the power-off/reboot functions will be disabled.
+On Wed,  9 Sep 2020 17:42:44 +0300
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
 
-IIRC, there's a flag property for this already.
+> Use of_device_get_match_data() instead of hand-coding it manually.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
->
-> > > +
-> > > +    properties:
-> > > +      compatible:
-> > > +        enum:
-> > > +          - actions,atc2603c-pwrc
-> > > +          - actions,atc2609a-pwrc
-> > > +
-> > > +    required:
-> > > +      - compatible
-> > > +
-> > > +    additionalProperties: false
-> > > +
-> > > +  onkey:
-> > > +    type: object
-> > > +    description: |
-> > > +      Use the ONKEY built into ATC260x PMICs as an input device reporting
-> > > +      power button status. ONKEY can be used to wakeup from low power
-> > > +      modes and force a reset on long press.
-> > > +
-> > > +    properties:
-> > > +      compatible:
-> > > +        enum:
-> > > +          - actions,atc2603c-onkey
-> > > +          - actions,atc2609a-onkey
-> > > +
-> > > +      actions,reset-time-sec:
-> > > +        description: |
-> > > +          Duration in seconds which the key should be kept pressed for device
-> > > +          to reset automatically. The hardware default is 8. Use 0 to disable
-> > > +          this functionality.
-> > > +        enum: [0, 6, 8, 10, 12]
-> >
-> > We already have 'power-off-time-sec' in input.yaml. How about adding
-> > 'reset-time-sec' there.
->
-> Thanks for the suggestion, I was actually looking for this before
-> choosing the custom property and just assumed this was not added for
-> a particular reason.
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Probably just because the usual behavior of holding the power button
-is to power off rather than reset.
+> ---
+>  drivers/iio/adc/qcom-spmi-adc5.c | 18 +++++++-----------
+>  1 file changed, 7 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+> index c2da8f068b87..ae27ed7a26ff 100644
+> --- a/drivers/iio/adc/qcom-spmi-adc5.c
+> +++ b/drivers/iio/adc/qcom-spmi-adc5.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/math64.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+> @@ -807,8 +808,6 @@ static int adc5_get_dt_data(struct adc5_chip *adc, struct device_node *node)
+>  	struct adc5_channel_prop prop, *chan_props;
+>  	struct device_node *child;
+>  	unsigned int index = 0;
+> -	const struct of_device_id *id;
+> -	const struct adc5_data *data;
+>  	int ret;
+>  
+>  	adc->nchannels = of_get_available_child_count(node);
+> @@ -827,24 +826,21 @@ static int adc5_get_dt_data(struct adc5_chip *adc, struct device_node *node)
+>  
+>  	chan_props = adc->chan_props;
+>  	iio_chan = adc->iio_chans;
+> -	id = of_match_node(adc5_match_table, node);
+> -	if (id)
+> -		data = id->data;
+> -	else
+> -		data = &adc5_data_pmic;
+> -	adc->data = data;
+> +	adc->data = of_device_get_match_data(adc->dev);
+> +	if (!adc->data)
+> +		adc->data = &adc5_data_pmic;
+>  
+>  	for_each_available_child_of_node(node, child) {
+> -		ret = adc5_get_dt_channel_data(adc, &prop, child, data);
+> +		ret = adc5_get_dt_channel_data(adc, &prop, child, adc->data);
+>  		if (ret) {
+>  			of_node_put(child);
+>  			return ret;
+>  		}
+>  
+>  		prop.scale_fn_type =
+> -			data->adc_chans[prop.channel].scale_fn_type;
+> +			adc->data->adc_chans[prop.channel].scale_fn_type;
+>  		*chan_props = prop;
+> -		adc_chan = &data->adc_chans[prop.channel];
+> +		adc_chan = &adc->data->adc_chans[prop.channel];
+>  
+>  		iio_chan->channel = prop.channel;
+>  		iio_chan->datasheet_name = prop.datasheet_name;
 
-> So I'm going to handle it. Would you like me to send a separate patch
-> (not part of this series)?
-
-Separate patch yes, but it can be part of the series.
-
-> > This could really just be a property in the parent node.
->
-> This is similar with 'pwrc': if 'onkey' node is not present, the ONKEY
-> functionality will not be enabled.
-
-Would you really want/need to support wakeup, but disable long press
-feature? Seems like a single property would be sufficient.
-
-> Is there a better/recommended approach to manage this MFD feature
-> selection?
-
-But we have child nodes for this in other cases, so I guess it is fine.
-
-Rob
