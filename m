@@ -2,133 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A31D2632A1
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D684A2632AB
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 18:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730854AbgIIQqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 12:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
+        id S1730927AbgIIQsv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 12:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730940AbgIIQHk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 12:07:40 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3C2C06134C
-        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 06:58:22 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id w5so3057568wrp.8
-        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 06:58:22 -0700 (PDT)
+        with ESMTP id S1730925AbgIIQHj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 12:07:39 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B411C0612FD
+        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 07:43:01 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id u21so3888749ljl.6
+        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 07:43:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:references:from:autocrypt:cc:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=eBH73PCNIO1FFhctRAZbYzQQykgJUSLfCaIpA+XFJt4=;
-        b=ah7HF7exP4/EXw0luSSJj977PqTSCiirtUGfu/aTG2ZS6fmJwKPIYCQ7I8uflq1TAO
-         kgtK+5jE9A+7XLIhfhdQhpLaOZNRD2TeLhX6aZmfaSy8EgjlveuRS4KwhbnBgw2vapD0
-         J9zFbUu9LSOQNIDZ8MlWqsdnu4trcBuRU3VN4Kvg5oqqVOBa/T9voRKZad7ObUulF4T3
-         u7iincLtfCoMDAl50lz73DQkm0Dyqnv1XJqgKXRPqjCXA6xPVH2aR2aS2tNWmFh8MjV6
-         W33EIkW6w2uyHavMTTVyeZGPAYn+8CDlneEVichmE61jOGdaGrN3m/0tXdr2XmWb6GKb
-         Q8qg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6qDammCrp0EwptO3CtGoLqfo/rfLYjc1bnqq0Kza7Dk=;
+        b=tD1KRG99K87Slut9PsLD50bnWV9IHs11Nt4RlM90goxiLCSr9qyu1410xG6SClag6H
+         YY0ODvIYZojAHdwdoKhUe2PXv3AJVY7jLbZDYDuqX65dp93gxqhr/0EcTkH/VBl71W0k
+         80vfCfofoM4PYefyjo8pEwfKufwtJu+jfONlJ3MsIjZ4ers1TbTk8USOODO1UUgwpF1I
+         vlriawyCAdUTXHwyQQntwnEnbAE/3qSyLOC/UpyfNKMTY2qt2aSKsa8jSyJhFDIuqDrp
+         1BeY6PwsaJCIDYdKMDwSzF/nBr/8mhM3l1gc6s+P+iTlk6Jb0Xw62GFWRWLmuKOAkkIO
+         enoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:cc
-         :message-id:date:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=eBH73PCNIO1FFhctRAZbYzQQykgJUSLfCaIpA+XFJt4=;
-        b=Eu7ZNnW9ryDJT9kxUIO3gPOQ+xZdAXAO4HUv5tUOgD6yErqDhPLTr7X59JOKhle4Lu
-         dk6qwcJ4hygRZ5rUWN2i9GoNRWFayp5dtf8nqLr8BAGXPPTrAvbeFkUKFTwMCgbBpe43
-         Myhhcwe5/S/SAJ89llx3RFcbVe5DqrjmOqJFHNVfVt6z6NZOhDbcloG6wHSIY2/03vUx
-         OHNAn7+/1iYjKjy1h/DjsEXrOl45Waj3T9+1+gaBThJhEdIMgGw1QVJ24QIMa3hhEAVp
-         0L9+FTza/A600pFLMKhtLfe/wv8jsZEoqbXSb2CaxSICg/DZ8AHE+9dlGhpuMnizO0Xx
-         Shfg==
-X-Gm-Message-State: AOAM532U+040G+mWywV68AsITjyZSLKCIeICaokTQSx/o+G1K5kSfU+m
-        xZTlQTwkw52Gf8Dj0JNyBTqXs540vN3mpg==
-X-Google-Smtp-Source: ABdhPJwAzRykE3ZncAPBm3t3mtmCJo0wHvEUg2GwTUYRbmReWKA8t4cFQ3+QN1CYV8Z9piKg/2HWoA==
-X-Received: by 2002:adf:81a3:: with SMTP id 32mr4042031wra.368.1599659900838;
-        Wed, 09 Sep 2020 06:58:20 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id h17sm4586643wro.27.2020.09.09.06.58.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 06:58:20 -0700 (PDT)
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add MSM8939 interconnect provider
- driver
-To:     Jun Nie <jun.nie@linaro.org>, shawn.guo@linaro.org
-References: <20200831075329.30374-1-jun.nie@linaro.org>
- <20200831075329.30374-2-jun.nie@linaro.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- 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
- KEmKjLDvB0pePJkdTw==
-Cc:     linux-pm@vger.kernel.org
-Message-ID: <0df97fbd-f0f5-3719-cebc-1d7525a43e60@linaro.org>
-Date:   Wed, 9 Sep 2020 16:58:19 +0300
+        bh=6qDammCrp0EwptO3CtGoLqfo/rfLYjc1bnqq0Kza7Dk=;
+        b=g+Y01BYAN09ouPDasm4duUz11yq+SgMAoPzmRg7kcbVkfr6brj09Ka8+5UmpvnBdWO
+         BABRnztESNg10wVV4WquLJhuiFxS1Mgf0P8+4NZuTNbAJx7x44R4D8IAHGFGKDVTw4KF
+         ndB02bEKYYUBQoloGnWYtjOnJ1UXqr92v1fzd1eoOcOgUOI+3iEVUYwQ6oUqtQ4g72gD
+         Qvf93eWKJ4b3qFTurxkGWEcN53J8ln9OnKKO+W37ul7yESo/CVJvwXY6nh+n/m/o2ZEu
+         7kciYpt8bFNGdRuzZI7ITxtf13DwG6E2/4sxedsuLi+85UCjbBJ8SegX2VY/b2GRs7an
+         lLlg==
+X-Gm-Message-State: AOAM530tn1MzGsfY2BVPyX+rITwReW9vFW/k6dWIHgmGvFU+KGABNb1+
+        AGl2oeaUPnXmqJPC/eT+MtMbMw==
+X-Google-Smtp-Source: ABdhPJxEuBTT8aEEjg3YXCValq4V9u4nYF0bTkCsaxt0ed3aIi4553PjjA3SvY86niYRjVh+SNxeDg==
+X-Received: by 2002:a2e:b615:: with SMTP id r21mr1938629ljn.341.1599662575775;
+        Wed, 09 Sep 2020 07:42:55 -0700 (PDT)
+Received: from eriador.lan ([188.162.64.155])
+        by smtp.gmail.com with ESMTPSA id t12sm621665lfk.26.2020.09.09.07.42.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2020 07:42:55 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 00/10] qcom: pm8150: add support for thermal monitoring
+Date:   Wed,  9 Sep 2020 17:42:38 +0300
+Message-Id: <20200909144248.54327-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200831075329.30374-2-jun.nie@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jun,
+This patch serie adds support for thermal monitoring block on Qualcomm's
+PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
+to support thermal zones provided by this thermal monitoring block.
+Unlike the rest of PMIC thermal senses, these thermal zones describe
+particular thermistors, which differ between from board to board.
 
-Thanks for working on this!
+Changes since v2:
+ - IIO: export of_iio_channel_get_by_name() function
+ - dt-bindings: move individual io-channels to each thermal monitoring
+   channel rather than listing them all in device node
+ - added fallback defaults to of_device_get_match_data calls in
+   qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
+ - minor typo fixes
 
-On 8/31/20 10:53, Jun Nie wrote:
-> Add driver for the Qualcomm interconnect buses found in MSM8939 based
-> platforms. The topology consists of four NoCs that are controlled by
-> a remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
-> 
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> ---
->  drivers/interconnect/qcom/Kconfig   |   9 +
->  drivers/interconnect/qcom/Makefile  |   2 +
->  drivers/interconnect/qcom/msm8939.c | 576 ++++++++++++++++++++++++++++
+Changes since v1:
+ - Introduce fixp_linear_interpolate() by Craig Tatlor
+ - Lots of syntax/whitespace changes
+ - Cleaned up register definitions per Jonathan's suggestion
+ - Implemented most of the suggestions from Bjorn's and Jonathan's
+   review
 
-All this looks almost the same as msm8916. Do you think we can we move the
-identical code into common file and leave just the topology and the msm8939-
-specific stuff in msm8939.c?
 
-Thanks,
-Georgi
