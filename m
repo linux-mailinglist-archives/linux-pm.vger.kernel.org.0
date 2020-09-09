@@ -2,61 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13305262983
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 10:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095D4262A53
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 10:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730255AbgIIIFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 04:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
+        id S1727075AbgIIIcB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 04:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730242AbgIIIFO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 04:05:14 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E805C0613ED
-        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 01:05:08 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id s12so1844188wrw.11
-        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 01:05:08 -0700 (PDT)
+        with ESMTP id S1726708AbgIIIb4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 04:31:56 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B213CC061755
+        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 01:31:54 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id a65so1408128wme.5
+        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 01:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=subject:to:cc:references:from:autocrypt:message-id:date
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GnsN9VJxY2tWMcKN+d2gl2RPXIURHKHn7BhArmMdOJI=;
-        b=lfKOkywn+OMumynjOSboeiWzYwjpSrRwiZF0r8UPdpuS3uS3zpTW59Pt/PBoW5QHFa
-         DJER2fIQFOyE9wzQN6aA+/Els4t3WcyQUyHvDU9+/uQ7ZloBA3Z9/JirgD6vL+RYkWZz
-         LSjSpwSGgColoMJ86ms2+elDXr8clJTOUSaD/7RdQ1KIqC8VpoVExaQnjjgct1c6XH9t
-         XQ60Hym3Tvj4BHL2FFmSxIZov18XfaMpS/KyQFLj+M+FqRRTeNhT6WOQDGKJI/m3sv2U
-         yjbKRXLiNhEjKFKk8bqWNQw9O7hjQi9AVHuovVIUw9pX/NkPGAMLYJv6PsHGMjswCxFG
-         Zqqw==
+        bh=6OOTP+3hdsrfyd1wUmm5Yj49uRIpO1u4gRia8ib7GbE=;
+        b=sbzYYJGUi2Tgen72Fb1lBf/XSZaBrkLvQD0BVyoOfqs/sMekPUafYW1x3vowHxwF8f
+         aKTSHlnDBiinjPy49bdsn1tVSKNkh4e3CECp0JHpS0wGHTf+cXyCmlhiURNRo4SBF/lX
+         J5zHpQdDpMa3Zvh4J13mMOuU0a8slfRlIQeFJYsU8/h/0Viwh5QvZyn8IJzF5HqQheE+
+         /wQ7mnjeLWn0XiO4G92oUnsc5klaBe1RkLG8UdJryGQk3vg7eK2XH5/vTOjqhp9did8v
+         TzwW6IWlsgj4Fb2TYW8rnHMbRlTsX0aPSJSIaldbOietK5n0IXzHZmCyJuV0rVR+84dR
+         nPcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
          :message-id:date:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=GnsN9VJxY2tWMcKN+d2gl2RPXIURHKHn7BhArmMdOJI=;
-        b=XIVR4uc0Rj+W20cfoBlY7nL1+e3eGry3tWXnVwYuRldZY+9mNfnc5BdIG4/3qG7MlZ
-         qngGWIxQJjM6RPb9JAwBV6ughoKB3t93fxTAasCm4ndZK+g3lY9DLjHTNR2NRwuIMvFf
-         ihLnIiyHyugDjzEEYSJ3F6SvBKxGSjbhye0NQoJ3h5E67q618jYhf600muo3A0YCQCO5
-         geDFH499V9QxUtE1VsnR4dTXX5Z3BMQcV2frXLlsa7bxks71YFK1gK9tRCFGVKBNFGK5
-         Yh3At1n5ZJxB/TiCbseqyeHQHkmjuptLSN1upHp6LZdJIpZlOp/kAFtm4fEvmClrk0J+
-         2fdQ==
-X-Gm-Message-State: AOAM533oVENf5rs65Fahbm8L2tpTjRD7cecXlpspcIm4FfAZnz59czOV
-        NXmwxGXfB6w5MGk9akhjfq+5s1WLVG2F9w==
-X-Google-Smtp-Source: ABdhPJw506zvow+7wjAknSFSUGWBL7dX5e7fDsg4nFHoFvxq0CUMBc0bPk4o5X9Jg0/wogGwq5TZgA==
-X-Received: by 2002:a5d:4e02:: with SMTP id p2mr2913549wrt.276.1599638706440;
-        Wed, 09 Sep 2020 01:05:06 -0700 (PDT)
+        bh=6OOTP+3hdsrfyd1wUmm5Yj49uRIpO1u4gRia8ib7GbE=;
+        b=oLvDNzs5kVEc2FaLQBAQ6lsAVlmxrMuVt5cm16JaZ7FJDYLarPdapQZ05W3s6sPV9F
+         JrjQgYXUAEyE0I6me2wLrkQhj6Vo2KRsqxxaZHqvXcQhRduzs9weiqirXRkKJNWJKQTv
+         Tb9L+4omPdw9nsnN0MFkqb338Wk6qMfE1+HNP10ftgn7aEA4rcsWhpbGY3Yi8KF9CKDq
+         VsYxmWKdqGsO7u8fWD79F974j53gDOU7EmSlj8KstoqBg07Y1tqp3+nb7iYt0wIFF68P
+         QQFTj2sklUODTfaczt2b7OKpW9aOgWE1iwKWNE8W1EdMsxi0bAkYZmhgImjsrjMvg5vw
+         xCtQ==
+X-Gm-Message-State: AOAM532oxL0JJu6GLelHJtAz71+S+N5cgDpzHU9tRvbWtzCEsx+1M3XW
+        cH3g0BTeYwULqbs4+VMervPyzw==
+X-Google-Smtp-Source: ABdhPJzLc81jh8oauFaHy0YfdIx9yli0duH7En+dTAhBtbEL4Xd8mI3wMAjPF7+EAkWCgkB2Czl7Dw==
+X-Received: by 2002:a05:600c:1:: with SMTP id g1mr2287583wmc.57.1599640313218;
+        Wed, 09 Sep 2020 01:31:53 -0700 (PDT)
 Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id g143sm2695680wme.0.2020.09.09.01.05.05
+        by smtp.googlemail.com with ESMTPSA id f1sm3111398wrx.75.2020.09.09.01.31.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 01:05:05 -0700 (PDT)
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: sm8150: Add OSM L3 interconnect
+        Wed, 09 Sep 2020 01:31:52 -0700 (PDT)
+Subject: Re: [PATCH v5 27/36] memory: tegra-mc: Register as interconnect
  provider
-To:     bjorn.andersson@linaro.org
-Cc:     Sibi Sankar <sibis@codeaurora.org>, robh+dt@kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jonathan@marek.ca, linux-pm@vger.kernel.org
-References: <20200801123049.32398-1-sibis@codeaurora.org>
- <20200801123049.32398-7-sibis@codeaurora.org>
+To:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200814000621.8415-1-digetx@gmail.com>
+ <20200814000621.8415-28-digetx@gmail.com>
 From:   Georgi Djakov <georgi.djakov@linaro.org>
 Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
  xsFNBFjTuRcBEACyAOVzghvyN19Sa/Nit4LPBWkICi5W20p6bwiZvdjhtuh50H5q4ktyxJtp
@@ -101,10 +110,10 @@ Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
  7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
  E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
  KEmKjLDvB0pePJkdTw==
-Message-ID: <a60ab579-baaf-06bd-02c7-ac584aeac3e4@linaro.org>
-Date:   Wed, 9 Sep 2020 11:05:03 +0300
+Message-ID: <923b6801-5194-b936-13c6-0972761c29b8@linaro.org>
+Date:   Wed, 9 Sep 2020 11:31:50 +0300
 MIME-Version: 1.0
-In-Reply-To: <20200801123049.32398-7-sibis@codeaurora.org>
+In-Reply-To: <20200814000621.8415-28-digetx@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -113,45 +122,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 8/1/20 15:30, Sibi Sankar wrote:
-> Add Operation State Manager (OSM) L3 interconnect provider node on
-> SM8150 SoCs.
+On 8/14/20 03:06, Dmitry Osipenko wrote:
+> Now memory controller is a memory interconnection provider. This allows us
+> to use interconnect API in order to change memory configuration.
 > 
-> Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+
+Thanks Dmitry! Looks good to me.
 
 Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
-
-> ---
->  arch/arm64/boot/dts/qcom/sm8150.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> index 0f6d84e8fd299..8563afd205ee9 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> @@ -10,6 +10,7 @@
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
->  #include <dt-bindings/clock/qcom,gcc-sm8150.h>
-> +#include <dt-bindings/interconnect/qcom,osm-l3.h>
->  #include <dt-bindings/interconnect/qcom,sm8150.h>
->  #include <dt-bindings/thermal/thermal.h>
->  
-> @@ -1184,6 +1185,16 @@ apps_bcm_voter: bcm_voter {
->  			};
->  		};
->  
-> +		osm_l3: interconnect@18321000 {
-> +			compatible = "qcom,sm8150-osm-l3";
-> +			reg = <0 0x18321000 0 0x1400>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
-> +			clock-names = "xo", "alternate";
-> +
-> +			#interconnect-cells = <1>;
-> +		};
-> +
->  		cpufreq_hw: cpufreq@18323000 {
->  			compatible = "qcom,cpufreq-hw";
->  			reg = <0 0x18323000 0 0x1400>, <0 0x18325800 0 0x1400>,
-> 
