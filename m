@@ -2,84 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B1B52637FE
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 22:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB988263850
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Sep 2020 23:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729741AbgIIU4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 16:56:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58626 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726534AbgIIU4E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 9 Sep 2020 16:56:04 -0400
-Received: from dhcp-10-100-145-180.wdl.wdc.com (unknown [199.255.45.60])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A2AC920BED;
-        Wed,  9 Sep 2020 20:56:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599684963;
-        bh=HOi/gRnNWCADuH3C2tuPouagH6ACKRSW8Me9mQGESc8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MIR0n2v6jYMLvL9ylCeswSmSkNjM38pD+hUWnq3QNBxdxavUAFW1nFlTLHe2pybfD
-         odrRmpSK6VaBtY4y/JW5mI6voxGDP7xP7wyaKsNWcxcK7TIQVymwmw1HPj8MEaIJrr
-         wYpwdfF4aTXncxhcjdHkCnRIxxiQ6/mo+8A6FHH4=
-Date:   Wed, 9 Sep 2020 13:55:58 -0700
-From:   Keith Busch <kbusch@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>,
-        Kees Cook <kees.cook@canonical.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-rdma@vger.kernel.org,
-        iommu@lists.linux-foundation.org, dm-devel@redhat.com,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
-        oss-drivers@netronome.com, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, sparclinux@vger.kernel.org,
-        linux-serial@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-parisc@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-afs@lists.infradead.org, ceph-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, bpf@vger.kernel.org,
-        dccp@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, linux-sctp@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-Message-ID: <20200909205558.GA3384631@dhcp-10-100-145-180.wdl.wdc.com>
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+        id S1729911AbgIIVQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Sep 2020 17:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728617AbgIIVPz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 17:15:55 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ADAC061573;
+        Wed,  9 Sep 2020 14:15:55 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id u21so5417672ljl.6;
+        Wed, 09 Sep 2020 14:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HnVKigTPD0SFBmS6CufvtEE5hp82hUFW+McOGmr8ObQ=;
+        b=AEMv6CEcQnDBpdKHTGDMpkqWbBkkyC3XIxDghgAq6QwSz0FWI1czP7m0rAzo79YaUO
+         HhSPr/YEjsCxhLZNISf2Be4NR3orDy7ZMU3ziy+PCzsbiOvedaK+eULC3/znoKwQpZQN
+         yEFMKl+0lLsRF885mZeeYpXmXqdzwu2hriKD0arnoUdoFgdQq/W7VbK0tMmb4llhPzLH
+         mylxshFdjPd7CFrrJjAFAcdxxmHgEZQUtW8vDl46F6E2AS+0y0rImqP+AIcfI+PYsOlt
+         0lsDcTyRVia/TrfsxcEeguz4Au8Zcsz1oZXSrbyLfaWKtThupylDm5rqOR7ozYYE3wOt
+         ou7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HnVKigTPD0SFBmS6CufvtEE5hp82hUFW+McOGmr8ObQ=;
+        b=j6YOlfc+i9nYu4BbHNVQbikoz3VLtx3rKUbGHci6QejzkdvPQtYnom1IAI18aKAspo
+         HiHJLVYkLp4Q8n5vBO7Q+e24u5HM+H7z9me9Bqa8Pn95esVHwCSgL/WmWSnRzeUB+gKp
+         u0tBOHrEy8iIaCcI9RqJuyr57FrHZ1lhdi9kNbfTpftF3stT+SfP69ECRb7WX19qiiD6
+         2pIpVYB6NGMsXwYXVl72YbOYJmlF9vU+0HceaCTcp1miAQpbH1FZeqJCjKwwyeDI9EHg
+         o5vebFgTAxU5RFjI0A8TdaGEyCDG75CywStqg+0LPX5XwtAfYp8IMOsM79AFdl3Cgga3
+         sT8A==
+X-Gm-Message-State: AOAM530NuBi/HUzoz2zhQPZS4csxmEaW8rqw/WjWoEr6i4sj6lXLQ5N4
+        6fMvbysnFNdhHhvLdR/N5tYO6ALxong=
+X-Google-Smtp-Source: ABdhPJxp8VYmLXdjWwfoDoXk3NH/mFiHKjQmDtqVaj5hvvbbW+sEPnZMlMfqd4r/5YSVXyKy5zLhqw==
+X-Received: by 2002:a2e:3c08:: with SMTP id j8mr2597735lja.358.1599686153003;
+        Wed, 09 Sep 2020 14:15:53 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id j7sm821561lfb.41.2020.09.09.14.15.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2020 14:15:52 -0700 (PDT)
+Subject: Re: [PATCH v5 27/36] memory: tegra-mc: Register as interconnect
+ provider
+To:     Georgi Djakov <georgi.djakov@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Mikko Perttunen <cyndis@kapsi.fi>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org
+References: <20200814000621.8415-1-digetx@gmail.com>
+ <20200814000621.8415-28-digetx@gmail.com>
+ <923b6801-5194-b936-13c6-0972761c29b8@linaro.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <01996606-84cd-909d-8dfc-4f33bdf8f3cc@gmail.com>
+Date:   Thu, 10 Sep 2020 00:15:51 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+In-Reply-To: <923b6801-5194-b936-13c6-0972761c29b8@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 01:06:39PM -0700, Joe Perches wrote:
-> diff --git a/crypto/tcrypt.c b/crypto/tcrypt.c
-> index eea0f453cfb6..8aac5bc60f4c 100644
-> --- a/crypto/tcrypt.c
-> +++ b/crypto/tcrypt.c
-> @@ -2464,7 +2464,7 @@ static int do_test(const char *alg, u32 type, u32 mask, int m, u32 num_mb)
->  		test_hash_speed("streebog512", sec,
->  				generic_hash_speed_template);
->  		if (mode > 300 && mode < 400) break;
-> -		fallthrough;
-> +		break;
->  	case 399:
->  		break;
+09.09.2020 11:31, Georgi Djakov пишет:
+> On 8/14/20 03:06, Dmitry Osipenko wrote:
+>> Now memory controller is a memory interconnection provider. This allows us
+>> to use interconnect API in order to change memory configuration.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> 
+> Thanks Dmitry! Looks good to me.
+> 
+> Acked-by: Georgi Djakov <georgi.djakov@linaro.org>
+> 
 
-Just imho, this change makes the preceding 'if' look even more
-pointless. Maybe the fallthrough was a deliberate choice? Not that my
-opinion matters here as I don't know this module, but it looked a bit
-odd to me.
+Thanks you!
