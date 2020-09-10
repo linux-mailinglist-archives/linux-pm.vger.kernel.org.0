@@ -2,137 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F38265451
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F229265452
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728584AbgIJVmt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 17:42:49 -0400
-Received: from cloudserver094114.home.pl ([79.96.170.134]:56066 "EHLO
-        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730722AbgIJM41 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 08:56:27 -0400
-Received: from 89-64-87-170.dynamic.chello.pl (89.64.87.170) (HELO kreacher.localnet)
- by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.468)
- id 0b9e2c09bd0fb81d; Thu, 10 Sep 2020 14:55:07 +0200
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     "Claude. Yen" <Claude.Yen@mediatek.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        wsd_upstream <wsd_upstream@mediatek.com>
-Subject: Re: [PATCH] PM: s2idle: Introduce syscore callbacks in s2idle flow
-Date:   Thu, 10 Sep 2020 14:55:06 +0200
-Message-ID: <1955367.r5QahNuf3v@kreacher>
-In-Reply-To: <1599099247.4435.4.camel@mtksdccf07>
-References: <1598943859-21857-1-git-send-email-claude.yen@mediatek.com> <CAJZ5v0hOGEUamXw124q4CnL67o97qRHy9Vv9_F2AQqefDdu3vQ@mail.gmail.com> <1599099247.4435.4.camel@mtksdccf07>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        id S1728573AbgIJVms (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 17:42:48 -0400
+Received: from ozlabs.org ([203.11.71.1]:33465 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730878AbgIJM40 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:56:26 -0400
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 4BnJlT4jccz9sTr; Thu, 10 Sep 2020 22:55:33 +1000 (AEST)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Joel Stanley <joel@jms.id.au>,
+        "Gautham R. Shenoy" <ego@linux.vnet.ibm.com>,
+        Vaidyanathan Srinivasan <svaidy@linux.vnet.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-pm@vger.kernel.org
+In-Reply-To: <1599125247-28488-1-git-send-email-ego@linux.vnet.ibm.com>
+References: <1599125247-28488-1-git-send-email-ego@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2] cpuidle-pseries: Fix CEDE latency conversion from tb to us
+Message-Id: <159974250748.1017939.3766182148722011711.b4-ty@ellerman.id.au>
+Date:   Thu, 10 Sep 2020 22:55:33 +1000 (AEST)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thursday, September 3, 2020 4:14:07 AM CEST Claude. Yen wrote:
-> On Tue, 2020-09-01 at 13:57 +0200, Rafael J. Wysocki wrote:
-> > On Tue, Sep 1, 2020 at 9:05 AM Claude Yen <claude.yen@mediatek.com> wrote:
-> > >
-> > > This series based on 5.9-rc1
-> > > This patch makes s2idle call existing syscore callbacks. Currently,
-> > > when s2idle is selected as system suspend method, callbacks hooked
-> > > by register_syscore_ops() will not be triggered. This may induce
-> > > unexpected results.
-> > 
-> > They are not executed by design.
-> > 
-> > > For example, sched_clock_suspend() was added to s2idle flow in
-> > > commit 3f2552f7e9c5 ("timers/sched_clock: Prevent generic sched_clock
-> > > wrap caused by tick_freeze()") to fix clock wrap problem. However,
-> > > sched_clock_suspend() is originally registered in syscore callback.
-> > 
-> > I'm not sure why this matters here.
+On Thu, 3 Sep 2020 14:57:27 +0530, Gautham R. Shenoy wrote:
+> commit d947fb4c965c ("cpuidle: pseries: Fixup exit latency for
+> CEDE(0)") sets the exit latency of CEDE(0) based on the latency values
+> of the Extended CEDE states advertised by the platform. The values
+> advertised by the platform are in timebase ticks. However the cpuidle
+> framework requires the latency values in microseconds.
 > 
-> If functions in syscore callbacks are needed in s2idle, explicit
-> migration is needed like commit 3f2552f7e9c5 ("timers/sched_clock:
-> Prevent generic sched_clock wrap caused by tick_freeze()").
-> Thus, I am wondering if such effort could be saved.
-
-Yes, it could.
-
-You can define platform ops for s2idle and invoke what's needed from there.
-
-> > > With this patch, if another syscore callback is needed in s2idle,
-> > > additional migration effort could be saved.
-> > 
-> > s2idle cannot execute syscore callbacks, because it doesn' take
-> > non-boot CPUs offline and it won't do that.
-> > 
-> > Thanks!
+> If the tb-ticks value advertised by the platform correspond to a value
+> smaller than 1us, during the conversion from tb-ticks to microseconds,
+> in the current code, the result becomes zero. This is incorrect as it
+> puts a CEDE state on par with the snooze state.
 > 
-> Yes, the current design of syscore callback needs non-boot CPUs offline.
-> Considering the following case: in s2idle flow, there is a status that
-> only one CPU is alive and other CPUs have enter deepest idle state.
-> This situation is similar to getting non-boot CPUs offline, though all
-> CPUs are online from kernel's perspective.
+> [...]
 
-It is only similar AFAICS.
+Applied to powerpc/fixes.
 
-You don't migrate interrupts during s2idle, for example.
+[1/1] cpuidle: pseries: Fix CEDE latency conversion from tb to us
+      https://git.kernel.org/powerpc/c/1d3ee7df009a46440c58508b8819213c09503acd
 
-> Reply from Stephen mentioned that if an operation is needed in both
-> S2R and s2idle, CPU_PM notifier can be utilized. 
-> In my opinion, CPU_PM notifier is particularly for CPU entering idle
-> state. In contrast, syscore callback is for system going low power
-> state. There exists semantic difference between these two callbacks.
-
-Fair enough.
-
-> Could the current design of syscore callback be re-designed as
-> system-wide suspend callback?
-
-No, it couldn't.
-
-> Proposed suspend flow in this patch:
-> 
->     Freeze tasks
->         |
->         V
->     Device suspend callbacks
->         |
->         |-------------s2idle----------
->         |                            |
->         V                            |
->     Disable nonboot CPUs    Is this CPU last core to enter idle?
->         |                            |
->         V                            |-------------
->     syscore callbacks                |            |
->         |                           No           Yes
->         V                            |            |
->     platform suspend                 V            V
->                                  enter idle     syscore callback
->                                                   |
->                                                   V
->                                                 enter idle
-> 
-
-The primary problem with this is that on some architectures (x86 at least)
-the syscore things cannot be run during the s2idle flow.
-
-Also there is a way to invoke them through the platform ops as I said.
-
-Thanks!
-
-
-
+cheers
