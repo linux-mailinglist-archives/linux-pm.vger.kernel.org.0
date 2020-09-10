@@ -2,131 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14568263F8F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 10:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D42263FFC
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 10:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729988AbgIJIVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 04:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730268AbgIJIUU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 04:20:20 -0400
-Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2544C061795
-        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 01:19:16 -0700 (PDT)
-Received: by mail-vk1-xa43.google.com with SMTP id r78so1348884vke.11
-        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 01:19:16 -0700 (PDT)
+        id S1730450AbgIJIbD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 04:31:03 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:61294 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730356AbgIJIYj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 04:24:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1599726278; x=1631262278;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Yyq2EDCS2vKZmH5eLOYYicNPIXcRgkd+H8Ca+7FcXOc=;
+  b=cj/9uAeAlzEQFS2eT6rVQ1IFXEBDChgI2LEhqtY4jULOSg+toOJ/EPDz
+   fNwmimX5eNLs3iyo+7O2YceRwhb9OjNUoZI8ftb9utA8PClcPnH7MpT1G
+   B6a5d2HZh3q+SGlLj0Pbsqa/hCRIPnuBHpdhudv4uhs69zm1L9c5ktYw1
+   9PTVwt0Cv+rCyC7qXPtBQ2GMQwonSg3jWbTZcRAGCIgPV+Ln+ugGRPtBO
+   k3K/WKJbsdPkSSfjZ503xX9W6ZwYmyBwxYG5DNA1VQCA/kuEe3/x95wD5
+   mOpdLX6I4EyWUalzUhElLrvDCHUugaPehbn8/DGdfAgFUqTYgr108q8ud
+   A==;
+IronPort-SDR: ftLnKVJWWVARs6xE60k80lvcWvEF9LnNReTXi2pIeHcFd1pOvCbq5YtWKyNQKbgntoF3PJrEzZ
+ yGkW+CSPkTanXwFzN+yaXQvli7N+J9TDXD7EYbxy0puKvjPuscpCKfJznonLOJ1RssHzyGXWld
+ FEmXkljrjgcGdATyyJ52ywdn6YOedSeAiw39Unb2/iAlFSlX4xOSaPEQ1oDzJo6jB0orKUYHob
+ 8TPZOmriiXyQ/YsxyXR92KLsMxoOl9I7rBMGKN1j5VU4WXWSblm45hfVc18o3BtgyAUNaPQFAh
+ yGo=
+X-IronPort-AV: E=Sophos;i="5.76,412,1592895600"; 
+   d="scan'208";a="91279822"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Sep 2020 01:24:26 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 10 Sep 2020 01:24:22 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Thu, 10 Sep 2020 01:24:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=itElKv30dbsNhtpfiKLkCOXYopTjtkZ9zEAzRioxDAmgifjIhq6QVV/lc6kfk0TIuSPX1OZAUrSDWVumK4tLXffHjOu4WRZugnRrQRvvAAgpCE7V1+zJn3PyPC0j6/G2aAtgoGzj2pGQVkq35HD5i3ZvkV68QA+ILQVSTYqBA+q+9/IrmOIYHSq5T7WknjE5tqhKpcoEPyxu0LHlp9MR91+nL0ffI8mb6UZ8R19c1Z8LDep20pLw6r6tPamTWrMJ0hAxNX35wsV6GMNcE6JFgdV5g0JfNl3CssuMyPR0eMKE/T9DeShiio5DN/5SR2TytdQ7bAPBSy6lDzF4x9zLmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/BE3UD6DmJgxUoBN4fm1O92DvDQlokRm7L2E5H8tZ/w=;
+ b=aw+E7ncriQCfdGAUGrQZUE/X01NpnQkPaMKg98SJOA6wY+Umt71j+ZM3yJT4X2e4Z3a1Nf1QLyhCWVWM5woSGiSrFRCtJ7Y+axoK5muAMFzy8K/q5zDKA+XhU43kGZTFp6nun78Bc4vdtny2nuHntBDykocQKzISfMU5cKF8KWDvMYiCfneJuxF9RID1NNZC8H0s/Flemt9H/8te0Tc5X4Wgyt0zHH2qftbjcUtGDix9JdV3FbJj+OP489jnkeYYjXBTFPWiX1axHsYPxivLdaeMUWo+d8svoqnPmKjaFYR7H+Czrws9kPnJiEDFXxT1EnrZJjVbs3wTlpHvyWTwVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Uk61sTaccx0/hQSlwACkFUhiMOK87nMWadgiJgRmzUw=;
-        b=Yq+j8D+Zda0smKuiw3v7rNXhIDyeTuPUck5pyNh+qPN84bKkTZfDzP+H/gRRv2m4HS
-         6MWItL/yY2SrGp6RbOYgC9y93bfZqjXynvVA0V379DvvQR6SrL/WIt+PRnWlEBx0sV4/
-         Go6Ly6CmM4x2XRnO5jPB8hlnWJyK2HnLylRmr4prouwyrAn17s+fVchnH3il+Mgl223a
-         HovqDK05j7yg/prJUSWxLkZM74MXg+ylGZiLaZYLLDN99vLE0GPpPdYEHbho/R84JjVf
-         GG7pGEyGrh4X/dg7sinQqugc9FzN25uG01lOmxt7jWSH6XLfhYoirBLTpZpHlyldpsyA
-         +EWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Uk61sTaccx0/hQSlwACkFUhiMOK87nMWadgiJgRmzUw=;
-        b=YEMlq7PtZtxrsc0VZL8wTyi6kcUx4WrOhUOFlX0H5s5EceeFX+wKLfSwd6PDgNbk2Y
-         5UE1XOiQmVhqeDr7DaDAaNyi0Lb7kBzDmIC1mm/MmgQqzQ6vzUDISI0GMoyltjNv0yfv
-         CIixIPW896mB/tKhldc+vVzNBEosw8aDApmo8GFG99f0CxCGHP5bGc2eFCnqwjlvY//G
-         CUVs+jfgngdhS7Y4tgpJtTr+15IfdQ0JMnyi/Ye34erQKao3OIaT/3/jFGaW+ZSuFbMY
-         OAANlUTtJZ6W8JdiEQ9sDQYQm+kWS5h2TcEb4UBK4RdVdcYXJGJpFzrGQjvmd7O4L/MZ
-         lG4g==
-X-Gm-Message-State: AOAM530kVQK7hYVLUkaE0y8YnAsDimMwJcFmiAVresBL+/mMbTXKdL11
-        UMZHtD++e0jPHnpDAMREVedIFxMhxzzVYbrysD1kbQ==
-X-Google-Smtp-Source: ABdhPJw3pZq9C5u57EnFxdNKPbvGPfqyEXBvz2ddeMDd27lufyfFe3J53FBP0DF2Cnb7F2JBXZFxeAbzyA1ZbcAMB6Q=
-X-Received: by 2002:a1f:141:: with SMTP id 62mr3232992vkb.2.1599725954938;
- Thu, 10 Sep 2020 01:19:14 -0700 (PDT)
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/BE3UD6DmJgxUoBN4fm1O92DvDQlokRm7L2E5H8tZ/w=;
+ b=nHI74pvWX9voKu6qjF0Kfqy5Sc0AGs+NSCuuZ7eJDs13Cd2LSPaaZXvb/ZjcOfT09uuWHM6p5pmozbJumZzu3LweHgExn3n4A3SazKZjxpV5HJ3Rfd1IYhfQ1vrLcAgTG/9j9wdLhYAt6RaeZr3RJVUTfyzdVhJVMpRZmeQD3Xk=
+Received: from BYAPR11MB3477.namprd11.prod.outlook.com (2603:10b6:a03:7c::28)
+ by BY5PR11MB4307.namprd11.prod.outlook.com (2603:10b6:a03:1bd::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Thu, 10 Sep
+ 2020 08:24:22 +0000
+Received: from BYAPR11MB3477.namprd11.prod.outlook.com
+ ([fe80::d1dd:de76:4e99:7c85]) by BYAPR11MB3477.namprd11.prod.outlook.com
+ ([fe80::d1dd:de76:4e99:7c85%7]) with mapi id 15.20.3348.019; Thu, 10 Sep 2020
+ 08:24:21 +0000
+From:   <Nicolas.Ferre@microchip.com>
+To:     <joe@perches.com>, <linux-kernel@vger.kernel.org>,
+        <trivial@kernel.org>
+CC:     <kees.cook@canonical.com>, <ndesaulniers@google.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <kvmarm@lists.cs.columbia.edu>, <linux-mips@vger.kernel.org>,
+        <linux-s390@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>,
+        <linux-atm-general@lists.sourceforge.net>,
+        <netdev@vger.kernel.org>, <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <nouveau@lists.freedesktop.org>,
+        <linux-input@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <dm-devel@redhat.com>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <intel-wired-lan@lists.osuosl.org>, <oss-drivers@netronome.com>,
+        <linux-usb@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-nvme@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <storagedev@microchip.com>, <sparclinux@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-parisc@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
+        <linux-afs@lists.infradead.org>, <ceph-devel@vger.kernel.org>,
+        <linux-nfs@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <dccp@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <linux-sctp@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <Eugen.Hristev@microchip.com>,
+        <Ludovic.Desroches@microchip.com>
+Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+Thread-Topic: [trivial PATCH] treewide: Convert switch/case fallthrough; to
+ break;
+Thread-Index: AQHWh0vIy44IYF5A+kuaVLhVJ6ZdVw==
+Date:   Thu, 10 Sep 2020 08:24:21 +0000
+Message-ID: <c2929349-ca60-486d-3cad-a83321587c5f@microchip.com>
+References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+authentication-results: perches.com; dkim=none (message not signed)
+ header.d=none;perches.com; dmarc=none action=none header.from=microchip.com;
+x-originating-ip: [2a01:cb1c:8c:b200:d11f:426b:f805:cbe2]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e351a690-85b8-47aa-f38f-08d85562eb8c
+x-ms-traffictypediagnostic: BY5PR11MB4307:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR11MB4307E000D4DA0597A74F9A31E0270@BY5PR11MB4307.namprd11.prod.outlook.com>
+x-bypassexternaltag: True
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rwdyTK6oNx+pJXY+VYO8jlUUcB5LsJW3ZQhau0YhpysDI1uZrWJ+5KkXmnJNABVwRpL8mxf24YLlXWyB3yirjaXQ/srQXMAk73DmLRMX7FFSd/uWs59kXpR0gz7YIDZpkdEHXR8Ks47+GSWaldjUxHW1dDgr9Bml1Ile+LfAjDi5j/2WavAN5DcmiJhVV86brSYApECTF1sqFMiIoIfargGWcDiXjLp0xoZy1wTF5cYKXSjd2DGvBQRASj+UAeO1Pg9WFEX+2sgdqqFJ/HgGUzu9uaOU20bpHBTTwQw7yoVGql5DTXE+Xr30INsHw1gSuTyHpcI3KtFhJi6QDKEIl6ZhO0EwhNcia52tqGsvyefiqtKNAZSsmZhN9N/OPaNO
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3477.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(346002)(396003)(366004)(39860400002)(36756003)(6506007)(4744005)(53546011)(31686004)(4326008)(8676002)(31696002)(6512007)(186003)(478600001)(2616005)(107886003)(83380400001)(54906003)(110136005)(5660300002)(316002)(2906002)(6486002)(76116006)(71200400001)(91956017)(66476007)(66556008)(8936002)(66446008)(66946007)(64756008)(7416002)(7406005)(86362001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: CK3jnFjP+DaxTGoKSfijNwQSDSi+zYRAANKGWEe0w6BHoCBr3jeo8QFCPrdi+OpT1qz3lmVs3mCRxOmBtUGK5WN0AxOt0wvA3bBJRUyjBicAE+lDMsP7vy1cft0wcXBrEZgdgqF7VD1sQj+khtUTD5EsNnntahNSIGqwN+VZCKQ1QzjPtAbjR2oPP/LrPDKYk//qfKAomMDI7R2fpR0tTUzDMz48DEh+PQCCmr/krCP8U3KTB6FIGhilgI7TLOfsJcLS9qlGh0PGNeVy7GIerGvFEQfkR4YdlzVLyEKvYmf4EXR5wArGM6eS5MMbLL4vYVjGrhiNaJt+earGuTqyYiFZbc+uujPQG9qCWcGOhC7tSaJvV/BIkb7lV8g/yXvxSbayqkCXQ/s7jX+D9fM+ZWNqgoWbSd/P+uuCP7/8e33PXHOet1lAM1sUIHpLxk8RCyecYucN6ijlgMa8IdFcV7U+ZA3zH97/7OWVEtd6OgF0CR21Hki2raxtlS5sca+cVURYu2gcHFAMLULSgaOruMk5qcKurGsgOTL9NDY1H7Jpn1+7gJ+bMQIt2b5OxDFW2nSizeQSfqlNFoprGc6aS71OSv+MwkoEfhBi640q5sGrdYfhliWNj5HhbdiTLJVy1TBmrhSIzi6KODxmStaMlQzfe8a1Otv3042csYwXaPKEPC9i6WiYuHbWrvEwzSbxIsAABeXwAiTaxYC040N9rw==
+Content-Type: text/plain; charset="Windows-1252"
+Content-ID: <0B2726412C35D14B94E876CA5EB14904@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20200821204921.32536-1-sibis@codeaurora.org> <159804608868.334488.2486130699850456264@swboyd.mtv.corp.google.com>
- <20200824164212.GA3715@yoga> <159834001729.334488.11862381163144726708@swboyd.mtv.corp.google.com>
- <20200825175345.GC3715@yoga> <0101017476da3906-412a2e35-dc56-43ee-8644-83a998279c2d-000000@us-west-2.amazonses.com>
-In-Reply-To: <0101017476da3906-412a2e35-dc56-43ee-8644-83a998279c2d-000000@us-west-2.amazonses.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 10 Sep 2020 10:18:38 +0200
-Message-ID: <CAPDyKFq=R9_4r+T8V7Fn2PvLr5HicKOTQMAGh4Lg3-Q=KaOiDg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] PM / Domains: Add GENPD_FLAG_NO_SUSPEND/RESUME flags
-To:     Sibi Sankar <sibis@codeaurora.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Andy Gross <agross@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        linux-kernel-owner@vger.kernel.org, clew@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3477.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e351a690-85b8-47aa-f38f-08d85562eb8c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2020 08:24:21.4887
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JW3oElxXZwEvl6R2z5GFIVkcX/+UpGKsEW8MKFxofB9W1y9KDMUkM69WnQUZrCOB/0mudh2ADBhfj0C34gWZhgepCXhZk3LC9prwi+CGg3E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4307
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 10 Sep 2020 at 09:23, Sibi Sankar <sibis@codeaurora.org> wrote:
->
-> On 2020-08-25 23:23, Bjorn Andersson wrote:
-> > On Tue 25 Aug 02:20 CDT 2020, Stephen Boyd wrote:
-> >> Quoting Bjorn Andersson (2020-08-24 09:42:12)
-> >> > On Fri 21 Aug 14:41 PDT 2020, Stephen Boyd wrote:
-> > [..]
-> >> > > I find it odd that this is modeled as a power domain instead of some
-> >> > > Qualcomm specific message that the remoteproc driver sends to AOSS. Is
-> >> > > there some sort of benefit the driver gets from using the power domain
-> >> > > APIs for this vs. using a custom API?
-> >> >
-> >> > We need to send "up" and "down" notifications and this needs to happen
-> >> > at the same time as other standard resources are enabled/disabled.
-> >> >
-> >> > Further more, at the time the all resources handled by the downstream
-> >> > driver was either power-domains (per above understanding) or clocks, so
-> >> > it made sense to me not to spin up a custom API.
-> >> >
-> >>
-> >> So the benefit is not spinning up a custom API? I'm not Ulf, but it
-> >> looks like this is hard to rationalize about as a power domain. It
-> >> doesn't have any benefit to model it this way besides to make it
-> >> possible to turn on with other power domains.
-> >>
-> >> This modem remoteproc drivers isn't SoC agnostic anyway, it relies on
-> >> SMEM APIs, so standing up another small qmp_remoteproc_booted() and
-> >> qmp_remoteproc_shutdown() API would avoid adding a genpd flag here
-> >> that
-> >> probably will never be used outside of this corner-case. There is also
-> >> some get/put EPROBE_DEFER sort of logic to implement, but otherwise it
-> >> would be possible to do this outside of power domains, and that seems
-> >> better given that this isn't really a power domain to start with.
-> >
-> > In later platforms a few new users of the AOSS communication interface
-> > is introduced that certainly doesn't fit any existing API/framework in
-> > the kernel. So the plan was to pretty much expose qmp_send() to these
-> > drivers.
-> >
-> > My worry with using this interface is that we'll probably have to come
-> > up with some DT binding pieces and probably we'll end up adding yet
-> > another piece of hard coded information in the remoteproc drivers.
-> >
-> > But I'm not against us doing this work in favor of not having to
-> > introduce a one-off for this corner case.
->
-> Bjorn/Stephen,
->
-> So the consensus is to stop modelling
-> aoss load_state as pds and expose qmp_send
-> to drivers?
+Joe,
 
-Would that mean qmp_send would have to be called from generic drivers?
-Then, please no. We want to keep drivers portable.
+Please drop this chunk: it's a successive controller version number=20
+which are all backward compatible with "fallthrough" on each case so=20
+removing from this last one makes it inconsistent.
 
-Kind regards
-Uffe
+In sort: NACK for atmel-mci.
+
+Best regards,
+   Nicolas
+
+
+On 09/09/2020 at 22:06, Joe Perches wrote:
+> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+> index 444bd3a0a922..8324312e4f42 100644
+> --- a/drivers/mmc/host/atmel-mci.c
+> +++ b/drivers/mmc/host/atmel-mci.c
+> @@ -2435,7 +2435,7 @@ static void atmci_get_cap(struct atmel_mci *host)
+>          case 0x100:
+>                  host->caps.has_bad_data_ordering =3D 0;
+>                  host->caps.need_reset_after_xfer =3D 0;
+> -               fallthrough;
+> +               break;
+>          case 0x0:
+>                  break;
+>          default:
+
+
+--=20
+Nicolas Ferre
