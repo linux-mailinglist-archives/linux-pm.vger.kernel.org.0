@@ -2,103 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE272649CC
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 18:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433BE264A8E
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 19:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgIJQbz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 12:31:55 -0400
-Received: from mo4-p01-ob.smtp.rzone.de ([81.169.146.166]:28205 "EHLO
-        mo4-p01-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgIJQ0Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 12:26:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1599755174;
-        s=strato-dkim-0002; d=gerhold.net;
-        h=Message-ID:Subject:Cc:To:From:Date:X-RZG-CLASS-ID:X-RZG-AUTH:From:
-        Subject:Sender;
-        bh=j4d59Y0kBRiNJToFL0y0NnSJVvNdlrKiKeGoVArTf0s=;
-        b=HIA+ZBYA574Emlou3jF1jYGgRGfLuaARiCzmLG5hEsjNclTbbG+yL9/tpa9RzQticQ
-        HHxlevd93LFFM+gOTsd09oke69aN22+OIk5SAGaircSe+vs8oORzzOc0azFLMXlBnRYr
-        Bk8z6blmF1M5nOKcM6hayOtocGHneO6u4nw5jK+249lgeiMcLI79OR632fAKX2g9NH4a
-        N4oPW04bV96nV66BFfMQ01TiOMwR0qHT0Lre3laEp7pKbDmHf3meEV2utV439zIxTQYy
-        5t2DD2mm9fbWk56pen56iPZfqwe1VeO0/1ZiD6OEoSves6Ubyu2zaYaSMs8UR0s+hBwY
-        NYDg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u26zEIdhPgVC7iy9yGr7ESbX"
-X-RZG-CLASS-ID: mo00
-Received: from gerhold.net
-        by smtp.strato.de (RZmta 46.10.7 DYNA|AUTH)
-        with ESMTPSA id g0b6c1w8AGQDJN6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-        Thu, 10 Sep 2020 18:26:13 +0200 (CEST)
-Date:   Thu, 10 Sep 2020 18:26:10 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Qcom clock performance votes on mainline
-Message-ID: <20200910162610.GA7008@gerhold.net>
+        id S1727796AbgIJRD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 13:03:57 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:56124 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726781AbgIJRBv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 13:01:51 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08AGjlEb130848;
+        Thu, 10 Sep 2020 11:45:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1599756347;
+        bh=pnk4f1iUfHWALtHgD4FAJQqVHJQ5Jg8J1SsT1dEO7VQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=uNSxyPNzboF/odzvryv+0n/zqHXAX4Mp9Zo6I4Gx0ihDxBXp8lCjA5LKBRP+dsziF
+         G6+9LyY41x/13Kmk19Ula+stpdDvjUqL9xY5B+35qIhDaiiQPArzlVWiwloZnPPNHN
+         FRMYf334NMQZ1WGKb2zY5r3snSyFUEx/2Yc9zEQg=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08AGjl2C107433
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Sep 2020 11:45:47 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 10
+ Sep 2020 11:45:46 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 10 Sep 2020 11:45:46 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08AGjjGn022616;
+        Thu, 10 Sep 2020 11:45:46 -0500
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+To:     <sre@kernel.org>, <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <dmurphy@ti.com>, Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: [PATCH v3 1/2] dt-bindings: power: Add the bq256xx dt bindings
+Date:   Thu, 10 Sep 2020 11:45:33 -0500
+Message-ID: <20200910164534.16987-2-r-rivera-matos@ti.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200910164534.16987-1-r-rivera-matos@ti.com>
+References: <20200910164534.16987-1-r-rivera-matos@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Stephen, Hi Rajendra,
+Add the bindings for the bq256xx series of battery charging ICs.
 
-while working on some MSM8916 things I've been staring at the downstream
-clock-gcc-8916.c [1] driver a bit. One thing that confuses me are the
-voltage/performance state votes that are made for certain clocks within
-the driver. Specifically lines like
+Datasheets:
+- https://www.ti.com/lit/ds/symlink/bq25600.pdf
+- https://www.ti.com/lit/ds/symlink/bq25601.pdf
+- https://www.ti.com/lit/ds/symlink/bq25600d.pdf
+- https://www.ti.com/lit/ds/symlink/bq25601d.pdf
+- https://www.ti.com/lit/ds/symlink/bq25611d.pdf
+- https://www.ti.com/lit/ds/symlink/bq25618.pdf
+- https://www.ti.com/lit/ds/symlink/bq25619.pdf
 
-    VDD_DIG_FMAX_MAP2(LOW, 32000000, NOMINAL, 64000000),
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+---
+ .../bindings/power/supply/bq256xx.yaml        | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq256xx.yaml
 
-on certain clocks like UART, I2C or SPI. There does not seem to be
-anything equivalent in the mainline clock driver at the moment.
+diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+new file mode 100644
+index 000000000000..8cc2242f7df0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
++# Copyright (C) 2020 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq256xx.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: TI bq256xx Switch Mode Buck Charger
++
++maintainers:
++  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
++
++description: |
++  The bq256xx devices are a family of highly-integrated battery charge
++  management and system power management ICs for single cell Li-ion and Li-
++  polymer batteries.
++
++  Datasheets:
++    - https://www.ti.com/lit/ds/symlink/bq25600.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25601.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25600d.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25601d.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25611d.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25618.pdf
++    - https://www.ti.com/lit/ds/symlink/bq25619.pdf
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25600
++      - ti,bq25601
++      - ti,bq25600d
++      - ti,bq25601d
++      - ti,bq25611d
++      - ti,bq25618
++      - ti,bq25619
++
++  reg:
++    maxItems: 1
++
++  ti,watchdog-timer:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description: |
++      Watchdog timer in ms. 0 (default) disables the watchdog
++    minimum: 0
++    maximum: 160000
++    enum: [ 0, 40000, 80000, 160000]
++
++  input-voltage-limit-microvolt:
++    description: |
++       Minimum input voltage limit in µV with a 100000 µV step
++    minimum: 3900000
++    maximum: 5400000
++
++  input-current-limit-microamp:
++    description: |
++       Maximum input current limit in µA with a 100000 µA step
++    minimum: 100000
++    maximum: 3200000
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++
++examples:
++  - |
++    bat: battery {
++      compatible = "simple-battery";
++      constant-charge-current-max-microamp = <2040000>;
++      constant-charge-voltage-max-microvolt = <4352000>;
++      precharge-current-microamp = <180000>;
++      charge-term-current-microamp = <180000>;
++    };
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++
++      clock-frequency = <400000>;
++
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      charger@6b {
++        compatible = "ti,bq25601";
++        reg = <0x6b>;
++        monitored-battery = <&bat>;
++
++        interrupt-parent = <&gpio1>;
++        interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++        watchdog-timer = <40000>;
++
++        input-voltage-limit-microvolt = <4500000>;
++        input-current-limit-microamp = <2400000>;
++       };
++    };
++...
+-- 
+2.28.0
 
-As far as I understand from related discussions on mailing lists [2],
-these performance votes are not supposed to be added to the clock
-driver(s), but rather as required-opps within OPP tables of all the
-consumers. Is that correct?
-
-As a second question, I'm wondering about one particular case:
-I've been trying to get CPR / all the CPU frequencies working on MSM8916.
-For that, I already added performance state votes for VDDMX and CPR as
-required-opps to the CPU OPP table.
-
-After a recent discussion [3] with Viresh about where to enable power
-domains managed by the OPP core, I've been looking at all the
-performance state votes made in the downstream kernel again.
-
-Actually, the A53 PLL used for the higher CPU frequencies also has such
-voltage/performance state votes. The downstream driver declares the
-clock like [4]:
-
-		.vdd_class = &vdd_sr2_pll,
-		.fmax = (unsigned long [VDD_SR2_PLL_NUM]) {
-			[VDD_SR2_PLL_SVS] = 1000000000,
-			[VDD_SR2_PLL_NOM] = 1900000000,
-		},
-		.num_fmax = VDD_SR2_PLL_NUM,
-
-which ends up as votes for the VDDCX power domain.
-
-Now I'm wondering: Where should I make these votes on mainline?
-Should I add it as yet another required-opps to the CPU OPP table?
-
-It would be a bit of a special case because these votes are only done
-for the A53 PLL (which is only used for the higher CPU frequencies, not
-the lower ones)...
-
-Thanks in advance!
-Stephan
-
-[1]: https://source.codeaurora.org/quic/la/kernel/msm-3.10/tree/drivers/clk/qcom/clock-gcc-8916.c?h=LA.BR.1.2.9.1-02310-8x16.0
-[2]: https://lore.kernel.org/linux-arm-msm/20190129015547.213276-1-swboyd@chromium.org/
-[3]: https://lore.kernel.org/linux-pm/20200826093328.88268-1-stephan@gerhold.net/
-[4]: https://source.codeaurora.org/quic/la/kernel/msm-3.10/tree/drivers/clk/qcom/clock-gcc-8916.c?h=LA.BR.1.2.9.1-02310-8x16.0#n354
