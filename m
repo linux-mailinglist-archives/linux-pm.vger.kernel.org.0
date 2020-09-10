@@ -2,75 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC86264D86
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 20:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1571264D35
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 20:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgIJSnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 14:43:41 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:58620 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgIJSRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 14:17:52 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08AGjjV5057212;
-        Thu, 10 Sep 2020 11:45:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1599756345;
-        bh=mGo45HNyVsJh9MrMbASyD3eQepVmN2osS7RHtgRFbMM=;
-        h=From:To:CC:Subject:Date;
-        b=KpyFds9ngk+ftnoC+TNLyXN92cT84SbXJLXajIAYTz5FwsG22luBX0DJzURyLg39k
-         DOU3fmROxeT7iO0daUhdjutxiS1zpkPVwcxM8//FFHyHKjtg7w/fwZh9sJYLNGEWNR
-         ALut7W1Tc1bzjnKbO2TBzapSPgQ5C5m3RuS1qVf4=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08AGjjoe119473
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Sep 2020 11:45:45 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 10
- Sep 2020 11:45:45 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Thu, 10 Sep 2020 11:45:44 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08AGjhP7022560;
-        Thu, 10 Sep 2020 11:45:44 -0500
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-To:     <sre@kernel.org>, <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <dmurphy@ti.com>, Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Subject: [PATCH v3 0/2]  Introduce the BQ256XX family of chargers
-Date:   Thu, 10 Sep 2020 11:45:32 -0500
-Message-ID: <20200910164534.16987-1-r-rivera-matos@ti.com>
-X-Mailer: git-send-email 2.28.0
+        id S1726931AbgIJSff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 14:35:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52090 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726984AbgIJSeb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 10 Sep 2020 14:34:31 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A1BC2087C;
+        Thu, 10 Sep 2020 18:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599762869;
+        bh=SRgE3e+cWOee6V2K0Aw2EKLPOh+GtgrkQeeqC/WhKkI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iRRR8DCEphKxCESUIOWKSYOGUMgScZXbeOeEcg0yOyRFJbnqmaYlOsiksuwiLjobQ
+         M4uyBus+mshUVHZZ3JgPrAGSIFrgxOqZoEzzZ37YKf8U3tBk8av9U+Y8144ibkRREk
+         PXnrMHTG6GY6MWdGQ00DeKQVPH9cYf3H7WrJDCZw=
+Received: by mail-ej1-f51.google.com with SMTP id z23so10139662ejr.13;
+        Thu, 10 Sep 2020 11:34:29 -0700 (PDT)
+X-Gm-Message-State: AOAM5309MZH2hu7qkldGTU7mIu6vR+EodTzY1BZTBk5+Pn51YJBCdv8c
+        7Oe/ExFWFSLC8z+1Ugwp+aJ3u3mdF3wKah6FmvI=
+X-Google-Smtp-Source: ABdhPJyqKY0eU5W2IUZveRSdHihYXkn66844ltcGWOZGAN2rPhOWdGk7NLfovjoBdKlH8jBLp9/fUyrxxJec5WeF4cE=
+X-Received: by 2002:a17:906:af53:: with SMTP id ly19mr9924685ejb.503.1599762867837;
+ Thu, 10 Sep 2020 11:34:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200904152404.20636-1-krzk@kernel.org> <20200904152404.20636-13-krzk@kernel.org>
+ <CAL_Jsq+tGQhkqtQszOx7nvr1PR=YFz2p1=OnWQ8JxmSg4qNkHA@mail.gmail.com>
+ <20200907060958.GA4525@kozik-lap> <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
+In-Reply-To: <CAL_JsqJZ=PxDxH-=GUUg7WadZrAKjYbtE0sQ8h9YDGOGx6Ykwg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Thu, 10 Sep 2020 20:34:15 +0200
+X-Gmail-Original-Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
+Message-ID: <CAJKOXPdVDGhdD5hMuXBDBa6XiaYRAK86E2G1gpGZSqnMLiY+Lg@mail.gmail.com>
+Subject: Re: [PATCH v3 12/14] dt-bindings: mtd: gpmi-nand: Fix matching of
+ clocks on different SoCs
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     linux-clk <linux-clk@vger.kernel.org>, devicetree@vger.kernel.org,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+On Tue, 8 Sep 2020 at 18:51, Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Mon, Sep 7, 2020 at 12:10 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> >
+> > On Fri, Sep 04, 2020 at 04:36:39PM -0600, Rob Herring wrote:
+> > > On Fri, Sep 4, 2020 at 9:25 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > >
+> > > > Driver requires different amount of clocks for different SoCs.  Describe
+> > > > these requirements properly to fix dtbs_check warnings like:
+> > > >
+> > > >     arch/arm64/boot/dts/freescale/imx8mm-beacon-kit.dt.yaml: nand-controller@33002000: clock-names:1: 'gpmi_apb' was expected
+> > > >
+> > > > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> > > >
+> > > > ---
+> > > >
+> > > > Changes since v1:
+> > > > 1. Do not require order of clocks (use pattern).
+> > >
+> > > To the extent that you can, you should fix the order in dts files
+> > > first. If we just adjust the schemas to match the dts files, then
+> > > what's the point?
+> >
+> > The DTSes do not have mixed order of clocks between each other, as fair
+> > as I remember. It was fix after Sasha Hauer comment that order is not
+> > necessarily good.
+> >
+> > We have the clock-names property, why enforcing the order?
+>
+> Because DT/OpenFirmware has always had a defined order for property
+> values. '*-names' is just extra information.
 
-This patchset introduces the bq256xx family of charging ICs. The bq256xx
-ICs are highly integrated, buck, switching chargers intended for use in 
-smartphones, tablets, and portable electronics.
+Thanks for the explanation. There are few nonobvious requirements
+about writing schema which seems many (including me) miss. It might be
+a good topic for some conference. Too bad ELCE CFP ended some time
+ago. :)
 
-Ricardo Rivera-Matos (2):
-  dt-bindings: power: Add the bq256xx dt bindings
-  power: supply: bq256xx: Introduce the BQ256XX charger driver
-
- .../bindings/power/supply/bq256xx.yaml        |   97 +
- drivers/power/supply/Kconfig                  |   11 +
- drivers/power/supply/Makefile                 |    1 +
- drivers/power/supply/bq256xx_charger.c        | 1769 +++++++++++++++++
- 4 files changed, 1878 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/bq256xx.yaml
- create mode 100644 drivers/power/supply/bq256xx_charger.c
-
--- 
-2.28.0
-
+Best regards,
+Krzysztof
