@@ -2,50 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFF3263B9E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 05:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC77263C08
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 06:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725773AbgIJDso (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Sep 2020 23:48:44 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:49871 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729822AbgIJDsb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Sep 2020 23:48:31 -0400
-X-UUID: 2df7bd4b00f14007921cf70cb6f6ce8e-20200910
+        id S1725876AbgIJEbT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 00:31:19 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:8710 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725372AbgIJEbK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 00:31:10 -0400
+X-UUID: 032b2ff9dcec4b6c949ac288fe68e278-20200910
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=h4KTk5shQrSyQDIxPJZftxCwDg7ngCtftlyh+RM3c1o=;
-        b=TWtYHWM+f2I2op8pMxtixr3wdhqoFJJr9dvWVQBh0Fp+CtK87F3Bhu4kFBd2fXNoYTiLTUQG9VbLClJ04eRvkkosGnHB4H6sG8U2rEdSFs4+LvPJXgEzSz0mD+GdX8nGaL9bEgC8CtnPIR1XWAHyvwEZbfpABlX6KoR7WOhyX2A=;
-X-UUID: 2df7bd4b00f14007921cf70cb6f6ce8e-20200910
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=2htd7M6DykqGF8tAcRkyCSKqlUafEqHfM5E33nlVBCI=;
+        b=X9SoaKfN68aafE6YjUwaDonkAVajPry3+ryDpprnRWdjEYlVTpZn/85q+Hl19fFRYfcAZUPINoqwRf7ytaQeubkpCw+0HHtR6XZ4Ko8+ZnPudEUXkDfKdR04vdEtFNRMmWGaWljyJfdr3tcu3l2hVSGSVhvrNzR+0sox1jh40Po=;
+X-UUID: 032b2ff9dcec4b6c949ac288fe68e278-20200910
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
         (envelope-from <hector.yuan@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 379000295; Thu, 10 Sep 2020 11:48:26 +0800
+        with ESMTP id 127319970; Thu, 10 Sep 2020 12:31:05 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 10 Sep 2020 11:48:21 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 10 Sep 2020 12:31:02 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 10 Sep 2020 11:48:22 +0800
-Message-ID: <1599709702.7042.1.camel@mtkswgap22>
-Subject: Re: [PATCH v6 1/2] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
+ Transport; Thu, 10 Sep 2020 12:31:03 +0800
 From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-mediatek@lists.infradead.org>,
+To:     <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <wsd_upstream@mediatek.com>
-Date:   Thu, 10 Sep 2020 11:48:22 +0800
-In-Reply-To: <20200910034245.eqya625p7la33dkc@vireshk-i7>
-References: <1599658476-16562-1-git-send-email-hector.yuan@mediatek.com>
-         <1599658476-16562-2-git-send-email-hector.yuan@mediatek.com>
-         <20200910034245.eqya625p7la33dkc@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
+        <hector.yuan@mediatek.com>
+Subject: [PATCH v7] cpufreq: mediatek-hw: Add support for Mediatek cpufreq HW driver
+Date:   Thu, 10 Sep 2020 12:31:00 +0800
+Message-ID: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: A78FA5853F92044C4771A9B1C8BF1BDA2274661E2593E21FCABB848E93EDED232000:8
+Content-Type: text/plain
 X-MTK:  N
 Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
@@ -53,28 +48,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA5LTEwIGF0IDA5OjEyICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
-IE9uIDA5LTA5LTIwLCAyMTozNCwgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gK3N0YXRpYyB1bnNp
-Z25lZCBpbnQgbXRrX2NwdWZyZXFfaHdfZ2V0KHVuc2lnbmVkIGludCBjcHUpDQo+ID4gK3sNCj4g
-PiArCXN0cnVjdCBjcHVmcmVxX210ayAqYzsNCj4gPiArCXN0cnVjdCBjcHVmcmVxX3BvbGljeSAq
-cG9saWN5Ow0KPiA+ICsJdW5zaWduZWQgaW50IGluZGV4Ow0KPiA+ICsNCj4gPiArCXBvbGljeSA9
-IGNwdWZyZXFfY3B1X2dldF9yYXcoY3B1KTsNCj4gPiArCWlmICghcG9saWN5KQ0KPiA+ICsJCXJl
-dHVybiAwOw0KPiANCj4gV2h5IGRpZG4ndCB5b3UgZHJvcCBwb2xpY3kgYXMgd2UgZGlzY3Vzc2Vk
-IGluIHByZXZpb3VzIHZlcnNpb24gPw0KPiANClNvcnJ5IEkgbWlzc2VkIHRoYXQuIFRoYW5rIHlv
-dS4NCj4gPiArCWMgPSBtdGtfZnJlcV9kb21haW5fbWFwW2NwdV07DQo+ID4gKw0KPiA+ICsJaW5k
-ZXggPSByZWFkbF9yZWxheGVkKGMtPnJlZ19iYXNlc1tSRUdfUEVSRl9TVEFURV0pOw0KPiA+ICsJ
-aW5kZXggPSBtaW4oaW5kZXgsIExVVF9NQVhfRU5UUklFUyAtIDEpOw0KPiA+ICsNCj4gPiArCXJl
-dHVybiBwb2xpY3ktPmZyZXFfdGFibGVbaW5kZXhdLmZyZXF1ZW5jeTsNCj4gDQo+IHBvbGljeS0+
-ZnJlcV90YWJsZSBhbmQgYy0+dGFibGUgYXJlIHNhbWUsIGlzbid0IGl0ID8NCj4gDQpZZXMsIHlv
-dSBhcmUgcmlnaHQuDQo+ID4gK30NCj4gPiArDQo+ID4gK3N0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1f
-ZHJpdmVyIG10a19jcHVmcmVxX2h3X2RyaXZlciA9IHsNCj4gPiArCS5wcm9iZSA9IG10a19jcHVm
-cmVxX2h3X2RyaXZlcl9wcm9iZSwNCj4gPiArCS5yZW1vdmUgPSBtdGtfY3B1ZnJlcV9od19kcml2
-ZXJfcmVtb3ZlLA0KPiA+ICsJLmRyaXZlciA9IHsNCj4gPiArCQkubmFtZSA9ICJtdGstY3B1ZnJl
-cS1odyIsDQo+ID4gKwkJLm9mX21hdGNoX3RhYmxlID0gbXRrX2NwdWZyZXFfaHdfbWF0Y2gsDQo+
-ID4gKwl9LA0KPiA+ICt9Ow0KPiA+ICsNCj4gDQo+IFJlbW92ZSB0aGlzIGJsYW5rIGxpbmUuDQo+
-IA0KT0sNCj4gPiArbW9kdWxlX3BsYXRmb3JtX2RyaXZlcihtdGtfY3B1ZnJlcV9od19kcml2ZXIp
-Ow0KPiA+ICsNCj4gPiArTU9EVUxFX0RFU0NSSVBUSU9OKCJtdGsgQ1BVRlJFUSBIVyBEcml2ZXIi
-KTsNCj4gDQo+IE1heWJlIHdyaXRlIHRoaXMgaXMgIk1lZGlhdGVrIGNwdWZyZXEtaHcgZHJpdmVy
-IiA/DQo+IA0KT0sNCj4gPiArTU9EVUxFX0xJQ0VOU0UoIkdQTCB2MiIpOw0KPiA+IC0tIA0KPiA+
-IDEuNy45LjUNCj4gDQoNCg==
+VGhlIENQVWZyZXEgSFcgcHJlc2VudCBpbiBzb21lIE1lZGlhdGVrIGNoaXBzZXRzIG9mZmxvYWRz
+IHRoZSBzdGVwcyBuZWNlc3NhcnkgZm9yIGNoYW5naW5nIHRoZSBmcmVxdWVuY3kgb2YgQ1BVcy4g
+DQpUaGUgZHJpdmVyIGltcGxlbWVudHMgdGhlIGNwdWZyZXEgZHJpdmVyIGludGVyZmFjZSBmb3Ig
+dGhpcyBoYXJkd2FyZSBlbmdpbmUuIA0KDQpUaGlzIHBhdGNoIGRlcGVuZHMgb24gdGhlIE1UNjc3
+OSBEVFMgcGF0Y2ggc3VibWl0dGVkIGJ5IEhhbmtzIENoZW4NCiBodHRwczovL2xrbWwub3JnL2xr
+bWwvMjAyMC84LzQvMTA5NA0KDQoNCkhlY3Rvci5ZdWFuICgyKToNCiAgY3B1ZnJlcTogbWVkaWF0
+ZWstaHc6IEFkZCBzdXBwb3J0IGZvciBNZWRpYXRlayBjcHVmcmVxIEhXIGRyaXZlcg0KICBkdC1i
+aW5kaW5nczogY3B1ZnJlcTogYWRkIGJpbmRpbmdzIGZvciBNZWRpYVRlayBjcHVmcmVxIEhXDQoN
+CiAuLi4vYmluZGluZ3MvY3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3LnlhbWwgICAgICB8ICAx
+NDEgKysrKysrKysrKw0KIGRyaXZlcnMvY3B1ZnJlcS9LY29uZmlnLmFybSAgICAgICAgICAgICAg
+ICAgICAgICAgIHwgICAxMiArDQogZHJpdmVycy9jcHVmcmVxL01ha2VmaWxlICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgICAxICsNCiBkcml2ZXJzL2NwdWZyZXEvbWVkaWF0ZWstY3B1ZnJl
+cS1ody5jICAgICAgICAgICAgICB8ICAyNzcgKysrKysrKysrKysrKysrKysrKysNCiA0IGZpbGVz
+IGNoYW5nZWQsIDQzMSBpbnNlcnRpb25zKCspDQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFt
+bA0KIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2NwdWZyZXEvbWVkaWF0ZWstY3B1ZnJlcS1o
+dy5j
 
