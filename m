@@ -2,130 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC2626438F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 12:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16A2264404
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 12:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730813AbgIJKQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 06:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
+        id S1730872AbgIJK2G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 06:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730260AbgIJKQi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 06:16:38 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656B6C061756;
-        Thu, 10 Sep 2020 03:16:38 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id s13so5065195wmh.4;
-        Thu, 10 Sep 2020 03:16:38 -0700 (PDT)
+        with ESMTP id S1730856AbgIJK1v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 06:27:51 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6ACC061573
+        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 03:27:50 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id l126so4375448pfd.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 03:27:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=DqY3ytm1lW24L4dBr5ZhfVe1Kl4JG7b6aElJixa0DtQ=;
-        b=TyMbFj/CCKS/yEhzmJyx0SXASPCumWs129eaMWwliNPHoe9nGlJZk2Tsw17ABtL/mL
-         mWke72l5dRMmrFg9ieYmDr1jVfXiMwSmIMEMsNuXAYrMDmbRSlu2SEhpSFeukLVe3cg9
-         +5O+wBu+Jx7JfEyF9JNwdrWebHIVozT6N0VTqxSNEjrIsLOZ3R3dejl3APk21PLF2Oj8
-         +Kb8ACZuKGttnfzoDexc2yloyF3/YUcCQzcDsr90PZvO0KOXZEocClY8eSC4NnFPV4xO
-         lvhsU6vpfnm+pvKWrckJN/8r5bLtL/kaV4lfgkeSIGRnLzVQeQ+BBL7u23nOrwhO07G+
-         JHEw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=LZQZwXwRu53YKSXrfkUA0WjeNn/V21ZhpJY2/Y12QvI=;
+        b=TzPt0pmdNspzQOTFKvx730AMrhJJADm6SbOatLVVciImg0+7g406SmECpp/TEcMqRk
+         286/u47cu3OOeQjZ7+aCD7K2ITZwnS4UZBphCBBO8VqHPC+2sdgt2jbpL5G3Gub1kWuI
+         9+oDszZ9EoGdzvisVMzMJPCPtuDYCqH3/GCiM62RQeEJ10KS1+Y+xCjkFR6M/WadeY9K
+         C/QDyORxqjQN5FX5TLy4T7XMzAZTj9AGV6avnS+GY+ksFyO9AY3OmtdXb2BTGGQrCjkG
+         ll3Cykr20wvPpmBg50/kGoK1zTizaFIWM2Q1FTnjyqpDm98rncC6qZIkvMW9w+D8hRPJ
+         f+ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=DqY3ytm1lW24L4dBr5ZhfVe1Kl4JG7b6aElJixa0DtQ=;
-        b=pmUw8PMCpmIHzSROi++DPz4KjuYgWtg1+Y5TE231Bqiqr8R2N1C3xqoxsiwBj6o1cg
-         uH2BXtjGnMGGoluHj644z5xr7xlqF6U2gftY836V0P2i1eGVJRbd6Kt5NRdxnuMIEUiL
-         l2iyGGPzmqplYZFS9cH521ZnO3ebnALHjbVC/Yy86VDwVom/j1SkB7EzjdV3z887JSV1
-         vBn2sxOKogw/Qr4Wwks6/Tsd6y+ZPpXYP0rtp5M7H0Cz9R+tTExVNwpFLc4afNM8kBHv
-         sPRTlUxnMhVTJVsmuIxtZtgT2oyddp39osiyXrTv8c0GKDU7rTuLb07sCHlL7FBgK0nz
-         qKBw==
-X-Gm-Message-State: AOAM531fehkY9RO3xn+p429hIZbAH2vvrEoH04VI6Oae8Aw4ljanDWzg
-        xuso8Ww0yrtKmBUnjJW0R1g=
-X-Google-Smtp-Source: ABdhPJxz+CTfYBRsr9wPZ8ehDJQEmTq++yYJr4Xo0s0U0R6hQKoUpOmBLcC8LM7TIOPThVoU3WYKbg==
-X-Received: by 2002:a1c:234b:: with SMTP id j72mr7837172wmj.153.1599732997083;
-        Thu, 10 Sep 2020 03:16:37 -0700 (PDT)
-Received: from ziggy.stardust ([213.195.113.201])
-        by smtp.gmail.com with ESMTPSA id a127sm2936155wmh.34.2020.09.10.03.16.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2020 03:16:36 -0700 (PDT)
-Subject: Re: [trivial PATCH] treewide: Convert switch/case fallthrough; to
- break;
-To:     Joe Perches <joe@perches.com>, LKML <linux-kernel@vger.kernel.org>,
-        Jiri Kosina <trivial@kernel.org>
-Cc:     linux-wireless@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        oss-drivers@netronome.com, nouveau@lists.freedesktop.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        dri-devel@lists.freedesktop.org, linux-ide@vger.kernel.org,
-        dm-devel@redhat.com, linux-mtd@lists.infradead.org,
-        linux-i2c@vger.kernel.org, sparclinux@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, linux-rtc@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        dccp@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net,
-        linux-afs@lists.infradead.org, coreteam@netfilter.org,
-        intel-wired-lan@lists.osuosl.org, linux-serial@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Kees Cook <kees.cook@canonical.com>,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, linux-sctp@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org,
-        storagedev@microchip.com, ceph-devel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-parisc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-mips@vger.kernel.org, iommu@lists.linux-foundation.org,
-        netfilter-devel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-Message-ID: <81d852d4-115f-c6c6-ef80-17c47ec4849a@gmail.com>
-Date:   Thu, 10 Sep 2020 12:16:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        bh=LZQZwXwRu53YKSXrfkUA0WjeNn/V21ZhpJY2/Y12QvI=;
+        b=sxANyeQWgmdDfo3zWFKsrofqYPWEWV8a8av60QoQIBnOcPNDwnr98BVK9yeYv1uKda
+         2L7Yu+T67ADpDnULiXwmLHM9oij3eChJJtkC/QvnqqGltzQ1/ZEv9w069T0RznGG8gcE
+         UfuQoXF1EZ1JtDMDw8CVEtB0IMn8rCTsH+qwKzsKTLwLYIC+sqvx2jsJ+AkI+tMGJyfW
+         vJ+GRqjtHt7zxMQ4E/Rqgs4X0Bkp+gt67e6TokldnorTB10AS7mK42YL1QxgIrjMGHwi
+         0fb1L9ZQS0Q5m68Q2I0ksUXWds3puUXj9Iq6MflX1olH+Nq4wF8BkATw2FTlKOygc8lN
+         wplg==
+X-Gm-Message-State: AOAM533KwOEACPlQeqjUoMkHCyUAfJaTKpeRYyalV1AoJKeXHC4KH008
+        ypewu2FnH1CNTgV0kb1aAiUuZg==
+X-Google-Smtp-Source: ABdhPJwo5Opm062PHIrhNSfRQH8EwatTMoUC2rcPFPzEY+vMvxlwb0kB1iL/Zh9vB25/UPh/cJpcBQ==
+X-Received: by 2002:a62:52c8:0:b029:13e:d13d:a10b with SMTP id g191-20020a6252c80000b029013ed13da10bmr4696466pfb.39.1599733669949;
+        Thu, 10 Sep 2020 03:27:49 -0700 (PDT)
+Received: from localhost ([103.208.69.30])
+        by smtp.gmail.com with ESMTPSA id m14sm5392656pfo.202.2020.09.10.03.27.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 03:27:48 -0700 (PDT)
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+X-Google-Original-From: Amit Kucheria <amitk@kernel.org>
+To:     linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org
+Subject: [PATCH] powercap: make documentation reflect code
+Date:   Thu, 10 Sep 2020 15:57:46 +0530
+Message-Id: <e40a76dbc4d17d0bc80daf95e259fcd6cc6d48e2.1599733531.git.amitk@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <e6387578c75736d61b2fe70d9783d91329a97eb4.camel@perches.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Fix up documentation of the struct members to reflect reality. Also
+fixup a stray whitespace.
 
+Signed-off-by: Amit Kucheria <amitk@kernel.org>
+---
+ include/linux/powercap.h | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-On 09/09/2020 22:06, Joe Perches wrote:
-> diff --git a/drivers/net/wireless/mediatek/mt7601u/dma.c b/drivers/net/wireless/mediatek/mt7601u/dma.c
-> index 09f931d4598c..778be26d329f 100644
-> --- a/drivers/net/wireless/mediatek/mt7601u/dma.c
-> +++ b/drivers/net/wireless/mediatek/mt7601u/dma.c
-> @@ -193,11 +193,11 @@ static void mt7601u_complete_rx(struct urb *urb)
->   	case -ESHUTDOWN:
->   	case -ENOENT:
->   		return;
-> +	case 0:
-> +		break;
->   	default:
->   		dev_err_ratelimited(dev->dev, "rx urb failed: %d\n",
->   				    urb->status);
-> -		fallthrough;
-> -	case 0:
->   		break;
->   	}
->   
-> @@ -238,11 +238,11 @@ static void mt7601u_complete_tx(struct urb *urb)
->   	case -ESHUTDOWN:
->   	case -ENOENT:
->   		return;
-> +	case 0:
-> +		break;
->   	default:
->   		dev_err_ratelimited(dev->dev, "tx urb failed: %d\n",
->   				    urb->status);
-> -		fallthrough;
-> -	case 0:
->   		break;
->   	}
+diff --git a/include/linux/powercap.h b/include/linux/powercap.h
+index 4537f57f9e42f..3d557bbcd2c71 100644
+--- a/include/linux/powercap.h
++++ b/include/linux/powercap.h
+@@ -44,19 +44,18 @@ struct powercap_control_type_ops {
+ };
+ 
+ /**
+- * struct powercap_control_type- Defines a powercap control_type
+- * @name:		name of control_type
++ * struct powercap_control_type - Defines a powercap control_type
+  * @dev:		device for this control_type
+  * @idr:		idr to have unique id for its child
+- * @root_node:		Root holding power zones for this control_type
++ * @nr_zones:		counter for number of zones of this type
+  * @ops:		Pointer to callback struct
+- * @node_lock:		mutex for control type
++ * @lock:		mutex for control type
+  * @allocated:		This is possible that client owns the memory
+  *			used by this structure. In this case
+  *			this flag is set to false by framework to
+  *			prevent deallocation during release process.
+  *			Otherwise this flag is set to true.
+- * @ctrl_inst:		link to the control_type list
++ * @node:		linked-list node
+  *
+  * Defines powercap control_type. This acts as a container for power
+  * zones, which use same method to control power. E.g. RAPL, RAPL-PCI etc.
+@@ -129,7 +128,7 @@ struct powercap_zone_ops {
+  *			this flag is set to false by framework to
+  *			prevent deallocation during release process.
+  *			Otherwise this flag is set to true.
+- * @constraint_ptr:	List of constraints for this zone.
++ * @constraints:	List of constraints for this zone.
+  *
+  * This defines a power zone instance. The fields of this structure are
+  * private, and should not be used by client drivers.
+-- 
+2.25.1
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
