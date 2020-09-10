@@ -2,102 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F5E26530F
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:28:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F38265451
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726978AbgIJV2Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 17:28:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725828AbgIJV2E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 10 Sep 2020 17:28:04 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 391E121D92;
-        Thu, 10 Sep 2020 21:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599773283;
-        bh=rxvS6AwOCqkTF8dpA59A+IKXNYafSMKsYQi6sF6t5cY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=D8bMlInaMbzmreh8AWVaj6VOCmrieNuNvtw24IhlqGgE3O5WPH1Aay4HThqIRkplf
-         CwO54HfYwM892eVqkcQlyBaWP0JggqtjersZ8bFOzIjOYct8/7WQw/FMmdLzp33a4d
-         wOGyFEl57OAHhuuI1kjZr+/5nQdqrBK9XJpiXNRM=
-Content-Type: text/plain; charset="utf-8"
+        id S1728584AbgIJVmt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 17:42:49 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:56066 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730722AbgIJM41 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 08:56:27 -0400
+Received: from 89-64-87-170.dynamic.chello.pl (89.64.87.170) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.468)
+ id 0b9e2c09bd0fb81d; Thu, 10 Sep 2020 14:55:07 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     "Claude. Yen" <Claude.Yen@mediatek.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        wsd_upstream <wsd_upstream@mediatek.com>
+Subject: Re: [PATCH] PM: s2idle: Introduce syscore callbacks in s2idle flow
+Date:   Thu, 10 Sep 2020 14:55:06 +0200
+Message-ID: <1955367.r5QahNuf3v@kreacher>
+In-Reply-To: <1599099247.4435.4.camel@mtksdccf07>
+References: <1598943859-21857-1-git-send-email-claude.yen@mediatek.com> <CAJZ5v0hOGEUamXw124q4CnL67o97qRHy9Vv9_F2AQqefDdu3vQ@mail.gmail.com> <1599099247.4435.4.camel@mtksdccf07>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20200910162610.GA7008@gerhold.net>
-References: <20200910162610.GA7008@gerhold.net>
-Subject: Re: Qcom clock performance votes on mainline
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org
-To:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Date:   Thu, 10 Sep 2020 14:28:01 -0700
-Message-ID: <159977328190.2295844.1029544710226353839@swboyd.mtv.corp.google.com>
-User-Agent: alot/0.9.1
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Stephan Gerhold (2020-09-10 09:26:10)
-> Hi Stephen, Hi Rajendra,
->=20
-> while working on some MSM8916 things I've been staring at the downstream
-> clock-gcc-8916.c [1] driver a bit. One thing that confuses me are the
-> voltage/performance state votes that are made for certain clocks within
-> the driver. Specifically lines like
->=20
->     VDD_DIG_FMAX_MAP2(LOW, 32000000, NOMINAL, 64000000),
->=20
-> on certain clocks like UART, I2C or SPI. There does not seem to be
-> anything equivalent in the mainline clock driver at the moment.
->=20
-> As far as I understand from related discussions on mailing lists [2],
-> these performance votes are not supposed to be added to the clock
-> driver(s), but rather as required-opps within OPP tables of all the
-> consumers. Is that correct?
+On Thursday, September 3, 2020 4:14:07 AM CEST Claude. Yen wrote:
+> On Tue, 2020-09-01 at 13:57 +0200, Rafael J. Wysocki wrote:
+> > On Tue, Sep 1, 2020 at 9:05 AM Claude Yen <claude.yen@mediatek.com> wrote:
+> > >
+> > > This series based on 5.9-rc1
+> > > This patch makes s2idle call existing syscore callbacks. Currently,
+> > > when s2idle is selected as system suspend method, callbacks hooked
+> > > by register_syscore_ops() will not be triggered. This may induce
+> > > unexpected results.
+> > 
+> > They are not executed by design.
+> > 
+> > > For example, sched_clock_suspend() was added to s2idle flow in
+> > > commit 3f2552f7e9c5 ("timers/sched_clock: Prevent generic sched_clock
+> > > wrap caused by tick_freeze()") to fix clock wrap problem. However,
+> > > sched_clock_suspend() is originally registered in syscore callback.
+> > 
+> > I'm not sure why this matters here.
+> 
+> If functions in syscore callbacks are needed in s2idle, explicit
+> migration is needed like commit 3f2552f7e9c5 ("timers/sched_clock:
+> Prevent generic sched_clock wrap caused by tick_freeze()").
+> Thus, I am wondering if such effort could be saved.
 
-Yes.
+Yes, it could.
 
->=20
-> As a second question, I'm wondering about one particular case:
-> I've been trying to get CPR / all the CPU frequencies working on MSM8916.
-> For that, I already added performance state votes for VDDMX and CPR as
-> required-opps to the CPU OPP table.
->=20
-> After a recent discussion [3] with Viresh about where to enable power
-> domains managed by the OPP core, I've been looking at all the
-> performance state votes made in the downstream kernel again.
->=20
-> Actually, the A53 PLL used for the higher CPU frequencies also has such
-> voltage/performance state votes. The downstream driver declares the
-> clock like [4]:
->=20
->                 .vdd_class =3D &vdd_sr2_pll,
->                 .fmax =3D (unsigned long [VDD_SR2_PLL_NUM]) {
->                         [VDD_SR2_PLL_SVS] =3D 1000000000,
->                         [VDD_SR2_PLL_NOM] =3D 1900000000,
->                 },
->                 .num_fmax =3D VDD_SR2_PLL_NUM,
->=20
-> which ends up as votes for the VDDCX power domain.
->=20
-> Now I'm wondering: Where should I make these votes on mainline?
-> Should I add it as yet another required-opps to the CPU OPP table?
+You can define platform ops for s2idle and invoke what's needed from there.
 
-Sounds like the right approach.
+> > > With this patch, if another syscore callback is needed in s2idle,
+> > > additional migration effort could be saved.
+> > 
+> > s2idle cannot execute syscore callbacks, because it doesn' take
+> > non-boot CPUs offline and it won't do that.
+> > 
+> > Thanks!
+> 
+> Yes, the current design of syscore callback needs non-boot CPUs offline.
+> Considering the following case: in s2idle flow, there is a status that
+> only one CPU is alive and other CPUs have enter deepest idle state.
+> This situation is similar to getting non-boot CPUs offline, though all
+> CPUs are online from kernel's perspective.
 
->=20
-> It would be a bit of a special case because these votes are only done
-> for the A53 PLL (which is only used for the higher CPU frequencies, not
-> the lower ones)...
+It is only similar AFAICS.
 
-Can that be put into the OPP table somehow for only the high
-frequencies? The OPP tables for CPUs sometimes cover the CPU PLL voltage
-requirements too so it doesn't seem like a totally bad idea.
+You don't migrate interrupts during s2idle, for example.
+
+> Reply from Stephen mentioned that if an operation is needed in both
+> S2R and s2idle, CPU_PM notifier can be utilized. 
+> In my opinion, CPU_PM notifier is particularly for CPU entering idle
+> state. In contrast, syscore callback is for system going low power
+> state. There exists semantic difference between these two callbacks.
+
+Fair enough.
+
+> Could the current design of syscore callback be re-designed as
+> system-wide suspend callback?
+
+No, it couldn't.
+
+> Proposed suspend flow in this patch:
+> 
+>     Freeze tasks
+>         |
+>         V
+>     Device suspend callbacks
+>         |
+>         |-------------s2idle----------
+>         |                            |
+>         V                            |
+>     Disable nonboot CPUs    Is this CPU last core to enter idle?
+>         |                            |
+>         V                            |-------------
+>     syscore callbacks                |            |
+>         |                           No           Yes
+>         V                            |            |
+>     platform suspend                 V            V
+>                                  enter idle     syscore callback
+>                                                   |
+>                                                   V
+>                                                 enter idle
+> 
+
+The primary problem with this is that on some architectures (x86 at least)
+the syscore things cannot be run during the s2idle flow.
+
+Also there is a way to invoke them through the platform ops as I said.
+
+Thanks!
+
+
+
