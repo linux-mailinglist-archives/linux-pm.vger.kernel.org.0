@@ -2,100 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE0C263C7D
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 07:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DDA263C8A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 07:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726079AbgIJFer (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 01:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S1725885AbgIJFj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 01:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbgIJFeV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 01:34:21 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5AEC0613ED
-        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 22:34:19 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id q4so2454117pjh.5
-        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 22:34:19 -0700 (PDT)
+        with ESMTP id S1725855AbgIJFjw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 01:39:52 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D65C061573
+        for <linux-pm@vger.kernel.org>; Wed,  9 Sep 2020 22:39:51 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u21so6874625eja.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Sep 2020 22:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=5lEi/XoDUJ11Wa7F5s06RrCLa2hPWxpKnO1zR9YxyoY=;
-        b=CAEWlx6IuBLlkVsW+lOwMOeCTijAw1MpiQ3Ubb2OiqpnJtMewM1XNtUAhSIg1ikgvE
-         JpQ79qJ6W+TpKYmuBH7/eBcz5WKzj9GaDsUqhxos2YpwlQsr8aEn9N36PdsFS0hDWe6y
-         cNhiV778PgC5as9xtK6R0NroTicROjr76SN0u0Pi4chuP8X3ibTcn/DO0e02C6/yTFtK
-         q0uHIk25Jr73tNAPDUqN0E/KWZ2FKnNQcJBseJJm25c6Sm0RT8fYscQXhoYRyGZbGG83
-         SI6aRY5TTQMwlVObPlooDffFy48lbHaXcaYOfHW0nENuCCHAJsdeecPwwCjiEoRllUoh
-         P+xQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HrzEcI7tVL3wJrzvYvYurbe8HlqDLa+gfYaACY1yWxY=;
+        b=bhCEnoHBe/islh9rGTTbTL9UmGoYOX4YjQy+u4S0jDc8tvCfCZPuq12wlUqD5DxX/A
+         DVnQJSPh2rAIyK8r7nP1pvhDYZig3rqXa6aKOC9LHZDmXyVwSlXVY4a4pemvyKBDmlBz
+         9LNR4dms2EHba6bPiwZ8UZW80oZDPrSDvgJRbjMRc3MP7JdrV7d92Iq4K5xEtJnk/nSx
+         gXiEYLxcetotOAqQ9/2GtgrzIk09vMoWI+otVEmVEbCkQv8rYfDsboeSLoQ/1J9KYzOs
+         LnKQQbE6s4k/N+6Wsel0rOYwTMYe3oAR4HdKGcFK02713bMTig6pBweNolDnQXB4S2YW
+         aUDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=5lEi/XoDUJ11Wa7F5s06RrCLa2hPWxpKnO1zR9YxyoY=;
-        b=RPfOih89ACVh0XzHcQimqlD1JRyyQJUDPwP5Klm1zyrSpzjiNLWpUkx51XPTUbTfMx
-         iR1R3SX9wSrNhDjsHqQf4qDXBQPssQBBunQ1/m7fEEnhnubasjpA/Pn1gA0xuoxxsEBg
-         lxaJRDZaL18PT8OXoOV6nLiGwnNksaSXMsuSfHbjJIGTGrl7BFc2PZyB+lUgaFnEUjf9
-         9nSqt3A/KA/CKGxblzoLKqlPinvte8hq1Ua3c81gmHNtdJuVjSXmjMO7hiv4sLqLlI08
-         3ktj/7JxPPPftgk9Jd+i13sU4vPhmNMjy3an6Y4HLCkqC4A5WZS6fKVF3VwSDBuUInxR
-         8WLA==
-X-Gm-Message-State: AOAM531AWGTk1oPxzFl5uk0TJpy5A2RCjHrd+Jp5CZUEX4UNzSQ9sk44
-        RkA6Ouj2fXI84BDiZl81s5K38w==
-X-Google-Smtp-Source: ABdhPJz3EgNE/dzdl1waBSoWGoWNzDHErjWDYYygsBmeO19Q5FRz5rTWYfVjdhPhDSbWLy3fyrzRsA==
-X-Received: by 2002:a17:90a:d315:: with SMTP id p21mr3945874pju.88.1599716059106;
-        Wed, 09 Sep 2020 22:34:19 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id w203sm4575162pff.0.2020.09.09.22.34.18
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Sep 2020 22:34:18 -0700 (PDT)
-Date:   Thu, 10 Sep 2020 11:04:06 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Hector Yuan <hector.yuan@mediatek.com>
-Cc:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH v7] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-Message-ID: <20200910053406.t37rgioykzvk3oem@vireshk-i7>
-References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
- <20200910050341.pgyieq3q7ijitosn@vireshk-i7>
- <1599715851.7042.9.camel@mtkswgap22>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HrzEcI7tVL3wJrzvYvYurbe8HlqDLa+gfYaACY1yWxY=;
+        b=eNOg7WX5/jyeaZ/vhkMxDhKoA4h0MMN0Ch+VEGAIL4JEKfCRaBTHg6P6Q+uteuPsqL
+         eo3w0a9oO1RxPsj1u2K4X60oLAPPuyG5tq5PQdxYfyes1FTVBfnoDaQ535fMll+HV1dk
+         hiSpR/3Vc7PFpAbZrhSGdP23FGhsn3QP3Un07GQeX+IvdAVFtyvT1sCqbW9WGv73KU5b
+         0fS6fC393DabKWp9woPj8XrbOZV6ro60Nx0iJX99jzgCFVtAjEtUeFkf7hHgjjwt+aDf
+         NT43LB1rxL8vyIOJF91g9V7Xbwgl/l4WthxnpNgbYywX3R2tP8sj4fynSNmWC/Q/Zsjk
+         kAcA==
+X-Gm-Message-State: AOAM533XcobFOOsIOjYhsg69TVej6TQ8yj2jMjiYDgEd057qowq6N9Yk
+        w96RCGe8aIXfm6DelSZhJhdgxp0DhDH5THe4pGAVbA==
+X-Google-Smtp-Source: ABdhPJxaieYVeSjCBFkQtp2/sEBfRSTYV5HJdwYX2Xm+2e2ACp56jmmfW9CNhScSeMYqLdBI/Z1zZ3kqVq7p6bXYPqA=
+X-Received: by 2002:a17:906:eced:: with SMTP id qt13mr6926424ejb.357.1599716390242;
+ Wed, 09 Sep 2020 22:39:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1599715851.7042.9.camel@mtkswgap22>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20200831075329.30374-1-jun.nie@linaro.org> <20200831075329.30374-2-jun.nie@linaro.org>
+ <0df97fbd-f0f5-3719-cebc-1d7525a43e60@linaro.org>
+In-Reply-To: <0df97fbd-f0f5-3719-cebc-1d7525a43e60@linaro.org>
+From:   Jun Nie <jun.nie@linaro.org>
+Date:   Thu, 10 Sep 2020 13:39:39 +0800
+Message-ID: <CABymUCMHKXMExUUT3f=Loov=CVWSrJV0RoU8xfECgnKA6fUXvw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] interconnect: qcom: Add MSM8939 interconnect provider driver
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Shawn Guo <shawn.guo@linaro.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-09-20, 13:30, Hector Yuan wrote:
-> On Thu, 2020-09-10 at 10:33 +0530, Viresh Kumar wrote:
-> > On 10-09-20, 12:31, Hector Yuan wrote:
-> > > The CPUfreq HW present in some Mediatek chipsets offloads the steps necessary for changing the frequency of CPUs. 
-> > > The driver implements the cpufreq driver interface for this hardware engine. 
-> > > 
-> > > This patch depends on the MT6779 DTS patch submitted by Hanks Chen
-> > >  https://lkml.org/lkml/2020/8/4/1094
-> > 
-> > Thanks for hanging there. Looks good to me. I will apply it once Rob
-> > Ack's the binding patch.
-> > 
-> 
-> Many thanks for your help. May I know if you can add Reviewed-by tag to
-> this patch set.
+Georgi Djakov <georgi.djakov@linaro.org> =E4=BA=8E2020=E5=B9=B49=E6=9C=889=
+=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=889:58=E5=86=99=E9=81=93=EF=BC=
+=9A
+>
+> Hi Jun,
+>
+> Thanks for working on this!
+>
+> On 8/31/20 10:53, Jun Nie wrote:
+> > Add driver for the Qualcomm interconnect buses found in MSM8939 based
+> > platforms. The topology consists of four NoCs that are controlled by
+> > a remote processor that collects the aggregated bandwidth for each
+> > master-slave pairs.
+> >
+> > Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> > ---
+> >  drivers/interconnect/qcom/Kconfig   |   9 +
+> >  drivers/interconnect/qcom/Makefile  |   2 +
+> >  drivers/interconnect/qcom/msm8939.c | 576 ++++++++++++++++++++++++++++
+>
+> All this looks almost the same as msm8916. Do you think we can we move th=
+e
+> identical code into common file and leave just the topology and the msm89=
+39-
+> specific stuff in msm8939.c?
+>
+> Thanks,
+> Georgi
 
-Since this patchset is going to get merged via my tree (ARM cpufreq
-tree), a reviewed-by isn't required here. I will queue it up for
-5.10-rc1 after I receive an Ack from Rob.
+Yes, good suggestion! I will work on this later.
 
-> I would like to prepare some patches for more features
-> based on this. Is that okay to you? Thanks again.
-
-That should be fine.
-
--- 
-viresh
+Jun
