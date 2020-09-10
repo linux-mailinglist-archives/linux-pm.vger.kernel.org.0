@@ -2,115 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D88265029
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 22:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0571326530C
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 23:28:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726301AbgIJUGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 16:06:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
+        id S1727850AbgIJV1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 17:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbgIJUDm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 16:03:42 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCF7C0613ED
-        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 13:03:42 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s65so3804891pgb.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 13:03:42 -0700 (PDT)
+        with ESMTP id S1731056AbgIJOJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 10:09:35 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D369C0617A9
+        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 07:00:14 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id y11so3651973lfl.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 07:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=iFDficNSci8qA9wFNJyygKnNTt9O8nMrmuFz9yCV5pU=;
-        b=ThfftGYqDO/6Ienq1czqP2kID3lipFmYlCjShbBFc67WGmMHoW3c+CzljeUYsA5WxD
-         K30jslTQU03cqtaQlcu5qhp3DKxEt/49q+/rbfeepllAnKkTTx5n5ZwR2Wkd6KH75JSf
-         oM4qDeDKaQ4yZN5CfArbQjUh1nH8zoA1JvK2HshJj5S6kQBHEONJaVMTVUmtb1kDodvz
-         t2Tu19pE5VcDe8439to8tgoxpna6TKmWYZg7W6xmwgcjtIgFhyBrwaeKTZBnQ5a7i8PV
-         i2yKJ9ec2v9j+IwJ07cnWkbXSjJp0xrXpgI6SwmnueXuBGCccP6vNMJmpaOvP9IdpQLW
-         K3xw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fbds+t1ZnFoCEkxj1/mr3T/pqQY9+u5UlZ3GW4t2en8=;
+        b=U2WzOfWo+o9VwfTR9lkjfBPA3rwJdLwKAz85NWFW19wdSUdRq7KmYs6wtMjPhrWI6X
+         1fMtl/io8zCh6e91yPDswaupfIXFTTHvxz7H3mpoiNjQpVOGRmaQIfclvCMEBUGwr2dW
+         XOUcWUvriJmDaoxJGhMAarqRuwED0QjdXYnEdAt0z4pGzdkylgSKl4JWEj6CDQ036AvY
+         yt96CWgeWKNMLSFF8eyUVZAXBjFYZ3Ajy9RP1elZcW34Ng1ztEFv8clkDz/Je34kEMAV
+         7xt2Ggcfi2OQwuiZOFQ8+YD+SG4Lt/KXE2MHtasNvP2GTyb9Zx/1SZtjsgX6cS7zRmT9
+         yknQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=iFDficNSci8qA9wFNJyygKnNTt9O8nMrmuFz9yCV5pU=;
-        b=XtFHFZ9zDrRpEfLGvv3RxxRyQKJYP1/ga38/9nXTYrl/ZA+s2UM3krslz3Sm6XOSTC
-         S4UKG+yeDp25JLy5azR2kV1sk+M40M+acv466BL38ZjTIZIeMzkHX5aWMdhL+8TDS224
-         EOYMjUSwW/HftgXfUotjWTWEqqUF9r3z3djh6C7EXDBzhqe+5YO82kQdhe7ByYI/RiUn
-         +IkgWQxV8EKfbTqOTCoGArvGgkFPZqv9Z90R8tkP3WxeWi7DEy/W1T0u68VrRWW0YGin
-         vbhpk/yVELY4n7zpm8nMKVFkJcjW6JF+x0rkzsYMF4k00/5KwPzei98Y0CIA0MKkIPCl
-         rvcg==
-X-Gm-Message-State: AOAM531RIHV6KJmlOLiCKqKkUzs7XOetiSSvFrYvsx5N+jtO4E8JQwYG
-        SzBGIB+2La+0woM/fckozofihIJPO2Br7g==
-X-Google-Smtp-Source: ABdhPJwqA/dpRqgQMWYbg5XxNFJTi7KZYE4QizEhVeS6IzYSF6yn2tuzxQIbOEErZ9tYxbshui9NsQ==
-X-Received: by 2002:aa7:961b:0:b029:13e:d13d:a140 with SMTP id q27-20020aa7961b0000b029013ed13da140mr7145098pfg.40.1599768222252;
-        Thu, 10 Sep 2020 13:03:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j19sm7020415pfe.108.2020.09.10.13.03.41
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fbds+t1ZnFoCEkxj1/mr3T/pqQY9+u5UlZ3GW4t2en8=;
+        b=lSza+VKCk8yGPSh25hLWZP7vQOmpnIVLsSj9CQHJlSz2Ea5SrzKRzTIk5U+FY9zxU2
+         HVRpNXyPoe9pX+9mP3a4Nn2O+gCwRhwEb+vtTGERuFlS9x8zlX9rGdfz8EDAGOW4skYK
+         /0HWzyn4XhWOeKCO8RdVrA++d6FwqLSI3VipjvyexzGVqlVQwSiA0QFeI8sccVdBMx6q
+         iP4aTU3kyywZEACB7jRG/6IYf5xAVaK+zB9NhU89+OJkhvkpdohWCArkhF3anpByyLlV
+         0P1VFhdJE/5Jlbxj6CaiMW8OKgzqpDTvHve+s63IdPqMxKRlzmpgotOTvi4QyamMZKys
+         MaNw==
+X-Gm-Message-State: AOAM531wkzb+owEVy7Ve4cGbnW/uvXJFeznrOsh88xJ6LsXqINwsMAOU
+        rG5zcN66AnWgt2We9eC9R/5rpg==
+X-Google-Smtp-Source: ABdhPJyV1tWf7B3yzuaRTqD2awGWyPJLIOGIT+JvbFoAqm6Mhx44+04HtPsEqk+5IjbGxLD+phHRuQ==
+X-Received: by 2002:a19:7604:: with SMTP id c4mr4403298lff.132.1599746411945;
+        Thu, 10 Sep 2020 07:00:11 -0700 (PDT)
+Received: from eriador.lan ([188.162.64.156])
+        by smtp.gmail.com with ESMTPSA id t82sm1367646lff.43.2020.09.10.07.00.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 13:03:41 -0700 (PDT)
-Message-ID: <5f5a869d.1c69fb81.d5c26.2b8a@mx.google.com>
-Date:   Thu, 10 Sep 2020 13:03:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 10 Sep 2020 07:00:11 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 01/10] iio: adc: qcom-spmi-adc5: fix driver name
+Date:   Thu, 10 Sep 2020 16:59:51 +0300
+Message-Id: <20200910140000.324091-2-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200910140000.324091-1-dmitry.baryshkov@linaro.org>
+References: <20200910140000.324091-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc4-6-g23818c154bae
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 6 runs, 1 regressions (v5.9-rc4-6-g23818c154bae)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 1 regressions (v5.9-rc4-6-g23818c154bae)
+Remove superfluous '.c' from qcom-spmi-adc5 device driver name.
 
-Regressions Summary
--------------------
+Fixes: e13d757279 ("iio: adc: Add QCOM SPMI PMIC5 ADC driver")
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/iio/adc/qcom-spmi-adc5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
+diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+index b4b73c9920b4..c10aa28be70a 100644
+--- a/drivers/iio/adc/qcom-spmi-adc5.c
++++ b/drivers/iio/adc/qcom-spmi-adc5.c
+@@ -982,7 +982,7 @@ static int adc5_probe(struct platform_device *pdev)
+ 
+ static struct platform_driver adc5_driver = {
+ 	.driver = {
+-		.name = "qcom-spmi-adc5.c",
++		.name = "qcom-spmi-adc5",
+ 		.of_match_table = adc5_match_table,
+ 	},
+ 	.probe = adc5_probe,
+-- 
+2.28.0
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc4=
--6-g23818c154bae/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc4-6-g23818c154bae
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      23818c154baeeb4bb6a8de39cdb9b1e589b6416a =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f5a762b37624b2991d35392
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc4-6-g23818c1=
-54bae/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc4-6-g23818c1=
-54bae/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0821.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f5a762b37624b2991d35393
-      failing since 22 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =20
