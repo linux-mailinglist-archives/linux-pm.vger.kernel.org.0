@@ -2,75 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37903264B20
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 19:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E341264B36
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Sep 2020 19:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbgIJRYL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Sep 2020 13:24:11 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:36783 "EHLO
+        id S1726967AbgIJR1X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Sep 2020 13:27:23 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:39605 "EHLO
         mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726812AbgIJRXH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 13:23:07 -0400
-Received: by mail-oi1-f194.google.com with SMTP id x19so6672454oix.3
-        for <linux-pm@vger.kernel.org>; Thu, 10 Sep 2020 10:23:06 -0700 (PDT)
+        with ESMTP id S1726810AbgIJRY5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Sep 2020 13:24:57 -0400
+Received: by mail-oi1-f194.google.com with SMTP id c13so6661764oiy.6;
+        Thu, 10 Sep 2020 10:24:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xyHp9dLhwEqu5uSE00MgEGnO20WmRujED0cXQoDFHK0=;
-        b=avRXJ0CQI+kZNm7c4pgGwpkYGUrNeUl5n5qP2To8jQvkQUXHVc0G4/7bmFK7IERc5B
-         RDIcRby4YPOHXvCsftSEIu2sgr0/2dHl0vWp08uMu0UGYO1lj4mXIHhEFxjNae2/ScSs
-         5eyWMKSWb1Q40Bjrdhr2kdgmjXXFc/lgyxQd7vCqVpvg77XhRrymp+/4yylcRvVnw+LW
-         8XLT6pnx68fXB4wH6Rn8g0Lcknroc1VrkSXpoKnFNSn4jxURU0qMyP0Bf5ZJUfkPbB0m
-         Bn2kL3eSMMHFZboa6HXjeVcOL1vyPMpdJwPPp+05n6xGgf3zi/B40pojWKgMVprPDGhg
-         wPTg==
-X-Gm-Message-State: AOAM5303R3lgLXSdxHTY/mSvGiuk+FhR1E2/Ma6PE+5voFfyNCaNQykD
-        0bkxNh5MAwZVtpMNMpJgUjLEzcsTuCL3U8tFq1w=
-X-Google-Smtp-Source: ABdhPJy262f35zF8hIu/s+XiOfGDeJoyIVMIx7jUbw3K2zK4sgTNeGhi0VimK0seMEhMKsHQszzisbGxz5rmhRo7d9E=
-X-Received: by 2002:aca:fd95:: with SMTP id b143mr658419oii.68.1599758586223;
- Thu, 10 Sep 2020 10:23:06 -0700 (PDT)
+        bh=SjYkPCU61w/qb4B6RVouCzvKhSm3h1WA66nzvLfjm4Y=;
+        b=quRiHve48nAJjV09bFrsgP8HHIa6G4pvDjKK5TOnnBN8ghyrvyybNOkMX/QfPhnWZ+
+         DFMj9OSMFXSHAdclgebGNGTvAX4wquzZ+tv/Tyo1ik1x5xNHHXD3mR34cjxDdeaI5DZ8
+         hVsMOw7dg8JiAswKzWRl1EZvE/2zCDWuGjorLl1PKe+owVLsCW8/pO9VJQsPor5BO0J1
+         0H9Kx34rfN8pPasZj0o/R9uREuYbB2MaC40Fn6e2mmx9Ow5I7gMS882xP6XzPRTjhaQ5
+         D3kQjRPgSuLwo/NzjakrnD4dnqpLIbayUWlL7vF5oTKDTyQO+cTlpOAIlr6DD6ct6Noq
+         RWmg==
+X-Gm-Message-State: AOAM532fVtQze6jy91FCnXkbxAs025w5rrJ0XyNWZa/6eFI49kiZazKr
+        n/++2VNOHgb8CojKRSfqDnkfZS/oFETwmn6rVBigqKxd
+X-Google-Smtp-Source: ABdhPJynJyCEpO/tGdCDaOxBk3ZDa6w6i3ddDaYTbgQkZw4gQmwn7+kK35cbsnV5yWaFCEJBy4sMikK+fdImbFZ11vs=
+X-Received: by 2002:aca:fd95:: with SMTP id b143mr663599oii.68.1599758696796;
+ Thu, 10 Sep 2020 10:24:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <6d3237551d3e9755a10f73698d102a63a9052bed.camel@intel.com>
-In-Reply-To: <6d3237551d3e9755a10f73698d102a63a9052bed.camel@intel.com>
+References: <d97f40ad-3033-703a-c3cb-2843ce0f6371@infradead.org>
+In-Reply-To: <d97f40ad-3033-703a-c3cb-2843ce0f6371@infradead.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Sep 2020 19:22:55 +0200
-Message-ID: <CAJZ5v0jz_6nE80vs=+Li8pEvOccHTwZ8CY7bGwCU9yi7ney_3A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] powercap/intel_rapl: add support for TigerLake Desktop
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
+Date:   Thu, 10 Sep 2020 19:24:45 +0200
+Message-ID: <CAJZ5v0iaHEWw2aV1pm6ZsXMRicYSkpKHmC+ygU=UW76isqX+4A@mail.gmail.com>
+Subject: Re: [PATCH] PM: <linux/device.h>: fix @em_pd kernel-doc warning
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 9:49 AM Zhang Rui <rui.zhang@intel.com> wrote:
+On Mon, Sep 7, 2020 at 5:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> From a6bca1219d998bd5505924ee2b67c5febb2e79d3 Mon Sep 17 00:00:00 2001
-> From: Zhang Rui <rui.zhang@intel.com>
-> Date: Wed, 9 Sep 2020 22:37:08 +0800
-> Subject: [PATCH 1/3] powercap/intel_rapl: add support for TigerLake Desktop
+> From: Randy Dunlap <rdunlap@infradead.org>
 >
-> Add intel_rapl support for TigerLake desktop platform.
+> Fix kernel-doc warning in <linux/device.h>:
 >
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ../include/linux/device.h:613: warning: Function parameter or member 'em_pd' not described in 'device'
+>
+> Fixes: 1bc138c62295 ("PM / EM: add support for other devices than CPUs in Energy Model")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/powercap/intel_rapl_common.c | 1 +
+>  include/linux/device.h |    1 +
 >  1 file changed, 1 insertion(+)
 >
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 6f55aaef8afc..60dbe0e43dd4 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1035,6 +1035,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,         &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,           &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,         &rapl_defaults_core),
-> +       X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,           &rapl_defaults_core),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &rapl_defaults_spr_server),
+> --- lnx-59-rc4.orig/include/linux/device.h
+> +++ lnx-59-rc4/include/linux/device.h
+> @@ -454,6 +454,7 @@ struct dev_links_info {
+>   * @pm_domain: Provide callbacks that are executed during system suspend,
+>   *             hibernation, system resume and during runtime PM transitions
+>   *             along with subsystem-level and driver-level callbacks.
+> + * @em_pd:     device's energy model performance domain
+>   * @pins:      For device pin management.
+>   *             See Documentation/driver-api/pinctl.rst for details.
+>   * @msi_list:  Hosts MSI descriptors
 >
->         X86_MATCH_INTEL_FAM6_MODEL(ATOM_SILVERMONT,     &rapl_defaults_byt),
-> --
 
-Applied along with the rest of the series as 5.9-rc material, thanks!
+Applied as 5.9-rc material, thanks!
