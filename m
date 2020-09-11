@@ -2,83 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAA02667A5
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 19:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78C9266839
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 20:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725842AbgIKMRK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Sep 2020 08:17:10 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:40509 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbgIKMQp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 08:16:45 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t76so9215746oif.7;
-        Fri, 11 Sep 2020 05:16:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xBfOLxbTh4kTcMU0r+KJNNeHONrOwn+AtKnHRK+5TXU=;
-        b=IwwZ9mW6Cg8dMSfG6X/YyXcgLl7O0heJkrmFSl9C+xWrLeS0aienU/aXSCDdpJpjW0
-         veBTIMMvjrkbZFUI9mg0ywFNHaD3LpUFOlGSVlhV1mIGGG/bWmg46qUmYzHM0vNDKZYU
-         moYXkzR0R/YRye678xqGTsg1KN//L6fQA8iU/oEZdkYnJ7TgAgcBaGZPJO5h6QlrmflL
-         b0ksbW8nb4AAiOoD+ijAB9HOv5i/Gt94X0ZZqdcnhqUESEBbo1OS7LsiRJSnkxOeZdyJ
-         GsQt+1D+9zzFgvHRvNv9LAFcP3td4oKPpdbB0VeW2onvUaWX47d0E9/IcAYF/AAB2JqM
-         EqGw==
-X-Gm-Message-State: AOAM533a2HdOP61SN1NBLlsfbihdAsGxMF1xr5+WfEENvHqs2H0//VfK
-        ooPQL0TwhOg/1L855oVo9xZOjf3baHwU625QuT8=
-X-Google-Smtp-Source: ABdhPJyCIAiCP8bbq24FgT0dntTldnj2QIOFwDjxpv+NiUuYcZ7IoSH6KvhpsQgj7qzed9PFFnbzWoMXH4Nd1Uy3JcE=
-X-Received: by 2002:aca:3e8b:: with SMTP id l133mr1136907oia.110.1599826604003;
- Fri, 11 Sep 2020 05:16:44 -0700 (PDT)
+        id S1725856AbgIKSXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Sep 2020 14:23:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725787AbgIKSXS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 11 Sep 2020 14:23:18 -0400
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AB92821D40;
+        Fri, 11 Sep 2020 18:23:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599848597;
+        bh=YY2vBU2Yo4rqMxD/qeQ8+2/9DSz2T2a0UG6lbEEq3G8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=q4ZuwCgX7Z+2ZOJ+NeU4ULnNdUzb+Xbc21jw35Xfapk2cL99q9nlvKuFcGO/dP4tW
+         5pc+giXQQDPB/5B3farttH5r0q1GtXJY6F0mWYOOhoe7AmAWDsWGf+qLwG1n6ac/Xe
+         yoK0gX0Jkou6UnrlnX9slwVTm6nQVGvp9Nb+A+3M=
+Received: by mail-ot1-f44.google.com with SMTP id h17so9161084otr.1;
+        Fri, 11 Sep 2020 11:23:17 -0700 (PDT)
+X-Gm-Message-State: AOAM532y/PQ+iL4g+Y+Uou8ZhS8ACsMF5vxcfRBO60aj5GECeR3IVK/z
+        QtUJsNg2+sinOhOrewm3uksHXPCF/QlW33VMrxM=
+X-Google-Smtp-Source: ABdhPJxBcPAsLveygKkrrNoxlgHdpRQY+vCwFDpMuEgOBUXrCiwKgj/V2tpmS4Nlr8qpxhjVTweRYEeB0rXov2e7QIw=
+X-Received: by 2002:a9d:6193:: with SMTP id g19mr1931544otk.108.1599848596998;
+ Fri, 11 Sep 2020 11:23:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1599031227.git.viresh.kumar@linaro.org> <973bd0536c4957d03f36447398498cfacb2393d9.1599031227.git.viresh.kumar@linaro.org>
- <20200911101132.GC165568@hirez.programming.kicks-ass.net> <20200911113532.zq2bou4swixb2ymk@vireshk-i7>
-In-Reply-To: <20200911113532.zq2bou4swixb2ymk@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Sep 2020 14:16:33 +0200
-Message-ID: <CAJZ5v0jt2ZyXB=2QAB0snC2XQ1N2TUjZGZjJ9vCDdAQHQ+3DpA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, cristian.marussi@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200828203332.11129-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20200828203332.11129-2-Smita.KoralahalliChannabasappa@amd.com>
+ <878sdvv20h.fsf@kokedama.swc.toshiba.co.jp> <102d0c75-d642-8f8b-68c7-792499c2a62a@amd.com>
+ <87a6y7qshg.fsf@kokedama.swc.toshiba.co.jp>
+In-Reply-To: <87a6y7qshg.fsf@kokedama.swc.toshiba.co.jp>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 11 Sep 2020 21:23:05 +0300
+X-Gmail-Original-Message-ID: <CAMj1kXGd8KgP6_-Ebec1wpxpCnjjOe4_uovcYW3GD1BA5au=3Q@mail.gmail.com>
+Message-ID: <CAMj1kXGd8KgP6_-Ebec1wpxpCnjjOe4_uovcYW3GD1BA5au=3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cper, apei, mce: Pass x86 CPER through the MCA
+ handling chain
+To:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+Cc:     Smita Koralahalli Channabasappa <skoralah@amd.com>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi <linux-efi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devel@acpica.org, Borislav Petkov <bp@alien8.de>,
+        Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 11, 2020 at 1:36 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, 3 Sep 2020 at 09:34, Punit Agrawal <punit1.agrawal@toshiba.co.jp> wrote:
 >
-> On 11-09-20, 12:11, peterz@infradead.org wrote:
-> > On Wed, Sep 02, 2020 at 12:54:41PM +0530, Viresh Kumar wrote:
-> > > +   atomic_t reset_pending;
+> Hi Smita,
+>
+> Smita Koralahalli Channabasappa <skoralah@amd.com> writes:
+>
+> > On 8/31/20 12:05 AM, Punit Agrawal wrote:
 > >
-> > > +   atomic_set(&stats->reset_pending, 0);
-> > > +   if (atomic_read(&stats->reset_pending))
-> > > +   bool pending = atomic_read(&stats->reset_pending);
-> > > +   atomic_set(&stats->reset_pending, 1);
-> > > +   bool pending = atomic_read(&stats->reset_pending);
-> > > +   if (atomic_read(&stats->reset_pending))
+> >> Hi Smita,
+> >>
+> >> A couple of comments below -
+> >>
+> >> Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> writes:
+> >>
+> >> [...]
+> >>
+> >>
+> >>> diff --git a/drivers/firmware/efi/cper-x86.c b/drivers/firmware/efi/cper-x86.c
+> >>> index 2531de49f56c..374b8e18552a 100644
+> >>> --- a/drivers/firmware/efi/cper-x86.c
+> >>> +++ b/drivers/firmware/efi/cper-x86.c
+> >>> @@ -1,7 +1,7 @@
+> >>>   // SPDX-License-Identifier: GPL-2.0
+> >>>   // Copyright (C) 2018, Advanced Micro Devices, Inc.
+> >>>   -#include <linux/cper.h>
+> >> Why is the include dropped? AFAICT, the definitions from there are still
+> >> being used after this patch.
 > >
-> > What do you think atomic_t is doing for you?
+> > Dropped because <acpi/apei.h> already includes <linux/cper.h>
 >
-> I was trying to avoid races while two writes are going in parallel,
-> but obviously as this isn't a RMW operation, it won't result in
-> anything for me.
+> Generally, you want to follow the rule that if a declaration from a
+> header file is being used, it should show up in the includes. The same
+> applies to both source as well as header files.
 >
-> Maybe what I should be doing is just READ_ONCE()/WRITE_ONCE()? So the
-> other side doesn't see any intermediate value that was never meant to
-> be set/read ?
+> It doesn't matter if another include in the source file in turn ends up
+> including the same header again; the #ifdef guards are there to prevent
+> duplicate declarations.
+>
+> The rationale is that if future changes remove the usage of
+> <acpi/apei.h>, the C file can still be compiled after dropping the
+> include; there should be no need to then re-introduce <linux/cper.h> at
+> that point.
+>
+> Hope that makes sense.
+>
 
-If the value in question is a pointer or an int (or equivalent),
-READ_ONCE()/WRITE_ONCE() should be sufficient, and should be used at
-least as a matter of annotation of the sensitive code IMO.
-
-IIRC, atomic_set() and atomic_read() are pretty much the same as
-WRITE_ONCE() and READ_ONCE(), respectively, anyway.
-
-Cheers!
+Agreed. If the code still uses declarations from linux/cper.h after
+the patch, the #include should remain.
