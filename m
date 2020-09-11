@@ -2,134 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF552669AA
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 22:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F1F2669B1
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 22:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725811AbgIKUmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Sep 2020 16:42:52 -0400
-Received: from mail-mw2nam10on2050.outbound.protection.outlook.com ([40.107.94.50]:55307
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725803AbgIKUml (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Sep 2020 16:42:41 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cd4PQY+Kq6nRbSa40E8BXsRc0B9k0Ymg7kPQCMQEXSNkanNWndqUcvHeaPufstftL0Zu/q80j5wR70a7MwQklf3iXJJDQQbIcSjwgf0adw5AAzOTQ7V8DurGORaN6HoXtrvIoyM/o6BsL+GToPMHtnfbPLrbQuLrtqQgQWQDin7VpAHegVTPp24IzChgueUUS26sc+/aeSCD26+Ic7WdVgztnMFGVV1J9++tmySl46YHUG6ob9jiGA7KfHwEYzmB2IJSCkZi/RH5d5b2TnQaZVPKTBf5PeorBECQ5rR6CbEZ4j3EmEctR3quDW/x1Ps12TxBkJlSaat3v9oA+Tubvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l51y7K+2A9GIEbrN+8NUJTrjpWudnMNjCcTpaYwqAbU=;
- b=CWkDd0atJLqgsXy4n5OrwZ4Omt/vTMkgbAJcmP+N4CEq+TFVfcTfc6YrtOs9PFu3djcyZhrDUQCGYiXfoOpT6JsCojpD6tFzrUMHT5X/ZNG9xaazBX0/pOuJ+bzzo9ImdDou87cmD9ZJKDC+wZ8YtRZTNIFwYUAycHfcExpKPIkbtXNpaL6I4aFReJ56oiZ2kn54pRZfFwuPfAsJkjAyDsw5yhNlrerp7M/nKDI7N3YoGWugtfnjGyXU+axrPeKn0uRTDCt7uKXzixG1fZKB0AmGXPo0V9uy+vEXyt74c6eEJsyJv4JLYFn7prvaGotUw/MCjSkdXy1uAdXTW9u4/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1725816AbgIKUpB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Sep 2020 16:45:01 -0400
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:6677 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725803AbgIKUpA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 16:45:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l51y7K+2A9GIEbrN+8NUJTrjpWudnMNjCcTpaYwqAbU=;
- b=mlYBQjh1Zv7oRanIHcKakbK+YZw1faV2pERS3LBKtAw7UGEAYHYC4zY+o9xBSFTGTAMG/P3ofsI1RTQr4Qz1AvqmllnAmfLrxi99JFshDGjQ9P3ggIbWMJqNKQatwiMglTS7av+nhRg+JQPSJkZhtaqtszxnzyfismyk6b5vv3A=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
- by SA0PR12MB4431.namprd12.prod.outlook.com (2603:10b6:806:95::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Fri, 11 Sep
- 2020 20:42:29 +0000
-Received: from SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::c0c8:60e:9d04:1409]) by SN6PR12MB2685.namprd12.prod.outlook.com
- ([fe80::c0c8:60e:9d04:1409%5]) with mapi id 15.20.3370.017; Fri, 11 Sep 2020
- 20:42:29 +0000
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org
-Cc:     Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH v3 2/2] x86/mce/dev-mcelog: Fix updating kflags in AMD systems
-Date:   Thu,  3 Sep 2020 18:45:31 -0500
-Message-Id: <20200903234531.162484-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200903234531.162484-1-Smita.KoralahalliChannabasappa@amd.com>
-References: <20200903234531.162484-1-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain
-X-ClientProxiedBy: DM6PR01CA0004.prod.exchangelabs.com (2603:10b6:5:296::9) To
- SN6PR12MB2685.namprd12.prod.outlook.com (2603:10b6:805:67::33)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1599857098; x=1631393098;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M8uCPr9eXi5AxRmIWKQnXR89z2m5VaOqvl9N9mhNTFA=;
+  b=idhg3pi2y+YASPdmM/RLQ2ZOeSMcCCw/IHgDmIEZ/mU/9g/8ajUgLbpq
+   SoTC+Y2sMrVH2yFejT4RWf87BMhYEHgVE/6ip4NHINuViUBU38UrIUWy5
+   Oe+Va2C31/q94mIbt3sZQp0EpVKRDo4JBJSo1zxYzFZBYI/xjkOu+XUWT
+   A=;
+X-IronPort-AV: E=Sophos;i="5.76,417,1592870400"; 
+   d="scan'208";a="53535315"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-baacba05.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 11 Sep 2020 20:44:55 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2b-baacba05.us-west-2.amazon.com (Postfix) with ESMTPS id 209E5A1D19;
+        Fri, 11 Sep 2020 20:44:53 +0000 (UTC)
+Received: from EX13D05UWB002.ant.amazon.com (10.43.161.50) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 11 Sep 2020 20:44:48 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX13D05UWB002.ant.amazon.com (10.43.161.50) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 11 Sep 2020 20:44:47 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Fri, 11 Sep 2020 20:44:47 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id D03A640770; Fri, 11 Sep 2020 20:44:47 +0000 (UTC)
+Date:   Fri, 11 Sep 2020 20:44:47 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        "Kamata, Munehisa" <kamatam@amazon.com>,
+        "Stefano Stabellini" <sstabellini@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        <roger.pau@citrix.com>, Jens Axboe <axboe@kernel.dk>,
+        David Miller <davem@davemloft.net>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eduardo Valentin <eduval@amazon.com>,
+        "Singh, Balbir" <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Benjamin Herrenschmidt" <benh@kernel.crashing.org>
+Subject: Re: [PATCH v3 00/11] Fix PM hibernation in Xen guests
+Message-ID: <20200911204447.GA23729@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1598042152.git.anchalag@amazon.com>
+ <20200828182640.GA20719@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <CAJZ5v0jDtttvGaBCuwK40W7gsYNn4U2dNszsOmtU_dt29Lvb4g@mail.gmail.com>
+ <20200828183945.GA22160@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from ethanolx024ehost.amd.com (165.204.78.2) by DM6PR01CA0004.prod.exchangelabs.com (2603:10b6:5:296::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Fri, 11 Sep 2020 20:42:28 +0000
-X-Mailer: git-send-email 2.17.1
-X-Originating-IP: [165.204.78.2]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: f73ee275-1d3d-4da9-33e1-08d85693334f
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4431:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SA0PR12MB4431807E12092DE403E0885B90240@SA0PR12MB4431.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tlZQmOFo9J2+yPi4OkzvIa51PLI1GVFdaSqjj95iuTg30y6cLm9fxj8mYCQfI6aaZtVk3Le365i7BFGZrQ+TKvlwmr9Eh0v3v2Cn0a0rtCL/bn63z+aZEOdd371dM18nynl9fipdAV75ShZUo1cDKasoBOhbOTauco6bzO/06rhI2t/kUYCA2AwizRajntKnKTpxYDPisxVw+ZObp+bvIkzb7jIpX+muliHsfiG8G8p4nE3qWQM5yYDTKKtWVMoSTp47Lfb7F+Cs3rmTkf0VN6DBVYtysKt0MuqROMmR0KzGPmu3XPa+4TXE3pQPAmuLaYJk9eXEIKIeBez6sVK0ObnDfC7443aL0nq/mRhPuEGDTUS2KSyQPi4+sjf0uAq65wN0u0ydx+lLNu110DMr2Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(366004)(376002)(346002)(136003)(396003)(8936002)(316002)(2616005)(8676002)(5660300002)(6666004)(956004)(54906003)(83380400001)(66946007)(1076003)(66476007)(52116002)(66556008)(36756003)(7696005)(7416002)(6486002)(966005)(16526019)(4326008)(2906002)(26005)(86362001)(478600001)(186003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: M65F3wj3fTTG3jduktukXaKAk2m+nHLRATzXoakm0cD0TzV4PdfM/wO2vU4wqSOhxKSwritsWyopLGpDsArWE+sfixyPUtyKuXwq/vUzgsc1YEUFCl/Emf35cjNa0gty+OnikqB3OpgYUHiawNpGXU0LMQ57x+xGskJZBLukzqNOIDLk/EoQmOpO9ZTAGpztWiZ80CGwcI9OTvL+qVxL9l7E7fZdGJ6HAzn/YiXpSiop1izCqhkeKAAO5ei/MZQJVMasanV9DL3aLW8rFTdnSrBk/IkGEC66Oo15QMnhggJ0W8lXo5g6w0bUT1XR6T9u1IkSPW3CQldk+ow4SMiIHrFCr/KE8nivOyjH1ALvOLMfwVDARYNpbsivhBFFmPpKRzqWMyGvBNnvHRGrJY1gLx+CLFdm5UD5200naCzZ3uKP6uunpI7BO+K5c87Iq7B4Bt8RxNKIjW/aMAy2j4G/bfvqBTSTwp3dCnVkVad1oHqojraeGYRD3eUVfAM6ZpDtOTCY1T7Ci5v6sWAocOSWcJweZRfBTN7W7tziJu5Pvsw8rKjvnV+lnjURZCLzYwYO6VEbDOkFWf6v6h+982e7HS9OgswL16301+LWli1Pg54N7ju7lgghV/emq0PCQXOlrpYVBtWnYncEKJ3dl3cieg==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f73ee275-1d3d-4da9-33e1-08d85693334f
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2020 20:42:29.5963
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o9gsPfHGolTSgucpevB0T8Xnu9gMgVwJAzIBvwzoYR+b/Mk8h1zoy90WJ+OPmiCijCVjfyZqLuHPRpYLJf6lKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4431
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200828183945.GA22160@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The mcelog utility is not commonly used on AMD systems. Therefore, errors
-logged only by the dev_mce_log() notifier will be missed. This may occur
-if the EDAC modules are not loaded in which case it's preferable to print
-the error record by the default notifier.
+On Fri, Aug 28, 2020 at 06:39:45PM +0000, Anchal Agarwal wrote:
+> On Fri, Aug 28, 2020 at 08:29:24PM +0200, Rafael J. Wysocki wrote:
+> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> > 
+> > 
+> > 
+> > On Fri, Aug 28, 2020 at 8:26 PM Anchal Agarwal <anchalag@amazon.com> wrote:
+> > >
+> > > On Fri, Aug 21, 2020 at 10:22:43PM +0000, Anchal Agarwal wrote:
+> > > > Hello,
+> > > > This series fixes PM hibernation for hvm guests running on xen hypervisor.
+> > > > The running guest could now be hibernated and resumed successfully at a
+> > > > later time. The fixes for PM hibernation are added to block and
+> > > > network device drivers i.e xen-blkfront and xen-netfront. Any other driver
+> > > > that needs to add S4 support if not already, can follow same method of
+> > > > introducing freeze/thaw/restore callbacks.
+> > > > The patches had been tested against upstream kernel and xen4.11. Large
+> > > > scale testing is also done on Xen based Amazon EC2 instances. All this testing
+> > > > involved running memory exhausting workload in the background.
+> > > >
+> > > > Doing guest hibernation does not involve any support from hypervisor and
+> > > > this way guest has complete control over its state. Infrastructure
+> > > > restrictions for saving up guest state can be overcome by guest initiated
+> > > > hibernation.
+> > > >
+> > > > These patches were send out as RFC before and all the feedback had been
+> > > > incorporated in the patches. The last v1 & v2 could be found here:
+> > > >
+> > > > [v1]: https://lkml.org/lkml/2020/5/19/1312
+> > > > [v2]: https://lkml.org/lkml/2020/7/2/995
+> > > > All comments and feedback from v2 had been incorporated in v3 series.
+> > > >
+> > > > Known issues:
+> > > > 1.KASLR causes intermittent hibernation failures. VM fails to resumes and
+> > > > has to be restarted. I will investigate this issue separately and shouldn't
+> > > > be a blocker for this patch series.
+> > > > 2. During hibernation, I observed sometimes that freezing of tasks fails due
+> > > > to busy XFS workqueuei[xfs-cil/xfs-sync]. This is also intermittent may be 1
+> > > > out of 200 runs and hibernation is aborted in this case. Re-trying hibernation
+> > > > may work. Also, this is a known issue with hibernation and some
+> > > > filesystems like XFS has been discussed by the community for years with not an
+> > > > effectve resolution at this point.
+> > > >
+> > > > Testing How to:
+> > > > ---------------
+> > > > 1. Setup xen hypervisor on a physical machine[ I used Ubuntu 16.04 +upstream
+> > > > xen-4.11]
+> > > > 2. Bring up a HVM guest w/t kernel compiled with hibernation patches
+> > > > [I used ubuntu18.04 netboot bionic images and also Amazon Linux on-prem images].
+> > > > 3. Create a swap file size=RAM size
+> > > > 4. Update grub parameters and reboot
+> > > > 5. Trigger pm-hibernation from within the VM
+> > > >
+> > > > Example:
+> > > > Set up a file-backed swap space. Swap file size>=Total memory on the system
+> > > > sudo dd if=/dev/zero of=/swap bs=$(( 1024 * 1024 )) count=4096 # 4096MiB
+> > > > sudo chmod 600 /swap
+> > > > sudo mkswap /swap
+> > > > sudo swapon /swap
+> > > >
+> > > > Update resume device/resume offset in grub if using swap file:
+> > > > resume=/dev/xvda1 resume_offset=200704 no_console_suspend=1
+> > > >
+> > > > Execute:
+> > > > --------
+> > > > sudo pm-hibernate
+> > > > OR
+> > > > echo disk > /sys/power/state && echo reboot > /sys/power/disk
+> > > >
+> > > > Compute resume offset code:
+> > > > "
+> > > > #!/usr/bin/env python
+> > > > import sys
+> > > > import array
+> > > > import fcntl
+> > > >
+> > > > #swap file
+> > > > f = open(sys.argv[1], 'r')
+> > > > buf = array.array('L', [0])
+> > > >
+> > > > #FIBMAP
+> > > > ret = fcntl.ioctl(f.fileno(), 0x01, buf)
+> > > > print buf[0]
+> > > > "
+> > > >
+> > > > Aleksei Besogonov (1):
+> > > >   PM / hibernate: update the resume offset on SNAPSHOT_SET_SWAP_AREA
+> > > >
+> > > > Anchal Agarwal (4):
+> > > >   x86/xen: Introduce new function to map HYPERVISOR_shared_info on
+> > > >     Resume
+> > > >   x86/xen: save and restore steal clock during PM hibernation
+> > > >   xen: Introduce wrapper for save/restore sched clock offset
+> > > >   xen: Update sched clock offset to avoid system instability in
+> > > >     hibernation
+> > > >
+> > > > Munehisa Kamata (5):
+> > > >   xen/manage: keep track of the on-going suspend mode
+> > > >   xenbus: add freeze/thaw/restore callbacks support
+> > > >   x86/xen: add system core suspend and resume callbacks
+> > > >   xen-blkfront: add callbacks for PM suspend and hibernation
+> > > >   xen-netfront: add callbacks for PM suspend and hibernation
+> > > >
+> > > > Thomas Gleixner (1):
+> > > >   genirq: Shutdown irq chips in suspend/resume during hibernation
+> > > >
+> > > >  arch/x86/xen/enlighten_hvm.c      |   7 +++
+> > > >  arch/x86/xen/suspend.c            |  63 ++++++++++++++++++++
+> > > >  arch/x86/xen/time.c               |  15 ++++-
+> > > >  arch/x86/xen/xen-ops.h            |   3 +
+> > > >  drivers/block/xen-blkfront.c      | 122 ++++++++++++++++++++++++++++++++++++--
+> > > >  drivers/net/xen-netfront.c        |  96 +++++++++++++++++++++++++++++-
+> > > >  drivers/xen/events/events_base.c  |   1 +
+> > > >  drivers/xen/manage.c              |  46 ++++++++++++++
+> > > >  drivers/xen/xenbus/xenbus_probe.c |  96 +++++++++++++++++++++++++-----
+> > > >  include/linux/irq.h               |   2 +
+> > > >  include/xen/xen-ops.h             |   3 +
+> > > >  include/xen/xenbus.h              |   3 +
+> > > >  kernel/irq/chip.c                 |   2 +-
+> > > >  kernel/irq/internals.h            |   1 +
+> > > >  kernel/irq/pm.c                   |  31 +++++++---
+> > > >  kernel/power/user.c               |   7 ++-
+> > > >  16 files changed, 464 insertions(+), 34 deletions(-)
+> > > >
+> > > > --
+> > > > 2.16.6
+> > > >
+> > > A gentle ping on the series in case there is any more feedback or can we plan to
+> > > merge this? I can then send the series with minor fixes pointed by tglx@
+> > 
+> > Some more time, please!
+> >
+> Sure happy to answer any more questions and fix more BUGS!!
+> 
+> --
+> Anchal
+>
+A gentle ping on this one again!
 
-However, the mce->kflags set by dev_mce_log() notifier makes the default
-notifier to skip over the errors assuming they are processed by
-dev_mce_log().
-
-Do not update kflags in the dev_mce_log() notifier on AMD systems.
-
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
----
-Link:
-https://lkml.kernel.org/r/20200828203332.11129-3-Smita.KoralahalliChannabasappa@amd.com
-
-v3:
-	No change
-v2:
-	No change
----
- arch/x86/kernel/cpu/mce/dev-mcelog.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/dev-mcelog.c b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-index 03e51053592a..100fbeebdc72 100644
---- a/arch/x86/kernel/cpu/mce/dev-mcelog.c
-+++ b/arch/x86/kernel/cpu/mce/dev-mcelog.c
-@@ -67,7 +67,9 @@ static int dev_mce_log(struct notifier_block *nb, unsigned long val,
- unlock:
- 	mutex_unlock(&mce_chrdev_read_mutex);
- 
--	mce->kflags |= MCE_HANDLED_MCELOG;
-+	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
-+		mce->kflags |= MCE_HANDLED_MCELOG;
-+
- 	return NOTIFY_OK;
- }
- 
--- 
-2.17.1
-
+--
+Anchal
