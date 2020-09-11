@@ -2,94 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC2C265F97
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 14:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D964D266202
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 17:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725919AbgIKMdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Sep 2020 08:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725902AbgIKMcM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 08:32:12 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E67C061756;
-        Fri, 11 Sep 2020 05:32:11 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id u126so10775028iod.12;
-        Fri, 11 Sep 2020 05:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0Sb49eUm0XrlnNsnZsPLqQ9U00n3jcPCCGAV2VtAgHI=;
-        b=lc6n1Kaa/wF17ufcjPO/ngCuQ9lEKwpFewkLAgOal4k3oEFKEtZXMsHExvbErNgW4Y
-         /1yhBN0xNaa+MvorWG4lj5SgsR6MdfF97Xtp1GEdGm9fV4Awomp/ru6KijDP0c4hG/Wo
-         1LLBcfx1S56swAtpr2fddq3hE/WBos01siWq1ERI6zlYru2wPoqsvsuG55A7aqM5kxWG
-         3GnBfYI+/97INTUmjaNNR03oi7Abq+XsngKHVdNdDWJEBj0tBn2BjHxQ8Zr/mvsAW9Sa
-         Bk9J6QJro6g5qnkb7vr8feWI4WjANL81MGy1wd9ibe/CjgF4nOzi4Me+SuBVq9DABK82
-         exbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0Sb49eUm0XrlnNsnZsPLqQ9U00n3jcPCCGAV2VtAgHI=;
-        b=F9mxqBCuOxVbWsqvp2+RBj8WyhYlUl8/5pmH9dvdS2/mInoyZ+wPt4lnG1kMquHbDn
-         YsqPPeo4Xg324CmsR7tl8+PRS7ZLM7U5l+rcPDFtdnR0Yp7Nl+neA3zc81REp7RToq1w
-         eq9OSOnfEd3B5mD/H54/jpSNxzA5+3EpKRt8TvCE3Y/M/1GF7gJmtfb5kV1c025WtoaO
-         EXhZLbKgm499y/eYBRU3cK5CQ7W4WajBfPQvybn26ZSXYlgBKn6Hjj/zn2weopv1Aar9
-         xai01IBMZsvXx5qDT2w7aQ7117VugeWxacPPBINlt2GZ+Z5sCQKT+UllAGCdsCaLT+4f
-         MANw==
-X-Gm-Message-State: AOAM531DtqYIYHC0btvDQ/X8vIDiuss5RsT1pIoj+XOlx7n1UhpSs2hT
-        4C+K/IyOqEWKUHevEWeANhQvS4/l6j4=
-X-Google-Smtp-Source: ABdhPJzHNqR+nZ6mQlao/3kciscoqAvYhSU0szgSBUbX1aqkqbfkR1HY4Kh8e/C90MsLYuX+4vS2Jg==
-X-Received: by 2002:a6b:9305:: with SMTP id v5mr1503265iod.201.1599827530934;
-        Fri, 11 Sep 2020 05:32:10 -0700 (PDT)
-Received: from aford-IdeaCentre-A730.lan (mn-10k-dhcp7-1791.dsl.hickorytech.net. [68.232.239.6])
-        by smtp.gmail.com with ESMTPSA id m18sm1144277iln.80.2020.09.11.05.32.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2020 05:32:10 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-pm@vger.kernel.org, linux-omap@vger.kernel.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARM: omap2plus_defconfig: Enable OMAP3_THERMAL
-Date:   Fri, 11 Sep 2020 07:31:57 -0500
-Message-Id: <20200911123157.759379-2-aford173@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200911123157.759379-1-aford173@gmail.com>
-References: <20200911123157.759379-1-aford173@gmail.com>
+        id S1726233AbgIKPWI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Sep 2020 11:22:08 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:55304 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726297AbgIKPUU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 11:20:20 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BFF3Zc061529;
+        Fri, 11 Sep 2020 15:19:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=/MeEy7v1R447j4T1klPQoqAF2B+oLO9ldzBbaI8x8Es=;
+ b=fjp11hQgk0M2ieGImtTlL3liHO/dyA25V5DntaVVhLX6Ilu+T/TV1XPoOJjeyYixOdXH
+ zTu3b7QveAgDRj+O1ApqsEwqbXRl/lzWg7UZjAG6BWw4KrKZiZe0s1mRw0SMpwW/2LfK
+ 7YUZ5RbrKNusDmRcqbVYffyvdjomq6LGK4rSI1g0g1J8rhlMt28xUhkmSX9FazUWm2G2
+ KyuibgxuaFLMs7xnoMXncD3eDGWm9zUul8GDnF48Ys6F2/7Cr3rvA60y7UAHvg4x611m
+ A4nS3Z4JPOYu1YNBX3PDlGFv2TnzNlgfcG5BSV+f+eoo0qxkMfUYHDPryr29pkH/p7Bu Ng== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 33c2mmesjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Sep 2020 15:19:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08BFFHDE118910;
+        Fri, 11 Sep 2020 15:19:31 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 33cmkd8cfk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Sep 2020 15:19:31 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08BFJK2q027490;
+        Fri, 11 Sep 2020 15:19:20 GMT
+Received: from [10.74.86.16] (/10.74.86.16)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 11 Sep 2020 08:19:20 -0700
+Subject: Re: [PATCH v3 00/11] Fix PM hibernation in Xen guests
+To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        kamatam@amazon.com, sstabellini@kernel.org, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, axboe@kernel.dk, davem@davemloft.net,
+        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        peterz@infradead.org, eduval@amazon.com, sblbir@amazon.com,
+        xen-devel@lists.xenproject.org, vkuznets@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org
+References: <cover.1598042152.git.anchalag@amazon.com>
+From:   boris.ostrovsky@oracle.com
+Organization: Oracle Corporation
+Message-ID: <03baf888-5c10-429b-3206-b75d4af1e09e@oracle.com>
+Date:   Fri, 11 Sep 2020 11:19:13 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1598042152.git.anchalag@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9741 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 bulkscore=0 adultscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009110126
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9741 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 priorityscore=1501
+ phishscore=0 adultscore=0 bulkscore=0 clxscore=1011 mlxlogscore=999
+ malwarescore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009110125
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With the additional power management options enabled,
-this patch enables OMAP3_THERMAL by default.
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
----
-V3:  No change
-V2:  No change
+On 8/21/20 6:22 PM, Anchal Agarwal wrote:
+>
+> Known issues:
+> 1.KASLR causes intermittent hibernation failures. VM fails to resumes and
+> has to be restarted. I will investigate this issue separately and shouldn't
+> be a blocker for this patch series.
 
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index fe383f5a92fb..efcc46305a47 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -303,6 +303,7 @@ CONFIG_THERMAL_GOV_FAIR_SHARE=y
- CONFIG_THERMAL_GOV_USER_SPACE=y
- CONFIG_CPU_THERMAL=y
- CONFIG_TI_THERMAL=y
-+CONFIG_OMAP3_THERMAL=y
- CONFIG_OMAP4_THERMAL=y
- CONFIG_OMAP5_THERMAL=y
- CONFIG_DRA752_THERMAL=y
--- 
-2.25.1
 
+Is there any change in status for this? This has been noted since January.
+
+
+-boris
+
+
+> 2. During hibernation, I observed sometimes that freezing of tasks fails due
+> to busy XFS workqueuei[xfs-cil/xfs-sync]. This is also intermittent may be 1
+> out of 200 runs and hibernation is aborted in this case. Re-trying hibernation
+> may work. Also, this is a known issue with hibernation and some
+> filesystems like XFS has been discussed by the community for years with not an
+> effectve resolution at this point.
+>
