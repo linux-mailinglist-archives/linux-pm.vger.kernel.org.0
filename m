@@ -2,69 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F72C26640A
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 18:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC26266457
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Sep 2020 18:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726252AbgIKQaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Sep 2020 12:30:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60862 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726450AbgIKQ2E (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 11 Sep 2020 12:28:04 -0400
-Received: from kozik-lap.mshome.net (unknown [194.230.155.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B19BC22208;
-        Fri, 11 Sep 2020 16:27:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599841666;
-        bh=Sx4EuGaHyHb+oW4aw/xTYThAtAnevqos0vAP/q03wt4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L1LS9l5vpU3gl6gR7bZMSzrnswJXsY1IESrsIRwWFpsrHiG8Oli9hSUZSGR+mlaRx
-         mZPsdD8ZQc6lZgeNNvnJa1VkdAvVZ4VC4jJEmEzw7PAbqrH/0gdeKthCKTG0iEUElJ
-         r41d5Fj1CLvPAuBx+1pk6WC/AFQkh61Aeb+0G5Jg=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Jonathan Bakker <xc-racer2@live.ca>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH 7/7] power: supply: pm2301: drop duplicated i2c_device_id
-Date:   Fri, 11 Sep 2020 18:27:29 +0200
-Message-Id: <20200911162729.3022-7-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200911162729.3022-1-krzk@kernel.org>
-References: <20200911162729.3022-1-krzk@kernel.org>
+        id S1726420AbgIKQg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Sep 2020 12:36:29 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:33179 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726147AbgIKPOz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 11:14:55 -0400
+Received: by mail-ot1-f68.google.com with SMTP id m12so8656458otr.0;
+        Fri, 11 Sep 2020 08:14:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=aMmfzDJqgpNrWgPb0hQzPYfkLxYcxMPt+xFm1HcIqzI=;
+        b=dah/j5ypaVWUUKW8BBup8/IUwP/WtapQLGl3m4w/x0nNeaHXTVi95RIobHmnMHTDq9
+         3Nblq7mFJvR7irD1gCdtdy8Rjelu71PsKGSegHGn3v4+1D4NE4hG0Rc1e3MO8UIBPwtW
+         mVhW3KgdbIQ1VJ8a4vqRcGttKU6Kn6CiR8vQ0Uz1WPPYudVmMRfPKo+iVdo+dUX31TQ8
+         cTWXf5T8RXjY8glKHTDkarL/vxyxOJe5stEhCVlLw/UE5t7kWXDb4Wf4rq9lKpruKKAR
+         7RubIF7v3HeIcjVAMN8KMqaS1ZyfM4+5+KIg6e3I03s9/JgotTN3pGJyvzcuX45tdHxH
+         9WDw==
+X-Gm-Message-State: AOAM532gjCD6mj3xa8hX8xEmEn/g37Gd/FC3DWmqoyItIomxii59mHfE
+        CRFSpaz3ZF5LrUxliWdXohRtk0AJUGvLPbEMRVFsJ51jYOg=
+X-Google-Smtp-Source: ABdhPJxx3QVjtIlHHmaRr+FIyCSanSv+NHluSyI7EbqSdQdh1eTL6q1Ds6lIG1SyGm3w/AYvLlR/UPmAAwOAlzy3MVc=
+X-Received: by 2002:a9d:6010:: with SMTP id h16mr1499403otj.262.1599837244523;
+ Fri, 11 Sep 2020 08:14:04 -0700 (PDT)
+MIME-Version: 1.0
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Sep 2020 17:13:53 +0200
+Message-ID: <CAJZ5v0jYBQ792GmDYMYOzxbmJC7HYzZFfQ4JR8LxDR=0goQ1_Q@mail.gmail.com>
+Subject: [GIT PULL] Power management updates for v5.9-rc5
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver defines two of 'struct i2c_device_id' but uses only one:
+Hi Linus,
 
-  drivers/power/supply/pm2301_charger.c:107:35: warning:
-    'pm2xxx_ident' defined but not used [-Wunused-const-variable=]
+Please pull from the tag
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/power/supply/pm2301_charger.c | 5 -----
- 1 file changed, 5 deletions(-)
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.9-rc5
 
-diff --git a/drivers/power/supply/pm2301_charger.c b/drivers/power/supply/pm2301_charger.c
-index 787867805944..2df6a2459d1f 100644
---- a/drivers/power/supply/pm2301_charger.c
-+++ b/drivers/power/supply/pm2301_charger.c
-@@ -104,11 +104,6 @@ static int pm2xxx_charger_current_map[] = {
- 	3000,
- };
- 
--static const struct i2c_device_id pm2xxx_ident[] = {
--	{ "pm2301", 0 },
--	{ }
--};
--
- static void set_lpn_pin(struct pm2xxx_charger *pm2)
- {
- 	if (!pm2->ac.charger_connected && gpio_is_valid(pm2->lpn_pin)) {
--- 
-2.17.1
+with top-most commit d64e6906d188f0ba6a4f82b3f42e0bd0598183fa
 
+ Merge branch 'powercap'
+
+on top of commit f4d51dffc6c01a9e94650d95ce0104964f8ae822
+
+ Linux 5.9-rc4
+
+to receive power management updates for 5.9-rc5.
+
+These fix three pieces of documentation and add new CPU IDs to the
+Intel RAPL power capping driver.
+
+Specifics:
+
+ - Add CPU IDs of the TigerLake Desktop, RocketLake and AlderLake
+   chips to the Intel RAPL power capping driver (Zhang Rui).
+
+ - Add the missing energy model performance domain item to the
+   struct device kerneldoc comment (Randy Dunlap).
+
+ - Fix the struct powercap_control_type kerneldoc comment to match
+   the actual definition of that structure and add missing item to
+   the struct powercap_zone_ops kerneldoc comment (Amit Kucheria).
+
+Thanks!
+
+
+---------------
+
+Amit Kucheria (1):
+      powercap: make documentation reflect code
+
+Randy Dunlap (1):
+      PM: <linux/device.h>: fix @em_pd kernel-doc warning
+
+Zhang Rui (3):
+      powercap/intel_rapl: add support for TigerLake Desktop
+      powercap/intel_rapl: add support for RocketLake
+      powercap/intel_rapl: add support for AlderLake
+
+---------------
+
+ drivers/powercap/intel_rapl_common.c |  3 +++
+ include/linux/device.h               |  1 +
+ include/linux/powercap.h             | 11 +++++------
+ 3 files changed, 9 insertions(+), 6 deletions(-)
