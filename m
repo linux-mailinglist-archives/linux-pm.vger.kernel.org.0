@@ -2,142 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24026267637
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Sep 2020 00:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB2C267990
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Sep 2020 12:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbgIKWzC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Sep 2020 18:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47156 "EHLO
+        id S1725820AbgILKgk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Sep 2020 06:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725849AbgIKWzA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Sep 2020 18:55:00 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56373C061573;
-        Fri, 11 Sep 2020 15:54:58 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id v123so11488176qkd.9;
-        Fri, 11 Sep 2020 15:54:58 -0700 (PDT)
+        with ESMTP id S1725869AbgILKgg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Sep 2020 06:36:36 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF7BC061795
+        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 03:36:35 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id u8so8421831lff.1
+        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 03:36:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NWMxrIUTpLgjVNXNaQ7pp9gIhnKeSDmE1V55I6cdtAM=;
-        b=crLyzdC/9dwAbWZ3Ic5ykP4m2BId6gf3W293bIfkO1ebX7A5arPZnrIb7qZdw87imQ
-         HbW0a1+VNmRG1RMU9wevX+5e1rL0bJK3AEhriOw3lp+lp6ApzB7vy0uL6ijUDKv8++cC
-         jP4O3IC1TiJVdK4gIcRCRT/ACnOI+psFUf8/HZ2l8PIWCJEdZ1IutRwZ62sIZnhEwhWw
-         sOtT6YxHVN4KLPGnkFJcTc0ezr9wz+GFcjndS1dp72Wju31OFBJSthlDhkl0z7YLsavJ
-         qj2ALdnmGz4ggh1Bxdwme/6PHjPwDiGJ2b6ABSKAoe2/M5rvTsfOA5Z514Dv1GKenEDU
-         ozQA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RF8m2xC4JB4qyW3nCqkmJE2v3IVbH777DHP9r98chVU=;
+        b=ZdAifYhj2ckBuaqC7gwZR7Hupf7v18XeH6Ksh6kg+yA5O8P0Qnbfx9ZEFfkqW0fTOy
+         lNszaKVc2NrsIDl1Egk7zLIrGNG0Ldo9UZJUcVS9IZVJkzXjn8CU8VVFivI17aeYfd+T
+         Jw9pNYWslgFu/FSgrEuYYb4RkkkzEPjBhUexfGTSPM0KnPb3qZxqBmZdq/2k3u04i6Qs
+         4Kst372V4IhEqb/0UqRTctNzZNV3duEfTaf7tKIlJl1AgMGryVizSQvmm6QuyWqLotes
+         ToifTRd3uH4Bz/BY28YZp5rWMeB9KXGmdnWQn1rhIugm5IKnafz7O0t1dTBhevtbIr6X
+         wZpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NWMxrIUTpLgjVNXNaQ7pp9gIhnKeSDmE1V55I6cdtAM=;
-        b=j4JYAuqfAL28ZAka3jHzPGz3oz0ytszNSJiJ7UvOWR88bVtzJgFUxguGiewoZhwAQm
-         vXHCNUCURSKcurQDm4vRQxh6oFv+3ALzd1F9+QWw/nJtzJJOcEqiXVvBuhMqOPmemOsr
-         tM2aLuJj5J/RHYG5XmAjrTg3nj0PBRooUtY5PbZkaooXuBWsxZDcDBrWJosZpUDxUNJg
-         nWRs3P4P0SJQ3NQJzkz388sQSUpLS5r500b6vVAu9S37Ta1dzldAV/JyI6K6pxDBffo+
-         BLgFhMHbtksX9UMg5ikhzwkf+TKAh28rGEx27nIG3WHRZfOdhZRCNwNARK+aRIdjoJnJ
-         jKnw==
-X-Gm-Message-State: AOAM5324XpbwAA+4hk1NlPI5SztA+MV3RjtDYF7rvpgmrBhbeMlf/6Ib
-        PrfliH4w+H1s6+4L3sI3qtI=
-X-Google-Smtp-Source: ABdhPJwzg6HPiHcP9mMdu0JIsPsjeyUmQIHyjp01tLStVmTK7xeyl9LYMu/1ZB72u0hesaAniiU9QQ==
-X-Received: by 2002:a37:ef05:: with SMTP id j5mr3570706qkk.456.1599864896536;
-        Fri, 11 Sep 2020 15:54:56 -0700 (PDT)
-Received: from shinobu (072-189-064-225.res.spectrum.com. [72.189.64.225])
-        by smtp.gmail.com with ESMTPSA id w6sm4257339qti.63.2020.09.11.15.54.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2020 15:54:55 -0700 (PDT)
-Date:   Fri, 11 Sep 2020 18:54:39 -0400
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Syed Nayyar Waris <syednwaris@gmail.com>,
-        akpm@linux-foundation.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RF8m2xC4JB4qyW3nCqkmJE2v3IVbH777DHP9r98chVU=;
+        b=sF7PRSHOWtixSZllmaaHfT7QIWydsCCk/MzyyntqW6GBPJK516Zp2OYKNFK3qF8lgj
+         mdUYpQUi7wGq1JrWdaC8b0cwIPoukGXRA8Ux4z/KEgI8lvX/y5TqGzUXoG0FrUYml/YI
+         y5O7WV2bPXVIFxAmj4UXQjMBRKY9xPD2qOmpK8QrsibhWnbi3VISdFEc5BK/KMZn5fK8
+         qa0XWJa0zDNWMZ9gHM7LtsuK7084100gf24TJI7RzVvflOrAnI82gWApm0l17zXdGYqw
+         ffDh55Jxq0ByNN5qzBNgAfrnaqQTK9+fiXTpwHvt35LZdpy1/s+s77UUby156DCRxpfD
+         52Eg==
+X-Gm-Message-State: AOAM530OnGqa6eq0ZxwkHsJM7oXO23tqvEHEFKbE9CK5juQXgWDh5Agd
+        NA3mK56LAwST7ZcKgW6cEeUsOAfgUSE++txwNPSJiw==
+X-Google-Smtp-Source: ABdhPJyoD2XPyfxM3troBciEM2Mczg6M+QUgoHKVC37fUndkhJdOxvWEyjUmNDBgtw0N6y9hRBKROUhaDN/qwicI9KA=
+X-Received: by 2002:a05:6512:370b:: with SMTP id z11mr1453851lfr.571.1599906993330;
+ Sat, 12 Sep 2020 03:36:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1595572867.git.frank@allwinnertech.com>
+In-Reply-To: <cover.1595572867.git.frank@allwinnertech.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 12 Sep 2020 12:36:22 +0200
+Message-ID: <CACRpkdZqNSGkDCm6HGpS63iWp5b4WrZpdqz8QEeu4CVzkhGQ=Q@mail.gmail.com>
+Subject: Re: [PATCH v5 00/16] Allwinner A100 Initial support
+To:     Frank Lee <frank@allwinnertech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Frank Lee <tiny.windzz@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arch@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Ondrej Jirman <megous@megous.com>,
+        Corentin Labbe <clabbe@baylibre.com>, bage@linutronix.de,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-i2c <linux-i2c@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 0/4] Introduce the for_each_set_clump macro
-Message-ID: <20200911225417.GA5286@shinobu>
-References: <cover.1593243079.git.syednwaris@gmail.com>
- <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="f2QGlHpHGjS2mn6Y"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jul 24, 2020 at 8:53 AM Frank Lee <frank@allwinnertech.com> wrote:
 
---f2QGlHpHGjS2mn6Y
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>   dt-bindings: pinctrl: sunxi: Get rid of continual nesting
+>   dt-bindings: pinctrl: sunxi: Add A100 pinctrl bindings
+>   pinctrl: sunxi: add support for the Allwinner A100 pin controller
 
-On Thu, Jul 16, 2020 at 02:49:35PM +0200, Linus Walleij wrote:
-> Hi Syed,
->=20
-> sorry for taking so long. I was on vacation and a bit snowed
-> under by work.
->=20
-> On Sat, Jun 27, 2020 at 10:10 AM Syed Nayyar Waris <syednwaris@gmail.com>=
- wrote:
->=20
-> > Since this patchset primarily affects GPIO drivers, would you like
-> > to pick it up through your GPIO tree?
->=20
-> I have applied the patches to an immutable branch and pushed
-> to kernelorg for testing (autobuilders will play with it I hope).
->=20
-> If all works fine I will merge this into my devel branch for v5.9.
->=20
-> It would be desirable if Andrew gave his explicit ACK on it too.
->=20
-> Yours,
-> Linus Walleij
+These three patches (3,4,5) are now applied to the pinctrl tree.
 
-Hi Linus,
-
-What's the name of the branch with these patches on kernelorg; I'm
-having trouble finding it?
-
-Btw, I'm CCing Andrew as well here because I notice him missing from the
-CC list earlier for this patchset.
-
-Thanks,
-
-William Breathitt Gray
-
---f2QGlHpHGjS2mn6Y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl9cAC8ACgkQhvpINdm7
-VJJypRAAxs2Ws4cBWHSC+xWIB7YolKoiCZO9NMeBRMncPL8n3mt80XKtlm9XWG1i
-8wYgMDcK5GiKsYy/hGtzLJA5OYoEvOGP3no0nTdYQylGdHlZxFGg2eUTijdnTsDH
-NJ1+RDdr7rp6i/ZSmTBYQ/59dQxvxHwsxx41snBD1EUqhx9RL+z2iWDmwJnMZn95
-yyqbxxAsEGWQmkLA8ATa1kT4iOAY07xA1aggKjxCmOAWtRIopStLbaLgFhzhiwxz
-CLEirmVbm5rBt5ZJ8L/48VZL2kqSzuAs2yClCTgLv6rXVNFxhERXUNcjARWxVghx
-EYp3E1+62z7XX8mevdDV/JNzZBRQvoWexAVgIeogK94wyoNlB1+tGvpTmwBRxSOD
-++hBdEnnPu7y2O9KghN32xDYtB0JyY4UTm0z9o/hZcmVJetJEYbIPXkGVdhYrvWd
-H3eQ2ON9tbTaPI2rQU3c9hnCm/lTPDBDRVSN8X6rb3PdSzhZHEp4R1aTm9QiZrdU
-jn5NNi+69aR2rDkTZMogvXE1bnaI3jFag8XtBb5x8HIVtPg0r8SHGlw/f2P6Ea3C
-SkAW5npBZv8HigRfGHPhOk8JHwJ4/PcX66gi/+tHeTlmrwRqTBViR6/qjv1MYXYR
-2Rcvoza6pKv45K/74PheOwz1W8mRrAlZ0t3ZbGBqE2zSOlMw6vk=
-=I8Cv
------END PGP SIGNATURE-----
-
---f2QGlHpHGjS2mn6Y--
+Yours,
+Linus Walleij
