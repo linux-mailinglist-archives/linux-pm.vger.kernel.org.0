@@ -2,121 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15843267A29
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Sep 2020 13:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0D6267B63
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Sep 2020 18:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725850AbgILLxH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Sep 2020 07:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53702 "EHLO
+        id S1725877AbgILQWS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Sep 2020 12:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725838AbgILLxB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Sep 2020 07:53:01 -0400
+        with ESMTP id S1725385AbgILQWL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Sep 2020 12:22:11 -0400
 Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A090C061757
-        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 04:53:00 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id u8so8545876lff.1
-        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 04:53:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6090C061573
+        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 09:22:10 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id x69so8996879lff.3
+        for <linux-pm@vger.kernel.org>; Sat, 12 Sep 2020 09:22:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=IpDA5lrqpoe9BhHzHEKcDdzah7WCXhPLSe4uwf4HayU=;
-        b=0TDzUIrd5WeoitfvoSTyJ+emMF5/BacQv11/txWOChQQeYZCc+kKRuMW0Y6rcvM99j
-         fAwP8fmEN+7ZiwDrs35uA7tsDkd6ap+GhjJWSs8NY8him2c1KOBsCrS2fGcdgnb4JN/C
-         QQErpArSKOjmVycQK+6tnooH/0gpRHR2FDYOmYAnzy4We/sOvVJPSNM2Tx9qtUv6Dite
-         TVA5DEEMMMlwoJGF83MCw+klch89BlMDGWrfOKMqmgxJILdOh/H3upJUpsql/aL+5mxn
-         FDhponLQKKlCnI2UR4umJKLTAXCduZ0ewdzK58C9X+1EagPhl1uOOnJnnQfSPd4A4t6h
-         q7vg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=whTwaaFIj4VaMO00rSkvbl86UfGSXDScx4RZw5sPwwA=;
+        b=pXKn1BNqhdkhBJzekoypq72xizuWmzUnDg57toV5RG6L7h6UZETD3VajMp4RJXwWmF
+         ADL3juoa02yH2BfzBAzMFY9qyfK5U3DSzTyUh18/fQQvc9p75/Mw3ZFWVL08yEvh2mFd
+         MbZu4EoSOia2pDnd75EtjZCFgHRE8wFj83ZY13TMN1YRe9Es/K/cZM72ymvB6kBq2840
+         BlaRwBM4p6hx9mp+Fo+V9WhL9zYS4FAs2NucaJ5KqV+zsWW7f+nocrPGF8QqPzxT6MFE
+         KgZqqlNSADNvwIh1x6iry8FtCAv552xvHecHGULH3DzoSCOr1AvGqpVSruBqlbAm9jOx
+         QDiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=IpDA5lrqpoe9BhHzHEKcDdzah7WCXhPLSe4uwf4HayU=;
-        b=PEXtK5F+H8OAs0aVPQKFUjAe2S47NBE7Xq9B7ev46gdEfJouxKPChQs/EobcgCqTVe
-         u/bumlFcxezXVAszXOtieC0K0LLFRACmRp+x5P8/oEuwAaOf0Km3vryU+dWPJgd5NCBa
-         VxG3j7DKMfNAPK4q+QLdD8zek1NoG0EU1RmFh/zPwgRGN7uPhO/jOGWzjK6pDAEe+9GN
-         ckm23XU9a3YUTqkrDcjReXw6S/X7qSdQ8LnctBV+jveTpsVfuqoHk2uBV+L5uDTeGtw8
-         mD2q2j87cYi8cEqAfjWu/QN19N4ws+b1QjeryAnLnOdlqfTNoggXzoXmSs9xrDTuY4mk
-         NqSg==
-X-Gm-Message-State: AOAM5316cA4MkK3PCjQWQT2lZFtAJbw8lz5L5U7qxcUch8zkgz3deB9k
-        84cCIbh5UGJvN8l1R3TM35XWpA==
-X-Google-Smtp-Source: ABdhPJwe/ic7w29H4PUhdB4LYAjG6LKQFEfW/u5HIb4rpcMPyN7QGCJkD6Fh0qXTQkaw0ph3r8243Q==
-X-Received: by 2002:ac2:4c11:: with SMTP id t17mr1439042lfq.230.1599911579231;
-        Sat, 12 Sep 2020 04:52:59 -0700 (PDT)
-Received: from localhost (h-209-203.A463.priv.bahnhof.se. [155.4.209.203])
-        by smtp.gmail.com with ESMTPSA id w4sm1404951ljm.50.2020.09.12.04.52.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2020 04:52:58 -0700 (PDT)
-Date:   Sat, 12 Sep 2020 13:52:58 +0200
-From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>
-Subject: Re: [PATCH] thermal: Kconfig: Update description for
- RCAR_GEN3_THERMAL config
-Message-ID: <20200912115258.GC674140@oden.dyn.berto.se>
-References: <20200911100148.19673-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=whTwaaFIj4VaMO00rSkvbl86UfGSXDScx4RZw5sPwwA=;
+        b=ZxXvweBjPLINhM334Itp2TtCdVS85dAy40MFi5rOAAXjOJ+2jyLkTcWRCGYXwF49nw
+         H4E2uM2+K1fL528Lg3fxj/Nm9PBFI4scyiEYZYoNKiaS18H69sBDl31jZzWmd0OHUrf3
+         o3Q4LKxae+YKFCPOZBTLO1afarT6tnZlXfEZaFCl6EaiIs7STPiFsa7O3ZdRxzAzTTR6
+         letWYSN97zLbfO80PusvsRZ+6KnfjKwy2xUZXMkMrSnnfMxQVCG3doB8moRwhm61lu8w
+         HEtPRXIxDekXTd8BH7jBMUG0NlQqsj0kfpPx7310Mhg6yaL6bw3eQS/hr5MZw/ZVJTvH
+         aeBQ==
+X-Gm-Message-State: AOAM531H5ng3/TDNQneLfFFXGpAFRqyT7XDKXTNf3tchU6ln1hTZ3ZZy
+        SyRJBvz57AqdhibPLV5cjnr2UD7YZKrJxsgEG5z3mA==
+X-Google-Smtp-Source: ABdhPJxeMSkr6dF/iyWmnFtQ6JiTKbE0tAM5i3iK+Aof7w3F98npke6rRj51PEaONLLT93UNEnc5jzoKKAONnegtCFc=
+X-Received: by 2002:a05:6512:370b:: with SMTP id z11mr1761753lfr.571.1599927729072;
+ Sat, 12 Sep 2020 09:22:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200911100148.19673-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20200808043512.106865-1-john.stultz@linaro.org>
+In-Reply-To: <20200808043512.106865-1-john.stultz@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 12 Sep 2020 18:21:58 +0200
+Message-ID: <CACRpkdZWC4078AyCJh67XW4kjLm1Eab76DS-3xy-0RgGrP09Yw@mail.gmail.com>
+Subject: Re: [RFC][PATCH] pinctrl: Rework driver_deferred_probe_check_state()
+ evaluation since default timeout has changed
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <treding@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Todd Kjos <tkjos@google.com>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lad,
+On Sat, Aug 8, 2020 at 6:35 AM John Stultz <john.stultz@linaro.org> wrote:
 
-Thanks for your work.
+> In commit bec6c0ecb243 ("pinctrl: Remove use of
+> driver_deferred_probe_check_state_continue()"), we removed the
+> use of driver_deferred_probe_check_state_continue() which
+> effectively never returned -ETIMED_OUT, with the
+> driver_deferred_probe_check_state() function that had been
+> reworked to properly return ETIMED_OUT when the deferred probe
+> timeout expired. Along with that change, we set the default
+> timeout to 30 seconds.
+>
+> However, since moving the timeout to 30 seconds caused some
+> issues for some users with optional dt links, we set the
+> default timeout back to zero - see commit ce68929f07de ("driver
+> core: Revert default driver_deferred_probe_timeout value to 0")
+>
+> This in essence changed the behavior of the pinctrl's usage
+> of driver_deferred_probe_check_state(), as it now would return
+> ETIMED_OUT by default. Thierry reported this caused problems with
+> resume on tegra platforms.
+>
+> Thus this patch tweaks the pinctrl logic so that it behaves as
+> before. If modules are enabled, we'll only return EPROBE_DEFERRED
+> while we're missing drivers linked in the DT.
+>
+> Cc: linux-pm@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Thierry Reding <treding@nvidia.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Cc: Todd Kjos <tkjos@google.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Kevin Hilman <khilman@kernel.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Rob Herring <robh@kernel.org>
+> Fixes: bec6c0ecb243 ("pinctrl: Remove use of driver_deferred_probe_check_state_continue()")
+> Fixes: ce68929f07de ("driver core: Revert default driver_deferred_probe_timeout value to 0")
+> Reported-by: Thierry Reding <thierry.reding@gmail.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
 
-On 2020-09-11 11:01:48 +0100, Lad Prabhakar wrote:
-> rcar_gen3_thermal driver is also used on Renesas RZ/G2 SoC's, update the
-> same to reflect the description for RCAR_GEN3_THERMAL config.
+As noted I applied Thierry's similar patch.
 
-Same comment about the commit message as for the VIN and CSI2 series 
-with same commit message. With that fixed,
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> Reviewed-by: Chris Paterson <Chris.Paterson2@renesas.com>
-> ---
->  drivers/thermal/Kconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index b668224f906d..7edc8dc6bbab 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -346,13 +346,13 @@ config RCAR_THERMAL
->  	  thermal framework.
->  
->  config RCAR_GEN3_THERMAL
-> -	tristate "Renesas R-Car Gen3 thermal driver"
-> +	tristate "Renesas R-Car Gen3 and RZ/G2 thermal driver"
->  	depends on ARCH_RENESAS || COMPILE_TEST
->  	depends on HAS_IOMEM
->  	depends on OF
->  	help
-> -	  Enable this to plug the R-Car Gen3 thermal sensor driver into the Linux
-> -	  thermal framework.
-> +	  Enable this to plug the R-Car Gen3 or RZ/G2 thermal sensor driver into
-> +	  the Linux thermal framework.
->  
->  config KIRKWOOD_THERMAL
->  	tristate "Temperature sensor on Marvell Kirkwood SoCs"
-> -- 
-> 2.17.1
-> 
-
--- 
-Regards,
-Niklas Söderlund
+Yours,
+Linus Walleij
