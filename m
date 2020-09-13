@@ -2,46 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3279268028
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Sep 2020 18:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3177226807C
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Sep 2020 19:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725940AbgIMQNK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Sep 2020 12:13:10 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56946 "EHLO
+        id S1725942AbgIMRNd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Sep 2020 13:13:33 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:35484 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgIMQNG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Sep 2020 12:13:06 -0400
+        with ESMTP id S1725876AbgIMRNc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Sep 2020 13:13:32 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DG9OC8102488;
-        Sun, 13 Sep 2020 16:11:57 GMT
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DH4iC8191502;
+        Sun, 13 Sep 2020 17:07:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=ug0tMzhluITQTcoGBeWBNqEK3Yug8rBXAC6fgIlchDU=;
- b=SGgTGK+RK3OiyWtYLGQOkQWO6TxPRTZe31NbqbWSTDslO/HSCF4bAjkuVmTsVDmSLt9c
- 7ZmnWCjcRCcYFtBwP+0ELWehwh5qUT+YBCNZY6Kfv7L9j/G3WuLJHmo0EbP5RGc8yNvx
- xC6slVYdm0SaZ2DyWu9zL9rKBfa0/zyD1pRVWX54g3iKKi4sOz3wgStkwJ96zw4dH7yV
- O/FHSxCZgbr9Fe/fALWz6TSCrt5Mkazmbnt7bjKMlEXitqMlnyJmk720xLGNQfKlg2gC
- g9Yh7CTNozWFqcKcvKIP7oiBMlO2dk9J0zHE9Uy6PjR79FCDlbJvcKxlcTRQIAXZCp0j SA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 33gp9ku4ds-1
+ bh=xVtLGu7xP2YfYZ/5jujoneuZlmPA2+dwH8I7NLyPQ1c=;
+ b=Juv1J9ih7aW9VwvSNOXrVn+lQ4/bY66fgMAgys7R6MsdDkbG+kKYFizO9UnPrQdS0FYR
+ +ezg0OJOUY1uvU8MGRH551lzfWXsOWSUFz6a4UJGMiDkcNUU5Feup7d9OHIFYenEikuu
+ C/UnQWnDb5PRRG4jPJrR+8XnwadKGotc5vHgqrdGPQ1ezckIfBrzqwv9imTfKgbGnvXn
+ 711q1eISZIqV86FM0NWO25rot6HkB/h8FGKSy4colpRNegADVYS0TN3neDlC5In0rLOH
+ 4wqPX+bPOBhDmiUf4csMsZx6svd9dvWTO8/52NkIc9i8ZFRXwgyhrKnchFHwyCeTi8JS 5A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 33gp9ku66c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 13 Sep 2020 16:11:57 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DG5vgQ160957;
-        Sun, 13 Sep 2020 16:11:57 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 33h7wjtmd7-1
+        Sun, 13 Sep 2020 17:07:47 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DH5fF1064033;
+        Sun, 13 Sep 2020 17:07:47 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 33hm2vghh7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 13 Sep 2020 16:11:57 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08DGBrTb013868;
-        Sun, 13 Sep 2020 16:11:53 GMT
+        Sun, 13 Sep 2020 17:07:46 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08DH7gN6025265;
+        Sun, 13 Sep 2020 17:07:42 GMT
 Received: from [10.74.86.192] (/10.74.86.192)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 13 Sep 2020 16:11:53 +0000
-Subject: Re: [PATCH v3 02/11] xenbus: add freeze/thaw/restore callbacks
- support
+        with ESMTP ; Sun, 13 Sep 2020 17:07:41 +0000
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
+ mode
 To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
         mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
         jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
@@ -53,133 +53,76 @@ To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         dwmw@amazon.co.uk, benh@kernel.crashing.org
 References: <cover.1598042152.git.anchalag@amazon.com>
- <2d3a7ed32bf38e13e0141a631a453b6e4c7ba5dc.1598042152.git.anchalag@amazon.com>
+ <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
 From:   boris.ostrovsky@oracle.com
 Organization: Oracle Corporation
-Message-ID: <eebc26b8-f1b1-3bea-5366-dd77f063237e@oracle.com>
-Date:   Sun, 13 Sep 2020 12:11:47 -0400
+Message-ID: <986e074e-9c9f-ce09-ffb8-ed8f5d528d98@oracle.com>
+Date:   Sun, 13 Sep 2020 13:07:36 -0400
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.2.1
 MIME-Version: 1.0
-In-Reply-To: <2d3a7ed32bf38e13e0141a631a453b6e4c7ba5dc.1598042152.git.anchalag@amazon.com>
+In-Reply-To: <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9743 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009130145
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009130155
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9743 signatures=668679
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
  adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- spamscore=0 priorityscore=1501 suspectscore=2 impostorscore=0 mlxscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009130145
+ definitions=main-2009130155
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 8/21/20 6:26 PM, Anchal Agarwal wrote:
-> From: Munehisa Kamata <kamatam@amazon.com> 
+On 8/21/20 6:25 PM, Anchal Agarwal wrote:
+> From: Munehisa Kamata <kamatam@amazon.com>  
 >
-> Since commit b3e96c0c7562 ("xen: use freeze/restore/thaw PM events for
-> suspend/resume/chkpt"), xenbus uses PMSG_FREEZE, PMSG_THAW and
-> PMSG_RESTORE events for Xen suspend. However, they're actually assigned
-> to xenbus_dev_suspend(), xenbus_dev_cancel() and xenbus_dev_resume()
-> respectively, and only suspend and resume callbacks are supported at
-> driver level. To support PM suspend and PM hibernation, modify the bus
-> level PM callbacks to invoke not only device driver's suspend/resume but
-> also freeze/thaw/restore.
+> Guest hibernation is different from xen suspend/resume/live migration.
+> Xen save/restore does not use pm_ops as is needed by guest hibernation.
+> Hibernation in guest follows ACPI path and is guest inititated , the
+> hibernation image is saved within guest as compared to later modes
+> which are xen toolstack assisted and image creation/storage is in
+> control of hypervisor/host machine.
+> To differentiate between Xen suspend and PM hibernation, keep track
+> of the on-going suspend mode by mainly using a new API to keep track of
+> SHUTDOWN_SUSPEND state.
+> Introduce a simple function that keeps track of on-going suspend mode
+> so that PM hibernation code can behave differently according to the
+> current suspend mode.
+> Since Xen suspend doesn't have corresponding PM event, its main logic
+> is modfied to acquire pm_mutex.
 >
-> Note that we'll use freeze/restore callbacks even for PM suspend whereas
-> suspend/resume callbacks are normally used in the case, becausae the
-> existing xenbus device drivers already have suspend/resume callbacks
-> specifically designed for Xen suspend.
-
-
-Something is wrong with this sentence. Or with my brain --- I can't
-quite parse this.
-
-
-And please be consistent with "PM suspend" vs. "PM hibernation".
-
-
->  So we can allow the device
-> drivers to keep the existing callbacks wihtout modification.
+> Though, accquirng pm_mutex is still right thing to do, we may
+> see deadlock if PM hibernation is interrupted by Xen suspend.
+> PM hibernation depends on xenwatch thread to process xenbus state
+> transactions, but the thread will sleep to wait pm_mutex which is
+> already held by PM hibernation context in the scenario. Xen shutdown
+> code may need some changes to avoid the issue.
 >
+> [Anchal Agarwal: Changelog]:
+>  RFC v1->v2: Code refactoring
+>  v1->v2:     Remove unused functions for PM SUSPEND/PM hibernation
+>  v2->v3:     Added logic to use existing pm_notifier to detect for ARM
+> 	     and abort hibernation for ARM guests. Also removed different
+> 	     suspend_modes and simplified the code with using existing state
+> 	     variables for tracking Xen suspend. The notifier won't get
+> 	     registered for pvh dom0 either.
+>
+> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
+> Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
 
 
-> @@ -599,16 +600,33 @@ int xenbus_dev_suspend(struct device *dev)
->  	struct xenbus_driver *drv;
->  	struct xenbus_device *xdev
->  		= container_of(dev, struct xenbus_device, dev);
-> +	bool xen_suspend = is_xen_suspend();
->  
->  	DPRINTK("%s", xdev->nodename);
->  
->  	if (dev->driver == NULL)
->  		return 0;
->  	drv = to_xenbus_driver(dev->driver);
-> -	if (drv->suspend)
-> -		err = drv->suspend(xdev);
-> -	if (err)
-> -		dev_warn(dev, "suspend failed: %i\n", err);
-> +	if (xen_suspend) {
-> +		if (drv->suspend)
-> +			err = drv->suspend(xdev);
-> +	} else {
-> +		if (drv->freeze) {
-
-
-'else if' (to avoid extra indent level).  In xenbus_dev_resume() too.
-
-
-> +			err = drv->freeze(xdev);
-> +			if (!err) {
-> +				free_otherend_watch(xdev);
-> +				free_otherend_details(xdev);
-> +				return 0;
-> +			}
-> +		}
-> +	}
-> +
-> +	if (err) {
-> +		dev_warn(&xdev->dev,
-
-
-Is there a reason why you replaced dev with xdev->dev (here and elsewhere)?
-
-
->  "%s %s failed: %d\n", xen_suspend ?
-> +				"suspend" : "freeze", xdev->nodename, err);
-> +		return err;
-> +	}
-> +
->  	
-
-> @@ -653,8 +683,44 @@ EXPORT_SYMBOL_GPL(xenbus_dev_resume);
->  
->  int xenbus_dev_cancel(struct device *dev)
->  {
-> -	/* Do nothing */
-> -	DPRINTK("cancel");
-> +	int err;
-> +	struct xenbus_driver *drv;
-> +	struct xenbus_device *xendev = to_xenbus_device(dev);
-
-
-xdev for consistency please.
-
-
-> +	bool xen_suspend = is_xen_suspend();
-
-
-No need for this, you use it only once anyway.
+BTW, just to make sure --- Thomas' comments about commit message format
+(SoB order, no changelog, etc) apply to all patches, not just #5.
 
 
 -boris
-
 
