@@ -2,102 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B368267F37
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Sep 2020 12:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65939267FFD
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Sep 2020 17:45:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgIMKVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Sep 2020 06:21:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725924AbgIMKV3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 13 Sep 2020 06:21:29 -0400
-Received: from archlinux (cpc149474-cmbg20-2-0-cust94.5-4.cable.virginm.net [82.4.196.95])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D41320709;
-        Sun, 13 Sep 2020 10:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599992488;
-        bh=qrXlPjdhm46n8PqoKDSkLIH/KCyIpGttHxR5823h9/w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=weVNjj2alHKqBcCuws07QUbCYG/Byuyua+HLPeKGfMmV4IVYvtcumPU8GyWhjgAg8
-         0qC127o7njBpUSnWa/XN1NMlIFF9utaRmV6AiOv+d6yXaBqLFsDQrTCa9DK3xwGOoZ
-         YaO2dkpiuNsB8gANSro6LYzMwck1dTTP66+qIiwY=
-Date:   Sun, 13 Sep 2020 11:21:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v3 00/10] qcom: pm8150: add support for thermal
- monitoring
-Message-ID: <20200913112122.0f4ee51b@archlinux>
-In-Reply-To: <20200910140000.324091-1-dmitry.baryshkov@linaro.org>
-References: <20200910140000.324091-1-dmitry.baryshkov@linaro.org>
-X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1725952AbgIMPpR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Sep 2020 11:45:17 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33118 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgIMPpG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Sep 2020 11:45:06 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DFUGHI094879;
+        Sun, 13 Sep 2020 15:43:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=+KYz9WIbVQU7rPAI45m7Ps673pTmdbdTUX1I+G/jOhY=;
+ b=X1P+8NpsKg3UbMT0WWzVM8HAl9xEWZbL+4ZfleEG0ASVxqSTscKJ9gvAmNXALxyCbP3P
+ 74lzqY/xtd3guruWFh9K9FYUrXU54TSfN3iizW8Xxy0fXyYZoPUaL7PNRX+KyX85Jmtg
+ pEA3bUsQA+3hFwV9IeNHgCChqM7LbJnLYTrVqLtTDAm3mF+lHfl6m8WJaBEwY7BD4h1c
+ lFDaiORtjwukYc1ZyCb92GaiAAkxVQ2FP7BayoITSR56GRu7lCia2IdFiDs2TsfZVDog
+ +9xKL7zaKxgGsGhapbZGlxDF0WjX7YHSmUsWn67s5F8XsA5KuI0UR3Is7u4ELYC6JkoQ Ow== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 33gpymb1db-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sun, 13 Sep 2020 15:43:56 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08DFPuQU088545;
+        Sun, 13 Sep 2020 15:43:56 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 33h7wjsx4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 13 Sep 2020 15:43:56 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08DFhabS027483;
+        Sun, 13 Sep 2020 15:43:36 GMT
+Received: from [10.74.86.192] (/10.74.86.192)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sun, 13 Sep 2020 15:43:36 +0000
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
+ mode
+To:     Anchal Agarwal <anchalag@amazon.com>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com, x86@kernel.org,
+        jgross@suse.com, linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        kamatam@amazon.com, sstabellini@kernel.org, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, axboe@kernel.dk, davem@davemloft.net,
+        rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz,
+        peterz@infradead.org, eduval@amazon.com, sblbir@amazon.com,
+        xen-devel@lists.xenproject.org, vkuznets@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dwmw@amazon.co.uk, benh@kernel.crashing.org
+References: <cover.1598042152.git.anchalag@amazon.com>
+ <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
+From:   boris.ostrovsky@oracle.com
+Organization: Oracle Corporation
+Message-ID: <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
+Date:   Sun, 13 Sep 2020 11:43:30 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9743 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009130140
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9743 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ phishscore=0 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ bulkscore=0 lowpriorityscore=0 priorityscore=1501 mlxlogscore=999
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009130140
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 10 Sep 2020 16:59:50 +0300
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
 
-> This patch serie adds support for thermal monitoring block on Qualcomm's
-> PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
-> to support thermal zones provided by this thermal monitoring block.
-> Unlike the rest of PMIC thermal senses, these thermal zones describe
-> particular thermistors, which differ between from board to board.
+
+On 8/21/20 6:25 PM, Anchal Agarwal wrote:
+> From: Munehisa Kamata <kamatam@amazon.com>  
 > 
+> Guest hibernation is different from xen suspend/resume/live migration.
+> Xen save/restore does not use pm_ops as is needed by guest hibernation.
+> Hibernation in guest follows ACPI path and is guest inititated , the
+> hibernation image is saved within guest as compared to later modes
+> which are xen toolstack assisted and image creation/storage is in
+> control of hypervisor/host machine.
+> To differentiate between Xen suspend and PM hibernation, keep track
+> of the on-going suspend mode by mainly using a new API to keep track of
+> SHUTDOWN_SUSPEND state.
+> Introduce a simple function that keeps track of on-going suspend mode
+> so that PM hibernation code can behave differently according to the
+> current suspend mode.
+> Since Xen suspend doesn't have corresponding PM event, its main logic
+> is modfied to acquire pm_mutex.
 
-As far as I am concerned this series is now ready to go up to one or two
-things in patch 8.  So on to the normal question based on the assumption
-it will pick up other necessary reviews shortly...
 
-What route do we want this to take? 
-I can do an immutable branch in IIO if that works for patches 1-8 and assume
-the dt file changes will got via usual SoC path?  We are getting a fair way
-into this cycle, so this may well end up happening next cycle depending
-on how quick reviews come in.
+lock_system_sleep() is not taking this mutex.
 
-Thanks,
 
-Jonathan
-
-> Changes since v3:
->  - Fix DT description to spell "thermal monitoring" instead of just TM
->  - Fix warnings in DT example
->  - Add EXPORT_SYMBOL_GPL(of_iio_channel_get_by_name)
->  - Fixed whitespace chanes in qcom-vadc-common.c
->  - Removed error message if IIO chanel get returns -EPROBE_DEFER
 > 
-> Changes since v2:
->  - IIO: export of_iio_channel_get_by_name() function
->  - dt-bindings: move individual io-channels to each thermal monitoring
->    channel rather than listing them all in device node
->  - added fallback defaults to of_device_get_match_data calls in
->    qcom-spmi-adc5 and qcom-spmi-adc-tm5 drivers
->  - minor typo fixes
-> 
-> Changes since v1:
->  - Introduce fixp_linear_interpolate() by Craig Tatlor
->  - Lots of syntax/whitespace changes
->  - Cleaned up register definitions per Jonathan's suggestion
->  - Implemented most of the suggestions from Bjorn's and Jonathan's
->    review
-> 
-> 
-> 
+> Though, accquirng pm_mutex is still right thing to do, we may
+> see deadlock if PM hibernation is interrupted by Xen suspend.
+> PM hibernation depends on xenwatch thread to process xenbus state
+> transactions, but the thread will sleep to wait pm_mutex which is
+> already held by PM hibernation context in the scenario. Xen shutdown
+> code may need some changes to avoid the issue.
 
+
+
+Is it Xen's shutdown or suspend code that needs to address this? (Or I
+may not understand what the problem is that you are describing)
+
+
+> 
+> +
+> +static int xen_pm_notifier(struct notifier_block *notifier,
+> +	unsigned long pm_event, void *unused)
+> +{
+> +	int ret;
+> +
+> +	switch (pm_event) {
+> +	case PM_SUSPEND_PREPARE:
+> +	case PM_HIBERNATION_PREPARE:
+> +	/* Guest hibernation is not supported for aarch64 currently*/
+> +	if (IS_ENABLED(CONFIG_ARM64)) {
+> +		ret = NOTIFY_BAD;
+> +		break;
+> +	}
+
+Indentation.
+
+> +	case PM_RESTORE_PREPARE:
+> +	case PM_POST_SUSPEND:
+> +	case PM_POST_HIBERNATION:
+> +	case PM_POST_RESTORE:
+> +	default:
+> +		ret = NOTIFY_OK;
+> +	}
+> +	return ret;
+> +};
+
+
+This whole routine now is
+
+	if (IS_ENABLED(CONFIG_ARM64))
+		return NOTIFY_BAD;
+
+	return NOTIFY_OK;
+
+isn't it?
+
+
+> +
+> +static struct notifier_block xen_pm_notifier_block = {
+> +	.notifier_call = xen_pm_notifier
+> +};
+> +
+> +static int xen_setup_pm_notifier(void)
+> +{
+> +	if (!xen_hvm_domain() || xen_initial_domain())
+> +		return -ENODEV;
+
+
+I don't think this works anymore.
+
+In the past your notifier would set suspend_mode (or something) but now
+it really doesn't do anything except reports an error in some (ARM) cases.
+
+So I think you should move this check into the notifier.
+
+(And BTW I still think PM_SUSPEND_PREPARE should return an error too.
+The fact that we are using "suspend" in xen routine names is irrelevant)
+
+
+
+-boris
+
+
+
+> +	return register_pm_notifier(&xen_pm_notifier_block);
+> +}
+> +
