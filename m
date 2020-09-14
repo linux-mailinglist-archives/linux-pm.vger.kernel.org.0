@@ -2,110 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4DB2691A8
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 18:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FBD2692A5
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 19:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726239AbgINQdb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 12:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726033AbgINPpn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 11:45:43 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ACAC06174A
-        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:45:36 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w11so13972013lfn.2
-        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=I1Diq3BVw3//vJqeDcLXAlMyOlmanauBDrj7DA7Bapg=;
-        b=aUDJEPCk0RcQKnW6Jt3+dgnCUbGNP8VTiZoqXo8QkUprwnChxH2RUbWoB/cLgQX2Rx
-         riIjyia/GLCJR9xVU04942RbOEFED35baENMdlCUNgF6PEUJsruLtw9P2wgxxvHcZdo1
-         8dnIN+mxtJeG9GZQl7WSoswNbvW7nvTXMlZk100dzBlnTyaoC33KqYHiLT/rDFEbelm0
-         qgYKQr7GNdiTmK3mIj6bqJhXoB4e081sdIcPTQHbneq/Cnn41Dxgybep14VDkzKaDVS5
-         37pnKSIy44Mxbs1HKblhUbJKz0QDHSYE+hvdUvhVfXHtH7oRP5H3jcG9PM67Vs2L9jYG
-         umbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=I1Diq3BVw3//vJqeDcLXAlMyOlmanauBDrj7DA7Bapg=;
-        b=GhxosjUy6vbstC1ZaPKQVm/b8SG0FpbWeKXiBU0WwVOuwlUrAMWAiSAGtJC3+XsWY1
-         cTI+sdZo8kmj5rtPBX+3x74lgtPgGCZ+LgqW3c+ekb8gSzWrjAmCoUoUzYFKBxbgt5Ce
-         Gc6h9LDWvd2FkaCh0gLaJNvnwWAdggQ/xugStw6sOfyIQsjh/L6noTtY+WmhC+cuPr4R
-         wZBImwNuKAmMIHiRfQcs9ZXGXWXIK1KpFnhrqT+f4SahjPm3a9/gq+9Pil9I8tsb6kHK
-         dT/kmADa1W4xDrrKyNjfQUapq+M117GW0Z4k3gZrbr5YrmboBUkr9yX+e8Z2XMd18T+k
-         W7kA==
-X-Gm-Message-State: AOAM531hzdJ+uUmfIJwHs9XmJG7cZNoLsCCDvPMkvLAMHfFa7zu6BhYs
-        dd0I/dcIEiBu0gIR0QZt45lqSg==
-X-Google-Smtp-Source: ABdhPJxtV7I4cIHpLZEVpRugay28tPPeWIt/1IZHQRAI99Q5d18DZ+ZTy9N5LpAUQnzFQm1TXpLMWA==
-X-Received: by 2002:ac2:48a2:: with SMTP id u2mr4534376lfg.359.1600098332759;
-        Mon, 14 Sep 2020 08:45:32 -0700 (PDT)
-Received: from [192.168.1.145] ([188.162.64.187])
-        by smtp.gmail.com with ESMTPSA id y17sm4115896ljm.55.2020.09.14.08.45.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2020 08:45:32 -0700 (PDT)
-Subject: Re: [PATCH v3 00/10] qcom: pm8150: add support for thermal monitoring
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-References: <20200910140000.324091-1-dmitry.baryshkov@linaro.org>
- <20200913112122.0f4ee51b@archlinux>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Message-ID: <99063ca8-c795-416c-18cb-5c026879a13c@linaro.org>
-Date:   Mon, 14 Sep 2020 18:45:29 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        id S1726125AbgINRLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 13:11:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726594AbgINNEt (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Sep 2020 09:04:49 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 56FAE221E5;
+        Mon, 14 Sep 2020 13:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600088653;
+        bh=L1FWJ3Phjt/pxDhSTC7ZNmaKjoDptfD5Cefa6BmLavA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=f/oTzkWf9LQq/GBDMOsWY6bIDunEJwRZNeL2HMN0mfORYVoxRVKmeqk+31fRdFmSa
+         OrBXxUsZygII65XRNBm3AykSfF0d7gpnRM9gpoIMJnWA8vDxPr+XzLh6iA31fYOL4u
+         6WyvmsVg7PRc7t3LNplH4luhbcBOZm8//GzTi3sg=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Evan Green <evgreen@chromium.org>,
+        Georgi Djakov <georgi.djakov@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.8 12/29] interconnect: Show bandwidth for disabled paths as zero in debugfs
+Date:   Mon, 14 Sep 2020 09:03:41 -0400
+Message-Id: <20200914130358.1804194-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200914130358.1804194-1-sashal@kernel.org>
+References: <20200914130358.1804194-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200913112122.0f4ee51b@archlinux>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/09/2020 13:21, Jonathan Cameron wrote:
-> On Thu, 10 Sep 2020 16:59:50 +0300
-> Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> 
->> This patch serie adds support for thermal monitoring block on Qualcomm's
->> PMIC5 chips. PM8150{,b,l} and sm8250-mtp board device trees are extended
->> to support thermal zones provided by this thermal monitoring block.
->> Unlike the rest of PMIC thermal senses, these thermal zones describe
->> particular thermistors, which differ between from board to board.
->>
-> 
-> As far as I am concerned this series is now ready to go up to one or two
-> things in patch 8.  So on to the normal question based on the assumption
-> it will pick up other necessary reviews shortly...
+From: Matthias Kaehlcke <mka@chromium.org>
 
-Sending v5 right now, fixing issues in patch 8.
+[ Upstream commit b1910c6b9983817160e04d4e87b2dc1413c5361a ]
 
-> 
-> What route do we want this to take?
-> I can do an immutable branch in IIO if that works for patches 1-8 and assume
-> the dt file changes will got via usual SoC path?  We are getting a fair way
-> into this cycle, so this may well end up happening next cycle depending
-> on how quick reviews come in.
+For disabled paths the 'interconnect_summary' in debugfs currently shows
+the orginally requested bandwidths. This is confusing, since the bandwidth
+requests aren't active. Instead show the bandwidths for disabled
+paths/requests as zero.
 
-I think this makes sense. Thank you for your reviews.
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Evan Green <evgreen@chromium.org>
+Link: https://lore.kernel.org/r/20200729104933.1.If8e80e4c0c7ddf99056f6e726e59505ed4e127f3@changeid
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/interconnect/core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 9e1ab701785c7..0162a9af93237 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -55,12 +55,18 @@ static int icc_summary_show(struct seq_file *s, void *data)
+ 
+ 			icc_summary_show_one(s, n);
+ 			hlist_for_each_entry(r, &n->req_list, req_node) {
++				u32 avg_bw = 0, peak_bw = 0;
++
+ 				if (!r->dev)
+ 					continue;
+ 
++				if (r->enabled) {
++					avg_bw = r->avg_bw;
++					peak_bw = r->peak_bw;
++				}
++
+ 				seq_printf(s, "  %-27s %12u %12u %12u\n",
+-					   dev_name(r->dev), r->tag, r->avg_bw,
+-					   r->peak_bw);
++					   dev_name(r->dev), r->tag, avg_bw, peak_bw);
+ 			}
+ 		}
+ 	}
 -- 
-With best wishes
-Dmitry
+2.25.1
+
