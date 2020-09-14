@@ -2,151 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3AD268435
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 07:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013202684DD
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 08:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726039AbgINFql (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 01:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbgINFqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 01:46:37 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE45C061788
-        for <linux-pm@vger.kernel.org>; Sun, 13 Sep 2020 22:46:53 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id b79so9893283wmb.4
-        for <linux-pm@vger.kernel.org>; Sun, 13 Sep 2020 22:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sDD9xbXrOHoErjZLRR+/+AtDLaCnVmHRrkVezZM912Y=;
-        b=eY+okMC8xfBiRH3cE/90LzCYt3zAjKBnNwVqBIqPfCCKGfS4LiZkI1tz5tVuAKD9Bt
-         gHHBuuvOIghEFOViq4ZTL21bCZXni8/Zlat4xIzctM+SS4EZdWsHZhBzUfXknGocvPSZ
-         mn+q3/tooHeVkXczfc+2yfawVsDQCwVVlOXbeB0gLAozyKoOoX7PO0KpkOk0jzw0OKiz
-         3VTlXVTjQia8VZeLobuuTUCrBFsjKu2CQdjs7vPq06bmvTkCRG7NOvMKj6xW/SGdOY9S
-         MQSRrUXP4HCb/O+HyjwfRdOpOfcCETks981G/J9Y+KeI7juc5WC4LpooQ2Fz/esbZE+4
-         Vf8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sDD9xbXrOHoErjZLRR+/+AtDLaCnVmHRrkVezZM912Y=;
-        b=Hzal5CQYsv8LHPoLozuAiYR2jKiznbtHQF51kAQAqDFilDo+N0Y30nYk4MZKpLHE29
-         WsoFWcLlg+f85P9SzgrsEZ8N+O81ZcQ0dBE7QyjspA+Y5ysHAUjHjTDaAhaq5yb/rCJk
-         37fMylfg3JuXBl07mLEopkKBqvvJq/7oKt88qETiWGP9/UJN/bXK0QtAFv+Aq+Qbj4RA
-         0pB7PHmcMq93iwXvlGDc5cMUzRx+E2UrAx4IjfdqcAcBC84KIQelRqbBbeQkS6xBREdA
-         5n4SS2GO0B+vcqjL+RcbUkGEDciR65BKM8J85RxjJo63zAn8QCajcTFm6imoffUBggJh
-         lthA==
-X-Gm-Message-State: AOAM533EdW8lZQ99WVoi+bZw2R+B5kOkQxAQPjGEZ2I8KPVvgepi1JHM
-        y0TVL3iHiKwRNwb/RoNZwYrsirK+6+G+CnjN
-X-Google-Smtp-Source: ABdhPJyUVCGBR93hL6wzG0lCe51kAZFFaJG76CajpH7T3daMVWhHg+pdihb6Vi5OLEnx0XzSO+6QCg==
-X-Received: by 2002:a05:600c:22c5:: with SMTP id 5mr13272418wmg.34.1600062412115;
-        Sun, 13 Sep 2020 22:46:52 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:a402:e7fb:d494:d130? ([2a01:e34:ed2f:f020:a402:e7fb:d494:d130])
-        by smtp.googlemail.com with ESMTPSA id h204sm17849917wmf.35.2020.09.13.22.46.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 13 Sep 2020 22:46:51 -0700 (PDT)
-Subject: Re: [PATCH] cpuidle: add riscv cpuidle driver
-To:     liush <liush@allwinnertech.com>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, rjw@rjwysocki.net,
-        anup.patel@wdc.com, atish.patra@wdc.com, damien.lemoal@wdc.com,
-        wangkefeng.wang@huawei.com, kernel@esmil.dk, zong.li@sifive.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <1600048323-2964-1-git-send-email-liush@allwinnertech.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <80bc85f5-fba3-5f08-4d73-372b5f495833@linaro.org>
-Date:   Mon, 14 Sep 2020 07:46:50 +0200
+        id S1726070AbgINGba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 02:31:30 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31144 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726003AbgINGb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 02:31:27 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08E62HqJ063631;
+        Mon, 14 Sep 2020 02:31:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=+f3ZSgcjocPx6bP9sBMNDfuiyXz+zw9QTYzFYdxpOdY=;
+ b=V+OVesyPrqeQPahOc9UwGccNoTot3LK1Uz1hQXajDjnU2Di7vpNQ5dv1MRyAlexiib0c
+ 2w2pC0hpu6z1WYVsTZHRYasd9vMP1UeN/jQM5UBmSe+gzGHUY8eYYIp5oHaSQVWIOniL
+ d6+Q8GW/BnKtZ5S+PPXqGL+rg3dQ7gyu1BwtOOcgMTvjD4qUGvX+e9c11kvbVi1hOaNn
+ c2NbaKauhndjChrK2/urwnMasrYaW96XRApJYjGLW65O2u3eVTlpEw0dMmLF1xnpPH4L
+ y/FOGg/UhhwqAzsq+9ahyUZQl8sSG24gNXL7JTAUbE8CxUPfcTJ66FG0SO4kYRC4V48W aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33hwys6tha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Sep 2020 02:31:17 -0400
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08E62W4b064885;
+        Mon, 14 Sep 2020 02:31:17 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33hwys6tge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Sep 2020 02:31:16 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08E6NHxH012794;
+        Mon, 14 Sep 2020 06:31:15 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma04ams.nl.ibm.com with ESMTP id 33h2r99d6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Sep 2020 06:31:14 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08E6VCns14811454
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Sep 2020 06:31:12 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 773C3AE045;
+        Mon, 14 Sep 2020 06:31:12 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 93E1EAE057;
+        Mon, 14 Sep 2020 06:31:10 +0000 (GMT)
+Received: from [9.79.217.60] (unknown [9.79.217.60])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Sep 2020 06:31:10 +0000 (GMT)
+Subject: Re: [RFC v4 1/1] selftests/cpuidle: Add support for cpuidle latency
+ measurement
+To:     dedekind1@gmail.com, rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        srivatsa@csail.mit.edu, shuah@kernel.org, npiggin@gmail.com,
+        ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
+References: <20200902114506.45809-1-psampat@linux.ibm.com>
+ <20200902114506.45809-2-psampat@linux.ibm.com>
+ <b59481655c29d081eea4f34c00166517738000e5.camel@gmail.com>
+ <fa616fed-66be-bcad-83b8-b1173a3a444f@linux.ibm.com>
+ <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+From:   Pratik Sampat <psampat@linux.ibm.com>
+Message-ID: <607abe47-6155-d956-d373-b498cc1d26e8@linux.ibm.com>
+Date:   Mon, 14 Sep 2020 12:01:09 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <1600048323-2964-1-git-send-email-liush@allwinnertech.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <9c5156274a86573ad592e6e431f3cbee8135b736.camel@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-13_09:2020-09-10,2020-09-13 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
+ suspectscore=0 impostorscore=0 spamscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009140051
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/09/2020 03:52, liush wrote:
-> This patch adds a cpuidle driver for systems based RISCV architecture.
-> This patch supports state WFI. Other states will be supported in the
-> future.
-> 
-> Signed-off-by: liush <liush@allwinnertech.com>
-> ---
-
-[ ... ]
-
->  
->  obj-$(CONFIG_RISCV_M_MODE)	+= traps_misaligned.o
-> diff --git a/arch/riscv/kernel/cpuidle.c b/arch/riscv/kernel/cpuidle.c
-> new file mode 100644
-> index 00000000..a3289e7
-> --- /dev/null
-> +++ b/arch/riscv/kernel/cpuidle.c
-> @@ -0,0 +1,8 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <asm/cpuidle.h>
-> +
-> +void cpu_do_idle(void)
-> +{
-> +	__asm__ __volatile__ ("wfi");
-> +
-
-extra line
-
-> +}
-
-As for the next deeper states should end up with the cpu_do_idle
-function, isn't there an extra operation with the wfi() like flushing
-the l1 cache?
-
-> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> index c0aeedd..f6be0fd 100644
-> --- a/drivers/cpuidle/Kconfig
-> +++ b/drivers/cpuidle/Kconfig
-> @@ -62,6 +62,11 @@ depends on PPC
->  source "drivers/cpuidle/Kconfig.powerpc"
->  endmenu
->  
-> +menu "RISCV CPU Idle Drivers"
-> +depends on RISCV
-> +source "drivers/cpuidle/Kconfig.riscv"
-> +endmenu
-> +
->  config HALTPOLL_CPUIDLE
->  	tristate "Halt poll cpuidle driver"
->  	depends on X86 && KVM_GUEST
-> diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
-> new file mode 100644
-> index 00000000..e86d36b
-> --- /dev/null
-> +++ b/drivers/cpuidle/Kconfig.riscv
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# RISCV CPU Idle drivers
-> +#
-> +config RISCV_CPUIDLE
-> +        bool "Generic RISCV CPU idle Driver"
-> +        select DT_IDLE_STATES
-> +	select CPU_IDLE_MULTIPLE_DRIVERS
-> +        help
-> +          Select this option to enable generic cpuidle driver for RISCV.
-> +	  Now only support C0 State.
-
-Identation
-
-Rest looks ok for me.
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+On 03/09/20 8:20 pm, Artem Bityutskiy wrote:
+> On Thu, 2020-09-03 at 17:30 +0530, Pratik Sampat wrote:
+>> I certainly did not know about that the Intel architecture being aware
+>> of timers and pre-wakes the CPUs which makes the timer experiment
+>> observations void.
+> Well, things depend on platform, it is really "void", it is just
+> different and it measures an optimized case. The result may be smaller
+> observed latency. And things depend on the platform.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Of course, this will be for just software observability and hardware
+can be more complex with each architecture behaving differently.
+
+>> However, we are also collecting a baseline measurement wherein we run
+>> the same test on a 100% busy CPU and the measurement of latency from
+>> that could be considered to the kernel-userspace overhead.
+>> The rest of the measurements would be considered keeping this baseline
+>> in mind.
+> Yes, this should give the idea of the overhead, but still, at least for
+> many Intel platforms I would not be comfortable using the resulting
+> number (measured latency - baseline) for a cpuidle driver, because
+> there are just too many variables there. I am not sure I could assume
+> the baseline measured this way is an invariant - it could be noticeably
+> different depending on whether you use C-states or not.
+>
+>>> At least on Intel platforms, this will mean that the IPI method won't
+>>> cover deep C-states like, say, PC6, because one CPU is busy. Again, not
+>>> saying this is not interesting, just pointing out the limitation.
+>> That's a valid point. We have similar deep idle states in POWER too.
+>> The idea here is that this test should be run on an already idle
+>> system, of course there will be kernel jitters along the way
+>> which can cause little skewness in observations across some CPUs but I
+>> believe the observations overall should be stable.
+> If baseline and cpuidle latency are numbers of same order of magnitude,
+> and you are measuring in a controlled lab system, may be yes. But if
+> baseline is, say, in milliseconds, and you are measuring a 10
+> microseconds C-state, then probably no.
+
+This makes complete sense. The magnitude of deviations being greater
+than the scope of the experiment may not be very useful in quantifying
+the latency metric.
+
+One way is to minimize the baseline overhead is to make this a kernel
+module https://lkml.org/lkml/2020/7/21/567. However, the overhead is
+unavoidable but definetly can be further minimized by using an external
+approach suggested by you in your LPC talk
+
+>> Another solution to this could be using isolcpus, but that just
+>> increases the complexity all the more.
+>> If you have any suggestions of any other way that could guarantee
+>> idleness that would be great.
+> Well, I did not try to guarantee idleness. I just use timers and
+> external device (the network card), so no CPUs needs to be busy and the
+> system can enter deep C-states. Then I just look at median, 99%-th
+> percentile, etc.
+>
+> But by all means IPI is also a very interesting experiment. Just covers
+> a different usage scenario.
+>
+> When I started experimenting in this area, one of my main early
+> takeaways was realization that C-state latency really depends on the
+> event source.
+
+That is an interesting observation, on POWER systems where we don't
+have timer related wakeup optimizations, the readings from this test do
+signify a difference between latencies of IPI versus the latency
+gathered after a timer interrupt.
+
+However, these timer based variations weren't as prominent on my Intel
+based ThinkPad t480, therefore in confirmation with your observations.
+
+This discussions does help!
+Although this approach may not help quantify latency deviations at a
+hardware-accurate level but could still be helpful in quantifying this
+metric from a software observability point of view.
+
+
+Thanks!
+Pratik
+
