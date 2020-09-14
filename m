@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 923B32690E2
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 17:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835D52690DA
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 17:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgINP6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 11:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50246 "EHLO
+        id S1726396AbgINP5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 11:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbgINPsY (ORCPT
+        with ESMTP id S1726524AbgINPsY (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 11:48:24 -0400
 Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EDDC061353
-        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:48:21 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id r24so111837ljm.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:48:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2B9C0612F2
+        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:48:24 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id s205so88285lja.7
+        for <linux-pm@vger.kernel.org>; Mon, 14 Sep 2020 08:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=paLqFLcsx0fUOLnJOcRz6bMeBzGi+tTtO3JWy1A0IIs=;
-        b=VcT8v9jIZiDawP/g/zX4s4gw1bpIazhAtE5+9dzKzIks+U1ep96wEDg+g/brwuQE5g
-         /md7zQr9ygLunuSSDqGVRAQgz5G8wiNVRJYAZq6nVs2C0RX3qihR/vaYaTHsQ6q8YHTj
-         0sgaQZo5X2okmkS+gZGYBfmsI8bqBGzuX+ypKlA6dXWh38xzv+lACbYlREldrvvfrER8
-         p2QLrTCAtz+AoXvwYkjMUOi+Kq0TSSV26N26tMKrJZ9kCJkTK7sfgdXj6DHLX9pzhCL2
-         Ny46D18mvMV9uy0rtKOzdqTeZZgeK31aETdyCSSzrdxk8yQaG4qbGX8v1YBsyhz4ZlMo
-         MLzQ==
+        bh=u+ec5e/iUjJ8qDBtGE9xKBCADcm1RI8srVHT5OLXlvU=;
+        b=Ah7wZk7H4a1YXb3siR+1ZjnwbjtSkXQdarNonG4apXmKK1RU7RgA3q5ffNCULhdZvv
+         szBF+ywo3gSiAmVakhVSgrzGXibgJEBf0zLpay43DWkEfJks/Sxn9RKntWuRWYaevQev
+         lg3aSW2BNqdhGyZe/JNz3NltDhgf8++D85FQcp14KLyjLf7D4vi1YLxZTZvklHXZ9T8Y
+         Un2iIgaxXMW8MTzeluqSCr7BmwGpo0sk+04aycaYPhknOLHiqpydFmz5ZYsXOE0v/Gbs
+         S1YPClKB3VqmlDYAnn14//BI+/N1syiPKkvqMZDzc7xAJueJPfZwiiaWpHxrUtoA2par
+         bnCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=paLqFLcsx0fUOLnJOcRz6bMeBzGi+tTtO3JWy1A0IIs=;
-        b=I1YNqlShIxmUFtPdIgDX1t7oDodGYjRiw80Ygkgo74IZOrpdwBdazYQ8zQr9gyGWzm
-         zfH9lxEYnamxuUWcvr5lF09hzX+wTWgbWvW9YTakwMePT3M2KqXnsm0gs0nBLARTLa0E
-         lfRGCbMmVl8naB2Z7wPgFxQ8rNwxF2axRba35SKwnr0E2ck8AP9gUs+QkCFRh3I/RkxY
-         AOsb21XQA+OmSNmCwvhxz9U1hXy0ispxRXK0p5v11qFL2ZoVMMEytDNT1Sg52IFehXmO
-         c66vR24XgDKQY//kyIArFmoA012AOTKXx+gStqB1GCEDgp/HojDAPF8UYwipPcrs3UPl
-         ih0w==
-X-Gm-Message-State: AOAM5330tGbY28oL6JsrF+wJ1S+Yp9gcHI6Xcpov4HCnbe4fmmpw3aHZ
-        1k58gnZKQXIjNCucLQdEPlJFhA==
-X-Google-Smtp-Source: ABdhPJyGyNYo2TRHsL5N90da0DMHD7jSXa1aML0vVbwOaXWmZLNwUR1S4PvdAMgtAAheA65Wr34mzw==
-X-Received: by 2002:a2e:a28b:: with SMTP id k11mr5517555lja.405.1600098499376;
-        Mon, 14 Sep 2020 08:48:19 -0700 (PDT)
+        bh=u+ec5e/iUjJ8qDBtGE9xKBCADcm1RI8srVHT5OLXlvU=;
+        b=U1Qqa5pHWRmgIsFtnWujKdrv4V0bLyhHuec5lA5W4HfufFetvvLc8ogp09/p26iJNx
+         xzsf9mfzKzn+vks6qtlZEvlgo/DgrIFcr2xqYrJNAAwsJCdMhU7QeWZWKW5JrmHooKvG
+         AShcubSEjvQ1uCcIc1bPnOSxDkGhACLy6gQ3yCEJ1lWggf1mqsh2lfUPAUkA1EEZQGUT
+         olzVwflHhuimbUuKP+fyRH3aC+NV+E5TJfBwmY2KiMmokYCngjXneJkojkMpbxlCMW+0
+         Y9TLb6y8IU0KUV0OurOcZpHJt82c7QfORdEg4X+PAcvMzsXLGtDKlJ+WulfJzz3b8HRS
+         dhZQ==
+X-Gm-Message-State: AOAM5317HaXiZHNGSYtprWCT/f2xRiCzkXjbpNhDLqPNS3FmxkBThePQ
+        N+MY5AaW7ZDZxsQhSgSeIqRudw==
+X-Google-Smtp-Source: ABdhPJzURBwsNbRnRIeAcecDmShpK8ebYE54NKbCVaKVQd6J/us5aq97BPTZiiIzM3WGoHHWH2cIzQ==
+X-Received: by 2002:a2e:780d:: with SMTP id t13mr5681189ljc.324.1600098502656;
+        Mon, 14 Sep 2020 08:48:22 -0700 (PDT)
 Received: from eriador.lan ([188.162.64.187])
-        by smtp.gmail.com with ESMTPSA id f19sm3834650lfs.85.2020.09.14.08.48.17
+        by smtp.gmail.com with ESMTPSA id f19sm3834650lfs.85.2020.09.14.08.48.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 08:48:18 -0700 (PDT)
+        Mon, 14 Sep 2020 08:48:22 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,10 +61,11 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Craig Tatlor <ctatlor97@gmail.com>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v5 1/9] dt-bindings: thermal: qcom: add adc-thermal monitor bindings
-Date:   Mon, 14 Sep 2020 18:48:01 +0300
-Message-Id: <20200914154809.192174-2-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v5 2/9] fixp-arith: add a linear interpolation function
+Date:   Mon, 14 Sep 2020 18:48:02 +0300
+Message-Id: <20200914154809.192174-3-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200914154809.192174-1-dmitry.baryshkov@linaro.org>
 References: <20200914154809.192174-1-dmitry.baryshkov@linaro.org>
@@ -75,173 +76,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
-close counterpart of VADC part of those PMICs.
+From: Craig Tatlor <ctatlor97@gmail.com>
 
+Adds a function to interpolate against two points,
+this is carried arount as a helper function by tons of drivers.
+
+Signed-off-by: Craig Tatlor <ctatlor97@gmail.com>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 151 ++++++++++++++++++
- 1 file changed, 151 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+ include/linux/fixp-arith.h | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-new file mode 100644
-index 000000000000..432a65839b89
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-@@ -0,0 +1,151 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/qcom-spmi-adc-tm5.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/include/linux/fixp-arith.h b/include/linux/fixp-arith.h
+index 8396013785ef..281cb4f83dbe 100644
+--- a/include/linux/fixp-arith.h
++++ b/include/linux/fixp-arith.h
+@@ -141,4 +141,23 @@ static inline s32 fixp_sin32_rad(u32 radians, u32 twopi)
+ #define fixp_cos32_rad(rad, twopi)	\
+ 	fixp_sin32_rad(rad + twopi / 4, twopi)
+ 
++/**
++ * fixp_linear_interpolate() - interpolates a value from two known points
++ *
++ * @x0: x value of point 0
++ * @y0: y value of point 0
++ * @x1: x value of point 1
++ * @y1: y value of point 1
++ * @x: the linear interpolant
++ */
++static inline int fixp_linear_interpolate(int x0, int y0, int x1, int y1, int x)
++{
++	if (y0 == y1 || x == x0)
++		return y0;
++	if (x1 == x0 || x == x1)
++		return y1;
 +
-+title: Qualcomm's SPMI PMIC ADC Thermal Monitoring
-+maintainers:
-+  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
++	return y0 + ((y1 - y0) * (x - x0) / (x1 - x0));
++}
 +
-+properties:
-+  compatible:
-+    const: qcom,spmi-adc-tm5
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  "#thermal-sensor-cells":
-+    const: 1
-+    description:
-+      Number of cells required to uniquely identify the thermal sensors. Since
-+      we have multiple sensors this is set to 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  qcom,avg-samples:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: Number of samples to be used for measurement.
-+    enum:
-+      - 1
-+      - 2
-+      - 4
-+      - 8
-+      - 16
-+    default: 1
-+
-+  qcom,decimation:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: This parameter is used to decrease ADC sampling rate.
-+            Quicker measurements can be made by reducing decimation ratio.
-+    enum:
-+      - 250
-+      - 420
-+      - 840
-+    default: 840
-+
-+patternProperties:
-+  "^([-a-z0-9]*)@[0-9]+$":
-+    type: object
-+    description:
-+      Represent one thermal sensor.
-+
-+    properties:
-+      reg:
-+        description: Specify the sensor channel.
-+        maxItems: 1
-+
-+      io-channels:
-+        description:
-+          From common IIO binding. Used to pipe PMIC ADC channel to thermal monitor
-+
-+      qcom,adc-channel:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Corresponding ADC channel ID.
-+
-+      qcom,ratiometric:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description:
-+          Channel calibration type.
-+          If this property is specified VADC will use the VDD reference
-+          (1.875V) and GND for channel calibration. If property is not found,
-+          channel will be calibrated with 0V and 1.25V reference channels,
-+          also known as absolute calibration.
-+
-+      qcom,hw-settle-time:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: Time between AMUX getting configured and the ADC starting conversion.
-+
-+      qcom,pre-scaling:
-+        $ref: /schemas/types.yaml#/definitions/uint32-array
-+        description: Used for scaling the channel input signal before the
-+          signal is fed to VADC. See qcom,spi-vadc specification for the list
-+          of possible values.
-+        minItems: 2
-+        maxItems: 2
-+
-+    required:
-+      - reg
-+      - qcom,adc-channel
-+
-+    additionalProperties:
-+      false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - "#address-cells"
-+  - "#size-cells"
-+  - "#thermal-sensor-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/iio/qcom,spmi-vadc.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spmi_bus {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        pm8150b_adc: adc@3100 {
-+            reg = <0x3100>;
-+            compatible = "qcom,spmi-adc5";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            #io-channel-cells = <1>;
-+            io-channel-ranges;
-+
-+            /* Other propreties are omitted */
-+            conn-therm@4f {
-+                reg = <ADC5_AMUX_THM3_100K_PU>;
-+                qcom,ratiometric;
-+                qcom,hw-settle-time = <200>;
-+            };
-+        };
-+
-+        pm8150b_adc_tm: adc-tm@3500 {
-+            compatible = "qcom,spmi-adc-tm5";
-+            reg = <0x3500>;
-+            interrupts = <0x2 0x35 0x0 IRQ_TYPE_EDGE_RISING>;
-+            #thermal-sensor-cells = <1>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            conn-therm@0 {
-+                reg = <0>;
-+                io-channels = <&pm8150b_adc ADC5_AMUX_THM3_100K_PU>;
-+                qcom,adc-channel = <ADC5_AMUX_THM3_100K_PU>;
-+                qcom,ratiometric;
-+                qcom,hw-settle-time = <200>;
-+            };
-+        };
-+    };
-+...
+ #endif
 -- 
 2.28.0
 
