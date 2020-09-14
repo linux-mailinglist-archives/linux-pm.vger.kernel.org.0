@@ -2,28 +2,28 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BC5268B05
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 14:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAEE8268B14
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 14:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbgINMdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 08:33:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47208 "EHLO mail.kernel.org"
+        id S1726533AbgINMfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 08:35:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726297AbgINMc5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 14 Sep 2020 08:32:57 -0400
+        id S1726296AbgINMfd (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 14 Sep 2020 08:35:33 -0400
 Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2636F20709;
-        Mon, 14 Sep 2020 12:32:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3381320756;
+        Mon, 14 Sep 2020 12:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600086771;
-        bh=xFSDw8//5wJ8dFfNNw4BsdqTVRi7fxPIg8Of2LQJ/j0=;
+        s=default; t=1600086932;
+        bh=Fm9KDut4PaJIs4j/JpgUlSl6imPbBlCojh25pXL1dG4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TIBVPOh3DWEDLqP8H6eDP3hQf8byFbaCVkE4ZnVykam1Kjx1Z53p0OTqlrTbEgyCa
-         Z3MDeth+eNr7mpjp0uDcV2ZEmoM3pmi3le9tA2h3wxoJJMcm5Q23rI3tx2KHEApyen
-         KRZDFFGRpP7fNuCPUxWRlN7VrU80dJPk14bL8kxI=
-Date:   Mon, 14 Sep 2020 13:32:02 +0100
+        b=IZQ70GjsSVMAVGAZtXl46ShJPi4R6iMklkXoESoet/WqxHw287SMHgEEGt6fjvI6l
+         kcpX0jt1mklJfTpTHtQ8H3qiLxr6yC9oQ0FMUEtg73rh9WF378KQzb+0omKfYjpyFX
+         NdaDHXENrXrzBvNv4LLonjthNdWuBAiP4Or9aG+w=
+Date:   Mon, 14 Sep 2020 13:34:44 +0100
 From:   Mark Brown <broonie@kernel.org>
 To:     Henry Chen <henryc.chen@mediatek.com>
 Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
@@ -41,16 +41,16 @@ Cc:     Georgi Djakov <georgi.djakov@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
-Subject: Re: [PATCH V5 14/17] dt-bindings: regulator: add DVFSRC regulator
- dt-bindings
-Message-ID: <20200914123202.GD4821@sirena.org.uk>
+Subject: Re: [PATCH V5 15/17] regulator: Regulator driver for the Mediatek
+ DVFSRC
+Message-ID: <20200914123444.GE4821@sirena.org.uk>
 References: <1600052684-21198-1-git-send-email-henryc.chen@mediatek.com>
- <1600052684-21198-15-git-send-email-henryc.chen@mediatek.com>
+ <1600052684-21198-16-git-send-email-henryc.chen@mediatek.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="JgQwtEuHJzHdouWu"
+        protocol="application/pgp-signature"; boundary="IDYEmSnFhs3mNXr+"
 Content-Disposition: inline
-In-Reply-To: <1600052684-21198-15-git-send-email-henryc.chen@mediatek.com>
+In-Reply-To: <1600052684-21198-16-git-send-email-henryc.chen@mediatek.com>
 X-Cookie: Disc space -- the final frontier!
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-pm-owner@vger.kernel.org
@@ -59,34 +59,55 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---JgQwtEuHJzHdouWu
+--IDYEmSnFhs3mNXr+
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Sep 14, 2020 at 11:04:41AM +0800, Henry Chen wrote:
+On Mon, Sep 14, 2020 at 11:04:42AM +0800, Henry Chen wrote:
 
->  		clocks = <&infracfg CLK_INFRA_DVFSRC>;
->  		clock-names = "dvfsrc";
->  		#interconnect-cells = <1>;
-> +		dvfsrc-regulator {
-> +			compatible = "mediatek,mt8183-dvfsrc-regulator";
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2019 MediaTek Inc.
+> + */
 
-This device has only one possible parent, why does it need a compatible
-string?
+Please make the entire comment a C++ one so things look more
+intentional, and are you sure about that copyright date?
 
---JgQwtEuHJzHdouWu
+> +static int dvfsrc_set_voltage_sel(struct regulator_dev *rdev,
+> +				  unsigned int selector)
+> +{
+> +	struct device *dvfsrc_dev = to_dvfsrc_dev(rdev);
+> +	int id = rdev_get_id(rdev);
+> +
+> +	switch (id) {
+> +	case DVFSRC_ID_VCORE:
+> +		mtk_dvfsrc_send_request(dvfsrc_dev,
+> +					MTK_DVFSRC_CMD_VCORE_REQUEST,
+> +					selector);
+> +	break;
+> +	case DVFSRC_ID_VSCP:
+> +		mtk_dvfsrc_send_request(dvfsrc_dev,
+> +					MTK_DVFSRC_CMD_VSCP_REQUEST,
+> +					selector);
+> +	break;
+
+Just have two separate operations rather than the switch statement, and
+where you do have switch statements please follow the kernel coding
+style.
+
+--IDYEmSnFhs3mNXr+
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9fYsIACgkQJNaLcl1U
-h9CGAwf+NdDwxcGz6vK2nMoZx0OSox6fapvguwKcIXo6+F97ItlNsR1WVQBnDgnb
-203sE6MD8JOg6WSkRP7PnGf1oZP6C5df/tB80kqV22bPc11sqWE1i2bqiM/LQwq+
-wVLFlxVYsCHQbpq0HdRBPG0fSrzkDlE3ShgUMMD2hAn94apWUL5U1cVs9SuY3oRi
-3fSngH9WbCL1X7o/whxg5Ogq38X0Z2xahcNz8G8MNRJoqazFTMRrFHvgpI8fKcsT
-vQ6WyeukDlkXErJnCxbl47PAOdSmpuZ0z27L2NGlUPQEkzcH3FvGYRv6MEbwFr+N
-GCwB3F0SHfonZ0Sd7JobMcHzFzPKnw==
-=miPV
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl9fY2MACgkQJNaLcl1U
+h9AXygf/Y3FBNX7Td9KehegefHCUBqS15IeZhWcko9jFgTgFMHNyfGyOrSkON5XM
+6cHvLPc8PdjA8nTnK7BnbTqQZC0X5waqF0f5d06fQ+ElTR2N0X9eZ4yLYldTAEaF
+1SWQY/tQ+FvZKnvrGn8nMc5UUQf3UrgA7Q9KgdPTg5w+FiveJ5eSWH6r2o3DUqGq
+5qVUdkgAwnsUAGQ77n8Z/PubaJUScTlesLoH7hhdZa73SZNW7yuYCmDYkM7J21/o
+6CcxGJvhZfehLa9rtgn0CEJG0L1t5iFaNCzGqDA9MfPfII8mCJ5qHYLVgK+/h9fp
+Ya31zSS1ZIzAjIaowtDsDJwwZRhPzw==
+=jIy1
 -----END PGP SIGNATURE-----
 
---JgQwtEuHJzHdouWu--
+--IDYEmSnFhs3mNXr+--
