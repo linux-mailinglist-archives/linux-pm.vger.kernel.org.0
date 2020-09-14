@@ -2,186 +2,408 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9582B2692B9
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 19:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21A5269361
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Sep 2020 19:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbgINRNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 13:13:35 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58326 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726055AbgINRNP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 13:13:15 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08EH41Ox015270;
-        Mon, 14 Sep 2020 13:13:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : mime-version : content-type
- : in-reply-to; s=pp1; bh=/1vfwABSnmtOZ4CtBNzW+dx7wqU5W4NhKkEHRm7FVhk=;
- b=jtDYDlloAGl78nnKrvd8o5kHB5jZEq9r/ImbctiqGDLvJUabksCUzlvqDR2M4hnE5zQa
- E84LGVGKIbr1T8OlBT7paAdmdmHM8FMs64vEUJJNxDTafDa/jbK/aY4Y3tXMU8elR4W7
- eMg9KUYUdML34opsEStl/o6Uzb2EtwRBmSkPlu+CmBI28P9eqcDx1UDYTzUomrvx8aWK
- 5MSTAAyXGUEbW1s5WNx6/LM6R08dgZ9Qbnord1vjo3A2VJR9+O35iZi48Z8m6+kTbjvd
- ViNsb8nHbVXH9O8NhzUjSGIg8JsnYbT7DrL/34D1rYnYesOjBUvQNdMAEVgWDHXJPxlN lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33ja70d3p9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Sep 2020 13:13:07 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08EH4YpH017398;
-        Mon, 14 Sep 2020 13:13:06 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33ja70d3nv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Sep 2020 13:13:06 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08EHCVuV032226;
-        Mon, 14 Sep 2020 17:13:05 GMT
-Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
-        by ppma03dal.us.ibm.com with ESMTP id 33gny95qjx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Sep 2020 17:13:05 +0000
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08EHD0tg33292616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Sep 2020 17:13:01 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F2596A051;
-        Mon, 14 Sep 2020 17:13:04 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BDF126A04F;
-        Mon, 14 Sep 2020 17:13:03 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.85.73.235])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Sep 2020 17:13:03 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 163712E3885; Mon, 14 Sep 2020 22:43:00 +0530 (IST)
-Date:   Mon, 14 Sep 2020 22:43:00 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     Pratik Rajesh Sampat <psampat@linux.ibm.com>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        srivatsa@csail.mit.edu, shuah@kernel.org, npiggin@gmail.com,
-        ego@linux.vnet.ibm.com, svaidy@linux.ibm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pratik.r.sampat@gmail.com
-Subject: Re: [RFC v4 0/1] Selftest for cpuidle latency measurement
-Message-ID: <20200914171259.GA25628@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <20200902114506.45809-1-psampat@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200902114506.45809-1-psampat@linux.ibm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-14_06:2020-09-14,2020-09-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- clxscore=1011 suspectscore=0 phishscore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009140133
+        id S1726379AbgINRaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 13:30:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:31474 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726368AbgINR36 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 13:29:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600104593;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aEDgkNV/uj4fx524Kzkj6ifXfGUTh3ZY0EQttVZHh6s=;
+        b=XYbXFqtDUBbh5Ej+NttOoEodFimfT3oxOHRYW2XxPJdNNhRfiQgzNcTOh8ZJ+Xa13JWUrU
+        J2RCWa0RL1/3MfmKK/Tk3cY0KrFK7I9YBq9tY5d6ekam7R+Ap+uYh1dYZtpK67amTL0Lgu
+        xT63mtY9UtFXKYfqBoow8qTkMKZ3aCY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-129-Z7IM2OXIPQmcCdNpBW7s7g-1; Mon, 14 Sep 2020 13:29:45 -0400
+X-MC-Unique: Z7IM2OXIPQmcCdNpBW7s7g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B9F0884639B;
+        Mon, 14 Sep 2020 17:29:42 +0000 (UTC)
+Received: from ovpn-113-249.rdu2.redhat.com (ovpn-113-249.rdu2.redhat.com [10.10.113.249])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CBB1060C87;
+        Mon, 14 Sep 2020 17:29:37 +0000 (UTC)
+Message-ID: <d7bdc37f6e3f98379289b262aea812e1894cd69b.camel@redhat.com>
+Subject: Re: WARNING: suspicious RCU usage: race/events/tlb.h:57 suspicious
+ rcu_dereference_check() usage!
+From:   Qian Cai <cai@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        rcu@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, Linux PM <linux-pm@vger.kernel.org>
+Cc:     ": Paul E. McKenney" <paulmck@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Date:   Mon, 14 Sep 2020 13:29:34 -0400
+In-Reply-To: <CA+G9fYuRquEtm53yz9SYqa6O5gg4e6d9BCmDn163Fe2VwhWcJw@mail.gmail.com>
+References: <CA+G9fYuRquEtm53yz9SYqa6O5gg4e6d9BCmDn163Fe2VwhWcJw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 02, 2020 at 05:15:05PM +0530, Pratik Rajesh Sampat wrote:
-> Changelog v3-->v4:
-> 1. Overhaul in implementation from kernel module to a userspace selftest 
-> ---
-> 
-> The patch series introduces a mechanism to measure wakeup latency for
-> IPI and timer based interrupts
-> The motivation behind this series is to find significant deviations
-> behind advertised latency and residency values
-> 
-> To achieve this in the userspace, IPI latencies are calculated by
-> sending information through pipes and inducing a wakeup, similarly
-> alarm events are setup for calculate timer based wakeup latencies.
+On Wed, 2020-09-09 at 10:08 +0530, Naresh Kamboju wrote:
+> While booting x86_64 with Linux next 20200908 tag kernel this warning
+> was noticed.
+
+This pretty much looks like the same issue in:
+
+https://lore.kernel.org/lkml/20200902035146.GA45826@roeck-us.net/
+
+Can you revert the patchset to see if it is related?
 
 > 
-> To account for delays from kernel-userspace interactions baseline
-> observations are taken on a 100% busy CPU and subsequent obervations
-> must be considered relative to that.
+> metadata:
+>   git branch: master
+>   git repo: 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>   git commit: dff9f829e5b0181d4ed9d35aa62d695292399b54
+>   git describe: next-20200908
+>   kernel-config:
+> http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/853/config
 > 
-> In theory, wakeups induced by IPI and Timers should have similar
-> wakeup latencies, however in practice there may be deviations which may
-> need to be captured.
-> 
-> One downside of the userspace approach in contrast to the kernel
-> implementation is that the run to run variance can turn out to be high
-> in the order of ms; which is the scope of the experiments at times.
-> 
-> Another downside of the userspace approach is that it takes much longer
-> to run and hence a command-line option quick and full are added to make
-> sure quick 1 CPU tests can be carried out when needed and otherwise it
-> can carry out a full system comprehensive test.
-> 
-> Usage
-> ---
-> ./cpuidle --mode <full / quick / num_cpus> --output <output location> 
-> full: runs on all CPUS
-> quick: run on a random CPU
-> num_cpus: Limit the number of CPUS to run on
-> 
-> Sample output snippet
+> warning logs:
 > ---------------------
-> --IPI Latency Test---
-> SRC_CPU   DEST_CPU IPI_Latency(ns)
-> ...
->   0          5       256178
->   0          6       478161
->   0          7       285445
->   0          8       273553
-> Expected IPI latency(ns): 100000
-> Observed Average IPI latency(ns): 248334
-
-I suppose by run-to-run variance you are referring to the outliers in
-the above sequence (like 478161) ? Or is it that each time you run
-your test program you observe completely different series of values ?
-
-If it is the former, then perhaps we could discard the outliers for
-the purpose of average latency computation and print the max, min and
-the corrected-average values above.
-
-
-
+> [   18.874329] Freeing unused kernel image (rodata/data gap) memory: 2012K
+> [   18.881107] Run /sbin/init as init process
+> [   18.905611]
+> [   18.907190] =============================
+> [   18.911194] WARNING: suspicious RCU usage
+> [   18.915199] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   18.919982] -----------------------------
+> [   18.923984] /usr/src/kernel/include/trace/events/tlb.h:57
+> suspicious rcu_dereference_check() usage!
+> [   18.933016]
+> [   18.933016] other info that might help us debug this:
+> [   18.933016]
+> [   18.941006]
+> [   18.941006] rcu_scheduler_active = 2, debug_locks = 1
+> [   18.947523] RCU used illegally from extended quiescent state!
+> [   18.953261] no locks held by swapper/2/0.
+> [   18.957264]
+> [   18.957264] stack backtrace:
+> [   18.961619] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   18.969007] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   18.976392] Call Trace:
+> [   18.978844]  dump_stack+0x7d/0x9f
+> [   18.982158]  lockdep_rcu_suspicious+0xce/0xf0
+> [   18.986517]  switch_mm_irqs_off+0x441/0x450
+> [   18.990702]  switch_mm+0x1b/0x50
+> [   18.993936]  leave_mm+0x34/0x40
+> [   18.997082]  acpi_idle_enter_bm+0x23/0x120
+> [   19.001180]  acpi_idle_enter+0x189/0x2a0
+> [   19.005104]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.010072]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.015265]  cpuidle_enter+0x2e/0x40
+> [   19.015268]  do_idle+0x226/0x2b0
+> [   19.015273]  cpu_startup_entry+0x1d/0x20
+> [   19.015275]  start_secondary+0x114/0x150
+> [   19.029943]  secondary_startup_64+0xb6/0xc0
+> [   19.034141]
+> [   19.034142] =============================
+> [   19.034142] WARNING: suspicious RCU usage
+> [   19.034142] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   19.034143] -----------------------------
+> [   19.034143] /usr/src/kernel/include/trace/events/lock.h:37
+> suspicious rcu_dereference_check() usage!
+> [   19.034143]
+> [   19.034144] other info that might help us debug this:
+> [   19.034144]
+> [   19.034144]
+> [   19.034145] rcu_scheduler_active = 2, debug_locks = 1
+> [   19.034145] RCU used illegally from extended quiescent state!
+> [   19.034146] no locks held by swapper/2/0.
+> [   19.034146]
+> [   19.034146] stack backtrace:
+> [   19.034147] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   19.034147] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   19.034147] Call Trace:
+> [   19.034148]  dump_stack+0x7d/0x9f
+> [   19.034148]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034148]  lock_acquire+0x327/0x390
+> [   19.034149]  _raw_spin_lock+0x2f/0x40
+> [   19.034149]  ? vprintk_emit+0x78/0x2f0
+> [   19.034149]  vprintk_emit+0x78/0x2f0
+> [   19.034149]  vprintk_default+0x1f/0x30
+> [   19.034150]  vprintk_func+0x51/0xf0
+> [   19.034150]  printk+0x52/0x6e
+> [   19.034150]  ? __lock_acquire+0x32a/0x19f0
+> [   19.034151]  lockdep_rcu_suspicious+0x20/0xf0
+> [   19.034151]  switch_mm_irqs_off+0x441/0x450
+> [   19.034151]  switch_mm+0x1b/0x50
+> [   19.034152]  leave_mm+0x34/0x40
+> [   19.034152]  acpi_idle_enter_bm+0x23/0x120
+> [   19.034152]  acpi_idle_enter+0x189/0x2a0
+> [   19.034153]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.034153]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.034153]  cpuidle_enter+0x2e/0x40
+> [   19.034154]  do_idle+0x226/0x2b0
+> [   19.034154]  cpu_startup_entry+0x1d/0x20
+> [   19.034154]  start_secondary+0x114/0x150
+> [   19.034155]  secondary_startup_64+0xb6/0xc0
+> [   19.034155]
+> [   19.034155] =============================
+> [   19.034156] WARNING: suspicious RCU usage
+> [   19.034156] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   19.034156] -----------------------------
+> [   19.034157] /usr/src/kernel/include/trace/events/lock.h:63
+> suspicious rcu_dereference_check() usage!
+> [   19.034157]
+> [   19.034157] other info that might help us debug this:
+> [   19.034158]
+> [   19.034158]
+> [   19.034158] rcu_scheduler_active = 2, debug_locks = 1
+> [   19.034159] RCU used illegally from extended quiescent state!
+> [   19.034159] 1 lock held by swapper/2/0:
+> [   19.034159]  #0: ffffffffbed25f58 (logbuf_lock){-...}-{2:2}, at:
+> vprintk_emit+0x78/0x2f0
+> [   19.034161]
+> [   19.034161] stack backtrace:
+> [   19.034162] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   19.034162] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   19.034162] Call Trace:
+> [   19.034163]  dump_stack+0x7d/0x9f
+> [   19.034163]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034163]  ? vprintk_emit+0x9e/0x2f0
+> [   19.034164]  lock_release+0x246/0x270
+> [   19.034164]  _raw_spin_unlock+0x1a/0x30
+> [   19.034164]  vprintk_emit+0x9e/0x2f0
+> [   19.034165]  vprintk_default+0x1f/0x30
+> [   19.034165]  vprintk_func+0x51/0xf0
+> [   19.034165]  printk+0x52/0x6e
+> [   19.034166]  ? __lock_acquire+0x32a/0x19f0
+> [   19.034166]  lockdep_rcu_suspicious+0x20/0xf0
+> [   19.034166]  switch_mm_irqs_off+0x441/0x450
+> [   19.034167]  switch_mm+0x1b/0x50
+> [   19.034167]  leave_mm+0x34/0x40
+> [   19.034167]  acpi_idle_enter_bm+0x23/0x120
+> [   19.034167]  acpi_idle_enter+0x189/0x2a0
+> [   19.034168]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.034168]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.034168]  cpuidle_enter+0x2e/0x40
+> [   19.034169]  do_idle+0x226/0x2b0
+> [   19.034169]  cpu_startup_entry+0x1d/0x20
+> [   19.034169]  start_secondary+0x114/0x150
+> [   19.034170]  secondary_startup_64+0xb6/0xc0
+> [   19.034170]
+> [   19.034170] =============================
+> [   19.034171] WARNING: suspicious RCU usage
+> [   19.034171] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   19.034171] -----------------------------
+> [   19.034172] /usr/src/kernel/include/trace/events/sched.h:90
+> suspicious rcu_dereference_check() usage!
+> [   19.034172]
+> [   19.034172] other info that might help us debug this:
+> [   19.034173]
+> [   19.034173]
+> [   19.034173] rcu_scheduler_active = 2, debug_locks = 1
+> [   19.034174] RCU used illegally from extended quiescent state!
+> [   19.034174] 2 locks held by swapper/2/0:
+> [   19.034174]  #0: ffffffffbed25ff8 ((console_sem).lock){-...}-{2:2},
+> at: up+0x16/0x50
+> [   19.034176]  #1: ffff90dbeea90800 (&p->pi_lock){-.-.}-{2:2}, at:
+> try_to_wake_up+0x52/0x7a0
+> [   19.034178]
+> [   19.034178] stack backtrace:
+> [   19.034178] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   19.034179] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   19.034179] Call Trace:
+> [   19.034179]  dump_stack+0x7d/0x9f
+> [   19.034180]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034180]  try_to_wake_up+0x6a4/0x7a0
+> [   19.034180]  ? find_held_lock+0x35/0xa0
+> [   19.034181]  wake_up_process+0x15/0x20
+> [   19.034181]  __up.isra.4+0x39/0x40
+> [   19.034181]  up+0x46/0x50
+> [   19.034182]  __up_console_sem+0x32/0x60
+> [   19.034182]  console_unlock+0x346/0x5c0
+> [   19.034182]  vprintk_emit+0x1d1/0x2f0
+> [   19.034183]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034183]  vprintk_default+0x1f/0x30
+> [   19.034183]  vprintk_func+0x51/0xf0
+> [   19.034184]  ? rcu_nmi_exit+0x12a/0x260
+> [   19.034184]  printk+0x52/0x6e
+> [   19.034184]  ? kernel_text_address+0x96/0xf0
+> [   19.034185]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034185]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034185]  show_trace_log_lvl+0x32f/0x3b0
+> [   19.034186]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034186]  show_stack+0x30/0x40
+> [   19.034186]  dump_stack+0x7d/0x9f
+> [   19.034186]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034187]  switch_mm_irqs_off+0x441/0x450
+> [   19.034187]  switch_mm+0x1b/0x50
+> [   19.034187]  leave_mm+0x34/0x40
+> [   19.034188]  acpi_idle_enter_bm+0x23/0x120
+> [   19.034188]  acpi_idle_enter+0x189/0x2a0
+> [   19.034188]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.034189]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.034189]  cpuidle_enter+0x2e/0x40
+> [   19.034189]  do_idle+0x226/0x2b0
+> [   19.034190]  cpu_startup_entry+0x1d/0x20
+> [   19.034190]  start_secondary+0x114/0x150
+> [   19.034190]  secondary_startup_64+0xb6/0xc0
+> [   19.034191]
+> [   19.034191] =============================
+> [   19.034191] WARNING: suspicious RCU usage
+> [   19.034192] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   19.034192] -----------------------------
+> [   19.034192] /usr/src/kernel/include/linux/rcupdate.h:643
+> rcu_read_lock() used illegally while idle!
+> [   19.034193]
+> [   19.034193] other info that might help us debug this:
+> [   19.034193]
+> [   19.034194]
+> [   19.034194] rcu_scheduler_active = 2, debug_locks = 1
+> [   19.034194] RCU used illegally from extended quiescent state!
+> [   19.034195] 3 locks held by swapper/2/0:
+> [   19.034195]  #0: ffffffffbed25ff8 ((console_sem).lock){-...}-{2:2},
+> at: up+0x16/0x50
+> [   19.034196]  #1: ffff90dbeea90800 (&p->pi_lock){-.-.}-{2:2}, at:
+> try_to_wake_up+0x52/0x7a0
+> [   19.034198]  #2: ffffffffbed28580 (rcu_read_lock){....}-{1:2}, at:
+> select_task_rq_fair+0xd0/0x10a0
+> [   19.034199]
+> [   19.034200] stack backtrace:
+> [   19.034200] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   19.034201] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   19.034201] Call Trace:
+> [   19.034201]  dump_stack+0x7d/0x9f
+> [   19.034202]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034202]  select_task_rq_fair+0x4aa/0x10a0
+> [   19.034202]  ? show_stack+0x30/0x40
+> [   19.034203]  try_to_wake_up+0x181/0x7a0
+> [   19.034203]  ? find_held_lock+0x35/0xa0
+> [   19.034203]  wake_up_process+0x15/0x20
+> [   19.034203]  __up.isra.4+0x39/0x40
+> [   19.034204]  up+0x46/0x50
+> [   19.034204]  __up_console_sem+0x32/0x60
+> [   19.034204]  console_unlock+0x346/0x5c0
+> [   19.034205]  vprintk_emit+0x1d1/0x2f0
+> [   19.034205]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034205]  vprintk_default+0x1f/0x30
+> [   19.034206]  vprintk_func+0x51/0xf0
+> [   19.034206]  ? rcu_nmi_exit+0x12a/0x260
+> [   19.034206]  printk+0x52/0x6e
+> [   19.034207]  ? kernel_text_address+0x96/0xf0
+> [   19.034207]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034207]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034208]  show_trace_log_lvl+0x32f/0x3b0
+> [   19.034208]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034208]  show_stack+0x30/0x40
+> [   19.034209]  dump_stack+0x7d/0x9f
+> [   19.034209]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034209]  switch_mm_irqs_off+0x441/0x450
+> [   19.034210]  switch_mm+0x1b/0x50
+> [   19.034210]  leave_mm+0x34/0x40
+> [   19.034210]  acpi_idle_enter_bm+0x23/0x120
+> [   19.034211]  acpi_idle_enter+0x189/0x2a0
+> [   19.034211]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.034211]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.034212]  cpuidle_enter+0x2e/0x40
+> [   19.034212]  do_idle+0x226/0x2b0
+> [   19.034212]  cpu_startup_entry+0x1d/0x20
+> [   19.034213]  start_secondary+0x114/0x150
+> [   19.034213]  secondary_startup_64+0xb6/0xc0
+> [   19.034213]
+> [   19.034214] =============================
+> [   19.034214] WARNING: suspicious RCU usage
+> [   19.034214] 5.9.0-rc4-next-20200908 #1 Not tainted
+> [   19.034215] -----------------------------
+> [   19.034215] /usr/src/kernel/kernel/sched/fair.c:6694 suspicious
+> rcu_dereference_check() usage!
+> [   19.034215]
+> [   19.034216] other info that might help us debug this:
+> [   19.034216]
+> [   19.034216]
+> [   19.034217] rcu_scheduler_active = 2, debug_locks = 1
+> [   19.034217] RCU used illegally from extended quiescent state!
+> [   19.034217] 3 locks held by swapper/2/0:
+> [   19.034217]  #0: ffffffffbed25ff8 ((console_sem).lock){-...}-{2:2},
+> at: up+0x16/0x50
+> [   19.034219]  #1: ffff90dbeea90800 (&p->pi_lock){-.-.}-{2:2}, at:
+> try_to_wake_up+0x52/0x7a0
+> [   19.034220]  #2: ffffffffbed28580 (rcu_read_lock){....}-{1:2}, at:
+> select_task_rq_fair+0xd0/0x10a0
+> [   19.034222]
+> [   19.034222] stack backtrace:
+> [   19.034223] CPU: 2 PID: 0 Comm: swapper/2 Not tainted
+> 5.9.0-rc4-next-20200908 #1
+> [   19.034223] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+> 2.2 05/23/2018
+> [   19.034223] Call Trace:
+> [   19.034224]  dump_stack+0x7d/0x9f
+> [   19.034224]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034224]  select_task_rq_fair+0x448/0x10a0
+> [   19.034225]  ? show_stack+0x30/0x40
+> [   19.034225]  try_to_wake_up+0x181/0x7a0
+> [   19.034225]  ? find_held_lock+0x35/0xa0
+> [   19.034226]  wake_up_process+0x15/0x20
+> [   19.034226]  __up.isra.4+0x39/0x40
+> [   19.034226]  up+0x46/0x50
+> [   19.034227]  __up_console_sem+0x32/0x60
+> [   19.034227]  console_unlock+0x346/0x5c0
+> [   19.034227]  vprintk_emit+0x1d1/0x2f0
+> [   19.034228]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034228]  vprintk_default+0x1f/0x30
+> [   19.034228]  vprintk_func+0x51/0xf0
+> [   19.034228]  ? rcu_nmi_exit+0x12a/0x260
+> [   19.034229]  printk+0x52/0x6e
+> [   19.034229]  ? kernel_text_address+0x96/0xf0
+> [   19.034229]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034230]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034230]  show_trace_log_lvl+0x32f/0x3b0
+> [   19.034230]  ? cpuidle_enter_state+0xa5/0x4b0
+> [   19.034231]  show_stack+0x30/0x40
+> [   19.034231]  dump_stack+0x7d/0x9f
+> [   19.034231]  lockdep_rcu_suspicious+0xce/0xf0
+> [   19.034232]  switch_mm_irqs_off+0x441/0x450
+> [   19.034232]  switch_mm+0x1b/0x50
+> [   19.034232]  leave_mm+0x34/0x40
+> [   19.034233]  acpi_idle_enter_bm+0x23/0x120
+> [   19.034233]  acpi_idle_enter+0x189/0x2a0
+> [   19.034233]  ? rcu_eqs_enter.constprop.85+0xb2/0x180
+> [   19.034234]  cpuidle_enter_state+0xa5/0x4b0
+> [   19.034234]  cpuidle_enter+0x2e/0x40
+> [   19.034234]  do_idle+0x226/0x2b0
+> [   19.034235]  cpu_startup_entry+0x1d/0x20
+> [   19.034235]  start_secondary+0x114/0x150
+> [   19.034235]  secondary_startup_64+0xb6/0xc0
 > 
-> --Timeout Latency Test--
-> --Baseline Timeout Latency measurement: CPU Busy--
-> Wakeup_src Baseline_delay(ns)
-> ...
->  32          972405
->  33         1004287
->  34          986663
->  35          994022
-> Expected timeout(ns): 10000000
-> Observed Average timeout diff(ns): 991844
->
-
-It would be good to see a complete sample output, perhaps for the
---mode=10 so that it is easy to discern if there are cases when the
-observed timeouts/IPI latencies for the busy case are larger than the
-idle-case.
-
-
-
-> Pratik Rajesh Sampat (1):
->   selftests/cpuidle: Add support for cpuidle latency measurement
+> Full test log,
 > 
->  tools/testing/selftests/Makefile          |   1 +
->  tools/testing/selftests/cpuidle/Makefile  |   7 +
->  tools/testing/selftests/cpuidle/cpuidle.c | 616 ++++++++++++++++++++++
->  tools/testing/selftests/cpuidle/settings  |   1 +
->  4 files changed, 625 insertions(+)
->  create mode 100644 tools/testing/selftests/cpuidle/Makefile
->  create mode 100644 tools/testing/selftests/cpuidle/cpuidle.c
->  create mode 100644 tools/testing/selftests/cpuidle/settings
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20200908/testrun/3171064/suite/linux-log-parser/test/check-kernel-bug-1743477/log
 > 
-> -- 
-> 2.26.2
 > 
 
---
-Thanks and Regards
-gautham.
