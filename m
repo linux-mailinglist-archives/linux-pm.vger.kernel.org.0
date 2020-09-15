@@ -2,187 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 498A626A5C4
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 15:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C509226A694
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 15:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726470AbgIONAY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 09:00:24 -0400
-Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:39363 "EHLO
-        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726183AbgIOM7e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 08:59:34 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07386647|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0476423-0.000196116-0.952162;FP=0|0|0|0|0|-1|-1|-1;HT=e01l10422;MF=liush@allwinnertech.com;NM=1;PH=DW;RN=14;RT=14;SR=0;TI=W4_5948689_DEFAULT_0A9326FA_1600174289947_o7001c2340k;
-Received: from WS-web (liush@allwinnertech.com[W4_5948689_DEFAULT_0A9326FA_1600174289947_o7001c2340k]) by ay29a011140100197.et135 at Tue, 15 Sep 2020 20:59:23 +0800
-Date:   Tue, 15 Sep 2020 20:59:23 +0800
-From:   "=?UTF-8?B?5YiY6YK15Y2OQlRE?=" <liush@allwinnertech.com>
-To:     "Palmer Dabbelt" <palmer@dabbelt.com>
-Cc:     "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "aou" <aou@eecs.berkeley.edu>, "rjw" <rjw@rjwysocki.net>,
-        "daniel.lezcano" <daniel.lezcano@linaro.org>,
-        "Anup Patel" <Anup.Patel@wdc.com>,
-        "Atish Patra" <Atish.Patra@wdc.com>,
-        "Damien Le Moal" <Damien.LeMoal@wdc.com>,
-        "wangkefeng.wang" <wangkefeng.wang@huawei.com>,
-        "kernel" <kernel@esmil.dk>, "zong.li" <zong.li@sifive.com>,
-        "linux-riscv" <linux-riscv@lists.infradead.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-pm" <linux-pm@vger.kernel.org>
-Reply-To: "=?UTF-8?B?5YiY6YK15Y2OQlRE?=" <liush@allwinnertech.com>
-Message-ID: <83f5615c-0ab0-4e1e-b083-b5558ee222b9.liush@allwinnertech.com>
-Subject: =?UTF-8?B?5Zue5aSN77yaW1BBVENIXSBjcHVpZGxlOiBhZGQgcmlzY3YgY3B1aWRsZSBkcml2ZXI=?=
-X-Mailer: [Alimail-Mailagent][W4_5948689][DEFAULT][Firefox]
+        id S1726724AbgIONtq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 09:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726745AbgIONsb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 09:48:31 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B21CC061353
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 06:21:10 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id w3so1001666uad.12
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 06:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=w/kdF94weVvZODB/AUs9f/NpmbxAQ75av/THK7S+FHo=;
+        b=kWSUr2pvfEBqdC0GJbcTw32LfLwQVJZ4Jurp7+Fl5teucDdSALr+lDkQJlg3AWmuxH
+         UHZRqZXxupGczvxbeJNyUoGu4lv3BgI0hU42Nqa9idhTcSYHE7EF9CsCouvsOGLyAWbJ
+         8BEwsRb9CjVil+Tzxz4mUya2EKWBH83lNdynQTFEvCtP94fOHwP552sMh89jskhaLXjV
+         A4xlOKV9VcFOi4aGbgHfqXeQOpDVRm4xZQfOWpOrLcgdtwpLBMXkKWIECKruXWFQiu7j
+         InN/xHzez2Q6xUALABBVn/FSLk5/6FtEy2Gje8nnPGCsdyff3do/3J8CBALMPbtLzdaG
+         WXTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=w/kdF94weVvZODB/AUs9f/NpmbxAQ75av/THK7S+FHo=;
+        b=N/QpVjo2bGSonvmgOZ6gVQBj+9JU4MZD+Skxd+sPJ8vx5oOKT8xqOa8ncCJ8k3N+th
+         fsMEo/bpjaxZrzlqVdMlZAHWmyFXbD7bzCZfsd838mXWVO1VovVYVDMW/D/uxvDFTZrh
+         pfkSFiZqWNdYLqZ/p2ZQVJHpX1MNy3IDOOvjC5YQAKeLQR1UgzkYJ80g6zgblb7uhYHs
+         nki4Q2U7XctHNU2PLyUeprVLicKH+tOG6DqI+oQ7QJGQIaI5B01wJkPbxymOcNzMOHzz
+         opNJ2vp40fxzDIsAxcQYpHQrAZnJ21ibxe/Li+uphDkYtr6A3SIBo1e8nVv0Rbmt8A3M
+         k5PQ==
+X-Gm-Message-State: AOAM532wnigjQ+dwH4KDANoLFBQ4ijPF36URU5dnN1PFUxk+j/1p9OoU
+        pbhHbJkvAicHt1R13ae+hD4bgbaOq53/VBlhxvNT/A==
+X-Google-Smtp-Source: ABdhPJw2tkkqzsTAYQBMAkSwdJ4a+/HWDG22i9K7BnBMNlT8KvEg3SRWxdng0aXuWW9caPvNIEDB06eAO3j9mhggOfk=
+X-Received: by 2002:ab0:130a:: with SMTP id g10mr10012968uae.100.1600176064842;
+ Tue, 15 Sep 2020 06:21:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <1600048323-2964-1-git-send-email-liush@allwinnertech.com>,<mhng-e743b908-36de-4226-832d-bc5acbbfd81b@palmerdabbelt-glaptop1>
-x-aliyun-mail-creator: W4_5948689_DEFAULT_IHJTW96aWxsYS81LjAgKFgxMTsgVWJ1bnR1OyBMaW51eCB4ODZfNjQ7IHJ2OjgwLjApIEdlY2tvLzIwMTAwMTAxIEZpcmVmb3gvODAuMA==jQ
-In-Reply-To: <mhng-e743b908-36de-4226-832d-bc5acbbfd81b@palmerdabbelt-glaptop1>
+References: <20200915103157.345404192@infradead.org> <20200915103806.411374792@infradead.org>
+In-Reply-To: <20200915103806.411374792@infradead.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 15 Sep 2020 15:20:27 +0200
+Message-ID: <CAPDyKFpku8oybzyDpSBU0JEkdaEFkadA9P=QLcB-RkQtVhTe8A@mail.gmail.com>
+Subject: Re: [RFC][PATCH 3/4] cpuidle: Allow cpuidle drivers to take over RCU-idle
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        Tony Luck <tony.luck@intel.com>, Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgUGFsbWVyLAoKPiA+IFRoaXMgcGF0Y2ggYWRkcyBhIGNwdWlkbGUgZHJpdmVyIGZvciBzeXN0
-ZW1zIGJhc2VkIFJJU0NWIGFyY2hpdGVjdHVyZS4KPiA+IFRoaXMgcGF0Y2ggc3VwcG9ydHMgc3Rh
-dGUgV0ZJLiBPdGhlciBzdGF0ZXMgd2lsbCBiZSBzdXBwb3J0ZWQgaW4gdGhlCj4gPiBmdXR1cmUu
-Cj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogbGl1c2ggPGxpdXNoQGFsbHdpbm5lcnRlY2guY29tPgo+
-ID4gLS0tCj4gPiAgYXJjaC9yaXNjdi9LY29uZmlnICAgICAgICAgICAgICAgfCAgNyArKysrKwo+
-ID4gIGFyY2gvcmlzY3YvaW5jbHVkZS9hc20vY3B1aWRsZS5oIHwgIDcgKysrKysKPiA+ICBhcmNo
-L3Jpc2N2L2tlcm5lbC9NYWtlZmlsZSAgICAgICB8ICAxICsKPiA+ICBhcmNoL3Jpc2N2L2tlcm5l
-bC9jcHVpZGxlLmMgICAgICB8ICA4ICsrKysrKwo+ID4gIGRyaXZlcnMvY3B1aWRsZS9LY29uZmln
-ICAgICAgICAgIHwgIDUgKysrKwo+ID4gIGRyaXZlcnMvY3B1aWRsZS9LY29uZmlnLnJpc2N2ICAg
-IHwgMTEgKysrKysrKysKPiA+ICBkcml2ZXJzL2NwdWlkbGUvTWFrZWZpbGUgICAgICAgICB8ICA0
-ICsrKwo+ID4gIGRyaXZlcnMvY3B1aWRsZS9jcHVpZGxlLXJpc2N2LmMgIHwgNTUgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+ID4gIDggZmlsZXMgY2hhbmdlZCwgOTgg
-aW5zZXJ0aW9ucygrKQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL3Jpc2N2L2luY2x1ZGUv
-YXNtL2NwdWlkbGUuaAo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL3Jpc2N2L2tlcm5lbC9j
-cHVpZGxlLmMKPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jcHVpZGxlL0tjb25maWcu
-cmlzY3YKPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy9jcHVpZGxlL2NwdWlkbGUtcmlz
-Y3YuYwo+ID4KPiA+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L0tjb25maWcgYi9hcmNoL3Jpc2N2
-L0tjb25maWcKPiA+IGluZGV4IGRmMTgzNzIuLmM3ZGRiOWQgMTAwNjQ0Cj4gPiAtLS0gYS9hcmNo
-L3Jpc2N2L0tjb25maWcKPiA+ICsrKyBiL2FyY2gvcmlzY3YvS2NvbmZpZwo+ID4gQEAgLTg2LDYg
-Kzg2LDcgQEAgY29uZmlnIFJJU0NWCj4gPiAgIHNlbGVjdCBTUEFSU0VfSVJRCj4gPiAgIHNlbGVj
-dCBTWVNDVExfRVhDRVBUSU9OX1RSQUNFCj4gPiAgIHNlbGVjdCBUSFJFQURfSU5GT19JTl9UQVNL
-Cj4gPiArIHNlbGVjdCBDUFVfSURMRQo+ID4KPiA+ICBjb25maWcgQVJDSF9NTUFQX1JORF9CSVRT
-X01JTgo+ID4gICBkZWZhdWx0IDE4IGlmIDY0QklUCj4gPiBAQCAtNDA3LDYgKzQwOCwxMiBAQCBj
-b25maWcgQlVJTFRJTl9EVEIKPiA+ICAgZGVwZW5kcyBvbiBSSVNDVl9NX01PREUKPiA+ICAgZGVw
-ZW5kcyBvbiBPRgo+ID4KPiA+ICttZW51ICJDUFUgUG93ZXIgTWFuYWdlbWVudCIKPiA+ICsKPiA+
-ICtzb3VyY2UgImRyaXZlcnMvY3B1aWRsZS9LY29uZmlnIgo+ID4gKwo+ID4gK2VuZG1lbnUKPiA+
-ICsKPiA+ICBtZW51ICJQb3dlciBtYW5hZ2VtZW50IG9wdGlvbnMiCj4gPgo+ID4gIHNvdXJjZSAi
-a2VybmVsL3Bvd2VyL0tjb25maWciCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9yaXNjdi9pbmNsdWRl
-L2FzbS9jcHVpZGxlLmggYi9hcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL2NwdWlkbGUuaAo+ID4gbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwLi4yNTk5ZDJmCj4gPiAtLS0gL2Rl
-di9udWxsCj4gPiArKysgYi9hcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL2NwdWlkbGUuaAo+ID4gQEAg
-LTAsMCArMSw3IEBACj4gPiArLyogU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAgKi8K
-PiA+ICsjaWZuZGVmIF9fUklTQ1ZfQ1BVSURMRV9ICj4gPiArI2RlZmluZSBfX1JJU0NWX0NQVUlE
-TEVfSAo+ID4gKwo+ICtleHRlcm4gdm9pZCBjcHVfZG9faWRsZSh2b2lkKTsKPiA+ICsKPiA+ICsj
-ZW5kaWYKPiA+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L2tlcm5lbC9NYWtlZmlsZSBiL2FyY2gv
-cmlzY3Yva2VybmVsL01ha2VmaWxlCj4gPiBpbmRleCBkYzkzNzEwLi4zOTZiYTljIDEwMDY0NAo+
-ID4gLS0tIGEvYXJjaC9yaXNjdi9rZXJuZWwvTWFrZWZpbGUKPiA+ICsrKyBiL2FyY2gvcmlzY3Yv
-a2VybmVsL01ha2VmaWxlCj4gPiBAQCAtMjksNiArMjksNyBAQCBvYmoteSArPSByaXNjdl9rc3lt
-cy5vCj4gPiAgb2JqLXkgKz0gc3RhY2t0cmFjZS5vCj4gPiAgb2JqLXkgKz0gY2FjaGVpbmZvLm8K
-PiA+ICBvYmoteSArPSBwYXRjaC5vCj4gPiArb2JqLXkgKz0gY3B1aWRsZS5vCgo+IFByZXN1bWFi
-bHkgd2Ugd2FudCB0aGlzIHRvIGJlIGEgS2NvbmZpZyBvcHRpb24sIGlmIG9ubHkgdG8gYXZvaWQg
-ZXhjZXNzIHNpemUgb24KPiB0aGUgc21hbGxlciBzeXN0ZW1zPwoKVGhhbmsgeW91IGZvciB5b3Vy
-IHN1Z2dlc3Rpb25zLgpJIGFtIGNvbnNpZGVyaW5nIGZvbGxvd2luZyBBbnVwJ3Mgc3VnZ2VzdGlv
-biAtIGRlbGV0ZSBjcHVpZGxlLmMgYW5kIGltcGxlbWVudCAKY3B1X2RvX2lkbGUgaW4gY3B1aWRs
-ZS5oLgoKPiA+ICBvYmotJChDT05GSUdfTU1VKSArPSB2ZHNvLm8gdmRzby8KPiA+Cj4gPiAgb2Jq
-LSQoQ09ORklHX1JJU0NWX01fTU9ERSkgKz0gdHJhcHNfbWlzYWxpZ25lZC5vCj4gPiBkaWZmIC0t
-Z2l0IGEvYXJjaC9yaXNjdi9rZXJuZWwvY3B1aWRsZS5jIGIvYXJjaC9yaXNjdi9rZXJuZWwvY3B1
-aWRsZS5jCj4gPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+ID4gaW5kZXggMDAwMDAwMDAuLmEzMjg5
-ZTcKPiA+IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL2FyY2gvcmlzY3Yva2VybmVsL2NwdWlkbGUu
-Ywo+ID4gQEAgLTAsMCArMSw4IEBACj4gPiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQ
-TC0yLjAKPiA+ICsjaW5jbHVkZSA8YXNtL2NwdWlkbGUuaD4KPiA+ICsKPiA+ICt2b2lkIGNwdV9k
-b19pZGxlKHZvaWQpCj4gPiArewo+ID4gKyBfX2FzbV9fIF9fdm9sYXRpbGVfXyAoIndmaSIpOwo+
-ID4gKwoKPiBXZSBoYXZlIHdhaXRfZm9yX2ludGVycnVwdCgpIHRoYXQgZG9lcyB0aGlzIGFscmVh
-ZHksIGJ1dCBpdCdzIG9uZSBsaW5lIHNvIGl0Cj4gZG9lc24ndCByZWFsbHkgbWF0dGVyLiAgRWl0
-aGVyIHdheSwgdGhlcmUncyBhbiBleHRyYSBuZXdsaW5lIGhlcmUuCgpUaGFua3MsIGknbGwgbW9k
-aWZ5IGl0Cgo+IEFkZGl0aW9uYWxseSwgd2UgaGF2ZSBhcmNoX2NwdV9pZGxlKCkgd2hpY2ggaXMg
-Y2FsbGluZyBjcHVfZG9faWRsZSgpIG9uIG90aGVyCj4gcGxhdGZvcm1zLiAgUHJlc3VtYWJseSB3
-ZSBzaG91bGQgYmUgZG9pbmcgc29tZXRoaW5nIHNpbWlsYXIsIHVuZGVyIHRoZQo+IGFzc3VtcHRp
-b24gdGhhdCB3ZSB3aWxsIGV2ZW50dWFsbHkgaGF2ZSBjcHVfZG9faWRsZSgpIGhvb2sgaW50byBD
-UFUgaWRsZQo+IGRyaXZlcnMgaGVyZT8KCkJhc2VkIG9uIHlvdXIgY29tbWVudHMsIEkgcnVuIGEg
-dGVzdCBhbmQgZm91bmQgdGhhdCBhcmNoX2NwdV9pZGxlIGNvdWxkIGJlIGV4ZWN1dGVkIApub3Jt
-YWxseSB3aXRob3V0IGVuYWJsaW5nIHRoZSBpZGxlIGRyaXZlci5QYXJ0IG9mIHRoZSBjb2RlIG9m
-IHRoZSBleHBlcmltZW50OgogCi0tLSAvZGV2L251bGwKKysrIGIvYXJjaC9yaXNjdi9pbmNsdWRl
-L2FzbS9jcHVpZGxlLmgKQEAgLTAsMCArMSwxMSBAQAorLyogU1BEWC1MaWNlbnNlLUlkZW50aWZp
-ZXI6IEdQTC0yLjAgKi8KKyNpZm5kZWYgX19SSVNDVl9DUFVJRExFX0gKKyNkZWZpbmUgX19SSVND
-Vl9DUFVJRExFX0gKKworc3RhdGljIGlubGluZSB2b2lkIGNwdV9kb19pZGxlKHZvaWQpCit7Cisg
-ICAgICAgbWIoKTsKKyAgICAgICB3YWl0X2Zvcl9pbnRlcnJ1cHQoKTsKK30KKworI2VuZGlmCgor
-KysgYi9hcmNoL3Jpc2N2L2tlcm5lbC9wcm9jZXNzLmMKQEAgLTIxLDYgKzIxLDcgQEAKICNpbmNs
-dWRlIDxhc20vc3RyaW5nLmg+CiAjaW5jbHVkZSA8YXNtL3N3aXRjaF90by5oPgogI2luY2x1ZGUg
-PGFzbS90aHJlYWRfaW5mby5oPgorI2luY2x1ZGUgPGFzbS9jcHVpZGxlLmg+CiAKIHJlZ2lzdGVy
-IHVuc2lnbmVkIGxvbmcgZ3BfaW5fZ2xvYmFsIF9fYXNtX18oImdwIik7CiAKQEAgLTM1LDcgKzM2
-LDcgQEAgZXh0ZXJuIGFzbWxpbmthZ2Ugdm9pZCByZXRfZnJvbV9rZXJuZWxfdGhyZWFkKHZvaWQp
-OwogCiB2b2lkIGFyY2hfY3B1X2lkbGUodm9pZCkKIHsKLSAgICAgICB3YWl0X2Zvcl9pbnRlcnJ1
-cHQoKTsKKyAgICAgICBjcHVfZG9faWRsZSgpOwogICAgICAgIGxvY2FsX2lycV9lbmFibGUoKTsK
-IH0KIAoKCj4gPiArfQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1aWRsZS9LY29uZmlnIGIv
-ZHJpdmVycy9jcHVpZGxlL0tjb25maWcKPiA+IGluZGV4IGMwYWVlZGQuLmY2YmUwZmQgMTAwNjQ0
-Cj4gPiAtLS0gYS9kcml2ZXJzL2NwdWlkbGUvS2NvbmZpZwo+ID4gKysrIGIvZHJpdmVycy9jcHVp
-ZGxlL0tjb25maWcKPiA+IEBAIC02Miw2ICs2MiwxMSBAQCBkZXBlbmRzIG9uIFBQQwo+ID4gIHNv
-dXJjZSAiZHJpdmVycy9jcHVpZGxlL0tjb25maWcucG93ZXJwYyIKPiA+ICBlbmRtZW51Cj4gPgo+
-ID4gK21lbnUgIlJJU0NWIENQVSBJZGxlIERyaXZlcnMiCj4gPiArZGVwZW5kcyBvbiBSSVNDVgo+
-ID4gK3NvdXJjZSAiZHJpdmVycy9jcHVpZGxlL0tjb25maWcucmlzY3YiCj4gPiArZW5kbWVudQo+
-ID4gKwo+ID4gIGNvbmZpZyBIQUxUUE9MTF9DUFVJRExFCj4gPiAgIHRyaXN0YXRlICJIYWx0IHBv
-bGwgY3B1aWRsZSBkcml2ZXIiCj4gPiAgIGRlcGVuZHMgb24gWDg2ICYmIEtWTV9HVUVTVAo+ID4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvY3B1aWRsZS9LY29uZmlnLnJpc2N2IGIvZHJpdmVycy9jcHVp
-ZGxlL0tjb25maWcucmlzY3YKPiA+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gPiBpbmRleCAwMDAw
-MDAwMC4uZTg2ZDM2Ygo+ID4gLS0tIC9kZXYvbnVsbAo+ID4gKysrIGIvZHJpdmVycy9jcHVpZGxl
-L0tjb25maWcucmlzY3YKPiA+IEBAIC0wLDAgKzEsMTEgQEAKPiA+ICsjIFNQRFgtTGljZW5zZS1J
-ZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKPiA+ICsjCj4gPiArIyBSSVNDViBDUFUgSWRsZSBkcml2
-ZXJzCj4gPiArIwo+ID4gK2NvbmZpZyBSSVNDVl9DUFVJRExFCj4gPiArICAgICAgICBib29sICJH
-ZW5lcmljIFJJU0NWIENQVSBpZGxlIERyaXZlciIKPiA+ICsgICAgICAgIHNlbGVjdCBEVF9JRExF
-X1NUQVRFUwo+ID4gKyBzZWxlY3QgQ1BVX0lETEVfTVVMVElQTEVfRFJJVkVSUwoKPiBMb29rcyBs
-aWtlIHRoZXJlJ3Mgc29tZSBzcGFjZS90YWIgaXNzdWVzIGhlcmUuICBJSVJDIGNoZWNrcGF0Y2gg
-d2lsbCBjYXRjaCB0aGlzCj4gc29ydCBvZiB0aGluZy4KCnllcywgaSdsbCBtb2RpZnkgaXQKCj4g
-PiArICAgICAgICBoZWxwCj4gPiArICAgICAgICAgIFNlbGVjdCB0aGlzIG9wdGlvbiB0byBlbmFi
-bGUgZ2VuZXJpYyBjcHVpZGxlIGRyaXZlciBmb3IgUklTQ1YuCj4gPiArICAgTm93IG9ubHkgc3Vw
-cG9ydCBDMCBTdGF0ZS4KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvTWFrZWZpbGUg
-Yi9kcml2ZXJzL2NwdWlkbGUvTWFrZWZpbGUKPiA+IGluZGV4IDI2YmJjNWUuLjRjODNjNGUgMTAw
-NjQ0Cj4gPiAtLS0gYS9kcml2ZXJzL2NwdWlkbGUvTWFrZWZpbGUKPiA+ICsrKyBiL2RyaXZlcnMv
-Y3B1aWRsZS9NYWtlZmlsZQo+ID4gQEAgLTM0LDMgKzM0LDcgQEAgb2JqLSQoQ09ORklHX01JUFNf
-Q1BTX0NQVUlETEUpICArPSBjcHVpZGxlLWNwcy5vCj4gPiAgIyBQT1dFUlBDIGRyaXZlcnMKPiA+
-ICBvYmotJChDT05GSUdfUFNFUklFU19DUFVJRExFKSAgKz0gY3B1aWRsZS1wc2VyaWVzLm8KPiA+
-ICBvYmotJChDT05GSUdfUE9XRVJOVl9DUFVJRExFKSAgKz0gY3B1aWRsZS1wb3dlcm52Lm8KPiA+
-ICsKPiA+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gPiArIyBSSVNDViBkcml2ZXJzCj4gPiAr
-b2JqLSQoQ09ORklHX1JJU0NWX0NQVUlETEUpICArPSBjcHVpZGxlLXJpc2N2Lm8KPiA+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL2NwdWlkbGUvY3B1aWRsZS1yaXNjdi5jIGIvZHJpdmVycy9jcHVpZGxl
-L2NwdWlkbGUtcmlzY3YuYwo+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAw
-MDAwLi41ZGRkY2ZhCj4gPiAtLS0gL2Rldi9udWxsCj4gPiArKysgYi9kcml2ZXJzL2NwdWlkbGUv
-Y3B1aWRsZS1yaXNjdi5jCj4gPiBAQCAtMCwwICsxLDU1IEBACj4gPiArLy8gU1BEWC1MaWNlbnNl
-LUlkZW50aWZpZXI6IEdQTC0yLjAKPiA+ICsvKgo+ID4gKyAqIFJJU0MtViBDUFUgaWRsZSBkcml2
-ZXIuCj4gPiArICoKPiA+ICsgKiBDb3B5cmlnaHQgKEMpIDIwMjAtMjAyMiBBbGx3aW5uZXIgTHRk
-Cj4gPiArICoKPiA+ICsgKiBCYXNlZCBvbiBjb2RlIC0gZHJpdmVyL2NwdWlkbGUvY3B1aWRsZS1h
-dDkxLmMKPiA+ICsgKgo+ID4gKyAqLwo+ID4gKyNpbmNsdWRlIDxsaW51eC9jcHVpZGxlLmg+Cj4g
-PiArI2luY2x1ZGUgPGxpbnV4L2NwdW1hc2suaD4KPiA+ICsjaW5jbHVkZSA8bGludXgvY3B1X3Bt
-Lmg+Cj4gPiArI2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5oPgo+ID4gKyNpbmNsdWRlIDxsaW51eC9t
-b2R1bGUuaD4KPiA+ICsjaW5jbHVkZSA8bGludXgvb2YuaD4KPiA+ICsjaW5jbHVkZSA8bGludXgv
-c2xhYi5oPgo+ID4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybV9kZXZpY2UuaD4KPiA+ICsjaW5j
-bHVkZSA8YXNtL2NwdWlkbGUuaD4KPiA+ICsKPiA+ICsjZGVmaW5lIE1BWF9JRExFX1NUQVRFUyAx
-Cj4gPiArCj4gPiArLyogVE9ETzogSW1wbGVtZW50IGRlZXBlciBpZGxlIHN0YXRlcyAqLwo+ID4g
-K3N0YXRpYyBpbnQgcmlzY3ZfbG93X2xldmVsX3N1c3BlbmRfZW50ZXIoaW50IHN0YXRlKQo+ID4g
-K3sKPiA+ICsgcmV0dXJuIDA7Cgo+IEFzIGZhciBhcyBJIGNhbiB0ZWxsLCB0aGlzIGRyaXZlciBq
-dXN0IGRvZXNuJ3QgZG8gYW55dGhpbmc/ICBBc3N1bWluZyB0aGF0J3MKPiB0aGUgY2FzZSwgaXQn
-cyBwcm9iYWJseSBiZXN0IHRvIGp1c3QgZHJvcCBldmVyeXRoaW5nIGJ1dCBjcHVfZG9faWRsZSgp
-IHVudGlsIHdlCj4gaGF2ZSBzb21ldGhpbmcgdG8gZXhlcmNpc2UgdGhpcy4KCkFsdGhvdWdoLCB0
-aGUgZHJpdmVyIGluIHRoaXMgY2FzZSBpcyBub3QgbmVjZXNzYXJ5LCBpdCBpcyBlc3NlbnRpYWwg
-d2hlbiB3b3JrIGluIHRoZSBtYWNybyAKQ1BVX1BNX0NQVV9JRExFX0VOVEVSX1BBUkFNLkFuZCBp
-dCBjb3VsZCBhbHNvIGJlIHVzZWQgZm9yIHN1cHBvcnRpbmcgb3RoZXIgCmRlZXBlciBzdGF0ZXMg
-aW4gdGhlIGZ1dHVyZS4gU28gSSB0aGluayBpdCB3b3VsZCBiZSBiZXR0ZXIgdG8ga2VlcCAKcmlz
-Y3ZfbG93X2xldmVsX3N1c3BlbmRfZW50ZXIgYnV0IGNoYW5nZSBpdCB0byBfX3dlYWsgZnVuY3Rp
-b24uCgo+ID4gK30KPiA+ICsKPiA+ICsvKiBBY3R1YWwgY29kZSB0aGF0IHB1dHMgdGhlIFNvQyBp
-biBkaWZmZXJlbnQgaWRsZSBzdGF0ZXMgKi8KPiA+ICtzdGF0aWMgaW50IHJpc2N2X2VudGVyX2lk
-bGUoc3RydWN0IGNwdWlkbGVfZGV2aWNlICpkZXYsCj4gPiArICAgc3RydWN0IGNwdWlkbGVfZHJp
-dmVyICpkcnYsCj4gPiArICAgICAgICAgIGludCBpbmRleCkKPiA+ICt7Cj4gPiArIHJldHVybiBD
-UFVfUE1fQ1BVX0lETEVfRU5URVJfUEFSQU0ocmlzY3ZfbG93X2xldmVsX3N1c3BlbmRfZW50ZXIs
-Cj4gPiArICAgICAgICBpbmRleCwgMCk7Cj4gPiArfQo+ID4gKwo+ID4gK3N0YXRpYyBzdHJ1Y3Qg
-Y3B1aWRsZV9kcml2ZXIgcmlzY3ZfaWRsZV9kcml2ZXIgPSB7Cj4gPiArIC5uYW1lICAgPSAicmlz
-Y3ZfaWRsZSIsCj4gPiArIC5vd25lciAgID0gVEhJU19NT0RVTEUsCj4gPiArIC5zdGF0ZXNbMF0g
-ID0gewo+ID4gKyAgLmVudGVyICAgPSByaXNjdl9lbnRlcl9pZGxlLAo+ID4gKyAgLmV4aXRfbGF0
-ZW5jeSAgPSAxLAo+ID4gKyAgLnRhcmdldF9yZXNpZGVuY3kgPSAxLAo+ID4gKyAgLm5hbWUgICA9
-ICJXRkkiLAo+ID4gKyAgLmRlc2MgICA9ICJSSVNDViBXRkkiLAo+ID4gKyB9LAo+ID4gKyAuc3Rh
-dGVfY291bnQgPSBNQVhfSURMRV9TVEFURVMsCj4gPiArfTsKPiA+ICsKPiA+ICtzdGF0aWMgaW50
-IF9faW5pdCByaXNjdl9jcHVpZGxlX2luaXQodm9pZCkKPiA+ICt7Cj4gPiArIHJldHVybiBjcHVp
-ZGxlX3JlZ2lzdGVyKCZyaXNjdl9pZGxlX2RyaXZlciwgTlVMTCk7Cj4gPiArfQo+ID4gKwo+ID4g
-K2RldmljZV9pbml0Y2FsbChyaXNjdl9jcHVpZGxlX2luaXQpOw==
+On Tue, 15 Sep 2020 at 12:44, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Some drivers have to do significant work, some of which relies on RCU
+> still being active. Instead of using RCU_NONIDLE in the drivers and
+> flipping RCU back on, allow drivers to take over RCU-idle duty.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/cpuidle/cpuidle.c |   15 ++++++++++-----
+>  include/linux/cpuidle.h   |    1 +
+>  2 files changed, 11 insertions(+), 5 deletions(-)
+>
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -138,6 +138,7 @@ static void enter_s2idle_proper(struct c
+>                                 struct cpuidle_device *dev, int index)
+>  {
+>         ktime_t time_start, time_end;
+> +       struct cpuidle_state *target_state = &drv->states[index];
+>
+>         time_start = ns_to_ktime(local_clock());
+>
+> @@ -153,8 +154,9 @@ static void enter_s2idle_proper(struct c
+>          * suspended is generally unsafe.
+>          */
+>         stop_critical_timings();
+> -       rcu_idle_enter();
+> -       drv->states[index].enter_s2idle(dev, drv, index);
+> +       if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+> +               rcu_idle_enter();
+> +       target_state->enter_s2idle(dev, drv, index);
+>         if (WARN_ON_ONCE(!irqs_disabled()))
+>                 local_irq_disable();
+>         /*
+> @@ -162,7 +164,8 @@ static void enter_s2idle_proper(struct c
+>          * first CPU executing it calls functions containing RCU read-side
+>          * critical sections, so tell RCU about that.
+>          */
+> -       rcu_idle_exit();
+> +       if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+> +               rcu_idle_exit();
+>         tick_unfreeze();
+>         start_critical_timings();
+>
+> @@ -239,9 +242,11 @@ int cpuidle_enter_state(struct cpuidle_d
+>         time_start = ns_to_ktime(local_clock());
+>
+>         stop_critical_timings();
+> -       rcu_idle_enter();
+> +       if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+> +               rcu_idle_enter();
+>         entered_state = target_state->enter(dev, drv, index);
+> -       rcu_idle_exit();
+> +       if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+> +               rcu_idle_exit();
+>         start_critical_timings();
+>
+>         sched_clock_idle_wakeup_event();
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -82,6 +82,7 @@ struct cpuidle_state {
+>  #define CPUIDLE_FLAG_UNUSABLE          BIT(3) /* avoid using this state */
+>  #define CPUIDLE_FLAG_OFF               BIT(4) /* disable this state by default */
+>  #define CPUIDLE_FLAG_TLB_FLUSHED       BIT(5) /* idle-state flushes TLBs */
+> +#define CPUIDLE_FLAG_RCU_IDLE          BIT(6) /* idle-state takes care of RCU */
+>
+>  struct cpuidle_device_kobj;
+>  struct cpuidle_state_kobj;
+>
+>
