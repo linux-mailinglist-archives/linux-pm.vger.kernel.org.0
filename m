@@ -2,179 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE1826AE20
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 21:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA71D26AE24
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 21:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726485AbgIOTwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 15:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S1727631AbgIOTxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 15:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727825AbgIORHz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:07:55 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 232A3C061351
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 09:57:39 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id c3so1661745plz.5
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 09:57:39 -0700 (PDT)
+        with ESMTP id S1727832AbgIOTwZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 15:52:25 -0400
+Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380ADC061788
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:52:00 -0700 (PDT)
+Received: by mail-pj1-x1041.google.com with SMTP id u3so328908pjr.3
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=RMBtx+N8rfyXlpE0k0ifH8sVhqMJoEQ3x/BGMNzKRfw=;
-        b=kDfmKB6bB82yeM/GMZV+8OfXIpT8eh8ukHdb1oXY7uPqiAzF9rtDAig6fWnmEvP8Zn
-         q6TQtul2Ow5lfzrxJwXCGmqxGNhtKMUkZ5RUXDU+ES6m51FGmkFvx8/F+XNAaUfgbY21
-         rUO69w4zE/Bxj9nPRuqSHi2J939bAKGzND9G+dj0CmpY+0ychAaDbiAjCdUxuwmmbg7M
-         KD9E/N3NRhZpqB02MBj3NKb9Ph8a3KdIY1CHvHEeCoNva870tb4+P3TDNY6R3hx1DZJ5
-         KvOH04Nj7yiwr2VlIk4kko8eKBRVFbtoXiufhmQkU4j/HmCnKXBx8sQWBpgc88C0V1mz
-         w0hQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TI2xLec+fHn8OciSaj91CFEPuyI3CYj5LnJd/mX8Q9c=;
+        b=CSaEWUa8LALEjbgWipzCz97uFtgtyhT3hXJSCT31PyfocmLJFaso6qNrkfOjRrWVeq
+         KZqwnYR6fH0mtweTbAb6DldweWs3wtZTzfU0+OxFajMgAsK2p/u/ZUuI3kpz5VFMhGZR
+         +SxUnsj75UMcYx77YumZz52dOIeKGtU9Rj+/ppDjfxBteqbiy/oSGtSQbKQeKDW4Kr9k
+         D3nitebGoAGkNoAud3IY1sZNSW+HSQ4xF/th2dGpb9YGwYsMCLWVW+v/ZVbxkC6I2jOL
+         9d2tnZAIvdKy2PRBzIV8Hh5rsJs+a9ekkfApDSMjYROTLpFJCoEccYbpeKjWemqRvqGa
+         mrJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=RMBtx+N8rfyXlpE0k0ifH8sVhqMJoEQ3x/BGMNzKRfw=;
-        b=NnQOZK2WlxjkuJx09WfH0/RSbjHQaPeJJ8wwcQo7S3AIKIeH63notEehrm3EyoGHbO
-         H4RYaAbO4n72fYBujylEoe5dFFMFarcgU+fiXD/MPTSihQ9NI7dHL1FTAaBlBPC9LqKd
-         K+uLzdssMbiwpFDNAUxGkktPtBYjUkWbFcSSb32aGn+S5bnDKAVBgjt3gxlYsVrPQP9C
-         UdgRciZ+4ruuTvE5NAf2zOhrSNJpGuQRDA7tJ7WaIJORGREQ0w1MQtYhbyqQB56+45gS
-         gdruDHzM6jq1Dzxw+ldCuky+XKEegMc1Cb86YfWDJk6zK4pIdAhMK+Agox4LclbMlFxV
-         YYSA==
-X-Gm-Message-State: AOAM531rM/eIjR/vJGE1ivsB+19SaTRID3X1Ozr81ceZKJ1ChnAkHh5m
-        gmj+5BZMrpjHBYpswqY3oWNOTWrEyUUsjg==
-X-Google-Smtp-Source: ABdhPJypOKcaPpjbNRDpdqO1TbALGLtahMaTQQN1C00GYFaKimbdCt009TDxcDp4Q3yLwKIeYKDLog==
-X-Received: by 2002:a17:902:b410:b029:d1:920c:c22b with SMTP id x16-20020a170902b410b02900d1920cc22bmr9318427plr.28.1600189058314;
-        Tue, 15 Sep 2020 09:57:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s129sm13918163pfb.39.2020.09.15.09.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 09:57:37 -0700 (PDT)
-Message-ID: <5f60f281.1c69fb81.1663.45e0@mx.google.com>
-Date:   Tue, 15 Sep 2020 09:57:37 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TI2xLec+fHn8OciSaj91CFEPuyI3CYj5LnJd/mX8Q9c=;
+        b=Qr6czZZjJ+V+qah+IeTC8tzPWQC1sYhP4cvf9qbO9kpcU2SHkbIpCnhg2RDq5E4r57
+         Hn/EGWfQXFBjRu84andOMGwa+HITHht0J1h4ykNkFmWrbzrJ2Nu4yzhk375avLNEbldi
+         vfRz6f8ISamhnzsDcckz81z9eRbnU582lDPxOSVjCt5QLxYnjgKdSXF/1p0z37qQsbrM
+         uWKV+4f1/Dg8hcz5ILlhZBRRobuwqz9I+piMhk6zweNapG2N/jfmVLzMQjvojOdk/xdR
+         1QjU0n3uNiqmzgU1w0rUvctUmHCmikkryRjXs7TkKRj5cqH0eYrnmDmqt/AgnmSxV4TO
+         xm9g==
+X-Gm-Message-State: AOAM530Uu0uCXcI+gjRl2d6YbgJGJ/+Gh9f38xa0xrRSSPTbPfUhVOpm
+        EYRtW9Yc1zjQfNa5vju54wG5tK43RocAkTXRBb7Fcg==
+X-Google-Smtp-Source: ABdhPJwfkIrGn0JOmTLbg7jGpiqZH9I7JEnSZAE9TuQEuAAV+13NJLuBvlt5+L2Qa0akcupsVX5eMn8WStg7f9QmNbQ=
+X-Received: by 2002:a17:90b:698:: with SMTP id m24mr883485pjz.32.1600199519432;
+ Tue, 15 Sep 2020 12:51:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc5
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 118 runs, 2 regressions (v5.9-rc5)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200915172658.1432732-1-rkir@google.com> <20200915174643.GT14436@zn.tnic>
+ <CAKwvOdm9bQmL=gZypkosH0MG=S28=jJ6wZiTMCNP6=Z+NfN1AA@mail.gmail.com> <20200915182530.GV14436@zn.tnic>
+In-Reply-To: <20200915182530.GV14436@zn.tnic>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 15 Sep 2020 12:51:47 -0700
+Message-ID: <CAKwvOdkKk1KuAFDoWNLnMUi3_JnV7atDFnvS7CdkgNXnNg0p1g@mail.gmail.com>
+Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
+ __restore_processor_state (clang)
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Roman Kiryanov <rkir@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Alistair Delva <adelva@google.com>,
+        Haitao Shan <hshan@google.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 118 runs, 2 regressions (v5.9-rc5)
+On Tue, Sep 15, 2020 at 11:25 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> On Tue, Sep 15, 2020 at 11:00:30AM -0700, Nick Desaulniers wrote:
+> > This is exactly the same code from __restore_processor_state.
+>
+> No, this patch is adding
+>
+> #ifdef __clang__
+>
+> and I don't like the sprinkling around of those compiler-specific
+> workarounds which we have to carry forward forever or at least until
+> that compiler version is deprecated. We already carry fixes for broken
+> hardware, broken BIOSes, broken peripherals,... can you follow the
+> progression? :)
 
-Regressions Summary
--------------------
+I agree; I also would not have sent the patch though.  Until LTO has
+landed upstream, this is definitely somewhat self inflicted.  This was
+only debugged last week; even with a compiler fix in hand today, it
+still takes time to ship that compiler and qualify it; for other folks
+on tighter timelines, I can understand why the patch was sent, and do
+genuinely appreciate the effort to participate more upstream which I'm
+trying to encourage more of throughout the company (we're in a lot of
+technical debt kernel-wise; and I'm not referring to Android...a story
+over beers perhaps, or ask Greg).  It's just that this isn't really
+appropriate since it works around a bug in a non-upstream feature, and
+will go away once we fix the toolchain.
 
-platform         | arch  | lab           | compiler | defconfig          | =
-results
------------------+-------+---------------+----------+--------------------+-=
--------
-panda            | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | =
-4/5    =
+>
+> So your argument about testing unreleased compilers in the other thread
+> makes a lot of sense so that stuff like that can be fixed in time, and
+> in the compiler, where it belongs (that is, *if* it belongs there).
 
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
-82/88  =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc5=
-/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc5
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      856deb866d16e29bd65952e0289066f6078af773 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig          | =
-results
------------------+-------+---------------+----------+--------------------+-=
--------
-panda            | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | =
-4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f60e8815f9aa187c4bed953
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc5/arm/multi_=
-v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc5/arm/multi_=
-v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f60e8815f9aa18=
-7c4bed957
-      failing since 26 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)
-      60 lines
-
-    2020-09-15 16:14:51.305000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c802
-    2020-09-15 16:14:51.310000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c803
-    2020-09-15 16:14:51.316000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c804
-    2020-09-15 16:14:51.322000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c805
-    2020-09-15 16:14:51.328000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c806
-    2020-09-15 16:14:51.334000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c807
-    2020-09-15 16:14:51.340000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c808
-    2020-09-15 16:14:51.346000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c809
-    2020-09-15 16:14:51.352000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c80a
-    2020-09-15 16:14:51.358000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c80b
-    ... (49 line(s) more)
-      =
-
-
-
-platform         | arch  | lab           | compiler | defconfig          | =
-results
------------------+-------+---------------+----------+--------------------+-=
--------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
-82/88  =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f60e8a0f377fb46b3bed959
-
-  Results:     82 PASS, 6 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc5/arm64/defc=
-onfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc5/arm64/defc=
-onfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.bootrr.rockchip-dp-probed: https://kernelci.org/test/case/id/5=
-f60e8a0f377fb46b3bed98c
-      new failure (last pass: v5.9-rc4-6-g23818c154bae)
-
-    2020-09-15 16:15:23.892000  /lava-2625562/1/../bin/lava-test-case
-      =20
+It would be much nicer if we had the flexibility to disable stack
+protectors per function, rather than per translation unit.  I'm going
+to encourage you to encourage your favorite compile vendor ("write to
+your senator") to support the function attribute
+__attribute__((no_stack_protector)) so that one day, we can use that
+to stop shipping crap like a9a3ed1eff360 ("x86: Fix early boot crash
+on gcc-10, third try").  Having had that, we could have used a nicer
+workaround until the toolchain was fixed (and one day revert
+a9a3ed1eff360, and d0a8d9378d16, and probably more hacks in the
+kernel).  And the case that's causing the compiler bug in question is
+something all compiler vendors will need to consider in their
+implementations.
+-- 
+Thanks,
+~Nick Desaulniers
