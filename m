@@ -2,112 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A789526AB45
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 19:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B6826AB21
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 19:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgIORrH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 13:47:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S1727702AbgIORvY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 13:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727615AbgIORqv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:46:51 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473CAC061788;
-        Tue, 15 Sep 2020 10:46:51 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0e42006096e946d741c4e4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:4200:6096:e946:d741:c4e4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 85C571EC032C;
-        Tue, 15 Sep 2020 19:46:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1600192009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rmBa7gEzQYxBNGzsURQUEAttoyf870NKssUflXTeqCg=;
-        b=q10yfnNWGXiBR4ItVPXZCGDs9iOdT/kKwdkymGIzET6Usrbyfg/m/xLXMbJWVyu+Ylj9N/
-        qUMBLAqTn3Bxhy5xIzRIN+ZT8bXacFZ+ERU0CdywcWfI+XcugOR3XYFOgh42qu93Gqk2QM
-        vVPZeDeXh0qg5VKVF0F8CJJp8Ru0K70=
-Date:   Tue, 15 Sep 2020 19:46:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     rkir@google.com
-Cc:     rjw@rjwysocki.net, pavel@ucw.cz, tglx@linutronix.de,
-        mingo@redhat.com, x86@kernel.org, linux-pm@vger.kernel.org,
-        gregkh@linuxfoundation.org, ndesaulniers@google.com,
-        adelva@google.com, Haitao Shan <hshan@google.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
- __restore_processor_state (clang)
-Message-ID: <20200915174643.GT14436@zn.tnic>
-References: <20200915172658.1432732-1-rkir@google.com>
+        with ESMTP id S1727758AbgIORuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:50:21 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25235C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:50:14 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id a17so4249420wrn.6
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Ra0UwZMSA18qjDYK2AtGt6BQncZY1tBEKXF6zPEuSQo=;
+        b=YwKVl4GeDkAYzX8+Xr7omJYjhQPzOKZaZZTBPR6WHuYJVvKOklBaZx/c/DTylR2jWN
+         ALjHoraylidjTnkGHY50QKUKtkQwIZ3Z3ydhZufdcUHbgVCV0WqWTB7zSdD5f5IfwaJN
+         vKMUn/qdSQuOYN6hY9pOCrX2ohILXF/SgkhzbG5fQHFakcnE/9tEqpLwbFkfydLPFPrT
+         MRhxfA6Mb+3Mk60km0jJuT6n0vbyXn1X8yj3niZG2C7FFL5ZAqSwfQM76MBb8k8e7MHf
+         2QdB8OanVyDr6UbHsSxJg0muPhGUS4Ytyot/jAKcbCsIU3nzZk5Pq7Da5zS6QlGn8w+H
+         Is+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Ra0UwZMSA18qjDYK2AtGt6BQncZY1tBEKXF6zPEuSQo=;
+        b=k838hS/yIWIh3ZOTU7ZJOkfcfMMBHe150yoTKpMKvGQdnWKYaHlgZWuVM0yP1KyzdB
+         5T4RGTUSJbRltvCJn13HjBADE2W6W3CnczVjeL/g6qg8xjAQ33w//+h44OPB4CHNNV9r
+         ThgiT32vX4rhAWZ12+dNwrD3w3t21jYoFkleAkjL9GAkumMRqMTEyqrfn7Hm/IzPtCF7
+         uGTNWLPukfW063RXEdZ+dxy6Xe24YSEEt2yrn1ja2HsT18RZ8ad1e+sgkWp/XAReBg0c
+         p6bFecQXgsS/gZMoX6CqXLXjRFcgwO8AX3w6F5yoL6qjUoTOJ2dyqxbRMVmgJk4gyvCX
+         YOrg==
+X-Gm-Message-State: AOAM533DRiDXVOZ2+GKgfrx91Oho3v0q6t2W1kTjWtHIgqZwyAQs6RXy
+        +t2oQx2XnDaa2PvLgZP5Ys53uQ==
+X-Google-Smtp-Source: ABdhPJx1YNcWQv0a8DqwHPEsoCstBIsXnKGLWt8dcuNbAYSyGZEFGGK5zfs9EbVq2XcAtMSEzWUxrg==
+X-Received: by 2002:a05:6000:1152:: with SMTP id d18mr22412835wrx.173.1600192212643;
+        Tue, 15 Sep 2020 10:50:12 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:a402:e7fb:d494:d130? ([2a01:e34:ed2f:f020:a402:e7fb:d494:d130])
+        by smtp.googlemail.com with ESMTPSA id y2sm501910wmg.23.2020.09.15.10.50.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 10:50:12 -0700 (PDT)
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+ <20200915172444.GA2771744@google.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
+Date:   Tue, 15 Sep 2020 19:50:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <20200915172444.GA2771744@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200915172658.1432732-1-rkir@google.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 10:26:58AM -0700, rkir@google.com wrote:
-> From: Haitao Shan <hshan@google.com>
+On 15/09/2020 19:24, Matthias Kaehlcke wrote:
+> +Thermal folks
 > 
-> This is a workaround which fixes triple fault
-> in __restore_processor_state on clang when
-> built with LTO.
+> Hi Rajendra,
 > 
-> When load_TR_desc and load_mm_ldt are inlined into
-> fix_processor_context due to LTO, they cause
-> fix_processor_context (or in this case __restore_processor_state,
-> as fix_processor_context was inlined into __restore_processor_state)
-> to access the stack canary through %gs, but before
-> __restore_processor_state has restored the previous value
-> of %gs properly. LLVM appears to be inlining functions with stack
-> protectors into functions compiled with -fno-stack-protector,
-> which is likely a bug in LLVM's inliner that needs to be fixed.
+> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
+>> Hi Rob,
+>>
+>> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
+>> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
+>> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
+>> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
+>> calculating power values in mW, is there a need to document the property as something that *has* to be
+>> based on real power measurements?
 > 
-> The LLVM bug is here: https://bugs.llvm.org/show_bug.cgi?id=47479
-> 
-> Signed-off-by: Haitao Shan <hshan@google.com>
-> Signed-off-by: Roman Kiryanov <rkir@google.com>
+> Relative values may work for scheduling decisions, but not for thermal
+> management with the power allocator, at least not when CPU cooling devices
+> are combined with others that specify their power consumption in absolute
+> values. Such a configuration should be supported IMO.
 
-Ok, google guys, pls make sure you Cc LKML too as this is where *all*
-patches and discussions are archived. Adding it now to Cc.
+The energy model is used in the cpufreq cooling device and if the
+sustainable power is consistent with the relative values then there is
+no reason it shouldn't work.
 
-> ---
->  arch/x86/power/cpu.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> index db1378c6ff26..e5677adb2d28 100644
-> --- a/arch/x86/power/cpu.c
-> +++ b/arch/x86/power/cpu.c
-> @@ -274,6 +274,16 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
->  /* Needed by apm.c */
->  void notrace restore_processor_state(void)
->  {
-> +#ifdef __clang__
-> +	// The following code snippet is copied from __restore_processor_state.
-> +	// Its purpose is to prepare GS segment before the function is called.
-> +#ifdef CONFIG_X86_64
-> +	wrmsrl(MSR_GS_BASE, saved_context.kernelmode_gs_base);
-> +#else
-> +	loadsegment(fs, __KERNEL_PERCPU);
-> +	loadsegment(gs, __KERNEL_STACK_CANARY);
-> +#endif
-> +#endif
 
-Ok, so why is the kernel supposed to take yet another ugly workaround
-because there's a bug in the compiler?
-
-If it is too late to fix it there, then maybe disable LTO builds for the
-buggy version only.
-
-We had a similar discussion this week and we already have one buggy
-compiler to deal with and this second one is not making it any easier...
 
 -- 
-Regards/Gruss,
-    Boris.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
