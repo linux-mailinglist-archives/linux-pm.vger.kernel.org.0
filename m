@@ -2,120 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA71D26AE24
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 21:53:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686F626AE26
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 21:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727631AbgIOTxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 15:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56776 "EHLO
+        id S1727813AbgIOTxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 15:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727832AbgIOTwZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 15:52:25 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380ADC061788
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:52:00 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id u3so328908pjr.3
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:52:00 -0700 (PDT)
+        with ESMTP id S1727821AbgIOTxQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 15:53:16 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76056C06174A
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:15 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id q124so1129479vkb.8
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=TI2xLec+fHn8OciSaj91CFEPuyI3CYj5LnJd/mX8Q9c=;
-        b=CSaEWUa8LALEjbgWipzCz97uFtgtyhT3hXJSCT31PyfocmLJFaso6qNrkfOjRrWVeq
-         KZqwnYR6fH0mtweTbAb6DldweWs3wtZTzfU0+OxFajMgAsK2p/u/ZUuI3kpz5VFMhGZR
-         +SxUnsj75UMcYx77YumZz52dOIeKGtU9Rj+/ppDjfxBteqbiy/oSGtSQbKQeKDW4Kr9k
-         D3nitebGoAGkNoAud3IY1sZNSW+HSQ4xF/th2dGpb9YGwYsMCLWVW+v/ZVbxkC6I2jOL
-         9d2tnZAIvdKy2PRBzIV8Hh5rsJs+a9ekkfApDSMjYROTLpFJCoEccYbpeKjWemqRvqGa
-         mrJw==
+        bh=JatNhbddJToYM0By7pCmtx57Fyea4GmWvkZSCincDmk=;
+        b=cs/Q6x0YzM+Pnjbl6WAD3RzDobJyyW3NLuTB+Fmlv0GjwsMl/B+GFzhyNWSmw90fQU
+         Xtqk1Uwmb+cc47MODVCKGi7K+6IaYLZkTSOlCr4/CL5Uzj5kvCqCPt+MFe2Vk3R8hL08
+         HLUmomtDf8ml9LyL4vgvTXl9tBLoW0hCaJ6V0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TI2xLec+fHn8OciSaj91CFEPuyI3CYj5LnJd/mX8Q9c=;
-        b=Qr6czZZjJ+V+qah+IeTC8tzPWQC1sYhP4cvf9qbO9kpcU2SHkbIpCnhg2RDq5E4r57
-         Hn/EGWfQXFBjRu84andOMGwa+HITHht0J1h4ykNkFmWrbzrJ2Nu4yzhk375avLNEbldi
-         vfRz6f8ISamhnzsDcckz81z9eRbnU582lDPxOSVjCt5QLxYnjgKdSXF/1p0z37qQsbrM
-         uWKV+4f1/Dg8hcz5ILlhZBRRobuwqz9I+piMhk6zweNapG2N/jfmVLzMQjvojOdk/xdR
-         1QjU0n3uNiqmzgU1w0rUvctUmHCmikkryRjXs7TkKRj5cqH0eYrnmDmqt/AgnmSxV4TO
-         xm9g==
-X-Gm-Message-State: AOAM530Uu0uCXcI+gjRl2d6YbgJGJ/+Gh9f38xa0xrRSSPTbPfUhVOpm
-        EYRtW9Yc1zjQfNa5vju54wG5tK43RocAkTXRBb7Fcg==
-X-Google-Smtp-Source: ABdhPJwfkIrGn0JOmTLbg7jGpiqZH9I7JEnSZAE9TuQEuAAV+13NJLuBvlt5+L2Qa0akcupsVX5eMn8WStg7f9QmNbQ=
-X-Received: by 2002:a17:90b:698:: with SMTP id m24mr883485pjz.32.1600199519432;
- Tue, 15 Sep 2020 12:51:59 -0700 (PDT)
+        bh=JatNhbddJToYM0By7pCmtx57Fyea4GmWvkZSCincDmk=;
+        b=ByOWM63pJIdQ3n/cda2ECtWj0Bm+j/WvCf8ov985h0+zAGkXUxc/uy//gO+p68QAXs
+         G+pncB67hkyAH8fOlCCbVQlT9vm0BVZRKraGnJXnodKvSZrR4nNVD28HEvGwldXB7V+k
+         M8WQws8TcN3T5/IoZfsEzN/G6EfvXebuCmhvHeejSwMbnctTZ3z+S4mr1ZKrontT3eBj
+         yk1by4SWoGhaBwNWYN/1hC482brrsDBWWxQK4HzlotFAlTKYRJeng0qWs2VaUolEbOCN
+         yL7MsqQ5ViMGg3bXkoNLOB0/htvjCmUAlV/OI4jXIAvRcJIeT9soAIuG4asI+M67isPM
+         747Q==
+X-Gm-Message-State: AOAM530bqbt4KNRO88C2jjrC8+MtUnr/dE10S4AjFL3jfYHDp/mJAkyi
+        TZoL1BU348hTEqT4EL5f8DNdELacvS9ZXw==
+X-Google-Smtp-Source: ABdhPJzBjdr9D5LDrKAs2PJd372PGrhSbMaLpSHrQ5uSVMmukoTLTXMTJZlXtKgr8qMWGAAH/REcsQ==
+X-Received: by 2002:a1f:2e54:: with SMTP id u81mr11834914vku.10.1600199594224;
+        Tue, 15 Sep 2020 12:53:14 -0700 (PDT)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id t186sm2476048vkg.7.2020.09.15.12.53.13
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
+Received: by mail-vs1-f50.google.com with SMTP id j3so2655059vsm.0
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
+X-Received: by 2002:a05:6102:101a:: with SMTP id q26mr2665758vsp.34.1600199593095;
+ Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200915172658.1432732-1-rkir@google.com> <20200915174643.GT14436@zn.tnic>
- <CAKwvOdm9bQmL=gZypkosH0MG=S28=jJ6wZiTMCNP6=Z+NfN1AA@mail.gmail.com> <20200915182530.GV14436@zn.tnic>
-In-Reply-To: <20200915182530.GV14436@zn.tnic>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 15 Sep 2020 12:51:47 -0700
-Message-ID: <CAKwvOdkKk1KuAFDoWNLnMUi3_JnV7atDFnvS7CdkgNXnNg0p1g@mail.gmail.com>
-Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
- __restore_processor_state (clang)
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Roman Kiryanov <rkir@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Alistair Delva <adelva@google.com>,
-        Haitao Shan <hshan@google.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+In-Reply-To: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 15 Sep 2020 12:53:00 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WkS41m_FnZ9V-MM3uh8V6XKgHqvK7FpyWPBCjk7VuVHA@mail.gmail.com>
+Message-ID: <CAD=FV=WkS41m_FnZ9V-MM3uh8V6XKgHqvK7FpyWPBCjk7VuVHA@mail.gmail.com>
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 11:25 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Sep 15, 2020 at 11:00:30AM -0700, Nick Desaulniers wrote:
-> > This is exactly the same code from __restore_processor_state.
->
-> No, this patch is adding
->
-> #ifdef __clang__
->
-> and I don't like the sprinkling around of those compiler-specific
-> workarounds which we have to carry forward forever or at least until
-> that compiler version is deprecated. We already carry fixes for broken
-> hardware, broken BIOSes, broken peripherals,... can you follow the
-> progression? :)
+Hi,
 
-I agree; I also would not have sent the patch though.  Until LTO has
-landed upstream, this is definitely somewhat self inflicted.  This was
-only debugged last week; even with a compiler fix in hand today, it
-still takes time to ship that compiler and qualify it; for other folks
-on tighter timelines, I can understand why the patch was sent, and do
-genuinely appreciate the effort to participate more upstream which I'm
-trying to encourage more of throughout the company (we're in a lot of
-technical debt kernel-wise; and I'm not referring to Android...a story
-over beers perhaps, or ask Greg).  It's just that this isn't really
-appropriate since it works around a bug in a non-upstream feature, and
-will go away once we fix the toolchain.
-
+On Mon, Sep 14, 2020 at 10:44 PM Rajendra Nayak <rnayak@codeaurora.org> wrote:
 >
-> So your argument about testing unreleased compilers in the other thread
-> makes a lot of sense so that stuff like that can be fixed in time, and
-> in the compiler, where it belongs (that is, *if* it belongs there).
+> Hi Rob,
+>
+> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
+> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
+> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
+> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
+> calculating power values in mW, is there a need to document the property as something that *has* to be
+> based on real power measurements?
+>
+> Looking at the bindings,
+>
+>    dynamic-power-coefficient:
+>      $ref: '/schemas/types.yaml#/definitions/uint32'
+>      description:
+>        A u32 value that represents the running time dynamic
+>        power coefficient in units of uW/MHz/V^2. The
+>        coefficient can either be calculated from power
+>        measurements or derived by analysis.
+>
+>        The dynamic power consumption of the CPU  is
+>        proportional to the square of the Voltage (V) and
+>        the clock frequency (f). The coefficient is used to
+>        calculate the dynamic power as below -
+>
+>        Pdyn = dynamic-power-coefficient * V^2 * f
+>
+>        where voltage is in V, frequency is in MHz.
+>
+> .. the 'can either be calculated from power measurements or derived by analysis'
+> tells me we don't mandate that this be based on real power measurements.
+> If we do, then perhaps that needs to be mentioned explicitly?
 
-It would be much nicer if we had the flexibility to disable stack
-protectors per function, rather than per translation unit.  I'm going
-to encourage you to encourage your favorite compile vendor ("write to
-your senator") to support the function attribute
-__attribute__((no_stack_protector)) so that one day, we can use that
-to stop shipping crap like a9a3ed1eff360 ("x86: Fix early boot crash
-on gcc-10, third try").  Having had that, we could have used a nicer
-workaround until the toolchain was fixed (and one day revert
-a9a3ed1eff360, and d0a8d9378d16, and probably more hacks in the
-kernel).  And the case that's causing the compiler bug in question is
-something all compiler vendors will need to consider in their
-implementations.
--- 
-Thanks,
-~Nick Desaulniers
+To me, the phrase "derived by analysis" doesn't mean that the number
+is allowed to be in completely made up units.  It means it's still
+supposed to be in the same units but it's OK if you didn't integrate a
+Coulomb counter into your system.
+
+It's kinda like saying that the police can give you a speeding ticket
+by either measuring your speed with a radar gun or by checking a clock
+when your car passed two known places and calculating your speed based
+on that.  The radar gun is a direct measurement whereas the other is
+derived by analysis.  In both cases you're still talking about a speed
+in terms of Miles per Hour (or kilometers per hour in more sane
+countries).
+
+-Doug
