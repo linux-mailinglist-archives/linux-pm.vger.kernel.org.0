@@ -2,123 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF4D26ACB2
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 20:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B440826AC81
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 20:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727755AbgIOS5T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 14:57:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33234 "EHLO
+        id S1727755AbgIOSsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 14:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727762AbgIORXI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:23:08 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B068C061A28
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:11:03 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id kk9so119686pjb.2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:11:03 -0700 (PDT)
+        with ESMTP id S1727888AbgIOR1G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:27:06 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D904C061221
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:24:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id o68so2359697pfg.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 10:24:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t80Xhl4ieaw4+4IDm2zgbCHUZGC+GFKM1u8bh3yil+k=;
-        b=HBRJnVE076xMyH+ZPFgWRMAbcqDlTLK3EKzvCzclTmiXZIsarEPBo/u/uCe/t2unaU
-         +BcFA1lMaJFc8LCsxwJ++J97q50ygi3uKm/L+OU/VkT2H0UXmbrVZpqyTTG13qlpgsPU
-         B1lUmGtcBzplMcrAwISvhhJpdamnXDblC94hw=
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Y1pACzzdEBRjHi4rSdwVdVaD3WaiuT67R2deRiZ6OMY=;
+        b=UDSiHR+LAP+ogYXhBbajpDwo3AARYaSAAgnUE+8DCeEG3/tj1TtKrcUCeH3dGJ2P/f
+         gBsXNgt3HBm+BnT+GSAsh0qVMWocPQCnyuhgrCVbESLn7fpGP5upx1nascFeJO/+snp8
+         ErYaOljNvSq0Vk2IyJ3U9sqTxiaECnG5Oudk4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t80Xhl4ieaw4+4IDm2zgbCHUZGC+GFKM1u8bh3yil+k=;
-        b=H0eYbLGhuamQzUW3DH7D32Xzv+C/1CbJ1uAT5nA3RwJl99srzbfNsGb0fx/hX+DfLr
-         FrF7HnRVaOicI+ASp7vtF9XSAUhV7FVzaujTv09LloNuZ9hwCpHV1TfuO8+IpHMjO0u2
-         rWCiI+2tooENgu5C9S9Ry1N82eJBNwA4RhgeiRQsMOw6vtJc+gU4ptIS0RQQqpc6CqsF
-         AY13/SbzgZoKcBAJK4WhjUAkQ1Vaj/+R8RAyOSM8TITrKulVDZMqSjKKsuXQ8iPyqIkT
-         HqofI6FjIRd4xrwcK4M7CLAai5mzqW/aJS5kx38XyqTq8wiQshXTDqemx6T/MzLdPLsE
-         25zw==
-X-Gm-Message-State: AOAM533SqyqIR5bzWn2ihwbU0csIJ++uVYZBBXI8xmWaWl7ZB1JLdel4
-        7JdbL3Gots1N8/zJpcDvlMyHbg==
-X-Google-Smtp-Source: ABdhPJyOY9aSbKit2ivdA6JFIddmNJ8Von035R3JQswaFSKsJXehrc6lpg8VraygWmsTae8nE81gNA==
-X-Received: by 2002:a17:90a:b702:: with SMTP id l2mr363925pjr.82.1600189863016;
-        Tue, 15 Sep 2020 10:11:03 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Y1pACzzdEBRjHi4rSdwVdVaD3WaiuT67R2deRiZ6OMY=;
+        b=eqfgre3ZvosRrQpEm6kQks4TfX83zOkXPMPsQC4Tgh48sP9xozebA/iXmvktO3Pbex
+         RRGjHK+Vz+O9A82tsxZJtTZe3mCSoqkBnPmB0ivD3SZ8r+XxZiW9xMAkxypgG2Pf2NVx
+         LpiumLuazQz5LDEa3w+RjjldFkD4Ze4hw2Az8gPKdLuAau35Uwm0kNJGeXZpVr6e+FOw
+         2/x4h+m3mDBKrCJUUx4gzKxdopOEtK7OfstX4XaVNgky/2RazCOm6AvSuCLmQI9etZEN
+         XBaQuMNaI+/8GQFMBe0ihAtPOSwbM+AibO6/r2smbpd2ie9NnrqARNBzdY4zvIT48nNK
+         fRbQ==
+X-Gm-Message-State: AOAM533pYZ01+M4jJOiYLUu3ggd9z0bE5PCDRpV3wsgEe81xmBWNN0xK
+        /19icjftAPqlDaOBHsr107QcSA==
+X-Google-Smtp-Source: ABdhPJxzIIZ3OEGJAXBsqEGT7Z5/CBoh2wSey9gTIyODiuKq2azSlSxgY08qj5qNugi92JuP7g4Glw==
+X-Received: by 2002:a62:6845:0:b029:13e:dcd:75bd with SMTP id d66-20020a6268450000b029013e0dcd75bdmr18840660pfc.12.1600190685583;
+        Tue, 15 Sep 2020 10:24:45 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id a20sm13834008pfa.59.2020.09.15.10.11.02
+        by smtp.gmail.com with ESMTPSA id f6sm14254540pfq.82.2020.09.15.10.24.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 10:11:02 -0700 (PDT)
+        Tue, 15 Sep 2020 10:24:45 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 10:24:44 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+To:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <tdas@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] cpufreq: qcom: Don't add frequencies without an OPP
-Date:   Tue, 15 Sep 2020 10:10:54 -0700
-Message-Id: <20200915101007.1.Iebcd373535de8eb0aa304ad22b062a5bbc88a665@changeid>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+        Javi Merino <javi.merino@kernel.org>
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+Message-ID: <20200915172444.GA2771744@google.com>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver currently adds all frequencies from the hardware LUT to
-the cpufreq table, regardless of whether the corresponding OPP
-exists. This prevents devices from disabling certain OPPs through
-the device tree and can result in CPU frequencies for which the
-interconnect bandwidth can't be adjusted. Only add frequencies
-with an OPP entry.
++Thermal folks
 
-Fixes: 55538fbc79e9 ("cpufreq: qcom: Read voltage LUT and populate OPP")
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Hi Rajendra,
 
- drivers/cpufreq/qcom-cpufreq-hw.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
+On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
+> Hi Rob,
+> 
+> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
+> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
+> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
+> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
+> calculating power values in mW, is there a need to document the property as something that *has* to be
+> based on real power measurements?
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 3fb044b907a8..47b7d394d2ab 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -177,10 +177,15 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 			freq = cpu_hw_rate / 1000;
- 
- 		if (freq != prev_freq && core_count != LUT_TURBO_IND) {
--			table[i].frequency = freq;
--			qcom_cpufreq_update_opp(cpu_dev, freq, volt);
--			dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
-+			if (!qcom_cpufreq_update_opp(cpu_dev, freq, volt)) {
-+				table[i].frequency = freq;
-+				dev_dbg(cpu_dev, "index=%d freq=%d, core_count %d\n", i,
- 				freq, core_count);
-+			} else {
-+				dev_warn(cpu_dev, "failed to update OPP for freq=%d\n", freq);
-+				table[i].frequency = CPUFREQ_ENTRY_INVALID;
-+			}
-+
- 		} else if (core_count == LUT_TURBO_IND) {
- 			table[i].frequency = CPUFREQ_ENTRY_INVALID;
- 		}
-@@ -197,9 +202,13 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 			 * as the boost frequency
- 			 */
- 			if (prev->frequency == CPUFREQ_ENTRY_INVALID) {
--				prev->frequency = prev_freq;
--				prev->flags = CPUFREQ_BOOST_FREQ;
--				qcom_cpufreq_update_opp(cpu_dev, prev_freq, volt);
-+				if (!qcom_cpufreq_update_opp(cpu_dev, prev_freq, volt)) {
-+					prev->frequency = prev_freq;
-+					prev->flags = CPUFREQ_BOOST_FREQ;
-+				} else {
-+					dev_warn(cpu_dev, "failed to update OPP for freq=%d\n",
-+						 freq);
-+				}
- 			}
- 
- 			break;
--- 
-2.28.0.618.gf4bc123cb7-goog
+Relative values may work for scheduling decisions, but not for thermal
+management with the power allocator, at least not when CPU cooling devices
+are combined with others that specify their power consumption in absolute
+values. Such a configuration should be supported IMO.
 
+Thanks
+
+Matthias
