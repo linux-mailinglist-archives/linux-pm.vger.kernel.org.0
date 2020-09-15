@@ -2,164 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B8D26AFF1
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 23:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7F726AFF3
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 23:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbgIOVvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 17:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S1728108AbgIOVwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 17:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728055AbgIOVty (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 17:49:54 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29371C061788
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:49:54 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id z18so198136pfg.0
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:49:54 -0700 (PDT)
+        with ESMTP id S1728085AbgIOVvr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 17:51:47 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7F1C06178A
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:51:46 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id s65so2736918pgb.0
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:51:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WRpHw5zCBEIhYxwdkTdUPJPPtKwwg9WVoW0/dlXYOFU=;
-        b=U2tjPWXOoaQZvfXCC/xDjl73VW3KlPBjDw0G8/0+99qDr1gTOXlYOv0Jdz321rbma7
-         ORHpkjm+Yn18tZI9TzuQws7IUWw3eXPbETqjR6MoePsAyFDJ0FfOTLU6Asu4c6OQWw2t
-         TG2rWc9SF6o2I8D55bxtMt2WAVhk6ZPRTMLL8jT9zGbtjqUu/WG850DsaJnqN5dVOxO/
-         cYxXC6GDh94W1NuLcjjtua1FYsaurb7Evm1Z2752lxDUK3poyEw0ZutwNaWGFLxbGll3
-         s06/rFWKxOYH4ZnDQZpy6N9Qqwy3lG9ATY2PKaNmOE0p6Ejt2CA+yfcL8NsHenfvjbdb
-         gXlQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=mH9lo1yIL7XtqfMGHP4oTXsGu+z1FdnjyArN1xA9P/M=;
+        b=KILcvAfoLaqMhcAZ8ys43ZMZLKPji8+6RcJNl/HeJbxBJs4Cbrz0EMe0CY7TNqoqOD
+         VxBdq0j5mRt/np0t8JXeZOPJlEcDRHFHiTHuhmU08lugLpVDejZJy+hM6DrZoFcXaGea
+         F64nvTzEq8chOxIE31izCedyb+gkvR9W1HgSU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WRpHw5zCBEIhYxwdkTdUPJPPtKwwg9WVoW0/dlXYOFU=;
-        b=qbP6iuiPMXuFpqbXTdIGSZbLyrWxdo7aRB4QbA/mHPmtOjHaomECGapG0vVP9F9Njj
-         OSGKMCbStOe8ZVEQCdA1CxuBIVnu/YWeELuFj0igZW5Ln6BJ+ETwb2ACU4Fx8x4/O/Nx
-         Mf9o4BCaMwkms8hxuAY7yz12bm6QQSMuSRy9KxSMCuDWNw3mYUDGJpGswLDTjhp72TJ4
-         U/rwB19gdg3WRT3W3NVjHniZ9dGPZnXgG02ePdmpvlv3/eV3ia3D+VYPtZG3ZD+nO/0O
-         PpphTPpObi3eQD/tmojz1Yy+NSiLu4ZOy5Efn/MkrfSF6Gjb1Pl1vfE4bsLGhTUgHx7K
-         ELsw==
-X-Gm-Message-State: AOAM530OJOyAtErYMbWqiHA4HYNtcIBhiOXmG5/2s8tIn+owA2BPCOdD
-        3Ckw6VduiwYrqVsmhFx41+U84hxzBmOdGeGSrFIcUA==
-X-Google-Smtp-Source: ABdhPJxYUdP/+ZEn0ANnOVR2hOfK2Y2KqTaiOoe3ydR+wyKezAj/LWiQzFNxpWdxpQH7vyQDbl3Q9w2R5YWPGLrroDs=
-X-Received: by 2002:a63:7882:: with SMTP id t124mr6423889pgc.381.1600206593276;
- Tue, 15 Sep 2020 14:49:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=mH9lo1yIL7XtqfMGHP4oTXsGu+z1FdnjyArN1xA9P/M=;
+        b=MeB72H3XpUppY0S/tDfZtcdLsFXNPH9Uu+JncHRgZwirKF1BKqwnak1/YoFfkKXy/3
+         0SyzMBhvAQwrnbF4JBHdpo/sPW/TSKGJLdmAggZo+V8l+FSHIlcUHwIl4N33Yuos/knV
+         h4zfJWtiGD2g96CWFlnO1pmZ87BgUPWq2CRSPUXYoq5pa2dFNN4mhYnV3kCH0Kx0+p3L
+         qXb+hTgH70w9J2tat/sqO7qMwITyEP98tvxJIcbtr0jo/TpxcY6WxEzwDsfdscP0UeJR
+         8gd167wziw60t90E+O+D3i3U0pQfkKlT9HyVwA8UhV5f7Ak4Shf1AnQRBtIUYSSqAhXb
+         oF6w==
+X-Gm-Message-State: AOAM531PGk/OTLDfvYM2iVdPjBHMK1SGJf8sYwWVoi+c9hqhEmUzlp/f
+        MFgV9sUheoc714ZHaJnqudOYdQ==
+X-Google-Smtp-Source: ABdhPJw7qB1eFbNMikCO4TGf4y13sWV7W+6ly29WgwiBnYXdRdaoQAV2Yv/vUKZcPpTtOYJ5ErmA5g==
+X-Received: by 2002:a65:685a:: with SMTP id q26mr6863702pgt.28.1600206705123;
+        Tue, 15 Sep 2020 14:51:45 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
+        by smtp.gmail.com with ESMTPSA id v205sm14551750pfc.110.2020.09.15.14.51.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 14:51:44 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 14:51:43 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+Message-ID: <20200915215143.GE2771744@google.com>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+ <20200915172444.GA2771744@google.com>
+ <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
+ <20200915175808.GB2771744@google.com>
+ <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
+ <CAD=FV=XPTrA0S5OukQT4=R7HCOd8DuJCdXCDKW+xCO6YNe7xNA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200915172658.1432732-1-rkir@google.com> <20200915174643.GT14436@zn.tnic>
- <CAKwvOdm9bQmL=gZypkosH0MG=S28=jJ6wZiTMCNP6=Z+NfN1AA@mail.gmail.com>
- <20200915182530.GV14436@zn.tnic> <CAKwvOdkKk1KuAFDoWNLnMUi3_JnV7atDFnvS7CdkgNXnNg0p1g@mail.gmail.com>
- <20200915202034.GZ14436@zn.tnic>
-In-Reply-To: <20200915202034.GZ14436@zn.tnic>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 15 Sep 2020 14:49:40 -0700
-Message-ID: <CAKwvOdmmXEu40m9bVL9zY5XyBRs2f15cs3FZQLCCh4u3i07pDA@mail.gmail.com>
-Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
- __restore_processor_state (clang)
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     =?UTF-8?Q?Martin_Li=C5=A1ka?= <mliska@suse.cz>,
-        Roman Kiryanov <rkir@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Alistair Delva <adelva@google.com>,
-        Haitao Shan <hshan@google.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=XPTrA0S5OukQT4=R7HCOd8DuJCdXCDKW+xCO6YNe7xNA@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 1:20 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Sep 15, 2020 at 12:51:47PM -0700, Nick Desaulniers wrote:
-> > I agree; I also would not have sent the patch though.
->
-> Maybe google folks should run stuff by you before sending it up... :-)
+On Tue, Sep 15, 2020 at 02:46:16PM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Tue, Sep 15, 2020 at 1:55 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+> >
+> > On 15/09/2020 19:58, Matthias Kaehlcke wrote:
+> > > On Tue, Sep 15, 2020 at 07:50:10PM +0200, Daniel Lezcano wrote:
+> > >> On 15/09/2020 19:24, Matthias Kaehlcke wrote:
+> > >>> +Thermal folks
+> > >>>
+> > >>> Hi Rajendra,
+> > >>>
+> > >>> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
+> > >>>> Hi Rob,
+> > >>>>
+> > >>>> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
+> > >>>> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
+> > >>>> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
+> > >>>> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
+> > >>>> calculating power values in mW, is there a need to document the property as something that *has* to be
+> > >>>> based on real power measurements?
+> > >>>
+> > >>> Relative values may work for scheduling decisions, but not for thermal
+> > >>> management with the power allocator, at least not when CPU cooling devices
+> > >>> are combined with others that specify their power consumption in absolute
+> > >>> values. Such a configuration should be supported IMO.
+> > >>
+> > >> The energy model is used in the cpufreq cooling device and if the
+> > >> sustainable power is consistent with the relative values then there is
+> > >> no reason it shouldn't work.
+> > >
+> > > Agreed on thermal zones that exclusively use CPUs as cooling devices, but
+> > > what when you have mixed zones, with CPUs with their pseudo-unit and e.g. a
+> > > GPU that specifies its power in mW?
+> >
+> > Well, if a SoC vendor decides to mix the units, then there is nothing we
+> > can do.
+> 
+> I mean, there is something someone could do.  They could buy one of
+> these devices, measure the power (which wouldn't actually be that hard
+> to do), then submit a patch to adjust all the numbers.  ;-)
 
-Ha!
+In case they look for a recipe:
 
-1. they don't pay me enough for that.
-2. even if they did, I wouldn't want that responsibility
-3. I'm probably least qualified for that.  Google has many strong
-upstream contributors with much longer contribution history than
-myself.  Maybe toolchain specific stuff though...
-4. you generally don't want people like that in any organization.
-More gatekeepers winds up being a synchronization/contention point.
-Remember, the goal is to train others to be self sufficient, so you
-can drink margaritas on the roof.  That suggestion goes against the
-ultimate goal.
-5. You'd think a multi-billion-dollar per quarter company could hire a
-few more people to help; instead stock buybacks are more attractive I
-guess?  Maybe better ROI?  I suspect one too many managers
-internalized the Mythical Man Month's point about "adding more people
-to a late software project just makes it later" to mean "starve your
-projects for resources" and run a ghost-ship (ie. big boat, with
-little to no deck hands to ensure the boat doesn't "Costa Concordia"
-(noun-as-a-verb...oh well)).  To be fair, hiring has been impacted by
-COVID; my point is more so being stretched incredibly thin.  There's
-been what, 3 Clang related kernel bugs you and I have been CC'ed on
-today.  Hard to fix compiler bugs AND triage from the fire hose.  I
-should probably just put down LKML for today and start fixing the
-[haunted][damned] compiler.
+commit ac60c5e33df4ec2b69c7e3ebbc0ccf1557e7bd5e
+Author: Matthias Kaehlcke <mka@chromium.org>
+Date:   Thu Apr 11 17:01:58 2019 -0700
 
->
-> > Until LTO has landed upstream, this is definitely somewhat self
-> > inflicted. This was only debugged last week; even with a compiler fix
-> > in hand today, it still takes time to ship that compiler and qualify
-> > it; for other folks on tighter timelines, I can understand why the
-> > patch was sent,
->
-> ... because they have the requirement that a patch which gets backported
-> to a kernel used at google needs to be upstream?
+    ARM: dts: rockchip: Add dynamic-power-coefficient for rk3288
 
-That's a rule for stable, yes.  But also because we have folks that
-don't seem to understand (moreso maybe haven't considered) that
-"forking is not free" when upstream moves faster than you and you'd
-also like to rebase someday; as such acquiring technical debt at a
-rate that's impossible to pay off.
+    The value was determined with the following method:
 
-> Because I'm willing to
-> bet a lot of cash that no one runs bleeding egde 5.9-rcX in production
-> over there right now :-)
+    - take CPUs 1-3 offline
+    - for each OPP
+      - set cpufreq min and max freq to OPP freq
+      - start dhrystone benchmark
+      - measure CPU power consumption during 10s
+      - calculate Cx for OPPx
+      - Cx = (Px - P1) / (Vx²fx - V1²f1)          [1]
+        using the following units: mW / Ghz / V   [2]
+    - C = avg(C2, ..., Cn)
 
-I guess you're paying for beers then.  "Android Common Kernels" run
-mainline.  (They're a bit esoteric in terms of "production" but
-cuttlefish virtual devices are running Android on mainline).
-
-> > It would be much nicer if we had the flexibility to disable stack
-> > protectors per function, rather than per translation unit.  I'm going
-> > to encourage you to encourage your favorite compile vendor ("write to
-> > your senator") to support the function attribute
-> > __attribute__((no_stack_protector)) so that one day,
->
-> I already forgot why gcc doesn't do that... Martin, do you know?
-
-Martin has patches for that, he has CC'ed me when sending them
-upstream for review.  Review was stalled, so I provided some feedback.
-I'll review a GCC patch (once it's updated with my previous feedback)
-if I have to; I'm not against it. w/e so long as we have a timeline
-for a kernel fix.
-
-> > And the case that's causing the compiler bug in question is something
-> > all compiler vendors will need to consider in their implementations.
->
-> Are you talking to gcc folks about it already so that they DTRT too?
-
-I CC'ed Martin on the LLVM bug, since this is a case I'm looking for
-his input on, or at least for him to be aware of the test case.
-
-> Btw, if it is any consolation, talking to compiler folks is like a charm
-> in comparison to talking to hardware vendors and trying to get them
-> to agree on something because they seem to think that the kernel is
-> software and sure, can be changed to do whatever. But that's another
-> story for the beers... :-)
-
-I look forward to it.
--- 
-Thanks,
-~Nick Desaulniers
+   [1] see commit 4daa001a1773 ("arm64: dts: juno: Add cpu
+       dynamic-power-coefficient information")
+   [2] https://patchwork.kernel.org/patch/10493615/#22158551
