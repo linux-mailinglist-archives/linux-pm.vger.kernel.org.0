@@ -2,203 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5F026A9BA
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 18:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C57026AA60
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 19:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727552AbgIOQ1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 12:27:31 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35379 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727591AbgIOQ1E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 12:27:04 -0400
-Received: by mail-oi1-f195.google.com with SMTP id w16so4575291oia.2;
-        Tue, 15 Sep 2020 09:27:03 -0700 (PDT)
+        id S1727712AbgIORTo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 13:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727883AbgIORPd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 13:15:33 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051EEC06121D;
+        Tue, 15 Sep 2020 10:01:17 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id q8so3875183lfb.6;
+        Tue, 15 Sep 2020 10:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=H0YZs1pPwgJd7Ktmm4myWmRtfPUsH5VHa1+aQx55PSk=;
+        b=RVIyTl6cn7mdnTle5r2TB8rk6Z5oEtnLJ5ScwkQx8hgwsXp9QUmXVRlwB4uojEMlyK
+         ro4ICaJFazaA1mm+EfgVBI9hxAPzmmhJ64lz4e9XRqr/CqvyDMSlTIi0Jq4DCY/1tT26
+         lZ90elCBfhc46rgjopy+NisYGA97eLI+mgA9sV8BwFl4VzDJuGCE8wJmhnAMhcX+cwiK
+         VVsJbNpykSo75U56Bmx3jdegHXN1gwtsHTK88BBJRkMJxUd4BcjpwaHbCwYnGYPU7epw
+         ghh2waPDId+IGm4+zWuFtbnEpr9oY8ZzoiInt5wUgHUlgJNe36Jd/6L2agHbfAUq3+tf
+         QEbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HH4K2Ik+9z0TLk55NCkKu0S9yy4lgkJGUwLdhLpq5Hc=;
-        b=iTEXLqnXeagXjxAnXSMcAcbfnrTW6Cp+h++5LIUSkc+9hUiXhchoLnumuj4Wu8NaES
-         kt7RIyFB2cn+YJoEG4nJz1xgspSUuluf+lE6xJ1V30KdJS7UqHcw6EN+0cIMdNkfYBkg
-         9RGD1uZsmYwP9BX5QT/A5EgKOH12FvDUxcuDCjN+x8bsTPNfhgsBrbBFLolL8F6Gbrc2
-         lX+oHY8pVa6DkYYdieu3qroWwMypK/1G3JKO6DB5BaW8cyKs2Haz1A73AUfNogr8uQTf
-         2kltuCe2RWErB5Y7XdHmiNoLkzYd+Vl9C46riN+IwCt7eygspoHCDRRiGTzzazVYjCoi
-         uhDA==
-X-Gm-Message-State: AOAM5322ZqWr8ztgEtl/vyR19Weer1maUOUVwLaqughb4y9fVsImfM21
-        tToUugLZN57FVYZPIbpfISiOnUYef/8Ar7ldTUTyRf4q
-X-Google-Smtp-Source: ABdhPJzMjp9df4Vl73h4WCdFgKfKnk5Gc1r5xBP7urKG2Puv8ljR7Uo5eQmaN0+kpLziIzsMIxCyDJcZ4U1iW0jvYo8=
-X-Received: by 2002:aca:fd95:: with SMTP id b143mr170257oii.68.1600187223051;
- Tue, 15 Sep 2020 09:27:03 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=H0YZs1pPwgJd7Ktmm4myWmRtfPUsH5VHa1+aQx55PSk=;
+        b=bG3u3U/NzMoA2SlC2NYfKMb9JR4n9dYN62mECR7PXWeLewrEiHSYmDyFz081Ga7Dwi
+         kYzxc8eAsmhy9oh5IIVH7xUCrJ5XfVyLa5ZxDXPbcQGaLJBgllIIhKyYOgevauOl8czE
+         odjs96X2Fpr7EfCZN/x+IbeWqz22P5u2u56Cm44yy79AI35bWZ+kfwc24ylmW7vu29YU
+         O2GmhrUx/Nlvy2OJTaN2cq6/68H2/sIKhR/br+xlP24ZboDB+iVgZeU2JQScZA1WNso/
+         pPZK9B09XxJ1Y9E1Gr8+ZPa4ETDBwHAiypA+afcYZIym7NAQs/IDvVVs/tudcbj0jGjt
+         Dfiw==
+X-Gm-Message-State: AOAM531h1IaJWGWVbIeK09n92welCNQsoh4XmPGYmQ7crPAXnthwRxXf
+        7CfjdeMWA/xp7BG1HZ0co4maNSpPW1w=
+X-Google-Smtp-Source: ABdhPJwQLpjsE+qFpvuqxasOzAcBnwJF7tP1y9VybOqTsRjgyc1k0GY6l9M7N7DZMzsiWYmMb1c9Zg==
+X-Received: by 2002:ac2:548d:: with SMTP id t13mr6603232lfk.602.1600189274348;
+        Tue, 15 Sep 2020 10:01:14 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
+        by smtp.googlemail.com with ESMTPSA id 73sm4011754lff.118.2020.09.15.10.01.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2020 10:01:13 -0700 (PDT)
+Subject: Re: [PATCH] PM / devfreq: tegra30: disable clock on error in probe
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <CGME20200908072627epcas1p41f2c8c2730d42bd8935a40b0ab8122f7@epcas1p4.samsung.com>
+ <20200908072557.GC294938@mwanda>
+ <2ceb045a-ebac-58d7-0250-4ea39d711ce8@samsung.com>
+ <44560522-f04e-ade5-2e02-9df56a6f79ba@gmail.com>
+ <e45c8ffc-ea24-1178-7bfa-62ca6bedbb3b@samsung.com>
+ <2573cd77-1175-d194-7bfc-24d28b276846@samsung.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <5aac4d59-5e06-25a6-3de1-6a5a586b9e34@gmail.com>
+Date:   Tue, 15 Sep 2020 20:01:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-References: <20200915103157.345404192@infradead.org> <20200915103806.280265587@infradead.org>
-In-Reply-To: <20200915103806.280265587@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Sep 2020 18:26:52 +0200
-Message-ID: <CAJZ5v0jD-Lv5WAKHd9KN8sPozN4DeA-sQ4pXZTHNSZ4XS=as3A@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/4] acpi: Use CPUIDLE_FLAG_TIMER_STOP
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Tony Luck <tony.luck@intel.com>, Len Brown <lenb@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <2573cd77-1175-d194-7bfc-24d28b276846@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 12:44 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Make acpi_processor_idle use the common broadcast code, there's no
-> reason not to. This also removes some RCU usage after
-> rcu_idle_enter().
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+15.09.2020 05:13, Chanwoo Choi пишет:
+> On 9/15/20 11:00 AM, Chanwoo Choi wrote:
+>> Hi Dmitry,
+>>
+>> On 9/14/20 10:56 PM, Dmitry Osipenko wrote:
+>>> 14.09.2020 10:09, Chanwoo Choi пишет:
+>>>> Hi,
+>>>>
+>>>> On 9/8/20 4:25 PM, Dan Carpenter wrote:
+>>>>> This error path needs to call clk_disable_unprepare().
+>>>>>
+>>>>> Fixes: 7296443b900e ("PM / devfreq: tegra30: Handle possible round-rate error")
+>>>>> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>>>> ---
+>>>>> ---
+>>>>>  drivers/devfreq/tegra30-devfreq.c | 4 +++-
+>>>>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+>>>>> index e94a27804c20..dedd39de7367 100644
+>>>>> --- a/drivers/devfreq/tegra30-devfreq.c
+>>>>> +++ b/drivers/devfreq/tegra30-devfreq.c
+>>>>> @@ -836,7 +836,8 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>>>>  	rate = clk_round_rate(tegra->emc_clock, ULONG_MAX);
+>>>>>  	if (rate < 0) {
+>>>>>  		dev_err(&pdev->dev, "Failed to round clock rate: %ld\n", rate);
+>>>>> -		return rate;
+>>>>> +		err = rate;
+>>>>> +		goto disable_clk;
+>>>>>  	}
+>>>>>  
+>>>>>  	tegra->max_freq = rate / KHZ;
+>>>>> @@ -897,6 +898,7 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
+>>>>>  	dev_pm_opp_remove_all_dynamic(&pdev->dev);
+>>>>>  
+>>>>>  	reset_control_reset(tegra->reset);
+>>>>> +disable_clk:
+>>>>>  	clk_disable_unprepare(tegra->clock);
+>>>>
+>>>> Is it doesn't need to reset with reset_contrl_reset()?
+>>>
+>>> Hello, Chanwoo!
+>>>
+>>> It's reset just before the clk_round_rate() invocation, hence there
+>>> shouldn't be a need to reset it second time.
+>>
+>> Do you mean that reset is deasserted automatically
+>> when invoke clk_round_rate() on tegra?
 
-The whole series looks good to me, so please feel free to add
+I only mean that the tegra30-devfreq driver deasserts the reset before
+the clk_round_rate():
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/devfreq/tegra30-devfreq.c?h=v5.9-rc5#n834
 
-to all of the four patches.
+>> If tree, I think that 'reset_control_reset(tegra->reset)' invocation
+> 
+> I'm sorry for my typo. s/tree/true.
+> 
+>> is not needed on 'remove_opp:' goto. Because already reset deassertion
+>> is invoked by clk_round_rate(), it seems that doesn't need to invoke
+>> anymore during exception case.
+>>
+>> Actually, it is not clear in my case.
 
-Alternatively, please let me know if you want me to take the patches.
-
-> ---
->  drivers/acpi/processor_idle.c |   49 +++++++++++++-----------------------------
->  1 file changed, 16 insertions(+), 33 deletions(-)
->
-> --- a/drivers/acpi/processor_idle.c
-> +++ b/drivers/acpi/processor_idle.c
-> @@ -161,18 +161,10 @@ static void lapic_timer_propagate_broadc
->  }
->
->  /* Power(C) State timer broadcast control */
-> -static void lapic_timer_state_broadcast(struct acpi_processor *pr,
-> -                                      struct acpi_processor_cx *cx,
-> -                                      int broadcast)
-> -{
-> -       int state = cx - pr->power.states;
-> -
-> -       if (state >= pr->power.timer_broadcast_on_state) {
-> -               if (broadcast)
-> -                       tick_broadcast_enter();
-> -               else
-> -                       tick_broadcast_exit();
-> -       }
-> +static bool lapic_timer_needs_broadcast(struct acpi_processor *pr,
-> +                                       struct acpi_processor_cx *cx)
-> +{
-> +       return cx - pr->power.states >= pr->power.timer_broadcast_on_state;
->  }
->
->  #else
-> @@ -180,9 +172,9 @@ static void lapic_timer_state_broadcast(
->  static void lapic_timer_check_state(int state, struct acpi_processor *pr,
->                                    struct acpi_processor_cx *cstate) { }
->  static void lapic_timer_propagate_broadcast(struct acpi_processor *pr) { }
-> -static void lapic_timer_state_broadcast(struct acpi_processor *pr,
-> -                                      struct acpi_processor_cx *cx,
-> -                                      int broadcast)
-> +
-> +static bool lapic_timer_needs_broadcast(struct acpi_processor *pr,
-> +                                       struct acpi_processor_cx *cx)
->  {
->  }
->
-> @@ -568,21 +560,13 @@ static DEFINE_RAW_SPINLOCK(c3_lock);
->   * acpi_idle_enter_bm - enters C3 with proper BM handling
->   * @pr: Target processor
->   * @cx: Target state context
-> - * @timer_bc: Whether or not to change timer mode to broadcast
->   */
->  static void acpi_idle_enter_bm(struct acpi_processor *pr,
-> -                              struct acpi_processor_cx *cx, bool timer_bc)
-> +                              struct acpi_processor_cx *cx)
->  {
->         acpi_unlazy_tlb(smp_processor_id());
->
->         /*
-> -        * Must be done before busmaster disable as we might need to
-> -        * access HPET !
-> -        */
-> -       if (timer_bc)
-> -               lapic_timer_state_broadcast(pr, cx, 1);
-> -
-> -       /*
->          * disable bus master
->          * bm_check implies we need ARB_DIS
->          * bm_control implies whether we can do ARB_DIS
-> @@ -609,9 +593,6 @@ static void acpi_idle_enter_bm(struct ac
->                 c3_cpu_count--;
->                 raw_spin_unlock(&c3_lock);
->         }
-> -
-> -       if (timer_bc)
-> -               lapic_timer_state_broadcast(pr, cx, 0);
->  }
->
->  static int acpi_idle_enter(struct cpuidle_device *dev,
-> @@ -630,7 +611,7 @@ static int acpi_idle_enter(struct cpuidl
->                         cx = per_cpu(acpi_cstate[index], dev->cpu);
->                 } else if (cx->type == ACPI_STATE_C3 && pr->flags.bm_check) {
->                         if (cx->bm_sts_skip || !acpi_idle_bm_check()) {
-> -                               acpi_idle_enter_bm(pr, cx, true);
-> +                               acpi_idle_enter_bm(pr, cx);
->                                 return index;
->                         } else if (drv->safe_state_index >= 0) {
->                                 index = drv->safe_state_index;
-> @@ -642,15 +623,11 @@ static int acpi_idle_enter(struct cpuidl
->                 }
->         }
->
-> -       lapic_timer_state_broadcast(pr, cx, 1);
-> -
->         if (cx->type == ACPI_STATE_C3)
->                 ACPI_FLUSH_CPU_CACHE();
->
->         acpi_idle_do_entry(cx);
->
-> -       lapic_timer_state_broadcast(pr, cx, 0);
-> -
->         return index;
->  }
->
-> @@ -666,7 +643,7 @@ static int acpi_idle_enter_s2idle(struct
->                         return 0;
->
->                 if (pr->flags.bm_check) {
-> -                       acpi_idle_enter_bm(pr, cx, false);
-> +                       acpi_idle_enter_bm(pr, cx);
->                         return 0;
->                 } else {
->                         ACPI_FLUSH_CPU_CACHE();
-> @@ -682,6 +659,7 @@ static int acpi_processor_setup_cpuidle_
->  {
->         int i, count = ACPI_IDLE_STATE_START;
->         struct acpi_processor_cx *cx;
-> +       struct cpuidle_state *state;
->
->         if (max_cstate == 0)
->                 max_cstate = 1;
-> @@ -694,6 +672,11 @@ static int acpi_processor_setup_cpuidle_
->
->                 per_cpu(acpi_cstate[count], dev->cpu) = cx;
->
-> +               if (lapic_timer_needs_broadcast(pr, cx)) {
-> +                       state = &acpi_idle_driver.states[count];
-> +                       state->flags |= CPUIDLE_FLAG_TIMER_STOP;
-> +               }
-> +
->                 count++;
->                 if (count == CPUIDLE_STATE_MAX)
->                         break;
->
->
+The reset_control_reset() in the error path of the driver probe function
+is placed that way to make the tear-down order match the driver removal
+order. Perhaps the reset could be moved before the remove_opp, but this
+change won't make any real difference, hence it already should be good
+as-is.
