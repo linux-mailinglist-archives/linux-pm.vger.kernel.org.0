@@ -2,143 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7F726AFF3
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 23:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF48626B117
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 00:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728108AbgIOVwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 17:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S1727398AbgIOWYf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 18:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728085AbgIOVvr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 17:51:47 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7F1C06178A
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:51:46 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s65so2736918pgb.0
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 14:51:46 -0700 (PDT)
+        with ESMTP id S1727671AbgIOQXt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 12:23:49 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56D8C061A2D
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 09:13:45 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id o20so2194956pfp.11
+        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 09:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=mH9lo1yIL7XtqfMGHP4oTXsGu+z1FdnjyArN1xA9P/M=;
-        b=KILcvAfoLaqMhcAZ8ys43ZMZLKPji8+6RcJNl/HeJbxBJs4Cbrz0EMe0CY7TNqoqOD
-         VxBdq0j5mRt/np0t8JXeZOPJlEcDRHFHiTHuhmU08lugLpVDejZJy+hM6DrZoFcXaGea
-         F64nvTzEq8chOxIE31izCedyb+gkvR9W1HgSU=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=qnYJg6W4hw2MyJXeVMM2oHZuIoahMRWwgF9XNViaLlM=;
+        b=Ly6ddWzCLXtiQ5tijlPtpbHyShoKJ8zntR9M+xpEULWDDV/DueW3lDFCc5J6wtvkmj
+         wQ4N1/a2xQao52SbAF/Tw6dcAbXazvdXokjtjwwQ80C9OlocjO3UC2fEWyqaWImTWPxj
+         aQN1I681xLnwPgxD7cQAZEPu7lKK12O8+fuXp+P/Y5l18kTZbHIU23bI1/jFgNwMImNq
+         fbQ4Hx72Otgx16OlVmWQI7AYNbFG1pfAzNEMFkyzsovFvWSk1z2VBBgx0Da4la2LRsVi
+         JHYxv/Ky7//SeC+YN1k2ARAO05w4xCJbELUNv1o0Twy0EdNLQpWjdrtlMspJ57h3BOtj
+         DH4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=mH9lo1yIL7XtqfMGHP4oTXsGu+z1FdnjyArN1xA9P/M=;
-        b=MeB72H3XpUppY0S/tDfZtcdLsFXNPH9Uu+JncHRgZwirKF1BKqwnak1/YoFfkKXy/3
-         0SyzMBhvAQwrnbF4JBHdpo/sPW/TSKGJLdmAggZo+V8l+FSHIlcUHwIl4N33Yuos/knV
-         h4zfJWtiGD2g96CWFlnO1pmZ87BgUPWq2CRSPUXYoq5pa2dFNN4mhYnV3kCH0Kx0+p3L
-         qXb+hTgH70w9J2tat/sqO7qMwITyEP98tvxJIcbtr0jo/TpxcY6WxEzwDsfdscP0UeJR
-         8gd167wziw60t90E+O+D3i3U0pQfkKlT9HyVwA8UhV5f7Ak4Shf1AnQRBtIUYSSqAhXb
-         oF6w==
-X-Gm-Message-State: AOAM531PGk/OTLDfvYM2iVdPjBHMK1SGJf8sYwWVoi+c9hqhEmUzlp/f
-        MFgV9sUheoc714ZHaJnqudOYdQ==
-X-Google-Smtp-Source: ABdhPJw7qB1eFbNMikCO4TGf4y13sWV7W+6ly29WgwiBnYXdRdaoQAV2Yv/vUKZcPpTtOYJ5ErmA5g==
-X-Received: by 2002:a65:685a:: with SMTP id q26mr6863702pgt.28.1600206705123;
-        Tue, 15 Sep 2020 14:51:45 -0700 (PDT)
-Received: from localhost ([2620:15c:202:1:f693:9fff:fef4:e70a])
-        by smtp.gmail.com with ESMTPSA id v205sm14551750pfc.110.2020.09.15.14.51.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 14:51:44 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 14:51:43 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>
-Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
- power measurements?
-Message-ID: <20200915215143.GE2771744@google.com>
-References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
- <20200915172444.GA2771744@google.com>
- <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
- <20200915175808.GB2771744@google.com>
- <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
- <CAD=FV=XPTrA0S5OukQT4=R7HCOd8DuJCdXCDKW+xCO6YNe7xNA@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=qnYJg6W4hw2MyJXeVMM2oHZuIoahMRWwgF9XNViaLlM=;
+        b=FzFsEhDIwMSr0jmscRmYoNPv2krLmkasVAQ3a1O3If9TcaApCKdQJ1BvEevGNHJBob
+         xr1haojhfR8+d1+mD7Pgr10jt3zhvarTG9FVws0QJqV7waFW+xOv6r5glIAKyciRV6HO
+         srmieLI2CqhFBUSNfY5sPbGSwX+r7MHlNIw7BSrvLg51dXh6oZabb9Rn3EaMibskaVzY
+         NgJGVW3k4VTcq/2VJ3lhNgXYiVqD6ocXKgBTtI5bidC15CXzeS+h5wKKPHn6Fx4BTPzW
+         tzSfLkgOLkm1sDL40KCQiOG36lN+KUUjFLew73Xk8OePUK2+AIXd12v2LqL8MDx3QLN7
+         1ncw==
+X-Gm-Message-State: AOAM532ByoROXo8VZgNhozk2IMdajm9rBc4UkJGZMkdBqhf2eH4KlRvk
+        eHL2wYXnXhPX+V2Z0t+vCY+Ciw==
+X-Google-Smtp-Source: ABdhPJw93mgMTnBYYNj3HISAF5Kb00fO1AwSRD5UqnxFvAoZ7Az/k7kXVBsZeEuwtoyeYfvX3kScqA==
+X-Received: by 2002:a62:e501:0:b029:13c:1611:6527 with SMTP id n1-20020a62e5010000b029013c16116527mr18336866pff.7.1600186424633;
+        Tue, 15 Sep 2020 09:13:44 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e19sm14384528pfl.135.2020.09.15.09.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 09:13:43 -0700 (PDT)
+Message-ID: <5f60e837.1c69fb81.1e52d.63be@mx.google.com>
+Date:   Tue, 15 Sep 2020 09:13:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XPTrA0S5OukQT4=R7HCOd8DuJCdXCDKW+xCO6YNe7xNA@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.9-rc5
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc5)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 02:46:16PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Sep 15, 2020 at 1:55 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 15/09/2020 19:58, Matthias Kaehlcke wrote:
-> > > On Tue, Sep 15, 2020 at 07:50:10PM +0200, Daniel Lezcano wrote:
-> > >> On 15/09/2020 19:24, Matthias Kaehlcke wrote:
-> > >>> +Thermal folks
-> > >>>
-> > >>> Hi Rajendra,
-> > >>>
-> > >>> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
-> > >>>> Hi Rob,
-> > >>>>
-> > >>>> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
-> > >>>> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
-> > >>>> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
-> > >>>> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
-> > >>>> calculating power values in mW, is there a need to document the property as something that *has* to be
-> > >>>> based on real power measurements?
-> > >>>
-> > >>> Relative values may work for scheduling decisions, but not for thermal
-> > >>> management with the power allocator, at least not when CPU cooling devices
-> > >>> are combined with others that specify their power consumption in absolute
-> > >>> values. Such a configuration should be supported IMO.
-> > >>
-> > >> The energy model is used in the cpufreq cooling device and if the
-> > >> sustainable power is consistent with the relative values then there is
-> > >> no reason it shouldn't work.
-> > >
-> > > Agreed on thermal zones that exclusively use CPUs as cooling devices, but
-> > > what when you have mixed zones, with CPUs with their pseudo-unit and e.g. a
-> > > GPU that specifies its power in mW?
-> >
-> > Well, if a SoC vendor decides to mix the units, then there is nothing we
-> > can do.
-> 
-> I mean, there is something someone could do.  They could buy one of
-> these devices, measure the power (which wouldn't actually be that hard
-> to do), then submit a patch to adjust all the numbers.  ;-)
+pm/testing build: 7 builds: 0 failed, 7 passed, 11 warnings (v5.9-rc5)
 
-In case they look for a recipe:
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc5/
 
-commit ac60c5e33df4ec2b69c7e3ebbc0ccf1557e7bd5e
-Author: Matthias Kaehlcke <mka@chromium.org>
-Date:   Thu Apr 11 17:01:58 2019 -0700
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc5
+Git Commit: 856deb866d16e29bd65952e0289066f6078af773
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-    ARM: dts: rockchip: Add dynamic-power-coefficient for rk3288
+Warnings Detected:
 
-    The value was determined with the following method:
+arc:
 
-    - take CPUs 1-3 offline
-    - for each OPP
-      - set cpufreq min and max freq to OPP freq
-      - start dhrystone benchmark
-      - measure CPU power consumption during 10s
-      - calculate Cx for OPPx
-      - Cx = (Px - P1) / (Vx²fx - V1²f1)          [1]
-        using the following units: mW / Ghz / V   [2]
-    - C = avg(C2, ..., Cn)
+arm64:
+    defconfig (gcc-8): 8 warnings
 
-   [1] see commit 4daa001a1773 ("arm64: dts: juno: Add cpu
-       dynamic-power-coefficient information")
-   [2] https://patchwork.kernel.org/patch/10493615/#22158551
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
