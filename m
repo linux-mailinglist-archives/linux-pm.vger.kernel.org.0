@@ -2,151 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD81C26AC24
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 20:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A480A26AC0D
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 20:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbgIOShj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 14:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727995AbgIOSBZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 14:01:25 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01F3C061788
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 11:00:42 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id b17so190737pji.1
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 11:00:42 -0700 (PDT)
+        id S1728003AbgIOSeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 14:34:46 -0400
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:61422 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727958AbgIOSMG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 14:12:06 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wZ7tyQ9/E068rLYJ+WthcD5+oEGjm8vJDzcqTloN5CI=;
-        b=rt5RfIiAS+3CtwsVx8/uLkBetuBZdjn5+h9mdZXKHV8bjKFXgd5fs5e5K3K2MLoYJV
-         R7I4aofOANTyB3SegR6vVwsbLoMMtroxYBAtxx05x/ApKXF3XAYGzl9QcR+H4E5o6rDS
-         mDcYwGQ48X1SmHPN1iq0Tacwn7o/JCCVbLPktWm4mx3xNjudE5xUR7jq0I7yN6amq4m5
-         5cjaqRqDrJ22dFnLSxMpbmDVIovqNQRnpnr9mnG2qnoP7/Xux0GHVaoOZh6gWTm9JCON
-         JR4e9W/gkwrTEMSaaJ+sYGa8HUupx3gLZdl+XxGtzSi5RgVaOMAnBRaiM7mx7iV3DAFA
-         9qgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wZ7tyQ9/E068rLYJ+WthcD5+oEGjm8vJDzcqTloN5CI=;
-        b=q5L7d3s8GOn7aQ0JmZq/vOKVoJxcBnzPcZYOCMWHK6nAOgHEFTLGo1MSKEF3Sq3/vL
-         3s3BnOYWtxhr2v0NmeD16wqmLwG8uOBI6pmnzwTDm7HYBnalg6gmO0TvDo38Sln5o1E2
-         0foZsb5cyA3fpCxyIeV3MkeF5XiLpuCfCiNCXaJG40rdiuGzDQylPrLmyq/hmdEQpmVW
-         YqpkCKwRJ2y4VEUZOESYAm53K55reRQDLG39BjyojzYx7yKTlUJWK/TJN9ux7UZwRQyQ
-         q5g7SvGBp5m6gTbcnA61ukVfdoTG6l/FqHdYfwHV+dx3Q1f0TiVLFitZjftIjgD4drDI
-         tcOg==
-X-Gm-Message-State: AOAM5314J40X01kZYqjDAzy7Ie3zm7srOyldoAoxVBlCDQTKs6Ryqku+
-        ewlbKq2NgZBytt5wkCxy4bUGm7jzXci1mV+BLaCYRg==
-X-Google-Smtp-Source: ABdhPJzYU8XT3NZ8h/McxVIhbz85243BuqtY/sNNFxzpti4dzqfSv3YjL9MuxlrerW7ZTmCi7f7cO3jM56rDm+HLR3o=
-X-Received: by 2002:a17:90b:889:: with SMTP id bj9mr497812pjb.101.1600192841937;
- Tue, 15 Sep 2020 11:00:41 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1600193525; x=1631729525;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=lGH087KRAdN2IAz1zJ/C61BaTYeYAAq4piRhMy/XWkM=;
+  b=oZpp8s4IOoj/KhC4s8tl2zDcLr+7qKBK7NGvxOegFqIKh5tSGijHrLoY
+   cpkEYBwJODN6GYM86bMxPGRdDw9qqbU6v+/jEohDD2zEVRs4zLFrhRS0h
+   EQO0MkWbNIL2r5DKJiJJaiRXLe11ucthm1n7SmPNQ29uqP+5vqhW9sBSv
+   s=;
+X-IronPort-AV: E=Sophos;i="5.76,430,1592870400"; 
+   d="scan'208";a="68218795"
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2c-87a10be6.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 15 Sep 2020 18:01:41 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2c-87a10be6.us-west-2.amazon.com (Postfix) with ESMTPS id 82565A069E;
+        Tue, 15 Sep 2020 18:01:38 +0000 (UTC)
+Received: from EX13D05UWC002.ant.amazon.com (10.43.162.92) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 15 Sep 2020 18:00:56 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D05UWC002.ant.amazon.com (10.43.162.92) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 15 Sep 2020 18:00:55 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Tue, 15 Sep 2020 18:00:55 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id A746640269; Tue, 15 Sep 2020 18:00:55 +0000 (UTC)
+Date:   Tue, 15 Sep 2020 18:00:55 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <boris.ostrovsky@oracle.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Message-ID: <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <cover.1598042152.git.anchalag@amazon.com>
+ <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
+ <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
+ <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
 MIME-Version: 1.0
-References: <20200915172658.1432732-1-rkir@google.com> <20200915174643.GT14436@zn.tnic>
-In-Reply-To: <20200915174643.GT14436@zn.tnic>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 15 Sep 2020 11:00:30 -0700
-Message-ID: <CAKwvOdm9bQmL=gZypkosH0MG=S28=jJ6wZiTMCNP6=Z+NfN1AA@mail.gmail.com>
-Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
- __restore_processor_state (clang)
-To:     Borislav Petkov <bp@alien8.de>, Roman Kiryanov <rkir@google.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Alistair Delva <adelva@google.com>,
-        Haitao Shan <hshan@google.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 10:46 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Tue, Sep 15, 2020 at 10:26:58AM -0700, rkir@google.com wrote:
-> > From: Haitao Shan <hshan@google.com>
+On Mon, Sep 14, 2020 at 08:24:22PM -0400, boris.ostrovsky@oracle.com wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 9/14/20 5:47 PM, Anchal Agarwal wrote:
+> > On Sun, Sep 13, 2020 at 11:43:30AM -0400, boris.ostrovsky@oracle.com wrote:
+> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>
+> >>
+> >>
+> >> On 8/21/20 6:25 PM, Anchal Agarwal wrote:
+> >>> Though, accquirng pm_mutex is still right thing to do, we may
+> >>> see deadlock if PM hibernation is interrupted by Xen suspend.
+> >>> PM hibernation depends on xenwatch thread to process xenbus state
+> >>> transactions, but the thread will sleep to wait pm_mutex which is
+> >>> already held by PM hibernation context in the scenario. Xen shutdown
+> >>> code may need some changes to avoid the issue.
+> >>
+> >>
+> >> Is it Xen's shutdown or suspend code that needs to address this? (Or I
+> >> may not understand what the problem is that you are describing)
+> >>
+> > Its Xen suspend code I think. If we do not take the system_transition_mutex
+> > in do_suspend then if hibernation is triggered in parallel to xen suspend there
+> > could be issues.
+> 
+> 
+> But you *are* taking this mutex to avoid this exact race, aren't you?
+yes, in that case this race should not occur and either one of it should fail
+gracefully.
+> 
+> 
+> > Now this is still theoretical in my case and I havent been able
+> > to reproduce such a race. So the approach the original author took was to take
+> > this lock which to me seems right.
+> > And its Xen suspend and not Xen Shutdown. So basically if this scenario
+> > happens I am of the view one of other will fail to occur then how do we recover
+> > or avoid this at all.
 > >
-> > This is a workaround which fixes triple fault
-> > in __restore_processor_state on clang when
-> > built with LTO.
+> > Does that answer your question?
 > >
-> > When load_TR_desc and load_mm_ldt are inlined into
-> > fix_processor_context due to LTO, they cause
-> > fix_processor_context (or in this case __restore_processor_state,
-> > as fix_processor_context was inlined into __restore_processor_state)
-> > to access the stack canary through %gs, but before
-> > __restore_processor_state has restored the previous value
-> > of %gs properly. LLVM appears to be inlining functions with stack
-> > protectors into functions compiled with -fno-stack-protector,
-> > which is likely a bug in LLVM's inliner that needs to be fixed.
+> 
+> 
+> >>> +
+> >>> +static int xen_setup_pm_notifier(void)
+> >>> +{
+> >>> +     if (!xen_hvm_domain() || xen_initial_domain())
+> >>> +             return -ENODEV;
+> >>
+> >> I don't think this works anymore.
+> > What do you mean?
+> > The first check is for xen domain types and other is for architecture support.
+> > The reason I put this check here is because I wanted to segregate the two.
+> > I do not want to register this notifier at all for !hmv guest and also if its
+> > an initial control domain.
+> > The arm check only lands in notifier because once hibernate() api is called ->
+> > calls pm_notifier_call_chain for PM_HIBERNATION_PREPARE this will fail for
+> > aarch64.
+> > Once we have support for aarch64 this notifier can go away altogether.
 > >
-> > The LLVM bug is here: https://bugs.llvm.org/show_bug.cgi?id=47479
+> > Is there any other reason I may be missing why we should move this check to
+> > notifier?
+> 
+> 
+> Not registering this notifier is equivalent to having it return NOTIFY_OK.
+>
+How is that different from current behavior?
+> 
+> In your earlier versions just returning NOTIFY_OK was not sufficient for
+> hibernation to proceed since the notifier would also need to set
+> suspend_mode appropriately. But now your notifier essentially filters
+> out unsupported configurations. And so if it is not called your
+> configuration (e.g. PV domain) will be considered supported.
+> 
+I am sorry if I am having a bit of hard time understanding this. 
+How will it be considered supported when its not even registered? My
+understanding is if its not registered, it will not land in notifier call chain
+which is invoked in pm_notifier_call_chain().
+
+As Roger, mentioned in last series none of this should be a part of PVH dom0 
+hibernation as its not tested but this series should also not break anything.
+If I register this notifier for PVH dom0 and return error later that will alter
+the current behavior right?
+
+If a pm_notifier for pvh dom0 is not registered then it will not land in the
+notifier call chain and system will work as before this series.
+If I look for unsupported configurations, then !hvm domain is also one but we
+filter that out at the beginning and don't even bother about it.
+
+Unless you mean guest running VMs itself? [Trying to read between the lines may
+not be the case though]
+> 
+> >> In the past your notifier would set suspend_mode (or something) but now
+> >> it really doesn't do anything except reports an error in some (ARM) cases.
+> >>
+> >> So I think you should move this check into the notifier.
+> >> (And BTW I still think PM_SUSPEND_PREPARE should return an error too.
+> >> The fact that we are using "suspend" in xen routine names is irrelevant)
+> >>
+> > I may have send "not-updated" version of the notifier's function change.
 > >
-> > Signed-off-by: Haitao Shan <hshan@google.com>
-> > Signed-off-by: Roman Kiryanov <rkir@google.com>
->
-> Ok, google guys, pls make sure you Cc LKML too as this is where *all*
-> patches and discussions are archived. Adding it now to Cc.
-
-Roman, please use ./scripts/get_maintainer.pl (in the kernel tree) for that.
-
->
-> > ---
-> >  arch/x86/power/cpu.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-> > index db1378c6ff26..e5677adb2d28 100644
-> > --- a/arch/x86/power/cpu.c
-> > +++ b/arch/x86/power/cpu.c
-> > @@ -274,6 +274,16 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
-> >  /* Needed by apm.c */
-> >  void notrace restore_processor_state(void)
-> >  {
-> > +#ifdef __clang__
-
-Should be CONFIG_CC_IS_CLANG; is more canonical throughout the tree.
-Or if this is only a bug when doing builds with LTO, and LTO is not
-yet upstream, then maybe Sami should carry this in his series, at
-least until I can fix the bug in Clang.  Or guard this with the
-CONFIG_LTO_CLANG config (not upstream yet; see Sami's series).
-
-> > +     // The following code snippet is copied from __restore_processor_state.
-> > +     // Its purpose is to prepare GS segment before the function is called.
-> > +#ifdef CONFIG_X86_64
-> > +     wrmsrl(MSR_GS_BASE, saved_context.kernelmode_gs_base);
-> > +#else
-> > +     loadsegment(fs, __KERNEL_PERCPU);
-> > +     loadsegment(gs, __KERNEL_STACK_CANARY);
-> > +#endif
-> > +#endif
->
-> Ok, so why is the kernel supposed to take yet another ugly workaround
-> because there's a bug in the compiler?
-
-This is exactly the same code from __restore_processor_state.  If it's
-ugly, talk to the author of 7ee18d677989e. ;)  All this patch is doing
-is moving this up a call frame (though now this is effectively being
-run twice).
-
-> If it is too late to fix it there, then maybe disable LTO builds for the
-> buggy version only.
-
-We could do that, too.  (We can disable LTO on a per translation unit
-basis in KBuild).  Note the author of the bug report linked above. :^P
-"Revenge of the stack protector"
-
->
-> We had a similar discussion this week and we already have one buggy
-> compiler to deal with and this second one is not making it any easier...
--- 
+> > +    switch (pm_event) {
+> > +       case PM_HIBERNATION_PREPARE:
+> > +        /* Guest hibernation is not supported for aarch64 currently*/
+> > +        if (IS_ENABLED(CONFIG_ARM64)) {
+> > +             ret = NOTIFY_BAD;
+> > +             break;
+> > +     }
+> > +       case PM_RESTORE_PREPARE:
+> > +       case PM_POST_RESTORE:
+> > +       case PM_POST_HIBERNATION:
+> > +       default:
+> > +           ret = NOTIFY_OK;
+> > +    }
+> 
+> 
+> There is no difference on x86 between this code and what you sent
+> earlier. In both instances PM_SUSPEND_PREPARE will return NOTIFY_OK.
+> 
+> 
+> On ARM this code will allow suspend to proceed (which is not what we want).
+> 
+Ok, I think I may have overlooked arm code. I will fix that.
+> 
+> -boris
+> 
 Thanks,
-~Nick Desaulniers
+Anchal
+> 
+> >
+> > With the above path PM_SUSPEND_PREPARE will go all together. Does that
+> > resolves this issue? I wanted to get rid of all SUSPEND_* as they are not needed
+> > here clearly.
+> > The only reason I kept it there is if someone tries to trigger hibernation on
+> > ARM instances they should get an error. As I am not sure about the current
+> > behavior. There may be a better way to not invoke hibernation on ARM DomU's and
+> > get rid of this block all together.
+> >
+> > Again, sorry for sending in the half baked fix. My workspace switch may have
+> > caused the error.
+> >>
+> >>
+> >> -boris
+> >>
+> > Anchal
+> >>
+> >>> +     return register_pm_notifier(&xen_pm_notifier_block);
+> >>> +}
+> >>> +
