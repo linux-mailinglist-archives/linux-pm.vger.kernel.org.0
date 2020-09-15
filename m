@@ -2,125 +2,197 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 686F626AE26
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 21:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D4426AE5B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 22:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbgIOTxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 15:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727821AbgIOTxQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 15:53:16 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76056C06174A
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:15 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id q124so1129479vkb.8
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JatNhbddJToYM0By7pCmtx57Fyea4GmWvkZSCincDmk=;
-        b=cs/Q6x0YzM+Pnjbl6WAD3RzDobJyyW3NLuTB+Fmlv0GjwsMl/B+GFzhyNWSmw90fQU
-         Xtqk1Uwmb+cc47MODVCKGi7K+6IaYLZkTSOlCr4/CL5Uzj5kvCqCPt+MFe2Vk3R8hL08
-         HLUmomtDf8ml9LyL4vgvTXl9tBLoW0hCaJ6V0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JatNhbddJToYM0By7pCmtx57Fyea4GmWvkZSCincDmk=;
-        b=ByOWM63pJIdQ3n/cda2ECtWj0Bm+j/WvCf8ov985h0+zAGkXUxc/uy//gO+p68QAXs
-         G+pncB67hkyAH8fOlCCbVQlT9vm0BVZRKraGnJXnodKvSZrR4nNVD28HEvGwldXB7V+k
-         M8WQws8TcN3T5/IoZfsEzN/G6EfvXebuCmhvHeejSwMbnctTZ3z+S4mr1ZKrontT3eBj
-         yk1by4SWoGhaBwNWYN/1hC482brrsDBWWxQK4HzlotFAlTKYRJeng0qWs2VaUolEbOCN
-         yL7MsqQ5ViMGg3bXkoNLOB0/htvjCmUAlV/OI4jXIAvRcJIeT9soAIuG4asI+M67isPM
-         747Q==
-X-Gm-Message-State: AOAM530bqbt4KNRO88C2jjrC8+MtUnr/dE10S4AjFL3jfYHDp/mJAkyi
-        TZoL1BU348hTEqT4EL5f8DNdELacvS9ZXw==
-X-Google-Smtp-Source: ABdhPJzBjdr9D5LDrKAs2PJd372PGrhSbMaLpSHrQ5uSVMmukoTLTXMTJZlXtKgr8qMWGAAH/REcsQ==
-X-Received: by 2002:a1f:2e54:: with SMTP id u81mr11834914vku.10.1600199594224;
-        Tue, 15 Sep 2020 12:53:14 -0700 (PDT)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id t186sm2476048vkg.7.2020.09.15.12.53.13
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
-Received: by mail-vs1-f50.google.com with SMTP id j3so2655059vsm.0
-        for <linux-pm@vger.kernel.org>; Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
-X-Received: by 2002:a05:6102:101a:: with SMTP id q26mr2665758vsp.34.1600199593095;
- Tue, 15 Sep 2020 12:53:13 -0700 (PDT)
+        id S1727637AbgIOUBn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 16:01:43 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41718 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727812AbgIOT7e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 15:59:34 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FJsYdd148170;
+        Tue, 15 Sep 2020 19:58:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=zszz4Wk0Z8hYu0e6GbpBILedfHLAamVV3KpsQALk+MY=;
+ b=cYabd4XRLzwlPu6EI22Jl3KW8FThCr3NHJRiRVIFuiWBisN/7ig7eIjuQJLSO7XmRVoJ
+ wxyif9kkcBZVUoUeICjdq33ky2ESTX66AwH8EickV/S+oNJ0dHnKUuybQt36q0qpWk2K
+ cgh0zggcNZsbxuvU6Lh2mMl+TcDdDigeaEUmVy/c55Xb4sXm2pPlHH7InMVxAjRgR12G
+ gvZtb5xpz6yHLqOpLyOKYaNupCnvf0aF6rMxShvXHL8uQzgV8K63N/gyFP4JPPOgtagD
+ lHoFX63R9IERITY1rCk08FhC/CIkyjWOJiPNJwNUm24KKp4pBZjgADEs0Fge+Sq5aqPp lg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 33j91dgxat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Sep 2020 19:58:55 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08FJtpB5041155;
+        Tue, 15 Sep 2020 19:58:55 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 33hm315t7e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Sep 2020 19:58:54 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08FJwpf6030579;
+        Tue, 15 Sep 2020 19:58:51 GMT
+Received: from [10.74.86.196] (/10.74.86.196)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Sep 2020 19:58:50 +0000
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
+ mode
+To:     Anchal Agarwal <anchalag@amazon.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
+        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
+        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
+        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
+        sblbir@amazon.com, xen-devel@lists.xenproject.org,
+        vkuznets@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
+        benh@kernel.crashing.org
+References: <cover.1598042152.git.anchalag@amazon.com>
+ <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
+ <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
+ <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
+ <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+From:   boris.ostrovsky@oracle.com
+Organization: Oracle Corporation
+Message-ID: <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
+Date:   Tue, 15 Sep 2020 15:58:45 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.2.1
 MIME-Version: 1.0
-References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
-In-Reply-To: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 15 Sep 2020 12:53:00 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WkS41m_FnZ9V-MM3uh8V6XKgHqvK7FpyWPBCjk7VuVHA@mail.gmail.com>
-Message-ID: <CAD=FV=WkS41m_FnZ9V-MM3uh8V6XKgHqvK7FpyWPBCjk7VuVHA@mail.gmail.com>
-Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
- power measurements?
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Matthias Kaehlcke <mka@chromium.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009150154
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9745 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
+ clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150154
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On Mon, Sep 14, 2020 at 10:44 PM Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
-> Hi Rob,
->
-> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
-> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
-> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
-> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
-> calculating power values in mW, is there a need to document the property as something that *has* to be
-> based on real power measurements?
->
-> Looking at the bindings,
->
->    dynamic-power-coefficient:
->      $ref: '/schemas/types.yaml#/definitions/uint32'
->      description:
->        A u32 value that represents the running time dynamic
->        power coefficient in units of uW/MHz/V^2. The
->        coefficient can either be calculated from power
->        measurements or derived by analysis.
->
->        The dynamic power consumption of the CPU  is
->        proportional to the square of the Voltage (V) and
->        the clock frequency (f). The coefficient is used to
->        calculate the dynamic power as below -
->
->        Pdyn = dynamic-power-coefficient * V^2 * f
->
->        where voltage is in V, frequency is in MHz.
->
-> .. the 'can either be calculated from power measurements or derived by analysis'
-> tells me we don't mandate that this be based on real power measurements.
-> If we do, then perhaps that needs to be mentioned explicitly?
 
-To me, the phrase "derived by analysis" doesn't mean that the number
-is allowed to be in completely made up units.  It means it's still
-supposed to be in the same units but it's OK if you didn't integrate a
-Coulomb counter into your system.
+>>
+>>
+>>>>> +
+>>>>> +static int xen_setup_pm_notifier(void)
+>>>>> +{
+>>>>> +     if (!xen_hvm_domain() || xen_initial_domain())
+>>>>> +             return -ENODEV;
+>>>>
+>>>> I don't think this works anymore.
+>>> What do you mean?
+>>> The first check is for xen domain types and other is for architecture support.
+>>> The reason I put this check here is because I wanted to segregate the two.
+>>> I do not want to register this notifier at all for !hmv guest and also if its
+>>> an initial control domain.
+>>> The arm check only lands in notifier because once hibernate() api is called ->
+>>> calls pm_notifier_call_chain for PM_HIBERNATION_PREPARE this will fail for
+>>> aarch64.
+>>> Once we have support for aarch64 this notifier can go away altogether.
+>>>
+>>> Is there any other reason I may be missing why we should move this check to
+>>> notifier?
+>>
+>>
+>> Not registering this notifier is equivalent to having it return NOTIFY_OK.
+>>
+> How is that different from current behavior?
+>>
+>> In your earlier versions just returning NOTIFY_OK was not sufficient for
+>> hibernation to proceed since the notifier would also need to set
+>> suspend_mode appropriately. But now your notifier essentially filters
+>> out unsupported configurations. And so if it is not called your
+>> configuration (e.g. PV domain) will be considered supported.
+>>
+> I am sorry if I am having a bit of hard time understanding this. 
+> How will it be considered supported when its not even registered? My
+> understanding is if its not registered, it will not land in notifier call chain
+> which is invoked in pm_notifier_call_chain().
 
-It's kinda like saying that the police can give you a speeding ticket
-by either measuring your speed with a radar gun or by checking a clock
-when your car passed two known places and calculating your speed based
-on that.  The radar gun is a direct measurement whereas the other is
-derived by analysis.  In both cases you're still talking about a speed
-in terms of Miles per Hour (or kilometers per hour in more sane
-countries).
 
--Doug
+Returning an error from xen_setup_pm_notifier() doesn't have any effect
+on whether hibernation will start. It's the notifier that can stop it.
+
+> 
+> As Roger, mentioned in last series none of this should be a part of PVH dom0 
+> hibernation as its not tested but this series should also not break anything.
+> If I register this notifier for PVH dom0 and return error later that will alter
+> the current behavior right?
+> 
+> If a pm_notifier for pvh dom0 is not registered then it will not land in the
+> notifier call chain and system will work as before this series.
+> If I look for unsupported configurations, then !hvm domain is also one but we
+> filter that out at the beginning and don't even bother about it.
+> 
+> Unless you mean guest running VMs itself? [Trying to read between the lines may
+> not be the case though]
+
+
+
+In hibernate():
+
+        error = __pm_notifier_call_chain(PM_HIBERNATION_PREPARE, -1,
+&nr_calls);
+        if (error) {
+                nr_calls--;
+                goto Exit;
+        }
+
+
+Is you don't have notifier registered (as will be the case with PV
+domains and dom0) you won't get an error and proceed with hibernation.
+(And now I actually suspect it didn't work even with your previous patches)
+
+
+But something like this I think will do what you want:
+
+
+static int xen_pm_notifier(struct notifier_block *notifier,
+	unsigned long pm_event, void *unused)
+
+{
+
+       if (IS_ENABLED(CONFIG_ARM64) ||
+	   !xen_hvm_domain() || xen_initial_domain() ||
+	   (pm_event == PM_SUSPEND_PREPARE)) {
+		if ((pm_event == PM_SUSPEND_PREPARE) || (pm_event ==
+PM_HIBERNATION_PREPARE))
+			pr_warn("%s is not supported for this guest",
+				(pm_event == PM_SUSPEND_PREPARE) ?
+				"Suspend" : "Hibernation");
+                return NOTIFY_BAD;
+
+        return NOTIFY_OK;
+
+}
+
+static int xen_setup_pm_notifier(void)
+{
+	return register_pm_notifier(&xen_pm_notifier_block);
+}
+
+
+I tried to see if there is a way to prevent hibernation without using
+notifiers (like having a global flag or something) but didn't find
+anything obvious. Perhaps others can point to a simpler way of doing this.
+
+
+-boris
+
