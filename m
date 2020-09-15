@@ -2,69 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6956526A2AB
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 12:04:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF20126A378
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 12:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726119AbgIOKEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 06:04:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:59676 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726102AbgIOKE3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 15 Sep 2020 06:04:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EA3D1396;
-        Tue, 15 Sep 2020 03:04:29 -0700 (PDT)
-Received: from [10.37.12.52] (unknown [10.37.12.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D2DB3F68F;
-        Tue, 15 Sep 2020 03:04:27 -0700 (PDT)
-Subject: Re: [PATCH 1/4] cpufreq: stats: Defer stats update to
- cpufreq_stats_record_transition()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        cristian.marussi@arm.com, sudeep.holla@arm.com,
-        linux-kernel@vger.kernel.org
-References: <cover.1599031227.git.viresh.kumar@linaro.org>
- <973bd0536c4957d03f36447398498cfacb2393d9.1599031227.git.viresh.kumar@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <bd6e6d93-7491-0971-3bed-27d1885c38cd@arm.com>
-Date:   Tue, 15 Sep 2020 11:04:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <973bd0536c4957d03f36447398498cfacb2393d9.1599031227.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726358AbgIOKq3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 06:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgIOKn5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 06:43:57 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5811C06174A;
+        Tue, 15 Sep 2020 03:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=VUh0x74rFETn1g3Yut3ZTkkDJyuzqbAXdAXZp2icBLA=; b=uZp0qBVO7EA2b4U9UE3pkYlpRm
+        Skm19GN/kZHisiT/YZXL/HiTJqeVFHQF7AC2EWBmJEkEACC0H84gdHLjrMnctcUj1NE63NVhMC8Cd
+        uKkUryTxfC+SOPbeaJAgSBzwI3RevZ99IGUwxjsPlJFor55u0JTtes9eV1haMCqwBk6zzCcofTtIi
+        JbiBRYIp9BYY/PTL7j1vfZSTU7K5rr2lElOroXFKeRPh6oCB8VArdTIN/hRCpmPceIIWOrEq2vWla
+        XIB6nZH9BnCwJpyZ8pqOuAPIgj+8g+18Gs2EZRwjTs0+Oy3a3BWyOLhYKnQ618zHNjaaiSk1ZvX13
+        vwpwi04A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kI8R5-0006v6-7X; Tue, 15 Sep 2020 10:43:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B003B305C16;
+        Tue, 15 Sep 2020 12:43:40 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 8A932214EDD4A; Tue, 15 Sep 2020 12:43:40 +0200 (CEST)
+Message-ID: <20200915103157.345404192@infradead.org>
+User-Agent: quilt/0.66
+Date:   Tue, 15 Sep 2020 12:31:57 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     rjw@rjwysocki.net, bp@alien8.de
+Cc:     x86@kernel.org, tony.luck@intel.com, lenb@kernel.org,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        ulf.hansson@linaro.org, paulmck@kernel.org, tglx@linutronix.de,
+        naresh.kamboju@linaro.org, peterz@infradead.org
+Subject: [RFC][PATCH 0/4] Fix up ACPI processor idle vs RCU
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+Hi,
 
-On 9/2/20 8:24 AM, Viresh Kumar wrote:
-> In order to prepare for lock-less stats update, add support to defer any
-> updates to it until cpufreq_stats_record_transition() is called.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/cpufreq_stats.c | 75 ++++++++++++++++++++++++---------
->   1 file changed, 56 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> index 94d959a8e954..fdf9e8556a49 100644
-> --- a/drivers/cpufreq/cpufreq_stats.c
-> +++ b/drivers/cpufreq/cpufreq_stats.c
-> @@ -22,17 +22,22 @@ struct cpufreq_stats {
+A number of people have been tripping over the improved RCU-lockdep complaints
+in idle.
 
-Would it be possible to move this structure in the
-linux/cpufreq.h header? Any subsystem could have access to it,
-like to the cpuidle stats.
+These 4 patches attempt to cure ACPI processor idle. I've done my best to not
+wreck things, but it's all magical code with very few comments, so who knows..
 
-Apart from that (and the comment regarding the 'atomic_t' field)
-I don't see any issues.
+Boris tested an earlier version of these patches and they worked for his
+32bit Atom board that was triggering complaints.
 
-Regards,
-Lukasz
