@@ -2,208 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC5C4269A65
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 02:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A914269ADE
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Sep 2020 03:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbgIOA1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Sep 2020 20:27:35 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56372 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbgIOA1d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 20:27:33 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08F0PmqX086919;
-        Tue, 15 Sep 2020 00:26:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=/lp3ssLFIF9grSJMfNvaz6HxSc4T07AGymekTnSNWLo=;
- b=D/M2X9A5slRKJGp/rXq/kiEFcmcwXxFp2tHp1UdyuCxEDowoaMk+WSsA5KDBiQfu0BbF
- IxAjf2DV3zJt5aie3at8QvzeCnyGBMvJCcpLlD8eBGkkYEHnszRIv034FamClD4HTlCe
- GPZjnzW/wx52Di89jiafv788Bm/pGFxTkkFcjKMtds5YKGJv+ppHMR7hXnY4Q4xHaoTo
- mdw6yK6SZ0RuFlRNmkAa0tjTL4Ra4U+YaUT9/frt3SPn0RMctWTZyvzpuc/5zgLlE9n8
- QMDjM5ZkbTrfnFMoneGIiAkTa8dq+6KCbiC3LC5LPwqhRaFmI9dIO+dMCtr8RQnVB7G0 yw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 33gp9m1r7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Sep 2020 00:26:35 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08F09toZ049766;
-        Tue, 15 Sep 2020 00:24:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 33h7wn3qga-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 15 Sep 2020 00:24:35 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08F0OSfW003043;
-        Tue, 15 Sep 2020 00:24:28 GMT
-Received: from [10.74.107.135] (/10.74.107.135)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 15 Sep 2020 00:24:28 +0000
-Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
- mode
-To:     Anchal Agarwal <anchalag@amazon.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
-        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
-        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
-        sblbir@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org
-References: <cover.1598042152.git.anchalag@amazon.com>
- <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
- <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
- <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   boris.ostrovsky@oracle.com
-Organization: Oracle Corporation
-Message-ID: <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
-Date:   Mon, 14 Sep 2020 20:24:22 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.2.1
+        id S1726057AbgIOBJ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Sep 2020 21:09:29 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:32817 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbgIOBJ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Sep 2020 21:09:27 -0400
+Received: by mail-io1-f67.google.com with SMTP id r25so2308017ioj.0;
+        Mon, 14 Sep 2020 18:09:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pUxGtvaIRUoyqovEVYWusEf+ErNPYsvl3hrLi3RtD/U=;
+        b=B3QARGafoc4UVGNa5KuuuOGNTpXpe5WClvL1wRgIYeRu0gr99z/zyeYcHVJPjeWofU
+         Hbo75Xo44IdZLnLDy8E99CIdEyR29nWtUG4wNjPs7bnKv2SggIGo6rDeurYDJcBEe5hv
+         8XrczIPhYJRgA4XEjBpA1JUVS+1NQF92qr7w0BlMlIBqctngtxFLmiujTJI4uc3O3GZZ
+         uErvKwM8lmZtznknW1HiPVZCa/8roEKc9642lYNhRbcLypykqi/SOFHvHJa4UOiFZIv9
+         p9mIW5I6JCR+BY7PAmk+js5ELtbyFo3XhTAoApur4wkgpc42kJKYU17c6Jiyjd2DH1/P
+         h4Xg==
+X-Gm-Message-State: AOAM533mxkMfw39rcN4z2OpIp4D4NycsvBqwCSrsVkblsejiEPw3CrmM
+        MWaxSFwg6nccHeuODKd1SQ==
+X-Google-Smtp-Source: ABdhPJxLiHjz61DfOBs3dWFIQPtmOLahnEoMRx0JaOoZ3VNzcjZEmyPMmUqbqG6agxIN66M2mOAjag==
+X-Received: by 2002:a02:a615:: with SMTP id c21mr15364024jam.106.1600132165659;
+        Mon, 14 Sep 2020 18:09:25 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id p9sm6877547iov.18.2020.09.14.18.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 18:09:24 -0700 (PDT)
+Received: (nullmailer pid 633962 invoked by uid 1000);
+        Tue, 15 Sep 2020 01:09:22 -0000
+Date:   Mon, 14 Sep 2020 19:09:22 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: Convert ingenic,battery.txt
+ to YAML
+Message-ID: <20200915010922.GA629419@bogus>
+References: <20200906144726.8852-1-contact@artur-rojek.eu>
 MIME-Version: 1.0
-In-Reply-To: <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9744 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- adultscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009150000
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9744 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
- spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009150001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200906144726.8852-1-contact@artur-rojek.eu>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sun, Sep 06, 2020 at 04:47:25PM +0200, Artur Rojek wrote:
+> Convert the textual documentation of Device Tree bindings for the
+> Ingenic JZ47xx SoCs battery to YAML.
+> 
+> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
+> ---
+> 
+> Changes:
+>     v2: move introduction of new compatibles into a separate patch
+> 
+>  .../bindings/power/supply/ingenic,battery.txt | 31 ----------
+>  .../power/supply/ingenic,battery.yaml         | 60 +++++++++++++++++++
+>  2 files changed, 60 insertions(+), 31 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt b/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
+> deleted file mode 100644
+> index 66430bf73815..000000000000
+> --- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.txt
+> +++ /dev/null
+> @@ -1,31 +0,0 @@
+> -* Ingenic JZ47xx battery bindings
+> -
+> -Required properties:
+> -
+> -- compatible: Must be "ingenic,jz4740-battery".
+> -- io-channels: phandle and IIO specifier pair to the IIO device.
+> -  Format described in iio-bindings.txt.
+> -- monitored-battery: phandle to a "simple-battery" compatible node.
+> -
+> -The "monitored-battery" property must be a phandle to a node using the format
+> -described in battery.txt, with the following properties being required:
+> -
+> -- voltage-min-design-microvolt: Drained battery voltage.
+> -- voltage-max-design-microvolt: Fully charged battery voltage.
+> -
+> -Example:
+> -
+> -#include <dt-bindings/iio/adc/ingenic,adc.h>
+> -
+> -simple_battery: battery {
+> -	compatible = "simple-battery";
+> -	voltage-min-design-microvolt = <3600000>;
+> -	voltage-max-design-microvolt = <4200000>;
+> -};
+> -
+> -ingenic_battery {
+> -	compatible = "ingenic,jz4740-battery";
+> -	io-channels = <&adc INGENIC_ADC_BATTERY>;
+> -	io-channel-names = "battery";
+> -	monitored-battery = <&simple_battery>;
+> -};
+> diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+> new file mode 100644
+> index 000000000000..b4e0275ac63a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2019-2020 Artur Rojek
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/power/supply/ingenic,battery.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Ingenic JZ47xx battery bindings
+> +
+> +maintainers:
+> +  - Artur Rojek <contact@artur-rojek.eu>
+> +
+> +properties:
+> +  compatible:
+> +    const: ingenic,jz4740-battery
+> +
+> +  io-channels:
+> +    items:
+> +      - description: >
+> +          phandle and IIO specifier pair to the IIO device.
+> +          See Documentation/devicetree/bindings/iio/iio-bindings.txt for more
+> +          details.
 
-On 9/14/20 5:47 PM, Anchal Agarwal wrote:
-> On Sun, Sep 13, 2020 at 11:43:30AM -0400, boris.ostrovsky@oracle.com wrote:
->> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>
->>
->>
->> On 8/21/20 6:25 PM, Anchal Agarwal wrote:
->>> Though, accquirng pm_mutex is still right thing to do, we may
->>> see deadlock if PM hibernation is interrupted by Xen suspend.
->>> PM hibernation depends on xenwatch thread to process xenbus state
->>> transactions, but the thread will sleep to wait pm_mutex which is
->>> already held by PM hibernation context in the scenario. Xen shutdown
->>> code may need some changes to avoid the issue.
->>
->>
->> Is it Xen's shutdown or suspend code that needs to address this? (Or I
->> may not understand what the problem is that you are describing)
->>
-> Its Xen suspend code I think. If we do not take the system_transition_mutex
-> in do_suspend then if hibernation is triggered in parallel to xen suspend there
-> could be issues. 
+No need to redefine common properties. 'maxItems: 1' is sufficient here.
 
+> +
+> +  io-channel-names:
+> +    const: "battery"
 
-But you *are* taking this mutex to avoid this exact race, aren't you?
+Don't need quotes.
 
+> +
+> +  monitored-battery:
+> +    items:
+> +      - description: >
 
-> Now this is still theoretical in my case and I havent been able
-> to reproduce such a race. So the approach the original author took was to take
-> this lock which to me seems right.
-> And its Xen suspend and not Xen Shutdown. So basically if this scenario
-> happens I am of the view one of other will fail to occur then how do we recover
-> or avoid this at all.
->
-> Does that answer your question?
->
+'monitored-battery' is always a single item. So just need 'description'.
 
-
->>> +
->>> +static int xen_setup_pm_notifier(void)
->>> +{
->>> +     if (!xen_hvm_domain() || xen_initial_domain())
->>> +             return -ENODEV;
->>
->> I don't think this works anymore.
-> What do you mean?
-> The first check is for xen domain types and other is for architecture support. 
-> The reason I put this check here is because I wanted to segregate the two.
-> I do not want to register this notifier at all for !hmv guest and also if its
-> an initial control domain.
-> The arm check only lands in notifier because once hibernate() api is called ->
-> calls pm_notifier_call_chain for PM_HIBERNATION_PREPARE this will fail for
-> aarch64. 
-> Once we have support for aarch64 this notifier can go away altogether. 
->
-> Is there any other reason I may be missing why we should move this check to
-> notifier?
-
-
-Not registering this notifier is equivalent to having it return NOTIFY_OK.
-
-
-In your earlier versions just returning NOTIFY_OK was not sufficient for
-hibernation to proceed since the notifier would also need to set
-suspend_mode appropriately. But now your notifier essentially filters
-out unsupported configurations. And so if it is not called your
-configuration (e.g. PV domain) will be considered supported.
-
-
->> In the past your notifier would set suspend_mode (or something) but now
->> it really doesn't do anything except reports an error in some (ARM) cases.
->>
->> So I think you should move this check into the notifier.
->> (And BTW I still think PM_SUSPEND_PREPARE should return an error too.
->> The fact that we are using "suspend" in xen routine names is irrelevant)
->>
-> I may have send "not-updated" version of the notifier's function change.
->
-> +    switch (pm_event) {
-> +       case PM_HIBERNATION_PREPARE:
-> +        /* Guest hibernation is not supported for aarch64 currently*/
-> +        if (IS_ENABLED(CONFIG_ARM64)) {
-> +             ret = NOTIFY_BAD;                                                                                                                                                                                                                                                    
-> +             break;                                                                                                                                                                                                                                                               
-> +     }               
-> +       case PM_RESTORE_PREPARE:
-> +       case PM_POST_RESTORE:
-> +       case PM_POST_HIBERNATION:
-> +       default:
-> +           ret = NOTIFY_OK;
-> +    }
-
-
-There is no difference on x86 between this code and what you sent
-earlier. In both instances PM_SUSPEND_PREPARE will return NOTIFY_OK.
-
-
-On ARM this code will allow suspend to proceed (which is not what we want).
-
-
--boris
-
-
->
-> With the above path PM_SUSPEND_PREPARE will go all together. Does that
-> resolves this issue? I wanted to get rid of all SUSPEND_* as they are not needed
-> here clearly.
-> The only reason I kept it there is if someone tries to trigger hibernation on
-> ARM instances they should get an error. As I am not sure about the current
-> behavior. There may be a better way to not invoke hibernation on ARM DomU's and
-> get rid of this block all together.
->
-> Again, sorry for sending in the half baked fix. My workspace switch may have
-> caused the error.
->>
->>
->> -boris
->>
-> Anchal
->>
->>> +     return register_pm_notifier(&xen_pm_notifier_block);
->>> +}
->>> +
+> +          phandle to a "simple-battery" compatible node.
+> +
+> +          This property must be a phandle to a node using the format described
+> +          in battery.txt, with the following properties being required:
+> +          - voltage-min-design-microvolt: drained battery voltage,
+> +          - voltage-max-design-microvolt: fully charged battery voltage.
+> +
+> +required:
+> +  - compatible
+> +  - io-channels
+> +  - io-channel-names
+> +  - monitored-battery
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/iio/adc/ingenic,adc.h>
+> +
+> +    simple_battery: battery {
+> +            compatible = "simple-battery";
+> +            voltage-min-design-microvolt = <3600000>;
+> +            voltage-max-design-microvolt = <4200000>;
+> +    };
+> +
+> +    ingenic-battery {
+> +            compatible = "ingenic,jz4740-battery";
+> +            io-channels = <&adc INGENIC_ADC_BATTERY>;
+> +            io-channel-names = "battery";
+> +            monitored-battery = <&simple_battery>;
+> +    };
+> -- 
+> 2.28.0
+> 
