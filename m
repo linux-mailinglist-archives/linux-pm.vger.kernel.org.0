@@ -2,187 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B696A26B071
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 00:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4143226B048
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 00:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727586AbgIOWKp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Sep 2020 18:10:45 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:26056 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727794AbgIOUCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Sep 2020 16:02:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1600200166; x=1631736166;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=wNziNNDxrF6gCaxX+ImX9p6CNqpNyiGV3hOiiuWa1DA=;
-  b=psG5UNU9DwNKfm4PLgr+eRkxEcvrIbzuy9ppNmJ+Cd044GhxpLKCHYFO
-   +Ro/wcZyPGGn5jsprcO6v55qX4ECXKI22+0u+d/Yip5SYTVnP8YfYHxdt
-   h1IKrKGArBuIP9+BbMgenpH+j7WctJGb935cs74EAty33DqsP1dER1+op
-   U=;
-X-IronPort-AV: E=Sophos;i="5.76,430,1592870400"; 
-   d="scan'208";a="75198936"
-Subject: Re: [PATCH v3 02/11] xenbus: add freeze/thaw/restore callbacks support
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 15 Sep 2020 19:57:00 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2b-4e24fd92.us-west-2.amazon.com (Postfix) with ESMTPS id 8A814A21BE;
-        Tue, 15 Sep 2020 19:56:58 +0000 (UTC)
-Received: from EX13D05UWC004.ant.amazon.com (10.43.162.223) by
- EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 15 Sep 2020 19:56:43 +0000
-Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
- EX13D05UWC004.ant.amazon.com (10.43.162.223) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 15 Sep 2020 19:56:43 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Tue, 15 Sep 2020 19:56:43 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id 5B464408BF; Tue, 15 Sep 2020 19:56:43 +0000 (UTC)
-Date:   Tue, 15 Sep 2020 19:56:43 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     <boris.ostrovsky@oracle.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
-        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <kamatam@amazon.com>, <sstabellini@kernel.org>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200915195643.GA28542@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <cover.1598042152.git.anchalag@amazon.com>
- <2d3a7ed32bf38e13e0141a631a453b6e4c7ba5dc.1598042152.git.anchalag@amazon.com>
- <eebc26b8-f1b1-3bea-5366-dd77f063237e@oracle.com>
+        id S1727861AbgIOWGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Sep 2020 18:06:52 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:42914 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727994AbgIOUVV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 15 Sep 2020 16:21:21 -0400
+Received: from zn.tnic (p200300ec2f0e42002ec71013b50744b4.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:4200:2ec7:1013:b507:44b4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A46AB1EC02B9;
+        Tue, 15 Sep 2020 22:20:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1600201240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=m1zeLlW+IDog00PQVGph/rOz8zmBb7aC18qc50BuwbI=;
+        b=KTtC5vZ7VLJvpMSdFhpGdy+qzsvIIE4abCCCEfXxgdbMRVmjGvteIOw0ic7X72Eq0CPbBI
+        V+40Ui/aq4WvZ4cEu5KmgmlHUPtISYwqIDEj7dvFstGPbR7YFnA9S7Hbxx8i0uEjDNdcz3
+        VTCmIFLK3LKpddDHeNNYyZSievhJXGE=
+Date:   Tue, 15 Sep 2020 22:20:34 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
+Cc:     Roman Kiryanov <rkir@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        linux-pm@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Alistair Delva <adelva@google.com>,
+        Haitao Shan <hshan@google.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
+Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
+ __restore_processor_state (clang)
+Message-ID: <20200915202034.GZ14436@zn.tnic>
+References: <20200915172658.1432732-1-rkir@google.com>
+ <20200915174643.GT14436@zn.tnic>
+ <CAKwvOdm9bQmL=gZypkosH0MG=S28=jJ6wZiTMCNP6=Z+NfN1AA@mail.gmail.com>
+ <20200915182530.GV14436@zn.tnic>
+ <CAKwvOdkKk1KuAFDoWNLnMUi3_JnV7atDFnvS7CdkgNXnNg0p1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <eebc26b8-f1b1-3bea-5366-dd77f063237e@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <CAKwvOdkKk1KuAFDoWNLnMUi3_JnV7atDFnvS7CdkgNXnNg0p1g@mail.gmail.com>
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Sep 13, 2020 at 12:11:47PM -0400, boris.ostrovsky@oracle.com wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On 8/21/20 6:26 PM, Anchal Agarwal wrote:
-> > From: Munehisa Kamata <kamatam@amazon.com>
-> >
-> > Since commit b3e96c0c7562 ("xen: use freeze/restore/thaw PM events for
-> > suspend/resume/chkpt"), xenbus uses PMSG_FREEZE, PMSG_THAW and
-> > PMSG_RESTORE events for Xen suspend. However, they're actually assigned
-> > to xenbus_dev_suspend(), xenbus_dev_cancel() and xenbus_dev_resume()
-> > respectively, and only suspend and resume callbacks are supported at
-> > driver level. To support PM suspend and PM hibernation, modify the bus
-> > level PM callbacks to invoke not only device driver's suspend/resume but
-> > also freeze/thaw/restore.
-> >
-> > Note that we'll use freeze/restore callbacks even for PM suspend whereas
-> > suspend/resume callbacks are normally used in the case, becausae the
-> > existing xenbus device drivers already have suspend/resume callbacks
-> > specifically designed for Xen suspend.
-> 
-> 
-> Something is wrong with this sentence. Or with my brain --- I can't
-> quite parse this.
-> 
-The message is trying to say that that freeze/thaw/restore callbacks will be
-used for both PM SUSPEND and PM HIBERNATION. Since, we are only focussing on PM
-hibernation, I will remove all wordings of PM suspend from this message to avoid
-confusion. I left it there in case someone wants to pick it up in future knowing
-framework is already present.
-> 
-> And please be consistent with "PM suspend" vs. "PM hibernation".
->
-I should remove PM suspend from everywhere since the mode is not tested
-for.
-> 
-> >  So we can allow the device
-> > drivers to keep the existing callbacks wihtout modification.
-> >
-> 
-> 
-> > @@ -599,16 +600,33 @@ int xenbus_dev_suspend(struct device *dev)
-> >       struct xenbus_driver *drv;
-> >       struct xenbus_device *xdev
-> >               = container_of(dev, struct xenbus_device, dev);
-> > +     bool xen_suspend = is_xen_suspend();
-> >
-> >       DPRINTK("%s", xdev->nodename);
-> >
-> >       if (dev->driver == NULL)
-> >               return 0;
-> >       drv = to_xenbus_driver(dev->driver);
-> > -     if (drv->suspend)
-> > -             err = drv->suspend(xdev);
-> > -     if (err)
-> > -             dev_warn(dev, "suspend failed: %i\n", err);
-> > +     if (xen_suspend) {
-> > +             if (drv->suspend)
-> > +                     err = drv->suspend(xdev);
-> > +     } else {
-> > +             if (drv->freeze) {
-> 
-> 
-> 'else if' (to avoid extra indent level).  In xenbus_dev_resume() too.
-> 
-> 
-> > +                     err = drv->freeze(xdev);
-> > +                     if (!err) {
-> > +                             free_otherend_watch(xdev);
-> > +                             free_otherend_details(xdev);
-> > +                             return 0;
-> > +                     }
-> > +             }
-> > +     }
-> > +
-> > +     if (err) {
-> > +             dev_warn(&xdev->dev,
-> 
-> 
-> Is there a reason why you replaced dev with xdev->dev (here and elsewhere)?
-> 
-> 
-Nope, they should be same. We can use dev here too. I should probably just use
-dev.
-> >  "%s %s failed: %d\n", xen_suspend ?
-> > +                             "suspend" : "freeze", xdev->nodename, err);
-> > +             return err;
-> > +     }
-> > +
-> >
-> 
-> > @@ -653,8 +683,44 @@ EXPORT_SYMBOL_GPL(xenbus_dev_resume);
-> >
-> >  int xenbus_dev_cancel(struct device *dev)
-> >  {
-> > -     /* Do nothing */
-> > -     DPRINTK("cancel");
-> > +     int err;
-> > +     struct xenbus_driver *drv;
-> > +     struct xenbus_device *xendev = to_xenbus_device(dev);
-> 
-> 
-> xdev for consistency please.
-> 
-Yes this I left unchanged, it should be consistent with xdev.
-> 
-> > +     bool xen_suspend = is_xen_suspend();
-> 
-> 
-> No need for this, you use it only once anyway.
-> 
-> 
-> -boris
->
-Thanks,
-Anchal
-> 
+On Tue, Sep 15, 2020 at 12:51:47PM -0700, Nick Desaulniers wrote:
+> I agree; I also would not have sent the patch though.
+
+Maybe google folks should run stuff by you before sending it up... :-)
+
+> Until LTO has landed upstream, this is definitely somewhat self
+> inflicted. This was only debugged last week; even with a compiler fix
+> in hand today, it still takes time to ship that compiler and qualify
+> it; for other folks on tighter timelines, I can understand why the
+> patch was sent,
+
+... because they have the requirement that a patch which gets backported
+to a kernel used at google needs to be upstream? Because I'm willing to
+bet a lot of cash that no one runs bleeding egde 5.9-rcX in production
+over there right now :-)
+
+> and do genuinely appreciate the effort to participate more upstream
+> which I'm trying to encourage more of throughout the company (we're
+> in a lot of technical debt kernel-wise; and I'm not referring to
+> Android...a story over beers perhaps, or ask Greg).
+
+Beers? Always. But I can imagine the reasons: people working on projects
+and then those projects getting done and no one cares about upstreaming
+stuff after the fact or no one has time ... or policy ... but let's keep
+that for beers. :-)
+
+> It's just that this isn't really appropriate since it works around
+> a bug in a non-upstream feature, and will go away once we fix the
+> toolchain.
+
+Hohumm.
+
+> It would be much nicer if we had the flexibility to disable stack
+> protectors per function, rather than per translation unit.  I'm going
+> to encourage you to encourage your favorite compile vendor ("write to
+> your senator") to support the function attribute
+> __attribute__((no_stack_protector)) so that one day,
+
+I already forgot why gcc doesn't do that... Martin, do you know?
+
+> we can use that to stop shipping crap like a9a3ed1eff360 ("x86: Fix
+> early boot crash on gcc-10, third try"). Having had that, we could
+> have used a nicer workaround until the toolchain was fixed (and one
+> day revert a9a3ed1eff360, and d0a8d9378d16, and probably more hacks in
+> the kernel).
+
+Yap, agreed. I guess with those new compiler features it is always a
+couple of releases - both kernel, i.e., the user of that feature, and
+compiler, i.e., the provider of the feature, to both figure out what
+the proper use cases are, to experiment a bit and then to adjust stuff,
+change here and there and then cast in stone. Oh well.
+
+> And the case that's causing the compiler bug in question is something
+> all compiler vendors will need to consider in their implementations.
+
+Are you talking to gcc folks about it already so that they DTRT too?
+
+Btw, if it is any consolation, talking to compiler folks is like a charm
+in comparison to talking to hardware vendors and trying to get them
+to agree on something because they seem to think that the kernel is
+software and sure, can be changed to do whatever. But that's another
+story for the beers... :-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
