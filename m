@@ -2,97 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A32D26BDAF
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 09:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BF626BEAE
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 10:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbgIPHKT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Sep 2020 03:10:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726172AbgIPHKQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Sep 2020 03:10:16 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DADC061788
-        for <linux-pm@vger.kernel.org>; Wed, 16 Sep 2020 00:10:15 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 7so3351065pgm.11
-        for <linux-pm@vger.kernel.org>; Wed, 16 Sep 2020 00:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dCN2AFryqy+FayqDrktseJf4Knff8xTZtC15klQo6HI=;
-        b=DKkZQkytUjTwB6aIU6j4eONmza9A70oFPJkSMH1+DRwON/kyhR42FZpvfsHiJSz+XI
-         ARVeqU8mDPxQLyrOJFsBNdpHwNfNn8x4RG8R/lJ3aehUm98MzbYsCszFoM3gPpLorwXK
-         W86jyHqMG9qbjO8RFsoK9KEtvhfRe+lkWU5n9riBFiJXcegLPo3K947iuKofzQ45gGWd
-         irFLCM0HgE01iIgV6oA3Vi3DXlVz/ogf9kZ1SfZnc/pKJOl+Bs3D1aWzpKj9S8HlCOkJ
-         AkNo2w5m3ON8yB/tSWt0a5T1EX3jqbxnL1c2xj2uYTz0mvBV3VjAHZ4KC9/LnHqTj6de
-         dncQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dCN2AFryqy+FayqDrktseJf4Knff8xTZtC15klQo6HI=;
-        b=VzyhStog4S6BmdgB36f4z9iFvKInLvrFd2F64rzIINDFOLKGFdVqbiVaQRrIM9/+ic
-         3KU3izy4nwYpmDC51BW4HCIMOufWN5G1bx80Yxhclr86KzseoZt2JbGgoxwygInPYh1X
-         BIOr2MgnqHFIUTVJYD0riROyJIFZSSD4Le5B22XK/IBSZu5aEE9iT9W1NLwkKBNayttI
-         89cagsxxXg4rW/h6CkGo0CUBR2g9wLgB7OwxrtYtum+xp+BYe8N7hfTpQkrpEu5drwNx
-         5Tm5agp3nWg8Z/KgotuCXBsnAhxx81lU8JJ1AhHncU0jwLznOTV5yda/Wd5Mj3GZO2VG
-         cYEQ==
-X-Gm-Message-State: AOAM531XVRV1tOk90+eu+7VWJTupDJp2QY3cNe5Az1c7VV6b6n4xzdYT
-        cwjkne+2BVx+bUg8dqtuKJBH6g==
-X-Google-Smtp-Source: ABdhPJwEKxo7Fjj0kYT7JCpuobL1YW/w9j9hFb9Ge9no8gjp05kHeLFv593g9FA9eT2Uix1Bqu/DpQ==
-X-Received: by 2002:a63:5f8b:: with SMTP id t133mr18058069pgb.238.1600240215289;
-        Wed, 16 Sep 2020 00:10:15 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id j4sm16730075pfd.101.2020.09.16.00.10.14
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Sep 2020 00:10:14 -0700 (PDT)
-Date:   Wed, 16 Sep 2020 12:40:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     rjw@rjwysocki.net, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, tdas@codeaurora.org
-Subject: Re: [PATCH v2 0/5] Add CPUFreq support for SM8250 SoC
-Message-ID: <20200916071001.vr3wxpprfrordpcj@vireshk-i7>
-References: <20200915072423.18437-1-manivannan.sadhasivam@linaro.org>
+        id S1726425AbgIPIA6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Sep 2020 04:00:58 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:27517 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726161AbgIPIA4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Sep 2020 04:00:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1600243255; x=1631779255;
+  h=references:from:to:cc:subject:in-reply-to:date:
+   message-id:mime-version;
+  bh=ZpeyqbXZZZChQLRdtPf3cky/jQApLEzjYIn40OLlPdY=;
+  b=jw0nOBmuJTc3Pn0VA0oA86RSCBfuBekE5dkhObvHLaPOMVFZNyjUWEz2
+   JRc620gvTi37ns+FYT87Hluom5uONZMv9/ko9FPiVPc8uh2SxUOfAK/wo
+   eX9k/9rlJSRr7sDHr8Gw30l37Z8xTaSkjfnasWDGqBht/JuiCn2KDQmEC
+   OnFrQouJgxdi6wX5QfPsLsARIL+dd65YVC4Q8OOtn2hKawKje50ME83Lr
+   sEYLQH7vUsQ6J1N//4WuNBFd2KysykirquTKRhJnmOjr75lIRBPXBKhV9
+   O55cWQhL7hAbJgQQG5pyseUwrQf24MUSyD8UsbvlEPDmG/gjy3xkP5DyN
+   g==;
+IronPort-SDR: xg6eAnAVn1jTFp4ys2AO0SVY/sOeqImazYtKMGt10eI/QOQ1ZppPaZ9dYoYGrP2GtzHvyA/GqG
+ 4gU7FX/87avYrXsXk1QTH2X+wYI42Nq75a27jSMS1a0Mlp4WVjoRncVBm/EnUJcXYHZhk23r+E
+ 5Gmc3sa7Lgt6lk9Hd8Sn7kI8uU4BtMGZiQYsmIPKAqEyvDV7+TJcCUI5C3vpKclg86GwdZ9cjJ
+ VySKltueviMAapWm9cQoy2BNzwRtpKSSlg7J615hPNa/ivY4Jztre35h3XVS46KX7hB6RKvmxK
+ LwY=
+X-IronPort-AV: E=Sophos;i="5.76,432,1592895600"; 
+   d="scan'208";a="87046701"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Sep 2020 01:00:54 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 16 Sep 2020 01:00:38 -0700
+Received: from soft-dev15.microsemi.net.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3
+ via Frontend Transport; Wed, 16 Sep 2020 01:00:36 -0700
+References: <20200513130842.24847-1-lars.povlsen@microchip.com> <20200513130842.24847-4-lars.povlsen@microchip.com> <20200528022502.GA3234572@bogus> <87wo4piyqz.fsf@soft-dev15.microsemi.net> <20200828163916.g6vbk3anfyijl7sx@earth.universe> <871rjnxm5h.fsf@soft-dev15.microsemi.net>
+From:   Lars Povlsen <lars.povlsen@microchip.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Microchip Linux Driver Support" <UNGLinuxDriver@microchip.com>,
+        <linux-pm@vger.kernel.org>,
+        "Lars Povlsen" <lars.povlsen@microchip.com>
+Subject: Re: [PATCH 3/5] dt-bindings: reset: ocelot: Add documentation for 'microchip,reset-switch-core' property
+In-Reply-To: <871rjnxm5h.fsf@soft-dev15.microsemi.net>
+Date:   Wed, 16 Sep 2020 10:00:51 +0200
+Message-ID: <875z8ei218.fsf@soft-dev15.microsemi.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200915072423.18437-1-manivannan.sadhasivam@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-09-20, 12:54, Manivannan Sadhasivam wrote:
-> Hello,
-> 
-> This series adds CPUFreq support for Qualcomm SM8250 SoC. The existing
-> qcom-hw driver is reworked to support the EPSS block on this SoC which
-> handles the CPUFreq duties.
-> 
-> The EPSS block supports additional features for which incremental patches
-> will be submitted on top of this series!
-> 
-> Thanks,
-> Mani
-> 
-> Changes in v2:
-> 
-> * Dropped the regmap conversion patch
-> * Used "qcom,cpufreq-epss" compatible and "epss_soc_data" for dev data
-> * Switched to "of_device_get_match_data" API
-> * Collected reviews from Amit, Viresh and Bjorn
-> * Dropped patch [3/7] which got applied by Viresh
-> 
-> Bjorn Andersson (1):
->   arm64: dts: qcom: sm8250: Add cpufreq hw node
 
-Applied all except this one, as it will go through ARM Soc tree.
+Lars Povlsen writes:
+
+> Sebastian Reichel writes:
+>
+>> Hi,
+>> 
+>> On Tue, Jun 02, 2020 at 11:49:08AM +0200, Lars Povlsen wrote:
+>> > Rob Herring writes:
+>> > > On Wed, May 13, 2020 at 03:08:40PM +0200, Lars Povlsen wrote:
+>> > >> This documents the 'microchip,reset-switch-core' property in the
+>> > >> ocelot-reset driver.
+>> > >>
+>> > >> Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+>> > >> ---
+>> > >>  .../devicetree/bindings/power/reset/ocelot-reset.txt        | 6 ++++++
+>> > >>  1 file changed, 6 insertions(+)
+>> > >>
+>> > >> diff --git a/Documentation/devicetree/bindings/power/reset/ocelot-rese=
+>> t.txt b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> > >> index 4d530d8154848..20fff03753ad2 100644
+>> > >> --- a/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> > >> +++ b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+>> > >> @@ -9,9 +9,15 @@ microchip Sparx5 armv8 SoC's.
+>> > >>  Required Properties:
+>> > >>   - compatible: "mscc,ocelot-chip-reset" or "microchip,sparx5-chip-res=
+>> et"
+>> > >>
+>> > >> +Optional properties:
+>> > >> +- microchip,reset-switch-core : Perform a switch core reset at the
+>> > >> +  time of driver load. This is may be used to initialize the switch
+>> > >> +  core to a known state (before other drivers are loaded).
+>> > >
+>> > > How do you know when other drivers are loaded? This could be a module
+>> > > perhaps. Doesn't seem like something that belongs in DT.
+>> > >
+>> > 
+>> > The reset driver is loaded at postcore_initcall() time, which ensures it
+>> > is loaded before other drivers using the switch core. I noticed other
+>> > drivers do the same to do low-level system reset and initialization at
+>> > early boot time.
+>> > 
+>> > > Can this behavior be implied with "microchip,sparx5-chip-reset"?
+>> > 
+>> > Since we need to cater for both modus operandi, I would need two driver
+>> > compatible strings per platform, which scales worse than a single
+>> > property.
+>> > 
+>> > The "microchip,reset-switch-core" is a device configuration property
+>> > which tells the system (driver) how the hw should be handled. Since you
+>> > do not *always* want to reset the switch core (f.ex. when implementing
+>> > systems with warm reboot), I think it makes perfect sense - but I may be
+>> > biased off course :-)
+>> > 
+>> > Thank you for (all) of your comments, by the way!
+>> > 
+>> > ---Lars
+>> > > Rob
+>> 
+>> Is this series still needed? Did I miss a follow-up?
+>
+> Hi Sebastian!
+>
+> Yes, the series is still needed, but the conversation died after my
+> last message.
+>
+> If the DT-controlled reset property is too controversial, I am willing
+> to drop that part. (Rob just reviewed the bindings).
+>
+> MCHP reference designs have GPIO resets, so we *could* get by without,
+> but new designs may this feature.
+>
+>> -- Sebastian
+>
+
+Sebastian,
+
+Any update on the patches? They're the last part of the original Sparx5
+series, so I would love to get them done.
+
+As previously stated, I could remove the "microchip,reset-switch-core"
+parts if that's whats what holding it stuck.
+
+---Lars
 
 -- 
-viresh
+Lars Povlsen,
+Microchip
