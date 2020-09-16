@@ -2,121 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C53226C12A
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 11:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E137526C36F
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Sep 2020 15:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726666AbgIPJx5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Sep 2020 05:53:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:57522 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726369AbgIPJxx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 16 Sep 2020 05:53:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7141B1FB;
-        Wed, 16 Sep 2020 02:53:52 -0700 (PDT)
-Received: from [10.37.12.50] (unknown [10.37.12.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 462573F718;
-        Wed, 16 Sep 2020 02:53:50 -0700 (PDT)
-Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
- power measurements?
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Rajendra Nayak <rnayak@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-pm@vger.kernel.org,
-        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Javi Merino <javi.merino@kernel.org>
-References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
- <20200915172444.GA2771744@google.com>
- <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
- <20200915175808.GB2771744@google.com>
- <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <b0d32e2b-1e21-b921-2d5f-335abafd0a37@arm.com>
-Date:   Wed, 16 Sep 2020 10:53:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726938AbgIPNzt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Sep 2020 09:55:49 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:34567 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726580AbgIPNn4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Sep 2020 09:43:56 -0400
+X-UUID: d375b2d7ef3b4924870ec3d7c51a879a-20200916
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=W4f0Gv7pUKvtQ+PgBn2oCT/tUuwNvMVT9QsIDFwdjg0=;
+        b=tREe3azI1u0MEgbt5H0hr3f29KZke4ZBJZj5JaGT+v3kP/QolKolAIg7L442D2z4O5/TEm5vMiIENcUohNUmNxaQtWj5mua/rr7vMjf074+uKEwuyYMsGmkICbqnosYdvebnaz/s6JiaLkh8ewzIM4osRYKpNY+XdBgfWqAAxHg=;
+X-UUID: d375b2d7ef3b4924870ec3d7c51a879a-20200916
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1425565730; Wed, 16 Sep 2020 19:39:15 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 16 Sep 2020 19:39:12 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 16 Sep 2020 19:39:11 +0800
+Message-ID: <1600256353.7042.13.camel@mtkswgap22>
+Subject: Re: [PATCH v7] cpufreq: mediatek-hw: Add support for Mediatek
+ cpufreq HW driver
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rob Herring" <robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wsd_upstream@mediatek.com>
+Date:   Wed, 16 Sep 2020 19:39:13 +0800
+In-Reply-To: <20200910053406.t37rgioykzvk3oem@vireshk-i7>
+References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
+         <20200910050341.pgyieq3q7ijitosn@vireshk-i7>
+         <1599715851.7042.9.camel@mtkswgap22>
+         <20200910053406.t37rgioykzvk3oem@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-In-Reply-To: <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: D31B7E4528DDBB4A6FAA5C2B85C8B1EDF1AF3454225063A0AD4497AD9E8527D22000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-pm-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+SGksIFJvYiBzaXI6DQoNClNvcnJ5IHRvIGJvdGhlciB5b3UsIG1heSBJIGhhdmUgeW91ciByZXZp
+ZXcgY29tbWVudCBmb3IgdGhlIGJpbmRpbmcNCnBhcnQ/DQpBcHByZWNpYXRlZC4NCg0KT24gVGh1
+LCAyMDIwLTA5LTEwIGF0IDExOjA0ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+IE9uIDEw
+LTA5LTIwLCAxMzozMCwgSGVjdG9yIFl1YW4gd3JvdGU6DQo+ID4gT24gVGh1LCAyMDIwLTA5LTEw
+IGF0IDEwOjMzICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+ID4gPiBPbiAxMC0wOS0yMCwg
+MTI6MzEsIEhlY3RvciBZdWFuIHdyb3RlOg0KPiA+ID4gPiBUaGUgQ1BVZnJlcSBIVyBwcmVzZW50
+IGluIHNvbWUgTWVkaWF0ZWsgY2hpcHNldHMgb2ZmbG9hZHMgdGhlIHN0ZXBzIG5lY2Vzc2FyeSBm
+b3IgY2hhbmdpbmcgdGhlIGZyZXF1ZW5jeSBvZiBDUFVzLiANCj4gPiA+ID4gVGhlIGRyaXZlciBp
+bXBsZW1lbnRzIHRoZSBjcHVmcmVxIGRyaXZlciBpbnRlcmZhY2UgZm9yIHRoaXMgaGFyZHdhcmUg
+ZW5naW5lLiANCj4gPiA+ID4gDQo+ID4gPiA+IFRoaXMgcGF0Y2ggZGVwZW5kcyBvbiB0aGUgTVQ2
+Nzc5IERUUyBwYXRjaCBzdWJtaXR0ZWQgYnkgSGFua3MgQ2hlbg0KPiA+ID4gPiAgaHR0cHM6Ly9s
+a21sLm9yZy9sa21sLzIwMjAvOC80LzEwOTQNCj4gPiA+IA0KPiA+ID4gVGhhbmtzIGZvciBoYW5n
+aW5nIHRoZXJlLiBMb29rcyBnb29kIHRvIG1lLiBJIHdpbGwgYXBwbHkgaXQgb25jZSBSb2INCj4g
+PiA+IEFjaydzIHRoZSBiaW5kaW5nIHBhdGNoLg0KPiA+ID4gDQo+ID4gDQo+ID4gTWFueSB0aGFu
+a3MgZm9yIHlvdXIgaGVscC4gTWF5IEkga25vdyBpZiB5b3UgY2FuIGFkZCBSZXZpZXdlZC1ieSB0
+YWcgdG8NCj4gPiB0aGlzIHBhdGNoIHNldC4NCj4gDQo+IFNpbmNlIHRoaXMgcGF0Y2hzZXQgaXMg
+Z29pbmcgdG8gZ2V0IG1lcmdlZCB2aWEgbXkgdHJlZSAoQVJNIGNwdWZyZXENCj4gdHJlZSksIGEg
+cmV2aWV3ZWQtYnkgaXNuJ3QgcmVxdWlyZWQgaGVyZS4gSSB3aWxsIHF1ZXVlIGl0IHVwIGZvcg0K
+PiA1LjEwLXJjMSBhZnRlciBJIHJlY2VpdmUgYW4gQWNrIGZyb20gUm9iLg0KPiANCj4gPiBJIHdv
+dWxkIGxpa2UgdG8gcHJlcGFyZSBzb21lIHBhdGNoZXMgZm9yIG1vcmUgZmVhdHVyZXMNCj4gPiBi
+YXNlZCBvbiB0aGlzLiBJcyB0aGF0IG9rYXkgdG8geW91PyBUaGFua3MgYWdhaW4uDQo+IA0KPiBU
+aGF0IHNob3VsZCBiZSBmaW5lLg0KPiANCg0KDQo=
 
-
-On 9/15/20 9:55 PM, Daniel Lezcano wrote:
-> On 15/09/2020 19:58, Matthias Kaehlcke wrote:
->> On Tue, Sep 15, 2020 at 07:50:10PM +0200, Daniel Lezcano wrote:
->>> On 15/09/2020 19:24, Matthias Kaehlcke wrote:
->>>> +Thermal folks
->>>>
->>>> Hi Rajendra,
->>>>
->>>> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
->>>>> Hi Rob,
->>>>>
->>>>> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
->>>>> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
->>>>> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
->>>>> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
->>>>> calculating power values in mW, is there a need to document the property as something that *has* to be
->>>>> based on real power measurements?
->>>>
->>>> Relative values may work for scheduling decisions, but not for thermal
->>>> management with the power allocator, at least not when CPU cooling devices
->>>> are combined with others that specify their power consumption in absolute
->>>> values. Such a configuration should be supported IMO.
->>>
->>> The energy model is used in the cpufreq cooling device and if the
->>> sustainable power is consistent with the relative values then there is
->>> no reason it shouldn't work.
->>
->> Agreed on thermal zones that exclusively use CPUs as cooling devices, but
->> what when you have mixed zones, with CPUs with their pseudo-unit and e.g. a
->> GPU that specifies its power in mW?
-> 
-> Well, if a SoC vendor decides to mix the units, then there is nothing we
-> can do.
-> 
-> When specifying the power numbers available for the SoC, they could be
-> all scaled against the highest power number.
-> 
-> There are so many factors on the hardware, the firmware, the kernel and
-> the userspace sides having an impact on the energy efficiency, I don't
-> understand why SoC vendors are so shy to share the power numbers...
-> 
-
-Unfortunately (because it might confuse engineers in some cases like
-this one), even in the SCMI spec DEN0056B [1] we have this statement
-which allows to expose an 'abstract scale' values from firmware:
-'4.5.1 Performance domain management protocol background
-...The power can be expressed in mW or in an abstract scale. Vendors
-are not obliged to reveal power costs if it is undesirable, but a linear
-scale is required.'
-
-This is the source of our Energy Model values when we use SCMI cpufreq
-driver [2].
-
-So this might be an issue in the future, when some SoC vendor decides to
-not expose the real mW, but the phone OEM would then take the SoC and
-try to add some other cooling device into the thermal zone. That new
-device is not part of the SCMI perf but some custom and has the real mW.
-
-Do you think Daniel it should be somewhere documented in the kernel
-thermal that the firmware might silently populate EM with 'abstract
-scale'? Then special care should be taken when combining new
-cooling devices.
-
-Regards,
-Lukasz
-
-[1] https://developer.arm.com/documentation/den0056/b/?lang=en
-[2] 
-https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/scmi-cpufreq.c#L121
