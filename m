@@ -2,83 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EC126D143
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Sep 2020 04:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5376126D1B7
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Sep 2020 05:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726040AbgIQChI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Sep 2020 22:37:08 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:31574 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725886AbgIQChH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Sep 2020 22:37:07 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 22:37:06 EDT
-X-UUID: b5f35bf3bcf240a48189df19bb23c453-20200917
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=55vZkGLvgoeApgdN8nM2vlO2w+ACfA3EPA25BOlXP70=;
-        b=bZSqCHxHRCTfgbe5XYPyHlPB48YAIS7XGniDa3QYe7igJJ5UHfaK9BSvttbbJGntPtI0pGBBgymqBvM2ego2yTc7UfPEPm7odDLc9RIg7pyxNnlLWOvvg2TiTw+y/rhfqfccY9WbvXyTsS0oG/U7zh3HvhKjxwsXWVOf9QJTwzM=;
-X-UUID: b5f35bf3bcf240a48189df19bb23c453-20200917
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 240590259; Thu, 17 Sep 2020 10:31:59 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 17 Sep 2020 10:31:45 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 17 Sep 2020 10:31:50 +0800
-Message-ID: <1600309910.7042.15.camel@mtkswgap22>
-Subject: Re: [PATCH v7] cpufreq: mediatek-hw: Add support for Mediatek
- cpufreq HW driver
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>
-CC:     Viresh Kumar <viresh.kumar@linaro.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
-Date:   Thu, 17 Sep 2020 10:31:50 +0800
-In-Reply-To: <1600256353.7042.13.camel@mtkswgap22>
-References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
-         <20200910050341.pgyieq3q7ijitosn@vireshk-i7>
-         <1599715851.7042.9.camel@mtkswgap22>
-         <20200910053406.t37rgioykzvk3oem@vireshk-i7>
-         <1600256353.7042.13.camel@mtkswgap22>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726130AbgIQD2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Sep 2020 23:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726098AbgIQD2B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Sep 2020 23:28:01 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA69C061756
+        for <linux-pm@vger.kernel.org>; Wed, 16 Sep 2020 20:22:28 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id w186so888694qkd.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Sep 2020 20:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcbOfWlEFuul00HQqd8oilYbvxROka4ZC4SJrI4joOI=;
+        b=ZoAZr1W5Oy5cf66eKQDQmN5f8ior/qPaBYuhUSTkzttNy0/O9TEdGWW4csN2pa49hh
+         id6Fmyh9QZCKAH0LJv0YPxZGf8vB/Itcyb+O/nYPdnbtGUhdBnRYcDkntbur9LKRXaQc
+         wj53IAzDyNAzQFKT2B9CkUV0rX5xEsCfMERavdq1QiHUHPoIZu5B+99HQgYDEnTp1Ykh
+         7zKTNEG9VaH025rt4wOluXioXoDuWzGUh4DNamII+pIl2TcaS9XZyfQhFEsqaPIN/9aA
+         CqwwYu7Z6KiZaYLWHss70WCO1qEl1UGGACL5OWYmfdGeRSCEWjQoTbfbs1s3MM3DSVuC
+         z4tQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KcbOfWlEFuul00HQqd8oilYbvxROka4ZC4SJrI4joOI=;
+        b=h4GHpdpHd+RZ6gvrikpoKL4/DwhoMMzZcKByoOLbxlQR5jAwFUOFpENiMwdTl5ZcL7
+         zkwWddObYevCNalmqiyMi5kkRCS83AKRalAaGEFa2Gg/B2nW1MY/ZE9OLYafH0FS8vz4
+         4SIOaYP+yW+jLyp0jvmb+SI81P55jHPFWEEyUyoato+dd4q7qXdppO5Tpf0fFfv5EZUR
+         YidKoSvevCaM1bzGzijSPBL0Pip22gqzhxjz6+abE0Qalay5Q15OmmEFV5RuLeYeqr5s
+         qITaNpPgN6kC/qKlcNFg4MiNzeAEcdrdaK0jbRWMndOHRGGDlLZERTIWSm7rgK4X1tY1
+         lhsQ==
+X-Gm-Message-State: AOAM531ve+zfm5/eBYcTVh101jVPghrFlzUbU4tdLyeAYUbtj/7fXATn
+        4M9+fjvZZgNwuuc79Zl9C7dSoA==
+X-Google-Smtp-Source: ABdhPJycdE9iUoUS8L8EAQ9dflosqsZ4aHX4wg/fxy61biNVVViV9GA9A6GsEun9aHQ6DekgpsepBg==
+X-Received: by 2002:a05:620a:2082:: with SMTP id e2mr25150130qka.421.1600312947892;
+        Wed, 16 Sep 2020 20:22:27 -0700 (PDT)
+Received: from pop-os.fios-router.home (pool-71-163-245-5.washdc.fios.verizon.net. [71.163.245.5])
+        by smtp.googlemail.com with ESMTPSA id g45sm21370801qtb.60.2020.09.16.20.22.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 20:22:27 -0700 (PDT)
+From:   Thara Gopinath <thara.gopinath@linaro.org>
+To:     rui.zhang@intel.com, daniel.lezcano@linaro.org, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        lukasz.luba@arm.com, amitk@kernel.org
+Subject: [PATCH RFC 0/8] Introduce warming in thermal framework
+Date:   Wed, 16 Sep 2020 23:22:18 -0400
+Message-Id: <20200917032226.820371-1-thara.gopinath@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 7B895C27C73AF267B15AA01BCC80074C1740AE0C6671D6C49EB69B78158A5A792000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIFJvYiBzaXI6DQoNClNvcnJ5IHRvIGJvdGhlciB5b3UsIG1heSBJIGhhdmUgeW91ciByZXZp
-ZXcgY29tbWVudCBmb3IgdGhlIGJpbmRpbmcNCnBhcnQ/DQpBcHByZWNpYXRlZC4NCg0KT24gV2Vk
-LCAyMDIwLTA5LTE2IGF0IDE5OjM5ICswODAwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4gSGksIFJv
-YiBzaXI6DQo+IA0KPiBTb3JyeSB0byBib3RoZXIgeW91LCBtYXkgSSBoYXZlIHlvdXIgcmV2aWV3
-IGNvbW1lbnQgZm9yIHRoZSBiaW5kaW5nDQo+IHBhcnQ/DQo+IEFwcHJlY2lhdGVkLg0KPiANCj4g
-T24gVGh1LCAyMDIwLTA5LTEwIGF0IDExOjA0ICswNTMwLCBWaXJlc2ggS3VtYXIgd3JvdGU6DQo+
-ID4gT24gMTAtMDktMjAsIDEzOjMwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4gPiA+IE9uIFRodSwg
-MjAyMC0wOS0xMCBhdCAxMDozMyArMDUzMCwgVmlyZXNoIEt1bWFyIHdyb3RlOg0KPiA+ID4gPiBP
-biAxMC0wOS0yMCwgMTI6MzEsIEhlY3RvciBZdWFuIHdyb3RlOg0KPiA+ID4gPiA+IFRoZSBDUFVm
-cmVxIEhXIHByZXNlbnQgaW4gc29tZSBNZWRpYXRlayBjaGlwc2V0cyBvZmZsb2FkcyB0aGUgc3Rl
-cHMgbmVjZXNzYXJ5IGZvciBjaGFuZ2luZyB0aGUgZnJlcXVlbmN5IG9mIENQVXMuIA0KPiA+ID4g
-PiA+IFRoZSBkcml2ZXIgaW1wbGVtZW50cyB0aGUgY3B1ZnJlcSBkcml2ZXIgaW50ZXJmYWNlIGZv
-ciB0aGlzIGhhcmR3YXJlIGVuZ2luZS4gDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gVGhpcyBwYXRj
-aCBkZXBlbmRzIG9uIHRoZSBNVDY3NzkgRFRTIHBhdGNoIHN1Ym1pdHRlZCBieSBIYW5rcyBDaGVu
-DQo+ID4gPiA+ID4gIGh0dHBzOi8vbGttbC5vcmcvbGttbC8yMDIwLzgvNC8xMDk0DQo+ID4gPiA+
-IA0KPiA+ID4gPiBUaGFua3MgZm9yIGhhbmdpbmcgdGhlcmUuIExvb2tzIGdvb2QgdG8gbWUuIEkg
-d2lsbCBhcHBseSBpdCBvbmNlIFJvYg0KPiA+ID4gPiBBY2sncyB0aGUgYmluZGluZyBwYXRjaC4N
-Cj4gPiA+ID4gDQo+ID4gPiANCj4gPiA+IE1hbnkgdGhhbmtzIGZvciB5b3VyIGhlbHAuIE1heSBJ
-IGtub3cgaWYgeW91IGNhbiBhZGQgUmV2aWV3ZWQtYnkgdGFnIHRvDQo+ID4gPiB0aGlzIHBhdGNo
-IHNldC4NCj4gPiANCj4gPiBTaW5jZSB0aGlzIHBhdGNoc2V0IGlzIGdvaW5nIHRvIGdldCBtZXJn
-ZWQgdmlhIG15IHRyZWUgKEFSTSBjcHVmcmVxDQo+ID4gdHJlZSksIGEgcmV2aWV3ZWQtYnkgaXNu
-J3QgcmVxdWlyZWQgaGVyZS4gSSB3aWxsIHF1ZXVlIGl0IHVwIGZvcg0KPiA+IDUuMTAtcmMxIGFm
-dGVyIEkgcmVjZWl2ZSBhbiBBY2sgZnJvbSBSb2IuDQo+ID4gDQo+ID4gPiBJIHdvdWxkIGxpa2Ug
-dG8gcHJlcGFyZSBzb21lIHBhdGNoZXMgZm9yIG1vcmUgZmVhdHVyZXMNCj4gPiA+IGJhc2VkIG9u
-IHRoaXMuIElzIHRoYXQgb2theSB0byB5b3U/IFRoYW5rcyBhZ2Fpbi4NCj4gPiANCj4gPiBUaGF0
-IHNob3VsZCBiZSBmaW5lLg0KPiA+IA0KPiANCj4gDQoNCg==
+Thermal framework today supports monitoring for rising temperatures and
+subsequently initiating cooling action in case of a thermal trip point
+being crossed. There are scenarios where a SoC need warming mitigating
+action to be activated if the temperature falls below a cetain permissible
+limit.  Since warming action can be considered mirror opposite of cooling
+action, most of the thermal framework can be re-used to achieve this. The
+key assumption in this patch series is that a device can act either as a
+warming device or a cooling device and not as both.
+
+In order to support warming three extensions are needed in the thermal
+framework.
+
+1. Indication that a trip point is being monitored for falling temperature
+and not rising temperature. We discussed two different ways to achieve this
+during LPC. First option is to introduce a new trip type to indicate that a
+trip is a cold trip(THERMAL_TRIP_COLD). The second option is to introduce a
+new property for trip point that will indicate whether a trip point is
+being monitored for rising temperature or falling temperature. The patch
+series(patches 1-4) chooses the second approach since it allows trip points
+of any type to be monitored for rising or falling temperature.Also this was
+the preferred approach when discussed during LPC. The approach that
+introduces a new cold trip type was posted on the list earlier as a RFC and
+can be found at [1].
+
+2. Extend the exisitng governors to handle monitoring of falling
+temperature. The patch series(patches 5 & 6) extends the step wise governor
+to monitor the falling temperature.Other governors return doing nothing if
+the trip point they are being called for is being monitored for falling
+temperature. The governors' mitigate function is called "throttle" in the
+thermal framework and with this patch series it is a misnomer as the
+function is called for both throttling and warming up. Ideally
+"throttle" should be renamed to "mitigate" to improve readability of code.
+The renaming is not part of this series.
+
+3. Finally, the cooling device framework itself can be reused for a warming
+device. As stated before a device can act either as a warming device or a
+cooling device and not as both.  With this the cooling state in the
+framework can be considered as mitigating state with 0 as the state with no
+thermal mitigation and higher the number higher the thermal mitigation.
+Again what affects the code readability and comprehension is the term
+"cooling" which is a misnomer here. Ideally the term "cooling" should be
+renamed to "mitigating" and hence thermal_cooling_device will become
+thermal_mitgating_device. The renaming is not part of the patch series as
+even though the renaming is a simple search-replace, it will change a lot
+of files.  The patch series(patches 7 & 8) instead introduces a minimal set
+of _warming_device_ apis to register and unregister warming devices which
+internally is identical to the _cooling_device_ counterpart.
+
+1. https://lkml.org/lkml/2020/7/10/639
+
+Thara Gopinath (8):
+  dt-bindings: thermal: Introduce monitor-falling parameter to thermal
+    trip point binding
+  thermal: Introduce new property monitor_type for trip point.
+  thermal: thermal_of: Extend thermal dt driver to support
+    bi-directional monitoring of a thermal trip point.
+  thermal:core:Add genetlink notifications for monitoring falling
+    temperature
+  thermal: gov_step_wise: Extend thermal step-wise governor to monitor
+    falling temperature.
+  thermal: Modify thermal governors to do nothing for trip points being
+    monitored for falling temperature
+  thermal:core: Add is_warming_dev and supporting warming device api's
+    to the cooling dev framework.
+  soc:qcom:qcom_aoss: Change cooling_device_register to
+    warming_device_register
+
+ .../bindings/thermal/thermal-zones.yaml       |   7 ++
+ drivers/soc/qcom/qcom_aoss.c                  |   6 +-
+ drivers/thermal/gov_bang_bang.c               |  12 ++
+ drivers/thermal/gov_fair_share.c              |  12 ++
+ drivers/thermal/gov_power_allocator.c         |  12 ++
+ drivers/thermal/gov_step_wise.c               |  62 +++++++---
+ drivers/thermal/thermal_core.c                | 113 +++++++++++++++---
+ drivers/thermal/thermal_core.h                |   2 +
+ drivers/thermal/thermal_of.c                  |  22 ++++
+ include/linux/thermal.h                       |   9 ++
+ include/uapi/linux/thermal.h                  |   5 +
+ 11 files changed, 226 insertions(+), 36 deletions(-)
+
+-- 
+2.25.1
 
