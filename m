@@ -2,143 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26A726D42B
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Sep 2020 09:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F53526D4CE
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Sep 2020 09:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgIQHFs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Sep 2020 03:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46310 "EHLO
+        id S1726169AbgIQHg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Sep 2020 03:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726340AbgIQHFn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Sep 2020 03:05:43 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF5CC06178A
-        for <linux-pm@vger.kernel.org>; Thu, 17 Sep 2020 00:05:33 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id e11so3761419wme.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Sep 2020 00:05:33 -0700 (PDT)
+        with ESMTP id S1726157AbgIQHg2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Sep 2020 03:36:28 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19500C06174A;
+        Thu, 17 Sep 2020 00:36:28 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id k14so853335pgi.9;
+        Thu, 17 Sep 2020 00:36:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lWWYwFEJdlsj3P23LfFOjyoT1SaVdGZj4iXJfGwnMqE=;
-        b=jXo8gyXs0EsvrL9UUHQW0PEwyvI40Z9dhYF2NKmEYlhnZ6rBzuNtSYjMZwzPv59koM
-         SvD5m/gZCUU+UhByyffqKA6p1faPwy8lUVpFka2LI06Jy7B8RUffW+iZjwiFa/11b1dN
-         pqVJe3nuLWn+f7Z7ezVlt1JGUk6gh7OdOUBLx+MoPwAM7z51AsFwKGWVDa9t712kyNYn
-         cyo25lXeVT/8iE/GW2ct1MHu53BuMfJIPKP0HNz2a8sO1nZCtIZVyuH7Jp9T71p2x8tw
-         xm6/fFY2po8pm3TYGmVPOZyZpTkg6OL9RYNY2thWB+qlTmLAotYsnWkPS3hi38XzFe1u
-         Lt8g==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=LVgjNZrNQHeGVyzoXCZ5eaezteocik+IrAZzCdzJuBs=;
+        b=QLoT4iocwJDgRY3jVhIx2DI4949mVscTOINeUfXIxEZ6B5God1X8pv8ghXq9RS/aJa
+         oqKXCcAgyLDBPezA0SA2dIdsGYy9EMv6DRb8EhC1h1PMH1PHVlyiTscxmG36D5LJ9Efq
+         K+/lgt9VC2Eo9oQc7KdqHaK2GD1N3ZsMkGeWG5TfQTbhMyx2Isgl1aCOrlzfrpGawq9N
+         fdx97Ug9bNjbsMuC0bCq5liTXYmQoHovaXNrL0kzAHAOa2rAfzhQLi3Njfu6lW5R9jO3
+         t+hcQddrpcL+4PCDb9jQTZ/pkgt1euQmifwy1IRcLi7Oy8joLWCP5VHszTKqkRj3DVby
+         f3Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lWWYwFEJdlsj3P23LfFOjyoT1SaVdGZj4iXJfGwnMqE=;
-        b=qjK8Iydb4eGOSDA+cle7BaAi4w3A2Ix3czqg6Q2MXMALqzwIt9zPG7vZNpXQb8AxGb
-         2jxYzqLm3pLsrMDELMzZmYBKpjPt6uaDxph5v9Gs0w+V43xvakvR6/P0pOru/wWqT7A5
-         R88JUAgQfWHUj7rbglEXXQe06QdjUiaLjtqGuSyN8RefCSW9EChWarbBmMScqC6+Z6DB
-         FTJZEfBwq51mEUmDEFrHbwpc5P4cdzk1+FakgMg74A9IteG6yMqACRZeP59AB6BnwMXu
-         WJ8z/kel+LrncK2gUKEKavRy0xZo4Fpjg4nJGlZoH8/03iXEc7tGL2JBT6tDah0ujM8T
-         B9Cg==
-X-Gm-Message-State: AOAM530u+1P9Lgbhf2QoL4ZQUDM9f49V5yjEALFInqhn32ZPAHpjrIkk
-        Qdxoybq1usqfF7xnOSfk6uVK2cD9W9ZSWe+I
-X-Google-Smtp-Source: ABdhPJww5pkMLl/HlZqN0QZzWsU+BDIPqCp7mPcGBAdQQG53/A1JOh4lzZJAHV5aita8sA+1qJMMvA==
-X-Received: by 2002:a7b:c5c1:: with SMTP id n1mr8035673wmk.125.1600326332159;
-        Thu, 17 Sep 2020 00:05:32 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:9934:ad8d:e364:de32? ([2a01:e34:ed2f:f020:9934:ad8d:e364:de32])
-        by smtp.googlemail.com with ESMTPSA id h8sm36632684wrw.68.2020.09.17.00.05.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2020 00:05:31 -0700 (PDT)
-Subject: Re: [PATCH] thermal/drivers/cpuidle_cooling: Change the set_cur_state
- function
-To:     zhuguangqing83@gmail.com, amit.kachhap@gmail.com,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=LVgjNZrNQHeGVyzoXCZ5eaezteocik+IrAZzCdzJuBs=;
+        b=AXhZ2qlT7uRFuDulE0HOXgryTP+7GSdxbBGhCsY1fbhixLqyVbyG4pIdIjDmoRzEaP
+         AKp4r6HYBs/H1fnMTARE7M9TkVudB7qc7fXqJLA6f7Eb53Nuh5YKavXtoKhn7dnFPyft
+         BUkgBlWcrqSoftlR+P9TMhFs9HQPyFnb0IW5Z9NpEWpAN5tCVkeRnV1WBk82uFVRqfyr
+         46XQWZQmXEdyw5aItmFBrqowaMM5ls11ZjjZAc2n4MYDCDIoDoj7EIB35TRAc2VwWdna
+         YPqNrCAcidvUqA9Gy0HH63SPNeOD3itTmkw0xcdp7Rghgs3A8o46jYkykOe+qYOzb29q
+         3a1g==
+X-Gm-Message-State: AOAM530Mg8Qv06nQWqJDR+boJt28Q6l3F93/xDCP24ElRsOU1O4Y0rmc
+        cQwaS7jTeGiyM5JAmv1GINk=
+X-Google-Smtp-Source: ABdhPJx6RK7QekcSJhCtPgsq4WyKnAmNS0Vif0ivK8GqYif0kzjdgiRloWKMja0iM+RMIh7hEWszHg==
+X-Received: by 2002:a63:f342:: with SMTP id t2mr21786819pgj.313.1600328187689;
+        Thu, 17 Sep 2020 00:36:27 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.179])
+        by smtp.gmail.com with ESMTPSA id 22sm5491834pfw.17.2020.09.17.00.36.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 00:36:27 -0700 (PDT)
+From:   zhuguangqing83@gmail.com
+To:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
         viresh.kumar@linaro.org, javi.merino@kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, zhuguangqing@xiaomi.com
+        rui.zhang@intel.com, amitk@kernel.org, rafael.j.wysocki@intel.com,
+        zhuguangqing@xiaomi.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200917060031.6566-1-zhuguangqing83@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <ff6e6aaa-3707-b320-0afe-d34118be4a2b@linaro.org>
-Date:   Thu, 17 Sep 2020 09:05:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200917060031.6566-1-zhuguangqing83@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Subject: [PATCH] thermal/idle_inject: Fix comment of idle_duration_us and name of latency_ns
+Date:   Thu, 17 Sep 2020 15:35:53 +0800
+Message-Id: <20200917073553.898-1-zhuguangqing83@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/09/2020 08:00, zhuguangqing83@gmail.com wrote:
-> From: zhuguangqing <zhuguangqing@xiaomi.com>
-> 
-> In the function cpuidle_cooling_set_cur_state(), if current_state is
-> not equal to state and both current_state and state are greater than
-> 0(scene 4 as follows), then maybe it should stop->start or restart
-> idle_inject.
+From: zhuguangqing <zhuguangqing@xiaomi.com>
 
-Sorry, I don't get it.
+The comment of idle_duration_us and the name of latency_ns can be misleading,
+so fix them.
 
-It is an update of the state, why do we need to restart the idle
-injection ? The state change will be automatically take into account by
-the idle injection code at the new injection cycle.
+Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
+---
+ drivers/thermal/cpuidle_cooling.c | 2 +-
+ include/linux/idle_inject.h       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> The scenes changed is as follows,
-> 
-> scene    current_state    state    action
->  1              0          >0       start
->  2              0          0        do nothing
->  3              >0         0        stop
->  4        >0 && !=state    >0       stop->start or restart
->  5        >0 && ==state    >0       do nothing
-> 
-> Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
-> ---
->  drivers/thermal/cpuidle_cooling.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
-> index 78e3e8238116..868919ad3dda 100644
-> --- a/drivers/thermal/cpuidle_cooling.c
-> +++ b/drivers/thermal/cpuidle_cooling.c
-> @@ -113,7 +113,7 @@ static int cpuidle_cooling_get_cur_state(struct thermal_cooling_device *cdev,
->  /**
->   * cpuidle_cooling_set_cur_state - Set the current cooling state
->   * @cdev: the thermal cooling device
-> - * @state: the target state
-> + * @state: the target state, max value is 100
->   *
->   * The function checks first if we are initiating the mitigation which
->   * in turn wakes up all the idle injection tasks belonging to the idle
-> @@ -130,6 +130,9 @@ static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->  	unsigned long current_state = idle_cdev->state;
->  	unsigned int runtime_us, idle_duration_us;
->  
-> +	if (state > 100 || current_state == state)
-> +		return 0;
-> +
->  	idle_cdev->state = state;
->  
->  	idle_inject_get_duration(ii_dev, &runtime_us, &idle_duration_us);
-> @@ -140,8 +143,11 @@ static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->  
->  	if (current_state == 0 && state > 0) {
->  		idle_inject_start(ii_dev);
-> -	} else if (current_state > 0 && !state)  {
-> +	} else if (current_state > 0 && !state) {
->  		idle_inject_stop(ii_dev);
-> +	} else {
-> +		idle_inject_stop(ii_dev);
-> +		idle_inject_start(ii_dev);
->  	}
->  
->  	return 0;
-> 
-
-
+diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
+index 78e3e8238116..7ecab4b16b29 100644
+--- a/drivers/thermal/cpuidle_cooling.c
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -30,7 +30,7 @@ static DEFINE_IDA(cpuidle_ida);
+ 
+ /**
+  * cpuidle_cooling_runtime - Running time computation
+- * @idle_duration_us: the idle cooling device
++ * @idle_duration_us: CPU idle time to inject in microseconds
+  * @state: a percentile based number
+  *
+  * The running duration is computed from the idle injection duration
+diff --git a/include/linux/idle_inject.h b/include/linux/idle_inject.h
+index 91a8612b8bf9..fb88e23a99d3 100644
+--- a/include/linux/idle_inject.h
++++ b/include/linux/idle_inject.h
+@@ -28,6 +28,6 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+ 				 unsigned int *idle_duration_us);
+ 
+ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
+-			     unsigned int latency_ns);
++			     unsigned int latency_us);
+ 
+ #endif /* __IDLE_INJECT_H__ */
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
