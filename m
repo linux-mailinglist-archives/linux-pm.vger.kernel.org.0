@@ -2,40 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B695A26EDBC
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4278D26F242
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729067AbgIRCQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Sep 2020 22:16:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47050 "EHLO mail.kernel.org"
+        id S1727009AbgIRC50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Sep 2020 22:57:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55092 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728842AbgIRCQz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:16:55 -0400
+        id S1727774AbgIRCGc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:06:32 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 514CC2399C;
-        Fri, 18 Sep 2020 02:16:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 359782399C;
+        Fri, 18 Sep 2020 02:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395411;
-        bh=WI/pjt1weQQ7po3ewfU8oddQZDYZsLZAP0LT5WBgph8=;
+        s=default; t=1600394788;
+        bh=ie++nir9f+2nD4AZK2bbGTkmWoKC3p+A/hsee9XYrIo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HuCFps+Q27K8r7KIYa1eKFSXxwAwtRLhVDZz1zdyg1/f1NDZb1QR2mkUM8tQoaRWN
-         Yiq6lKALP2y9BiJuOmkqkxtM4EU0vnbbV46cW3kevROIeZsXgItgWvWH3Z364ouEQl
-         423fpkGUYc4nM/6CFdJ3pQFrGKGZoNFRuCY+puSc=
+        b=iNTwE+dJ1g+apDM9ANSTT+zZagt7rz0Qn4+sshEB5NvLv3kTpboM+/SrlzgxRQzc4
+         7KugYqaBQGdGOxcYjLZduck+KvMQKl1u9mIqHtM2TgTmFbPLQCQqbpXNNp1bLtsdgR
+         Zhs+iUIWWaGVU7/zRiCz9WvLwMdgD58vWXkQqAmU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 06/64] PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-Date:   Thu, 17 Sep 2020 22:15:45 -0400
-Message-Id: <20200918021643.2067895-6-sashal@kernel.org>
+Cc:     Jonathan Bakker <xc-racer2@live.ca>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 259/330] power: supply: max17040: Correct voltage reading
+Date:   Thu, 17 Sep 2020 21:59:59 -0400
+Message-Id: <20200918020110.2063155-259-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021643.2067895-1-sashal@kernel.org>
-References: <20200918021643.2067895-1-sashal@kernel.org>
+In-Reply-To: <20200918020110.2063155-1-sashal@kernel.org>
+References: <20200918020110.2063155-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,45 +42,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Jonathan Bakker <xc-racer2@live.ca>
 
-[ Upstream commit 53b4b2aeee26f42cde5ff2a16dd0d8590c51a55a ]
+[ Upstream commit 0383024f811aa469df258039807810fc3793a105 ]
 
-There is another kHz-conversion bug in the code, resulting in integer
-overflow. Although, this time the resulting value is 4294966296 and it's
-close to ULONG_MAX, which is okay in this case.
+According to the datasheet available at (1), the bottom four
+bits are always zero and the actual voltage is 1.25x this value
+in mV.  Since the kernel API specifies that voltages should be in
+uV, it should report 1250x the shifted value.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+1) https://datasheets.maximintegrated.com/en/ds/MAX17040-MAX17041.pdf
+
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/devfreq/tegra-devfreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/power/supply/max17040_battery.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
-index 64a2e02b87d78..0b0de6a049afb 100644
---- a/drivers/devfreq/tegra-devfreq.c
-+++ b/drivers/devfreq/tegra-devfreq.c
-@@ -79,6 +79,8 @@
+diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+index 62499018e68bf..2e845045a3fc0 100644
+--- a/drivers/power/supply/max17040_battery.c
++++ b/drivers/power/supply/max17040_battery.c
+@@ -105,7 +105,7 @@ static void max17040_get_vcell(struct i2c_client *client)
  
- #define KHZ							1000
+ 	vcell = max17040_read_reg(client, MAX17040_VCELL);
  
-+#define KHZ_MAX						(ULONG_MAX / KHZ)
-+
- /* Assume that the bus is saturated if the utilization is 25% */
- #define BUS_SATURATION_RATIO					25
+-	chip->vcell = vcell;
++	chip->vcell = (vcell >> 4) * 1250;
+ }
  
-@@ -179,7 +181,7 @@ struct tegra_actmon_emc_ratio {
- };
- 
- static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
--	{ 1400000, ULONG_MAX },
-+	{ 1400000,    KHZ_MAX },
- 	{ 1200000,    750000 },
- 	{ 1100000,    600000 },
- 	{ 1000000,    500000 },
+ static void max17040_get_soc(struct i2c_client *client)
 -- 
 2.25.1
 
