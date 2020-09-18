@@ -2,80 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 146F1270609
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 22:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9244A2706A1
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 22:16:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbgIRUME (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Sep 2020 16:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52274 "EHLO
+        id S1726245AbgIRUQo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Sep 2020 16:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbgIRUMD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Sep 2020 16:12:03 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949E1C0613CE
-        for <linux-pm@vger.kernel.org>; Fri, 18 Sep 2020 13:12:03 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d19so3573963pld.0
-        for <linux-pm@vger.kernel.org>; Fri, 18 Sep 2020 13:12:03 -0700 (PDT)
+        with ESMTP id S1726801AbgIRUQf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Sep 2020 16:16:35 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C939EC0613D1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Sep 2020 13:16:34 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id bg9so3570186plb.2
+        for <linux-pm@vger.kernel.org>; Fri, 18 Sep 2020 13:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=WYax7v4NuEypPEvd+V/vHx29fv7IIwQqylMWYbQJGb4=;
-        b=g2nFX6vYp55iT9QkeDSx3oS1z2dptOcTFIaCgSCPj9ilpajYlt1BQD81Og5YUnR4Y+
-         XPil1W1fK1i2p1puAc5IWOIVCs15vliGXNejHzd9xjUQKCzUEX1V42FizDovyDQ/sLy2
-         Qj6rA5BIktF0J3kXMbgq8L25B0tQxU/nQsZgqtf8/3H4VoXLgzeJlmFQcjo4qlJSahap
-         58kOrc6zn1uLyOfDitW6o5GLwSVm6WlE5/X+TtGpWPlo+d4G3UR4wW2HCZ5ekK3/czw9
-         uqXWD2RadIBCXo8mgSvQwVv7/XSmVXuUMyRzvizhBeeT/bkNWLriRAEVz6/k+PDTopZY
-         +99Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QlEobsn16/HZPi69CSqOjUi/Ev9EOUolHVFIEzKh1d0=;
+        b=Cu+BpZsYq8xo9CmZFmG/NdGwNojdzVsgymJ7kwPPrUAXFQPK8a2QUlKtDn7250Ubsq
+         plsZB/YYcLbkYBS8Fq/z2z1q1m9j8gl7aq62B8HS5LW43k9v16edxNqYr+9NzmYfPrwn
+         cq3wH0uW3ZcHD+dQAGFM6XtXz5L8Whz3TAMDYANg0DmI7URKxbbhEg/Z+E3ypziJYKIE
+         Pl3V1a0gu2zK3U7nYqNgIrHK11iAYG9Ab3M+w85rCv4omr4G3nb9vgfmycboh9msEs/J
+         ZHKqAKtRD8ppiRYXdvvVXSOExckJPG6VuiDOsaqYC56jQptk8duFDsF5U/QXHIfEsi3b
+         RWlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=WYax7v4NuEypPEvd+V/vHx29fv7IIwQqylMWYbQJGb4=;
-        b=FGr7Wf7222IaLysefoAOubrhc5AU4+QRrknOq/oQvKV3hLcbyptwMAOUT+iA5Dlmir
-         656GntFc8wqytghgOg1tocBIyn7x//655thO/h1pVSR1W/d6uR0kn6AICiad7f+3CV9g
-         IbXlgJU50jxUQbNfJLYIXpk7gmbsemzQ/s4Fnn3sgqILBmdKpAoc9bifxHnt6NXO7nVG
-         U1ZGhlw7h12WfBePLp2nXToHP+ugeSe6uGGOozye2yCnjZe1YlS4LxCscBFjjXRv8jIm
-         6drWJxy3kUb1//j/ttz/BjoaExfKy9EjFlq6Ysi5u/uTvolkdvI3bqRbw73G8VqCHWtr
-         0+cg==
-X-Gm-Message-State: AOAM5300oiatGyCoKq1y2JrNNNcJ3tzWmlC+7nKGCObjrlnB5e8OoV85
-        4qvPQ3Oth4LAUzeyMHMUVHIcjg==
-X-Google-Smtp-Source: ABdhPJwSY0Hzmg5C+Z/FHs4BwlJgD3AAS3rxUQWe3xi7RXPELvqajT4QHxfxQkQWHWg43jTmhbkMfQ==
-X-Received: by 2002:a17:902:c206:b029:d1:e598:3fff with SMTP id 6-20020a170902c206b02900d1e5983fffmr17975673pll.57.1600459922118;
-        Fri, 18 Sep 2020 13:12:02 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QlEobsn16/HZPi69CSqOjUi/Ev9EOUolHVFIEzKh1d0=;
+        b=cVaQVCdQpbAaOExpR4DHRpcVDkPAp/eQS18yj5dF0X2HKtrhuEkeJd8ihBGkTVmD8P
+         ghX9TL4Xah+VMe7Uc3LrS4MytArKmSCmo43EL2+t6WV+ZfulSOSbsRXxzrLlNK6eEbCs
+         2mVr0la6usw1KeQPW624ND5z5FtM9w/sz2VLsXVXWavCve+tkN67zE1DmnaZEIxm0n6+
+         8gmZmm5zY1WXx15vtcl1CUj8YQf0+sImfxhDCWcfV3wYhTIH1ShCEvWmW2udLB1pnjrD
+         72cnoiMSHIvyc4JwMGnhjHJRJMeHW9QWP8voOzaEZ8QE+aeNv0kV4+DX4xPOYNg/jm7Q
+         g2Aw==
+X-Gm-Message-State: AOAM530ePa5p/bok92RPA303L+yMHgUs7bnSMEfVSPDG8jHNId6pTAoP
+        v0ZvCuVkaqHR/k+saCgfDto/v8ENH2FKRA==
+X-Google-Smtp-Source: ABdhPJz9LwXbQGxVwz/aszM2yl3QnXHYgNikKov8IUYXXvcoS7Yqu3Q6wxEn4QOq8Pb1IVtLyoyuUA==
+X-Received: by 2002:a17:90b:117:: with SMTP id p23mr14981324pjz.67.1600460194319;
+        Fri, 18 Sep 2020 13:16:34 -0700 (PDT)
 Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id p68sm4330181pfb.40.2020.09.18.13.12.01
+        by smtp.gmail.com with ESMTPSA id d25sm4095709pgl.23.2020.09.18.13.16.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2020 13:12:01 -0700 (PDT)
+        Fri, 18 Sep 2020 13:16:33 -0700 (PDT)
 From:   Kevin Hilman <khilman@baylibre.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Cc:     Niklas Cassel <nks@flawful.org>, Andy Gross <agross@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH -next] power: avs: qcom-cpr: simplify the return expression of cpr_disable()
-In-Reply-To: <20200915031714.GA670377@yoga>
-References: <20200915032629.1772569-1-liushixin2@huawei.com> <20200915031714.GA670377@yoga>
-Date:   Fri, 18 Sep 2020 13:12:00 -0700
-Message-ID: <7hwo0qdeun.fsf@baylibre.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: drop myself from PM AVS drivers
+Date:   Fri, 18 Sep 2020 13:16:33 -0700
+Message-Id: <20200918201633.27017-1-khilman@baylibre.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Bjorn Andersson <bjorn.andersson@linaro.org> writes:
+I haven't had the time or the expertise to adequately review and
+maintain these drivers for awhile, so make it official.
 
-> On Mon 14 Sep 22:26 CDT 2020, Liu Shixin wrote:
->
->> Simplify the return expression.
->> 
->> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
->
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+---
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
-Acked-by: Kevin Hilman <khilman@baylibre.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index deaafb617361..f1bf6071c438 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -5361,7 +5361,6 @@ F:	include/linux/kobj*
+ F:	lib/kobj*
+ 
+ DRIVERS FOR ADAPTIVE VOLTAGE SCALING (AVS)
+-M:	Kevin Hilman <khilman@kernel.org>
+ M:	Nishanth Menon <nm@ti.com>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+-- 
+2.28.0
 
-Rafael, please apply directly.
