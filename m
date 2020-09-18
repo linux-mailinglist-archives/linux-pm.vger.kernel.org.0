@@ -2,95 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B664D270187
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 18:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FABB2702B2
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 18:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726335AbgIRQCM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Sep 2020 12:02:12 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:33602 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbgIRQCL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Sep 2020 12:02:11 -0400
-Received: by mail-oi1-f196.google.com with SMTP id m7so7616436oie.0;
-        Fri, 18 Sep 2020 09:02:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CLWLadygFzbacUrStlzsUwiQts54prWGYIH+pDEwe0A=;
-        b=dYrQVj2rSXLlWEWNr3I6U+LMUuW6xJDLNKqC4E7FszQEKpmQFodheM4yINYXSj//4h
-         NM1YRX+jum28PBQ41gM6/AMWC6ktoTFS+vbC0ZsBf0C4IZ81/JqC5U2qN3teCiFXUYF5
-         aMclzO4ylo+9ObumQp7O9zxoLga6nGnBAjVLRmBYZpb/W4WDJqFpCAqekLFudl8uIdrm
-         iZUoM+rZjj0dL8lXgqx86r2BiWszlUMFR0hF+gMXinVjoY1ajYGpU2/qz0vmVrtWtfIe
-         8vjRzXOjFrQek3EfiMKb3Z/THPKF02ZimCEIjh1aIrjZpTT3i80ps+NArBlU9whzMuCi
-         Hx5A==
-X-Gm-Message-State: AOAM532srrIyMv6hz9hJYp9Xi/nPRaCXHbVFToX9G1562zLHtuxhlyrr
-        u1M6ZZNVFkSe2LSw/75VDYwvB4h7zT4a159QT1I=
-X-Google-Smtp-Source: ABdhPJygTxTyjBXaRmjiZjnzUB9+LiiCBE3DDYWxmdEXB/AZO3s12ola6t96FwD5p8jaLrRmcTTRjtSYPzdoh/tzvoc=
-X-Received: by 2002:aca:df84:: with SMTP id w126mr10401882oig.103.1600444930764;
- Fri, 18 Sep 2020 09:02:10 -0700 (PDT)
+        id S1726290AbgIRQzk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Sep 2020 12:55:40 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:50760 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbgIRQzj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Sep 2020 12:55:39 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08IGtSFe031511;
+        Fri, 18 Sep 2020 11:55:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1600448128;
+        bh=dnBBdBAJkrSU9mR6n8dkW+xkv8/EHY+JavGeJ3J8HS0=;
+        h=From:To:CC:Subject:Date;
+        b=Zj2XpPaWnkRn/SrR8zK+9qULZOzS/nbS0pLie9aCUY+TvM8Xc4RvCXJUBIRQa1bL9
+         ipZ2deeSmyK8V5gyycqcIj8+TfGpOiORTOe2KdsvRqXIbSAEmkn8meDGuwfSTe718q
+         rd8+v2bTjqG+4JW0FtkeTtM9fmaF5WPDIp9ARq/U=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08IGtSl2039017;
+        Fri, 18 Sep 2020 11:55:28 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 18
+ Sep 2020 11:55:27 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 18 Sep 2020 11:55:27 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08IGtQDc106420;
+        Fri, 18 Sep 2020 11:55:27 -0500
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+CC:     Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        <linux-kernel@vger.kernel.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>
+Subject: [PATCH] pm: runtime: fix timer_expires on 32bits arch
+Date:   Fri, 18 Sep 2020 19:55:18 +0300
+Message-ID: <20200918165518.23246-1-grygorii.strashko@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20200917165720.3285256-1-hch@lst.de> <20200917165720.3285256-14-hch@lst.de>
-In-Reply-To: <20200917165720.3285256-14-hch@lst.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 18 Sep 2020 18:01:59 +0200
-Message-ID: <CAJZ5v0jAQnEHedZs7kQmfHx4KTw9G1wrObuEpid_m5uVk5qoJQ@mail.gmail.com>
-Subject: Re: [PATCH 13/14] PM: mm: cleanup swsusp_swap_check
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        nbd@other.debian.org,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-block@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 7:39 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> Use blkdev_get_by_dev instead of bdget + blkdev_get.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+The commit 8234f6734c5d ("PM-runtime: Switch autosuspend over to using
+hrtimers") switched PM runtime autosuspend to use hrtimers and all related
+time accounting in ns, but missed update the struct
+dev_pm_info->timer_expires to u64. This causes timer_expires value to be
+truncated on 32bits architectures when assignment is done from u64 values:
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+rpm_suspend()
+|- dev->power.timer_expires = expires;
 
-> ---
->  kernel/power/swap.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 9d3ffbfe08dbf6..71385bedcc3a49 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -343,12 +343,10 @@ static int swsusp_swap_check(void)
->                 return res;
->         root_swap = res;
->
-> -       hib_resume_bdev = bdget(swsusp_resume_device);
-> -       if (!hib_resume_bdev)
-> -               return -ENOMEM;
-> -       res = blkdev_get(hib_resume_bdev, FMODE_WRITE, NULL);
-> -       if (res)
-> -               return res;
-> +       hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device, FMODE_WRITE,
-> +                       NULL);
-> +       if (IS_ERR(hib_resume_bdev))
-> +               return PTR_ERR(hib_resume_bdev);
->
->         res = set_blocksize(hib_resume_bdev, PAGE_SIZE);
->         if (res < 0)
-> --
-> 2.28.0
->
+Hence, fix it by changing timer_expires type to u64.
+
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Fixes: 8234f6734c5d ("PM-runtime: Switch autosuspend over to using hrtimers")
+Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+---
+ include/linux/pm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index a30a4b54df52..47aca6bac1d6 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -590,7 +590,7 @@ struct dev_pm_info {
+ #endif
+ #ifdef CONFIG_PM
+ 	struct hrtimer		suspend_timer;
+-	unsigned long		timer_expires;
++	u64			timer_expires;
+ 	struct work_struct	work;
+ 	wait_queue_head_t	wait_queue;
+ 	struct wake_irq		*wakeirq;
+-- 
+2.17.1
+
