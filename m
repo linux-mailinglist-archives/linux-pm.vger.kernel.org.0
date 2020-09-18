@@ -2,37 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C070826EE99
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFE626EE23
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbgIRC3a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Sep 2020 22:29:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43810 "EHLO mail.kernel.org"
+        id S1729330AbgIRC0W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Sep 2020 22:26:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45036 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729173AbgIRCPH (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:15:07 -0400
+        id S1729325AbgIRCQD (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:16:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61130239A1;
-        Fri, 18 Sep 2020 02:15:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C047023718;
+        Fri, 18 Sep 2020 02:16:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395303;
-        bh=z6WH/dxbI5lzFkCLiIYwfprIJLDsUsAMekmZzPTs7iQ=;
+        s=default; t=1600395362;
+        bh=pZdPBhjCbkeixyqGuvLsmWtPpZc48xi+WJ8qgdxG2Xc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vAttXVLKoCfIomZQHtNBjVhqAGB2cRNHSRugASytujjbCh0bLNIVNFurzK5gSxvbQ
-         lyjqFgakh1DhMyUexqaEptrwkra+hrKBYa5LIqsYnrQOKDLq6DjYw9shQGxNEwfxSg
-         AeRxvhqeuIaX+h1/EEI7FtoeDpbe780ffU6pHfzI=
+        b=W4fadeB5a9bjVNEpBUjUx3W5xbGBClJVuSHvfclxaxIQcDtTpdTVAFY9y0r9UWUO6
+         dArpDM4jOUegSgg5uhSgmlqVeciUQywQCGx3L0kt2ZQ4UyHaK5L0OoktEirQO4gjht
+         q05B1sPZ5f8dNlkOkHAtiPlkMpTk/ryJP1pZqjJM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 06/90] PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-Date:   Thu, 17 Sep 2020 22:13:31 -0400
-Message-Id: <20200918021455.2067301-6-sashal@kernel.org>
+Cc:     Pratik Rajesh Sampat <psampat@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 56/90] cpufreq: powernv: Fix frame-size-overflow in powernv_cpufreq_work_fn
+Date:   Thu, 17 Sep 2020 22:14:21 -0400
+Message-Id: <20200918021455.2067301-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200918021455.2067301-1-sashal@kernel.org>
 References: <20200918021455.2067301-1-sashal@kernel.org>
@@ -44,45 +43,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Pratik Rajesh Sampat <psampat@linux.ibm.com>
 
-[ Upstream commit 53b4b2aeee26f42cde5ff2a16dd0d8590c51a55a ]
+[ Upstream commit d95fe371ecd28901f11256c610b988ed44e36ee2 ]
 
-There is another kHz-conversion bug in the code, resulting in integer
-overflow. Although, this time the resulting value is 4294966296 and it's
-close to ULONG_MAX, which is okay in this case.
+The patch avoids allocating cpufreq_policy on stack hence fixing frame
+size overflow in 'powernv_cpufreq_work_fn'
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: 227942809b52 ("cpufreq: powernv: Restore cpu frequency to policy->cur on unthrottling")
+Signed-off-by: Pratik Rajesh Sampat <psampat@linux.ibm.com>
+Reviewed-by: Daniel Axtens <dja@axtens.net>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20200316135743.57735-1-psampat@linux.ibm.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/devfreq/tegra-devfreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/cpufreq/powernv-cpufreq.c | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
-index fe9dce0245bf0..a20267d93f8a4 100644
---- a/drivers/devfreq/tegra-devfreq.c
-+++ b/drivers/devfreq/tegra-devfreq.c
-@@ -79,6 +79,8 @@
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+index b4fc65512aad3..c3b05676e0dbe 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -802,6 +802,7 @@ static struct notifier_block powernv_cpufreq_reboot_nb = {
+ void powernv_cpufreq_work_fn(struct work_struct *work)
+ {
+ 	struct chip *chip = container_of(work, struct chip, throttle);
++	struct cpufreq_policy *policy;
+ 	unsigned int cpu;
+ 	cpumask_t mask;
  
- #define KHZ							1000
+@@ -816,12 +817,14 @@ void powernv_cpufreq_work_fn(struct work_struct *work)
+ 	chip->restore = false;
+ 	for_each_cpu(cpu, &mask) {
+ 		int index;
+-		struct cpufreq_policy policy;
  
-+#define KHZ_MAX						(ULONG_MAX / KHZ)
-+
- /* Assume that the bus is saturated if the utilization is 25% */
- #define BUS_SATURATION_RATIO					25
- 
-@@ -179,7 +181,7 @@ struct tegra_actmon_emc_ratio {
- };
- 
- static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
--	{ 1400000, ULONG_MAX },
-+	{ 1400000,    KHZ_MAX },
- 	{ 1200000,    750000 },
- 	{ 1100000,    600000 },
- 	{ 1000000,    500000 },
+-		cpufreq_get_policy(&policy, cpu);
+-		index = cpufreq_table_find_index_c(&policy, policy.cur);
+-		powernv_cpufreq_target_index(&policy, index);
+-		cpumask_andnot(&mask, &mask, policy.cpus);
++		policy = cpufreq_cpu_get(cpu);
++		if (!policy)
++			continue;
++		index = cpufreq_table_find_index_c(policy, policy->cur);
++		powernv_cpufreq_target_index(policy, index);
++		cpumask_andnot(&mask, &mask, policy->cpus);
++		cpufreq_cpu_put(policy);
+ 	}
+ out:
+ 	put_online_cpus();
 -- 
 2.25.1
 
