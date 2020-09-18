@@ -2,87 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9C326EFC3
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3B926F03D
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727561AbgIRCiA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Sep 2020 22:38:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38814 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727309AbgIRCMa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:12:30 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E51022395C;
-        Fri, 18 Sep 2020 02:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600395149;
-        bh=Kvg4TYtCRyYFiO+X6QdpTQiPvFHaswMRec8XtHXSmN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LFbE9k+i2w563HolCNKfu72VmXle8l0O+rtlkxEEnY4ifvDUSA/pwLACXrOdyoVCM
-         +gR0g1JOpQtKoO0aSCHqcIXAetZ2IBuwU6SwkbquTUaLfmkZfi/pZ0/rc868rR1fyt
-         6XuGxEorVZcF6uT30OSWf9Eghh/XGRVd60bA5mrI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 008/127] PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-Date:   Thu, 17 Sep 2020 22:10:21 -0400
-Message-Id: <20200918021220.2066485-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200918021220.2066485-1-sashal@kernel.org>
-References: <20200918021220.2066485-1-sashal@kernel.org>
+        id S1729852AbgIRCl7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Sep 2020 22:41:59 -0400
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:54714 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728575AbgIRCLO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Sep 2020 22:11:14 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0U9Gue2N_1600395067;
+Received: from JosephdeMacBook-Pro.local(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0U9Gue2N_1600395067)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 18 Sep 2020 10:11:07 +0800
+Subject: Re: [PATCH 09/14] ocfs2: cleanup o2hb_region_dev_store
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, nbd@other.debian.org,
+        linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org
+References: <20200917165720.3285256-1-hch@lst.de>
+ <20200917165720.3285256-10-hch@lst.de>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+Message-ID: <1c8a3a5a-aa59-f30e-4865-6777436c4225@linux.alibaba.com>
+Date:   Fri, 18 Sep 2020 10:11:07 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200917165720.3285256-10-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
 
-[ Upstream commit 53b4b2aeee26f42cde5ff2a16dd0d8590c51a55a ]
 
-There is another kHz-conversion bug in the code, resulting in integer
-overflow. Although, this time the resulting value is 4294966296 and it's
-close to ULONG_MAX, which is okay in this case.
+On 2020/9/18 00:57, Christoph Hellwig wrote:
+> Use blkdev_get_by_dev instead of igrab (aka open coded bdgrab) +
+> blkdev_get.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/devfreq/tegra-devfreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Reviewed-by: Joseph Qi <joseph.qi@linux.alibaba.com>
 
-diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
-index 6627a7dce95c4..f6a2dd6b188fa 100644
---- a/drivers/devfreq/tegra-devfreq.c
-+++ b/drivers/devfreq/tegra-devfreq.c
-@@ -79,6 +79,8 @@
- 
- #define KHZ							1000
- 
-+#define KHZ_MAX						(ULONG_MAX / KHZ)
-+
- /* Assume that the bus is saturated if the utilization is 25% */
- #define BUS_SATURATION_RATIO					25
- 
-@@ -179,7 +181,7 @@ struct tegra_actmon_emc_ratio {
- };
- 
- static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
--	{ 1400000, ULONG_MAX },
-+	{ 1400000,    KHZ_MAX },
- 	{ 1200000,    750000 },
- 	{ 1100000,    600000 },
- 	{ 1000000,    500000 },
--- 
-2.25.1
-
+> ---
+>  fs/ocfs2/cluster/heartbeat.c | 28 ++++++++++------------------
+>  1 file changed, 10 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/ocfs2/cluster/heartbeat.c b/fs/ocfs2/cluster/heartbeat.c
+> index 89d13e0705fe7b..0179a73a3fa2c4 100644
+> --- a/fs/ocfs2/cluster/heartbeat.c
+> +++ b/fs/ocfs2/cluster/heartbeat.c
+> @@ -1766,7 +1766,6 @@ static ssize_t o2hb_region_dev_store(struct config_item *item,
+>  	int sectsize;
+>  	char *p = (char *)page;
+>  	struct fd f;
+> -	struct inode *inode;
+>  	ssize_t ret = -EINVAL;
+>  	int live_threshold;
+>  
+> @@ -1793,20 +1792,16 @@ static ssize_t o2hb_region_dev_store(struct config_item *item,
+>  	    reg->hr_block_bytes == 0)
+>  		goto out2;
+>  
+> -	inode = igrab(f.file->f_mapping->host);
+> -	if (inode == NULL)
+> +	if (!S_ISBLK(f.file->f_mapping->host->i_mode))
+>  		goto out2;
+>  
+> -	if (!S_ISBLK(inode->i_mode))
+> -		goto out3;
+> -
+> -	reg->hr_bdev = I_BDEV(f.file->f_mapping->host);
+> -	ret = blkdev_get(reg->hr_bdev, FMODE_WRITE | FMODE_READ, NULL);
+> -	if (ret) {
+> +	reg->hr_bdev = blkdev_get_by_dev(f.file->f_mapping->host->i_rdev,
+> +					 FMODE_WRITE | FMODE_READ, NULL);
+> +	if (IS_ERR(reg->hr_bdev)) {
+> +		ret = PTR_ERR(reg->hr_bdev);
+>  		reg->hr_bdev = NULL;
+> -		goto out3;
+> +		goto out2;
+>  	}
+> -	inode = NULL;
+>  
+>  	bdevname(reg->hr_bdev, reg->hr_dev_name);
+>  
+> @@ -1909,16 +1904,13 @@ static ssize_t o2hb_region_dev_store(struct config_item *item,
+>  		       config_item_name(&reg->hr_item), reg->hr_dev_name);
+>  
+>  out3:
+> -	iput(inode);
+> +	if (ret < 0) {
+> +		blkdev_put(reg->hr_bdev, FMODE_READ | FMODE_WRITE);
+> +		reg->hr_bdev = NULL;
+> +	}
+>  out2:
+>  	fdput(f);
+>  out:
+> -	if (ret < 0) {
+> -		if (reg->hr_bdev) {
+> -			blkdev_put(reg->hr_bdev, FMODE_READ|FMODE_WRITE);
+> -			reg->hr_bdev = NULL;
+> -		}
+> -	}
+>  	return ret;
+>  }
+>  
+> 
