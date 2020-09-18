@@ -2,41 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C441F26F18A
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAAD26F08F
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Sep 2020 04:44:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728248AbgIRCwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Sep 2020 22:52:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59486 "EHLO mail.kernel.org"
+        id S1728451AbgIRCK0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Sep 2020 22:10:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727431AbgIRCIU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 17 Sep 2020 22:08:20 -0400
+        id S1728443AbgIRCKZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 17 Sep 2020 22:10:25 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C541238E3;
-        Fri, 18 Sep 2020 02:08:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E57EB238E6;
+        Fri, 18 Sep 2020 02:10:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600394900;
-        bh=UjL3BskRwLRof0uTzYp0icPKMM6aheG/65eSWsggAEc=;
+        s=default; t=1600395024;
+        bh=Ne3dh4tylcpIqw3gc57sWDEHi9qpHguAfHHfpVuiAqo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=riCtRqsKPDtNtScxjJGErn5WCALM/dl/FVdO9MbeI+Up8Nx8YHxALG85RVuQKCuu6
-         BD3mSboxrGQ5UQlDZSBJbszqqaJCyhu8YaZJTlNKV2LgV+uLD3ZBEJ69bXR3Sqyw3B
-         nvNLPosD9XJR2VA4So6J3O/c2nztwFOtrTHwWCJ0=
+        b=gCihhU9k8CGy/UgI9kMu+73WG1nN4My+d1x6i00QtNh+0IqhjAbDk5WrAHQnzI/5O
+         0WspJOkn46alP/vlLMD6EKUQUw02rtRHYMe2qHG3ZU1iFFKGJekayoSCf2RDcOSMow
+         1QrR/C4MAG5hjh09cnefMaQGb4ZePAc8+U7syYk8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 014/206] PM / devfreq: tegra30: Fix integer overflow on CPU's freq max out
-Date:   Thu, 17 Sep 2020 22:04:50 -0400
-Message-Id: <20200918020802.2065198-14-sashal@kernel.org>
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 118/206] thermal: rcar_thermal: Handle probe error gracefully
+Date:   Thu, 17 Sep 2020 22:06:34 -0400
+Message-Id: <20200918020802.2065198-118-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200918020802.2065198-1-sashal@kernel.org>
 References: <20200918020802.2065198-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,45 +45,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Dmitry Osipenko <digetx@gmail.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 53b4b2aeee26f42cde5ff2a16dd0d8590c51a55a ]
+[ Upstream commit 39056e8a989ef52486e063e34b4822b341e47b0e ]
 
-There is another kHz-conversion bug in the code, resulting in integer
-overflow. Although, this time the resulting value is 4294966296 and it's
-close to ULONG_MAX, which is okay in this case.
+If the common register memory resource is not available the driver needs
+to fail gracefully to disable PM. Instead of returning the error
+directly store it in ret and use the already existing error path.
 
-Reviewed-by: Chanwoo Choi <cw00.choi@samsung.com>
-Tested-by: Peter Geis <pgwipeout@gmail.com>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Link: https://lore.kernel.org/r/20200310114709.1483860-1-niklas.soderlund+renesas@ragnatech.se
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/devfreq/tegra-devfreq.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/thermal/rcar_thermal.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/devfreq/tegra-devfreq.c b/drivers/devfreq/tegra-devfreq.c
-index 06768074d2d82..479d9575e1245 100644
---- a/drivers/devfreq/tegra-devfreq.c
-+++ b/drivers/devfreq/tegra-devfreq.c
-@@ -80,6 +80,8 @@
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index 4dc30e7890f6c..140386d7c75a3 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -505,8 +505,10 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+ 			res = platform_get_resource(pdev, IORESOURCE_MEM,
+ 						    mres++);
+ 			common->base = devm_ioremap_resource(dev, res);
+-			if (IS_ERR(common->base))
+-				return PTR_ERR(common->base);
++			if (IS_ERR(common->base)) {
++				ret = PTR_ERR(common->base);
++				goto error_unregister;
++			}
  
- #define KHZ							1000
- 
-+#define KHZ_MAX						(ULONG_MAX / KHZ)
-+
- /* Assume that the bus is saturated if the utilization is 25% */
- #define BUS_SATURATION_RATIO					25
- 
-@@ -180,7 +182,7 @@ struct tegra_actmon_emc_ratio {
- };
- 
- static struct tegra_actmon_emc_ratio actmon_emc_ratios[] = {
--	{ 1400000, ULONG_MAX },
-+	{ 1400000,    KHZ_MAX },
- 	{ 1200000,    750000 },
- 	{ 1100000,    600000 },
- 	{ 1000000,    500000 },
+ 			idle = 0; /* polling delay is not needed */
+ 		}
 -- 
 2.25.1
 
