@@ -2,56 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B78A270ACD
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 07:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E41270C15
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 11:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbgISFP0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Sep 2020 01:15:26 -0400
-Received: from verein.lst.de ([213.95.11.211]:34874 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgISFP0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 19 Sep 2020 01:15:26 -0400
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 811BE68BEB; Sat, 19 Sep 2020 07:15:20 +0200 (CEST)
-Date:   Sat, 19 Sep 2020 07:15:20 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>,
+        id S1726097AbgISJG0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Sep 2020 05:06:26 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:38222 "EHLO
+        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgISJG0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Sep 2020 05:06:26 -0400
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 692B51C0B85; Sat, 19 Sep 2020 11:06:22 +0200 (CEST)
+Date:   Sat, 19 Sep 2020 11:06:22 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
         Minchan Kim <minchan@kernel.org>,
         Stefan Haberland <sth@linux.ibm.com>,
         Jan Hoeppner <hoeppner@linux.ibm.com>,
         Joseph Qi <joseph.qi@linux.alibaba.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Len Brown <len.brown@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, nbd@other.debian.org,
         linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
         linux-pm@vger.kernel.org, linux-mm@kvack.org,
         linux-block@vger.kernel.org
-Subject: Re: [PATCH 02/14] block: switch register_disk to use
- blkdev_get_by_dev
-Message-ID: <20200919051520.GA7070@lst.de>
-References: <20200917165720.3285256-1-hch@lst.de> <20200917165720.3285256-3-hch@lst.de> <091931b1-eb9c-e45e-c9e8-501554618508@gmail.com>
+Subject: Re: [PATCH 11/14] PM: rewrite is_hibernate_resume_dev to not require
+ an inode
+Message-ID: <20200919090622.GA12294@duo.ucw.cz>
+References: <20200917165720.3285256-1-hch@lst.de>
+ <20200917165720.3285256-12-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
 Content-Disposition: inline
-In-Reply-To: <091931b1-eb9c-e45e-c9e8-501554618508@gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20200917165720.3285256-12-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 11:52:39AM +0300, Sergei Shtylyov wrote:
-> Hello!
->
-> On 17.09.2020 19:57, Christoph Hellwig wrote:
->
->> Use blkdev_get_by_dev instead of open coding it using bdget_disk +
->> blkdev_get.
->
->    I don't see where you are removing bdget_disk() call (situated just before
-> the below code?)...
 
-Indeed.  That's what you get for a messy last minute rebase.. :(
+--9jxsPFA5p3P2qPhR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu 2020-09-17 18:57:17, Christoph Hellwig wrote:
+> Just check the dev_t to help simplifying the code.
+>=20
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+Acked-by: Pavel Machek <pavel@ucw.cz>
+
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--9jxsPFA5p3P2qPhR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2XKDgAKCRAw5/Bqldv6
+8iT+AKCdeHs2MkV4o38Cq3BJ5Qkr4r6UYACfUFtBKvg5a5MldciJ6HjtHFepxI8=
+=mDoa
+-----END PGP SIGNATURE-----
+
+--9jxsPFA5p3P2qPhR--
