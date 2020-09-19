@@ -2,89 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4C32708EC
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 00:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DD8270ABE
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 06:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726154AbgIRWZe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Sep 2020 18:25:34 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:41310 "EHLO
-        jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726134AbgIRWZe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Sep 2020 18:25:34 -0400
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id C90C91C0B78; Sat, 19 Sep 2020 00:25:31 +0200 (CEST)
-Date:   Sat, 19 Sep 2020 00:25:31 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Roman Kiryanov <rkir@google.com>
-Cc:     Borislav Petkov <bp@alien8.de>, rjw@rjwysocki.net,
-        Thomas Gleixner <tglx@linutronix.de>, mingo@redhat.com,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alistair Delva <adelva@google.com>,
-        Haitao Shan <hshan@google.com>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] arch: x86: power: cpu: init %gs before
- __restore_processor_state (clang)
-Message-ID: <20200918222531.GD7443@duo.ucw.cz>
-References: <20200915172658.1432732-1-rkir@google.com>
- <20200915174643.GT14436@zn.tnic>
- <CAOGAQepp_1QXrNAAXbLpW8qrujfdszfU2rMoh804wKK-Ja66Yw@mail.gmail.com>
- <20200915182730.GW14436@zn.tnic>
- <CAOGAQeqhKS48Kd8W4y13ATT3m+nJSksF_U1SJ=SBrOZFrDq9Nw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="RhUH2Ysw6aD5utA4"
-Content-Disposition: inline
-In-Reply-To: <CAOGAQeqhKS48Kd8W4y13ATT3m+nJSksF_U1SJ=SBrOZFrDq9Nw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1726097AbgISEri (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Sep 2020 00:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbgISEri (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Sep 2020 00:47:38 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183D2C0613CE;
+        Fri, 18 Sep 2020 21:47:38 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id w7so4770848pfi.4;
+        Fri, 18 Sep 2020 21:47:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=1+rk0Yb85QwC2uyvEMI2pDfEImVWuhSTx15aUUDMpOg=;
+        b=g68ExC3d9sovA7VmyWcDsPBMqHLhWKIcTFcUEh81MmXMOmBeXLI+hrsu9m0+TigiBP
+         NIgJqjlM+/+FuFhr8ViyzlhzcJeD657/l7K8CuGHZezozE0OZqDlb+MbgD5yswpO1ock
+         rQAY0kjdwRrF/rprigJCIZJLo/fWuERSw3ypQMLfPqk5r0TOqbwO8xlZNR0lID4Xo8iz
+         NvambGcH03EvjQKtkp9Srpq+foceEKzm4joXMW7/wNnvD9VeQotQK7m7VKeByi58FNb1
+         THzC0RXxta02G/tn9uuwA9+ppOcER5tLTeFAs+EPWSLQ5NC+f/GkPlzN85ckrZtFQ4pr
+         vXbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=1+rk0Yb85QwC2uyvEMI2pDfEImVWuhSTx15aUUDMpOg=;
+        b=kBPD6oFCJvlU+vbXT2Ql3rztVVCWvKXFwLfLSbHiM1D4nkoXCPki77bV5kTdFoTM2K
+         ckulSMtN0vcwdI9TcL7xgJfV/ykRdU1hnv/3CVz9yIcI9GGLUQBtSkZch3ilJ7oUYjZE
+         grCvhEpvEuze7/5xBzC6aRTxUEjEj811zo5XAy0q1THLrzQYZluPBi7e/59sl4/7R14j
+         tKCVOdoABkIpAl7wK3aZxReMveWJjgP2ZFc544eEogQKlgYJ6qrIz3ZXr0HSUF6tmfU8
+         wP/QoARN/yoUo7zaEzBjDx8LyaX9U1TrwDl6NmE5vwS+h9aWnxfvpk3hsZRirmLWRxox
+         L/IQ==
+X-Gm-Message-State: AOAM5314No4Ny12PD8XPRnH0stS3N8cxIXxlSowRNm4Wm0Crqp4cqFPc
+        zoZ1lspSFpbvxM360WriUsc=
+X-Google-Smtp-Source: ABdhPJzV2XSt7/1TMMaL54a+Y5LNWcvRNGgkfwWflY4O11w6GSTD+hw4JUMFpUvEXav4NghtsSpWBQ==
+X-Received: by 2002:a05:6a00:15c8:b029:142:2501:35ca with SMTP id o8-20020a056a0015c8b0290142250135camr19183086pfu.42.1600490857573;
+        Fri, 18 Sep 2020 21:47:37 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.179])
+        by smtp.gmail.com with ESMTPSA id h35sm4718339pgl.31.2020.09.18.21.47.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2020 21:47:37 -0700 (PDT)
+From:   zhuguangqing83@gmail.com
+To:     amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, javi.merino@kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing <zhuguangqing@xiaomi.com>
+Subject: [PATCH] thermal/drivers/cpuidle_cooling: Change the latency limit
+Date:   Sat, 19 Sep 2020 12:47:25 +0800
+Message-Id: <20200919044725.2148-1-zhuguangqing83@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: zhuguangqing <zhuguangqing@xiaomi.com>
 
---RhUH2Ysw6aD5utA4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The injected idle duration must be greater than the wake up latency
+(entry + exit latency) or the idle state target residency (or  min
+residency), otherwise we end up consuming more energy and potentially
+invert the mitigation effect.
 
-On Tue 2020-09-15 11:36:13, Roman Kiryanov wrote:
-> On Tue, Sep 15, 2020 at 11:27 AM Borislav Petkov <bp@alien8.de> wrote:
-> > > I believe the kernel makes a questionable assumption on how clang
-> > > uses registers (gs will not be used if stack protection is disabled).
-> > > Both kernel and clang behaves unfortunate here.
-> >
-> > If the kernel is at fault here and this same thing happens with GCC,
-> > sure, but this is a clang-specific fix.
->=20
-> This is fair. Unfortunately I am not an x86 asm expert. I expect the prop=
-er
-> fix should land into arch/x86/kernel/acpi/wakeup_64.S to init %gs
-> (maybe some more registers) before "jmp restore_processor_state".
+In function idle_inject_fn(), we call play_idle_precise() to specify
+a latency limit which is finally used in find_deepest_state() to find
+the deepest idle state. Although the latency limit is compared with
+s->exit_latency_ns in find_deepest_state(), it should not be exit
+latency, but the idle duraion minus entry latency which can ensure
+that the injected idle duration is greater than the wake up latency
+(entry + exit latency).
 
-That would certainly be nicer / more acceptable solution than patch
-being proposed here.
+There are two timers in idle inject process, the length of the first
+timer (timer_1) is idle duration, and the length of the second timer
+(timer_2) is idle duration plus run duration. When timer_2 expires,
+it's restarted and idle_inject_timer_fn() is called and it wakes up
+idle injection tasks associated with the timer and they, in turn,
+invoke play_idle_precise() to inject a specified amount (idle duration)
+of CPU idle time. The major functions called are as follows:
 
-Code was written with assumption compiler random C code would not use
-%gs. If that's no longer true, fixing it in wakeup_64.S _with comments
-explaining what goes on_ might be solution.
+play_idle_precise() ->
+ do_idle() ->
+  cpuidle_idle_call() ->
+   cpuidle_find_deepest_state() ->
+    find_deepest_state()
 
-Best regards,
-									Pavel
+When we call find_deepest_state(), some time has been consumed from
+the beginning of the idle duration which could be considered the
+entry latency approximately, so the latency limit should be the idle
+duraion minus entry latency which can ensure that the injected idle
+duration is greater than the wake up latency (entry + exit latency).
 
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+Here are two sample scenes,
+scene   entry latency(us)    exit latency(us)    idle duration(us)
+1            500                     600               1000
+2            500                     600               3000
 
---RhUH2Ysw6aD5utA4
-Content-Type: application/pgp-signature; name="signature.asc"
+In scene 1, if we use exit latency (600us) for the latency limit,
+we may find a idle state which has a exit latency equal to or less
+than 600us, suppose the idle state's exit latency is equal to 600us,
+then the wake up latency (entry + exit latency) is greater than idle
+duration.
 
------BEGIN PGP SIGNATURE-----
+In scene 2, if we use exit latency (600us) for the latency limit,
+we may also find a idle state which has a exit latency equal to
+600us. But if we use the idle duraion minus entry latency
+(3000 - 500 = 2500us), we can find a deeper idle state to save
+more power in idle duration.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCX2Uz2wAKCRAw5/Bqldv6
-8kNgAKCjTg2A11mig0JlRnhrDpMSV8Je1gCgu1Podyh1Zl2y7FFnMx3zbtS9RV0=
-=9X7o
------END PGP SIGNATURE-----
+Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
+---
+ drivers/thermal/cpuidle_cooling.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
---RhUH2Ysw6aD5utA4--
+diff --git a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
+index 78e3e8238116..6f78c7816fcc 100644
+--- a/drivers/thermal/cpuidle_cooling.c
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -174,6 +174,7 @@ static int __cpuidle_cooling_register(struct device_node *np,
+ 	struct idle_inject_device *ii_dev;
+ 	struct cpuidle_cooling_device *idle_cdev;
+ 	struct thermal_cooling_device *cdev;
++	unsigned int entry_latency_us;
+ 	unsigned int idle_duration_us = TICK_USEC;
+ 	unsigned int latency_us = UINT_MAX;
+ 	char dev_name[THERMAL_NAME_LENGTH];
+@@ -198,7 +199,9 @@ static int __cpuidle_cooling_register(struct device_node *np,
+ 	}
+ 
+ 	of_property_read_u32(np, "duration-us", &idle_duration_us);
+-	of_property_read_u32(np, "exit-latency-us", &latency_us);
++	if (!of_property_read_u32(np, "entry-latency-us", &entry_latency_us) &&
++	    idle_duration_us > entry_latency_us)
++		latency_us = idle_duration_us - entry_latency_us;
+ 
+ 	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
+ 	idle_inject_set_latency(ii_dev, latency_us);
+-- 
+2.17.1
+
