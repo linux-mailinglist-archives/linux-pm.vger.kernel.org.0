@@ -2,27 +2,27 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04816270E59
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 16:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DD5270E5C
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Sep 2020 16:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726532AbgISOEm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Sep 2020 10:04:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41428 "EHLO mail.kernel.org"
+        id S1726548AbgISOEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Sep 2020 10:04:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41528 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726510AbgISOEi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 19 Sep 2020 10:04:38 -0400
+        id S1726159AbgISOEm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 19 Sep 2020 10:04:42 -0400
 Received: from localhost.localdomain (unknown [194.230.155.191])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5376821D43;
-        Sat, 19 Sep 2020 14:04:36 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0359421707;
+        Sat, 19 Sep 2020 14:04:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600524278;
-        bh=22njGzYbgVLmqZwKMutr7y/CtPsY/fcDoav/iUVMvtk=;
+        s=default; t=1600524281;
+        bh=G1rBETN5Htd6dGPg5Ma1dHWDGClo+P7ZqLA4Y4JKMW4=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=H+vLyMxeyYECtqIstFTAEVcYMVxLLUGWmOnDIg4GXGuxFW1vJxBK098ltm2HfV7v+
-         nQ9BqSeEW4/Vsnns7z8JsXZyHJfY9q2EXB+FhB6V+oyQahkyUDfPFm1QZQJHntoAkH
-         MeqNgQbLVvrXMjLeiVL5mFjgLL0x8/YQREYywY2s=
+        b=mct18cNMGz1DOsX6T2NsZg+aCRVHuh14skQESopDPlN3pj3+XQSSMy0VSmxj+HW5V
+         mzOrM1S49k/rViDGj95PXIhFP+FVGsFOrqLRHJrAX5f8+DPQRg8uiBY0qdNWXeYmPu
+         v0TJx+K4j4D8aMYPptAci8jjmQVyV7zc9DEXlrxE=
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -31,9 +31,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/6] power: supply: bq27xxx: adjust whitespace and use BIT() for bitflags
-Date:   Sat, 19 Sep 2020 16:04:15 +0200
-Message-Id: <20200919140418.3705-4-krzk@kernel.org>
+Subject: [PATCH v2 4/6] power: supply: bq27xxx: add separate flag for single SoC register
+Date:   Sat, 19 Sep 2020 16:04:16 +0200
+Message-Id: <20200919140418.3705-5-krzk@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200919140418.3705-1-krzk@kernel.org>
 References: <20200919140418.3705-1-krzk@kernel.org>
@@ -41,50 +41,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-BIT() is a preferred way to toggle bit-like flags: no problems with 32/64
-bit systems, less chances for mistakes.  Remove also unneeded
-whitespace.
+bq27000, bq27010 and upcoming bq34z100 have a single byte SoC
+register.  However except this similarity, bq34z100 is quite different
+than bq27000/bq27010, so flag BQ27XXX_O_ZERO cannot be reused here.  Add
+a new bit flag describing that SoC is a single byte register.
+
+No functional change for bq27000 and bq27010.
 
 Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 ---
- drivers/power/supply/bq27xxx_battery.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/power/supply/bq27xxx_battery.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 65806f668b1f..e971af43dd45 100644
+index e971af43dd45..88cdad0ecb08 100644
 --- a/drivers/power/supply/bq27xxx_battery.c
 +++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -76,7 +76,7 @@
- 
- /* BQ27Z561 has different layout for Flags register */
- #define BQ27Z561_FLAG_FDC	BIT(4) /* Battery fully discharged */
--#define BQ27Z561_FLAG_FC		BIT(5) /* Battery fully charged */
-+#define BQ27Z561_FLAG_FC	BIT(5) /* Battery fully charged */
- #define BQ27Z561_FLAG_DIS_CH	BIT(6) /* Battery is discharging */
- 
- /* control register params */
-@@ -847,13 +847,14 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
- 
- #define bq27z561_dm_regs 0
- #define bq28z610_dm_regs 0
--
--#define BQ27XXX_O_ZERO	0x00000001
--#define BQ27XXX_O_OTDC	0x00000002 /* has OTC/OTD overtemperature flags */
--#define BQ27XXX_O_UTOT  0x00000004 /* has OT overtemperature flag */
--#define BQ27XXX_O_CFGUP	0x00000008
--#define BQ27XXX_O_RAM	0x00000010
--#define BQ27Z561_O_BITS	0x00000020
-+#define bq34z100_dm_regs 0
-+
-+#define BQ27XXX_O_ZERO		BIT(0)
-+#define BQ27XXX_O_OTDC		BIT(1) /* has OTC/OTD overtemperature flags */
-+#define BQ27XXX_O_UTOT		BIT(2) /* has OT overtemperature flag */
-+#define BQ27XXX_O_CFGUP		BIT(3)
-+#define BQ27XXX_O_RAM		BIT(4)
-+#define BQ27Z561_O_BITS		BIT(5)
+@@ -855,6 +855,7 @@ static struct bq27xxx_dm_reg bq27621_dm_regs[] = {
+ #define BQ27XXX_O_CFGUP		BIT(3)
+ #define BQ27XXX_O_RAM		BIT(4)
+ #define BQ27Z561_O_BITS		BIT(5)
++#define BQ27XXX_O_SOC_SI	BIT(6) /* SoC is single register */
  
  #define BQ27XXX_DATA(ref, key, opt) {		\
  	.opts = (opt),				\
+@@ -872,8 +873,8 @@ static struct {
+ 	enum power_supply_property *props;
+ 	size_t props_size;
+ } bq27xxx_chip_data[] = {
+-	[BQ27000]   = BQ27XXX_DATA(bq27000,   0         , BQ27XXX_O_ZERO),
+-	[BQ27010]   = BQ27XXX_DATA(bq27010,   0         , BQ27XXX_O_ZERO),
++	[BQ27000]   = BQ27XXX_DATA(bq27000,   0         , BQ27XXX_O_ZERO | BQ27XXX_O_SOC_SI),
++	[BQ27010]   = BQ27XXX_DATA(bq27010,   0         , BQ27XXX_O_ZERO | BQ27XXX_O_SOC_SI),
+ 	[BQ2750X]   = BQ27XXX_DATA(bq2750x,   0         , BQ27XXX_O_OTDC),
+ 	[BQ2751X]   = BQ27XXX_DATA(bq2751x,   0         , BQ27XXX_O_OTDC),
+ 	[BQ2752X]   = BQ27XXX_DATA(bq2752x,   0         , BQ27XXX_O_OTDC),
+@@ -1420,7 +1421,7 @@ static int bq27xxx_battery_read_soc(struct bq27xxx_device_info *di)
+ {
+ 	int soc;
+ 
+-	if (di->opts & BQ27XXX_O_ZERO)
++	if (di->opts & BQ27XXX_O_SOC_SI)
+ 		soc = bq27xxx_read(di, BQ27XXX_REG_SOC, true);
+ 	else
+ 		soc = bq27xxx_read(di, BQ27XXX_REG_SOC, false);
 -- 
 2.17.1
 
