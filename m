@@ -2,118 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C085D27183B
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Sep 2020 23:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB130271945
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 04:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbgITVhq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Sep 2020 17:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726126AbgITVhp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Sep 2020 17:37:45 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228B9C061755;
-        Sun, 20 Sep 2020 14:37:45 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id c2so9444695ljj.12;
-        Sun, 20 Sep 2020 14:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uUHnkFzVd/NEKgu8zQqIER3cRG3IZwAsoXwHaK0rQ0Y=;
-        b=B2ySQtn7QA6RNzAGSr45L8cA6W7UpfdWFhxBXFkjIl9Tg+UWUrBdnhY3ETzPYBTrUO
-         aXCdDQMrOwJ3ABvhdmti3LdflLW7dL7Iy0R2Ydy0ipMeNAmU005aDbLrp/OuCs2otozz
-         Mr9+a2iC3D8FAs3goeXEk9+ZsjvvW72UKYIUEKZ2GvifAePgW4k+WqCT1eP2eSEKYjEC
-         xoUCv9gc49IIwsC4Y6XTxgp3A01zWB4ce5X/pkJgOzXFs2i4hkFQ1JMKTJeWVr+4AgYl
-         7efBzevXIzbWWdhZvKzg/aFdpbdlg2SKGtFi30mLnWW9J8/rrTR/Spiu/YKTN7YkeVEc
-         1wbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uUHnkFzVd/NEKgu8zQqIER3cRG3IZwAsoXwHaK0rQ0Y=;
-        b=likSctkTsUYHBDxMRZN5G96RmBP/s++lOXevWqWSFBT5dT3scq5uR3RRZXM5qL3dnj
-         EyX09cFp8tGa6N85JLOa4UMtrtGolOujnkrlKk6/FKxrbUjKNGpBxRHDkxJr81biv9SV
-         3enJJfrkJXcrAbfCPoy/xo0xTdDuxkOYQLS90l4UYmNTZKdeyzPLa7/R0g+k+1UaXOFj
-         58V1MBHnKr1dfOTZoWjkN1MsWnQL+9rYdo7iLg79u+GSJ42KGAVfXIMtOZaBdekWT7Ze
-         HciFf8tHmglU9SBDe2nn3+Tx95zLvstExwGWYIyahsnbzFyDpCWbpxpMmlnhe8KBknRW
-         G2fw==
-X-Gm-Message-State: AOAM533TSgPrHuCSlz9K3V/vf1QWAuaGV8IhxFtJgGkSI7SmF/Ko2P9q
-        IR9ag+EZ6pg9i37Rhof8VPuvZxjxCYg=
-X-Google-Smtp-Source: ABdhPJzY3c1BSGgoLUS+Qku420dV/Lo6lL4tufDPffWltCXV4MYZf3R+2C9Qe0CyMYjXNeMiB6mASQ==
-X-Received: by 2002:a2e:8153:: with SMTP id t19mr15777844ljg.334.1600637862040;
-        Sun, 20 Sep 2020 14:37:42 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-170-211.dynamic.spd-mgts.ru. [109.252.170.211])
-        by smtp.googlemail.com with ESMTPSA id g74sm2047040lfd.152.2020.09.20.14.37.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2020 14:37:41 -0700 (PDT)
-Subject: Re: [PATCH] PM / devfreq: tegra30: disable clock on error in probe
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <CGME20200908072627epcas1p41f2c8c2730d42bd8935a40b0ab8122f7@epcas1p4.samsung.com>
- <20200908072557.GC294938@mwanda>
- <2ceb045a-ebac-58d7-0250-4ea39d711ce8@samsung.com>
- <44560522-f04e-ade5-2e02-9df56a6f79ba@gmail.com>
- <e45c8ffc-ea24-1178-7bfa-62ca6bedbb3b@samsung.com>
- <2573cd77-1175-d194-7bfc-24d28b276846@samsung.com>
- <5aac4d59-5e06-25a6-3de1-6a5a586b9e34@gmail.com>
- <bccb08ef-7e48-0cc7-08b5-7177b84a5763@samsung.com>
- <887f4b2d-9181-356c-5f09-23be30d2480c@gmail.com>
- <8edcfd7b-110b-3886-64ee-3ec02cc6bd19@samsung.com>
- <57e8ccad-f0d5-febb-7a31-8d34430a5cb8@gmail.com>
- <64f4b682-00b7-60f2-902f-e50a40a04a55@samsung.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <c80c6f3a-bbbf-f18b-33c8-62e63397df9c@gmail.com>
-Date:   Mon, 21 Sep 2020 00:37:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726196AbgIUCYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Sep 2020 22:24:09 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:53180 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726104AbgIUCYI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Sep 2020 22:24:08 -0400
+X-UUID: 74f339483dcc4b37b4da86db042b02c5-20200921
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=A8DmZOGo3w7wTbOR1VzHdmyQYxcVW5Y/nrnEgYO45L8=;
+        b=qw9igmiXKoxFz8QGwqSnFDTPqX24QMISh5UGvcjWIukGLwMhn2VmtVvp0ZOYRtZuZDDHf0u7OmFnIESaMBiJ/6IeGbSOcfoiZgmcpurBSNrGaOFsp8YzRp4hiNW0BxlgJP54kLmdXfH1397/h4Q562EbsyWJr+3Fcnk1qbqdWUk=;
+X-UUID: 74f339483dcc4b37b4da86db042b02c5-20200921
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 980906251; Mon, 21 Sep 2020 10:23:59 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 21 Sep 2020 10:23:54 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 21 Sep 2020 10:23:54 +0800
+Message-ID: <1600655037.3787.1.camel@mtkswgap22>
+Subject: Re: [PATCH v7 2/2] dt-bindings: cpufreq: add bindings for MediaTek
+ cpufreq HW
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
+Date:   Mon, 21 Sep 2020 10:23:57 +0800
+In-Reply-To: <1599712262-8819-3-git-send-email-hector.yuan@mediatek.com>
+References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
+         <1599712262-8819-3-git-send-email-hector.yuan@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-In-Reply-To: <64f4b682-00b7-60f2-902f-e50a40a04a55@samsung.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-18.09.2020 12:23, Chanwoo Choi пишет:
-...
->> Hence if we want to improve the code, I think we can make this change:
->>
->> diff --git a/drivers/devfreq/tegra30-devfreq.c
->> b/drivers/devfreq/tegra30-devfreq.c
->> index ee274daa57ac..4e3ac23e6850 100644
->> --- a/drivers/devfreq/tegra30-devfreq.c
->> +++ b/drivers/devfreq/tegra30-devfreq.c
->> @@ -891,8 +891,6 @@ static int tegra_devfreq_probe(struct
->> platform_device *pdev)
->>  		return err;
->>  	}
->>
->> -	reset_control_assert(tegra->reset);
->> -
->>  	err = clk_prepare_enable(tegra->clock);
->>  	if (err) {
->>  		dev_err(&pdev->dev,
->> @@ -900,7 +898,7 @@ static int tegra_devfreq_probe(struct
->> platform_device *pdev)
->>  		return err;
->>  	}
->>
->> -	reset_control_deassert(tegra->reset);
->> +	reset_control_reset(tegra->reset);
->>
->>  	for (i = 0; i < mc->num_timings; i++) {
->>  		/*
-> 
-> It looks good to me for improving the readability
-> for everyone who don't know the detailed h/w information.
+SGksIFJvYiBzaXI6DQoNClNvcnJ5IHRvIGJvdGhlciB5b3UsIG1heSBJIGhhdmUgeW91ciByZXZp
+ZXcgY29tbWVudCBmb3IgdGhlIGJpbmRpbmcNCnBhcnQ/DQpBcHByZWNpYXRlZC4NCg0KT24gVGh1
+LCAyMDIwLTA5LTEwIGF0IDEyOjMxICswODAwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4gRnJvbTog
+IkhlY3Rvci5ZdWFuIiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KPiANCj4gQWRkIGRldmlj
+ZXRyZWUgYmluZGluZ3MgZm9yIE1lZGlhVGVrIEhXIGRyaXZlci4NCj4gDQo+IFNpZ25lZC1vZmYt
+Ynk6IEhlY3Rvci5ZdWFuIDxoZWN0b3IueXVhbkBtZWRpYXRlay5jb20+DQo+IC0tLQ0KPiAgLi4u
+L2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sICAgICAgfCAgMTQxICsr
+KysrKysrKysrKysrKysrKysrDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTQxIGluc2VydGlvbnMoKykN
+Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mv
+Y3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3LnlhbWwNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJlcS9jcHVmcmVxLW1lZGlhdGVrLWh3
+LnlhbWwgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJlcS9jcHVmcmVx
+LW1lZGlhdGVrLWh3LnlhbWwNCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAw
+MC4uMTE4YTE2Mw0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL0RvY3VtZW50YXRpb24vZGV2aWNl
+dHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbA0KPiBAQCAtMCww
+ICsxLDE0MSBAQA0KPiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogKEdQTC0yLjAtb25seSBP
+UiBCU0QtMi1DbGF1c2UpDQo+ICslWUFNTCAxLjINCj4gKy0tLQ0KPiArJGlkOiBodHRwOi8vZGV2
+aWNldHJlZS5vcmcvc2NoZW1hcy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbCMNCj4g
+KyRzY2hlbWE6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0K
+PiArDQo+ICt0aXRsZTogTWVkaWFUZWsncyBDUFVGUkVRIEJpbmRpbmdzDQo+ICsNCj4gK21haW50
+YWluZXJzOg0KPiArICAtIEhlY3RvciBZdWFuIDxoZWN0b3IueXVhbkBtZWRpYXRlay5jb20+DQo+
+ICsNCj4gK2Rlc2NyaXB0aW9uOg0KPiArICBDUFVGUkVRIEhXIGlzIGEgaGFyZHdhcmUgZW5naW5l
+IHVzZWQgYnkgTWVkaWFUZWsNCj4gKyAgU29DcyB0byBtYW5hZ2UgZnJlcXVlbmN5IGluIGhhcmR3
+YXJlLiBJdCBpcyBjYXBhYmxlIG9mIGNvbnRyb2xsaW5nIGZyZXF1ZW5jeQ0KPiArICBmb3IgbXVs
+dGlwbGUgY2x1c3RlcnMuDQo+ICsNCj4gK3Byb3BlcnRpZXM6DQo+ICsgIGNvbXBhdGlibGU6DQo+
+ICsgICAgY29uc3Q6ICJtZWRpYXRlayxjcHVmcmVxLWh3Ig0KPiArDQo+ICsgIHJlZzoNCj4gKyAg
+ICBtaW5JdGVtczogMQ0KPiArICAgIG1heEl0ZW1zOiAyDQo+ICsgICAgZGVzY3JpcHRpb246IHwN
+Cj4gKyAgICAgIEFkZHJlc3NlcyBhbmQgc2l6ZXMgZm9yIHRoZSBtZW1vcnkgb2YgdGhlIEhXIGJh
+c2VzIGluIGVhY2ggZnJlcXVlbmN5IGRvbWFpbi4NCj4gKw0KPiArICByZWctbmFtZXM6DQo+ICsg
+ICAgaXRlbXM6DQo+ICsgICAgICAtIGNvbnN0OiAiZnJlcS1kb21haW4wIg0KPiArICAgICAgLSBj
+b25zdDogImZyZXEtZG9tYWluMSINCj4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiArICAgICAgRnJl
+cXVlbmN5IGRvbWFpbiBuYW1lLiBpLmUuDQo+ICsgICAgICAiZnJlcS1kb21haW4wIiwgImZyZXEt
+ZG9tYWluMSIuDQo+ICsNCj4gKyAgIiNmcmVxLWRvbWFpbi1jZWxscyI6DQo+ICsgICAgY29uc3Q6
+IDENCj4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiArICAgICAgTnVtYmVyIG9mIGNlbGxzIGluIGEg
+ZnJlcWVuY3kgZG9tYWluIHNwZWNpZmllci4NCj4gKw0KPiArICBtdGstZnJlcS1kb21haW46DQo+
+ICsgICAgbWF4SXRlbXM6IDENCj4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiArICAgICAgRGVmaW5l
+IHRoaXMgY3B1IGJlbG9uZ3MgdG8gd2hpY2ggZnJlcXVlbmN5IGRvbWFpbi4gaS5lLg0KPiArICAg
+ICAgY3B1MC0zIGJlbG9uZyB0byBmcmVxdWVuY3kgZG9tYWluMCwNCj4gKyAgICAgIGNwdTQtNiBi
+ZWxvbmcgdG8gZnJlcXVlbmN5IGRvbWFpbjEuDQo+ICsNCj4gK3JlcXVpcmVkOg0KPiArICAtIGNv
+bXBhdGlibGUNCj4gKyAgLSByZWcNCj4gKyAgLSByZWctbmFtZXMNCj4gKyAgLSAiI2ZyZXEtZG9t
+YWluLWNlbGxzIg0KPiArDQo+ICtleGFtcGxlczoNCj4gKyAgLSB8DQo+ICsgICAgY3B1cyB7DQo+
+ICsgICAgICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gKyAgICAgICAgICAgICNzaXpl
+LWNlbGxzID0gPDA+Ow0KPiArDQo+ICsgICAgICAgICAgICBjcHUwOiBjcHVAMCB7DQo+ICsgICAg
+ICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gKyAgICAgICAgICAgICAgICBjb21w
+YXRpYmxlID0gImFybSxjb3J0ZXgtYTU1IjsNCj4gKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0
+aG9kID0gInBzY2kiOw0KPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1
+ZnJlcV9odyAwPjsNCj4gKyAgICAgICAgICAgICAgICByZWcgPSA8MHgwMDA+Ow0KPiArICAgICAg
+ICAgICAgfTsNCj4gKw0KPiArICAgICAgICAgICAgY3B1MTogY3B1QDEgew0KPiArICAgICAgICAg
+ICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQo+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJs
+ZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ICsgICAgICAgICAgICAgICAgZW5hYmxlLW1ldGhvZCA9
+ICJwc2NpIjsNCj4gKyAgICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFf
+aHcgMD47DQo+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4MTAwPjsNCj4gKyAgICAgICAgICAg
+IH07DQo+ICsNCj4gKyAgICAgICAgICAgIGNwdTI6IGNwdUAyIHsNCj4gKyAgICAgICAgICAgICAg
+ICBkZXZpY2VfdHlwZSA9ICJjcHUiOw0KPiArICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAi
+YXJtLGNvcnRleC1hNTUiOw0KPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNj
+aSI7DQo+ICsgICAgICAgICAgICAgICAgbXRrLWZyZXEtZG9tYWluID0gPCZjcHVmcmVxX2h3IDA+
+Ow0KPiArICAgICAgICAgICAgICAgIHJlZyA9IDwweDIwMD47DQo+ICsgICAgICAgICAgICB9Ow0K
+PiArDQo+ICsgICAgICAgICAgICBjcHUzOiBjcHVAMyB7DQo+ICsgICAgICAgICAgICAgICAgZGV2
+aWNlX3R5cGUgPSAiY3B1IjsNCj4gKyAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImFybSxj
+b3J0ZXgtYTU1IjsNCj4gKyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0K
+PiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAwPjsNCj4g
+KyAgICAgICAgICAgICAgICByZWcgPSA8MHgzMDA+Ow0KPiArICAgICAgICAgICAgfTsNCj4gKw0K
+PiArICAgICAgICAgICAgY3B1NDogY3B1QDQgew0KPiArICAgICAgICAgICAgICAgIGRldmljZV90
+eXBlID0gImNwdSI7DQo+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4
+LWE1NSI7DQo+ICsgICAgICAgICAgICAgICAgZW5hYmxlLW1ldGhvZCA9ICJwc2NpIjsNCj4gKyAg
+ICAgICAgICAgICAgICBtdGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMT47DQo+ICsgICAg
+ICAgICAgICAgICAgcmVnID0gPDB4NDAwPjsNCj4gKyAgICAgICAgICAgIH07DQo+ICsNCj4gKyAg
+ICAgICAgICAgIGNwdTU6IGNwdUA1IHsNCj4gKyAgICAgICAgICAgICAgICBkZXZpY2VfdHlwZSA9
+ICJjcHUiOw0KPiArICAgICAgICAgICAgICAgIGNvbXBhdGlibGUgPSAiYXJtLGNvcnRleC1hNTUi
+Ow0KPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ICsgICAgICAg
+ICAgICAgICAgbXRrLWZyZXEtZG9tYWluID0gPCZjcHVmcmVxX2h3IDE+Ow0KPiArICAgICAgICAg
+ICAgICAgIHJlZyA9IDwweDUwMD47DQo+ICsgICAgICAgICAgICB9Ow0KPiArDQo+ICsgICAgICAg
+ICAgICBjcHU2OiBjcHVANiB7DQo+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1
+IjsNCj4gKyAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImFybSxjb3J0ZXgtYTc1IjsNCj4g
+KyAgICAgICAgICAgICAgICBlbmFibGUtbWV0aG9kID0gInBzY2kiOw0KPiArICAgICAgICAgICAg
+ICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAxPjsNCj4gKyAgICAgICAgICAgICAg
+ICByZWcgPSA8MHg2MDA+Ow0KPiArICAgICAgICAgICAgfTsNCj4gKw0KPiArICAgICAgICAgICAg
+Y3B1NzogY3B1QDcgew0KPiArICAgICAgICAgICAgICAgIGRldmljZV90eXBlID0gImNwdSI7DQo+
+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE3NSI7DQo+ICsgICAg
+ICAgICAgICAgICAgZW5hYmxlLW1ldGhvZCA9ICJwc2NpIjsNCj4gKyAgICAgICAgICAgICAgICBt
+dGstZnJlcS1kb21haW4gPSA8JmNwdWZyZXFfaHcgMT47DQo+ICsgICAgICAgICAgICAgICAgcmVn
+ID0gPDB4NzAwPjsNCj4gKyAgICAgICAgICAgIH07DQo+ICsgICAgfTsNCj4gKw0KPiArICAgIC8q
+IC4uLiAqLw0KPiArDQo+ICsgICAgc29jIHsNCj4gKyAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8
+Mj47DQo+ICsgICAgICAgICNzaXplLWNlbGxzID0gPDI+Ow0KPiArDQo+ICsgICAgICAgIGNwdWZy
+ZXFfaHc6IGNwdWZyZXFAMTFiYzAwIHsNCj4gKyAgICAgICAgICAgIGNvbXBhdGlibGUgPSAibWVk
+aWF0ZWssY3B1ZnJlcS1odyI7DQo+ICsgICAgICAgICAgICByZWcgPSA8MCAweDExYmMxMCAwIDB4
+OGM+LA0KPiArICAgICAgICAgICAgICAgPDAgMHgxMWJjYTAgMCAweDhjPjsNCj4gKyAgICAgICAg
+ICAgIHJlZy1uYW1lcyA9ICJmcmVxLWRvbWFpbjAiLCAiZnJlcS1kb21haW4xIjsNCj4gKyAgICAg
+ICAgICAgICNmcmVxLWRvbWFpbi1jZWxscyA9IDwxPjsNCj4gKyAgICAgICAgfTsNCj4gKyAgICB9
+Ow0KPiArDQo+ICsNCj4gKw0KPiArDQoNCg==
 
-Okay, I'll make a patch sometime soon.
