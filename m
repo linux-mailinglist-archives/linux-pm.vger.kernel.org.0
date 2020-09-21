@@ -2,119 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF7E27349B
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 23:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABA6273520
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 23:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbgIUVGO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 17:06:14 -0400
-Received: from jabberwock.ucw.cz ([46.255.230.98]:43748 "EHLO
+        id S1727171AbgIUVqf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 17:46:35 -0400
+Received: from jabberwock.ucw.cz ([46.255.230.98]:51596 "EHLO
         jabberwock.ucw.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726427AbgIUVGO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 17:06:14 -0400
+        with ESMTP id S1726452AbgIUVqf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 17:46:35 -0400
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8A4241C0B8C; Mon, 21 Sep 2020 23:06:11 +0200 (CEST)
-Date:   Mon, 21 Sep 2020 23:06:10 +0200
+        id 3E3A31C0B8C; Mon, 21 Sep 2020 23:46:33 +0200 (CEST)
+Date:   Mon, 21 Sep 2020 23:46:32 +0200
 From:   Pavel Machek <pavel@ucw.cz>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>, Dan Murphy <dmurphy@ti.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: move Milo Kim to credits
-Message-ID: <20200921210610.GA5338@amd>
-References: <20200921210233.21449-1-krzk@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, nbd@other.debian.org,
+        linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH 11/14] PM: rewrite is_hibernate_resume_dev to not require
+ an inode
+Message-ID: <20200921214632.GA11006@amd>
+References: <20200921071958.307589-1-hch@lst.de>
+ <20200921071958.307589-12-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="W/nzBZO5zC0uMSeA"
+        protocol="application/pgp-signature"; boundary="Dxnq1zWXvFF0Q93v"
 Content-Disposition: inline
-In-Reply-To: <20200921210233.21449-1-krzk@kernel.org>
+In-Reply-To: <20200921071958.307589-12-hch@lst.de>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---W/nzBZO5zC0uMSeA
+--Dxnq1zWXvFF0Q93v
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
-> Milo Kim's email in TI bounces with permanent error (550: Invalid
-> recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
-> credits and remove the separate driver entries for:
+On Mon 2020-09-21 09:19:55, Christoph Hellwig wrote:
+> Just check the dev_t to help simplifying the code.
 >=20
->  - TI LP855x backlight driver,
->  - TI LP8727 charger driver,
->  - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I believe normal way would be to mark the entries "orphaned", not to
-drop them altogether. Plus, I believe someone from TI is likely to
-step up.
-
-Best regards,
-								Pavel
-
-
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5b9621ca2b31..031adeff29cc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17471,29 +17471,6 @@ S:	Maintained
->  F:	sound/soc/codecs/isabelle*
->  F:	sound/soc/codecs/lm49453*
-> =20
-> -TI LP855x BACKLIGHT DRIVER
-> -M:	Milo Kim <milo.kim@ti.com>
-> -S:	Maintained
-> -F:	Documentation/driver-api/backlight/lp855x-driver.rst
-> -F:	drivers/video/backlight/lp855x_bl.c
-> -F:	include/linux/platform_data/lp855x.h
-> -
-> -TI LP8727 CHARGER DRIVER
-> -M:	Milo Kim <milo.kim@ti.com>
-> -S:	Maintained
-> -F:	drivers/power/supply/lp8727_charger.c
-> -F:	include/linux/platform_data/lp8727.h
-> -
-> -TI LP8788 MFD DRIVER
-> -M:	Milo Kim <milo.kim@ti.com>
-> -S:	Maintained
-> -F:	drivers/iio/adc/lp8788_adc.c
-> -F:	drivers/leds/leds-lp8788.c
-> -F:	drivers/mfd/lp8788*.c
-> -F:	drivers/power/supply/lp8788-charger.c
-> -F:	drivers/regulator/lp8788-*.c
-> -F:	include/linux/mfd/lp8788*.h
-> -
->  TI NETCP ETHERNET DRIVER
->  M:	Wingman Kwok <w-kwok2@ti.com>
->  M:	Murali Karicheri <m-karicheri2@ti.com>
+Acked-by: Pavel Machek <pavel@ucw.cz>
 
 --=20
 (english) http://www.livejournal.com/~pavelmachek
 (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
 g.html
 
---W/nzBZO5zC0uMSeA
+--Dxnq1zWXvFF0Q93v
 Content-Type: application/pgp-signature; name="signature.asc"
 Content-Description: Digital signature
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iEYEARECAAYFAl9pFcIACgkQMOfwapXb+vLy/QCgpLhlHZK8W60IO1WeGXWGyjdL
-DgUAnA9wxYGm4Wd3nk9+jCX3EnjhPK6A
-=Cjsr
+iEYEARECAAYFAl9pHzgACgkQMOfwapXb+vLjrwCgkqX/NkSqeB9h9XmupMxguXKk
+HU8An2MYofOY5WFBUrwRO2mqpLwzFEzu
+=u07+
 -----END PGP SIGNATURE-----
 
---W/nzBZO5zC0uMSeA--
+--Dxnq1zWXvFF0Q93v--
