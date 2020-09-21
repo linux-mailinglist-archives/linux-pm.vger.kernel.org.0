@@ -2,119 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0146272AC8
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 17:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D6B272AE5
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 18:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727231AbgIUPxv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 11:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
+        id S1726810AbgIUQA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 12:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727197AbgIUPxv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 11:53:51 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02088C0613CF
-        for <linux-pm@vger.kernel.org>; Mon, 21 Sep 2020 08:53:50 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id x14so13312651wrl.12
-        for <linux-pm@vger.kernel.org>; Mon, 21 Sep 2020 08:53:50 -0700 (PDT)
+        with ESMTP id S1726696AbgIUQA0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 12:00:26 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5F9C061755;
+        Mon, 21 Sep 2020 09:00:26 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id kk9so21037pjb.2;
+        Mon, 21 Sep 2020 09:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KTBpsSohstfdxMCBUF81EcDDdz06RoEyYMuNoZotyCo=;
-        b=famILgKo1O88xDk5AaXOek1uxyqZObcL9K6qvjo0azlyjsg7v7iDgG9+PGPL8NcU9w
-         2/m2NQTTomJgdDPXlhkkewzzopjPRU3Q9dOXfkCQ8LoKknK8z9PJNKkph5lQUD+fdU8F
-         Jdih1cwR+CG3Jbdn20qourw/iguPUz++2PjGeSFmXqHaR/0JNN7dp0ND1NZOfIfh1kBx
-         wSHdRBJeUKD41c3q8VVI+NTmGxlmkUaQ9FlvoWEJdS/NR3r00n4qX9Fgow9RFRPCDgnk
-         1gKVdq6e1DFOseXsXbUReVAyX+Coa6hGPo4da7o+ISqXnHgIo6cBb1KDfStXwEi3TTH3
-         oR+A==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1z7DxZA1C6ZLPIw2jqF0dHu9eU0mYGkZpeGpThre5W0=;
+        b=QnEDrJd5mKeVdUFr1/aPFCjEysnxjkDGtLcVK6OwRG7mQyvggpoAWaypcsnZyzfKpO
+         FgQStqDqwVYGlMTtJXMgSeHoin8vnaugWMZhSg1YgzWBtGVOhxEux13fUkqpTVcfA1u3
+         nay+BQDY1yy+aGoUhnIlq4XIIT3XvRuD/X/W9TY2lGqBDNpdOTl/QGyoNk8FtZ6UJYUz
+         quyAgUtuYPt2UhpqTcpLDi33n6NNGDklaNHsDzcuiWXbwgk+1RsgdZEQM8XW/KlT+y0j
+         d3ghTVjzQIvhuQXEmWbknfdibssdwKjsWxBZSbykdsw3LE4kjo0qJOtG+vihysGlsAzJ
+         RpAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=KTBpsSohstfdxMCBUF81EcDDdz06RoEyYMuNoZotyCo=;
-        b=QiTiM3hLkCoGHWAVOcE/4Iz3Ix1G2gjbZz05UbbpJSsoO+AbSvYPMbtNm6ZbTqsKO0
-         IAiOh7lDbcXeYKhQcei16SQHlWmXxF3koIbFGlcGLPcS+JlzDEQwc5FC7PppA1fip08G
-         WXPvNrkyRqVy5leFdjLKFAPQU6pdNXP1yViGJKXqXdLjWTJO0es+XOJEXdMz2PgDURCB
-         KakSs3qCo+ERr/UmINEmM4yPKU7vR0HGnQ+ZI0iu0Vs4trik6MAhx/xMCcfysvWFqcul
-         72KlVtYWfHHeUi/fzHIokFNFr4G7MgCcr7Xf97FXfbqDwUmD4wp0dE1lhU6b/LXNdYNJ
-         GUlA==
-X-Gm-Message-State: AOAM531q/hwAM3kobkZ7kNcI72r7r6d51WU6lqHHndFefNx+8kHytdLM
-        m0mkTqdP1JWTZoppgbxgxu/GBQ==
-X-Google-Smtp-Source: ABdhPJyNCd7UpIRBrJBPlKXwCCU7poZm1KA+CUVsd8NiT+RLNIDpMICY3MKvb+cogfmje7NojwyJWw==
-X-Received: by 2002:a5d:4104:: with SMTP id l4mr437511wrp.396.1600703629473;
-        Mon, 21 Sep 2020 08:53:49 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:f173:2b51:521d:d30b? ([2a01:e34:ed2f:f020:f173:2b51:521d:d30b])
-        by smtp.googlemail.com with ESMTPSA id l4sm19642474wme.43.2020.09.21.08.53.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2020 08:53:48 -0700 (PDT)
-Subject: Re: [PATCH 0/3] powercap: Enable RAPL for AMD Fam17h
-To:     Victor Ding <victording@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-References: <20200729105206.2991064-1-victording@google.com>
- <CAJZ5v0jfMAi2UjvwjYG6=hytGeHZkuaeNEsu+oaz8tEMcuHnPg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <29fb8ba3-8f7c-7736-201e-fec1b0a0d702@linaro.org>
-Date:   Mon, 21 Sep 2020 17:53:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        bh=1z7DxZA1C6ZLPIw2jqF0dHu9eU0mYGkZpeGpThre5W0=;
+        b=d1QcQN0AGEft2M0x2J8uAEZ7HPmXDdL659fNYEKXmk7LOXt95JF4ZNKVvt2q42T1gs
+         bTLOLhT04pvPggTuBbzlsjPWD672fouhuGh4bmONtvMVRZtOPuXg7z7QDGsAVmV1tnNf
+         ABjdyuP25gKTksRrCCio9D/ul88JPjuCV9ZACgx6fBrkpvpX8+ZI2ils+ScRzeI7rGsX
+         nF4fO2Y/gsQz3hm+XREwgpnqqGKAVKaa1jnjpkSFuE4MDs49/hxllEq2JWxP/I5BHyxg
+         3TWTIzaeL7tMY4wW1zjwcOp2So5Fr6G5WYa7QklapH6gN7CEU9k9RaOD587Xpx/cV5O8
+         XR6w==
+X-Gm-Message-State: AOAM531fVa9rvs1j1ErGQw7rduJWdEuSd2C+10Nik0RSiisvP4EYGXSS
+        SgpyqFebXbcKfSJSEcfzpiaH5xUhWOwBw8jeLQ==
+X-Google-Smtp-Source: ABdhPJzDYQ+qQl0zHfHu3dx0mPPwS7Piu9hDRkwW6ap//krle+V13oNG9arVJDRIlibdmn77a15DbA==
+X-Received: by 2002:a17:90b:3cb:: with SMTP id go11mr65880pjb.152.1600704026027;
+        Mon, 21 Sep 2020 09:00:26 -0700 (PDT)
+Received: from localhost.localdomain ([47.242.131.39])
+        by smtp.gmail.com with ESMTPSA id y13sm12554963pfr.141.2020.09.21.09.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 09:00:25 -0700 (PDT)
+From:   Pujin Shi <shipujin.t@gmail.com>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hankinsea@gmail.com, shipujin.t@gmail.com,
+        Pujin Shi <shipj@lemote.com>
+Subject: [PATCH v3] powercap: include header to fix -Wmissing-prototypes
+Date:   Tue, 22 Sep 2020 00:00:08 +0800
+Message-Id: <20200921160008.2162-1-shipujin.t@gmail.com>
+X-Mailer: git-send-email 2.18.4
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jfMAi2UjvwjYG6=hytGeHZkuaeNEsu+oaz8tEMcuHnPg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/09/2020 17:51, Rafael J. Wysocki wrote:
-> On Wed, Jul 29, 2020 at 12:52 PM Victor Ding <victording@google.com> wrote:
->>
->> This patch series adds support for AMD Fam17h RAPL counters. As per
->> AMD PPR, Fam17h support RAPL counters to monitor power usage. The RAPL
->> counter operates as with Intel RAPL. Therefore, it is beneficial to
->> re-use existing framework for Intel, especially to allow existing tools
->> to seamlessly run on AMD.
->>
->> From the user's point view, this series enables the following two sysfs
->> entry on AMD Fam17h:
->>   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
->>   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
->>
->>
->> Victor Ding (3):
->>   x86/msr-index: sort AMD RAPL MSRs by address
-> 
-> I haven't received this patch.
-> 
-> Any chance to resend the entire series with a CC to linux-pm?
+Include the linux/idle_inject.h header to fix W=1 build warning:
 
-Is it possible to add me in Cc too ?
+    drivers/powercap/idle_inject.c:152:6: warning: no previous prototype for ‘idle_inject_set_duration’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:167:6: warning: no previous prototype for ‘idle_inject_get_duration’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:179:6: warning: no previous prototype for ‘idle_inject_set_latency’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:195:5: warning: no previous prototype for ‘idle_inject_start’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:227:6: warning: no previous prototype for ‘idle_inject_stop’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:299:28: warning: no previous prototype for ‘idle_inject_register’ [-Wmissing-prototypes]
+    drivers/powercap/idle_inject.c:345:6: warning: no previous prototype for ‘idle_inject_unregister’ [-Wmissing-prototypes]
 
-Thanks
+Signed-off-by: Pujin Shi <shipujin.t@gmail.com>
+Signed-off-by: Pujin Shi <shipj@lemote.com>
+---
+ drivers/powercap/idle_inject.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-
-
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index 4310901a074e..6e1a0043c411 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -43,6 +43,7 @@
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/smpboot.h>
++#include <linux/idle_inject.h>
+ 
+ #include <uapi/linux/sched/types.h>
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.25.4
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
