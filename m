@@ -2,116 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB59D272A52
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 17:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6AB272AAA
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 17:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbgIUPgn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 11:36:43 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:41802 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726611AbgIUPgn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 11:36:43 -0400
-Received: by mail-oi1-f194.google.com with SMTP id x69so17395178oia.8;
-        Mon, 21 Sep 2020 08:36:42 -0700 (PDT)
+        id S1727197AbgIUPsY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 11:48:24 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44778 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727654AbgIUPsY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 11:48:24 -0400
+Received: by mail-oi1-f196.google.com with SMTP id 185so17443573oie.11;
+        Mon, 21 Sep 2020 08:48:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YP2Z3oRhK3eHSoO4BzbyEvH/PYDM17b6EUAJ8a+UJbY=;
-        b=bCbDalZehF7uENL8Dz/p2w9yMkk4PDvmJFs1oNEraVgy4UuS5fki3SWr6ffJmk0mRN
-         OedPeSLJ9QvtKXNGGecSFhzDbs7/5dzC8rlLKJEMUyTKzHM3NtXP5XTKR220x/iuCzOe
-         ONAZ/5KMI5GyIXYKjqzXlANAUmOIpsmfmR01jeFx910Cpy04A5MUqkvwKkKtALsn8HHT
-         0jqNyNMZx/1/E6bUy3uBBH8Rz/2YvscSR1EYfg42RqUWqqkGpB5uUQ4yLrWTjFc+uFUT
-         0isz6hUysZSNSO5UoVLwsHEtCNklQt1S271SjPvyYSByd1XD1TtJUwQOvm2HxOLs2myi
-         cZ0Q==
-X-Gm-Message-State: AOAM531UZZCksrh/keX4/H25iiTyPzmDnQ+XzjSk1V5M3rsY/zbGOyB1
-        nESxry34vsVHeIksJTB1nh4j1yB9Fkd6jT4WUdU=
-X-Google-Smtp-Source: ABdhPJww9oxNxeRQH2N770Y4aJZAy5wWFPihKynYSdxaeVByKSUNpuumDTSh7xvGVB++b11h6B4FGSMBlhz9smJmGBo=
-X-Received: by 2002:aca:df84:: with SMTP id w126mr63347oig.103.1600702601836;
- Mon, 21 Sep 2020 08:36:41 -0700 (PDT)
+        bh=8wfvHHeEp/JKYstqyvgUvA2MMpB9G1P1QpyTn5Wcj8Y=;
+        b=py5LzIP4OA58E1T6eErwkox4jGhUIGWtg/8Q1mnhyghyK8m7V9Kg2bxB/Gsprq+ogL
+         8ikdY+7AJ4Hnh1Xsito8zbsY1B2d/1ZBXA+ZFXqj8qVU8HyS4uV4s1m6HMc9NIHivqFL
+         VBdoRC/mfSVTzdzbAifF4T5bCb4c2qnWjo0xExu/4xX9jTcPKz59//9BDBt6uc77fNVT
+         nWfYcnFKjBHk5A/6YvrrWbXiyUw7cSHkr6rnDAtdXfsvYoXnrnHXvhU1nKoR2JC8y20P
+         KihHqJXcKARdQgdpgzIIdDjAFtwBLrmeOuC9s67pyxPJSIJHnUzHvY8cu+Np/IwyGXLR
+         yCrA==
+X-Gm-Message-State: AOAM533hb3PTD6WWmpM/kJSQJmxFl4+5rgw9CvVPXYU2kqs1sc5ec+vm
+        fw9UQ93dcATgvnehHFXoGyX6sVYiHiwIixSNZU0=
+X-Google-Smtp-Source: ABdhPJygyV6wL92IxL1fJriiF2wtj07bmKmGGQKjhIUv3QpvSlXVfn7jqABqeI1d441/b4stIC1h3aBvTkpcwSUxwIg=
+X-Received: by 2002:a05:6808:491:: with SMTP id z17mr28257oid.110.1600703303008;
+ Mon, 21 Sep 2020 08:48:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAA25o9QUtut3+nEs0H8H5qa2H7tQokq+_UoOrAaVGhmYvMTz0Q@mail.gmail.com>
- <20200609061931.GH8413@xps-13>
-In-Reply-To: <20200609061931.GH8413@xps-13>
+References: <20200831083832.17889-1-digetx@gmail.com>
+In-Reply-To: <20200831083832.17889-1-digetx@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Sep 2020 17:36:30 +0200
-Message-ID: <CAJZ5v0jWvQssoajoz2qh3Rbw8gNJSnRxg3NW6R6ayXYeHxodOQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/2] PM: hibernate: introduce opportunistic memory reclaim
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Luigi Semenzato <semenzato@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
+Date:   Mon, 21 Sep 2020 17:48:11 +0200
+Message-ID: <CAJZ5v0iSS5u8hf9bxqz=4mc7o232nVyt8ng1P7rePg+gqDgBxg@mail.gmail.com>
+Subject: Re: [PATCH RESEND v4] cpuidle: tegra: Correctly handle result of arm_cpuidle_simple_enter()
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
+        linux-tegra <linux-tegra@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andrea,
+On Mon, Aug 31, 2020 at 10:39 AM Dmitry Osipenko <digetx@gmail.com> wrote:
+>
+> The enter() callback of CPUIDLE drivers returns index of the entered idle
+> state on success or a negative value on failure. The negative value could
+> any negative value, i.e. it doesn't necessarily needs to be a error code.
+> That's because CPUIDLE core only cares about the fact of failure and not
+> about the reason of the enter() failure.
+>
+> Like every other enter() callback, the arm_cpuidle_simple_enter() returns
+> the entered idle-index on success. Unlike some of other drivers, it never
+> fails. It happened that TEGRA_C1=index=err=0 in the code of cpuidle-tegra
+> driver, and thus, there is no problem for the cpuidle-tegra driver created
+> by the typo in the code which assumes that the arm_cpuidle_simple_enter()
+> returns a error code.
+>
+> The arm_cpuidle_simple_enter() also may return a -ENODEV error if CPU_IDLE
+> is disabled in a kernel's config, but all CPUIDLE drivers are disabled if
+> CPU_IDLE is disabled, including the cpuidle-tegra driver. So we can't ever
+> see the error code from arm_cpuidle_simple_enter() today.
+>
+> Of course the code may get some changes in the future and then the
+> typo may transform into a real bug, so let's correct the typo! The
+> tegra_cpuidle_state_enter() is now changed to make it return the entered
+> idle-index on success and negative error code on fail, which puts it on
+> par with the arm_cpuidle_simple_enter(), making code consistent in regards
+> to the error handling.
+>
+> This patch fixes a minor typo in the code, it doesn't fix any bugs.
+>
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-On Tue, Jun 9, 2020 at 8:19 AM Andrea Righi <andrea.righi@canonical.com> wrote:
->
-> On Mon, Jun 08, 2020 at 03:23:22PM -0700, Luigi Semenzato wrote:
-> > Hi Andrea,
-> >
-> > 1. This mechanism is quite general.  It is possible that, although
-> > hibernation may be an important use, there will be other uses for it.
-> > I suggest leaving the hibernation example and performance analysis,
-> > but not mentioning PM or hibernation in the patch subject.
->
-> I was actually thinking to make this feature even more generic, since
-> there might be other potential users of this forced "memory reclaim"
-> feature outside hibernation. So, instead of adding the new sysfs files
-> under /sys/power/mm_reclaim/, maybe move them to /sys/kernel/mm/ (since
-> it's more like a mm feature, rather than a PM/hibernation feature).
->
-> >
-> > 2. It may be useful to have run_show() return the number of pages
-> > reclaimed in the last attempt.  (I had suggested something similar in
-> > https://lore.kernel.org/linux-mm/CAA25o9SxajRaa+ZyhvTYdaKdXokcrNYXgEUimax4sUJGCmRYLA@mail.gmail.com/).
->
-> I like this idea, I'll add that in the next version.
->
-> >
-> > 3. It is not clear how much mm_reclaim/release is going to help.  If
-> > the preloading of the swapped-out pages uses some kind of LIFO order,
-> > and can batch multiple pages, then it might help.  Otherwise demand
-> > paging is likely to be more effective.  If the preloading does indeed
-> > help, it may be useful to explain why in the commit message.
->
-> Swap readahead helps a lot in terms of performance if we preload all at
-> once. But I agree that for the majority of cases on-demand paging just
-> works fine.
->
-> My specific use-case for mm_reclaim/release is to make sure a VM
-> that is just resumed is immediately "fast" by preloading the swapped-out
-> pages back to memory all at once.
->
-> Without mm_reclaim/release I've been using the trick of running swapoff
-> followed by a swapon to force all the pages back to memory, but it's
-> kinda ugly and I was looking for a better way to do this. I've been
-> trying also the ptrace() + reading all the VMAs via /proc/pid/mem, it
-> works, but it's not as fast as swapoff+swapon or mm_reclaim/release.
->
-> I'll report performance numbers of mm_reclaim/release vs ptrace() +
-> /proc/pid/mem in the next version of this patch.
+Applied as 5.10 material, thanks!
 
-Sorry for the huge delay.
-
-I'm wondering what your vision regarding the use of this mechanism in
-practice is?
-
-In the "Testing" part of the changelog you say that "in the
-5.7-mm_reclaim case a user-space daemon detects when the system is
-idle and triggers the opportunistic memory reclaim via
-/sys/power/mm_reclaim/run", but this may not be entirely practical,
-because hibernation is not triggered every time the system is idle.
-
-In particular, how much time is required for the opportunistic reclaim
-to run before hibernation so as to make a significant difference?
-
-Thanks!
+> ---
+>
+> Changelog:
+>
+> v4: No code changes. Added r-b from Jon Hunter and re-sending for 5.10.
+>
+> v3: The tegra_cpuidle_state_enter() now returns entered idle-index on
+>     success instead of 0. Hence the error message will be shown by the
+>     tegra-cpuidle driver if arm_cpuidle_simple_enter() will ever fail.
+>     Again thanks to Jon Hunter!
+>
+> v2: Improved commit message by clarifying what values are returned by
+>     arm_cpuidle_simple_enter() and when. Thanks to Jon Hunter for the
+>     suggestion!
+>
+>  drivers/cpuidle/cpuidle-tegra.c | 34 +++++++++++++++++++--------------
+>  1 file changed, 20 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidle-tegra.c
+> index a12fb141875a..e8956706a291 100644
+> --- a/drivers/cpuidle/cpuidle-tegra.c
+> +++ b/drivers/cpuidle/cpuidle-tegra.c
+> @@ -172,7 +172,7 @@ static int tegra_cpuidle_coupled_barrier(struct cpuidle_device *dev)
+>  static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+>                                      int index, unsigned int cpu)
+>  {
+> -       int ret;
+> +       int err;
+>
+>         /*
+>          * CC6 state is the "CPU cluster power-off" state.  In order to
+> @@ -183,9 +183,9 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+>          * CPU cores, GIC and L2 cache).
+>          */
+>         if (index == TEGRA_CC6) {
+> -               ret = tegra_cpuidle_coupled_barrier(dev);
+> -               if (ret)
+> -                       return ret;
+> +               err = tegra_cpuidle_coupled_barrier(dev);
+> +               if (err)
+> +                       return err;
+>         }
+>
+>         local_fiq_disable();
+> @@ -194,15 +194,15 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+>
+>         switch (index) {
+>         case TEGRA_C7:
+> -               ret = tegra_cpuidle_c7_enter();
+> +               err = tegra_cpuidle_c7_enter();
+>                 break;
+>
+>         case TEGRA_CC6:
+> -               ret = tegra_cpuidle_cc6_enter(cpu);
+> +               err = tegra_cpuidle_cc6_enter(cpu);
+>                 break;
+>
+>         default:
+> -               ret = -EINVAL;
+> +               err = -EINVAL;
+>                 break;
+>         }
+>
+> @@ -210,7 +210,7 @@ static int tegra_cpuidle_state_enter(struct cpuidle_device *dev,
+>         tegra_pm_clear_cpu_in_lp2();
+>         local_fiq_enable();
+>
+> -       return ret;
+> +       return err ?: index;
+>  }
+>
+>  static int tegra_cpuidle_adjust_state_index(int index, unsigned int cpu)
+> @@ -236,21 +236,27 @@ static int tegra_cpuidle_enter(struct cpuidle_device *dev,
+>                                int index)
+>  {
+>         unsigned int cpu = cpu_logical_map(dev->cpu);
+> -       int err;
+> +       int ret;
+>
+>         index = tegra_cpuidle_adjust_state_index(index, cpu);
+>         if (dev->states_usage[index].disable)
+>                 return -1;
+>
+>         if (index == TEGRA_C1)
+> -               err = arm_cpuidle_simple_enter(dev, drv, index);
+> +               ret = arm_cpuidle_simple_enter(dev, drv, index);
+>         else
+> -               err = tegra_cpuidle_state_enter(dev, index, cpu);
+> +               ret = tegra_cpuidle_state_enter(dev, index, cpu);
+>
+> -       if (err && (err != -EINTR || index != TEGRA_CC6))
+> -               pr_err_once("failed to enter state %d err: %d\n", index, err);
+> +       if (ret < 0) {
+> +               if (ret != -EINTR || index != TEGRA_CC6)
+> +                       pr_err_once("failed to enter state %d err: %d\n",
+> +                                   index, ret);
+> +               index = -1;
+> +       } else {
+> +               index = ret;
+> +       }
+>
+> -       return err ? -1 : index;
+> +       return index;
+>  }
+>
+>  static int tegra114_enter_s2idle(struct cpuidle_device *dev,
+> --
+> 2.27.0
+>
