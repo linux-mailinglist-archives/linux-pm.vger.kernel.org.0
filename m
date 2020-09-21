@@ -2,64 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CB022723C7
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 14:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171F62724D0
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 15:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727286AbgIUMVZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 08:21:25 -0400
-Received: from foss.arm.com ([217.140.110.172]:42380 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727270AbgIUMVW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:21:22 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80B94D6E;
-        Mon, 21 Sep 2020 05:21:21 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.37.12.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 0E3DC3F73B;
-        Mon, 21 Sep 2020 05:21:16 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        daniel.lezcano@linaro.org, lukasz.luba@arm.com, orjan.eide@arm.com,
-        robh@kernel.org, alyssa.rosenzweig@collabora.com,
-        steven.price@arm.com, airlied@linux.ie, daniel@ffwll.ch
-Subject: [PATCH 5/5] drm/panfrost: Register devfreq cooling and attempt to add Energy Model
-Date:   Mon, 21 Sep 2020 13:20:07 +0100
-Message-Id: <20200921122007.29610-6-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200921122007.29610-1-lukasz.luba@arm.com>
-References: <20200921122007.29610-1-lukasz.luba@arm.com>
+        id S1727514AbgIUNLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 09:11:36 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:14202 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727455AbgIUNKz (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 21 Sep 2020 09:10:55 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 0894D7546E7C1BE89E59;
+        Mon, 21 Sep 2020 21:10:54 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.487.0; Mon, 21 Sep 2020 21:10:44 +0800
+From:   Qinglang Miao <miaoqinglang@huawei.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Maxime Coquelin" <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+CC:     <linux-pm@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>
+Subject: [PATCH -next] thermal: stm32: simplify the return expression of stm_thermal_prepare()
+Date:   Mon, 21 Sep 2020 21:11:07 +0800
+Message-ID: <20200921131107.93273-1-miaoqinglang@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Register devfreq cooling device and attempt to register Energy Model. This
-will add the devfreq device to the Energy Model framework. It will create
-a dedicated and unified data structures used i.e. in thermal framework.
-The last NULL parameter indicates that the power model is simplified and
-created based on DT 'dynamic-power-coefficient', voltage and frequency.
+Simplify the return expression.
 
-Reviewed-by: Steven Price <steven.price@arm.com>
-Reviewed-by: Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
 ---
- drivers/gpu/drm/panfrost/panfrost_devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/st/stm_thermal.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/gpu/drm/panfrost/panfrost_devfreq.c b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-index 8ab025d0035f..0d97176c9fb5 100644
---- a/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_devfreq.c
-@@ -143,7 +143,7 @@ int panfrost_devfreq_init(struct panfrost_device *pfdev)
- 	}
- 	pfdevfreq->devfreq = devfreq;
+diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
+index 331e2b768..5fd3fb891 100644
+--- a/drivers/thermal/st/stm_thermal.c
++++ b/drivers/thermal/st/stm_thermal.c
+@@ -446,14 +446,9 @@ static int stm_thermal_prepare(struct stm_thermal_sensor *sensor)
+ #ifdef CONFIG_PM_SLEEP
+ static int stm_thermal_suspend(struct device *dev)
+ {
+-	int ret;
+ 	struct stm_thermal_sensor *sensor = dev_get_drvdata(dev);
  
--	cooling = of_devfreq_cooling_register(dev->of_node, devfreq);
-+	cooling = devfreq_cooling_em_register(devfreq, NULL);
- 	if (IS_ERR(cooling))
- 		DRM_DEV_INFO(dev, "Failed to register cooling device\n");
- 	else
+-	ret = stm_thermal_sensor_off(sensor);
+-	if (ret)
+-		return ret;
+-
+-	return 0;
++	return stm_thermal_sensor_off(sensor);
+ }
+ 
+ static int stm_thermal_resume(struct device *dev)
 -- 
-2.17.1
+2.23.0
 
