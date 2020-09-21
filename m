@@ -2,123 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66F98272AEB
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 18:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF92B272B38
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 18:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgIUQCd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Sep 2020 12:02:33 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41111 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726749AbgIUQCd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 12:02:33 -0400
-Received: by mail-ot1-f65.google.com with SMTP id q21so12800567ota.8
-        for <linux-pm@vger.kernel.org>; Mon, 21 Sep 2020 09:02:32 -0700 (PDT)
+        id S1727990AbgIUQL5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 12:11:57 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45630 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727361AbgIUQL5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 12:11:57 -0400
+Received: by mail-oi1-f196.google.com with SMTP id z26so17520111oih.12;
+        Mon, 21 Sep 2020 09:11:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=kp/e2M9JL4AVHHaxLuKUDgiDvKuz5GDLkg8ubpm9sn4=;
-        b=przhbCIY66VLcfQ435lT0AA1/hHo9LqQu9CBe3Zk87XcVHreCHwL31P/gb4RaD/Zsx
-         wz1DhxK+XN/7Lz9fFlXchYN9xWV18vqniutZumYjpRt+5i+cT1A/YN1Tew5c3wphVFZY
-         GBvmJEJ2fLnWhCI0/qCSmYwSuHAZrX4zvKHalO25eKy//79aNc8rjmm+22WlG/oegQFU
-         Up8vZl4HtOSeC9AkXyex2FYUtnF9KMySoYKOqbB/vWM+JUzU7BOUe6VaroDxmX4Mu7Rz
-         f+TvUBMft8forcyDxZypt8p5DcO3tCWKKyernrDoUb3xipmICItj6ugSFwkQgWOTbGNF
-         y7BQ==
-X-Gm-Message-State: AOAM530zoIHT7cNxXWwmhVzccGflwkFZaY/ICjcQ8tKujjjxM26aXiVv
-        oI45p1lcPWaVw9CBZcJ2VupqauojCvk93yNIfG8=
-X-Google-Smtp-Source: ABdhPJxN5F5GOYnz5x4gmxoc/6QVUGSt8V4zL2giYuWnECypIqio65skrE/m5lfSgLT/9bNRlYhxRBytwA3bPYku/F0=
-X-Received: by 2002:a05:6830:150a:: with SMTP id k10mr114472otp.167.1600704152212;
- Mon, 21 Sep 2020 09:02:32 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=f5xopPVHQvCwupw2qPGnrX8/IM5yBS9FV37XxNdou08=;
+        b=hFZdYqZltOTB4rxpY60SKn37N2VRAga5blC8T3EM36HN5qEf1/wLnVAmzk4NlLgVtP
+         8kfa5flq13GGqlRtrbOyNyrOfWtI9nJ3nozrIoY7jAKEGTWg2cVxscq1HrCKuTTELmlV
+         /D6ie6v7hgbcaCTqc3i91OKPWTeW/aYerOSvYtnrqJQ/pDQCwHlrKKxAm0W/eYc2JIWj
+         B0TeBgBGzEOIHE4nzH0bBWCMtRcmFDibuA8uFdbjlM+Vi0iPziVcnSMddwqlfKEV5oBE
+         t2LideYA+VsKSnlYy9SxBEHNAecuSNV8uwRP4BCGsEnEWXczr6z94/0RrDI9O9rmrJWZ
+         PEBQ==
+X-Gm-Message-State: AOAM532B3SQg03PfGe4pkTTn6vfaUzYzt6eT4mz+yg6MIFf4W/vW74yj
+        2n0M1SxIYqRfD4Kyj3l+9+CkITFnlBgLctsFejA=
+X-Google-Smtp-Source: ABdhPJxGSsJ7wpuVxd0sTGjXqj0IvtjRadaXaA0vQ3zuWQjZAQjSobuRQ6HP8HZViuRxvTdCU9lcxi9EUCJP5vAKYJ4=
+X-Received: by 2002:aca:df84:: with SMTP id w126mr76245oig.103.1600704716385;
+ Mon, 21 Sep 2020 09:11:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <1596088129-88814-1-git-send-email-chenxiang66@hisilicon.com> <28bc46a7-7140-cc80-43a5-c1de8adfd81f@hisilicon.com>
-In-Reply-To: <28bc46a7-7140-cc80-43a5-c1de8adfd81f@hisilicon.com>
+References: <20200819104057.318230-1-ulf.hansson@linaro.org>
+ <20200819104057.318230-4-ulf.hansson@linaro.org> <20200825161602.GE12523@codeaurora.org>
+ <CAPDyKFrMUf4y5kVjr=dW-wf2kqBwcGePf=55U1Ck8O6tp-OuqQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFrMUf4y5kVjr=dW-wf2kqBwcGePf=55U1Ck8O6tp-OuqQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Sep 2020 18:02:20 +0200
-Message-ID: <CAJZ5v0hkUqBLw-PjTeP2nSxF1+knTUoFevv3hPQL=6x1t5BcoA@mail.gmail.com>
-Subject: Re: [RFC PATCH] PM:runtime:Remove the link state check in function rpm_get_supplier()
-To:     "chenxiang (M)" <chenxiang66@hisilicon.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>,
-        John Garry <john.garry@huawei.com>,
+Date:   Mon, 21 Sep 2020 18:11:44 +0200
+Message-ID: <CAJZ5v0jXn-O3xQzpW_0QahDOLeGZC58cCeOnVF66HWAsRNT4zg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] PM / Domains: Add support for PM domain on/off
+ notifiers for genpd
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Lina Iyer <ilina@codeaurora.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Linuxarm <linuxarm@huawei.com>
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 9:12 AM chenxiang (M) <chenxiang66@hisilicon.com> wrote:
+On Wed, Aug 26, 2020 at 8:38 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
+> On Tue, 25 Aug 2020 at 18:16, Lina Iyer <ilina@codeaurora.org> wrote:
+> >
+> > On Wed, Aug 19 2020 at 04:41 -0600, Ulf Hansson wrote:
+> > >A device may have specific HW constraints that must be obeyed to, before
+> > >its corresponding PM domain (genpd) can be powered off - and vice verse at
+> > >power on. These constraints can't be managed through the regular runtime PM
+> > >based deployment for a device, because the access pattern for it, isn't
+> > >always request based. In other words, using the runtime PM callbacks to
+> > >deal with the constraints doesn't work for these cases.
+> > >
+> > >For these reasons, let's instead add a PM domain power on/off notification
+> > >mechanism to genpd. To add/remove a notifier for a device, the device must
+> > >already have been attached to the genpd, which also means that it needs to
+> > >be a part of the PM domain topology.
+> > >
+> > >To add/remove a notifier, let's introduce two genpd specific functions:
+> > > - dev_pm_genpd_add|remove_notifier()
+> > >
+> > >Note that, to further clarify when genpd power on/off notifiers may be
+> > >used, one can compare with the existing CPU_CLUSTER_PM_ENTER|EXIT
+> > >notifiers. In the long run, the genpd power on/off notifiers should be able
+> > >to replace them, but that requires additional genpd based platform support
+> > >for the current users.
+> > >
+> > >Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > >---
+> > > drivers/base/power/domain.c | 130 ++++++++++++++++++++++++++++++++++--
+> > > include/linux/pm_domain.h   |  15 +++++
+> > > 2 files changed, 141 insertions(+), 4 deletions(-)
+> > >
+> > >diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > >index 4b787e1ff188..9cb85a5e8342 100644
+> > >--- a/drivers/base/power/domain.c
+> > >+++ b/drivers/base/power/domain.c
+> > >@@ -545,13 +545,21 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+> > >       if (!genpd->gov)
+> > >               genpd->state_idx = 0;
+> > >
+> > >+      /* Notify consumers that we are about to power off. */
+> > >+      ret = raw_notifier_call_chain(&genpd->power_notifiers, GENPD_STATE_OFF,
+> > >+                                    NULL);
+> > >+      if (ret)
+> > >+              return ret;
+> > >+
+> > >       /* Don't power off, if a child domain is waiting to power on. */
+> > >-      if (atomic_read(&genpd->sd_count) > 0)
+> > >-              return -EBUSY;
+> > >+      if (atomic_read(&genpd->sd_count) > 0) {
+> > >+              ret = -EBUSY;
+> > >+              goto busy;
+> > >+      }
+> > >
+> > >       ret = _genpd_power_off(genpd, true);
+> > >       if (ret)
+> > >-              return ret;
+> > >+              goto busy;
+> > >
+> > >       genpd->status = GENPD_STATE_OFF;
+> > >       genpd_update_accounting(genpd);
+> > >@@ -564,6 +572,9 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+> > >       }
+> > >
+> > >       return 0;
+> > >+busy:
+> > >+      raw_notifier_call_chain(&genpd->power_notifiers, GENPD_STATE_ON, NULL);
+> > It would be helpful to abstract these notification related calls into
+> > functions of their own. So, for CPU PM domains, it would help to add
+> > RCU_NONIDLE() around the notifiers, allowing the callbacks to add trace
+> > functions.
 >
->
-> 在 2020/7/30 13:48, chenxiang 写道:
-> > From: Xiang Chen <chenxiang66@hisilicon.com>
-> >
-> > To support runtime PM for hisi SAS driver (the dirver is in directory
-> > drivers/scsi/hisi_sas), we add device link between scsi_device->sdev_gendev
-> > (consumer device) and hisi_hba->dev(supplier device) with flags
-> > DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE.
-> > After runtime suspended consumers and supplier, unload the dirver which
-> > cause a hung. We find that it calls function device_release_driver_internal()
-> > to release supplier device hisi_hba->dev, as the device link is busy,
-> > it sets the device link as DL_STATE_SUPPLIER_UNBIND, and then call function
-> > device_release_driver_internal() to release consumer device
-> > scsi_device->sdev_gendev). Then It will try to call pm_runtime_get_sync()
-> > to resume consumer device, as consumer-supplier relation exists, it will try
-> > to resume supplier first, but as the link state is already set as
-> > DL_STATE_SUPPLIER_UNBIND, so it skips resuming supplier and only resume
-> > consumer which cause a hung (it sends IOs to resume scsi_device while
-> > SAS controller is suspended). Simple flow is as follows:
-> >
-> > device_release_driver_internal -> (supplier device)
-> >      if device_links_busy ->
-> >           device_links_unbind_consumers ->
-> >               ...
-> >               WRITE_ONCE(link->status, DL_STATE_SUPPLIER_UNBIND)
-> >               device_release_driver_internal (consumer device)
-> >      pm_runtime_get_sync -> (consumer device)
-> >       ...
-> >       __rpm_callback ->
-> >           rpm_get_suppliers ->
-> >               if link->state == DL_STATE_SUPPLIER_UNBIND -> skip the action of resuming the supplier
-> >               ...
-> >      pm_runtime_clean_up_links
-> >      ...
->
-> Hi Rafael, do you have any idea about this issue?
->
-> > It should guarantee correct suspend/resume ordering between a supplier
-> > device and its consumer devices (resume the supplier device before resuming
-> > consumer devices, and suspend consumer devices before suspending supplier
-> > device) for runtime PM, but it seems the check in rpm_get_supplier() breaks
-> > the rule, so remove it.
-> >
-> > Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-> > ---
-> >   drivers/base/power/runtime.c | 3 +--
-> >   1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index 9f62790..a8edd92 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -291,8 +291,7 @@ static int rpm_get_suppliers(struct device *dev)
-> >                               device_links_read_lock_held()) {
-> >               int retval;
-> >
-> > -             if (!(link->flags & DL_FLAG_PM_RUNTIME) ||
-> > -                 READ_ONCE(link->status) == DL_STATE_SUPPLIER_UNBIND)
-> > +             if (!(link->flags & DL_FLAG_PM_RUNTIME))
+> Thanks for the suggestion! It makes perfect sense to me - and would
+> also be consistent with how CPU PM notifiers are managed,
 
-AFAICS you need to make the analogous change in rpm_put_suppliers(),
-but apart from this it should be fine.
+So I thought that you wanted to send a v2, but I cannot find it.
 
-Thanks!
-
-> >                       continue;
-> >
-> >               retval = pm_runtime_get_sync(link->supplier);
->
->
+Cheers!
