@@ -2,100 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7296271B95
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 09:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 730E1271D86
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 10:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726689AbgIUHVD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 03:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726547AbgIUHUR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 03:20:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D3FC061755;
-        Mon, 21 Sep 2020 00:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=aWpQMjG3K8ZDoYTgVEFk+u0gKdJASH29rDnXXsv40lc=; b=nPdCKsa1AKYRb5HoCWLpMWnHZ2
-        WCzoTP4XCD0vyRaLIMn5iDFyYAA8Xb8Yddn7TOP2uVGBRq5AP3wK3vqVJFCaxhLv4Kt7Alp2qbVuS
-        tMAx1+5VCDlAsg7CXEFh2DA26uSrVwWRbVDQBrJ9zo8doVfGJfAhpINmK98BIZyZUGrC+K0x32iwX
-        LYBk5b1gPP3CeKR/yE/3rZTm2osd3al6VncOcoX/Ji3imqTpOVc8wf6lO72NvI5Rm+BOqOjrpAnmf
-        Qyb8TYf1JgO1QiDHTK29wr3DOXIzknAMqf5iWxna1LDXl9q6kzsxGQ8z64z9kpKzWizW5DRXA03qw
-        ZdXiB9DQ==;
-Received: from p4fdb0c34.dip0.t-ipconnect.de ([79.219.12.52] helo=localhost)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kKG7J-0003JK-J0; Mon, 21 Sep 2020 07:20:05 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Josef Bacik <josef@toxicpanda.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Stefan Haberland <sth@linux.ibm.com>,
-        Jan Hoeppner <hoeppner@linux.ibm.com>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, nbd@other.debian.org,
-        linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-block@vger.kernel.org
-Subject: [PATCH 14/14] block: mark blkdev_get static
-Date:   Mon, 21 Sep 2020 09:19:58 +0200
-Message-Id: <20200921071958.307589-15-hch@lst.de>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200921071958.307589-1-hch@lst.de>
-References: <20200921071958.307589-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+        id S1726341AbgIUIJz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 04:09:55 -0400
+Received: from smtp2207-205.mail.aliyun.com ([121.197.207.205]:35682 "EHLO
+        smtp2207-205.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726326AbgIUIJx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 04:09:53 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07469255|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00718346-0.00298717-0.989829;FP=0|0|0|0|0|-1|-1|-1;HT=e02c03308;MF=liush@allwinnertech.com;NM=1;PH=DS;RN=13;RT=13;SR=0;TI=SMTPD_---.Ia6tHzu_1600675784;
+Received: from localhost.localdomain(mailfrom:liush@allwinnertech.com fp:SMTPD_---.Ia6tHzu_1600675784)
+          by smtp.aliyun-inc.com(10.147.40.200);
+          Mon, 21 Sep 2020 16:09:49 +0800
+From:   liush <liush@allwinnertech.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rjw@rjwysocki.net,
+        daniel.lezcano@linaro.org, christian.brauner@ubuntu.com,
+        keescook@chromium.org, amanieu@gmail.com, guoren@linux.alibaba.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, liush <liush@allwinnertech.com>
+Subject: [v2] cpuidle: add riscv cpuidle driver
+Date:   Mon, 21 Sep 2020 16:09:42 +0800
+Message-Id: <1600675782-25992-1-git-send-email-liush@allwinnertech.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are no users outside the core block code left now.
+This patch adds a simple cpuidle driver for RISC-V systems using
+the WFI state. Other states will be supported in the future.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: liush <liush@allwinnertech.com>
 ---
- fs/block_dev.c         | 3 +--
- include/linux/blkdev.h | 1 -
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Changes in v2:
+ - call "mb()" before run "WFI" in cpu_do_idle 
+ - modify commit description 
+ - place "select CPU_IDLE" in alphabetical order  
+ - replace "__asm__ __volatile__ ("wfi")" with "wait_for_interrupt()" 
+ - delete "cpuidle.c",move "cpu_do_idle()" to cpuidle.h 
+ - modify "arch_cpu_idle", "cpu_do_idle" can be called by 
+   "arch_cpu_idle"
+ - fix space/tab issues
+ - modify riscv_low_level_suspend_enter to __weak mode
 
-diff --git a/fs/block_dev.c b/fs/block_dev.c
-index 2898d69be6b3e4..6b9d19ffa5af7b 100644
---- a/fs/block_dev.c
-+++ b/fs/block_dev.c
-@@ -1616,7 +1616,7 @@ static int __blkdev_get(struct block_device *bdev, fmode_t mode, void *holder,
-  * RETURNS:
-  * 0 on success, -errno on failure.
-  */
--int blkdev_get(struct block_device *bdev, fmode_t mode, void *holder)
-+static int blkdev_get(struct block_device *bdev, fmode_t mode, void *holder)
+ arch/riscv/Kconfig               |  7 ++++++
+ arch/riscv/include/asm/cpuidle.h | 16 ++++++++++++
+ arch/riscv/kernel/process.c      |  3 ++-
+ drivers/cpuidle/Kconfig          |  5 ++++
+ drivers/cpuidle/Kconfig.riscv    | 11 ++++++++
+ drivers/cpuidle/Makefile         |  4 +++
+ drivers/cpuidle/cpuidle-riscv.c  | 54 ++++++++++++++++++++++++++++++++++++++++
+ 7 files changed, 99 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/include/asm/cpuidle.h
+ create mode 100644 drivers/cpuidle/Kconfig.riscv
+ create mode 100644 drivers/cpuidle/cpuidle-riscv.c
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index df18372..799bf86 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -33,6 +33,7 @@ config RISCV
+ 	select ARCH_WANT_HUGE_PMD_SHARE if 64BIT
+ 	select CLONE_BACKWARDS
+ 	select COMMON_CLK
++	select CPU_IDLE
+ 	select EDAC_SUPPORT
+ 	select GENERIC_ARCH_TOPOLOGY if SMP
+ 	select GENERIC_ATOMIC64 if !64BIT
+@@ -407,6 +408,12 @@ config BUILTIN_DTB
+ 	depends on RISCV_M_MODE
+ 	depends on OF
+ 
++menu "CPU Power Management"
++
++source "drivers/cpuidle/Kconfig"
++
++endmenu
++
+ menu "Power management options"
+ 
+ source "kernel/power/Kconfig"
+diff --git a/arch/riscv/include/asm/cpuidle.h b/arch/riscv/include/asm/cpuidle.h
+new file mode 100644
+index 00000000..599b810
+--- /dev/null
++++ b/arch/riscv/include/asm/cpuidle.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __RISCV_CPUIDLE_H
++#define __RISCV_CPUIDLE_H
++
++static inline void cpu_do_idle(void)
++{
++	/*
++	 * Add mb() here to ensure that all
++	 * IO/MEM access are completed prior
++	 * to enter WFI.
++	 */
++	mb();
++	wait_for_interrupt();
++}
++
++#endif
+diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+index 2b97c49..5431aaa 100644
+--- a/arch/riscv/kernel/process.c
++++ b/arch/riscv/kernel/process.c
+@@ -21,6 +21,7 @@
+ #include <asm/string.h>
+ #include <asm/switch_to.h>
+ #include <asm/thread_info.h>
++#include <asm/cpuidle.h>
+ 
+ register unsigned long gp_in_global __asm__("gp");
+ 
+@@ -35,7 +36,7 @@ extern asmlinkage void ret_from_kernel_thread(void);
+ 
+ void arch_cpu_idle(void)
  {
- 	int ret, perm = 0;
- 
-@@ -1637,7 +1637,6 @@ int blkdev_get(struct block_device *bdev, fmode_t mode, void *holder)
- 	bdput(bdev);
- 	return ret;
+-	wait_for_interrupt();
++	cpu_do_idle();
+ 	local_irq_enable();
  }
--EXPORT_SYMBOL(blkdev_get);
  
- /**
-  * blkdev_get_by_path - open a block device by name
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 5bd96fbab9b4c8..14117995091224 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1975,7 +1975,6 @@ void blkdev_show(struct seq_file *seqf, off_t offset);
- #define BLKDEV_MAJOR_MAX	0
- #endif
+diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
+index c0aeedd..f6be0fd 100644
+--- a/drivers/cpuidle/Kconfig
++++ b/drivers/cpuidle/Kconfig
+@@ -62,6 +62,11 @@ depends on PPC
+ source "drivers/cpuidle/Kconfig.powerpc"
+ endmenu
  
--int blkdev_get(struct block_device *bdev, fmode_t mode, void *holder);
- struct block_device *blkdev_get_by_path(const char *path, fmode_t mode,
- 		void *holder);
- struct block_device *blkdev_get_by_dev(dev_t dev, fmode_t mode, void *holder);
++menu "RISCV CPU Idle Drivers"
++depends on RISCV
++source "drivers/cpuidle/Kconfig.riscv"
++endmenu
++
+ config HALTPOLL_CPUIDLE
+ 	tristate "Halt poll cpuidle driver"
+ 	depends on X86 && KVM_GUEST
+diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
+new file mode 100644
+index 00000000..7bec059
+--- /dev/null
++++ b/drivers/cpuidle/Kconfig.riscv
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0-only
++#
++# RISCV CPU Idle drivers
++#
++config RISCV_CPUIDLE
++	bool "Generic RISCV CPU idle Driver"
++	select DT_IDLE_STATES
++	select CPU_IDLE_MULTIPLE_DRIVERS
++	help
++	  Select this option to enable generic cpuidle driver for RISCV.
++	  Now only support C0 State.
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index 26bbc5e..4c83c4e 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -34,3 +34,7 @@ obj-$(CONFIG_MIPS_CPS_CPUIDLE)		+= cpuidle-cps.o
+ # POWERPC drivers
+ obj-$(CONFIG_PSERIES_CPUIDLE)		+= cpuidle-pseries.o
+ obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
++
++###############################################################################
++# RISCV drivers
++obj-$(CONFIG_RISCV_CPUIDLE)		+= cpuidle-riscv.o
+diff --git a/drivers/cpuidle/cpuidle-riscv.c b/drivers/cpuidle/cpuidle-riscv.c
+new file mode 100644
+index 00000000..2ada1d5
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-riscv.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * RISC-V CPU idle driver.
++ *
++ * Copyright (C) 2020-2022 Allwinner Ltd
++ *
++ * Based on code - driver/cpuidle/cpuidle-at91.c
++ *
++ */
++#include <linux/cpuidle.h>
++#include <linux/cpumask.h>
++#include <linux/cpu_pm.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/slab.h>
++#include <linux/platform_device.h>
++#include <asm/cpuidle.h>
++
++#define MAX_IDLE_STATES	1
++
++int __weak riscv_low_level_suspend_enter(int state)
++{
++	return 0;
++}
++
++/* Actual code that puts the SoC in different idle states */
++static int riscv_enter_idle(struct cpuidle_device *dev,
++			struct cpuidle_driver *drv,
++			       int index)
++{
++	return CPU_PM_CPU_IDLE_ENTER_PARAM(riscv_low_level_suspend_enter,
++					   index, 0);
++}
++
++static struct cpuidle_driver riscv_idle_driver = {
++	.name			= "riscv_idle",
++	.owner			= THIS_MODULE,
++	.states[0]		= {
++		.enter			= riscv_enter_idle,
++		.exit_latency		= 1,
++		.target_residency	= 1,
++		.name			= "WFI",
++		.desc			= "RISCV WFI",
++	},
++	.state_count = MAX_IDLE_STATES,
++};
++
++static int __init riscv_cpuidle_init(void)
++{
++	return cpuidle_register(&riscv_idle_driver, NULL);
++}
++
++device_initcall(riscv_cpuidle_init);
 -- 
-2.28.0
+2.7.4
 
