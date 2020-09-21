@@ -2,91 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673E0272AB0
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 17:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC84272ABF
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Sep 2020 17:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727244AbgIUPuE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Sep 2020 11:50:04 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:43362 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726810AbgIUPuE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 11:50:04 -0400
-Received: by mail-ot1-f66.google.com with SMTP id n61so12746226ota.10
-        for <linux-pm@vger.kernel.org>; Mon, 21 Sep 2020 08:50:03 -0700 (PDT)
+        id S1727677AbgIUPvx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Sep 2020 11:51:53 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38114 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbgIUPvv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Sep 2020 11:51:51 -0400
+Received: by mail-ot1-f68.google.com with SMTP id y5so12777402otg.5;
+        Mon, 21 Sep 2020 08:51:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oO/ARDft/cks7ZXJorM0gJHERENVGdcO1TPxxlhgkig=;
-        b=AfNgt9KYMmZwvflrZCw4LHg4pXP1WmS3BqPPieIIWwzSDWrLVdQBiJMQW7tr0yQQGV
-         8iTBsNYvXTLcUiwtDWYdj5fOB83ifJ54QlTJZlsDcATBEMyXoIOK/kzbcLPoGPnNrl3v
-         8WJD+0GLySoHcb9dT0CWPprcKOIgnLG3H+mRImNxGTQGAjZLfmJhYGOorCgacBwq1YkI
-         RLYqzU7kThzev3yvXkmT3VG0jZvKE9ciKmBRuhEsxrrcFCBJW7VPGUjnxVmeNArWlhGy
-         5/oKkJhX801iN9T1mxR1n52L09b8mms62M2zoJ6fdQPTSoyZp53W46S1z+yPiMZCcXtY
-         e/7Q==
-X-Gm-Message-State: AOAM533Bvl4VaYdvMT77nRg5GNOdnviDDHjaoVSsQ38Vh/HQhr7ePEtq
-        n/vRbPGOqt0C2KWF1DaJfU6dkJM3ncdXlacxoMo=
-X-Google-Smtp-Source: ABdhPJz1lAeoMlUYT/ZXcQuOOuc/mu3ZY7Mipj9Nz31LlB8KdhrWsyJPPUOYjmEqSDaGm0yDB6aS74uDShwqJq4V5gQ=
-X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr116301otg.118.1600703403285;
- Mon, 21 Sep 2020 08:50:03 -0700 (PDT)
+        bh=jPJjBMxHKHUceSNmN9Nn7k9JJsU0eMQLMBgotnWjMpk=;
+        b=dXeaqskShL5VdJIDEZqgY5cQSMleaYNXNMayX/zKxBZc4ngCZDILlN9mRyTbhlUmjb
+         poO+uyotmk5kz7GDmiRol+/a0iNSQJDgC62SutF56E6qRqWkwMQ0eVU+uSrLlZlV5O3u
+         r9brwsxJlUdOHlEA0MQF7P6w4I1XXs+6qQwmxb7p9+x1FHyU/PG1OpCB6cd2aKyiFyRO
+         dPaq8UoCxNWQZznQq0jGNfKq6AVQd1q6yLPKy5yWE+iy4yYH+oaqDoxDwCbt4spRId8q
+         p8xOOAqBA4tagufC1mDRc7WjBbGBuU4muXWM/6E6KmauPclJKMSEh8WtUZqlWFZEwZu/
+         Um9w==
+X-Gm-Message-State: AOAM530MZZ0CJLQjN5oIguFUZg20VeqWTrWu25I9OckXU7O5ojVcTfAg
+        U2qeRAVedN3iC6qUDA5mTgJt9kkibCS9QTLyHQ4=
+X-Google-Smtp-Source: ABdhPJwyZBHi30AoB3e0t3aFxTO9o6sVcsJ+5b6Q9mDBTXNnZGwnR/bJVyZjwVBonJuX1wH+//jBBbMAhXmIuFbBLpU=
+X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr120500otg.118.1600703509133;
+ Mon, 21 Sep 2020 08:51:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200814123716.61936-1-ulf.hansson@linaro.org>
-In-Reply-To: <20200814123716.61936-1-ulf.hansson@linaro.org>
+References: <20200729105206.2991064-1-victording@google.com>
+In-Reply-To: <20200729105206.2991064-1-victording@google.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Sep 2020 17:49:52 +0200
-Message-ID: <CAJZ5v0g7EZVeF6GL8yqfALq-wgp+9igO3JkzR-as7Ng9ycbFJQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+Date:   Mon, 21 Sep 2020 17:51:37 +0200
+Message-ID: <CAJZ5v0jfMAi2UjvwjYG6=hytGeHZkuaeNEsu+oaz8tEMcuHnPg@mail.gmail.com>
+Subject: Re: [PATCH 0/3] powercap: Enable RAPL for AMD Fam17h
+To:     Victor Ding <victording@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 14, 2020 at 2:37 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Wed, Jul 29, 2020 at 12:52 PM Victor Ding <victording@google.com> wrote:
 >
-> Extend the file pattern to also include cpuidle-psci.h and
-> cpuidle-psci-domain.c. Moreover, add myself as a co-maintainer,
-> particularly to help with the support for PM domains.
+> This patch series adds support for AMD Fam17h RAPL counters. As per
+> AMD PPR, Fam17h support RAPL counters to monitor power usage. The RAPL
+> counter operates as with Intel RAPL. Therefore, it is beneficial to
+> re-use existing framework for Intel, especially to allow existing tools
+> to seamlessly run on AMD.
 >
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> From the user's point view, this series enables the following two sysfs
+> entry on AMD Fam17h:
+>   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
+>   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
+>
+>
+> Victor Ding (3):
+>   x86/msr-index: sort AMD RAPL MSRs by address
 
-Any objections from the original maintainers?
+I haven't received this patch.
 
-> ---
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+Any chance to resend the entire series with a CC to linux-pm?
+
+>   powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
+>   powercap: Add AMD Fam17h RAPL support
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f9ae8ea54e27..66821197175e 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -4556,10 +4556,11 @@ F:      drivers/cpuidle/cpuidle-exynos.c
->  CPUIDLE DRIVER - ARM PSCI
->  M:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
->  M:     Sudeep Holla <sudeep.holla@arm.com>
-> +M:     Ulf Hansson <ulf.hansson@linaro.org>
->  L:     linux-pm@vger.kernel.org
->  L:     linux-arm-kernel@lists.infradead.org
->  S:     Supported
-> -F:     drivers/cpuidle/cpuidle-psci.c
-> +F:     drivers/cpuidle/cpuidle-psci*
+>  arch/x86/include/asm/msr-index.h     |  3 +-
+>  drivers/powercap/intel_rapl_common.c |  2 +
+>  drivers/powercap/intel_rapl_msr.c    | 58 +++++++++++++++++++++-------
+>  3 files changed, 47 insertions(+), 16 deletions(-)
 >
->  CRAMFS FILESYSTEM
->  M:     Nicolas Pitre <nico@fluxnic.net>
 > --
-> 2.25.1
+> 2.28.0.rc0.142.g3c755180ce-goog
 >
