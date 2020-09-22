@@ -2,85 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CA6274537
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260B6274542
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgIVP1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 11:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbgIVP1R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:27:17 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312EC0613CF
-        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 08:27:17 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id o5so17520893wrn.13
-        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 08:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=daWCo1RFCRJHeJIJbYudV3s6gpJF4K5dmJezag8Qxqc=;
-        b=PQ0Av58MFvLr8hCz6Yr/XxwJJ7Rgqi5vRs6SigDx5kZJM55s9csvPupwqeaTQWbb5z
-         TRGOieLlELVhujXUHDOon7IzLBsGs3ni5pwKbtN4mB5zBPYampC9UdWB+vt9L+9B+kA3
-         R5vvd2tolQMyPqDvZ3F8UN102erJ643KTs9FuimjTL9q7XVs6EIOZuAzaz6Nhm5enw7s
-         9jMD1N9hAov6lVgtCVQx4WoWiHmWIAtsOIkf8+5Z6ycPjYAZHMv10udgKsbxF+JwHDxd
-         msuvSW9jl3394JT8quDkK7Mx9/08S7nGKzMTHlj5eIue6YMna08FEjFemZ4KefCcu3Z3
-         4Dpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=daWCo1RFCRJHeJIJbYudV3s6gpJF4K5dmJezag8Qxqc=;
-        b=k3j6AeS4S6wc+bKbl13GgLhO/qtVrVAPCFxIdww2Hjb9mP5uD0dZNAJ9OaMJCNvSwQ
-         hv+OoxbqPE3TQtsiqPWd99UHTtOgAY0vJ6krvsEQcMnZJwrlZtFO15h/AFTzg1S9i1X9
-         Ic9qWGeHHpLdlKLDdU6feUFILb3e3GAgLBUTjJGpIkvhvtad6z/s+S9ZiM+YztMHWjd4
-         kjzu0uMfYYVJtMe9hEsoF78qreSxBoaXn1/ENiQ2/olKcUVcdEKGJDwmRM8+eyVsTqW7
-         9muzJjrQOIBSrmqOIxJq2d82LKduaFuouUS2vphDEUY5IDrjimG7QmMPrDu6PyqF2KiN
-         v96g==
-X-Gm-Message-State: AOAM530quHVWDxn0CpHi6WsG7iMnxzKX4R9rKpqum3EWug0IBKNN8PdF
-        ZZbP0dceYSHynI+oPcLpgoCvQQ==
-X-Google-Smtp-Source: ABdhPJxIF3wfnvfDxTeIOMmGPLFmN7hQs1E4eU47akeBeJuybRbsqN+aPPzVy9tpPtD1sT/n/nNwzQ==
-X-Received: by 2002:a5d:4a0c:: with SMTP id m12mr6017594wrq.83.1600788434458;
-        Tue, 22 Sep 2020 08:27:14 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:2047:2ab9:c10c:f4f? ([2a01:e34:ed2f:f020:2047:2ab9:c10c:f4f])
-        by smtp.googlemail.com with ESMTPSA id f6sm27290103wro.5.2020.09.22.08.27.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2020 08:27:13 -0700 (PDT)
-Subject: Re: [PATCH -next] thermal: core: remove unnecessary mutex_init()
-To:     Qinglang Miao <miaoqinglang@huawei.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20200916062139.191233-1-miaoqinglang@huawei.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <6c4c2d70-e901-74e4-185a-8f8bb105f03b@linaro.org>
-Date:   Tue, 22 Sep 2020 17:27:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20200916062139.191233-1-miaoqinglang@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1726723AbgIVP3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 11:29:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55956 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726566AbgIVP27 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Sep 2020 11:28:59 -0400
+Received: from localhost.localdomain (unknown [194.230.155.191])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 332D7214F1;
+        Tue, 22 Sep 2020 15:28:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600788539;
+        bh=27J/qBjEJpMQ8FBjYAVH6iBhxNoGncMH/j8Wfds65Pk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PUADNSFPFhR29EDiZ/Ij/9aOCJMuqQD/tfx+RF+4ktGbqIa574a09TU2HgTYkAgHI
+         IBI43/uVuc/fDA4alYxxp1xhvSuyZG75OL/ch4cfeUkqHCjw0N8hUXlGplF+DensSJ
+         fFcIES1zzv27+KfI4PjVOCCdKSMMXJn6bMWx+0VI=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-iio@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-pwm@vger.kernel.org
+Cc:     Dan Murphy <dmurphy@ti.com>
+Subject: [PATCH v2] MAINTAINERS: add Dan Murphy as TP LP8xxx drivers maintainer
+Date:   Tue, 22 Sep 2020 17:28:39 +0200
+Message-Id: <20200922152839.2744-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/09/2020 08:21, Qinglang Miao wrote:
-> The mutex poweroff_lock is initialized statically. It is
-> unnecessary to initialize by mutex_init().
-> 
-> Signed-off-by: Qinglang Miao <miaoqinglang@huawei.com>
-> ---
+Milo Kim's email in TI bounces with permanent error (550: Invalid
+recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
+credits and add Dan Murphy from TI to look after:
+ - TI LP855x backlight driver,
+ - TI LP8727 charger driver,
+ - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
 
-Applied, thanks
+Cc: Dan Murphy <dmurphy@ti.com>
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
 
+---
 
+Changes since v1:
+1. Add Dan Murphy, do not remove the entries.
+---
+ CREDITS     | 3 +++
+ MAINTAINERS | 6 +++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/CREDITS b/CREDITS
+index 1df63cdf71df..46384b11f258 100644
+--- a/CREDITS
++++ b/CREDITS
+@@ -1910,6 +1910,9 @@ S: 660 Harvard Ave. #7
+ S: Santa Clara, CA 95051
+ S: USA
+ 
++N: Milo Kim
++D: TI LP855x, LP8727 and LP8788 drivers
++
+ N: Russell King
+ E: rmk@arm.linux.org.uk
+ D: Linux/arm integrator, maintainer & hacker
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b9621ca2b31..bcd2fdf0dbf2 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17472,20 +17472,20 @@ F:	sound/soc/codecs/isabelle*
+ F:	sound/soc/codecs/lm49453*
+ 
+ TI LP855x BACKLIGHT DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
++M:	Dan Murphy <dmurphy@ti.com>
+ S:	Maintained
+ F:	Documentation/driver-api/backlight/lp855x-driver.rst
+ F:	drivers/video/backlight/lp855x_bl.c
+ F:	include/linux/platform_data/lp855x.h
+ 
+ TI LP8727 CHARGER DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
++M:	Dan Murphy <dmurphy@ti.com>
+ S:	Maintained
+ F:	drivers/power/supply/lp8727_charger.c
+ F:	include/linux/platform_data/lp8727.h
+ 
+ TI LP8788 MFD DRIVER
+-M:	Milo Kim <milo.kim@ti.com>
++M:	Dan Murphy <dmurphy@ti.com>
+ S:	Maintained
+ F:	drivers/iio/adc/lp8788_adc.c
+ F:	drivers/leds/leds-lp8788.c
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.17.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
