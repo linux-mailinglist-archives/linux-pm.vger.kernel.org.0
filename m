@@ -2,86 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C505D2745CB
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566162745D8
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgIVPw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 11:52:58 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42264 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgIVPw6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:52:58 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m13so11582619otl.9
-        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 08:52:58 -0700 (PDT)
+        id S1726703AbgIVP5R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 11:57:17 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:45872 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726566AbgIVP5R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:57:17 -0400
+Received: by mail-oi1-f194.google.com with SMTP id z26so21527977oih.12;
+        Tue, 22 Sep 2020 08:57:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=H3q9f14ehpAz5FVsFd+k/aiAvb/GxFKUaV2cgid0foQ=;
-        b=ViJAuS48Zt79m25VIiI8Rl9G0cxmHibZlhBIPPV/X2cJaR0U6ya+xs6ne8HcWLKHQa
-         iI2jL1IOB8K9uPy0DWSdgRcee17TTasEyiks8er8LYnB+LeKqAKfMS+f3UIH07XkDbzG
-         4xPkQDce6EJCpOE/94CYFboYCKuk2tHcG7fdhWDePgx2q18lhouNAJh1WHmcLDwiVJaY
-         PcXg3Any3Dx+65BcJfUjnryFN/eIvoeYSIcaSUyJfbl0AVPRAvaLgX+xG+wVnVyxKooq
-         Pvc/9oqQLmZ7fmNHHmV1GCcbZyZMKqWaNs5uoEyu3FUT3KBAAhYWzze6EuNP2on7I280
-         pa+A==
-X-Gm-Message-State: AOAM533VOYuKLlueGPfD/Yg5SP+KLE+wLsBEdSTrh09m8EAa4IJF72nO
-        fITOZO7HMe2uy9e0xMb7jYtKZhuwumorgq5/hRE=
-X-Google-Smtp-Source: ABdhPJwwnquJiS4Bglp8qZNaDx5i6oFUEt6soBVGViBRA2vNmVhgxHRoVIwsU9dj/Ykj+RsebZqCZAOBOtvc5iHFEvw=
-X-Received: by 2002:a05:6830:150a:: with SMTP id k10mr3047075otp.167.1600789977850;
- Tue, 22 Sep 2020 08:52:57 -0700 (PDT)
+        bh=H7GTMYyDTGfT2GkuPOYpbPR9aCxeCsMt4Pl5zwmZ3aQ=;
+        b=ZHoXZYi+V2kiyf52ylq5HGU18/Y5PtAZUFjAIpn7h4AJG7Si2wE6xY8zTjAYzygwr9
+         KJCmBiSggH5RfRPEJe6yNfUJUnpjP1KtLS8d9CoEbRvFz23kNYkRxgRF3AL8zS94cTrv
+         bVVnL2jrRDGf1Ry+AueSEhCtyVZ+22AcZe0kkkXbi8DJvBlk/8dakqYnysGSwGKd1++s
+         QTV+2GbM2bunuVf6R811zs7EzoXdHlbbLNNej2g74j/e3gL2WtHA1it425+u1Ma0fxO1
+         NyCLSXuoNg1As4p7tHNIev2JIdUNntG9taz7Fw2Edk9cxtwOapT452suhCL0iBRhbGKw
+         0WhA==
+X-Gm-Message-State: AOAM533SDzECuY+1loteK2dtR9KscopLi8GPoWIMZL088jbRUQyPHdXj
+        9/NE7PTQyv3pkXo5NcJnNbPpSysckaqS1t8oxQ4=
+X-Google-Smtp-Source: ABdhPJySETBo8YtEgNAde+S5KENFHtSP29em06c8SeyWbwPKS6nl0wIvxxd16q5d/ROKSfXuO6+g7rbOC9AHW8Joloc=
+X-Received: by 2002:a05:6808:491:: with SMTP id z17mr3163364oid.110.1600790236736;
+ Tue, 22 Sep 2020 08:57:16 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200901142859.224381-1-ulf.hansson@linaro.org> <CAPDyKFrim8D10N46FFE55kuWw68SuRWBD3HBcY5VMkOR1fhybg@mail.gmail.com>
-In-Reply-To: <CAPDyKFrim8D10N46FFE55kuWw68SuRWBD3HBcY5VMkOR1fhybg@mail.gmail.com>
+References: <20200902210116.7360-1-ilina@codeaurora.org>
+In-Reply-To: <20200902210116.7360-1-ilina@codeaurora.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Sep 2020 17:52:46 +0200
-Message-ID: <CAJZ5v0i6myhZfb6GTSUdyWXYqAhc2RGBotDit+0UPzjrzRxWSA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] cpuidle: psci: Always create the PM domains
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+Date:   Tue, 22 Sep 2020 17:57:05 +0200
+Message-ID: <CAJZ5v0gWVVPF_S_=1WyXAiB0Gse6PO8VZQf0yAr=in15CM3w7w@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: record state entry failed statistics
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lina Iyer <ilina@codeaurora.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 9:51 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+Sorry for the delay.
+
+On Wed, Sep 2, 2020 at 11:01 PM Lina Iyer <ilina@codeaurora.org> wrote:
 >
-> On Tue, 1 Sep 2020 at 16:29, Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > This coverletter is mainly to help keeping track of the patches part in the
-> > series. Please have a look at each patch for more details.
-> >
-> > Kind regards
-> > Ulf Hansson
-> >
-> >
-> > Ulf Hansson (2):
-> >   firmware: psci: Extend psci_set_osi_mode() to allow reset to PC mode
-> >   cpuidle: psci: Allow PM domain to be initialized even if no OSI mode
-> >
-> >  drivers/cpuidle/cpuidle-psci-domain.c | 59 ++++++++++++++-------------
-> >  drivers/firmware/psci/psci.c          | 12 +++---
-> >  include/linux/psci.h                  |  2 +-
-> >  3 files changed, 39 insertions(+), 34 deletions(-)
-> >
+> When CPUs fail to enter the chosen idle state it's mostly because of a
+> pending interrupt. Let's record that and show along with other
+> statistics for the idle state. This could prove useful in understanding
+> behavior of the governor and the system during usecases that involve
+> multiple CPUs.
 >
-> Rafael, I guess you may have not seen this one.
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> ---
+>  drivers/cpuidle/cpuidle.c | 1 +
+>  drivers/cpuidle/sysfs.c   | 3 +++
+>  include/linux/cpuidle.h   | 1 +
 
-I have seen it, but I didn't manage to get to it before today, sadly.
+The documentation needs to be updated too to cover the new state attribute.
 
-> I think it's ready to get applied as v5.10 material. Do you want me to resend?
+>  3 files changed, 5 insertions(+)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 04becd70cc41..8dbf71f6138d 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -302,6 +302,7 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+>                 }
+>         } else {
+>                 dev->last_residency_ns = 0;
+> +               dev->states_usage[index].failed++;
+>         }
+>
+>         return entered_state;
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 091d1caceb41..f166687b3bcd 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -256,6 +256,7 @@ define_show_state_time_function(exit_latency)
+>  define_show_state_time_function(target_residency)
+>  define_show_state_function(power_usage)
+>  define_show_state_ull_function(usage)
+> +define_show_state_ull_function(failed)
 
-No need, applied now.
+And what about calling it "rejected" instead of "failed"?
 
-Thanks!
+>  define_show_state_str_function(name)
+>  define_show_state_str_function(desc)
+>  define_show_state_ull_function(above)
+> @@ -312,6 +313,7 @@ define_one_state_ro(latency, show_state_exit_latency);
+>  define_one_state_ro(residency, show_state_target_residency);
+>  define_one_state_ro(power, show_state_power_usage);
+>  define_one_state_ro(usage, show_state_usage);
+> +define_one_state_ro(failed, show_state_failed);
+>  define_one_state_ro(time, show_state_time);
+>  define_one_state_rw(disable, show_state_disable, store_state_disable);
+>  define_one_state_ro(above, show_state_above);
+> @@ -325,6 +327,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
+>         &attr_residency.attr,
+>         &attr_power.attr,
+>         &attr_usage.attr,
+> +       &attr_failed.attr,
+>         &attr_time.attr,
+>         &attr_disable.attr,
+>         &attr_above.attr,
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index 75895e6363b8..911b99273eba 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -38,6 +38,7 @@ struct cpuidle_state_usage {
+>         u64                     time_ns;
+>         unsigned long long      above; /* Number of times it's been too deep */
+>         unsigned long long      below; /* Number of times it's been too shallow */
+> +       unsigned long long      failed; /* Number of times it failed to enter */
+>  #ifdef CONFIG_SUSPEND
+>         unsigned long long      s2idle_usage;
+>         unsigned long long      s2idle_time; /* in US */
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
