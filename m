@@ -2,111 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF38274645
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 18:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC49274662
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 18:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726667AbgIVQMp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 12:12:45 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:32738 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbgIVQMp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Sep 2020 12:12:45 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1600791165; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=EZRwqUT9E3jZrgdjNm8FFMtkMTg/4V6XnlWG1JPmllI=; b=Og5ae/8y9kZ/ds9RgXrBG9/ZCVbkyDrpXcS2JtkqgZmJIGMln2yjiuh/tY7zZS4VSwkVXpFZ
- 5YiTy07WQOhoPhkDXrZZobwfTrUzFgVAChqWBFKmkP3SNEoEtaV/IBF4Km38mQR1qNc5dSir
- AmdkmG5vAJz06k1YFo6PpwDMzoE=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 5f6a226145a0e38d8175087b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 22 Sep 2020 16:12:17
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 309DCC433F1; Tue, 22 Sep 2020 16:12:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7583FC433C8;
-        Tue, 22 Sep 2020 16:12:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7583FC433C8
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-Date:   Tue, 22 Sep 2020 10:12:15 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: governor: export cpuidle governor functions
-Message-ID: <20200922161215.GD30658@codeaurora.org>
-References: <010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com>
- <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
+        id S1726573AbgIVQTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 12:19:09 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:39120 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726508AbgIVQTJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 12:19:09 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08MGFCef055413;
+        Tue, 22 Sep 2020 16:18:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=sEHjYHgpuV+AnxSztrrqp3lRmdzCrQ71bV6mXr0RVMU=;
+ b=aVEU3mvLJ/ITw0VV2xKn7/NCGpGUFxAruRlqpDHa/L2rdiTooPqTZlL+AtHMIWVaVMk+
+ NM5RqspUXUdS4+u92d3uZVICz1kFvKsatIOAyaZztQ2ZAbZqIbGGKbaPGE85Iq2jCKa8
+ M1B2dg+7f7R/KWihI0S2unb4nUtUtwnJcilFnxAitc/vmFOtMuFeHPj0yIwZR5bAhXQt
+ 2h3PZMTeeeeTIsW0dPCoAcbuGw6+c6+U8AHux+AJZ7Cc67InCxaYY5pYJOfxdf6V16n4
+ EJQb0WZthhCKVdRRN9u26KCT+OTiJctOPCd0ems4pYIBByUawhs8waeDdg4kkZ24WEPN eQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 33q5rgc4ts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 22 Sep 2020 16:18:22 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08MGFtHd143702;
+        Tue, 22 Sep 2020 16:18:22 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 33nuw4b02s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Sep 2020 16:18:21 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08MGIBWW018552;
+        Tue, 22 Sep 2020 16:18:11 GMT
+Received: from [10.74.86.236] (/10.74.86.236)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 22 Sep 2020 09:18:11 -0700
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
+ mode
+To:     Anchal Agarwal <anchalag@amazon.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
+        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
+        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
+        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
+        sblbir@amazon.com, xen-devel@lists.xenproject.org,
+        vkuznets@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
+        benh@kernel.crashing.org
+References: <cover.1598042152.git.anchalag@amazon.com>
+ <9b970e12491107afda0c1d4a6f154b52d90346ac.1598042152.git.anchalag@amazon.com>
+ <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
+ <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
+ <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
+ <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+From:   boris.ostrovsky@oracle.com
+Organization: Oracle Corporation
+Message-ID: <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
+Date:   Tue, 22 Sep 2020 12:18:05 -0400
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 suspectscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009220124
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9752 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 impostorscore=0
+ clxscore=1015 suspectscore=0 phishscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009220124
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-On Tue, Sep 22 2020 at 10:00 -0600, Rafael J. Wysocki wrote:
->Sorry for the delay.
+On 9/21/20 5:54 PM, Anchal Agarwal wrote:
+> Thanks for the above suggestion. You are right I didn't find a way to declare
+> a global state either. I just broke the above check in 2 so that once we have
+> support for ARM we should be able to remove aarch64 condition easily. Let me
+> know if I am missing nay corner cases with this one.
 >
->On Wed, Sep 9, 2020 at 12:15 AM Lina Iyer <ilina@codeaurora.org> wrote:
->>
->> Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
->> capability of registering cpuidle governors, which was unused at that
->> time. By exporting the symbol, let's allow platform specific modules to
->> register cpuidle governors and use cpuidle_governor_latency_req() to get
->> the QoS for the CPU.
+> static int xen_pm_notifier(struct notifier_block *notifier,
+> 	unsigned long pm_event, void *unused)
+> {
+>     int ret = NOTIFY_OK;
+>     if (!xen_hvm_domain() || xen_initial_domain())
+> 	ret = NOTIFY_BAD;
+>     if(IS_ENABLED(CONFIG_ARM64) && (pm_event == PM_SUSPEND_PREPARE || pm_event == HIBERNATION_PREPARE))
+> 	ret = NOTIFY_BAD;
 >
->Which platform-specific modules may want to do that and why?
->
-We are planning a custom cpuidle governor for QCOM SoCs. With Android,
-the idea is to make them loadable modules so they can be in a separate
-partition.
+>     return ret;
+> }
 
-Thanks,
-Lina
 
->> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> ---
->>  drivers/cpuidle/governor.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
->> index 29acaf48e575..0e51ed25665e 100644
->> --- a/drivers/cpuidle/governor.c
->> +++ b/drivers/cpuidle/governor.c
->> @@ -102,6 +102,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
->>
->>         return ret;
->>  }
->> +EXPORT_SYMBOL_GPL(cpuidle_register_governor);
->>
->>  /**
->>   * cpuidle_governor_latency_req - Compute a latency constraint for CPU
->> @@ -118,3 +119,4 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
->>
->>         return (s64)device_req * NSEC_PER_USEC;
->>  }
->> +EXPORT_SYMBOL_GPL(cpuidle_governor_latency_req);
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
+
+This will allow PM suspend to proceed on x86.
+
+
+-boris
+
