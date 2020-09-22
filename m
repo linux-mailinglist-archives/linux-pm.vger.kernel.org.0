@@ -2,76 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE89274771
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 19:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE689274789
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 19:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbgIVR1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 13:27:44 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:42134 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726563AbgIVR1o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 13:27:44 -0400
-Received: by mail-oi1-f193.google.com with SMTP id x14so21891337oic.9;
-        Tue, 22 Sep 2020 10:27:44 -0700 (PDT)
+        id S1726643AbgIVReQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 13:34:16 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38473 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbgIVReQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 13:34:16 -0400
+Received: by mail-ot1-f67.google.com with SMTP id y5so16384701otg.5
+        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 10:34:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kU4bT0i25SjrMN84gdoOesX/M8UlZc1ewy1FNxT3Nmk=;
-        b=g9nVglvZ8n/aolXMm7z2bF+sKZ8HafTJ71t+Q414ucl4PK3Rip82HOzgnyCp7wPePi
-         tLSO46gAP0Ga8cE3EOK6e4Z0bs/wmEyV01hH3nOPfmLl2iG8kja6bpqAyMWAliTWPeR0
-         ju/qSS27SGXuE/qbTgKE0PN20j9QAuU0AsX7rwylaC0GlrVUvCoJgcBc6mZS1szxUGZ2
-         fpEYqxguWzET7x3F7QfSa599Ll6QqxOHqwkF+VnFJcbX/iEi1D6llN0o5d1guFIzD0dG
-         st1m9M6z3wg7QFQVxV5+knPS6wWUzLKl26zmV1MhBjhavtT7BSs6Z0c7xRODJUwC/l5V
-         z/OQ==
-X-Gm-Message-State: AOAM533i/qQb9asdVfFCXKqlsTRCnyKnhBS0dIbb9mnFU5o1M44GImTP
-        wk1R8qdvAYGVsyzkZPEzwYxGmXjCZe5b8TlMcLA=
-X-Google-Smtp-Source: ABdhPJyEOriize9tTcV0MGf37PfDaCQkXKcVAGzSX54sh0NyjzbCsHVnJJVY26WCA+OH4bwlbCodLmMMoJrGO6eTPWk=
-X-Received: by 2002:aca:df84:: with SMTP id w126mr3486140oig.103.1600795663663;
- Tue, 22 Sep 2020 10:27:43 -0700 (PDT)
+        bh=GkKfT1bHunvAZFPekK2APeELP8gPnhgpzPP51/xnQmk=;
+        b=XSKyHqPV/0y3xvx7HgI536JSZviFiJ2B9ZsPcP7srWijL+J27BjAzXGshGj6mS9JpU
+         FXljoFatQmd65OqnC8yftA2+yO8A+IEbH1v0khCl/jsM/uTmAd3I0uR2P9s2vMu4H2XK
+         0EPHFMdswsSmgAVKJiNhlSqUePuf2BDu21rVPKz+W9FU619PKA1OvCa7jnabx719Lafn
+         BMeeRZ1EOmkwPc4Ka8AXREaYl8qsHSMxI0hKS9gY5+cemBhDsDeV3cZDurPB0gJHThjG
+         WRJGIBroUw2wkslSEOHqjNzAW4ACUZaIuYRI2PBnIY2ojEvFxiAWOHTlM/qsNizw6oww
+         IRHA==
+X-Gm-Message-State: AOAM531rcaQ35CJ5a7uJO6r8+aOF5jzPCnnxUEBlPeV2MTBtKAy3Tiv6
+        MdmGxnVAd2T1THYcwzbU/dt88yh7N2/ohQ1DAGz5Y2kz
+X-Google-Smtp-Source: ABdhPJwFvRsdduyDo+UicZCG5kKy+yzJ8q8k4aNi+ygNbljm65vsyB9y0VNZFeYmYgIft0jLNnKugitx8pKaPlDXiaM=
+X-Received: by 2002:a9d:6010:: with SMTP id h16mr3547336otj.262.1600796055602;
+ Tue, 22 Sep 2020 10:34:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com>
- <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com> <20200922161215.GD30658@codeaurora.org>
-In-Reply-To: <20200922161215.GD30658@codeaurora.org>
+References: <20200922091550.90191-1-ulf.hansson@linaro.org>
+In-Reply-To: <20200922091550.90191-1-ulf.hansson@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Sep 2020 19:27:32 +0200
-Message-ID: <CAJZ5v0ipDRkPe6N9B6RzvHyCBobz8B9EoBfPh4DANrL_e86+Ww@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: governor: export cpuidle governor functions
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Tue, 22 Sep 2020 19:34:04 +0200
+Message-ID: <CAJZ5v0gFR5a3mkNxnpAHgK1NxDe2PYbk=9gnjdHCHsYSaB+SYQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: Drop misleading comments about RCU usage
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+        Lina Iyer <ilina@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lina,
-
-On Tue, Sep 22, 2020 at 6:12 PM Lina Iyer <ilina@codeaurora.org> wrote:
+On Tue, Sep 22, 2020 at 11:16 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Hi Rafael,
+> The commit 1098582a0f6c ("sched,idle,rcu: Push rcu_idle deeper into the
+> idle path"), moved the calls rcu_idle_enter|exit() into the cpuidle core.
 >
-> On Tue, Sep 22 2020 at 10:00 -0600, Rafael J. Wysocki wrote:
-> >Sorry for the delay.
-> >
-> >On Wed, Sep 9, 2020 at 12:15 AM Lina Iyer <ilina@codeaurora.org> wrote:
-> >>
-> >> Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
-> >> capability of registering cpuidle governors, which was unused at that
-> >> time. By exporting the symbol, let's allow platform specific modules to
-> >> register cpuidle governors and use cpuidle_governor_latency_req() to get
-> >> the QoS for the CPU.
-> >
-> >Which platform-specific modules may want to do that and why?
-> >
-> We are planning a custom cpuidle governor for QCOM SoCs. With Android,
-> the idea is to make them loadable modules so they can be in a separate
-> partition.
+> However, it forgot to remove a couple of comments in enter_s2idle_proper()
+> about why RCU_NONIDLE earlier was needed. So, let's drop them as they have
+> become a bit misleading.
+>
+> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Well, the $subject patch is not applicable without a mainline user
-requiring this, so it needs to be posted along with that user.
+Applied as 5.9-rc7 material, thanks!
 
-Cheers!
+> ---
+>  drivers/cpuidle/cpuidle.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 6c7e5621cf9a..29e84687f3c3 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -142,11 +142,6 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>
+>         time_start = ns_to_ktime(local_clock());
+>
+> -       /*
+> -        * trace_suspend_resume() called by tick_freeze() for the last CPU
+> -        * executing it contains RCU usage regarded as invalid in the idle
+> -        * context, so tell RCU about that.
+> -        */
+>         tick_freeze();
+>         /*
+>          * The state used here cannot be a "coupled" one, because the "coupled"
+> @@ -159,11 +154,6 @@ static void enter_s2idle_proper(struct cpuidle_driver *drv,
+>         target_state->enter_s2idle(dev, drv, index);
+>         if (WARN_ON_ONCE(!irqs_disabled()))
+>                 local_irq_disable();
+> -       /*
+> -        * timekeeping_resume() that will be called by tick_unfreeze() for the
+> -        * first CPU executing it calls functions containing RCU read-side
+> -        * critical sections, so tell RCU about that.
+> -        */
+>         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE))
+>                 rcu_idle_exit();
+>         tick_unfreeze();
+> --
+> 2.25.1
+>
