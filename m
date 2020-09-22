@@ -2,94 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79592274106
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 13:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AD427411D
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 13:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgIVLhD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 07:37:03 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:45934 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726722AbgIVLhD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 07:37:03 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08MBamS7113201;
-        Tue, 22 Sep 2020 06:36:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1600774608;
-        bh=ld3vYC0kWkXR/z2w5WEX+jmQfpiHTi9KtNWEfTWxkxA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=aoqNyr+rCe46BR+SfRZoyMr8YYfuA5vR9gPlhXw/ccUNa7mDrVehyH+FWgL1MEFMv
-         Lf7RRP/Aoi0Bj2ziIFR6RdbDu1xVMg8+ZV/Enok+EepcoubHUSLp+TtnjvKkM44MYL
-         B9HRop2MT/71r2hqWDGsZX1+mkDYrwCI1VKzlg0U=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08MBamkK064472;
-        Tue, 22 Sep 2020 06:36:48 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 22
- Sep 2020 06:36:48 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 22 Sep 2020 06:36:48 -0500
-Received: from [10.250.35.164] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08MBal3X004763;
-        Tue, 22 Sep 2020 06:36:47 -0500
-Subject: Re: [PATCH] MAINTAINERS: move Milo Kim to credits
-To:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-CC:     Pavel Machek <pavel@ucw.cz>, Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-References: <20200921210233.21449-1-krzk@kernel.org>
- <20200921210610.GA5338@amd>
- <CAJKOXPdwQc86H-S=C4v_1VCbd7RhC2Soepj_2LqG1e_E_bgAug@mail.gmail.com>
- <20200922093637.GK4792@sirena.org.uk>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <346f2ecd-a015-7f26-b68d-10cf6b5343b6@ti.com>
-Date:   Tue, 22 Sep 2020 06:36:47 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726655AbgIVLnm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 07:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726629AbgIVLnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 07:43:23 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C1C061755;
+        Tue, 22 Sep 2020 04:43:22 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id s13so2987701wmh.4;
+        Tue, 22 Sep 2020 04:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hx5o5MPaK7diP2i6MWvOvec7p9+pTYWAqdrxIV16j5g=;
+        b=a19IzS1kHQO70+YrqmLrKGarjNoDKBE8HeWYimBCTOXwa/I0kvA2OTwYQyGDeM4NI0
+         vYA/+MQa5UHZY+snA0BPnHwyksq3RB8Pn+gB7rub4IrNAJWd+nyC/hKygLhj3e23vkOM
+         3d7lWdoQ8sm+x6te2lBMta00NiYnuhly35WALC56aJyPgSFJJH7eVOGSkOkCIT3fqXy5
+         DTFwAr3tWEbo2t70wZ/0BHGykvUI96yfveMLF9VViQShL8TtmJzqakbEaaCuhPx7/dWp
+         rMbUcOUGCPlFtwEnoJcW/KAglOEgw2Z8GkYwyrc7v98kALdEl5e8LmBA4ptNFZpPskPL
+         CAMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hx5o5MPaK7diP2i6MWvOvec7p9+pTYWAqdrxIV16j5g=;
+        b=jo1lR1c/MGkfnA8i5uwN2cnAnUqQsqC5fdUX05UeDcwA+V95zl4Hlcq296MW7okXyT
+         b4W2ceR1wbEzwkUrjJIl2uU82fx4uuG88FqD4NhIIVx+GrT5UECSMnV3p4emy7jgt6Zp
+         a4okGye22h28z7jHz1ntxI2F5xxpLyA/Y9fOUjJuyBn3rIQRnSz6+N6ey/2ECnVAik58
+         itvElOVtmhvgCxtr5h9ocxPTXTmjil+DZfvZagI7BFVGeXMVWH0oJcgVJVtjssfaPQKe
+         jdUtJJd4AIdFAj2DqeRIOcRhlzxSlROHmt8ZgubmL+aXCOS4oIYCpNkHtnC4lxyNiQ7q
+         TQyw==
+X-Gm-Message-State: AOAM530y6bpSiEfWfpdY32Uoymr+khuWhaLtYvRgc2YBl/F74QPr/mne
+        ASTyHpzuCvz16WOFg2fmtCk=
+X-Google-Smtp-Source: ABdhPJwXPz4IBVcHUUaBogWlqzeGDAMa6qqmCb/lNjtX+tLgO5rjRDfkkqryocSu/hUJwsVSZMzVOA==
+X-Received: by 2002:a7b:c317:: with SMTP id k23mr580999wmj.44.1600775000716;
+        Tue, 22 Sep 2020 04:43:20 -0700 (PDT)
+Received: from localhost (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
+        by smtp.gmail.com with ESMTPSA id z8sm3009611wrl.11.2020.09.22.04.43.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Sep 2020 04:43:19 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH v5 0/7] power: supply: max17040 support compatible devices
+Date:   Tue, 22 Sep 2020 14:42:30 +0300
+Message-Id: <20200922114237.1803628-1-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-In-Reply-To: <20200922093637.GK4792@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All
+The max17040 fuel gauge is part of a family of 8 chips that have very
+similar mode of operations and registers.
 
-On 9/22/20 4:36 AM, Mark Brown wrote:
-> On Tue, Sep 22, 2020 at 09:08:37AM +0200, Krzysztof Kozlowski wrote:
->> On Mon, 21 Sep 2020 at 23:06, Pavel Machek <pavel@ucw.cz> wrote:
->>> I believe normal way would be to mark the entries "orphaned", not to
->>> drop them altogether. Plus, I believe someone from TI is likely to
->>> step up.
->> These are entries for specific drivers so they are covered by the
->> subsystem maintainers. You believe someone will step up, I believe if
->> these were important for TI, they would find the person some time ago,
->> so the emails won't bounce... This was similar with BQ chargers where
-> It's fairly common for mobile parts to get dropped relatively quickly as
-> the technology moves fairly quickly in that market, I think a lot of teh
-> parts that Milo was working on were mobile ones.
+This patch set adds:
+- compatible strings for all supported devices and handles the minor
+  differences between them;
+- handling for devices reporting double capacity via maxim,double-soc;
+- handling for setting rcomp, a compensation value for more accurate
+  reading, affected by battery chemistry and operating temps;
+- suppot for SOC alerts (capacity changes by +/- 1%), to prevent polling
+  every second;
+- improved max17040 driver with regmap and devm_
 
-These specific drivers don't see many patches applied to them. These 
-drivers did have a few patches this year to fix random bugs.
+The datasheets of the supported devices are linked [0] [1] [2] [3].
 
-Since I have worked in these other subsystems if replacing the 
-Maintainer is desired over removal then my name and email can be added 
-like I did with Andrews.
+[0] https://datasheets.maximintegrated.com/en/ds/MAX17040-MAX17041.pdf
+[1] https://datasheets.maximintegrated.com/en/ds/MAX17043-MAX17044.pdf
+[2] https://datasheets.maximintegrated.com/en/ds/MAX17048-MAX17049.pdf
+[3] https://datasheets.maximintegrated.com/en/ds/MAX17058-MAX17059.pdf
 
-Dan Murphy <dmurphy@ti.com>
+v4: https://lkml.org/lkml/2020/9/6/237
+v3: https://lkml.org/lkml/2020/6/24/874
+v2: https://lkml.org/lkml/2020/6/18/260
+v1: https://lkml.org/lkml/2020/6/8/682
 
-Dan
+Changes from v4:
+- fix warning reported by kernel test robot <lkp@intel.com> for v4
+  patch 4/7
+- ensure all patches have Sign-off-by matching author (was violated
+  for v4 patch 2/7)
+
+Iskren Chernev (7):
+  power: supply: max17040: Use devm_ to automate remove
+  power: supply: max17040: Use regmap i2c
+  dt-bindings: power: supply: Extend max17040 compatibility
+  power: supply: max17040: Support compatible devices
+  dt-bindings: power: supply: max17040: Add maxim,rcomp
+  power: supply: max17040: Support setting rcomp
+  power: supply: max17040: Support soc alert
+
+ .../power/supply/max17040_battery.txt         |  21 +-
+ drivers/power/supply/Kconfig                  |  11 +-
+ drivers/power/supply/max17040_battery.c       | 489 ++++++++++++------
+ 3 files changed, 367 insertions(+), 154 deletions(-)
+
+
+base-commit: e64997027d5f171148687e58b78c8b3c869a6158
+--
+2.28.0
 
