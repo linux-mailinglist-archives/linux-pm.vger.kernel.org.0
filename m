@@ -2,86 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC192745B3
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C505D2745CB
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbgIVPsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 11:48:38 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:39777 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgIVPsi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:48:38 -0400
-Received: by mail-oi1-f195.google.com with SMTP id c13so21529823oiy.6;
-        Tue, 22 Sep 2020 08:48:37 -0700 (PDT)
+        id S1726632AbgIVPw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 11:52:58 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:42264 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbgIVPw6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:52:58 -0400
+Received: by mail-ot1-f68.google.com with SMTP id m13so11582619otl.9
+        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 08:52:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8Lkyw6K4mV5Y9N5eOKNLOPXKcrnx+bU2Daos8PJksvo=;
-        b=j2u7v2FbnwDflMk6eSaIuNv3FRyqOt2pFUwoOzNvQsKXGojEOwdQ6GEbZhLwFH1C9h
-         lsw+jwc4OWDLlrZ4CjfBodLfL26HD4xQ4BHyem8VUQueGMIO+KGdUEm0rcdt6imdK/Hu
-         TO/rV6L5OH3jVVArkC96xdGD2fdYCSWeGWL+H3kjSeQ0bfiJJ7AINqkGn2YNBthooXkM
-         z5LxEp9uMU1CYRKNfPPCSaXOlSQm4k0NAgD4EwBFfV253AZRejlNYToFxP4LMiiIYC8N
-         O3XJ+ZrYrO8X0Ge+Z7FJDQRCqmFJjBez9PfryoVHLs8zt1NJtTSxCoVEw8YqtoUCtGK8
-         W8Xw==
-X-Gm-Message-State: AOAM533JrJkAVNhy3cjMsRGEGrxADsaUA3Fy58KCheQZvRVOJl4sQaDf
-        w4wWCAUjL2J//dDKTeRMphP6tLM/3BIfW8V7GAQ=
-X-Google-Smtp-Source: ABdhPJyyb74MqXqM/L4v+TsjroaR502YIu9Saxz+evAEAqRpZ7pN8+e2GMKQNv6/ALjD0JqyAUXKJsdF1IWhtplVmi0=
-X-Received: by 2002:aca:df84:: with SMTP id w126mr3170800oig.103.1600789717353;
- Tue, 22 Sep 2020 08:48:37 -0700 (PDT)
+        bh=H3q9f14ehpAz5FVsFd+k/aiAvb/GxFKUaV2cgid0foQ=;
+        b=ViJAuS48Zt79m25VIiI8Rl9G0cxmHibZlhBIPPV/X2cJaR0U6ya+xs6ne8HcWLKHQa
+         iI2jL1IOB8K9uPy0DWSdgRcee17TTasEyiks8er8LYnB+LeKqAKfMS+f3UIH07XkDbzG
+         4xPkQDce6EJCpOE/94CYFboYCKuk2tHcG7fdhWDePgx2q18lhouNAJh1WHmcLDwiVJaY
+         PcXg3Any3Dx+65BcJfUjnryFN/eIvoeYSIcaSUyJfbl0AVPRAvaLgX+xG+wVnVyxKooq
+         Pvc/9oqQLmZ7fmNHHmV1GCcbZyZMKqWaNs5uoEyu3FUT3KBAAhYWzze6EuNP2on7I280
+         pa+A==
+X-Gm-Message-State: AOAM533VOYuKLlueGPfD/Yg5SP+KLE+wLsBEdSTrh09m8EAa4IJF72nO
+        fITOZO7HMe2uy9e0xMb7jYtKZhuwumorgq5/hRE=
+X-Google-Smtp-Source: ABdhPJwwnquJiS4Bglp8qZNaDx5i6oFUEt6soBVGViBRA2vNmVhgxHRoVIwsU9dj/Ykj+RsebZqCZAOBOtvc5iHFEvw=
+X-Received: by 2002:a05:6830:150a:: with SMTP id k10mr3047075otp.167.1600789977850;
+ Tue, 22 Sep 2020 08:52:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200817224109.11040-1-kim.phillips@amd.com>
-In-Reply-To: <20200817224109.11040-1-kim.phillips@amd.com>
+References: <20200901142859.224381-1-ulf.hansson@linaro.org> <CAPDyKFrim8D10N46FFE55kuWw68SuRWBD3HBcY5VMkOR1fhybg@mail.gmail.com>
+In-Reply-To: <CAPDyKFrim8D10N46FFE55kuWw68SuRWBD3HBcY5VMkOR1fhybg@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Sep 2020 17:48:26 +0200
-Message-ID: <CAJZ5v0iwuSQ9RadMTVTdcbN8ecRzLT_vmfwsEMh0jZKpE+8v2Q@mail.gmail.com>
-Subject: Re: [PATCH] powercap: Add AMD Fam19h RAPL support
-To:     Kim Phillips <kim.phillips@amd.com>
+Date:   Tue, 22 Sep 2020 17:52:46 +0200
+Message-ID: <CAJZ5v0i6myhZfb6GTSUdyWXYqAhc2RGBotDit+0UPzjrzRxWSA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] cpuidle: psci: Always create the PM domains
+To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Victor Ding <victording@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 12:41 AM Kim Phillips <kim.phillips@amd.com> wrote:
+On Tue, Sep 22, 2020 at 9:51 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> AMD Family 19h's RAPL MSRs are identical to Family 17h's.  Extend
-> Family 17h's support to Family 19h.
+> On Tue, 1 Sep 2020 at 16:29, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > This coverletter is mainly to help keeping track of the patches part in the
+> > series. Please have a look at each patch for more details.
+> >
+> > Kind regards
+> > Ulf Hansson
+> >
+> >
+> > Ulf Hansson (2):
+> >   firmware: psci: Extend psci_set_osi_mode() to allow reset to PC mode
+> >   cpuidle: psci: Allow PM domain to be initialized even if no OSI mode
+> >
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 59 ++++++++++++++-------------
+> >  drivers/firmware/psci/psci.c          | 12 +++---
+> >  include/linux/psci.h                  |  2 +-
+> >  3 files changed, 39 insertions(+), 34 deletions(-)
+> >
 >
-> Signed-off-by: Kim Phillips <kim.phillips@amd.com>
-> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> Cc: Victor Ding <victording@google.com>
-> Cc: LKML <linux-kernel@vger.kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Cc: x86@kernel.org
-> ---
-> Depends on Victor Ding's "powercap: Enable RAPL for AMD Fam17h"
-> series, submitted here:
->
-> https://lore.kernel.org/lkml/20200729105206.2991064-1-victording@google.com/
+> Rafael, I guess you may have not seen this one.
 
-So I'm deferring this one, because the submitter of the above was
-requested to resend the series.
+I have seen it, but I didn't manage to get to it before today, sadly.
 
->  drivers/powercap/intel_rapl_common.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-> index 2e311f9c0d85..1bc0e67cd7a4 100644
-> --- a/drivers/powercap/intel_rapl_common.c
-> +++ b/drivers/powercap/intel_rapl_common.c
-> @@ -1052,6 +1052,7 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
->         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &rapl_defaults_hsw_server),
->
->         X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_core),
-> +       X86_MATCH_VENDOR_FAM(AMD, 0x19, &rapl_defaults_core),
->         {}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
-> --
-> 2.27.0
->
+> I think it's ready to get applied as v5.10 material. Do you want me to resend?
+
+No need, applied now.
+
+Thanks!
