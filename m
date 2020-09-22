@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AD427411D
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 13:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CC6274166
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 13:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbgIVLnm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 07:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S1726925AbgIVLtC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 07:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726629AbgIVLnX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 07:43:23 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260C1C061755;
-        Tue, 22 Sep 2020 04:43:22 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id s13so2987701wmh.4;
-        Tue, 22 Sep 2020 04:43:22 -0700 (PDT)
+        with ESMTP id S1726559AbgIVLn0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 07:43:26 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0921C0613CF;
+        Tue, 22 Sep 2020 04:43:24 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id w2so3006726wmi.1;
+        Tue, 22 Sep 2020 04:43:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hx5o5MPaK7diP2i6MWvOvec7p9+pTYWAqdrxIV16j5g=;
-        b=a19IzS1kHQO70+YrqmLrKGarjNoDKBE8HeWYimBCTOXwa/I0kvA2OTwYQyGDeM4NI0
-         vYA/+MQa5UHZY+snA0BPnHwyksq3RB8Pn+gB7rub4IrNAJWd+nyC/hKygLhj3e23vkOM
-         3d7lWdoQ8sm+x6te2lBMta00NiYnuhly35WALC56aJyPgSFJJH7eVOGSkOkCIT3fqXy5
-         DTFwAr3tWEbo2t70wZ/0BHGykvUI96yfveMLF9VViQShL8TtmJzqakbEaaCuhPx7/dWp
-         rMbUcOUGCPlFtwEnoJcW/KAglOEgw2Z8GkYwyrc7v98kALdEl5e8LmBA4ptNFZpPskPL
-         CAMg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bpGLyTGFFFsvy7eUvf4p2N7aeZs8Bgtl+St8PzvtoYc=;
+        b=Nia7PZj2XhIagSgk3TpOp9d4d1hmKtrp7i5bCGpK45loLkmt8j/QY9I+8Vp8H36X0D
+         RSvhcEiOwlRtoRvGBeBzo0f7DBrb2jFtHtxaM4szpYzNxgyvR4F51N2j/2a/l+EX6eDU
+         YJW7DpHl/ho/j5xCcBGU7a7unBKDZsfAZ39owbKr211UM+KKYwbSjC82M98lAdMkT2v4
+         gdSRzNCaa0/7vDUIPJdC21LBa2PBcYJiIMthz6fGOsVA14emPOKd6K4+83NRTOl2UQfE
+         gQsC+Vod8KCnDLM80hfClrl/PPLjNAfDxO/ukZoJbNzE6OIAFOeBiH6n5e0ibQH6mAa/
+         A9Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hx5o5MPaK7diP2i6MWvOvec7p9+pTYWAqdrxIV16j5g=;
-        b=jo1lR1c/MGkfnA8i5uwN2cnAnUqQsqC5fdUX05UeDcwA+V95zl4Hlcq296MW7okXyT
-         b4W2ceR1wbEzwkUrjJIl2uU82fx4uuG88FqD4NhIIVx+GrT5UECSMnV3p4emy7jgt6Zp
-         a4okGye22h28z7jHz1ntxI2F5xxpLyA/Y9fOUjJuyBn3rIQRnSz6+N6ey/2ECnVAik58
-         itvElOVtmhvgCxtr5h9ocxPTXTmjil+DZfvZagI7BFVGeXMVWH0oJcgVJVtjssfaPQKe
-         jdUtJJd4AIdFAj2DqeRIOcRhlzxSlROHmt8ZgubmL+aXCOS4oIYCpNkHtnC4lxyNiQ7q
-         TQyw==
-X-Gm-Message-State: AOAM530y6bpSiEfWfpdY32Uoymr+khuWhaLtYvRgc2YBl/F74QPr/mne
-        ASTyHpzuCvz16WOFg2fmtCk=
-X-Google-Smtp-Source: ABdhPJwXPz4IBVcHUUaBogWlqzeGDAMa6qqmCb/lNjtX+tLgO5rjRDfkkqryocSu/hUJwsVSZMzVOA==
-X-Received: by 2002:a7b:c317:: with SMTP id k23mr580999wmj.44.1600775000716;
-        Tue, 22 Sep 2020 04:43:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bpGLyTGFFFsvy7eUvf4p2N7aeZs8Bgtl+St8PzvtoYc=;
+        b=f85BkCyLRNuD3tZPMlBcxhrI+5R3c8vzdhMETNQwnGNWowyaXQpq9RKHWOrvCDhu8S
+         vC3UBMUq4uPJdhv6TkRjYRo3FfjFEY7LVTVyJnEYmhRyJj1iYC8l5zB/nID5KblD9wOb
+         04Y4W7iMfLk8Ogqpg68Os+u9RVyI65vehkqUw9TkAPzFdQHHadyHSUW76T9nq/NaY1h7
+         SdOGm9YN3KIwcXnaB2H+nHpCqnZRqQi9KJy6V0WJo+Ct1B9N5ZekbPOu+UQyxIIPClXJ
+         gnMejPPRQNI9RWTwwXqNONLhqfX3MaRCZs5MNCJGHE4Hn2ER9NaWxh9Twl96PBPGJqEH
+         WUaw==
+X-Gm-Message-State: AOAM530RQ6S8COyHgWC451AGMLxygrlBKViqwnWn4Wsg4xgQTu8FOd4x
+        mS+lZ39DCLDjcI0Jg+5wknY=
+X-Google-Smtp-Source: ABdhPJy+nNu5DY6MJAxBvtzBp86fGbGhf547KSWKBEXiH3sweBE8GwULh/UfJNxysjX6SQAXdkkfKA==
+X-Received: by 2002:a1c:32c6:: with SMTP id y189mr588444wmy.51.1600775003382;
+        Tue, 22 Sep 2020 04:43:23 -0700 (PDT)
 Received: from localhost (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
-        by smtp.gmail.com with ESMTPSA id z8sm3009611wrl.11.2020.09.22.04.43.18
+        by smtp.gmail.com with ESMTPSA id c4sm4561954wme.27.2020.09.22.04.43.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2020 04:43:19 -0700 (PDT)
+        Tue, 22 Sep 2020 04:43:22 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -56,63 +56,121 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         Jonathan Bakker <xc-racer2@live.ca>,
         Vladimir Barinov <vladimir.barinov@cogentembedded.com>,
         Iskren Chernev <iskren.chernev@gmail.com>
-Subject: [PATCH v5 0/7] power: supply: max17040 support compatible devices
-Date:   Tue, 22 Sep 2020 14:42:30 +0300
-Message-Id: <20200922114237.1803628-1-iskren.chernev@gmail.com>
+Subject: [PATCH v5 1/7] power: supply: max17040: Use devm_ to automate remove
+Date:   Tue, 22 Sep 2020 14:42:31 +0300
+Message-Id: <20200922114237.1803628-2-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200922114237.1803628-1-iskren.chernev@gmail.com>
+References: <20200922114237.1803628-1-iskren.chernev@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The max17040 fuel gauge is part of a family of 8 chips that have very
-similar mode of operations and registers.
+Two actions were performed during remove - power supply dereg and
+delayed work cleanup. Power supply dereg can be handled by using the
+devm_ version of the registration function. Work cleanup can be added as
+a devm_action.
 
-This patch set adds:
-- compatible strings for all supported devices and handles the minor
-  differences between them;
-- handling for devices reporting double capacity via maxim,double-soc;
-- handling for setting rcomp, a compensation value for more accurate
-  reading, affected by battery chemistry and operating temps;
-- suppot for SOC alerts (capacity changes by +/- 1%), to prevent polling
-  every second;
-- improved max17040 driver with regmap and devm_
+If probe fails after psy registration it will now be cleaned up
+properly.
 
-The datasheets of the supported devices are linked [0] [1] [2] [3].
+Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+Tested-by: Jonathan Bakker <xc-racer2@live.ca>
+---
+ drivers/power/supply/max17040_battery.c | 39 +++++++++++++------------
+ 1 file changed, 21 insertions(+), 18 deletions(-)
 
-[0] https://datasheets.maximintegrated.com/en/ds/MAX17040-MAX17041.pdf
-[1] https://datasheets.maximintegrated.com/en/ds/MAX17043-MAX17044.pdf
-[2] https://datasheets.maximintegrated.com/en/ds/MAX17048-MAX17049.pdf
-[3] https://datasheets.maximintegrated.com/en/ds/MAX17058-MAX17059.pdf
-
-v4: https://lkml.org/lkml/2020/9/6/237
-v3: https://lkml.org/lkml/2020/6/24/874
-v2: https://lkml.org/lkml/2020/6/18/260
-v1: https://lkml.org/lkml/2020/6/8/682
-
-Changes from v4:
-- fix warning reported by kernel test robot <lkp@intel.com> for v4
-  patch 4/7
-- ensure all patches have Sign-off-by matching author (was violated
-  for v4 patch 2/7)
-
-Iskren Chernev (7):
-  power: supply: max17040: Use devm_ to automate remove
-  power: supply: max17040: Use regmap i2c
-  dt-bindings: power: supply: Extend max17040 compatibility
-  power: supply: max17040: Support compatible devices
-  dt-bindings: power: supply: max17040: Add maxim,rcomp
-  power: supply: max17040: Support setting rcomp
-  power: supply: max17040: Support soc alert
-
- .../power/supply/max17040_battery.txt         |  21 +-
- drivers/power/supply/Kconfig                  |  11 +-
- drivers/power/supply/max17040_battery.c       | 489 ++++++++++++------
- 3 files changed, 367 insertions(+), 154 deletions(-)
-
-
-base-commit: e64997027d5f171148687e58b78c8b3c869a6158
---
+diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+index 6cb31b9a958dd..19b9e710bbd2f 100644
+--- a/drivers/power/supply/max17040_battery.c
++++ b/drivers/power/supply/max17040_battery.c
+@@ -207,6 +207,19 @@ static void max17040_check_changes(struct i2c_client *client)
+ 	max17040_get_status(client);
+ }
+ 
++static void max17040_queue_work(struct max17040_chip *chip)
++{
++	queue_delayed_work(system_power_efficient_wq, &chip->work,
++			   MAX17040_DELAY);
++}
++
++static void max17040_stop_work(void *data)
++{
++	struct max17040_chip *chip = data;
++
++	cancel_delayed_work_sync(&chip->work);
++}
++
+ static void max17040_work(struct work_struct *work)
+ {
+ 	struct max17040_chip *chip;
+@@ -223,8 +236,7 @@ static void max17040_work(struct work_struct *work)
+ 	if (last_soc != chip->soc || last_status != chip->status)
+ 		power_supply_changed(chip->battery);
+ 
+-	queue_delayed_work(system_power_efficient_wq, &chip->work,
+-			   MAX17040_DELAY);
++	max17040_queue_work(chip);
+ }
+ 
+ static irqreturn_t max17040_thread_handler(int id, void *dev)
+@@ -339,7 +351,7 @@ static int max17040_probe(struct i2c_client *client,
+ 	i2c_set_clientdata(client, chip);
+ 	psy_cfg.drv_data = chip;
+ 
+-	chip->battery = power_supply_register(&client->dev,
++	chip->battery = devm_power_supply_register(&client->dev,
+ 				&max17040_battery_desc, &psy_cfg);
+ 	if (IS_ERR(chip->battery)) {
+ 		dev_err(&client->dev, "failed: power supply register\n");
+@@ -368,18 +380,11 @@ static int max17040_probe(struct i2c_client *client,
+ 	}
+ 
+ 	INIT_DEFERRABLE_WORK(&chip->work, max17040_work);
+-	queue_delayed_work(system_power_efficient_wq, &chip->work,
+-			   MAX17040_DELAY);
+-
+-	return 0;
+-}
+-
+-static int max17040_remove(struct i2c_client *client)
+-{
+-	struct max17040_chip *chip = i2c_get_clientdata(client);
++	ret = devm_add_action(&client->dev, max17040_stop_work, chip);
++	if (ret)
++		return ret;
++	max17040_queue_work(chip);
+ 
+-	power_supply_unregister(chip->battery);
+-	cancel_delayed_work(&chip->work);
+ 	return 0;
+ }
+ 
+@@ -403,12 +408,11 @@ static int max17040_resume(struct device *dev)
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct max17040_chip *chip = i2c_get_clientdata(client);
+ 
+-	queue_delayed_work(system_power_efficient_wq, &chip->work,
+-			   MAX17040_DELAY);
+-
+ 	if (client->irq && device_may_wakeup(dev))
+ 		disable_irq_wake(client->irq);
+ 
++	max17040_queue_work(chip);
++
+ 	return 0;
+ }
+ 
+@@ -442,7 +446,6 @@ static struct i2c_driver max17040_i2c_driver = {
+ 		.pm	= MAX17040_PM_OPS,
+ 	},
+ 	.probe		= max17040_probe,
+-	.remove		= max17040_remove,
+ 	.id_table	= max17040_id,
+ };
+ module_i2c_driver(max17040_i2c_driver);
+-- 
 2.28.0
 
