@@ -2,110 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260B6274542
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A676274562
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 17:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbgIVP3D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 11:29:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726566AbgIVP27 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 22 Sep 2020 11:28:59 -0400
-Received: from localhost.localdomain (unknown [194.230.155.191])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 332D7214F1;
-        Tue, 22 Sep 2020 15:28:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600788539;
-        bh=27J/qBjEJpMQ8FBjYAVH6iBhxNoGncMH/j8Wfds65Pk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PUADNSFPFhR29EDiZ/Ij/9aOCJMuqQD/tfx+RF+4ktGbqIa574a09TU2HgTYkAgHI
-         IBI43/uVuc/fDA4alYxxp1xhvSuyZG75OL/ch4cfeUkqHCjw0N8hUXlGplF+DensSJ
-         fFcIES1zzv27+KfI4PjVOCCdKSMMXJn6bMWx+0VI=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-iio@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     Dan Murphy <dmurphy@ti.com>
-Subject: [PATCH v2] MAINTAINERS: add Dan Murphy as TP LP8xxx drivers maintainer
-Date:   Tue, 22 Sep 2020 17:28:39 +0200
-Message-Id: <20200922152839.2744-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        id S1726632AbgIVPgD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 11:36:03 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37559 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726566AbgIVPgC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 11:36:02 -0400
+Received: by mail-oi1-f193.google.com with SMTP id a3so21523366oib.4;
+        Tue, 22 Sep 2020 08:36:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yBYKnp2qIyIar4+QEHF6IHFHyA4o1eDMQTBvugxuVxY=;
+        b=jQLRIlgyi4R6sFeho/H09CXcD1Ls1erL2apqizl+eKE3MBnk+/YwF7bJnx5zKTLVkk
+         qVKYFC4OAGXVhj06EwH2W9ZOHw1RjQD+nGq6tSMuEuoLqSvYBBxHrRyVtLqhdxl5CVJh
+         ZZbZ1uBoOfoDxfw69e1bL2Px492kmWjAnftSWuce/cQhUaH1mXOXmbHS9WkuwtiKGkjH
+         aDEEwZPkeZ3avsIp2HAAcKdjCAWvn2dGjTdYGXkuH/g5gYEfz5ZU5gIlsV7LMQv+Fjha
+         mF8oj9Qkgn2722do5L/r8EotqdyMMLDiWYBTkK7+D7S5tjiPYKV10OvUHolORLHGt21Q
+         Txfw==
+X-Gm-Message-State: AOAM530GWfmoc2vl+DmPKfrJG1PsaV5RxafpqiIQ900fwK6YsKfRK9ZK
+        6jDr1SgdNj7X9cm87aoyhsm8Ads/K7hGTs7dbq0=
+X-Google-Smtp-Source: ABdhPJyQ3oBma7ZSM0DZ1lCdbgYp+HqDIHEHTk6w56xE90nMDiJZNDikOMvJidF9A9Okh8UaErkOIhUH+UFs4ZgqHZQ=
+X-Received: by 2002:aca:df84:: with SMTP id w126mr3134469oig.103.1600788961565;
+ Tue, 22 Sep 2020 08:36:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200821204921.32536-1-sibis@codeaurora.org> <CAJZ5v0gdMroJY0d9n2+_P2uhBNw1xp5yn=jhxdejDLq0WmkPTA@mail.gmail.com>
+ <160071818317.4188128.15658877054019388462@swboyd.mtv.corp.google.com> <14eb0558c8ff820280bb7354cfe33326@codeaurora.org>
+In-Reply-To: <14eb0558c8ff820280bb7354cfe33326@codeaurora.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Sep 2020 17:35:50 +0200
+Message-ID: <CAJZ5v0jPQoXtNY3YMe=TEEAOJjF-GbVe4msc682dHamoveatzA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] PM / Domains: Add GENPD_FLAG_NO_SUSPEND/RESUME flags
+To:     Sibi Sankar <sibis@codeaurora.org>
+Cc:     Stephen Boyd <swboyd@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Andy Gross <agross@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        "Nayak, Rajendra" <rnayak@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Milo Kim's email in TI bounces with permanent error (550: Invalid
-recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
-credits and add Dan Murphy from TI to look after:
- - TI LP855x backlight driver,
- - TI LP8727 charger driver,
- - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
+On Tue, Sep 22, 2020 at 6:51 AM Sibi Sankar <sibis@codeaurora.org> wrote:
+>
+> On 2020-09-22 01:26, Stephen Boyd wrote:
+> > Quoting Rafael J. Wysocki (2020-09-21 09:18:17)
+> >> On Fri, Aug 21, 2020 at 10:49 PM Sibi Sankar <sibis@codeaurora.org>
+> >> wrote:
+> >> >
+> >> > Add GENPD_FLAG_NO_SUSPEND/RESUME flags to instruct genpd to keep the
+> >> > status of the PM domain unaltered during suspend/resume respectively.
+> >> > The flags are aimed at power domains coupled to co-processors which
+> >> > enter low-power modes independent to that of the application processor.
+> >> >
+> >> > Specifically the flags are to be used by the power domains exposed
+> >> > by the AOSS QMP driver linked to modem, adsp, cdsp remoteprocs. These
+> >> > power domains are used to notify the Always on Subsystem (AOSS) that
+> >> > a particular co-processor is up. AOSS uses this information to wait
+> >> > for the co-processors to suspend before starting its sleep sequence.
+> >> > The application processor powers off these power domains only if the
+> >> > co-processor has crashed or powered off and remains unaltered during
+> >> > system suspend/resume.
+> >> >
+> >> > Signed-off-by: Sibi Sankar <sibis@codeaurora.org>
+> >>
+> >> Applied with the Ulf's R-by along with the [2/2] as 5.10 material,
+> >> thanks!
+> >>
+> >
+> > There was a bunch of discussion on this patch series and I thought the
+> > consensus was to not apply these patches and instead implement a custom
+> > qcom specific API that does this instead.
+>
+> https://lore.kernel.org/lkml/20200913034603.GV3715@yoga/
+>
+> The power domains which were targeted
+> to use the flags will be replaced by
+> custom qcom specific API. So let's not
+> pick up the patch series.
 
-Cc: Dan Murphy <dmurphy@ti.com>
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-
----
-
-Changes since v1:
-1. Add Dan Murphy, do not remove the entries.
----
- CREDITS     | 3 +++
- MAINTAINERS | 6 +++---
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/CREDITS b/CREDITS
-index 1df63cdf71df..46384b11f258 100644
---- a/CREDITS
-+++ b/CREDITS
-@@ -1910,6 +1910,9 @@ S: 660 Harvard Ave. #7
- S: Santa Clara, CA 95051
- S: USA
- 
-+N: Milo Kim
-+D: TI LP855x, LP8727 and LP8788 drivers
-+
- N: Russell King
- E: rmk@arm.linux.org.uk
- D: Linux/arm integrator, maintainer & hacker
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5b9621ca2b31..bcd2fdf0dbf2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17472,20 +17472,20 @@ F:	sound/soc/codecs/isabelle*
- F:	sound/soc/codecs/lm49453*
- 
- TI LP855x BACKLIGHT DRIVER
--M:	Milo Kim <milo.kim@ti.com>
-+M:	Dan Murphy <dmurphy@ti.com>
- S:	Maintained
- F:	Documentation/driver-api/backlight/lp855x-driver.rst
- F:	drivers/video/backlight/lp855x_bl.c
- F:	include/linux/platform_data/lp855x.h
- 
- TI LP8727 CHARGER DRIVER
--M:	Milo Kim <milo.kim@ti.com>
-+M:	Dan Murphy <dmurphy@ti.com>
- S:	Maintained
- F:	drivers/power/supply/lp8727_charger.c
- F:	include/linux/platform_data/lp8727.h
- 
- TI LP8788 MFD DRIVER
--M:	Milo Kim <milo.kim@ti.com>
-+M:	Dan Murphy <dmurphy@ti.com>
- S:	Maintained
- F:	drivers/iio/adc/lp8788_adc.c
- F:	drivers/leds/leds-lp8788.c
--- 
-2.17.1
-
+OK, I'm dropping it then, thanks!
