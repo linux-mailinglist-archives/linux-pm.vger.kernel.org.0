@@ -2,71 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C567274631
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 18:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CF38274645
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Sep 2020 18:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbgIVQH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 12:07:27 -0400
-Received: from mail-oi1-f177.google.com ([209.85.167.177]:34306 "EHLO
-        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726558AbgIVQHW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 12:07:22 -0400
-Received: by mail-oi1-f177.google.com with SMTP id n2so21610111oij.1;
-        Tue, 22 Sep 2020 09:07:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZiwJUvaSFlx1/asaLqqaBoYnVyJQN8NlMctLP6sQWeI=;
-        b=ZMz9v5xA8TVx2zZBaR3m2xkOup0Vv9gzKp76KWuH7cyPAWdzBVyqE76VcBREsSKbS9
-         XmhZ600llBmB+h/Cv05NIo6QuOmUXiTucDm1E++JQnEC87asbviEy4PxfnzRzeKbfdZn
-         /NIXVT9sUS1AYNvW/aR3U/w84REidm68dPj3a5fXEWUJ6ds+2Jmv+9WBp2q6lrSA6Zy5
-         kWWkN66dnPNZgPj3LiLg0thz4Oxl22edJ2I6oBfWV/O7NMujTfi5rDtBPrf/ni2qv7dg
-         Moc5VeVa9vyI+PZ7F6IGAHIY84QBGe/F/Zm5XmnLtK6ZshXvthHIpyiDc8iUcEG+SNZy
-         mXlg==
-X-Gm-Message-State: AOAM532H3MJ1cgbhYPyhSCrtrL6wu6SMlCMivU5fyEKRLBlabIyx7T9J
-        Vnd6vb2noTVMCHDj8Xq8gy7MVreWiLu8akowPZ4=
-X-Google-Smtp-Source: ABdhPJxniD6JhtDmzvKhIf9BQHPSO3ocEi0tmyadGh6S4OPjujF2AkUQ/mnGSl9/ss0LzTuZEVN3FJdLQIyu7oP73Fo=
-X-Received: by 2002:aca:5b09:: with SMTP id p9mr2965041oib.68.1600790842017;
- Tue, 22 Sep 2020 09:07:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200915032629.1772569-1-liushixin2@huawei.com>
- <20200915031714.GA670377@yoga> <7hwo0qdeun.fsf@baylibre.com>
-In-Reply-To: <7hwo0qdeun.fsf@baylibre.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Sep 2020 18:07:10 +0200
-Message-ID: <CAJZ5v0hbTH0_Lfkoed54=+PU87MHwTrmMkf_HVW1vNAig-M2jg@mail.gmail.com>
-Subject: Re: [PATCH -next] power: avs: qcom-cpr: simplify the return
- expression of cpr_disable()
-To:     Kevin Hilman <khilman@baylibre.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Niklas Cassel <nks@flawful.org>,
-        Andy Gross <agross@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Nishanth Menon <nm@ti.com>,
+        id S1726667AbgIVQMp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Sep 2020 12:12:45 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:32738 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726637AbgIVQMp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 22 Sep 2020 12:12:45 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1600791165; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=EZRwqUT9E3jZrgdjNm8FFMtkMTg/4V6XnlWG1JPmllI=; b=Og5ae/8y9kZ/ds9RgXrBG9/ZCVbkyDrpXcS2JtkqgZmJIGMln2yjiuh/tY7zZS4VSwkVXpFZ
+ 5YiTy07WQOhoPhkDXrZZobwfTrUzFgVAChqWBFKmkP3SNEoEtaV/IBF4Km38mQR1qNc5dSir
+ AmdkmG5vAJz06k1YFo6PpwDMzoE=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5f6a226145a0e38d8175087b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 22 Sep 2020 16:12:17
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 309DCC433F1; Tue, 22 Sep 2020 16:12:17 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7583FC433C8;
+        Tue, 22 Sep 2020 16:12:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7583FC433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+Date:   Tue, 22 Sep 2020 10:12:15 -0600
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH] cpuidle: governor: export cpuidle governor functions
+Message-ID: <20200922161215.GD30658@codeaurora.org>
+References: <010101746fc98add-45e77496-d2d6-4bc1-a1ce-0692599a9a7a-000000@us-west-2.amazonses.com>
+ <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0hJJxxb+J5UtyZe2S_Tn7ARoGvjwDjw4dq601VJrriH9g@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 10:12 PM Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Bjorn Andersson <bjorn.andersson@linaro.org> writes:
->
-> > On Mon 14 Sep 22:26 CDT 2020, Liu Shixin wrote:
-> >
-> >> Simplify the return expression.
-> >>
-> >> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> >
-> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->
-> Acked-by: Kevin Hilman <khilman@baylibre.com>
->
-> Rafael, please apply directly.
+Hi Rafael,
 
-Applied as 5.10 material with minor edits in the subject, thanks!
+On Tue, Sep 22 2020 at 10:00 -0600, Rafael J. Wysocki wrote:
+>Sorry for the delay.
+>
+>On Wed, Sep 9, 2020 at 12:15 AM Lina Iyer <ilina@codeaurora.org> wrote:
+>>
+>> Commit 83788c0caed3 ("cpuidle: remove unused exports") removed
+>> capability of registering cpuidle governors, which was unused at that
+>> time. By exporting the symbol, let's allow platform specific modules to
+>> register cpuidle governors and use cpuidle_governor_latency_req() to get
+>> the QoS for the CPU.
+>
+>Which platform-specific modules may want to do that and why?
+>
+We are planning a custom cpuidle governor for QCOM SoCs. With Android,
+the idea is to make them loadable modules so they can be in a separate
+partition.
+
+Thanks,
+Lina
+
+>> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>> ---
+>>  drivers/cpuidle/governor.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+>> index 29acaf48e575..0e51ed25665e 100644
+>> --- a/drivers/cpuidle/governor.c
+>> +++ b/drivers/cpuidle/governor.c
+>> @@ -102,6 +102,7 @@ int cpuidle_register_governor(struct cpuidle_governor *gov)
+>>
+>>         return ret;
+>>  }
+>> +EXPORT_SYMBOL_GPL(cpuidle_register_governor);
+>>
+>>  /**
+>>   * cpuidle_governor_latency_req - Compute a latency constraint for CPU
+>> @@ -118,3 +119,4 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
+>>
+>>         return (s64)device_req * NSEC_PER_USEC;
+>>  }
+>> +EXPORT_SYMBOL_GPL(cpuidle_governor_latency_req);
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> a Linux Foundation Collaborative Project
+>>
