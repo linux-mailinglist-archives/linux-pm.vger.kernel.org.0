@@ -2,254 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6297B275918
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 15:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8053275945
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 16:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgIWNsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 09:48:38 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:42157 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726606AbgIWNsi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 09:48:38 -0400
-Received: by mail-ot1-f65.google.com with SMTP id m13so14503249otl.9;
-        Wed, 23 Sep 2020 06:48:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mJSihRXz/gvuMsPkQyFBnZN2lc53j8bv4MakGdcfst4=;
-        b=kjHj9O1XKNlv8TcC0ej6ZzJ6v4fOVvFMyE+C+J8Gn7gLoPIgJJ6J5leuwhg+JYO/9n
-         lXsbEsJpyq2pPToqAjGca18kmB7pdMutlL61VU5mzuR81hRX02/T+Z3C6j9WBCkLEsCY
-         u0cBRN+uJPLfvJ8yPjFIOMZxf3fhJvLC0QUZ3tluTGJ8AB9QqPB35FcogazUmUsMbwX7
-         E+FKjnvRov0CE85/xQ/plEo0rtJaO2gego0WvPR2mnEwripvz32o4apFF7thc5H2laq3
-         0Ehma9pbA0Q7G5H7oUTuh9RoxDjmtEr/yFw1xlt3Tck7sozVpNX6ia3sgPi8doSgmHWp
-         RDcA==
-X-Gm-Message-State: AOAM530BAKc/bIJW0oH8bGTuuYpUJ3y/voTcS/dJb/fQFeVwJE74c5fq
-        nVKImLzZn4NbNauRvjgZzEmd57o8rV3/zpW2Nqk=
-X-Google-Smtp-Source: ABdhPJxqnJ6rTAsG4LPmdV/0Tzgrr9KmZtVMh6uIxv4EEJmW66ziwr76KlgavrDQoaSEuksMvlkfk69zy8bKLRrgHdk=
-X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr5927129otg.118.1600868915730;
- Wed, 23 Sep 2020 06:48:35 -0700 (PDT)
+        id S1726514AbgIWOAn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 10:00:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48564 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726234AbgIWOAn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Sep 2020 10:00:43 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 40B132220D;
+        Wed, 23 Sep 2020 14:00:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600869642;
+        bh=uPO5QEsbdE6AvUAkxiDyJMEnsN9G+X32NRZNdDWX7vo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GKmrh7TKpBRsEGTgA4ERGMC6c1N348Rx3sUa10F5RhBLgK29xbuC3wkccDbFEoX81
+         Z4eB1C0TDl+nPx/l4YzfJ1OQMCAGEf5I75L9WTB8gTOwOeAdvzPe399aJsSLPigTeS
+         0VGt2YFuxr6cQ7DjfI7HKIZxXJDDJeL7TrTJ28Bg=
+Received: by mail-oi1-f182.google.com with SMTP id v20so25129405oiv.3;
+        Wed, 23 Sep 2020 07:00:42 -0700 (PDT)
+X-Gm-Message-State: AOAM530KJbrl+opgoSkXPxjlcp7sUYo+Tyf3HJ32e8o65dnPHGj0rToj
+        NgxNZNhvITamIxXg9u0i0LiqLWcthZe6XCYxow==
+X-Google-Smtp-Source: ABdhPJw5m3EwopKpxZHXzXo8D6QAKUjhQa+P6a04N3OwKxbxayvWDjFH81CTtEfTj3d77o1PSZFOQUPKo/164Vp/9hE=
+X-Received: by 2002:aca:4d58:: with SMTP id a85mr5948098oib.147.1600869641415;
+ Wed, 23 Sep 2020 07:00:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1600238586.git.viresh.kumar@linaro.org> <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
-In-Reply-To: <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Sep 2020 15:48:24 +0200
-Message-ID: <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
-Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, cristian.marussi@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200914154809.192174-1-dmitry.baryshkov@linaro.org>
+ <20200914154809.192174-2-dmitry.baryshkov@linaro.org> <20200922234025.GA3476652@bogus>
+ <55d3f181-b9e6-4963-9d0c-cefee875058c@linaro.org>
+In-Reply-To: <55d3f181-b9e6-4963-9d0c-cefee875058c@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 23 Sep 2020 08:00:29 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqK+Obxpy+Zd-3g8BN2h++S413=8V_ff1A2j91Cqc6RnDQ@mail.gmail.com>
+Message-ID: <CAL_JsqK+Obxpy+Zd-3g8BN2h++S413=8V_ff1A2j91Cqc6RnDQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/9] dt-bindings: thermal: qcom: add adc-thermal
+ monitor bindings
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Sep 23, 2020 at 3:07 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> In order to prepare for lock-less stats update, add support to defer any
-> updates to it until cpufreq_stats_record_transition() is called.
+> On 23/09/2020 02:40, Rob Herring wrote:
+> > On Mon, Sep 14, 2020 at 06:48:01PM +0300, Dmitry Baryshkov wrote:
+> >> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
+> >> close counterpart of VADC part of those PMICs.
+> >>
+> >> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> >> ---
+> >>   .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 151 ++++++++++++++++++
+> >>   1 file changed, 151 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> >> new file mode 100644
+> >> index 000000000000..432a65839b89
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
+> >> @@ -0,0 +1,151 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/thermal/qcom-spmi-adc-tm5.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: Qualcomm's SPMI PMIC ADC Thermal Monitoring
+> >> +maintainers:
+> >> +  - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: qcom,spmi-adc-tm5
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  interrupts:
+> >> +    maxItems: 1
+> >> +
+> >> +  "#thermal-sensor-cells":
+> >> +    const: 1
+> >> +    description:
+> >> +      Number of cells required to uniquely identify the thermal sensors. Since
+> >> +      we have multiple sensors this is set to 1
+> >> +
+> >> +  "#address-cells":
+> >> +    const: 1
+> >> +
+> >> +  "#size-cells":
+> >> +    const: 0
+> >> +
+> >> +  qcom,avg-samples:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    description: Number of samples to be used for measurement.
+> >> +    enum:
+> >> +      - 1
+> >> +      - 2
+> >> +      - 4
+> >> +      - 8
+> >> +      - 16
+> >> +    default: 1
+> >> +
+> >> +  qcom,decimation:
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    description: This parameter is used to decrease ADC sampling rate.
+> >> +            Quicker measurements can be made by reducing decimation ratio.
+> >> +    enum:
+> >> +      - 250
+> >> +      - 420
+> >> +      - 840
+> >> +    default: 840
+> >> +
+> >> +patternProperties:
+> >> +  "^([-a-z0-9]*)@[0-9]+$":
+> >
+> > Less than 10 as unit-addresses are hex?
+>
+> 8 channels at max currently. I'll fix to use hex though.
 
-This is a bit devoid of details.
+Then it should be @[0-7]$
 
-I guess you mean reset in particular, but that's not clear from the above.
+> >> +    type: object
+> >> +    description:
+> >> +      Represent one thermal sensor.
+> >> +
+> >> +    properties:
+> >> +      reg:
+> >> +        description: Specify the sensor channel.
+> >> +        maxItems: 1
+> >
+> > You need a range of values here.
+>
+> ok.
+>
+> >
+> >> +
+> >> +      io-channels:
+> >> +        description:
+> >> +          From common IIO binding. Used to pipe PMIC ADC channel to thermal monitor
+> >> +
+> >> +      qcom,adc-channel:
+> >> +        $ref: /schemas/types.yaml#/definitions/uint32
+> >> +        description: Corresponding ADC channel ID.
+> >
+> > Why is this not a cell in io-channels?
+>
+>
+> Do you mean parsing a cell from io-channels rather than specifying it
+> again? Sounds like a good idea.
 
-Also, it would be useful to describe the design somewhat.
+Yes.
 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq_stats.c | 75 ++++++++++++++++++++++++---------
->  1 file changed, 56 insertions(+), 19 deletions(-)
+> >> +      qcom,ratiometric:
+> >> +        $ref: /schemas/types.yaml#/definitions/flag
+> >> +        description:
+> >> +          Channel calibration type.
+> >> +          If this property is specified VADC will use the VDD reference
+> >> +          (1.875V) and GND for channel calibration. If property is not found,
+> >> +          channel will be calibrated with 0V and 1.25V reference channels,
+> >> +          also known as absolute calibration.
+> >> +
+> >> +      qcom,hw-settle-time:
+> >> +        $ref: /schemas/types.yaml#/definitions/uint32
+> >> +        description: Time between AMUX getting configured and the ADC starting conversion.
+> >
+> > Time values should have a unit suffix. Seems like a commmon ADC
+> > property...
 >
-> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> index 94d959a8e954..3e7eee29ee86 100644
-> --- a/drivers/cpufreq/cpufreq_stats.c
-> +++ b/drivers/cpufreq/cpufreq_stats.c
-> @@ -22,17 +22,22 @@ struct cpufreq_stats {
->         spinlock_t lock;
->         unsigned int *freq_table;
->         unsigned int *trans_table;
-> +
-> +       /* Deferred reset */
-> +       unsigned int reset_pending;
-> +       unsigned long long reset_time;
->  };
->
-> -static void cpufreq_stats_update(struct cpufreq_stats *stats)
-> +static void cpufreq_stats_update(struct cpufreq_stats *stats,
-> +                                unsigned long long time)
->  {
->         unsigned long long cur_time = get_jiffies_64();
->
-> -       stats->time_in_state[stats->last_index] += cur_time - stats->last_time;
-> +       stats->time_in_state[stats->last_index] += cur_time - time;
->         stats->last_time = cur_time;
->  }
->
-> -static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
-> +static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
->  {
->         unsigned int count = stats->max_state;
->
-> @@ -41,42 +46,67 @@ static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
->         memset(stats->trans_table, 0, count * count * sizeof(int));
->         stats->last_time = get_jiffies_64();
->         stats->total_trans = 0;
-> +
-> +       /* Adjust for the time elapsed since reset was requested */
-> +       WRITE_ONCE(stats->reset_pending, 0);
+> Could you please be more specific here? Would you like for me to just
+> specify the unit in the description?
 
-What if this runs in parallel with store_reset()?
+More a question for Jonathan I guess as to whether this should be
+common or not. Maybe we have something already. Settle or acquisition
+time is a common thing for ADCs, right?
 
-The latter may update reset_pending to 1 before the below runs.
-Conversely, this may clear reset_pending right after store_reset() has
-set it to 1, but before it manages to set reset_time.  Is that not a
-problem?
+Properties with units need a suffix as defined in
+.../bindings/property-units.txt.
 
-> +       cpufreq_stats_update(stats, stats->reset_time);
->
->         spin_unlock(&stats->lock);
->  }
->
->  static ssize_t show_total_trans(struct cpufreq_policy *policy, char *buf)
->  {
-> -       return sprintf(buf, "%d\n", policy->stats->total_trans);
-> +       struct cpufreq_stats *stats = policy->stats;
-> +
-> +       if (READ_ONCE(stats->reset_pending))
-> +               return sprintf(buf, "%d\n", 0);
-> +       else
-> +               return sprintf(buf, "%d\n", stats->total_trans);
->  }
->  cpufreq_freq_attr_ro(total_trans);
->
->  static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
->  {
->         struct cpufreq_stats *stats = policy->stats;
-> +       bool pending = READ_ONCE(stats->reset_pending);
-> +       unsigned long long time;
->         ssize_t len = 0;
->         int i;
->
->         if (policy->fast_switch_enabled)
->                 return 0;
->
-> -       spin_lock(&stats->lock);
-> -       cpufreq_stats_update(stats);
-> -       spin_unlock(&stats->lock);
-> -
->         for (i = 0; i < stats->state_num; i++) {
-> +               if (pending) {
-> +                       if (i == stats->last_index)
-> +                               time = get_jiffies_64() - stats->reset_time;
-
-What if this runs in parallel with store_reset() and reads reset_time
-before the latter manages to update it?
-
-> +                       else
-> +                               time = 0;
-> +               } else {
-> +                       time = stats->time_in_state[i];
-> +                       if (i == stats->last_index)
-> +                               time += get_jiffies_64() - stats->last_time;
-> +               }
-> +
->                 len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
-> -                       (unsigned long long)
-> -                       jiffies_64_to_clock_t(stats->time_in_state[i]));
-> +                              jiffies_64_to_clock_t(time));
->         }
->         return len;
->  }
->  cpufreq_freq_attr_ro(time_in_state);
->
-> +/* We don't care what is written to the attribute */
->  static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
->                            size_t count)
->  {
-> -       /* We don't care what is written to the attribute. */
-> -       cpufreq_stats_clear_table(policy->stats);
-> +       struct cpufreq_stats *stats = policy->stats;
-> +
-> +       /*
-> +        * Defer resetting of stats to cpufreq_stats_record_transition() to
-> +        * avoid races.
-> +        */
-> +       WRITE_ONCE(stats->reset_pending, 1);
-> +       stats->reset_time = get_jiffies_64();
-
-AFAICS, there is nothing to ensure that reset_time will be updated in
-one go and even to ensure that it won't be partially updated before
-setting reset_pending.
-
-This should at least be addressed in a comment to explain why it is
-not a problem.
-
-> +
->         return count;
->  }
->  cpufreq_freq_attr_wo(reset);
-> @@ -84,8 +114,9 @@ cpufreq_freq_attr_wo(reset);
->  static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
->  {
->         struct cpufreq_stats *stats = policy->stats;
-> +       bool pending = READ_ONCE(stats->reset_pending);
->         ssize_t len = 0;
-> -       int i, j;
-> +       int i, j, count;
->
->         if (policy->fast_switch_enabled)
->                 return 0;
-> @@ -113,8 +144,13 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
->                 for (j = 0; j < stats->state_num; j++) {
->                         if (len >= PAGE_SIZE)
->                                 break;
-> -                       len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ",
-> -                                       stats->trans_table[i*stats->max_state+j]);
-> +
-> +                       if (pending)
-> +                               count = 0;
-> +                       else
-> +                               count = stats->trans_table[i * stats->max_state + j];
-> +
-> +                       len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ", count);
->                 }
->                 if (len >= PAGE_SIZE)
->                         break;
-> @@ -228,10 +264,11 @@ void cpufreq_stats_record_transition(struct cpufreq_policy *policy,
->         struct cpufreq_stats *stats = policy->stats;
->         int old_index, new_index;
->
-> -       if (!stats) {
-> -               pr_debug("%s: No stats found\n", __func__);
-> +       if (!stats)
->                 return;
-> -       }
-> +
-> +       if (READ_ONCE(stats->reset_pending))
-> +               cpufreq_stats_reset_table(stats);
-
-This is a bit confusing, because cpufreq_stats_reset_table() calls
-cpufreq_stats_update() and passes reset_time to it, but it is called
-again below with last_time as the second arg.
-
-It is not particularly clear to me why this needs to be done this way.
-
->
->         old_index = stats->last_index;
->         new_index = freq_table_get_index(stats, new_freq);
-> @@ -241,7 +278,7 @@ void cpufreq_stats_record_transition(struct cpufreq_policy *policy,
->                 return;
->
->         spin_lock(&stats->lock);
-> -       cpufreq_stats_update(stats);
-> +       cpufreq_stats_update(stats, stats->last_time);
->
->         stats->last_index = new_index;
->         stats->trans_table[old_index * stats->max_state + new_index]++;
-> --
-> 2.25.0.rc1.19.g042ed3e048af
->
+Rob
