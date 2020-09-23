@@ -2,92 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 03100275AC9
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 16:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8AE275B06
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 17:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgIWOwb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 10:52:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47592 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726553AbgIWOwb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Sep 2020 10:52:31 -0400
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 75E7C21D43;
-        Wed, 23 Sep 2020 14:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600872750;
-        bh=BuNEmV3RbwiVDXoElwTtCudTourRjlDPhW6anCvkcOI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=omls3z2aNzSeO7YXJU8B+XpmHWyF7nGvgmS7/nl0TsXghchmwrQSj6W/Fr3D5YEEA
-         J7QcVSmwme+9NAIeJhS1gJ0GcDpRBpSLJ1SPedz5eghiQ4uCcTSt/OrjAVrb1FR3eB
-         lhPYORoRYhhHGaxA1Uc1//fJY0ro08uk0kL2Zw+s=
-Received: by mail-ot1-f49.google.com with SMTP id u25so19229375otq.6;
-        Wed, 23 Sep 2020 07:52:30 -0700 (PDT)
-X-Gm-Message-State: AOAM532qvSuuWokCOVRdtUsJQZxJwEgbw6r7UtI/FW+vDTftHV5mrjEW
-        mZmbVbvOzcVExMZ9B9WC4p8GhV/X2HjptSPc744=
-X-Google-Smtp-Source: ABdhPJz1tB0v4rYXWKiVzq4CO7HqLAQuT148DttuOsfIeDd/8T6HdfGV6yNZdU27bv3drjcxGrhH7zes5DzzT22HS3U=
-X-Received: by 2002:a9d:6193:: with SMTP id g19mr43512otk.108.1600872749842;
- Wed, 23 Sep 2020 07:52:29 -0700 (PDT)
+        id S1726498AbgIWPAB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 11:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38084 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWPAB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 11:00:01 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA5C0613CE
+        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 08:00:01 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id t7so3371847pjd.3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 08:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=OdgxVchKr804lbg26B3TIKGQcQ5GUL6BtiREtl0Xv88=;
+        b=j0GsnOtKQH8GPr8K0IKpzk6RhfdZSbUQobXgnOygsYa5heqvGNwkjjs+lV0dUE/OMV
+         VKioe8HxGjF9MJIo/nPzq8pXqs1sSvTwXM8muIzfQuVWde1E0D7KTZdqwncDy3b43VjA
+         QZmzz6r3Yr74Y1aaeeh/ZppekeQoyTRkwIi+fzgH1kDM3IpeLR/IIPJMfAWltDQ+i7TJ
+         pRzjVUOYKP5qQDC+y7N6NTuzZV5A+xmWLmPRZasLFx3S+LtFFNULnilOWv5GCUBgfQ+I
+         Tojrg8lLijG7b0NND/s0A5Pc9vPfDYj6eirGrr/4zkZ7gd+pQV2+DKmCfsgiX417fmvI
+         Gh0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=OdgxVchKr804lbg26B3TIKGQcQ5GUL6BtiREtl0Xv88=;
+        b=YLoSvlJEUAUkAjfV+L3kPow6kelA4HtwzeGAxB1tICMpen8sK8WyUOvLf8NPA6haif
+         XHU+Hj3To6Lo43vsSVHIqp+QyqAN3UPBx0ss1HYSJqp9i9Kabjh2Hx1HDYseAtB21Hrk
+         I07IiGGm8Wfcs2c70b1YfQGE5ymzOdhjtMqZLAzW9CVgvOd+6S0KSAbvWOYrFgvcjqYA
+         YhtNCdALKyDrm95dYjExGSKV7LFv+RXpAUJd7epS/+nSf938uSCLYETtx3Gtcr9tM02v
+         3JZdRMMgDzxUC0A8jo9D3m6kO0wfLMpFKF862wx4G1ZV51nenJqLyEsc+vgwKkpSv+0y
+         ctFg==
+X-Gm-Message-State: AOAM530FeJbeTsV2QvdpzSLMIf70pnDld8fL1wCQi3hZiyfw8SA4tzWe
+        9/obYOGIvNmsH5uqyBWsv4yDLAiKscEndA==
+X-Google-Smtp-Source: ABdhPJyW2vZHYLvCo6EchRmlNb4BreW2Kzs8YRVV8ajG6fGZYbGdKOcQLbH+VMaQrvN1UoCrM7gjDg==
+X-Received: by 2002:a17:902:7c01:b029:d2:29fc:9a93 with SMTP id x1-20020a1709027c01b02900d229fc9a93mr226786pll.84.1600873201147;
+        Wed, 23 Sep 2020 08:00:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 9sm205131pgx.76.2020.09.23.07.59.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2020 08:00:00 -0700 (PDT)
+Message-ID: <5f6b62f0.1c69fb81.921c3.087e@mx.google.com>
+Date:   Wed, 23 Sep 2020 08:00:00 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
- <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp> <20200923140512.GJ28545@zn.tnic>
-In-Reply-To: <20200923140512.GJ28545@zn.tnic>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 23 Sep 2020 16:52:18 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH2uWEfAxTf_+6YN-Sp2VNKtaGhqAx4jyvhW3xR=0Jaug@mail.gmail.com>
-Message-ID: <CAMj1kXH2uWEfAxTf_+6YN-Sp2VNKtaGhqAx4jyvhW3xR=0Jaug@mail.gmail.com>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA
- handling chain
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        X86 ML <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi <linux-efi@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.9-rc6-35-g5dee22f9d504
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 13 warnings (v5.9-rc6-35-g5dee22f9d504)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 23 Sep 2020 at 16:05, Borislav Petkov <bp@alien8.de> wrote:
->
-> Smita,
->
-> pls sync the time of the box where you create the patch:
->
->  Date: Fri,  4 Sep 2020 09:04:44 -0500
->
-> but your mail headers have:
->
->  Received: from ... with mapi id 15.20.3370.019; Fri, 18 Sep 2020 14:49:12 +0000
->                                                 ^^^^^^^^^^^^^^^^^^
->
-> On Wed, Sep 23, 2020 at 07:07:17PM +0900, Punit Agrawal wrote:
-> > I know Boris asked you to add the reason for the Reported-by, but
-> > usually we don't track version differences in the committed patch.
-> >
-> > Boris, can you confirm if you want the Reported-by to be retained?
->
-> How else would you explain what the Reported-by: tag is for on a patch
-> which adds a feature?
->
+pm/testing build: 7 builds: 0 failed, 7 passed, 13 warnings (v5.9-rc6-35-g5=
+dee22f9d504)
 
-I think the question is why we are retaining this Reported-by header
-to begin with. Even though the early feedback is appreciated,
-crediting the bot for eternity for a version of the patch that never
-got merged seems a bit excessive. Also, it may suggest that the bot
-was involved in reporting an issue that the patch aims to fix but that
-is not the case. The last thing we want is Sasha's bot to jump on
-patches adding new functionality just because it has a reported-by
-line.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc6-35-g5dee22f9d504/
 
-So I suggest dropping the Reported-by credit as well as the [] context
-regarding v1
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc6-35-g5dee22f9d504
+Git Commit: 5dee22f9d504e6f0a1ab8559900638a87376475c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+    i386_defconfig (gcc-8): 2 warnings
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    2    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to poi=
+nter from integer of different size [-Wint-to-pointer-cast]
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
