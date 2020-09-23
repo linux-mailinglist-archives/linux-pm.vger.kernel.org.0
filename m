@@ -2,138 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E7F275782
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 13:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676232757BD
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 14:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgIWLwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 07:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726610AbgIWLwG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 07:52:06 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F21C0613CE;
-        Wed, 23 Sep 2020 04:52:06 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id d4so6844356wmd.5;
-        Wed, 23 Sep 2020 04:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=62leXxkn6lfQBk0pj9IGOMm88gpEkBUQrcCqhx44WHI=;
-        b=ODmaWdLBKOeSP1ZafWzo21vjJrHlk3UG4jvO8+g6WMM1BFtTLmzx1IjbGjRouQUa+7
-         nAMc2SENwtPelG8pH3qifpRoFvyXIyHkkSpyttxOBSllpGFUWNDTbc7RWWZwDXiubVzz
-         DId3At1uwFhl8QdtjFs9TEb9pLJUGmoMWNZljWBiFG6YHY/D5eEaVWfYRHdsGOT1LmMl
-         WPXOjkI7LdOyCKmm8KnbDvvqWylTGVG9rccvd2qnBAegNKT8R9zR8wUu35rVANaWTR32
-         pzLd85pgC4hOTjPoqQYRZACHbmH3e+lrH/elvTuoGpBsCqkzId/E+uobn2wcVgIWij43
-         kdgw==
+        id S1726513AbgIWMMZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 08:12:25 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45931 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbgIWMMZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 08:12:25 -0400
+Received: by mail-oi1-f196.google.com with SMTP id z26so24724138oih.12;
+        Wed, 23 Sep 2020 05:12:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=62leXxkn6lfQBk0pj9IGOMm88gpEkBUQrcCqhx44WHI=;
-        b=aEDvazGiZZMyoy6AXGp62tjWh21f7xsDLSFNdZpCd4GNFK8Ui99xX7YzlaCjok6CxM
-         mWqCq+t/2xBhrkhjME5QISNdot7YR5oj18rgsBv/ikDhFdVhxiDujUTLqETd6D6qylDj
-         5ovcorP+p8Mub/S2ip0eVH5X5/fjAkZyzhYwND+xIszCLBGWqBIycGP0pK4XkT+LAHkR
-         vUoHxjRnv4PWlOFJkPs3KF2tzPQDLZqyr+NqFX6DBQyw2Y4rPI1X3xSfxB4nbcmxAleK
-         yRIs6VCmXnjicd1swB8bcRww2a4DnRlGR8xQOKbwGs8/W8xt8MRyHrIyXMvp4PoA2lhQ
-         KErg==
-X-Gm-Message-State: AOAM531H4PvE36xZxr0r95w3y5DeIAdA14Ta3yxLzxhaNttHrVTVUUrz
-        QQ0fkiVGTv3Hf3zPwCRfcIY=
-X-Google-Smtp-Source: ABdhPJwuky5Ub23hg9gD1yy7ZPW4fTKq0bW7//cbGIq+DmdbAGJe7JBSRBqC41QuYp6pi5kgGRRJBA==
-X-Received: by 2002:a05:600c:2159:: with SMTP id v25mr5266287wml.180.1600861924874;
-        Wed, 23 Sep 2020 04:52:04 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id a20sm7785703wmm.40.2020.09.23.04.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 04:52:03 -0700 (PDT)
-Date:   Wed, 23 Sep 2020 13:52:01 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anson Huang <Anson.Huang@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, Han Xu <han.xu@nxp.com>,
-        Frank Li <frank.li@nxp.com>, Fugang Duan <fugang.duan@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v3 06/19] dt-bindings: pwm: imx-pwm: Add i.MX 8M
- compatibles
-Message-ID: <20200923115201.GD1846003@ulmo>
-References: <20200825193536.7332-1-krzk@kernel.org>
- <20200825193536.7332-7-krzk@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eveZIbMy5IaynFxma8rYgZSMFND5801oVWlwra+0n8I=;
+        b=bOZnX94N16otpsU1LPVWYvCSMbFL+SOA3z5aaeuRoCHjOGWRI7Eh+w1RyeaQPZ7UWu
+         nCEwbqhcZ6D9u0j0UFGVNL3xFtmFDJdI4LgV8u84/pxuxuaxAznJhc9DZfVycfMtmDIz
+         Ah1z6B5tmg+tyytM7XyQSAJ8K86NKQz6krbWO4YFtxAl4XFCu9l4rszHbk7zkleP1oN8
+         4WaZ9O9Cpxfyy+a/dDa3JdiSXIm/dcHl0H2wthrt8yEKrcMLhe1wjkwU5Bbk092Xk+Fb
+         T58S5HB+VQ6lJEevGYDGtunbMHfWBXR0zgZcbco91Cn242Rz/m5HmeiaKMP/PsXRlvYH
+         6gYw==
+X-Gm-Message-State: AOAM532me7d4Gi7j0L/8bL+rUjUg3otut1DDTKn9+jXYYuK3QXKhrgk8
+        jXPeWUcC3i/Mhy0Ty9onxY/d2PyhZk04Ix/9vtzy1DY4
+X-Google-Smtp-Source: ABdhPJzzJuupuF64EpLqYlHLZHIz3hvhsnMUcZcqxdYlUfrZGOIRy88bH3VwTICVcry00uYzCyQWzAIc7VxUC0xZMbQ=
+X-Received: by 2002:aca:5b09:: with SMTP id p9mr5330041oib.68.1600863144301;
+ Wed, 23 Sep 2020 05:12:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/unnNtmY43mpUSKx"
-Content-Disposition: inline
-In-Reply-To: <20200825193536.7332-7-krzk@kernel.org>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+References: <20200922183416.14442-1-ilina@codeaurora.org>
+In-Reply-To: <20200922183416.14442-1-ilina@codeaurora.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 23 Sep 2020 14:12:10 +0200
+Message-ID: <CAJZ5v0gooHij1AAjXXm+R-SHYUscuvANYv25pG2_iWqe_DBcpw@mail.gmail.com>
+Subject: Re: [PATCH v2] cpuidle: record state entry rejection statistics
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Sep 22, 2020 at 8:34 PM Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> CPUs may fail to enter the chosen idle state if there was a pending
+> interrupt. The cpuidle driver would return an error value in that case.
+> Let's record that and show along with other statistics for the idle
+> state. This could prove useful in understanding behavior of the governor
+> and the system during usecases that involve multiple CPUs.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 
---/unnNtmY43mpUSKx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied as 5.10 material with some changelog and documentation edits, thanks!
 
-On Tue, Aug 25, 2020 at 09:35:23PM +0200, Krzysztof Kozlowski wrote:
-> DTSes with new i.MX 8M SoCs introduce their own compatibles so add them
-> to fix dtbs_check warnings like:
->=20
->   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
->     compatible:0: 'fsl,imx8mm-pwm' is not one of ['fsl,imx1-pwm', 'fsl,im=
-x27-pwm']
->     From schema: Documentation/devicetree/bindings/pwm/imx-pwm.yaml
->=20
->   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
->     compatible: ['fsl,imx8mm-pwm', 'fsl,imx27-pwm'] is too long
->=20
->   arch/arm64/boot/dts/freescale/imx8mm-evk.dt.yaml: pwm@30660000:
->     compatible: Additional items are not allowed ('fsl,imx27-pwm' was une=
-xpected)
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+>
 > ---
->  Documentation/devicetree/bindings/pwm/imx-pwm.yaml | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-
-Applied, thanks.
-
-Thierry
-
---/unnNtmY43mpUSKx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9rNuEACgkQ3SOs138+
-s6GvDg/+Nro4jTSFhaaEb45wLg7Wg5AT70Vw7JpMwqEfIe5L3+HCzsAZX08eoriW
-TwsrzDYwi1mA2E8LXgnab5e3AAgrQJO5HprXoQ0736DAqPzLovczCCUfBnS72FTM
-gtWR/H60vrI/6jPUT+YqqvgtH1SQZIDSC0Sr936omELFXZ7N7kgTW1gTMR9jeMGj
-eoEUbgMKztiNGZpCm/kRLffCONoKpyz/3luja+KXkB07rPVluMjwhaFBNYxr6oB2
-K48rLlPN3B/3u+qD03bB4fBdycLNO0IjVepdM21pBsGyKAT4uYfl0wG86/ww99EB
-1v9/vWoSmwnxVBuPDDj4ecj7iD3VExSDZ7x2vvID5NmhK3ndjisf8C979I48hvMo
-maBVSISDlvaIs2KbzJt9JoqHYaBNJ4LUdTwnFfcVo0vT9EY0H9KvLbfw93I/0VjU
-r9WMPCRYtEOiS5riua25jp9pSxcnQE92v5NyNEMg+sdJ9uyLPYo0NBFbhTskEjnC
-7evLkq5xpYJywh6bQvhVOhnbCoVGAOdqOIJ25xSC2wF5vaCWWRhjDtsS7d/EbXql
-tRX3gA2RlNUKlF1MlGp7TUtnWkl/EWtaWI26qm0/zuvyAnxGKBY5Eo4HUMGNtVWH
-BgQsfOviGCcDALYVPWC6foLtzrsz8BMYVVi+7u2hD0FMOa29oas=
-=09l4
------END PGP SIGNATURE-----
-
---/unnNtmY43mpUSKx--
+> Changes in v2:
+> - Rename 'failed' to 'rejected'
+> - Update documentation
+> ---
+>  Documentation/admin-guide/pm/cpuidle.rst | 8 ++++++++
+>  drivers/cpuidle/cpuidle.c                | 1 +
+>  drivers/cpuidle/sysfs.c                  | 3 +++
+>  include/linux/cpuidle.h                  | 1 +
+>  4 files changed, 13 insertions(+)
+>
+> diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
+> index a96a423e3779..1e7fd7a64c65 100644
+> --- a/Documentation/admin-guide/pm/cpuidle.rst
+> +++ b/Documentation/admin-guide/pm/cpuidle.rst
+> @@ -528,6 +528,9 @@ object corresponding to it, as follows:
+>         Total number of times the hardware has been asked by the given CPU to
+>         enter this idle state.
+>
+> +``rejected``
+> +        Total number of times the idle state requested to the CPU was rejected.
+> +
+>  The :file:`desc` and :file:`name` files both contain strings.  The difference
+>  between them is that the name is expected to be more concise, while the
+>  description may be longer and it may contain white space or special characters.
+> @@ -572,6 +575,11 @@ particular case.  For these reasons, the only reliable way to find out how
+>  much time has been spent by the hardware in different idle states supported by
+>  it is to use idle state residency counters in the hardware, if available.
+>
+> +Generally, an  interrupt received when entering idle state would cause the idle
+> +state entry request to be rejected. The return value from the cpuidle driver
+> +indicates whether the idle state was entered or rejected. The files
+> +:file:`usage` and :file:`rejected` report the number of times the idle states
+> +were successfully entered and rejected, respectively.
+>
+>  .. _cpu-pm-qos:
+>
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 6c7e5621cf9a..0ed5030b89d6 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -307,6 +307,7 @@ int cpuidle_enter_state(struct cpuidle_device *dev, struct cpuidle_driver *drv,
+>                 }
+>         } else {
+>                 dev->last_residency_ns = 0;
+> +               dev->states_usage[index].rejected++;
+>         }
+>
+>         return entered_state;
+> diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
+> index 091d1caceb41..53ec9585ccd4 100644
+> --- a/drivers/cpuidle/sysfs.c
+> +++ b/drivers/cpuidle/sysfs.c
+> @@ -256,6 +256,7 @@ define_show_state_time_function(exit_latency)
+>  define_show_state_time_function(target_residency)
+>  define_show_state_function(power_usage)
+>  define_show_state_ull_function(usage)
+> +define_show_state_ull_function(rejected)
+>  define_show_state_str_function(name)
+>  define_show_state_str_function(desc)
+>  define_show_state_ull_function(above)
+> @@ -312,6 +313,7 @@ define_one_state_ro(latency, show_state_exit_latency);
+>  define_one_state_ro(residency, show_state_target_residency);
+>  define_one_state_ro(power, show_state_power_usage);
+>  define_one_state_ro(usage, show_state_usage);
+> +define_one_state_ro(rejected, show_state_rejected);
+>  define_one_state_ro(time, show_state_time);
+>  define_one_state_rw(disable, show_state_disable, store_state_disable);
+>  define_one_state_ro(above, show_state_above);
+> @@ -325,6 +327,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
+>         &attr_residency.attr,
+>         &attr_power.attr,
+>         &attr_usage.attr,
+> +       &attr_rejected.attr,
+>         &attr_time.attr,
+>         &attr_disable.attr,
+>         &attr_above.attr,
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index 6175c77bf25e..ed0da0e58e8b 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -38,6 +38,7 @@ struct cpuidle_state_usage {
+>         u64                     time_ns;
+>         unsigned long long      above; /* Number of times it's been too deep */
+>         unsigned long long      below; /* Number of times it's been too shallow */
+> +       unsigned long long      rejected; /* Number of times idle entry was rejected */
+>  #ifdef CONFIG_SUSPEND
+>         unsigned long long      s2idle_usage;
+>         unsigned long long      s2idle_time; /* in US */
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
