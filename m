@@ -2,114 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A9F274F8D
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 05:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1B12752F9
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 10:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbgIWD2n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Sep 2020 23:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726448AbgIWD2m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Sep 2020 23:28:42 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F1AC061755
-        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 20:28:42 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id x22so9375567pfo.12
-        for <linux-pm@vger.kernel.org>; Tue, 22 Sep 2020 20:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Cyv0NbN0yWPS+PsT7IMJD+tb3MCt73IHlNI22dI4avY=;
-        b=jnHtu8GEt0GqpKYIvrCK8wUR0AjN5vWE834OR2PkQJHipX9aSkYCRqsiLD+DICGD87
-         3XlIb95uL/v25ehWameSZmknzctiELQeIWHbJQBvh6x/mNjfttGl5Fd4S95fdq+VC/5O
-         JFm/TOeu9SY8f+35BpxUpnX2y/98Ncf55GUWWigi66iCooNtB1iNiUk+7CBtSLmAyApM
-         1iVJ+DQ1otTK8RHzteqbsv6s3WhpCxrEIR1ZEpbtv75be8G+8uoJGo/jns3e8S0swmB0
-         Jyi3ow60BnNIHOsA7J/6uyFggIUIqe0N7l64qFt1PepV0q1WArSfB9h9VnPB/pFekp+9
-         yhSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Cyv0NbN0yWPS+PsT7IMJD+tb3MCt73IHlNI22dI4avY=;
-        b=kR8rwQ3jD3YvkOr3+3lAVogyt/j7dSUKzKeV3TD0UIYmvsTcsMWCJrWBJ5vcOwtv+X
-         WitgqfNAUj0QXKz9Ee6LQ68whx+AMLG+x89TYP0kD1UFxdorpvnmsZR+74V4+60uVBVt
-         FsPHAkXiiYtz7Tc3dnB0iE2BIKcWZWis3rsakQYvlcoMOJ2L4KXPjber1UkxRQORqpm7
-         uwhFuvT6ZzFI/90P5ZMd4wZM1BufDEu6woVLDrvHV74yWqPAbahpzey9E7g2txI+6GBG
-         vhTs2Q3M1kaIcAHG8iw9DKWx/6cE7UDG8oeiBhpXvQjGFtTiMJGiTeURvhPWmtOJnkIV
-         AI6g==
-X-Gm-Message-State: AOAM531Bp7koaSymNm5ceRWZuDhgUSrUUrEY5lct7inD75QqsU4RtvLz
-        UlNNgJ1DGre9Qw05pgn0qUj/uDqtE0UbKw==
-X-Google-Smtp-Source: ABdhPJzNEZ6WltZ55+evFCa4bbCqWv1Ks88DBV4lFOkk8FpMgDUkqkzUiACyaIMrIi32w286Q+AbpA==
-X-Received: by 2002:a63:1e03:: with SMTP id e3mr6071294pge.69.1600831722030;
-        Tue, 22 Sep 2020 20:28:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l141sm16613695pfd.47.2020.09.22.20.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 20:28:41 -0700 (PDT)
-Message-ID: <5f6ac0e9.1c69fb81.d6589.910e@mx.google.com>
-Date:   Tue, 22 Sep 2020 20:28:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726178AbgIWILO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 04:11:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:39322 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726130AbgIWILO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Sep 2020 04:11:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9B85113E;
+        Wed, 23 Sep 2020 01:11:13 -0700 (PDT)
+Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18C583F718;
+        Wed, 23 Sep 2020 01:11:11 -0700 (PDT)
+Date:   Wed, 23 Sep 2020 09:11:06 +0100
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
+Message-ID: <20200923081106.GA30942@e121166-lin.cambridge.arm.com>
+References: <20200814123716.61936-1-ulf.hansson@linaro.org>
+ <CAJZ5v0g7EZVeF6GL8yqfALq-wgp+9igO3JkzR-as7Ng9ycbFJQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.9-rc6-28-gbc13abdb9140
-Subject: pm/testing sleep: 4 runs, 1 regressions (v5.9-rc6-28-gbc13abdb9140)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g7EZVeF6GL8yqfALq-wgp+9igO3JkzR-as7Ng9ycbFJQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 4 runs, 1 regressions (v5.9-rc6-28-gbc13abdb9140)
+On Mon, Sep 21, 2020 at 05:49:52PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Aug 14, 2020 at 2:37 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Extend the file pattern to also include cpuidle-psci.h and
+> > cpuidle-psci-domain.c. Moreover, add myself as a co-maintainer,
+> > particularly to help with the support for PM domains.
+> >
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Cc: Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> Any objections from the original maintainers?
 
-Regressions Summary
--------------------
+The PSCI driver providing support for platform coordinated idle states
+(that this patch is targeting AFAICS) does not require more maintainers,
+that support is complete and Sudeep and I will take care of refactoring
+and fixes.
 
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
+If the OSI bits in it require a specific maintainer I would prefer those
+bits to be moved into a specific file and maintainership added
+_explicitly_ for that file only.
 
+Thanks,
+Lorenzo
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc6=
--28-gbc13abdb9140/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc6-28-gbc13abdb9140
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      bc13abdb914005e3af0362e03ab72a80e14eb797 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6ab4560a43f5c57ebf9dc3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc6-28-gbc13ab=
-db9140/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc6-28-gbc13ab=
-db9140/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0911.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f6ab4560a43f5c57ebf9dc4
-      failing since 34 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =20
+> >  MAINTAINERS | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index f9ae8ea54e27..66821197175e 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -4556,10 +4556,11 @@ F:      drivers/cpuidle/cpuidle-exynos.c
+> >  CPUIDLE DRIVER - ARM PSCI
+> >  M:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+> >  M:     Sudeep Holla <sudeep.holla@arm.com>
+> > +M:     Ulf Hansson <ulf.hansson@linaro.org>
+> >  L:     linux-pm@vger.kernel.org
+> >  L:     linux-arm-kernel@lists.infradead.org
+> >  S:     Supported
+> > -F:     drivers/cpuidle/cpuidle-psci.c
+> > +F:     drivers/cpuidle/cpuidle-psci*
+> >
+> >  CRAMFS FILESYSTEM
+> >  M:     Nicolas Pitre <nico@fluxnic.net>
+> > --
+> > 2.25.1
+> >
