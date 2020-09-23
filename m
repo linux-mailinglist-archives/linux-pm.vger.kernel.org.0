@@ -2,139 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D29CE275CA0
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 17:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC13275CB6
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 18:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgIWP6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 11:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgIWP6x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 11:58:53 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C76C0613CE
-        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 08:58:52 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id f2so14658299pgd.3
-        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 08:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=W1aTWsbxhQ+aTQonuMGx6xR0hjG1bOpvURxp1bhuSck=;
-        b=l0WfkSPS4efd2Vrlr/hgVSHNOXMnWewlI6nt+NjbRZjTdxWC3HhV27fOKIYHDPQPbu
-         E10TlcgkbmOUvwsBxnPxM2whcWMdkXfPqKfe3sGWIaQ6z5gN+FZAEEAbdQRvro9bEoxB
-         B2lMFDxzQLxIF8xkNMRw6XkgRDkzx9pdkXCx0bPp0Qme11VfLNJLblFGs2dv6fdBxlJ8
-         HIxo0q/mh70DdEQB5FWNIdJGTiBAkVr4U2bfcbIrx/3xTX/KVAtpFfIrgC87Erwtyoj1
-         Z16clxZIiZfHdeGl7ADnYTx//rn/dsvWWZVgT7ZgOGbS0IStaU1sVIsa6P3AgSnSvJQ6
-         YzJg==
+        id S1726784AbgIWQDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 12:03:32 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:41526 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726761AbgIWQDb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 12:03:31 -0400
+Received: by mail-il1-f194.google.com with SMTP id f82so87460ilh.8;
+        Wed, 23 Sep 2020 09:03:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=W1aTWsbxhQ+aTQonuMGx6xR0hjG1bOpvURxp1bhuSck=;
-        b=mnB7AKf2O6z5gGOaLJguWkRX0KQsh9uMZOs/k6WatV4Tw0rkLpL70FLkw9WP1qhZJV
-         IJSfctFDJVe56m1iHbQCCsVFeJZK1M8fWNhNRjnpaIO5rzeCoxI0oKuFxdlDgN6Ocln1
-         exCGZb4FH0OtwWb7c3Q2Mk2oj7bCQjCsxcALzwJJfMF8JUUzM7deWZ1zYLfpdvOgEdhu
-         PcK5e+/YHTDDyyWyG7uyz9whUlP9AfitQcMo6zmENNHC9pYp51JBVWDLfnipHBY1a6Gl
-         Uks4QZfkBZWF7fkZQ60Fq4T/FtDj/kQJnb0rZd74ciFqBbzcysI/r8FtYXhImYUty29M
-         cPFw==
-X-Gm-Message-State: AOAM532+6nLnyZlfhGqwfMkyEuPiu3vlb1xT+Z7oqEIZu4caCWs4pYG5
-        qF4cwuk1h7UQF4AWz4oEz3gXGg==
-X-Google-Smtp-Source: ABdhPJwxQStw2UcHi18nk7bRc0C4EVZQNANbafCt9RaRVDmeO7rYcGilLvX6SW4IN4skrQQMRfkU2w==
-X-Received: by 2002:a63:cc42:: with SMTP id q2mr391086pgi.216.1600876731990;
-        Wed, 23 Sep 2020 08:58:51 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r2sm264823pga.94.2020.09.23.08.58.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=f7oNf2n/2S4LdD+hJ5wvJbkdup7gyW0tYobtVU4/lCo=;
+        b=LJxua3tbHd2IGS7253Qjbw6lZg6qeXG1jQn/HsZinU323Ehay5oRodKmTGClYHstgl
+         lEuIXhDet/nt4yQjx4fd4QGoElccOnJ7DXI2w/IJwXrAwDkrhNuMZGY9OKIMuqxtKjS2
+         rc9eX4STQkTYRceH4zTR+Yr1ddzNu6pnIadQcTCGbLma1vmXR2dRIZzxkLjCOEVaOGgo
+         LdXkd9UpBQXCZg5nxS/0u3ybqrNAeMZ9oxTFhkY7F8jlxuKLaNMj17LT1D23xb0hdFGI
+         DSwwohR52Ubp0XEJwAYplruwZc8C9srqRg+TWk0xk1P0Th7wzpqM9wYfQtvFT0ktx8iq
+         BUyA==
+X-Gm-Message-State: AOAM532hLT+wTZhwgfso4u4dmfww7avgJ4aCSQr5aPmByL+cCzNuRZVK
+        gLLsa/EvjrYcHJCqiiogVw==
+X-Google-Smtp-Source: ABdhPJx8Jk2Cu+4knjIJI93h2RDm8Bp12YNWlPvaSS83rCXADkAPJBrKwucmpTFhKApUGVNahPjd0A==
+X-Received: by 2002:a92:bb57:: with SMTP id w84mr421072ili.41.1600877010279;
+        Wed, 23 Sep 2020 09:03:30 -0700 (PDT)
+Received: from xps15 ([64.188.179.253])
+        by smtp.gmail.com with ESMTPSA id v24sm129353ioh.21.2020.09.23.09.03.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 08:58:51 -0700 (PDT)
-Message-ID: <5f6b70bb.1c69fb81.d2631.0a6d@mx.google.com>
-Date:   Wed, 23 Sep 2020 08:58:51 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 23 Sep 2020 09:03:29 -0700 (PDT)
+Received: (nullmailer pid 836373 invoked by uid 1000);
+        Wed, 23 Sep 2020 16:03:28 -0000
+Date:   Wed, 23 Sep 2020 10:03:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thara Gopinath <thara.gopinath@linaro.org>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, lukasz.luba@arm.com,
+        amitk@kernel.org
+Subject: Re: [PATCH RFC 1/8] dt-bindings: thermal: Introduce monitor-falling
+ parameter to thermal trip point binding
+Message-ID: <20200923160328.GA833754@bogus>
+References: <20200917032226.820371-1-thara.gopinath@linaro.org>
+ <20200917032226.820371-2-thara.gopinath@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.9-rc6-35-g5dee22f9d504
-Subject: pm/testing sleep: 6 runs, 2 regressions (v5.9-rc6-35-g5dee22f9d504)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917032226.820371-2-thara.gopinath@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 2 regressions (v5.9-rc6-35-g5dee22f9d504)
+On Wed, Sep 16, 2020 at 11:22:19PM -0400, Thara Gopinath wrote:
+> Introduce a new binding parameter to thermal trip point description
+> to indicate whether the temperature level specified by the trip point
+> is monitored for a rise or fall in temperature.
+> 
+> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>  .../devicetree/bindings/thermal/thermal-zones.yaml         | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> index 3ec9cc87ec50..cc1332ad6c16 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> @@ -161,6 +161,13 @@ patternProperties:
+>                    The active trip type can be used to control other HW to
+>                    help in cooling e.g. fans can be sped up or slowed down
+>  
+> +              monitor-falling:
+> +                description: |
+> +                  boolean, If true, the trip point is being monitored for
+> +                  falling temperature. If false/absent/default, the trip
+> +                  point is being monitored for rising temperature.
+> +                type: boolean
 
-Regressions Summary
--------------------
+What if you wanted to monitor for both?
 
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc6=
--35-g5dee22f9d504/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc6-35-g5dee22f9d504
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      5dee22f9d504e6f0a1ab8559900638a87376475c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6b62de57e7fad2b6bf9dcf
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc6-35-g5dee22=
-f9d504/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc6-35-g5dee22=
-f9d504/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0911.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f6b62de57e7fad2b6bf9dd0
-      failing since 34 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f6b631b7430cbe6d7bf9dd8
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc6-35-g5dee22=
-f9d504/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc6-35-g5dee22=
-f9d504/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0911.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f6b631b7430cbe6d7bf9dd9
-      new failure (last pass: v5.9-rc6-28-gbc13abdb9140)  =20
+> +
+>              required:
+>                - temperature
+>                - hysteresis
+> -- 
+> 2.25.1
+> 
