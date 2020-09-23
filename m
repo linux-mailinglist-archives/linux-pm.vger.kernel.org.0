@@ -2,81 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9875275DF3
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 18:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28787275FC1
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 20:25:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbgIWQxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 12:53:46 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:37638 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbgIWQxq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 12:53:46 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 08NGrYUc073873;
-        Wed, 23 Sep 2020 11:53:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1600880014;
-        bh=v/OdQtLrwg8yFHMiXDvciypEO6WxHuaqhFeT3aUYHVk=;
-        h=Subject:To:References:From:Date:In-Reply-To;
-        b=bPXmP2CUn6HstssqRQAJHuvz8dGAJpgOb44WcJiChOvDH5JjqhtpWwfpiqSfRM3Pw
-         pa0uVcKlGFPxYYoMhQMmlLsSOiqovFxNpf+k/wp06OeNuSt03GhjMTxwMOle+5eVV3
-         CTu99N+bQ8HczmerxJF38khSQ3FO4mQuVekEsCmI=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 08NGrYso032957
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 23 Sep 2020 11:53:34 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 23
- Sep 2020 11:53:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 23 Sep 2020 11:53:34 -0500
-Received: from [10.250.36.88] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 08NGrXwg008341;
-        Wed, 23 Sep 2020 11:53:33 -0500
-Subject: Re: [PATCH v2] MAINTAINERS: add Dan Murphy as TP LP8xxx drivers
- maintainer
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Mark Brown <broonie@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <linux-leds@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-fbdev@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>
-References: <20200922152839.2744-1-krzk@kernel.org>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <fe4609b5-5aab-46ed-5280-9a4742b97fe5@ti.com>
-Date:   Wed, 23 Sep 2020 11:53:33 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1726699AbgIWSZB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 14:25:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34278 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726419AbgIWSZB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 23 Sep 2020 14:25:01 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44C0323772;
+        Wed, 23 Sep 2020 18:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600885500;
+        bh=PQ694416mkyRJSudKeRj8BUutkY/M7TaA4klpl4VyS4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Sp25cRCfXBwQvz8IEVyYDCihyBlbXyN9B/1NISrGs9y+1srSW97VOmUQ/DE41EM0C
+         KvIwFSmNAZVLn5+WIb1cgtc1+M9/AGEhma8J+L2VwYv8Zhv5JJSifOvibXDbjv7L/B
+         zavBT3QAfrCIoTHAYA6lJ94iYn6voP9ghpnPrRQY=
+Received: by mail-ot1-f41.google.com with SMTP id h17so697446otr.1;
+        Wed, 23 Sep 2020 11:25:00 -0700 (PDT)
+X-Gm-Message-State: AOAM531jwKoa99XqRDfVN3FFGQQQl4Ur4isnYiE3LrvozmVWPq/SRHp/
+        Gd0SGQf+8Hb3TWvj3UakWvrXBYXnuumagxhQLSQ=
+X-Google-Smtp-Source: ABdhPJy9WdySVafg27Wj/nNe1H0VU72po5OOABeeZP3D0Di8Jb0nGEdDJw+uU/MGCnmXwce3EztKeBoH4saGj0jKFD8=
+X-Received: by 2002:a9d:6250:: with SMTP id i16mr677534otk.77.1600885499444;
+ Wed, 23 Sep 2020 11:24:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200922152839.2744-1-krzk@kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
+ <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp> <20200923140512.GJ28545@zn.tnic>
+ <CAMj1kXH2uWEfAxTf_+6YN-Sp2VNKtaGhqAx4jyvhW3xR=0Jaug@mail.gmail.com> <20200923153941.GK28545@zn.tnic>
+In-Reply-To: <20200923153941.GK28545@zn.tnic>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 23 Sep 2020 20:24:48 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXE2HR1Yd9rfyXp92WaB2k1YQ5wKskN0tZ1HwC5Ti+V3OA@mail.gmail.com>
+Message-ID: <CAMj1kXE2HR1Yd9rfyXp92WaB2k1YQ5wKskN0tZ1HwC5Ti+V3OA@mail.gmail.com>
+Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA
+ handling chain
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        X86 ML <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi <linux-efi@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello
-
-On 9/22/20 10:28 AM, Krzysztof Kozlowski wrote:
-> Milo Kim's email in TI bounces with permanent error (550: Invalid
-> recipient).  Last email from him on LKML was in 2017.  Move Milo Kim to
-> credits and add Dan Murphy from TI to look after:
->   - TI LP855x backlight driver,
->   - TI LP8727 charger driver,
->   - TI LP8788 MFD (ADC, LEDs, charger and regulator) drivers.
+On Wed, 23 Sep 2020 at 17:39, Borislav Petkov <bp@alien8.de> wrote:
 >
-> Cc: Dan Murphy <dmurphy@ti.com>
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> On Wed, Sep 23, 2020 at 04:52:18PM +0200, Ard Biesheuvel wrote:
+> > I think the question is why we are retaining this Reported-by header
+> > to begin with. Even though the early feedback is appreciated,
+> > crediting the bot for eternity for a version of the patch that never
+> > got merged seems a bit excessive. Also, it may suggest that the bot
+> > was involved in reporting an issue that the patch aims to fix but that
+> > is not the case.
+>
+> That is supposed to be explained in [] properly so that there's no
+> misreading of why that tag's there.
+>
+> > The last thing we want is Sasha's bot to jump on patches adding new
+> > functionality just because it has a reported-by line.
+>
+> It should jump on patches which have Fixes: tags. But Sasha's bot is
+> nuts regardless. :-)
+>
+> > So I suggest dropping the Reported-by credit as well as the [] context
+> > regarding v1
+>
+> So I don't mind having a Reported-by: tag with an explanation of what
+> it reported. We slap all kinds of tags so having some attribution for
+> the work the 0day bot does to catch such errors is reasonable. I presume
+> they track this way how "useful" it is, by counting the Reported-by's or
+> so, as they suggest one should add a Reported-by in their reports.
+>
+> And without any attribution what the 0day bot reported, it might decide
+> not to report anything next time, I'd venture a guess.
+>
+> And the same argument can be had for Suggested-by: tags: one could
+> decide not to add that tag and the person who's doing the suggesting
+> might decide not to suggest anymore.
+>
+> So I think something like:
+>
+>  [ Fix a build breakage in an earlier version. ]
+> Reported-by: 0day bot
+>
+> is fine as long as it makes it perfectly clear what Reported-by tag
+> is for and as long as ts purpose for being present there is clear, I
+> don't see an issue...
+>
 
-Acked-by: Dan Murphy <dmurphy@ti.com>
-
+I don't think it adds much value tbh, but I am not going to obsess
+about it either.
