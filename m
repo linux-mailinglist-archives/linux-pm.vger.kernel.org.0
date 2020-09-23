@@ -2,91 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC13275CB6
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 18:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D652275DB7
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 18:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbgIWQDc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 12:03:32 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:41526 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726761AbgIWQDb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 12:03:31 -0400
-Received: by mail-il1-f194.google.com with SMTP id f82so87460ilh.8;
-        Wed, 23 Sep 2020 09:03:30 -0700 (PDT)
+        id S1726680AbgIWQn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 12:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbgIWQn7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 12:43:59 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97B70C0613CE
+        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 09:43:59 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id p16so38236pgi.9
+        for <linux-pm@vger.kernel.org>; Wed, 23 Sep 2020 09:43:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=9kKVBm2QDcEhoI7VNH0u9uwqsgFbX84K7to4q+EvAF8=;
+        b=wo1HxCm5bKIVa9so0OH72jUPeuxpy0gBmSztrnAMX5SSm8gqDsd/uDbJD7n0nTY7Hv
+         CKJoObg/EBB1JCvStmCq+2DKeNopjuTxhY6T7yv5TlzOVOSgvtBEy4neG07it4ARoA4J
+         WHOi+7obrEMIUDmzT3kBBEHLDf0ZbrbNxMoUwtAnQnNZ4qwV/A1Mq5PJhKVbgpJ/Rod5
+         V4wdCnvNPJU0KSWHIs05KbU5DxoLhNDG93YaWxwBm6g7XccmnyHw+ixRtSpxeaSGMhwd
+         mx1/GOsS6pG7kDo6kprXjUbJ/6H+1rzHGTrQ7trw2dp1Uk7jyzCH8F6put7clvS8xmh3
+         DueQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=f7oNf2n/2S4LdD+hJ5wvJbkdup7gyW0tYobtVU4/lCo=;
-        b=LJxua3tbHd2IGS7253Qjbw6lZg6qeXG1jQn/HsZinU323Ehay5oRodKmTGClYHstgl
-         lEuIXhDet/nt4yQjx4fd4QGoElccOnJ7DXI2w/IJwXrAwDkrhNuMZGY9OKIMuqxtKjS2
-         rc9eX4STQkTYRceH4zTR+Yr1ddzNu6pnIadQcTCGbLma1vmXR2dRIZzxkLjCOEVaOGgo
-         LdXkd9UpBQXCZg5nxS/0u3ybqrNAeMZ9oxTFhkY7F8jlxuKLaNMj17LT1D23xb0hdFGI
-         DSwwohR52Ubp0XEJwAYplruwZc8C9srqRg+TWk0xk1P0Th7wzpqM9wYfQtvFT0ktx8iq
-         BUyA==
-X-Gm-Message-State: AOAM532hLT+wTZhwgfso4u4dmfww7avgJ4aCSQr5aPmByL+cCzNuRZVK
-        gLLsa/EvjrYcHJCqiiogVw==
-X-Google-Smtp-Source: ABdhPJx8Jk2Cu+4knjIJI93h2RDm8Bp12YNWlPvaSS83rCXADkAPJBrKwucmpTFhKApUGVNahPjd0A==
-X-Received: by 2002:a92:bb57:: with SMTP id w84mr421072ili.41.1600877010279;
-        Wed, 23 Sep 2020 09:03:30 -0700 (PDT)
-Received: from xps15 ([64.188.179.253])
-        by smtp.gmail.com with ESMTPSA id v24sm129353ioh.21.2020.09.23.09.03.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2020 09:03:29 -0700 (PDT)
-Received: (nullmailer pid 836373 invoked by uid 1000);
-        Wed, 23 Sep 2020 16:03:28 -0000
-Date:   Wed, 23 Sep 2020 10:03:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thara Gopinath <thara.gopinath@linaro.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, lukasz.luba@arm.com,
-        amitk@kernel.org
-Subject: Re: [PATCH RFC 1/8] dt-bindings: thermal: Introduce monitor-falling
- parameter to thermal trip point binding
-Message-ID: <20200923160328.GA833754@bogus>
-References: <20200917032226.820371-1-thara.gopinath@linaro.org>
- <20200917032226.820371-2-thara.gopinath@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9kKVBm2QDcEhoI7VNH0u9uwqsgFbX84K7to4q+EvAF8=;
+        b=oyMXytkOyjvO6xvvAPraWayyUdzIoUENwRMlTMGWZUCXd27kXLe+M1uE2TMqYGdV+Q
+         croIymWpFSON7FL5psYtQZSbEWrp5f42DrEyt3rbU/PFhVE/5EoKe6F/VLJGXzpMG+su
+         6oisw8RZJV20nMv6MEkLvjIa4G4Rr1TOBJGFG6UavR6+ZoqYHCjpowN2jzTNEPxqoHiq
+         i2/DLoZz6n9sE60TLqL6nAegSJpzGCIrMy+CM1bAL2Qqy4dGsyhsMKpc/7zmY/2PCCV5
+         O3UmONHQWObuGgHVpNdy5ZwGLX6szR7h+sDaYHxFqfNzYVxEOQPVt+I0En2fq3zmer4Y
+         hkXg==
+X-Gm-Message-State: AOAM532ZB/8DkBPrblGtAyQM7JV5polbyS6YNb0JFVvKUsHV2OnWb78D
+        AVbhINjoxD8z5/SXY5TmJjcb9g==
+X-Google-Smtp-Source: ABdhPJzQnxjNRw3M1n4lJU3pDIkemY3ZCQKnOQ7VywhFrMYRm0itMgYfj3gWdktm3tes58COiW8SXA==
+X-Received: by 2002:a62:2b52:0:b029:142:2501:39e9 with SMTP id r79-20020a622b520000b0290142250139e9mr746426pfr.56.1600879439083;
+        Wed, 23 Sep 2020 09:43:59 -0700 (PDT)
+Received: from [192.168.1.30] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id q190sm241046pfq.99.2020.09.23.09.43.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2020 09:43:58 -0700 (PDT)
+Subject: Re: remove blkdev_get as a public API v2
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Stefan Haberland <sth@linux.ibm.com>,
+        Jan Hoeppner <hoeppner@linux.ibm.com>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, nbd@other.debian.org,
+        linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-block@vger.kernel.org
+References: <20200921071958.307589-1-hch@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <d23e5bd4-4d69-f909-eb8b-10c489b67f8b@kernel.dk>
+Date:   Wed, 23 Sep 2020 10:43:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200917032226.820371-2-thara.gopinath@linaro.org>
+In-Reply-To: <20200921071958.307589-1-hch@lst.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 11:22:19PM -0400, Thara Gopinath wrote:
-> Introduce a new binding parameter to thermal trip point description
-> to indicate whether the temperature level specified by the trip point
-> is monitored for a rise or fall in temperature.
+On 9/21/20 1:19 AM, Christoph Hellwig wrote:
+> Hi Jens,
 > 
-> Signed-off-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->  .../devicetree/bindings/thermal/thermal-zones.yaml         | 7 +++++++
->  1 file changed, 7 insertions(+)
+> this series removes blkdev_get as a public API, leaving it as just an
+> implementation detail of blkdev_get_by_path and blkdev_get_by_dev.  The
+> reason for that is that blkdev_get is a very confusing API that requires
+> a struct block_device to be fed in, but then actually consumes the
+> reference.  And it turns out just using the two above mentioned APIs
+> actually significantly simplifies the code as well.
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index 3ec9cc87ec50..cc1332ad6c16 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -161,6 +161,13 @@ patternProperties:
->                    The active trip type can be used to control other HW to
->                    help in cooling e.g. fans can be sped up or slowed down
->  
-> +              monitor-falling:
-> +                description: |
-> +                  boolean, If true, the trip point is being monitored for
-> +                  falling temperature. If false/absent/default, the trip
-> +                  point is being monitored for rising temperature.
-> +                type: boolean
+> Changes since v1:
+>  - fix a mismerged that left a stray bdget_disk around
+>  - factour the partition scan at registration time code into a new
+>    helper.
 
-What if you wanted to monitor for both?
+Applied for 5.10, thanks.
 
-> +
->              required:
->                - temperature
->                - hysteresis
-> -- 
-> 2.25.1
-> 
+-- 
+Jens Axboe
+
