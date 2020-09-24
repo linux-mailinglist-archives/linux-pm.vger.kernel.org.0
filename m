@@ -2,116 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A71276B50
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 10:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F4F276BB0
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 10:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgIXIA7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 04:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727013AbgIXIA7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 04:00:59 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8E7C0613CE;
-        Thu, 24 Sep 2020 01:00:59 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id z18so1426395pfg.0;
-        Thu, 24 Sep 2020 01:00:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=SGl+breC8K9DZrFahalhbnYwE9PtZ9W0GoZnYML7ng0=;
-        b=fFCLD85CQF97stUOStSx7BIHQeboYjWxWZGzHZuSzf6h6MvR36Y0HL78awwIHOR7jM
-         xVvqJio0wc9I8uMo2o+isDmQz2YCVixQN/uHCAM4HfrufyPwOtYvac+Mxp4kK65BM5bO
-         ZhSf3Qx2w7ufHFs/Q2HNqMJLKWl0X6aKm/M7X12zAObT3HwXXIDm+Zii9uVybIFMdkL8
-         vLc74QliQrivZkpxivgXedt/0s76KM+NjWr7qjLgREAeIygel3z4sFjRHfdRy5hTew4K
-         m+yf/bNohEZWbo4CGYIjQ1jo8ttdpnLR50S2KFL4495ED84Qenpbhyb6k8QiDnjyW+JE
-         Ax/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SGl+breC8K9DZrFahalhbnYwE9PtZ9W0GoZnYML7ng0=;
-        b=kCYMSnc8fgUhHc0W9nlSZ23V3GtQUGSdSkY9lXisbgkbu/S8F2mTHIPpCrJAbmZES5
-         XAUKZC+MCGLQRfodzCOG9ZkB2oK340UkwHjm3xLPqOiOONqZg/7vYTTFGUQl4PxJNP8g
-         ns+zsLUM7hzTpjiQgjEBtM4prgwHbtlRyfmXA+sJdUIMYErmSaV8syY9jgkf8Rx9ZCi4
-         qYOouoJBTZcT6v/n8WaMsMxvOaPjD/QEHwRUEjvSfEnruOJ/H6HAecAyJI8Luwj6OfnA
-         2sH5jbwhHRqD8Ncv2e7hbR9ri1661/jEN1NoRlekHdO9nrD9QvReHXTtAkHSHOse1Fs4
-         4/BA==
-X-Gm-Message-State: AOAM531y5p4SJm0znvSo/KhVE0P2UCSCncmPamavmalISm3JVPLJtd5a
-        5IMZJGGtRTLZjNyr+LmQLEk=
-X-Google-Smtp-Source: ABdhPJwIceL2FFIaXp152oPqEv28Fsp9zTrULykK+7DU7WDJ7/UFb5srhrU+gvEVwruQGGkKb7lt4w==
-X-Received: by 2002:a65:594b:: with SMTP id g11mr2985272pgu.382.1600934459326;
-        Thu, 24 Sep 2020 01:00:59 -0700 (PDT)
-Received: from mi-OptiPlex-7060.mioffice.cn ([209.9.72.212])
-        by smtp.gmail.com with ESMTPSA id 137sm1947359pfb.183.2020.09.24.01.00.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 01:00:58 -0700 (PDT)
-From:   zhuguangqing83@gmail.com
-To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: [PATCH] cpuidle: change #ifdef for the declaration of cpuidle_enter_s2idle()
-Date:   Thu, 24 Sep 2020 16:00:41 +0800
-Message-Id: <20200924080041.2740-1-zhuguangqing83@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727229AbgIXIWD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 04:22:03 -0400
+Received: from foss.arm.com ([217.140.110.172]:38358 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726849AbgIXIWC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Sep 2020 04:22:02 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C809930E;
+        Thu, 24 Sep 2020 01:22:01 -0700 (PDT)
+Received: from [10.57.51.181] (unknown [10.57.51.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CA8183F70D;
+        Thu, 24 Sep 2020 01:21:59 -0700 (PDT)
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+To:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+ <20200915172444.GA2771744@google.com>
+ <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
+ <20200915175808.GB2771744@google.com>
+ <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
+ <b0d32e2b-1e21-b921-2d5f-335abafd0a37@arm.com>
+ <20200916164840.GI2771744@google.com>
+ <c8367a0e-ee58-37f3-b306-648ddc0a3e2b@codeaurora.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <6bb2dab0-5d5a-3a32-6ff2-ec322f6d6004@arm.com>
+Date:   Thu, 24 Sep 2020 09:21:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <c8367a0e-ee58-37f3-b306-648ddc0a3e2b@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: zhuguangqing <zhuguangqing@xiaomi.com>
 
-Currently, if CONFIG_SUSPEND=n and CONFIG_CPU_IDLE=y, the function
-cpuidle_enter_s2idle() is declared but not defined, it may cause error
-when cpuidle_enter_s2idle() is called.
 
-If CONFIG_SUSPEND=y and CONFIG_CPU_IDLE=n, the function
-cpuidle_enter_s2idle() is defined as "return -ENODEV;" which is not
-supposed to be.
+On 9/24/20 7:09 AM, Rajendra Nayak wrote:
+> 
+> On 9/16/2020 10:18 PM, Matthias Kaehlcke wrote:
+>> On Wed, Sep 16, 2020 at 10:53:48AM +0100, Lukasz Luba wrote:
+>>>
+>>>
+>>> On 9/15/20 9:55 PM, Daniel Lezcano wrote:
+>>>> On 15/09/2020 19:58, Matthias Kaehlcke wrote:
+>>>>> On Tue, Sep 15, 2020 at 07:50:10PM +0200, Daniel Lezcano wrote:
+>>>>>> On 15/09/2020 19:24, Matthias Kaehlcke wrote:
+>>>>>>> +Thermal folks
+>>>>>>>
+>>>>>>> Hi Rajendra,
+>>>>>>>
+>>>>>>> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
+>>>>>>>> Hi Rob,
+>>>>>>>>
+>>>>>>>> There has been some discussions on another thread [1] around the 
+>>>>>>>> DPC (dynamic-power-coefficient) values
+>>>>>>>> for CPU's being relative vs absolute (based on real power) and 
+>>>>>>>> should they be used to derive 'real' power
+>>>>>>>> at various OPPs in order to calculate things like 
+>>>>>>>> 'sustainable-power' for thermal zones.
+>>>>>>>> I believe relative values work perfectly fine for scheduling 
+>>>>>>>> decisions, but with others using this for
+>>>>>>>> calculating power values in mW, is there a need to document the 
+>>>>>>>> property as something that *has* to be
+>>>>>>>> based on real power measurements?
+>>>>>>>
+>>>>>>> Relative values may work for scheduling decisions, but not for 
+>>>>>>> thermal
+>>>>>>> management with the power allocator, at least not when CPU 
+>>>>>>> cooling devices
+>>>>>>> are combined with others that specify their power consumption in 
+>>>>>>> absolute
+>>>>>>> values. Such a configuration should be supported IMO.
+>>>>>>
+>>>>>> The energy model is used in the cpufreq cooling device and if the
+>>>>>> sustainable power is consistent with the relative values then 
+>>>>>> there is
+>>>>>> no reason it shouldn't work.
+>>>>>
+>>>>> Agreed on thermal zones that exclusively use CPUs as cooling 
+>>>>> devices, but
+>>>>> what when you have mixed zones, with CPUs with their pseudo-unit 
+>>>>> and e.g. a
+>>>>> GPU that specifies its power in mW?
+>>>>
+>>>> Well, if a SoC vendor decides to mix the units, then there is 
+>>>> nothing we
+>>>> can do.
+>>>>
+>>>> When specifying the power numbers available for the SoC, they could be
+>>>> all scaled against the highest power number.
+>>>>
+>>>> There are so many factors on the hardware, the firmware, the kernel and
+>>>> the userspace sides having an impact on the energy efficiency, I don't
+>>>> understand why SoC vendors are so shy to share the power numbers...
+>>>>
+>>>
+>>> Unfortunately (because it might confuse engineers in some cases like
+>>> this one), even in the SCMI spec DEN0056B [1] we have this statement
+>>> which allows to expose an 'abstract scale' values from firmware:
+>>> '4.5.1 Performance domain management protocol background
+>>> ...The power can be expressed in mW or in an abstract scale. Vendors
+>>> are not obliged to reveal power costs if it is undesirable, but a linear
+>>> scale is required.'
+>>>
+>>> This is the source of our Energy Model values when we use SCMI cpufreq
+>>> driver [2].
+>>>
+>>> So this might be an issue in the future, when some SoC vendor decides to
+>>> not expose the real mW, but the phone OEM would then take the SoC and
+>>> try to add some other cooling device into the thermal zone. That new
+>>> device is not part of the SCMI perf but some custom and has the real mW.
+>>>
+>>> Do you think Daniel it should be somewhere documented in the kernel
+>>> thermal that the firmware might silently populate EM with 'abstract
+>>> scale'? Then special care should be taken when combining new
+>>> cooling devices.
+>>>
+>>> Regards,
+>>> Lukasz
+>>>
+>>> [1] https://developer.arm.com/documentation/den0056/b/?lang=en
+>>> [2] 
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/scmi-cpufreq.c#L121 
+>>>
+>>
+>> If an 'abstract scale' is explicitly allowed I think it should be 
+>> documented
+>> to avoid confusion and make engineers aware of the peril of combining 
+>> cooling
+>> devices of different types in the same thermal zone.
+> 
+> Rob, we should perhaps also document this as part of the DT bindings 
+> document
+> to be consistent, that an abstract scale is allowed when specifying the DPC
+> values in DT.
+> if you agree, I can spin a quick patch to update the documentation.
+> 
 
-Change #ifdef CONFIG_CPU_IDLE to #ifdef CONFIG_SUSPEND for
-cpuidle_enter_s2idle() in cpuidle.h, which is consistent with its
-defination in cpuidle.c.
+The 'dynamic-power-coefficient' which is in the:
+Documentation/devicetree/bindings/arm/cpus.yaml does not need any update
+because it expects units of 'uW/MHz/V^2' to calculate dynamic power.
 
-Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
----
- include/linux/cpuidle.h | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+You have two ways to register Energy Model for a device:
+1. em_dev_register_perf_domain() where you provide the callback function
+and that can feed the 'abstract scale' (like the scmi-cpufreq.c)
+2. dev_pm_opp_of_register_em() where the 'dynamic-power-coefficient'
+is going to be involved.
 
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index 6175c77bf25e..2aa8cead1727 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -216,22 +216,26 @@ static inline struct cpuidle_device *cpuidle_get_device(void) {return NULL; }
- extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
- 				      struct cpuidle_device *dev,
- 				      u64 latency_limit_ns);
--extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
--				struct cpuidle_device *dev);
- extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
- #else
- static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
- 					     struct cpuidle_device *dev,
- 					     u64 latency_limit_ns)
- {return -ENODEV; }
--static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
--				       struct cpuidle_device *dev)
--{return -ENODEV; }
- static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
- {
- }
- #endif
- 
-+#ifdef CONFIG_SUSPEND
-+extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-+				struct cpuidle_device *dev);
-+#else
-+static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-+				       struct cpuidle_device *dev)
-+{return -ENODEV; }
-+#endif
-+
- /* kernel/sched/idle.c */
- extern void sched_idle_set_state(struct cpuidle_state *idle_state);
- extern void default_idle_call(void);
--- 
-2.17.1
+If the developer would see that the platform might face potential issue
+of mixing devices in one thermal zone of two scales, it should not use
+the 2nd registration, but the 1st API and provide callback with
+consistent scale to all devices. It is also very unlikely that the
+device like GPU or DSP would not be part of the scmi perf domains
+and would not expose a consistent abstract scale.
+
+I have a patch spinning in our internal review to update EAS, EM, IPA
+documentation and that would be updated soon.
+
+Regards,
+Lukasz
 
