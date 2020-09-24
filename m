@@ -2,150 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6FE2764D8
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 02:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D49A0276687
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 04:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgIXADP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 20:03:15 -0400
-Received: from mo-csw1516.securemx.jp ([210.130.202.155]:44786 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbgIXADP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 20:03:15 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 08O02lcW002993; Thu, 24 Sep 2020 09:02:47 +0900
-X-Iguazu-Qid: 34trYbPuXK3Y6WokyV
-X-Iguazu-QSIG: v=2; s=0; t=1600905766; q=34trYbPuXK3Y6WokyV; m=0KDuZXTtA84FWvgU79W3hotyFURS5UbU6LM7nkZ0KNg=
-Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
-        by relay.securemx.jp (mx-mr1511) id 08O02iHp036909;
-        Thu, 24 Sep 2020 09:02:44 +0900
-Received: from enc01.toshiba.co.jp ([106.186.93.100])
-        by imx2.toshiba.co.jp  with ESMTP id 08O02iOw020352;
-        Thu, 24 Sep 2020 09:02:44 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
-        by enc01.toshiba.co.jp  with ESMTP id 08O02h4O023471;
-        Thu, 24 Sep 2020 09:02:43 +0900
-From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Yazen Ghannam <yazen.ghannam@amd.com>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
-        <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
-        <20200923140512.GJ28545@zn.tnic>
-Date:   Thu, 24 Sep 2020 09:02:42 +0900
-In-Reply-To: <20200923140512.GJ28545@zn.tnic> (Borislav Petkov's message of
-        "Wed, 23 Sep 2020 16:05:12 +0200")
-X-TSB-HOP: ON
-Message-ID: <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1726348AbgIXCgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 22:36:14 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:50152 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726196AbgIXCgO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 22:36:14 -0400
+X-UUID: 907f4184b01f4cf991460b1a07a8d87a-20200924
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=n9dduTjSXB3i85Fg6MsJRt9EcTGkwXOYK1rV3o9PTmg=;
+        b=XinJ+MIQJzUSbaY+C1NjFnuIdA6/u81RJ3HtGKKDfEyMAqhH273tsFkrQlmJPrmq2PsRj6uT3tOiyCyjgjVa/QTtsbvtrMwt4owzK2aGTOiL4r5IljD/BETyujD/enTOa7lowj9g0dYJRKx35uBUKzuaLY0+rRud8gmIbg0XWtI=;
+X-UUID: 907f4184b01f4cf991460b1a07a8d87a-20200924
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <hector.yuan@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 71668580; Thu, 24 Sep 2020 10:36:03 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 24 Sep 2020 10:35:59 +0800
+Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 24 Sep 2020 10:35:58 +0800
+Message-ID: <1600914961.21446.26.camel@mtkswgap22>
+Subject: Re: [PATCH v7 2/2] dt-bindings: cpufreq: add bindings for MediaTek
+ cpufreq HW
+From:   Hector Yuan <hector.yuan@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
+Date:   Thu, 24 Sep 2020 10:36:01 +0800
+In-Reply-To: <1600866614.21446.18.camel@mtkswgap22>
+References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
+         <1599712262-8819-3-git-send-email-hector.yuan@mediatek.com>
+         <20200922202852.GA3134161@bogus> <1600866614.21446.18.camel@mtkswgap22>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Borislav Petkov <bp@alien8.de> writes:
+T24gV2VkLCAyMDIwLTA5LTIzIGF0IDIxOjEwICswODAwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4g
+T24gVHVlLCAyMDIwLTA5LTIyIGF0IDE0OjI4IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
+PiBPbiBUaHUsIFNlcCAxMCwgMjAyMCBhdCAxMjozMTowMlBNICswODAwLCBIZWN0b3IgWXVhbiB3
+cm90ZToNCj4gPiA+IEZyb206ICJIZWN0b3IuWXVhbiIgPGhlY3Rvci55dWFuQG1lZGlhdGVrLmNv
+bT4NCj4gPiA+IA0KPiA+ID4gQWRkIGRldmljZXRyZWUgYmluZGluZ3MgZm9yIE1lZGlhVGVrIEhX
+IGRyaXZlci4NCj4gPiA+IA0KPiA+ID4gU2lnbmVkLW9mZi1ieTogSGVjdG9yLll1YW4gPGhlY3Rv
+ci55dWFuQG1lZGlhdGVrLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIC4uLi9iaW5kaW5ncy9jcHVm
+cmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbCAgICAgIHwgIDE0MSArKysrKysrKysrKysrKysr
+KysrKw0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxNDEgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJl
+cS9jcHVmcmVxLW1lZGlhdGVrLWh3LnlhbWwNCj4gPiA+IA0KPiA+ID4gZGlmZiAtLWdpdCBhL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWst
+aHcueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZy
+ZXEtbWVkaWF0ZWstaHcueWFtbA0KPiA+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiA+IGlu
+ZGV4IDAwMDAwMDAuLjExOGExNjMNCj4gPiA+IC0tLSAvZGV2L251bGwNCj4gPiA+ICsrKyBiL0Rv
+Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWst
+aHcueWFtbA0KPiA+ID4gQEAgLTAsMCArMSwxNDEgQEANCj4gPiA+ICsjIFNQRFgtTGljZW5zZS1J
+ZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkNCj4gPiA+ICslWUFNTCAx
+LjINCj4gPiA+ICstLS0NCj4gPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFz
+L2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sIw0KPiA+ID4gKyRzY2hlbWE6IGh0dHA6
+Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ID4gKw0KPiA+ID4g
+K3RpdGxlOiBNZWRpYVRlaydzIENQVUZSRVEgQmluZGluZ3MNCj4gPiA+ICsNCj4gPiA+ICttYWlu
+dGFpbmVyczoNCj4gPiA+ICsgIC0gSGVjdG9yIFl1YW4gPGhlY3Rvci55dWFuQG1lZGlhdGVrLmNv
+bT4NCj4gPiA+ICsNCj4gPiA+ICtkZXNjcmlwdGlvbjoNCj4gPiA+ICsgIENQVUZSRVEgSFcgaXMg
+YSBoYXJkd2FyZSBlbmdpbmUgdXNlZCBieSBNZWRpYVRlaw0KPiA+ID4gKyAgU29DcyB0byBtYW5h
+Z2UgZnJlcXVlbmN5IGluIGhhcmR3YXJlLiBJdCBpcyBjYXBhYmxlIG9mIGNvbnRyb2xsaW5nIGZy
+ZXF1ZW5jeQ0KPiA+ID4gKyAgZm9yIG11bHRpcGxlIGNsdXN0ZXJzLg0KPiA+ID4gKw0KPiA+ID4g
+K3Byb3BlcnRpZXM6DQo+ID4gPiArICBjb21wYXRpYmxlOg0KPiA+ID4gKyAgICBjb25zdDogIm1l
+ZGlhdGVrLGNwdWZyZXEtaHciDQo+ID4gDQo+ID4gTmVlZHMgdG8gYmUgU29DIHNwZWNpZmljLiBU
+aGlzIHN0dWZmIGlzIG5ldmVyIGNvbnN0YW50IGZyb20gb25lIFNvQyB0byANCj4gPiB0aGUgbmV4
+dC4gJ2NwdWZyZXEnIGlzIGEgTGludXhpc20uIFdoYXQncyB0aGUgYmxvY2sgY2FsbGVkIGluIHRo
+ZSANCj4gPiBkYXRhc2hlZXQ/IFVzZSB0aGF0Lg0KPiA+IA0KPiBPSywgd2lsbCB1c2UgbWVkaWF0
+ZWssc3NwbS1kdmZzLW10Njc3OSBpbnN0ZWFkLg0KPiA+IERvbid0IG5lZWQgcXVvdGVzIGVpdGhl
+ci4NCj4gPiANCj4gT0ssIHdpbGwgcmVtb3ZlIGl0Lg0KPiA+ID4gKw0KPiA+ID4gKyAgcmVnOg0K
+PiA+ID4gKyAgICBtaW5JdGVtczogMQ0KPiA+ID4gKyAgICBtYXhJdGVtczogMg0KPiA+ID4gKyAg
+ICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIEFkZHJlc3NlcyBhbmQgc2l6ZXMgZm9yIHRo
+ZSBtZW1vcnkgb2YgdGhlIEhXIGJhc2VzIGluIGVhY2ggZnJlcXVlbmN5IGRvbWFpbi4NCj4gPiA+
+ICsNCj4gPiA+ICsgIHJlZy1uYW1lczoNCj4gPiA+ICsgICAgaXRlbXM6DQo+ID4gPiArICAgICAg
+LSBjb25zdDogImZyZXEtZG9tYWluMCINCj4gPiA+ICsgICAgICAtIGNvbnN0OiAiZnJlcS1kb21h
+aW4xIg0KPiA+IA0KPiA+IEtpbmQgb2YgcG9pbnRsZXNzIHRvIGhhdmUgbmFtZXMgYmFzZWQgb24g
+dGhlIGluZGV4LiBEcm9wICdyZWctbmFtZXMnLg0KPiA+IA0KPiBPSywgd2lsbCBkcm9wIGl0Lg0K
+PiA+ID4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIEZyZXF1ZW5jeSBkb21haW4g
+bmFtZS4gaS5lLg0KPiA+ID4gKyAgICAgICJmcmVxLWRvbWFpbjAiLCAiZnJlcS1kb21haW4xIi4N
+Cj4gPiA+ICsNCj4gPiA+ICsgICIjZnJlcS1kb21haW4tY2VsbHMiOg0KPiA+ID4gKyAgICBjb25z
+dDogMQ0KPiA+ID4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIE51bWJlciBvZiBj
+ZWxscyBpbiBhIGZyZXFlbmN5IGRvbWFpbiBzcGVjaWZpZXIuDQo+ID4gDQo+ID4gWW91IGRvbid0
+IG5lZWQgdGhpcy4gSXQncyBub3QgYSBjb21tb24gYmluZGluZyB0aGF0J3MgZ29pbmcgdG8gdmFy
+eS4NCj4gPiANCj4gT0ssIHdpbGwgcmVtb3ZlIGl0Lg0KPiA+ID4gKw0KPiA+ID4gKyAgbXRrLWZy
+ZXEtZG9tYWluOg0KPiA+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ID4gKyAgICBkZXNjcmlwdGlv
+bjogfA0KPiA+ID4gKyAgICAgIERlZmluZSB0aGlzIGNwdSBiZWxvbmdzIHRvIHdoaWNoIGZyZXF1
+ZW5jeSBkb21haW4uIGkuZS4NCj4gPiA+ICsgICAgICBjcHUwLTMgYmVsb25nIHRvIGZyZXF1ZW5j
+eSBkb21haW4wLA0KPiA+ID4gKyAgICAgIGNwdTQtNiBiZWxvbmcgdG8gZnJlcXVlbmN5IGRvbWFp
+bjEuDQo+ID4gDQo+ID4gVGhpcyBwcm9wZXJ0eSBkb2Vzbid0IGdvIGluIHRoZSAnbWVkaWF0ZWss
+Y3B1ZnJlcS1odycgbm9kZS4gWW91IHdvdWxkIA0KPiA+IG5lZWQgYSBzZXBhcmF0ZSBzY2hlbWEu
+IEhvd2V2ZXIsIEkgdGhpbmsgdGhlIGVhc2llc3QgdGhpbmcgdG8gZG8gaGVyZSBpcyANCj4gPiBz
+b21ldGhpbmcgbGlrZSB0aGlzOg0KPiA+IA0KPiA+IG1lZGlhdGVrLGZyZXEtZG9tYWluLTAgPSA8
+JmNwdTA+LCA8JmNwdTE+Ow0KPiA+IA0KPiBTb3JyeSwgbWF5IEkga25vdyB0aGUgcmVhc29uIGFu
+ZCB0aGUgZGV0YWlscyBhYm91dCBob3cgdG8gc2VwYXJhdGUNCj4gc2NoZW1hPyBUaGFuayB5b3Ug
+dmVyeSBtdWNoLg0KPiANCkFjdHVhbGx5LCBJIHJlZmVyZW5jZWQgdGhlIHRoZXJtYWwtY29vbGlu
+Zy1kZXZpY2VzIGFuZCBzZW5kIG15IHlhbWwgZm9yDQpyZXZpZXcuDQpodHRwczovL2VsaXhpci5i
+b290bGluLmNvbS9saW51eC92NS45LXJjNi9zb3VyY2UvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
+L2JpbmRpbmdzL3RoZXJtYWwvdGhlcm1hbC1jb29saW5nLWRldmljZXMueWFtbA0KSXQgdXNlZCBj
+cHUgbm9kZSBmb3IgY29vbGluZyBkZXZpY2UsIGFuZCB0aGVybWFsIHNjaGVtYSB1c2UgaXQuDQpB
+cHByZWNpYXRlZCBmb3IgYW55IGRldGFpbHMuDQoNCj4gVGhlIG51bWJlcnMgb2YgZnJlcXVlbmN5
+IGRvbWFpbiBtYXkgYmUgdmFyeSBmcm9tIGRpZmZlcmVudCBwcm9qZWN0cy4gSWYNCj4gSSBkbyB0
+aGUgZWFzaWVyIHdheSwgSSBtYXkgbmVlZCB0byBpbXBsZW1lbnQgZXh0cmEgbG9vcCB0byBjaGVj
+ayBob3cNCj4gbWFueSBmcmVxdWVuY3kgZG9tYWluLg0KPiA+IE9yIHlvdSBjb3VsZCBqdXN0IHJl
+LXVzZSB0aGUgT1BQIGJpbmRpbmcgd2l0aCBqdXN0IDAgZW50cmllczoNCj4gPiANCj4gPiBvcHAt
+dGFibGUtMCB7DQo+ID4gICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLGh3LW9wZXJhdGluZy1wb2lu
+dHMiLCAib3BlcmF0aW5nLXBvaW50cy12MiI7DQo+ID4gfTsNCj4gPiBvcHAtdGFibGUtMSB7DQo+
+ID4gICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLGh3LW9wZXJhdGluZy1wb2ludHMiLCAib3BlcmF0
+aW5nLXBvaW50cy12MiI7DQo+ID4gfTsNCj4gPiANCj4gSW4gcHJldmlvdXMgcmV2aWV3IHN0YWdl
+LCBhbHJlYWR5IGFiYW5kb24gT1BQIGZyYW1ld29yayBpbiBkcml2ZXIgY29kZS4NCj4gV2lsbCBj
+aGVjayB3aXRoIFZpcmVzaCB0byBzZWUgaWYgaXRzIE9LIHRvIGFkZCBPUFAgYmFjay4NCj4gPiA+
+ICsNCj4gPiA+ICtyZXF1aXJlZDoNCj4gPiA+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ID4gKyAgLSBy
+ZWcNCj4gPiA+ICsgIC0gcmVnLW5hbWVzDQo+ID4gPiArICAtICIjZnJlcS1kb21haW4tY2VsbHMi
+DQo+ID4gPiArDQo+ID4gPiArZXhhbXBsZXM6DQo+ID4gPiArICAtIHwNCj4gPiA+ICsgICAgY3B1
+cyB7DQo+ID4gPiArICAgICAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gPiArICAg
+ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gPiArDQo+ID4gPiArICAgICAgICAgICAg
+Y3B1MDogY3B1QDAgew0KPiA+ID4gKyAgICAgICAgICAgICAgICBkZXZpY2VfdHlwZSA9ICJjcHUi
+Ow0KPiA+ID4gKyAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImFybSxjb3J0ZXgtYTU1IjsN
+Cj4gPiA+ICsgICAgICAgICAgICAgICAgZW5hYmxlLW1ldGhvZCA9ICJwc2NpIjsNCj4gPiA+ICsg
+ICAgICAgICAgICAgICAgbXRrLWZyZXEtZG9tYWluID0gPCZjcHVmcmVxX2h3IDA+Ow0KPiA+ID4g
+KyAgICAgICAgICAgICAgICByZWcgPSA8MHgwMDA+Ow0KPiA+ID4gKyAgICAgICAgICAgIH07DQo+
+ID4gPiArDQo+ID4gPiArICAgICAgICAgICAgY3B1MTogY3B1QDEgew0KPiA+IA0KPiA+IFVuaXQg
+YWRkcmVzcyBpcyB3cm9uZy4NCj4gPiANCj4gT0ssIHdpbGwgbW9kaWZ5IHRvICJjcHUxIDogY3B1
+QDEwMCIgaWYgd2Ugc3RpbGwgZGVjaWRlIHRvIHB1dA0KPiBmcmVxX2RvbWFpbiBpbiBDUFUgbm9k
+ZS4NCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsg
+ICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAg
+ICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAg
+ICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAg
+ICAgICAgcmVnID0gPDB4MTAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+
+ID4gKyAgICAgICAgICAgIGNwdTI6IGNwdUAyIHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2
+aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJh
+cm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAi
+cHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJl
+cV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4MjAwPjsNCj4gPiA+ICsg
+ICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTM6IGNwdUAzIHsN
+Cj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAg
+ICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAg
+ICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAg
+IG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAgICAg
+ICAgcmVnID0gPDB4MzAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4g
+KyAgICAgICAgICAgIGNwdTQ6IGNwdUA0IHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNl
+X3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0s
+Y29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNj
+aSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9o
+dyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4NDAwPjsNCj4gPiA+ICsgICAg
+ICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTU6IGNwdUA1IHsNCj4g
+PiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAg
+ICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAg
+ICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10
+ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAg
+cmVnID0gPDB4NTAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAg
+ICAgICAgICAgIGNwdTY6IGNwdUA2IHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5
+cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29y
+dGV4LWE3NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7
+DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAx
+PjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4NjAwPjsNCj4gPiA+ICsgICAgICAg
+ICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTc6IGNwdUA3IHsNCj4gPiA+
+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAg
+ICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE3NSI7DQo+ID4gPiArICAgICAgICAgICAg
+ICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1m
+cmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVn
+ID0gPDB4NzAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKyAgICB9Ow0KPiA+ID4g
+Kw0KPiA+ID4gKyAgICAvKiAuLi4gKi8NCj4gPiA+ICsNCj4gPiA+ICsgICAgc29jIHsNCj4gPiA+
+ICsgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDI+Ow0KPiA+ID4gKyAgICAgICAgI3NpemUtY2Vs
+bHMgPSA8Mj47DQo+ID4gPiArDQo+ID4gPiArICAgICAgICBjcHVmcmVxX2h3OiBjcHVmcmVxQDEx
+YmMwMCB7DQo+ID4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRlayxjcHVmcmVx
+LWh3IjsNCj4gPiA+ICsgICAgICAgICAgICByZWcgPSA8MCAweDExYmMxMCAwIDB4OGM+LA0KPiA+
+ID4gKyAgICAgICAgICAgICAgIDwwIDB4MTFiY2EwIDAgMHg4Yz47DQo+ID4gPiArICAgICAgICAg
+ICAgcmVnLW5hbWVzID0gImZyZXEtZG9tYWluMCIsICJmcmVxLWRvbWFpbjEiOw0KPiA+ID4gKyAg
+ICAgICAgICAgICNmcmVxLWRvbWFpbi1jZWxscyA9IDwxPjsNCj4gPiA+ICsgICAgICAgIH07DQo+
+ID4gPiArICAgIH07DQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiAt
+LSANCj4gPiA+IDEuNy45LjUNCj4gDQoNCg==
 
-> Smita,
->
-> pls sync the time of the box where you create the patch:
->
->  Date: Fri,  4 Sep 2020 09:04:44 -0500
->
-> but your mail headers have:
->
->  Received: from ... with mapi id 15.20.3370.019; Fri, 18 Sep 2020 14:49:12 +0000
->  						^^^^^^^^^^^^^^^^^^
->
-> On Wed, Sep 23, 2020 at 07:07:17PM +0900, Punit Agrawal wrote:
->> I know Boris asked you to add the reason for the Reported-by, but
->> usually we don't track version differences in the committed patch.
->> 
->> Boris, can you confirm if you want the Reported-by to be retained?
->
-> How else would you explain what the Reported-by: tag is for on a patch
-> which adds a feature?
-
-As Ard clarified, I was questioning the inclusion of the Reported-by:
-tag in the patch itself. But I also don't have enough of a strong
-opinion to obsess about it.
-
-[ Aside: One interesting consequence of this though is that by the same
-argument, changes resulting from comments on earlier versions are also
-legitimate content for the final patch. Not saying I agree. ]
-
->
->> > + * The first expected register in the register layout of MCAX address space.
->> > + * The address defined must match with the first MSR address extracted from
->> > + * BERT which in SMCA systems is the bank's MCA_STATUS register.
->> > + *
->> > + * Note that the decoding of the raw MSR values in BERT is implementation
->> > + * specific and follows register offset order of MCAX address space.
->> > + */
->> > +#define MASK_MCA_STATUS 0xC0002001
->> 
->> The macro value is already defined in mce.h as
->> MSR_AMD64_SMCA_MC0_STATUS.  Is there any reason to not use it?
->
-> Good point.
->
->> You can move the comment to where you check the status register.
->
-> No need if he really wants to use the first MCi_STATUS address.
->
->> > +	m.apicid = lapic_id;
->> > +	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
->> > +	m.status = *i_mce;
->> > +	m.addr = *(i_mce + 1);
->> > +	m.misc = *(i_mce + 2);
->> > +	/* Skipping MCA_CONFIG */
->> > +	m.ipid = *(i_mce + 4);
->> > +	m.synd = *(i_mce + 5);
->> 
->> Instead of using the raw pointer arithmetic, it is better to define a
->> structure for the MCA registers? Something like -
->> 
->>     struct {
->>         u64 addr;
->>         u64 misc;
->>         u64 config;
->>         u64 ipid;
->>         ...
->>     }
->> 
->> Checking back, this was mentioned in the previous review comments as
->> well. Please address all comments before posting a new version - either
->> by following the suggestion or explaining why it is not a good idea.
->
-> Well, that was addressed in his reply last time:
->
-> https://lkml.kernel.org/r/a28aa613-8353-0052-31f6-34bc733abf59@amd.com
-
-Oops. My bad - sorry I missed the response.
-
-Copying the relevant comment here for discussion -
-
->>> The registers here are implementation specific and applies only for
->>> SMCA systems. So I have used pointer arithmetic as it is not defined
->>> in the spec.
-
-Even though it's not defined in the UEFI spec, it doesn't mean a
-structure definition cannot be created. After all, the patch is relying
-on some guarantee of the meaning of the values and their ordering.
-
-If the patch is relying on the definitions in the SMCA spec it is a good
-idea to reference it here - both for review and providing relevant
-context for future developers.
-
-> You might've missed it because you weren't CCed directly.
-
-Indeed, I missed it. Thanks for the pointer.
-
-Cheers,
-Punit
