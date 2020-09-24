@@ -2,97 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB54B276CE9
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 11:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9D2276D05
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 11:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727330AbgIXJPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 05:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727328AbgIXJPB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 05:15:01 -0400
-Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6785BC0613DC
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-Received: by mail-ed1-x543.google.com with SMTP id k14so2663281edo.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=blIPJEbomAKiMgTEwz666YDx51JxK5KUKkCacV2k5DGrYF1dgoN3TPlbCce3UdPyqn
-         l+sjX0//ZpWoRSpXvagCpGylKqMTkNMo/2HAZJY28dwC1rti3ofKw4Z1RDbjcvxMDnbn
-         DBnAhALu6UdIa4wCDzo7dIv9qp2U03O4u7rDCQdwmjFPbrVpv5bepecSdGtwKnTJB9rH
-         nH/oGusFJ6JM43Xna+7eDdLYcEoJL8AsTmou4kcpDb2UtDY0KPfodc/NGQ4TUEcOm3hs
-         6cMsgEJtG/d3gouoUvTe4+Wy9RSjcJnO5Ygg3P7zVsSedlaT/hDy9teH4tkT8r3LGB8W
-         6cvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
-        b=RskPpsqla/hZJNRXOErX+i6HdpQjEumfCoNnLMgGNXiDTVnu1NOS7hAlbs9S9fNg2i
-         MqJD4Y+Kmisp488kSTKcd6aoNTaSjL3HpUIq8lWu3YppJp21tFdGYnTc+zbz3FDx5yEd
-         ri2Q28ytVaS8PCbFnDaXtU/t9J/C5j/t61BDqXx6sobTB37F8jkzzJU022SHjdor+n1O
-         h27CJuTO1ZYKPuRDDfCQ6kfdL6TUL1PvlzvhJ17O/6Bvtb94zneTH/Pc9XqzUpPgx6im
-         DxNQX1mgGoQCiLyeI9njqE2nHIMTGwFWPvSUJ0EkKQHMOaeVCHaBQqCyo+NZUVcAiwXt
-         pxqQ==
-X-Gm-Message-State: AOAM533FOI2l4LQcEvBO0swl7cVt/TmiIy8KOC2SDYUzsjk6sUfZvVRC
-        lnYXvjPiwCjjVppqX6Y6CFrSaEZocl4TcDT6uH8=
-X-Google-Smtp-Source: ABdhPJyTPH8PP/2mieNLbOyLqms9pUviMKvSeTWD9wb8h+Pr7H1ZfKMbyjpiQTFtDXkxINcaJ73NV9FfmSogeqXajbU=
-X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr1946edb.268.1600938899597;
- Thu, 24 Sep 2020 02:14:59 -0700 (PDT)
+        id S1727369AbgIXJZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 05:25:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:39694 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727322AbgIXJZr (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Sep 2020 05:25:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D9AF11D4;
+        Thu, 24 Sep 2020 02:25:46 -0700 (PDT)
+Received: from [10.57.51.181] (unknown [10.57.51.181])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F26B3F73B;
+        Thu, 24 Sep 2020 02:25:44 -0700 (PDT)
+Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to
+ cpufreq_stats_record_transition()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        cristian.marussi@arm.com, Sudeep Holla <sudeep.holla@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cover.1600238586.git.viresh.kumar@linaro.org>
+ <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
+ <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <a4c5a6b9-10f8-34f8-f01d-8b373214d173@arm.com>
+Date:   Thu, 24 Sep 2020 10:25:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a54:2811:0:0:0:0:0 with HTTP; Thu, 24 Sep 2020 02:14:58
- -0700 (PDT)
-Reply-To: ayishagddafio@mail.ru
-From:   AISHA GADDAFI <floradarpin.d@gmail.com>
-Date:   Thu, 24 Sep 2020 02:14:58 -0700
-Message-ID: <CAPX4zWxG6--oZzPaoMmta9n5fWHajuiA-wFBP=cbGe-CKGcWaw@mail.gmail.com>
-Subject: Lieber Freund (Assalamu Alaikum),?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---=20
-Lieber Freund (Assalamu Alaikum),
+Hi Rafael,
 
-Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
-Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
-Mutter und eine Witwe
-mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
-hen
-Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
+On 9/23/20 2:48 PM, Rafael J. Wysocki wrote:
+> On Wed, Sep 16, 2020 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> In order to prepare for lock-less stats update, add support to defer any
+>> updates to it until cpufreq_stats_record_transition() is called.
+> 
+> This is a bit devoid of details.
+> 
+> I guess you mean reset in particular, but that's not clear from the above.
+> 
+> Also, it would be useful to describe the design somewhat.
+> 
+>> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> ---
+>>   drivers/cpufreq/cpufreq_stats.c | 75 ++++++++++++++++++++++++---------
+>>   1 file changed, 56 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+>> index 94d959a8e954..3e7eee29ee86 100644
+>> --- a/drivers/cpufreq/cpufreq_stats.c
+>> +++ b/drivers/cpufreq/cpufreq_stats.c
+>> @@ -22,17 +22,22 @@ struct cpufreq_stats {
+>>          spinlock_t lock;
+>>          unsigned int *freq_table;
+>>          unsigned int *trans_table;
+>> +
+>> +       /* Deferred reset */
+>> +       unsigned int reset_pending;
+>> +       unsigned long long reset_time;
+>>   };
+>>
+>> -static void cpufreq_stats_update(struct cpufreq_stats *stats)
+>> +static void cpufreq_stats_update(struct cpufreq_stats *stats,
+>> +                                unsigned long long time)
+>>   {
+>>          unsigned long long cur_time = get_jiffies_64();
+>>
+>> -       stats->time_in_state[stats->last_index] += cur_time - stats->last_time;
+>> +       stats->time_in_state[stats->last_index] += cur_time - time;
+>>          stats->last_time = cur_time;
+>>   }
+>>
+>> -static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
+>> +static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
+>>   {
+>>          unsigned int count = stats->max_state;
+>>
+>> @@ -41,42 +46,67 @@ static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
+>>          memset(stats->trans_table, 0, count * count * sizeof(int));
+>>          stats->last_time = get_jiffies_64();
+>>          stats->total_trans = 0;
+>> +
+>> +       /* Adjust for the time elapsed since reset was requested */
+>> +       WRITE_ONCE(stats->reset_pending, 0);
+> 
+> What if this runs in parallel with store_reset()?
+> 
+> The latter may update reset_pending to 1 before the below runs.
+> Conversely, this may clear reset_pending right after store_reset() has
+> set it to 1, but before it manages to set reset_time.  Is that not a
+> problem?
 
-Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
-f=C3=BCnfhunderttausend
-United State Dollar ($ 27.500.000.00) und ich brauche eine
-vertrauensw=C3=BCrdige Investition
-Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
-jedoch
-M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
-von
-Investitionsprojekten in Ihrem Land
-Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
-bauen.
+I wonder if we could just drop the reset feature. Is there a tool
+which uses this file? The 'reset' sysfs would probably have to stay
+forever, but an empty implementation is not an option?
+The documentation states:
+'This can be useful for evaluating system behaviour under different
+governors without the need for a reboot.'
+With the scenario of fast-switch this resetting complicates the
+implementation and the justification of having it just for experiments
+avoiding reboot is IMO weak. The real production code would have to pay
+extra cycles every time. Also, we would probably not experiment with
+cpufreq different governors, since the SchedUtil is considered the best
+option.
 
-Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
-n und
-Unternehmensgewinn zu verhandeln
-Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
-
-Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
-antworten Sie bitte dringend
-Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
-.
-
-Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
-esse (
-ayishagddafio@mail.ru ) zur weiteren Diskussion.
-
-Freundliche Gr=C3=BC=C3=9Fe
-Frau Aisha Al-Qaddafi
+Regards,
+Lukasz
