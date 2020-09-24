@@ -2,117 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC32276C84
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 10:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07C4276CCE
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 11:07:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbgIXI4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 04:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S1727314AbgIXJH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 05:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726064AbgIXI4y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 04:56:54 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EDC1C0613CE;
-        Thu, 24 Sep 2020 01:56:54 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id d4so2676756wmd.5;
-        Thu, 24 Sep 2020 01:56:53 -0700 (PDT)
+        with ESMTP id S1727307AbgIXJH1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 05:07:27 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F4CC0613CE
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:07:27 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id a16so1653004vsp.12
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:07:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=b+vCyePcASyFGhspPBbceHGqzeae6YWgXdySMvXHJPQ=;
-        b=M0ft3ILmZ6fWlkUE08VmJstvfltv7aoLNTsVq3TDIhuOED2BGWNOi4PFhautDzpugW
-         WrnSiPYq/RW2t836MVWYZieDqv3gVtftTknkgSzL712ZLdSiNiRj/aM/esnkhd5zyLqj
-         NotuICH1vw/3yWKdVE9j5+Xrcrv1FhsPhFG7XKHUOpXy8a57DjBbcJAxuOd9jiq8IQ1O
-         1tLbw2p3JG+lIIhhhTmIKN5Yk66f9rKJM67cf4Cf9Q2z0dwtunKRN8oZSNIdLERd+xpu
-         AwMQfg4WXjgGu8U4wsOA97YUtBQhSG7xE4+G0VHkOp4Ken/PfcF1K6e4cr3JKXJCiGwx
-         YPBQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/X7t9uVIEd+S4xSIbror7zIP86C/H0V5Buw9Pzp4CZQ=;
+        b=IZ3+kGRz+xW/GPCA5Ct34Vn6POsjNIyMIC2BJf25muLLT1VW+fy9hPEApxK+ov//uW
+         lLPpwShllPTEp/t+51PPukiPuRNiI0MDzcQl9B5wEVqspVLEfA2x4mF9h5q27fLuEUr/
+         JPggxVugLZuzBZU8rXEkSz3pCfWLGnXKaCKemSygdQszB7ZDsqY7Q1tY2B/KT58is8md
+         N54rjXlWGNRw91+Vg3aIe6mBpgkmmi8Ox5krSuqAi7HS5+rvaXqMwZcjIbqu0pyzKttP
+         Jv+fGUe/vOzCvjTenc0Yrfy9e2wDyh+UNoY/eQidXc7wHzv2po4QmFV7TUkKrBAmC2Ht
+         BQXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=b+vCyePcASyFGhspPBbceHGqzeae6YWgXdySMvXHJPQ=;
-        b=fb53QsavK4rYUx9jPRlkawRdXhWn436ptaJvwyt1K3uJYJFMZENRoq1ghVD5bFvXOk
-         dxTco7sKThWiBOprpryWKAICeJIgeYRk6KoNITMTE01x/u68e34b+H6p015v7gSNHC4p
-         D58iDtRJWd++Aq6bpoq0ukZIbxHoUOFzpglbFu1gOIQ1lTPVCNkmz1A+Z8Awv1vKihyM
-         bRu4evcHUhtzKxJCot+iYuGi+yWmiVk4Uk+xlUSQZgBY0udq3R+nH3HKFZeaUXkoz3tN
-         c2e4Xbhv2kWqwKf7Zv+TXHGIfrVlfJ6dBYg+poo/nwbauf7ZTdWuycK2oS4U1KxvZ+FM
-         qTiw==
-X-Gm-Message-State: AOAM5309u1g3JPFEffjOWtKV6w/guDWjrA03sCCZJRvtdtUfSQL79OBm
-        ioAft76PNFXZgxxN2waeNPA=
-X-Google-Smtp-Source: ABdhPJza5ifso1pd+QfPKv1OfhuYFjTSetwREIoOFwIti6KXUTRxqB14SGMoTvpCQGJwsp6t+IQ1WQ==
-X-Received: by 2002:a1c:1f08:: with SMTP id f8mr3612783wmf.168.1600937812650;
-        Thu, 24 Sep 2020 01:56:52 -0700 (PDT)
-Received: from localhost ([217.111.27.204])
-        by smtp.gmail.com with ESMTPSA id n66sm2597837wmb.35.2020.09.24.01.56.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 01:56:51 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 10:56:50 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     viresh.kumar@linaro.org, rjw@rjwysocki.net, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ksitaraman@nvidia.com, bbasu@nvidia.com
-Subject: Re: [Patch 2/2] cpufreq: tegra194: Fix unlisted boot freq warning
-Message-ID: <20200924085650.GB2483160@ulmo>
-References: <1600276277-7290-1-git-send-email-sumitg@nvidia.com>
- <1600276277-7290-3-git-send-email-sumitg@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/X7t9uVIEd+S4xSIbror7zIP86C/H0V5Buw9Pzp4CZQ=;
+        b=mQqo5NgMwBMNOro0nbGwxzyexnNLSIO/gE0cct3AkZ8qC2i8mQAubWOYRrUbS0eBML
+         qszq83zKHutFeXe3MPv9kAZpBx4fLrLa4sYnUrGu9mheT9MCoU0+s5/QY8rRLzjHbQ2e
+         QOAgzDrHNw/wxYYVFwzPojUi7Zoh+D5UIsv8ZiYKp4FYtw7/eghF4iSaumTVCCyBNd1G
+         iMA/Xc8vJgxiNBL2HEYkdbizYDD2aVDmOojQ8104ZV4QAG/NTVUqiPQ1yXcL5Gju5MFY
+         gJnOAxNqkSbAfaeNrBSR+OHE/EvciObF591H2L/bBKJ9yqu5c0XevKjwWoTAkxrwRmcN
+         2zmw==
+X-Gm-Message-State: AOAM530qJjJGDjDZ9C/nkGVCF9euWN0TDBk2L8EuH0B0LH1laaloBqLh
+        QE1wGNSdZSSgueX5zltkRIuIMX3bLX+TAOom3dz6Pw==
+X-Google-Smtp-Source: ABdhPJyos8gdOhVSu8Yw+Ta+UgVcQV1l8SNxPLoifsBHaUuGMdJ2eI8bSRsCAI4Ru+05RrslWyoUN9AQu0Xj/PPLRLc=
+X-Received: by 2002:a67:3009:: with SMTP id w9mr3249705vsw.19.1600938446195;
+ Thu, 24 Sep 2020 02:07:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="V0207lvV8h4k8FAm"
-Content-Disposition: inline
-In-Reply-To: <1600276277-7290-3-git-send-email-sumitg@nvidia.com>
-User-Agent: Mutt/1.14.7 (2020-08-29)
+References: <20200918201633.27017-1-khilman@baylibre.com> <CAJZ5v0gzk_h09kJnWnagAL3E7TVmCqFO2E52Dewwyj6NRgKd=w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gzk_h09kJnWnagAL3E7TVmCqFO2E52Dewwyj6NRgKd=w@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 24 Sep 2020 11:06:50 +0200
+Message-ID: <CAPDyKFqR6WTt1_p8jTkZVvvBvAGF2ROChfYLvnW8Mu0KUFvhFA@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: drop myself from PM AVS drivers
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Kevin Hilman <khilman@baylibre.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, 22 Sep 2020 at 20:10, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Fri, Sep 18, 2020 at 10:16 PM Kevin Hilman <khilman@baylibre.com> wrote:
+> >
+> > I haven't had the time or the expertise to adequately review and
+> > maintain these drivers for awhile, so make it official.
+>
+> Well, fair enough, so applied as 5.10 material.
+>
+> But this means that I'm going to stop picking up AVS drivers changes myself.
+>
+> I'll be expecting someone to step in and become a proper maintainer of
+> them and send pull requests either to me or to arm-soc.
 
---V0207lvV8h4k8FAm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+How about if we instead move these avs drivers to drivers/soc/* instead?
 
-On Wed, Sep 16, 2020 at 10:41:17PM +0530, Sumit Gupta wrote:
-> Warning coming during boot because the boot freq set by bootloader
-> gets filtered out due to big freq steps while creating freq_table.
-> Fixing this by setting closest ndiv value from freq_table.
-> Warning:
->   cpufreq: cpufreq_online: CPU0: Running at unlisted freq
->   cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed
->=20
-> Also, added change in init to wait till current frequency becomes
-> equal or near to the previously requested frequency. This is done
-> because it takes some time to restore the previous frequency while
-> turning-on non-boot cores during exit from SC7(Suspend-to-RAM).
->=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/cpufreq/tegra194-cpufreq.c | 118 +++++++++++++++++++++++++++++++=
-+++---
->  1 file changed, 111 insertions(+), 7 deletions(-)
+There are currently only three avs drivers, they are SoC specific and
+we already have kind of similar drivers in drivers/soc/*.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+I can take care of the move, to release you from the burden. :-)
 
---V0207lvV8h4k8FAm
-Content-Type: application/pgp-signature; name="signature.asc"
+Kind regards
+Uffe
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl9sX1EACgkQ3SOs138+
-s6GGiA/9E37Nq3uNMS/H/CmiUxJqDpYP44ubhyJPYN17A05WDIAnslc0u8H6F5f+
-2OVEVyibvEyXI56oLIZO4k8wQ0ffEw61Fmv7lKriDp1UEv3ZvuIu39X9znliuyVM
-1+bSiXkhU4oyabmeN3iDHXa8lC66DPMF2hgLZqWvbYUZNIXIK0iNdw1KeNLTyOgB
-UlBrOrTEPB81Wa/Yv8UuVvJO8oIYgKuya7hAgSjhOSLkO9q01lTLnf1EDj+1epLF
-5XlmYsg04vdxDIboIlzDUsq01Rwm2mfxeDMcHD7zhDgo5euoh4SEVEjWQmf80zhK
-PWP2A+xnODEzl9l5nGdUYx4cMca4ABmTvWKLeQtMbLwgSBxDV0eSpjEd+SlxuZYU
-BcHJ6S8Oof3VuHN8zoA3T1S6jjqGayj+zVgJYtfOsJOUMsPQ2YEvXDuBVmPaKmy4
-B8JTgOehMnfQ8XB6V6Gu1d/KxJqvnr0rLmR1YNnovOuEImPyiWcKnlEJv9xJI0s6
-yXK2VNFmeBXnbNkqeixYxIaN7pUnCdIYIoFrQakOCzqL3V3Ud2N75mykjDDjMvcM
-YbrP9TkdSyXP5aKY/E1QfHpT11avIFNO+2wa5uQKDAb4HAqNleVfm5LdyvbnR95K
-lAPZHW6ffHuYXub+TzX5YXf8VS+bVH2lZyYZHAQXTqMb083yoZY=
-=Hd6C
------END PGP SIGNATURE-----
-
---V0207lvV8h4k8FAm--
+>
+> Cheers!
+>
+> > Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> > ---
+> >  MAINTAINERS | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index deaafb617361..f1bf6071c438 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -5361,7 +5361,6 @@ F:        include/linux/kobj*
+> >  F:     lib/kobj*
+> >
+> >  DRIVERS FOR ADAPTIVE VOLTAGE SCALING (AVS)
+> > -M:     Kevin Hilman <khilman@kernel.org>
+> >  M:     Nishanth Menon <nm@ti.com>
+> >  L:     linux-pm@vger.kernel.org
+> >  S:     Maintained
+> > --
+> > 2.28.0
+> >
