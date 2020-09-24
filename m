@@ -2,188 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D49A0276687
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 04:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2402768AF
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 08:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726348AbgIXCgO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 22:36:14 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:50152 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726196AbgIXCgO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 22:36:14 -0400
-X-UUID: 907f4184b01f4cf991460b1a07a8d87a-20200924
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=n9dduTjSXB3i85Fg6MsJRt9EcTGkwXOYK1rV3o9PTmg=;
-        b=XinJ+MIQJzUSbaY+C1NjFnuIdA6/u81RJ3HtGKKDfEyMAqhH273tsFkrQlmJPrmq2PsRj6uT3tOiyCyjgjVa/QTtsbvtrMwt4owzK2aGTOiL4r5IljD/BETyujD/enTOa7lowj9g0dYJRKx35uBUKzuaLY0+rRud8gmIbg0XWtI=;
-X-UUID: 907f4184b01f4cf991460b1a07a8d87a-20200924
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 71668580; Thu, 24 Sep 2020 10:36:03 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 24 Sep 2020 10:35:59 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 24 Sep 2020 10:35:58 +0800
-Message-ID: <1600914961.21446.26.camel@mtkswgap22>
-Subject: Re: [PATCH v7 2/2] dt-bindings: cpufreq: add bindings for MediaTek
- cpufreq HW
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>
-Date:   Thu, 24 Sep 2020 10:36:01 +0800
-In-Reply-To: <1600866614.21446.18.camel@mtkswgap22>
-References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
-         <1599712262-8819-3-git-send-email-hector.yuan@mediatek.com>
-         <20200922202852.GA3134161@bogus> <1600866614.21446.18.camel@mtkswgap22>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726806AbgIXGJp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 02:09:45 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:53446 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726683AbgIXGJp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 24 Sep 2020 02:09:45 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1600927783; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=BSw8uLG6fAIxSKQlCXzX+qNRyeNk83mkcoyVybEKS/k=; b=KoKRdj9B6FYpKkXT4Efb5eU/9jYVXmX3u1BYM82TCvgY/aZqiqBIOb83W85U5OcPrrW9iBGB
+ rCzhFe1nWaCzHbF/Jd65shHQNod/iTTJKwsfRq/+eXIr83dMA9VtQdZGDBkpEoiGYv3LoWFu
+ 95SbI2avvgmdQ5yU2NZG4jteb1o=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5f6c3827c2a5b66eb961de57 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 24 Sep 2020 06:09:43
+ GMT
+Sender: rnayak=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0F581C433FE; Thu, 24 Sep 2020 06:09:43 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.118] (unknown [49.207.198.93])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F007AC433C8;
+        Thu, 24 Sep 2020 06:09:38 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F007AC433C8
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: is 'dynamic-power-coefficient' expected to be based on 'real'
+ power measurements?
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-pm@vger.kernel.org,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Javi Merino <javi.merino@kernel.org>
+References: <248bb01e-1746-c84c-78c4-3cf7d2541a70@codeaurora.org>
+ <20200915172444.GA2771744@google.com>
+ <406d5d4e-d7d7-8a37-5501-119b734facb3@linaro.org>
+ <20200915175808.GB2771744@google.com>
+ <27785351-ba14-dc92-6761-d64962c29596@linaro.org>
+ <b0d32e2b-1e21-b921-2d5f-335abafd0a37@arm.com>
+ <20200916164840.GI2771744@google.com>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <c8367a0e-ee58-37f3-b306-648ddc0a3e2b@codeaurora.org>
+Date:   Thu, 24 Sep 2020 11:39:36 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200916164840.GI2771744@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gV2VkLCAyMDIwLTA5LTIzIGF0IDIxOjEwICswODAwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4g
-T24gVHVlLCAyMDIwLTA5LTIyIGF0IDE0OjI4IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-PiBPbiBUaHUsIFNlcCAxMCwgMjAyMCBhdCAxMjozMTowMlBNICswODAwLCBIZWN0b3IgWXVhbiB3
-cm90ZToNCj4gPiA+IEZyb206ICJIZWN0b3IuWXVhbiIgPGhlY3Rvci55dWFuQG1lZGlhdGVrLmNv
-bT4NCj4gPiA+IA0KPiA+ID4gQWRkIGRldmljZXRyZWUgYmluZGluZ3MgZm9yIE1lZGlhVGVrIEhX
-IGRyaXZlci4NCj4gPiA+IA0KPiA+ID4gU2lnbmVkLW9mZi1ieTogSGVjdG9yLll1YW4gPGhlY3Rv
-ci55dWFuQG1lZGlhdGVrLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIC4uLi9iaW5kaW5ncy9jcHVm
-cmVxL2NwdWZyZXEtbWVkaWF0ZWstaHcueWFtbCAgICAgIHwgIDE0MSArKysrKysrKysrKysrKysr
-KysrKw0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxNDEgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gIGNy
-ZWF0ZSBtb2RlIDEwMDY0NCBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvY3B1ZnJl
-cS9jcHVmcmVxLW1lZGlhdGVrLWh3LnlhbWwNCj4gPiA+IA0KPiA+ID4gZGlmZiAtLWdpdCBhL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWst
-aHcueWFtbCBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZy
-ZXEtbWVkaWF0ZWstaHcueWFtbA0KPiA+ID4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gPiA+IGlu
-ZGV4IDAwMDAwMDAuLjExOGExNjMNCj4gPiA+IC0tLSAvZGV2L251bGwNCj4gPiA+ICsrKyBiL0Rv
-Y3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtbWVkaWF0ZWst
-aHcueWFtbA0KPiA+ID4gQEAgLTAsMCArMSwxNDEgQEANCj4gPiA+ICsjIFNQRFgtTGljZW5zZS1J
-ZGVudGlmaWVyOiAoR1BMLTIuMC1vbmx5IE9SIEJTRC0yLUNsYXVzZSkNCj4gPiA+ICslWUFNTCAx
-LjINCj4gPiA+ICstLS0NCj4gPiA+ICskaWQ6IGh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9zY2hlbWFz
-L2NwdWZyZXEvY3B1ZnJlcS1tZWRpYXRlay1ody55YW1sIw0KPiA+ID4gKyRzY2hlbWE6IGh0dHA6
-Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29yZS55YW1sIw0KPiA+ID4gKw0KPiA+ID4g
-K3RpdGxlOiBNZWRpYVRlaydzIENQVUZSRVEgQmluZGluZ3MNCj4gPiA+ICsNCj4gPiA+ICttYWlu
-dGFpbmVyczoNCj4gPiA+ICsgIC0gSGVjdG9yIFl1YW4gPGhlY3Rvci55dWFuQG1lZGlhdGVrLmNv
-bT4NCj4gPiA+ICsNCj4gPiA+ICtkZXNjcmlwdGlvbjoNCj4gPiA+ICsgIENQVUZSRVEgSFcgaXMg
-YSBoYXJkd2FyZSBlbmdpbmUgdXNlZCBieSBNZWRpYVRlaw0KPiA+ID4gKyAgU29DcyB0byBtYW5h
-Z2UgZnJlcXVlbmN5IGluIGhhcmR3YXJlLiBJdCBpcyBjYXBhYmxlIG9mIGNvbnRyb2xsaW5nIGZy
-ZXF1ZW5jeQ0KPiA+ID4gKyAgZm9yIG11bHRpcGxlIGNsdXN0ZXJzLg0KPiA+ID4gKw0KPiA+ID4g
-K3Byb3BlcnRpZXM6DQo+ID4gPiArICBjb21wYXRpYmxlOg0KPiA+ID4gKyAgICBjb25zdDogIm1l
-ZGlhdGVrLGNwdWZyZXEtaHciDQo+ID4gDQo+ID4gTmVlZHMgdG8gYmUgU29DIHNwZWNpZmljLiBU
-aGlzIHN0dWZmIGlzIG5ldmVyIGNvbnN0YW50IGZyb20gb25lIFNvQyB0byANCj4gPiB0aGUgbmV4
-dC4gJ2NwdWZyZXEnIGlzIGEgTGludXhpc20uIFdoYXQncyB0aGUgYmxvY2sgY2FsbGVkIGluIHRo
-ZSANCj4gPiBkYXRhc2hlZXQ/IFVzZSB0aGF0Lg0KPiA+IA0KPiBPSywgd2lsbCB1c2UgbWVkaWF0
-ZWssc3NwbS1kdmZzLW10Njc3OSBpbnN0ZWFkLg0KPiA+IERvbid0IG5lZWQgcXVvdGVzIGVpdGhl
-ci4NCj4gPiANCj4gT0ssIHdpbGwgcmVtb3ZlIGl0Lg0KPiA+ID4gKw0KPiA+ID4gKyAgcmVnOg0K
-PiA+ID4gKyAgICBtaW5JdGVtczogMQ0KPiA+ID4gKyAgICBtYXhJdGVtczogMg0KPiA+ID4gKyAg
-ICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIEFkZHJlc3NlcyBhbmQgc2l6ZXMgZm9yIHRo
-ZSBtZW1vcnkgb2YgdGhlIEhXIGJhc2VzIGluIGVhY2ggZnJlcXVlbmN5IGRvbWFpbi4NCj4gPiA+
-ICsNCj4gPiA+ICsgIHJlZy1uYW1lczoNCj4gPiA+ICsgICAgaXRlbXM6DQo+ID4gPiArICAgICAg
-LSBjb25zdDogImZyZXEtZG9tYWluMCINCj4gPiA+ICsgICAgICAtIGNvbnN0OiAiZnJlcS1kb21h
-aW4xIg0KPiA+IA0KPiA+IEtpbmQgb2YgcG9pbnRsZXNzIHRvIGhhdmUgbmFtZXMgYmFzZWQgb24g
-dGhlIGluZGV4LiBEcm9wICdyZWctbmFtZXMnLg0KPiA+IA0KPiBPSywgd2lsbCBkcm9wIGl0Lg0K
-PiA+ID4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIEZyZXF1ZW5jeSBkb21haW4g
-bmFtZS4gaS5lLg0KPiA+ID4gKyAgICAgICJmcmVxLWRvbWFpbjAiLCAiZnJlcS1kb21haW4xIi4N
-Cj4gPiA+ICsNCj4gPiA+ICsgICIjZnJlcS1kb21haW4tY2VsbHMiOg0KPiA+ID4gKyAgICBjb25z
-dDogMQ0KPiA+ID4gKyAgICBkZXNjcmlwdGlvbjogfA0KPiA+ID4gKyAgICAgIE51bWJlciBvZiBj
-ZWxscyBpbiBhIGZyZXFlbmN5IGRvbWFpbiBzcGVjaWZpZXIuDQo+ID4gDQo+ID4gWW91IGRvbid0
-IG5lZWQgdGhpcy4gSXQncyBub3QgYSBjb21tb24gYmluZGluZyB0aGF0J3MgZ29pbmcgdG8gdmFy
-eS4NCj4gPiANCj4gT0ssIHdpbGwgcmVtb3ZlIGl0Lg0KPiA+ID4gKw0KPiA+ID4gKyAgbXRrLWZy
-ZXEtZG9tYWluOg0KPiA+ID4gKyAgICBtYXhJdGVtczogMQ0KPiA+ID4gKyAgICBkZXNjcmlwdGlv
-bjogfA0KPiA+ID4gKyAgICAgIERlZmluZSB0aGlzIGNwdSBiZWxvbmdzIHRvIHdoaWNoIGZyZXF1
-ZW5jeSBkb21haW4uIGkuZS4NCj4gPiA+ICsgICAgICBjcHUwLTMgYmVsb25nIHRvIGZyZXF1ZW5j
-eSBkb21haW4wLA0KPiA+ID4gKyAgICAgIGNwdTQtNiBiZWxvbmcgdG8gZnJlcXVlbmN5IGRvbWFp
-bjEuDQo+ID4gDQo+ID4gVGhpcyBwcm9wZXJ0eSBkb2Vzbid0IGdvIGluIHRoZSAnbWVkaWF0ZWss
-Y3B1ZnJlcS1odycgbm9kZS4gWW91IHdvdWxkIA0KPiA+IG5lZWQgYSBzZXBhcmF0ZSBzY2hlbWEu
-IEhvd2V2ZXIsIEkgdGhpbmsgdGhlIGVhc2llc3QgdGhpbmcgdG8gZG8gaGVyZSBpcyANCj4gPiBz
-b21ldGhpbmcgbGlrZSB0aGlzOg0KPiA+IA0KPiA+IG1lZGlhdGVrLGZyZXEtZG9tYWluLTAgPSA8
-JmNwdTA+LCA8JmNwdTE+Ow0KPiA+IA0KPiBTb3JyeSwgbWF5IEkga25vdyB0aGUgcmVhc29uIGFu
-ZCB0aGUgZGV0YWlscyBhYm91dCBob3cgdG8gc2VwYXJhdGUNCj4gc2NoZW1hPyBUaGFuayB5b3Ug
-dmVyeSBtdWNoLg0KPiANCkFjdHVhbGx5LCBJIHJlZmVyZW5jZWQgdGhlIHRoZXJtYWwtY29vbGlu
-Zy1kZXZpY2VzIGFuZCBzZW5kIG15IHlhbWwgZm9yDQpyZXZpZXcuDQpodHRwczovL2VsaXhpci5i
-b290bGluLmNvbS9saW51eC92NS45LXJjNi9zb3VyY2UvRG9jdW1lbnRhdGlvbi9kZXZpY2V0cmVl
-L2JpbmRpbmdzL3RoZXJtYWwvdGhlcm1hbC1jb29saW5nLWRldmljZXMueWFtbA0KSXQgdXNlZCBj
-cHUgbm9kZSBmb3IgY29vbGluZyBkZXZpY2UsIGFuZCB0aGVybWFsIHNjaGVtYSB1c2UgaXQuDQpB
-cHByZWNpYXRlZCBmb3IgYW55IGRldGFpbHMuDQoNCj4gVGhlIG51bWJlcnMgb2YgZnJlcXVlbmN5
-IGRvbWFpbiBtYXkgYmUgdmFyeSBmcm9tIGRpZmZlcmVudCBwcm9qZWN0cy4gSWYNCj4gSSBkbyB0
-aGUgZWFzaWVyIHdheSwgSSBtYXkgbmVlZCB0byBpbXBsZW1lbnQgZXh0cmEgbG9vcCB0byBjaGVj
-ayBob3cNCj4gbWFueSBmcmVxdWVuY3kgZG9tYWluLg0KPiA+IE9yIHlvdSBjb3VsZCBqdXN0IHJl
-LXVzZSB0aGUgT1BQIGJpbmRpbmcgd2l0aCBqdXN0IDAgZW50cmllczoNCj4gPiANCj4gPiBvcHAt
-dGFibGUtMCB7DQo+ID4gICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLGh3LW9wZXJhdGluZy1wb2lu
-dHMiLCAib3BlcmF0aW5nLXBvaW50cy12MiI7DQo+ID4gfTsNCj4gPiBvcHAtdGFibGUtMSB7DQo+
-ID4gICBjb21wYXRpYmxlID0gIm1lZGlhdGVrLGh3LW9wZXJhdGluZy1wb2ludHMiLCAib3BlcmF0
-aW5nLXBvaW50cy12MiI7DQo+ID4gfTsNCj4gPiANCj4gSW4gcHJldmlvdXMgcmV2aWV3IHN0YWdl
-LCBhbHJlYWR5IGFiYW5kb24gT1BQIGZyYW1ld29yayBpbiBkcml2ZXIgY29kZS4NCj4gV2lsbCBj
-aGVjayB3aXRoIFZpcmVzaCB0byBzZWUgaWYgaXRzIE9LIHRvIGFkZCBPUFAgYmFjay4NCj4gPiA+
-ICsNCj4gPiA+ICtyZXF1aXJlZDoNCj4gPiA+ICsgIC0gY29tcGF0aWJsZQ0KPiA+ID4gKyAgLSBy
-ZWcNCj4gPiA+ICsgIC0gcmVnLW5hbWVzDQo+ID4gPiArICAtICIjZnJlcS1kb21haW4tY2VsbHMi
-DQo+ID4gPiArDQo+ID4gPiArZXhhbXBsZXM6DQo+ID4gPiArICAtIHwNCj4gPiA+ICsgICAgY3B1
-cyB7DQo+ID4gPiArICAgICAgICAgICAgI2FkZHJlc3MtY2VsbHMgPSA8MT47DQo+ID4gPiArICAg
-ICAgICAgICAgI3NpemUtY2VsbHMgPSA8MD47DQo+ID4gPiArDQo+ID4gPiArICAgICAgICAgICAg
-Y3B1MDogY3B1QDAgew0KPiA+ID4gKyAgICAgICAgICAgICAgICBkZXZpY2VfdHlwZSA9ICJjcHUi
-Ow0KPiA+ID4gKyAgICAgICAgICAgICAgICBjb21wYXRpYmxlID0gImFybSxjb3J0ZXgtYTU1IjsN
-Cj4gPiA+ICsgICAgICAgICAgICAgICAgZW5hYmxlLW1ldGhvZCA9ICJwc2NpIjsNCj4gPiA+ICsg
-ICAgICAgICAgICAgICAgbXRrLWZyZXEtZG9tYWluID0gPCZjcHVmcmVxX2h3IDA+Ow0KPiA+ID4g
-KyAgICAgICAgICAgICAgICByZWcgPSA8MHgwMDA+Ow0KPiA+ID4gKyAgICAgICAgICAgIH07DQo+
-ID4gPiArDQo+ID4gPiArICAgICAgICAgICAgY3B1MTogY3B1QDEgew0KPiA+IA0KPiA+IFVuaXQg
-YWRkcmVzcyBpcyB3cm9uZy4NCj4gPiANCj4gT0ssIHdpbGwgbW9kaWZ5IHRvICJjcHUxIDogY3B1
-QDEwMCIgaWYgd2Ugc3RpbGwgZGVjaWRlIHRvIHB1dA0KPiBmcmVxX2RvbWFpbiBpbiBDUFUgbm9k
-ZS4NCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsg
-ICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAg
-ICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAg
-ICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAg
-ICAgICAgcmVnID0gPDB4MTAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+
-ID4gKyAgICAgICAgICAgIGNwdTI6IGNwdUAyIHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2
-aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJh
-cm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAi
-cHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJl
-cV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4MjAwPjsNCj4gPiA+ICsg
-ICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTM6IGNwdUAzIHsN
-Cj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAg
-ICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAg
-ICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAg
-IG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAwPjsNCj4gPiA+ICsgICAgICAgICAgICAg
-ICAgcmVnID0gPDB4MzAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4g
-KyAgICAgICAgICAgIGNwdTQ6IGNwdUA0IHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNl
-X3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0s
-Y29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNj
-aSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9o
-dyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4NDAwPjsNCj4gPiA+ICsgICAg
-ICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTU6IGNwdUA1IHsNCj4g
-PiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAg
-ICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE1NSI7DQo+ID4gPiArICAgICAgICAg
-ICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10
-ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAg
-cmVnID0gPDB4NTAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAg
-ICAgICAgICAgIGNwdTY6IGNwdUA2IHsNCj4gPiA+ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5
-cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29y
-dGV4LWE3NSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7
-DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1mcmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAx
-PjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVnID0gPDB4NjAwPjsNCj4gPiA+ICsgICAgICAg
-ICAgICB9Ow0KPiA+ID4gKw0KPiA+ID4gKyAgICAgICAgICAgIGNwdTc6IGNwdUA3IHsNCj4gPiA+
-ICsgICAgICAgICAgICAgICAgZGV2aWNlX3R5cGUgPSAiY3B1IjsNCj4gPiA+ICsgICAgICAgICAg
-ICAgICAgY29tcGF0aWJsZSA9ICJhcm0sY29ydGV4LWE3NSI7DQo+ID4gPiArICAgICAgICAgICAg
-ICAgIGVuYWJsZS1tZXRob2QgPSAicHNjaSI7DQo+ID4gPiArICAgICAgICAgICAgICAgIG10ay1m
-cmVxLWRvbWFpbiA9IDwmY3B1ZnJlcV9odyAxPjsNCj4gPiA+ICsgICAgICAgICAgICAgICAgcmVn
-ID0gPDB4NzAwPjsNCj4gPiA+ICsgICAgICAgICAgICB9Ow0KPiA+ID4gKyAgICB9Ow0KPiA+ID4g
-Kw0KPiA+ID4gKyAgICAvKiAuLi4gKi8NCj4gPiA+ICsNCj4gPiA+ICsgICAgc29jIHsNCj4gPiA+
-ICsgICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDI+Ow0KPiA+ID4gKyAgICAgICAgI3NpemUtY2Vs
-bHMgPSA8Mj47DQo+ID4gPiArDQo+ID4gPiArICAgICAgICBjcHVmcmVxX2h3OiBjcHVmcmVxQDEx
-YmMwMCB7DQo+ID4gPiArICAgICAgICAgICAgY29tcGF0aWJsZSA9ICJtZWRpYXRlayxjcHVmcmVx
-LWh3IjsNCj4gPiA+ICsgICAgICAgICAgICByZWcgPSA8MCAweDExYmMxMCAwIDB4OGM+LA0KPiA+
-ID4gKyAgICAgICAgICAgICAgIDwwIDB4MTFiY2EwIDAgMHg4Yz47DQo+ID4gPiArICAgICAgICAg
-ICAgcmVnLW5hbWVzID0gImZyZXEtZG9tYWluMCIsICJmcmVxLWRvbWFpbjEiOw0KPiA+ID4gKyAg
-ICAgICAgICAgICNmcmVxLWRvbWFpbi1jZWxscyA9IDwxPjsNCj4gPiA+ICsgICAgICAgIH07DQo+
-ID4gPiArICAgIH07DQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiArDQo+ID4gPiAt
-LSANCj4gPiA+IDEuNy45LjUNCj4gDQoNCg==
 
+On 9/16/2020 10:18 PM, Matthias Kaehlcke wrote:
+> On Wed, Sep 16, 2020 at 10:53:48AM +0100, Lukasz Luba wrote:
+>>
+>>
+>> On 9/15/20 9:55 PM, Daniel Lezcano wrote:
+>>> On 15/09/2020 19:58, Matthias Kaehlcke wrote:
+>>>> On Tue, Sep 15, 2020 at 07:50:10PM +0200, Daniel Lezcano wrote:
+>>>>> On 15/09/2020 19:24, Matthias Kaehlcke wrote:
+>>>>>> +Thermal folks
+>>>>>>
+>>>>>> Hi Rajendra,
+>>>>>>
+>>>>>> On Tue, Sep 15, 2020 at 11:14:00AM +0530, Rajendra Nayak wrote:
+>>>>>>> Hi Rob,
+>>>>>>>
+>>>>>>> There has been some discussions on another thread [1] around the DPC (dynamic-power-coefficient) values
+>>>>>>> for CPU's being relative vs absolute (based on real power) and should they be used to derive 'real' power
+>>>>>>> at various OPPs in order to calculate things like 'sustainable-power' for thermal zones.
+>>>>>>> I believe relative values work perfectly fine for scheduling decisions, but with others using this for
+>>>>>>> calculating power values in mW, is there a need to document the property as something that *has* to be
+>>>>>>> based on real power measurements?
+>>>>>>
+>>>>>> Relative values may work for scheduling decisions, but not for thermal
+>>>>>> management with the power allocator, at least not when CPU cooling devices
+>>>>>> are combined with others that specify their power consumption in absolute
+>>>>>> values. Such a configuration should be supported IMO.
+>>>>>
+>>>>> The energy model is used in the cpufreq cooling device and if the
+>>>>> sustainable power is consistent with the relative values then there is
+>>>>> no reason it shouldn't work.
+>>>>
+>>>> Agreed on thermal zones that exclusively use CPUs as cooling devices, but
+>>>> what when you have mixed zones, with CPUs with their pseudo-unit and e.g. a
+>>>> GPU that specifies its power in mW?
+>>>
+>>> Well, if a SoC vendor decides to mix the units, then there is nothing we
+>>> can do.
+>>>
+>>> When specifying the power numbers available for the SoC, they could be
+>>> all scaled against the highest power number.
+>>>
+>>> There are so many factors on the hardware, the firmware, the kernel and
+>>> the userspace sides having an impact on the energy efficiency, I don't
+>>> understand why SoC vendors are so shy to share the power numbers...
+>>>
+>>
+>> Unfortunately (because it might confuse engineers in some cases like
+>> this one), even in the SCMI spec DEN0056B [1] we have this statement
+>> which allows to expose an 'abstract scale' values from firmware:
+>> '4.5.1 Performance domain management protocol background
+>> ...The power can be expressed in mW or in an abstract scale. Vendors
+>> are not obliged to reveal power costs if it is undesirable, but a linear
+>> scale is required.'
+>>
+>> This is the source of our Energy Model values when we use SCMI cpufreq
+>> driver [2].
+>>
+>> So this might be an issue in the future, when some SoC vendor decides to
+>> not expose the real mW, but the phone OEM would then take the SoC and
+>> try to add some other cooling device into the thermal zone. That new
+>> device is not part of the SCMI perf but some custom and has the real mW.
+>>
+>> Do you think Daniel it should be somewhere documented in the kernel
+>> thermal that the firmware might silently populate EM with 'abstract
+>> scale'? Then special care should be taken when combining new
+>> cooling devices.
+>>
+>> Regards,
+>> Lukasz
+>>
+>> [1] https://developer.arm.com/documentation/den0056/b/?lang=en
+>> [2] https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/scmi-cpufreq.c#L121
+> 
+> If an 'abstract scale' is explicitly allowed I think it should be documented
+> to avoid confusion and make engineers aware of the peril of combining cooling
+> devices of different types in the same thermal zone.
+
+Rob, we should perhaps also document this as part of the DT bindings document
+to be consistent, that an abstract scale is allowed when specifying the DPC
+values in DT.
+if you agree, I can spin a quick patch to update the documentation.
+
+thanks,
+Rajendra
+
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
