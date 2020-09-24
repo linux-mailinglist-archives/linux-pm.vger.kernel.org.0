@@ -2,210 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F672771A1
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 14:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B8D2771C0
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 15:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbgIXMoz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 08:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        id S1727861AbgIXNCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 09:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727705AbgIXMom (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 08:44:42 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299E7C0613D3
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 05:44:42 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id l126so1835202pfd.5
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 05:44:42 -0700 (PDT)
+        with ESMTP id S1727475AbgIXNCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 09:02:46 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A24BC0613CE
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:02:46 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id b79so3502678wmb.4
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=PJqKf+mCJ+EoPJqxzgxhPHvrpVy9acagdAM33eNHD0A=;
-        b=bCoLh2KuuVi3kJXwFHZuSrYawrz6uRqXjOL47EGVjSPoK5bgHCciSbeSZgOLxXf7Bi
-         jcq4lqlQik66XKrJLJlHjO6ccL7Ps8A4RcPaDxkGNz5D7TnHv2GurUm41GSnkaSlgIMY
-         SMVWBS6J8Dk2KxHmwgCFMB7xnvIlF5Mg2tVTE5UOaAfnMFnFQLnFsznZm63gRQwvI4zT
-         dP0UzNOAFsEBUtfahaKeBLXezvidfcNfT74uInvfCWGlVVXFrFl49iRY6LiTdKDTffGl
-         TRpsUBaV2qeJ3706xyFctMbOlTu4Xfq99/r+cu5JjE7qk3ZP7eZ3ijlwJ4QUIr5BNH9W
-         nFxA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wd72o99dI8O+8Erl62aPyt+op0c7sTjoUw8Lqij53Ck=;
+        b=vgTkw2TNrI3qaJi7wfvHs5SXCUj+o0oDCjpQnhdcNZkAi7ShmJ03yyrI3MRrUd34Db
+         y7VvUO1XFFmGeKumZnQa9gNI3bTJUpeWE5gM44PI+Y307RsWKPYjRSd2JRWVwjtFCwb2
+         c8b/cUeDgNT7EhKZw3DXkzJ53k8NWkyWDd8L6XPfIbedo+j7ySF0v5Q0DqMnune2om6N
+         v4spXNLNEnKG9ajWetvtAzybNNLQ6+RyaTXmabXV02CijRM1xP7em57wNw7klz0FN9VM
+         wR+y4cwkbTe0OjE7emamEu9zatGvPjrsgaraTo+ormxbFZcEeZut6O4T4ig6KWWDZuJ7
+         83xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=PJqKf+mCJ+EoPJqxzgxhPHvrpVy9acagdAM33eNHD0A=;
-        b=gL7C/V0czgks+31F8bTaMqGTwT+x/qE2+EDBZIDtcvTfxOIABr9Dgi7IlVOfGq7t3h
-         OZx+s7vZ6/3lTwPFRqZ6mRVBGohrjj6TRmoatJyv+5HdZS52FMcIkOImyKr2purKkBAd
-         7KDQjTx/w9v87qr7oINkTyStsAsgxwIhzhTiLDFRzA3t3B7C+NPsUMgbdDb6uUsrSdPD
-         amqCfot3zTZeZrtGt2vgOLCv5UDiEWAL1uHZT7KjyxLx9n+K3z89zzcuAGemE2aOASC1
-         1qVni+DkqlBpBFywuSnHRioX+saKxcbyVsIC/GkAQiZKqMAB19xMPp4pSISxZktyulEW
-         dl6w==
-X-Gm-Message-State: AOAM530v4dWxrwC5VptGMtkmfc/KyA5ZKP7oVikMorLa/0tMNBvl/kXp
-        77HVJCUatAQlzz5fNBjLd7PdBQ==
-X-Google-Smtp-Source: ABdhPJxYZm5dHdhiI27PAYhZA8N60fegOFfQCdR+3NOmgipbaN4ER15q4/r0tW/ctO5YM1eLLlV2bg==
-X-Received: by 2002:a63:eb58:: with SMTP id b24mr3875399pgk.178.1600951481675;
-        Thu, 24 Sep 2020 05:44:41 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id kk17sm2066775pjb.31.2020.09.24.05.44.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 05:44:40 -0700 (PDT)
-Message-ID: <5f6c94b8.1c69fb81.7655b.585f@mx.google.com>
-Date:   Thu, 24 Sep 2020 05:44:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wd72o99dI8O+8Erl62aPyt+op0c7sTjoUw8Lqij53Ck=;
+        b=sQCj3A3suQS9iU8HdxJ0XfdOFAUYKJp9C6O35Yu7ah+nK4DwQzAzmkCRMRIsKs+63n
+         s86x7O2OT7oiUY00nmI5ggHjUnKavoaDYwrEYgkfywCHwrkZWO0zEmd/NwtJ5nSAFvQH
+         n8dyhqMYC6SufpoJM4vLDO5pZvSnFguDAkJ6uAPmJgRaGWEL8xVcKPCMbQ8cJl7XCq6w
+         sXYkWNhiihG69wUvv56DVWY4gHYNyDc6Jz2Efw7Vfd8efHekkAGHP0pPZ/wzvpVr/VYt
+         2ahaB8yiPtUy8A6wjl04NPJtob6jUBnDlVQBFxzsSmc7QZI4dotmucax2KO5azo09VCn
+         uXIQ==
+X-Gm-Message-State: AOAM5332S+39QeWNhc8h+SCX78fzGGRUBRNmVYwWbEl5oa8NPq4TKV2n
+        qJh+Jed8nx13eP2lMUfwkzHZFA1YxaKkUA==
+X-Google-Smtp-Source: ABdhPJxlNkv36npEGmirFkkM24uP+RpBoZpt4cCa2RcZXhcKgTHRUMCtNZq9fNmdpDxKf8X4qh3PSQ==
+X-Received: by 2002:a1c:7418:: with SMTP id p24mr4653554wmc.123.1600952564762;
+        Thu, 24 Sep 2020 06:02:44 -0700 (PDT)
+Received: from localhost.localdomain ([212.45.67.2])
+        by smtp.googlemail.com with ESMTPSA id v204sm3498579wmg.20.2020.09.24.06.02.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Sep 2020 06:02:44 -0700 (PDT)
+From:   Georgi Djakov <georgi.djakov@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        georgi.djakov@linaro.org
+Subject: [GIT PULL] interconnect changes for 5.10
+Date:   Thu, 24 Sep 2020 16:02:42 +0300
+Message-Id: <20200924130242.24867-1-georgi.djakov@linaro.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.9-rc6-37-ga31d518ec481
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 13 warnings (v5.9-rc6-37-ga31d518ec481)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 13 warnings (v5.9-rc6-37-ga=
-31d518ec481)
+Hello Greg,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-9-rc6-37-ga31d518ec481/
+This is the pull request with the interconnect changes for the 5.10-rc1
+merge window. It contains both core changes and new drivers. More details
+are available in the signed tag.
 
-Tree: pm
-Branch: testing
-Git Describe: v5.9-rc6-37-ga31d518ec481
-Git Commit: a31d518ec48107762495760932218e57b2038289
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+All patches have been in linux-next without any reported issues. Please
+pull into char-misc-next.
 
-Warnings Detected:
+Thanks,
+Georgi
 
-arc:
+The following changes since commit 91e045b93db79a2ef66e045ad0d1f8f9d348e1f4:
 
-arm64:
-    defconfig (gcc-8): 8 warnings
+  interconnect: qcom: Fix small BW votes being truncated to zero (2020-09-04 00:07:12 +0300)
 
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
+are available in the Git repository at:
 
-i386:
-    i386_defconfig (gcc-8): 2 warnings
+  https://git.linaro.org/people/georgi.djakov/linux.git tags/icc-5.10-rc1
 
-mips:
+for you to fetch changes up to 86d6e5793e0fa3a510cff466894d0d3051fd716e:
 
-riscv:
+  interconnect: imx: simplify the return expression of imx_icc_unregister (2020-09-21 11:15:02 +0300)
 
-x86_64:
+----------------------------------------------------------------
+interconnect changes for 5.10
 
+Here are the interconnect changes for the 5.10-rc1 merge window
+consisting of core changes, new drivers and cleanups.
 
-Warnings summary:
+Core changes:
+ - New bulk API helpers for managing multiple interconnect paths.
+ - New xlate_extended() interface for parsing additional data from DT.
+ - Support for sync_state().
 
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    2    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to poi=
-nter from integer of different size [-Wint-to-pointer-cast]
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
+Driver changes:
+ - New drivers for SM8150 and SM8250 platforms.
+ - New drivers for the Qualcomm OSM and EPSS hardware blocks.
+ - Per-BCM scaling factor support.
+ - Misc cleanups.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 
-Detailed per-defconfig build reports:
+----------------------------------------------------------------
+Georgi Djakov (9):
+      interconnect: Add bulk API helpers
+      interconnect: Introduce xlate_extended() callback
+      dt-bindings: interconnect: Document the support of optional path tag
+      interconnect: qcom: Implement xlate_extended() to parse tags
+      interconnect: qcom: sdm845: Replace xlate with xlate_extended
+      interconnect: Add get_bw() callback
+      interconnect: Add sync state support
+      interconnect: qcom: Use icc_sync_state
+      Merge branch 'icc-syncstate' into icc-next
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Jonathan Marek (5):
+      dt-bindings: interconnect: single yaml file for RPMh interconnect drivers
+      dt-bindings: interconnect: Add Qualcomm SM8150 DT bindings
+      dt-bindings: interconnect: Add Qualcomm SM8250 DT bindings
+      interconnect: qcom: Add SM8150 interconnect provider driver
+      interconnect: qcom: Add SM8250 interconnect provider driver
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+Krzysztof Kozlowski (2):
+      interconnect: core: Simplify with dev_err_probe()
+      interconnect: imx: Simplify with dev_err_probe()
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
+Liu Shixin (1):
+      interconnect: imx: simplify the return expression of imx_icc_unregister
 
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
+Mike Tipton (5):
+      dt-bindings: interconnect: Add generic qcom bindings
+      dt-bindings: interconnect: Add property to set BCM TCS wait behavior
+      interconnect: qcom: Support bcm-voter-specific TCS wait behavior
+      interconnect: qcom: Only wait for completion in AMC/WAKE by default
+      interconnect: qcom: Add support for per-BCM scaling factors
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+Sibi Sankar (6):
+      interconnect: qcom: sc7180: Replace xlate with xlate_extended
+      dt-bindings: interconnect: Add OSM L3 DT binding on SM8150
+      interconnect: qcom: Add OSM L3 support on SM8150
+      interconnect: qcom: Lay the groundwork for adding EPSS support
+      dt-bindings: interconnect: Add EPSS L3 DT binding on SM8250
+      interconnect: qcom: Add EPSS L3 support on SM8250
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
+Stephen Boyd (1):
+      interconnect: qcom: osm-l3: Mark more structures const
 
-Warnings:
-    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
-from integer of different size [-Wint-to-pointer-cast]
-    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
-from integer of different size [-Wint-to-pointer-cast]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
+ Documentation/devicetree/bindings/interconnect/interconnect.txt |  24 +-
+ .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml        |  20 +
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml |   2 +
+ .../bindings/interconnect/{qcom,sdm845.yaml => qcom,rpmh.yaml}  |  42 +-
+ Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml |  85 -
+ drivers/interconnect/Makefile                                   |   2 +-
+ drivers/interconnect/bulk.c                                     | 117 ++
+ drivers/interconnect/core.c                                     | 140 +-
+ drivers/interconnect/imx/imx.c                                  |  13 +-
+ drivers/interconnect/qcom/Kconfig                               |  20 +
+ drivers/interconnect/qcom/Makefile                              |   4 +
+ drivers/interconnect/qcom/bcm-voter.c                           |  36 +-
+ drivers/interconnect/qcom/icc-rpmh.c                            |  30 +
+ drivers/interconnect/qcom/icc-rpmh.h                            |  21 +-
+ drivers/interconnect/qcom/osm-l3.c                              |  91 +-
+ drivers/interconnect/qcom/sc7180.c                              |   3 +-
+ drivers/interconnect/qcom/sdm845.c                              |   3 +-
+ drivers/interconnect/qcom/sm8150.c                              | 635 +++++++
+ drivers/interconnect/qcom/sm8150.h                              | 154 ++
+ drivers/interconnect/qcom/sm8250.c                              | 651 ++++++++
+ drivers/interconnect/qcom/sm8250.h                              | 164 ++
+ include/dt-bindings/interconnect/qcom,icc.h                     |  26 +
+ include/dt-bindings/interconnect/qcom,osm-l3.h                  |   3 +
+ include/dt-bindings/interconnect/qcom,sm8150.h                  | 162 ++
+ include/dt-bindings/interconnect/qcom,sm8250.h                  | 172 ++
+ include/linux/interconnect-provider.h                           |  24 +-
+ include/linux/interconnect.h                                    |  22 +
+ 27 files changed, 2490 insertions(+), 176 deletions(-)
+ rename Documentation/devicetree/bindings/interconnect/{qcom,sdm845.yaml => qcom,rpmh.yaml} (60%)
+ delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc7180.yaml
+ create mode 100644 drivers/interconnect/bulk.c
+ create mode 100644 drivers/interconnect/qcom/sm8150.c
+ create mode 100644 drivers/interconnect/qcom/sm8150.h
+ create mode 100644 drivers/interconnect/qcom/sm8250.c
+ create mode 100644 drivers/interconnect/qcom/sm8250.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,icc.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8150.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8250.h
