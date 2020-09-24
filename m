@@ -2,303 +2,179 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7692771FD
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 15:15:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CCD277226
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 15:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbgIXNPw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 09:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S1727849AbgIXN20 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 09:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727849AbgIXNPw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 09:15:52 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36555C0613CE
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:15:52 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id u24so1906163pgi.1
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:15:52 -0700 (PDT)
+        with ESMTP id S1727809AbgIXN20 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 09:28:26 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CB2C0613CE
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:28:26 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id mm21so1699694pjb.4
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 06:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=H8jgedehDcIKrVC69PKTFAUnUAvOxPkTNNhjO0rO1Zs=;
-        b=NIG4WVzTTJIdThQuALqvkI2Dm49+IxAziGZABeXb8LOLgNcv5n3ntfz4ep//ZMYcCV
-         CZn0OBl258FLioirsZZq4Rb5aZKopIkZpSiqyS24ltdOzh0+MpIKUSFN8kBr5bAoZG6J
-         G29Bl7Siv2GaI2zjk69gGJryx8kTp/6LM0cBtbHuSAFtWZ5KcUldX3KJT0zxKdE5FVdH
-         9OwH3BXB0CSw2J5UXq+C+OZd2OG830XaZ5wxIRVCY1feKrVPHKEf9gLDJpEeHecB5Ldy
-         X5GD2+B6U7e/OIIH5+bWM0JU5WYf2KjhLp/Fqigyg9M6glyCu8Jcq6PjE6MK9eQmHgZb
-         DAWg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=VYhbgvl85Zs3EN025pTqLMvAcOSvaQeILqmmhpwbPXk=;
+        b=ZpqE+XWuiaZtc7CuwfDkO4JPco8rrErwTH/aJgEX8lM7vXWbkbp5SamlYLZAL8VQMv
+         QNmw9+Ok7UFZ0PDFs+srA/SuqY47fzLKD3wYZGsPRLML6/OtIf63N3I1JX5pGsVxfVKm
+         0E38MmCzAifU5YVZbMneC8ep703aizLViXmDL0zNQ1nexBumMHCbxGe43BNqps6cx8oH
+         Lm1ymSbF4uZCvr85oYlTLWVjxMUXPkWi3YMbOxdui+rmD6MwZubcTXCVNcpnjKRM6++g
+         uFVgvf8el4NUreOXw6Wk8640OOEnO2ORicTlCJRVz7ddp2tYI6PxBSuj7kizPZpUDAA4
+         gmAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H8jgedehDcIKrVC69PKTFAUnUAvOxPkTNNhjO0rO1Zs=;
-        b=WWTdMz7ydcqkbmDig6dwi0vRIagPoZqXiSdAnJYzKRb6PsjCMX1dLRJpr6avYEX1Of
-         yywJxK8K6w25fSlIfhBAjpsjoiTr1sHQ9BB+YGXlLH4F31hXF5Tr4X9VxXLJchq+3Nqu
-         +1Vgi+IzgXu9i25y2VWxgI78vBlM2thKpjYPY/KHV1rPpsvU8VPzDUjMcij9/oaQs5jH
-         LoKde3gYFqZR0w9Ie8W3suXMksRX05smR/BZK+ubnkOIpl/enrBKSMeCAu5e+k+E1vXu
-         JiiSEwgAGNTNKo79lnxmYq78Z0nwCHd3ZwVHXX32xayEuk5Y4nfVcKqtmB1cVlOjnbZC
-         UnMQ==
-X-Gm-Message-State: AOAM533qw88EX3an3Syg/OvWOTgBk3eOuDxVaFAZjdBzoj3OnWjLhnh9
-        22PClqbmos250iVxlkQmEXzE4g==
-X-Google-Smtp-Source: ABdhPJyG0nxNbj5IVPKVznxuCjYURjard9ch0vTrW7qUwGIRZybxc1oY9HwwF92Kr6LRMGKd4CiX3g==
-X-Received: by 2002:a62:93:0:b029:13e:d13d:a085 with SMTP id 141-20020a6200930000b029013ed13da085mr4336720pfa.28.1600953351602;
-        Thu, 24 Sep 2020 06:15:51 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id i126sm3011138pfc.48.2020.09.24.06.15.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Sep 2020 06:15:50 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 18:45:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, cristian.marussi@arm.com,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to
- cpufreq_stats_record_transition()
-Message-ID: <20200924131543.eury5vhqy3xt35v6@vireshk-i7>
-References: <cover.1600238586.git.viresh.kumar@linaro.org>
- <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
- <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=VYhbgvl85Zs3EN025pTqLMvAcOSvaQeILqmmhpwbPXk=;
+        b=geoob3RMXuZlAwZokGmmSMqjd6RrTnDNGR59yhVolyrZg1ZPGyKDknjC3o0H7KN76d
+         pFP6mXJ7ggV2KHgs/QeOhcOi8B6LakvrU39dg5Ot9mzYykM37lzUq9L7SQvPJurbkPaI
+         DRtfeCZIOJWZ8mbVvRx2cgUVt6vcqqdSkNZHaEfMh0oJ2NXaQIPACLlQf76KfjCvKWnu
+         LDRDQMCx5vSdrDDlp9D8sErfOzMqQA53ySRD2UaHC2soBAT6jL8lt2jmKQS++u33spS0
+         1uwwXRxl9NgfOb1HIvsaX9uoJPtcKU7Y1+zvbb/5KZMdEmPuVSxELyVITixZBSUFHHXl
+         h03Q==
+X-Gm-Message-State: AOAM531FUqbVbAEnQHkZGxN1Ga1Og5APkmjJtqmOKsPWOuXfY2aSF/RK
+        WrLQEaN4I0qYjWaLPfjVOkjPpg==
+X-Google-Smtp-Source: ABdhPJwVzYL1UQPOH/4RSv5TmHfWB0asqQS0YhgzVMrD3TxBJm6Hk4t0oFwbvMggZ3JefG0eQK20dg==
+X-Received: by 2002:a17:90b:883:: with SMTP id bj3mr3782396pjb.184.1600954105607;
+        Thu, 24 Sep 2020 06:28:25 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id d193sm2968491pfd.181.2020.09.24.06.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2020 06:28:24 -0700 (PDT)
+Message-ID: <5f6c9ef8.1c69fb81.38df2.7938@mx.google.com>
+Date:   Thu, 24 Sep 2020 06:28:24 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.9-rc6-37-ga31d518ec481
+Subject: pm/testing baseline: 117 runs,
+ 2 regressions (v5.9-rc6-37-ga31d518ec481)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23-09-20, 15:48, Rafael J. Wysocki wrote:
-> On Wed, Sep 16, 2020 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > In order to prepare for lock-less stats update, add support to defer any
-> > updates to it until cpufreq_stats_record_transition() is called.
-> 
-> This is a bit devoid of details.
-> 
-> I guess you mean reset in particular, but that's not clear from the above.
+pm/testing baseline: 117 runs, 2 regressions (v5.9-rc6-37-ga31d518ec481)
 
-We used to update the stats from two places earlier, reset and
-show_time_in_state, the later got removed with this patch.
+Regressions Summary
+-------------------
 
-> Also, it would be useful to describe the design somewhat.
+platform         | arch  | lab           | compiler | defconfig          | =
+results
+-----------------+-------+---------------+----------+--------------------+-=
+-------
+panda            | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | =
+4/5    =
 
-Okay. I will work on it.
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
+82/88  =
 
-> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> >  drivers/cpufreq/cpufreq_stats.c | 75 ++++++++++++++++++++++++---------
-> >  1 file changed, 56 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> > index 94d959a8e954..3e7eee29ee86 100644
-> > --- a/drivers/cpufreq/cpufreq_stats.c
-> > +++ b/drivers/cpufreq/cpufreq_stats.c
-> > @@ -22,17 +22,22 @@ struct cpufreq_stats {
-> >         spinlock_t lock;
-> >         unsigned int *freq_table;
-> >         unsigned int *trans_table;
-> > +
-> > +       /* Deferred reset */
-> > +       unsigned int reset_pending;
-> > +       unsigned long long reset_time;
-> >  };
-> >
-> > -static void cpufreq_stats_update(struct cpufreq_stats *stats)
-> > +static void cpufreq_stats_update(struct cpufreq_stats *stats,
-> > +                                unsigned long long time)
-> >  {
-> >         unsigned long long cur_time = get_jiffies_64();
-> >
-> > -       stats->time_in_state[stats->last_index] += cur_time - stats->last_time;
-> > +       stats->time_in_state[stats->last_index] += cur_time - time;
-> >         stats->last_time = cur_time;
-> >  }
-> >
-> > -static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
-> > +static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
-> >  {
-> >         unsigned int count = stats->max_state;
-> >
-> > @@ -41,42 +46,67 @@ static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
-> >         memset(stats->trans_table, 0, count * count * sizeof(int));
-> >         stats->last_time = get_jiffies_64();
-> >         stats->total_trans = 0;
-> > +
-> > +       /* Adjust for the time elapsed since reset was requested */
-> > +       WRITE_ONCE(stats->reset_pending, 0);
-> 
-> What if this runs in parallel with store_reset()?
-> 
-> The latter may update reset_pending to 1 before the below runs.
-> Conversely, this may clear reset_pending right after store_reset() has
-> set it to 1, but before it manages to set reset_time.  Is that not a
-> problem?
 
-What I tried to do here with reset_time is to capture the delta time-in-state
-that has elapsed since the last time reset was called and reset was actually
-performed, so we keep showing it in stats.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc6=
+-37-ga31d518ec481/plan/baseline/
 
-In the first race you mentioned, whatever update we make here won't matter much
-as reset-pending will be 1 and so below stats will not be used anywhere.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.9-rc6-37-ga31d518ec481
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      a31d518ec48107762495760932218e57b2038289 =
 
-In the second race, we may get the delta time-in-state wrong, since this is just
-stats it shouldn't matter much. But still I think we need to fix the way we do
-reset as you pointed out. More later.
 
-> > +       cpufreq_stats_update(stats, stats->reset_time);
-> >
-> >         spin_unlock(&stats->lock);
-> >  }
-> >
-> >  static ssize_t show_total_trans(struct cpufreq_policy *policy, char *buf)
-> >  {
-> > -       return sprintf(buf, "%d\n", policy->stats->total_trans);
-> > +       struct cpufreq_stats *stats = policy->stats;
-> > +
-> > +       if (READ_ONCE(stats->reset_pending))
-> > +               return sprintf(buf, "%d\n", 0);
-> > +       else
-> > +               return sprintf(buf, "%d\n", stats->total_trans);
-> >  }
-> >  cpufreq_freq_attr_ro(total_trans);
-> >
-> >  static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
-> >  {
-> >         struct cpufreq_stats *stats = policy->stats;
-> > +       bool pending = READ_ONCE(stats->reset_pending);
-> > +       unsigned long long time;
-> >         ssize_t len = 0;
-> >         int i;
-> >
-> >         if (policy->fast_switch_enabled)
-> >                 return 0;
-> >
-> > -       spin_lock(&stats->lock);
-> > -       cpufreq_stats_update(stats);
-> > -       spin_unlock(&stats->lock);
-> > -
-> >         for (i = 0; i < stats->state_num; i++) {
-> > +               if (pending) {
-> > +                       if (i == stats->last_index)
-> > +                               time = get_jiffies_64() - stats->reset_time;
-> 
-> What if this runs in parallel with store_reset() and reads reset_time
-> before the latter manages to update it?
 
-We should update reset-time first I think. More later.
+Test Regressions
+---------------- =
 
-> > +                       else
-> > +                               time = 0;
-> > +               } else {
-> > +                       time = stats->time_in_state[i];
-> > +                       if (i == stats->last_index)
-> > +                               time += get_jiffies_64() - stats->last_time;
-> > +               }
-> > +
-> >                 len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
-> > -                       (unsigned long long)
-> > -                       jiffies_64_to_clock_t(stats->time_in_state[i]));
-> > +                              jiffies_64_to_clock_t(time));
-> >         }
-> >         return len;
-> >  }
-> >  cpufreq_freq_attr_ro(time_in_state);
-> >
-> > +/* We don't care what is written to the attribute */
-> >  static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
-> >                            size_t count)
-> >  {
-> > -       /* We don't care what is written to the attribute. */
-> > -       cpufreq_stats_clear_table(policy->stats);
-> > +       struct cpufreq_stats *stats = policy->stats;
-> > +
-> > +       /*
-> > +        * Defer resetting of stats to cpufreq_stats_record_transition() to
-> > +        * avoid races.
-> > +        */
-> > +       WRITE_ONCE(stats->reset_pending, 1);
-> > +       stats->reset_time = get_jiffies_64();
-> 
-> AFAICS, there is nothing to ensure that reset_time will be updated in
-> one go and even to ensure that it won't be partially updated before
-> setting reset_pending.
-> 
-> This should at least be addressed in a comment to explain why it is
-> not a problem.
 
-I propose something like this for it:
 
-       WRITE_ONCE(stats->reset_time, get_jiffies_64());
-       WRITE_ONCE(stats->reset_pending, 1);
+platform         | arch  | lab           | compiler | defconfig          | =
+results
+-----------------+-------+---------------+----------+--------------------+-=
+-------
+panda            | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | =
+4/5    =
 
-Whatever race happens here, the worst would be like getting time-in-state for
-one of the frequencies wrong only once and I don't think that should be a
-real problem as this is just stats and won't make the kernel behave badly.
 
-> > +
-> >         return count;
-> >  }
-> >  cpufreq_freq_attr_wo(reset);
-> > @@ -84,8 +114,9 @@ cpufreq_freq_attr_wo(reset);
-> >  static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
-> >  {
-> >         struct cpufreq_stats *stats = policy->stats;
-> > +       bool pending = READ_ONCE(stats->reset_pending);
-> >         ssize_t len = 0;
-> > -       int i, j;
-> > +       int i, j, count;
-> >
-> >         if (policy->fast_switch_enabled)
-> >                 return 0;
-> > @@ -113,8 +144,13 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
-> >                 for (j = 0; j < stats->state_num; j++) {
-> >                         if (len >= PAGE_SIZE)
-> >                                 break;
-> > -                       len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ",
-> > -                                       stats->trans_table[i*stats->max_state+j]);
-> > +
-> > +                       if (pending)
-> > +                               count = 0;
-> > +                       else
-> > +                               count = stats->trans_table[i * stats->max_state + j];
-> > +
-> > +                       len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ", count);
-> >                 }
-> >                 if (len >= PAGE_SIZE)
-> >                         break;
-> > @@ -228,10 +264,11 @@ void cpufreq_stats_record_transition(struct cpufreq_policy *policy,
-> >         struct cpufreq_stats *stats = policy->stats;
-> >         int old_index, new_index;
-> >
-> > -       if (!stats) {
-> > -               pr_debug("%s: No stats found\n", __func__);
-> > +       if (!stats)
-> >                 return;
-> > -       }
-> > +
-> > +       if (READ_ONCE(stats->reset_pending))
-> > +               cpufreq_stats_reset_table(stats);
-> 
-> This is a bit confusing, because cpufreq_stats_reset_table() calls
-> cpufreq_stats_update() and passes reset_time to it, but it is called
-> again below with last_time as the second arg.
-> 
-> It is not particularly clear to me why this needs to be done this way.
+  Details:     https://kernelci.org/test/plan/id/5f6c95d7fcb491cd43bf9ddf
 
-Because we need to account for the elapsed time-in-state, for the currently
-running frequency.
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc6-37-ga31d51=
+8ec481/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc6-37-ga31d51=
+8ec481/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
 
-When reset-stats is called, we note down the reset-time, then if reset was
-pending then we call reset-table which calls cpufreq_stats_update(reset_time),
-and so we account for the elapsed time in current state, where we also update
-last-time.
 
-The second call here won't update much in case reset was pending, but will
-update normally otherwise.
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f6c95d7fcb491c=
+d43bf9de5
+      failing since 35 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
+ v5.9-rc1-4-g1f08d51cd57f)
+      60 lines
 
--- 
-viresh
+    2020-09-24 12:49:21.521000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c802
+    2020-09-24 12:49:21.527000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c803
+    2020-09-24 12:49:21.533000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c804
+    2020-09-24 12:49:21.539000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c805
+    2020-09-24 12:49:21.544000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c806
+    2020-09-24 12:49:21.551000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c807
+    2020-09-24 12:49:21.556000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c808
+    2020-09-24 12:49:21.563000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c809
+    2020-09-24 12:49:21.568000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80a
+    2020-09-24 12:49:21.575000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80b
+    ... (49 line(s) more)
+      =
+
+
+
+platform         | arch  | lab           | compiler | defconfig          | =
+results
+-----------------+-------+---------------+----------+--------------------+-=
+-------
+rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig          | =
+82/88  =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f6c9490ead7013653bf9dd7
+
+  Results:     82 PASS, 6 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc6-37-ga31d51=
+8ec481/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc6-37-ga31d51=
+8ec481/arm64/defconfig/gcc-8/lab-collabora/baseline-rk3399-gru-kevin.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.bootrr.rockchip-dp-probed: https://kernelci.org/test/case/id/5=
+f6c9490ead7013653bf9e06
+      new failure (last pass: v5.9-rc6-35-g5dee22f9d504)
+
+    2020-09-24 12:43:55.606000  /lava-2651837/1/../bin/lava-test-case
+      =20
