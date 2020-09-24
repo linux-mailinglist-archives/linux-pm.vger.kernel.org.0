@@ -2,160 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F082762FD
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Sep 2020 23:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6FE2764D8
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 02:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgIWVUX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Sep 2020 17:20:23 -0400
-Received: from mail-eopbgr670051.outbound.protection.outlook.com ([40.107.67.51]:9040
-        "EHLO CAN01-TO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726265AbgIWVUX (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 23 Sep 2020 17:20:23 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bfCVy4dmx/9qsELszYqJzRThHo3djuGvqmGteddKSenWXd8MWERYjbPOXyZ5SL2A+mqhu5Y5wJjsfSdideFt+WZ/WfUH8YbEr1ClPG27kkfjgiJYb2imZiinvjI44zWx4lG0uazeq5sAc0OGPr9atoZWY6psa/pa+YbaqU4hPNnQvalpi0sAx8xuwAgo47ApSoBceBbwQkHft57ShLjx6iTSTmCyTD3UaloYODISOHHdc9fwD9gFcVXp4lROVOC+NHoG2uiFJoOzToH+YwIgxyi3spS8BN6urrBRdrIm3FlYqvy8Qz/wdbSxb5i8/2DZ7C89gIXsV8izOeHSQMBfXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RJPnbUtu+RpgiUXMowQN1sU8q+Co6nnzDgAHeyfHYhA=;
- b=XmgBqV53QbE/ADWKLlTvcVxTNl6FqZLvOUfMcQBxj2rbG4LrPcsGpflqcx2i3JG5c3quZH1aY+xZpx1sFeefQ+ZGYElnXcCmBt/HCFqGSbsMwdi0/QJqxf/A09mUECm53SMz3JeOAI+DM+PiQd34aAhnCYkeYM3+wCxKv6ZkpchzNicuAnGez+oSNEybA8Dmnfm62Ii85s15ghtJu06MThBSfCgn7UXj+wY0fW4Zqi6/gAeEB931uwS0H6FSd0FRmRlUB8vBOetgvqJ1G1J0L5xQ9DHlE1QXD2cVqSfoc+brwwcYIzPu9/UfsZA6TLvrwBMNVRYXQfi1LP/lJudkBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
- dkim=pass header.d=calian.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RJPnbUtu+RpgiUXMowQN1sU8q+Co6nnzDgAHeyfHYhA=;
- b=fC52KGlOK8pM9GpAWEsH/kDWLOBcYxz9HOprFuQGQwpFH7M3BDLykeJO5KutBQAoPFI3sVtR/+8BIjr5CpNbQawfbeX8n6P/4ruzszJoINBk/JgyzwZqLmghdBzjIC4D+XrDm81nisIODeYs+odzByc31XrdNSFzBI/7rtETCl8=
-Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:f::20)
- by YTBPR01MB2607.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:1b::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22; Wed, 23 Sep
- 2020 21:20:20 +0000
-Received: from YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::5c60:6462:fef4:793]) by YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::5c60:6462:fef4:793%3]) with mapi id 15.20.3391.026; Wed, 23 Sep 2020
- 21:20:20 +0000
-From:   Robert Hancock <robert.hancock@calian.com>
-To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: WARNING in clk_core_disable and clk_core_unprepare with imx6q-cpufreq
- and schedutil governor
-Thread-Topic: WARNING in clk_core_disable and clk_core_unprepare with
- imx6q-cpufreq and schedutil governor
-Thread-Index: AQHWke5228P8yefMLEywWtwegYabrQ==
-Date:   Wed, 23 Sep 2020 21:20:20 +0000
-Message-ID: <YT1PR01MB35468E99C4BFF62C0A039DC1EC380@YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM>
-Accept-Language: en-CA, en-US
-Content-Language: en-CA
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=calian.com;
-x-originating-ip: [2604:3d09:e37f:fce0::d4a]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1eb99011-e22b-4be3-8fb2-08d8600679e9
-x-ms-traffictypediagnostic: YTBPR01MB2607:
-x-microsoft-antispam-prvs: <YTBPR01MB2607BC3E501CB1CB7BDD1AB4EC380@YTBPR01MB2607.CANPRD01.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sTyx1Vq2aNBPOCEuQ958KVThVlZqMN39Cww06iddi3Mp4phrTbu8Uf6QKPreW1GG2ekpQTuLErrA61zRt6ZqmC93qiQI91mB0NK1RZrnaIvvplm7iysGR8r4efKTV8TajiC/DsGrDsJnSQqCOkydFgiZnQa7fgfEE1uvY6MuAtAoSItP90cf/KGjUrarOR010RX5eT/sHPTBXwb/s70bW/pdpJvIHFQWY6BEzdXnRtUsmyQLJhtA5zZWRJLPKm8zapAiASr7iLK3coY7L92R1/nf2N6MqAqvyUK/vEwhbQ7dHolGol3Mb2QkBEJ6iQpRwVJCmMqApN43xNkPyQW0GB5P+xBL3HPpQbfoNOyuKb+lIFvPBKuItx2/iBfEXGcRtia8GHOIRpf7oRt+6yraAQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(136003)(366004)(39850400004)(396003)(55016002)(86362001)(6506007)(7696005)(71200400001)(66476007)(66946007)(66556008)(186003)(8676002)(76116006)(5660300002)(9686003)(8936002)(316002)(2906002)(33656002)(110136005)(52536014)(66446008)(64756008)(44832011)(45080400002)(83380400001)(478600001)(58493002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: 461X1X3wCa3iZHqwyLyAv/zxjOn5yeVtpSOLhggtLW80w94G8A2lq4PvS7gNU5RfcU4SRx8JdlpxaY6d0pfaIGCgl6GBZHi+pzJ+oW0/ZHkLsMuiOWXRjW4RAdgNuAraFDEAqeKYUuAeharq+qwIQDtZeuTH98LTzEsqw9QPJ4zSFcsaDA2ueyQDJIIACZyBv1hwCCWAi0c6lzp1DmzZzsTDpy0qIFX1U2Lq9auBPgWsMdw3gWd+IUlOWNb7dnSx4ZG9SneLRPU+1kD4DFjouQXmBQpAd+pjrapXF8stzzCrr0nT0PCYOLCrbiMfBmyoSl/76+9aNluoqrikbDcy/f0+PQptKe0gB4aXq6cSjcnaZKFYDJQyiX1hHnv8Qx0hV+/fQN5N7EOqCTZ4hukPPFCnagb+nFnTiXJu/yzlWzHEoy2M1yA+AB+fHr73JkZDVaveA27tL7gmLZ7PGcIFNlovVK1GiInIwXUnHcQnTVGiRl/DoKtkA4tiPwPO8XTj/hhot3Cl0ontGAwVqGGU+JDoAcmHKgt3Vec2RMejJ6Vac4Jet0Tb9BYgqQCOQAWbZWD67o0Sb+KY/OYCMOgm+lNvkGIcN/VMLZTZNyvKIy+GzMaAiYIVFWCR+yWBLqslvqYvdofr1OsIqOJmWh1tTMTpPHyBYee1tA9eUml6iw4=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1726621AbgIXADP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Sep 2020 20:03:15 -0400
+Received: from mo-csw1516.securemx.jp ([210.130.202.155]:44786 "EHLO
+        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbgIXADP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Sep 2020 20:03:15 -0400
+Received: by mo-csw.securemx.jp (mx-mo-csw1516) id 08O02lcW002993; Thu, 24 Sep 2020 09:02:47 +0900
+X-Iguazu-Qid: 34trYbPuXK3Y6WokyV
+X-Iguazu-QSIG: v=2; s=0; t=1600905766; q=34trYbPuXK3Y6WokyV; m=0KDuZXTtA84FWvgU79W3hotyFURS5UbU6LM7nkZ0KNg=
+Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
+        by relay.securemx.jp (mx-mr1511) id 08O02iHp036909;
+        Thu, 24 Sep 2020 09:02:44 +0900
+Received: from enc01.toshiba.co.jp ([106.186.93.100])
+        by imx2.toshiba.co.jp  with ESMTP id 08O02iOw020352;
+        Thu, 24 Sep 2020 09:02:44 +0900 (JST)
+Received: from hop001.toshiba.co.jp ([133.199.164.63])
+        by enc01.toshiba.co.jp  with ESMTP id 08O02h4O023471;
+        Thu, 24 Sep 2020 09:02:43 +0900
+From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
+        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
+References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
+        <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
+        <20200923140512.GJ28545@zn.tnic>
+Date:   Thu, 24 Sep 2020 09:02:42 +0900
+In-Reply-To: <20200923140512.GJ28545@zn.tnic> (Borislav Petkov's message of
+        "Wed, 23 Sep 2020 16:05:12 +0200")
+X-TSB-HOP: ON
+Message-ID: <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YT1PR01MB3546.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1eb99011-e22b-4be3-8fb2-08d8600679e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2020 21:20:20.3995
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: New6tSYCgAxlCbyqZ8w8sLWKmSs/bkqFcboq2qAr3IAsRB1rfbBu5Y/IpsEzANfrNXc0tl6xZ08THGuVgIeIGUpXgsvwSuICckdEVBgH8ww=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YTBPR01MB2607
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello, I have been trying out the schedutil governor using a 5.4.61 kernel =
-on an iMX6D platform, but am occasionally seeing the warnings below in the =
-kernel log. Is this a known issue? I didn't notice any relevant changes to =
-imx6q-cpufreq between 5.4 and master.=0A=
-=0A=
-------------[ cut here ]------------=0A=
-WARNING: CPU: 1 PID: 166 at drivers/clk/clk.c:958 clk_core_disable+0xc4/0xc=
-c=0A=
-pll1_sys already disabled=0A=
-Modules linked in: sed_fan_monitor(O) sed_axi_dma_sg(O) sed_pcie_axi(O)=0A=
-CPU: 1 PID: 166 Comm: sugov:0 Tainted: G           O      5.4.61 #2=0A=
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)=0A=
-[<c0110a74>] (unwind_backtrace) from [<c010b924>] (show_stack+0x10/0x14)=0A=
-[<c010b924>] (show_stack) from [<c06e2d20>] (dump_stack+0x90/0xa4)=0A=
-[<c06e2d20>] (dump_stack) from [<c01214ec>] (__warn+0xbc/0xd8)=0A=
-[<c01214ec>] (__warn) from [<c01215a0>] (warn_slowpath_fmt+0x98/0xc4)=0A=
-[<c01215a0>] (warn_slowpath_fmt) from [<c03ef9d0>] (clk_core_disable+0xc4/0=
-xcc)=0A=
-[<c03ef9d0>] (clk_core_disable) from [<c03efac8>] (clk_core_disable_lock+0x=
-18/0x24)=0A=
-[<c03efac8>] (clk_core_disable_lock) from [<c051e4c0>] (imx6q_set_target+0x=
-4a8/0x500)=0A=
-[<c051e4c0>] (imx6q_set_target) from [<c0518568>] (__cpufreq_driver_target+=
-0x220/0x534)=0A=
-[<c0518568>] (__cpufreq_driver_target) from [<c0164dd8>] (sugov_work+0x48/0=
-x54)=0A=
-[<c0164dd8>] (sugov_work) from [<c013f9e8>] (kthread_worker_fn+0xf8/0x1fc)=
-=0A=
-[<c013f9e8>] (kthread_worker_fn) from [<c0140680>] (kthread+0x150/0x190)=0A=
-[<c0140680>] (kthread) from [<c01010e8>] (ret_from_fork+0x14/0x2c)=0A=
-Exception stack(0xecb97fb0 to 0xecb97ff8)=0A=
-7fa0:                                     00000000 00000000 00000000 000000=
-00=0A=
-7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 000000=
-00=0A=
-7fe0: 00000000 00000000 00000000 00000000 00000013 00000000=0A=
----[ end trace 37734437c8c6ed11 ]---=0A=
-------------[ cut here ]------------=0A=
-WARNING: CPU: 1 PID: 166 at drivers/clk/clk.c:816 clk_core_unprepare+0xec/0=
-x148=0A=
-pll1_sys already unprepared=0A=
-Modules linked in: sed_fan_monitor(O) sed_axi_dma_sg(O) sed_pcie_axi(O)=0A=
-CPU: 1 PID: 166 Comm: sugov:0 Tainted: G        W  O      5.4.61 #2=0A=
-Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)=0A=
-[<c0110a74>] (unwind_backtrace) from [<c010b924>] (show_stack+0x10/0x14)=0A=
-[<c010b924>] (show_stack) from [<c06e2d20>] (dump_stack+0x90/0xa4)=0A=
-[<c06e2d20>] (dump_stack) from [<c01214ec>] (__warn+0xbc/0xd8)=0A=
-[<c01214ec>] (__warn) from [<c01215a0>] (warn_slowpath_fmt+0x98/0xc4)=0A=
-[<c01215a0>] (warn_slowpath_fmt) from [<c03f0ca4>] (clk_core_unprepare+0xec=
-/0x148)=0A=
-[<c03f0ca4>] (clk_core_unprepare) from [<c03f14f8>] (clk_unprepare+0x24/0x2=
-c)=0A=
-[<c03f14f8>] (clk_unprepare) from [<c051e4c8>] (imx6q_set_target+0x4b0/0x50=
-0)=0A=
-[<c051e4c8>] (imx6q_set_target) from [<c0518568>] (__cpufreq_driver_target+=
-0x220/0x534)=0A=
-[<c0518568>] (__cpufreq_driver_target) from [<c0164dd8>] (sugov_work+0x48/0=
-x54)=0A=
-[<c0164dd8>] (sugov_work) from [<c013f9e8>] (kthread_worker_fn+0xf8/0x1fc)=
-=0A=
-[<c013f9e8>] (kthread_worker_fn) from [<c0140680>] (kthread+0x150/0x190)=0A=
-[<c0140680>] (kthread) from [<c01010e8>] (ret_from_fork+0x14/0x2c)=0A=
-Exception stack(0xecb97fb0 to 0xecb97ff8)=0A=
-7fa0:                                     00000000 00000000 00000000 000000=
-00=0A=
-7fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 000000=
-00=0A=
-7fe0: 00000000 00000000 00000000 00000000 00000013 00000000=0A=
----[ end trace 37734437c8c6ed12 ]---=0A=
-=0A=
-=0A=
---=A0=0A=
-=0A=
-Robert Hancock =0A=
-Senior Hardware Designer =0A=
-Calian - SED =
+Borislav Petkov <bp@alien8.de> writes:
+
+> Smita,
+>
+> pls sync the time of the box where you create the patch:
+>
+>  Date: Fri,  4 Sep 2020 09:04:44 -0500
+>
+> but your mail headers have:
+>
+>  Received: from ... with mapi id 15.20.3370.019; Fri, 18 Sep 2020 14:49:12 +0000
+>  						^^^^^^^^^^^^^^^^^^
+>
+> On Wed, Sep 23, 2020 at 07:07:17PM +0900, Punit Agrawal wrote:
+>> I know Boris asked you to add the reason for the Reported-by, but
+>> usually we don't track version differences in the committed patch.
+>> 
+>> Boris, can you confirm if you want the Reported-by to be retained?
+>
+> How else would you explain what the Reported-by: tag is for on a patch
+> which adds a feature?
+
+As Ard clarified, I was questioning the inclusion of the Reported-by:
+tag in the patch itself. But I also don't have enough of a strong
+opinion to obsess about it.
+
+[ Aside: One interesting consequence of this though is that by the same
+argument, changes resulting from comments on earlier versions are also
+legitimate content for the final patch. Not saying I agree. ]
+
+>
+>> > + * The first expected register in the register layout of MCAX address space.
+>> > + * The address defined must match with the first MSR address extracted from
+>> > + * BERT which in SMCA systems is the bank's MCA_STATUS register.
+>> > + *
+>> > + * Note that the decoding of the raw MSR values in BERT is implementation
+>> > + * specific and follows register offset order of MCAX address space.
+>> > + */
+>> > +#define MASK_MCA_STATUS 0xC0002001
+>> 
+>> The macro value is already defined in mce.h as
+>> MSR_AMD64_SMCA_MC0_STATUS.  Is there any reason to not use it?
+>
+> Good point.
+>
+>> You can move the comment to where you check the status register.
+>
+> No need if he really wants to use the first MCi_STATUS address.
+>
+>> > +	m.apicid = lapic_id;
+>> > +	m.bank = (ctx_info->msr_addr >> 4) & 0xFF;
+>> > +	m.status = *i_mce;
+>> > +	m.addr = *(i_mce + 1);
+>> > +	m.misc = *(i_mce + 2);
+>> > +	/* Skipping MCA_CONFIG */
+>> > +	m.ipid = *(i_mce + 4);
+>> > +	m.synd = *(i_mce + 5);
+>> 
+>> Instead of using the raw pointer arithmetic, it is better to define a
+>> structure for the MCA registers? Something like -
+>> 
+>>     struct {
+>>         u64 addr;
+>>         u64 misc;
+>>         u64 config;
+>>         u64 ipid;
+>>         ...
+>>     }
+>> 
+>> Checking back, this was mentioned in the previous review comments as
+>> well. Please address all comments before posting a new version - either
+>> by following the suggestion or explaining why it is not a good idea.
+>
+> Well, that was addressed in his reply last time:
+>
+> https://lkml.kernel.org/r/a28aa613-8353-0052-31f6-34bc733abf59@amd.com
+
+Oops. My bad - sorry I missed the response.
+
+Copying the relevant comment here for discussion -
+
+>>> The registers here are implementation specific and applies only for
+>>> SMCA systems. So I have used pointer arithmetic as it is not defined
+>>> in the spec.
+
+Even though it's not defined in the UEFI spec, it doesn't mean a
+structure definition cannot be created. After all, the patch is relying
+on some guarantee of the meaning of the values and their ordering.
+
+If the patch is relying on the definitions in the SMCA spec it is a good
+idea to reference it here - both for review and providing relevant
+context for future developers.
+
+> You might've missed it because you weren't CCed directly.
+
+Indeed, I missed it. Thanks for the pointer.
+
+Cheers,
+Punit
