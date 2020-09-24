@@ -2,108 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B07C4276CCE
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 11:07:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB54B276CE9
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Sep 2020 11:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727314AbgIXJH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Sep 2020 05:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S1727330AbgIXJPH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Sep 2020 05:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbgIXJH1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 05:07:27 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F4CC0613CE
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:07:27 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id a16so1653004vsp.12
-        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:07:26 -0700 (PDT)
+        with ESMTP id S1727328AbgIXJPB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Sep 2020 05:15:01 -0400
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com [IPv6:2a00:1450:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6785BC0613DC
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
+Received: by mail-ed1-x543.google.com with SMTP id k14so2663281edo.1
+        for <linux-pm@vger.kernel.org>; Thu, 24 Sep 2020 02:15:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/X7t9uVIEd+S4xSIbror7zIP86C/H0V5Buw9Pzp4CZQ=;
-        b=IZ3+kGRz+xW/GPCA5Ct34Vn6POsjNIyMIC2BJf25muLLT1VW+fy9hPEApxK+ov//uW
-         lLPpwShllPTEp/t+51PPukiPuRNiI0MDzcQl9B5wEVqspVLEfA2x4mF9h5q27fLuEUr/
-         JPggxVugLZuzBZU8rXEkSz3pCfWLGnXKaCKemSygdQszB7ZDsqY7Q1tY2B/KT58is8md
-         N54rjXlWGNRw91+Vg3aIe6mBpgkmmi8Ox5krSuqAi7HS5+rvaXqMwZcjIbqu0pyzKttP
-         Jv+fGUe/vOzCvjTenc0Yrfy9e2wDyh+UNoY/eQidXc7wHzv2po4QmFV7TUkKrBAmC2Ht
-         BQXw==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=blIPJEbomAKiMgTEwz666YDx51JxK5KUKkCacV2k5DGrYF1dgoN3TPlbCce3UdPyqn
+         l+sjX0//ZpWoRSpXvagCpGylKqMTkNMo/2HAZJY28dwC1rti3ofKw4Z1RDbjcvxMDnbn
+         DBnAhALu6UdIa4wCDzo7dIv9qp2U03O4u7rDCQdwmjFPbrVpv5bepecSdGtwKnTJB9rH
+         nH/oGusFJ6JM43Xna+7eDdLYcEoJL8AsTmou4kcpDb2UtDY0KPfodc/NGQ4TUEcOm3hs
+         6cMsgEJtG/d3gouoUvTe4+Wy9RSjcJnO5Ygg3P7zVsSedlaT/hDy9teH4tkT8r3LGB8W
+         6cvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/X7t9uVIEd+S4xSIbror7zIP86C/H0V5Buw9Pzp4CZQ=;
-        b=mQqo5NgMwBMNOro0nbGwxzyexnNLSIO/gE0cct3AkZ8qC2i8mQAubWOYRrUbS0eBML
-         qszq83zKHutFeXe3MPv9kAZpBx4fLrLa4sYnUrGu9mheT9MCoU0+s5/QY8rRLzjHbQ2e
-         QOAgzDrHNw/wxYYVFwzPojUi7Zoh+D5UIsv8ZiYKp4FYtw7/eghF4iSaumTVCCyBNd1G
-         iMA/Xc8vJgxiNBL2HEYkdbizYDD2aVDmOojQ8104ZV4QAG/NTVUqiPQ1yXcL5Gju5MFY
-         gJnOAxNqkSbAfaeNrBSR+OHE/EvciObF591H2L/bBKJ9yqu5c0XevKjwWoTAkxrwRmcN
-         2zmw==
-X-Gm-Message-State: AOAM530qJjJGDjDZ9C/nkGVCF9euWN0TDBk2L8EuH0B0LH1laaloBqLh
-        QE1wGNSdZSSgueX5zltkRIuIMX3bLX+TAOom3dz6Pw==
-X-Google-Smtp-Source: ABdhPJyos8gdOhVSu8Yw+Ta+UgVcQV1l8SNxPLoifsBHaUuGMdJ2eI8bSRsCAI4Ru+05RrslWyoUN9AQu0Xj/PPLRLc=
-X-Received: by 2002:a67:3009:: with SMTP id w9mr3249705vsw.19.1600938446195;
- Thu, 24 Sep 2020 02:07:26 -0700 (PDT)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=RskPpsqla/hZJNRXOErX+i6HdpQjEumfCoNnLMgGNXiDTVnu1NOS7hAlbs9S9fNg2i
+         MqJD4Y+Kmisp488kSTKcd6aoNTaSjL3HpUIq8lWu3YppJp21tFdGYnTc+zbz3FDx5yEd
+         ri2Q28ytVaS8PCbFnDaXtU/t9J/C5j/t61BDqXx6sobTB37F8jkzzJU022SHjdor+n1O
+         h27CJuTO1ZYKPuRDDfCQ6kfdL6TUL1PvlzvhJ17O/6Bvtb94zneTH/Pc9XqzUpPgx6im
+         DxNQX1mgGoQCiLyeI9njqE2nHIMTGwFWPvSUJ0EkKQHMOaeVCHaBQqCyo+NZUVcAiwXt
+         pxqQ==
+X-Gm-Message-State: AOAM533FOI2l4LQcEvBO0swl7cVt/TmiIy8KOC2SDYUzsjk6sUfZvVRC
+        lnYXvjPiwCjjVppqX6Y6CFrSaEZocl4TcDT6uH8=
+X-Google-Smtp-Source: ABdhPJyTPH8PP/2mieNLbOyLqms9pUviMKvSeTWD9wb8h+Pr7H1ZfKMbyjpiQTFtDXkxINcaJ73NV9FfmSogeqXajbU=
+X-Received: by 2002:a05:6402:c15:: with SMTP id co21mr1946edb.268.1600938899597;
+ Thu, 24 Sep 2020 02:14:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200918201633.27017-1-khilman@baylibre.com> <CAJZ5v0gzk_h09kJnWnagAL3E7TVmCqFO2E52Dewwyj6NRgKd=w@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gzk_h09kJnWnagAL3E7TVmCqFO2E52Dewwyj6NRgKd=w@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 24 Sep 2020 11:06:50 +0200
-Message-ID: <CAPDyKFqR6WTt1_p8jTkZVvvBvAGF2ROChfYLvnW8Mu0KUFvhFA@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: drop myself from PM AVS drivers
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: by 2002:a54:2811:0:0:0:0:0 with HTTP; Thu, 24 Sep 2020 02:14:58
+ -0700 (PDT)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <floradarpin.d@gmail.com>
+Date:   Thu, 24 Sep 2020 02:14:58 -0700
+Message-ID: <CAPX4zWxG6--oZzPaoMmta9n5fWHajuiA-wFBP=cbGe-CKGcWaw@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 22 Sep 2020 at 20:10, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Sep 18, 2020 at 10:16 PM Kevin Hilman <khilman@baylibre.com> wrote:
-> >
-> > I haven't had the time or the expertise to adequately review and
-> > maintain these drivers for awhile, so make it official.
->
-> Well, fair enough, so applied as 5.10 material.
->
-> But this means that I'm going to stop picking up AVS drivers changes myself.
->
-> I'll be expecting someone to step in and become a proper maintainer of
-> them and send pull requests either to me or to arm-soc.
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-How about if we instead move these avs drivers to drivers/soc/* instead?
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-There are currently only three avs drivers, they are SoC specific and
-we already have kind of similar drivers in drivers/soc/*.
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-I can take care of the move, to release you from the burden. :-)
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
 
-Kind regards
-Uffe
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
 
->
-> Cheers!
->
-> > Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> > ---
-> >  MAINTAINERS | 1 -
-> >  1 file changed, 1 deletion(-)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index deaafb617361..f1bf6071c438 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -5361,7 +5361,6 @@ F:        include/linux/kobj*
-> >  F:     lib/kobj*
-> >
-> >  DRIVERS FOR ADAPTIVE VOLTAGE SCALING (AVS)
-> > -M:     Kevin Hilman <khilman@kernel.org>
-> >  M:     Nishanth Menon <nm@ti.com>
-> >  L:     linux-pm@vger.kernel.org
-> >  S:     Maintained
-> > --
-> > 2.28.0
-> >
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
