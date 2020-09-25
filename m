@@ -2,106 +2,334 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 098EA2785C2
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 13:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E0F278628
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 13:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728220AbgIYL1F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 07:27:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728148AbgIYL1E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 07:27:04 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B3DC0613D3
-        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 04:27:04 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id s88so1978814ilb.6
-        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 04:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uiVJLOBV5LcmVTiJhnHnDU44FmxZVBCf8/K2rl5lfoU=;
-        b=LwlV686z+l+2FKghH/so8g8fDFpHMDDWt7w5TMBjKRTHi4JZxQnYesIgGqgK+osGu+
-         jx7m6APWPYvpIXXM0+wqcD+vTSMp3roUI0HEJ2khbbImkdDGNP+WbnFsoF6IAHcWquQ+
-         CkPISGcKTwZV1/CiyCAW+aQBD/qZac4B6gbQJICGkgn5LdTByu/g0pPJ7E0z3B1DYoIu
-         lF34X8O3qlAXGAn/gNpNho7olYmveqm1L57mzDm+b/CKvaaLHM+Fnq+dYi3PahkbKhfW
-         Q5QMZJGS8wQsz0oQEVojJNc3DO5NLX1dhbExJjmrOhYm1LqMma0fXmTVM4CITCy54Kxw
-         prOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uiVJLOBV5LcmVTiJhnHnDU44FmxZVBCf8/K2rl5lfoU=;
-        b=Mfi1eq9v7LhWAgO6FXcHQ25BLyetRS41rrMfTu04vfyb/cMqh30IhobhA5Q+jhWnwp
-         V+pukDIvwH3iwUmD/Gg6zhBg/FA5TaGVk44YXft/TCweCLXuorS4vcpeF0/3dQ9xcGo0
-         XOJKunONkJi3GiFzIWvEs+KLBU5AEpgckyuuWrv0rLjqYueJ1bF4vpENFbdIhcKqgq9j
-         Ai8ZGAp5ZkGw1y3X1y+HTJsny8Ql0PuSIMb56cl2w0Sgil2JGh5QSwUAIkWXeGene7fO
-         pkXYlygs2vjSXseHmT35XinOh+U1BQ+8k5qSl1/cbCHhOO8TiXbOXJ5oBjH16QEzdezc
-         q4Bg==
-X-Gm-Message-State: AOAM531/xcaDxMZvQ5p+a9AvJ0qUk4jGo3gGoTtT54oOdHgIbfoPUuCZ
-        GHifohZryvtE+cPNK1ObHC4y4b8CcDxX914a4A3GMg==
-X-Google-Smtp-Source: ABdhPJwRwhqEygDtN+4fhAZ/kjJMmmas2CozDB/Ls+XD0FdOOYj3VCXukeYOfRAyINpvB4gAj20a+yQIoxbxi4s9LuU=
-X-Received: by 2002:a92:5bd0:: with SMTP id c77mr2742659ilg.31.1601033223767;
- Fri, 25 Sep 2020 04:27:03 -0700 (PDT)
+        id S1728361AbgIYLm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 07:42:26 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:62420 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728179AbgIYLm0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 25 Sep 2020 07:42:26 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1601034144; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=9tEzE1V0mHPa1EiuwWlCtSVX3/hfU2/0ETy9LFMC3eI=; b=HDE3+VtELVuOaCzzXOdb4mu1Qg83n83fCjIo44tgKY5P95hFImxwqNvER4K+6GjexfThNCw/
+ akfbl7HPJxeK7WijoW2oslSUejbQgy0oZadCY54n9GmDCA4ACQ1ksIxizEQuZ22Udtnpwzx0
+ K0IFwQHO8qQusvFXH7OH3R1ECXE=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
+ 5f6dd7a099ecd993e1b56366 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Sep 2020 11:42:24
+ GMT
+Sender: jprakash=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D801CC433F1; Fri, 25 Sep 2020 11:42:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.101] (unknown [157.48.192.227])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jprakash)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4C315C433CA;
+        Fri, 25 Sep 2020 11:42:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4C315C433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jprakash@codeaurora.org
+Subject: Re: [PATCH v5 7/9] thermal: qcom: add support for adc-tm5 PMIC
+ thermal monitor
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+References: <20200914154809.192174-1-dmitry.baryshkov@linaro.org>
+ <20200914154809.192174-8-dmitry.baryshkov@linaro.org>
+From:   Jishnu Prakash <jprakash@codeaurora.org>
+Message-ID: <fe3fc299-5f1d-5318-49f6-b8d42d0615da@codeaurora.org>
+Date:   Fri, 25 Sep 2020 17:12:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <cover.1600238586.git.viresh.kumar@linaro.org> <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
- <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
- <20200924131543.eury5vhqy3xt35v6@vireshk-i7> <CAJZ5v0g8Bmxt=GEKcNrKjY1cHnsURV5oe3+n1R2+U_2VJnwfRQ@mail.gmail.com>
- <20200925105830.xsmiwkjohlqb5joj@vireshk-i7> <CAJZ5v0guU0GDs06W98boFpdCopHTiF_ojwTPrZFNP0Bk3DiQXQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0guU0GDs06W98boFpdCopHTiF_ojwTPrZFNP0Bk3DiQXQ@mail.gmail.com>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Fri, 25 Sep 2020 16:56:51 +0530
-Message-ID: <CAKohpo=2Dm3+9XBpmkj5xp1vpamcR5tufc522uSz1Egkmmf-6A@mail.gmail.com>
-Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200914154809.192174-8-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 25 Sep 2020 at 16:39, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Sep 25, 2020 at 12:58 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > On 25-09-20, 12:04, Rafael J. Wysocki wrote:
-> > > I'm actually wondering if reset_time is necessary at all.
-> > >
-> > > If cpufreq_stats_record_transition() is the only updater of the stats,
-> > > which will be the case after applying this series IIUC, it may as well
-> > > simply set the new starting point and discard all of the data
-> > > collected so far if reset_pending is set.
-> > >
-> > > IOW, the time when the reset has been requested isn't particularly
-> > > relevant IMV (and it is not exact anyway), because the user is
-> > > basically asking for discarding "history" and that may very well be
-> > > interpreted to include the current sample.
-> >
-> > There are times when this would be visible to userspace and won't look nice.
-> >
-> > Like, set governor to performance, reset the stats and after 10 seconds, read
-> > the stats again, everything will be 0.
->
-> Unless I'm missing something, the real reset happens when
-> cpufreq_stats_record_transition() runs next time, so the old stats
-> will still be visible at that point, won't they?
+Hi Dmitry,
 
-For userspace the stats shouldn't be visible after reset is requested
-by it and so with
-this series, we check for reset-pending in all the show_*() helpers and print
-stats since the time reset was requested.
+Recently I was testing the ADC_TM driver added with these changes on 
+SC7180 and I could see that this patch needs a few changes, which I'll 
+mention below.
 
-> > Because cpufreq_stats_record_transition()
-> > doesn't get called at all here, we would never clear them until the time
-> > governor is changed and so we need to keep a track of reset-time.
+On 9/14/2020 9:18 PM, Dmitry Baryshkov wrote:
+> Add support for Thermal Monitoring part of PMIC5. This part is closely
+> coupled with ADC, using it's channels directly. ADC-TM support
+> generating interrupts on ADC value crossing low or high voltage bounds,
+> which is used to support thermal trip points.
 >
-> Or trigger a forced update.
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> ---
+>   drivers/iio/adc/qcom-vadc-common.c       |  62 +++
+>   drivers/iio/adc/qcom-vadc-common.h       |   3 +
+>   drivers/thermal/qcom/Kconfig             |  11 +
+>   drivers/thermal/qcom/Makefile            |   1 +
+>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 583 +++++++++++++++++++++++
+>   5 files changed, 660 insertions(+)
+>   create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+>
+> diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
+> index 40d77b3af1bb..e58e393b8713 100644
+> --- a/drivers/iio/adc/qcom-vadc-common.c
+> +++ b/drivers/iio/adc/qcom-vadc-common.c
+> @@ -377,6 +377,42 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
+>   	return 0;
+>   }
+>   
 
-That would add races while updating the actual stats. And so I found the current
-way to be more reliable.
+
+> +static irqreturn_t adc_tm5_isr(int irq, void *data)
+> +{
+> +	struct adc_tm5_chip *chip = data;
+> +	u8 status_low, status_high, ctl;
+> +	int ret = 0, i = 0;
+> +
+> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_LOW, &status_low, 1);
+> +	if (ret) {
+> +		dev_err(chip->dev, "read status low failed with %d\n", ret);
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_HIGH, &status_high, 1);
+> +	if (ret) {
+> +		dev_err(chip->dev, "read status high failed with %d\n", ret);
+> +		return IRQ_HANDLED;
+> +	}
+> +
+> +	for (i = 0; i < chip->nchannels; i++) {
+> +		bool upper_set = false, lower_set = false;
+> +		unsigned int ch = chip->channels[i].channel;
+> +
+> +		if (!chip->channels[i].tzd) {
+> +			dev_err_once(chip->dev, "thermal device not found\n");
+> +			continue;
+> +		}
+> +
+> +		ret = adc_tm5_read(chip, ADC_TM5_M_EN(ch), &ctl, 1);
+> +
+> +		if (ret) {
+> +			dev_err(chip->dev, "ctl read failed with %d\n", ret);
+> +			continue;
+> +		}
+> +
+> +		lower_set = (status_low & BIT(ch)) &&
+> +			(ctl & ADC_TM5_M_MEAS_EN) &&
+> +			(ctl & ADC_TM5_M_LOW_THR_INT_EN);
+> +
+> +		upper_set = (status_high & BIT(ch)) &&
+> +			(ctl & ADC_TM5_M_MEAS_EN) &&
+> +			(ctl & ADC_TM5_M_HIGH_THR_INT_EN);
+> +
+> +		if (upper_set || lower_set)
+> +			thermal_zone_device_update(chip->channels[i].tzd,
+> +						   THERMAL_EVENT_UNSPECIFIED);
+
+When using thermal_zone_device_update here, it internally calls 
+tz->ops->get_temp, which maps to adc_tm5_get_temp defined just below. 
+This in turn calls iio_read_channel_processed, which internally calls a 
+mutex and this results in a mutex being called from atomic context.
+
+To avoid this, the interrupt should be requested as a threaded IRQ.
+
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int adc_tm5_get_temp(void *data, int *temp)
+> +{
+> +	struct adc_tm5_channel *channel = data;
+> +	int ret, milli_celsius;
+> +
+> +	if (!channel || !channel->iio)
+> +		return -EINVAL;
+> +
+> +	ret = iio_read_channel_processed(channel->iio, &milli_celsius);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	*temp = milli_celsius;
+> +
+> +	return 0;
+> +}
+> +
+> +static int adc_tm5_disable_channel(struct adc_tm5_channel *channel)
+> +{
+> +	struct adc_tm5_chip *chip = channel->chip;
+> +	unsigned int reg = ADC_TM5_M_EN(channel->channel);
+> +
+> +	return adc_tm5_reg_update(chip, reg,
+> +			ADC_TM5_M_MEAS_EN | ADC_TM5_M_HIGH_THR_INT_EN | ADC_TM5_M_LOW_THR_INT_EN,
+> +			0);
+> +}
+> +
+> +static int adc_tm5_configure(struct adc_tm5_channel *channel, int low_temp, int high_temp)
+> +{
+> +	struct adc_tm5_chip *chip = channel->chip;
+> +	u8 buf[8];
+> +	u16 reg = ADC_TM5_M_ADC_CH_SEL_CTL(channel->channel);
+> +	int ret = 0;
+> +
+> +	ret = adc_tm5_read(chip, reg, buf, sizeof(buf));
+> +	if (ret) {
+> +		dev_err(chip->dev, "block read failed with %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Update ADC channel select */
+> +	buf[0] = channel->adc_channel;
+> +
+> +	/* Warm temperature corresponds to low voltage threshold */
+> +	if (high_temp != INT_MAX) {
+> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
+> +				chip->data->full_scale_code_volt, high_temp);
+> +
+> +		buf[1] = adc_code & 0xff;
+> +		buf[2] = adc_code >> 8;
+> +		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
+> +	}
+> +
+> +	/* Cool temperature corresponds to high voltage threshold */
+> +	if (low_temp != -INT_MAX) {
+> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
+> +				chip->data->full_scale_code_volt, low_temp);
+> +
+> +		buf[3] = adc_code & 0xff;
+> +		buf[4] = adc_code >> 8;
+> +		buf[7] |= ADC_TM5_M_HIGH_THR_INT_EN;
+> +	}
+> +
+> +	/* Update timer select */
+> +	buf[5] = ADC5_TIMER_SEL_2;
+> +
+> +	/* Set calibration select, hw_settle delay */
+> +	buf[6] &= ~ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK;
+> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK, channel->hw_settle_time);
+> +	buf[6] &= ~ADC_TM5_M_CTL_CAL_SEL_MASK;
+> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_CAL_SEL_MASK, channel->cal_method);
+> +
+> +	buf[7] |= ADC_TM5_M_MEAS_EN;
+> +
+> +	ret = adc_tm5_write(chip, reg, buf, sizeof(buf));
+> +	if (ret)
+> +		dev_err(chip->dev, "buf write failed\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int adc_tm5_set_trips(void *data, int low_temp, int high_temp)
+> +{
+> +	struct adc_tm5_channel *channel = data;
+> +	struct adc_tm5_chip *chip;
+> +	int ret;
+> +
+> +	if (!channel)
+> +		return -EINVAL;
+> +
+> +	chip = channel->chip;
+> +	dev_dbg(chip->dev, "%d:low_temp(mdegC):%d, high_temp(mdegC):%d\n",
+> +		channel->channel, low_temp, high_temp);
+> +
+> +	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
+> +		ret = adc_tm5_disable_channel(channel);
+> +	else
+> +		ret = adc_tm5_configure(channel, low_temp, high_temp);
+In addition to the configurations done in adc_tm5_configure, you also 
+need to write to the registers at 0x3546 (write 0x80 to enable the 
+ADC_TM peripheral overall) and 0x3547 (this is the conversion request 
+strobe, you need to write to bit 7 here too, to initiate the recurring 
+measurements).
+> +
+> +	return ret;
+> +}
+> +
+
+
+
+> +static int adc_tm5_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct device *dev = &pdev->dev;
+> +	struct adc_tm5_chip *adc_tm;
+> +	struct regmap *regmap;
+> +	int ret, irq;
+> +	u32 reg;
+> +
+> +	regmap = dev_get_regmap(dev->parent, NULL);
+> +	if (!regmap)
+> +		return -ENODEV;
+> +
+> +	ret = of_property_read_u32(node, "reg", &reg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	adc_tm = devm_kzalloc(&pdev->dev, sizeof(*adc_tm), GFP_KERNEL);
+> +	if (!adc_tm)
+> +		return -ENOMEM;
+> +
+> +	adc_tm->regmap = regmap;
+> +	adc_tm->dev = dev;
+> +	adc_tm->base = reg;
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0) {
+> +		dev_err(dev, "get_irq failed: %d\n", irq);
+> +		return irq;
+> +	}
+> +
+> +	ret = adc_tm5_get_dt_data(adc_tm, node);
+> +	if (ret) {
+> +		dev_err(dev, "get dt data failed: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = adc_tm5_init(adc_tm);
+> +	if (ret) {
+> +		dev_err(dev, "adc-tm init failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = adc_tm5_register_tzd(adc_tm);
+> +	if (ret) {
+> +		dev_err(dev, "tzd register failed\n");
+> +		return ret;
+> +	}
+> +
+> +	return devm_request_irq(dev, irq, adc_tm5_isr, 0, "pm-adc-tm5", adc_tm);
+The interrupt should be requested with devm_request_threaded_irq, with 
+the existing interrupt handler being given as the threaded function, for 
+the reason mentioned above earlier.
+> +}
+> +
+>
