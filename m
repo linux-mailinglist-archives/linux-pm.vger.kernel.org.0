@@ -2,172 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD867279202
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 22:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A94279435
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 00:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbgIYUVt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 16:21:49 -0400
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:63553 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728778AbgIYUTq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 16:19:46 -0400
+        id S1726807AbgIYW2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 18:28:53 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:13358 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727258AbgIYW2x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 18:28:53 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1601065185; x=1632601185;
-  h=from:subject:to:cc:references:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GHHDInrwsavPs8gmYpvoKhvNpX26ELB7NaKPCnphfu0=;
-  b=XJv80MM1TutIWCcWsLrvBiW44khhJXzN1u2CJL4jNDq4kf0G4OfKsCwc
-   Qp8CxMUeo/zf7O7cUfiyWrrGFYVhsPwDCD2y5+Hj9l8+V1bnhVN6PlcTW
-   oX6AKYRM0x5YmNysEqpTMhZncMtObD3cY1KDnlbzL00rJCdXzMS4oF0vs
-   g=;
+  t=1601072932; x=1632608932;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=H/ByxnyqVs12wa6YXcMkkIXYTiIPz40wHkOjYuHpCoE=;
+  b=jxxR8GZAl/PYVcjcYf5TxvCzVcfaE3jDipdc8L5EAoXs76dkESN0McVa
+   6Bg/mEQn6gKWjvvhJe+HN/GxBoA9hPjpdEK6HMZ/uI04d8McNe9wpXnsC
+   1ekuArqDVz4gEApLOBsm3wv79gmDEksMGV0A+TqrM9K59r6NIKyZUSZMq
+   4=;
 X-IronPort-AV: E=Sophos;i="5.77,303,1596499200"; 
-   d="scan'208";a="71193806"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 25 Sep 2020 19:26:15 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-1d-5dd976cd.us-east-1.amazon.com (Postfix) with ESMTPS id 00B42A209D;
-        Fri, 25 Sep 2020 19:26:13 +0000 (UTC)
-Received: from EX13D12UWA002.ant.amazon.com (10.43.160.88) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 25 Sep 2020 19:26:13 +0000
-Received: from uba0035656cf856.ant.amazon.com (10.43.161.146) by
- EX13D12UWA002.ant.amazon.com (10.43.160.88) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 25 Sep 2020 19:26:13 +0000
-From:   "Chen, Xiaoyi" <cxiaoyi@amazon.com>
-Subject: Re: [PATCH] PM: Batch hibernate and resume IO requests
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     Pavel Machek <pavel@ucw.cz>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Agarwal, Anchal" <anchalag@amazon.com>,
-        "Duncan, David" <davdunc@amazon.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Eric Sandeen <esandeen@redhat.com>
-References: <cc09f36e506145399fe470c71ad34c7c@EX13D12UWA002.ant.amazon.com>
- <CAJZ5v0h-qmKcwis9GSa=ceBUMgkvq1s3XqchPotM_DH2=in6qA@mail.gmail.com>
-Message-ID: <667ded38-06a6-d058-ca22-a53eed384fd4@amazon.com>
-Date:   Fri, 25 Sep 2020 20:26:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.0
+   d="scan'208";a="56168877"
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 25 Sep 2020 22:28:51 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com (Postfix) with ESMTPS id 8D1EC281EA5;
+        Fri, 25 Sep 2020 22:28:44 +0000 (UTC)
+Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
+ EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 25 Sep 2020 22:28:27 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Fri, 25 Sep 2020 22:28:26 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Fri, 25 Sep 2020 22:28:26 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id B1F8B40269; Fri, 25 Sep 2020 22:28:26 +0000 (UTC)
+Date:   Fri, 25 Sep 2020 22:28:26 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <boris.ostrovsky@oracle.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Message-ID: <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
+ <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
+ <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
+ <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
+ <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0h-qmKcwis9GSa=ceBUMgkvq1s3XqchPotM_DH2=in6qA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.43.161.146]
-X-ClientProxiedBy: EX13D23UWA001.ant.amazon.com (10.43.160.68) To
- EX13D12UWA002.ant.amazon.com (10.43.160.88)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/25/20 4:27 PM, Rafael J. Wysocki wrote:
+On Fri, Sep 25, 2020 at 04:02:58PM -0400, boris.ostrovsky@oracle.com wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
 > 
 > 
-> On Tue, Sep 22, 2020 at 6:19 PM Chen, Xiaoyi <cxiaoyi@amazon.com> wrote:
->>
->>
->> Hibernate and resume process submits individual IO requests for each page
->> of the data. With this patch, we use blk_plug to improve the batching of
->> these requests.
->>
->> Tested this patch with hibernate and resumes, and consistently observed the
->> merging of the IO requests. We see more than an order of magnitude
->> improvement in hibernate and resume speed.
->>
->> One hibernate and resume cycle for 16GB used RAM out of 32GB takes around
->> 21 minutes before the change, and 1 minutes after the change on systems
->> with limited storage IOPS.
->>
->> Signed-off-by: Xiaoyi Chen <cxiaoyi@amazon.com>
->> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
->> ---
->>   kernel/power/swap.c | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
->> index 01e2858b5fe3..961615365b5c 100644
->> --- a/kernel/power/swap.c
->> +++ b/kernel/power/swap.c
->> @@ -226,6 +226,7 @@ struct hib_bio_batch {
->>          atomic_t                count;
->>          wait_queue_head_t       wait;
->>          blk_status_t            error;
->> +       struct blk_plug         plug;
->>   };
->>
->>   static void hib_init_batch(struct hib_bio_batch *hb)
->> @@ -233,6 +234,12 @@ static void hib_init_batch(struct hib_bio_batch *hb)
->>          atomic_set(&hb->count, 0);
->>          init_waitqueue_head(&hb->wait);
->>          hb->error = BLK_STS_OK;
->> +       blk_start_plug(&hb->plug);
->> +}
->> +
->> +static void hib_finish_batch(struct hib_bio_batch *hb)
->> +{
->> +       blk_finish_plug(&hb->plug);
->>   }
->>
->>   static void hib_end_io(struct bio *bio)
->> @@ -294,6 +301,10 @@ static int hib_submit_io(int op, int op_flags, pgoff_t page_off, void *addr,
->>
->>   static blk_status_t hib_wait_io(struct hib_bio_batch *hb)
->>   {
->> +       /*
->> +        * We are relying on the behavior of blk_plug that a thread with
->> +        * a plug will flush the plug list before sleeping.
->> +        */
->>          wait_event(hb->wait, atomic_read(&hb->count) == 0);
->>          return blk_status_to_errno(hb->error);
->>   }
->> @@ -561,6 +572,7 @@ static int save_image(struct swap_map_handle *handle,
->>                  nr_pages++;
->>          }
->>          err2 = hib_wait_io(&hb);
->> +       hib_finish_batch(&hb);
->>          stop = ktime_get();
->>          if (!ret)
->>                  ret = err2;
->> @@ -854,6 +866,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
->>                  pr_info("Image saving done\n");
->>          swsusp_show_speed(start, stop, nr_to_write, "Wrote");
->>   out_clean:
->> +       hib_finish_batch(&hb);
->>          if (crc) {
->>                  if (crc->thr)
->>                          kthread_stop(crc->thr);
->> @@ -1084,6 +1097,7 @@ static int load_image(struct swap_map_handle *handle,
->>                  nr_pages++;
->>          }
->>          err2 = hib_wait_io(&hb);
->> +       hib_finish_batch(&hb);
->>          stop = ktime_get();
->>          if (!ret)
->>                  ret = err2;
->> @@ -1447,6 +1461,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
->>          }
->>          swsusp_show_speed(start, stop, nr_to_read, "Read");
->>   out_clean:
->> +       hib_finish_batch(&hb);
->>          for (i = 0; i < ring_size; i++)
->>                  free_page((unsigned long)page[i]);
->>          if (crc) {
->> --
 > 
-> Applied as 5.10 material with some subject and changelog edits, but:
-> 1. The patch is white-space-damaged and I needed to fix that up
-> manually which was not fun.
-> 2. I dropped the second S-o-b, because it was not clear to me whether
-> a Co-developed-by tag was missing or Reviewed-by should have been used
-> instead.
+> On 9/25/20 3:04 PM, Anchal Agarwal wrote:
+> > On Tue, Sep 22, 2020 at 11:17:36PM +0000, Anchal Agarwal wrote:
+> >> On Tue, Sep 22, 2020 at 12:18:05PM -0400, boris.ostrovsky@oracle.com wrote:
+> >>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>>
+> >>>
+> >>>
+> >>> On 9/21/20 5:54 PM, Anchal Agarwal wrote:
+> >>>> Thanks for the above suggestion. You are right I didn't find a way to declare
+> >>>> a global state either. I just broke the above check in 2 so that once we have
+> >>>> support for ARM we should be able to remove aarch64 condition easily. Let me
+> >>>> know if I am missing nay corner cases with this one.
+> >>>>
+> >>>> static int xen_pm_notifier(struct notifier_block *notifier,
+> >>>>       unsigned long pm_event, void *unused)
+> >>>> {
+> >>>>     int ret = NOTIFY_OK;
+> >>>>     if (!xen_hvm_domain() || xen_initial_domain())
+> >>>>       ret = NOTIFY_BAD;
+> >>>>     if(IS_ENABLED(CONFIG_ARM64) && (pm_event == PM_SUSPEND_PREPARE || pm_event == HIBERNATION_PREPARE))
+> >>>>       ret = NOTIFY_BAD;
+> >>>>
+> >>>>     return ret;
+> >>>> }
+> >>>
+> >>>
+> >>> This will allow PM suspend to proceed on x86.
+> >> Right!! Missed it.
+> >> Also, wrt KASLR stuff, that issue is still seen sometimes but I haven't had
+> >> bandwidth to dive deep into the issue and fix it.
 > 
-> Thanks!
 > 
+> So what's the plan there? You first mentioned this issue early this year and judged by your response it is not clear whether you will ever spend time looking at it.
+> 
+I do want to fix it and did do some debugging earlier this year just haven't
+gotten back to it. Also, wanted to understand if the issue is a blocker to this
+series?
+I had some theories when debugging around this like if the random base address picked by kaslr for the
+resuming kernel mismatches the suspended kernel and just jogging my memory, I didn't find that as the case.
+Another hunch was if physical address of registered vcpu info at boot is different from what suspended kernel
+has and that can cause CPU's to get stuck when coming online. The issue was only
+reproducible 3% of the time out of 3000 runs hence its hard to just reproduce this.
 
-Thanks for the prompt review. Apologies for the white-space and tags
-issues, will do better next time.
-
-Would you mind adding following tags if not too late?
-Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-Co-Developed-by: Anchal Agarwal <anchalag@amazon.com>
+Moreover, I also wanted to get an insight on if hibernation works correctly with KASLR
+generally and its only Xen causing the issue?
+> 
+> >>  I seem to have lost your email
+> >> in my inbox hence covering the question here.
+> >>>
+> > Can I add your Reviewed-by or Signed-off-by to it?
+> 
+> 
+> Are you asking me to add my R-b to the broken code above?
+> 
+Of course not!! After its fixed.
+Well can forget it for now then!
+> 
+> -boris
+> 
+Thanks,
+Anchal
