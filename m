@@ -2,141 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A94279435
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 00:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D24279459
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 00:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgIYW2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 18:28:53 -0400
-Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:13358 "EHLO
-        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727258AbgIYW2x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 18:28:53 -0400
+        id S1726412AbgIYWqx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 18:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726348AbgIYWqx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 18:46:53 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C20C0613CE
+        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 15:46:53 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id z18so4657937pfg.0
+        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 15:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1601072932; x=1632608932;
-  h=date:from:to:cc:message-id:references:mime-version:
-   in-reply-to:subject;
-  bh=H/ByxnyqVs12wa6YXcMkkIXYTiIPz40wHkOjYuHpCoE=;
-  b=jxxR8GZAl/PYVcjcYf5TxvCzVcfaE3jDipdc8L5EAoXs76dkESN0McVa
-   6Bg/mEQn6gKWjvvhJe+HN/GxBoA9hPjpdEK6HMZ/uI04d8McNe9wpXnsC
-   1ekuArqDVz4gEApLOBsm3wv79gmDEksMGV0A+TqrM9K59r6NIKyZUSZMq
-   4=;
-X-IronPort-AV: E=Sophos;i="5.77,303,1596499200"; 
-   d="scan'208";a="56168877"
-Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 25 Sep 2020 22:28:51 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-1d-37fd6b3d.us-east-1.amazon.com (Postfix) with ESMTPS id 8D1EC281EA5;
-        Fri, 25 Sep 2020 22:28:44 +0000 (UTC)
-Received: from EX13D08UEB004.ant.amazon.com (10.43.60.142) by
- EX13MTAUEB002.ant.amazon.com (10.43.60.12) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 25 Sep 2020 22:28:27 +0000
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D08UEB004.ant.amazon.com (10.43.60.142) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Fri, 25 Sep 2020 22:28:26 +0000
-Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
- (172.22.96.68) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.2 via Frontend Transport; Fri, 25 Sep 2020 22:28:26 +0000
-Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
-        id B1F8B40269; Fri, 25 Sep 2020 22:28:26 +0000 (UTC)
-Date:   Fri, 25 Sep 2020 22:28:26 +0000
-From:   Anchal Agarwal <anchalag@amazon.com>
-To:     <boris.ostrovsky@oracle.com>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
-        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
-        <kamatam@amazon.com>, <sstabellini@kernel.org>,
-        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
-        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
-        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
-        <eduval@amazon.com>, <sblbir@amazon.com>,
-        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
-Message-ID: <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-References: <4b2bbc8b-7817-271a-4ff0-5ee5df956049@oracle.com>
- <20200914214754.GA19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
- <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
- <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
- <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=IePIZmRYe7JzNQ743sVNUWUPDAUxPkXjHBwOy9UqTVE=;
+        b=lN8rPeMUvkjhcYGUYPuI+/sBKHeRHy0X3Hp4EfWfSIF/ijz9qmUHfJsHwDljBuZK44
+         2WQLUzbqdMiH9i3xUBGaL/+uTwfaywXlkrheHXdEv8rXAXO1ScUyL8VOjMWR2CQxm1hY
+         0rPd6ejTAqSOiDFSJ7xgja/I54zBHCxqPUtmViQ2inhGxhT007ikU6tIxN2c0LvhT+IK
+         Z+6bDU3vV3dZmHQdLOMCkeY563mgE04pDWb5WLpxcQlj9QnG3PRpa/0iSIrb9QajNykb
+         IK8EfpvJaNwxuONK37Yqbwepw5fItQdo3xTjDJhJHR+y6QtKwO4D1z+mYTjT7/8Yl3Jd
+         fzLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=IePIZmRYe7JzNQ743sVNUWUPDAUxPkXjHBwOy9UqTVE=;
+        b=akCJpHIv/8odGbX9RfbQWxKBiUxow1nFyKe6bqJYApDpcCh9MattzzXGHx+meS10zb
+         l1sd8GxevJbC8Ck++Kr7gofCb7Ok8xi96WI5i/THI3d7ChpsJfgSYaztcI2FB/Wq4iad
+         XLjtKxR7DhL554v0I69ctobD5pHUhTy1YiPgZ6CkxYV1jd19Jr6tGOsk9l0bkmYohwmN
+         P0jvqnQ64PcZwgyMcCuNau4IctMOKE4ZGBAc6+tl0G+0W0VAjjQ7OWfpEegNLnB11z/z
+         Emt455m0fFUbqRJKgAMx0TnwRO/sz7B34cjzkEszy4ZQDjT+aUCYDwfxp8mazymlT/4u
+         uPgQ==
+X-Gm-Message-State: AOAM531FtGPVtLHwURPfOm0yfa60+Qd5vjBCxE00d4xTW9hg/nukKiMz
+        6uJLVCNTnxWoDeCoV1NJ2Q5w+w==
+X-Google-Smtp-Source: ABdhPJybSi2K0RLKyKSnr6CIfjZvPsZdnnAsBee2PhvEWknK11GkpCIkledNE8RnJhdGPFGO4gaxMg==
+X-Received: by 2002:a05:6a00:887:b029:142:2501:396f with SMTP id q7-20020a056a000887b02901422501396fmr1333639pfj.52.1601074013130;
+        Fri, 25 Sep 2020 15:46:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x13sm3681301pff.152.2020.09.25.15.46.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 15:46:52 -0700 (PDT)
+Message-ID: <5f6e735c.1c69fb81.36856.a3e3@mx.google.com>
+Date:   Fri, 25 Sep 2020 15:46:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v5.9-rc6-48-g537658447367
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 13 warnings (v5.9-rc6-48-g537658447367)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 04:02:58PM -0400, boris.ostrovsky@oracle.com wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> 
-> 
-> 
-> On 9/25/20 3:04 PM, Anchal Agarwal wrote:
-> > On Tue, Sep 22, 2020 at 11:17:36PM +0000, Anchal Agarwal wrote:
-> >> On Tue, Sep 22, 2020 at 12:18:05PM -0400, boris.ostrovsky@oracle.com wrote:
-> >>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
-> >>>
-> >>>
-> >>>
-> >>> On 9/21/20 5:54 PM, Anchal Agarwal wrote:
-> >>>> Thanks for the above suggestion. You are right I didn't find a way to declare
-> >>>> a global state either. I just broke the above check in 2 so that once we have
-> >>>> support for ARM we should be able to remove aarch64 condition easily. Let me
-> >>>> know if I am missing nay corner cases with this one.
-> >>>>
-> >>>> static int xen_pm_notifier(struct notifier_block *notifier,
-> >>>>       unsigned long pm_event, void *unused)
-> >>>> {
-> >>>>     int ret = NOTIFY_OK;
-> >>>>     if (!xen_hvm_domain() || xen_initial_domain())
-> >>>>       ret = NOTIFY_BAD;
-> >>>>     if(IS_ENABLED(CONFIG_ARM64) && (pm_event == PM_SUSPEND_PREPARE || pm_event == HIBERNATION_PREPARE))
-> >>>>       ret = NOTIFY_BAD;
-> >>>>
-> >>>>     return ret;
-> >>>> }
-> >>>
-> >>>
-> >>> This will allow PM suspend to proceed on x86.
-> >> Right!! Missed it.
-> >> Also, wrt KASLR stuff, that issue is still seen sometimes but I haven't had
-> >> bandwidth to dive deep into the issue and fix it.
-> 
-> 
-> So what's the plan there? You first mentioned this issue early this year and judged by your response it is not clear whether you will ever spend time looking at it.
-> 
-I do want to fix it and did do some debugging earlier this year just haven't
-gotten back to it. Also, wanted to understand if the issue is a blocker to this
-series?
-I had some theories when debugging around this like if the random base address picked by kaslr for the
-resuming kernel mismatches the suspended kernel and just jogging my memory, I didn't find that as the case.
-Another hunch was if physical address of registered vcpu info at boot is different from what suspended kernel
-has and that can cause CPU's to get stuck when coming online. The issue was only
-reproducible 3% of the time out of 3000 runs hence its hard to just reproduce this.
+pm/testing build: 7 builds: 0 failed, 7 passed, 13 warnings (v5.9-rc6-48-g5=
+37658447367)
 
-Moreover, I also wanted to get an insight on if hibernation works correctly with KASLR
-generally and its only Xen causing the issue?
-> 
-> >>  I seem to have lost your email
-> >> in my inbox hence covering the question here.
-> >>>
-> > Can I add your Reviewed-by or Signed-off-by to it?
-> 
-> 
-> Are you asking me to add my R-b to the broken code above?
-> 
-Of course not!! After its fixed.
-Well can forget it for now then!
-> 
-> -boris
-> 
-Thanks,
-Anchal
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc6-48-g537658447367/
+
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc6-48-g537658447367
+Git Commit: 537658447367fc0c4c1edf81958e10e7c63fceac
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+    i386_defconfig (gcc-8): 2 warnings
+
+mips:
+
+riscv:
+
+x86_64:
+
+
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    2    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to poi=
+nter from integer of different size [-Wint-to-pointer-cast]
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
