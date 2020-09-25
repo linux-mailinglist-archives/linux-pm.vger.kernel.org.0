@@ -2,79 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CE0278E65
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 18:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC65278F21
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 18:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbgIYQ1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 12:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729202AbgIYQ1U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 12:27:20 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E8BC0613CE;
-        Fri, 25 Sep 2020 09:27:20 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f0b3a00329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:3a00:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D4B211EC0284;
-        Fri, 25 Sep 2020 18:27:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1601051237;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=K6sGbhgfxwnmQZIyH+ysWIaxNNdvcxJU0y9gu+E0hU8=;
-        b=LdPUlJAHdtaj0hAkfJ5AyHey6VAvxuL4x2dzyh9ersdpijNhAv02QlF3LfYPKTyc4S5pXV
-        xBM+5yc9c2xByJ9PV1/xOt21dIYqI8egHmlopbikT7gC0e5A8/YgpzZGQl2bXiHe+4xvtk
-        djGnMJkcNpyqfuK0A0Ru5VY4mNgvGgQ=
-Date:   Fri, 25 Sep 2020 18:27:10 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Punit Agrawal <punit1.agrawal@toshiba.co.jp>,
-        Smita Koralahalli Channabasappa <skoralah@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-efi@vger.kernel.org, linux-acpi@vger.kernel.org,
-        devel@acpica.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA
- handling chain
-Message-ID: <20200925162710.GK16872@zn.tnic>
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
- <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
- <20200923140512.GJ28545@zn.tnic>
- <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
- <52c50f37-a86c-57ad-30e0-dac0857e4ef7@amd.com>
- <20200924175023.GN5030@zn.tnic>
- <877dsiislt.fsf@kokedama.swc.toshiba.co.jp>
- <20200925161940.GA21194@yaz-nikka.amd.com>
+        id S1729238AbgIYQxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 12:53:25 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39412 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728069AbgIYQxZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 12:53:25 -0400
+Received: by mail-ot1-f66.google.com with SMTP id u25so2935059otq.6;
+        Fri, 25 Sep 2020 09:53:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=fJTtSUwyASxVJzC78M9UtgW3Gnkvqlxlm8ZCb8ZlYrQ=;
+        b=Gfa6Z5UTTcusw1Y1AO3oyc2uu1QF1UsFFLf6AuQ09Bj43vJRKoUF4//rkAS95h1MHg
+         vWxVlg1oCQXL29SGiR4DCaUmkbn8Ib7f0cUK7eL43Dhrj7dmlKB2g5i13A/cU4JGIfkK
+         wSqjOcSYWnfJ87KqWH2ys3toDSZ+PNlBb/yaAGn4Vw7HnubMxDN5bmoyspMHhILQZS+2
+         GeozcVgV8vRnJMzCjcTcrNkatdRuXHbkp+xrtwXm84XMmjdWv+XWcvvTSfk7tgEDriN/
+         ATqucAIgZRErOqSH4w8SX8sroqm8IlvbHYLgOPX84aI6Zoqc21jEIPXa9kY6tHnFQ0tk
+         HCBg==
+X-Gm-Message-State: AOAM53026ECN9PazzYOA3OiuF6l6L9gVua/cpWLtCDb9Y8O0KzZDLAup
+        CHDfqYOZAWnrt32jv+J+BcIQi7iY0KFH1d7sbu0KmSvvtLs=
+X-Google-Smtp-Source: ABdhPJyCMzxKnePEtgfIIqf3VsWpaEy+Dj/SyVMNOBWnK0BRT9ZAEQ0cnv1NvGTC6GggQuuaHUilrmN426XTwMAuTrs=
+X-Received: by 2002:a05:6830:150a:: with SMTP id k10mr879687otp.167.1601052804474;
+ Fri, 25 Sep 2020 09:53:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200925161940.GA21194@yaz-nikka.amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Sep 2020 18:53:13 +0200
+Message-ID: <CAJZ5v0hyx0Jh7Cc2ZpHTM0V+QzFrQtwsXbMjcBRp3TRFgY9vUQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v5.9-rc7
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:19:40AM -0500, Yazen Ghannam wrote:
-> This patch is checking if an MSR context info structure lines up with
-> the MCAX register space used on Scalable MCA systems. This register
-> space is defined in the AMD Processor Programming Reference for various
-> products. This is considered a hardware feature extension, so the
-> existing register layout won't change though new registers may be added.
+Hi Linus,
 
-Yeah, and exactly for that there's no need to add a special structure
-because if new registers get added, you'd need to add a new struct
-definition too. Let's keep it simple and do the offsets thing.
+Please pull from the tag
 
-Thx.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-5.9-rc7
 
--- 
-Regards/Gruss,
-    Boris.
+with top-most commit 6040723009060ed356dc93dd9a27e80b2206e59b
 
-https://people.kernel.org/tglx/notes-about-netiquette
+ Merge branch 'pm-cpuidle'
+
+on top of commit ba4f184e126b751d1bffad5897f263108befc780
+
+ Linux 5.9-rc6
+
+to receive power management fixes for 5.9-rc7.
+
+These fix more fallout of recent RCU-lockdep changes in CPU idle
+code and two devfreq issues.
+
+Specifics:
+
+ - Export rcu_idle_{enter,exit} to modules to fix build issues
+   introduced by recent RCU-lockdep fixes (Borislav Petkov).
+
+ - Add missing return statement to a stub function in the ACPI
+   processor driver to fix a build issue introduced by recent
+   RCU-lockdep fixes (Rafael Wysocki).
+
+ - Fix recently introduced suspicious RCU usage warnings in the PSCI
+   cpuidle driver and drop stale comments regarding RCU_NONIDLE()
+   usage from enter_s2idle_proper() (Ulf Hansson).
+
+ - Fix error code path in the tegra30 devfreq driver (Dan Carpenter).
+
+ - Add missing information to devfreq_summary debugfs (Chanwoo Choi).
+
+Thanks!
+
+
+---------------
+
+Borislav Petkov (1):
+      rcu/tree: Export rcu_idle_{enter,exit} to modules
+
+Chanwoo Choi (1):
+      PM / devfreq: Add timer type to devfreq_summary debugfs
+
+Dan Carpenter (1):
+      PM / devfreq: tegra30: Disable clock on error in probe
+
+Rafael J. Wysocki (1):
+      ACPI: processor: Fix build for ARCH_APICTIMER_STOPS_ON_C3 unset
+
+Ulf Hansson (2):
+      cpuidle: psci: Fix suspicious RCU usage
+      cpuidle: Drop misleading comments about RCU usage
+
+---------------
+
+ drivers/acpi/processor_idle.c     |  1 +
+ drivers/cpuidle/cpuidle-psci.c    |  4 ++--
+ drivers/cpuidle/cpuidle.c         | 10 ----------
+ drivers/devfreq/devfreq.c         | 11 ++++++++---
+ drivers/devfreq/tegra30-devfreq.c |  4 +++-
+ kernel/rcu/tree.c                 |  2 ++
+ 6 files changed, 16 insertions(+), 16 deletions(-)
