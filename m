@@ -2,334 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E0F278628
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 13:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EC8278642
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 13:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728361AbgIYLm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 07:42:26 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:62420 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728179AbgIYLm0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 25 Sep 2020 07:42:26 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1601034144; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=9tEzE1V0mHPa1EiuwWlCtSVX3/hfU2/0ETy9LFMC3eI=; b=HDE3+VtELVuOaCzzXOdb4mu1Qg83n83fCjIo44tgKY5P95hFImxwqNvER4K+6GjexfThNCw/
- akfbl7HPJxeK7WijoW2oslSUejbQgy0oZadCY54n9GmDCA4ACQ1ksIxizEQuZ22Udtnpwzx0
- K0IFwQHO8qQusvFXH7OH3R1ECXE=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5f6dd7a099ecd993e1b56366 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Sep 2020 11:42:24
- GMT
-Sender: jprakash=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D801CC433F1; Fri, 25 Sep 2020 11:42:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.1.101] (unknown [157.48.192.227])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jprakash)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4C315C433CA;
-        Fri, 25 Sep 2020 11:42:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4C315C433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jprakash@codeaurora.org
-Subject: Re: [PATCH v5 7/9] thermal: qcom: add support for adc-tm5 PMIC
- thermal monitor
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-References: <20200914154809.192174-1-dmitry.baryshkov@linaro.org>
- <20200914154809.192174-8-dmitry.baryshkov@linaro.org>
-From:   Jishnu Prakash <jprakash@codeaurora.org>
-Message-ID: <fe3fc299-5f1d-5318-49f6-b8d42d0615da@codeaurora.org>
-Date:   Fri, 25 Sep 2020 17:12:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1728173AbgIYLst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 07:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728069AbgIYLst (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 07:48:49 -0400
+Received: from mail-vk1-xa43.google.com (mail-vk1-xa43.google.com [IPv6:2607:f8b0:4864:20::a43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAC8C0613D3
+        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 04:48:49 -0700 (PDT)
+Received: by mail-vk1-xa43.google.com with SMTP id c25so571509vkm.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 04:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bOpX08TIm3AOFTz7k77ObUqDMIC27zNLgskbqhvk3SA=;
+        b=PACLZu7q59wk8Az8cg9u6s88T2SjRUmZWHyp1N0U0G5a3NhuafqvY+nnQIz4jwHzKZ
+         JdBWjVnR7lTpQMYe2ucg7FDdeN/XtVwC0R4lDX/2qDcHquqOeS5NcREMzCelxwmfg3Fr
+         sBd4sxyvhLLvFYfYzJn4MuyMj7JmUkd8TgbCDts23DFzsE9FoEnTOlgEnGv5My0efX/W
+         9pCVtYMYG4HCYJOp6GbENz2C1YSDG/yNY336BmDJ/O1JvxhGKG5wnAV/79fqZeH1/R48
+         MTOLEI+oQyeoDTH0YRQ0w7GfXXDXa1WaR06bv3F1Hjw86Fbmd4YNU3PRUWTH8B0YZ95y
+         PtTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bOpX08TIm3AOFTz7k77ObUqDMIC27zNLgskbqhvk3SA=;
+        b=A2PvTN238u6xkW/mQaJbRqUJtfnqjVzd+7Aj6kl3WreIHSUsMRdsEwPZ9fWr+JqJuJ
+         wZeAWLiDKfiJocalT6igSuN1NQQ3uPFovqSXq3nJ4sj1/gPdLkl1YXEFQQf1bAnTKbt5
+         sKC4HNvvupUy6Lo6t3V3pv6tvInJ6Fi7mvU55g/lV/CzKQg8bbebiWxe6cf4qKflWgWo
+         o6Ntn1ILCd4CqQ4lZz0GQ2fm8xQlpFytQWg84AsVQADhSf6vMDeD/Z5GaKnCzd/qBR76
+         b2RXCe41hvMCdP+u6pHFc/52khgFasxJkWBUrSGUqOTIyn3sJwNngXUs+xnV2qgvggHp
+         OmZg==
+X-Gm-Message-State: AOAM531W/9iv967Vw8XzL0VO+fUUQ3ABfuymYlq6zeZCjvix0f5RA3av
+        1Rhbf57s8XFcPCqg1gHVrkEavFuqARSKsH8JGrwOVg==
+X-Google-Smtp-Source: ABdhPJz+HJM37xvIxMDhO2iRf+bRH1sI4QfxVFpQTT+NhZrnx4AVfL/rS86Oam7VXSlyg989p2LZVUIUwQqzVxFAYO4=
+X-Received: by 2002:a1f:964c:: with SMTP id y73mr2404723vkd.8.1601034528439;
+ Fri, 25 Sep 2020 04:48:48 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200914154809.192174-8-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <20200924110449.329523-1-ulf.hansson@linaro.org>
+ <20200924110449.329523-4-ulf.hansson@linaro.org> <DB6PR0402MB2760BD51916BEA5DB80A268188360@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+In-Reply-To: <DB6PR0402MB2760BD51916BEA5DB80A268188360@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 25 Sep 2020 13:48:12 +0200
+Message-ID: <CAPDyKFrrLq6mPCsSoRBBmgMxSvC4xeiSedi1c5CsEWF=+f73mw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] PM / Domains: Add support for PM domain on/off
+ notifiers for genpd
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
-
-Recently I was testing the ADC_TM driver added with these changes on 
-SC7180 and I could see that this patch needs a few changes, which I'll 
-mention below.
-
-On 9/14/2020 9:18 PM, Dmitry Baryshkov wrote:
-> Add support for Thermal Monitoring part of PMIC5. This part is closely
-> coupled with ADC, using it's channels directly. ADC-TM support
-> generating interrupts on ADC value crossing low or high voltage bounds,
-> which is used to support thermal trip points.
+On Fri, 25 Sep 2020 at 08:08, Peng Fan <peng.fan@nxp.com> wrote:
 >
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->   drivers/iio/adc/qcom-vadc-common.c       |  62 +++
->   drivers/iio/adc/qcom-vadc-common.h       |   3 +
->   drivers/thermal/qcom/Kconfig             |  11 +
->   drivers/thermal/qcom/Makefile            |   1 +
->   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 583 +++++++++++++++++++++++
->   5 files changed, 660 insertions(+)
->   create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> Hi Ulf,
 >
-> diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-> index 40d77b3af1bb..e58e393b8713 100644
-> --- a/drivers/iio/adc/qcom-vadc-common.c
-> +++ b/drivers/iio/adc/qcom-vadc-common.c
-> @@ -377,6 +377,42 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
->   	return 0;
->   }
->   
-
-
-> +static irqreturn_t adc_tm5_isr(int irq, void *data)
-> +{
-> +	struct adc_tm5_chip *chip = data;
-> +	u8 status_low, status_high, ctl;
-> +	int ret = 0, i = 0;
-> +
-> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_LOW, &status_low, 1);
-> +	if (ret) {
-> +		dev_err(chip->dev, "read status low failed with %d\n", ret);
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_HIGH, &status_high, 1);
-> +	if (ret) {
-> +		dev_err(chip->dev, "read status high failed with %d\n", ret);
-> +		return IRQ_HANDLED;
-> +	}
-> +
-> +	for (i = 0; i < chip->nchannels; i++) {
-> +		bool upper_set = false, lower_set = false;
-> +		unsigned int ch = chip->channels[i].channel;
-> +
-> +		if (!chip->channels[i].tzd) {
-> +			dev_err_once(chip->dev, "thermal device not found\n");
-> +			continue;
-> +		}
-> +
-> +		ret = adc_tm5_read(chip, ADC_TM5_M_EN(ch), &ctl, 1);
-> +
-> +		if (ret) {
-> +			dev_err(chip->dev, "ctl read failed with %d\n", ret);
-> +			continue;
-> +		}
-> +
-> +		lower_set = (status_low & BIT(ch)) &&
-> +			(ctl & ADC_TM5_M_MEAS_EN) &&
-> +			(ctl & ADC_TM5_M_LOW_THR_INT_EN);
-> +
-> +		upper_set = (status_high & BIT(ch)) &&
-> +			(ctl & ADC_TM5_M_MEAS_EN) &&
-> +			(ctl & ADC_TM5_M_HIGH_THR_INT_EN);
-> +
-> +		if (upper_set || lower_set)
-> +			thermal_zone_device_update(chip->channels[i].tzd,
-> +						   THERMAL_EVENT_UNSPECIFIED);
-
-When using thermal_zone_device_update here, it internally calls 
-tz->ops->get_temp, which maps to adc_tm5_get_temp defined just below. 
-This in turn calls iio_read_channel_processed, which internally calls a 
-mutex and this results in a mutex being called from atomic context.
-
-To avoid this, the interrupt should be requested as a threaded IRQ.
-
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int adc_tm5_get_temp(void *data, int *temp)
-> +{
-> +	struct adc_tm5_channel *channel = data;
-> +	int ret, milli_celsius;
-> +
-> +	if (!channel || !channel->iio)
-> +		return -EINVAL;
-> +
-> +	ret = iio_read_channel_processed(channel->iio, &milli_celsius);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*temp = milli_celsius;
-> +
-> +	return 0;
-> +}
-> +
-> +static int adc_tm5_disable_channel(struct adc_tm5_channel *channel)
-> +{
-> +	struct adc_tm5_chip *chip = channel->chip;
-> +	unsigned int reg = ADC_TM5_M_EN(channel->channel);
-> +
-> +	return adc_tm5_reg_update(chip, reg,
-> +			ADC_TM5_M_MEAS_EN | ADC_TM5_M_HIGH_THR_INT_EN | ADC_TM5_M_LOW_THR_INT_EN,
-> +			0);
-> +}
-> +
-> +static int adc_tm5_configure(struct adc_tm5_channel *channel, int low_temp, int high_temp)
-> +{
-> +	struct adc_tm5_chip *chip = channel->chip;
-> +	u8 buf[8];
-> +	u16 reg = ADC_TM5_M_ADC_CH_SEL_CTL(channel->channel);
-> +	int ret = 0;
-> +
-> +	ret = adc_tm5_read(chip, reg, buf, sizeof(buf));
-> +	if (ret) {
-> +		dev_err(chip->dev, "block read failed with %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Update ADC channel select */
-> +	buf[0] = channel->adc_channel;
-> +
-> +	/* Warm temperature corresponds to low voltage threshold */
-> +	if (high_temp != INT_MAX) {
-> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-> +				chip->data->full_scale_code_volt, high_temp);
-> +
-> +		buf[1] = adc_code & 0xff;
-> +		buf[2] = adc_code >> 8;
-> +		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
-> +	}
-> +
-> +	/* Cool temperature corresponds to high voltage threshold */
-> +	if (low_temp != -INT_MAX) {
-> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-> +				chip->data->full_scale_code_volt, low_temp);
-> +
-> +		buf[3] = adc_code & 0xff;
-> +		buf[4] = adc_code >> 8;
-> +		buf[7] |= ADC_TM5_M_HIGH_THR_INT_EN;
-> +	}
-> +
-> +	/* Update timer select */
-> +	buf[5] = ADC5_TIMER_SEL_2;
-> +
-> +	/* Set calibration select, hw_settle delay */
-> +	buf[6] &= ~ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK;
-> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK, channel->hw_settle_time);
-> +	buf[6] &= ~ADC_TM5_M_CTL_CAL_SEL_MASK;
-> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_CAL_SEL_MASK, channel->cal_method);
-> +
-> +	buf[7] |= ADC_TM5_M_MEAS_EN;
-> +
-> +	ret = adc_tm5_write(chip, reg, buf, sizeof(buf));
-> +	if (ret)
-> +		dev_err(chip->dev, "buf write failed\n");
-> +
-> +	return ret;
-> +}
-> +
-> +static int adc_tm5_set_trips(void *data, int low_temp, int high_temp)
-> +{
-> +	struct adc_tm5_channel *channel = data;
-> +	struct adc_tm5_chip *chip;
-> +	int ret;
-> +
-> +	if (!channel)
-> +		return -EINVAL;
-> +
-> +	chip = channel->chip;
-> +	dev_dbg(chip->dev, "%d:low_temp(mdegC):%d, high_temp(mdegC):%d\n",
-> +		channel->channel, low_temp, high_temp);
-> +
-> +	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
-> +		ret = adc_tm5_disable_channel(channel);
-> +	else
-> +		ret = adc_tm5_configure(channel, low_temp, high_temp);
-In addition to the configurations done in adc_tm5_configure, you also 
-need to write to the registers at 0x3546 (write 0x80 to enable the 
-ADC_TM peripheral overall) and 0x3547 (this is the conversion request 
-strobe, you need to write to bit 7 here too, to initiate the recurring 
-measurements).
-> +
-> +	return ret;
-> +}
-> +
-
-
-
-> +static int adc_tm5_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct device *dev = &pdev->dev;
-> +	struct adc_tm5_chip *adc_tm;
-> +	struct regmap *regmap;
-> +	int ret, irq;
-> +	u32 reg;
-> +
-> +	regmap = dev_get_regmap(dev->parent, NULL);
-> +	if (!regmap)
-> +		return -ENODEV;
-> +
-> +	ret = of_property_read_u32(node, "reg", &reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	adc_tm = devm_kzalloc(&pdev->dev, sizeof(*adc_tm), GFP_KERNEL);
-> +	if (!adc_tm)
-> +		return -ENOMEM;
-> +
-> +	adc_tm->regmap = regmap;
-> +	adc_tm->dev = dev;
-> +	adc_tm->base = reg;
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0) {
-> +		dev_err(dev, "get_irq failed: %d\n", irq);
-> +		return irq;
-> +	}
-> +
-> +	ret = adc_tm5_get_dt_data(adc_tm, node);
-> +	if (ret) {
-> +		dev_err(dev, "get dt data failed: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = adc_tm5_init(adc_tm);
-> +	if (ret) {
-> +		dev_err(dev, "adc-tm init failed\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = adc_tm5_register_tzd(adc_tm);
-> +	if (ret) {
-> +		dev_err(dev, "tzd register failed\n");
-> +		return ret;
-> +	}
-> +
-> +	return devm_request_irq(dev, irq, adc_tm5_isr, 0, "pm-adc-tm5", adc_tm);
-The interrupt should be requested with devm_request_threaded_irq, with 
-the existing interrupt handler being given as the threaded function, for 
-the reason mentioned above earlier.
-> +}
-> +
+> > Subject: [PATCH v2 3/3] PM / Domains: Add support for PM domain on/off
+> > notifiers for genpd
+> >
+> > A device may have specific HW constraints that must be obeyed to, before its
+> > corresponding PM domain (genpd) can be powered off - and vice verse at
+> > power on. These constraints can't be managed through the regular runtime
+> > PM based deployment for a device, because the access pattern for it, isn't
+> > always request based. In other words, using the runtime PM callbacks to deal
+> > with the constraints doesn't work for these cases.
 >
+> Could the notification be added before/after power on, and before/after power
+> off? not just after power on and before power off?
+>
+> Our SoC has a requirement that before power on/off the specific module,
+> the corresponding clk needs to be on to make sure the hardware async
+> bridge could finish handshake.
+
+Thanks for your comments!
+
+May I ask, to be sure - does the clock correspond to the genpd
+provider or is it a clock for the genpd consumer device?
+
+If the former, couldn't the clock be managed from the ->power_on|off()
+callbacks for the genpd provider?
+
+>
+> So we need clk_prepare_on/off to guard power on and power off as below:
+>
+> clk_prepare_on
+> power on
+> clk_prepare_off
+>
+> clk_prepare_on
+> power off
+> clk_prepare_off
+>
+> Thanks,
+> Peng.
+>
+
+[...]
+
+Kind regards
+Uffe
