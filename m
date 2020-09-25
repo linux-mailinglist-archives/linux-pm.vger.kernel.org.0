@@ -2,149 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF4B278C9F
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 17:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449F6278CAA
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 17:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729253AbgIYP1h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 11:27:37 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42113 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728801AbgIYP1h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 11:27:37 -0400
-Received: by mail-ot1-f66.google.com with SMTP id m13so2629745otl.9
-        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 08:27:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hYZFtXCYjTrRnkRERS3aRwjVpSpqk7/94nKF01x+sB8=;
-        b=sSr9rsSiKzSWYwO8hrM/Sp4AolQmkWp+z0nqbpW/kXwYTXWEuD4xzBfxe4D1zZzhfY
-         tXCCR6icJBVjqCI/slWYWQA8f7SJyQB1t5D19y0d3a7JdkZKuAK/XEbCDLGYFXnN17Wj
-         mHP+qQ1TIRZ7+eSyo0ifojEM4XolP3p9VO3OK198P2amdFS17Cf76836hryXFcn5GIWZ
-         4yAzxf8sRzcEJBRSp/CR2bbzihPXwqMNONNVIqGmA/BlFBNru2gU9zF6HxOLhAHqkCcq
-         QHnrOFrEKQjETOHQ8URjKX73G8k2OaYB718UGGx7QNOi+u7+xh//UgXjZwmt3U5ZlvpW
-         WNzQ==
-X-Gm-Message-State: AOAM532zToMmHpScZZwlwUFMSR0+9erDgLrvcpXNkcbRYHEOI+kHYmGB
-        PcGfNDJSlG3Rp4PUmHst5hfH5/B9Su9ADO4ZngN4a8fk
-X-Google-Smtp-Source: ABdhPJwTT4rE/Gh3E+kHmMrA1aHLGIGWuzm3IIpqhgVqgtls+2eFSGozPocYXzloTag5JCj3bRXVRL5fC84qcuvnYXg=
-X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr666864otg.118.1601047656398;
- Fri, 25 Sep 2020 08:27:36 -0700 (PDT)
+        id S1729204AbgIYP3G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 11:29:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56948 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728612AbgIYP3G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 25 Sep 2020 11:29:06 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2B10235F9;
+        Fri, 25 Sep 2020 15:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601047745;
+        bh=rOVcj/V35cyfMa0Vlg8hucdK+66n/l/bpxjyII5KeJ0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=twt0N8Abp9/Po1t9micl7QeynkbSKIgF9pG47HY5rYmOCvHWpfcRB8LlA0LlSnx9V
+         g+4xPB19lcoxmjeyuhvrwqjDXjp5yJ++pbQ6b/b92WxI4prVpFXhmQze82tVUECRxY
+         cC5FYO6TCIx4vwuYHKIuzmxdED0g6N13t8dQuh9M=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 98E1035207C1; Fri, 25 Sep 2020 08:29:05 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 08:29:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
+        bp@alien8.de, x86@kernel.org, tony.luck@intel.com, lenb@kernel.org,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        ulf.hansson@linaro.org, tglx@linutronix.de,
+        naresh.kamboju@linaro.org
+Subject: Re: [RFC][PATCH 4/4] acpi: Take over RCU-idle for C3-BM idle
+Message-ID: <20200925152905.GE29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200915103157.345404192@infradead.org>
+ <20200915103806.479637218@infradead.org>
+ <20200925152000.GA171076@roeck-us.net>
 MIME-Version: 1.0
-References: <cc09f36e506145399fe470c71ad34c7c@EX13D12UWA002.ant.amazon.com>
-In-Reply-To: <cc09f36e506145399fe470c71ad34c7c@EX13D12UWA002.ant.amazon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Sep 2020 17:27:25 +0200
-Message-ID: <CAJZ5v0h-qmKcwis9GSa=ceBUMgkvq1s3XqchPotM_DH2=in6qA@mail.gmail.com>
-Subject: Re: [PATCH] PM: Batch hibernate and resume IO requests
-To:     "Chen, Xiaoyi" <cxiaoyi@amazon.com>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Agarwal, Anchal" <anchalag@amazon.com>,
-        "Duncan, David" <davdunc@amazon.com>,
-        "dchinner@redhat.com" <dchinner@redhat.com>,
-        "esandeen@redhat.com" <esandeen@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200925152000.GA171076@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 22, 2020 at 6:19 PM Chen, Xiaoyi <cxiaoyi@amazon.com> wrote:
->
->
-> Hibernate and resume process submits individual IO requests for each page
-> of the data. With this patch, we use blk_plug to improve the batching of
-> these requests.
->
-> Tested this patch with hibernate and resumes, and consistently observed the
-> merging of the IO requests. We see more than an order of magnitude
-> improvement in hibernate and resume speed.
->
-> One hibernate and resume cycle for 16GB used RAM out of 32GB takes around
-> 21 minutes before the change, and 1 minutes after the change on systems
-> with limited storage IOPS.
->
-> Signed-off-by: Xiaoyi Chen <cxiaoyi@amazon.com>
-> Signed-off-by: Anchal Agarwal <anchalag@amazon.com>
-> ---
->  kernel/power/swap.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 01e2858b5fe3..961615365b5c 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -226,6 +226,7 @@ struct hib_bio_batch {
->         atomic_t                count;
->         wait_queue_head_t       wait;
->         blk_status_t            error;
-> +       struct blk_plug         plug;
->  };
->
->  static void hib_init_batch(struct hib_bio_batch *hb)
-> @@ -233,6 +234,12 @@ static void hib_init_batch(struct hib_bio_batch *hb)
->         atomic_set(&hb->count, 0);
->         init_waitqueue_head(&hb->wait);
->         hb->error = BLK_STS_OK;
-> +       blk_start_plug(&hb->plug);
-> +}
-> +
-> +static void hib_finish_batch(struct hib_bio_batch *hb)
-> +{
-> +       blk_finish_plug(&hb->plug);
->  }
->
->  static void hib_end_io(struct bio *bio)
-> @@ -294,6 +301,10 @@ static int hib_submit_io(int op, int op_flags, pgoff_t page_off, void *addr,
->
->  static blk_status_t hib_wait_io(struct hib_bio_batch *hb)
->  {
-> +       /*
-> +        * We are relying on the behavior of blk_plug that a thread with
-> +        * a plug will flush the plug list before sleeping.
-> +        */
->         wait_event(hb->wait, atomic_read(&hb->count) == 0);
->         return blk_status_to_errno(hb->error);
->  }
-> @@ -561,6 +572,7 @@ static int save_image(struct swap_map_handle *handle,
->                 nr_pages++;
->         }
->         err2 = hib_wait_io(&hb);
-> +       hib_finish_batch(&hb);
->         stop = ktime_get();
->         if (!ret)
->                 ret = err2;
-> @@ -854,6 +866,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
->                 pr_info("Image saving done\n");
->         swsusp_show_speed(start, stop, nr_to_write, "Wrote");
->  out_clean:
-> +       hib_finish_batch(&hb);
->         if (crc) {
->                 if (crc->thr)
->                         kthread_stop(crc->thr);
-> @@ -1084,6 +1097,7 @@ static int load_image(struct swap_map_handle *handle,
->                 nr_pages++;
->         }
->         err2 = hib_wait_io(&hb);
-> +       hib_finish_batch(&hb);
->         stop = ktime_get();
->         if (!ret)
->                 ret = err2;
-> @@ -1447,6 +1461,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
->         }
->         swsusp_show_speed(start, stop, nr_to_read, "Read");
->  out_clean:
-> +       hib_finish_batch(&hb);
->         for (i = 0; i < ring_size; i++)
->                 free_page((unsigned long)page[i]);
->         if (crc) {
-> --
+On Fri, Sep 25, 2020 at 08:20:00AM -0700, Guenter Roeck wrote:
+> On Tue, Sep 15, 2020 at 12:32:01PM +0200, Peter Zijlstra wrote:
+> > The C3 BusMaster idle code takes lock in a number of places, some deep
+> > inside the ACPI code. Instead of wrapping it all in RCU_NONIDLE, have
+> > the driver take over RCU-idle duty and avoid flipping RCU state back
+> > and forth a lot.
+> > 
+> > ( by marking 'C3 && bm_check' as RCU_IDLE, we _must_ call enter_bm() for
+> >   that combination, otherwise we'll loose RCU-idle, this requires
+> >   shuffling some code around )
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> ia64:defconfig:
+> 
+> ERROR: modpost: "rcu_idle_enter" [drivers/acpi/processor.ko] undefined!
+> ERROR: modpost: "rcu_idle_exit" [drivers/acpi/processor.ko] undefined!
+> 
+> I realize that this has already been reported more than a week ago, with
+> no visible reaction. Another problem introduced in the same file, resulting
+> in
+> 
+> drivers/acpi/processor_idle.c: In function 'lapic_timer_needs_broadcast':
+> drivers/acpi/processor_idle.c:179:1: warning:
+> 	no return statement in function returning non-void
+> 
+> may cause ia64 boot problems since a non-zero return value will trigger
+> a function call. AFAICS that is not supposed to happen on ia64.
+> 
+> This makes me wonder - if no one cares about buiding (much less running)
+> ia64 images with the upstream kernel, is it possibly time to remove it ?
 
-Applied as 5.10 material with some subject and changelog edits, but:
-1. The patch is white-space-damaged and I needed to fix that up
-manually which was not fun.
-2. I dropped the second S-o-b, because it was not clear to me whether
-a Co-developed-by tag was missing or Reviewed-by should have been used
-instead.
+Rafael is taking a fix up his cpuidle tree:
 
-Thanks!
+https://lkml.kernel.org/lkml/CAJZ5v0jVerU92WxL4qCoU6NC0KCyszmRNhpL3tu5LYtMqALd9A@mail.gmail.com/
+
+							Thanx, Paul
