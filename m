@@ -2,87 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 449F6278CAA
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 17:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBF2278CB2
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 17:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbgIYP3G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 11:29:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56948 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728612AbgIYP3G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 25 Sep 2020 11:29:06 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D2B10235F9;
-        Fri, 25 Sep 2020 15:29:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601047745;
-        bh=rOVcj/V35cyfMa0Vlg8hucdK+66n/l/bpxjyII5KeJ0=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=twt0N8Abp9/Po1t9micl7QeynkbSKIgF9pG47HY5rYmOCvHWpfcRB8LlA0LlSnx9V
-         g+4xPB19lcoxmjeyuhvrwqjDXjp5yJ++pbQ6b/b92WxI4prVpFXhmQze82tVUECRxY
-         cC5FYO6TCIx4vwuYHKIuzmxdED0g6N13t8dQuh9M=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 98E1035207C1; Fri, 25 Sep 2020 08:29:05 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 08:29:05 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Peter Zijlstra <peterz@infradead.org>, rjw@rjwysocki.net,
-        bp@alien8.de, x86@kernel.org, tony.luck@intel.com, lenb@kernel.org,
-        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        ulf.hansson@linaro.org, tglx@linutronix.de,
-        naresh.kamboju@linaro.org
-Subject: Re: [RFC][PATCH 4/4] acpi: Take over RCU-idle for C3-BM idle
-Message-ID: <20200925152905.GE29330@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200915103157.345404192@infradead.org>
- <20200915103806.479637218@infradead.org>
- <20200925152000.GA171076@roeck-us.net>
+        id S1729141AbgIYP3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 11:29:36 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:39618 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728966AbgIYP3f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 11:29:35 -0400
+Received: by mail-oi1-f195.google.com with SMTP id c13so3170610oiy.6;
+        Fri, 25 Sep 2020 08:29:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=73cx2+6HpCMkyAb8T8v+SSARvZpxXhASmBPUda5hJXg=;
+        b=EsBfJD3eef/tAi5k5iwJ2IB5EHMIDUZZ8I2isXHaIftce/kOT1BLq2fNKrUfk1VBwv
+         uWLKXHK+IFzGrrJ1cYBuc5LGGEODmY0k6iiUaDDn4a7EiF8Uji74AAs/PVO2WzIVYmeB
+         /fMO7CZHiMvftcetBGYaZeMfIjwMY6Hsk82nUpMUEr5LoaBbwO2k9rNlAj/sEt27IZVW
+         2j67BQys81NEfh//MSZQVoOxsbtNKIk9OoKQgL3LpQ4cdcvSWsF1wBeC77pqbMH7WQKP
+         OGFmSD5qrni0HbvTiE2hxv1SvNu5AdMDKTufNzXVtjaNj/hk+ExXq5hcLLhbjyyfE4z9
+         7/uw==
+X-Gm-Message-State: AOAM530V30ZOx1dQZq/V8Z1hQQcVRrCyyYvHuxVJz8bZLeGUQ8E5lVou
+        oNqaw8n4xtkR9y/4709lc8ED8V165CL+k8uX5pliHJko
+X-Google-Smtp-Source: ABdhPJyjV0wV5y5tNn603qIJpSbgJuXQvFizXmF4VfxZxFI4NLJ5EtXVycpdAvZUdSUh663PGn3AXuvFl7+uL28vVqA=
+X-Received: by 2002:aca:df84:: with SMTP id w126mr583992oig.103.1601047774623;
+ Fri, 25 Sep 2020 08:29:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200925152000.GA171076@roeck-us.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200925024200.6429-1-ilina@codeaurora.org>
+In-Reply-To: <20200925024200.6429-1-ilina@codeaurora.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Sep 2020 17:29:23 +0200
+Message-ID: <CAJZ5v0gLL8KxeLxYtQ0pVeYket5uXeTktL9MB3Uf7MW-MiD5rg@mail.gmail.com>
+Subject: Re: [PATCH RFC] PM / Domains: enable domain idle state accounting
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 08:20:00AM -0700, Guenter Roeck wrote:
-> On Tue, Sep 15, 2020 at 12:32:01PM +0200, Peter Zijlstra wrote:
-> > The C3 BusMaster idle code takes lock in a number of places, some deep
-> > inside the ACPI code. Instead of wrapping it all in RCU_NONIDLE, have
-> > the driver take over RCU-idle duty and avoid flipping RCU state back
-> > and forth a lot.
-> > 
-> > ( by marking 'C3 && bm_check' as RCU_IDLE, we _must_ call enter_bm() for
-> >   that combination, otherwise we'll loose RCU-idle, this requires
-> >   shuffling some code around )
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> 
-> ia64:defconfig:
-> 
-> ERROR: modpost: "rcu_idle_enter" [drivers/acpi/processor.ko] undefined!
-> ERROR: modpost: "rcu_idle_exit" [drivers/acpi/processor.ko] undefined!
-> 
-> I realize that this has already been reported more than a week ago, with
-> no visible reaction. Another problem introduced in the same file, resulting
-> in
-> 
-> drivers/acpi/processor_idle.c: In function 'lapic_timer_needs_broadcast':
-> drivers/acpi/processor_idle.c:179:1: warning:
-> 	no return statement in function returning non-void
-> 
-> may cause ia64 boot problems since a non-zero return value will trigger
-> a function call. AFAICS that is not supposed to happen on ia64.
-> 
-> This makes me wonder - if no one cares about buiding (much less running)
-> ia64 images with the upstream kernel, is it possibly time to remove it ?
+On Fri, Sep 25, 2020 at 4:42 AM Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> To enable better debug of PM domains, let's keep a track of the success
+> and failures in entering each domain idle state.
+>
+> This statistics is exported in debugfs when reading the idle_states
+> node, associated with each PM domain.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+>
+> ---
+> This patch depends-on: https://lkml.org/lkml/2020/9/24/465
+> ---
+>  drivers/base/power/domain.c | 7 +++++--
+>  include/linux/pm_domain.h   | 2 ++
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index f001ac6326fb..ba3355f935da 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -564,6 +564,7 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>
+>         genpd->status = GENPD_STATE_OFF;
+>         genpd_update_accounting(genpd);
+> +       genpd->states[genpd->state_idx].usage++;
+>
+>         list_for_each_entry(link, &genpd->child_links, child_node) {
+>                 genpd_sd_counter_dec(link->parent);
+> @@ -574,6 +575,7 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>
+>         return 0;
+>  busy:
+> +       genpd->states[genpd->state_idx].failed++;
 
-Rafael is taking a fix up his cpuidle tree:
+What about consistently calling these "rejected" instead of "failed"?
 
-https://lkml.kernel.org/lkml/CAJZ5v0jVerU92WxL4qCoU6NC0KCyszmRNhpL3tu5LYtMqALd9A@mail.gmail.com/
-
-							Thanx, Paul
+>         if (nr_calls)
+>                 __raw_notifier_call_chain(&genpd->power_notifiers,
+>                                           GENPD_STATE_ON, NULL,
+> @@ -3053,7 +3055,7 @@ static int idle_states_show(struct seq_file *s, void *data)
+>         if (ret)
+>                 return -ERESTARTSYS;
+>
+> -       seq_puts(s, "State          Time Spent(ms)\n");
+> +       seq_puts(s, "State          Time Spent(ms) Usage          Failed\n");
+>
+>         for (i = 0; i < genpd->state_count; i++) {
+>                 ktime_t delta = 0;
+> @@ -3065,7 +3067,8 @@ static int idle_states_show(struct seq_file *s, void *data)
+>
+>                 msecs = ktime_to_ms(
+>                         ktime_add(genpd->states[i].idle_time, delta));
+> -               seq_printf(s, "S%-13i %lld\n", i, msecs);
+> +               seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
+> +                             genpd->states[i].usage, genpd->states[i].failed);
+>         }
+>
+>         genpd_unlock(genpd);
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 3b2b561ce846..c30994ec0cec 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -82,6 +82,8 @@ struct genpd_power_state {
+>         s64 power_off_latency_ns;
+>         s64 power_on_latency_ns;
+>         s64 residency_ns;
+> +       u64 usage;
+> +       u64 failed;
+>         struct fwnode_handle *fwnode;
+>         ktime_t idle_time;
+>         void *data;
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
