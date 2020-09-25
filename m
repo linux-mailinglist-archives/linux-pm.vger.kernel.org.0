@@ -2,96 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B61D278573
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 12:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C5FA27858C
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Sep 2020 13:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727535AbgIYK6j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 06:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49444 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbgIYK6i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 06:58:38 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA61C0613CE
-        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 03:58:38 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id md22so1213168pjb.0
-        for <linux-pm@vger.kernel.org>; Fri, 25 Sep 2020 03:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oAJrRFkjqiZjslJYlYFWCtkiFMgZCCH4FGFRNUlNi2M=;
-        b=vRrDqE9P0tnL8nDtFvM0Q367Z5ymCaxjktdq5fuZXjTDLvHEZSytN4AIovAUQ86Ngf
-         MFSf1MZNGY8+MRU3tuxCFlaKS/qQwMoqCe6gWMZGJGFZ0mTg7IiCW4c+qydrR6yszK01
-         syhjxFQO6NbzbcCNUzEsW9fCvD44j+0iqI40DW5HUf/C7LjVMGrPGiMWE38ds8ZCwb+h
-         Nms/SLE2q8Hjdmcgy8Sw2eeACFuzinCv2Xcc0l6HXO3DX2OTg0Kjxv81J+2fBjMIks+N
-         yzoaXKqzRt4Zy3uIVkkeTgb1Y+JbW0onSo8SpqtUyIsjIWpHR2z4iNnIU4UeReWlBgFu
-         4L5g==
+        id S1727132AbgIYLJm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 07:09:42 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:46086 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727044AbgIYLJm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 07:09:42 -0400
+Received: by mail-oi1-f196.google.com with SMTP id u126so2337088oif.13;
+        Fri, 25 Sep 2020 04:09:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oAJrRFkjqiZjslJYlYFWCtkiFMgZCCH4FGFRNUlNi2M=;
-        b=TMlU+hFpTJDK7CBPBwh3PogmTJaq6Ck4a5fdsxygVsxsMv7+L1Gnlhk0nbO7Ua38pf
-         lzutf30hWR9u24h7yTBEAFvfd/7TgB0lew4vF+oid3Z7ryE/otWReAV/X+qe4dr3q2mo
-         NZT9QKtkWW3Ldjk1oHUN29NXLkfkRdJ9FeSD+zomMpQq9zDo5nz6CaKB4gPy5Vprz/4c
-         SYu4tOPfD8N/iMduWMTcgSipwopb5xr538zQkB3Mer7SlyqLukmyxhlNBFl8yQGAqZmZ
-         4EhUSNo6u4ubTo0ftkN+dMn7nKsycgUVW19klTHuA6QOelOoIi4R3guKBnWvSm2HqPn9
-         D4fg==
-X-Gm-Message-State: AOAM531AsX02iyaoirF3t5CpSEa+iadVy3T/KX8vc6BS+bFnKXtdhugB
-        r5EyTTqtjE8PkJO3QP5PEl1XCA==
-X-Google-Smtp-Source: ABdhPJwZFpFShelf2IuBLECWnc8DtK9yg/mtTTI8N/aWHMtli1doBnI/KO23D/dvCAYIQu2DZz26Sw==
-X-Received: by 2002:a17:90b:1649:: with SMTP id il9mr2115322pjb.50.1601031518092;
-        Fri, 25 Sep 2020 03:58:38 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id w19sm2384717pfq.60.2020.09.25.03.58.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Sep 2020 03:58:37 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 16:28:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=N0XOyqHWfOpDLt9M6Ig1oO+6ZMp3I1SUHg/BkMQAork=;
+        b=QRM7el//GDK2ayZ8x/LWKn1KAYaVT73F3+R4ocrRRA0R6G41eU5lXTBCuYgsKTYNeI
+         EV7U8udqJM4MkRkLAUvkoPMJbaiiy6mtiDMsbnIqHOembCIh/xvpKUFT+QK/kd3Yl0jU
+         InPVbhXYZgTOBwx+F9IYBzOPpYS28DfsNfPCk8m3rMmMRu7gTMA2fLrhKkom/mcSDOrh
+         p7Ga7OcFSCk/BYQSTtMeP+uA11Jci6xpX9rlYV/m60PHJYGjTMiry/I4kZVqaehzlCVr
+         q2TJn+4G+AkQnAwrPKyYGKp0pbOxyly7GnKCs5pO1Ag46ILPl9yNbVTqxa4X6+SE3Mnb
+         0c2A==
+X-Gm-Message-State: AOAM5328sG6I24r8LlLQ835W/NRNSGj8rAfj6iaBzmJpK2SwYzc3WB//
+        MztOnr09/QASUwX4jhlQCaKVaNouEMCkJ77Pwx8=
+X-Google-Smtp-Source: ABdhPJxciLZD1CftNy0xx8NjNfqeXSw6jM3Y3ux4IPYmuYNHFOYdVRyzws3CukCu0BvJrZKIUXnyf8knGbw5ODTJ0+o=
+X-Received: by 2002:aca:5b09:: with SMTP id p9mr1167842oib.68.1601032181317;
+ Fri, 25 Sep 2020 04:09:41 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1600238586.git.viresh.kumar@linaro.org> <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
+ <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
+ <20200924131543.eury5vhqy3xt35v6@vireshk-i7> <CAJZ5v0g8Bmxt=GEKcNrKjY1cHnsURV5oe3+n1R2+U_2VJnwfRQ@mail.gmail.com>
+ <20200925105830.xsmiwkjohlqb5joj@vireshk-i7>
+In-Reply-To: <20200925105830.xsmiwkjohlqb5joj@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 25 Sep 2020 13:09:30 +0200
+Message-ID: <CAJZ5v0guU0GDs06W98boFpdCopHTiF_ojwTPrZFNP0Bk3DiQXQ@mail.gmail.com>
+Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Lukasz Luba <lukasz.luba@arm.com>, cristian.marussi@arm.com,
         Sudeep Holla <sudeep.holla@arm.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 1/4] cpufreq: stats: Defer stats update to
- cpufreq_stats_record_transition()
-Message-ID: <20200925105830.xsmiwkjohlqb5joj@vireshk-i7>
-References: <cover.1600238586.git.viresh.kumar@linaro.org>
- <31999d801bfb4d8063dc1ceec1234b6b80b4ae68.1600238586.git.viresh.kumar@linaro.org>
- <CAJZ5v0i0aW6jT=DD6ogyfr+bs5LZu7Gn+5A9O_bZxNsnHPojOQ@mail.gmail.com>
- <20200924131543.eury5vhqy3xt35v6@vireshk-i7>
- <CAJZ5v0g8Bmxt=GEKcNrKjY1cHnsURV5oe3+n1R2+U_2VJnwfRQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0g8Bmxt=GEKcNrKjY1cHnsURV5oe3+n1R2+U_2VJnwfRQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25-09-20, 12:04, Rafael J. Wysocki wrote:
-> I'm actually wondering if reset_time is necessary at all.
-> 
-> If cpufreq_stats_record_transition() is the only updater of the stats,
-> which will be the case after applying this series IIUC, it may as well
-> simply set the new starting point and discard all of the data
-> collected so far if reset_pending is set.
-> 
-> IOW, the time when the reset has been requested isn't particularly
-> relevant IMV (and it is not exact anyway), because the user is
-> basically asking for discarding "history" and that may very well be
-> interpreted to include the current sample.
+On Fri, Sep 25, 2020 at 12:58 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 25-09-20, 12:04, Rafael J. Wysocki wrote:
+> > I'm actually wondering if reset_time is necessary at all.
+> >
+> > If cpufreq_stats_record_transition() is the only updater of the stats,
+> > which will be the case after applying this series IIUC, it may as well
+> > simply set the new starting point and discard all of the data
+> > collected so far if reset_pending is set.
+> >
+> > IOW, the time when the reset has been requested isn't particularly
+> > relevant IMV (and it is not exact anyway), because the user is
+> > basically asking for discarding "history" and that may very well be
+> > interpreted to include the current sample.
+>
+> There are times when this would be visible to userspace and won't look nice.
+>
+> Like, set governor to performance, reset the stats and after 10 seconds, read
+> the stats again, everything will be 0.
 
-There are times when this would be visible to userspace and won't look nice.
+Unless I'm missing something, the real reset happens when
+cpufreq_stats_record_transition() runs next time, so the old stats
+will still be visible at that point, won't they?
 
-Like, set governor to performance, reset the stats and after 10 seconds, read
-the stats again, everything will be 0. Because cpufreq_stats_record_transition()
-doesn't get called at all here, we would never clear them until the time
-governor is changed and so we need to keep a track of reset-time.
+> Because cpufreq_stats_record_transition()
+> doesn't get called at all here, we would never clear them until the time
+> governor is changed and so we need to keep a track of reset-time.
 
--- 
-viresh
+Or trigger a forced update.
