@@ -2,76 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A370827963C
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 04:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EC49279643
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 04:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728967AbgIZCap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 22:30:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51706 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727495AbgIZCap (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 25 Sep 2020 22:30:45 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C829F206E5;
-        Sat, 26 Sep 2020 02:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601087445;
-        bh=ttpTgYzXopAatsApc0pGrkNrc9iSWLibOUMl6nLpCJE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=y1jXQpuDd0jp9Ec6IFYi0brKIM0XUtmCpXsk0ITqdRHlP+LaKzSKvRh1RO6/2iPOW
-         L6hKWKKt+wMj6ALUkB4BY/ZNtFB0Rwnc33pXgI28e1GMCmcBCymDQnTLuMpnzObyDV
-         p2zUS2l1M7JRlZBJokjdGrrWE80mAf98i26M/2bI=
-Date:   Sat, 26 Sep 2020 11:30:41 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Thomas Renninger <trenn@suse.de>
-Cc:     linux-pm@vger.kernel.org, rafael@kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: tools/bootconfig: Create missing directories in Makefile
- install object if needed
-Message-Id: <20200926113041.d0ce430c3b3e4c76cf4e857a@kernel.org>
-In-Reply-To: <2482827.XuMzNZMSYQ@c100>
-References: <2482827.XuMzNZMSYQ@c100>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1729201AbgIZClp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Sep 2020 22:41:45 -0400
+Received: from m17618.mail.qiye.163.com ([59.111.176.18]:8237 "EHLO
+        m17618.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728871AbgIZClo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 22:41:44 -0400
+Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.231])
+        by m17618.mail.qiye.163.com (Hmail) with ESMTPA id BCA244E1432;
+        Sat, 26 Sep 2020 10:41:40 +0800 (CST)
+From:   Wang Qing <wangqing@vivo.com>
+To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wang Qing <wangqing@vivo.com>
+Subject: [PATCH] power: supply: fix spelling typo
+Date:   Sat, 26 Sep 2020 10:41:07 +0800
+Message-Id: <1601088070-12790-1-git-send-email-wangqing@vivo.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
+        oVCBIfWUFZGUNPSh5JT0IfTRgZVkpNS0pLQ0NKS0tCTENVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        FZT0tIVUpKS0hKTFVLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ORA6KRw6MD8sOAE2Lk1MCTpR
+        ARAaFDBVSlVKTUtKS0NDSktKT0tJVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5KVUxPVUlISllXWQgBWUFIQk1MNwY+
+X-HM-Tid: 0a74c8499a319376kuwsbca244e1432
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 25 Sep 2020 17:09:09 +0200
-Thomas Renninger <trenn@suse.de> wrote:
+Modify the comment typo: "compliment" -> "complement".
 
-> Signed-off-by: Thomas Renninger <trenn@suse.de>
+Signed-off-by: Wang Qing <wangqing@vivo.com>
+---
+ drivers/power/supply/ds2780_battery.c | 6 +++---
+ drivers/power/supply/ds2781_battery.c | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Looks good to me.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thanks!
-
-> 
-> ---
->  tools/bootconfig/Makefile |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/tools/bootconfig/Makefile
-> +++ b/tools/bootconfig/Makefile
-> @@ -24,7 +24,7 @@
->  	./test-bootconfig.sh $(OUTPUT)
->  
->  install: $(ALL_PROGRAMS)
-> -	install $(OUTPUT)bootconfig $(DESTDIR)$(bindir)
-> +	install -D $(OUTPUT)bootconfig $(DESTDIR)$(bindir)/bootconfig
->  
->  clean:
->  	$(RM) -f $(OUTPUT)*.o $(ALL_PROGRAMS)
-> 
-> 
-> 
-
-
+diff --git a/drivers/power/supply/ds2780_battery.c b/drivers/power/supply/ds2780_battery.c
+index db3a254..dd57a47
+--- a/drivers/power/supply/ds2780_battery.c
++++ b/drivers/power/supply/ds2780_battery.c
+@@ -160,7 +160,7 @@ static int ds2780_get_voltage(struct ds2780_device_info *dev_info,
+ 
+ 	/*
+ 	 * The voltage value is located in 10 bits across the voltage MSB
+-	 * and LSB registers in two's compliment form
++	 * and LSB registers in two's complement form
+ 	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
+ 	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
+ 	 * voltage MSB register
+@@ -188,7 +188,7 @@ static int ds2780_get_temperature(struct ds2780_device_info *dev_info,
+ 
+ 	/*
+ 	 * The temperature value is located in 10 bits across the temperature
+-	 * MSB and LSB registers in two's compliment form
++	 * MSB and LSB registers in two's complement form
+ 	 * Sign bit of the temperature value is in bit 7 of the temperature
+ 	 * MSB register
+ 	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
+@@ -241,7 +241,7 @@ static int ds2780_get_current(struct ds2780_device_info *dev_info,
+ 
+ 	/*
+ 	 * The current value is located in 16 bits across the current MSB
+-	 * and LSB registers in two's compliment form
++	 * and LSB registers in two's complement form
+ 	 * Sign bit of the current value is in bit 7 of the current MSB register
+ 	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
+ 	 * MSB register
+diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply/ds2781_battery.c
+index 130cbdf..3df3c82
+--- a/drivers/power/supply/ds2781_battery.c
++++ b/drivers/power/supply/ds2781_battery.c
+@@ -168,7 +168,7 @@ static int ds2781_get_voltage(struct ds2781_device_info *dev_info,
+ 		return ret;
+ 	/*
+ 	 * The voltage value is located in 10 bits across the voltage MSB
+-	 * and LSB registers in two's compliment form
++	 * and LSB registers in two's complement form
+ 	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
+ 	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
+ 	 * voltage MSB register
+@@ -197,7 +197,7 @@ static int ds2781_get_temperature(struct ds2781_device_info *dev_info,
+ 		return ret;
+ 	/*
+ 	 * The temperature value is located in 10 bits across the temperature
+-	 * MSB and LSB registers in two's compliment form
++	 * MSB and LSB registers in two's complement form
+ 	 * Sign bit of the temperature value is in bit 7 of the temperature
+ 	 * MSB register
+ 	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
+@@ -242,7 +242,7 @@ static int ds2781_get_current(struct ds2781_device_info *dev_info,
+ 
+ 	/*
+ 	 * The current value is located in 16 bits across the current MSB
+-	 * and LSB registers in two's compliment form
++	 * and LSB registers in two's complement form
+ 	 * Sign bit of the current value is in bit 7 of the current MSB register
+ 	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
+ 	 * MSB register
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.7.4
+
