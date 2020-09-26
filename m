@@ -2,79 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FDA279B7B
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 19:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1555279C13
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 21:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729412AbgIZRgT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Sep 2020 13:36:19 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:36666 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726244AbgIZRgT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Sep 2020 13:36:19 -0400
-Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 6B26B3A2296;
-        Sat, 26 Sep 2020 17:36:17 +0000 (UTC)
-Received: from pc.localdomain (unknown [195.189.32.242])
-        (Authenticated sender: contact@artur-rojek.eu)
-        by relay11.mail.gandi.net (Postfix) with ESMTPSA id C1A97100007;
-        Sat, 26 Sep 2020 17:35:54 +0000 (UTC)
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 2/2] dt-bindings: power: ingenic,battery: add new compatibles
-Date:   Sat, 26 Sep 2020 19:35:29 +0200
-Message-Id: <20200926173529.25238-2-contact@artur-rojek.eu>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200926173529.25238-1-contact@artur-rojek.eu>
-References: <20200926173529.25238-1-contact@artur-rojek.eu>
+        id S1729291AbgIZTPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Sep 2020 15:15:21 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:51312 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729106AbgIZTPU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 26 Sep 2020 15:15:20 -0400
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4BzJC210pSz18;
+        Sat, 26 Sep 2020 21:05:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1601147134; bh=i6GErGfH+UT41Llr031HN9MqOM80pBRiCXb/wqO7iKQ=;
+        h=Date:From:Subject:To:Cc:From;
+        b=VR3M8UdVC8FaxGAgq6IGf3dm6ilJIQwnWMSnpKo9en2np1zKJm654igWbl2Y/bYHX
+         QmBTH8H3feCEGAtG+H+z3HILrqeSfO1UgS7ya915CpoK8iri5YiMXYv+O4JaP2M5sa
+         jKKlsRehr1jxOOFz6/53Yy7OP1Mcte9m3yamq6rLPjRtPSW1ptbjkXeiQ8qENYbmlj
+         7RYVlf9VzVgvkXR0k4W4XMXGHDn82BtRBN1+DCiAdTiZ3zEQi1dlXfYt5o2uZ9EGuO
+         5E7gH4uqwc/04X3cehjnt4knoL6qMaVEZQWcN5z3vcH42nifgsClGI1iX/dgmJOqNK
+         iGZinkS/lKFbw==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.102.4 at mail
+Date:   Sat, 26 Sep 2020 21:05:31 +0200
+Message-Id: <cover.1601146802.git.mirq-linux@rere.qmqm.pl>
+From:   =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>
+Subject: [PATCH v4 0/2] power: bq25890: IBAT compensation support
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+To:     Angus Ainslie <angus@akkea.ca>, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Yauhen Kharuzhy <jekhor@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This binding can support Ingenic JZ4725B and JZ4770 SoCs, as they are
-compatible with Ingenic JZ4740 battery.
+These two patches add support for IBAT compensation feature of bq2589x
+chargers.
 
-Introduce the following compatible property combinations:
- compatible = "ingenic,jz4725b-battery", "ingenic,jz4740-battery",
- compatible = "ingenic,jz4770-battery", "ingenic,jz4740-battery"
-
-Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-Reviewed-by: Rob Herring <robh@kernel.org>
 ---
+v4 fixed property names for the features and dropped other applied or rejected
+   patches
 
-Changes:
-    v2: new patch
-    
-    v3: no change
+Michał Mirosław (2):
+  power: bq25890: document IBAT compensation DT properties
+  power: bq25890: support IBAT compensation
 
- .../devicetree/bindings/power/supply/ingenic,battery.yaml | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/power/supply/bq25890.txt  |  4 ++++
+ drivers/power/supply/bq25890_charger.c            | 15 +++++++++++++--
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-index 658ef92a5b82..683fa79ba2f3 100644
---- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-@@ -12,7 +12,13 @@ maintainers:
- 
- properties:
-   compatible:
--    const: ingenic,jz4740-battery
-+    oneOf:
-+      - const: ingenic,jz4740-battery
-+      - items:
-+        - enum:
-+          - ingenic,jz4725b-battery
-+          - ingenic,jz4770-battery
-+        - const: ingenic,jz4740-battery
- 
-   io-channels:
-     maxItems: 1
 -- 
-2.28.0
+2.20.1
 
