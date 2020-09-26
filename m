@@ -2,107 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC49279643
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 04:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F4127971F
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Sep 2020 07:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729201AbgIZClp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Sep 2020 22:41:45 -0400
-Received: from m17618.mail.qiye.163.com ([59.111.176.18]:8237 "EHLO
-        m17618.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728871AbgIZClo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Sep 2020 22:41:44 -0400
-Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.231])
-        by m17618.mail.qiye.163.com (Hmail) with ESMTPA id BCA244E1432;
-        Sat, 26 Sep 2020 10:41:40 +0800 (CST)
-From:   Wang Qing <wangqing@vivo.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH] power: supply: fix spelling typo
-Date:   Sat, 26 Sep 2020 10:41:07 +0800
-Message-Id: <1601088070-12790-1-git-send-email-wangqing@vivo.com>
-X-Mailer: git-send-email 2.7.4
-X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZGUNPSh5JT0IfTRgZVkpNS0pLQ0NKS0tCTENVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
-        FZT0tIVUpKS0hKTFVLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6ORA6KRw6MD8sOAE2Lk1MCTpR
-        ARAaFDBVSlVKTUtKS0NDSktKT0tJVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5KVUxPVUlISllXWQgBWUFIQk1MNwY+
-X-HM-Tid: 0a74c8499a319376kuwsbca244e1432
+        id S1726311AbgIZFgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Sep 2020 01:36:35 -0400
+Received: from mga14.intel.com ([192.55.52.115]:51600 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726210AbgIZFgf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 26 Sep 2020 01:36:35 -0400
+IronPort-SDR: 6vPSFg4DS0GHdJNv3ePAPXQgMrNrA+2OmjmNFmwkwNnM0K1ntF7Ys1cJXYqjUrGQdGkohaxWOf
+ fYzHasHwtBPg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9755"; a="160944581"
+X-IronPort-AV: E=Sophos;i="5.77,303,1596524400"; 
+   d="scan'208";a="160944581"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2020 21:40:25 -0700
+IronPort-SDR: lBolHQXCN+uTf5Ovg09dLCNqq/rPEFe+C3NHSGNMN3KvKycIJ5m/4Ua+tegdRZgVNjE3YHm9hh
+ 9N1sgd9SBTxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,303,1596524400"; 
+   d="scan'208";a="348865877"
+Received: from lkp-server01.sh.intel.com (HELO 2dda29302fe3) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 25 Sep 2020 21:40:23 -0700
+Received: from kbuild by 2dda29302fe3 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kM20V-0000Na-5Y; Sat, 26 Sep 2020 04:40:23 +0000
+Date:   Sat, 26 Sep 2020 12:40:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 39d54892be91e1df9d45a5eb813e766035f07e90
+Message-ID: <5f6ec634.prqVnwLaN9rRUYrE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Modify the comment typo: "compliment" -> "complement".
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 39d54892be91e1df9d45a5eb813e766035f07e90  Merge branch 'acpi-battery' into bleeding-edge
 
-Signed-off-by: Wang Qing <wangqing@vivo.com>
+elapsed time: 723m
+
+configs tested: 88
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                       holly_defconfig
+arm                        multi_v5_defconfig
+sh                         ecovec24_defconfig
+mips                        jmr3927_defconfig
+sparc                       sparc64_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                     ksi8560_defconfig
+arm                            mps2_defconfig
+um                            kunit_defconfig
+sh                          landisk_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                    socrates_defconfig
+arm                         vf610m4_defconfig
+arm                       versatile_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20200925
+i386                 randconfig-a006-20200925
+i386                 randconfig-a003-20200925
+i386                 randconfig-a004-20200925
+i386                 randconfig-a005-20200925
+i386                 randconfig-a001-20200925
+x86_64               randconfig-a011-20200925
+x86_64               randconfig-a013-20200925
+x86_64               randconfig-a014-20200925
+x86_64               randconfig-a015-20200925
+x86_64               randconfig-a012-20200925
+x86_64               randconfig-a016-20200925
+i386                 randconfig-a012-20200925
+i386                 randconfig-a014-20200925
+i386                 randconfig-a016-20200925
+i386                 randconfig-a013-20200925
+i386                 randconfig-a011-20200925
+i386                 randconfig-a015-20200925
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a005-20200925
+x86_64               randconfig-a003-20200925
+x86_64               randconfig-a004-20200925
+x86_64               randconfig-a002-20200925
+x86_64               randconfig-a006-20200925
+x86_64               randconfig-a001-20200925
+
 ---
- drivers/power/supply/ds2780_battery.c | 6 +++---
- drivers/power/supply/ds2781_battery.c | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/power/supply/ds2780_battery.c b/drivers/power/supply/ds2780_battery.c
-index db3a254..dd57a47
---- a/drivers/power/supply/ds2780_battery.c
-+++ b/drivers/power/supply/ds2780_battery.c
-@@ -160,7 +160,7 @@ static int ds2780_get_voltage(struct ds2780_device_info *dev_info,
- 
- 	/*
- 	 * The voltage value is located in 10 bits across the voltage MSB
--	 * and LSB registers in two's compliment form
-+	 * and LSB registers in two's complement form
- 	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
- 	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
- 	 * voltage MSB register
-@@ -188,7 +188,7 @@ static int ds2780_get_temperature(struct ds2780_device_info *dev_info,
- 
- 	/*
- 	 * The temperature value is located in 10 bits across the temperature
--	 * MSB and LSB registers in two's compliment form
-+	 * MSB and LSB registers in two's complement form
- 	 * Sign bit of the temperature value is in bit 7 of the temperature
- 	 * MSB register
- 	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
-@@ -241,7 +241,7 @@ static int ds2780_get_current(struct ds2780_device_info *dev_info,
- 
- 	/*
- 	 * The current value is located in 16 bits across the current MSB
--	 * and LSB registers in two's compliment form
-+	 * and LSB registers in two's complement form
- 	 * Sign bit of the current value is in bit 7 of the current MSB register
- 	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
- 	 * MSB register
-diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply/ds2781_battery.c
-index 130cbdf..3df3c82
---- a/drivers/power/supply/ds2781_battery.c
-+++ b/drivers/power/supply/ds2781_battery.c
-@@ -168,7 +168,7 @@ static int ds2781_get_voltage(struct ds2781_device_info *dev_info,
- 		return ret;
- 	/*
- 	 * The voltage value is located in 10 bits across the voltage MSB
--	 * and LSB registers in two's compliment form
-+	 * and LSB registers in two's complement form
- 	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
- 	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
- 	 * voltage MSB register
-@@ -197,7 +197,7 @@ static int ds2781_get_temperature(struct ds2781_device_info *dev_info,
- 		return ret;
- 	/*
- 	 * The temperature value is located in 10 bits across the temperature
--	 * MSB and LSB registers in two's compliment form
-+	 * MSB and LSB registers in two's complement form
- 	 * Sign bit of the temperature value is in bit 7 of the temperature
- 	 * MSB register
- 	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
-@@ -242,7 +242,7 @@ static int ds2781_get_current(struct ds2781_device_info *dev_info,
- 
- 	/*
- 	 * The current value is located in 16 bits across the current MSB
--	 * and LSB registers in two's compliment form
-+	 * and LSB registers in two's complement form
- 	 * Sign bit of the current value is in bit 7 of the current MSB register
- 	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
- 	 * MSB register
--- 
-2.7.4
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
