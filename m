@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB88027A196
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Sep 2020 17:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DC527A198
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Sep 2020 17:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgI0PKH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Sep 2020 11:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S1726315AbgI0PKI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Sep 2020 11:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726196AbgI0PKG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Sep 2020 11:10:06 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95A7AC0613CE;
-        Sun, 27 Sep 2020 08:10:06 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id c18so8952334wrm.9;
-        Sun, 27 Sep 2020 08:10:06 -0700 (PDT)
+        with ESMTP id S1726196AbgI0PKI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Sep 2020 11:10:08 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3165C0613CE;
+        Sun, 27 Sep 2020 08:10:07 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x23so3873677wmi.3;
+        Sun, 27 Sep 2020 08:10:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=HMVabqNDpRm5jRigfMy/HSkt9g7XhYmIwimrxhJfJvQ=;
-        b=TkxGGsf7AhHgvKTOqLLuyHlNnTMX2xsgmCsz/B9oj1CwPeXjoiiRr54Eliz/xjBGQe
-         thAXINErMhrAsr5bnQ+9vk6x5Fi5LxcVQ7WjKqGO8W50PUPSNKxamHVOy/9C8t2NL0wK
-         2sqJuxtIttZiX4H4PYH1w+l4em8+ojMhveJ60X9CYPhmd7l8jJmLbmtdPNc1rFUdjdPe
-         jJ+W0ZkttAeoxtfKVq9N4v1gavDjWBHmlPqiUILfGhfZzbVjsCUFSTMo1UAkLfq7aRzJ
-         qgGZo9zN+He2YChmM0ZVDlavX/49LQ9G4V7jQFfW+9YRPDnFnOMO9V+I2tJM0UtpVLmG
-         tkRQ==
+        bh=N1v7I4XPINcsYoLjVYjg/trmmo2v0jQccnOxIjDhNkY=;
+        b=inaom1v/j0In/+L2dXCWCvrkS8KCLXpWQyFFaYYQYHOLS2yiX/XRVJCLTw4ltDLiGN
+         UGklcA0NGK3NVaDZdZXfbVfI+TkIBl/1OK8xAWcZ/8NHaSDukkEHT+PGpZKzEcWEgusk
+         Ez3C9UCNuzaXLpOnFh0LnDMZ5HtsWKN+sxG9odAr5ClkBRLdSQ23oJeIlAYF00G8OVs2
+         h5DZu9RqltJ84Ca7Eh4AIqAjJEEnve1+HY4ElfbUxOezyUDNwgjmnO67URmXemImhOWw
+         5MYKZFV26EmPJG+HPUhgJsujY7Cf3uiVyDk9Y+UcvrCJJxVnMP8Js3x+OvbzH3knzG05
+         hc2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=HMVabqNDpRm5jRigfMy/HSkt9g7XhYmIwimrxhJfJvQ=;
-        b=OirNBsN7sP9MEPY1z2JwCB0EDzIeZWHdsq9yKjUBu+nUXLscGVcT7UvLSEhO7mVCOG
-         QOVuBDkJU+wqPJ318P36lal3S1Ka7Yo5fWaLoRgB1ZttFy9YKDEtixVRwQRm5nuAE1Ji
-         /LnzlCHzHdCJUsXoPsgKq3u46E7+gAH0Yvo1499v8F50Gk8M0ED93QkLcYSfTLlsXnYH
-         lLHvRJUEihLv9wLtntoHr+oQHsdh3CMr2wo4GtmA0eod4Y7HmWosu2mSDTOgyZaIueg+
-         1l1vSj2tNGAKGFS6IaudIGHnaDxeeQMzmDWKbVmvHDTv8W36T0ecB4vgqOU7Lmd/Oahf
-         zhOA==
-X-Gm-Message-State: AOAM530mofMQ3LaCMtGTZXHt+xBdXMwd+woug3U1XRk8r5Oe3A27LTIJ
-        mDTEG29K/x7mMp2XqtjJpmD6STRIB7wtGe3J
-X-Google-Smtp-Source: ABdhPJxXQkXpfAdTjoBbm1Eq3yFMek1ks+tD8lDdfcrvNKaiExSLVktaf+NLI5Ru87arAicswKdzMQ==
-X-Received: by 2002:a5d:4811:: with SMTP id l17mr14832728wrq.252.1601219405330;
-        Sun, 27 Sep 2020 08:10:05 -0700 (PDT)
+        bh=N1v7I4XPINcsYoLjVYjg/trmmo2v0jQccnOxIjDhNkY=;
+        b=nWphKWPxSJ3I2noRU9rUpbqxU5OsWQxKKKwbYDRZuoOxSn6dPDkZRVnle20BZCi2uh
+         YUOXiL3a1E6/mQgymZ5qDlFLQcd5Lcs+q1JajYIuta2hJZ53/4yHfpJM0m0FN6p2QLDj
+         68g3d04Ig2PyZDiOXA2gsd2D2g/B95W3mYW9FzAGxl/x12uTGete8zonELLAJb+J5z8Y
+         pVICCU3z8b1w7Ei9CVCqDuBOtskmNLe0wox5V6YPGpZrr7xTVYMfVas+NwcXxfFgyub+
+         dJcg09yuKZqYUctb5tY8IXm/JKM7e4VzpdyrgCSYWgGIiVg0/nFZuZrEslfs1pRgUbBs
+         t6xA==
+X-Gm-Message-State: AOAM532jlDSIaYrwZ1UP20R8VbOjaju9GW8fS9U4P9oak2NnDIuJN/WZ
+        eaI+1TR80s4DBtJQa5q879o=
+X-Google-Smtp-Source: ABdhPJzetvO/vp3JE6rgLvWSdmmfu+pDIrUmB1Q0Evdct9VETa0BtOWPqYF5BH124IyUprIuurphgg==
+X-Received: by 2002:a1c:66c4:: with SMTP id a187mr7157834wmc.148.1601219406490;
+        Sun, 27 Sep 2020 08:10:06 -0700 (PDT)
 Received: from arrakis.kwizart.net (lfbn-nic-1-212-171.w2-15.abo.wanadoo.fr. [2.15.59.171])
-        by smtp.gmail.com with ESMTPSA id s11sm9565114wrt.43.2020.09.27.08.10.04
+        by smtp.gmail.com with ESMTPSA id s11sm9565114wrt.43.2020.09.27.08.10.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2020 08:10:04 -0700 (PDT)
+        Sun, 27 Sep 2020 08:10:05 -0700 (PDT)
 From:   Nicolas Chauvet <kwizart@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -54,9 +54,9 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
         Nicolas Chauvet <kwizart@gmail.com>
-Subject: [PATCH v2 4/6] arm64: tegra: Add missing gpu-throt-level to tegra210 soctherm
-Date:   Sun, 27 Sep 2020 17:09:54 +0200
-Message-Id: <20200927150956.34609-5-kwizart@gmail.com>
+Subject: [PATCH v2 5/6] arm64: tegra: Add missing hot temperatures to tegra210 thermal-zones
+Date:   Sun, 27 Sep 2020 17:09:55 +0200
+Message-Id: <20200927150956.34609-6-kwizart@gmail.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200927150956.34609-1-kwizart@gmail.com>
 References: <20200927150956.34609-1-kwizart@gmail.com>
@@ -66,28 +66,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On jetson-tx1 the following message can be seen:
- tegra_soctherm 700e2000.thermal-sensor: throttle-cfg: heavy: no throt prop or invalid prop
+According to dmesg, thermal-zones for mem and cpu are missing hot
+temperatures properties.
 
-This patch will fix the invalid prop issue according to the binding.
+  throttrip: pll: missing hot temperature
+...
+  throttrip: mem: missing hot temperature
+...
+
+Adding them will clear the messages.
 
 Signed-off-by: Nicolas Chauvet <kwizart@gmail.com>
 ---
- arch/arm64/boot/dts/nvidia/tegra210.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/nvidia/tegra210.dtsi b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-index 8cca2166a446..c518292ee3f5 100644
+index c518292ee3f5..9e8ddec52651 100644
 --- a/arch/arm64/boot/dts/nvidia/tegra210.dtsi
 +++ b/arch/arm64/boot/dts/nvidia/tegra210.dtsi
-@@ -1582,6 +1582,7 @@ throttle-cfgs {
- 			throttle_heavy: heavy {
- 				nvidia,priority = <100>;
- 				nvidia,cpu-throt-percent = <85>;
-+				nvidia,gpu-throt-level = <TEGRA_SOCTHERM_THROT_LEVEL_HIGH>;
+@@ -1639,6 +1639,12 @@ dram_throttle: mem-throttle-trip {
+ 					type = "active";
+ 				};
  
- 				#cooling-cells = <2>;
++				mem-hot-trip {
++					temperature = <100000>;
++					hysteresis = <1000>;
++					type = "hot";
++				};
++
+ 				mem-shutdown-trip {
+ 					temperature = <103000>;
+ 					hysteresis = <0>;
+@@ -1701,6 +1707,12 @@ pllx-shutdown-trip {
+ 					hysteresis = <0>;
+ 					type = "critical";
+ 				};
++
++				pllx-throttle-trip {
++					temperature = <100000>;
++					hysteresis = <1000>;
++					type = "hot";
++				};
  			};
+ 
+ 			cooling-maps {
 -- 
 2.25.4
 
