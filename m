@@ -2,85 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 903B1279CE3
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Sep 2020 01:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E651B27A18F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Sep 2020 17:10:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726382AbgIZXlz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Sep 2020 19:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S1726210AbgI0PKD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Sep 2020 11:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726311AbgIZXlz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Sep 2020 19:41:55 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3D8C0613CE;
-        Sat, 26 Sep 2020 16:41:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id u8so6935468lff.1;
-        Sat, 26 Sep 2020 16:41:54 -0700 (PDT)
+        with ESMTP id S1726196AbgI0PKD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Sep 2020 11:10:03 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB95C0613CE;
+        Sun, 27 Sep 2020 08:10:02 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id a9so4105372wmm.2;
+        Sun, 27 Sep 2020 08:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=lgP48LmDi6OR55TkF8fuCZFClfYwvs7R4PpuOgG5rOo=;
-        b=BMIuhpxy9MD5mQ4V49vciGHOcDWUM2qZo2fGc2jnthCCTB+vfK9Yb42Gc8K2EmFiRa
-         iJozIDjoYKcXU8d5JwtodiwIG/Md4KmhSA+qRBvYWWR5l8XQ7G07O+pH+aQjWaq+Esew
-         l0YMWqJjofUqzp7VmGZVIg9rfNmDACHjOxO/d4GRxhu962dxiivWi90HOWbdOf2VO/z0
-         otpv2b27/C3v671FncQifBdp3bBVZ2uCoQB44/YXrKZocVlV5FoBoltu/jkHmO0Sj/K9
-         67oJy/43pRSGdmSsLCW/h2kwMi8u+7OvHWQu7354jQDraZ7bNl9dfDcI3CKaRFhskREq
-         yYFg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PNSBe0zAjluon9ill3hnifHC4ktxmqkt1PDQlHvm6Pg=;
+        b=Ge3aF7MshyN28iK7O+AE8wVD5ytwxAYLrlMjJZIwSpogIG8K/pG0mmJEalGoHYm+oa
+         ULzhjxlRNzJVNzYEPWGado0teCQDKTqNnhsqpL/IHb5S3XyPiZPWKJh6ykICVGYyHN+8
+         xC54Sz0Ae75JyrOZ07f5N7pUkPmEgHbWlYTybpCYD0X4dPjYPAXV7GpoNPP1TjJZ06Kg
+         z7ivCEf699pdVSaEeXtDns9fyAytsK2h2GXbzcgFrR7IwJW4VKhlkGNNu2Yowg2V8L5K
+         hYMjVgG+Y1yfJqPY0J84H6TUEeHxCglfVHrbOpPs8/YKx+gOJSNu3TWfepj7oA0m6Lkp
+         En7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=lgP48LmDi6OR55TkF8fuCZFClfYwvs7R4PpuOgG5rOo=;
-        b=HiSdOVnAebHttvkfxgG91mYXdopnG7V49p08awlnk75pHD52nSMUgyztINZUMmVOFk
-         ql1QkASQrCILvhOE7rAldIBFP8Yh4vfZh6We8Jf9y45MIgQrs7S/XwUNCv3T3h3cpKxh
-         6x0bzTH1IDnBOemzjW4Frd1j54IpF3ihlUpv9D7XHuQW2SYOSdGFY2pfmJS/FRCT5/EX
-         vi4qy61KYjFl1uUWQoZPrZX0JrYrU5S4bZ5SS2QF27N8JBfCuc07U04nn7/BpbbovUuL
-         71qHzVrFcEqf3ybd/ju9KRDWIywxLduqqXAVZJCKKKisGybosO5ezkR7WtB4efZeBaqL
-         Qq5g==
-X-Gm-Message-State: AOAM533coaMROvDgnllJqyjJbKafXrIb0aCgXIqntrH9Y7h6fxlIPliM
-        Cd7LuV4MoQMoeszOOjx75tRaHD58kxaFWKwYIF0=
-X-Google-Smtp-Source: ABdhPJyi8Qg/4C/eCF2XezRHXtKYOEgyHWgsmnY7E7R1VZ2MKMvVQMATSNs2tYCCfBe8pPSJrUdwp/H8v0IG3Z4sDq4=
-X-Received: by 2002:ac2:5458:: with SMTP id d24mr1572771lfn.446.1601163712190;
- Sat, 26 Sep 2020 16:41:52 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PNSBe0zAjluon9ill3hnifHC4ktxmqkt1PDQlHvm6Pg=;
+        b=Gc4TQTTNggrTDZyjOhGfrveIScTv0EfN24w0lARMXjttOVvCZUxB1GesLgK+a5VlwY
+         6b2dcWlzA+TUy4Dev2sVLo+MdRyOY9GpdJVdA2DDTotuq4KuR/5oBfJcw2aFtnBaKDyT
+         5Vk19lpw/0VX18CAVjkUwPBWybKmLOzaFfvPF0ndt1tWPGEmbb74L+KNptfRvLtan5zV
+         bCI7Llw51J2IVrwrHnhYtQHZTUXsVSFYxZuectBHqAIE4C7brtKz0ZgspApUOHopPdI/
+         BJZb0CR5JMwFDcB3k+nVu7RJWPEH8rAuqud1vePRLqFhcwtMbAtvvrktsPzMIH1/agG7
+         5IrA==
+X-Gm-Message-State: AOAM530SVc6KCYmoHNSPGaZy7YdeBXASfkmldwxRyoPFAVj8ilit0Qrv
+        2lbzM6HHDuHeEynITqGkSnQ=
+X-Google-Smtp-Source: ABdhPJyQfBZuFJLSQfmtsxw396achk7s8orrIXlS/eW/HeoBrYMfZLeHLR+tmELZqpjWdK9h9+2xXA==
+X-Received: by 2002:a1c:4b17:: with SMTP id y23mr7301070wma.162.1601219401421;
+        Sun, 27 Sep 2020 08:10:01 -0700 (PDT)
+Received: from arrakis.kwizart.net (lfbn-nic-1-212-171.w2-15.abo.wanadoo.fr. [2.15.59.171])
+        by smtp.gmail.com with ESMTPSA id s11sm9565114wrt.43.2020.09.27.08.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2020 08:10:00 -0700 (PDT)
+From:   Nicolas Chauvet <kwizart@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        Nicolas Chauvet <kwizart@gmail.com>
+Subject: [PATCH v2 0/6] thermal: tegra: soctherm bugfixes
+Date:   Sun, 27 Sep 2020 17:09:50 +0200
+Message-Id: <20200927150956.34609-1-kwizart@gmail.com>
+X-Mailer: git-send-email 2.25.4
 MIME-Version: 1.0
-References: <CGME20200924100342epcas1p42ad5d9bf5f2316f8c9e3909dfaa49a75@epcas1p4.samsung.com>
- <2dc9eeae-159e-c886-0278-f3c85d20bab5@samsung.com> <CAJZ5v0h3yLJjaxshWUdYAzGW2RhjWqeKv+iEumKQyOs16pc2oQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0h3yLJjaxshWUdYAzGW2RhjWqeKv+iEumKQyOs16pc2oQ@mail.gmail.com>
-Reply-To: cwchoi00@gmail.com
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-Date:   Sun, 27 Sep 2020 08:41:16 +0900
-Message-ID: <CAGTfZH3u3i1V6UXmf0KvXwQ4=ytA7DPTdLKO3nnkKmbQ80kJyg@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq fixes for v5.9-rc7
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Sep 24, 2020 at 12:03 PM Chanwoo Choi <cw00.choi@samsung.com> wrote:
-> >
-> > Dear Rafael,
-> >
-> > This is devfreq-next pull request for v5.9-rc7. I add detailed description of
-> > this pull request on the following tag. Please pull devfreq with following updates.
-> > - tag name : devfreq-fixes-for-5.9-rc7
->
-> Pulled, thanks!
->
-> I would appreciate receiving pull requests a bit earlier before the
-> target -rc, though.
+When using tegra_soctherm driver on jetson-tk1, the following messages
+can be seen:
+from kernel: tegra_soctherm 700e2000.thermal-sensor:
+ throttle-cfg: heavy: no throt prop or invalid prop
+ soctherm: trip temperature -2147483647 forced to -127000
+ thermtrip: will shut down when cpu reaches 101000 mC
+ soctherm: trip temperature -2147483647 forced to -127000
+ thermtrip: will shut down when gpu reaches 101000 mC
+ soctherm: trip temperature -2147483647 forced to -127000
+ thermtrip: will shut down when pll reaches 103000 mC
+ throttrip: pll: missing hot temperature
+ soctherm: trip temperature -2147483647 forced to -127000
+ thermtrip: will shut down when mem reaches 101000 mC
+ throttrip: mem: missing hot temperature
+ IRQ index 1 not found
 
-I'm sorry for late pull request for rc. I'll send pull request as you commented.
+This serie fixes two errors and two warnings that are reported in dmesg
+It was compiled and tested at runtime on jetson-tk1 only.
+
+
+v2:
+ * Add missing tegra210 device-tree properties
+ * Add the appropriate prefix for tegra soctherm
+ * Use SoCs condition over of_compatible
+
+
+Nicolas Chauvet (6):
+  ARM: tegra: Add missing gpu-throt-level to tegra124 soctherm
+  ARM: tegra: Add missing hot temperatures to tegra124 thermal-zones
+  arm64: tegra: Add missing hot temperatures to tegra132 thermal-zones
+  arm64: tegra: Add missing gpu-throt-level to tegra210 soctherm
+  arm64: tegra: Add missing hot temperatures to tegra210 thermal-zones
+  thermal: tegra: Avoid setting edp_irq when not relevant
+
+ arch/arm/boot/dts/tegra124.dtsi           | 11 +++++++
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi  | 10 ++++++
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi  | 13 ++++++++
+ drivers/thermal/tegra/soctherm.c          | 38 +++++++++++++----------
+ drivers/thermal/tegra/soctherm.h          |  1 +
+ drivers/thermal/tegra/tegra124-soctherm.c |  1 +
+ drivers/thermal/tegra/tegra132-soctherm.c |  1 +
+ drivers/thermal/tegra/tegra210-soctherm.c |  1 +
+ 8 files changed, 60 insertions(+), 16 deletions(-)
 
 -- 
-Best Regards,
-Chanwoo Choi
+2.25.4
+
