@@ -2,208 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A282227B4F9
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 21:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C54827B5CA
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 21:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbgI1TFa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Sep 2020 15:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S1726656AbgI1T7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Sep 2020 15:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbgI1TFa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 15:05:30 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4E7C061755;
-        Mon, 28 Sep 2020 12:05:28 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id ay8so2823294edb.8;
-        Mon, 28 Sep 2020 12:05:28 -0700 (PDT)
+        with ESMTP id S1726590AbgI1T7A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 15:59:00 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092B9C061755;
+        Mon, 28 Sep 2020 12:59:00 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id y15so2383044wmi.0;
+        Mon, 28 Sep 2020 12:58:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=hRTBwQSNskyyWTt7HoaboYk425+EVn9mSaFvm7gVvzI=;
-        b=kFEqroD0yn0X0PdULijc1NU8Yf7u7hfECskpCWz8xWDN1nURcXG8azPKpLiY+2WNbi
-         FnIPi7cgFD53pS4rdmIzMlW+jPP+14zucxYTDmCn+kXI8hFN1dNK4vvLchiH59Q7gLYj
-         +fk+aFzFyspooNVybhD2qJhC2KPLrzw70qFkJv0na+dudpfjmZPr8zUVGX9eRa8/L9Fg
-         NBLAGehzqlzq7I0X6pRgMg4UkjER7e2fo2oN+73TvgYYgfNdG3V5my6yhsMD/mm4I7Wv
-         8ym7fzBwMghRp0GiNfc3B7ZRMfIFWpP6WyJCmvXbQPstb8DI2nuNnXDyxdRyoO9pbl06
-         6dLw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R40nrCDfhihDaBak/buX8nywTFdAEmU4Ja2xlgkMpqk=;
+        b=qrDsEFA0vYMYm2cs78HiC7HnifY6UfEh5tE99eHZRifsMoXiOe8pimSaKCxFpIyss+
+         Xn2F4HfK6ESIgX81k0Li/LIO0d5y1O5Z5a+8RZ6gxr7bh1Et1i/PliJidTKZ9f1LHbxU
+         9yxCM04Gnfs+5ZGev8a8CZzw+JpV7nBB7YzEaEFnOwNVVUjnevqDDI6E0KJCsz/xlD7p
+         humPbko98hUZ4ENqkQo18eQdlJWOXtb0R0ui+ltQxTx35IAiNkagqqE0SB1YodXJXbwM
+         4EkSdpYwf9nvecNfUWkb/XmXyhNgkLaIPGsn9vlOvNPgjPtjDDwio53YSAxpqsuJr+PK
+         YxQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=hRTBwQSNskyyWTt7HoaboYk425+EVn9mSaFvm7gVvzI=;
-        b=XXnqN6LxcmDuOwvpBdvxogvbJ/1dbOkEuWho4mzHfpf03Kv1muC6lpI1K+b/2HvZIV
-         Gt64RW1fIZiYT1sZHJKmZlnnWB5hAuGDRk/booJ2ozCK+1t+5nK9G5THrVcbZj/aXYdK
-         K4lUFTHZYIRnos+D4+0hsuFqdEF8cbiuQSiAcWQqNiBbJvKE/QRjzVyuegse1XKVnPk2
-         r6u+cQXx4iEypzPL59uyz3idpiRtFe+vEjMFHD12QIgLMMo8kumA3rGEjF5tq8B1u98m
-         Su15pDbA2IFTpOW+bnWeZhrQtjgADjlUcdYQCaqXCSMc4uKolU1BYsQxouG1xRB2DDUs
-         9IqA==
-X-Gm-Message-State: AOAM532ICzpiepqbrbmVRy3zLwDgJM0/lZSqe21EcILgsfCo+MZ7t3np
-        O3Z3b4SeEYZQKEEFq/57Xx6/S1ELj/W6sc8K
-X-Google-Smtp-Source: ABdhPJyx1WFcLiVlf3JIRvX3dBSFpqSlvJxG8RGuzVpj4dxGjImJVhR7Jq4xn/oIqgvpaQK+KLO/MQ==
-X-Received: by 2002:a50:e3c4:: with SMTP id c4mr3550332edm.90.1601319926893;
-        Mon, 28 Sep 2020 12:05:26 -0700 (PDT)
-Received: from AnsuelXPS (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
-        by smtp.gmail.com with ESMTPSA id x12sm2832585edq.77.2020.09.28.12.05.25
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Sep 2020 12:05:26 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Rob Herring'" <robh@kernel.org>
-Cc:     "'MyungJoo Ham'" <myungjoo.ham@samsung.com>,
-        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
-        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20200927160515.6480-1-ansuelsmth@gmail.com> <20200927160515.6480-2-ansuelsmth@gmail.com> <20200928180839.GB2999374@bogus>
-In-Reply-To: <20200928180839.GB2999374@bogus>
-Subject: RE: [PATCH 2/2] dt-bindings: devfreq: Document L2 Krait CPU Cache devfreq driver
-Date:   Mon, 28 Sep 2020 21:05:24 +0200
-Message-ID: <002401d695ca$52c2f850$f848e8f0$@gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R40nrCDfhihDaBak/buX8nywTFdAEmU4Ja2xlgkMpqk=;
+        b=Iof8fhXwJzP8jwIeWvfTL2zCnAr9FjzSolH/w2HWtUTZ+IzSjD/BY9osTCqyHSTc9+
+         0jzF5f018upDeN/SJK0HU+fFZzUnfto4kUNHU8UI4c7mXxjF7I2I8o/kSp9Ze1uN8twj
+         gCCPB0UfThvAG0aCgpNzX6neBkK2oT5G0QiEg0j7GLBC8XHqZRTNz6Ux5RCbnTaVyIrt
+         a/aB2MXqcyHIcHsYJIch1RIXX3jmxnNYca0mv5SKWBk0YGOu97wEN8o7y51c9CVRfsQs
+         HwlWqwriLzX7MLXqmYjyb52BAMoq0ycLPYwhMxM5U78o9ZgIAbzYEwRYkD4tWjJov+o+
+         UTyA==
+X-Gm-Message-State: AOAM531y/bU5CCPx7jEgb5B8JqmryTIUe1CKvLTnLwFXlRJ97Hzisql9
+        B0USWquri6RRejLeKPYBBds=
+X-Google-Smtp-Source: ABdhPJwku5+xhjSNPN+gwulBq1wbSl0jOpoz06nnz0x0xvjXyMrJzi6pLqvi6Ba61eMBP2aBpLE8gg==
+X-Received: by 2002:a05:600c:220f:: with SMTP id z15mr751487wml.87.1601323138479;
+        Mon, 28 Sep 2020 12:58:58 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu ([2.237.20.237])
+        by smtp.gmail.com with ESMTPSA id q4sm2607434wru.65.2020.09.28.12.58.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Sep 2020 12:58:57 -0700 (PDT)
+From:   kholk11@gmail.com
+To:     bjorn.andersson@linaro.org
+Cc:     robh+dt@kernel.org, agross@kernel.org, georgi.djakov@linaro.org,
+        kholk11@gmail.com, marijns95@gmail.com, konradybcio@gmail.com,
+        martin.botka1@gmail.com, linux-arm-msm@vger.kernel.org,
+        phone-devel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Add SDM630/636/660 interconnect driver
+Date:   Mon, 28 Sep 2020 21:58:51 +0200
+Message-Id: <20200928195853.40084-1-kholk11@gmail.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: it
-Thread-Index: AQKHJ8vfj37MLqL4um7J+At48GMuxQIRgZ/YAlxGVsun+dZE4A==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 
+This patch series adds the SDM660 interconnect provider driver in
+order to stop some timeouts and achieve some decent performance by
+avoiding to be NoC limited.
+It's also providing some power consumption improvement, but I have
+only measured that as less heat, which is quite important when
+working on thermally constrained devices like smartphones.
 
-> -----Original Message-----
-> From: Rob Herring <robh@kernel.org>
-> Sent: Monday, September 28, 2020 8:09 PM
-> To: Ansuel Smith <ansuelsmth@gmail.com>
-> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>; Kyungmin Park
-> <kyungmin.park@samsung.com>; Chanwoo Choi
-> <cw00.choi@samsung.com>; linux-pm@vger.kernel.org;
-> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH 2/2] dt-bindings: devfreq: Document L2 Krait CPU
-> Cache devfreq driver
-> 
-> On Sun, Sep 27, 2020 at 06:05:13PM +0200, Ansuel Smith wrote:
-> > Document dedicated L2 Krait CPU Cache devfreq scaling driver.
-> >
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> > ---
-> >  .../bindings/devfreq/krait-cache-devfreq.yaml | 77
-> +++++++++++++++++++
-> >  1 file changed, 77 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/devfreq/krait-
-> cache-devfreq.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/devfreq/krait-cache-
-> devfreq.yaml b/Documentation/devicetree/bindings/devfreq/krait-cache-
-> devfreq.yaml
-> > new file mode 100644
-> > index 000000000000..099ed978e022
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/devfreq/krait-cache-
-> devfreq.yaml
-> > @@ -0,0 +1,77 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/cpufreq/krait-cache-devfreq.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: DEVFREQ driver for Krait L2 Cpu Cache Frequency Scaling
-> 
-> Bindings are for h/w devices, not collections of properties for some
-> driver. Define a binding for L2 cache and add on to it what you need.
-> 
+Please note that this driver's yaml binding is referring to a MMCC
+clock, so this series does depend on the SDM660 MMCC driver that I
+have sent separately.
+The multimedia clock is required only for the Multimedia NoC (mnoc).
 
-Should I still document it in the devfreq directory or somewhere else?
+This patch series has been tested against the following devices:
+ - Sony Xperia XA2 Ultra (SDM630 Nile Discovery)
+ - Sony Xperia 10        (SDM630 Ganges Kirin)
+ - Sony Xperia 10 Plus   (SDM636 Ganges Mermaid)
 
-> > +
-> > +maintainers:
-> > +  - Ansuel Smith <ansuelsmth@gmail.com>
-> > +
-> > +description: |
-> > +  This Scale the Krait CPU L2 Cache Frequency and optionally voltage
-> > +  when the Cpu Frequency is changed (using the cpufreq notifier).
-> > +
-> > +  Cache is scaled with the max frequency across all core and the cache
-> > +  frequency will scale based on the configured threshold in the dts.
-> > +
-> > +  The cache thresholds can be set to 3+ frequency bin, idle, nominal
-and
-> > +  high.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: qcom,krait-cache
-> > +
-> > +  clocks:
-> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> 
-> 'clocks' already has a type defined. You just need how many and what
-> each entry is.
-> 
-> > +    description: Phandle to the L2 CPU clock
-> > +
-> > +  clock-names:
-> > +    const: "l2"
-> > +
-> > +  voltage-tolerance:
-> > +    description: Same voltage tolerance of the Krait CPU
-> 
-> Needs a vendor prefix and unit suffix.
-> 
-> > +
-> > +  l2-cpufreq:
-> > +    description: |
-> > +      Threshold used by the driver to scale the L2 cache.
-> > +      If the max CPU Frequency is more than the set frequency,
-> > +      the driver will transition to the next frequency bin.
-> > +      Value is in kHz
-> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> > +    minItems: 3
-> > +    items:
-> > +      - description: idle
-> > +      - description: nominal
-> > +      - description: high
-> > +
-> > +  l2-supply:
-> > +    $ref: "/schemas/types.yaml#/definitions/phandle"
-> > +    description: Phandle to the L2 regulator supply.
-> > +
-> > +  opp-table: true
-> > +
-> > +required:
-> > +  - compatible
-> > +  - clocks
-> > +  - clock-names
-> > +  - voltage-tolerance
-> > +  - l2-cpufreq
-> > +
-> > +examples:
-> > +  - |
-> > +    qcom-krait-cache {
-> > +      compatible = "qcom,krait-cache";
-> > +      clocks = <&kraitcc 4>;
-> > +      clock-names = "l2";
-> > +      l2-cpufreq = <384000 600000 1200000>;
-> > +      l2-supply = <&smb208_s1a>;
-> > +
-> > +      operating-points = <
-> 
-> Not documented and generally deprecated.
-> 
+Changes in v2:
+ - Added missing qcom,mmcc-sdm660.h dt-binding include in the
+   interconnect/qcom,sdm660.yaml binding, as pointed out by
+   Rob Herring
 
-Ok will change to v2.
+AngeloGioacchino Del Regno (2):
+  interconnect: qcom: Add SDM660 interconnect provider driver
+  dt-bindings: interconnect: Add bindings for Qualcomm SDM660 NoC
 
-> > +        /* kHz    uV */
-> > +        384000  1100000
-> > +        1000000  1100000
-> > +        1200000  1150000
-> > +      >;
-> > +    };
-> > --
-> > 2.27.0
-> >
+AngeloGioacchino Del Regno (2):
+  interconnect: qcom: Add SDM660 interconnect provider driver
+  dt-bindings: interconnect: Add bindings for Qualcomm SDM660 NoC
+
+ .../bindings/interconnect/qcom,sdm660.yaml    | 147 +++
+ drivers/interconnect/qcom/Kconfig             |   9 +
+ drivers/interconnect/qcom/Makefile            |   2 +
+ drivers/interconnect/qcom/sdm660.c            | 919 ++++++++++++++++++
+ .../dt-bindings/interconnect/qcom,sdm660.h    | 116 +++
+ 5 files changed, 1193 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
+ create mode 100644 drivers/interconnect/qcom/sdm660.c
+ create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
+
+-- 
+2.28.0
 
