@@ -2,128 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3D627AFB6
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 16:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AEB27AFE5
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 16:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgI1OKx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Sep 2020 10:10:53 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40970 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgI1OKw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 10:10:52 -0400
-Received: by mail-ot1-f65.google.com with SMTP id q21so1017284ota.8;
-        Mon, 28 Sep 2020 07:10:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2sM12ZeK0z1tSNxQRVSSWCLi5jDZGPNS8m7K+6sRVao=;
-        b=OWD79MGyqIOE5fHO53MPeWlK4vPkk4Sde63QKpjGUi5buaCLiK3o4ADnWoLfbCcGI1
-         nTV5Y6P28Dokqh+zsl6pzna8PWT9omN6xW4+cN6ITInWUq9wkSA3Nx9gqrUjAJZTiHbq
-         tT7qhPqzPoM/AOMZtueM4wV/13e9fZewU1w8Nr/Kf4sBAzrHaNbeI+PxOex69xg8h6cU
-         wMrhCXwX9HzkxyaAMzmnkgBWbkTHT3490jBDVh6D0z8aSsEYTgqzffeAyfN1Wt04sLTM
-         MwNgB8vZNzsBJqmekw3+JZWsjiTTYmjGfIBxKRWG9CcNs2hBooJag2/Pj/FAkEcd9vyE
-         //2Q==
-X-Gm-Message-State: AOAM532xhvlTNYMebyj/BEoFqJqzthMjBkDz7NHp5K37KeaI7NsBqJf9
-        JuPgTKCxVRVVbmaGew0OnAKul9LR/l03wN0ogUo=
-X-Google-Smtp-Source: ABdhPJzoRcZtx0KR+JiVPrhbYB+WXxT604oAjCIQ0JUATh9EyZHxwpAfE2Rm0/6BIsROa8t6jNpV1RiZbkd6WDpqdb8=
-X-Received: by 2002:a9d:718a:: with SMTP id o10mr1097527otj.262.1601302251909;
- Mon, 28 Sep 2020 07:10:51 -0700 (PDT)
+        id S1726461AbgI1OXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Sep 2020 10:23:37 -0400
+Received: from foss.arm.com ([217.140.110.172]:52392 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726327AbgI1OXh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Sep 2020 10:23:37 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 765FD1063;
+        Mon, 28 Sep 2020 07:23:36 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1756D3F73B;
+        Mon, 28 Sep 2020 07:23:35 -0700 (PDT)
+Date:   Mon, 28 Sep 2020 15:23:34 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Quentin Perret <qperret@google.com>, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, valentin.schneider@arm.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] arm64: rebuild sched domains on invariance status
+ changes
+Message-ID: <20200928142334.GA19372@arm.com>
+References: <20200924123937.20938-1-ionela.voinescu@arm.com>
+ <20200924123937.20938-4-ionela.voinescu@arm.com>
+ <20200924133925.GC3920949@google.com>
+ <20200924161002.GC17927@arm.com>
+ <20200925135900.GA11648@google.com>
+ <626062da-1d0e-3095-dd6f-f909a60a7de3@arm.com>
 MIME-Version: 1.0
-References: <00d901d693a4$93195980$b94c0c80$@gmail.com>
-In-Reply-To: <00d901d693a4$93195980$b94c0c80$@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 28 Sep 2020 16:10:36 +0200
-Message-ID: <CAJZ5v0ivZnvVbY4WyM1SQO1TY=G8yb4=C0kWkVQPas5=NX1Sog@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: change #ifdef for the declaration of cpuidle_enter_s2idle()
-To:     zhuguangqing83 <zhuguangqing83@gmail.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <626062da-1d0e-3095-dd6f-f909a60a7de3@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Sep 26, 2020 at 3:30 AM zhuguangqing83 <zhuguangqing83@gmail.com> wrote:
->
->
-> > On Thu, Sep 24, 2020 at 10:01 AM <zhuguangqing83@gmail.com> wrote:
-> > >
-> > > From: zhuguangqing <zhuguangqing@xiaomi.com>
-> > >
-> > > Currently, if CONFIG_SUSPEND=n and CONFIG_CPU_IDLE=y, the function
-> > > cpuidle_enter_s2idle() is declared but not defined, it may cause error
-> > > when cpuidle_enter_s2idle() is called.
-> > >
-> > > If CONFIG_SUSPEND=y and CONFIG_CPU_IDLE=n, the function
-> > > cpuidle_enter_s2idle() is defined as "return -ENODEV;" which is not
-> > > supposed to be.
-> > >
-> > > Change #ifdef CONFIG_CPU_IDLE to #ifdef CONFIG_SUSPEND for
-> > > cpuidle_enter_s2idle() in cpuidle.h, which is consistent with its
-> > > defination in cpuidle.c.
-> >
-> > Well, what about the case when CONFIG_SUSPEND is set, but CONFIG_CPU_IDLE
-> > isn't?
-> >
->
-> When CONFIG_SUSPEND is set, but CONFIG_CPU_IDLE isn't, the function
-> cpuidle_enter_s2idle() is defined in cpuidle.c, but the defination in
-> cpuidle.c is not used actually because CONFIG_CPU_IDLE isn't set, we
-> only use its defination as "return -ENODEV;" in cpuidle.h.
+Hi guys,
 
-Actually, if CONFIG_CPU_IDLE is not set, cpuidle.c is not compiled at
-all AFAICS, but after the $subject patch the compiler will be looking
-for cpuidle_enter_s2idle() in that case, won't it? [The static inline
-stub is only present for CONFIG_SUSPEND unset.]
+On Monday 28 Sep 2020 at 13:55:49 (+0200), Dietmar Eggemann wrote:
+> On 25/09/2020 15:59, Quentin Perret wrote:
+> > Hey Ionela,
+> > 
+> > On Thursday 24 Sep 2020 at 17:10:02 (+0100), Ionela Voinescu wrote:
+> >> I'm not sure what is a good way of fixing this.. I could add more info
+> >> to the warning to suggest it might be temporary ("Disabling EAS:
+> >> frequency-invariant load tracking currently not supported"). For further
+> >> debugging there are the additional prints guarded by sched_debug().
+> >>
+> >> I'll look over the code some more to see if other ideas pop out. Any
+> >> suggestions are appreciated.
+> > 
+> > Right, I'm not seeing anything perfect here, but I think I'd be
+> > personally happy with this message being entirely guarded by
+> > sched_debug(), like we do for asym CPU capacities for instance.
+> > 
+> > It's not easy to see if EAS has started at all w/o sched debug anyway,
+> > so I expect folks who need it to enable the debug stuff during
+> > bring-up. With a descriptive enough warn message, that should be just
+> > fine. But that's my 2p, so I'm happy to hear if others disagree.
+> 
+> Are you discussing a scenario where the system doesn't have FI via
+> CPUfreq but only via AMU? And then we would get the pr_warn
+> 
+>  "rd %*pbl: Disabling EAS: frequency-invariant load tracking not
+>  supported"
+> 
 
-> > > Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
-> > > ---
-> > >  include/linux/cpuidle.h | 14 +++++++++-----
-> > >  1 file changed, 9 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> > > index 6175c77bf25e..2aa8cead1727 100644
-> > > --- a/include/linux/cpuidle.h
-> > > +++ b/include/linux/cpuidle.h
-> > > @@ -216,22 +216,26 @@ static inline struct cpuidle_device
-> > *cpuidle_get_device(void) {return NULL; }
-> > >  extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> > >                                       struct cpuidle_device *dev,
-> > >                                       u64 latency_limit_ns);
-> > > -extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > > -                               struct cpuidle_device *dev);
-> > >  extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
-> > >  #else
-> > >  static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> > >                                              struct cpuidle_device *dev,
-> > >                                              u64 latency_limit_ns)
-> > >  {return -ENODEV; }
-> > > -static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > > -                                      struct cpuidle_device *dev)
-> > > -{return -ENODEV; }
-> > >  static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
-> > >  {
-> > >  }
-> > >  #endif
-> > >
-> > > +#ifdef CONFIG_SUSPEND
-> > > +extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > > +                               struct cpuidle_device *dev);
-> > > +#else
-> > > +static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> > > +                                      struct cpuidle_device *dev)
-> > > +{return -ENODEV; }
-> > > +#endif
-> > > +
-> > >  /* kernel/sched/idle.c */
-> > >  extern void sched_idle_set_state(struct cpuidle_state *idle_state);
-> > >  extern void default_idle_call(void);
-> > > --
-> > > 2.17.1
-> > >
->
+Yes, that is correct. Unfortunately for !sched_debug, even if we have
+FI via AMUs, the EAS enablement message "sched_energy_set: starting EAS"
+won't appear, and therefore one would only see the warnings above, giving
+the wrong impression that EAS is disabled.
+
+> in (1)-(3)?
+> 
+> (1) initial sd build
+> (2) update_topology_flags_workfn()
+> (3) rebuild_sched_domains_energy()
+> (4) init_amu_fie()
+> 
+> Today (e.g. on Juno( we start EAS within (1)
+> 
+> root@juno:~# dmesg | grep "build_perf_domains\|EAS"
+> [    3.491304] *** build_perf_domains: rd 0-5
+> [    3.574226] sched_energy_set: starting EAS <--- !!!
+> [    3.847584] *** build_perf_domains: rd 0-5
+> [    3.928227] *** build_perf_domains: rd 0-5
+> 
+> And on a future AMU FI only system it would look like:
+> 
+>  Disabling EAS: frequency-invariant load tracking not supported"
+>  Disabling EAS: frequency-invariant load tracking not supported"
+>  Disabling EAS: frequency-invariant load tracking not supported"
+>  sched_energy_set: starting EAS
+> 
+
+Correct (with the same mention that "sched_energy_set: starting EAS" is
+guarded by sched debug).
+
+> I guess it's a good idea to put all those warnings which indicate why
+> EAS can't be started under sched_debug().
+> 
+> The warning "rd %*pbl: CPUs do not have asymmetric capacities" already
+> is. This one is actually very similar to the FI related one, since
+> 'asymmetric capacities' could only exist starting with (2) (big.LITTLE
+> based entirely on CPUfreq diffs)
+
+Yes, this seems the right solution, as suggested by Quentin as well.
+I'll do this together with the other suggestions and submit v2.
+
+Thank you both,
+Ionela.
+
