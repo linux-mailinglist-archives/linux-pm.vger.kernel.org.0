@@ -2,105 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9327727ACEB
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 13:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEE127AD53
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 13:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726615AbgI1LfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Sep 2020 07:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgI1LfN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 07:35:13 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5153AC061755;
-        Mon, 28 Sep 2020 04:35:13 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id gr14so8064007ejb.1;
-        Mon, 28 Sep 2020 04:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=H54mErN7yVeSyiSMCbQutLCzpzIzf9ZISuru6EqV53Y=;
-        b=MxSgjektmvs+k5buqD7e84mMn+BejuRg+/7pd4MeKluPbeiDLliOb9WH4axU8JFm30
-         dvvRlZAqWzxYu1WzhBI4drkdz2pN8Jja5+JLaZdZcY0VO/ez/EB5AtcxcgWc7oUC9QlB
-         YeKz0bVGViHSZ3I+msg6EZNLLgSzStzhy7oqZAzeo/pPkOSEOXE38SCbmwH7FfZevjJD
-         arRm0XJ5ae2zl6Nq/u7LrD6ibxoxuIklInN089XpQ9NNlHUeETNr2Ht4BxJPfmt312b7
-         jJOTnCF6grxFeUgLBBDMxSZqJtBVYpE4EiEjz0lHBZnn6uJjrBYrg3ox/Sm+ZqwB+geO
-         9tXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=H54mErN7yVeSyiSMCbQutLCzpzIzf9ZISuru6EqV53Y=;
-        b=NGJFK1mExkyL0ClSnlTmX/HHEzVua/B0BF2ThiBP23X2uOgO2OJBzaUqcGc/OHqicE
-         uSxvT0k9IhdGqWWiUboVaFW8wwnzbNKlMKf1pFvV+BcTSzMpsPvk5vPnmI4y7uUQp4v1
-         idjZJAAS9GrPuPtNdz7ca4qzWfdgnVMQ2DZMjd+Sd8tMtozP5FT3wa/zGI8+yWyoOQ6+
-         4rA8gLsocgloiUGn0TZZn+lF3xPeNDsFL9Yabe8F04cAOTN0cpmJMsU8305BWH2/r1fk
-         7wnXMkBcs4eTEDczUQoe03Ft6nhzKbcTvMOnVtSgCTDbaFsvjCyTOkaj8rRbO7s015DI
-         TuUg==
-X-Gm-Message-State: AOAM531r3QiLl3JVvQXxycP555uPdyFihRP+k61hQdn7iX4kJrxWBxqH
-        v5JzdSL8G4mMFWJH4Cw0IhU=
-X-Google-Smtp-Source: ABdhPJyeH0MheGAETpC+2xQtn94x3NATOZ8jYqhUtyA8qgWtvvTv2aTMyzjRjpO3uWi1OSVUCG2kfQ==
-X-Received: by 2002:a17:906:594c:: with SMTP id g12mr1212711ejr.347.1601292911288;
-        Mon, 28 Sep 2020 04:35:11 -0700 (PDT)
-Received: from AnsuelXPS (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
-        by smtp.gmail.com with ESMTPSA id y9sm893360ejw.96.2020.09.28.04.35.09
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Sep 2020 04:35:10 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Amit Kucheria'" <amitk@kernel.org>
-Cc:     "'Andy Gross'" <agross@kernel.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
-        "'Zhang Rui'" <rui.zhang@intel.com>,
-        "'Daniel Lezcano'" <daniel.lezcano@linaro.org>,
-        "'Rob Herring'" <robh+dt@kernel.org>,
-        "'linux-arm-msm'" <linux-arm-msm@vger.kernel.org>,
-        "'Linux PM list'" <linux-pm@vger.kernel.org>,
-        "'open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS'" 
-        <devicetree@vger.kernel.org>,
-        "'LKML'" <linux-kernel@vger.kernel.org>
-References: <20200814134123.14566-1-ansuelsmth@gmail.com> <CAHLCerM666W9ijLu529NNPNz_NuyO0QPKws8spWrR4bWNo0A-A@mail.gmail.com>
-In-Reply-To: <CAHLCerM666W9ijLu529NNPNz_NuyO0QPKws8spWrR4bWNo0A-A@mail.gmail.com>
-Subject: RE: [RFC PATCH v6 0/8] Add support for ipq8064 tsens
-Date:   Mon, 28 Sep 2020 13:35:09 +0200
-Message-ID: <00b901d6958b$6c320ae0$449620a0$@gmail.com>
+        id S1726610AbgI1Lzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Sep 2020 07:55:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:50226 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726600AbgI1Lzy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:55:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F71231B;
+        Mon, 28 Sep 2020 04:55:53 -0700 (PDT)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F3EE3F6CF;
+        Mon, 28 Sep 2020 04:55:51 -0700 (PDT)
+Subject: Re: [PATCH 3/3] arm64: rebuild sched domains on invariance status
+ changes
+To:     Quentin Perret <qperret@google.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, rjw@rjwysocki.net,
+        viresh.kumar@linaro.org, valentin.schneider@arm.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20200924123937.20938-1-ionela.voinescu@arm.com>
+ <20200924123937.20938-4-ionela.voinescu@arm.com>
+ <20200924133925.GC3920949@google.com> <20200924161002.GC17927@arm.com>
+ <20200925135900.GA11648@google.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Message-ID: <626062da-1d0e-3095-dd6f-f909a60a7de3@arm.com>
+Date:   Mon, 28 Sep 2020 13:55:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
+In-Reply-To: <20200925135900.GA11648@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: it
-Thread-Index: AQKNSg84Txe44YHglS9ra7bUDGlM1AMS+IIEp/fqk8A=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Amit Kucheria <amitk@kernel.org>
-> Sent: Monday, September 28, 2020 1:33 PM
-> To: Ansuel Smith <ansuelsmth@gmail.com>
-> Cc: Andy Gross <agross@kernel.org>; Bjorn Andersson
-> <bjorn.andersson@linaro.org>; Zhang Rui <rui.zhang@intel.com>; Daniel
-> Lezcano <daniel.lezcano@linaro.org>; Rob Herring <robh+dt@kernel.org>;
-> linux-arm-msm <linux-arm-msm@vger.kernel.org>; Linux PM list <linux-
-> pm@vger.kernel.org>; open list:OPEN FIRMWARE AND FLATTENED DEVICE
-> TREE BINDINGS <devicetree@vger.kernel.org>; LKML <linux-
-> kernel@vger.kernel.org>
-> Subject: Re: [RFC PATCH v6 0/8] Add support for ipq8064 tsens
+On 25/09/2020 15:59, Quentin Perret wrote:
+> Hey Ionela,
 > 
-> Hi Ansuel,
+> On Thursday 24 Sep 2020 at 17:10:02 (+0100), Ionela Voinescu wrote:
+>> I'm not sure what is a good way of fixing this.. I could add more info
+>> to the warning to suggest it might be temporary ("Disabling EAS:
+>> frequency-invariant load tracking currently not supported"). For further
+>> debugging there are the additional prints guarded by sched_debug().
+>>
+>> I'll look over the code some more to see if other ideas pop out. Any
+>> suggestions are appreciated.
 > 
-> Just a quick note to say that I'm not ignoring this, just on
-> vacations. I'll be back to review this in a few days.
+> Right, I'm not seeing anything perfect here, but I think I'd be
+> personally happy with this message being entirely guarded by
+> sched_debug(), like we do for asym CPU capacities for instance.
 > 
-> Regards,
-> Amit
-> 
+> It's not easy to see if EAS has started at all w/o sched debug anyway,
+> so I expect folks who need it to enable the debug stuff during
+> bring-up. With a descriptive enough warn message, that should be just
+> fine. But that's my 2p, so I'm happy to hear if others disagree.
 
-Thx a lot. Was thinking of resending this but I will wait.
+Are you discussing a scenario where the system doesn't have FI via
+CPUfreq but only via AMU? And then we would get the pr_warn
 
+ "rd %*pbl: Disabling EAS: frequency-invariant load tracking not
+ supported"
 
+in (1)-(3)?
+
+(1) initial sd build
+(2) update_topology_flags_workfn()
+(3) rebuild_sched_domains_energy()
+(4) init_amu_fie()
+
+Today (e.g. on Juno( we start EAS within (1)
+
+root@juno:~# dmesg | grep "build_perf_domains\|EAS"
+[    3.491304] *** build_perf_domains: rd 0-5
+[    3.574226] sched_energy_set: starting EAS <--- !!!
+[    3.847584] *** build_perf_domains: rd 0-5
+[    3.928227] *** build_perf_domains: rd 0-5
+
+And on a future AMU FI only system it would look like:
+
+ Disabling EAS: frequency-invariant load tracking not supported"
+ Disabling EAS: frequency-invariant load tracking not supported"
+ Disabling EAS: frequency-invariant load tracking not supported"
+ sched_energy_set: starting EAS
+
+I guess it's a good idea to put all those warnings which indicate why
+EAS can't be started under sched_debug().
+
+The warning "rd %*pbl: CPUs do not have asymmetric capacities" already
+is. This one is actually very similar to the FI related one, since
+'asymmetric capacities' could only exist starting with (2) (big.LITTLE
+based entirely on CPUfreq diffs)
