@@ -2,156 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B34CF27A94D
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 10:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E06727AA30
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Sep 2020 11:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgI1IHR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Sep 2020 04:07:17 -0400
-Received: from mo-csw1114.securemx.jp ([210.130.202.156]:50596 "EHLO
-        mo-csw.securemx.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726328AbgI1IHR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 04:07:17 -0400
-Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 08S86hJQ020143; Mon, 28 Sep 2020 17:06:43 +0900
-X-Iguazu-Qid: 2wHHD8Mc0ow5N7A8gs
-X-Iguazu-QSIG: v=2; s=0; t=1601280402; q=2wHHD8Mc0ow5N7A8gs; m=wyJW3X7i3huENYMQ7/lLyT141B4MpZI3/qHSzRMZx5Y=
-Received: from imx2.toshiba.co.jp (imx2.toshiba.co.jp [106.186.93.51])
-        by relay.securemx.jp (mx-mr1112) id 08S86eGE006235;
-        Mon, 28 Sep 2020 17:06:40 +0900
-Received: from enc01.toshiba.co.jp ([106.186.93.100])
-        by imx2.toshiba.co.jp  with ESMTP id 08S86elB000843;
-        Mon, 28 Sep 2020 17:06:40 +0900 (JST)
-Received: from hop001.toshiba.co.jp ([133.199.164.63])
-        by enc01.toshiba.co.jp  with ESMTP id 08S86c4l003317;
-        Mon, 28 Sep 2020 17:06:39 +0900
-From:   Punit Agrawal <punit1.agrawal@toshiba.co.jp>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Smita Koralahalli Channabasappa <skoralah@amd.com>,
-        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-edac@vger.kernel.org>,
-        <linux-efi@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <devel@acpica.org>, Tony Luck <tony.luck@intel.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: Re: [PATCH v4] cper, apei, mce: Pass x86 CPER through the MCA handling chain
-References: <20200904140444.161291-1-Smita.KoralahalliChannabasappa@amd.com>
-        <87wo0kiz6y.fsf@kokedama.swc.toshiba.co.jp>
-        <20200923140512.GJ28545@zn.tnic>
-        <87pn6chwil.fsf@kokedama.swc.toshiba.co.jp>
-        <52c50f37-a86c-57ad-30e0-dac0857e4ef7@amd.com>
-        <20200924175023.GN5030@zn.tnic>
-        <877dsiislt.fsf@kokedama.swc.toshiba.co.jp>
-        <20200925161940.GA21194@yaz-nikka.amd.com>
-Date:   Mon, 28 Sep 2020 17:06:36 +0900
-X-TSB-HOP: ON
-Message-ID: <87lfgugwab.fsf@kokedama.swc.toshiba.co.jp>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        id S1726504AbgI1JE2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Sep 2020 05:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbgI1JE2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Sep 2020 05:04:28 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200E9C061755
+        for <linux-pm@vger.kernel.org>; Mon, 28 Sep 2020 02:04:28 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id r78so1378763vke.11
+        for <linux-pm@vger.kernel.org>; Mon, 28 Sep 2020 02:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S7pENcmmNgOoqlL1+ZG5YXU2ecSXuvsW0dZ6tL5rYFY=;
+        b=iqd29t5mDGOgpna+dqL33C997s6TDn5QnSW5JQ985xPlvVqWhqjJ3+MsFOzijTtu6n
+         2oXQ0eov4XdPLwRGfZDm+5jkLPNiYkJhccH0RmK7ZdLMV8cophAkURcQutBN5v8VLgNj
+         t6lxjxwGkr4iQSEyVhfTIU+sM2FRd008Xy8uapCYwAapPl7ph5Pt3X1P+yHe2WJDz/G2
+         fnCP2PVWQZvU0UJzQSahopKJGCPQXFmeI2i8Pr0/9tNjrTzllqGCiAEQ8OqrO7rjILSP
+         9RRvUloZ3yo/feovRLhHw3bxDTOGfsEfFHRiOmy4S4ascfWtajKpCUQpl4DtZa0kru4k
+         PK5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S7pENcmmNgOoqlL1+ZG5YXU2ecSXuvsW0dZ6tL5rYFY=;
+        b=n6tCMhDUT9r+snmtKsEdjTsRMpgJPyKA9rKIx7sWb/abn1buEwI750BWzIaTVUwi4M
+         WLGNS751596Yxps1U7U6RgHw2NdjuJpifGk6J79ve8O5B9+jO3UFShAyqj8xwvubpIFb
+         sH/X/shQ46rDNxmCwJE7rRUv18GhbneDYkwnWBqDMLWBXuAWM85zAadO76PMLFMV5wae
+         LXIE6MRX44+6XxXZMp4oHIE7Vh74imKMxJp7BpdQvuChGpgx9xeeRUH6oc8Tzgtm3q5u
+         mMMxKt+QPWKRCrsvPPjf9ZWWk9K2X0v9OqnFb59o0VCwX4Kz8Kpg/RPDj6bwGZT3xzUM
+         udtg==
+X-Gm-Message-State: AOAM530HlwsWtWDBarzOi/vTswirxwHdrGhqFHBsYVzwRv9oSHW1HLOw
+        0+cBpV1NYJmxSsC5Yhg9whEZ69SBoorUzeianQPx8g==
+X-Google-Smtp-Source: ABdhPJxHK8RbAlpRwlzO6tBh7XUOKN1wlZhR3fkmpMHAJ9DGs5PSbq3MYA1AOvuE9l+LIbKbS8k0TJrL/PCnHO7DnDg=
+X-Received: by 2002:a1f:6ec4:: with SMTP id j187mr4294515vkc.15.1601283867298;
+ Mon, 28 Sep 2020 02:04:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20200924110449.329523-1-ulf.hansson@linaro.org>
+ <20200924110449.329523-4-ulf.hansson@linaro.org> <DB6PR0402MB2760BD51916BEA5DB80A268188360@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+ <CAPDyKFrrLq6mPCsSoRBBmgMxSvC4xeiSedi1c5CsEWF=+f73mw@mail.gmail.com> <DB6PR0402MB2760B91DB92A5307E12D59BB88360@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+In-Reply-To: <DB6PR0402MB2760B91DB92A5307E12D59BB88360@DB6PR0402MB2760.eurprd04.prod.outlook.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 28 Sep 2020 11:03:51 +0200
+Message-ID: <CAPDyKFrb7pv__AOpDRtf-psr9x_pseSCnPG1xe7pxs88m42JFQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] PM / Domains: Add support for PM domain on/off
+ notifiers for genpd
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lina Iyer <ilina@codeaurora.org>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Yazen Ghannam <yazen.ghannam@amd.com> writes:
-
-> On Fri, Sep 25, 2020 at 09:54:06AM +0900, Punit Agrawal wrote:
->> Borislav Petkov <bp@alien8.de> writes:
->> 
->> > On Thu, Sep 24, 2020 at 12:23:27PM -0500, Smita Koralahalli Channabasappa wrote:
->> >> > Even though it's not defined in the UEFI spec, it doesn't mean a
->> >> > structure definition cannot be created.
->> >
->> > Created for what? That structure better have a big fat comment above it, what
->> > firmware generates its layout.
->> 
->> Maybe I could've used a better choice of words - I meant to define a
->> structure with meaningful member names to replace the *(ptr + i)
->> accesses in the patch.
->> 
->> The requirement for documenting the record layout doesn't change -
->> whether using raw pointer arithmetic vs a structure definition.
->> 
->> >> > After all, the patch is relying on some guarantee of the meaning of
->> >> > the values and their ordering.
->> >
->> > AFAICT, this looks like an ad-hoc definition and the moment they change
->> > it in some future revision, that struct of yours becomes invalid so we'd
->> > need to add another one.
->> 
->> If there's no spec backing the current layout, then it'll indeed be an
->> ad-hoc definition of a structure in the kernel. But considering that
->> it's part of firmware / OS interface for an important part of the RAS
->> story I would hope that the code is based on a spec - having that
->> reference included would help maintainability.
->> 
->> Incompatible changes will indeed break the assumptions in the kernel and
->> code will need to be updated - regardless of the choice of kernel
->> implementation; pointer arithmetic, structure definition - ad-hoc or
->> spec provided.
->> 
->> Having versioning will allow running older kernels on newer hardware and
->> vice versa - but I don't see why that is important only when using a
->> structure based access.
->>
+On Fri, 25 Sep 2020 at 16:30, Peng Fan <peng.fan@nxp.com> wrote:
 >
-> There is no versioning option for the x86 context info structure in the
-> UEFI spec, so I don't think there'd be a clean way to include version
-> information.
+> > Subject: Re: [PATCH v2 3/3] PM / Domains: Add support for PM domain on/off
+> > notifiers for genpd
+> >
+> > On Fri, 25 Sep 2020 at 08:08, Peng Fan <peng.fan@nxp.com> wrote:
+> > >
+> > > Hi Ulf,
+> > >
+> > > > Subject: [PATCH v2 3/3] PM / Domains: Add support for PM domain
+> > > > on/off notifiers for genpd
+> > > >
+> > > > A device may have specific HW constraints that must be obeyed to,
+> > > > before its corresponding PM domain (genpd) can be powered off - and
+> > > > vice verse at power on. These constraints can't be managed through
+> > > > the regular runtime PM based deployment for a device, because the
+> > > > access pattern for it, isn't always request based. In other words,
+> > > > using the runtime PM callbacks to deal with the constraints doesn't work
+> > for these cases.
+> > >
+> > > Could the notification be added before/after power on, and
+> > > before/after power off? not just after power on and before power off?
+> > >
+> > > Our SoC has a requirement that before power on/off the specific
+> > > module, the corresponding clk needs to be on to make sure the hardware
+> > > async bridge could finish handshake.
+> >
+> > Thanks for your comments!
+> >
+> > May I ask, to be sure - does the clock correspond to the genpd provider or is it
+> > a clock for the genpd consumer device?
 >
-> The format of the data in the context info is not totally ad-hoc, and it
-> does follow the UEFI spec. The "Register Array" field is raw data. This
-> may follow one of the predefined formats in the UEFI spec like the "X64
-> Register State", etc. Or, in the case of MSR and Memory Mapped
-> Registers, this is a raw dump of the registers starting from the address
-> shown in the structure. The two values that can be changed are the
-> starting address and the array size. These two together provide a window
-> to the registers. The registers are fixed, so a single context info
-> struture should include a single contiguous range of registers. Multiple
-> context info structures can be provided to include registers from
-> different, non-contiguous ranges.
+> It is the clock for the genpd consumer device.
 >
-> This patch is checking if an MSR context info structure lines up with
-> the MCAX register space used on Scalable MCA systems. This register
-> space is defined in the AMD Processor Programming Reference for various
-> products. This is considered a hardware feature extension, so the
-> existing register layout won't change though new registers may be added.
-> A layout change would require moving to another register space which is
-> what happened going from legacy MCA (starting at address 0x400) to MCAX
-> (starting at address 0xC0002000) registers.
-
-Thanks for the SMCA related background.
+> >
+> > If the former, couldn't the clock be managed from the ->power_on|off()
+> > callbacks for the genpd provider?
 >
-> The only two things firmware can change are from what address does the
-> info start and where does the info end. So the implementation-specific
-> details here are that currently the starting address is MCA_STATUS (in
-> MCAX space) for a bank and the remaining info includes the other MCA
-> registers for this bank.
+> Sadly not former.
 >
-> So I think the kernel can be strict with this format, i.e. the two
-> variables match what we're looking for. This patch already has a check
-> on the starting address. It should also include a check that "Register
-> Array Size" is large enough to include all the registers we want to
-> extract. If the format doesn't match, then we fall back to a raw dump
-> of the data like we have today.
+> Our current solution is to add a clock property to the power domain node(NXP ARM SIP
+> based power domain driver), and when power_on/off, we enable/disable the clocks.
 >
-> Or the kernel can be more flexible and try to find the window of
-> registers based on the starting address. I think this is really
-> open-ended though.
+> But we are moving to use SCMI power domain, and leave the clock in Linux,
+> Scmi power domain driver is a generic driver, and we are not able to mix clock
+> parts in the driver which is bad.
+>
+> Your patch gives me a light that if we could use notification to let consumer
+> device driver do the clock enable/disable for each power on and power off.
+> That would be great.
 
-I think I understand the hesitancy here if the firmware can arbitrarily
-move the starting address. Though I hope that doesn't happen as it would
-break the feature introduced in $SUBJECT.
+Thanks for clarifying. Let me re-spin the patch to address your points.
 
-The way I read the code / spec led me to believe that the MSR context
-info records in the SMCA space are just encoding the layout of MC Bank
-registers[0] and making it explicit can only help.
+[...]
 
-But Boris seems to think the current approach is good enough. So no
-objections from me.
-
-Thanks,
-Punit
-
-[0] AMD Processor Programming Reference for Family 17H, Sec 3.1.5
+Kind regards
+Uffe
