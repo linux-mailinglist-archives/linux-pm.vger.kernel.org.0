@@ -2,210 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E5E27D0A6
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 16:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5620927D1A5
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 16:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbgI2OJY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Sep 2020 10:09:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgI2OJX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 10:09:23 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8F5C061755
-        for <linux-pm@vger.kernel.org>; Tue, 29 Sep 2020 07:09:23 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id jw11so2732245pjb.0
-        for <linux-pm@vger.kernel.org>; Tue, 29 Sep 2020 07:09:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Pq2C9aKfdSMOT+usUDeQTw9BvP0yzmTx6KRBaNzsgkU=;
-        b=jbxZE5+WuuUTTBagwwRyEJt8/z9sDU4EPJmj+s/EVMeugw36HRF4lCjxtDCSCj7GZk
-         uZubpEkHF9vnMj8oFqJttNLgxeC2Pr7U3YNKpzVLi0VuWQMQZA/WSqkovi+gJvLZqHIN
-         YkFvIWrlxoO3i30ES0UoOKD3c3bWp5ET/4Nau2AjW+O1SNRF8b0Yr9LTJ6AjdO+e6V7p
-         I13eQsG/u0JJDJ8J+opYHFvWNhESwf42qw1zNW8lBj5iSggEatEgjQA5ZVM46kCodLjR
-         uta7jha5nsSD8vWZ1m9/lPq/PfvGPHU7/nzSiviN83Y74wT9qdXS6YX59LLyDcOk5tMz
-         SnYw==
+        id S1730159AbgI2OnX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Sep 2020 10:43:23 -0400
+Received: from mail-oo1-f67.google.com ([209.85.161.67]:47074 "EHLO
+        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728607AbgI2OnX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 10:43:23 -0400
+Received: by mail-oo1-f67.google.com with SMTP id b12so1330299oop.13;
+        Tue, 29 Sep 2020 07:43:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Pq2C9aKfdSMOT+usUDeQTw9BvP0yzmTx6KRBaNzsgkU=;
-        b=UowsVcLV+83BLKEgNevbQr7lpQBROLIPOaFQ4hpohq6M1OBK63PnEyGU1+MPnyS2yX
-         mSzcbMkmZYyCzt5jWYyN4auLcEnpgf0Ll+CeK+4+9tphqTY4t/4/opjeucj7P9/wyLhf
-         YOkjAQ6hPD5vIsc6j9B1UCyNsVwihkZQxmR+sQ97szC+F0QU0+Di/Moh5N7b32reihCz
-         H43mvl+DwHT3NGxkNJ18X9Nmjj3EK51q6givjXzDkvH/ErXf5w+bVlN8uo7n6NlEUdJt
-         dfyMQfcwTBpXuZ/+7Du2kEqVZ3jRUJqja6FwNrmizTOGbtWpqQKqs0hUGgL9JH8OPRKw
-         jN+A==
-X-Gm-Message-State: AOAM531QSFI8sYspzJp7HKXUhBwbXAvwkXhTRKGbjlzP4QEBB9q/hZAr
-        m7CncwTMDHMYNaRdLzIonKEH6A==
-X-Google-Smtp-Source: ABdhPJwzC8YazSk3gRkCLONIvQH5SIuv8EQACp167Ba+UQYA5Szn3whtlKISjsyVeqtIN5LY/vhtVQ==
-X-Received: by 2002:a17:90a:7bcd:: with SMTP id d13mr3536067pjl.18.1601388563122;
-        Tue, 29 Sep 2020 07:09:23 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id b15sm5523231pft.84.2020.09.29.07.09.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6bgECZ9uqVfvJbocL8Cxkr581j2QQ4ktwy9AOE+ABj0=;
+        b=lYhycORRmA6ytx6j9muoZcFuBec7pd1tOfLw+VKEIehHPjLHa3XaHYiT7kn/bE0vhX
+         7WKbsEeqHLeRKWexDEUeWx7HLIffMn4Pnx7UPnn1I8X0Lq1NyplDbQVbrt5FbDs+Gi6N
+         0EkG/VfSH67tjoU2J1T5Jt4NmHAXP/4OCLAWaM9FK78RpnqrZ1k/fs0v5sS26bz9nTx/
+         SZ2idh5iYBJ2M24GLzIeRIjrPpx5PAuvvg9U3QBgEx1Z5/ytGGEyPMyyLj60U7Tpy26g
+         XE8UBiEYSEXJTTtgAJU4thIQI8szppTLb0QhzmemuLvvGQuWFIz0ie7dyqLhpSu5uipK
+         cBXg==
+X-Gm-Message-State: AOAM532mfUhsq6pR1r0ERXFEe8UgUzAQipv/bGj6cT/iOboGlfmQKmCD
+        q6yvgsML4xUvV+huJo812A==
+X-Google-Smtp-Source: ABdhPJyhKRuXHenxEEbcJRR3XpS7OSTwtwMBjFAFyQvdVeSkYH+HePX6cjvIUGv3FOkseJr8KsxsoA==
+X-Received: by 2002:a4a:b30d:: with SMTP id m13mr4771067ooo.50.1601390602115;
+        Tue, 29 Sep 2020 07:43:22 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id c14sm3106413ooi.9.2020.09.29.07.43.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 07:09:22 -0700 (PDT)
-Message-ID: <5f734012.1c69fb81.4eb94.b343@mx.google.com>
-Date:   Tue, 29 Sep 2020 07:09:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 29 Sep 2020 07:43:21 -0700 (PDT)
+Received: (nullmailer pid 559478 invoked by uid 1000);
+        Tue, 29 Sep 2020 14:43:20 -0000
+Date:   Tue, 29 Sep 2020 09:43:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     kholk11@gmail.com
+Cc:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, konradybcio@gmail.com,
+        phone-devel@vger.kernel.org, georgi.djakov@linaro.org,
+        linux-pm@vger.kernel.org, robh+dt@kernel.org, marijns95@gmail.com,
+        martin.botka1@gmail.com
+Subject: Re: [PATCH v2 2/2] dt-bindings: interconnect: Add bindings for
+ Qualcomm SDM660 NoC
+Message-ID: <20200929144320.GA557822@bogus>
+References: <20200928195853.40084-1-kholk11@gmail.com>
+ <20200928195853.40084-3-kholk11@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v5.9-rc7-68-geb6335b68ce3
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 13 warnings (v5.9-rc7-68-geb6335b68ce3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200928195853.40084-3-kholk11@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 13 warnings (v5.9-rc7-68-ge=
-b6335b68ce3)
-
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
-9-rc7-68-geb6335b68ce3/
-
-Tree: pm
-Branch: testing
-Git Describe: v5.9-rc7-68-geb6335b68ce3
-Git Commit: eb6335b68ce3fc85a93c4c6cd3bb6bc5ac490efe
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-    defconfig (gcc-8): 8 warnings
-
-arm:
-    multi_v7_defconfig (gcc-8): 3 warnings
-
-i386:
-    i386_defconfig (gcc-8): 2 warnings
-
-mips:
-
-riscv:
-
-x86_64:
+On Mon, 28 Sep 2020 21:58:53 +0200, kholk11@gmail.com wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> 
+> Add the bindings for the Qualcomm SDM660-class NoC, valid for
+> SDM630, SDM636, SDM660 and SDA variants.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> ---
+>  .../bindings/interconnect/qcom,sdm660.yaml    | 147 ++++++++++++++++++
+>  1 file changed, 147 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
+> 
 
 
-Warnings summary:
+My bot found errors running 'make dt_binding_check' on your patch:
 
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #size-cells (1) differs from / (2)
-    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
-dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
-s" property but its #address-cells (1) differs from / (2)
-    2    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to poi=
-nter from integer of different size [-Wint-to-pointer-cast]
-    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
-iled prerequisite 'spi_bus_bridge'
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #size-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
-ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
-its #address-cells (1) differs from / (2)
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
-SPI bus
-    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
-spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
-or SPI bus
+Documentation/devicetree/bindings/interconnect/qcom,sdm660.example.dts:20:18: fatal error: dt-bindings/clock/qcom,mmcc-sdm660.h: No such file or directory
+   20 |         #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:342: Documentation/devicetree/bindings/interconnect/qcom,sdm660.example.dt.yaml] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1366: dt_binding_check] Error 2
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
 
-Detailed per-defconfig build reports:
+See https://patchwork.ozlabs.org/patch/1372879
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
-smatches
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
 
-Warnings:
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
-7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
-operty but its #size-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-address-cells (1) differs from / (2)
-    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
-(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
-size-cells (1) differs from / (2)
+Please check and re-submit.
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
-from integer of different size [-Wint-to-pointer-cast]
-    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
-from integer of different size [-Wint-to-pointer-cast]
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
-I bus
-    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
-us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
-us
-    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
-prerequisite 'spi_bus_bridge'
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
