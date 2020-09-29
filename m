@@ -2,94 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCE227DC98
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 01:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1666A27DD20
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 01:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgI2XUA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Sep 2020 19:20:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47490 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728494AbgI2XUA (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Sep 2020 19:20:00 -0400
-Received: from earth.universe (unknown [185.213.155.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6579D20773;
-        Tue, 29 Sep 2020 23:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601421599;
-        bh=WPXNf1ElVSRNw3/GmB0unSeJlPq69xRHSvqa12iVl8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FFaDLFU5o5Aa0pzYqkKAhtfOSr1ssPQ6UUGMBnCf5x9pTvjnJVZCrEUiiJgZDybmd
-         7pbbsgjmjF+pfl8mn2c4b+eyQbt6z6lbDBNj8a4l28eiOtoW6otjOqhN4xZ1qBvOdP
-         cTr1sF1lWfwWX4s0TXg+X4JAZK7bSzztQRWHRWmM=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 440ED3C0C84; Wed, 30 Sep 2020 01:19:57 +0200 (CEST)
-Date:   Wed, 30 Sep 2020 01:19:57 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Dan Murphy <dmurphy@ti.com>, sumit.semwal@linaro.org,
-        linux-pm@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Remove Andrew F Davis from list
-Message-ID: <20200929231957.fx2dchbky6wvyy4j@earth.universe>
-References: <20200917193702.31347-1-dmurphy@ti.com>
- <CAJKOXPc_K-T95MY84qGX6ERi4OmVVGXSkH3XCKqF84qvak_Eqg@mail.gmail.com>
+        id S1729524AbgI2Xx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Sep 2020 19:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728291AbgI2Xx1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 19:53:27 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32212C0613D1
+        for <linux-pm@vger.kernel.org>; Tue, 29 Sep 2020 16:53:27 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id w25so28925vsk.9
+        for <linux-pm@vger.kernel.org>; Tue, 29 Sep 2020 16:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GOMvpJf6jnH+JyF4Og6jExEF8H9zHVHC1Jf6qwYVtbM=;
+        b=iI8aT1Wp1Gb1k5+bUZubbPKESeO6IaGvH04eyr/FlKisSVUJrSN7sxDr7ZHh6ykQ/k
+         p7cNKRYxDABzhCKvmHmHPKiowzooCDlBaAZvhSAf2IiRXIGwzXrOzYmprGqkR3t5zyME
+         2T3KDDuBxMrpVIi6xezEVmNob5wdPQLidqukU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GOMvpJf6jnH+JyF4Og6jExEF8H9zHVHC1Jf6qwYVtbM=;
+        b=OZgJAbdfP65JW6PXAwl6thnIKgbx0QBElz2/zO/oHeAF+8sMk7iMCl5OGuyXkVPaP2
+         qagcsnIhsB7m87AUz9jLLbR9dRdCLKpc2T0uVAWtDBaPfiZLSKzWwns+NP7ePugE69SY
+         Me1JhTtPmzw1SGAW0ska7cA+krUj/BZ23F1tX3Jxq3bYYo4VqGfLsDZvwgzZcmeivAyt
+         Izkq3JHwWYlwIOp1Jf/D+HxHpV3gb9WgVxSDSBrkZlE0BTx2MZu3o8816b58/KYRZY08
+         GMjnGtIGKjpnEB7o5HvkjQZ0IKIH9VXj/usL5wPJfJTRD8t+K3ohpl4PDH8yqHGbCUPy
+         ICbg==
+X-Gm-Message-State: AOAM531y/3/4AHeo4PihtokCt3psRFCrjh5qqLSuG/nwA86H4wu6mglV
+        AOEMiS88cDSA4TxsYJ5TUFf/CLw4EyUgqQ==
+X-Google-Smtp-Source: ABdhPJyokEidCpeBhyLQqJ594CeJtEWnk0K36RCYIgVJNJOhlYGnwKaG8fCmfNpgfQcZ0fSIv7rjJw==
+X-Received: by 2002:a67:f9d6:: with SMTP id c22mr4630773vsq.49.1601423606086;
+        Tue, 29 Sep 2020 16:53:26 -0700 (PDT)
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com. [209.85.222.48])
+        by smtp.gmail.com with ESMTPSA id f206sm1696555vkf.37.2020.09.29.16.53.24
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Sep 2020 16:53:25 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id n2so4061146uaw.11
+        for <linux-pm@vger.kernel.org>; Tue, 29 Sep 2020 16:53:24 -0700 (PDT)
+X-Received: by 2002:ab0:29d7:: with SMTP id i23mr2207uaq.121.1601423604458;
+ Tue, 29 Sep 2020 16:53:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h2ktrx6pnhubyryv"
-Content-Disposition: inline
-In-Reply-To: <CAJKOXPc_K-T95MY84qGX6ERi4OmVVGXSkH3XCKqF84qvak_Eqg@mail.gmail.com>
+References: <20200929121610.16060-1-lukasz.luba@arm.com>
+In-Reply-To: <20200929121610.16060-1-lukasz.luba@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 29 Sep 2020 16:53:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
+Message-ID: <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
+ in Energy Model
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Rajendra Nayak <rnayak@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---h2ktrx6pnhubyryv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
 Hi,
 
-On Thu, Sep 24, 2020 at 02:01:06PM +0200, Krzysztof Kozlowski wrote:
-> On Thu, 17 Sep 2020 at 22:02, Dan Murphy <dmurphy@ti.com> wrote:
-> >
-> > Andrews TI email is no longer valid and he indicated that it is
-> > OK to remove him from the MAINTAINERS file for the DMA HEAPS FRAMEWORK.
-> >
-> > For the BQ27xxx list I replaced Andrews email with mine.
-> >
-> > Signed-off-by: Dan Murphy <dmurphy@ti.com>
-> > ---
-> >  MAINTAINERS | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
->=20
-> Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> The Energy Model (EM) can store power values in milli-Watts or in abstract
+> scale. This might cause issues in the subsystems which use the EM for
+> estimating the device power, such as:
+> - mixing of different scales in a subsystem which uses multiple
+>   (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
+> - assuming that energy [milli-Joules] can be derived from the EM power
+>   values which might not be possible since the power scale doesn't have to
+>   be in milli-Watts
+>
+> To avoid misconfiguration add the needed documentation to the EM and
+> related subsystems: EAS and IPA.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
+>  Documentation/power/energy-model.rst                | 13 +++++++++++++
+>  Documentation/scheduler/sched-energy.rst            |  5 +++++
+>  3 files changed, 26 insertions(+)
 
-Thanks, queued.
+I haven't read through these files in massive detail, but the quick
+skim makes me believe that your additions seem sane.  In general, I'm
+happy with documenting reality, thus:
 
--- Sebastian
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
---h2ktrx6pnhubyryv
-Content-Type: application/pgp-signature; name="signature.asc"
+I will note: you haven't actually updated the device tree bindings.
+Thus, presumably, anyone who is specifying these numbers in the device
+tree is still supposed to specify them in a way that mW can be
+recovered, right?  Said another way: nothing about your patches makes
+it OK to specify numbers in device trees using an "abstract scale",
+right?
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9zwR0ACgkQ2O7X88g7
-+poD4A//Y/1rJNuF837cToE8LUnfayGAlHY6IKS77LoK0DvSCZBKxXLnSF++h/fZ
-rIcDgFZ6hzNm09Gj6WrY0pgVdv4e+IEHcke45dEmv3XR4qF7d3T2XGTft3aSGyak
-gkrk01D/gD1zinyGk5X5mSRyvp/v8CGKak0VEUTA83iUyccQY0ckLpOxvJw7WDRV
-CTZ5ALTNUgAUMlmZVzUB+SOH/9KQ3Az0t1YhZqfYyXidF3PgaU1XGdYWTGnVAo64
-i06OqguNqZ8cRFOeXXUnZMtL7DIUYXnouCf5Vu44/g4BKfPtDWfLVBWkb1x0D1iC
-jTNH1stbndht1so4Dc3GMbvcVIRI3Dl5fc/BXNaxuzmo5cK23EdRmNKXgNzjs2FL
-hsuDsEUZSTI3k6H75kwX2ZApxyEU3OLfx1GZwwJa6fG23Y1JOA7xTye97SOPxHKF
-5jkgxVgAU5NZlXcMpAsFI2LtK8ZlY+jwoNt0tGbUF3TQ+wjs3yyQi0kafrBAYL0R
-NOOt/KBme+edMC9rUuKP8gV/Pu2cKvestktFtH2b3gvgFmLf3Ic1jI3fYb4k36nU
-PQL+U8UissAqyAAzq/OmJeqSjDkBg6FFOpj05CqAxu0kp4etH0Yz/GQzr5N3U63I
-8RSbguqOItdrhDabnzhsipinFJdUAx6cLKB5QTMKHhG9Y8+5yZ0=
-=qhXO
------END PGP SIGNATURE-----
-
---h2ktrx6pnhubyryv--
+-Doug
