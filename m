@@ -2,133 +2,193 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5464E27BA1C
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 03:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8395027BB1F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 04:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbgI2Ba7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Sep 2020 21:30:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40028 "EHLO mail.kernel.org"
+        id S1726924AbgI2Crd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Sep 2020 22:47:33 -0400
+Received: from mga09.intel.com ([134.134.136.24]:7690 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727454AbgI2Ba6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 28 Sep 2020 21:30:58 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2A36721734;
-        Tue, 29 Sep 2020 01:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601343057;
-        bh=gnFsBKMWFbEWtrezR3gQjFqKb7oCLp1fI/Myh8q4kV8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OWK4TqNu9F/urENUWFW36x5mfLZzIstOI0lfQhZ2ZG8NlCgrHDwXJzB2IAoMHi6Lv
-         0w0k4SbEPpgJ+Y8dr+BESS2s5EjBEd/Kwip67lXgap9DL3+Rbmfetl6gc2AJg3PlIR
-         Ag0ntZP6D9xwJkY3ytTwm8WZ38O+ze/EfpRmAgVs=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.8 23/29] cpuidle: psci: Fix suspicious RCU usage
-Date:   Mon, 28 Sep 2020 21:30:20 -0400
-Message-Id: <20200929013027.2406344-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200929013027.2406344-1-sashal@kernel.org>
-References: <20200929013027.2406344-1-sashal@kernel.org>
+        id S1726421AbgI2Crc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 28 Sep 2020 22:47:32 -0400
+IronPort-SDR: 9cOIc/1lkK4J8vN3FfAHHntZbLgkhAeRvtXoaqDKEMr9vUj13zXpGiQ1bvYUu7siUEHhFTcsEV
+ m0JI0JVUOIOg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9758"; a="162981705"
+X-IronPort-AV: E=Sophos;i="5.77,316,1596524400"; 
+   d="scan'208";a="162981705"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2020 19:47:32 -0700
+IronPort-SDR: NTFC79nVp3nM20f1HV6tPF7lu6x/41Y620bpURqmHfp6oeSrNvsTu1OTZgFOS93O9u2tUzxHQL
+ I6mmImDSGfCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,316,1596524400"; 
+   d="scan'208";a="293495720"
+Received: from lkp-server02.sh.intel.com (HELO 029ab7997206) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 28 Sep 2020 19:47:30 -0700
+Received: from kbuild by 029ab7997206 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kN5ft-00000n-QC; Tue, 29 Sep 2020 02:47:29 +0000
+Date:   Tue, 29 Sep 2020 10:47:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ eb6335b68ce3fc85a93c4c6cd3bb6bc5ac490efe
+Message-ID: <5f72a03b.3V6oX1ZdKGavplMX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: eb6335b68ce3fc85a93c4c6cd3bb6bc5ac490efe  Merge branch 'pnp' into linux-next
 
-[ Upstream commit 36050d8984ab743f9990a2eb97a0062fdc3d7bbd ]
+elapsed time: 725m
 
-The commit eb1f00237aca ("lockdep,trace: Expose tracepoints"), started to
-expose us for tracepoints. This lead to the following RCU splat on an ARM64
-Qcom board.
+configs tested: 128
+configs skipped: 2
 
-[    5.529634] WARNING: suspicious RCU usage
-[    5.537307] sdhci-pltfm: SDHCI platform and OF driver helper
-[    5.541092] 5.9.0-rc3 #86 Not tainted
-[    5.541098] -----------------------------
-[    5.541105] ../include/trace/events/lock.h:37 suspicious rcu_dereference_check() usage!
-[    5.541110]
-[    5.541110] other info that might help us debug this:
-[    5.541110]
-[    5.541116]
-[    5.541116] rcu_scheduler_active = 2, debug_locks = 1
-[    5.541122] RCU used illegally from extended quiescent state!
-[    5.541129] no locks held by swapper/0/0.
-[    5.541134]
-[    5.541134] stack backtrace:
-[    5.541143] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.9.0-rc3 #86
-[    5.541149] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
-[    5.541157] Call trace:
-[    5.568185] sdhci_msm 7864900.sdhci: Got CD GPIO
-[    5.574186]  dump_backtrace+0x0/0x1c8
-[    5.574206]  show_stack+0x14/0x20
-[    5.574229]  dump_stack+0xe8/0x154
-[    5.574250]  lockdep_rcu_suspicious+0xd4/0xf8
-[    5.574269]  lock_acquire+0x3f0/0x460
-[    5.574292]  _raw_spin_lock_irqsave+0x80/0xb0
-[    5.574314]  __pm_runtime_suspend+0x4c/0x188
-[    5.574341]  psci_enter_domain_idle_state+0x40/0xa0
-[    5.574362]  cpuidle_enter_state+0xc0/0x610
-[    5.646487]  cpuidle_enter+0x38/0x50
-[    5.650651]  call_cpuidle+0x18/0x40
-[    5.654467]  do_idle+0x228/0x278
-[    5.657678]  cpu_startup_entry+0x24/0x70
-[    5.661153]  rest_init+0x1a4/0x278
-[    5.665061]  arch_call_rest_init+0xc/0x14
-[    5.668272]  start_kernel+0x508/0x540
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Following the path in pm_runtime_put_sync_suspend() from
-psci_enter_domain_idle_state(), it seems like we end up using the RCU.
-Therefore, let's simply silence the splat by informing the RCU about it
-with RCU_NONIDLE.
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+mips                         rt305x_defconfig
+mips                      fuloong2e_defconfig
+arm                       versatile_defconfig
+mips                        nlm_xlp_defconfig
+sh                        edosk7705_defconfig
+nios2                         3c120_defconfig
+powerpc                      arches_defconfig
+powerpc                      cm5200_defconfig
+sparc                       sparc32_defconfig
+arm                          badge4_defconfig
+powerpc                        cell_defconfig
+powerpc                      obs600_defconfig
+sh                        apsh4ad0a_defconfig
+sh                            shmin_defconfig
+arm                        neponset_defconfig
+arm                          collie_defconfig
+powerpc                     rainier_defconfig
+powerpc                     mpc512x_defconfig
+mips                       lemote2f_defconfig
+riscv                          rv32_defconfig
+arc                            hsdk_defconfig
+m68k                       bvme6000_defconfig
+arm                         mv78xx0_defconfig
+riscv                               defconfig
+arm                           spitz_defconfig
+powerpc                mpc7448_hpc2_defconfig
+mips                      maltaaprp_defconfig
+arm                        spear6xx_defconfig
+mips                         db1xxx_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arc                      axs103_smp_defconfig
+arm                              zx_defconfig
+arm                        mvebu_v5_defconfig
+c6x                        evmc6472_defconfig
+mips                           gcw0_defconfig
+m68k                             allmodconfig
+arm                         vf610m4_defconfig
+mips                       rbtx49xx_defconfig
+nios2                         10m50_defconfig
+mips                     cu1000-neo_defconfig
+sh                           se7619_defconfig
+powerpc                     stx_gp3_defconfig
+sh                      rts7751r2d1_defconfig
+m68k                             alldefconfig
+mips                     decstation_defconfig
+arm                           stm32_defconfig
+powerpc                     kilauea_defconfig
+powerpc                     pseries_defconfig
+arm                         lpc32xx_defconfig
+ia64                            zx1_defconfig
+arm                          simpad_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20200928
+i386                 randconfig-a002-20200928
+i386                 randconfig-a003-20200928
+i386                 randconfig-a004-20200928
+i386                 randconfig-a005-20200928
+i386                 randconfig-a001-20200928
+i386                 randconfig-a002-20200927
+i386                 randconfig-a006-20200927
+i386                 randconfig-a003-20200927
+i386                 randconfig-a004-20200927
+i386                 randconfig-a005-20200927
+i386                 randconfig-a001-20200927
+i386                 randconfig-a012-20200928
+i386                 randconfig-a016-20200928
+i386                 randconfig-a014-20200928
+i386                 randconfig-a013-20200928
+i386                 randconfig-a015-20200928
+i386                 randconfig-a011-20200928
+x86_64               randconfig-a003-20200928
+x86_64               randconfig-a002-20200928
+x86_64               randconfig-a001-20200928
+x86_64               randconfig-a005-20200928
+x86_64               randconfig-a004-20200928
+x86_64               randconfig-a006-20200928
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-Note that, this is a temporary solution. Instead we should strive to avoid
-using RCU_NONIDLE (and similar), but rather push rcu_idle_enter|exit()
-further down, closer to the arch specific code. However, as the CPU PM
-notifiers are also using the RCU, additional rework is needed.
+clang tested configs:
+x86_64               randconfig-a011-20200928
+x86_64               randconfig-a013-20200928
+x86_64               randconfig-a015-20200928
+x86_64               randconfig-a014-20200928
+x86_64               randconfig-a016-20200928
+x86_64               randconfig-a012-20200928
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cpuidle/cpuidle-psci.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index 3806f911b61c0..915172e3ec906 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -64,7 +64,7 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 		return -1;
- 
- 	/* Do runtime PM to manage a hierarchical CPU toplogy. */
--	pm_runtime_put_sync_suspend(pd_dev);
-+	RCU_NONIDLE(pm_runtime_put_sync_suspend(pd_dev));
- 
- 	state = psci_get_domain_state();
- 	if (!state)
-@@ -72,7 +72,7 @@ static int psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 
- 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
- 
--	pm_runtime_get_sync(pd_dev);
-+	RCU_NONIDLE(pm_runtime_get_sync(pd_dev));
- 
- 	cpu_pm_exit();
- 
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
