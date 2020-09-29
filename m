@@ -2,150 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 435E027DC94
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 01:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6063827DC96
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 01:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbgI2XS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Sep 2020 19:18:57 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:39320 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728931AbgI2XS4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 19:18:56 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 5E3D629B618
+        id S1728745AbgI2XT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Sep 2020 19:19:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46418 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728223AbgI2XT0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Sep 2020 19:19:26 -0400
+Received: from earth.universe (unknown [185.213.155.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 748BB21531;
+        Tue, 29 Sep 2020 23:19:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601421565;
+        bh=c/XKGpjnQIM08izDBF9EkAJK9jfCtnDXdCi0b04UMNg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gy9bOMMfGL2FDLToSHuNvjsmnBN8HMzhHY6MQDVMf/FSS4C3cV282LBMkBIyPfwrh
+         QnFK7Rma7YYo46YDLflEyrGkf1Hj+15Dww9ks0s6Qet5nwmqpQ02csidIiFHZtlSKz
+         +J/o68eJGGj4d1Ph6eNK35uISr4BrQ1xxfDRzm7o=
 Received: by earth.universe (Postfix, from userid 1000)
-        id E6A0B3C0C84; Wed, 30 Sep 2020 01:18:52 +0200 (CEST)
-Date:   Wed, 30 Sep 2020 01:18:52 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+        id 5C4AD3C0C84; Wed, 30 Sep 2020 01:19:23 +0200 (CEST)
+Date:   Wed, 30 Sep 2020 01:19:23 +0200
+From:   Sebastian Reichel <sre@kernel.org>
 To:     Wang Qing <wangqing@vivo.com>
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: fix spelling typo
-Message-ID: <20200929231852.cej2fj2etrwaif2o@earth.universe>
-References: <1601088070-12790-1-git-send-email-wangqing@vivo.com>
+Subject: Re: [PATCH] power: fix spelling typo
+Message-ID: <20200929231923.q6xyqyfbszys3fbg@earth.universe>
+References: <1600929478-26554-1-git-send-email-wangqing@vivo.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uqs32q2ghsl3w3ku"
+        protocol="application/pgp-signature"; boundary="6ncpxg4jsumrrvk2"
 Content-Disposition: inline
-In-Reply-To: <1601088070-12790-1-git-send-email-wangqing@vivo.com>
+In-Reply-To: <1600929478-26554-1-git-send-email-wangqing@vivo.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---uqs32q2ghsl3w3ku
+--6ncpxg4jsumrrvk2
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sat, Sep 26, 2020 at 10:41:07AM +0800, Wang Qing wrote:
+On Thu, Sep 24, 2020 at 02:37:56PM +0800, Wang Qing wrote:
 > Modify the comment typo: "compliment" -> "complement".
 >=20
 > Signed-off-by: Wang Qing <wangqing@vivo.com>
 > ---
 
-Thanks, queued.
+Thanks, queued with modified patch subject.
 
 -- Sebastian
 
->  drivers/power/supply/ds2780_battery.c | 6 +++---
->  drivers/power/supply/ds2781_battery.c | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  drivers/power/supply/ab8500_fg.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >=20
-> diff --git a/drivers/power/supply/ds2780_battery.c b/drivers/power/supply=
-/ds2780_battery.c
-> index db3a254..dd57a47
-> --- a/drivers/power/supply/ds2780_battery.c
-> +++ b/drivers/power/supply/ds2780_battery.c
-> @@ -160,7 +160,7 @@ static int ds2780_get_voltage(struct ds2780_device_in=
-fo *dev_info,
+> diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
+00_fg.c
+> index 7eec415..592a73d
+> --- a/drivers/power/supply/ab8500_fg.c
+> +++ b/drivers/power/supply/ab8500_fg.c
+> @@ -653,7 +653,7 @@ int ab8500_fg_inst_curr_finalize(struct ab8500_fg *di=
+, int *res)
 > =20
 >  	/*
->  	 * The voltage value is located in 10 bits across the voltage MSB
-> -	 * and LSB registers in two's compliment form
-> +	 * and LSB registers in two's complement form
->  	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
->  	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
->  	 * voltage MSB register
-> @@ -188,7 +188,7 @@ static int ds2780_get_temperature(struct ds2780_devic=
-e_info *dev_info,
+>  	 * negative value for Discharging
+> -	 * convert 2's compliment into decimal
+> +	 * convert 2's complement into decimal
+>  	 */
+>  	if (high & 0x10)
+>  		val =3D (low | (high << 8) | 0xFFFFE000);
+> @@ -781,7 +781,7 @@ static void ab8500_fg_acc_cur_work(struct work_struct=
+ *work)
+>  	if (ret < 0)
+>  		goto exit;
 > =20
->  	/*
->  	 * The temperature value is located in 10 bits across the temperature
-> -	 * MSB and LSB registers in two's compliment form
-> +	 * MSB and LSB registers in two's complement form
->  	 * Sign bit of the temperature value is in bit 7 of the temperature
->  	 * MSB register
->  	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
-> @@ -241,7 +241,7 @@ static int ds2780_get_current(struct ds2780_device_in=
-fo *dev_info,
-> =20
->  	/*
->  	 * The current value is located in 16 bits across the current MSB
-> -	 * and LSB registers in two's compliment form
-> +	 * and LSB registers in two's complement form
->  	 * Sign bit of the current value is in bit 7 of the current MSB register
->  	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
->  	 * MSB register
-> diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply=
-/ds2781_battery.c
-> index 130cbdf..3df3c82
-> --- a/drivers/power/supply/ds2781_battery.c
-> +++ b/drivers/power/supply/ds2781_battery.c
-> @@ -168,7 +168,7 @@ static int ds2781_get_voltage(struct ds2781_device_in=
-fo *dev_info,
->  		return ret;
->  	/*
->  	 * The voltage value is located in 10 bits across the voltage MSB
-> -	 * and LSB registers in two's compliment form
-> +	 * and LSB registers in two's complement form
->  	 * Sign bit of the voltage value is in bit 7 of the voltage MSB register
->  	 * Bits 9 - 3 of the voltage value are in bits 6 - 0 of the
->  	 * voltage MSB register
-> @@ -197,7 +197,7 @@ static int ds2781_get_temperature(struct ds2781_devic=
-e_info *dev_info,
->  		return ret;
->  	/*
->  	 * The temperature value is located in 10 bits across the temperature
-> -	 * MSB and LSB registers in two's compliment form
-> +	 * MSB and LSB registers in two's complement form
->  	 * Sign bit of the temperature value is in bit 7 of the temperature
->  	 * MSB register
->  	 * Bits 9 - 3 of the temperature value are in bits 6 - 0 of the
-> @@ -242,7 +242,7 @@ static int ds2781_get_current(struct ds2781_device_in=
-fo *dev_info,
-> =20
->  	/*
->  	 * The current value is located in 16 bits across the current MSB
-> -	 * and LSB registers in two's compliment form
-> +	 * and LSB registers in two's complement form
->  	 * Sign bit of the current value is in bit 7 of the current MSB register
->  	 * Bits 14 - 8 of the current value are in bits 6 - 0 of the current
->  	 * MSB register
+> -	/* Check for sign bit in case of negative value, 2's compliment */
+> +	/* Check for sign bit in case of negative value, 2's complement */
+>  	if (high & 0x10)
+>  		val =3D (low | (med << 8) | (high << 16) | 0xFFE00000);
+>  	else
 > --=20
 > 2.7.4
 >=20
 
---uqs32q2ghsl3w3ku
+--6ncpxg4jsumrrvk2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9zwNwACgkQ2O7X88g7
-+poe4xAApDqvp17zcMV6bbQjCgtAfIVxdXyV22639kClfCylNrt2K7vd/5Xdf/Rm
-RDHbUbVnRYIdDZEhZ1y8UZXUrI5zbRjD+aRTGMYrqAyI12ExEsty5dKC5aFHSj+M
-ERVJ3zNWr9ORLFPnUNPHxquU91V1KDJ55S0zrtbd6KLTdErCw4D+lrnomiTU4kCn
-PUBNuD0o10Qd6sDm6uYHpAEE9nYzUkQxoJEtOJqGr5iiKg378nEMsUlLZRhZibVV
-I3AsoGmifOw2xcrQLc4yNCmTu75sK54MWyPCdKnVuf37+eDOmQ586A6l5B5ytqhD
-WzKvXF6dK/T/VB2MWq2YazwKt+zjVTzqaNQiK7Iju3k3Z8ErrL6AbDXyDreIu2j1
-kBKe4HWdcM0RuiQdy0/q86lt1TMoa23A3zyjkzT8bFdmYuBo64xZ0QBu3Ymvyb53
-M41sGcrwJkmhW2ZJJOlhaX/G3gni4Fi3jlZrIaQVBngM2HH6GXhWYOQ7PsvOHvLN
-ijsMN3/2OYJk04roj5nJepIbuvXMvNqCxvA9FvpjWd/yjdPNAqRIlc9+SWsxvJKf
-88o3k0Q4O1Wb9PQ9snGs0rRkdhNnQ4QjVFH6X5bJvSJbGPAqpOsBLRj5G+TgTL0s
-tfwMJ1RIHAdN5cWlBxaNuCeocZqxzy4TmTHs5UP2YbR2baX0I1k=
-=rMNz
+iQIyBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl9zwPsACgkQ2O7X88g7
++ppKZA/1F5+6BU6Vt7tYWZugPoDf0NB/ZHylStSL99vYMRcx3+lwXWbqCFyTUaLV
+xV4I8las5TprCzd6CGLOklHlmT4/NI7IDKQZD8YUziF+CKDMIFg9XM5mZxfFFoJf
+woD8U6Ml6IbUUyGPfxUBFOLZjfOZpQVseRwyazJ8fDwu0qHjWk6dkccpFqsyqEJE
+1fvKj+sHoPSjQqAqzab3HNJv4xNIbOXfZzWP7rO9FTSXLpvuNHFMwHFdWTfUpzUZ
+/JRzKCU8D0O1hbsNpbxzCHtO1+DEZ9QHxBoc2+7FIHq8CL1ZTNZzqS4aoc9x8HmW
+N1GKjnmP+4GQPcqzprs+leHhyaTjOAl8MFsqjqgYmDn+h16o7L3/RHvdPvV/Dndg
+BMlcfFWe/HITGB6khpwabQHhTn798RNJdFp/Rf+UM2927knAI2uUrkr1gUcxyc/N
+SHfPQ0rhQQ3ChdnN3ll2wf7MVMgAEy1IOdDARPtxs5rnEzvDnaq9W3v60OZzxErG
+Ra6H6lO7AnVJc4+LKgJd3YNVk2pxJB03LfRapudWqeAPhhyZWeAnUfadhyq12NW8
+C5lzaoSJj/hciPSpXvpV2GatsGXtjNsRIXf6KjFAKautmuS6aXHvJIqqIb1OVIyz
+Ba5qbg6L332/ClCA0hveeDOU2Jn46KLrxixscCiE4RLp5M6d3A==
+=reba
 -----END PGP SIGNATURE-----
 
---uqs32q2ghsl3w3ku--
+--6ncpxg4jsumrrvk2--
