@@ -2,158 +2,281 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E4527CE7C
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 15:07:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676EC27CEA9
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 15:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728394AbgI2NHw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Sep 2020 09:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728241AbgI2NHs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 09:07:48 -0400
-Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74D9C061755;
-        Tue, 29 Sep 2020 06:07:47 -0700 (PDT)
-Received: by mail-qt1-x843.google.com with SMTP id r8so3416846qtp.13;
-        Tue, 29 Sep 2020 06:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7vpidMw0HWxX/6cx3RBRN6x4KkgYNc8nMb6h2YX3QMA=;
-        b=uEFvEhv19wQsEcRNHH6yVD1084qfg6Pj4nrTxmDW0UfBKThyXC18qxVI0Sr278NBFp
-         QhMyZBoNnJN7CcikqikkkmTGVvJu44iJ86pcbmzHUb0zw/d3tE8iwjAxY7iN41XusioE
-         Z57maCFo9jO8ZWrtvghGSX7hiF31oVLxYeAbHQ1Dhs+deEqirh3Jc76s+fd2KSP4x/Uv
-         5C++V86gALFO/pFhV7lfesfFdDatOdN7S0rs2QTqLkThT71ExAupq6lgjUfn8P1fK3aq
-         VasjDadv3sGj9HvjQy322Fqsh3apvisLeqWDA6xlJ2T4iabQJu+ziVeunbzp5/skRIxF
-         cqCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7vpidMw0HWxX/6cx3RBRN6x4KkgYNc8nMb6h2YX3QMA=;
-        b=SA9Lax6BETozMKj8Ge0oMAzioWsRVMM0FDhOSULXsJhDUjPZ6q1uE3pAo+tTRmitdo
-         GV4JVTpqqZjN9XUjK475Tmr1N02bpeJ73K6Umyr7xsi8LVK4EnID2FUua2FohF4hCni9
-         cZVer1eYJA0T4Li4r06DBhGp6aXAzX0a+eWo/MzHSAexFENX/tPZIlqqGoaQ7saQItIt
-         A/BVjqhqcndw8Zf9gW82X3VzoHh0gtWaqpFvgi8Z2olOaFh0JcOBbqFx10nfDKcUVYEh
-         tDmPHJrbGbPYjExS2/IVZklgS3SCmOdxlajWeqRnkxpZxBbXrafycfR8MXo6FTrK5LxM
-         Egqw==
-X-Gm-Message-State: AOAM531U/XO4E03yOehS20Nk6raq7YuAxV8FFvWo9ppr5B+xA5Yp8krN
-        q4sok2Md6RtBIjA5XefwigI=
-X-Google-Smtp-Source: ABdhPJxaE8lTwuOySLwhCQ/9B/ylIcnWpBoFn/x+SwnEU4LMZQcbJzXzO3M60w/YptS92AuCQ3o57w==
-X-Received: by 2002:aed:35b2:: with SMTP id c47mr2950755qte.95.1601384866843;
-        Tue, 29 Sep 2020 06:07:46 -0700 (PDT)
-Received: from shinobu (072-189-064-225.res.spectrum.com. [72.189.64.225])
-        by smtp.gmail.com with ESMTPSA id w94sm5147990qte.93.2020.09.29.06.07.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 06:07:46 -0700 (PDT)
-Date:   Tue, 29 Sep 2020 09:07:43 -0400
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Syed Nayyar Waris <syednwaris@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        linux-arch@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v9 0/4] Introduce the for_each_set_clump macro
-Message-ID: <20200929130743.GB4458@shinobu>
-References: <cover.1593243079.git.syednwaris@gmail.com>
- <CACRpkdYyCNEUSOtCJMTm7t1z15oK7nH3KcTe5LreJAzZ0KtQuw@mail.gmail.com>
- <20200911225417.GA5286@shinobu>
- <CACRpkdah+k-EyhF8bNRkvw4bFDiai9dYo3ph9wsumo_v3U-U0g@mail.gmail.com>
+        id S1729150AbgI2NLv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Sep 2020 09:11:51 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:56596 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728566AbgI2NLu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Sep 2020 09:11:50 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08TD3bDL095852;
+        Tue, 29 Sep 2020 09:11:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=RG1Uv5STyr5XZTpnTxIdCgVPhqYsGIeVg/+pw1rRP0s=;
+ b=Y8W7mO/P8lIb+sNsuBba+46UEz5kK9LSYw50K/SJJnQw7pm7I1Nqieqgk+zjDuJT/4Nd
+ KMIn7HZPY7P5uUB9hlqGoXIEGtql4P8fVDgQmAnKDqzihh0+XwErVsmQwt3aIKhJwc94
+ lfHPmDEJWcMxGUibPSjPgA+zTVG3FkSoUNcw1wq1ohAKHx20F+UcNrQgFU+Uz61IYruU
+ s8ubLEQ98rOxx/hB7X0Z6u2GCSjNMyxMih5/oc6isniUootLB+GxdYAqiP2sPCcrxORc
+ hYaWUjTUc4GyBzJbUQhClopT1FyHtE5zkeyfSI/ztWHsK60zgCe6SxK+3MJn1a3rdbhK qQ== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33v4w02095-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 09:11:43 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08TD7cZk014352;
+        Tue, 29 Sep 2020 13:11:41 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma03ams.nl.ibm.com with ESMTP id 33sw983b1d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Sep 2020 13:11:41 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08TDBdMk36110786
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 29 Sep 2020 13:11:39 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E1B384C050;
+        Tue, 29 Sep 2020 13:11:38 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2235E4C052;
+        Tue, 29 Sep 2020 13:11:37 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.79.233.44])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 29 Sep 2020 13:11:36 +0000 (GMT)
+From:   Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+To:     shuah@kernel.org, trenn@suse.com
+Cc:     latha@linux.vnet.ibm.com, Janakarajan.Natarajan@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Pavithra R . Prakash" <pavrampu@in.ibm.com>
+Subject: [PATCH v2] cpupower: Provide online and offline CPU information
+Date:   Tue, 29 Sep 2020 18:41:08 +0530
+Message-Id: <20200929131108.19435-1-latha@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5I6of5zJg18YgZEa"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdah+k-EyhF8bNRkvw4bFDiai9dYo3ph9wsumo_v3U-U0g@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-29_04:2020-09-29,2020-09-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 adultscore=0 clxscore=1011
+ priorityscore=1501 mlxlogscore=999 suspectscore=2 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009290114
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When a user tries to modify cpuidle or cpufreq properties on offline
+CPUs, the tool returns success (exit status 0) but also does not provide
+any warning message regarding offline cpus that may have been specified
+but left unchanged. In case of all or a few CPUs being offline, it can be
+difficult to keep track of which CPUs didn't get the new frequency or idle
+state set. Silent failures are difficult to keep track of when there are a
+huge number of CPUs on which the action is performed.
 
---5I6of5zJg18YgZEa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch adds helper functions to find both online and offline CPUs and
+print them out accordingly.
 
-On Tue, Sep 29, 2020 at 02:45:18PM +0200, Linus Walleij wrote:
-> On Sat, Sep 12, 2020 at 12:54 AM William Breathitt Gray
-> <vilhelm.gray@gmail.com> wrote:
-> > On Thu, Jul 16, 2020 at 02:49:35PM +0200, Linus Walleij wrote:
-> > > Hi Syed,
-> > >
-> > > sorry for taking so long. I was on vacation and a bit snowed
-> > > under by work.
-> > >
-> > > On Sat, Jun 27, 2020 at 10:10 AM Syed Nayyar Waris <syednwaris@gmail.=
-com> wrote:
-> > >
-> > > > Since this patchset primarily affects GPIO drivers, would you like
-> > > > to pick it up through your GPIO tree?
-> > >
-> > > I have applied the patches to an immutable branch and pushed
-> > > to kernelorg for testing (autobuilders will play with it I hope).
-> > >
-> > > If all works fine I will merge this into my devel branch for v5.9.
-> > >
-> > > It would be desirable if Andrew gave his explicit ACK on it too.
-> > >
-> > > Yours,
-> > > Linus Walleij
-> >
-> > Hi Linus,
-> >
-> > What's the name of the branch with these patches on kernelorg; I'm
-> > having trouble finding it?
-> >
-> > Btw, I'm CCing Andrew as well here because I notice him missing from the
-> > CC list earlier for this patchset.
->=20
-> IIRC there were complaints from the zeroday build robot so I
-> dropped the branch and I am still waiting for a fixed up patch
-> series.
->=20
-> Yours,
-> Linus Walleij
+We use these helper functions in cpuidle-set and cpufreq-set to print an
+additional message if the user attempts to modify offline cpus.
 
-My apologies, I wasn't aware a build error was reported. I'll be happy
-to help address the issue with Syed, but I can't seem to find a copy of
-the message on <https://lkml.org/lkml/2020/6/27/107> or my email logs.
-Do you have a link available to the zeroday build log?
+Reported-by: Pavithra R. Prakash <pavrampu@in.ibm.com>
+Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+---
+ tools/power/cpupower/utils/cpufreq-set.c     |  3 +
+ tools/power/cpupower/utils/cpuidle-set.c     |  4 ++
+ tools/power/cpupower/utils/cpupower.c        |  8 +++
+ tools/power/cpupower/utils/helpers/helpers.h | 12 ++++
+ tools/power/cpupower/utils/helpers/misc.c    | 66 +++++++++++++++++++-
+ 5 files changed, 92 insertions(+), 1 deletion(-)
 
-Thanks,
+diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
+index 6ed82fba5aaa..f25cdfa05c5f 100644
+--- a/tools/power/cpupower/utils/cpufreq-set.c
++++ b/tools/power/cpupower/utils/cpufreq-set.c
+@@ -311,6 +311,7 @@ int cmd_freq_set(int argc, char **argv)
+ 		}
+ 	}
+ 
++	get_cpustate();
+ 
+ 	/* loop over CPUs */
+ 	for (cpu = bitmask_first(cpus_chosen);
+@@ -328,5 +329,7 @@ int cmd_freq_set(int argc, char **argv)
+ 		}
+ 	}
+ 
++	print_offline_cpus();
++
+ 	return 0;
+ }
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 569f268f4c7f..46158928f9ad 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -95,6 +95,8 @@ int cmd_idle_set(int argc, char **argv)
+ 		exit(EXIT_FAILURE);
+ 	}
+ 
++	get_cpustate();
++
+ 	/* Default is: set all CPUs */
+ 	if (bitmask_isallclear(cpus_chosen))
+ 		bitmask_setall(cpus_chosen);
+@@ -181,5 +183,7 @@ int cmd_idle_set(int argc, char **argv)
+ 			break;
+ 		}
+ 	}
++
++	print_offline_cpus();
+ 	return EXIT_SUCCESS;
+ }
+diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
+index 8e3d08042825..8ac3304a9957 100644
+--- a/tools/power/cpupower/utils/cpupower.c
++++ b/tools/power/cpupower/utils/cpupower.c
+@@ -34,6 +34,8 @@ int run_as_root;
+ int base_cpu;
+ /* Affected cpus chosen by -c/--cpu param */
+ struct bitmask *cpus_chosen;
++struct bitmask *online_cpus;
++struct bitmask *offline_cpus;
+ 
+ #ifdef DEBUG
+ int be_verbose;
+@@ -178,6 +180,8 @@ int main(int argc, const char *argv[])
+ 	char pathname[32];
+ 
+ 	cpus_chosen = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
++	online_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
++	offline_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
+ 
+ 	argc--;
+ 	argv += 1;
+@@ -230,6 +234,10 @@ int main(int argc, const char *argv[])
+ 		ret = p->main(argc, argv);
+ 		if (cpus_chosen)
+ 			bitmask_free(cpus_chosen);
++		if (online_cpus)
++			bitmask_free(online_cpus);
++		if (offline_cpus)
++			bitmask_free(offline_cpus);
+ 		return ret;
+ 	}
+ 	print_help();
+diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+index c258eeccd05f..88ab1bda7ba4 100644
+--- a/tools/power/cpupower/utils/helpers/helpers.h
++++ b/tools/power/cpupower/utils/helpers/helpers.h
+@@ -94,6 +94,8 @@ struct cpupower_cpu_info {
+  */
+ extern int get_cpu_info(struct cpupower_cpu_info *cpu_info);
+ extern struct cpupower_cpu_info cpupower_cpu_info;
++
++
+ /* cpuid and cpuinfo helpers  **************************/
+ 
+ /* X86 ONLY ****************************************/
+@@ -171,4 +173,14 @@ static inline unsigned int cpuid_ecx(unsigned int op) { return 0; };
+ static inline unsigned int cpuid_edx(unsigned int op) { return 0; };
+ #endif /* defined(__i386__) || defined(__x86_64__) */
+ 
++/*
++ * CPU State related functions
++ */
++extern struct bitmask *online_cpus;
++extern struct bitmask *offline_cpus;
++
++void get_cpustate(void);
++void get_cpustate(void);
++void get_cpustate(void);
++
+ #endif /* __CPUPOWERUTILS_HELPERS__ */
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index f406adc40bad..2ead98169cf5 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -1,8 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#if defined(__i386__) || defined(__x86_64__)
++
++#include <stdio.h>
++#include <stdlib.h>
+ 
+ #include "helpers/helpers.h"
+ 
++#if defined(__i386__) || defined(__x86_64__)
++
+ #define MSR_AMD_HWCR	0xc0010015
+ 
+ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+@@ -41,3 +45,63 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+ 	return 0;
+ }
+ #endif /* #if defined(__i386__) || defined(__x86_64__) */
++
++/* get_cpustate
++ *
++ * Gather the information of all online CPUs into bitmask struct
++ */
++void get_cpustate(void)
++{
++	unsigned int cpu = 0;
++
++	bitmask_clearall(online_cpus);
++	bitmask_clearall(offline_cpus);
++
++	for (cpu = bitmask_first(cpus_chosen);
++		cpu <= bitmask_last(cpus_chosen); cpu++) {
++
++		if (cpupower_is_cpu_online(cpu) == 1)
++			bitmask_setbit(online_cpus, cpu);
++		else
++			bitmask_setbit(offline_cpus, cpu);
++
++		continue;
++	}
++}
++
++/* print_online_cpus
++ *
++ * Print the CPU numbers of all CPUs that are online currently
++ */
++void print_online_cpus(void)
++{
++	int str_len = 0;
++	char *online_cpus_str = NULL;
++
++	str_len = online_cpus->size * 5;
++	online_cpus_str = (void *)malloc(sizeof(char) * str_len);
++
++	if (!bitmask_isallclear(online_cpus)) {
++		bitmask_displaylist(online_cpus_str, str_len, online_cpus);
++		printf(_("Following CPUs are online:\n%s\n"), online_cpus_str);
++	}
++}
++
++/* print_offline_cpus
++ *
++ * Print the CPU numbers of all CPUs that are offline currently
++ */
++void print_offline_cpus(void)
++{
++	int str_len = 0;
++	char *offline_cpus_str = NULL;
++
++	str_len = offline_cpus->size * 5;
++	offline_cpus_str = (void *)malloc(sizeof(char) * str_len);
++
++	if (!bitmask_isallclear(offline_cpus)) {
++		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
++		printf(_("Following CPUs are offline:\n%s\n"), offline_cpus_str);
++		printf(_("cpupower set operation was not performed on them\n"));
++	}
++}
+-- 
+2.24.3 (Apple Git-128)
 
-William Breathitt Gray
-
---5I6of5zJg18YgZEa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAl9zMZ8ACgkQhvpINdm7
-VJJhJBAAne4+TuZ5ye+zKdwxECRHf9+8DEOtmN37vuRuxtlFqmGEngLWRwKNmzhF
-8wwqSulCWUT32f7vjozpkEiT06bcV+zHcmkRu5xb/Bo8KIkc/7F1YQeVH5KxkUn+
-u0mmZBnjEWc8oBBjSBArc2XqMRVTnATMlViSbs/Ilax7/d0S6Ywlm3GlioGPJp+E
-uj5X8AUEi7Zhtsz3VT2lxNQN20BsyhwY16DnU8n69D4XIeF09vGu7htqsU05a2NW
-DtO5MVf9uUH6c637WiTBnwor2SgsR1/5OBZzSdXqu5Gqq43Ol+8s8cUvF1Gr64g/
-lKFULCcFfyrj2hSLJrfjkOW6qd1NxsHAWwvSMyGWfM7b7laTaWPV5jHjZuS2Wu7w
-lRZdp4N5XibtDSWUxt2Pi6NgnV9C6lgv5Fz4fX/Dd927E/WMcF3q46QutRXT8Mab
-z2Z4PEs+RR4A2E5cJv/qRxPID3ZzEINx+LLs1koor9F8av9ve4LH3cy6aQ7k3O7L
-jk1cg48c2GSLMH5bDfgJ6xhW7vNvBzjp0SaFlZl6DYiFq7HNISMzIsIXi0t8Yi2t
-/FIXL/xih9BzeX3+MDEcgyfJhwh+btrerBF544kHkI61QLaxHLaSvU0Iy/qHmkGg
-43o+XzQZeWHrZ/rt4FgDYG+oGL0pJVKVg5C9cQyZUTY+F/ROTeY=
-=9zS3
------END PGP SIGNATURE-----
-
---5I6of5zJg18YgZEa--
