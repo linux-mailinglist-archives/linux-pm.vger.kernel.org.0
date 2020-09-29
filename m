@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0B7127D955
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 22:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD8E27D959
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Sep 2020 22:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729058AbgI2UzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Sep 2020 16:55:21 -0400
-Received: from foss.arm.com ([217.140.110.172]:51310 "EHLO foss.arm.com"
+        id S1729504AbgI2Uzb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Sep 2020 16:55:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:51354 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728729AbgI2UzV (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 29 Sep 2020 16:55:21 -0400
+        id S1729491AbgI2Uz3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 29 Sep 2020 16:55:29 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94AF431B;
-        Tue, 29 Sep 2020 13:55:20 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5450031B;
+        Tue, 29 Sep 2020 13:55:28 -0700 (PDT)
 Received: from e108754-lin.cambridge.arm.com (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CED1D3F73B;
-        Tue, 29 Sep 2020 13:55:18 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8E1353F73B;
+        Tue, 29 Sep 2020 13:55:21 -0700 (PDT)
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
         catalin.marinas@arm.com, will@kernel.org, rjw@rjwysocki.net,
@@ -25,9 +25,9 @@ Cc:     dietmar.eggemann@arm.com, qperret@google.com,
         valentin.schneider@arm.com, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         ionela.voinescu@arm.com
-Subject: [PATCH v2 1/3] sched/topology,schedutil: wrap sched domains rebuild
-Date:   Tue, 29 Sep 2020 21:54:40 +0100
-Message-Id: <20200929205442.24792-2-ionela.voinescu@arm.com>
+Subject: [PATCH v2 2/3] arm64: rebuild sched domains on invariance status changes
+Date:   Tue, 29 Sep 2020 21:54:41 +0100
+Message-Id: <20200929205442.24792-3-ionela.voinescu@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200929205442.24792-1-ionela.voinescu@arm.com>
 References: <20200929205442.24792-1-ionela.voinescu@arm.com>
@@ -35,104 +35,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the rebuild_sched_domains_energy() function to wrap the functionality
-that rebuilds the scheduling domains if any of the Energy Aware Scheduling
-(EAS) initialisation conditions change. This functionality is used when
-schedutil is added or removed or when EAS is enabled or disabled
-through the sched_energy_aware sysctl.
+Task scheduler behavior depends on frequency invariance (FI) support and
+the resulting invariant load tracking signals. For example, in order to
+make accurate predictions across CPUs for all performance states, Energy
+Aware Scheduling (EAS) needs frequency-invariant load tracking signals
+and therefore it has a direct dependency on FI. This dependency is known,
+but EAS enablement is not yet conditioned on the presence of FI during
+the built of the scheduling domain hierarchy.
 
-Therefore, create a single function that is used in both these cases and
-that can be later reused.
+Before this is done, the following must be considered: while
+arch_scale_freq_invariant() will see changes in FI support and could
+be used to condition the use of EAS, it could return different values
+during system initialisation.
+
+For arm64, such a scenario will happen for a system that does not support
+cpufreq driven FI, but does support counter-driven FI. For such a system,
+arch_scale_freq_invariant() will return false if called before counter
+based FI initialisation, but change its status to true after it.
+If EAS becomes explicitly dependent on FI this would affect the task
+scheduler behavior which builds its scheduling domain hierarchy well
+before the late counter-based FI init. During that process, EAS would be
+disabled due to its dependency on FI.
+
+Two points of future early calls to arch_scale_freq_invariant() which
+would determine EAS enablement are:
+ - (1) drivers/base/arch_topology.c:126 <<update_topology_flags_workfn>>
+		rebuild_sched_domains();
+       This will happen after CPU capacity initialisation.
+ - (2) kernel/sched/cpufreq_schedutil.c:917 <<rebuild_sd_workfn>>
+		rebuild_sched_domains_energy();
+		-->rebuild_sched_domains();
+       This will happen during sched_cpufreq_governor_change() for the
+       schedutil cpufreq governor.
+
+Therefore, before enforcing the presence of FI support for the use of EAS,
+ensure the following: if there is a change in FI support status after
+counter init, use the existing rebuild_sched_domains_energy() function to
+trigger a rebuild of the scheduling and performance domains that in turn
+will determine the enablement of EAS.
 
 Signed-off-by: Ionela Voinescu <ionela.voinescu@arm.com>
-Acked-by: Quentin Perret <qperret@google.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rafael J. Wysocki <rjw@rjwysocki.net>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 ---
- include/linux/sched/topology.h   |  8 ++++++++
- kernel/sched/cpufreq_schedutil.c |  9 +--------
- kernel/sched/topology.c          | 18 +++++++++++-------
- 3 files changed, 20 insertions(+), 15 deletions(-)
+ arch/arm64/kernel/topology.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index 9ef7bf686a9f..8f0f778b7c91 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -225,6 +225,14 @@ static inline bool cpus_share_cache(int this_cpu, int that_cpu)
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 543c67cae02f..2a9b69fdabc9 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -213,6 +213,7 @@ static DEFINE_STATIC_KEY_FALSE(amu_fie_key);
  
- #endif	/* !CONFIG_SMP */
- 
-+#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
-+extern void rebuild_sched_domains_energy(void);
-+#else
-+static inline void rebuild_sched_domains_energy(void)
-+{
-+}
-+#endif
-+
- #ifndef arch_scale_cpu_capacity
- /**
-  * arch_scale_cpu_capacity - get the capacity scale factor of a given CPU.
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e39008242cf4..0337a9b025e1 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -912,16 +912,9 @@ struct cpufreq_governor *cpufreq_default_governor(void)
- cpufreq_governor_init(schedutil_gov);
- 
- #ifdef CONFIG_ENERGY_MODEL
--extern bool sched_energy_update;
--extern struct mutex sched_energy_mutex;
--
- static void rebuild_sd_workfn(struct work_struct *work)
+ static int __init init_amu_fie(void)
  {
--	mutex_lock(&sched_energy_mutex);
--	sched_energy_update = true;
--	rebuild_sched_domains();
--	sched_energy_update = false;
--	mutex_unlock(&sched_energy_mutex);
-+	rebuild_sched_domains_energy();
- }
- static DECLARE_WORK(rebuild_sd_work, rebuild_sd_workfn);
++	bool invariance_status = topology_scale_freq_invariant();
+ 	cpumask_var_t valid_cpus;
+ 	bool have_policy = false;
+ 	int ret = 0;
+@@ -255,6 +256,15 @@ static int __init init_amu_fie(void)
+ 	if (!topology_scale_freq_invariant())
+ 		static_branch_disable(&amu_fie_key);
  
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 55c453d140e9..e0a8e55e7df0 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -211,6 +211,15 @@ unsigned int sysctl_sched_energy_aware = 1;
- DEFINE_MUTEX(sched_energy_mutex);
- bool sched_energy_update;
- 
-+void rebuild_sched_domains_energy(void)
-+{
-+	mutex_lock(&sched_energy_mutex);
-+	sched_energy_update = true;
-+	rebuild_sched_domains();
-+	sched_energy_update = false;
-+	mutex_unlock(&sched_energy_mutex);
-+}
++	/*
++	 * Task scheduler behavior depends on frequency invariance support,
++	 * either cpufreq or counter driven. If the support status changes as
++	 * a result of counter initialisation and use, retrigger the build of
++	 * scheduling domains to ensure the information is propagated properly.
++	 */
++	if (invariance_status != topology_scale_freq_invariant())
++		rebuild_sched_domains_energy();
 +
- #ifdef CONFIG_PROC_SYSCTL
- int sched_energy_aware_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *lenp, loff_t *ppos)
-@@ -223,13 +232,8 @@ int sched_energy_aware_handler(struct ctl_table *table, int write,
- 	ret = proc_dointvec_minmax(table, write, buffer, lenp, ppos);
- 	if (!ret && write) {
- 		state = static_branch_unlikely(&sched_energy_present);
--		if (state != sysctl_sched_energy_aware) {
--			mutex_lock(&sched_energy_mutex);
--			sched_energy_update = 1;
--			rebuild_sched_domains();
--			sched_energy_update = 0;
--			mutex_unlock(&sched_energy_mutex);
--		}
-+		if (state != sysctl_sched_energy_aware)
-+			rebuild_sched_domains_energy();
- 	}
+ free_valid_mask:
+ 	free_cpumask_var(valid_cpus);
  
- 	return ret;
 -- 
 2.17.1
 
