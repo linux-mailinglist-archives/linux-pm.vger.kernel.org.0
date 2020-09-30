@@ -2,142 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CC927E740
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 12:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 707EF27E78D
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 13:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728965AbgI3Kz6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 06:55:58 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:44880 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbgI3Kz6 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Sep 2020 06:55:58 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1601463357; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=23IxMnrq2Jp59pR7Ft4ivJfH7caZwKcP3O3ByLp+9OU=; b=Qi7FLVVD1EXK0XpsdXwNPaOx2I+moVgWh63mizf5LBzr4POIxUB3zpO/x/XSl7z1Wx+YkRpo
- 8YgV+tiXYiMJjthNXdOf+aJ0GtkAGnf9wLAEWQ3+DwoLGDWO88SLXyo3ndw0r0RB4S7S4JPH
- 4rE+KG7QD1YfW6uImyxPE1NfK4I=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 5f74642919fe605f254d928c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 30 Sep 2020 10:55:37
- GMT
-Sender: rnayak=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B2836C433F1; Wed, 30 Sep 2020 10:55:37 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [192.168.0.118] (unknown [49.207.198.93])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: rnayak)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7F36EC433CA;
-        Wed, 30 Sep 2020 10:55:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7F36EC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
- in Energy Model
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S1729448AbgI3LUp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 07:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729268AbgI3LUp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 07:20:45 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E12C061755
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 04:20:44 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id x69so1674052lff.3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 04:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JaBYkCpqxdbjLQb1w+KKEU4S8vRsQ/8VWeCdl0OLNmw=;
+        b=ZQUJnNObqdGuqomARat9Rzcy1IMw/qk9+IKE4ijq8mcEnxCUlIYe+Xr0IIVv6LytD8
+         RPJYRdmjB74vyhEK0C++tvW/9hNpc7pmhmXYzjLY5z9EWt3m1QZkFRwcwjrKdG0ccE3S
+         dvZ0AFvgnYJ3CrPviGAZJ/zrH7Q6Qqh53Rr/c8zh0doO5gCcYlVu2IsH18tLcYF3ewGL
+         DdqGnHJwCW57AmbetW0uftX75VcX/r4rndYX9LMfpuJJcU+F1pPhppZ7dKd5vz34xoSp
+         27KErU6W1k/hXubW4Qb9DjSZqWrRixJCSmEJ04S5W8TtDa2wDjRWwAv7rTxzBPpLcbWH
+         blkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JaBYkCpqxdbjLQb1w+KKEU4S8vRsQ/8VWeCdl0OLNmw=;
+        b=RvTx6S/n4ZPteEiD0+7BN5SSnG1S4YFe89AeW+aLOV2U78FaSLrTd2ugmmXU+EKoFX
+         Y/odNKckbtDuV9587YGCIu9SElPc44dtpEJi+2iLxoZnyFipxhzMAROadPQNMt8ILh1A
+         M8VWW/u3MkhY3znww1Lku86jaCH65+9smFUbwbqDfwH2EzFDZiFRL56JShIt/fCH+HBk
+         XiSMN01AjGT5vMw5m7kxub1NHRc/q56EiaRc3+ONCLMxFKaEImyVRk8RWrvdlKUal2yP
+         n6JZ1rI/I/T9KDY8AY68niZI9zR0KvEfXHr1sNtKpPm93yVyLoJbpL+H7LcuJusSW1fc
+         ttgg==
+X-Gm-Message-State: AOAM533s236d6Z23upY6HkswBSoCBOpnjVYDpfruXLL4FuONC3DC01ir
+        sGj6qY6IUJDBOIsl2HFlDPoANg==
+X-Google-Smtp-Source: ABdhPJzhbbNwWxMqHCyhim49dAaiswEhhMSkIreW4KtcezyQ5OH951tEGHQ39H7clnjw9VFmPgpQrg==
+X-Received: by 2002:a05:6512:207:: with SMTP id a7mr670315lfo.127.1601464843110;
+        Wed, 30 Sep 2020 04:20:43 -0700 (PDT)
+Received: from localhost.localdomain (h-155-4-133-169.NA.cust.bahnhof.se. [155.4.133.169])
+        by smtp.gmail.com with ESMTPSA id 138sm155770lfl.241.2020.09.30.04.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 04:20:42 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20200929121610.16060-1-lukasz.luba@arm.com>
- <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
- <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <62540312-65a2-b6d9-86ce-b4deaaa913c1@codeaurora.org>
-Date:   Wed, 30 Sep 2020 16:25:30 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+        Anson Huang <anson.huang@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] ARM: imx6q: Fixup RCU usage for cpuidle
+Date:   Wed, 30 Sep 2020 13:20:23 +0200
+Message-Id: <20200930112023.121821-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The commit eb1f00237aca ("lockdep,trace: Expose tracepoints"), started to
+expose us for tracepoints. For imx6q cpuidle, this leads to an RCU splat
+according to below.
 
-On 9/30/2020 1:55 PM, Lukasz Luba wrote:
-> Hi Douglas,
-> 
-> On 9/30/20 12:53 AM, Doug Anderson wrote:
->> Hi,
->>
->> On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>
->>> The Energy Model (EM) can store power values in milli-Watts or in abstract
->>> scale. This might cause issues in the subsystems which use the EM for
->>> estimating the device power, such as:
->>> - mixing of different scales in a subsystem which uses multiple
->>>    (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
->>> - assuming that energy [milli-Joules] can be derived from the EM power
->>>    values which might not be possible since the power scale doesn't have to
->>>    be in milli-Watts
->>>
->>> To avoid misconfiguration add the needed documentation to the EM and
->>> related subsystems: EAS and IPA.
->>>
->>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>> ---
->>>   .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
->>>   Documentation/power/energy-model.rst                | 13 +++++++++++++
->>>   Documentation/scheduler/sched-energy.rst            |  5 +++++
->>>   3 files changed, 26 insertions(+)
->>
->> I haven't read through these files in massive detail, but the quick
->> skim makes me believe that your additions seem sane.  In general, I'm
->> happy with documenting reality, thus:
->>
->> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> 
-> Thank you for the review.
-> 
->>
->> I will note: you haven't actually updated the device tree bindings.
->> Thus, presumably, anyone who is specifying these numbers in the device
->> tree is still supposed to specify them in a way that mW can be
->> recovered, right?  Said another way: nothing about your patches makes
->> it OK to specify numbers in device trees using an "abstract scale",
->> right?
-> 
-> For completeness, we are talking here about the binding from:
-> Documentation/devicetree/bindings/arm/cpus.yaml
-> which is 'dynamic-power-coefficient'. Yes, it stays untouched, also the
-> unit (uW/MHz/V^2) which then allows to have mW in the power
-> values in the EM.
+[6.870684] [<c0db7690>] (_raw_spin_lock) from [<c011f6a4>] (imx6q_enter_wait+0x18/0x9c)
+[6.878846] [<c011f6a4>] (imx6q_enter_wait) from [<c09abfb0>] (cpuidle_enter_state+0x168/0x5e4)
 
-So for platforms where 'dynamic-power-coefficient' is specified in device tree,
-its always expected to be derived from 'real' power numbers on these platforms in
-'real' mW?
+To fix the problem, let's assign the corresponding idlestate->flags the
+CPUIDLE_FLAG_RCU_IDLE bit, which enables us to call rcu_idle_enter|exit()
+at the proper point.
 
-Atleast on Qualcomm platforms we have these numbers scaled, so in essence it
-can't be used to derive 'real' mW values. That said we also do not have any of
-the 'platform might face potential issue of mixing devices in one thermal zone
-of two scales' problem.
+Reported-by: Dong Aisheng <aisheng.dong@nxp.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ arch/arm/mach-imx/cpuidle-imx6q.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-So the question is, can such platforms still use 'dynamic-power-coefficient'
-in device tree and create an abstract scale? The other way of doing this would
-be to *not* specify this value in device tree and have these values stored in the
-cpufreq driver and register a custom callback to do the math.
-
-It just feels like jumping through hoops just to deal with the fact that the
-device tree bindings say its expected to be in mW and can't be abstract.
-
+diff --git a/arch/arm/mach-imx/cpuidle-imx6q.c b/arch/arm/mach-imx/cpuidle-imx6q.c
+index 24dd5bbe60e4..094337dc1bc7 100644
+--- a/arch/arm/mach-imx/cpuidle-imx6q.c
++++ b/arch/arm/mach-imx/cpuidle-imx6q.c
+@@ -24,7 +24,9 @@ static int imx6q_enter_wait(struct cpuidle_device *dev,
+ 		imx6_set_lpm(WAIT_UNCLOCKED);
+ 	raw_spin_unlock(&cpuidle_lock);
+ 
++	rcu_idle_enter();
+ 	cpu_do_idle();
++	rcu_idle_exit();
+ 
+ 	raw_spin_lock(&cpuidle_lock);
+ 	if (num_idle_cpus-- == num_online_cpus())
+@@ -44,7 +46,7 @@ static struct cpuidle_driver imx6q_cpuidle_driver = {
+ 		{
+ 			.exit_latency = 50,
+ 			.target_residency = 75,
+-			.flags = CPUIDLE_FLAG_TIMER_STOP,
++			.flags = CPUIDLE_FLAG_TIMER_STOP | CPUIDLE_FLAG_RCU_IDLE,
+ 			.enter = imx6q_enter_wait,
+ 			.name = "WAIT",
+ 			.desc = "Clock off",
 -- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+2.25.1
+
