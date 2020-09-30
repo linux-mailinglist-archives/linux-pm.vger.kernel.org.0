@@ -2,108 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A33BA27E7B2
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 13:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 585AF27E7FE
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 13:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbgI3Ldf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 07:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
+        id S1729304AbgI3L4F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 07:56:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbgI3Lde (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 07:33:34 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3ABDC061755
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 04:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mGXif5c1D0bP4N9KNJlE5DzIZgbdve743XcY4Tk32Oc=; b=rQ59hkASANGuZsk3OexuzhblSz
-        9OMAz1xQFLj4Vm0ZK9r9hLMYNqSoN9CkTKzDnRklzd9JLb7cMryLPObBjMShtNhd3C0FbjsR/4tf3
-        maQcCS+W7De/vahGaso1Tr/3F8DjJkFAa4KBt96Xfz7u/4g33CJ8uCrXyP9VrGO6MIsiSo7YY90BK
-        4aKF/cxIAB7F8Ll5svEG7xDwQHTzkizSOuK4WjGDYiQYEmZJGs+aqnyZ8Sd043vaiiy2gO6Xw/2ZA
-        MxCFU1V2xKMf2ldbmnkiYWXUoiK8e4xKZBPraldL8zKfpPlItW3pmYpilntuIW0F5id4MldKW6Lfw
-        zaOSxBzQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1kNaMQ-0006s1-BE; Wed, 30 Sep 2020 11:33:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A01A23003D8;
-        Wed, 30 Sep 2020 13:33:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 819E2202A40A0; Wed, 30 Sep 2020 13:33:25 +0200 (CEST)
-Date:   Wed, 30 Sep 2020 13:33:25 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Shawn Guo <shawnguo@kernel.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Anson Huang <anson.huang@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] ARM: imx6q: Fixup RCU usage for cpuidle
-Message-ID: <20200930113325.GA2628@hirez.programming.kicks-ass.net>
-References: <20200930112023.121821-1-ulf.hansson@linaro.org>
+        with ESMTP id S1725776AbgI3L4F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 07:56:05 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BF6C061755;
+        Wed, 30 Sep 2020 04:56:05 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id a9so1444821wmm.2;
+        Wed, 30 Sep 2020 04:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=/e6Hsi9CMtqzZnIKCBnu9x6TRjKgsku17Kje/SLQgxk=;
+        b=nlytbkeZSQFvQ/dR3WEjx/pwtK7fPq36kiqhAaienevjAo7N39meQZ+oCzvJ8Hdk36
+         zb3yDbtBqYI5xXInfZjty6fztpwTm6J+bcTL24prz4UefHiqknsBNMVSjWdMzb4ZB5fk
+         49rbsC7fXQJp+G1RTlP3jQl5Xuzr8oEHF4dAe0RBLS9Ehp1S+NKLj1GXn/Cpf806KL4n
+         LaDG2OlTUFxy5wEVrx6Ky9QyTkCLzujagGAUMOt5b8oQP9myED9WkJM+oJdvtpAUJZdo
+         4CViUbJhF3GsbjNgLEjQ3r84syUAEAR4MA+YqC++ldHpa4TgCvNBUM5yo/eW7/UEAL3z
+         97eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:content-language
+         :thread-index;
+        bh=/e6Hsi9CMtqzZnIKCBnu9x6TRjKgsku17Kje/SLQgxk=;
+        b=txwL1jxCQAH1QELXZmlMoJJriykvjDHui912PEE1FGkxtevM6ki6yqXloxKEyji84w
+         hFQGy4bMsv2uagOl7tb1wMrrVZSRXFbDRYf56UYDMA8BYaUgOy/dlZyWkwAOe+OgYCZx
+         Kqn2r5RlEtTsUoHssQVv16LQW8hOEPLs8NW+fjee2Ebre+HDCLsgCzdNHDhJm1ibUDED
+         DIGNVFwR6BUGTTAq/52udu1i9rxQAqkAomQ6amguNMWcldht8gVWCz6c2tSmz+VDGZ4G
+         v/MnIWTy2fjhOz1sOKvDTRiq1Vgxo+17YjdOafoQ0slPpY2cNomjeyn27UbqsxEcM/JD
+         Az+w==
+X-Gm-Message-State: AOAM532YBRtfC40Gp/zNEOnKDy/mXROW1WKveMPkTVn5+uZrBwiGZ9ir
+        /5s21jW97d7LNU5N0k2XubI7I4kt+JbjmA==
+X-Google-Smtp-Source: ABdhPJzZbgSCxiYKhLE3ZvqSSKxPBlptlSX/RpWq51eO1owDHr5yHk+gVbqlEv3e9tLdz8/hoIu3aw==
+X-Received: by 2002:a1c:f008:: with SMTP id a8mr2740833wmb.155.1601466963922;
+        Wed, 30 Sep 2020 04:56:03 -0700 (PDT)
+Received: from AnsuelXPS (93-39-149-95.ip76.fastwebnet.it. [93.39.149.95])
+        by smtp.gmail.com with ESMTPSA id h4sm2996187wrm.54.2020.09.30.04.56.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 30 Sep 2020 04:56:03 -0700 (PDT)
+From:   <ansuelsmth@gmail.com>
+To:     "'Sudeep Holla'" <sudeep.holla@arm.com>
+Cc:     "'Rob Herring'" <robh+dt@kernel.org>,
+        "'Andy Gross'" <agross@kernel.org>,
+        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>,
+        "'MyungJoo Ham'" <myungjoo.ham@samsung.com>,
+        "'Kyungmin Park'" <kyungmin.park@samsung.com>,
+        "'Chanwoo Choi'" <cw00.choi@samsung.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <20200929162926.139-1-ansuelsmth@gmail.com> <20200930092954.GA7125@bogus>
+In-Reply-To: <20200930092954.GA7125@bogus>
+Subject: RE: [PATCH v2 1/2] devfreq: qcom: Add L2 Krait Cache devfreq scaling driver
+Date:   Wed, 30 Sep 2020 13:56:01 +0200
+Message-ID: <006c01d69720$abd3f230$037bd690$@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200930112023.121821-1-ulf.hansson@linaro.org>
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: it
+Thread-Index: AQHRHCX89vsNM0cZY8BINv1SaJtjIwLCr4YDqXXwJVA=
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 01:20:23PM +0200, Ulf Hansson wrote:
-> The commit eb1f00237aca ("lockdep,trace: Expose tracepoints"), started to
-> expose us for tracepoints. For imx6q cpuidle, this leads to an RCU splat
-> according to below.
+> Subject: Re: [PATCH v2 1/2] devfreq: qcom: Add L2 Krait Cache devfreq
+> scaling driver
 > 
-> [6.870684] [<c0db7690>] (_raw_spin_lock) from [<c011f6a4>] (imx6q_enter_wait+0x18/0x9c)
-> [6.878846] [<c011f6a4>] (imx6q_enter_wait) from [<c09abfb0>] (cpuidle_enter_state+0x168/0x5e4)
+> On Tue, Sep 29, 2020 at 06:29:24PM +0200, Ansuel Smith wrote:
+> > Qcom L2 Krait CPUs use the generic cpufreq-dt driver and doesn't
+actually
+> > scale the Cache frequency when the CPU frequency is changed. This
+> > devfreq driver register with the cpu notifier and scale the Cache
+> > based on the max Freq across all core as the CPU cache is shared across
+> > all of them. If provided this also scale the voltage of the regulator
+> > attached to the CPU cache. The scaling logic is based on the CPU freq
+> > and the 3 scaling interval are set by the device dts.
+> >
 > 
-> To fix the problem, let's assign the corresponding idlestate->flags the
-> CPUIDLE_FLAG_RCU_IDLE bit, which enables us to call rcu_idle_enter|exit()
-> at the proper point.
+> I have raised this concern before. I am worried this kind of independent
+> CPU and cache frequency controls make way for clkscrew kind of attacks.
+> Why can't the clocks be made parent/child or secondary and automatically
+> updated when CPU clocks are changed.
 > 
-> Reported-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> --
+> Regards,
+> Sudeep
 
-Yep, that looks about right.
+I don't think I understand this fully. Anyway about the clkscrew attack, the
+range are set on the dts so unless someone actually wants to have a
+vulnerable
+system, the range can't be changes at runtime. The devfreq governor is set
+to
+immutable and can't be changes AFAIK.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+About 'automatically updated when CPU changes', the cache is shared across 2
+core and they scale independently. We can be in situation where one cpu is
+at
+max and one at idle freq and the cache is set to idle. To fix this at every
+change
+the clk should find the max value and I think this would make all the clk
+scaling
+very slow. If you have any suggestion on how I can implement this better,
+I'm
+more than happy to address them. For now, the lack of this kind of cache
+scale,
+make the system really slow since by default the init of the cpu and cache
+clks
+put them at the lowest frequency and nobody changes that. (we have cpufreq
+scaling support but the cache is never actually scaled)
 
-> ---
->  arch/arm/mach-imx/cpuidle-imx6q.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/mach-imx/cpuidle-imx6q.c b/arch/arm/mach-imx/cpuidle-imx6q.c
-> index 24dd5bbe60e4..094337dc1bc7 100644
-> --- a/arch/arm/mach-imx/cpuidle-imx6q.c
-> +++ b/arch/arm/mach-imx/cpuidle-imx6q.c
-> @@ -24,7 +24,9 @@ static int imx6q_enter_wait(struct cpuidle_device *dev,
->  		imx6_set_lpm(WAIT_UNCLOCKED);
->  	raw_spin_unlock(&cpuidle_lock);
->  
-> +	rcu_idle_enter();
->  	cpu_do_idle();
-> +	rcu_idle_exit();
->  
->  	raw_spin_lock(&cpuidle_lock);
->  	if (num_idle_cpus-- == num_online_cpus())
-> @@ -44,7 +46,7 @@ static struct cpuidle_driver imx6q_cpuidle_driver = {
->  		{
->  			.exit_latency = 50,
->  			.target_residency = 75,
-> -			.flags = CPUIDLE_FLAG_TIMER_STOP,
-> +			.flags = CPUIDLE_FLAG_TIMER_STOP | CPUIDLE_FLAG_RCU_IDLE,
->  			.enter = imx6q_enter_wait,
->  			.name = "WAIT",
->  			.desc = "Clock off",
-> -- 
-> 2.25.1
-> 
+
