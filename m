@@ -2,140 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDA327F25D
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 21:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6543327F439
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 23:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725814AbgI3TNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 15:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725771AbgI3TNB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 15:13:01 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5048C061755
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 12:13:01 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id t18so1598833plo.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 12:13:01 -0700 (PDT)
+        id S1730117AbgI3VaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 17:30:14 -0400
+Received: from smtp-fw-2101.amazon.com ([72.21.196.25]:37982 "EHLO
+        smtp-fw-2101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725814AbgI3VaO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 17:30:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Pr5+K2OmnHgHQ0BOfHck1nEaWy6m0y2UD2KTqORUOuE=;
-        b=Ei5Ls/UpxUsp73heN21iXt9T30S3s/wPI6xuEQM74LGks6tLkM+HOJWRjykuqMJnqR
-         6ALQqcJKU+iH6ljI93hzX4t1AdIuwyPD411D1Ol05wJEBazU0t6TX9bRQ+FxuDQUenQC
-         Yrz8U9GBdEHRtc8wyznPa+poUZm2OHypIEAf6+QQ68DNPOwny9s+EOn2wI9aKsTl9kNS
-         23QxnQwX1Pf2HzKOdP7RLkB7hFLEoFLnYg2dvid8AzULrxCqNRcpvkXADyvp2GGiK6aY
-         bQpNim4Z7EAnVvBEcRFnf7vfw3Bj67JAT7+4mCc6OIp3puNc1W24ZsnKFS0YdQEven1b
-         jShQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Pr5+K2OmnHgHQ0BOfHck1nEaWy6m0y2UD2KTqORUOuE=;
-        b=oinoUgdAQUoaZIxe+5HIYQfW6S5K80W8wzap0jjcUsnMmveniOX2lkKsQSO4gZZR39
-         fdA7WCPuBLAxNSSCSkINc4IgLeri23MBPyznwSG5PuzL+BfuJya3KDIEfj89XEiF2khv
-         DxlRscEmFPwqnPQV9Pz1DI20WTGPyn1pcKl1OFXiB8avrH/idt3DgxGdcgrbsajrWZkG
-         2XOreRT9WHbhVXnbfWNrr0WKG7y0synvqWHnaB1n9QaKwZd1UdCsIRbcm6yNZ1595SkD
-         +uHIoevyKMhUlqyGSoN5lRW7+oJp6+NxNDbz1kWc/YTwKKumoxnGAvHczFCbs6yNfT8Q
-         vI7Q==
-X-Gm-Message-State: AOAM5303jzjgrAwYObte5XSpb1NtOyJJsABvf8j4TzT8kHoUwnIMoL9t
-        w7UNgHdUJjqLdxbU1J0keeGoRA==
-X-Google-Smtp-Source: ABdhPJxXS2FVZf0LNKl7AqakJ09sMsG2jatodSIJMEWHp5BDyY2m7YK5yf/VG7OTs6NhLh0Gb4NErA==
-X-Received: by 2002:a17:902:b107:b029:d2:ab87:c418 with SMTP id q7-20020a170902b107b02900d2ab87c418mr4057618plr.40.1601493181127;
-        Wed, 30 Sep 2020 12:13:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u4sm3185381pfk.166.2020.09.30.12.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Sep 2020 12:13:00 -0700 (PDT)
-Message-ID: <5f74d8bc.1c69fb81.17537.6313@mx.google.com>
-Date:   Wed, 30 Sep 2020 12:13:00 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1601501413; x=1633037413;
+  h=date:from:to:cc:message-id:references:mime-version:
+   in-reply-to:subject;
+  bh=PzproGxQQPVApvJjIQ8ERr8X0N8MusoN+Qds32pYVAw=;
+  b=TnK6vYe830cNZSlXgNNkzDJHW/3tS4pY1l30+672pb0wMqaFMpWAuy2I
+   jRsudFL+aDbWutBjw+vSb+Af9APw1AYa1e8iKsmVbPxtdhYlEoBxVWOoZ
+   T2pp1eVVX1Ml2y9c+nwX+nYMavF0BY9boCXnpgMgtspg0eIDX3PfV7ZOI
+   M=;
+X-IronPort-AV: E=Sophos;i="5.77,322,1596499200"; 
+   d="scan'208";a="57055348"
+Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend mode
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-16425a8d.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-out-2101.iad2.amazon.com with ESMTP; 30 Sep 2020 21:30:11 +0000
+Received: from EX13MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-1d-16425a8d.us-east-1.amazon.com (Postfix) with ESMTPS id 764D6100F36;
+        Wed, 30 Sep 2020 21:30:05 +0000 (UTC)
+Received: from EX13D05UWC003.ant.amazon.com (10.43.162.226) by
+ EX13MTAUWC002.ant.amazon.com (10.43.162.240) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 30 Sep 2020 21:29:45 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (10.43.162.135) by
+ EX13D05UWC003.ant.amazon.com (10.43.162.226) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 30 Sep 2020 21:29:45 +0000
+Received: from dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com
+ (172.22.96.68) by mail-relay.amazon.com (10.43.162.232) with Microsoft SMTP
+ Server id 15.0.1497.2 via Frontend Transport; Wed, 30 Sep 2020 21:29:44 +0000
+Received: by dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com (Postfix, from userid 4335130)
+        id E3F2F40A16; Wed, 30 Sep 2020 21:29:44 +0000 (UTC)
+Date:   Wed, 30 Sep 2020 21:29:44 +0000
+From:   Anchal Agarwal <anchalag@amazon.com>
+To:     <boris.ostrovsky@oracle.com>
+CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <hpa@zytor.com>, <x86@kernel.org>, <jgross@suse.com>,
+        <linux-pm@vger.kernel.org>, <linux-mm@kvack.org>,
+        <kamatam@amazon.com>, <sstabellini@kernel.org>,
+        <konrad.wilk@oracle.com>, <roger.pau@citrix.com>,
+        <axboe@kernel.dk>, <davem@davemloft.net>, <rjw@rjwysocki.net>,
+        <len.brown@intel.com>, <pavel@ucw.cz>, <peterz@infradead.org>,
+        <eduval@amazon.com>, <sblbir@amazon.com>,
+        <xen-devel@lists.xenproject.org>, <vkuznets@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dwmw@amazon.co.uk>, <benh@kernel.crashing.org>
+Message-ID: <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+References: <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
+ <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
+ <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
+ <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
+ <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
+ <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc7-75-g027a0d093137
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 6 runs, 2 regressions (v5.9-rc7-75-g027a0d093137)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 6 runs, 2 regressions (v5.9-rc7-75-g027a0d093137)
+On Mon, Sep 28, 2020 at 02:49:56PM -0400, boris.ostrovsky@oracle.com wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> 
+> 
+> 
+> On 9/25/20 6:28 PM, Anchal Agarwal wrote:
+> > On Fri, Sep 25, 2020 at 04:02:58PM -0400, boris.ostrovsky@oracle.com wrote:
+> >> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>
+> >>
+> >>
+> >> On 9/25/20 3:04 PM, Anchal Agarwal wrote:
+> >>> On Tue, Sep 22, 2020 at 11:17:36PM +0000, Anchal Agarwal wrote:
+> >>>> On Tue, Sep 22, 2020 at 12:18:05PM -0400, boris.ostrovsky@oracle.com wrote:
+> >>>>> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>> On 9/21/20 5:54 PM, Anchal Agarwal wrote:
+> 
+> >>>>> Also, wrt KASLR stuff, that issue is still seen sometimes but I haven't had
+> >>>>> bandwidth to dive deep into the issue and fix it.
+> >>
+> >> So what's the plan there? You first mentioned this issue early this year and judged by your response it is not clear whether you will ever spend time looking at it.
+> >>
+> > I do want to fix it and did do some debugging earlier this year just haven't
+> > gotten back to it. Also, wanted to understand if the issue is a blocker to this
+> > series?
+> 
+> 
+> Integrating code with known bugs is less than ideal.
+> 
+So for this series to be accepted, KASLR needs to be fixed along with other
+comments of course? 
+> 
+> 3% failure for this feature seems to be a manageable number from the reproducability perspective --- you should be able to script this and each iteration should take way under a minute, no?
+> 
+>
+Yes it should be doable. The % is not constant here that's the max I have seen.
+Also, if at worse it takes a min per run and I have to run 2000-3000 runs to
+produce failure that will still be slower. I have to dig in to see if I can find
+a better way. 
 
-Regressions Summary
--------------------
-
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc7=
--75-g027a0d093137/plan/sleep/
-
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc7-75-g027a0d093137
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      027a0d093137cac9655d241a1ace1b36ed1f455d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana  | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f74cb8c3cc29680988771f0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc7-75-g027a0d=
-093137/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc7-75-g027a0d=
-093137/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0925.2/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f74cb8c3cc29680988771f1
-      failing since 42 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =
-
-
-
-platform         | arch  | lab           | compiler | defconfig | results
------------------+-------+---------------+----------+-----------+--------
-rk3399-gru-kevin | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f74cdb5a3a0202d53877169
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc7-75-g027a0d=
-093137/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc7-75-g027a0d=
-093137/arm64/defconfig/gcc-8/lab-collabora/sleep-rk3399-gru-kevin.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-0925.2/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f74cdb5a3a0202d5387716a
-      failing since 1 day (last pass: v5.9-rc6-48-g537658447367, first fail=
-: v5.9-rc7-68-geb6335b68ce3)  =20
+> > I had some theories when debugging around this like if the random base address picked by kaslr for the
+> > resuming kernel mismatches the suspended kernel and just jogging my memory, I didn't find that as the case.
+> > Another hunch was if physical address of registered vcpu info at boot is different from what suspended kernel
+> > has and that can cause CPU's to get stuck when coming online.
+> 
+> 
+> I'd think if this were the case you'd have 100% failure rate. And we are also re-registering vcpu info on xen restore and I am not aware of any failures due to KASLR.
+> 
+What I meant there wrt VCPU info was that VCPU info is not unregistered during hibernation,
+so Xen still remembers the old physical addresses for the VCPU information, created by the
+booting kernel. But since the hibernation kernel may have different physical
+addresses for VCPU info and if mismatch happens, it may cause issues with resume. 
+During hibernation, the VCPU info register hypercall is not invoked again.
+> 
+> > The issue was only
+> > reproducible 3% of the time out of 3000 runs hence its hard to just reproduce this.
+> >
+> > Moreover, I also wanted to get an insight on if hibernation works correctly with KASLR
+> > generally and its only Xen causing the issue?
+> 
+> 
+> With KASLR being on by default I'd be surprised if it didn't.
+>
+Thant makes it xen specific then. Also, I have not seen the issue on KVM based
+instances.
+> 
+> -boris
+> 
+- Anchal
