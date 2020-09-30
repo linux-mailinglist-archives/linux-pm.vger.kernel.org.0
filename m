@@ -2,98 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFB227EA6F
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 15:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0947327EA8A
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 16:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730304AbgI3N6J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 09:58:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:36834 "EHLO foss.arm.com"
+        id S1730234AbgI3OEG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 10:04:06 -0400
+Received: from foss.arm.com ([217.140.110.172]:36946 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729903AbgI3N6I (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Sep 2020 09:58:08 -0400
+        id S1730104AbgI3OEF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 30 Sep 2020 10:04:05 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD1FB30E;
-        Wed, 30 Sep 2020 06:58:07 -0700 (PDT)
-Received: from bogus (unknown [10.57.47.250])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E0A73F6CF;
-        Wed, 30 Sep 2020 06:58:04 -0700 (PDT)
-Date:   Wed, 30 Sep 2020 14:57:33 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     ansuelsmth@gmail.com
-Cc:     'Rob Herring' <robh+dt@kernel.org>,
-        'Andy Gross' <agross@kernel.org>,
-        'Bjorn Andersson' <bjorn.andersson@linaro.org>,
-        'MyungJoo Ham' <myungjoo.ham@samsung.com>,
-        'Kyungmin Park' <kyungmin.park@samsung.com>,
-        'Chanwoo Choi' <cw00.choi@samsung.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] devfreq: qcom: Add L2 Krait Cache devfreq scaling
- driver
-Message-ID: <20200930135733.GA7609@bogus>
-References: <20200929162926.139-1-ansuelsmth@gmail.com>
- <20200930092954.GA7125@bogus>
- <006c01d69720$abd3f230$037bd690$@gmail.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01F2F30E;
+        Wed, 30 Sep 2020 07:04:05 -0700 (PDT)
+Received: from [10.57.54.5] (unknown [10.57.54.5])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 801673F6CF;
+        Wed, 30 Sep 2020 07:04:02 -0700 (PDT)
+Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
+ in Energy Model
+To:     Rajendra Nayak <rnayak@codeaurora.org>,
+        Doug Anderson <dianders@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <20200929121610.16060-1-lukasz.luba@arm.com>
+ <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
+ <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com>
+ <62540312-65a2-b6d9-86ce-b4deaaa913c1@codeaurora.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <1f713ff6-32f6-4ea6-b7f7-4c61f097cf2a@arm.com>
+Date:   Wed, 30 Sep 2020 15:04:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <006c01d69720$abd3f230$037bd690$@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <62540312-65a2-b6d9-86ce-b4deaaa913c1@codeaurora.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 30, 2020 at 01:56:01PM +0200, ansuelsmth@gmail.com wrote:
-> > Subject: Re: [PATCH v2 1/2] devfreq: qcom: Add L2 Krait Cache devfreq
-> > scaling driver
-> >
-> > On Tue, Sep 29, 2020 at 06:29:24PM +0200, Ansuel Smith wrote:
-> > > Qcom L2 Krait CPUs use the generic cpufreq-dt driver and doesn't
-> actually
-> > > scale the Cache frequency when the CPU frequency is changed. This
-> > > devfreq driver register with the cpu notifier and scale the Cache
-> > > based on the max Freq across all core as the CPU cache is shared across
-> > > all of them. If provided this also scale the voltage of the regulator
-> > > attached to the CPU cache. The scaling logic is based on the CPU freq
-> > > and the 3 scaling interval are set by the device dts.
-> > >
-> >
-> > I have raised this concern before. I am worried this kind of independent
-> > CPU and cache frequency controls make way for clkscrew kind of attacks.
-> > Why can't the clocks be made parent/child or secondary and automatically
-> > updated when CPU clocks are changed.
-> >
->
-> I don't think I understand this fully. Anyway about the clkscrew attack, the
-> range are set on the dts so unless someone actually wants to have a
-> vulnerable system, the range can't be changes at runtime. The devfreq
-> governor is set to immutable and can't be changes AFAIK.
->
 
-I don't think that matters, we are talking about Secure/Non-secure boundary
-here. DT can be modified or simple a rogue devfreq module can do all the
-bad things.
 
-> About 'automatically updated when CPU changes', the cache is shared across 2
-> core and they scale independently. We can be in situation where one cpu is
-> at max and one at idle freq and the cache is set to idle. To fix this at
-> every change the clk should find the max value and I think this would make
-> all the clk scaling very slow.
+On 9/30/20 11:55 AM, Rajendra Nayak wrote:
+> 
+> On 9/30/2020 1:55 PM, Lukasz Luba wrote:
+>> Hi Douglas,
+>>
+>> On 9/30/20 12:53 AM, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> The Energy Model (EM) can store power values in milli-Watts or in 
+>>>> abstract
+>>>> scale. This might cause issues in the subsystems which use the EM for
+>>>> estimating the device power, such as:
+>>>> - mixing of different scales in a subsystem which uses multiple
+>>>>    (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
+>>>> - assuming that energy [milli-Joules] can be derived from the EM power
+>>>>    values which might not be possible since the power scale doesn't 
+>>>> have to
+>>>>    be in milli-Watts
+>>>>
+>>>> To avoid misconfiguration add the needed documentation to the EM and
+>>>> related subsystems: EAS and IPA.
+>>>>
+>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>> ---
+>>>>   .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
+>>>>   Documentation/power/energy-model.rst                | 13 
+>>>> +++++++++++++
+>>>>   Documentation/scheduler/sched-energy.rst            |  5 +++++
+>>>>   3 files changed, 26 insertions(+)
+>>>
+>>> I haven't read through these files in massive detail, but the quick
+>>> skim makes me believe that your additions seem sane.  In general, I'm
+>>> happy with documenting reality, thus:
+>>>
+>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>>
+>> Thank you for the review.
+>>
+>>>
+>>> I will note: you haven't actually updated the device tree bindings.
+>>> Thus, presumably, anyone who is specifying these numbers in the device
+>>> tree is still supposed to specify them in a way that mW can be
+>>> recovered, right?  Said another way: nothing about your patches makes
+>>> it OK to specify numbers in device trees using an "abstract scale",
+>>> right?
+>>
+>> For completeness, we are talking here about the binding from:
+>> Documentation/devicetree/bindings/arm/cpus.yaml
+>> which is 'dynamic-power-coefficient'. Yes, it stays untouched, also the
+>> unit (uW/MHz/V^2) which then allows to have mW in the power
+>> values in the EM.
+> 
+> So for platforms where 'dynamic-power-coefficient' is specified in 
+> device tree,
+> its always expected to be derived from 'real' power numbers on these 
+> platforms in
+> 'real' mW?
 
-This sounds like we are going back to coupled idle states kind of setup.
-Sorry we don't want those anymore.
+Yes, the purpose and the name of that binding was only for 'real'
+power in mW.
 
-> If you have any suggestion on how I can implement this better, I'm
-> more than happy to address them. For now, the lack of this kind of cache
-> scale, make the system really slow since by default the init of the cpu and
-> cache clks put them at the lowest frequency and nobody changes that.
-> (we have cpufreq scaling support but the cache is never actually scaled)
+> 
+> Atleast on Qualcomm platforms we have these numbers scaled, so in 
+> essence it
+> can't be used to derive 'real' mW values. That said we also do not have 
+> any of
+> the 'platform might face potential issue of mixing devices in one 
+> thermal zone
+> of two scales' problem.
 
-As I mentioned, if this needs to be done in OSPM, then hide it in the clock
-building right dependencies. Clk will even have refcount so that one idle
-CPU won't bring the cache down to idle frequency.
+If you have these numbers scaled, then it's probably documented
+somewhere in your docs for your OEMs, because they might assume it's in
+uW/MHz/V^2 (according to the bindings doc). If not, they probably
+realized it during the measurements and comparison (that the power in
+EM is not what they see on the power meter).
+This binding actually helps those developers who take the experiments
+and based on measured power values, store derived coefficient.
+Everyone can just measure in local setup and compare the results
+easily, speaking the same language (proposing maybe a patch adjusting
+the value in DT).
 
---
+> 
+> So the question is, can such platforms still use 
+> 'dynamic-power-coefficient'
+> in device tree and create an abstract scale? The other way of doing this 
+> would
+> be to *not* specify this value in device tree and have these values 
+> stored in the
+> cpufreq driver and register a custom callback to do the math.
+
+But then we would also have to change the name of that binding.
+
+I'd recommend you the second way that you've described. It will avoid
+your OEMs confusion. In your cpufreq driver you can simply register
+to EM using the em_dev_register_perf_domain(). In your local
+callback you can do whatever you need (read driver array, firmware,
+DT, scale or not, etc).
+The helper code in dev_pm_opp_of_register_em() is probably not suited
+for your use case (when you don't want to share the real power of the
+SoC).
+
+> 
+> It just feels like jumping through hoops just to deal with the fact that 
+> the
+> device tree bindings say its expected to be in mW and can't be abstract.
+> 
+
+I don't want to add more confusion into the EM power values topic.
+Overloading the meaning of that binding would create more mess.
+
 Regards,
-Sudeep
+Lukasz
