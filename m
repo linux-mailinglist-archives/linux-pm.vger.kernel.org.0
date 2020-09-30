@@ -2,192 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4A927F075
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8858827F123
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 20:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731477AbgI3RZH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 13:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S1729322AbgI3SOM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 14:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731638AbgI3RZG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 13:25:06 -0400
-Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B78C0613D0
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 10:25:05 -0700 (PDT)
-Received: by mail-vs1-xe42.google.com with SMTP id f63so1325831vsc.8
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 10:25:05 -0700 (PDT)
+        with ESMTP id S1725355AbgI3SOJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 14:14:09 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15472C061755
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 11:14:09 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id m34so1554894pgl.9
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 11:14:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vW6nfGRTz/sTEP7gbvkvTgm0nzQPx/Ar8oJMubseyNA=;
-        b=Wu+N1EEPQlezri0eilDt/EmQjVaPC7mh7e+xt53v7wvzU7vqg7jGKW/hrbLIJZOzbn
-         g3TtmKm2I50xDw63us09VXc5c40L4V2/3Loek9Jn6kjZ6rG/H3Ik2yOu1TAaqjao0osQ
-         ECY6OOhQr87v43ypSh1IWo+NJ7TRxnrhIMOx8=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Z5lu0PeqUpQhHfIFiSeFh3YIiVvY8Dyl15uNalwR/lc=;
+        b=v54jyApSEtOIgv38chiNi12+W5aoKN1il2S6XEU+H5+78qjS1w+mxSN1a26Uuwf0jg
+         Bg0nr3dYwbFKAtcWDnVcNZZ1JWvulJ5RfAsJogt4mi/rpM2ue/60ZBSV1Gg+KI2F1XXC
+         buEMs3MpDt/25AI4DzEBFTgVbeIFCi5qsy2UfQ8tuDv75wXZkqV/hq+xjIKVwGuBH/R8
+         MBmBkZb/Ka5XcPLWBGrXBF1bOkb5I+cDvIPj33yyAmh968MnqXFtsdQDdWgNXuDZZrAw
+         5zyoKLsxo9LlX4fsroGME7eX0xKinZfYn5cYslfn2LBEWk3c8hZK9bj5cdjbIsepaynY
+         wNXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vW6nfGRTz/sTEP7gbvkvTgm0nzQPx/Ar8oJMubseyNA=;
-        b=FItkAUs6dc/YCnvwJOg2bn9Ia2w3pT73UEmDBpqrV1kjpahNG/DqEObi7RQ4e4tbcA
-         TAX2183D55wnVa21DE51BxNG53AFyUy04ynRHeAVQUUDGpP6Zgkn6chO9qek2Is8BjoK
-         onb4e/BFFJ1VU7EH/Mtp4lv5zg4w8dxRrskEpYnY+Xfr+5+CHkaM909kxmf1dtZZG1hj
-         wgivGmSmxI+q7GrFCsrTm/T3YzdINkvHhWdfFxEW+XzUGJf3GOkd2Q+Rh5OOltCr6+GR
-         Y2zqQgFrbfW2Vkkov5EGAEOGSAJxyNJ2GuUsrXYtJeIMid7C/0aU1DEXuAuZ7ZZWBWKs
-         zxag==
-X-Gm-Message-State: AOAM533MkTWxx27O0F7RLfmo8d3qvAXwNv1I8uLiULr4X9jOOlBhPtYr
-        DRHofeGd0CjD41xZ20xB5Cuxt7WXCYlHAQ==
-X-Google-Smtp-Source: ABdhPJyBqXeO2k+kkMMGg3J+trMiXDcQV+EW965NSoktOU4HWLuv74//RvMQIiKwA2H1U0eNK78zNA==
-X-Received: by 2002:a67:ee98:: with SMTP id n24mr1844150vsp.39.1601486704322;
-        Wed, 30 Sep 2020 10:25:04 -0700 (PDT)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id e16sm360650vsr.16.2020.09.30.10.25.03
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2020 10:25:03 -0700 (PDT)
-Received: by mail-ua1-f53.google.com with SMTP id n26so688392uao.8
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 10:25:03 -0700 (PDT)
-X-Received: by 2002:ab0:2ea1:: with SMTP id y1mr2436125uay.104.1601486702629;
- Wed, 30 Sep 2020 10:25:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Z5lu0PeqUpQhHfIFiSeFh3YIiVvY8Dyl15uNalwR/lc=;
+        b=hXNHUSJF1NdyDOG0yfk5gJrSOKwIkhLzJADbC4t1hduuphjg2ZHTd69DySH/6uxPaP
+         RG0nkTw8vBRKfaVJhCgXe7XIb8WFjbsYUqgM+BI6eTl80pUGcSU/SP4f6kijvit6QsZw
+         oJ0N3K3JhvyEv5hJdxFjNYDNrhXIvwm9BxC3kY8jnpuJuIECWnZI/+45M4+qOUTs5zCu
+         +NZCMvgpOMv5qrIHbsS0MieutCsmfcb4KA+xKLzVccE0v4Tg47307ihr0W4yDYphg2z9
+         4QGLQPW9luYhq+tY61A3rx5v0mU6frdRMOQS2yVZdVjjoh/kULxcLTcK3Oufe8ShSGND
+         TpAA==
+X-Gm-Message-State: AOAM531JL4t99K0Tz64N4Njw9Oti3HbfA0ifGMv+7iVayq8dtc63ZTNe
+        owMEcEU5j5mHcB2g8Oojqixrt9VlXZVZtw==
+X-Google-Smtp-Source: ABdhPJyFNqVYg17+/tVfoRB+ejMm5GmU0R86MZAOh7goKlhTPQ+9XM1UkHo7o2Gvpdaw3Z3Lrn1YfQ==
+X-Received: by 2002:aa7:9a0e:0:b029:142:2501:35e5 with SMTP id w14-20020aa79a0e0000b0290142250135e5mr3755963pfj.69.1601489648582;
+        Wed, 30 Sep 2020 11:14:08 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id j144sm3369415pfd.106.2020.09.30.11.14.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 11:14:07 -0700 (PDT)
+Message-ID: <5f74caef.1c69fb81.a5ef8.64f6@mx.google.com>
+Date:   Wed, 30 Sep 2020 11:14:07 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200929121610.16060-1-lukasz.luba@arm.com> <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
- <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com> <62540312-65a2-b6d9-86ce-b4deaaa913c1@codeaurora.org>
- <1f713ff6-32f6-4ea6-b7f7-4c61f097cf2a@arm.com> <b74a5907-47dc-6c3c-3da8-94959af07ea8@codeaurora.org>
-In-Reply-To: <b74a5907-47dc-6c3c-3da8-94959af07ea8@codeaurora.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 30 Sep 2020 10:24:50 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V84RmTpKN50Rz-BJqccSme3T3yw=hT5KvYerx=X7aEsA@mail.gmail.com>
-Message-ID: <CAD=FV=V84RmTpKN50Rz-BJqccSme3T3yw=hT5KvYerx=X7aEsA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
- in Energy Model
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.9-rc7-75-g027a0d093137
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 13 warnings (v5.9-rc7-75-g027a0d093137)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+pm/testing build: 7 builds: 0 failed, 7 passed, 13 warnings (v5.9-rc7-75-g0=
+27a0d093137)
 
-On Wed, Sep 30, 2020 at 8:48 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
->
->
-> On 9/30/2020 7:34 PM, Lukasz Luba wrote:
-> >
-> >
-> > On 9/30/20 11:55 AM, Rajendra Nayak wrote:
-> >>
-> >> On 9/30/2020 1:55 PM, Lukasz Luba wrote:
-> >>> Hi Douglas,
-> >>>
-> >>> On 9/30/20 12:53 AM, Doug Anderson wrote:
-> >>>> Hi,
-> >>>>
-> >>>> On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>>
-> >>>>> The Energy Model (EM) can store power values in milli-Watts or in abstract
-> >>>>> scale. This might cause issues in the subsystems which use the EM for
-> >>>>> estimating the device power, such as:
-> >>>>> - mixing of different scales in a subsystem which uses multiple
-> >>>>>    (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
-> >>>>> - assuming that energy [milli-Joules] can be derived from the EM power
-> >>>>>    values which might not be possible since the power scale doesn't have to
-> >>>>>    be in milli-Watts
-> >>>>>
-> >>>>> To avoid misconfiguration add the needed documentation to the EM and
-> >>>>> related subsystems: EAS and IPA.
-> >>>>>
-> >>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>>> ---
-> >>>>>   .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
-> >>>>>   Documentation/power/energy-model.rst                | 13 +++++++++++++
-> >>>>>   Documentation/scheduler/sched-energy.rst            |  5 +++++
-> >>>>>   3 files changed, 26 insertions(+)
-> >>>>
-> >>>> I haven't read through these files in massive detail, but the quick
-> >>>> skim makes me believe that your additions seem sane.  In general, I'm
-> >>>> happy with documenting reality, thus:
-> >>>>
-> >>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> >>>
-> >>> Thank you for the review.
-> >>>
-> >>>>
-> >>>> I will note: you haven't actually updated the device tree bindings.
-> >>>> Thus, presumably, anyone who is specifying these numbers in the device
-> >>>> tree is still supposed to specify them in a way that mW can be
-> >>>> recovered, right?  Said another way: nothing about your patches makes
-> >>>> it OK to specify numbers in device trees using an "abstract scale",
-> >>>> right?
-> >>>
-> >>> For completeness, we are talking here about the binding from:
-> >>> Documentation/devicetree/bindings/arm/cpus.yaml
-> >>> which is 'dynamic-power-coefficient'. Yes, it stays untouched, also the
-> >>> unit (uW/MHz/V^2) which then allows to have mW in the power
-> >>> values in the EM.
-> >>
-> >> So for platforms where 'dynamic-power-coefficient' is specified in device tree,
-> >> its always expected to be derived from 'real' power numbers on these platforms in
-> >> 'real' mW?
-> >
-> > Yes, the purpose and the name of that binding was only for 'real'
-> > power in mW.
-> >
-> >>
-> >> Atleast on Qualcomm platforms we have these numbers scaled, so in essence it
-> >> can't be used to derive 'real' mW values. That said we also do not have any of
-> >> the 'platform might face potential issue of mixing devices in one thermal zone
-> >> of two scales' problem.
-> >
-> > If you have these numbers scaled, then it's probably documented
-> > somewhere in your docs for your OEMs, because they might assume it's in
-> > uW/MHz/V^2 (according to the bindings doc). If not, they probably
-> > realized it during the measurements and comparison (that the power in
-> > EM is not what they see on the power meter).
-> > This binding actually helps those developers who take the experiments
-> > and based on measured power values, store derived coefficient.
-> > Everyone can just measure in local setup and compare the results
-> > easily, speaking the same language (proposing maybe a patch adjusting
-> > the value in DT).
-> >
-> >>
-> >> So the question is, can such platforms still use 'dynamic-power-coefficient'
-> >> in device tree and create an abstract scale? The other way of doing this would
-> >> be to *not* specify this value in device tree and have these values stored in the
-> >> cpufreq driver and register a custom callback to do the math.
-> >
-> > But then we would also have to change the name of that binding.
-> >
-> > I'd recommend you the second way that you've described. It will avoid
-> > your OEMs confusion. In your cpufreq driver you can simply register
-> > to EM using the em_dev_register_perf_domain(). In your local
-> > callback you can do whatever you need (read driver array, firmware,
-> > DT, scale or not, etc).
-> > The helper code in dev_pm_opp_of_register_em() is probably not suited
-> > for your use case (when you don't want to share the real power of the
-> > SoC).
->
-> Got it, thanks for the clarification. I will get the cpufreq driver updated
-> to use em_dev_register_perf_domain() with a custom callback and get rid of these
-> values from device tree.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v5.=
+9-rc7-75-g027a0d093137/
 
-This sounds good.  ...except...
+Tree: pm
+Branch: testing
+Git Describe: v5.9-rc7-75-g027a0d093137
+Git Commit: 027a0d093137cac9655d241a1ace1b36ed1f455d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
-How exactly are boards supposed to provide their "sustainable-power"
-number in this model?  As far as I'm aware, there's no place to
-specify this board-specific file other than in device tree, and the
-bindings [1] say that this value has to be in mW.  Lukasz: how do you
-envision boards can provide "sustainable-power" in cases where the
-energy model is in "abstract scale"?
+Warnings Detected:
 
-[1] Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+arc:
+
+arm64:
+    defconfig (gcc-8): 8 warnings
+
+arm:
+    multi_v7_defconfig (gcc-8): 3 warnings
+
+i386:
+    i386_defconfig (gcc-8): 2 warnings
+
+mips:
+
+riscv:
+
+x86_64:
 
 
--Doug
+Warnings summary:
+
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #size-cells (1) differs from / (2)
+    3    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.=
+dtsi:7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-range=
+s" property but its #address-cells (1) differs from / (2)
+    2    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to poi=
+nter from integer of different size [-Wint-to-pointer-cast]
+    1    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Fa=
+iled prerequisite 'spi_bus_bridge'
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #size-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: War=
+ning (dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but =
+its #address-cells (1) differs from / (2)
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for =
+SPI bus
+    1    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (=
+spi_bus_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells f=
+or SPI bus
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section mi=
+smatches
+
+Warnings:
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:=
+7.3-14: Warning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" pr=
+operty but its #size-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+address-cells (1) differs from / (2)
+    /scratch/linux/arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning =
+(dma_ranges_format): /soc:dma-ranges: empty "dma-ranges" property but its #=
+size-cells (1) differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+    /scratch/linux/include/acpi/actypes.h:501:48: warning: cast to pointer =
+from integer of different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #address-cells for SP=
+I bus
+    /scratch/linux/arch/arm/boot/dts/mmp2.dtsi:472.23-480.6: Warning (spi_b=
+us_bridge): /soc/apb@d4000000/spi@d4037000: incorrect #size-cells for SPI b=
+us
+    arch/arm/boot/dts/mmp2-olpc-xo-1-75.dtb: Warning (spi_bus_reg): Failed =
+prerequisite 'spi_bus_bridge'
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
