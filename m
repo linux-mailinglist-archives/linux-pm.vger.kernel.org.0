@@ -2,78 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8D427ED8B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 17:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2E527EDAD
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 17:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbgI3Plw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 11:41:52 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40641 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbgI3Plw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 11:41:52 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t76so2152547oif.7;
-        Wed, 30 Sep 2020 08:41:52 -0700 (PDT)
+        id S1725800AbgI3PoV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 11:44:21 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:39786 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbgI3PoU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 11:44:20 -0400
+Received: by mail-ot1-f68.google.com with SMTP id u25so2261239otq.6
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 08:44:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1boUtBUBLzQPw5c/Bp/DpOn4m94EkQSBe7ntlAkUbpc=;
-        b=eBxUkvSK/LH2qsEUUrl7N6kzNcNMEGN3++4eP24oB6XU6tiYomcnhpHhhlJoJzVgTA
-         4D78wt1HSNALVtzNz03kGoNCJvFdbAr8oy2Cgcjx2UZe9wmqjWKM3n6o5n83jfBuIiw7
-         KvsaBCFdfnJnxZKJ9DM3sQu1dm4kh2IxBR0LoaXp/RW0HTZ5Es3PD5lwooSXniP2fNfg
-         4OBudKd3bjYGesCK5zYTaso5qinLZLDKVPvpZ3VQ/LttiLZXtm4fKD8u5z8GzAARc4oB
-         gDrrd//ilI8+xM3ao0ovp5Vi31FEEEPKi1OTc8ZsNNRjfbWt6OmJgqxcfFO+Iw6iKRyB
-         Jo3g==
-X-Gm-Message-State: AOAM5339ti5LDvC2G6RJkxlW1LEsyiSbBsiZOuX3g8vbyan9NDKpYsAF
-        YTc4tCaO5mUL4b+PfFnWKQHYMxFWQYOCWXQJkZU=
-X-Google-Smtp-Source: ABdhPJwO8Zwm2P/HdWE4ZaRyDRWRm98cReLmsfm15FI09hCLMOcfxwQoewDPg0eRsuAM+RE0tTlRapJKHKbdOBdHW+M=
-X-Received: by 2002:aca:5b09:: with SMTP id p9mr1673233oib.68.1601480511860;
- Wed, 30 Sep 2020 08:41:51 -0700 (PDT)
+        bh=JjeC5rpY3ogtYfbRV5nQV9QBqwwYTMX7A0W2mjHYHbI=;
+        b=dOisB5kVbJLmhGAYctRDSmQiQOi7GFkyB8uuqLYYGmQjUnGYZ+w5xLKhFBAvBoVMX1
+         vHuU0gJNN4J/uaIYPE5tn6xNe8OyDsKUGIigcZzJnUqmIa28U5T5PmJdHjVUgpQYhp3c
+         dqttKC4uA+9FD7+mbyBvMBYCFXLT+M9HSRKewt45ZjmPmpwtz2HPETzcTPOtyt0uRWhv
+         V8lydCP1jt/MUjkIemWNVn4xSqmQkAjN2jyhIHTvXM1KK6+tmBzmW+O5EumSC8Fg4q+e
+         yaeUPsJIg+TJX/yHLOgzb74ENCVQqRQU7PnBLra1HkvbF3oPbOo8Ta8teJs6RaQkPMLp
+         b2qw==
+X-Gm-Message-State: AOAM5311M5w76Uj+su77X0PRxC0S8UYs1+t/yLvUg4wi2UyjpCe+vQRF
+        yc8gRYJqk2/lCo/nV+sx4oBki3kW4TogvrMYdOw=
+X-Google-Smtp-Source: ABdhPJwyUkCU9l67+54wed74H514qvvOHHcQdnUig8q9sb34USr+toT4z43h9wvod6Jcwq4j37hxxSlO/4UOWnWq/1s=
+X-Received: by 2002:a05:6830:1f16:: with SMTP id u22mr1864228otg.118.1601480659995;
+ Wed, 30 Sep 2020 08:44:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200929204157.26127-1-yoann.congal@smile.fr>
-In-Reply-To: <20200929204157.26127-1-yoann.congal@smile.fr>
+References: <20200930112023.121821-1-ulf.hansson@linaro.org> <20200930113325.GA2628@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200930113325.GA2628@hirez.programming.kicks-ass.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Sep 2020 17:41:40 +0200
-Message-ID: <CAJZ5v0h9Qkn8ymFjOVBR+WU1vDmb7CyDRsWT_Yo4yc8xVEn23A@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: PM: Fix a reStructuredText syntax error
-To:     Yoann Congal <yoann.congal@smile.fr>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Wed, 30 Sep 2020 17:44:09 +0200
+Message-ID: <CAJZ5v0g0oOwZfARXfWVcWvv33rWGBhGcHZdJxL1WGPTWOEqPDg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: imx6q: Fixup RCU usage for cpuidle
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Shawn Guo <shawnguo@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Anson Huang <anson.huang@nxp.com>,
         Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Sep 29, 2020 at 10:43 PM Yoann Congal <yoann.congal@smile.fr> wrote:
+On Wed, Sep 30, 2020 at 1:33 PM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> Fix a reStructuredText syntax error in the cpuidle PM admin-guide
-> documentation: the ``...'' quotation marks are parsed as partial ''...''
-> reStructuredText markup and break the output formatting.
+> On Wed, Sep 30, 2020 at 01:20:23PM +0200, Ulf Hansson wrote:
+> > The commit eb1f00237aca ("lockdep,trace: Expose tracepoints"), started to
+> > expose us for tracepoints. For imx6q cpuidle, this leads to an RCU splat
+> > according to below.
+> >
+> > [6.870684] [<c0db7690>] (_raw_spin_lock) from [<c011f6a4>] (imx6q_enter_wait+0x18/0x9c)
+> > [6.878846] [<c011f6a4>] (imx6q_enter_wait) from [<c09abfb0>] (cpuidle_enter_state+0x168/0x5e4)
+> >
+> > To fix the problem, let's assign the corresponding idlestate->flags the
+> > CPUIDLE_FLAG_RCU_IDLE bit, which enables us to call rcu_idle_enter|exit()
+> > at the proper point.
+> >
+> > Reported-by: Dong Aisheng <aisheng.dong@nxp.com>
+> > Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 >
-> This change them to "...".
+> Yep, that looks about right.
 >
-> Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
-> ---
->  Documentation/admin-guide/pm/cpuidle.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 >
-> diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
-> index e70b365dbc60..191cfa4a450b 100644
-> --- a/Documentation/admin-guide/pm/cpuidle.rst
-> +++ b/Documentation/admin-guide/pm/cpuidle.rst
-> @@ -690,7 +690,7 @@ which of the two parameters is added to the kernel command line.  In the
->  instruction of the CPUs (which, as a rule, suspends the execution of the program
->  and causes the hardware to attempt to enter the shallowest available idle state)
->  for this purpose, and if ``idle=poll`` is used, idle CPUs will execute a
-> -more or less ``lightweight'' sequence of instructions in a tight loop.  [Note
-> +more or less "lightweight" sequence of instructions in a tight loop.  [Note
->  that using ``idle=poll`` is somewhat drastic in many cases, as preventing idle
->  CPUs from saving almost any energy at all may not be the only effect of it.
->  For example, on Intel hardware it effectively prevents CPUs from using
-> --
+> > ---
+> >  arch/arm/mach-imx/cpuidle-imx6q.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/arm/mach-imx/cpuidle-imx6q.c b/arch/arm/mach-imx/cpuidle-imx6q.c
+> > index 24dd5bbe60e4..094337dc1bc7 100644
+> > --- a/arch/arm/mach-imx/cpuidle-imx6q.c
+> > +++ b/arch/arm/mach-imx/cpuidle-imx6q.c
+> > @@ -24,7 +24,9 @@ static int imx6q_enter_wait(struct cpuidle_device *dev,
+> >               imx6_set_lpm(WAIT_UNCLOCKED);
+> >       raw_spin_unlock(&cpuidle_lock);
+> >
+> > +     rcu_idle_enter();
+> >       cpu_do_idle();
+> > +     rcu_idle_exit();
+> >
+> >       raw_spin_lock(&cpuidle_lock);
+> >       if (num_idle_cpus-- == num_online_cpus())
+> > @@ -44,7 +46,7 @@ static struct cpuidle_driver imx6q_cpuidle_driver = {
+> >               {
+> >                       .exit_latency = 50,
+> >                       .target_residency = 75,
+> > -                     .flags = CPUIDLE_FLAG_TIMER_STOP,
+> > +                     .flags = CPUIDLE_FLAG_TIMER_STOP | CPUIDLE_FLAG_RCU_IDLE,
+> >                       .enter = imx6q_enter_wait,
+> >                       .name = "WAIT",
+> >                       .desc = "Clock off",
+> > --
 
 Applied as 5.9-rc8 material, thanks!
