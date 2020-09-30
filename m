@@ -2,76 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB3427ED76
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 17:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8D427ED8B
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 17:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbgI3PjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 11:39:13 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44090 "EHLO
+        id S1728006AbgI3Plw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 11:41:52 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40641 "EHLO
         mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbgI3PjN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 11:39:13 -0400
-Received: by mail-oi1-f195.google.com with SMTP id 185so2131799oie.11
-        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 08:39:13 -0700 (PDT)
+        with ESMTP id S1725468AbgI3Plw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 11:41:52 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t76so2152547oif.7;
+        Wed, 30 Sep 2020 08:41:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Fc37h7a0HpcuQSQ7npavP/zcanPJUZY3IMs2yQyrUP8=;
-        b=Qx/nSJNVAkH8Xr0jYc0EhpeCgJVqAouF8D9o7AxJsLSrZWRiT3la5Xnsx23zjbO501
-         ixQumAn+r6yQimfMYMveprz+B3OFeOY/Bi66cRZLXXqRbBKu8BsA1hQ2J6waz9DlOOYA
-         NrWF7nciVVq0T3NUbb2YwYk1n14T79khzjN1VDMlC408ifNJOl+TiNPeSx7Ea0WiCUHo
-         PMvg17hlI2ycyxFWCi7c13qhgPEqpiRjtF1M+yb7DS9tJNfoDirAafdyJXS9Y8TvZf9R
-         ew0EOoc6HmPN/vWTvtqPAdlVh8Pg6M8PaVM65COL3btZ+HaQwEDA8Z12Elr/ypJ7VHyL
-         51XA==
-X-Gm-Message-State: AOAM531s0HjW/GZM+p9r2pFKKJV7MJGaD2Fo0n0mmdsSNVQXok6yi0de
-        wB1QpFkD6/QiTqXJ+ww6RtT7pso0ZLdlUAHni2KmylwH
-X-Google-Smtp-Source: ABdhPJyICO+bwGiTxYfx9mADXnCxKxtQzWCkN7fRe1BhIJFYfWf41bIY2binuzgSifp8KE7kCJVaJHBUPtSABV9g5l8=
-X-Received: by 2002:aca:df84:: with SMTP id w126mr1781508oig.103.1601480352852;
- Wed, 30 Sep 2020 08:39:12 -0700 (PDT)
+        bh=1boUtBUBLzQPw5c/Bp/DpOn4m94EkQSBe7ntlAkUbpc=;
+        b=eBxUkvSK/LH2qsEUUrl7N6kzNcNMEGN3++4eP24oB6XU6tiYomcnhpHhhlJoJzVgTA
+         4D78wt1HSNALVtzNz03kGoNCJvFdbAr8oy2Cgcjx2UZe9wmqjWKM3n6o5n83jfBuIiw7
+         KvsaBCFdfnJnxZKJ9DM3sQu1dm4kh2IxBR0LoaXp/RW0HTZ5Es3PD5lwooSXniP2fNfg
+         4OBudKd3bjYGesCK5zYTaso5qinLZLDKVPvpZ3VQ/LttiLZXtm4fKD8u5z8GzAARc4oB
+         gDrrd//ilI8+xM3ao0ovp5Vi31FEEEPKi1OTc8ZsNNRjfbWt6OmJgqxcfFO+Iw6iKRyB
+         Jo3g==
+X-Gm-Message-State: AOAM5339ti5LDvC2G6RJkxlW1LEsyiSbBsiZOuX3g8vbyan9NDKpYsAF
+        YTc4tCaO5mUL4b+PfFnWKQHYMxFWQYOCWXQJkZU=
+X-Google-Smtp-Source: ABdhPJwO8Zwm2P/HdWE4ZaRyDRWRm98cReLmsfm15FI09hCLMOcfxwQoewDPg0eRsuAM+RE0tTlRapJKHKbdOBdHW+M=
+X-Received: by 2002:aca:5b09:: with SMTP id p9mr1673233oib.68.1601480511860;
+ Wed, 30 Sep 2020 08:41:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <89e655dbf96777b897ceb721f82be0d5ea7210e0.camel@intel.com>
-In-Reply-To: <89e655dbf96777b897ceb721f82be0d5ea7210e0.camel@intel.com>
+References: <20200929204157.26127-1-yoann.congal@smile.fr>
+In-Reply-To: <20200929204157.26127-1-yoann.congal@smile.fr>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Sep 2020 17:39:01 +0200
-Message-ID: <CAJZ5v0i+KJxS=GKCP8r-5XJ7mnKLAo2hU3fNgFYXush=NrViUw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix missing return statement
-To:     Zhang Rui <rui.zhang@intel.com>
+Date:   Wed, 30 Sep 2020 17:41:40 +0200
+Message-ID: <CAJZ5v0h9Qkn8ymFjOVBR+WU1vDmb7CyDRsWT_Yo4yc8xVEn23A@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: PM: Fix a reStructuredText syntax error
+To:     Yoann Congal <yoann.congal@smile.fr>
 Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM list <linux-pm@vger.kernel.org>
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 4:36 PM Zhang Rui <rui.zhang@intel.com> wrote:
+On Tue, Sep 29, 2020 at 10:43 PM Yoann Congal <yoann.congal@smile.fr> wrote:
 >
-> From 1027ed2cacb0b50676eb52dd0089076d951033d7 Mon Sep 17 00:00:00 2001
-> From: Zhang Rui <rui.zhang@intel.com>
-> Date: Mon, 28 Sep 2020 11:33:42 +0800
-> Subject: [PATCH] cpufreq: intel_pstate: Fix missing return statement
+> Fix a reStructuredText syntax error in the cpuidle PM admin-guide
+> documentation: the ``...'' quotation marks are parsed as partial ''...''
+> reStructuredText markup and break the output formatting.
 >
-> Fix missing return statement when writing "off" to intel_pstate status
-> sysfs I/F.
+> This change them to "...".
 >
-> Fixes: 55671ea3257a ("cpufreq: intel_pstate: Free memory only when turning off")
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
 > ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
+>  Documentation/admin-guide/pm/cpuidle.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index a827b000ef51..9a515c460a00 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2781,6 +2781,7 @@ static int intel_pstate_update_status(const char *buf, size_t size)
->
->                 cpufreq_unregister_driver(intel_pstate_driver);
->                 intel_pstate_driver_cleanup();
-> +               return 0;
->         }
->
->         if (size == 6 && !strncmp(buf, "active", size)) {
+> diff --git a/Documentation/admin-guide/pm/cpuidle.rst b/Documentation/admin-guide/pm/cpuidle.rst
+> index e70b365dbc60..191cfa4a450b 100644
+> --- a/Documentation/admin-guide/pm/cpuidle.rst
+> +++ b/Documentation/admin-guide/pm/cpuidle.rst
+> @@ -690,7 +690,7 @@ which of the two parameters is added to the kernel command line.  In the
+>  instruction of the CPUs (which, as a rule, suspends the execution of the program
+>  and causes the hardware to attempt to enter the shallowest available idle state)
+>  for this purpose, and if ``idle=poll`` is used, idle CPUs will execute a
+> -more or less ``lightweight'' sequence of instructions in a tight loop.  [Note
+> +more or less "lightweight" sequence of instructions in a tight loop.  [Note
+>  that using ``idle=poll`` is somewhat drastic in many cases, as preventing idle
+>  CPUs from saving almost any energy at all may not be the only effect of it.
+>  For example, on Intel hardware it effectively prevents CPUs from using
 > --
 
-Applied as a 5.9-rc fix, thanks!
+Applied as 5.9-rc8 material, thanks!
