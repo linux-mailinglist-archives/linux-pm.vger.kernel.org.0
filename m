@@ -2,95 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7431527E3A6
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 10:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D260127E3F4
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Sep 2020 10:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728346AbgI3IZ0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Sep 2020 04:25:26 -0400
-Received: from foss.arm.com ([217.140.110.172]:59372 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728563AbgI3IZZ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 30 Sep 2020 04:25:25 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 456A2D6E;
-        Wed, 30 Sep 2020 01:25:25 -0700 (PDT)
-Received: from [10.57.54.5] (unknown [10.57.54.5])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D99613F6CF;
-        Wed, 30 Sep 2020 01:25:22 -0700 (PDT)
-Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
- in Energy Model
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-References: <20200929121610.16060-1-lukasz.luba@arm.com>
- <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com>
-Date:   Wed, 30 Sep 2020 09:25:21 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728329AbgI3Ikw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Sep 2020 04:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725535AbgI3Ikw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Sep 2020 04:40:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BD2C061755
+        for <linux-pm@vger.kernel.org>; Wed, 30 Sep 2020 01:40:51 -0700 (PDT)
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1kNXfN-0002og-61; Wed, 30 Sep 2020 10:40:50 +0200
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, kernel@pengutronix.de,
+        patchwork-lst@pengutronix.de,
+        Kevin Benson <kevin_simona@hotmail.com>,
+        Chris Healy <cphealy@gmail.com>
+Date:   Wed, 30 Sep 2020 10:40:47 +0200
+Message-Id: <20200930084047.2927163-1-l.stach@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::39
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
+        metis.ext.pengutronix.de
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.2 required=4.0 tests=AWL,BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.2
+Subject: [PATCH] power: supply: ucs1002: fix some health status issues
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on metis.ext.pengutronix.de)
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Douglas,
+Some fault events like the over-current condition will get resolved
+by the hardware, by e.g. disabling the port. As the status in the
+interrupt status register is cleared on read when the fault is resolved,
+the sysfs health property will only contain the correct health status
+for the first time it is read after such an event, even if the actual
+fault condition (like a VBUS short) still persists. To reflect this
+properly in the property we cache the last health status and only update
+the cache when a actual change happens, i.e. the ERR bit in the status
+register flips, as this one properly reflects a continued fault condition.
 
-On 9/30/20 12:53 AM, Doug Anderson wrote:
-> Hi,
-> 
-> On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> The Energy Model (EM) can store power values in milli-Watts or in abstract
->> scale. This might cause issues in the subsystems which use the EM for
->> estimating the device power, such as:
->> - mixing of different scales in a subsystem which uses multiple
->>    (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
->> - assuming that energy [milli-Joules] can be derived from the EM power
->>    values which might not be possible since the power scale doesn't have to
->>    be in milli-Watts
->>
->> To avoid misconfiguration add the needed documentation to the EM and
->> related subsystems: EAS and IPA.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
->>   Documentation/power/energy-model.rst                | 13 +++++++++++++
->>   Documentation/scheduler/sched-energy.rst            |  5 +++++
->>   3 files changed, 26 insertions(+)
-> 
-> I haven't read through these files in massive detail, but the quick
-> skim makes me believe that your additions seem sane.  In general, I'm
-> happy with documenting reality, thus:
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+The ALERT pin however, is not driven by the ERR status, but by the actual
+fault status, so the pin will change back to it's default state when the
+hardware has automatically resolved the fault by cutting the power. Thus
+we never get an IRQ when the actual fault condition has been resolved and
+the ERR status bit has been cleared in auto-recovery mode. To get this
+information we need to poll the interrupt status register after some time
+to see if the fault is gone and update our cache in that case.
 
-Thank you for the review.
+To avoid any additional locking, we handle both paths (IRQ firing and
+delayed polling) through the same single-threaded delayed work.
 
-> 
-> I will note: you haven't actually updated the device tree bindings.
-> Thus, presumably, anyone who is specifying these numbers in the device
-> tree is still supposed to specify them in a way that mW can be
-> recovered, right?  Said another way: nothing about your patches makes
-> it OK to specify numbers in device trees using an "abstract scale",
-> right?
+Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+---
+ drivers/power/supply/ucs1002_power.c | 75 ++++++++++++++++------------
+ 1 file changed, 43 insertions(+), 32 deletions(-)
 
-For completeness, we are talking here about the binding from:
-Documentation/devicetree/bindings/arm/cpus.yaml
-which is 'dynamic-power-coefficient'. Yes, it stays untouched, also the
-unit (uW/MHz/V^2) which then allows to have mW in the power
-values in the EM.
+diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
+index cdb9a23d825f..ef673ec3db56 100644
+--- a/drivers/power/supply/ucs1002_power.c
++++ b/drivers/power/supply/ucs1002_power.c
+@@ -38,6 +38,7 @@
+ 
+ /* Interrupt Status */
+ #define UCS1002_REG_INTERRUPT_STATUS	0x10
++#  define F_ERR				BIT(7)
+ #  define F_DISCHARGE_ERR		BIT(6)
+ #  define F_RESET			BIT(5)
+ #  define F_MIN_KEEP_OUT		BIT(4)
+@@ -103,6 +104,9 @@ struct ucs1002_info {
+ 	struct regulator_dev *rdev;
+ 	bool present;
+ 	bool output_disable;
++	struct delayed_work health_poll;
++	int health;
++
+ };
+ 
+ static enum power_supply_property ucs1002_props[] = {
+@@ -362,32 +366,6 @@ static int ucs1002_get_usb_type(struct ucs1002_info *info,
+ 	return 0;
+ }
+ 
+-static int ucs1002_get_health(struct ucs1002_info *info,
+-			      union power_supply_propval *val)
+-{
+-	unsigned int reg;
+-	int ret, health;
+-
+-	ret = regmap_read(info->regmap, UCS1002_REG_INTERRUPT_STATUS, &reg);
+-	if (ret)
+-		return ret;
+-
+-	if (reg & F_TSD)
+-		health = POWER_SUPPLY_HEALTH_OVERHEAT;
+-	else if (reg & (F_OVER_VOLT | F_BACK_VOLT))
+-		health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
+-	else if (reg & F_OVER_ILIM)
+-		health = POWER_SUPPLY_HEALTH_OVERCURRENT;
+-	else if (reg & (F_DISCHARGE_ERR | F_MIN_KEEP_OUT))
+-		health = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+-	else
+-		health = POWER_SUPPLY_HEALTH_GOOD;
+-
+-	val->intval = health;
+-
+-	return 0;
+-}
+-
+ static int ucs1002_get_property(struct power_supply *psy,
+ 				enum power_supply_property psp,
+ 				union power_supply_propval *val)
+@@ -406,7 +384,7 @@ static int ucs1002_get_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_USB_TYPE:
+ 		return ucs1002_get_usb_type(info, val);
+ 	case POWER_SUPPLY_PROP_HEALTH:
+-		return ucs1002_get_health(info, val);
++		return val->intval = info->health;
+ 	case POWER_SUPPLY_PROP_PRESENT:
+ 		val->intval = info->present;
+ 		return 0;
+@@ -458,6 +436,38 @@ static const struct power_supply_desc ucs1002_charger_desc = {
+ 	.num_properties		= ARRAY_SIZE(ucs1002_props),
+ };
+ 
++static void ucs1002_health_poll(struct work_struct *work)
++{
++	struct ucs1002_info *info = container_of(work, struct ucs1002_info,
++						 health_poll.work);
++	int ret;
++	u32 reg;
++
++	ret = regmap_read(info->regmap, UCS1002_REG_INTERRUPT_STATUS, &reg);
++	if (ret)
++		return;
++
++	/* bad health and no status change, just schedule us again in a while */
++	if ((reg & F_ERR) && info->health != POWER_SUPPLY_HEALTH_GOOD) {
++		schedule_delayed_work(&info->health_poll,
++				      msecs_to_jiffies(2000));
++		return;
++	}
++
++	if (reg & F_TSD)
++		info->health = POWER_SUPPLY_HEALTH_OVERHEAT;
++	else if (reg & (F_OVER_VOLT | F_BACK_VOLT))
++		info->health = POWER_SUPPLY_HEALTH_OVERVOLTAGE;
++	else if (reg & F_OVER_ILIM)
++		info->health = POWER_SUPPLY_HEALTH_OVERCURRENT;
++	else if (reg & (F_DISCHARGE_ERR | F_MIN_KEEP_OUT))
++		info->health = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
++	else
++		info->health = POWER_SUPPLY_HEALTH_GOOD;
++
++	sysfs_notify(&info->charger->dev.kobj, NULL, "health");
++}
++
+ static irqreturn_t ucs1002_charger_irq(int irq, void *data)
+ {
+ 	int ret, regval;
+@@ -484,7 +494,7 @@ static irqreturn_t ucs1002_alert_irq(int irq, void *data)
+ {
+ 	struct ucs1002_info *info = data;
+ 
+-	power_supply_changed(info->charger);
++	mod_delayed_work(system_wq, &info->health_poll, 0);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -632,6 +642,9 @@ static int ucs1002_probe(struct i2c_client *client,
+ 		return ret;
+ 	}
+ 
++	info->health = POWER_SUPPLY_HEALTH_GOOD;
++	INIT_DELAYED_WORK(&info->health_poll, ucs1002_health_poll);
++
+ 	if (irq_a_det > 0) {
+ 		ret = devm_request_threaded_irq(dev, irq_a_det, NULL,
+ 						ucs1002_charger_irq,
+@@ -645,10 +658,8 @@ static int ucs1002_probe(struct i2c_client *client,
+ 	}
+ 
+ 	if (irq_alert > 0) {
+-		ret = devm_request_threaded_irq(dev, irq_alert, NULL,
+-						ucs1002_alert_irq,
+-						IRQF_ONESHOT,
+-						"ucs1002-alert", info);
++		ret = devm_request_irq(dev, irq_alert, ucs1002_alert_irq,
++				       0,"ucs1002-alert", info);
+ 		if (ret) {
+ 			dev_err(dev, "Failed to request ALERT threaded irq: %d\n",
+ 				ret);
+-- 
+2.20.1
 
-Regards,
-Lukasz
