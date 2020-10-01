@@ -2,175 +2,270 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E3972800EC
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 16:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD517280436
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 18:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732357AbgJAOJn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Oct 2020 10:09:43 -0400
-Received: from foss.arm.com ([217.140.110.172]:35318 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732147AbgJAOJn (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 1 Oct 2020 10:09:43 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22681D6E;
-        Thu,  1 Oct 2020 07:09:42 -0700 (PDT)
-Received: from [10.57.50.177] (unknown [10.57.50.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB99A3F6CF;
-        Thu,  1 Oct 2020 07:09:39 -0700 (PDT)
-Subject: Re: [PATCH 1/2] docs: Clarify abstract scale usage for power values
- in Energy Model
-To:     Doug Anderson <dianders@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20200929121610.16060-1-lukasz.luba@arm.com>
- <CAD=FV=UnNkjMiOc0DZE7+OM3-Kr1ZRynxSerdA=ifbyGiRa2Zw@mail.gmail.com>
- <a1d1fe2a-485f-a21e-2f91-9b609223aa5a@arm.com>
- <62540312-65a2-b6d9-86ce-b4deaaa913c1@codeaurora.org>
- <1f713ff6-32f6-4ea6-b7f7-4c61f097cf2a@arm.com>
- <b74a5907-47dc-6c3c-3da8-94959af07ea8@codeaurora.org>
- <CAD=FV=V84RmTpKN50Rz-BJqccSme3T3yw=hT5KvYerx=X7aEsA@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <e878bfe8-7224-5395-4632-4bb985fb306b@arm.com>
-Date:   Thu, 1 Oct 2020 15:09:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1732670AbgJAQrP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Oct 2020 12:47:15 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:39990 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732610AbgJAQrP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 12:47:15 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 091GlCas110323;
+        Thu, 1 Oct 2020 11:47:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1601570832;
+        bh=cBELNFIPwspTIBCA2zHV6tM8uGfMKesPrz8uvHLYLcg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=vUY7LTfaP0M+evcyJRiNJ/VRusCaAkvktf7q54rf/n5rLFVSwB8gAc/EQu5+K321o
+         M/Mgl660n+GqktMfINmiAlMSkxspuKWiGrAq6yl9hvKUZ1DUZWNPgbfOFHm2IAPHSA
+         /pBlsfI6TWAukvMrhj6nsu4RTNgRS4qtCGBg6MwE=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 091GlCRY038514;
+        Thu, 1 Oct 2020 11:47:12 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 1 Oct
+ 2020 11:47:11 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 1 Oct 2020 11:47:11 -0500
+Received: from [10.250.79.43] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 091GlBKo001683;
+        Thu, 1 Oct 2020 11:47:11 -0500
+Subject: Re: [EXTERNAL] Re: [PATCH v4 2/2] power: supply: bq256xx: Introduce
+ the BQ256XX charger driver
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <dmurphy@ti.com>
+References: <20200923152416.24822-1-r-rivera-matos@ti.com>
+ <20200923152416.24822-3-r-rivera-matos@ti.com>
+ <20200930234725.467aylfzokwzw72z@earth.universe>
+From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Message-ID: <e78c0a78-8401-a6bf-8b49-b1444da79999@ti.com>
+Date:   Thu, 1 Oct 2020 11:47:10 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=V84RmTpKN50Rz-BJqccSme3T3yw=hT5KvYerx=X7aEsA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <20200930234725.467aylfzokwzw72z@earth.universe>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Douglas
+Sebastian
 
-On 9/30/20 6:24 PM, Doug Anderson wrote:
+On 9/30/20 6:47 PM, Sebastian Reichel wrote:
 > Hi,
-> 
-> On Wed, Sep 30, 2020 at 8:48 AM Rajendra Nayak <rnayak@codeaurora.org> wrote:
->>
->>
->> On 9/30/2020 7:34 PM, Lukasz Luba wrote:
->>>
->>>
->>> On 9/30/20 11:55 AM, Rajendra Nayak wrote:
->>>>
->>>> On 9/30/2020 1:55 PM, Lukasz Luba wrote:
->>>>> Hi Douglas,
->>>>>
->>>>> On 9/30/20 12:53 AM, Doug Anderson wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On Tue, Sep 29, 2020 at 5:16 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>>>>
->>>>>>> The Energy Model (EM) can store power values in milli-Watts or in abstract
->>>>>>> scale. This might cause issues in the subsystems which use the EM for
->>>>>>> estimating the device power, such as:
->>>>>>> - mixing of different scales in a subsystem which uses multiple
->>>>>>>     (cooling) devices (e.g. thermal Intelligent Power Allocation (IPA))
->>>>>>> - assuming that energy [milli-Joules] can be derived from the EM power
->>>>>>>     values which might not be possible since the power scale doesn't have to
->>>>>>>     be in milli-Watts
->>>>>>>
->>>>>>> To avoid misconfiguration add the needed documentation to the EM and
->>>>>>> related subsystems: EAS and IPA.
->>>>>>>
->>>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>>>>> ---
->>>>>>>    .../driver-api/thermal/power_allocator.rst          |  8 ++++++++
->>>>>>>    Documentation/power/energy-model.rst                | 13 +++++++++++++
->>>>>>>    Documentation/scheduler/sched-energy.rst            |  5 +++++
->>>>>>>    3 files changed, 26 insertions(+)
->>>>>>
->>>>>> I haven't read through these files in massive detail, but the quick
->>>>>> skim makes me believe that your additions seem sane.  In general, I'm
->>>>>> happy with documenting reality, thus:
->>>>>>
->>>>>> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->>>>>
->>>>> Thank you for the review.
->>>>>
->>>>>>
->>>>>> I will note: you haven't actually updated the device tree bindings.
->>>>>> Thus, presumably, anyone who is specifying these numbers in the device
->>>>>> tree is still supposed to specify them in a way that mW can be
->>>>>> recovered, right?  Said another way: nothing about your patches makes
->>>>>> it OK to specify numbers in device trees using an "abstract scale",
->>>>>> right?
->>>>>
->>>>> For completeness, we are talking here about the binding from:
->>>>> Documentation/devicetree/bindings/arm/cpus.yaml
->>>>> which is 'dynamic-power-coefficient'. Yes, it stays untouched, also the
->>>>> unit (uW/MHz/V^2) which then allows to have mW in the power
->>>>> values in the EM.
->>>>
->>>> So for platforms where 'dynamic-power-coefficient' is specified in device tree,
->>>> its always expected to be derived from 'real' power numbers on these platforms in
->>>> 'real' mW?
->>>
->>> Yes, the purpose and the name of that binding was only for 'real'
->>> power in mW.
->>>
->>>>
->>>> Atleast on Qualcomm platforms we have these numbers scaled, so in essence it
->>>> can't be used to derive 'real' mW values. That said we also do not have any of
->>>> the 'platform might face potential issue of mixing devices in one thermal zone
->>>> of two scales' problem.
->>>
->>> If you have these numbers scaled, then it's probably documented
->>> somewhere in your docs for your OEMs, because they might assume it's in
->>> uW/MHz/V^2 (according to the bindings doc). If not, they probably
->>> realized it during the measurements and comparison (that the power in
->>> EM is not what they see on the power meter).
->>> This binding actually helps those developers who take the experiments
->>> and based on measured power values, store derived coefficient.
->>> Everyone can just measure in local setup and compare the results
->>> easily, speaking the same language (proposing maybe a patch adjusting
->>> the value in DT).
->>>
->>>>
->>>> So the question is, can such platforms still use 'dynamic-power-coefficient'
->>>> in device tree and create an abstract scale? The other way of doing this would
->>>> be to *not* specify this value in device tree and have these values stored in the
->>>> cpufreq driver and register a custom callback to do the math.
->>>
->>> But then we would also have to change the name of that binding.
->>>
->>> I'd recommend you the second way that you've described. It will avoid
->>> your OEMs confusion. In your cpufreq driver you can simply register
->>> to EM using the em_dev_register_perf_domain(). In your local
->>> callback you can do whatever you need (read driver array, firmware,
->>> DT, scale or not, etc).
->>> The helper code in dev_pm_opp_of_register_em() is probably not suited
->>> for your use case (when you don't want to share the real power of the
->>> SoC).
->>
->> Got it, thanks for the clarification. I will get the cpufreq driver updated
->> to use em_dev_register_perf_domain() with a custom callback and get rid of these
->> values from device tree.
-> 
-> This sounds good.  ...except...
-> 
-> How exactly are boards supposed to provide their "sustainable-power"
-> number in this model?  As far as I'm aware, there's no place to
-> specify this board-specific file other than in device tree, and the
-> bindings [1] say that this value has to be in mW.  Lukasz: how do you
-> envision boards can provide "sustainable-power" in cases where the
-> energy model is in "abstract scale"?
-> 
-> [1] Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> 
+>
+> You are leaking some resources, otherwise LGTM.
+ACK
+>
+> On Wed, Sep 23, 2020 at 10:24:16AM -0500, Ricardo Rivera-Matos wrote:
+>> [...]
+>> +static int bq256xx_hw_init(struct bq256xx_device *bq)
+>> +{
+>> +	struct power_supply_battery_info bat_info = { };
+>> +	int wd_reg_val = BQ256XX_WATCHDOG_DIS;
+>> +	int ret = 0;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
+>> +		if (bq->watchdog_timer > bq256xx_watchdog_time[i] &&
+>> +		    bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
+>> +			wd_reg_val = i;
+>> +	}
+>> +	ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
+>> +				 BQ256XX_WATCHDOG_MASK, wd_reg_val <<
+>> +						BQ256XX_WDT_BIT_SHIFT);
+>> +
+>> +	ret = power_supply_get_battery_info(bq->charger, &bat_info);
+>> +	if (ret) {
+>> +		dev_warn(bq->dev, "battery info missing, default values will be applied\n");
+>> +
+>> +		bat_info.constant_charge_current_max_ua =
+>> +				bq->chip_info->bq256xx_def_ichg;
+>> +
+>> +		bat_info.constant_charge_voltage_max_uv =
+>> +				bq->chip_info->bq256xx_def_vbatreg;
+>> +
+>> +		bat_info.precharge_current_ua =
+>> +				bq->chip_info->bq256xx_def_iprechg;
+>> +
+>> +		bat_info.charge_term_current_ua =
+>> +				bq->chip_info->bq256xx_def_iterm;
+>> +
+>> +		bq->init_data.ichg_max =
+>> +				bq->chip_info->bq256xx_max_ichg;
+>> +
+>> +		bq->init_data.vbatreg_max =
+>> +				bq->chip_info->bq256xx_max_vbatreg;
+>> +	} else {
+>> +		bq->init_data.ichg_max =
+>> +			bat_info.constant_charge_current_max_ua;
+>> +
+>> +		bq->init_data.vbatreg_max =
+>> +			bat_info.constant_charge_voltage_max_uv;
+>> +	}
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_vindpm(bq, bq->init_data.vindpm);
+>> +	if (ret)
+>> +		goto err_out;
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_iindpm(bq, bq->init_data.iindpm);
+>> +	if (ret)
+>> +		goto err_out;
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_ichg(bq,
+>> +				bat_info.constant_charge_current_max_ua);
+>> +	if (ret)
+>> +		goto err_out;
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_iprechg(bq,
+>> +				bat_info.precharge_current_ua);
+>> +	if (ret)
+>> +		goto err_out;
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_vbatreg(bq,
+>> +				bat_info.constant_charge_voltage_max_uv);
+>> +	if (ret)
+>> +		goto err_out;
+>> +
+>> +	ret = bq->chip_info->bq256xx_set_iterm(bq,
+>> +				bat_info.charge_term_current_ua);
+>> +	if (ret)
+>> +		goto err_out;
+> You need to power_supply_put_battery_info().
+ACK
+>
+>> +
+>> +	return 0;
+>> +
+>> +err_out:
+>> +	return ret;
+>> +}
+>> +
+>> +static int bq256xx_parse_dt(struct bq256xx_device *bq)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	ret = device_property_read_u32(bq->dev, "ti,watchdog-timeout-ms",
+>> +				       &bq->watchdog_timer);
+>> +	if (ret)
+>> +		bq->watchdog_timer = BQ256XX_WATCHDOG_DIS;
+>> +
+>> +	if (bq->watchdog_timer > BQ256XX_WATCHDOG_MAX ||
+>> +	    bq->watchdog_timer < BQ256XX_WATCHDOG_DIS)
+>> +		return -EINVAL;
+>> +
+>> +	ret = device_property_read_u32(bq->dev,
+>> +				       "input-voltage-limit-microvolt",
+>> +				       &bq->init_data.vindpm);
+>> +	if (ret)
+>> +		bq->init_data.vindpm = bq->chip_info->bq256xx_def_vindpm;
+>> +
+>> +	ret = device_property_read_u32(bq->dev,
+>> +				       "input-current-limit-microamp",
+>> +				       &bq->init_data.iindpm);
+>> +	if (ret)
+>> +		bq->init_data.iindpm = bq->chip_info->bq256xx_def_iindpm;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int bq256xx_probe(struct i2c_client *client,
+>> +			 const struct i2c_device_id *id)
+>> +{
+>> +	struct device *dev = &client->dev;
+>> +	struct bq256xx_device *bq;
+>> +	int ret;
+>> +
+>> +	bq = devm_kzalloc(dev, sizeof(*bq), GFP_KERNEL);
+>> +	if (!bq)
+>> +		return -ENOMEM;
+>> +
+>> +	bq->client = client;
+>> +	bq->dev = dev;
+>> +	bq->chip_info = &bq256xx_chip_info_tbl[id->driver_data];
+>> +
+>> +	mutex_init(&bq->lock);
+>> +
+>> +	strncpy(bq->model_name, id->name, I2C_NAME_SIZE);
+>> +
+>> +	bq->regmap = devm_regmap_init_i2c(client,
+>> +					bq->chip_info->bq256xx_regmap_config);
+>> +
+>> +	if (IS_ERR(bq->regmap)) {
+>> +		dev_err(dev, "Failed to allocate register map\n");
+>> +		return PTR_ERR(bq->regmap);
+>> +	}
+>> +
+>> +	i2c_set_clientdata(client, bq);
+>> +
+>> +	ret = bq256xx_parse_dt(bq);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to read device tree properties%d\n", ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	/* OTG reporting */
+>> +	bq->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+>> +	if (!IS_ERR_OR_NULL(bq->usb2_phy)) {
+>> +		INIT_WORK(&bq->usb_work, bq256xx_usb_work);
+>> +		bq->usb_nb.notifier_call = bq256xx_usb_notifier;
+>> +		usb_register_notifier(bq->usb2_phy, &bq->usb_nb);
+>> +	}
+>> +
+>> +	bq->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
+>> +	if (!IS_ERR_OR_NULL(bq->usb3_phy)) {
+>> +		INIT_WORK(&bq->usb_work, bq256xx_usb_work);
+>> +		bq->usb_nb.notifier_call = bq256xx_usb_notifier;
+>> +		usb_register_notifier(bq->usb3_phy, &bq->usb_nb);
+>> +	}
+>> +
+>> +	if (client->irq) {
+>> +		ret = devm_request_threaded_irq(dev, client->irq, NULL,
+>> +						bq256xx_irq_handler_thread,
+>> +						IRQF_TRIGGER_FALLING |
+>> +						IRQF_ONESHOT,
+>> +						dev_name(&client->dev), bq);
+>> +		if (ret)
+>> +			goto error_out;
+>> +	}
+>> +
+>> +	ret = bq256xx_power_supply_init(bq, dev);
+>> +	if (ret) {
+>> +		dev_err(dev, "Failed to register power supply\n");
+>> +		goto error_out;
+>> +	}
+>> +
+>> +	ret = bq256xx_hw_init(bq);
+>> +	if (ret) {
+>> +		dev_err(dev, "Cannot initialize the chip.\n");
+>> +		goto error_out;
+>> +	}
+>> +
+>> +	return ret;
+>> +
+>> +error_out:
+>> +	if (!IS_ERR_OR_NULL(bq->usb2_phy))
+>> +		usb_unregister_notifier(bq->usb2_phy, &bq->usb_nb);
+>> +
+>> +	if (!IS_ERR_OR_NULL(bq->usb3_phy))
+>> +		usb_unregister_notifier(bq->usb3_phy, &bq->usb_nb);
+>> +	return ret;
+> This also needs to be called during driver removal. Probably
+> it's best to do this via devm_add_action_or_reset().
+ACK, I will insert devm_add_action_or_reset() just before ret = 
+bq256xx_power_supply_init()
+>
+>> [...]
+> -- Sebastian
+Ricardo
 
-
-I am currently investigating this issue. I will keep you in CC list
-when I send some patches.
-
-Regards,
-Lukasz
