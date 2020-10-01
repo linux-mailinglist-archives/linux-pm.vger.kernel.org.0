@@ -2,45 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 490D427FE4B
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 13:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EB227FE70
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 13:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731921AbgJALZD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Oct 2020 07:25:03 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42494 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731134AbgJALZD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 07:25:03 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m13so4955659otl.9
-        for <linux-pm@vger.kernel.org>; Thu, 01 Oct 2020 04:25:02 -0700 (PDT)
+        id S1731877AbgJALci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Oct 2020 07:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731692AbgJALci (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 07:32:38 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7A3C0613D0
+        for <linux-pm@vger.kernel.org>; Thu,  1 Oct 2020 04:32:38 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id e23so2413114vsk.2
+        for <linux-pm@vger.kernel.org>; Thu, 01 Oct 2020 04:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZH7jQBZB/HAgbtO2SyW4qZYiSqlYjSnLc4Kr6Sf3SKo=;
+        b=X5xzrmcuaHdC7I6CXrtmKYwn0e2PBPyTDiCM1g91kWFgnSHdukQEKfvBqync+gLs2z
+         zfIxSTQa1JmB2eoYaxNrAapsun4mJo2DXPRIU6FeY9/bSVnra561UOK0BzozdEV3Y5vw
+         WeHkv5N5Z8MPGAZUP6A/LDoJ8dPWzwSxZX+9BcyywfGvdKrOSmVI25k1QCcd6EUxcJqW
+         M44c7ofafE8SxXgh8DSKr9wSKZyGg5Yqcd6MlxRFZKNfIzuQhNJP0vTHc1nYQzkXOeRw
+         a/70vMe9a9nff91G6U4Gi6vtLqDcKsu0s+OJcvlf//OjSRhLBCqiL8oqZO4DA8get3Gq
+         udZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=EtZ6soe4Web0rzh5iPw/y1rfCvGvEU4upGzzC1GIut8=;
-        b=e92dhfM7NHTJeLEIk66dW1Vm/267AID81vufk3pIoOsSkE9OWnTW49B/Fy72uJTaE2
-         03RtgfVdRC/f9RjSqMqXrS/1eH0SBr6/46VTdVKy8nl6KPMSSM1vMaRQ7oOOLmepW+7O
-         h9EJmwsq9bGrBfJBdKRqip8yAkxnKvL/pvNdHkJScL740ZXDO2GwfXe1S1CTsge9DyV8
-         kXhjRFNUqN95Uuc1ae+yudn5YNbXuEYVnMU+ZgWGvkI1EhF3m1tmCRMI2GI5GhK4RtBg
-         rUu6C8bjZAszfGd1NkJ3h0Pd5MG7vJ7b7aGhGZLX9htcWFs+4wqeZpqikkhxJ+TpmPVr
-         POLQ==
-X-Gm-Message-State: AOAM531O7WAdloXglGc4M8hucMsD1MBzmfz3BVV24nGt7TLBGsKdpl5t
-        +XXmVUiNPqfxdnxX/jlVmlAakcjvLuymv+Xyb90=
-X-Google-Smtp-Source: ABdhPJyL8PPJSzJg7q2uVTh6on6G2gG1lDDr7VfeQJ4b6NQVFGA/ftm9GG/aRmEYkhY+BzOfGznOXAShBikYNxu9jOY=
-X-Received: by 2002:a05:6830:150a:: with SMTP id k10mr4312555otp.167.1601551502463;
- Thu, 01 Oct 2020 04:25:02 -0700 (PDT)
+        bh=ZH7jQBZB/HAgbtO2SyW4qZYiSqlYjSnLc4Kr6Sf3SKo=;
+        b=dsGAzyvWXGozdaz3Rz9t/K5oAzDPiLwJ4KXeiYg/nxrAXFvG8mqFZIqJBh3NPmGDtF
+         f7D2K+Vb6lE1Zwmg+ox9QiJ6sDbkQUN0Abu0fylqf1FaGNFCfgYkXXFwdjFPjr0S+Fhh
+         i/Jo4XR+8ayTpJKppE5p/jDlrnh7XIS7WCYqzJDtINhDYGxWUpyPrFG0Ynf00EXfzAl4
+         KqAkgjOut0sd1iVqFWg3Urr7kSGqJ1JHbkUsDpV8i4WXzbTBbf064zMtQu9A8gTtTVzW
+         x4cekQte8lbgc21UlTUDlWVgbTX6birQmJlZ+ba4+rlkqeG4Rt7CKu475Gm1+NvCNjER
+         S68Q==
+X-Gm-Message-State: AOAM533nyrvjWLNqF21R4mav3aEp5u26xLH/bF3AhfOei8iAGzODSXmG
+        8Q7NZ3CfqH4kqzvmnxArkEEFIDXbQDzHw1Kyuc/ZuOu1ZYp7qJMG
+X-Google-Smtp-Source: ABdhPJwIUwSb8US1bsUI9Cki9ak9E8E3ghISXCekOeQoSN809EI/DJ7HuH2flSLcln77z2tdqhf0JN5mpLZuqfN9484=
+X-Received: by 2002:a05:6102:910:: with SMTP id x16mr4271658vsh.42.1601551957226;
+ Thu, 01 Oct 2020 04:32:37 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200901082707.106860-1-ulf.hansson@linaro.org>
  <20200901082707.106860-3-ulf.hansson@linaro.org> <20201001101756.GB906@bogus>
 In-Reply-To: <20201001101756.GB906@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 1 Oct 2020 13:24:48 +0200
-Message-ID: <CAJZ5v0jYozAZN5rkL3f0WWSN+Uhwd_Ze=SmgOd_TYZFjn6_qvg@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 1 Oct 2020 13:32:00 +0200
+Message-ID: <CAPDyKFqNrCo=jGWMp67bKstErE5ZYR+3JzoPyYUtb4y2rK+dOA@mail.gmail.com>
 Subject: Re: [PATCH 2/2] cpuidle: psci: Enable s2idle when using OSI with the
  PM domain topology
 To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
+Cc:     Lorenzo Pieralisi <Lorenzo.Pieralisi@arm.com>,
         Linux PM <linux-pm@vger.kernel.org>,
         "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -56,7 +69,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 1, 2020 at 12:18 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Thu, 1 Oct 2020 at 12:18, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
 > On Tue, Sep 01, 2020 at 10:27:07AM +0200, Ulf Hansson wrote:
 > > To select domain idle states for cpuidle-psci, the PM domains via genpd are
@@ -68,6 +81,12 @@ On Thu, Oct 1, 2020 at 12:18 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
 > > suspend.
 >
 > When you refer system suspend above, you mean both S2R and S2I ?
+
+Correct.
+
+Although, there is no problem with S2R to reach the proper idlestate,
+because of the way we offline all but the boot CPU.
+
 >
 > > Even if genpd tries to power off the PM domain in the
 > > suspend_noirq phase, that doesn't help to properly select a domain idle
@@ -75,6 +94,9 @@ On Thu, Oct 1, 2020 at 12:18 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
 > >
 >
 > And what prevents doing per CPU basis ?
+
+The PM core doesn't execute the system suspend callbacks on a per CPU basis.
+
 >
 > > Let's address the issue by enabling the syscore flag for the attached CPU
 > > devices. This prevents genpd from trying to power off the corresponding PM
@@ -85,17 +107,22 @@ On Thu, Oct 1, 2020 at 12:18 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
 > >
 >
 > The syscore_suspend is not executed for S2I and using syscore APIs here
-> is bit confusing IMO.
+> is bit confusing IMO. If Rafael is fine, I have no objections.
 
-Right.
+That's correct, the syscore phase doesn't exist in the S2I path.
 
-> If Rafael is fine,
+However, in some cases the same functions that are being called in the
+syscore phase, are also being called for S2I. For example, have a look
+at timekeeping_suspend(), which is being called from both paths.
 
-No, I'm not.
+In the end, I think the confusing part is the name of the genpd functions.
 
-Cheers!
+Maybe we should rename pm_genpd_syscore_poweroff|poweron() to
+pm_genpd_suspend|resume() - or something along those lines.
 
-> I have no objections.
+Kind regards
+Uffe
+
 >
 > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > > ---
