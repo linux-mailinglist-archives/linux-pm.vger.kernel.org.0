@@ -2,129 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E93F927FF6A
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 14:45:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF89727FF94
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Oct 2020 14:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732094AbgJAMp1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Oct 2020 08:45:27 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:47218 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731891AbgJAMp0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 08:45:26 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091Chq1s130044;
-        Thu, 1 Oct 2020 12:44:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=dRio5ZMU9WDz6PjNY704BdYKLFPP9TtV0vYjDf32cpI=;
- b=L1tXWifpPI2khL7ZWsxd+W1OzbP5uZquW/uyQ5eKyU/GjTGSHQi30vn6r3rT7PpE/9Jd
- 1UCv0ETLyOoJYqF9c0WsJVQJTp/y2FpkcoVBlK+ec42xTHc/LafZA0UXKAYkLtOY7ujM
- Gnxq5MbZIjL3GsNTAhwyceyOtdjSI5kJioc9HSNhxr64tFD9dCRDFWuAMO30IbelxaDN
- LVKCtugIDxlclIM7JSu/2UKbH9tOGUVemGFchOa5of7QiKH2ySYHPjihtWRlaI5ETzwu
- VKdojWeV1D7mXjHmrrlmUo3Mi/+h9yjiL8I62ff7BIPsaxYMYEVVGWMnND2ps+MGeZ4i kg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 33swkm5pva-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 01 Oct 2020 12:44:19 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 091CQ6ec104197;
-        Thu, 1 Oct 2020 12:44:18 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 33tfk1gcdq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Oct 2020 12:44:18 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 091Ci4s6018950;
-        Thu, 1 Oct 2020 12:44:05 GMT
-Received: from [10.74.86.152] (/10.74.86.152)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 01 Oct 2020 05:44:04 -0700
-Subject: Re: [PATCH v3 01/11] xen/manage: keep track of the on-going suspend
- mode
-To:     Anchal Agarwal <anchalag@amazon.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        x86@kernel.org, jgross@suse.com, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org, kamatam@amazon.com, sstabellini@kernel.org,
-        konrad.wilk@oracle.com, roger.pau@citrix.com, axboe@kernel.dk,
-        davem@davemloft.net, rjw@rjwysocki.net, len.brown@intel.com,
-        pavel@ucw.cz, peterz@infradead.org, eduval@amazon.com,
-        sblbir@amazon.com, xen-devel@lists.xenproject.org,
-        vkuznets@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dwmw@amazon.co.uk,
-        benh@kernel.crashing.org
-References: <e9b94104-d20a-b6b2-cbe0-f79b1ed09c98@oracle.com>
- <20200915180055.GB19975@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <5f1e4772-7bd9-e6c0-3fe6-eef98bb72bd8@oracle.com>
- <20200921215447.GA28503@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <e3e447e5-2f7a-82a2-31c8-10c2ffcbfb2c@oracle.com>
- <20200922231736.GA24215@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <20200925190423.GA31885@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <274ddc57-5c98-5003-c850-411eed1aea4c@oracle.com>
- <20200925222826.GA11755@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
- <cc738014-6a79-a5ae-cb2a-a02ff15b4582@oracle.com>
- <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-From:   boris.ostrovsky@oracle.com
-Organization: Oracle Corporation
-Message-ID: <8cd59d9c-36b1-21cf-e59f-40c5c20c65f8@oracle.com>
-Date:   Thu, 1 Oct 2020 08:43:58 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.3.1
+        id S1732018AbgJAM4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Oct 2020 08:56:38 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:59858 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731952AbgJAM4i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 08:56:38 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 091CuHDM010605;
+        Thu, 1 Oct 2020 07:56:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1601556978;
+        bh=NERvX0ibPZAG954pYwxdSlatt/7xFMKxeO9GZ4PNz3w=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=gYAzt8ANg8RcLNLykcCHOrYRwiC4ZYEt2h1fDAecQhVLn11Wxg7Pjfgc81drZBBBr
+         ymvkByvCt+w20WLI/fGqrDS6YasKFalSar5SenqaVjqlDxB/Q+dOcJ1Wov+nWRcSrs
+         09z3OMGKHn6g3nCdnNspnD4aFpngOdw0ubFZQhDc=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 091CuH1B124673
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Oct 2020 07:56:17 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 1 Oct
+ 2020 07:56:17 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 1 Oct 2020 07:56:17 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 091CuDWj079637;
+        Thu, 1 Oct 2020 07:56:14 -0500
+Subject: Re: Slow booting on x15
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-pm@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20200924055313.GC9471@atomide.com>
+ <fe0a4fa8-53fc-d316-261f-52f631f12469@ti.com>
+ <20200924060826.GE9471@atomide.com>
+ <20200924133049.GH3968@pendragon.ideasonboard.com>
+ <20200925115147.GM9471@atomide.com>
+ <20200925115817.GB3933@pendragon.ideasonboard.com>
+ <20200930052057.GP9471@atomide.com>
+ <d8d81891-7e22-81a2-19df-6e9a5f8679c4@ti.com>
+ <20201001075344.GU9471@atomide.com> <20201001081748.GW9471@atomide.com>
+ <20201001082256.GA3722@pendragon.ideasonboard.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <60ea4b42-fbc2-2b80-7eab-8a236581d4c9@ti.com>
+Date:   Thu, 1 Oct 2020 15:56:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <20200930212944.GA3138@dev-dsk-anchalag-2a-9c2d1d96.us-west-2.amazon.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20201001082256.GA3722@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9760 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=980 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010010109
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9760 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=979 clxscore=1015 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2010010110
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
->>>>>>> Also, wrt KASLR stuff, that issue is still seen sometimes but I haven't had
->>>>>>> bandwidth to dive deep into the issue and fix it.
->>>> So what's the plan there? You first mentioned this issue early this year and judged by your response it is not clear whether you will ever spend time looking at it.
+
+On 01/10/2020 11:22, Laurent Pinchart wrote:
+> Hi Tony,
+> 
+> On Thu, Oct 01, 2020 at 11:17:48AM +0300, Tony Lindgren wrote:
+>> * Tony Lindgren <tony@atomide.com> [201001 07:53]:
+>>> * Peter Ujfalusi <peter.ujfalusi@ti.com> [200930 12:41]:
+>>>> Fwiw on my beagle x15
 >>>>
->>> I do want to fix it and did do some debugging earlier this year just haven't
->>> gotten back to it. Also, wanted to understand if the issue is a blocker to this
->>> series?
+>>>> v5.8
+>>>> [    9.908787] Run /sbin/init as init process
+>>>>
+>>>> v5.9-rc7
+>>>> [   15.085373] Run /sbin/init as init process
+>>>>
+>>>>
+>>>> It appears to be 'fixed' in next-20200928: the board does not even boot.
+>>>
+>>> Yeah so it seems :(
+>>>
+>>>> next-20200928 on omap5
+>>>> [    9.936806] Run /sbin/init as init process
+>>>>
+>>>>
+>>>> -rc7 spends most of it's time:
+>>>> [    7.635530] Micrel KSZ9031 Gigabit PHY 48485000.mdio:01: attached PHY driver [Micrel KSZ9031 Gigabit PHY] (mii_bus:phy_addr=48485000.mdio:01, irq=POLL)
+>>>> [   14.956671] cpsw 48484000.ethernet eth0: Link is Up - 1Gbps/Full - flow control off
+>>>> [   15.005211] IP-Config: Complete:
+>>>
+>>> Booting with initcall_debug I see this with current Linux next:
+>>>
+>>> ...
+>>> [    1.697313] cpuidle: using governor menu
+>>> [    1.701353] initcall init_menu+0x0/0xc returned 0 after 0 usecs
+>>> [    1.707458] calling  gpmc_init+0x0/0x10 @ 1
+>>> [    1.711784] initcall gpmc_init+0x0/0x10 returned 0 after 0 usecs
+>>> [    1.717974] calling  omap3_l3_init+0x0/0x10 @ 1
+>>> [    1.722653] initcall omap3_l3_init+0x0/0x10 returned 0 after 0 usecs
+>>> [    1.729201] calling  omap_l3_init+0x0/0x10 @ 1
+>>> [    1.733791] initcall omap_l3_init+0x0/0x10 returned 0 after 0 usecs
+>>> [    1.740314] calling  gate_vma_init+0x0/0x70 @ 1
+>>> [    1.744976] initcall gate_vma_init+0x0/0x70 returned 0 after 0 usecs
+>>> [    1.751522] calling  customize_machine+0x0/0x30 @ 1
+>>> [    3.823114] initcall customize_machine+0x0/0x30 returned 0 after 2011718 usecs
+>>> [    3.830566] calling  init_atags_procfs+0x0/0xec @ 1
+>>> [    3.835583] No ATAGs?
 >>
->> Integrating code with known bugs is less than ideal.
+>> And the long time above with customize_machine() ends up being
+>> pdata_quirks_init() calling of_platform_populate().
+> 
+> That's what the delay is for me (I think I've reported that initially).
+> 
+>>> Laurent & Tomi, care to check what you guys see in the slow booting case
+>>> after booting with initcall_debug?
 >>
-> So for this series to be accepted, KASLR needs to be fixed along with other
-> comments of course? 
+>> But maybe the long delay is something else for you guys so please check.
+> 
+
+It's all devlink :( Looks like sometimes, improvements (PM) could became so complicated
+that time required to execute such algorithms may completely eliminate all expected benefits.
+Will not be surprised if PM consumption also increased instead of decreasing in some cases.
+
+not sure if it's 100% correct, but below diff reduces boot time
+from 7.6sec to 3.7sec :P
+
+before:
+[    0.053870] cpuidle: using governor menu
+[    2.505971] No ATAGs?
+...
+[    7.562317] Freeing unused kernel memory: 1024K
+
+after:
+[    0.053800] cpuidle: using governor menu
+[    0.136853] No ATAGs?
+[    3.716218] devtmpfs: mounted
+[    3.719628] Freeing unused kernel memory: 1024K
+[    3.724266] Run /sbin/init as init process  
+
+----
+diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+index 071f04da32c8..e0cc37ed46ca 100644
+--- a/drivers/of/platform.c
++++ b/drivers/of/platform.c
+@@ -481,6 +481,7 @@ int of_platform_populate(struct device_node *root,
+         pr_debug(" starting at: %pOF\n", root);
+  
+         device_links_supplier_sync_state_pause();
++       fw_devlink_pause();
+         for_each_child_of_node(root, child) {
+                 rc = of_platform_bus_create(child, matches, lookup, parent, true);
+                 if (rc) {
+@@ -488,6 +489,7 @@ int of_platform_populate(struct device_node *root,
+                         break;
+                 }
+         }
++       fw_devlink_resume();
+         device_links_supplier_sync_state_resume();
+  
+         of_node_set_flag(root, OF_POPULATED_BUS);
+@@ -538,9 +540,7 @@ static int __init of_platform_default_populate_init(void)
+         }
+  
+         /* Populate everything else. */
+-       fw_devlink_pause();
+         of_platform_default_populate(NULL, NULL, NULL);
+-       fw_devlink_resume();
+  
+         return 0;
+  }
 
 
-Yes, please.
-
-
-
->>> I had some theories when debugging around this like if the random base address picked by kaslr for the
->>> resuming kernel mismatches the suspended kernel and just jogging my memory, I didn't find that as the case.
->>> Another hunch was if physical address of registered vcpu info at boot is different from what suspended kernel
->>> has and that can cause CPU's to get stuck when coming online.
->>
->> I'd think if this were the case you'd have 100% failure rate. And we are also re-registering vcpu info on xen restore and I am not aware of any failures due to KASLR.
->>
-> What I meant there wrt VCPU info was that VCPU info is not unregistered during hibernation,
-> so Xen still remembers the old physical addresses for the VCPU information, created by the
-> booting kernel. But since the hibernation kernel may have different physical
-> addresses for VCPU info and if mismatch happens, it may cause issues with resume. 
-> During hibernation, the VCPU info register hypercall is not invoked again.
-
-
-I still don't think that's the cause but it's certainly worth having a look.
-
-
--boris
-
+-- 
+Best regards,
+grygorii
