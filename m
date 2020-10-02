@@ -2,198 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 096FA281604
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 17:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F19281640
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 17:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388241AbgJBPEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 11:04:11 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39628 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726017AbgJBPEL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 11:04:11 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 092F3uOF059943;
-        Fri, 2 Oct 2020 10:03:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1601651036;
-        bh=00EmeBEsJXIW+I4V1YKyuovGpP0u20l2BkMznworpNU=;
-        h=Subject:From:To:CC:References:Date:In-Reply-To;
-        b=lLGeoVfqeNI3kVh58Nc0c/m5l6fA3pyaPy7WAqEsZberBjuXAtySV4EamOfjvsQ2M
-         g9UdCC3CKq4spM1TtSEEhzBtVlIjOTSwuZ0jKQwZPFaSPlM4kAQV5YrscOQm4837XY
-         NPx3M9tjSG3MzpQzk3yup6irAn30fdrS3oZtx5Ks=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 092F3u6e001694
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 2 Oct 2020 10:03:56 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 2 Oct
- 2020 10:03:55 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Fri, 2 Oct 2020 10:03:55 -0500
-Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 092F3oeb115201;
-        Fri, 2 Oct 2020 10:03:51 -0500
-Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
- init_machine() path
-From:   Grygorii Strashko <grygorii.strashko@ti.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Saravana Kannan <saravanak@google.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        <geert+renesas@glider.be>, <gregkh@linuxfoundation.org>,
-        <linux-omap@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <peter.ujfalusi@ti.com>, <rjw@rjwysocki.net>,
-        <tomi.valkeinen@ti.com>, <tony@atomide.com>,
-        <ulf.hansson@linaro.org>, <kernel-team@android.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com>
- <20201001231922.GG3722@pendragon.ideasonboard.com>
- <17bdc3f0-d816-151a-fef2-88cd38fc8621@ti.com>
-Message-ID: <e0ef8816-11ea-3a1a-cac6-14b9f6c92bcf@ti.com>
-Date:   Fri, 2 Oct 2020 18:03:48 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2388192AbgJBPNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 11:13:02 -0400
+Received: from foss.arm.com ([217.140.110.172]:38760 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388176AbgJBPNB (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Oct 2020 11:13:01 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD3B41396;
+        Fri,  2 Oct 2020 08:13:00 -0700 (PDT)
+Received: from [10.57.50.3] (unknown [10.57.50.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9ABC3F73B;
+        Fri,  2 Oct 2020 08:12:57 -0700 (PDT)
+Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: update sustainable-power
+ with abstract scale
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        amitk@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <20201002114426.31277-1-lukasz.luba@arm.com>
+ <20201002114426.31277-4-lukasz.luba@arm.com>
+ <CAD=FV=UbNP5-G1z95F37Fmv8=n0JPSSwnPQO_K==WpAc4vAHWQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <e9b6fc5a-45d3-168d-db38-6c068da26f6b@arm.com>
+Date:   Fri, 2 Oct 2020 16:12:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <17bdc3f0-d816-151a-fef2-88cd38fc8621@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <CAD=FV=UbNP5-G1z95F37Fmv8=n0JPSSwnPQO_K==WpAc4vAHWQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Doug,
+
+On 10/2/20 3:31 PM, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Oct 2, 2020 at 4:45 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Update the documentation for the binding 'sustainable-power' and allow
+>> to provide values in an abstract scale. It is required when the cooling
+>> devices use an abstract scale for their power values.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   .../devicetree/bindings/thermal/thermal-zones.yaml  | 13 +++++++++----
+>>   1 file changed, 9 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>> index 3ec9cc87ec50..4d8f2e37d1e6 100644
+>> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+>> @@ -99,10 +99,15 @@ patternProperties:
+>>         sustainable-power:
+>>           $ref: /schemas/types.yaml#/definitions/uint32
+>>           description:
+>> -          An estimate of the sustainable power (in mW) that this thermal zone
+>> -          can dissipate at the desired control temperature. For reference, the
+>> -          sustainable power of a 4-inch phone is typically 2000mW, while on a
+>> -          10-inch tablet is around 4500mW.
+>> +          An estimate of the sustainable power (in mW or in an abstract scale)
+>> +         that this thermal zone can dissipate at the desired control
+>> +         temperature. For reference, the sustainable power of a 4-inch phone
+>> +         is typically 2000mW, while on a 10-inch tablet is around 4500mW.
+>> +
+>> +         It is possible to express the sustainable power in an abstract
+>> +         scale. This is the case when the related cooling devices use also
+>> +         abstract scale to express their power usage. The scale must be
+>> +         consistent.
+> 
+> Two thoughts:
+> 
+> 1. If we're going to allow "sustainable-power" to be in abstract
+> scale, why not allow "dynamic-power-coefficient" to be in abstract
+> scale too?  I assume that the whole reason against that originally was
+> the idea of device tree purity, but if we're allowing the abstract
+> scale here then there seems no reason not to allow it for
+> "dynamic-power-coefficient".
+
+With this binding it's a bit more tricky.
+I also have to discuss a few things internally. This requirement of
+uW/MHz/V^2 makes the code easier also for potential drivers
+like GPU (which are going to register the devfreq cooling with EM).
+
+Let me think about it, but for now I would just update these bits.
+These are required to proper IPA operation, the dyn.-pow.-coef. is a
+nice to have and possible next step.
+
+> 
+> 2. Is it worth adding some type of indication of what type of units
+> "sustainable-power" is represented in?  Maybe even a made up unit so
+> that you could tell the difference between made up units in the same
+> system?  I'd envision something like:
+> 
+> sustainable-power-units = "qualcomm,sc7180-bogoWatts"
+> 
+> ...and on the dynamic-power-coefficient side, the same:
+> 
+> dynamic-power-coefficient-units = "qualcomm,sc7180-bogoWatts"
+> 
+> One could imagine someone even later (after devices are widely
+> distributed) figuring out translations between these bogoWatts numbers
+> and real Watts if someone could come up with a case where it matters.
+
+To figure this out we don't need a new binding.
+I think a simple comment in the DT would be enough for this, even e.g.:
+
+sustainable-power = <100> /* bogoWatts */
 
 
-On 02/10/2020 14:40, Grygorii Strashko wrote:
-> 
-> 
-> On 02/10/2020 02:19, Laurent Pinchart wrote:
->> Hi Saravana,
->>
->> Thank you for the patch.
->>
->> On Thu, Oct 01, 2020 at 03:59:51PM -0700, Saravana Kannan wrote:
->>> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
->>> adding all top level devices") optimized the fwnode parsing when all top
->>> level devices are added, it missed out optimizing this for platform
->>> where the top level devices are added through the init_machine() path.
->>>
->>> This commit does the optimization for all paths by simply moving the
->>> fw_devlink_pause/resume() inside of_platform_default_populate().
->>
->> Based on v5.9-rc5, before the patch:
->>
->> [    0.652887] cpuidle: using governor menu
->> [   12.349476] No ATAGs?
->>
->> After the patch:
->>
->> [    0.650460] cpuidle: using governor menu
->> [   12.262101] No ATAGs?
->>
->> :-(
-> 
-> This is kinda expected :( because omap2 arch doesn't call of_platform_default_populate()
-> 
-> Call path:
-> board-generic.c
->   DT_MACHINE_START()
->     .init_machine    = omap_generic_init,
-> 
->   omap_generic_init()
->     pdata_quirks_init(omap_dt_match_table);
->          of_platform_populate(NULL, omap_dt_match_table,
->                   omap_auxdata_lookup, NULL);
-> 
-> Other affected platforms
-> arm: mach-ux500
-> some mips
-> some powerpc
-> 
-> there are also case when a lot of devices placed under bus node, in such case
->   of_platform_populate() calls from bus drivers will also suffer from this issue.
-> 
-> I think one option could be to add some parameter to _populate() or introduce new api.
-> 
-> By the way, is there option to disable this feature at all?
-> Is there Kconfig option?
-> Is there any reasons why such complex and time consuming code added to the kernel and not implemented on DTC level?
-> 
-> 
-> Also, I've came with another diff, pls check.
-> 
-> [    0.000000] Booting Linux on physical CPU 0x0
-> [    0.000000] Linux version 5.9.0-rc6-01791-g9acba6b38757-dirty (grygorii@grygorii-XPS-13-9370) (arm-linux-gnueabihf-gcc (GNU Toolcha0
-> [    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=10c5387d
-> [    0.000000] CPU: div instructions available: patching division code
-> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, PIPT instruction cache
-> [    0.000000] OF: fdt: Machine model: TI AM5718 IDK
-> ...
-> [    0.053443] cpuidle: using governor ladder
-> [    0.053470] cpuidle: using governor menu
-> [    0.089304] No ATAGs?
-> ...
-> [    3.092291] devtmpfs: mounted
-> [    3.095804] Freeing unused kernel memory: 1024K
-> [    3.100483] Run /sbin/init as init process
-> 
-> 
-> 
-> ------ >< ---
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 071f04da32c8..4521b26e7745 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -514,6 +514,12 @@ static const struct of_device_id reserved_mem_matches[] = {
->          {}
->   };
-> 
-> +static int __init of_platform_fw_devlink_pause(void)
-> +{
-> +       fw_devlink_pause();
-> +}
-> +core_initcall(of_platform_fw_devlink_pause);
-> +
->   static int __init of_platform_default_populate_init(void)
->   {
->          struct device_node *node;
-> @@ -538,9 +544,7 @@ static int __init of_platform_default_populate_init(void)
->          }
-> 
->          /* Populate everything else. */
-> -       fw_devlink_pause();
->          of_platform_default_populate(NULL, NULL, NULL);
-> -       fw_devlink_resume();
-> 
->          return 0;
->   }
-> @@ -548,6 +552,7 @@ arch_initcall_sync(of_platform_default_populate_init);
-> 
->   static int __init of_platform_sync_state_init(void)
->   {
-> +       fw_devlink_resume();
+Thank you for your comments.
+BTW, I haven't put your 'Reviewed-by' because I have added this
+sustainable-power new stuff in patch 1/3. I will grateful if you
+have a look on that.
 
-^ it seems has to be done earlier, like
-+static int __init of_platform_fw_devlink_resume(void)
-+{
-+       fw_devlink_resume();
-+       return 0;
-+}
-+device_initcall_sync(of_platform_fw_devlink_resume);
-
-
->          device_links_supplier_sync_state_resume();
->          return 0;
->   }
-> 
-> 
-> 
-
--- 
-Best regards,
-grygorii
+Regards,
+Lukasz
