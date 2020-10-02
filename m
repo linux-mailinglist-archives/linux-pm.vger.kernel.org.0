@@ -2,119 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707BD280B47
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 01:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC3D280DA5
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 08:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733119AbgJAXUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Oct 2020 19:20:03 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:54832 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728090AbgJAXUC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Oct 2020 19:20:02 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 44E3A60;
-        Fri,  2 Oct 2020 01:20:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1601594400;
-        bh=rfIIQwVRd/AeRqJEFC4VlBko7IIup6fEBhePqztkIR8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D39RLFAyWjqKwgTPH1a8EHsX07hOSfHzj62ZmTqxirfGmrvGP/bNc+NtszXhl6VkN
-         s/2MWQTd2wrRkETjQru4rieOG9kAhy0ON8UMTzUYGrqnlM0cL7JGAsCd5S7c/Yz0tb
-         zIcNp663oGEWjRaTK/g4LECn89v68Mj7AMAsS75s=
-Date:   Fri, 2 Oct 2020 02:19:22 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>, geert+renesas@glider.be,
-        gregkh@linuxfoundation.org, grygorii.strashko@ti.com,
-        linux-omap@vger.kernel.org, linux-pm@vger.kernel.org,
-        peter.ujfalusi@ti.com, rjw@rjwysocki.net, tomi.valkeinen@ti.com,
-        tony@atomide.com, ulf.hansson@linaro.org, kernel-team@android.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
- init_machine() path
-Message-ID: <20201001231922.GG3722@pendragon.ideasonboard.com>
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com>
+        id S1726209AbgJBGuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 02:50:19 -0400
+Received: from verein.lst.de ([213.95.11.211]:51231 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725968AbgJBGuS (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Oct 2020 02:50:18 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id C736F68B02; Fri,  2 Oct 2020 08:50:15 +0200 (CEST)
+Date:   Fri, 2 Oct 2020 08:50:15 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Minho Ban <mhban@samsung.com>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 2/2] PM/hibernate: remove the bogus call to get_gendisk
+ in software_resume
+Message-ID: <20201002065015.GA9691@lst.de>
+References: <20200925161447.1486883-1-hch@lst.de> <20200925161447.1486883-3-hch@lst.de> <CAJZ5v0h8TbOZ=seE8+OqFKTRxOYK25aTXDam7Lez0VR5qnkM3Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201001225952.3676755-1-saravanak@google.com>
+In-Reply-To: <CAJZ5v0h8TbOZ=seE8+OqFKTRxOYK25aTXDam7Lez0VR5qnkM3Q@mail.gmail.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
-
-Thank you for the patch.
-
-On Thu, Oct 01, 2020 at 03:59:51PM -0700, Saravana Kannan wrote:
-> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
-> adding all top level devices") optimized the fwnode parsing when all top
-> level devices are added, it missed out optimizing this for platform
-> where the top level devices are added through the init_machine() path.
+On Wed, Sep 30, 2020 at 05:45:27PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Sep 25, 2020 at 6:15 PM Christoph Hellwig <hch@lst.de> wrote:
+> >
+> > get_gendisk grabs a reference on the disk and file operation, so this
+> > code will leak both of them while having absolutely no use for the
+> > gendisk itself.
+> >
+> > This effectively reverts commit 2df83fa4bce421f
+> > ("PM / Hibernate: Use get_gendisk to verify partition if resume_file is integer format")
+> >
+> > Signed-off-by: Christoph Hellwig <hch@lst.de>
 > 
-> This commit does the optimization for all paths by simply moving the
-> fw_devlink_pause/resume() inside of_platform_default_populate().
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Based on v5.9-rc5, before the patch:
-
-[    0.652887] cpuidle: using governor menu
-[   12.349476] No ATAGs?
-
-After the patch:
-
-[    0.650460] cpuidle: using governor menu
-[   12.262101] No ATAGs?
-
-:-(
-
-> Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/of/platform.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 071f04da32c8..79972e49b539 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
->  				 const struct of_dev_auxdata *lookup,
->  				 struct device *parent)
->  {
-> -	return of_platform_populate(root, of_default_bus_match_table, lookup,
-> -				    parent);
-> +	int ret;
-> +
-> +	/*
-> +	 * fw_devlink_pause/resume() are only safe to be called around top
-> +	 * level device addition due to locking constraints.
-> +	 */
-> +	if (!root)
-> +		fw_devlink_pause();
-> +
-> +	ret = of_platform_populate(root, of_default_bus_match_table, lookup,
-> +				   parent);
-> +
-> +	if (!root)
-> +		fw_devlink_resume();
-> +	return ret;
->  }
->  EXPORT_SYMBOL_GPL(of_platform_default_populate);
->  
-> @@ -538,9 +551,7 @@ static int __init of_platform_default_populate_init(void)
->  	}
->  
->  	/* Populate everything else. */
-> -	fw_devlink_pause();
->  	of_platform_default_populate(NULL, NULL, NULL);
-> -	fw_devlink_resume();
->  
->  	return 0;
->  }
-
--- 
-Regards,
-
-Laurent Pinchart
+Can you pick it up through the PM tree?  The big rework in this area
+I have planned won't land before 5.11 anyway.
