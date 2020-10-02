@@ -2,31 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C655281A3A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 19:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CCC281A50
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 19:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726813AbgJBRzF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 13:55:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S2387957AbgJBR7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 13:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbgJBRzF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 13:55:05 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41F0C0613D0;
-        Fri,  2 Oct 2020 10:55:04 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BE0D72A2;
-        Fri,  2 Oct 2020 19:55:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1601661300;
-        bh=Qf5HRVHyIghCAni0kFGOWiS+pLkA33+NJPB9Z0/mkIM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tyQZ83BXpSGafZKcDDYw5h9fnxWiy6R8cB193qxbzdZznN7LBrciEoZTVFUOZBMl+
-         FhKB8srgeqVzZ6BUphAZ4AsgJnwvg2ebbaPIQLjtfq5ywom1UnaILbMF0sDMhDMUZN
-         jYIXxfd4B3aItZkQnYX08/FGcSHjOKgL+FOVFb4U=
-Date:   Fri, 2 Oct 2020 20:54:23 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Saravana Kannan <saravanak@google.com>
+        with ESMTP id S2387789AbgJBR7c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 13:59:32 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652ADC0613E4
+        for <linux-pm@vger.kernel.org>; Fri,  2 Oct 2020 10:59:32 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id s19so1770883ybc.5
+        for <linux-pm@vger.kernel.org>; Fri, 02 Oct 2020 10:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vZbuayUw4nR5ldchYC0QJ2SKyNmd/sp/ZArDf0aVmf4=;
+        b=hxne4JB9HZja3FImgOTwwGft+D9UZ0uS9fK4OcJP2Eg1oroqmn/9modjXkPJGSlN8g
+         Lh5UDYM7CynmC7F+t8Uq5psnpU8Z5iPg+RgiXlsA6p/lD2mphiU75QAqHBKi1YSqj7XW
+         7LoAJgH6xJq1blMl4m/G5sIIkMci/wvcZrPRhucqEIygDXBzfFT+Qf7VHFgFAyQk/z+1
+         F/V36+u2ogFL7XMkvpu/ekSzZkW2RoA3QWTLoD2astGElGbvCRuXZLvLQNp8zSMbfqsI
+         izqQ+mlyGkYqerxmFose6Nqt7AAsAnO9detgWoYY7GHj8Az83ZD5RLrYOddI9P+0V/ml
+         IIMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vZbuayUw4nR5ldchYC0QJ2SKyNmd/sp/ZArDf0aVmf4=;
+        b=rmQP4I8i/UV3Sgs5s4E3IwiaPZqWHQQT66Gl5YJ21ltNbtSUex+NUdkFPOBmRAcR/w
+         ZX+r6b/XrJd4AIOaARkif5mGDQqHsXZHYCZDMJYpouSNCSMAJGWTrWYCAszjlxjh7rTc
+         UMmxfICZEzvFluiCMbP5LzgexWWBtNKRCgEjr/B+zcnw3jIB7kvg40VKzA6/NMZ6KbnI
+         hjWhBTKA1nKFznKkpxZ8nlQeqx87+QzZ/bLQ1AvC0ftKup6Awrwkc9D+65DNQ0k3hvh4
+         TF5EQjx9nNiYiTVjTLTU87eRAZ0d9xVQXxBZnQFRL+lNcdTXSQkJdK8gJu8OLCGqPqKV
+         Bp1A==
+X-Gm-Message-State: AOAM531oFFaC9fda9TaEYlq66VPSMmsOjsDChv3XKS6LQs+kXSaMGg9n
+        pLmTfR/k3Ej1nM7PGK4JA/Z3A0Fm4qhqrXSYuSx/Wg==
+X-Google-Smtp-Source: ABdhPJy+2uWxMGaMD27VX8hqKxgrKfNstiISBRAtvv2ZfenCYYbpD2QB2rzAxASzDDq7221cpxy+ivvqhR77p6L+E3Y=
+X-Received: by 2002:a05:6902:725:: with SMTP id l5mr4142164ybt.346.1601661571259;
+ Fri, 02 Oct 2020 10:59:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
+ <20201001225952.3676755-1-saravanak@google.com> <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
+ <CAGETcx-tq446JQN0RpKhtyCXB+Y_PUePN_tBZsUmtpO7othm4g@mail.gmail.com> <20201002175423.GE3933@pendragon.ideasonboard.com>
+In-Reply-To: <20201002175423.GE3933@pendragon.ideasonboard.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 2 Oct 2020 10:58:55 -0700
+Message-ID: <CAGETcx-7nJaU6pDo_KL-nKmCaxv57C5aaXq-pvo4XiN=N0K5Jg@mail.gmail.com>
+Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
+ init_machine() path
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
@@ -43,87 +70,80 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
- init_machine() path
-Message-ID: <20201002175423.GE3933@pendragon.ideasonboard.com>
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com>
- <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
- <CAGETcx-tq446JQN0RpKhtyCXB+Y_PUePN_tBZsUmtpO7othm4g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAGETcx-tq446JQN0RpKhtyCXB+Y_PUePN_tBZsUmtpO7othm4g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
-
-On Fri, Oct 02, 2020 at 10:51:51AM -0700, Saravana Kannan wrote:
-> On Fri, Oct 2, 2020 at 7:08 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
+On Fri, Oct 2, 2020 at 10:55 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Saravana,
+>
+> On Fri, Oct 02, 2020 at 10:51:51AM -0700, Saravana Kannan wrote:
+> > On Fri, Oct 2, 2020 at 7:08 AM Rob Herring <robh+dt@kernel.org> wrote:
+> > > On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
+> > > >
+> > > > When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
+> > > > adding all top level devices") optimized the fwnode parsing when all top
+> > > > level devices are added, it missed out optimizing this for platform
+> > > > where the top level devices are added through the init_machine() path.
+> > > >
+> > > > This commit does the optimization for all paths by simply moving the
+> > > > fw_devlink_pause/resume() inside of_platform_default_populate().
+> > > >
+> > > > Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > ---
+> > > >  drivers/of/platform.c | 19 +++++++++++++++----
+> > > >  1 file changed, 15 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > > > index 071f04da32c8..79972e49b539 100644
+> > > > --- a/drivers/of/platform.c
+> > > > +++ b/drivers/of/platform.c
+> > > > @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
+> > > >                                  const struct of_dev_auxdata *lookup,
+> > > >                                  struct device *parent)
+> > > >  {
+> > > > -       return of_platform_populate(root, of_default_bus_match_table, lookup,
+> > > > -                                   parent);
+> > > > +       int ret;
+> > > > +
+> > > > +       /*
+> > > > +        * fw_devlink_pause/resume() are only safe to be called around top
+> > > > +        * level device addition due to locking constraints.
+> > > > +        */
+> > > > +       if (!root)
+> > > > +               fw_devlink_pause();
+> > > > +
+> > > > +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
+> > > > +                                  parent);
 > > >
-> > > When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
-> > > adding all top level devices") optimized the fwnode parsing when all top
-> > > level devices are added, it missed out optimizing this for platform
-> > > where the top level devices are added through the init_machine() path.
+> > > of_platform_default_populate() vs. of_platform_populate() is just a
+> > > different match table. I don't think the behavior should otherwise be
+> > > different.
 > > >
-> > > This commit does the optimization for all paths by simply moving the
-> > > fw_devlink_pause/resume() inside of_platform_default_populate().
-> > >
-> > > Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > ---
-> > >  drivers/of/platform.c | 19 +++++++++++++++----
-> > >  1 file changed, 15 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > > index 071f04da32c8..79972e49b539 100644
-> > > --- a/drivers/of/platform.c
-> > > +++ b/drivers/of/platform.c
-> > > @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
-> > >                                  const struct of_dev_auxdata *lookup,
-> > >                                  struct device *parent)
-> > >  {
-> > > -       return of_platform_populate(root, of_default_bus_match_table, lookup,
-> > > -                                   parent);
-> > > +       int ret;
-> > > +
-> > > +       /*
-> > > +        * fw_devlink_pause/resume() are only safe to be called around top
-> > > +        * level device addition due to locking constraints.
-> > > +        */
-> > > +       if (!root)
-> > > +               fw_devlink_pause();
-> > > +
-> > > +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
-> > > +                                  parent);
+> > > There's also of_platform_probe() which has slightly different matching
+> > > behavior. It should not behave differently either with respect to
+> > > devlinks.
 > >
-> > of_platform_default_populate() vs. of_platform_populate() is just a
-> > different match table. I don't think the behavior should otherwise be
-> > different.
+> > So I'm trying to do this only when the top level devices are added for
+> > the first time. of_platform_default_populate() seems to be the most
+> > common path. For other cases, I think we just need to call
+> > fw_devlink_pause/resume() wherever the top level devices are added for
+> > the first time. As I said in the other email, we can't add
+> > fw_devlink_pause/resume() by default to of_platform_populate().
 > >
-> > There's also of_platform_probe() which has slightly different matching
-> > behavior. It should not behave differently either with respect to
-> > devlinks.
-> 
-> So I'm trying to do this only when the top level devices are added for
-> the first time. of_platform_default_populate() seems to be the most
-> common path. For other cases, I think we just need to call
-> fw_devlink_pause/resume() wherever the top level devices are added for
-> the first time. As I said in the other email, we can't add
-> fw_devlink_pause/resume() by default to of_platform_populate().
-> 
-> Do you have other ideas for achieving "call fw_devlink_pause/resume()
-> only when top level devices are added for the first time"?
+> > Do you have other ideas for achieving "call fw_devlink_pause/resume()
+> > only when top level devices are added for the first time"?
+>
+> I'm not an expert in this domain, but before investigating it, would you
+> be able to share a hack patch that implements this (in the most simple
+> way) to check if it actually fixes the delays I experience on my system
+> ?
 
-I'm not an expert in this domain, but before investigating it, would you
-be able to share a hack patch that implements this (in the most simple
-way) to check if it actually fixes the delays I experience on my system
-?
+So I take it the patch I sent out didn't work for you? Can you tell me
+what machine/DT you are using?
 
--- 
-Regards,
-
-Laurent Pinchart
+-Saravana
