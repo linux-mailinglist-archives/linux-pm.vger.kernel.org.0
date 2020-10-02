@@ -2,109 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9FA2814AA
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 16:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B5C2814B9
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 16:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387688AbgJBOIJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 10:08:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50158 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726017AbgJBOIJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 2 Oct 2020 10:08:09 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3F14F207DE;
-        Fri,  2 Oct 2020 14:08:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601647688;
-        bh=+3VAWIyE736i8QJoJWyBkDl46THgUH5Y4ZYxc7rww6M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YS1CG4Oq4huZaIu8Ij+hCQ8yMeyS36kpM3ri/SpDmf7c/4ohOYavdzjqQINHrtMh8
-         S5TM/P/23W3g2UnzrPxSe2Cntf/zAVfCMhcH9eXkTdMJNNfMdIo/WYFPRCIjCth4PB
-         eR0N9LtyPPEpeKWJA/sR5JRvkpq+rlfyzILcDgr4=
-Received: by mail-ot1-f51.google.com with SMTP id m13so1437744otl.9;
-        Fri, 02 Oct 2020 07:08:08 -0700 (PDT)
-X-Gm-Message-State: AOAM531bQPWfd7wgP9QFVIN1VvpxAL30hBz5JwGPdvepdcwGWXdfPvu0
-        4Mu3d4ctwv3QVkGCP+HNiTLUxBF0u44Jwbp5lg==
-X-Google-Smtp-Source: ABdhPJyhESEM7l1n2tIx5F0cvgikaOZ2/i+MUqha3K8do3Q2vmEsuhRy0a+dFZdN8iCN+3dCIkrbCldSgjZJebzgVBg=
-X-Received: by 2002:a9d:7998:: with SMTP id h24mr1914471otm.192.1601647687409;
- Fri, 02 Oct 2020 07:08:07 -0700 (PDT)
+        id S2388004AbgJBOLo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 10:11:44 -0400
+Received: from mail-oo1-f66.google.com ([209.85.161.66]:44754 "EHLO
+        mail-oo1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbgJBOLo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 10:11:44 -0400
+Received: by mail-oo1-f66.google.com with SMTP id 4so360331ooh.11;
+        Fri, 02 Oct 2020 07:11:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gesR1T7BjDx7faU3zrJze9mnQNTvk17XfofPixkh6R8=;
+        b=QW8OOsrdMU3X1mmWnuPD1RPNM1RSkCRFqhJD//qTq0SyAXJ8Hhumtw9ErobE+i4eWC
+         LLflRUs+NkycEgZ/Y3iKa0ck8w4Rb6lJdE02LhBgnsT4QSNvoZKXP/QZ1gcwAsR/TlEG
+         tOxO6YhLUzMfORdHGvhk1wh0E/zvj/7TslSF4XqgArrcH3xA+t4gGPuxUCoH4Wa/bkYL
+         kqMHSCYtmuH9Ez/5S9GwIa9zetXLPUH2HDk01ycfQmP5flKFrAIfvd/Mi416jAvzANFk
+         cdlLSq7v+JDhxEcjyvJbNsz7lcXxUcE4kgKJnAgRHkxhCTmJA6CaNNK2X5+wJU7zwLL/
+         lQUA==
+X-Gm-Message-State: AOAM530vxyF1ujhCm9/hqMFKRGSLG1OakTCfiOxPvKJIv5ck1wLU8S5N
+        eMb+5baVWyUhZTLcI2N/vGWd7hZraP4qxSeqtxdD2B2M
+X-Google-Smtp-Source: ABdhPJyOChhrOxMlaFI5j/v7n2WWIa9JJ6DsWupxqoyuqq9cx0MDNFvfbr/1n5VWiIB1HK6C3AQJgvKcYqwj5k3CjaE=
+X-Received: by 2002:a4a:e946:: with SMTP id v6mr2068079ood.38.1601647903052;
+ Fri, 02 Oct 2020 07:11:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com>
-In-Reply-To: <20201001225952.3676755-1-saravanak@google.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 2 Oct 2020 09:07:55 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
-Message-ID: <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
-Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
- init_machine() path
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+References: <20200925161447.1486883-1-hch@lst.de> <20200925161447.1486883-3-hch@lst.de>
+ <CAJZ5v0h8TbOZ=seE8+OqFKTRxOYK25aTXDam7Lez0VR5qnkM3Q@mail.gmail.com> <20201002065015.GA9691@lst.de>
+In-Reply-To: <20201002065015.GA9691@lst.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Oct 2020 16:11:30 +0200
+Message-ID: <CAJZ5v0hN7S0Tg8UTQCTLSsZw-n+9pHQBjvscWcBC4gpA5jPCuQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM/hibernate: remove the bogus call to get_gendisk in software_resume
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Minho Ban <mhban@samsung.com>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
+On Fri, Oct 2, 2020 at 8:50 AM Christoph Hellwig <hch@lst.de> wrote:
 >
-> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
-> adding all top level devices") optimized the fwnode parsing when all top
-> level devices are added, it missed out optimizing this for platform
-> where the top level devices are added through the init_machine() path.
+> On Wed, Sep 30, 2020 at 05:45:27PM +0200, Rafael J. Wysocki wrote:
+> > On Fri, Sep 25, 2020 at 6:15 PM Christoph Hellwig <hch@lst.de> wrote:
+> > >
+> > > get_gendisk grabs a reference on the disk and file operation, so this
+> > > code will leak both of them while having absolutely no use for the
+> > > gendisk itself.
+> > >
+> > > This effectively reverts commit 2df83fa4bce421f
+> > > ("PM / Hibernate: Use get_gendisk to verify partition if resume_file is integer format")
+> > >
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> This commit does the optimization for all paths by simply moving the
-> fw_devlink_pause/resume() inside of_platform_default_populate().
->
-> Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> ---
->  drivers/of/platform.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> index 071f04da32c8..79972e49b539 100644
-> --- a/drivers/of/platform.c
-> +++ b/drivers/of/platform.c
-> @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
->                                  const struct of_dev_auxdata *lookup,
->                                  struct device *parent)
->  {
-> -       return of_platform_populate(root, of_default_bus_match_table, lookup,
-> -                                   parent);
-> +       int ret;
-> +
-> +       /*
-> +        * fw_devlink_pause/resume() are only safe to be called around top
-> +        * level device addition due to locking constraints.
-> +        */
-> +       if (!root)
-> +               fw_devlink_pause();
-> +
-> +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
-> +                                  parent);
+> Can you pick it up through the PM tree?  The big rework in this area
+> I have planned won't land before 5.11 anyway.
 
-of_platform_default_populate() vs. of_platform_populate() is just a
-different match table. I don't think the behavior should otherwise be
-different.
-
-There's also of_platform_probe() which has slightly different matching
-behavior. It should not behave differently either with respect to
-devlinks.
-
-Rob
+Will do, thanks!
