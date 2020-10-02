@@ -2,59 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 938B228127E
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 14:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9FA2814AA
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 16:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387989AbgJBMYa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 08:24:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:34560 "EHLO foss.arm.com"
+        id S2387688AbgJBOIJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 10:08:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50158 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387954AbgJBMY3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 2 Oct 2020 08:24:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17B6E106F;
-        Fri,  2 Oct 2020 05:24:29 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.50.3])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 535E73F70D;
-        Fri,  2 Oct 2020 05:24:27 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        Dietmar.Eggemann@arm.com, lukasz.luba@arm.com
-Subject: [PATCH 2/2] thermal: power allocator: estimate sustainable power only once
-Date:   Fri,  2 Oct 2020 13:24:16 +0100
-Message-Id: <20201002122416.13659-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201002122416.13659-1-lukasz.luba@arm.com>
-References: <20201002122416.13659-1-lukasz.luba@arm.com>
+        id S1726017AbgJBOIJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 2 Oct 2020 10:08:09 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3F14F207DE;
+        Fri,  2 Oct 2020 14:08:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601647688;
+        bh=+3VAWIyE736i8QJoJWyBkDl46THgUH5Y4ZYxc7rww6M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YS1CG4Oq4huZaIu8Ij+hCQ8yMeyS36kpM3ri/SpDmf7c/4ohOYavdzjqQINHrtMh8
+         S5TM/P/23W3g2UnzrPxSe2Cntf/zAVfCMhcH9eXkTdMJNNfMdIo/WYFPRCIjCth4PB
+         eR0N9LtyPPEpeKWJA/sR5JRvkpq+rlfyzILcDgr4=
+Received: by mail-ot1-f51.google.com with SMTP id m13so1437744otl.9;
+        Fri, 02 Oct 2020 07:08:08 -0700 (PDT)
+X-Gm-Message-State: AOAM531bQPWfd7wgP9QFVIN1VvpxAL30hBz5JwGPdvepdcwGWXdfPvu0
+        4Mu3d4ctwv3QVkGCP+HNiTLUxBF0u44Jwbp5lg==
+X-Google-Smtp-Source: ABdhPJyhESEM7l1n2tIx5F0cvgikaOZ2/i+MUqha3K8do3Q2vmEsuhRy0a+dFZdN8iCN+3dCIkrbCldSgjZJebzgVBg=
+X-Received: by 2002:a9d:7998:: with SMTP id h24mr1914471otm.192.1601647687409;
+ Fri, 02 Oct 2020 07:08:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
+ <20201001225952.3676755-1-saravanak@google.com>
+In-Reply-To: <20201001225952.3676755-1-saravanak@google.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 2 Oct 2020 09:07:55 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
+Message-ID: <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
+Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
+ init_machine() path
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Android Kernel Team <kernel-team@android.com>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sustainable power value might come from the Device Tree or can be
-estimated in run time. There is no need to estimate every time when the
-governor is called and temperature is high. Instead, store the estimated
-value and make it available via standard sysfs interface so it can be
-checked from the user-space.
+On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
+>
+> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
+> adding all top level devices") optimized the fwnode parsing when all top
+> level devices are added, it missed out optimizing this for platform
+> where the top level devices are added through the init_machine() path.
+>
+> This commit does the optimization for all paths by simply moving the
+> fw_devlink_pause/resume() inside of_platform_default_populate().
+>
+> Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> ---
+>  drivers/of/platform.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> index 071f04da32c8..79972e49b539 100644
+> --- a/drivers/of/platform.c
+> +++ b/drivers/of/platform.c
+> @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
+>                                  const struct of_dev_auxdata *lookup,
+>                                  struct device *parent)
+>  {
+> -       return of_platform_populate(root, of_default_bus_match_table, lookup,
+> -                                   parent);
+> +       int ret;
+> +
+> +       /*
+> +        * fw_devlink_pause/resume() are only safe to be called around top
+> +        * level device addition due to locking constraints.
+> +        */
+> +       if (!root)
+> +               fw_devlink_pause();
+> +
+> +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
+> +                                  parent);
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
- drivers/thermal/gov_power_allocator.c | 2 ++
- 1 file changed, 2 insertions(+)
+of_platform_default_populate() vs. of_platform_populate() is just a
+different match table. I don't think the behavior should otherwise be
+different.
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index f69fafe486a5..dd59085f38f5 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -204,6 +204,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 		estimate_pid_constants(tz, sustainable_power,
- 				       params->trip_switch_on, control_temp,
- 				       true);
-+		/* Do the estimation only once and make available in sysfs */
-+		tz->tzp->sustainable_power = sustainable_power;
- 	}
- 
- 	err = control_temp - tz->temperature;
--- 
-2.17.1
+There's also of_platform_probe() which has slightly different matching
+behavior. It should not behave differently either with respect to
+devlinks.
 
+Rob
