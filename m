@@ -2,65 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CCC281A50
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 19:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858D9281AA4
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Oct 2020 20:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387957AbgJBR7c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 13:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59108 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387789AbgJBR7c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 13:59:32 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652ADC0613E4
-        for <linux-pm@vger.kernel.org>; Fri,  2 Oct 2020 10:59:32 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id s19so1770883ybc.5
-        for <linux-pm@vger.kernel.org>; Fri, 02 Oct 2020 10:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vZbuayUw4nR5ldchYC0QJ2SKyNmd/sp/ZArDf0aVmf4=;
-        b=hxne4JB9HZja3FImgOTwwGft+D9UZ0uS9fK4OcJP2Eg1oroqmn/9modjXkPJGSlN8g
-         Lh5UDYM7CynmC7F+t8Uq5psnpU8Z5iPg+RgiXlsA6p/lD2mphiU75QAqHBKi1YSqj7XW
-         7LoAJgH6xJq1blMl4m/G5sIIkMci/wvcZrPRhucqEIygDXBzfFT+Qf7VHFgFAyQk/z+1
-         F/V36+u2ogFL7XMkvpu/ekSzZkW2RoA3QWTLoD2astGElGbvCRuXZLvLQNp8zSMbfqsI
-         izqQ+mlyGkYqerxmFose6Nqt7AAsAnO9detgWoYY7GHj8Az83ZD5RLrYOddI9P+0V/ml
-         IIMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vZbuayUw4nR5ldchYC0QJ2SKyNmd/sp/ZArDf0aVmf4=;
-        b=rmQP4I8i/UV3Sgs5s4E3IwiaPZqWHQQT66Gl5YJ21ltNbtSUex+NUdkFPOBmRAcR/w
-         ZX+r6b/XrJd4AIOaARkif5mGDQqHsXZHYCZDMJYpouSNCSMAJGWTrWYCAszjlxjh7rTc
-         UMmxfICZEzvFluiCMbP5LzgexWWBtNKRCgEjr/B+zcnw3jIB7kvg40VKzA6/NMZ6KbnI
-         hjWhBTKA1nKFznKkpxZ8nlQeqx87+QzZ/bLQ1AvC0ftKup6Awrwkc9D+65DNQ0k3hvh4
-         TF5EQjx9nNiYiTVjTLTU87eRAZ0d9xVQXxBZnQFRL+lNcdTXSQkJdK8gJu8OLCGqPqKV
-         Bp1A==
-X-Gm-Message-State: AOAM531oFFaC9fda9TaEYlq66VPSMmsOjsDChv3XKS6LQs+kXSaMGg9n
-        pLmTfR/k3Ej1nM7PGK4JA/Z3A0Fm4qhqrXSYuSx/Wg==
-X-Google-Smtp-Source: ABdhPJy+2uWxMGaMD27VX8hqKxgrKfNstiISBRAtvv2ZfenCYYbpD2QB2rzAxASzDDq7221cpxy+ivvqhR77p6L+E3Y=
-X-Received: by 2002:a05:6902:725:: with SMTP id l5mr4142164ybt.346.1601661571259;
- Fri, 02 Oct 2020 10:59:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com> <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
- <CAGETcx-tq446JQN0RpKhtyCXB+Y_PUePN_tBZsUmtpO7othm4g@mail.gmail.com> <20201002175423.GE3933@pendragon.ideasonboard.com>
-In-Reply-To: <20201002175423.GE3933@pendragon.ideasonboard.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 2 Oct 2020 10:58:55 -0700
-Message-ID: <CAGETcx-7nJaU6pDo_KL-nKmCaxv57C5aaXq-pvo4XiN=N0K5Jg@mail.gmail.com>
+        id S2387602AbgJBSLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Oct 2020 14:11:43 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:59866 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726017AbgJBSLm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 14:11:42 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 092IBSqr092465;
+        Fri, 2 Oct 2020 13:11:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1601662288;
+        bh=FrG+09mt+C6MwBdbdxNRK4ndGXEpqzZKrDi9Tb3hMr4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=idPX+SntM348a4zjFy3y23URBnUA3fN5DgNzf35MZqeH5/ImNtli4IFyIVy8s5rPX
+         QytTtST7OVYXmQvNkH/ullG5IdtdHa0O1WOR7qfmtkqZwqMD/vXrc5/6ug+1pA3YO0
+         zOJ1A43sA3T5jEszN2giQy6h4qOQGxBqyxCmlw30=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 092IBSj5031587
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 2 Oct 2020 13:11:28 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 2 Oct
+ 2020 13:11:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 2 Oct 2020 13:11:28 -0500
+Received: from [10.250.100.73] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 092IBN8W122280;
+        Fri, 2 Oct 2020 13:11:24 -0500
 Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
  init_machine() path
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+To:     Saravana Kannan <saravanak@google.com>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Peter Ujfalusi <peter.ujfalusi@ti.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
@@ -68,82 +53,160 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         Android Kernel Team <kernel-team@android.com>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
+ <20201001225952.3676755-1-saravanak@google.com>
+ <20201001231922.GG3722@pendragon.ideasonboard.com>
+ <17bdc3f0-d816-151a-fef2-88cd38fc8621@ti.com>
+ <e0ef8816-11ea-3a1a-cac6-14b9f6c92bcf@ti.com>
+ <CAGETcx-wkZZQyfnkc59e2ECg_kho-O_c2ms4OOtM4=-Hd125+Q@mail.gmail.com>
+From:   Grygorii Strashko <grygorii.strashko@ti.com>
+Message-ID: <65bfd5be-8a10-4575-41a5-94e2f4ca2729@ti.com>
+Date:   Fri, 2 Oct 2020 21:11:21 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAGETcx-wkZZQyfnkc59e2ECg_kho-O_c2ms4OOtM4=-Hd125+Q@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 2, 2020 at 10:55 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Saravana,
->
-> On Fri, Oct 02, 2020 at 10:51:51AM -0700, Saravana Kannan wrote:
-> > On Fri, Oct 2, 2020 at 7:08 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > > On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
-> > > > adding all top level devices") optimized the fwnode parsing when all top
-> > > > level devices are added, it missed out optimizing this for platform
-> > > > where the top level devices are added through the init_machine() path.
-> > > >
-> > > > This commit does the optimization for all paths by simply moving the
-> > > > fw_devlink_pause/resume() inside of_platform_default_populate().
-> > > >
-> > > > Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > > > ---
-> > > >  drivers/of/platform.c | 19 +++++++++++++++----
-> > > >  1 file changed, 15 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > > > index 071f04da32c8..79972e49b539 100644
-> > > > --- a/drivers/of/platform.c
-> > > > +++ b/drivers/of/platform.c
-> > > > @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
-> > > >                                  const struct of_dev_auxdata *lookup,
-> > > >                                  struct device *parent)
-> > > >  {
-> > > > -       return of_platform_populate(root, of_default_bus_match_table, lookup,
-> > > > -                                   parent);
-> > > > +       int ret;
-> > > > +
-> > > > +       /*
-> > > > +        * fw_devlink_pause/resume() are only safe to be called around top
-> > > > +        * level device addition due to locking constraints.
-> > > > +        */
-> > > > +       if (!root)
-> > > > +               fw_devlink_pause();
-> > > > +
-> > > > +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
-> > > > +                                  parent);
-> > >
-> > > of_platform_default_populate() vs. of_platform_populate() is just a
-> > > different match table. I don't think the behavior should otherwise be
-> > > different.
-> > >
-> > > There's also of_platform_probe() which has slightly different matching
-> > > behavior. It should not behave differently either with respect to
-> > > devlinks.
-> >
-> > So I'm trying to do this only when the top level devices are added for
-> > the first time. of_platform_default_populate() seems to be the most
-> > common path. For other cases, I think we just need to call
-> > fw_devlink_pause/resume() wherever the top level devices are added for
-> > the first time. As I said in the other email, we can't add
-> > fw_devlink_pause/resume() by default to of_platform_populate().
-> >
-> > Do you have other ideas for achieving "call fw_devlink_pause/resume()
-> > only when top level devices are added for the first time"?
->
-> I'm not an expert in this domain, but before investigating it, would you
-> be able to share a hack patch that implements this (in the most simple
-> way) to check if it actually fixes the delays I experience on my system
-> ?
 
-So I take it the patch I sent out didn't work for you? Can you tell me
-what machine/DT you are using?
 
--Saravana
+On 02/10/2020 20:48, Saravana Kannan wrote:
+> On Fri, Oct 2, 2020 at 8:03 AM 'Grygorii Strashko' via kernel-team
+> <kernel-team@android.com> wrote:
+>>
+>>
+>>
+>> On 02/10/2020 14:40, Grygorii Strashko wrote:
+>>>
+>>>
+>>> On 02/10/2020 02:19, Laurent Pinchart wrote:
+>>>> Hi Saravana,
+>>>>
+>>>> Thank you for the patch.
+>>>>
+>>>> On Thu, Oct 01, 2020 at 03:59:51PM -0700, Saravana Kannan wrote:
+>>>>> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
+>>>>> adding all top level devices") optimized the fwnode parsing when all top
+>>>>> level devices are added, it missed out optimizing this for platform
+>>>>> where the top level devices are added through the init_machine() path.
+>>>>>
+>>>>> This commit does the optimization for all paths by simply moving the
+>>>>> fw_devlink_pause/resume() inside of_platform_default_populate().
+>>>>
+>>>> Based on v5.9-rc5, before the patch:
+>>>>
+>>>> [    0.652887] cpuidle: using governor menu
+>>>> [   12.349476] No ATAGs?
+>>>>
+>>>> After the patch:
+>>>>
+>>>> [    0.650460] cpuidle: using governor menu
+>>>> [   12.262101] No ATAGs?
+>>>>
+>>>> :-(
+>>>
+>>> This is kinda expected :( because omap2 arch doesn't call of_platform_default_populate()
+>>>
+>>> Call path:
+>>> board-generic.c
+>>>    DT_MACHINE_START()
+>>>      .init_machine    = omap_generic_init,
+>>>
+>>>    omap_generic_init()
+>>>      pdata_quirks_init(omap_dt_match_table);
+>>>           of_platform_populate(NULL, omap_dt_match_table,
+>>>                    omap_auxdata_lookup, NULL);
+>>>
+>>> Other affected platforms
+>>> arm: mach-ux500
+>>> some mips
+>>> some powerpc
+>>>
+>>> there are also case when a lot of devices placed under bus node, in such case
+>>>    of_platform_populate() calls from bus drivers will also suffer from this issue.
+>>>
+>>> I think one option could be to add some parameter to _populate() or introduce new api.
+>>>
+>>> By the way, is there option to disable this feature at all?
+>>> Is there Kconfig option?
+>>> Is there any reasons why such complex and time consuming code added to the kernel and not implemented on DTC level?
+>>>
+>>>
+>>> Also, I've came with another diff, pls check.
+>>>
+>>> [    0.000000] Booting Linux on physical CPU 0x0
+>>> [    0.000000] Linux version 5.9.0-rc6-01791-g9acba6b38757-dirty (grygorii@grygorii-XPS-13-9370) (arm-linux-gnueabihf-gcc (GNU Toolcha0
+>>> [    0.000000] CPU: ARMv7 Processor [412fc0f2] revision 2 (ARMv7), cr=10c5387d
+>>> [    0.000000] CPU: div instructions available: patching division code
+>>> [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, PIPT instruction cache
+>>> [    0.000000] OF: fdt: Machine model: TI AM5718 IDK
+>>> ...
+>>> [    0.053443] cpuidle: using governor ladder
+>>> [    0.053470] cpuidle: using governor menu
+>>> [    0.089304] No ATAGs?
+>>> ...
+>>> [    3.092291] devtmpfs: mounted
+>>> [    3.095804] Freeing unused kernel memory: 1024K
+>>> [    3.100483] Run /sbin/init as init process
+>>>
+>>>
+>>>
+>>> ------ >< ---
+>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+>>> index 071f04da32c8..4521b26e7745 100644
+>>> --- a/drivers/of/platform.c
+>>> +++ b/drivers/of/platform.c
+>>> @@ -514,6 +514,12 @@ static const struct of_device_id reserved_mem_matches[] = {
+>>>           {}
+>>>    };
+>>>
+>>> +static int __init of_platform_fw_devlink_pause(void)
+>>> +{
+>>> +       fw_devlink_pause();
+>>> +}
+>>> +core_initcall(of_platform_fw_devlink_pause);
+>>> +
+>>>    static int __init of_platform_default_populate_init(void)
+>>>    {
+>>>           struct device_node *node;
+>>> @@ -538,9 +544,7 @@ static int __init of_platform_default_populate_init(void)
+>>>           }
+>>>
+>>>           /* Populate everything else. */
+>>> -       fw_devlink_pause();
+>>>           of_platform_default_populate(NULL, NULL, NULL);
+>>> -       fw_devlink_resume();
+>>>
+>>>           return 0;
+>>>    }
+>>> @@ -548,6 +552,7 @@ arch_initcall_sync(of_platform_default_populate_init);
+>>>
+>>>    static int __init of_platform_sync_state_init(void)
+>>>    {
+>>> +       fw_devlink_resume();
+>>
+>> ^ it seems has to be done earlier, like
+>> +static int __init of_platform_fw_devlink_resume(void)
+>> +{
+>> +       fw_devlink_resume();
+>> +       return 0;
+>> +}
+>> +device_initcall_sync(of_platform_fw_devlink_resume);
+> 
+> This will mean no device will probe until device_initcall_sync().
+> Unfortunately, I don't think we can make such a sweeping assumption.
+
+Could you answer below questions, pls?
+>>> By the way, is there option to disable this feature at all?
+>>> Is there Kconfig option?
+
+-- 
+Best regards,
+grygorii
