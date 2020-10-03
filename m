@@ -2,81 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4162826EC
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 23:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3082826EA
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 23:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbgJCVuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Oct 2020 17:50:55 -0400
-Received: from smtprelay0073.hostedemail.com ([216.40.44.73]:40334 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725913AbgJCVuz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Oct 2020 17:50:55 -0400
-X-Greylist: delayed 464 seconds by postgrey-1.27 at vger.kernel.org; Sat, 03 Oct 2020 17:50:55 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 7099F1800CFD7
-        for <linux-pm@vger.kernel.org>; Sat,  3 Oct 2020 21:43:12 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 40ABA100E7B43;
-        Sat,  3 Oct 2020 21:43:11 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1461:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2198:2199:2200:2393:2553:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3871:3872:4184:4321:5007:7901:7903:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12740:12760:12895:13069:13311:13357:13439:14180:14181:14659:14721:21060:21080:21451:21611:21627:21990:30054:30090:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: son82_5e02d3d271b0
-X-Filterd-Recvd-Size: 2434
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf17.hostedemail.com (Postfix) with ESMTPA;
-        Sat,  3 Oct 2020 21:43:10 +0000 (UTC)
-Message-ID: <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
+        id S1725929AbgJCVuc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Oct 2020 17:50:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56528 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725913AbgJCVuc (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 3 Oct 2020 17:50:32 -0400
+Received: from earth.universe (unknown [185.213.155.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D39B206C3;
+        Sat,  3 Oct 2020 21:50:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601761831;
+        bh=fW/MShrvVaeOh1J4dzKJiFbCTCe6vgKzdHkQwIvKw2g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VfjKT85tbuHd2Hl+EPSekpf88rrzirRQQhZD3p/ij9MSuWuLVD5kQnxL46665rsg7
+         jbHnmrwPa/cG7lUUni4m7evSKESzeV5dHfGB7LJFogvpeBsWmZSwYnEPLei1Vmf1mk
+         UcERQUrl0QMTsTNfz/4Rbh1pVlo4j4Kwa/Xt2HkM=
+Received: by earth.universe (Postfix, from userid 1000)
+        id 572133C0C87; Sat,  3 Oct 2020 23:50:29 +0200 (CEST)
+Date:   Sat, 3 Oct 2020 23:50:29 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Joe Perches <joe@perches.com>
+Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] test_power: add missing newlines when printing
  parameters by sysfs
-From:   Joe Perches <joe@perches.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Xiongfeng Wang <wangxiongfeng2@huawei.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 03 Oct 2020 14:43:09 -0700
-In-Reply-To: <20201003212336.5et7erdf6fihqscu@earth.universe>
+Message-ID: <20201003215029.jsugcgpgrmcmydr3@earth.universe>
 References: <1599199798-27804-1-git-send-email-wangxiongfeng2@huawei.com>
-         <20201003212336.5et7erdf6fihqscu@earth.universe>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+ <20201003212336.5et7erdf6fihqscu@earth.universe>
+ <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ly4wgne62jo6bhtn"
+Content-Disposition: inline
+In-Reply-To: <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 2020-10-03 at 23:23 +0200, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Fri, Sep 04, 2020 at 02:09:58PM +0800, Xiongfeng Wang wrote:
-> > When I cat some module parameters by sysfs, it displays as follows.
-> > It's better to add a newline for easy reading.
-[]
-> > root@syzkaller:~# cd /sys/module/test_power/parameters/
-> > root@syzkaller:/sys/module/test_power/parameters# cat ac_online
-> > onroot@syzkaller:/sys/module/test_power/parameters# cat battery_present
-> > trueroot@syzkaller:/sys/module/test_power/parameters# cat battery_health
-> > goodroot@syzkaller:/sys/module/test_power/parameters# cat battery_status
-> > dischargingroot@syzkaller:/sys/module/test_power/parameters# cat battery_technology
-> > LIONroot@syzkaller:/sys/module/test_power/parameters# cat usb_online
-> > onroot@syzkaller:/sys/module/test_power/parameters#
-> > 
-> > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> > ---
-> 
-> Thanks, queued.
-[]
-> > diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-[]
-> > @@ -353,6 +353,7 @@ static int param_set_ac_online(const char *key, const struct kernel_param *kp)
-> >  static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
-> >  {
-> >  	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
-> > +	strcat(buffer, "\n");
-> >  	return strlen(buffer);
-> >  }
 
-All of these would be better as sprintf(buffer, "%s\n", <whatever>)
-so the output is scanned just once instead of scanned three times.
+--ly4wgne62jo6bhtn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
+On Sat, Oct 03, 2020 at 02:43:09PM -0700, Joe Perches wrote:
+> On Sat, 2020-10-03 at 23:23 +0200, Sebastian Reichel wrote:
+> > On Fri, Sep 04, 2020 at 02:09:58PM +0800, Xiongfeng Wang wrote:
+> > > When I cat some module parameters by sysfs, it displays as follows.
+> > > It's better to add a newline for easy reading.
+> []
+> > > root@syzkaller:~# cd /sys/module/test_power/parameters/
+> > > root@syzkaller:/sys/module/test_power/parameters# cat ac_online
+> > > onroot@syzkaller:/sys/module/test_power/parameters# cat battery_prese=
+nt
+> > > trueroot@syzkaller:/sys/module/test_power/parameters# cat battery_hea=
+lth
+> > > goodroot@syzkaller:/sys/module/test_power/parameters# cat battery_sta=
+tus
+> > > dischargingroot@syzkaller:/sys/module/test_power/parameters# cat batt=
+ery_technology
+> > > LIONroot@syzkaller:/sys/module/test_power/parameters# cat usb_online
+> > > onroot@syzkaller:/sys/module/test_power/parameters#
+> > >=20
+> > > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
+> > > ---
+> >=20
+> > Thanks, queued.
+> []
+> > > diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply=
+/test_power.c
+> []
+> > > @@ -353,6 +353,7 @@ static int param_set_ac_online(const char *key, c=
+onst struct kernel_param *kp)
+> > >  static int param_get_ac_online(char *buffer, const struct kernel_par=
+am *kp)
+> > >  {
+> > >  	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
+> > > +	strcat(buffer, "\n");
+> > >  	return strlen(buffer);
+> > >  }
+>=20
+> All of these would be better as sprintf(buffer, "%s\n", <whatever>)
+> so the output is scanned just once instead of scanned three times.
+
+Agreed. Anybody willing to send a patch? :)
+
+-- Sebastian
+
+--ly4wgne62jo6bhtn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl948iIACgkQ2O7X88g7
++pqfHg/+LTGXjiz4dukxRGm15eNueBi4JiM/H06xmc2bd5Lk9IH2dB6cLjrcpk5f
+F123gNDhFIUPEnXzya64mqCUy2OmkUFijs6cXMOYgX7LPtIRBMjmiM7NRkOStpIg
+mn+XFesG8AhfOeZ0EX1pefbVRwjxrp2yJcOeKTtDSu4JNmdM3xT+IRSmi/fELJys
+ALoYqwtqr7jUKQAGCtnL9tv4sV4CqkqeayvKqnmB0amU6uXhQz0yawNsylhVAVW1
+1q3fy6c6qNEUls0Ykbac0RbbC6nWud1XoxuJLxjek5JQt9Od2sLyBYV6L/Ahnge/
+C6p2EWwMn81mUH5Xp50YhUxpGDwiAlREQgt18L9sbRr4qv7SUbuyiJHeNcjk1jps
+1fdjJiOIbNOcewnxeZZhaPeSDP6v5ORsM9bznOCBeIApHXor1LOgfvm381iR4x5g
+UqrlLtk9k4t/9UpEXfpTR2budlqlzVRRr0HNglC+vVnXxGVTykPEXAhVas08B3/p
+0gyNpd43/NSEzfmtJ54VEVRRFTxyxCfABq94vBOuCSVpgRwA4D+yYv/NL37qlnSk
+OTSP6iWKCiNEVHzA1HSZySt76NmvlLUiSJkrVvGTPlVQIk1+rw3MhpYHsoYJxDls
+sAZWEbVMN3epd/zrw/mw+Gd4YuD2W6sbCtqw3s4H7zTKJLqOjm8=
+=8CAB
+-----END PGP SIGNATURE-----
+
+--ly4wgne62jo6bhtn--
