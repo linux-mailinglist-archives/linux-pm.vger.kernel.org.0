@@ -2,174 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8E7281FA3
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 02:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ABB4282216
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 09:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725550AbgJCAOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Oct 2020 20:14:23 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:47802 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbgJCAOX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Oct 2020 20:14:23 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DE87A2A2;
-        Sat,  3 Oct 2020 02:14:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1601684060;
-        bh=+6oLaNXCzW10EOi7yZGKf53UByBP3OfCZ2DbymvFru4=;
+        id S1725793AbgJCHtH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Oct 2020 03:49:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49884 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725648AbgJCHtG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 3 Oct 2020 03:49:06 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CF12206CA;
+        Sat,  3 Oct 2020 07:49:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601711345;
+        bh=rSNbOsR9qrZbk/22kRR7H2mTyhHla1eb6pLRYw92C3A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bc+Deodasn0sCNZhaf6Gx6XbXjbyA7lfRaoFjKOxRjIEndIeT2xnvZAokcMbefTQw
-         OP9+oMRViNvXrrED+cG2VM92CfLmCZbm2aFhZAD3Wyigb0P4dwUvUhDrhDIY7727CE
-         Y+hgqcbTo6LIJe9vjNIbPBBkIdeb+0UBK1ua8qu0=
-Date:   Sat, 3 Oct 2020 03:13:42 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Grygorii Strashko <grygorii.strashko@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
+        b=Xpfo7j5Ogz+5FMLQE6JEcdCuZJLS220njFOGq0w4q/ezcS8/YUJxV/tVp00x1cRme
+         PeytJ+bYJeETsXVwvFCvNmLXIxzaEU/n9jv+Ho+tcc1DWNdFus5jjW+U0OJ02cZ/dL
+         cV4hpDQF2Gtg0pwq+PecAcI5R7GAWDWmhCugOA3g=
+Date:   Sat, 3 Oct 2020 09:49:01 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Lee Jones <lee.jones@linaro.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] of: platform: Batch fwnode parsing in the
- init_machine() path
-Message-ID: <20201003001342.GA1730@pendragon.ideasonboard.com>
-References: <CAGETcx8owDP_Bu4oNCyHEsME8XpKygxghm8+yNc2RyMA4wyjCA@mail.gmail.com>
- <20201001225952.3676755-1-saravanak@google.com>
- <CAL_JsqKOUkKBKyxPtZ+BFXPiOfm2uPXhgJPxKP=WS-qX6kSB0w@mail.gmail.com>
- <CAGETcx-tq446JQN0RpKhtyCXB+Y_PUePN_tBZsUmtpO7othm4g@mail.gmail.com>
- <20201002175423.GE3933@pendragon.ideasonboard.com>
- <CAGETcx-7nJaU6pDo_KL-nKmCaxv57C5aaXq-pvo4XiN=N0K5Jg@mail.gmail.com>
- <20201002182712.GF3933@pendragon.ideasonboard.com>
- <11018e7e-a6a1-2df6-5639-821a7c0cb68b@ti.com>
- <CAGETcx8DCiEJy-1PiHheyuuw3YBYfFh67MBcOwv4JEviXmsp3Q@mail.gmail.com>
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Another round of adding missing
+ 'additionalProperties'
+Message-ID: <20201003074901.GA109727@kroah.com>
+References: <20201002234143.3570746-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx8DCiEJy-1PiHheyuuw3YBYfFh67MBcOwv4JEviXmsp3Q@mail.gmail.com>
+In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Saravana,
-
-On Fri, Oct 02, 2020 at 12:56:30PM -0700, Saravana Kannan wrote:
-> On Fri, Oct 2, 2020 at 11:35 AM 'Grygorii Strashko' via kernel-team wrote:
-> > On 02/10/2020 21:27, Laurent Pinchart wrote:
-> > > On Fri, Oct 02, 2020 at 10:58:55AM -0700, Saravana Kannan wrote:
-> > >> On Fri, Oct 2, 2020 at 10:55 AM Laurent Pinchart wrote:
-> > >>> On Fri, Oct 02, 2020 at 10:51:51AM -0700, Saravana Kannan wrote:
-> > >>>> On Fri, Oct 2, 2020 at 7:08 AM Rob Herring <robh+dt@kernel.org> wrote:
-> > >>>>> On Thu, Oct 1, 2020 at 5:59 PM Saravana Kannan <saravanak@google.com> wrote:
-> > >>>>>>
-> > >>>>>> When commit 93d2e4322aa7 ("of: platform: Batch fwnode parsing when
-> > >>>>>> adding all top level devices") optimized the fwnode parsing when all top
-> > >>>>>> level devices are added, it missed out optimizing this for platform
-> > >>>>>> where the top level devices are added through the init_machine() path.
-> > >>>>>>
-> > >>>>>> This commit does the optimization for all paths by simply moving the
-> > >>>>>> fw_devlink_pause/resume() inside of_platform_default_populate().
-> > >>>>>>
-> > >>>>>> Reported-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> > >>>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > >>>>>> ---
-> > >>>>>>   drivers/of/platform.c | 19 +++++++++++++++----
-> > >>>>>>   1 file changed, 15 insertions(+), 4 deletions(-)
-> > >>>>>>
-> > >>>>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
-> > >>>>>> index 071f04da32c8..79972e49b539 100644
-> > >>>>>> --- a/drivers/of/platform.c
-> > >>>>>> +++ b/drivers/of/platform.c
-> > >>>>>> @@ -501,8 +501,21 @@ int of_platform_default_populate(struct device_node *root,
-> > >>>>>>                                   const struct of_dev_auxdata *lookup,
-> > >>>>>>                                   struct device *parent)
-> > >>>>>>   {
-> > >>>>>> -       return of_platform_populate(root, of_default_bus_match_table, lookup,
-> > >>>>>> -                                   parent);
-> > >>>>>> +       int ret;
-> > >>>>>> +
-> > >>>>>> +       /*
-> > >>>>>> +        * fw_devlink_pause/resume() are only safe to be called around top
-> > >>>>>> +        * level device addition due to locking constraints.
-> > >>>>>> +        */
-> > >>>>>> +       if (!root)
-> > >>>>>> +               fw_devlink_pause();
-> > >>>>>> +
-> > >>>>>> +       ret = of_platform_populate(root, of_default_bus_match_table, lookup,
-> > >>>>>> +                                  parent);
-> > >>>>>
-> > >>>>> of_platform_default_populate() vs. of_platform_populate() is just a
-> > >>>>> different match table. I don't think the behavior should otherwise be
-> > >>>>> different.
-> > >>>>>
-> > >>>>> There's also of_platform_probe() which has slightly different matching
-> > >>>>> behavior. It should not behave differently either with respect to
-> > >>>>> devlinks.
-> > >>>>
-> > >>>> So I'm trying to do this only when the top level devices are added for
-> > >>>> the first time. of_platform_default_populate() seems to be the most
-> > >>>> common path. For other cases, I think we just need to call
-> > >>>> fw_devlink_pause/resume() wherever the top level devices are added for
-> > >>>> the first time. As I said in the other email, we can't add
-> > >>>> fw_devlink_pause/resume() by default to of_platform_populate().
-> > >>>>
-> > >>>> Do you have other ideas for achieving "call fw_devlink_pause/resume()
-> > >>>> only when top level devices are added for the first time"?
-> > >>>
-> > >>> I'm not an expert in this domain, but before investigating it, would you
-> > >>> be able to share a hack patch that implements this (in the most simple
-> > >>> way) to check if it actually fixes the delays I experience on my system
-> > >>> ?
-> > >>
-> > >> So I take it the patch I sent out didn't work for you? Can you tell me
-> > >> what machine/DT you are using?
-> > >
-> > > I've replied to the patch:
-> > >
-> > > Based on v5.9-rc5, before the patch:
-> > >
-> > > [    0.652887] cpuidle: using governor menu
-> > > [   12.349476] No ATAGs?
-> > >
-> > > After the patch:
-> > >
-> > > [    0.650460] cpuidle: using governor menu
-> > > [   12.262101] No ATAGs?
-> > >
-> > > I'm using an AM57xx EVM, whose DT is not upstream, but it's essentially
-> > > a am57xx-beagle-x15-revb1.dts (it includes that DTS) with a few
-> > > additional nodes for GPIO keys, LCD panel, backlight and touchscreen.
-> > >
-> >
-> > hope you are receiving my mails as I've provided you with all required information already [1]
+On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
+> Another round of wack-a-mole. The json-schema default is additional
+> unknown properties are allowed, but for DT all properties should be
+> defined.
 > 
-> Laurent/Grygorii,
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Baolin Wang <baolin.wang7@gmail.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Cc: Jonathan Cameron <jic23@kernel.org>
+> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Cc: Lee Jones <lee.jones@linaro.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-clk@vger.kernel.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-iio@vger.kernel.org
+> Cc: openipmi-developer@lists.sourceforge.net
+> Cc: linux-leds@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: linux-rockchip@lists.infradead.org
+> Cc: linux-stm32@st-md-mailman.stormreply.com
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-pci@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-remoteproc@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 > 
-> Looks like I'm definitely missing emails. Sorry about the confusion.
-> 
-> I have some other urgent things on my plate right now. Is it okay if I
-> get to this in a day or two? In the end, we'll find a solution that
-> addresses most/all of the delay.
+> I'll take this thru the DT tree.
 
-No issue on my side.
+For USB:
 
-By the way, during initial investigations, I've traced code paths to
-figure out if there was a particular step that would consume a large
-amount of time, and found out that of_platform_populate() ends up
-executing devlink-related code that seems to have an O(n^3) complexity
-on the number of devices, with a few dozens of milliseconds for each
-iteration. That's a very bad complexity.
-
--- 
-Regards,
-
-Laurent Pinchart
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
