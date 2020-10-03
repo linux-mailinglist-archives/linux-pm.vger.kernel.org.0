@@ -2,122 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABB4282216
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 09:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB00A282230
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Oct 2020 09:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725793AbgJCHtH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Oct 2020 03:49:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49884 "EHLO mail.kernel.org"
+        id S1725765AbgJCHxy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Oct 2020 03:53:54 -0400
+Received: from mga14.intel.com ([192.55.52.115]:3419 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725648AbgJCHtG (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sat, 3 Oct 2020 03:49:06 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1CF12206CA;
-        Sat,  3 Oct 2020 07:49:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601711345;
-        bh=rSNbOsR9qrZbk/22kRR7H2mTyhHla1eb6pLRYw92C3A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xpfo7j5Ogz+5FMLQE6JEcdCuZJLS220njFOGq0w4q/ezcS8/YUJxV/tVp00x1cRme
-         PeytJ+bYJeETsXVwvFCvNmLXIxzaEU/n9jv+Ho+tcc1DWNdFus5jjW+U0OJ02cZ/dL
-         cV4hpDQF2Gtg0pwq+PecAcI5R7GAWDWmhCugOA3g=
-Date:   Sat, 3 Oct 2020 09:49:01 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Another round of adding missing
- 'additionalProperties'
-Message-ID: <20201003074901.GA109727@kroah.com>
-References: <20201002234143.3570746-1-robh@kernel.org>
+        id S1725648AbgJCHxy (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Sat, 3 Oct 2020 03:53:54 -0400
+IronPort-SDR: ukV+TEyMxgPUEI5IbokHJSdp+/vejZ0yGGE7Y5b2fab2n+wybhnfxr9BEJotPX9ogtt8rI3sf6
+ QSuYpXV3EXTQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9762"; a="162410325"
+X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
+   d="scan'208";a="162410325"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2020 00:53:53 -0700
+IronPort-SDR: JMleUwxOkpcoo0vZ/ScUsH/PvUxGUrXYu4GXgZn6XjSlLTHsw7IY20EnNXkxm9VaJ3HSTscE+c
+ jhrwSwFIJMuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,330,1596524400"; 
+   d="scan'208";a="340253269"
+Received: from lkp-server02.sh.intel.com (HELO 404f47266ee4) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Oct 2020 00:53:51 -0700
+Received: from kbuild by 404f47266ee4 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kOcMY-0000JB-Ga; Sat, 03 Oct 2020 07:53:50 +0000
+Date:   Sat, 03 Oct 2020 15:52:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 560fc9ff45156590549fb92f9383b3412fb9e376
+Message-ID: <5f782dd4.5ABhydDaWAYy5v9u%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201002234143.3570746-1-robh@kernel.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 02, 2020 at 06:41:43PM -0500, Rob Herring wrote:
-> Another round of wack-a-mole. The json-schema default is additional
-> unknown properties are allowed, but for DT all properties should be
-> defined.
-> 
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Baolin Wang <baolin.wang7@gmail.com>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Cc: Lee Jones <lee.jones@linaro.org>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Liam Girdwood <lgirdwood@gmail.com>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-iio@vger.kernel.org
-> Cc: openipmi-developer@lists.sourceforge.net
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: linux-rockchip@lists.infradead.org
-> Cc: linux-stm32@st-md-mailman.stormreply.com
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: linux-pci@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-remoteproc@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> 
-> I'll take this thru the DT tree.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 560fc9ff45156590549fb92f9383b3412fb9e376  Merge branch 'acpi-tools' into bleeding-edge
 
-For USB:
+elapsed time: 722m
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+configs tested: 95
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         s3c2410_defconfig
+arm                           viper_defconfig
+arm                            zeus_defconfig
+powerpc                     tqm8555_defconfig
+sh                           se7343_defconfig
+powerpc                        cell_defconfig
+m68k                        stmark2_defconfig
+arm                       omap2plus_defconfig
+sh                          rsk7264_defconfig
+mips                        bcm47xx_defconfig
+powerpc                 canyonlands_defconfig
+arm                        multi_v7_defconfig
+powerpc                     tqm8541_defconfig
+m68k                             alldefconfig
+powerpc                 mpc832x_mds_defconfig
+arm                            mmp2_defconfig
+mips                            gpr_defconfig
+powerpc                      ppc44x_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20201002
+i386                 randconfig-a005-20201002
+i386                 randconfig-a001-20201002
+i386                 randconfig-a004-20201002
+i386                 randconfig-a003-20201002
+i386                 randconfig-a002-20201002
+i386                 randconfig-a014-20201002
+i386                 randconfig-a013-20201002
+i386                 randconfig-a015-20201002
+i386                 randconfig-a016-20201002
+i386                 randconfig-a011-20201002
+i386                 randconfig-a012-20201002
+x86_64               randconfig-a004-20201002
+x86_64               randconfig-a001-20201002
+x86_64               randconfig-a002-20201002
+x86_64               randconfig-a005-20201002
+x86_64               randconfig-a003-20201002
+x86_64               randconfig-a006-20201002
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a012-20201002
+x86_64               randconfig-a015-20201002
+x86_64               randconfig-a014-20201002
+x86_64               randconfig-a013-20201002
+x86_64               randconfig-a011-20201002
+x86_64               randconfig-a016-20201002
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
