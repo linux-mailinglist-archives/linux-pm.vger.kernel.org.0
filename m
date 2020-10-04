@@ -2,137 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AACDF282E12
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 00:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3537C282E19
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 00:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgJDWQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Oct 2020 18:16:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726431AbgJDWQs (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 4 Oct 2020 18:16:48 -0400
-Received: from earth.universe (unknown [185.213.155.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D5EA3205CB;
-        Sun,  4 Oct 2020 22:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601849808;
-        bh=NBtE/81jZQ0RhL5a24FlrAYkRmb7yL18m82kiAglvQM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DfcNmrv3NW+V1zb3qDiCB+qk0ZoPRl6J8tjThoIABJK2c7DDyB8jNRzXo33CjJ7WD
-         nmq4zqGLQev/dLV54ieD6Xr93uMBCtx2eHvwJBLotBz+0Y/bSGMhQYN4MpCTUwoPCk
-         Ym0Dq8Yq0xvpYVpOg1PN1Wglv0M65+Aa+J+bEiSk=
-Received: by earth.universe (Postfix, from userid 1000)
-        id DE5003C0C87; Mon,  5 Oct 2020 00:16:45 +0200 (CEST)
-Date:   Mon, 5 Oct 2020 00:16:45 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] test_power: add missing newlines when printing
- parameters by sysfs
-Message-ID: <20201004221645.nyaf7jhur4jixo6n@earth.universe>
-References: <1599199798-27804-1-git-send-email-wangxiongfeng2@huawei.com>
- <20201003212336.5et7erdf6fihqscu@earth.universe>
- <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
- <20201003215029.jsugcgpgrmcmydr3@earth.universe>
- <9822843f764520e1076a92fd9120294aa393a085.camel@perches.com>
+        id S1725848AbgJDW3u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Oct 2020 18:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725828AbgJDW3u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Oct 2020 18:29:50 -0400
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C638EC0613CE;
+        Sun,  4 Oct 2020 15:29:49 -0700 (PDT)
+Received: by mail-ed1-x541.google.com with SMTP id l16so140903eds.3;
+        Sun, 04 Oct 2020 15:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4yLKaYo4XIK+RyZ/mSCyoM9p4n3zdL/L+O3joJQSGto=;
+        b=YRtuiS9rvOcBGoaoqnpcWDVgAk353mdnXOiylTkQdU15hKTBdGDIHxv32WdRayqybZ
+         J8GpATybGHzNpC51ohxXRRGjBNr20GMsr3/3cle4rVC2xvCiYxwG3jRc61xYeEx79WVH
+         /lIw24YPRp+u+YiDJPVG9aOucwWxGkb3No+vHqENGT6x6lYYasGYghEKd44gxZg5Qsz2
+         FljsM1zCFneuCILbSeX7WovF6YBDJt0Q52upXMOVZcPYDcH1MMnT/Z5QNlZVNoo4C7LH
+         3YiyUgFuzHO5yeRON1GnM0+EIS2GQBEnT73kC0dCTv4cPMMhS+ZpRmcu5vzLHh0J67Nt
+         4jdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4yLKaYo4XIK+RyZ/mSCyoM9p4n3zdL/L+O3joJQSGto=;
+        b=Vpvjzntch0locr6WRDQekywdwHQpKczCzfJ0aRMqEyo8R3chfMTUrq9awyh4pZStDf
+         pzMLH9N3es9nb5vmnqk1qWpO0Fas8U2reHCj91EY/eayHY+xgkfp5DRe54FndLaav0L/
+         ZtWvCi1yIRdEa8ZUiJrPM7zxLs/wPAukgRZe5EstD4mao4a36WbICGkSfIroPBR27+TC
+         c8LU0BMNl7ubpfuH+gE9jN3vfj7ooOLy1TGwmCG9ibvjJn42uHwc0AgUUtdt4FaSm2vH
+         4In4IZ+1/awD25/lDHKwlg7NUwNgHAWkPn59dsezJ/LIfKzSvcTGQbpHIuFbHsqNMURN
+         3MRA==
+X-Gm-Message-State: AOAM532XPQNBDadP3VN9cLldL5YgQYxcJoHNZ/aad9sSE9UWTBXzyj7y
+        J+8tjrshnuooPgg7ogMrr4k=
+X-Google-Smtp-Source: ABdhPJwFFF0iaQdGUKCMMoq3Gx7+W1mqfUYpNMrfBaWa6+9xcUWUYabVHxIysevlHI/XN4f67UABYw==
+X-Received: by 2002:a05:6402:6d3:: with SMTP id n19mr13809009edy.381.1601850587034;
+        Sun, 04 Oct 2020 15:29:47 -0700 (PDT)
+Received: from pce.localnet (host-79-12-92-76.retail.telecomitalia.it. [79.12.92.76])
+        by smtp.gmail.com with ESMTPSA id o13sm4191055ejr.120.2020.10.04.15.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Oct 2020 15:29:46 -0700 (PDT)
+From:   Elia Devito <eliadevito@gmail.com>
+To:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Mark Pearson <mpearson@lenovo.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Benjamin Berg <bberg@redhat.com>, linux-pm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>
+Subject: Re: [RFC] Documentation: Add documentation for new performance_profile sysfs class
+Date:   Mon, 05 Oct 2020 00:29:44 +0200
+Message-ID: <2051253.irdbgypaU6@pce>
+In-Reply-To: <20201003131938.9426-2-hdegoede@redhat.com>
+References: <20201003131938.9426-1-hdegoede@redhat.com> <20201003131938.9426-2-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vr4whwmim25ljj7f"
-Content-Disposition: inline
-In-Reply-To: <9822843f764520e1076a92fd9120294aa393a085.camel@perches.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Hans,
 
---vr4whwmim25ljj7f
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2020-10-03 9:19 a.m., Hans de Goede wrote:
+> On modern systems CPU/GPU/... performance is often dynamically configurable
+> in the form of e.g. variable clock-speeds and TPD. The performance is often
+> automatically adjusted to the load by some automatic-mechanism (which may
+> very well live outside the kernel).
+>
+> These auto performance-adjustment mechanisms often can be configured with
+> one of several performance-profiles, with either a bias towards low-power
+> consumption (and cool and quiet) or towards performance (and higher power
+> consumption and thermals).
+>
+> Introduce a new performance_profile class/sysfs API which offers a generic
+> API for selecting the performance-profile of these automatic-mechanisms.
+>
+> Cc: Mark Pearson <markpearson@lenovo.com>
+> Cc: Elia Devito <eliadevito@gmail.com>
+> Cc: Bastien Nocera <hadess@hadess.net>
+> Cc: Benjamin Berg <bberg@redhat.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-acpi@vger.kernel.org
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+> .../testing/sysfs-class-performance_profile   | 104 ++++++++++++++++++
+> 1 file changed, 104 insertions(+)
+> create mode 100644
+> Documentation/ABI/testing/sysfs-class-performance_profile
+>
+> diff --git a/Documentation/ABI/testing/sysfs-class-performance_profile
+> b/Documentation/ABI/testing/sysfs-class-performance_profile new file mode
+> 100644
+> index 000000000000..9c67cae39600
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-class-performance_profile
+> @@ -0,0 +1,104 @@
+> +Performance-profile selection (e.g.
+> /sys/class/performance_profile/thinkpad_acpi/) +
+> +On modern systems CPU/GPU/... performance is often dynamically configurable
+> +in the form of e.g. variable clock-speeds and TPD. The performance is
+> often +automatically adjusted to the load by some automatic-mechanism
+> (which may +very well live outside the kernel).
+> +
+> +These auto performance-adjustment mechanisms often can be configured with
+> +one of several performance-profiles, with either a bias towards low-power
+> +consumption (and cool and quiet) or towards performance (and higher power
+> +consumption and thermals).
+> +
+> +The purpose of the performance_profile class is to offer a generic sysfs
+> +API for selecting the performance-profile of these automatic-mechanisms.
+> +
+> +Note that this API is only for selecting the performance-profile, it is
+> +NOT a goal of this API to allow monitoring the resulting performance
+> +characteristics. Monitoring performance is best done with device/vendor
+> +specific tools such as e.g. turbostat.
+> +
+> +Specifically when selecting a high-performance profile the actual achieved
+> +performance may be limited by various factors such as: the heat generated
+> by +other components, room temperature, free air flow at the bottom of a
+> laptop, +etc. It is explicitly NOT a goal of this API to let userspace know
+> about +any sub-optimal conditions which are impeding reaching the requested
+> +performance level.
+> +
+> +Since numbers are a rather meaningless way to describe performance-profiles
+> +this API uses strings to describe the various profiles. To make sure that
+> +userspace gets a consistent experience when using this API this API
+> document +defines a fixed set of profile-names. Drivers *must* map their
+> internal +profile representation/names onto this fixed set.
+> +
+> +If for some reason there is no good match when mapping then a new
+> profile-name +may be added. Drivers which wish to introduce new
+> profile-names must: +1. Have very good reasons to do so.
+> +2. Add the new profile-name to this document, so that future drivers which
+> also +   have a similar problem can use the same new. Usually new
+> profile-names will +   be added to the "extra profile-names" section of
+> this document. But in some +   cases the set of standard profile-names may
+> be extended.
+> +
+> +What:          /sys/class/performance_profile/<device>/
+available_profiles
+> +Date:          October 2020
+> +Contact:       Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +               Reading this file gives a space separated list of profiles
+> +               supported for this device.
+> +
+> +               Drivers must use the following standard profile-names 
+whenever
+> +               possible:
+> +
+> +               low-power:              Emphasises low power consumption
+> +                                       (and also cool and 
+quiet)
+> +               balanced-low-power:     Balances between low power 
+consumption
+> +                                       and performance with a 
+slight bias
+> +                                       towards low power
+> +               balanced:               Balance between low power 
+consumption
+> +                                       and performance
+> +               balanced-performance:   Balances between performance and 
+low
+> +                                       power consumption with 
+a slight bias
+> +                                       towards performance
+> +               performance:            Emphasises performance 
+(and may lead to
+> +                                       higher temperatures and 
+fan speeds)
+> +
+> +               Userspace may expect drivers to offer at least several of 
+these
+> +               standard profile-names! If none of the above are a good 
+match
+> +               for some of the drivers profiles, then drivers may use 
+one of
+> +               these extra profile-names:
+> +               <reserved for future use>
+> +
+> +What:          /sys/class/performance_profile/<device>/current_profile
+> +Date:          October 2020
+> +Contact:       Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +               Reading this file gives the current selected profile for 
+this
+> +               device. Writing this file with one of the strings from
+> +               available_profiles changes the profile to the new value.
+> +
+> +               Reading this file may also return "custom". This is 
+intended for
+> +               drivers which have and export multiple knobs influencing
+> +               performance. Such drivers may very well still want to 
+offer a
+> +               set of profiles for easy of use and to be able to offer a
+> +               consistent standard API (this API) to userspace for 
+configuring
+> +               their performance. The "custom" value is intended for 
+when a
+> +               user has directly configured the knobs (through e.g. some
+> +               advanced control-panel for a GPU) and the knob values do 
+not
+> +               match any of the presets represented by the
+> +               performance-profiles. In this case writing this file will
+> +               override the modifications and restore the selected 
+presets.
+> +
+> +What:          /sys/class/performance_profile/<device>/type
+> +Date:          October 2020
+> +Contact:       Hans de Goede <hdegoede@redhat.com>
+> +Description:
+> +               Performance-profiles may be system-wide, or for a specific
+> +               device (e.g. CPU / GPU). System-wide profiles are 
+typically
+> +               used on devices where where a single cooling solution is
+> +               shared between all components, such as laptops and NUCs.
+> +
+> +               Reading this file indicates the type of the device for 
+which
+> +               the thermal-profile is being configured.
+> +
+> +               Valid values: "system"
+> +               Reserved for future use values: "cpu", "gpu"
+> --
+> 2.28.0
 
-Hi,
+This looks good to me, the only consideration I have is that in my opinion the
+quiet profile and the cool profile should not necessarily match the low-power
+state because the quiet profile could cause thermal throttling without
+benefiting consumption, instead the cool profile (with the fans almost
+always on) would lead to an unnecessary increase in noise.
 
-On Sat, Oct 03, 2020 at 02:55:41PM -0700, Joe Perches wrote:
-> On Sat, 2020-10-03 at 23:50 +0200, Sebastian Reichel wrote:
-> > Hi,
-> >=20
-> > On Sat, Oct 03, 2020 at 02:43:09PM -0700, Joe Perches wrote:
-> > > On Sat, 2020-10-03 at 23:23 +0200, Sebastian Reichel wrote:
-> > > > On Fri, Sep 04, 2020 at 02:09:58PM +0800, Xiongfeng Wang wrote:
-> > > > > When I cat some module parameters by sysfs, it displays as follow=
-s.
-> > > > > It's better to add a newline for easy reading.
-> > > []
-> > > > > root@syzkaller:~# cd /sys/module/test_power/parameters/
-> > > > > root@syzkaller:/sys/module/test_power/parameters# cat ac_online
-> > > > > onroot@syzkaller:/sys/module/test_power/parameters# cat battery_p=
-resent
-> > > > > trueroot@syzkaller:/sys/module/test_power/parameters# cat battery=
-_health
-> > > > > goodroot@syzkaller:/sys/module/test_power/parameters# cat battery=
-_status
-> > > > > dischargingroot@syzkaller:/sys/module/test_power/parameters# cat =
-battery_technology
-> > > > > LIONroot@syzkaller:/sys/module/test_power/parameters# cat usb_onl=
-ine
-> > > > > onroot@syzkaller:/sys/module/test_power/parameters#
-> > > > >=20
-> > > > > Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
-> > > > > ---
-> > > >=20
-> > > > Thanks, queued.
-> > > []
-> > > > > diff --git a/drivers/power/supply/test_power.c b/drivers/power/su=
-pply/test_power.c
-> > > []
-> > > > > @@ -353,6 +353,7 @@ static int param_set_ac_online(const char *ke=
-y, const struct kernel_param *kp)
-> > > > >  static int param_get_ac_online(char *buffer, const struct kernel=
-_param *kp)
-> > > > >  {
-> > > > >  	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown")=
-);
-> > > > > +	strcat(buffer, "\n");
-> > > > >  	return strlen(buffer);
-> > > > >  }
-> > >=20
-> > > All of these would be better as sprintf(buffer, "%s\n", <whatever>)
-> > > so the output is scanned just once instead of scanned three times.
-> >=20
-> > Agreed. Anybody willing to send a patch? :)
->=20
-> Well, you _are_ the maintainer. Why not you?
+another question is the notebooks that offer both quiet and cool profile,
+which profile should be associated as low power?
 
-I prefer to have patches reviewed and when I sent out patches for
-my own subsystem I often do not get any reviews at all. From my
-experience people often like to increase their patch count anyways
-(e.g. because their employer wanting to see high patch count), so
-asking others to write the patch is an easy workaround for me. I
-then only do the leftovers.
+wouldn't it be better not to associate any of the 2 profiles with low-power
+status and eventually expose them through another API maybe setting to
+"custom" the current_profile value as you proposed for GPU knobs?
 
--- Sebastian
+otherwise it seems to me an excellent solution
 
---vr4whwmim25ljj7f
-Content-Type: application/pgp-signature; name="signature.asc"
+Elia
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl96SccACgkQ2O7X88g7
-+prN/hAAhvjucLG5mdmznzb+0h8DEKNMLC1kj95NZTvydXpmKbgWVbZbEe8vlKaG
-cd783d+/CZxnrOWUQ0G+vuAHDzfySno/rkJX3hIcCQUM4lTPG7gMwnjEEtGPB8FO
-oFWuMTDnKklpjgELckUg8hkZdA28HUr/QxMSBYI5sR+yJwqjGGV2ISE8LWJ+iTO+
-5gCgdeSLG1+jIqFE2CMFXNo5Hy263Zj5+pz+JoNgj06NzRlH72t52VNZzMvOA+Ku
-t+rHG+us35JlCbeYjJjeUOaSv3UwBS5/0LmfvXhcU+MDPMZQgFh5GDp1yfSSNF7M
-VSu9gGHNrxm1zzsjQXYy/5l4oeuJuMHhT8rIX5bOIcrOGtilSPMn3jAba+lMEDy3
-r/7B5sC0PWOx6k/NjJlVo4Qo/JKj1i6I9QIBqR0oxuJZW6KZcRccMFaf+ujvzz8B
-+vUxiM89fEM763dOc+aj5BpbcaT4FrFtiLYg11uV6VShmQKpcuwiUj+bbXhcckC0
-7p5UfeMLADdkzH/7Q7fextnZ2yoF6THNYQ1Ci3Vn/SSVTpAuKIFuQoqSGoXrnTiX
-vBi5+01TjXf8yNXjSjS8GcLZeaZcW6nnckZ2+YT2CNZzHq3xC70+0GIP7bBSRSso
-oEgDs8AsJTMxiAqtooDl2EwHLhh+dF33RDbOT+PZ5eyzCh4uZzo=
-=yD3h
------END PGP SIGNATURE-----
-
---vr4whwmim25ljj7f--
