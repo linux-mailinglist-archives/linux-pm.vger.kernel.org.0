@@ -2,126 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC292840E1
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 22:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC7C2840ED
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 22:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729769AbgJEUdN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 16:33:13 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38591 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727262AbgJEUdL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 16:33:11 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n18so3235090wrs.5;
-        Mon, 05 Oct 2020 13:33:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ARrZ6TB7yXMqpP/+XXhswWetXRSqYRU5CXxzWSIwqA0=;
-        b=RnCaTAeLda2g7G5fRy5G6tkS7At6V0s/RegwR9VguJioedEtQIJdw6BNLKEK/gUGRD
-         AkEB4uPGf3i+LyEsLWBdPb5/DcD/BL7glr7/Kqr+DhNf5J4HVWo+7n/mUse3ZY7S8gLr
-         SHGy1GGZG4l1bH3MKOMzvgNvPk3l3MBNeR7Y1bb6OaZSo1FyocBeFTq/+g75HfHcPlAJ
-         YK98UWQ/irYlWEDTjRo3FB2draI8v8Bup47C8o/AQoRtLLLd80xga6C8A5u2LgihGqQU
-         qGI2giLr060foyPTuSrxFAiFXpeO56x9qKG9Y0Sv744sQiomDaBHzfaDshfnctRB0WHO
-         JAyA==
-X-Gm-Message-State: AOAM530bXKyLIBGo4JH1pO7bUr+EogsTQovm/K5mNjfX4q1FlBuPhS96
-        KJez1DDXkXTZaW5NrlElQGo=
-X-Google-Smtp-Source: ABdhPJweyRYGmXLqO/tcc/k2HRzuAg/v1oLgLOtbvTUusAAWSCQYB/uOgoLBn7Xz9zdrfu5geKiRqw==
-X-Received: by 2002:a5d:4682:: with SMTP id u2mr1245871wrq.254.1601929986334;
-        Mon, 05 Oct 2020 13:33:06 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.194])
-        by smtp.googlemail.com with ESMTPSA id c14sm1265048wrm.64.2020.10.05.13.33.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Oct 2020 13:33:05 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 22:33:00 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 2/4] dt-bindings: Use 'additionalProperties' instead of
- 'unevaluatedProperties'
-Message-ID: <20201005203300.GB23742@kozik-lap>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-3-robh@kernel.org>
+        id S1727282AbgJEUdv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 16:33:51 -0400
+Received: from static-213-198-238-194.adsl.eunet.rs ([213.198.238.194]:51502
+        "EHLO fx.arvanta.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727262AbgJEUdv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 16:33:51 -0400
+Received: from arya.arvanta.net (arya.arvanta.net [10.5.1.6])
+        by fx.arvanta.net (Postfix) with ESMTP id 0379C1C136;
+        Mon,  5 Oct 2020 22:33:49 +0200 (CEST)
+Date:   Mon, 5 Oct 2020 22:33:49 +0200
+From:   Milan =?utf-8?Q?P=2E_Stani=C4=87?= <mps@arvanta.net>
+To:     Vicente Bergas <vicencb@gmail.com>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
+        kernel@collabora.com,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Subject: Re: [PATCH] power: supply: sbs-battery: chromebook workaround for PEC
+Message-ID: <20201005203349.GA23644@arya.arvanta.net>
+References: <20201004224601.420786-1-sebastian.reichel@collabora.com>
+ <9b4f62f2-0bf6-41bb-a946-bd94c75168b8@gmail.com>
+ <20201005184759.GA15677@arya.arvanta.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-3-robh@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20201005184759.GA15677@arya.arvanta.net>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 05, 2020 at 01:38:28PM -0500, Rob Herring wrote:
-> In cases where we don't reference another schema, 'additionalProperties'
-> can be used instead. This is preferred for now as 'unevaluatedProperties'
-> support isn't implemented yet.
+On Mon, 2020-10-05 at 20:48, Milan P. Stanić wrote:
+> Hi all,
 > 
-> In a few cases, this means adding some missing property definitions of
-> which most are for SPI bus properties. 'unevaluatedProperties' is not going
-> to work for the SPI bus properties anyways as they are evaluated from the
-> parent node, not the SPI child node.
+> On Mon, 2020-10-05 at 19:53, Vicente Bergas wrote:
+> > On Monday, October 5, 2020 12:46:01 AM CEST, Sebastian Reichel wrote:
+> > > Looks like the I2C tunnel implementation from Chromebook's
+> > > embedded controller does not handle PEC correctly. Fix this
+> > > by disabling PEC for batteries behind those I2C tunnels as
+> > > a workaround.
+> > > 
+> > > Reported-by: "Milan P. Stanić" <mps@arvanta.net>
+> > > Reported-by: Vicente Bergas <vicencb@gmail.com>
+> > > CC: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> > > Fixes: 7222bd603dd2 ("power: supply: sbs-battery: add PEC support")
+> > > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > > ---
+> > > Hi,
+> > > 
+> > > This is compile-tested only, since I do not have a chromebook at
+> > > hand. Please test if this fixes your issue.
+> > 
+> > Hi Sebastian,
+> > tested on rk3399-gru-kevin with 5.9.0-rc8 and now the CPU usage is 0 when
+> > idling.
+> > dmesg reports:
+> > [    1.370249] sbs-battery 9-000b: Disabling PEC because of broken Cros-EC
+> > implementation
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Also I tested on same board and same kernel version and can confirm
+> this.
 
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-Best regards,
-Krzysztof
+And I forgot to mention that I opened bug report. sorry.
+https://bugzilla.kernel.org/show_bug.cgi?id=209409
+  
+> > So,
+> > Tested-by: Vicente Bergas <vicencb@gmail.com>
+> > 
+> > Thanks,
+> >  Vicente.
+> > 
+> > > -- Sebastian
+> > > ---
+> > >  drivers/power/supply/sbs-battery.c | 6 ++++++
+> > >  1 file changed, 6 insertions(+)
+> > > 
+> > > diff --git a/drivers/power/supply/sbs-battery.c
+> > > b/drivers/power/supply/sbs-battery.c
+> > > index 13192cbcce71..b6a538ebb378 100644
+> > > --- a/drivers/power/supply/sbs-battery.c
+> > > +++ b/drivers/power/supply/sbs-battery.c
+> > > @@ -279,6 +279,12 @@ static int sbs_update_presence(struct sbs_info
+> > > *chip, bool is_present)
+> > >  	else
+> > >  		client->flags &= ~I2C_CLIENT_PEC;
+> > >   +	if (of_device_is_compatible(client->dev.parent->of_node,
+> > > "google,cros-ec-i2c-tunnel")
+> > > +	    && client->flags & I2C_CLIENT_PEC) {
+> > > +		dev_info(&client->dev, "Disabling PEC because of broken Cros-EC
+> > > implementation\n");
+> > > +		client->flags &= ~I2C_CLIENT_PEC;
+> > > +	}
+> > > +
+> > >  	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
+> > >  		"enabled" : "disabled");
+> > 
