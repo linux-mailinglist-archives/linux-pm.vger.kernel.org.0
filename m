@@ -2,108 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9006628312B
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 09:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7F828312D
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 09:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725906AbgJEH4c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 03:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
+        id S1725942AbgJEH4h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 03:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbgJEH4c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 03:56:32 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6E2C0613A6
-        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 00:56:32 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id t7so5532177pjd.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 00:56:32 -0700 (PDT)
+        with ESMTP id S1725931AbgJEH4f (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 03:56:35 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C293BC0613A6
+        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 00:56:35 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id e10so5736772pfj.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 00:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mH7edDuC95rp9652QxLQjfjq1vuOkDjmbsdc1O4M4ZE=;
-        b=Jc0yCaI25EikNxoWQ86qLK6HcjzlcKYXU1ECKBbrnShwjgBzlfZfJPa9DWq9OQqINq
-         vfXqCT5cYjwfNCfF4Eqkx3RgHYD8idImlfDRh4pXhd/Fg0L5p6QqMwl3GMt9TgNy5mS6
-         ZlbeKRq5Qor3ZPnuytLVn10+ArFizYmUXCC20NoFQcL5JBqlIsvxMPXXvOHWtAsTNWj4
-         ps678/iwYAf7+yVnXpEWXDYpYfQRUEmsKSYA4tOrXJ/cC5ayLI3DwYuPS+c9pmZNdk7R
-         uBLXhA3mQxSxfSWOdhtejzekgCaFd8Q1e6npNiBuK878JWFCMSkNdMGJbG2uS7+Jqb32
-         vCUA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=rXevW3gspEqrbAGRsrOKhUql5m0Aoc1FPHPDeVmOGB0=;
+        b=knhU6mtRL+hMoixoMeE5z6HzTd6SQof8JiUtyCx1XosRHhlL0c5Fz2lzDh4WpWsrk+
+         hhechBFPkwZa5oUoTuNCk4fDbEHOhfApb1sM5HdWmiR7WGcpEyve7xw+xthFrHWpIlWY
+         7jwFPjZUBz5WLZSHSrHVghSOzeVDsrEKwfCuPC5qzZqJPuoUJVUWy2w+nNP/v9XUjMEO
+         3xMoRn2/2M4RImjukHEzwRRkIpyDFlL3aRcNBwskrq1PY2KtAOq23EWSlOxHVtiIU/EU
+         K/Xz4W1P5xE6xOiVB40EnelI92yZl5YTdr8EcgYb5R6xSYQRBmhejpJT/V3cBs02XCVT
+         BGZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=mH7edDuC95rp9652QxLQjfjq1vuOkDjmbsdc1O4M4ZE=;
-        b=N0Nq4dh+XopAEIhDN46EAWYTxUp4y4GBAY8CYVuZotBKMcqpAB0bc6tTrxpLDzI4Xb
-         NDI6jzo9NChz4RbEoVrLnFYUOhKr+ALnRt6u+76hHLw2H7SUdCHEMPzHXdfpNVqyod7W
-         ZUwUNdAHRgxRU++cM16eRySvvTxJNponOtbaaNAF64lQ8QlOlSF7+uPJA+SvSiX1Z5nF
-         MWIXpHrJc8WF6fOIMZi4sDEnTRwZsPQxtHbBquUW/0Kkntvk8hG2mK/0yiIAW6tArEng
-         8DFlGIMoYkJBWMCGPbObzEkPiyMTDs9iDeEPVnG4zMDXOE2jFnloMbHT7zPCrL3OMw2E
-         yF+g==
-X-Gm-Message-State: AOAM5310qDlpFiBoywTT9i7bGEIdA+ol9BxVwCP0j3aKZRHnq1OwCv17
-        OAXj7eYrEr2IrKmLTi3W964sKw==
-X-Google-Smtp-Source: ABdhPJwMzOfefnTJXiOPc6ysjwW9PvTdqj9lIzCIwV7CrWVO7k5avufb59YK1uht5UsgHcp0iOFw9Q==
-X-Received: by 2002:a17:90a:420b:: with SMTP id o11mr9876075pjg.142.1601884591801;
-        Mon, 05 Oct 2020 00:56:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=rXevW3gspEqrbAGRsrOKhUql5m0Aoc1FPHPDeVmOGB0=;
+        b=ZuZkURbMj/9aomxuk67JYYRgkxjgJWoGW4W97jhHZ00PexAAmvqS0LQEx8FEWHctqI
+         cNELlYZ6YLeDQCO/VsFRwYUACMKhkCQQD8tPv/VMxXNig47xPhtVLXVm6nFMDAWvtcas
+         BOfkylI1P0U33UJGZcHluARJz+ZgwGbR4ycEyFehPSkbwBG7OOA+r/GBNELyaDLctvUC
+         5BQCmvq8ycRwOHhln20gCISuCmxZIN4L2Ej+/0iGecGr6d9GNdqpijvDfGBOAg7NDA4e
+         7jMKjF/t8hAk62TcBr5W/fsTBLkroqjcXgGbJrsrZjzCpp84taZE7I2jgy2yj7wsbYGd
+         qnLA==
+X-Gm-Message-State: AOAM530kj84CSJV5LAMfyOfWU/2VIqXfs0HlE3xd8rNHjfeiIfklF8Vj
+        JiBeuiEzSyO/gBcq1b6QkcT/bAxFK27hDQ==
+X-Google-Smtp-Source: ABdhPJwGFoxTy7Ia4fihc+xAupy9E8rnHjAwhi5e5qj8gagwC1Dgw39Rp2LpAkYqkyC7bKzW4NjPPA==
+X-Received: by 2002:a63:d841:: with SMTP id k1mr13588737pgj.59.1601884595204;
+        Mon, 05 Oct 2020 00:56:35 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id d12sm9851018pgd.93.2020.10.05.00.56.30
+        by smtp.gmail.com with ESMTPSA id x12sm3497294pfr.156.2020.10.05.00.56.34
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 00:56:30 -0700 (PDT)
+        Mon, 05 Oct 2020 00:56:34 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Ben Segall <bsegall@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        cristian.marussi@arm.com, sudeep.holla@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 0/5] cpufreq: Record stats with fast-switching
-Date:   Mon,  5 Oct 2020 13:26:00 +0530
-Message-Id: <cover.1601884370.git.viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Lukasz Luba <lukasz.luba@arm.com>, cristian.marussi@arm.com,
+        sudeep.holla@arm.com, linux-kernel@vger.kernel.org
+Subject: [PATCH V3 1/5] cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()
+Date:   Mon,  5 Oct 2020 13:26:01 +0530
+Message-Id: <2570daf8931feeecd3ae94463f736e813c993fc0.1601884370.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
+In-Reply-To: <cover.1601884370.git.viresh.kumar@linaro.org>
+References: <cover.1601884370.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+In order to prepare for lock-less stats update, add support to defer any
+updates to it until cpufreq_stats_record_transition() is called.
 
-We disabled recording cpufreq stats when fast switching was introduced
-to the cpufreq core as the cpufreq stats required to take a spinlock and
-that can't be allowed (for performance reasons) on scheduler's hot path.
+The stats were updated from two places earlier:
 
-Here is an attempt to get rid of the lock and bring back the support.
+- show_time_in_state(): This can be easily deferred, all we need is to
+  calculate the delta duration again in this routine to show the current
+  state's time-in-state.
 
-V2->V3:
-- Use READ/WRITE_ONCE() for reset-time as well.
-- Use unlikely for few conditionals in the hot path.
-- Better changelogs.
-- Rebase changes.
+- store_reset(): This is a bit tricky as we need to clear the stats
+  here and avoid races with simultaneous call to
+  cpufreq_stats_record_transition().
 
-V1-V2:
-- Use READ_ONCE/WRITE_ONCE instead of atomic in the first patch.
+  This patch fixes it by deferring the reset of the stats (within the
+  code) to the next call to cpufreq_stats_record_transition(), but since
+  we need to keep showing the right stats until that time, we capture
+  the reset time and account for the time since last time reset was
+  called until the time cpufreq_stats_record_transition() update the
+  stats.
 
---
-Viresh
+  Userspace will continue seeing the stats correctly, everything will be
+  0 after the stats are reset, apart from the time-in-state of the
+  current state, until the time a frequency switch happens.
 
-Viresh Kumar (5):
-  cpufreq: stats: Defer stats update to
-    cpufreq_stats_record_transition()
-  cpufreq: stats: Remove locking
-  cpufreq: stats: Mark few conditionals with unlikely()
-  cpufreq: stats: Enable stats for fast-switch as well
-  cpufreq: Move traces and update to policy->cur to cpufreq core
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq_stats.c | 75 ++++++++++++++++++++++++---------
+ 1 file changed, 56 insertions(+), 19 deletions(-)
 
- drivers/cpufreq/cpufreq.c        | 11 ++++
- drivers/cpufreq/cpufreq_stats.c  | 89 ++++++++++++++++++++------------
- kernel/sched/cpufreq_schedutil.c | 12 +----
- 3 files changed, 69 insertions(+), 43 deletions(-)
-
+diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+index 94d959a8e954..498d962ba224 100644
+--- a/drivers/cpufreq/cpufreq_stats.c
++++ b/drivers/cpufreq/cpufreq_stats.c
+@@ -22,17 +22,22 @@ struct cpufreq_stats {
+ 	spinlock_t lock;
+ 	unsigned int *freq_table;
+ 	unsigned int *trans_table;
++
++	/* Deferred reset */
++	unsigned int reset_pending;
++	unsigned long long reset_time;
+ };
+ 
+-static void cpufreq_stats_update(struct cpufreq_stats *stats)
++static void cpufreq_stats_update(struct cpufreq_stats *stats,
++				 unsigned long long time)
+ {
+ 	unsigned long long cur_time = get_jiffies_64();
+ 
+-	stats->time_in_state[stats->last_index] += cur_time - stats->last_time;
++	stats->time_in_state[stats->last_index] += cur_time - time;
+ 	stats->last_time = cur_time;
+ }
+ 
+-static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
++static void cpufreq_stats_reset_table(struct cpufreq_stats *stats)
+ {
+ 	unsigned int count = stats->max_state;
+ 
+@@ -41,42 +46,67 @@ static void cpufreq_stats_clear_table(struct cpufreq_stats *stats)
+ 	memset(stats->trans_table, 0, count * count * sizeof(int));
+ 	stats->last_time = get_jiffies_64();
+ 	stats->total_trans = 0;
++
++	/* Adjust for the time elapsed since reset was requested */
++	WRITE_ONCE(stats->reset_pending, 0);
++	cpufreq_stats_update(stats, READ_ONCE(stats->reset_time));
+ 	spin_unlock(&stats->lock);
+ }
+ 
+ static ssize_t show_total_trans(struct cpufreq_policy *policy, char *buf)
+ {
+-	return sprintf(buf, "%d\n", policy->stats->total_trans);
++	struct cpufreq_stats *stats = policy->stats;
++
++	if (READ_ONCE(stats->reset_pending))
++		return sprintf(buf, "%d\n", 0);
++	else
++		return sprintf(buf, "%d\n", stats->total_trans);
+ }
+ cpufreq_freq_attr_ro(total_trans);
+ 
+ static ssize_t show_time_in_state(struct cpufreq_policy *policy, char *buf)
+ {
+ 	struct cpufreq_stats *stats = policy->stats;
++	bool pending = READ_ONCE(stats->reset_pending);
++	unsigned long long time;
+ 	ssize_t len = 0;
+ 	int i;
+ 
+ 	if (policy->fast_switch_enabled)
+ 		return 0;
+ 
+-	spin_lock(&stats->lock);
+-	cpufreq_stats_update(stats);
+-	spin_unlock(&stats->lock);
+-
+ 	for (i = 0; i < stats->state_num; i++) {
++		if (pending) {
++			if (i == stats->last_index)
++				time = get_jiffies_64() - READ_ONCE(stats->reset_time);
++			else
++				time = 0;
++		} else {
++			time = stats->time_in_state[i];
++			if (i == stats->last_index)
++				time += get_jiffies_64() - stats->last_time;
++		}
++
+ 		len += sprintf(buf + len, "%u %llu\n", stats->freq_table[i],
+-			(unsigned long long)
+-			jiffies_64_to_clock_t(stats->time_in_state[i]));
++			       jiffies_64_to_clock_t(time));
+ 	}
+ 	return len;
+ }
+ cpufreq_freq_attr_ro(time_in_state);
+ 
++/* We don't care what is written to the attribute */
+ static ssize_t store_reset(struct cpufreq_policy *policy, const char *buf,
+ 			   size_t count)
+ {
+-	/* We don't care what is written to the attribute. */
+-	cpufreq_stats_clear_table(policy->stats);
++	struct cpufreq_stats *stats = policy->stats;
++
++	/*
++	 * Defer resetting of stats to cpufreq_stats_record_transition() to
++	 * avoid races.
++	 */
++	WRITE_ONCE(stats->reset_time, get_jiffies_64());
++	WRITE_ONCE(stats->reset_pending, 1);
++
+ 	return count;
+ }
+ cpufreq_freq_attr_wo(reset);
+@@ -84,8 +114,9 @@ cpufreq_freq_attr_wo(reset);
+ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
+ {
+ 	struct cpufreq_stats *stats = policy->stats;
++	bool pending = READ_ONCE(stats->reset_pending);
+ 	ssize_t len = 0;
+-	int i, j;
++	int i, j, count;
+ 
+ 	if (policy->fast_switch_enabled)
+ 		return 0;
+@@ -113,8 +144,13 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
+ 		for (j = 0; j < stats->state_num; j++) {
+ 			if (len >= PAGE_SIZE)
+ 				break;
+-			len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ",
+-					stats->trans_table[i*stats->max_state+j]);
++
++			if (pending)
++				count = 0;
++			else
++				count = stats->trans_table[i * stats->max_state + j];
++
++			len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ", count);
+ 		}
+ 		if (len >= PAGE_SIZE)
+ 			break;
+@@ -228,10 +264,11 @@ void cpufreq_stats_record_transition(struct cpufreq_policy *policy,
+ 	struct cpufreq_stats *stats = policy->stats;
+ 	int old_index, new_index;
+ 
+-	if (!stats) {
+-		pr_debug("%s: No stats found\n", __func__);
++	if (!stats)
+ 		return;
+-	}
++
++	if (unlikely(READ_ONCE(stats->reset_pending)))
++		cpufreq_stats_reset_table(stats);
+ 
+ 	old_index = stats->last_index;
+ 	new_index = freq_table_get_index(stats, new_freq);
+@@ -241,7 +278,7 @@ void cpufreq_stats_record_transition(struct cpufreq_policy *policy,
+ 		return;
+ 
+ 	spin_lock(&stats->lock);
+-	cpufreq_stats_update(stats);
++	cpufreq_stats_update(stats, stats->last_time);
+ 
+ 	stats->last_index = new_index;
+ 	stats->trans_table[old_index * stats->max_state + new_index]++;
 -- 
 2.25.0.rc1.19.g042ed3e048af
 
