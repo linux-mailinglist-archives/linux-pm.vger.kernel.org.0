@@ -2,73 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A69D9284296
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 00:36:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 485BD2842DD
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 01:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727229AbgJEWgu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 18:36:50 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:34024 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbgJEWgr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 18:36:47 -0400
-Received: from relay10.mail.gandi.net (unknown [217.70.178.230])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id 40F323A8667;
-        Mon,  5 Oct 2020 22:30:17 +0000 (UTC)
-Received: from localhost (lfbn-lyo-1-1908-165.w90-65.abo.wanadoo.fr [90.65.88.165])
-        (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 0AA07240002;
-        Mon,  5 Oct 2020 22:29:53 +0000 (UTC)
-Date:   Tue, 6 Oct 2020 00:29:53 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     a.zummo@towertech.it, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        len.brown@intel.com, pavel@ucw.cz,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [Question] rtc wake behavior and sysfs
-Message-ID: <20201005222953.GD2804081@piout.net>
-References: <CAMdYzYrYdDYF_Y_TwQ65u=Ymu2_8Rs9KWm_TfXcaPGTwucT=jg@mail.gmail.com>
+        id S1726713AbgJEXQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 19:16:30 -0400
+Received: from foss.arm.com ([217.140.110.172]:60900 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725865AbgJEXQa (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 5 Oct 2020 19:16:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5353B113E;
+        Mon,  5 Oct 2020 16:16:29 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E2C5F3F70D;
+        Mon,  5 Oct 2020 16:16:28 -0700 (PDT)
+Date:   Tue, 6 Oct 2020 00:16:27 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Puhov <peter.puhov@linaro.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC 0/3] cpufreq: cppc: Add support for frequency invariance
+Message-ID: <20201005231627.GB18029@arm.com>
+References: <cover.1594289009.git.viresh.kumar@linaro.org>
+ <20200709124349.GA15342@arm.com>
+ <20200710030032.3yq3lqqybhy5m744@vireshk-i7>
+ <CAKfTPtBpOdRSV0gb2CoC8J9GnuPiqZ+MbQLLc6NdSmjJhb0cgA@mail.gmail.com>
+ <20200825095629.GA15469@arm.com>
+ <20200827075149.ixunmyi3m6ygtehu@vireshk-i7>
+ <20200827112740.GA9923@arm.com>
+ <20201005075822.6odp2ulk6wopcwtn@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMdYzYrYdDYF_Y_TwQ65u=Ymu2_8Rs9KWm_TfXcaPGTwucT=jg@mail.gmail.com>
+In-Reply-To: <20201005075822.6odp2ulk6wopcwtn@vireshk-i7>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/10/2020 09:13:08-0400, Peter Geis wrote:
-> Good Morning,
-> 
-> While testing suspend to ram on the Ouya, I encountered an interesting
-> issue with the rtc-tps65910 driver.
-> Attempting to use rtc-wake on the default configuration returned:
-> rtcwake: /dev/rtc0 not enabled for wakeup events
-> This is due to:
-> eb5eba4ef722 drivers/rtc/rtc-tps65910.c: enable/disable wake in suspend/resume
-> This commit changed this driver's behavior to not enable wakeup by
-> default, but enables it when entering sleep mode.
-> This seems to be odd behavior to me.
-> Looking at a few other rtc drivers show they simply enable themselves
-> as wakeup sources by default.
-> 
-> I also found the sysfs entries are at /sys/devices/ ..
-> /tps65910-rtc/power but are missing at /sys/class/rtc/rtc0/power/
-> 
-> I have two questions.
->  - Should the sysfs wakeup entries be missing at /sys/class/rtc/rtc0/power/ ?
+Hi Viresh,
 
-I would be in /sys/class/rtc/rtc0/device/power
-
->  - Shouldn't a rtc be enabled as a wakeup source by default?
+On Monday 05 Oct 2020 at 13:28:22 (+0530), Viresh Kumar wrote:
+> On 27-08-20, 12:27, Ionela Voinescu wrote:
+> > I am in the middle of unifying AMU counter and cpufreq invariance through
+> > something like this, so if you like the idea and you don't think I'm
+> > stepping too much on your toes with this, I can consider the usecase in
+> > my (what should be) generic support. So in the end this might end up
+> > being just a matter of adding a new invariance source (CPPC counters).
+> 
+> Any update on this ?
 > 
 
-The short answer is no, the reason being that not all RTCs are connected
-to an IRQ or a pin that can wakeup or start the platform. What should be
-done is enabling wakeup only when interrupts are available or the
-wakeup-source property is in the rtc device tree node.
+I have some code for this, but not yet in the final state I wanted to
+bring it to. The code has some dependencies/conflicts with the FFH support
+and in small part with the new BL_SWITCHER patches so I wanted to get
+those through first.
 
--- 
-Alexandre Belloni, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+I'm in the middle of some distractions now, so probably it will take a
+around two-three more weeks before I submit the code for review.
+
+Sorry for the delay,
+Ionela.
+
+> -- 
+> viresh
