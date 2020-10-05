@@ -2,88 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83DEB28305A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 08:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9006628312B
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 09:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbgJEG0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 02:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
+        id S1725906AbgJEH4c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 03:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbgJEG0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 02:26:36 -0400
+        with ESMTP id S1725905AbgJEH4c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 03:56:32 -0400
 Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90990C0613CE
-        for <linux-pm@vger.kernel.org>; Sun,  4 Oct 2020 23:26:36 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id x2so4927051pjk.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Oct 2020 23:26:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6E2C0613A6
+        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 00:56:32 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t7so5532177pjd.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 00:56:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=SKaQ5+8uUmRtIWBKZSxd+2jDGXEKN5QdEKsAPMYJkgg=;
-        b=hVUBIPjnHGOWjGUi1oUG2maCLkvuCE7pMNCmJn6gkaIVPZ8LdYKidM635ZHKQeHwr+
-         l2knVD95lg4NSfyju+W6598JCldz5UwtjNiq5Jw8H8LWwbCeS4VjYFXgNY9WYCMElFUg
-         2atFKK1Z5tvYk+DhYbjVwhkBzLDgUhCcKGzBzX8j4fumt3o5pOmUeq9QqIeXEm7BnOnZ
-         a+C2Am6JbEg4Ha9fo3qOa+KC6LPN927a6o67oRVjFKDbmc9/uYW0fgX+Cks4uxcGs2HW
-         NWZrgF1TEebG01jSrJh4i4AjHHuHT+bSBFJDRKzAlvEWgDfpYYZ6UGBMMucpf0+sffjM
-         zsXw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mH7edDuC95rp9652QxLQjfjq1vuOkDjmbsdc1O4M4ZE=;
+        b=Jc0yCaI25EikNxoWQ86qLK6HcjzlcKYXU1ECKBbrnShwjgBzlfZfJPa9DWq9OQqINq
+         vfXqCT5cYjwfNCfF4Eqkx3RgHYD8idImlfDRh4pXhd/Fg0L5p6QqMwl3GMt9TgNy5mS6
+         ZlbeKRq5Qor3ZPnuytLVn10+ArFizYmUXCC20NoFQcL5JBqlIsvxMPXXvOHWtAsTNWj4
+         ps678/iwYAf7+yVnXpEWXDYpYfQRUEmsKSYA4tOrXJ/cC5ayLI3DwYuPS+c9pmZNdk7R
+         uBLXhA3mQxSxfSWOdhtejzekgCaFd8Q1e6npNiBuK878JWFCMSkNdMGJbG2uS7+Jqb32
+         vCUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SKaQ5+8uUmRtIWBKZSxd+2jDGXEKN5QdEKsAPMYJkgg=;
-        b=dUK1cAmTgd3f5mJSMOG7yvUjEyoVbfvhAlSgs+3Wd88wMq+wURYbClsqffafBApi8X
-         RoWogQ8zQGRpfdvdO6aFMlpa2CBI4hrrl7xc345ccwGD4RsQQzZvkKMMofxIrwTAaV61
-         giMTumJ5RCFJf/sYHwuRMdNHkFF7nbIjouQKsJawW85/TjX4ehYKDFzM+IcCOExDYUjw
-         chO/HaSo1PPC71fHzvJFFRDOMMIn9nSdtrUlkaC+Z0wlLTLxZK/BUmthIOUbru//HZNo
-         bnNu4OlwwnKHkCAU+4zjED4I7jxh2pKrjB2LFa4vU5dHb+xsJI+jt+geKS8jTkyvMAlh
-         gfWA==
-X-Gm-Message-State: AOAM531eGPNEvLgJrS8WHw0A7xveFaDqnKZF5Xkw5r06Dln7RuznQB8z
-        CXVShCxq18MIIuyOEzSCEee4TQ==
-X-Google-Smtp-Source: ABdhPJzMX/4YpxutBiiXM2fWXSSduuaC0HQCvEVYpnrcJsYem70ESjGjA5g+ApA82zM/o6oW1zh/YQ==
-X-Received: by 2002:a17:90a:e282:: with SMTP id d2mr104042pjz.159.1601879196092;
-        Sun, 04 Oct 2020 23:26:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mH7edDuC95rp9652QxLQjfjq1vuOkDjmbsdc1O4M4ZE=;
+        b=N0Nq4dh+XopAEIhDN46EAWYTxUp4y4GBAY8CYVuZotBKMcqpAB0bc6tTrxpLDzI4Xb
+         NDI6jzo9NChz4RbEoVrLnFYUOhKr+ALnRt6u+76hHLw2H7SUdCHEMPzHXdfpNVqyod7W
+         ZUwUNdAHRgxRU++cM16eRySvvTxJNponOtbaaNAF64lQ8QlOlSF7+uPJA+SvSiX1Z5nF
+         MWIXpHrJc8WF6fOIMZi4sDEnTRwZsPQxtHbBquUW/0Kkntvk8hG2mK/0yiIAW6tArEng
+         8DFlGIMoYkJBWMCGPbObzEkPiyMTDs9iDeEPVnG4zMDXOE2jFnloMbHT7zPCrL3OMw2E
+         yF+g==
+X-Gm-Message-State: AOAM5310qDlpFiBoywTT9i7bGEIdA+ol9BxVwCP0j3aKZRHnq1OwCv17
+        OAXj7eYrEr2IrKmLTi3W964sKw==
+X-Google-Smtp-Source: ABdhPJwMzOfefnTJXiOPc6ysjwW9PvTdqj9lIzCIwV7CrWVO7k5avufb59YK1uht5UsgHcp0iOFw9Q==
+X-Received: by 2002:a17:90a:420b:: with SMTP id o11mr9876075pjg.142.1601884591801;
+        Mon, 05 Oct 2020 00:56:31 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id j6sm10860110pfi.129.2020.10.04.23.26.34
+        by smtp.gmail.com with ESMTPSA id d12sm9851018pgd.93.2020.10.05.00.56.30
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 04 Oct 2020 23:26:35 -0700 (PDT)
-Date:   Mon, 5 Oct 2020 11:56:33 +0530
+        Mon, 05 Oct 2020 00:56:30 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     rnayak@codeaurora.org, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>
-Cc:     linux-pm@vger.kernel.org,
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Ben Segall <bsegall@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Rafael Wysocki <rjw@rjwysocki.net>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 3/8] drm/msm: Unconditionally call
- dev_pm_opp_of_remove_table()
-Message-ID: <20201005062633.ejpehkpeuwksrx3e@vireshk-i7>
-References: <cover.1598594714.git.viresh.kumar@linaro.org>
- <6e4110032f8711e8bb0acbeccfe66dec3b09d5c1.1598594714.git.viresh.kumar@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+        cristian.marussi@arm.com, sudeep.holla@arm.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/5] cpufreq: Record stats with fast-switching
+Date:   Mon,  5 Oct 2020 13:26:00 +0530
+Message-Id: <cover.1601884370.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6e4110032f8711e8bb0acbeccfe66dec3b09d5c1.1598594714.git.viresh.kumar@linaro.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28-08-20, 11:37, Viresh Kumar wrote:
-> dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
-> find the OPP table with error -ENODEV (i.e. OPP table not present for
-> the device). And we can call dev_pm_opp_of_remove_table()
-> unconditionally here.
-> 
-> While at it, also create a label to put clkname.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Hi,
 
-Can someone please apply this and the other drm patch (2/8) ?
+We disabled recording cpufreq stats when fast switching was introduced
+to the cpufreq core as the cpufreq stats required to take a spinlock and
+that can't be allowed (for performance reasons) on scheduler's hot path.
+
+Here is an attempt to get rid of the lock and bring back the support.
+
+V2->V3:
+- Use READ/WRITE_ONCE() for reset-time as well.
+- Use unlikely for few conditionals in the hot path.
+- Better changelogs.
+- Rebase changes.
+
+V1-V2:
+- Use READ_ONCE/WRITE_ONCE instead of atomic in the first patch.
+
+--
+Viresh
+
+Viresh Kumar (5):
+  cpufreq: stats: Defer stats update to
+    cpufreq_stats_record_transition()
+  cpufreq: stats: Remove locking
+  cpufreq: stats: Mark few conditionals with unlikely()
+  cpufreq: stats: Enable stats for fast-switch as well
+  cpufreq: Move traces and update to policy->cur to cpufreq core
+
+ drivers/cpufreq/cpufreq.c        | 11 ++++
+ drivers/cpufreq/cpufreq_stats.c  | 89 ++++++++++++++++++++------------
+ kernel/sched/cpufreq_schedutil.c | 12 +----
+ 3 files changed, 69 insertions(+), 43 deletions(-)
 
 -- 
-viresh
+2.25.0.rc1.19.g042ed3e048af
+
