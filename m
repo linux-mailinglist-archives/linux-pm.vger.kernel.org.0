@@ -2,144 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 797D2283134
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 09:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D60128313B
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 09:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726013AbgJEH4t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 03:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S1725881AbgJEH60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 03:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbgJEH4t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 03:56:49 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A9CC0613A6
-        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 00:56:48 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id t14so5477506pgl.10
-        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 00:56:48 -0700 (PDT)
+        with ESMTP id S1725870AbgJEH60 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 03:58:26 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83065C0613A6
+        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 00:58:25 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id x22so6273780pfo.12
+        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 00:58:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=V24nFqUoLW4E3Th0MpyhsidyzVGENaV4KzeBs2bcktI=;
-        b=IJH3N+4VTgKq/7yzzSibeAML3izyYdLrGuWTH3WTmV9f4KVaPgK8ma8n0pyl32oisR
-         LMGx6FLS0wyiX4qm6cTxKwT1cEmZ6cyrhq2RrzcEfeg6ylmpwHzID2PoVLqdoMYO2OPW
-         twbGV0dEeluBWu14lxxj9WinZIhNq6UsYMtnjb3+H7hAV5f+Xi/bkdqIgawWvQIhYERz
-         sYTz1v8O1C1CbfV1FpUHhV1EzKttxLFjbybYVklM+p2jC8SxsrYSpI7X1ckPlnEaxxxi
-         VbO2ogMSk//2i8lbwjBh4DQ+O9AQ0KcvXUy7I2RPyUDipux0iz0UX+PicwXWzxaYdyhu
-         BK+g==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wt1eY5ySQ7zeKuyklJDHkBCjNeSzu8NHJjYLWLeX8sY=;
+        b=swvOXot1YbYCGNxcWiToQ+75e2uZCnTPbIHfKBFlaufFP1FoE5tGqi4hYg2/x6recG
+         2qKx+Y4U8lh6eYiuS2Hjf+5m5NuzN+nDj0Tt1zIK/qTdZa9U5FoCB5KMcoVdeLUTyHlW
+         BJ/xME7KZdjZ1GlBTR5R59QEv2aud3qyzwi6Vz2nHab+G+wrIQo0LlKBVpVIaUVZw8CT
+         Ju7O2SrML+bEN0jPB4LkviL476tmAVxdXOMiibdjG6649K89qzHDM/uTvQm1lqY4m5/k
+         SRahPw7ERiw8qksATVagKm3rck4u8q7BIMCFYAts3wQearQUP3Ltl5sbyr7aVdHeeGCu
+         A9SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=V24nFqUoLW4E3Th0MpyhsidyzVGENaV4KzeBs2bcktI=;
-        b=gMX1l9pKomL0cSHWG9m07o69iqoHd/gww/CQMKykNPGTYTQcKMP6/nmV8ey8r4oLrp
-         1cfZlCQIVoIqxo8nnLWBJGPaZKT71tReDfLZn4nCw5dJerWUb1RihcSKs3nG1MRT5+iE
-         aadxjM0wTorduXMI+hdLSravAezFPTMu/jTllmNRxXwz11TF/6CHiJHV+zqwC+nhKJrH
-         qwrPdT4Zl8Od6CzrukxOCsUXk6v+Fy9yR5NiJhwtdB/PRDGI743uThFrx4hdxY8Ex7b2
-         OOtRcERi42HzymVxTHb3TRx+hcPDvR7Q9DhktTcHvtY+nYoWDpmPs7bgLq8ivtUXlsT+
-         tkRg==
-X-Gm-Message-State: AOAM53005YwBWruVGF3oBqFR1ZQDSYLJxfDw76B6GB8qpvBDeBF+Jmos
-        FRzr6szpMOaLWcwHHktbG293lQ==
-X-Google-Smtp-Source: ABdhPJzEDI0+5SGijxUigKS4MKnFVsdoYLdCe5Hmr2YYhueCd/nXgFjF0qwlFmKyHaC0U8qepooiWQ==
-X-Received: by 2002:a65:60d0:: with SMTP id r16mr13871777pgv.348.1601884607804;
-        Mon, 05 Oct 2020 00:56:47 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wt1eY5ySQ7zeKuyklJDHkBCjNeSzu8NHJjYLWLeX8sY=;
+        b=H7y8esemhO1JP7ByBuMDDtRsErF6KFho+wFxPlL7Rhok7s1mX/FLw1PW/A97VLo/9w
+         tfztSfQYg2Tmayz2PdDdIunXdHi80BR0yl9CKUPEWpSOfWcI6tyU/jhLsS209eGN19KT
+         keGg4DeZWsV7b89oRPdX+TatUqiQWr5lUFD3mBvepXvBfhTG0Maa628zTcwmK0ih2YAb
+         h/stSD8+uYb1rOIan5+wrjwy7ANey6th7MZ40uJoF9YsKrSpjqsZvmZMm90R4N6pft4F
+         cHNNZdBZIRCBsb7XK+utuDI+Cqlrb3sYwu8B6HgLLgidf0osCq0pttj1bew2o5VIPXJS
+         cSlg==
+X-Gm-Message-State: AOAM532GMR35JRFbvrZs0+WzB/nNaqnkEmsiKCTrUOWf6V5zc5dUZwp9
+        SCL46ucUKs4suOoXQ3PHf27laQ==
+X-Google-Smtp-Source: ABdhPJwBcFs5doqrGh/r9Eqn6hv6BOLwBEiNp0Xq+5FMT3S3EADoPW6HdBXGFiV6qCitdHKCC1LIoA==
+X-Received: by 2002:a62:545:0:b029:142:2501:35db with SMTP id 66-20020a6205450000b0290142250135dbmr15763183pff.59.1601884705073;
+        Mon, 05 Oct 2020 00:58:25 -0700 (PDT)
 Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id z20sm9480873pjq.1.2020.10.05.00.56.46
+        by smtp.gmail.com with ESMTPSA id c185sm11436315pfb.123.2020.10.05.00.58.23
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 00:56:47 -0700 (PDT)
+        Mon, 05 Oct 2020 00:58:23 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 13:28:22 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rafael Wysocki <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ben Segall <bsegall@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>
-Cc:     linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
-        cristian.marussi@arm.com, sudeep.holla@arm.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V3 5/5] cpufreq: Move traces and update to policy->cur to cpufreq core
-Date:   Mon,  5 Oct 2020 13:26:05 +0530
-Message-Id: <b4d80430c640fceaf871d90a1ec39277a4de34e8.1601884370.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
-In-Reply-To: <cover.1601884370.git.viresh.kumar@linaro.org>
-References: <cover.1601884370.git.viresh.kumar@linaro.org>
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Puhov <peter.puhov@linaro.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>
+Subject: Re: [RFC 0/3] cpufreq: cppc: Add support for frequency invariance
+Message-ID: <20201005075822.6odp2ulk6wopcwtn@vireshk-i7>
+References: <cover.1594289009.git.viresh.kumar@linaro.org>
+ <20200709124349.GA15342@arm.com>
+ <20200710030032.3yq3lqqybhy5m744@vireshk-i7>
+ <CAKfTPtBpOdRSV0gb2CoC8J9GnuPiqZ+MbQLLc6NdSmjJhb0cgA@mail.gmail.com>
+ <20200825095629.GA15469@arm.com>
+ <20200827075149.ixunmyi3m6ygtehu@vireshk-i7>
+ <20200827112740.GA9923@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200827112740.GA9923@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The cpufreq core handles the updates to policy->cur and recording of
-cpufreq trace events for all the governors except schedutil's fast
-switch case.
+On 27-08-20, 12:27, Ionela Voinescu wrote:
+> I am in the middle of unifying AMU counter and cpufreq invariance through
+> something like this, so if you like the idea and you don't think I'm
+> stepping too much on your toes with this, I can consider the usecase in
+> my (what should be) generic support. So in the end this might end up
+> being just a matter of adding a new invariance source (CPPC counters).
 
-Move that as well to cpufreq core for consistency and readability.
+Any update on this ?
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c        |  7 +++++++
- kernel/sched/cpufreq_schedutil.c | 12 +-----------
- 2 files changed, 8 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 2d0e2e464b14..db00693a586a 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2068,6 +2068,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq)
- {
- 	unsigned int freq;
-+	int cpu;
- 
- 	target_freq = clamp_val(target_freq, policy->min, policy->max);
- 	freq = cpufreq_driver->fast_switch(policy, target_freq);
-@@ -2075,10 +2076,16 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 	if (!freq)
- 		return 0;
- 
-+	policy->cur = freq;
- 	arch_set_freq_scale(policy->related_cpus, freq,
- 			    policy->cpuinfo.max_freq);
- 	cpufreq_stats_record_transition(policy, freq);
- 
-+	if (trace_cpu_frequency_enabled()) {
-+		for_each_cpu(cpu, policy->cpus)
-+			trace_cpu_frequency(freq, cpu);
-+	}
-+
- 	return freq;
- }
- EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e39008242cf4..28f6d1ad608b 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -115,21 +115,11 @@ static void sugov_fast_switch(struct sugov_policy *sg_policy, u64 time,
- 			      unsigned int next_freq)
- {
- 	struct cpufreq_policy *policy = sg_policy->policy;
--	int cpu;
- 
- 	if (!sugov_update_next_freq(sg_policy, time, next_freq))
- 		return;
- 
--	next_freq = cpufreq_driver_fast_switch(policy, next_freq);
--	if (!next_freq)
--		return;
--
--	policy->cur = next_freq;
--
--	if (trace_cpu_frequency_enabled()) {
--		for_each_cpu(cpu, policy->cpus)
--			trace_cpu_frequency(next_freq, cpu);
--	}
-+	cpufreq_driver_fast_switch(policy, next_freq);
- }
- 
- static void sugov_deferred_update(struct sugov_policy *sg_policy, u64 time,
 -- 
-2.25.0.rc1.19.g042ed3e048af
-
+viresh
