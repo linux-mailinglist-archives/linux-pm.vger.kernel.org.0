@@ -2,82 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8556283D58
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 19:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B24283DAB
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 19:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgJERdS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 13:33:18 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:53196 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726600AbgJERdS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 13:33:18 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 095HXFUn041529;
-        Mon, 5 Oct 2020 12:33:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1601919195;
-        bh=6ETL33FBIngVUOzEHYnY66O2QOkqaMTE7Ld41zHA9VM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=d47Zo6Ofqi2KI9vdg/kNBJGF16iMi1jSlRw5VI9eXWwZZWMtQJ0dz5GxRagZsqFd4
-         8A6AO7Hx86K+9R8OoMg6/mDs/RpYr/GzQ/mQ0kQWA6v4HXOMXLVpUu1a9GqlM0IzaR
-         dmJ1Q9f5Qq5iv3gxdTa8hwN68SW4ABDZpoZ2E1N0=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 095HXF8d024532
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 5 Oct 2020 12:33:15 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Mon, 5 Oct
- 2020 12:33:14 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Mon, 5 Oct 2020 12:33:14 -0500
-Received: from [10.250.79.43] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 095HXEmo008422;
-        Mon, 5 Oct 2020 12:33:14 -0500
-Subject: Re: [EXTERNAL] Re: [PATCH v5 2/2] power: supply: bq256xx: Introduce
- the BQ256XX charger driver
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <robh+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dmurphy@ti.com>
-References: <20201001214034.5925-1-r-rivera-matos@ti.com>
- <20201001214034.5925-3-r-rivera-matos@ti.com>
- <20201003105448.eqeyfpr7dugsp4in@earth.universe>
-From:   Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Message-ID: <8ff0ba7b-d310-f7e3-bfcb-3bb2079344d2@ti.com>
-Date:   Mon, 5 Oct 2020 12:33:13 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728205AbgJERoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 13:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728027AbgJERoN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 13:44:13 -0400
+Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E6EC0613A7
+        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 10:44:13 -0700 (PDT)
+Received: by mail-ua1-x943.google.com with SMTP id o64so2782139uao.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 10:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T0SUN6EKstVpoqlENVYkDpfxgRN2mhcM+hd8aVgx82Y=;
+        b=Bjhy7mLEf3dMbcB301h2+hrEGKwW0Lztpw8VQTUMYjrf5E1N0OvXzBbiN7Nm22aCGw
+         9lKqHBSMuJczFFO2SHFwXrme+RSj2XbTPmbMh7WBl7D7F4LgcymOwFioF5/PDyoF94sI
+         03dR3zYUPifD8/ZTSvWCz2HfMihd2oVmvihvE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T0SUN6EKstVpoqlENVYkDpfxgRN2mhcM+hd8aVgx82Y=;
+        b=fN+BMmmemO74KPu4Wcm4/2+tztLtzti6NRUm/BcBwQBALAcfBw17xuWEZ4N2Yr81aq
+         salHcQWdS3Tv8LCiip6pow8pUeA7BUw71Z3vwQfafoQxqK3iInE3iaD8ohqflvbkkBep
+         KryY4/ps9nzYqi+vuyouaZt8t0txLKxQkPyG41hudERoSlKwpq7P2xkQSMZQ+hG1+QsO
+         hfeQSF7AgA3pT75bIfVfP/3vzGj0GaVnP5XBjk1WXUWv04YNCv+kxD+SECW0f46I7mpj
+         sQe50mWiZxUe3SH4OGAebjueEl8BuKjHbAeuArAOx+/xVKUjL0aTHFEPmV6z0c+z6HS5
+         zFCw==
+X-Gm-Message-State: AOAM533wba/72pBPiuDm4F7m+QkQSKd2rlZ0aurZVfZfH2HJR2rS+laa
+        zB5WAkmiVJKS8v9ID2rQ/S/GssOmHDIWFg==
+X-Google-Smtp-Source: ABdhPJzi0t4uHx/sucsGPu+PXt2vmFqS3dFbNBRzWfFkqjUjuqZy3pAlhqSFfJ5HUdW8wFhjU8j1Qw==
+X-Received: by 2002:ab0:7718:: with SMTP id z24mr734244uaq.92.1601919852383;
+        Mon, 05 Oct 2020 10:44:12 -0700 (PDT)
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
+        by smtp.gmail.com with ESMTPSA id s70sm128188vka.45.2020.10.05.10.44.10
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Oct 2020 10:44:11 -0700 (PDT)
+Received: by mail-vs1-f48.google.com with SMTP id u74so2141463vsc.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 10:44:10 -0700 (PDT)
+X-Received: by 2002:a67:f4c2:: with SMTP id s2mr992567vsn.4.1601919849846;
+ Mon, 05 Oct 2020 10:44:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201003105448.eqeyfpr7dugsp4in@earth.universe>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20201005163016.13650-1-lukasz.luba@arm.com>
+In-Reply-To: <20201005163016.13650-1-lukasz.luba@arm.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 5 Oct 2020 10:43:58 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W70OPB=ufEfqAJEeZBNwr5yPOCmkM7R2uLKnEj6tZ1qA@mail.gmail.com>
+Message-ID: <CAD=FV=W70OPB=ufEfqAJEeZBNwr5yPOCmkM7R2uLKnEj6tZ1qA@mail.gmail.com>
+Subject: Re: [RESEND][PATCH v2 3/3] dt-bindings: thermal: update
+ sustainable-power with abstract scale
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        amitk@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian,
+Hi,
 
-On 10/3/20 5:54 AM, Sebastian Reichel wrote:
-> Hi Ricardo,
+On Mon, Oct 5, 2020 at 9:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On Thu, Oct 01, 2020 at 04:40:34PM -0500, Ricardo Rivera-Matos wrote:
->> The BQ256XX family of devices are highly integrated buck chargers
->> for single cell batteries.
->>
->> Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
->>
->> v5 - adds power_supply_put_battery_info() and devm_add_action_or_reset() calls
->> ---
-> changes look good, but you are still missing
-> usb_unregister_notifier() calls on drival removal.
-ACK, I will add a driver removal function and make the appropriate 
-usb_unregister_notifier() calls.
+> Update the documentation for the binding 'sustainable-power' and allow
+> to provide values in an abstract scale. It is required when the cooling
+> devices use an abstract scale for their power values.
 >
-> -- Sebastian
-Ricardo
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>
+> Hi Rob,
+>
+> This is a fixed patch for DT binding, which now passes the
+> make dt_binding_check (I have changed tabs into spaces).
+> The former patch error that I have received is here [1].
+>
+> Regards,
+> Lukasz
+>
+> [1] https://lore.kernel.org/linux-pm/20201002114426.31277-1-lukasz.luba@arm.com/T/#md4b02a3ada592df67446566180643ba56788c159
 
+...and because I suspect you might not look at any patches that fail
+your auto-checker, I'd appreciate it if you could comment on the
+discussion on the previous version of the patch.  Thanks!  :-)
+
+-Doug
