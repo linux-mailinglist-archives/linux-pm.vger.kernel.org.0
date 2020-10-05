@@ -2,144 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E59283005
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 07:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DEB28305A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 08:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725908AbgJEFIM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 01:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S1725872AbgJEG0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 02:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgJEFIL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 01:08:11 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54227C061787;
-        Sun,  4 Oct 2020 22:08:11 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id m34so5234820pgl.9;
-        Sun, 04 Oct 2020 22:08:11 -0700 (PDT)
+        with ESMTP id S1725267AbgJEG0g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 02:26:36 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90990C0613CE
+        for <linux-pm@vger.kernel.org>; Sun,  4 Oct 2020 23:26:36 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id x2so4927051pjk.0
+        for <linux-pm@vger.kernel.org>; Sun, 04 Oct 2020 23:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4tJLfv4r1zoGxZLPIaDyCtUW4+LVxjwAdNen8IGn/go=;
-        b=se1XSVGwrhHdOgI356g94SUutkWKQpBzxrpqpgfPMBUHMoA90lXzkjgZ0/3Tw8I6QB
-         Q5UOA4g26ikmyxmGNiEUC3x3ScQap1qGzK2DTuVfPYXwczdynjqThsGFkHlrBI9rFqlc
-         eJtIn1vZAKuoQt8JnVE2YXPu5kCEmlLVNfu9mL6gdd81xTRSbC3SFDGt+HTaXqom0oRD
-         VF56TE9qgti4LqfLMq65X7Nk26Zkv8FYAddFi5YtGDkyM9W6WRu+Irfo/xmTGqGQxqAP
-         yGgN41FtnwCEBSNAjHdSvGZE6TQpIRcr7WiyNXJZ8/cEOc21PP4Qj90lxbFEu1hau11H
-         hUKg==
+         :content-disposition:in-reply-to:user-agent;
+        bh=SKaQ5+8uUmRtIWBKZSxd+2jDGXEKN5QdEKsAPMYJkgg=;
+        b=hVUBIPjnHGOWjGUi1oUG2maCLkvuCE7pMNCmJn6gkaIVPZ8LdYKidM635ZHKQeHwr+
+         l2knVD95lg4NSfyju+W6598JCldz5UwtjNiq5Jw8H8LWwbCeS4VjYFXgNY9WYCMElFUg
+         2atFKK1Z5tvYk+DhYbjVwhkBzLDgUhCcKGzBzX8j4fumt3o5pOmUeq9QqIeXEm7BnOnZ
+         a+C2Am6JbEg4Ha9fo3qOa+KC6LPN927a6o67oRVjFKDbmc9/uYW0fgX+Cks4uxcGs2HW
+         NWZrgF1TEebG01jSrJh4i4AjHHuHT+bSBFJDRKzAlvEWgDfpYYZ6UGBMMucpf0+sffjM
+         zsXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4tJLfv4r1zoGxZLPIaDyCtUW4+LVxjwAdNen8IGn/go=;
-        b=dnQYs3vi7sOlYG43HWYrxZAPYyVLkrF5Uw0PEp8px2L2pk/TokLR/yQwFDEHOCQMyl
-         rEeghcmYnCx5dKbiEPzZ+8A3UxTjpUQu/VRWk5EbHBG1/VEpq4xhpMOapq3pTF4psDc3
-         dZYbPsMr7yfNsl7X2Ca/17UJp6d1ZiuMwkNBI4oRpqSGmJzCNj3GlXuxg/r/eIs+LPeJ
-         +cnh8frWt2bS+euGycdwJQV9waDUEzvQB2dHm0QfTEuw6F/LyKKE8yoEPkkTkL0w6qE+
-         rqEBMvPdCD/vL+MkeYK3qNmCvg30WUAmxrr4prfsayGLSMq2lCPub8Xs1YxAf6PJa0OY
-         5CwA==
-X-Gm-Message-State: AOAM533eIPJ9TTvyDDztj+3gCdLPuj9bsUIM3aSZ6YVW4eS6cxJcN0FV
-        ovmL8w65+fq9vYXwp9NjEek=
-X-Google-Smtp-Source: ABdhPJzbc7KATEHw3tURSc0pA0PlebTOm5ozKxIivLTRAmqi1P5kxW+VgeENvYQMNfQrrxbYDAqGGA==
-X-Received: by 2002:a63:ec4c:: with SMTP id r12mr12411601pgj.74.1601874490742;
-        Sun, 04 Oct 2020 22:08:10 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id d128sm10874958pfc.8.2020.10.04.22.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Oct 2020 22:08:10 -0700 (PDT)
-Date:   Sun, 4 Oct 2020 22:08:07 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
-        linux-input@vger.kernel.org,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        patches@opensource.cirrus.com,
-        ibm-acpi-devel@lists.sourceforge.net,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Barry Song <baohua@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Nick Dyer <nick@shmanahar.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ferruh Yigit <fery@cypress.com>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Peter Hutterer <peter.hutterer@redhat.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        Collabora Kernel ML <kernel@collabora.com>
-Subject: Re: [PATCH v4 3/7] ACPI: button: Access input device's users under
- appropriate mutex
-Message-ID: <20201005050807.GI1009802@dtor-ws>
-References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
- <20200608112211.12125-1-andrzej.p@collabora.com>
- <20200608112211.12125-4-andrzej.p@collabora.com>
- <CAJZ5v0j7e9TzDtEiDXmj3fLAQ7CvFHoe7Q3aYKKas3PEXrsUuw@mail.gmail.com>
- <20200625052318.GE248110@dtor-ws>
- <CAJZ5v0hgQt-amMn8xiF_0kyVZ-9pQxgm5H-VcFpinVQGKnYhwQ@mail.gmail.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SKaQ5+8uUmRtIWBKZSxd+2jDGXEKN5QdEKsAPMYJkgg=;
+        b=dUK1cAmTgd3f5mJSMOG7yvUjEyoVbfvhAlSgs+3Wd88wMq+wURYbClsqffafBApi8X
+         RoWogQ8zQGRpfdvdO6aFMlpa2CBI4hrrl7xc345ccwGD4RsQQzZvkKMMofxIrwTAaV61
+         giMTumJ5RCFJf/sYHwuRMdNHkFF7nbIjouQKsJawW85/TjX4ehYKDFzM+IcCOExDYUjw
+         chO/HaSo1PPC71fHzvJFFRDOMMIn9nSdtrUlkaC+Z0wlLTLxZK/BUmthIOUbru//HZNo
+         bnNu4OlwwnKHkCAU+4zjED4I7jxh2pKrjB2LFa4vU5dHb+xsJI+jt+geKS8jTkyvMAlh
+         gfWA==
+X-Gm-Message-State: AOAM531eGPNEvLgJrS8WHw0A7xveFaDqnKZF5Xkw5r06Dln7RuznQB8z
+        CXVShCxq18MIIuyOEzSCEee4TQ==
+X-Google-Smtp-Source: ABdhPJzMX/4YpxutBiiXM2fWXSSduuaC0HQCvEVYpnrcJsYem70ESjGjA5g+ApA82zM/o6oW1zh/YQ==
+X-Received: by 2002:a17:90a:e282:: with SMTP id d2mr104042pjz.159.1601879196092;
+        Sun, 04 Oct 2020 23:26:36 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id j6sm10860110pfi.129.2020.10.04.23.26.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 04 Oct 2020 23:26:35 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 11:56:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     rnayak@codeaurora.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 3/8] drm/msm: Unconditionally call
+ dev_pm_opp_of_remove_table()
+Message-ID: <20201005062633.ejpehkpeuwksrx3e@vireshk-i7>
+References: <cover.1598594714.git.viresh.kumar@linaro.org>
+ <6e4110032f8711e8bb0acbeccfe66dec3b09d5c1.1598594714.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hgQt-amMn8xiF_0kyVZ-9pQxgm5H-VcFpinVQGKnYhwQ@mail.gmail.com>
+In-Reply-To: <6e4110032f8711e8bb0acbeccfe66dec3b09d5c1.1598594714.git.viresh.kumar@linaro.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 25, 2020 at 12:55:29PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Jun 25, 2020 at 7:23 AM Dmitry Torokhov
-> <dmitry.torokhov@gmail.com> wrote:
-> >
-> > On Wed, Jun 24, 2020 at 05:00:09PM +0200, Rafael J. Wysocki wrote:
-> > > On Mon, Jun 8, 2020 at 1:22 PM Andrzej Pietrasiewicz
-> > > <andrzej.p@collabora.com> wrote:
-> > > >
-> > > > Inspecting input device's 'users' member should be done under device's
-> > > > mutex, so add appropriate invocations.
-> > > >
-> > > > Signed-off-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-> > >
-> > > This looks like a fix that might be applied independently of the other
-> > > patches in the series.
-> > >
-> > > Do you want me to pick it up?
-> >
-> > If you pick it we'll have to have a dance with this series. Can I apply
-> > instead?
+On 28-08-20, 11:37, Viresh Kumar wrote:
+> dev_pm_opp_of_remove_table() doesn't report any errors when it fails to
+> find the OPP table with error -ENODEV (i.e. OPP table not present for
+> the device). And we can call dev_pm_opp_of_remove_table()
+> unconditionally here.
 > 
-> Yes, please.
+> While at it, also create a label to put clkname.
 > 
-> Also feel free to add
-> 
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> to it.
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Looking at the driver I think the patch and the original use of
-input->users is not proper. I'll post another patch addressing this
-shortly.
-
-Thanks.
+Can someone please apply this and the other drm patch (2/8) ?
 
 -- 
-Dmitry
+viresh
