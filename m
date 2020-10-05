@@ -2,84 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C19282F61
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 06:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9830D282FA5
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 06:34:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725845AbgJEETT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 00:19:19 -0400
-Received: from smtprelay0195.hostedemail.com ([216.40.44.195]:47212 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725844AbgJEETS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 00:19:18 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 9D24518224D61;
-        Mon,  5 Oct 2020 04:19:17 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2198:2199:2200:2393:2559:2562:2828:2895:2914:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3871:3874:4321:4605:5007:7901:7903:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21451:21627:21990:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
-X-HE-Tag: fold51_2101521271bb
-X-Filterd-Recvd-Size: 2681
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf10.hostedemail.com (Postfix) with ESMTPA;
-        Mon,  5 Oct 2020 04:19:16 +0000 (UTC)
-Message-ID: <f8fd76b81dab7dcb0e262a62e4d92bdf63ef2cfe.camel@perches.com>
-Subject: Re: [PATCH] test_power: add missing newlines when printing
- parameters by sysfs
-From:   Joe Perches <joe@perches.com>
-To:     "Harley A.W. Lorenzo" <hl1998@protonmail.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wangxiongfeng2@huawei.com" <wangxiongfeng2@huawei.com>
-Date:   Sun, 04 Oct 2020 21:19:15 -0700
-In-Reply-To: <1g3ecQ7VLlrgKOSHr6teWgw9xcmVVQx1bFp2KpJD7y35lZpaC8ONb-jrPKapmFttEwVg2uhDwmv6mug9z5-GVZbqPbkOjcqjrSHtaW-k6ts=@protonmail.com>
-References: <1599199798-27804-1-git-send-email-wangxiongfeng2@huawei.com>
-         <20201003212336.5et7erdf6fihqscu@earth.universe>
-         <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
-         <20201003215029.jsugcgpgrmcmydr3@earth.universe>
-         <9822843f764520e1076a92fd9120294aa393a085.camel@perches.com>
-         <20201004221645.nyaf7jhur4jixo6n@earth.universe>
-         <1g3ecQ7VLlrgKOSHr6teWgw9xcmVVQx1bFp2KpJD7y35lZpaC8ONb-jrPKapmFttEwVg2uhDwmv6mug9z5-GVZbqPbkOjcqjrSHtaW-k6ts=@protonmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.36.4-0ubuntu1 
+        id S1725855AbgJEEeh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 00:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725844AbgJEEeh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 00:34:37 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFD5C061787
+        for <linux-pm@vger.kernel.org>; Sun,  4 Oct 2020 21:34:37 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id i2so1488695pgh.7
+        for <linux-pm@vger.kernel.org>; Sun, 04 Oct 2020 21:34:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ER8SNkIBPUO1PeDrBI9sogZFaNg4g0CVTXD/yACbP1A=;
+        b=uVF914RE8PZ+0g+2++oaI7xbK8lnE/K79gTtJ5mrBQ7lsDIKF2bikRJFghZqW+RY9m
+         7owim99rGPKMMdXspkSHKrRZobVVU5UligXCkmPofpdtnIrbxJkpE/Ar5C/zRRLc3Eh7
+         +1YMbuG2CaNmc1zVJDV7D4MgSyeYEo591bp55KQQzhgGwDEoJDEJJv74RR6qUwcCBl+g
+         7Z1sm2ZgBnbRNNCiSRm8gmQmsmLVY5BSwP97XaPO8WsSZ44euDGEgKShq3dCkbRjL5fz
+         gmTjAKXrfmz5zbLfpcMS1BwgwhaVvTvdLfdb1g3D+mDJWUc4bLWl4jefPdr5EpTMeXnw
+         vRzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ER8SNkIBPUO1PeDrBI9sogZFaNg4g0CVTXD/yACbP1A=;
+        b=QLsKfN1y3DT273OY4D3c5MMDURKP6xEgyv1Fz3xYomh/F5e/GNw4DS2A5ocRI5JKJj
+         BHH/bkRbsoR++qoa9BmlVxsmJV9llXPrJC90511Fwi7jfGshNNBb9ql4FCZA7k3q5+15
+         VLAdIFF0EJN7kdFPBmU0244MzMegQXGfKs0k0YW2gl2DBbbq3dkCRfC3nVFnI/5STeBL
+         v5HxmBT0SckUeYlj2G6Gso1h4yBzfDOV12DsJNzy9OnXMV1fSneUYilBYA2TEsn695VQ
+         iJr3jqp1hkXnTvXpuF0sCmLNS1aOYmo15aTnpZLeLsiQg63/yFdi7bf+qqx+RdzknF7Z
+         bqHA==
+X-Gm-Message-State: AOAM533UtuS2etSjMXla1UZL8mcxQVW+3Z3U+CKicS8GNcVzjK4iVX0v
+        DfKKmo5rmaok8wK+PIQK+aXlbg==
+X-Google-Smtp-Source: ABdhPJzrKc1LvHWa06bmxAdSLSneIia0aUnXbwiPmahaJ6y/3sCPWUpdaV9xsfJiYpM4Voc+ai37Bg==
+X-Received: by 2002:a63:f812:: with SMTP id n18mr12307150pgh.438.1601872476758;
+        Sun, 04 Oct 2020 21:34:36 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id 17sm10507165pfi.55.2020.10.04.21.34.35
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 04 Oct 2020 21:34:35 -0700 (PDT)
+Date:   Mon, 5 Oct 2020 10:04:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Sumit Gupta <sumitg@nvidia.com>, rjw@rjwysocki.net,
+        thierry.reding@gmail.com, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
+        bbasu@nvidia.com
+Subject: Re: [Patch 1/2] cpufreq: tegra194: get consistent cpuinfo_cur_freq
+Message-ID: <20201005043433.hvyjmzafazg46kvv@vireshk-i7>
+References: <1600276277-7290-1-git-send-email-sumitg@nvidia.com>
+ <1600276277-7290-2-git-send-email-sumitg@nvidia.com>
+ <81d2517d-6581-b491-c509-832fd1c0321e@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <81d2517d-6581-b491-c509-832fd1c0321e@nvidia.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2020-10-05 at 01:30 +0000, Harley A.W. Lorenzo wrote:
-> Here is the updated patch using sprintf, diffing from the original patch by Xiongfeng Wang.
-> 
-> [PATCH] test_power: revise parameter printing to use sprintf
-> 
-> Signed-off-by: Harley A.W. Lorenzo <hl1998@protonmail.com>
-> Suggested-by: Joe Perches <joe@perches.com>
+On 17-09-20, 09:36, Jon Hunter wrote:
+> Viresh, ideally we need to include this fix for v5.9. Do you need Sumit
+> to resend with the Fixes tag or are you happy to add?
 
-I did not suggest this.
+I understand that this fixes a patch which got merged recently, but I am not
+sure if anything is broken badly right now, i.e. will make the hardware work
+incorrectly.
 
-> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-[]
-> @@ -352,8 +352,8 @@ static int param_set_ac_online(const char *key, const struct kernel_param *kp)
-> 
->  static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
->  {.
-> -	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
-> -	strcat(buffer, "\n");
-> +	char const *out = map_get_key(map_ac_online, ac_online, "unknown");
-> +	sprintf(buffer, "%s\n", out);
->  	return strlen(buffer);
->  }
+Do we really need to get these in 5.9 ? As these are significant changes and may
+cause more bugs. Won't getting them in 5.9-stable and 5.10-rc1 be enough ?
 
-No temporary is necessary nor is strlen as
-that's the same as the return from sprintf.
-
-All of these should be similar to:
-
-static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
-{
-	return sprintf(buffer, "%s\n",
-		       map_get_key(map_ac_online, ac_online, "unknown"));
-}
-
-
+-- 
+viresh
