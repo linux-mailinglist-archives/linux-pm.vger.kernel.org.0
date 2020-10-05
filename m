@@ -2,102 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B24283DAB
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 19:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D3F283DB3
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 19:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728205AbgJERoN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Oct 2020 13:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728027AbgJERoN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 13:44:13 -0400
-Received: from mail-ua1-x943.google.com (mail-ua1-x943.google.com [IPv6:2607:f8b0:4864:20::943])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E6EC0613A7
-        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 10:44:13 -0700 (PDT)
-Received: by mail-ua1-x943.google.com with SMTP id o64so2782139uao.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 10:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T0SUN6EKstVpoqlENVYkDpfxgRN2mhcM+hd8aVgx82Y=;
-        b=Bjhy7mLEf3dMbcB301h2+hrEGKwW0Lztpw8VQTUMYjrf5E1N0OvXzBbiN7Nm22aCGw
-         9lKqHBSMuJczFFO2SHFwXrme+RSj2XbTPmbMh7WBl7D7F4LgcymOwFioF5/PDyoF94sI
-         03dR3zYUPifD8/ZTSvWCz2HfMihd2oVmvihvE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T0SUN6EKstVpoqlENVYkDpfxgRN2mhcM+hd8aVgx82Y=;
-        b=fN+BMmmemO74KPu4Wcm4/2+tztLtzti6NRUm/BcBwQBALAcfBw17xuWEZ4N2Yr81aq
-         salHcQWdS3Tv8LCiip6pow8pUeA7BUw71Z3vwQfafoQxqK3iInE3iaD8ohqflvbkkBep
-         KryY4/ps9nzYqi+vuyouaZt8t0txLKxQkPyG41hudERoSlKwpq7P2xkQSMZQ+hG1+QsO
-         hfeQSF7AgA3pT75bIfVfP/3vzGj0GaVnP5XBjk1WXUWv04YNCv+kxD+SECW0f46I7mpj
-         sQe50mWiZxUe3SH4OGAebjueEl8BuKjHbAeuArAOx+/xVKUjL0aTHFEPmV6z0c+z6HS5
-         zFCw==
-X-Gm-Message-State: AOAM533wba/72pBPiuDm4F7m+QkQSKd2rlZ0aurZVfZfH2HJR2rS+laa
-        zB5WAkmiVJKS8v9ID2rQ/S/GssOmHDIWFg==
-X-Google-Smtp-Source: ABdhPJzi0t4uHx/sucsGPu+PXt2vmFqS3dFbNBRzWfFkqjUjuqZy3pAlhqSFfJ5HUdW8wFhjU8j1Qw==
-X-Received: by 2002:ab0:7718:: with SMTP id z24mr734244uaq.92.1601919852383;
-        Mon, 05 Oct 2020 10:44:12 -0700 (PDT)
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com. [209.85.217.48])
-        by smtp.gmail.com with ESMTPSA id s70sm128188vka.45.2020.10.05.10.44.10
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Oct 2020 10:44:11 -0700 (PDT)
-Received: by mail-vs1-f48.google.com with SMTP id u74so2141463vsc.2
-        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 10:44:10 -0700 (PDT)
-X-Received: by 2002:a67:f4c2:: with SMTP id s2mr992567vsn.4.1601919849846;
- Mon, 05 Oct 2020 10:44:09 -0700 (PDT)
+        id S1727612AbgJERrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 13:47:02 -0400
+Received: from mail1.bemta24.messagelabs.com ([67.219.250.5]:19570 "EHLO
+        mail1.bemta24.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727344AbgJERrC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 13:47:02 -0400
+Received: from [100.112.130.136] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-5.bemta.az-a.us-west-2.aws.symcld.net id 47/26-10948-E0C5B7F5; Mon, 05 Oct 2020 17:46:54 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrCKsWRWlGSWpSXmKPExsWS8eIhjy5vTHW
+  8waFH+haTZvxntth/XcKia6GBxcL7p1gtvn67zW7x5vh0Jovl+/oZLS7vmsNm8bn3CKNFU2cT
+  kNUxmcVi9Z4XzBZrv8xjc+D1mDRzBrPHzll32T1+bVvD4rF5hZbHvJOBHj1tm5g83u+7yubxe
+  ZNcAEcUa2ZeUn5FAmvGrln9zAUL+Cu2rDjA1MC4jaeLkYtDSOA/o8SG6V+ZIJznjBLzX91h7m
+  Lk4BAWyJaY9lKui5GTQ0SgWGLvpCvsIDXMAitZJC71f4Rq6GGRaJnayQpSxSagLbFlyy82kGZ
+  eAVuJic+NQUwWARWJ1vlcIBWiAhESa45PZAKxeQUEJU7OfMICYnMKxEp0fTgFNoVZwEJi5vzz
+  jBC2uMStJ/OZIGx5ie1v5zCD2BICChKz2neyQ9gJEste3mGewCg4C8nYWUhGzUIyahaSUQsYW
+  VYxmicVZaZnlOQmZuboGhoY6BoaGukaGlnqmhroJVbpJuqVFuuWpxaX6BrpJZYX6xVX5ibnpO
+  jlpZZsYgRGaEpBo9EOxr+vP+gdYpTkYFIS5XUOrY4X4kvKT6nMSCzOiC8qzUktPsSowcEhcOX
+  gkdmMUix5+XmpShK8eVFAdYJFqempFWmZOcAkAlMqwcGjJMJbC5LmLS5IzC3OTIdInWJUlBLn
+  fQmSEABJZJTmwbXBEtclRlkpYV5GBgYGIZ6C1KLczBJU+VeM4hyMSsK8eiBTeDLzSuCmvwJaz
+  AS0+PbRCpDFJYkIKakGpgalxQuCU/tfWapdjLywiz1n/hOmbXXru/ziI94wq2yb65fAsVrW5a
+  pa9LJ3Rc9UXdwuTP7ySTXumk9r4/szXPNnxRc//r6JxZ2FSbG1+eALMwN2ng2Fl69er2J1f1f
+  mamIt3l5hrnorf33j6+YVfhYeIrn7OJpKYv6wzHXmiarwMGBu0+ZuWiytqeR7YbOseN32gDkL
+  Y1o8V0hy2ytWcUx7I3D6l1jEzh8lMUu7F3vrVW3f2KGXYDM1JOvO7aMqTt/yVJnK+IMn9jGZv
+  f5680LjkkpjpftBk3pm12us6cvW4J3W6L83dPIs1h/RUi0RQt/XX2ZrfyyYqbCn/0iYvVHBod
+  mKn8S9zaS9fZRYijMSDbWYi4oTAQ5trVfXAwAA
+X-Env-Sender: markpearson@lenovo.com
+X-Msg-Ref: server-21.tower-335.messagelabs.com!1601920012!3362!1
+X-Originating-IP: [104.232.225.12]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.60.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 13372 invoked from network); 5 Oct 2020 17:46:53 -0000
+Received: from unknown (HELO lenovo.com) (104.232.225.12)
+  by server-21.tower-335.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 5 Oct 2020 17:46:53 -0000
+Received: from reswpmail04.lenovo.com (unknown [10.62.32.23])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by Forcepoint Email with ESMTPS id 3E43A34616AD7D75D0E8;
+        Mon,  5 Oct 2020 13:46:52 -0400 (EDT)
+Received: from localhost.localdomain (10.46.54.144) by reswpmail04.lenovo.com
+ (10.62.32.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2044.4; Mon, 5 Oct 2020
+ 10:46:49 -0700
+Subject: Re: [External] RE: [RFC] Documentation: Add documentation for new
+ performance_profile sysfs class
+To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Mark Pearson <mpearson@lenovo.com>,
+        Elia Devito <eliadevito@gmail.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Benjamin Berg <bberg@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20201003131938.9426-1-hdegoede@redhat.com>
+ <20201003131938.9426-2-hdegoede@redhat.com>
+ <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <Mz2G7glm3yMTniKA6SHM011dDkTFF4_otICrMQfVLheopX8JMGSupPleyjyK8OY0tyUazu09nX7XhleBVdl4ozTCWXCPGyvV58Qc-UUTvig=@protonmail.com>
+ <DM6PR19MB26369E7468931E63B69A0604FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+ <91a9bb74-49e7-0a8d-cbc1-3f1907293fa4@lenovo.com>
+ <DM6PR19MB263622BBE4B699A0AA49977DFA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+From:   Mark Pearson <markpearson@lenovo.com>
+Message-ID: <26662fd8-1bd8-94b9-2fa6-6b1c1c96481d@lenovo.com>
+Date:   Mon, 5 Oct 2020 13:46:47 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-References: <20201005163016.13650-1-lukasz.luba@arm.com>
-In-Reply-To: <20201005163016.13650-1-lukasz.luba@arm.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 5 Oct 2020 10:43:58 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W70OPB=ufEfqAJEeZBNwr5yPOCmkM7R2uLKnEj6tZ1qA@mail.gmail.com>
-Message-ID: <CAD=FV=W70OPB=ufEfqAJEeZBNwr5yPOCmkM7R2uLKnEj6tZ1qA@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v2 3/3] dt-bindings: thermal: update
- sustainable-power with abstract scale
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        amitk@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <DM6PR19MB263622BBE4B699A0AA49977DFA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.46.54.144]
+X-ClientProxiedBy: reswpmail04.lenovo.com (10.62.32.23) To
+ reswpmail04.lenovo.com (10.62.32.23)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
 
-On Mon, Oct 5, 2020 at 9:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Update the documentation for the binding 'sustainable-power' and allow
-> to provide values in an abstract scale. It is required when the cooling
-> devices use an abstract scale for their power values.
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->
-> Hi Rob,
->
-> This is a fixed patch for DT binding, which now passes the
-> make dt_binding_check (I have changed tabs into spaces).
-> The former patch error that I have received is here [1].
->
-> Regards,
-> Lukasz
->
-> [1] https://lore.kernel.org/linux-pm/20201002114426.31277-1-lukasz.luba@arm.com/T/#md4b02a3ada592df67446566180643ba56788c159
 
-...and because I suspect you might not look at any patches that fail
-your auto-checker, I'd appreciate it if you could comment on the
-discussion on the previous version of the patch.  Thanks!  :-)
-
--Doug
+On 2020-10-05 12:56 p.m., Limonciello, Mario wrote:
+>>>
+>>> When implemented for the two vendors mentioned here, it would be using a
+>>> proprietary "firmware API" implemented by those two vendors.  For example
+>> write
+>>> arguments (0x1, 0x2) to ACPI-WMI method WMFT and it will cause firmware to
+>> coordinate
+>>> using undisclosed protocol to affect the platform changes desirable.
+>>>
+>>> This is different in my mind from "kernel writes to a specific register" to
+>> set
+>>> power properties of a specific device.
+>>>
+>>
+>> Just curious on this point - isn't that (mostly) what all hardware does?
+>> You write to it and the device does "stuff" to achieve the required
+>> effect. Yes this is in proprietary firmware, but from my experience with
+>> hardware devices that's not uncommon these days anyway.
+>>
+> 
+> Yes I agree.  Even "register" writes to a device are actually an API and
+> something in the hardware monitors those registers and does something as a
+> result.
+> 
+>> Let me know if I'm misunderstanding something here. I couldn't see the
+>> difference between a register written to via ACPI and one written to via
+>> some other protocol (SMBUS? or whatever)
+>>
+>> Mark
+>>
+> 
+> The reason I'm calling out a distinction here is that "platform" and "device"
+> can cover a lot more things.  In this case it's an API provided by the platform's
+> firmware, not an individual device's firmware.  So you can't actually guarantee
+> what the platform's firmware did.  It could have sent any number of sideband
+> commands to devices that it controls.  The "platform" could have potentially
+> told the GPU to turn up its fans, or lower it's clock as a result of this, but you
+> can't possibly know.
+> 
+> However if we go the GPU example alone, it's a specific single device you're
+> controlling.  You put the GPU into the characterization that you expected and it
+> operates that way.
+> 
+Got it - fair enough :) Thanks for the explain.
+Thanks
+Mark
