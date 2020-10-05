@@ -2,80 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9080F282ED0
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 04:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49C19282F61
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Oct 2020 06:19:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725862AbgJEC3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Oct 2020 22:29:53 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:50201 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725841AbgJEC3x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Oct 2020 22:29:53 -0400
-X-UUID: 43e6c307201740c2a5fc0d87cca4fa5e-20201005
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=zfIoFOO7M2zzmk/gLUFI1nPpZvnU+1hf0KYlAmBzynM=;
-        b=nvyOw5xuwQfMsLWDm49sXKIRbVZ7Zxle5+RQR9b3rO5QczMUY0RjujUheDKTkqKHyBN9qWo603dG8ilJ2Ud7GQif6V3wt/DBAVIwXv/uZm/zVAYY+pvGGjW/Do48x1cZHCwezqlsAwEzawun3kIEO90Rpn5SxWPOYsP14tSrHjM=;
-X-UUID: 43e6c307201740c2a5fc0d87cca4fa5e-20201005
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1506511504; Mon, 05 Oct 2020 10:29:47 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 5 Oct 2020 10:29:36 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 5 Oct 2020 10:29:36 +0800
-Message-ID: <1601864976.21446.46.camel@mtkswgap22>
-Subject: Re: [PATCH v7 2/2] dt-bindings: cpufreq: add bindings for MediaTek
- cpufreq HW
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Mon, 5 Oct 2020 10:29:36 +0800
-In-Reply-To: <1601018748.21446.43.camel@mtkswgap22>
-References: <1599712262-8819-1-git-send-email-hector.yuan@mediatek.com>
-         <1599712262-8819-3-git-send-email-hector.yuan@mediatek.com>
-         <20200922202852.GA3134161@bogus> <1600866614.21446.18.camel@mtkswgap22>
-         <1601000847.21446.34.camel@mtkswgap22>
-         <20200925061543.5hxs3ija2y53gzea@vireshk-i7>
-         <1601018748.21446.43.camel@mtkswgap22>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1725845AbgJEETT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Oct 2020 00:19:19 -0400
+Received: from smtprelay0195.hostedemail.com ([216.40.44.195]:47212 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725844AbgJEETS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Oct 2020 00:19:18 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 9D24518224D61;
+        Mon,  5 Oct 2020 04:19:17 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:355:379:599:800:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2194:2198:2199:2200:2393:2559:2562:2828:2895:2914:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3871:3874:4321:4605:5007:7901:7903:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12740:12760:12895:13069:13311:13357:13439:14181:14659:14721:21080:21451:21627:21990:30054:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:2,LUA_SUMMARY:none
+X-HE-Tag: fold51_2101521271bb
+X-Filterd-Recvd-Size: 2681
+Received: from XPS-9350.home (unknown [47.151.133.149])
+        (Authenticated sender: joe@perches.com)
+        by omf10.hostedemail.com (Postfix) with ESMTPA;
+        Mon,  5 Oct 2020 04:19:16 +0000 (UTC)
+Message-ID: <f8fd76b81dab7dcb0e262a62e4d92bdf63ef2cfe.camel@perches.com>
+Subject: Re: [PATCH] test_power: add missing newlines when printing
+ parameters by sysfs
+From:   Joe Perches <joe@perches.com>
+To:     "Harley A.W. Lorenzo" <hl1998@protonmail.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "wangxiongfeng2@huawei.com" <wangxiongfeng2@huawei.com>
+Date:   Sun, 04 Oct 2020 21:19:15 -0700
+In-Reply-To: <1g3ecQ7VLlrgKOSHr6teWgw9xcmVVQx1bFp2KpJD7y35lZpaC8ONb-jrPKapmFttEwVg2uhDwmv6mug9z5-GVZbqPbkOjcqjrSHtaW-k6ts=@protonmail.com>
+References: <1599199798-27804-1-git-send-email-wangxiongfeng2@huawei.com>
+         <20201003212336.5et7erdf6fihqscu@earth.universe>
+         <472008b94f4b20915425db4714fdb505cb0cbe5a.camel@perches.com>
+         <20201003215029.jsugcgpgrmcmydr3@earth.universe>
+         <9822843f764520e1076a92fd9120294aa393a085.camel@perches.com>
+         <20201004221645.nyaf7jhur4jixo6n@earth.universe>
+         <1g3ecQ7VLlrgKOSHr6teWgw9xcmVVQx1bFp2KpJD7y35lZpaC8ONb-jrPKapmFttEwVg2uhDwmv6mug9z5-GVZbqPbkOjcqjrSHtaW-k6ts=@protonmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.36.4-0ubuntu1 
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: ABEF21196E9B582F58E3DE8582B85091A8ED4ECED688690E8E2408ECBC9D27172000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTA5LTI1IGF0IDE1OjI1ICswODAwLCBIZWN0b3IgWXVhbiB3cm90ZToNCj4g
-SGksIFJvYiBzaXI6DQo+IA0KPiBZZXMsIG15IHBhdGNoIGZvbGxvd3MNCj4gRG9jdW1lbnRhdGlv
-bi9kZXZpY2V0cmVlL2JpbmRpbmdzL2NwdWZyZXEvY3B1ZnJlcS1xY29tLWh3LnR4dCB3YXkgdG8N
-Cj4gZGVmaW5lIGZyZXF1ZW5jeSBkb21haW4uDQo+IElzIGl0IE9LIHRvIHlvdSBpZiBJIHVzZSB0
-aGUgc2FtZSB3YXkgdG8gZG8/DQo+IEFuZCBpZiB0aGVyZSBleGlzdCBhbnkgc2NoZW1hIHByb2Js
-ZW0sIHBsZWFzZSBraW5kbHkgbGV0IG1lIGtub3cgaG93IHRvDQo+IGZpeCBpdC4NCj4gDQo+IE15
-IHBhdGNoIHJlZmVyZW5jZQ0KPiBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdGhl
-cm1hbC90aGVybWFsLWNvb2xpbmctZGV2aWNlcy55YW1sDQo+IHRvIHVzZSB0aGUgY3B1IG5vZGUu
-DQo+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y1LjktcmM2L3NvdXJjZS9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdGhlcm1hbC90aGVybWFsLWNvb2xpbmctZGV2
-aWNlcy55YW1sDQo+IA0KPiBUaGFua3MgYSBsb3QuDQo+IA0KSGksIFJvYiBzaXI6DQoNClNvcnJ5
-IHRvIGJvdGhlciB5b3UsIG1heSB3ZSBrbm93IHlvdXIgY29tbWVudCBmb3IgdGhpcy4NClRoYW5r
-cyBzbyBtdWNoLiANCg0KPiBPbiBGcmksIDIwMjAtMDktMjUgYXQgMTE6NDUgKzA1MzAsIFZpcmVz
-aCBLdW1hciB3cm90ZToNCj4gPiBPbiAyNS0wOS0yMCwgMTA6MjcsIEhlY3RvciBZdWFuIHdyb3Rl
-Og0KPiA+ID4gSGksIFZpcmVzaCAmIFJvYiBTaXI6DQo+ID4gPiANCj4gPiA+IEkgd2lsbCBjaGFu
-Z2UgZnJlcXVlbmN5IGRvbWFpbiB0byBiZWxvdyBhbmQgZGVmaW5lIGl0IGluIGNwdWZyZXFfaHcN
-Cj4gPiA+IHNjaGVtYSByYXRoZXIgdGhhbiBjcHUgbm9kZS4NCj4gPiA+IA0KPiA+ID4gbWVkaWF0
-ZWssZnJlcS1kb21haW4tMCA9IDwmY3B1MD4sIDwmY3B1MT47DQo+ID4gDQo+ID4gSSB0aGluayBp
-dCB3b3VsZCBiZSBiZXR0ZXIgdG8gZG8gaXQgdGhlIHN0YW5kYXJkIHdheSB3ZSBoYXZlIGRvbmUg
-aXQgZWxzZXdoZXJlLg0KPiA+IGkuZS4gZm9sbG93IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9i
-aW5kaW5ncy9jcHVmcmVxL2NwdWZyZXEtcWNvbS1ody50eHQsIHRoYXQNCj4gPiBpcyBzaW1pbGFy
-IHRvIHdoYXQgeW91IGRpZCBlYXJsaWVyLg0KPiA+IA0KPiANCg0K
+On Mon, 2020-10-05 at 01:30 +0000, Harley A.W. Lorenzo wrote:
+> Here is the updated patch using sprintf, diffing from the original patch by Xiongfeng Wang.
+> 
+> [PATCH] test_power: revise parameter printing to use sprintf
+> 
+> Signed-off-by: Harley A.W. Lorenzo <hl1998@protonmail.com>
+> Suggested-by: Joe Perches <joe@perches.com>
+
+I did not suggest this.
+
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+[]
+> @@ -352,8 +352,8 @@ static int param_set_ac_online(const char *key, const struct kernel_param *kp)
+> 
+>  static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
+>  {.
+> -	strcpy(buffer, map_get_key(map_ac_online, ac_online, "unknown"));
+> -	strcat(buffer, "\n");
+> +	char const *out = map_get_key(map_ac_online, ac_online, "unknown");
+> +	sprintf(buffer, "%s\n", out);
+>  	return strlen(buffer);
+>  }
+
+No temporary is necessary nor is strlen as
+that's the same as the return from sprintf.
+
+All of these should be similar to:
+
+static int param_get_ac_online(char *buffer, const struct kernel_param *kp)
+{
+	return sprintf(buffer, "%s\n",
+		       map_get_key(map_ac_online, ac_online, "unknown"));
+}
+
 
