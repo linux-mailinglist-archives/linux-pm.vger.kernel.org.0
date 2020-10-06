@@ -2,57 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE40C284880
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 10:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD548284903
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 11:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbgJFIZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35994 "EHLO
+        id S1726060AbgJFJNS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 05:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbgJFIZM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 04:25:12 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A836DC0613D6
-        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 01:25:11 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e18so6504433wrw.9
-        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 01:25:11 -0700 (PDT)
+        with ESMTP id S1726012AbgJFJNS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 05:13:18 -0400
+Received: from mail-ua1-x944.google.com (mail-ua1-x944.google.com [IPv6:2607:f8b0:4864:20::944])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD207C0613DB
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 02:13:17 -0700 (PDT)
+Received: by mail-ua1-x944.google.com with SMTP id x26so2587819uan.11
+        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 02:13:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YdhpNKlTW8M5AEVFobND3IcWnRcYsnTU1ylxUOoxLOQ=;
-        b=qHporHfANLglN4o1QtjGAQRWNnN7asjRL3cjazvXjsHh09RfWeLWPhNLVvwSLhWTRD
-         dq9W25RBebcUYOBXWtFq8Xg4Jpr5iwt1eXNmqsekvon7Xl48K0UpprSPFSz88KD7f3X5
-         mVcgrKZ1Q+07rFYOZ6TaIw9SiDE9zLlxqZ10OzeIv3M1P2sRohlLAogcHVmvgwhtbxWh
-         aDv0+4vxSuOdMGAP1BZwP0BlcnNmUE37U3q6XBhiOW2IywzQSNU0oPIf35dwBbDiZGem
-         YyfEcoZuw1vq+eSTNb3BPCippk6TyfUXDjeg7Imo0qPxxzlaz4AKfZHvUV+rJldsOuzH
-         6yMA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
+        b=mMV78gRfUiTX0Fhq7sbtPeAZE51FANqXe2ffb+yEjr5QoeawgMMwQ8XSrhilmLvHtx
+         sEQF9fUq5Cmu8qOzxjbqa7RQXLkqpoqkoe++HcWkcaLYHbckkwjq/ue7xT3XAD7Uwx43
+         V06RGxgjHInxMdw3DBkk+/9rjGYrV+FnbFAksujQ3/k0njBC0ztFm62WAFNts1zyT9yx
+         oCohLIW+tNgNLvhP4H4CyiMr4WGBCs1Zex5WjzDVN9v47A0drQeaNuCYVRG5QCA6OMto
+         TQSAPGix4TPbAEDvrfDxLrnk+h7EjMNps8LmL2KLypfVwnIUdvEC6slFmF9jTy6w85lq
+         wAsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YdhpNKlTW8M5AEVFobND3IcWnRcYsnTU1ylxUOoxLOQ=;
-        b=PLHa2quFculyjUzF4j3ovWycWWN5rPVxDzDoUuK9Yuk6zhNk9IKaguqStwqoAt1dLQ
-         IRrSEscvqXtvX8Ids4LmNee7kGlHp9WMSURTOqfahpf0bxjxOTs8Q72tQ+niFuXYb5Ru
-         YGScdOE/sFhXeUyj+iFCK98aRx44j7WW7ML9ZMKfINyF44srKKfIwP1mV1fHpjANBjjM
-         voYGFr8ZqsigxWRj+BsFPNlU19AHMd8ignPzwv9iCb2NmfydwfPHXDgKaY3eZZAuNOyk
-         PN9cINDcQItx6JgdU2oI2zpIHmqGsXNlkfRFQySjtLqoox70jkXk8rFyL8bRmK5IACvM
-         +xkg==
-X-Gm-Message-State: AOAM530zBJJTe9Nb6zsU6pbDd9WoHd+YH30Ck8Gk7qoTkDnYj1Of+Lnb
-        bjCR2fStpHJW71ZPkLnCiIrNwg==
-X-Google-Smtp-Source: ABdhPJxsjuEumsaEtaU67N9vbg2cBftfsc/wZW21wnFzsv2BjeMFHC1JmQFLaFRJtrvHxARri2Z8Zg==
-X-Received: by 2002:a5d:6409:: with SMTP id z9mr120080wru.391.1601972710164;
-        Tue, 06 Oct 2020 01:25:10 -0700 (PDT)
-Received: from [192.168.86.34] (cpc86377-aztw32-2-0-cust226.18-1.cable.virginm.net. [92.233.226.227])
-        by smtp.googlemail.com with ESMTPSA id y11sm3353486wrs.16.2020.10.06.01.25.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Oct 2020 01:25:09 -0700 (PDT)
-Subject: Re: [PATCH 0/4] dt-bindings: additional/unevaluatedProperties
- clean-ups
-To:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8dDgYnCSpFzq6wD68V8dBs1dGtEohkus4tfFLo0MV6k=;
+        b=s66oSBPE7439H7yflgK5IOA0z1D/QMmd9SclAUJrN8UqBPGRKlMdY1VXDMyJK9jpoM
+         vnuHw4u/5gxJgOXc+2y57cUAIco06BdeZ5dhM3SICR/HN93FQRLVcD7ri9eQjuxWAKWP
+         PdoEof4/xUPLC5pLX5thP5mhv2UK+9BWiZL0TPhyAgHZro8nyE+MSqVKgbgznnQI1z+h
+         w2U+gZhR8iMW5kz2dPKgD61C2DGxznGeBFXJ0cxM5lM+ZBTj6FEnk+AdQZzhtZ60keHF
+         vCjcpr4sLFJoEtWtGh/qd41PpRPRgBbL9HfzUINGBS7ldTEia9wDsUGTmkYyeIY3aFL7
+         6kMw==
+X-Gm-Message-State: AOAM531coteJOgnPZVCDquNk1lfQyfc0Cd/2xVcB/9w89qa4KkMB5J9w
+        YOLq8ty8zbx4jMd+fdxpFCW3zHtXi2UlXVBCsaq6wA==
+X-Google-Smtp-Source: ABdhPJyShwqC7yW6UgNo8q98koC+vDiOR29TMFNqADEMu067y863m4dqGu1r37N7vNMGC6BIcV2u4BNvWr4WQc/Y4R4=
+X-Received: by 2002:ab0:130a:: with SMTP id g10mr2309765uae.100.1601975596602;
+ Tue, 06 Oct 2020 02:13:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201005183830.486085-1-robh@kernel.org> <20201005183830.486085-2-robh@kernel.org>
+In-Reply-To: <20201005183830.486085-2-robh@kernel.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 6 Oct 2020 11:12:39 +0200
+Message-ID: <CAPDyKFqMic9_3OBvSWrdrXonDjeC+8kjDobTunijxvL6gYDPjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] dt-bindings: Add missing 'unevaluatedProperties'
+To:     Rob Herring <robh@kernel.org>
+Cc:     DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
         Alessandro Zummo <a.zummo@towertech.it>,
         Andrew Lunn <andrew@lunn.ch>,
         Bjorn Helgaas <bhelgaas@google.com>,
@@ -60,7 +61,7 @@ Cc:     Albert Ou <aou@eecs.berkeley.edu>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -86,11 +87,11 @@ Cc:     Albert Ou <aou@eecs.berkeley.edu>,
         Richard Weinberger <richard@nod.at>,
         Sam Ravnborg <sam@ravnborg.org>,
         Sebastian Reichel <sre@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Vinod Koul <vkoul@kernel.org>,
         Viresh Kumar <vireshk@kernel.org>,
@@ -98,54 +99,60 @@ Cc:     Albert Ou <aou@eecs.berkeley.edu>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
         Wolfgang Grandegger <wg@grandegger.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-can@vger.kernel.org, linux-clk <linux-clk@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
         linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>,
         linux-watchdog@vger.kernel.org
-References: <20201005183830.486085-1-robh@kernel.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <d04c47dd-6e37-a7ac-f3c4-d6e6c308dbcd@linaro.org>
-Date:   Tue, 6 Oct 2020 09:25:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20201005183830.486085-1-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, 5 Oct 2020 at 20:38, Rob Herring <robh@kernel.org> wrote:
+>
+> This doesn't yet do anything in the tools, but make it explicit so we can
+> check either 'unevaluatedProperties' or 'additionalProperties' is present
+> in schemas.
+>
+> 'unevaluatedProperties' is appropriate when including another schema (via
+> '$ref') and all possible properties and/or child nodes are not
+> explicitly listed in the schema with the '$ref'.
+>
+> This is in preparation to add a meta-schema to check for missing
+> 'unevaluatedProperties' or 'additionalProperties'. This has been a
+> constant source of review issues.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
+[...]
 
-On 05/10/2020 19:38, Rob Herring wrote:
-> The default behavior for json-schema is any unknown property is allowed.
-> T
-> 
-> hat is generally not the behavior we want for DT. In order to disallow
-> extra properties, schemas need to define 'additionalProperties: false'
-> typically. Ideally, we'd just add that automatically with the tools, but
-> there are some exceptions so only making things explicit everywhere
-> really works. Missing 'additionalProperties' or 'unevaluatedProperties'
-> has been a constant source of review comments, so a meta-schema check is
-> really needed here.
-> 
->   Documentation/devicetree/bindings/nvmem/nvmem.yaml     |  2 ++
->   .../devicetree/bindings/nvmem/qcom,qfprom.yaml         |  2 ++
+>  .../devicetree/bindings/mmc/amlogic,meson-mx-sdhc.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml        | 2 ++
+>  Documentation/devicetree/bindings/mmc/ingenic,mmc.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/owl-mmc.yaml           | 2 ++
+>  Documentation/devicetree/bindings/mmc/rockchip-dw-mshc.yaml  | 2 ++
+>  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml         | 2 ++
+>  .../devicetree/bindings/mmc/socionext,uniphier-sd.yaml       | 2 ++
+>  Documentation/devicetree/bindings/mmc/synopsys-dw-mshc.yaml  | 2 ++
 
-for nvmem parts,
+For mmc:
 
-Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+[...]
 
-thanks,
---srini
+Kind regards
+Uffe
