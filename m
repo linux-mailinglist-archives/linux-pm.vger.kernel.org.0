@@ -2,56 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9582D2852CC
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 22:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC6592852CF
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 22:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbgJFUDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 16:03:33 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:48139 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgJFUDd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 16:03:33 -0400
+        id S1727188AbgJFUDm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 16:03:42 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:24438 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbgJFUDm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 16:03:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1602014612; x=1633550612;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=S5Lk5IYNPfklOzkbGG082cbWlD2ByiSYJT6pEWsLLHk=;
-  b=rCy+7xrPOXiKiVT7bpwxszIwy+JXH1t0Y1a2+CLN8SMZkvJ7qzMUI96s
-   9GoeU/RPF3SXiMRtbkUHd+OB3L6hfY4k6nHpVMXCcGwPMBrnFeCjaPTHg
-   MC8s/Cpc+0k274yzmGrFYKotsPn2FYFxS3Ww2t4vJultm6AsufObn31gx
-   Fd2LsPjN55YvRQYDViyz3q3qQqDKeNJQhTkK2ojWG/WbjvpxtG/io/zAs
-   K+2pMsHzz8aeXPx3merfig6Zc4ofk8S/FpI8C+GVPw4314DqLUyjF9MyH
-   uedUozrF9rA3QW8NMrPX+18N0iMdtRKBkD5iqP0wyJAiabv/zLpvo5cPB
-   A==;
-IronPort-SDR: EjA+WSvRrbWAAKoR1p4KH0TbPBINsfgYSy6WP3BCx9DlLd08m+K4doO6SrNi10ejbEo6WHrxz6
- cit0oB1MOCRjUTKEklE8v0Ib427M8rk1jiyDwLO1Ho5r/0WuMedvymQoOnspm3evDuILHE8zfT
- Rafx0L7nxOnuyV/QoE9QmnEfRIxL9Z+7sLfIgmFDVhbmB6u4ahz6l1i9hWT83FcQkzQGEwomsd
- Qk7NvbyM95sM4bRnagJFzMh25uzg6KppJqXy9GVbpaDQDYpbV8Mb8GR1twdC6BkQiENd1KYMjz
- iQc=
+  t=1602014621; x=1633550621;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7BXCajxhGO2RKQWwE9sCw07Gt6S0v/iP/4MJXAOe4dU=;
+  b=e1mUOum19E6P6a5T15/8wO4nZXumZVdlaikr9XinHgmDVv0SICt41Dlb
+   c+jcUZDrc7EGhoVhPwA+16WAKqNt7uBVdQBBT5y+Tuos7gxc0UgqZIeC7
+   2VMNr/yzgcp0kHG0xxwqfpBMkOll352wU7CAxMjP1fLsiGbW873huA3Fz
+   BZI8G2CaAg+4JicODdgSaogH/Jb2ul2qUluqhIeMkF3EXxtaajjulWSIz
+   fGNheesZdOCyHluDgev8kbAqxYa0+9smkV/CHzOPwv71BhCk1JLNudKWI
+   9wDR87curSpAKwSTbmOi9o/ZEUdFdI9Zhno/bpEf4szDwjNYcQgQHt8gi
+   g==;
+IronPort-SDR: ujWoXHm0CCpH1Y4y9K1fFUPpRyLpYwd0wcu+Oj4WAeIv+bPhv9+I9i29GsV3ZLIvcdPBMQFzna
+ VcQRqnv/JNd2OlscZ0wjgH/s6AmlRd6p4NeEqu9jNHa5olnX8722kghD+IxurblyN2gZdYc81z
+ 5HSCicqqPClS5+GOE+zMviNi0pgcXs2X80OqTOZwxIA73jN2ot0gEnbG00IP5nuB6c6FPRwpUA
+ Z3e+v2GJHIr4SUWvRGwVtoVwcFLVp47dJLL37Q2QFXW4mbEkJbNHgkzfg9iBdUeWoJ5EO3gloo
+ AF0=
 X-IronPort-AV: E=Sophos;i="5.77,343,1596524400"; 
-   d="scan'208";a="91665223"
+   d="scan'208";a="89329645"
 Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Oct 2020 13:03:32 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Oct 2020 13:03:40 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 6 Oct 2020 13:03:31 -0700
+ 15.1.1979.3; Tue, 6 Oct 2020 13:03:28 -0700
 Received: from soft-dev10.microsemi.net (10.10.115.15) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.1979.3 via Frontend Transport; Tue, 6 Oct 2020 13:03:30 -0700
+ 15.1.1979.3 via Frontend Transport; Tue, 6 Oct 2020 13:03:38 -0700
 From:   Lars Povlsen <lars.povlsen@microchip.com>
-To:     Sebastian Reichel <sre@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
 CC:     Lars Povlsen <lars.povlsen@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
         <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 0/3] power: Add reset support for Microchip Sparx5 SoC
-Date:   Tue, 6 Oct 2020 22:03:13 +0200
-Message-ID: <20201006200316.2261245-1-lars.povlsen@microchip.com>
+Subject: [PATCH v2 1/3] dt-bindings: reset: ocelot: Add Sparx5 support
+Date:   Tue, 6 Oct 2020 22:03:14 +0200
+Message-ID: <20201006200316.2261245-2-lars.povlsen@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201006200316.2261245-1-lars.povlsen@microchip.com>
+References: <20201006200316.2261245-1-lars.povlsen@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -59,24 +62,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds reset support for the Sparx5 SoC, using the ocelot reset
-driver.
+This adds the support for the Sparx5 SoC.
 
-Changes in v2:
-- Dropped the parts for resetting the switch core upon load time -
-  controlled by the 'microchip,reset-switch-core' DT property.
+Signed-off-by: Lars Povlsen <lars.povlsen@microchip.com>
+---
+ .../devicetree/bindings/power/reset/ocelot-reset.txt       | 7 +++++--
+ MAINTAINERS                                                | 1 +
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
-Lars Povlsen (3):
-  dt-bindings: reset: ocelot: Add Sparx5 support
-  power: reset: ocelot: Add support for Sparx5
-  arm64: dts: sparx5: Add reset support
+diff --git a/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+index 1b4213eb3473..4d530d815484 100644
+--- a/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
++++ b/Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+@@ -1,10 +1,13 @@
+ Microsemi Ocelot reset controller
 
- .../bindings/power/reset/ocelot-reset.txt     |  7 ++-
- MAINTAINERS                                   |  1 +
- arch/arm64/boot/dts/microchip/sparx5.dtsi     | 10 ++++
- drivers/power/reset/Kconfig                   |  3 +-
- drivers/power/reset/ocelot-reset.c            | 55 +++++++++++++++----
- 5 files changed, 60 insertions(+), 16 deletions(-)
+ The DEVCPU_GCB:CHIP_REGS have a SOFT_RST register that can be used to reset the
+-SoC MIPS core.
++SoC core.
++
++The reset registers are both present in the MSCC vcoreiii MIPS and
++microchip Sparx5 armv8 SoC's.
 
+ Required Properties:
+- - compatible: "mscc,ocelot-chip-reset"
++ - compatible: "mscc,ocelot-chip-reset" or "microchip,sparx5-chip-reset"
+
+ Example:
+ 	reset@1070008 {
+diff --git a/MAINTAINERS b/MAINTAINERS
+index deaafb617361..cc70e3ab428b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11516,6 +11516,7 @@ M:	Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
+ L:	linux-mips@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/mips/mscc.txt
++F:	Documentation/devicetree/bindings/power/reset/ocelot-reset.txt
+ F:	arch/mips/boot/dts/mscc/
+ F:	arch/mips/configs/generic/board-ocelot.config
+ F:	arch/mips/generic/board-ocelot.c
 --
 2.25.1
