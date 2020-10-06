@@ -2,196 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C8F284B64
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 14:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1EC284B83
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 14:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726137AbgJFMKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 08:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S1726329AbgJFMUq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 08:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbgJFMKN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 08:10:13 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86301C061755
-        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 05:10:12 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id x5so1119486plo.6
-        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 05:10:12 -0700 (PDT)
+        with ESMTP id S1726133AbgJFMUq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 08:20:46 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E020EC0613D1
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 05:20:45 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id e18so7312467wrw.9
+        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 05:20:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=m2Bju6l/8/6XsORAyp8wWJVC5m8rx+JKRvZApR963ys=;
-        b=lovbOIzOAAwJrW6ZNSm5Z4+sfeGdhUwnHDThhoW9XcP6nEMJ5Ql4nD6AbM0Izk/Wya
-         uqKslBZbsxy+NqohLE5JqEFFXrKSjAnk3LidMLl2gOSixmb3+cwl+IV0oaOYTYy6+rJj
-         oY+3Y2Dlplor2X+2Dd3Nr/22s27+cLXDPlKORor4AOPp7N2tbtFOQhqbCe55Uz6LLmJl
-         0ESLqP/71BuieXQpeZi/pIy0Ey0hLCULvhEIaNbXvPe0nUWL5mRs7NSCpGg0IiYjQs0V
-         WbFZiuFVLqRyvhLQi4aSjKq8p01Ik7WN4Ys/NfxX6ADzFV9tQHP55MGjqIABSUaUJF0O
-         s7MA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHqlJlKyK3t+BplWZMVjP0HJb12amo5gWYHD/Aa8e9s=;
+        b=fB7+dnIdkE+utP0B/DtZDwiIRlCjrN+H3ocJF3Kg7TpO8uliOFUsHs0nCFJEtu0z9F
+         Q30VL7TfftLQawwmbVq6URRycNI2U6ymvN5r3ssthQWYhxxOMR6uDwwx0csrjUWsugcA
+         PnxUifmMqz16gCqUpSj7ePV6H+Tepnrg4QrSqGfkYudLBOi52MSWEfjBTZqi4ygvWx5R
+         JgDZbi7WNI/wKqXtS6kv93sdmGnjSOwsIHr+ELxQCtYl5TG7bnvfwrjDVTxFwtwpXTYq
+         024D9ccCJTIPWHTAjoamaaUTreonc3WYsdmKK5J1DMALErGonc/Y6/7KtNdsFFiM46mM
+         ueMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=m2Bju6l/8/6XsORAyp8wWJVC5m8rx+JKRvZApR963ys=;
-        b=UgQWCDYI2pCX3sjvkL4oyPatDI+QSvtoRSOZWDFI0+wbzy3TfG6bpDbIZSvp6dpS07
-         cC0a3bOSU9eYn/RJY0e2gU+PJgo7Lkt0WMyOppJBRfnOd38IIJoHrjDdjA2aCRsMLQR0
-         ZkGq+gDGuLYxs6dYg04SlIGKhi09C8si3wPboH71LyOJICoPsF1UOAkhEGy1QZBVMHYL
-         W/zBYhS1kAHm7dxdc3SUpMW+hz1qMx1IgjuRZZxmunWZLsOXLbevfeG0a8nnFAywcHy7
-         wFg5yIwC7vqqxJ529ki76yteE+5RALuMeTdWbiARPxr3tIC/ckS6SocUufgsdauAOE3Y
-         97ng==
-X-Gm-Message-State: AOAM531Pd6QK98HojWxPB3C+yDxqvMf4RW2mjeJQWRvystsyHQ/lNlJ5
-        1iI5N2iCg8xX/zEeRpI+7/ouEgiblURc9Q==
-X-Google-Smtp-Source: ABdhPJx7axOnLt2C4dB1cn8m4rHyaNswA8wYhVvMKyDMknmRYxECybmSZ50nEEnAPdYvEaa8GMtzOg==
-X-Received: by 2002:a17:902:864b:b029:d3:ce46:2829 with SMTP id y11-20020a170902864bb02900d3ce462829mr3106732plt.16.1601986212013;
-        Tue, 06 Oct 2020 05:10:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c187sm3775613pfc.0.2020.10.06.05.10.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jHqlJlKyK3t+BplWZMVjP0HJb12amo5gWYHD/Aa8e9s=;
+        b=OJrtam/WeqzYGAp5QmVlxrvzDo9YPdsgbjfe5VO9fKclPp0jA5NItPshsJvxC8FYPV
+         eQCng1VKGBGuSRDD7xyYcwXNt24OAZpWD5XnhERU8DsYe6CXizpj08QP4J7W0JnE51u8
+         Wwrm0qqKQn+0UuC/GTdKmPdV0JRQBiNlwvowBvveZDvRj1pDu6sGOpsQVsaK16eCHXS9
+         qOMQ8RDwJnf0EfRMhXkEMKDsNRF1WLTPkbcRTn5bVk1OllA6IMMPXwBJC8AYAN+y6K92
+         KaB7l90nrQq+y3lpM6W+FmAPhuAZgqpxizot6XzprV1DC1kLszVnduimUhkye9uZeWeN
+         BPbQ==
+X-Gm-Message-State: AOAM533q3MXBYaP3wvzzwTPBgASgAIcMOgj+o11NvHpVd91xpNxqcAwd
+        Qp+avn13Z66vTrwabHhdh2MzuA==
+X-Google-Smtp-Source: ABdhPJxC22IO37gpc3nCTUf4QVKu5O5/BfhzkqDY75+/hntvPjceH3AhCEQMht+nQSLUH68LbDfjnQ==
+X-Received: by 2002:a5d:540e:: with SMTP id g14mr4828784wrv.148.1601986844293;
+        Tue, 06 Oct 2020 05:20:44 -0700 (PDT)
+Received: from localhost.localdomain (lns-bzn-59-82-252-130-8.adsl.proxad.net. [82.252.130.8])
+        by smtp.gmail.com with ESMTPSA id s19sm3742521wmc.41.2020.10.06.05.20.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 05:10:11 -0700 (PDT)
-Message-ID: <5f7c5ea3.1c69fb81.bf5cd.825f@mx.google.com>
-Date:   Tue, 06 Oct 2020 05:10:11 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 06 Oct 2020 05:20:43 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com
+Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rui.zhang@intel.com
+Subject: [PATCH 0/4] powercap/dtpm: Add the DTPM framework
+Date:   Tue,  6 Oct 2020 14:20:20 +0200
+Message-Id: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc8-119-g9acb56ca0dec
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 80 runs,
- 2 regressions (v5.9-rc8-119-g9acb56ca0dec)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 80 runs, 2 regressions (v5.9-rc8-119-g9acb56ca0dec)
+The density of components greatly increased the last decade bringing a
+numerous number of heating sources which are monitored by more than 20
+sensors on recent SoC. The skin temperature, which is the case
+temperature of the device, must stay below approximately 45°C in order
+to comply with the legal requirements.
 
-Regressions Summary
--------------------
+The skin temperature is managed as a whole by an user space daemon,
+which is catching the current application profile, to allocate a power
+budget to the different components where the resulting heating effect
+will comply with the skin temperature constraint.
 
-platform        | arch  | lab           | compiler | defconfig          | r=
-esults
-----------------+-------+---------------+----------+--------------------+--=
-------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 3=
-/4    =
+This technique is called the Dynamic Thermal Power Management.
 
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 4=
-/5    =
+The Linux kernel does not provide any unified interface to act on the
+power of the different devices. Currently, the thermal framework is
+changed to export artificially the performance states of different
+devices via the cooling device software component with opaque values.
+This change is done regardless of the in-kernel logic to mitigate the
+temperature. The user space daemon uses all the available knobs to act
+on the power limit and those differ from one platform to another.
 
+This series provides a Dynamic Thermal Power Management framework to
+provide an unified way to act on the power of the devices.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc8=
--119-g9acb56ca0dec/plan/baseline/
+Daniel Lezcano (4):
+  units: Add Watt units
+  Documentation/powercap/dtpm: Add documentation for dtpm
+  powercap/drivers/dtpm: Add API for dynamic thermal power management
+  powercap/drivers/dtpm: Add CPU energy model based support
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc8-119-g9acb56ca0dec
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      9acb56ca0dec044037bf2d0a76f49ba773134ec0 =
+ Documentation/power/powercap/dtpm.rst | 222 +++++++++++++
+ drivers/powercap/Kconfig              |  14 +
+ drivers/powercap/Makefile             |   2 +
+ drivers/powercap/dtpm.c               | 430 ++++++++++++++++++++++++++
+ drivers/powercap/dtpm_cpu.c           | 242 +++++++++++++++
+ include/asm-generic/vmlinux.lds.h     |  11 +
+ include/linux/cpuhotplug.h            |   1 +
+ include/linux/dtpm.h                  |  76 +++++
+ include/linux/units.h                 |   4 +
+ 9 files changed, 1002 insertions(+)
+ create mode 100644 Documentation/power/powercap/dtpm.rst
+ create mode 100644 drivers/powercap/dtpm.c
+ create mode 100644 drivers/powercap/dtpm_cpu.c
+ create mode 100644 include/linux/dtpm.h
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-esults
-----------------+-------+---------------+----------+--------------------+--=
-------
-bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 3=
-/4    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7c5015447eca13724ff3ea
-
-  Results:     3 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc8-119-g9acb5=
-6ca0dec/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc8-119-g9acb5=
-6ca0dec/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7c5015447eca13=
-724ff3ee
-      failing since 0 day (last pass: v5.9-rc7-75-g027a0d093137, first fail=
-: v5.9-rc8-85-g66bebc5f7cab)
-      1 lines
-
-    2020-10-06 11:06:02.215000  Connected to bcm2837-rpi-3-b console [chann=
-el connected] (~$quit to exit)
-    2020-10-06 11:06:02.215000  (user:khilman) is already connected
-    2020-10-06 11:06:18.304000  =00
-    2020-10-06 11:06:18.304000  =
-
-    2020-10-06 11:06:18.304000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
-0)
-    2020-10-06 11:06:18.304000  =
-
-    2020-10-06 11:06:18.304000  DRAM:  948 MiB
-    2020-10-06 11:06:18.320000  RPI 3 Model B (0xa02082)
-    2020-10-06 11:06:18.407000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
-    2020-10-06 11:06:18.439000  Loading Environment from FAT... *** Warning=
- - bad CRC, using default environment
-    ... (378 line(s) more)
-      =
-
-
-
-platform        | arch  | lab           | compiler | defconfig          | r=
-esults
-----------------+-------+---------------+----------+--------------------+--=
-------
-panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 4=
-/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7c54a2575bfd64ad4ff3fd
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc8-119-g9acb5=
-6ca0dec/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc8-119-g9acb5=
-6ca0dec/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f7c54a2575bfd6=
-4ad4ff403
-      failing since 47 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)
-      60 lines
-
-    2020-10-06 11:27:23.182000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c802
-    2020-10-06 11:27:23.188000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c803
-    2020-10-06 11:27:23.194000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c804
-    2020-10-06 11:27:23.200000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c805
-    2020-10-06 11:27:23.206000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c806
-    2020-10-06 11:27:23.212000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c807
-    2020-10-06 11:27:23.218000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c808
-    2020-10-06 11:27:23.224000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c809
-    2020-10-06 11:27:23.230000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c80a
-    2020-10-06 11:27:23.237000  kern  :alert : BUG: Bad page state in proce=
-ss swapper/0  pfn:9c80b
-    ... (49 line(s) more)
-      =20
+--
+2.17.1
