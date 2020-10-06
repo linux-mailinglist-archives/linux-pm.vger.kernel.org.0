@@ -2,114 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 219CC284BFB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 14:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810D0284C2C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 15:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726578AbgJFMtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 08:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S1726181AbgJFNEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 09:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbgJFMtt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 08:49:49 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4DDC061755
-        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 05:49:49 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p21so1514820pju.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 05:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eJ1aq4jgjqD+XAdKnyKlrf72kNxBwvd/dyCBPHrWBCc=;
-        b=tWV1i5KD4A7CLC4G5r0hmQpYRlwmk6lVI3vabttdA7R+77ijJ7HJ8hPEAiw83vjWFO
-         lsu4OUwItUGuJzXRMLNhkuxtkLeR/FO0Y8HcZUEQugJrwdzy+xQOPGsOv6ooSG6cxBXO
-         lpIRepNyqpOMhW/LRUbW5VRqLdh9WdQ+L2IxHdZ8I3kfb1VgQzbJD2pBMc+tQ5kTCQaK
-         RbIr0/y2qbUXXyMwUJJuG0RLbKig6C84nM2qiEe5IZK/Q4XYlq6ah1QeH2AZADiOEZuq
-         Srjo3DBa1wxo+OooOfN2QqtsUJfL4/R/pFTlck/OTh3wSf2lbkFuBY+ByzGxNdpSoNEZ
-         FkGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eJ1aq4jgjqD+XAdKnyKlrf72kNxBwvd/dyCBPHrWBCc=;
-        b=dhVnnsfXeIMQhqbRwyBLTN9v62owKIu5AHk9/m3SkGn1I04xgpbl/JgvxGgVP5rMWL
-         zGdwlTtjEE5AuVBtQV15/7TcHkMXV9t9UdCXbGUnylgxC2iWP+VchC93Jc76/M37B1X3
-         wT+NU9OriQ0id/j0jhbDgul+w8vqSrL9FPSbWlwVI88Faw5iirb/6O98HqxHsEahiF8q
-         tXfkTp7x0BmR9DprO05C4IL4zsgIidElY+G1mElJ/JeluSMl9wMK+Mzl00kWlOX52P+y
-         aXCys10A5wNKMAtUJ9JI4eU15GQbJhiQo8Gj1GvvFMPH8t5e+gILPb9q1jmfB2ptT4K5
-         W+Rw==
-X-Gm-Message-State: AOAM533uDAs0Uxce7ixOpoIQmsTdGSVccK30kpvLX3hkIHmvtzxioi9t
-        QOGhZJxspBlsfc/1I4Daqa5FkoYEPwZF1Q==
-X-Google-Smtp-Source: ABdhPJyU4xxUKSUbKTbjUDCd8JfmNtc62yBHKMCpPgWoaKMb+86mcKoyi8WQwhzqjGsL3e2fC5iCpg==
-X-Received: by 2002:a17:902:7d8d:b029:d3:95b9:68ed with SMTP id a13-20020a1709027d8db02900d395b968edmr3132977plm.28.1601988589394;
-        Tue, 06 Oct 2020 05:49:49 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q24sm2661017pfn.72.2020.10.06.05.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 05:49:48 -0700 (PDT)
-Message-ID: <5f7c67ec.1c69fb81.a90f4.4ae3@mx.google.com>
-Date:   Tue, 06 Oct 2020 05:49:48 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1725891AbgJFNEd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 09:04:33 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A849C061755;
+        Tue,  6 Oct 2020 06:04:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: andrzej.p)
+        with ESMTPSA id 7ECB0299E5B
+Subject: Re: [PATCH v4 7/7] Input: Add "inhibited" property
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
+        ibm-acpi-devel@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Kukjin Kim <kgene@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Barry Song <baohua@kernel.org>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Nick Dyer <nick@shmanahar.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Ferruh Yigit <fery@cypress.com>,
+        Sangwon Jee <jeesw@melfas.com>,
+        Peter Hutterer <peter.hutterer@redhat.com>,
+        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
+        kernel@collabora.com, Patrik Fimml <patrikf@chromium.org>
+References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
+ <20200608112211.12125-1-andrzej.p@collabora.com>
+ <20200608112211.12125-8-andrzej.p@collabora.com>
+ <20201005181014.GL1009802@dtor-ws>
+From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Message-ID: <ac4eeab7-8333-b96b-707b-eb2d6d0d8139@collabora.com>
+Date:   Tue, 6 Oct 2020 15:04:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v5.9-rc8-137-gc3cdb7873495
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing sleep: 3 runs, 1 regressions (v5.9-rc8-137-gc3cdb7873495)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20201005181014.GL1009802@dtor-ws>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing sleep: 3 runs, 1 regressions (v5.9-rc8-137-gc3cdb7873495)
+Hi Dmitry,
 
-Regressions Summary
--------------------
+W dniu 05.10.2020 o 20:10, Dmitry Torokhov pisze:
+> Hi Andrzej,
+> 
+> On Mon, Jun 08, 2020 at 01:22:11PM +0200, Andrzej Pietrasiewicz wrote:
+>> @@ -284,8 +284,11 @@ static int input_get_disposition(struct input_dev *dev,
+>>   	case EV_KEY:
+>>   		if (is_event_supported(code, dev->keybit, KEY_MAX)) {
+>>   
+>> -			/* auto-repeat bypasses state updates */
+>> -			if (value == 2) {
+>> +			/*
+>> +			 * auto-repeat bypasses state updates but repeat
+>> +			 * events are ignored if the key is not pressed
+>> +			 */
+>> +			if (value == 2 && test_bit(code, dev->key)) {
+>>   				disposition = INPUT_PASS_TO_HANDLERS;
+>>   				break;
+>>   			}
+> 
+> Is this chunk really part of inhibit support? I'd think we cancel
+> autorepeat timer when we are releasing a key, no?
+> 
 
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
+When I look at it now it seems to me the chunk might be redundant.
+But let me explain what I had in mind when adding it.
 
+It is a matter of what we do with input events generated while a
+device is inhibited. If ->open()/->close() are not provided by the
+driver then inhibiting amounts to merely ignoring input events from
+a device while it remains active. What else can you do if the driver
+does not provide a method to prepare the device for generating events/
+to stop generating events?
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc8=
--137-gc3cdb7873495/plan/sleep/
+In this special case a user might trigger a repeated event while the
+device is inhibited, then the user keeps holding the key down and the
+device is uninhibited. Do we pass anything to handlers then?
 
-  Test:     sleep
-  Tree:     pm
-  Branch:   testing
-  Describe: v5.9-rc8-137-gc3cdb7873495
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c3cdb7873495e5bbe7e3168efa9a2e7c988669a2 =
+In my opinion we should not. Such an event is "illegal" in a sense that it
+was generated at a time when nobody wanted any events from the device.
+Hence the test to let only those auto-repeat events through for which
+a key is actually pressed.
 
+However, what I see now is that if a device is inhibited, no key
+will ever reach neither the "1" nor "2" state because of the "if"
+in the very beginning of input_handle_event().
 
+Regards,
 
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | results
-----------------+-------+---------------+----------+-----------+--------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-8    | defconfig | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f7c5ba934a7cb2c5d4ff3ec
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc8-137-gc3cdb=
-7873495/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc8-137-gc3cdb=
-7873495/arm64/defconfig/gcc-8/lab-collabora/sleep-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/buster/2020=
-1002.0/arm64/rootfs.cpio.gz =
-
-
-  * sleep.login: https://kernelci.org/test/case/id/5f7c5ba934a7cb2c5d4ff3ed
-      failing since 47 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
- v5.9-rc1-4-g1f08d51cd57f)  =20
+Andrzej
