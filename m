@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDB7285228
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF9C28522B
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgJFTNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 15:13:05 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:38783 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726934AbgJFTNF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:13:05 -0400
-Received: by mail-oi1-f193.google.com with SMTP id 26so13779044ois.5;
-        Tue, 06 Oct 2020 12:13:04 -0700 (PDT)
+        id S1726934AbgJFTOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 15:14:08 -0400
+Received: from mail-oo1-f65.google.com ([209.85.161.65]:35154 "EHLO
+        mail-oo1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726924AbgJFTOI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:14:08 -0400
+Received: by mail-oo1-f65.google.com with SMTP id k13so3481703oor.2;
+        Tue, 06 Oct 2020 12:14:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=gQ2ktDJGEeFM3h8T9B6y0y8BdmKCksK+/sMYqWj0X2Q=;
-        b=T6NET71QkVogpk2c/uwNt7XzqY88FShKTx7+/nTr1GpcQ9nYzn8yaBA3kaJIJuLYEq
-         Yri6DMCQhXe1eAChDalxnEOPbdH/oeqtr15eVTmFAaIPjzEtoZieAE8VXGlZWexEDro6
-         gk5K8kCrMGbNGLju9gOG67NXPcmoS+Gf+A9Grx1MhvzRO3uJu2N8k8OvDnSHq6ZJjDXJ
-         FTagXlefgsh44LUV76WKA4iIlp/0uO5OEW356eg7JtRb192Nj5BaMH7X//oytBo9uE92
-         p7kh7lclmOcALzushFZrNh9vKlTejvPrLfSkgof6HBUBlsqj5GqwOk90Vywd/OuPnXP8
-         pKhQ==
-X-Gm-Message-State: AOAM530XACZ8HiOmD51k/EKhmpoPP0AHz4fp63pWv42PaYD5x6jnX90i
-        1bv3PKkRfELv10qvrifAOg==
-X-Google-Smtp-Source: ABdhPJzS1sWkVbVnu4ENueybstx38Y7NDNmZgFYCtTD6rgOqGcMqCr+fGLnhC6bD5bXUcCMzLdyByQ==
-X-Received: by 2002:aca:c40c:: with SMTP id u12mr3737079oif.158.1602011583784;
-        Tue, 06 Oct 2020 12:13:03 -0700 (PDT)
+        bh=YBRxc4Kl5euYsrW5ldPYtXnE2JqSKHbO7VHU7IS1NW8=;
+        b=P3yRFIowIfzYurTuDdZ8w8Z6zWsaWG7FviN70CUdAdN3gqZzfNirB6VpRCvJHW5Eu8
+         mEqAkKzmjlQ6MKc9ACD7WEhEyj2B1wm3sUAvRTE+qiMkKkwGOUfhYqrnIMnv31ss9Zga
+         lyocj+vsrOhKLYrOHB2Pr/ROcwly+NXQ7Cmc6Nb9UfmWzjy2oKP+hSMjkpoaMvmgRo+p
+         ebzarh+4ol1h3FSmwkRFf9S1cmpqb2By/yVhnRQDDvQoXSJC1IGwXX6DH9vZhS8Q70Fe
+         swcHFEU46InJmwmyrMfjjRG5eXD3vDwpllOgWdXNu/hUTbJfu99909KKY5wVjCESyTAP
+         1AQA==
+X-Gm-Message-State: AOAM531Uw9q1iorm/1Qhzj6oy6HhEhLzlah9rgwsScDlu0F33pRasszF
+        96Lleb7t6GkZlifFv4zvJw==
+X-Google-Smtp-Source: ABdhPJyO60XXGdD91dbKp8H85ouCBk/vtG+KxND8yp1CWYyYSTN7O0rpOmPpAErTBWuQWDvekynJuA==
+X-Received: by 2002:a4a:e3d3:: with SMTP id m19mr4134545oov.55.1602011647048;
+        Tue, 06 Oct 2020 12:14:07 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l3sm1480866oth.36.2020.10.06.12.13.02
+        by smtp.gmail.com with ESMTPSA id s124sm1556045oig.6.2020.10.06.12.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 12:13:02 -0700 (PDT)
-Received: (nullmailer pid 2661432 invoked by uid 1000);
-        Tue, 06 Oct 2020 19:13:02 -0000
-Date:   Tue, 6 Oct 2020 14:13:02 -0500
+        Tue, 06 Oct 2020 12:14:06 -0700 (PDT)
+Received: (nullmailer pid 2663111 invoked by uid 1000);
+        Tue, 06 Oct 2020 19:14:05 -0000
+Date:   Tue, 6 Oct 2020 14:14:05 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Jun Nie <jun.nie@linaro.org>
 Cc:     devicetree@vger.kernel.org, georgi.djakov@linaro.org,
@@ -44,7 +44,7 @@ Cc:     devicetree@vger.kernel.org, georgi.djakov@linaro.org,
         linux-kernel@vger.kernel.org, shawn.guo@linaro.org
 Subject: Re: [PATCH 3/5] dt-bindings: interconnect: single yaml file for RPM
  interconnect drivers
-Message-ID: <20201006191302.GA2659485@bogus>
+Message-ID: <20201006191405.GB2659485@bogus>
 References: <20200930081645.3434-1-jun.nie@linaro.org>
  <20200930081645.3434-4-jun.nie@linaro.org>
 MIME-Version: 1.0
@@ -177,6 +177,9 @@ On Wed, Sep 30, 2020 at 04:16:43PM +0800, Jun Nie wrote:
 > +   RPM interconnect providers support system bandwidth requirements through
 > +   RPM processor. The provider is able to communicate with the RPM through
 > +   the RPM shared memory device.
+
+And here the indentation is wrong too.
+
 >  
 >  properties:
 > -  compatible:
@@ -190,13 +193,6 @@ On Wed, Sep 30, 2020 at 04:16:43PM +0800, Jun Nie wrote:
 >  
 > +  compatible:
 > +        enum:
-
-Wrong indentation...
-
-With that fixed,
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
 > +          - qcom,msm8916-bimc
 > +          - qcom,msm8916-pcnoc
 > +          - qcom,msm8916-snoc
