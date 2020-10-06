@@ -2,68 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7509528527A
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EA3285295
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727117AbgJFTdK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 15:33:10 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:34387 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726981AbgJFTdK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:33:10 -0400
-Received: by mail-ot1-f67.google.com with SMTP id d28so7127197ote.1;
-        Tue, 06 Oct 2020 12:33:08 -0700 (PDT)
+        id S1727128AbgJFTi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 15:38:59 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45192 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbgJFTi7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:38:59 -0400
+Received: by mail-ot1-f65.google.com with SMTP id f37so9868215otf.12;
+        Tue, 06 Oct 2020 12:38:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=Vr0kh5Yxt0ub2gjD/7iyTdno80qJHwUQsM63YCqKmPE=;
-        b=NH6tzrB/M9/29bFwH6AjtwdZ8KtGXCMe677oW2Gm5J+KwZpZ7S0NjwuFuhSXxotZj1
-         sWa/CkxSGJ6ncmNDKq5T+YMioOINq+1p2YdSoJHumcaGF+SbPa87u9IHPWBKDUkohDnB
-         O77S3PEE7/FBZhWVAYR2WRAatKkBboGW4ybrNZkbBPUsAozWMk4Ghz1wvdm//UpC/zre
-         rtnWg60orniGcWMQA/06w86lrTxRfqFVm4P4ehB+NxDJYk/nXSfhMh3ZFEXnwYNzi00v
-         A/nTjnztRbuK8wGpa/FTLfG3hgqTxAf2Ttf2zT4eb3soZ9sNkhMZ0BJj94K46S4jcle+
-         aJjg==
-X-Gm-Message-State: AOAM531nvzMPVyN6t5nWrkQDujZiIeT5RKZP+PrMdTVj9tmMKFdR60LB
-        KWjDAv4uwVEOgbWLMC6B8zVhfD5QJwyw
-X-Google-Smtp-Source: ABdhPJz+7hDASH5s1uaYlFg8P2NS0UoUxaBOu1qyfY2bBXP9RS81Vr5QtD5xZcp7K8YqiXsh+Bt+Hg==
-X-Received: by 2002:a05:6830:1e30:: with SMTP id t16mr4070247otr.18.1602012788414;
-        Tue, 06 Oct 2020 12:33:08 -0700 (PDT)
+        bh=tqYmNdcba1X2zBYfUmvOF++PfDd8CuhGxZ7g4HEecZE=;
+        b=JghTnOE3fgtsRpbi1CjfbfhOmygfK1zGdzBbde8s/n+nmL6k24J26z2/m3dS4hewrE
+         c0Q2Yhx32YSFE0yLBZSXp+wJOygGh/7qQqo4kihAX2fadLLaioNvP/WB6eHTjJYY1NXH
+         qMagxmgqHaABG5JPMk6vV8KA1g/UHtA3NtdRUhjcynofSgMvcJOz2iVaIM7cmwfYiCiK
+         81ApWqtwx/3EYkA9vaud3NextV4z4eonBnxQj4cSr5uWQsevT5rK03Lr16uuXaP5Li5D
+         tyhSTEw3x8GBkE7ByHL9YHjBri9m+nXJJAiigQIhpakSL4jRmRXshHtEQIuXcHyq0VEV
+         rgWA==
+X-Gm-Message-State: AOAM531aE7XHr6BOYOZX9NKISfQ2bW1FSFSotAhoqMfpzDrC4UyAFGlX
+        MxTU/iT7y9lusGfL5xzuSg==
+X-Google-Smtp-Source: ABdhPJz3nbs0BLBGLc7Xt8eDp3ZIh8VMut//oYe947BNCfVab2LNDOEU5hxoWKRnftmTTRirHJseUQ==
+X-Received: by 2002:a9d:618c:: with SMTP id g12mr2184084otk.322.1602013136068;
+        Tue, 06 Oct 2020 12:38:56 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id i6sm1729470oig.54.2020.10.06.12.33.07
+        by smtp.gmail.com with ESMTPSA id 71sm1631074otm.81.2020.10.06.12.38.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 12:33:07 -0700 (PDT)
-Received: (nullmailer pid 2693469 invoked by uid 1000);
-        Tue, 06 Oct 2020 19:33:06 -0000
-Date:   Tue, 6 Oct 2020 14:33:06 -0500
+        Tue, 06 Oct 2020 12:38:55 -0700 (PDT)
+Received: (nullmailer pid 2702718 invoked by uid 1000);
+        Tue, 06 Oct 2020 19:38:54 -0000
+Date:   Tue, 6 Oct 2020 14:38:54 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     Jun Nie <jun.nie@linaro.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        shawn.guo@linaro.org, stephan@gerhold.net, agross@kernel.org,
-        bjorn.andersson@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: power: rpmpd: Add MSM8939 RPM power
- domains
-Message-ID: <20201006193306.GA2693413@bogus>
-References: <20200930100145.9457-1-jun.nie@linaro.org>
- <20200930100145.9457-2-jun.nie@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>, linux-pm@vger.kernel.org,
+        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Andy Gross <agross@kernel.org>
+Subject: Re: [PATCH v6 01/10] dt-bindings: thermal: qcom: add adc-thermal
+ monitor bindings
+Message-ID: <20201006193854.GA2702634@bogus>
+References: <20200930100203.1988374-1-dmitry.baryshkov@linaro.org>
+ <20200930100203.1988374-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200930100145.9457-2-jun.nie@linaro.org>
+In-Reply-To: <20200930100203.1988374-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Sep 2020 18:01:44 +0800, Jun Nie wrote:
-> MSM8939 has three RPM power domains: VDDCX and VDDMX and VDDMDCX.
-> Add the device tree bindings to manage them through rpmpd.
+On Wed, 30 Sep 2020 13:01:54 +0300, Dmitry Baryshkov wrote:
+> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
+> close counterpart of VADC part of those PMICs.
 > 
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  .../devicetree/bindings/power/qcom,rpmpd.yaml          |  1 +
->  include/dt-bindings/power/qcom-rpmpd.h                 | 10 ++++++++++
->  2 files changed, 11 insertions(+)
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 154 ++++++++++++++++++
+>  1 file changed, 154 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
