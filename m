@@ -2,60 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F02284B8B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 14:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BEDD284B8C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 14:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbgJFMVF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 08:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
+        id S1726551AbgJFMVO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 08:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726504AbgJFMVF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 08:21:05 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3687C0613D1
-        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 05:21:04 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id p15so2695328wmi.4
-        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 05:21:04 -0700 (PDT)
+        with ESMTP id S1726182AbgJFMVN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 08:21:13 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECC4C061755
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 05:21:13 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id n15so7464044wrq.2
+        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 05:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=3LkwJf7/8QhmcT3hOLsXffvH/dghnsDpAfit/51wzXQ=;
-        b=BSBu/hXkCC3YXHMWu6O2zl2b1dp50s6lb9wl5j8cAbnVuUEByWMBrXxlwI1/+arpCI
-         ob0bDGSZkNY/v1ES93ohvjRopIen6Ihp6RwFiDwRGkm5MQX5gFPOEM6+Lbf/l70OcyGC
-         b+Bd5P487zrEUEgaOMRqq4g7eaia9B0uFREyiltNZCKSMn/Rc6Pb0h9u/cZpczyeYrpd
-         asPV4kL/1McvD5cbXtfSEtsDbxTMAVu+WHQYNwUpny9g9+yaNjUtBPQVbTHMidi08qZn
-         GIliuDNWWYEAWg4LWHhijLCLDlLU9Qa0D0Rm0v5V8Kwz0ePZR/+wlYVveIjKqsL7Z87y
-         v1ZA==
+        bh=t0N69QCkcOuVUePm6DDLzLJ3FPaHM4LOMBGRQnTz/dA=;
+        b=c6M1Lc+afDx4uhXXLf/SzKWfMa1oMBn+neWQFcy0qgimYoNn3V8OX9CGf3VVdO0nHu
+         hcGjXSMi3vDhg/Kmhz2XI9wZafkHYzgOgduPcBg0yY9ISM06OMitmPHzN0IBvOpec/hL
+         PORQndl1bNHVYio4O5Iyu8Cab0l9+FkOsgcLoIksEacjXQ38EPdEn2u/nqiOIpLTiOnR
+         Qut+1MyXGzgJgQ+QyVA0pziFxtdUWmWBz1L8H2gJY7pDm6m1k/UhM00YsaeDE/0BNagT
+         ZMSrssg0lFzvjTPpjHaGDaoG8mX1PsUQFyOWmy50ZH6cPejf93nbKf7JSfcXezGbwDlJ
+         gEcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=3LkwJf7/8QhmcT3hOLsXffvH/dghnsDpAfit/51wzXQ=;
-        b=jBdStUaFf4mGdjO2b8msFWhjJqdhU3V2R0hpu/zXJjBvyXnqNO1op9dVRf1LI1YxwU
-         Pf0yVc84vbNzVIIiGrO/PB2874fp15GH/qABAR5jRkAQ/3CEMkOlG3DHF5I97gmeEjMg
-         MHRKU8HlR30F5x4XJkeZSucSnLl2dLX+34zGSZJfyypa88cLp7vDGhTH2R/cUI8kLJVl
-         mdfXW455ZXKDuuJc7fS6t3eHCOEgGnwBpblARQH8Rk0Hof2xgGebw5E7ZVZ/DQ00FB2w
-         YSfmF4oKRn6tMhYTP7MUoPURjNgcgY+6GKOB2DgvwWwkIG6aTQlg03VJNqe7Q05AaGyI
-         V/5g==
-X-Gm-Message-State: AOAM5336eDfHbW4gOinNGjkNZDHYd1dEgDLOeNmum6vyijqmyMeB/Mug
-        uUZ50Wp4j9mQqBM0QradFRpGaw==
-X-Google-Smtp-Source: ABdhPJxjuNltKQw8De00ZDORKuLUL1BKoBr13pUv88wGXfPVhOm/DdkYj4LZwR+wKJAYWxL7LKnpvg==
-X-Received: by 2002:a1c:f009:: with SMTP id a9mr4513130wmb.158.1601986863174;
-        Tue, 06 Oct 2020 05:21:03 -0700 (PDT)
+        bh=t0N69QCkcOuVUePm6DDLzLJ3FPaHM4LOMBGRQnTz/dA=;
+        b=h7vlZJw4+k1FyGDznnOg8wZwTX/hAZ27pH8obkBiUuw4tGPW655F28qxd3IblW5myU
+         vPOeHUHtVrP/G5yoUh8m5+WpdqKRJT1iXSAvRDha/oB8KjRh7kziGjOkh5BtdIpVjWSb
+         G+6RMw2VYm/CHjRH8AfPIo+pGRC4XEq7PtcjnubsNvxdnwcIDvZPJpKZT6Y7GmSr2SCQ
+         1XBsG20I9mYqleuUq9JVbC6liCywR9qf/+sRotbQLP8Ud3x2X80Hu1gS05MeDb9n8nm+
+         WSiZ07dQUXK7cuqlc82fyC1LvrUl3ue5NpTBjf7ubvaTcIjXWclPxct1X55IjYLoLPbI
+         39WQ==
+X-Gm-Message-State: AOAM5329xpimApOrDe05uu2Mn2GKLzCG7WjGPP7mp7K+V2FWKdJoGblD
+        XTc4ZSME3FThljIuVGe/6f0DeQ==
+X-Google-Smtp-Source: ABdhPJwC89P7MlUrxsd5DJ5eTfNxbp0oV1tGR0OA2BskLMPr8AeOjhS6QyRdMMLfIDKJ9tTZ+YtRBA==
+X-Received: by 2002:adf:eb04:: with SMTP id s4mr4963161wrn.81.1601986871692;
+        Tue, 06 Oct 2020 05:21:11 -0700 (PDT)
 Received: from localhost.localdomain (lns-bzn-59-82-252-130-8.adsl.proxad.net. [82.252.130.8])
-        by smtp.gmail.com with ESMTPSA id s19sm3742521wmc.41.2020.10.06.05.21.01
+        by smtp.gmail.com with ESMTPSA id s19sm3742521wmc.41.2020.10.06.05.21.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 05:21:02 -0700 (PDT)
+        Tue, 06 Oct 2020 05:21:11 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com
 Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, rui.zhang@intel.com,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org (open list:GENERIC INCLUDE/ASM HEADER FILES)
-Subject: [PATCH 3/4] powercap/drivers/dtpm: Add API for dynamic thermal power management
-Date:   Tue,  6 Oct 2020 14:20:23 +0200
-Message-Id: <20201006122024.14539-4-daniel.lezcano@linaro.org>
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Daniel Jordan <daniel.m.jordan@oracle.com>,
+        Steven Price <steven.price@arm.com>
+Subject: [PATCH 4/4] powercap/drivers/dtpm: Add CPU energy model based support
+Date:   Tue,  6 Oct 2020 14:20:24 +0200
+Message-Id: <20201006122024.14539-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20201006122024.14539-1-daniel.lezcano@linaro.org>
 References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
@@ -63,639 +71,353 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On the embedded world, the complexity of the SoC leads to an
-increasing number of hotspots which need to be monitored and mitigated
-as a whole in order to prevent the temperature to go above the
-normative and legally stated 'skin temperature'.
+With the powercap dtpm controller, we are able to plug devices with
+power limitation features in the tree.
 
-Another aspect is to sustain the performance for a given power budget,
-for example virtual reality where the user can feel dizziness if the
-GPU performance is capped while a big CPU is processing something
-else. Or reduce the battery charging because the dissipated power is
-too high compared with the power consumed by other devices.
+The following patch introduces the CPU power limitation based on the
+energy model and the performance states.
 
-The userspace is the most adequate place to dynamically act on the
-different devices by limiting their power given an application
-profile: it has the knowledge of the platform.
+The power limitation is done at the performance domain level. If some
+CPUs are unplugged, the corresponding power will be substracted from
+the performance domain total power.
 
-These userspace daemons are in charge of the Dynamic Thermal Power
-Management (DTPM).
+It is up to the platform to initialize the dtpm tree and add the CPU.
 
-Nowadays, the dtpm daemons are abusing the thermal framework as they
-act on the cooling device state to force a specific and arbitraty
-state without taking care of the governor decisions. Given the closed
-loop of some governors that can confuse the logic or directly enter in
-a decision conflict.
+Here is an example to create a simple tree with one root node called
+"pkg" and the cpu's performance domains.
 
-As the number of cooling device support is limited today to the CPU
-and the GPU, the dtpm daemons have little control on the power
-dissipation of the system. The out of tree solutions are hacking
-around here and there in the drivers, in the frameworks to have
-control on the devices. The common solution is to declare them as
-cooling devices.
+int dtpm_register_pkg(struct dtpm_descr *descr)
+{
+	struct dtpm *pkg;
+	int ret;
 
-There is no unification of the power limitation unit, opaque states
-are used.
+	pkg = dtpm_alloc();
+	if (!pkg)
+		return -ENOMEM;
 
-This patch provides a way to create a hierarchy of constraints using
-the powercap framework. The devices which are registered as power
-limit-able devices are represented in this hierarchy as a tree. They
-are linked together with intermediate nodes which are just there to
-propagate the constraint to the children.
+	ret = dtpm_register_parent(descr->name, pkg, descr->parent);
+	if (ret)
+		return ret;
 
-The leaves of the tree are the real devices, the intermediate nodes
-are virtual, aggregating the children constraints and power
-characteristics.
+	return dtpm_register_cpu(pkg);
+}
 
-Each node have a weight on a 2^10 basis, in order to reflect the
-percentage of power distribution of the children's node. This
-percentage is used to dispatch the power limit to the children.
-
-The weight is computed against the max power of the siblings.
-
-This simple approach allows to do a fair distribution of the power
-limit.
+struct dtpm_descr descr = {
+	.name = "pkg",
+	.init = dtpm_register_pkg,
+};
+DTPM_DECLARE(descr);
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/powercap/Kconfig          |   6 +
- drivers/powercap/Makefile         |   1 +
- drivers/powercap/dtpm.c           | 430 ++++++++++++++++++++++++++++++
- include/asm-generic/vmlinux.lds.h |  11 +
- include/linux/dtpm.h              |  73 +++++
- 5 files changed, 521 insertions(+)
- create mode 100644 drivers/powercap/dtpm.c
- create mode 100644 include/linux/dtpm.h
+ drivers/powercap/Kconfig    |   8 ++
+ drivers/powercap/Makefile   |   1 +
+ drivers/powercap/dtpm_cpu.c | 242 ++++++++++++++++++++++++++++++++++++
+ include/linux/cpuhotplug.h  |   1 +
+ include/linux/dtpm.h        |   3 +
+ 5 files changed, 255 insertions(+)
+ create mode 100644 drivers/powercap/dtpm_cpu.c
 
 diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index ebc4d4578339..777cf60300b8 100644
+index 777cf60300b8..240dc09e8dc2 100644
 --- a/drivers/powercap/Kconfig
 +++ b/drivers/powercap/Kconfig
-@@ -43,4 +43,10 @@ config IDLE_INJECT
- 	  CPUs for power capping. Idle period can be injected
- 	  synchronously on a set of specified CPUs or alternatively
- 	  on a per CPU basis.
+@@ -49,4 +49,12 @@ config DTPM
+ 	help
+ 	  This enables support for the power capping for the dynamic
+ 	  thermal management userspace engine.
 +
-+config DTPM
-+	bool "Power capping for dynamic thermal power management"
++config DTPM_CPU
++	bool "Add CPU power capping based on the energy model"
++	depends on DTPM && ENERGY_MODEL
 +	help
-+	  This enables support for the power capping for the dynamic
-+	  thermal management userspace engine.
++	  This enables support for CPU power limitation based on
++	  energy model.
++
  endif
 diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-index 7255c94ec61c..6482ac52054d 100644
+index 6482ac52054d..fabcf388a8d3 100644
 --- a/drivers/powercap/Makefile
 +++ b/drivers/powercap/Makefile
-@@ -1,4 +1,5 @@
+@@ -1,5 +1,6 @@
  # SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_DTPM) += dtpm.o
+ obj-$(CONFIG_DTPM) += dtpm.o
++obj-$(CONFIG_DTPM_CPU) += dtpm_cpu.o
  obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
  obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
  obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
-diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
 new file mode 100644
-index 000000000000..6df1e51a2c1c
+index 000000000000..23ebf704c599
 --- /dev/null
-+++ b/drivers/powercap/dtpm.c
-@@ -0,0 +1,430 @@
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -0,0 +1,242 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright 2020 Linaro Limited
 + *
 + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
 + *
-+ * The powercap based Dynamic Thermal Power Management framework
-+ * provides to the userspace a consistent API to set the power limit
-+ * on some devices.
-+ *
-+ * DTPM defines the functions to create a tree of constraints. Each
-+ * parent node is a virtual description of the aggregation of the
-+ * children. It propagates the constraints set at its level to its
-+ * children and collect the children power infomation. The leaves of
-+ * the tree are the real devices which have the ability to get their
-+ * current power consumption and set their power limit.
 + */
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
++#include <linux/cpumask.h>
++#include <linux/cpufreq.h>
++#include <linux/cpuhotplug.h>
 +#include <linux/dtpm.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/powercap.h>
++#include <linux/energy_model.h>
++#include <linux/pm_qos.h>
 +#include <linux/slab.h>
-+#include <linux/spinlock.h>
++#include <linux/units.h>
 +
-+static const char *constraint_name[] = {
-+	"Instantaneous power constraint",
++static struct dtpm *__parent;
++
++static DEFINE_PER_CPU(struct dtpm *, dtpm_per_cpu);
++
++struct dtpm_cpu {
++	struct freq_qos_request qos_req;
++	int cpu;
 +};
 +
-+static struct powercap_control_type *pct;
-+static struct dtpm *root;
-+
-+static int get_time_window_us(struct powercap_zone *pcz, int cid, u64 *window)
++static int power_add(struct dtpm *dtpm, struct em_perf_domain *em)
 +{
-+	return -ENOSYS;
++	u64 power_min, power_max;
++
++	power_min = em->table[0].power;
++	power_min *= MICROWATT_PER_MILLIWATT;
++	power_min += dtpm->power_min;
++
++	power_max = em->table[em->nr_perf_states - 1].power;
++	power_max *= MICROWATT_PER_MILLIWATT;
++	power_max += dtpm->power_max;
++
++	return dtpm_update_power(dtpm, power_min, power_max);
 +}
 +
-+static int set_time_window_us(struct powercap_zone *pcz, int cid, u64 window)
++static int power_sub(struct dtpm *dtpm, struct em_perf_domain *em)
 +{
-+	return -ENOSYS;
++	u64 power_min, power_max;
++
++	power_min = em->table[0].power;
++	power_min *= MICROWATT_PER_MILLIWATT;
++	power_min = dtpm->power_min - power_min;
++
++	power_max = em->table[em->nr_perf_states - 1].power;
++	power_max *= MICROWATT_PER_MILLIWATT;
++	power_max = dtpm->power_max - power_max;
++
++	return dtpm_update_power(dtpm, power_min, power_max);
 +}
 +
-+static int get_max_power_range_uw(struct powercap_zone *pcz, u64 *max_power_uw)
++static int set_pd_power_limit(struct powercap_zone *pcz, int cid,
++			      u64 power_limit)
 +{
 +	struct dtpm *dtpm = to_dtpm(pcz);
++	struct dtpm_cpu *dtpm_cpu = dtpm->private;
++	struct em_perf_domain *pd;
++	unsigned long freq;
++	int i, nr_cpus;
 +
 +	spin_lock(&dtpm->lock);
-+	*max_power_uw = dtpm->power_max - dtpm->power_min;
-+	spin_unlock(&dtpm->lock);
 +
-+	return 0;
-+}
-+
-+static int get_children_power_uw(struct powercap_zone *pcz, u64 *power_uw)
-+{
-+	struct dtpm *dtpm = to_dtpm(pcz);
-+	struct dtpm *child;
-+	u64 power;
-+	int ret = 0;
-+
-+	*power_uw = 0;
-+
-+	spin_lock(&dtpm->lock);
-+	list_for_each_entry(child, &dtpm->children, sibling) {
-+		ret = child->zone.ops->get_power_uw(&child->zone, &power);
-+		if (ret)
-+			break;
-+		*power_uw += power;
-+	}
-+	spin_unlock(&dtpm->lock);
-+
-+	return ret;
-+}
-+
-+static void __dtpm_rebalance_weight(struct dtpm *dtpm)
-+{
-+	struct dtpm *child;
-+
-+	spin_lock(&dtpm->lock);
-+	list_for_each_entry(child, &dtpm->children, sibling) {
-+
-+		pr_debug("Setting weight '%d' for '%s'\n",
-+			 child->weight, child->zone.name);
-+
-+		child->weight = DIV_ROUND_CLOSEST(child->power_max * 1024,
-+						  dtpm->power_max);
-+
-+		__dtpm_rebalance_weight(child);
-+	}
-+	spin_unlock(&dtpm->lock);
-+}
-+
-+static void dtpm_rebalance_weight(void)
-+{
-+	__dtpm_rebalance_weight(root);
-+}
-+
-+static void dtpm_sub_power(struct dtpm *dtpm)
-+{
-+	struct dtpm *parent = dtpm->parent;
-+
-+	while (parent) {
-+		spin_lock(&parent->lock);
-+		parent->power_min -= dtpm->power_min;
-+		parent->power_max -= dtpm->power_max;
-+		spin_unlock(&parent->lock);
-+		parent = parent->parent;
-+	}
-+
-+	dtpm_rebalance_weight();
-+}
-+
-+static void dtpm_add_power(struct dtpm *dtpm)
-+{
-+	struct dtpm *parent = dtpm->parent;
-+
-+	while (parent) {
-+		spin_lock(&parent->lock);
-+		parent->power_min += dtpm->power_min;
-+		parent->power_max += dtpm->power_max;
-+		spin_unlock(&parent->lock);
-+		parent = parent->parent;
-+	}
-+
-+	dtpm_rebalance_weight();
-+}
-+
-+/**
-+ * dtpm_update_power - Update the power on the dtpm
-+ * @dtpm: a pointer to a dtpm structure to update
-+ * @power_min: a u64 representing the new power_min value
-+ * @power_max: a u64 representing the new power_max value
-+ *
-+ * Function to update the power values of the dtpm node specified in
-+ * parameter. These new values will be propagated to the tree.
-+ *
-+ * Return: zero on success, -EINVAL if the values are inconsistent
-+ */
-+int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max)
-+{
-+	if (power_min == dtpm->power_min && power_max == dtpm->power_max)
-+		return 0;
-+
-+	if (power_max < power_min)
-+		return -EINVAL;
-+
-+	dtpm_sub_power(dtpm);
-+	spin_lock(&dtpm->lock);
-+	dtpm->power_min = power_min;
-+	dtpm->power_max = power_max;
-+	spin_unlock(&dtpm->lock);
-+	dtpm_add_power(dtpm);
-+
-+	return 0;
-+}
-+
-+/**
-+ * dtpm_release_zone - Cleanup when the node is released
-+ * @pcz: a pointer to a powercap_zone structure
-+ *
-+ * Do some housecleaning and update the weight on the tree. The
-+ * release will be denied if the node has children. This function must
-+ * be called by the specific release callback of the different
-+ * backends.
-+ *
-+ * Return: 0 on success, -EBUSY if there are children
-+ */
-+int dtpm_release_zone(struct powercap_zone *pcz)
-+{
-+	struct dtpm *dtpm = to_dtpm(pcz);
-+	struct dtpm *parent = dtpm->parent;
-+
-+	if (!list_empty(&dtpm->children))
-+		return -EBUSY;
-+
-+	if (parent) {
-+		spin_lock(&parent->lock);
-+		list_del(&dtpm->sibling);
-+		spin_unlock(&parent->lock);
-+	}
-+
-+	dtpm_sub_power(dtpm);
-+
-+	kfree(dtpm);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Set the power limit on the nodes, the power limit is distributed
-+ * given the weight of the children.
-+ */
-+static int set_children_power_limit(struct powercap_zone *pcz, int cid,
-+				    u64 power_limit)
-+{
-+	struct dtpm *dtpm = to_dtpm(pcz);
-+	struct dtpm *child;
-+	u64 power;
-+	int ret = 0;
-+
-+	/*
-+	 * Don't allow values outside of the power range previously
-+	 * set when initiliazing the power numbers.
-+	 */
 +	power_limit = clamp_val(power_limit, dtpm->power_min, dtpm->power_max);
 +
-+	spin_lock(&dtpm->lock);
-+	list_for_each_entry(child, &dtpm->children, sibling) {
++	pd = em_cpu_get(dtpm_cpu->cpu);
 +
-+		/*
-+		 * Integer division rounding will inevitably lead to a
-+		 * different max value when set several times. In
-+		 * order to restore the initial value, we force the
-+		 * child's max power every time if the constraint is
-+		 * removed by setting a value greater or equal to the
-+		 * max power.
-+		 */
-+		if (power_limit == dtpm->power_max)
-+			power = child->power_max;
-+		else
-+			power = DIV_ROUND_CLOSEST(
-+				power_limit * child->weight, 1024);
++	nr_cpus = cpumask_weight(to_cpumask(pd->cpus));
 +
-+		pr_debug("Setting power limit for '%s': %llu uW\n",
-+			 child->zone.name, power);
++	for (i = 0; i < pd->nr_perf_states; i++) {
 +
-+		ret = child->zone.constraints->ops->set_power_limit_uw(
-+			&child->zone, cid, power);
-+		if (ret)
++		u64 power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
++
++		if ((power * nr_cpus) > power_limit)
 +			break;
 +	}
-+	spin_unlock(&dtpm->lock);
 +
-+	return ret;
-+}
++	freq = pd->table[i - 1].frequency;
 +
-+static int get_children_power_limit(struct powercap_zone *pcz, int cid,
-+				    u64 *power_limit)
-+{
-+	struct dtpm *dtpm = to_dtpm(pcz);
-+	struct dtpm *child;
-+	u64 power;
-+	int ret = 0;
++	freq_qos_update_request(&dtpm_cpu->qos_req, freq);
 +
-+	*power_limit = 0;
++	dtpm->power_limit = power_limit;
 +
-+	spin_lock(&dtpm->lock);
-+	list_for_each_entry(child, &dtpm->children, sibling) {
-+		ret = child->zone.constraints->ops->get_power_limit_uw(
-+			&child->zone, cid, &power);
-+		if (ret)
-+			break;
-+		*power_limit += power;
-+	}
-+	spin_unlock(&dtpm->lock);
-+
-+	return ret;
-+}
-+
-+static const char *get_constraint_name(struct powercap_zone *pcz, int cid)
-+{
-+	return constraint_name[cid];
-+}
-+
-+static int get_max_power_uw(struct powercap_zone *pcz, int id, u64 *max_power)
-+{
-+	struct dtpm *dtpm = to_dtpm(pcz);
-+
-+	spin_lock(&dtpm->lock);
-+	*max_power = dtpm->power_max;
 +	spin_unlock(&dtpm->lock);
 +
 +	return 0;
 +}
 +
-+static struct powercap_zone_constraint_ops constraint_ops = {
-+	.set_power_limit_uw = set_children_power_limit,
-+	.get_power_limit_uw = get_children_power_limit,
-+	.set_time_window_us = set_time_window_us,
-+	.get_time_window_us = get_time_window_us,
-+	.get_max_power_uw = get_max_power_uw,
-+	.get_name = get_constraint_name,
-+};
-+
-+static struct powercap_zone_ops zone_ops = {
-+	.get_max_power_range_uw = get_max_power_range_uw,
-+	.get_power_uw = get_children_power_uw,
-+	.release = dtpm_release_zone,
-+};
-+
-+/**
-+ * dtpm_alloc - Allocate and initialize a dtpm struct
-+ * @name: a string specifying the name of the node
-+ *
-+ * Return: a struct dtpm pointer, NULL in case of error
-+ */
-+struct dtpm *dtpm_alloc(void)
++static int get_pd_power_limit(struct powercap_zone *pcz, int cid, u64 *data)
 +{
++	struct dtpm *dtpm = to_dtpm(pcz);
++
++	spin_lock(&dtpm->lock);
++	*data = dtpm->power_max;
++	spin_unlock(&dtpm->lock);
++
++	return 0;
++}
++
++static int get_pd_power_uw(struct powercap_zone *pcz, u64 *power_uw)
++{
++	struct dtpm *dtpm = to_dtpm(pcz);
++	struct dtpm_cpu *dtpm_cpu = dtpm->private;
++	struct em_perf_domain *pd;
++	unsigned long freq;
++	int i, nr_cpus;
++
++	freq = cpufreq_quick_get(dtpm_cpu->cpu);
++	pd = em_cpu_get(dtpm_cpu->cpu);
++	nr_cpus = cpumask_weight(to_cpumask(pd->cpus));
++
++	for (i = 0; i < pd->nr_perf_states; i++) {
++
++		if (pd->table[i].frequency < freq)
++			continue;
++
++		*power_uw = pd->table[i].power *
++			MICROWATT_PER_MILLIWATT * nr_cpus;
++
++		return 0;
++	}
++
++	return -EINVAL;
++}
++
++static int cpu_release_zone(struct powercap_zone *pcz)
++{
++	struct dtpm *dtpm = to_dtpm(pcz);
++	struct dtpm_cpu *dtpm_cpu = dtpm->private;
++
++	freq_qos_remove_request(&dtpm_cpu->qos_req);
++
++	return dtpm_release_zone(pcz);
++}
++
++static struct powercap_zone_constraint_ops pd_constraint_ops = {
++	.set_power_limit_uw = set_pd_power_limit,
++	.get_power_limit_uw = get_pd_power_limit,
++};
++
++static struct powercap_zone_ops pd_zone_ops = {
++	.get_power_uw = get_pd_power_uw,
++	.release = cpu_release_zone,
++};
++
++static int cpuhp_dtpm_cpu_offline(unsigned int cpu)
++{
++	struct cpufreq_policy *policy;
++	struct em_perf_domain *pd;
 +	struct dtpm *dtpm;
 +
-+	dtpm = kzalloc(sizeof(*dtpm), GFP_KERNEL);
-+	if (dtpm) {
-+		INIT_LIST_HEAD(&dtpm->children);
-+		INIT_LIST_HEAD(&dtpm->sibling);
-+		spin_lock_init(&dtpm->lock);
-+		dtpm->weight = 1024;
-+	}
++	policy = cpufreq_cpu_get(cpu);
 +
-+	return dtpm;
-+}
++	if (!policy)
++		return 0;
 +
-+/**
-+ * dtpm_unregister - Unregister a dtpm node from the hierarchy tree
-+ * @dtpm: a pointer to a dtpm structure corresponding to the node to be removed
-+ *
-+ * Call the underlying powercap unregister function. That will call
-+ * the release callback of the powercap zone.
-+ */
-+void dtpm_unregister(struct dtpm *dtpm)
-+{
-+	powercap_unregister_zone(pct, &dtpm->zone);
-+}
-+
-+/**
-+ * dtpm_register - Register a dtpm node in the hierarchy tree
-+ * @name: a string specifying the name of the node
-+ * @dtpm: a pointer to a dtpm structure corresponding to the new node
-+ * @parent: a pointer to a dtpm structure corresponding to the parent node
-+ * @ops: a pointer to a powercap_zone_ops structure
-+ * @nr_constraints: a integer giving the number of constraints supported
-+ * @const_ops: a pointer to a powercap_zone_constraint_ops structure
-+ *
-+ * Create a dtpm node in the tree. If no parent is specified, the node
-+ * is the root node of the hierarchy. If the root node already exists,
-+ * then the registration will fail. The powercap controller must be
-+ * initialized before calling this function.
-+ *
-+ * The dtpm structure must be initialized with the power numbers
-+ * before calling this function.
-+ *
-+ * Return: zero on success, a negative value in case of error:
-+ *  -EAGAIN: the function is called before the framework is initialized.
-+ *  -EBUSY: the root node is already inserted
-+ *  -EINVAL: there is no root node yet and @parent is specified
-+ *   Other negative values are reported back from the powercap framework
-+ */
-+int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
-+		  struct powercap_zone_ops *ops, int nr_constraints,
-+		  struct powercap_zone_constraint_ops *const_ops)
-+{
-+	struct powercap_zone *pcz;
-+
-+	if (!pct)
-+		return -EAGAIN;
-+
-+	if (root && !parent)
-+		return -EBUSY;
-+
-+	if (!root && parent)
++	pd = em_cpu_get(cpu);
++	if (!pd)
 +		return -EINVAL;
 +
-+	const_ops->get_name = get_constraint_name;
-+	const_ops->get_max_power_uw = get_max_power_uw;
-+	const_ops->set_time_window_us = set_time_window_us;
-+	const_ops->get_time_window_us = get_time_window_us;
++	dtpm = per_cpu(dtpm_per_cpu, cpu);
 +
-+	ops->get_max_power_range_uw = get_max_power_range_uw;
++	power_sub(dtpm, pd);
 +
-+	pcz = powercap_register_zone(&dtpm->zone, pct, name,
-+				     parent ? &parent->zone : NULL,
-+				     ops, nr_constraints, const_ops);
-+	if (IS_ERR(pcz))
-+		return PTR_ERR(pcz);
++	if (cpumask_weight(policy->cpus) != 1)
++		return 0;
 +
-+	if (parent) {
-+		spin_lock(&parent->lock);
-+		list_add_tail(&dtpm->sibling, &parent->children);
-+		spin_unlock(&parent->lock);
-+		dtpm->parent = parent;
-+	} else {
-+		root = dtpm;
-+	}
++	for_each_cpu(cpu, policy->related_cpus)
++		per_cpu(dtpm_per_cpu, cpu) = NULL;
 +
-+	dtpm_add_power(dtpm);
++	dtpm_unregister(dtpm);
 +
 +	return 0;
 +}
 +
-+/**
-+ * dtpm_register_parent - Register a intermediate node in the tree
-+ * @name: a string specifying the name of the node
-+ * @dtpm: a pointer to a dtpm structure corresponding to the new node
-+ * @parent: a pointer to a dtpm structure corresponding parent's new node
-+ *
-+ * The function will add an intermediate node corresponding to a
-+ * parent to more nodes. Its purpose is to aggregate the children
-+ * characteristics and dispatch the constraints. If the @parent
-+ * parameter is NULL, then this node becomes the root node of the tree
-+ * if there is no root node yet.
-+ *
-+ * Return: zero on success, a negative value in case of error:
-+ *  -EAGAIN: the function is called before the framework is initialized.
-+ *  -EBUSY: the root node is already inserted
-+ *  -EINVAL: there is not root node yet and @parent is specified
-+ *   Other negative values are reported back from the powercap framework
-+ */
-+int dtpm_register_parent(const char *name, struct dtpm *dtpm,
-+			 struct dtpm *parent)
++static int cpuhp_dtpm_cpu_online(unsigned int cpu)
 +{
-+	return dtpm_register(name, dtpm, parent, &zone_ops,
-+			     MAX_DTPM_CONSTRAINTS, &constraint_ops);
-+}
++        struct dtpm *dtpm;
++	struct dtpm_cpu *dtpm_cpu;
++	struct cpufreq_policy *policy;
++	struct em_perf_domain *pd;
++	char name[CPUFREQ_NAME_LEN];
++	int ret;
 +
-+static int __init dtpm_init(void)
-+{
-+	struct dtpm_descr **dtpm_descr;
++	policy = cpufreq_cpu_get(cpu);
 +
-+	pct = powercap_register_control_type(NULL, "dtpm", NULL);
-+	if (!pct) {
-+		pr_err("Failed to register control type\n");
++	if (!policy)
++		return 0;
++
++	pd = em_cpu_get(cpu);
++	if (!pd)
 +		return -EINVAL;
-+	}
 +
-+	for_each_dtpm_table(dtpm_descr)
-+		(*dtpm_descr)->init(*dtpm_descr);
++	dtpm = per_cpu(dtpm_per_cpu, cpu);
++	if (dtpm)
++		return power_add(dtpm, pd);
 +
-+	return 0;
++	dtpm = dtpm_alloc();
++	if (!dtpm)
++		return -EINVAL;
++
++	dtpm_cpu = kzalloc(sizeof(dtpm_cpu), GFP_KERNEL);
++	if (!dtpm_cpu)
++		return -ENOMEM;
++
++	dtpm->private = dtpm_cpu;
++	dtpm_cpu->cpu = cpu;
++
++	for_each_cpu(cpu, policy->related_cpus)
++		per_cpu(dtpm_per_cpu, cpu) = dtpm;
++
++	ret = power_add(dtpm, pd);
++	if (ret)
++		return ret;
++
++	dtpm->power_limit = dtpm->power_max;
++
++	sprintf(name, "cpu%d", dtpm_cpu->cpu);
++
++	ret = dtpm_register(name, dtpm, __parent, &pd_zone_ops,
++			    1, &pd_constraint_ops);
++	if (ret)
++		return ret;
++
++	ret = freq_qos_add_request(&policy->constraints,
++				   &dtpm_cpu->qos_req, FREQ_QOS_MAX,
++				   pd->table[pd->nr_perf_states - 1].frequency);
++	return ret;
 +}
-+late_initcall(dtpm_init);
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index 5430febd34be..29b30976ea02 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -315,6 +315,16 @@
- #define THERMAL_TABLE(name)
- #endif
- 
-+#ifdef CONFIG_DTPM
-+#define DTPM_TABLE()							\
-+	. = ALIGN(8);							\
-+	__dtpm_table = .;						\
-+	KEEP(*(__dtpm_table))						\
-+	__dtpm_table_end = .;
-+#else
-+#define DTPM_TABLE()
-+#endif
 +
- #define KERNEL_DTB()							\
- 	STRUCT_ALIGN();							\
- 	__dtb_start = .;						\
-@@ -715,6 +725,7 @@
- 	ACPI_PROBE_TABLE(irqchip)					\
- 	ACPI_PROBE_TABLE(timer)						\
- 	THERMAL_TABLE(governor)						\
-+	DTPM_TABLE()							\
- 	EARLYCON_TABLE()						\
- 	LSM_TABLE()							\
- 	EARLY_LSM_TABLE()
++int dtpm_register_cpu(struct dtpm *parent)
++{
++	__parent = parent;
++
++	return cpuhp_setup_state(CPUHP_AP_DTPM_CPU_ONLINE,
++				 "dtpm_cpu:online",
++				 cpuhp_dtpm_cpu_online,
++				 cpuhp_dtpm_cpu_offline);
++}
+diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+index bf9181cef444..6792bad4a435 100644
+--- a/include/linux/cpuhotplug.h
++++ b/include/linux/cpuhotplug.h
+@@ -190,6 +190,7 @@ enum cpuhp_state {
+ 	CPUHP_AP_ONLINE_DYN_END		= CPUHP_AP_ONLINE_DYN + 30,
+ 	CPUHP_AP_X86_HPET_ONLINE,
+ 	CPUHP_AP_X86_KVM_CLK_ONLINE,
++	CPUHP_AP_DTPM_CPU_ONLINE,
+ 	CPUHP_AP_ACTIVE,
+ 	CPUHP_ONLINE,
+ };
 diff --git a/include/linux/dtpm.h b/include/linux/dtpm.h
-new file mode 100644
-index 000000000000..6696bdcfdb87
---- /dev/null
+index 6696bdcfdb87..b62215a13baa 100644
+--- a/include/linux/dtpm.h
 +++ b/include/linux/dtpm.h
-@@ -0,0 +1,73 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2020 Linaro Ltd
-+ *
-+ * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-+ */
-+#ifndef ___DTPM_H__
-+#define ___DTPM_H__
+@@ -70,4 +70,7 @@ int dtpm_register_parent(const char *name, struct dtpm *dtpm,
+ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
+ 		  struct powercap_zone_ops *ops, int nr_constraints,
+ 		  struct powercap_zone_constraint_ops *const_ops);
 +
-+#include <linux/of.h>
-+#include <linux/powercap.h>
++int dtpm_register_cpu(struct dtpm *parent);
 +
-+#define MAX_DTPM_DESCR 8
-+#define MAX_DTPM_CONSTRAINTS 1
-+
-+struct dtpm {
-+	struct powercap_zone zone;
-+	struct dtpm *parent;
-+	struct list_head sibling;
-+	struct list_head children;
-+	spinlock_t lock;
-+	u64 power_limit;
-+	u64 power_max;
-+	u64 power_min;
-+	int weight;
-+	void *private;
-+};
-+
-+struct dtpm_descr;
-+
-+typedef int (*dtpm_init_t)(struct dtpm_descr *);
-+
-+struct dtpm_descr {
-+	struct dtpm *parent;
-+	const char *name;
-+	dtpm_init_t init;
-+};
-+
-+/* Init section thermal table */
-+extern struct dtpm_descr *__dtpm_table[];
-+extern struct dtpm_descr *__dtpm_table_end[];
-+
-+#define DTPM_TABLE_ENTRY(name)			\
-+	static typeof(name) *__dtpm_table_entry_##name	\
-+	__used __section(__dtpm_table) = &name
-+
-+#define DTPM_DECLARE(name)	DTPM_TABLE_ENTRY(name)
-+
-+#define for_each_dtpm_table(__dtpm)	\
-+	for (__dtpm = __dtpm_table;	\
-+	     __dtpm < __dtpm_table_end;	\
-+	     __dtpm++)
-+
-+static inline struct dtpm *to_dtpm(struct powercap_zone *zone)
-+{
-+	return container_of(zone, struct dtpm, zone);
-+}
-+
-+int dtpm_update_power(struct dtpm *dtpm, u64 power_min, u64 power_max);
-+
-+int dtpm_release_zone(struct powercap_zone *pcz);
-+
-+struct dtpm *dtpm_alloc(void);
-+
-+void dtpm_unregister(struct dtpm *dtpm);
-+
-+int dtpm_register_parent(const char *name, struct dtpm *dtpm,
-+			 struct dtpm *parent);
-+
-+int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent,
-+		  struct powercap_zone_ops *ops, int nr_constraints,
-+		  struct powercap_zone_constraint_ops *const_ops);
-+#endif
+ #endif
 -- 
 2.17.1
 
