@@ -2,207 +2,469 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAE128493B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 11:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948642849AC
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 11:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbgJFJU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 05:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
+        id S1725906AbgJFJvB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 05:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgJFJU5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 05:20:57 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB41EC061755;
-        Tue,  6 Oct 2020 02:20:57 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id ds1so1256344pjb.5;
-        Tue, 06 Oct 2020 02:20:57 -0700 (PDT)
+        with ESMTP id S1725939AbgJFJu6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 05:50:58 -0400
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E205C0613D1
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 02:50:57 -0700 (PDT)
+Received: by mail-pl1-x641.google.com with SMTP id h2so956975pll.11
+        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 02:50:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=d3jdb/5lz1KiMUpxKMIKdfOKuYYaMLuxcEbpzM+Zj2E=;
-        b=KNOO1op0I6GTujszc0nTBZFzEzbdmck/hDFL68Pmp8Qkil+KhY+6O5QmcDcoBO6IQd
-         4MAjgfuWwpdN1Y4/9CyBU7Nw0YcSRl3vPiSkeUKQwGbV7mEqOrL6pcqX2guKRTboyvWk
-         doun9WRQcOAn9u3hHMsaqXAWW5399deLJQX8PBe9G/JIjVlqH3NMaaJEqmEmeA6ZUSBC
-         WpVMTtZfH6Vq8DvbA4AELIG7k9D7ZoQiIFlXoEFCJ+9fSnnuZC13mqfIeYLnTZHcuiA+
-         I2FgylEe+PJABVf+9XSrn4tEOR/LO3Y+gXKEHLkSd3zmUlSV1ZTb4JL9pE5SbyPu0Dzy
-         TNYA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=mycjQb93JeYpVYCRmqAervRMhPA70rTAQD2ylQgQobQ=;
+        b=DH5cXDdLsP5zV5SH9Edi6Wjky4+cSm892NocSCE6yVfQTGSHN+Hh2vpyV0E9V7c8u0
+         068xGZbUHbiEmpQgjwru7RF8jXgc65PktOfNJ2HYF9y7gXr+aCrk2DI8VyxaqK0JhqF9
+         HA6hOict0YsCwTk8SwBh9Lj74QbYj6rngx3Fj0NjYICFW2TJ3WwK/zjLJU1x3/Pb38U3
+         KBm/knfgz1RW++FrQ3Wi54HA5Iq3Wo8uVXZ+Hsj7gmYJRZz/cvzJYDBzrbxUj6WMspF9
+         CAqRtPBUKxVXiW9Ehq7kJEqzluwO8GRcrI+Yttgr3iCz1G3MhfaWdZYone+c8G9hAs5g
+         taSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=d3jdb/5lz1KiMUpxKMIKdfOKuYYaMLuxcEbpzM+Zj2E=;
-        b=qpwk6k2ru1YozhfLbT+R40inbEUR8vzEl/27z03iIfTibYRwI6PhK9ksX7yp0IuvKG
-         5WWgKLcad5Kvt8ZsBCC1dzy8xTWIVelwszuDtgDOq2kIMzA/LOz4GRBQ3e/6XiINvLKT
-         C5dM0eWlRpJGcNgeuz4vivKsWlj6OeuGEr2nsCGCBgUPJ9lNsKbw8X6PPRR6J8Sxku5I
-         r21um4qH5QtrxhnTefo2IqGq6hdHxtnDLuy9tJguMtXQaQ70V/LN7jfZJUQRE8SlE6qc
-         GikU8SBEu1T0t7YdKFgYGbrh6fQicwFoC0I0WT5a75pprCiCEaOdgdL+a0jRAK/+6Axh
-         TbJQ==
-X-Gm-Message-State: AOAM532d+vWMSPT6sabBooHNk+RycfZ1n4Bmap6tcrNsqpxdG7VLfN2O
-        MDToyteNIQcjlHIKi4PRKww=
-X-Google-Smtp-Source: ABdhPJzBzXmQ74kfuH9fSC1P115/I/Hq+ad4Re6y1cJ6FSnkZfO67obYwhX8I+xGjT5apVJYMDb6xw==
-X-Received: by 2002:a17:902:b113:b029:d2:abce:b689 with SMTP id q19-20020a170902b113b02900d2abceb689mr2324927plr.51.1601976057364;
-        Tue, 06 Oct 2020 02:20:57 -0700 (PDT)
-Received: from syed ([117.97.226.113])
-        by smtp.gmail.com with ESMTPSA id s20sm2743067pfu.112.2020.10.06.02.20.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Oct 2020 02:20:56 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 14:50:38 +0530
-From:   Syed Nayyar Waris <syednwaris@gmail.com>
-To:     linus.walleij@linaro.org, akpm@linux-foundation.org
-Cc:     andriy.shevchenko@linux.intel.com, vilhelm.gray@gmail.com,
-        michal.simek@xilinx.com, arnd@arndb.de, rrichter@marvell.com,
-        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
-        yamada.masahiro@socionext.com, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amit.kucheria@verdurent.com,
-        linux-arch@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v11 0/4] Introduce the for_each_set_clump macro
-Message-ID: <cover.1601974764.git.syednwaris@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=mycjQb93JeYpVYCRmqAervRMhPA70rTAQD2ylQgQobQ=;
+        b=kxO9S0RglS/v5ynIc3UtBE+4GaPtYxrSd+bPJcaXLznfVEGVI9HBYvOex8Un2Na7DR
+         iISD5usAPP0YPIhHAxXAZDYWzjZZdjRDxgADH/9w32UYhAzqnjFIy5R885nu1j/kUlKT
+         zmgisecG2x1jBsp9F1qCHlm7ro6dBX9NbOTxJ1oZhksEkeQH0cubyDgHwKNimVXbpLuK
+         LVKv0NS6yf+Dy+GZDxEmTEU8FGTCp5UVE9tywgZKgFsb0rJF/LRvOyelMYBogDQeJRA0
+         8xHH0wLGNmrZjw+tJi8UW09Bs2vWTGvreOTHON8tmmes4oVgiJ6NEjU+n1ISiBFlfWiI
+         TrEQ==
+X-Gm-Message-State: AOAM532pTFAbVbS96P2HlC4Tk4KB1kkR2QcrQ6C/mxm146WvTSb+BGCp
+        mDjohIcmo3q/YJ+9WBqH3FoU
+X-Google-Smtp-Source: ABdhPJyDgiy7IGlwkfN5RgDJvsMp5VpBk/wuDaejJivnre1JvscceD3vX4ijlMiU0qpmoSbtS+53dg==
+X-Received: by 2002:a17:902:9b83:b029:d2:439c:3b7d with SMTP id y3-20020a1709029b83b02900d2439c3b7dmr2438063plp.39.1601977856354;
+        Tue, 06 Oct 2020 02:50:56 -0700 (PDT)
+Received: from Mani-XPS-13-9360.localdomain ([2409:4072:6e9d:8f58:948:749c:4eeb:26a])
+        by smtp.gmail.com with ESMTPSA id e19sm2979783pfl.135.2020.10.06.02.50.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 02:50:55 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     rjw@rjwysocki.net, viresh.kumar@linaro.org, robh+dt@kernel.org
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to YAML bindings
+Date:   Tue,  6 Oct 2020 15:20:47 +0530
+Message-Id: <20201006095047.30242-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Linus,
+Convert Qualcomm cpufreq devicetree binding to YAML.
 
-Since this patchset primarily affects GPIO drivers, would you like
-to pick it up through your GPIO tree?
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 --------------
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 212 ++++++++++++++++++
+ 2 files changed, 212 insertions(+), 172 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
 
-This patchset introduces a new generic version of for_each_set_clump. 
-The previous version of for_each_set_clump8 used a fixed size 8-bit
-clump, but the new generic version can work with clump of any size but
-less than or equal to BITS_PER_LONG. The patchset utilizes the new macro 
-in several GPIO drivers.
-
-The earlier 8-bit for_each_set_clump8 facilitated a
-for-loop syntax that iterates over a memory region entire groups of set
-bits at a time.
-
-For example, suppose you would like to iterate over a 32-bit integer 8
-bits at a time, skipping over 8-bit groups with no set bit, where
-XXXXXXXX represents the current 8-bit group:
-
-    Example:        10111110 00000000 11111111 00110011
-    First loop:     10111110 00000000 11111111 XXXXXXXX
-    Second loop:    10111110 00000000 XXXXXXXX 00110011
-    Third loop:     XXXXXXXX 00000000 11111111 00110011
-
-Each iteration of the loop returns the next 8-bit group that has at
-least one set bit.
-
-But with the new for_each_set_clump the clump size can be different from 8 bits.
-Moreover, the clump can be split at word boundary in situations where word 
-size is not multiple of clump size. Following are examples showing the working 
-of new macro for clump sizes of 24 bits and 6 bits.
-
-Example 1:
-clump size: 24 bits, Number of clumps (or ports): 10
-bitmap stores the bit information from where successive clumps are retrieved.
-
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x000000aa000000aa;
-        0xbbbbabcdeffedcba;  /* Least significant bits */
-
-Different iterations of for_each_set_clump:-
-'offset' is the bit position and 'clump' is the 24 bit clump from the
-above bitmap.
-Iteration first:        offset: 0 clump: 0xfedcba
-Iteration second:       offset: 24 clump: 0xabcdef
-Iteration third:        offset: 48 clump: 0xaabbbb
-Iteration fourth:       offset: 96 clump: 0xaa
-Iteration fifth:        offset: 144 clump: 0xff
-Iteration sixth:        offset: 168 clump: 0xaaaaaa
-Iteration seventh:      offset: 216 clump: 0xff
-Loop breaks because in the end the remaining bits (0x00aa) size was less
-than clump size of 24 bits.
-
-In above example it can be seen that in iteration third, the 24 bit clump
-that was retrieved was split between bitmap[0] and bitmap[1]. This example 
-also shows that 24 bit zeroes if present in between, were skipped (preserving
-the previous for_each_set_macro8 behaviour). 
-
-Example 2:
-clump size = 6 bits, Number of clumps (or ports) = 3.
-
-     /* bitmap memory region */
-        0x00aa0000ff000000;  /* Most significant bits */
-        0xaaaaaa0000ff0000;
-        0x0f00000000000000;
-        0x0000000000000ac0;  /* Least significant bits */
-
-Different iterations of for_each_set_clump:
-'offset' is the bit position and 'clump' is the 6 bit clump from the
-above bitmap.
-Iteration first:        offset: 6 clump: 0x2b
-Loop breaks because 6 * 3 = 18 bits traversed in bitmap.
-Here 6 * 3 is clump size * no. of clumps.
-
-Changes in v11:
- - [Patch 1/4]: Document range of values 'nbits' can take.
- - [Patch 4/4]: Change variable name 'flag' to 'flags'.
-
-Changes in v10:
- - Patchset based on v5.9-rc1.
-
-Changes in v9:
- - [Patch 4/4]: Remove looping of 'for_each_set_clump' and instead process two 
-   halves of a 64-bit bitmap separately or individually. Use normal spin_lock 
-   call for second inner lock. And take the spin_lock_init call outside the 'if'
-   condition in the probe function of driver.
-
-Changes in v8:
- - [Patch 2/4]: Minor change: Use '__initdata' for correct section mismatch
-   in 'clump_test_data' array.
-
-Changes in v7:
- - [Patch 2/4]: Minor changes: Use macro 'DECLARE_BITMAP()' and split 'struct'
-   definition and test data.
-
-Changes in v6:
- - [Patch 2/4]: Make 'for loop' inside test_for_each_set_clump more
-   succinct.
-
-Changes in v5:
- - [Patch 4/4]: Minor change: Hardcode value for better code readability.
-
-Changes in v4:
- - [Patch 2/4]: Use 'for' loop in test function of for_each_set_clump.
- - [Patch 3/4]: Minor change: Inline value for better code readability.
- - [Patch 4/4]: Minor change: Inline value for better code readability.
-
-Changes in v3:
- - [Patch 3/4]: Change datatype of some variables from u64 to unsigned long
-   in function thunderx_gpio_set_multiple.
-
-CHanges in v2:
- - [Patch 2/4]: Unify different tests for 'for_each_set_clump'. Pass test data as
-   function parameters.
- - [Patch 2/4]: Remove unnecessary bitmap_zero calls.
-
-Syed Nayyar Waris (4):
-  bitops: Introduce the for_each_set_clump macro
-  lib/test_bitmap.c: Add for_each_set_clump test cases
-  gpio: thunderx: Utilize for_each_set_clump macro
-  gpio: xilinx: Utilize generic bitmap_get_value and _set_value
-
- drivers/gpio/gpio-thunderx.c      |  11 ++-
- drivers/gpio/gpio-xilinx.c        |  64 ++++++-------
- include/asm-generic/bitops/find.h |  19 ++++
- include/linux/bitmap.h            |  63 +++++++++++++
- include/linux/bitops.h            |  13 +++
- lib/find_bit.c                    |  14 +++
- lib/test_bitmap.c                 | 144 ++++++++++++++++++++++++++++++
- 7 files changed, 292 insertions(+), 36 deletions(-)
-
-
-base-commit: 9123e3a74ec7b934a4a099e98af6a61c2f80bbf5
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+deleted file mode 100644
+index 9299028ee712..000000000000
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
++++ /dev/null
+@@ -1,172 +0,0 @@
+-Qualcomm Technologies, Inc. CPUFREQ Bindings
+-
+-CPUFREQ HW is a hardware engine used by some Qualcomm Technologies, Inc. (QTI)
+-SoCs to manage frequency in hardware. It is capable of controlling frequency
+-for multiple clusters.
+-
+-Properties:
+-- compatible
+-	Usage:		required
+-	Value type:	<string>
+-	Definition:	must be "qcom,cpufreq-hw" or "qcom,cpufreq-epss".
+-
+-- clocks
+-	Usage:		required
+-	Value type:	<phandle> From common clock binding.
+-	Definition:	clock handle for XO clock and GPLL0 clock.
+-
+-- clock-names
+-	Usage:		required
+-	Value type:	<string> From common clock binding.
+-	Definition:	must be "xo", "alternate".
+-
+-- reg
+-	Usage:		required
+-	Value type:	<prop-encoded-array>
+-	Definition:	Addresses and sizes for the memory of the HW bases in
+-			each frequency domain.
+-- reg-names
+-	Usage:		Optional
+-	Value type:	<string>
+-	Definition:	Frequency domain name i.e.
+-			"freq-domain0", "freq-domain1".
+-
+-- #freq-domain-cells:
+-	Usage:		required.
+-	Definition:	Number of cells in a freqency domain specifier.
+-
+-* Property qcom,freq-domain
+-Devices supporting freq-domain must set their "qcom,freq-domain" property with
+-phandle to a cpufreq_hw followed by the Domain ID(0/1) in the CPU DT node.
+-
+-
+-Example:
+-
+-Example 1: Dual-cluster, Quad-core per cluster. CPUs within a cluster switch
+-DCVS state together.
+-
+-/ {
+-	cpus {
+-		#address-cells = <2>;
+-		#size-cells = <0>;
+-
+-		CPU0: cpu@0 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x0>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_0>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_0: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-				L3_0: l3-cache {
+-				      compatible = "cache";
+-				};
+-			};
+-		};
+-
+-		CPU1: cpu@100 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x100>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_100>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_100: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU2: cpu@200 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x200>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_200>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_200: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU3: cpu@300 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x300>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_300>;
+-			qcom,freq-domain = <&cpufreq_hw 0>;
+-			L2_300: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU4: cpu@400 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x400>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_400>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_400: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU5: cpu@500 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x500>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_500>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_500: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU6: cpu@600 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x600>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_600>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_600: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-
+-		CPU7: cpu@700 {
+-			device_type = "cpu";
+-			compatible = "qcom,kryo385";
+-			reg = <0x0 0x700>;
+-			enable-method = "psci";
+-			next-level-cache = <&L2_700>;
+-			qcom,freq-domain = <&cpufreq_hw 1>;
+-			L2_700: l2-cache {
+-				compatible = "cache";
+-				next-level-cache = <&L3_0>;
+-			};
+-		};
+-	};
+-
+- soc {
+-	cpufreq_hw: cpufreq@17d43000 {
+-		compatible = "qcom,cpufreq-hw";
+-		reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
+-		reg-names = "freq-domain0", "freq-domain1";
+-
+-		clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
+-		clock-names = "xo", "alternate";
+-
+-		#freq-domain-cells = <1>;
+-	};
+-}
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+new file mode 100644
+index 000000000000..a11c69a29b5d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -0,0 +1,212 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/cpufreq/cpufreq-qcom-hw.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies, Inc. CPUFREQ
++
++maintainers:
++  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++
++description: |
++
++  CPUFREQ HW is a hardware engine used by some Qualcomm Technologies, Inc. (QTI)
++  SoCs to manage frequency in hardware. It is capable of controlling frequency
++  for multiple clusters.
++
++properties:
++  compatible:
++    oneOf:
++      - description: v1 of CPUFREQ HW
++        items:
++          - const: qcom,cpufreq-hw
++
++      - description: v2 of CPUFREQ HW (EPSS)
++        items:
++          - enum:
++              - qcom,sm8250-cpufreq-epss
++          - const: qcom,cpufreq-epss
++
++  reg:
++    minItems: 2
++    maxItems: 3
++    items:
++      - description: Frequency domain 0 register region
++      - description: Frequency domain 1 register region
++      - description: Frequency domain 2 register region
++
++  reg-names:
++    minItems: 2
++    maxItems: 3
++    items:
++      - const: freq-domain0
++      - const: freq-domain1
++      - const: freq-domain2
++
++  clocks:
++    items:
++      - description: XO Clock
++      - description: GPLL0 Clock
++
++  clock-names:
++    items:
++      - const: xo
++      - const: alternate
++
++  '#freq-domain-cells':
++    const: 1
++
++  qcom,freq-domain:
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++    maxItems: 1
++    description:
++      Devices supporting freq-domain must set their "qcom,freq-domain"
++      property with phandle to a cpufreq_hw followed by the Domain ID(0/1)
++      in the CPU DT node.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - '#freq-domain-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/qcom,gcc-sdm845.h>
++    #include <dt-bindings/clock/qcom,rpmh.h>
++
++    // Example 1: Dual-cluster, Quad-core per cluster. CPUs within a cluster
++    // switch DCVS state together.
++    cpus {
++      #address-cells = <2>;
++      #size-cells = <0>;
++
++      CPU0: cpu@0 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x0>;
++        enable-method = "psci";
++        next-level-cache = <&L2_0>;
++        qcom,freq-domain = <&cpufreq_hw 0>;
++        L2_0: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++          L3_0: l3-cache {
++            compatible = "cache";
++          };
++        };
++      };
++
++      CPU1: cpu@100 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x100>;
++        enable-method = "psci";
++        next-level-cache = <&L2_100>;
++        qcom,freq-domain = <&cpufreq_hw 0>;
++        L2_100: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU2: cpu@200 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x200>;
++        enable-method = "psci";
++        next-level-cache = <&L2_200>;
++        qcom,freq-domain = <&cpufreq_hw 0>;
++        L2_200: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU3: cpu@300 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x300>;
++        enable-method = "psci";
++        next-level-cache = <&L2_300>;
++        qcom,freq-domain = <&cpufreq_hw 0>;
++        L2_300: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU4: cpu@400 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x400>;
++        enable-method = "psci";
++        next-level-cache = <&L2_400>;
++        qcom,freq-domain = <&cpufreq_hw 1>;
++        L2_400: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU5: cpu@500 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x500>;
++        enable-method = "psci";
++        next-level-cache = <&L2_500>;
++        qcom,freq-domain = <&cpufreq_hw 1>;
++        L2_500: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU6: cpu@600 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x600>;
++        enable-method = "psci";
++        next-level-cache = <&L2_600>;
++        qcom,freq-domain = <&cpufreq_hw 1>;
++        L2_600: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++
++      CPU7: cpu@700 {
++        device_type = "cpu";
++        compatible = "qcom,kryo385";
++        reg = <0x0 0x700>;
++        enable-method = "psci";
++        next-level-cache = <&L2_700>;
++        qcom,freq-domain = <&cpufreq_hw 1>;
++        L2_700: l2-cache {
++          compatible = "cache";
++          next-level-cache = <&L3_0>;
++        };
++      };
++    };
++
++    soc {
++      #address-cells = <1>;
++      #size-cells = <1>;
++
++      cpufreq@17d43000 {
++        compatible = "qcom,cpufreq-hw";
++        reg = <0x17d43000 0x1400>, <0x17d45800 0x1400>;
++        reg-names = "freq-domain0", "freq-domain1";
++
++        clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
++        clock-names = "xo", "alternate";
++
++        #freq-domain-cells = <1>;
++      };
++    };
++...
 -- 
-2.26.2
+2.17.1
 
