@@ -2,148 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A12F5284824
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 10:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D20C2847F8
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 09:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbgJFIJE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 04:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725947AbgJFIJD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 04:09:03 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C31C061755
-        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 01:09:02 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id a17so1187114pju.1
-        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 01:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=IM2k4cVlmtEK6muT2xOn1tB16P30SzlvEHjvukRzcWU=;
-        b=moBV0FCOYwTDIBQRoXVTchQU96Qj5A+SjvBpxWW1Z5QEW7wMMJByzKG74Sjwhf0iZt
-         pZmgyeJBQUldylp3kTMnUpQIvmVVhvKcLEBXxysg/cebplaW2MtdKTAC7BqCc24Ok8xX
-         x77BQfK3IY2DCywn/8SrHgOAs4430NuU5slAIXt82vPyhIygiPP/bJTaavYB3eQm6rlR
-         UniqqisbJek5jQpfXaWX9X9b1HBu8wwIGMYaCJ+qtljSJpwEHCn0gQgPsW8ggIwSIxVT
-         9MlP8VozbwKAqXcPTHtGqRVHFiUyYueaT249/TIL5ss3UNrk8O2DbcJvH4xc/euoVNgP
-         8mjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=IM2k4cVlmtEK6muT2xOn1tB16P30SzlvEHjvukRzcWU=;
-        b=jOkQJHo0Cd4KAshsiJ623piTEAyCm0XmZvFhT0XfxO3AxN2vPynxzXYMsxJHKermh8
-         X3dN24uRKPgHJ3tK+ur58bsal9HYF/8zzBQwDD9OOwuslljgm04VaFbMLfxaohVRXKC9
-         8PTT52NJ0kFQ1jVOGk0HdoE8Nr/Octj9/B78D6UBB9m201oGz0jE3mmyLrRHqZlKi0h6
-         dE3tnPjqP4UDoa7qwBC9h6evrftpJvsaXEb1hurmH43WGPYyTVSf3gntGW4MkBHmK81y
-         guXmpo9NXX6/zLCEDMsKQBzZlRdShRQOFd/MFeCM3qNAT84+1cdxzymjJ/kiJnvtEGIP
-         Ba4g==
-X-Gm-Message-State: AOAM530+BFST2oAVHis7i1KbwpSDOaGGBnJeoR1r4rntAem6PhFiD3SK
-        7uWH3tmpAma53gHTn91RhW2DCh2bQ4DFjg==
-X-Google-Smtp-Source: ABdhPJxQpVbXZ+k0A0VOHtGzOM1IAwKXihWel8dFSCcHye/B8808DDd4Yv6JayQq6wrnowMETXnnGA==
-X-Received: by 2002:a17:90a:840d:: with SMTP id j13mr3283582pjn.31.1601971741897;
-        Tue, 06 Oct 2020 01:09:01 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id 15sm2113363pgt.24.2020.10.06.01.09.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Oct 2020 01:09:00 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 13:38:59 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
+        id S1727158AbgJFH47 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 03:56:59 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:20023 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726934AbgJFH47 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 03:56:59 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20201006075656epoutp03ddb70e8788330c5ced597033613db7d8~7WCb9NHj72468624686epoutp03k
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 07:56:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20201006075656epoutp03ddb70e8788330c5ced597033613db7d8~7WCb9NHj72468624686epoutp03k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1601971016;
+        bh=eGJ/o/4mHLr8azDiSIfZgtOCa4YXD3Uyr1TeR5gmAUw=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=K05jsex6CZ//NkIMIgyPhxM7kplqo0mi966D8H8lSwhJ8Ke/0VnpEVvCPorF07LK3
+         yD0nSgLGDVWWDH+DjKlVYMSb9MKXQ9k3/Ks43vK7wLcB9e9371S4vcjyR+EQhh1TKa
+         WdjHWOxMNfLOxnLS+JvYEKc5Jc+TA267WOt18V+c=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20201006075656epcas1p141f361f953fb4227d6d1810fc3510718~7WCbbgwr22887328873epcas1p1l;
+        Tue,  6 Oct 2020 07:56:56 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4C58ts1dMjzMqYlp; Tue,  6 Oct
+        2020 07:56:53 +0000 (GMT)
+Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B7.4B.09543.5432C7F5; Tue,  6 Oct 2020 16:56:53 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTPA id
+        20201006075652epcas1p46e5781a799c2782c9f9fa61b0d1f3ebe~7WCX7QWHP3158031580epcas1p4L;
+        Tue,  6 Oct 2020 07:56:52 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201006075652epsmtrp1b3dc79eea2bb85b6e5411b144e11dcc7~7WCX6sIH22802928029epsmtrp1d;
+        Tue,  6 Oct 2020 07:56:52 +0000 (GMT)
+X-AuditID: b6c32a35-35dff70000002547-d4-5f7c2345c9d1
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        45.29.08745.4432C7F5; Tue,  6 Oct 2020 16:56:52 +0900 (KST)
+Received: from [10.113.221.102] (unknown [10.113.221.102]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20201006075652epsmtip29934adc2804d8ca34c520cc65efb6f5a~7WCXmXszN1963719637epsmtip2R;
+        Tue,  6 Oct 2020 07:56:52 +0000 (GMT)
+Subject: Re: [GIT PULL] devfreq next for v5.10
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] cpufreq-arm for 5.10-rc1
-Message-ID: <20201006080859.rzwkdl5ijfbcp723@vireshk-i7>
+Cc:     "Rafael J. Wysocki <rjw@rjwysocki.net>" <rjw@rjwysocki.net>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chanwoo Choi (chanwoo@kernel.org)" <chanwoo@kernel.org>,
+        =?UTF-8?B?7ZWo66qF7KO8?= <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+Organization: Samsung Electronics
+Message-ID: <da43236a-b44e-d4d7-97c5-37ce3c447c95@samsung.com>
+Date:   Tue, 6 Oct 2020 17:10:15 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:59.0) Gecko/20100101
+        Thunderbird/59.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAJZ5v0giQRQG+V=XPVMJH4aRcvZo-JQ82bgw-KHAXBGfnEkgpQ@mail.gmail.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMJsWRmVeSWpSXmKPExsWy7bCmrq6rck28wdot7BYTb1xhsTjb9Ibd
+        4vKuOWwWn3uPMFrcblzBZjH3y1RmizOnL7E6sHtsWtXJ5rHlajuLR9+WVYwenzfJBbBEZdtk
+        pCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAF2gpFCWmFMK
+        FApILC5W0rezKcovLUlVyMgvLrFVSi1IySmwLNArTswtLs1L10vOz7UyNDAwMgUqTMjO+DH3
+        OEvBXpaK5fsfszQwnmTuYuTgkBAwkeg5F9fFyMUhJLCDUeLagd+sEM4nRonla9sYIZzPjBKH
+        384C6uAE67i/8DsTRGIXo8T7J81sEM57RomfHbPZQKqEBfQkzqy+xApiiwhoSyxZdJUZpIhZ
+        4DqTROPFxUwgCTYBLYn9L26ANfALKEpc/fGYEcTmFbCTePtsPtg6FgEViU9bXoHViwqESZzc
+        1gJVIyhxcuYTFhCbUyBQ4uyq+2BzmAXEJW49mc8EYctLbH87B+rsqRwSLduTIWwXiYnf5zBC
+        2MISr45vYYewpSRe9rdB2dUSK08eAftMQqCDUWLL/gusEAljif1LJzOBQo9ZQFNi/S59iLCi
+        xM7fcxkh9vJJvPvawwoJYF6JjjYhiBJlicsP7jJB2JISi9s72SYwKs1C8s0sJB/MQvLBLIRl
+        CxhZVjGKpRYU56anFhsWGCLH9iZGcOrUMt3BOPHtB71DjEwcjIcYJTiYlUR49cIq4oV4UxIr
+        q1KL8uOLSnNSiw8xmgLDdyKzlGhyPjB555XEG5oaGRsbW5gYmpkaGiqJ8z68pRAvJJCeWJKa
+        nZpakFoE08fEwSnVwFR6/OPSDQtO/wx8wfM0Y6tlZu2+q3qmapHuKzWXeXIFlzxw+Bbz7atD
+        +bZMfec9n+I66jM1735rvD5dd7PPjqN1DtY7XO7GnJ7zw+U8q+TT3RvDbQWfn9RZoP/k6NnM
+        nmm/psp4/tPevTgme9HfroPWIre7VwkKNL05JTTHJniz9X6LI2dL/QQfikrcPXl1z9Gvc7xk
+        b9jlL2Bi8wxZZcNQFt0XcZFtm9G5wk6bx1Kv/55ZYpETOc27Qr9nI7N+k45W6oyLzm9m7BK/
+        dvp5fu8NpkcW90UXflVY5Vo8XUK96OA8wxsTtyYudrq6b0vXAyOhvcGa2v+2zqy+albY5pPq
+        WCLatXXLtnjviBQvRVUlluKMREMt5qLiRADWm1bVJgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPLMWRmVeSWpSXmKPExsWy7bCSvK6Lck28wdq3shYTb1xhsTjb9Ibd
+        4vKuOWwWn3uPMFrcblzBZjH3y1RmizOnL7E6sHtsWtXJ5rHlajuLR9+WVYwenzfJBbBEcdmk
+        pOZklqUW6dslcGX8mHucpWAvS8Xy/Y9ZGhhPMncxcnJICJhI3F/4namLkYtDSGAHo8SauXeY
+        IBKSEtMuHgUq4gCyhSUOHy6GqHnLKNHy6RVYjbCAnsSZ1ZdYQWwRAW2JJYuuMoMUMQvcZJJ4
+        9q2PDaLjJqPEuxvPWECq2AS0JPa/uMEGYvMLKEpc/fGYEcTmFbCTePtsPthJLAIqEp+2QGwQ
+        FQiT2LnkMRNEjaDEyZlPwOZwCgRKnF11H2wOs4C6xJ95l5ghbHGJW0/mM0HY8hLb385hnsAo
+        PAtJ+ywkLbOQtMxC0rKAkWUVo2RqQXFuem6xYYFRXmq5XnFibnFpXrpecn7uJkZwHGlp7WDc
+        s+qD3iFGJg7GQ4wSHMxKIrx6YRXxQrwpiZVVqUX58UWlOanFhxilOViUxHm/zloYJySQnliS
+        mp2aWpBaBJNl4uCUamDitxHawsfY5PUz9bKlxDTmGIFlH15efxRxT+fPBHdej4CaeYatQaYL
+        ioudtC/zPXV6XvbOxrOrUM9z5pk9Wat2p/vvyzygHTFd5pvmthTDyAYXYeU359hXH/1hOSer
+        5jmbzYxTGj+aZh9n/aW4Iku1RWipi/ReVdPOI20Pz9hZ9ZTvD5IzuFd4edb8Rzu22cTFn3Ov
+        YdYS7r6lIRIrtflusZJNfeqGOY+aZFY/v3CJ24H3qv2W5TapkjnHynN/GBq8v+P8Jk5FTV90
+        vnJAQqNL2vqLu9ZsLfkfvLBQ63R9Cb+K4MIXhi36l5d27m41Utxu7aC+QmdN+nbWwyvv3Azd
+        0r4i4onWUZcPP0xatymxFGckGmoxFxUnAgBQstvdEgMAAA==
+X-CMS-MailID: 20201006075652epcas1p46e5781a799c2782c9f9fa61b0d1f3ebe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20200929085610epcas1p2447455fd0bcde25f5dff466e71b7ac15
+References: <CGME20200929085610epcas1p2447455fd0bcde25f5dff466e71b7ac15@epcas1p2.samsung.com>
+        <b5d67c59-90c7-6a77-7420-a8783282430f@samsung.com>
+        <CAJZ5v0giQRQG+V=XPVMJH4aRcvZo-JQ82bgw-KHAXBGfnEkgpQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Dear Rafael,
 
-This pull request contains following changes:
+On 10/1/20 12:56 AM, Rafael J. Wysocki wrote:
+> On Tue, Sep 29, 2020 at 10:56 AM Chanwoo Choi <cw00.choi@samsung.com> wrote:
+>>
+>> Dear Rafael,
+>>
+>> This is devfreq-next pull request for v5.10-rc1. I add detailed description of
+>> this pull request on the following tag. Please pull devfreq with following updates.
+>> - tag name : devfreq-next-for-5.10
+> 
+> Pulled, thanks!
 
-- STI cpufreq driver updates to allow new hardware (Alain Volmat).
+Thanks for pulled the request. But, I tried to check on linux-pm.git,
+I cannot find the pull request of devfreq patches for v5.10-rc1.
 
-- Minor tegra driver fixes around initial frequency mismatch warnings (Jon
-  Hunter).
+Best Regards,
+Chanwoo Choi
 
-- dev_err simplification for s5pv210 driver (Krzysztof Kozlowski).
-
-- Qcom driver updates to allow new hardware and minor cleanup (Manivannan
-  Sadhasivam and Matthias Kaehlcke).
-
-- Add missing MODULE_DEVICE_TABLE for armada driver (Pali Rohár).
-
-- Improved defer-probe handling in cpufreq-dt driver (Stephan Gerhold).
-
-- Call dev_pm_opp_of_remove_table() unconditionally for imx driver (Viresh
-  Kumar).
-
--------------------------8<-------------------------
-
-The following changes since commit 90d46d71cce279d878793a0ed4b326b4027aca6c:
-
-  opp: Handle multiple calls for same OPP table in _of_add_opp_table_v1() (2020-09-16 13:56:08 +0530)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/arm/linux-next
-
-for you to fetch changes up to bc9b9c5ab9d8d16157737db539929d57562926e9:
-
-  cpufreq: qcom: Don't add frequencies without an OPP (2020-09-16 15:22:15 +0530)
-
-----------------------------------------------------------------
-Alain Volmat (3):
-      cpufreq: sti-cpufreq: add stih418 support
-      cpufreq: dt-platdev: Blacklist st,stih418 SoC
-      cpufreq: arm: Kconfig: add CPUFREQ_DT depend for STI CPUFREQ
-
-Jon Hunter (1):
-      cpufreq: tegra186: Fix initial frequency
-
-Krzysztof Kozlowski (2):
-      cpufreq: s5pv210: Simplify with dev_err_probe()
-      cpufreq: s5pv210: Use dev_err instead of pr_err in probe
-
-Manivannan Sadhasivam (5):
-      cpufreq: qcom-hw: Make use of cpufreq driver_data for passing pdev
-      dt-bindings: cpufreq: cpufreq-qcom-hw: Document Qcom EPSS compatible
-      cpufreq: qcom-hw: Use devm_platform_ioremap_resource() to simplify code
-      cpufreq: qcom-hw: Use of_device_get_match_data for offsets and row size
-      cpufreq: qcom-hw: Add cpufreq support for SM8250 SoC
-
-Matthias Kaehlcke (1):
-      cpufreq: qcom: Don't add frequencies without an OPP
-
-Pali Rohár (1):
-      cpufreq: armada-37xx: Add missing MODULE_DEVICE_TABLE
-
-Stephan Gerhold (1):
-      cpufreq: dt: Refactor initialization to handle probe deferral properly
-
-Viresh Kumar (2):
-      cpufreq: imx6q: Unconditionally call dev_pm_opp_of_remove_table()
-      Merge commit 'ded10c47f39e' into HEAD
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt |   2 +-
- drivers/cpufreq/Kconfig.arm                                   |   2 +-
- drivers/cpufreq/armada-37xx-cpufreq.c                         |   6 +++
- drivers/cpufreq/cpufreq-dt-platdev.c                          |   1 +
- drivers/cpufreq/cpufreq-dt.c                                  | 286 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------------------------------------------------
- drivers/cpufreq/imx6q-cpufreq.c                               |  10 +----
- drivers/cpufreq/qcom-cpufreq-hw.c                             | 135 ++++++++++++++++++++++++++++++++++++++++++++-----------------------
- drivers/cpufreq/s5pv210-cpufreq.c                             |  31 ++++++----------
- drivers/cpufreq/sti-cpufreq.c                                 |   6 ++-
- drivers/cpufreq/tegra186-cpufreq.c                            |  30 +++++++++++++++
- drivers/opp/core.c                                            |  22 ++++++++---
- drivers/opp/opp.h                                             |   2 +-
- 12 files changed, 305 insertions(+), 228 deletions(-)
-
-
--- 
-viresh
