@@ -2,77 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EA3285295
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4771128529F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727128AbgJFTi7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 15:38:59 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45192 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgJFTi7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:38:59 -0400
-Received: by mail-ot1-f65.google.com with SMTP id f37so9868215otf.12;
-        Tue, 06 Oct 2020 12:38:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tqYmNdcba1X2zBYfUmvOF++PfDd8CuhGxZ7g4HEecZE=;
-        b=JghTnOE3fgtsRpbi1CjfbfhOmygfK1zGdzBbde8s/n+nmL6k24J26z2/m3dS4hewrE
-         c0Q2Yhx32YSFE0yLBZSXp+wJOygGh/7qQqo4kihAX2fadLLaioNvP/WB6eHTjJYY1NXH
-         qMagxmgqHaABG5JPMk6vV8KA1g/UHtA3NtdRUhjcynofSgMvcJOz2iVaIM7cmwfYiCiK
-         81ApWqtwx/3EYkA9vaud3NextV4z4eonBnxQj4cSr5uWQsevT5rK03Lr16uuXaP5Li5D
-         tyhSTEw3x8GBkE7ByHL9YHjBri9m+nXJJAiigQIhpakSL4jRmRXshHtEQIuXcHyq0VEV
-         rgWA==
-X-Gm-Message-State: AOAM531aE7XHr6BOYOZX9NKISfQ2bW1FSFSotAhoqMfpzDrC4UyAFGlX
-        MxTU/iT7y9lusGfL5xzuSg==
-X-Google-Smtp-Source: ABdhPJz3nbs0BLBGLc7Xt8eDp3ZIh8VMut//oYe947BNCfVab2LNDOEU5hxoWKRnftmTTRirHJseUQ==
-X-Received: by 2002:a9d:618c:: with SMTP id g12mr2184084otk.322.1602013136068;
-        Tue, 06 Oct 2020 12:38:56 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 71sm1631074otm.81.2020.10.06.12.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 12:38:55 -0700 (PDT)
-Received: (nullmailer pid 2702718 invoked by uid 1000);
-        Tue, 06 Oct 2020 19:38:54 -0000
-Date:   Tue, 6 Oct 2020 14:38:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>, linux-pm@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v6 01/10] dt-bindings: thermal: qcom: add adc-thermal
- monitor bindings
-Message-ID: <20201006193854.GA2702634@bogus>
-References: <20200930100203.1988374-1-dmitry.baryshkov@linaro.org>
- <20200930100203.1988374-2-dmitry.baryshkov@linaro.org>
+        id S1726012AbgJFTnq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 15:43:46 -0400
+Received: from cloudserver094114.home.pl ([79.96.170.134]:48368 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725943AbgJFTnq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:43:46 -0400
+Received: from 89-64-87-80.dynamic.chello.pl (89.64.87.80) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.489)
+ id 3bf34580619004af; Tue, 6 Oct 2020 21:43:44 +0200
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH v2] cpufreq: stats: Add memory barrier to store_reset()
+Date:   Tue, 06 Oct 2020 21:43:43 +0200
+Message-ID: <4635763.B4JZuFUhXG@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200930100203.1988374-2-dmitry.baryshkov@linaro.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Sep 2020 13:01:54 +0300, Dmitry Baryshkov wrote:
-> Add bindings for thermal monitor, part of Qualcomm PMIC5 chips. It is a
-> close counterpart of VADC part of those PMICs.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   | 154 ++++++++++++++++++
->  1 file changed, 154 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml
-> 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+There is nothing to prevent the CPU or the compiler from reordering
+the writes to stats->reset_time and stats->reset_pending in
+store_reset(), in which case the readers of stats->reset_time may see
+a stale value.  Moreover, on 32-bit arches the write to reset_time
+cannot be completed in one go, so the readers of it may see a
+partially updated value in that case.
+
+To prevent that from happening, add a write memory barrier between
+the writes to stats->reset_time and stats->reset_pending in
+store_reset() and corresponding read memory barrier in the
+readers of stats->reset_time.
+
+Fixes: 40c3bd4cfa6f ("cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+linux-next material.
+
+-> v2: Pair read and write memory barriers as appropriate.
+
+---
+ drivers/cpufreq/cpufreq_stats.c |   20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/cpufreq_stats.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/cpufreq_stats.c
++++ linux-pm/drivers/cpufreq/cpufreq_stats.c
+@@ -47,6 +47,11 @@ static void cpufreq_stats_reset_table(st
+ 
+ 	/* Adjust for the time elapsed since reset was requested */
+ 	WRITE_ONCE(stats->reset_pending, 0);
++	/*
++	 * Prevent the reset_time read from being reordered before the
++	 * reset_pending accesses in cpufreq_stats_record_transition().
++	 */
++	smp_rmb();
+ 	cpufreq_stats_update(stats, READ_ONCE(stats->reset_time));
+ }
+ 
+@@ -71,10 +76,16 @@ static ssize_t show_time_in_state(struct
+ 
+ 	for (i = 0; i < stats->state_num; i++) {
+ 		if (pending) {
+-			if (i == stats->last_index)
++			if (i == stats->last_index) {
++				/*
++				 * Prevent the reset_time read from occurring
++				 * before the reset_pending read above.
++				 */
++				smp_rmb();
+ 				time = get_jiffies_64() - READ_ONCE(stats->reset_time);
+-			else
++			} else {
+ 				time = 0;
++			}
+ 		} else {
+ 			time = stats->time_in_state[i];
+ 			if (i == stats->last_index)
+@@ -99,6 +110,11 @@ static ssize_t store_reset(struct cpufre
+ 	 * avoid races.
+ 	 */
+ 	WRITE_ONCE(stats->reset_time, get_jiffies_64());
++	/*
++	 * The memory barrier below is to prevent the readers of reset_time from
++	 * seeing a stale or partially updated value.
++	 */
++	smp_wmb();
+ 	WRITE_ONCE(stats->reset_pending, 1);
+ 
+ 	return count;
+
+
+
