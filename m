@@ -2,86 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0748285184
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 20:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDB7285228
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 21:13:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbgJFSTk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 14:19:40 -0400
-Received: from mail-oo1-f68.google.com ([209.85.161.68]:43197 "EHLO
-        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725906AbgJFSTk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 14:19:40 -0400
-Received: by mail-oo1-f68.google.com with SMTP id w25so3420645oos.10;
-        Tue, 06 Oct 2020 11:19:39 -0700 (PDT)
+        id S1726948AbgJFTNF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 15:13:05 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:38783 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726934AbgJFTNF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 15:13:05 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 26so13779044ois.5;
+        Tue, 06 Oct 2020 12:13:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BJWbJD2f71Np9nV5SqEsQ+f8lbMmKTYWc1i1BZ6eq58=;
-        b=PYYYZ1nNYPucm9eR/p5eizeUA8MmHER68Kjj5hpRnxNq8WnDao82AAnGBUMYm1BY99
-         BdJZvVaQhr/IXN0usxfvjZuiOFrTdPhmHbvZxHdsA9o4SfK3B5pYdZrio2i3ctXKC+ua
-         pOEGu0D0AgSFs7JhpbTjTt+v0pXcWcv+Z7BeDMVIFFlUY3Ss5zjB0i+neKq3uCCh8gZE
-         KoJqYNsafDNoeV3Xxy3L8RhJsjIuXzLcu4VfeCHPyLXZ0aS8AZrQOxqlzG/x3Ghy7QqX
-         dSPPftGjREqCF2Xo3bOZzrZ/dhLPJHiHAnLEIGZwu5uqcj6S7dcaLPKnvGzg7uW/W/Yi
-         4Zbw==
-X-Gm-Message-State: AOAM533ZO28l5Lk6/Snn8dCJzzBfTTWDYtet40FHj1CmSobj0lWp6Gg0
-        zS3DQc5VyRAyBi4YCaQejA==
-X-Google-Smtp-Source: ABdhPJwFL4l3f1wRexJyo8j2AuIR3ZQtB3DQa+PNN69rLAGMCtIaGFZl8KBStXM7MZMo3OrJBwy+jA==
-X-Received: by 2002:a4a:3954:: with SMTP id x20mr3995362oog.6.1602008379203;
-        Tue, 06 Oct 2020 11:19:39 -0700 (PDT)
+        bh=gQ2ktDJGEeFM3h8T9B6y0y8BdmKCksK+/sMYqWj0X2Q=;
+        b=T6NET71QkVogpk2c/uwNt7XzqY88FShKTx7+/nTr1GpcQ9nYzn8yaBA3kaJIJuLYEq
+         Yri6DMCQhXe1eAChDalxnEOPbdH/oeqtr15eVTmFAaIPjzEtoZieAE8VXGlZWexEDro6
+         gk5K8kCrMGbNGLju9gOG67NXPcmoS+Gf+A9Grx1MhvzRO3uJu2N8k8OvDnSHq6ZJjDXJ
+         FTagXlefgsh44LUV76WKA4iIlp/0uO5OEW356eg7JtRb192Nj5BaMH7X//oytBo9uE92
+         p7kh7lclmOcALzushFZrNh9vKlTejvPrLfSkgof6HBUBlsqj5GqwOk90Vywd/OuPnXP8
+         pKhQ==
+X-Gm-Message-State: AOAM530XACZ8HiOmD51k/EKhmpoPP0AHz4fp63pWv42PaYD5x6jnX90i
+        1bv3PKkRfELv10qvrifAOg==
+X-Google-Smtp-Source: ABdhPJzS1sWkVbVnu4ENueybstx38Y7NDNmZgFYCtTD6rgOqGcMqCr+fGLnhC6bD5bXUcCMzLdyByQ==
+X-Received: by 2002:aca:c40c:: with SMTP id u12mr3737079oif.158.1602011583784;
+        Tue, 06 Oct 2020 12:13:03 -0700 (PDT)
 Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q8sm1331026otf.7.2020.10.06.11.19.37
+        by smtp.gmail.com with ESMTPSA id l3sm1480866oth.36.2020.10.06.12.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Oct 2020 11:19:38 -0700 (PDT)
-Received: (nullmailer pid 2573852 invoked by uid 1000);
-        Tue, 06 Oct 2020 18:19:37 -0000
-Date:   Tue, 6 Oct 2020 13:19:37 -0500
+        Tue, 06 Oct 2020 12:13:02 -0700 (PDT)
+Received: (nullmailer pid 2661432 invoked by uid 1000);
+        Tue, 06 Oct 2020 19:13:02 -0000
+Date:   Tue, 6 Oct 2020 14:13:02 -0500
 From:   Rob Herring <robh@kernel.org>
-To:     kholk11@gmail.com
-Cc:     bjorn.andersson@linaro.org, agross@kernel.org,
-        georgi.djakov@linaro.org, marijns95@gmail.com,
-        konradybcio@gmail.com, martin.botka1@gmail.com,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] interconnect: qcom: Add SDM660 interconnect
- provider driver
-Message-ID: <20201006181937.GA2572634@bogus>
-References: <20200928195853.40084-1-kholk11@gmail.com>
- <20200928195853.40084-2-kholk11@gmail.com>
+To:     Jun Nie <jun.nie@linaro.org>
+Cc:     devicetree@vger.kernel.org, georgi.djakov@linaro.org,
+        bjorn.andersson@linaro.org, agross@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shawn.guo@linaro.org
+Subject: Re: [PATCH 3/5] dt-bindings: interconnect: single yaml file for RPM
+ interconnect drivers
+Message-ID: <20201006191302.GA2659485@bogus>
+References: <20200930081645.3434-1-jun.nie@linaro.org>
+ <20200930081645.3434-4-jun.nie@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200928195853.40084-2-kholk11@gmail.com>
+In-Reply-To: <20200930081645.3434-4-jun.nie@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 09:58:52PM +0200, kholk11@gmail.com wrote:
-> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+On Wed, Sep 30, 2020 at 04:16:43PM +0800, Jun Nie wrote:
+> MSM8916 and QCS404 bindings are almost identical, so combine them into one.
+> This will make it easier to add interconnect bindings for more SoC with RPM.
 > 
-> Introduce a driver for the Qualcomm interconnect busses found in
-> the SDM630/SDM636/SDM660 SoCs.
-> The topology consists of several NoCs that are controlled by a
-> remote processor that collects the aggregated bandwidth for each
-> master-slave pairs.
-> 
-> On a note, these chips are managing the "bus QoS" in a "hybrid"
-> fashion: some of the paths in the topology are managed through
-> (and by, of course) the RPM uC, while some others are "AP Owned",
-> meaning that the AP shall do direct writes to the appropriate
-> QoS registers for the specific paths and ports, instead of sending
-> an indication to the RPM and leaving the job to that one.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
 > ---
->  drivers/interconnect/qcom/Kconfig             |   9 +
->  drivers/interconnect/qcom/Makefile            |   2 +
->  drivers/interconnect/qcom/sdm660.c            | 919 ++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,sdm660.h    | 116 +++
+>  .../bindings/interconnect/qcom,qcs404.yaml    | 77 -------------------
+>  .../{qcom,msm8916.yaml => qcom,rpm.yaml}      | 24 +++---
+>  2 files changed, 14 insertions(+), 87 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/interconnect/qcom,qcs404.yaml
+>  rename Documentation/devicetree/bindings/interconnect/{qcom,msm8916.yaml => qcom,rpm.yaml} (76%)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcs404.yaml
+> deleted file mode 100644
+> index 3fbb8785fbc9..000000000000
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,qcs404.yaml
+> +++ /dev/null
+> @@ -1,77 +0,0 @@
+> -# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> -%YAML 1.2
+> ----
+> -$id: http://devicetree.org/schemas/interconnect/qcom,qcs404.yaml#
+> -$schema: http://devicetree.org/meta-schemas/core.yaml#
+> -
+> -title: Qualcomm QCS404 Network-On-Chip interconnect
+> -
+> -maintainers:
+> -  - Georgi Djakov <georgi.djakov@linaro.org>
+> -
+> -description: |
+> -  The Qualcomm QCS404 interconnect providers support adjusting the
+> -  bandwidth requirements between the various NoC fabrics.
+> -
+> -properties:
+> -  reg:
+> -    maxItems: 1
+> -
+> -  compatible:
+> -    enum:
+> -      - qcom,qcs404-bimc
+> -      - qcom,qcs404-pcnoc
+> -      - qcom,qcs404-snoc
+> -
+> -  '#interconnect-cells':
+> -    const: 1
+> -
+> -  clock-names:
+> -    items:
+> -      - const: bus
+> -      - const: bus_a
+> -
+> -  clocks:
+> -    items:
+> -      - description: Bus Clock
+> -      - description: Bus A Clock
+> -
+> -required:
+> -  - compatible
+> -  - reg
+> -  - '#interconnect-cells'
+> -  - clock-names
+> -  - clocks
+> -
+> -additionalProperties: false
+> -
+> -examples:
+> -  - |
+> -      #include <dt-bindings/clock/qcom,rpmcc.h>
+> -
+> -      bimc: interconnect@400000 {
+> -              reg = <0x00400000 0x80000>;
+> -              compatible = "qcom,qcs404-bimc";
+> -              #interconnect-cells = <1>;
+> -              clock-names = "bus", "bus_a";
+> -              clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
+> -                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
+> -      };
+> -
+> -      pnoc: interconnect@500000 {
+> -             reg = <0x00500000 0x15080>;
+> -             compatible = "qcom,qcs404-pcnoc";
+> -             #interconnect-cells = <1>;
+> -             clock-names = "bus", "bus_a";
+> -             clocks = <&rpmcc RPM_SMD_PNOC_CLK>,
+> -                      <&rpmcc RPM_SMD_PNOC_A_CLK>;
+> -      };
+> -
+> -      snoc: interconnect@580000 {
+> -            reg = <0x00580000 0x23080>;
+> -            compatible = "qcom,qcs404-snoc";
+> -            #interconnect-cells = <1>;
+> -            clock-names = "bus", "bus_a";
+> -            clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
+> -                     <&rpmcc RPM_SMD_SNOC_A_CLK>;
+> -      };
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> similarity index 76%
+> rename from Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml
+> rename to Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> index e1009ae4e8f7..e9f856357822 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8916.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+> @@ -1,28 +1,32 @@
+>  # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: http://devicetree.org/schemas/interconnect/qcom,msm8916.yaml#
+> +$id: http://devicetree.org/schemas/interconnect/qcom,rpm.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  
+> -title: Qualcomm MSM8916 Network-On-Chip interconnect
+> +title: Qualcomm RPM Network-On-Chip Interconnect
+>  
+>  maintainers:
+>    - Georgi Djakov <georgi.djakov@linaro.org>
+>  
+>  description: |
+> -  The Qualcomm MSM8916 interconnect providers support adjusting the
+> -  bandwidth requirements between the various NoC fabrics.
+> +   RPM interconnect providers support system bandwidth requirements through
+> +   RPM processor. The provider is able to communicate with the RPM through
+> +   the RPM shared memory device.
+>  
+>  properties:
+> -  compatible:
+> -    enum:
+> -      - qcom,msm8916-bimc
+> -      - qcom,msm8916-pcnoc
+> -      - qcom,msm8916-snoc
+> -
+>    reg:
+>      maxItems: 1
+>  
+> +  compatible:
+> +        enum:
 
-This goes with the binding.
+Wrong indentation...
 
->  4 files changed, 1046 insertions(+)
->  create mode 100644 drivers/interconnect/qcom/sdm660.c
->  create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
+With that fixed,
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
+> +          - qcom,msm8916-bimc
+> +          - qcom,msm8916-pcnoc
+> +          - qcom,msm8916-snoc
+> +          - qcom,qcs404-bimc
+> +          - qcom,qcs404-pcnoc
+> +          - qcom,qcs404-snoc
+> +
+>    '#interconnect-cells':
+>      const: 1
+>  
+> -- 
+> 2.17.1
+> 
