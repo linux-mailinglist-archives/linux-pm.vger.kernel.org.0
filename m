@@ -2,178 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C60AC284E3D
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 16:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0C23284F6B
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 18:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726123AbgJFOqv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 10:46:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:49124 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgJFOqv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Oct 2020 10:46:51 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 408791476;
-        Tue,  6 Oct 2020 07:46:50 -0700 (PDT)
-Received: from [10.57.54.147] (unknown [10.57.54.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B2433F71F;
-        Tue,  6 Oct 2020 07:46:46 -0700 (PDT)
-Subject: Re: [PATCH] thermal: power_allocate: add upper and lower limits
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     Michael Kao <michael.kao@mediatek.com>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20200424071601.2636-1-michael.kao@mediatek.com>
- <accb83e0-ffbe-b6e3-6bf9-e7cc8b9fe19c@arm.com>
- <1588156776.3573.1.camel@mtksdccf07>
- <03286571-c110-7f5e-a911-24f8c3e4fd42@arm.com>
- <1598347775.16267.0.camel@mtksdccf07>
- <25cb2d5b-0d87-8a22-a881-a5b6e46307ec@arm.com>
-Message-ID: <77bd14bb-0318-332a-4ea1-f60a314ce3be@arm.com>
-Date:   Tue, 6 Oct 2020 15:46:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1725972AbgJFQFa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 12:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725769AbgJFQF2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 12:05:28 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085A2C0613D1
+        for <linux-pm@vger.kernel.org>; Tue,  6 Oct 2020 09:05:27 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id a4so6948395lji.12
+        for <linux-pm@vger.kernel.org>; Tue, 06 Oct 2020 09:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QAdbXuSvVlSM2nTJl+6lnaw3AgFKGzcm9XVz8xwLu10=;
+        b=sDMilXL4+Om1AsMsj+y9BoKnhLeWBPImLBU41kLw0UOG2spQ3ij1GxTTPUA5dcQdmn
+         /3bd5SwTVzLLkuN4kkgW+gOquQqXb7IVKSW1ngnh2AeLwCuOKcXUaLBS+FpuWOTNCNQA
+         1lT6vY5kx4hqwCaSpKwCQh+ki5honF7OBLFgSGBeQwmC/lMrzwMD9S9LRkmRTMG35AiP
+         vVp7fm+ggv17eNk/UwgB2LvaBjM8UPdg9TGggOLmQju8SUxGMdGNB2K0Vo9MrsQc/gWz
+         O0Nz8pR2MmNR+vOa6Fx5WZUfD6NwEiGi1DwcUfskV2Fkg8cY+bmK/8QhI3lpYvbYSkKM
+         +WiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QAdbXuSvVlSM2nTJl+6lnaw3AgFKGzcm9XVz8xwLu10=;
+        b=RP+zDtjbnh6YCfq0h9OBUPgDNqG673+Ct6X/tNcwjqq3A8wZXNeeKI0vr3c6x3Y5po
+         nvBmp7fWJamOIAjYHAywABSgUCk7zU38nvJZ8w1l6o/iv3bXyB46w77nIvoRjzf3ByAH
+         das+xahZeOmcJG7xGzX/Wos+jEHpL2wZkqfwAxxRQrw6kEZVxG+S1J4Sy9G1aRP8srFE
+         TZD386qEqBGQ69dOrKKwwfjtCASAuidcHSnLRM15tseAM7QOg0lMz8PTbKn98uKsknnr
+         XXtfnzVgLbGBVM5QGkMpbsoXmiCPFF2HoWwSPPbpcZOXXpYuZEGnBkFkrb2MG/+VjzGJ
+         EobQ==
+X-Gm-Message-State: AOAM530a7lDaP1gCxERPTDbSCqhETCjQ9O1P2o0MMkK5uRV8BW+j65cE
+        eOwd4qcnRCxc4SSzNmZ90jFVwg==
+X-Google-Smtp-Source: ABdhPJxvChusiVdW5VMFAiybl8fEzzkWPdeDLJrMeJG2k/mhdHmwqr+oDLAahEDp4kFPTIKvMJs/VQ==
+X-Received: by 2002:a2e:8508:: with SMTP id j8mr1958522lji.354.1602000326185;
+        Tue, 06 Oct 2020 09:05:26 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-180-91.NA.cust.bahnhof.se. [98.128.180.91])
+        by smtp.gmail.com with ESMTPSA id c16sm640925lfc.304.2020.10.06.09.05.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Oct 2020 09:05:24 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/4] power: avs: Move drivers to the soc directories and drop avs
+Date:   Tue,  6 Oct 2020 18:05:12 +0200
+Message-Id: <20201006160516.319830-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <25cb2d5b-0d87-8a22-a881-a5b6e46307ec@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The avs drivers in drivers/power/avs/* are all SoC specific drivers that
+doesn't share any code. Instead they are located in a directory, mostly to keep
+similar functionality together. From a maintenance point of view, it makes
+better sense to collect SoC specific drivers like these, into the SoC specific
+directories.
 
+Therefore, this series moves the drivers, one by one - and in the end, it
+deletes the empty avs directory.
 
-On 10/6/20 3:39 PM, Lukasz Luba wrote:
-> Hi Michael,
-> 
-> On 8/25/20 10:29 AM, Michael Kao wrote:
->> On Wed, 2020-04-29 at 21:24 +0100, Lukasz Luba wrote:
->>>
->>> On 4/29/20 11:39 AM, Michael Kao wrote:
->>>> On Fri, 2020-04-24 at 10:22 +0100, Lukasz Luba wrote:
->>>>> Hi Michael,
->>>>>
->>>>> On 4/24/20 8:16 AM, Michael Kao wrote:
->>>>>> The upper and lower limits of thermal throttle state in the
->>>>>> device tree do not apply to the power_allocate governor.
->>>>>> Add the upper and lower limits to the power_allocate governor.
->>>>>>
->>>>>> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
->>>>>> ---
->>>>>>     drivers/thermal/thermal_core.c | 2 +-
->>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/drivers/thermal/thermal_core.c 
->>>>>> b/drivers/thermal/thermal_core.c
->>>>>> index 9a321dc548c8..f6feed2265bd 100644
->>>>>> --- a/drivers/thermal/thermal_core.c
->>>>>> +++ b/drivers/thermal/thermal_core.c
->>>>>> @@ -598,7 +598,7 @@ int power_actor_set_power(struct 
->>>>>> thermal_cooling_device *cdev,
->>>>>>         if (ret)
->>>>>>             return ret;
->>>>>> -    instance->target = state;
->>>>>> +    instance->target = clamp_val(state, instance->lower, 
->>>>>> instance->upper);
->>>>>>         mutex_lock(&cdev->lock);
->>>>>>         cdev->updated = false;
->>>>>>         mutex_unlock(&cdev->lock);
->>>>>>
->>>>>
->>>>> Thank you for the patch and having to look at it. I have some concerns
->>>>> with this approach. Let's analyze it further.
->>>>>
->>>>> In default the cooling devices in the thermal zone which is used by 
->>>>> IPA
->>>>> do not have this 'lower' and 'upper' limits. They are set to
->>>>> THERMAL_NO_LIMIT in DT to give full control to IPA over the states.
->>>>>
->>>>> This the function 'power_actor_set_power' actually translates granted
->>>>> power to the state that device will run for the next period.
->>>>> The IPA algorithm has already split the power budget.
->>>>> Now what happen when the 'lower' value will change the state to a 
->>>>> state
->>>>> which consumes more power than was calculated in the IPA alg... It 
->>>>> will
->>>>> became unstable.
->>>>>
->>>>> I would rather see a change which uses these 'lower' and 'upper' 
->>>>> limits
->>>>> before the IPA do the calculation of the power budget. But this wasn't
->>>>> a requirement and we assumed that IPA has full control over the 
->>>>> cooling
->>>>> device (which I described above with this DT THERMAL_NO_LIMIT).
->>>>>
->>>>> Is there a problem with your platform that it has to provide some
->>>>> minimal performance, so you tried to introduce this clamping?
->>>>>
->>>>> Regards,
->>>>> Lukasz
->>>>
->>>>
->>>> Hi Lukasz,
->>>>
->>>> I refer to the documentation settings of the thermal device tree
->>>> (Documentation / devicetree / bindings / thermal / thermal.txt).
->>>>
->>>> It shows that cooling-device is a mandatory property, so max/min 
->>>> cooling
->>>> state should be able to support in framework point of view.
->>>> Otherwise, the limitation should be added in binding document.
->>>>
->>>> Different hardware mechanisms have different heat dissipation
->>>> capabilities.
->>>> Limiting the input heat source can slow down the heat accumulation and
->>>> temperature burst.
->>>> We want to reduce the accumulation of heat at high temperature by
->>>> limiting the minimum gear of thermal throttle.
->>>
->>> I agree that these 'lower' and 'upper' limits shouldn't be just
->>> ignored as is currently. This patch clamps the value at late stage,
->>> though.
->>>
->>> Let me have a look how it could be taken into account in the early
->>> stage, before the power calculation and split are done. Maybe there
->>> is a clean way to inject this.
->>>
->>> Regards,
->>> Lukasz
->> Hi Lukasz,
->>
->> After the research, do you have any ideas or suggestions?
->>
->> Best Regards,
->> Michael
->>
-> 
-> My apologies for the delay. I have done some experiments.
-> Could you resend the patch, please make sure it is not encoded in base64
-> like this one.
-> 
-> I am going to take your patch together with some other changes.
-> 
-> Regards,
-> Lukasz
+It seems best to me, if this can be funneled via Rafael's linux-pm tree. Then
+when going forward, each driver should be managed through the SoC maintainer's
+trees.
 
-Please change also the commit message to something like:
+Kind regards
+Ulf Hansson
 
-thermal: core: add upper and lower limits to power_actor_set_power
+Ulf Hansson (4):
+  power: avs: qcom-cpr: Move the driver to the qcom specific drivers
+  power: avs: rockchip-io: Move the driver to the rockchip specific
+    drivers
+  power: avs: smartreflex Move driver to soc specific drivers
+  power: avs: Drop the avs directory and the corresponding Kconfig
 
-The upper and lower limits of thermal throttle state in the
-DT do not apply to the Intelligent Power Allocation (IPA) governor.
-Add the clamping for cooling device upper and lower limits in the
-power_actor_set_power() used by IPA.
+ MAINTAINERS                                   |  6 +--
+ arch/arm/plat-omap/Kconfig                    |  2 +-
+ drivers/power/Kconfig                         |  1 -
+ drivers/power/Makefile                        |  1 -
+ drivers/power/avs/Kconfig                     | 37 -------------------
+ drivers/power/avs/Makefile                    |  4 --
+ drivers/soc/qcom/Kconfig                      | 16 ++++++++
+ drivers/soc/qcom/Makefile                     |  1 +
+ .../{power/avs/qcom-cpr.c => soc/qcom/cpr.c}  |  0
+ drivers/soc/rockchip/Kconfig                  |  8 ++++
+ drivers/soc/rockchip/Makefile                 |  1 +
+ .../rockchip/io-domain.c}                     |  0
+ drivers/soc/ti/Makefile                       |  1 +
+ drivers/{power/avs => soc/ti}/smartreflex.c   |  0
+ 14 files changed, 31 insertions(+), 47 deletions(-)
+ delete mode 100644 drivers/power/avs/Kconfig
+ delete mode 100644 drivers/power/avs/Makefile
+ rename drivers/{power/avs/qcom-cpr.c => soc/qcom/cpr.c} (100%)
+ rename drivers/{power/avs/rockchip-io-domain.c => soc/rockchip/io-domain.c} (100%)
+ rename drivers/{power/avs => soc/ti}/smartreflex.c (100%)
 
-Regards,
-Lukasz
-
-
+-- 
+2.25.1
 
