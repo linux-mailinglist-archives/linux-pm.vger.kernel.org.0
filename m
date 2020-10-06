@@ -2,139 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D784D28458C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 07:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A4328463C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 08:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgJFFmc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 01:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbgJFFmb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 01:42:31 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957C3C0613B2
-        for <linux-pm@vger.kernel.org>; Mon,  5 Oct 2020 22:42:31 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id i3so1068576pjz.4
-        for <linux-pm@vger.kernel.org>; Mon, 05 Oct 2020 22:42:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=scAXD8YuBk8j/NF0iYDdCeaAVj2lJqU4ekQ7XmxKGRZD9n7rlAL/7uG23DDE1fcZ56
-         zF72mU8P6EdMfXizzEbowAVRT7aqB90B0ZPahldWPyAERYWd6msUiWvIw5u5I68GC10s
-         2mfO8dqRM6oWZLB0Q6RNjtouVvMzAMtCqHytHKbKwrjH25Far6tK8oMk2FL/+Ytm6yFo
-         ix24Oh/3R7FZgjcOmnnbZhO2Rnj4pwkEjTGIWiz4UAhFCmHcKJq5fJPHDGVhMb52+bja
-         GRW+sJiWWq/RfS6N9j6fS0MlegpQS8J4O6R0p/6fHQbNSKo6Dg2SOD+ESIa+qx/GxTp7
-         QQLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=FYOEybxQ9Y8nUxVZmzLLg+Qyso2tjlpbGNthFRqblLc=;
-        b=kaPUWtiVQK46DC6JGBd6LBvLGNZwY5i2ahqlkXZe56NByGtxGp4Wd773DKFJmzZAvs
-         B1VE5PILt7GpiXvdCOLRD3VaU9gBAke5Ca1j1Bw2tM4SrKtXYoVlE8m2uLhz/u+toKeu
-         7NFbRuUuoym1MYHeU5MYXVaKC1K5PfNf3Ttg7XeOEOZYI2owBMoVVxMtUbjikGx5AHAU
-         +maOcEqnbGYQxW7WQA6m59gHKwpGA1jnVpyj9Mbm3daB+YxD8YYPkIfoXEfwwhsfqaWR
-         EJRHq8sJAuRjy0jCuMcYLXIJ2vEF5ff7y4PyiqVsUVknqyHAlOXIXIMS+hSCEzfDo0Sa
-         JHtA==
-X-Gm-Message-State: AOAM531voVOECHcGZvUtjvy7P1IqOfZBk7AbCrlcV5IwMCERuoDDmO4p
-        A8bVxQ8UPJ5c0bn1VMAna0Gm5g==
-X-Google-Smtp-Source: ABdhPJzo+T1F54fl8q16F3SuWBffglk48PEytQu7/wpxM8oR5iYvbOQGglf6EbVoa0EICQ893qG+lw==
-X-Received: by 2002:a17:90b:950:: with SMTP id dw16mr2661711pjb.200.1601962950652;
-        Mon, 05 Oct 2020 22:42:30 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id d145sm2005503pfd.136.2020.10.05.22.42.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Oct 2020 22:42:29 -0700 (PDT)
-Date:   Tue, 6 Oct 2020 11:12:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>, dmaengine@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Richard Weinberger <richard@nod.at>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: Explicitly allow additional properties
- in board/SoC schemas
-Message-ID: <20201006054228.ho3ajzfgpiew32ft@vireshk-i7>
-References: <20201005183830.486085-1-robh@kernel.org>
- <20201005183830.486085-4-robh@kernel.org>
+        id S1726769AbgJFGmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 02:42:43 -0400
+Received: from mga02.intel.com ([134.134.136.20]:56579 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725962AbgJFGmm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 6 Oct 2020 02:42:42 -0400
+IronPort-SDR: Atocw+axsvEAhe1d/aMLle7j667oFhroN20VtzSRyGyrknxGr+LE9i64f8z8Bkk8wSvo4ocRbl
+ QyFW4AGpAoEA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9765"; a="151319052"
+X-IronPort-AV: E=Sophos;i="5.77,342,1596524400"; 
+   d="scan'208";a="151319052"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2020 23:42:41 -0700
+IronPort-SDR: gLhqoIgKQ/+ixP23wcrHegi219XWtRMXzlvBj0JC2p2cHPCx5E9CBlJROcCeLnW1emoL1PfuSe
+ JsnNJ7JmEHUQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,342,1596524400"; 
+   d="scan'208";a="460565444"
+Received: from lkp-server02.sh.intel.com (HELO b5ae2f167493) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 05 Oct 2020 23:42:39 -0700
+Received: from kbuild by b5ae2f167493 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kPggJ-00016y-6k; Tue, 06 Oct 2020 06:42:39 +0000
+Date:   Tue, 06 Oct 2020 14:41:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 5e46e56c2b0018fe280a88cdb424165c3fe59ba0
+Message-ID: <5f7c11b3.wuZFSnBcDzgYepc+%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201005183830.486085-4-robh@kernel.org>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-10-20, 13:38, Rob Herring wrote:
-> In order to add meta-schema checks for additional/unevaluatedProperties
-> being present, all schema need to make this explicit. As the top-level
-> board/SoC schemas always have additional properties, add
-> 'additionalProperties: true'.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/arm/spear.yaml               | 3 +++
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 5e46e56c2b0018fe280a88cdb424165c3fe59ba0  Merge branch 'pm-sleep' into bleeding-edge
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+elapsed time: 721m
 
--- 
-viresh
+configs tested: 93
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                         cm_x300_defconfig
+powerpc                      pasemi_defconfig
+mips                      bmips_stb_defconfig
+powerpc                      cm5200_defconfig
+powerpc                     stx_gp3_defconfig
+sh                           se7721_defconfig
+mips                      fuloong2e_defconfig
+mips                      pic32mzda_defconfig
+sh                         microdev_defconfig
+arm                       versatile_defconfig
+powerpc                     skiroot_defconfig
+powerpc                      chrp32_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                         palmz72_defconfig
+arm                          ixp4xx_defconfig
+mips                        jmr3927_defconfig
+arm                         vf610m4_defconfig
+mips                          ath25_defconfig
+powerpc                 canyonlands_defconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a006-20201005
+i386                 randconfig-a005-20201005
+i386                 randconfig-a001-20201005
+i386                 randconfig-a004-20201005
+i386                 randconfig-a003-20201005
+i386                 randconfig-a002-20201005
+x86_64               randconfig-a012-20201005
+x86_64               randconfig-a015-20201005
+x86_64               randconfig-a014-20201005
+x86_64               randconfig-a013-20201005
+x86_64               randconfig-a011-20201005
+x86_64               randconfig-a016-20201005
+i386                 randconfig-a014-20201005
+i386                 randconfig-a015-20201005
+i386                 randconfig-a013-20201005
+i386                 randconfig-a016-20201005
+i386                 randconfig-a011-20201005
+i386                 randconfig-a012-20201005
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                           allyesconfig
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20201005
+x86_64               randconfig-a002-20201005
+x86_64               randconfig-a001-20201005
+x86_64               randconfig-a003-20201005
+x86_64               randconfig-a005-20201005
+x86_64               randconfig-a006-20201005
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
