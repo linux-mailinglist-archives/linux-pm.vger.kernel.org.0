@@ -2,123 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 810D0284C2C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 15:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36F1284CC0
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Oct 2020 15:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgJFNEe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 09:04:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725891AbgJFNEd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 09:04:33 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A849C061755;
-        Tue,  6 Oct 2020 06:04:33 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id 7ECB0299E5B
-Subject: Re: [PATCH v4 7/7] Input: Add "inhibited" property
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-tegra@vger.kernel.org, patches@opensource.cirrus.com,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>,
-        Kukjin Kim <kgene@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Barry Song <baohua@kernel.org>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Nick Dyer <nick@shmanahar.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ferruh Yigit <fery@cypress.com>,
-        Sangwon Jee <jeesw@melfas.com>,
-        Peter Hutterer <peter.hutterer@redhat.com>,
-        Henrique de Moraes Holschuh <ibm-acpi@hmh.eng.br>,
-        kernel@collabora.com, Patrik Fimml <patrikf@chromium.org>
-References: <2336e15d-ff4b-bbb6-c701-dbf3aa110fcd@redhat.com>
- <20200608112211.12125-1-andrzej.p@collabora.com>
- <20200608112211.12125-8-andrzej.p@collabora.com>
- <20201005181014.GL1009802@dtor-ws>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <ac4eeab7-8333-b96b-707b-eb2d6d0d8139@collabora.com>
-Date:   Tue, 6 Oct 2020 15:04:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1725939AbgJFN50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 09:57:26 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:34947 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725902AbgJFN5Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 09:57:25 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s66so12354488otb.2;
+        Tue, 06 Oct 2020 06:57:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X1lgbO0KN64aF6ELTrDTiOq+HH8RynZOzp1I+2Xq3iQ=;
+        b=YJC3Ek+wl9J5yVxvEwgrtYwijFlZ7wnAElOBciaVdvKX4IKihexzZfnqaABJJCkq2K
+         vTZgpLvxCBIuzFCwCeZOAgp/rBS5Qoh0EOgibiET35GlqsdMu/19nKwDQmD/UuniRI2x
+         oQqYwsV0ukHOcfDsnaE2mxSJHrbXn3G6q0QgM6sgY+2IAPv9hYUSHOrmLvtdBtFrGpqD
+         wDa7Z8PSuoOoIVskk0/MaDa17DMla808HkZqgBjc/U57im3lKDRo7QKAnsOaFcjrf76d
+         5wMuTKtiH71w65INZ6XZUtwntHjCpbkLHLuQ4BD+9sEB0wLVwJ0IJDVLDSKaCbbssbP+
+         1yHg==
+X-Gm-Message-State: AOAM530vRR4JWQzam9mVvvVpcfmVEYayzYRp+24NfVSVtUz0Hj9VKQA3
+        tiszj8id9uTbCuQszm+R1GY0MGpCqcDmrvYTmUsDZOPH
+X-Google-Smtp-Source: ABdhPJyJdIV1d8C93RfqaZttnkALg6b33zImxohE26jQQRq+Bd0F3IQ2A2x9c3gdCn6wmTBCBRuJK/B5YvLI9/2ifdA=
+X-Received: by 2002:a9d:734f:: with SMTP id l15mr3185667otk.260.1601992644679;
+ Tue, 06 Oct 2020 06:57:24 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201005181014.GL1009802@dtor-ws>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <7155888.fM3j0pV3QS@kreacher>
+In-Reply-To: <7155888.fM3j0pV3QS@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 6 Oct 2020 15:57:13 +0200
+Message-ID: <CAJZ5v0h5kQD-Grvw1eNP-STQ3PH03cYErpC+VV43nV0q4qO6yg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: stats: Add memory barrier to store_reset()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dmitry,
+On Tue, Oct 6, 2020 at 1:59 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> There is nothing to prevent the CPU or the compiler from reordering
+> the writes to stats->reset_time and stats->reset_pending in
+> store_reset(), in which case the readers of stats->reset_time may see
+> a stale value.  Moreover, on 32-bit arches the write to reset_time
+> cannot be completed in one go, so the readers of it may see a
+> partially updated value in that case.
+>
+> To prevent that from happening, add a write memory barrier between
+> the writes to stats->reset_time and stats->reset_pending in
+> store_reset().
+>
+> Fixes: 40c3bd4cfa6f ("cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>
+> I couldn't convince myself that it was OK to leave the code as it was.
+>
+> linux-next material.
+>
+> ---
+>  drivers/cpufreq/cpufreq_stats.c |    7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> Index: linux-pm/drivers/cpufreq/cpufreq_stats.c
+> ===================================================================
+> --- linux-pm.orig/drivers/cpufreq/cpufreq_stats.c
+> +++ linux-pm/drivers/cpufreq/cpufreq_stats.c
+> @@ -99,6 +99,13 @@ static ssize_t store_reset(struct cpufre
+>          * avoid races.
+>          */
+>         WRITE_ONCE(stats->reset_time, get_jiffies_64());
+> +       /*
+> +        * The memory barrier below is to prevent the readers of reset_time from
+> +        * seeing a stale or partially updated value. Note that they both access
+> +        * reset_time only if reset_pending is 1, so corresponding read barriers
+> +        * are not needed.
 
-W dniu 05.10.2020 o 20:10, Dmitry Torokhov pisze:
-> Hi Andrzej,
-> 
-> On Mon, Jun 08, 2020 at 01:22:11PM +0200, Andrzej Pietrasiewicz wrote:
->> @@ -284,8 +284,11 @@ static int input_get_disposition(struct input_dev *dev,
->>   	case EV_KEY:
->>   		if (is_event_supported(code, dev->keybit, KEY_MAX)) {
->>   
->> -			/* auto-repeat bypasses state updates */
->> -			if (value == 2) {
->> +			/*
->> +			 * auto-repeat bypasses state updates but repeat
->> +			 * events are ignored if the key is not pressed
->> +			 */
->> +			if (value == 2 && test_bit(code, dev->key)) {
->>   				disposition = INPUT_PASS_TO_HANDLERS;
->>   				break;
->>   			}
-> 
-> Is this chunk really part of inhibit support? I'd think we cancel
-> autorepeat timer when we are releasing a key, no?
-> 
+I'm taking this back after double-checking memory-barriers.txt.
 
-When I look at it now it seems to me the chunk might be redundant.
-But let me explain what I had in mind when adding it.
+Will send a v2.
 
-It is a matter of what we do with input events generated while a
-device is inhibited. If ->open()/->close() are not provided by the
-driver then inhibiting amounts to merely ignoring input events from
-a device while it remains active. What else can you do if the driver
-does not provide a method to prepare the device for generating events/
-to stop generating events?
-
-In this special case a user might trigger a repeated event while the
-device is inhibited, then the user keeps holding the key down and the
-device is uninhibited. Do we pass anything to handlers then?
-
-In my opinion we should not. Such an event is "illegal" in a sense that it
-was generated at a time when nobody wanted any events from the device.
-Hence the test to let only those auto-repeat events through for which
-a key is actually pressed.
-
-However, what I see now is that if a device is inhibited, no key
-will ever reach neither the "1" nor "2" state because of the "if"
-in the very beginning of input_handle_event().
-
-Regards,
-
-Andrzej
+> +        */
+> +       smp_wmb();
+>         WRITE_ONCE(stats->reset_pending, 1);
+>
+>         return count;
+>
+>
+>
