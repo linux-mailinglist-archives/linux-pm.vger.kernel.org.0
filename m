@@ -2,88 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A8E285AA1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 10:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D81B2285B9A
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 11:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbgJGIjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 04:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727369AbgJGIjC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Oct 2020 04:39:02 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5A0C0613D3
-        for <linux-pm@vger.kernel.org>; Wed,  7 Oct 2020 01:39:01 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id a15so1145395ljk.2
-        for <linux-pm@vger.kernel.org>; Wed, 07 Oct 2020 01:39:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X/CTq+Ii8YYGlsTBxUkE2J0PCQyVRe5tUNmSX2DD4CQ=;
-        b=oabYzbNjgTaVHV+r00t+tDC3+0dTVNdSOlaClGlLs21doOxTmPumwNt3J/PkkGf08q
-         AuTGo3ooXnG8RuZTGgQpKB9FdetN3mL1Hlip1qsF2GcSA+HVQcA59+6ijyu6vBbcyv75
-         LLm1YOI2EQWx76WQnPl1FiJzLTj3vsOZviWUxDWncuaZNgc7QSLT3eJ54Aa1XYamj88V
-         kRZ+L37Qg/FL6BKZVr0mlNd84XvttjbjA9uD0FYsK3qswfe5rLYw031s5NPeFLo5GeDO
-         JuwiwUkRVnUCvtqxvY9msYtYN/q5jUr7/1Upj9uA0u1OAid16UB1ZvLy5NYZHkQfsFxG
-         /H/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X/CTq+Ii8YYGlsTBxUkE2J0PCQyVRe5tUNmSX2DD4CQ=;
-        b=RHUitHm5qtMSHZzyZAIejkF7N5wl+Q2q12WGz+z+/4tdunHrU2ydEKVmln8ryHYPVe
-         shQL/OMhdjWhHtH5cJFFnVK34X/2ei662qn81QklDvIGeBy5dJfmsDwRy8JL9X7u2Qn0
-         U24VNv5wJ1t659OYHzjQbieL3/vlMB6YR3uMjpuakGbzmxFldOrxPKZjtF049QSA/xpl
-         GUGDDVt2i6ql831k3u6gIWKJ9a2cYEPow5iphVZ1BsVmzeDNv+6dyyvsCEpx6wcOWHq7
-         aTGks7QLGVwDwmqdbtJ7MPiys7+UNEBABLXF5ujUCTccku8uDF8N67YASstbQBNLqkd1
-         4dXw==
-X-Gm-Message-State: AOAM531DJ6xvpdjBCpR9hmmcR2GGMXUJXHa4EiUG2Ryb6LVjBtGKD+Fi
-        3TxPXFJWr5/UVR3TZMcPcalff9jSOAax+hckYh3gWA==
-X-Google-Smtp-Source: ABdhPJwvN/74UnKNYnZMEj9q7ob1QqvcR1emufgQbxmGvJ46Tg35bsCOcA3ioK4zL1xqdnw0xgR10qrV/kaLqGO/M3E=
-X-Received: by 2002:a2e:9b0c:: with SMTP id u12mr717572lji.338.1602059939987;
- Wed, 07 Oct 2020 01:38:59 -0700 (PDT)
+        id S1726218AbgJGJJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 05:09:46 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:50366 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726269AbgJGJJq (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Oct 2020 05:09:46 -0400
+X-Greylist: delayed 1824 seconds by postgrey-1.27 at vger.kernel.org; Wed, 07 Oct 2020 05:09:45 EDT
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1kQ4ye-0004RV-Bl; Wed, 07 Oct 2020 10:39:12 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 2/4] power: avs: rockchip-io: Move the driver to the rockchip specific drivers
+Date:   Wed, 07 Oct 2020 10:39:11 +0200
+Message-ID: <1739403.NJMpfr3yiC@diego>
+In-Reply-To: <20201006160516.319830-3-ulf.hansson@linaro.org>
+References: <20201006160516.319830-1-ulf.hansson@linaro.org> <20201006160516.319830-3-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-References: <cover.1601974764.git.syednwaris@gmail.com>
-In-Reply-To: <cover.1601974764.git.syednwaris@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 7 Oct 2020 10:38:49 +0200
-Message-ID: <CACRpkdZcfR8Vyavpi4xM1zJab6SgapGBYqK9GR2mp-xh=LuVsw@mail.gmail.com>
-Subject: Re: [PATCH v11 0/4] Introduce the for_each_set_clump macro
-To:     Syed Nayyar Waris <syednwaris@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        William Breathitt Gray <vilhelm.gray@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Richter <rrichter@marvell.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "(Exiting) Amit Kucheria" <amit.kucheria@verdurent.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 6, 2020 at 11:20 AM Syed Nayyar Waris <syednwaris@gmail.com> wrote:
+Am Dienstag, 6. Oktober 2020, 18:05:14 CEST schrieb Ulf Hansson:
+> The avs drivers are all SoC specific drivers that doesn't share any code.
+> Instead they are located in a directory, mostly to keep similar
+> functionality together. From a maintenance point of view, it makes better
+> sense to collect SoC specific drivers like these, into the SoC specific
+> directories.
+> 
+> Therefore, let's move the rockchip-io driver to the rockchip directory.
+> 
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: linux-rockchip@lists.infradead.org
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> Since this patchset primarily affects GPIO drivers, would you like
-> to pick it up through your GPIO tree?
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
-Definitely will, once we are finished!
 
-I see Andy still has comments and we need more iterations.
-That is fine, because we are not in any hurry. Just keep posting
-it!
 
-Let's merge this for v5.11 when we are finished with it.
-
-Yours,
-Linus Walleij
