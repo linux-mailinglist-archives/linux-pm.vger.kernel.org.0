@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F145286373
+	by mail.lfdr.de (Postfix) with ESMTP id EBC2F286374
 	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 18:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727550AbgJGQQy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 12:16:54 -0400
-Received: from mail-bn7nam10on2053.outbound.protection.outlook.com ([40.107.92.53]:53761
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
+        id S1728599AbgJGQRC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 12:17:02 -0400
+Received: from mail-co1nam11on2064.outbound.protection.outlook.com ([40.107.220.64]:61856
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727152AbgJGQQx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Oct 2020 12:16:53 -0400
+        id S1727152AbgJGQRC (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Oct 2020 12:17:02 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Jk3Gu+I6Czh71qhmpjAjkv8N9xCfXpCVSfCLOvO20ks9mCaerwl2M04wFPYI81grproIaP957gn9gmg2qmJTiIcU2a5ieOO0d6Tw8EBmNNvazXlczPuItPjhDlB7gjvatuvF1iJiZsvnE//9FdT/vrX+fmrtlhV5gS1y48MMiQJCav58oq/gfkgBV4IngjqiI1nVNrzfwA/YdBUdMKTQCMaiYcLyrEK5EU4SetNthgCmgJ25NwfO91IeAB7kBLLpua9vtIoXATH6EpTgnnhZN1GDbqHtXGYkpnMNnWZH3O47LGNJKjk1WOUFhxlMbM15+wBLSHzQGPN0MJpdF1Bi+w==
+ b=DIkzDK/3xB5pIdWh01Q3SPeEV+WMNd6v0sw0xd7BVI+SyitjJtBXzMDx46WW6V6ZJyv2Rs1PobjCEHzEUVXV4klhFKzCJmuckDo5huODXewGGDrQ3nHJfQn4pfzIZ6h7Ur1VFvLYviVdsL0qoupf1pXNOWO7twWDOL+l4ZAG7tYCNIO0pQu8trE1hr4OZQKq8FfT79lJsB9/VLQEx8HdCJmBrm18c/DNYT9mgHsL//b8bkrPqBj+eSOn8WbJWLUkToiT3y0JnHYkc8AF+COWzqQea8UMmlycvVfY8ZmDPI68k57nLuwbNIo9AXbxDpcg3eT7zCOLlM/XHDHTRAldGw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CmlQG/NA+a+j3TsLHpF6FlD3tj0KaoiiM/QOBD1ckUA=;
- b=PAXZA6BLyBKh7OI9n8gk1b4cTxV2pofhiPI86Bw/8Vtz9YIWYcGXIygkEDFDOzCiAsrXWcQP+p6ZOm/cbqmN4Qf5opx7oNwJcf9t+h7Mum6l7uac3cJzAuv4kTApfVDJUdh+tBLxwG7F6MIZbhki5z1yPlT4taqHIV3D31pcqFx/R5WbgBMzGiY4DdJHVpOnK0ZbTHcGMVF46rZFiFQ6ZXl6x8G1Ezx4FWMH31BFR+YvenVygpDtwwaFputa01Bm6QBdEtzuDlWnq3TZHqUm2QCaNRNtg+NQuh+kh962/bAzFhE8SruK6hrGxk/c6ytODt5YluNmwXee68VZkPWjnA==
+ bh=mkTwbv/DDDxRuCnLAMSgOwJo6omE51WScq9zVlw0cmU=;
+ b=FcPWKnnBiYSaFFfskcr+HboL/TaNEnqZKuglvyL8dPgPdQsIP5E8oJVWTPD1d7aoaOMwcm8IB+zqWeLKexTJdc1zT6w8drg6r89SJ7thkCR9mhUVGnl2aa0DGvta7niudONYuzWUkRngDgto2e0fxhYYLZPliVceYijHSE5/sTlQlC3at078yU0GuL+JnnxY/r9KeqSxRZ/E/o1tF/GIP8DlIJxlG59+aSVp07xlrhViwIGwQu0Sr70d0Uf7yZlGNW/MTNtzUQExQyg5fyk/f1A6IST5/++d8GFRghy9huu+UgZsVi3QsHcPsnRF3Sb+suq99wiiQG8KqRgPI/1rDQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CmlQG/NA+a+j3TsLHpF6FlD3tj0KaoiiM/QOBD1ckUA=;
- b=XR8210bqkYoriFBoij+2x5lV10SZBNzX0tuauRZd9p+w133yvZM7VdLkTWfEWDAkCSeEG+/5gTonjeJD5c+oe0AQyQI+MvzUBN1qyWy3mkTaGijBybzUD7tj+TyTMm9CG99B/qh9Eo6OZQAaRGgdUpSg/7Kkta650QDjyOh7XmQ=
+ bh=mkTwbv/DDDxRuCnLAMSgOwJo6omE51WScq9zVlw0cmU=;
+ b=fjqeXc3oElrx4emlchTVCZ5nFbLxtu0Y1FcX1qrXFa4SHpoJFMZHxUaEyA3PNjsp4XlPp+rsTKZI67kxIkqGkJrqGNw3gZx4VlyGkRcCuNufbmq24NFL9/AuKv2F3zNSZp+JUYprpiuAWm9vNj/cJD942957taldrELDgs35Pw0=
 Authentication-Results: rjwysocki.net; dkim=none (message not signed)
  header.d=none;rjwysocki.net; dmarc=none action=none header.from=amd.com;
 Received: from BN8PR12MB2946.namprd12.prod.outlook.com (2603:10b6:408:9d::13)
- by BN8PR12MB3106.namprd12.prod.outlook.com (2603:10b6:408:45::19) with
+ by BN6PR12MB1315.namprd12.prod.outlook.com (2603:10b6:404:1f::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.37; Wed, 7 Oct
- 2020 16:16:45 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21; Wed, 7 Oct
+ 2020 16:16:58 +0000
 Received: from BN8PR12MB2946.namprd12.prod.outlook.com
  ([fe80::3054:612a:b2d7:f46d]) by BN8PR12MB2946.namprd12.prod.outlook.com
  ([fe80::3054:612a:b2d7:f46d%6]) with mapi id 15.20.3433.046; Wed, 7 Oct 2020
- 16:16:45 +0000
+ 16:16:58 +0000
 From:   Kim Phillips <kim.phillips@amd.com>
 To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
         Victor Ding <victording@google.com>, linux-pm@vger.kernel.org
@@ -54,55 +54,58 @@ Cc:     Kim Phillips <kim.phillips@amd.com>,
         Tony Luck <tony.luck@intel.com>,
         Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
         LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
-Subject: [PATCH v2 2/4] powercap/intel_rapl_msr: Convert rapl_msr_priv into pointer
-Date:   Wed,  7 Oct 2020 11:14:37 -0500
-Message-Id: <20201007161439.312534-3-kim.phillips@amd.com>
+Subject: [PATCH v2 3/4] powercap: Add AMD Fam17h RAPL support
+Date:   Wed,  7 Oct 2020 11:14:38 -0500
+Message-Id: <20201007161439.312534-4-kim.phillips@amd.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201007161439.312534-1-kim.phillips@amd.com>
 References: <20201007161439.312534-1-kim.phillips@amd.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Originating-IP: [70.114.200.6]
-X-ClientProxiedBy: SA9PR11CA0006.namprd11.prod.outlook.com
- (2603:10b6:806:6e::11) To BN8PR12MB2946.namprd12.prod.outlook.com
+X-ClientProxiedBy: SN4PR0601CA0016.namprd06.prod.outlook.com
+ (2603:10b6:803:2f::26) To BN8PR12MB2946.namprd12.prod.outlook.com
  (2603:10b6:408:9d::13)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (70.114.200.6) by SA9PR11CA0006.namprd11.prod.outlook.com (2603:10b6:806:6e::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.39 via Frontend Transport; Wed, 7 Oct 2020 16:16:44 +0000
+Received: from localhost.localdomain (70.114.200.6) by SN4PR0601CA0016.namprd06.prod.outlook.com (2603:10b6:803:2f::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.23 via Frontend Transport; Wed, 7 Oct 2020 16:16:57 +0000
 X-MS-PublicTrafficType: Email
 X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 1011f38b-9ff3-4cba-06ae-08d86adc62c4
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3106:
+X-MS-Office365-Filtering-Correlation-Id: c0864b21-4635-4d60-096e-08d86adc6a66
+X-MS-TrafficTypeDiagnostic: BN6PR12MB1315:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3106762655BA8C44068F0B86870A0@BN8PR12MB3106.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <BN6PR12MB131575C3AAA41C1D42979420870A0@BN6PR12MB1315.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lRqt88MeMTvhve3ZnUvOr24oLS34n8krlaiOukjVPQXRtjSiEzIQ50/y5svJMsMcdsTf0Fs4js4KGPXqF4+HulxSUW0kQYed0Qw4peVupfeWuYf06wWtEvufHmE4ARsWr6JZzF2jOEd1/xQWUrkzA0UCfM9+d/9x7spqfqM52vfsjdcFdiVWSmm4Xl0PcJfmi6W8JDOCJe/6/tU91oZytSf8r7VV724VMn9XUgnpe+rels6TeeWouQq8jdBD3REda3Km2nIkwCKfuk1Se7SmyI/lP9VVi9CUHjhaX4zwS+YMmYvvTHgWDPjUaIXEb6YWETVsVuqUaGZFimilf8QnMf448SKIjJVVsk/Btxd7McyhrgeNjzpLp4aHHCjApbjnG4P7ruy8hihJy3oHupQ/dGH7aJ2rRfoCJDoGmvj/B9uF81aCab/4vkH40sUYeKlelAqss+xCEEosZc32ti2IXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2946.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39850400004)(376002)(346002)(396003)(136003)(26005)(8936002)(83380400001)(16526019)(186003)(83080400001)(86362001)(316002)(8676002)(36756003)(2616005)(956004)(110136005)(54906003)(69590400008)(2906002)(1076003)(6666004)(4326008)(44832011)(52116002)(5660300002)(6486002)(478600001)(966005)(66476007)(7416002)(66556008)(66946007)(6512007)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: btOZH9xrqg/yhxqupVe79BKIWQW1vIYmnepbQARyBCvSgkHGalz5QJj20IY2VmxtGXJ0Qrb7mrna1bKZSmiGtaby3g+jYyuhbLOxVYX5Unm4SKSbzpXtJ3nQlKgwl+mVABQCyMRKQXDF3lTtcLkGwgAX2R0S2WuH4RmGdGXMDlnkecQNtJJef+FBL9zqXfgC6ouzarqxnMFLaiiwhv6pvkqTq77O7OSLP/awQhtHCFlTs7J4IJxcsdLKStgGOfjJf/zeokkL9qgqy83JfB2cFS4qVJ/93qukkYf+EXi6WMiIAvOlx2Ti/6pSh88gpQBD7gnUhuZyULnl7geohRaJItSi1wOutncZ7QR/hL6Yt3BS1CANDQFDU4Sh9VGjga3QnjBsKSvyqq4vc0kJp7TzsyIQ8SHVJXBKiM4GMbvB0UatA9UMJBTZzh7Up5wc+NKfGcU9+SA7VXnK++FaqtQhBfgbVyBYWQPEH6J3UqbHAXxh/p1ZEIN7uvzRbARD+C9qm79qxZ8hqoID2LNdvNVFpojlx5ApREr9HpZbM903blkuw3sgW+w2MqsLsJ/O4/ngS1vBmOz7bQq8kMnsD8ln8h5vWqPqsVpSxKwRpNnyvkkbaQRvPcUTMySajhrIMY+XgM7BWfeOQlJFRvWMwCGdeA==
+X-Microsoft-Antispam-Message-Info: X+HqpP3MmyMTcGxrpY8Vo3Xy+8XTiUjE5MvCRsn87zBGNyL34rOW7N1E15ChhASPIqnTovLadi4IGrdLQCGTTmx2meWGW1yFQirlY1a+cx8RMGPmhn6WlclCa2V3RIZbaFp0l58rz5KkpDViDZ2ypwL8oNIQdCkfWRFYxPAPB4K/bDuIjfzZuRSaeBdQEToiqU2jAjgeFYEaOOwgLMpoMeZdwIxrWjAzGwgSh+lh0na+4pTKlaeE5UtuY07C2lQP1IxknziYVyIyPFCL2zp6Kit1fst7pEPfxsqc8xuzMLPt+GdLS+9A3ybjPpk0HWXLe9c6nPBjy15C0e2YkWDEpDtKr8bV1iSa+pk+inYBKUn8hDjHjxanmBREM0nIc7MxOagg5miGg/SqGeXAoYOU1HK+6sOWNVu21Z0SyTSWhZOVMAMb8HwUyxYv57L8kJVGAed/+MyXovASlQDyKgxRLg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2946.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(366004)(346002)(136003)(376002)(8936002)(66556008)(66476007)(66946007)(44832011)(52116002)(110136005)(1076003)(6666004)(5660300002)(26005)(6506007)(54906003)(69590400008)(2616005)(36756003)(186003)(16526019)(956004)(316002)(6512007)(2906002)(7416002)(83380400001)(966005)(4326008)(83080400001)(8676002)(478600001)(6486002)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: KlzX8i52ImT0nz/9Cy6eEEjkYgPpXWDmfRqARuTyYLyoS32Os2RxyYQHsHAv8lL/3DplR2DmdpqFN9iIoWpQWI5gB3ncjDyVfD5qSU+1R+dnfr8FaimnQ9UTWun3UjJVodpBxmDa6jxNB1bWerfs4VKFxq9Jlq+8OoLEMyxEe7r68V8f7zY5PqZk2Ngel6uENL8GK7FcITmJRCSNtEykZW5ik9XsPzjSd+hIf5gMlFNlX8e4z2jmXYiwMg+rcJVt3TDkbOfgsj54zUzMh+obb/ZZlCQy1yqRm9rct/jI+WStFfCxUGXph3O/5qTAxPwgCx0irYhnVaJnfrd5y0GCLBml6E41VrzUZSnITMkPqcwo0LN8jxx82noWklu84bJxmJeqd/u6ZKLzWv9koFLvzuAEIdrRD+zrA84qG/cjvoggh12nOjR+G3xuq/oLCG9UqVJWWYjJg0Ups/rwJWhYKSk8oEpsaKOaEld89OcJSfxusMkImTMHDplbTbVnUlEHvsFUMRINsgVXMQ1DhZzsmgS/GvoZo6RE7Vpv2Nu9a3jD/nzsNoKC8BEsQnyq2AJlz0robNXwOb9RbYtiMLyAAkttF1nG5R4qychfPV35Bynw/pkQs0loSLz3tfHSmNxckO22GDq21sgkzo9YJdfdCw==
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1011f38b-9ff3-4cba-06ae-08d86adc62c4
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0864b21-4635-4d60-096e-08d86adc6a66
 X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2946.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2020 16:16:45.6877
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2020 16:16:58.4575
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ChryvCTaqSwGpxSvPVZTzVLDZk3M6lwY+YTXvc0wOWWmWXSRKT+VLR4Rfh+lnfBQV0Cxu9PAJRS/KCzURN+FAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3106
+X-MS-Exchange-CrossTenant-UserPrincipalName: L+qksoKnpGgtOZmDLARbfDVOpKrA5/wJbCx/X9e+DKMBwBHNh7HLH+DLjvVpxxfRXGTFol2yhcwZeef7Cpp/lQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1315
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Victor Ding <victording@google.com>
 
-This patch changes the static struct rapl_msr_priv to a pointer to allow
-using a different set of of RAPL MSR interface, preparing for supporting
-AMD's RAPL MSR interface.
+This patch enables AMD Fam17h RAPL support for the power capping
+framework. The support is as per AMD Fam17h Model31h (Zen2) and
+model 00-ffh (Zen1) PPR.
 
-No functional changes.
+Tested by comparing the results of following two sysfs entries and the
+values directly read from corresponding MSRs via /dev/cpu/[x]/msr:
+  /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
+  /sys/class/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:0/energy_uj
 
 Signed-off-by: Victor Ding <victording@google.com>
 Acked-by: Kim Phillips <kim.phillips@amd.com>
@@ -126,108 +129,85 @@ Cc: x86@kernel.org
 ---
 Kim's changes from Victor's original submission:
 
-https://lore.kernel.org/lkml/20200729205144.2.I4cb96a95365506b77761c1416258672a7556b595@changeid/
+https://lore.kernel.org/lkml/20200729205144.3.I01b89fb23d7498521c84cfdf417450cbbfca46bb@changeid/
 
  - Added my Acked-by.
  - Added Daniel Lezcano to Cc.
 
- drivers/powercap/intel_rapl_msr.c | 37 +++++++++++++++++--------------
- 1 file changed, 20 insertions(+), 17 deletions(-)
+ arch/x86/include/asm/msr-index.h     |  1 +
+ drivers/powercap/intel_rapl_common.c |  2 ++
+ drivers/powercap/intel_rapl_msr.c    | 27 ++++++++++++++++++++++++++-
+ 3 files changed, 29 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index f1b24f1b774d..c0646f69d2a5 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -324,6 +324,7 @@
+ #define MSR_PP1_POLICY			0x00000642
+ 
+ #define MSR_AMD_RAPL_POWER_UNIT		0xc0010299
++#define MSR_AMD_CORE_ENERGY_STATUS	0xc001029a
+ #define MSR_AMD_PKG_ENERGY_STATUS	0xc001029b
+ 
+ /* Config TDP MSRs */
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 983d75bd5bd1..6905ccffcec3 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -1054,6 +1054,8 @@ static const struct x86_cpu_id rapl_ids[] __initconst = {
+ 
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&rapl_defaults_hsw_server),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&rapl_defaults_hsw_server),
++
++	X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_core),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
 diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index d2a2627507a9..c68ef5e4e1c4 100644
+index c68ef5e4e1c4..dcaef917f79d 100644
 --- a/drivers/powercap/intel_rapl_msr.c
 +++ b/drivers/powercap/intel_rapl_msr.c
-@@ -31,7 +31,9 @@
- #define MSR_VR_CURRENT_CONFIG		0x00000601
+@@ -48,6 +48,21 @@ static struct rapl_if_priv rapl_msr_priv_intel = {
+ 	.limits[RAPL_DOMAIN_PACKAGE] = 2,
+ };
  
- /* private data for RAPL MSR Interface */
--static struct rapl_if_priv rapl_msr_priv = {
-+static struct rapl_if_priv *rapl_msr_priv;
++static struct rapl_if_priv rapl_msr_priv_amd = {
++	.reg_unit = MSR_AMD_RAPL_POWER_UNIT,
++	.regs[RAPL_DOMAIN_PACKAGE] = {
++		0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
++	.regs[RAPL_DOMAIN_PP0] = {
++		0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
++	.regs[RAPL_DOMAIN_PP1] = {
++		0, 0, 0, 0, 0 },
++	.regs[RAPL_DOMAIN_DRAM] = {
++		0, 0, 0, 0, 0 },
++	.regs[RAPL_DOMAIN_PLATFORM] = {
++		0, 0, 0, 0, 0},
++	.limits[RAPL_DOMAIN_PACKAGE] = 1,
++};
 +
-+static struct rapl_if_priv rapl_msr_priv_intel = {
- 	.reg_unit = MSR_RAPL_POWER_UNIT,
- 	.regs[RAPL_DOMAIN_PACKAGE] = {
- 		MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS, MSR_PKG_PERF_STATUS, 0, MSR_PKG_POWER_INFO },
-@@ -57,9 +59,9 @@ static int rapl_cpu_online(unsigned int cpu)
- {
- 	struct rapl_package *rp;
- 
--	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
-+	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
- 	if (!rp) {
--		rp = rapl_add_package(cpu, &rapl_msr_priv);
-+		rp = rapl_add_package(cpu, rapl_msr_priv);
- 		if (IS_ERR(rp))
- 			return PTR_ERR(rp);
- 	}
-@@ -72,7 +74,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
- 	struct rapl_package *rp;
- 	int lead_cpu;
- 
--	rp = rapl_find_package_domain(cpu, &rapl_msr_priv);
-+	rp = rapl_find_package_domain(cpu, rapl_msr_priv);
- 	if (!rp)
- 		return 0;
- 
-@@ -135,44 +137,45 @@ static int rapl_msr_probe(struct platform_device *pdev)
+ /* Handles CPU hotplug on multi-socket systems.
+  * If a CPU goes online as the first CPU of the physical package
+  * we add the RAPL package to the system. Similarly, when the last
+@@ -137,7 +152,17 @@ static int rapl_msr_probe(struct platform_device *pdev)
  	const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
  	int ret;
  
--	rapl_msr_priv.read_raw = rapl_msr_read_raw;
--	rapl_msr_priv.write_raw = rapl_msr_write_raw;
-+	rapl_msr_priv = &rapl_msr_priv_intel;
-+	rapl_msr_priv->read_raw = rapl_msr_read_raw;
-+	rapl_msr_priv->write_raw = rapl_msr_write_raw;
- 
- 	if (id) {
--		rapl_msr_priv.limits[RAPL_DOMAIN_PACKAGE] = 3;
--		rapl_msr_priv.regs[RAPL_DOMAIN_PACKAGE][RAPL_DOMAIN_REG_PL4] =
-+		rapl_msr_priv->limits[RAPL_DOMAIN_PACKAGE] = 3;
-+		rapl_msr_priv->regs[RAPL_DOMAIN_PACKAGE][RAPL_DOMAIN_REG_PL4] =
- 			MSR_VR_CURRENT_CONFIG;
- 		pr_info("PL4 support detected.\n");
- 	}
- 
--	rapl_msr_priv.control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
--	if (IS_ERR(rapl_msr_priv.control_type)) {
-+	rapl_msr_priv->control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
-+	if (IS_ERR(rapl_msr_priv->control_type)) {
- 		pr_debug("failed to register powercap control_type.\n");
--		return PTR_ERR(rapl_msr_priv.control_type);
-+		return PTR_ERR(rapl_msr_priv->control_type);
- 	}
- 
- 	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "powercap/rapl:online",
- 				rapl_cpu_online, rapl_cpu_down_prep);
- 	if (ret < 0)
- 		goto out;
--	rapl_msr_priv.pcap_rapl_online = ret;
-+	rapl_msr_priv->pcap_rapl_online = ret;
- 
- 	/* Don't bail out if PSys is not supported */
--	rapl_add_platform_domain(&rapl_msr_priv);
-+	rapl_add_platform_domain(rapl_msr_priv);
- 
- 	return 0;
- 
- out:
- 	if (ret)
--		powercap_unregister_control_type(rapl_msr_priv.control_type);
-+		powercap_unregister_control_type(rapl_msr_priv->control_type);
- 	return ret;
- }
- 
- static int rapl_msr_remove(struct platform_device *pdev)
- {
--	cpuhp_remove_state(rapl_msr_priv.pcap_rapl_online);
--	rapl_remove_platform_domain(&rapl_msr_priv);
--	powercap_unregister_control_type(rapl_msr_priv.control_type);
-+	cpuhp_remove_state(rapl_msr_priv->pcap_rapl_online);
-+	rapl_remove_platform_domain(rapl_msr_priv);
-+	powercap_unregister_control_type(rapl_msr_priv->control_type);
- 	return 0;
- }
+-	rapl_msr_priv = &rapl_msr_priv_intel;
++	switch (boot_cpu_data.x86_vendor) {
++	case X86_VENDOR_INTEL:
++		rapl_msr_priv = &rapl_msr_priv_intel;
++		break;
++	case X86_VENDOR_AMD:
++		rapl_msr_priv = &rapl_msr_priv_amd;
++		break;
++	default:
++		pr_err("intel-rapl does not support CPU vendor %d\n", boot_cpu_data.x86_vendor);
++		return -ENODEV;
++	}
+ 	rapl_msr_priv->read_raw = rapl_msr_read_raw;
+ 	rapl_msr_priv->write_raw = rapl_msr_write_raw;
  
 -- 
 2.27.0
