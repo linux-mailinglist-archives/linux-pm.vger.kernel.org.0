@@ -2,235 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 771C828678F
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 20:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF7F286952
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 22:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727824AbgJGSll (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 14:41:41 -0400
-Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:4794 "EHLO
-        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726312AbgJGSlh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Oct 2020 14:41:37 -0400
-Received: from pps.filterd (m0170396.ppops.net [127.0.0.1])
-        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 097IReBX022114;
-        Wed, 7 Oct 2020 14:41:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=1xh7AHscHwXqsKx3XygzmsMMAFYiDudvXDgPSveIuoM=;
- b=EFR9W52WrDYlbfLemVvt+xBT6rXGtlijOWiMndQOyZwyhD3DjNcd2nutRIzup8nEz3WO
- supujddY2JbHAZxAQKnnDakToav/6/ibHVYqv3tBbAQaqG1qHolZ11ku2Prjoh62N+do
- Lp5FtlXb8cEOeBZeFGOj+JKqGwj273D03QcDdl5E9yWNHvEfodNeGIg83KbhQkKRqWOe
- uJtNkaHCIM28V4iDnYkJ9bqJiw1NFh3fBa9SQbjqvzEol4O98StNFZg77pMNVbtz/oZq
- yCL/J+uaZIGbPtLrQnlSjePTNjNAKDkSB923WF2tY1GZZYfoh90DRm+NPHwE9YkACnSV Uw== 
-Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
-        by mx0b-00154904.pphosted.com with ESMTP id 340phw6fp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Oct 2020 14:41:25 -0400
-Received: from pps.filterd (m0144104.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 097IXVhd101629;
-        Wed, 7 Oct 2020 14:41:25 -0400
-Received: from nam02-bl2-obe.outbound.protection.outlook.com (mail-bl2nam02lp2055.outbound.protection.outlook.com [104.47.38.55])
-        by mx0b-00154901.pphosted.com with ESMTP id 340rkc6hmx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Oct 2020 14:41:25 -0400
+        id S1726105AbgJGUoc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 16:44:32 -0400
+Received: from mail-dm6nam12on2071.outbound.protection.outlook.com ([40.107.243.71]:29856
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726152AbgJGUob (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Oct 2020 16:44:31 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dXavKa7dIqvpFMtU6NfSW2sgZ5Z/dWJHF13+91FTYB05rwjZlG1+Ijmx/9O1xENnoKEckHTbdbu7+Wwi51R1bItZHBOV1kAI0aIsqOGHRM8/g9uYpluOdfNhgGTzjbdA1q5fx3fHa+ASeJ4riikSfgpt3VoZSNs9yH1RDZx80OT5GFSUNK/rV8bivcyLpTdP5VMLzfuaHJFdCqwYcsEWkWsiA/YVNRxAJPbPNm1C9XUo0BLs3pym0zGdmmwE6zvR4vhwr68j/jJHRl++D2VnViLkaGZn7AEWPUU52GQlpknu6oItCoIS9D3qte/bAG0avs5PIArH7iOlEiY8ytFQvQ==
+ b=B8djkwKsRo9jB1r85muZCKyv55RiWZRAAjLm3X5X4YSlZ2Gdvhlt8jBeFq3mXAGdb46tSXpYFtORkTQGoqKloUhWBscPhnkb255z7DSstCMt5VsyN0WlJ6vvdEOFjLw92OnN57TYKXB/mvQP141UzuwENn2wWp52abeKKKtL5Vo/f84Za25nBH7CxtxTnT/0YzjkDnMEmzeJFJJhZXMwlf58jwOAgO8SVyiAuy9rc0m3R7gn/oUoY980GioJHaUpyVn3qRG32a0311aw3E/rMxl4uKxiBoCtuukb5SDdSEupLlhh8v/qLDOi3bAAnD7bMBfWmcOpEi+ZufKLU46klQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1xh7AHscHwXqsKx3XygzmsMMAFYiDudvXDgPSveIuoM=;
- b=VCpxQaWFEvGwUHq3iONnBlbxpDj+nIpaw3CrtjLVQi1K5KKxPwu9mubaD75GnPFwfdcaw3hMEAvV59orFpb9QEwSUliVe+JHYYJUcNM+9H+zg+9cphVJ1C2omnZjtAfABNp83pOpL7sKOc/U27MKfth7IHWOTK3hYmUfi1kYv4kRKJU3sWZ8yHKepVFU+yyIafnKmBMxyIeaPSQEUOS7eBpsXTtAdaIp6hH4oR7ELR1hlwbEp8hcwp10s9vgDxbJG9Hfnbd0N1OZ5UT7+Wg4Jtl4EnLzRxeqSCqnYb+0PX9PwmOlhRqmY1fU2yRrWVCu6cfL2oQyV6Jz8qDh6UPPcg==
+ bh=QVq6dDkJSgOws3iXidiJkaNFQipv6Gu9G2wD4qkgC2s=;
+ b=O4QqCNNnFdtMP+qjST7O3IXMSb4leOyBnEEc37tRGYJX2kkf0KBrfEoauqYbd0fU9vjFAzZjrhoYWu20uQYYaaoMcbwTOJCP4apuFpBYNU45FBcfRPjddYrJ6kPquHtcVFOQHGorUgsvJTKA/nE0m6ir+og+ysOx2JZt9PH4bzQtB/v4VTU/eNXjK9ZGEqF33Y0cMmtDWAAiPgaRfrNg2JocMLlRdE7SPfIftZU1tbkeH3oPXYTnL4U/NY63qaif4k0M4dV/sju1UzkilI8+zAuGneN1zzy18wxtQEA4/C11nyBePDjxFLbPNwpaVILr2HpY9K4sDP2qUsOmNsJfkQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dell.com; dmarc=pass action=none header.from=dell.com;
- dkim=pass header.d=dell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Dell.onmicrosoft.com;
- s=selector1-Dell-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1xh7AHscHwXqsKx3XygzmsMMAFYiDudvXDgPSveIuoM=;
- b=fk7sUUKxIW/Pzm6o+hPfphKB7OsfnPstf2lhbCPJdTPii04HgOdm2VlFzDqW0XkafKul8Oa85JUQpXDZMW69sBPZYEh/3d2NgGu8KXr/GjiUs1/vJQ/LuMIl4I0QA8VckRbT9bxbwiZt8vQ3y9uAQhvlKsKpvv/+Am7q06ExLEM=
-Received: from DM6PR19MB2636.namprd19.prod.outlook.com (2603:10b6:5:15f::15)
- by DM5PR1901MB2183.namprd19.prod.outlook.com (2603:10b6:4:aa::16) with
+ bh=QVq6dDkJSgOws3iXidiJkaNFQipv6Gu9G2wD4qkgC2s=;
+ b=0j91gKfvmEJ/Yhpg+vPdxC8n6Ffbb4/t0rSj98LAWi87NKSXqn94oyqT2uvzm89GYK9rwPtd7lWsdtoW6ybu//YRwQ0Ntx7ycDGCLhimusdVDCzyFxoqUIqmrY80Cn3V4MttsVzYTFy87Oj8LgLhtUyVB2p4FRJilYvgZdNcubI=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com (2603:10b6:910:f::22)
+ by CY4PR12MB1351.namprd12.prod.outlook.com (2603:10b6:903:36::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.22; Wed, 7 Oct
- 2020 18:41:23 +0000
-Received: from DM6PR19MB2636.namprd19.prod.outlook.com
- ([fe80::a4b8:d5c9:29da:39b2]) by DM6PR19MB2636.namprd19.prod.outlook.com
- ([fe80::a4b8:d5c9:29da:39b2%4]) with mapi id 15.20.3455.023; Wed, 7 Oct 2020
- 18:41:23 +0000
-From:   "Limonciello, Mario" <Mario.Limonciello@dell.com>
-To:     Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>
-CC:     Mark Pearson <mpearson@lenovo.com>,
-        Elia Devito <eliadevito@gmail.com>,
-        Benjamin Berg <bberg@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: RE: [RFC] Documentation: Add documentation for new
- performance_profile sysfs class
-Thread-Topic: [RFC] Documentation: Add documentation for new
- performance_profile sysfs class
-Thread-Index: AQHWmYfgDjG0YI7kc0C9HQeldGcjC6mI+DtAgAMVLYCAAEOvcIAAC2yAgAAeRRA=
-Date:   Wed, 7 Oct 2020 18:41:23 +0000
-Message-ID: <DM6PR19MB2636B067186B08B744EA2163FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
-References: <20201003131938.9426-1-hdegoede@redhat.com>
-         <20201003131938.9426-2-hdegoede@redhat.com>
-         <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
-         <85a36eb58cb9774f1907582dfc75295ed847200c.camel@hadess.net>
-         <DM6PR19MB26364E6AA2F51981F592CE58FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
- <c73ffad8fd6bff8ff20d91930b097bff82be1c8f.camel@hadess.net>
-In-Reply-To: <c73ffad8fd6bff8ff20d91930b097bff82be1c8f.camel@hadess.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2020-10-07T18:39:28.6152410Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_ActionId=e7a272ed-da76-45c4-b7f0-53744d67eebd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual
-authentication-results: hadess.net; dkim=none (message not signed)
- header.d=none;hadess.net; dmarc=none action=none header.from=Dell.com;
-x-originating-ip: [76.251.167.31]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c5cfa8ed-09da-473b-b222-08d86af0976d
-x-ms-traffictypediagnostic: DM5PR1901MB2183:
-x-microsoft-antispam-prvs: <DM5PR1901MB21838B3BD16C55360F1BFD61FA0A0@DM5PR1901MB2183.namprd19.prod.outlook.com>
-x-exotenant: 2khUwGVqB6N9v58KS13ncyUmMJd8q4
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bL0K/AxX1L8juVydCj9PxGGdp+YvnvtAIdfnF9DjXx2L8jlj3RCqX9zP29c1iF89KGKGz9sWrGLx7LN9Gd9mzeibJ2Jt+treZG4CRtaWtSyyP9xM6N3UvrgjLCRFtuTq/pijjtzEGxPeUIUTr6ITOidgXnrNIOeK9MjSKZ3eC+FKHpa19ODieD3iSpUaA2wBr0db0h4TMQGjwEGDlhDo9vrNwY6qtpWlRPQqU0aT8yAixXe+lflE5fKuKCJScpgS3LfjycvubaRNm6s8fvfmcDSW1UurSpU3Dx1sWn1onBP77Xv7tvCX8axsPxPleCS4eiKIbo7azA7S446sCUynouB2czFrOCjW1m5sZjj2JkcHrQvjQLMTHinRtan+0B4Fsw7gXUJJERdjUjxi7gbyww==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR19MB2636.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(136003)(366004)(39860400002)(376002)(346002)(66946007)(110136005)(55016002)(76116006)(66556008)(66476007)(64756008)(66446008)(33656002)(5660300002)(4326008)(8936002)(52536014)(7696005)(6506007)(7416002)(186003)(26005)(9686003)(316002)(786003)(83380400001)(478600001)(71200400001)(966005)(2906002)(83080400001)(8676002)(86362001)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: cVIJE1ssOeJy2+SuS46B3gW/MVZkejWZa/WfsAG5wZFaWsE+a9YkeUObtuvq+5pvZ4E0a/rCJuov8hSEUDmGswVx8uzpHO9XowBnSV+MY9776T5I1cpJKagxQDKMjVKpELd+ux6zViksGt3tld7bwCqvrtP/McSLJCTE/44QzjJhBQlHJjRoBejoE9/EUkDT4BsVJOIZjoWhdh0cyt/0dxaXXuKVBuRjW5V16pKZmhWbgpzxjZ+ok64WYzhVNLeMnMorIRbFbJk6UU8bVQtkNng/sEw8a12sTLjcNb2rVE6liy6V7KYQTbCWtdRDowrsWp5fl/DyQffA/CCFjR/J+IveowP0kfq7/Ys7tQoYw//H/7uNvLXuIafJtplU7eOVz2OopouQZ4S3JIGNdyujatcEKJrYcL2ufb6AjP6wM4jsiFFsU31zZ3ONT6FXGVmDPcwdwCEP5Gw/CmvZ9gB4g7e36+QUYsHYYUgen/15Sst50JU6BL6H8hRGzsXWjZE7XmHLOptOAxIwkkH/ICRF95njaMRqJrFxDZq68hB/GsBpLUBZCV+C8yiiab/MPwN8+/PTMkRfG1YCCOjm6okVmRXNm9lfiJgssKuajZbTjLrhChxT6lcI0Qp/G2jSKlAsH293P0J6FJxaUg90XXz4GQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3433.36; Wed, 7 Oct
+ 2020 20:44:21 +0000
+Received: from CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::11f9:59c8:16c0:7718]) by CY4PR12MB1494.namprd12.prod.outlook.com
+ ([fe80::11f9:59c8:16c0:7718%8]) with mapi id 15.20.3433.046; Wed, 7 Oct 2020
+ 20:44:20 +0000
+From:   Wei Huang <wei.huang2@amd.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, wei.huang2@amd.com
+Subject: [PATCH 1/1] acpi-cpufreq: Honor _PSD table setting in CPU frequency control
+Date:   Wed,  7 Oct 2020 15:44:12 -0500
+Message-Id: <20201007204412.565881-1-wei.huang2@amd.com>
+X-Mailer: git-send-email 2.26.2
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [24.55.15.93]
+X-ClientProxiedBy: SN4PR0201CA0012.namprd02.prod.outlook.com
+ (2603:10b6:803:2b::22) To CY4PR12MB1494.namprd12.prod.outlook.com
+ (2603:10b6:910:f::22)
 MIME-Version: 1.0
-X-OriginatorOrg: Dell.com
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from localhost.localdomain (24.55.15.93) by SN4PR0201CA0012.namprd02.prod.outlook.com (2603:10b6:803:2b::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.23 via Frontend Transport; Wed, 7 Oct 2020 20:44:19 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 05d21643-a154-4bb3-ecc7-08d86b01c453
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1351:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CY4PR12MB135153B6BABFD32340538510CF0A0@CY4PR12MB1351.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0TCJSlsmPPjIPganJwgAzzcNAY2ZNPC0TlVPlZa0BKpimlFLhfAJMeg3Gvkb2JkKhsh3KzVUhU7mjYgx/ad4/LCsf8zkJPQR90yhEdqiQnR17tXmgzUakNesFJ8mV+zSRtq/lJg1OEEv2KsK+oMp++hck4pOzgurKfN8GhpToVnsZ84qdxRMGbVqusxpGm4wzPwmHGrZoeHb1ia+n5GYM6XyCmBX3ITAPFypD9RXM2Y1Cu1aKSafOJ4tIrpZqTdyF5hdz5R7N+8/xlv+8g5DxzNILb6Cv+HbkTOXI3YN5kG1dMQiCtRfjrtTvRk8JlKluC0p1nw553fnJo6lwKO+aS7iPrud00wVSnB3xJVnYqDew0fRUIdNhywZO3kxIDOt
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1494.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(366004)(346002)(136003)(376002)(16526019)(6512007)(956004)(478600001)(26005)(2616005)(186003)(8676002)(8936002)(69590400008)(36756003)(5660300002)(6506007)(52116002)(1076003)(66476007)(316002)(6916009)(66946007)(2906002)(6486002)(6666004)(4326008)(83380400001)(86362001)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: AoGP8l5OuLKpQeXIIzTMlK9X1jxWgT5r8RanroCTbzVXXIkMyQgEhA4ZPp7jixM0ltVKk8W9vBy5BilMM9lzJFe6Kub+lGGoL+8Yjo/PMVsu4SqBql1T96gg++ugRRMBIqn7i2lbYan87y9bmbO6ZHbx5fx//PyV4NsBL7JUD4uGR6bytymeWnEmrb2W22+YBqFPF2Fz6yG4DL6VXIIwZVLt6+3nK+h+3/gM3vV15IkwLtyV7GWyZT2o+FGB2S6Ua7hzLAlVUMf2eBbdUCXTMWWKzY+0VwtEoTmbTrLAbJe5GS5Bs2MF/hvANyGpiUR9OwqLLspC4HZ0nBG/jCQyWpbCG1XaA5OQf8py3zwYEjv2UGJrBmHuFXrOn5+Mh3ypEkLPhxQ569Ixuy0hfZK5fm/lLg7DvhsNdZQ/5qSCZxagoidvM6HRYmd3pdQCoX7s93ukQKDkTssJ3KKRhYaKveSW+02t9jyaA0TnY1JREwrf46rKLWTnbXjL20z40x32+WXJqod0nN5DPEzzUNVvKbJZNFOg3kPOqACDqTiDSh4IN371g87vLwD1G+nurVIWyLfJnMd2WUfd3eWXSv/07+32wthiVH2bMsVrT3Fgkrwesq+B8tstrH8JhBBEPFsahH11rkY/PBVhHEuXLEYlCQ==
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05d21643-a154-4bb3-ecc7-08d86b01c453
+X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1494.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR19MB2636.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5cfa8ed-09da-473b-b222-08d86af0976d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Oct 2020 18:41:23.7069
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2020 20:44:20.8907
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 945c199a-83a2-4e80-9f8c-5a91be5752dd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ctggf8HBp4p4cxcNfOKQyfQ/idC/vs9Mf3AFRp5btUjiFGyCp+t1EjqWxGqqM5/0z5vjQ5xmC+xoxIeCNHfE2A7iMRq7plu8a1XoT1a8zV0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1901MB2183
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-07_10:2020-10-07,2020-10-07 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
- clxscore=1015 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010070118
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- adultscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010070118
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IfA1ZmJYWGQlbmt/jdxVe0mbXZymznlr/BzGUJvODWXfZpcNIgmCl8Y4DtTmwwHZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1351
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBPbiBXZWQsIDIwMjAtMTAtMDcgYXQgMTU6NTggKzAwMDAsIExpbW9uY2llbGxvLCBNYXJpbyB3
-cm90ZToNCj4gPg0KPiA+ID4gT24gTW9uLCAyMDIwLTEwLTA1IGF0IDEyOjU4ICswMDAwLCBMaW1v
-bmNpZWxsbywgTWFyaW8gd3JvdGU6DQo+ID4gPiA+ID4gT24gbW9kZXJuIHN5c3RlbXMgQ1BVL0dQ
-VS8uLi4gcGVyZm9ybWFuY2UgaXMgb2Z0ZW4gZHluYW1pY2FsbHkNCj4gPiA+ID4gPiBjb25maWd1
-cmFibGUNCj4gPiA+ID4gPiBpbiB0aGUgZm9ybSBvZiBlLmcuIHZhcmlhYmxlIGNsb2NrLXNwZWVk
-cyBhbmQgVFBELiBUaGUNCj4gPiA+ID4gPiBwZXJmb3JtYW5jZQ0KPiA+ID4gPiA+IGlzIG9mdGVu
-DQo+ID4gPiA+ID4gYXV0b21hdGljYWxseSBhZGp1c3RlZCB0byB0aGUgbG9hZCBieSBzb21lIGF1
-dG9tYXRpYy1tZWNoYW5pc20NCj4gPiA+ID4gPiAod2hpY2ggbWF5DQo+ID4gPiA+ID4gdmVyeSB3
-ZWxsIGxpdmUgb3V0c2lkZSB0aGUga2VybmVsKS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IFRoZXNl
-IGF1dG8gcGVyZm9ybWFuY2UtYWRqdXN0bWVudCBtZWNoYW5pc21zIG9mdGVuIGNhbiBiZQ0KPiA+
-ID4gPiA+IGNvbmZpZ3VyZWQgd2l0aA0KPiA+ID4gPiA+IG9uZSBvZiBzZXZlcmFsIHBlcmZvcm1h
-bmNlLXByb2ZpbGVzLCB3aXRoIGVpdGhlciBhIGJpYXMgdG93YXJkcw0KPiA+ID4gPiA+IGxvdy1w
-b3dlcg0KPiA+ID4gPiA+IGNvbnN1bXB0aW9uIChhbmQgY29vbCBhbmQgcXVpZXQpIG9yIHRvd2Fy
-ZHMgcGVyZm9ybWFuY2UgKGFuZA0KPiA+ID4gPiA+IGhpZ2hlcg0KPiA+ID4gPiA+IHBvd2VyDQo+
-ID4gPiA+ID4gY29uc3VtcHRpb24gYW5kIHRoZXJtYWxzKS4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+
-IEludHJvZHVjZSBhIG5ldyBwZXJmb3JtYW5jZV9wcm9maWxlIGNsYXNzL3N5c2ZzIEFQSSB3aGlj
-aA0KPiA+ID4gPiA+IG9mZmVycyBhDQo+ID4gPiA+ID4gZ2VuZXJpYw0KPiA+ID4gPiA+IEFQSSBm
-b3Igc2VsZWN0aW5nIHRoZSBwZXJmb3JtYW5jZS1wcm9maWxlIG9mIHRoZXNlIGF1dG9tYXRpYy0N
-Cj4gPiA+ID4gPiBtZWNoYW5pc21zLg0KPiA+ID4gPiA+DQo+ID4gPiA+DQo+ID4gPiA+IElmIGlu
-dHJvZHVjaW5nIGFuIEFQSSBmb3IgdGhpcyAtIGxldCBtZSBhc2sgdGhlIHF1ZXN0aW9uLCB3aHkN
-Cj4gPiA+ID4gZXZlbiBsZXQgZWFjaA0KPiA+ID4gPiBkcml2ZXIgb2ZmZXIgYSBjbGFzcyBpbnRl
-cmZhY2UgYW5kIHVzZXJzcGFjZSBuZWVkIHRvIGNoYW5nZQ0KPiA+ID4gPiAiZWFjaCIgZHJpdmVy
-J3MNCj4gPiA+ID4gcGVyZm9ybWFuY2Ugc2V0dGluZz8NCj4gPiA+ID4NCj4gPiA+ID4gSSB3b3Vs
-ZCB0aGluayB0aGF0IHlvdSBjb3VsZCBqdXN0IG9mZmVyIHNvbWV0aGluZyBrZXJuZWwtd2lkZQ0K
-PiA+ID4gPiBsaWtlDQo+ID4gPiA+IC9zeXMvcG93ZXIvcGVyZm9ybWFuY2UtcHJvZmlsZQ0KPiA+
-ID4gPg0KPiA+ID4gPiBVc2Vyc3BhY2UgY2FuIHJlYWQgYW5kIHdyaXRlIHRvIGEgc2luZ2xlIGZp
-bGUuwqAgQWxsIGRyaXZlcnMgY2FuDQo+ID4gPiA+IGdldCBub3RpZmllZA0KPiA+ID4gPiBvbiB0
-aGlzIHN5c2ZzIGZpbGUgY2hhbmdpbmcuDQo+ID4gPiA+DQo+ID4gPiA+IFRoZSBzeXN0ZW1zIHRo
-YXQgcmVhY3QgaW4gZmlybXdhcmUgKHN1Y2ggYXMgdGhlIHR3byB0aGF0IHByb21wdGVkDQo+ID4g
-PiA+IHRoaXMgZGlzY3Vzc2lvbikgY2FuIGNoYW5nZSBhdCB0aGF0IHRpbWUuwqAgSXQgbGVhdmVz
-IHRoZQ0KPiA+ID4gPiBwb3NzaWJpbGl0eSBmb3IgYQ0KPiA+ID4gPiBtb3JlIG9wZW4ga2VybmVs
-IGltcGxlbWVudGF0aW9uIHRoYXQgY2FuIGRvIHRoZSBzYW1lIHRoaW5nIHRob3VnaA0KPiA+ID4g
-PiB0b28gYnkNCj4gPiA+ID4gZGlyZWN0bHkgbW9kaWZ5aW5nIGRldmljZSByZWdpc3RlcnMgaW5z
-dGVhZCBvZiBBQ1BJIGRldmljZXMuDQo+ID4gPg0KPiA+ID4gVGhlIHByb2JsZW0sIGFzIEkndmUg
-bWVudGlvbmVkIGluIHByZXZpb3VzIGRpc2N1c3Npb25zIHdlIGhhZCBhYm91dA0KPiA+ID4gdGhp
-cywgaXMgdGhhdCwgYXMgeW91J3ZlIHNlZW4gaW4gcmVwbGllcyB0byB0aGlzIG1haWwsIHRoaXMg
-d291bGQNCj4gPiA+IHN1ZGRlbmx5IGJlIG1ha2luZyB0aGUga2VybmVsIGFwcGx5IHBvbGljeS4N
-Cj4gPiA+DQo+ID4gPiBUaGVyZSdzIGdvaW5nIHRvIGJlIHB1c2hiYWNrIGFzIHNvb24gYXMgcG9s
-aWN5IGlzIGVuYWN0ZWQgaW4gdGhlDQo+ID4gPiBrZXJuZWwsIGFuZCB5b3UgdGFrZSBhd2F5IHRo
-ZSBkaWZmZXJlbnQga25vYnMgZm9yIGluZGl2aWR1YWwNCj4gPiA+IGNvbXBvbmVudHMNCj4gPiA+
-IChvciB5b3UgY2FuIGNvbnRyb2wgdGhlbSBjZW50cmFsbHkgYXMgd2VsbCBhcyBpbmRpdmlkdWFs
-bHkpLiBBcw0KPiA+ID4gbXVjaCBhcw0KPiA+ID4gSSBoYXRlIHRoZSBxdWFudGl0eSBvZiBrbm9i
-c1sxXSwgSSBkb24ndCB0aGluayB0aGF0IHRyeWluZyB0bw0KPiA+ID4gcmVkdWNlDQo+ID4gPiB0
-aGUgbnVtYmVyIG9mIGtub2JzIGluIHRoZSBrZXJuZWwgaXMgYSBnb29kIHVzZSBvZiBvdXIgdGlt
-ZSwgYW5kDQo+ID4gPiBlYXNpZXINCj4gPiA+IHRvIGVuYWN0LCBjb29yZGluYXRlZCB3aXRoIGRl
-c2lnbiB0YXJnZXRzLCBpbiB1c2VyLXNwYWNlLg0KPiA+ID4NCj4gPiA+IFVubGVzcyB5b3UgY2Fu
-IHRoaW5rIG9mIGEgd2F5IHRvIGltcGxlbWVudCB0aGlzIGtlcm5lbCB3aWRlIHNldHRpbmcNCj4g
-PiA+IHdpdGhvdXQgYWRkaW5nIG9uZSBtb3JlIGV4cG9uZW50IG9uIHRoZSBudW1iZXIgb2YgcG9z
-c2liaWxpdGllcyBmb3INCj4gPiA+IHRoZQ0KPiA+ID4gdGVzdGluZyBtYXRyaXgsIEknbGwgKzEg
-SGFucycgb3JpZ2luYWwgQVBJLg0KPiA+ID4NCj4gPiBBY3R1YWxseSBJIG9mZmVyZWQgdHdvIHBy
-b3Bvc2FscyBpbiBteSByZXBseS7CoCBTbyBhcmUgeW91IE5BS2luZw0KPiA+IGJvdGg/DQo+IA0K
-PiBObywgdGhpcyBpcyBvbmx5IGFib3V0IHRoZSBmaXJzdCBwb3J0aW9uIG9mIHRoZSBlbWFpbCwg
-d2hpY2ggSSBxdW90ZWQuDQo+IEFuZCBJJ20gbm90IE5BSydpbmcgaXQsIGJ1dCBJIGRvbid0IHNl
-ZSBob3cgaXQgY2FuIHdvcmsgd2l0aG91dCBiZWluZw0KPiBhbnRpdGhldGljYWwgdG8gd2hhdCBr
-ZXJuZWwgInVzZXJzIiBleHBlY3QsIG9yIHdoYXQgdGhlIGZvbGtzIGNvbnN1bWluZw0KPiB0aG9z
-ZSBpbnRlcmZhY2VzIChwcmVzdW1hYmx5IHVzIGJvdGgpIHdvdWxkIGV4cGVjdCB0byBiZSBhYmxl
-IHRvIHRlc3QNCj4gYW5kIG1haW50YWluLg0KPiANCg0KKEp1c3Qgc28gb3RoZXJzIGFyZSBhd2Fy
-ZSwgQmFzdGllbiBhbmQgSSBoYWQgYSBwcmV2aW91cyBkaXNjdXNzaW9uIG9uIHRoaXMgdG9waWMN
-CnRoYXQgaGUgYWxsdWRlZCB0byBoZXJlOiBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcv
-aGFkZXNzL3Bvd2VyLXByb2ZpbGVzLWRhZW1vbi8tL2lzc3Vlcy8xKQ0KDQpJbiBnZW5lcmFsIEkg
-YWdyZWUgdGhhdCB3ZSBzaG91bGRuJ3QgYmUgb2ZmZXJpbmcgMTAwJ3Mgb2Yga25vYnMgdG8gY2hh
-bmdlDQp0aGluZ3MgYW5kIHByb3RlY3QgdXNlcnMgZnJvbSB0aGVtc2VsdmVzIHdoZXJlIHBvc3Np
-YmxlLg0KDQpXaGV0aGVyIHRoZSBkZWNpc2lvbnMgYXJlIG1hZGUgaW4gdGhlIGtlcm5lbCBvciBp
-biB1c2Vyc3BhY2UgeW91IHN0aWxsIGhhdmUgYSBtYXRyaXggb25jZQ0KeW91J3JlIGxldHRpbmcg
-c29tZW9uZSBjaGFuZ2UgMiBkaWZmZXJlbnQga2VybmVsIGRldmljZXMgdGhhdCBvZmZlciBwb2xp
-Y3kuICBJJ2QgYXJndWUgaXQncw0KYWN0dWFsbHkgd29yc2UgaWYgeW91IGxldCB1c2Vyc3BhY2Ug
-Y2hhbmdlIGl0IHRob3VnaC4NCg0KTGV0J3MgZ28gYmFjayB0byB0aGUgbXkgR1BVIGFuZCBwbGF0
-Zm9ybSBleGFtcGxlIGFuZCBsZXRzIHNheSBib3RoIG9mZmVyIHRoZSBuZXcga25vYiBoZXJlDQpm
-b3IgYm90aC4gIFVzZXJzcGFjZSBzb2Z0d2FyZSBzdWNoIGFzIHlvdXIgUFBEIHBpY2tzIHBlcmZv
-cm1hbmNlLiAgQm90aCB0aGUgcGxhdGZvcm0gZGV2aWNlDQphbmQgR1BVIGRldmljZSBnZXQgY2hh
-bmdlZCwgaG9wZWZ1bGx5IG5vIGNvbmZsaWN0cy4NClRoZW4gdXNlciBkZWNpZGVzIG5vLCBJIGRv
-bid0IHdhbnQgbXkgR1BVIGluIHBlcmZvcm1hbmNlIG1vZGUsIEkgb25seSB3YW50IG15IHBsYXRm
-b3JtLg0KU28gdGhleSBjaGFuZ2UgdGhlIGtub2IgZm9yIHRoZSBHUFUgbWFudWFsbHksIGFuZCBu
-b3cgeW91IGhhdmUgYSBuZXcgY29uZmlnIGluIHlvdXIgbWF0cml4Lg0KDQpIb3dldmVyIGlmIHlv
-dSBsZWZ0IGl0IHRvIGEgc2luZ2xlIGtlcm5lbCBrbm9iLCBib3RoIEdQVSBhbmQgcGxhdGZvcm0g
-Z2V0IG1vdmVkIHRvZ2V0aGVyIGFuZA0KeW91IGRvbid0IGhhdmUgdGhlc2UgZXh0cmEgY29uZmln
-cyBpbiB5b3VyIG1hdHJpeCBhbnltb3JlLg0KDQpUaGUgb3RoZXIgcG9pbnQgSSBtZW50aW9uZWQs
-IHRoYXQgcGxhdGZvcm0gbWlnaHQgYWxzbyBkbyBzb21ldGhpbmcgdG8gR1BVIHZpYSBhIHNpZGVi
-YW5kIGFuZA0KeW91IHJhY2UsIHlvdSBjYW4gc29sdmUgaXQgd2l0aCBrZXJuZWwgdG9vIGJ5IG1v
-ZGlmeWluZyB0aGUgb3JkZXJpbmcgdGhlIGtlcm5lbCBoYW5kbGVzIGl0Lg0KDQpVc2Vyc3BhY2Ug
-aG93ZXZlciwgeW91IGdpdmUgdHdvIGtub2JzIGFuZCBub3cgeW91IGhhdmUgdG8gd29ycnkgYWJv
-dXQgdGhlbSBnZXR0aW5nIGl0IHJpZ2h0DQphbmQgc3VwcG9ydGluZyB0aGVtIGRvaW5nIHRoZW0g
-aW4gdGhlIHdyb25nIG9yZGVyLg0KDQo+ID4gVGhlIG90aGVyIG9uZSBzdWdnZXN0ZWQgdG8gdXNl
-IHRoZSBzYW1lIGZpcm13YXJlIGF0dHJpYnV0ZXMgY2xhc3MNCj4gPiBiZWluZw0KPiA+IGludHJv
-ZHVjZWQgYnkgdGhlIG5ldyBEZWxsIGRyaXZlciAoDQo+ID4gaHR0cHM6Ly9wYXRjaHdvcmsua2Vy
-bmVsLm9yZy9wYXRjaC8xMTgxODM0My8pDQo+ID4gc2luY2UgdGhpcyBpcyBhY3R1YWxseSBhIGtu
-b2IgdG8gYSBzcGVjaWZpYyBmaXJtd2FyZSBzZXR0aW5nLg0KPiANCj4gVGhpcyBzZWVtZWQgdG8g
-bWUgbGlrZSBhbiBpbXBsZW1lbnRhdGlvbiBkZXRhaWwgKGVnLiB0aGUgc2FtZSBtZXRhZGF0YQ0K
-PiBpcyBiZWluZyBleHBvcnRlZCwgYnV0IGluIGEgZGlmZmVyZW50IHdheSksIGFuZCBJIGRvbid0
-IGZlZWwgc3Ryb25nbHkNCj4gYWJvdXQgaXQgZWl0aGVyIHdheS4NCg0KT0sgdGhhbmtzLg0K
+acpi-cpufreq has a old quirk that overrides the _PSD table supplied by
+BIOS on AMD CPUs. However the _PSD table of new AMD CPUs (Family 19h+)
+now accurately reports the P-state dependency of CPU cores. Hence this
+quirk needs to be fixed in order to support new CPUs' frequency control.
+
+Fixes: acd316248205 ("acpi-cpufreq: Add quirk to disable _PSD usage on all AMD CPUs")
+Signed-off-by: Wei Huang <wei.huang2@amd.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index e4ff681faaaa..1e6e2abde428 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -691,7 +691,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 		cpumask_copy(policy->cpus, topology_core_cpumask(cpu));
+ 	}
+ 
+-	if (check_amd_hwpstate_cpu(cpu) && !acpi_pstate_strict) {
++	if (check_amd_hwpstate_cpu(cpu) && (c->x86 < 0x19) &&
++	    !acpi_pstate_strict) {
+ 		cpumask_clear(policy->cpus);
+ 		cpumask_set_cpu(cpu, policy->cpus);
+ 		cpumask_copy(data->freqdomain_cpus,
+-- 
+2.26.2
+
