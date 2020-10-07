@@ -2,156 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E6D285686
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 03:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409462856B7
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 04:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbgJGB62 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Oct 2020 21:58:28 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:42662 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726623AbgJGB62 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 6 Oct 2020 21:58:28 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602035907; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=+o7MGsKHeGQlXkai/cG9FMjYngfTEsCZ2bNT3OvLsrk=; b=HhgczNI9156JEzXGI0A3l9JcpoSdbGHhUHLzwoiK46epgk262PY+pZdRXWbnklTX51IG8nT6
- 0oavNoKoWvhXG9mQnM+7AUUm/8An8fjCjw49J0PkBO3G7Xubi5QYllAmWwOn5p1Zz8SeRBje
- RMC9Igmp3ajN8wOVicrbKOhnawc=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5f7d20c23711fec7b1aa16a5 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 07 Oct 2020 01:58:26
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 348B1C433CA; Wed,  7 Oct 2020 01:58:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 21A9DC433CA;
-        Wed,  7 Oct 2020 01:58:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 21A9DC433CA
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-Date:   Tue, 6 Oct 2020 19:58:24 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v2] PM / Domains: enable domain idle state accounting
-Message-ID: <20201007015824.GB17917@codeaurora.org>
-References: <20201003155618.11997-1-ilina@codeaurora.org>
- <CAJZ5v0jMzN5nHCpTnJuUoFbrqYhrciRp04quUTAnt0sSU4q+aw@mail.gmail.com>
+        id S1726942AbgJGCnq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Oct 2020 22:43:46 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42591 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726637AbgJGCnq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Oct 2020 22:43:46 -0400
+X-UUID: 20384dc07366430b91a2c9fb45b9941f-20201007
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=AFPXpclqC/BVWvt1LdPXCMRHLa9WQf2iX9kXqT1ZSNs=;
+        b=eBGwrty71ludhboOCgew7oyCJIcOzGTzYnUfNaGFRPQizsUc/ctOd/odc8h74bUnePBQ/p0Zp0eliuk8qjLRDYd1fPMyit7CW/xo2vXpvBATRj8jWnIpaPfQHN8qAjQey5e9DYJbYJ2/Fj/DUMQQi9Hm+SlyVJOsnBSgvazabnQ=;
+X-UUID: 20384dc07366430b91a2c9fb45b9941f-20201007
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 841286483; Wed, 07 Oct 2020 10:43:38 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 7 Oct 2020 10:43:35 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 7 Oct 2020 10:43:32 +0800
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Michael Kao <michael.kao@mediatek.com>
+Subject: [PATCH] [v2] thermal: core: add upper and lower limits to power_actor_set_power
+Date:   Wed, 7 Oct 2020 10:43:32 +0800
+Message-ID: <20201007024332.30322-1-michael.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jMzN5nHCpTnJuUoFbrqYhrciRp04quUTAnt0sSU4q+aw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 05 2020 at 07:27 -0600, Rafael J. Wysocki wrote:
->On Sat, Oct 3, 2020 at 5:56 PM Lina Iyer <ilina@codeaurora.org> wrote:
->>
->> To enable better debug of PM domains, let's keep a track of the success
->> and rejections in entering each domain idle state.
->>
->> This statistics is exported in debugfs when reading the idle_states
->> node, associated with each PM domain.
->>
->> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> ---
->> Changes in v2:
->>         - Renamed 'failed' to 'rejected'
->>
->> This patch depends-on: https://lkml.org/lkml/2020/9/24/465
->> ---
->>  drivers/base/power/domain.c | 7 +++++--
->>  include/linux/pm_domain.h   | 2 ++
->>  2 files changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index f001ac6326fb..dbe89454f594 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -564,6 +564,7 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
->>
->>         genpd->status = GENPD_STATE_OFF;
->>         genpd_update_accounting(genpd);
->> +       genpd->states[genpd->state_idx].usage++;
->
->Why not to do this in genpd_update_accounting()?
->
-That function is clubbed with debugfs and does heavy tracking using
-timers. This accounting is fairly basic and still quite useful for
-debugging.
+VGhlIHVwcGVyIGFuZCBsb3dlciBsaW1pdHMgb2YgdGhlcm1hbCB0aHJvdHRsZSBzdGF0ZSBpbiB0
+aGUNCkRUIGRvIG5vdCBhcHBseSB0byB0aGUgSW50ZWxsaWdlbnQgUG93ZXIgQWxsb2NhdGlvbiAo
+SVBBKSBnb3Zlcm5vci4NCkFkZCB0aGUgY2xhbXBpbmcgZm9yIGNvb2xpbmcgZGV2aWNlIHVwcGVy
+IGFuZCBsb3dlciBsaW1pdHMgaW4gdGhlDQpwb3dlcl9hY3Rvcl9zZXRfcG93ZXIoKSB1c2VkIGJ5
+IElQQS4NCg0KU2lnbmVkLW9mZi1ieTogTWljaGFlbCBLYW8gPG1pY2hhZWwua2FvQG1lZGlhdGVr
+LmNvbT4NCi0tLQ0KIGRyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUuYyB8IDIgKy0NCiAxIGZp
+bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCg0KZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX2NvcmUuYyBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFs
+X2NvcmUuYw0KaW5kZXggNzJiZjE1OWJjZWNjLi5hMjYwZTRhNTc1ZjMgMTAwNjQ0DQotLS0gYS9k
+cml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9jb3JlLmMNCisrKyBiL2RyaXZlcnMvdGhlcm1hbC90aGVy
+bWFsX2NvcmUuYw0KQEAgLTY3NCw3ICs2NzQsNyBAQCBpbnQgcG93ZXJfYWN0b3Jfc2V0X3Bvd2Vy
+KHN0cnVjdCB0aGVybWFsX2Nvb2xpbmdfZGV2aWNlICpjZGV2LA0KIAlpZiAocmV0KQ0KIAkJcmV0
+dXJuIHJldDsNCiANCi0JaW5zdGFuY2UtPnRhcmdldCA9IHN0YXRlOw0KKwlpbnN0YW5jZS0+dGFy
+Z2V0ID0gY2xhbXBfdmFsKHN0YXRlLCBpbnN0YW5jZS0+bG93ZXIsIGluc3RhbmNlLT51cHBlcik7
+DQogCW11dGV4X2xvY2soJmNkZXYtPmxvY2spOw0KIAljZGV2LT51cGRhdGVkID0gZmFsc2U7DQog
+CW11dGV4X3VubG9jaygmY2Rldi0+bG9jayk7DQotLSANCjIuMTguMA0K
 
->>
->>         list_for_each_entry(link, &genpd->child_links, child_node) {
->>                 genpd_sd_counter_dec(link->parent);
->> @@ -574,6 +575,7 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
->>
->>         return 0;
->>  busy:
->> +       genpd->states[genpd->state_idx].rejected++;
->>         if (nr_calls)
->>                 __raw_notifier_call_chain(&genpd->power_notifiers,
->>                                           GENPD_STATE_ON, NULL,
->
->This doesn't apply to the current code, please rebase.
->
-I believe it applies cleanly on top of
-https://lkml.org/lkml/2020/9/24/465, which I believe you are applied to
-your tree. Let me rebase and re-post. Sorry about that.
-
-Thanks,
-Lina
-
->> @@ -3053,7 +3055,7 @@ static int idle_states_show(struct seq_file *s, void *data)
->>         if (ret)
->>                 return -ERESTARTSYS;
->>
->> -       seq_puts(s, "State          Time Spent(ms)\n");
->> +       seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
->>
->>         for (i = 0; i < genpd->state_count; i++) {
->>                 ktime_t delta = 0;
->> @@ -3065,7 +3067,8 @@ static int idle_states_show(struct seq_file *s, void *data)
->>
->>                 msecs = ktime_to_ms(
->>                         ktime_add(genpd->states[i].idle_time, delta));
->> -               seq_printf(s, "S%-13i %lld\n", i, msecs);
->> +               seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
->> +                             genpd->states[i].usage, genpd->states[i].rejected);
->>         }
->>
->>         genpd_unlock(genpd);
->> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
->> index 3b2b561ce846..239647f2d27f 100644
->> --- a/include/linux/pm_domain.h
->> +++ b/include/linux/pm_domain.h
->> @@ -82,6 +82,8 @@ struct genpd_power_state {
->>         s64 power_off_latency_ns;
->>         s64 power_on_latency_ns;
->>         s64 residency_ns;
->> +       u64 usage;
->> +       u64 rejected;
->>         struct fwnode_handle *fwnode;
->>         ktime_t idle_time;
->>         void *data;
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> a Linux Foundation Collaborative Project
->>
