@@ -2,141 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C91CA2864BB
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 18:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 409262865D5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 19:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbgJGQnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 12:43:10 -0400
-Received: from mslow2.mail.gandi.net ([217.70.178.242]:57892 "EHLO
-        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726105AbgJGQnK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Oct 2020 12:43:10 -0400
-Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow2.mail.gandi.net (Postfix) with ESMTP id E1EF73AF61E;
-        Wed,  7 Oct 2020 16:35:28 +0000 (UTC)
-X-Originating-IP: 82.255.60.242
-Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
-        (Authenticated sender: hadess@hadess.net)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 7D1DB240011;
-        Wed,  7 Oct 2020 16:34:56 +0000 (UTC)
-Message-ID: <c73ffad8fd6bff8ff20d91930b097bff82be1c8f.camel@hadess.net>
-Subject: Re: [RFC] Documentation: Add documentation for new
- performance_profile sysfs class
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     Mark Pearson <mpearson@lenovo.com>,
-        Elia Devito <eliadevito@gmail.com>,
-        Benjamin Berg <bberg@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>
-Date:   Wed, 07 Oct 2020 18:34:55 +0200
-In-Reply-To: <DM6PR19MB26364E6AA2F51981F592CE58FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
-References: <20201003131938.9426-1-hdegoede@redhat.com>
-         <20201003131938.9426-2-hdegoede@redhat.com>
-         <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
-         <85a36eb58cb9774f1907582dfc75295ed847200c.camel@hadess.net>
-         <DM6PR19MB26364E6AA2F51981F592CE58FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.0 (3.38.0-1.fc33) 
+        id S1727891AbgJGRX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 13:23:59 -0400
+Received: from mga03.intel.com ([134.134.136.65]:1354 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727969AbgJGRX7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Oct 2020 13:23:59 -0400
+IronPort-SDR: XejR/9Mbmw6bTXi00mTdvFcXXvW7H7Iu2Lb/jKLy7d/EEPiEaBUwyU5fT62lkUjjIarNomLzrB
+ NetAGuBRXJEg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9767"; a="165087285"
+X-IronPort-AV: E=Sophos;i="5.77,347,1596524400"; 
+   d="scan'208";a="165087285"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2020 09:48:57 -0700
+IronPort-SDR: JS5WF/ZWWJ6drdqE9KPrrDpGO1nBnyE4kYAX0TQWWs/O+DP5LvoNAnanbch5hAQcdmV4FDKhDy
+ /8xYVEACsEgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,347,1596524400"; 
+   d="scan'208";a="311818207"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 07 Oct 2020 09:48:56 -0700
+Received: from debox1-desk2.jf.intel.com (debox1-desk2.jf.intel.com [10.54.75.16])
+        by linux.intel.com (Postfix) with ESMTP id 01586580867;
+        Wed,  7 Oct 2020 09:48:56 -0700 (PDT)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     bhelgaas@google.com, len.brown@intel.com, rafael@kernel.org
+Cc:     "David E. Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: Disable PTM during suspend on Intel PCI bridges
+Date:   Wed,  7 Oct 2020 09:48:51 -0700
+Message-Id: <20201007164851.1218-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2020-10-07 at 15:58 +0000, Limonciello, Mario wrote:
->  
-> > On Mon, 2020-10-05 at 12:58 +0000, Limonciello, Mario wrote:
-> > > > On modern systems CPU/GPU/... performance is often dynamically
-> > > > configurable
-> > > > in the form of e.g. variable clock-speeds and TPD. The
-> > > > performance
-> > > > is often
-> > > > automatically adjusted to the load by some automatic-mechanism
-> > > > (which may
-> > > > very well live outside the kernel).
-> > > > 
-> > > > These auto performance-adjustment mechanisms often can be
-> > > > configured with
-> > > > one of several performance-profiles, with either a bias towards
-> > > > low-power
-> > > > consumption (and cool and quiet) or towards performance (and
-> > > > higher
-> > > > power
-> > > > consumption and thermals).
-> > > > 
-> > > > Introduce a new performance_profile class/sysfs API which
-> > > > offers a
-> > > > generic
-> > > > API for selecting the performance-profile of these automatic-
-> > > > mechanisms.
-> > > > 
-> > > 
-> > > If introducing an API for this - let me ask the question, why
-> > > even let each
-> > > driver offer a class interface and userspace need to change
-> > > "each" driver's
-> > > performance setting?
-> > > 
-> > > I would think that you could just offer something kernel-wide
-> > > like
-> > > /sys/power/performance-profile
-> > > 
-> > > Userspace can read and write to a single file.  All drivers can
-> > > get notified
-> > > on this sysfs file changing.
-> > > 
-> > > The systems that react in firmware (such as the two that prompted
-> > > this discussion) can change at that time.  It leaves the
-> > > possibility for a
-> > > more open kernel implementation that can do the same thing though
-> > > too by
-> > > directly modifying device registers instead of ACPI devices.
-> > 
-> > The problem, as I've mentioned in previous discussions we had about
-> > this, is that, as you've seen in replies to this mail, this would
-> > suddenly be making the kernel apply policy.
-> > 
-> > There's going to be pushback as soon as policy is enacted in the
-> > kernel, and you take away the different knobs for individual
-> > components
-> > (or you can control them centrally as well as individually). As
-> > much as
-> > I hate the quantity of knobs[1], I don't think that trying to
-> > reduce
-> > the number of knobs in the kernel is a good use of our time, and
-> > easier
-> > to enact, coordinated with design targets, in user-space.
-> > 
-> > Unless you can think of a way to implement this kernel wide setting
-> > without adding one more exponent on the number of possibilities for
-> > the
-> > testing matrix, I'll +1 Hans' original API.
-> > 
-> Actually I offered two proposals in my reply.  So are you NAKing
-> both?
+On Intel Platform Controller Hubs (PCH) since Cannon Lake, the Precision
+Time Measurement (PTM) capability can prevent PCIe root ports from power
+gating during suspend-to-idle, causing increased power consumption on
+systems that suspend using Low Power S0 Idle [1]. The issue is yet to be
+root caused but believed to be coming from a race condition in the suspend
+flow as the incidence rate varies for different platforms on Linux but the
+issue does not occur at all in other operating systems. For now, disable
+the feature on suspend on all Intel root ports and enable again on resume.
 
-No, this is only about the first portion of the email, which I quoted.
-And I'm not NAK'ing it, but I don't see how it can work without being
-antithetical to what kernel "users" expect, or what the folks consuming
-those interfaces (presumably us both) would expect to be able to test
-and maintain.
+Link: https://www.uefi.org/sites/default/files/resources/Intel_ACPI_Low_Power_S0_Idle.pdf
+Bug: https://bugzilla.kernel.org/show_bug.cgi?id=209361
+Tested-by: Len Brown <len.brown@intel.com>
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
+ drivers/pci/quirks.c | 57 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-> The other one suggested to use the same firmware attributes class
-> being
-> introduced by the new Dell driver ( 
-> https://patchwork.kernel.org/patch/11818343/)
-> since this is actually a knob to a specific firmware setting.
-
-This seemed to me like an implementation detail (eg. the same metadata
-is being exported, but in a different way), and I don't feel strongly
-about it either way.
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index bdf9b52567e0..e82b1f60c7a1 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5632,3 +5632,60 @@ static void apex_pci_fixup_class(struct pci_dev *pdev)
+ }
+ DECLARE_PCI_FIXUP_CLASS_HEADER(0x1ac1, 0x089a,
+ 			       PCI_CLASS_NOT_DEFINED, 8, apex_pci_fixup_class);
++
++#ifdef CONFIG_PCIE_PTM
++/*
++ * On Intel Platform Controller Hubs (PCH) since Cannon Lake, the Precision
++ * Time Measurement (PTM) capability can prevent the PCIe root port from
++ * power gating during suspend-to-idle, causing increased power consumption.
++ * So disable the feature on suspend on all Intel root ports and enable
++ * again on resume.
++ */
++static void quirk_intel_ptm_disable_suspend(struct pci_dev *dev)
++{
++	int pos;
++	u32 ctrl;
++
++	if (!(dev->ptm_enabled && dev->ptm_root))
++		return;
++
++	pos = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
++	if (!pos)
++		return;
++
++	pci_dbg(dev, "quirk: disabling PTM\n");
++
++	dev->ptm_enabled = 0;
++	dev->ptm_root = 0;
++
++	pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
++	ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
++	pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
++}
++
++static void quirk_intel_ptm_enable_resume(struct pci_dev *dev)
++{
++	int pos;
++	u32 ctrl;
++
++	pos = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
++	if (!pos)
++		return;
++
++	pci_dbg(dev, "quirk: re-enabling PTM\n");
++
++	pci_read_config_dword(dev, pos + PCI_PTM_CTRL, &ctrl);
++	ctrl |= PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT;
++	pci_write_config_dword(dev, pos + PCI_PTM_CTRL, ctrl);
++
++	dev->ptm_enabled = 1;
++	dev->ptm_root = 1;
++}
++
++DECLARE_PCI_FIXUP_CLASS_SUSPEND(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
++				PCI_CLASS_BRIDGE_PCI, 8,
++				quirk_intel_ptm_disable_suspend)
++DECLARE_PCI_FIXUP_CLASS_RESUME(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
++			       PCI_CLASS_BRIDGE_PCI, 8,
++			       quirk_intel_ptm_enable_resume)
++#endif
+-- 
+2.20.1
 
