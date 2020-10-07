@@ -2,131 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95131285B82
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 11:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB6B285C98
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 12:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbgJGJDi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 05:03:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:40512 "EHLO foss.arm.com"
+        id S1727014AbgJGKMA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 06:12:00 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:38051 "EHLO z5.mailgun.us"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726269AbgJGJDi (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Oct 2020 05:03:38 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 887C0113E;
-        Wed,  7 Oct 2020 02:03:37 -0700 (PDT)
-Received: from [10.57.52.96] (unknown [10.57.52.96])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7C9A63F71F;
-        Wed,  7 Oct 2020 02:03:34 -0700 (PDT)
-Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: update sustainable-power
- with abstract scale
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, linux-doc@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        amitk@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        id S1727297AbgJGKL7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 7 Oct 2020 06:11:59 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1602065519; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=ioiudp9XALfKdIVzKVk4P9/mHsW/D6jALV6wDdyxdnQ=; b=n5Kfsj9o4hsTHyb0ZutCtH3tw2KqodBG35iW0nuaXJ79NJaxDlJK6gvXIeJfcnxpz0hVRx77
+ UjqyHZnV+6z5KC1v5MebIqWNcKFt4wfHCDiepL/9DHv8t8VfIr1M5V8NiWkrmN7R7Q5897I1
+ s6ChjWD2+WDFX0kNyYz+wz6H/Ik=
+X-Mailgun-Sending-Ip: 104.130.96.5
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 5f7d9466319d4e9cb51b6a20 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 07 Oct 2020 10:11:50
+ GMT
+Sender: jprakash=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0E2F8C433FF; Wed,  7 Oct 2020 10:11:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.1.100] (unknown [157.46.213.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jprakash)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B4A43C433CB;
+        Wed,  7 Oct 2020 10:11:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B4A43C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jprakash@codeaurora.org
+Subject: Re: [PATCH v6 07/10] thermal: qcom: add support for adc-tm5 PMIC
+ thermal monitor
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-References: <20201002114426.31277-1-lukasz.luba@arm.com>
- <20201002114426.31277-4-lukasz.luba@arm.com>
- <CAD=FV=UbNP5-G1z95F37Fmv8=n0JPSSwnPQO_K==WpAc4vAHWQ@mail.gmail.com>
- <e9b6fc5a-45d3-168d-db38-6c068da26f6b@arm.com>
- <CAD=FV=Xkg1zpsMW5rERbibnjrgY6opZi8Z9DUFkWebb7NHtU5w@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <e80dc3ac-c115-887f-6c72-e0f3d8cd9c76@arm.com>
-Date:   Wed, 7 Oct 2020 10:03:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Amit Kucheria <amitk@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Hartmut Knaack <knaack.h@gmx.de>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
+References: <20200930100203.1988374-1-dmitry.baryshkov@linaro.org>
+ <20200930100203.1988374-8-dmitry.baryshkov@linaro.org>
+From:   Jishnu Prakash <jprakash@codeaurora.org>
+Message-ID: <073bec11-cd9e-7c3b-ae89-50486d36337a@codeaurora.org>
+Date:   Wed, 7 Oct 2020 15:41:40 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAD=FV=Xkg1zpsMW5rERbibnjrgY6opZi8Z9DUFkWebb7NHtU5w@mail.gmail.com>
+In-Reply-To: <20200930100203.1988374-8-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+Hi Dmitry,
 
-On 10/2/20 4:47 PM, Doug Anderson wrote:
-> Hi,
-> 
-> On Fri, Oct 2, 2020 at 8:13 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Doug,
->>
->> On 10/2/20 3:31 PM, Doug Anderson wrote:
->>> Hi,
->>>
->>> On Fri, Oct 2, 2020 at 4:45 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Update the documentation for the binding 'sustainable-power' and allow
->>>> to provide values in an abstract scale. It is required when the cooling
->>>> devices use an abstract scale for their power values.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>> ---
->>>>    .../devicetree/bindings/thermal/thermal-zones.yaml  | 13 +++++++++----
->>>>    1 file changed, 9 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
->>>> index 3ec9cc87ec50..4d8f2e37d1e6 100644
->>>> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
->>>> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
->>>> @@ -99,10 +99,15 @@ patternProperties:
->>>>          sustainable-power:
->>>>            $ref: /schemas/types.yaml#/definitions/uint32
->>>>            description:
->>>> -          An estimate of the sustainable power (in mW) that this thermal zone
->>>> -          can dissipate at the desired control temperature. For reference, the
->>>> -          sustainable power of a 4-inch phone is typically 2000mW, while on a
->>>> -          10-inch tablet is around 4500mW.
->>>> +          An estimate of the sustainable power (in mW or in an abstract scale)
->>>> +         that this thermal zone can dissipate at the desired control
->>>> +         temperature. For reference, the sustainable power of a 4-inch phone
->>>> +         is typically 2000mW, while on a 10-inch tablet is around 4500mW.
->>>> +
->>>> +         It is possible to express the sustainable power in an abstract
->>>> +         scale. This is the case when the related cooling devices use also
->>>> +         abstract scale to express their power usage. The scale must be
->>>> +         consistent.
->>>
->>> Two thoughts:
->>>
->>> 1. If we're going to allow "sustainable-power" to be in abstract
->>> scale, why not allow "dynamic-power-coefficient" to be in abstract
->>> scale too?  I assume that the whole reason against that originally was
->>> the idea of device tree purity, but if we're allowing the abstract
->>> scale here then there seems no reason not to allow it for
->>> "dynamic-power-coefficient".
->>
->> With this binding it's a bit more tricky.
->> I also have to discuss a few things internally. This requirement of
->> uW/MHz/V^2 makes the code easier also for potential drivers
->> like GPU (which are going to register the devfreq cooling with EM).
->>
->> Let me think about it, but for now I would just update these bits.
->> These are required to proper IPA operation, the dyn.-pow.-coef. is a
->> nice to have and possible next step.
-> 
-> I guess the problem is that Rajendra is currently planning to remove
-> all the "dynamic-power-coefficient" values from device tree right now
-> and move them to the source code because the numbers we currently have
-> in the device tree _are_ in abstract scale and thus violate the
-> bindings.  Moving this to source code won't help us get to more real
-> power numbers (since it'll still be abstract scale), it'll just be
-> pure churn.  If we're OK with the abstract scale in general then we
-> should allow it everywhere and not add churn for no reason.
-> 
-> 
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c 
+b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> new file mode 100644
+> index 000000000000..22d5414a3c5e
+> --- /dev/null
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> @@ -0,0 +1,621 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020 Linaro Limited
+> + */
+> +
+> +#include <linux/iio/consumer.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/thermal.h>
+> +
+> +#include "../../iio/adc/qcom-vadc-common.h"
+> +
 
-I just want to notify you that I had internal conversation about this
-'dynamic-power-coefficient' binding and abstract scale. We would
-change it as well, similarly to 'sustainable-power'. It must pass
-internal review and I will send the v3 of this series.
+When I was testing the patches on SC7180, I found that I had to add this 
+line for fixing a compilation error for the FIELD_PREP macro:
 
-Regards,
-Lukasz
+#include <linux/bitfield.h>
+
+Can you please check and confirm if its needed for compilation here?
+
+Thanks,
+
+Jishnu
+
