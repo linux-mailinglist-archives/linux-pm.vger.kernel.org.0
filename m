@@ -2,87 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 304BD285DA8
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 12:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42B0285E8B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Oct 2020 13:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726660AbgJGKza (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 06:55:30 -0400
-Received: from foss.arm.com ([217.140.110.172]:41842 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbgJGKza (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 7 Oct 2020 06:55:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B9A411B3;
-        Wed,  7 Oct 2020 03:55:29 -0700 (PDT)
-Received: from [10.57.52.96] (unknown [10.57.52.96])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0795F3F71F;
-        Wed,  7 Oct 2020 03:55:19 -0700 (PDT)
-Subject: Re: [PATCH] [v2] thermal: core: add upper and lower limits to
- power_actor_set_power
-To:     Michael Kao <michael.kao@mediatek.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, srv_heupstream@mediatek.com
-Cc:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>, hsinyi@chromium.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20201007024332.30322-1-michael.kao@mediatek.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-Message-ID: <9ecedd8a-fbc3-895c-d79c-f05af5c90ae5@arm.com>
-Date:   Wed, 7 Oct 2020 11:55:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728003AbgJGL6Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Oct 2020 07:58:25 -0400
+Received: from mslow2.mail.gandi.net ([217.70.178.242]:35804 "EHLO
+        mslow2.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726219AbgJGL6Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Oct 2020 07:58:25 -0400
+Received: from relay11.mail.gandi.net (unknown [217.70.178.231])
+        by mslow2.mail.gandi.net (Postfix) with ESMTP id BF1DF3B64F5;
+        Wed,  7 Oct 2020 11:52:15 +0000 (UTC)
+Received: from [192.168.0.28] (lns-bzn-39-82-255-60-242.adsl.proxad.net [82.255.60.242])
+        (Authenticated sender: hadess@hadess.net)
+        by relay11.mail.gandi.net (Postfix) with ESMTPSA id 3A8A3100012;
+        Wed,  7 Oct 2020 11:51:47 +0000 (UTC)
+Message-ID: <85a36eb58cb9774f1907582dfc75295ed847200c.camel@hadess.net>
+Subject: Re: [RFC] Documentation: Add documentation for new
+ performance_profile sysfs class
+From:   Bastien Nocera <hadess@hadess.net>
+To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     Mark Pearson <mpearson@lenovo.com>,
+        Elia Devito <eliadevito@gmail.com>,
+        Benjamin Berg <bberg@redhat.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Mark Pearson <markpearson@lenovo.com>
+Date:   Wed, 07 Oct 2020 13:51:47 +0200
+In-Reply-To: <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+References: <20201003131938.9426-1-hdegoede@redhat.com>
+         <20201003131938.9426-2-hdegoede@redhat.com>
+         <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.0 (3.38.0-1.fc33) 
 MIME-Version: 1.0
-In-Reply-To: <20201007024332.30322-1-michael.kao@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 10/7/20 3:43 AM, Michael Kao wrote:
-> The upper and lower limits of thermal throttle state in the
-> DT do not apply to the Intelligent Power Allocation (IPA) governor.
-> Add the clamping for cooling device upper and lower limits in the
-> power_actor_set_power() used by IPA.
+On Mon, 2020-10-05 at 12:58 +0000, Limonciello, Mario wrote:
+> > On modern systems CPU/GPU/... performance is often dynamically
+> > configurable
+> > in the form of e.g. variable clock-speeds and TPD. The performance
+> > is often
+> > automatically adjusted to the load by some automatic-mechanism
+> > (which may
+> > very well live outside the kernel).
+> > 
+> > These auto performance-adjustment mechanisms often can be
+> > configured with
+> > one of several performance-profiles, with either a bias towards
+> > low-power
+> > consumption (and cool and quiet) or towards performance (and higher
+> > power
+> > consumption and thermals).
+> > 
+> > Introduce a new performance_profile class/sysfs API which offers a
+> > generic
+> > API for selecting the performance-profile of these automatic-
+> > mechanisms.
+> > 
 > 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> ---
->   drivers/thermal/thermal_core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> If introducing an API for this - let me ask the question, why even let each
+> driver offer a class interface and userspace need to change "each" driver's
+> performance setting?
 > 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 72bf159bcecc..a260e4a575f3 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -674,7 +674,7 @@ int power_actor_set_power(struct thermal_cooling_device *cdev,
->   	if (ret)
->   		return ret;
->   
-> -	instance->target = state;
-> +	instance->target = clamp_val(state, instance->lower, instance->upper);
->   	mutex_lock(&cdev->lock);
->   	cdev->updated = false;
->   	mutex_unlock(&cdev->lock);
+> I would think that you could just offer something kernel-wide like
+> /sys/power/performance-profile
 > 
+> Userspace can read and write to a single file.  All drivers can get notified
+> on this sysfs file changing.
+> 
+> The systems that react in firmware (such as the two that prompted
+> this discussion) can change at that time.  It leaves the possibility for a
+> more open kernel implementation that can do the same thing though too by
+> directly modifying device registers instead of ACPI devices.
 
-Please check the patch with scripts/checkpatch.pl before sending.
-It's again base64 encoded, I was able to apply it on my end with
---ignore-whitespace, but still some odd char is there.
+The problem, as I've mentioned in previous discussions we had about
+this, is that, as you've seen in replies to this mail, this would
+suddenly be making the kernel apply policy.
 
-If Daniel is OK to fix it when applying to the thermal branch, then:
+There's going to be pushback as soon as policy is enacted in the
+kernel, and you take away the different knobs for individual components
+(or you can control them centrally as well as individually). As much as
+I hate the quantity of knobs[1], I don't think that trying to reduce
+the number of knobs in the kernel is a good use of our time, and easier
+to enact, coordinated with design targets, in user-space.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+Unless you can think of a way to implement this kernel wide setting
+without adding one more exponent on the number of possibilities for the
+testing matrix, I'll +1 Hans' original API.
 
-I would send a few patches on top of this one, to fully support the
-upper and lower limits in IPA.
+Cheers
 
-Regards,
-Lukasz
+[1]: https://ometer.com/preferences.html
+
