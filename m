@@ -2,98 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D71287250
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 12:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB4128730F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 13:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729366AbgJHKOh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 06:14:37 -0400
-Received: from foss.arm.com ([217.140.110.172]:48508 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729341AbgJHKOh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Oct 2020 06:14:37 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 38C9631B;
-        Thu,  8 Oct 2020 03:14:36 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4CD3F70D;
-        Thu,  8 Oct 2020 03:14:35 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 11:14:34 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org,
-        Dietmar.Eggemann@arm.com
-Subject: Re: [PATCH 2/2] thermal: power allocator: estimate sustainable power
- only once
-Message-ID: <20201008101434.GA23491@arm.com>
-References: <20201002122416.13659-1-lukasz.luba@arm.com>
- <20201002122416.13659-3-lukasz.luba@arm.com>
+        id S1729736AbgJHLCq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 07:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729703AbgJHLCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 07:02:46 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBD8C0613D3
+        for <linux-pm@vger.kernel.org>; Thu,  8 Oct 2020 04:02:45 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id u24so4001812pgi.1
+        for <linux-pm@vger.kernel.org>; Thu, 08 Oct 2020 04:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=seYFO3MZi0exVs/ZUxcuhNhvgzjGR2rTrbYBZtZEJqA=;
+        b=kMyxFGgBawxNBTQkES346ihp5Px1Yewo0rFQz6YH6VmOiboGAuW+Kc7SatGALM65E0
+         iT7DA4ut81fCnHG53ACbd2vu34dEZt/jAsbai6qqt17HAlTY+4prLKD5NUX9C8CMaYvJ
+         9RjhhL8f+09SPFEHjXfh+qlAghK5R1SmwXPAKuaVyXPJMtWeTQdCZcP0F5Lc6BvXWxYJ
+         fVeS6xoGB+hlBizvf9oPRFdHnG0QTdXc8u/4In2veNI0XJs1J84buFuAh/xIHy47ZFk4
+         r/HiywwhpNlOyDBX80X5tKVXy4JNljsxJzA9cGD6qr0tkGXNNqF7WXoOli+64cPW9BwG
+         aXYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=seYFO3MZi0exVs/ZUxcuhNhvgzjGR2rTrbYBZtZEJqA=;
+        b=bIfhLh23WCxwWu5o4y+1fyp/UUGUMAnZlYsPr7MVUEgJsQLpwwmegwdehhac1UoWHC
+         9rqJ768zOfZhoLSlTmLHa02rWlyMVKADrxqeDKH7I/CZ3rvPMar6CK9d7AEFZUxAlge5
+         eNTROFkGiJcnuzBEZNNlnQA9GZBAUckoOMkU5FFq1Jkwgno2TvzqS7WxLRlfLluwlI5p
+         EDGkECTDpfHafy+HukDZHLOAWbYvr0Ljb5GOEN4vpcrpcRtlVgs3WtkVhnkhiWXE/jLx
+         17sYasB2jOgSKdWTgatEanxGLjBzZFEN8ofytXrECN+/2cuT9XUAKugYeOVH83vvNCiv
+         xVWA==
+X-Gm-Message-State: AOAM533R3wu4MgRqu203nASOvpfYKwJUS5fV8MDD+PPK8xNlVaURIqEc
+        UAG2WBvznEo0A+ekJrFPWZJVTqRcDVMYaQ==
+X-Google-Smtp-Source: ABdhPJxjpMounYBj09y8+gSGlN9nIF2DacFiUHEb7lVsdfQZ7veWAJwaqYxBeajp2YolegGCcyBJ+Q==
+X-Received: by 2002:a63:ec4c:: with SMTP id r12mr6743483pgj.74.1602154965062;
+        Thu, 08 Oct 2020 04:02:45 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id v3sm7015641pjk.23.2020.10.08.04.02.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 08 Oct 2020 04:02:44 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 16:32:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        morten.rasmussen@arm.com, chris.redpath@arm.com
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201002122416.13659-3-lukasz.luba@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Lukasz,
-
-On Friday 02 Oct 2020 at 13:24:16 (+0100), Lukasz Luba wrote:
-> The sustainable power value might come from the Device Tree or can be
-> estimated in run time. There is no need to estimate every time when the
-> governor is called and temperature is high. Instead, store the estimated
-> value and make it available via standard sysfs interface so it can be
-> checked from the user-space.
+On 07-10-20, 13:58, Nicola Mazzucato wrote:
+> Hi Viresh,
 > 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/thermal/gov_power_allocator.c | 2 ++
->  1 file changed, 2 insertions(+)
+> performance controls is what is exposed by the firmware through a protocol that
+> is not capable of describing hardware (say SCMI). For example, the firmware can
+> tell that the platform has N controls, but it can't say to which hardware they
+> are "wired" to. This is done in dt, where, for example, we map these controls
+> to cpus, gpus, etc.
 > 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index f69fafe486a5..dd59085f38f5 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -204,6 +204,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
->  		estimate_pid_constants(tz, sustainable_power,
->  				       params->trip_switch_on, control_temp,
->  				       true);
-> +		/* Do the estimation only once and make available in sysfs */
-> +		tz->tzp->sustainable_power = sustainable_power;
-
-After looking over the code, it does seems mostly useless to do the
-estimation every time the controller kicks in.
-
-But I have two comments in this regard:
-
- - The estimation is dependent on the temperature we control for which
-   can be changed from sysfs. While I don't see that as a big worry,
-   (sustainable power is an estimation anyway), it might be worth a
-   more detailed comment on why we don't expect this to be a problem,
-   or what we expect the consequences of computing sustainable power
-   only once could be.
-
- - In the function comment for estimate_pid_constants() there is a
-   mention of sustainable power:
-   """
-    * Sustainable power is provided in case it was estimated.  The
-    * estimated sustainable_power should not be stored in the
-    * thermal_zone_parameters so it has to be passed explicitly to this
-    * function.
-   """
-   If we are going to compute the sustainable power estimation only once,
-   this comment should be removed, the estimated value should be added to
-   the trip point parameters before estimate_pid_constants(), and the
-   sustainable_power argument should be removed.
-   Otherwise we end up with conflicting information in the code.
-
-Regards,
-Ionela.
-
->  	}
->  
->  	err = control_temp - tz->temperature;
-> -- 
-> 2.17.1
+> Let's focus on cpus.
 > 
+> Normally we would have N of performance controls (what comes from f/w)
+> that that correspond to hardware clock/dvfs domains.
+> 
+> However, some firmware implementations might benefit from having finer
+> grained information about the performance requirements (e.g.
+> per-CPU) and therefore choose to present M performance controls to the
+> OS. DT would be adjusted accordingly to "wire" these controls to cpus
+> or set of cpus.
+> In this scenario, the f/w will make aggregation decisions based on the
+> requests it receives on these M controls.
+> 
+> Here we would have M cpufreq policies which do not necessarily reflect the
+> underlying clock domains, thus some s/w components will underperform
+> (EAS and thermal, for example).
+> 
+> A real example would be a platform in which the firmware describes the system
+> having M per-cpu control, and the cpufreq subsystem will have M policies while
+> in fact these cpus are "performance-dependent" each other (e.g. are in the same
+> clock domain).
+
+If the CPUs are in the same clock domain, they must be part of the
+same cpufreq policy.
+
+> This performance dependency information is essential for some
+> components that take information from the cpufreq policy.
+> 
+> To restore functionality we can use the optional node
+> 'cpu-performance-dependencies' in dt which will provide such dependency
+> information and we can add a new cpumask 'dependency_cpus' in policy.
+> 
+> Hope it gives some clarity.
+
+Some, but I am still confused :(
+
+Can you give a real example, with exact number of CPUs, how they share
+clocks/voltage domains and what else the firmware needs in terms of
+performance-domains ? That may make it easier for me to understand it.
+
+-- 
+viresh
