@@ -2,123 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 764392876A6
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 17:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D739D2876FC
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 17:18:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730828AbgJHPDW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 11:03:22 -0400
-Received: from foss.arm.com ([217.140.110.172]:33758 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730697AbgJHPDU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Oct 2020 11:03:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9483E1063;
-        Thu,  8 Oct 2020 08:03:19 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35BAC3F70D;
-        Thu,  8 Oct 2020 08:03:19 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 16:03:17 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        sudeep.holla@arm.com, chris.redpath@arm.com,
-        morten.rasmussen@arm.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201008150317.GB20268@arm.com>
-References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
- <20200924095347.32148-3-nicola.mazzucato@arm.com>
- <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
- <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
- <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
+        id S1730831AbgJHPSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 11:18:38 -0400
+Received: from mail-oo1-f68.google.com ([209.85.161.68]:33007 "EHLO
+        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730650AbgJHPSi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 11:18:38 -0400
+Received: by mail-oo1-f68.google.com with SMTP id r7so387652ool.0;
+        Thu, 08 Oct 2020 08:18:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lVTN3l7RCWCg+57rF3cB/zdsT9nZyrC1LZ/Pc3QOkPg=;
+        b=h5q7OeANNvfFXdqJSfmu5Khf2vG/T318mcNU8r+JewYgqfP62BR0c8gEse+/rnD5wY
+         uTS3eL1YlGdoOwoC/Ec+vMmjqMKW/x0W3pNTcnuomQ9OVsY/8JgK/X2mWB2Y5I7CPJFR
+         25UeSRhjtkEG1mfS3qF3x0B91O+++cFcI4TN2Ew5vJp+NghP0r++AQ5O/0JuKnQighGi
+         prks4Ya3n7yOukWRgd2SRYEbHfo+NFLgvhjeJLZPtTXelll6Itq7/p5ICgCM6Lu1L7ww
+         uMcriwNkVjCw7y49CGTMsuZO4OCW1imdXL9TJAQTi6QzaJLoRteOo8eCN3CuVOKX1s9x
+         +n6g==
+X-Gm-Message-State: AOAM53314IHZt6DIajVG4ThJaP3wq9s3gSLTvJUvenjx7ivkd9M/4cKq
+        wW4Q9f42kaUJW+FdmPvGHFmAXz4Ms12xyzQMw0aRBRwk
+X-Google-Smtp-Source: ABdhPJwdTaCWeEKKtUZT0Fd4ttSycfvOA7vXKrn7kpF0QR9Q67ObsRAossur3ThMA7cjZYizHClXPKC9I5fu/d/hVwo=
+X-Received: by 2002:a4a:d44:: with SMTP id 65mr5852302oob.44.1602170316044;
+ Thu, 08 Oct 2020 08:18:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+References: <20200924123016.13427-1-ionela.voinescu@arm.com>
+ <CAJZ5v0hr+MZzokObNq5L0q1Fd0M5EXc6QmLXDv9b85P5b4yp4g@mail.gmail.com> <20201008140558.ovytcc34div3ih6m@bogus>
+In-Reply-To: <20201008140558.ovytcc34div3ih6m@bogus>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Oct 2020 17:18:25 +0200
+Message-ID: <CAJZ5v0hYu_86LB=nycAEDQQ3TsMMpcBV=Ue4WuOqH3YhxAehVQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2]cpufreq,topology,arm: disable FI for BL_SWITCHER
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+On Thu, Oct 8, 2020 at 4:06 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Oct 07, 2020 at 04:34:44PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, Sep 24, 2020 at 2:30 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> > >
+> > > This series is the result of the discussions ([1], [2]) around the
+> > > complications that the BL_SWITCHER poses when it comes to Frequency
+> > > Invariance (FI) and it aims to restart the discussions.
+> > >
+> > > To properly scale its per-entity load-tracking signals, the task
+> > > scheduler needs to be given a frequency scale factor, i.e. some image of
+> > > the current frequency the CPU is running at, relative to its maximum
+> > > frequency.
+> > >
+> > > But (reiterating the message in the changelog of patch 2/2), big.LITTLE
+> > > switching complicates the setting of a correct cpufreq-based frequency
+> > > invariance scale factor due to (as observed in
+> > > drivers/cpufreq/vexpress-spc-cpufreq.c):
+> > >  - Incorrect current and maximum frequencies as a result of the
+> > >    exposure of a virtual frequency table to the cpufreq core,
+> > >  - Missed updates as a result of asynchronous frequency adjustments
+> > >    caused by frequency changes in other CPU pairs.
+> > > More information on this feature can be found at [3].
+> > >
+> > > Given that its functionality is atypical in regards to FI and that this
+> > > is an old technology, patch 2/2 disable FI for when big.LITTLE switching
+> > > is configured in to prevent incorrect scale setting.
+> > >
+> > > For this purpose patch 1/2 changes the way arch_set_freq_scale() is
+> > > defined in architecture code which brings it in line with the logic of
+> > > other architectural function definitions while allowing for less invasive
+> > > filtering of FI support.
+> > >
+> > > In the discussions at [2], three possible solutions were suggested:
+> > >  - (1) conditioning FI by !CONFIG_BL_SWITCHER
+> > >  - (2) leave as is with note in driver specifying this FI broken
+> > >    functionality
+> > >  - (3) removing full BL_SWITCHER support
+> > >
+> > > This series restructures the solution at (1). The reason for it is that
+> > > the new patch limits the ifdef filtering to the arm topology include file,
+> > > a location where frequency invariance functions are defined. Therefore,
+> > > this seems more appropriate given that the b.L switcher is an arm
+> > > technology and that the new FI filtering location seems more natural for
+> > > conditioned FI disabling.
+> > >
+> > > Solutions (2) and (3) were not implemented given that there might be some
+> > > remaining users of this technology (Samsung Chromebook 2 - Samsung Exynos
+> > > 5 Octa 5420, Samsung Exynos 5 Octa 5800) and therefore leaving this
+> > > broken (2) seems equally bad to removing support for it (3).
+> > >
+> > > [1] https://lore.kernel.org/lkml/20200701090751.7543-5-ionela.voinescu@arm.com/
+> > > [2] https://lore.kernel.org/lkml/20200722093732.14297-4-ionela.voinescu@arm.com/
+> > > [3] https://lwn.net/Articles/481055/
+> >
+> > I can take this set with the ACKs from Viresh if that's fine by
+> > everyone.  Catalin?  Sudeep?
+>
+> Acked-by: Sudeep Holla <sudeep.holla@arm.com> (BL_SWITCHER and topology parts)
 
-On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
-> On 07-10-20, 13:58, Nicola Mazzucato wrote:
-> > Hi Viresh,
-> > 
-> > performance controls is what is exposed by the firmware through a protocol that
-> > is not capable of describing hardware (say SCMI). For example, the firmware can
-> > tell that the platform has N controls, but it can't say to which hardware they
-> > are "wired" to. This is done in dt, where, for example, we map these controls
-> > to cpus, gpus, etc.
-> > 
-> > Let's focus on cpus.
-> > 
-> > Normally we would have N of performance controls (what comes from f/w)
-> > that that correspond to hardware clock/dvfs domains.
-> > 
-> > However, some firmware implementations might benefit from having finer
-> > grained information about the performance requirements (e.g.
-> > per-CPU) and therefore choose to present M performance controls to the
-> > OS. DT would be adjusted accordingly to "wire" these controls to cpus
-> > or set of cpus.
-> > In this scenario, the f/w will make aggregation decisions based on the
-> > requests it receives on these M controls.
-> > 
-> > Here we would have M cpufreq policies which do not necessarily reflect the
-> > underlying clock domains, thus some s/w components will underperform
-> > (EAS and thermal, for example).
-> > 
-> > A real example would be a platform in which the firmware describes the system
-> > having M per-cpu control, and the cpufreq subsystem will have M policies while
-> > in fact these cpus are "performance-dependent" each other (e.g. are in the same
-> > clock domain).
-> 
-> If the CPUs are in the same clock domain, they must be part of the
-> same cpufreq policy.
-
-But cpufreq does not currently support HW_ALL (I'm using the ACPI
-coordination type to describe the generic scenario of using hardware
-aggregation and coordination when establishing the clock rate of CPUs).
-
-Adding support for HW_ALL* will involve either bypassing some
-assumptions around cpufreq policies or making core cpufreq changes.
-
-In the way I see it, support for HW_ALL involves either:
-
- - (a) Creating per-cpu policies in order to allow each of the CPUs to
-   send their own frequency request to the hardware which will do
-   aggregation and clock rate decision at the level of the clock
-   domain. The PSD domains (ACPI) and the new DT binding will tell
-   which CPUs are actually in the same clock domain for whomever is
-   interested, despite those CPUs not being in the same policy.
-   This requires the extra mask that Nicola introduced.
-
- - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
-   - Governors to stop aggregating (usually max) the information
-     for each of the CPUs in the policy and convey to the core
-     information for each CPU.
-   - Cpufreq core to be able to receive and pass this information
-     down to the drivers.
-   - Drivers to be able to have some per cpu structures to hold
-     frequency control (let's say SCP fast channel addresses) for
-     each of the CPUs in the policy. Or have these structures in the
-     cpufreq core/policy, to avoid code duplication in drivers.
-
-Therefore (a) is the least invasive but we'll be bypassing the rule
-above. But to make that rule stick we'll have to make invasive cpufreq
-changes (b).
-
-This is my current understanding and I'm leaning towards (a). What do
-you think?
-
-*in not so many words, this is what these patches are trying to propose,
-while also making sure it's supported for both ACPI and DT.
-
-BTW, thank you for your effort in making sense of this!
-
-Regards,
-Ionela.
+OK, the series has been applied as 5.10 material, thanks!
