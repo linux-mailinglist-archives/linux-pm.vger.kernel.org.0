@@ -2,213 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4ED2874BC
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 15:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E0F287559
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 15:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730230AbgJHNBa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 09:01:30 -0400
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:14784 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729869AbgJHNB3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 09:01:29 -0400
-Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
-        id <B5f7f0d710001>; Thu, 08 Oct 2020 06:00:33 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 8 Oct
- 2020 13:01:24 +0000
-Received: from sumitg-l4t.nvidia.com (172.20.13.39) by mail.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server id 15.0.1473.3 via Frontend
- Transport; Thu, 8 Oct 2020 13:01:20 +0000
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <viresh.kumar@linaro.org>, <rjw@rjwysocki.net>,
-        <sudeep.holla@arm.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <linux-pm@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <ksitaraman@nvidia.com>, <bbasu@nvidia.com>, <sumitg@nvidia.com>
-Subject: [PATCH v2 2/2] cpufreq: tegra194: Fix unlisted boot freq warning
-Date:   Thu, 8 Oct 2020 18:31:06 +0530
-Message-ID: <1602162066-26442-3-git-send-email-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1602162066-26442-1-git-send-email-sumitg@nvidia.com>
-References: <1602162066-26442-1-git-send-email-sumitg@nvidia.com>
-X-NVConfidentiality: public
+        id S1730227AbgJHNmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 09:42:05 -0400
+Received: from foss.arm.com ([217.140.110.172]:58262 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725871AbgJHNmF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Oct 2020 09:42:05 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A55C1063;
+        Thu,  8 Oct 2020 06:42:04 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDFF33F71F;
+        Thu,  8 Oct 2020 06:42:03 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 14:42:02 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
+        robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        chris.redpath@arm.com, morten.rasmussen@arm.com
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: Add devicetree binding for
+ cpu-performance-dependencies
+Message-ID: <20201008134153.GA20268@arm.com>
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-2-nicola.mazzucato@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1602162033; bh=w/t/1HPtHe4dWml26XyhXVC/J2g3Sci7nmwVsHDJwGw=;
-        h=From:To:CC:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
-         References:X-NVConfidentiality:MIME-Version:Content-Type;
-        b=rRZVfG4fiJdhzamTESY2oBrCljhFhQ14lxavgwcLewW20BoGjIzcpDvx7nSaGfSRR
-         K0ptRUpNtMPBKCuNm/kIy57jrEk86dYOnRL6+8X7bTYWhH1eR+AqQiEVURYfrABzDg
-         bx0A8yo0NTKrLVoGgIunLxzw+L/IRSpiUPbzL91t19Pg9LEn++z0cM1FUNeVVvS4bn
-         X5g027JUwArOfK5GouxWL4IQPQOSn61g6m239l1VHv6duTANfX4F1OJAe8USi5jl1t
-         6n7a0xPnqU+aN8RgvWmxRkpH2xLWhLjdGICUmeTDxX2u5GnVnHWWW3FxQHp4Gbofgj
-         cZq7EXYrVPxqA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200924095347.32148-2-nicola.mazzucato@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Warning coming during boot because the boot freq set by bootloader
-gets filtered out due to big freq steps while creating freq_table.
-Fix this by setting closest higher frequency from freq_table.
-Warning:
-  cpufreq: cpufreq_online: CPU0: Running at unlisted freq
-  cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed
+Hi guys,
 
-These warning messages also come during hotplug online of non-boot
-CPU's while exiting from 'Suspend-to-RAM'. This happens because
-during exit from 'Suspend-to-RAM', some time is taken to restore
-last software requested CPU frequency written in register before
-entering suspend. To fix this, adding online hook to wait till the
-current frequency becomes equal or close to the last requested
-frequency.
+On Thursday 24 Sep 2020 at 10:53:46 (+0100), Nicola Mazzucato wrote:
+[..]
+> diff --git a/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml b/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml
+> new file mode 100644
+> index 000000000000..c7a577236cd6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml
+> @@ -0,0 +1,48 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/arm/cpu-perf-dependencies.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: CPU Performance Dependencies
+> +
+> +maintainers:
+> +  - Nicola Mazzucato <nicola.mazzucato@arm.com>
+> +
+> +description: |+
+> +  This optional node provides information to OSPM of cpu performance
+> +  dependencies.
+> +  Each list represents a set of CPUs which have performance level
+> +  dependencies and can assumed to be roughly at the same performance
+> +  level coordinated by hardware and/or firmware.
+> +  Example: Describing CPUs in the same clock domain.
 
-Fixes: df320f89359c ("cpufreq: Add Tegra194 cpufreq driver")
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
- drivers/cpufreq/tegra194-cpufreq.c | 86 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 79 insertions(+), 7 deletions(-)
+I'm continuing here a conversation started in v1 on the characteristics of
+cpu-perf-dependencies and whether this binding actually describes the
+hardware.
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index d250e49..cc28b1e3 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -7,6 +7,7 @@
- #include <linux/cpufreq.h>
- #include <linux/delay.h>
- #include <linux/dma-mapping.h>
-+#include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_platform.h>
-@@ -21,7 +22,6 @@
- #define KHZ                     1000
- #define REF_CLK_MHZ             408 /* 408 MHz */
- #define US_DELAY                500
--#define US_DELAY_MIN            2
- #define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
- #define MAX_CNT                 ~0U
- 
-@@ -249,17 +249,22 @@ static unsigned int tegra194_get_speed(u32 cpu)
- static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
- {
- 	struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
--	u32 cpu;
-+	u32 cpu = policy->cpu;
-+	int ret;
- 	u32 cl;
- 
--	smp_call_function_single(policy->cpu, get_cpu_cluster, &cl, true);
-+	if (!cpu_online(cpu))
-+		return -EINVAL;
-+
-+	ret = smp_call_function_single(cpu, get_cpu_cluster, &cl, true);
-+	if (ret) {
-+		pr_err("cpufreq: Failed to get cluster for CPU%d\n", cpu);
-+		return ret;
-+	}
- 
- 	if (cl >= data->num_clusters)
- 		return -EINVAL;
- 
--	/* boot freq */
--	policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY_MIN);
--
- 	/* set same policy for all cpus in a cluster */
- 	for (cpu = (cl * 2); cpu < ((cl + 1) * 2); cpu++)
- 		cpumask_set_cpu(cpu, policy->cpus);
-@@ -267,7 +272,23 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
- 	policy->freq_table = data->tables[cl];
- 	policy->cpuinfo.transition_latency = TEGRA_CPUFREQ_TRANSITION_LATENCY;
- 
--	return 0;
-+	policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
-+
-+	ret = cpufreq_table_validate_and_sort(policy);
-+	if (ret)
-+		return ret;
-+
-+	/* Are we running at unknown frequency ? */
-+	ret = cpufreq_frequency_table_get_index(policy, policy->cur);
-+	if (ret == -EINVAL) {
-+		ret = __cpufreq_driver_target(policy, policy->cur - 1,
-+					      CPUFREQ_RELATION_L);
-+		if (ret)
-+			return ret;
-+		policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
-+	}
-+
-+	return ret;
- }
- 
- static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
-@@ -285,6 +306,55 @@ static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
- 	return 0;
- }
- 
-+static int tegra194_cpufreq_online(struct cpufreq_policy *policy)
-+{
-+	unsigned int interm_freq, last_set_freq;
-+	struct cpufreq_frequency_table *pos;
-+	u64 ndiv;
-+	int ret;
-+
-+	if (!cpu_online(policy->cpu))
-+		return -EINVAL;
-+
-+	/* get ndiv for the last frequency request from software  */
-+	ret = smp_call_function_single(policy->cpu, get_cpu_ndiv, &ndiv, true);
-+	if (ret) {
-+		pr_err("cpufreq: Failed to get ndiv for CPU%d\n", policy->cpu);
-+		return ret;
-+	}
-+
-+	cpufreq_for_each_valid_entry(pos, policy->freq_table) {
-+		if (pos->driver_data == ndiv) {
-+			last_set_freq = pos->frequency;
-+			break;
-+		}
-+	}
-+
-+	policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
-+	interm_freq =  policy->cur;
-+
-+	/*
-+	 * It takes some time to restore the previous frequency while
-+	 * turning-on non-boot cores during exit from SC7(Suspend-to-RAM).
-+	 * So, wait till it reaches the previous value and timeout if the
-+	 * time taken to reach requested freq is >100ms
-+	 */
-+	ret = read_poll_timeout(tegra194_get_speed_common, policy->cur,
-+				abs(policy->cur - last_set_freq) <= 115200, 0,
-+				100 * USEC_PER_MSEC, false, policy->cpu,
-+				US_DELAY);
-+	if (ret)
-+		pr_warn("cpufreq: cpu%d, cur:%u, last set:%u, intermed:%u\n",
-+			policy->cpu, policy->cur, last_set_freq, interm_freq);
-+
-+	return ret;
-+}
-+
-+static int tegra194_cpufreq_offline(struct cpufreq_policy *policy)
-+{
-+	return 0;
-+}
-+
- static struct cpufreq_driver tegra194_cpufreq_driver = {
- 	.name = "tegra194",
- 	.flags = CPUFREQ_STICKY | CPUFREQ_CONST_LOOPS |
-@@ -294,6 +364,8 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
- 	.get = tegra194_get_speed,
- 	.init = tegra194_cpufreq_init,
- 	.attr = cpufreq_generic_attr,
-+	.online = tegra194_cpufreq_online,
-+	.offline = tegra194_cpufreq_offline,
- };
- 
- static void tegra194_cpufreq_free_resources(void)
--- 
-2.7.4
+In the way I see this, the answer is clearly yes and it is information
+that we need in the device tree, beyond the presence of SCMI as cpufreq
+driver, and beyond the way it will be consumed by EAS/thermal/etc.
 
+I link this to whether software will do the aggregation of per CPU
+information in establishing the next frequency to be requested from the
+driver/hardware for all dependent CPUs, or whether hardware is able to
+receive the per CPU information on different channels and do the
+aggregation itself.
+
+This software aggregation is the typical way currently supported in
+cpufreq, but hardware aggregation will be needed the more we see
+hardware features for performance/power control.
+
+But support for hardware aggregation involves having per-cpu channels
+to convey the frequency request for that CPU. But currently the device
+tree only gives us the ability to describe the information to be used
+for sending frequency requests and as a result the kernel considers
+CPUs as dependent only if they use the same controls for those CPUs.
+So we currently can have hardware aggregation, but we lose all
+information about what CPUs actually ended up having the same frequency,
+because they are actually using the same clocks.
+
+Therefore this new binding is needed for when hardware/firmware is better
+equipped to make a decision about the clock rate for a group of CPUs, when
+information is given about each CPU. The usefulness comes from informing
+the software that some CPUs will have the same clock and therefore it
+does describe a hardware characteristic of the system. In some cases
+counters will help observe what was the frequency that was eventually
+granted by hardware.
+
+Knowing what CPUs actually use the same clock is very useful for the
+scheduler (EAS, frequency invariance) and thermal.
+
+Hope it helps,
+Ionela.
