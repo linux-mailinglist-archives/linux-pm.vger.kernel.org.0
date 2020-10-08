@@ -2,128 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B393286C56
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 03:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1078B286FB3
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 09:41:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727663AbgJHBIL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Oct 2020 21:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726520AbgJHBIL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Oct 2020 21:08:11 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B233CC0613D2
-        for <linux-pm@vger.kernel.org>; Wed,  7 Oct 2020 18:08:10 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id g12so4469043wrp.10
-        for <linux-pm@vger.kernel.org>; Wed, 07 Oct 2020 18:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=xm6G93I/kiU5WNNhxogPGvPfXFNKFqMEdWdZrehhfck=;
-        b=Uxk7VSF7MRI3ohv3f/EHZ3mQLG47yd8Z0crJy3aFn/hLYKDRrLXjo1dZgvsxh6a46h
-         q6qniej7L3XwNymck+dPi0/HnV24/jxAGPa7cyNN4h+5lr8xWgsR41iLqBNIKhoLcA2z
-         FOIqvGZOm2fqF3kgpmZtT3D3dY6jReaCeKpDrrnzrnMKJQ8WNm3TgUoMHq5G2nsMscKU
-         o7OISh48Uog8wcHOghHkz+NBm3uAqo+MeyP9LL8iH7ou+U9PdEk3bObfXhnDrD5Ye+iD
-         ZQezZIy8cXcv+xLmdKlKyF4Cq0qgOCmAjQSRkYyxx14Xd8rQC0Apjqlp92PF13ltjHES
-         mE1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=xm6G93I/kiU5WNNhxogPGvPfXFNKFqMEdWdZrehhfck=;
-        b=PQDK8YX9NI9/pORWV96LGmG+YbnYPHMAG7uWBBhlKKYoa7vW8hTx0myJ+x9VLQPaWL
-         heRSWkq7nyqtJrjhSkr1q8v0uEjWCHD4++Vc4bEVGwQtqEq9v8I/6LBqc209iwoi87vy
-         y4f59C8ldf34qZ93rPvLH+jjblWSJXuVT0vvEqdjc9Lyj/cFzBQApDe+DqAmhodYhJHp
-         9oL7uZ7B16zD+9aAM7QbA+J694FkywcXv3lgJjkxxgnBYeF/jAr1nRO2rRcNmJw1BJHt
-         VWXSxjy3SBaPAGfaU7oPmDZQj/A/HyVIHiHbJS2wTo/CTtGb8u2BGytBw/UDXmgZBYWA
-         SP2Q==
-X-Gm-Message-State: AOAM530eYDHohjBf6+0h3Q2jvDdWpc6oWCbhW+kL4pRjxcOHGiCZj0CC
-        ddS7x29994KEXUf6bZbB49TipA==
-X-Google-Smtp-Source: ABdhPJwi5G/ckrzPjYQ/bmCk4CS0dLMl2/fwN5uXLfxMESusYJvQR9WLt94VXE1CJ47+cQ38kpGNYQ==
-X-Received: by 2002:a5d:5748:: with SMTP id q8mr6279945wrw.299.1602119289296;
-        Wed, 07 Oct 2020 18:08:09 -0700 (PDT)
-Received: from [192.168.1.9] ([195.24.90.54])
-        by smtp.googlemail.com with ESMTPSA id x6sm4728126wmb.17.2020.10.07.18.08.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Oct 2020 18:08:08 -0700 (PDT)
-Subject: Re: [PATCH] PM: runtime: Use pmruntime sync variant to put suppliers
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>
-References: <20201007001934.18606-1-stanimir.varbanov@linaro.org>
- <CAJZ5v0hxdxV6pB5q94qCEmeDXOMJQzL3b8ZokgTn00i0MbykvQ@mail.gmail.com>
-From:   Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Message-ID: <e24794e5-419c-ad5f-c281-12a6e15cfa4c@linaro.org>
-Date:   Thu, 8 Oct 2020 04:08:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0hxdxV6pB5q94qCEmeDXOMJQzL3b8ZokgTn00i0MbykvQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728243AbgJHHkz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 03:40:55 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:46079 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727819AbgJHHku (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 03:40:50 -0400
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20201008074048epoutp01914b0f70202b8d6f80c92d597cfb61b6~79G6jfaF61010910109epoutp01g
+        for <linux-pm@vger.kernel.org>; Thu,  8 Oct 2020 07:40:48 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20201008074048epoutp01914b0f70202b8d6f80c92d597cfb61b6~79G6jfaF61010910109epoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1602142848;
+        bh=tnVpPq5RduDpY/hro1ifqwIj0aBN5FZ2kF5JbnaqwLE=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=qbxZ4bkLr6DV4tiUUKscoaFmLTQZVHUH+qozo2oOQB3mUkl+56zCBqDUcXlj3iUb/
+         y6w8C1BrkFc2QfLvaWbFom7g3twEn+nHsWpNagcx1L4tggEYKQAt0B+yLWueWjQZJM
+         RzH0aJKzuWgHq393v0jGnuXPnCD9iWsWCoY0LX74=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20201008074047epcas1p27f32825fc2ab3d151a9e5897349a77ef~79G6Cja2b0879108791epcas1p26;
+        Thu,  8 Oct 2020 07:40:47 +0000 (GMT)
+Received: from epsmges1p1.samsung.com (unknown [182.195.40.154]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4C6NRH5ZkMzMqYkb; Thu,  8 Oct
+        2020 07:40:43 +0000 (GMT)
+Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
+        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4E.2C.09543.972CE7F5; Thu,  8 Oct 2020 16:40:41 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20201008074041epcas1p14111dc3070c66fce8d775e2fbae39f15~79GzypXgW1333513335epcas1p16;
+        Thu,  8 Oct 2020 07:40:41 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20201008074041epsmtrp1134546067f4fa22f6debf47f9d99a476~79GzyAxK72784527845epsmtrp10;
+        Thu,  8 Oct 2020 07:40:41 +0000 (GMT)
+X-AuditID: b6c32a35-35dff70000002547-cd-5f7ec2790be4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4C.5D.08745.972CE7F5; Thu,  8 Oct 2020 16:40:41 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.113.221.102]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20201008074040epsmtip1579bd5b0901662e0c16af30e051e17c6~79GzgNg8y3068830688epsmtip1Q;
+        Thu,  8 Oct 2020 07:40:40 +0000 (GMT)
+From:   Chanwoo Choi <cw00.choi@samsung.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     mka@chromium.org, rostedt@goodmis.org, mingo@redhat.com,
+        cw00.choi@samsung.com, chanwoo@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Subject: [PATCH 0/3] PM / devfreq: Add devfreq_frequency tracepoint to track
+ frequency change
+Date:   Thu,  8 Oct 2020 16:54:00 +0900
+Message-Id: <20201008075403.26181-1-cw00.choi@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrIKsWRmVeSWpSXmKPExsWy7bCmgW7lobp4g45rehYTb1xhsbj+5Tmr
+        xdmmN+wWl3fNYbP43HuE0eLSgQVMFp83PGa0uN24gs1iX8cDJgdOj9kNF1k8WvbdYvfYtKqT
+        zeP9vqtsHn1bVjF6fN4kF8AWlW2TkZqYklqkkJqXnJ+SmZduq+QdHO8cb2pmYKhraGlhrqSQ
+        l5ibaqvk4hOg65aZA3SVkkJZYk4pUCggsbhYSd/Opii/tCRVISO/uMRWKbUgJafAskCvODG3
+        uDQvXS85P9fK0MDAyBSoMCE74+/6n8wFDzkrfqw/wN7AOIGji5GTQ0LAROLthWbmLkYuDiGB
+        HYwSRxb/ZodwPjFKdLy6wgLhfGaUWLR2FytMy5f7zVCJXYwSOzbsYIVwvjBKHNtxnxmkik1A
+        S2L/ixtsILaIgJXE6f8dYEuYBeYzSvy9+5MRJCEsEC9xrfkAWAOLgKrEz2cH2UFsXqCGpw3L
+        2SDWyUus3nAArFlC4BS7xKQtn5ghEi4S/2e8Z4SwhSVeHd/CDmFLSbzsb4OyqyVWnjzCBtHc
+        wSixZf8FqCeMJfYvnczUxcgBdJKmxPpd+hBhRYmdv+eCzWQW4JN497WHFaREQoBXoqNNCKJE
+        WeLyg7tMELakxOL2Tqg7PSS2td0EO01IIFZi0uVdjBMYZWchLFjAyLiKUSy1oDg3PbXYsMAQ
+        OZ42MYLTmpbpDsaJbz/oHWJk4mA8xCjBwawkwpvuXRMvxJuSWFmVWpQfX1Sak1p8iNEUGGAT
+        maVEk/OBiTWvJN7Q1MjY2NjCxNDM1NBQSZz34S2FeCGB9MSS1OzU1ILUIpg+Jg5OqQambGv7
+        zdwHn91d/a5OzrOhOOaK1MymQF9B5ocnolcoJ1gJT13sNyG8YeIk0yqT89I76o/oL78oPTd6
+        /iEFKQuh2Wm3Ww5FlJnqeJ239CvWuDiPb1NW8M78dr5bU+5tvSVcau9ywIyFTXrTb+njAuUR
+        q45tWqJ3zTrlZOnbD0+XxJ6ZIceZ/4Ote9aKaYb3m85w+Cv+tOJj9p4t1qN77csnh6RFQu9n
+        Xg1PE1WqM//EUen99e6/TVvuSfhaP1Zx4Et4veF866Ku8BlXCl7tF/d5Mql9/fZIAQ/ezOtx
+        +40YTwc47bL91Tnprj1jxM5dL58GFCxzS+10ylKv0p0p06k0d/vyzcEJnb6VffMSduxWYinO
+        SDTUYi4qTgQATNuNgvQDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplluLIzCtJLcpLzFFi42LZdlhJTrfyUF28waJtbBYTb1xhsbj+5Tmr
+        xdmmN+wWl3fNYbP43HuE0eLSgQVMFp83PGa0uN24gs1iX8cDJgdOj9kNF1k8WvbdYvfYtKqT
+        zeP9vqtsHn1bVjF6fN4kF8AWxWWTkpqTWZZapG+XwJXxd/1P5oKHnBU/1h9gb2CcwNHFyMkh
+        IWAi8eV+M0sXIxeHkMAORol70/czQiQkJaZdPMrcxcgBZAtLHD5cDFHziVFi4fMGsBo2AS2J
+        /S9usIHYIgI2EncXX2MBsZkFljNKzG0VBLGFBWIlTk1dzgxiswioSvx8dpAdxOYVsJJ42rCc
+        DWKXvMTqDQeYJzDyLGBkWMUomVpQnJueW2xYYJSXWq5XnJhbXJqXrpecn7uJERxiWlo7GPes
+        +qB3iJGJg/EQowQHs5IIb7p3TbwQb0piZVVqUX58UWlOavEhRmkOFiVx3q+zFsYJCaQnlqRm
+        p6YWpBbBZJk4OKUamE5PvCprkfdQ6PeGhdOvdAlz5e5rX75ZIMbZ/5rLitRY/5mzux8kKoWL
+        P+GYsDleNnrHkivzV+tPjc5IqPWfqX3x4p51RYWP2yfMdmO6vLOi+MeJDffTGLfeufiZdbHH
+        5eO6xq80S556PDWsDW7dfOUU55m3TL82aOfd5JWNuCeqeIzT8eTqWUZvr8fZJXc63QiYOnPL
+        2t7knctaBV7Ez2JjOvj/wlt3E3km9V+hIhu3PGBpO7W/h0FMo/17y69i6TsTbOprPC+q5HKU
+        bzm7dzHT3rnunsbskx22cj2JcWD37r+/bvaEgz93Oh522yX67N2ZgPcHp6ptM1mZ0VFs98r1
+        UP4JH2tXXTmH+hmZr1KVWIozEg21mIuKEwER+n0MoAIAAA==
+X-CMS-MailID: 20201008074041epcas1p14111dc3070c66fce8d775e2fbae39f15
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20201008074041epcas1p14111dc3070c66fce8d775e2fbae39f15
+References: <CGME20201008074041epcas1p14111dc3070c66fce8d775e2fbae39f15@epcas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Add devfreq_tracepoint to track the correct timing of frequency change
+with following information:
+- device name
+- current frequency
+- previous frequency
+- load when change frequency
+- tracepoint path : /sys/kernel/debug/tracing/events/devfreq_frequency
 
-On 10/7/20 5:37 PM, Rafael J. Wysocki wrote:
-> On Wed, Oct 7, 2020 at 2:20 AM Stanimir Varbanov
-> <stanimir.varbanov@linaro.org> wrote:
->>
->> Calling pm_runtime_put_sync over a device with suppliers with device
->> link flags PM_RUNTIME | RPM_ACTIVE it is observed that the supplier
->> is not put (turned off) at the end, but instead put asynchronously.
-> 
-> Yes, that's by design.
-> 
->> In some case This could lead to issues for the callers which expects
->> that the pmruntime sync variants should also put the suppliers
->> synchronously.
-> 
-> Why would anyone expect that to happen?
+And add devfreq_update_target() function to unify the frequency change code
+on both devfreq core and devfreq passive governor because there are redundant
+duplicate code. Lastly, Use fixed indentation size to improve readability
+for 'devfreq_monitor' tracepoint.
 
-It is logical to me that when I call pm_runtime_put_sync the device and
-its suppliers are put synchronously. If I want to put device and its
-suppliers asynchronously I'd use pm_runtime_put. Is that wrong assumption?
+Matthias already sent the patch[1]. Make patch3 by editing patch[1].
+[1]https://www.mail-archive.com/linux-kernel@vger.kernel.org/msg2108015.html
 
-> 
->> Also the opposite rpm_get_suppliers is already using pmruntime _sync
->> variant of the API.
-> 
-> Yes, it does, because that is necessary.
-> 
->> Correct this by changing pmruntime_put to pmruntime_put_sync in
->> rpm_put_suppliers.
-> 
-> It is not a correction, but a change in behavior without good enough
-> rationale, as it stands.
+Chanwoo Choi (2):
+  trace: events: devfreq: Use fixed indentation size to improve readability
+  PM / devfreq: Unify frequency change to devfreq_update_target func
 
-In my driver case I want to deal with a recovery of a crash in remote
-processor (the remote processor is used to control and program hardware
-blocks and also to communicate with host processor through shared
-memory). To restart the remote processor I have to disable clocks and
-turn off few power domains (one of the power domains is made a supplier
-of my main device) in order to complete the cold-boot.
+Matthias Kaehlcke (1):
+  PM / devfreq: Add tracepoint for frequency changes
 
-The problem I'm facing with this design is that when I call
-runtime_put_sync (to disable device's clocks and turn off power domain)
-the clocks are disabled (part of pmruntime_suspend callback) but the
-pmdomain (the device supplier) is not turned synchronously. I workaround
-this by checking the supplier device via pm_runtime_active() until it
-becomes inactive and the continue with rest of the steps.
-
-From my point of view this check for supplier activity should be part of
-pmruntime API.
-
-> 
-> Thanks!
-> 
+ drivers/devfreq/devfreq.c          | 37 +++++++++++++++++++++-----
+ drivers/devfreq/governor.h         |  1 +
+ drivers/devfreq/governor_passive.c | 42 +++++++-----------------------
+ include/trace/events/devfreq.h     | 30 ++++++++++++++++++++-
+ 4 files changed, 70 insertions(+), 40 deletions(-)
 
 -- 
-regards,
-Stan
+2.17.1
+
