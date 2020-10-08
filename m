@@ -2,109 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E0F287559
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 15:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E77B28759E
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 16:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730227AbgJHNmF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 09:42:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:58262 "EHLO foss.arm.com"
+        id S1730438AbgJHOGJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 10:06:09 -0400
+Received: from foss.arm.com ([217.140.110.172]:59364 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725871AbgJHNmF (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Oct 2020 09:42:05 -0400
+        id S1730432AbgJHOGJ (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Oct 2020 10:06:09 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A55C1063;
-        Thu,  8 Oct 2020 06:42:04 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDFF33F71F;
-        Thu,  8 Oct 2020 06:42:03 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 14:42:02 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        sudeep.holla@arm.com, rjw@rjwysocki.net, vireshk@kernel.org,
-        robh+dt@kernel.org, daniel.lezcano@linaro.org,
-        chris.redpath@arm.com, morten.rasmussen@arm.com
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: Add devicetree binding for
- cpu-performance-dependencies
-Message-ID: <20201008134153.GA20268@arm.com>
-References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
- <20200924095347.32148-2-nicola.mazzucato@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7F2481063;
+        Thu,  8 Oct 2020 07:06:08 -0700 (PDT)
+Received: from bogus (unknown [10.57.53.233])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA9673F70D;
+        Thu,  8 Oct 2020 07:06:05 -0700 (PDT)
+Date:   Thu, 8 Oct 2020 15:05:58 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2]cpufreq,topology,arm: disable FI for BL_SWITCHER
+Message-ID: <20201008140558.ovytcc34div3ih6m@bogus>
+References: <20200924123016.13427-1-ionela.voinescu@arm.com>
+ <CAJZ5v0hr+MZzokObNq5L0q1Fd0M5EXc6QmLXDv9b85P5b4yp4g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200924095347.32148-2-nicola.mazzucato@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAJZ5v0hr+MZzokObNq5L0q1Fd0M5EXc6QmLXDv9b85P5b4yp4g@mail.gmail.com>
+User-Agent: NeoMutt/20171215
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi guys,
+On Wed, Oct 07, 2020 at 04:34:44PM +0200, Rafael J. Wysocki wrote:
+> On Thu, Sep 24, 2020 at 2:30 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
+> >
+> > This series is the result of the discussions ([1], [2]) around the
+> > complications that the BL_SWITCHER poses when it comes to Frequency
+> > Invariance (FI) and it aims to restart the discussions.
+> >
+> > To properly scale its per-entity load-tracking signals, the task
+> > scheduler needs to be given a frequency scale factor, i.e. some image of
+> > the current frequency the CPU is running at, relative to its maximum
+> > frequency.
+> >
+> > But (reiterating the message in the changelog of patch 2/2), big.LITTLE
+> > switching complicates the setting of a correct cpufreq-based frequency
+> > invariance scale factor due to (as observed in
+> > drivers/cpufreq/vexpress-spc-cpufreq.c):
+> >  - Incorrect current and maximum frequencies as a result of the
+> >    exposure of a virtual frequency table to the cpufreq core,
+> >  - Missed updates as a result of asynchronous frequency adjustments
+> >    caused by frequency changes in other CPU pairs.
+> > More information on this feature can be found at [3].
+> >
+> > Given that its functionality is atypical in regards to FI and that this
+> > is an old technology, patch 2/2 disable FI for when big.LITTLE switching
+> > is configured in to prevent incorrect scale setting.
+> >
+> > For this purpose patch 1/2 changes the way arch_set_freq_scale() is
+> > defined in architecture code which brings it in line with the logic of
+> > other architectural function definitions while allowing for less invasive
+> > filtering of FI support.
+> >
+> > In the discussions at [2], three possible solutions were suggested:
+> >  - (1) conditioning FI by !CONFIG_BL_SWITCHER
+> >  - (2) leave as is with note in driver specifying this FI broken
+> >    functionality
+> >  - (3) removing full BL_SWITCHER support
+> >
+> > This series restructures the solution at (1). The reason for it is that
+> > the new patch limits the ifdef filtering to the arm topology include file,
+> > a location where frequency invariance functions are defined. Therefore,
+> > this seems more appropriate given that the b.L switcher is an arm
+> > technology and that the new FI filtering location seems more natural for
+> > conditioned FI disabling.
+> >
+> > Solutions (2) and (3) were not implemented given that there might be some
+> > remaining users of this technology (Samsung Chromebook 2 - Samsung Exynos
+> > 5 Octa 5420, Samsung Exynos 5 Octa 5800) and therefore leaving this
+> > broken (2) seems equally bad to removing support for it (3).
+> >
+> > [1] https://lore.kernel.org/lkml/20200701090751.7543-5-ionela.voinescu@arm.com/
+> > [2] https://lore.kernel.org/lkml/20200722093732.14297-4-ionela.voinescu@arm.com/
+> > [3] https://lwn.net/Articles/481055/
+> 
+> I can take this set with the ACKs from Viresh if that's fine by
+> everyone.  Catalin?  Sudeep?
 
-On Thursday 24 Sep 2020 at 10:53:46 (+0100), Nicola Mazzucato wrote:
-[..]
-> diff --git a/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml b/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml
-> new file mode 100644
-> index 000000000000..c7a577236cd6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/cpu-perf-dependencies.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/cpu-perf-dependencies.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: CPU Performance Dependencies
-> +
-> +maintainers:
-> +  - Nicola Mazzucato <nicola.mazzucato@arm.com>
-> +
-> +description: |+
-> +  This optional node provides information to OSPM of cpu performance
-> +  dependencies.
-> +  Each list represents a set of CPUs which have performance level
-> +  dependencies and can assumed to be roughly at the same performance
-> +  level coordinated by hardware and/or firmware.
-> +  Example: Describing CPUs in the same clock domain.
+Acked-by: Sudeep Holla <sudeep.holla@arm.com> (BL_SWITCHER and topology parts)
 
-I'm continuing here a conversation started in v1 on the characteristics of
-cpu-perf-dependencies and whether this binding actually describes the
-hardware.
-
-In the way I see this, the answer is clearly yes and it is information
-that we need in the device tree, beyond the presence of SCMI as cpufreq
-driver, and beyond the way it will be consumed by EAS/thermal/etc.
-
-I link this to whether software will do the aggregation of per CPU
-information in establishing the next frequency to be requested from the
-driver/hardware for all dependent CPUs, or whether hardware is able to
-receive the per CPU information on different channels and do the
-aggregation itself.
-
-This software aggregation is the typical way currently supported in
-cpufreq, but hardware aggregation will be needed the more we see
-hardware features for performance/power control.
-
-But support for hardware aggregation involves having per-cpu channels
-to convey the frequency request for that CPU. But currently the device
-tree only gives us the ability to describe the information to be used
-for sending frequency requests and as a result the kernel considers
-CPUs as dependent only if they use the same controls for those CPUs.
-So we currently can have hardware aggregation, but we lose all
-information about what CPUs actually ended up having the same frequency,
-because they are actually using the same clocks.
-
-Therefore this new binding is needed for when hardware/firmware is better
-equipped to make a decision about the clock rate for a group of CPUs, when
-information is given about each CPU. The usefulness comes from informing
-the software that some CPUs will have the same clock and therefore it
-does describe a hardware characteristic of the system. In some cases
-counters will help observe what was the frequency that was eventually
-granted by hardware.
-
-Knowing what CPUs actually use the same clock is very useful for the
-scheduler (EAS, frequency invariance) and thermal.
-
-Hope it helps,
-Ionela.
+-- 
+Regards,
+Sudeep
