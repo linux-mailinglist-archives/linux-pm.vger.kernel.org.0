@@ -2,125 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 652A32873DC
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 14:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ADF287451
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 14:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729587AbgJHMNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 08:13:42 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:43457 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725871AbgJHMNm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 08:13:42 -0400
-X-UUID: 678ba5023dff4fa3be6c744151ed7245-20201008
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=3MSsqoh1JwjXfyI5saR12zhZgmKR4OSbtoJozpp9kpc=;
-        b=GyW6TsgXr4WBE4vWeF+mAqjVdhuazzUYat8H/qp6KuEzZYFBCYYUap7mQ5X+pTz9GIL8CuhQAmIQUhvDzPXe1m4USxq4O/LYsGUxJG2QExK0mcxHfM0nTVD/s2l44q6IsLDmtXXTqP7LOD+p10xnRz7fjeD7owvOnh/mH7PF05Y=;
-X-UUID: 678ba5023dff4fa3be6c744151ed7245-20201008
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <hector.yuan@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 620526542; Thu, 08 Oct 2020 20:13:37 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 8 Oct 2020 20:13:34 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 8 Oct 2020 20:13:34 +0800
-From:   Hector Yuan <hector.yuan@mediatek.com>
-To:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <hector.yuan@mediatek.com>
-Subject: [PATCH v1 1/1] cpufreq: mediatek-hw: Register EM power table
-Date:   Thu, 8 Oct 2020 20:13:24 +0800
-Message-ID: <1602159204-13756-2-git-send-email-hector.yuan@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1602159204-13756-1-git-send-email-hector.yuan@mediatek.com>
-References: <1602159204-13756-1-git-send-email-hector.yuan@mediatek.com>
+        id S1729635AbgJHMeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 08:34:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:55118 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729931AbgJHMeo (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Thu, 8 Oct 2020 08:34:44 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 893DF1063;
+        Thu,  8 Oct 2020 05:34:43 -0700 (PDT)
+Received: from [10.57.48.204] (unknown [10.57.48.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 306A63F71F;
+        Thu,  8 Oct 2020 05:34:42 -0700 (PDT)
+Subject: Re: [PATCH 2/2] thermal: power allocator: estimate sustainable power
+ only once
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org,
+        Dietmar.Eggemann@arm.com
+References: <20201002122416.13659-1-lukasz.luba@arm.com>
+ <20201002122416.13659-3-lukasz.luba@arm.com> <20201008101434.GA23491@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d57cc0aa-01e4-e3b2-c591-be7e54f95780@arm.com>
+Date:   Thu, 8 Oct 2020 13:34:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: F6F2F17101A6B232DE0515C059CB03673413A6D7CCAE1BF62441835C41AF8EBC2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20201008101434.GA23491@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-RnJvbTogIkhlY3Rvci5ZdWFuIiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KDQpSZWdpc3Rl
-ciBDUFUgcG93ZXIgdGFibGUgdG8gZW5lcmd5IG1vZGVsIGZyYW1ld29yaw0KDQpTaWduZWQtb2Zm
-LWJ5OiBIZWN0b3IuWXVhbiA8aGVjdG9yLnl1YW5AbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVy
-cy9jcHVmcmVxL21lZGlhdGVrLWNwdWZyZXEtaHcuYyB8ICAgNTAgKysrKysrKysrKysrKysrKysr
-KysrKysrKy0tLS0tLS0tDQogMSBmaWxlIGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKyksIDEyIGRl
-bGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVmcmVxL21lZGlhdGVrLWNwdWZy
-ZXEtaHcuYyBiL2RyaXZlcnMvY3B1ZnJlcS9tZWRpYXRlay1jcHVmcmVxLWh3LmMNCmluZGV4IDhm
-YTEyZTUuLjM4MDhlYTAgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL2NwdWZyZXEvbWVkaWF0ZWstY3B1
-ZnJlcS1ody5jDQorKysgYi9kcml2ZXJzL2NwdWZyZXEvbWVkaWF0ZWstY3B1ZnJlcS1ody5jDQpA
-QCAtNSw2ICs1LDcgQEANCiANCiAjaW5jbHVkZSA8bGludXgvYml0ZmllbGQuaD4NCiAjaW5jbHVk
-ZSA8bGludXgvY3B1ZnJlcS5oPg0KKyNpbmNsdWRlIDxsaW51eC9lbmVyZ3lfbW9kZWwuaD4NCiAj
-aW5jbHVkZSA8bGludXgvaW5pdC5oPg0KICNpbmNsdWRlIDxsaW51eC9rZXJuZWwuaD4NCiAjaW5j
-bHVkZSA8bGludXgvbW9kdWxlLmg+DQpAQCAtMTcsOSArMTgsMTAgQEANCiAjZGVmaW5lIExVVF9S
-T1dfU0laRQkJCTB4NA0KIA0KIGVudW0gew0KLQlSRUdfTFVUX1RBQkxFLA0KLQlSRUdfRU5BQkxF
-LA0KLQlSRUdfUEVSRl9TVEFURSwNCisJUkVHX0ZSRVFfTFVUX1RBQkxFLA0KKwlSRUdfRlJFUV9F
-TkFCTEUsDQorCVJFR19GUkVRX1BFUkZfU1RBVEUsDQorCVJFR19FTV9QT1dFUl9UQkwsDQogDQog
-CVJFR19BUlJBWV9TSVpFLA0KIH07DQpAQCAtMjcsMjMgKzI5LDQ0IEBAIGVudW0gew0KIHN0cnVj
-dCBjcHVmcmVxX210ayB7DQogCXN0cnVjdCBjcHVmcmVxX2ZyZXF1ZW5jeV90YWJsZSAqdGFibGU7
-DQogCXZvaWQgX19pb21lbSAqcmVnX2Jhc2VzW1JFR19BUlJBWV9TSVpFXTsNCisJaW50IG5yX29w
-cDsNCiAJY3B1bWFza190IHJlbGF0ZWRfY3B1czsNCiB9Ow0KIA0KIHN0YXRpYyBjb25zdCB1MTYg
-Y3B1ZnJlcV9tdGtfb2Zmc2V0c1tSRUdfQVJSQVlfU0laRV0gPSB7DQotCVtSRUdfTFVUX1RBQkxF
-XQkJPSAweDAsDQotCVtSRUdfRU5BQkxFXQkJPSAweDg0LA0KLQlbUkVHX1BFUkZfU1RBVEVdCT0g
-MHg4OCwNCisJW1JFR19GUkVRX0xVVF9UQUJMRV0JPSAweDAsDQorCVtSRUdfRlJFUV9FTkFCTEVd
-CT0gMHg4NCwNCisJW1JFR19GUkVRX1BFUkZfU1RBVEVdCT0gMHg4OCwNCisJW1JFR19FTV9QT1dF
-Ul9UQkxdCT0gMHgzRDAsDQogfTsNCiANCiBzdGF0aWMgc3RydWN0IGNwdWZyZXFfbXRrICptdGtf
-ZnJlcV9kb21haW5fbWFwW05SX0NQVVNdOw0KIA0KK3N0YXRpYyBpbnQgbXRrX2NwdWZyZXFfZ2V0
-X2NwdV9wb3dlcih1bnNpZ25lZCBsb25nICptVywNCisJCQkJICAgICB1bnNpZ25lZCBsb25nICpL
-SHosIGludCBjcHUpDQorew0KKwlzdHJ1Y3QgY3B1ZnJlcV9tdGsgKmMgPSBtdGtfZnJlcV9kb21h
-aW5fbWFwW2NwdV07DQorCWludCBpOw0KKw0KKwlmb3IgKGkgPSAwOyBpIDwgYy0+bnJfb3BwOyBp
-KyspIHsNCisJCWlmIChjLT50YWJsZVtpXS5mcmVxdWVuY3kgPCAqS0h6KQ0KKwkJCWJyZWFrOw0K
-Kwl9DQorCWktLTsNCisNCisJKktIeiA9IGMtPnRhYmxlW2ldLmZyZXF1ZW5jeTsNCisJKm1XID0g
-cmVhZGxfcmVsYXhlZChjLT5yZWdfYmFzZXNbUkVHX0VNX1BPV0VSX1RCTF0gKw0KKwkJCSAgICBp
-ICogTFVUX1JPV19TSVpFKSAvIDEwMDA7DQorDQorCXJldHVybiAwOw0KK30NCisNCiBzdGF0aWMg
-aW50IG10a19jcHVmcmVxX2h3X3RhcmdldF9pbmRleChzdHJ1Y3QgY3B1ZnJlcV9wb2xpY3kgKnBv
-bGljeSwNCiAJCQkJICAgICAgIHVuc2lnbmVkIGludCBpbmRleCkNCiB7DQogCXN0cnVjdCBjcHVm
-cmVxX210ayAqYyA9IHBvbGljeS0+ZHJpdmVyX2RhdGE7DQogDQotCXdyaXRlbF9yZWxheGVkKGlu
-ZGV4LCBjLT5yZWdfYmFzZXNbUkVHX1BFUkZfU1RBVEVdKTsNCisJd3JpdGVsX3JlbGF4ZWQoaW5k
-ZXgsIGMtPnJlZ19iYXNlc1tSRUdfRlJFUV9QRVJGX1NUQVRFXSk7DQogDQogCXJldHVybiAwOw0K
-IH0NCkBAIC01NSw3ICs3OCw3IEBAIHN0YXRpYyB1bnNpZ25lZCBpbnQgbXRrX2NwdWZyZXFfaHdf
-Z2V0KHVuc2lnbmVkIGludCBjcHUpDQogDQogCWMgPSBtdGtfZnJlcV9kb21haW5fbWFwW2NwdV07
-DQogDQotCWluZGV4ID0gcmVhZGxfcmVsYXhlZChjLT5yZWdfYmFzZXNbUkVHX1BFUkZfU1RBVEVd
-KTsNCisJaW5kZXggPSByZWFkbF9yZWxheGVkKGMtPnJlZ19iYXNlc1tSRUdfRlJFUV9QRVJGX1NU
-QVRFXSk7DQogCWluZGV4ID0gbWluKGluZGV4LCBMVVRfTUFYX0VOVFJJRVMgLSAxKTsNCiANCiAJ
-cmV0dXJuIGMtPnRhYmxlW2luZGV4XS5mcmVxdWVuY3k7DQpAQCAtNjQsNiArODcsNyBAQCBzdGF0
-aWMgdW5zaWduZWQgaW50IG10a19jcHVmcmVxX2h3X2dldCh1bnNpZ25lZCBpbnQgY3B1KQ0KIHN0
-YXRpYyBpbnQgbXRrX2NwdWZyZXFfaHdfY3B1X2luaXQoc3RydWN0IGNwdWZyZXFfcG9saWN5ICpw
-b2xpY3kpDQogew0KIAlzdHJ1Y3QgY3B1ZnJlcV9tdGsgKmM7DQorCXN0cnVjdCBlbV9kYXRhX2Nh
-bGxiYWNrIGVtX2NiID0gRU1fREFUQV9DQihtdGtfY3B1ZnJlcV9nZXRfY3B1X3Bvd2VyKTsNCiAN
-CiAJYyA9IG10a19mcmVxX2RvbWFpbl9tYXBbcG9saWN5LT5jcHVdOw0KIAlpZiAoIWMpIHsNCkBA
-IC03Nyw3ICsxMDEsOCBAQCBzdGF0aWMgaW50IG10a19jcHVmcmVxX2h3X2NwdV9pbml0KHN0cnVj
-dCBjcHVmcmVxX3BvbGljeSAqcG9saWN5KQ0KIAlwb2xpY3ktPmRyaXZlcl9kYXRhID0gYzsNCiAN
-CiAJLyogSFcgc2hvdWxkIGJlIGluIGVuYWJsZWQgc3RhdGUgdG8gcHJvY2VlZCBub3cgKi8NCi0J
-d3JpdGVsX3JlbGF4ZWQoMHgxLCBjLT5yZWdfYmFzZXNbUkVHX0VOQUJMRV0pOw0KKwl3cml0ZWxf
-cmVsYXhlZCgweDEsIGMtPnJlZ19iYXNlc1tSRUdfRlJFUV9FTkFCTEVdKTsNCisJZW1fcmVnaXN0
-ZXJfcGVyZl9kb21haW4ocG9saWN5LT5jcHVzLCBjLT5ucl9vcHAsICZlbV9jYik7DQogDQogCXJl
-dHVybiAwOw0KIH0NCkBAIC05Myw3ICsxMTgsNyBAQCBzdGF0aWMgaW50IG10a19jcHVmcmVxX2h3
-X2NwdV9leGl0KHN0cnVjdCBjcHVmcmVxX3BvbGljeSAqcG9saWN5KQ0KIAl9DQogDQogCS8qIEhX
-IHNob3VsZCBiZSBpbiBwYXVzZWQgc3RhdGUgbm93ICovDQotCXdyaXRlbF9yZWxheGVkKDB4MCwg
-Yy0+cmVnX2Jhc2VzW1JFR19FTkFCTEVdKTsNCisJd3JpdGVsX3JlbGF4ZWQoMHgwLCBjLT5yZWdf
-YmFzZXNbUkVHX0ZSRVFfRU5BQkxFXSk7DQogDQogCXJldHVybiAwOw0KIH0NCkBAIC0xMjIsNyAr
-MTQ3LDcgQEAgc3RhdGljIGludCBtdGtfY3B1X2NyZWF0ZV9mcmVxX3RhYmxlKHN0cnVjdCBwbGF0
-Zm9ybV9kZXZpY2UgKnBkZXYsDQogCWlmICghYy0+dGFibGUpDQogCQlyZXR1cm4gLUVOT01FTTsN
-CiANCi0JYmFzZV90YWJsZSA9IGMtPnJlZ19iYXNlc1tSRUdfTFVUX1RBQkxFXTsNCisJYmFzZV90
-YWJsZSA9IGMtPnJlZ19iYXNlc1tSRUdfRlJFUV9MVVRfVEFCTEVdOw0KIA0KIAlmb3IgKGkgPSAw
-OyBpIDwgTFVUX01BWF9FTlRSSUVTOyBpKyspIHsNCiAJCWRhdGEgPSByZWFkbF9yZWxheGVkKGJh
-c2VfdGFibGUgKyAoaSAqIExVVF9ST1dfU0laRSkpOw0KQEAgLTE0MCw2ICsxNjUsNyBAQCBzdGF0
-aWMgaW50IG10a19jcHVfY3JlYXRlX2ZyZXFfdGFibGUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAq
-cGRldiwNCiAJfQ0KIA0KIAljLT50YWJsZVtpXS5mcmVxdWVuY3kgPSBDUFVGUkVRX1RBQkxFX0VO
-RDsNCisJYy0+bnJfb3BwID0gaTsNCiANCiAJcmV0dXJuIDA7DQogfQ0KQEAgLTE5Miw3ICsyMTgs
-NyBAQCBzdGF0aWMgaW50IG10a19jcHVfcmVzb3VyY2VzX2luaXQoc3RydWN0IHBsYXRmb3JtX2Rl
-dmljZSAqcGRldiwNCiAJaWYgKElTX0VSUihiYXNlKSkNCiAJCXJldHVybiBQVFJfRVJSKGJhc2Up
-Ow0KIA0KLQlmb3IgKGkgPSBSRUdfTFVUX1RBQkxFOyBpIDwgUkVHX0FSUkFZX1NJWkU7IGkrKykN
-CisJZm9yIChpID0gUkVHX0ZSRVFfTFVUX1RBQkxFOyBpIDwgUkVHX0FSUkFZX1NJWkU7IGkrKykN
-CiAJCWMtPnJlZ19iYXNlc1tpXSA9IGJhc2UgKyBvZmZzZXRzW2ldOw0KIA0KIAlyZXQgPSBtdGtf
-Z2V0X3JlbGF0ZWRfY3B1cyhpbmRleCwgYyk7DQotLSANCjEuNy45LjUNCg==
+Hi Ionela,
 
+On 10/8/20 11:14 AM, Ionela Voinescu wrote:
+> Hi Lukasz,
+> 
+> On Friday 02 Oct 2020 at 13:24:16 (+0100), Lukasz Luba wrote:
+>> The sustainable power value might come from the Device Tree or can be
+>> estimated in run time. There is no need to estimate every time when the
+>> governor is called and temperature is high. Instead, store the estimated
+>> value and make it available via standard sysfs interface so it can be
+>> checked from the user-space.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/gov_power_allocator.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+>> index f69fafe486a5..dd59085f38f5 100644
+>> --- a/drivers/thermal/gov_power_allocator.c
+>> +++ b/drivers/thermal/gov_power_allocator.c
+>> @@ -204,6 +204,8 @@ static u32 pid_controller(struct thermal_zone_device *tz,
+>>   		estimate_pid_constants(tz, sustainable_power,
+>>   				       params->trip_switch_on, control_temp,
+>>   				       true);
+>> +		/* Do the estimation only once and make available in sysfs */
+>> +		tz->tzp->sustainable_power = sustainable_power;
+> 
+> After looking over the code, it does seems mostly useless to do the
+> estimation every time the controller kicks in.
+> 
+> But I have two comments in this regard:
+> 
+>   - The estimation is dependent on the temperature we control for which
+>     can be changed from sysfs. While I don't see that as a big worry,
+>     (sustainable power is an estimation anyway), it might be worth a
+>     more detailed comment on why we don't expect this to be a problem,
+>     or what we expect the consequences of computing sustainable power
+>     only once could be.
+
+The problem is that we don't expose the estimated value in the sysfs.
+This is the case when there was no DT entry with 'sustainable-power'.
+If someone is going to write the values via sysfs, we assume he/she
+knows the consequences and also what other values to write and where,
+to make it working optimally.
+
+> 
+>   - In the function comment for estimate_pid_constants() there is a
+>     mention of sustainable power:
+>     """
+>      * Sustainable power is provided in case it was estimated.  The
+>      * estimated sustainable_power should not be stored in the
+>      * thermal_zone_parameters so it has to be passed explicitly to this
+>      * function.
+>     """
+
+Good catch, that comment left. I will remove it.
+
+>     If we are going to compute the sustainable power estimation only once,
+>     this comment should be removed, the estimated value should be added to
+>     the trip point parameters before estimate_pid_constants(), and the
+>     sustainable_power argument should be removed.
+>     Otherwise we end up with conflicting information in the code.
+
+We can also call estimate_sustainable_power() inside the
+estimate_pid_constants() if sust. power was 0, then set the
+tz->tzp->sustainable_power = sustainable_power
+
+Thank you for your comments.
+
+Regards,
+Lukasz
+
+> 
+> Regards,
+> Ionela.
+> 
