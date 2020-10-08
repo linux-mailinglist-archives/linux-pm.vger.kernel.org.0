@@ -2,169 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4A1287A97
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 19:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D80287B17
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 19:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731638AbgJHRIS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 13:08:18 -0400
-Received: from foss.arm.com ([217.140.110.172]:39744 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730545AbgJHRIR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 8 Oct 2020 13:08:17 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26CD2D6E;
-        Thu,  8 Oct 2020 10:08:17 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBC693F802;
-        Thu,  8 Oct 2020 10:08:16 -0700 (PDT)
-Date:   Thu, 8 Oct 2020 18:08:15 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Chris Redpath <chris.redpath@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201008170815.GB29728@arm.com>
-References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
- <20200924095347.32148-3-nicola.mazzucato@arm.com>
- <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
- <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
- <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
- <20201008150317.GB20268@arm.com>
- <CAJZ5v0j=g6y53yk_+cPNnUYb6usrQmghCNuiHYc1vbpsypFtCQ@mail.gmail.com>
+        id S1725923AbgJHRic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 13:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725908AbgJHRic (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 13:38:32 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3C6C061755
+        for <linux-pm@vger.kernel.org>; Thu,  8 Oct 2020 10:38:31 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x5so3113494plo.6
+        for <linux-pm@vger.kernel.org>; Thu, 08 Oct 2020 10:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Tcw+Hn/R7gQMR2edGzUaAbBuUkt4+JRCYonfOy36olc=;
+        b=diqcBbesuQK+64JdDdgBeguF6X42JwseLqpuinUhLW5KHaYevYWYc3O/4nyCoQ7iB/
+         BSsV7NzFmy/g85ab29HVN9AKLCb20P+OQ2x2btzygvgeSMdNOP4F9kTSsH5rADpzPsPu
+         KOSscSKxaKu9cV+ztpkAP4vInCDdOzETIgWqi2cYOPDS9i+ousIRF/Jc58thtlDvRHbs
+         64LJySGNJM+vuNvu6QOmdZn36ckpp8kPtY99UkKF9hKppPSPrzWmtaXkqCA0l4d91m07
+         2F3A3peDpBmv8tI2M5N98o5v83fy6In/Dw1Y22vnuFimCyxe2nLFt8CD0WhOBPttxSHg
+         roJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Tcw+Hn/R7gQMR2edGzUaAbBuUkt4+JRCYonfOy36olc=;
+        b=TdMj2c87qLYEYx6sBc7nU5W9iZZDPSkf8Ru2oX5TJvAd6yeJJJQoIF/L21LGDCxhA9
+         iT9mwVzRsmmOWA2u1EeveRuNSssaO4/4abUiM42nkRm404yY+gHt23MBm1dWRr9dBO4F
+         7LNXM5Imf0ifB1iGKjhW+Aor56kBat3UZOpjKY/rjMebJa/FA/5FgaruNoP11Ia2TxMI
+         hg7rGFWakyMBfphKOzv8z9VlPIY80Rh06235VqchCrhPtE5YGQGY368mjYl8CZxJHw2C
+         9DdFAjtISeJmv3MnKcvyQc8+XsNGEJRXRZWawB0VEdPSESRfbVoYPyQLu4xl77d5llrH
+         3xhA==
+X-Gm-Message-State: AOAM533yQe6ypf+cY6U89Py+ezchOgMZDbUvWg9EBrT0HPwLy2D4R3TE
+        MB1LIYKTVxKGPxihV+MrUQ3BIg==
+X-Google-Smtp-Source: ABdhPJzwZKkCqxJnWlcWoRw5T/xuOQQAnoX3ZYXQPv5uS9a3fyIGZ/2/0al5/5N3HovUhxEBGp6twA==
+X-Received: by 2002:a17:902:6803:b029:d2:42a6:312 with SMTP id h3-20020a1709026803b02900d242a60312mr8404865plk.24.1602178710329;
+        Thu, 08 Oct 2020 10:38:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o20sm8494595pgh.63.2020.10.08.10.38.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2020 10:38:29 -0700 (PDT)
+Message-ID: <5f7f4e95.1c69fb81.7f41b.f236@mx.google.com>
+Date:   Thu, 08 Oct 2020 10:38:29 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j=g6y53yk_+cPNnUYb6usrQmghCNuiHYc1vbpsypFtCQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v5.9-rc8-158-g4ae5e76f4c5d
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 85 runs,
+ 2 regressions (v5.9-rc8-158-g4ae5e76f4c5d)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+pm/testing baseline: 85 runs, 2 regressions (v5.9-rc8-158-g4ae5e76f4c5d)
 
-On Thursday 08 Oct 2020 at 17:57:23 (+0200), Rafael J. Wysocki wrote:
-> On Thu, Oct 8, 2020 at 5:03 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
-> >
-> > Hi Viresh,
-> >
-> > On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
-> > > On 07-10-20, 13:58, Nicola Mazzucato wrote:
-> > > > Hi Viresh,
-> > > >
-> > > > performance controls is what is exposed by the firmware through a protocol that
-> > > > is not capable of describing hardware (say SCMI). For example, the firmware can
-> > > > tell that the platform has N controls, but it can't say to which hardware they
-> > > > are "wired" to. This is done in dt, where, for example, we map these controls
-> > > > to cpus, gpus, etc.
-> > > >
-> > > > Let's focus on cpus.
-> > > >
-> > > > Normally we would have N of performance controls (what comes from f/w)
-> > > > that that correspond to hardware clock/dvfs domains.
-> > > >
-> > > > However, some firmware implementations might benefit from having finer
-> > > > grained information about the performance requirements (e.g.
-> > > > per-CPU) and therefore choose to present M performance controls to the
-> > > > OS. DT would be adjusted accordingly to "wire" these controls to cpus
-> > > > or set of cpus.
-> > > > In this scenario, the f/w will make aggregation decisions based on the
-> > > > requests it receives on these M controls.
-> > > >
-> > > > Here we would have M cpufreq policies which do not necessarily reflect the
-> > > > underlying clock domains, thus some s/w components will underperform
-> > > > (EAS and thermal, for example).
-> > > >
-> > > > A real example would be a platform in which the firmware describes the system
-> > > > having M per-cpu control, and the cpufreq subsystem will have M policies while
-> > > > in fact these cpus are "performance-dependent" each other (e.g. are in the same
-> > > > clock domain).
-> > >
-> > > If the CPUs are in the same clock domain, they must be part of the
-> > > same cpufreq policy.
-> >
-> > But cpufreq does not currently support HW_ALL (I'm using the ACPI
-> > coordination type to describe the generic scenario of using hardware
-> > aggregation and coordination when establishing the clock rate of CPUs).
-> >
-> > Adding support for HW_ALL* will involve either bypassing some
-> > assumptions around cpufreq policies or making core cpufreq changes.
-> >
-> > In the way I see it, support for HW_ALL involves either:
-> >
-> >  - (a) Creating per-cpu policies in order to allow each of the CPUs to
-> >    send their own frequency request to the hardware which will do
-> >    aggregation and clock rate decision at the level of the clock
-> >    domain.
-> 
-> This has been done for years on many platforms.
+Regressions Summary
+-------------------
 
-Exactly!
+platform        | arch  | lab           | compiler | defconfig          | r=
+esults
+----------------+-------+---------------+----------+--------------------+--=
+------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 3=
+/4    =
 
-> 
-> >    The PSD domains (ACPI) and the new DT binding will tell
-> >    which CPUs are actually in the same clock domain for whomever is
-> >    interested, despite those CPUs not being in the same policy.
-> 
-> And this information hasn't been used so far in those cases.
-> 
-> >    This requires the extra mask that Nicola introduced.
-> 
-> What would you use it for, specifically?
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 4=
+/5    =
 
-This would be useful for:
 
- - Energy Aware Scheduling: for this you need to know how other CPUs in
-   a clock domain would be impacted by a task placement. For example,
-   if the utilization of a CPU would increase as a result of a certain
-   task placement choice and as a result (for schedutil) its clock rate
-   need would increase as well, this increase in the clock rate, and
-   therefore energy, of the entire domain is considered before making
-   that task placement choice.
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v5.9-rc8=
+-158-g4ae5e76f4c5d/plan/baseline/
 
- - Thermal: the usefulness is dependent on the distribution of thermal
-   zones and their attached cooling devices. But with knowledge about
-   what CPUs use the same clock, the thermal governors could cap all
-   dependent CPUs in one go, while for some governor (IPA) knowing about
-   dependent CPUs help with more accurate power allocation, similar to
-   EAS.
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v5.9-rc8-158-g4ae5e76f4c5d
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      4ae5e76f4c5d75baac0f3466ab0798c6d124a4bf =
 
- - Frequency invariance: ideally one would have counters for this,
-   but when lacking counters, even knowing that some CPUs have the same
-   frequency and after using some software aggregation (likely maximum)
-   to establish what that frequency might be, I believe it would still
-   be more useful than no frequency invariance at all.
 
-Even if in these cases you don't have accurate information about the
-frequency that hardware will grant, knowing that some CPUs will change
-frequency together is useful. Given that some of the above users (EAS,
-IPA) are proactive and are trying to predict the future state of a
-system, they did not have completely accurate information to begin with.
-But not taking into account CPUs sharing a clock will result in too
-much inaccuracy (that even control loops and can't compensate for).
-This together with the assumption* that predicted frequencies won't be
-very far off from granted frequencies will result in maintaining these
-features in a more useful state.
 
-*my assumption, until proven otherwise :)
+Test Regressions
+---------------- =
 
-> 
-> >  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
-> 
-> Not an option really.
 
-Agreed!
 
-Thanks,
-Ionela.
+platform        | arch  | lab           | compiler | defconfig          | r=
+esults
+----------------+-------+---------------+----------+--------------------+--=
+------
+bcm2837-rpi-3-b | arm64 | lab-baylibre  | gcc-8    | defconfig          | 3=
+/4    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f7f449cb094f5267b4ff3ff
+
+  Results:     3 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc8-158-g4ae5e=
+76f4c5d/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc8-158-g4ae5e=
+76f4c5d/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-3-g27eeeac7da2d/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f7f449cb094f526=
+7b4ff403
+      new failure (last pass: v5.9-rc8-137-gc3cdb7873495)
+      1 lines
+
+    2020-10-08 16:53:50.003000  Connected to bcm2837-rpi-3-b console [chann=
+el connected] (~$quit to exit)
+    2020-10-08 16:53:50.003000  (user:khilman) is already connected
+    2020-10-08 16:54:05.335000  =00
+    2020-10-08 16:54:05.336000  =
+
+    2020-10-08 16:54:05.336000  U-Boot 2018.11 (Dec 04 2018 - 10:54:32 -080=
+0)
+    2020-10-08 16:54:05.337000  =
+
+    2020-10-08 16:54:05.337000  DRAM:  948 MiB
+    2020-10-08 16:54:05.350000  RPI 3 Model B (0xa02082)
+    2020-10-08 16:54:05.438000  MMC:   mmc@7e202000: 0, sdhci@7e300000: 1
+    2020-10-08 16:54:05.472000  Loading Environment from FAT... *** Warning=
+ - bad CRC, using default environment
+    ... (378 line(s) more)
+      =
+
+
+
+platform        | arch  | lab           | compiler | defconfig          | r=
+esults
+----------------+-------+---------------+----------+--------------------+--=
+------
+panda           | arm   | lab-collabora | gcc-8    | multi_v7_defconfig | 4=
+/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f7f441124fa2c2f154ff3e8
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//pm/testing/v5.9-rc8-158-g4ae5e=
+76f4c5d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v5.9-rc8-158-g4ae5e=
+76f4c5d/arm/multi_v7_defconfig/gcc-8/lab-collabora/baseline-panda.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05-3-g27eeeac7da2d/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.alert: https://kernelci.org/test/case/id/5f7f441224fa2c2=
+f154ff3ee
+      failing since 49 days (last pass: v5.8-107-gb72b3ea38c81, first fail:=
+ v5.9-rc1-4-g1f08d51cd57f)
+      60 lines
+
+    2020-10-08 16:53:31.878000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c802
+    2020-10-08 16:53:31.883000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c803
+    2020-10-08 16:53:31.889000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c804
+    2020-10-08 16:53:31.895000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c805
+    2020-10-08 16:53:31.901000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c806
+    2020-10-08 16:53:31.907000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c807
+    2020-10-08 16:53:31.913000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c808
+    2020-10-08 16:53:31.919000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c809
+    2020-10-08 16:53:31.925000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80a
+    2020-10-08 16:53:31.931000  kern  :alert : BUG: Bad page state in proce=
+ss swapper/0  pfn:9c80b
+    ... (49 line(s) more)
+      =20
