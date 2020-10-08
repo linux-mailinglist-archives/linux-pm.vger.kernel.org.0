@@ -2,117 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D739D2876FC
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 17:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BFC2877BD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 17:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730831AbgJHPSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 11:18:38 -0400
-Received: from mail-oo1-f68.google.com ([209.85.161.68]:33007 "EHLO
-        mail-oo1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730650AbgJHPSi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 11:18:38 -0400
-Received: by mail-oo1-f68.google.com with SMTP id r7so387652ool.0;
-        Thu, 08 Oct 2020 08:18:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lVTN3l7RCWCg+57rF3cB/zdsT9nZyrC1LZ/Pc3QOkPg=;
-        b=h5q7OeANNvfFXdqJSfmu5Khf2vG/T318mcNU8r+JewYgqfP62BR0c8gEse+/rnD5wY
-         uTS3eL1YlGdoOwoC/Ec+vMmjqMKW/x0W3pNTcnuomQ9OVsY/8JgK/X2mWB2Y5I7CPJFR
-         25UeSRhjtkEG1mfS3qF3x0B91O+++cFcI4TN2Ew5vJp+NghP0r++AQ5O/0JuKnQighGi
-         prks4Ya3n7yOukWRgd2SRYEbHfo+NFLgvhjeJLZPtTXelll6Itq7/p5ICgCM6Lu1L7ww
-         uMcriwNkVjCw7y49CGTMsuZO4OCW1imdXL9TJAQTi6QzaJLoRteOo8eCN3CuVOKX1s9x
-         +n6g==
-X-Gm-Message-State: AOAM53314IHZt6DIajVG4ThJaP3wq9s3gSLTvJUvenjx7ivkd9M/4cKq
-        wW4Q9f42kaUJW+FdmPvGHFmAXz4Ms12xyzQMw0aRBRwk
-X-Google-Smtp-Source: ABdhPJwdTaCWeEKKtUZT0Fd4ttSycfvOA7vXKrn7kpF0QR9Q67ObsRAossur3ThMA7cjZYizHClXPKC9I5fu/d/hVwo=
-X-Received: by 2002:a4a:d44:: with SMTP id 65mr5852302oob.44.1602170316044;
- Thu, 08 Oct 2020 08:18:36 -0700 (PDT)
+        id S1730992AbgJHPoB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 11:44:01 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:51032 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729833AbgJHPoA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 11:44:00 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 098Fhwqq050068;
+        Thu, 8 Oct 2020 10:43:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1602171838;
+        bh=CqA3/3irziC+4BcEaHbe20GdHaKIvMNwdaUsujUpDGI=;
+        h=From:To:CC:Subject:Date;
+        b=X5qmOC99KHshNJSarsS52/nVE4ITFccGS6f8Bo0QpausLnI7LnnrXfP814e5MqcWM
+         15IvhZ1rySNRI1ZMlRnxtDL0IKVmWxaC4+qi06BMEl565XLzIW6eS3WPGoRd3SZA+K
+         E4e2N0tttsczjmTTL1wFhVqc+AJHfgmVHIc372R4=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 098FhwJ3110236
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 8 Oct 2020 10:43:58 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Thu, 8 Oct
+ 2020 10:43:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Thu, 8 Oct 2020 10:43:58 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 098Fhvkb001903;
+        Thu, 8 Oct 2020 10:43:57 -0500
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        Dan Murphy <dmurphy@ti.com>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: [PATCH v3 1/2] dt-bindings: power: Add the bq25790 dt bindings
+Date:   Thu, 8 Oct 2020 10:43:55 -0500
+Message-ID: <20201008154356.19692-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20200924123016.13427-1-ionela.voinescu@arm.com>
- <CAJZ5v0hr+MZzokObNq5L0q1Fd0M5EXc6QmLXDv9b85P5b4yp4g@mail.gmail.com> <20201008140558.ovytcc34div3ih6m@bogus>
-In-Reply-To: <20201008140558.ovytcc34div3ih6m@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Oct 2020 17:18:25 +0200
-Message-ID: <CAJZ5v0hYu_86LB=nycAEDQQ3TsMMpcBV=Ue4WuOqH3YhxAehVQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2]cpufreq,topology,arm: disable FI for BL_SWITCHER
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 8, 2020 at 4:06 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Oct 07, 2020 at 04:34:44PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Sep 24, 2020 at 2:30 PM Ionela Voinescu <ionela.voinescu@arm.com> wrote:
-> > >
-> > > This series is the result of the discussions ([1], [2]) around the
-> > > complications that the BL_SWITCHER poses when it comes to Frequency
-> > > Invariance (FI) and it aims to restart the discussions.
-> > >
-> > > To properly scale its per-entity load-tracking signals, the task
-> > > scheduler needs to be given a frequency scale factor, i.e. some image of
-> > > the current frequency the CPU is running at, relative to its maximum
-> > > frequency.
-> > >
-> > > But (reiterating the message in the changelog of patch 2/2), big.LITTLE
-> > > switching complicates the setting of a correct cpufreq-based frequency
-> > > invariance scale factor due to (as observed in
-> > > drivers/cpufreq/vexpress-spc-cpufreq.c):
-> > >  - Incorrect current and maximum frequencies as a result of the
-> > >    exposure of a virtual frequency table to the cpufreq core,
-> > >  - Missed updates as a result of asynchronous frequency adjustments
-> > >    caused by frequency changes in other CPU pairs.
-> > > More information on this feature can be found at [3].
-> > >
-> > > Given that its functionality is atypical in regards to FI and that this
-> > > is an old technology, patch 2/2 disable FI for when big.LITTLE switching
-> > > is configured in to prevent incorrect scale setting.
-> > >
-> > > For this purpose patch 1/2 changes the way arch_set_freq_scale() is
-> > > defined in architecture code which brings it in line with the logic of
-> > > other architectural function definitions while allowing for less invasive
-> > > filtering of FI support.
-> > >
-> > > In the discussions at [2], three possible solutions were suggested:
-> > >  - (1) conditioning FI by !CONFIG_BL_SWITCHER
-> > >  - (2) leave as is with note in driver specifying this FI broken
-> > >    functionality
-> > >  - (3) removing full BL_SWITCHER support
-> > >
-> > > This series restructures the solution at (1). The reason for it is that
-> > > the new patch limits the ifdef filtering to the arm topology include file,
-> > > a location where frequency invariance functions are defined. Therefore,
-> > > this seems more appropriate given that the b.L switcher is an arm
-> > > technology and that the new FI filtering location seems more natural for
-> > > conditioned FI disabling.
-> > >
-> > > Solutions (2) and (3) were not implemented given that there might be some
-> > > remaining users of this technology (Samsung Chromebook 2 - Samsung Exynos
-> > > 5 Octa 5420, Samsung Exynos 5 Octa 5800) and therefore leaving this
-> > > broken (2) seems equally bad to removing support for it (3).
-> > >
-> > > [1] https://lore.kernel.org/lkml/20200701090751.7543-5-ionela.voinescu@arm.com/
-> > > [2] https://lore.kernel.org/lkml/20200722093732.14297-4-ionela.voinescu@arm.com/
-> > > [3] https://lwn.net/Articles/481055/
-> >
-> > I can take this set with the ACKs from Viresh if that's fine by
-> > everyone.  Catalin?  Sudeep?
->
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com> (BL_SWITCHER and topology parts)
+Add the bindings for the bq25790.
 
-OK, the series has been applied as 5.10 material, thanks!
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
+---
+ .../bindings/power/supply/bq25790.yaml        | 95 +++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
+
+diff --git a/Documentation/devicetree/bindings/power/supply/bq25790.yaml b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+new file mode 100644
+index 000000000000..6d9178ce5a2b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+@@ -0,0 +1,95 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2020 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq25790.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: TI BQ25790 Switch Mode Buck-Boost Charger
++
++maintainers:
++  - Dan Murphy <dmurphy@ti.com>
++
++description: |
++  BQ25790 is a highly integrated switch-mode buck-boost charger for 1-4 cell
++  Li-ion batteries and Li-polymer batteries. The device charges a battery from a
++  wide range of input sources including legacy USB adapters to high voltage USB
++  PD adapters and traditional barrel adapters.
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25790
++      - ti,bq25792
++
++  reg:
++    maxItems: 1
++
++  ti,watchdog-timeout-ms:
++    default: 0
++    description: |
++      Watchdog timer in milli seconds. 0 (default) disables the watchdog.
++    minimum: 0
++    maximum: 160000
++    enum: [ 0, 500, 1000, 2000, 20000, 40000, 80000, 160000]
++
++  input-voltage-limit-microvolt:
++    description: |
++      Minimum input voltage limit in micro volts with a 100000 micro volt step.
++    minimum: 3600000
++    maximum: 22000000
++
++  input-current-limit-microamp:
++    description: |
++      Maximum input current limit in micro amps with a 100000 micro amp step.
++    minimum: 100000
++    maximum: 3300000
++
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to the battery node being monitored
++
++  interrupts:
++    maxItems: 1
++    description: |
++      Interrupt sends an active low, 256 μs pulse to host to report the charger
++      device status and faults.
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    bat: battery {
++      compatible = "simple-battery";
++      constant-charge-current-max-microamp = <2000000>;
++      constant-charge-voltage-max-microvolt = <4200000>;
++      precharge-current-microamp = <160000>;
++      charge-term-current-microamp = <160000>;
++    };
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      bq25790: charger@6b {
++          compatible = "ti,bq25790";
++          reg = <0x6b>;
++          interrupt-parent = <&gpio1>;
++          interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++          ti,watchdog-timeout-ms = <2000>;
++          input-current-limit-microamp = <3000000>;
++          input-voltage-limit-microvolt = <4500000>;
++          monitored-battery = <&bat>;
++      };
++    };
++
++...
+-- 
+2.28.0.585.ge1cfff676549
+
