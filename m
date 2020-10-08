@@ -2,734 +2,520 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD6F2879E3
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 18:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64DAA287A38
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Oct 2020 18:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730207AbgJHQWh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Oct 2020 12:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46210 "EHLO
+        id S1725978AbgJHQmE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Oct 2020 12:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729230AbgJHQWg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 12:22:36 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17C3C061755
-        for <linux-pm@vger.kernel.org>; Thu,  8 Oct 2020 09:22:34 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id e23so54997wme.2
-        for <linux-pm@vger.kernel.org>; Thu, 08 Oct 2020 09:22:34 -0700 (PDT)
+        with ESMTP id S1725874AbgJHQmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Oct 2020 12:42:04 -0400
+Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615E1C0613D2
+        for <linux-pm@vger.kernel.org>; Thu,  8 Oct 2020 09:42:04 -0700 (PDT)
+Received: by mail-vs1-xe41.google.com with SMTP id w25so3389694vsk.9
+        for <linux-pm@vger.kernel.org>; Thu, 08 Oct 2020 09:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SKUQEG77tLu/FcBREyxs8/i/I0c07XpqLijNhDKPkB4=;
-        b=SNlUDjtvoEakd9ACg+hFSmG+L6kGpxQDAm2m8OIqeT3CyDHlB6WJOp34sbEw+OQJ69
-         9XAxOcturXeH3Evmdq2nn4/sNlLLXr4NOE4CiZfX+YLXCOdulPzuXsvnrdDAJcX1gUtF
-         8RWGlQqNt/cpndKUm/JjVS6UueW2fgVwhxPK2kKtGNpDyKypybef2c+KQ4XeT/eqZd44
-         4NmwraN6Jnm56QHCCPKSgc0tnIRA++qhdi03WKogTBa3U0tnib6d7yrbIOzIgmTo8yxw
-         Ai77AwImuJOIF9hV2VFKxen4prBIjuD7RgLN2kU+GYJGLRQ10tp3HLqxzmPohTifwXS9
-         XiNA==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BXYCRPdwwjw5+VNxRy5P5amHnYR+JOarFfXCXf3ZLpg=;
+        b=TZ7MWLebOTz3kwvrBEUeoSXXXod8vpl13gzzpRz39XaxB3fxdqucLF5raubPC1guCk
+         0fLXPJXRPYSixyiEOWdbso3K2oY5R9x8n0ktZ8FX7ZUhPoDiwD+pKEMOAR3cqqG4Y4q0
+         0sRdov3++8tm+B9lOGzY5nDNuUY31NZFrrvQI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SKUQEG77tLu/FcBREyxs8/i/I0c07XpqLijNhDKPkB4=;
-        b=bw6rAad7KPSvXwxliqKK+UqpZtMeYvbxUeTK8fD7R7cXgp4hfIhgdbU9tmazQOfeE6
-         oV8B+8L9/Eg8BTVycul4woSfpRPjghs56cdkaKxZrynTBKWEQdcrYpDMfFZ8WYtxVcYR
-         XLH49DSonwcjWdewWHNTtuK9Lv3aS3tYujau/UZxTQxtdlvydF0RkAfFznUHqfncux6K
-         /M7wwikDObbmyxZ5jiRY6cFvBKlidMMDGOEJ+EmkScoVT7URTR0yKT4Zb/rhdntM4Rky
-         LExGxPmpJc8YYhXZqO37p1DFPnFuHcRjCZe/Frdq3oJLF/5kvHotuamnX+ihltUlbVx2
-         oG8Q==
-X-Gm-Message-State: AOAM533LjkL0alHHZ5EMLpK2WlHh/9L2o11FGjxts7j7HnkXEeTpqwSa
-        Q7OC0SAu6OaVyMLz7uJwlkhCdg==
-X-Google-Smtp-Source: ABdhPJzlBsFh7FWZNxZu9MzIVhBWcv9Z73bZ+9rgEVlgDz6vS8CQCkBab4Wq5mUC5SoI3oGatinduA==
-X-Received: by 2002:a1c:3283:: with SMTP id y125mr9885470wmy.61.1602174153033;
-        Thu, 08 Oct 2020 09:22:33 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:bcbd:c839:6352:ebcd? ([2a01:e34:ed2f:f020:bcbd:c839:6352:ebcd])
-        by smtp.googlemail.com with ESMTPSA id v17sm8275815wrc.23.2020.10.08.09.22.31
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BXYCRPdwwjw5+VNxRy5P5amHnYR+JOarFfXCXf3ZLpg=;
+        b=gv4hIqUsVhK/3aZ1ZZe2jV4gL/fBeJ9GTsrm2WiV2DwbCn20Tyt5QmtGdvo5YB+3fj
+         3Sl7w8oJdY7ObVfp0jlDcCbyrCNVW3CdBOZ7HxAdErlrI3yxiYFG3kyi2SDroCMb3x0a
+         MjHHNSs9b2gC1MJQTU2Bgmghj88A9rd0jyjBmnvgyIzaOs5hpxgTITFE2fzdI9lWLw6k
+         Qw6BznObS8tBilHaR8kvzHWXysVS8oPq5qyFq3xxqWKwtRLTXvwQH1GW4DwPZvNgPGGu
+         TG2fUyJSrSoRwej22Ceb3qu2u7dsWzVbZ/9HD3tLUjOYrVIHZy7uFEgpYLTAva0DUzNS
+         rXFA==
+X-Gm-Message-State: AOAM531+eJ2yjDyYr2aomEbNh5Kg3RdJRmSCdsahY9v+HgmDTc7Awf7O
+        ZSotqSzD+MoBNnZfFhooPgpHwoQm2jXGPQ==
+X-Google-Smtp-Source: ABdhPJwzACPEDKJux0VBwZWEdave++DHdyplGVtwL3HBQRTwxHXmE+WLtDZqIXf2GcGzx6/tB3Dwbg==
+X-Received: by 2002:a67:6b84:: with SMTP id g126mr5040089vsc.35.1602175322798;
+        Thu, 08 Oct 2020 09:42:02 -0700 (PDT)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id p130sm766983vke.14.2020.10.08.09.42.01
+        for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Oct 2020 09:22:32 -0700 (PDT)
-Subject: Re: [PATCH v7 07/10] thermal: qcom: add support for adc-tm5 PMIC
- thermal monitor
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-References: <20201007135433.1041979-1-dmitry.baryshkov@linaro.org>
- <20201007135433.1041979-8-dmitry.baryshkov@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <3d6bd019-1516-5307-ef49-b6279fbfbe82@linaro.org>
-Date:   Thu, 8 Oct 2020 18:22:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 08 Oct 2020 09:42:01 -0700 (PDT)
+Received: by mail-vs1-f41.google.com with SMTP id w25so3389637vsk.9
+        for <linux-pm@vger.kernel.org>; Thu, 08 Oct 2020 09:42:01 -0700 (PDT)
+X-Received: by 2002:a67:e3b9:: with SMTP id j25mr5335450vsm.37.1602175320772;
+ Thu, 08 Oct 2020 09:42:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201007135433.1041979-8-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201002114426.31277-1-lukasz.luba@arm.com> <20201002114426.31277-4-lukasz.luba@arm.com>
+ <CAD=FV=UbNP5-G1z95F37Fmv8=n0JPSSwnPQO_K==WpAc4vAHWQ@mail.gmail.com>
+ <e9b6fc5a-45d3-168d-db38-6c068da26f6b@arm.com> <CAD=FV=Xkg1zpsMW5rERbibnjrgY6opZi8Z9DUFkWebb7NHtU5w@mail.gmail.com>
+ <bc5d21c1-ea84-9132-2e52-ae84fbb0515a@arm.com> <CAD=FV=VfA8AB3BZk8Ykkhigv9eGijzu4zuA6KdXk0K5UG0yCCQ@mail.gmail.com>
+ <CAL_JsqJ37TVk4=E1DyZuhfH1jZ7wyauGLucSH7XW9wkeT3PSgg@mail.gmail.com>
+ <CAD=FV=Vy641h5KNLKipC1n=tgjp7a3HGHw0odY9fNpwdqorrAg@mail.gmail.com>
+ <CAL_JsqJ=brfbLiTm9D+p2N0Az-gcStbYj=RS2EaG50dHo0-5WA@mail.gmail.com> <CAD=FV=XF_kqr0=vBqHVT4RWB8NWx0kHoFnap-smxtv_m+GQvSg@mail.gmail.com>
+In-Reply-To: <CAD=FV=XF_kqr0=vBqHVT4RWB8NWx0kHoFnap-smxtv_m+GQvSg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Thu, 8 Oct 2020 09:41:49 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=U1FP0e3_AVHpauUUZtD-5X3XCwh5aT9fH_8S_FFML2Uw@mail.gmail.com>
+Message-ID: <CAD=FV=U1FP0e3_AVHpauUUZtD-5X3XCwh5aT9fH_8S_FFML2Uw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: thermal: update sustainable-power
+ with abstract scale
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Amit Kucheria <amitk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Dietmar.Eggemann@arm.com, Quentin Perret <qperret@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/10/2020 15:54, Dmitry Baryshkov wrote:
-> Add support for Thermal Monitoring part of PMIC5. This part is closely
-> coupled with ADC, using it's channels directly. ADC-TM support
-> generating interrupts on ADC value crossing low or high voltage bounds,
-> which is used to support thermal trip points.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/iio/adc/qcom-vadc-common.c       |  62 +++
->  drivers/iio/adc/qcom-vadc-common.h       |   3 +
->  drivers/thermal/qcom/Kconfig             |  11 +
->  drivers/thermal/qcom/Makefile            |   1 +
->  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 622 +++++++++++++++++++++++
->  5 files changed, 699 insertions(+)
->  create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> 
-> diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-> index 40d77b3af1bb..e58e393b8713 100644
-> --- a/drivers/iio/adc/qcom-vadc-common.c
-> +++ b/drivers/iio/adc/qcom-vadc-common.c
-> @@ -377,6 +377,42 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
->  	return 0;
->  }
->  
-> +static s32 qcom_vadc_map_temp_voltage(const struct vadc_map_pt *pts,
-> +				      u32 tablesize, int input)
-> +{
-> +	bool descending = 1;
-> +	u32 i = 0;
-> +
+Hi,
 
-The code seems like a bit
+On Wed, Oct 7, 2020 at 2:40 PM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Wed, Oct 7, 2020 at 6:26 AM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Tue, Oct 6, 2020 at 8:17 PM Doug Anderson <dianders@chromium.org> wrote:
+> > >
+> > > Hi,
+> > >
+> > > On Tue, Oct 6, 2020 at 3:24 PM Rob Herring <robh+dt@kernel.org> wrote:
+> > > >
+> > > > On Fri, Oct 2, 2020 at 12:39 PM Doug Anderson <dianders@chromium.org> wrote:
+> > > > >
+> > > > > Hi,
+> > > > >
+> > > > > On Fri, Oct 2, 2020 at 9:40 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> > > > > >
+> > > > > > On 10/2/20 4:47 PM, Doug Anderson wrote:
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > On Fri, Oct 2, 2020 at 8:13 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> > > > > > >>
+> > > > > > >> Hi Doug,
+> > > > > > >>
+> > > > > > >> On 10/2/20 3:31 PM, Doug Anderson wrote:
+> > > > > > >>> Hi,
+> > > > > > >>>
+> > > > > > >>> On Fri, Oct 2, 2020 at 4:45 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> > > > > > >>>>
+> > > > > > >>>> Update the documentation for the binding 'sustainable-power' and allow
+> > > > > > >>>> to provide values in an abstract scale. It is required when the cooling
+> > > > > > >>>> devices use an abstract scale for their power values.
+> > > > > > >>>>
+> > > > > > >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > > > >>>> ---
+> > > > > > >>>>    .../devicetree/bindings/thermal/thermal-zones.yaml  | 13 +++++++++----
+> > > > > > >>>>    1 file changed, 9 insertions(+), 4 deletions(-)
+> > > > > > >>>>
+> > > > > > >>>> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> > > > > > >>>> index 3ec9cc87ec50..4d8f2e37d1e6 100644
+> > > > > > >>>> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> > > > > > >>>> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> > > > > > >>>> @@ -99,10 +99,15 @@ patternProperties:
+> > > > > > >>>>          sustainable-power:
+> > > > > > >>>>            $ref: /schemas/types.yaml#/definitions/uint32
+> > > > > > >>>>            description:
+> > > > > > >>>> -          An estimate of the sustainable power (in mW) that this thermal zone
+> > > > > > >>>> -          can dissipate at the desired control temperature. For reference, the
+> > > > > > >>>> -          sustainable power of a 4-inch phone is typically 2000mW, while on a
+> > > > > > >>>> -          10-inch tablet is around 4500mW.
+> > > > > > >>>> +          An estimate of the sustainable power (in mW or in an abstract scale)
+> > > > > > >>>> +         that this thermal zone can dissipate at the desired control
+> > > > > > >>>> +         temperature. For reference, the sustainable power of a 4-inch phone
+> > > > > > >>>> +         is typically 2000mW, while on a 10-inch tablet is around 4500mW.
+> > > > > > >>>> +
+> > > > > > >>>> +         It is possible to express the sustainable power in an abstract
+> > > > > > >>>> +         scale. This is the case when the related cooling devices use also
+> > > > > > >>>> +         abstract scale to express their power usage. The scale must be
+> > > > > > >>>> +         consistent.
+> > > > > > >>>
+> > > > > > >>> Two thoughts:
+> > > > > > >>>
+> > > > > > >>> 1. If we're going to allow "sustainable-power" to be in abstract
+> > > > > > >>> scale, why not allow "dynamic-power-coefficient" to be in abstract
+> > > > > > >>> scale too?  I assume that the whole reason against that originally was
+> > > > > > >>> the idea of device tree purity, but if we're allowing the abstract
+> > > > > > >>> scale here then there seems no reason not to allow it for
+> > > > > > >>> "dynamic-power-coefficient".
+> > > > > > >>
+> > > > > > >> With this binding it's a bit more tricky.
+> > > > > > >> I also have to discuss a few things internally. This requirement of
+> > > > > > >> uW/MHz/V^2 makes the code easier also for potential drivers
+> > > > > > >> like GPU (which are going to register the devfreq cooling with EM).
+> > > > > > >>
+> > > > > > >> Let me think about it, but for now I would just update these bits.
+> > > > > > >> These are required to proper IPA operation, the dyn.-pow.-coef. is a
+> > > > > > >> nice to have and possible next step.
+> > > > > > >
+> > > > > > > I guess the problem is that Rajendra is currently planning to remove
+> > > > > > > all the "dynamic-power-coefficient" values from device tree right now
+> > > > > > > and move them to the source code because the numbers we currently have
+> > > > > > > in the device tree _are_ in abstract scale and thus violate the
+> > > > > > > bindings.  Moving this to source code won't help us get to more real
+> > > > > > > power numbers (since it'll still be abstract scale), it'll just be
+> > > > > > > pure churn.  If we're OK with the abstract scale in general then we
+> > > > > > > should allow it everywhere and not add churn for no reason.
+> > > > > >
+> > > > > > IIUC he is still going to use the Energy Model, but with different
+> > > > > > registration function. We have such a driver: scmi-cpufreq.c, which
+> > > > > > uses em_dev_register_perf_domain(). He can still use EM, EAS, IPA
+> > > > > > not violating anything.
+> > > > >
+> > > > > Right.  He's going to take the exact same "abstract scale" numbers
+> > > > > that he has today and take them out of device tree and put them in the
+> > > > > cpufreq driver.  Doing so magically makes it so that he's not
+> > > > > violating anything since "abstract scale" is not currently allowed in
+> > > > > device tree but is allowed in the cpufreq driver.  I'm not saying that
+> > > > > he's doing anything wrong, I'm just saying that it's pointless churn.
+> > > > > If we're OK with "abstract scale" in one place in the device tree we
+> > > > > should be OK with it everywhere in the device tree.  Then Rajendra
+> > > > > wouldn't need his patch at all and he could leave his numbers in the
+> > > > > device tree.
+> > > > >
+> > > > >
+> > > > > > The real problem that we want to address is with sustainable-power in
+> > > > > > IPA. It is used in power budget calculation and if the devices operate
+> > > > > > in abstract scale, then there is an issue.
+> > > > > > There are two options to get that value:
+> > > > > > 1. from DT, which can have optimized value, stored by OEM engineer
+> > > > > > 2. from IPA estimation code, which just calculates it as a sum of
+> > > > > > minimum OPP power for each cooling device.
+> > > > > >
+> > > > > > The 2nd option might not be the best for a platform, so vendor/OEM
+> > > > > > engineer might want to provide a better value in DT -> 1st option.
+> > > > > > This is currently against the binding description and I have to fix it.
+> > > > >
+> > > > > Right, things are already broken today because a SoC vendor could
+> > > > > (without violating any rules) provide their SoC core
+> > > > > "dynamic-power-coefficient" in "abstract scale" in code and there
+> > > > > would be no way to for a board to (without violating DT bindings)
+> > > > > specify a "sustainable-power".  ...so, in that sense, your patch does
+> > > > > provide a benefit even if we don't make any changes to the rules for
+> > > > > "sustainable-power".  All I'm saying is that if these new rules for
+> > > > > allowing an abstract scale for "sustainable-power" in the device tree
+> > > > > are OK that it should _also_ be OK to add new rules to allow an
+> > > > > abstract scale for "dynamic-power-coefficient".
+> > > >
+> > > > Didn't we beat this one to death with "dynamic-power-coefficient"?
+> > >
+> > > We did?  Where / when?
+> >
+> > https://lore.kernel.org/r/1448288921-30307-1-git-send-email-juri.lelli@arm.com/
+>
+> Thanks for the reference.
+>
+>
+> > > I'm not sure I was involved, but right now
+> > > both "sustainable-power" and "dynamic-power-coefficient" are still
+> > > defined in the device tree to be in real units, not abstract scale.
+> > > Are you saying that we beat it to death and decided that it needed to
+> > > be in real units, or we beat it to death and decided that abstract
+> > > scale was OK and we just didn't put it in the bindings?
+> >
+> > The former.
+>
+> OK.  So I suppose this is a NAK to Lukasz's patch.  It also means that:
+>
+> * The power numbers that landed in the sc7180 devicetree violate
+> what's documented in the bindings.
+>
+> * While Rajendra can fix this by moving the numbers out of devicetree
+> and into code, it doesn't really help us because there will be no way
+> to allow boards to specify their "sustainable-power" in code.
+>
+> * Anyone who is using the "abstract scale" provided by firmware or by
+> code is in the same boat.  There's no way for a board to specify
+> "sustainable-power" that will match this "abstract scale" without
+> violating the devicetree bindings.
+>
+> Obviously the easiest way to fix this is to just move everyone off of
+> "abstract scale".
+>
+> If someone else has other bright ideas I'm all ears.
+>
+>
+> > > > That is the abstract scale because I don't think you can really ever
+> > > > measure it
+> > >
+> > > That's debatable.  it's not very hard to get reasonable measurements.
+> > > Matthias provided a recipe earlier in the thread.  See commit
+> > > ac60c5e33df4 ("ARM: dts: rockchip: Add dynamic-power-coefficient for
+> > > rk3288").  In that case he used a machine that could easily measure
+> > > power on the CPU rail, but if you simply keep all other rails in the
+> > > system constant (and/or run a long enough test), you can easily
+> > > accomplish this by just querying the smart battery in systems.
+> >
+> > Okay, yes, you can measure and then calculate something. But the value
+> > is only meaningful within that platform. There's no standardized test
+> > to run. What the power rails are could be different (e.g. CPU RAMs on
+> > a separate rail and shared).
+>
+> I think in this case the dynamic-power-coefficient is supposed to
+> describe the CPU cores only.  Presumably for a given SoC the cores
+> will behave (to a rough approximation) the same from board to board?
+>
+>
+> > > > and because vendors don't want to advertise their absolute
+> > > > power.
+> > >
+> > > That is certainly true, though after a device has shipped it's not
+> > > that hard to measure.
+> >
+> > Can you tell me how to measure the CPU rail on my Pixel3?
+>
+> I've written a script to do this and I'll share it soon.
+> Unfortunately the power consumption of little cores when running at
+> very low frequencies is pretty miniscule and sbs_battery doesn't have
+> that fine of a granularity.  I tried running where I spent 10 minutes
+> at each frequency and it was still slightly too noisy.  I'll run it
+> overnight where I spend 30 minutes at each frequency and see if my
+> numbers are accurate / consistent.  Since I'm running on hardware that
+> hasn't been released to the general public I won't publish my numbers,
+> but I'm hoping my script will be good enough that you should be able
+> to run it on your hardware and get real / consistent numbers.
 
-> +	/* Check if table is descending or ascending */
-> +	if (tablesize > 1) {
-> +		if (pts[0].y < pts[1].y)
-> +			descending = 0;
-> +	}
-> +
-> +	while (i < tablesize) {
-> +		if (descending && pts[i].y < input) {
-> +			/* table entry is less than measured*/
-> +			 /* value and table is descending, stop */
-> +			break;
-> +		} else if ((!descending) && pts[i].y > input) {
-> +			/* table entry is greater than measured*/
-> +			/*value and table is ascending, stop */
-> +			break;
-> +		}
-> +		i++;
-> +	}
-> +
-> +	if (i == 0)
-> +		return pts[0].x;
-> +	if (i == tablesize)
-> +		return pts[tablesize - 1].x;
-> +
-> +	/* result is between search_index and search_index-1 */
-> +	/* interpolate linearly */
-> +	return fixp_linear_interpolate(pts[i - 1].y, pts[i - 1].x,
-> +			pts[i].y, pts[i].x, input);
-> +}
-> +
->  static void qcom_vadc_scale_calib(const struct vadc_linear_graph *calib_graph,
->  				  u16 adc_code,
->  				  bool absolute,
-> @@ -474,6 +510,19 @@ static int qcom_vadc_scale_chg_temp(const struct vadc_linear_graph *calib_graph,
->  	return 0;
->  }
->  
-> +static u16 qcom_vadc_scale_voltage_code(int voltage,
-> +					const struct vadc_prescale_ratio *prescale,
-> +					const u32 full_scale_code_volt,
-> +					unsigned int factor)
-> +{
-> +	s64 volt = voltage, adc_vdd_ref_mv = 1875;
-> +
-> +	volt *= prescale->num * factor * full_scale_code_volt;
-> +	volt = div64_s64(volt, (s64)prescale->den * adc_vdd_ref_mv * 1000);
-> +
-> +	return volt;
-> +}
-> +
->  static int qcom_vadc_scale_code_voltage_factor(u16 adc_code,
->  				const struct vadc_prescale_ratio *prescale,
->  				const struct adc5_data *data,
-> @@ -658,6 +707,19 @@ int qcom_vadc_scale(enum vadc_scale_fn_type scaletype,
->  }
->  EXPORT_SYMBOL(qcom_vadc_scale);
->  
-> +u16 qcom_adc_tm5_temp_volt_scale(unsigned int prescale_ratio,
-> +				 u32 full_scale_code_volt, int temp)
-> +{
-> +	const struct vadc_prescale_ratio *prescale = &adc5_prescale_ratios[prescale_ratio];
-> +	s32 voltage;
-> +
-> +	voltage = qcom_vadc_map_temp_voltage(adcmap_100k_104ef_104fb_1875_vref,
-> +					     ARRAY_SIZE(adcmap_100k_104ef_104fb_1875_vref),
-> +					     temp);
-> +	return qcom_vadc_scale_voltage_code(voltage, prescale, full_scale_code_volt, 1000);
-> +}
-> +EXPORT_SYMBOL(qcom_adc_tm5_temp_volt_scale);
-> +
->  int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
->  		    unsigned int prescale_ratio,
->  		    const struct adc5_data *data,
-> diff --git a/drivers/iio/adc/qcom-vadc-common.h b/drivers/iio/adc/qcom-vadc-common.h
-> index 7e5f6428e311..9af41201ad77 100644
-> --- a/drivers/iio/adc/qcom-vadc-common.h
-> +++ b/drivers/iio/adc/qcom-vadc-common.h
-> @@ -172,6 +172,9 @@ int qcom_adc5_hw_scale(enum vadc_scale_fn_type scaletype,
->  		    const struct adc5_data *data,
->  		    u16 adc_code, int *result_mdec);
->  
-> +u16 qcom_adc_tm5_temp_volt_scale(unsigned int prescale_ratio,
-> +				 u32 full_scale_code_volt, int temp);
-> +
->  int qcom_adc5_prescaling_from_dt(u32 num, u32 den);
->  
->  int qcom_adc5_hw_settle_time_from_dt(u32 value, const unsigned int *hw_settle);
-> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-> index aa9c1d80fae4..8d5ac2df26dc 100644
-> --- a/drivers/thermal/qcom/Kconfig
-> +++ b/drivers/thermal/qcom/Kconfig
-> @@ -10,6 +10,17 @@ config QCOM_TSENS
->  	  Also able to set threshold temperature for both hot and cold and update
->  	  when a threshold is reached.
->  
-> +config QCOM_SPMI_ADC_TM5
-> +	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5"
-> +	depends on OF && SPMI && IIO
-> +	select REGMAP_SPMI
-> +	select QCOM_VADC_COMMON
-> +	help
-> +	  This enables the thermal driver for the ADC thermal monitoring
-> +	  device. It shows up as a thermal zone with multiple trip points.
-> +	  Thermal client sets threshold temperature for both warm and cool and
-> +	  gets updated when a threshold is reached.
-> +
->  config QCOM_SPMI_TEMP_ALARM
->  	tristate "Qualcomm SPMI PMIC Temperature Alarm"
->  	depends on OF && SPMI && IIO
-> diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
-> index ec86eef7f6a6..252ea7d9da0b 100644
-> --- a/drivers/thermal/qcom/Makefile
-> +++ b/drivers/thermal/qcom/Makefile
-> @@ -3,4 +3,5 @@ obj-$(CONFIG_QCOM_TSENS)	+= qcom_tsens.o
->  
->  qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
->  				   tsens-8960.o
-> +obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
->  obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
-> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> new file mode 100644
-> index 000000000000..c09a50f59053
-> --- /dev/null
-> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-> @@ -0,0 +1,622 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020 Linaro Limited
-> + */
+OK, I finished writing my python script for this.  It's not massively
+pretty, but I at least tried to comment all of it.  This should make
+it easy to get "real" power numbers on any hardware that has a smart
+battery without too much trouble.
 
-If it is possible, please give a description of this sensor, the
-different register mapping, etc ... So it will be easier to review and
-debug in the future.
+I ran this on my board and got reasonable-looking results.  My smart
+battery wasn't quite as smart as I hoped (reported wattage for the
+same thing increased a little), but given that the numbers made sense
+and were reasonable I'm willing to believe they're at least in the
+ballpark.  To test, I charged my battery up to ~95% and then ran:
 
+powernumbers.py 6 120; \
+powernumbers.py 0 120; \
+powernumbers.py 0 120; \
+powernumbers.py 6 120
 
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/consumer.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/thermal.h>
-> +
-> +#include "../../iio/adc/qcom-vadc-common.h"
+Running twice and 2 orders helped me account for the smart battery
+seeming to report larger numbers as it drained.  If you wanted even
+more accurate numbers you could run it until the battery drained and
+take the average all the way down.  ...or find a better smart
+battery...  ;-)
 
-Do not use this form of inclusion.
+I'd be super curious if anyone else wants to run this on "released" hardware...
 
-> +#define ADC5_MAX_CHANNEL                        0xc0
-> +#define ADC_TM5_NUM_CHANNELS		8
-> +
-> +#define ADC_TM5_STATUS_LOW			0x0a
-> +
-> +#define ADC_TM5_STATUS_HIGH			0x0b
-> +
-> +#define ADC_TM5_NUM_BTM				0x0f
-> +
-> +#define ADC_TM5_ADC_DIG_PARAM			0x42
-> +
-> +#define ADC_TM5_FAST_AVG_CTL			(ADC_TM5_ADC_DIG_PARAM + 1)
-> +#define ADC_TM5_FAST_AVG_EN				BIT(7)
-> +
-> +#define ADC_TM5_MEAS_INTERVAL_CTL		(ADC_TM5_ADC_DIG_PARAM + 2)
-> +#define ADC_TM5_TIMER1					3 /* 3.9ms */
-> +
-> +#define ADC_TM5_MEAS_INTERVAL_CTL2		(ADC_TM5_ADC_DIG_PARAM + 3)
-> +#define ADC_TM5_MEAS_INTERVAL_CTL2_MASK			0xf0
-> +#define ADC_TM5_TIMER2					10 /* 1 second */
-> +#define ADC_TM5_MEAS_INTERVAL_CTL3_MASK			0xf
-> +#define ADC_TM5_TIMER3					4 /* 4 second */
-> +
-> +#define ADC_TM_EN_CTL1				0x46
-> +#define ADC_TM_EN					BIT(7)
-> +#define ADC_TM_CONV_REQ				0x47
-> +#define ADC_TM_CONV_REQ_EN				BIT(7)
-> +
-> +#define ADC_TM5_M_CHAN_BASE			0x60
-> +
-> +#define ADC_TM5_M_ADC_CH_SEL_CTL(n)		(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 0)
-> +#define ADC_TM5_M_LOW_THR0(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 1)
-> +#define ADC_TM5_M_LOW_THR1(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 2)
-> +#define ADC_TM5_M_HIGH_THR0(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 3)
-> +#define ADC_TM5_M_HIGH_THR1(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 4)
-> +#define ADC_TM5_M_MEAS_INTERVAL_CTL(n)		(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 5)
-> +#define ADC_TM5_M_CTL(n)			(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 6)
-> +#define ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK		0xf
-> +#define ADC_TM5_M_CTL_CAL_SEL_MASK			0x30
-> +#define ADC_TM5_M_CTL_CAL_VAL				0x40
-> +#define ADC_TM5_M_EN(n)				(ADC_TM5_M_CHAN_BASE + ((n) * 8) + 7)
-> +#define ADC_TM5_M_MEAS_EN				BIT(7)
-> +#define ADC_TM5_M_HIGH_THR_INT_EN			BIT(1)
-> +#define ADC_TM5_M_LOW_THR_INT_EN			BIT(0)
-> +
-> +enum adc5_timer_select {
-> +	ADC5_TIMER_SEL_1 = 0,
-> +	ADC5_TIMER_SEL_2,
-> +	ADC5_TIMER_SEL_3,
-> +	ADC5_TIMER_SEL_NONE,
-> +};
-> +
-> +struct adc_tm5_data {
-> +	const u32	full_scale_code_volt;
-> +	unsigned int	*decimation;
-> +	unsigned int	*hw_settle;
-> +};
-> +
-> +enum adc_tm5_cal_method {
-> +	ADC_TM5_NO_CAL = 0,
-> +	ADC_TM5_RATIOMETRIC_CAL,
-> +	ADC_TM5_ABSOLUTE_CAL
-> +};
-> +
-> +struct adc_tm5_chip;
-> +
-> +/**
-> + * struct adc_tm5_channel - ADC Thermal Monitoring channel data.
-> + * @channel: channel number.
-> + * @adc_channel: corresponding ADC channel number.
-> + * @cal_method: calibration method.
-> + * @prescale: channel scaling performed on the input signal.
-> + * @hw_settle_time: the time between AMUX being configured and the
-> + *	start of conversion.
-> + * @iio: IIO channel instance used by this channel.
-> + * @chip: ADC TM chip instance.
-> + * @tzd: thermal zone device used by this channel.
-> + */
-> +struct adc_tm5_channel {
-> +	unsigned int		channel;
-> +	unsigned int		adc_channel;
-> +	enum adc_tm5_cal_method	cal_method;
-> +	unsigned int		prescale;
-> +	unsigned int		hw_settle_time;
-> +	struct iio_channel	*iio;
-> +	struct adc_tm5_chip	*chip;
-> +	struct thermal_zone_device *tzd;
-> +};
-> +
-> +/**
-> + * struct adc_tm5_chip - ADC Thermal Monitoring properties
-> + * @regmap: SPMI ADC5 Thermal Monitoring  peripheral register map field.
-> + * @dev: SPMI ADC5 device.
-> + * @data: software configuration data.
-> + * @channels: array of ADC TM channel data.
-> + * @nchannels: amount of channels defined/allocated
-> + * @decimation: sampling rate supported for the channel.
-> + * @avg_samples: ability to provide single result from the ADC
-> + *	that is an average of multiple measurements.
-> + * @base: base address of TM registers.
-> + */
-> +struct adc_tm5_chip {
-> +	struct regmap		*regmap;
-> +	struct device		*dev;
-> +	const struct adc_tm5_data	*data;
-> +	struct adc_tm5_channel	*channels;
-> +	unsigned int		nchannels;
-> +	unsigned int		decimation;
-> +	unsigned int		avg_samples;
-> +	u16			base;
-> +};
-> +
-> +static const struct adc_tm5_data adc_tm5_data_pmic = {
-> +	.full_scale_code_volt = 0x70e4,
-> +	.decimation = (unsigned int []) {250, 420, 840},
-> +	.hw_settle = (unsigned int []) {15, 100, 200, 300, 400, 500, 600, 700,
-> +					1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000},
+My hope in writing this is to prove that these numbers are _not_
+secret nor hard to obtain on any hardware that's in the general
+public's hands.
 
-Fixup format please, { 15, ... 128000 },
-less than 80 chars.
+One note: in measuring on my board, I found that the ratio between the
+dynamic-power-coefficient for the big and little cores didn't match
+what Qualcomm provided.  I'll kick off a task to ask about this.
+Specifically their numbers (in the public DTS) show bigs have a
+coefficient of 405 and littles of 100.  If I understand correctly this
+means that Qualcomm is claiming that bigs draw roughly 4x more power
+if run at the same voltage / frequency.  My numbers showed closer to
+3x (if littles were 100 bigs would be 313)
 
-> +};
-> +
-> +static int adc_tm5_read(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
-> +{
-> +	return regmap_bulk_read(adc_tm->regmap, adc_tm->base + offset, data, len);
-> +}
-> +
-> +static int adc_tm5_write(struct adc_tm5_chip *adc_tm, u16 offset, u8 *data, int len)
-> +{
-> +	return regmap_bulk_write(adc_tm->regmap, adc_tm->base + offset, data, len);
-> +}
-> +
-> +static int adc_tm5_reg_update(struct adc_tm5_chip *adc_tm, u16 offset, u8 mask, u8 val)
-> +{
-> +	return regmap_write_bits(adc_tm->regmap, adc_tm->base + offset, mask, val);
-> +}
-> +
-> +static irqreturn_t adc_tm5_isr(int irq, void *data)
-> +{
-> +	struct adc_tm5_chip *chip = data;
-> +	u8 status_low, status_high, ctl;
-> +	int ret = 0, i = 0;
-> +
-> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_LOW, &status_low, 1);
+In any case, without further ado, here's my script.  Hopefully gmail
+doesn't mangle it too badly (I tried to keep away from long lines and
+it just uses spaces for indent):
 
-Replace '1' by sizeof(status_low), that will prevent errors if the type
-changes in the future or if there is a copy/paste.
+===
 
-> +	if (ret) {
-> +		dev_err(chip->dev, "read status low failed with %d\n", ret);
-> +		return IRQ_HANDLED;
-> +	}
+#!python3
 
-Can you identify the reasons those reads can fail? If it is not supposed
-to happen it is fine but otherwise we don't want to be flooded with
-error messages on the console.
+# NOTES:
+# - You have to muck with the config (in code) below a bit.
+#   It shouldn't be too hard, I hope.
+# - You have to manually get the frequency / voltage mapping
+#   and enter it below.  This is _not_ secret if you have
+#   access to a device because the kernel needs to know it.
+#   See below for at least one way to obtain.
+# - This assumes you've got a battery that can measure current
+#   that is reasonably accurate.  The one on the Chromebook
+#   I tested seemed OK.
+# - This doesn't cleanup after itself (leaves CPUs offline
+#   at whatever freq it last tested).  Reboot after using.
+# - You need to have "dry2" in your path (dhrystone).  This is
+#   the canonical program used to benchmark.  There might
+#   be some variance between the 32-bit version and 64-bit
+#   version, so the 64-bit version is preferred if you want
+#   to compare your numbers to others.
+#   - I git cloned drystone and ran 2.2
+#     https://github.com/Keith-S-Thompson/dhrystone.git
+#   - I think I had to make a small change to includes
+#     to fix compiler complaints?
+#   - I compiled in Chrome OS chroot with:
+#     LFLAGS="-static" \
+#     CFLAGS="-O3" \
+#     CC=aarch64-cros-linux-gnu-gcc sh dry.c
+# - This is whipped together code.  It won't win beauty
+#   contests.  Sorry.
 
-> +	ret = adc_tm5_read(chip, ADC_TM5_STATUS_HIGH, &status_high, 1);
-> +	if (ret) {
-> +		dev_err(chip->dev, "read status high failed with %d\n", ret);
-> +		return IRQ_HANDLED;
-> +	}
+# Before running, quiesce power and disconnect charger.
+# You don't have to try too hard.  On Chrome OS, I did this:
+#
+# echo 0 > /sys/class/backlight/backlight/brightness
+# stop ui
+# stop powerd
+# stop anomaly-detector
+# stop metrics_daemon
+# stop auditd
+# killall timberslide
 
-Ditto.
+import glob
+import os
+import pprint
+import subprocess
+import sys
+import time
 
-> +	for (i = 0; i < chip->nchannels; i++) {
-> +		bool upper_set = false, lower_set = false;
-> +		unsigned int ch = chip->channels[i].channel;
-> +
-> +		if (!chip->channels[i].tzd) {
-> +			dev_err_once(chip->dev, "thermal device not found\n");
-> +			continue;
-> +		}
-> +
-> +		ret = adc_tm5_read(chip, ADC_TM5_M_EN(ch), &ctl, 1);
+### Config starts here ###
 
-sizeof(ctl)
+# Put a CPU number you want to measure here, or pass it in
+# as the first argument.
+if len(sys.argv) >= 2:
+  measure_cpu = int(sys.argv[1])
+else:
+  measure_cpu = 0
 
-> +
-> +		if (ret) {
-> +			dev_err(chip->dev, "ctl read failed with %d\n", ret);
-> +			continue;
-> +		}
+# We'll spend this much time at each frequency.
+# 2nd argument
+# It seems that (at least my battery) slowly reports
+# more power as it drains, so don't make this too long
+# or it might skew your results.
+if len(sys.argv) >= 3:
+  min_time_per_freq = int(sys.argv[2])
+else:
+  min_time_per_freq = 120
 
-Same comment here regarding the error.
+# Path to your smart battery on your system.
+sbs_path = "/sys/class/power_supply/sbs-12-000b"
 
-> +		lower_set = (status_low & BIT(ch)) &&
-> +			(ctl & ADC_TM5_M_MEAS_EN) &&
-> +			(ctl & ADC_TM5_M_LOW_THR_INT_EN);
-> +
-> +		upper_set = (status_high & BIT(ch)) &&
-> +			(ctl & ADC_TM5_M_MEAS_EN) &&
-> +			(ctl & ADC_TM5_M_HIGH_THR_INT_EN);
+# You need to fill in this voltage table for your system.
+# Maybe there's a better way to get this, but on Qualcomm CPU
+# frequencies you can simply instrument qcom_cpufreq_hw_read_lut()
+# to print out a frequency and voltage.
+#
+# This maps Hz to uW
+if measure_cpu == 0:
+  voltage_table = {
+    # FILL THIS IN.  See comment above.
+    freq: uW,
+  }
+elif measure_cpu == 6:
+  voltage_table = {
+    # FILL THIS IN.  See comment above.
+    freq: uW,
+  }
 
-Is the check (ctl & ADC_TM5_M_[HIGH|LOW]_THR_INT_EN) necessary if
-status_high or status_low is true ?
+### Program starts here ###
 
-Isn't possible to simplify that with:
+cpufreq_dir = "/sys/devices/system/cpu/cpu%d/cpufreq/" % measure_cpu
+freqs = sorted(voltage_table.keys())
 
-eg.
+# Kick off a background process to log current/voltage every second
+def start_power_measure():
+  p = subprocess.Popen("""
+    rm -f /tmp/times.txt;
+    for i in $(seq %d); do
+      echo $(cat %s/current_now %s/voltage_now) >> /tmp/times.txt;
+      sleep 1;
+    done"""  % (min_time_per_freq, sbs_path, sbs_path), shell=True)
+  return p
 
-		if (!(ctl & ADC_TM5_M_MEAS_EN)
-			continue;
+# Look at the times the background process logged and return mW.
+def stop_power_measure(p):
+  # Finish the program.  It shouldn't have output anything.
+  p.communicate()
 
-		if (!(status_high & BIT(ch)) && !(status_low & BIT(ch))
-			continue;
+  # Read and covert to watts.
+  lines = open("/tmp/times.txt", "r").readlines()
+  pairs = [line.split() for line in lines]
+  watts = [(-float(uA) / 1000000) * (float(uV) / 1000000)
+           for (uA, uV) in pairs]
+  watts = list(sorted(watts))
 
-		thermal_zone_device_update(chip->channels[i].tzd,
-					THERMAL_EVENT_UNSPECIFIED);
+  # Take only the middle 3rd (throw out the outliers)
+  num = len(watts)
+  watts = watts[num // 3:-num // 3]
 
-??
+  # Return mW
+  return sum(watts) / len(watts) * 1000.
 
-> +		if (upper_set || lower_set)
-> +			thermal_zone_device_update(chip->channels[i].tzd,
-> +						   THERMAL_EVENT_UNSPECIFIED);
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int adc_tm5_get_temp(void *data, int *temp)
-> +{
-> +	struct adc_tm5_channel *channel = data;
-> +	int ret, milli_celsius;
-> +
-> +	if (!channel || !channel->iio)
-> +		return -EINVAL;
-> +
-> +	ret = iio_read_channel_processed(channel->iio, &milli_celsius);
+# Make sure only the CPU being measured is online
+open("/sys/devices/system/cpu/cpu%d/online" %
+     measure_cpu, "w").write("1")
+for dir in glob.glob("/sys/devices/system/cpu/cpu[0-9]*"):
+  if dir == "/sys/devices/system/cpu/cpu%d" % measure_cpu:
+    continue
+  open("%s/online" % dir, "w").write("0")
 
-just pass temp, one variable saved from the stack that simplifies to:
+results = {}
 
-	return iio_read_channel_processed(channel->iio, temp);
+# We need userspace governor so we can pick the frequency.
+open(cpufreq_dir + "scaling_governor", "w").write("userspace")
 
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*temp = milli_celsius;
-> +
-> +	return 0;
-> +}
-> +
-> +static int adc_tm5_disable_channel(struct adc_tm5_channel *channel)
-> +{
-> +	struct adc_tm5_chip *chip = channel->chip;
-> +	unsigned int reg = ADC_TM5_M_EN(channel->channel);
-> +
-> +	return adc_tm5_reg_update(chip, reg,
-> +			ADC_TM5_M_MEAS_EN | ADC_TM5_M_HIGH_THR_INT_EN | ADC_TM5_M_LOW_THR_INT_EN,
-> +			0);
+# We'll measure quiescent power first at the lowest CPU freq
+print("Reading quiescent power")
+open(cpufreq_dir + "scaling_setspeed", "w").write(str(freqs[0]))
+p = start_power_measure()
+time.sleep(min_time_per_freq)
+baseline_mW = stop_power_measure(p)
+print("Baseline power is %.2f mW" % baseline_mW)
 
-Format 80 cols.
+# Now we go through each
+for freq in freqs:
+  open(cpufreq_dir + "scaling_setspeed", "w").write(str(freq))
 
-May be worth to create a ADC_TM5_M_THR_INT_EN macro:
+  print("========== Measuring power at %d Hz ==========" % freq)
 
-#define ADC_TM5_M_THR_INT_EN (ADC_TM5_M_HIGH_THR_INT_EN | \
-				 ADC_TM5_M_LOW_THR_INT_EN)
+  p = start_power_measure()
+  start_time = time.time()
 
-> +}
-> +
-> +static int adc_tm5_enable(struct adc_tm5_chip *chip)
-> +{
-> +	int rc = 0;
+  # Keep running the benchmark to keep the CPU busy while we're
+  # measuring power.  Arbitrarily picked a loops count so that
+  # it was busy right away at all tested freqs.
+  while time.time() - start_time < min_time_per_freq:
+    subprocess.check_output(["dry2 100000000; true"],
+                            stderr=subprocess.STDOUT, shell=True)
 
-Please be consistent with the variable names. s/rc/ret/
+  mW = stop_power_measure(p)
 
-> +	u8 data = 0;
-> +
-> +	data = ADC_TM_EN;
-> +	rc = adc_tm5_write(chip, ADC_TM_EN_CTL1, &data, 1);
+  results[freq] = mW - baseline_mW
+  print("Took %d seconds, used %.2f mW" %
+        (time.time() - start_time, results[freq]))
 
-sizeof
+# We now have total system power for each frequency.
+pprint.pprint(repr(results))
 
-> +	if (rc < 0) {
-> +		pr_err("adc-tm enable failed\n");
-> +		return rc;
-> +	}
-> +
-> +	data = ADC_TM_CONV_REQ_EN;
-> +	rc = adc_tm5_write(chip, ADC_TM_CONV_REQ, &data, 1);
+# Use the magic math, as documented in:
+# ac60c5e33df4 ARM: dts: rockchip: Add dynamic-power-coefficient...
 
-sizeof
+P1 = results[freqs[0]]
+V1 = voltage_table[freqs[0]] / 1000000.
+f1 = freqs[0] / 1000000.
 
-> +	if (rc < 0) {
-> +		pr_err("adc-tm request conversion failed\n");
-> +		return rc;
-> +	}
-> +
-> +	return rc;
-> +}
-> +
-> +static int adc_tm5_configure(struct adc_tm5_channel *channel, int low_temp, int high_temp)
-> +{
-> +	struct adc_tm5_chip *chip = channel->chip;
-> +	u8 buf[8];
-> +	u16 reg = ADC_TM5_M_ADC_CH_SEL_CTL(channel->channel);
-> +	int ret = 0;
-> +
-> +	ret = adc_tm5_read(chip, reg, buf, sizeof(buf));
-> +	if (ret) {
-> +		dev_err(chip->dev, "block read failed with %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Update ADC channel select */
-> +	buf[0] = channel->adc_channel;
-> +
-> +	/* Warm temperature corresponds to low voltage threshold */
-> +	if (high_temp != INT_MAX) {
-> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-> +				chip->data->full_scale_code_volt, high_temp);
-> +
-> +		buf[1] = adc_code & 0xff;
-> +		buf[2] = adc_code >> 8;
-> +		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
-> +	} else {
-> +		buf[7] &= ~ADC_TM5_M_LOW_THR_INT_EN;
-> +	}
-> +
-> +	/* Cool temperature corresponds to high voltage threshold */
-> +	if (low_temp != -INT_MAX) {
+all_Cx = []
+for freq in freqs[1:]:
+  Px = results[freq]
+  Vx = voltage_table[freq] / 1000000.
+  fx = freq / 1000000.
+  Cx = (Px - P1) / (Vx * Vx * fx - V1 * V1 * f1)
+  all_Cx.append(Cx)
+  print("%d kHz, %d mV, %d mW, %d Cx" %
+        (freq / 1000, Vx * 1000, Px, Cx))
 
-Is it really -INT_MAX ? or INT_MIN
-
--2147483647 vs -2147483648 ?
-
-> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
-> +				chip->data->full_scale_code_volt, low_temp);
-> +
-> +		buf[3] = adc_code & 0xff;
-> +		buf[4] = adc_code >> 8;
-> +		buf[7] |= ADC_TM5_M_HIGH_THR_INT_EN;
-> +	} else {
-> +		buf[7] &= ~ADC_TM5_M_HIGH_THR_INT_EN;
-> +	}
-> +
-> +	/* Update timer select */
-> +	buf[5] = ADC5_TIMER_SEL_2;
-> +
-> +	/* Set calibration select, hw_settle delay */
-> +	buf[6] &= ~ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK;
-> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_HW_SETTLE_DELAY_MASK, channel->hw_settle_time);
-> +	buf[6] &= ~ADC_TM5_M_CTL_CAL_SEL_MASK;
-> +	buf[6] |= FIELD_PREP(ADC_TM5_M_CTL_CAL_SEL_MASK, channel->cal_method);
-> +
-> +	buf[7] |= ADC_TM5_M_MEAS_EN;
-> +
-> +	ret = adc_tm5_write(chip, reg, buf, sizeof(buf));
-> +	if (ret) {
-> +		dev_err(chip->dev, "buf write failed\n");
-> +		return ret;
-> +	}
-> +
-> +	return adc_tm5_enable(chip);
-> +}
-> +
-> +static int adc_tm5_set_trips(void *data, int low_temp, int high_temp)
-> +{
-> +	struct adc_tm5_channel *channel = data;
-> +	struct adc_tm5_chip *chip;
-> +	int ret;
-> +
-> +	if (!channel)
-> +		return -EINVAL;
-> +
-> +	chip = channel->chip;
-> +	dev_dbg(chip->dev, "%d:low_temp(mdegC):%d, high_temp(mdegC):%d\n",
-> +		channel->channel, low_temp, high_temp);
-> +
-> +	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
-> +		ret = adc_tm5_disable_channel(channel);
-> +	else
-> +		ret = adc_tm5_configure(channel, low_temp, high_temp);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct thermal_zone_of_device_ops adc_tm5_ops = {
-> +	.get_temp = adc_tm5_get_temp,
-> +	.set_trips = adc_tm5_set_trips,
-> +};
-> +
-> +static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
-> +{
-> +	unsigned int i;
-> +	struct thermal_zone_device *tzd;
-> +
-> +	for (i = 0; i < adc_tm->nchannels; i++) {
-> +		adc_tm->channels[i].chip = adc_tm;
-> +
-> +		tzd = devm_thermal_zone_of_sensor_register(adc_tm->dev,
-> +							   adc_tm->channels[i].channel,
-> +							   &adc_tm->channels[i],
-> +							   &adc_tm5_ops);
-> +		if (IS_ERR(tzd)) {
-> +			dev_err(adc_tm->dev, "Error registering TZ zone:%ld for channel:%d\n",
-> +				PTR_ERR(tzd), adc_tm->channels[i].channel);
-> +			continue;
-> +		}
-> +		adc_tm->channels[i].tzd = tzd;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int adc_tm5_init(struct adc_tm5_chip *chip)
-> +{
-> +	u8 buf[4], channels_available;
-> +	int ret;
-> +	unsigned int i;
-> +
-> +	ret = adc_tm5_read(chip, ADC_TM5_NUM_BTM, &channels_available, 1);
-
-sizeof
-
-> +	if (ret) {
-> +		dev_err(chip->dev, "read failed for BTM channels\n");
-> +		return ret;
-> +	}
-> +
-> +	ret = adc_tm5_read(chip, ADC_TM5_ADC_DIG_PARAM, buf, sizeof(buf));
-> +	if (ret) {
-> +		dev_err(chip->dev, "block read failed with %d\n", ret);
-> +		return ret;
-> +	}
-
-What is the point of reading the 'buf' and right after overwrite the
-content ?
-
-> +	/* Select decimation */
-> +	buf[0] = chip->decimation;
-> +
-> +	/* Select number of samples in fast average mode */
-> +	buf[1] = chip->avg_samples | ADC_TM5_FAST_AVG_EN;
-> +
-> +	/* Select timer1 */
-> +	buf[2] = ADC_TM5_TIMER1;
-> +
-> +	/* Select timer2 and timer3 */
-> +	buf[3] = FIELD_PREP(ADC_TM5_MEAS_INTERVAL_CTL2_MASK, ADC_TM5_TIMER2) |
-> +		 FIELD_PREP(ADC_TM5_MEAS_INTERVAL_CTL3_MASK, ADC_TM5_TIMER3);
-> +
-> +	ret = adc_tm5_write(chip, ADC_TM5_ADC_DIG_PARAM, buf, sizeof(buf));
-> +	if (ret)
-> +		dev_err(chip->dev, "block write failed with %d\n", ret);
-> +
-> +	for (i = 0; i < chip->nchannels; i++) {
-> +		if (chip->channels[i].channel >= channels_available) {
-> +			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
-> +			return -EINVAL;
-> +		}
-
-Is it a sanity check to make sure the hardware and the DT are compatible ?
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-
-[ ... ]
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+print("Your dynamic-power-coefficient for cpu %d: %d" %
+      (measure_cpu, round(sum(all_Cx) / len(all_Cx))))
