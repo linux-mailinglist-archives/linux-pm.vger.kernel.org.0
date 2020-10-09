@@ -2,199 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FFE288A28
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 15:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933F0288A36
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 16:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387889AbgJIN7H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 09:59:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:51832 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387861AbgJIN7G (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Oct 2020 09:59:06 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B00C011B3;
-        Fri,  9 Oct 2020 06:59:05 -0700 (PDT)
-Received: from e123648.arm.com (unknown [10.57.51.133])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CD8EF3F70D;
-        Fri,  9 Oct 2020 06:59:03 -0700 (PDT)
-From:   Lukasz Luba <lukasz.luba@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        Dietmar.Eggemann@arm.com, lukasz.luba@arm.com,
-        ionela.voinescu@arm.com
-Subject: [PATCH v3 2/2] thermal: power allocator: change how estimation code is called
-Date:   Fri,  9 Oct 2020 14:58:50 +0100
-Message-Id: <20201009135850.14727-3-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201009135850.14727-1-lukasz.luba@arm.com>
-References: <20201009135850.14727-1-lukasz.luba@arm.com>
+        id S2388157AbgJIOBq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 10:01:46 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:47086 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388143AbgJIOBp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 10:01:45 -0400
+Received: by mail-ot1-f66.google.com with SMTP id m11so9031825otk.13;
+        Fri, 09 Oct 2020 07:01:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cH5Jy7jqvkfCKJUsuljnSzvtpIPq9+lrQngP0Px2a6Q=;
+        b=UZYGcr4KqeqabUfNBT3pie2cGrWHM8oXuWjaFLeGTBqj5/02p8j+T9Yjvt8Z0qxspn
+         NMqk46NvIdxElJbgaPQ1u2BvhMuhumB3ZyGYP3tbA4CPM0xhvaFsg/n5naKhihl7VHNc
+         lEf+5J1+NnpXAoTOvzQiSnqcyGFxAfvBx2L2/JBnYDVNhWs6nhkqy6TKsFSdeW9TL0Vr
+         x3G12ZS27bNJnbK/kjZZgcCAMDZldNN8omtjKIb4mC++269DcdSQFu+5+3MLga5QswXJ
+         eo4pin5qgLLR2cVVD6dnQV9Hgh/cPR1Tylv+u3cu/6RsOt77MUs+7GKKp8928cA/xCQD
+         DzCA==
+X-Gm-Message-State: AOAM532V/5MwGx6DLv6ZfJS+aFg6JTlFu34lqe7cwvd5TrRZTWXbgNaH
+        5y4xPq9c2T53MbKQQUN57g==
+X-Google-Smtp-Source: ABdhPJwM+8LgqTS+MCftCmGiU/RuYADbszxF5Z6NC4V/qMOtg48g1rU8VL1N8BeQ6vEmzL0QoGG7Nw==
+X-Received: by 2002:a05:6830:2012:: with SMTP id e18mr9388173otp.54.1602252103660;
+        Fri, 09 Oct 2020 07:01:43 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o9sm7790090oop.1.2020.10.09.07.01.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 07:01:42 -0700 (PDT)
+Received: (nullmailer pid 4070846 invoked by uid 1000);
+        Fri, 09 Oct 2020 14:01:41 -0000
+Date:   Fri, 9 Oct 2020 09:01:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201009140141.GA4048593@bogus>
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
+ <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sustainable power value might come from the Device Tree or can be
-estimated in run time. There is no need to estimate every time when the
-governor is called and temperature is high. Instead, store the estimated
-value and make it available via standard sysfs interface so it can be
-checked from the user-space. Re-invoke the estimation only in case the
-sustainable power was set to 0. Apart from that the PID coefficients
-are not going to be force updated thus can better handle sysfs settings.
+On Fri, Oct 09, 2020 at 12:10:03PM +0100, Nicola Mazzucato wrote:
+> Hi Viresh, I'm glad it helped.
+> 
+> Please find below my reply.
+> 
+> On 10/9/20 6:39 AM, Viresh Kumar wrote:
+> > On 08-10-20, 17:00, Nicola Mazzucato wrote:
+> >> On 10/8/20 4:03 PM, Ionela Voinescu wrote:
+> >>> Hi Viresh,
+> >>>
+> >>> On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
+> >>>> On 07-10-20, 13:58, Nicola Mazzucato wrote:
+> >>>>> Hi Viresh,
+> >>>>>
+> >>>>> performance controls is what is exposed by the firmware through a protocol that
+> >>>>> is not capable of describing hardware (say SCMI). For example, the firmware can
+> >>>>> tell that the platform has N controls, but it can't say to which hardware they
+> >>>>> are "wired" to. This is done in dt, where, for example, we map these controls
+> >>>>> to cpus, gpus, etc.
+> >>>>>
+> >>>>> Let's focus on cpus.
+> >>>>>
+> >>>>> Normally we would have N of performance controls (what comes from f/w)
+> >>>>> that that correspond to hardware clock/dvfs domains.
+> >>>>>
+> >>>>> However, some firmware implementations might benefit from having finer
+> >>>>> grained information about the performance requirements (e.g.
+> >>>>> per-CPU) and therefore choose to present M performance controls to the
+> >>>>> OS. DT would be adjusted accordingly to "wire" these controls to cpus
+> >>>>> or set of cpus.
+> >>>>> In this scenario, the f/w will make aggregation decisions based on the
+> >>>>> requests it receives on these M controls.
+> >>>>>
+> >>>>> Here we would have M cpufreq policies which do not necessarily reflect the
+> >>>>> underlying clock domains, thus some s/w components will underperform
+> >>>>> (EAS and thermal, for example).
+> >>>>>
+> >>>>> A real example would be a platform in which the firmware describes the system
+> >>>>> having M per-cpu control, and the cpufreq subsystem will have M policies while
+> >>>>> in fact these cpus are "performance-dependent" each other (e.g. are in the same
+> >>>>> clock domain).
+> >>>>
+> >>>> If the CPUs are in the same clock domain, they must be part of the
+> >>>> same cpufreq policy.
+> >>>
+> >>> But cpufreq does not currently support HW_ALL (I'm using the ACPI
+> >>> coordination type to describe the generic scenario of using hardware
+> >>> aggregation and coordination when establishing the clock rate of CPUs).
+> >>>
+> >>> Adding support for HW_ALL* will involve either bypassing some
+> >>> assumptions around cpufreq policies or making core cpufreq changes.
+> >>>
+> >>> In the way I see it, support for HW_ALL involves either:
+> >>>
+> >>>  - (a) Creating per-cpu policies in order to allow each of the CPUs to
+> >>>    send their own frequency request to the hardware which will do
+> >>>    aggregation and clock rate decision at the level of the clock
+> >>>    domain. The PSD domains (ACPI) and the new DT binding will tell
+> >>>    which CPUs are actually in the same clock domain for whomever is
+> >>>    interested, despite those CPUs not being in the same policy.
+> >>>    This requires the extra mask that Nicola introduced.
+> >>>
+> >>>  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
+> >>>    - Governors to stop aggregating (usually max) the information
+> >>>      for each of the CPUs in the policy and convey to the core
+> >>>      information for each CPU.
+> >>>    - Cpufreq core to be able to receive and pass this information
+> >>>      down to the drivers.
+> >>>    - Drivers to be able to have some per cpu structures to hold
+> >>>      frequency control (let's say SCP fast channel addresses) for
+> >>>      each of the CPUs in the policy. Or have these structures in the
+> >>>      cpufreq core/policy, to avoid code duplication in drivers.
+> >>>
+> >>> Therefore (a) is the least invasive but we'll be bypassing the rule
+> >>> above. But to make that rule stick we'll have to make invasive cpufreq
+> >>> changes (b).
+> >>
+> >> Regarding the 'rule' above of one cpufreq policy per clock domain, I would like
+> >> to share my understanding on it. Perhaps it's a good opportunity to shed some light.
+> >>
+> >> Looking back in the history of CPUFreq, related_cpus was originally designed
+> >> to hold the map of cpus within the same clock. Later on, the meaning of this
+> >> cpumask changed [1].
+> >> This led to the introduction of a new cpumask 'freqdomain_cpus'
+> >> within acpi-cpufreq to keep the knowledge of hardware clock domains for
+> >> sysfs consumers since related_cpus was not suitable anymore for this.
+> >> Further on, this cpumask was assigned to online+offline cpus within the same clk
+> >> domain when sw coordination is in use [2].
+> >>
+> >> My interpretation is that there is no guarantee that related_cpus holds the
+> >> 'real' hardware clock implementation. As a consequence, it is not true anymore
+> >> that cpus that are in the same clock domain will be part of the same
+> >> policy.
+> >>
+> >> This guided me to think it would be better to have a cpumask which always holds
+> >> the real hw clock domains in the policy.
+> >>
+> >>>
+> >>> This is my current understanding and I'm leaning towards (a). What do
+> >>> you think?
+> >>>
+> >>> *in not so many words, this is what these patches are trying to propose,
+> >>> while also making sure it's supported for both ACPI and DT.
+> >>>
+> >>> BTW, thank you for your effort in making sense of this!
+> >>>
+> >>> Regards,
+> >>> Ionela.
+> >>>
+> >>
+> >> This could be a platform where per-cpu and perf-dependencies will be used:
+> >>
+> >> CPU:              0    1    2    3    4    5    6    7
+> >> Type:             A    A    A    A    B    B    B    B
+> >> Cluster:         [                                    ]
+> >> perf-controls:   [  ] [  ] [  ] [ ]  [ ]  [ ]  [ ]  [ ]
+> >> perf-dependency: [                ]  [                ]
+> >> HW clock:        [                ]  [                ]
+> >>
+> >> The firmware will present 8 controls to the OS and each control is mapped to a
+> >> cpu device via the standard dt. This is done so we can achieve hw coordination.
+> >> What is required in these systems is to present to OS the information of which
+> >> cpus belong to which clock domain. In other words, when hw coordinates we don't
+> >> have any way at present in dt to understand how these cpus are dependent
+> >> each other, from performance perspective (as opposed to ACPI where we have
+> >> _PSD). Hence my proposal for the new cpu-perf-dependencies.
+> >> This is regardless whether we decide to go for either a policy per-cpu or a
+> >> policy per-domain.
+> >>
+> >> Hope it helps.
+> > 
+> > Oh yes, I get it now. Finally. Thanks for helping me out :)
+> > 
+> > So if I can say all this stuff in simple terms, this is what it will
+> > be like:
+> > 
+> > - We don't want software aggregation of frequencies and so we need to
+> >   have per-cpu policies even when they share their clock lines.
+> > 
+> > - But we still need a way for other frameworks to know which CPUs
+> >   share the clock lines (that's what the perf-dependency is all about,
+> >   right ?).
+> > 
+> > - We can't get it from SCMI, but need a DT based solution.
+> > 
+> > - Currently for the cpufreq-case we relied for this on the way OPP
+> >   tables for the CPUs were described. i.e. the opp-table is marked as
+> >   "shared" and multiple CPUs point to it.
+> > 
+> > - I wonder if we can keep using that instead of creating new bindings
+> >   for exact same stuff ? Though the difference here would be that the
+> >   OPP may not have any other entries.
+> 
+> I thought about it and looked for other platforms' DT to see if can reuse
+> existing opp information. Unfortunately I don't think it is optimal. The reason
+> being that, because cpus have the same opp table it does not necessarily mean
+> that they share a clock wire. It just tells us that they have the same
+> capabilities (literally just tells us they have the same V/f op points).
+> Unless I am missing something?
+> 
+> When comparing with ACPI/_PSD it becomes more intuitive that there is no
+> equivalent way to reveal "perf-dependencies" in DT.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
+You should be able to by examining the clock tree. But perhaps SCMI 
+abstracts all that and just presents virtual clocks without parent 
+clocks available to determine what clocks are shared? Fix SCMI if that's 
+the case.
 
-v3:
-- changed estimate_pid_constants to estimate_tzp_constants and related comments
-- estimate the PID coefficients always together with sust. power
-- added print indicating that we are estimating sust. power and PID const.
-- don't use local variable 'sustainable_power'
-
-
- drivers/thermal/gov_power_allocator.c | 65 ++++++++++++---------------
- 1 file changed, 29 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index aa35aa6c561c..e92a8d3ca5d4 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -96,6 +96,9 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
- 		if (instance->trip != params->trip_max_desired_temperature)
- 			continue;
- 
-+		if (!cdev_is_power_actor(cdev))
-+			continue;
-+
- 		if (cdev->ops->state2power(cdev, tz, instance->upper,
- 					   &min_power))
- 			continue;
-@@ -107,40 +110,37 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
- }
- 
- /**
-- * estimate_pid_constants() - Estimate the constants for the PID controller
-+ * estimate_tzp_constants() - Estimate sustainable power and PID constants
-  * @tz:		thermal zone for which to estimate the constants
-- * @sustainable_power:	sustainable power for the thermal zone
-  * @trip_switch_on:	trip point number for the switch on temperature
-  * @control_temp:	target temperature for the power allocator governor
-- * @force:	whether to force the update of the constants
-  *
-- * This function is used to update the estimation of the PID
-- * controller constants in struct thermal_zone_parameters.
-- * Sustainable power is provided in case it was estimated.  The
-- * estimated sustainable_power should not be stored in the
-- * thermal_zone_parameters so it has to be passed explicitly to this
-- * function.
-- *
-- * If @force is not set, the values in the thermal zone's parameters
-- * are preserved if they are not zero.  If @force is set, the values
-- * in thermal zone's parameters are overwritten.
-+ * This function is used to estimate the sustainable power and PID controller
-+ * constants in struct thermal_zone_parameters. These estimations will then be
-+ * available in the sysfs.
-  */
--static void estimate_pid_constants(struct thermal_zone_device *tz,
--				   u32 sustainable_power, int trip_switch_on,
--				   int control_temp, bool force)
-+static void estimate_tzp_constants(struct thermal_zone_device *tz,
-+				   int trip_switch_on, int control_temp)
- {
--	int ret;
--	int switch_on_temp;
- 	u32 temperature_threshold;
-+	int switch_on_temp;
-+	bool force = false;
-+	int ret;
- 	s32 k_i;
- 
-+	if (!tz->tzp->sustainable_power) {
-+		tz->tzp->sustainable_power = estimate_sustainable_power(tz);
-+		force = true;
-+		dev_info(&tz->device, "power_allocator: estimating sust. power and PID constants\n");
-+	}
-+
- 	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
- 	if (ret)
- 		switch_on_temp = 0;
- 
- 	temperature_threshold = control_temp - switch_on_temp;
- 	/*
--	 * estimate_pid_constants() tries to find appropriate default
-+	 * estimate_tzp_constants() tries to find appropriate default
- 	 * values for thermal zones that don't provide them. If a
- 	 * system integrator has configured a thermal zone with two
- 	 * passive trip points at the same temperature, that person
-@@ -151,11 +151,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
- 		return;
- 
- 	if (!tz->tzp->k_po || force)
--		tz->tzp->k_po = int_to_frac(sustainable_power) /
-+		tz->tzp->k_po = int_to_frac(tz->tzp->sustainable_power) /
- 			temperature_threshold;
- 
- 	if (!tz->tzp->k_pu || force)
--		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
-+		tz->tzp->k_pu = int_to_frac(2 * tz->tzp->sustainable_power) /
- 			temperature_threshold;
- 
- 	if (!tz->tzp->k_i || force) {
-@@ -193,19 +193,13 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- {
- 	s64 p, i, d, power_range;
- 	s32 err, max_power_frac;
--	u32 sustainable_power;
- 	struct power_allocator_params *params = tz->governor_data;
- 
- 	max_power_frac = int_to_frac(max_allocatable_power);
- 
--	if (tz->tzp->sustainable_power) {
--		sustainable_power = tz->tzp->sustainable_power;
--	} else {
--		sustainable_power = estimate_sustainable_power(tz);
--		estimate_pid_constants(tz, sustainable_power,
--				       params->trip_switch_on, control_temp,
--				       true);
--	}
-+	if (!tz->tzp->sustainable_power)
-+		estimate_tzp_constants(tz, params->trip_switch_on,
-+				       control_temp);
- 
- 	err = control_temp - tz->temperature;
- 	err = int_to_frac(err);
-@@ -244,7 +238,7 @@ static u32 pid_controller(struct thermal_zone_device *tz,
- 	power_range = p + i + d;
- 
- 	/* feed-forward the known sustainable dissipatable power */
--	power_range = sustainable_power + frac_to_int(power_range);
-+	power_range = tz->tzp->sustainable_power + frac_to_int(power_range);
- 
- 	power_range = clamp(power_range, (s64)0, (s64)max_allocatable_power);
- 
-@@ -603,20 +597,19 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 
- 	get_governor_trips(tz, params);
- 
-+	tz->governor_data = params;
-+
- 	if (tz->trips > 0) {
- 		ret = tz->ops->get_trip_temp(tz,
- 					params->trip_max_desired_temperature,
- 					&control_temp);
- 		if (!ret)
--			estimate_pid_constants(tz, tz->tzp->sustainable_power,
--					       params->trip_switch_on,
--					       control_temp, false);
-+			estimate_tzp_constants(tz, params->trip_switch_on,
-+					       control_temp);
- 	}
- 
- 	reset_pid_controller(params);
- 
--	tz->governor_data = params;
--
- 	return 0;
- 
- free_params:
--- 
-2.17.1
-
+Rob
