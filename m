@@ -2,109 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D50D2887B8
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 13:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE7512887BF
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 13:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732276AbgJILRQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 07:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731313AbgJILRP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 07:17:15 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661A9C0613D2
-        for <linux-pm@vger.kernel.org>; Fri,  9 Oct 2020 04:17:15 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id g10so6590456pfc.8
-        for <linux-pm@vger.kernel.org>; Fri, 09 Oct 2020 04:17:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=sdKjLE39B7ygzVMKXpWDsFa+IvvEq27MGJewZf/7lCg=;
-        b=Nw+5vsPOCAS7UG8LvQZQR5XoQM3EArj6MEMgN42MSx2WhLXo2n7CqMWoffdqNQO7VM
-         H7dgPtUyrr7Bp3AiXcgiEbnIe/jL0Y0Q6/um7ChE5MT3umLjSPAjnzJKQVp560Q/Yjom
-         dlCs3XWucYsx6mDUTX9krJvWc6elh11ttJykknP3DgnW2LKqjDCcUXmJbKPmTzQDtKi0
-         zNxQndFXYPyZlmveBrH8+Uu5WhAOjdpbpDfE7MKxaiiRNRaC9boPkeXTZloCWU8+xArI
-         MspHoYYS4wcIqWGuCoe597m6XBZM6hhGrNhklKo/h/7rOD1n+KUg+SXlzW9wVYkXyoIQ
-         bI6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=sdKjLE39B7ygzVMKXpWDsFa+IvvEq27MGJewZf/7lCg=;
-        b=rJrEQf6AhF+c4AxSigYNDq3ftU4jHhlAKP8KOfxbsENwLLfJ6SCba58POSSvC1za6d
-         US4lpbt0dOYUNFj2MQg4dk8IAgvdeXKeZ6o4sjN3G3giBEQLzKfP3N+SpuTvqfm2hSc1
-         kxEGZfiT0Mj5jBSRV/YUzhVRD+IxKx6/Aq9/TFpqyP7fyh4K5DrnfShC5DUp9+Gb09h8
-         OynIAPjecNNfQRAXoYPs45DZjuclB6mf0h1TLf2AgMRbOlnOE1GGFfgHaqVZPCWrZlEP
-         rept/nd5cgdUA6u2VoPddhkPqwFyrmemhDSHNgD7WQ6tl4rdCb6+L2xyHUPa1F1DkkCS
-         UTKg==
-X-Gm-Message-State: AOAM533x93nP9GE8QcKCy39UmeLJw72ORfbHiDbshlURZj3vi0hfPkMJ
-        loAZlkKkNQhJNZTZDby7tnCRpQ==
-X-Google-Smtp-Source: ABdhPJxBKuG1iPxOpqq941k33Ge0O8I4ewjPMmBzrqpHWVf5NcOde3wtKA9HWOPkM8yq2Oo8IOl2rQ==
-X-Received: by 2002:a17:90a:dc06:: with SMTP id i6mr4132826pjv.162.1602242234766;
-        Fri, 09 Oct 2020 04:17:14 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id p22sm10941904pju.48.2020.10.09.04.17.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Oct 2020 04:17:13 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 16:47:11 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        sudeep.holla@arm.com, chris.redpath@arm.com,
-        morten.rasmussen@arm.com, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201009111711.5sl7m24engcwiqii@vireshk-i7>
-References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
- <20200924095347.32148-3-nicola.mazzucato@arm.com>
- <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
- <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
- <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
- <20201008150317.GB20268@arm.com>
- <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
- <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
- <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+        id S1732045AbgJILTR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 07:19:17 -0400
+Received: from foss.arm.com ([217.140.110.172]:48404 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725908AbgJILTR (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Oct 2020 07:19:17 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 021A5D6E;
+        Fri,  9 Oct 2020 04:19:16 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 970063F66B;
+        Fri,  9 Oct 2020 04:19:15 -0700 (PDT)
+Date:   Fri, 9 Oct 2020 12:19:14 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org,
+        Dietmar.Eggemann@arm.com
+Subject: Re: [PATCH v2 2/2] thermal: power allocator: change how estimation
+ code is called
+Message-ID: <20201009111906.GA5207@arm.com>
+References: <20201008170426.465-1-lukasz.luba@arm.com>
+ <20201008170426.465-3-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201008170426.465-3-lukasz.luba@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09-10-20, 12:10, Nicola Mazzucato wrote:
-> I thought about it and looked for other platforms' DT to see if can reuse
-> existing opp information. Unfortunately I don't think it is optimal. The reason
-> being that, because cpus have the same opp table it does not necessarily mean
-> that they share a clock wire. It just tells us that they have the same
-> capabilities (literally just tells us they have the same V/f op points).
+Hi Lukasz,
 
-No.
+On Thursday 08 Oct 2020 at 18:04:26 (+0100), Lukasz Luba wrote:
+> The sustainable power value might come from the Device Tree or can be
+> estimated in run time. There is no need to estimate every time when the
+> governor is called and temperature is high. Instead, store the estimated
+> value and make it available via standard sysfs interface so it can be
+> checked from the user-space. Re-invoke the estimation only in case the
+> sustainable power was set to 0. Apart from that the PID coefficients
+> are not going to be force updated thus can better handle sysfs settings.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/thermal/gov_power_allocator.c | 56 +++++++++++++--------------
+>  1 file changed, 26 insertions(+), 30 deletions(-)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index aa35aa6c561c..1ad8d9c2685f 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -96,6 +96,9 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
+>  		if (instance->trip != params->trip_max_desired_temperature)
+>  			continue;
+>  
+> +		if (!cdev_is_power_actor(cdev))
+> +			continue;
+> +
+>  		if (cdev->ops->state2power(cdev, tz, instance->upper,
+>  					   &min_power))
+>  			continue;
+> @@ -109,31 +112,28 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
+>  /**
+>   * estimate_pid_constants() - Estimate the constants for the PID controller
+      ^^^^^^^^^^^^^^^^^^^^^^
+      estimate_tzp_constants()?
 
-> Unless I am missing something?
+When called in pid_controller() it feels strange that we check for
+sustainable_power, then we call estimate_pid_constants() and then we
+magically have an non-zero sustainable_power. Therefore, it would be
+good to change the name to indicate it's not only the PID constants that
+are estimated.
 
-Yes.
+>   * @tz:		thermal zone for which to estimate the constants
+> - * @sustainable_power:	sustainable power for the thermal zone
+>   * @trip_switch_on:	trip point number for the switch on temperature
+>   * @control_temp:	target temperature for the power allocator governor
+> - * @force:	whether to force the update of the constants
+>   *
+>   * This function is used to update the estimation of the PID
+>   * controller constants in struct thermal_zone_parameters.
 
-Here are the different scenarios which can happen.
-- Two CPUs have separate OPP tables, even if they are exact copy of
-  each other, these CPUs don't share a clock line, but just v/f points
-  as you said.
+How about replacing this with: 
 
-- Two CPUs use the same OPP table, i.e. both point to it, but
-  "opp-shared" property is missing. This is same as above case. They
-  just share the v/f points and this is the preferred way instead of
-  duplicate OPP tables.
+"""
+ * This function is used to estimate the sustainable power and PID controller
+ * constants in struct thermal_zone_parameters. These estimations will then be
+ * available in sysfs.
+"""
 
-- Case two with "opp-shared" property present in the OPP table. The
-  CPUs share clock-lines.
+> - * Sustainable power is provided in case it was estimated.  The
+> - * estimated sustainable_power should not be stored in the
+> - * thermal_zone_parameters so it has to be passed explicitly to this
+> - * function.
+> - *
+> - * If @force is not set, the values in the thermal zone's parameters
+> - * are preserved if they are not zero.  If @force is set, the values
+> - * in thermal zone's parameters are overwritten.
+> + * Sustainable power is going to be estimated in case it is 0.
+>   */
+>  static void estimate_pid_constants(struct thermal_zone_device *tz,
+> -				   u32 sustainable_power, int trip_switch_on,
+> -				   int control_temp, bool force)
+> +				   int trip_switch_on, int control_temp)
+>  {
+> -	int ret;
+> -	int switch_on_temp;
+> +	u32 sustainable_power = tz->tzp->sustainable_power;
+>  	u32 temperature_threshold;
+> +	int switch_on_temp;
+> +	int ret;
+>  	s32 k_i;
+>  
+> +	if (!sustainable_power) {
+> +		sustainable_power = estimate_sustainable_power(tz);
+> +		/* Make the estimation available in sysfs */
 
-And this is exactly how we find out today if CPUs share a policy or
-not.
+I would remove this comment from here. The reason is that this is not a
+special case. This will happen for all the tzp parameters set below.
+That's why I suggested adding this to the overall function comment above.
 
--- 
-viresh
+> +		tz->tzp->sustainable_power = sustainable_power;
+> +	}
+> +
+>  	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+>  	if (ret)
+>  		switch_on_temp = 0;
+> @@ -150,15 +150,15 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>  	if (!temperature_threshold)
+>  		return;
+>  
+> -	if (!tz->tzp->k_po || force)
+> +	if (!tz->tzp->k_po)
+>  		tz->tzp->k_po = int_to_frac(sustainable_power) /
+>  			temperature_threshold;
+>  
+> -	if (!tz->tzp->k_pu || force)
+> +	if (!tz->tzp->k_pu)
+>  		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
+>  			temperature_threshold;
+>  
+> -	if (!tz->tzp->k_i || force) {
+> +	if (!tz->tzp->k_i) {
+>  		k_i = tz->tzp->k_pu / 10;
+>  		tz->tzp->k_i = k_i > 0 ? k_i : 1;
+>  	}
+
+(Possibly judgement call)
+
+I agree we don't need the force argument to this function, but I would
+still keep an internal force variable (default false) to be set to true
+when we estimate and set the sustainable power.
+
+The reason for this is that there is no guarantee that when
+sustainable_power is found to be 0 and estimated, we'll then find all of
+the PID constants 0 as well in order to set them to a sane default.
+Basically my worry is that we'll end up with a combination of PID
+constants and sustainable power (some estimated and some not) that is not
+quite sane.
+
+But I understand a potential usecase in which a user might want to set
+it's own PID constants while wanting an estimated sustainable_power.
+But for this do you think it might be worth just having a pr_info
+message saying that "Sustainable power is 0; will estimate sustainable
+power and PID constants."? For this the user would only have to know
+that they need to set the sustainable_power to 0 first and then
+populate its own PID constants if they want to.
+
+> @@ -198,14 +198,11 @@ static u32 pid_controller(struct thermal_zone_device *tz,
+>  
+>  	max_power_frac = int_to_frac(max_allocatable_power);
+>  
+> -	if (tz->tzp->sustainable_power) {
+> -		sustainable_power = tz->tzp->sustainable_power;
+> -	} else {
+> -		sustainable_power = estimate_sustainable_power(tz);
+> -		estimate_pid_constants(tz, sustainable_power,
+> -				       params->trip_switch_on, control_temp,
+> -				       true);
+> -	}
+> +	if (!tz->tzp->sustainable_power)
+> +		estimate_pid_constants(tz, params->trip_switch_on,
+> +				       control_temp);
+> +
+> +	sustainable_power = tz->tzp->sustainable_power;
+>  
+
+(Nit)
+
+This is only used once below in:
+power_range = sustainable_power + frac_to_int(power_range);
+
+I think we can use tz->tzp->sustainable_power directly there and
+completely remove sustainable_power.
+
+Thank you,
+Ionela.
+
+>  	err = control_temp - tz->temperature;
+>  	err = int_to_frac(err);
+> @@ -603,20 +600,19 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+>  
+>  	get_governor_trips(tz, params);
+>  
+> +	tz->governor_data = params;
+> +
+>  	if (tz->trips > 0) {
+>  		ret = tz->ops->get_trip_temp(tz,
+>  					params->trip_max_desired_temperature,
+>  					&control_temp);
+>  		if (!ret)
+> -			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+> -					       params->trip_switch_on,
+> -					       control_temp, false);
+> +			estimate_pid_constants(tz, params->trip_switch_on,
+> +					       control_temp);
+>  	}
+>  
+>  	reset_pid_controller(params);
+>  
+> -	tz->governor_data = params;
+> -
+>  	return 0;
+>  
+>  free_params:
+> -- 
+> 2.17.1
+> 
