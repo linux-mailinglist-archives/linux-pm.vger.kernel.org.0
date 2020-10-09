@@ -2,256 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4239C2881D7
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 07:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5159E2885D5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 11:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731668AbgJIFy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 01:54:59 -0400
-Received: from mga18.intel.com ([134.134.136.126]:39915 "EHLO mga18.intel.com"
+        id S1733054AbgJIJQX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 05:16:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:45660 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725917AbgJIFy7 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Oct 2020 01:54:59 -0400
-IronPort-SDR: /XanyMaiglzoj2it8KQ40r4bP/1J0WKeemcq8G6SCR7WsrWNz/CNhPE9l6+mfAzuaB8++KJo1V
- a2yU3lEJfOUA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9768"; a="153280244"
-X-IronPort-AV: E=Sophos;i="5.77,354,1596524400"; 
-   d="scan'208";a="153280244"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2020 22:54:58 -0700
-IronPort-SDR: ROocLh77CBu45tiVjrZ8FGGNhepD1wNQSm0CnTBuiLYKmKapkq1r4XgHrgVByfmwR9cqa9g1jV
- AMomnwPqRR9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.77,354,1596524400"; 
-   d="scan'208";a="298170003"
-Received: from lkp-server02.sh.intel.com (HELO 80eb06af76cf) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Oct 2020 22:54:57 -0700
-Received: from kbuild by 80eb06af76cf with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1kQlMm-0000F7-DQ; Fri, 09 Oct 2020 05:54:56 +0000
-Date:   Fri, 09 Oct 2020 13:54:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [pm:bleeding-edge] BUILD SUCCESS
- 4ae5e76f4c5d75baac0f3466ab0798c6d124a4bf
-Message-ID: <5f7ffb2a.TRwVntyRiYEeMPDi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S1731262AbgJIJQW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Oct 2020 05:16:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5C1ED6E;
+        Fri,  9 Oct 2020 02:16:21 -0700 (PDT)
+Received: from [10.57.51.133] (unknown [10.57.51.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD9AF3F66B;
+        Fri,  9 Oct 2020 02:16:18 -0700 (PDT)
+Subject: Re: [PATCH v2 0/3] Clarify abstract scale usage for power values in
+ Energy Model, EAS and IPA
+To:     rjw@rjwysocki.net
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-doc@vger.kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, amitk@kernel.org, corbet@lwn.net,
+        daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com,
+        qperret@google.com, dianders@chromium.org, mka@chromium.org,
+        rnayak@codeaurora.org
+References: <20201002114426.31277-1-lukasz.luba@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <d2960f6a-1805-1fb4-98ae-4a756d20370b@arm.com>
+Date:   Fri, 9 Oct 2020 10:16:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <20201002114426.31277-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
-branch HEAD: 4ae5e76f4c5d75baac0f3466ab0798c6d124a4bf  Merge branch 'acpica' into linux-next
+Hi Rafael,
 
-elapsed time: 721m
+On 10/2/20 12:44 PM, Lukasz Luba wrote:
+> Hi all,
+> 
+> The Energy Model supports power values expressed in an abstract scale.
+> This has an impact on Intelligent Power Allocation (IPA) and should be
+> documented properly. There is also a need to update the DT binding for the
+> 'sustainable-power' and allow it to have abstract scale as well.
+> 
+> Changes:
+> v2:
+> - updated sustainable power section in IPA documentation
+> - updated DT binding for the 'sustainable-power'
+> 
+> The v1 of the patch set and related discussion can be found in [1].
+> 
+> Regards,
+> Lukasz Luba
+> 
+> [1] https://lore.kernel.org/linux-doc/20200929121610.16060-1-lukasz.luba@arm.com/
+> 
+> Lukasz Luba (3):
+>    docs: Clarify abstract scale usage for power values in Energy Model
+>    PM / EM: update the comments related to power scale
+>    dt-bindings: thermal: update sustainable-power with abstract scale
+> 
+>   .../devicetree/bindings/thermal/thermal-zones.yaml  | 13 +++++++++----
+>   .../driver-api/thermal/power_allocator.rst          | 13 ++++++++++++-
+>   Documentation/power/energy-model.rst                | 13 +++++++++++++
+>   Documentation/scheduler/sched-energy.rst            |  5 +++++
+>   include/linux/energy_model.h                        | 11 +++++------
+>   kernel/power/energy_model.c                         |  2 +-
+>   6 files changed, 45 insertions(+), 12 deletions(-)
+> 
 
-configs tested: 191
-configs skipped: 2
+Could you take patch 1/3 and patch 2/3 via your PM tree,
+please? I will be very grateful.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+These patches just update the documentation and comments regarding
+an issue that we can have: bogoWatts in the Energy Model (and we
+already have). One of the drawbacks is that we cannot derive real energy
+from these numbers. Will see how this would evolve.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                  colibri_pxa300_defconfig
-m68k                       m5475evb_defconfig
-mips                      fuloong2e_defconfig
-arm                          exynos_defconfig
-s390                       zfcpdump_defconfig
-m68k                       m5208evb_defconfig
-powerpc                    mvme5100_defconfig
-mips                        jmr3927_defconfig
-mips                       rbtx49xx_defconfig
-arm                            u300_defconfig
-sh                         ap325rxa_defconfig
-powerpc                 xes_mpc85xx_defconfig
-m68k                        m5307c3_defconfig
-arm                             mxs_defconfig
-h8300                               defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                        mvebu_v5_defconfig
-arm                           omap1_defconfig
-mips                   sb1250_swarm_defconfig
-powerpc                  mpc885_ads_defconfig
-sh                          rsk7203_defconfig
-sh                 kfr2r09-romimage_defconfig
-c6x                        evmc6678_defconfig
-powerpc                      ppc64e_defconfig
-powerpc                        warp_defconfig
-powerpc                         ps3_defconfig
-arm                           h3600_defconfig
-powerpc                     mpc512x_defconfig
-mips                     cu1830-neo_defconfig
-powerpc                 mpc832x_rdb_defconfig
-m68k                             allmodconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                        icon_defconfig
-sh                          landisk_defconfig
-mips                     decstation_defconfig
-powerpc                     pseries_defconfig
-arm                       netwinder_defconfig
-arm                          ep93xx_defconfig
-i386                             alldefconfig
-powerpc                 mpc834x_itx_defconfig
-m68k                        mvme16x_defconfig
-arc                    vdk_hs38_smp_defconfig
-arc                          axs103_defconfig
-m68k                       m5275evb_defconfig
-riscv                             allnoconfig
-powerpc                     ppa8548_defconfig
-openrisc                    or1ksim_defconfig
-sh                          rsk7201_defconfig
-mips                      malta_kvm_defconfig
-sh                           se7721_defconfig
-arc                     haps_hs_smp_defconfig
-sh                          r7780mp_defconfig
-sh                          r7785rp_defconfig
-um                             i386_defconfig
-alpha                            allyesconfig
-powerpc                     tqm8548_defconfig
-sh                           se7712_defconfig
-mips                         mpc30x_defconfig
-powerpc                     kilauea_defconfig
-powerpc                      makalu_defconfig
-s390                             allyesconfig
-mips                           rs90_defconfig
-powerpc                       holly_defconfig
-arm                      pxa255-idp_defconfig
-sh                        edosk7705_defconfig
-arm                         assabet_defconfig
-sparc                       sparc32_defconfig
-h8300                            alldefconfig
-arm                           viper_defconfig
-powerpc                      ppc44x_defconfig
-powerpc                      chrp32_defconfig
-arm                         lpc18xx_defconfig
-powerpc                 mpc8313_rdb_defconfig
-mips                      pic32mzda_defconfig
-arm                         s5pv210_defconfig
-x86_64                              defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                        qi_lb60_defconfig
-c6x                        evmc6472_defconfig
-sh                     sh7710voipgw_defconfig
-m68k                          multi_defconfig
-mips                         tb0219_defconfig
-sh                          urquell_defconfig
-ia64                        generic_defconfig
-ia64                             alldefconfig
-arm                        oxnas_v6_defconfig
-arm                        trizeps4_defconfig
-mips                           ip28_defconfig
-arm                        shmobile_defconfig
-powerpc                      arches_defconfig
-powerpc                    gamecube_defconfig
-powerpc                     ksi8560_defconfig
-h8300                     edosk2674_defconfig
-arm                     eseries_pxa_defconfig
-m68k                          amiga_defconfig
-mips                           xway_defconfig
-sh                              ul2_defconfig
-sh                          lboxre2_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-c6x                              allyesconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20201008
-x86_64               randconfig-a003-20201008
-x86_64               randconfig-a005-20201008
-x86_64               randconfig-a001-20201008
-x86_64               randconfig-a002-20201008
-x86_64               randconfig-a006-20201008
-i386                 randconfig-a006-20201008
-i386                 randconfig-a005-20201008
-i386                 randconfig-a001-20201008
-i386                 randconfig-a004-20201008
-i386                 randconfig-a002-20201008
-i386                 randconfig-a003-20201008
-i386                 randconfig-a006-20201009
-i386                 randconfig-a005-20201009
-i386                 randconfig-a001-20201009
-i386                 randconfig-a004-20201009
-i386                 randconfig-a002-20201009
-i386                 randconfig-a003-20201009
-x86_64               randconfig-a012-20201009
-x86_64               randconfig-a015-20201009
-x86_64               randconfig-a013-20201009
-x86_64               randconfig-a014-20201009
-x86_64               randconfig-a011-20201009
-x86_64               randconfig-a016-20201009
-i386                 randconfig-a015-20201009
-i386                 randconfig-a013-20201009
-i386                 randconfig-a014-20201009
-i386                 randconfig-a016-20201009
-i386                 randconfig-a011-20201009
-i386                 randconfig-a012-20201009
-i386                 randconfig-a015-20201008
-i386                 randconfig-a013-20201008
-i386                 randconfig-a014-20201008
-i386                 randconfig-a016-20201008
-i386                 randconfig-a011-20201008
-i386                 randconfig-a012-20201008
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                                   rhel
-x86_64                           allyesconfig
-x86_64                    rhel-7.6-kselftests
-x86_64                               rhel-8.3
-x86_64                                  kexec
+The patch 3/3 with dt-binding is not going to fly upstream [1].
+I hope developers will put a real number in DT so we could
+have real milliWatts from that source (wishful thinking).
+Doug even made a script, which might be helpful for that [2].
 
-clang tested configs:
-x86_64               randconfig-a004-20201009
-x86_64               randconfig-a003-20201009
-x86_64               randconfig-a005-20201009
-x86_64               randconfig-a001-20201009
-x86_64               randconfig-a002-20201009
-x86_64               randconfig-a006-20201009
-x86_64               randconfig-a012-20201008
-x86_64               randconfig-a015-20201008
-x86_64               randconfig-a013-20201008
-x86_64               randconfig-a014-20201008
-x86_64               randconfig-a011-20201008
-x86_64               randconfig-a016-20201008
+Regards,
+Lukasz
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+[1] 
+https://lore.kernel.org/linux-pm/45fae8cd-0635-41dc-c744-3c9833bf6492@arm.com/
+[2] 
+https://lore.kernel.org/linux-pm/CAD=FV=U1FP0e3_AVHpauUUZtD-5X3XCwh5aT9fH_8S_FFML2Uw@mail.gmail.com/
