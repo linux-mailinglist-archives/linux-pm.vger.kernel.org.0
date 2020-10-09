@@ -2,209 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B9D288AC2
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 16:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E02288B15
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 16:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388808AbgJIOY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 10:24:28 -0400
-Received: from foss.arm.com ([217.140.110.172]:52300 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388790AbgJIOXu (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 9 Oct 2020 10:23:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 385511063;
-        Fri,  9 Oct 2020 07:23:49 -0700 (PDT)
-Received: from localhost (e108754-lin.cambridge.arm.com [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF5143F70D;
-        Fri,  9 Oct 2020 07:23:48 -0700 (PDT)
-Date:   Fri, 9 Oct 2020 15:23:47 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org,
-        Dietmar.Eggemann@arm.com
-Subject: Re: [PATCH v3 2/2] thermal: power allocator: change how estimation
- code is called
-Message-ID: <20201009142347.GA3269@arm.com>
-References: <20201009135850.14727-1-lukasz.luba@arm.com>
- <20201009135850.14727-3-lukasz.luba@arm.com>
+        id S2388917AbgJIObl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 10:31:41 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:37527 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388908AbgJIObX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 10:31:23 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t77so10410677oie.4;
+        Fri, 09 Oct 2020 07:31:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fSY177QCDHA506ltAJfX+pyNUH3460/blci6wiOpURg=;
+        b=Dz3C4A04lOAU2/DC7VW/OvzSNx9wH8P11EnW33vywHUiY1EGjN3G6AuwrNOn2DOBgJ
+         cgYclT0jTClNTOmCEmNBKWR8A+p1URBZ7Ir/cNpwGutO8FjonOk0oUMtdnS6hg5TV/te
+         X0d6G2oPvhp0CBve3bd4LdW0CZOValsvsWjHKBWY7FaDFicqqF+MFMb52Ov6CFEw4G70
+         xumNSpUwU/dcVj6Ohpp55kExGjRyEdFWbDSMhm8JIQhB1VOe+TbLVzpVFVf8uBp+f3aF
+         JhzqpBb/CxrLSMEyVe2yxe3TzVV+09b33QlAmRLFDDomH1EgwULjHP6fZBNuFReSdfpK
+         kKzw==
+X-Gm-Message-State: AOAM533bXiYLJC90T4RsQs7RRpvriDhRYi/mGzUsgTHreDoVqM2okjfa
+        K/weLJpM4esNPhi9+1ceEoM6G2IlHGL+
+X-Google-Smtp-Source: ABdhPJxyqYEZTKZUYGot+5w2hJJtIfWrX5UV1nuE4AmB8RyXv8PbfdnyYX0HugcKNhLpSLyxvRMYCA==
+X-Received: by 2002:aca:4188:: with SMTP id o130mr2424926oia.167.1602253880742;
+        Fri, 09 Oct 2020 07:31:20 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id y23sm8328527ooj.34.2020.10.09.07.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 07:31:20 -0700 (PDT)
+Received: (nullmailer pid 4109836 invoked by uid 1000);
+        Fri, 09 Oct 2020 14:31:19 -0000
+Date:   Fri, 9 Oct 2020 09:31:19 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     kholk11@gmail.com
+Cc:     martin.botka1@gmail.com, linux-pm@vger.kernel.org,
+        phone-devel@vger.kernel.org, georgi.djakov@linaro.org,
+        konradybcio@gmail.com, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        marijns95@gmail.com, robh+dt@kernel.org
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add bindings for
+ Qualcomm SDM660 NoC
+Message-ID: <20201009143119.GA4109583@bogus>
+References: <20201008204515.695210-1-kholk11@gmail.com>
+ <20201008204515.695210-2-kholk11@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201009135850.14727-3-lukasz.luba@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20201008204515.695210-2-kholk11@gmail.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 09 Oct 2020 at 14:58:50 (+0100), Lukasz Luba wrote:
-> The sustainable power value might come from the Device Tree or can be
-> estimated in run time. There is no need to estimate every time when the
-> governor is called and temperature is high. Instead, store the estimated
-> value and make it available via standard sysfs interface so it can be
-> checked from the user-space. Re-invoke the estimation only in case the
-> sustainable power was set to 0. Apart from that the PID coefficients
-> are not going to be force updated thus can better handle sysfs settings.
+On Thu, 08 Oct 2020 22:45:14 +0200, kholk11@gmail.com wrote:
+> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
 > 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> Add the bindings for the Qualcomm SDM660-class NoC, valid for
+> SDM630, SDM636, SDM660 and SDA variants.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
 > ---
-> 
-> v3:
-> - changed estimate_pid_constants to estimate_tzp_constants and related comments
-> - estimate the PID coefficients always together with sust. power
-> - added print indicating that we are estimating sust. power and PID const.
-> - don't use local variable 'sustainable_power'
-> 
-> 
->  drivers/thermal/gov_power_allocator.c | 65 ++++++++++++---------------
->  1 file changed, 29 insertions(+), 36 deletions(-)
-> 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index aa35aa6c561c..e92a8d3ca5d4 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -96,6 +96,9 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
->  		if (instance->trip != params->trip_max_desired_temperature)
->  			continue;
->  
-> +		if (!cdev_is_power_actor(cdev))
-> +			continue;
-> +
->  		if (cdev->ops->state2power(cdev, tz, instance->upper,
->  					   &min_power))
->  			continue;
-> @@ -107,40 +110,37 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
->  }
->  
->  /**
-> - * estimate_pid_constants() - Estimate the constants for the PID controller
-> + * estimate_tzp_constants() - Estimate sustainable power and PID constants
->   * @tz:		thermal zone for which to estimate the constants
-> - * @sustainable_power:	sustainable power for the thermal zone
->   * @trip_switch_on:	trip point number for the switch on temperature
->   * @control_temp:	target temperature for the power allocator governor
-> - * @force:	whether to force the update of the constants
->   *
-> - * This function is used to update the estimation of the PID
-> - * controller constants in struct thermal_zone_parameters.
-> - * Sustainable power is provided in case it was estimated.  The
-> - * estimated sustainable_power should not be stored in the
-> - * thermal_zone_parameters so it has to be passed explicitly to this
-> - * function.
-> - *
-> - * If @force is not set, the values in the thermal zone's parameters
-> - * are preserved if they are not zero.  If @force is set, the values
-> - * in thermal zone's parameters are overwritten.
-> + * This function is used to estimate the sustainable power and PID controller
-> + * constants in struct thermal_zone_parameters. These estimations will then be
-> + * available in the sysfs.
->   */
-> -static void estimate_pid_constants(struct thermal_zone_device *tz,
-> -				   u32 sustainable_power, int trip_switch_on,
-> -				   int control_temp, bool force)
-> +static void estimate_tzp_constants(struct thermal_zone_device *tz,
-> +				   int trip_switch_on, int control_temp)
->  {
-> -	int ret;
-> -	int switch_on_temp;
->  	u32 temperature_threshold;
-> +	int switch_on_temp;
-> +	bool force = false;
-> +	int ret;
->  	s32 k_i;
->  
-> +	if (!tz->tzp->sustainable_power) {
-> +		tz->tzp->sustainable_power = estimate_sustainable_power(tz);
-> +		force = true;
-> +		dev_info(&tz->device, "power_allocator: estimating sust. power and PID constants\n");
-> +	}
-> +
->  	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
->  	if (ret)
->  		switch_on_temp = 0;
->  
->  	temperature_threshold = control_temp - switch_on_temp;
->  	/*
-> -	 * estimate_pid_constants() tries to find appropriate default
-> +	 * estimate_tzp_constants() tries to find appropriate default
->  	 * values for thermal zones that don't provide them. If a
->  	 * system integrator has configured a thermal zone with two
->  	 * passive trip points at the same temperature, that person
-> @@ -151,11 +151,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
->  		return;
->  
->  	if (!tz->tzp->k_po || force)
-> -		tz->tzp->k_po = int_to_frac(sustainable_power) /
-> +		tz->tzp->k_po = int_to_frac(tz->tzp->sustainable_power) /
->  			temperature_threshold;
->  
->  	if (!tz->tzp->k_pu || force)
-> -		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
-> +		tz->tzp->k_pu = int_to_frac(2 * tz->tzp->sustainable_power) /
->  			temperature_threshold;
->  
->  	if (!tz->tzp->k_i || force) {
-> @@ -193,19 +193,13 @@ static u32 pid_controller(struct thermal_zone_device *tz,
->  {
->  	s64 p, i, d, power_range;
->  	s32 err, max_power_frac;
-> -	u32 sustainable_power;
->  	struct power_allocator_params *params = tz->governor_data;
->  
->  	max_power_frac = int_to_frac(max_allocatable_power);
->  
-> -	if (tz->tzp->sustainable_power) {
-> -		sustainable_power = tz->tzp->sustainable_power;
-> -	} else {
-> -		sustainable_power = estimate_sustainable_power(tz);
-> -		estimate_pid_constants(tz, sustainable_power,
-> -				       params->trip_switch_on, control_temp,
-> -				       true);
-> -	}
-> +	if (!tz->tzp->sustainable_power)
-> +		estimate_tzp_constants(tz, params->trip_switch_on,
-> +				       control_temp);
->  
->  	err = control_temp - tz->temperature;
->  	err = int_to_frac(err);
-> @@ -244,7 +238,7 @@ static u32 pid_controller(struct thermal_zone_device *tz,
->  	power_range = p + i + d;
->  
->  	/* feed-forward the known sustainable dissipatable power */
-> -	power_range = sustainable_power + frac_to_int(power_range);
-> +	power_range = tz->tzp->sustainable_power + frac_to_int(power_range);
->  
->  	power_range = clamp(power_range, (s64)0, (s64)max_allocatable_power);
->  
-> @@ -603,20 +597,19 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
->  
->  	get_governor_trips(tz, params);
->  
-> +	tz->governor_data = params;
-> +
->  	if (tz->trips > 0) {
->  		ret = tz->ops->get_trip_temp(tz,
->  					params->trip_max_desired_temperature,
->  					&control_temp);
->  		if (!ret)
-> -			estimate_pid_constants(tz, tz->tzp->sustainable_power,
-> -					       params->trip_switch_on,
-> -					       control_temp, false);
-> +			estimate_tzp_constants(tz, params->trip_switch_on,
-> +					       control_temp);
->  	}
->  
->  	reset_pid_controller(params);
->  
-> -	tz->governor_data = params;
-> -
->  	return 0;
->  
->  free_params:
-> -- 
-> 2.17.1
+>  .../bindings/interconnect/qcom,sdm660.yaml    | 147 ++++++++++++++++++
+>  .../dt-bindings/interconnect/qcom,sdm660.h    | 116 ++++++++++++++
+>  2 files changed, 263 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
 > 
 
-Awesome!
-
-Reviewed-by: Ionela Voinescu <ionela.voinescu@arm.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
