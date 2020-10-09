@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93797288D18
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 17:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EA8288D1B
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 17:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389443AbgJIPpS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 11:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S2388745AbgJIPpV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 11:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389442AbgJIPpQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 11:45:16 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663D4C0613D5
-        for <linux-pm@vger.kernel.org>; Fri,  9 Oct 2020 08:45:16 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id l2so11195479lfk.0
-        for <linux-pm@vger.kernel.org>; Fri, 09 Oct 2020 08:45:16 -0700 (PDT)
+        with ESMTP id S2389449AbgJIPpT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 11:45:19 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E324EC0613D9
+        for <linux-pm@vger.kernel.org>; Fri,  9 Oct 2020 08:45:18 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id b22so11124374lfs.13
+        for <linux-pm@vger.kernel.org>; Fri, 09 Oct 2020 08:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SyrNRlrzgocwFtm4m1D+vgyjZWlJZcz7p/Dz+/oWD3I=;
-        b=a/NyN1qBHmwcjyJPMEHdonVDKXS7DWlZT4d2U6JHV1IpNhHPzldV8MlqOoalcSg1o7
-         wP7ZM2ZjDX2xuQQPZ6tiOoC1DMuDODzVvubHE4+UiiVYa+Z4KoF0dueQcfjClCvF8htV
-         RT3cQjm/revmjP/04IigW/3kt9Emqc4r6TwrviAbLEnT89/+JGBOWGIWydBCiwZxlD4s
-         fuCdLoaEqRWPJymODD3VMw6Lg32WofShzxPapIcIAbNp9kmmc008k7iCj1ArU1tW7ISb
-         S9ZnYEAY9T8VQmU867y1Cgr3VA2jF9w8w//KbalsQV29ed9WUH3ZCG+5kykuJR/Ws/GY
-         beaw==
+        bh=ppiJR77c+oyF2YPqQViuqav70ajnTqRX4XIvZy2HLv8=;
+        b=yqYEPrXtJyHyKi78NpIfgz5NJR/HgrPDcP6uMGuIC4u0TUtMT4AA7NoczlaHwwX7B+
+         pYJkQ5KsqWfwbWrk2k8FosS4kEM3ogb1vLag84mjjvdf0z1htGRt/g+DqFiK4WHjIThJ
+         StqYkJTnYYV/14APbiQylu0L9ucP1PA079pi9rF4qfixfaXbwgNvTpJ7zz2duL8pRkSn
+         vcnc7ohe5rh7HbDCDZ3mO/5NvgFmKdA68ASpGulzI19MGJKWU2jPpCYzQIBAZPhM69yD
+         CtQwCTD/ST2FPLV4qfVyiKgPntjmK2Z4zWtlzKFYOKZkdn0Ww5yb5A+/3NbM+lSyfMHM
+         Fdzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SyrNRlrzgocwFtm4m1D+vgyjZWlJZcz7p/Dz+/oWD3I=;
-        b=ox8VJbJcEKcOhy8Ty46jhIhZ6nrDJVbNLp408zAwKd/jgh0ywvuqwHDgYbWfZUkj/2
-         Wvo/XTw0IfTmLugsYQ3SCvB6pPksSQWBEK+JF8cbOxUhhVYKw14HZmvrpKQDWGJXXSYU
-         rCd9hWMHQOORl9BPtppEoN0WKKdP3u2mZ0XFW+UMDA7OPrKTHE3qPuxbDv3gTUPrTYzS
-         HEQUIMeZF1JC+3w5g82VfTEu8GAuIQK00Z//hTz74/jxryIPI1TH6WK6NgvcBVmpWAoe
-         8QXFNY/pfejAJ0/hQxAhJpuUKdq+gZNJXVFLETvz15Eelo9oaD7PmgyNTbqFoNoQYS8R
-         vvJw==
-X-Gm-Message-State: AOAM531OgvnGfe3sDgLjXyTM9cZftyMNqrIU6a0+Cg7JPtYMjJtUDuer
-        BhNPgvraxPipZqH/z7/JGOoZVR11D1HAiTuJ
-X-Google-Smtp-Source: ABdhPJxxrCCHXMIr9nzhNuBFrehzppK5IHHmaW65LXYkXPafToY0k0uv9q5i+ToAbCEPA0OZfWUAKw==
-X-Received: by 2002:a05:6512:1182:: with SMTP id g2mr2033086lfr.198.1602258314846;
-        Fri, 09 Oct 2020 08:45:14 -0700 (PDT)
+        bh=ppiJR77c+oyF2YPqQViuqav70ajnTqRX4XIvZy2HLv8=;
+        b=lGDKxdrSl+Qrn3TC4ZTbbc22oLcIrJZ4cw97NaMrF9SzDaydVi5n82ToH9IYvcwJOr
+         Oi33GjMpGyK8K8je0H1rLuzjsIl3WVEtfgm6uYv7Z93f9B6cpjutFKHAhofLI6qNKeDW
+         AcdNLbioFx7p56RzCbsS4NHNEFqTJuygH5LNTEVbAbwZRXBd39itF2kE0iFd9CwkCFi3
+         Jl+wCpyPVN1SnhKD80jOenfDvGn7v/x8K0ofaPJhojmkIv8kLf9t0yveYCEmgbF1j66k
+         l0unyTpjdzT7X+kXmixvfq1nj/rwUC98cDN5ZnorLsvJOIzth42mHShUalHHHBjdobfl
+         bSDw==
+X-Gm-Message-State: AOAM532cXO3XrXkQJYuO/NWAlfXxift+kuh8wTkqCrMXtzY0melxuETw
+        JlPMQaYV92S9hDDjKmQxDAXudg==
+X-Google-Smtp-Source: ABdhPJzv6xde0hahyKDw5usEElwUcSIYhD7oBaPoeyTWik0BrSxwu6tuUQAYfGKITywwCTiMOdhtfw==
+X-Received: by 2002:a19:f245:: with SMTP id d5mr4100476lfk.97.1602258317288;
+        Fri, 09 Oct 2020 08:45:17 -0700 (PDT)
 Received: from eriador.lan ([188.162.65.231])
-        by smtp.gmail.com with ESMTPSA id r4sm1505597lfc.162.2020.10.09.08.45.12
+        by smtp.gmail.com with ESMTPSA id r4sm1505597lfc.162.2020.10.09.08.45.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 08:45:14 -0700 (PDT)
+        Fri, 09 Oct 2020 08:45:16 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -61,11 +61,10 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: [PATCH v8 04/11] iio: adc: qcom-vadc-common: use fixp_linear_interpolate
-Date:   Fri,  9 Oct 2020 18:44:52 +0300
-Message-Id: <20201009154459.106189-5-dmitry.baryshkov@linaro.org>
+        Jishnu Prakash <jprakash@qti.qualcomm.com>
+Subject: [PATCH v8 05/11] iio: adc: move qcom-vadc-common.h to include dir
+Date:   Fri,  9 Oct 2020 18:44:53 +0300
+Message-Id: <20201009154459.106189-6-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201009154459.106189-1-dmitry.baryshkov@linaro.org>
 References: <20201009154459.106189-1-dmitry.baryshkov@linaro.org>
@@ -75,41 +74,117 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use new function fixp_linear_interpolate() instead of hand-coding the
-linear interpolation.
+qcom-vadc-common module will be used by ADC thermal monitoring driver,
+so move it to global include dir.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 ---
- drivers/iio/adc/qcom-vadc-common.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/iio/adc/qcom-pm8xxx-xoadc.c                   | 3 +--
+ drivers/iio/adc/qcom-spmi-adc5.c                      | 2 +-
+ drivers/iio/adc/qcom-spmi-vadc.c                      | 3 +--
+ drivers/iio/adc/qcom-vadc-common.c                    | 3 +--
+ {drivers => include/linux}/iio/adc/qcom-vadc-common.h | 2 ++
+ 5 files changed, 6 insertions(+), 7 deletions(-)
+ rename {drivers => include/linux}/iio/adc/qcom-vadc-common.h (99%)
 
+diff --git a/drivers/iio/adc/qcom-pm8xxx-xoadc.c b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+index 7e108da7d255..0610bf254771 100644
+--- a/drivers/iio/adc/qcom-pm8xxx-xoadc.c
++++ b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+@@ -10,6 +10,7 @@
+  * Author: Linus Walleij <linus.walleij@linaro.org>
+  */
+ 
++#include <linux/iio/adc/qcom-vadc-common.h>
+ #include <linux/iio/iio.h>
+ #include <linux/iio/sysfs.h>
+ #include <linux/module.h>
+@@ -21,8 +22,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/regulator/consumer.h>
+ 
+-#include "qcom-vadc-common.h"
+-
+ /*
+  * Definitions for the "user processor" registers lifted from the v3.4
+  * Qualcomm tree. Their kernel has two out-of-tree drivers for the ADC:
+diff --git a/drivers/iio/adc/qcom-spmi-adc5.c b/drivers/iio/adc/qcom-spmi-adc5.c
+index c2da8f068b87..b10a0fcf09dc 100644
+--- a/drivers/iio/adc/qcom-spmi-adc5.c
++++ b/drivers/iio/adc/qcom-spmi-adc5.c
+@@ -7,6 +7,7 @@
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
++#include <linux/iio/adc/qcom-vadc-common.h>
+ #include <linux/iio/iio.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+@@ -19,7 +20,6 @@
+ #include <linux/slab.h>
+ 
+ #include <dt-bindings/iio/qcom,spmi-vadc.h>
+-#include "qcom-vadc-common.h"
+ 
+ #define ADC5_USR_REVISION1			0x0
+ #define ADC5_USR_STATUS1			0x8
+diff --git a/drivers/iio/adc/qcom-spmi-vadc.c b/drivers/iio/adc/qcom-spmi-vadc.c
+index b0388f8a69f4..05ff948372b3 100644
+--- a/drivers/iio/adc/qcom-spmi-vadc.c
++++ b/drivers/iio/adc/qcom-spmi-vadc.c
+@@ -7,6 +7,7 @@
+ #include <linux/completion.h>
+ #include <linux/delay.h>
+ #include <linux/err.h>
++#include <linux/iio/adc/qcom-vadc-common.h>
+ #include <linux/iio/iio.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+@@ -20,8 +21,6 @@
+ 
+ #include <dt-bindings/iio/qcom,spmi-vadc.h>
+ 
+-#include "qcom-vadc-common.h"
+-
+ /* VADC register and bit definitions */
+ #define VADC_REVISION2				0x1
+ #define VADC_REVISION2_SUPPORTED_VADC		1
 diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
-index d11f3343ad52..40d77b3af1bb 100644
+index 40d77b3af1bb..ee94774b72e6 100644
 --- a/drivers/iio/adc/qcom-vadc-common.c
 +++ b/drivers/iio/adc/qcom-vadc-common.c
-@@ -2,6 +2,7 @@
- #include <linux/bug.h>
+@@ -3,14 +3,13 @@
  #include <linux/kernel.h>
  #include <linux/bitops.h>
-+#include <linux/fixp-arith.h>
+ #include <linux/fixp-arith.h>
++#include <linux/iio/adc/qcom-vadc-common.h>
  #include <linux/math64.h>
  #include <linux/log2.h>
  #include <linux/err.h>
-@@ -368,10 +369,9 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
- 	} else {
- 		/* result is between search_index and search_index-1 */
- 		/* interpolate linearly */
--		*output = (((s32)((pts[i].y - pts[i - 1].y) *
--			(input - pts[i - 1].x)) /
--			(pts[i].x - pts[i - 1].x)) +
--			pts[i - 1].y);
-+		*output = fixp_linear_interpolate(pts[i - 1].x, pts[i - 1].y,
-+						  pts[i].x, pts[i].y,
-+						  input);
- 	}
+ #include <linux/module.h>
+ #include <linux/units.h>
  
- 	return 0;
+-#include "qcom-vadc-common.h"
+-
+ /* Voltage to temperature */
+ static const struct vadc_map_pt adcmap_100k_104ef_104fb[] = {
+ 	{1758,	-40},
+diff --git a/drivers/iio/adc/qcom-vadc-common.h b/include/linux/iio/adc/qcom-vadc-common.h
+similarity index 99%
+rename from drivers/iio/adc/qcom-vadc-common.h
+rename to include/linux/iio/adc/qcom-vadc-common.h
+index 7e5f6428e311..03a9119edc71 100644
+--- a/drivers/iio/adc/qcom-vadc-common.h
++++ b/include/linux/iio/adc/qcom-vadc-common.h
+@@ -6,6 +6,8 @@
+ #ifndef QCOM_VADC_COMMON_H
+ #define QCOM_VADC_COMMON_H
+ 
++#include <linux/types.h>
++
+ #define VADC_CONV_TIME_MIN_US			2000
+ #define VADC_CONV_TIME_MAX_US			2100
+ 
 -- 
 2.28.0
 
