@@ -2,74 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E02288B15
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 16:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49629288BB2
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 16:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388917AbgJIObl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 10:31:41 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:37527 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388908AbgJIObX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 10:31:23 -0400
-Received: by mail-oi1-f195.google.com with SMTP id t77so10410677oie.4;
-        Fri, 09 Oct 2020 07:31:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fSY177QCDHA506ltAJfX+pyNUH3460/blci6wiOpURg=;
-        b=Dz3C4A04lOAU2/DC7VW/OvzSNx9wH8P11EnW33vywHUiY1EGjN3G6AuwrNOn2DOBgJ
-         cgYclT0jTClNTOmCEmNBKWR8A+p1URBZ7Ir/cNpwGutO8FjonOk0oUMtdnS6hg5TV/te
-         X0d6G2oPvhp0CBve3bd4LdW0CZOValsvsWjHKBWY7FaDFicqqF+MFMb52Ov6CFEw4G70
-         xumNSpUwU/dcVj6Ohpp55kExGjRyEdFWbDSMhm8JIQhB1VOe+TbLVzpVFVf8uBp+f3aF
-         JhzqpBb/CxrLSMEyVe2yxe3TzVV+09b33QlAmRLFDDomH1EgwULjHP6fZBNuFReSdfpK
-         kKzw==
-X-Gm-Message-State: AOAM533bXiYLJC90T4RsQs7RRpvriDhRYi/mGzUsgTHreDoVqM2okjfa
-        K/weLJpM4esNPhi9+1ceEoM6G2IlHGL+
-X-Google-Smtp-Source: ABdhPJxyqYEZTKZUYGot+5w2hJJtIfWrX5UV1nuE4AmB8RyXv8PbfdnyYX0HugcKNhLpSLyxvRMYCA==
-X-Received: by 2002:aca:4188:: with SMTP id o130mr2424926oia.167.1602253880742;
-        Fri, 09 Oct 2020 07:31:20 -0700 (PDT)
-Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y23sm8328527ooj.34.2020.10.09.07.31.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 07:31:20 -0700 (PDT)
-Received: (nullmailer pid 4109836 invoked by uid 1000);
-        Fri, 09 Oct 2020 14:31:19 -0000
-Date:   Fri, 9 Oct 2020 09:31:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     kholk11@gmail.com
-Cc:     martin.botka1@gmail.com, linux-pm@vger.kernel.org,
-        phone-devel@vger.kernel.org, georgi.djakov@linaro.org,
-        konradybcio@gmail.com, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
-        marijns95@gmail.com, robh+dt@kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add bindings for
- Qualcomm SDM660 NoC
-Message-ID: <20201009143119.GA4109583@bogus>
-References: <20201008204515.695210-1-kholk11@gmail.com>
- <20201008204515.695210-2-kholk11@gmail.com>
+        id S2388967AbgJIOlQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 10:41:16 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:47316 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388848AbgJIOlP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 10:41:15 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 099EfDs7130278;
+        Fri, 9 Oct 2020 09:41:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1602254473;
+        bh=CqA3/3irziC+4BcEaHbe20GdHaKIvMNwdaUsujUpDGI=;
+        h=From:To:CC:Subject:Date;
+        b=eZKgqzau8RPAvbAm2vii+BVWsDl+rBQLSDnmtCYfZNPQXNazr3lUyaIaOaD6e9qaF
+         mT6ORe6dBKzGIvWIxorC/gWl2xCE/qyDe9nx/jtH9MC056rm9ZFbl8TVR9PL/kBUYS
+         au+PzXc7xhfblV01nDHNDGXMV72YXW674B6SGsiw=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 099EfDlK079112
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 9 Oct 2020 09:41:13 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Fri, 9 Oct
+ 2020 09:41:13 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Fri, 9 Oct 2020 09:41:13 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 099EfDUY109157;
+        Fri, 9 Oct 2020 09:41:13 -0500
+From:   Dan Murphy <dmurphy@ti.com>
+To:     <sre@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <robh@kernel.org>,
+        Dan Murphy <dmurphy@ti.com>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Subject: [PATCH v4 1/2] dt-bindings: power: Add the bq25790 dt bindings
+Date:   Fri, 9 Oct 2020 09:41:11 -0500
+Message-ID: <20201009144112.3007-1-dmurphy@ti.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201008204515.695210-2-kholk11@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 08 Oct 2020 22:45:14 +0200, kholk11@gmail.com wrote:
-> From: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> 
-> Add the bindings for the Qualcomm SDM660-class NoC, valid for
-> SDM630, SDM636, SDM660 and SDA variants.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-> ---
->  .../bindings/interconnect/qcom,sdm660.yaml    | 147 ++++++++++++++++++
->  .../dt-bindings/interconnect/qcom,sdm660.h    | 116 ++++++++++++++
->  2 files changed, 263 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sdm660.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sdm660.h
-> 
+Add the bindings for the bq25790.
 
 Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Ricardo Rivera-Matos <r-rivera-matos@ti.com>
+Signed-off-by: Dan Murphy <dmurphy@ti.com>
+---
+ .../bindings/power/supply/bq25790.yaml        | 95 +++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/bq25790.yaml
+
+diff --git a/Documentation/devicetree/bindings/power/supply/bq25790.yaml b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+new file mode 100644
+index 000000000000..6d9178ce5a2b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/bq25790.yaml
+@@ -0,0 +1,95 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) 2020 Texas Instruments Incorporated
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/power/supply/bq25790.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: TI BQ25790 Switch Mode Buck-Boost Charger
++
++maintainers:
++  - Dan Murphy <dmurphy@ti.com>
++
++description: |
++  BQ25790 is a highly integrated switch-mode buck-boost charger for 1-4 cell
++  Li-ion batteries and Li-polymer batteries. The device charges a battery from a
++  wide range of input sources including legacy USB adapters to high voltage USB
++  PD adapters and traditional barrel adapters.
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - ti,bq25790
++      - ti,bq25792
++
++  reg:
++    maxItems: 1
++
++  ti,watchdog-timeout-ms:
++    default: 0
++    description: |
++      Watchdog timer in milli seconds. 0 (default) disables the watchdog.
++    minimum: 0
++    maximum: 160000
++    enum: [ 0, 500, 1000, 2000, 20000, 40000, 80000, 160000]
++
++  input-voltage-limit-microvolt:
++    description: |
++      Minimum input voltage limit in micro volts with a 100000 micro volt step.
++    minimum: 3600000
++    maximum: 22000000
++
++  input-current-limit-microamp:
++    description: |
++      Maximum input current limit in micro amps with a 100000 micro amp step.
++    minimum: 100000
++    maximum: 3300000
++
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: phandle to the battery node being monitored
++
++  interrupts:
++    maxItems: 1
++    description: |
++      Interrupt sends an active low, 256 μs pulse to host to report the charger
++      device status and faults.
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    bat: battery {
++      compatible = "simple-battery";
++      constant-charge-current-max-microamp = <2000000>;
++      constant-charge-voltage-max-microvolt = <4200000>;
++      precharge-current-microamp = <160000>;
++      charge-term-current-microamp = <160000>;
++    };
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c0 {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      bq25790: charger@6b {
++          compatible = "ti,bq25790";
++          reg = <0x6b>;
++          interrupt-parent = <&gpio1>;
++          interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
++          ti,watchdog-timeout-ms = <2000>;
++          input-current-limit-microamp = <3000000>;
++          input-voltage-limit-microvolt = <4500000>;
++          monitored-battery = <&bat>;
++      };
++    };
++
++...
+-- 
+2.28.0.585.ge1cfff676549
+
