@@ -2,306 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4572A288756
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 12:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D700288795
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 13:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731740AbgJIKw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 06:52:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:37851 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731678AbgJIKw5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 06:52:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602240774;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=b2KmhyJYuwfzClA4XY5dqci0ZQ4SyQqC2jJEQonb8LA=;
-        b=Lc9BaTUAeMbdnBYKiLo3lNQI8AEO/QvlxJtLEtNgKXf6SEd7tT3UoIxzVQxS9KqOPU0WGh
-        4hfrAJRQXW7RtAzDaCkkcUN4NtGvMaLCnv3UECgbBgz2hZE+yGLsBzzyw4puJc+pR0tnPG
-        By7NAY0HpvPV9KAueR+XzflmnWNU6xs=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-572-IhVEfASbMNm1CCykUF-N_Q-1; Fri, 09 Oct 2020 06:52:53 -0400
-X-MC-Unique: IhVEfASbMNm1CCykUF-N_Q-1
-Received: by mail-ed1-f70.google.com with SMTP id h6so346051edt.12
-        for <linux-pm@vger.kernel.org>; Fri, 09 Oct 2020 03:52:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=b2KmhyJYuwfzClA4XY5dqci0ZQ4SyQqC2jJEQonb8LA=;
-        b=sf6DRTIOvjVlz41YJCQzd2nLiaMjO0+/jCcX5YKS9mbvwP41jNGAsUTITPBZ9w9lNy
-         WV4icO6yLv2XLB9MO3oqm0fRHa4d6fMMdJPFHyW2V55Jd0RPGhLLmb7Ps0ilgZIMtCGu
-         cJ40UnZ6BWHabpQnVideXB6RlFNyvBp9pWfFQAMAGAX0ukljdgWUREpNiQCwxVIkbGy5
-         ncV7bRDtqc/OipoO16+ov2y3GApUqWd8Nw17JunhvxgsjNYh3gVM83oknJZ3RBKEzAn5
-         ZKVzYlg1Yth1BOG7k4F8wfyUzsMQLKac+gv8dHy9HPN/dVl+vxfdSDaS0D2aW2RBPwcQ
-         rf8Q==
-X-Gm-Message-State: AOAM532icdcJxH+TH04h+E2sFqbDC2i3eL7El3hai9N4hBq73kPV03VF
-        QOfIyLVQ1q0a2zJLRhLczygsxY7wgUBl8qSukj4a/s8ebgJHJtN1VtdQR20971iT57wgpM5wFEl
-        SSRecyKjd3bbhTbgflks=
-X-Received: by 2002:a05:6402:1446:: with SMTP id d6mr13836315edx.244.1602240771736;
-        Fri, 09 Oct 2020 03:52:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxk2PfNW1NkoSH52LJaUH6ugaTFiZoxJGCN7TcohXu5wXflzKhdG6ONwhefqnIoI4tfeXGwHw==
-X-Received: by 2002:a05:6402:1446:: with SMTP id d6mr13836295edx.244.1602240771475;
-        Fri, 09 Oct 2020 03:52:51 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id w4sm5953979edr.72.2020.10.09.03.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Oct 2020 03:52:50 -0700 (PDT)
-Subject: Re: [RFC] Documentation: Add documentation for new
- performance_profile sysfs class
-To:     Elia Devito <eliadevito@gmail.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     Mario Limonciello <mario.limonciello@dell.com>,
-        Mark Pearson <mpearson@lenovo.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Benjamin Berg <bberg@redhat.com>, linux-pm@vger.kernel.org,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>
-References: <20201003131938.9426-1-hdegoede@redhat.com>
- <20201003131938.9426-2-hdegoede@redhat.com> <2051253.irdbgypaU6@pce>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <79eac00c-1788-7a28-4229-b850f9fa6a64@redhat.com>
-Date:   Fri, 9 Oct 2020 12:52:50 +0200
+        id S1729280AbgJILI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 07:08:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:48166 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727181AbgJILI5 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Oct 2020 07:08:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A4BED6E;
+        Fri,  9 Oct 2020 04:08:56 -0700 (PDT)
+Received: from [10.57.17.201] (unknown [10.57.17.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 136AC3F66B;
+        Fri,  9 Oct 2020 04:08:53 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        sudeep.holla@arm.com, chris.redpath@arm.com,
+        morten.rasmussen@arm.com, linux-arm-kernel@lists.infradead.org
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7> <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+Date:   Fri, 9 Oct 2020 12:10:03 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <2051253.irdbgypaU6@pce>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+Hi Viresh, I'm glad it helped.
 
-On 10/5/20 12:29 AM, Elia Devito wrote:
-> Hi Hans,
+Please find below my reply.
+
+On 10/9/20 6:39 AM, Viresh Kumar wrote:
+> On 08-10-20, 17:00, Nicola Mazzucato wrote:
+>> On 10/8/20 4:03 PM, Ionela Voinescu wrote:
+>>> Hi Viresh,
+>>>
+>>> On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
+>>>> On 07-10-20, 13:58, Nicola Mazzucato wrote:
+>>>>> Hi Viresh,
+>>>>>
+>>>>> performance controls is what is exposed by the firmware through a protocol that
+>>>>> is not capable of describing hardware (say SCMI). For example, the firmware can
+>>>>> tell that the platform has N controls, but it can't say to which hardware they
+>>>>> are "wired" to. This is done in dt, where, for example, we map these controls
+>>>>> to cpus, gpus, etc.
+>>>>>
+>>>>> Let's focus on cpus.
+>>>>>
+>>>>> Normally we would have N of performance controls (what comes from f/w)
+>>>>> that that correspond to hardware clock/dvfs domains.
+>>>>>
+>>>>> However, some firmware implementations might benefit from having finer
+>>>>> grained information about the performance requirements (e.g.
+>>>>> per-CPU) and therefore choose to present M performance controls to the
+>>>>> OS. DT would be adjusted accordingly to "wire" these controls to cpus
+>>>>> or set of cpus.
+>>>>> In this scenario, the f/w will make aggregation decisions based on the
+>>>>> requests it receives on these M controls.
+>>>>>
+>>>>> Here we would have M cpufreq policies which do not necessarily reflect the
+>>>>> underlying clock domains, thus some s/w components will underperform
+>>>>> (EAS and thermal, for example).
+>>>>>
+>>>>> A real example would be a platform in which the firmware describes the system
+>>>>> having M per-cpu control, and the cpufreq subsystem will have M policies while
+>>>>> in fact these cpus are "performance-dependent" each other (e.g. are in the same
+>>>>> clock domain).
+>>>>
+>>>> If the CPUs are in the same clock domain, they must be part of the
+>>>> same cpufreq policy.
+>>>
+>>> But cpufreq does not currently support HW_ALL (I'm using the ACPI
+>>> coordination type to describe the generic scenario of using hardware
+>>> aggregation and coordination when establishing the clock rate of CPUs).
+>>>
+>>> Adding support for HW_ALL* will involve either bypassing some
+>>> assumptions around cpufreq policies or making core cpufreq changes.
+>>>
+>>> In the way I see it, support for HW_ALL involves either:
+>>>
+>>>  - (a) Creating per-cpu policies in order to allow each of the CPUs to
+>>>    send their own frequency request to the hardware which will do
+>>>    aggregation and clock rate decision at the level of the clock
+>>>    domain. The PSD domains (ACPI) and the new DT binding will tell
+>>>    which CPUs are actually in the same clock domain for whomever is
+>>>    interested, despite those CPUs not being in the same policy.
+>>>    This requires the extra mask that Nicola introduced.
+>>>
+>>>  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
+>>>    - Governors to stop aggregating (usually max) the information
+>>>      for each of the CPUs in the policy and convey to the core
+>>>      information for each CPU.
+>>>    - Cpufreq core to be able to receive and pass this information
+>>>      down to the drivers.
+>>>    - Drivers to be able to have some per cpu structures to hold
+>>>      frequency control (let's say SCP fast channel addresses) for
+>>>      each of the CPUs in the policy. Or have these structures in the
+>>>      cpufreq core/policy, to avoid code duplication in drivers.
+>>>
+>>> Therefore (a) is the least invasive but we'll be bypassing the rule
+>>> above. But to make that rule stick we'll have to make invasive cpufreq
+>>> changes (b).
+>>
+>> Regarding the 'rule' above of one cpufreq policy per clock domain, I would like
+>> to share my understanding on it. Perhaps it's a good opportunity to shed some light.
+>>
+>> Looking back in the history of CPUFreq, related_cpus was originally designed
+>> to hold the map of cpus within the same clock. Later on, the meaning of this
+>> cpumask changed [1].
+>> This led to the introduction of a new cpumask 'freqdomain_cpus'
+>> within acpi-cpufreq to keep the knowledge of hardware clock domains for
+>> sysfs consumers since related_cpus was not suitable anymore for this.
+>> Further on, this cpumask was assigned to online+offline cpus within the same clk
+>> domain when sw coordination is in use [2].
+>>
+>> My interpretation is that there is no guarantee that related_cpus holds the
+>> 'real' hardware clock implementation. As a consequence, it is not true anymore
+>> that cpus that are in the same clock domain will be part of the same
+>> policy.
+>>
+>> This guided me to think it would be better to have a cpumask which always holds
+>> the real hw clock domains in the policy.
+>>
+>>>
+>>> This is my current understanding and I'm leaning towards (a). What do
+>>> you think?
+>>>
+>>> *in not so many words, this is what these patches are trying to propose,
+>>> while also making sure it's supported for both ACPI and DT.
+>>>
+>>> BTW, thank you for your effort in making sense of this!
+>>>
+>>> Regards,
+>>> Ionela.
+>>>
+>>
+>> This could be a platform where per-cpu and perf-dependencies will be used:
+>>
+>> CPU:              0    1    2    3    4    5    6    7
+>> Type:             A    A    A    A    B    B    B    B
+>> Cluster:         [                                    ]
+>> perf-controls:   [  ] [  ] [  ] [ ]  [ ]  [ ]  [ ]  [ ]
+>> perf-dependency: [                ]  [                ]
+>> HW clock:        [                ]  [                ]
+>>
+>> The firmware will present 8 controls to the OS and each control is mapped to a
+>> cpu device via the standard dt. This is done so we can achieve hw coordination.
+>> What is required in these systems is to present to OS the information of which
+>> cpus belong to which clock domain. In other words, when hw coordinates we don't
+>> have any way at present in dt to understand how these cpus are dependent
+>> each other, from performance perspective (as opposed to ACPI where we have
+>> _PSD). Hence my proposal for the new cpu-perf-dependencies.
+>> This is regardless whether we decide to go for either a policy per-cpu or a
+>> policy per-domain.
+>>
+>> Hope it helps.
 > 
-> On 2020-10-03 9:19 a.m., Hans de Goede wrote:
->> On modern systems CPU/GPU/... performance is often dynamically configurable
->> in the form of e.g. variable clock-speeds and TPD. The performance is often
->> automatically adjusted to the load by some automatic-mechanism (which may
->> very well live outside the kernel).
->>
->> These auto performance-adjustment mechanisms often can be configured with
->> one of several performance-profiles, with either a bias towards low-power
->> consumption (and cool and quiet) or towards performance (and higher power
->> consumption and thermals).
->>
->> Introduce a new performance_profile class/sysfs API which offers a generic
->> API for selecting the performance-profile of these automatic-mechanisms.
->>
->> Cc: Mark Pearson <markpearson@lenovo.com>
->> Cc: Elia Devito <eliadevito@gmail.com>
->> Cc: Bastien Nocera <hadess@hadess.net>
->> Cc: Benjamin Berg <bberg@redhat.com>
->> Cc: linux-pm@vger.kernel.org
->> Cc: linux-acpi@vger.kernel.org
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->> .../testing/sysfs-class-performance_profile   | 104 ++++++++++++++++++
->> 1 file changed, 104 insertions(+)
->> create mode 100644
->> Documentation/ABI/testing/sysfs-class-performance_profile
->>
->> diff --git a/Documentation/ABI/testing/sysfs-class-performance_profile
->> b/Documentation/ABI/testing/sysfs-class-performance_profile new file mode
->> 100644
->> index 000000000000..9c67cae39600
->> --- /dev/null
->> +++ b/Documentation/ABI/testing/sysfs-class-performance_profile
->> @@ -0,0 +1,104 @@
->> +Performance-profile selection (e.g.
->> /sys/class/performance_profile/thinkpad_acpi/) +
->> +On modern systems CPU/GPU/... performance is often dynamically configurable
->> +in the form of e.g. variable clock-speeds and TPD. The performance is
->> often +automatically adjusted to the load by some automatic-mechanism
->> (which may +very well live outside the kernel).
->> +
->> +These auto performance-adjustment mechanisms often can be configured with
->> +one of several performance-profiles, with either a bias towards low-power
->> +consumption (and cool and quiet) or towards performance (and higher power
->> +consumption and thermals).
->> +
->> +The purpose of the performance_profile class is to offer a generic sysfs
->> +API for selecting the performance-profile of these automatic-mechanisms.
->> +
->> +Note that this API is only for selecting the performance-profile, it is
->> +NOT a goal of this API to allow monitoring the resulting performance
->> +characteristics. Monitoring performance is best done with device/vendor
->> +specific tools such as e.g. turbostat.
->> +
->> +Specifically when selecting a high-performance profile the actual achieved
->> +performance may be limited by various factors such as: the heat generated
->> by +other components, room temperature, free air flow at the bottom of a
->> laptop, +etc. It is explicitly NOT a goal of this API to let userspace know
->> about +any sub-optimal conditions which are impeding reaching the requested
->> +performance level.
->> +
->> +Since numbers are a rather meaningless way to describe performance-profiles
->> +this API uses strings to describe the various profiles. To make sure that
->> +userspace gets a consistent experience when using this API this API
->> document +defines a fixed set of profile-names. Drivers *must* map their
->> internal +profile representation/names onto this fixed set.
->> +
->> +If for some reason there is no good match when mapping then a new
->> profile-name +may be added. Drivers which wish to introduce new
->> profile-names must: +1. Have very good reasons to do so.
->> +2. Add the new profile-name to this document, so that future drivers which
->> also +   have a similar problem can use the same new. Usually new
->> profile-names will +   be added to the "extra profile-names" section of
->> this document. But in some +   cases the set of standard profile-names may
->> be extended.
->> +
->> +What:          /sys/class/performance_profile/<device>/
-> available_profiles
->> +Date:          October 2020
->> +Contact:       Hans de Goede <hdegoede@redhat.com>
->> +Description:
->> +               Reading this file gives a space separated list of profiles
->> +               supported for this device.
->> +
->> +               Drivers must use the following standard profile-names
-> whenever
->> +               possible:
->> +
->> +               low-power:              Emphasises low power consumption
->> +                                       (and also cool and
-> quiet)
->> +               balanced-low-power:     Balances between low power
-> consumption
->> +                                       and performance with a
-> slight bias
->> +                                       towards low power
->> +               balanced:               Balance between low power
-> consumption
->> +                                       and performance
->> +               balanced-performance:   Balances between performance and
-> low
->> +                                       power consumption with
-> a slight bias
->> +                                       towards performance
->> +               performance:            Emphasises performance
-> (and may lead to
->> +                                       higher temperatures and
-> fan speeds)
->> +
->> +               Userspace may expect drivers to offer at least several of
-> these
->> +               standard profile-names! If none of the above are a good
-> match
->> +               for some of the drivers profiles, then drivers may use
-> one of
->> +               these extra profile-names:
->> +               <reserved for future use>
->> +
->> +What:          /sys/class/performance_profile/<device>/current_profile
->> +Date:          October 2020
->> +Contact:       Hans de Goede <hdegoede@redhat.com>
->> +Description:
->> +               Reading this file gives the current selected profile for
-> this
->> +               device. Writing this file with one of the strings from
->> +               available_profiles changes the profile to the new value.
->> +
->> +               Reading this file may also return "custom". This is
-> intended for
->> +               drivers which have and export multiple knobs influencing
->> +               performance. Such drivers may very well still want to
-> offer a
->> +               set of profiles for easy of use and to be able to offer a
->> +               consistent standard API (this API) to userspace for
-> configuring
->> +               their performance. The "custom" value is intended for
-> when a
->> +               user has directly configured the knobs (through e.g. some
->> +               advanced control-panel for a GPU) and the knob values do
-> not
->> +               match any of the presets represented by the
->> +               performance-profiles. In this case writing this file will
->> +               override the modifications and restore the selected
-> presets.
->> +
->> +What:          /sys/class/performance_profile/<device>/type
->> +Date:          October 2020
->> +Contact:       Hans de Goede <hdegoede@redhat.com>
->> +Description:
->> +               Performance-profiles may be system-wide, or for a specific
->> +               device (e.g. CPU / GPU). System-wide profiles are
-> typically
->> +               used on devices where where a single cooling solution is
->> +               shared between all components, such as laptops and NUCs.
->> +
->> +               Reading this file indicates the type of the device for
-> which
->> +               the thermal-profile is being configured.
->> +
->> +               Valid values: "system"
->> +               Reserved for future use values: "cpu", "gpu"
->> --
->> 2.28.0
+> Oh yes, I get it now. Finally. Thanks for helping me out :)
 > 
-> This looks good to me, the only consideration I have is that in my opinion the
-> quiet profile and the cool profile should not necessarily match the low-power
-> state because the quiet profile could cause thermal throttling without
-> benefiting consumption, instead the cool profile (with the fans almost
-> always on) would lead to an unnecessary increase in noise.
+> So if I can say all this stuff in simple terms, this is what it will
+> be like:
+> 
+> - We don't want software aggregation of frequencies and so we need to
+>   have per-cpu policies even when they share their clock lines.
+> 
+> - But we still need a way for other frameworks to know which CPUs
+>   share the clock lines (that's what the perf-dependency is all about,
+>   right ?).
+> 
+> - We can't get it from SCMI, but need a DT based solution.
+> 
+> - Currently for the cpufreq-case we relied for this on the way OPP
+>   tables for the CPUs were described. i.e. the opp-table is marked as
+>   "shared" and multiple CPUs point to it.
+> 
+> - I wonder if we can keep using that instead of creating new bindings
+>   for exact same stuff ? Though the difference here would be that the
+>   OPP may not have any other entries.
 
-Ah I see, so you are interpreting cool as "cool to touch / low temps" not
-as in cool by not generating much heat. That is not an unreasonable interpretation
-and I see that the hp-wmi stuff you are working on has separate cool and
-quiet profiles (and does not seem to have one which explicit targets low-power).
+I thought about it and looked for other platforms' DT to see if can reuse
+existing opp information. Unfortunately I don't think it is optimal. The reason
+being that, because cpus have the same opp table it does not necessarily mean
+that they share a clock wire. It just tells us that they have the same
+capabilities (literally just tells us they have the same V/f op points).
+Unless I am missing something?
 
-So I agree that we should not lump these together leading to the following
-set of standard profile names (for now, can be extended in the future) :
+When comparing with ACPI/_PSD it becomes more intuitive that there is no
+equivalent way to reveal "perf-dependencies" in DT.
 
-                 quiet:                  Emphasises quiet running
-		cool:                   Emphasises low temperatures
-                 low-power:              Emphasises low power consumption
-                 balanced-low-power:     Balances between low power consumption
-                                         and performance with a slight bias
-                                         towards low power
-                 balanced:               Balance between low power consumption
-                                         and performance
-                 balanced-performance:   Balances between performance and low
-                                         power consumption with a slight bias
-                                         towards performance
-                 performance:            Emphasises performance
+Thank you for time on this.
 
+Regards
+Nicola
 
-> another question is the notebooks that offer both quiet and cool profile,
-> which profile should be associated as low power?
-
-That is a good question, IMHO the kernels role here is to provide a
-mechanism to control these kinda profiles in various systems / components.
-
-If the UI for this takes the form of a slider going from low-power
-to performance, then on hardware which only offers cool and quiet
-as options, like the hp-wmi interface seems to do, which one to
-pick when the user selects low-power is a policy decision left
-up to userspace. Likely the performance-profile-daemon Bastien is
-working on, so from the sysfs API pov this is solved by just offering
-cool and quiet as profile choices and then userspace needs to figure
-out what to do (sorry Bastien).
-
-Note if the driver knows that one of cool vs quiet also leads
-to low-power, while for the other one that is not so much the case,
-then it would make sense for the driver to also offer low-power as
-an alias to one of the two (*) since the chances that the driver knows
-this are better then that the performance-profile-daemon will know.
-
-Regards,
-
-Hans
-
-
-*) or maybe in that case offer only low-power + one of the
-other 2 options ?  Either way works I guess...
-
+> 
