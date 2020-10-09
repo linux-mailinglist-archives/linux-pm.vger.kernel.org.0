@@ -2,293 +2,255 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C050288C59
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 17:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09BF288C8A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Oct 2020 17:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388914AbgJIPPQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Oct 2020 11:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388745AbgJIPPP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Oct 2020 11:15:15 -0400
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1AEFC0613D2
-        for <linux-pm@vger.kernel.org>; Fri,  9 Oct 2020 08:15:14 -0700 (PDT)
-Received: by mail-lj1-x243.google.com with SMTP id i2so9978576ljg.4
-        for <linux-pm@vger.kernel.org>; Fri, 09 Oct 2020 08:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=E6Nd8bFLpZfzhnJqMtPJPONxQyfB4cH/rdHKzqew4oo=;
-        b=Qc/JMWf/ffAVqqTQcI9JG4TLUusWr4+kaYKzlWwyTDeUgS1j7voTIwEya6AAJzKkol
-         faszaKpvwTwYMpoWr7PvAuqEVkrcOaLdwCa5Tio52Iv+xaVEkA13ERUSzISHWEgYMoRV
-         +U1Lbz3GTYcKT2y466elZ15AG/H25fvV0Txp5RYLd3XvpwCxfUq9n/1y6uwF9Is2lEmE
-         VqmRzDBVzXqskzg90Rt8TxLq9oiAWhQvvDZlkOMYX3wkoXcB6MRzFN2xKR9r2QPYuNdO
-         d6WJ0xXYuicfxNruqVEMs37/qJRqVoy1OTUGKJSAjgNb1aYV1yhj7wex1NgN+Xk7JxlM
-         dNgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=E6Nd8bFLpZfzhnJqMtPJPONxQyfB4cH/rdHKzqew4oo=;
-        b=tXucUztYBXvj2M0yNgZ6D2JbOyeNrOLgW+QmuWSILFpqH9A/JYjkYFwfmmYCQyLQFX
-         PXQougz/Nk0JgyzdYljew97fyX42WMzEycZly4W33AreNVj1jCPfmOeciE6lKRo9IEUE
-         BxD7ijMtexu5SVpSJuRr8fij66YZ6NvQADt54JF4N0zMLxoN5tLZsPwT4INgRIPkEOTQ
-         0snBDaZEamnqPGkK84BgEqmR/LmQ+5saAtGYiu6LZ7vDWonDK7+rPeE6n2B9G8H6oNci
-         Og2JLJ3AGSkqc5UoAiWoKpi25PvAKv54KT6O4l7AQVCgbRKtmzOlJCtKXJ6rj5DPSL+W
-         4CPQ==
-X-Gm-Message-State: AOAM531Ugvfb4xJXA3orgC+j/4GALGXe+/UkngK9BXUl2qTeWZ+hwAjL
-        HLL00jlxDwwixt14QJqVXr5txg==
-X-Google-Smtp-Source: ABdhPJyMApbqWWYKrRxdaZeohuRpwHPicgxI00Hs2697xZEQeG8le9Oh2C+OAPB+UP3mMy0RKFGWhg==
-X-Received: by 2002:a2e:9d94:: with SMTP id c20mr5363714ljj.445.1602256513326;
-        Fri, 09 Oct 2020 08:15:13 -0700 (PDT)
-Received: from [192.168.1.211] ([188.162.65.231])
-        by smtp.gmail.com with ESMTPSA id t17sm743958lff.147.2020.10.09.08.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Oct 2020 08:15:12 -0700 (PDT)
-Subject: Re: [PATCH v7 07/10] thermal: qcom: add support for adc-tm5 PMIC
- thermal monitor
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Hartmut Knaack <knaack.h@gmx.de>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Peter Meerwald-Stadler <pmeerw@pmeerw.net>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Jishnu Prakash <jprakash@qti.qualcomm.com>
-References: <20201007135433.1041979-1-dmitry.baryshkov@linaro.org>
- <20201007135433.1041979-8-dmitry.baryshkov@linaro.org>
- <3d6bd019-1516-5307-ef49-b6279fbfbe82@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Message-ID: <642645af-19f1-7ac1-a10a-7f943c757c7f@linaro.org>
-Date:   Fri, 9 Oct 2020 18:15:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.2
+        id S2388719AbgJIP0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Oct 2020 11:26:48 -0400
+Received: from foss.arm.com ([217.140.110.172]:53720 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387664AbgJIP0s (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 9 Oct 2020 11:26:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7B811063;
+        Fri,  9 Oct 2020 08:26:47 -0700 (PDT)
+Received: from [10.57.17.201] (unknown [10.57.17.201])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B39C3F70D;
+        Fri,  9 Oct 2020 08:26:45 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+To:     Rob Herring <robh@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7> <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+ <20201009140141.GA4048593@bogus>
+From:   Nicola Mazzucato <nicola.mazzucato@arm.com>
+Message-ID: <88f46cd0-226a-fb3c-0bd7-59688a566ea4@arm.com>
+Date:   Fri, 9 Oct 2020 16:28:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <3d6bd019-1516-5307-ef49-b6279fbfbe82@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20201009140141.GA4048593@bogus>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/10/2020 19:22, Daniel Lezcano wrote:
-> On 07/10/2020 15:54, Dmitry Baryshkov wrote:
->> Add support for Thermal Monitoring part of PMIC5. This part is closely
->> coupled with ADC, using it's channels directly. ADC-TM support
->> generating interrupts on ADC value crossing low or high voltage bounds,
->> which is used to support thermal trip points.
+Hi Viresh and Rob,
+
+first of all, thanks once again for looking into this!
+
+On 10/9/20 3:01 PM, Rob Herring wrote:
+> On Fri, Oct 09, 2020 at 12:10:03PM +0100, Nicola Mazzucato wrote:
+>> Hi Viresh, I'm glad it helped.
 >>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   drivers/iio/adc/qcom-vadc-common.c       |  62 +++
->>   drivers/iio/adc/qcom-vadc-common.h       |   3 +
->>   drivers/thermal/qcom/Kconfig             |  11 +
->>   drivers/thermal/qcom/Makefile            |   1 +
->>   drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 622 +++++++++++++++++++++++
->>   5 files changed, 699 insertions(+)
->>   create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+>> Please find below my reply.
 >>
->> diff --git a/drivers/iio/adc/qcom-vadc-common.c b/drivers/iio/adc/qcom-vadc-common.c
->> index 40d77b3af1bb..e58e393b8713 100644
->> --- a/drivers/iio/adc/qcom-vadc-common.c
->> +++ b/drivers/iio/adc/qcom-vadc-common.c
->> @@ -377,6 +377,42 @@ static int qcom_vadc_map_voltage_temp(const struct vadc_map_pt *pts,
->>   	return 0;
->>   }
->>   
->> +static s32 qcom_vadc_map_temp_voltage(const struct vadc_map_pt *pts,
->> +				      u32 tablesize, int input)
->> +{
->> +	bool descending = 1;
->> +	u32 i = 0;
->> +
+>> On 10/9/20 6:39 AM, Viresh Kumar wrote:
+>>> On 08-10-20, 17:00, Nicola Mazzucato wrote:
+>>>> On 10/8/20 4:03 PM, Ionela Voinescu wrote:
+>>>>> Hi Viresh,
+>>>>>
+>>>>> On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
+>>>>>> On 07-10-20, 13:58, Nicola Mazzucato wrote:
+>>>>>>> Hi Viresh,
+>>>>>>>
+>>>>>>> performance controls is what is exposed by the firmware through a protocol that
+>>>>>>> is not capable of describing hardware (say SCMI). For example, the firmware can
+>>>>>>> tell that the platform has N controls, but it can't say to which hardware they
+>>>>>>> are "wired" to. This is done in dt, where, for example, we map these controls
+>>>>>>> to cpus, gpus, etc.
+>>>>>>>
+>>>>>>> Let's focus on cpus.
+>>>>>>>
+>>>>>>> Normally we would have N of performance controls (what comes from f/w)
+>>>>>>> that that correspond to hardware clock/dvfs domains.
+>>>>>>>
+>>>>>>> However, some firmware implementations might benefit from having finer
+>>>>>>> grained information about the performance requirements (e.g.
+>>>>>>> per-CPU) and therefore choose to present M performance controls to the
+>>>>>>> OS. DT would be adjusted accordingly to "wire" these controls to cpus
+>>>>>>> or set of cpus.
+>>>>>>> In this scenario, the f/w will make aggregation decisions based on the
+>>>>>>> requests it receives on these M controls.
+>>>>>>>
+>>>>>>> Here we would have M cpufreq policies which do not necessarily reflect the
+>>>>>>> underlying clock domains, thus some s/w components will underperform
+>>>>>>> (EAS and thermal, for example).
+>>>>>>>
+>>>>>>> A real example would be a platform in which the firmware describes the system
+>>>>>>> having M per-cpu control, and the cpufreq subsystem will have M policies while
+>>>>>>> in fact these cpus are "performance-dependent" each other (e.g. are in the same
+>>>>>>> clock domain).
+>>>>>>
+>>>>>> If the CPUs are in the same clock domain, they must be part of the
+>>>>>> same cpufreq policy.
+>>>>>
+>>>>> But cpufreq does not currently support HW_ALL (I'm using the ACPI
+>>>>> coordination type to describe the generic scenario of using hardware
+>>>>> aggregation and coordination when establishing the clock rate of CPUs).
+>>>>>
+>>>>> Adding support for HW_ALL* will involve either bypassing some
+>>>>> assumptions around cpufreq policies or making core cpufreq changes.
+>>>>>
+>>>>> In the way I see it, support for HW_ALL involves either:
+>>>>>
+>>>>>  - (a) Creating per-cpu policies in order to allow each of the CPUs to
+>>>>>    send their own frequency request to the hardware which will do
+>>>>>    aggregation and clock rate decision at the level of the clock
+>>>>>    domain. The PSD domains (ACPI) and the new DT binding will tell
+>>>>>    which CPUs are actually in the same clock domain for whomever is
+>>>>>    interested, despite those CPUs not being in the same policy.
+>>>>>    This requires the extra mask that Nicola introduced.
+>>>>>
+>>>>>  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
+>>>>>    - Governors to stop aggregating (usually max) the information
+>>>>>      for each of the CPUs in the policy and convey to the core
+>>>>>      information for each CPU.
+>>>>>    - Cpufreq core to be able to receive and pass this information
+>>>>>      down to the drivers.
+>>>>>    - Drivers to be able to have some per cpu structures to hold
+>>>>>      frequency control (let's say SCP fast channel addresses) for
+>>>>>      each of the CPUs in the policy. Or have these structures in the
+>>>>>      cpufreq core/policy, to avoid code duplication in drivers.
+>>>>>
+>>>>> Therefore (a) is the least invasive but we'll be bypassing the rule
+>>>>> above. But to make that rule stick we'll have to make invasive cpufreq
+>>>>> changes (b).
+>>>>
+>>>> Regarding the 'rule' above of one cpufreq policy per clock domain, I would like
+>>>> to share my understanding on it. Perhaps it's a good opportunity to shed some light.
+>>>>
+>>>> Looking back in the history of CPUFreq, related_cpus was originally designed
+>>>> to hold the map of cpus within the same clock. Later on, the meaning of this
+>>>> cpumask changed [1].
+>>>> This led to the introduction of a new cpumask 'freqdomain_cpus'
+>>>> within acpi-cpufreq to keep the knowledge of hardware clock domains for
+>>>> sysfs consumers since related_cpus was not suitable anymore for this.
+>>>> Further on, this cpumask was assigned to online+offline cpus within the same clk
+>>>> domain when sw coordination is in use [2].
+>>>>
+>>>> My interpretation is that there is no guarantee that related_cpus holds the
+>>>> 'real' hardware clock implementation. As a consequence, it is not true anymore
+>>>> that cpus that are in the same clock domain will be part of the same
+>>>> policy.
+>>>>
+>>>> This guided me to think it would be better to have a cpumask which always holds
+>>>> the real hw clock domains in the policy.
+>>>>
+>>>>>
+>>>>> This is my current understanding and I'm leaning towards (a). What do
+>>>>> you think?
+>>>>>
+>>>>> *in not so many words, this is what these patches are trying to propose,
+>>>>> while also making sure it's supported for both ACPI and DT.
+>>>>>
+>>>>> BTW, thank you for your effort in making sense of this!
+>>>>>
+>>>>> Regards,
+>>>>> Ionela.
+>>>>>
+>>>>
+>>>> This could be a platform where per-cpu and perf-dependencies will be used:
+>>>>
+>>>> CPU:              0    1    2    3    4    5    6    7
+>>>> Type:             A    A    A    A    B    B    B    B
+>>>> Cluster:         [                                    ]
+>>>> perf-controls:   [  ] [  ] [  ] [ ]  [ ]  [ ]  [ ]  [ ]
+>>>> perf-dependency: [                ]  [                ]
+>>>> HW clock:        [                ]  [                ]
+>>>>
+>>>> The firmware will present 8 controls to the OS and each control is mapped to a
+>>>> cpu device via the standard dt. This is done so we can achieve hw coordination.
+>>>> What is required in these systems is to present to OS the information of which
+>>>> cpus belong to which clock domain. In other words, when hw coordinates we don't
+>>>> have any way at present in dt to understand how these cpus are dependent
+>>>> each other, from performance perspective (as opposed to ACPI where we have
+>>>> _PSD). Hence my proposal for the new cpu-perf-dependencies.
+>>>> This is regardless whether we decide to go for either a policy per-cpu or a
+>>>> policy per-domain.
+>>>>
+>>>> Hope it helps.
+>>>
+>>> Oh yes, I get it now. Finally. Thanks for helping me out :)
+>>>
+>>> So if I can say all this stuff in simple terms, this is what it will
+>>> be like:
+>>>
+>>> - We don't want software aggregation of frequencies and so we need to
+>>>   have per-cpu policies even when they share their clock lines.
+>>>
+>>> - But we still need a way for other frameworks to know which CPUs
+>>>   share the clock lines (that's what the perf-dependency is all about,
+>>>   right ?).
+>>>
+>>> - We can't get it from SCMI, but need a DT based solution.
+>>>
+>>> - Currently for the cpufreq-case we relied for this on the way OPP
+>>>   tables for the CPUs were described. i.e. the opp-table is marked as
+>>>   "shared" and multiple CPUs point to it.
+>>>
+>>> - I wonder if we can keep using that instead of creating new bindings
+>>>   for exact same stuff ? Though the difference here would be that the
+>>>   OPP may not have any other entries.
+>>
+>> I thought about it and looked for other platforms' DT to see if can reuse
+>> existing opp information. Unfortunately I don't think it is optimal. The reason
+>> being that, because cpus have the same opp table it does not necessarily mean
+>> that they share a clock wire. It just tells us that they have the same
+>> capabilities (literally just tells us they have the same V/f op points).
+>> Unless I am missing something?
+>>
+>> When comparing with ACPI/_PSD it becomes more intuitive that there is no
+>> equivalent way to reveal "perf-dependencies" in DT.
+
+@Viresh
+I am sorry I misread your reply earlier thus I did not pay attention on that
+property.
+And yes, it is exactly as how you have described :)
+In the case 1 (different opps, different clk) and case 2 (same opps, different
+clk) we provide v/f points. In case 3, we add 'opp-shared' property in opp table
+to tell that the cpus with this opp table share a clock line.
+
+Here are my thoughts on this 3rd case:
+- the information of 'share the same clock line' comes correctly from DT as it's
+purely a hw description. The same applies for cpu-perf-dependencies.
+- because the opp table can come from any firmware, we won't have any opp table
+in DT, thus we won't be able to take advantage of 'opp-shared' I am afraid.
+
 > 
-> The code seems like a bit
-
-Could you please clarify, what do you mean?
-
+> You should be able to by examining the clock tree. But perhaps SCMI 
+> abstracts all that and just presents virtual clocks without parent 
+> clocks available to determine what clocks are shared? Fix SCMI if that's 
+> the case.
 > 
->> +	/* Check if table is descending or ascending */
->> +	if (tablesize > 1) {
->> +		if (pts[0].y < pts[1].y)
->> +			descending = 0;
->> +	}
->> +
->> +	while (i < tablesize) {
->> +		if (descending && pts[i].y < input) {
->> +			/* table entry is less than measured*/
->> +			 /* value and table is descending, stop */
->> +			break;
->> +		} else if ((!descending) && pts[i].y > input) {
->> +			/* table entry is greater than measured*/
->> +			/*value and table is ascending, stop */
->> +			break;
->> +		}
->> +		i++;
->> +	}
->> +
->> +	if (i == 0)
->> +		return pts[0].x;
->> +	if (i == tablesize)
->> +		return pts[tablesize - 1].x;
->> +
->> +	/* result is between search_index and search_index-1 */
->> +	/* interpolate linearly */
->> +	return fixp_linear_interpolate(pts[i - 1].y, pts[i - 1].x,
->> +			pts[i].y, pts[i].x, input);
->> +}
->> +
->>   static void qcom_vadc_scale_calib(const struct vadc_linear_graph *calib_graph,
->>   				  u16 adc_code,
->>   				  bool absolute,
-
-[....]
-
->> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
->> new file mode 100644
->> index 000000000000..c09a50f59053
->> --- /dev/null
->> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
->> @@ -0,0 +1,622 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * Copyright (c) 2012-2020, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2020 Linaro Limited
->> + */
+> Rob
 > 
-> If it is possible, please give a description of this sensor, the
-> different register mapping, etc ... So it will be easier to review and
-> debug in the future.
 
-In which form? I don't often see such descriptions in the code.
+@Rob
+I think that performance is not only dealing with clocks. Possibly my expression
+of 'clock line' was not entirely precise, though it was good enough to
+understand the problem. It should have rather been "performance line". So the
+information from the clock tree would not be precise too.
 
-> 
-> 
->> +#include <linux/bitfield.h>
->> +#include <linux/iio/consumer.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/of_device.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/regmap.h>
->> +#include <linux/thermal.h>
->> +
->> +#include "../../iio/adc/qcom-vadc-common.h"
-> 
-> Do not use this form of inclusion.
+The issue here is for any DT without opp table, cause it can come from ANY
+firmware, and therefore we can't reuse 'opp-shared'.
 
-Fixed.
+Once again, thanks for providing your insights!
 
-
-[...]
-
-> 
->> +	if (ret) {
->> +		dev_err(chip->dev, "read status low failed with %d\n", ret);
->> +		return IRQ_HANDLED;
->> +	}
-> 
-> Can you identify the reasons those reads can fail? If it is not supposed
-> to happen it is fine but otherwise we don't want to be flooded with
-> error messages on the console.
-
-Changed to use unlikely(ret) as way to show that this is not supposed to 
-happen.
-
-
->> +		lower_set = (status_low & BIT(ch)) &&
->> +			(ctl & ADC_TM5_M_MEAS_EN) &&
->> +			(ctl & ADC_TM5_M_LOW_THR_INT_EN);
->> +
->> +		upper_set = (status_high & BIT(ch)) &&
->> +			(ctl & ADC_TM5_M_MEAS_EN) &&
->> +			(ctl & ADC_TM5_M_HIGH_THR_INT_EN);
-> 
-> Is the check (ctl & ADC_TM5_M_[HIGH|LOW]_THR_INT_EN) necessary if
-> status_high or status_low is true ?
-> 
-> Isn't possible to simplify that with:
-> 
-> eg.
-> 
-> 		if (!(ctl & ADC_TM5_M_MEAS_EN)
-> 			continue;
-> 
-> 		if (!(status_high & BIT(ch)) && !(status_low & BIT(ch))
-> 			continue;
-> 
-> 		thermal_zone_device_update(chip->channels[i].tzd,
-> 					THERMAL_EVENT_UNSPECIFIED);
-> 
-> ??
-
-I'd prefer to leave the check as is, having no information if status bit 
-can be updated without actually triggering IRQ.
-
-I've moved ADC_TM5_MEAS_EN check upwards to simplify this.
-
->> +static int adc_tm5_configure(struct adc_tm5_channel *channel, int low_temp, int high_temp)
->> +{
->> +	struct adc_tm5_chip *chip = channel->chip;
->> +	u8 buf[8];
->> +	u16 reg = ADC_TM5_M_ADC_CH_SEL_CTL(channel->channel);
->> +	int ret = 0;
->> +
->> +	ret = adc_tm5_read(chip, reg, buf, sizeof(buf));
->> +	if (ret) {
->> +		dev_err(chip->dev, "block read failed with %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	/* Update ADC channel select */
->> +	buf[0] = channel->adc_channel;
->> +
->> +	/* Warm temperature corresponds to low voltage threshold */
->> +	if (high_temp != INT_MAX) {
->> +		u16 adc_code = qcom_adc_tm5_temp_volt_scale(channel->prescale,
->> +				chip->data->full_scale_code_volt, high_temp);
->> +
->> +		buf[1] = adc_code & 0xff;
->> +		buf[2] = adc_code >> 8;
->> +		buf[7] |= ADC_TM5_M_LOW_THR_INT_EN;
->> +	} else {
->> +		buf[7] &= ~ADC_TM5_M_LOW_THR_INT_EN;
->> +	}
->> +
->> +	/* Cool temperature corresponds to high voltage threshold */
->> +	if (low_temp != -INT_MAX) {
-> 
-> Is it really -INT_MAX ? or INT_MIN
-> 
-> -2147483647 vs -2147483648 ?
-
-It is really -INT_MAX, see thermal_zone_set_trips().
-
-[...]
-
->> +
->> +	for (i = 0; i < chip->nchannels; i++) {
->> +		if (chip->channels[i].channel >= channels_available) {
->> +			dev_err(chip->dev, "Invalid channel %d\n", chip->channels[i].channel);
->> +			return -EINVAL;
->> +		}
-> 
-> Is it a sanity check to make sure the hardware and the DT are compatible ?
-
-Yes.
-
-
--- 
-With best wishes
-Dmitry
+Best regards,
+Nicola
