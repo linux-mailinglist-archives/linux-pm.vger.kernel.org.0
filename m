@@ -2,145 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FC028BE9D
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 19:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 462B528BEA8
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 19:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403923AbgJLREp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 13:04:45 -0400
-Received: from mail-dm6nam12on2072.outbound.protection.outlook.com ([40.107.243.72]:14977
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2403845AbgJLREp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Oct 2020 13:04:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WQweAuPSI6+3YMswXhstSYp0gYFykiJpvbwycCO+rLuZvl8xVNuSaqcWX4HIf2B30Jcd27IlKIst7ECuhopLEKGibppv6YYx6GoiYieYIpuqYlBfzSVzUfQtJS12Iu2hmGsLeFUPxy/Om9wj1ZQM7P1fh5RswhV65b3AUMSxfJye4qmSqCkQc50otPZVnjhX3YtuWous/LEbWUC9fUwz1UWzxuRX17UusqhKu5yFAN4rcucEcoKGCsZk9INdp1u24aSAnr0jGsM7PprfYeccMuNZlqJgU+wFBY2TFNx2Nbi8KyJXIPkqABhL0kjCUIfikRfBghz1FSUnB1JKaEAqog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FQ/DFQmZE5ZSsMPvaMr8LjRo7hj1IyeHUBNyuK3r81k=;
- b=j5QxskHErzRksotS8/533I+oqEMKr/MkfK5ofLd9v2ji+gZJyy0jYhWdZOQRPXaaDNqQtMoQPpsYawSWZhaj3KMv3QgZwZGkIw6ZOtSJhZG3YogOQadTZhOwh4S0BWG3AZ0xuRfTVimD48EheZzeFiuLt8zucsP4nPiNbaQdqs9jP7+6ka11Ma0+Z4XTjZJuTcoQxITDfE/wzDSJ3+24rODrRdozBn7H6z1sba/C9K5kSPGUhuOE7WmHsNs+PCiBfoX9MzJRflNjtgiqj+UQMkR8oApxHkz1npcNQpbCJseNmJHvcmW275+FFP2fWj8RYguviszKvzimjPkzgFUFtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FQ/DFQmZE5ZSsMPvaMr8LjRo7hj1IyeHUBNyuK3r81k=;
- b=pbwfGFId7Ieu3LbSXuvu9t7PU8YGykbNDSVxLuHf1EvoK3DPYAPCFER42jwDJW6LlPDAXM5knjs4w+npd3BjNFaUvmnzDDi1O5SxfPjtgREKZ1MCi9xx8DApv6yIa6CNFVukGvhhRsoourZ+sQd+KNbTFE26ksi8mjilwBrx7sY=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=labundy.com;
-Received: from SN6PR08MB5517.namprd08.prod.outlook.com (2603:10b6:805:fb::32)
- by SN6PR08MB4093.namprd08.prod.outlook.com (2603:10b6:805:1e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.24; Mon, 12 Oct
- 2020 17:04:42 +0000
-Received: from SN6PR08MB5517.namprd08.prod.outlook.com
- ([fe80::c989:9cea:baa6:8254]) by SN6PR08MB5517.namprd08.prod.outlook.com
- ([fe80::c989:9cea:baa6:8254%7]) with mapi id 15.20.3455.029; Mon, 12 Oct 2020
- 17:04:42 +0000
-Date:   Mon, 12 Oct 2020 12:04:35 -0500
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] PM / sysfs: Add the ability to call PM operations
- manually
-Message-ID: <20201012170435.GA7275@labundy.com>
-References: <1602461364-17300-1-git-send-email-jeff@labundy.com>
- <CAJZ5v0jmnWxnpwHEV3k04_v4YV+oOAm7JE3OyMbKe-K18x8OsA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jmnWxnpwHEV3k04_v4YV+oOAm7JE3OyMbKe-K18x8OsA@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [136.49.227.119]
-X-ClientProxiedBy: DM6PR03CA0001.namprd03.prod.outlook.com
- (2603:10b6:5:40::14) To SN6PR08MB5517.namprd08.prod.outlook.com
- (2603:10b6:805:fb::32)
+        id S2404014AbgJLRGg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 13:06:36 -0400
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14820 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404011AbgJLRGg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 13:06:36 -0400
+Received: from hqmail.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, AES256-SHA)
+        id <B5f848ca90000>; Mon, 12 Oct 2020 10:04:41 -0700
+Received: from [10.41.23.128] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 12 Oct
+ 2020 17:06:27 +0000
+Subject: Re: [PATCH v2 2/2] cpufreq: tegra194: Fix unlisted boot freq warning
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rjw@rjwysocki.net>, <sudeep.holla@arm.com>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <ksitaraman@nvidia.com>,
+        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
+References: <1602162066-26442-1-git-send-email-sumitg@nvidia.com>
+ <1602162066-26442-3-git-send-email-sumitg@nvidia.com>
+ <20201012061335.nht4hnn7kdjupakn@vireshk-i7>
+From:   Sumit Gupta <sumitg@nvidia.com>
+Message-ID: <4fb38a3b-ed26-6c02-e9de-59ce99ce563e@nvidia.com>
+Date:   Mon, 12 Oct 2020 22:36:25 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from labundy.com (136.49.227.119) by DM6PR03CA0001.namprd03.prod.outlook.com (2603:10b6:5:40::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Mon, 12 Oct 2020 17:04:41 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 734957bb-7b66-4a40-c24c-08d86ed0e90a
-X-MS-TrafficTypeDiagnostic: SN6PR08MB4093:
-X-Microsoft-Antispam-PRVS: <SN6PR08MB40936125A981784490C8FEA8D3070@SN6PR08MB4093.namprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CoUNnePGRKo84c6jsWPQZE19WGAf9X8wjj1YdWj9h9MN0qA1T/c9rMGCqhg25k8uYKILtWsUTDGrb59tPKwH7NIZZIdz7/k/CImuJoVswq81Levb5iOVU7qgr08oiDXUBQ3D6Pd22I0ofBMYhYxZZTyphXw9p4u62TWCzCF7NDh9keTu3WPjXCS3McisK4OY7bCVPUuVO5g4eca3IdpVLyJji6FbeuSOxtRFk+O1RANtAEdQ9Gqhjvvv/MA9mmdzHiQHtUYremMpYKMw50KB7ioaNZA6G4o551TTzxaEEVjfKOPH33b42Tk3z2Y+ZwtjqZ+Joy2MmF/R09g1HVDVnw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5517.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(366004)(396003)(376002)(136003)(346002)(54906003)(316002)(186003)(6916009)(26005)(8936002)(55016002)(8886007)(16526019)(66946007)(7696005)(66556008)(5660300002)(66476007)(53546011)(33656002)(2906002)(478600001)(86362001)(8676002)(6666004)(52116002)(36756003)(2616005)(1076003)(83380400001)(956004)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: jsJD/JDpuAzvuBpmcScjiq9D+BCbFPW72PxsyOlImgi9eZQFdyuq8a2i4v1ntHflOJdLPzBY+ACKOkjgwoRYVViRQkNS+HPojU5ia9rS5kxvhSJZujVKzfkS/MiaRmermhk+R3inJ27jUuBsFKtzfbsW5Jl6VVURBOQ6oTEKAJhAQYWCNROskgPSUCAgNarsfO2/TtCwI+g9tTAv7Cn30ipzFT73DTCRcGgXHztN8f8Em1UVqcGt72Obmd4kBj4zhOUGGopiRimj7oXIRbi7bbNeD6UV2KFf4SuD24s/Nmvw3zJ83KwahC8pE39XWyLjHzklX9zoeWHLnAhX4mTxfKony/+zYMz2zDYBc2hYOQi8gvm4RHkl7TAsthAxbH5Vfdmn2gHbAYstXQmyAX+rf0ZhOpkjCYlDcC7tF14j3b8K0XQ2FX0ZaNyFjdTHYFh+yhZOQ3fdin3A2AqL68IGnbQ+6GBikNZ/cP1Tn+EG4wHQHgBVpyhf9+wo50uWlKuesEAfAalZ286S+1dTYI4e+umFZQSfEpATdDvCbL9hGYI3d1elQs2M2di+qwyMm6OG/plgfyh9dtWs4J3mrBcyVb/kEAWXmfWeJRkE4DaQidrxajBVnkH9sbaSzUxn3CVU+SXz/Yi6wljB8PfSTfkbbg==
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 734957bb-7b66-4a40-c24c-08d86ed0e90a
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR08MB5517.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2020 17:04:41.9162
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bj+l3n9pIO9eumH4ca/cR43vhsUJNH/1HvKsHyPxK+yZ+LD23/pxGGC3G2Kdd9ycD8qWEtdTZS1ZBtKfk9OdKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB4093
+In-Reply-To: <20201012061335.nht4hnn7kdjupakn@vireshk-i7>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1602522281; bh=ie/Fj4acUBaQsFdQijWZk+3BtMFnqzGxCLrm9LrQs4I=;
+        h=Subject:To:CC:References:From:Message-ID:Date:User-Agent:
+         MIME-Version:In-Reply-To:Content-Type:Content-Language:
+         Content-Transfer-Encoding:X-Originating-IP:X-ClientProxiedBy;
+        b=ntZ3XZzRgUBoTpN/QAu1TaiG5Zvji265XxQvtxpjA/TMug16ELujWE3Qzm7x8EKcb
+         VkG1KE4fQba7rPVIJeMLTlJe4H8GcLOL+f7dQZQP9EL5222ewgtZRgOO2Py6qplHJ+
+         jzylPY62nQ1Wllb2EB8DPowKdUq6nlkq0WJElQKyeqb/Ofz54LnQKp3Q7/vKAUVNin
+         YUjQcwtfZtUAU94rfh5NvKwGqNm6FgdQJ4pbbAxv4G9OuB0xckFM/WeXxA6KCAywH6
+         6oP+fSULBFZiRKeJaxDm6UxsGXq7gC6JOUB/DoMaMVReyoGX1tkrdO0TYAxWAiERNd
+         /wQBOA8D02ZJA==
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-Thank you for taking a look.
-
-On Mon, Oct 12, 2020 at 12:31:02PM +0200, Rafael J. Wysocki wrote:
-> On Mon, Oct 12, 2020 at 2:09 AM Jeff LaBundy <jeff@labundy.com> wrote:
-> >
-> > During driver development, it's useful to be able to call a device's
-> > suspend and resume operations for test purposes without having to
-> > involve the rest of the PM subsystem. Such an ability would be handy
-> > for measuring power consumption, checking interrupt function, etc.
-> >
-> > The PM subsystem does have debug hooks for limiting the scope of
-> > suspend or excluding devices that shouldn't suspend, but there can be
-> > overhead in configuring these hooks that is often inconvenient during
-> > early bring-up.
-> >
-> > This patch introduces the pm_op_test attribute, to be used as follows
-> > (random I2C client used as an example):
-> >
-> > 1. echo 'suspend' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
-> > 2. Measure power consumption at one's leisure, check wake-up interrupt
-> >    behavior, etc.
-> > 3. echo 'resume' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
+>> Warning coming during boot because the boot freq set by bootloader
+>> gets filtered out due to big freq steps while creating freq_table.
+>> Fix this by setting closest higher frequency from freq_table.
+>> Warning:
+>>    cpufreq: cpufreq_online: CPU0: Running at unlisted freq
+>>    cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed
+>>
+>> These warning messages also come during hotplug online of non-boot
+>> CPU's while exiting from 'Suspend-to-RAM'. This happens because
+>> during exit from 'Suspend-to-RAM', some time is taken to restore
+>> last software requested CPU frequency written in register before
+>> entering suspend.
 > 
-> This is utterly incorrect.
+> And who does this restoration ?
 > 
-> In general, the suspend and resume callbacks specific to system-wide
-> PM cannot be executed in the working state of the system safely.
-
-I don't disagree that suspending some devices outside of PM's knowledge
-can be dangerous; that's why it's presented as a debug option. But for
-innocuous devices like keypads or LED controllers where all we're doing
-is writing some registers to put that device in a low-power mode during
-system-wide suspend, it seems OK for test purposes.
-
-Here's an example: I need to test the register writes and sequencing
-in my suspend callback. I can use pm_test to do something similar, but
-by the time I've fumbled around with my oscilloscope probes or called a
-co-worker to come look at my bench while the device of interest is in a
-low-power state, the system has already resumed.
-
-Furthermore a development system may have some other blocking issue that
-prevents system-wide suspend from working. I talk to my current platform
-with SSH and if I try to test my driver's suspend callback with pm_test,
-the platform drops off the network presumably because the WLAN adapter
-is suspending (and it doesn't come back, presumably because it doesn't
-support runtime suspend in the first place). In many cases we need to get
-a driver to a vendor faster than we can troubleshoot that problem.
-
-Is there a way I can change the patch to make it more palatable? I'm also
-happy to drop it; it has simply been handy for me to have locally so I
-figured I'd share it.
-
+>> To fix this, adding online hook to wait till the
+>> current frequency becomes equal or close to the last requested
+>> frequency.
+>>
+>> Fixes: df320f89359c ("cpufreq: Add Tegra194 cpufreq driver")
+>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>> ---
+>>   drivers/cpufreq/tegra194-cpufreq.c | 86 ++++++++++++++++++++++++++++++++++----
+>>   1 file changed, 79 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+>> index d250e49..cc28b1e3 100644
+>> --- a/drivers/cpufreq/tegra194-cpufreq.c
+>> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+>> @@ -7,6 +7,7 @@
+>>   #include <linux/cpufreq.h>
+>>   #include <linux/delay.h>
+>>   #include <linux/dma-mapping.h>
+>> +#include <linux/iopoll.h>
+>>   #include <linux/module.h>
+>>   #include <linux/of.h>
+>>   #include <linux/of_platform.h>
+>> @@ -21,7 +22,6 @@
+>>   #define KHZ                     1000
+>>   #define REF_CLK_MHZ             408 /* 408 MHz */
+>>   #define US_DELAY                500
+>> -#define US_DELAY_MIN            2
+>>   #define CPUFREQ_TBL_STEP_HZ     (50 * KHZ * KHZ)
+>>   #define MAX_CNT                 ~0U
+>>
+>> @@ -249,17 +249,22 @@ static unsigned int tegra194_get_speed(u32 cpu)
+>>   static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>>   {
+>>        struct tegra194_cpufreq_data *data = cpufreq_get_driver_data();
+>> -     u32 cpu;
+>> +     u32 cpu = policy->cpu;
+>> +     int ret;
+>>        u32 cl;
+>>
+>> -     smp_call_function_single(policy->cpu, get_cpu_cluster, &cl, true);
+>> +     if (!cpu_online(cpu))
 > 
-> Thanks!
+> Not required to check this.
+> 
+OK.
 
-Kind regards,
-Jeff LaBundy
+>> +             return -EINVAL;
+>> +
+>> +     ret = smp_call_function_single(cpu, get_cpu_cluster, &cl, true);
+>> +     if (ret) {
+> 
+> Same as in the other patch.
+> 
+Got.
+
+>> +             pr_err("cpufreq: Failed to get cluster for CPU%d\n", cpu);
+>> +             return ret;
+>> +     }
+>>
+>>        if (cl >= data->num_clusters)
+>>                return -EINVAL;
+>>
+>> -     /* boot freq */
+>> -     policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY_MIN);
+>> -
+>>        /* set same policy for all cpus in a cluster */
+>>        for (cpu = (cl * 2); cpu < ((cl + 1) * 2); cpu++)
+>>                cpumask_set_cpu(cpu, policy->cpus);
+>> @@ -267,7 +272,23 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>>        policy->freq_table = data->tables[cl];
+>>        policy->cpuinfo.transition_latency = TEGRA_CPUFREQ_TRANSITION_LATENCY;
+>>
+>> -     return 0;
+>> +     policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
+>> +
+>> +     ret = cpufreq_table_validate_and_sort(policy);
+>> +     if (ret)
+>> +             return ret;
+>> +
+>> +     /* Are we running at unknown frequency ? */
+>> +     ret = cpufreq_frequency_table_get_index(policy, policy->cur);
+>> +     if (ret == -EINVAL) {
+>> +             ret = __cpufreq_driver_target(policy, policy->cur - 1,
+>> +                                           CPUFREQ_RELATION_L);
+>> +             if (ret)
+>> +                     return ret;
+> 
+>> +             policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
+> 
+> cpufreq-core will do this anyway, you don't need to do it.
+> 
+Got.
+
+>> +     }
+>> +
+>> +     return ret;
+>>   }
+> 
+> I wonder if I should change the pr_warn() in cpufreq-core to pr_info()
+> instead, will that help you guys ? Will that still be a problem ? This
+> is exactly same as what we do there.
+> 
+Yes, this will also work. Then we don't need the current patch.
+You want me to send a patch with change from pr_warn to pr_info?
+
+>>   static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>> @@ -285,6 +306,55 @@ static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>>        return 0;
+>>   }
+>>
+>> +static int tegra194_cpufreq_online(struct cpufreq_policy *policy)
+>> +{
+>> +     unsigned int interm_freq, last_set_freq;
+>> +     struct cpufreq_frequency_table *pos;
+>> +     u64 ndiv;
+>> +     int ret;
+>> +
+>> +     if (!cpu_online(policy->cpu))
+>> +             return -EINVAL;
+>> +
+>> +     /* get ndiv for the last frequency request from software  */
+>> +     ret = smp_call_function_single(policy->cpu, get_cpu_ndiv, &ndiv, true);
+>> +     if (ret) {
+>> +             pr_err("cpufreq: Failed to get ndiv for CPU%d\n", policy->cpu);
+>> +             return ret;
+>> +     }
+>> +
+>> +     cpufreq_for_each_valid_entry(pos, policy->freq_table) {
+>> +             if (pos->driver_data == ndiv) {
+>> +                     last_set_freq = pos->frequency;
+>> +                     break;
+>> +             }
+>> +     }
+>> +
+>> +     policy->cur = tegra194_get_speed_common(policy->cpu, US_DELAY);
+>> +     interm_freq =  policy->cur;
+>> +
+>> +     /*
+>> +      * It takes some time to restore the previous frequency while
+>> +      * turning-on non-boot cores during exit from SC7(Suspend-to-RAM).
+>> +      * So, wait till it reaches the previous value and timeout if the
+>> +      * time taken to reach requested freq is >100ms
+>> +      */
+>> +     ret = read_poll_timeout(tegra194_get_speed_common, policy->cur,
+>> +                             abs(policy->cur - last_set_freq) <= 115200, 0,
+>> +                             100 * USEC_PER_MSEC, false, policy->cpu,
+>> +                             US_DELAY);
+> 
+> The firmware does this update ? Why do we need to wait for this ? I
+> was actually suggesting an empty tegra194_cpufreq_online() routine
+> here.
+> > --
+> viresh
+> 
