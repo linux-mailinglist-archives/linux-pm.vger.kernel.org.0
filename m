@@ -2,224 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE9A28B40B
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 13:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EFB828B453
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 14:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388135AbgJLLqZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 07:46:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56075 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388070AbgJLLqY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 07:46:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602503182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MPOxMq+F8ph56ff+X8V9f90cV/Mc4fJb08APecd2if8=;
-        b=heMIBJvh0xoujHDEUZafOJbW3d8ZP2OEYNZ+fldiZz3dqVdmYZVJmB0L5G+icIVM8j41TN
-        GCj5dONhVdMkA+tPJnXLdRpilDeVnPkeakG6GX2Hz/UAMcIz2Gqvuz+rYZFqbJx970nPyR
-        5ZpSMk6M686WXeI261T/qHZHZ20QPoQ=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-10-uo7eOsARPpiiHO3VWelygA-1; Mon, 12 Oct 2020 07:46:20 -0400
-X-MC-Unique: uo7eOsARPpiiHO3VWelygA-1
-Received: by mail-ej1-f72.google.com with SMTP id p19so6207392ejy.11
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 04:46:20 -0700 (PDT)
+        id S2388322AbgJLMEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 08:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388321AbgJLMEq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 08:04:46 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ED8C0613D1
+        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 05:04:45 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id a7so17019396lfk.9
+        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 05:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QecOJJIpChCwDyXx3HayhiFszoIttsDqWMb62K2XmqE=;
+        b=mvSuQPVzZtD44qEEOLFnSqqT2uyk2p6WL1sRgpJahbrMoLLbaFmiRoBCynpNmDrmt5
+         OGNQvh6lyHfET6VlVcZXKmrgR858brB30H/mBHv95js+qWt880t8DMcNr5LnEYzIApH5
+         cjNTOAuiUBtFohBkqK8lxqbb8OQsckz3dY+8dqYkStyyh2gVgSIelHYxJBQUJijotnyN
+         urQ8rMmOTfYWpk5JYDkxcoEXizxa46me/21aUs7EDE5WQeU9Z1CZpaTx0+oP28lhnSpH
+         y2ao0IiOT9yy5P+qjspb+rUj3nMCRAThdfypzYuPLcDxjyv7IptNXgiJVmh13Gfn1gGf
+         lUCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=MPOxMq+F8ph56ff+X8V9f90cV/Mc4fJb08APecd2if8=;
-        b=nncawGVL0uvhM3DoR9lGYOo7C4JbLSF9D3y7wMKSa+C9JACqFOLgP4e/MKh2C3LtqW
-         VvFbrAcu7je6SUbUHC7jLuXr62CeUKqQg5F4f0m5/Ai/x3MzNz2r90gqg3h4yV9tsXQb
-         x81zYego2N3iyb4mbqK2nEWgdIXJQx6FIaTFGVinki50T+hczWFQF7xTDeI2vkOR8lKj
-         LCp95BJjaQ3D0JlCBV4EMXYpnhzfE6CW4mBgeuFA/nAdWMSGZ+jDBsI+9oOOCDPFAPTW
-         1WWeh5lzmaci7sPZGh5cLhmWnVRUuXhL+rNvPBNI+9XBtNn6UCgCP1Gs57r94oPSmbQl
-         uuvg==
-X-Gm-Message-State: AOAM531zSZMedbN6H+pDNYzp/e1bJLzCoDbrFzFoldEidWgLvDU0CblW
-        7drt7x+VEfC+hDkujqEn6E0lrX1czGbtJo61GT7hMTpb7yiRGi0xMesUlCK4MGAQPj9KMt7Wbdg
-        525ZVWqqPiAXLUTbJDy8=
-X-Received: by 2002:a05:6402:744:: with SMTP id p4mr13245306edy.190.1602503178826;
-        Mon, 12 Oct 2020 04:46:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzxgS7fuYft0E4VSk86TJ480HWHxhGEz4kkZwvpi6R3og3eSUHOtcLYgXqEyHl7XDOc+k3J2A==
-X-Received: by 2002:a05:6402:744:: with SMTP id p4mr13245274edy.190.1602503178524;
-        Mon, 12 Oct 2020 04:46:18 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
-        by smtp.gmail.com with ESMTPSA id r27sm10550629edx.33.2020.10.12.04.46.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Oct 2020 04:46:17 -0700 (PDT)
-Subject: Re: [PATCH 0/4] powercap/dtpm: Add the DTPM framework
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com
-References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
- <eb26a00d-eee0-a4d1-ed25-61a661ad5683@redhat.com>
- <8be66efd-7833-2c8a-427d-b0055c2f6ec1@linaro.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <97e5368b-228d-eca1-85a5-b918dfcfd336@redhat.com>
-Date:   Mon, 12 Oct 2020 13:46:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QecOJJIpChCwDyXx3HayhiFszoIttsDqWMb62K2XmqE=;
+        b=YnB+FU9i8Oq7NF0WozR4s08NZhHYPq/0Ga6wLIY/LHccc7pOLTp/P7jq3LoAwdhoN8
+         f6Ime20K2meMJXkf7AN5meKa2GhrRzx5JHljcEu36Zeqwozh1IJfgL2t2f9BG6aH9cgM
+         1GExKTg03f0LWGzwYaWUW6ihLWu3MGWifujxQXMeKiae+x0a13trFQkmTuV8IGQsfNls
+         OniKtd5E+VmdJN7KmTUO2La9xQkJmxT7QwBtqc4tjayoVgjy5opwp91m7XhZJ4nPqazb
+         MTabgaEwwwPK+CaeQGCqi1AhZrHz4v2M2vpsQchvaRA78f7fo7sAVhIHl4lasX05tETA
+         6D4w==
+X-Gm-Message-State: AOAM532sw1LN8wf7obtUgvtOzxNFvRjiTbtuRXNPQauTAst3s6hdC5gS
+        ZH8sXaHwgHTakyuqvO6yydha3nuPKVp9DHuFc4Afvg==
+X-Google-Smtp-Source: ABdhPJzNAYTPNzgMXP+cKRSx4rvmcaCS0Ay1Ut0v/rTmNc/NEV0vIZyD97DqJ2NlfxLL1XpvZv8wYtz6sP8jxT0415g=
+X-Received: by 2002:a19:c10:: with SMTP id 16mr7500143lfm.459.1602504283998;
+ Mon, 12 Oct 2020 05:04:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8be66efd-7833-2c8a-427d-b0055c2f6ec1@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20201007161439.312534-1-kim.phillips@amd.com> <20201007161439.312534-4-kim.phillips@amd.com>
+ <eb8dbbceb2252ebc36e3ed76f7a9efe1612ed2b7.camel@intel.com>
+In-Reply-To: <eb8dbbceb2252ebc36e3ed76f7a9efe1612ed2b7.camel@intel.com>
+From:   Victor Ding <victording@google.com>
+Date:   Mon, 12 Oct 2020 23:04:08 +1100
+Message-ID: <CANqTbdbeaZ6wtEVFiWHu9TCEMV4G36T9Tqf=C8nz89DPLq7t3g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] powercap: Add AMD Fam17h RAPL support
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Kim Phillips <kim.phillips@amd.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Fri, Oct 9, 2020 at 2:47 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> On Wed, 2020-10-07 at 11:14 -0500, Kim Phillips wrote:
+> > From: Victor Ding <victording@google.com>
+> >
+> > This patch enables AMD Fam17h RAPL support for the power capping
+> > framework. The support is as per AMD Fam17h Model31h (Zen2) and
+> > model 00-ffh (Zen1) PPR.
+> >
+> > Tested by comparing the results of following two sysfs entries and
+> > the
+> > values directly read from corresponding MSRs via /dev/cpu/[x]/msr:
+> >   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
+> >   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-
+> > rapl:0:0/energy_uj
+> >
+> > Signed-off-by: Victor Ding <victording@google.com>
+> > Acked-by: Kim Phillips <kim.phillips@amd.com>
+> > Cc: Victor Ding <victording@google.com>
+> > Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> > Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> > Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
+> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> > Cc: Sean Christopherson <sean.j.christopherson@intel.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Tony Luck <tony.luck@intel.com>
+> > Cc: Vineela Tummalapalli <vineela.tummalapalli@intel.com>
+> > Cc: LKML <linux-kernel@vger.kernel.org>
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: x86@kernel.org
+> > ---
+> > Kim's changes from Victor's original submission:
+> >
+> >
+> https://lore.kernel.org/lkml/20200729205144.3.I01b89fb23d7498521c84cfdf417450cbbfca46bb@changeid/
+> >
+> >  - Added my Acked-by.
+> >  - Added Daniel Lezcano to Cc.
+> >
+> >  arch/x86/include/asm/msr-index.h     |  1 +
+> >  drivers/powercap/intel_rapl_common.c |  2 ++
+> >  drivers/powercap/intel_rapl_msr.c    | 27
+> > ++++++++++++++++++++++++++-
+> >  3 files changed, 29 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/include/asm/msr-index.h
+> > b/arch/x86/include/asm/msr-index.h
+> > index f1b24f1b774d..c0646f69d2a5 100644
+> > --- a/arch/x86/include/asm/msr-index.h
+> > +++ b/arch/x86/include/asm/msr-index.h
+> > @@ -324,6 +324,7 @@
+> >  #define MSR_PP1_POLICY                       0x00000642
+> >
+> >  #define MSR_AMD_RAPL_POWER_UNIT              0xc0010299
+> > +#define MSR_AMD_CORE_ENERGY_STATUS   0xc001029a
+> >  #define MSR_AMD_PKG_ENERGY_STATUS    0xc001029b
+> >
+> >  /* Config TDP MSRs */
+> > diff --git a/drivers/powercap/intel_rapl_common.c
+> > b/drivers/powercap/intel_rapl_common.c
+> > index 983d75bd5bd1..6905ccffcec3 100644
+> > --- a/drivers/powercap/intel_rapl_common.c
+> > +++ b/drivers/powercap/intel_rapl_common.c
+> > @@ -1054,6 +1054,8 @@ static const struct x86_cpu_id rapl_ids[]
+> > __initconst = {
+> >
+> >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &rapl_defaults_hsw_se
+> > rver),
+> >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &rapl_defaults_hsw_se
+> > rver),
+> > +
+> > +     X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_core),
+>
+> I double if we can use rapl_defaults_core here.
+>
+> static const struct rapl_defaults rapl_defaults_core = {
+>         .floor_freq_reg_addr = 0,
+>         .check_unit = rapl_check_unit_core,
+>         .set_floor_freq = set_floor_freq_default,
+>         .compute_time_window = rapl_compute_time_window_core,
+> };
+>
+>         .floor_freq_reg_addr = 0,
+> is redundant here, even for rapl_defaults_core, we can remove it.
+>
+>         .check_unit = rapl_check_unit_core,
+> the Intel UNIT MSR supports three units including Energy/Power/Time.
+> From the change below, only the energy counter is supported, so you may
+> need to confirm if all the three units are supported or not.
+>
+>         .set_floor_freq = set_floor_freq_default,this function sets PL1_CLAMP bit on RAPL_DOMAIN_REG_LIMIT, but RAPL_DOMAIN_REG_LIMIT is not supported on the AMD cpus.
+>
+>         .compute_time_window = rapl_compute_time_window_core,
+> this is used for setting the power limits, which is not supported on
+> the AMD cpus.
+>
+> IMO, it's better to use a new rapl_defaults that contains valid
+> callbacks for AMD cpus.
+Good point. The only reason why I proposed to re-use rapl_defaults_core was
+that "check_unit" is the only function needed here, and it is the same
+as Intel's.
+The rest of callbacks are not used at all since setting the power limits is not
+supported on AMD CPUs. Let's create a new callback for AMD. It should be like:
+static const struct rapl_defaults rapl_defaults_amd = {
+         .check_unit = rapl_check_unit_core,
+};
+The AMD UNIT MSR behaves the same as Intel's: [3:0] is Power Units, [12:8] is
+Energy Status Units, and [19:16] is Time Units.
+>
+> >       {}
+> >  };
+> >  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
+> > diff --git a/drivers/powercap/intel_rapl_msr.c
+> > b/drivers/powercap/intel_rapl_msr.c
+> > index c68ef5e4e1c4..dcaef917f79d 100644
+> > --- a/drivers/powercap/intel_rapl_msr.c
+> > +++ b/drivers/powercap/intel_rapl_msr.c
+> > @@ -48,6 +48,21 @@ static struct rapl_if_priv rapl_msr_priv_intel = {
+> >       .limits[RAPL_DOMAIN_PACKAGE] = 2,
+> >  };
+> >
+> > +static struct rapl_if_priv rapl_msr_priv_amd = {
+> > +     .reg_unit = MSR_AMD_RAPL_POWER_UNIT,
+> > +     .regs[RAPL_DOMAIN_PACKAGE] = {
+> > +             0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
+> > +     .regs[RAPL_DOMAIN_PP0] = {
+> > +             0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
+> > +     .regs[RAPL_DOMAIN_PP1] = {
+> > +             0, 0, 0, 0, 0 },
+> > +     .regs[RAPL_DOMAIN_DRAM] = {
+> > +             0, 0, 0, 0, 0 },
+> > +     .regs[RAPL_DOMAIN_PLATFORM] = {
+> > +             0, 0, 0, 0, 0},
+>
+> I don't think you need to set the PP1/DRAM/PLATFORM registers to 0 explicitly if they are not supported.
+Good suggestion. Let's remove the zeros.
+>
+> > +     .limits[RAPL_DOMAIN_PACKAGE] = 1,
+>
+>
+> Is Pkg Domain PL1 really supported?
+> At least according to this patch, I don't think so. So if power limit
+> is supported, it is better to add the support in this patch altogether.
+>
+> If no, we're actually exposing energy counters only. If this is the
+> case, I'm not sure if it is proper to do this in powercap class because
+> we can not do powercap actually. Or at least, if we want to support
+> power zones with no power limits, we should enhance the code to
+> support this rather than fake a power limit.
+>
+Correct, this is solely to expose energy counters. Many existing tools
+are built on
+top of powercap's sysfs to query energy counters, even though they don't set the
+power limit. Exposing the energy counters through the same powercap interface
+allows these tools built for Intel run seamlessly on AMD. Hence, I
+believe powercap
+is the best place to expose AMD's energy counters.
 
-On 10/12/20 12:30 PM, Daniel Lezcano wrote:
-> 
-> Hi Hans,
-> 
-> On 07/10/2020 12:43, Hans de Goede wrote:
->> Hi,
->>
->> On 10/6/20 2:20 PM, Daniel Lezcano wrote:
->>> The density of components greatly increased the last decade bringing a
->>> numerous number of heating sources which are monitored by more than 20
->>> sensors on recent SoC. The skin temperature, which is the case
->>> temperature of the device, must stay below approximately 45°C in order
->>> to comply with the legal requirements.
->>>
->>> The skin temperature is managed as a whole by an user space daemon,
->>> which is catching the current application profile, to allocate a power
->>> budget to the different components where the resulting heating effect
->>> will comply with the skin temperature constraint.
->>>
->>> This technique is called the Dynamic Thermal Power Management.
->>>
->>> The Linux kernel does not provide any unified interface to act on the
->>> power of the different devices. Currently, the thermal framework is
->>> changed to export artificially the performance states of different
->>> devices via the cooling device software component with opaque values.
->>> This change is done regardless of the in-kernel logic to mitigate the
->>> temperature. The user space daemon uses all the available knobs to act
->>> on the power limit and those differ from one platform to another.
->>>
->>> This series provides a Dynamic Thermal Power Management framework to
->>> provide an unified way to act on the power of the devices.
->>
->> Interesting, we have a discussion going on about a related
->> (while at the same time almost orthogonal) discussion for
->> setting policies for if the code managing the restraints
->> (which on x86 is often hidden in firmware or ACPI DPTF tables)
->> should have a bias towards trying to have as long a battery life
->> as possible, vs maximum performance. I know those 2 aren't
->> always opposite ends of a spectrum with race-to-idle, yet most
->> modern x86 hardware has some notion of what I call performance-profiles
->> where we can tell the firmware managing this to go for a bias towards
->> low-power / balanced / performance.
->>
->> I've send a RFC / sysfs API proposal for this here:
->> https://lore.kernel.org/linux-pm/20201003131938.9426-1-hdegoede@redhat.com/
->>
->> I've read the patches in this thread and as said already I think
->> the 2 APIs are mostly orthogonal. The API in this thread is giving
->> userspace direct access to detailed power-limits allowing userspace
->> to configure things directly (and for things to work optimal userspace
->> must do this). Where as in the x86 case with which I'm dealing everything
->> is mostly handled in a black-box and userspace can merely configure
->> the low-power / balanced / performance bias (*) of that black-box.
->>
->> Still I think it is good if we are aware of each-others efforts here.
->>
->> So Daniel, if you can take a quick look at my proposal:
->> https://lore.kernel.org/linux-pm/20201003131938.9426-1-hdegoede@redhat.com/
->>
->> That would be great. I think we definitely want to avoid having 2
->> APIs for the same thing here. Again I don't think that is actually
->> the case, but maybe you see this differently ?
-> 
-> Thanks for pointing this out. Actually, it is a different feature as you
-> mentioned. The profile is the same knob we have with the BIOS where we
-> can choose power/ balanced power / balanced/balanced
-> performance / performance, AFAICT.
-
-Right.
-
-> Here the proposed interface is already exported in userspace via the
-> powercap framework which supports today the backend driver for the RAPL
-> register.
-
-You say that some sort of power/ balanced power / balanced /
-balanced performance / performance setting in is already exported
-through the powercap interface today (if I understand you correctly)?
-
-But I'm not seeing any such setting in:
-Documentation/ABI/testing/sysfs-class-powercap
-
-Nor can I find it under /sys/class/powercap/intel-rapl* on a ThinkPad
-X1 carbon 8th gen.
-
-Note, if there indeed is an existing userspace API for this I would
-greatly prefer for the thinkpad_acpi and hp-wmi (and possibly other)
-drivers to use this, so if you can point me to this interface then
-that would be great.
-
-> The userspace will be in charge of handling the logic to have the
-> correct power/performance profile tuned against the current application
-> running foreground. The DTPM framework gives the unified access to the
-> power limitation to the individual devices the userspace logic can act on.
-> 
-> A side note, related to your proposal, not this patch. IMO it suits
-> better to have /sys/power/profile.
-> 
-> cat /sys/power/profile
-> 
-> power
-> balanced_power *
-> balanced
-> balanced_performance
-> performance
-> 
-> The (*) being the active profile.
-
-Interesting the same thing was brought up in the discussion surrounding
-RFC which I posted.
-
-The downside against this approach is that it assumes that there
-only is a single system-wide settings. AFAIK that is not always
-the case, e.g. (AFAIK):
-
-1. The intel pstate driver has something like this
-    (might this be the rapl setting you mean? )
-
-2. The X1C8 has such a setting for the embedded-controller, controlled
-    through the ACPI interfaces which thinkpad-acpi used
-
-3. The hp-wmi interface allows selecting a profile which in turn
-    (through AML code) sets a bunch of variables which influence how
-    the (dynamic, through mjg59's patches) DPTF code controls various
-    things
-
-At least the pstate setting and the vendor specific settings can
-co-exist. Also the powercap API has a notion of zones, I can see the
-same thing here, with a desktop e.g. having separate performance-profile
-selection for the CPU and a discrete GPU.
-
-So limiting the API to a single /sys/power/profile setting seems a
-bit limited and I have the feeling we will regret making this
-choice in the future.
-
-With that said your proposal would work well for the current
-thinkpad_acpi / hp-wmi cases, so I'm not 100% against it.
-
-This would require adding some internal API to the code which
-owns the /sys/power root-dir to allow registering a profile
-provider I guess. But that would also immediately bring the
-question, what if multiple drivers try to register themselves
-as /sys/power/profile provider ?
-
-Regards,
-
-Hans
-
-
+I like your idea of enhancing the code to avoid using a fake power
+limit. I'll make
+the update.
+> thanks,
+> rui
+> > +};
+> > +
+> >  /* Handles CPU hotplug on multi-socket systems.
+> >   * If a CPU goes online as the first CPU of the physical package
+> >   * we add the RAPL package to the system. Similarly, when the last
+> > @@ -137,7 +152,17 @@ static int rapl_msr_probe(struct platform_device
+> > *pdev)
+> >       const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
+> >       int ret;
+> >
+> > -     rapl_msr_priv = &rapl_msr_priv_intel;
+> > +     switch (boot_cpu_data.x86_vendor) {
+> > +     case X86_VENDOR_INTEL:
+> > +             rapl_msr_priv = &rapl_msr_priv_intel;
+> > +             break;
+> > +     case X86_VENDOR_AMD:
+> > +             rapl_msr_priv = &rapl_msr_priv_amd;
+> > +             break;
+> > +     default:
+> > +             pr_err("intel-rapl does not support CPU vendor %d\n",
+> > boot_cpu_data.x86_vendor);
+> > +             return -ENODEV;
+> > +     }
+> >       rapl_msr_priv->read_raw = rapl_msr_read_raw;
+> >       rapl_msr_priv->write_raw = rapl_msr_write_raw;
+> >
+>
+>
+>
+> IF
+>
+>
+>
+Best regards,
+Victor Ding
