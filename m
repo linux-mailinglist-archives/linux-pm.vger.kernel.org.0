@@ -2,144 +2,229 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D32E528B616
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 15:22:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C2228B80E
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 15:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726651AbgJLNWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 09:22:53 -0400
-Received: from mga12.intel.com ([192.55.52.136]:30218 "EHLO mga12.intel.com"
+        id S2389348AbgJLNtE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 09:49:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:47532 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727037AbgJLNWx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Oct 2020 09:22:53 -0400
-IronPort-SDR: U5Z2K33Ih0PM74he7Ky+t7/wEmjAZQHAyWywPcXF+1K0R5RsKpkXGGY5wXJVy4Uk9Pne9eZG/2
- Q7Le+qW5ZyNA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9771"; a="145058659"
-X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
-   d="scan'208";a="145058659"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 06:22:52 -0700
-IronPort-SDR: 2u0JEWs5FttLeBkwYWr9XNFVFwfNSatW82ERDKeFWGFp8Ybww0hJBw21NO4MgojtMj7UfJAiVj
- DclbRii/7rvg==
-X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
-   d="scan'208";a="529954737"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 06:22:52 -0700
-Message-ID: <ae351673692472b5ff5a482debc2de9060ffdd5e.camel@linux.intel.com>
-Subject: Re: [RFC][PATCH] cpufreq: intel_pstate: Delete intel_pstate sysfs
- if failed to register the driver
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 12 Oct 2020 06:22:40 -0700
-In-Reply-To: <20201009033038.23157-1-yu.c.chen@intel.com>
-References: <20201009033038.23157-1-yu.c.chen@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1731968AbgJLNs0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 09:48:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73AC1D6E;
+        Mon, 12 Oct 2020 06:48:25 -0700 (PDT)
+Received: from [10.57.55.84] (unknown [10.57.55.84])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7789D3F66B;
+        Mon, 12 Oct 2020 06:48:22 -0700 (PDT)
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7> <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+ <20201009140141.GA4048593@bogus>
+ <2b7b6486-2898-1279-ce9f-9e7bd3512152@arm.com>
+ <20201012105945.GA9219@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <500510b9-58f3-90b3-8c95-0ac481d468b5@arm.com>
+Date:   Mon, 12 Oct 2020 14:48:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <20201012105945.GA9219@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2020-10-09 at 11:30 +0800, Chen Yu wrote:
-> There is a corner case that if the intel_pstate driver failed to be
-> registered(might be due to invalid MSR access) 
-Do you have logs why it is not loaded? On supported platforms MSRs
-should be invalid.
-It may be a case when we are trying to bring up pre-production systems
-where some instability in MSRs on certain CPUs. 
-
-But the patch is correct. We can't have invalid folder when
-intel_pstate is not used. 
-
-> and with the acpi_cpufreq
-> loaded, the intel_pstate sysfs might still be created, which makes
-> the
-> user confusing(turbostat for example):
-> 
-> grep . /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
-> acpi-cpufreq
-> 
-> grep . /sys/devices/system/cpu/intel_pstate/*
-> /sys/devices/system/cpu/intel_pstate/max_perf_pct:0
-> /sys/devices/system/cpu/intel_pstate/min_perf_pct:0
-> grep: /sys/devices/system/cpu/intel_pstate/no_turbo: Resource
-> temporarily unavailable
-> grep: /sys/devices/system/cpu/intel_pstate/num_pstates: Resource
-> temporarily unavailable
-> /sys/devices/system/cpu/intel_pstate/status:off
-> grep: /sys/devices/system/cpu/intel_pstate/turbo_pct: Resource
-> temporarily unavailable
-> 
-> The existing of intel_pstate sysfs does not mean that the
-> intel_pstate driver
-> has been successfully loaded(for example, echo off to status), but
-> the
-> intel_pstate sysfs should not co-exist when acpi-cpufreq is also
-> present.
-> Fix this issue by deleting the intel_pstate sysfs if the driver
-> failed
-> to be loaded during bootup.
-> 
-> Reported-by: Wendy Wang <wendy.wang@intel.com>
-> Suggested-by: Zhang Rui <rui.zhang@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com
 
 
-> --->
->  drivers/cpufreq/intel_pstate.c | 24 +++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
+On 10/12/20 11:59 AM, Ionela Voinescu wrote:
+> On Monday 12 Oct 2020 at 11:22:57 (+0100), Lukasz Luba wrote:
+> [..]
+>>>> I thought about it and looked for other platforms' DT to see if can reuse
+>>>> existing opp information. Unfortunately I don't think it is optimal. The reason
+>>>> being that, because cpus have the same opp table it does not necessarily mean
+>>>> that they share a clock wire. It just tells us that they have the same
+>>>> capabilities (literally just tells us they have the same V/f op points).
+>>>> Unless I am missing something?
+>>>>
+>>>> When comparing with ACPI/_PSD it becomes more intuitive that there is no
+>>>> equivalent way to reveal "perf-dependencies" in DT.
+>>>
+>>> You should be able to by examining the clock tree. But perhaps SCMI
+>>> abstracts all that and just presents virtual clocks without parent
+>>> clocks available to determine what clocks are shared? Fix SCMI if that's
+>>> the case.
+>>
+>> True, the SCMI clock does not support discovery of clock tree:
+>> (from 4.6.1 Clock management protocol background)
+>> 'The protocol does not cover discovery of the clock tree, which must be
+>> described through firmware tables instead.' [1]
+>>
+>> In this situation, would it make sense, instead of this binding from
+>> patch 1/2, create a binding for internal firmware/scmi node?
+>>
+>> Something like:
+>>
+>> firmware {
+>> 	scmi {
+>> 	...		
+>> 		scmi-perf-dep {
+>> 			compatible = "arm,scmi-perf-dependencies";
+>> 			cpu-perf-dep0 {
+>> 				cpu-perf-affinity = <&CPU0>, <&CPU1>;
+>> 			};
+>> 			cpu-perf-dep1 {
+>> 				cpu-perf-affinity = <&CPU3>, <&CPU4>;
+>> 			};
+>> 			cpu-perf-dep2 {
+>> 				cpu-perf-affinity = <&CPU7>;
+>> 			};
+>> 		};
+>> 	};
+>> };
+>>
+>> The code which is going to parse the binding would be inside the
+>> scmi perf protocol code and used via API by scmi-cpufreq.c.
+>>
 > 
-> diff --git a/drivers/cpufreq/intel_pstate.c
-> b/drivers/cpufreq/intel_pstate.c
-> index 9a515c460a00..8c5f9680de83 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -1420,6 +1420,26 @@ static void __init
-> intel_pstate_sysfs_expose_params(void)
->  	}
->  }
->  
-> +static void __init intel_pstate_sysfs_clean(void)
-> +{
-> +	if (!intel_pstate_kobject)
-> +		return;
-> +
-> +	sysfs_remove_group(intel_pstate_kobject,
-> &intel_pstate_attr_group);
-> +
-> +	if (per_cpu_limits)
-> +		goto release_kobj;
-> +
-> +	sysfs_remove_file(intel_pstate_kobject, &max_perf_pct.attr);
-> +	sysfs_remove_file(intel_pstate_kobject, &min_perf_pct.attr);
-> +
-> +	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids))
-> +		sysfs_remove_file(intel_pstate_kobject,
-> &energy_efficiency.attr);
-> +
-> +release_kobj:
-> +	kobject_put(intel_pstate_kobject);
-> +}
-> +
->  static void intel_pstate_sysfs_expose_hwp_dynamic_boost(void)
->  {
->  	int rc;
-> @@ -3063,8 +3083,10 @@ static int __init intel_pstate_init(void)
->  	mutex_lock(&intel_pstate_driver_lock);
->  	rc = intel_pstate_register_driver(default_driver);
->  	mutex_unlock(&intel_pstate_driver_lock);
-> -	if (rc)
-> +	if (rc) {
-> +		intel_pstate_sysfs_clean();
->  		return rc;
-> +	}
->  
->  	if (hwp_active) {
->  		const struct x86_cpu_id *id;
+> While SCMI cpufreq would be able to benefit from the functionality that
+> Nicola is trying to introduce, it's not the only driver, and more
+> importantly, it's not *going* to be the only driver benefiting from
+> this.
+> 
+> Currently there is also qcom-cpufreq-hw.c and the future
+> mediatek-cpufreq-hw.c that is currently under review [1]. They both do
+> their frequency setting by interacting with HW/FW, and could either take
+> or update their OPP tables from there. Therefore, if the platform would
+> require it, they could also expose different controls for frequency
+> setting and could benefit from additional information about clock
+> domains (either through opp-shared or the new entries in Nicola's patch),
+> without driver changes.
+> 
+> Another point to be made is that I strongly believe this is going to be
+> the norm in the future. Directly setting PLLs and regulator voltages
+> has been proven unsafe and unsecure.
+> 
+> Therefore, I see this as support for a generic cpufreq feature (a
+> hardware coordination type), rather than support for a specific driver.
+> 
+> [1] https://lkml.org/lkml/2020/9/10/11
+> 
+>>
+>> Now regarding the 'dependent_cpus' mask.
+>>
+>> We could avoid adding a new field 'dependent_cpus' in policy
+>> struct, but I am not sure of one bit - Frequency Invariant Engine,
+>> (which is also not fixed by just adding a new cpumask).
+>    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    Let's take it step by step..
+>>
+>> We have 3 subsystems to fix:
+>> 1. EAS - EM has API function which takes custom cpumask, so no issue,
+>             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 	   keep in mind that EAS it's using the max aggregation method
+> 	   that schedutil is using. So if we are to describe the
+> 	   functionality correctly, it needs both a cpumask describing
+> 	   the frequency domains and an aggregation method.
 
+EAS does not use schedutil max agregation, it calculates max_util
+internally.
+
+The compute_energy() loops through the CPUs in the domain and
+takes the utilization from them via schedutil_cpu_util(cpu_rq(cpu)).
+It figures out max_util and then em_cpu_energy() maps it to next
+frequency for the cluster. It just needs proper utilization from
+CPUs, which is taken from run-queues, which is a sum of utilization
+of tasks being there. This leads to problem how we account utilization
+of a task. This is the place where the FIE is involved. EAS assumes the
+utilization is calculated properly.
+
+> 
+>>    fix would be to use it via the scmi-cpufreq.c
+> 
+>> 2. IPA (for calculating the power of a cluster, not whole thermal needs
+>>    this knowledge about 'dependent cpus') - this can be fixed internally
+> 
+>> 3. Frequency Invariant Engine (FIE) - currently it relies on schedutil
+>>    filtering and providing max freq of all cpus in the cluster into the
+>>    FIE; this info is then populated to all 'related_cpus' which will
+>>    have this freq (we know, because there is no other freq requests);
+>>    Issues:
+>> 3.1. Schedutil is not going to check all cpus in the cluster to take
+>>    max freq, which is then passed into the cpufreq driver and FIE
+>> 3.2. FIE would have to (or maybe we would drop it) have a logic similar
+>>    to what schedutil does (max freq search and set, then filter next
+>>    freq requests from other cpus in the next period e.g. 10ms)
+>> 3.3. Schedutil is going to invoke freq change for each cpu independently
+>>    and the current code just calls arch_set_freq_scale() - adding just
+>>    'dependent_cpus' won't help
+> 
+> I don't believe these are issues. As we need changes for EAS and IPA, we'd
+> need changes for FIE. We don't need more than the cpumask that shows
+> frequency domains as we already already have the aggregation method that
+> schedutil uses to propagate the max frequency in a domain across CPUs.
+
+Schedutil is going to work in !policy_is_shared() mode, which leads to
+sugov_update_single() being the 'main' function. We won't have
+schedutil goodness which is handling related_cpus use case.
+
+Then in software FIE would you just change the call from:
+	arch_set_freq_scale(policy->related_cpus,...)
+to:
+	arch_set_freq_scale(policy->dependent_cpus,...)
+?
+
+This code would be called from any CPU (without filtering) and it
+would loop through cpumask updating freq_scale, which is wrong IMO.
+You need some 'logic', which is not currently in there.
+
+Leaving the 'related_cpus' would also be wrong (because real CPU
+frequency is different, so we would account task utilization wrongly).
+
+> 
+> This would be the default method if cycle counters are not present. It
+> might not reflect the frequency the cores actually get from HW, but for
+> that cycle counters should be used.
+
+IMHO the configurations with per-cpu freq requests while there are CPUs
+'dependent' and there are no HW counters to use for tasks
+utilization accounting - should be blocked. Then we don't need
+'dependent_cpus' in software FIE. Then one less from your requirements
+list for new cpumask.
+
+> 
+>> 3.4 What would be the real frequency of these cpus and what would be
+>>    set to FIE
+>> 3.5 FIE is going to filter to soon requests from other dependent cpus?
+>>
+>> IMHO the FIE needs more bits than just a new cpumask.
+>> Maybe we should consider to move FIE arch_set_freq_scale() call into the
+>> cpufreq driver, which will know better how to aggregate/filter requests
+>> and then call FIE update?
+> 
+> I'm quite strongly against this :). As described before, this is not a
+> feature that a single driver needs, and even if it was, the aggregation
+> method for FIE is not a driver policy.
+
+Software version of FIE has issues in this case, schedutil or EAS won't
+help (different code path).
+
+Regards,
+Lukasz
