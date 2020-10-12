@@ -2,215 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1570528BE78
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 18:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FC028BE9D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 19:04:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390708AbgJLQwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 12:52:22 -0400
-Received: from foss.arm.com ([217.140.110.172]:57696 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390705AbgJLQwW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Oct 2020 12:52:22 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E280431B;
-        Mon, 12 Oct 2020 09:52:20 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84FD43F66B;
-        Mon, 12 Oct 2020 09:52:20 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 17:52:19 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        chris.redpath@arm.com, morten.rasmussen@arm.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201012165219.GA3573@arm.com>
-References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
- <20200924095347.32148-3-nicola.mazzucato@arm.com>
- <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
- <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
- <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
- <20201008150317.GB20268@arm.com>
- <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
- <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
- <20201012154915.GD16519@bogus>
-MIME-Version: 1.0
+        id S2403923AbgJLREp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 13:04:45 -0400
+Received: from mail-dm6nam12on2072.outbound.protection.outlook.com ([40.107.243.72]:14977
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2403845AbgJLREp (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 13:04:45 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WQweAuPSI6+3YMswXhstSYp0gYFykiJpvbwycCO+rLuZvl8xVNuSaqcWX4HIf2B30Jcd27IlKIst7ECuhopLEKGibppv6YYx6GoiYieYIpuqYlBfzSVzUfQtJS12Iu2hmGsLeFUPxy/Om9wj1ZQM7P1fh5RswhV65b3AUMSxfJye4qmSqCkQc50otPZVnjhX3YtuWous/LEbWUC9fUwz1UWzxuRX17UusqhKu5yFAN4rcucEcoKGCsZk9INdp1u24aSAnr0jGsM7PprfYeccMuNZlqJgU+wFBY2TFNx2Nbi8KyJXIPkqABhL0kjCUIfikRfBghz1FSUnB1JKaEAqog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FQ/DFQmZE5ZSsMPvaMr8LjRo7hj1IyeHUBNyuK3r81k=;
+ b=j5QxskHErzRksotS8/533I+oqEMKr/MkfK5ofLd9v2ji+gZJyy0jYhWdZOQRPXaaDNqQtMoQPpsYawSWZhaj3KMv3QgZwZGkIw6ZOtSJhZG3YogOQadTZhOwh4S0BWG3AZ0xuRfTVimD48EheZzeFiuLt8zucsP4nPiNbaQdqs9jP7+6ka11Ma0+Z4XTjZJuTcoQxITDfE/wzDSJ3+24rODrRdozBn7H6z1sba/C9K5kSPGUhuOE7WmHsNs+PCiBfoX9MzJRflNjtgiqj+UQMkR8oApxHkz1npcNQpbCJseNmJHvcmW275+FFP2fWj8RYguviszKvzimjPkzgFUFtw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
+ dkim=pass header.d=labundy.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FQ/DFQmZE5ZSsMPvaMr8LjRo7hj1IyeHUBNyuK3r81k=;
+ b=pbwfGFId7Ieu3LbSXuvu9t7PU8YGykbNDSVxLuHf1EvoK3DPYAPCFER42jwDJW6LlPDAXM5knjs4w+npd3BjNFaUvmnzDDi1O5SxfPjtgREKZ1MCi9xx8DApv6yIa6CNFVukGvhhRsoourZ+sQd+KNbTFE26ksi8mjilwBrx7sY=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=labundy.com;
+Received: from SN6PR08MB5517.namprd08.prod.outlook.com (2603:10b6:805:fb::32)
+ by SN6PR08MB4093.namprd08.prod.outlook.com (2603:10b6:805:1e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.24; Mon, 12 Oct
+ 2020 17:04:42 +0000
+Received: from SN6PR08MB5517.namprd08.prod.outlook.com
+ ([fe80::c989:9cea:baa6:8254]) by SN6PR08MB5517.namprd08.prod.outlook.com
+ ([fe80::c989:9cea:baa6:8254%7]) with mapi id 15.20.3455.029; Mon, 12 Oct 2020
+ 17:04:42 +0000
+Date:   Mon, 12 Oct 2020 12:04:35 -0500
+From:   Jeff LaBundy <jeff@labundy.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] PM / sysfs: Add the ability to call PM operations
+ manually
+Message-ID: <20201012170435.GA7275@labundy.com>
+References: <1602461364-17300-1-git-send-email-jeff@labundy.com>
+ <CAJZ5v0jmnWxnpwHEV3k04_v4YV+oOAm7JE3OyMbKe-K18x8OsA@mail.gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201012154915.GD16519@bogus>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CAJZ5v0jmnWxnpwHEV3k04_v4YV+oOAm7JE3OyMbKe-K18x8OsA@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [136.49.227.119]
+X-ClientProxiedBy: DM6PR03CA0001.namprd03.prod.outlook.com
+ (2603:10b6:5:40::14) To SN6PR08MB5517.namprd08.prod.outlook.com
+ (2603:10b6:805:fb::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from labundy.com (136.49.227.119) by DM6PR03CA0001.namprd03.prod.outlook.com (2603:10b6:5:40::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21 via Frontend Transport; Mon, 12 Oct 2020 17:04:41 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 734957bb-7b66-4a40-c24c-08d86ed0e90a
+X-MS-TrafficTypeDiagnostic: SN6PR08MB4093:
+X-Microsoft-Antispam-PRVS: <SN6PR08MB40936125A981784490C8FEA8D3070@SN6PR08MB4093.namprd08.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CoUNnePGRKo84c6jsWPQZE19WGAf9X8wjj1YdWj9h9MN0qA1T/c9rMGCqhg25k8uYKILtWsUTDGrb59tPKwH7NIZZIdz7/k/CImuJoVswq81Levb5iOVU7qgr08oiDXUBQ3D6Pd22I0ofBMYhYxZZTyphXw9p4u62TWCzCF7NDh9keTu3WPjXCS3McisK4OY7bCVPUuVO5g4eca3IdpVLyJji6FbeuSOxtRFk+O1RANtAEdQ9Gqhjvvv/MA9mmdzHiQHtUYremMpYKMw50KB7ioaNZA6G4o551TTzxaEEVjfKOPH33b42Tk3z2Y+ZwtjqZ+Joy2MmF/R09g1HVDVnw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5517.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(39830400003)(366004)(396003)(376002)(136003)(346002)(54906003)(316002)(186003)(6916009)(26005)(8936002)(55016002)(8886007)(16526019)(66946007)(7696005)(66556008)(5660300002)(66476007)(53546011)(33656002)(2906002)(478600001)(86362001)(8676002)(6666004)(52116002)(36756003)(2616005)(1076003)(83380400001)(956004)(4326008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: jsJD/JDpuAzvuBpmcScjiq9D+BCbFPW72PxsyOlImgi9eZQFdyuq8a2i4v1ntHflOJdLPzBY+ACKOkjgwoRYVViRQkNS+HPojU5ia9rS5kxvhSJZujVKzfkS/MiaRmermhk+R3inJ27jUuBsFKtzfbsW5Jl6VVURBOQ6oTEKAJhAQYWCNROskgPSUCAgNarsfO2/TtCwI+g9tTAv7Cn30ipzFT73DTCRcGgXHztN8f8Em1UVqcGt72Obmd4kBj4zhOUGGopiRimj7oXIRbi7bbNeD6UV2KFf4SuD24s/Nmvw3zJ83KwahC8pE39XWyLjHzklX9zoeWHLnAhX4mTxfKony/+zYMz2zDYBc2hYOQi8gvm4RHkl7TAsthAxbH5Vfdmn2gHbAYstXQmyAX+rf0ZhOpkjCYlDcC7tF14j3b8K0XQ2FX0ZaNyFjdTHYFh+yhZOQ3fdin3A2AqL68IGnbQ+6GBikNZ/cP1Tn+EG4wHQHgBVpyhf9+wo50uWlKuesEAfAalZ286S+1dTYI4e+umFZQSfEpATdDvCbL9hGYI3d1elQs2M2di+qwyMm6OG/plgfyh9dtWs4J3mrBcyVb/kEAWXmfWeJRkE4DaQidrxajBVnkH9sbaSzUxn3CVU+SXz/Yi6wljB8PfSTfkbbg==
+X-OriginatorOrg: labundy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 734957bb-7b66-4a40-c24c-08d86ed0e90a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR08MB5517.namprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2020 17:04:41.9162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bj+l3n9pIO9eumH4ca/cR43vhsUJNH/1HvKsHyPxK+yZ+LD23/pxGGC3G2Kdd9ycD8qWEtdTZS1ZBtKfk9OdKg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB4093
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 12 Oct 2020 at 16:49:30 (+0100), Sudeep Holla wrote:
-> On Fri, Oct 09, 2020 at 11:09:21AM +0530, Viresh Kumar wrote:
-> > On 08-10-20, 17:00, Nicola Mazzucato wrote:
-> > > On 10/8/20 4:03 PM, Ionela Voinescu wrote:
-> > > > Hi Viresh,
-> > > > 
-> > > > On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
-> > > >> On 07-10-20, 13:58, Nicola Mazzucato wrote:
-> > > >>> Hi Viresh,
-> > > >>>
-> > > >>> performance controls is what is exposed by the firmware through a protocol that
-> > > >>> is not capable of describing hardware (say SCMI). For example, the firmware can
-> > > >>> tell that the platform has N controls, but it can't say to which hardware they
-> > > >>> are "wired" to. This is done in dt, where, for example, we map these controls
-> > > >>> to cpus, gpus, etc.
-> > > >>>
-> > > >>> Let's focus on cpus.
-> > > >>>
-> > > >>> Normally we would have N of performance controls (what comes from f/w)
-> > > >>> that that correspond to hardware clock/dvfs domains.
-> > > >>>
-> > > >>> However, some firmware implementations might benefit from having finer
-> > > >>> grained information about the performance requirements (e.g.
-> > > >>> per-CPU) and therefore choose to present M performance controls to the
-> > > >>> OS. DT would be adjusted accordingly to "wire" these controls to cpus
-> > > >>> or set of cpus.
-> > > >>> In this scenario, the f/w will make aggregation decisions based on the
-> > > >>> requests it receives on these M controls.
-> > > >>>
-> > > >>> Here we would have M cpufreq policies which do not necessarily reflect the
-> > > >>> underlying clock domains, thus some s/w components will underperform
-> > > >>> (EAS and thermal, for example).
-> > > >>>
-> > > >>> A real example would be a platform in which the firmware describes the system
-> > > >>> having M per-cpu control, and the cpufreq subsystem will have M policies while
-> > > >>> in fact these cpus are "performance-dependent" each other (e.g. are in the same
-> > > >>> clock domain).
-> > > >>
-> > > >> If the CPUs are in the same clock domain, they must be part of the
-> > > >> same cpufreq policy.
-> > > > 
-> > > > But cpufreq does not currently support HW_ALL (I'm using the ACPI
-> > > > coordination type to describe the generic scenario of using hardware
-> > > > aggregation and coordination when establishing the clock rate of CPUs).
-> > > > 
-> > > > Adding support for HW_ALL* will involve either bypassing some
-> > > > assumptions around cpufreq policies or making core cpufreq changes.
-> > > > 
-> > > > In the way I see it, support for HW_ALL involves either:
-> > > > 
-> > > >  - (a) Creating per-cpu policies in order to allow each of the CPUs to
-> > > >    send their own frequency request to the hardware which will do
-> > > >    aggregation and clock rate decision at the level of the clock
-> > > >    domain. The PSD domains (ACPI) and the new DT binding will tell
-> > > >    which CPUs are actually in the same clock domain for whomever is
-> > > >    interested, despite those CPUs not being in the same policy.
-> > > >    This requires the extra mask that Nicola introduced.
-> > > > 
-> > > >  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
-> > > >    - Governors to stop aggregating (usually max) the information
-> > > >      for each of the CPUs in the policy and convey to the core
-> > > >      information for each CPU.
-> > > >    - Cpufreq core to be able to receive and pass this information
-> > > >      down to the drivers.
-> > > >    - Drivers to be able to have some per cpu structures to hold
-> > > >      frequency control (let's say SCP fast channel addresses) for
-> > > >      each of the CPUs in the policy. Or have these structures in the
-> > > >      cpufreq core/policy, to avoid code duplication in drivers.
-> > > > 
-> > > > Therefore (a) is the least invasive but we'll be bypassing the rule
-> > > > above. But to make that rule stick we'll have to make invasive cpufreq
-> > > > changes (b).
-> > > 
-> > > Regarding the 'rule' above of one cpufreq policy per clock domain, I would like
-> > > to share my understanding on it. Perhaps it's a good opportunity to shed some light.
-> > > 
-> > > Looking back in the history of CPUFreq, related_cpus was originally designed
-> > > to hold the map of cpus within the same clock. Later on, the meaning of this
-> > > cpumask changed [1].
-> > > This led to the introduction of a new cpumask 'freqdomain_cpus'
-> > > within acpi-cpufreq to keep the knowledge of hardware clock domains for
-> > > sysfs consumers since related_cpus was not suitable anymore for this.
-> > > Further on, this cpumask was assigned to online+offline cpus within the same clk
-> > > domain when sw coordination is in use [2].
-> > > 
-> > > My interpretation is that there is no guarantee that related_cpus holds the
-> > > 'real' hardware clock implementation. As a consequence, it is not true anymore
-> > > that cpus that are in the same clock domain will be part of the same
-> > > policy.
-> > > 
-> > > This guided me to think it would be better to have a cpumask which always holds
-> > > the real hw clock domains in the policy.
-> > > 
-> > > > 
-> > > > This is my current understanding and I'm leaning towards (a). What do
-> > > > you think?
-> > > > 
-> > > > *in not so many words, this is what these patches are trying to propose,
-> > > > while also making sure it's supported for both ACPI and DT.
-> > > > 
-> > > > BTW, thank you for your effort in making sense of this!
-> > > > 
-> > > > Regards,
-> > > > Ionela.
-> > > > 
-> > > 
-> > > This could be a platform where per-cpu and perf-dependencies will be used:
-> > > 
-> > > CPU:              0    1    2    3    4    5    6    7
-> > > Type:             A    A    A    A    B    B    B    B
-> > > Cluster:         [                                    ]
-> > > perf-controls:   [  ] [  ] [  ] [ ]  [ ]  [ ]  [ ]  [ ]
-> > > perf-dependency: [                ]  [                ]
-> > > HW clock:        [                ]  [                ]
-> > > 
-> > > The firmware will present 8 controls to the OS and each control is mapped to a
-> > > cpu device via the standard dt. This is done so we can achieve hw coordination.
-> > > What is required in these systems is to present to OS the information of which
-> > > cpus belong to which clock domain. In other words, when hw coordinates we don't
-> > > have any way at present in dt to understand how these cpus are dependent
-> > > each other, from performance perspective (as opposed to ACPI where we have
-> > > _PSD). Hence my proposal for the new cpu-perf-dependencies.
-> > > This is regardless whether we decide to go for either a policy per-cpu or a
-> > > policy per-domain.
-> > > 
-> > > Hope it helps.
-> > 
-> > Oh yes, I get it now. Finally. Thanks for helping me out :)
-> > 
-> > So if I can say all this stuff in simple terms, this is what it will
-> > be like:
-> > 
-> > - We don't want software aggregation of frequencies and so we need to
-> >   have per-cpu policies even when they share their clock lines.
-> > 
-> > - But we still need a way for other frameworks to know which CPUs
-> >   share the clock lines (that's what the perf-dependency is all about,
-> >   right ?).
-> > 
-> > - We can't get it from SCMI, but need a DT based solution.
-> > 
-> > - Currently for the cpufreq-case we relied for this on the way OPP
-> >   tables for the CPUs were described. i.e. the opp-table is marked as
-> >   "shared" and multiple CPUs point to it.
-> > 
-> > - I wonder if we can keep using that instead of creating new bindings
-> >   for exact same stuff ? Though the difference here would be that the
-> >   OPP may not have any other entries.
+Hi Rafael,
+
+Thank you for taking a look.
+
+On Mon, Oct 12, 2020 at 12:31:02PM +0200, Rafael J. Wysocki wrote:
+> On Mon, Oct 12, 2020 at 2:09 AM Jeff LaBundy <jeff@labundy.com> wrote:
+> >
+> > During driver development, it's useful to be able to call a device's
+> > suspend and resume operations for test purposes without having to
+> > involve the rest of the PM subsystem. Such an ability would be handy
+> > for measuring power consumption, checking interrupt function, etc.
+> >
+> > The PM subsystem does have debug hooks for limiting the scope of
+> > suspend or excluding devices that shouldn't suspend, but there can be
+> > overhead in configuring these hooks that is often inconvenient during
+> > early bring-up.
+> >
+> > This patch introduces the pm_op_test attribute, to be used as follows
+> > (random I2C client used as an example):
+> >
+> > 1. echo 'suspend' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
+> > 2. Measure power consumption at one's leisure, check wake-up interrupt
+> >    behavior, etc.
+> > 3. echo 'resume' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
 > 
-> Well summarised, sorry for chiming in late. I could have not summarised
-> any better. Just saw the big thread and was thinking of summarising.
-> If the last point on OPP is possible(i.e. no OPP entries but just use
-> it for fetch the information) for $subject patch is trying to achieve,
-> then it would be good.
+> This is utterly incorrect.
 > 
+> In general, the suspend and resume callbacks specific to system-wide
+> PM cannot be executed in the working state of the system safely.
 
-Just to put in my two pennies worth: using opp-shared (in possibly empty
-OPP table) as alternative to cpu-perf-dependencies sounds good enough
-to me as well.
+I don't disagree that suspending some devices outside of PM's knowledge
+can be dangerous; that's why it's presented as a debug option. But for
+innocuous devices like keypads or LED controllers where all we're doing
+is writing some registers to put that device in a low-power mode during
+system-wide suspend, it seems OK for test purposes.
 
-Thanks,
-Ionela.
+Here's an example: I need to test the register writes and sequencing
+in my suspend callback. I can use pm_test to do something similar, but
+by the time I've fumbled around with my oscilloscope probes or called a
+co-worker to come look at my bench while the device of interest is in a
+low-power state, the system has already resumed.
 
-> -- 
-> Regards,
-> Sudeep
+Furthermore a development system may have some other blocking issue that
+prevents system-wide suspend from working. I talk to my current platform
+with SSH and if I try to test my driver's suspend callback with pm_test,
+the platform drops off the network presumably because the WLAN adapter
+is suspending (and it doesn't come back, presumably because it doesn't
+support runtime suspend in the first place). In many cases we need to get
+a driver to a vendor faster than we can troubleshoot that problem.
+
+Is there a way I can change the patch to make it more palatable? I'm also
+happy to drop it; it has simply been handy for me to have locally so I
+figured I'd share it.
+
+> 
+> Thanks!
+
+Kind regards,
+Jeff LaBundy
