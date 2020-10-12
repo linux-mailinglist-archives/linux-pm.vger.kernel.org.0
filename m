@@ -2,32 +2,32 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6338628C4D5
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 00:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5969E28C4D3
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 00:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390273AbgJLWej (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 18:34:39 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:55521 "EHLO z5.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390279AbgJLWei (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        id S2390051AbgJLWei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 12 Oct 2020 18:34:38 -0400
+Received: from z5.mailgun.us ([104.130.96.5]:41500 "EHLO z5.mailgun.us"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390273AbgJLWeh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 18:34:37 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602542077; h=Content-Transfer-Encoding: MIME-Version:
+ s=smtp; t=1602542076; h=Content-Transfer-Encoding: MIME-Version:
  References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=CAA8HtrnxV68z7xJ7H069hnJ4UKgoDlQuitgfOh24BQ=; b=kfIleEMfX/jEj0XwSt/psS73/Xj5zmMEVcDWieYlKQOKjG34KrwL4vpZMplK5Tgim5zW37Vs
- Y1jCIx73MZRajk9CHuuEssR0unWaLoHkN6DMh+jmyzIsEjwVikKpOUcG2rGm6tYazdWGNTX/
- weHi21MyVpTko6SHnwtZka1JXTs=
+ Sender; bh=XKpGBpZzmWhm7bXNsIqJEj46Bl1p8p5AhOlTFIJPcJ8=; b=RIoXMIHD/6S7kjElmvfgQDyX0TfMZgggLvqJ3fYkgk1qOMNWbIY4z6nGxGIHIMOcZtQQnMAE
+ E6/3ZBjGahcGAljcqkMaP2MwZhKo8YlnmoNwj9SfKdoLvfBAZdo44j8Dc3YUqneXDPoytMDG
+ HRDY3TYIFX2aTiaq4eiXy9z14ss=
 X-Mailgun-Sending-Ip: 104.130.96.5
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 5f84d9fbef891f1ee26dfea6 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Oct 2020 22:34:34
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5f84d9fb3711fec7b1a221d2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Oct 2020 22:34:35
  GMT
 Sender: ilina=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3FAA8C43391; Mon, 12 Oct 2020 22:34:34 +0000 (UTC)
+        id 276BCC433F1; Mon, 12 Oct 2020 22:34:35 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -37,17 +37,17 @@ Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03746C43382;
-        Mon, 12 Oct 2020 22:34:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 03746C43382
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C8C77C433FF;
+        Mon, 12 Oct 2020 22:34:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C8C77C433FF
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
 From:   Lina Iyer <ilina@codeaurora.org>
 To:     rjw@rjwysocki.net, ulf.hansson@linaro.org, linux-pm@vger.kernel.org
 Cc:     linux-arm-msm@vger.kernel.org, Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH 1/2] PM / runtime: register device's next wakeup
-Date:   Mon, 12 Oct 2020 16:33:59 -0600
-Message-Id: <20201012223400.23609-2-ilina@codeaurora.org>
+Subject: [PATCH 2/2] PM / Domains: use device's next wakeup to determine domain idle state
+Date:   Mon, 12 Oct 2020 16:34:00 -0600
+Message-Id: <20201012223400.23609-3-ilina@codeaurora.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20201012223400.23609-1-ilina@codeaurora.org>
 References: <20201012223400.23609-1-ilina@codeaurora.org>
@@ -57,162 +57,149 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some devices have a predictable interrupt pattern while executing a
-particular usecase. An example would be the VSYNC interrupt on devices
-associated with displays. A 60 Hz display could cause a periodic
-interrupt every 16 ms. A PM domain that holds such a device could power
-off and on at similar intervals.
+If the device's next event is known, determine if it is worthwhile
+entering a domain idle state. To find the next wakeup, traverse a domain
+for all child devices and find out the earliest wakeup value. A parent
+domain's next wakeup is the earliest of all its child devices and
+domains. The next wakeup is specified by devices in the domains before
+they devices are suspended.
 
-Entering a domain idle state saves power, only if the domain remains in
-the idle state for the amount of time greater than or equal to the
-residency of the idle state. Knowing the next wakeup event of the device
-will help the PM domain governor make better idle state decisions.
-
-Let's add the pm_runtime_set_next_wake() API for the device and document
-the usage of the API.
+Update the domain governor logic to determine if it is worthwhile to
+enter an idle state based on the next wakeup for the domain along with
+other existing constraints.
 
 Signed-off-by: Lina Iyer <ilina@codeaurora.org>
 ---
- Documentation/power/runtime_pm.rst | 21 ++++++++++++++++++++
- drivers/base/power/runtime.c       | 31 ++++++++++++++++++++++++++++++
- include/linux/pm.h                 |  2 ++
- include/linux/pm_runtime.h         |  1 +
- 4 files changed, 55 insertions(+)
+ drivers/base/power/domain_governor.c | 83 ++++++++++++++++++++++++++--
+ include/linux/pm_domain.h            |  1 +
+ 2 files changed, 79 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index 0553008b6279..90a5ac481ad4 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -515,6 +515,14 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
-       power.use_autosuspend isn't set, otherwise returns the expiration time
-       in jiffies
- 
-+  `int pm_runtime_set_next_event(struct device *dev, ktime_t next);`
-+    - notify runtime PM of the next event on the device. Devices that are
-+      sensitive to their domain idle enter/exit latencies may provide this
-+      information for use by the PM domain governor. The governor may determine
-+      if it worthwhile to enter a domain idle state. If the residency of the
-+      domain idle state is not met, the domain would waste more power entering
-+      and exiting the said idle state.
-+
- It is safe to execute the following helper functions from interrupt context:
- 
- - pm_request_idle()
-@@ -545,6 +553,7 @@ functions may also be used in interrupt context:
- - pm_runtime_put_sync()
- - pm_runtime_put_sync_suspend()
- - pm_runtime_put_sync_autosuspend()
-+- pm_runtime_set_next_event()
- 
- 5. Runtime PM Initialization, Device Probing and Removal
- ========================================================
-@@ -639,6 +648,18 @@ suspend routine).  It may be necessary to resume the device and suspend it again
- in order to do so.  The same is true if the driver uses different power levels
- or other settings for runtime suspend and system sleep.
- 
-+When a device enters idle at runtime, it may trigger the runtime PM up the
-+hierarchy. Devices that have an predictable interrupt pattern, may help
-+influence a better idle state determination of its parent. For example, a
-+display device could get a VSYNC interrupt every 16ms. A PM domain containing
-+the device, could also be entering and exiting idle due to runtime PM
-+coordination. If the domain were also entering runtime idle, we would know when
-+the domain would be waken up as a result of the display device waking up. Using
-+the device's next_event, the PM domain governor can make a better choice of the
-+idle state for the domain, knowing it would be be woken up by the device in the
-+near future. This is specially useful when the device is sensitive to its PM
-+domain's idle state enter and exit latencies.
-+
- During system resume, the simplest approach is to bring all devices back to full
- power, even if they had been suspended before the system suspend began.  There
- are several reasons for this, including:
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 8143210a5c54..53c2b3d962bc 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -122,6 +122,33 @@ u64 pm_runtime_suspended_time(struct device *dev)
+diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+index 490ed7deb99a..77b4928aa389 100644
+--- a/drivers/base/power/domain_governor.c
++++ b/drivers/base/power/domain_governor.c
+@@ -117,6 +117,49 @@ static bool default_suspend_ok(struct device *dev)
+ 	return td->cached_suspend_ok;
  }
- EXPORT_SYMBOL_GPL(pm_runtime_suspended_time);
  
-+/**
-+ * pm_runtime_set_next_wakeup_event - Notify PM framework of an impending event.
-+ * @dev: Device to handle
-+ * @next: impending interrupt/wakeup for the device
-+ */
-+int pm_runtime_set_next_event(struct device *dev, ktime_t next)
++static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
 +{
-+	unsigned long flags;
-+	int ret = -EINVAL;
++	ktime_t domain_wakeup = KTIME_MAX;
++	ktime_t next_wakeup;
++	struct pm_domain_data *pdd;
++	struct gpd_link *link;
++
++	/* Find the earliest wakeup for all devices in the domain */
++	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
++		next_wakeup = READ_ONCE(pdd->dev->power.next_event);
++		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
++			if (ktime_before(next_wakeup, domain_wakeup))
++				domain_wakeup = next_wakeup;
++	}
++
++	/* Then find the earliest wakeup of from all the child domains */
++	list_for_each_entry(link, &genpd->parent_links, parent_node) {
++		next_wakeup = link->child->next_wakeup;
++		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
++			if (ktime_before(next_wakeup, domain_wakeup))
++				domain_wakeup = next_wakeup;
++	}
++
++	genpd->next_wakeup = domain_wakeup;
++}
++
++static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
++				     unsigned int state, ktime_t now)
++{
++	s64 idle_time_ns, min_sleep_ns;
++	ktime_t domain_wakeup = genpd->next_wakeup;
++
++	min_sleep_ns = genpd->states[state].power_off_latency_ns +
++		       genpd->states[state].power_on_latency_ns +
++		       genpd->states[state].residency_ns;
++
++	idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
++	if (idle_time_ns < min_sleep_ns)
++		return false;
++
++	return true;
++}
++
+ static bool __default_power_down_ok(struct dev_pm_domain *pd,
+ 				     unsigned int state)
+ {
+@@ -210,6 +253,33 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
+ {
+ 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
+ 	struct gpd_link *link;
++	unsigned int state_idx;
++	ktime_t now = ktime_get();
 +
 +	/*
-+	 * Note the next pending wakeup of a device,
-+	 * if the device does not have runtime PM enabled.
++	 * Find the next wakeup from devices that can determine their own wakeup
++	 * to find when the domain would wakeup and do it for every device down
++	 * the hierarchy. It is not worth while to sleep if the state's residency
++	 * cannot be met.
 +	 */
-+	spin_lock_irqsave(&dev->power.lock, flags);
-+	if (!dev->power.disable_depth) {
-+		if (ktime_before(ktime_get(), next)) {
-+			dev->power.next_event = next;
-+			ret = 0;
++	update_domain_next_wakeup(genpd, now);
++	state_idx = genpd->state_count - 1;
++	if (genpd->next_wakeup != KTIME_MAX) {
++		/* Let's find out the deepest domain idle state, the devices prefer */
++		while (state_idx >= 0) {
++			if (next_wakeup_allows_state(genpd, state_idx, now)) {
++				genpd->max_off_time_changed = true;
++				break;
++			}
++			state_idx--;
++		}
++
++		if (state_idx < 0) {
++			state_idx = 0;
++			genpd->cached_power_down_ok = false;
++			goto done;
 +		}
 +	}
-+	spin_unlock_irqrestore(&dev->power.lock, flags);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(pm_runtime_set_next_event);
-+
- /**
-  * pm_runtime_deactivate_timer - Deactivate given device's suspend timer.
-  * @dev: Device to handle.
-@@ -1380,6 +1407,9 @@ void __pm_runtime_disable(struct device *dev, bool check_resume)
- 	/* Update time accounting before disabling PM-runtime. */
- 	update_pm_runtime_accounting(dev);
  
-+	/* Reset the next wakeup for the device */
-+	dev->power.next_event = KTIME_MAX;
-+
- 	if (!dev->power.disable_depth++)
- 		__pm_runtime_barrier(dev);
+ 	if (!genpd->max_off_time_changed) {
+ 		genpd->state_idx = genpd->cached_power_down_state_idx;
+@@ -228,17 +298,20 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
+ 	genpd->max_off_time_ns = -1;
+ 	genpd->max_off_time_changed = false;
+ 	genpd->cached_power_down_ok = true;
+-	genpd->state_idx = genpd->state_count - 1;
  
-@@ -1609,6 +1639,7 @@ void pm_runtime_init(struct device *dev)
- 	dev->power.deferred_resume = false;
- 	INIT_WORK(&dev->power.work, pm_runtime_work);
+-	/* Find a state to power down to, starting from the deepest. */
+-	while (!__default_power_down_ok(pd, genpd->state_idx)) {
+-		if (genpd->state_idx == 0) {
++	/* Find a state to power down to, starting from the state
++	 * determined by the next wakeup.
++	 */
++	while (!__default_power_down_ok(pd, state_idx)) {
++		if (state_idx == 0) {
+ 			genpd->cached_power_down_ok = false;
+ 			break;
+ 		}
+-		genpd->state_idx--;
++		state_idx--;
+ 	}
  
-+	dev->power.next_event = KTIME_MAX;
- 	dev->power.timer_expires = 0;
- 	hrtimer_init(&dev->power.suspend_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS);
- 	dev->power.suspend_timer.function = pm_suspend_timer_fn;
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index a30a4b54df52..9051658674a4 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -8,6 +8,7 @@
- #ifndef _LINUX_PM_H
- #define _LINUX_PM_H
- 
-+#include <linux/ktime.h>
- #include <linux/list.h>
- #include <linux/workqueue.h>
- #include <linux/spinlock.h>
-@@ -616,6 +617,7 @@ struct dev_pm_info {
- 	u64			active_time;
- 	u64			suspended_time;
- 	u64			accounting_timestamp;
-+	ktime_t			next_event;
- #endif
- 	struct pm_subsys_data	*subsys_data;  /* Owned by the subsystem. */
- 	void (*set_latency_tolerance)(struct device *, s32);
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index 6245caa18034..af6d35178335 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -59,6 +59,7 @@ extern void pm_runtime_get_suppliers(struct device *dev);
- extern void pm_runtime_put_suppliers(struct device *dev);
- extern void pm_runtime_new_link(struct device *dev);
- extern void pm_runtime_drop_link(struct device *dev);
-+extern int pm_runtime_set_next_event(struct device *dev, ktime_t next);
- 
- /**
-  * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
++done:
++	genpd->state_idx = state_idx;
+ 	genpd->cached_power_down_state_idx = genpd->state_idx;
+ 	return genpd->cached_power_down_ok;
+ }
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index ee11502a575b..9ea6f666967b 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -119,6 +119,7 @@ struct generic_pm_domain {
+ 				     unsigned int state);
+ 	struct gpd_dev_ops dev_ops;
+ 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
++	ktime_t next_wakeup;
+ 	bool max_off_time_changed;
+ 	bool cached_power_down_ok;
+ 	bool cached_power_down_state_idx;
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
