@@ -2,275 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EFB828B453
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 14:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7641C28B4C7
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 14:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388322AbgJLMEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 08:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S1729646AbgJLMmW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 08:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388321AbgJLMEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 08:04:46 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4ED8C0613D1
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 05:04:45 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id a7so17019396lfk.9
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 05:04:45 -0700 (PDT)
+        with ESMTP id S1726348AbgJLMmW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 08:42:22 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3006C0613D0;
+        Mon, 12 Oct 2020 05:42:21 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id j18so837993pfa.0;
+        Mon, 12 Oct 2020 05:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QecOJJIpChCwDyXx3HayhiFszoIttsDqWMb62K2XmqE=;
-        b=mvSuQPVzZtD44qEEOLFnSqqT2uyk2p6WL1sRgpJahbrMoLLbaFmiRoBCynpNmDrmt5
-         OGNQvh6lyHfET6VlVcZXKmrgR858brB30H/mBHv95js+qWt880t8DMcNr5LnEYzIApH5
-         cjNTOAuiUBtFohBkqK8lxqbb8OQsckz3dY+8dqYkStyyh2gVgSIelHYxJBQUJijotnyN
-         urQ8rMmOTfYWpk5JYDkxcoEXizxa46me/21aUs7EDE5WQeU9Z1CZpaTx0+oP28lhnSpH
-         y2ao0IiOT9yy5P+qjspb+rUj3nMCRAThdfypzYuPLcDxjyv7IptNXgiJVmh13Gfn1gGf
-         lUCg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=3Cj47lWhLKBGlmOv6O753WAzZFddEs+CDjhGU44ptXQ=;
+        b=QcdgBuug7zCqVBW+8cpJ6GKov6YaGsKH1UgfAAlcJAquIfK+r/DsD2APOBDB4JPvSa
+         QJXX77ndYzv2ssaJFZ1Um18zcCvFZrrDuE99dZ+2JNsKKZaVKntqIA1Mebur9/CP5P6w
+         QlKSUBna3x3Dxo4PE8Xeh9rnXXQB7x9ahRXWCAJZfnx3Ao2JXopnL99CSedQwt7ea99h
+         xDWBVJkVk3qp3XpaE/BGeHOR+CEWIY97wVgBe4V93oQ2wPO1q120m+36cw+/brlFLK/r
+         YFsNjkvt/Qb1pzLsMt2Gf1iK0/Mveffj50dnAz/Ev9sNAuHScSGlgQtdAm5rFXu6rmRC
+         B9kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QecOJJIpChCwDyXx3HayhiFszoIttsDqWMb62K2XmqE=;
-        b=YnB+FU9i8Oq7NF0WozR4s08NZhHYPq/0Ga6wLIY/LHccc7pOLTp/P7jq3LoAwdhoN8
-         f6Ime20K2meMJXkf7AN5meKa2GhrRzx5JHljcEu36Zeqwozh1IJfgL2t2f9BG6aH9cgM
-         1GExKTg03f0LWGzwYaWUW6ihLWu3MGWifujxQXMeKiae+x0a13trFQkmTuV8IGQsfNls
-         OniKtd5E+VmdJN7KmTUO2La9xQkJmxT7QwBtqc4tjayoVgjy5opwp91m7XhZJ4nPqazb
-         MTabgaEwwwPK+CaeQGCqi1AhZrHz4v2M2vpsQchvaRA78f7fo7sAVhIHl4lasX05tETA
-         6D4w==
-X-Gm-Message-State: AOAM532sw1LN8wf7obtUgvtOzxNFvRjiTbtuRXNPQauTAst3s6hdC5gS
-        ZH8sXaHwgHTakyuqvO6yydha3nuPKVp9DHuFc4Afvg==
-X-Google-Smtp-Source: ABdhPJzNAYTPNzgMXP+cKRSx4rvmcaCS0Ay1Ut0v/rTmNc/NEV0vIZyD97DqJ2NlfxLL1XpvZv8wYtz6sP8jxT0415g=
-X-Received: by 2002:a19:c10:: with SMTP id 16mr7500143lfm.459.1602504283998;
- Mon, 12 Oct 2020 05:04:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201007161439.312534-1-kim.phillips@amd.com> <20201007161439.312534-4-kim.phillips@amd.com>
- <eb8dbbceb2252ebc36e3ed76f7a9efe1612ed2b7.camel@intel.com>
-In-Reply-To: <eb8dbbceb2252ebc36e3ed76f7a9efe1612ed2b7.camel@intel.com>
-From:   Victor Ding <victording@google.com>
-Date:   Mon, 12 Oct 2020 23:04:08 +1100
-Message-ID: <CANqTbdbeaZ6wtEVFiWHu9TCEMV4G36T9Tqf=C8nz89DPLq7t3g@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] powercap: Add AMD Fam17h RAPL support
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     Kim Phillips <kim.phillips@amd.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Vineela Tummalapalli <vineela.tummalapalli@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3Cj47lWhLKBGlmOv6O753WAzZFddEs+CDjhGU44ptXQ=;
+        b=nqXZ/rOOVSV0GrosqVqX5YIKgBRYDzgXL699kr7O4jWyS4BXmcnGUV+cYL2nYDXAV5
+         pM8bbKdMmwqhl0ECMAxpQ1VcTy3cS/obVxgGpso89qkPN/yw3gikAPUAIpwhDwflarTJ
+         mxOzuZCvkIyduZlVFymbs1anIftwPRsJ+XDfxnFZWP3OXY4nY/wt9ffY1u9eOiVY1cZz
+         L9sELFnzvrk/s8VTJ7EdRv2/mLZ4WJ21Braad0mdluxP4SqWpohnHju2T6ssXs7kgG1n
+         DqbnWDVgZMcr6E+DCa3Ezoe/WtarEVvzBz2fAfaN/eRo/McDKFIxCAO3yVmGEIdc3XeS
+         F6IA==
+X-Gm-Message-State: AOAM530Ef2N0CsoQEYY5dYQN77iYFy+oh9mW1vo+IhA/9BtfUTp0lsWU
+        s7R/bPJLUwRD/l7HYQn6a0PFVN6g5ObpKA==
+X-Google-Smtp-Source: ABdhPJyTuqeDFAmDfO69EXGtk5fHUyTaExaWAj/zc69Fq7iARWqLSYHTZqNSfe5Dn/FdCH0EZbvy+g==
+X-Received: by 2002:a17:90a:aa18:: with SMTP id k24mr19669492pjq.231.1602506541262;
+        Mon, 12 Oct 2020 05:42:21 -0700 (PDT)
+Received: from mi-OptiPlex-7060.mioffice.cn ([43.224.245.179])
+        by smtp.gmail.com with ESMTPSA id r6sm16259559pfg.85.2020.10.12.05.42.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Oct 2020 05:42:20 -0700 (PDT)
+From:   zhuguangqing83@gmail.com
+To:     lukasz.luba@arm.com, quentin.perret@arm.com, rjw@rjwysocki.net,
+        pavel@ucw.cz, len.brown@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuguangqing <zhuguangqing@xiaomi.com>
+Subject: [PATCH] PM / EM: consult something about cpumask in em_dev_register_perf_domain
+Date:   Mon, 12 Oct 2020 20:41:36 +0800
+Message-Id: <20201012124136.4147-1-zhuguangqing83@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 2:47 PM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Wed, 2020-10-07 at 11:14 -0500, Kim Phillips wrote:
-> > From: Victor Ding <victording@google.com>
-> >
-> > This patch enables AMD Fam17h RAPL support for the power capping
-> > framework. The support is as per AMD Fam17h Model31h (Zen2) and
-> > model 00-ffh (Zen1) PPR.
-> >
-> > Tested by comparing the results of following two sysfs entries and
-> > the
-> > values directly read from corresponding MSRs via /dev/cpu/[x]/msr:
-> >   /sys/class/powercap/intel-rapl/intel-rapl:0/energy_uj
-> >   /sys/class/powercap/intel-rapl/intel-rapl:0/intel-
-> > rapl:0:0/energy_uj
-> >
-> > Signed-off-by: Victor Ding <victording@google.com>
-> > Acked-by: Kim Phillips <kim.phillips@amd.com>
-> > Cc: Victor Ding <victording@google.com>
-> > Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> > Cc: Borislav Petkov <bp@alien8.de>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: "H. Peter Anvin" <hpa@zytor.com>
-> > Cc: Ingo Molnar <mingo@redhat.com>
-> > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> > Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>
-> > Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-> > Cc: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Tony Luck <tony.luck@intel.com>
-> > Cc: Vineela Tummalapalli <vineela.tummalapalli@intel.com>
-> > Cc: LKML <linux-kernel@vger.kernel.org>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: x86@kernel.org
-> > ---
-> > Kim's changes from Victor's original submission:
-> >
-> >
-> https://lore.kernel.org/lkml/20200729205144.3.I01b89fb23d7498521c84cfdf417450cbbfca46bb@changeid/
-> >
-> >  - Added my Acked-by.
-> >  - Added Daniel Lezcano to Cc.
-> >
-> >  arch/x86/include/asm/msr-index.h     |  1 +
-> >  drivers/powercap/intel_rapl_common.c |  2 ++
-> >  drivers/powercap/intel_rapl_msr.c    | 27
-> > ++++++++++++++++++++++++++-
-> >  3 files changed, 29 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/include/asm/msr-index.h
-> > b/arch/x86/include/asm/msr-index.h
-> > index f1b24f1b774d..c0646f69d2a5 100644
-> > --- a/arch/x86/include/asm/msr-index.h
-> > +++ b/arch/x86/include/asm/msr-index.h
-> > @@ -324,6 +324,7 @@
-> >  #define MSR_PP1_POLICY                       0x00000642
-> >
-> >  #define MSR_AMD_RAPL_POWER_UNIT              0xc0010299
-> > +#define MSR_AMD_CORE_ENERGY_STATUS   0xc001029a
-> >  #define MSR_AMD_PKG_ENERGY_STATUS    0xc001029b
-> >
-> >  /* Config TDP MSRs */
-> > diff --git a/drivers/powercap/intel_rapl_common.c
-> > b/drivers/powercap/intel_rapl_common.c
-> > index 983d75bd5bd1..6905ccffcec3 100644
-> > --- a/drivers/powercap/intel_rapl_common.c
-> > +++ b/drivers/powercap/intel_rapl_common.c
-> > @@ -1054,6 +1054,8 @@ static const struct x86_cpu_id rapl_ids[]
-> > __initconst = {
-> >
-> >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &rapl_defaults_hsw_se
-> > rver),
-> >       X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &rapl_defaults_hsw_se
-> > rver),
-> > +
-> > +     X86_MATCH_VENDOR_FAM(AMD, 0x17, &rapl_defaults_core),
->
-> I double if we can use rapl_defaults_core here.
->
-> static const struct rapl_defaults rapl_defaults_core = {
->         .floor_freq_reg_addr = 0,
->         .check_unit = rapl_check_unit_core,
->         .set_floor_freq = set_floor_freq_default,
->         .compute_time_window = rapl_compute_time_window_core,
-> };
->
->         .floor_freq_reg_addr = 0,
-> is redundant here, even for rapl_defaults_core, we can remove it.
->
->         .check_unit = rapl_check_unit_core,
-> the Intel UNIT MSR supports three units including Energy/Power/Time.
-> From the change below, only the energy counter is supported, so you may
-> need to confirm if all the three units are supported or not.
->
->         .set_floor_freq = set_floor_freq_default,this function sets PL1_CLAMP bit on RAPL_DOMAIN_REG_LIMIT, but RAPL_DOMAIN_REG_LIMIT is not supported on the AMD cpus.
->
->         .compute_time_window = rapl_compute_time_window_core,
-> this is used for setting the power limits, which is not supported on
-> the AMD cpus.
->
-> IMO, it's better to use a new rapl_defaults that contains valid
-> callbacks for AMD cpus.
-Good point. The only reason why I proposed to re-use rapl_defaults_core was
-that "check_unit" is the only function needed here, and it is the same
-as Intel's.
-The rest of callbacks are not used at all since setting the power limits is not
-supported on AMD CPUs. Let's create a new callback for AMD. It should be like:
-static const struct rapl_defaults rapl_defaults_amd = {
-         .check_unit = rapl_check_unit_core,
-};
-The AMD UNIT MSR behaves the same as Intel's: [3:0] is Power Units, [12:8] is
-Energy Status Units, and [19:16] is Time Units.
->
-> >       {}
-> >  };
-> >  MODULE_DEVICE_TABLE(x86cpu, rapl_ids);
-> > diff --git a/drivers/powercap/intel_rapl_msr.c
-> > b/drivers/powercap/intel_rapl_msr.c
-> > index c68ef5e4e1c4..dcaef917f79d 100644
-> > --- a/drivers/powercap/intel_rapl_msr.c
-> > +++ b/drivers/powercap/intel_rapl_msr.c
-> > @@ -48,6 +48,21 @@ static struct rapl_if_priv rapl_msr_priv_intel = {
-> >       .limits[RAPL_DOMAIN_PACKAGE] = 2,
-> >  };
-> >
-> > +static struct rapl_if_priv rapl_msr_priv_amd = {
-> > +     .reg_unit = MSR_AMD_RAPL_POWER_UNIT,
-> > +     .regs[RAPL_DOMAIN_PACKAGE] = {
-> > +             0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
-> > +     .regs[RAPL_DOMAIN_PP0] = {
-> > +             0, MSR_AMD_CORE_ENERGY_STATUS, 0, 0, 0 },
-> > +     .regs[RAPL_DOMAIN_PP1] = {
-> > +             0, 0, 0, 0, 0 },
-> > +     .regs[RAPL_DOMAIN_DRAM] = {
-> > +             0, 0, 0, 0, 0 },
-> > +     .regs[RAPL_DOMAIN_PLATFORM] = {
-> > +             0, 0, 0, 0, 0},
->
-> I don't think you need to set the PP1/DRAM/PLATFORM registers to 0 explicitly if they are not supported.
-Good suggestion. Let's remove the zeros.
->
-> > +     .limits[RAPL_DOMAIN_PACKAGE] = 1,
->
->
-> Is Pkg Domain PL1 really supported?
-> At least according to this patch, I don't think so. So if power limit
-> is supported, it is better to add the support in this patch altogether.
->
-> If no, we're actually exposing energy counters only. If this is the
-> case, I'm not sure if it is proper to do this in powercap class because
-> we can not do powercap actually. Or at least, if we want to support
-> power zones with no power limits, we should enhance the code to
-> support this rather than fake a power limit.
->
-Correct, this is solely to expose energy counters. Many existing tools
-are built on
-top of powercap's sysfs to query energy counters, even though they don't set the
-power limit. Exposing the energy counters through the same powercap interface
-allows these tools built for Intel run seamlessly on AMD. Hence, I
-believe powercap
-is the best place to expose AMD's energy counters.
+From: zhuguangqing <zhuguangqing@xiaomi.com>
 
-I like your idea of enhancing the code to avoid using a fake power
-limit. I'll make
-the update.
-> thanks,
-> rui
-> > +};
-> > +
-> >  /* Handles CPU hotplug on multi-socket systems.
-> >   * If a CPU goes online as the first CPU of the physical package
-> >   * we add the RAPL package to the system. Similarly, when the last
-> > @@ -137,7 +152,17 @@ static int rapl_msr_probe(struct platform_device
-> > *pdev)
-> >       const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
-> >       int ret;
-> >
-> > -     rapl_msr_priv = &rapl_msr_priv_intel;
-> > +     switch (boot_cpu_data.x86_vendor) {
-> > +     case X86_VENDOR_INTEL:
-> > +             rapl_msr_priv = &rapl_msr_priv_intel;
-> > +             break;
-> > +     case X86_VENDOR_AMD:
-> > +             rapl_msr_priv = &rapl_msr_priv_amd;
-> > +             break;
-> > +     default:
-> > +             pr_err("intel-rapl does not support CPU vendor %d\n",
-> > boot_cpu_data.x86_vendor);
-> > +             return -ENODEV;
-> > +     }
-> >       rapl_msr_priv->read_raw = rapl_msr_read_raw;
-> >       rapl_msr_priv->write_raw = rapl_msr_write_raw;
-> >
->
->
->
-> IF
->
->
->
-Best regards,
-Victor Ding
+Hi, Lukasz, Quentin
+  I have three questions to consult about cpumask in energy_model.c.
+
+1, The first one is about the meanings of the following two parameters,
+[1] and [2].
+[1]: "cpumask_t *cpus" in function em_dev_register_perf_domain(): Pointer
+to cpumask_t, which in case of a CPU device is obligatory. It can be taken
+from i.e. 'policy->cpus'.
+[2]: "unsigned long cpus[]" in struct em_perf_domain: Cpumask covering the
+CPUs of the domain. It's here for performance reasons to avoid potential
+cache misses during energy calculations in the scheduler and simplifies
+allocating/freeing that memory region.
+
+From the current code, we see [2] is copied from [1]. But from comments,
+accorinding to my understanding, [2] and [1] have different meanings.
+[1] can be taken from i.e. 'policy->cpus', according to the comment in the
+defination of struct cpufreq_policy, it means Online CPUs only. Actually,
+'policy->cpus' is not always Online CPUs.
+[2] means each_possible_cpus in the same domain, including phycical
+hotplug cpus(just possible), logically hotplug cpus(just present) and
+online cpus.
+
+So, the first question is, what are the meanings of [1] and [2]?
+I guess maybe there are the following 4 possible choices.
+A), for_each_possible_cpu in the same domain, maybe phycical hotplug
+B), for_each_present_cpu in the same domain, maybe logically hotplug
+C), for_each_online_cpu in the same domain, online
+D), others
+
+2, The second question is about the function em_dev_register_perf_domain().
+If multiple clients register the same performance domain with different
+*dev or *cpus, how should we handle?
+
+int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+			struct em_data_callback *cb, cpumask_t *cpus)
+
+For example, say cpu0 and cpu1 are in the same performance domain,
+cpu0 is registered first. As part of the init process,
+em_dev_register_perf_domain() is called, then *dev = cpu0_dev,
+*cpus = 01b(cpu1 is initially offline). It creates a em_pd for cpu0_dev.
+After a while, cpu1 is online, em_dev_register_perf_domain() is called
+again as part of init process for cpu1, then *dev =cpu1_dev,
+*cpus = 11b(cpu1 is online).  In this case, for the current code,
+cpu1_dev can not get its em_pd.
+
+3, The third question is, how can we ensure cpu_dev as follows is not
+NULL? If we can't ensure that, maybe we should add a check before using
+it.
+/kernel/power/energy_model.c
+174) static int em_create_pd(struct device *dev, int nr_states,
+175)                    struct em_data_callback *cb, cpumask_t *cpus)
+176) {
+199)    if (_is_cpu_device(dev))
+200)            for_each_cpu(cpu, cpus) {
+201)                    cpu_dev = get_cpu_device(cpu);
+202)                    cpu_dev->em_pd = pd;
+203)            }
+
+Signed-off-by: zhuguangqing <zhuguangqing@xiaomi.com>
+---
+ kernel/power/energy_model.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index c1ff7fa030ab..addf2f400184 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -199,7 +199,13 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	if (_is_cpu_device(dev))
+ 		for_each_cpu(cpu, cpus) {
+ 			cpu_dev = get_cpu_device(cpu);
+-			cpu_dev->em_pd = pd;
++			if (cpu_dev)
++				cpu_dev->em_pd = pd;
++			else {
++				cpumask_clear_cpu(cpu, em_span_cpus(pd));
++				dev_dbg(dev, "EM: failed to get cpu%d device\n",
++					cpu);
++			}
+ 		}
+ 
+ 	dev->em_pd = pd;
+-- 
+2.17.1
+
