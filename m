@@ -2,72 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F4228B242
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 12:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DEA28B249
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 12:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387537AbgJLKbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 06:31:18 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:44126 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387488AbgJLKbS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 06:31:18 -0400
-Received: by mail-oi1-f194.google.com with SMTP id x62so18209939oix.11
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 03:31:17 -0700 (PDT)
+        id S2387557AbgJLKee (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 06:34:34 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:39474 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387463AbgJLKed (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 06:34:33 -0400
+Received: by mail-oi1-f196.google.com with SMTP id c13so18243769oiy.6;
+        Mon, 12 Oct 2020 03:34:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=NVWp/Q4Y06s9l9IsSXNdU2diHV6oPXkJE9vei1JyoKg=;
-        b=WvxYwBGCVkp2E58JG4j0ZsWYkapxv3zz6gkT7SQ5FH4FWkwLD38MgybCMxkdSF/Cx0
-         Ulj3Mtkboo2TpmZm5uhF2EC/8rM+Zfti3ZvMd2g679gwqlRN9ruEKRZjy1+De5Mgt3ku
-         qN5NSwbn0tIkYMUTCfbykydvrI+CP7M18jj7JabKDOpjWQLy7AUAZuwfC9wet90VLVf8
-         7SycWdrS/mCIve8ShG/cinXhOF5s9EWfBm5AqxzFCiO3GDAVJwYItcvhpvZTllKUM/X+
-         uuRrDs3RUa1my3T0DCTyI1H/6Y5hwVMgFkAIkzOdoxsBejdabhU1DIsHHYea8wmfwG0H
-         BO/g==
-X-Gm-Message-State: AOAM533DFuFzeboPOCG7wprCM1QWxqhh4tFV2baZ3Gv1CzVe5AyqS/vn
-        ODMz94L6emOhZjjiIe2CjABYDh2Lk5n820jVW0U=
-X-Google-Smtp-Source: ABdhPJzLIBydeKdh5a/2NqYUc8RszWA1m/FeP6ClvZwRXS0a5ivE2moxoMOPbQSev20PsRUl3EfK/quMK2NyYr1I9tc=
-X-Received: by 2002:aca:724a:: with SMTP id p71mr10555025oic.157.1602498677060;
- Mon, 12 Oct 2020 03:31:17 -0700 (PDT)
+        bh=Jvl1uNpai0+Z9/xkkl9P1c4uC5A00NigHSFBn2BljHM=;
+        b=dYgdmI+A3jiryNepEr/LSkszwyxINfx3FRiJu8Gaeeb4eQKOeszbslwkCqvp5BdRWD
+         hyoGxAK9cNX4T2/B29c1Scg5oeyyzknItLb63BqpYWtO1hYM8IPENzWGhiIgTV9v/ySa
+         2+X4h4Gvoebcu8Fme4Z4CEsA9MIcArHQLez9aQlg2B5BjhL/OxPNVN0ZHg2j37OLOY7T
+         57nhzXfZhO5N244B62dpn9t7hdiykm3z7oCMUBzXOPPOi6M06QwCMNiyzOrJwFs5PJFf
+         kGS5lpN3eohArMijI4jNj0U/BqEyZIs69QxEF53q9W3up/hIQx2veKtiaRsrmnSFjSZh
+         Bw/Q==
+X-Gm-Message-State: AOAM530DdjpQ/LZ1YG8PpUz/rYTJagoT+LhDGJViBurht5mK/akMQ2wR
+        04Vxxl7ot87459mNAl0/gNdgQdpwxuUoipllUIQ=
+X-Google-Smtp-Source: ABdhPJx6uN7tu4QRGeMwub0VWq2S/xcIycEV9s+wBnNitxuxv9EtDYCkFI5lWj+m90/kr6Rv/9Sq0ZLFFLh8XmdQgy0=
+X-Received: by 2002:aca:5256:: with SMTP id g83mr5839116oib.71.1602498871268;
+ Mon, 12 Oct 2020 03:34:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <1602461364-17300-1-git-send-email-jeff@labundy.com>
-In-Reply-To: <1602461364-17300-1-git-send-email-jeff@labundy.com>
+References: <9c499a132d06f31e81a516c91bd92d619eb118ba.1602478204.git.viresh.kumar@linaro.org>
+In-Reply-To: <9c499a132d06f31e81a516c91bd92d619eb118ba.1602478204.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Oct 2020 12:31:02 +0200
-Message-ID: <CAJZ5v0jmnWxnpwHEV3k04_v4YV+oOAm7JE3OyMbKe-K18x8OsA@mail.gmail.com>
-Subject: Re: [PATCH] PM / sysfs: Add the ability to call PM operations manually
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Mon, 12 Oct 2020 12:34:16 +0200
+Message-ID: <CAJZ5v0iC7hs7jEdm0q3wnFycEr-WAZSKhiYkwPwGgkGDew3ZEw@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: stats: Fix string format specifier mismatch
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel test robot <lkp@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 2:09 AM Jeff LaBundy <jeff@labundy.com> wrote:
+On Mon, Oct 12, 2020 at 6:50 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> During driver development, it's useful to be able to call a device's
-> suspend and resume operations for test purposes without having to
-> involve the rest of the PM subsystem. Such an ability would be handy
-> for measuring power consumption, checking interrupt function, etc.
+> Fix following warning:
 >
-> The PM subsystem does have debug hooks for limiting the scope of
-> suspend or excluding devices that shouldn't suspend, but there can be
-> overhead in configuring these hooks that is often inconvenient during
-> early bring-up.
+> drivers/cpufreq/cpufreq_stats.c:63:10: warning: %d in format string (no.
+> 1) requires 'int' but the argument type is 'unsigned int'
 >
-> This patch introduces the pm_op_test attribute, to be used as follows
-> (random I2C client used as an example):
+> Fixes: 40c3bd4cfa6f ("cpufreq: stats: Defer stats update to cpufreq_stats_record_transition()")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq_stats.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> 1. echo 'suspend' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
-> 2. Measure power consumption at one's leisure, check wake-up interrupt
->    behavior, etc.
-> 3. echo 'resume' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
+> diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+> index 1b1389face85..6cd5c8ab5d49 100644
+> --- a/drivers/cpufreq/cpufreq_stats.c
+> +++ b/drivers/cpufreq/cpufreq_stats.c
+> @@ -62,7 +62,7 @@ static ssize_t show_total_trans(struct cpufreq_policy *policy, char *buf)
+>         if (READ_ONCE(stats->reset_pending))
+>                 return sprintf(buf, "%d\n", 0);
+>         else
+> -               return sprintf(buf, "%d\n", stats->total_trans);
+> +               return sprintf(buf, "%u\n", stats->total_trans);
+>  }
+>  cpufreq_freq_attr_ro(total_trans);
+>
+> --
 
-This is utterly incorrect.
-
-In general, the suspend and resume callbacks specific to system-wide
-PM cannot be executed in the working state of the system safely.
-
-Thanks!
+Applied, thanks!
