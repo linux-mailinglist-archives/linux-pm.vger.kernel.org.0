@@ -2,100 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A013A28C473
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 00:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C0A28C4D0
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 00:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732211AbgJLWBg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 18:01:36 -0400
-Received: from foss.arm.com ([217.140.110.172]:46380 "EHLO foss.arm.com"
+        id S2390286AbgJLWeg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 18:34:36 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:59541 "EHLO m42-4.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727778AbgJLWBf (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Oct 2020 18:01:35 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7FCA31B;
-        Mon, 12 Oct 2020 15:01:34 -0700 (PDT)
-Received: from localhost (unknown [10.1.199.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6999E3F719;
-        Mon, 12 Oct 2020 15:01:34 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 23:01:33 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Nicola Mazzucato <nicola.mazzucato@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
-        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
-        chris.redpath@arm.com, morten.rasmussen@arm.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
- cpu-perf-dependencies
-Message-ID: <20201012220132.GA1715@arm.com>
-References: <20201008150317.GB20268@arm.com>
- <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
- <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
- <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
- <20201009140141.GA4048593@bogus>
- <2b7b6486-2898-1279-ce9f-9e7bd3512152@arm.com>
- <20201012105945.GA9219@arm.com>
- <500510b9-58f3-90b3-8c95-0ac481d468b5@arm.com>
- <20201012163032.GA30838@arm.com>
- <9fe56600-ba7d-d3b6-eea3-885475d94d7a@arm.com>
+        id S2389956AbgJLWef (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 18:34:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1602542074; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=sflyGCGy5TB2ukNP2ZHfV/JvTdRpoIj2ZM6HWG0GHas=; b=nKlTYei09C3APms0ig0Pb/bHtd0fw0/Fhk/SDDd8yg0NBV9peewaeC3dYZ4aY60MV9e4OEyT
+ xYp89txJoQSdF7s6lkUHLKaZxBTrFV95soqsjHQY4NcQ1WnCLfnEBGaLc9PhiJRJO7D8l4Yw
+ KKQcF8mqmDWZpFLzPX+OnSAefTA=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 5f84d9fa4f8cc67c31ef755f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Oct 2020 22:34:34
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 65119C43395; Mon, 12 Oct 2020 22:34:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 386C6C433FF;
+        Mon, 12 Oct 2020 22:34:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 386C6C433FF
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     rjw@rjwysocki.net, ulf.hansson@linaro.org, linux-pm@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, Lina Iyer <ilina@codeaurora.org>
+Subject: [PATCH 0/2] Better domain idle from device wakeup patterns
+Date:   Mon, 12 Oct 2020 16:33:58 -0600
+Message-Id: <20201012223400.23609-1-ilina@codeaurora.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9fe56600-ba7d-d3b6-eea3-885475d94d7a@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Lukasz,
+Changes since RFC [1]:
+- Organized the code to make it cleaner
+- Fixed some issues with idle state determination
+- Add documentation and update commit text
 
-I think after all this discussion (in our own way of describing things)
-we agree on how the current cpufreq based FIE implementation is affected
-in systems that use hardware coordination.
+Hello,
 
-What we don't agree on is the location where that implementation (that
-uses the new mask and aggregation) should be.
+I was looking for an option to do better power management for some
+domains where the devices enter runtime PM in a predictable fashion. For
+example a display device that sends a vsync interrupt every 16 ms for a
+60 Hz panel. These interrupts are not timer interrupts but tend to
+interrupt periodically to service the workflow and the devices and
+domains may go back to idle soon after. Two domains are affected by this
+- the device's PM domain and the CPU PM domain.
 
-On Monday 12 Oct 2020 at 19:19:29 (+0100), Lukasz Luba wrote:
-[..]
-> The previous FIE implementation where arch_set_freq_scale()
-> was called from the drivers, was better suited for this issue.
-> Driver could just use internal dependency cpumask or even
-> do the aggregation to figure out the max freq for cluster
-> if there is a need, before calling arch_set_freq_scale().
-> 
-> It is not perfect solution for software FIE, but one of possible
-> when there is no hw counters.
-> 
-[..]
+As a first step, I am looking to solve for the device's PM domain idle
+state (and hopefully solve for the CPU PM domains subsequently). The PM
+domain could have multiple idle states and/or the enter/exit latencies
+could be high. In either case, it may not always be beneficial to power
+off the domain, only to turn it back on before satisfying the idle state
+residency. When the wakeup is known for the device, we could use that to
+determine the worthiness of entering a domain idle state. Only the
+device can tell us when the future event would be and that could change
+as the usecase changes. Like, when the panel refresh rate increases to
+120 Hz. If this information was made available to runtime PM, we could
+use that in the domain governor to determine a suitable idle state. This
+is the idea behind these patches.
 
-> Difference between new FIE and old FIE (from v5.8) is that the new one
-> purely relies on schedutil max freq value (which will now be missing),
-> while the old FIE was called by the driver and thus it was an option to
-> fix only the affected cpufreq driver [1][2].
-> 
-
-My final argument is that now you have 2 drivers that would need this
-support, next you'll have 3 (the new mediatek driver), and in the future
-there will be more. So why limit and duplicate this functionality in the
-drivers? Why not make it generic for all drivers to use if the system
-is using hardware coordination?
-
-Additionally, I don't think drivers should not even need to know about
-these dependency/clock domains. They should act at the level of the
-policy, which in this case will be at the level of each CPU.
+Would appreciate your thoughts on this.
 
 Thanks,
-Ionela.
+Lina
 
-> IMO we can avoid this new cpumask in policy.
-> 
-> Regards,
-> Lukasz
-> 
-> [1] https://elixir.bootlin.com/linux/v5.8/source/drivers/cpufreq/scmi-cpufreq.c#L58
-> [2] https://elixir.bootlin.com/linux/v5.8/source/drivers/cpufreq/qcom-cpufreq-hw.c#L79
-> 
+[1]. https://lore.kernel.org/linux-pm/010101746eccb270-05beb27f-e1e4-40eb-92da-ad1bb48feb41-000000@us-west-2.amazonses.com/T/
+
+Lina Iyer (2):
+  PM / runtime: register device's next wakeup
+  PM / Domains: use device's next wakeup to determine domain idle state
+
+ Documentation/power/runtime_pm.rst   | 21 +++++++
+ drivers/base/power/domain_governor.c | 83 ++++++++++++++++++++++++++--
+ drivers/base/power/runtime.c         | 31 +++++++++++
+ include/linux/pm.h                   |  2 +
+ include/linux/pm_domain.h            |  1 +
+ include/linux/pm_runtime.h           |  1 +
+ 6 files changed, 134 insertions(+), 5 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
