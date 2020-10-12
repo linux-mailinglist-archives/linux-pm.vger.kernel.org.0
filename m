@@ -2,94 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7E528B593
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 15:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32E528B616
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 15:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgJLNKO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 09:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388696AbgJLNKK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 09:10:10 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89624C0613D0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 06:10:09 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id n18so19132515wrs.5
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 06:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=HDv79H0T0YMmpA6Cg6LXdiKcuj2DrLE+0Njp0Y0u8KM=;
-        b=XGY9IxnK+Djfx5Zb8HC+CkSfHoX6LZfeU7EHgj0M7jE27eNiu/NTCS/8O2N4CTMsIr
-         5HqQk78SAe0OaeEucGW1pj0pUs0eJK0sgVXRExrJJ1zO7w1xG78/XBvpsOoi0BhY+Z1w
-         jF7hYRNPIHRUxxFrSyeAToz+/9RQ+zjKRDJgcjSHa4Uap2u0tdqxNVZf7hqSh24Xi9sT
-         f+HixQE9Y0oDRYUii64YVp8p/vFZjnBTnvXhhjUpoK82Up70SzvU6+iF4rws5ul5hPfy
-         YRi+o3/CaD4VTZS0wfrcVj/HR330hT2wnk/fWjBuNSrCrx78+tJHm2Pf+4dKLNOcsWEp
-         9FQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HDv79H0T0YMmpA6Cg6LXdiKcuj2DrLE+0Njp0Y0u8KM=;
-        b=s9joCbanxzwvQcCMRtWqEZfgWoCTNHXr+QbQC9skjSqjTEwhjqpw0i/v5nhqNKdVZf
-         Sd2RzN5raMPFYDyNERSATASbHzZ4895BSQNPfGf2Y7EWT66SHnK9eLHPkFlYVpXlpTD3
-         E/OhjFf3hxL5x5HyVfL32eNz2aryQc3SwmT8ouB8xgBiAiAvi/Zl7Daf5HM+CJTMmDDW
-         NaPyyyH4PkOs8aRLOLwkawa3iTPcmqnBUKsUXPJtGzzigxkJ3DFxp3/OM20QNsXKurQN
-         hkH9agZeiKesUH0ucJBo5oaKXQGZJW++hpO0iy6ZhrrbVBlqg1bkEx0BCS9i1xlZai/C
-         Yl9g==
-X-Gm-Message-State: AOAM533kyOk65x3MjUdrG+9BuWupjDCKuDff+1LzqfaT2h9ebU38/ucf
-        FhyrMFNF+38OXOorSN8I08eGAg==
-X-Google-Smtp-Source: ABdhPJysslHpkfKa/rNifK/bUIFGSLBzE605Lmx/ZaVPZeJstlvv21gBu3jK5rmlIjoNhyVsWXs6gg==
-X-Received: by 2002:adf:97dd:: with SMTP id t29mr21818564wrb.322.1602508208105;
-        Mon, 12 Oct 2020 06:10:08 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id u20sm15595626wmm.29.2020.10.12.06.10.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Oct 2020 06:10:07 -0700 (PDT)
-Date:   Mon, 12 Oct 2020 14:10:04 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     zhuguangqing83@gmail.com
-Cc:     lukasz.luba@arm.com, quentin.perret@arm.com, rjw@rjwysocki.net,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        zhuguangqing <zhuguangqing@xiaomi.com>
-Subject: Re: [PATCH] PM / EM: consult something about cpumask in
- em_dev_register_perf_domain
-Message-ID: <20201012131004.GB3366383@google.com>
-References: <20201012124136.4147-1-zhuguangqing83@gmail.com>
- <20201012130501.GA3366383@google.com>
+        id S1726651AbgJLNWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 09:22:53 -0400
+Received: from mga12.intel.com ([192.55.52.136]:30218 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727037AbgJLNWx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 09:22:53 -0400
+IronPort-SDR: U5Z2K33Ih0PM74he7Ky+t7/wEmjAZQHAyWywPcXF+1K0R5RsKpkXGGY5wXJVy4Uk9Pne9eZG/2
+ Q7Le+qW5ZyNA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9771"; a="145058659"
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="145058659"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 06:22:52 -0700
+IronPort-SDR: 2u0JEWs5FttLeBkwYWr9XNFVFwfNSatW82ERDKeFWGFp8Ybww0hJBw21NO4MgojtMj7UfJAiVj
+ DclbRii/7rvg==
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="529954737"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.21])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 06:22:52 -0700
+Message-ID: <ae351673692472b5ff5a482debc2de9060ffdd5e.camel@linux.intel.com>
+Subject: Re: [RFC][PATCH] cpufreq: intel_pstate: Delete intel_pstate sysfs
+ if failed to register the driver
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Chen Yu <yu.c.chen@intel.com>, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 12 Oct 2020 06:22:40 -0700
+In-Reply-To: <20201009033038.23157-1-yu.c.chen@intel.com>
+References: <20201009033038.23157-1-yu.c.chen@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201012130501.GA3366383@google.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 12 Oct 2020 at 14:05:01 (+0100), Quentin Perret wrote:
-> > 3, The third question is, how can we ensure cpu_dev as follows is not
-> > NULL? If we can't ensure that, maybe we should add a check before using
-> > it.
-> > /kernel/power/energy_model.c
-> > 174) static int em_create_pd(struct device *dev, int nr_states,
-> > 175)                    struct em_data_callback *cb, cpumask_t *cpus)
-> > 176) {
-> > 199)    if (_is_cpu_device(dev))
-> > 200)            for_each_cpu(cpu, cpus) {
-> > 201)                    cpu_dev = get_cpu_device(cpu);
-> > 202)                    cpu_dev->em_pd = pd;
-> > 203)            }
+On Fri, 2020-10-09 at 11:30 +0800, Chen Yu wrote:
+> There is a corner case that if the intel_pstate driver failed to be
+> registered(might be due to invalid MSR access) 
+Do you have logs why it is not loaded? On supported platforms MSRs
+should be invalid.
+It may be a case when we are trying to bring up pre-production systems
+where some instability in MSRs on certain CPUs. 
+
+But the patch is correct. We can't have invalid folder when
+intel_pstate is not used. 
+
+> and with the acpi_cpufreq
+> loaded, the intel_pstate sysfs might still be created, which makes
+> the
+> user confusing(turbostat for example):
 > 
-> And that should not be necessary as we check for the !dev case at the
-> top of em_dev_register_perf_domain(). Or were you thinking about
-> something else?
+> grep . /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+> acpi-cpufreq
+> 
+> grep . /sys/devices/system/cpu/intel_pstate/*
+> /sys/devices/system/cpu/intel_pstate/max_perf_pct:0
+> /sys/devices/system/cpu/intel_pstate/min_perf_pct:0
+> grep: /sys/devices/system/cpu/intel_pstate/no_turbo: Resource
+> temporarily unavailable
+> grep: /sys/devices/system/cpu/intel_pstate/num_pstates: Resource
+> temporarily unavailable
+> /sys/devices/system/cpu/intel_pstate/status:off
+> grep: /sys/devices/system/cpu/intel_pstate/turbo_pct: Resource
+> temporarily unavailable
+> 
+> The existing of intel_pstate sysfs does not mean that the
+> intel_pstate driver
+> has been successfully loaded(for example, echo off to status), but
+> the
+> intel_pstate sysfs should not co-exist when acpi-cpufreq is also
+> present.
+> Fix this issue by deleting the intel_pstate sysfs if the driver
+> failed
+> to be loaded during bootup.
+> 
+> Reported-by: Wendy Wang <wendy.wang@intel.com>
+> Suggested-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com
 
-Oh I think I read that one wrong, but the conclusion should be the same,
-at least on Arm64 -- all _possible_ CPUs should be registered early
-enough for that not to be an issue.
 
-Did you observe anything wrong there for your use-case?
+> --->
+>  drivers/cpufreq/intel_pstate.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c
+> b/drivers/cpufreq/intel_pstate.c
+> index 9a515c460a00..8c5f9680de83 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1420,6 +1420,26 @@ static void __init
+> intel_pstate_sysfs_expose_params(void)
+>  	}
+>  }
+>  
+> +static void __init intel_pstate_sysfs_clean(void)
+> +{
+> +	if (!intel_pstate_kobject)
+> +		return;
+> +
+> +	sysfs_remove_group(intel_pstate_kobject,
+> &intel_pstate_attr_group);
+> +
+> +	if (per_cpu_limits)
+> +		goto release_kobj;
+> +
+> +	sysfs_remove_file(intel_pstate_kobject, &max_perf_pct.attr);
+> +	sysfs_remove_file(intel_pstate_kobject, &min_perf_pct.attr);
+> +
+> +	if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids))
+> +		sysfs_remove_file(intel_pstate_kobject,
+> &energy_efficiency.attr);
+> +
+> +release_kobj:
+> +	kobject_put(intel_pstate_kobject);
+> +}
+> +
+>  static void intel_pstate_sysfs_expose_hwp_dynamic_boost(void)
+>  {
+>  	int rc;
+> @@ -3063,8 +3083,10 @@ static int __init intel_pstate_init(void)
+>  	mutex_lock(&intel_pstate_driver_lock);
+>  	rc = intel_pstate_register_driver(default_driver);
+>  	mutex_unlock(&intel_pstate_driver_lock);
+> -	if (rc)
+> +	if (rc) {
+> +		intel_pstate_sysfs_clean();
+>  		return rc;
+> +	}
+>  
+>  	if (hwp_active) {
+>  		const struct x86_cpu_id *id;
 
-Thanks,
-Quentin
