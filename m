@@ -2,159 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D016028AB2C
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 02:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF4928ACBE
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 06:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726060AbgJLAJv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Oct 2020 20:09:51 -0400
-Received: from mail-dm6nam12on2047.outbound.protection.outlook.com ([40.107.243.47]:31041
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725962AbgJLAJv (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Sun, 11 Oct 2020 20:09:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l0agqJSTifV9C1/8KFK4v1W8jQzxObniI6nrIx66t1FXxAydTn8sM494VjHqr0rz5Tzq6aaDnoQeQWoN88WF0iy912RT3oLZEWqjokpRIHPqovk++8NM91pwGerCpLWYG0VsMZyiKg490rAZy48vCdD0DdFecL3mOCiTLFifCEaNbG5eBgpK6tQ/1yOBL21rUtsxobiNOD8feRrllI4+wqI77XEbZcMQLTc7FpvsHx7vmKTT7b9GHQvUIwdiwmFEe5Ml7VEnpqbNgV6Y0OOq7DvJvyghsffjZ7IfvdTjsj+FLnvvAQIYZMkDtLLweGIIEr+r8rALM99SSahBTJ2g5Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/zKdzI18byw69s+Y0+oBqTxtqs9ams5oeFQZ51RFsgY=;
- b=ad68PRsTC9ys2RjttAGi3j/LV6RnLHPlchbiK/T7wPxaRyKOK1+Ptxdq6XKMpop2m+PjyX7pbkpw6A/KY+JgrOyuqFv6GvyepkcDiYJAHNJl9PxEGs/D1HDQf3X5E2HYO88RgjwW8oxUhzIYvBfgz+Rv3O8jjCM7WyZNsvLTXGnRQnscEwZJNij0kYIgu1CMbbyxmkFk19oW2/zpiTSzu8j4VqSrbZKUz/bxZuYbMrKD6NOQ8SpnmfjyFu/eurp4hziJrReRDE9+iOeo3SFVa3AzpTrzhntpgUWHp9LidElCTu4LMvzvlAUugIPNtvHu2qahhzKx2niU7NdX2hK2ZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=labundy.com; dmarc=pass action=none header.from=labundy.com;
- dkim=pass header.d=labundy.com; arc=none
+        id S1727698AbgJLET6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 00:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727694AbgJLET5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 00:19:57 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226D8C0613D0
+        for <linux-pm@vger.kernel.org>; Sun, 11 Oct 2020 21:19:56 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id y14so13037591pgf.12
+        for <linux-pm@vger.kernel.org>; Sun, 11 Oct 2020 21:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=NETORG5796793.onmicrosoft.com; s=selector1-NETORG5796793-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/zKdzI18byw69s+Y0+oBqTxtqs9ams5oeFQZ51RFsgY=;
- b=iMwiKc5jcdfduMbwmYJkx4WowtqtxUXkUjgC05O83N52WTeUTmm6QP/mlm6cVtz4COxpHQP43tef5yCX5T78c6dYeH+YADi0Vll5wpsAuW17FRI8/uFxaRVC4lBnWmJuPWxBGTXy9ceMxTk3zQb6Eo0zy5cgUM0Au67kC4a6L9I=
-Authentication-Results: rjwysocki.net; dkim=none (message not signed)
- header.d=none;rjwysocki.net; dmarc=none action=none header.from=labundy.com;
-Received: from SN6PR08MB5517.namprd08.prod.outlook.com (2603:10b6:805:fb::32)
- by SN6PR08MB6111.namprd08.prod.outlook.com (2603:10b6:805:100::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.28; Mon, 12 Oct
- 2020 00:09:48 +0000
-Received: from SN6PR08MB5517.namprd08.prod.outlook.com
- ([fe80::c989:9cea:baa6:8254]) by SN6PR08MB5517.namprd08.prod.outlook.com
- ([fe80::c989:9cea:baa6:8254%7]) with mapi id 15.20.3455.029; Mon, 12 Oct 2020
- 00:09:48 +0000
-From:   Jeff LaBundy <jeff@labundy.com>
-To:     rjw@rjwysocki.net, len.brown@intel.com, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, Jeff LaBundy <jeff@labundy.com>
-Subject: [PATCH] PM / sysfs: Add the ability to call PM operations manually
-Date:   Sun, 11 Oct 2020 19:09:24 -0500
-Message-Id: <1602461364-17300-1-git-send-email-jeff@labundy.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-Originating-IP: [136.49.227.119]
-X-ClientProxiedBy: SA0PR11CA0042.namprd11.prod.outlook.com
- (2603:10b6:806:d0::17) To SN6PR08MB5517.namprd08.prod.outlook.com
- (2603:10b6:805:fb::32)
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=d+sLnvZTeiN7/c8MjJpzLtaNxN7gU2/mrKXXOJoa83I=;
+        b=KZNllpqNv5xOOyaT+G76rND+p88FGMLQDwK/cKeOaH0uaaFMeS/R2t/RDbnFjojLn6
+         w3hgXLVskRRdm4HZzepz2AWIxtY3A+S7ZcR/XGzLerA5Lk19lufAV2U/mRlqmm+/cdQr
+         290KuNWsojQRMc8HK5QdcUGyV0KzwahuRZTM4bhE18hiw/gRN7JubTomi2KxG0Qsnp9o
+         t6qI3WrIrhHJtGKqntnM4+IMW90BR988wMzW/TpWaXbloatA8wYUZ53dClTQdEEBXCaC
+         RiHroE/nO6QMJcF3ORz21df3TbOYtzcI/prP0Y3vFmys8Gu9uYnQ7slnpdS4DybE3qus
+         CZ3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d+sLnvZTeiN7/c8MjJpzLtaNxN7gU2/mrKXXOJoa83I=;
+        b=D9JD3pB0fMrlm93JqAKtmurha3Zgo3BcmB/2P8I8AqN1SLC3jRnkJ9Uzsyjekaj74n
+         prkI6Kz19CjVUhxXy9Sce9dEyjo9efzsZ6uPJU6pHqT39kQ1TgG0tjL9GgU411157L5E
+         RrZhb8k08gWiOgJtZaT7sGGmB7RWj+LV0XjS0jlrPJ3DfpHwteYZplL4IYf5d5NDLC85
+         zT5ThCcPOaeqs6As6rytIv0PH5NpB1K4KQmRfVb31avhwOPnLPI230UwlpSAcPHbIq0J
+         hGdXb70yK4o0Af2cfO5ftxJoy6lhV8G7R3Mt22wIvroFKsLhe4sY0DC7EpslxZqcg+ZF
+         T6WQ==
+X-Gm-Message-State: AOAM531L+rrLQBvkchIIZ+czJO97xIl2wpVzlgIQNZkGujmoJt6Q+HvB
+        AxySxMhTyg6p/D0ou5tAeslr2Q==
+X-Google-Smtp-Source: ABdhPJwzZau3S/gIoJSK5Yx87xenSxCIZ61I1KDOdlIEpr0ycGp+oIrV+pYht3gAa9PS7YL4RjIgGA==
+X-Received: by 2002:aa7:9358:0:b029:152:b349:8af8 with SMTP id 24-20020aa793580000b0290152b3498af8mr22989089pfn.9.1602476395311;
+        Sun, 11 Oct 2020 21:19:55 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id e21sm15513630pfl.22.2020.10.11.21.19.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 11 Oct 2020 21:19:54 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 09:49:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Nicola Mazzucato <nicola.mazzucato@arm.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, sudeep.holla@arm.com,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201012041951.4qytnhuqvvzjionh@vireshk-i7>
+References: <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
+ <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <42e3c8e9-cadc-d013-1e1f-fa06af4a45ff@arm.com>
+ <20201009140141.GA4048593@bogus>
+ <88f46cd0-226a-fb3c-0bd7-59688a566ea4@arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (136.49.227.119) by SA0PR11CA0042.namprd11.prod.outlook.com (2603:10b6:806:d0::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.3455.21 via Frontend Transport; Mon, 12 Oct 2020 00:09:48 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c1c8f83c-d06b-491d-1bff-08d86e4321d4
-X-MS-TrafficTypeDiagnostic: SN6PR08MB6111:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <SN6PR08MB61114D762ADD322F88779EE1D3070@SN6PR08MB6111.namprd08.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g18HZ4s39VY75dAJX4jmXuYivKjAYUbrwCjbLbQFxZXUKfLdTv9xaXkgOMs84ZhTGnV//WTi64SCgWQD/LQPk2cOtB/DOCbbf0yz48vybzz3OocPIRVxsmDxWeSfBfu+KrReDVj6VHwNYd/msiT1m6BbBTMbqCpsLIt/vt4a8r9iv9JVAyXGosTDhx3unjWfvqdJh+fzudSfJnFa2zvHu+gziM/z1X8umhBqfGAFZC04x5FeTl/4pJHHwGFqnMEE7p/b7cVQ2AjgxFFSkw/LgJXtWf7H2SVRDXjYWN7Wq8PRg5s/gSLIMfCRKuhCvK3Syj+4ScELOsdQzg/Gfn3ISLdfjHsWqRdQggQUt9G7urZxTXBMSFlMVS60n0kJF1zr
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5517.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(366004)(396003)(346002)(39830400003)(16526019)(26005)(6506007)(66556008)(66476007)(66946007)(4326008)(86362001)(6486002)(36756003)(478600001)(69590400008)(52116002)(186003)(956004)(2616005)(8676002)(8936002)(2906002)(316002)(5660300002)(6512007)(6666004)(83380400001)(107886003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: VOmjpc/lEXXZV+8+KM6SxI02CGbR2fb4E2Br8dwBZqJQ/snF7DBCp9S3k2y+h1XoLHeQOw5iCsZbchRv8ALOkNi5ybJRDgptJzYPYR2m/IlwSy7bIl6yklDwlSPlCQGj0Godszgf2yMqSKqMh99PcVqzrkbGIVvTZTw4ad5FK/OMpvJnrT6zC8Hb0uqy2QTi5f6iLQarzz8iHTbfQehzxh37uDfi5YeMBijsmx3jgzQExT1J52nLUL9r1CspF4EXQh2d6XsImxoIp8h9rnbSkRJa7ozfpuBY2Zb+D5OM+m5RuJYCRGdrN0jL4RWhYUlHbI1aSOJFIB7bs5NfSWKSDsX87ie2+zn/chmvHqaka9znQazod4eADh+9sCIKbugoSwVGdFWXs5DNLsPNryMqd4FZ2jMa9vlPuiObuskDPfBmsq5wEjNlqrhvoCVichUTNkjtLExgLiYa/rhuyKpewthI/XR43NdYSPVv86XVMxprDMQjwBKrYS/N5bWYS2gTa5JhRIrwzKQ6eIUPTkgkkHg0mpBZcC1KFYZBvGfCWDKufpbRrddXh9dvzzXXEcqvpt/qdEEaoD1uaAi3kjB+/uLmFJ0BLix2EifVTQfoFPaT3F+/UHbAeSnG5gz/u3wvj1UeTsusMsQA1RpseQKVgQ==
-X-OriginatorOrg: labundy.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1c8f83c-d06b-491d-1bff-08d86e4321d4
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR08MB5517.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2020 00:09:48.3957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 00b69d09-acab-4585-aca7-8fb7c6323e6f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8mgle8AQImEoTFYzom2qwjLCbF1n9B6qc58NcvONM4lrC0x26EHHtPhgmlocNf8YawBGJxFzv3DoAxeRzhV7jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB6111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88f46cd0-226a-fb3c-0bd7-59688a566ea4@arm.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-During driver development, it's useful to be able to call a device's
-suspend and resume operations for test purposes without having to
-involve the rest of the PM subsystem. Such an ability would be handy
-for measuring power consumption, checking interrupt function, etc.
+On 09-10-20, 16:28, Nicola Mazzucato wrote:
+> @Viresh
+> I am sorry I misread your reply earlier thus I did not pay attention on that
+> property.
+> And yes, it is exactly as how you have described :)
+> In the case 1 (different opps, different clk) and case 2 (same opps, different
+> clk) we provide v/f points. In case 3, we add 'opp-shared' property in opp table
+> to tell that the cpus with this opp table share a clock line.
+> 
+> Here are my thoughts on this 3rd case:
+> - the information of 'share the same clock line' comes correctly from DT as it's
+> purely a hw description. The same applies for cpu-perf-dependencies.
+> - because the opp table can come from any firmware, we won't have any opp table
+> in DT, thus we won't be able to take advantage of 'opp-shared' I am afraid.
 
-The PM subsystem does have debug hooks for limiting the scope of
-suspend or excluding devices that shouldn't suspend, but there can be
-overhead in configuring these hooks that is often inconvenient during
-early bring-up.
+I wonder if we should use an empty OPP table just for parsing this
+information.
 
-This patch introduces the pm_op_test attribute, to be used as follows
-(random I2C client used as an example):
-
-1. echo 'suspend' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
-2. Measure power consumption at one's leisure, check wake-up interrupt
-   behavior, etc.
-3. echo 'resume' > /sys/bus/i2c/devices/1-0044/power/pm_op_test
-
-Nothing is done to check or report the device's state; as such this
-new function is conservatively guarded by CONFIG_PM_ADVANCED_DEBUG.
-Only suspend and resume PM operations are included for now.
-
-Signed-off-by: Jeff LaBundy <jeff@labundy.com>
----
- drivers/base/power/sysfs.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index c7b2481..78ee6f1 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -77,6 +77,8 @@
-  *	attribute is set to "enabled" by bus type code or device drivers and in
-  *	that cases it should be safe to leave the default value.
-  *
-+ *	pm_op_test - Call one of the device's PM operations for test purposes
-+ *
-  *	autosuspend_delay_ms - Report/change a device's autosuspend_delay value
-  *
-  *	Some drivers don't want to carry out a runtime suspend as soon as a
-@@ -571,6 +573,27 @@ static ssize_t async_store(struct device *dev, struct device_attribute *attr,
- 
- static DEVICE_ATTR_RW(async);
- 
-+static const char pm_op_test_suspend[] = "suspend";
-+static const char pm_op_test_resume[] = "resume";
-+
-+static ssize_t pm_op_test_store(struct device *dev,
-+				struct device_attribute *attr,
-+				const char *buf, size_t n)
-+{
-+	int ret;
-+
-+	if (sysfs_streq(buf, pm_op_test_suspend))
-+		ret = pm_generic_suspend(dev);
-+	else if (sysfs_streq(buf, pm_op_test_resume))
-+		ret = pm_generic_resume(dev);
-+	else
-+		ret = -EINVAL;
-+
-+	return ret < 0 ? ret : n;
-+}
-+
-+static DEVICE_ATTR_WO(pm_op_test);
-+
- #endif /* CONFIG_PM_SLEEP */
- #endif /* CONFIG_PM_ADVANCED_DEBUG */
- 
-@@ -578,6 +601,7 @@ static struct attribute *power_attrs[] = {
- #ifdef CONFIG_PM_ADVANCED_DEBUG
- #ifdef CONFIG_PM_SLEEP
- 	&dev_attr_async.attr,
-+	&dev_attr_pm_op_test.attr,
- #endif
- 	&dev_attr_runtime_status.attr,
- 	&dev_attr_runtime_usage.attr,
 -- 
-2.7.4
-
+viresh
