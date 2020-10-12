@@ -2,193 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5C528BE33
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 18:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1570528BE78
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Oct 2020 18:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390541AbgJLQmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 12:42:52 -0400
-Received: from mail-oo1-f67.google.com ([209.85.161.67]:41526 "EHLO
-        mail-oo1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390257AbgJLQmw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 12:42:52 -0400
-Received: by mail-oo1-f67.google.com with SMTP id o184so602871ooo.8;
-        Mon, 12 Oct 2020 09:42:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N7U2QovlXoAUmOW3ls2XQIumCSQJr3uUb2npc8xY5T4=;
-        b=I0FiJlRMrDLPRMevZKtJMDfUjNclXjL6vZZ/1WJcCEc8ipFan/uNR+KlFo1iCq1SSp
-         fIVtWjOpmDHlooqUOd3awTmKli5kf9fhtn7Plq2Vv3Wkswpexay6UgfOTzCmp6cMWhXZ
-         qt3co693TganlI2WkPC7d/+M5Tz+gd+OPn6GWqrNrE25A1UoKCLF0FV10ReDKdUuTd82
-         5klFR4EQkm3pHUkBLI70nG05J8m1SNz2HsPHsA3WSl0HQHQj+v2bqBHYDlZNMXzO1JDE
-         13Vv2KNMXKJeAXTqayUbbDpMsA5uHnEU/Xxg89rswswqB5sZ+qMtkq61k88nM4z3PL+O
-         sgSA==
-X-Gm-Message-State: AOAM5318N3HxkiQ6c5qp8Giq4smN8K2SarJsOSho3Clh6Jk2gA3y74vR
-        cyEX7GaWlfeZaLSA7M6l32JcnsI89mg9UfDFdkM=
-X-Google-Smtp-Source: ABdhPJzpl9k9CPunKp7hPHiVc1Wk3vDvRo2pGsL5isaQKjvj7VGy8tOKpBZhot1+oXSGCjF961IFri2MTy+iHC+PRxY=
-X-Received: by 2002:a4a:d44:: with SMTP id 65mr19170928oob.44.1602520970989;
- Mon, 12 Oct 2020 09:42:50 -0700 (PDT)
+        id S2390708AbgJLQwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 12:52:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:57696 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390705AbgJLQwW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 12:52:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E280431B;
+        Mon, 12 Oct 2020 09:52:20 -0700 (PDT)
+Received: from localhost (unknown [10.1.199.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84FD43F66B;
+        Mon, 12 Oct 2020 09:52:20 -0700 (PDT)
+Date:   Mon, 12 Oct 2020 17:52:19 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Nicola Mazzucato <nicola.mazzucato@arm.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        vireshk@kernel.org, daniel.lezcano@linaro.org, rjw@rjwysocki.net,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        chris.redpath@arm.com, morten.rasmussen@arm.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/2] [RFC] CPUFreq: Add support for
+ cpu-perf-dependencies
+Message-ID: <20201012165219.GA3573@arm.com>
+References: <20200924095347.32148-1-nicola.mazzucato@arm.com>
+ <20200924095347.32148-3-nicola.mazzucato@arm.com>
+ <20201006071909.3cgz7i5v35dgnuzn@vireshk-i7>
+ <2417d7b5-bc58-fa30-192c-e5991ec22ce0@arm.com>
+ <20201008110241.dcyxdtqqj7slwmnc@vireshk-i7>
+ <20201008150317.GB20268@arm.com>
+ <56846759-e3a6-9471-827d-27af0c3d410d@arm.com>
+ <20201009053921.pkq4pcyrv4r7ylzu@vireshk-i7>
+ <20201012154915.GD16519@bogus>
 MIME-Version: 1.0
-References: <20201003131938.9426-1-hdegoede@redhat.com> <20201003131938.9426-2-hdegoede@redhat.com>
- <DM6PR19MB263669227D122BB7699951E6FA0C0@DM6PR19MB2636.namprd19.prod.outlook.com>
- <85a36eb58cb9774f1907582dfc75295ed847200c.camel@hadess.net>
- <DM6PR19MB26364E6AA2F51981F592CE58FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
- <c73ffad8fd6bff8ff20d91930b097bff82be1c8f.camel@hadess.net> <DM6PR19MB2636B067186B08B744EA2163FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
-In-Reply-To: <DM6PR19MB2636B067186B08B744EA2163FA0A0@DM6PR19MB2636.namprd19.prod.outlook.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Oct 2020 18:42:39 +0200
-Message-ID: <CAJZ5v0jBJBTTb3qBGH0UWOAfvY24gWqJQA=MahnhaTdMu-w0Bw@mail.gmail.com>
-Subject: Re: [RFC] Documentation: Add documentation for new
- performance_profile sysfs class
-To:     "Limonciello, Mario" <Mario.Limonciello@dell.com>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Mark Pearson <mpearson@lenovo.com>,
-        Elia Devito <eliadevito@gmail.com>,
-        Benjamin Berg <bberg@redhat.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Pearson <markpearson@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012154915.GD16519@bogus>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 7, 2020 at 8:41 PM Limonciello, Mario
-<Mario.Limonciello@dell.com> wrote:
->
-> > On Wed, 2020-10-07 at 15:58 +0000, Limonciello, Mario wrote:
-> > >
-> > > > On Mon, 2020-10-05 at 12:58 +0000, Limonciello, Mario wrote:
-> > > > > > On modern systems CPU/GPU/... performance is often dynamically
-> > > > > > configurable
-> > > > > > in the form of e.g. variable clock-speeds and TPD. The
-> > > > > > performance
-> > > > > > is often
-> > > > > > automatically adjusted to the load by some automatic-mechanism
-> > > > > > (which may
-> > > > > > very well live outside the kernel).
-> > > > > >
-> > > > > > These auto performance-adjustment mechanisms often can be
-> > > > > > configured with
-> > > > > > one of several performance-profiles, with either a bias towards
-> > > > > > low-power
-> > > > > > consumption (and cool and quiet) or towards performance (and
-> > > > > > higher
-> > > > > > power
-> > > > > > consumption and thermals).
-> > > > > >
-> > > > > > Introduce a new performance_profile class/sysfs API which
-> > > > > > offers a
-> > > > > > generic
-> > > > > > API for selecting the performance-profile of these automatic-
-> > > > > > mechanisms.
-> > > > > >
-> > > > >
-> > > > > If introducing an API for this - let me ask the question, why
-> > > > > even let each
-> > > > > driver offer a class interface and userspace need to change
-> > > > > "each" driver's
-> > > > > performance setting?
-> > > > >
-> > > > > I would think that you could just offer something kernel-wide
-> > > > > like
-> > > > > /sys/power/performance-profile
-> > > > >
-> > > > > Userspace can read and write to a single file.  All drivers can
-> > > > > get notified
-> > > > > on this sysfs file changing.
-> > > > >
-> > > > > The systems that react in firmware (such as the two that prompted
-> > > > > this discussion) can change at that time.  It leaves the
-> > > > > possibility for a
-> > > > > more open kernel implementation that can do the same thing though
-> > > > > too by
-> > > > > directly modifying device registers instead of ACPI devices.
-> > > >
-> > > > The problem, as I've mentioned in previous discussions we had about
-> > > > this, is that, as you've seen in replies to this mail, this would
-> > > > suddenly be making the kernel apply policy.
-> > > >
-> > > > There's going to be pushback as soon as policy is enacted in the
-> > > > kernel, and you take away the different knobs for individual
-> > > > components
-> > > > (or you can control them centrally as well as individually). As
-> > > > much as
-> > > > I hate the quantity of knobs[1], I don't think that trying to
-> > > > reduce
-> > > > the number of knobs in the kernel is a good use of our time, and
-> > > > easier
-> > > > to enact, coordinated with design targets, in user-space.
-> > > >
-> > > > Unless you can think of a way to implement this kernel wide setting
-> > > > without adding one more exponent on the number of possibilities for
-> > > > the
-> > > > testing matrix, I'll +1 Hans' original API.
-> > > >
-> > > Actually I offered two proposals in my reply.  So are you NAKing
-> > > both?
-> >
-> > No, this is only about the first portion of the email, which I quoted.
-> > And I'm not NAK'ing it, but I don't see how it can work without being
-> > antithetical to what kernel "users" expect, or what the folks consuming
-> > those interfaces (presumably us both) would expect to be able to test
-> > and maintain.
-> >
->
-> (Just so others are aware, Bastien and I had a previous discussion on this topic
-> that he alluded to here: https://gitlab.freedesktop.org/hadess/power-profiles-daemon/-/issues/1)
->
-> In general I agree that we shouldn't be offering 100's of knobs to change
-> things and protect users from themselves where possible.
->
-> Whether the decisions are made in the kernel or in userspace you still have a matrix once
-> you're letting someone change 2 different kernel devices that offer policy.  I'd argue it's
-> actually worse if you let userspace change it though.
->
-> Let's go back to the my GPU and platform example and lets say both offer the new knob here
-> for both.  Userspace software such as your PPD picks performance.  Both the platform device
-> and GPU device get changed, hopefully no conflicts.
-> Then user decides no, I don't want my GPU in performance mode, I only want my platform.
-> So they change the knob for the GPU manually, and now you have a new config in your matrix.
->
-> However if you left it to a single kernel knob, both GPU and platform get moved together and
-> you don't have these extra configs in your matrix anymore.
->
-> The other point I mentioned, that platform might also do something to GPU via a sideband and
-> you race, you can solve it with kernel too by modifying the ordering the kernel handles it.
->
-> Userspace however, you give two knobs and now you have to worry about them getting it right
-> and supporting them doing them in the wrong order.
->
-> > > The other one suggested to use the same firmware attributes class
-> > > being
-> > > introduced by the new Dell driver (
-> > > https://patchwork.kernel.org/patch/11818343/)
-> > > since this is actually a knob to a specific firmware setting.
-> >
-> > This seemed to me like an implementation detail (eg. the same metadata
-> > is being exported, but in a different way), and I don't feel strongly
-> > about it either way.
->
-> OK thanks.
+On Monday 12 Oct 2020 at 16:49:30 (+0100), Sudeep Holla wrote:
+> On Fri, Oct 09, 2020 at 11:09:21AM +0530, Viresh Kumar wrote:
+> > On 08-10-20, 17:00, Nicola Mazzucato wrote:
+> > > On 10/8/20 4:03 PM, Ionela Voinescu wrote:
+> > > > Hi Viresh,
+> > > > 
+> > > > On Thursday 08 Oct 2020 at 16:32:41 (+0530), Viresh Kumar wrote:
+> > > >> On 07-10-20, 13:58, Nicola Mazzucato wrote:
+> > > >>> Hi Viresh,
+> > > >>>
+> > > >>> performance controls is what is exposed by the firmware through a protocol that
+> > > >>> is not capable of describing hardware (say SCMI). For example, the firmware can
+> > > >>> tell that the platform has N controls, but it can't say to which hardware they
+> > > >>> are "wired" to. This is done in dt, where, for example, we map these controls
+> > > >>> to cpus, gpus, etc.
+> > > >>>
+> > > >>> Let's focus on cpus.
+> > > >>>
+> > > >>> Normally we would have N of performance controls (what comes from f/w)
+> > > >>> that that correspond to hardware clock/dvfs domains.
+> > > >>>
+> > > >>> However, some firmware implementations might benefit from having finer
+> > > >>> grained information about the performance requirements (e.g.
+> > > >>> per-CPU) and therefore choose to present M performance controls to the
+> > > >>> OS. DT would be adjusted accordingly to "wire" these controls to cpus
+> > > >>> or set of cpus.
+> > > >>> In this scenario, the f/w will make aggregation decisions based on the
+> > > >>> requests it receives on these M controls.
+> > > >>>
+> > > >>> Here we would have M cpufreq policies which do not necessarily reflect the
+> > > >>> underlying clock domains, thus some s/w components will underperform
+> > > >>> (EAS and thermal, for example).
+> > > >>>
+> > > >>> A real example would be a platform in which the firmware describes the system
+> > > >>> having M per-cpu control, and the cpufreq subsystem will have M policies while
+> > > >>> in fact these cpus are "performance-dependent" each other (e.g. are in the same
+> > > >>> clock domain).
+> > > >>
+> > > >> If the CPUs are in the same clock domain, they must be part of the
+> > > >> same cpufreq policy.
+> > > > 
+> > > > But cpufreq does not currently support HW_ALL (I'm using the ACPI
+> > > > coordination type to describe the generic scenario of using hardware
+> > > > aggregation and coordination when establishing the clock rate of CPUs).
+> > > > 
+> > > > Adding support for HW_ALL* will involve either bypassing some
+> > > > assumptions around cpufreq policies or making core cpufreq changes.
+> > > > 
+> > > > In the way I see it, support for HW_ALL involves either:
+> > > > 
+> > > >  - (a) Creating per-cpu policies in order to allow each of the CPUs to
+> > > >    send their own frequency request to the hardware which will do
+> > > >    aggregation and clock rate decision at the level of the clock
+> > > >    domain. The PSD domains (ACPI) and the new DT binding will tell
+> > > >    which CPUs are actually in the same clock domain for whomever is
+> > > >    interested, despite those CPUs not being in the same policy.
+> > > >    This requires the extra mask that Nicola introduced.
+> > > > 
+> > > >  - (b) Making deep changes to cpufreq (core/governors/drivers) to allow:
+> > > >    - Governors to stop aggregating (usually max) the information
+> > > >      for each of the CPUs in the policy and convey to the core
+> > > >      information for each CPU.
+> > > >    - Cpufreq core to be able to receive and pass this information
+> > > >      down to the drivers.
+> > > >    - Drivers to be able to have some per cpu structures to hold
+> > > >      frequency control (let's say SCP fast channel addresses) for
+> > > >      each of the CPUs in the policy. Or have these structures in the
+> > > >      cpufreq core/policy, to avoid code duplication in drivers.
+> > > > 
+> > > > Therefore (a) is the least invasive but we'll be bypassing the rule
+> > > > above. But to make that rule stick we'll have to make invasive cpufreq
+> > > > changes (b).
+> > > 
+> > > Regarding the 'rule' above of one cpufreq policy per clock domain, I would like
+> > > to share my understanding on it. Perhaps it's a good opportunity to shed some light.
+> > > 
+> > > Looking back in the history of CPUFreq, related_cpus was originally designed
+> > > to hold the map of cpus within the same clock. Later on, the meaning of this
+> > > cpumask changed [1].
+> > > This led to the introduction of a new cpumask 'freqdomain_cpus'
+> > > within acpi-cpufreq to keep the knowledge of hardware clock domains for
+> > > sysfs consumers since related_cpus was not suitable anymore for this.
+> > > Further on, this cpumask was assigned to online+offline cpus within the same clk
+> > > domain when sw coordination is in use [2].
+> > > 
+> > > My interpretation is that there is no guarantee that related_cpus holds the
+> > > 'real' hardware clock implementation. As a consequence, it is not true anymore
+> > > that cpus that are in the same clock domain will be part of the same
+> > > policy.
+> > > 
+> > > This guided me to think it would be better to have a cpumask which always holds
+> > > the real hw clock domains in the policy.
+> > > 
+> > > > 
+> > > > This is my current understanding and I'm leaning towards (a). What do
+> > > > you think?
+> > > > 
+> > > > *in not so many words, this is what these patches are trying to propose,
+> > > > while also making sure it's supported for both ACPI and DT.
+> > > > 
+> > > > BTW, thank you for your effort in making sense of this!
+> > > > 
+> > > > Regards,
+> > > > Ionela.
+> > > > 
+> > > 
+> > > This could be a platform where per-cpu and perf-dependencies will be used:
+> > > 
+> > > CPU:              0    1    2    3    4    5    6    7
+> > > Type:             A    A    A    A    B    B    B    B
+> > > Cluster:         [                                    ]
+> > > perf-controls:   [  ] [  ] [  ] [ ]  [ ]  [ ]  [ ]  [ ]
+> > > perf-dependency: [                ]  [                ]
+> > > HW clock:        [                ]  [                ]
+> > > 
+> > > The firmware will present 8 controls to the OS and each control is mapped to a
+> > > cpu device via the standard dt. This is done so we can achieve hw coordination.
+> > > What is required in these systems is to present to OS the information of which
+> > > cpus belong to which clock domain. In other words, when hw coordinates we don't
+> > > have any way at present in dt to understand how these cpus are dependent
+> > > each other, from performance perspective (as opposed to ACPI where we have
+> > > _PSD). Hence my proposal for the new cpu-perf-dependencies.
+> > > This is regardless whether we decide to go for either a policy per-cpu or a
+> > > policy per-domain.
+> > > 
+> > > Hope it helps.
+> > 
+> > Oh yes, I get it now. Finally. Thanks for helping me out :)
+> > 
+> > So if I can say all this stuff in simple terms, this is what it will
+> > be like:
+> > 
+> > - We don't want software aggregation of frequencies and so we need to
+> >   have per-cpu policies even when they share their clock lines.
+> > 
+> > - But we still need a way for other frameworks to know which CPUs
+> >   share the clock lines (that's what the perf-dependency is all about,
+> >   right ?).
+> > 
+> > - We can't get it from SCMI, but need a DT based solution.
+> > 
+> > - Currently for the cpufreq-case we relied for this on the way OPP
+> >   tables for the CPUs were described. i.e. the opp-table is marked as
+> >   "shared" and multiple CPUs point to it.
+> > 
+> > - I wonder if we can keep using that instead of creating new bindings
+> >   for exact same stuff ? Though the difference here would be that the
+> >   OPP may not have any other entries.
+> 
+> Well summarised, sorry for chiming in late. I could have not summarised
+> any better. Just saw the big thread and was thinking of summarising.
+> If the last point on OPP is possible(i.e. no OPP entries but just use
+> it for fetch the information) for $subject patch is trying to achieve,
+> then it would be good.
+> 
 
-IMV there are two choices here:  One is between exposing the low-level
-interfaces verbatim to user space and wrapping them up into a certain
-"translation" layer allowing user space to use a unified interface (I
-think that is what everybody wants) and the other  boils down to how
-the unified interface between the kernel and user space will look
-like.
+Just to put in my two pennies worth: using opp-shared (in possibly empty
+OPP table) as alternative to cpu-perf-dependencies sounds good enough
+to me as well.
 
-Personally, I think that something line /sys/power/profile allowing
-drivers (and other kernel entities) to register callbacks might work
-(as stated in my last reply to Hans).
+Thanks,
+Ionela.
 
-Cheers!
+> -- 
+> Regards,
+> Sudeep
