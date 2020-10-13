@@ -2,79 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E51928C826
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 07:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8548328C8B5
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 08:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732318AbgJMFNj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 01:13:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729939AbgJMFNi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 01:13:38 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E74BC0613D0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 22:13:38 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id n9so3308497pgt.8
-        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 22:13:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=efg9FTe3uvnwtjsVgWH7nQgd64ldTBqAhLypV6QVYl0=;
-        b=DAKUM39v1Y9ihvNReu6Z5fR987aM7WTeEu0h2bOul3ucAfdXF0TmTia5TSmGBtqkzm
-         g1geRovBMMw4JaDFppUaSpYEwE19jFnOzHvorQgWg6fpJ0Y5dGEEDvnY3ZiLV0zztHgp
-         CAtj+N8d+GKrFhKGHy2hJ+PHd3lxDe6Si5RrxeEBk27hVw68FtdjVARCyYQmPVl+H1Vz
-         eNr5ZDjTl5nHLTVpObPYbtiVYvae+3VDc5Hk5V6LqtaVdrBYxEq5P4V/S2PHJl7eKobN
-         whcQQGIaPtV1RQYseHd3Lw5tT1aFX4OmgmkY8XOsOY7VwbUnRmeCCI+X6jE4L8bCSvdX
-         APFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=efg9FTe3uvnwtjsVgWH7nQgd64ldTBqAhLypV6QVYl0=;
-        b=TfdEWOJiyOKDxwJQn776Mq9800WjgQndekyS1nyJa+tlH3lU3xlbDXpHotqnwcm9Er
-         +5iwChxrd7TVG5R9LjLoshXEhqnQPi9IsHokjloL4R1aKHiA+S+T2ALkq3AAI/YA9DpW
-         gd8KuCPSNQbkt5qekeJmAvAkTzKU33fVVGy3tA3nU/UcHgZnGrdnW2bUq+L8qHUqnUl2
-         yJtggGvtSXYeUWDRmYri1qWBfXtyXtjgMUQBEcrOCDQoohz/Ieshv1+GVAKmjdv4U645
-         iE+7049bSC20U5KB+cTdKjJLb5Osui1aYPdugC+nGCV4i8V+m2eNv+F+yb5nvGOygtGS
-         i24w==
-X-Gm-Message-State: AOAM530X5xTbjkiAulSckb6u/Kx6SVxUYNTNAW1sUzehiWMzpr9gDmji
-        cI02oBRiFW8TJqU3RKqR1DgKRA==
-X-Google-Smtp-Source: ABdhPJxTpZWNGjguj6B7PCtCebgMA5wXT+BYZbYeOEWdL+11jRFlkSEaxJGCu6EEuDHXELY8VFRzig==
-X-Received: by 2002:a63:3247:: with SMTP id y68mr15571023pgy.224.1602566017546;
-        Mon, 12 Oct 2020 22:13:37 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id n67sm20400497pgn.14.2020.10.12.22.13.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Oct 2020 22:13:36 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 10:43:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     rjw@rjwysocki.net, sudeep.holla@arm.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-pm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ksitaraman@nvidia.com,
-        bbasu@nvidia.com
-Subject: Re: [PATCH v2 2/2] cpufreq: tegra194: Fix unlisted boot freq warning
-Message-ID: <20201013051334.ij3iucjmctg7d2xt@vireshk-i7>
-References: <1602162066-26442-1-git-send-email-sumitg@nvidia.com>
- <1602162066-26442-3-git-send-email-sumitg@nvidia.com>
- <20201012061335.nht4hnn7kdjupakn@vireshk-i7>
- <4fb38a3b-ed26-6c02-e9de-59ce99ce563e@nvidia.com>
+        id S2389519AbgJMGnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 02:43:15 -0400
+Received: from mga12.intel.com ([192.55.52.136]:51882 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389493AbgJMGnO (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 02:43:14 -0400
+IronPort-SDR: q8eCrC4X5cOKUWA4CV97VwWNVZsrGiQV+zCIT+HepgHg3/qAiTiwvqCbv2/ZvSMy+PCulvfrk5
+ +PpqzCCazH8w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="145177398"
+X-IronPort-AV: E=Sophos;i="5.77,369,1596524400"; 
+   d="scan'208";a="145177398"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 23:43:13 -0700
+IronPort-SDR: UrQi1LWaZMKfgcFs5IclXvK2HEsLSBivZCrR3hrlP6tUsCFm0VJ6KIXL7F8Y3wrCYZnwYwQwfy
+ A6zc86KG9rmw==
+X-IronPort-AV: E=Sophos;i="5.77,369,1596524400"; 
+   d="scan'208";a="313700061"
+Received: from chenyu-office.sh.intel.com ([10.239.158.173])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 23:43:10 -0700
+Date:   Tue, 13 Oct 2020 14:44:52 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Wendy Wang <wendy.wang@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] cpufreq: intel_pstate: Delete intel_pstate sysfs if
+ failed to register the driver
+Message-ID: <20201013064452.GA17226@chenyu-office.sh.intel.com>
+References: <20201009033038.23157-1-yu.c.chen@intel.com>
+ <ae351673692472b5ff5a482debc2de9060ffdd5e.camel@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4fb38a3b-ed26-6c02-e9de-59ce99ce563e@nvidia.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <ae351673692472b5ff5a482debc2de9060ffdd5e.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-10-20, 22:36, Sumit Gupta wrote:
-> Yes, this will also work. Then we don't need the current patch.
-> You want me to send a patch with change from pr_warn to pr_info?
+Hi Srinivas,
+On Mon, Oct 12, 2020 at 06:22:40AM -0700, srinivas pandruvada wrote:
+> On Fri, 2020-10-09 at 11:30 +0800, Chen Yu wrote:
+> > There is a corner case that if the intel_pstate driver failed to be
+> > registered(might be due to invalid MSR access) 
+> Do you have logs why it is not loaded? On supported platforms MSRs
+> should be invalid.
+Unfortunately we don't have the boot up log for now, as it is
+a pre-production platform and the low-level simulation(for MSR)
+might be unstable.( And there seems to be some environment issue
+on pre-production platform to reproduce this issue).
+But we can hack the code in intel_pstate to make the driver failed
+to be loaded and the issue was reproduced.
+> It may be a case when we are trying to bring up pre-production systems
+> where some instability in MSRs on certain CPUs. 
+> 
+> But the patch is correct. We can't have invalid folder when
+> intel_pstate is not used. 
+> 
+> > and with the acpi_cpufreq
+> > loaded, the intel_pstate sysfs might still be created, which makes
+> > the
+> > user confusing(turbostat for example):
+> > 
+> > grep . /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+> > acpi-cpufreq
+> > 
+> > grep . /sys/devices/system/cpu/intel_pstate/*
+> > /sys/devices/system/cpu/intel_pstate/max_perf_pct:0
+> > /sys/devices/system/cpu/intel_pstate/min_perf_pct:0
+> > grep: /sys/devices/system/cpu/intel_pstate/no_turbo: Resource
+> > temporarily unavailable
+> > grep: /sys/devices/system/cpu/intel_pstate/num_pstates: Resource
+> > temporarily unavailable
+> > /sys/devices/system/cpu/intel_pstate/status:off
+> > grep: /sys/devices/system/cpu/intel_pstate/turbo_pct: Resource
+> > temporarily unavailable
+> > 
+> > The existing of intel_pstate sysfs does not mean that the
+> > intel_pstate driver
+> > has been successfully loaded(for example, echo off to status), but
+> > the
+> > intel_pstate sysfs should not co-exist when acpi-cpufreq is also
+> > present.
+> > Fix this issue by deleting the intel_pstate sysfs if the driver
+> > failed
+> > to be loaded during bootup.
+> > 
+> > Reported-by: Wendy Wang <wendy.wang@intel.com>
+> > Suggested-by: Zhang Rui <rui.zhang@intel.com>
+> > Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com
+Thanks!
 
-I have sent one.
 
--- 
-viresh
+Best,
+Chenyu
