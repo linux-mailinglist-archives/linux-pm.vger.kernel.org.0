@@ -2,179 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E75828CB42
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 804B828CB7D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 12:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730958AbgJMJ4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 05:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S2387810AbgJMKVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 06:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726766AbgJMJ4R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 05:56:17 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB87C0613D6
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 02:56:17 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id b19so10402707pld.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 02:56:17 -0700 (PDT)
+        with ESMTP id S1726935AbgJMKVM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 06:21:12 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8093BC0613D2
+        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 03:21:12 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id e2so21191157wme.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 03:21:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=lOvbNuBRkRQie407GzVJVOf2n6wAAnp8oic0OTWh+Bc=;
-        b=lHrWeRZPxXoqU43SOZ60EkCQVA9ID9koDOnGrYihX0JfAasRug/D75Fp2WXShcPH7g
-         7gtZNOVqeA2CtpNWXdKdYeIO7W2uHciFwj64l4kZEO+5NatcXwlBD31s5XhsOMkqCcrD
-         JFFoNiQHsglaPo43l9JFNkzxqWBMr2bKoOjSNUQF+kZLBdBx3fwVV4N8KWhHgYZ9szcx
-         hp2aPzxCPcJzqTrpbnyY2qCZYHYXR/weB4dYgZsyL3kPuNKHItUBLMyELIapXU/vF24r
-         BhhkbaIwODX9F7UipLf8xt5Gt6cD4MTM+A5d7HEZjRgYtKGyd83nszGQbCA1UkIMSWXr
-         sfwA==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Isdnj7ywPpyzw3VK2rGw/3l/B3KgvYFYumf7odl6w+M=;
+        b=baX5WSZ6fBfa7WhogUTvoq9WWCzoYmgCcoy0Yw+jDc9uqWaEzi0Oqi+0AJx+HZSrLB
+         p88a/dAOpu/O1U/CffNSGmz1leN8bJwEFeYA2LcVEd/SzE9bxuTCfgyw/pQzFOuC+eBE
+         7dg1eRq58tto5/pJQeJO+gupOcltXnAbelSA+XR9mFipWzE5U83w0JluYz073g9zUXx9
+         ZfJzzlE3EOSBfuiJMTTQAK3WBtA+Chpu5f48+C8iqBTszDnxjhCDp0t6UFxTyeuYy5Pj
+         ++RZSEVeYSYq5JFZ5qBRxSDAwd39kUYpbTsLe4b/0iUFwWGkuhYlGfRsA/Mpj+cbc87d
+         qgTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=lOvbNuBRkRQie407GzVJVOf2n6wAAnp8oic0OTWh+Bc=;
-        b=XFuk5PgM4MPmtFRBJH5ol96LKlz66wFjXayJDRu4WWuQNZa8/jFmxv9jE3SjMfmyzv
-         1zP4x2zX1kErECCRDXcdsQTa7oqefxGAj3JcidvtfAw39Y5hBZq6QqQA3yhw1ENavy0O
-         UzwTgvFnbIq4uPjanxqx02i4Zj8e13MuyPS6cAWdz+4hAhEVmd5JI8LDOtLC83t+6jJo
-         1kEab6oXwbQa6GT4rZE2cwPAzNAfNc/vIWP3R2rudZe5vmzLrfFWJIkkpOHi0tObJ2OO
-         8Sinz7z3CbRWFbnSXSJsG5IkkG7bttHZmW+AJojMfV0uE9rqeqovbVTCFVbb2tnjPv+7
-         B+ug==
-X-Gm-Message-State: AOAM531GiH6gKHtVyOSIB5JnCzB1DyWVQVmTUO3Z83O3bhNWkUIHUx/B
-        zLVfKqGy/qXcxPoVUX9xX2F+CA==
-X-Google-Smtp-Source: ABdhPJw4E0wMnWwjRC1sr2bzOYapBYmacXLeYKGrOtasp3/b5pfPVT06dgs++RnqLZtuoG+WVWrfyg==
-X-Received: by 2002:a17:902:7882:b029:d3:b3bc:9d8a with SMTP id q2-20020a1709027882b02900d3b3bc9d8amr27137601pll.46.1602582976868;
-        Tue, 13 Oct 2020 02:56:16 -0700 (PDT)
-Received: from localhost ([122.181.54.133])
-        by smtp.gmail.com with ESMTPSA id f9sm26770712pjq.26.2020.10.13.02.56.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 13 Oct 2020 02:56:16 -0700 (PDT)
-Date:   Tue, 13 Oct 2020 15:26:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-        nks@flawful.org, Georgi Djakov <georgi.djakov@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH V2 2/2] cpufreq: dt: Refactor initialization to handle
- probe deferral properly
-Message-ID: <20201013095613.mbgmjwzojg5wxmau@vireshk-i7>
-References: <24ff92dd1b0ee1b802b45698520f2937418f8094.1598260050.git.viresh.kumar@linaro.org>
- <f75c61f193f396608d592ae2a9938264d582c038.1598260050.git.viresh.kumar@linaro.org>
- <CAMuHMdXLQKN5n58NvOp43vhc3ryLXWurBSsmcW9Q=oW502PYOQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Isdnj7ywPpyzw3VK2rGw/3l/B3KgvYFYumf7odl6w+M=;
+        b=pMeSviIqjjlkmPtXPo+JoJq5XXjwnzPt1nbRbyYtm2aWzqgLLwB3h3WfWUWJdi7ex9
+         cGnhv5zKZFnrw5U4M4Sznnu8OlNzHEvGTl3qUYY57OAgdil/0nYQbtmVBzoTmooE+ZO4
+         oqrPbSWHZqV8SymyoV02BI0KI1rUvCkeEC1FFgpV2no4BicLxXMMzTM2KUgONwpA1RE4
+         LTOUCPCPjDjzBDlyqj24SqImxcPSz2eIC7fCcpoC8VfvpgmC3e7p/OYb4SY0P9yJ52e/
+         ByKoWXTJCg7XbWr7Sju7J+WrtUwxg9FmyfQJHJ14Rqu93VSBh2UgDa8wYWXhkgomWLvJ
+         wJiQ==
+X-Gm-Message-State: AOAM530nibyLIO4wTeHLHiqXrlUtUaYhuSBHKTREZMGf/w73M1UAFoYl
+        jjz46UEd37T8jz9l9kp9Fw1Iew==
+X-Google-Smtp-Source: ABdhPJzU95PX4mPOUpPLXrtgK2LFOdkKKBEgDELP6aMUt94N+q30VRUZnT7qA/qS1JJ3E9zIu96vcg==
+X-Received: by 2002:a1c:87:: with SMTP id 129mr14651577wma.103.1602584471014;
+        Tue, 13 Oct 2020 03:21:11 -0700 (PDT)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8dea:c7dd:5d0e:51e6? ([2a01:e34:ed2f:f020:8dea:c7dd:5d0e:51e6])
+        by smtp.googlemail.com with ESMTPSA id h16sm30010895wre.87.2020.10.13.03.21.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Oct 2020 03:21:10 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: power allocator: change the 'k_i'
+ coefficient estimation
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     amitk@kernel.org, Dietmar.Eggemann@arm.com
+References: <20201002122416.13659-1-lukasz.luba@arm.com>
+ <20201002122416.13659-2-lukasz.luba@arm.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <cc0e6d85-28ad-3cfc-e5b8-75820552b716@linaro.org>
+Date:   Tue, 13 Oct 2020 12:21:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXLQKN5n58NvOp43vhc3ryLXWurBSsmcW9Q=oW502PYOQ@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <20201002122416.13659-2-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13-10-20, 11:47, Geert Uytterhoeven wrote:
-> Thanks for your patch, which is now commit dc279ac6e5b4e06e ("cpufreq:
-> dt: Refactor initialization to handle probe deferral properly") in
-> pm/linux-next, and to which I bisected a regression.
-> Reverting this commit fixes the issue.
 
-Strange. I had a look again and I failed to understand why it would
-happen this way.
+Hi Lukasz,
 
-> On r8a7791/koelsch, during resume from s2ram:
+On 02/10/2020 14:24, Lukasz Luba wrote:
+> Intelligent Power Allocation (IPA) is built around the PID controller
+> concept. The initialization code tries to setup the environment based on
+> the information available in DT or estimate the value based on minimum
+> power reported by each of the cooling device. The estimation will have an
+> impact on the PID controller behaviour via the related 'k_po', 'k_pu',
+> 'k_i' coefficients and also on the power budget calculation.
 > 
->      PM: suspend entry (deep)
->      Filesystems sync: 0.000 seconds
->      Freezing user space processes ... (elapsed 0.003 seconds) done.
->      OOM killer disabled.
->      Freezing remaining freezable tasks ... (elapsed 0.009 seconds) done.
->      Disabling non-boot CPUs ...
->      Enabling non-boot CPUs ...
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +i2c-sh_mobile e60b0000.i2c: Transfer request timed out
->     +cpu cpu0: OPP table can't be empty
->      CPU1 is up
->      rcar-pcie fe000000.pcie: PCIe x1: link up
+> This change prevents the situation when 'k_i' is relatively big compared
+> to 'k_po' and 'k_pu' values. This might happen when the estimation for
+> 'sustainable_power' returned small value, thus 'k_po' and 'k_pu' are
+> small.
 > 
-> The cpufreq code tries to talk to the PMIC, while the I2C controller
-> that hosts the PMIC is suspended, and thus any communication attempt
-> times out.  __i2c_check_suspended() fails to notice that, as the
-> i2c_shmobile_i2c driver doesn't have a suspend callback calling
-> i2c_mark_adapter_suspended() yet.  After fixing that (will send a patch
-> soon), the I2C core rightfully complains with:
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/thermal/gov_power_allocator.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
->     WARNING: CPU: 1 PID: 13 at drivers/i2c/i2c-core.h:54
-> __i2c_transfer+0x4a4/0x4e4
->     i2c i2c-6: Transfer while suspended
->     CPU: 1 PID: 13 Comm: cpuhp/1 Not tainted
-> 5.9.0-shmobile-09581-g05a3e5886c7615b1-dirty #718
->     Hardware name: Generic R-Car Gen2 (Flattened Device Tree)
->     [<c010dcec>] (unwind_backtrace) from [<c0109b18>] (show_stack+0x10/0x14)
->     [<c0109b18>] (show_stack) from [<c075e928>] (dump_stack+0x8c/0xac)
->     [<c075e928>] (dump_stack) from [<c011c23c>] (__warn+0xd0/0xe8)
->     [<c011c23c>] (__warn) from [<c011c2c4>] (warn_slowpath_fmt+0x70/0x9c)
->     [<c011c2c4>] (warn_slowpath_fmt) from [<c0548be8>]
-> (__i2c_transfer+0x4a4/0x4e4)
->     [<c0548be8>] (__i2c_transfer) from [<c0548cd8>] (i2c_transfer+0xb0/0xf8)
->     [<c0548cd8>] (i2c_transfer) from [<c046f884>] (regmap_i2c_read+0x54/0x88)
->     [<c046f884>] (regmap_i2c_read) from [<c046b69c>]
-> (_regmap_raw_read+0x118/0x1f0)
->     [<c046b69c>] (_regmap_raw_read) from [<c046b7b8>]
-> (_regmap_bus_read+0x44/0x68)
->     [<c046b7b8>] (_regmap_bus_read) from [<c04698a0>] (_regmap_read+0x84/0x110)
->     [<c04698a0>] (_regmap_read) from [<c046c10c>] (regmap_read+0x40/0x58)
->     [<c046c10c>] (regmap_read) from [<c03cf0a8>]
-> (regulator_get_voltage_sel_regmap+0x28/0x74)
->     [<c03cf0a8>] (regulator_get_voltage_sel_regmap) from [<c03cb29c>]
-> (regulator_get_voltage_rdev+0xa4/0x14c)
->     [<c03cb29c>] (regulator_get_voltage_rdev) from [<c03cc658>]
-> (regulator_get_voltage+0x2c/0x60)
->     [<c03cc658>] (regulator_get_voltage) from [<c03cd994>]
-> (regulator_is_supported_voltage+0x30/0xd8)
->     [<c03cd994>] (regulator_is_supported_voltage) from [<c05a32b4>]
-> (_opp_add+0x164/0x1b8)
->     [<c05a32b4>] (_opp_add) from [<c05a3388>] (_opp_add_v1+0x80/0xb8)
->     [<c05a3388>] (_opp_add_v1) from [<c05a5220>]
-> (dev_pm_opp_of_add_table+0x130/0x168)
->     [<c05a5220>] (dev_pm_opp_of_add_table) from [<c05a5330>]
-> (dev_pm_opp_of_cpumask_add_table+0x60/0xac)
->     [<c05a5330>] (dev_pm_opp_of_cpumask_add_table) from [<c05ab88c>]
-> (cpufreq_init+0x94/0x1c4)
->     [<c05ab88c>] (cpufreq_init) from [<c05a8190>] (cpufreq_online+0x148/0x7ac)
->     [<c05a8190>] (cpufreq_online) from [<c05a87fc>]
-> (cpuhp_cpufreq_online+0x8/0x10)
->     [<c05a87fc>] (cpuhp_cpufreq_online) from [<c011d088>]
-> (cpuhp_invoke_callback+0xf8/0x2e4)
->     [<c011d088>] (cpuhp_invoke_callback) from [<c011d418>]
-> (cpuhp_thread_fun+0xac/0x244)
->     [<c011d418>] (cpuhp_thread_fun) from [<c013c090>]
-> (smpboot_thread_fn+0x19c/0x1a8)
->     [<c013c090>] (smpboot_thread_fn) from [<c0138408>] (kthread+0x104/0x110)
->     [<c0138408>] (kthread) from [<c0100148>] (ret_from_fork+0x14/0x2c)
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 5cb518d8f156..f69fafe486a5 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -131,6 +131,7 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>  	int ret;
+>  	int switch_on_temp;
+>  	u32 temperature_threshold;
+> +	s32 k_i;
+>  
+>  	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+>  	if (ret)
+> @@ -156,8 +157,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>  		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
+>  			temperature_threshold;
+>  
+> -	if (!tz->tzp->k_i || force)
+> -		tz->tzp->k_i = int_to_frac(10) / 1000;
+> +	if (!tz->tzp->k_i || force) {
+> +		k_i = tz->tzp->k_pu / 10;
+> +		tz->tzp->k_i = k_i > 0 ? k_i : 1;
+> +	}
 
-So there is a dependency chain here. cpufreq->regulator->i2c,
-specially with the patch you pointed out, we handle defer-probing in a
-better way and so I would expect i2c driver to get in first and
-cpufreq should get registered later only. And I would have expected
-the same during suspend/resume.
+I do not understand the rational behind this change.
 
-Can you see why this happens ?
+Do you have some values to share describing what would be the impact of
+this change?
+
+Depending on the thermal behavior of a board, these coefficients could
+be very different, no ?
+
+
 
 -- 
-viresh
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
