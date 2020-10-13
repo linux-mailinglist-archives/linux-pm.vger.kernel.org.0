@@ -2,141 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B373A28CD53
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 13:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B2A28CDC8
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 14:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728411AbgJML6r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 07:58:47 -0400
-Received: from mail-eopbgr80085.outbound.protection.outlook.com ([40.107.8.85]:45790
-        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728407AbgJML6q (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Oct 2020 07:58:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mj3kcHPs65ENTfO4D8CKKVOqIJEQbyqnFGH4OetZYGQBE8DiQuAcijSdGtGwP7bMjhF8QkSJRFZmoI6F3VmfbsH8EZAOiryAeJ6U33wr3vbnY+bdqXRcOLY0UYyDnc+i1VJ9asqRdAS/KcLtqnN+h3NE6VA18tgptZImH5D0krCi9ZUwQnitfu/i7F9tb7PUosl+RUoiGxuN4cejI0KE/8uakgQUCfcbF4LP0svw+8h27xKtEsII20dX+D9TpV5HYRdk2Lm3b1xMNcqK+y/IdxJcZ9whldQX9KWp0CjCEztgJ8yboXK3CRyW2PcAk8Vll0Q070ppPlPEqgEhXH4Q6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7lbNMGYXtUy+YhreNFYwNYYHpc7VKv8mAdwr/xpaFYM=;
- b=Ov1C4u5iszsctKZYOefBWZxgKpfz96dLrWW/K+F9kbx7WAqtDWlNB9+wYROkcG32yvIJPgpQ7U3LznPh4VfW403FbwJP6JH9ZcrfCGn+Vty1eclKzo+BvAqKBcgzLmlMvO1G5sKnYqE380zFnzC7keLg7cknZj8EcHDo218yOrSvJql9aGgjAxphSayvYLdIx1S6d5x/hkoh5ymN/d45Sn3v2cRJMmwCLx8aiQWtPotzVrNEgAEBT7YikDiq0jAzTFPkwKpuLNt72NBeq65a03Qu18PDwkgwbT/DlAWQ7unO16qEs7QTpqymKC1fT0U9pHyo6GsUCzXhGb2i/zzR7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7lbNMGYXtUy+YhreNFYwNYYHpc7VKv8mAdwr/xpaFYM=;
- b=h8wXvUFCoGcFbr2kYr7El7LZQJDGDPQ4vwFMn+nGEXd8VGH/zclPfZOvLAF72JlvR1zrdV2dztAfFz7j3riA5eCJMjR/Ce626nKe+ISrBW4SdZmr222NrOa4Uwc+G/HLZGh1AfFyiw33tTSGSu76twCA1RuUgE3PhdM4yIwAilQ=
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
- by AM7PR04MB7062.eurprd04.prod.outlook.com (2603:10a6:20b:122::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20; Tue, 13 Oct
- 2020 11:58:42 +0000
-Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::546f:92f0:f3c5:a148]) by AM6PR04MB4966.eurprd04.prod.outlook.com
- ([fe80::546f:92f0:f3c5:a148%7]) with mapi id 15.20.3455.029; Tue, 13 Oct 2020
- 11:58:42 +0000
-From:   Aisheng Dong <aisheng.dong@nxp.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     Viresh Kumar <vireshk@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>, Anson Huang <anson.huang@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: cpufreq regression on imx6q sabresd
-Thread-Topic: cpufreq regression on imx6q sabresd
-Thread-Index: AdahMGy5rDqWJMR8TQG2KN/ixfSdHwAEq9YAAAJu27A=
-Date:   Tue, 13 Oct 2020 11:58:42 +0000
-Message-ID: <AM6PR04MB49666E48C1761543CE86B07280040@AM6PR04MB4966.eurprd04.prod.outlook.com>
-References: <AM6PR04MB4966C65D8439BD0B0459B6AC80040@AM6PR04MB4966.eurprd04.prod.outlook.com>
- <20201013092746.ancm24mp7tu4wjve@vireshk-i7>
-In-Reply-To: <20201013092746.ancm24mp7tu4wjve@vireshk-i7>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linaro.org; dkim=none (message not signed)
- header.d=none;linaro.org; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 584121b7-05ad-43da-0749-08d86f6f54d3
-x-ms-traffictypediagnostic: AM7PR04MB7062:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM7PR04MB7062FA5DC1AEAF0CBB79A1BF80040@AM7PR04MB7062.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /Z6WJrLTtktxhg0rk16ko+YJMXPDVsxuKLFtDP21L05csPOXdQUdu0jROpA3osNcAgP13FV9cXw/wlTVKRWcFm84m65QODyXYcfp0DLM5ESFIROZdCGGGnkHJsm1MN4gwPDV94EA8dO1sJW/7NQQzyBsafKuJbu9S2lGy55f0E02HdHyr+s3/SJcwAuSgjgymz6+VydiQmUIYzUGCLWA8C7x9Wk2gvkT1ERakMkyAqv4/qANxew3Q+4EHv4YNr1Cz6/1XAGwU+oDpRGXXPd8uZ7cnnyC99XXvgmUFluc11MW/UqO787Afnhm1HbXsk3A1XL0lbJeSzzTJpqgRtlj8pEnhQoJLJEHSV3X4VsZD5qJBp/jZbrFBhE50pVwQzj3
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7696005)(5660300002)(86362001)(76116006)(52536014)(66946007)(2906002)(66446008)(66476007)(66556008)(64756008)(44832011)(4326008)(498600001)(55016002)(6506007)(53546011)(26005)(186003)(6916009)(33656002)(54906003)(8676002)(83380400001)(9686003)(71200400001)(8936002)(32563001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: i6mzXIJU/0njg1l64WKR9ksi0dqlHXK2pt+yLLaE1nFHOC82v/9INUw9+vFBstG3/AEMvYmbgxPdM2rgpXPBBqKgWRnY2mAV0ifmbwOKlTauLVc1g9qH3XK2U6TEearUDgRWa7Z/k7JaJqFk1a9PopqgxBHqfeSFF6xF/62AqbWEbDnyP+9JOIsGwncTVQoYmgc0XBN9kfkxYWI8C5vL/hzlwE1PaDhb1peGyXZmCQFsvZWOEyf9bS20b+6IRw05XEj97yb5eHgMX1JDB5z6vR2XEQay2GM3KIhCoqXZQYTFgC3i9lyqO8a4yLz1eZtrOPfCEiLI8lpkU6LtEzgcD+Brmkv3ZANdAu/HZc/JzSUPJ3N6ekyv9TU/mYia72rGrjqbXtDYqEb/i6ubyhzfNLGFH6lVR8SF997yL3mUsGyQXtoL/Qe4qvfh8T+d1V6Mu1gqBSPinvpoW82m1Fjln46wvZJN9VNQ3CUvgvcHxGTJLP6zJ6942xUNLhiQ3DcyDP4Rl5KVtB7O6JX8qDuYVCZc220gk2xitkjNd64ApWzgFs195EqzZqjXp/wZb9g0IwjrgONQ611sRtqlfA3Lvj6rtS+R3V7GHjHarSrPogobet6k01HBS53GkAI394AIl9pkksSiMt69+NIGOyVcBg==
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726470AbgJMMEx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 08:04:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:58788 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726412AbgJMMEx (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 08:04:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41A971FB;
+        Tue, 13 Oct 2020 05:04:52 -0700 (PDT)
+Received: from [10.57.51.141] (unknown [10.57.51.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 035C73F719;
+        Tue, 13 Oct 2020 05:04:50 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: power allocator: change the 'k_i'
+ coefficient estimation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     amitk@kernel.org, Dietmar.Eggemann@arm.com
+References: <20201002122416.13659-1-lukasz.luba@arm.com>
+ <20201002122416.13659-2-lukasz.luba@arm.com>
+ <cc0e6d85-28ad-3cfc-e5b8-75820552b716@linaro.org>
+ <5f682bbb-b250-49e6-dbb7-aea522a58595@arm.com>
+ <326a84b4-1782-9e6b-2b95-9627767dd2f8@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <42360f0f-5d53-085b-536f-33df93b787ca@arm.com>
+Date:   Tue, 13 Oct 2020 13:04:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 584121b7-05ad-43da-0749-08d86f6f54d3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2020 11:58:42.6585
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: b6MOqVgn4ozBfBzngJspmv+m89beDL95EdqY3KCixYA/XzyOjoQa3a7MntkNeflWLk59r/d0TZcZghm50dvcGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7062
+In-Reply-To: <326a84b4-1782-9e6b-2b95-9627767dd2f8@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiBGcm9tOiBWaXJlc2ggS3VtYXIgPHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnPg0KPiBTZW50OiBU
-dWVzZGF5LCBPY3RvYmVyIDEzLCAyMDIwIDU6MjggUE0NCj4gDQo+IE9uIDEzLTEwLTIwLCAwOTow
-MCwgQWlzaGVuZyBEb25nIHdyb3RlOg0KPiA+IEhpDQo+ID4NCj4gPiBDcHVmcmVxIG9uIE1YNlEg
-U0RCIGJlY29tZXMgdW53b3JrIHNpbmNlIG5leHQtMjAyMDA5MDIgYW5kIHRoaXMgaXNzdWUNCj4g
-PiBhbHNvIGV4aXN0IHdpdGggbGF0ZXN0IGxpbnV4LW5leHQgbmV4dC0yMDIwMTAxMi4NCj4gPg0K
-PiA+IEVycm9yIGxvZyBhcyBmb2xsb3dzOg0KPiA+IFsgICAgNi43ODIzOTVdIGNwdSBjcHUwOiBm
-YWlsZWQgdG8gZGlzYWJsZSA4NTJNSHogT1BQDQo+ID4gWyAgICA2Ljc4NzI0Nl0gY3B1IGNwdTA6
-IGZhaWxlZCB0byBkaXNhYmxlIDEuMkdIeiBPUFANCj4gPiBbICAgIDYuNzkyMTg5XSBjcHUgY3B1
-MDogZmFpbGVkIHRvIGluaXQgY3B1ZnJlcSB0YWJsZTogLTYxDQo+ID4gWyAgICA2LjgwMDIzNF0g
-aW14NnEtY3B1ZnJlcTogcHJvYmUgb2YgaW14NnEtY3B1ZnJlcSBmYWlsZWQgd2l0aCBlcnJvciAt
-NjENCj4gPg0KPiA+IFNpbXBseSBiYWNrIHRvIG5leHQtMjAyMDA4MjggdmVyc2lvbiBmb3IgZHJp
-dmVycy9vcHAgY2FuIGF2b2lkIHRoaXMgaXNzdWUuDQo+ID4gZS5nLiBnaXQgY2hlY2tvdXQgbmV4
-dC0yMDIwMDgyOCBkcml2ZXJzL29wcC8gU28gdGhlIGlzc3VlIHNlZW1zIHRvIGJlDQo+ID4gcmVs
-YXRlZCB0byBPUFAgY2hhbmdlcy4NCj4gPg0KPiA+ICQgZ2l0IGxvZyAtLW9uZWxpbmUgLS1uby1t
-ZXJnZXMgbmV4dC0yMDIwMDgyOC4ubmV4dC0yMDIwMTAxMg0KPiA+IGRyaXZlcnMvb3BwLw0KPiAN
-Cj4gZGlmZiB3aXRoIDIwMjAwOTAyIHdvdWxkIGhhdmUgYmVlbiBtb3JlIGludGVyZXN0aW5nIGFz
-IHlvdSBzYWlkIGl0IGRpZG4ndCB3b3JrDQo+IHRoZXJlIGVpdGhlciA/IEkgaGFkIGEgbG9vayBh
-dCBpdCBhbmQgYW0gbm90IHN1cmUgd2h5IHdvdWxkIGl0IGZhaWwgdGhpcyB3YXkuDQo+IA0KPiBJ
-IHRyaWVkIHRvIGxvb2sgaW50byB0aGlzIGJ1dCBJIGFtIGFmcmFpZCB5b3UgbmVlZCB0byBkaWcg
-aW4gYSBiaXQgZnVydGhlciB0byBzZWUNCj4gd2hlcmUgaXQgaXMgZ29pbmcgYmFkLg0KPiANCg0K
-SSB0aGluayBpdCdzIGNhdXNlZCBieSB0aGUgcGF0Y2ggYmVsb3c6DQo5MGQ0NmQ3MWNjZTIgb3Bw
-OiBIYW5kbGUgbXVsdGlwbGUgY2FsbHMgZm9yIHNhbWUgT1BQIHRhYmxlIGluIF9vZl9hZGRfb3Bw
-X3RhYmxlX3YxKCkNCg0KTXkga2VybmVsIGlzIG5leHQtMjAyMDEwMTIuDQokIGdpdCBsb2cgLS1u
-by1tZXJnZXMgLS1vbmVsaW5lIC1uMTAgZHJpdmVycy9vcHAvDQphNTY2M2M5YjFlMzEgb3BwOiBB
-bGxvdyBvcHAtbGV2ZWwgdG8gYmUgc2V0IHRvIDANCmNiNjBlOTYwMmNjZSBvcHA6IFByZXZlbnQg
-bWVtb3J5IGxlYWsgaW4gZGV2X3BtX29wcF9hdHRhY2hfZ2VucGQoKQ0KMGZmMjVjOTkwNDJhIG9w
-cDogQWxsb3cgb3BwLXN1cHBvcnRlZC1odyB0byBjb250YWluIG11bHRpcGxlIHZlcnNpb25zDQoy
-YzU5MTM4YzIyZjEgb3BwOiBTZXQgcmVxdWlyZWQgT1BQcyBpbiByZXZlcnNlIG9yZGVyIHdoZW4g
-c2NhbGluZyBkb3duDQo2MGNkZWFlMGQ2Mjcgb3BwOiBSZWR1Y2UgY29kZSBkdXBsaWNhdGlvbiBp
-biBfc2V0X3JlcXVpcmVkX29wcHMoKQ0KNDc1YWM4ZWFkODAzIG9wcDogRHJvcCB1bm5lY2Vzc2Fy
-eSBjaGVjayBmcm9tIGRldl9wbV9vcHBfYXR0YWNoX2dlbnBkKCkNCjkwZDQ2ZDcxY2NlMiBvcHA6
-IEhhbmRsZSBtdWx0aXBsZSBjYWxscyBmb3Igc2FtZSBPUFAgdGFibGUgaW4gX29mX2FkZF9vcHBf
-dGFibGVfdjEoKQ0KOTIyZmYwNzU5YTE2IG9wcDogRG9uJ3QgZHJvcCByZWZlcmVuY2UgZm9yIGFu
-IE9QUCB0YWJsZSB0aGF0IHdhcyBuZXZlciBwYXJzZWQNCmRkNDYxY2Q5MTgzZiBvcHA6IEFsbG93
-IGRldl9wbV9vcHBfZ2V0X29wcF90YWJsZSgpIHRvIHJldHVybiAtRVBST0JFX0RFRkVSDQo4YWFm
-NjI2NGZjN2Ygb3BwOiBSZW1vdmUgX2Rldl9wbV9vcHBfZmluZF9hbmRfcmVtb3ZlX3RhYmxlKCkg
-d3JhcHBlcg0KDQpJZiBiYWNrIHRvIHRoZSB2ZXJzaW9uIGVhcmxpZXIgdGhhbiB0aGF0IGNvbW1p
-dCwgdGhlIGlzc3VlIHdhcyBnb25lLg0KZS5nLg0KZ2l0IGNoZWNrb3V0IDkyMmZmMDc1OWExNiBk
-cml2ZXJzL29wcC8NCk5PVEU6IG5vIGR0IGNoYW5nZXMuIE9ubHkgb3BwIGNoYW5nZXMuDQoNCkFz
-IEknbSBidXN5IHdpdGggc29tZSBvdGhlciB1cmdlbnQgdGhpbmdzLCBzbyBzdGlsbCBkaWQgbm90
-IHNwZW5kIHRvbyBtdWNoIHRpbWUgdG8gZGlnDQpJbnRvIHRoZSBjb2RlIHRvIHNlZSB3aHkgdGhl
-IGlzc3VlIGhhcHBlbmVkLg0KSSBtYXkgZmluZCBzb21lIHRpbWUgdG8gbG9vayBpbnRvIGl0IGxh
-dGVyIGlmIG5vIG9uZSBlbHNlIGxvb2sgYXQgaXQuDQoNClJlZ2FyZHMNCkFpc2hlbmcNCg0KPiBI
-aW50LCBmcm9tIHRoZSBlcnJvciBtZXNzYWdlIGFuZCB0aGUgcmV0dXJuIGVycm9yIChFTk9FTlQp
-LCBpdCBsb29rcyBsaWtlIHRoZXJlDQo+IGFyZSBubyBlbnRpcmVzIGluIHRoZSBPUFAgdGFibGUg
-dGhhdCBhcmUgdmFsaWQgYW5kIHNvIGEgY291bnQgb2YgMCBpcyByZXR1cm5lZCwNCj4gd2hpY2gg
-bWFkZSBPUFAgY29yZSByZXR1cm4gRU5PRU5ULiBZb3UgbmVlZCB0byBsb29rIGludG8gd2h5IHRo
-ZSBjb3VudCBpcw0KPiB6ZXJvLCB3aGlsZSB5b3Ugd2VyZSBhYmxlIHRvIGFkZCB0aGUgT1BQIHRh
-YmxlLg0KPiANCj4gLS0NCj4gdmlyZXNoDQo=
+
+
+On 10/13/20 12:22 PM, Daniel Lezcano wrote:
+> On 13/10/2020 12:59, Lukasz Luba wrote:
+>> Hi Daniel,
+>>
+>> On 10/13/20 11:21 AM, Daniel Lezcano wrote:
+>>>
+>>> Hi Lukasz,
+>>>
+>>> On 02/10/2020 14:24, Lukasz Luba wrote:
+>>>> Intelligent Power Allocation (IPA) is built around the PID controller
+>>>> concept. The initialization code tries to setup the environment based on
+>>>> the information available in DT or estimate the value based on minimum
+>>>> power reported by each of the cooling device. The estimation will
+>>>> have an
+>>>> impact on the PID controller behaviour via the related 'k_po', 'k_pu',
+>>>> 'k_i' coefficients and also on the power budget calculation.
+>>>>
+>>>> This change prevents the situation when 'k_i' is relatively big compared
+>>>> to 'k_po' and 'k_pu' values. This might happen when the estimation for
+>>>> 'sustainable_power' returned small value, thus 'k_po' and 'k_pu' are
+>>>> small.
+>>>>
+>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>> ---
+>>>>    drivers/thermal/gov_power_allocator.c | 8 ++++++--
+>>>>    1 file changed, 6 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/thermal/gov_power_allocator.c
+>>>> b/drivers/thermal/gov_power_allocator.c
+>>>> index 5cb518d8f156..f69fafe486a5 100644
+>>>> --- a/drivers/thermal/gov_power_allocator.c
+>>>> +++ b/drivers/thermal/gov_power_allocator.c
+>>>> @@ -131,6 +131,7 @@ static void estimate_pid_constants(struct
+>>>> thermal_zone_device *tz,
+>>>>        int ret;
+>>>>        int switch_on_temp;
+>>>>        u32 temperature_threshold;
+>>>> +    s32 k_i;
+>>>>          ret = tz->ops->get_trip_temp(tz, trip_switch_on,
+>>>> &switch_on_temp);
+>>>>        if (ret)
+>>>> @@ -156,8 +157,11 @@ static void estimate_pid_constants(struct
+>>>> thermal_zone_device *tz,
+>>>>            tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
+>>>>                temperature_threshold;
+>>>>    -    if (!tz->tzp->k_i || force)
+>>>> -        tz->tzp->k_i = int_to_frac(10) / 1000;
+>>>> +    if (!tz->tzp->k_i || force) {
+>>>> +        k_i = tz->tzp->k_pu / 10;
+>>>> +        tz->tzp->k_i = k_i > 0 ? k_i : 1;
+>>>> +    }
+>>>
+>>> I do not understand the rational behind this change.
+>>
+>> This is the unfortunate impact of the EM abstract scale of power values.
+>> IPA didn't have to deal with it, because we always had milli-Watts.
+>> Because the EM allows the bogoWatts and some vendors already have
+>> them I have to re-evaluate the IPA.
+>>
+>>>
+>>> Do you have some values to share describing what would be the impact of
+>>> this change?
+>>
+>> Yes, here is an example:
+>> EM has 3 devices with abstract scale power values, where minimum power
+>> is 25 and max is 200. The minimum power is used by
+>> estimate_sustainable_power()
+>> as a sum of all devices' min power. Sustainable power is going to be
+>> estimated to 75.
+>>
+>> Then in the code we have 'temperature_threshold' which is in
+>> milli-Celcius, thus 15degC is 15000.
+>>
+>> We estimate 'k_po' according to:
+>> int_to_frac(sustainable_power) / temperature_threshold;
+>>
+>> which is:
+>> (75 << 10) / 15000 = ~75000 / 15000 = 5 <-- 'k_po'
+>>
+>> then k_pu:
+>> ((2*75) << 10) / 15000 = ~150000 / 15000 = 10
+>>
+>> Then the old 'k_i' is just hard-coded 10, which is
+>> the same order of magnitude to what is in 'k_pu'.
+>> It should be 1 order of magnitude smaller than 'k_pu'.
+>>
+>> I did some experiments and the bigger 'k_i' slows down a lot
+>> the rising temp. That's why this change.
+>>
+>> It was OK to have k_i=10 when we were in milliWatts world,
+>> when the min power value was bigger, thus 'k_pu' was also bigger
+>> than our hard-coded 'k_i'.
+>>
+>>>
+>>> Depending on the thermal behavior of a board, these coefficients could
+>>> be very different, no ?
+>>>
+>>
+>> Yes, I strongly believe that vendor engineers will make experiments with
+>> these values and not go with default. Then they will store the k_pu,
+>> k_po, k_i via sysfs interface, with also sustainable_power.
+> 
+> IMHO it is the opposite. For what I've seen, the IPA is not used or the
+> k_* are misunderstood, thus not changed. The PID regulation loop
+> technique is not quite used and known by everyone.
+
+There is quite a few DT entries of 'sustainable-power' so I assumed
+it is known, but you might be right.
+
+> 
+>> But I have to also fix the hard-coded k_i in the estimation. As
+>> described above, when we have small power values from abstract scale,
+>> the k_i stays too big.
+> 
+> May be it is preferable to adjust the k_* dynamically given the
+> undershot and overshot results? And then add a set of less opaque
+> parameters for the user, like the time or watts, no?
+> 
+
+Hmmmm, this is interesting, I haven't thought about it. Thank you
+for this idea.
+That would require a re-design of current IPA. IPA trying to figure
+out better k_* values... I will discuss it internally.
+
+It would take time, definitely more than the proposed small fix
+addressing abstract scale and hard-coded 'k_i'.
+Do you think that this fix can be applied and then I can experiment
+on what you suggested?
+
+There is v3 reviewed by Ionela [1].
+
+Thank you for your comments.
+
+Regards,
+Lukasz
+
+[1] 
+https://lore.kernel.org/linux-pm/20201009135850.14727-1-lukasz.luba@arm.com/
