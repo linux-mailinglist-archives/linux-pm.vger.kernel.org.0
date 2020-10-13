@@ -2,145 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6790528CB8D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 12:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358C828CC13
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 12:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387922AbgJMKYM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 06:24:12 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:45376 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729123AbgJMKYG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 06:24:06 -0400
-X-UUID: b2a871c885094e4f84bc52129a9ea121-20201013
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=uU5h/PCfw5tLAU29bsJqUl+QoZ77GPhjS0d0QniL9QQ=;
-        b=br10SF3BpaSVd8m073qpYehuoUsbCbLyhuM8JTXKJOdVnYlKvAHafmQ4j6U8bVNsTLBgCEoISLIcBmLgHS1yi1mvHVPzzggZ0u7cTR0TLjcxy3dhNdbMHsBho+fko9dDFbhuWB7PpbAB3qJPOBWPnZOos83Ui5CNC5ntg/Ji6/Q=;
-X-UUID: b2a871c885094e4f84bc52129a9ea121-20201013
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <michael.kao@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 426077312; Tue, 13 Oct 2020 18:24:01 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 13 Oct 2020 18:24:01 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 13 Oct 2020 18:24:00 +0800
-From:   Michael Kao <michael.kao@mediatek.com>
-To:     Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
-CC:     Eduardo Valentin <edubezval@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Michael Kao <michael.kao@mediatek.com>
-Subject: [v5 3/3] thermal: mediatek: add another get_temp ops for thermal sensors
-Date:   Tue, 13 Oct 2020 18:23:58 +0800
-Message-ID: <20201013102358.22588-4-michael.kao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20201013102358.22588-1-michael.kao@mediatek.com>
-References: <20201013102358.22588-1-michael.kao@mediatek.com>
+        id S1730080AbgJMK7r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 06:59:47 -0400
+Received: from foss.arm.com ([217.140.110.172]:55194 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728700AbgJMK7r (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 06:59:47 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64DBD1FB;
+        Tue, 13 Oct 2020 03:59:46 -0700 (PDT)
+Received: from [10.57.51.141] (unknown [10.57.51.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3FE6A3F719;
+        Tue, 13 Oct 2020 03:59:45 -0700 (PDT)
+Subject: Re: [PATCH 1/2] thermal: power allocator: change the 'k_i'
+ coefficient estimation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     amitk@kernel.org, Dietmar.Eggemann@arm.com
+References: <20201002122416.13659-1-lukasz.luba@arm.com>
+ <20201002122416.13659-2-lukasz.luba@arm.com>
+ <cc0e6d85-28ad-3cfc-e5b8-75820552b716@linaro.org>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+Message-ID: <5f682bbb-b250-49e6-dbb7-aea522a58595@arm.com>
+Date:   Tue, 13 Oct 2020 11:59:42 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <cc0e6d85-28ad-3cfc-e5b8-75820552b716@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UHJvdmlkZSB0aGVybWFsIHpvbmUgdG8gcmVhZCB0aGVybWFsIHNlbnNvcg0KaW4gdGhlIFNvQy4g
-V2UgY2FuIHJlYWQgYWxsIHRoZSB0aGVybWFsIHNlbnNvcnMNCnZhbHVlIGluIHRoZSBTb0MgYnkg
-dGhlIG5vZGUgL3N5cy9jbGFzcy90aGVybWFsLw0KDQpJbiBtdGtfdGhlcm1hbF9iYW5rX3RlbXBl
-cmF0dXJlLCByZXR1cm4gLUVBR0FJTiBpbnN0ZWFkIG9mIC1FQUNDRVNTDQpvbiB0aGUgZmlyc3Qg
-cmVhZCBvZiBzZW5zb3IgdGhhdCBvZnRlbiBhcmUgYm9ndXMgdmFsdWVzLg0KVGhpcyBjYW4gYXZv
-aWQgZm9sbG93aW5nIHdhcm5pbmcgb24gYm9vdDoNCg0KICB0aGVybWFsIHRoZXJtYWxfem9uZTY6
-IGZhaWxlZCB0byByZWFkIG91dCB0aGVybWFsIHpvbmUgKC0xMykNCg0KU2lnbmVkLW9mZi1ieTog
-TWljaGFlbCBLYW8gPG1pY2hhZWwua2FvQG1lZGlhdGVrLmNvbT4NClNpZ25lZC1vZmYtYnk6IEhz
-aW4tWWkgV2FuZyA8aHNpbnlpQGNocm9taXVtLm9yZz4NCi0tLQ0KIGRyaXZlcnMvdGhlcm1hbC9t
-dGtfdGhlcm1hbC5jIHwgOTkgKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0NCiAx
-IGZpbGUgY2hhbmdlZCwgNzYgaW5zZXJ0aW9ucygrKSwgMjMgZGVsZXRpb25zKC0pDQoNCmRpZmYg
-LS1naXQgYS9kcml2ZXJzL3RoZXJtYWwvbXRrX3RoZXJtYWwuYyBiL2RyaXZlcnMvdGhlcm1hbC9t
-dGtfdGhlcm1hbC5jDQppbmRleCAwYmQ3YWE1NjRiYzIuLjQzYzdiZGJjMTQ3ZiAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvdGhlcm1hbC9tdGtfdGhlcm1hbC5jDQorKysgYi9kcml2ZXJzL3RoZXJtYWwv
-bXRrX3RoZXJtYWwuYw0KQEAgLTI0NSw2ICsyNDUsMTEgQEAgZW51bSBtdGtfdGhlcm1hbF92ZXJz
-aW9uIHsNCiANCiBzdHJ1Y3QgbXRrX3RoZXJtYWw7DQogDQorc3RydWN0IG10a190aGVybWFsX3pv
-bmUgew0KKwlzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10Ow0KKwlpbnQgaWQ7DQorfTsNCisNCiBzdHJ1
-Y3QgdGhlcm1hbF9iYW5rX2NmZyB7DQogCXVuc2lnbmVkIGludCBudW1fc2Vuc29yczsNCiAJY29u
-c3QgaW50ICpzZW5zb3JzOw0KQEAgLTYzNyw2ICs2NDIsMzIgQEAgc3RhdGljIHZvaWQgbXRrX3Ro
-ZXJtYWxfcHV0X2Jhbmsoc3RydWN0IG10a190aGVybWFsX2JhbmsgKmJhbmspDQogCQltdXRleF91
-bmxvY2soJm10LT5sb2NrKTsNCiB9DQogDQorc3RhdGljIHUzMiBfZ2V0X3NlbnNvcl90ZW1wKHN0
-cnVjdCBtdGtfdGhlcm1hbCAqbXQsIGludCBpZCkNCit7DQorCXUzMiByYXc7DQorCWludCB0ZW1w
-Ow0KKw0KKwljb25zdCBzdHJ1Y3QgbXRrX3RoZXJtYWxfZGF0YSAqY29uZiA9IG10LT5jb25mOw0K
-Kw0KKwlyYXcgPSByZWFkbChtdC0+dGhlcm1hbF9iYXNlICsgY29uZi0+bXNyW2lkXSk7DQorDQor
-CWlmIChtdC0+Y29uZi0+dmVyc2lvbiA9PSBNVEtfVEhFUk1BTF9WMSkNCisJCXRlbXAgPSByYXdf
-dG9fbWNlbHNpdXNfdjEobXQsIGlkLCByYXcpOw0KKwllbHNlDQorCQl0ZW1wID0gcmF3X3RvX21j
-ZWxzaXVzX3YyKG10LCBpZCwgcmF3KTsNCisNCisJLyoNCisJICogVGhlIGZpcnN0IHJlYWQgb2Yg
-YSBzZW5zb3Igb2Z0ZW4gY29udGFpbnMgdmVyeSBoaWdoIGJvZ3VzDQorCSAqIHRlbXBlcmF0dXJl
-IHZhbHVlLiBGaWx0ZXIgdGhlc2Ugb3V0IHNvIHRoYXQgdGhlIHN5c3RlbSBkb2VzDQorCSAqIG5v
-dCBpbW1lZGlhdGVseSBzaHV0IGRvd24uDQorCSAqLw0KKw0KKwlpZiAodGVtcCA+IDIwMDAwMCkN
-CisJCXJldHVybiAgLUVBR0FJTjsNCisJZWxzZQ0KKwkJcmV0dXJuCXRlbXA7DQorfQ0KKw0KIC8q
-Kg0KICAqIG10a190aGVybWFsX2JhbmtfdGVtcGVyYXR1cmUgLSBnZXQgdGhlIHRlbXBlcmF0dXJl
-IG9mIGEgYmFuaw0KICAqIEBiYW5rOglUaGUgYmFuaw0KQEAgLTY0OSwyNiArNjgwLDEwIEBAIHN0
-YXRpYyBpbnQgbXRrX3RoZXJtYWxfYmFua190ZW1wZXJhdHVyZShzdHJ1Y3QgbXRrX3RoZXJtYWxf
-YmFuayAqYmFuaykNCiAJc3RydWN0IG10a190aGVybWFsICptdCA9IGJhbmstPm10Ow0KIAljb25z
-dCBzdHJ1Y3QgbXRrX3RoZXJtYWxfZGF0YSAqY29uZiA9IG10LT5jb25mOw0KIAlpbnQgaSwgdGVt
-cCA9IElOVF9NSU4sIG1heCA9IElOVF9NSU47DQotCXUzMiByYXc7DQogDQogCWZvciAoaSA9IDA7
-IGkgPCBjb25mLT5iYW5rX2RhdGFbYmFuay0+aWRdLm51bV9zZW5zb3JzOyBpKyspIHsNCi0JCXJh
-dyA9IHJlYWRsKG10LT50aGVybWFsX2Jhc2UgKyBjb25mLT5tc3JbaV0pOw0KLQ0KLQkJaWYgKG10
-LT5jb25mLT52ZXJzaW9uID09IE1US19USEVSTUFMX1YxKSB7DQotCQkJdGVtcCA9IHJhd190b19t
-Y2Vsc2l1c192MSgNCi0JCQkJbXQsIGNvbmYtPmJhbmtfZGF0YVtiYW5rLT5pZF0uc2Vuc29yc1tp
-XSwgcmF3KTsNCi0JCX0gZWxzZSB7DQotCQkJdGVtcCA9IHJhd190b19tY2Vsc2l1c192MigNCi0J
-CQkJbXQsIGNvbmYtPmJhbmtfZGF0YVtiYW5rLT5pZF0uc2Vuc29yc1tpXSwgcmF3KTsNCi0JCX0N
-CiANCi0JCS8qDQotCQkgKiBUaGUgZmlyc3QgcmVhZCBvZiBhIHNlbnNvciBvZnRlbiBjb250YWlu
-cyB2ZXJ5IGhpZ2ggYm9ndXMNCi0JCSAqIHRlbXBlcmF0dXJlIHZhbHVlLiBGaWx0ZXIgdGhlc2Ug
-b3V0IHNvIHRoYXQgdGhlIHN5c3RlbSBkb2VzDQotCQkgKiBub3QgaW1tZWRpYXRlbHkgc2h1dCBk
-b3duLg0KLQkJICovDQotCQlpZiAodGVtcCA+IDIwMDAwMCkNCi0JCQl0ZW1wID0gMDsNCisJCXRl
-bXAgPSBfZ2V0X3NlbnNvcl90ZW1wKG10LCBpKTsNCiANCiAJCWlmICh0ZW1wID4gbWF4KQ0KIAkJ
-CW1heCA9IHRlbXA7DQpAQCAtNjc5LDcgKzY5NCw4IEBAIHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxf
-YmFua190ZW1wZXJhdHVyZShzdHJ1Y3QgbXRrX3RoZXJtYWxfYmFuayAqYmFuaykNCiANCiBzdGF0
-aWMgaW50IG10a19yZWFkX3RlbXAodm9pZCAqZGF0YSwgaW50ICp0ZW1wZXJhdHVyZSkNCiB7DQot
-CXN0cnVjdCBtdGtfdGhlcm1hbCAqbXQgPSBkYXRhOw0KKwlzdHJ1Y3QgbXRrX3RoZXJtYWxfem9u
-ZSAqdHogPSBkYXRhOw0KKwlzdHJ1Y3QgbXRrX3RoZXJtYWwgKm10ID0gdHotPm10Ow0KIAlpbnQg
-aTsNCiAJaW50IHRlbXBtYXggPSBJTlRfTUlOOw0KIA0KQEAgLTY5OCwxMCArNzE0LDI4IEBAIHN0
-YXRpYyBpbnQgbXRrX3JlYWRfdGVtcCh2b2lkICpkYXRhLCBpbnQgKnRlbXBlcmF0dXJlKQ0KIAly
-ZXR1cm4gMDsNCiB9DQogDQorc3RhdGljIGludCBtdGtfcmVhZF9zZW5zb3JfdGVtcCh2b2lkICpk
-YXRhLCBpbnQgKnRlbXBlcmF0dXJlKQ0KK3sNCisJc3RydWN0IG10a190aGVybWFsX3pvbmUgKnR6
-ID0gZGF0YTsNCisJc3RydWN0IG10a190aGVybWFsICptdCA9IHR6LT5tdDsNCisJaW50IGlkID0g
-dHotPmlkIC0gMTsNCisNCisJaWYgKGlkIDwgMCkNCisJCXJldHVybiAgLUVBQ0NFUzsNCisNCisJ
-KnRlbXBlcmF0dXJlID0gX2dldF9zZW5zb3JfdGVtcChtdCwgaWQpOw0KKw0KKwlyZXR1cm4gMDsN
-Cit9DQorDQogc3RhdGljIGNvbnN0IHN0cnVjdCB0aGVybWFsX3pvbmVfb2ZfZGV2aWNlX29wcyBt
-dGtfdGhlcm1hbF9vcHMgPSB7DQogCS5nZXRfdGVtcCA9IG10a19yZWFkX3RlbXAsDQogfTsNCiAN
-CitzdGF0aWMgY29uc3Qgc3RydWN0IHRoZXJtYWxfem9uZV9vZl9kZXZpY2Vfb3BzIG10a190aGVy
-bWFsX3NlbnNvcl9vcHMgPSB7DQorCS5nZXRfdGVtcCA9IG10a19yZWFkX3NlbnNvcl90ZW1wLA0K
-K307DQorDQogc3RhdGljIHZvaWQgbXRrX3RoZXJtYWxfaW5pdF9iYW5rKHN0cnVjdCBtdGtfdGhl
-cm1hbCAqbXQsIGludCBudW0sDQogCQkJCSAgdTMyIGFwbWl4ZWRfcGh5c19iYXNlLCB1MzIgYXV4
-YWRjX3BoeXNfYmFzZSwNCiAJCQkJICBpbnQgY3RybF9pZCkNCkBAIC05OTIsNiArMTAyNiw3IEBA
-IHN0YXRpYyBpbnQgbXRrX3RoZXJtYWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRl
-dikNCiAJdTY0IGF1eGFkY19waHlzX2Jhc2UsIGFwbWl4ZWRfcGh5c19iYXNlOw0KIAlzdHJ1Y3Qg
-dGhlcm1hbF96b25lX2RldmljZSAqdHpkZXY7DQogCXZvaWQgX19pb21lbSAqYXBtaXhlZF9iYXNl
-LCAqYXV4YWRjX2Jhc2U7DQorCXN0cnVjdCBtdGtfdGhlcm1hbF96b25lICp0ejsNCiANCiAJbXQg
-PSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwgc2l6ZW9mKCptdCksIEdGUF9LRVJORUwpOw0KIAlp
-ZiAoIW10KQ0KQEAgLTEwODAsMTEgKzExMTUsMjkgQEAgc3RhdGljIGludCBtdGtfdGhlcm1hbF9w
-cm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KIA0KIAlwbGF0Zm9ybV9zZXRfZHJ2
-ZGF0YShwZGV2LCBtdCk7DQogDQotCXR6ZGV2ID0gZGV2bV90aGVybWFsX3pvbmVfb2Zfc2Vuc29y
-X3JlZ2lzdGVyKCZwZGV2LT5kZXYsIDAsIG10LA0KLQkJCQkJCSAgICAgJm10a190aGVybWFsX29w
-cyk7DQotCWlmIChJU19FUlIodHpkZXYpKSB7DQotCQlyZXQgPSBQVFJfRVJSKHR6ZGV2KTsNCi0J
-CWdvdG8gZXJyX2Rpc2FibGVfY2xrX3BlcmlfdGhlcm07DQorCWZvciAoaSA9IDA7IGkgPCBtdC0+
-Y29uZi0+bnVtX3NlbnNvcnMgKyAxOyBpKyspIHsNCisJCXR6ID0ga21hbGxvYyhzaXplb2YoKnR6
-KSwgR0ZQX0tFUk5FTCk7DQorCQlpZiAoIXR6KQ0KKwkJCXJldHVybiAtRU5PTUVNOw0KKw0KKwkJ
-dHotPm10ID0gbXQ7DQorCQl0ei0+aWQgPSBpOw0KKw0KKwkJdHpkZXYgPSBkZXZtX3RoZXJtYWxf
-em9uZV9vZl9zZW5zb3JfcmVnaXN0ZXIoJnBkZXYtPmRldiwgaSwgdHosIChpID09IDApID8NCisJ
-CQkJCQkJICAgICAmbXRrX3RoZXJtYWxfb3BzIDoNCisJCQkJCQkJICAgICAmbXRrX3RoZXJtYWxf
-c2Vuc29yX29wcyk7DQorDQorCQlpZiAoSVNfRVJSKHR6ZGV2KSkgew0KKwkJCWlmIChQVFJfRVJS
-KHR6ZGV2KSA9PSAtRU5PREVWKSB7DQorCQkJCWRldl93YXJuKCZwZGV2LT5kZXYsDQorCQkJCQkg
-InNlbnNvciAlZCBub3QgcmVnaXN0ZXJlZCBpbiB0aGVybWFsIHpvbmUgaW4gZHRcbiIsIGkpOw0K
-KwkJCQljb250aW51ZTsNCisJCQl9DQorCQkJaWYgKFBUUl9FUlIodHpkZXYpID09IC1FQUNDRVMp
-IHsNCisJCQkJcmV0ID0gUFRSX0VSUih0emRldik7DQorCQkJCWdvdG8gZXJyX2Rpc2FibGVfY2xr
-X3BlcmlfdGhlcm07DQorCQkJfQ0KKwkJfQ0KIAl9DQogDQogCXJldHVybiAwOw0KLS0gDQoyLjE4
-LjANCg==
+Hi Daniel,
 
+On 10/13/20 11:21 AM, Daniel Lezcano wrote:
+> 
+> Hi Lukasz,
+> 
+> On 02/10/2020 14:24, Lukasz Luba wrote:
+>> Intelligent Power Allocation (IPA) is built around the PID controller
+>> concept. The initialization code tries to setup the environment based on
+>> the information available in DT or estimate the value based on minimum
+>> power reported by each of the cooling device. The estimation will have an
+>> impact on the PID controller behaviour via the related 'k_po', 'k_pu',
+>> 'k_i' coefficients and also on the power budget calculation.
+>>
+>> This change prevents the situation when 'k_i' is relatively big compared
+>> to 'k_po' and 'k_pu' values. This might happen when the estimation for
+>> 'sustainable_power' returned small value, thus 'k_po' and 'k_pu' are
+>> small.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/gov_power_allocator.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+>> index 5cb518d8f156..f69fafe486a5 100644
+>> --- a/drivers/thermal/gov_power_allocator.c
+>> +++ b/drivers/thermal/gov_power_allocator.c
+>> @@ -131,6 +131,7 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>>   	int ret;
+>>   	int switch_on_temp;
+>>   	u32 temperature_threshold;
+>> +	s32 k_i;
+>>   
+>>   	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+>>   	if (ret)
+>> @@ -156,8 +157,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+>>   		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
+>>   			temperature_threshold;
+>>   
+>> -	if (!tz->tzp->k_i || force)
+>> -		tz->tzp->k_i = int_to_frac(10) / 1000;
+>> +	if (!tz->tzp->k_i || force) {
+>> +		k_i = tz->tzp->k_pu / 10;
+>> +		tz->tzp->k_i = k_i > 0 ? k_i : 1;
+>> +	}
+> 
+> I do not understand the rational behind this change.
+
+This is the unfortunate impact of the EM abstract scale of power values.
+IPA didn't have to deal with it, because we always had milli-Watts.
+Because the EM allows the bogoWatts and some vendors already have
+them I have to re-evaluate the IPA.
+
+> 
+> Do you have some values to share describing what would be the impact of
+> this change?
+
+Yes, here is an example:
+EM has 3 devices with abstract scale power values, where minimum power
+is 25 and max is 200. The minimum power is used by
+estimate_sustainable_power()
+as a sum of all devices' min power. Sustainable power is going to be
+estimated to 75.
+
+Then in the code we have 'temperature_threshold' which is in
+milli-Celcius, thus 15degC is 15000.
+
+We estimate 'k_po' according to:
+int_to_frac(sustainable_power) / temperature_threshold;
+
+which is:
+(75 << 10) / 15000 = ~75000 / 15000 = 5 <-- 'k_po'
+
+then k_pu:
+((2*75) << 10) / 15000 = ~150000 / 15000 = 10
+
+Then the old 'k_i' is just hard-coded 10, which is
+the same order of magnitude to what is in 'k_pu'.
+It should be 1 order of magnitude smaller than 'k_pu'.
+
+I did some experiments and the bigger 'k_i' slows down a lot
+the rising temp. That's why this change.
+
+It was OK to have k_i=10 when we were in milliWatts world,
+when the min power value was bigger, thus 'k_pu' was also bigger
+than our hard-coded 'k_i'.
+
+> 
+> Depending on the thermal behavior of a board, these coefficients could
+> be very different, no ?
+> 
+
+Yes, I strongly believe that vendor engineers will make experiments with
+these values and not go with default. Then they will store the k_pu,
+k_po, k_i via sysfs interface, with also sustainable_power.
+
+But I have to also fix the hard-coded k_i in the estimation. As
+described above, when we have small power values from abstract scale,
+the k_i stays too big.
+
+Regards,
+Lukasz
