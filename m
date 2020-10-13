@@ -2,88 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D159D28D638
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 23:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67FFF28D63F
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 23:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbgJMVbm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 17:31:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50006 "EHLO mail.kernel.org"
+        id S1728327AbgJMVkN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 17:40:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbgJMVbm (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Oct 2020 17:31:42 -0400
+        id S1726652AbgJMVkN (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 17:40:13 -0400
 Received: from earth.universe (unknown [185.213.155.232])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 50C9621582;
-        Tue, 13 Oct 2020 21:31:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EC58A21582;
+        Tue, 13 Oct 2020 21:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602624701;
-        bh=vWAc6/uDDUGElUaAfDOKgXveygt5RpMJ7/yFtcLKEsk=;
+        s=default; t=1602625213;
+        bh=mHiysqJkcsaVHBb3pBlRG17I+HxL8BTZ42A6v8iuD/Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E+XNdCqfTjrU7sQiF0xQDflawlK+bJX5fVJ7TvkZ2H2FupoovrQoZlGLE/cj0DMT0
-         kQVQ5LA5bt4RFMAQgXzCWSmbfAevrMUKrmQmApBa/eqaGWPs9+cQL2Z0h66CV+r2+Q
-         9A7jIyZ4aN0Zkf8weZkjkLhPE5xcNxvs0EHMOFDU=
+        b=RwfQ/KkhOQBTWfMQuvnvf1aUYSygb3PDm+bbzE3nPXUNlBm8mHKVzzpYL3xF5u1c9
+         lvWVH2+higZrwdskAgYH1O3Jtop5lvdIQPhhSUkBzNucgVwpHdpbnjOT/cEPrNOB1y
+         37xxab+5k7bLkIqPLISASLrVTCq7Dgb6Fo3sAfbU=
 Received: by earth.universe (Postfix, from userid 1000)
-        id 5705E3C0C87; Tue, 13 Oct 2020 23:31:39 +0200 (CEST)
-Date:   Tue, 13 Oct 2020 23:31:39 +0200
+        id D282F3C0C87; Tue, 13 Oct 2020 23:40:10 +0200 (CEST)
+Date:   Tue, 13 Oct 2020 23:40:10 +0200
 From:   Sebastian Reichel <sre@kernel.org>
 To:     Dan Murphy <dmurphy@ti.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh@kernel.org,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: Add the bq25790 dt bindings
-Message-ID: <20201013213139.rj5vvitgo3znj7fb@earth.universe>
-References: <20201009144112.3007-1-dmurphy@ti.com>
- <ac52ca59-74f4-7ffd-544c-4a542e799ae5@ti.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bq25980: Fix uninitialized wd_reg_val and
+ overrun
+Message-ID: <20201013214010.2qulyhqo2x6lebwl@earth.universe>
+References: <20201009121205.28178-1-dmurphy@ti.com>
+ <f75856b4-88b5-38af-8d31-a7c19c978f26@ti.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ms7dhtfyoseouiz4"
+        protocol="application/pgp-signature"; boundary="kitil4vbe2z42uf6"
 Content-Disposition: inline
-In-Reply-To: <ac52ca59-74f4-7ffd-544c-4a542e799ae5@ti.com>
+In-Reply-To: <f75856b4-88b5-38af-8d31-a7c19c978f26@ti.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ms7dhtfyoseouiz4
+--kitil4vbe2z42uf6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi Dan,
 
-On Tue, Oct 13, 2020 at 01:03:52PM -0500, Dan Murphy wrote:
-> On 10/9/20 9:41 AM, Dan Murphy wrote:
-> > Add the bindings for the bq25790.
+On Tue, Oct 13, 2020 at 01:03:13PM -0500, Dan Murphy wrote:
+> On 10/9/20 7:12 AM, Dan Murphy wrote:
+> > Fix the issue when 'i' is equal to array size then array index over
+> > runs the array when checking for the watch dog value.
+> >=20
+> > This also fixes the uninitialized wd_reg_val if the for..loop was not
+> > successful in finding an appropriate match.
 >=20
-> Also any updates on this series?
+> Might want to pull this into next as well this is a 0-day bug fix
 
-Sorry, It's not gonna make it into this merge window. I did not
-yet fully review it and merge window is already open. I can say
-you are at least leaking USB notifier on driver removal, since
-you never call usb_unregister_notifier() for that case (similar
-to Ricardo's submission).
+Yes, merged now. I did not take it directly, since I had to rebase
+it first. Please always send power-supply patches based on the
+for-next branch, which already contained a fix for the uninitialized
+wd_reg_val.
+
+(also no need to Cc DT people for this patch :))
 
 -- Sebastian
 
---ms7dhtfyoseouiz4
+--kitil4vbe2z42uf6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl+GHLgACgkQ2O7X88g7
-+pp8ZRAAl4dM1MwYHzNCWp8Qdsac8glJJfSk2CeH8pfWMgyOml9Kh4YsQh4C7fFK
-cqnE9V/6YVGsD/0GXoM5ptwlnIZxEV2GWqbLiIA1Fo+T/BZuicDiDFJh2fFiJ2ny
-SgBfyNzhcJRcrHkP/2QYqZEeInfHiPzdlHPzEFAmif5HCCZdqNHbpA3FXnulW2to
-cp7iKTejWCDE50OD7uNcIjPhL7mBLLZZh/JNc08ajhsXI8Aj34iYtCX/foGLy4p3
-vaWpM3iZC/C7aeeVN1S2Q/rkEofzGnz9WJNJnPsshyhLpkYrTDnkXR3dTqzgH9U6
-Sonb45s79+/ZJW5mR/qCYjQ3ngW+3KhPavH5toodioFxEHQJXcjfGxtlm5xNuxnL
-bH15YBlTmGSQNTE8osvXf6O/N+HsmbQ1soqogEZOIhxXOJqsQrXONyWNQGy2822q
-QbdonrASURD1C3qVxH5O2+BOzCEK/CikUFaKOpv4/2L5C94BRCOrSj8eXzUWgHXP
-u3ZoZeo/V/A588sBU9GVOH1Yr8xI3NGDAg/pV4dHq+P9zpRlAcn7TP9jd0LWzkyh
-1BaoLUCNxUnj68ZF7KuoQSlgg8liVru2Qf1nKb/63Q2k4XpfBbjv3W410V1xijqN
-blIYlVM3cMFPt1HffizNiSRdRzq9M7JeQ+2fKZoOnxoRxNX9D8k=
-=Ykzz
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl+GHroACgkQ2O7X88g7
++poGPg/9FmY39emByDrWFBKDPkT2LQISCw8Uw0buqcEFvi6KWjzFwVGE/EdlaIeu
+0eDp1/B34sYIAVfSdaDK8J7a57UpHC8c3ReuEz2TcJxbNSjyWy9V1O9OzVfYCfvA
+e31m7t2VdB7sjArMBkxgGdvjIkWsaDZKhIhImb5Zw9OOcSmuVBPO6w6x5SkY+hKb
+PPTZfbZspPdYYshVjQQGDRttU+FjPsoNqrxBq+2sT1Q1r+orKM6Hf+0iB5mgNleE
+28P1bFcdSaYgsSSskaVxSJvG15uGHHvkbi634WOdfnH6QcTvOEcqgPu7l5FhxAd8
+365QdowHxbII7p3ViknriVAMbm+hHkVSlqR/R4HffND8o6fhUCdgsp9gQb7epcsQ
+7rN7z5vwH/URsF6hu3Aej/6FQ6kSVTIFTmoIv/C92v9xtt2DOtgOv/68rZeVNUpC
+tZMJjjGJOFT5JmLeYvtsG9YxCsAdCbBTuOmTaufMhL1DVA+3Uj/ft/2li0FKRgfX
+JfyRD/d+pQDzfjf2CEJnPtKfMQffOnW3xf0Ki87Zh+ouBWiirTC1S4Bf6dyFoGld
+sl8dKHXOXmVYDNJMRBye4c2RDcXE1GcuCctOVbQEm7+7qNE/nKWWT0F/QaiMvYKM
+RimhDvoMPA0mLCfWW5cTH3/4fAD7hp983e2mFkdZyD1O0SWrzc4=
+=MQmv
 -----END PGP SIGNATURE-----
 
---ms7dhtfyoseouiz4--
+--kitil4vbe2z42uf6--
