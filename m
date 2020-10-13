@@ -2,207 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178A828C79D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 05:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34EF28C821
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 07:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729111AbgJMDkh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 23:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48594 "EHLO
+        id S1729372AbgJMFMy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 01:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727831AbgJMDkh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Oct 2020 23:40:37 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9EBC0613D0;
-        Mon, 12 Oct 2020 20:40:37 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id y1so6395197plp.6;
-        Mon, 12 Oct 2020 20:40:37 -0700 (PDT)
+        with ESMTP id S1727482AbgJMFMy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 01:12:54 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147E6C0613D0
+        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 22:12:53 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id t18so10031646plo.1
+        for <linux-pm@vger.kernel.org>; Mon, 12 Oct 2020 22:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding:content-language:thread-index;
-        bh=9MhRZAedylu9vwMnX0stOllS6CiVUi1ZAX06b3mgjU0=;
-        b=F0jZw9SpGT2EhMWVHtFSakopuC2SqUZ72YTe25dNAGoxdGiAuYzd1D9uara/95KWfW
-         3sD5nhPt8lgSpgRA8suyFGc6ZDtQAQszXavREC0nkoFuyhlDrsdWSUhgys5OI71jCV46
-         t7MAlBWPNJzW9lmx22xH4EbtrnUpu/hjzFSxDFuzk4+gukZXnHvkEZB7Oqg7x+Ojw+yc
-         r3gEO6lKv+rL2QP2N1vl7xGCHhxbzT2y74ykbEPjHBVeXsx7lYI73w/mjhQUsUnaaVve
-         6Jl/ej+p2xiFxp5RRyYFudTxDcLyRq2++GrUZgVNkMY11kANvvNXymVjvhbT5dPpKehw
-         /haA==
+         :content-transfer-encoding;
+        bh=02oO3Z8jOKDlfqPM7EqzxD4EZC21R1hXbEcsn0yQIcg=;
+        b=AwQj+36MNZq8miR7Y9m93CEutLWF3wDTZ405RIPBqSi2Up44xIAZmFczwMhbkAH7hH
+         bowC74t+9YlTmEQApnKMxQLa3Wayo9U9X1ON5A/izi7GsOsFD5O17jtM/FySTfOSF247
+         HGvtGcR1Q8yrNEB/BjnSCnd9kD7ZE+nttLbVGDdNgjrLAKaj40WsLYZF27zdLX0rZixt
+         BBnXTNat7Dox2abrh4KyCNUnEkLMgU/lBO+EWGlYbu19xn5cUJgSx0IDHh/R7fVwWidn
+         MivCJR0WLCc9F+aEIRjHO+F/9hPLXd3L1o6iPahKXhf1o7cgfB9DwchHSIF1HtbpVORJ
+         1dGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding:content-language:thread-index;
-        bh=9MhRZAedylu9vwMnX0stOllS6CiVUi1ZAX06b3mgjU0=;
-        b=bvxZlxOXNRlMRWQQNH7ubBp43YjPpq7w7lAoS4rus4vlPxQrxdn6I/w2E93R7NtFNy
-         XAD5RrWOxkKwQGlWIVWwcLx09NwF+TH1srQ46IWow7wL115bJztcUQAcqvjI9t/+MsrQ
-         249hgq6vs72I5SQZFKSlOrcDW6EB7uLr47yx/id1KZlfXXlVwCbsPexjek597ut0Fviy
-         C4jDfMPyYE9Am0V2Gpm7sbM9iWQ/n6or70Mj75iJE6AaM9nlyAkEOZrYN1IT5a39veYG
-         tjjxthorDPClb1NyZXuaTddqc1TGwB3qQN5xQGJm+syZXUegxGnfb+22xXg3RptcaVk8
-         K1Lw==
-X-Gm-Message-State: AOAM530f45I7InblwP1DmV7HwypYIs12xqTBW8znNlCfdl9ypiULcZXb
-        a9gvbbRFfjS4DTN+RM0cKH0nFJVtSknJVA==
-X-Google-Smtp-Source: ABdhPJxhU4GJbmrzclA3y4LRr8OHSN7xnaSxJ5W1PHPbhZTjoGs5ITALY3vw15SkVzpDe48fFKtuCA==
-X-Received: by 2002:a17:902:9890:b029:d2:2f2a:584e with SMTP id s16-20020a1709029890b02900d22f2a584emr26848676plp.29.1602560437040;
-        Mon, 12 Oct 2020 20:40:37 -0700 (PDT)
-Received: from DESKTOPIUKEMQD ([209.9.72.212])
-        by smtp.gmail.com with ESMTPSA id g13sm20464911pgd.82.2020.10.12.20.40.34
+         :content-transfer-encoding;
+        bh=02oO3Z8jOKDlfqPM7EqzxD4EZC21R1hXbEcsn0yQIcg=;
+        b=i/plu/cnEo64NHS+5sRuAi41soT1wgkPC2mvepT4E07b3J3BhU7feaJckHCj9RfZtF
+         R4uRvT6q5H12OXsxezmwG9tjaVV3jFVRcV5G6dVPYffowM/+hUv9TxcthZxZb6FmoqI3
+         SSnhDUh7T5zIYp5+rMxBApQSWO/1h5iUgE5clT5IGi1xw9xZW32rwxX6oH4xgnfSx7g+
+         zqUJ09liSaCwXE/qZNzNu9QUvlQACZXvyjv7wGOUKx77RI1GsPgm1IMYvEqKPvTk8o/9
+         yCSGOkQhHRsYZ0ffgj/i+HhfiNwUFaVD4jD7ZGxv7r6yoAJXfiZddEaHjWRNTvbYr3UN
+         S4Nw==
+X-Gm-Message-State: AOAM532bpSSyOu4RB3J52rlN4jirr9ietLzYDHp/vge1h38/uzN4V0z+
+        pas5Ooxpn4YNaLBvielDjVzsxw==
+X-Google-Smtp-Source: ABdhPJzMGzjOYjEi4ZhrNYhyNrJk7b4DJ3/VFaJdEsiOxykRh3VlhDNPCXVdcptoKOxpnD6x0NBf/g==
+X-Received: by 2002:a17:902:b688:b029:d2:43a9:ef1f with SMTP id c8-20020a170902b688b02900d243a9ef1fmr26248237pls.9.1602565972452;
+        Mon, 12 Oct 2020 22:12:52 -0700 (PDT)
+Received: from localhost ([122.181.54.133])
+        by smtp.gmail.com with ESMTPSA id f15sm19293265pfk.21.2020.10.12.22.12.51
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Oct 2020 20:40:36 -0700 (PDT)
-From:   "zhuguangqing83" <zhuguangqing83@gmail.com>
-To:     "'Quentin Perret'" <qperret@google.com>
-Cc:     <lukasz.luba@arm.com>, <rjw@rjwysocki.net>, <pavel@ucw.cz>,
-        <len.brown@intel.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "'zhuguangqing'" <zhuguangqing@xiaomi.com>
-Subject: Re: [PATCH] PM / EM: consult something about cpumask in em_dev_register_perf_domain
-Date:   Tue, 13 Oct 2020 11:40:31 +0800
-Message-ID: <098a01d6a112$9cd7f410$d687dc30$@gmail.com>
+        Mon, 12 Oct 2020 22:12:51 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sumit Gupta <sumitg@nvidia.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: Improve code around unlisted freq check
+Date:   Tue, 13 Oct 2020 10:42:47 +0530
+Message-Id: <37c3f1f76c055b305d1bba2c2001ac5b1d7a9b5f.1602565964.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.25.0.rc1.19.g042ed3e048af
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AdahAmo3046yVeRlQAq1r9STFu9v+A==
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The cpufreq core checks if the frequency programmed by the bootloaders
+is not listed in the freq table and programs one from the table in such
+a case. This is done only if the driver has set the
+CPUFREQ_NEED_INITIAL_FREQ_CHECK flag.
 
-> 
-> Hi,
-> 
-> On Monday 12 Oct 2020 at 20:41:36 (+0800), zhuguangqing83@gmail.com wrote:
-> > From: zhuguangqing <zhuguangqing@xiaomi.com>
-> >
-> > Hi, Lukasz, Quentin
-> >   I have three questions to consult about cpumask in energy_model.c.
-> 
-> OK, let's see if we can help :)
-> 
+Currently we print two separate messages, with almost the same content,
+and do this with a pr_warn() which may be a bit too much as the driver
+only asked us to check this as it expected this to be the case. Lower
+down the severity of the print message by switching to pr_info() instead
+and print a single message only.
 
-Thanks for your help and review.
+Reported-by: Sumit Gupta <sumitg@nvidia.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-> > 1, The first one is about the meanings of the following two parameters,
-> > [1] and [2].
-> > [1]: "cpumask_t *cpus" in function em_dev_register_perf_domain():
-Pointer
-> > to cpumask_t, which in case of a CPU device is obligatory. It can be
-taken
-> > from i.e. 'policy->cpus'.
-> > [2]: "unsigned long cpus[]" in struct em_perf_domain: Cpumask covering
-the
-> > CPUs of the domain. It's here for performance reasons to avoid potential
-> > cache misses during energy calculations in the scheduler and simplifies
-> > allocating/freeing that memory region.
-> >
-> > From the current code, we see [2] is copied from [1]. But from comments,
-> > accorinding to my understanding, [2] and [1] have different meanings.
-> > [1] can be taken from i.e. 'policy->cpus', according to the comment in
-the
-> > defination of struct cpufreq_policy, it means Online CPUs only.
-Actually,
-> > 'policy->cpus' is not always Online CPUs.
-> > [2] means each_possible_cpus in the same domain, including phycical
-> > hotplug cpus(just possible), logically hotplug cpus(just present) and
-> > online cpus.
-> >
-> >
-> > So, the first question is, what are the meanings of [1] and [2]?
-> > I guess maybe there are the following 4 possible choices.
-> > A), for_each_possible_cpu in the same domain, maybe phycical hotplug
-> > B), for_each_present_cpu in the same domain, maybe logically hotplug
-> > C), for_each_online_cpu in the same domain, online
-> > D), others
-> 
-> So, if the comments are confusing we should update them, but from the EM
-> framework perspective, all cpumasks must be the _possible_ CPUs in the
-> domain. It's up to the clients (e.g. the scheduler) to deal with hotplug
-> and so on, but the EM framework should cover non-online CPUs too.
-> 
-
-I see, from the EM framework perspective, all cpumasks must be the
-_possible_ CPUs in the domain. But up to the clients (e.g. the scheduler),
-'policy->cpus' maybe not the _possible_ CPUs. For example, in the function
-scmi_cpufreq_init() which calls em_dev_register_perf_domain(),
-'policy->cpus'
-is got from scmi_get_sharing_cpus() and cpufreq_online(), including CPUs
-satisfied the following three conditions at the same time which means
-_present_ CPUs according to my understanding.
-1) _possible_
-2) if (get_cpu_device(cpu))
-3) in the same domain
-
-> > 2, The second question is about the function
-em_dev_register_perf_domain().
-> > If multiple clients register the same performance domain with different
-> > *dev or *cpus, how should we handle?
-> >
-> > int em_dev_register_perf_domain(struct device *dev, unsigned int
-nr_states,
-> > 			struct em_data_callback *cb, cpumask_t *cpus)
-> >
-> > For example, say cpu0 and cpu1 are in the same performance domain,
-> > cpu0 is registered first. As part of the init process,
-> > em_dev_register_perf_domain() is called, then *dev = cpu0_dev,
-> > *cpus = 01b(cpu1 is initially offline). It creates a em_pd for cpu0_dev.
-> > After a while, cpu1 is online, em_dev_register_perf_domain() is called
-> > again as part of init process for cpu1, then *dev =cpu1_dev,
-> > *cpus = 11b(cpu1 is online).  In this case, for the current code,
-> > cpu1_dev can not get its em_pd.
-> 
-> As per the above, the registration should be done once, with the mask of
-> all possible CPUs in the domain. If CPUs 0 and 1 share the same domain, a
-> single call to em_dev_register_perf_domain() should be sufficient to
-> register both of them at once.
-> 
-
-I just saw your discussion in https://lkml.org/lkml/2020/2/7/479, it
-mentioned
-"PM_EM ignores hotplug ATM. Perhaps we should document that somewhere ..."
-
-So, if PM_EM still ignores hotplug now, then the registration should be done
-once,
-with the mask of all possible CPUs in the domain. If PM_EM consider hotplug
-in
-the future, then we should consider the case that
-em_dev_register_perf_domain()
-will be called more than once with different input parameters *dev or/and
-*cpus.
-And the CPU mask might not be all possible CPUs in the domain.
-
-> > 3, The third question is, how can we ensure cpu_dev as follows is not
-> > NULL? If we can't ensure that, maybe we should add a check before using
-> > it.
-> > /kernel/power/energy_model.c
-> > 174) static int em_create_pd(struct device *dev, int nr_states,
-> > 175)                    struct em_data_callback *cb, cpumask_t *cpus)
-> > 176) {
-> > 199)    if (_is_cpu_device(dev))
-> > 200)            for_each_cpu(cpu, cpus) {
-> > 201)                    cpu_dev = get_cpu_device(cpu);
-> > 202)                    cpu_dev->em_pd = pd;
-> > 203)            }
-> 
-> And that should not be necessary as we check for the !dev case at the
-> top of em_dev_register_perf_domain(). Or were you thinking about
-> something else?
-> 
-> Oh I think I read that one wrong, but the conclusion should be the same,
-> at least on Arm64 -- all _possible_ CPUs should be registered early
-> enough for that not to be an issue.
->
->Did you observe anything wrong there for your use-case?
-> 
-
-I did not observe anything wrong for my use-case. But I think it's possible
-in
-theory that cpu_dev maybe NULL. I observe that in the function
-scmi_cpufreq_init(), before calling em_dev_register_perf_domain(),
-'policy->cpus' can be ensure that all the cpu_dev in CPU mask are not NULL.
-But maybe we can not ensure all the clients do the check.  This could happen
-if the arch did not set up cpu_dev since this CPU is not in cpu_present mask
-and the driver did not send a correct CPU mask during registration.
-
-> Thanks,
-> Quentin
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 2ea245a6c0c0..99864afac272 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1461,14 +1461,13 @@ static int cpufreq_online(unsigned int cpu)
+ 	 */
+ 	if ((cpufreq_driver->flags & CPUFREQ_NEED_INITIAL_FREQ_CHECK)
+ 	    && has_target()) {
++		unsigned int old_freq = policy->cur;
++
+ 		/* Are we running at unknown frequency ? */
+-		ret = cpufreq_frequency_table_get_index(policy, policy->cur);
++		ret = cpufreq_frequency_table_get_index(policy, old_freq);
+ 		if (ret == -EINVAL) {
+-			/* Warn user and fix it */
+-			pr_warn("%s: CPU%d: Running at unlisted freq: %u KHz\n",
+-				__func__, policy->cpu, policy->cur);
+-			ret = __cpufreq_driver_target(policy, policy->cur - 1,
+-				CPUFREQ_RELATION_L);
++			ret = __cpufreq_driver_target(policy, old_freq - 1,
++						      CPUFREQ_RELATION_L);
+ 
+ 			/*
+ 			 * Reaching here after boot in a few seconds may not
+@@ -1476,8 +1475,8 @@ static int cpufreq_online(unsigned int cpu)
+ 			 * frequency for longer duration. Hence, a BUG_ON().
+ 			 */
+ 			BUG_ON(ret);
+-			pr_warn("%s: CPU%d: Unlisted initial frequency changed to: %u KHz\n",
+-				__func__, policy->cpu, policy->cur);
++			pr_info("%s: CPU%d: Running at unlisted initial frequency: %u KHz, changing to: %u KHz\n",
++				__func__, policy->cpu, old_freq, policy->cur);
+ 		}
+ 	}
+ 
+-- 
+2.25.0.rc1.19.g042ed3e048af
 
