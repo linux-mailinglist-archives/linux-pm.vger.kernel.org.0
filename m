@@ -2,205 +2,243 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5969E28C4D3
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 00:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8818F28C6DA
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 03:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390051AbgJLWei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Oct 2020 18:34:38 -0400
-Received: from z5.mailgun.us ([104.130.96.5]:41500 "EHLO z5.mailgun.us"
+        id S1728253AbgJMBfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Oct 2020 21:35:22 -0400
+Received: from mga11.intel.com ([192.55.52.93]:42342 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390273AbgJLWeh (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Mon, 12 Oct 2020 18:34:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602542076; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=XKpGBpZzmWhm7bXNsIqJEj46Bl1p8p5AhOlTFIJPcJ8=; b=RIoXMIHD/6S7kjElmvfgQDyX0TfMZgggLvqJ3fYkgk1qOMNWbIY4z6nGxGIHIMOcZtQQnMAE
- E6/3ZBjGahcGAljcqkMaP2MwZhKo8YlnmoNwj9SfKdoLvfBAZdo44j8Dc3YUqneXDPoytMDG
- HRDY3TYIFX2aTiaq4eiXy9z14ss=
-X-Mailgun-Sending-Ip: 104.130.96.5
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5f84d9fb3711fec7b1a221d2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 12 Oct 2020 22:34:35
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 276BCC433F1; Mon, 12 Oct 2020 22:34:35 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C8C77C433FF;
-        Mon, 12 Oct 2020 22:34:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C8C77C433FF
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     rjw@rjwysocki.net, ulf.hansson@linaro.org, linux-pm@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, Lina Iyer <ilina@codeaurora.org>
-Subject: [PATCH 2/2] PM / Domains: use device's next wakeup to determine domain idle state
-Date:   Mon, 12 Oct 2020 16:34:00 -0600
-Message-Id: <20201012223400.23609-3-ilina@codeaurora.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201012223400.23609-1-ilina@codeaurora.org>
-References: <20201012223400.23609-1-ilina@codeaurora.org>
+        id S1728217AbgJMBfW (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Mon, 12 Oct 2020 21:35:22 -0400
+IronPort-SDR: P9awuN7TupT5IotyhWeK8Uw+UNceI61F61evXtqluhY+5X0px3tSvVOhEBFqVwONg4EJoVJlRx
+ JEBVmXWUzEig==
+X-IronPort-AV: E=McAfee;i="6000,8403,9772"; a="162363817"
+X-IronPort-AV: E=Sophos;i="5.77,369,1596524400"; 
+   d="scan'208";a="162363817"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2020 18:35:21 -0700
+IronPort-SDR: SN8WWaIprLB1wQSmfiEQDM4uoDndPtx+SZ4fyiWBjGzYk2Z+buQh8UtnbuvNTyyTOdBuufKq2E
+ abIQqRhw/3uw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,369,1596524400"; 
+   d="scan'208";a="530190952"
+Received: from lkp-server01.sh.intel.com (HELO aa1d92d39b27) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 12 Oct 2020 18:35:19 -0700
+Received: from kbuild by aa1d92d39b27 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1kS9Dj-0000FD-4d; Tue, 13 Oct 2020 01:35:19 +0000
+Date:   Tue, 13 Oct 2020 09:34:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [pm:bleeding-edge] BUILD SUCCESS
+ 91e0225c546b542d828011feef9fb155e18b7941
+Message-ID: <5f850430.JehQN60BoOCjEESB%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the device's next event is known, determine if it is worthwhile
-entering a domain idle state. To find the next wakeup, traverse a domain
-for all child devices and find out the earliest wakeup value. A parent
-domain's next wakeup is the earliest of all its child devices and
-domains. The next wakeup is specified by devices in the domains before
-they devices are suspended.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git  bleeding-edge
+branch HEAD: 91e0225c546b542d828011feef9fb155e18b7941  Merge branch 'pm-cpufreq' into linux-next
 
-Update the domain governor logic to determine if it is worthwhile to
-enter an idle state based on the next wakeup for the domain along with
-other existing constraints.
+elapsed time: 721m
 
-Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+configs tested: 178
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm                     eseries_pxa_defconfig
+sh                             shx3_defconfig
+mips                            e55_defconfig
+arm                       spear13xx_defconfig
+arm                          imote2_defconfig
+arc                          axs101_defconfig
+arm                      tct_hammer_defconfig
+m68k                        mvme16x_defconfig
+mips                          rm200_defconfig
+mips                           jazz_defconfig
+sh                   sh7770_generic_defconfig
+powerpc                    sam440ep_defconfig
+sh                          rsk7264_defconfig
+powerpc                       ebony_defconfig
+arm                            mmp2_defconfig
+arm                           spitz_defconfig
+powerpc                  iss476-smp_defconfig
+s390                          debug_defconfig
+ia64                                defconfig
+powerpc                      cm5200_defconfig
+sh                          rsk7201_defconfig
+h8300                            allyesconfig
+arm                       mainstone_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                     asp8347_defconfig
+arm                  colibri_pxa270_defconfig
+mips                      loongson3_defconfig
+powerpc                     kilauea_defconfig
+arc                 nsimosci_hs_smp_defconfig
+arm                         palmz72_defconfig
+arm                      integrator_defconfig
+arm                        multi_v7_defconfig
+arm                              alldefconfig
+sh                             espt_defconfig
+c6x                         dsk6455_defconfig
+arm                      footbridge_defconfig
+mips                         mpc30x_defconfig
+sh                        dreamcast_defconfig
+mips                         db1xxx_defconfig
+arm                        realview_defconfig
+mips                           ip32_defconfig
+powerpc                 mpc834x_mds_defconfig
+xtensa                    xip_kc705_defconfig
+sh                   secureedge5410_defconfig
+arm                          iop32x_defconfig
+mips                      pistachio_defconfig
+openrisc                    or1ksim_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arc                        vdk_hs38_defconfig
+powerpc                    amigaone_defconfig
+powerpc                    mvme5100_defconfig
+sh                              ul2_defconfig
+arm                            qcom_defconfig
+sh                        sh7785lcr_defconfig
+m68k                        stmark2_defconfig
+xtensa                  cadence_csp_defconfig
+x86_64                           allyesconfig
+mips                      fuloong2e_defconfig
+mips                           xway_defconfig
+arm                            xcep_defconfig
+powerpc                     tqm8548_defconfig
+parisc                              defconfig
+arc                              allyesconfig
+powerpc                 mpc8313_rdb_defconfig
+openrisc                            defconfig
+ia64                         bigsur_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                       maple_defconfig
+powerpc                     powernv_defconfig
+sh                           se7712_defconfig
+arm                         lubbock_defconfig
+sh                     sh7710voipgw_defconfig
+um                           x86_64_defconfig
+nios2                            allyesconfig
+powerpc                          g5_defconfig
+arc                             nps_defconfig
+m68k                        m5272c3_defconfig
+mips                           ip28_defconfig
+arm                         socfpga_defconfig
+sh                          urquell_defconfig
+arc                            hsdk_defconfig
+openrisc                         alldefconfig
+arm                           h3600_defconfig
+sh                             sh03_defconfig
+powerpc                      ppc40x_defconfig
+powerpc                 mpc836x_rdk_defconfig
+arm                       omap2plus_defconfig
+mips                       lemote2f_defconfig
+mips                         cobalt_defconfig
+arm                           corgi_defconfig
+m68k                        m5307c3_defconfig
+sh                          sdk7780_defconfig
+um                            kunit_defconfig
+arm                      jornada720_defconfig
+h8300                     edosk2674_defconfig
+powerpc                      pcm030_defconfig
+arm64                            alldefconfig
+arm                             rpc_defconfig
+powerpc                     tqm8555_defconfig
+arm                       multi_v4t_defconfig
+powerpc                   motionpro_defconfig
+mips                        workpad_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                  mpc885_ads_defconfig
+arc                           tb10x_defconfig
+mips                          ath25_defconfig
+parisc                           allyesconfig
+nios2                         3c120_defconfig
+mips                           ip27_defconfig
+powerpc                     pq2fads_defconfig
+m68k                             allmodconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+c6x                              allyesconfig
+nds32                               defconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a005-20201012
+i386                 randconfig-a006-20201012
+i386                 randconfig-a001-20201012
+i386                 randconfig-a003-20201012
+i386                 randconfig-a004-20201012
+i386                 randconfig-a002-20201012
+x86_64               randconfig-a016-20201012
+x86_64               randconfig-a015-20201012
+x86_64               randconfig-a012-20201012
+x86_64               randconfig-a013-20201012
+x86_64               randconfig-a014-20201012
+x86_64               randconfig-a011-20201012
+i386                 randconfig-a016-20201012
+i386                 randconfig-a015-20201012
+i386                 randconfig-a013-20201012
+i386                 randconfig-a012-20201012
+i386                 randconfig-a011-20201012
+i386                 randconfig-a014-20201012
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                                   rhel
+x86_64                    rhel-7.6-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a004-20201012
+x86_64               randconfig-a002-20201012
+x86_64               randconfig-a006-20201012
+x86_64               randconfig-a001-20201012
+x86_64               randconfig-a003-20201012
+x86_64               randconfig-a005-20201012
+
 ---
- drivers/base/power/domain_governor.c | 83 ++++++++++++++++++++++++++--
- include/linux/pm_domain.h            |  1 +
- 2 files changed, 79 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
-index 490ed7deb99a..77b4928aa389 100644
---- a/drivers/base/power/domain_governor.c
-+++ b/drivers/base/power/domain_governor.c
-@@ -117,6 +117,49 @@ static bool default_suspend_ok(struct device *dev)
- 	return td->cached_suspend_ok;
- }
- 
-+static void update_domain_next_wakeup(struct generic_pm_domain *genpd, ktime_t now)
-+{
-+	ktime_t domain_wakeup = KTIME_MAX;
-+	ktime_t next_wakeup;
-+	struct pm_domain_data *pdd;
-+	struct gpd_link *link;
-+
-+	/* Find the earliest wakeup for all devices in the domain */
-+	list_for_each_entry(pdd, &genpd->dev_list, list_node) {
-+		next_wakeup = READ_ONCE(pdd->dev->power.next_event);
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	/* Then find the earliest wakeup of from all the child domains */
-+	list_for_each_entry(link, &genpd->parent_links, parent_node) {
-+		next_wakeup = link->child->next_wakeup;
-+		if (next_wakeup != KTIME_MAX && !ktime_before(next_wakeup, now))
-+			if (ktime_before(next_wakeup, domain_wakeup))
-+				domain_wakeup = next_wakeup;
-+	}
-+
-+	genpd->next_wakeup = domain_wakeup;
-+}
-+
-+static bool next_wakeup_allows_state(struct generic_pm_domain *genpd,
-+				     unsigned int state, ktime_t now)
-+{
-+	s64 idle_time_ns, min_sleep_ns;
-+	ktime_t domain_wakeup = genpd->next_wakeup;
-+
-+	min_sleep_ns = genpd->states[state].power_off_latency_ns +
-+		       genpd->states[state].power_on_latency_ns +
-+		       genpd->states[state].residency_ns;
-+
-+	idle_time_ns = ktime_to_ns(ktime_sub(domain_wakeup, now));
-+	if (idle_time_ns < min_sleep_ns)
-+		return false;
-+
-+	return true;
-+}
-+
- static bool __default_power_down_ok(struct dev_pm_domain *pd,
- 				     unsigned int state)
- {
-@@ -210,6 +253,33 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
- {
- 	struct generic_pm_domain *genpd = pd_to_genpd(pd);
- 	struct gpd_link *link;
-+	unsigned int state_idx;
-+	ktime_t now = ktime_get();
-+
-+	/*
-+	 * Find the next wakeup from devices that can determine their own wakeup
-+	 * to find when the domain would wakeup and do it for every device down
-+	 * the hierarchy. It is not worth while to sleep if the state's residency
-+	 * cannot be met.
-+	 */
-+	update_domain_next_wakeup(genpd, now);
-+	state_idx = genpd->state_count - 1;
-+	if (genpd->next_wakeup != KTIME_MAX) {
-+		/* Let's find out the deepest domain idle state, the devices prefer */
-+		while (state_idx >= 0) {
-+			if (next_wakeup_allows_state(genpd, state_idx, now)) {
-+				genpd->max_off_time_changed = true;
-+				break;
-+			}
-+			state_idx--;
-+		}
-+
-+		if (state_idx < 0) {
-+			state_idx = 0;
-+			genpd->cached_power_down_ok = false;
-+			goto done;
-+		}
-+	}
- 
- 	if (!genpd->max_off_time_changed) {
- 		genpd->state_idx = genpd->cached_power_down_state_idx;
-@@ -228,17 +298,20 @@ static bool default_power_down_ok(struct dev_pm_domain *pd)
- 	genpd->max_off_time_ns = -1;
- 	genpd->max_off_time_changed = false;
- 	genpd->cached_power_down_ok = true;
--	genpd->state_idx = genpd->state_count - 1;
- 
--	/* Find a state to power down to, starting from the deepest. */
--	while (!__default_power_down_ok(pd, genpd->state_idx)) {
--		if (genpd->state_idx == 0) {
-+	/* Find a state to power down to, starting from the state
-+	 * determined by the next wakeup.
-+	 */
-+	while (!__default_power_down_ok(pd, state_idx)) {
-+		if (state_idx == 0) {
- 			genpd->cached_power_down_ok = false;
- 			break;
- 		}
--		genpd->state_idx--;
-+		state_idx--;
- 	}
- 
-+done:
-+	genpd->state_idx = state_idx;
- 	genpd->cached_power_down_state_idx = genpd->state_idx;
- 	return genpd->cached_power_down_ok;
- }
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index ee11502a575b..9ea6f666967b 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -119,6 +119,7 @@ struct generic_pm_domain {
- 				     unsigned int state);
- 	struct gpd_dev_ops dev_ops;
- 	s64 max_off_time_ns;	/* Maximum allowed "suspended" time. */
-+	ktime_t next_wakeup;
- 	bool max_off_time_changed;
- 	bool cached_power_down_ok;
- 	bool cached_power_down_state_idx;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
