@@ -2,130 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 804B828CB7D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 12:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23FCB28CB88
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 12:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387810AbgJMKVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 06:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726935AbgJMKVM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 06:21:12 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8093BC0613D2
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 03:21:12 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id e2so21191157wme.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 03:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Isdnj7ywPpyzw3VK2rGw/3l/B3KgvYFYumf7odl6w+M=;
-        b=baX5WSZ6fBfa7WhogUTvoq9WWCzoYmgCcoy0Yw+jDc9uqWaEzi0Oqi+0AJx+HZSrLB
-         p88a/dAOpu/O1U/CffNSGmz1leN8bJwEFeYA2LcVEd/SzE9bxuTCfgyw/pQzFOuC+eBE
-         7dg1eRq58tto5/pJQeJO+gupOcltXnAbelSA+XR9mFipWzE5U83w0JluYz073g9zUXx9
-         ZfJzzlE3EOSBfuiJMTTQAK3WBtA+Chpu5f48+C8iqBTszDnxjhCDp0t6UFxTyeuYy5Pj
-         ++RZSEVeYSYq5JFZ5qBRxSDAwd39kUYpbTsLe4b/0iUFwWGkuhYlGfRsA/Mpj+cbc87d
-         qgTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Isdnj7ywPpyzw3VK2rGw/3l/B3KgvYFYumf7odl6w+M=;
-        b=pMeSviIqjjlkmPtXPo+JoJq5XXjwnzPt1nbRbyYtm2aWzqgLLwB3h3WfWUWJdi7ex9
-         cGnhv5zKZFnrw5U4M4Sznnu8OlNzHEvGTl3qUYY57OAgdil/0nYQbtmVBzoTmooE+ZO4
-         oqrPbSWHZqV8SymyoV02BI0KI1rUvCkeEC1FFgpV2no4BicLxXMMzTM2KUgONwpA1RE4
-         LTOUCPCPjDjzBDlyqj24SqImxcPSz2eIC7fCcpoC8VfvpgmC3e7p/OYb4SY0P9yJ52e/
-         ByKoWXTJCg7XbWr7Sju7J+WrtUwxg9FmyfQJHJ14Rqu93VSBh2UgDa8wYWXhkgomWLvJ
-         wJiQ==
-X-Gm-Message-State: AOAM530nibyLIO4wTeHLHiqXrlUtUaYhuSBHKTREZMGf/w73M1UAFoYl
-        jjz46UEd37T8jz9l9kp9Fw1Iew==
-X-Google-Smtp-Source: ABdhPJzU95PX4mPOUpPLXrtgK2LFOdkKKBEgDELP6aMUt94N+q30VRUZnT7qA/qS1JJ3E9zIu96vcg==
-X-Received: by 2002:a1c:87:: with SMTP id 129mr14651577wma.103.1602584471014;
-        Tue, 13 Oct 2020 03:21:11 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8dea:c7dd:5d0e:51e6? ([2a01:e34:ed2f:f020:8dea:c7dd:5d0e:51e6])
-        by smtp.googlemail.com with ESMTPSA id h16sm30010895wre.87.2020.10.13.03.21.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 03:21:10 -0700 (PDT)
-Subject: Re: [PATCH 1/2] thermal: power allocator: change the 'k_i'
- coefficient estimation
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     amitk@kernel.org, Dietmar.Eggemann@arm.com
-References: <20201002122416.13659-1-lukasz.luba@arm.com>
- <20201002122416.13659-2-lukasz.luba@arm.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <cc0e6d85-28ad-3cfc-e5b8-75820552b716@linaro.org>
-Date:   Tue, 13 Oct 2020 12:21:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730103AbgJMKYH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 06:24:07 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:45376 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729142AbgJMKYF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 06:24:05 -0400
+X-UUID: 62c5888df13443448298e49461e47086-20201013
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=PWbV9UJVNx5Rqkoezdtv//5m6JUAtb7ulTjtaO+ZtI8=;
+        b=fCOnt20siAhWL/cCwso+jL+Fjm66NNvrTfaPF+p+YAwsMOiLXxVu4xYijifMZ/u3VFwxmb4Xgdm4dsOcc6rPRBKy2eXsbAR/a8Njlx1t+IPxNnrPxbdlM++LB3OE+rSsH3uYLkuCCcRS+h9xEWHfB9c087GSz1kAF2vR1OclvE4=;
+X-UUID: 62c5888df13443448298e49461e47086-20201013
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <michael.kao@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.14 Build 0819 with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1942852951; Tue, 13 Oct 2020 18:24:01 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 13 Oct 2020 18:24:00 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 13 Oct 2020 18:24:00 +0800
+From:   Michael Kao <michael.kao@mediatek.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <srv_heupstream@mediatek.com>
+CC:     Eduardo Valentin <edubezval@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <hsinyi@chromium.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [v5 0/3] mt8183: Add Mediatek thermal driver and dtsi 
+Date:   Tue, 13 Oct 2020 18:23:55 +0800
+Message-ID: <20201013102358.22588-1-michael.kao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20201002122416.13659-2-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+VGhpcyBwYXRjaHNldCBzdXBwb3J0cyBmb3IgTVQ4MTgzIGNoaXAgdG8gbXRrX3RoZXJtYWwuYy4N
+CkFkZCB0aGVybWFsIHpvbmUgb2YgYWxsIHRoZSB0aGVybWFsIHNlbnNvciBpbiBTb0MgZm9yDQph
+bm90aGVyIGdldCB0ZW1wZXJhdHJ1ZS4gVGhleSBkb24ndCBuZWVkIHRvIHRoZXJtYWwgdGhyb3R0
+bGUuDQpBbmQgd2UgYmluZCBjb29sZXJzIGZvciB0aGVybWFsIHpvbmUgbm9kZXMgb2YgY3B1X3Ro
+ZXJtYWwuDQoNCkNoYW5nZXMgaW4gdjU6DQogICAgLSBSZWJhc2UgdG8ga2VybmVsLTUuOS1yYzEu
+DQogICAgLSBSZXZpc2UgdGhlIHRpdGxlIG9mIGNvdmVyIGxldHRlci4NCiAgICAtIERyb3AgIlt2
+NCw3LzddIHRoZXJtYWw6IG1lZGlhdGVrOiB1c2Ugc3BpbmxvY2sgdG8gcHJvdGVjdCBQVFBDT1JF
+U0VMIg0KICAgIC0gWzIvMl0NCiAgICAgICAgLSAgQWRkIHRoZSBqdWRnZW1lbnQgdG8gdGhlIHZl
+cnNpb24gb2YgcmF3X3RvX21jZWxzaXVzLg0KDQpDaGFuZ2VzIGluIHY0Og0KICAgIC0gUmViYXNl
+IHRvIGtlcm5lbC01LjYtcmMxLg0KICAgIC0gWzEvN10NCiAgICAgICAgLSBTcXVhc2ggdGhlcm1h
+bCB6b25lIHNldHRpbmdzIGluIHRoZSBkdHNpIGZyb20gW3YzLDUvOF0NCiAgICAgICAgICBhcm02
+NDogZHRzOiBtdDgxODM6IEluY3JlYXNlIHBvbGxpbmcgZnJlcXVlbmN5IGZvciBDUFUgdGhlcm1h
+bCB6b25lLg0KICAgICAgICAtIFJlbW92ZSB0aGUgcHJvcGVydHkgb2YgaW50ZXJydXB0cyBhbmQg
+bWVkaWF0ZWssaHctcmVzZXQtdGVtcC4NCiAgICAtIFsyLzddDQogICAgICAgIC0gQ29ycmVjdCBj
+b21taXQgbWVzc2FnZS4NCiAgICAtIFs0LzddDQogICAgICAgIC0gQ2hhbmdlIHRoZSB0YXJnZXQg
+dGVtcGVyYXR1cmUgdG8gdGhlIDgwQyBhbmQgY2hhbmdlIHRoZSBjb21taXQgbWVzc2FnZS4NCiAg
+ICAtIFs2LzddDQogICAgICAgIC0gQWRqdXN0IG5ld2xpbmUgYWxpZ25tZW50Lg0KICAgICAgICAt
+IEZpeCB0aGUganVkZ2VtZW50IG9uIHRoZSByZXR1cm4gdmFsdWUgb2YgcmVnaXN0ZXJpbmcgdGhl
+cm1hbCB6b25lLg0KDQpDaGFuZ2VzIGluIHYzOg0KICAgIC0gUmViYXNlIHRvIGtlcm5lbC01LjUt
+cmMxLg0KICAgIC0gWzEvOF0NCiAgICAgICAgLSBVcGRhdGUgc3VzdGFpbmFibGUgcG93ZXIgb2Yg
+Y3B1LCB0enRzMX41IGFuZCB0enRzQUJCLg0KICAgIC0gWzcvOF0NCiAgICAgICAgLSBCeXBhc3Mg
+dGhlIGZhaWx1cmUgdGhhdCBub24gY3B1X3RoZXJtYWwgc2Vuc29yIGlzIG5vdCBmaW5kIGluIHRo
+ZXJtYWwtem9uZXMNCiAgICAgICAgICBpbiBkdHMsIHdoaWNoIGlzIG5vcm1hbCBmb3IgbXQ4MTcz
+LCBzbyBwcm9tcHQgYSB3YXJuaW5nIGhlcmUgaW5zdGVhZCBvZg0KICAgICAgICAgIGZhaWxpbmcu
+DQoNCiAgICAgICAgUmV0dXJuIC1FQUdBSU4gaW5zdGVhZCBvZiAtRUFDQ0VTUyBvbiB0aGUgZmly
+c3QgcmVhZCBvZiBzZW5zb3IgdGhhdA0KICAgICAgICBvZnRlbiBhcmUgYm9ndXMgdmFsdWVzLiBU
+aGlzIGNhbiBhdm9pZCBmb2xsb3dpbmcgd2FybmluZyBvbiBib290Og0KDQogICAgICAgICAgdGhl
+cm1hbCB0aGVybWFsX3pvbmU2OiBmYWlsZWQgdG8gcmVhZCBvdXQgdGhlcm1hbCB6b25lICgtMTMp
+DQoNCkNoYW5nZXMgaW4gdjI6DQogICAgLSBbMS84XQ0KICAgICAgICAtIEFkZCB0aGUgc3VzdGFp
+bmFibGUtcG93ZXIsdHJpcHMsY29vbGluZy1tYXBzIHRvIHRoZSB0enRzMX50enRzQUJCLg0KICAg
+IC0gWzQvOF0NCiAgICAgICAgLSBBZGQgdGhlIG1pbiBvcHAgb2YgY3B1IHRocm90dGxlLg0KDQoN
+Ck1hdHRoaWFzIEthZWhsY2tlICgxKToNCiAgYXJtNjQ6IGR0czogbXQ4MTgzOiBDb25maWd1cmUg
+Q1BVIGNvb2xpbmcNCg0KTWljaGFlbCBLYW8gKDIpOg0KICB0aGVybWFsOiBtZWRpYXRlazogYWRk
+IGFub3RoZXIgZ2V0X3RlbXAgb3BzIGZvciB0aGVybWFsIHNlbnNvcnMNCiAgYXJtNjQ6IGR0czog
+bXQ4MTgzOiBhZGQgdGhlcm1hbCB6b25lIG5vZGUNCg0KIGFyY2gvYXJtNjQvYm9vdC9kdHMvbWVk
+aWF0ZWsvbXQ4MTgzLmR0c2kgfCAxNDAgKysrKysrKysrKysrKysrKysrKysrKysNCiBkcml2ZXJz
+L3RoZXJtYWwvbXRrX3RoZXJtYWwuYyAgICAgICAgICAgIHwgIDk5ICsrKysrKysrKysrKy0tLS0N
+CiAyIGZpbGVzIGNoYW5nZWQsIDIxNiBpbnNlcnRpb25zKCspLCAyMyBkZWxldGlvbnMoLSkNCg0K
+DQo=
 
-Hi Lukasz,
-
-On 02/10/2020 14:24, Lukasz Luba wrote:
-> Intelligent Power Allocation (IPA) is built around the PID controller
-> concept. The initialization code tries to setup the environment based on
-> the information available in DT or estimate the value based on minimum
-> power reported by each of the cooling device. The estimation will have an
-> impact on the PID controller behaviour via the related 'k_po', 'k_pu',
-> 'k_i' coefficients and also on the power budget calculation.
-> 
-> This change prevents the situation when 'k_i' is relatively big compared
-> to 'k_po' and 'k_pu' values. This might happen when the estimation for
-> 'sustainable_power' returned small value, thus 'k_po' and 'k_pu' are
-> small.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/thermal/gov_power_allocator.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> index 5cb518d8f156..f69fafe486a5 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -131,6 +131,7 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
->  	int ret;
->  	int switch_on_temp;
->  	u32 temperature_threshold;
-> +	s32 k_i;
->  
->  	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
->  	if (ret)
-> @@ -156,8 +157,11 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
->  		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
->  			temperature_threshold;
->  
-> -	if (!tz->tzp->k_i || force)
-> -		tz->tzp->k_i = int_to_frac(10) / 1000;
-> +	if (!tz->tzp->k_i || force) {
-> +		k_i = tz->tzp->k_pu / 10;
-> +		tz->tzp->k_i = k_i > 0 ? k_i : 1;
-> +	}
-
-I do not understand the rational behind this change.
-
-Do you have some values to share describing what would be the impact of
-this change?
-
-Depending on the thermal behavior of a board, these coefficients could
-be very different, no ?
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
