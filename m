@@ -2,104 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE0E28D36E
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 20:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064B928D419
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 20:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727858AbgJMSGy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 14:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727853AbgJMSGy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 14:06:54 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD77C0613D2
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 11:06:53 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id s89so378342ybi.12
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 11:06:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GtobIb+A6viiRru8d79APeEFh87bD0AFLsr1fjkdhuE=;
-        b=k3l9vpH1V8xOE3NCxYEK+h37hCqwUttm0yyJEAqW6aDw2VnHIDwf++fXcx5Dg58wYH
-         zEtT3t6kocHDSb1s4kBmAsYkvSp329MQ7mi+DPGDIuUbqdrYzOn5n51kOTP0kfd/zoby
-         g5TVpd1g/5/tK7T6tfgFuai9RaL2RgqlXvdDele01utn87caDonT/kcUTQUq0jP85i0z
-         Fcbnd8eM4C8hOAcco4TzRn/P2TW2e/aVfJbfw2dIhZH0/i/lyBjirA349s9Ut1zbMXry
-         I0C1dOtS9/8oryUyC2eRABikYEGu8rlBH9bFIre6il17dBNRJPlMYOp8eUgV05uSsszy
-         r5PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GtobIb+A6viiRru8d79APeEFh87bD0AFLsr1fjkdhuE=;
-        b=Z6B4+aa9ZcxAkCQjZvQFROJNYbZ1G+ECU6QVxJpnyHTLLlKJtl2Q7Apr8jvPW0yXlC
-         cB+RKjAm+QH8aOK76ZrkPrvdhBQjPN1GslKCKcI22KE8qeskHcKkUY0T9aPJPmFDubA/
-         MwV5+MfC+uQrMOrwwBm6PPS/veWosmi3VrnyJ2AdmXj87A9NE0MxdaCVuS9u6DWxuSMF
-         w9JZUnOVlBC7ihohTMC+rZyS1jV4LxT19930MlC3kWZgV71/leGCavbPPbhIAqdT6lkq
-         otf86aoiWq4ZvxVsKNgyRA/YG6TwRQr5iDMqFQEqmw9ZBxmS3LnNSWhjYlwwjJwidnM8
-         Z44Q==
-X-Gm-Message-State: AOAM5335u1UMaT4bH/LjT1Q24Rr1jocDxzySAvWytIHSd315JknHHPBL
-        m5r9mhqZmVsU7a5OHwQeK6pfZcmUNUiLN07NA/z6+w==
-X-Google-Smtp-Source: ABdhPJyA9B2d4k/BLN+YlgZ956Kq0TBgqLh/LAv5CQUubzJKNNprdD+OPYvVcmMGWCijfe7bNVID4AMRQWC3bvuEBK8=
-X-Received: by 2002:a5b:88a:: with SMTP id e10mr1625126ybq.412.1602612412891;
- Tue, 13 Oct 2020 11:06:52 -0700 (PDT)
+        id S1727948AbgJMSzb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 14:55:31 -0400
+Received: from mga01.intel.com ([192.55.52.88]:41279 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727033AbgJMSzb (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 14:55:31 -0400
+IronPort-SDR: q1qF5AkRN96vkbIGJRaEi4FjFVM0XOqpQ7/JqhOBu45U/R7PfYVHqp3ZD6qsI2eqrpXxnRTcou
+ RPUKDVXqtKpQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9773"; a="183455545"
+X-IronPort-AV: E=Sophos;i="5.77,371,1596524400"; 
+   d="scan'208";a="183455545"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 11:55:30 -0700
+IronPort-SDR: Z0d2FdRUxpn9Lo2WjHT52tkOlQLSWbPftrqdZdlgk70MJqqCt06VSAjSo820hJEtDSQv43AdwV
+ BqRQ7TchRVzQ==
+X-IronPort-AV: E=Sophos;i="5.77,371,1596524400"; 
+   d="scan'208";a="463603361"
+Received: from rjwysock-mobl1.ger.corp.intel.com (HELO [10.249.131.190]) ([10.249.131.190])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2020 11:55:28 -0700
+Subject: Re: ACPI _CST introduced performance regresions on Haswll
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Takashi Iwai <tiwai@suse.de>, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org, Linux PM <linux-pm@vger.kernel.org>
+References: <20201006083639.GJ3227@techsingularity.net>
+ <c3566d2b-3da1-917b-2df6-f7dcfb33c8ed@intel.com>
+ <20201006190322.GL3227@techsingularity.net>
+ <25f31d3e-7a67-935f-93ba-32216a5084e2@intel.com>
+ <20201006211820.GN3227@techsingularity.net>
+ <2382d796-7c2f-665e-9169-5cdc437bf34c@intel.com>
+ <20201008090909.GP3227@techsingularity.net>
+ <dcf4266a-5769-8a6b-d8e1-e77553126861@intel.com>
+ <20201008173436.GQ3227@techsingularity.net>
+From:   "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Organization: Intel Technology Poland Sp. z o. o., KRS 101882, ul. Slowackiego
+ 173, 80-298 Gdansk
+Message-ID: <f6b04376-4214-ff5d-1069-890449a923e2@intel.com>
+Date:   Tue, 13 Oct 2020 20:55:26 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-References: <20201013135913.29059-1-georgi.djakov@linaro.org> <20201013135913.29059-3-georgi.djakov@linaro.org>
-In-Reply-To: <20201013135913.29059-3-georgi.djakov@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 13 Oct 2020 11:06:17 -0700
-Message-ID: <CAGETcx9kzB2QxNXUNtVx0szh4c=J=ZuBFXZDiRwb8+y-NVa1qA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] interconnect: qcom: sc7180: Init BCMs before creating
- the nodes
-To:     Georgi Djakov <georgi.djakov@linaro.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Mike Tipton <mdtipton@codeaurora.org>, okukatla@codeaurora.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201008173436.GQ3227@techsingularity.net>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 6:59 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+On 10/8/2020 7:34 PM, Mel Gorman wrote:
+> On Thu, Oct 08, 2020 at 07:15:46PM +0200, Rafael J. Wysocki wrote:
+>>> Force enabling C6
+>>>
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state0/disable:0
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state1/disable:0
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state2/disable:0
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state3/disable:1
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state4/disable:0
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state0/default_status:enabled
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state1/default_status:enabled
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state2/default_status:enabled
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state3/default_status:disabled
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state4/default_status:enabled
+>>>
+>>> Note that as expected, C3 remains disabled when only C6 is forced (state3
+>>> == c3, state4 == c6). While this particular workload does not appear to
+>>> care as it does not remain idle for long, the exit latency difference
+>>> between c3 and c6 is large so potentially a workload that idles for short
+>>> durations that are somewhere between c1e and c3 exit latency might take
+>>> a larger penalty exiting from c6 state if the deeper c-state is selected
+>>> for idling.
+>>>
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state0/residency:0
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state1/residency:2
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state2/residency:20
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state3/residency:100
+>>> ./5.9.0-rc8-enable-c6/iter-0/sys/devices/system/cpu/cpu0/cpuidle/state4/residency:400
+>>>
+>> If you are worried that C6 might be used instead of C3 in some cases, this
+>> is not going to happen.
+>>
+> Ok, so it goes in the C1E direction instead. I lost track of how C-state
+> is selected based on predictions about the future. It's changed a bit
+> over time.
+>   
+>> I all cases in which C3 would have been used had it not been disabled, C1E
+>> will be used instead.
+>>
+>> Which BTW indicates that using C1E more often adds a lot of latency to the
+>> workload (if C3 and C6 are both disabled, C1E is used in all cases in which
+>> one of them would have been used).
+> Which is weird. From the exit latency alone, I'd think it would be faster
+> to use C1E instead of C3. It implies that using C1E instead of C3/C6 has
+> some other side-effect on Haswell. At one point, there was plenty of advice
+> on disabling C1E but very little concrete information on what impact it
+> has exactly and why it might cause problems that other c-states avoid.
 >
-> Currently if we use sync_state, by default the bandwidth is maxed out,
-> but in order to set this in hardware, the BCMs (Bus Clock Managers) need
-> to be initialized first. Move the BCM initialization before creating the
-> nodes to fix this.
+>> With C6 enabled, that state is used at
+>> least sometimes (so C1E is used less often), but PC6 doesn't seem to be
+>> really used - it looks like core C6 only is entered and which may be why C6
+>> adds less latency than C1E (and analogously for C3).
+>>
+> At the moment, I'm happy with either solution but mostly because I can't
+> tell what other trade-offs should be considered :/
 >
-> Fixes: 7d3b0b0d8184 ("interconnect: qcom: Use icc_sync_state")
-> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
-> ---
->  drivers/interconnect/qcom/sc7180.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
-> index bf11b82ed55c..8d9044ed18ab 100644
-> --- a/drivers/interconnect/qcom/sc7180.c
-> +++ b/drivers/interconnect/qcom/sc7180.c
-> @@ -553,6 +553,9 @@ static int qnoc_probe(struct platform_device *pdev)
->                 return ret;
->         }
->
-> +       for (i = 0; i < qp->num_bcms; i++)
-> +               qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-> +
->         for (i = 0; i < num_nodes; i++) {
->                 size_t j;
->
-> @@ -576,9 +579,6 @@ static int qnoc_probe(struct platform_device *pdev)
->         }
->         data->num_nodes = num_nodes;
->
-> -       for (i = 0; i < qp->num_bcms; i++)
-> -               qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
-> -
->         platform_set_drvdata(pdev, qp);
->
->         return 0;
+I talked to Len and Srinivas about this and my theory above didn't survive.
 
-Acked-by: Saravana Kannan <saravanak@google.com>
+The most likely reason why you see a performance drop after enabling the 
+ACPI support (which effectively causes C3 and C6 to be disabled by 
+default on the affected machines) is because the benchmarks in question 
+require sufficiently high one-CPU performance and the CPUs cannot reach 
+high enough one-core turbo P-states without the other CPUs going into C6.
 
--Saravana
+Inspection of the ACPI tables you sent me indicates that there is a BIOS 
+switch in that system allowing C6 to be enabled.  Would it be possible 
+to check whether or not there is a BIOS setup option to change that setting?
+
+Also, I need to know what happens if that system is started with 
+intel_idle disabled.  That is, what idle states are visible in sysfs in 
+that configuration (what their names and descriptions are in particular) 
+and whether or not the issue is still present then.
+
+In addition to that, can you please run the benchmark on that system 
+under turbostat both with unmodified intel_idle and with intel_idle 
+disabled and post the turbostat output in each of those cases?
+
+Cheers!
+
+
