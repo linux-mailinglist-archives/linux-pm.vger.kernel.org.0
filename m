@@ -2,123 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCCE28D2EE
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 19:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C4728D2FD
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 19:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbgJMRPX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 13:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgJMRPW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 13:15:22 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6662C0613D0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 10:15:22 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id l8so59222ioh.11
-        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 10:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language;
-        bh=PKr7Vq/qqPUHxm1qGwB++7US2ok17L2SyFB+bd51t5M=;
-        b=GBiVfTW9sPA9hnr1lVocuHkd2ol9Y1iG6UqtZTiC3GgTH+UI4hmZelRbhcVPNovwLX
-         MpjQEETf901lRykbRjt0oCWLAWQF2DMk4pj3BFEp7NVT5bYZcAdhoiQXJdmWjDzMA7DT
-         Eh8zdZLHu3iAdSB/M9Uiy22T161MJ8j1jKQY4=
+        id S2388141AbgJMRSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 13:18:02 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44955 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726395AbgJMRSC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 13:18:02 -0400
+Received: by mail-ot1-f68.google.com with SMTP id e20so701917otj.11;
+        Tue, 13 Oct 2020 10:18:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language;
-        bh=PKr7Vq/qqPUHxm1qGwB++7US2ok17L2SyFB+bd51t5M=;
-        b=FR3lCyu0rekSm7dGS20h26HyFW5bQPdqR3cSfhU4P1xLyZO52xEFu4hbDpoDHhs0dH
-         Q3QiObWzHm9VgVPP6iUMLdLfAyF5c8QKjez+qNVWaL655qb/UJMS5UwVYwy0J6PbtnKs
-         uedyvOeFK24Jx3TTGCIkELoCUGq+Gjw6lG9nhj2eTd/bKcPrlNwA9Gq6xIERDXgqJZNu
-         4va1dZT7H1n1CcF9h2kfS9gOSRrHgooYVBas/i27zqHc7q5fACgNQZIPV+yRZaaUBFE3
-         8rpsxQK1ewsmOhnqy0kkkTjGRHmNu/BrV5rW5DkqrrZx4ox1gf4FnAaaHdBFmuMvtQxQ
-         QcPA==
-X-Gm-Message-State: AOAM530F0RCzdg47Yd3tVqWHpPP6W6qG7XJnEYM2bEBl58Flo9vYFIXu
-        IpNQLxpAkjF7+mQujFdOoNtP0A==
-X-Google-Smtp-Source: ABdhPJzqdvyL97vez1+NJ4KUJFse17yXWg7WveVX5D/7FXNoe1+SckoKGXUNeXTndO4widcJcM8Pwg==
-X-Received: by 2002:a6b:8bd7:: with SMTP id n206mr300274iod.13.1602609322123;
-        Tue, 13 Oct 2020 10:15:22 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s77sm485077ilk.8.2020.10.13.10.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 10:15:21 -0700 (PDT)
-Subject: Re: [GIT PULL] cpupower update for Linux 5.10-rc1
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Thomas Renninger <trenn@suse.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <396f8b57-50f5-cd20-7a32-40785e669048@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <8acb2352-579f-5a5a-840c-d9330807b3f7@linuxfoundation.org>
-Date:   Tue, 13 Oct 2020 11:15:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oAgL+fcQX6cQENvM7HFJALQXy7xcg9RXhbSjkn/52oc=;
+        b=K3xUrh9UjqCZyBu6uy15W+gfwOdMClcGwTT1Feeg+yySZ2safizJlQTqui4tMBjPaL
+         3271uoMPV5AoAWvcGc0l+zZnDiO/gm2NCJtrP14qwgR8lcAPpYePMK4QlUaiuKa+5vEd
+         M2RyQb4wei8UafOjCvJ6eY4tTuL3xGOtFJ81RM8eXRoOrL+XhPTrE1DEk3soEhZlujPD
+         NB8vhsGBRIpfK09ss0JiEqgDiSiyailbfWBjJab0EW2OoEtB2N45Y670z8bUmdN/A97y
+         G+GUmEQIs/WBwR07cUODwOZfQeZ46nM3xNboeKhQwqx51BsyKYcZoGBW7a5ptWrrmBMf
+         Fyew==
+X-Gm-Message-State: AOAM5332AW0BDOEx8ylKaXhloLsrKFC68t7tKwyxk9UXpg5YqMOVR9RT
+        4e+qqHSfvXo0XNuvp9mtDA==
+X-Google-Smtp-Source: ABdhPJy0lSY/ZeGDaAyNk/JablfzwCtpz61hQiNytpGKyQe7S2fFAdaHIgwB9f2d3TlCWsjbvbnXRg==
+X-Received: by 2002:a05:6830:214c:: with SMTP id r12mr517796otd.258.1602609481531;
+        Tue, 13 Oct 2020 10:18:01 -0700 (PDT)
+Received: from xps15 (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id w64sm135656oig.31.2020.10.13.10.18.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Oct 2020 10:18:00 -0700 (PDT)
+Received: (nullmailer pid 3719465 invoked by uid 1000);
+        Tue, 13 Oct 2020 17:18:00 -0000
+Date:   Tue, 13 Oct 2020 12:18:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: cpufreq: cpufreq-qcom-hw: Convert to
+ YAML bindings
+Message-ID: <20201013171800.GA3716411@bogus>
+References: <20201012155012.28938-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <396f8b57-50f5-cd20-7a32-40785e669048@linuxfoundation.org>
-Content-Type: multipart/mixed;
- boundary="------------15D84663CDBC2E5F294D18E8"
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201012155012.28938-1-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------15D84663CDBC2E5F294D18E8
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 10/13/20 11:13 AM, Shuah Khan wrote:
-> Hi Rafael,
+On Mon, Oct 12, 2020 at 09:20:12PM +0530, Manivannan Sadhasivam wrote:
+> Convert Qualcomm cpufreq devicetree binding to YAML.
 > 
-> Please pull the following cpupower update for Linux 5.10-rc1 or for
-> a later rc.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
 > 
-> This cpupower update for Linux 5.10-rc1 consists of minor fixes for
-> spelling and speeding up generating git version string which will
-> in turn speedup compiles.
+> Changes in v2:
 > 
-> diff is attached.
+> * Removed qcom,freq-domain property which doesn't belong to this binding
+
+It needs to be defined *somewhere*. As I said before, you need a 
+separate schema for it.
+
 > 
-
-Sorry. Here is the diff.
-
-thanks,
--- Shuah
-
---------------15D84663CDBC2E5F294D18E8
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux-cpupower-5.10-rc1.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-cpupower-5.10-rc1.diff"
-
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index c8622497ef23..c7bcddbd486d 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -51,7 +51,7 @@ DESTDIR ?=
- # Package-related definitions. Distributions can modify the version
- # and _should_ modify the PACKAGE_BUGREPORT definition
- 
--VERSION=			$(shell ./utils/version-gen.sh)
-+VERSION:=			$(shell ./utils/version-gen.sh)
- LIB_MAJ=			0.0.1
- LIB_MIN=			0
- 
-diff --git a/tools/power/cpupower/debug/i386/intel_gsic.c b/tools/power/cpupower/debug/i386/intel_gsic.c
-index e5e926f46d6b..befd837f07f8 100644
---- a/tools/power/cpupower/debug/i386/intel_gsic.c
-+++ b/tools/power/cpupower/debug/i386/intel_gsic.c
-@@ -71,7 +71,7 @@ int main (void)
- 		printf("\tsmi_cmd=0x?? smi_port=0x?? smi_sig=1\n");
- 		printf("\nUnfortunately, you have to know what exactly are "
- 		       "smi_cmd and smi_port, and this\nis system "
--		       "dependant.\n");
-+		       "dependent.\n");
- 	}
- 	return 1;
- }
-
---------------15D84663CDBC2E5F294D18E8--
+>  .../bindings/cpufreq/cpufreq-qcom-hw.txt      | 172 ---------------
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 204 ++++++++++++++++++
+>  2 files changed, 204 insertions(+), 172 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.txt
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
