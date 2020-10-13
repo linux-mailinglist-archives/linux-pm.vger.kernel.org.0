@@ -2,67 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD7E28D368
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 20:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79B728D369
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Oct 2020 20:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727649AbgJMSDz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 14:03:55 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39170 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbgJMSDz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 14:03:55 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 09DI3rop078060;
-        Tue, 13 Oct 2020 13:03:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1602612233;
-        bh=qzOJzu34mq4mDb7uWYaWmL6yfIvaed5Y4wmBqocHePs=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=SbkZfz4eeI56jY6esPhIn1LQtpEgGQKjwpsDSHZIVrXboZ1TraJA/4GkdFEDM0Z9E
-         h9Bw/IhDM9/dP3fN9BiHfF6OCKBtp4LNJcwsFVopiOWcVHsjCZZZWGXdbvSvLb6hxL
-         6BkWcw/jyq4nzEzNehhffB/VKqU6SzaFdNJCDhAI=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 09DI3rR7027585
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 13 Oct 2020 13:03:53 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Tue, 13
- Oct 2020 13:03:53 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Tue, 13 Oct 2020 13:03:53 -0500
-Received: from [10.250.67.63] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 09DI3qNS006602;
-        Tue, 13 Oct 2020 13:03:52 -0500
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: Add the bq25790 dt bindings
-To:     <sre@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <robh@kernel.org>,
-        Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-References: <20201009144112.3007-1-dmurphy@ti.com>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <ac52ca59-74f4-7ffd-544c-4a542e799ae5@ti.com>
-Date:   Tue, 13 Oct 2020 13:03:52 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1727732AbgJMSFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 14:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbgJMSFT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Oct 2020 14:05:19 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C378CC0613D0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 11:05:19 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id a12so390317ybg.9
+        for <linux-pm@vger.kernel.org>; Tue, 13 Oct 2020 11:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3EL4YSi40Waetm8JFtlQtx58rjTb1nx9uVO2kymWX9Y=;
+        b=i+IYLsy3sc6AGUKbF306nPzn3sLKeRQ9RsHTyiWhhaAB0uuyl1YO7ytYC/KVSEyLSK
+         r7NP9DQoHat4rjLhgtkriDTD8xPowBaRhnyeqoKJp/D3VLQNokhQ2/s1W5volQK9A+W3
+         aq5DVRw2uvmLmzK4dAqARo+Op/sPuPHSIf5PTsznLnjSPQnbz641/zaHmh0rNfsOHHKX
+         uhxyNOC5IY84QanDw2AuGAW4VMh2qd3EcBx9jlzftKaczQ793/Xm4ET6QYo3qhJYiRQy
+         D/XWAn0f68+tzMYKEJQidgnviOo/cICWuhLPSxuBz9hRQ9H2CFxMIvPLbhqQUf0dRcIQ
+         AUyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3EL4YSi40Waetm8JFtlQtx58rjTb1nx9uVO2kymWX9Y=;
+        b=Zkmp5X+cjpzbBzavlwtz2mYpN+wVnkj2JjCfs5v9OZ7PsFq187VWbOXvOICjTJsra7
+         E2Sh1P5ponPXWqtSjAo5YLoZACBIa/VBNV5A56N1hGQ0xkEm0l4cC7bkVpOfmks7NxWK
+         mbq2vM3vC4BmjZ8vaUaW/eWuX/DZD7iStMET/KOMurSMSMH0YhJNYfeSzSmUpgSmchc3
+         F0hyyYeyd6mb1z9SATxGxK2lZhG8+2IuVOhFN4j3vnckZvwJH61cHEgLqySGaqZRXkfc
+         8jGuCJkWDj8fEqEdrm1dpQYKpThskGzE++njO9hTDOXX2+apdFQ4xP4ZuU1vgTNfkdxb
+         UPhg==
+X-Gm-Message-State: AOAM532eZ9v4fzO01JoKULU6QH+w0iKw4qC4ELe4wpXSvjiQrbXV8Uhg
+        hbG8PP2hW0fXrimKc15AisCPDsKEFCtysu0DELPlzA==
+X-Google-Smtp-Source: ABdhPJx8gHsXGel6BVOgxpgYgx4FbMqAL0fAllKSdt2tK5tSyxg2VuJHaqgzZ4oAgQDQD4lqVnq4q3SJPRnoH2rjFQY=
+X-Received: by 2002:a25:380c:: with SMTP id f12mr1850176yba.32.1602612318764;
+ Tue, 13 Oct 2020 11:05:18 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201009144112.3007-1-dmurphy@ti.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20201013135913.29059-1-georgi.djakov@linaro.org>
+In-Reply-To: <20201013135913.29059-1-georgi.djakov@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 13 Oct 2020 11:04:42 -0700
+Message-ID: <CAGETcx8JWztwy8LevoT30NrhioxF+L9XF7ezxJQ7NscL5=+Xiw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] interconnect: Aggregate before setting initial bandwidth
+To:     Georgi Djakov <georgi.djakov@linaro.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>, okukatla@codeaurora.org,
+        Sibi Sankar <sibis@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian
+On Tue, Oct 13, 2020 at 6:59 AM Georgi Djakov <georgi.djakov@linaro.org> wrote:
+>
+> When setting the initial bandwidth, make sure to call the aggregate()
+> function (if such is implemented for the current provider), to handle
+> cases when data needs to be aggregated first.
+>
+> Fixes: b1d681d8d324 ("interconnect: Add sync state support")
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
+> ---
+>  drivers/interconnect/core.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index eea47b4c84aa..974a66725d09 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -971,6 +971,9 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+>         }
+>         node->avg_bw = node->init_avg;
+>         node->peak_bw = node->init_peak;
+> +       if (provider->aggregate)
+> +               provider->aggregate(node, 0, node->init_avg, node->init_peak,
+> +                                   &node->avg_bw, &node->peak_bw);
+>         provider->set(node, node);
+>         node->avg_bw = 0;
+>         node->peak_bw = 0;
 
-On 10/9/20 9:41 AM, Dan Murphy wrote:
-> Add the bindings for the bq25790.
+Acked-by: Saravana Kannan <saravanak@google.com>
 
-Also any updates on this series?
-
-Dan
-
+-Saravana
