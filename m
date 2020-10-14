@@ -2,64 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED7128D65D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Oct 2020 00:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C453828D7D6
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Oct 2020 03:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgJMWC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Oct 2020 18:02:26 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:63617 "EHLO m42-4.mailgun.net"
+        id S1730816AbgJNBKZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Oct 2020 21:10:25 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:22847 "EHLO m42-4.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbgJMWC0 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Tue, 13 Oct 2020 18:02:26 -0400
+        id S1730746AbgJNBKY (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Tue, 13 Oct 2020 21:10:24 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602626544; h=Content-Transfer-Encoding: Content-Type:
+ s=smtp; t=1602637824; h=Content-Transfer-Encoding: Content-Type:
  In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=j2wvnj3QXykcXdMcqTw76Kbrt7Uu3aOrgnn6+mk+B20=; b=grqoU3dSxOR2pTa87+sAKrq8r1WUGY/yq6hLDTIX68mvtZnXZeifdfi7BIx8t9oXx56VLQb7
- KLC215ioPLVCJWP+dFys/lGsfrcHozSJmLHt/rhs09LWrSO62fsoQ3UUZN2G+N9ZAP6St5Li
- EYlp5JB2JRT7ZUf8TET8VevRX0A=
+ Subject: Sender; bh=jjLKhfAQlUtz5Rcyx45kgleXOq80qXSbQQgEXyBeLjw=; b=hAoz3zsz1dJUkzAvfcZgDo+zg/rRu2wlVxd4/EbFecugAIwePAtVqSjNvKTeJpH6Nb1NeKJ3
+ uYEH16IDjbMOFtKJH3L4UAJGZhUML01jeNEwVMnUdM+/eXPETCMAx2Rk+7vc95rMwURr/K6R
+ 1HzWmxcW6VJdzteff7yrHV0Stf8=
 X-Mailgun-Sending-Ip: 69.72.42.4
 X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 5f8623cf588858a30411cafa (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 13 Oct 2020 22:01:51
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5f864ffff9168450ea7bb1e4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 14 Oct 2020 01:10:23
  GMT
-Sender: rkumbako=codeaurora.org@mg.codeaurora.org
+Sender: mdtipton=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B2081C433CB; Tue, 13 Oct 2020 22:01:50 +0000 (UTC)
+        id 62423C433F1; Wed, 14 Oct 2020 01:10:23 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
         NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.0
-Received: from [192.168.1.64] (unknown [209.131.238.206])
+Received: from [192.168.1.159] (ip70-179-20-127.sd.sd.cox.net [70.179.20.127])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: rkumbako)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A608CC433F1;
-        Tue, 13 Oct 2020 22:01:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A608CC433F1
+        (Authenticated sender: mdtipton)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0B607C433CB;
+        Wed, 14 Oct 2020 01:10:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0B607C433CB
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=rkumbako@codeaurora.org
-Subject: Re: [PATCH 2/4] Documentation/powercap/dtpm: Add documentation for
- dtpm
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Cc:     lukasz.luba@arm.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
- <20201006122024.14539-3-daniel.lezcano@linaro.org>
-From:   Ram Chandrasekar <rkumbako@codeaurora.org>
-Message-ID: <35e0775c-f86c-6040-7194-5b8032e92b30@codeaurora.org>
-Date:   Tue, 13 Oct 2020 16:01:47 -0600
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=mdtipton@codeaurora.org
+Subject: Re: [PATCH] interconnect: qcom: sdm845: Enable keepalive for the MM1
+ BCM
+To:     Georgi Djakov <georgi.djakov@linaro.org>, linux-pm@vger.kernel.org
+Cc:     okukatla@codeaurora.org, sibis@codeaurora.org,
+        bjorn.andersson@linaro.org, amit.pundir@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20201012194034.26944-1-georgi.djakov@linaro.org>
+From:   Mike Tipton <mdtipton@codeaurora.org>
+Message-ID: <56dc5ac7-2bed-4dbb-b7fc-c0308a2a454a@codeaurora.org>
+Date:   Tue, 13 Oct 2020 18:10:21 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-In-Reply-To: <20201006122024.14539-3-daniel.lezcano@linaro.org>
+In-Reply-To: <20201012194034.26944-1-georgi.djakov@linaro.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -67,262 +64,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 10/12/2020 12:40 PM, Georgi Djakov wrote:
+> After enabling interconect scaling for display on the db845c board,
+s/interconect/interconnect/
 
-
-On 10/6/2020 6:20 AM, Daniel Lezcano wrote:
-> The dynamic thermal and power management is a technique to dynamically
-> adjust the power consumption of different devices in order to ensure a
-> global thermal constraint.
+> in certain configurations the board hangs, while the following errors
+> are observed on the console:
 > 
-> An userspace daemon is usually monitoring the temperature and the
-> power to take immediate action on the device.
+>    Error sending AMC RPMH requests (-110)
+>    qcom_rpmh TCS Busy, retrying RPMH message send: addr=0x50000
+>    qcom_rpmh TCS Busy, retrying RPMH message send: addr=0x50000
+>    qcom_rpmh TCS Busy, retrying RPMH message send: addr=0x50000
+>    ...
 > 
-> The DTPM framework provides an unified API to userspace to act on the
-> power.
+> In this specific case, the above is related to one of the sequencers
+> being stuck, while client drivers are returning from probe and trying
+> to disable the currently unused clock and interconnect resources.
+> Generally we want to keep the multimedia NoC enabled like the rest of
+> the NoCs, so let's set the keepalive flag on it too.
 > 
-> Document this framework.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Fixes: aae57773fbe0 ("interconnect: qcom: sdm845: Split qnodes into their respective NoCs")
+> Reported-by: Amit Pundir <amit.pundir@linaro.org>
+> Signed-off-by: Georgi Djakov <georgi.djakov@linaro.org>
 > ---
->   Documentation/power/powercap/dtpm.rst | 222 ++++++++++++++++++++++++++
->   1 file changed, 222 insertions(+)
->   create mode 100644 Documentation/power/powercap/dtpm.rst
+>   drivers/interconnect/qcom/sdm845.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/power/powercap/dtpm.rst b/Documentation/power/powercap/dtpm.rst
-> new file mode 100644
-> index 000000000000..ce11cf183994
-> --- /dev/null
-> +++ b/Documentation/power/powercap/dtpm.rst
-> @@ -0,0 +1,222 @@
-> +==========================================
-> +Dynamic Thermal Power Management framework
-> +==========================================
-> +
-> +On the embedded world, the complexity of the SoC leads to an
-> +increasing number of hotspots which need to be monitored and mitigated
-> +as a whole in order to prevent the temperature to go above the
-> +normative and legally stated 'skin temperature'.
-> +
-> +Another aspect is to sustain the performance for a given power budget,
-> +for example virtual reality where the user can feel dizziness if the
-> +performance is capped while a big CPU is processing something else. Or
-> +reduce the battery charging because the dissipated power is too high
-> +compared with the power consumed by other devices.
-> +
-> +The userspace is the most adequate place to dynamically act on the
-> +different devices by limiting their power given an application
-> +profile: it has the knowledge of the platform.
-> +
-> +The Dynamic Thermal Power Management (DTPM) is a technique acting on
-> +the device power by limiting and/or balancing a power budget among
-> +different devices.
-> +
-> +The DTPM framework provides an unified interface to act on the
-> +device power.
-> +
-> +===========
-> +1. Overview
-> +===========
-> +
-> +The DTPM framework relies on the powercap framework to create the
-> +powercap entries in the sysfs directory and implement the backend
-> +driver to do the connection with the power manageable device.
-> +
-> +The DTPM is a tree representation describing the power constraints
-> +shared between devices, not their physical positions.
-> +
-> +The nodes of the tree are a virtual description aggregating the power
-> +characteristics of the children nodes and their power limitations.
-> +
-> +The leaves of the tree are the real power manageable devices.
-> +
-> +For instance:
-> +
-> +  SoC
-> +   |
-> +   `-- pkg
-> +	|
-> +	|-- pd0 (cpu0-3)
-> +	|
-> +	`-- pd1 (cpu4-5)
-> +
-> +* The pkg power will be the sum of pd0 and pd1 power numbers.
-> +
-> +  SoC (400mW - 3100mW)
-> +   |
-> +   `-- pkg (400mW - 3100mW)
-> +	|
-> +	|-- pd0 (100mW - 700mW)
-> +	|
-> +	`-- pd1 (300mW - 2400mW)
-> +
-> +* When the nodes are inserted in the tree, their power characteristics
-> +  are propagated to the parents.
-> +
-> +  SoC (600mW - 5900mW)
-> +   |
-> +   |-- pkg (400mW - 3100mW)
-> +   |    |
-> +   |    |-- pd0 (100mW - 700mW)
-> +   |    |
-> +   |    `-- pd1 (300mW - 2400mW)
-> +   |
-> +   `-- pd2 (200mW - 2800mW)
-> +
-> +* Each node have a weight on a 2^10 basis reflecting the percentage of
-> +  power consumption along the siblings.
-> +
-> +  SoC (w=1024)
-> +   |
-> +   |-- pkg (w=538)
-> +   |    |
-> +   |    |-- pd0 (w=231)
-> +   |    |
-> +   |    `-- pd1 (w=794)
-> +   |
-> +   `-- pd2 (w=486)
-> +
-> +   Note the sum of weights at the same level are equal to 1024.
-> +
-> +* When a power limitation is applied to a node, then it is distributed
-> +  along the children given their weights. For example, if we set a
-> +  power limitation of 3200mW at the 'SoC' root node, the resulting
-> +  tree will be.
-> +
-> +  SoC (w=1024) <--- power_limit = 3200mW
-> +   |
-> +   |-- pkg (w=538) --> power_limit = 1681mW
-> +   |    |
-> +   |    |-- pd0 (w=231) --> power_limit = 378mW
-> +   |    |
-> +   |    `-- pd1 (w=794) --> power_limit = 1303mW
-> +   |
-> +   `-- pd2 (w=486) --> power_limit = 1519mW
-> +
-> +====================
-> +1.1 Flat description
-> +====================
-> +
-> +A root node is created and it is the parent of all the nodes. This
-> +description is the simplest one and it is supposed to give to
-> +userspace a flat representation of all the devices supporting the
-> +power limitation without any power limitation distribution.
-> +
-> +============================
-> +1.2 Hierarchical description
-> +============================
-> +
-> +The different devices supporting the power limitation are represented
-> +hierarchically. There is one root node, all intermediate nodes are
-> +grouping the child nodes which can be intermediate nodes also or real
-> +devices.
-> +
-> +The intermediate nodes aggregate the power information and allows to
-> +set the power limit given the weight of the nodes.
-> +
-> +================
-> +2. Userspace API
-> +================
-> +
-> +As stated in the overview, the DTPM framework is built on top of the
-> +powercap framework. Thus the sysfs interface is the same, please refer
-> +to the powercap documentation for further details.
-> +
-> + * power_uw: Instantaneous power consumption. If the node is an
-> +   intermediate node, then the power consumption will be the sum of all
-> +   children power consumption.
-> +
-> + * max_power_range_uw: The power range resulting of the maximum power
-> +   minus the minimum power.
-> +
-> + * name: The name of the node. This is implementation dependant. Even
-> +   if it is not recommended for the userspace, several nodes can have
-> +   the same name.
-> +
-> + * constraint_X_name: The name of the constraint.
-> +
-> + * constraint_X_max_power_uw: The maximum power limit to be applicable
-> +   to the node.
-> +
-> + * constraint_X_power_limit_uw: The power limit to be applied to the
-> +   node. If the value contained in constraint_X_max_power_uw is set,
-> +   the constraint will be removed.
 
-How is power_limit_uW different from max_power_uW?
-
-> +
-> + * constraint_X_time_window_us: The meaning of this file will depend
-> +   on the constraint number.
-> +
-> +===============
-> +2.1 Constraints
-> +===============
-> +
-> + * Constraint 0: The power limitation is immediately applied, without
-> +   limitation in time.
-> +
-> +=============
-> +3. Kernel API
-> +=============
-> +
-> +============
-> +3.1 Overview
-> +============
-> +
-> +The DTPM framework has no power limiting backend support. It is
-> +generic and provides a set of API to let the different drivers to
-> +implement the backend part for the power limitation and create a the
-
-create a the -> create a
-
-> +power constraints tree.
-> +
-> +It is up to the platform to provide the initialization function to
-> +allocate and link the different nodes of the tree.
-> +
-> +A special macro has the role of declaring a node and the corresponding
-> +initialization function via a description structure. This one contains
-> +an optional parent field allowing to hook different devices to an
-> +already existing tree at boot time.
-> +
-> +struct dtpm_descr my_descr = {
-> +	.name = "my_name",
-> +	.init = my_init_func,
-> +};
-> +
-> +DTPM_DECLARE(my_descr);
-> +
-> +The nodes of the DTPM tree are described with dtpm structure. The
-> +steps to add a new power limitable device is done in three steps:
-> +
-> + * Allocate the dtpm node
-> + * Set the power number of the dtpm node
-> + * Register the dtpm node
-> +
-> +The registration of the dtpm node is done with the powercap
-> +ops. Basically, it must implements the callbacks to get and set the
-
-implements -> implement
-
-> +power and the limit.
-> +
-> +Alternatively, if the node to be inserted is an intermediate one, then
-> +a simple function to insert it as a future parent is available.
-> +
-> +If a device has its power characteristics changing, then the tree must
-> +be updated with the new power numbers and weights.
-> +
-> +================
-> +3.2 Nomenclature
-> +================
-> +
-> + * dtpm_alloc() : Allocate and initialize a dtpm structure
-> +
-> + * dtpm_register() : Add the dtpm node to the tree
-> +
-> + * dtpm_register_parent() : Add an intermediate node
-> +
-> + * dtpm_unregister() : Remove the dtpm node from the tree
-> +
-> + * dtpm_update_power() : Update the power characteristics of the dtpm node
-> 
+Reviewed-by: Mike Tipton <mdtipton@codeaurora.org>
