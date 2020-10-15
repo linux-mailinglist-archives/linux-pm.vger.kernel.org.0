@@ -2,55 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 924E828F371
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 15:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 995EE28F379
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 15:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387853AbgJONjZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Oct 2020 09:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729892AbgJONjZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Oct 2020 09:39:25 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393FC0613D4
-        for <linux-pm@vger.kernel.org>; Thu, 15 Oct 2020 06:39:24 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id e23so3228020wme.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Oct 2020 06:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=o2Nh6KJm4jPGdm8+1OLljLZrSt0m6NW06Aa+KD07b00=;
-        b=hv2CDDRO2tkNNRofdtyGczxALxVwH4U+r/AF4hjKShlob9En1V/hZpPy+qjwW/Ps4V
-         NQyU3olnRIylVF+P8VLYAFzHZVRHYeTMl484i3qS7sVykQvixx9xvfXS84cTe1VonRMa
-         bQ5samKS9ScnJ9ibQ12oJlA/Ie2dg6pWHF2CK/WrkhBRSVGmjpOjZRdr7Pzwnk1ytNs/
-         67q68LN8YA8frqWhvf72+lpFBu0wmSnnubuZWrTDSQit1l2UIThXrNl4n77Muz7iAyWM
-         x9FE/QxkWrueH12IiZx1nyuO9Tjaiz9WZdZ86Bxqc50Bj3vQY2yBk07lUxwhlNZiS0NB
-         GyMg==
+        id S1730039AbgJONk3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Oct 2020 09:40:29 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:40593 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729837AbgJONk3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Oct 2020 09:40:29 -0400
+Received: by mail-oi1-f193.google.com with SMTP id m128so3126273oig.7;
+        Thu, 15 Oct 2020 06:40:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=o2Nh6KJm4jPGdm8+1OLljLZrSt0m6NW06Aa+KD07b00=;
-        b=psqpxLZoxXj6okK8dbmC/9aZ3OVtTdyiv3/9ivvZEXW/yeqCaIKfD4nCAKFs/CpSQG
-         TKWyJbIjsxUL3NZyjXG98TPl6IuF/He2Hjt8VpXxu1kZkVLjZvyn10irur+QHSCvuzaT
-         OHK5dKc57O5bgV+3kDjc0ln79PP9rRAxPIwWGQeTheDVqBSs8/S58LHttNUBN7JarlIP
-         OhvX34C9UgBleD12Xr0BT/w0tbJ7lnO5oxL0ftHYTNbYfizUu5MazYpKdRVwb9/qC0QJ
-         AY6io+Vp9nY8IQO1mfqcT7l7JdMkMQfeHAX8EqP80zmL6L7an+eF2n1H/qq/UOJ++pWk
-         1Yzw==
-X-Gm-Message-State: AOAM533D7iijSnRL/DrqjVRvevkz+uqT66FdHC5rMI6aDWcsQGNnh0EZ
-        nMTHzqjWByyQwjwBvReXhmCbZA==
-X-Google-Smtp-Source: ABdhPJx2lu3FnUf0sJpN8vCYCdGRv5t8JUlS/lE5EZosWOJK9Taj+BresQtefuQQdeBIDXMdGqhbAQ==
-X-Received: by 2002:a1c:449:: with SMTP id 70mr4008121wme.40.1602769163466;
-        Thu, 15 Oct 2020 06:39:23 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:5400:5b12:4f4c:844b? ([2a01:e34:ed2f:f020:5400:5b12:4f4c:844b])
-        by smtp.googlemail.com with ESMTPSA id b5sm4539952wrs.97.2020.10.15.06.39.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2020 06:39:22 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EOqcpAW3QJidtNkzeDWtmKSshgjwO1Lbx6qQkgeNQdo=;
+        b=Uga8vmOL7MQNdgsyjkcUgaZNRIkUfK8IHojXm1/j7e+77bJJa/2tumwc8hUmhfLacu
+         yF6AhG07L1RQxlWyANQk0vqQJZOrWM8q43q5jdUqyCW7i3XcbuPZaChd9OwhEDKm4NE7
+         rE6JoynEqjc4vNpnEWJryIVlXH6ieoKgm1LNDX6cWk1CX2Y7CrTUSOqk0kvnBx3/rnFp
+         GmeF5aKKIR3Gx5DNdq88pn4zJyXTwnY0q6MenDsL6PhC2P1EOvKGMWRsd5+Q2HAJEc8X
+         Ukk+snIl+p3elq4lF1aJeATt3LsE3kb9qXY776vuPh+mkGVTZPGdFv+G1wc/KRbe2ZHc
+         ROlA==
+X-Gm-Message-State: AOAM532lOSQJNClSzl1qbx5UkvwxyyHTUV/p5Ti5o4CYaDiTEzAlIZvM
+        iFeKsfLoI55vHc+dcJ5mNDqpm1cMJjER4V4g0Wm6IK5L
+X-Google-Smtp-Source: ABdhPJw9Zr5JPQTUmWofZa2CwNMCls3dZWBOXE34dhtBiHfQoGf5kljzQNOu/ZUFgYkdU0wYWGiXd6IymaFqmZLhMlc=
+X-Received: by 2002:aca:724a:: with SMTP id p71mr2189525oic.157.1602769228038;
+ Thu, 15 Oct 2020 06:40:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201002114426.31277-1-lukasz.luba@arm.com> <d2960f6a-1805-1fb4-98ae-4a756d20370b@arm.com>
+ <765e6603-b614-fb72-64ff-248b42474803@linaro.org> <b19c1f12-b7cf-fcae-4ebb-617019effe2e@arm.com>
+ <55d3fb0f-f7d8-63c5-2bdb-53eaa62380e0@linaro.org> <f660731e-132b-2514-f526-d7123ed3522c@arm.com>
+ <d04019bd-9e85-5f3e-2a1b-66780b8df3dc@linaro.org> <3e3dd42c-48ac-7267-45c5-ca88205611bd@arm.com>
+ <00ceec64-3273-bb4a-6f38-22de8d877ab5@linaro.org>
+In-Reply-To: <00ceec64-3273-bb4a-6f38-22de8d877ab5@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 15 Oct 2020 15:40:16 +0200
+Message-ID: <CAJZ5v0hV8fwRnADdjiiF=zapO3AE6=_W_PeOQ_WhUirCcFkgdA@mail.gmail.com>
 Subject: Re: [PATCH v2 0/3] Clarify abstract scale usage for power values in
  Energy Model, EAS and IPA
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Lukasz Luba <lukasz.luba@arm.com>,
         "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -65,45 +56,71 @@ Cc:     Lukasz Luba <lukasz.luba@arm.com>,
         Doug Anderson <dianders@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
         "Nayak, Rajendra" <rnayak@codeaurora.org>
-References: <20201002114426.31277-1-lukasz.luba@arm.com>
- <d2960f6a-1805-1fb4-98ae-4a756d20370b@arm.com>
- <765e6603-b614-fb72-64ff-248b42474803@linaro.org>
- <b19c1f12-b7cf-fcae-4ebb-617019effe2e@arm.com>
- <55d3fb0f-f7d8-63c5-2bdb-53eaa62380e0@linaro.org>
- <f660731e-132b-2514-f526-d7123ed3522c@arm.com>
- <d04019bd-9e85-5f3e-2a1b-66780b8df3dc@linaro.org>
- <CAJZ5v0jmTYtMyujxxTBezmiO-j3iW_RjRKOkCpqU4gtRe+OJ2Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <03baa329-8fce-410c-ba51-385d4041aaa9@linaro.org>
-Date:   Thu, 15 Oct 2020 15:39:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jmTYtMyujxxTBezmiO-j3iW_RjRKOkCpqU4gtRe+OJ2Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/10/2020 15:33, Rafael J. Wysocki wrote:
+On Thu, Oct 15, 2020 at 12:22 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 15/10/2020 11:00, Lukasz Luba wrote:
+>
+> [ ... ]
+>
+> >> There is the SCMI and the DT. Because there are two sources where it is
+> >> impossible to know if they are using the same units, we are stuck to
+> >> ensure a consistency for the kernel.
+> >>
+> >> The platform should use:
+> >>   - the SCMI only (scaled or real)
+> >>   - the DT only (real)
+> >>   [ - the firmware file only (scaled or real) ]
+> >>
+> >
+> > Do you mean by SCMI - registration using em_dev_register_perf_domain() ?
+>
+> It was high level description, but yes, I guess it is the case.
+>
+> >> As it is not possible to know if they are scaled or real, there is no
+> >> choice except making them mutually exclusive.
+> >
+> > So you propose a bit more restriction in registration EM, to not get
+> > lost in the future. I also have these doubts. Let's consider it and
+> > maybe agree.
+> >
+> > I've recommended Qcom to use em_dev_register_perf_domain() when they
+> > have this obfuscated power values. Then any developer in the future
+> > who wants to add EM for a new device on that platform, should use the
+> > em_dev_register_perf_domain().
+> >
+> > In this case the flag in EM that you have proposed makes sense.
+> > We probably need an argument 'bool abstract_scale' in the
+> > em_dev_register_perf_domain(..., bool abstract_scale)
+> > as a source of information.
+>
+> I was suggesting to add a flag to the em_perf_domain structure giving
+> the source of the power numbers.
+>
+> So if the IPA is having the 'sustainable-power' set in DT but the
+> em_perf_domain is flagged with power number coming from SCMI, then they
+> will be incompatible, the thermal zone will fail to register.
+>
+>
+> > We would allow to co-exist em_dev_register_perf_domain(..., false)
+> > with dev_pm_opp_of_register_em() EM devices.
+> >
+> > Is it make sense?
+>
+> Well, it does not change my opinion. We should assume the energy model
+> is always milliwatts. If the SoC vendors find a way to get around with
+> bogoWatts, then good to them and up to them to deal with in the future.
 
-[ ... ]
+That sounds fair enough, but it also means that any kernel patches
+using power units different from milliwatts for the EM should be
+rejected in the future, doesn't it?
 
->> Up to Rafael to decide what to do with this documentation update.
-> 
-> Well, I was hoping that you both would reach some kind of agreement.
-> 
-> I don't feel like the decision is mine here to be honest.
+And the existing code using different power units for the EM (if any)
+should be updated/fixed accordingly, shouldn't it?
 
-No problem, probably we have to think about that a bit more before
-reaching the agreement.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Otherwise I don't see now this can be regarded as a hard rule.
