@@ -2,149 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A446628E8DF
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 00:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BD428EB3C
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 04:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728852AbgJNWpp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Oct 2020 18:45:45 -0400
-Received: from outbound-smtp21.blacknight.com ([81.17.249.41]:40042 "EHLO
-        outbound-smtp21.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727387AbgJNWpp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Oct 2020 18:45:45 -0400
-X-Greylist: delayed 518 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Oct 2020 18:45:43 EDT
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp21.blacknight.com (Postfix) with ESMTPS id E9A7DCCAA0
-        for <linux-pm@vger.kernel.org>; Wed, 14 Oct 2020 23:37:04 +0100 (IST)
-Received: (qmail 31767 invoked from network); 14 Oct 2020 22:37:04 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.22.4])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 14 Oct 2020 22:37:04 -0000
-Date:   Wed, 14 Oct 2020 23:37:03 +0100
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Takashi Iwai <tiwai@suse.de>, linux-kernel@vger.kernel.org,
-        Len Brown <lenb@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: ACPI _CST introduced performance regresions on Haswll
-Message-ID: <20201014223703.GT3227@techsingularity.net>
-References: <20201006083639.GJ3227@techsingularity.net>
- <c3566d2b-3da1-917b-2df6-f7dcfb33c8ed@intel.com>
- <20201006190322.GL3227@techsingularity.net>
- <25f31d3e-7a67-935f-93ba-32216a5084e2@intel.com>
- <20201006211820.GN3227@techsingularity.net>
- <2382d796-7c2f-665e-9169-5cdc437bf34c@intel.com>
- <20201008090909.GP3227@techsingularity.net>
- <dcf4266a-5769-8a6b-d8e1-e77553126861@intel.com>
- <20201008173436.GQ3227@techsingularity.net>
- <f6b04376-4214-ff5d-1069-890449a923e2@intel.com>
+        id S1727915AbgJOCfk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Oct 2020 22:35:40 -0400
+Received: from mail-eopbgr80057.outbound.protection.outlook.com ([40.107.8.57]:44006
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725977AbgJOCfk (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Wed, 14 Oct 2020 22:35:40 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A3HKi/Vm0VAhs2ore0dO4XYktb/JcKKMugsOr+dWic4V/jPDPz8jZZgkuSfo4wZB1+koxEBNlEl88KeJcep9r2J+ELp9CgG2rFAN1DelyXKXzTwWqehFxqLU9NhPkc/lnPsy5uriA9PTmUW2MYjjRdmEIkxziAm1t9SVhHOoPOLh4xX9hniI5Ergvnbq7zjOOV4r/minlhBSSCcpVvQ7H6myViyoGd0lHZmesxK4YkkcDrWCOkPoR7GjDEiB/oIqjwhGa9JDmWKJr84sOfxV7VBLEeFZpCcctahbOfmZZbw20E9nE/lot8lb/aS9LlwpsUMBnaUJDAYbpECby2oFlA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VdKvWqAthxzuGa7ThvCQiwkWL8jFJKtftsrbQMLbFXM=;
+ b=Rv5LkKPu49b7ybG3b7kyT8ZHIFzleWz62AMZfmGKtUETzJo7s/quTu4DuntXSPuApSQlXVd//b7kGyjurWVukL9OAb2RDnzWvjbWATpD4gasIGNf2Am3V1IbYMn0TKn9tYi6e3YEXtd+QpZzXRjKIe2xpnLTrvd9rEBm+4pM7SR9UrQjanNrt1Q5AKJd40GPYHf7YUKs+qnw5x+Nd8A+AZ5pc8ni1vKo2UL62XUaxuy0S3pn3n9dzyv1pg9gjauWZby8z7FRnf8k649j/I8JmLdx5jsCtrAmLcm2Hmd1JZYIJvKB5IuHF0ExELysILQunr7VYx8bOtAAkeS5aSv6JQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VdKvWqAthxzuGa7ThvCQiwkWL8jFJKtftsrbQMLbFXM=;
+ b=HxuBzYdsMAIT+SCSFYHLw/Iby5RWbZvHVjYRotm8yC4rhVrUo3z596al5DTwF88NDYZbvHAcV+b5LZFGlvzWF5NF5qfyujS35MvtM7qTzy7yBpY//rVd2MBsgnJY/Vcb3bQpxGsnCbKwDh63DLo+hnMZuMDlaluAo42HWisYJ70=
+Received: from AM6PR04MB4966.eurprd04.prod.outlook.com (2603:10a6:20b:2::14)
+ by AM6PR04MB4039.eurprd04.prod.outlook.com (2603:10a6:209:4d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.21; Thu, 15 Oct
+ 2020 02:35:35 +0000
+Received: from AM6PR04MB4966.eurprd04.prod.outlook.com
+ ([fe80::546f:92f0:f3c5:a148]) by AM6PR04MB4966.eurprd04.prod.outlook.com
+ ([fe80::546f:92f0:f3c5:a148%7]) with mapi id 15.20.3455.032; Thu, 15 Oct 2020
+ 02:35:35 +0000
+From:   Aisheng Dong <aisheng.dong@nxp.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Rafael Wysocki <rjw@rjwysocki.net>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: RE: [PATCH] opp: Don't always remove static OPPs in
+ _of_add_opp_table_v1()
+Thread-Topic: [PATCH] opp: Don't always remove static OPPs in
+ _of_add_opp_table_v1()
+Thread-Index: AQHWoeIyJ2LgM4hmBkCxSzkI73YeG6mX844Q
+Date:   Thu, 15 Oct 2020 02:35:35 +0000
+Message-ID: <AM6PR04MB496659599D41F6B88036420680020@AM6PR04MB4966.eurprd04.prod.outlook.com>
+References: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
+In-Reply-To: <2c73ab54717ef358b118ea0cfb727b1427e7730a.1602648719.git.viresh.kumar@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linaro.org; dkim=none (message not signed)
+ header.d=none;linaro.org; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.67]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: fcdd0d4d-fad7-4aa4-e533-08d870b2fef2
+x-ms-traffictypediagnostic: AM6PR04MB4039:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM6PR04MB40391D4E5CB633D39EE0D7F580020@AM6PR04MB4039.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5516;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dpGxQOBPxqGRfngkZMTn+pC4UkXYespV/d2gGOD44TnItuhzIU6MJSrqZViVNDvpAk/GFsNf2bxGHjqLePoaDleLP0xEo946VK4eaNQN59Brxyi3eeK2FCDhnKuuHkqH+NJlf/hfIkOzGfcP6UrcQD5nt3qa70a1rZFV9GPP7APiKsOHMudtAStQvMi5VSpBJhfhReFTXrxHKxL7lWC8BbfiPYn11Xq0V2VIlcQIMeiSvEhYmI4quKfLFOzoU32zFR3GLJihCN17WVoIPX0o6jsDdCSIQysK73eguDe6dUcW0TaOr5mq21iDvsxEc1XDiMBXkJkAeaQLswC13dIlTA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4966.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(346002)(376002)(136003)(366004)(66946007)(478600001)(66556008)(76116006)(66446008)(64756008)(66476007)(86362001)(9686003)(4326008)(6506007)(44832011)(7696005)(55016002)(2906002)(26005)(316002)(54906003)(110136005)(33656002)(186003)(71200400001)(4744005)(8936002)(5660300002)(8676002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: FCllAc1lt5g5LW46ocJE++cXytbMjTXywBtFoFTplJyYP0CrR2Z1b3OQAarbU808lgECv922GAc+WxEbf4uNU5+pCx1p/RnigIWvJiKgXS9CwX4Y0rN5hbU4EkgY8xLiw7R2PlgwVDsB1xncMrrSZKkf00L3JZP5Xoo1QW4gR5fW+oGDf8uruqd+IS8/lC5lALAvP8fgAy+4KC3Vp3414EFAN3+NLDXkq5qOr1BQnoIkdmItwr311hng7wnxsh3C2bVkJQwF3HEb3NciZCCCYBDRVfUeucPvDxCHypmHR1troJFn0gP2h7fOptvYiT5fHr67CViym/gfsEYCNeEgfgjCCmspHWcGxHrXa69WlOAEqygO8At60hKdLpu/8gQS2ZzIFA2wTKViDnziU0AG/1PU3/qBBb8XMISTMaHGloFqbDQr4VPq+dWh8FMaE00Ar2kVSYmDEtk3y2XKHoZ+H6bWDf1xO8ikX3Z6hrvfSLWkWFlrc04CnoKSjIYa3oe+lQUKgPZfW7U4jVhbNLgtBbvi0OiNbYKmQTNEZdIuzw7/miwyLhoU5n6RMUJdm9BkQ17i5ZxTAdDzxmO3D5vuP8BUzAoldHrFdMy6PXneenhT9VvTylohbiDNzauSKb/mjV+2k6SWCNTqZnB3XXPgDA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f6b04376-4214-ff5d-1069-890449a923e2@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4966.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fcdd0d4d-fad7-4aa4-e533-08d870b2fef2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2020 02:35:35.5516
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 64qqlGVTDKRdUgGyQxEkUngqABJSQL/7JAdN1VwlLlNRyQKDeVOLcb09NRD69KdqOb+0p9Dw4sR4JQjL27v4SQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR04MB4039
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 08:55:26PM +0200, Rafael J. Wysocki wrote:
-> > > With C6 enabled, that state is used at
-> > > least sometimes (so C1E is used less often), but PC6 doesn't seem to be
-> > > really used - it looks like core C6 only is entered and which may be why C6
-> > > adds less latency than C1E (and analogously for C3).
-> > > 
-> > At the moment, I'm happy with either solution but mostly because I can't
-> > tell what other trade-offs should be considered :/
-> > 
->
-> I talked to Len and Srinivas about this and my theory above didn't survive.
-> 
-> The most likely reason why you see a performance drop after enabling the
-> ACPI support (which effectively causes C3 and C6 to be disabled by default
-> on the affected machines) is because the benchmarks in question require
-> sufficiently high one-CPU performance and the CPUs cannot reach high enough
-> one-core turbo P-states without the other CPUs going into C6.
-> 
-
-That makes sense. It also can explain anomalies like server/clients being
-split across NUMA nodes with no other activity can sometimes be better
-because of turbo states being more important than memory locality for
-some benchmarks.
-
-> Inspection of the ACPI tables you sent me indicates that there is a BIOS
-> switch in that system allowing C6 to be enabled.  Would it be possible to
-> check whether or not there is a BIOS setup option to change that setting?
-> 
-
-Yes, it's well hidden but it's there. If the profile is made custom, then
-the p-states can be selected and "custom" default enables C6 but not C3
-(there is a note saying that it's not recommended for that CPU). If I
-then switch it back to the normal profile, the c-states are not restored
-so this is a one-way trip even if you disable the c-state in custom,
-reboot, switch back, reboot. Same if the machine is reset to "optimal
-default settings". Yey for BIOS developers.
-
-This means I have a limited number of attempts to do something about
-this. 2 machines can no longer reproduce the problem reliably.
-
-However, that also says a "solution" is to enable the state on each of
-these machines, discard the historical results and carry on. In practice,
-if reports are received either upstream or in distros about strange
-behaviour on old machines when upgrading then first check the c-states
-and the CPU generation. Given long enough, the machines with that specific
-CPU and a crappy BIOS will phase out :/
-
-> Also, I need to know what happens if that system is started with intel_idle
-> disabled.  That is, what idle states are visible in sysfs in that
-> configuration (what their names and descriptions are in particular) and
-> whether or not the issue is still present then.
-> 
-
-Kernel name		c-state	  exit latency	 disabled?  default?
------------             ------    ------------   ---------  --------
-5.9-vanilla              POLL     latency:0      disabled:0 default:enabled
-5.9-vanilla              C1       latency:2      disabled:0 default:enabled
-5.9-vanilla              C1E      latency:10     disabled:0 default:enabled
-5.9-vanilla              C3       latency:33     disabled:1 default:disabled
-5.9-vanilla              C6       latency:133    disabled:0 default:enabled
-5.9-intel_idle-disabled  POLL     latency:0      disabled:0 default:enabled
-5.9-intel_idle-disabled  C1       latency:1      disabled:0 default:enabled
-5.9-intel_idle-disabled  C2       latency:41     disabled:0 default:enabled
-5.9-acpi-disable         POLL     latency:0      disabled:0 default:enabled
-5.9-acpi-disable         C1       latency:2      disabled:0 default:enabled
-5.9-acpi-disable         C1E      latency:10     disabled:0 default:enabled
-5.9-acpi-disable         C3       latency:33     disabled:0 default:enabled
-5.9-acpi-disable         C6       latency:133    disabled:0 default:enabled
-5.9-custom-powerprofile  POLL     latency:0      disabled:0 default:enabled
-5.9-custom-powerprofile  C1       latency:2      disabled:0 default:enabled
-5.9-custom-powerprofile  C1E      latency:10     disabled:0 default:enabled
-5.9-custom-powerprofile  C3       latency:33     disabled:1 default:disabled
-5.9-custom-powerprofile  C6       latency:133    disabled:0 default:enabled
-
-In this case, the test results are similar. I vaguely recall the bios
-was reconfigured on the second machine for unrelated reasons and it's no
-longer able to reproduce the problem properly. As the results show little
-difference in this case, I didn't include the turbostat figures. The
-summary from mmtests showed this
-
-                      5.9         5.9         5.9         5.9
-                  vanillaintel_idle-disabledacpi-disablecustom-powerprofile
-Hmean Avg_MHz        8.31        8.29        8.35        8.26
-Hmean Busy%          0.58        0.56        0.58        0.57
-Hmean CPU%c1         3.19       40.81        3.14        3.18
-Hmean CPU%c3         0.00        0.00        0.00        0.00
-Hmean CPU%c6        92.24        0.00       92.21       92.20
-Hmean CPU%c7         0.00        0.00        0.00        0.00
-Hmean PkgWatt       47.98        0.00       47.95       47.68
-
-i.e. The average time on c6 was high on the vanilla kernel where as it
-would not have been when the problem was originally reproduced (I
-clearly broke this test machine in a way I can't "fix"). Disabling
-intel_idle kept it mostly in C1 state.
-
-I'll try a third machine tomorrow but even if I reproduce the problem,
-I won't be able to do it again because ... yey bios developers.
-
--- 
-Mel Gorman
-SUSE Labs
+SGkgVmlyZXNoDQoNClRoYW5rcyBmb3IgdGhlIHF1aWNrIGZpeC4NCg0KPiBGcm9tOiBWaXJlc2gg
+S3VtYXIgPHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIE9jdG9i
+ZXIgMTQsIDIwMjAgMTI6MjYgUE0NCj4gDQo+IFRoZSBwYXRjaCBtaXNzZWQgcmV0dXJuaW5nIDAg
+ZWFybHkgaW4gY2FzZSBvZiBzdWNjZXNzIGFuZCBoZW5jZSB0aGUgc3RhdGljIE9QUHMNCj4gZ290
+IHJlbW92ZWQgYnkgbWlzdGFrZS4gRml4IGl0Lg0KPiANCj4gRml4ZXM6IDkwZDQ2ZDcxY2NlMiAo
+Im9wcDogSGFuZGxlIG11bHRpcGxlIGNhbGxzIGZvciBzYW1lIE9QUCB0YWJsZSBpbg0KPiBfb2Zf
+YWRkX29wcF90YWJsZV92MSgpIikNCj4gUmVwb3J0ZWQtYnk6IEFpc2hlbmcgRG9uZyA8YWlzaGVu
+Zy5kb25nQG54cC5jb20+DQo+IFNpZ25lZC1vZmYtYnk6IFZpcmVzaCBLdW1hciA8dmlyZXNoLmt1
+bWFyQGxpbmFyby5vcmc+DQoNClRlc3RlZC1ieTogRG9uZyBBaXNoZW5nIDxhaXNoZW5nLmRvbmdA
+bnhwLmNvbT4NCg0KUmVnYXJkcw0KQWlzaGVuZw0KDQo+IC0tLQ0KPiAgZHJpdmVycy9vcHAvb2Yu
+YyB8IDIgKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykNCj4gDQo+IGRpZmYg
+LS1naXQgYS9kcml2ZXJzL29wcC9vZi5jIGIvZHJpdmVycy9vcHAvb2YuYyBpbmRleA0KPiA4NzRi
+NTg3NTYyMjAuLjlmYWViODNlNGIzMiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9vcHAvb2YuYw0K
+PiArKysgYi9kcml2ZXJzL29wcC9vZi5jDQo+IEBAIC05NDQsNiArOTQ0LDggQEAgc3RhdGljIGlu
+dCBfb2ZfYWRkX29wcF90YWJsZV92MShzdHJ1Y3QgZGV2aWNlICpkZXYsDQo+IHN0cnVjdCBvcHBf
+dGFibGUgKm9wcF90YWJsZSkNCj4gIAkJbnIgLT0gMjsNCj4gIAl9DQo+IA0KPiArCXJldHVybiAw
+Ow0KPiArDQo+ICByZW1vdmVfc3RhdGljX29wcDoNCj4gIAlfb3BwX3JlbW92ZV9hbGxfc3RhdGlj
+KG9wcF90YWJsZSk7DQo+IA0KPiAtLQ0KPiAyLjI1LjAucmMxLjE5LmcwNDJlZDNlMDQ4YWYNCg0K
