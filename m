@@ -2,19 +2,22 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 263ED28F51F
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 16:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB97228F515
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Oct 2020 16:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389186AbgJOOqp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Oct 2020 10:46:45 -0400
-Received: from mail.skyhub.de ([5.9.137.197]:48162 "EHLO mail.skyhub.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389099AbgJOOqT (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Thu, 15 Oct 2020 10:46:19 -0400
+        id S2389137AbgJOOqW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Oct 2020 10:46:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389122AbgJOOqV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Oct 2020 10:46:21 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4706BC0613D8;
+        Thu, 15 Oct 2020 07:46:20 -0700 (PDT)
 Received: from zn.tnic (p200300ec2f0ed2005c4d90d75300802a.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:d200:5c4d:90d7:5300:802a])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0C3EB1EC0380;
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CBB1D1EC03CE;
         Thu, 15 Oct 2020 16:46:17 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
         t=1602773177;
@@ -22,18 +25,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
          to:to:cc:cc:mime-version:mime-version:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ift/+6nNDAL5TzMTDEhFdJR7nk8eIUURJcaFE6ruXfs=;
-        b=NsH5A8XEoWrwlRuhlZivwmms705isQUhPvwfB3J9ggq/WyyJXJKq9PRmfARXzlFgUrvGLR
-        LqrtlwDOsBbKRiZi9R8HABFnf7lHSqAL7dkMQnwCVGdAHKtf99l2LgS9dIH9p4s1I0YiFK
-        PCTVhM9WABkfEHyMWPVfN+67LxGhfaM=
+        bh=4QHsxbopA1jJrvw6XXL20mjzFqcvCsIi7OxZFfD0NeQ=;
+        b=Tgk9Dlfg+QjNmPd0iN4JDbzWCJXW6wKliztX6tsxmcVyUCoG72bk2C5sZQDC09gH0KDk1h
+        uW3RiVYBt8noxH7BmEohcq0eWIuxPqTDCa4Sit5J03qG+z6O0qlFUMp66qH6C6HG8Yg+Rx
+        63oCEk75Ghq9acxa9M1EwtzM2KXKJ1E=
 From:   Borislav Petkov <bp@alien8.de>
 To:     X86 ML <x86@kernel.org>
 Cc:     Thomas Renninger <trenn@suse.com>, Shuah Khan <shuah@kernel.org>,
         Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
         LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/4] tools/power/cpupower: Read energy_perf_bias from sysfs
-Date:   Thu, 15 Oct 2020 16:46:00 +0200
-Message-Id: <20201015144603.27933-2-bp@alien8.de>
+Subject: [PATCH 2/4] tools/power/turbostat: Read energy_perf_bias from sysfs
+Date:   Thu, 15 Oct 2020 16:46:01 +0200
+Message-Id: <20201015144603.27933-3-bp@alien8.de>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201015144603.27933-1-bp@alien8.de>
 References: <20201015144603.27933-1-bp@alien8.de>
@@ -45,246 +48,79 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Borislav Petkov <bp@suse.de>
 
-... instead of poking at the MSR. For that, move the accessor functions
-to misc.c and add a sysfs-writing function too.
-
-There should be no functional changes resulting from this.
+... instead of poking at the MSR directly.
 
 Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Thomas Renninger <trenn@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>
+Cc: Len Brown <lenb@kernel.org>
+Cc: linux-pm@vger.kernel.org
 ---
- tools/power/cpupower/lib/cpupower.c          | 23 +++++++++-
- tools/power/cpupower/lib/cpupower_intern.h   |  5 ++
- tools/power/cpupower/utils/cpupower-info.c   |  2 +-
- tools/power/cpupower/utils/cpupower-set.c    |  2 +-
- tools/power/cpupower/utils/helpers/helpers.h |  8 ++--
- tools/power/cpupower/utils/helpers/misc.c    | 48 ++++++++++++++++++++
- tools/power/cpupower/utils/helpers/msr.c     | 28 ------------
- 7 files changed, 81 insertions(+), 35 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 29 ++++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
-diff --git a/tools/power/cpupower/lib/cpupower.c b/tools/power/cpupower/lib/cpupower.c
-index 3656e697537e..d2fa4bbecf74 100644
---- a/tools/power/cpupower/lib/cpupower.c
-+++ b/tools/power/cpupower/lib/cpupower.c
-@@ -16,8 +16,8 @@
- 
- unsigned int cpupower_read_sysfs(const char *path, char *buf, size_t buflen)
- {
--	int fd;
- 	ssize_t numread;
-+	int fd;
- 
- 	fd = open(path, O_RDONLY);
- 	if (fd == -1)
-@@ -35,6 +35,27 @@ unsigned int cpupower_read_sysfs(const char *path, char *buf, size_t buflen)
- 	return (unsigned int) numread;
- }
- 
-+unsigned int cpupower_write_sysfs(const char *path, char *buf, size_t buflen)
-+{
-+	ssize_t numwritten;
-+	int fd;
-+
-+	fd = open(path, O_WRONLY);
-+	if (fd == -1)
-+		return 0;
-+
-+	numwritten = write(fd, buf, buflen - 1);
-+	if (numwritten < 1) {
-+		perror("write failed");
-+		close(fd);
-+		return -1;
-+	}
-+
-+	close(fd);
-+
-+	return (unsigned int) numwritten;
-+}
-+
- /*
-  * Detect whether a CPU is online
-  *
-diff --git a/tools/power/cpupower/lib/cpupower_intern.h b/tools/power/cpupower/lib/cpupower_intern.h
-index 4887c76d23f8..ac1112b956ec 100644
---- a/tools/power/cpupower/lib/cpupower_intern.h
-+++ b/tools/power/cpupower/lib/cpupower_intern.h
-@@ -1,6 +1,11 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- #define PATH_TO_CPU "/sys/devices/system/cpu/"
-+
-+#ifndef MAX_LINE_LEN
- #define MAX_LINE_LEN 4096
-+#endif
-+
- #define SYSFS_PATH_MAX 255
- 
- unsigned int cpupower_read_sysfs(const char *path, char *buf, size_t buflen);
-+unsigned int cpupower_write_sysfs(const char *path, char *buf, size_t buflen);
-diff --git a/tools/power/cpupower/utils/cpupower-info.c b/tools/power/cpupower/utils/cpupower-info.c
-index 0ba61a2c4d81..06345b543786 100644
---- a/tools/power/cpupower/utils/cpupower-info.c
-+++ b/tools/power/cpupower/utils/cpupower-info.c
-@@ -101,7 +101,7 @@ int cmd_info(int argc, char **argv)
- 		}
- 
- 		if (params.perf_bias) {
--			ret = msr_intel_get_perf_bias(cpu);
-+			ret = cpupower_intel_get_perf_bias(cpu);
- 			if (ret < 0) {
- 				fprintf(stderr,
- 			_("Could not read perf-bias value[%d]\n"), ret);
-diff --git a/tools/power/cpupower/utils/cpupower-set.c b/tools/power/cpupower/utils/cpupower-set.c
-index 052044d7e012..180d5ba877e6 100644
---- a/tools/power/cpupower/utils/cpupower-set.c
-+++ b/tools/power/cpupower/utils/cpupower-set.c
-@@ -95,7 +95,7 @@ int cmd_set(int argc, char **argv)
- 		}
- 
- 		if (params.perf_bias) {
--			ret = msr_intel_set_perf_bias(cpu, perf_bias);
-+			ret = cpupower_intel_set_perf_bias(cpu, perf_bias);
- 			if (ret) {
- 				fprintf(stderr, _("Error setting perf-bias "
- 						  "value on CPU %d\n"), cpu);
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index c258eeccd05f..37dac161f3fe 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -105,8 +105,8 @@ extern struct cpupower_cpu_info cpupower_cpu_info;
- extern int read_msr(int cpu, unsigned int idx, unsigned long long *val);
- extern int write_msr(int cpu, unsigned int idx, unsigned long long val);
- 
--extern int msr_intel_set_perf_bias(unsigned int cpu, unsigned int val);
--extern int msr_intel_get_perf_bias(unsigned int cpu);
-+extern int cpupower_intel_set_perf_bias(unsigned int cpu, unsigned int val);
-+extern int cpupower_intel_get_perf_bias(unsigned int cpu);
- extern unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu);
- 
- /* Read/Write msr ****************************/
-@@ -150,9 +150,9 @@ static inline int read_msr(int cpu, unsigned int idx, unsigned long long *val)
- { return -1; };
- static inline int write_msr(int cpu, unsigned int idx, unsigned long long val)
- { return -1; };
--static inline int msr_intel_set_perf_bias(unsigned int cpu, unsigned int val)
-+static inline int cpupower_intel_set_perf_bias(unsigned int cpu, unsigned int val)
- { return -1; };
--static inline int msr_intel_get_perf_bias(unsigned int cpu)
-+static inline int cpupower_intel_get_perf_bias(unsigned int cpu)
- { return -1; };
- static inline unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu)
- { return 0; };
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index f406adc40bad..e8f8f643a627 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -1,7 +1,15 @@
- // SPDX-License-Identifier: GPL-2.0
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+
- #if defined(__i386__) || defined(__x86_64__)
- 
- #include "helpers/helpers.h"
-+#include "helpers/sysfs.h"
-+
-+#include "cpupower_intern.h"
- 
- #define MSR_AMD_HWCR	0xc0010015
- 
-@@ -40,4 +48,44 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
- 		*support = *active = 1;
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 33b370865d16..0baec7ea1bbd 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -1721,6 +1721,25 @@ int get_mp(int cpu, struct msr_counter *mp, unsigned long long *counterp)
  	return 0;
  }
-+
-+int cpupower_intel_get_perf_bias(unsigned int cpu)
+ 
++int get_epb(int cpu)
 +{
-+	char linebuf[MAX_LINE_LEN];
-+	char path[SYSFS_PATH_MAX];
-+	unsigned long val;
-+	char *endp;
++	char path[128 + PATH_BYTES];
++	int ret, epb = -1;
++	FILE *fp;
 +
-+	if (!(cpupower_cpu_info.caps & CPUPOWER_CAP_PERF_BIAS))
-+		return -1;
++	sprintf(path, "/sys/devices/system/cpu/cpu%d/power/energy_perf_bias", cpu);
 +
-+	snprintf(path, sizeof(path), PATH_TO_CPU "cpu%u/power/energy_perf_bias", cpu);
++	fp = fopen_or_die(path, "r");
 +
-+	if (cpupower_read_sysfs(path, linebuf, MAX_LINE_LEN) == 0)
-+		return -1;
++	ret = fscanf(fp, "%d", &epb);
++	if (ret != 1)
++		err(1, "%s(%s)", __func__, path);
 +
-+	val = strtol(linebuf, &endp, 0);
-+	if (endp == linebuf || errno == ERANGE)
-+		return -1;
++	fclose(fp);
 +
-+	return val;
++	return epb;
 +}
 +
-+int cpupower_intel_set_perf_bias(unsigned int cpu, unsigned int val)
-+{
-+	char path[SYSFS_PATH_MAX];
-+	char linebuf[3] = {};
-+
-+	if (!(cpupower_cpu_info.caps & CPUPOWER_CAP_PERF_BIAS))
-+		return -1;
-+
-+	snprintf(path, sizeof(path), PATH_TO_CPU "cpu%u/power/energy_perf_bias", cpu);
-+	snprintf(linebuf, sizeof(linebuf), "%d", val);
-+
-+	if (cpupower_write_sysfs(path, linebuf, 3) <= 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
- #endif /* #if defined(__i386__) || defined(__x86_64__) */
-diff --git a/tools/power/cpupower/utils/helpers/msr.c b/tools/power/cpupower/utils/helpers/msr.c
-index ab9950748838..8b0b6be74bb8 100644
---- a/tools/power/cpupower/utils/helpers/msr.c
-+++ b/tools/power/cpupower/utils/helpers/msr.c
-@@ -11,7 +11,6 @@
- /* Intel specific MSRs */
- #define MSR_IA32_PERF_STATUS		0x198
- #define MSR_IA32_MISC_ENABLES		0x1a0
--#define MSR_IA32_ENERGY_PERF_BIAS	0x1b0
- #define MSR_NEHALEM_TURBO_RATIO_LIMIT	0x1ad
- 
- /*
-@@ -73,33 +72,6 @@ int write_msr(int cpu, unsigned int idx, unsigned long long val)
- 	return -1;
- }
- 
--int msr_intel_get_perf_bias(unsigned int cpu)
--{
--	unsigned long long val;
--	int ret;
--
--	if (!(cpupower_cpu_info.caps & CPUPOWER_CAP_PERF_BIAS))
--		return -1;
--
--	ret = read_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &val);
--	if (ret)
--		return ret;
--	return val;
--}
--
--int msr_intel_set_perf_bias(unsigned int cpu, unsigned int val)
--{
--	int ret;
--
--	if (!(cpupower_cpu_info.caps & CPUPOWER_CAP_PERF_BIAS))
--		return -1;
--
--	ret = write_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, val);
--	if (ret)
--		return ret;
--	return 0;
--}
--
- unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu)
+ void get_apic_id(struct thread_data *t)
  {
- 	unsigned long long val;
+ 	unsigned int eax, ebx, ecx, edx;
+@@ -3631,9 +3650,8 @@ dump_sysfs_pstate_config(void)
+  */
+ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ {
+-	unsigned long long msr;
+ 	char *epb_string;
+-	int cpu;
++	int cpu, epb;
+ 
+ 	if (!has_epb)
+ 		return 0;
+@@ -3649,10 +3667,11 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 		return -1;
+ 	}
+ 
+-	if (get_msr(cpu, MSR_IA32_ENERGY_PERF_BIAS, &msr))
++	epb = get_epb(cpu);
++	if (epb < 0)
+ 		return 0;
+ 
+-	switch (msr & 0xF) {
++	switch (epb) {
+ 	case ENERGY_PERF_BIAS_PERFORMANCE:
+ 		epb_string = "performance";
+ 		break;
+@@ -3666,7 +3685,7 @@ int print_epb(struct thread_data *t, struct core_data *c, struct pkg_data *p)
+ 		epb_string = "custom";
+ 		break;
+ 	}
+-	fprintf(outf, "cpu%d: MSR_IA32_ENERGY_PERF_BIAS: 0x%08llx (%s)\n", cpu, msr, epb_string);
++	fprintf(outf, "cpu%d: EPB: %d (%s)\n", cpu, epb, epb_string);
+ 
+ 	return 0;
+ }
 -- 
 2.21.0
 
