@@ -2,126 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB3A290600
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 15:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 885EF290633
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 15:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406032AbgJPNJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 09:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41822 "EHLO
+        id S2394761AbgJPNW1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 09:22:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408197AbgJPNJM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 09:09:12 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85B96C0613D4
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:09:11 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id n6so2809254wrm.13
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:09:11 -0700 (PDT)
+        with ESMTP id S2394611AbgJPNW1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 09:22:27 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6432C061755
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:22:25 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id v7so1327084plp.23
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:22:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eyHBJddDTbNPFeEpW+RroYrsG4+cEx3Q/2uix0wzOfQ=;
-        b=E9r8pmWqGNv7QdV+tX6/6JYGehMkG0K7T0kEJ6WtZgJWRJGjrtTAnbe+IP3139FQH1
-         pmStuVpaB0g1MaCmOFsN2UclDZMzpUN1tLt007fD0IBnDezvtqaxabzZiZZMzs0yVnSM
-         FmkAiigUXgmK177YJvOq0/1sTmPbB5JGk7r2uS4VsZmrvD2ZEznJD1d+mBStQF9yEOtZ
-         kVCFpsoXd8gBvmVXB8ePrHyT0A0uyg+Cs/FghA+LZslDdJYh+CrAyjIqh502bf1MzRKP
-         vHgve0jdyaKaeSgyGmyy+KTwwCqmBVZ9QLb9yI737edsqY+8oe7a5k0jYY5peDSuBXRT
-         AfVw==
+        h=sender:mime-version:message-id:date:subject:from:to:cc;
+        bh=YEanuN8sObryFQCW5AeGRJqhNtr6AqJyoyNt3MXkCtQ=;
+        b=Lb0gXw0QDfcZawEb9d4CS03gSg5l+NVqm/offdQFobtd/XQmc8GeOX/5aRCnTa0V7m
+         nOUJeNhMC5nf7hIhwkDn8whq1zLzvnGaT63dVGk0lLZhHB4xtyk22Hdqx8oxzHFMZpPm
+         AeQvDTMeIARJXCXYqvm0JcdlwR2z0vYpYnMTVplE43i2b2WVZLgDr3suIlTFtzGvKOaN
+         V12vVzsCFWZfgWsiXOkPGnxdoRRAaTc3Nd2D83WyBOfRGuEmbvngr7gO42sLzcD3980i
+         bnueUr5UJRm6kT9vNxv85UTSHBLPUYW3RSsaQpYJcH05KAvi+jo7n2vjJVrXi4MQStEk
+         vflw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eyHBJddDTbNPFeEpW+RroYrsG4+cEx3Q/2uix0wzOfQ=;
-        b=giYtcu8Pec1YJrTCawqb/8+XkzBqyZmKNSFZxHR9BV/6I77RuKoQd+RDbstJmuqaZ7
-         rNS9SMOPR0hEvXJO+yZPBDdRZZR8TJsRLlPNZsDbDNKiGCQgbHvpu8SMSFa2OEoX8akK
-         Bw8HxCwXddRCilJdVLCLiRJdVgfB7O7qZ1ZDuGsIHE3MEKsIgw2kK4DC0AnE11WJjHyu
-         gCOoudZ/cPufJvU//Ul9H9WTlrexLi558X1mpc6EbrF+6U8doYJfYYzNwe/o3gmX7Ulo
-         OnrFERYFQEWKrrmDYCmgEBGX97shxz+LMCBl7o9Wk3aK2Ka5otEwy1PkmLPo+y4aBtM/
-         8c9A==
-X-Gm-Message-State: AOAM531M1uZODse1fMypH9fSs2yComfn8mm3yC9itpcfCnID9iyoinIP
-        vdDNi0gqfxC4Fh8+xwuPWSgxIQ==
-X-Google-Smtp-Source: ABdhPJyJx2ziKX8CMV9mtHGWssCPDzWgGWdhDq5rg06Ua4cfCHB0ZtCFKPT068dgSrnPDzX14r37mQ==
-X-Received: by 2002:a5d:5090:: with SMTP id a16mr3713627wrt.281.1602853749936;
-        Fri, 16 Oct 2020 06:09:09 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id s1sm2694735wmh.22.2020.10.16.06.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 06:09:09 -0700 (PDT)
-Date:   Fri, 16 Oct 2020 14:09:05 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Nayak, Rajendra" <rnayak@codeaurora.org>
-Subject: Re: [PATCH v2 0/3] Clarify abstract scale usage for power values in
- Energy Model, EAS and IPA
-Message-ID: <20201016130905.GA2426638@google.com>
-References: <b19c1f12-b7cf-fcae-4ebb-617019effe2e@arm.com>
- <55d3fb0f-f7d8-63c5-2bdb-53eaa62380e0@linaro.org>
- <f660731e-132b-2514-f526-d7123ed3522c@arm.com>
- <d04019bd-9e85-5f3e-2a1b-66780b8df3dc@linaro.org>
- <3e3dd42c-48ac-7267-45c5-ca88205611bd@arm.com>
- <00ceec64-3273-bb4a-6f38-22de8d877ab5@linaro.org>
- <CAJZ5v0hV8fwRnADdjiiF=zapO3AE6=_W_PeOQ_WhUirCcFkgdA@mail.gmail.com>
- <e321191c-61d2-a15d-47c2-653b277984ca@linaro.org>
- <20201016121844.GA2420691@google.com>
- <b3c6d7a5-0564-6e84-77ff-9afe10d7ee27@linaro.org>
+        h=x-gm-message-state:sender:mime-version:message-id:date:subject:from
+         :to:cc;
+        bh=YEanuN8sObryFQCW5AeGRJqhNtr6AqJyoyNt3MXkCtQ=;
+        b=j3o9qiUWljerWmfC7QNcob4XGlNOVQfS5MipkaQy8wi4fVOz0FpeIlxVaasee04hEt
+         6bXh1MstEd7UEe/idQdIQIMsdadVP+3DWcesOa4PHNk2GFl6uby63e5vf+L31SFBjYFq
+         OqWCezNp5+9N7EnxUuR3AHtZbQ4KUJawTunTd6PT64A7YNYZ0nGpSD9Tag3Jwhr0xh3O
+         M36exLuEHPvKN3dgJRFigMbv4ShW9hahgFvyc6Z5+8UVb4SgVCDxRWHvQ8GdVqucxsir
+         UPWtD0WtvMYXBI87aiPXfwPCQUzlIBaSSPbxWviJ1F+LutBqaQBOGs8ZdIbS0NnRkP1j
+         ArGg==
+X-Gm-Message-State: AOAM533MaiD2WYcUca1OiZsObQZQ+q0i8gikD366LZQH7a9TdLmThoRY
+        C0LQw/zSY99nbsvLYHtQmu9u3sb1gwP4aY1B
+X-Google-Smtp-Source: ABdhPJxMAFpmDwvWzRB8k+Eouj+/UWaZkKvju8/sAQz6PIiX/QjQMHqg62BhG+UIye5lHBAbjB7ZR/CqP13OW1hZ
+Sender: "josephjang via sendgmr" 
+        <josephjang@josephjang-p920.ntc.corp.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b3c6d7a5-0564-6e84-77ff-9afe10d7ee27@linaro.org>
+X-Received: from josephjang-p920.ntc.corp.google.com ([2401:fa00:fc:1:7220:84ff:fe09:41e0])
+ (user=josephjang job=sendgmr) by 2002:a62:4e05:0:b029:156:6a80:2686 with SMTP
+ id c5-20020a624e050000b02901566a802686mr3525957pfb.61.1602854545149; Fri, 16
+ Oct 2020 06:22:25 -0700 (PDT)
+Message-ID: <000000000000cafee605b1c9a745@google.com>
+Date:   Fri, 16 Oct 2020 13:22:25 +0000
+Subject: [PATCH] power: suspend: Add suspend timeout handler
+From:   <josephjang@google.com>
+To:     rafael@kernel.org, gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        pavel@ucw.cz, len.brown@intel.com, pmladek@suse.com,
+        sergey.senozhatsky@gmail.com, rostedt@goodmis.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        jonglin@google.com, woodylin@google.com, markcheng@google.com,
+        josephjang@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 16 Oct 2020 at 14:50:29 (+0200), Daniel Lezcano wrote:
-> On 16/10/2020 14:18, Quentin Perret wrote:
-> > On Friday 16 Oct 2020 at 13:48:33 (+0200), Daniel Lezcano wrote:
-> >> If the SCMI is returning abstract numbers, the thermal IPA governor will
-> >> use these numbers as a reference to mitigate the temperature at the
-> >> specified sustainable power which is expressed in mW in the DT. So it
-> >> does not work and we can not detect such conflict.
-> >>
-> >> That is why I'm advocating to keep mW for the energy model and make the
-> >> SCMI and DT power numbers incompatible.
-> > 
-> > I think it's fair to say SCMI-provided number should only be compared to
-> > other SCMI-provided numbers, so +1 on that. But what I don't understand
-> > is why specifying the EM in mW helps with that?
-> 
-> It is already specified in mW. I'm just saying to not add the
-> 'scale'/'abstract'/'bogoWatt' in the documentation.
-> 
-> > Can we not let the providers specify the unit? 
-> 
-> Yes, it is possible but the provider must give the 'unit' and the energy
-> model must store this information along with the "power" numbers, so we
-> can compare apple with apple.
-> 
-> Today, the energy model is using the mW unit only and the providers are
-> not telling the 'unit', so both are missing.
-> 
-> Because both are missing, it does not make sense to talk about
-> 'abstract' values in the energy model documentation until the above is
-> fixed.
+Thank you Rafael's promptly response.
 
-Right, so that sounds like a reasonable way forward with this series.
+> On Fri, Oct 16, 2020 at 5:51 AM Joseph Jang <josephjang@google.com> wrote:
+> >
+> > From: josephjang <josephjang@google.com>
+> >
+> > Add suspend timeout handler to prevent device stuck during suspend/
+> > resume process. Suspend timeout handler will dump disk sleep task
+> > at first round timeout and trigger kernel panic at second round timeout.
+> > The default timer for each round is 30 seconds.
+> >
+> > Note: Can use following command to simulate suspend hang for testing.
+> >     adb shell echo 1 > /sys/power/pm_hang
+> >     adb shell echo mem > /sys/power/state
+> > Signed-off-by: josephjang <josephjang@google.com>
+> > ---
+> >  include/linux/console.h |   1 +
+> >  kernel/power/Kconfig    |   9 +++
+> >  kernel/power/main.c     |  66 ++++++++++++++++
+> >  kernel/power/suspend.c  | 162 ++++++++++++++++++++++++++++++++++++++++
+> >  kernel/printk/printk.c  |   5 ++
+> >  5 files changed, 243 insertions(+)
+> >
+> > diff --git a/include/linux/console.h b/include/linux/console.h
+> > index 0670d3491e0e..ac468c602c0b 100644
+> > --- a/include/linux/console.h
+> > +++ b/include/linux/console.h
+> > @@ -192,6 +192,7 @@ static inline void console_sysfs_notify(void)
+> >  { }
+> >  #endif
+> >  extern bool console_suspend_enabled;
+> > +extern int is_console_suspended(void);
+> >
+> >  /* Suspend and resume console messages over PM events */
+> >  extern void suspend_console(void);
+> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > index a7320f07689d..52b7a181b6d8 100644
+> > --- a/kernel/power/Kconfig
+> > +++ b/kernel/power/Kconfig
+> > @@ -207,6 +207,15 @@ config PM_SLEEP_DEBUG
+> >         def_bool y
+> >         depends on PM_DEBUG && PM_SLEEP
+> >
+> > +config PM_SLEEP_MONITOR
+> > +       bool "Linux kernel suspend/resume process monitor"
+> > +       depends on PM_SLEEP
+> > +       help
+> > +       This option will enable suspend/resume monitor to prevent device
+> > +       stuck during suspend/resume process. Suspend timeout handler  
+> will
+> > +       dump disk sleep task at first round timeout and trigger kernel  
+> panic
+> > +       at second round timeout. The default timer for each round is 30  
+> seconds.
+> > +
 
-Lukasz would you be able to re-spin this with a first patch that allows
-the EM provider to specify a unit? And perhaps we could use Doug's idea
-for the sustained power DT binding and allow specifying a unit
-explicitly there too, so we're sure to compare apples with apples.
+> The facility associated with the Kconfig entry right below is supposed
+> to do exactly the same thing.
 
-Thanks,
-Quentin
+> What's the reason to add another one?  What is missing?
+
+
+
+> >  config DPM_WATCHDOG
+> >         bool "Device suspend/resume watchdog"
+> >         depends on PM_DEBUG && PSTORE && EXPERT
+
+Because we found some suspend hand issue that cannot be detected by
+"CONFIG_DPM_WATCHDOG" (which is focus on device PM).
+Our suspend timeout monitor can cover PM core and Device PM hang issues.
+
+Thank you,
+Joseph.
