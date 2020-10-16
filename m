@@ -2,74 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F07290970
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 18:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4971F29097F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 18:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409799AbgJPQNY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 12:13:24 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:45459 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2409711AbgJPQNY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 12:13:24 -0400
-Received: by mail-ot1-f67.google.com with SMTP id f37so2850888otf.12;
-        Fri, 16 Oct 2020 09:13:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EPxHTzD8/iEuAZA1Yzf7Cm0jlzb7zJo79bF0l0zeZDY=;
-        b=cGIBYihQDv0dazAJJWzUn06m4XgNn0zGfB0mMFln5Wq+3PKqiD2ZrblQQm6P224oJU
-         MwsPHT17FI9EyeQg6L4xDX7kAy8AULdhgkW9rDGj4YkNQtMKBuAczdO4O+uAw6v93uu4
-         vIrH8vO1aTWtmD671rjanPTLtU7bKwO2Dg3di7psfSp6rXa9uF4u7G1IYiH+Fzjvu8yP
-         OXkIWLfkACnIo73wXof6iIpIKNCwRI95qFLTYGeARaR13Svn6aFBZC5QqQVs1BN0sY95
-         pR4qVesIYiMKPKybOdr65h4AcYCQ/TKGEyog1s2SDzDO612jtBQN8l7i6FvbflsAwKQU
-         Kajw==
-X-Gm-Message-State: AOAM530WIYotap3r7bl5hJ/TL15k720P30Il1OqZYtKKrNDu7ac8dWyH
-        47RqBeXEhrEKGOS6ym5pLshblw49q820Xzmhovc=
-X-Google-Smtp-Source: ABdhPJwWFowQRtA3kR7/LGCeiMdlojlTu8g3NXr9PZ9lxOYAyL76FVxfg1wTtA9atqz+K9rY1/X5vuPG0S9/Lj7f46I=
-X-Received: by 2002:a9d:734f:: with SMTP id l15mr3344092otk.260.1602864801772;
- Fri, 16 Oct 2020 09:13:21 -0700 (PDT)
+        id S2409837AbgJPQQU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 12:16:20 -0400
+Received: from m42-4.mailgun.net ([69.72.42.4]:41852 "EHLO m42-4.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2409913AbgJPQQU (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Oct 2020 12:16:20 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1602864979; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=cNo/m9caBnx/dcHtIvvDESgSyJ2dDDvT47/EEbF5F0I=; b=nSIZrVIEMuArWZdfoeGR+TjKmhDMfvWadDYghY/dRt2MA+wovw52UEoVAY6717BJFZpD53Vr
+ baksYOwqyhKz2gQn9cvsawMvqzqN0zciqjGykFCT/HASeY4GN+YK15cZMI3xXZ9UdH7o8IA2
+ zZ8fUM1LiIulH0u5oGhpwab7A8k=
+X-Mailgun-Sending-Ip: 69.72.42.4
+X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 5f89c752856d9308b5e7cb87 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Oct 2020 16:16:18
+ GMT
+Sender: ilina=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 63BAEC433FF; Fri, 16 Oct 2020 16:16:18 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from codeaurora.org (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: ilina)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 290B5C433FF;
+        Fri, 16 Oct 2020 16:16:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 290B5C433FF
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
+From:   Lina Iyer <ilina@codeaurora.org>
+To:     rjw@rjwysocki.net, ulf.hansson@linaro.org, linux-pm@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, Lina Iyer <ilina@codeaurora.org>
+Subject: [PATCH v4] PM / Domains: enable domain idle state accounting
+Date:   Fri, 16 Oct 2020 10:16:00 -0600
+Message-Id: <20201016161600.26196-1-ilina@codeaurora.org>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-References: <20201015204722.18764-1-ilina@codeaurora.org> <CAJZ5v0ifjHRomAxEKTW5z+VEZLGeM5MN-NcRxUUgrFQvtB0seQ@mail.gmail.com>
- <20201016160724.GB16756@codeaurora.org>
-In-Reply-To: <20201016160724.GB16756@codeaurora.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 16 Oct 2020 18:13:10 +0200
-Message-ID: <CAJZ5v0gBb91rFHne26zLrMPOKcHTmcDERBRLiPAuVJo+H6BAzA@mail.gmail.com>
-Subject: Re: [PATCH v3] PM / Domains: enable domain idle state accounting
-To:     Lina Iyer <ilina@codeaurora.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 16, 2020 at 6:07 PM Lina Iyer <ilina@codeaurora.org> wrote:
->
-> On Fri, Oct 16 2020 at 09:55 -0600, Rafael J. Wysocki wrote:
-> >On Thu, Oct 15, 2020 at 10:47 PM Lina Iyer <ilina@codeaurora.org> wrote:
-> >>
-> >> To enable better debug of PM domains, let's keep a track of the success
-> >> and rejections in entering each domain idle state.
-> >>
-> >> This statistics is exported in debugfs when reading the idle_states
-> >> node, associated with each PM domain.
-> >>
-> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
-> >> ---
-> >> Changes in v3:
-> >>         - Rebased on top of mainline
-> >
-> >I still needed to rebase it to apply it to my tree, so please double
-> >check the result in the bleeding-edge branch.
-> >
-> Okay, will rebase on that branch and post shortly.
+To enable better debug of PM domains, let's keep a track of the success
+and rejections in entering each domain idle state.
 
-No need, it's been applied already, just please check the result in
-bleeding-edge.
+This statistics is exported in debugfs when reading the idle_states
+node, associated with each PM domain.
 
-Thanks!
+Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+---
+Changes in v4:
+	- Rebase on top of bleeding-edge
+---
+ drivers/base/power/domain.c | 10 +++++++---
+ include/linux/pm_domain.h   |  2 ++
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 05bb4d4401b2..9c9a1d5fb07a 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -550,11 +550,14 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+ 		return -EBUSY;
+ 
+ 	ret = _genpd_power_off(genpd, true);
+-	if (ret)
++	if (ret) {
++		genpd->states[genpd->state_idx].rejected++;
+ 		return ret;
++	}
+ 
+ 	genpd->status = GENPD_STATE_OFF;
+ 	genpd_update_accounting(genpd);
++	genpd->states[genpd->state_idx].usage++;
+ 
+ 	list_for_each_entry(link, &genpd->child_links, child_node) {
+ 		genpd_sd_counter_dec(link->parent);
+@@ -2923,7 +2926,7 @@ static int idle_states_show(struct seq_file *s, void *data)
+ 	if (ret)
+ 		return -ERESTARTSYS;
+ 
+-	seq_puts(s, "State          Time Spent(ms)\n");
++	seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
+ 
+ 	for (i = 0; i < genpd->state_count; i++) {
+ 		ktime_t delta = 0;
+@@ -2935,7 +2938,8 @@ static int idle_states_show(struct seq_file *s, void *data)
+ 
+ 		msecs = ktime_to_ms(
+ 			ktime_add(genpd->states[i].idle_time, delta));
+-		seq_printf(s, "S%-13i %lld\n", i, msecs);
++		seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
++			      genpd->states[i].usage, genpd->states[i].rejected);
+ 	}
+ 
+ 	genpd_unlock(genpd);
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 66f3c5d64d81..fb28320b1def 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -82,6 +82,8 @@ struct genpd_power_state {
+ 	s64 power_off_latency_ns;
+ 	s64 power_on_latency_ns;
+ 	s64 residency_ns;
++	u64 usage;
++	u64 rejected;
+ 	struct fwnode_handle *fwnode;
+ 	ktime_t idle_time;
+ 	void *data;
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
