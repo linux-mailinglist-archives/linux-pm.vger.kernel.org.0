@@ -2,105 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7813A290711
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 16:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A80D29071B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 16:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406693AbgJPOVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 10:21:38 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:44892 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406666AbgJPOVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 10:21:38 -0400
-Received: by mail-oi1-f195.google.com with SMTP id x62so2581518oix.11;
-        Fri, 16 Oct 2020 07:21:36 -0700 (PDT)
+        id S2406887AbgJPO0U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 10:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390724AbgJPO0T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 10:26:19 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C02C061755;
+        Fri, 16 Oct 2020 07:26:18 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x7so3174037wrl.3;
+        Fri, 16 Oct 2020 07:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=RpHL2pmcG7XNMxRENeUpmnEYfg0F72pinXyJP1jJFB8=;
+        b=SmmMkUw2n6WZdR0N52P05/GmD5Oo5yyLda9sROnFISetU7nBx+EL+EYbxviRgOYD4w
+         XXlwaA4lzppI5vziBVE0+ISQVMnjzRMJe4pyVIx451NhcPj5nGB6XdPYKZbowidlCbQJ
+         0FjmiiPw8sWlNkZvDv58qzOIBsHuvsqPhQX6GVy18VygS/1rVJ+99xlMo9BSkWf/dpR1
+         xAtIIgx3m+Z8Z7FaxZpl6VmYO2MWNsfvOdO9R6VU0SA8zi+NpvAMkmz2eiN3YIfvAqkl
+         aMOtE++fnAt0vzpl4OjbjjtAHZkzyCwmt1cfMr4aF/P5Z/ym4sTo8/wYAJcR9x+1gn50
+         brhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3+Msx894Km+mStI8UCb+zmDoBuIzSy5hxYPbjtCgtYo=;
-        b=RvKeyIhW3I+bMdVxmpMTTBw1DHnLK7AQk6O0TX5htnWfFBT74y28Cu9Qa2V1LEqCOj
-         cy7o/CQI/Hbe2W86DxPbqSOuEXV+wcx8hnKwqClHaOWS5xGBgf5wN0SlQ0TATGe2OIT+
-         a5tf6M2xO22eZCP5oLO1cDiz0PFc14rklCYfA2ipV4YPKtfGwc4AvSdsgUYVi84lvAM0
-         jofu2TIYQJKV0wdrzUk4ID9K7QLHo1yB8I5DvCURrNRZqm0Gjb1jKcnmRRbc1w16FSSr
-         wXgENmeiIpPkN1CX5fD6ZMtwt9m3jJFOnn3TsgaW/EePcrBhDgCrBGObw/GbyTWxNHk+
-         LMhg==
-X-Gm-Message-State: AOAM533ZX4kXNbrV+FqDAsMEePy3wI1+hMoyDkZHOIhpffQPayLPmjSv
-        Yh7QF9AJSvLGcEgZWPa7VmzbsSziKJJ/aKb2tcw=
-X-Google-Smtp-Source: ABdhPJzUaqOCepfqqlp3XTiV86lgRQAGCRVZbjSYBQ6ueBWwAT7o0VYma1/tzOUrqQitO3OjUvbD5bL3BVao6/lPsJg=
-X-Received: by 2002:aca:fd52:: with SMTP id b79mr2648814oii.69.1602858096113;
- Fri, 16 Oct 2020 07:21:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <37c3f1f76c055b305d1bba2c2001ac5b1d7a9b5f.1602565964.git.viresh.kumar@linaro.org>
-In-Reply-To: <37c3f1f76c055b305d1bba2c2001ac5b1d7a9b5f.1602565964.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 16 Oct 2020 16:21:25 +0200
-Message-ID: <CAJZ5v0iYWf=SFnVeVcrWpD40vR+axdX9NrXxftdVH4PDeiNz7g@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Improve code around unlisted freq check
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Rafael Wysocki <rjw@rjwysocki.net>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=RpHL2pmcG7XNMxRENeUpmnEYfg0F72pinXyJP1jJFB8=;
+        b=Bl8aPoggZKv/ivcnBBKM3YkO0nwyYILEYzzivkwboix61zPYx9eNu6MMIYE8M6tSBI
+         FERsrw1PyTMckCOVLYnVl7QffY1ZvLpxv18cBhuvdRWudm09L5IAg6t9WMHtxJa0PCVw
+         kYlths6ODhFAYE3soBEjfHPNDstDE9HSN+zXZuBh8Hrq1T4170IBm2dlgmhQvLeag/hs
+         ECG9Yu9Jt424yu9L/WFLuRuQQyO6TseUA4mq96zbr1bbd61yoeCgbUBlXAVPK/8Hekwr
+         euTTiClZ/MOWJZS2GS9BLwT1rVNN8rxngqPd8GHOvhGM9zSkRjX+ZLOURspFjucmmoYl
+         m13Q==
+X-Gm-Message-State: AOAM531kIWpzoqSrj05bWQAzZRv8GhWZIH0+h3UYmOx6eRC9DnEvNtpg
+        pUpgrmu4L8WpszavYd0X53o=
+X-Google-Smtp-Source: ABdhPJxOXM7pkhmb/DdXwtIspFFXCqiiNtkftB3jeaUYVxEHwrZdhEZr99bZiJuOICg0fa6LMZ3f6g==
+X-Received: by 2002:adf:ed07:: with SMTP id a7mr4443771wro.326.1602858376481;
+        Fri, 16 Oct 2020 07:26:16 -0700 (PDT)
+Received: from pce.localnet (host-80-117-125-178.retail.telecomitalia.it. [80.117.125.178])
+        by smtp.gmail.com with ESMTPSA id i33sm3823963wri.79.2020.10.16.07.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Oct 2020 07:26:15 -0700 (PDT)
+From:   Elia Devito <eliadevito@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sumit Gupta <sumitg@nvidia.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mark Pearson <mpearson@lenovo.com>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Benjamin Berg <bberg@redhat.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+Subject: Re: [RFC] Documentation: Add documentation for new performance_profile sysfs class (Also Re: [PATCH 0/4] powercap/dtpm: Add the DTPM framework)
+Date:   Fri, 16 Oct 2020 16:26:13 +0200
+Message-ID: <4600468.GXAFRqVoOG@pce>
+In-Reply-To: <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org> <CAJZ5v0iWmmu5WV7cX7uNb61NMYQ7s0dnhg1K+T0x90b3sBfU9w@mail.gmail.com> <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 7:12 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> The cpufreq core checks if the frequency programmed by the bootloaders
-> is not listed in the freq table and programs one from the table in such
-> a case. This is done only if the driver has set the
-> CPUFREQ_NEED_INITIAL_FREQ_CHECK flag.
->
-> Currently we print two separate messages, with almost the same content,
-> and do this with a pr_warn() which may be a bit too much as the driver
-> only asked us to check this as it expected this to be the case. Lower
-> down the severity of the print message by switching to pr_info() instead
-> and print a single message only.
->
-> Reported-by: Sumit Gupta <sumitg@nvidia.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 2ea245a6c0c0..99864afac272 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1461,14 +1461,13 @@ static int cpufreq_online(unsigned int cpu)
->          */
->         if ((cpufreq_driver->flags & CPUFREQ_NEED_INITIAL_FREQ_CHECK)
->             && has_target()) {
-> +               unsigned int old_freq = policy->cur;
-> +
->                 /* Are we running at unknown frequency ? */
-> -               ret = cpufreq_frequency_table_get_index(policy, policy->cur);
-> +               ret = cpufreq_frequency_table_get_index(policy, old_freq);
->                 if (ret == -EINVAL) {
-> -                       /* Warn user and fix it */
-> -                       pr_warn("%s: CPU%d: Running at unlisted freq: %u KHz\n",
-> -                               __func__, policy->cpu, policy->cur);
-> -                       ret = __cpufreq_driver_target(policy, policy->cur - 1,
-> -                               CPUFREQ_RELATION_L);
-> +                       ret = __cpufreq_driver_target(policy, old_freq - 1,
-> +                                                     CPUFREQ_RELATION_L);
->
->                         /*
->                          * Reaching here after boot in a few seconds may not
-> @@ -1476,8 +1475,8 @@ static int cpufreq_online(unsigned int cpu)
->                          * frequency for longer duration. Hence, a BUG_ON().
->                          */
->                         BUG_ON(ret);
-> -                       pr_warn("%s: CPU%d: Unlisted initial frequency changed to: %u KHz\n",
-> -                               __func__, policy->cpu, policy->cur);
-> +                       pr_info("%s: CPU%d: Running at unlisted initial frequency: %u KHz, changing to: %u KHz\n",
-> +                               __func__, policy->cpu, old_freq, policy->cur);
->                 }
->         }
->
-> --
+Hi,
 
-Applied as 5.10-rc material, thanks!
+In data venerd=EC 16 ottobre 2020 13:10:54 CEST, Hans de Goede ha scritto:
+> <note folding the 2 threads we are having on this into one, adding every =
+one
+> from both threads to the Cc>
+>=20
+> Hi,
+>=20
+> On 10/14/20 5:42 PM, Rafael J. Wysocki wrote:
+> > On Wed, Oct 14, 2020 at 4:06 PM Hans de Goede <hdegoede@redhat.com> wro=
+te:
+> >> On 10/14/20 3:33 PM, Rafael J. Wysocki wrote:
+> <snip>
+>=20
+> >>> First, a common place to register a DPTF system profile seems to be
+> >>> needed and, as I said above, I wouldn't expect more than one such
+> >>> thing to be present in the system at any given time, so it may be
+> >>> registered along with the list of supported profiles and user space
+> >>> will have to understand what they mean.
+> >>=20
+> >> Mostly Ack, I would still like to have an enum for DPTF system
+> >> profiles in the kernel and have a single piece of code map that
+> >> enum to profile names. This enum can then be extended as
+> >> necessary, but I want to avoid having one driver use
+> >> "Performance" and the other "performance" or one using
+> >> "performance-balanced" and the other "balanced-performance", etc.
+> >>=20
+> >> With the goal being that new drivers use existing values from
+> >> the enum as much as possible, but we extend it where necessary.
+> >=20
+> > IOW, just a table of known profile names with specific indices assigned=
+ to
+> > them.
+> Yes.
+>=20
+> > This sounds reasonable.
+> >=20
+> >>> Second, irrespective of the above, it may be useful to have a
+> >>> consistent way to pass performance-vs-power preference information
+> >>> from user space to different parts of the kernel so as to allow them
+> >>> to adjust their operation and this could be done with a system-wide
+> >>> power profile attribute IMO.
+> >>=20
+> >> I agree, which is why I tried to tackle both things in one go,
+> >> but as you said doing both in 1 API is probably not the best idea.
+> >> So I believe we should park this second issue for now and revisit it
+> >> when we find a need for it.
+> >=20
+> > Agreed.
+> >=20
+> >> Do you have any specific userspace API in mind for the
+> >> DPTF system profile selection?
+> >=20
+> > Not really.
+>=20
+> So before /sys/power/profile was mentioned, but that seems more like
+> a thing which should have a set of fixed possible values, iow that is
+> out of scope for this discussion.
+>=20
+> Since we all seem to agree that this is something which we need
+> specifically for DPTF profiles maybe just add:
+>=20
+> /sys/power/dptf_current_profile    (rw)
+> /sys/power/dptf_available_profiles (ro)
+>=20
+> (which will only be visible if a dptf-profile handler
+>  has been registered) ?
+>=20
+> Or more generic and thus better (in case other platforms
+> later need something similar) I think, mirror the:
+>=20
+> /sys/bus/cpu/devices/cpu#/cpufreq/energy_performance_* bits
+> for a system-wide energy-performance setting, so we get:
+>=20
+> /sys/power/energy_performance_preference
+> /sys/power/energy_performance_available_preferences
+>=20
+> (again only visible when applicable) ?
+>=20
+> I personally like the second option best.
+>=20
+> Regards,
+>=20
+> Hans
+
+between the two, the second seems to me more appropriate.
+Considering that the various profiles interact with thermal behaviors what =
+do=20
+you think of something like:
+
+/sys/power/thermal_profile_available_profiles
+/sys/power/thermal_profile_profile
+
+Regards,
+Elia
+
+
+
