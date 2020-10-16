@@ -2,177 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4A7290660
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 15:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C75290672
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 15:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408138AbgJPNdk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 09:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408036AbgJPNdi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 09:33:38 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2818AC0613D3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:33:37 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id q16so1457332pfj.7
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 06:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:mime-version:message-id:date:subject:from:to:cc;
-        bh=KcIutrRAI690Kuxs6Ggg953kyLX5Sg3gj/e4pIHhVgA=;
-        b=Me+/3P5ngmHekvdLvG/5LNWF9JOFgy0gp1tj8Qzwpw/LCk9rEUIDm6FeFA/KulV1uK
-         hehBlKdcquNszWV2o1IvuuzYXjoCGuyPH2S9omIAaImZeFCtufZg4u7bWVamKHnTnLgO
-         T7CIpFgFIBhnyR1XPQ5jJBxz2GnBcWKr6ygAlemMfednCbBzwBhpDQInJyZsANzS7GEg
-         s0l3obUarohtvhThj7wOmTc8nk6gpKnQ8MfIlMOa8P8ni8Yk81QHtYmSZQfhkZyYu3LO
-         p9eaqzb6GSYlT4C0q5LyHZ2iXuTUM8s6zAOwVeSawIZdmThX9wrhpds7UlBvXb4Efe9Q
-         6sKw==
+        id S2404478AbgJPNlZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 09:41:25 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44160 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395255AbgJPNlY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 09:41:24 -0400
+Received: by mail-ot1-f66.google.com with SMTP id e20so2386768otj.11;
+        Fri, 16 Oct 2020 06:41:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:mime-version:message-id:date:subject:from
-         :to:cc;
-        bh=KcIutrRAI690Kuxs6Ggg953kyLX5Sg3gj/e4pIHhVgA=;
-        b=EtD25lRGEWW8Rq52MBUDJeXczgMygLmjvTbmTsq8mq6FfbMd+e5rpeO6J3bHqefNCF
-         niEngq6MAgXKW/0BsFlwPvzmXqOSqeM012I+YGic+3jy8sa+r4ADgQraeiur6qNqJXcp
-         qT/cAIUPnoFBUS9TQy7IsiNKiVjqLSMLXYh3NPZ/NMc7K9AYl/pf9f4p268bdac5sGe4
-         rHMu7ffcUbanWr1mWh64iUxonub18EpknqiVqKeYpYxMrFY52ifb95b9LHcY/E6BvKPU
-         dYsS92hBBruMnCjh5JyEEFkPYfae+81kG40PAh+hhUMIxPJ7dGJ0MYuxWue6dGkRSES0
-         nwIw==
-X-Gm-Message-State: AOAM533GB8yUF4HLAakwhjDDh4I/c6WYBuXRLAd5zOItHRiTrHhK0yRL
-        4onpV/lKTKdQSLdWaLUgU08lk8JBIJ+eg/f2
-X-Google-Smtp-Source: ABdhPJyDqt0Arf5tyMl1YZBfCGnMk0e7itWn7hCVqqkMfa88u0f/qFiKDj57Rz8Lbh9cZSoo+BJ2RJ8y1JC1eMj8
-Sender: "josephjang via sendgmr" 
-        <josephjang@josephjang-p920.ntc.corp.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZDw6us/ymT1w8JQKh1+hOfSJ0DL7eGX/CDAwjYTDpuA=;
+        b=RV+r8AtuKpgXZO5PeAulS/PYymXiWw0b8YEy33PGrz1NpFuDGctqsCo6gyk/7yQiD6
+         Zp1tkMKtrhiflQSDtmGAy6FWM2zlZctJmkn6Lzn1SdJt/LviO79fdS7NK+qHTEvaA1TV
+         ztqgBWA2wLiMmVmWreVoSezj+W3fx7oYP6/SHNARVlkDuBjAKSZ6EtV3dgdMcU8XX7/+
+         EVJzpy5xnI31cfmcoMtoNyAOYdO3VSJgJHRjMfN80uF23I7bBkpXIBwFctLOQqlv9qPX
+         Pyzru+h3zOQHfRAANm0ejYk2tGZ4mqgtuw6uhpW1LykD9QfrnNuShkGO3TjmqJlF/kXh
+         se+A==
+X-Gm-Message-State: AOAM532fBxB3fWSHNby5srQn/7OGM6rkU8hoWj3/+AAeEHd676KL91FX
+        h9UwWZp3JuQgiBJwjakKADYbFrbpUMDTbZG3GBM=
+X-Google-Smtp-Source: ABdhPJxRyuvIqMQV3+EzV/OlzhrdUcDEUgjwsCnM/euQIUfl0/FUTZF8o0wdgj3jbQU9AkFDtIC6FSFyxcs+3/xiEXc=
+X-Received: by 2002:a9d:ac9:: with SMTP id 67mr2703887otq.321.1602855683757;
+ Fri, 16 Oct 2020 06:41:23 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: from josephjang-p920.ntc.corp.google.com ([2401:fa00:fc:1:7220:84ff:fe09:41e0])
- (user=josephjang job=sendgmr) by 2002:a17:902:aa8b:b029:d3:b362:7936 with
- SMTP id d11-20020a170902aa8bb02900d3b3627936mr3905140plr.11.1602855216579;
- Fri, 16 Oct 2020 06:33:36 -0700 (PDT)
-Message-ID: <000000000000cfe69e05b1c9cf0e@google.com>
-Date:   Fri, 16 Oct 2020 13:33:36 +0000
-Subject: [PATCH] power: suspend: Add suspend timeout handler
-From:   <josephjang@google.com>
-To:     rafael@kernel.org, gregkh@linuxfoundation.org, rjw@rjwysocki.net,
-        pavel@ucw.cz, len.brown@intel.com, pmladek@suse.com,
-        sergey.senozhatsky@gmail.com, rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        jonglin@google.com, woodylin@google.com, markcheng@google.com,
-        josephjang@google.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <c3566d2b-3da1-917b-2df6-f7dcfb33c8ed@intel.com>
+ <20201006190322.GL3227@techsingularity.net> <25f31d3e-7a67-935f-93ba-32216a5084e2@intel.com>
+ <20201006211820.GN3227@techsingularity.net> <2382d796-7c2f-665e-9169-5cdc437bf34c@intel.com>
+ <20201008090909.GP3227@techsingularity.net> <dcf4266a-5769-8a6b-d8e1-e77553126861@intel.com>
+ <20201008173436.GQ3227@techsingularity.net> <f6b04376-4214-ff5d-1069-890449a923e2@intel.com>
+ <20201014223703.GT3227@techsingularity.net> <20201015183410.GU3227@techsingularity.net>
+In-Reply-To: <20201015183410.GU3227@techsingularity.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Oct 2020 15:41:12 +0200
+Message-ID: <CAJZ5v0jzZ6iQGYNnkgi-pPmdbq3aH+RoH+tBbEoBxFfmt_0MDg@mail.gmail.com>
+Subject: Re: ACPI _CST introduced performance regresions on Haswll
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Oct 15, 2020 at 8:34 PM Mel Gorman <mgorman@techsingularity.net> wrote:
+>
+> > Yes, it's well hidden but it's there. If the profile is made custom, then
+> > the p-states can be selected and "custom" default enables C6 but not C3
+> > (there is a note saying that it's not recommended for that CPU). If I
+> > then switch it back to the normal profile, the c-states are not restored
+> > so this is a one-way trip even if you disable the c-state in custom,
+> > reboot, switch back, reboot. Same if the machine is reset to "optimal
+> > default settings". Yey for BIOS developers.
 > >
-> > On Fri, Oct 16, 2020 at 3:22 PM <josephjang@google.com> wrote:
-> > >
-> > > Thank you Rafael's promptly response.
-> > >
-> > > > On Fri, Oct 16, 2020 at 5:51 AM Joseph Jang <josephjang@google.com>  
-> wrote:
-> > > > >
-> > > > > From: josephjang <josephjang@google.com>
-> > > > >
-> > > > > Add suspend timeout handler to prevent device stuck during  
-> suspend/
-> > > > > resume process. Suspend timeout handler will dump disk sleep task
-> > > > > at first round timeout and trigger kernel panic at second round  
-> timeout.
-> > > > > The default timer for each round is 30 seconds.
-> > > > >
-> > > > > Note: Can use following command to simulate suspend hang for  
-> testing.
-> > > > >     adb shell echo 1 > /sys/power/pm_hang
-> > > > >     adb shell echo mem > /sys/power/state
-> > > > > Signed-off-by: josephjang <josephjang@google.com>
-> > > > > ---
-> > > > >  include/linux/console.h |   1 +
-> > > > >  kernel/power/Kconfig    |   9 +++
-> > > > >  kernel/power/main.c     |  66 ++++++++++++++++
-> > > > >  kernel/power/suspend.c  | 162  
-> ++++++++++++++++++++++++++++++++++++++++
-> > > > >  kernel/printk/printk.c  |   5 ++
-> > > > >  5 files changed, 243 insertions(+)
-> > > > >
-> > > > > diff --git a/include/linux/console.h b/include/linux/console.h
-> > > > > index 0670d3491e0e..ac468c602c0b 100644
-> > > > > --- a/include/linux/console.h
-> > > > > +++ b/include/linux/console.h
-> > > > > @@ -192,6 +192,7 @@ static inline void console_sysfs_notify(void)
-> > > > >  { }
-> > > > >  #endif
-> > > > >  extern bool console_suspend_enabled;
-> > > > > +extern int is_console_suspended(void);
-> > > > >
-> > > > >  /* Suspend and resume console messages over PM events */
-> > > > >  extern void suspend_console(void);
-> > > > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> > > > > index a7320f07689d..52b7a181b6d8 100644
-> > > > > --- a/kernel/power/Kconfig
-> > > > > +++ b/kernel/power/Kconfig
-> > > > > @@ -207,6 +207,15 @@ config PM_SLEEP_DEBUG
-> > > > >         def_bool y
-> > > > >         depends on PM_DEBUG && PM_SLEEP
-> > > > >
-> > > > > +config PM_SLEEP_MONITOR
-> > > > > +       bool "Linux kernel suspend/resume process monitor"
-> > > > > +       depends on PM_SLEEP
-> > > > > +       help
-> > > > > +       This option will enable suspend/resume monitor to prevent  
-> device
-> > > > > +       stuck during suspend/resume process. Suspend timeout  
-> handler
-> > > > will
-> > > > > +       dump disk sleep task at first round timeout and trigger  
-> kernel
-> > > > panic
-> > > > > +       at second round timeout. The default timer for each round  
-> is 30
-> > > > seconds.
-> > > > > +
-> > >
-> > > > The facility associated with the Kconfig entry right below is  
-> supposed
-> > > > to do exactly the same thing.
-> > >
-> > > > What's the reason to add another one?  What is missing?
-> > >
-> > >
-> > >
-> > > > >  config DPM_WATCHDOG
-> > > > >         bool "Device suspend/resume watchdog"
-> > > > >         depends on PM_DEBUG && PSTORE && EXPERT
-> > >
-> > > Because we found some suspend hand issue that cannot be detected by
-> > > "CONFIG_DPM_WATCHDOG" (which is focus on device PM).
+> > This means I have a limited number of attempts to do something about
+> > this. 2 machines can no longer reproduce the problem reliably.
 > >
-> > What's that issue?
-> >
-> > > Our suspend timeout monitor can cover PM core and Device PM hang  
-> issues.
-> >
-> > Then I'd suggest to extend the existing watchdog instead of adding a
-> > whole new implementation.
+>
+> Turns out I didn't even have that. On another machine (same model,
+> same cpu, different BIOS that cannot be updated), enabling the C6 state
+> still did not enable it on boot and dmesg complained about CST not being
+> usable. This is weird because one would expect that if CST was unusable
+> that it would be the same as use_acpi == false.
+>
+> This could potentially be if the ACPI tables are unsuitable due to bad
+> bad FFH information for a lower c-state. If _CST is not found or usable,
+> should acpi_state_table.count be reset to go back to the old behaviour?
 
+Yes, it should, although I would reset it in intel_idle_cst_usable()
+right away before returning 'false'.
 
-Since kernel/power/suspend.c doesn't need "struct device *dev" like  
-following.
-Can we create a new suspend_timer to cover PM core and Device PM hang  
-issues?
+I can send a patch to do the above or please submit the one below as
+it works too.
 
-/**
-  * dpm_watchdog_set - Enable pm watchdog for given device.
-  * @wd: Watchdog. Must be allocated on the stack.
-  * @dev: Device to handle.
-  */
-static void dpm_watchdog_set(struct dpm_watchdog *wd, struct device *dev)
-{
-	struct timer_list *timer = &wd->timer;
-
-	wd->dev = dev;
-	wd->tsk = current;
-...
-
-
-
-Thank you,
-Joseph.
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 13600c403035..3b84f8631b40 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1261,6 +1261,7 @@ static bool intel_idle_acpi_cst_extract(void)
+>                 return true;
+>         }
+>
+> +       acpi_state_table.count = 0;
+>         pr_debug("ACPI _CST not found or not usable\n");
+>         return false;
+>  }
+>
+> --
