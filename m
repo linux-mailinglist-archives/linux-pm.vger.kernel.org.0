@@ -2,200 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E294290B33
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 20:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B678290B37
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 20:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391494AbgJPSQr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 14:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
+        id S2391549AbgJPSRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 14:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391390AbgJPSQr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 14:16:47 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38878C061755
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:16:47 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id f10so3255366otb.6
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:16:47 -0700 (PDT)
+        with ESMTP id S2391441AbgJPSRc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 14:17:32 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB66EC061755
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:17:31 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id a16so1879663qtj.7
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 11:17:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=lXUFwXy4CvWitPRBtcqz4P6w54dAmXcel3/G3PMWxJk=;
-        b=W5g+DZ0Y+oLih8JHD8yavPz/uC0IhD0zJoUh59V8GVOd6SaaZhHBMLTt5ePflQ91pd
-         /1kUpypg2gwGTndoH0SOMQ4qGBOfD1mSG1DMPuGMWpbezFoZsdHnDTHT/Upbey6/L7Kz
-         3GbgLp8aWQrW9HWuXCtjyFqQLxE89a5b7wnqwGUQYZLS+4Jh5eLuKFL8LKEBgTyCo33S
-         U3YHhKl8uN7kEOqUvYujVmRpHlbqNeh6F5yC2ElknhcZQYLtsmAaIwLgKodysE0Y41X3
-         0qolVLm8P4JKYAIGBsu92Ii6hNPuaG9/tQM1oo7Wn8aGOXh9DQEX2sR00NElZLhkt2Nv
-         BY7w==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:cc;
+        bh=jSjH1eyM8iVzeEs2L9+1VUmTOGY9+1KpajutAHg/TE8=;
+        b=stpM8PVUNvapHN5s3GE6OEHXwbzMr7MaqXEB3iezjKNeivnwwyNR3KGpmNu6x4y9yU
+         UswZlo7ZUSX34RMC/ZwjPm5rE+hc8UrG5+UDizTp0RdKJClCXsISUAO1ZWr6Z3Pcturf
+         g2f0IVLQ7ftWZn039a+ocgXPaPqzGOuynE7yaH8fxx1W77dGedK9ar/lZj2jMybL3EQK
+         avRl4dUR7bdVCxMwyfRka2vNbRH8dUOULVcA18YIpMqx8hjQ+ygk8+DrPv6oNRDiis2d
+         sKS/ToQvqYgpb+MRvnTt/hib+RFrcWyB1a0BZUN45Qxg8l9OnQeTKrrEE2dl2o0pCpQh
+         L2hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=lXUFwXy4CvWitPRBtcqz4P6w54dAmXcel3/G3PMWxJk=;
-        b=TtIRXrSsLtM2n+qZNgSDci1fnORIv9k1856pARr1YhRArLhPbUNV722r6cZ4nEYbqA
-         kboQsiYWKsl2F5JEwqx6R3pTIjpQgnJglIWf/YGf1pGAQpUtrOJWeEI3hIlhNGlz+MqL
-         2jAryurwLMHTXCEXoh4rkS3xRaebNIu0wLHVCHN47JMrWa3ZTzWuglpCfDOYxYUQ5Zw+
-         y+6Ne6osn58BR5pGKt0m8hOgRVpwaqY73v0s6KqI/SAr8hg4YFZWVVHlQFjz2t9pP9Dg
-         wI+0OIdW8ZPJRR2YI3f8KB2EiclwV7LXkxPHVZCvnOI3ljvWLwdCCbvJz3JO7upBv2gH
-         DllQ==
-X-Gm-Message-State: AOAM531VBNWa+M/EdTxrKgjsnYX+NLL+aILJKGK+XxWeGCY/xAtqJSNp
-        Yq1QGctPQ7n3Cqu0JaVmFspGLA==
-X-Google-Smtp-Source: ABdhPJxMlYFEmvPd/oJ+AQMXJK2Q7X41clGIcOfyf7fGkqn3XjCTTzI8bIyIQwbfPa70i7PTr009ZA==
-X-Received: by 2002:a9d:7315:: with SMTP id e21mr3387087otk.372.1602872206412;
-        Fri, 16 Oct 2020 11:16:46 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e30sm1173034otf.49.2020.10.16.11.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 11:16:45 -0700 (PDT)
-Date:   Fri, 16 Oct 2020 13:11:35 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Nishanth Menon <nm@ti.com>, linux-pm@vger.kernel.org,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Tony Lindgren <tony@atomide.com>,
-        Andy Gross <agross@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kevin Hilman <khilman@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/4] power: avs: qcom-cpr: Move the driver to the qcom
- specific drivers
-Message-ID: <20201016181135.GB6705@builder.lan>
-References: <20201006160516.319830-1-ulf.hansson@linaro.org>
- <20201006160516.319830-2-ulf.hansson@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201006160516.319830-2-ulf.hansson@linaro.org>
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:cc;
+        bh=jSjH1eyM8iVzeEs2L9+1VUmTOGY9+1KpajutAHg/TE8=;
+        b=BpPNzPRaRTzDZTQkYXIm84INP3lcQw/wPWBl9Bw7qqUKw87vmOETalBoiZaZ6upvP9
+         QHntUkob4jb7qXqIQAavAenMsAVsN2P333LDRDVuxIP6J3d+LfVafdvhQE9V5I4wxhW7
+         JMq+TwBe99RgZZzfRrwW3IuJwEaPqOHRmYu6Z7Jel9lPnT6qbkGllOmXiTfTUme+UO7L
+         VtKS8NQU9H/CPmIPRr8yGwBAVJjv/1MsScWnLd80OHdTVPnGxLGrKJf5QA/SURyhOU75
+         GNil7iMiNdLGR33Rhd/CvusqqJBtP5qMHOdQnhNBIVr6cG+XuFfEVO7tP4LqFEa5NJkQ
+         1jzw==
+X-Gm-Message-State: AOAM531Ad9NHkDpf2ASyyblCc2WRtdm5m+k9EQS4wBKQfXvxhbT+bfaE
+        1xy6KCEsxheVvwgzkTDyaWcZyf4=
+X-Google-Smtp-Source: ABdhPJwBwRGWQ8hx/LhLhBXqOKsJPOZy8AYuESOLuGtz5uVcUy5TNC7Rpt5+0cDqhHwQ1UC00IuKzzA=
+Sender: "wvw via sendgmr" <wvw@wvw-pc.mtv.corp.google.com>
+X-Received: from wvw-pc.mtv.corp.google.com ([2620:15c:211:1:f693:9fff:fef4:4f9b])
+ (user=wvw job=sendgmr) by 2002:ad4:45ec:: with SMTP id q12mr5445691qvu.33.1602872250940;
+ Fri, 16 Oct 2020 11:17:30 -0700 (PDT)
+Date:   Fri, 16 Oct 2020 11:17:22 -0700
+In-Reply-To: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
+Message-Id: <20201016181722.884812-1-wvw@google.com>
+Mime-Version: 1.0
+References: <CAGXk5yoNxZBD9gX-8RvtsqAwB4rO=hFQKBewFhOGoMO171aJVA@mail.gmail.com>
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
+Subject: [PATCH] sched: cpufreq_schedutil: restore cached freq when next_f is
+ not changed
+From:   Wei Wang <wvw@google.com>
+Cc:     wei.vince.wang@gmail.com, viresh.kumar@linaro.org,
+        qperret@google.com, rafael@kernel.org, Wei Wang <wvw@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 06 Oct 11:05 CDT 2020, Ulf Hansson wrote:
+We have the raw cached freq to reduce the chance in calling cpufreq
+driver where it could be costly in some arch/SoC.
 
-> The avs drivers are all SoC specific drivers that doesn't share any code.
-> Instead they are located in a directory, mostly to keep similar
-> functionality together. From a maintenance point of view, it makes better
-> sense to collect SoC specific drivers like these, into the SoC specific
-> directories.
-> 
-> Therefore, let's move the qcom-cpr driver to the qcom directory.
-> 
-> Cc: Niklas Cassel <nks@flawful.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Currently, the raw cached freq will be reset when next_f is changed for
+correctness. This patch changes it to maintain the cached value instead
+of dropping it to honor the purpose of the cached value.
 
-Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+This is adapted from https://android-review.googlesource.com/1352810/
 
-Regards,
-Bjorn
+Signed-off-by: Wei Wang <wvw@google.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> ---
->  MAINTAINERS                                      |  2 +-
->  drivers/power/avs/Kconfig                        | 16 ----------------
->  drivers/power/avs/Makefile                       |  1 -
->  drivers/soc/qcom/Kconfig                         | 16 ++++++++++++++++
->  drivers/soc/qcom/Makefile                        |  1 +
->  drivers/{power/avs/qcom-cpr.c => soc/qcom/cpr.c} |  0
->  6 files changed, 18 insertions(+), 18 deletions(-)
->  rename drivers/{power/avs/qcom-cpr.c => soc/qcom/cpr.c} (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4f1a56f6efaa..f51dd1944fe6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14337,7 +14337,7 @@ L:	linux-pm@vger.kernel.org
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.txt
-> -F:	drivers/power/avs/qcom-cpr.c
-> +F:	drivers/soc/qcom/cpr.c
->  
->  QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
->  M:	Ilia Lin <ilia.lin@kernel.org>
-> diff --git a/drivers/power/avs/Kconfig b/drivers/power/avs/Kconfig
-> index cdb4237bfd02..089b6244b716 100644
-> --- a/drivers/power/avs/Kconfig
-> +++ b/drivers/power/avs/Kconfig
-> @@ -12,22 +12,6 @@ menuconfig POWER_AVS
->  
->  	  Say Y here to enable Adaptive Voltage Scaling class support.
->  
-> -config QCOM_CPR
-> -	tristate "QCOM Core Power Reduction (CPR) support"
-> -	depends on POWER_AVS && HAS_IOMEM
-> -	select PM_OPP
-> -	select REGMAP
-> -	help
-> -	  Say Y here to enable support for the CPR hardware found on Qualcomm
-> -	  SoCs like QCS404.
-> -
-> -	  This driver populates CPU OPPs tables and makes adjustments to the
-> -	  tables based on feedback from the CPR hardware. If you want to do
-> -	  CPUfrequency scaling say Y here.
-> -
-> -	  To compile this driver as a module, choose M here: the module will
-> -	  be called qcom-cpr
-> -
->  config ROCKCHIP_IODOMAIN
->  	tristate "Rockchip IO domain support"
->  	depends on POWER_AVS && ARCH_ROCKCHIP && OF
-> diff --git a/drivers/power/avs/Makefile b/drivers/power/avs/Makefile
-> index 9007d05853e2..a1b8cd453f19 100644
-> --- a/drivers/power/avs/Makefile
-> +++ b/drivers/power/avs/Makefile
-> @@ -1,4 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-$(CONFIG_POWER_AVS_OMAP)		+= smartreflex.o
-> -obj-$(CONFIG_QCOM_CPR)			+= qcom-cpr.o
->  obj-$(CONFIG_ROCKCHIP_IODOMAIN)		+= rockchip-io-domain.o
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index 3dc3e3d61ea3..6a3b69b43ad5 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -26,6 +26,22 @@ config QCOM_COMMAND_DB
->  	  resource on a RPM-hardened platform must use this database to get
->  	  SoC specific identifier and information for the shared resources.
->  
-> +config QCOM_CPR
-> +	tristate "QCOM Core Power Reduction (CPR) support"
-> +	depends on ARCH_QCOM && HAS_IOMEM
-> +	select PM_OPP
-> +	select REGMAP
-> +	help
-> +	  Say Y here to enable support for the CPR hardware found on Qualcomm
-> +	  SoCs like QCS404.
-> +
-> +	  This driver populates CPU OPPs tables and makes adjustments to the
-> +	  tables based on feedback from the CPR hardware. If you want to do
-> +	  CPUfrequency scaling say Y here.
-> +
-> +	  To compile this driver as a module, choose M here: the module will
-> +	  be called qcom-cpr
-> +
->  config QCOM_GENI_SE
->  	tristate "QCOM GENI Serial Engine Driver"
->  	depends on ARCH_QCOM || COMPILE_TEST
-> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> index 93392d9dc7f7..ad675a6593d0 100644
-> --- a/drivers/soc/qcom/Makefile
-> +++ b/drivers/soc/qcom/Makefile
-> @@ -3,6 +3,7 @@ CFLAGS_rpmh-rsc.o := -I$(src)
->  obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
->  obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
->  obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
-> +obj-$(CONFIG_QCOM_CPR)		+= cpr.o
->  obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
->  obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
->  obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
-> diff --git a/drivers/power/avs/qcom-cpr.c b/drivers/soc/qcom/cpr.c
-> similarity index 100%
-> rename from drivers/power/avs/qcom-cpr.c
-> rename to drivers/soc/qcom/cpr.c
-> -- 
-> 2.25.1
-> 
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 5ae7b4e6e8d6..e254745a82cb 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -441,6 +441,7 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+ 	unsigned long util, max;
+ 	unsigned int next_f;
+ 	bool busy;
++	unsigned int cached_freq = sg_policy->cached_raw_freq;
+ 
+ 	sugov_iowait_boost(sg_cpu, time, flags);
+ 	sg_cpu->last_update = time;
+@@ -464,8 +465,8 @@ static void sugov_update_single(struct update_util_data *hook, u64 time,
+ 	if (busy && next_f < sg_policy->next_freq) {
+ 		next_f = sg_policy->next_freq;
+ 
+-		/* Reset cached freq as next_freq has changed */
+-		sg_policy->cached_raw_freq = 0;
++		/* Restore cached freq as next_freq has changed */
++		sg_policy->cached_raw_freq = cached_freq;
+ 	}
+ 
+ 	/*
+-- 
+2.29.0.rc1.297.gfa9743e501-goog
+
