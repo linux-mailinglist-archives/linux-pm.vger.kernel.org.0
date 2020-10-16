@@ -2,178 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A80D29071B
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 16:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 962EB290745
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 16:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406887AbgJPO0U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 10:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390724AbgJPO0T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 10:26:19 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C02C061755;
-        Fri, 16 Oct 2020 07:26:18 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id x7so3174037wrl.3;
-        Fri, 16 Oct 2020 07:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RpHL2pmcG7XNMxRENeUpmnEYfg0F72pinXyJP1jJFB8=;
-        b=SmmMkUw2n6WZdR0N52P05/GmD5Oo5yyLda9sROnFISetU7nBx+EL+EYbxviRgOYD4w
-         XXlwaA4lzppI5vziBVE0+ISQVMnjzRMJe4pyVIx451NhcPj5nGB6XdPYKZbowidlCbQJ
-         0FjmiiPw8sWlNkZvDv58qzOIBsHuvsqPhQX6GVy18VygS/1rVJ+99xlMo9BSkWf/dpR1
-         xAtIIgx3m+Z8Z7FaxZpl6VmYO2MWNsfvOdO9R6VU0SA8zi+NpvAMkmz2eiN3YIfvAqkl
-         aMOtE++fnAt0vzpl4OjbjjtAHZkzyCwmt1cfMr4aF/P5Z/ym4sTo8/wYAJcR9x+1gn50
-         brhw==
+        id S2408930AbgJPOfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 10:35:06 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39276 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408929AbgJPOfG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 10:35:06 -0400
+Received: by mail-oi1-f193.google.com with SMTP id c13so2660367oiy.6;
+        Fri, 16 Oct 2020 07:35:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RpHL2pmcG7XNMxRENeUpmnEYfg0F72pinXyJP1jJFB8=;
-        b=Bl8aPoggZKv/ivcnBBKM3YkO0nwyYILEYzzivkwboix61zPYx9eNu6MMIYE8M6tSBI
-         FERsrw1PyTMckCOVLYnVl7QffY1ZvLpxv18cBhuvdRWudm09L5IAg6t9WMHtxJa0PCVw
-         kYlths6ODhFAYE3soBEjfHPNDstDE9HSN+zXZuBh8Hrq1T4170IBm2dlgmhQvLeag/hs
-         ECG9Yu9Jt424yu9L/WFLuRuQQyO6TseUA4mq96zbr1bbd61yoeCgbUBlXAVPK/8Hekwr
-         euTTiClZ/MOWJZS2GS9BLwT1rVNN8rxngqPd8GHOvhGM9zSkRjX+ZLOURspFjucmmoYl
-         m13Q==
-X-Gm-Message-State: AOAM531kIWpzoqSrj05bWQAzZRv8GhWZIH0+h3UYmOx6eRC9DnEvNtpg
-        pUpgrmu4L8WpszavYd0X53o=
-X-Google-Smtp-Source: ABdhPJxOXM7pkhmb/DdXwtIspFFXCqiiNtkftB3jeaUYVxEHwrZdhEZr99bZiJuOICg0fa6LMZ3f6g==
-X-Received: by 2002:adf:ed07:: with SMTP id a7mr4443771wro.326.1602858376481;
-        Fri, 16 Oct 2020 07:26:16 -0700 (PDT)
-Received: from pce.localnet (host-80-117-125-178.retail.telecomitalia.it. [80.117.125.178])
-        by smtp.gmail.com with ESMTPSA id i33sm3823963wri.79.2020.10.16.07.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 07:26:15 -0700 (PDT)
-From:   Elia Devito <eliadevito@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mark Pearson <mpearson@lenovo.com>,
-        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mark Gross <mgross@linux.intel.com>,
-        Benjamin Berg <bberg@redhat.com>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>
-Subject: Re: [RFC] Documentation: Add documentation for new performance_profile sysfs class (Also Re: [PATCH 0/4] powercap/dtpm: Add the DTPM framework)
-Date:   Fri, 16 Oct 2020 16:26:13 +0200
-Message-ID: <4600468.GXAFRqVoOG@pce>
-In-Reply-To: <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
-References: <20201006122024.14539-1-daniel.lezcano@linaro.org> <CAJZ5v0iWmmu5WV7cX7uNb61NMYQ7s0dnhg1K+T0x90b3sBfU9w@mail.gmail.com> <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BMrhIZD6r0of3W5tstYF8ZNKDB8ambJy+gjTSmYvPiw=;
+        b=tDsZee+FToTzIQZopfaC5WJ7U+RVCu0+fSgWYrebLaMi4zX4VTerGAAOMxsG6t3yit
+         HTlH4za27Wg7acWlb70vcmNNXaPIeZ/zzLkMinKRY1mpjct12KsrlzunN7Ac3nD1wiAg
+         0mpvZI56VEiR+GRPM9PwSvMsoS/xrpnNmnXT+AksKqOsA+ojEb25k+sF1EUnslGShXQG
+         yqwZihx7iVwq10K5L2ukCZ0bZ1SLc8HPysoE+54w5mqJMzy1WWQZGcqnb9BX6U/KRzDF
+         ATKDUIAne+EX3w/WpTOUbXpMYK9/XOcR3xI8VI0wf299ZEp9yAazSYdFLZH/Yn/emtmV
+         7g2g==
+X-Gm-Message-State: AOAM532Dla5nAbPlVXc6sgB7gGPj+PTYNZPaaDMt/R/GCBIkbQIOSjZ1
+        FbVEgvGy88NjZKMQJQYNUQpS2Md7fRM9OBGvxWw=
+X-Google-Smtp-Source: ABdhPJzwektfZX7s7ICU25OD4YqiBH+zmoJaUe0za277AGueUQMCvay8xkoH5mOrl2rYdv/ZEubJfU9OxKvlIpnvPeE=
+X-Received: by 2002:aca:724a:: with SMTP id p71mr2681753oic.157.1602858905300;
+ Fri, 16 Oct 2020 07:35:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+References: <20201009033038.23157-1-yu.c.chen@intel.com>
+In-Reply-To: <20201009033038.23157-1-yu.c.chen@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Oct 2020 16:34:54 +0200
+Message-ID: <CAJZ5v0jcGWKz_LuWOaeZaNqJ0RX69Bw9wisZ=Ver7TKdJf8XNQ@mail.gmail.com>
+Subject: Re: [RFC][PATCH] cpufreq: intel_pstate: Delete intel_pstate sysfs if
+ failed to register the driver
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri, Oct 9, 2020 at 5:29 AM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> There is a corner case that if the intel_pstate driver failed to be
+> registered(might be due to invalid MSR access) and with the acpi_cpufreq
+> loaded, the intel_pstate sysfs might still be created, which makes the
+> user confusing(turbostat for example):
+>
+> grep . /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+> acpi-cpufreq
+>
+> grep . /sys/devices/system/cpu/intel_pstate/*
+> /sys/devices/system/cpu/intel_pstate/max_perf_pct:0
+> /sys/devices/system/cpu/intel_pstate/min_perf_pct:0
+> grep: /sys/devices/system/cpu/intel_pstate/no_turbo: Resource temporarily unavailable
+> grep: /sys/devices/system/cpu/intel_pstate/num_pstates: Resource temporarily unavailable
+> /sys/devices/system/cpu/intel_pstate/status:off
+> grep: /sys/devices/system/cpu/intel_pstate/turbo_pct: Resource temporarily unavailable
+>
+> The existing of intel_pstate sysfs does not mean that the intel_pstate driver
+> has been successfully loaded(for example, echo off to status), but the
+> intel_pstate sysfs should not co-exist when acpi-cpufreq is also present.
+> Fix this issue by deleting the intel_pstate sysfs if the driver failed
+> to be loaded during bootup.
+>
+> Reported-by: Wendy Wang <wendy.wang@intel.com>
+> Suggested-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 9a515c460a00..8c5f9680de83 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1420,6 +1420,26 @@ static void __init intel_pstate_sysfs_expose_params(void)
+>         }
+>  }
+>
+> +static void __init intel_pstate_sysfs_clean(void)
+> +{
+> +       if (!intel_pstate_kobject)
+> +               return;
+> +
+> +       sysfs_remove_group(intel_pstate_kobject, &intel_pstate_attr_group);
+> +
+> +       if (per_cpu_limits)
+> +               goto release_kobj;
+> +
+> +       sysfs_remove_file(intel_pstate_kobject, &max_perf_pct.attr);
+> +       sysfs_remove_file(intel_pstate_kobject, &min_perf_pct.attr);
+> +
+> +       if (x86_match_cpu(intel_pstate_cpu_ee_disable_ids))
+> +               sysfs_remove_file(intel_pstate_kobject, &energy_efficiency.attr);
+> +
+> +release_kobj:
+> +       kobject_put(intel_pstate_kobject);
+> +}
+> +
+>  static void intel_pstate_sysfs_expose_hwp_dynamic_boost(void)
+>  {
+>         int rc;
+> @@ -3063,8 +3083,10 @@ static int __init intel_pstate_init(void)
+>         mutex_lock(&intel_pstate_driver_lock);
+>         rc = intel_pstate_register_driver(default_driver);
+>         mutex_unlock(&intel_pstate_driver_lock);
+> -       if (rc)
+> +       if (rc) {
+> +               intel_pstate_sysfs_clean();
+>                 return rc;
+> +       }
+>
+>         if (hwp_active) {
+>                 const struct x86_cpu_id *id;
+> --
 
-In data venerd=EC 16 ottobre 2020 13:10:54 CEST, Hans de Goede ha scritto:
-> <note folding the 2 threads we are having on this into one, adding every =
-one
-> from both threads to the Cc>
->=20
-> Hi,
->=20
-> On 10/14/20 5:42 PM, Rafael J. Wysocki wrote:
-> > On Wed, Oct 14, 2020 at 4:06 PM Hans de Goede <hdegoede@redhat.com> wro=
-te:
-> >> On 10/14/20 3:33 PM, Rafael J. Wysocki wrote:
-> <snip>
->=20
-> >>> First, a common place to register a DPTF system profile seems to be
-> >>> needed and, as I said above, I wouldn't expect more than one such
-> >>> thing to be present in the system at any given time, so it may be
-> >>> registered along with the list of supported profiles and user space
-> >>> will have to understand what they mean.
-> >>=20
-> >> Mostly Ack, I would still like to have an enum for DPTF system
-> >> profiles in the kernel and have a single piece of code map that
-> >> enum to profile names. This enum can then be extended as
-> >> necessary, but I want to avoid having one driver use
-> >> "Performance" and the other "performance" or one using
-> >> "performance-balanced" and the other "balanced-performance", etc.
-> >>=20
-> >> With the goal being that new drivers use existing values from
-> >> the enum as much as possible, but we extend it where necessary.
-> >=20
-> > IOW, just a table of known profile names with specific indices assigned=
- to
-> > them.
-> Yes.
->=20
-> > This sounds reasonable.
-> >=20
-> >>> Second, irrespective of the above, it may be useful to have a
-> >>> consistent way to pass performance-vs-power preference information
-> >>> from user space to different parts of the kernel so as to allow them
-> >>> to adjust their operation and this could be done with a system-wide
-> >>> power profile attribute IMO.
-> >>=20
-> >> I agree, which is why I tried to tackle both things in one go,
-> >> but as you said doing both in 1 API is probably not the best idea.
-> >> So I believe we should park this second issue for now and revisit it
-> >> when we find a need for it.
-> >=20
-> > Agreed.
-> >=20
-> >> Do you have any specific userspace API in mind for the
-> >> DPTF system profile selection?
-> >=20
-> > Not really.
->=20
-> So before /sys/power/profile was mentioned, but that seems more like
-> a thing which should have a set of fixed possible values, iow that is
-> out of scope for this discussion.
->=20
-> Since we all seem to agree that this is something which we need
-> specifically for DPTF profiles maybe just add:
->=20
-> /sys/power/dptf_current_profile    (rw)
-> /sys/power/dptf_available_profiles (ro)
->=20
-> (which will only be visible if a dptf-profile handler
->  has been registered) ?
->=20
-> Or more generic and thus better (in case other platforms
-> later need something similar) I think, mirror the:
->=20
-> /sys/bus/cpu/devices/cpu#/cpufreq/energy_performance_* bits
-> for a system-wide energy-performance setting, so we get:
->=20
-> /sys/power/energy_performance_preference
-> /sys/power/energy_performance_available_preferences
->=20
-> (again only visible when applicable) ?
->=20
-> I personally like the second option best.
->=20
-> Regards,
->=20
-> Hans
-
-between the two, the second seems to me more appropriate.
-Considering that the various profiles interact with thermal behaviors what =
-do=20
-you think of something like:
-
-/sys/power/thermal_profile_available_profiles
-/sys/power/thermal_profile_profile
-
-Regards,
-Elia
-
-
-
+Applied as 5.10-rc material with some minor changes and the Srinivas'
+ACK, thanks!
