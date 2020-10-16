@@ -2,107 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CCF2908F1
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 17:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A582908FA
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 17:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408912AbgJPPz1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 11:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408871AbgJPPz0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 11:55:26 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685B8C0613D3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 08:55:26 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id h7so3494037wre.4
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 08:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uPu7s21uGVHH4Ds8znmWGRC7b4dIQAk9M5zAN/zbV9c=;
-        b=UACZys+M5/IfIGGSkw3rjGRumLVfWG1/0Bmpc9hHLj2gpJGSdpBu6IQSQpDDy9KA1D
-         R7JjwLL8XX/ZWQZ2ShVSu+WrPP21NQaz02L64vNESD1yJ3uRrC8gudQUN4iRhmBLAPQN
-         ORorH8SWpASdPF9UY1x2uZ0HBzD/ncgVAImWSqnjEWX1St0zkdq0iWGWLf0jzoLrOqW/
-         FeblMF8Q9XeC6SG0p39v8+/bL5jJvtTE8oXVEa85IHIO7M0FwUurGk8khlK8s6CCeqZ/
-         GiKmRGDX8zkFgewcXa414Dvm/vs9VQoqrsM5C2qc04qk41rncbX9B8zBQ6PCbc51iMYW
-         SVfA==
+        id S2409063AbgJPPzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 11:55:54 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:42919 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410484AbgJPPzu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 11:55:50 -0400
+Received: by mail-oi1-f194.google.com with SMTP id 16so2924033oix.9;
+        Fri, 16 Oct 2020 08:55:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uPu7s21uGVHH4Ds8znmWGRC7b4dIQAk9M5zAN/zbV9c=;
-        b=Zop4vOUCty3/ESX6jopjbXf7C+aTlLzqW5GrS8kPTn+EnGtalydXgg6zDSfM5GqBzA
-         TAlysb/MQfowiVMY2NsrGCHno7cLoJybdqsiSscNtOdpXkEechR743aIEZYG25ikBFwh
-         pADTPpFz+8NpHtnS2daaesPeYU5RJR5bSyFc8zwW46uhUfxjD+5R34i7XsVShg6qKCyN
-         /W7IWxrPnGEKk64WQO2/biaY9fNdGJWXUqQ7WlGXLgTKejxyMQ/gNSpLsSVvKnp9j/OK
-         6fDqGYMqj7XB1rq3v9DYm6MUgiC6d4+KqkAtLlYZzSWdJxUVqfT1KfEHK/LT2GosU0G6
-         zFVg==
-X-Gm-Message-State: AOAM531k1kBcOCOzwCmkufY77BxmTlfFvmOuNRZE0/tN3GwaHTNPnTch
-        7+ryoqye0+AzxbRFRr4Bffwgog==
-X-Google-Smtp-Source: ABdhPJyo6H7nom6g6P02iEOhohyxQR/g9mjSToUWmLZKNDYCi89M6RnksM8yvLq8oTc2yMqYTG/hcA==
-X-Received: by 2002:adf:f1c1:: with SMTP id z1mr4716324wro.331.1602863723768;
-        Fri, 16 Oct 2020 08:55:23 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:110:f693:9fff:fef4:a7ef])
-        by smtp.gmail.com with ESMTPSA id g144sm3462364wmg.30.2020.10.16.08.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Oct 2020 08:55:22 -0700 (PDT)
-Date:   Fri, 16 Oct 2020 16:55:19 +0100
-From:   Quentin Perret <qperret@google.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Dietmar Eggemann <Dietmar.Eggemann@arm.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Nayak, Rajendra" <rnayak@codeaurora.org>
-Subject: Re: [PATCH v2 0/3] Clarify abstract scale usage for power values in
- Energy Model, EAS and IPA
-Message-ID: <20201016155519.GB2426638@google.com>
-References: <f660731e-132b-2514-f526-d7123ed3522c@arm.com>
- <d04019bd-9e85-5f3e-2a1b-66780b8df3dc@linaro.org>
- <3e3dd42c-48ac-7267-45c5-ca88205611bd@arm.com>
- <00ceec64-3273-bb4a-6f38-22de8d877ab5@linaro.org>
- <CAJZ5v0hV8fwRnADdjiiF=zapO3AE6=_W_PeOQ_WhUirCcFkgdA@mail.gmail.com>
- <e321191c-61d2-a15d-47c2-653b277984ca@linaro.org>
- <20201016121844.GA2420691@google.com>
- <b3c6d7a5-0564-6e84-77ff-9afe10d7ee27@linaro.org>
- <20201016130905.GA2426638@google.com>
- <CAD=FV=VXt_JdYjPdTSJPWpXR2Owz096WhzYrZcQZ8-znmQbkLg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J6wHl916ulOPF6+J0BN3BXb1roDxF5lOuXP9shO1p6o=;
+        b=JscggOXWYmqgK+ONiddjJJkY4mC+4z4062D+LDgex91iqtbMYY5+a6dLh44vL10mII
+         9JU1QU9Iu/MpbILboFuwBP5veap1LzlI+X/ArxyMl6d3PHmYV7q4+9TmttdLk4jZktVh
+         V17euQrgiDQ8KwjGeKokuqCDn3uLxYKpJZPHqbhi0sSpslpXnqVXlt+N1wnuX7Bms8Tf
+         QOxn4w6sUjJbvzpjKz/9A3nNbWeQpjsfB2jjgz5NCeFLaYawQSaY8qdH+2QtLinOL3E3
+         y4u+nRKinzaaKDK8yJ7LuAR8Q6CpCA8Sv2H1/xgrLU9frw7JbfhlRCTq0ujmajHEuoiR
+         h71g==
+X-Gm-Message-State: AOAM532V+FagnHoRiErN2LWncdXCLRluPoFHfTD0KVDb76wBHhgUdilK
+        il0HIjgF8zN86npQ3UzffmCPGoWama/qMWBUyyE=
+X-Google-Smtp-Source: ABdhPJzYUVGFnp6fh23adMJ8rT4QzdNgAk2AO+/nkLvkVD/kq0WcCG3+QdYXwqewomLFxo2XV0SDl0TtxkAC94gonro=
+X-Received: by 2002:aca:5256:: with SMTP id g83mr2993351oib.71.1602863749798;
+ Fri, 16 Oct 2020 08:55:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=VXt_JdYjPdTSJPWpXR2Owz096WhzYrZcQZ8-znmQbkLg@mail.gmail.com>
+References: <20201015204722.18764-1-ilina@codeaurora.org>
+In-Reply-To: <20201015204722.18764-1-ilina@codeaurora.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Oct 2020 17:55:38 +0200
+Message-ID: <CAJZ5v0ifjHRomAxEKTW5z+VEZLGeM5MN-NcRxUUgrFQvtB0seQ@mail.gmail.com>
+Subject: Re: [PATCH v3] PM / Domains: enable domain idle state accounting
+To:     Lina Iyer <ilina@codeaurora.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Friday 16 Oct 2020 at 07:36:03 (-0700), Doug Anderson wrote:
-> The one issue that I started with, though, is that I wanted to be able
-> to specify "sustainable-power" for a board in the device tree.  Unless
-> you think you'll convince Rob that it's OK to provide a "units"
-> property in the device tree then just adding a "units" to the API
-> won't help us because you'll still be stuck mixing/matching with a
-> value based in mW, right?  ...or are you suggesting that the
-> board-specific value "sustainable-power" would also have to come from
-> SCMI?  That would be pretty annoying.
+On Thu, Oct 15, 2020 at 10:47 PM Lina Iyer <ilina@codeaurora.org> wrote:
+>
+> To enable better debug of PM domains, let's keep a track of the success
+> and rejections in entering each domain idle state.
+>
+> This statistics is exported in debugfs when reading the idle_states
+> node, associated with each PM domain.
+>
+> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
+> ---
+> Changes in v3:
+>         - Rebased on top of mainline
 
-Hmm, maybe, but that's the sanest option IMO.
+I still needed to rebase it to apply it to my tree, so please double
+check the result in the bleeding-edge branch.
 
-We should fix the PM_EM API regardless of the DT stuff because
-pretending SCMI values are mW is kinda dodgy and confusing. And for the
-sustained power stuff, then yes you need this in a comparable unit. If
-SCMI gives it to you then it sounds like should just use that. And if we
-can make that change to the DT binding then you'll be able to specify it
-there as well. But if we can't, then we just won't support mixing and
-matching DT and SCMI values. So, yeah, either the EM or the sustained
-power value will have to be provided some other way, to keep thing
-consistent ...
+Thanks!
+
+> ---
+>  drivers/base/power/domain.c | 10 +++++++---
+>  include/linux/pm_domain.h   |  2 ++
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 2cb5e04cf86c..20ecc1a7113c 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -559,12 +559,15 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
+>                  * happen very often).
+>                  */
+>                 ret = _genpd_power_off(genpd, true);
+> -               if (ret)
+> +               if (ret) {
+> +                       genpd->states[genpd->state_idx].rejected++;
+>                         return ret;
+> +               }
+>         }
+>
+>         genpd->status = GPD_STATE_POWER_OFF;
+>         genpd_update_accounting(genpd);
+> +       genpd->states[genpd->state_idx].usage++;
+>
+>         list_for_each_entry(link, &genpd->child_links, child_node) {
+>                 genpd_sd_counter_dec(link->parent);
+> @@ -2932,7 +2935,7 @@ static int idle_states_show(struct seq_file *s, void *data)
+>         if (ret)
+>                 return -ERESTARTSYS;
+>
+> -       seq_puts(s, "State          Time Spent(ms)\n");
+> +       seq_puts(s, "State          Time Spent(ms) Usage          Rejected\n");
+>
+>         for (i = 0; i < genpd->state_count; i++) {
+>                 ktime_t delta = 0;
+> @@ -2944,7 +2947,8 @@ static int idle_states_show(struct seq_file *s, void *data)
+>
+>                 msecs = ktime_to_ms(
+>                         ktime_add(genpd->states[i].idle_time, delta));
+> -               seq_printf(s, "S%-13i %lld\n", i, msecs);
+> +               seq_printf(s, "S%-13i %-14lld %-14llu %llu\n", i, msecs,
+> +                             genpd->states[i].usage, genpd->states[i].rejected);
+>         }
+>
+>         genpd_unlock(genpd);
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index ee11502a575b..1d9a8de6b7ac 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -82,6 +82,8 @@ struct genpd_power_state {
+>         s64 power_off_latency_ns;
+>         s64 power_on_latency_ns;
+>         s64 residency_ns;
+> +       u64 usage;
+> +       u64 rejected;
+>         struct fwnode_handle *fwnode;
+>         ktime_t idle_time;
+>         void *data;
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
