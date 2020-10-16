@@ -2,95 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AF5290997
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 18:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8A42909B6
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 18:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410073AbgJPQV3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 12:21:29 -0400
-Received: from m42-4.mailgun.net ([69.72.42.4]:54842 "EHLO m42-4.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410086AbgJPQV3 (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Fri, 16 Oct 2020 12:21:29 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1602865288; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=lMRxBStFAwL5DZTVxOwtseg396vfedbEbLgzwWs2eD8=; b=O3vCRMk+LHS7QscGgIk6d3wMpV1o2Wct3F+XgA3h8BULzAl6V2CLX4Tan0QyFIt+0NoDxtsI
- lhSh5FJVzOcmnxXngmMdIIKb7tnx7WsT+TY47LdEHqRMp18w6wIONu35LbgAFtjU1drig/uB
- nvF1Sh8fvriEJgTxeHL0PWi2LvA=
-X-Mailgun-Sending-Ip: 69.72.42.4
-X-Mailgun-Sid: WyI5ZDFmMiIsICJsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmciLCAiYmU5ZTRhIl0=
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 5f89c8820764f13b00faad8e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Oct 2020 16:21:22
- GMT
-Sender: ilina=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 6FBBAC433FE; Fri, 16 Oct 2020 16:21:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: ilina)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 96572C433C9;
-        Fri, 16 Oct 2020 16:21:20 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 96572C433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=ilina@codeaurora.org
-Date:   Fri, 16 Oct 2020 10:21:19 -0600
-From:   Lina Iyer <ilina@codeaurora.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v3] PM / Domains: enable domain idle state accounting
-Message-ID: <20201016162119.GC16756@codeaurora.org>
-References: <20201015204722.18764-1-ilina@codeaurora.org>
- <CAJZ5v0ifjHRomAxEKTW5z+VEZLGeM5MN-NcRxUUgrFQvtB0seQ@mail.gmail.com>
- <20201016160724.GB16756@codeaurora.org>
- <CAJZ5v0gBb91rFHne26zLrMPOKcHTmcDERBRLiPAuVJo+H6BAzA@mail.gmail.com>
+        id S2408617AbgJPQaj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 12:30:39 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44702 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408429AbgJPQaj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 12:30:39 -0400
+Received: by mail-oi1-f196.google.com with SMTP id x62so3030231oix.11;
+        Fri, 16 Oct 2020 09:30:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tMQhVtgWTLUrHnXhHeGDTXy+R8Q9Ulj7YjmL8avZ4i0=;
+        b=DE3jpborKFPNieaEhZtYIXksMh5JzhzmsSjufIfwEsu6Tn4UBecGVS8Gb8R//Yzism
+         GQckDH8ZOiBQtFy0XZbxZJBcUbrkA3oiyY62jX1MfEdHdNLd8auzrMKMOsuif/EZf+u+
+         f1iDjKzKg18nKe4cEXUaOwsYa5PeXs8msukOzdigPhS6UcjK0sghh8d0/2eL6NtvwmQC
+         BOVSjJNLOqim2JoBVxIzrS9flq4piRb20J726HG+A/NyhQBlBOwuvjtYGnxEbGfsTr9Y
+         oHeEt5cTg8qVC/D9splOJfaf7PsU0Cq6dwMVP2At7W5PWqM1iBVotYJv4rAMs/8+/ihT
+         r1HA==
+X-Gm-Message-State: AOAM530IsYnKzK/OYdllv8bulHzODFurCEGK/j9JkN4wgBFTeo1JWODI
+        A9NKwbY0IpwEbfQGhFfXYRKAq8+Lb9MRZcB7Qmg=
+X-Google-Smtp-Source: ABdhPJzQyn0JbPc7rGxUTeQ87yBu9s0xoUvfAxPzQH1y7cn5aiMsjxR8zZkxZV3SmT3VwlwdAELK2xZWa48odZL1CHA=
+X-Received: by 2002:aca:724a:: with SMTP id p71mr3049209oic.157.1602865839368;
+ Fri, 16 Oct 2020 09:30:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gBb91rFHne26zLrMPOKcHTmcDERBRLiPAuVJo+H6BAzA@mail.gmail.com>
+References: <20201006160516.319830-1-ulf.hansson@linaro.org>
+ <CAJZ5v0iNQ51C5WYUy-ZhzpFGMLxSAVV8=xxYBfMX9ia6FOpg1Q@mail.gmail.com> <CAPDyKFrLTsYWVhR03hQgRJGGEkmTk5etGR5RcKgMW+Nj60+vhQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFrLTsYWVhR03hQgRJGGEkmTk5etGR5RcKgMW+Nj60+vhQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 16 Oct 2020 18:30:28 +0200
+Message-ID: <CAJZ5v0i6CeUy4aQnyMmNyAHfdunWbbB2TsQwtX4QwNwYk+71jg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] power: avs: Move drivers to the soc directories and
+ drop avs
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Nishanth Menon <nm@ti.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kevin Hilman <khilman@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 16 2020 at 10:13 -0600, Rafael J. Wysocki wrote:
->On Fri, Oct 16, 2020 at 6:07 PM Lina Iyer <ilina@codeaurora.org> wrote:
->>
->> On Fri, Oct 16 2020 at 09:55 -0600, Rafael J. Wysocki wrote:
->> >On Thu, Oct 15, 2020 at 10:47 PM Lina Iyer <ilina@codeaurora.org> wrote:
->> >>
->> >> To enable better debug of PM domains, let's keep a track of the success
->> >> and rejections in entering each domain idle state.
->> >>
->> >> This statistics is exported in debugfs when reading the idle_states
->> >> node, associated with each PM domain.
->> >>
->> >> Signed-off-by: Lina Iyer <ilina@codeaurora.org>
->> >> ---
->> >> Changes in v3:
->> >>         - Rebased on top of mainline
->> >
->> >I still needed to rebase it to apply it to my tree, so please double
->> >check the result in the bleeding-edge branch.
->> >
->> Okay, will rebase on that branch and post shortly.
+On Wed, Oct 7, 2020 at 5:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
->No need, it's been applied already, just please check the result in
->bleeding-edge.
+> + Arnd
 >
-I think I may have the wrong bleeding-edge branch. Is it not 
-https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=bleeding-edge
+> On Wed, 7 Oct 2020 at 17:09, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Oct 6, 2020 at 6:05 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > The avs drivers in drivers/power/avs/* are all SoC specific drivers that
+> > > doesn't share any code. Instead they are located in a directory, mostly to keep
+> > > similar functionality together. From a maintenance point of view, it makes
+> > > better sense to collect SoC specific drivers like these, into the SoC specific
+> > > directories.
+> > >
+> > > Therefore, this series moves the drivers, one by one - and in the end, it
+> > > deletes the empty avs directory.
+> > >
+> > > It seems best to me, if this can be funneled via Rafael's linux-pm tree. Then
+> > > when going forward, each driver should be managed through the SoC maintainer's
+> > > trees.
+> >
+> > That's fine by me.
+> >
+> > I'd like to get an ACK from the arm-soc side on this, though.
+>
+> I have looped in Arnd, to get his opinion on this.
+>
+> Although, I think the people on cc already send pull requests to the
+> arm-soc maintainers (or perhaps it was these people you were referring
+> to), so just awaiting their acks should be fine, I guess.
 
-Apologize for the confusion. 
+OK
 
---Lina
+For now, I've taken patches [2-3/4] that have been ACKed.
+
+When the [1/4] is ACKed, I'll take it too and apply the last one.
+
+Thanks!
