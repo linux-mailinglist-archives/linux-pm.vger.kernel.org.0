@@ -2,272 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A563290249
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 11:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7FD2903D3
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 13:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406437AbgJPJzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 05:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406414AbgJPJzH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 05:55:07 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9538DC061755
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 02:55:07 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id o70so1462801ybc.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 02:55:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KAG00OU6I8ZSKVj+GjsDY5lnIf7cqlgqOKkytYnMQYA=;
-        b=dqC73mbifYSnjiynxQSRfPcV8neE4zGgBUukmpro4mix8nZi9JC8qw3lp9DB/n/xvV
-         6YJC5cd84A+TwsRmbGwBxkLQfz3P2f3m45ouXxSzrQG3FZkGVUn034/6ROWF7gOkjseo
-         FebJ6YvhIDXwZ5zHZ3EELH6thU2AqbgzWHQd4y3WiN4eUH66qy+bPlp6aKW1C3+O6tqv
-         uluAsBt6+p/Qhh9VESBzRPDEXBzle9omIbh6JIVp07asw61uAlp+oxrmbFw4ujkl1bgR
-         RT2kF3Lk6chjnuI27Pz3kOglB+TmQ/VYw/INOuuU2gB0J+/IUpE6PLQVE1HJkXF18h9s
-         5sIw==
+        id S2406496AbgJPLLE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 07:11:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35999 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2406734AbgJPLLB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 07:11:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602846659;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kOERbbEx7nVCNHLlMb3rSnmIO9vt1UAO946lTC4L+xc=;
+        b=BgyFuUhGCHc+CNlaVEuKhwjT5d+oq5e8MTD/j4q+KNLi+COldA4ou1ihtHMRfISDioVEFZ
+        ozf+8GaCS2DUDa7rFRyl90hzpPSvzdlg96QTJfMplNCUC0jXZEj3eUBmDlPNWjMmw5W3V3
+        xzBZXaRIttxh6m4X1U9D8oL0WWeyI7w=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-250-sMhya3AyOP2E_G1Li1bDsA-1; Fri, 16 Oct 2020 07:10:57 -0400
+X-MC-Unique: sMhya3AyOP2E_G1Li1bDsA-1
+Received: by mail-ej1-f72.google.com with SMTP id k13so779975ejv.16
+        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 04:10:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KAG00OU6I8ZSKVj+GjsDY5lnIf7cqlgqOKkytYnMQYA=;
-        b=Oxhz1p2Sd2C98Ci+urOSiqNiWL+qwRNvjd43xNYAkqs9jmsQyfpOmMNe9X1LSMKd/V
-         bMy4FycaTkC7TqEa+BAvqsuc+/m4sDTmozGXwlucaAs2Cwi3WU5WoxudHeaGwym72lcs
-         d1sDZHgnx5RaGrHOP6wlKVUNS+7csL3z46ssLaHxSUAFU7XrQT5HAQs3wMmmZjkPz96E
-         L09HAbtqosnlPwwSfIlo9hN2U6y8w92AHUKZNGk0YqejUUKd4ZRQ3heFOvk8jGyVseZz
-         FOcLTbQ7f3YbblLlqk338cp/ZDn5id+uaPzyp75zA1y2Ght5jWCEgUY8Uvs4YdsjqDr1
-         Exgg==
-X-Gm-Message-State: AOAM532k2KcPAkbVsfk1VhVLUDSZRuvfY1H/mD5Oha/3s+Zd8yv8Ok2q
-        gJCtxP4xPibm1kls/2rwx1vRgBqm3b6Lth/0IxqIAg==
-X-Google-Smtp-Source: ABdhPJzrDKChDSgbRPUnqHVLxigY3990lB2Cf6/7Eyx/Kc+ZUDTPyGYgWd4tlAAwDr+fVdO0D1caZ7iOZT9mVPrFviE=
-X-Received: by 2002:a25:2389:: with SMTP id j131mr1711428ybj.25.1602842106593;
- Fri, 16 Oct 2020 02:55:06 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=kOERbbEx7nVCNHLlMb3rSnmIO9vt1UAO946lTC4L+xc=;
+        b=dGUpZBZ4FSBPElizrBL6jqR3tNBU3OH37mtQ4Q+EFs5wYcnPf5ylc/FrqiW/tVZEHt
+         LC6yKPqooR6dOaRc/bCauspfZW+442n7JisczzXBYK/3008wr17yZiFsq+0VAQRHdc9H
+         hUPnNEKLIc2CbRmR2bf6bmj6FJSmo3bfMzJw8qIBWpoJzuiwpMQXwOs4gjJCzYLBN/An
+         Ho4x8bJ5HAELJYzhAAijHwQjhaw1+cPjQaJAUyB9zpangAEmhrZpD0dzJeP1F2cCHn1J
+         Fuy4lbjP1X0IOJ0V4biQGRagtXUB9qBdfZYldPzgeFXmIVRPCqVf5Rsg5+kqZvFCY9ir
+         rFKw==
+X-Gm-Message-State: AOAM531ba0GiT/OPtUUIwNJoEvfXg0wgjeP+uAVscxbZIi0N+mH9bmnA
+        pyg9oqYqABFEy2U44UE2FiEf4FjjDLpMGdrGb+DxWU3OdzfSt0IwIh/asGIhCCpQd4u5Ly2UU50
+        OFnfM+qF7+B3Fap/jiSo=
+X-Received: by 2002:a50:c309:: with SMTP id a9mr3223881edb.199.1602846656277;
+        Fri, 16 Oct 2020 04:10:56 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx+iD0vQ3CWmW+0Tj/Lolks366zfvPUxo3S7eFXQ4IACS8Nha9I/OIrD7KLkJUTlI56BBzdlw==
+X-Received: by 2002:a50:c309:: with SMTP id a9mr3223845edb.199.1602846655995;
+        Fri, 16 Oct 2020 04:10:55 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c0c-fe00-d2ea-f29d-118b-24dc.cable.dynamic.v6.ziggo.nl. [2001:1c00:c0c:fe00:d2ea:f29d:118b:24dc])
+        by smtp.gmail.com with ESMTPSA id 11sm1321247ejy.19.2020.10.16.04.10.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Oct 2020 04:10:55 -0700 (PDT)
+Subject: Re: [RFC] Documentation: Add documentation for new
+ performance_profile sysfs class (Also Re: [PATCH 0/4] powercap/dtpm: Add the
+ DTPM framework)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Bastien Nocera <hadess@hadess.net>,
+        Mark Pearson <mpearson@lenovo.com>,
+        "Limonciello, Mario" <Mario.Limonciello@dell.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mark Gross <mgross@linux.intel.com>,
+        Elia Devito <eliadevito@gmail.com>,
+        Benjamin Berg <bberg@redhat.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>
+References: <20201006122024.14539-1-daniel.lezcano@linaro.org>
+ <eb26a00d-eee0-a4d1-ed25-61a661ad5683@redhat.com>
+ <8be66efd-7833-2c8a-427d-b0055c2f6ec1@linaro.org>
+ <97e5368b-228d-eca1-85a5-b918dfcfd336@redhat.com>
+ <CAJZ5v0gwc_d1vnwDVWXY+i4f0T2r0tAz8xuWV7oS_afsy7OocQ@mail.gmail.com>
+ <63dfa6a1-0424-7985-7803-756c0c5cc4a5@redhat.com>
+ <CAJZ5v0jpYpu3Tk7qq_MCVs0wUr-Dw0rY5EZELrVbQta0NZaoVA@mail.gmail.com>
+ <87d9a808-39d6-4949-c4f9-6a80d14a3768@redhat.com>
+ <CAJZ5v0iWmmu5WV7cX7uNb61NMYQ7s0dnhg1K+T0x90b3sBfU9w@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <943531a7-74d6-7c7f-67bc-2645b3ba7b8a@redhat.com>
+Date:   Fri, 16 Oct 2020 13:10:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-References: <20201016035109.3952356-1-josephjang@google.com> <20201016090108.GG8871@alley>
-In-Reply-To: <20201016090108.GG8871@alley>
-From:   Joseph Jang <josephjang@google.com>
-Date:   Fri, 16 Oct 2020 17:54:55 +0800
-Message-ID: <CAPaOXEQadaDTVbwbi72Zw2yDHEKDgRNM-rLhoOzVMp_N0fyqMw@mail.gmail.com>
-Subject: Re: [PATCH] power: suspend: Add suspend timeout handler
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Jonglin Lee <jonglin@google.com>,
-        Woody Lin <woodylin@google.com>,
-        Mark Cheng <markcheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAJZ5v0iWmmu5WV7cX7uNb61NMYQ7s0dnhg1K+T0x90b3sBfU9w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks Petr promptly response.
+<note folding the 2 threads we are having on this into one, adding every one from both threads to the Cc>
 
-On Fri 2020-10-16 11:51:09, Joseph Jang wrote:
-> From: josephjang <josephjang@google.com>
->
-> Add suspend timeout handler to prevent device stuck during suspend/
-> resume process. Suspend timeout handler will dump disk sleep task
-> at first round timeout and trigger kernel panic at second round timeout.
-> The default timer for each round is 30 seconds.
+Hi,
 
-A better solution would be to resume instead of panic().
+On 10/14/20 5:42 PM, Rafael J. Wysocki wrote:
+> On Wed, Oct 14, 2020 at 4:06 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>> On 10/14/20 3:33 PM, Rafael J. Wysocki wrote:
 
-[Joseph] suspend_timeout() will trigger kernel panic() only when
-suspend thread stuck (deadlock/hang) for 2*30 seconds.
-At that moment, I don't know how to resume the suspend thread. So I
-just could trigger panic to reboot system.
-If you have better suggestions, I am willing to study it.
+<snip>
 
+>>> First, a common place to register a DPTF system profile seems to be
+>>> needed and, as I said above, I wouldn't expect more than one such
+>>> thing to be present in the system at any given time, so it may be
+>>> registered along with the list of supported profiles and user space
+>>> will have to understand what they mean.
+>>
+>> Mostly Ack, I would still like to have an enum for DPTF system
+>> profiles in the kernel and have a single piece of code map that
+>> enum to profile names. This enum can then be extended as
+>> necessary, but I want to avoid having one driver use
+>> "Performance" and the other "performance" or one using
+>> "performance-balanced" and the other "balanced-performance", etc.
+>>
+>> With the goal being that new drivers use existing values from
+>> the enum as much as possible, but we extend it where necessary.
+> 
+> IOW, just a table of known profile names with specific indices assigned to them.
 
-> Note: Can use following command to simulate suspend hang for testing.
->     adb shell echo 1 > /sys/power/pm_hang
+Yes.
 
-This looks dangerous. It adds a simple way to panic() the system.
+> This sounds reasonable.
+> 
+>>> Second, irrespective of the above, it may be useful to have a
+>>> consistent way to pass performance-vs-power preference information
+>>> from user space to different parts of the kernel so as to allow them
+>>> to adjust their operation and this could be done with a system-wide
+>>> power profile attribute IMO.
+>>
+>> I agree, which is why I tried to tackle both things in one go,
+>> but as you said doing both in 1 API is probably not the best idea.
+>> So I believe we should park this second issue for now and revisit it
+>> when we find a need for it.
+> 
+> Agreed.
+> 
+>> Do you have any specific userspace API in mind for the
+>> DPTF system profile selection?
+> 
+> Not really.
 
-First, it should get enabled separately. e.g.
-CONFIG_TEST_PM_SLEEP_MONITOR.
+So before /sys/power/profile was mentioned, but that seems more like
+a thing which should have a set of fixed possible values, iow that is
+out of scope for this discussion.
 
-Second, I would add it as a module that might get loaded
-and unloaded.
+Since we all seem to agree that this is something which we need
+specifically for DPTF profiles maybe just add:
 
-[Joseph] Agree to enable new compile flag for test module.
-I think it is better to create separate patch for the new test module right=
-?
+/sys/power/dptf_current_profile    (rw)
+/sys/power/dptf_available_profiles (ro)
 
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 8b1bb5ee7e5d..6f2679cfd9d1 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-Using kthread looks like an overkill to me. I wonder how this actually
-works when the kthreads get freezed. It might be enough to implement
-just a timer callback. Start the timer in start_suspend_mon() and
-delete it in stop_suspend_mon(). Or do I miss anything?
+(which will only be visible if a dptf-profile handler
+ has been registered) ?
 
+Or more generic and thus better (in case other platforms
+later need something similar) I think, mirror the:
 
-Anyway, the kthread implementation looks a but hairy. If you really
-need to use kthread, I suggest to use kthread_worker API. You would
-need to run an init work to setup the RT scheduling. Then you
-could just call kthread_queue_delayed_work(()
-and kthread_cancel_delayed_work_sync() to start and stop
-the monitor.
+/sys/bus/cpu/devices/cpu#/cpufreq/energy_performance_* bits
+for a system-wide energy-performance setting, so we get:
 
-[Joseph]
-Actually, I had ever think we just need to use
-add_timer()/del_timer_sync() for start_suspend_mon()/stop_suspend_mon() bef=
-ore.
+/sys/power/energy_performance_preference
+/sys/power/energy_performance_available_preferences
 
-But I am not sure if add_timer() may cause any performance impact in
-suspend thread or not.
-So I try to create a suspend monitor kthread and just flip the flag in
-suspend thread.
+(again only visible when applicable) ?
 
-Thank you,
-Joseph.
-> @@ -114,6 +251,10 @@ static void s2idle_enter(void)
->       s2idle_state =3D S2IDLE_STATE_NONE;
->       raw_spin_unlock_irq(&s2idle_lock);
->
-> +#ifdef CONFIG_PM_SLEEP_MONITOR
-> +     start_suspend_mon();
-> +#endif
+I personally like the second option best.
 
-It is better to solve this by defining start_suspend_mon() as empty
-function when the config option is disabled. For example, see
-how  vgacon_text_force() is defined in console.h.
+Regards,
 
-[Joseph] Thank you for good suggestions.
-May I know if I could use IS_ENABLED() ?
-if (IS_ENABLED(CONFIG_PM_SLEEP_MONITOR))
-start_suspend_mon();
+Hans
 
-
-Best Regards,
-Petr
-
-
-
-Thank you,
-Joseph.
-
-
-Petr Mladek <pmladek@suse.com> =E6=96=BC 2020=E5=B9=B410=E6=9C=8816=E6=97=
-=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=885:01=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Fri 2020-10-16 11:51:09, Joseph Jang wrote:
-> > From: josephjang <josephjang@google.com>
-> >
-> > Add suspend timeout handler to prevent device stuck during suspend/
-> > resume process. Suspend timeout handler will dump disk sleep task
-> > at first round timeout and trigger kernel panic at second round timeout=
-.
-> > The default timer for each round is 30 seconds.
->
-> A better solution would be to resume instead of panic().
->
-> > Note: Can use following command to simulate suspend hang for testing.
-> >     adb shell echo 1 > /sys/power/pm_hang
->
-> This looks dangerous. It adds a simple way to panic() the system.
->
-> First, it should get enabled separately. e.g.
-> CONFIG_TEST_PM_SLEEP_MONITOR.
->
-> Second, I would add it as a module that might get loaded
-> and unloaded.
->
-> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> > index 8b1bb5ee7e5d..6f2679cfd9d1 100644
-> > --- a/kernel/power/suspend.c
-> > +++ b/kernel/power/suspend.c
-> > +static int suspend_monitor_kthread(void *arg)
-> > +{
-> > +     long err;
-> > +     struct sched_param param =3D {.sched_priority
-> > +             =3D MAX_RT_PRIO-1};
-> > +     static int timeout_count;
-> > +     static long timeout;
-> > +
-> > +     pr_info("Init ksuspend_mon thread\n");
-> > +
-> > +     sched_setscheduler(current, SCHED_FIFO, &param);
-> > +
-> > +     timeout_count =3D 0;
-> > +     timeout =3D MAX_SCHEDULE_TIMEOUT;
-> > +
-> > +     do {
-> > +             /* Wait suspend timer timeout */
-> > +             err =3D wait_event_interruptible_timeout(
-> > +                     power_suspend_waitqueue,
-> > +                     (suspend_mon_toggle !=3D TOGGLE_NONE),
-> > +                     timeout);
-> > +
-> > +             mutex_lock(&suspend_mon_lock);
-> > +             /* suspend monitor state change */
-> > +             if (suspend_mon_toggle !=3D TOGGLE_NONE) {
-> > +                     if (suspend_mon_toggle =3D=3D TOGGLE_START) {
-> > +                             timeout =3D msecs_to_jiffies(
-> > +                                     SUSPEND_TIMER_TIMEOUT_MS);
-> > +                             pr_info("Start suspend monitor\n");
-> > +                     } else if (suspend_mon_toggle =3D=3D TOGGLE_STOP)=
- {
-> > +                             timeout =3D MAX_SCHEDULE_TIMEOUT;
-> > +                             timeout_count =3D 0;
-> > +                             pr_info("Stop suspend monitor\n");
-> > +                     }
-> > +                     suspend_mon_toggle =3D TOGGLE_NONE;
-> > +                     mutex_unlock(&suspend_mon_lock);
-> > +                     continue;
-> > +             }
-> > +             mutex_unlock(&suspend_mon_lock);
-> > +
-> > +             /* suspend monitor event handler */
-> > +             if (err =3D=3D 0) {
-> > +                     timeout_count++;
-> > +                     suspend_timeout(timeout_count);
-> > +             } else if (err =3D=3D -ERESTARTSYS) {
-> > +                     pr_info("Exit ksuspend_mon!");
-> > +                     break;
-> > +             }
-> > +     } while (1);
-> > +
-> > +     return 0;
-> > +}
->
-> Using kthread looks like an overkill to me. I wonder how this actually
-> works when the kthreads get freezed. It might be enough to implement
-> just a timer callback. Start the timer in start_suspend_mon() and
-> delete it in stop_suspend_mon(). Or do I miss anything?
->
-> Anyway, the kthread implementation looks a but hairy. If you really
-> need to use kthread, I suggest to use kthread_worker API. You would
-> need to run an init work to setup the RT scheduling. Then you
-> could just call kthread_queue_delayed_work(()
-> and kthread_cancel_delayed_work_sync() to start and stop
-> the monitor.
->
->
-> > @@ -114,6 +251,10 @@ static void s2idle_enter(void)
-> >       s2idle_state =3D S2IDLE_STATE_NONE;
-> >       raw_spin_unlock_irq(&s2idle_lock);
-> >
-> > +#ifdef CONFIG_PM_SLEEP_MONITOR
-> > +     start_suspend_mon();
-> > +#endif
->
-> It is better to solve this by defining start_suspend_mon() as empty
-> function when the config option is disabled. For example, see
-> how  vgacon_text_force() is defined in console.h.
->
-> Best Regards,
-> Petr
-
-
-
---=20
-Embedded Software engineer
