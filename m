@@ -2,283 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA621290050
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 10:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520C629005C
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 11:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394653AbgJPI74 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 04:59:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49096 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390404AbgJPI74 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 04:59:56 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09G8Y0GR187560;
-        Fri, 16 Oct 2020 04:59:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=aALYR+KLGLyFqDjlUTb6VFMnGfzSKI3yLC1Ow2yGdeY=;
- b=dNDQQIfHSAd7XPhKLxxUNCmtNzAEpnMwPsBzIvDSagAB2LrfDyQ6S6vbBS2+Ch5t6NX6
- QTS9Ie9ZwM9BdgRzuaYVRjjv8staR23qTlfEPYXqMshhCOFYjFp1WS3YAX+9Eq3RdyLi
- MM75k5iFAnXnBZjMzQtODxGAq6mEQsx4osTcL5YVB31vqQD7wp0AuoPVj/3nsVE6m3d9
- qS0U7MID+oLjbYTr8uLDPHZ+kpuohIFJvoXBPr0sFng1eLQrDuQNderPEinJPpCnntZd
- cNo5m9cccOlS4Ad9UvJcfT2dsZl0n66zUgObz8PIMuyhbKetSdIgSY3FxFsmjfUdQWrs /w== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 34781ggv6a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Oct 2020 04:59:45 -0400
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09G8sl0T013242;
-        Fri, 16 Oct 2020 08:59:43 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3434k83626-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 16 Oct 2020 08:59:43 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09G8xfWJ33817006
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 16 Oct 2020 08:59:41 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 31EAC42042;
-        Fri, 16 Oct 2020 08:59:41 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DAB2C42041;
-        Fri, 16 Oct 2020 08:59:39 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.79.233.59])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 16 Oct 2020 08:59:39 +0000 (GMT)
-From:   Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
-To:     shuah@kernel.org, trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        latha@linux.vnet.ibm.com,
-        "Pavithra R . Prakash" <pavrampu@in.ibm.com>
-Subject: [PATCH v3] cpupower: Provide online and offline CPU information
-Date:   Fri, 16 Oct 2020 14:29:29 +0530
-Message-Id: <20201016085929.86252-1-latha@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        id S2394143AbgJPJBM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 05:01:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54744 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391070AbgJPJBL (ORCPT <rfc822;linux-pm@vger.kernel.org>);
+        Fri, 16 Oct 2020 05:01:11 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1602838869;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rvmgJYrPfDkJmNrTnzLB9ylTxrjfM8Kvwfsy9nroC+8=;
+        b=WZcljI8PQ7btAvIS1SycIt5IezMG5DIVCZtvLDiP1y8o+dZgwJrCEVQeMBulntEDiO0pA0
+        ph/uqT12pS9UQh5kyqt0jGbhsSOY5zi/vvVGeFMJCrrJGzmnnDpPif2qdtgpbYorE18DSt
+        gUxubKk2nwWjs0T9toKHMaj5JBM3wjs=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 8CE67ADE4;
+        Fri, 16 Oct 2020 09:01:09 +0000 (UTC)
+Date:   Fri, 16 Oct 2020 11:01:08 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Joseph Jang <josephjang@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        jonglin@google.com, woodylin@google.com, markcheng@google.com
+Subject: Re: [PATCH] power: suspend: Add suspend timeout handler
+Message-ID: <20201016090108.GG8871@alley>
+References: <20201016035109.3952356-1-josephjang@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-16_05:2020-10-16,2020-10-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- mlxscore=0 malwarescore=0 impostorscore=0 phishscore=0 priorityscore=1501
- mlxlogscore=999 suspectscore=2 spamscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010160062
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201016035109.3952356-1-josephjang@google.com>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When a user tries to modify cpuidle or cpufreq properties on offline
-CPUs, the tool returns success (exit status 0) but also does not provide
-any warning message regarding offline cpus that may have been specified
-but left unchanged. In case of all or a few CPUs being offline, it can be
-difficult to keep track of which CPUs didn't get the new frequency or idle
-state set. Silent failures are difficult to keep track of when there are a
-huge number of CPUs on which the action is performed.
+On Fri 2020-10-16 11:51:09, Joseph Jang wrote:
+> From: josephjang <josephjang@google.com>
+> 
+> Add suspend timeout handler to prevent device stuck during suspend/
+> resume process. Suspend timeout handler will dump disk sleep task
+> at first round timeout and trigger kernel panic at second round timeout.
+> The default timer for each round is 30 seconds.
 
-In v1 of this patch, I had sent tried to address this with repetitive code
-in both cpufreq-set and cpuidle-set. V2 incorporated the review comments
-and added helper functions to find both online and offline CPUs and print
-them out accordingly. Correcting compile issues in v3.
+A better solution would be to resume instead of panic().
 
-We use these helper functions in cpuidle-set and cpufreq-set to print an
-additional message if the user attempts to modify offline cpus.
+> Note: Can use following command to simulate suspend hang for testing.
+>     adb shell echo 1 > /sys/power/pm_hang
 
-Reported-by: Pavithra R. Prakash <pavrampu@in.ibm.com>
-Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
----
- tools/power/cpupower/utils/cpufreq-set.c     |  3 +
- tools/power/cpupower/utils/cpuidle-set.c     |  4 ++
- tools/power/cpupower/utils/cpupower.c        |  8 +++
- tools/power/cpupower/utils/helpers/helpers.h | 12 ++++
- tools/power/cpupower/utils/helpers/misc.c    | 66 +++++++++++++++++++-
- 5 files changed, 92 insertions(+), 1 deletion(-)
+This looks dangerous. It adds a simple way to panic() the system.
 
-diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
-index 6ed82fba5aaa..f25cdfa05c5f 100644
---- a/tools/power/cpupower/utils/cpufreq-set.c
-+++ b/tools/power/cpupower/utils/cpufreq-set.c
-@@ -311,6 +311,7 @@ int cmd_freq_set(int argc, char **argv)
- 		}
- 	}
- 
-+	get_cpustate();
- 
- 	/* loop over CPUs */
- 	for (cpu = bitmask_first(cpus_chosen);
-@@ -328,5 +329,7 @@ int cmd_freq_set(int argc, char **argv)
- 		}
- 	}
- 
-+	print_offline_cpus();
-+
- 	return 0;
- }
-diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
-index 569f268f4c7f..46158928f9ad 100644
---- a/tools/power/cpupower/utils/cpuidle-set.c
-+++ b/tools/power/cpupower/utils/cpuidle-set.c
-@@ -95,6 +95,8 @@ int cmd_idle_set(int argc, char **argv)
- 		exit(EXIT_FAILURE);
- 	}
- 
-+	get_cpustate();
-+
- 	/* Default is: set all CPUs */
- 	if (bitmask_isallclear(cpus_chosen))
- 		bitmask_setall(cpus_chosen);
-@@ -181,5 +183,7 @@ int cmd_idle_set(int argc, char **argv)
- 			break;
- 		}
- 	}
-+
-+	print_offline_cpus();
- 	return EXIT_SUCCESS;
- }
-diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
-index 8e3d08042825..8ac3304a9957 100644
---- a/tools/power/cpupower/utils/cpupower.c
-+++ b/tools/power/cpupower/utils/cpupower.c
-@@ -34,6 +34,8 @@ int run_as_root;
- int base_cpu;
- /* Affected cpus chosen by -c/--cpu param */
- struct bitmask *cpus_chosen;
-+struct bitmask *online_cpus;
-+struct bitmask *offline_cpus;
- 
- #ifdef DEBUG
- int be_verbose;
-@@ -178,6 +180,8 @@ int main(int argc, const char *argv[])
- 	char pathname[32];
- 
- 	cpus_chosen = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
-+	online_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
-+	offline_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
- 
- 	argc--;
- 	argv += 1;
-@@ -230,6 +234,10 @@ int main(int argc, const char *argv[])
- 		ret = p->main(argc, argv);
- 		if (cpus_chosen)
- 			bitmask_free(cpus_chosen);
-+		if (online_cpus)
-+			bitmask_free(online_cpus);
-+		if (offline_cpus)
-+			bitmask_free(offline_cpus);
- 		return ret;
- 	}
- 	print_help();
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index c258eeccd05f..d5799aa71e1f 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -94,6 +94,8 @@ struct cpupower_cpu_info {
-  */
- extern int get_cpu_info(struct cpupower_cpu_info *cpu_info);
- extern struct cpupower_cpu_info cpupower_cpu_info;
-+
-+
- /* cpuid and cpuinfo helpers  **************************/
- 
- /* X86 ONLY ****************************************/
-@@ -171,4 +173,14 @@ static inline unsigned int cpuid_ecx(unsigned int op) { return 0; };
- static inline unsigned int cpuid_edx(unsigned int op) { return 0; };
- #endif /* defined(__i386__) || defined(__x86_64__) */
- 
-+/*
-+ * CPU State related functions
-+ */
-+extern struct bitmask *online_cpus;
-+extern struct bitmask *offline_cpus;
-+
-+void get_cpustate(void);
-+void print_online_cpus(void);
-+void print_offline_cpus(void);
-+
- #endif /* __CPUPOWERUTILS_HELPERS__ */
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index f406adc40bad..2ead98169cf5 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -1,8 +1,12 @@
- // SPDX-License-Identifier: GPL-2.0
--#if defined(__i386__) || defined(__x86_64__)
-+
-+#include <stdio.h>
-+#include <stdlib.h>
- 
- #include "helpers/helpers.h"
- 
-+#if defined(__i386__) || defined(__x86_64__)
-+
- #define MSR_AMD_HWCR	0xc0010015
- 
- int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
-@@ -41,3 +45,63 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
- 	return 0;
- }
- #endif /* #if defined(__i386__) || defined(__x86_64__) */
-+
-+/* get_cpustate
-+ *
-+ * Gather the information of all online CPUs into bitmask struct
-+ */
-+void get_cpustate(void)
-+{
-+	unsigned int cpu = 0;
-+
-+	bitmask_clearall(online_cpus);
-+	bitmask_clearall(offline_cpus);
-+
-+	for (cpu = bitmask_first(cpus_chosen);
-+		cpu <= bitmask_last(cpus_chosen); cpu++) {
-+
-+		if (cpupower_is_cpu_online(cpu) == 1)
-+			bitmask_setbit(online_cpus, cpu);
-+		else
-+			bitmask_setbit(offline_cpus, cpu);
-+
-+		continue;
-+	}
-+}
-+
-+/* print_online_cpus
-+ *
-+ * Print the CPU numbers of all CPUs that are online currently
-+ */
-+void print_online_cpus(void)
-+{
-+	int str_len = 0;
-+	char *online_cpus_str = NULL;
-+
-+	str_len = online_cpus->size * 5;
-+	online_cpus_str = (void *)malloc(sizeof(char) * str_len);
-+
-+	if (!bitmask_isallclear(online_cpus)) {
-+		bitmask_displaylist(online_cpus_str, str_len, online_cpus);
-+		printf(_("Following CPUs are online:\n%s\n"), online_cpus_str);
-+	}
-+}
-+
-+/* print_offline_cpus
-+ *
-+ * Print the CPU numbers of all CPUs that are offline currently
-+ */
-+void print_offline_cpus(void)
-+{
-+	int str_len = 0;
-+	char *offline_cpus_str = NULL;
-+
-+	str_len = offline_cpus->size * 5;
-+	offline_cpus_str = (void *)malloc(sizeof(char) * str_len);
-+
-+	if (!bitmask_isallclear(offline_cpus)) {
-+		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
-+		printf(_("Following CPUs are offline:\n%s\n"), offline_cpus_str);
-+		printf(_("cpupower set operation was not performed on them\n"));
-+	}
-+}
--- 
-2.27.0
+First, it should get enabled separately. e.g.
+CONFIG_TEST_PM_SLEEP_MONITOR.
 
+Second, I would add it as a module that might get loaded
+and unloaded.
+
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index 8b1bb5ee7e5d..6f2679cfd9d1 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> +static int suspend_monitor_kthread(void *arg)
+> +{
+> +	long err;
+> +	struct sched_param param = {.sched_priority
+> +		= MAX_RT_PRIO-1};
+> +	static int timeout_count;
+> +	static long timeout;
+> +
+> +	pr_info("Init ksuspend_mon thread\n");
+> +
+> +	sched_setscheduler(current, SCHED_FIFO, &param);
+> +
+> +	timeout_count = 0;
+> +	timeout = MAX_SCHEDULE_TIMEOUT;
+> +
+> +	do {
+> +		/* Wait suspend timer timeout */
+> +		err = wait_event_interruptible_timeout(
+> +			power_suspend_waitqueue,
+> +			(suspend_mon_toggle != TOGGLE_NONE),
+> +			timeout);
+> +
+> +		mutex_lock(&suspend_mon_lock);
+> +		/* suspend monitor state change */
+> +		if (suspend_mon_toggle != TOGGLE_NONE) {
+> +			if (suspend_mon_toggle == TOGGLE_START) {
+> +				timeout = msecs_to_jiffies(
+> +					SUSPEND_TIMER_TIMEOUT_MS);
+> +				pr_info("Start suspend monitor\n");
+> +			} else if (suspend_mon_toggle == TOGGLE_STOP) {
+> +				timeout = MAX_SCHEDULE_TIMEOUT;
+> +				timeout_count = 0;
+> +				pr_info("Stop suspend monitor\n");
+> +			}
+> +			suspend_mon_toggle = TOGGLE_NONE;
+> +			mutex_unlock(&suspend_mon_lock);
+> +			continue;
+> +		}
+> +		mutex_unlock(&suspend_mon_lock);
+> +
+> +		/* suspend monitor event handler */
+> +		if (err == 0) {
+> +			timeout_count++;
+> +			suspend_timeout(timeout_count);
+> +		} else if (err == -ERESTARTSYS) {
+> +			pr_info("Exit ksuspend_mon!");
+> +			break;
+> +		}
+> +	} while (1);
+> +
+> +	return 0;
+> +}
+
+Using kthread looks like an overkill to me. I wonder how this actually
+works when the kthreads get freezed. It might be enough to implement
+just a timer callback. Start the timer in start_suspend_mon() and
+delete it in stop_suspend_mon(). Or do I miss anything?
+
+Anyway, the kthread implementation looks a but hairy. If you really
+need to use kthread, I suggest to use kthread_worker API. You would
+need to run an init work to setup the RT scheduling. Then you
+could just call kthread_queue_delayed_work(()
+and kthread_cancel_delayed_work_sync() to start and stop
+the monitor.
+
+
+> @@ -114,6 +251,10 @@ static void s2idle_enter(void)
+>  	s2idle_state = S2IDLE_STATE_NONE;
+>  	raw_spin_unlock_irq(&s2idle_lock);
+>  
+> +#ifdef CONFIG_PM_SLEEP_MONITOR
+> +	start_suspend_mon();
+> +#endif
+
+It is better to solve this by defining start_suspend_mon() as empty
+function when the config option is disabled. For example, see
+how  vgacon_text_force() is defined in console.h.
+
+Best Regards,
+Petr
