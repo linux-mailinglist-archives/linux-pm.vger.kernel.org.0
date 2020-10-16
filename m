@@ -2,205 +2,283 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E612290022
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 10:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA621290050
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Oct 2020 10:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394789AbgJPIrK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Oct 2020 04:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394788AbgJPIrH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 04:47:07 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DBBC0613D3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 01:47:05 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id x7so1818988wrl.3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Oct 2020 01:47:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=26IH4G1N/Js32Z6Db8oxyYdX3MbO7EjY0dLYS0HR0pY=;
-        b=wwixGbOeBb+X2TxLeHVlysxw0H3LCvLuAMJHZEhQYSIuxEghJrN6flDtshl8ua6JWp
-         36sTJWpk1fEkD5Kl33vc0MVwas7YoL2fQVdXbXZ/7xktJKRKPnk4q+P6goGcFmvrdhVj
-         ehIbgdtoagmToDKtRrZca4w6U8DdD1SOQbRfqVV6GWEHVKPewuamwoyOaV0xexhUMX2C
-         Aj4F841srlb5eGcXuyHs7vIcI1aJ0YPL/dSjNdidpmc81jr467KFncKdtXs1/1OSVI0o
-         11FMWtAXPeedH/Ny7khGk5qqUtyYLNQ+/Z6Q3VsiZkoRuuVU0sGeGIQTvqYwhgjY4gh5
-         AcsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=26IH4G1N/Js32Z6Db8oxyYdX3MbO7EjY0dLYS0HR0pY=;
-        b=Tbxy2Cfwo0SqrxcJ1Kv78qgcCyDSrtRbXn0XBhohJWcCN/YvAdW1/0SUTMnUeLUm2U
-         clz9jE9JoIKcxy2W5na+v2Akig7203wTeelV8WqcamDIqPmQCDpJ9HQvz33o/2pyqJDW
-         yzka483QVhSEOboKazEYFyuWg/0sM2bHw2ipOampUNOSKX8N2tFvLMWQDFDjbBXfryaN
-         G0sBLfJveMDqoFVDl17dC49yrwQwEMeDcvl8mqi5+KDfG3VbLa6cebV5GOCdDBSHKlPj
-         oHBvICEXWpZ5TzJdhzDhp9CFrHMGbM+ZUiB5+GoW0y8HyiTtWj6w+mj7MNyN+/cMy7pK
-         L8+g==
-X-Gm-Message-State: AOAM530rH2/ZI4ZQgcNKMttPEGAl4UM9H5h+G0jmQ73VBFb+c7yWG7t+
-        vMR75qBM2VamfQUL8CmZ8Kdx8mgYuvEPuQ==
-X-Google-Smtp-Source: ABdhPJwpxfPndPflMtom/crYO9+pMokVWyonyRJCg5829T7aatR+zjjeBAlinTCHGYbuauGU74zuaw==
-X-Received: by 2002:adf:ce8a:: with SMTP id r10mr2793141wrn.188.1602838023583;
-        Fri, 16 Oct 2020 01:47:03 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:c9d8:1700:5168:39b? ([2a01:e34:ed2f:f020:c9d8:1700:5168:39b])
-        by smtp.googlemail.com with ESMTPSA id f14sm2602050wrt.53.2020.10.16.01.47.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Oct 2020 01:47:02 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Colin King <colin.king@canonical.com>,
-        Anson Huang <anson.huang@nxp.com>,
-        Tian Tao <tiantao6@hisilicon.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Qinglang Miao <miaoqinglang@huawei.com>,
-        zhuguangqing@xiaomi.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Adam Ford <aford173@gmail.com>,
-        Jing Xiangfeng <jingxiangfeng@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal for v5.10-rc1
-Message-ID: <ff1ca9b4-51fa-209a-b047-17dcc2e74720@linaro.org>
-Date:   Fri, 16 Oct 2020 10:47:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S2394653AbgJPI74 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Oct 2020 04:59:56 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:49096 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390404AbgJPI74 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Oct 2020 04:59:56 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09G8Y0GR187560;
+        Fri, 16 Oct 2020 04:59:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=aALYR+KLGLyFqDjlUTb6VFMnGfzSKI3yLC1Ow2yGdeY=;
+ b=dNDQQIfHSAd7XPhKLxxUNCmtNzAEpnMwPsBzIvDSagAB2LrfDyQ6S6vbBS2+Ch5t6NX6
+ QTS9Ie9ZwM9BdgRzuaYVRjjv8staR23qTlfEPYXqMshhCOFYjFp1WS3YAX+9Eq3RdyLi
+ MM75k5iFAnXnBZjMzQtODxGAq6mEQsx4osTcL5YVB31vqQD7wp0AuoPVj/3nsVE6m3d9
+ qS0U7MID+oLjbYTr8uLDPHZ+kpuohIFJvoXBPr0sFng1eLQrDuQNderPEinJPpCnntZd
+ cNo5m9cccOlS4Ad9UvJcfT2dsZl0n66zUgObz8PIMuyhbKetSdIgSY3FxFsmjfUdQWrs /w== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34781ggv6a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Oct 2020 04:59:45 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 09G8sl0T013242;
+        Fri, 16 Oct 2020 08:59:43 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3434k83626-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Oct 2020 08:59:43 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 09G8xfWJ33817006
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Oct 2020 08:59:41 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 31EAC42042;
+        Fri, 16 Oct 2020 08:59:41 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAB2C42041;
+        Fri, 16 Oct 2020 08:59:39 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.79.233.59])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Oct 2020 08:59:39 +0000 (GMT)
+From:   Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+To:     shuah@kernel.org, trenn@suse.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        latha@linux.vnet.ibm.com,
+        "Pavithra R . Prakash" <pavrampu@in.ibm.com>
+Subject: [PATCH v3] cpupower: Provide online and offline CPU information
+Date:   Fri, 16 Oct 2020 14:29:29 +0530
+Message-Id: <20201016085929.86252-1-latha@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-16_05:2020-10-16,2020-10-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 malwarescore=0 impostorscore=0 phishscore=0 priorityscore=1501
+ mlxlogscore=999 suspectscore=2 spamscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010160062
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following changes since commit ba4f184e126b751d1bffad5897f263108befc780:
+When a user tries to modify cpuidle or cpufreq properties on offline
+CPUs, the tool returns success (exit status 0) but also does not provide
+any warning message regarding offline cpus that may have been specified
+but left unchanged. In case of all or a few CPUs being offline, it can be
+difficult to keep track of which CPUs didn't get the new frequency or idle
+state set. Silent failures are difficult to keep track of when there are a
+huge number of CPUs on which the action is performed.
 
-  Linux 5.9-rc6 (2020-09-20 16:33:55 -0700)
+In v1 of this patch, I had sent tried to address this with repetitive code
+in both cpufreq-set and cpuidle-set. V2 incorporated the review comments
+and added helper functions to find both online and offline CPUs and print
+them out accordingly. Correcting compile issues in v3.
 
-are available in the Git repository at:
+We use these helper functions in cpuidle-set and cpufreq-set to print an
+additional message if the user attempts to modify offline cpus.
 
+Reported-by: Pavithra R. Prakash <pavrampu@in.ibm.com>
+Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+---
+ tools/power/cpupower/utils/cpufreq-set.c     |  3 +
+ tools/power/cpupower/utils/cpuidle-set.c     |  4 ++
+ tools/power/cpupower/utils/cpupower.c        |  8 +++
+ tools/power/cpupower/utils/helpers/helpers.h | 12 ++++
+ tools/power/cpupower/utils/helpers/misc.c    | 66 +++++++++++++++++++-
+ 5 files changed, 92 insertions(+), 1 deletion(-)
 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-tags/thermal-v5.10-rc1
-
-for you to fetch changes up to 48b458591749d35c927351b4960b49e35af30fe6:
-
-  thermal: core: Adding missing nlmsg_free() in
-thermal_genl_sampling_temp() (2020-10-12 12:08:36 +0200)
-
-----------------------------------------------------------------
-- Fix Kconfig typo "acces" -> "access" (Colin Ian King)
-
-- Use dev_error_probe() to simplify the error handling on imx and imx8
-  platforms (Anson Huang)
-
-- Use dedicated kobj_to_dev() instead of container_of() in the sysfs
-  core code (Tian Tao)
-
-- Fix coding style by adding braces to a one line conditional
-  statement on rcar (Geert Uytterhoeven)
-
-- Add DT binding documentation for the r8a774e1 platform and update
-  the Kconfig description supporting RZ/G2 SoCs (Lad Prabhakar)
-
-- Simplify the return expression of stm_thermal_prepare on the stm32
-  platform (Qinglang Miao)
-
-- Fix the unit in the function documentation for the idle injection
-  cooling device (Zhuguang Qing)
-
-- Remove an unecessary mutex_init() in the core code (Qinglang Miao)
-
-- Add support for keep alive events in the core code and the specific
-  int340x (Srinivas Pandruvada)
-
-- Remove unused thermal zone variable in devfreq and cpufreq cooling
-  devices (Zhuguang Qing)
-
-- Add the A100's THS controller support (Yangtao Li)
-
-- Add power management on the omap3's bandgap sensor (Adam Ford)
-
-- Fix a missing nlmsg_free in the netlink core error path (Jing Xiangfeng)
-
-----------------------------------------------------------------
-Adam Ford (1):
-      thermal: ti-soc-thermal: Enable addition power management
-
-Anson Huang (2):
-      thermal: imx: Use dev_err_probe() to simplify error handling
-      thermal: imx8mm: Use dev_err_probe() to simplify error handling
-
-Colin Ian King (1):
-      drivers: thermal: Kconfig: fix spelling mistake "acces" -> "access"
-
-Geert Uytterhoeven (1):
-      thermal: rcar_thermal: Add missing braces to conditional statement
-
-Jing Xiangfeng (1):
-      thermal: core: Adding missing nlmsg_free() in
-thermal_genl_sampling_temp()
-
-Lad Prabhakar (2):
-      dt-bindings: thermal: rcar-gen3-thermal: Add r8a774e1 support
-      thermal: Kconfig: Update description for RCAR_GEN3_THERMAL config
-
-Qinglang Miao (2):
-      thermal: stm32: simplify the return expression of
-stm_thermal_prepare()
-      thermal: core: remove unnecessary mutex_init()
-
-Srinivas Pandruvada (3):
-      thermal: int340x: Provide notification for OEM variable change
-      thermal: core: Add new event for sending keep alive notifications
-      thermal: int340x: Add keep alive response method
-
-Tian Tao (1):
-      thermal: Use kobj_to_dev() instead of container_of()
-
-Yangtao Li (3):
-      dt-bindings: thermal: sun8i: Add binding for A100's THS controller
-      thermal: sun8i: add TEMP_CALIB_MASK for calibration data in
-sun50i_h6_ths_calibrate
-      thermal: sun8i: Add A100's THS controller support
-
-zhuguangqing (2):
-      thermal/idle_inject: Fix comment of idle_duration_us and name of
-latency_ns
-      thermal: cooling: Remove unused variable *tz
-
- .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |  6 ++-
- .../bindings/thermal/rcar-gen3-thermal.yaml        |  1 +
- drivers/thermal/Kconfig                            |  6 +--
- drivers/thermal/cpufreq_cooling.c                  |  8 +---
- drivers/thermal/cpuidle_cooling.c                  |  2 +-
- drivers/thermal/devfreq_cooling.c                  |  3 --
- drivers/thermal/gov_power_allocator.c              |  6 +--
- drivers/thermal/imx8mm_thermal.c                   | 10 ++--
- drivers/thermal/imx_thermal.c                      | 22 +++------
- .../intel/int340x_thermal/int3400_thermal.c        | 51
-+++++++++++++++-----
- drivers/thermal/rcar_thermal.c                     |  4 +-
- drivers/thermal/st/Kconfig                         |  2 +-
- drivers/thermal/st/stm_thermal.c                   |  7 +--
- drivers/thermal/sun8i_thermal.c                    | 16 ++++++-
- drivers/thermal/thermal_core.c                     | 13 ++----
- drivers/thermal/thermal_core.h                     |  4 +-
- drivers/thermal/thermal_netlink.c                  |  3 +-
- drivers/thermal/thermal_sysfs.c                    |  2 +-
- drivers/thermal/ti-soc-thermal/ti-bandgap.c        | 54
-+++++++++++++++++++++-
- drivers/thermal/ti-soc-thermal/ti-bandgap.h        |  6 +++
- include/linux/idle_inject.h                        |  2 +-
- include/linux/thermal.h                            | 10 ++--
- 22 files changed, 156 insertions(+), 82 deletions(-)
-
+diff --git a/tools/power/cpupower/utils/cpufreq-set.c b/tools/power/cpupower/utils/cpufreq-set.c
+index 6ed82fba5aaa..f25cdfa05c5f 100644
+--- a/tools/power/cpupower/utils/cpufreq-set.c
++++ b/tools/power/cpupower/utils/cpufreq-set.c
+@@ -311,6 +311,7 @@ int cmd_freq_set(int argc, char **argv)
+ 		}
+ 	}
+ 
++	get_cpustate();
+ 
+ 	/* loop over CPUs */
+ 	for (cpu = bitmask_first(cpus_chosen);
+@@ -328,5 +329,7 @@ int cmd_freq_set(int argc, char **argv)
+ 		}
+ 	}
+ 
++	print_offline_cpus();
++
+ 	return 0;
+ }
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 569f268f4c7f..46158928f9ad 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -95,6 +95,8 @@ int cmd_idle_set(int argc, char **argv)
+ 		exit(EXIT_FAILURE);
+ 	}
+ 
++	get_cpustate();
++
+ 	/* Default is: set all CPUs */
+ 	if (bitmask_isallclear(cpus_chosen))
+ 		bitmask_setall(cpus_chosen);
+@@ -181,5 +183,7 @@ int cmd_idle_set(int argc, char **argv)
+ 			break;
+ 		}
+ 	}
++
++	print_offline_cpus();
+ 	return EXIT_SUCCESS;
+ }
+diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
+index 8e3d08042825..8ac3304a9957 100644
+--- a/tools/power/cpupower/utils/cpupower.c
++++ b/tools/power/cpupower/utils/cpupower.c
+@@ -34,6 +34,8 @@ int run_as_root;
+ int base_cpu;
+ /* Affected cpus chosen by -c/--cpu param */
+ struct bitmask *cpus_chosen;
++struct bitmask *online_cpus;
++struct bitmask *offline_cpus;
+ 
+ #ifdef DEBUG
+ int be_verbose;
+@@ -178,6 +180,8 @@ int main(int argc, const char *argv[])
+ 	char pathname[32];
+ 
+ 	cpus_chosen = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
++	online_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
++	offline_cpus = bitmask_alloc(sysconf(_SC_NPROCESSORS_CONF));
+ 
+ 	argc--;
+ 	argv += 1;
+@@ -230,6 +234,10 @@ int main(int argc, const char *argv[])
+ 		ret = p->main(argc, argv);
+ 		if (cpus_chosen)
+ 			bitmask_free(cpus_chosen);
++		if (online_cpus)
++			bitmask_free(online_cpus);
++		if (offline_cpus)
++			bitmask_free(offline_cpus);
+ 		return ret;
+ 	}
+ 	print_help();
+diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
+index c258eeccd05f..d5799aa71e1f 100644
+--- a/tools/power/cpupower/utils/helpers/helpers.h
++++ b/tools/power/cpupower/utils/helpers/helpers.h
+@@ -94,6 +94,8 @@ struct cpupower_cpu_info {
+  */
+ extern int get_cpu_info(struct cpupower_cpu_info *cpu_info);
+ extern struct cpupower_cpu_info cpupower_cpu_info;
++
++
+ /* cpuid and cpuinfo helpers  **************************/
+ 
+ /* X86 ONLY ****************************************/
+@@ -171,4 +173,14 @@ static inline unsigned int cpuid_ecx(unsigned int op) { return 0; };
+ static inline unsigned int cpuid_edx(unsigned int op) { return 0; };
+ #endif /* defined(__i386__) || defined(__x86_64__) */
+ 
++/*
++ * CPU State related functions
++ */
++extern struct bitmask *online_cpus;
++extern struct bitmask *offline_cpus;
++
++void get_cpustate(void);
++void print_online_cpus(void);
++void print_offline_cpus(void);
++
+ #endif /* __CPUPOWERUTILS_HELPERS__ */
+diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+index f406adc40bad..2ead98169cf5 100644
+--- a/tools/power/cpupower/utils/helpers/misc.c
++++ b/tools/power/cpupower/utils/helpers/misc.c
+@@ -1,8 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#if defined(__i386__) || defined(__x86_64__)
++
++#include <stdio.h>
++#include <stdlib.h>
+ 
+ #include "helpers/helpers.h"
+ 
++#if defined(__i386__) || defined(__x86_64__)
++
+ #define MSR_AMD_HWCR	0xc0010015
+ 
+ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+@@ -41,3 +45,63 @@ int cpufreq_has_boost_support(unsigned int cpu, int *support, int *active,
+ 	return 0;
+ }
+ #endif /* #if defined(__i386__) || defined(__x86_64__) */
++
++/* get_cpustate
++ *
++ * Gather the information of all online CPUs into bitmask struct
++ */
++void get_cpustate(void)
++{
++	unsigned int cpu = 0;
++
++	bitmask_clearall(online_cpus);
++	bitmask_clearall(offline_cpus);
++
++	for (cpu = bitmask_first(cpus_chosen);
++		cpu <= bitmask_last(cpus_chosen); cpu++) {
++
++		if (cpupower_is_cpu_online(cpu) == 1)
++			bitmask_setbit(online_cpus, cpu);
++		else
++			bitmask_setbit(offline_cpus, cpu);
++
++		continue;
++	}
++}
++
++/* print_online_cpus
++ *
++ * Print the CPU numbers of all CPUs that are online currently
++ */
++void print_online_cpus(void)
++{
++	int str_len = 0;
++	char *online_cpus_str = NULL;
++
++	str_len = online_cpus->size * 5;
++	online_cpus_str = (void *)malloc(sizeof(char) * str_len);
++
++	if (!bitmask_isallclear(online_cpus)) {
++		bitmask_displaylist(online_cpus_str, str_len, online_cpus);
++		printf(_("Following CPUs are online:\n%s\n"), online_cpus_str);
++	}
++}
++
++/* print_offline_cpus
++ *
++ * Print the CPU numbers of all CPUs that are offline currently
++ */
++void print_offline_cpus(void)
++{
++	int str_len = 0;
++	char *offline_cpus_str = NULL;
++
++	str_len = offline_cpus->size * 5;
++	offline_cpus_str = (void *)malloc(sizeof(char) * str_len);
++
++	if (!bitmask_isallclear(offline_cpus)) {
++		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
++		printf(_("Following CPUs are offline:\n%s\n"), offline_cpus_str);
++		printf(_("cpupower set operation was not performed on them\n"));
++	}
++}
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.27.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
